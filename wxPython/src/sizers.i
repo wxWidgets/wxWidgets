@@ -310,8 +310,8 @@ public:
             raise TypeError, 'Expected wxSizer or wxWindow parameter'
 "
 
-    // Recursively call wxWindow::Show () on all sizer items.
-    void ShowItems (bool show);
+    // Recursively call wxWindow::Show() on all sizer items.
+    void ShowItems(bool show);
 
 };
 
