@@ -30,9 +30,9 @@ public:
 
     ~csProjectTreeCtrl();
 
-    wxImageList& GetImageList() const { return (wxImageList&) m_imageList; }
+    wxImageList *GetImageList() const { return (wxImageList *)&m_imageList; }
 protected:
-    wxImageList     m_imageList;
+    wxImageList m_imageList;
 
 DECLARE_EVENT_TABLE()
 };
