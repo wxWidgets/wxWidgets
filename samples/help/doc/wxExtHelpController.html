@@ -1,0 +1,180 @@
+<html><head><TITLE>wxExtHelpController</TITLE></head>
+<body>
+<H2><A HREF ="#DOC.DOCU" > <IMG BORDER=0 SRC=down.gif></A>  class  wxExtHelpController  </H2><BLOCKQUOTE>
+
+This class implements help via an external browser
+</BLOCKQUOTE>
+<hr>
+
+<DL>
+<DL>
+<DT><h3>Public Methods</h3><DD><DT><A HREF="#DOC.8.6"> <IMG BORDER=0 SRC=icon1.gif></A> virtual  bool  <B>DisplayBlock</B>(long blockNo) </B>
+ <DD><I>Display help for id sectionNo -- identical with DisplaySection()</I>
+<DT><A HREF="#DOC.8.4"> <IMG BORDER=0 SRC=icon1.gif></A> virtual  bool  <B>DisplayContents</B>(void) </B>
+ <DD><I>Display list of all help entries</I>
+<DT><A HREF="#DOC.8.5"> <IMG BORDER=0 SRC=icon1.gif></A> virtual  bool  <B>DisplaySection</B>(int sectionNo) </B>
+ <DD><I>Display help for id sectionNo</I>
+<DT><A HREF="#DOC.8.1"> <IMG BORDER=0 SRC=icon1.gif></A> virtual  bool  <B>Initialize</B>(const wxString&amp; file, int WXUNUSED(server)) </B>
+ <DD><I>This must be called to tell the controller where to find the
+documentation</I>
+<DT><A HREF="#DOC.8.2"> <IMG BORDER=0 SRC=icon1.gif></A> virtual  bool  <B>Initialize</B>(const wxString&amp; file) </B>
+ <DD><I>This must be called to tell the controller where to find the
+documentation</I>
+<DT><A HREF="#DOC.8.7"> <IMG BORDER=0 SRC=icon1.gif></A> virtual  bool  <B>KeywordSearch</B>(const wxString&amp; k) </B>
+ <DD><I>Search comment/documentation fields in map file and present a
+list to chose from</I>
+<DT><A HREF="#DOC.8.3"> <IMG BORDER=0 SRC=icon1.gif></A> virtual  bool  <B>LoadFile</B>(const wxString&amp; file = "") </B>
+ <DD><I>If file is "", reloads file given in Initialize</I>
+<DT><A HREF="#DOC.8.10"> <IMG BORDER=0 SRC=icon1.gif></A> virtual  void  <B>OnQuit</B>(void) </B>
+ <DD><I>does nothing</I>
+<DT><A HREF="#DOC.8.9"> <IMG BORDER=0 SRC=icon1.gif></A> virtual  bool  <B>Quit</B>(void) </B>
+ <DD><I>does nothing</I>
+<DT><A HREF="#DOC.8.8"> <IMG BORDER=0 SRC=icon1.gif></A> void  <B>SetBrowser</B>(wxString const &amp; browsername = <!2><A HREF="#DOC.4">WXEXTHELP_DEFAULTBROWSER</A>, bool isNetscape = <!2><A HREF="#DOC.5">WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE</A>) </B>
+ <DD><I>Tell it which browser to use</I>
+</DL><DL>
+<DT><h3>Private Fields</h3><DD><DT><A HREF="#DOC.8.15"> <IMG BORDER=0 SRC=icon1.gif></A> bool  <B>m_BrowserIsNetscape</B> </B>
+ <DD><I>Is the viewer a variant of netscape?</I>
+<DT><A HREF="#DOC.8.14"> <IMG BORDER=0 SRC=icon1.gif></A> wxString  <B>m_BrowserName</B> </B>
+ <DD><I>How to call the html viewer</I>
+<DT><A HREF="#DOC.8.11"> <IMG BORDER=0 SRC=icon1.gif></A> wxString  <B>m_MapFile</B> </B>
+ <DD><I>Filename of currently active map file</I>
+<DT><A HREF="#DOC.8.13"> <IMG BORDER=0 SRC=icon1.gif></A> wxExtHelpMapList*  <B>m_MapList</B> </B>
+ <DD><I>A list containing all id,url,documentation triples</I>
+<DT><A HREF="#DOC.8.12"> <IMG BORDER=0 SRC=icon1.gif></A> int  <B>m_NumOfEntries</B> </B>
+ <DD><I>How many entries do we have in the map file?</I>
+</DL><DL>
+<DT><h3>Private Methods</h3><DD><DT><A HREF="#DOC.8.16"> <IMG BORDER=0 SRC=icon1.gif></A> bool  <B>CallBrowser</B>(wxString const &amp;) </B>
+ <DD><I>Call the browser using a relative URL</I>
+</DL></DL>
+<A NAME="DOC.DOCU">
+<hr>
+ <h2> Documentation </h2>
+<BLOCKQUOTE>
+
+This class implements help via an external browser.
+It requires the name of a directory containing the documentation
+and a file mapping numerical Section numbers to relative URLS.<P>The map file contains two or three fields per line:
+numeric_id  relative_URL  [; comment/documentation]<P>The numeric_id is the id used to look up the entry in
+DisplaySection()/DisplayBlock(). The relative_URL is a filename of
+an html file, relative to the help directory. The optional
+comment/documentation field (after a ';') is used for keyword
+searches, so some meaningful text here does not hurt.
+If the documentation itself contains a ';', only the part before
+that will be displayed in the listbox, but all of it used for search.<P>Lines starting with ';' will be ignored.<P>This confuses DOC++, so I leave it out for now:
+<TT>ifdef USE_HELP</TT>: public wxHelpControllerBase
+{
+DECLARE_CLASS(wxExtHelpController)
+<TT>else</TT>{
+<TT>endif
+
+</BLOCKQUOTE>
+<DL>
+
+<A NAME="Initialize">
+<A NAME ="DOC.8.1">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> virtual  bool  Initialize(const wxString&amp; file, int WXUNUSED(server))</B></TT>
+<DD>This must be called to tell the controller where to find the
+documentation
+<DL><DT><B>Returns:</B><DD>true on success
+<DT><B>Parameters:</B><DD><B>file</B> -  - NOT a filename, but a directory name.
+<br></DL><P>
+<A NAME="Initialize">
+<A NAME ="DOC.8.2">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> virtual  bool  Initialize(const wxString&amp; file)</B></TT>
+<DD>This must be called to tell the controller where to find the
+documentation
+<DL><DT><B>Returns:</B><DD>true on success
+<DT><B>Parameters:</B><DD><B>file</B> -  - NOT a filename, but a directory name.
+<br></DL><P>
+<A NAME="LoadFile">
+<A NAME ="DOC.8.3">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> virtual  bool  LoadFile(const wxString&amp; file = "")</B></TT>
+<DD>If file is "", reloads file given in Initialize.
+@file Name of help directory.
+
+<DL><DT><B>Returns:</B><DD>true on success
+</DL><P>
+<A NAME="DisplayContents">
+<A NAME ="DOC.8.4">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> virtual  bool  DisplayContents(void)</B></TT>
+<DD>Display list of all help entries
+<DL><DT><B>Returns:</B><DD>true on success
+</DL><P>
+<A NAME="DisplaySection">
+<A NAME ="DOC.8.5">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> virtual  bool  DisplaySection(int sectionNo)</B></TT>
+<DD>Display help for id sectionNo
+<DL><DT><B>Returns:</B><DD>true on success
+</DL><P>
+<A NAME="DisplayBlock">
+<A NAME ="DOC.8.6">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> virtual  bool  DisplayBlock(long blockNo)</B></TT>
+<DD>Display help for id sectionNo -- identical with DisplaySection()
+<DL><DT><B>Returns:</B><DD>true on success
+</DL><P>
+<A NAME="KeywordSearch">
+<A NAME ="DOC.8.7">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> virtual  bool  KeywordSearch(const wxString&amp; k)</B></TT>
+<DD>Search comment/documentation fields in map file and present a
+list to chose from.
+@key k string to search for, empty string will list all entries
+
+<DL><DT><B>Returns:</B><DD>true on success
+</DL><P>
+<A NAME="Quit">
+<A NAME ="DOC.8.9">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> virtual  bool  Quit(void)</B></TT>
+<DD>does nothing
+<DL></DL><P>
+<A NAME="OnQuit">
+<A NAME ="DOC.8.10">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> virtual  void  OnQuit(void)</B></TT>
+<DD>does nothing
+<DL></DL><P>
+<A NAME="SetBrowser">
+<A NAME ="DOC.8.8">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> void  SetBrowser(wxString const &amp; browsername = <!2><A HREF="#DOC.4">WXEXTHELP_DEFAULTBROWSER</A>, bool isNetscape = <!2><A HREF="#DOC.5">WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE</A>)</B></TT>
+<DD>Tell it which browser to use.
+The Netscape support will check whether Netscape is already
+running (by looking at the .netscape/lock file in the user's
+home directory) and tell it to load the page into the existing
+window. 
+
+<DL><DT><B>Parameters:</B><DD><B>browsername</B> -  The command to call a browser/html viewer.
+<br><B>isNetscape</B> -  Set this to TRUE if the browser is some variant of Netscape.<br></DL><P>
+<A NAME="m_MapFile">
+<A NAME ="DOC.8.11">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> wxString  m_MapFile</B></TT>
+<DD>Filename of currently active map file
+<DL></DL><P>
+<A NAME="m_NumOfEntries">
+<A NAME ="DOC.8.12">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> int  m_NumOfEntries</B></TT>
+<DD>How many entries do we have in the map file?
+<DL></DL><P>
+<A NAME="m_MapList">
+<A NAME ="DOC.8.13">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> wxExtHelpMapList*  m_MapList</B></TT>
+<DD>A list containing all id,url,documentation triples
+<DL></DL><P>
+<A NAME="m_BrowserName">
+<A NAME ="DOC.8.14">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> wxString  m_BrowserName</B></TT>
+<DD>How to call the html viewer
+<DL></DL><P>
+<A NAME="m_BrowserIsNetscape">
+<A NAME ="DOC.8.15">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> bool  m_BrowserIsNetscape</B></TT>
+<DD>Is the viewer a variant of netscape?
+<DL></DL><P>
+<A NAME="CallBrowser">
+<A NAME ="DOC.8.16">
+<DT><IMG BORDER=0 SRC=icon2.gif><TT><B> bool  CallBrowser(wxString const &amp;)</B></TT>
+<DD>Call the browser using a relative URL
+<DL></DL><P></DL>
+<hr>
+ <DL><DT><B>This class has no child classes.</B></DL>
+<DL></DL><P><I><A HREF="aindex.html"> alphabetic index</A></I>  <I><A HREF="HIER.html"> hierarchy of classes</A></I><P></BODY><hr>
+<A HREF="http://www.zib.de/Visual/software/doc++/index.html"><IMG BORDER=0 ALIGN=RIGHT SRC=logo.gif></A>
+<P Align=Center><I>this page has been generated automatically by doc++
+<P Align=Center>(c)opyright by <A HREF="http://www.zib.de/zoeckler/"> Malte  Z&oumlckler</A>, <A HREF="mailto:wunderling@zib.de"> Roland Wunderling </A><br>contact: <A HREF="mailto:doc++@zib.de"> doc++@zib.de </a>
