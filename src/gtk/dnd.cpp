@@ -27,6 +27,239 @@
 
 extern bool g_blockEventsOnDrag;
 
+
+#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MICRO_VERSION >= 3)
+#define NEW_GTK_DND_CODE
+#endif
+#endif
+
+#ifdef NEW_GTK_DND_CODE
+
+wxDropTarget::wxDropTarget()
+{
+}
+
+wxDropTarget::~wxDropTarget()
+{
+}
+
+void wxDropTarget::UnregisterWidget( GtkWidget *widget )
+{
+  if (!widget) return;
+  
+  // TODO
+}
+
+void wxDropTarget::RegisterWidget( GtkWidget *widget )
+{
+  if (!widget) return;
+  
+  wxString formats;
+  int valid = 0;
+  
+  for ( size_t i = 0; i < GetFormatCount(); i++ )
+  {
+    wxDataFormat df = GetFormat( i );
+    switch (df) 
+    {
+      case wxDF_TEXT:
+	if (i > 0) formats += ";";
+        formats += "text/plain";
+	valid++;
+	break;
+      case wxDF_FILENAME:
+	if (i > 0) formats += ";";
+        formats += "file:ALL";
+	valid++;
+	break;
+      default:
+        break;
+    }
+  }
+  
+  char *str = WXSTRINGCAST formats;
+  
+  // TODO
+}
+
+// ----------------------------------------------------------------------------
+// wxTextDropTarget
+// ----------------------------------------------------------------------------
+
+bool wxTextDropTarget::OnDrop( long x, long y, const void *data, size_t WXUNUSED(size) )
+{
+  OnDropText( x, y, (const char*)data );
+  return TRUE;
+}
+
+bool wxTextDropTarget::OnDropText( long x, long y, const char *psz )
+{
+  printf( "Got dropped text: %s.\n", psz );
+  printf( "At x: %d, y: %d.\n", (int)x, (int)y );
+  return TRUE;
+}
+
+size_t wxTextDropTarget::GetFormatCount() const
+{
+  return 1;
+}
+
+wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
+{
+  return wxDF_TEXT;
+}
+
+// ----------------------------------------------------------------------------
+// wxFileDropTarget
+// ----------------------------------------------------------------------------
+
+bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * const aszFiles[] )
+{
+  printf( "Got %d dropped files.\n", (int)nFiles );
+  printf( "At x: %d, y: %d.\n", (int)x, (int)y );
+  for (size_t i = 0; i < nFiles; i++)
+  {
+    printf( aszFiles[i] );
+    printf( "\n" );
+  }
+  return TRUE;
+}
+
+bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
+{
+  size_t number = 0;
+  char *text = (char*) data;
+  for (size_t i = 0; i < size; i++)
+    if (text[i] == 0) number++;
+
+  if (number == 0) return TRUE;    
+    
+  char **files = new char*[number];
+  
+  text = (char*) data;
+  for (size_t i = 0; i < number; i++)
+  {
+    files[i] = text;
+    int len = strlen( text );
+    text += len+1;
+  }
+
+  bool ret = OnDropFiles( x, y, 1, files ); 
+  
+  free( files );
+  
+  return ret;
+}
+
+size_t wxFileDropTarget::GetFormatCount() const
+{
+  return 1;
+}
+
+wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
+{
+  return wxDF_FILENAME;
+}
+
+//-------------------------------------------------------------------------
+// wxDropSource
+//-------------------------------------------------------------------------
+
+wxDropSource::wxDropSource( wxWindow *win )
+{
+  g_blockEventsOnDrag = TRUE;
+  
+  m_window = win;
+  m_widget = win->m_widget;
+  if (win->m_wxwindow) m_widget = win->m_wxwindow;
+  
+  m_data = (wxDataObject *) NULL;
+  m_retValue = wxDragCancel;
+
+  m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+  m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+}
+
+wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
+{
+  g_blockEventsOnDrag = TRUE;
+  
+  m_window = win;
+  m_widget = win->m_widget;
+  if (win->m_wxwindow) m_widget = win->m_wxwindow;
+  m_retValue = wxDragCancel;
+  
+  m_data = &data;
+
+  m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+  m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+}
+
+void wxDropSource::SetData( wxDataObject &data )
+{
+  m_data = &data;  
+}
+
+wxDropSource::~wxDropSource(void)
+{
+//  if (m_data) delete m_data;
+
+  g_blockEventsOnDrag = FALSE;
+}
+   
+wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
+{
+  wxASSERT_MSG( m_data, "wxDragSource: no data" );
+  
+  if (!m_data) return (wxDragResult) wxDragNone;
+  if (m_data->GetDataSize() == 0) return (wxDragResult) wxDragNone;
+  
+  RegisterWindow();
+  
+  // TODO
+  
+  UnregisterWindow();
+  
+  g_blockEventsOnDrag = FALSE;
+  
+  return m_retValue;
+}
+
+void wxDropSource::RegisterWindow(void)
+{
+  if (!m_data) return;
+
+  wxString formats;
+    
+  wxDataFormat df = m_data->GetPreferredFormat();
+  
+    switch (df) 
+    {
+      case wxDF_TEXT: 
+        formats += "text/plain";
+	break;
+      case wxDF_FILENAME:
+        formats += "file:ALL";
+	break;
+      default:
+        break;
+    }
+  
+  char *str = WXSTRINGCAST formats;
+  
+  // TODO
+}
+
+void wxDropSource::UnregisterWindow(void)
+{
+  if (!m_widget) return;
+  
+  // TODO
+}
+
+#else
+
 // ----------------------------------------------------------------------------
 // wxDropTarget
 // ----------------------------------------------------------------------------
@@ -322,3 +555,7 @@ void wxDropSource::UnregisterWindow(void)
   
   gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)this );
 }
+
+#endif 
+       // NEW_GTK_DND_CODE
+       

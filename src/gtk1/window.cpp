@@ -109,6 +109,16 @@
 */
 
 //-----------------------------------------------------------------------------
+// cond comp
+//-----------------------------------------------------------------------------
+
+#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MICRO_VERSION >= 3)
+#define NEW_GTK_DND_CODE
+#endif
+#endif
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -837,6 +847,11 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget, GdkEventBut
     return FALSE;
 }
 
+
+#ifdef NEW_GTK_DND_CODE
+
+#else
+
 //-----------------------------------------------------------------------------
 // "drop_data_available_event"
 //-----------------------------------------------------------------------------
@@ -861,6 +876,9 @@ static void gtk_window_drop_callback( GtkWidget *widget, GdkEventDropDataAvailab
   g_free (event->dropdataavailable.data_type);
 */
 }
+
+#endif
+       // NEW_GTK_DND_CODE
 
 //-----------------------------------------------------------------------------
 // InsertChild for wxWindow.
@@ -2196,18 +2214,32 @@ void wxWindow::ConnectDnDWidget( GtkWidget *widget )
 
   m_dropTarget->RegisterWidget( widget );
 
+#ifdef NEW_GTK_DND_CODE
+
+#else
+
   gtk_signal_connect( GTK_OBJECT(widget), "drop_data_available_event",
     GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
+    
+#endif
+    
 }
 
 void wxWindow::DisconnectDnDWidget( GtkWidget *widget )
 {
   if (!m_dropTarget) return;
 
+#ifdef NEW_GTK_DND_CODE
+
+#else
+
   gtk_signal_disconnect_by_func( GTK_OBJECT(widget),
     GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
 
   m_dropTarget->UnregisterWidget( widget );
+  
+#endif
+
 }
 
 GtkWidget* wxWindow::GetConnectWidget()

@@ -78,7 +78,7 @@ gtk_myfixed_class_init (GtkMyFixedClass *klass)
   object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
-
+  
   parent_class = gtk_type_class (gtk_container_get_type ());
 
   widget_class->map = gtk_myfixed_map;
@@ -104,6 +104,10 @@ gtk_myfixed_init (GtkMyFixed *myfixed)
   GTK_WIDGET_UNSET_FLAGS (myfixed, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (myfixed, GTK_BASIC);
   
+#if (GTK_MINOR_VERSION == 1)
+  gtk_container_set_resize_mode( GTK_CONTAINER(myfixed), GTK_RESIZE_PARENT );
+#endif
+
   myfixed->children = NULL;
 }
 

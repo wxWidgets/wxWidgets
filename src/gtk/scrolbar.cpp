@@ -14,6 +14,7 @@
 
 #include "wx/scrolbar.h"
 #include "wx/utils.h"
+#include <math.h>
 
 //-----------------------------------------------------------------------------
 // data

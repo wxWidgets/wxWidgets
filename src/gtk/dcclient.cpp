@@ -13,6 +13,7 @@
 
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
+#include <math.h>
 
 //-----------------------------------------------------------------------------
 // local data

@@ -160,7 +160,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     if (m_parent) m_parent->AddChild( this );
   
     PostCreation();
-
+    
     return TRUE;
 }
 
@@ -316,260 +316,262 @@ void wxFrame::GetClientSize( int *width, int *height ) const
 
 void wxFrame::SetClientSize( int const width, int const height )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  int h = height;
-  if (m_frameMenuBar) h += wxMENU_HEIGHT;
-  if (m_frameStatusBar) h += wxSTATUS_HEIGHT;
-  if (m_frameToolBar)
-  {
-    int y = 0;
-    m_frameToolBar->GetSize( (int *) NULL, &y );
-    h += y;
-  }
-  wxWindow::SetClientSize( width, h );
+    int h = height;
+    if (m_frameMenuBar) h += wxMENU_HEIGHT;
+    if (m_frameStatusBar) h += wxSTATUS_HEIGHT;
+    if (m_frameToolBar)
+    {
+        int y = 0;
+        m_frameToolBar->GetSize( (int *) NULL, &y );
+        h += y;
+    }
+    wxWindow::SetClientSize( width, h );
 }
 
 void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
 {
-  // due to a bug in gtk, x,y are always 0
-  // m_x = x;
-  // m_y = y;
+    // due to a bug in gtk, x,y are always 0
+    // m_x = x;
+    // m_y = y;
 
-  if ((m_height == height) && (m_width == width) &&
-      (m_sizeSet)) return;
-  if (!m_wxwindow) return;
-
-  m_width = width;
-  m_height = height;
-  if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
-  if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-  if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
-  if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
-
-  gtk_widget_set_usize( m_widget, m_width, m_height );
-
-  // This emulates the new wxMSW behaviour
-
-  if (m_frameMenuBar)
-  {
-    m_frameMenuBar->m_x = 1;  
-    m_frameMenuBar->m_y = 1;
-    m_frameMenuBar->m_width = m_width-2;
-    m_frameMenuBar->m_height = wxMENU_HEIGHT-2;
-    gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameMenuBar->m_widget, 1, 1 );
-    gtk_widget_set_usize( m_frameMenuBar->m_widget, m_width-2, wxMENU_HEIGHT-2 );
-  }
-
-  if (m_frameToolBar)
-  {
-    int y = 0;
-    if (m_frameMenuBar) y = wxMENU_HEIGHT;
-    int h = m_frameToolBar->m_height;
-    
-    m_frameToolBar->m_x = 2;  
-    gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameToolBar->m_widget, 2, y );
-    gtk_widget_set_usize( m_frameToolBar->m_widget, m_width-3, h );
-  }
+    if ((m_height == height) && (m_width == width) &&
+        (m_sizeSet)) return;
+    if (!m_wxwindow) return;
   
-  if (m_frameStatusBar)
-  {
-    // OK, this hurts in the eye, but I don't want to call SetSize()
-    // because I don't want to call any non-native functions here.
-    m_frameStatusBar->m_x = 0;  
-    m_frameStatusBar->m_y = m_height-wxSTATUS_HEIGHT;
-    m_frameStatusBar->m_width = m_width;
-    m_frameStatusBar->m_height = wxSTATUS_HEIGHT;
-    gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameStatusBar->m_widget, 0, m_height-wxSTATUS_HEIGHT );
-    gtk_widget_set_usize( m_frameStatusBar->m_widget, m_width, wxSTATUS_HEIGHT );
-  }
+    m_width = width;
+    m_height = height;
+  
+    if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
+    if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
+    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
+    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
 
-  m_sizeSet = TRUE;
+    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
+    event.SetEventObject( this );
+    ProcessEvent( event );
+  
+    gtk_widget_set_usize( m_widget, m_width, m_height );
 
-  wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-  event.SetEventObject( this );
-  ProcessEvent( event );
+    // This emulates the new wxMSW behaviour
+
+    if (m_frameMenuBar)
+    {
+        m_frameMenuBar->m_x = 1;  
+        m_frameMenuBar->m_y = 1;
+        m_frameMenuBar->m_width = m_width-2;
+        m_frameMenuBar->m_height = wxMENU_HEIGHT-2;
+        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameMenuBar->m_widget, 1, 1 );
+        gtk_widget_set_usize( m_frameMenuBar->m_widget, m_width-2, wxMENU_HEIGHT-2 );
+    }
+
+    if (m_frameToolBar)
+    {
+        int y = 0;
+        if (m_frameMenuBar) y = wxMENU_HEIGHT;
+        int h = m_frameToolBar->m_height;
+    
+        m_frameToolBar->m_x = 2;  
+        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameToolBar->m_widget, 2, y );
+        gtk_widget_set_usize( m_frameToolBar->m_widget, m_width-3, h );
+    }
+  
+    if (m_frameStatusBar)
+    {
+        // OK, this hurts in the eye, but I don't want to call SetSize()
+        // because I don't want to call any non-native functions here.
+        m_frameStatusBar->m_x = 0;  
+        m_frameStatusBar->m_y = m_height-wxSTATUS_HEIGHT;
+        m_frameStatusBar->m_width = m_width;
+        m_frameStatusBar->m_height = wxSTATUS_HEIGHT;
+        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameStatusBar->m_widget, 0, m_height-wxSTATUS_HEIGHT );
+        gtk_widget_set_usize( m_frameStatusBar->m_widget, m_width, wxSTATUS_HEIGHT );
+    }
+
+    m_sizeSet = TRUE;
 }
 
 void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  if ( GetAutoLayout() )
-    Layout();
-  else {
-    // no child: go out !
-    if (!GetChildren()->First())
-      return;
-      
-    // do we have exactly one child?
-    wxWindow *child = (wxWindow *) NULL;
-    for(wxNode *node = GetChildren()->First(); node; node = node->Next())
+    if (GetAutoLayout())
     {
-      wxWindow *win = (wxWindow *)node->Data();
-      if (!IS_KIND_OF(win,wxFrame) && !IS_KIND_OF(win,wxDialog)
-#if 0  // not in m_children anyway ?
-          && (win != m_frameMenuBar) &&
-             (win != m_frameToolBar) &&
-             (win != m_frameStatusBar)
-#endif
-         )
-      {
-        if ( child )  // it's the second one: do nothing
-          return;
-
-        child = win;
-      }
+        Layout();
     }
+    else 
+    {
+        // no child: go out !
+        if (!GetChildren()->First()) return;
+      
+        // do we have exactly one child?
+        wxWindow *child = (wxWindow *) NULL;
+        for(wxNode *node = GetChildren()->First(); node; node = node->Next())
+        {
+            wxWindow *win = (wxWindow *)node->Data();
+            if (!IS_KIND_OF(win,wxFrame) && !IS_KIND_OF(win,wxDialog)
+#if 0  // not in m_children anyway ?
+              && (win != m_frameMenuBar) &&
+              (win != m_frameToolBar) &&
+              (win != m_frameStatusBar)
+#endif
+            )
+            {
+	        // it's the second one: do nothing
+                if (child) return;
+                child = win;
+            }
+        }
 
-    // yes: set it's size to fill all the frame
-    int client_x, client_y;
-    GetClientSize(&client_x, &client_y);
-    child->SetSize( 1, 1, client_x-2, client_y);
-  }
+        // yes: set it's size to fill all the frame
+        int client_x, client_y;
+        GetClientSize( &client_x, &client_y );
+        child->SetSize( 1, 1, client_x-2, client_y);
+    }
 }
 
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
-  menu->SetInvokingWindow( win );
-  wxNode *node = menu->m_items.First();
-  while (node)
-  {
-    wxMenuItem *menuitem = (wxMenuItem*)node->Data();
-    if (menuitem->IsSubMenu())
-      SetInvokingWindow( menuitem->GetSubMenu(), win );
-    node = node->Next();
-  }
+    menu->SetInvokingWindow( win );
+    wxNode *node = menu->m_items.First();
+    while (node)
+    {
+        wxMenuItem *menuitem = (wxMenuItem*)node->Data();
+        if (menuitem->IsSubMenu())
+            SetInvokingWindow( menuitem->GetSubMenu(), win );
+        node = node->Next();
+    }
 }
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
-  wxASSERT_MSG( (m_wxwindow != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_wxwindow != NULL), "invalid frame" );
   
-  m_frameMenuBar = menuBar;
+    m_frameMenuBar = menuBar;
   
-  if (m_frameMenuBar)
-  {
-    wxNode *node = m_frameMenuBar->m_menus.First();
-    while (node)
+    if (m_frameMenuBar)
     {
-      wxMenu *menu = (wxMenu*)node->Data();
-      SetInvokingWindow( menu, this );
-      node = node->Next();
-    }
+        wxNode *node = m_frameMenuBar->m_menus.First();
+        while (node)
+        {
+            wxMenu *menu = (wxMenu*)node->Data();
+            SetInvokingWindow( menu, this );
+            node = node->Next();
+        }
     
-    if (m_frameMenuBar->m_parent != this)
-    {
-      m_frameMenuBar->m_parent = this;
-      gtk_myfixed_put( GTK_MYFIXED(m_wxwindow),
-        m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
+        if (m_frameMenuBar->m_parent != this)
+        {
+            m_frameMenuBar->m_parent = this;
+            gtk_myfixed_put( GTK_MYFIXED(m_wxwindow),
+                m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
+        }
     }
-  }
 }
 
 wxMenuBar *wxFrame::GetMenuBar(void) const
 {
-  return m_frameMenuBar;
+    return m_frameMenuBar;
 }
 
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  wxCHECK_MSG( m_frameToolBar == NULL, FALSE, "recreating toolbar in wxFrame" );
+    wxCHECK_MSG( m_frameToolBar == NULL, FALSE, "recreating toolbar in wxFrame" );
 
-  m_frameToolBar = OnCreateToolBar( style, id, name );
+    m_frameToolBar = OnCreateToolBar( style, id, name );
   
-  GetChildren()->DeleteObject( m_frameToolBar );
+    GetChildren()->DeleteObject( m_frameToolBar );
   
-  return m_frameToolBar;
+    return m_frameToolBar;
 }
 
 wxToolBar* wxFrame::OnCreateToolBar( long style, wxWindowID id, const wxString& name )
 {
-  return new wxToolBar( this, id, wxDefaultPosition, wxDefaultSize, style, name );
+    return new wxToolBar( this, id, wxDefaultPosition, wxDefaultSize, style, name );
 }
 
 wxToolBar *wxFrame::GetToolBar(void) const 
 { 
-  return m_frameToolBar; 
+    return m_frameToolBar; 
 }
 
 wxStatusBar* wxFrame::CreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, "recreating status bar in wxFrame" );
+    wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, "recreating status bar in wxFrame" );
 
-  m_frameStatusBar = OnCreateStatusBar( number, style, id, name );
+    m_frameStatusBar = OnCreateStatusBar( number, style, id, name );
   
-  return m_frameStatusBar;
+    return m_frameStatusBar;
 }
 
 wxStatusBar *wxFrame::OnCreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
 {
-  wxStatusBar *statusBar = (wxStatusBar *) NULL;
+    wxStatusBar *statusBar = (wxStatusBar *) NULL;
     
-  statusBar = new wxStatusBar(this, id, wxPoint(0, 0), wxSize(100, 20), style, name);
+    statusBar = new wxStatusBar(this, id, wxPoint(0, 0), wxSize(100, 20), style, name);
     
-  // Set the height according to the font and the border size
-  wxClientDC dc(statusBar);
-  dc.SetFont( *statusBar->GetFont() );
+    // Set the height according to the font and the border size
+    wxClientDC dc(statusBar);
+    dc.SetFont( *statusBar->GetFont() );
 
-  long x, y;
-  dc.GetTextExtent( "X", &x, &y );
+    long x, y;
+    dc.GetTextExtent( "X", &x, &y );
 
-  int height = (int)( (y  * 1.1) + 2* statusBar->GetBorderY());
+    int height = (int)( (y  * 1.1) + 2* statusBar->GetBorderY());
 
-  statusBar->SetSize( -1, -1, 100, height );
+    statusBar->SetSize( -1, -1, 100, height );
 
-  statusBar->SetFieldsCount( number );
-  return statusBar;
+    statusBar->SetFieldsCount( number );
+    return statusBar;
 }
 
 void wxFrame::SetStatusText(const wxString& text, int number)
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set text for" );
+    wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set text for" );
 
-  m_frameStatusBar->SetStatusText(text, number);
+    m_frameStatusBar->SetStatusText(text, number);
 }
 
 void wxFrame::SetStatusWidths(int n, const int widths_field[] )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set widths for" );
+    wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set widths for" );
 
-  m_frameStatusBar->SetStatusWidths(n, widths_field);
+    m_frameStatusBar->SetStatusWidths(n, widths_field);
 }
 
 wxStatusBar *wxFrame::GetStatusBar(void) const
 {
-  return m_frameStatusBar;
+    return m_frameStatusBar;
 }
 
 void wxFrame::SetTitle( const wxString &title )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  m_title = title;
-  if (m_title.IsNull()) m_title = "";
-  gtk_window_set_title( GTK_WINDOW(m_widget), title );
+    m_title = title;
+    if (m_title.IsNull()) m_title = "";
+    gtk_window_set_title( GTK_WINDOW(m_widget), title );
 }
 
 void wxFrame::SetIcon( const wxIcon &icon )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  m_icon = icon;
-  if (!icon.Ok()) return;
+    m_icon = icon;
+    if (!icon.Ok()) return;
   
-  wxMask *mask = icon.GetMask();
-  GdkBitmap *bm = (GdkBitmap *) NULL;
-  if (mask) bm = mask->GetBitmap();
+    wxMask *mask = icon.GetMask();
+    GdkBitmap *bm = (GdkBitmap *) NULL;
+    if (mask) bm = mask->GetBitmap();
   
-  gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
+    gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
 }

@@ -83,17 +83,17 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
     // ... and put into the upper left hand corner of the table
     m_widget = gtk_table_new(bHasHScrollbar ? 2 : 1, 2, FALSE);
-    gtk_table_attach(GTK_TABLE(m_widget), m_text, 0, 1, 0, 1,
-                     GTK_FILL | GTK_EXPAND,
-                     GTK_FILL | GTK_EXPAND | GTK_SHRINK,
-                     0, 0);
+    gtk_table_attach( GTK_TABLE(m_widget), m_text, 0, 1, 0, 1,
+                      (GtkAttachOptions)(GTK_FILL | GTK_EXPAND),
+                      (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
+                       0, 0);
 
     // put the horizontal scrollbar in the lower left hand corner
     if (bHasHScrollbar) 
     {
       GtkWidget *hscrollbar = gtk_hscrollbar_new(GTK_TEXT(m_text)->hadj);
       gtk_table_attach(GTK_TABLE(m_widget), hscrollbar, 0, 1, 1, 2,
-                       GTK_EXPAND | GTK_FILL,
+                       (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
                        GTK_FILL,
                        0, 0);
       gtk_widget_show(hscrollbar);
@@ -103,7 +103,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     GtkWidget *vscrollbar = gtk_vscrollbar_new(GTK_TEXT(m_text)->vadj);
     gtk_table_attach(GTK_TABLE(m_widget), vscrollbar, 1, 2, 0, 1,
                      GTK_FILL,
-                     GTK_EXPAND | GTK_FILL | GTK_SHRINK,
+                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL | GTK_SHRINK),
                      0, 0);
     gtk_widget_show( vscrollbar );
   }

@@ -14,6 +14,7 @@
 
 #include "wx/spinbutt.h"
 #include "wx/utils.h"
+#include <math.h>
 
 //-----------------------------------------------------------------------------
 // data
