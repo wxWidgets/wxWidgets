@@ -18,6 +18,7 @@
 
 #include "wx/docview.h"
 #include "wx/treectrl.h"
+#include "wx/fdrepdlg.h"
 #include "configitem.h"
 
 class ctConfigTreeCtrl;
@@ -190,6 +191,14 @@ public:
     /// Save configure command file update handler
     void OnUpdateSaveConfigureCommand(wxUpdateUIEvent& event);
 
+    // Find
+
+    /// Find text
+    void OnFind(wxCommandEvent& event);
+
+    /// Update find text
+    void OnUpdateFind(wxUpdateUIEvent& event);
+
 DECLARE_EVENT_TABLE()
 
 protected:
@@ -219,6 +228,38 @@ public:
 
     ctConfigItem*   m_item;
     int             m_op;
+};
+
+/*
+ * ctFindReplaceDialog
+ */
+
+class ctFindReplaceDialog: public wxFindReplaceDialog
+{
+public:
+    // constructors and destructors
+    ctFindReplaceDialog( wxWindow* parent, const wxString& title,
+        long style = 0 );
+    
+    void OnFind(wxFindDialogEvent& event);
+    void OnClose(wxFindDialogEvent& event);
+
+    // If wrap is TRUE, go back to the beginning if at the end of the
+    // document.
+    bool DoFind(const wxString& textToFind, bool matchCase, bool wholeWord, bool wrap = TRUE);
+
+    ctConfigItem* FindNextItem(ctConfigToolDoc* doc,
+                                                      ctConfigItem* item,
+                                                      const wxString& text,
+                                                      bool matchCase,
+                                                      bool matchWordOnly,
+                                                      bool wrap,
+                                                      bool skipFirst);
+    static wxFindReplaceData    sm_findData;
+    static wxString             sm_currentItem; // card name
+
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

@@ -117,6 +117,10 @@ public:
     int                     m_mainSashSize;
     bool                    m_showTrayIcon;
     bool                    m_trayIconIsShown;
+
+    // Search settings
+    bool                    m_matchCase;
+    bool                    m_matchWholeWord;
 };
 
 #endif

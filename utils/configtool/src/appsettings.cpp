@@ -73,6 +73,8 @@ ctSettings::ctSettings()
     m_trayIconIsShown = FALSE;
     m_useEnvironmentVariable = TRUE;
     m_frameworkDir = wxEmptyString;
+    m_matchWholeWord = FALSE;
+    m_matchCase = FALSE;
 }
 
 // Copy constructor
@@ -114,6 +116,8 @@ void ctSettings::Copy (const ctSettings& settings)
 
     m_useEnvironmentVariable = settings.m_useEnvironmentVariable;
     m_frameworkDir = settings.m_frameworkDir;
+    m_matchWholeWord = settings.m_matchWholeWord;
+    m_matchCase = settings.m_matchCase;
 }
 
 // Do some initialisation within stApp::OnInit
@@ -173,6 +177,8 @@ bool ctSettings::LoadConfig()
     config.Read(wxT("Misc/ShowWelcomeDialog"), (bool*) & m_showWelcomeDialog);
     config.Read(wxT("Misc/Ran"), & m_noUses);
     config.Read(wxT("Misc/ShowTrayIcon"), (bool*) & m_showTrayIcon);
+    config.Read(wxT("Misc/MatchWholeWord"), (bool*) & m_matchWholeWord);
+    config.Read(wxT("Misc/MatchCase"), (bool*) & m_matchCase);
 
     m_noUses ++;
 
@@ -231,6 +237,8 @@ bool ctSettings::SaveConfig()
     config.Write(wxT("Misc/ShowWelcomeDialog"), (long) m_showWelcomeDialog);
     config.Write(wxT("Misc/Ran"), m_noUses);
     config.Write(wxT("Misc/ShowTrayIcon"), (long) m_showTrayIcon);
+    config.Write(wxT("Misc/MatchWholeWord"), (long) m_matchWholeWord);
+    config.Write(wxT("Misc/MatchCase"), (long) m_matchCase);
 
     config.Write(wxT("Windows/ShowToolBar"), m_showToolBar);
     config.Write(wxT("Windows/WindowX"), (long) m_frameSize.x);

@@ -791,6 +791,51 @@ wxString ctConfigToolDoc::GetFrameworkDir(bool makeUnix)
     return path;
 }
 
+/// Finds the next item in the tree
+ctConfigItem* ctConfigToolDoc::FindNextItem(ctConfigItem* item, bool wrap)
+{
+    if (!item)
+        return GetTopItem();
+
+    // First, try to find the first child
+    if (item->GetChildCount() > 0)
+    {
+        return item->GetChild(0);
+    }
+    else
+    {
+        ctConfigItem* p = item;
+        while (p)
+        {
+            ctConfigItem* toFind = FindNextSibling(p);
+            if (toFind)
+                return toFind;
+            p = p->GetParent();
+        }
+    }
+
+    // Finally, wrap around to the root.
+    if (wrap)
+        return GetTopItem();
+    else
+        return NULL;
+}
+
+/// Finds the next sibling in the tree
+ctConfigItem* ctConfigToolDoc::FindNextSibling(ctConfigItem* item)
+{
+    if (item->GetParent())
+    {
+        wxNode* node = item->GetParent()->GetChildren().Member(item);
+        if (node && node->GetNext())
+        {
+            ctConfigItem* nextItem = (ctConfigItem*) node->GetNext()->GetData();
+            return nextItem;
+        }
+    }
+    return NULL;
+}
+
 
 /*
  * Implements a document editing command.
@@ -990,3 +1035,4 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
     return TRUE;
 }
 
+        

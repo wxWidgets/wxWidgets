@@ -196,5 +196,10 @@ wxOutputStream& operator <<(wxOutputStream&, long l);
 // Convert characters to HTML equivalents
 wxString ctEscapeHTMLCharacters(const wxString& str);
 
+// Match 'matchText' against 'matchAgainst', optionally constraining to
+// whole-word only.
+bool ctMatchString(const wxString& matchAgainst, const wxString& matchText, bool wholeWordOnly);
+
+
 #endif
     // _AP_UTILS_H_

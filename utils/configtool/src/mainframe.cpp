@@ -80,6 +80,8 @@ BEGIN_EVENT_TABLE(ctMainFrame, wxDocParentFrame)
 
     EVT_UPDATE_UI(ctID_SAVE_SETUP_FILE, ctMainFrame::OnUpdateDisable)
     EVT_UPDATE_UI(ctID_SAVE_CONFIGURE_COMMAND, ctMainFrame::OnUpdateDisable)
+
+    EVT_UPDATE_UI(wxID_FIND, ctMainFrame::OnUpdateDisable)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -92,6 +94,7 @@ ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, 
     m_configurePage = NULL;
     m_setupPage = NULL;
     m_mainNotebook = NULL;
+    m_findDialog = NULL;
 
     m_treeSplitterWindow = new wxSplitterWindow(this, -1, wxDefaultPosition, wxSize(400, 300),
         wxSP_3DSASH|wxSP_3DBORDER);
@@ -149,6 +152,12 @@ void ctMainFrame::OnCloseWindow(wxCloseEvent& event)
             event.Veto();
             return;
         }
+    }
+
+    if (m_findDialog)
+    {
+        m_findDialog->Destroy();
+        m_findDialog = NULL;
     }
 
     Show(FALSE);
@@ -293,6 +302,8 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
     editMenu->AppendSeparator();
     editMenu->Append(ctID_DELETE_ITEM, _("&Delete Option"), _("Delete a configuration option"));
     editMenu->Append(ctID_RENAME_ITEM, _("&Rename Option"), _("Rename a configuration option"));
+    editMenu->AppendSeparator();
+    editMenu->Append(wxID_FIND, _("&Find...\tCtrl+F"), _("Search for a string in the settings document"));
 
     // Save for the command processor.
     m_editMenu = editMenu;

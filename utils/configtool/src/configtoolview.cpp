@@ -87,6 +87,10 @@ BEGIN_EVENT_TABLE(ctConfigToolView, wxView)
     EVT_MENU(ctID_SAVE_CONFIGURE_COMMAND, ctConfigToolView::OnSaveConfigureCommand)
     EVT_UPDATE_UI(ctID_SAVE_SETUP_FILE, ctConfigToolView::OnUpdateSaveSetupFile)
     EVT_UPDATE_UI(ctID_SAVE_CONFIGURE_COMMAND, ctConfigToolView::OnUpdateSaveConfigureCommand)
+
+    EVT_MENU(wxID_FIND, ctConfigToolView::OnFind)
+    EVT_UPDATE_UI(wxID_FIND, ctConfigToolView::OnUpdateFind)
+
 END_EVENT_TABLE()
 
 ctConfigToolView::ctConfigToolView()
@@ -965,4 +969,193 @@ void ctConfigToolView::OnUpdateSaveSetupFile(wxUpdateUIEvent& event)
 void ctConfigToolView::OnUpdateSaveConfigureCommand(wxUpdateUIEvent& event)
 {
     event.Enable(TRUE);
+}
+
+/// Find text
+void ctConfigToolView::OnFind(wxCommandEvent& event)
+{
+    ctFindReplaceDialog* dialog = wxGetApp().GetMainFrame()->GetFindDialog();
+    if (dialog)
+    {
+        dialog->Raise();
+    }
+
+    if (!dialog)
+    {
+        int style = wxFR_NOUPDOWN;
+        wxString caption(wxT("Find text in settings"));
+        int flags = wxFR_DOWN;
+        if (wxGetApp().GetSettings().m_matchCase)
+            flags|=wxFR_MATCHCASE;
+        if (wxGetApp().GetSettings().m_matchWholeWord)
+            flags|=wxFR_WHOLEWORD;
+
+        ctFindReplaceDialog::sm_findData.SetFlags(flags);
+
+        dialog = new ctFindReplaceDialog(wxGetApp().GetMainFrame(), caption, style);
+        dialog->Show(TRUE);
+    }
+}
+
+/// Update find text
+void ctConfigToolView::OnUpdateFind(wxUpdateUIEvent& event)
+{
+    event.Enable(TRUE);
+}
+
+//----------------------------------------------------------------------------
+// ctFindReplaceDialog
+//----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(ctFindReplaceDialog, wxFindReplaceDialog)
+    EVT_FIND(-1, ctFindReplaceDialog::OnFind)
+    EVT_FIND_NEXT(-1, ctFindReplaceDialog::OnFind)
+    EVT_FIND_CLOSE(-1, ctFindReplaceDialog::OnClose)
+END_EVENT_TABLE()
+
+wxFindReplaceData ctFindReplaceDialog::sm_findData;
+wxString ctFindReplaceDialog::sm_currentItem = wxEmptyString;
+
+ctFindReplaceDialog::ctFindReplaceDialog( wxWindow *parent, const wxString& title,
+        long style):
+    wxFindReplaceDialog( parent, & sm_findData, title, style )
+{
+    sm_currentItem = wxEmptyString;
+
+    if (parent)
+        ((ctMainFrame*) parent)->SetFindDialog(this);
+}
+
+void ctFindReplaceDialog::OnFind(wxFindDialogEvent& event)
+{
+    wxString textToFind = event.GetFindString();
+    bool matchCase = ((event.GetFlags() & wxFR_MATCHCASE) != 0);
+    bool wholeWord = ((event.GetFlags() & wxFR_WHOLEWORD) != 0);
+
+    wxGetApp().GetSettings().m_matchCase = matchCase;
+    wxGetApp().GetSettings().m_matchWholeWord = wholeWord;
+
+    if (!DoFind(textToFind, matchCase, wholeWord))
+    {
+        wxMessageBox(wxT("No more matches."), wxT("Search"), wxOK|wxICON_INFORMATION, this);
+    }
+}
+
+bool ctFindReplaceDialog::DoFind(const wxString& textToFind, bool matchCase, bool wholeWord, bool wrap)
+{
+    ctConfigToolDoc* doc = wxGetApp().GetMainFrame()->GetDocument();
+    if (!doc)
+        return FALSE;
+    ctConfigToolView* view = (ctConfigToolView*) doc->GetFirstView();
+
+    ctConfigItem* currentItem = NULL;
+    ctConfigItem* focusItem = view->GetSelection();
+    if (!focusItem)
+    {
+        focusItem = doc->GetTopItem();
+        if (!focusItem)
+            return FALSE;
+    }
+
+    if (!sm_currentItem.IsEmpty())
+    {
+        currentItem = doc->GetTopItem()->FindItem(sm_currentItem);
+    }
+
+    // If we were at this item last time, skip the first one.
+    bool skipFirstItem = (currentItem == focusItem);
+    currentItem = FindNextItem(doc, currentItem, textToFind, matchCase, wholeWord, wrap,
+        skipFirstItem);
+
+    if (currentItem)
+    {
+        sm_currentItem = currentItem->GetName();
+        wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->SelectItem(currentItem->GetTreeItemId());
+        return TRUE;
+    }
+    else
+    {
+        sm_currentItem = wxEmptyString;
+    }
+
+    return FALSE;
+}
+
+ctConfigItem* ctFindReplaceDialog::FindNextItem(ctConfigToolDoc* doc,
+                                                      ctConfigItem* item,
+                                                      const wxString& text,
+                                                      bool matchCase,
+                                                      bool matchWordOnly,
+                                                      bool wrap,
+                                                      bool skipFirst)
+{
+    ctConfigItem* firstInDoc = NULL;
+
+    wxString text2(text);
+    if (!matchCase)
+        text2.MakeLower();
+
+    ctConfigItem* found = NULL;
+    ctConfigItem* next = item;
+
+    int i = 0;
+    do
+    {
+        // If starting the search from beginning, we can now
+        // set the value of 'item' in the 2nd iteration without immediately
+        // dropping out of the while loop because card == next
+        if (!item && (i > 0))
+            item = firstInDoc;
+
+        // We might want to start from this item if skipFirst is false.
+        if ((i == 0) && !skipFirst && next)
+        {
+        }
+        else
+            next = doc->FindNextItem(next, wrap);
+
+        // Save to be used in iteration 2
+        if ((i == 0) && !item)
+            firstInDoc = next;
+
+        if (next)
+        {
+            wxString str(next->GetName());
+            wxString description(next->GetPropertyString(wxT("description")));
+            wxString notes(next->GetPropertyString(wxT("notes")));
+            if (!matchCase)
+            {
+                str.MakeLower();
+                description.MakeLower();
+                notes.MakeLower();
+            }
+            if (ctMatchString(str, text2, matchWordOnly) ||
+                ctMatchString(description, text2, matchWordOnly) ||
+                ctMatchString(notes, text2, matchWordOnly))
+            {
+                found = next;
+            }
+        }
+        else
+            break; // Didn't find an item at all
+
+        i ++;
+    }
+    while (!found && item != next);
+
+    if (item == found && !firstInDoc)
+        return NULL;
+    else
+        return found;
+}
+
+void ctFindReplaceDialog::OnClose(wxFindDialogEvent& event)
+{
+    bool matchCase = ((event.GetFlags() & wxFR_MATCHCASE) != 0);
+    bool wholeWord = ((event.GetFlags() & wxFR_WHOLEWORD) != 0);
+    wxGetApp().GetSettings().m_matchCase = matchCase;
+    wxGetApp().GetSettings().m_matchWholeWord = wholeWord;
+
+    this->Destroy();
+    ((ctMainFrame*) GetParent())->SetFindDialog(NULL);
 }

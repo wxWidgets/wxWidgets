@@ -26,6 +26,7 @@ class WXDLLEXPORT wxNotebookEvent;
 class ctConfigTreeCtrl;
 class ctPropertyEditor;
 class ctOutputWindow;
+class ctFindReplaceDialog;
 
 /*!
  * \brief The main window of the application.
@@ -120,6 +121,12 @@ class ctMainFrame: public wxDocParentFrame
     /// Returns the main notebook containing editor and text tabs 
     wxNotebook* GetMainNotebook() const { return m_mainNotebook; }
 
+    /// Sets the find dialog for future closing
+    void SetFindDialog(ctFindReplaceDialog* findDialog) { m_findDialog = findDialog; }
+
+    /// Gets the find dialog
+    ctFindReplaceDialog* GetFindDialog() const { return m_findDialog ; }
+
 DECLARE_EVENT_TABLE()
 
 protected:
@@ -145,6 +152,8 @@ protected:
     wxNotebook*             m_mainNotebook;
     ctOutputWindow*         m_setupPage;
     ctOutputWindow*         m_configurePage;
+
+    ctFindReplaceDialog*    m_findDialog;
 };
 
 /*!

@@ -477,3 +477,37 @@ wxString ctEscapeHTMLCharacters(const wxString& str)
     }
     return s;
 }
+
+// Match 'matchText' against 'matchAgainst', optionally constraining to
+// whole-word only.
+bool ctMatchString(const wxString& matchAgainst, const wxString& matchText, bool wholeWordOnly)
+{
+    // Fast operation if not matching against whole words only
+    if (!wholeWordOnly)
+        return (matchAgainst.Find(matchText) != -1);
+
+    wxString left(matchAgainst);
+    bool success = FALSE;
+    int pos = 0;
+    int matchTextLen = (int) matchText.Length();
+    while (!success && !matchAgainst.IsEmpty())
+    {
+        pos = left.Find(matchText);
+        if (pos == -1)
+            return FALSE;
+
+        bool firstCharOK = FALSE;
+        bool lastCharOK = FALSE;
+        if (pos == 0 || !wxIsalnum(left[(size_t) (pos-1)]))
+            firstCharOK = TRUE;
+
+        if (((pos + matchTextLen) == (int) left.Length()) || !wxIsalnum(left[(size_t) (pos + matchTextLen)]))
+            lastCharOK = TRUE;
+
+        if (firstCharOK && lastCharOK)
+            success = TRUE;
+
+        left = left.Mid(pos+1);
+    }
+    return success;
+}

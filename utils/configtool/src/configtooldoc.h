@@ -100,6 +100,12 @@ public:
 
     /// Helper function
     void GenerateConfigureCommand(ctConfigItem* item, wxString& str);
+
+    /// Finds the next item in the tree
+    ctConfigItem* FindNextItem(ctConfigItem* item, bool wrap);
+        
+    /// Finds the next sibling in the tree
+    ctConfigItem* FindNextSibling(ctConfigItem* item);
         
 protected:
     ctConfigItem*   m_topItem;

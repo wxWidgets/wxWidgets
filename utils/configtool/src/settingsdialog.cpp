@@ -153,7 +153,7 @@ void ctSettingsDialog::OnHelp( wxCommandEvent& event )
     }
     else if (page->GetId() == ID_LOCATION_SETTINGS_DIALOG)
     {
-        helpTopic = wxT("Location dialog");
+        helpTopic = wxT("Location settings dialog");
     }
 
     if (!helpTopic.IsEmpty())
