@@ -1541,7 +1541,7 @@ GUI_TK_LINK=
 
 WXGTK12=
 WXGTK127=
-WXGTK13=
+WXGTK20=
 
 WXWINE=
 
@@ -1601,10 +1601,12 @@ fi
 if test "$wxUSE_GTK" = 1; then
     dnl avoid calling AM_PATH_GTK twice, so check first for the newer version
     dnl and only then, if it wasn't found, for an older one
-    AM_PATH_GTK(1.2.7, WXGTK127=1)
-    AM_PATH_GTK(1.2.3, WXGTK12=1)
+    AM_PATH_GTK_2_0(1.3.1, WXGTK20=1,[
+      AM_PATH_GTK(1.2.7, WXGTK127=1)
+      AM_PATH_GTK(1.2.3, WXGTK12=1)
+    ], gthread)
 
-    if test "$WXGTK12" != 1; then
+    if test "$WXGTK12" != 1 -a "$WXGTK20" != 1; then
         AC_MSG_ERROR([
             Please check that gtk-config is in path, the directory
             where GTK+ libraries are installed (returned by
@@ -1612,15 +1614,6 @@ if test "$wxUSE_GTK" = 1; then
             equivalent variable and GTK+ is version 1.2.3 or above.
         ])
     fi
-
-dnl it doesn't really work with 1.3.0 now...
-dnl    AM_PATH_GTK(1.3.0,
-dnl        WXGTK13=1,
-dnl        AM_PATH_GTK(1.2.1,
-dnl            WXGTK12=1,
-dnl            AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.1 or above?)
-dnl        )
-dnl    )
 
     TOOLKIT_INCLUDE="$GTK_CFLAGS"
 
@@ -2211,6 +2204,10 @@ dnl defines HAVE_WCSTR_H
 AC_CHECK_HEADERS(wcstr.h)
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
+dnl defines HAVE_ICONV_H (Unix98 encoding conversion routines)
+AC_CHECK_HEADERS(iconv.h)
+dnl defines HAVE_LANGINFO_H (GNU libc locale parameters)
+AC_CHECK_HEADERS(langinfo.h)
 
 if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_UNIX" = "yes"; then
@@ -2274,6 +2271,7 @@ dnl check the sizes of integral types (give some reasonable default values for
 dnl cross-compiling)
 dnl   defines the size of certain types of variables in SIZEOF_<TYPE>
 AC_CHECK_SIZEOF(char, 1)
+AC_CHECK_SIZEOF(wchar_t, 4)
 AC_CHECK_SIZEOF(short, 2)
 AC_CHECK_SIZEOF(int *, 4)
 AC_CHECK_SIZEOF(int, 4)
@@ -2667,8 +2665,8 @@ else
   fi
 fi
 
-if test "$WXGTK13" = 1 ; then
-  AC_DEFINE_UNQUOTED(__WXGTK13__,$WXGTK13)
+if test "$WXGTK20" = 1 ; then
+  AC_DEFINE_UNQUOTED(__WXGTK20__,$WXGTK20)
   WXGTK12=1
 fi
 

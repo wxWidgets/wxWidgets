@@ -65,7 +65,7 @@
 #undef __WXGTK127__
 
 /* Define this if your version of GTK+ is greater than 1.3 */
-#undef __WXGTK13__
+#undef __WXGTK20__
 
 /*
  * Define to 1 for Unix[-like] system
@@ -703,6 +703,9 @@
 /* The number of bytes in a char.  */
 #undef SIZEOF_CHAR
 
+/* The number of bytes in a wchar_t.  */
+#undef SIZEOF_WCHAR_T
+
 /* The number of bytes in a int.  */
 #undef SIZEOF_INT
 
@@ -780,6 +783,12 @@
 
 /* Define if you have the <wcstr.h> header file.  */
 #undef HAVE_WCSTR_H
+
+/* Define if you have the <iconv.h> header file.  */
+#undef HAVE_ICONV_H
+
+/* Define if you have the <langinfo.h> header file.  */
+#undef HAVE_LANGINFO_H
 
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
