@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows-2.5.1\n"
+"Project-Id-Version: wxWidgets-2.5.4\n"
 "POT-Creation-Date: 2005-02-15 01:23+0100\n"
-"PO-Revision-Date: 2005-02-19 15:05+0100\n"
-"Last-Translator:  <>\n"
-"Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
+"PO-Revision-Date: 2005-02-27 16:44+0100\n"
+"Last-Translator: Mattia Barbon <mbarbon@cpan.org>\n"
+"Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -99,19 +99,19 @@ msgstr "%s: messaggio"
 #: ../contrib/src/deprecated/resource.cpp:2390
 #, c-format
 msgid "%s not a bitmap resource specification."
-msgstr ""
+msgstr "%s non è la specifica di una risorsa bitmap."
 
 #: ../contrib/src/deprecated/resource.cpp:2544
 #, c-format
 msgid "%s not an icon resource specification."
-msgstr ""
+msgstr "%s non è la specifica di una risorsa icona."
 
 #: ../contrib/src/deprecated/resource.cpp:1901
 #: ../contrib/src/deprecated/resource.cpp:2030
 #: ../contrib/src/deprecated/resource.cpp:3123
 #, c-format
 msgid "%s: ill-formed resource file syntax."
-msgstr ""
+msgstr "%s: sintassi errata nel file di risorsa."
 
 #: ../src/html/helpfrm.cpp:341
 #: ../src/html/helpfrm.cpp:343
@@ -448,6 +448,8 @@ msgid ""
 ", expected static, #include or #define\n"
 "while parsing resource."
 msgstr ""
+", atteso static, #include o #define\n"
+"durante l'analisi delle risorse."
 
 #: ../src/generic/dirctrlg.cpp:655
 #: ../src/generic/filedlgg.cpp:739
@@ -631,7 +633,7 @@ msgstr "Arabo (ISO-8859-6)"
 
 #: ../src/html/chm.cpp:564
 msgid "Archive doesnt contain #SYSTEM file"
-msgstr ""
+msgstr "L'archivio non contiene il file #SYSTEM"
 
 #: ../src/generic/filedlgg.cpp:439
 msgid "Attributes"
@@ -695,9 +697,9 @@ msgid "Baltic (old) (ISO-8859-4)"
 msgstr "Baltico (vecchio) (ISO-8859-4)"
 
 #: ../contrib/src/deprecated/resource.cpp:2524
-#, fuzzy, c-format
+#, c-format
 msgid "Bitmap resource specification %s not found."
-msgstr "Risorsa XRC '%s' (classe '%s') non trovata!"
+msgstr "Specifica della risorsa di tipo bitmap %s non trovata."
 
 #: ../src/generic/fontdlgg.cpp:235
 msgid "Bold"
@@ -853,9 +855,9 @@ msgid "Can't enumerate values of key '%s'"
 msgstr "Impossibile elencare i valori della chiave '%s'"
 
 #: ../src/msw/registry.cpp:1267
-#, fuzzy, c-format
+#, c-format
 msgid "Can't export value of unsupported type %d."
-msgstr "Impossibile copiare valori del tipo non supportato %d."
+msgstr "Impossibile esportare valori del tipo non supportato %d."
 
 #: ../src/common/ffile.cpp:241
 #, c-format
@@ -887,9 +889,9 @@ msgid "Can't open registry key '%s'"
 msgstr "Impossibile aprire la chiave '%s' del registro di sistema"
 
 #: ../src/common/zstream.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Can't read from inflate stream: %s"
-msgstr "Impossibile leggere dal flusso di decompressione: %s\n"
+msgstr "Impossibile leggere dal flusso di decompressione: %s"
 
 #: ../src/common/zstream.cpp:159
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
@@ -930,9 +932,9 @@ msgid "Can't set value of '%s'"
 msgstr "Impossibile impostare il valore di '%s'"
 
 #: ../src/common/zstream.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Can't write to deflate stream: %s"
-msgstr "Impossibile scrivere new flusso di compressione: %s\n"
+msgstr "Impossibile scrivere new flusso di compressione: %s"
 
 #: ../src/generic/choicdgg.cpp:285
 #: ../src/generic/dirdlgg.cpp:116
@@ -1082,15 +1084,13 @@ msgstr "Impossibile avviare il thread: errore nella scrittura del TLS"
 
 #: ../src/mac/carbon/mpthread.cpp:977
 #: ../src/mac/carbon/thread.cpp:1174
-#, fuzzy
 msgid "Cannot wait on thread to exit."
 msgstr "Impossibile attendere la fine del thread"
 
 #: ../src/mac/carbon/mpthread.cpp:893
 #: ../src/mac/carbon/thread.cpp:1082
-#, fuzzy
 msgid "Cant create the thread event queue"
-msgstr "Impossibile creare il thread"
+msgstr "Impossibile creare la coda di eventi per il thread"
 
 #: ../src/html/helpfrm.cpp:511
 msgid "Case sensitive"
@@ -1216,9 +1216,9 @@ msgstr "Impossibile estrarre %s in %s: %s"
 
 #: ../contrib/src/deprecated/resource.cpp:1830
 #: ../contrib/src/deprecated/resource.cpp:1960
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find resource include file %s."
-msgstr "Impossibile trovare il file '%s'."
+msgstr "Impossibile trovare il file di inclusione di risorsa %s."
 
 #: ../src/generic/tabg.cpp:1049
 msgid "Could not find tab for id"
@@ -1240,6 +1240,8 @@ msgid ""
 "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
 " or provide #define (see manual for caveats)"
 msgstr ""
+"Impossibile risolvere la classe del controllo o l'id '%s'. Impiegare in sostituzione un intero (non nullo)\n"
+" o fornire #define (vedere il manuale per avvertimenti)"
 
 #: ../contrib/src/deprecated/resource.cpp:1278
 #, c-format
@@ -1247,6 +1249,8 @@ msgid ""
 "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
 "or provide #define (see manual for caveats)"
 msgstr ""
+"Impossibile risolvere l'id del menu '%s'. Impiegare in sostituzione un intero (non nullo)\n"
+" o fornire #define (vedere il manuale per avvertimenti)"
 
 #: ../src/common/prntbase.cpp:1226
 msgid "Could not start document preview."
@@ -1558,14 +1562,13 @@ msgid "Error reading config options."
 msgstr "Errore durante la lettura del file di configurazione."
 
 #: ../src/common/fileconf.cpp:1015
-#, fuzzy
 msgid "Error saving user configuration data."
-msgstr "Errore durante la lettura del file di configurazione."
+msgstr "Errore durante il salvataggio del file di configurazione."
 
 #: ../src/mac/carbon/mpthread.cpp:482
 #: ../src/mac/carbon/thread.cpp:672
 msgid "Error while waiting on semaphore"
-msgstr ""
+msgstr "Errore durante l'attesa su di un semaforo"
 
 #: ../src/common/log.cpp:477
 msgid "Error: "
@@ -1597,24 +1600,24 @@ msgstr "Executive, 7 1/4 x 10 1/2 in"
 #: ../contrib/src/deprecated/resource.cpp:1999
 #: ../contrib/src/deprecated/resource.cpp:3091
 msgid "Expected '*' while parsing resource."
-msgstr ""
+msgstr "Atteso '*' durante l'analisi della risorsa."
 
 #: ../contrib/src/deprecated/resource.cpp:1886
 #: ../contrib/src/deprecated/resource.cpp:2015
 #: ../contrib/src/deprecated/resource.cpp:3108
 msgid "Expected '=' while parsing resource."
-msgstr ""
+msgstr "Atteso '=' durante l'analisi della risorsa."
 
 #: ../contrib/src/deprecated/resource.cpp:1855
 #: ../contrib/src/deprecated/resource.cpp:1985
 #: ../contrib/src/deprecated/resource.cpp:3077
 msgid "Expected 'char' while parsing resource."
-msgstr ""
+msgstr "Atteso 'char' durante l'analisi della risorsa."
 
 #: ../src/msw/registry.cpp:1125
 #, c-format
 msgid "Exporting registry key: file \"%s\" already exists and won't be overwritten."
-msgstr ""
+msgstr "Durante l'esportazione dela chiave di registro: il file \"%s\" esiste e non verrà sovrascritto."
 
 #: ../src/common/fmapbase.cpp:141
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
@@ -1680,9 +1683,9 @@ msgid "Failed to copy the file '%s' to '%s'"
 msgstr "Impossibile copiare copiare il file '%s' in '%s'"
 
 #: ../src/msw/registry.cpp:605
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
-msgstr "Impossibile rinominare la chiave '%s' del registro di sistema in '%s'."
+msgstr "Impossibile copiare la chiave '%s' del registro di sistema in '%s'."
 
 #: ../src/msw/dde.cpp:988
 msgid "Failed to create DDE string"
@@ -1778,6 +1781,8 @@ msgid ""
 "Failed to find XBM resource %s.\n"
 "Forgot to use wxResourceLoadBitmapData?"
 msgstr ""
+"Impossibile trovare la risorsa XBM %s.\n"
+"Dimenticato di impiegare wxResourceLoadBitmapData?"
 
 #: ../contrib/src/deprecated/resource.cpp:2643
 #, c-format
@@ -1785,6 +1790,8 @@ msgid ""
 "Failed to find XBM resource %s.\n"
 "Forgot to use wxResourceLoadIconData?"
 msgstr ""
+"Impossibile trovare la risorsa XBM %s.\n"
+"Dimenticato di impiegare wxResourceLoadIconData?"
 
 #: ../contrib/src/deprecated/resource.cpp:2504
 #, c-format
@@ -1792,6 +1799,8 @@ msgid ""
 "Failed to find XPM resource %s.\n"
 "Forgot to use wxResourceLoadBitmapData?"
 msgstr ""
+"Impossibile trovare la risorsa XPM %s.\n"
+"Dimenticato di impiegare wxResourceLoadBitmapData?"
 
 #: ../src/msw/dialup.cpp:681
 #, c-format
@@ -1808,11 +1817,13 @@ msgid "Failed to get data from the clipboard"
 msgstr "Impossibile ottenere i dati dagli appunti"
 
 #: ../src/msw/stackwalk.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to get stack backtrace:\n"
 "%s"
-msgstr "Impossibile ottenere i nomi degli ISP: %s"
+msgstr ""
+"Impossibile ottenere un backtrace:\n"
+"%s"
 
 #: ../src/common/stopwatch.cpp:189
 msgid "Failed to get the local system time"
@@ -2041,9 +2052,8 @@ msgid "Failed to unregister DDE server '%s'"
 msgstr "Impossibile cancellare la registrazione del server DDE '%s'"
 
 #: ../src/common/fileconf.cpp:990
-#, fuzzy
 msgid "Failed to update user configuration file."
-msgstr "impossibile aprire il file di configurazione utente."
+msgstr "impossibile aggiornare il file di configurazione utente."
 
 #: ../src/unix/snglinst.cpp:173
 #, c-format
@@ -2225,7 +2235,7 @@ msgstr "Greco (ISO-8859-7)"
 #: ../src/common/zstream.cpp:72
 #: ../src/common/zstream.cpp:209
 msgid "Gzip not supported by this version of zlib"
-msgstr ""
+msgstr "Gzip non è supportato da questa versione della libreria zlib"
 
 #: ../src/html/helpfrm.cpp:1560
 msgid "HTML Help Project (*.hhp)|*.hhp|"
@@ -2333,18 +2343,18 @@ msgstr "IFF: errore sconosciuto!!!"
 
 #: ../contrib/src/deprecated/resource.cpp:2673
 #: ../contrib/src/deprecated/resource.cpp:2684
-#, fuzzy, c-format
+#, c-format
 msgid "Icon resource specification %s not found."
-msgstr "Risorsa XRC '%s' (classe '%s') non trovata!"
+msgstr "Specifica della risorsa icona %s non trovata."
 
 #: ../src/msw/registry.cpp:1281
 #, c-format
 msgid "Ignoring value \"%s\" of the key \"%s\"."
-msgstr ""
+msgstr "Il valore \"%s\" della chiave \"%s\" è stato ignorato."
 
 #: ../contrib/src/deprecated/resource.cpp:271
 msgid "Ill-formed resource file syntax."
-msgstr ""
+msgstr "Sintassi errata nel file di risorsa."
 
 #: ../src/common/xtistrm.cpp:260
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
@@ -2532,14 +2542,14 @@ msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr "Caricamento di un'immagine PNM Raw a toni di grigio non ancora implementato."
 
 #: ../src/unix/snglinst.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "Lock file '%s' has incorrect owner."
-msgstr "File sonoro '%s' ha un formato non supportato."
+msgstr "Il file di lock '%s' ha un proprietario errato."
 
 #: ../src/unix/snglinst.cpp:256
 #, c-format
 msgid "Lock file '%s' has incorrect permissions."
-msgstr ""
+msgstr "Il file di lock '%s' ha permessi scorretti."
 
 #: ../src/generic/logg.cpp:571
 #, c-format
@@ -2557,7 +2567,7 @@ msgstr "Figlio MDI"
 
 #: ../src/mac/carbon/thread.cpp:1635
 msgid "MP Thread Support is not available on this System"
-msgstr ""
+msgstr "Il supporto per thread MP non è disponibile in questo sistema"
 
 #: ../src/msw/helpchm.cpp:60
 msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
@@ -2661,11 +2671,11 @@ msgstr "No"
 #: ../contrib/src/deprecated/resource.cpp:2495
 #: ../contrib/src/deprecated/resource.cpp:2649
 msgid "No XBM facility available!"
-msgstr ""
+msgstr "Funzionalità XBM non disponibili!"
 
 #: ../contrib/src/deprecated/resource.cpp:2667
 msgid "No XPM icon facility available!"
-msgstr ""
+msgstr "Funzionalità per icone XPM non disponibili!"
 
 #: ../src/generic/helpext.cpp:436
 msgid "No entries found."
@@ -2726,14 +2736,12 @@ msgstr "Nessun suono"
 
 #: ../src/common/image.cpp:977
 #: ../src/common/image.cpp:1016
-#, fuzzy
 msgid "No unused colour in image being masked."
-msgstr "Nessun colore inutilizzato nell'immagine da mascherare"
+msgstr "Nessun colore inutilizzato nell'immagine da mascherare."
 
 #: ../src/common/image.cpp:1608
-#, fuzzy
 msgid "No unused colour in image."
-msgstr "Nessun colore inutilizzato nell'immagine da mascherare"
+msgstr "Nessun colore inutilizzato nell'immagine."
 
 #: ../src/common/fmapbase.cpp:112
 msgid "Nordic (ISO-8859-10)"
@@ -2912,9 +2920,8 @@ msgid "Please choose an existing file."
 msgstr "Per favore scegliere un file esistente."
 
 #: ../src/html/helpfrm.cpp:790
-#, fuzzy
 msgid "Please choose the page to display:"
-msgstr "Per favore scegliere un file esistente."
+msgstr "Per favore scegliere la pagina da visualizzare."
 
 #: ../src/msw/dialup.cpp:750
 msgid "Please choose which ISP do you want to connect to"
@@ -3212,7 +3219,7 @@ msgstr "Errore durante la seek nel file '%s'"
 #: ../src/common/ffile.cpp:215
 #, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
-msgstr ""
+msgstr "Errore durante la seek nel file '%s' (stdio non supporta file di queste dimensioni))"
 
 #: ../src/msw/textctrl.cpp:2062
 msgid "Select &All"
@@ -3402,9 +3409,8 @@ msgid "The FTP server doesn't support passive mode."
 msgstr "Il server FTP non supporta la modalità passiva di trasfrimento"
 
 #: ../src/common/ftp.cpp:696
-#, fuzzy
 msgid "The FTP server doesn't support the PORT command."
-msgstr "Il server FTP non supporta la modalità passiva di trasfrimento"
+msgstr "Il server FTP non supporta il comando PORT."
 
 #: ../src/common/fontmap.cpp:190
 #, c-format
@@ -3531,9 +3537,8 @@ msgid "Tile &Vertically"
 msgstr "Affianca verticalmente"
 
 #: ../src/common/ftp.cpp:635
-#, fuzzy
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
-msgstr "Il server FTP non supporta la modalità passiva di trasfrimento"
+msgstr "Tempo di attesa eccessivo durante l'attesa per la connessione del server FTP, si prega di provare la modalità assiva."
 
 #: ../src/msw/timer.cpp:116
 #: ../src/os2/timer.cpp:141
@@ -3614,7 +3619,7 @@ msgstr "Annulla elimina"
 #: ../contrib/src/deprecated/resource.cpp:3101
 #: ../contrib/src/deprecated/resource.cpp:3115
 msgid "Unexpected end of file while parsing resource."
-msgstr ""
+msgstr "Fine del file durante l'analisi delle risorse."
 
 #: ../src/common/cmdline.cpp:826
 #, c-format
@@ -3664,7 +3669,7 @@ msgstr "Oggetto non conosciuto passato a GetObjectClassInfo"
 
 #: ../src/unix/dlunix.cpp:282
 msgid "Unknown dynamic library error"
-msgstr ""
+msgstr "Errore sconosciuto nella libreria dinamica"
 
 #: ../src/common/fmapbase.cpp:685
 #, c-format
@@ -3710,7 +3715,7 @@ msgstr "Comando privo di nome"
 #: ../contrib/src/deprecated/resource.cpp:2367
 #, c-format
 msgid "Unrecognized style %s while parsing resource."
-msgstr ""
+msgstr "Stile %s sconosciuto durante l'analisi delle risorse."
 
 #: ../src/mac/carbon/clipbrd.cpp:66
 #: ../src/mac/classic/clipbrd.cpp:64
@@ -4059,7 +4064,7 @@ msgstr ""
 
 #: ../src/common/zipstrm.cpp:1317
 msgid "assuming this is a multi-part zip concatenated"
-msgstr ""
+msgstr "si assume queste siano più parti di un archivio ZIP concatenate"
 
 #: ../src/common/fileconf.cpp:1804
 #, c-format
@@ -4076,7 +4081,7 @@ msgstr "firma errata"
 
 #: ../src/common/zipstrm.cpp:1567
 msgid "bad zipfile offset to entry"
-msgstr ""
+msgstr "offset scorretto per il file nell'archivio ZIP"
 
 #: ../src/common/ftp.cpp:385
 msgid "binary"
@@ -4121,9 +4126,8 @@ msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "impossibile determinare se il descrittore di file %d ha raggiunto la fine del file"
 
 #: ../src/common/zipstrm.cpp:1344
-#, fuzzy
 msgid "can't find central directory in zip"
-msgstr "Impossibile determinare la posizione corrente del file '%s'"
+msgstr "impossibile trovare il catalogo all'interno del file ZIP"
 
 #: ../src/common/file.cpp:429
 #, c-format
@@ -4174,14 +4178,12 @@ msgid "can't query for GUI plugins name in console applications"
 msgstr "impossibile richiedere plugin GUI in un applicazione console"
 
 #: ../src/common/zipstrm.cpp:432
-#, fuzzy
 msgid "can't re-initialize zlib deflate stream"
-msgstr "Impossibile inizializzare il flusso zlib di decompressione."
+msgstr "impossibile reinizializzare il flusso zlib di compressione"
 
 #: ../src/common/zipstrm.cpp:457
-#, fuzzy
 msgid "can't re-initialize zlib inflate stream"
-msgstr "Impossibile inizializzare il flusso di compressione zlib."
+msgstr "impossibile reinizializzare il flusso di decompressione zlib."
 
 #: ../src/common/file.cpp:310
 #, c-format
@@ -4205,9 +4207,9 @@ msgid "can't seek on file descriptor %d"
 msgstr "impossibile eseguire una seek sul descrittore di file %d"
 
 #: ../src/common/file.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "can't seek on file descriptor %d, large files support is not enabled."
-msgstr "impossibile eseguire una seek sul descrittore di file %d"
+msgstr "impossibile eseguire una seek sul descrittore di file %d, il supporto per file grossi non è abilitato"
 
 #: ../src/common/textfile.cpp:196
 #, c-format
@@ -4238,7 +4240,7 @@ msgstr "errore di compressione"
 
 #: ../src/common/regex.cpp:141
 msgid "conversion to 8-bit encoding failed"
-msgstr ""
+msgstr "la conversione in una codifica ad 8 bit è fallita"
 
 #: ../src/common/menucmn.cpp:112
 msgid "ctrl"
@@ -4292,18 +4294,17 @@ msgid "error opening file"
 msgstr "errore nell'apertura file"
 
 #: ../src/common/zipstrm.cpp:1429
-#, fuzzy
 msgid "error reading zip central directory"
-msgstr "Errore nella creazione della cartella"
+msgstr "errore durante la lettura del catalogo del file ZIP"
 
 #: ../src/common/zipstrm.cpp:1507
 msgid "error reading zip local header"
-msgstr ""
+msgstr "errore durante la lettura dell'intestazione ZIP locale"
 
 #: ../src/common/zipstrm.cpp:2208
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
-msgstr ""
+msgstr "errore durante la scrittura del file '%s': CRC o lunghezza errati"
 
 #: ../src/msw/dialup.cpp:844
 msgid "establish"
@@ -4384,9 +4385,8 @@ msgid "invalid message box return value"
 msgstr "il riquadro di dialogo ha ritornato un valore non valido"
 
 #: ../src/common/zipstrm.cpp:1293
-#, fuzzy
 msgid "invalid zip file"
-msgstr "File di blocco '%s' non valido."
+msgstr "file ZIP non valido"
 
 #: ../src/common/fontcmn.cpp:585
 #: ../src/common/fontcmn.cpp:649
@@ -4460,14 +4460,14 @@ msgid "reading"
 msgstr "lettura"
 
 #: ../src/common/zipstrm.cpp:1730
-#, fuzzy, c-format
+#, c-format
 msgid "reading zip stream (entry %s): bad crc"
-msgstr "codice di controllo errato durante la lettura di un flusso Gzip"
+msgstr "CRC errato durante la lettura del file %s dal file ZIP"
 
 #: ../src/common/zipstrm.cpp:1727
-#, fuzzy, c-format
+#, c-format
 msgid "reading zip stream (entry %s): bad length"
-msgstr "lunghezza scorretta durante la lettura di un flusso Gzip"
+msgstr "lunghezza errata durante la lettura del file %s dal file ZIP"
 
 #: ../src/msw/dde.cpp:1077
 msgid "reentrancy problem."
@@ -4514,9 +4514,8 @@ msgid "specify the theme to use"
 msgstr "specifica il tema da utilizzare"
 
 #: ../src/common/zipstrm.cpp:1633
-#, fuzzy
 msgid "stored file length not in Zip header"
-msgstr "Opzione non supportata nell'intestazione Gzip"
+msgstr "la lunghezza del file non è memorizzata nell'intestazione del file ZIP"
 
 #: ../src/common/cmdline.cpp:1085
 msgid "str"
@@ -4617,14 +4616,12 @@ msgstr "senzanome%d"
 
 #: ../src/common/zipstrm.cpp:1647
 #: ../src/common/zipstrm.cpp:2002
-#, fuzzy
 msgid "unsupported Zip compression method"
-msgstr "metodo di compressione non supportato per il flusso Gzip"
+msgstr "metodo di compressione non supportato per il file ZIP"
 
 #: ../src/common/zipstrm.cpp:1137
-#, fuzzy
 msgid "unsupported zip archive"
-msgstr "Opzione non supportata nell'intestazione Gzip"
+msgstr "archivio ZIP non supportato"
 
 #: ../src/common/intl.cpp:1119
 #, c-format
