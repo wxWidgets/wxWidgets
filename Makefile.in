@@ -201,6 +201,7 @@ WX_HEADERS = \
 		debug.h \
 		defs.h \
 		dialog.h \
+		dialup.h \
 		dirdlg.h \
 		dnd.h \
 		docmdi.h \
