@@ -41,7 +41,6 @@
 
 #include "widgets.h"
 
-#if 1
 #include "icons/text.xpm"
 
 // ----------------------------------------------------------------------------
@@ -555,8 +554,10 @@ void TextWidgetsPage::CreateText()
                             valueOld,
                             wxDefaultPosition, wxDefaultSize,
                             flags);
+
+    // cast to int needed to silence gcc warning about different enums
     m_sizerText->Add(m_text, 1, wxALL |
-                     (flags & wxTE_MULTILINE ? wxGROW
+                     (flags & wxTE_MULTILINE ? (int)wxGROW
                                              : wxALIGN_TOP), 5);
     m_sizerText->Layout();
 }
@@ -757,4 +758,4 @@ void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
 {
     CreateText();
 }
-#endif
+
