@@ -419,3 +419,17 @@ which can be overridden for the desired behaviour. By default, the pane being re
 \helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally}, \helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically},\rtfsp
 \helpref{wxSplitterWindow::IsSplit}{wxsplitterwindowissplit}, \helpref{wxSplitterWindow::OnUnsplit}{wxsplitterwindowonunsplit}
 
+\membersection{wxSplitterWindow::UpdateSize}\label{wxsplitterwindowupdatesize}
+
+\func{void}{UpdateSize}{\void}
+
+Causes any pending sizing of the sash and child panes to take place
+immediately.
+
+Such resizing normally takes place in idle time, in order
+to wait for layout to be completed. However, this can cause
+unacceptable flicker as the panes are resized after the window has been
+shown. To work around this, you can perform window layout (for
+example by sending a size event to the parent window), and then
+call this function, before showing the top-level window.
+
