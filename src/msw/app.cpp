@@ -649,6 +649,7 @@ int wxEntry(WXHINSTANCE hInstance,
     */
 
     ::ExitProcess(3); // the same exit code as abort()
+    return 0;
   }
 #endif //debug
 }

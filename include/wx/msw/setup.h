@@ -22,11 +22,12 @@
 #define _WX_GOODCOMPILER__
                                 // gcc can have problems, but Windows compilers
                                 // are generally OK.
-#define WXWIN_COMPATIBILITY  1
-                                // Compatibility with 1.66 API.
+#define WXWIN_COMPATIBILITY  0
+                                // Compatibility with 1.68 API.
                                 // Level 0: no backward compatibility, all new features
-                                // Level 1: wxDC, OnSize (etc.) compatibility, but
-                                //          some new features such as event tables
+                                // Level 1: Some compatibility. In fact
+                                // the compatibility code is now very minimal so there
+                                // is little advantage to setting it to 1.
 
 #define wxUSE_AUTOTRANS   1
                                 // Define wxTString

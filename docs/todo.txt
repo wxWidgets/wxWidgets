@@ -18,11 +18,15 @@ Please see also:
 
 - Get Karsten to remove trashed CVS files:
 
-  utils/glcanvas/isosurf/isosurf.dat.gz
+  include/wx/msw/magnif1.cur
   src/msw/ctl3d/*
 
   and re-add them.
 
-- Complete this ToDo list :-)
+- wxDB ODBC classes: it seems that there are too many
+  Sybase-specific features for it to work on e.g. MySQL,
+  PostgreSQL. Find out what Remstar uses and document
+  problems/restrictions.
 
+- Complete this ToDo list :-)
 

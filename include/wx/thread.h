@@ -301,10 +301,10 @@ public:
     void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
 
     // returns TRUE if the main thread has GUI lock
-    inline bool WXDLLEXPORT wxGuiOwnedByMainThread();
+    bool WXDLLEXPORT wxGuiOwnedByMainThread();
 
     // wakes up the main thread if it's sleeping inside ::GetMessage()
-    inline void WXDLLEXPORT wxWakeUpMainThread();
+    void WXDLLEXPORT wxWakeUpMainThread();
 #else // !MSW
     // implement wxCriticalSection using mutexes
     inline wxCriticalSection::wxCriticalSection() { }

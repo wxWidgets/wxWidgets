@@ -132,7 +132,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 {
       // Make another frame, containing a canvas
       MyChild *subframe = new MyChild(frame, "Canvas Frame", wxPoint(-1, -1), wxSize(-1, -1),
-                             wxDEFAULT_FRAME);
+                             wxDEFAULT_FRAME_STYLE);
 
       wxString title;
       title.Printf("Canvas Frame %d", winNumber);
