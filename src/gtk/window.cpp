@@ -632,7 +632,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
 #ifndef __WXUNIVERSAL__
     GtkPizza *pizza = GTK_PIZZA (widget);
 
-    if (win->GetThemeEnabled() && win->GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
+    if (win->GetThemeEnabled() && win->GetBackgroundStyle() == wxBG_STYLE_SYSTEM)
     {
         wxWindow *parent = win->GetParent();
         while (parent && !parent->IsTopLevel())
@@ -3943,7 +3943,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     // widget to draw on
     GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
 
-    if (GetThemeEnabled() && GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
+    if (GetThemeEnabled() && GetBackgroundStyle() == wxBG_STYLE_SYSTEM)
     {
         // find ancestor from which to steal background
         wxWindow *parent = GetParent();
