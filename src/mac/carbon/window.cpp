@@ -559,6 +559,22 @@ pascal void wxMacLiveScrollbarActionProc( ControlRef control , ControlPartCode p
  // constructors and such
 // ----------------------------------------------------------------------------
 
+wxWindowMac::wxWindowMac()
+{ 
+    Init(); 
+}
+
+wxWindowMac::wxWindowMac(wxWindowMac *parent,
+            wxWindowID id,
+            const wxPoint& pos ,
+            const wxSize& size ,
+            long style ,
+            const wxString& name )
+{
+    Init();
+    Create(parent, id, pos, size, style, name);
+}
+
 void wxWindowMac::Init()
 {
     m_frozenness = 0 ;
