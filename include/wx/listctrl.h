@@ -54,6 +54,10 @@ public:
     inline long GetMask() { return m_item.m_mask; }
     inline const wxListItem &GetItem() const { return m_item; }
 
+#ifndef __WXMSW__
+    void CopyObject(wxObject& object_dest) const;
+#endif
+
 private:
     DECLARE_DYNAMIC_CLASS(wxListEvent)
 };
