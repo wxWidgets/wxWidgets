@@ -46,7 +46,7 @@
 #endif  //Win/Unix
 
 #if defined(__WXMSW__)
-  #include  "wx/msw/private.h"  // includes windows.h for MessageBox()
+  #include  "wx/msw/wrapwin.h"  // includes windows.h for MessageBox()
 #endif
 
 #if wxUSE_FONTMAP
