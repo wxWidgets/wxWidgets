@@ -26,6 +26,8 @@
         <define-tag name="include"/>
         <define-tag name="install-to"/>
         <define-tag name="install-if"/>
+        <define-tag name="installable"/>
+        <define-tag name="dir"/>
         <define-tag name="lib-path"/>
         <define-tag name="precomp-headers"/>
         <define-tag name="precomp-headers-gen"/>
@@ -47,6 +49,7 @@
     <define-rule name="lib" extends="__fake"/>
     <define-rule name="action" extends="__fake"/>
     <define-rule name="phony" extends="__fake"/>
+    <define-rule name="subproject" extends="__fake"/>
 
     <set var="ALL_SOURCES" eval="0">
         $(MONOLIB_SRC) src/msw/dummy.cpp $(OPENGL_SRC)
