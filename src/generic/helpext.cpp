@@ -89,7 +89,7 @@ wxExtHelpController::DisplayHelp(wxString const &relativeURL)
 #if defined(__WXMSW__)
    wxString url;
    url << m_MapFile << '\\' << relativeURL.BeforeFirst('#');
-   bool bOk = (int)ShellExecute(NULL, wxT("open"), url.c_string(),
+   bool bOk = (int)ShellExecute(NULL, wxT("open"), url.c_str(),
                                 NULL, NULL, SW_SHOWNORMAL ) > 32;
    if ( !bOk )
    {
