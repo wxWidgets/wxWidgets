@@ -588,7 +588,7 @@ wxInt32 wxComboBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());
-    ProcessCommand(event);
-    return noErr ; */
+    ProcessCommand(event);*/
+    return noErr ;
 }
 
