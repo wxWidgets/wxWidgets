@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        setup.h
+// Name:        wx/msw/setup.h
 // Purpose:     Configuration for the library
 // Author:      Julian Smart
 // Modified by:
@@ -23,12 +23,15 @@
 // compatibility settings
 // ----------------------------------------------------------------------------
 
+// This setting determines the compatibility with 1.68 API:
+// Level 0: no backward compatibility, all new features
+// Level 1: some extra methods are defined for compatibility.
+//
+// Default is 0.
+//
+// Recommended setting: 0 (in fact the compatibility code is now very minimal
+// so there is little advantage to setting it to 1.
 #define WXWIN_COMPATIBILITY  0
-                                // Compatibility with 1.68 API.
-                                // Level 0: no backward compatibility, all new features
-                                // Level 1: Some compatibility. In fact
-                                // the compatibility code is now very minimal so there
-                                // is little advantage to setting it to 1.
 
 // in wxMSW version 2.1.11 and earlier, wxIcon always derives from wxBitmap,
 // but this is very dangerous because you can mistakenly pass an icon instead
@@ -125,6 +128,38 @@
 #define wxUSE_TOOLBAR_NATIVE 1
 #define wxUSE_TOOLBAR_SIMPLE 1
 
+// wxNotebook is a control with several "tabs" located on one of its sides. It
+// may be used ot logically organise the data presented to the user instead of
+// putting everything in one huge dialog. It replaces wxTabControl and related
+// classes of wxWin 1.6x.
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_NOTEBOOK 1
+
+// The corresponding controls will be compiled in if wxUSE_<CONTROL> is set to
+// 1 and not compiled into the library otherwise.
+//
+// Default is 1 for everything.
+//
+// Recommended setting: 1 (library might fail to compile for some combinations
+// of disabled controls) 
+#define wxUSE_COMBOBOX     1
+#define wxUSE_CHOICE       1
+#define wxUSE_RADIOBTN     1
+#define wxUSE_RADIOBOX     1
+#define wxUSE_SCROLLBAR    1
+#define wxUSE_CHECKBOX     1
+#define wxUSE_LISTBOX      1
+#define wxUSE_SPINBTN      1
+#define wxUSE_SPINCTRL     1
+#define wxUSE_STATLINE     1
+#define wxUSE_CHECKLISTBOX 1
+#define wxUSE_CHOICE       1
+#define wxUSE_CARET        1
+#define wxUSE_SLIDER       1
+
 // ----------------------------------------------------------------------------
 // Postscript support settings
 // ----------------------------------------------------------------------------
@@ -160,49 +195,6 @@
 #define wxUSE_GAUGE        1
                                 // Define 1 to use Microsoft's gauge (Windows)
                                 // or Bull's gauge (Motif) library (both in contrib).
-#define wxUSE_COMBOBOX     1
-                                // Define 1 to use COMBOXBOX control (Windows)
-                                // or FWW's ComboBox widget (Motif).
-#define wxUSE_CHOICE       1
-                                // Define 1 to use CHOICE
-
-#define wxUSE_RADIOBUTTON  1
-                                // Define 1 to use radio button control
-#define wxUSE_RADIOBTN     1
-                                // Unfortunately someone introduced this one, too
-#define wxUSE_RADIOBOX     1
-                                // And this... don't know which one is corect
-
-#define wxUSE_SCROLLBAR    1
-                                // Define 1 to compile contributed wxScrollBar class
-
-#define wxUSE_CHECKBOX     1
-                                // Define 1 to compile checkbox
-
-#define wxUSE_LISTBOX      1
-                                // Define 1 to compile listbox
-
-#define wxUSE_SPINBTN      1
-                                // Define 1 to compile spin button
-
-#define wxUSE_SPINCTRL     1
-                                // Define 1 to use wxSpinCtrl class
-
-#define wxUSE_STATLINE     1
-                                // use wxStaticLine class
-
-#define wxUSE_CHECKLISTBOX 1
-                                // Define 1 to compile check listbox
-
-#define wxUSE_CHOICE       1
-                                // Define 1 to compile choice
-
-#define wxUSE_CARET        1
-                                // Define 1 to use wxCaret class
-
-#define wxUSE_SLIDER       1
-                                // Define 1 to use wxSlider class
-
 #define wxUSE_NEW_GRID     1
                                 // Define 1 to use the new wxGrid class
                                 // (still under development, define 0 to

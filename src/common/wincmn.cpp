@@ -1217,14 +1217,14 @@ void wxWindowBase::UpdateWindowUI()
         }
 #endif // wxUSE_CHECKBOX
 
-#if wxUSE_RADIOBUTTON
+#if wxUSE_RADIOBTN
         wxRadioButton *radiobtn = wxDynamicCast(this, wxRadioButton);
         if ( radiobtn )
         {
             if ( event.GetSetChecked() )
                 radiobtn->SetValue(event.GetChecked());
         }
-#endif // wxUSE_RADIOBUTTON
+#endif // wxUSE_RADIOBTN
     }
 }
 

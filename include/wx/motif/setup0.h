@@ -111,7 +111,7 @@
 /*
  * Use scrollbar item
  */
-#define wxUSE_RADIOBUTTON 1
+#define wxUSE_RADIOBTN 1
 /*
  * Use toolbar item
  */
