@@ -89,26 +89,49 @@ children of the same wxBoxSizer. For example, you might have a horizontal wxBoxS
 of which are supposed to change their size with the sizer. Then the two stretchable windows would get a
 value of 1 each to make them grow and shrink equally with the sizer's horizontal dimension.}
 
-\docparam{flag}{This parameter can be used to set a number of flags which can
-be combined using the binary OR operator |. Two main behaviours are defined
-using these flags. One is the border around a window: the {\it border}
-parameter determines the border width whereas the flags given here determine
-where the border may be (wxTOP, wxBOTTOM, wxLEFT, wxRIGHT or wxALL). The other
-flags determine the child window's behaviour if the size of the sizer changes.
-However this is not - in contrast to the {\it proportion} flag - in the main
-orientation, but in the respectively other orientation. So if you created a
-wxBoxSizer with the wxVERTICAL option, these flags will be relevant if the
-sizer changes its horizontal size. A child may get resized to completely fill
-out the new size (using either wxGROW or wxEXPAND), it may get proportionally
-resized (wxSHAPED), it may get centered (wxALIGN\_CENTER or wxALIGN\_CENTRE)
-or it may get aligned to either side (wxALIGN\_LEFT and wxALIGN\_TOP are set
-to 0 and thus represent the default, wxALIGN\_RIGHT and wxALIGN\_BOTTOM have
-their obvious meaning). With proportional resize, a child may also be centered
-in the main orientation using wxALIGN\_CENTER\_VERTICAL (same as
-wxALIGN\_CENTRE\_VERTICAL) and wxALIGN\_CENTER\_HORIZONTAL (same as
-wxALIGN\_CENTRE\_HORIZONTAL) flags.}
+\docparam{flag}{This parameter can be used to set a number of flags
+which can be combined using the binary OR operator |. Two main
+behaviours are defined using these flags. One is the border around a
+window: the {\it border} parameter determines the border width whereas
+the flags given here determine which side(s) of the item that the
+border will be added.  The other flags determine how the sizer item
+behaves when the space allotted to the sizer changes, and is somewhat
+dependent on the specific kind of sizer used.
 
-\docparam{border}{Determines the border width, if the {\it flag} parameter is set to any border.}
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxTOP}\\
+\windowstyle{wxBOTTOM}\\
+\windowstyle{wxLEFT}\\
+\windowstyle{wxRIGHT}\\
+\windowstyle{wxALL}}{These flags are used to specify which side(s) of
+  the sizer item the {\it border} width will apply to. }
+
+\twocolitem{\windowstyle{wxEXAPAND}}{The item will be expanded to fill
+the space allotted to the item.}
+\twocolitem{\windowstyle{wxSHAPED}}{The item will be expanded as much
+as possible while also maintaining its aspect ratio}
+\twocolitem{\windowstyle{wxFIXED\_SIZE}}{Normally wxSizers will use
+  \helpref{GetAdjustedBestSize}{wxwindowgetadjustedbestsize} to
+  determin what the minimal size of window items should be, and will
+  use that size to calculate the layout.  This allows layouts to
+  adjust when an item changes and it's {\it best size} becomes
+  different.  If you would rather have a window item stay the size it
+  started with then use wxFIXED\_SIZE.}
+\twocolitem{\windowstyle{wxALIGN\_CENTER}\\
+\windowstyle{wxALIGN\_LEFT}\\
+\windowstyle{wxALIGN\_RIGHT}\\
+\windowstyle{wxALIGN\_TOP}\\
+\windowstyle{wxALIGN\_BOTTOM}\\
+\windowstyle{wxALIGN\_CENTER\_VERTICAL}\\
+\windowstyle{wxALIGN\_CENTER\_HORIZONTAL}}{The wxALIGN flags allow you to
+  specify the alignment of the item within the space allotted to it by
+  the sizer, ajusted for the border if any.}
+\end{twocollist}
+}
+
+\docparam{border}{Determines the border width, if the {\it flag}
+  parameter is set to include any border flag.}
 
 \docparam{userData}{Allows an extra object to be attached to the sizer
 item, for use in derived classes when sizing information is more

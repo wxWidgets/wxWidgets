@@ -193,7 +193,7 @@ wxSize wxSizerItem::CalcMin()
     }
     else
     {
-        if ( IsWindow() )
+        if ( IsWindow() && !(m_flag & wxFIXED_SIZE) )
         {
             // the size of the window may change during run-time, we should
             // use the current minimal size
@@ -736,6 +736,7 @@ bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
         if (item->GetWindow() == window)
         {
             item->SetInitSize( width, height );
+            item->GetWindow()->SetSizeHints(width, height);
             return true;
         }
         node = node->GetNext();
@@ -815,6 +816,8 @@ bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
     {
         // ... but the minimal size of spacers and windows in stored in them
         item->SetInitSize( width, height );
+        if (item->GetWindow())
+            item->GetWindow()->SetSizeHints(width, height);
     }
 
     return true;

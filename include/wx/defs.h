@@ -1031,7 +1031,7 @@ enum wxStretch
     wxGROW                    = 0x2000,
     wxEXPAND                  = wxGROW,
     wxSHAPED                  = 0x4000,
-    // free value: 0x8000 (old wxADJUST_MINSIZE)
+    wxFIXED_SIZE              = 0x8000,
     wxTILE                    = 0xc000,
 
     // for compatibility only, default now, don't use explicitly any more
