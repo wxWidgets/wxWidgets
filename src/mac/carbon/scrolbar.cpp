@@ -31,8 +31,6 @@ END_EVENT_TABLE()
 
 #endif
 
-extern ControlActionUPP wxMacLiveScrollbarActionUPP ;
-
 // Scrollbar
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
@@ -49,7 +47,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     m_peer = new wxMacControl(this) ;
     verify_noerr ( CreateScrollBarControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
-    0 , 0 , 100 , 1 , true /* liveTracking */ , wxMacLiveScrollbarActionUPP , m_peer->GetControlRefAddr() ) );
+    0 , 0 , 100 , 1 , true /* liveTracking */ , GetwxMacLiveScrollbarActionProc() , m_peer->GetControlRefAddr() ) );
     
 
     MacPostControlCreate(pos,size) ;

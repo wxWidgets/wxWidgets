@@ -34,8 +34,6 @@
     IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
 #endif
 
-extern ControlActionUPP wxMacLiveScrollbarActionUPP ;
-
 wxSpinButton::wxSpinButton()
    : wxSpinButtonBase()
 {
@@ -62,7 +60,7 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
     verify_noerr ( CreateLittleArrowsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 0 , m_min , m_max , 1 ,
      m_peer->GetControlRefAddr() ) );
 
-    m_peer->SetActionProc( wxMacLiveScrollbarActionUPP ) ;
+    m_peer->SetActionProc( GetwxMacLiveScrollbarActionProc() ) ;
     MacPostControlCreate(pos,size) ;
 
     return true;

@@ -52,8 +52,6 @@ END_EVENT_TABLE()
     m_tickFreq = 0;
 }
 
-extern ControlActionUPP wxMacLiveScrollbarActionUPP ;
-
 bool wxSlider::Create(wxWindow *parent, wxWindowID id,
                       int value, int minValue, int maxValue,
                       const wxPoint& pos,
@@ -94,7 +92,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     m_peer = new wxMacControl(this) ;
     verify_noerr ( CreateSliderControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
         value , minValue , maxValue , kControlSliderPointsDownOrRight , tickMarks , true /* liveTracking */ ,
-        wxMacLiveScrollbarActionUPP , m_peer->GetControlRefAddr() ) );
+        GetwxMacLiveScrollbarActionProc() , m_peer->GetControlRefAddr() ) );
 
 
     if(style & wxSL_VERTICAL) {
