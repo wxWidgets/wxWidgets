@@ -809,6 +809,7 @@ enum wxStretch
 // this style means to use RICHEDIT control and does something only under wxMSW
 // and Win32 and is silently ignored under all other platforms
 #define wxTE_RICH           0x0080
+#define wxTE_NO_VSCROLL     0x0100
 
 /*
  * wxComboBox style flags

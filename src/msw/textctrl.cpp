@@ -131,7 +131,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                       _T("wxTE_PROCESS_ENTER style is ignored for multiline "
                          "text controls (they always process it)") );
 
-        msStyle |= ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL;
+        msStyle |= ES_MULTILINE | ES_WANTRETURN;
+        if ((m_windowStyle & wxTE_NO_VSCROLL) == 0)
+            msStyle |= WS_VSCROLL;
         m_windowStyle |= wxTE_PROCESS_ENTER;
     }
     else

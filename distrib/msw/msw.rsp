@@ -52,6 +52,7 @@ src/msw/*.lst
 src/msw/*.def
 src/msw/*.inc
 src/msw/winestub.c
+src/msw/gsocket.c
 
 src/msw/ctl3d/*.*
 src/msw/ctl3d/msvc/*.*

@@ -1017,7 +1017,7 @@ public:
 
     // Was it a button event? (*doesn't* mean: is any button *down*?)
     bool IsButton() const { return ((GetEventType() == wxEVT_JOY_BUTTON_DOWN) ||
-            (GetEventType() == wxEVT_JOY_BUTTON_DOWN)); }
+            (GetEventType() == wxEVT_JOY_BUTTON_UP)); }
 
     // Was it a move event?
     bool IsMove() const { return (GetEventType() == wxEVT_JOY_MOVE) ; }

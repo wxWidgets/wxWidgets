@@ -1813,6 +1813,7 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
   { _T("wxTE_READONLY"), wxTE_READONLY},
   { _T("wxTE_PROCESS_ENTER"), wxTE_PROCESS_ENTER},
   { _T("wxTE_MULTILINE"), wxTE_MULTILINE},
+  { _T("wxTE_NO_VSCROLL"), wxTE_NO_VSCROLL},
 
   /* wxRadioBox/wxRadioButton */
   { _T("wxRB_GROUP"), wxRB_GROUP },
