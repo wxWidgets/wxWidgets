@@ -1713,6 +1713,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/helpxxxx.h
     wx/mac/icon.h
     wx/mac/imaglist.h
+    wx/mac/joystick.h
     wx/mac/listbox.h
     wx/mac/listctrl.h
     wx/mac/macnotfy.h
@@ -1746,6 +1747,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/stattext.h
     wx/mac/statusbr.h
     wx/mac/tabctrl.h
+    wx/mac/taskbarosx.h
     wx/mac/textctrl.h
     wx/mac/timer.h
     wx/mac/tglbtn.h
