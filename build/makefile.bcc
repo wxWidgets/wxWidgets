@@ -858,12 +858,14 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_pen.obj \
 	$(OBJS)\monolib_popupwin.obj \
 	$(OBJS)\monolib_region.obj \
+	$(OBJS)\monolib_renderer.obj \
 	$(OBJS)\monolib_settings.obj \
 	$(OBJS)\monolib_taskbar.obj \
 	$(OBJS)\monolib_timer.obj \
 	$(OBJS)\monolib_tooltip.obj \
 	$(OBJS)\monolib_toplevel.obj \
 	$(OBJS)\monolib_utilsgui.obj \
+	$(OBJS)\monolib_uxtheme.obj \
 	$(OBJS)\monolib_wave.obj \
 	$(OBJS)\monolib_window.obj \
 	$(OBJS)\monolib_statusbr.obj \
@@ -901,7 +903,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_printwin.obj \
 	$(OBJS)\monolib_radiobox.obj \
 	$(OBJS)\monolib_radiobut.obj \
-	$(OBJS)\monolib_renderer.obj \
 	$(OBJS)\monolib_scrolbar.obj \
 	$(OBJS)\monolib_slider95.obj \
 	$(OBJS)\monolib_spinbutt.obj \
@@ -916,7 +917,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textctrl.obj \
 	$(OBJS)\monolib_tglbtn.obj \
 	$(OBJS)\monolib_treectrl.obj \
-	$(OBJS)\monolib_uxtheme.obj \
 	$(OBJS)\monolib_accesscmn.obj \
 	$(OBJS)\monolib_appcmn.obj \
 	$(OBJS)\monolib_artprov.obj \
@@ -1051,12 +1051,14 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_pen.obj \
 	$(OBJS)\monolib_popupwin.obj \
 	$(OBJS)\monolib_region.obj \
+	$(OBJS)\monolib_renderer.obj \
 	$(OBJS)\monolib_settings.obj \
 	$(OBJS)\monolib_taskbar.obj \
 	$(OBJS)\monolib_timer.obj \
 	$(OBJS)\monolib_tooltip.obj \
 	$(OBJS)\monolib_toplevel.obj \
 	$(OBJS)\monolib_utilsgui.obj \
+	$(OBJS)\monolib_uxtheme.obj \
 	$(OBJS)\monolib_wave.obj \
 	$(OBJS)\monolib_window.obj \
 	$(OBJS)\monolib_textctrl.obj \
@@ -1080,6 +1082,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_colschem.obj \
 	$(OBJS)\monolib_combobox.obj \
 	$(OBJS)\monolib_control.obj \
+	$(OBJS)\monolib_ctrlrend.obj \
 	$(OBJS)\monolib_dialog.obj \
 	$(OBJS)\monolib_framuniv.obj \
 	$(OBJS)\monolib_gauge.obj \
@@ -1090,7 +1093,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_notebook.obj \
 	$(OBJS)\monolib_radiobox.obj \
 	$(OBJS)\monolib_radiobut.obj \
-	$(OBJS)\monolib_renderer.obj \
 	$(OBJS)\monolib_scrarrow.obj \
 	$(OBJS)\monolib_scrolbar.obj \
 	$(OBJS)\monolib_scrthumb.obj \
@@ -1242,12 +1244,14 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_pen.obj \
 	$(OBJS)\coredll_popupwin.obj \
 	$(OBJS)\coredll_region.obj \
+	$(OBJS)\coredll_renderer.obj \
 	$(OBJS)\coredll_settings.obj \
 	$(OBJS)\coredll_taskbar.obj \
 	$(OBJS)\coredll_timer.obj \
 	$(OBJS)\coredll_tooltip.obj \
 	$(OBJS)\coredll_toplevel.obj \
 	$(OBJS)\coredll_utilsgui.obj \
+	$(OBJS)\coredll_uxtheme.obj \
 	$(OBJS)\coredll_wave.obj \
 	$(OBJS)\coredll_window.obj \
 	$(OBJS)\coredll_statusbr.obj \
@@ -1285,7 +1289,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_printwin.obj \
 	$(OBJS)\coredll_radiobox.obj \
 	$(OBJS)\coredll_radiobut.obj \
-	$(OBJS)\coredll_renderer.obj \
 	$(OBJS)\coredll_scrolbar.obj \
 	$(OBJS)\coredll_slider95.obj \
 	$(OBJS)\coredll_spinbutt.obj \
@@ -1300,7 +1303,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textctrl.obj \
 	$(OBJS)\coredll_tglbtn.obj \
 	$(OBJS)\coredll_treectrl.obj \
-	$(OBJS)\coredll_uxtheme.obj \
 	$(OBJS)\coredll_accesscmn.obj \
 	$(OBJS)\coredll_appcmn.obj \
 	$(OBJS)\coredll_artprov.obj \
@@ -1435,12 +1437,14 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_pen.obj \
 	$(OBJS)\coredll_popupwin.obj \
 	$(OBJS)\coredll_region.obj \
+	$(OBJS)\coredll_renderer.obj \
 	$(OBJS)\coredll_settings.obj \
 	$(OBJS)\coredll_taskbar.obj \
 	$(OBJS)\coredll_timer.obj \
 	$(OBJS)\coredll_tooltip.obj \
 	$(OBJS)\coredll_toplevel.obj \
 	$(OBJS)\coredll_utilsgui.obj \
+	$(OBJS)\coredll_uxtheme.obj \
 	$(OBJS)\coredll_wave.obj \
 	$(OBJS)\coredll_window.obj \
 	$(OBJS)\coredll_textctrl.obj \
@@ -1464,6 +1468,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_colschem.obj \
 	$(OBJS)\coredll_combobox.obj \
 	$(OBJS)\coredll_control.obj \
+	$(OBJS)\coredll_ctrlrend.obj \
 	$(OBJS)\coredll_dialog.obj \
 	$(OBJS)\coredll_framuniv.obj \
 	$(OBJS)\coredll_gauge.obj \
@@ -1474,7 +1479,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_notebook.obj \
 	$(OBJS)\coredll_radiobox.obj \
 	$(OBJS)\coredll_radiobut.obj \
-	$(OBJS)\coredll_renderer.obj \
 	$(OBJS)\coredll_scrarrow.obj \
 	$(OBJS)\coredll_scrolbar.obj \
 	$(OBJS)\coredll_scrthumb.obj \
@@ -1626,12 +1630,14 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_pen.obj \
 	$(OBJS)\corelib_popupwin.obj \
 	$(OBJS)\corelib_region.obj \
+	$(OBJS)\corelib_renderer.obj \
 	$(OBJS)\corelib_settings.obj \
 	$(OBJS)\corelib_taskbar.obj \
 	$(OBJS)\corelib_timer.obj \
 	$(OBJS)\corelib_tooltip.obj \
 	$(OBJS)\corelib_toplevel.obj \
 	$(OBJS)\corelib_utilsgui.obj \
+	$(OBJS)\corelib_uxtheme.obj \
 	$(OBJS)\corelib_wave.obj \
 	$(OBJS)\corelib_window.obj \
 	$(OBJS)\corelib_statusbr.obj \
@@ -1669,7 +1675,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_printwin.obj \
 	$(OBJS)\corelib_radiobox.obj \
 	$(OBJS)\corelib_radiobut.obj \
-	$(OBJS)\corelib_renderer.obj \
 	$(OBJS)\corelib_scrolbar.obj \
 	$(OBJS)\corelib_slider95.obj \
 	$(OBJS)\corelib_spinbutt.obj \
@@ -1684,7 +1689,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textctrl.obj \
 	$(OBJS)\corelib_tglbtn.obj \
 	$(OBJS)\corelib_treectrl.obj \
-	$(OBJS)\corelib_uxtheme.obj \
 	$(OBJS)\corelib_accesscmn.obj \
 	$(OBJS)\corelib_appcmn.obj \
 	$(OBJS)\corelib_artprov.obj \
@@ -1819,12 +1823,14 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_pen.obj \
 	$(OBJS)\corelib_popupwin.obj \
 	$(OBJS)\corelib_region.obj \
+	$(OBJS)\corelib_renderer.obj \
 	$(OBJS)\corelib_settings.obj \
 	$(OBJS)\corelib_taskbar.obj \
 	$(OBJS)\corelib_timer.obj \
 	$(OBJS)\corelib_tooltip.obj \
 	$(OBJS)\corelib_toplevel.obj \
 	$(OBJS)\corelib_utilsgui.obj \
+	$(OBJS)\corelib_uxtheme.obj \
 	$(OBJS)\corelib_wave.obj \
 	$(OBJS)\corelib_window.obj \
 	$(OBJS)\corelib_textctrl.obj \
@@ -1848,6 +1854,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_colschem.obj \
 	$(OBJS)\corelib_combobox.obj \
 	$(OBJS)\corelib_control.obj \
+	$(OBJS)\corelib_ctrlrend.obj \
 	$(OBJS)\corelib_dialog.obj \
 	$(OBJS)\corelib_framuniv.obj \
 	$(OBJS)\corelib_gauge.obj \
@@ -1858,7 +1865,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_notebook.obj \
 	$(OBJS)\corelib_radiobox.obj \
 	$(OBJS)\corelib_radiobut.obj \
-	$(OBJS)\corelib_renderer.obj \
 	$(OBJS)\corelib_scrarrow.obj \
 	$(OBJS)\corelib_scrolbar.obj \
 	$(OBJS)\corelib_scrthumb.obj \
@@ -2010,12 +2016,14 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_pen.obj \
 	$(OBJS)\monodll_popupwin.obj \
 	$(OBJS)\monodll_region.obj \
+	$(OBJS)\monodll_renderer.obj \
 	$(OBJS)\monodll_settings.obj \
 	$(OBJS)\monodll_taskbar.obj \
 	$(OBJS)\monodll_timer.obj \
 	$(OBJS)\monodll_tooltip.obj \
 	$(OBJS)\monodll_toplevel.obj \
 	$(OBJS)\monodll_utilsgui.obj \
+	$(OBJS)\monodll_uxtheme.obj \
 	$(OBJS)\monodll_wave.obj \
 	$(OBJS)\monodll_window.obj \
 	$(OBJS)\monodll_statusbr.obj \
@@ -2053,7 +2061,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_printwin.obj \
 	$(OBJS)\monodll_radiobox.obj \
 	$(OBJS)\monodll_radiobut.obj \
-	$(OBJS)\monodll_renderer.obj \
 	$(OBJS)\monodll_scrolbar.obj \
 	$(OBJS)\monodll_slider95.obj \
 	$(OBJS)\monodll_spinbutt.obj \
@@ -2068,7 +2075,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textctrl.obj \
 	$(OBJS)\monodll_tglbtn.obj \
 	$(OBJS)\monodll_treectrl.obj \
-	$(OBJS)\monodll_uxtheme.obj \
 	$(OBJS)\monodll_accesscmn.obj \
 	$(OBJS)\monodll_appcmn.obj \
 	$(OBJS)\monodll_artprov.obj \
@@ -2203,12 +2209,14 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_pen.obj \
 	$(OBJS)\monodll_popupwin.obj \
 	$(OBJS)\monodll_region.obj \
+	$(OBJS)\monodll_renderer.obj \
 	$(OBJS)\monodll_settings.obj \
 	$(OBJS)\monodll_taskbar.obj \
 	$(OBJS)\monodll_timer.obj \
 	$(OBJS)\monodll_tooltip.obj \
 	$(OBJS)\monodll_toplevel.obj \
 	$(OBJS)\monodll_utilsgui.obj \
+	$(OBJS)\monodll_uxtheme.obj \
 	$(OBJS)\monodll_wave.obj \
 	$(OBJS)\monodll_window.obj \
 	$(OBJS)\monodll_textctrl.obj \
@@ -2232,6 +2240,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_colschem.obj \
 	$(OBJS)\monodll_combobox.obj \
 	$(OBJS)\monodll_control.obj \
+	$(OBJS)\monodll_ctrlrend.obj \
 	$(OBJS)\monodll_dialog.obj \
 	$(OBJS)\monodll_framuniv.obj \
 	$(OBJS)\monodll_gauge.obj \
@@ -2242,7 +2251,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_notebook.obj \
 	$(OBJS)\monodll_radiobox.obj \
 	$(OBJS)\monodll_radiobut.obj \
-	$(OBJS)\monodll_renderer.obj \
 	$(OBJS)\monodll_scrarrow.obj \
 	$(OBJS)\monodll_scrolbar.obj \
 	$(OBJS)\monodll_scrthumb.obj \
@@ -3212,6 +3220,9 @@ $(OBJS)\coredll_ctrlcmn.obj: ..\src\common\ctrlcmn.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
 
+$(OBJS)\coredll_ctrlrend.obj: ..\src\univ\ctrlrend.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
+
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_ctrlsub.obj: ..\src\common\ctrlsub.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
@@ -3816,12 +3827,7 @@ $(OBJS)\coredll_rendcmn.obj: ..\src\common\rendcmn.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
 
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_renderer.obj: ..\src\univ\renderer.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_renderer.obj: ..\src\msw\renderer.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -4081,8 +4087,10 @@ $(OBJS)\coredll_uuid.obj: ..\src\msw\ole\uuid.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
 
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_uxtheme.obj: ..\src\msw\uxtheme.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
+!endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_valgen.obj: ..\src\common\valgen.cpp
@@ -4334,6 +4342,9 @@ $(OBJS)\corelib_cshelp.obj: ..\src\common\cshelp.cpp
 $(OBJS)\corelib_ctrlcmn.obj: ..\src\common\ctrlcmn.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
+
+$(OBJS)\corelib_ctrlrend.obj: ..\src\univ\ctrlrend.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_ctrlsub.obj: ..\src\common\ctrlsub.cpp
@@ -4939,12 +4950,7 @@ $(OBJS)\corelib_rendcmn.obj: ..\src\common\rendcmn.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_renderer.obj: ..\src\univ\renderer.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+!if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_renderer.obj: ..\src\msw\renderer.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
@@ -5204,8 +5210,10 @@ $(OBJS)\corelib_uuid.obj: ..\src\msw\ole\uuid.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
+!if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_uxtheme.obj: ..\src\msw\uxtheme.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
+!endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_valgen.obj: ..\src\common\valgen.cpp
@@ -5628,6 +5636,9 @@ $(OBJS)\monodll_cshelp.obj: ..\src\common\cshelp.cpp
 $(OBJS)\monodll_ctrlcmn.obj: ..\src\common\ctrlcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
+
+$(OBJS)\monodll_ctrlrend.obj: ..\src\univ\ctrlrend.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_ctrlsub.obj: ..\src\common\ctrlsub.cpp
@@ -6449,12 +6460,7 @@ $(OBJS)\monodll_rendcmn.obj: ..\src\common\rendcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_renderer.obj: ..\src\univ\renderer.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_renderer.obj: ..\src\msw\renderer.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -6783,8 +6789,10 @@ $(OBJS)\monodll_uuid.obj: ..\src\msw\ole\uuid.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_uxtheme.obj: ..\src\msw\uxtheme.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_valgen.obj: ..\src\common\valgen.cpp
@@ -7081,6 +7089,9 @@ $(OBJS)\monolib_cshelp.obj: ..\src\common\cshelp.cpp
 $(OBJS)\monolib_ctrlcmn.obj: ..\src\common\ctrlcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
+
+$(OBJS)\monolib_ctrlrend.obj: ..\src\univ\ctrlrend.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_ctrlsub.obj: ..\src\common\ctrlsub.cpp
@@ -7902,12 +7913,7 @@ $(OBJS)\monolib_rendcmn.obj: ..\src\common\rendcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_renderer.obj: ..\src\univ\renderer.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_renderer.obj: ..\src\msw\renderer.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
@@ -8236,8 +8242,10 @@ $(OBJS)\monolib_uuid.obj: ..\src\msw\ole\uuid.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_uxtheme.obj: ..\src\msw\uxtheme.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_valgen.obj: ..\src\common\valgen.cpp
