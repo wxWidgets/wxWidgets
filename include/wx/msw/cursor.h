@@ -16,27 +16,11 @@
     #pragma interface "cursor.h"
 #endif
 
-// compatible (even if incorrect) behaviour by default: derive wxCursor from
-// wxBitmap
-#ifndef wxICON_IS_BITMAP
-    #define wxICON_IS_BITMAP 0
-#endif
-
-#if wxICON_IS_BITMAP
-    #include "wx/bitmap.h"
-
-    #define wxCursorRefDataBase   wxBitmapRefData
-    #define wxCursorBase          wxBitmap
-#else
-    #include "wx/msw/gdiimage.h"
-
-    #define wxCursorRefDataBase   wxGDIImageRefData
-    #define wxCursorBase          wxGDIImage
-#endif
+#include "wx/msw/gdiimage.h"
 
 class WXDLLEXPORT wxImage;
 
-class WXDLLEXPORT wxCursorRefData : public wxCursorRefDataBase
+class WXDLLEXPORT wxCursorRefData : public wxGDIImageRefData
 {
 public:
     wxCursorRefData();
@@ -50,14 +34,14 @@ public:
 };
 
 // Cursor
-class WXDLLEXPORT wxCursor : public wxCursorBase
+class WXDLLEXPORT wxCursor : public wxGDIImage
 {
 public:
     wxCursor();
 
     // Copy constructors
     wxCursor(const wxCursor& cursor) { Ref(cursor); }
-    wxCursor(const wxImage & image) ;
+    wxCursor(const wxImage& image);
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
              const char maskBits[] = NULL);
