@@ -33,22 +33,41 @@
 // ---------------------------------------------------------------------------
 
 extern wxWindow* wxWndHook;
-extern MRESULT wxDlgProc(HWND hWnd, UINT message,
-                         MPARAM wParam, MPARAM lParam);
+extern MRESULT wxDlgProc( HWND   hWnd
+                         ,UINT   message
+                         ,MPARAM wParam
+                         ,MPARAM lParam
+                        );
 
 // ===========================================================================
 // implementation
 // ===========================================================================
 
-bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
+bool wxWindow::LoadNativeDialog (
+  wxWindow*                         pParent
+, wxWindowID&                       vId
+)
 {
-    m_windowId = id;
-    wxWndHook = this;
+    wxWindow*                       pChild = NULL;
+    HWND                            hWndOwner;
+    HWND                            hWndNext = NULLHANDLE;
+    HENUM                           hEnum;
 
-    m_hWnd = 0; // TODO (WXHWND)::CreateDialog((HINSTANCE)wxGetInstance(),
-                //                     MAKEINTRESOURCE(id),
-                //                     parent ? (HWND)parent->GetHWND() : 0,
-                //                     (DLGPROC) wxDlgProc);
+    if (pParent)
+        hWndOwner = GetHwndOf(pParent);
+    else
+        hWndOwner = HWND_DESKTOP;
+
+    m_windowId = vId;
+    wxWndHook  = this;
+
+    m_hWnd = ::WinLoadDlg( HWND_DESKTOP
+                          ,hWndOwner
+                          ,(PFNWP)wxDlgProc
+                          ,NULL
+                          ,(ULONG)131 // Caption dialog from the resource file
+                          ,(PVOID)this
+                         );
     wxWndHook = NULL;
 
     if ( !m_hWnd )
@@ -56,237 +75,216 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
 
     SubclassWin(GetHWND());
 
-    if ( parent )
-        parent->AddChild(this);
+    if (pParent)
+        pParent->AddChild(this);
     else
         wxTopLevelWindows.Append(this);
 
-    // Enumerate all children
-    HWND hWndNext = NULLHANDLE;
-// TODO    hWndNext = ::GetWindow((HWND) m_hWnd, GW_CHILD);
-
-    wxWindow* child = NULL;
-    if (hWndNext)
-        child = CreateWindowFromHWND(this, (WXHWND) hWndNext);
-
-    while (hWndNext != (HWND) NULL)
-    {
-// TODO:        hWndNext = ::GetWindow(hWndNext, GW_HWNDNEXT);
-        if (hWndNext)
-            child = CreateWindowFromHWND(this, (WXHWND) hWndNext);
-    }
-
+    //
+    // Enumerate the children
+    //
+    hEnum = ::WinBeginEnumWindows(GetHwndOf(pParent));
+    while ((hWndNext = ::WinGetNextWindow(hEnum)) != NULLHANDLE)
+        pChild = CreateWindowFromHWND( this
+                                      ,(WXHWND)hWndNext
+                                     );
+    ::WinEndEnumWindows(hEnum);
     return TRUE;
-}
+} // end of wxWindow::LoadNativeDialog
 
-bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxString& name)
+bool wxWindow::LoadNativeDialog (
+  wxWindow*                         pParent
+, const wxString&                   rsName
+)
 {
-    SetName(name);
+    HWND                            hWndOwner;
+
+    if (pParent)
+        hWndOwner = GetHwndOf(pParent);
+    else
+        hWndOwner = HWND_DESKTOP;
+    SetName(rsName);
 
     wxWndHook = this;
-    m_hWnd = 0; //TODO: (WXHWND)::CreateDialog((HINSTANCE) wxGetInstance(),
-                //                    name.c_str(),
-                //                    parent ? (HWND)parent->GetHWND() : 0,
-                //                    (DLGPROC)wxDlgProc);
+    m_hWnd = ::WinLoadDlg( HWND_DESKTOP
+                          ,hWndOwner
+                          ,(PFNWP)wxDlgProc
+                          ,NULL
+                          ,(ULONG)131 // Caption dialog from the resource file
+                          ,(PVOID)this
+                         );
     wxWndHook = NULL;
 
-    if ( !m_hWnd )
+    if (!m_hWnd)
         return FALSE;
 
     SubclassWin(GetHWND());
 
-    if ( parent )
-        parent->AddChild(this);
+    if (pParent)
+        pParent->AddChild(this);
     else
         wxTopLevelWindows.Append(this);
-
-    // FIXME why don't we enum all children here?
-
     return TRUE;
-}
+} // end of wxWindow::LoadNativeDialog
 
 // ---------------------------------------------------------------------------
 // look for child by id
 // ---------------------------------------------------------------------------
-
-wxWindow* wxWindow::GetWindowChild1(wxWindowID id)
+wxWindow* wxWindow::GetWindowChild1 (
+  wxWindowID                        vId
+)
 {
-    if ( m_windowId == id )
+    if (m_windowId == vId)
         return this;
 
-    wxWindowList::Node *node = GetChildren().GetFirst();
-    while ( node )
-    {
-        wxWindow* child = node->GetData();
-        wxWindow* win = child->GetWindowChild1(id);
-        if ( win )
-            return win;
+    wxWindowList::Node*             pNode = GetChildren().GetFirst();
 
-        node = node->GetNext();
+    while (pNode)
+    {
+        wxWindow*                   pChild = pNode->GetData();
+        wxWindow*                   pWin   = pChild->GetWindowChild1(vId);
+
+        if (pWin)
+            return pWin;
+
+        pNode = pNode->GetNext();
     }
-
     return NULL;
-}
+} // end of wxWindow::GetWindowChild1
 
-wxWindow* wxWindow::GetWindowChild(wxWindowID id)
+wxWindow* wxWindow::GetWindowChild (
+  wxWindowID                        vId
+)
 {
-    wxWindow* win = GetWindowChild1(id);
-    if ( !win )
+    wxWindow*                       pWin = GetWindowChild1(vId);
+
+    if (!pWin)
     {
-        HWND hWnd = 0; // TODO: ::GetDlgItem((HWND) GetHWND(), id);
+        HWND                        hWnd = 0; // TODO: ::GetDlgItem((HWND) GetHWND(), id);
 
         if (hWnd)
         {
-            wxWindow* child = CreateWindowFromHWND(this, (WXHWND) hWnd);
-            if (child)
+            wxWindow*               pChild = CreateWindowFromHWND( this
+                                                                  ,(WXHWND)hWnd
+                                                                 );
+            if (pChild)
             {
-                child->AddChild(this);
-                return child;
+                pChild->AddChild(this);
+                return pChild;
             }
         }
     }
-
     return NULL;
-}
+} // end of wxWindow::GetWindowChild
 
 // ---------------------------------------------------------------------------
 // create wxWin window from a native HWND
 // ---------------------------------------------------------------------------
 
-wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
+wxWindow* wxWindow::CreateWindowFromHWND (
+  wxWindow*                         pParent
+, WXHWND                            hWnd
+)
 {
-    wxString str(wxGetWindowClass(hWnd));
-    str.UpperCase();
+    wxString                        sStr(wxGetWindowClass(hWnd));
+    long                            lId    = wxGetWindowId(hWnd);
+    long                            lStyle = ::WinQueryWindowULong((HWND)hWnd
+                                                                   ,QWL_STYLE
+                                                                  );
+    wxWindow*                       pWin = NULL;
 
-    long id = wxGetWindowId(hWnd);
-    long style = 0; // TODO: GetWindowLong((HWND) hWnd, GWL_STYLE);
+    sStr.UpperCase();
 
-    wxWindow* win = NULL;
 
-// TODO:
-/*
-    if (str == wxT("BUTTON"))
+
+    if (sStr == wxT("BUTTON"))
     {
-        int style1 = (style & 0xFF);
-        if ((style1 == BS_3STATE) || (style1 == BS_AUTO3STATE) || (style1 == BS_AUTOCHECKBOX) ||
-            (style1 == BS_CHECKBOX))
+        if (lStyle == BS_AUTOCHECKBOX)
         {
-            win = new wxCheckBox;
+            pWin = new wxCheckBox;
         }
-        else if ((style1 == BS_AUTORADIOBUTTON) || (style1 == BS_RADIOBUTTON))
+        else if (lStyle == BS_AUTORADIOBUTTON)
         {
-            win = new wxRadioButton;
+            pWin = new wxRadioButton;
         }
-        else if (style & BS_BITMAP)
+        else if (lStyle & BS_BITMAP || lStyle == BS_USERBUTTON)
         {
-            // TODO: how to find the bitmap?
-            win = new wxBitmapButton;
-            wxLogError(wxT("Have not yet implemented bitmap button as BS_BITMAP button."));
+            pWin = new wxBitmapButton;
         }
-        else if (style1 == BS_OWNERDRAW)
+        else if (lStyle == BS_PUSHBUTTON)
         {
-            // TODO: how to find the bitmap?
-            // TODO: can't distinguish between bitmap button and bitmap static.
-            // Change implementation of wxStaticBitmap to SS_BITMAP.
-            // PROBLEM: this assumes that we're using resource-based bitmaps.
-            // So maybe need 2 implementations of bitmap buttons/static controls,
-            // with a switch in the drawing code. Call default proc if BS_BITMAP.
-            win = new wxBitmapButton;
+            pWin = new wxButton;
         }
-        else if ((style1 == BS_PUSHBUTTON) || (style1 == BS_DEFPUSHBUTTON))
+        else if (lStyle == SS_GROUPBOX)
         {
-            win = new wxButton;
-        }
-        else if (style1 == BS_GROUPBOX)
-        {
-            win = new wxStaticBox;
+            pWin = new wxStaticBox;
         }
         else
         {
-            wxLogError(wxT("Don't know what kind of button this is: id = %d"),
-                       id);
+            wxLogError(wxT("Don't know what kind of button this is: id = %ld"),
+                       lId);
         }
     }
-    else if (str == wxT("COMBOBOX"))
+    else if (sStr == wxT("COMBOBOX"))
     {
-        win = new wxComboBox;
+        pWin = new wxComboBox;
     }
-    // TODO: Problem if the user creates a multiline - but not rich text - text control,
-    // since wxWin assumes RichEdit control for this. Should have m_isRichText in
-    // wxTextCtrl. Also, convert as much of the window style as is necessary
-    // for correct functioning.
-    // Could have wxWindow::AdoptAttributesFromHWND(WXHWND)
-    // to be overridden by each control class.
-    else if (str == wxT("EDIT"))
+    else if (sStr == wxT("EDIT"))
     {
-        win = new wxTextCtrl;
+        pWin = new wxTextCtrl;
     }
-    else if (str == wxT("LISTBOX"))
+    else if (sStr == wxT("LISTBOX"))
     {
-        win = new wxListBox;
+        pWin = new wxListBox;
     }
-    else if (str == wxT("SCROLLBAR"))
+    else if (sStr == wxT("SCROLLBAR"))
     {
-        win = new wxScrollBar;
+        pWin = new wxScrollBar;
     }
-    else if (str == wxT("MSCTLS_UPDOWN32"))
+    else if (sStr == wxT("MSCTLS_UPDOWN32"))
     {
-        win = new wxSpinButton;
+        pWin = new wxSpinButton;
     }
-    else if (str == wxT("MSCTLS_TRACKBAR32"))
+    else if (sStr == wxT("MSCTLS_TRACKBAR32"))
     {
-        // Need to ascertain if it's horiz or vert
-        win = new wxSlider;
+        pWin = new wxSlider;
     }
-    else if (str == wxT("STATIC"))
+    else if (sStr == wxT("STATIC"))
     {
-        int style1 = (style & 0xFF);
-
-        if ((style1 == SS_LEFT) || (style1 == SS_RIGHT) || (style1 == SS_SIMPLE))
-            win = new wxStaticText;
-        else if (style1 == SS_BITMAP)
+        if (lStyle == SS_TEXT)
+            pWin = new wxStaticText;
+        else if (lStyle == SS_ICON)
         {
-            win = new wxStaticBitmap;
-
-            // Help! this doesn't correspond with the wxWin implementation.
-            wxLogError(wxT("Please make SS_BITMAP statics into owner-draw buttons."));
+            pWin = new wxStaticBitmap;
         }
     }
     else
     {
-        wxString msg(wxT("Don't know how to convert from Windows class "));
-        msg += str;
-        wxLogError(msg);
-    }
-*/
-    if (win)
-    {
-        parent->AddChild(win);
-        win->SetEventHandler(win);
-        win->SetHWND(hWnd);
-        win->SetId(id);
-        win->SubclassWin(hWnd);
-        win->AdoptAttributesFromHWND();
-        win->SetupColours();
+        wxString                    sMsg(wxT("Don't know how to convert from Windows class "));
 
-        return win;
+        sMsg += sStr;
+        wxLogError(sMsg);
+    }
+    if (pWin)
+    {
+        pParent->AddChild(pWin);
+        pWin->SetEventHandler(pWin);
+        pWin->SetHWND(hWnd);
+        pWin->SetId(lId);
+        pWin->SubclassWin(hWnd);
+        pWin->AdoptAttributesFromHWND();
+        pWin->SetupColours();
+        return pWin;
     }
     else
         return NULL;
-}
+} // end of wxWindow::CreateWindowFromHWND
 
+//
 // Make sure the window style (etc.) reflects the HWND style (roughly)
-void wxWindow::AdoptAttributesFromHWND(void)
+//
+void wxWindow::AdoptAttributesFromHWND()
 {
-    HWND hWnd = (HWND) GetHWND();
-// TODO:
-/*
-    long style = GetWindowLong((HWND) hWnd, GWL_STYLE);
-
-    if (style & WS_VSCROLL)
-        m_windowStyle |= wxVSCROLL;
-    if (style & WS_HSCROLL)
-        m_windowStyle |= wxHSCROLL;
-*/
-}
+  // Does nothing under OS/2
+} // end of wxWindow::AdoptAttributesFromHWND
 

@@ -9795,6 +9795,141 @@ EXPORTS
       __ct__10wxLogFrameFP7wxFrameP11wxLogWindowPCc
       ;wxLogWindow::wxLogWindow(wxFrame*,const char*,unsigned long,unsigned long)
       __ct__11wxLogWindowFP7wxFramePCcUlT3
+  ;From object file:  ..\generic\mdig.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxGenericMDIClientWindow::CreateClient(wxGenericMDIParentFrame*,long)
+      CreateClient__24wxGenericMDIClientWindowFP23wxGenericMDIParentFramel
+      ;wxGenericMDIChildFrame::DoMoveWindow(int,int,int,int)
+      DoMoveWindow__22wxGenericMDIChildFrameFiN31
+      ;wxConstructorForwxGenericMDIParentFrame()
+      wxConstructorForwxGenericMDIParentFrame__Fv
+      ;wxGenericMDIParentFrame::RemoveWindowMenu(wxMenuBar*)
+      RemoveWindowMenu__23wxGenericMDIParentFrameFP9wxMenuBar
+      ;wxGenericMDIParentFrame::OnCreateClient()
+      OnCreateClient__23wxGenericMDIParentFrameFv
+      ;wxGenericMDIParentFrame::ActivatePrevious()
+      ActivatePrevious__23wxGenericMDIParentFrameFv
+      ;wxGenericMDIParentFrame::ActivateNext()
+      ActivateNext__23wxGenericMDIParentFrameFv
+      ;wxMDIClientWindow::sm_classwxMDIClientWindow
+      sm_classwxMDIClientWindow__17wxMDIClientWindow
+      ;wxGenericMDIClientWindow::sm_eventTable
+      sm_eventTable__24wxGenericMDIClientWindow
+      ;wxGenericMDIClientWindow::wxGenericMDIClientWindow(wxGenericMDIParentFrame*,long)
+      __ct__24wxGenericMDIClientWindowFP23wxGenericMDIParentFramel
+      __vft24wxGenericMDIClientWindow8wxObject
+      ;wxGenericMDIClientWindow::OnPageChanged(wxNotebookEvent&)
+      OnPageChanged__24wxGenericMDIClientWindowFR15wxNotebookEvent
+      ;wxGenericMDIParentFrame::SetChildMenuBar(wxGenericMDIChildFrame*)
+      SetChildMenuBar__23wxGenericMDIParentFrameFP22wxGenericMDIChildFrame
+      ;wxGenericMDIChildFrame::sm_eventTableEntries
+      sm_eventTableEntries__22wxGenericMDIChildFrame
+      ;wxMDIParentFrame::sm_classwxMDIParentFrame
+      sm_classwxMDIParentFrame__16wxMDIParentFrame
+      ;wxGenericMDIParentFrame::sm_classwxGenericMDIParentFrame
+      sm_classwxGenericMDIParentFrame__23wxGenericMDIParentFrame
+      ;wxGenericMDIClientWindow::SetSelection(int)
+      SetSelection__24wxGenericMDIClientWindowFi
+      ;wxGenericMDIChildFrame::wxGenericMDIChildFrame()
+      __ct__22wxGenericMDIChildFrameFv
+      ;wxGenericMDIClientWindow::wxGenericMDIClientWindow()
+      __ct__24wxGenericMDIClientWindowFv
+      ;wxGenericMDIParentFrame::SetMenuBar(wxMenuBar*)
+      SetMenuBar__23wxGenericMDIParentFrameFP9wxMenuBar
+      ;wxGenericMDIParentFrame::AddWindowMenu(wxMenuBar*)
+      AddWindowMenu__23wxGenericMDIParentFrameFP9wxMenuBar
+      ;wxGenericMDIParentFrame::ProcessEvent(wxEvent&)
+      ProcessEvent__23wxGenericMDIParentFrameFR7wxEvent
+      __vft23wxGenericMDIParentFrame8wxObject
+      ;wxGenericMDIParentFrame::DoHandleMenu(wxCommandEvent&)
+      DoHandleMenu__23wxGenericMDIParentFrameFR14wxCommandEvent
+      ;wxGenericMDIChildFrame::sm_classwxGenericMDIChildFrame
+      sm_classwxGenericMDIChildFrame__22wxGenericMDIChildFrame
+      ;wxGenericMDIChildFrame::sm_eventTable
+      sm_eventTable__22wxGenericMDIChildFrame
+      ;wxMDIChildFrame::sm_classwxMDIChildFrame
+      sm_classwxMDIChildFrame__15wxMDIChildFrame
+      ;wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
+      __dt__22wxGenericMDIChildFrameFv
+      ;wxGenericMDIClientWindow::~wxGenericMDIClientWindow()
+      __dt__24wxGenericMDIClientWindowFv
+      ;wxGenericMDIChildFrame::SetMenuBar(wxMenuBar*)
+      SetMenuBar__22wxGenericMDIChildFrameFP9wxMenuBar
+      ;wxGenericMDIChildFrame::GetMenuBar() const
+      GetMenuBar__22wxGenericMDIChildFrameCFv
+      ;wxGenericMDIParentFrame::GetActiveChild() const
+      GetActiveChild__23wxGenericMDIParentFrameCFv
+      ;wxGenericMDIChildFrame::Activate()
+      Activate__22wxGenericMDIChildFrameFv
+      ;wxGenericMDIParentFrame::wxGenericMDIParentFrame(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
+      __ct__23wxGenericMDIParentFrameFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
+      ;wxGenericMDIClientWindow::sm_classwxGenericMDIClientWindow
+      sm_classwxGenericMDIClientWindow__24wxGenericMDIClientWindow
+      ;wxGenericMDIChildFrame::OnSize(wxSizeEvent&)
+      OnSize__22wxGenericMDIChildFrameFR11wxSizeEvent
+      __vft22wxGenericMDIChildFrame8wxObject
+      ;wxGenericMDIClientWindow::OnSize(wxSizeEvent&)
+      OnSize__24wxGenericMDIClientWindowFR11wxSizeEvent
+      ;wxGenericMDIChildFrame::OnCloseWindow(wxCloseEvent&)
+      OnCloseWindow__22wxGenericMDIChildFrameFR12wxCloseEvent
+      ;wxGenericMDIParentFrame::SetWindowMenu(wxMenu*)
+      SetWindowMenu__23wxGenericMDIParentFrameFP6wxMenu
+      ;wxGenericMDIParentFrame::sm_eventTableEntries
+      sm_eventTableEntries__23wxGenericMDIParentFrame
+      ;wxGenericMDIChildFrame::SetMDIParentFrame(wxGenericMDIParentFrame*)
+      SetMDIParentFrame__22wxGenericMDIChildFrameFP23wxGenericMDIParentFrame
+      ;wxGenericMDIParentFrame::DoGetClientSize(int*,int*) const
+      DoGetClientSize__23wxGenericMDIParentFrameCFPiT1
+      ;wxGenericMDIParentFrame::wxGenericMDIParentFrame()
+      __ct__23wxGenericMDIParentFrameFv
+      ;wxConstructorForwxGenericMDIClientWindow()
+      wxConstructorForwxGenericMDIClientWindow__Fv
+      ;wxConstructorForwxGenericMDIChildFrame()
+      wxConstructorForwxGenericMDIChildFrame__Fv
+      ;wxGenericMDIParentFrame::Init()
+      Init__23wxGenericMDIParentFrameFv
+      ;wxGenericMDIChildFrame::GetMDIParentFrame() const
+      GetMDIParentFrame__22wxGenericMDIChildFrameCFv
+      ;wxGenericMDIClientWindow::GetEventTable() const
+      GetEventTable__24wxGenericMDIClientWindowCFv
+      ;wxGenericMDIParentFrame::GetEventTable() const
+      GetEventTable__23wxGenericMDIParentFrameCFv
+      ;wxGenericMDIParentFrame::GetClientWindow() const
+      GetClientWindow__23wxGenericMDIParentFrameCFv
+      ;wxGenericMDIChildFrame::Create(wxGenericMDIParentFrame*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
+      Create__22wxGenericMDIChildFrameFP23wxGenericMDIParentFrameiRC8wxStringRC7wxPointRC6wxSizelT3
+      ;wxGenericMDIChildFrame::OnMenuHighlight(wxMenuEvent&)
+      OnMenuHighlight__22wxGenericMDIChildFrameFR11wxMenuEvent
+      ;wxGenericMDIChildFrame::OnActivate(wxActivateEvent&)
+      OnActivate__22wxGenericMDIChildFrameFR15wxActivateEvent
+      ;wxGenericMDIClientWindow::PageChanged(int,int)
+      PageChanged__24wxGenericMDIClientWindowFiT1
+      ;wxGenericMDIParentFrame::sm_eventTable
+      sm_eventTable__23wxGenericMDIParentFrame
+      ;wxGenericMDIParentFrame::~wxGenericMDIParentFrame()
+      __dt__23wxGenericMDIParentFrameFv
+      ;wxConstructorForwxMDIParentFrame()
+      wxConstructorForwxMDIParentFrame__Fv
+      ;wxConstructorForwxMDIClientWindow()
+      wxConstructorForwxMDIClientWindow__Fv
+      ;wxConstructorForwxMDIChildFrame()
+      wxConstructorForwxMDIChildFrame__Fv
+      ;wxGenericMDIChildFrame::Init()
+      Init__22wxGenericMDIChildFrameFv
+      ;wxGenericMDIChildFrame::GetTitle() const
+      GetTitle__22wxGenericMDIChildFrameCFv
+      ;wxGenericMDIChildFrame::GetEventTable() const
+      GetEventTable__22wxGenericMDIChildFrameCFv
+      ;wxGenericMDIChildFrame::ApplyMDIChildFrameRect()
+      ApplyMDIChildFrameRect__22wxGenericMDIChildFrameFv
+      ;wxGenericMDIChildFrame::wxGenericMDIChildFrame(wxGenericMDIParentFrame*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
+      __ct__22wxGenericMDIChildFrameFP23wxGenericMDIParentFrameiRC8wxStringRC7wxPointRC6wxSizelT3
+      ;wxGenericMDIClientWindow::sm_eventTableEntries
+      sm_eventTableEntries__24wxGenericMDIClientWindow
+      ;wxGenericMDIChildFrame::SetTitle(const wxString&)
+      SetTitle__22wxGenericMDIChildFrameFRC8wxString
+      ;wxGenericMDIParentFrame::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
+      Create__23wxGenericMDIParentFrameFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
   ;From object file:  ..\generic\numdlgg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGetNumberFromUser(const wxString&,const wxString&,const wxString&,long,long,long,wxWindow*,const wxPoint&)
@@ -13369,111 +13504,6 @@ EXPORTS
   ;From object file:  ..\os2\main.cpp
     ;PUBDEFs (Symbols available from object file):
       main
-  ;From object file:  ..\os2\mdi.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent&)
-      OnSysColourChanged__16wxMDIParentFrameFR23wxSysColourChangedEvent
-      ;wxMDIClientWindow::GetEventTable() const
-      GetEventTable__17wxMDIClientWindowCFv
-      ;wxMDIChildFrame::~wxMDIChildFrame()
-      __dt__15wxMDIChildFrameFv
-      ;wxMDIParentFrame::ArrangeIcons()
-      ArrangeIcons__16wxMDIParentFrameFv
-      ;wxMDIParentFrame::ActivatePrevious()
-      ActivatePrevious__16wxMDIParentFrameFv
-      ;wxMDIClientWindow::sm_classwxMDIClientWindow
-      sm_classwxMDIClientWindow__17wxMDIClientWindow
-      ;wxMDIParentFrame::OnSize(wxSizeEvent&)
-      OnSize__16wxMDIParentFrameFR11wxSizeEvent
-      ;wxMDIChildFrame::Maximize(unsigned long)
-      Maximize__15wxMDIChildFrameFUl
-      ;wxMDIClientWindow::CreateClient(wxMDIParentFrame*,long)
-      CreateClient__17wxMDIClientWindowFP16wxMDIParentFramel
-      ;wxMDIChildFrame::DoSetClientSize(int,int)
-      DoSetClientSize__15wxMDIChildFrameFiT1
-      ;wxMDIParentFrame::sm_classwxMDIParentFrame
-      sm_classwxMDIParentFrame__16wxMDIParentFrame
-      ;wxMDIParentFrame::GetEventTable() const
-      GetEventTable__16wxMDIParentFrameCFv
-      ;wxMDIParentFrame::~wxMDIParentFrame()
-      __dt__16wxMDIParentFrameFv
-      ;wxMDIParentFrame::Tile()
-      Tile__16wxMDIParentFrameFv
-      ;wxMDIChildFrame::Restore()
-      Restore__15wxMDIChildFrameFv
-      ;wxMDIParentFrame::OS2WindowProc(unsigned int,void*,void*)
-      OS2WindowProc__16wxMDIParentFrameFUiPvT2
-      ;wxMDIParentFrame::OS2TranslateMessage(void**)
-      OS2TranslateMessage__16wxMDIParentFrameFPPv
-      ;wxMDIParentFrame::OS2DefWindowProc(unsigned int,void*,void*)
-      OS2DefWindowProc__16wxMDIParentFrameFUiPvT2
-      ;wxMDIParentFrame::InternalSetMenuBar()
-      InternalSetMenuBar__16wxMDIParentFrameFv
-      ;wxMDIChildFrame::HandleWindowPosChanging(void*)
-      HandleWindowPosChanging__15wxMDIChildFrameFPv
-      ;wxMDIParentFrame::Cascade()
-      Cascade__16wxMDIParentFrameFv
-      ;wxMDIParentFrame::HandleCommand(unsigned short,unsigned short,unsigned long)
-      HandleCommand__16wxMDIParentFrameFUsT1Ul
-      ;wxMDIClientWindow::OnScroll(wxScrollEvent&)
-      OnScroll__17wxMDIClientWindowFR13wxScrollEvent
-      ;wxMDIChildFrame::HandleCommand(unsigned short,unsigned short,unsigned long)
-      HandleCommand__15wxMDIChildFrameFUsT1Ul
-      ;wxMDIChildFrame::sm_classwxMDIChildFrame
-      sm_classwxMDIChildFrame__15wxMDIChildFrame
-      ;wxMDIParentFrame::wxMDIParentFrame()
-      __ct__16wxMDIParentFrameFv
-      ;wxMDIChildFrame::OS2TranslateMessage(void**)
-      OS2TranslateMessage__15wxMDIChildFrameFPPv
-      ;wxMDIChildFrame::InternalSetMenuBar()
-      InternalSetMenuBar__15wxMDIChildFrameFv
-      ;wxMDIParentFrame::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
-      Create__16wxMDIParentFrameFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
-      __vft16wxMDIParentFrame8wxObject
-      ;wxMDIChildFrame::HandleSize(int,int,unsigned int)
-      HandleSize__15wxMDIChildFrameFiT1Ui
-      ;wxMDIParentFrame::sm_eventTable
-      sm_eventTable__16wxMDIParentFrame
-      ;wxMDIParentFrame::sm_eventTableEntries
-      sm_eventTableEntries__16wxMDIParentFrame
-      ;wxMDIParentFrame::GetActiveChild() const
-      GetActiveChild__16wxMDIParentFrameCFv
-      ;wxMDIParentFrame::OnCreateClient()
-      OnCreateClient__16wxMDIParentFrameFv
-      ;wxMDIChildFrame::OS2WindowProc(unsigned int,void*,void*)
-      OS2WindowProc__15wxMDIChildFrameFUiPvT2
-      ;wxMDIChildFrame::OS2DestroyWindow()
-      OS2DestroyWindow__15wxMDIChildFrameFv
-      ;wxMDIParentFrame::HandleActivate(int,unsigned long,unsigned long)
-      HandleActivate__16wxMDIParentFrameFiUlT2
-      ;wxMDIClientWindow::sm_eventTableEntries
-      sm_eventTableEntries__17wxMDIClientWindow
-      __vft15wxMDIChildFrame8wxObject
-      __vft17wxMDIClientWindow8wxObject
-      ;wxMDIChildFrame::DoGetPosition(int*,int*) const
-      DoGetPosition__15wxMDIChildFrameCFPiT1
-      ;wxConstructorForwxMDIParentFrame()
-      wxConstructorForwxMDIParentFrame__Fv
-      ;wxConstructorForwxMDIClientWindow()
-      wxConstructorForwxMDIClientWindow__Fv
-      ;wxConstructorForwxMDIChildFrame()
-      wxConstructorForwxMDIChildFrame__Fv
-      ;wxMDIChildFrame::wxMDIChildFrame()
-      __ct__15wxMDIChildFrameFv
-      ;wxMDIChildFrame::ResetWindowStyle(void*)
-      ResetWindowStyle__15wxMDIChildFrameFPv
-      ;wxMDIChildFrame::OS2DefWindowProc(unsigned int,void*,void*)
-      OS2DefWindowProc__15wxMDIChildFrameFUiPvT2
-      ;wxMDIChildFrame::HandleMDIActivate(long,unsigned long,unsigned long)
-      HandleMDIActivate__15wxMDIChildFrameFlUlT2
-      ;wxMDIChildFrame::Activate()
-      Activate__15wxMDIChildFrameFv
-      ;wxMDIParentFrame::ActivateNext()
-      ActivateNext__16wxMDIParentFrameFv
-      ;wxMDIChildFrame::Create(wxMDIParentFrame*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
-      Create__15wxMDIChildFrameFP16wxMDIParentFrameiRC8wxStringRC7wxPointRC6wxSizelT3
-      ;wxMDIClientWindow::sm_eventTable
-      sm_eventTable__17wxMDIClientWindow
   ;From object file:  ..\os2\menu.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxMenuBar::wxMenuBar(long)
@@ -13665,12 +13695,6 @@ EXPORTS
       GetFileTypeFromMimeType__22wxMimeTypesManagerImplFRC8wxString
       ;wxFileTypeImpl::GetExtensions(wxArrayString&)
       GetExtensions__14wxFileTypeImplFR13wxArrayString
-  ;From object file:  ..\os2\minifram.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxMiniFrame::sm_classwxMiniFrame
-      sm_classwxMiniFrame__11wxMiniFrame
-      ;wxConstructorForwxMiniFrame()
-      wxConstructorForwxMiniFrame__Fv
   ;From object file:  ..\os2\msgdlg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxMessageDialog::ShowModal()
