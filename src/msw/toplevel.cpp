@@ -754,6 +754,12 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
         // remember the last focused child if it is our child
         m_winLastFocused = FindFocus();
 
+        if ( m_winLastFocused )
+        {
+            // let it know that it doesn't have focus any more
+            m_winLastFocused->HandleKillFocus(NULL);
+        }
+
         // so we NULL it out if it's a child from some other frame
         wxWindow *win = m_winLastFocused;
         while ( win )
