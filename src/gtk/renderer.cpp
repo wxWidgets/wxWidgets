@@ -59,6 +59,15 @@ public:
                                     int flags = 0);
 #endif // GTK 2.0
 
+    // draw a (vertical) sash
+    //
+    // VZ: doesn't work -- nothing is shown on screen, why?
+#if 0
+    virtual void DrawSplitterSash(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxSize& size,
+                                  wxCoord position);
+#endif // 0
 };
 
 // ============================================================================
@@ -133,4 +142,44 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* WXUNUSED(win),
 
 #endif // GTK 2.0
 
+#if 0
+
+// draw a (vertical) sash
+void
+wxRendererGTK::DrawSplitterSash(wxWindow *win,
+                                wxDC& dc,
+                                const wxSize& size,
+                                wxCoord position)
+{
+    if ( !win->m_wxwindow->window )
+    {
+        // VZ: this happens on startup -- why?
+        return;
+    }
+
+    gtk_paint_vline
+    (
+        win->m_wxwindow->style,
+        win->m_wxwindow->window,
+        GTK_STATE_NORMAL,
+        (GdkRectangle *)NULL,
+        win->m_wxwindow,
+        (char *)"vpaned", // const_cast
+        0, size.y, position + 3
+    );
+
+    gtk_paint_box
+    (
+        win->m_wxwindow->style,
+        win->m_wxwindow->window,
+        GTK_STATE_NORMAL,
+        GTK_SHADOW_OUT,
+        (GdkRectangle *)NULL,
+        win->m_wxwindow,
+        (char *)"paned", // const_cast
+        position, 5, 10, 10
+    );
+}
+
+#endif // 0
 
