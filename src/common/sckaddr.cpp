@@ -55,6 +55,13 @@
 #include <unistd.h>
 #include <netdb.h>
 
+#ifdef __SUN__
+extern "C"
+{
+   struct hostent *gethostbyname(const char *name); 
+};
+#endif
+
 #endif // __UNIX__
 
 #include "wx/sckaddr.h"

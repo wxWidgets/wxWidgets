@@ -30,6 +30,10 @@
 #endif
 #include "unistd.h"
 
+#ifdef __SUN__
+int usleep(unsigned int useconds); 
+#endif
+
 #include "glib.h"
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"

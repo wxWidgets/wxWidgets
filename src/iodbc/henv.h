@@ -32,6 +32,10 @@
 #include	<isql.h>
 #include	<isqlext.h>
 
+#ifndef SYSERR
+#define   SYSERR -1
+#endif
+
 enum
   {
 
