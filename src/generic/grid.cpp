@@ -5287,9 +5287,31 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 
             case WXK_TAB:
                 if (event.ShiftDown())
-                    MoveCursorLeft( FALSE );
+                {
+                    if ( GetGridCursorCol() > 0 )
+                    {
+                        MoveCursorLeft( FALSE );
+                    }
+                    else
+                    {
+                        // at left of grid
+                        HideCellEditControl();
+                        SaveEditControlValue();
+                    }
+                }
                 else
-                    MoveCursorRight( FALSE );
+                {
+                    if ( GetGridCursorCol() > 0 )
+                    {
+                        MoveCursorRight( FALSE );
+                    }
+                    else
+                    {
+                        // at right of grid
+                        HideCellEditControl();
+                        SaveEditControlValue();
+                    }
+                }
                 break;
 
             case WXK_HOME:
