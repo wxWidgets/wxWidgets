@@ -1647,7 +1647,7 @@
     src/cocoa/data.cpp
     src/cocoa/dc.mm
     src/cocoa/dcclient.mm
-    src/cocoa/dcmemory.cpp
+    src/cocoa/dcmemory.mm
     src/cocoa/dcscreen.cpp
     src/cocoa/dialog.mm
     src/cocoa/font.cpp
