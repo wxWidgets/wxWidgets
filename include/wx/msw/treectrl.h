@@ -504,12 +504,16 @@ public:
         // keyboard code (for wxEVT_COMMAND_TREE_KEY_DOWN only)
     int GetCode() const { return m_code; }
 
+        // label (for EVT_TREE_{BEGIN|END}_LABEL_EDIT only)
+    const wxString& GetLabel() const { return m_label; }
+
 private:
-    // @@ we could save some space by using union here
+    // TODO we could save some space by using union here
     int           m_code;
     wxTreeItemId  m_item,
                   m_itemOld;
     wxPoint       m_pointDrag;
+    wxString      m_label;
 
     DECLARE_DYNAMIC_CLASS(wxTreeEvent)
 };
@@ -524,7 +528,11 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 #define EVT_TREE_BEGIN_DRAG(id, fn) { wxEVT_COMMAND_TREE_BEGIN_DRAG, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 #define EVT_TREE_BEGIN_RDRAG(id, fn) { wxEVT_COMMAND_TREE_BEGIN_RDRAG, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 
-// GetItem() returns the itme whose label is being edited
+// GetItem() returns the itme whose label is being edited, GetLabel() returns
+// the current item label for BEGIN and the would be new one for END.
+//
+// Vetoing BEGIN event means that label editing won't happen at all,
+// vetoing END means that the new value is discarded and the old one kept
 #define EVT_TREE_BEGIN_LABEL_EDIT(id, fn) { wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 #define EVT_TREE_END_LABEL_EDIT(id, fn) { wxEVT_COMMAND_TREE_END_LABEL_EDIT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 

@@ -23,8 +23,9 @@
 #ifndef WX_PRECOMP
    #include "wx/string.h"
    #include "wx/window.h"
-   #include "wx/msw/private.h"
 #endif
+
+#include "wx/msw/private.h"
 
 #include "wx/dcscreen.h"
 

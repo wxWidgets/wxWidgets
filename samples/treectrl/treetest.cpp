@@ -35,21 +35,16 @@
 
 #include "treetest.h"
 
-#ifdef wxTR_HAS_VARIABLE_ROW_HIGHT
-#define USE_TR_HAS_VARIABLE_ROW_HIGHT 1
-#else
-#define USE_TR_HAS_VARIABLE_ROW_HIGHT 0
+#ifdef __WXMSW__
+    #define NO_ADVANCED_FEATURES
 #endif
 
 // under Windows the icons are in the .rc file
 #ifndef __WXMSW__
-#if !USE_TR_HAS_VARIABLE_ROW_HIGHT
   #include "icon1.xpm"
-#endif
   #include "icon2.xpm"
   #include "mondrian.xpm"
 #endif
-
 
 // verify that the item is ok and insult the user if it is not
 #define CHECK_ITEM( item ) if ( !item.IsOk() ) {                            \
@@ -157,9 +152,8 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_IncSpacing, "Add 5 points to spacing\tCtrl-I");
     tree_menu->Append(TreeTest_DecSpacing, "Reduce spacing by 5 points\tCtrl-R");
 
-    item_menu->AppendSeparator();
     item_menu->Append(TreeTest_Dump, "&Dump item children");
-#ifdef wxTR_MULTIPLE
+#ifndef NO_ADVANCED_FEATURES
     item_menu->Append(TreeTest_Dump_Selected, "Dump selected items\tAlt-S");
 #endif
     item_menu->Append(TreeTest_Rename, "&Rename item...");
@@ -176,14 +170,13 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxTR_HAS_BUTTONS | 
-#ifdef wxTR_MULTIPLE
-				wxTR_MULTIPLE |
+                                wxTR_HAS_BUTTONS |
+                                wxTR_EDIT_LABELS |
+#ifndef NO_ADVANCED_FEATURES
+                                wxTR_MULTIPLE |
+                                wxTR_HAS_VARIABLE_ROW_HEIGHT |
 #endif
-#if USE_TR_HAS_VARIABLE_ROW_HIGHT
-				wxTR_HAS_VARIABLE_ROW_HIGHT |
-#endif
-				wxSUNKEN_BORDER);
+                                wxSUNKEN_BORDER);
     wxTextCtrl *textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
@@ -231,8 +224,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox("Tree test sample\n"
-                 "Julian Smart (c) 1997,\n"
-                 "Vadim Zeitlin (c) 1998",
+                 "(c) Julian Smart 1997, Vadim Zeitlin 1998",
                  "About tree test",
                  wxOK | wxICON_INFORMATION, this);
 }
@@ -243,6 +235,8 @@ void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
 
     CHECK_ITEM( item );
 
+    // old code - now we edit in place
+#if 0
     static wxString s_text;
     s_text = wxGetTextFromUser("New name: ", "Tree sample question",
             s_text, this);
@@ -250,6 +244,10 @@ void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
     {
         m_treeCtrl->SetItemText(item, s_text);
     }
+#endif // 0
+
+    // TODO demonstrate creating a custom edit control...
+    (void)m_treeCtrl->EditLabel(item);
 }
 
 void MyFrame::DoSort(bool reverse)
@@ -272,7 +270,7 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef wxTR_MULTIPLE 
+#ifndef NO_ADVANCED_FEATURES
    wxArrayTreeItemIds array;
 
     m_treeCtrl->GetSelections(array);
@@ -510,8 +508,6 @@ void MyTreeCtrl::name(wxTreeEvent& WXUNUSED(event))         \
 
 TREE_EVENT_HANDLER(OnBeginDrag)
 TREE_EVENT_HANDLER(OnBeginRDrag)
-TREE_EVENT_HANDLER(OnBeginLabelEdit)
-TREE_EVENT_HANDLER(OnEndLabelEdit)
 TREE_EVENT_HANDLER(OnDeleteItem)
 TREE_EVENT_HANDLER(OnGetInfo)
 TREE_EVENT_HANDLER(OnSetInfo)
@@ -523,13 +519,40 @@ TREE_EVENT_HANDLER(OnSelChanging)
 
 #undef TREE_EVENT_HANDLER
 
+void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
+{
+    wxLogMessage("OnBeginLabelEdit");
+
+    // for testing, prevent this items label editing
+    wxTreeItemId itemId = event.GetItem();
+    if ( IsTestItem(itemId) )
+    {
+        wxMessageBox("You can't edit this item.");
+
+        event.Veto();
+    }
+}
+
+void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& event)
+{
+    wxLogMessage("OnEndLabelEdit");
+
+    // don't allow anything except letters in the labels
+    if ( !event.GetLabel().IsWord() )
+    {
+        wxMessageBox("The label should contain only letters.");
+
+        event.Veto();
+    }
+}
+
 void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
 {
     wxLogMessage("OnItemCollapsing");
 
     // for testing, prevent the user from collapsing the first child folder
     wxTreeItemId itemId = event.GetItem();
-    if ( GetParent(itemId) == GetRootItem() && !GetPrevSibling(itemId) )
+    if ( IsTestItem(itemId) )
     {
         wxMessageBox("You can't collapse this item.");
 

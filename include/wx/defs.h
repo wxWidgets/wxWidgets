@@ -768,7 +768,7 @@ enum
 #define wxTR_SINGLE          0x0000
 #define wxTR_MULTIPLE        0x0020
 #define wxTR_EXTENDED        0x0040
-#define wxTR_HAS_VARIABLE_ROW_HIGHT 0x0080
+#define wxTR_HAS_VARIABLE_ROW_HEIGHT 0x0080
 
 /*
  * wxListCtrl flags

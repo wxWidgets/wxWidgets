@@ -1231,13 +1231,21 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_col = hdr->iSubItem;
                 break;
             }
+
         case LVN_DELETEALLITEMS:
-            {
-                eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
-                //      NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
-                event.m_itemIndex = -1;
-                break;
-            }
+            // what's the sense of generating a wxWin event for this when
+            // it's absolutely not portable?
+#if 0
+            eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
+            event.m_itemIndex = -1;
+#endif // 0
+
+            // return TRUE to suppress all additional LVN_DELETEITEM
+            // notifications - this makes deleting all items from a list ctrl
+            // much faster
+            *result = TRUE;
+            return TRUE;
+
         case LVN_DELETEITEM:
             {
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;

@@ -71,6 +71,13 @@ public:
 protected:
     virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
 
+    // is this the test item which we use in several event handlers?
+    bool IsTestItem(const wxTreeItemId& item)
+    {
+        // the test item is the first child folder
+        return GetParent(item) == GetRootItem() && !GetPrevSibling(item);
+    }
+
 private:
     void AddItemsRecursively(const wxTreeItemId& idParent,
                              size_t nChildren,

@@ -131,8 +131,8 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_windowId = (id == -1) ? NewControlId() : id;
 
-    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP | TVS_HASLINES | TVS_SHOWSELALWAYS ;
-
+    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
+                   TVS_HASLINES | TVS_SHOWSELALWAYS;
 
     bool want3D;
     WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
@@ -792,7 +792,12 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 
     HWND hWnd = (HWND) TreeView_EditLabel(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item);
 
-    wxCHECK_MSG( hWnd, NULL, _T("Can't edit tree ctrl label") );
+    // this is not an error - the TVN_BEGINLABELEDIT handler might have
+    // returned FALSE
+    if ( !hWnd )
+    {
+        return NULL;
+    }
 
     DeleteTextCtrl();
 
@@ -960,6 +965,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 TV_DISPINFO *info = (TV_DISPINFO *)lParam;
 
                 event.m_item = (WXHTREEITEM) info->item.hItem;
+                event.m_label = info->item.pszText;
                 break;
             }
 
@@ -977,7 +983,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = wxEVT_COMMAND_TREE_END_LABEL_EDIT;
                 TV_DISPINFO *info = (TV_DISPINFO *)lParam;
 
-                event.m_item = (WXHTREEITEM) info->item.hItem;
+                event.m_item = (WXHTREEITEM)info->item.hItem;
+                event.m_label = info->item.pszText;
                 break;
             }
 
@@ -1074,18 +1081,46 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     bool processed = GetEventHandler()->ProcessEvent(event);
 
     // post processing
-    if ( hdr->code == TVN_DELETEITEM )
+    switch ( hdr->code )
     {
-        // NB: we might process this message using wxWindows event tables, but
-        //     due to overhead of wxWin event system we prefer to do it here
-        //     (otherwise deleting a tree with many items is just too slow)
-        NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
-        wxTreeItemData *data = (wxTreeItemData *)tv->itemOld.lParam;
-        delete data; // may be NULL, ok
-        processed = TRUE; // Make sure we don't get called twice
-    }
+        case TVN_DELETEITEM:
+            {
+                // NB: we might process this message using wxWindows event
+                //     tables, but due to overhead of wxWin event system we
+                //     prefer to do it here ourself (otherwise deleting a tree
+                //     with many items is just too slow)
+                NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
+                wxTreeItemData *data = (wxTreeItemData *)tv->itemOld.lParam;
+                delete data; // may be NULL, ok
 
-    *result = !event.IsAllowed();
+                processed = TRUE; // Make sure we don't get called twice
+            }
+            break;
+
+        case TVN_BEGINLABELEDIT:
+            // return TRUE to cancel label editing
+            *result = !event.IsAllowed();
+            break;
+
+        case TVN_ENDLABELEDIT:
+            // return TRUE to set the label to the new string
+            *result = event.IsAllowed();
+
+            // ensure that we don't have the text ctrl which is going to be
+            // deleted any more
+            DeleteTextCtrl();
+            break;
+
+        case TVN_SELCHANGING:
+        case TVN_ITEMEXPANDING:
+            // return TRUE to prevent the action from happening
+            *result = !event.IsAllowed();
+            break;
+
+        //default:
+            // for the other messages the return value is ignored and there is
+            // nothing special to do
+    }
 
     return processed;
 }

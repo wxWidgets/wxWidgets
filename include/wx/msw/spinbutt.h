@@ -30,7 +30,7 @@ public:
     /*
      * Public interface
      */
-    wxSpinButton();
+    wxSpinButton() { }
 
     wxSpinButton(wxWindow *parent,
                  wxWindowID id = -1,
