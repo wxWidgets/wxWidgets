@@ -12,12 +12,6 @@
         <define>wxUSE_BASE=1</define>
         <define>wxUSE_GUI=0</define> 
         <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
-        
-        <library>$(LIB_ZLIB)</library>
-        <library>$(LIB_REGEX)</library>
-        <library>$(LIB_PNG)</library>
-        <library>$(LIB_JPEG)</library>
-        <library>$(LIB_TIFF)</library>
     </dll>
     
     <lib id="baselib" template="wx_lib"
@@ -38,8 +32,6 @@
         <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
         
         <wx-lib>base</wx-lib>
-      
-        <library>$(LIB_ODBC)</library>        
     </dll>
     
     <lib id="corelib" template="wx_lib"

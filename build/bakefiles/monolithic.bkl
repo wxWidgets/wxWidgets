@@ -17,13 +17,6 @@
         <define>wxUSE_BASE=1</define> 
         <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC)</sources>
-
-        <library>$(LIB_ZLIB)</library>
-        <library>$(LIB_REGEX)</library>
-        <library>$(LIB_PNG)</library>
-        <library>$(LIB_JPEG)</library>
-        <library>$(LIB_TIFF)</library>
-        <library>$(LIB_ODBC)</library>
     </dll>
     
     <lib id="monolib" template="wx_lib"
