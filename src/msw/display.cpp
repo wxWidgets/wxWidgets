@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        display.cpp
 // Purpose:     MSW Implementation of wxDisplay class
-// Author:      Royce Mitchell III
+// Author:      Royce Mitchell III, Ryan Norton
 // Modified by: VZ (resolutions enumeration/change support, DirectDraw, ...)
 // Created:     06/21/02
 // RCS-ID:      $Id$
@@ -542,6 +542,30 @@ wxString wxDisplay::GetNameForEnumSettings() const
         name = GetName();
 
     return name;
+}
+
+// ----------------------------------------------------------------------------
+// determine if this is the primary display
+// ----------------------------------------------------------------------------
+
+bool wxDisplay::IsPrimary() const
+{
+    wxDisplayInfo& dpyInfo = (*gs_displays)[m_index];
+
+    MONITORINFOEX monInfo;
+    wxZeroMemory(monInfo);
+    monInfo.cbSize = sizeof(monInfo);
+
+    // NB: Cast from MONITORINFOEX* to MONITORINFO* is done because
+    //     Mingw headers - unlike the ones from Microsoft's Platform SDK -
+    //     don't derive the former from the latter in C++ mode and so
+    //     the pointer's type is not converted implicitly.
+    if ( !::GetMonitorInfo(dpyInfo.m_hmon, (LPMONITORINFO)&monInfo) )
+    {
+        wxLogLastError(_T("GetMonitorInfo"));
+    }
+
+    return (monInfo.dwFlags & MONITORINFOF_PRIMARY) == MONITORINFOF_PRIMARY;
 }
 
 // ----------------------------------------------------------------------------

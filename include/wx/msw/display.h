@@ -38,6 +38,8 @@ public:
     virtual wxVideoMode GetCurrentMode() const;
     virtual bool ChangeMode(const wxVideoMode& mode = wxVideoMode());
 
+    virtual bool IsPrimary() const;
+
 private:
     // get the display name to use with EnumDisplaySettings()
     wxString GetNameForEnumSettings() const;

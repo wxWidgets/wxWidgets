@@ -67,8 +67,8 @@ public:
     // name may be empty
     virtual wxString GetName() const = 0;
 
-    // display 0 is always the primary display
-    bool IsPrimary() const { return m_index == 0; }
+    // display 0 is usually the primary display
+    virtual bool IsPrimary() const { return m_index == 0; }
 
 
     // enumerate all video modes supported by this display matching the given
