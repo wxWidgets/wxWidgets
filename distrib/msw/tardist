@@ -63,7 +63,7 @@ rm -f $2/tiff.tgz
 echo Tarring...
 
 ### Generic
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxgen.txt
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxgen.txt
 tar cvf $2/wxWindows-${WXVER}-gen.tar -T /tmp/wxgen.txt
 gzip $2/wxWindows-${WXVER}-gen.tar
 mv $2/wxWindows-${WXVER}-gen.tar.gz $2/wxWindows-${WXVER}-gen.tgz
@@ -79,6 +79,12 @@ ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/contr
 tar cvf $2/wxWindows-${WXVER}-mot.tar -T /tmp/wxmotif.txt
 gzip $2/wxWindows-${WXVER}-mot.tar
 mv $2/wxWindows-${WXVER}-mot.tar.gz $2/wxWindows-${WXVER}-mot.tgz
+
+### wxMSW
+ls `cat $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp` > /tmp/wxmsw.txt
+tar cvf $2/wxWindows-${WXVER}-msw.tar -T /tmp/wxmsw.txt
+gzip $2/wxWindows-${WXVER}-msw.tar
+mv $2/wxWindows-${WXVER}-msw.tar.gz $2/wxWindows-${WXVER}-msw.tgz
 
 ### Doc sources
 ls `cat $1/distrib/msw/docsrc.rsp` > /tmp/docsrc.txt
