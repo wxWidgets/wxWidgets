@@ -360,6 +360,7 @@ bool wxWindow::Create(
         {
             nTempy = pParent->GetSize().y + (vPos.y + rSize.y);
             pParent->SetSize(0, 0, pParent->GetSize().x, nTempy);
+            nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
         }
 #endif
         vPos.y = nTempy;
@@ -807,9 +808,9 @@ void wxWindow::SetScrollbar(
                                                     ,(PSZ)NULL
                                                     ,ulStyle
                                                     ,vRect.xRight - 20
-                                                    ,vRect.yBottom
+                                                    ,vRect.yBottom + 20
                                                     ,20
-                                                    ,vRect.yTop - vRect.yBottom
+                                                    ,vRect.yTop - (vRect.yBottom + 20)
                                                     ,hWnd
                                                     ,HWND_TOP
                                                     ,FID_VERTSCROLL
@@ -837,9 +838,9 @@ void wxWindow::SetScrollbar(
                 ::WinSetWindowPos( m_hWndScrollBarVert
                                   ,HWND_TOP
                                   ,vRect.xRight - 20
-                                  ,vRect.yBottom
+                                  ,vRect.yBottom + 20
                                   ,20
-                                  ,vRect.yTop - vRect.yBottom
+                                  ,vRect.yTop - (vRect.yBottom + 20)
                                   ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
                                  );
             }
@@ -1306,7 +1307,10 @@ void wxWindow::DoGetClientSize(
     HWND                            hWndClient;
     RECTL                           vRect;
 
-    hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
+    if (IsKindOf(CLASSINFO(wxFrame)))
+        hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
+    else
+        hWndClient = NULLHANDLE;
     if( hWndClient == NULLHANDLE)
        ::WinQueryWindowRect(GetHwnd(), &vRect);
     else
