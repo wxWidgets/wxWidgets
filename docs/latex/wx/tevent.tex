@@ -2,7 +2,7 @@
 
 Classes: \helpref{wxEvtHandler}{wxevthandler}, \helpref{wxWindow}{wxwindow}, \helpref{wxEvent}{wxevent}
 
-\subsection{Introduction}
+\subsection{Introduction}\label{eventintroduction}
 
 Before version 2.0 of wxWidgets, events were handled by the application
 either by supplying callback functions, or by overriding virtual member
@@ -236,7 +236,7 @@ all events (or any selection of them) to the parent window.
 % requests, so no extra coding is required to support them in your menus and
 % toolbars.
 
-\subsection{Pluggable event handlers}
+\subsection{Pluggable event handlers}\label{pluggablehandlers}
 
 In fact, you don't have to derive a new class from a window class
 if you don't want to. You can derive a new class from wxEvtHandler instead,

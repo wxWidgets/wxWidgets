@@ -20,7 +20,7 @@ The wxMBConv classes in wxWidgets enables an Unicode-aware application to
 easily convert between Unicode and the variety of 8-bit encoding systems still
 in use.
 
-\subsection{Background: The need for conversion}
+\subsection{Background: The need for conversion}\label{needforconversion}
 
 As programs are becoming more and more globalized, and users exchange documents
 across country boundaries as never before, applications increasingly need to
@@ -40,7 +40,7 @@ Unicode data from one Unicode-aware system to another may need encoding to an
 8-bit multibyte encoding (UTF-7 or UTF-8 is typically used for this purpose), to
 pass unhindered through any traditional transport channels.
 
-\subsection{Background: The wxString class}
+\subsection{Background: The wxString class}\label{conversionandwxstring}
 
 If you have compiled wxWidgets in Unicode mode, the wxChar type will become
 identical to wchar\_t rather than char, and a wxString stores wxChars. Hence,
@@ -54,7 +54,7 @@ data over a network, or processing a text file for some other application. You
 need a way to quickly convert your easily-handled Unicode data to and from a
 traditional 8-bit-encoding. And this is what the wxMBConv classes do.
 
-\subsection{wxMBConv classes}
+\subsection{wxMBConv classes}\label{wxmbconvclasses}
 
 The base class for all these conversions is the wxMBConv class (which itself
 implements standard libc locale conversion). Derived classes include
@@ -63,7 +63,7 @@ implement different kinds of conversions. You can also derive your own class
 for your own custom encoding and use it, should you need it. All you need to do
 is override the MB2WC and WC2MB methods.
 
-\subsection{wxMBConv objects}
+\subsection{wxMBConv objects}\label{wxmbconvobjects}
 
 Several of the wxWidgets-provided wxMBConv classes have predefined instances
 (wxConvLibc, wxConvFile, wxConvUTF7, wxConvUTF8, wxConvLocal). You can use
@@ -74,7 +74,7 @@ interface is supposed to use, in the case that the user interface is not
 Unicode-based (like with GTK+ 1.2). By default, it points to wxConvLibc or
 wxConvLocal, depending on which works best on the current platform.
 
-\subsection{wxCSConv}
+\subsection{wxCSConv}\label{wxcsconvclass}
 
 The wxCSConv class is special because when it is instantiated, you can tell it
 which character set it should use, which makes it meaningful to keep many
@@ -85,7 +85,7 @@ The predefined wxCSConv instance, wxConvLocal, is preset to use the
 default user character set, but you should rarely need to use it directly,
 it is better to go through wxConvCurrent.
 
-\subsection{Converting strings}
+\subsection{Converting strings}\label{convertingstrings}
 
 Once you have chosen which object you want to use to convert your text,
 here is how you would use them with wxString. These examples all assume
@@ -128,7 +128,7 @@ Note: Since mb\_str() returns a temporary wxCharBuffer to hold the result
 of the conversion, you need to explicitly cast it to const char* if you use
 it in a vararg context (like with printf).
 
-\subsection{Converting buffers}
+\subsection{Converting buffers}\label{convertingbuffers}
 
 If you have specialized needs, or just don't want to use wxString, you
 can also use the conversion methods of the conversion objects directly.

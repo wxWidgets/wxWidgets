@@ -3,7 +3,7 @@
 Here is the list of preprocessor symbols used in the wxWidgets source grouped
 by category (and sorted by alphabetical order inside each category).
 
-\subsection{GUI system}
+\subsection{GUI system}\label{guisystemconst}
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\_\_WINDOWS\_\_}{any Windows, yom may also use \_\_WXMSW\_\_}
@@ -37,7 +37,7 @@ to one of the symbols above so this should be tested first.}
 In fact, they should better all start with \_\_WX instead of \_\_ only,
 so please start any new defines with \_\_WX.
 
-\subsection{Operating systems}
+\subsection{Operating systems}\label{osconst}
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\_\_APPLE\_\_}{any Mac OS version}
@@ -66,7 +66,7 @@ so please start any new defines with \_\_WX.
 \twocolitem{\_\_WINDOWS\_\_}{any Windows}
 \end{twocollist}
 
-\subsection{Hardware architectures}
+\subsection{Hardware architectures}\label{hardwareconst}
 
 Note that not all of these symbols are always defined, it depends on the
 compiler used.
@@ -77,7 +77,7 @@ compiler used.
 \twocolitem{\_\_POWERPC\_\_}{Motorola Power PC}
 \end{twocollist}
 
-\subsection{Compilers}
+\subsection{Compilers}\label{compilerconst}
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\_\_BORLANDC\_\_}{Borland C++. The value of the macro corresponds
@@ -102,7 +102,7 @@ the compiler version, $1100$ is $11.0$ and $1200$ is OpenWatcom.}
 \twocolitem{\_WIN32\_WCE}{Windows CE version}
 \end{twocollist}
 
-\subsection{Miscellaneous}
+\subsection{Miscellaneous}\label{miscellaneousconst}
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\_\_WXWINDOWS\_\_}{always defined in wxWidgets applications, see

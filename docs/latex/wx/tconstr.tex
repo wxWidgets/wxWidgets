@@ -43,7 +43,7 @@ Layout yourself (note that you do have to call
 \helpref{Layout}{wxwindowlayout} yourself if the parent window is not a
 frame, panel or dialog).
 
-\subsection{Constraint layout: more detail}
+\subsection{Constraint layout: more details}\label{constraintlayoutdetails}
 
 By default, windows do not have a wxLayoutConstraints object. In this case, much layout
 must be done explicitly, by performing calculations in OnSize members, except
@@ -97,7 +97,7 @@ natural left-to-right order.
 
 \subsection{Window layout examples}\label{layoutexamples}
 
-\subsubsection{Example 1: subwindow layout}
+\subsubsection{Example 1: subwindow layout}\label{subwindowlayoutexample}
 
 This example specifies a panel and a window side by side,
 with a text subwindow below it.
@@ -137,7 +137,7 @@ with a text subwindow below it.
   frame->text_window->SetConstraints(c3);
 \end{verbatim}
 
-\subsubsection{Example 2: panel item layout}
+\subsubsection{Example 2: panel item layout}\label{panelitemlayoutexample}
 
 This example sizes a button width to 80 percent of the panel width, and centres
 it horizontally. A listbox and multitext item are placed below it. The listbox

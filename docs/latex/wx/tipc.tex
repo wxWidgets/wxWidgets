@@ -118,7 +118,7 @@ successful.
 \item Use the wxConnection member functions to send messages to the server.
 \end{enumerate}
 
-\subsection{Data transfer}
+\subsection{Data transfer}\label{datatransfer}
 
 These are the ways that data can be transferred from one
 application to another. These are methods of wxConnection.
@@ -145,7 +145,7 @@ The default data type is wxCF\_TEXT (ASCII text), and the default data
 size is the length of the null-terminated string. Windows-specific data
 types could also be used on the PC.
 
-\subsection{Examples}
+\subsection{Examples}\label{ipcexamples}
 
 See the sample programs {\it server}\/ and {\it client}\/ in the IPC
 samples directory.  Run the server, then the client. This demonstrates
@@ -153,7 +153,7 @@ using the Execute, Request, and Poke commands from the client, together
 with an Advise loop: selecting an item in the server list box causes
 that item to be highlighted in the client list box.
 
-\subsection{More DDE details}
+\subsection{More DDE details}\label{ddedetails}
 
 A wxClient object initiates the client part of a client-server
 DDE-like (Dynamic Data Exchange) conversation (available in both

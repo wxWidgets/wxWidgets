@@ -11,7 +11,7 @@
 
 \section{C++ exceptions overview}\label{exceptionsoverview}
 
-\subsection{Introduction}
+\subsection{Introduction}\label{exceptionintroduction}
 
 wxWidgets had been started long before the exceptions were introduced in C++ so
 it is not very surprizing that it is not built around using them as some more
@@ -27,7 +27,7 @@ exceptions in the user code and the library tries to help you with this. Please
 note that making the library exception-safe is still work in progress.
 
 
-\subsection{Strategies for exceptions handling}
+\subsection{Strategies for exceptions handling}\label{exceptionstrategies}
 
 There are several choice for using the exceptions in wxWidgets programs. First
 of all, you may not use them at all. As stated above, the library doesn't throw
@@ -57,7 +57,7 @@ the \helpref{wxApp::HandleEvent()}{wxapphandleevent} which allows you to handle
 all the exceptions thrown by any event handler.
 
 
-\subsection{Technicalities}
+\subsection{Technicalities}\label{exceptionstechnicalities}
 
 To use any kind of exception support in the library you need to build it with 
 \texttt{wxUSE\_EXCEPTIONS} set to $1$. This should be the case by default but

@@ -414,17 +414,17 @@ along with any user-supplied ones.
 
 The following documents some miscellaneous C++ issues.
 
-\subsection{Templates}
+\subsection{Templates}\label{templates}
 
 wxWidgets does not use templates (except for some advanced features that
 are switched off by default) since it is a notoriously unportable feature.
 
-\subsection{RTTI}
+\subsection{RTTI}\label{rtti}
 
 wxWidgets does not use C++ run-time type information since wxWidgets provides
 its own run-time type information system, implemented using macros.
 
-\subsection{Type of NULL}
+\subsection{Type of NULL}\label{null}
 
 Some compilers (e.g. the native IRIX cc) define NULL to be 0L so that
 no conversion to pointers is allowed. Because of that, all these
@@ -440,7 +440,7 @@ as
 It is recommended to adhere to this in all code using wxWidgets as
 this make the code (a bit) more portable.
 
-\subsection{Precompiled headers}
+\subsection{Precompiled headers}\label{precompiledheaders}
 
 Some compilers, such as Borland C++ and Microsoft C++, support
 precompiled headers. This can save a great deal of compiling time. The
@@ -589,7 +589,7 @@ please submit them for inclusion here.
 
 \section{Strategies for reducing programming errors}\label{reducingerrors}
 
-\subsection{Use ASSERT}
+\subsection{Use ASSERT}\label{useassert}
 
 Although I haven't done this myself within wxWidgets, it is good
 practice to use ASSERT statements liberally, that check for conditions that
@@ -598,7 +598,7 @@ These can be compiled out of a non-debugging version of wxWidgets
 and your application. Using ASSERT is an example of `defensive programming':
 it can alert you to problems later on.
 
-\subsection{Use wxString in preference to character arrays}
+\subsection{Use wxString in preference to character arrays}\label{usewxstring}
 
 Using wxString can be much safer and more convenient than using char *.
 Again, I haven't practiced what I'm preaching, but I'm now trying to use
@@ -612,7 +612,7 @@ The same goes for other data types: use classes wherever possible.
 
 \section{Strategies for portability}\label{portability}
 
-\subsection{Use relative positioning or constraints}
+\subsection{Use relative positioning or constraints}\label{userelativepositioning}
 
 Don't use absolute panel item positioning if you can avoid it. Different GUIs have
 very differently sized panel items. Consider using the constraint system, although this
@@ -622,14 +622,14 @@ Alternatively, you could use alternative .wrc (wxWidgets resource files) on diff
 platforms, with slightly different dimensions in each. Or space your panel items out
 to avoid problems.
 
-\subsection{Use wxWidgets resource files}
+\subsection{Use wxWidgets resource files}\label{useresources}
 
 Use .xrc (wxWidgets resource files) where possible, because they can be easily changed
 independently of source code.
 
 \section{Strategies for debugging}\label{debugstrategies}
 
-\subsection{Positive thinking}
+\subsection{Positive thinking}\label{positivethinking}
 
 It is common to blow up the problem in one's imagination, so that it seems to threaten
 weeks, months or even years of work. The problem you face may seem insurmountable:
@@ -643,7 +643,7 @@ you will probably wonder why you worried so much. That's not to say it
 isn't painful at the time. Try not to worry -- there are many more important
 things in life.
 
-\subsection{Simplify the problem}
+\subsection{Simplify the problem}\label{simplifyproblem}
 
 Reduce the code exhibiting the problem to the smallest program possible
 that exhibits the problem. If it is not possible to reduce a large and
@@ -656,14 +656,14 @@ to go from functioning to non-functioning state. This should give a clue
 to the problem. In some cases though, such as memory leaks or wrong
 deallocation, this can still give totally spurious results!
 
-\subsection{Use a debugger}
+\subsection{Use a debugger}\label{usedebugger}
 
 This sounds like facetious advice, but it is surprising how often people
 don't use a debugger. Often it is an overhead to install or learn how to
 use a debugger, but it really is essential for anything but the most
 trivial programs.
 
-\subsection{Use logging functions}
+\subsection{Use logging functions}\label{uselogging}
 
 There is a variety of logging functions that you can use in your program:
 see \helpref{Logging functions}{logfunctions}.
@@ -672,7 +672,7 @@ Using tracing statements may be more convenient than using the debugger
 in some circumstances (such as when your debugger doesn't support a lot
 of debugging code, or you wish to print a bunch of variables).
 
-\subsection{Use the wxWidgets debugging facilities}
+\subsection{Use the wxWidgets debugging facilities}\label{usedebuggingfacilities}
 
 You can use wxDebugContext to check for
 memory leaks and corrupt memory: in fact in debugging mode, wxWidgets will
