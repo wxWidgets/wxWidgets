@@ -495,3 +495,7 @@ Checking in docs/latex/wx/htdcrend.tex;
 /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/htdcrend.tex,v  <--  htdcrend.tex
 new revision: 1.8; previous revision: 1.7
 done
+
+37. Backport wxLANGUAGE_CHINESE_TRADITIONAL fix in src/common/intl.cpp
+    (replace zh_CN with zh_TW)
+
