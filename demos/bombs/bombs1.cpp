@@ -164,6 +164,41 @@ void BombsCanvasClass::Refresh(int xc1, int yc1, int xc2, int yc2)
       }
   }
 
+// Called when uncovering a cell.
+void BombsCanvasClass::Uncover(int x, int y)
+{
+  wxGetApp().Game.Unhide(x,y);
+  Refresh(x, y, x, y);
+  if (wxGetApp().Game.IsBomb(x,y) || wxGetApp().Game.GetRemainingCells()==0)
+    { wxBell();
+      if (!wxGetApp().Game.IsBomb(x,y))
+       { wxMessageBox("Nice! You found all the bombs!", "wxWin Bombs",
+                      wxOK|wxCENTRE, wxGetApp().BombsFrame);
+       }
+      else // x,y is a bomb
+       { wxGetApp().Game.Explode(x, y);
+       }
+      for(x=0; x<field_width; x++)
+       for(y=0; y<field_height; y++)
+         wxGetApp().Game.Unhide(x,y);
+      Refresh(0, 0, field_width-1, field_height-1);
+    }
+  else if (!wxGetApp().Game.Get(x, y))
+    { int left = ( x > 0 ) ? x-1 : 0;
+      int right = ( x < wxGetApp().Game.GetWidth() - 1 )?
+       x+1 : wxGetApp().Game.GetWidth() - 1;
+      int top = ( y > 0 ) ? y-1 : 0;
+      int bottom = ( y < wxGetApp().Game.GetHeight() - 1 )?
+       y+1 : wxGetApp().Game.GetHeight() - 1;
+      int i,j;
+      for (j = top; j <= bottom; j++)
+       for (i=left; i <= right; i++)
+         if ((i != x || j != y) && wxGetApp().Game.IsHidden(i,j)
+             && !wxGetApp().Game.IsMarked(i,j))
+           Uncover(i,j);
+    }
+}
+
 // Called when the canvas receives a mouse event.
 void BombsCanvasClass::OnEvent(wxMouseEvent& event)
 {
@@ -181,23 +216,8 @@ void BombsCanvasClass::OnEvent(wxMouseEvent& event)
         }
       else if (event.LeftDown() && wxGetApp().Game.IsHidden(x,y)
                && !wxGetApp().Game.IsMarked(x,y))
-        { wxGetApp().Game.Unhide(x,y);
-          Refresh(x, y, x, y);
-          if (wxGetApp().Game.IsBomb(x,y) || wxGetApp().Game.GetRemainingCells()==0)
-            { wxBell();
-              if (!wxGetApp().Game.IsBomb(x,y))
-                { wxMessageBox("Nice! You found all the bombs!", "wxWin Bombs",
-                             wxOK|wxCENTRE, wxGetApp().BombsFrame);
-                }
-              else // x,y is a bomb
-                { wxGetApp().Game.Explode(x, y);
-                }
-              for(x=0; x<field_width; x++)
-                for(y=0; y<field_height; y++)
-                  wxGetApp().Game.Unhide(x,y);
-              Refresh(0, 0, field_width-1, field_height-1);
-            }
-          return;
+        { Uncover(x,y);
+         return;
         }
     }
 }

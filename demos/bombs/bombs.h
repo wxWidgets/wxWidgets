@@ -95,6 +95,7 @@ class BombsCanvasClass: public wxWindow
  void OnPaint(wxPaintEvent& event);
  void DrawField(wxDC *, int xc1, int yc1, int xc2, int yc2);
  void Refresh(int xc1, int yc1, int xc2, int yc2);
+ void Uncover(int x, int y);
  void OnEvent(wxMouseEvent& event);
  void UpdateFieldSize();
 
