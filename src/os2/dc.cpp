@@ -526,7 +526,7 @@ bool wxDC::CanGetTextExtent() const
 int wxDC::GetDepth() const
 {
     LONG                            lArray[CAPS_COLOR_BITCOUNT];
-    int                             nBitsPerPixel;
+    int                             nBitsPerPixel = 0;
 
     if(::DevQueryCaps( GetHDC()
                       ,CAPS_FAMILY
@@ -972,8 +972,8 @@ void wxDC::DoDrawLines(
     {
         int                         i;
 
-        CalcBoundingBox( vPoints[i].x
-                        ,vPoints[i].y
+        CalcBoundingBox( vPoints[0].x
+                        ,vPoints[0].y
                        );
         vPoint.x = vPoints[0].x;
         vPoint.y = OS2Y(vPoints[0].y,0);
@@ -1397,7 +1397,7 @@ void wxDC::DoDrawBitmap(
 
                     lColor = pWindowDC->m_pCanvas->GetBackgroundColour().GetPixel();
                 }
-                else if (GetBrush() != wxNullBrush)
+                else if (GetBrush().Ok())
                     lColor = GetBrush().GetColour().GetPixel();
                 else
                     lColor = m_textBackgroundColour.GetPixel();
