@@ -60,6 +60,11 @@ class MySTC(wxStyledTextCtrl):
         EVT_STC_START_DRAG(self, ID, self.OnStartDrag)
         EVT_STC_MODIFIED(self, ID, self.OnModified)
 
+##         EVT_WINDOW_DESTROY(self, self.OnDestroy)
+##     def OnDestroy(self, evt):
+##         wxTheClipboard.Flush()
+##         evt.Skip()
+
 
     def OnStartDrag(self, evt):
         self.log.write("OnStartDrag: %d, %s\n"
