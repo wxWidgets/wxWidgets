@@ -191,8 +191,6 @@ class Shell(editwindow.EditWindow):
         self.stdin = sys.stdin
         self.stdout = sys.stdout
         self.stderr = sys.stderr
-##         # Add the current working directory "." to the search path.
-##         sys.path.insert(0, os.curdir)
         # Import a default interpreter class if one isn't provided.
         if InterpClass == None:
             from interpreter import Interpreter
