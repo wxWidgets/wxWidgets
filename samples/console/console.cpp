@@ -32,8 +32,8 @@
 //#define TEST_ARRAYS
 //#define TEST_LOG
 //#define TEST_STRINGS
-#define TEST_THREADS
-//#define TEST_TIME
+//#define TEST_THREADS
+#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================
@@ -187,10 +187,37 @@ static void TestTimeZones()
     wxDateTime now = wxDateTime::Now();
 
     printf("Current GMT time:\t%s\n", now.ToGMT().Format().c_str());
-    //printf("Unix epoch (GMT):\t%s\n", wxDateTime((time_t)0).MakeGMT().Format().c_str());
+    //TODO printf("Unix epoch (GMT):\t%s\n", wxDateTime((time_t)0).MakeGMT().Format().c_str());
     printf("Current time in Paris:\t%s\n", now.ToTimezone(wxDateTime::CET).Format().c_str());
     printf("               Moscow:\t%s\n", now.ToTimezone(wxDateTime::MSK).Format().c_str());
     printf("             New York:\t%s\n", now.ToTimezone(wxDateTime::EST).Format().c_str());
+}
+
+// test some minimal support for the dates outside the standard range
+static void TestTimeRange()
+{
+    puts("\n*** wxDateTime out-of-standard-range dates test ***");
+
+    printf("JDN 0:     \t%s\n",
+            wxDateTime(0.0).Format().c_str());
+    printf("Jan 1, 1AD:\t%s\n",
+            wxDateTime(1, wxDateTime::Jan, 1).Format().c_str());
+    printf("May 29, 2099:\t%s\n",
+            wxDateTime(29, wxDateTime::May, 2099).Format().c_str());
+}
+
+// test conversions to JDN &c
+static void TestTimeJulian()
+{
+    puts("\n*** wxDateTime to JDN test ***");
+
+    printf("JDN of current time:\t%f\n", wxDateTime::Now().GetJulianDayNumber());
+    printf("JDN of Jan 1, 1900: \t%f\n",
+            wxDateTime(1, wxDateTime::Jan, 1900).GetJulianDayNumber());
+    printf("JDN of Jan 1, 1BC:  \t%f\n",
+            wxDateTime(1, wxDateTime::Jan, 0).GetJulianDayNumber());
+    printf("JDN 0:              \t%f\n",
+            wxDateTime(24, wxDateTime::Nov, -4713, 12, 0, 0).GetJulianDayNumber());
 }
 
 #endif // TEST_TIME
@@ -593,6 +620,8 @@ int main(int argc, char **argv)
     TestTimeStatic();
     TestTimeSet();
     TestTimeZones();
+    TestTimeRange();
+    TestTimeJulian();
 #endif // TEST_TIME
 
     wxUninitialize();

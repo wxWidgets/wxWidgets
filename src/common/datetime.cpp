@@ -44,19 +44,18 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// note that all these constants should be signed or we'd get some big
-// surprizes with C integer arithmetics
+// some trivial ones
 static const int MONTHS_IN_YEAR = 12;
 
 static const int SECONDS_IN_MINUTE = 60;
 
-// the number of days in month in Julian/Gregorian calendar: the first line is
-// for normal years, the second one is for the leap ones
-static wxDateTime::wxDateTime_t gs_daysInMonth[2][MONTHS_IN_YEAR] =
-{
-    { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
-    { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
-};
+static const long SECONDS_PER_DAY = 86400l;
+
+static const long MILLISECONDS_PER_DAY = 86400000l;
+
+// this is the integral part of JDN of the midnight of Jan 1, 1970
+// (i.e. JDN(Jan 1, 1970) = 2440587.5)
+static const int EPOCH_JDN = 2440587;
 
 // ----------------------------------------------------------------------------
 // globals
@@ -76,7 +75,15 @@ static wxDateTime::wxDateTime_t gs_daysInMonth[2][MONTHS_IN_YEAR] =
 static inline
 wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
 {
-    return gs_daysInMonth[wxDateTime::IsLeapYear(year)][month];
+    // the number of days in month in Julian/Gregorian calendar: the first line
+    // is for normal years, the second one is for the leap ones
+    static wxDateTime::wxDateTime_t daysInMonth[2][MONTHS_IN_YEAR] =
+    {
+        { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
+        { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+    };
+
+    return daysInMonth[wxDateTime::IsLeapYear(year)][month];
 }
 
 // ensure that the timezone variable is set by calling localtime
@@ -89,12 +96,55 @@ static int GetTimeZone()
 
     if ( !s_timezoneSet )
     {
-        (void)localtime(0);
+        // just call localtime() instead of figurin out whether this system
+        // supports tzset(), _tzset() or something else
+        time_t t;
+        (void)localtime(&t);
 
         s_timezoneSet = TRUE;
     }
 
     return (int)timezone;
+}
+
+// return the integral part of the JDN for the midnight of the given date (to
+// get the real JDN you need to add 0.5, this is, in fact, JDN of the noon of
+// the previous day)
+static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
+                            wxDateTime::Month mon,
+                            int year)
+{
+    // CREDIT: the algorithm was taken from Peter Baum's home page
+
+    // the algorithm assumes Jan == 1
+    int month = mon + 1;
+
+    // we want the leap day (Feb 29) be at the end of the year, so we count
+    // March as the first month
+    if ( month < wxDateTime::Mar + 1 )
+    {
+        month += MONTHS_IN_YEAR;
+        year--;
+    }
+
+    // this table contains the number of the days before the 1st of the each
+    // month (in a non leap year) with the third value corresponding to March
+    // (and the last one to February)
+    static const int monthOffsets[14] =
+    {
+        0, 31, 61, 92, 122, 153, 184, 214, 245, 275, 306
+    };
+
+    // and now add contributions of all terms together to get the result (you'd
+    // better see the Web page for the description if you want to understand
+    // why it works (if it does :-))
+    return day +
+           // linear approximation for months
+           monthOffsets[month - (wxDateTime::Mar + 1)] +
+           // the year contribution
+           365*year + year/4 - year/100 + year/400 +
+           // 1721119.5 is the JDN of the midnight of Mar 1, year 0
+           1721118;
 }
 
 // this function is a wrapper around strftime(3)
@@ -152,12 +202,13 @@ wxDateTime::Tm::Tm()
     year = (wxDateTime_t)wxDateTime::Inv_Year;
     mon = wxDateTime::Inv_Month;
     mday = 0;
-    hour = min = sec = 0;
+    hour = min = sec = msec = 0;
     wday = wxDateTime::Inv_WeekDay;
 }
 
 wxDateTime::Tm::Tm(const struct tm& tm)
 {
+    msec = 0;
     sec = tm.tm_sec;
     min = tm.tm_min;
     hour = tm.tm_hour;
@@ -173,7 +224,7 @@ bool wxDateTime::Tm::IsValid() const
     // we allow for the leap seconds, although we don't use them (yet)
     return (year != wxDateTime::Inv_Year) && (mon != wxDateTime::Inv_Month) &&
            (mday < GetNumOfDaysInMonth(year, mon)) &&
-           (hour < 24) && (min < 60) && (sec < 62);
+           (hour < 24) && (min < 60) && (sec < 62) && (msec < 1000);
 }
 
 void wxDateTime::Tm::ComputeWeekDay()
@@ -181,7 +232,7 @@ void wxDateTime::Tm::ComputeWeekDay()
     wxFAIL_MSG(_T("TODO"));
 }
 
-void wxDateTime::Tm::AddMonths(wxDateTime::wxDateTime_t monDiff)
+void wxDateTime::Tm::AddMonths(int monDiff)
 {
     // normalize the months field
     while ( monDiff < -mon )
@@ -198,10 +249,10 @@ void wxDateTime::Tm::AddMonths(wxDateTime::wxDateTime_t monDiff)
 
     mon = (wxDateTime::Month)(mon + monDiff);
 
-    wxASSERT_MSG( mon >= 0 && mon < 12, _T("logic error") );
+    wxASSERT_MSG( mon >= 0 && mon < MONTHS_IN_YEAR, _T("logic error") );
 }
 
-void wxDateTime::Tm::AddDays(wxDateTime::wxDateTime_t dayDiff)
+void wxDateTime::Tm::AddDays(int dayDiff)
 {
     // normalize the days field
     mday += dayDiff;
@@ -536,8 +587,21 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
     {
         // do time calculations ourselves: we want to calculate the number of
         // milliseconds between the given date and the epoch
-        wxFAIL_MSG(_T("TODO"));
+
+        // get the JDN for the midnight of this day
+        m_time = GetTruncatedJDN(day, month, year);
+        m_time -= EPOCH_JDN;
+        m_time *= SECONDS_PER_DAY * TIME_T_FACTOR;
+
+        Add(wxTimeSpan(hour, minute, second, millisec));
     }
+
+    return *this;
+}
+
+wxDateTime& wxDateTime::Set(double jdn)
+{
+    m_time = (jdn - 0.5 - EPOCH_JDN) * TIME_T_FACTOR;
 
     return *this;
 }
@@ -563,9 +627,50 @@ wxDateTime::Tm wxDateTime::GetTm() const
     }
     else
     {
-        wxFAIL_MSG(_T("TODO"));
+        // CREDIT: the algorithm was taken from Peter Baum's home page
 
-        return Tm();
+        // calculate the Gregorian date from JDN for the midnight of our date
+        wxLongLong timeMidnight = m_time;
+        long timeOnly = (m_time % MILLISECONDS_PER_DAY).GetLo();
+        timeMidnight -= timeOnly;
+
+        // TODO this probably could be optimised somehow...
+
+        double jdn = (timeMidnight / MILLISECONDS_PER_DAY).GetLo();
+        jdn += EPOCH_JDN + 0.5;
+        long z = jdn - 1721118.5;
+        double r = jdn - 1721118.5 - z;
+        double g = z - 0.25;
+        long a = g/36524.25;    // number of days per year
+        long b = a - a / 4;
+        int year = (b + g) / 365.25;
+        long c = b + z - 365.25*year;
+        int month = (5*c + 456)/153;
+        int day = c - (153*month - 457)/5 + (r < 0.5 ? 0 : 1);
+        if ( month > 12 )
+        {
+            year++;
+            month -= 12;
+        }
+
+        Tm tm;
+        tm.year = year;
+        tm.mon = (Month)(month - 1); // algorithm yields 1 for January, not 0
+        tm.mday = day;
+        tm.msec = timeOnly % 1000;
+        timeOnly -= tm.msec;
+        timeOnly /= 1000;               // now we have time in seconds
+
+        tm.sec = timeOnly % 60;
+        timeOnly -= tm.sec;
+        timeOnly /= 60;                 // now we have time in minutes
+
+        tm.min = timeOnly % 60;
+        timeOnly -= tm.min;
+
+        tm.hour = timeOnly / 60;
+
+        return tm;
     }
 }
 
@@ -745,6 +850,29 @@ bool wxDateTime::SetToWeekDay(WeekDay weekday,
 }
 
 // ----------------------------------------------------------------------------
+// Julian day number conversion and related stuff
+// ----------------------------------------------------------------------------
+
+double wxDateTime::GetJulianDayNumber() const
+{
+    Tm tm(GetTm());
+
+    double result = GetTruncatedJDN(tm.mday, tm.mon, tm.year);
+
+    // add the part GetTruncatedJDN() neglected
+    result += 0.5;
+
+    // and now add the time: 86400 sec = 1 JDN
+    return result + ((double)(60*(60*tm.hour + tm.min) + tm.sec)) / 86400;
+}
+
+double wxDateTime::GetRataDie() const
+{
+    // March 1 of the year 0 is Rata Die day -306 and JDN 1721119.5
+    return GetJulianDayNumber() - 1721119.5 - 306;
+}
+
+// ----------------------------------------------------------------------------
 // timezone stuff
 // ----------------------------------------------------------------------------
 
@@ -771,6 +899,8 @@ wxDateTime& wxDateTime::MakeLocalTime(const TimeZone& tz)
 
 wxString wxDateTime::Format(const wxChar *format) const
 {
+    wxCHECK_MSG( format, _T(""), _T("NULL format in wxDateTime::Format") );
+
     time_t time = GetTicks();
     if ( time != (time_t)-1 )
     {
@@ -784,9 +914,48 @@ wxString wxDateTime::Format(const wxChar *format) const
     }
     else
     {
-        wxFAIL_MSG(_T("TODO"));
+        // use a hack and still use strftime(): make a copy of the format and
+        // replace all occurences of YEAR in it with some unique string not
+        // appearing anywhere else in it, then use strftime() to format the
+        // date in year YEAR and then replace YEAR back by the real year and
+        // the unique replacement string back with YEAR where YEAR is any year
+        // in the range supported by strftime() (1970 - 2037) which is equal to
+        // the real year modulo 28 (so the week days coincide for them)
 
-        return _T("");
+        // find the YEAR
+        int yearReal = GetYear();
+        int year = 1970 + yearReal % 28;
+
+        wxString strYear;
+        strYear.Printf(_T("%d"), year);
+
+        // find a string not occuring in format (this is surely not optimal way
+        // of doing it... improvements welcome!)
+        wxString fmt = format;
+        wxString replacement = (wxChar)-1;
+        while ( fmt.Find(replacement) != wxNOT_FOUND )
+        {
+            replacement << (wxChar)-1;
+        }
+
+        // replace all occurences of year with it
+        bool wasReplaced = fmt.Replace(strYear, replacement) > 0;
+
+        // use strftime() to format the same date but in supported year
+        wxDateTime dt(*this);
+        dt.SetYear(year);
+        wxString str = dt.Format(format);
+
+        // now replace the occurence of 1999 with the real year
+        wxString strYearReal;
+        strYearReal.Printf(_T("%d"), yearReal);
+        str.Replace(strYear, strYearReal);
+
+        // and replace back all occurences of replacement string
+        if ( wasReplaced )
+            str.Replace(replacement, strYear);
+
+        return str;
     }
 }
 
@@ -794,11 +963,84 @@ wxString wxDateTime::Format(const wxChar *format) const
 // wxTimeSpan
 // ============================================================================
 
+// not all strftime(3) format specifiers make sense here because, for example,
+// a time span doesn't have a year nor a timezone
+//
+// Here are the ones which are supported (all of them are supported by strftime
+// as well):
+//  %H          hour in 24 hour format
+//  %M          minute (00 - 59)
+//  %S          second (00 - 59)
+//  %%          percent sign
+//
+// Also, for MFC CTimeSpan compatibility, we support
+//  %D          number of days
+//
+// And, to be better than MFC :-), we also have
+//  %E          number of wEeks
+//  %l          milliseconds (000 - 999)
 wxString wxTimeSpan::Format(const wxChar *format) const
 {
-    wxFAIL_MSG( _T("TODO") );
+    wxCHECK_MSG( format, _T(""), _T("NULL format in wxTimeSpan::Format") );
 
     wxString str;
+    str.Alloc(strlen(format));
+
+    for ( const wxChar *pch = format; pch; pch++ )
+    {
+        wxChar ch = *pch;
+
+        if ( ch == '%' )
+        {
+            wxString tmp;
+
+            ch = *pch++;
+            switch ( ch )
+            {
+                default:
+                    wxFAIL_MSG( _T("invalid format character") );
+                    // fall through
+
+                case '%':
+                    // will get to str << ch below
+                    break;
+
+                case 'D':
+                    tmp.Printf(_T("%d"), GetDays());
+                    break;
+
+                case 'E':
+                    tmp.Printf(_T("%d"), GetWeeks());
+                    break;
+
+                case 'H':
+                    tmp.Printf(_T("%02d"), GetHours());
+                    break;
+
+                case 'l':
+                    tmp.Printf(_T("%03d"), GetMilliseconds());
+                    break;
+
+                case 'M':
+                    tmp.Printf(_T("%02d"), GetMinutes());
+                    break;
+
+                case 'S':
+                    tmp.Printf(_T("%02d"), GetSeconds());
+                    break;
+            }
+
+            if ( !!tmp )
+            {
+                str += tmp;
+
+                // skip str += ch below
+                continue;
+            }
+        }
+
+        str += ch;
+    }
 
     return str;
 }

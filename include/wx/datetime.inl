@@ -75,6 +75,11 @@ wxDateTime::wxDateTime(const Tm& tm)
     Set(tm);
 }
 
+wxDateTime::wxDateTime(double jdn)
+{
+    Set(jdn);
+}
+
 wxDateTime& wxDateTime::Set(const Tm& tm)
 {
     wxASSERT_MSG( tm.IsValid(), _T("invalid broken down date/time") );
@@ -257,7 +262,7 @@ wxDateTime wxDateTime::ToLocalTime(const wxDateTime::TimeZone& tz) const
 }
 
 // ----------------------------------------------------------------------------
-// wxTimeSpan
+// wxTimeSpan construction
 // ----------------------------------------------------------------------------
 
 wxTimeSpan::wxTimeSpan(int hours, int minutes, int seconds, int milliseconds)
@@ -271,6 +276,39 @@ wxTimeSpan::wxTimeSpan(int hours, int minutes, int seconds, int milliseconds)
     m_diff *= 1000;
     m_diff += milliseconds;
 }
+
+// ----------------------------------------------------------------------------
+// wxTimeSpan accessors
+// ----------------------------------------------------------------------------
+
+wxLongLong wxTimeSpan::GetSeconds() const
+{
+    return m_diff / 1000l;
+}
+
+int wxTimeSpan::GetMinutes() const
+{
+    return (GetSeconds() / 60l).GetLo();
+}
+
+int wxTimeSpan::GetHours() const
+{
+    return GetMinutes() / 60;
+}
+
+int wxTimeSpan::GetDays() const
+{
+    return GetHours() / 24;
+}
+
+int wxTimeSpan::GetWeeks() const
+{
+    return GetDays() / 7;
+}
+
+// ----------------------------------------------------------------------------
+// wxTimeSpan arithmetics
+// ----------------------------------------------------------------------------
 
 wxTimeSpan& wxTimeSpan::Add(const wxTimeSpan& diff)
 {

@@ -331,7 +331,7 @@ public:
         //     instead of modifying the member fields directly!
     struct Tm
     {
-        wxDateTime_t sec, min, hour, mday;
+        wxDateTime_t msec, sec, min, hour, mday;
         Month mon;
         int year;
 
@@ -354,10 +354,10 @@ public:
         }
 
         // add the given number of months to the date keeping it normalized
-        void AddMonths(wxDateTime_t monDiff);
+        void AddMonths(int monDiff);
 
         // add the given number of months to the date keeping it normalized
-        void AddDays(wxDateTime_t dayDiff);
+        void AddDays(int dayDiff);
 
     private:
         // compute the weekday from other fields
@@ -457,6 +457,9 @@ public:
         // from broken down time/date (any range)
     inline wxDateTime(const Tm& tm);
 
+        // from JDN (beware of rounding errors)
+    inline wxDateTime(double jdn);
+
         // from separate values for each component, date set to today
     inline wxDateTime(wxDateTime_t hour,
                       wxDateTime_t minute = 0,
@@ -491,6 +494,9 @@ public:
 
         // set to given broken down time/date
     inline wxDateTime& Set(const Tm& tm);
+
+        // set to given JDN (beware of rounding errors)
+    wxDateTime& Set(double jdn);
 
         // set to given time, date = today
     wxDateTime& Set(wxDateTime_t hour,
@@ -590,11 +596,12 @@ public:
         // of days relative to a base date of December 31 of the year 0. Thus
         // January 1 of the year 1 is Rata Die day 1.
 
-        // get the Julian Day number
-    long GetJulianDay() const;
+        // get the Julian Day number (the fractional part specifies the time of
+        // the day, related to noon - beware of rounding errors!)
+    double GetJulianDayNumber() const;
 
         // get the Rata Die number
-    long GetRataDie() const;
+    double GetRataDie() const;
 
         // TODO algorithms for calculating some important dates, such as
         //      religious holidays (Easter...) or moon/solar eclipses? Some
@@ -899,16 +906,9 @@ public:
         // timespans are equal in absolute value.
     bool IsShorterThan(const wxTimeSpan& t) const { return !IsLongerThan(t); }
 
-    // breaking into years, ..., days, ..., seconds: all these functions
-    // behave like GetYears() which returns 1 for the timespan of 1 year and 1
-    // day, but 0 (and not -1) for the negative timespan of 1 year without 1
-    // day. IOW, (ts - wxTimeSpan(ts.GetYears())).GetYears() is always 0.
+    // breaking into days, hours, minutes and seconds
     // ------------------------------------------------------------------------
 
-        // get the max number of years in this timespan
-    inline int GetYears() const;
-        // get the max number of months in this timespan
-    inline int GetMonths() const;
         // get the max number of weeks in this timespan
     inline int GetWeeks() const;
         // get the max number of days in this timespan
@@ -918,7 +918,7 @@ public:
         // get the max number of minutes in this timespan
     inline int GetMinutes() const;
         // get the max number of seconds in this timespan
-    inline int GetSeconds() const;
+    inline wxLongLong GetSeconds() const;
         // get the number of milliseconds in this timespan
     wxLongLong GetMilliseconds() const { return m_diff; }
 
