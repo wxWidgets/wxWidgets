@@ -4,6 +4,7 @@ include my_distutils.py
 include licence/*.txt
 include b
 include b.bat
+include MANIFEST.in
 
 include SWIG/*
 exclude SWIG/CVS/*
