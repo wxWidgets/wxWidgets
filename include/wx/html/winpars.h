@@ -19,8 +19,10 @@
 #if wxUSE_HTML
 
 #include "wx/module.h"
+#include "wx/font.h"
 #include "wx/html/htmlpars.h"
 #include "wx/html/htmlcell.h"
+#include "wx/encconv.h"
 
 class wxHtmlWinParser;
 class wxHtmlWinTagHandler;
@@ -39,6 +41,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
 
     public:
         wxHtmlWinParser(wxWindow *wnd = NULL);
+        ~wxHtmlWinParser();
 
         virtual void InitParser(const wxString& source);
         virtual void DoneParser();
@@ -90,16 +93,21 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         int GetFontFixed() const {return m_FontFixed;}
         void SetFontFixed(int x) {m_FontFixed = x;}
         wxString GetFontFace() const {return GetFontFixed() ? m_FontFaceFixed : m_FontFaceNormal;}
-        void SetFontFace(const wxString& face) {if (GetFontFixed()) m_FontFaceFixed = face; else m_FontFaceNormal = face;}
+        void SetFontFace(const wxString& face);
 
         int GetAlign() const {return m_Align;}
         void SetAlign(int a) {m_Align = a;}
-        const wxColour& GetLinkColor() const {return m_LinkColor;}
-        void SetLinkColor(const wxColour& clr) {m_LinkColor = clr;}
-        const wxColour& GetActualColor() const {return m_ActualColor;}
-        void SetActualColor(const wxColour& clr) {m_ActualColor = clr;}
-        const wxHtmlLinkInfo& GetLink() const {return m_Link;}
+        const wxColour& GetLinkColor() const { return m_LinkColor; }
+        void SetLinkColor(const wxColour& clr) { m_LinkColor = clr; }
+        const wxColour& GetActualColor() const { return m_ActualColor; }
+        void SetActualColor(const wxColour& clr) { m_ActualColor = clr ;}
+        const wxHtmlLinkInfo& GetLink() const { return m_Link; }
         void SetLink(const wxHtmlLinkInfo& link);
+
+        void SetInputEncoding(wxFontEncoding enc);
+        wxFontEncoding GetInputEncoding() const { return m_InputEnc; }
+        wxFontEncoding GetOutputEncoding() const { return m_OutputEnc; }
+        wxEncodingConverter *GetEncodingConverter() const { return m_EncConv; }
 
         virtual wxFont* CreateCurrentFont();
             // creates font depending on m_Font* members.
@@ -138,6 +146,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         
         wxFont* m_FontsTable[2][2][2][2][7];
         wxString m_FontsFacesTable[2][2][2][2][7];
+        wxFontEncoding m_FontsEncTable[2][2][2][2][7];
                 // table of loaded fonts. 1st four indexes are 0 or 1, depending on on/off
                 // state of these flags (from left to right):
                 // [bold][italic][underlined][fixed_size]
@@ -147,6 +156,10 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         int m_FontsSizes[7];
         wxString m_FontFaceFixed, m_FontFaceNormal;
                 // html font sizes and faces of fixed and proportional fonts
+                
+        wxFontEncoding m_InputEnc, m_OutputEnc;
+                // I/O font encodings
+        wxEncodingConverter *m_EncConv;
 };
 
 

@@ -3,6 +3,7 @@
 % htmlwinparser.tex at 14/Mar/99 20:13:37
 %
 
+
 \section{\class{wxHtmlWinParser}}\label{wxhtmlwinparser}
 
 This class is derived from \helpref{wxHtmlParser}{wxhtmlparser} and
@@ -109,6 +110,15 @@ m_WParser -> GetContainer() -> InsertCell(new ...);
 
 Returns pointer to the DC used during parsing.
 
+
+\membersection{wxHtmlWinParser::GetEncodingConverter}\label{wxhtmlwinparsergetencodingconverter}
+
+\constfunc{wxEncodingConverter *}{GetEncodingConverter}{\void}
+
+Returns \helpref{wxEncodingConverter}{wxencodingconverter} class used
+to do conversion between \helpref{input encoding}{wxhtmlwinparsergetinputencoding}
+and \helpref{output encoding}{wxhtmlwinparsergetoutputencoding}.
+
 \membersection{wxHtmlWinParser::GetFontBold}\label{wxhtmlwinparsergetfontbold}
 
 \constfunc{int}{GetFontBold}{\void}
@@ -147,6 +157,13 @@ Returns actual font size (HTML size varies from -2 to +4)
 
 Returns TRUE if actual font is underlined, FALSE otherwise.
 
+\membersection{wxHtmlWinParser::GetInputEncoding}\label{wxhtmlwinparsergetinputencoding}
+
+\constfunc{wxFontEncoding}{GetInputEncoding}{\void}
+
+Returns input encoding.
+
+
 \membersection{wxHtmlWinParser::GetLink}\label{wxhtmlwinparsergetlink}
 
 \constfunc{const wxHtmlLinkInfo\&}{GetLink}{\void}
@@ -162,6 +179,14 @@ wxEmptyString otherwise.)
 \constfunc{const wxColour\&}{GetLinkColor}{\void}
 
 Returns color of hypertext link text.
+
+
+\membersection{wxHtmlWinParser::GetOutputEncoding}\label{wxhtmlwinparsergetoutputencoding}
+
+\constfunc{wxFontEncoding}{GetOutputEncoding}{\void}
+
+Returns output encoding, i.e. closest match to document's input encoding
+that is supported by operating system.
 
 \membersection{wxHtmlWinParser::GetWindow}\label{wxhtmlwinparsergetwindow}
 
@@ -258,6 +283,16 @@ Sets underlined flag of actualfont. {\it x} is either TRUE of FALSE.
 \func{void}{SetFonts}{\param{wxString }{normal\_face}, \param{wxString }{fixed\_face}, \param{const int }{*sizes}}
 
 Sets fonts. This method is identical to \helpref{wxHtmlWindow::SetFonts}{wxhtmlwindowsetfonts}
+
+
+\membersection{wxHtmlWinParser::SetInputEncoding}\label{wxhtmlwinparsersetinputencoding}
+
+\func{void}{SetInputEncoding}{\param{wxFontEncoding }{enc}}
+
+Sets input encoding. The parser uses this information to build conversion
+tables from document's encoding to some encoding supported by operating
+system.
+
 
 \membersection{wxHtmlWinParser::SetLink}\label{wxhtmlwinparsersetlink}
 

@@ -28,6 +28,7 @@
 #include "wx/html/htmldefs.h"
 #include "wx/html/winpars.h"
 #include "wx/html/htmlwin.h"
+#include "wx/fontmap.h"
 
 
 //-----------------------------------------------------------------------------
@@ -44,6 +45,8 @@ wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
     m_DC = NULL;
     m_CharHeight = m_CharWidth = 0;
     m_UseLink = FALSE;
+    m_EncConv = NULL;
+    m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
 
     {
         int i, j, k, l, m;
@@ -54,6 +57,7 @@ wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
                         for (m = 0; m < 7; m++) {
                             m_FontsTable[i][j][k][l][m] = NULL;
                             m_FontsFacesTable[i][j][k][l][m] = wxEmptyString;
+                            m_FontsEncTable[i][j][k][l][m] = wxFONTENCODING_DEFAULT;
                         }
 #ifdef __WXMSW__
         static int default_sizes[7] = {7, 8, 10, 12, 16, 22, 30};
@@ -73,6 +77,21 @@ wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
 }
 
 
+wxHtmlWinParser::~wxHtmlWinParser()
+{
+    int i, j, k, l, m;
+
+    for (i = 0; i < 2; i++)
+        for (j = 0; j < 2; j++)
+            for (k = 0; k < 2; k++)
+                for (l = 0; l < 2; l++)
+                    for (m = 0; m < 7; m++) {
+                        if (m_FontsTable[i][j][k][l][m] != NULL) 
+                            delete m_FontsTable[i][j][k][l][m];
+                    }
+    if (m_EncConv) delete m_EncConv;
+}
+
 
 void wxHtmlWinParser::AddModule(wxHtmlTagsModule *module)
 {
@@ -88,6 +107,8 @@ void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face, const 
     for (i = 0; i < 7; i++) m_FontsSizes[i] = sizes[i];
     m_FontFaceFixed = fixed_face;
     m_FontFaceNormal = normal_face;
+    
+    SetInputEncoding(m_InputEnc);
 
     for (i = 0; i < 2; i++)
         for (j = 0; j < 2; j++)
@@ -135,6 +156,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 void wxHtmlWinParser::DoneParser()
 {
     m_Container = NULL;
+    SetInputEncoding(wxFONTENCODING_DEFAULT); // for next call
     wxHtmlParser::DoneParser();
 }
 
@@ -179,6 +201,7 @@ void wxHtmlWinParser::AddText(const char* txt)
             temp[templen-1] = ' ';
             temp[templen] = 0;
             templen = 0;
+            if (m_EncConv) m_EncConv -> Convert(temp);
             c = new wxHtmlWordCell(temp, *(GetDC()));
             if (m_UseLink) c -> SetLink(m_Link);
             m_Container -> InsertCell(c);
@@ -187,6 +210,7 @@ void wxHtmlWinParser::AddText(const char* txt)
     }
     if (templen) {
         temp[templen] = 0;
+        if (m_EncConv) m_EncConv -> Convert(temp);
         c = new wxHtmlWordCell(temp, *(GetDC()));
         if (m_UseLink) c -> SetLink(m_Link);
         m_Container -> InsertCell(c);
@@ -243,20 +267,23 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
     wxString face = ff ? m_FontFaceFixed : m_FontFaceNormal;
     wxString *faceptr = &(m_FontsFacesTable[fb][fi][fu][ff][fs]);
     wxFont **fontptr = &(m_FontsTable[fb][fi][fu][ff][fs]);
+    wxFontEncoding *encptr = &(m_FontsEncTable[fb][fi][fu][ff][fs]);
 
-    if (*fontptr != NULL && *faceptr != face) {
+    if (*fontptr != NULL && (*faceptr != face || *encptr != m_OutputEnc)) {
         delete *fontptr;
         *fontptr = NULL;
     }
 
     if (*fontptr == NULL) {
         *faceptr = face;
+        *encptr = m_OutputEnc;
         *fontptr = new wxFont(
                        m_FontsSizes[fs] * m_PixelScale,
                        ff ? wxMODERN : wxSWISS,
                        fi ? wxITALIC : wxNORMAL,
                        fb ? wxBOLD : wxNORMAL,
-                       fu ? TRUE : FALSE, face);
+                       fu ? TRUE : FALSE, face,
+                       m_OutputEnc);
     }
     m_DC -> SetFont(**fontptr);
     return (*fontptr);
@@ -269,6 +296,67 @@ void wxHtmlWinParser::SetLink(const wxHtmlLinkInfo& link)
     m_Link = link; 
     m_UseLink = (link.GetHref() != wxEmptyString);
 }
+
+
+void wxHtmlWinParser::SetFontFace(const wxString& face) 
+{
+    if (GetFontFixed()) m_FontFaceFixed = face; 
+    else m_FontFaceNormal = face;
+
+    if (m_InputEnc != wxFONTENCODING_DEFAULT)
+        SetInputEncoding(m_InputEnc);
+}
+
+
+
+void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
+{
+    m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
+    if (m_EncConv) {delete m_EncConv; m_EncConv = NULL;}
+
+    if (enc == wxFONTENCODING_DEFAULT) return;
+
+    wxFontEncoding altfix, altnorm;
+    bool availfix, availnorm;
+    
+    // exact match?    
+    availnorm = wxTheFontMapper -> IsEncodingAvailable(enc, m_FontFaceNormal);
+    availfix = wxTheFontMapper -> IsEncodingAvailable(enc, m_FontFaceFixed);
+    if (availnorm && availfix) 
+        m_OutputEnc = enc;
+    
+    // alternatives?
+    else if (wxTheFontMapper -> GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, FALSE) &&
+             wxTheFontMapper -> GetAltForEncoding(enc, &altfix, m_FontFaceFixed, FALSE) &&
+             altnorm == altfix)
+        m_OutputEnc = altnorm;
+    
+    // at least normal face?
+    else if (availnorm)
+        m_OutputEnc = enc;
+    else if (wxTheFontMapper -> GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, FALSE))
+        m_OutputEnc = altnorm;
+        
+    // okay, let convert to ISO_8859-1, available always
+    else
+        m_OutputEnc = wxFONTENCODING_DEFAULT;
+        
+    m_InputEnc = enc;
+    
+    if (m_InputEnc == m_OutputEnc) return;
+
+    m_EncConv = new wxEncodingConverter();
+    if (!m_EncConv -> Init(m_InputEnc, 
+                           (m_OutputEnc == wxFONTENCODING_DEFAULT) ?
+                                      wxFONTENCODING_ISO8859_1 : m_OutputEnc,
+                           wxCONVERT_SUBSTITUTE))  
+    { // total failture :-(
+        m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
+        delete m_EncConv;
+        m_EncConv = NULL;
+    }
+}
+
 
 
 
