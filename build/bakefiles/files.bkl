@@ -1930,7 +1930,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/statbox.mm
     src/cocoa/statline2.mm
     src/cocoa/stattext.mm
-    src/cocoa/taskbar.mm
     src/cocoa/textctrl.mm
     src/cocoa/toolbar.mm
     src/cocoa/tooltip.mm
@@ -2024,7 +2023,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/statbox.h
     wx/cocoa/statline.h
     wx/cocoa/stattext.h
-    wx/cocoa/taskbar.h
     wx/cocoa/textctrl.h
     wx/cocoa/toolbar.h
     wx/cocoa/toplevel.h
