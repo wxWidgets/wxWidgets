@@ -263,6 +263,11 @@ void wxBitmapButton::OnSetBitmap()
     }
 }
 
+wxSize wxBitmapButton::DoGetBestSize() const
+{
+    return wxControl::DoGetBestSize();
+}
+
 bool wxBitmapButton::Enable( bool enable )
 {
     if ( !wxWindow::Enable(enable) )
