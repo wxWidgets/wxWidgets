@@ -154,8 +154,8 @@ MyCanvas::MyCanvas( wxScrolledWindow *parent, wxWindowID id,
 {
     m_owner = parent;
     
-    (void)new wxButton( this, -1, "Hallo I", wxPoint(0,50), wxSize(100,25) );
-    (void)new wxButton( this, -1, "Hallo II", wxPoint(200,50), wxSize(100,25) );
+//    (void)new wxButton( this, -1, "Hallo I", wxPoint(0,50), wxSize(100,25) );
+//    (void)new wxButton( this, -1, "Hallo II", wxPoint(200,50), wxSize(100,25) );
 
     SetBackgroundColour( *wxWHITE );
   
@@ -201,7 +201,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // Has the region an screen been exposed?
 	if (IsExposed(0,0,100,25))
 	{
-	    printf( "Redraw first cell\n" );
+	    wxLogMessage( "Redraw first cell" );
             dc.DrawRectangle( 0, 0, 100, 25 );
 	    dc.DrawText( "First Cell", 5, 5 );
 	}
@@ -216,7 +216,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // Has the region an screen been exposed?
 	if (IsExposed(200,0,100,25))
 	{
-	    printf( "Redraw second cell\n" );
+	    wxLogMessage( "Redraw second cell" );
             dc.DrawRectangle( 200, 0, 100, 25 );
 	    dc.DrawText( "Second Cell", 205, 5 );
 	}

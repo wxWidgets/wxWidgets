@@ -6,6 +6,11 @@ Who has a BigEndian computer (e.g. Sparc) that runs a 15 and/or
 person could help me by running a small testprogram and sending
 me the output.
 
+Added support for multiple font and colour support to item in
+list ctrls and tree ctrls.
+
+Added support for multiple-selection file dialog.
+
 Implemented wxMenuBar::Insert() and wxMenu::Insert(). There is
 also a Remove() method now, but the GTK doesn't really like that.
 
@@ -18,11 +23,14 @@ certain circumstances (Karsten Ballueder).
 wxGTK no longer gives warnings if the application shows a dialog
 before entering the main loop.
 
+Added string to long/ulong/float conversion routines and some
+more string related things.
+
 Updated documentation for wxFile, wxFFile and their respective
 stream classes. Documented some more stream classes.
 
 Improved wxHTML and its help system. Options dialog, better printing,
-history index.
+history index. Also implemented more (cite, definition lists, etc).
 
 Corrected wxRegion::GetBox().
 
@@ -42,7 +50,8 @@ wxSpinCtrl now has its own event, intercepted using EVT_SPINCTRL.
 The ODBC classes can now be configured at run-time if they
 are to use forward-only cursors or not.
 
-Added wxDateTime class.
+Added wxDateTime class. The existing classes wxTime and wxDate
+have been reimplemented and corrected using wxDatTime.
 
 Rewritten wxThread to have a flag controlling if the
 thread will delete its C++ class itself ("delete this") or
@@ -53,11 +62,12 @@ Added TIFF reading code, PCX writing code.
 Minor compile and build fixes for different architectures.
 
 Added more flags to wxSizer for proportional sizing and
-centering and alignment combination.
+centering and alignment combination and a wxNotebookSizer.
 
 Added controls to wxToolBars (e.g. combobox) and DeleteTool.
 
-Fixed problem with reading flushable streams.
+Fixed several problems with buffered streams. Added support for
+setting the end-of-line mode (Mac,DOS,Unix) in wxTextOutputStream.
 
 Added code to send events from one thread to another and added
 function to wake up idle system (needed for sending inter-thread 
@@ -69,14 +79,16 @@ Also corrected navigation on wxRadioBox.
 Corrected segfaults in wxGLCanvas and stupid race when using
 several such canvasses.
 
-Some minor updates to wxSockets.
+Some minor updates to wxSockets. Fixed timeout problem.
 
 Speed-up for new encoding related font code.
 
 Changed wxListBox to send deferred events, i.e. events emitted by
 the listbox won't get processed before the next idle message.
 
-Some more minor changes.
+More minor changes and fixes.
+
+Began work on a new dialog and resource editor (wxDesigner).
 
 7st November '99: wxWindows 2.1.11 released
 

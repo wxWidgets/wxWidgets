@@ -3330,6 +3330,10 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
 
+/*
+    printf( "ScrollWindow: %d %d\n", dx, dy );
+*/
+
     gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
 
 /*
