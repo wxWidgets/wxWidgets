@@ -378,8 +378,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index )
         case wxSYS_ICON_X:     return 32;
         case wxSYS_ICON_Y:     return 32;
         default:               
-            wxFAIL_MSG( wxT("wxSystemSettings::GetMetric not fully implemented") );
-            return 0;
+            return 0;   // metric is unknown
     }
 }
 
