@@ -45,15 +45,6 @@ private:
 
 #if !defined( __WXMSW__ ) && !defined( __WXMAC__) && !defined(__WXPM__)
 #define wxMessageDialog wxGenericMessageDialog
-
-int wxMessageBox( const wxString& message
-                 ,const wxString& caption = wxMessageBoxCaptionStr
-                 ,long  style = wxOK|wxCENTRE
-                 ,wxWindow *parent = (wxWindow *) NULL
-                 ,int x = -1
-                 ,int y = -1
-                );
-
 #endif
 
 #endif

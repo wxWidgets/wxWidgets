@@ -196,7 +196,8 @@ bool wxNotebook::Create(wxWindow *parent,
 // dtor
 wxNotebook::~wxNotebook()
 {
-  if (m_bOwnsImageList) delete m_pImageList;
+  if (m_bOwnsImageList)
+      delete m_imageList;
 }
 
 // ----------------------------------------------------------------------------

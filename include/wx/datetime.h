@@ -17,6 +17,8 @@
     #pragma interface "datetime.h"
 #endif
 
+#if wxUSE_DATETIME
+
 #include <time.h>
 #include <limits.h>             // for INT_MIN
 
@@ -1569,5 +1571,7 @@ inline WXDLLEXPORT void wxPrevWDay(wxDateTime::WeekDay& wd)
     wd = wd == wxDateTime::Sun ? wxDateTime::Inv_WeekDay
                                : (wxDateTime::WeekDay)(wd - 1);
 }
+
+#endif // wxUSE_DATETIME
 
 #endif // _WX_DATETIME_H

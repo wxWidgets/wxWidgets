@@ -150,7 +150,7 @@ bool wxHtmlWindow::SetPage(const wxString& source)
         nodeG = (m_GlobalProcessors) ? m_GlobalProcessors->GetFirst() : NULL;
 
         // VS: there are two lists, global and local, both of them sorted by
-        //     priority. Since we have to go through _both_ lists with 
+        //     priority. Since we have to go through _both_ lists with
         //     decreasing priority, we "merge-sort" the lists on-line by
         //     processing that one of the two heads that has higher priority
         //     in every iteration
@@ -205,15 +205,15 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     wxYield(); Refresh(FALSE);
 
     m_tmpCanDrawLocks++;
-    if (m_HistoryOn && (m_HistoryPos != -1)) 
+    if (m_HistoryOn && (m_HistoryPos != -1))
     {
         // store scroll position into history item:
         int x, y;
-        ViewStart(&x, &y);
+        GetViewStart(&x, &y);
         (*m_History)[m_HistoryPos].SetPos(y);
     }
 
-    if (location[0] == wxT('#')) 
+    if (location[0] == wxT('#'))
     {
         // local anchor:
         wxString anch = location.Mid(1) /*1 to end*/;
@@ -230,7 +230,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     }
     else if (location.Find(wxT('#')) != wxNOT_FOUND &&
              (m_FS->GetPath() + location.BeforeFirst(wxT('#'))) == m_OpenedPage)
-	{
+    {
         wxString anch = location.AfterFirst(wxT('#'));
         m_tmpCanDrawLocks--;
         rt_val = ScrollToAnchor(anch);
@@ -242,7 +242,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         needs_refresh = TRUE;
         // load&display it:
         if (m_RelatedStatusBar != -1)
-	    {
+        {
             m_RelatedFrame->SetStatusText(_("Connecting..."), m_RelatedStatusBar);
             Refresh(FALSE);
         }
@@ -250,9 +250,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         f = m_FS->OpenFile(location);
 
         if (f == NULL)
-	    {
-            wxString err;
-
+        {
             wxLogError(_("Unable to open requested HTML document: %s"), location.c_str());
             m_tmpCanDrawLocks--;
 
@@ -261,12 +259,12 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         }
 
         else
-    	{
+        {
             wxNode *node;
             wxString src = wxEmptyString;
 
             if (m_RelatedStatusBar != -1)
-	        {
+            {
                 wxString msg = _("Loading : ") + location;
                 m_RelatedFrame->SetStatusText(msg, m_RelatedStatusBar);
                 Refresh(FALSE);
@@ -274,17 +272,17 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
             node = m_Filters.GetFirst();
             while (node)
-	        {
+            {
                 wxHtmlFilter *h = (wxHtmlFilter*) node->GetData();
                 if (h->CanRead(*f))
-		        {
+                {
                     src = h->ReadFile(*f);
                     break;
                 }
                 node = node->GetNext();
             }
             if (src == wxEmptyString)
-	        {
+            {
                 if (m_DefaultFilter == NULL) m_DefaultFilter = GetDefaultFilter();
                 src = m_DefaultFilter->ReadFile(*f);
             }
@@ -293,7 +291,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             rt_val = SetPage(src);
             m_OpenedPage = f->GetLocation();
             if (f->GetAnchor() != wxEmptyString)
-	        {
+            {
                 wxYield();
                 ScrollToAnchor(f->GetAnchor());
             }
@@ -384,7 +382,7 @@ void wxHtmlWindow::CreateLayout()
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell->Layout(ClientWidth);
         if (ClientHeight < m_Cell->GetHeight() + GetCharHeight())
-	    {
+        {
             SetScrollbars(
                   wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
                   m_Cell->GetWidth() / wxHTML_SCROLL_STEP,
@@ -392,7 +390,7 @@ void wxHtmlWindow::CreateLayout()
                   /*cheat: top-level frag is always container*/);
         }
         else /* we fit into window, no need for scrollbars */
-	    {
+        {
             SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell->GetWidth() / wxHTML_SCROLL_STEP, 0); // disable...
             GetClientSize(&ClientWidth, &ClientHeight);
             m_Cell->Layout(ClientWidth); // ...and relayout
@@ -465,7 +463,7 @@ bool wxHtmlWindow::HistoryBack()
 
     // store scroll position into history item:
     int x, y;
-    ViewStart(&x, &y);
+    GetViewStart(&x, &y);
     (*m_History)[m_HistoryPos].SetPos(y);
 
     // go to previous position:
@@ -558,7 +556,7 @@ void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
         m_GlobalProcessors->DeleteContents(TRUE);
     }
     wxHtmlProcessorList::Node *node;
-    
+
     for (node = m_GlobalProcessors->GetFirst(); node; node = node->GetNext())
     {
         if (processor->GetPriority() > node->GetData()->GetPriority())
@@ -624,7 +622,7 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
 #endif
 #endif
     dc.SetBackgroundMode(wxTRANSPARENT);
-    ViewStart(&x, &y);
+    GetViewStart(&x, &y);
 
     while (upd)
     {
@@ -656,7 +654,7 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
         wxPoint pos;
         wxString lnk;
 
-        ViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
+        GetViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
         pos = event.GetPosition();
 
         if (m_Cell)
@@ -680,20 +678,20 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
         int x, y;
         wxHtmlLinkInfo *lnk;
 
-        ViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
+        GetViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
         wxGetMousePosition(&x, &y);
         ScreenToClient(&x, &y);
         lnk = m_Cell->GetLink(sx + x, sy + y);
 
         if (lnk != m_tmpLastLink)
-	    {
+        {
             if (lnk == NULL)
-	        {
+            {
                 SetCursor(*s_cur_arrow);
                 if (m_RelatedStatusBar != -1) m_RelatedFrame->SetStatusText(wxEmptyString, m_RelatedStatusBar);
             }
             else
-	        {
+            {
                 SetCursor(*s_cur_hand);
                 if (m_RelatedStatusBar != -1)
                     m_RelatedFrame->SetStatusText(lnk->GetHref(), m_RelatedStatusBar);

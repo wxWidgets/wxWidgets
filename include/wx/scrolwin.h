@@ -112,7 +112,9 @@ public:
     void HandleOnChar(wxKeyEvent& event);
     void HandleOnMouseEnter(wxMouseEvent& event);
     void HandleOnMouseLeave(wxMouseEvent& event);
+#if wxUSE_MOUSEWHEEL
     void HandleOnMouseWheel(wxMouseEvent& event);
+#endif // wxUSE_MOUSEWHEEL
 
 protected:
     // get pointer to our scroll rect if we use it or NULL
@@ -158,6 +160,10 @@ protected:
 
     double                m_scaleX;
     double                m_scaleY;
+
+#if wxUSE_MOUSEWHEEL
+    int m_wheelRotation;
+#endif // wxUSE_MOUSEWHEEL
 };
 
 // ----------------------------------------------------------------------------

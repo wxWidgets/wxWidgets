@@ -174,42 +174,49 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     // ProcessEvent() above
     event.Skip(FALSE);
 
-    switch ( event.GetEventType() )
+    wxEventType evType = event.GetEventType();
+
+    if ( evType == wxEVT_PAINT )
     {
-        case wxEVT_SCROLLWIN_TOP:
-        case wxEVT_SCROLLWIN_BOTTOM:
-        case wxEVT_SCROLLWIN_LINEUP:
-        case wxEVT_SCROLLWIN_LINEDOWN:
-        case wxEVT_SCROLLWIN_PAGEUP:
-        case wxEVT_SCROLLWIN_PAGEDOWN:
-        case wxEVT_SCROLLWIN_THUMBTRACK:
-        case wxEVT_SCROLLWIN_THUMBRELEASE:
+        m_scrollHelper->HandleOnPaint((wxPaintEvent &)event);
+        return TRUE;
+    }
+
+    if ( evType == wxEVT_SCROLLWIN_TOP ||
+         evType == wxEVT_SCROLLWIN_BOTTOM ||
+         evType == wxEVT_SCROLLWIN_LINEUP ||
+         evType == wxEVT_SCROLLWIN_LINEDOWN ||
+         evType == wxEVT_SCROLLWIN_PAGEUP ||
+         evType == wxEVT_SCROLLWIN_PAGEDOWN ||
+         evType == wxEVT_SCROLLWIN_THUMBTRACK ||
+         evType == wxEVT_SCROLLWIN_THUMBRELEASE )
+    {
             m_scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
             return !event.GetSkipped();
+    }
 
-        case wxEVT_PAINT:
-            m_scrollHelper->HandleOnPaint((wxPaintEvent &)event);
-            return TRUE;
-
-        case wxEVT_SIZE:
-            m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
-            return FALSE;
-
-        case wxEVT_CHAR:
-            m_scrollHelper->HandleOnChar((wxKeyEvent &)event);
-            return !event.GetSkipped();
-
-        case wxEVT_ENTER_WINDOW:
-            m_scrollHelper->HandleOnMouseEnter((wxMouseEvent &)event);
-            break;
-
-        case wxEVT_LEAVE_WINDOW:
-            m_scrollHelper->HandleOnMouseLeave((wxMouseEvent &)event);
-            break;
-
-        case wxEVT_MOUSEWHEEL:
-            m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
-            break;
+    if ( evType == wxEVT_ENTER_WINDOW )
+    {
+        m_scrollHelper->HandleOnMouseEnter((wxMouseEvent &)event);
+    }
+    else if ( evType == wxEVT_LEAVE_WINDOW )
+    {
+        m_scrollHelper->HandleOnMouseLeave((wxMouseEvent &)event);
+    }
+#if wxUSE_MOUSEWHEEL
+    else if ( evType == wxEVT_MOUSEWHEEL )
+    {
+        m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
+    }
+#endif // wxUSE_MOUSEWHEEL
+    else if ( evType == wxEVT_SIZE )
+    {
+        m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
+    }
+    else if ( evType == wxEVT_CHAR )
+    {
+        m_scrollHelper->HandleOnChar((wxKeyEvent &)event);
+        return !event.GetSkipped();
     }
 
     return FALSE;
@@ -937,6 +944,8 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
     }
 }
 
+#if wxUSE_MOUSEWHEEL
+
 void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
 {
     m_wheelRotation += event.GetWheelRotation();
@@ -952,6 +961,8 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
         Scroll(-1, vsy - lines);
     }
 }
+
+#endif // wxUSE_MOUSEWHEEL
 
 // ----------------------------------------------------------------------------
 // wxGenericScrolledWindow implementation

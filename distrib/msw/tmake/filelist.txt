@@ -192,6 +192,7 @@ prntbase.cpp	C
 process.cpp	C	32,B
 protocol.cpp	C	S,B
 quantize.cpp	C
+radiocmn.cpp	C
 resource.cpp	C
 sckaddr.cpp	C	S,B
 sckfile.cpp	C	S,B

@@ -1992,7 +1992,8 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
         }
         else
         {
-            lvItem.pszText = info.m_text;
+            // pszText is not const, hence the cast
+            lvItem.pszText = (wxChar *)info.m_text.c_str();
             if ( lvItem.pszText )
                 lvItem.cchTextMax = info.m_text.Length();
             else

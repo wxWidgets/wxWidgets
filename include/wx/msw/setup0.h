@@ -232,7 +232,7 @@
 // i18n support: _() macro, wxLocale class. Requires wxTextFile.
 #define wxUSE_INTL          1
 
-// Set wxUSE_TIMEDATE to 1 to compile the wxDateTime and related classes which
+// Set wxUSE_DATETIME to 1 to compile the wxDateTime and related classes which
 // allow to manipulate dates, times and time intervals. wxDateTime replaces the
 // old wxTime and wxDate classes which are still provided for backwards
 // compatibility (and implemented in terms of wxDateTime).
@@ -244,8 +244,19 @@
 //
 // Requires: wxUSE_LONGLONG
 //
+// Default is 1
+//
 // Recommended setting: 1
-#define wxUSE_TIMEDATE      1
+#define wxUSE_DATETIME      1
+
+// wxUSE_TIMEDATE enables compilation of the old wxDate and wxTime classes (not
+// the same as wxDateTime!). These classes are obsolete and shouldn't be used
+// in new code
+//
+// Default is 0
+//
+// Recommended setting: 0 unless you have legacy code which uses these classes
+#define wxUSE_TIMEDATE 0
 
 // Set wxUSE_TIMER to 1 to compile wxTimer class
 //
@@ -539,6 +550,22 @@
 // Recommended setting: 1 (unless it really doesn't work)
 #define wxUSE_COMMON_DIALOGS 1
 
+// wxBusyInfo displays window with message when app is busy. Works in same way
+// as wxBusyCursor
+#define wxUSE_BUSYINFO      1
+
+// Use single/multiple choice dialogs.
+//
+// Default is 1
+//
+// Recommended setting: 1 (used in the library itself)
+#define wxUSE_CHOICEDLG     1
+
+// wxDirDlg class for getting a directory name from user
+#define wxUSE_DIRDLG 1
+
+// TODO: setting to choose the generic or native one
+
 // Use file open/save dialogs.
 //
 // Default is 1
@@ -553,28 +580,21 @@
 // Recommended setting: 1 (used in the library itself)
 #define wxUSE_FONTDLG       1
 
-// Use single/multiple choice dialogs.
+// Use wxMessageDialog and wxMessageBox.
 //
 // Default is 1
 //
 // Recommended setting: 1 (used in the library itself)
-#define wxUSE_CHOICEDLG     1
-
-// text entry dialog and wxGetTextFromUser function
-#define wxUSE_TEXTDLG 1
+#define wxUSE_MSGDLG        1
 
 // progress dialog class for lengthy operations
 #define wxUSE_PROGRESSDLG 1
 
-// wxBusyInfo displays window with message when app is busy. Works in same way
-// as wxBusyCursor
-#define wxUSE_BUSYINFO      1
-
-// wxDirDlg class for getting a directory name from user
-#define wxUSE_DIRDLG 1
-
 // support for startup tips (wxShowTip &c)
 #define wxUSE_STARTUP_TIPS 1
+
+// text entry dialog and wxGetTextFromUser function
+#define wxUSE_TEXTDLG 1
 
 // ----------------------------------------------------------------------------
 // Metafiles support
@@ -1073,7 +1093,7 @@
 // you need to modify setup.h and rebuild everything
 // ----------------------------------------------------------------------------
 
-#if wxUSE_TIMEDATE && !wxUSE_LONGLONG
+#if wxUSE_DATETIME && !wxUSE_LONGLONG
     #error wxDateTime requires wxLongLong
 #endif
 

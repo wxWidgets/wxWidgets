@@ -166,8 +166,6 @@ static bool IsMouseInWindow(HWND hwnd);
 // event tables
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
-
 // in wxUniv/MSW this class is abstract because it doesn't have DoPopupMenu()
 // method
 #ifdef __WXUNIVERSAL__

@@ -85,9 +85,11 @@ static wxString ConvertStringFromOle(BSTR bStr);
 static int rgMonthDays[13] =
 	{0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
 
+#if wxUSE_TIMEDATE
 static BOOL OleDateFromTm(WORD wYear, WORD wMonth, WORD wDay,
 	WORD wHour, WORD wMinute, WORD wSecond, DATE& dtDest);
 static BOOL TmFromOleDate(DATE dtSrc, struct tm& tmDest);
+#endif // wxUSE_TIMEDATE
 
 static void ClearVariant(VARIANTARG *pvarg) ;
 static void ReleaseVariant(VARIANTARG *pvarg) ;

@@ -645,115 +645,11 @@ wxFontEncoding wxFont::GetEncoding() const
     return M_FONTDATA->m_encoding;
 }
 
-// ----------------------------------------------------------------------------
-// wxNativeFontInfo
-// ----------------------------------------------------------------------------
-
-bool wxNativeFontInfo::FromString(const wxString& s)
+wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    long l;
+    if( M_FONTDATA->m_nativeFontInfoOk )
+        return new wxNativeFontInfo(M_FONTDATA->m_nativeFontInfo);
 
-    wxStringTokenizer tokenizer(s, _T(";"));
-
-    wxString token = tokenizer.GetNextToken();
-    //
-    //  Ignore the version for now
-    //
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfHeight = l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfWidth = l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfEscapement = l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfOrientation = l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfWeight = l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfItalic = (BYTE)l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfUnderline = (BYTE)l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfStrikeOut = (BYTE)l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfCharSet = (BYTE)l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfOutPrecision = (BYTE)l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfClipPrecision = (BYTE)l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfQuality = (BYTE)l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return FALSE;
-    lf.lfPitchAndFamily = (BYTE)l;
-
-    token = tokenizer.GetNextToken();
-    if(!token)
-        return FALSE;
-    wxStrcpy(lf.lfFaceName, token.c_str());
-
-    return TRUE;
-}
-
-wxString wxNativeFontInfo::ToString() const
-{
-    wxString s;
-
-    s.Printf(_T("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%s"),
-             0, // version, in case we want to change the format later
-             lf.lfHeight,
-             lf.lfWidth,
-             lf.lfEscapement,
-             lf.lfOrientation,
-             lf.lfWeight,
-             lf.lfItalic,
-             lf.lfUnderline,
-             lf.lfStrikeOut,
-             lf.lfCharSet,
-             lf.lfOutPrecision,
-             lf.lfClipPrecision,
-             lf.lfQuality,
-             lf.lfPitchAndFamily,
-             lf.lfFaceName);
-
-    return s;
+    return 0;
 }
 

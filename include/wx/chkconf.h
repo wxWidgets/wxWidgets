@@ -181,6 +181,14 @@
 #   endif
 #endif /* !defined(wxUSE_LISTCTRL) */
 
+#ifndef wxUSE_MSGDLG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MSGDLG must be defined."
+#   else
+#       define wxUSE_MSGDLG 0
+#   endif
+#endif /* !defined(wxUSE_MSGDLG) */
+
 #ifndef wxUSE_MDI_ARCHITECTURE
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MDI_ARCHITECTURE must be defined."
@@ -457,7 +465,7 @@
 #           define wxUSE_FILEDLG 1
 #       endif
 #   endif
-#endif /* !wxUSE_FILEDLG */
+#endif /* wxUSE_FILEDLG */
 
 #if !wxUSE_FONTDLG
 #   if defined(wxUSE_FONTMAP)
@@ -480,6 +488,16 @@
 #       endif
 #   endif
 #endif /* !wxUSE_IMAGLIST */
+
+#if !wxUSE_MSGDLG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+        /* FIXME: should compile without it, of course, but doesn't */
+#       error "wxMessageBox is always needed"
+#   else
+#       undef wxUSE_MSGDLG
+#       define wxUSE_MSGDLG 1
+#   endif
+#endif
 
 #if wxUSE_RADIOBTN
 #   if defined(__WXUNIVERSAL__) && !wxUSE_CHECKBOX
