@@ -3681,7 +3681,3 @@ msgstr "wxWindowsはディスプレイをオープンすることができませ
 msgid "yesterday"
 msgstr "昨日"
 
-#: ../contrib/src/stc/scintilla/src/ScintillaBase.cxx:390
-msgid "Select All"
-msgstr "全て選択"
-
