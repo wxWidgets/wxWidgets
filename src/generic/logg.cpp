@@ -809,15 +809,17 @@ void wxLogDialog::CreateDetailsControls()
     {
         wxBitmap bmp = wxTheApp->GetStdIcon(icons[icon]);
 
-        // This may very well fail if there are insufficient
-        // colours available. Degrade gracefully.
-
-        if (!bmp.Ok())
+        // This may very well fail if there are insufficient colours available.
+        // Degrade gracefully.
+        if ( !bmp.Ok() )
+        {
             loadedIcons = FALSE;
-        else
-            imageList->Add(wxImage(bmp).
-                        Rescale(ICON_SIZE, ICON_SIZE).
-                         ConvertToBitmap());
+
+            break;
+        }
+
+        wxImage img(bmp);
+        imageList->Add(img.Rescale(ICON_SIZE, ICON_SIZE).ConvertToBitmap());
     }
 
     m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
@@ -834,52 +836,52 @@ void wxLogDialog::CreateDetailsControls()
     size_t count = m_messages.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        int image = -1;
+        int image;
+
 #ifndef __WIN16__
-        switch ( m_severity[n] )
+        if ( loadedIcons )
         {
-            case wxLOG_Error:
-                image = 0;
-                break;
+            switch ( m_severity[n] )
+            {
+                case wxLOG_Error:
+                    image = 0;
+                    break;
 
-            case wxLOG_Warning:
-                image = 1;
-                break;
+                case wxLOG_Warning:
+                    image = 1;
+                    break;
 
-            default:
-                image = 2;
+                default:
+                    image = 2;
+            }
         }
+        else // failed to load images
 #endif // !Win16
-
-        if (!loadedIcons)
+        {
             image = -1;
+        }
 
-        if (image > -1)
-            m_listctrl->InsertItem(n, m_messages[n], image);
-        else
-            m_listctrl->InsertItem(n, m_messages[n]);
-
-        m_listctrl->SetItem(n, 1,
-                            TimeStamp(fmt, (time_t)m_times[n]));
+        m_listctrl->InsertItem(n, m_messages[n], image);
+        m_listctrl->SetItem(n, 1, TimeStamp(fmt, (time_t)m_times[n]));
     }
 
     // let the columns size themselves
     m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
     m_listctrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
 
-    // get the approx height of the listctrl
-    wxFont font = GetFont();
-    if ( !font.Ok() )
-        font = *wxSWISS_FONT;
+    // calculate an approximately nice height for the listctrl
+    int height = GetCharHeight()*(count + 2);
 
-    int y;
-    GetTextExtent(_T("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
-    int height = wxMax(y*(count + 3), 100);
+    // but check that the dialog won't fall fown from the screen
+    //
+    // we use GetMinHeight() to get the height of the dialog part without the
+    // details and we consider that the "Save" button below and the separator
+    // line (and the margins around it) take about as much, hence double it
+    int heightMax = wxGetDisplaySize().y - GetPosition().y - 2*GetMinHeight();
 
-    // if the height as computed from list items exceeds, together with the
-    // actual message & controls, the screen, make it smaller
-    int heightMax =
-        (3*wxSystemSettings::GetMetric(wxSYS_SCREEN_Y))/5 - GetSize().y;
+    // we should leave a margin
+    heightMax *= 9;
+    heightMax /= 10;
 
     m_listctrl->SetSize(-1, wxMin(height, heightMax));
 }
@@ -936,7 +938,7 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
 
     if ( !ok )
         wxLogError(_("Can't save log contents to file."));
-#endif
+#endif // wxUSE_FILEDLG
 }
 
 #endif // wxUSE_FILE
@@ -973,6 +975,15 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_STATLINE
 
         sizer->Add(m_listctrl, 1, wxEXPAND | (wxALL & ~wxTOP), MARGIN);
+
+        // VZ: this doesn't work as this becomes the initial (and not only
+        //     minimal) listctrl height as well - why?
+#if 0
+        // allow the user to make the dialog shorter than its initial height -
+        // without this it wouldn't work as the list ctrl would have been
+        // incompressible
+        sizer->SetItemMinSize(m_listctrl, 100, 3*GetCharHeight());
+#endif // 0
 
 #if wxUSE_FILE
         sizer->Add(m_btnSave, 0, wxALIGN_RIGHT | (wxALL & ~wxTOP), MARGIN);
