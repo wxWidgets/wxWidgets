@@ -741,8 +741,6 @@ wxMenu *wxMenuBar::Remove(size_t pos)
             ::DeleteMenu( menu->MacGetMenuId() /* m_menus[pos]->MacGetMenuId() */ ) ;
         }
 
-        menu->Detach();
-
         Refresh();
     }
 
