@@ -255,11 +255,11 @@ it will be placed after the help string and before the optional pulldown menu sp
 
 Note that the menu item identifier must be an integer if the resource is being
 included as C++ code and then parsed on initialisation. Unfortunately,\rtfsp
-\verb$#$define substitution is not performed inside strings, and
+\#define substitution is not performed inside strings, and
 therefore the program cannot know the mapping. However, if the .WXR file
 is being loaded dynamically, wxWindows will attempt to replace string
-identifiers with \verb$#$defined integers, because it is able to parse
-the included \verb$#$defines.
+identifiers with \#defined integers, because it is able to parse
+the included \#defines.
 
 \subsection{Bitmap resource format}
 
@@ -323,7 +323,7 @@ Using a .RC resource table for some wxWindows resource data may be a partial sol
 although .RC strings are limited to 255 characters.
 \item Without a resource preprocessor, it is not possible to substitute integers
 for identifiers (so menu identifiers have to be written as integers in the resource
-object, in addition to providing \verb$#$defines for application code convenience).
+object, in addition to providing \#defines for application code convenience).
 \end{itemize}
 
 \subsection{Compiling the resource system}
