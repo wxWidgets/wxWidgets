@@ -86,7 +86,14 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 	HBITMAP hBitmap2 = 0;
 	if ( mask.Ok() )
 	    hBitmap2 = (HBITMAP) mask.GetHBITMAP();
-	return ImageList_Add((HIMAGELIST) GetHIMAGELIST(), hBitmap1, hBitmap2);
+
+    int index = ImageList_Add((HIMAGELIST) GetHIMAGELIST(), hBitmap1, hBitmap2);
+	if ( index == -1 )
+    {
+        wxLogError(_("Couldn't add an image to the image list."));
+    }
+
+    return index;
 }
 
 // Adds a bitmap, using the specified colour to create the mask bitmap
