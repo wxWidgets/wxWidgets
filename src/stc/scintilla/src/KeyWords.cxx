@@ -171,6 +171,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmLatex);
 	LINK_LEXER(lmPascal);
 	LINK_LEXER(lmPerl);
+	LINK_LEXER(lmPOV);
 	LINK_LEXER(lmPython);
 	LINK_LEXER(lmRuby);
 	LINK_LEXER(lmSQL);
