@@ -256,8 +256,7 @@ wxString::wxString(const void *pStart, const void *pEnd)
 wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 {
   // first get necessary size
-
-  size_t nLen = conv.MB2WC((wchar_t *) NULL, psz, 0);
+  size_t nLen = psz ? conv.MB2WC((wchar_t *) NULL, psz, 0) : 0;
 
   // nLength is number of *Unicode* characters here!
   if (nLen > nLength)
@@ -279,8 +278,7 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 wxString::wxString(const wchar_t *pwz)
 {
   // first get necessary size
-
-  size_t nLen = wxWC2MB((char *) NULL, pwz, 0);
+  size_t nLen = pwz ? wxWC2MB((char *) NULL, pwz, 0) : 0;
 
   // empty?
   if ( nLen != 0 ) {
