@@ -27,6 +27,7 @@
 
 #include "wx/html/htmlwin.h"
 #include "wx/html/forcelnk.h"
+#include "wx/log.h"
 
 
 //-----------------------------------------------------------------------------
@@ -154,10 +155,8 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         if (f == NULL) {
             wxString err;
 
-            err.Printf(_("Unable to open requested location :\n\n%s"), WXSTRINGCAST location);
+            wxLogError(_("Unable to open requested HTML document: %s"), location.mb_str());
             m_tmpCanDrawLocks--;
-            Refresh();
-            wxMessageBox(err, "Error");
 
             SetCursor(*wxSTANDARD_CURSOR);
             return FALSE;
@@ -224,7 +223,11 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
 {
     const wxHtmlCell *c = m_Cell -> Find(wxHTML_COND_ISANCHOR, &anchor);
-    if (!c) return FALSE;
+    if (!c)
+    {
+        wxLogWarning(_("HTML anchor %s does not exist."), anchor.mb_str());
+        return FALSE;
+    }
     else {
         int y;
 
@@ -474,11 +477,11 @@ void wxHtmlWindow::OnKeyDown(wxKeyEvent& event)
     switch (event.KeyCode()) {
         case WXK_PAGEUP :
         case WXK_PRIOR :
-                Scroll(-1, sty - (2 * cliy / 3));
+                Scroll(-1, sty - (5 * cliy / 6));
                 break;
         case WXK_PAGEDOWN :
         case WXK_NEXT :
-                Scroll(-1, sty + (2 * cliy / 3));
+                Scroll(-1, sty + (5 * cliy / 6));
                 break;
         case WXK_HOME :
                 Scroll(-1, 0);

@@ -173,7 +173,12 @@ void wxHtmlParser::PopTagHandler()
 {
     wxNode *first;
     
-    if (m_HandlersStack == NULL || (first = m_HandlersStack -> GetFirst()) == NULL) return;
+    if (m_HandlersStack == NULL || 
+        (first = m_HandlersStack -> GetFirst()) == NULL) 
+    {
+        wxLogWarning(_("Warning: attempt to remove HTML tag handler from empty stack."));
+        return;
+    }
     m_HandlersHash = *((wxHashTable*) first -> GetData());
     m_HandlersStack -> DeleteNode(first);
 }

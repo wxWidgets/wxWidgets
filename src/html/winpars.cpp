@@ -29,6 +29,7 @@
 #include "wx/html/winpars.h"
 #include "wx/html/htmlwin.h"
 #include "wx/fontmap.h"
+#include "wx/log.h"
 
 
 //-----------------------------------------------------------------------------
@@ -353,6 +354,8 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
                                       wxFONTENCODING_ISO8859_1 : m_OutputEnc,
                            wxCONVERT_SUBSTITUTE))  
     { // total failture :-(
+        wxLogError(_("Failed to display HTML document in %s encoding"), 
+	           wxFontMapper::GetEncodingName(enc).mb_str());
         m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
         delete m_EncConv;
         m_EncConv = NULL;

@@ -141,7 +141,11 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     char *src;
     wxString doc;
 
-    if (s == NULL) return wxEmptyString;
+    if (s == NULL) 
+    {
+        wxLogError(_("Cannot open HTML document: %s"), file.GetLocation().mb_str());
+        return wxEmptyString;
+    }
     src = new char[s -> GetSize() + 1];
     src[s -> GetSize()] = 0;
     s -> Read(src, s -> GetSize());

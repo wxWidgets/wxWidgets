@@ -34,6 +34,7 @@
 #include "wx/busyinfo.h"
 #include "wx/encconv.h"
 #include "wx/fontmap.h"
+#include "wx/log.h"
 #include "wx/html/htmlpars.h"
 #include "wx/html/htmldefs.h"
 
@@ -233,6 +234,8 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
         handler -> WriteOut(m_Contents, m_ContentsCnt);
         delete[] buf;
     }
+    else
+        wxLogError(_("Cannot open contents file: %s"), contentsfile.mb_str());
 
     f = ( indexfile.IsEmpty() ? 0 : fsys.OpenFile(indexfile) );
     if (f) {
@@ -246,6 +249,8 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
         handler -> WriteOut(m_Index, m_IndexCnt);
         delete[] buf;
     }
+    else
+        wxLogError(_("Cannot open index file: %s"), indexfile.mb_str());
     return TRUE;
 }
 
@@ -278,9 +283,13 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
     f -> Read(&x, sizeof(x));
     version = wxINT32_SWAP_ON_BE(x);
     
-    if (version != CURRENT_CACHED_BOOK_VERSION) return FALSE;
+    if (version != CURRENT_CACHED_BOOK_VERSION) 
+    {
+        wxLogError(_("Incorrect version of HTML help book"));
+        return FALSE;
         // NOTE: when adding new version, please ensure backward compatibility!
-
+    }
+    
     /* load contents : */
 
     f -> Read(&x, sizeof(x));
@@ -517,7 +526,11 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         else bookFull = wxGetCwd() + "/" + book;
 
         fi = fsys.OpenFile(bookFull);
-        if (fi == NULL) return FALSE;
+        if (fi == NULL) 
+	{
+	    wxLogError(_("Cannot open HTML help book: %s"), bookFull.mb_str());
+	    return FALSE;
+	}
         fsys.ChangePathTo(bookFull);
         s = fi -> GetStream();
         sz = s -> GetSize();
