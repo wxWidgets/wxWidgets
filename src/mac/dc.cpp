@@ -1379,6 +1379,21 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
             	{
     	            Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
                     CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
+		            if ( m_backgroundMode != wxTRANSPARENT )
+		            {
+			            Point bounds={0,0} ;
+			            Rect background = frame ;
+			            SInt16 baseline ;
+			    		::GetThemeTextDimensions( mString,
+			    							kThemeCurrentPortFont,
+			    							kThemeStateActive,
+			    							false,
+			    							&bounds,
+			    							&baseline );
+			    		background.right = background.left + bounds.h ;
+			    		background.bottom = background.top + bounds.v ;
+			    		::EraseRect( &background ) ;
+		            }
             		::DrawThemeTextBox( mString,
             							kThemeCurrentPortFont,
             							kThemeStateActive,
@@ -1405,6 +1420,21 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     	{
     	    Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
             CFStringRef mString = CFStringCreateWithCString( NULL , text + laststop , kCFStringEncodingMacRoman ) ;
+            if ( m_backgroundMode != wxTRANSPARENT )
+            {
+	            Point bounds={0,0} ;
+	            Rect background = frame ;
+	            SInt16 baseline ;
+	    		::GetThemeTextDimensions( mString,
+	    							kThemeCurrentPortFont,
+	    							kThemeStateActive,
+	    							false,
+	    							&bounds,
+	    							&baseline );
+	    		background.right = background.left + bounds.h ;
+	    		background.bottom = background.top + bounds.v ;
+	    		::EraseRect( &background ) ;
+            }
     		::DrawThemeTextBox( mString,
     							kThemeCurrentPortFont,
     							kThemeStateActive,
