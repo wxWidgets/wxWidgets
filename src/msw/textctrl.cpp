@@ -239,6 +239,11 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxValidator& validator,
                         const wxString& name)
 {
+#ifdef __WXWINCE__
+    if ((style & wxBORDER_MASK) == 0)
+        style |= wxBORDER_SIMPLE;
+#endif
+
     // base initialization
     if ( !CreateBase(parent, id, pos, size, style, validator, name) )
         return FALSE;
