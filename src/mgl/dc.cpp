@@ -249,6 +249,7 @@ void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
     // check if the DC is scaled or moved, and if yes, then
     // convert rg to device coordinates:
     if ( m_deviceOriginX != 0 || m_deviceOriginY != 0 ||
+         m_logicalOriginX != 0 || m_logicalOriginY != 0 ||
          XLOG2DEVREL(500) != 500 || YLOG2DEVREL(500) != 500 )
     {
         region_t *mrg = rg.GetMGLRegion().rgnPointer();
