@@ -133,7 +133,7 @@ public:
     // Adds HTML processor to this instance of wxHtmlWindow:
     void AddProcessor(wxHtmlProcessor *processor);
     // Adds HTML processor to wxHtmlWindow class as whole:
-    static void AddSharedProcessor(wxHtmlProcessor *processor);
+    static void AddGlobalProcessor(wxHtmlProcessor *processor);
 
 protected:
     // Scrolls to anchor of this name. (Anchor is #news
@@ -212,7 +212,7 @@ private:
 
     // html processors array:
     wxHtmlProcessorList *m_Processors;
-    static wxHtmlProcessorList *m_SharedProcessors;
+    static wxHtmlProcessorList *m_GlobalProcessors;    
 
     DECLARE_EVENT_TABLE()
 };

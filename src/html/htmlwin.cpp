@@ -141,27 +141,32 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     wxString newsrc(source);
 
     // pass HTML through registered processors:
-    if (m_Processors || m_SharedProcessors)
+    if (m_Processors || m_GlobalProcessors)
     {
-        wxHtmlProcessorList::Node *nodeL, *nodeS;
-        int prL, prS;
+        wxHtmlProcessorList::Node *nodeL, *nodeG;
+        int prL, prG;
 
         nodeL = (m_Processors) ? m_Processors->GetFirst() : NULL;
-        nodeS = (m_SharedProcessors) ? m_SharedProcessors->GetFirst() : NULL;
+        nodeG = (m_GlobalProcessors) ? m_GlobalProcessors->GetFirst() : NULL;
 
-        while (nodeL || nodeS)
+        // VS: there are two lists, global and local, both of them sorted by
+        //     priority. Since we have to go through _both_ lists with 
+        //     decreasing priority, we "merge-sort" the lists on-line by
+        //     processing that one of the two heads that has higher priority
+        //     in every iteration
+        while (nodeL || nodeG)
         {
             prL = (nodeL) ? nodeL->GetData()->GetPriority() : -1;
-            prS = (nodeS) ? nodeS->GetData()->GetPriority() : -1;
-            if (prL > prS)
+            prG = (nodeG) ? nodeG->GetData()->GetPriority() : -1;
+            if (prL > prG)
             {
                 newsrc = nodeL->GetData()->Process(newsrc);
                 nodeL = nodeL->GetNext();
             }
-            else // prL <= prS
+            else // prL <= prG
             {
-                newsrc = nodeS->GetData()->Process(newsrc);
-                nodeS = nodeS->GetNext();
+                newsrc = nodeG->GetData()->Process(newsrc);
+                nodeG = nodeG->GetNext();
             }
         }
     }
@@ -198,15 +203,17 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     wxYield(); Refresh(FALSE);
 
     m_tmpCanDrawLocks++;
-    if (m_HistoryOn && (m_HistoryPos != -1)) // store scroll position into history item
+    if (m_HistoryOn && (m_HistoryPos != -1)) 
     {
+        // store scroll position into history item:
         int x, y;
         ViewStart(&x, &y);
         (*m_History)[m_HistoryPos].SetPos(y);
     }
 
-    if (location[0] == wxT('#')) // local anchor
+    if (location[0] == wxT('#')) 
     {
+        // local anchor:
         wxString anch = location.Mid(1) /*1 to end*/;
         m_tmpCanDrawLocks--;
         rt_val = ScrollToAnchor(anch);
@@ -535,28 +542,30 @@ void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
         if (processor->GetPriority() > node->GetData()->GetPriority())
         {
             m_Processors->Insert(node, processor);
-            break;
+            return;
         }
     }
+    m_Processors->Append(processor);
 }
 
-/*static */ void wxHtmlWindow::AddSharedProcessor(wxHtmlProcessor *processor)
+/*static */ void wxHtmlWindow::AddGlobalProcessor(wxHtmlProcessor *processor)
 {
-    if (!m_SharedProcessors)
+    if (!m_GlobalProcessors)
     {
-        m_SharedProcessors = new wxHtmlProcessorList;
-        m_SharedProcessors->DeleteContents(TRUE);
+        m_GlobalProcessors = new wxHtmlProcessorList;
+        m_GlobalProcessors->DeleteContents(TRUE);
     }
     wxHtmlProcessorList::Node *node;
-
-    for (node = m_SharedProcessors->GetFirst(); node; node = node->GetNext())
+    
+    for (node = m_GlobalProcessors->GetFirst(); node; node = node->GetNext())
     {
         if (processor->GetPriority() > node->GetData()->GetPriority())
         {
-            m_SharedProcessors->Insert(node, processor);
-            break;
+            m_GlobalProcessors->Insert(node, processor);
+            return;
         }
     }
+    m_GlobalProcessors->Append(processor);
 }
 
 
@@ -565,7 +574,7 @@ wxList wxHtmlWindow::m_Filters;
 wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = NULL;
 wxCursor *wxHtmlWindow::s_cur_hand = NULL;
 wxCursor *wxHtmlWindow::s_cur_arrow = NULL;
-wxHtmlProcessorList *wxHtmlWindow::m_SharedProcessors = NULL;
+wxHtmlProcessorList *wxHtmlWindow::m_GlobalProcessors = NULL;
 
 void wxHtmlWindow::CleanUpStatics()
 {
@@ -573,10 +582,8 @@ void wxHtmlWindow::CleanUpStatics()
     m_DefaultFilter = NULL;
     m_Filters.DeleteContents(TRUE);
     m_Filters.Clear();
-
-    delete m_SharedProcessors;
-    m_SharedProcessors = NULL;
-
+    delete m_GlobalProcessors;
+    m_GlobalProcessors = NULL;
     delete s_cur_hand;
     delete s_cur_arrow;
 }
