@@ -430,7 +430,7 @@ bool wxWindowMSW::Create(wxWindow *parent,
         msflags |= WS_VISIBLE;
     }
 
-    bool retValue = MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle);
+    bool retVal = MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle);
     if (retVal)
         SetWindowLong( (HWND)m_hWnd, GWL_WNDPROC, (LONG)wxWndProc);
     return retVal;
@@ -3078,7 +3078,7 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
     // we need to handle it as well, otherwise no tooltips will be shown in
     // this case
 
-    if ( !(code == TTN_NEEDTEXTA || code == TTN_NEEDTEXTW) || ttip.empty() )
+    if ( !(code == (WXUINT) TTN_NEEDTEXTA || code == (WXUINT) TTN_NEEDTEXTW) || ttip.empty() )
     {
         // not a tooltip message or no tooltip to show anyhow
         return FALSE;
@@ -3086,7 +3086,7 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
 
     LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
 
-    if ( code == TTN_NEEDTEXTA )
+    if ( code == (WXUINT) TTN_NEEDTEXTA )
     {
         ttText->lpszText = (wxChar *)ttip.c_str();
     }
