@@ -116,7 +116,7 @@ wxWindowDC::wxWindowDC(wxWindow *window)
         m_graphicContext = new wxMacCGContext( (CGContextRef) window->MacGetCGContextRef() ) ;
         m_graphicContext->SetPen( m_pen ) ;
         m_graphicContext->SetBrush( m_brush ) ;
-        SetBackground(MacGetBackgroundBrush(window));
+        SetBackground(MacGetBackgroundBrush(window));        
     }
     else
     {
@@ -187,6 +187,9 @@ wxClientDC::wxClientDC(wxWindow *window)
         m_graphicContext = new wxMacCGContext( (CGContextRef) window->MacGetCGContextRef() ) ;
         m_graphicContext->SetPen( m_pen ) ;
         m_graphicContext->SetBrush( m_brush ) ;
+        wxSize size = window->GetClientSize() ;
+        m_ok = TRUE ;    
+        SetClippingRegion( 0 , 0 , size.x , size.y ) ;
         SetBackground(MacGetBackgroundBrush(window));
     }
     else
@@ -209,9 +212,8 @@ wxClientDC::wxClientDC(wxWindow *window)
         m_graphicContext = new wxMacCGContext( port ) ;
         m_graphicContext->SetPen( m_pen ) ;
         m_graphicContext->SetBrush( m_brush ) ;
-        SetBackground(MacGetBackgroundBrush(window));
+        m_ok = TRUE ;    
      }
-    m_ok = TRUE ;    
 #else
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     if (!rootwindow)
