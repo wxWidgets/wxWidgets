@@ -18,9 +18,11 @@
 // wxButton flags
 // ----------------------------------------------------------------------------
 
-// all these flags are obsolete
+// These two flags are obsolete
 #define wxBU_NOAUTODRAW      0x0000
 #define wxBU_AUTODRAW        0x0004
+
+// These flags affect label alignment
 #define wxBU_LEFT            0x0040
 #define wxBU_TOP             0x0080
 #define wxBU_RIGHT           0x0100
