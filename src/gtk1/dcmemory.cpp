@@ -2,9 +2,8 @@
 // Name:        dcmemory.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,10 +12,6 @@
 #endif
 
 #include "wx/dcmemory.h"
-
-#ifdef wxUSE_GDK_IMLIB
-#include "../gdk_imlib/gdk_imlib.h"
-#endif
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC
@@ -28,22 +23,14 @@ wxMemoryDC::wxMemoryDC(void)
 {
   m_ok = FALSE;
   
-#ifdef wxUSE_GDK_IMLIB
-  m_cmap = gdk_imlib_get_colormap();
-#else
-  m_cmap = gdk_colormap_get_system();
-#endif
+  m_cmap = gtk_widget_get_default_colormap();
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
 {
   m_ok = FALSE;
   
-#ifdef wxUSE_GDK_IMLIB
-  m_cmap = gdk_imlib_get_colormap();
-#else
-  m_cmap = gdk_colormap_get_system();
-#endif
+  m_cmap = gtk_widget_get_default_colormap();
 }
 
 wxMemoryDC::~wxMemoryDC(void)

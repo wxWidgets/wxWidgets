@@ -15,9 +15,7 @@
 
 #include "wx/gdicmn.h"
 
-#ifdef wxUSE_GDK_IMLIB
-#include "../gdk_imlib/gdk_imlib.h"
-#endif
+#include "gdk/gdkprivate.h"
 
 //-----------------------------------------------------------------------------
 // wxColour
@@ -186,19 +184,30 @@ void wxColour::CalcPixel( GdkColormap *cmap )
   if ((M_COLDATA->m_hasPixel) && (M_COLDATA->m_colormap == cmap)) return;
   M_COLDATA->FreeColour();
   
-#ifdef wxUSE_GDK_IMLIB
+  GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) cmap;
+  if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
+      (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
+  {
+    GdkColor *colors = cmap->colors;
+    int max = 3 * (65536);
+    int index = -1;
 
-  int r = M_COLDATA->m_color.red >> SHIFT;
-  int g = M_COLDATA->m_color.green >> SHIFT;
-  int b = M_COLDATA->m_color.blue >> SHIFT;
-  M_COLDATA->m_hasPixel = TRUE;
-  M_COLDATA->m_color.pixel = gdk_imlib_best_color_match( &r, &g, &b );
-
-#else
-
-  M_COLDATA->m_hasPixel = gdk_color_alloc( cmap, &M_COLDATA->m_color );
-  
-#endif
+    for (int i = 0; i < cmap->size; i++)
+    {
+      int rdiff = (M_COLDATA->m_color.red - colors[i].red);
+      int gdiff = (M_COLDATA->m_color.green - colors[i].green);
+      int bdiff = (M_COLDATA->m_color.blue - colors[i].blue);
+      int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
+      if (sum < max) { index = i; max = sum; }
+    }
+    
+    M_COLDATA->m_hasPixel = TRUE;
+    M_COLDATA->m_color.pixel = index;
+  }
+  else
+  {
+    M_COLDATA->m_hasPixel = gdk_color_alloc( cmap, &M_COLDATA->m_color );
+  }
   
   M_COLDATA->m_colormap = cmap;
 }

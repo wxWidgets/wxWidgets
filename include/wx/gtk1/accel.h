@@ -3,7 +3,7 @@
 // Purpose:     wxAcceleratorTable class
 // Author:      Robert
 // Modified by:
-// RCS-ID:      
+// RCS-ID:      $id$
 // Copyright:   (c) Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

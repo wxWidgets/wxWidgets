@@ -2,8 +2,9 @@
 // Name:        dnd.cpp
 // Purpose:     wxDropTarget class
 // Author:      Robert Roebling
-// Copyright:   Robert Roebling
-// Licence:     wxWindows license
+// Id:          $id$
+// Copyright:   (c) 1998 Robert Roebling
+// Licence:   	wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__

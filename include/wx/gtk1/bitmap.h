@@ -2,9 +2,8 @@
 // Name:        bitmap.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -20,6 +19,7 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/palette.h"
+#include "wx/image.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -60,7 +60,6 @@ class wxMask: public wxObject
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-// CMB 20/5/98: added xbm constructor and GetBitmap() method
 class wxBitmap: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxBitmap)
@@ -70,6 +69,7 @@ class wxBitmap: public wxObject
     wxBitmap();
     wxBitmap( int width, int height, int depth = -1 );
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
+    wxBitmap( const wxImage &image );
     wxBitmap( char **bits );
     wxBitmap( const wxBitmap& bmp );
     wxBitmap( const wxBitmap* bmp );
@@ -79,6 +79,8 @@ class wxBitmap: public wxObject
     bool operator == ( const wxBitmap& bmp );
     bool operator != ( const wxBitmap& bmp );
     bool Ok() const;
+    
+    wxImage ConvertToImage() const;
 
     int GetHeight() const;
     int GetWidth() const;
@@ -89,8 +91,6 @@ class wxBitmap: public wxObject
 
     wxMask *GetMask() const;
     void SetMask( wxMask *mask );
-
-    void Resize( int height, int width );
 
     bool SaveFile( const wxString &name, int type, wxPalette *palette = (wxPalette *) NULL );
     bool LoadFile( const wxString &name, int type = wxBITMAP_TYPE_XPM);
@@ -103,10 +103,6 @@ class wxBitmap: public wxObject
 
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;
-
-    void DestroyImage();
-    void RecreateImage();
-    void Render();
 
     // no data :-)
 };

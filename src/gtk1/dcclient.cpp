@@ -2,9 +2,8 @@
 // Name:        dcclient.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) 1998 Robert Roebling, Markus Holzem, Chris Breeze
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -138,8 +137,6 @@ void wxPaintDC::DrawLine( long x1, long y1, long x2, long y2 )
 {
   if (!Ok()) return;
   
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
-  
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
     gdk_draw_line( m_window, m_penGC, 
@@ -150,8 +147,6 @@ void wxPaintDC::DrawLine( long x1, long y1, long x2, long y2 )
 void wxPaintDC::CrossHair( long x, long y )
 {
   if (!Ok()) return;
-  
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
@@ -170,8 +165,6 @@ void wxPaintDC::CrossHair( long x, long y )
 void wxPaintDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double yc )
 {
   if (!Ok()) return;
-  
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   long xx1 = XLOG2DEV(x1); 
   long yy1 = YLOG2DEV(y1);
@@ -221,8 +214,6 @@ void wxPaintDC::DrawEllipticArc( long x, long y, long width, long height, double
 {
   if (!Ok()) return;
   
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
-  
   long xx = XLOG2DEV(x);    
   long yy = YLOG2DEV(y);
   long ww = m_signX * XLOG2DEVREL(width); 
@@ -245,8 +236,6 @@ void wxPaintDC::DrawPoint( long x, long y )
 {
   if (!Ok()) return;
   
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
-  
   if (m_pen.GetStyle() != wxTRANSPARENT)
     gdk_draw_point( m_window, m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
 }
@@ -254,8 +243,6 @@ void wxPaintDC::DrawPoint( long x, long y )
 void wxPaintDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
 {
   if (!Ok()) return;
-  
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() == wxTRANSPARENT) return;
   
@@ -272,8 +259,6 @@ void wxPaintDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
 void wxPaintDC::DrawLines( wxList *points, long xoffset, long yoffset )
 {
   if (!Ok()) return;
-  
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() == wxTRANSPARENT) return;
   
@@ -294,8 +279,6 @@ void wxPaintDC::DrawLines( wxList *points, long xoffset, long yoffset )
 void wxPaintDC::DrawPolygon( int n, wxPoint points[], long xoffset, long yoffset, int WXUNUSED(fillStyle) )
 {
   if (!Ok()) return;
-  
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
    if (!n) return;    // Nothing to draw
    GdkPoint *gdkpoints = new GdkPoint[n+1];
@@ -321,8 +304,6 @@ void wxPaintDC::DrawPolygon( int n, wxPoint points[], long xoffset, long yoffset
 void wxPaintDC::DrawPolygon( wxList *lines, long xoffset, long yoffset, int WXUNUSED(fillStyle))
 {
   if (!Ok()) return;
-  
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
    int n = lines->Number();
    GdkPoint *gdkpoints = new GdkPoint[n];
@@ -356,8 +337,6 @@ void wxPaintDC::DrawRectangle( long x, long y, long width, long height )
 {
   if (!Ok()) return;
 
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
-  
   long xx = XLOG2DEV(x);
   long yy = YLOG2DEV(y);
   long ww = m_signX * XLOG2DEVREL(width);
@@ -380,8 +359,6 @@ void wxPaintDC::DrawRectangle( long x, long y, long width, long height )
 void wxPaintDC::DrawRoundedRectangle( long x, long y, long width, long height, double radius )
 {
   if (!Ok()) return;
-  
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
   
@@ -448,8 +425,6 @@ void wxPaintDC::DrawEllipse( long x, long y, long width, long height )
 {
   if (!Ok()) return;
   
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
-  
   long xx = XLOG2DEV(x);    
   long yy = YLOG2DEV(y);
   long ww = m_signX * XLOG2DEVREL(width); 
@@ -477,8 +452,6 @@ void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
   
   if (!icon.Ok()) return;
   
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
-  
   int xx = XLOG2DEV(x);
   int yy = YLOG2DEV(y);
   
@@ -505,8 +478,6 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
        wxDC *source, long xsrc, long ysrc, int WXUNUSED(logical_func), bool WXUNUSED(useMask) )
 {
   if (!Ok()) return FALSE;
-  
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_isMemDC)
   {
@@ -547,8 +518,6 @@ void wxPaintDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(us
 {
   if (!Ok()) return;
 
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
-  
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
 
   x = XLOG2DEV(x);
@@ -617,8 +586,6 @@ long wxPaintDC::GetCharHeight(void)
 void wxPaintDC::Clear(void)
 {
   if (!Ok()) return;
-  
-  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (!m_isMemDC)
   {

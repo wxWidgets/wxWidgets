@@ -2,9 +2,8 @@
 // Name:        imaglist.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -91,15 +90,6 @@ bool wxImageList::RemoveAll()
 
 bool wxImageList::GetSize( int index, int &width, int &height ) const
 {
-#ifdef __WXGTK__
-
-  width = m_width;
-  height = m_height;
-  
-  return (m_images.Nth( index ) != NULL);
-  
-#else
-  
   wxNode *node = m_images.Nth( index );
   if (node)
   {
@@ -114,8 +104,6 @@ bool wxImageList::GetSize( int index, int &width, int &height ) const
     height = 0;
     return FALSE;
   }
-
-#endif  
 }
 
 bool wxImageList::Draw( int index, wxDC &dc, int x, int y,
@@ -124,19 +112,6 @@ bool wxImageList::Draw( int index, wxDC &dc, int x, int y,
   wxNode *node = m_images.Nth( index );
   if (!node) return FALSE;
   wxBitmap *bm = (wxBitmap*)node->Data();
-  
-#ifdef __WXGTK__
-
-  // As X doesn't have a standard size for icons, we resize here.
-  // Otherwise we'd simply have to forbid different bitmap sizes.
-
-  if ((m_width != bm->GetWidth()) ||
-      (m_height != bm->GetHeight()))
-  {
-    bm->Resize( m_width, m_height );
-  }
-  
-#endif  
   
   wxIcon *icon = (wxIcon*)bm;
   dc.DrawIcon( *icon, x, y, (flags & wxIMAGELIST_DRAW_TRANSPARENT) > 0 );

@@ -25,6 +25,7 @@ LIB_CPP_SRC=\
  common/hash.cpp \
  common/helpbase.cpp \
  common/intl.cpp \
+ common/image.cpp \
  common/ipcbase.cpp \
  common/layout.cpp \
  common/list.cpp \
@@ -167,12 +168,3 @@ LIB_C_SRC=\
  zlib/infcodes.c \
  zlib/infutil.c \
  zlib/inffast.c \
-\
- gdk_imlib/cache.c \
- gdk_imlib/colors.c \
- gdk_imlib/globals.c \
- gdk_imlib/load.c \
- gdk_imlib/misc.c \
- gdk_imlib/rend.c \
- gdk_imlib/save.c \
- gdk_imlib/utils.c

@@ -39,7 +39,6 @@ all::
 	@if test ! -d generic; then mkdir generic; fi
 	@if test ! -d png; then mkdir png; fi
 	@if test ! -d zlib; then mkdir zlib; fi
-	@if test ! -d gdk_imlib; then mkdir gdk_imlib; fi
 	@if test ! -d iodbc; then mkdir iodbc; fi
 
 install::
@@ -118,13 +117,11 @@ clean::
 	$(RM) -rf generic
 	$(RM) -rf png
 	$(RM) -rf zlib
-	$(RM) -rf gdk_imlib
 	$(RM) -rf iodbc
 	@$(RM) lexer.c parser.c
 
 #additional things needed for compile
-ADD_COMPILE= \
-   -DHAVE_LIBPNG -DDJPEG_PROG=\"\" -DCJPEG_PROG=\"\"
+ADD_COMPILE=
 
 # include the definitions now
 include ../../template.mak

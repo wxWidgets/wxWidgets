@@ -1,10 +1,9 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Name:        wx_gtk.h
-// Purpose:
+// Purpose:     native GTK+ widget for wxWindows
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
