@@ -263,7 +263,7 @@ int wxDC::GetDepth() const
 
 void wxDC::Clear()
 {
-   // TODO
+    ::GpiErase(m_hPS);
 }
 
 void wxDC::DoFloodFill(
