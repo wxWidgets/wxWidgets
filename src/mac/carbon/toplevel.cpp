@@ -1193,6 +1193,11 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
         }
         if ( style & wxFULLSCREEN_NOTOOLBAR )
         {
+            // TODO
+        }
+        if ( style & wxFULLSCREEN_NOSTATUSBAR )
+        {
+            // TODO
         }
         SetSize( x , y , w, h ) ;
     }
