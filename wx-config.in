@@ -957,22 +957,18 @@ if is_monolithic; then
 
 else    # MONOLITHIC = 0
 
-    # Import everything by default, and base if it was omitted.
+    # Import everything by default, expand std if specified, or add base if omitted.
     if [ -z "$wx_libs" ]; then
         wx_libs="@CORE_GUI_LIBS@ @CORE_BASE_LIBS@"
-    elif ! match_field base $wx_libs ; then
-        wx_libs="$wx_libs base"
-    fi
-
-    # Expand the magic library 'std' to the default set.
-    # Only add those not already specified to future-proof
-    # against changes to std which would otherwise break
-    # people's builds.
-    if match_field std $wx_libs; then
+    elif match_field std $wx_libs; then
+        # Bubble any libs that were already specified to the end
+        # of the list and ensure static linking order is retained.
         wx_libs=$(remove_field std $wx_libs)
         for i in @CORE_GUI_LIBS@ @CORE_BASE_LIBS@; do
-            match_field "$i" $wx_libs || wx_libs="$wx_libs $i"
+            wx_libs="$(remove_field $i $wx_libs) $i"
         done
+    elif ! match_field base $wx_libs ; then
+        wx_libs="$wx_libs base"
     fi
 
     using_gui=no
