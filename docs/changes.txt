@@ -25,6 +25,7 @@ wxHTML:
 
 - new HTML parser with correct parsing of character entities and fixes
   to tags parsing
+- added support for animated GIFs
 
 2.3.1
 -----
