@@ -4,108 +4,128 @@ Listed here are the depreciated and incompatable changes made to wxWidgets.
 
 For other changes (such as additional features, bug fixes, etc.) see the changes.txt file located in the docs directory of your wxWidgets directory.
 
+
+
 \subsection{Incompatable changes since 2.4.x}\label{incompatiblesince24}
 
 \subsubsection{New window repainting behaviour}\label{newwindowrepainting}
 
-Windows are no longer fully repainted when resized, use new style wxFULL\_REPAINT\_ON\_RESIZE to force this (wxNO\_FULL\_REPAINT\_ON\_RESIZE still exists but doesn't do anything any more, this behaviour is default now).
+Windows are no longer fully repainted when resized, use new style \windowstyle{wxFULL\_REPAINT\_ON\_RESIZE} to force this (\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE} still exists but doesn't do anything any more, this behaviour is default now).
+
+
 
 \subsubsection{Window class member changes}\label{windowclassmemberchanges}
 
-wxWindow::m\_font and m\_backgroundColour/m\_foregroundColour are no longer always set, use GetFont(), GetBack/ForegroundColour() to access them, and they will be dynamically determined if necessary.
+wxWindow::m\_font and m\_backgroundColour/m\_foregroundColour are no longer always set, use \helpref{GetFont()}{wxwindowgetfont}, \helpref{GetBack}{wxwindowgetbackgroundcolour}/\helpref{ForegroundColour()}{wxwindowgetforegroundcolour} to access them, and they will be dynamically determined if necessary.
+
+
 
 \subsubsection{Sizers Internal Overhaul}\label{sizersinternaloverhaul}
 
-The Sizers have had some fundamental internal changes in the 2.5.2 and 2.5.3 releases intended to make them do more of the "Right Thing" but also be as backwards compatible as possible.  First a bit about how things used to work:
+\helpref{The Sizers}{sizeroverview} have had some fundamental internal changes in the 2.5.2 and 2.5.3 releases intended to make them do more of the "Right Thing" but also be as backwards compatible as possible.  First a bit about how things used to work:
 
-    * The size that a window had when Add()ed to the sizer was assumed
+\begin{itemize}\itemsep=0pt
+\item The size that a window had when \helpref{Add()}{wxsizeradd}ed to the sizer was assumed
       to be its minimal size, and that size would always be used by
       default when calculating layout size and positions, and the
       sizer itself would keep track of that minimal size.
 
-    * If the window item was Add()ed with the wxADJUST\_MINSIZE flag
-      then when layout was calculated the item's GetBestSize would be
+\item If the window item was \helpref{Add()}{wxsizeradd}ed with the \windowstyle{wxADJUST\_MINSIZE} flag
+      then when layout was calculated the item's \helpref{GetBestSize}{wxwindowgetbestsize} would be
       used to reset the minimal size that the sizer used.
+\end{itemize}
 
   The main thrust of the new Sizer changes was to make behaviour like
-  wxADJUST\_MINSIZE be the default, and also to push the tracking of
+  \windowstyle{wxADJUST\_MINSIZE} be the default, and also to push the tracking of
   the minimal size to the window itself (since it knows its own needs)
   instead of having the sizer take care of it.  Consequently these
   changes were made:
 
-    * The wxFIXED\_MINSIZE flag was added to allow for the old
+\begin{itemize}\itemsep=0pt
+\item The \windowstyle{wxFIXED\_MINSIZE} flag was added to allow for the old
       behaviour.  When this flag is used the size a window has when
-      Add()ed to the sizer will be treated as its minimal size and it
+      \helpref{Add()}{wxsizeradd}ed to the sizer will be treated as its minimal size and it
       will not be readjusted on each layout.
 
-    * The min size stored in wxWindow and settable with SetSizeHints or
-      SetMinSize will by default be used by the sizer (if it was set)
+\item The min size stored in wxWindow and settable with \helpref{SetSizeHints}{wxwindowsetsizehints} or
+      \helpref{SetMinSize}{wxwindowsetminsize} will by default be used by the sizer (if it was set)
       as the minimal size of the sizer item.  If the minsize was not
       set (or was only partially set) then the window's best size is
       fetched and it is used instead of (or blended with) the minsize.
-      wxWindow:GetBestFittingSize was added to facilitate getting the
+      \helpref{wxWindow::GetBestFittingSize}{wxwindowgetbestfittingsize} was added to facilitate getting the
       size to be used by the sizers.
 
-    * The best size of a window is cached so it doesn't need to
-      recalculated on every layout.  wxWindow::InvalidateBestSize was
+\item The best size of a window is cached so it doesn't need to
+      recalculated on every layout. \helpref{wxWindow::InvalidateBestSize}{wxwindowinvalidatebestsize} was
       added and should be called (usually just internally in control
       methods) whenever something is done that would make the best
       size change.
 
-    * All wxControls were changed to set the minsize to what is passed
-      to the constructor or Create method, and also to set the real
+\item All \helpref{wxControls}{wxcontrol} were changed to set the minsize to what is passed
+      to the constructor or their Create method, and also to set the real
       size of the control to the blending of the minsize and bestsize.
-      wxWindow::SetBestFittingSize was added to help with this,
+      \helpref{wxWindow::SetBestFittingSize}{wxwindowsetbestfittingsize} was added to help with this,
       although most controls don't need to call it directly because it
       is called indirectly via the SetInitialSize called in the base
       classes.
+\end{itemize}
 
   At this time, the only situation known not to work the same as
   before is the following:
 
-    win = new SomeWidget(parent);
-    win->SetSize(SomeNonDefaultSize);
-    sizer->Add(win);
+\begin{verbatim}
+win = new SomeWidget(parent);
+win->SetSize(SomeNonDefaultSize);
+sizer->Add(win);
+\end{verbatim}
 
   In this case the old code would have used the new size as the
   minimum, but now the sizer will use the default size as the minimum
   rather than the size set later.  It is an easy fix though, just move
   the specification of the size to the constructor (assuming that
   SomeWidget will set its minsize there like the rest of the controls
-  do) or call SetMinSize instead of SetSize.
+  do) or call \helpref{SetMinSize}{wxwindowsetminsize} instead of \helpref{SetSize}{wxwindowsetsize}.
 
-  In order to fit well with this new scheme of things, all wxControls
+  In order to fit well with this new scheme of things, all \helpref{wxControls}{wxcontrol}
   or custom controls should do the following things.  (Depending on
   how they are used you may also want to do the same thing for
   non-control custom windows.)
 
-    * Either override or inherit a meaningful DoGetBestSize method
+\begin{itemize}\itemsep=0pt
+\item Either override or inherit a meaningful DoGetBestSize method
       that calculates whatever size is "best" for the control.  Once
       that size is calculated then there should normally be a call to
       CacheBestSize to save it for later use, unless for some reason
       you want the best size to be recalculated on every layout.
 
-    * Any method that changes the attributes of the control such that
+\item Any method that changes the attributes of the control such that
       the best size will change should call InvalidateBestSize so it
       will be recalculated the next time it is needed.
 
-    * The control's constructor and/or Create method should ensure
+\item The control's constructor and/or Create method should ensure
       that the minsize is set to the size passed in, and that the
       control is sized to a blending of the min size and best size.
       This can be done by calling SetBestFittingSize.
+\end{itemize}
+
+
 
 \subsubsection{Massive wxURL Rewrite}\label{wxurlrewrite}
 
 wxURL has undergone some radical changes.
 
-    * Many accessors of wxURL - GetHostName, GetProtocolName, and GetPath,
+\begin{itemize}\itemsep=0pt
+\item Many accessors of wxURL - GetHostName, GetProtocolName, and GetPath,
       have been replaced by its parent's (wxURI) counterparts - GetServer,
       GetScheme, and GetPath, respectively.
 
-    * ConvertToValidURI has been replaced by wxURI.  Do not use
+\item ConvertToValidURI has been replaced by wxURI.  Do not use
       ConvertToValidURI for future applications.
 
-    * ConvertFromURI has been replaced by wxURI::Unescape.
+\item ConvertFromURI has been replaced by wxURI::Unescape.
+\end{itemize}
+
+
 
 \subsubsection{Less drastic incompatable changes since 2.4.x}\label{24incompatiblelessdrastic}
 
@@ -189,6 +209,8 @@ wxURL has undergone some radical changes.
   writeen with if(Add(..)==true) will not work. Use if(Add(..)) instead.
 
 - New wxBrush::IsHatch() checking for brush type replaces IS_HATCH macro.
+
+
 
 \subsection{Depreciated changes since 2.4.x}\label{depreciatedsince24}
 
