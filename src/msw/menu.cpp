@@ -778,7 +778,8 @@ bool wxMenuBar::IsEnabled(int id) const
 
     int flag = ::GetMenuState(GetHmenuOf(itemMenu), id, MF_BYCOMMAND) ;
 
-    return (flag & MF_ENABLED) != 0;
+    // don't "and" with MF_ENABLED because its value is 0
+    return (flag & MF_DISABLED) == 0;
 }
 
 void wxMenuBar::SetLabel(int id, const wxString& label)
