@@ -91,14 +91,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// module globals
-// ----------------------------------------------------------------------------
-
-#if wxUSE_ON_FATAL_EXCEPTION
-    static bool gs_handleExceptions = FALSE;
-#endif
-
-// ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
@@ -1210,41 +1202,4 @@ extern long wxCharsetToCodepage(const wxChar *name)
 }
 
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
-
-// ----------------------------------------------------------------------------
-// wxApp::OnFatalException() support
-// ----------------------------------------------------------------------------
-
-bool wxHandleFatalExceptions(bool doit)
-{
-#if wxUSE_ON_FATAL_EXCEPTION
-    // assume this can only be called from the main thread
-    gs_handleExceptions = doit;
-
-    return TRUE;
-#else
-    wxFAIL_MSG(_T("set wxUSE_ON_FATAL_EXCEPTION to 1 to use this function"));
-
-    (void)doit;
-    return FALSE;
-#endif
-}
-
-#if wxUSE_ON_FATAL_EXCEPTION
-
-extern unsigned long wxGlobalSEHandler()
-{
-    if ( gs_handleExceptions && wxTheApp )
-    {
-        // give the user a chance to do something special about this
-        wxTheApp->OnFatalException();
-
-        // this will execute our handler and terminate the process
-        return EXCEPTION_EXECUTE_HANDLER;
-    }
-
-    return EXCEPTION_CONTINUE_SEARCH;
-}
-
-#endif // wxUSE_ON_FATAL_EXCEPTION
 
