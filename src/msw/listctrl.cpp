@@ -1906,7 +1906,8 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     int i;
     if (drawHRules)
     {
-        for (i = 0; i < itemCount; i++)
+        long top = GetTopItem();
+        for (i = top; i < top + GetCountPerPage() + 1; i++)
         {
             if (GetItemRect(i, itemRect))
             {
