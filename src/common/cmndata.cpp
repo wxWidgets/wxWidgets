@@ -248,13 +248,21 @@ wxPrintData::~wxPrintData()
 #if TARGET_CARBON
     if (m_macPageFormat != kPMNoPageFormat)
     {
+  #if PM_USE_SESSION_APIS
+        (void)PMRelease(m_macPageFormat);
+  #else
         (void)PMDisposePageFormat(m_macPageFormat);
+  #endif
         m_macPageFormat = kPMNoPageFormat;
     }
 
     if (m_macPrintSettings != kPMNoPrintSettings)
     {
+  #if PM_USE_SESSION_APIS
+        (void)PMRelease(m_macPrintSettings);
+  #else
         (void)PMDisposePrintSettings(m_macPrintSettings);
+  #endif
         m_macPrintSettings = kPMNoPrintSettings;
     }
 #else
