@@ -66,7 +66,7 @@ public:
     DocDeclStr(
         void, SetAppName(const wxString& name),
         "Set the application name. This value may be used automatically\n"
-        "by wxConfig and such.");
+        "by wx.Config and such.");
 
     DocDeclStr(
         wxString, GetClassName() const,
@@ -82,7 +82,7 @@ public:
     DocDeclStr(
         void, SetVendorName(const wxString& name),
         "Set the application's vendor name. This value may be used automatically\n"
-        "by wxConfig and such.");
+        "by wx.Config and such.");
 
 
     DocDeclStr(
@@ -90,13 +90,13 @@ public:
         "Create the app traits object to which we delegate for everything which either\n"
         "should be configurable by the user (then he can change the default behaviour\n"
         "simply by overriding CreateTraits() and returning his own traits object) or\n"
-        "which is GUI/console dependent as then wxAppTraits allows us to abstract the\n"
+        "which is GUI/console dependent as then wx.AppTraits allows us to abstract the\n"
         "differences behind the common facade");
 
 
     DocDeclStr(
         virtual void, ProcessPendingEvents(),
-        "Process all events in the wxPendingEvents list -- it is necessary to call this\n"
+        "Process all events in the Pending Events list -- it is necessary to call this\n"
         "function to process posted events. This happens during each event loop\n"
         "iteration.");
 
@@ -222,10 +222,10 @@ public:
         "Set the OnAssert behaviour for debug and hybrid builds.  The following flags\n"
         "may be or'd together:\n"
         "\n"
-        " wxPYAPP_ASSERT_SUPPRESS         Don't do anything\n"
-        " wxPYAPP_ASSERT_EXCEPTION        Turn it into a Python exception if possible (default)\n"
-        " wxPYAPP_ASSERT_DIALOG           Display a message dialog\n"
-        " wxPYAPP_ASSERT_LOG              Write the assertion info to the wxLog\n");
+        " wx.PYAPP_ASSERT_SUPPRESS         Don't do anything\n"
+        " wx.PYAPP_ASSERT_EXCEPTION        Turn it into a Python exception if possible (default)\n"
+        " wx.PYAPP_ASSERT_DIALOG           Display a message dialog\n"
+        " wx.PYAPP_ASSERT_LOG              Write the assertion info to the wx.Log\n");
     
     DocDeclStr(
         int,  GetAssertMode(),
@@ -312,7 +312,7 @@ DocStr(wxApp_CleanUp,
 
 
 DocStr(wxGetApp,
-       "Return a reference to the current wxApp object.");
+       "Return a reference to the current wx.App object.");
 %inline %{
     wxPyApp* wxGetApp() {
         return (wxPyApp*)wxTheApp;

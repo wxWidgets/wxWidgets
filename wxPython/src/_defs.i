@@ -196,6 +196,33 @@ typedef unsigned char   byte;
 %enddef
 
 //---------------------------------------------------------------------------
+// Forward declarations and %renames for some classes, so the autodoc strings
+// will be able to use the right types even when the real class declaration is
+// not in the module being processed.
+
+#ifdef BUILDING_RENAMERS
+    #define FORWARD_DECLARE(wxName, Name)
+#else
+    %define FORWARD_DECLARE(wxName, Name)
+        %rename(Name) wxName;
+        class wxName;
+    %enddef
+#endif
+
+FORWARD_DECLARE(wxString,       String);
+FORWARD_DECLARE(wxBitmap,       Bitmap);
+FORWARD_DECLARE(wxDateTime,     DateTime);
+FORWARD_DECLARE(wxInputStream,  InputStream);
+FORWARD_DECLARE(wxDC,           DC);
+FORWARD_DECLARE(wxCursor,       Cursor);
+FORWARD_DECLARE(wxRegion,       Region);
+FORWARD_DECLARE(wxColour,       Colour);
+FORWARD_DECLARE(wxFont,         Font);
+FORWARD_DECLARE(wxCaret,        Caret);
+FORWARD_DECLARE(wxToolTip,      ToolTip);
+FORWARD_DECLARE(wxPyDropTarget, PyDropTarget);
+
+//---------------------------------------------------------------------------
 
 // General numeric #define's and etc.  Making them all enums makes SWIG use the
 // real macro when making the Python Int
@@ -832,6 +859,7 @@ enum wxItemKind
     wxITEM_RADIO,
     wxITEM_MAX
 };
+
 
 enum wxHitTest
 {

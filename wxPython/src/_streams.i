@@ -68,7 +68,6 @@ enum wxSeekMode
 };
 
 
-
 %name(InputStream) class wxPyInputStream {
 public:
     %extend {

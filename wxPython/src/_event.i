@@ -991,6 +991,8 @@ enum wxUpdateUIMode
     wxUPDATE_UI_PROCESS_SPECIFIED
 };
 
+
+
 class wxUpdateUIEvent : public wxCommandEvent
 {
 public:
@@ -1183,6 +1185,7 @@ enum wxIdleMode
         // the wxWS_EX_PROCESS_IDLE flag specified
     wxIDLE_PROCESS_SPECIFIED
 };
+
 
 class wxIdleEvent : public wxEvent
 {

@@ -44,18 +44,16 @@ wx = _sys.modules[__name__]
 
 #endif
 
-//---------------------------------------------------------------------------
 
-%{
-    DECLARE_DEF_STRING(EmptyString);
-//    DECLARE_DEF_STRING(PanelNameStr);
-%}
 
 //---------------------------------------------------------------------------
 // Include all the files that make up the core module
 
 // wxObject, functions and other base stuff
 %include _defs.i
+
+MAKE_CONST_WXSTRING(EmptyString);
+
 %include _obj.i
 %include _gdicmn.i
 %include _streams.i

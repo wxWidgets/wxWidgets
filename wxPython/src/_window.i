@@ -546,13 +546,13 @@ public:
 
     DocDeclAStr(
         void, GetTextExtent(const wxString& string, int *OUTPUT, int *OUTPUT),
-        "GetTextExtent(wxString string) -> (width, height)",
+        "GetTextExtent(String string) -> (width, height)",
         "Get the width and height of the text using the current font.");
     DocDeclAStrName(
         void, GetTextExtent(const wxString& string,
                             int *OUTPUT, int *OUTPUT, int *OUTPUT, int* OUTPUT, 
                             const wxFont* font = NULL),
-        "GetFullTextExtent(wxString string, Font font=None) ->\n   (width, height, descent, externalLeading)",
+        "GetFullTextExtent(String string, Font font=None) ->\n   (width, height, descent, externalLeading)",
         "Get the width, height, decent and leading of the text using the current or specified font.",
         GetFullTextExtent);
 

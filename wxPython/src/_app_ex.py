@@ -21,8 +21,8 @@ class PyOnDemandOutputWindow:
     def CreateOutputWindow(self, st):
         self.frame = wx.Frame(self.parent, -1, self.title,
                               style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
-        self.text  = wxTextCtrl(self.frame, -1, "",
-                                style = wx.TE_MULTILINE | wx.TE_READONLY)
+        self.text  = wx.TextCtrl(self.frame, -1, "",
+                                 style = wx.TE_MULTILINE | wx.TE_READONLY)
         self.frame.SetSize((450, 300))
         self.frame.Show(True)
         EVT_CLOSE(self.frame, self.OnCloseWindow)
@@ -180,7 +180,7 @@ class PyWidgetTester(wx.App):
         wx.App.__init__(self, 0)
 
     def OnInit(self):
-        self.frame = wxFrame(None, -1, "Widget Tester", pos=(0,0), size=self.size)
+        self.frame = wx.Frame(None, -1, "Widget Tester", pos=(0,0), size=self.size)
         self.SetTopWindow(self.frame)
         return True
 
