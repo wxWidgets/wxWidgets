@@ -13,14 +13,28 @@ import  wx.lib.plot
 # the file, as expected.                                        |
 ################################################################/
 
-#----------------------------------------------------------------------
+#---------------------------------------------------------------------------
+
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Show the PyPlot sample", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        win = wx.lib.plot.TestFrame(self, -1, "PlotCanvas Demo")
+        win.Show()
+
+#---------------------------------------------------------------------------
+
 
 def runTest(frame, nb, log):
-    # Loading the demo class directly from the library's
-    # test code.
-    win = wx.lib.plot.TestFrame(nb, -1, "PlotCanvas Demo")
-    frame.otherWin = win
-    return None
+    win = TestPanel(nb, log)
+    return win
+
 
 #----------------------------------------------------------------------
 

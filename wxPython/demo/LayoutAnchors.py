@@ -172,15 +172,28 @@ class AnchorsDemoFrame(wx.Frame):
     def OnOkButtonButton(self, event):
         self.Close()
 
-#----------------------------------------------------------------------
+#---------------------------------------------------------------------------
+
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Show the LayoutAnchors sample", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        win = AnchorsDemoFrame(self)
+        win.Show(True)
+
+
+#---------------------------------------------------------------------------
+
 
 def runTest(frame, nb, log):
-    win = AnchorsDemoFrame(frame)
-    frame.otherWin = win
-    win.Show(True)
-
-
-
+    win = TestPanel(nb, log)
+    return win
 
 #----------------------------------------------------------------------
 

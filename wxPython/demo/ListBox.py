@@ -76,7 +76,7 @@ class TestListBox(wx.Panel):
 
         wx.StaticText(self, -1, "This example uses the wx.ListBox control.", (45, 10))
         wx.StaticText(self, -1, "Select one:", (15, 50), (65, 18))
-        self.lb1 = wx.ListBox(self, 60, (80, 50), (80, 120), sampleList, wx.LB_SINGLE)
+        self.lb1 = wx.ListBox(self, 60, (80, 50), (90, 120), sampleList, wx.LB_SINGLE)
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.lb1)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, self.lb1)
         self.lb1.Bind(wx.EVT_RIGHT_UP, self.EvtRightButton)
@@ -86,7 +86,7 @@ class TestListBox(wx.Panel):
 
 
         wx.StaticText(self, -1, "Select many:", (200, 50), (65, 18))
-        self.lb2 = wx.ListBox(self, 70, (300, 50), (80, 120), sampleList, wx.LB_EXTENDED)
+        self.lb2 = wx.ListBox(self, 70, (300, 50), (90, 120), sampleList, wx.LB_EXTENDED)
         self.Bind(wx.EVT_LISTBOX, self.EvtMultiListBox, self.lb2)
         self.lb2.Bind(wx.EVT_RIGHT_UP, self.EvtRightButton)
         self.lb2.SetSelection(0)
@@ -96,7 +96,7 @@ class TestListBox(wx.Panel):
                                    'test abcd' ]
         sampleList.sort()
         wx.StaticText(self, -1, "Find Prefix:", (15, 250))
-        fp = FindPrefixListBox(self, -1, (80, 250), (80, 120), sampleList, wx.LB_SINGLE)
+        fp = FindPrefixListBox(self, -1, (80, 250), (90, 120), sampleList, wx.LB_SINGLE)
         fp.SetSelection(0)
 
 
