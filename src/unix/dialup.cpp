@@ -250,21 +250,18 @@ class AutoCheckTimer : public wxTimer
 {
 public:
    AutoCheckTimer(wxDialUpManagerImpl *dupman)
-      {
-         m_dupman = dupman;
-         m_started = FALSE;
-      }
-
-   virtual bool Start( int millisecs = -1, bool WXUNUSED(one_shot) = FALSE )
-      { m_started = TRUE; return wxTimer::Start(millisecs, FALSE); }
+   {
+       m_dupman = dupman;
+   }
 
    virtual void Notify()
-      { wxLogTrace(wxT("Checking dial up network status.")); m_dupman->CheckStatus(); }
+   {
+       wxLogTrace(_T("dialup"), wxT("Checking dial up network status."));
 
-   virtual void Stop()
-      { if ( m_started ) wxTimer::Stop(); }
+       m_dupman->CheckStatus();
+   }
+
 public:
-   bool m_started;
    wxDialUpManagerImpl *m_dupman;
 };
 
