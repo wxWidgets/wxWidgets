@@ -978,7 +978,7 @@ void wxApp::MacSuspend( bool convertClipboard )
 {
     // we have to deactive the window manually
 
-    wxWindow* window = GetTopWindow() ;
+    wxTopLevelWindow* window = (wxTopLevelWindow*) GetTopWindow() ;
     if ( window )
         window->MacActivate( MacGetCurrentEvent() , false ) ;
 
@@ -1111,7 +1111,7 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
         ::GetWindowAttributes( frontWindow , &frontWindowAttributes ) ;
 
     short windowPart = ::FindWindow(ev->where, &window);
-    wxWindow* win = wxFindWinFromMacWindow( window ) ;
+    wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
     if ( wxPendingDelete.Member(win) )
         return ;
 
@@ -1274,7 +1274,7 @@ void wxApp::MacHandleMouseUpEvent( EventRecord *ev )
             break ;
         default:
             {
-                wxWindow* win = wxFindWinFromMacWindow( window ) ;
+                wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
                 if ( win )
                     win->MacMouseUp( ev , windowPart ) ;
             }
@@ -1556,7 +1556,7 @@ void wxApp::MacHandleActivateEvent( EventRecord *ev )
             // if it is a floater we activate/deactivate the front non-floating window instead
             window = ::FrontNonFloatingWindow() ;
         }
-        wxWindow* win = wxFindWinFromMacWindow( window ) ;
+        wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
         if ( win )
             win->MacActivate( ev , activate ) ;
     }
@@ -1565,11 +1565,11 @@ void wxApp::MacHandleActivateEvent( EventRecord *ev )
 void wxApp::MacHandleUpdateEvent( EventRecord *ev )
 {
     WindowRef window = (WindowRef) ev->message ;
-    wxWindow * win = wxFindWinFromMacWindow( window ) ;
+    wxTopLevelWindowMac * win = wxFindWinFromMacWindow( window ) ;
     if ( win )
     {
         if ( !wxPendingDelete.Member(win) )
-            win->MacUpdate( ev ) ;
+            win->MacUpdate( ev->when ) ;
     }
     else
     {
@@ -1626,13 +1626,13 @@ void wxApp::MacHandleOSEvent( EventRecord *ev )
 
                     if ( oldFrontWindow )
                     {
-                        wxWindow* win = wxFindWinFromMacWindow( oldFrontWindow ) ;
+                        wxTopLevelWindowMac* win = wxFindWinFromMacWindow( oldFrontWindow ) ;
                         if ( win )
                             win->MacActivate( ev , false ) ;
                     }
                     if ( newFrontWindow )
                     {
-                        wxWindow* win = wxFindWinFromMacWindow( newFrontWindow ) ;
+                        wxTopLevelWindowMac* win = wxFindWinFromMacWindow( newFrontWindow ) ;
                         if ( win )
                             win->MacActivate( ev , true ) ;
                     }
@@ -1726,7 +1726,7 @@ void wxApp::MacHandleOSEvent( EventRecord *ev )
                             ::GetNextEvent(0, &tmp);
                             ev->modifiers = tmp.modifiers;
                             
-                            wxWindow* win = wxFindWinFromMacWindow( window ) ;
+                            wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
                             if ( win )
                                 win->MacMouseMoved( ev , windowPart ) ;
                             else
