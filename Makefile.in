@@ -217,74 +217,20 @@ PNGOBJS     = \
 
 FREETYPEOBJS = \
 		ftsystem.o \
-		ahangles.o \
-		ahglobal.o \
-		ahglyph.o \
-		ahhint.o \
-		ahmodule.o \
-		ahoptim.o \
 		autohint.o \
 		ftbase.o \
-		ftcalc.o \
 		ftdebug.o \
-		ftextend.o \
 		ftglyph.o \
 		ftinit.o \
-		ftlist.o \
 		ftmm.o \
-		ftnames.o \
-		ftobjs.o \
-		ftoutln.o \
-		ftstream.o \
 		cff.o \
-		t2driver.o \
-		t2gload.o \
-		t2load.o \
-		t2objs.o \
-		t2parse.o \
-		cidafm.o \
-		cidgload.o \
-		cidload.o \
-		cidobjs.o \
-		cidparse.o \
-		ciddriver.o \
 		type1cid.o \
-		fonddrvr.o \
-		oltypes.o \
-		psmodule.o \
 		psnames.o \
-		ftraster.o \
-		ftrend1.o \
+		psmodule.o \
 		raster1.o \
-		sfdriver.o \
 		sfnt.o \
-		sfobjs.o \
-		ttcmap.o \
-		ttload.o \
-		ttsbits.o \
-		ftgrays.o \
-		ftsmooth.o \
 		smooth.o \
 		truetype.o \
-		ttdriver.o \
-		ttgload.o \
-		ttobjs.o \
-		ttpload.o \
-		t1afm.o \
-		t1driver.o \
-		t1gload.o \
-		t1hinter.o \
-		t1load.o \
-		t1objs.o \
-		t1parse.o \
-		t1tokens.o \
-		type1.o \
-		z1afm.o \
-		z1driver.o \
-		z1gload.o \
-		z1load.o \
-		z1objs.o \
-		z1parse.o \
 		type1z.o \
 		winfnt.o
 
