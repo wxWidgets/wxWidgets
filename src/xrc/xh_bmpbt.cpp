@@ -25,25 +25,27 @@
 wxBitmapButtonXmlHandler::wxBitmapButtonXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE(wxBU_AUTODRAW);
-    ADD_STYLE(wxBU_LEFT);
-    ADD_STYLE(wxBU_RIGHT);
-    ADD_STYLE(wxBU_TOP);
-    ADD_STYLE(wxBU_BOTTOM);
+    XRC_ADD_STYLE(wxBU_AUTODRAW);
+    XRC_ADD_STYLE(wxBU_LEFT);
+    XRC_ADD_STYLE(wxBU_RIGHT);
+    XRC_ADD_STYLE(wxBU_TOP);
+    XRC_ADD_STYLE(wxBU_BOTTOM);
     AddWindowStyles();
 }
 
-
 wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
 { 
-    wxBitmapButton *button = new wxBitmapButton(m_parentAsWindow,
-                                    GetID(),
-                                    GetBitmap(wxT("bitmap")),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(wxT("style"), wxBU_AUTODRAW),
-                                    wxDefaultValidator,
-                                    GetName());
-    if (GetBool(wxT("default"), 0) == 1) button->SetDefault();
+    XRC_MAKE_INSTANCE(button, wxBitmapButton)
+
+    button->Create(m_parentAsWindow,
+                   GetID(),
+                   GetBitmap(wxT("bitmap")),
+                   GetPosition(), GetSize(),
+                   GetStyle(wxT("style"), wxBU_AUTODRAW),
+                   wxDefaultValidator,
+                   GetName());
+    if (GetBool(wxT("default"), 0))
+        button->SetDefault();
     SetupWindow(button);
     
     if (!GetParamValue(wxT("selected")).IsEmpty())
@@ -56,11 +58,7 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
     return button;
 }
 
-
-
 bool wxBitmapButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxBitmapButton"));
 }
-
-

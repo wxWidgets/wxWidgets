@@ -30,10 +30,7 @@ wxStaticBoxXmlHandler::wxStaticBoxXmlHandler()
 
 wxObject *wxStaticBoxXmlHandler::DoCreateResource()
 { 
-    wxStaticBox *box = wxStaticCast(m_instance, wxStaticBox);
-
-    if (!box)
-       box = new wxStaticBox;
+    XRC_MAKE_INSTANCE(box, wxStaticBox)
 
     box->Create(m_parentAsWindow,
                 GetID(),
@@ -47,11 +44,7 @@ wxObject *wxStaticBoxXmlHandler::DoCreateResource()
     return box;
 }
 
-
-
 bool wxStaticBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxStaticBox"));
 }
-
-

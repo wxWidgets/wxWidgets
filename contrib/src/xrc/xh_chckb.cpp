@@ -32,10 +32,7 @@ wxCheckBoxXmlHandler::wxCheckBoxXmlHandler()
 
 wxObject *wxCheckBoxXmlHandler::DoCreateResource()
 { 
-    wxCheckBox *control = wxStaticCast(m_instance, wxCheckBox);
-
-    if (!control)
-       control = new wxCheckBox;
+    XRC_MAKE_INSTANCE(control, wxCheckBox)
 
     control->Create(m_parentAsWindow,
                     GetID(),
@@ -45,13 +42,11 @@ wxObject *wxCheckBoxXmlHandler::DoCreateResource()
                     wxDefaultValidator,
                     GetName());
 
-    control->SetValue( GetBool( wxT("checked")));
+    control->SetValue(GetBool( wxT("checked")));
     SetupWindow(control);
     
     return control;
 }
-
-
 
 bool wxCheckBoxXmlHandler::CanHandle(wxXmlNode *node)
 {

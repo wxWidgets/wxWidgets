@@ -30,14 +30,12 @@
 wxNotebookXmlHandler::wxNotebookXmlHandler() 
 : wxXmlResourceHandler(), m_isInside(FALSE), m_notebook(NULL)
 {
-    ADD_STYLE(wxNB_FIXEDWIDTH);
-    ADD_STYLE(wxNB_LEFT);
-    ADD_STYLE(wxNB_RIGHT);
-    ADD_STYLE(wxNB_BOTTOM);
+    XRC_ADD_STYLE(wxNB_FIXEDWIDTH);
+    XRC_ADD_STYLE(wxNB_LEFT);
+    XRC_ADD_STYLE(wxNB_RIGHT);
+    XRC_ADD_STYLE(wxNB_BOTTOM);
     AddWindowStyles();
 }
-
-
 
 wxObject *wxNotebookXmlHandler::DoCreateResource()
 { 
@@ -45,8 +43,8 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
     {
         wxXmlNode *n = GetParamNode(wxT("object"));
 
-       if ( !n )
-           n = GetParamNode(wxT("object_ref"));
+        if ( !n )
+            n = GetParamNode(wxT("object_ref"));
 
         if (n)
         {
@@ -70,17 +68,15 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         }
     }
     
-    else {
-       wxNotebook *nb = wxStaticCast(m_instance, wxNotebook);
+    else 
+    {
+        XRC_MAKE_INSTANCE(nb, wxNotebook)
 
-       if ( !nb )
-           nb = new wxNotebook;
-
-       nb->Create(m_parentAsWindow, 
-                 GetID(),
-                 GetPosition(), GetSize(),
-                 GetStyle( wxT("style" )),
-                 GetName());
+        nb->Create(m_parentAsWindow, 
+                   GetID(),
+                   GetPosition(), GetSize(),
+                   GetStyle(wxT("style")),
+                   GetName());
 
         wxNotebook *old_par = m_notebook;
         m_notebook = nb;
@@ -96,8 +92,6 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
             return nb;
     }
 }
-
-
 
 bool wxNotebookXmlHandler::CanHandle(wxXmlNode *node)
 {

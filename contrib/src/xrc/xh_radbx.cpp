@@ -25,12 +25,12 @@
 #if wxUSE_RADIOBOX
 
 wxRadioBoxXmlHandler::wxRadioBoxXmlHandler() 
-: wxXmlResourceHandler() , m_insideBox(FALSE)
+: wxXmlResourceHandler(), m_insideBox(FALSE)
 {
-    ADD_STYLE(wxRA_SPECIFY_COLS);
-    ADD_STYLE(wxRA_HORIZONTAL);
-    ADD_STYLE(wxRA_SPECIFY_ROWS);
-    ADD_STYLE(wxRA_VERTICAL);
+    XRC_ADD_STYLE(wxRA_SPECIFY_COLS);
+    XRC_ADD_STYLE(wxRA_HORIZONTAL);
+    XRC_ADD_STYLE(wxRA_SPECIFY_ROWS);
+    XRC_ADD_STYLE(wxRA_VERTICAL);
     AddWindowStyles();
 }
 
@@ -53,10 +53,7 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
                 strings[i]=strList[i];
         }
 
-        wxRadioBox *control = wxStaticCast(m_instance, wxRadioBox);
-
-        if (!control)
-           control = new wxRadioBox;
+        XRC_MAKE_INSTANCE(control, wxRadioBox)
 
         control->Create(m_parentAsWindow,
                         GetID(),
@@ -69,13 +66,13 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
                         wxDefaultValidator,
                         GetName());
 
-        if( selection != -1 )
-            control->SetSelection( selection );
+        if (selection != -1)
+            control->SetSelection(selection);
 
         SetupWindow(control);
 
-        if( strings != NULL )
-            delete [] strings;
+        if (strings != NULL)
+            delete[] strings;
         strList.Clear();    // dump the strings   
 
         return control;
@@ -86,20 +83,17 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
         // handle <item selected="boolean">Label</item>
 
         // add to the list
-        strList.Add( GetNodeContent(m_node) );
+        strList.Add(GetNodeContent(m_node));
 
         return NULL;
     }
 
 }
 
-
-
 bool wxRadioBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxRadioBox")) ||
-           (m_insideBox && node->GetName() == wxT("item"))
-           );
+           (m_insideBox && node->GetName() == wxT("item")));
 }
 
 #endif

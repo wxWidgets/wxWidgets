@@ -26,21 +26,17 @@
 wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE(wxTR_HAS_BUTTONS);
-    ADD_STYLE(wxTR_EDIT_LABELS);
-    ADD_STYLE(wxTR_MULTIPLE);
+    XRC_ADD_STYLE(wxTR_HAS_BUTTONS);
+    XRC_ADD_STYLE(wxTR_EDIT_LABELS);
+    XRC_ADD_STYLE(wxTR_MULTIPLE);
     AddWindowStyles();
 }
 
-
 wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
 { 
-   wxTreeCtrl *tree = wxStaticCast(m_instance, wxTreeCtrl);
+    XRC_MAKE_INSTANCE(tree, wxTreeCtrl)
 
-   if (!tree)
-       tree = new wxTreeCtrl;
-
-   tree->Create( m_parentAsWindow,
+    tree->Create(m_parentAsWindow,
                 GetID(),
                 GetPosition(), GetSize(),
                 GetStyle(),
@@ -52,11 +48,7 @@ wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
     return tree;
 }
 
-
-
 bool wxTreeCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxTreeCtrl"));
 }
-
-

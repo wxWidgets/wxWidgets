@@ -27,10 +27,8 @@
 wxMenuXmlHandler::wxMenuXmlHandler() : 
         wxXmlResourceHandler(), m_insideMenu(FALSE)
 {
-    ADD_STYLE(wxMENU_TEAROFF);
+    XRC_ADD_STYLE(wxMENU_TEAROFF);
 }
-
-
 
 wxObject *wxMenuXmlHandler::DoCreateResource()
 {
@@ -103,15 +101,10 @@ bool wxMenuXmlHandler::CanHandle(wxXmlNode *node)
            );
 }
 
-
-
-
 wxMenuBarXmlHandler::wxMenuBarXmlHandler() : wxXmlResourceHandler()
 {
-    ADD_STYLE(wxMB_DOCKABLE);
+    XRC_ADD_STYLE(wxMB_DOCKABLE);
 }
-
-
 
 wxObject *wxMenuBarXmlHandler::DoCreateResource()
 {
@@ -134,4 +127,3 @@ bool wxMenuBarXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxMenuBar"));
 }
-

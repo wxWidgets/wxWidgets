@@ -28,13 +28,11 @@
 wxToolBarXmlHandler::wxToolBarXmlHandler() 
 : wxXmlResourceHandler(), m_isInside(FALSE), m_toolbar(NULL)
 {
-    ADD_STYLE(wxTB_FLAT);
-    ADD_STYLE(wxTB_DOCKABLE);
-    ADD_STYLE(wxTB_VERTICAL);
-    ADD_STYLE(wxTB_HORIZONTAL);
+    XRC_ADD_STYLE(wxTB_FLAT);
+    XRC_ADD_STYLE(wxTB_DOCKABLE);
+    XRC_ADD_STYLE(wxTB_VERTICAL);
+    XRC_ADD_STYLE(wxTB_HORIZONTAL);
 }
-
-
 
 wxObject *wxToolBarXmlHandler::DoCreateResource()
 { 
@@ -67,10 +65,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         if (!(style & wxNO_BORDER)) style |= wxNO_BORDER;
 #endif
 
-        wxToolBar *toolbar = wxStaticCast(m_instance, wxToolBar);
- 
-        if ( !toolbar )
-            toolbar = new wxToolBar;
+        XRC_MAKE_INSTANCE(toolbar, wxToolBar)
  
         toolbar->Create(m_parentAsWindow,
                          GetID(),
@@ -134,8 +129,6 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         return toolbar;
     }
 }
-
-
 
 bool wxToolBarXmlHandler::CanHandle(wxXmlNode *node)
 {

@@ -30,10 +30,7 @@ wxStaticBitmapXmlHandler::wxStaticBitmapXmlHandler()
 
 wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
 { 
-    wxStaticBitmap *bmp = wxStaticCast(m_instance, wxStaticBitmap);
-
-    if (!bmp)
-       bmp = new wxStaticBitmap;
+    XRC_MAKE_INSTANCE(bmp, wxStaticBitmap)
 
     bmp->Create(m_parentAsWindow,
                 GetID(),
@@ -47,11 +44,7 @@ wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
     return bmp;
 }
 
-
-
 bool wxStaticBitmapXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxStaticBitmap"));
 }
-
-

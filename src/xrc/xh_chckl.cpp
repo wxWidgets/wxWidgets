@@ -37,18 +37,15 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
         m_insideBox = TRUE;
         CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
-        if( strList.GetCount() > 0 )
+        if (strList.GetCount() > 0)
         {
             strings = new wxString[strList.GetCount()];
             int count = strList.GetCount();
-            for( int i = 0; i < count; i++ )
-                strings[i]=strList[i];
+            for(int i = 0; i < count; i++)
+                strings[i] = strList[i];
         }
 
-        wxCheckListBox *control = wxStaticCast(m_instance, wxCheckListBox);
-
-        if (!control)
-           control = new wxCheckListBox;
+        XRC_MAKE_INSTANCE(control, wxCheckListBox)
 
         control->Create(m_parentAsWindow,
                         GetID(),
@@ -81,8 +78,8 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
         
         SetupWindow(control);
 
-        if( strings != NULL )
-            delete [] strings;
+        if (strings != NULL)
+            delete[] strings;
         strList.Clear();    // dump the strings   
 
         return control;
@@ -93,20 +90,15 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
         // handle <item checked="boolean">Label</item>
 
         // add to the list
-        strList.Add( GetNodeContent(m_node) );
-
+        strList.Add(GetNodeContent(m_node));
         return NULL;
     }
-
 }
-
-
 
 bool wxCheckListXmlHandler::CanHandle(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxCheckList")) ||
-           (m_insideBox && node->GetName() == wxT("item"))
-           );
+           (m_insideBox && node->GetName() == wxT("item")));
 }
 
 

@@ -26,20 +26,16 @@
 wxButtonXmlHandler::wxButtonXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE(wxBU_LEFT);
-    ADD_STYLE(wxBU_RIGHT);
-    ADD_STYLE(wxBU_TOP);
-    ADD_STYLE(wxBU_BOTTOM);
+    XRC_ADD_STYLE(wxBU_LEFT);
+    XRC_ADD_STYLE(wxBU_RIGHT);
+    XRC_ADD_STYLE(wxBU_TOP);
+    XRC_ADD_STYLE(wxBU_BOTTOM);
     AddWindowStyles();
 }
 
-
 wxObject *wxButtonXmlHandler::DoCreateResource()
 { 
-   wxButton *button = wxStaticCast(m_instance, wxButton);
-
-   if (!button)
-       button = new wxButton;
+   XRC_MAKE_INSTANCE(button, wxButton)
 
    button->Create(m_parentAsWindow,
                     GetID(),
@@ -49,17 +45,14 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
                     wxDefaultValidator,
                     GetName());
 
-    if (GetBool(wxT("default"), 0) == 1) button->SetDefault();
+    if (GetBool(wxT("default"), 0))
+        button->SetDefault();
     SetupWindow(button);
     
     return button;
 }
 
-
-
 bool wxButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxButton"));
 }
-
-

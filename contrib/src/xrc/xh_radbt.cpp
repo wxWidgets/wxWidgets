@@ -27,7 +27,7 @@
 wxRadioButtonXmlHandler::wxRadioButtonXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE( wxRB_GROUP );
+    XRC_ADD_STYLE(wxRB_GROUP);
     AddWindowStyles();
 }
 
@@ -40,10 +40,7 @@ wxObject *wxRadioButtonXmlHandler::DoCreateResource()
      * normal radio button.
      */ 
 
-    wxRadioButton *control = wxStaticCast(m_instance, wxRadioButton);
-
-    if (!control)
-       control = new wxRadioButton;
+    XRC_MAKE_INSTANCE(control, wxRadioButton)
 
     control->Create(m_parentAsWindow,
                     GetID(),
@@ -53,18 +50,15 @@ wxObject *wxRadioButtonXmlHandler::DoCreateResource()
                     wxDefaultValidator,
                     GetName());
 
-    control->SetValue( GetBool(wxT("value"), 0));
+    control->SetValue(GetBool(wxT("value"), 0));
     SetupWindow(control);
     
     return control;
 }
 
-
-
 bool wxRadioButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxRadioButton"));
 }
-
 
 #endif

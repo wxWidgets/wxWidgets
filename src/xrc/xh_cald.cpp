@@ -27,21 +27,18 @@
 wxCalendarCtrlXmlHandler::wxCalendarCtrlXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE(wxCAL_SUNDAY_FIRST);
-    ADD_STYLE(wxCAL_MONDAY_FIRST);
-    ADD_STYLE(wxCAL_SHOW_HOLIDAYS);
-    ADD_STYLE(wxCAL_NO_YEAR_CHANGE);
-    ADD_STYLE(wxCAL_NO_MONTH_CHANGE);
+    XRC_ADD_STYLE(wxCAL_SUNDAY_FIRST);
+    XRC_ADD_STYLE(wxCAL_MONDAY_FIRST);
+    XRC_ADD_STYLE(wxCAL_SHOW_HOLIDAYS);
+    XRC_ADD_STYLE(wxCAL_NO_YEAR_CHANGE);
+    XRC_ADD_STYLE(wxCAL_NO_MONTH_CHANGE);
     AddWindowStyles();
 }
 
 
 wxObject *wxCalendarCtrlXmlHandler::DoCreateResource()
 { 
-    wxCalendarCtrl *calendar = wxStaticCast(m_instance, wxCalendarCtrl);
-
-    if (!calendar)
-       calendar = new wxCalendarCtrl;
+    XRC_MAKE_INSTANCE(calendar, wxCalendarCtrl);
 
     calendar->Create(m_parentAsWindow,
                      GetID(),
@@ -56,11 +53,7 @@ wxObject *wxCalendarCtrlXmlHandler::DoCreateResource()
     return calendar;
 }
 
-
-
 bool wxCalendarCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxCalendarCtrl"));
 }
-
-

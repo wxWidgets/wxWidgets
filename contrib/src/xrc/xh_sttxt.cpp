@@ -25,19 +25,16 @@
 wxStaticTextXmlHandler::wxStaticTextXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE(wxST_NO_AUTORESIZE);
-    ADD_STYLE(wxALIGN_LEFT);
-    ADD_STYLE(wxALIGN_RIGHT);
-    ADD_STYLE(wxALIGN_CENTRE);
+    XRC_ADD_STYLE(wxST_NO_AUTORESIZE);
+    XRC_ADD_STYLE(wxALIGN_LEFT);
+    XRC_ADD_STYLE(wxALIGN_RIGHT);
+    XRC_ADD_STYLE(wxALIGN_CENTRE);
     AddWindowStyles();
 }
 
 wxObject *wxStaticTextXmlHandler::DoCreateResource()
 { 
-    wxStaticText *text = wxStaticCast(m_instance, wxStaticText);
-
-    if (!text)
-       text = new wxStaticText;
+    XRC_MAKE_INSTANCE(text, wxStaticText)
 
     text->Create(m_parentAsWindow,
                     GetID(),
@@ -51,11 +48,7 @@ wxObject *wxStaticTextXmlHandler::DoCreateResource()
     return text;
 }
 
-
-
 bool wxStaticTextXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxStaticText"));
 }
-
-

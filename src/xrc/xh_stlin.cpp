@@ -27,17 +27,14 @@
 wxStaticLineXmlHandler::wxStaticLineXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE(wxLI_HORIZONTAL);
-    ADD_STYLE(wxLI_VERTICAL);
+    XRC_ADD_STYLE(wxLI_HORIZONTAL);
+    XRC_ADD_STYLE(wxLI_VERTICAL);
     AddWindowStyles();
 }
 
 wxObject *wxStaticLineXmlHandler::DoCreateResource()
 { 
-    wxStaticLine *line = wxStaticCast(m_instance, wxStaticLine);
-
-    if (!line)
-       line = new wxStaticLine;
+    XRC_MAKE_INSTANCE(line, wxStaticLine)
 
     line->Create(m_parentAsWindow,
                 GetID(),
@@ -49,8 +46,6 @@ wxObject *wxStaticLineXmlHandler::DoCreateResource()
     
     return line;
 }
-
-
 
 bool wxStaticLineXmlHandler::CanHandle(wxXmlNode *node)
 {

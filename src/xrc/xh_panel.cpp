@@ -25,21 +25,16 @@
 
 wxPanelXmlHandler::wxPanelXmlHandler() : wxXmlResourceHandler()
 {
-    ADD_STYLE(wxNO_3D);
-    ADD_STYLE(wxTAB_TRAVERSAL);
-    ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
-    ADD_STYLE(wxCLIP_CHILDREN);
+    XRC_ADD_STYLE(wxNO_3D);
+    XRC_ADD_STYLE(wxTAB_TRAVERSAL);
+    XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
+    XRC_ADD_STYLE(wxCLIP_CHILDREN);
     AddWindowStyles();
 }
 
-
-
 wxObject *wxPanelXmlHandler::DoCreateResource()
 { 
-    wxPanel *panel = wxDynamicCast(m_instance, wxPanel);
-
-    if (!panel)
-       panel = new wxPanel;
+    XRC_MAKE_INSTANCE(panel, wxPanel)
 
     panel->Create(m_parentAsWindow,
                   GetID(),
@@ -52,7 +47,6 @@ wxObject *wxPanelXmlHandler::DoCreateResource()
     
     return panel;
 }
-
 
 bool wxPanelXmlHandler::CanHandle(wxXmlNode *node)
 {

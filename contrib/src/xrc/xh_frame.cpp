@@ -27,29 +27,28 @@
 
 wxFrameXmlHandler::wxFrameXmlHandler() : wxXmlResourceHandler()
 {
-    ADD_STYLE(wxSTAY_ON_TOP);
-    ADD_STYLE(wxCAPTION);
-    ADD_STYLE(wxDEFAULT_DIALOG_STYLE);
-    ADD_STYLE(wxDEFAULT_FRAME_STYLE);
-    ADD_STYLE(wxTHICK_FRAME);
-    ADD_STYLE(wxSYSTEM_MENU);
-    ADD_STYLE(wxRESIZE_BORDER);
-    ADD_STYLE(wxRESIZE_BOX);
+    XRC_ADD_STYLE(wxSTAY_ON_TOP);
+    XRC_ADD_STYLE(wxCAPTION);
+    XRC_ADD_STYLE(wxDEFAULT_DIALOG_STYLE);
+    XRC_ADD_STYLE(wxDEFAULT_FRAME_STYLE);
+    XRC_ADD_STYLE(wxTHICK_FRAME);
+    XRC_ADD_STYLE(wxSYSTEM_MENU);
+    XRC_ADD_STYLE(wxRESIZE_BORDER);
+    XRC_ADD_STYLE(wxRESIZE_BOX);
 
-    ADD_STYLE(wxFRAME_TOOL_WINDOW);
-    ADD_STYLE(wxFRAME_FLOAT_ON_PARENT);
-    ADD_STYLE(wxMAXIMIZE_BOX);
-    ADD_STYLE(wxMINIMIZE_BOX);
-    ADD_STYLE(wxSTAY_ON_TOP);
+    XRC_ADD_STYLE(wxFRAME_TOOL_WINDOW);
+    XRC_ADD_STYLE(wxFRAME_FLOAT_ON_PARENT);
+    XRC_ADD_STYLE(wxMAXIMIZE_BOX);
+    XRC_ADD_STYLE(wxMINIMIZE_BOX);
+    XRC_ADD_STYLE(wxSTAY_ON_TOP);
 
-    ADD_STYLE(wxNO_3D);
-    ADD_STYLE(wxTAB_TRAVERSAL);
-    ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
-    ADD_STYLE(wxCLIP_CHILDREN);
+    XRC_ADD_STYLE(wxNO_3D);
+    XRC_ADD_STYLE(wxTAB_TRAVERSAL);
+    XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
+    XRC_ADD_STYLE(wxCLIP_CHILDREN);
+
     AddWindowStyles();
 }
-
-
 
 wxObject *wxFrameXmlHandler::DoCreateResource()
 { 
@@ -58,15 +57,17 @@ wxObject *wxFrameXmlHandler::DoCreateResource()
     wxASSERT_MSG(frame, _("XRC resource: Cannot create dialog without instance."));
     
     frame->Create(m_parentAsWindow,
-                GetID(),
-                GetText(wxT("title")),
-                wxDefaultPosition, wxDefaultSize,
-                GetStyle(wxT("style"), wxDEFAULT_FRAME_STYLE),
-                GetName());
+                  GetID(),
+                  GetText(wxT("title")),
+                  wxDefaultPosition, wxDefaultSize,
+                  GetStyle(wxT("style"), wxDEFAULT_FRAME_STYLE),
+                  GetName());
+
     if (HasParam(wxT("size")))
         frame->SetClientSize(GetSize());
     if (HasParam(wxT("pos")))
         frame->Move(GetPosition());
+
     SetupWindow(frame);
 
     CreateChildren(frame);
@@ -77,11 +78,7 @@ wxObject *wxFrameXmlHandler::DoCreateResource()
     return frame;
 }
 
-
-
 bool wxFrameXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxFrame"));
 }
-
-

@@ -27,24 +27,23 @@
 
 wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
 {
-    ADD_STYLE(wxSTAY_ON_TOP);
-    ADD_STYLE(wxCAPTION);
-    ADD_STYLE(wxDEFAULT_DIALOG_STYLE);
-    ADD_STYLE(wxTHICK_FRAME);
-    ADD_STYLE(wxSYSTEM_MENU);
-    ADD_STYLE(wxRESIZE_BORDER);
-    ADD_STYLE(wxRESIZE_BOX);
-    ADD_STYLE(wxDIALOG_MODAL);
-    ADD_STYLE(wxDIALOG_MODELESS);
+    XRC_ADD_STYLE(wxSTAY_ON_TOP);
+    XRC_ADD_STYLE(wxCAPTION);
+    XRC_ADD_STYLE(wxDEFAULT_DIALOG_STYLE);
+    XRC_ADD_STYLE(wxTHICK_FRAME);
+    XRC_ADD_STYLE(wxSYSTEM_MENU);
+    XRC_ADD_STYLE(wxRESIZE_BORDER);
+    XRC_ADD_STYLE(wxRESIZE_BOX);
+    XRC_ADD_STYLE(wxDIALOG_MODAL);
+    XRC_ADD_STYLE(wxDIALOG_MODELESS);
 
-    ADD_STYLE(wxNO_3D);
-    ADD_STYLE(wxTAB_TRAVERSAL);
-    ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
-    ADD_STYLE(wxCLIP_CHILDREN);
+    XRC_ADD_STYLE(wxNO_3D);
+    XRC_ADD_STYLE(wxTAB_TRAVERSAL);
+    XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
+    XRC_ADD_STYLE(wxCLIP_CHILDREN);
+
     AddWindowStyles();
 }
-
-
 
 wxObject *wxDialogXmlHandler::DoCreateResource()
 { 
@@ -58,10 +57,12 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
                 wxDefaultPosition, wxDefaultSize,
                 GetStyle(wxT("style"), wxDEFAULT_DIALOG_STYLE),
                 GetName());
+
     if (HasParam(wxT("size")))
         dlg->SetClientSize(GetSize());
     if (HasParam(wxT("pos")))
         dlg->Move(GetPosition());
+
     SetupWindow(dlg);
 
     CreateChildren(dlg);
@@ -72,11 +73,7 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
     return dlg;
 }
 
-
-
 bool wxDialogXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxDialog"));
 }
-
-

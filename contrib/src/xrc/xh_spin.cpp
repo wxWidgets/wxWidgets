@@ -27,19 +27,16 @@
 wxSpinButtonXmlHandler::wxSpinButtonXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE( wxSP_HORIZONTAL );
-    ADD_STYLE( wxSP_VERTICAL );
-    ADD_STYLE( wxSP_ARROW_KEYS );
-    ADD_STYLE( wxSP_WRAP );
+    XRC_ADD_STYLE(wxSP_HORIZONTAL);
+    XRC_ADD_STYLE(wxSP_VERTICAL);
+    XRC_ADD_STYLE(wxSP_ARROW_KEYS);
+    XRC_ADD_STYLE(wxSP_WRAP);
     AddWindowStyles();
 }
 
 wxObject *wxSpinButtonXmlHandler::DoCreateResource()
 { 
-    wxSpinButton *control = wxStaticCast(m_instance, wxSpinButton);
-
-    if (!control)
-       control = new wxSpinButton;
+    XRC_MAKE_INSTANCE(control, wxSpinButton)
 
     control->Create(m_parentAsWindow,
                     GetID(),
@@ -47,15 +44,13 @@ wxObject *wxSpinButtonXmlHandler::DoCreateResource()
                     GetStyle(wxT("style"), wxSP_VERTICAL | wxSP_ARROW_KEYS),
                     GetName());
 
-    control->SetValue( GetLong( wxT("value"), wxSP_DEFAULT_VALUE) );
-    control->SetRange( GetLong( wxT("min"), wxSP_DEFAULT_MIN),
-            GetLong( wxT("max"), wxSP_DEFAULT_MAX) );
+    control->SetValue(GetLong( wxT("value"), wxSP_DEFAULT_VALUE));
+    control->SetRange(GetLong( wxT("min"), wxSP_DEFAULT_MIN),
+                      GetLong(wxT("max"), wxSP_DEFAULT_MAX));
     SetupWindow(control);
     
     return control;
 }
-
-
 
 bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
@@ -69,31 +64,30 @@ bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 wxSpinCtrlXmlHandler::wxSpinCtrlXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE( wxSP_HORIZONTAL );
-    ADD_STYLE( wxSP_VERTICAL );
-    ADD_STYLE( wxSP_ARROW_KEYS );
-    ADD_STYLE( wxSP_WRAP );
+    XRC_ADD_STYLE(wxSP_HORIZONTAL);
+    XRC_ADD_STYLE(wxSP_VERTICAL);
+    XRC_ADD_STYLE(wxSP_ARROW_KEYS);
+    XRC_ADD_STYLE(wxSP_WRAP);
 }
 
 wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
 { 
-    wxSpinCtrl *control = new wxSpinCtrl(m_parentAsWindow,
-                                    GetID(),
-                                    GetText(wxT("value")),
-                                    GetPosition(), GetSize(),
-                                    GetStyle( wxT("style"), wxSP_ARROW_KEYS ),
-                                    GetLong( wxT("min"), wxSP_DEFAULT_MIN),
-                                    GetLong( wxT("max"), wxSP_DEFAULT_MAX),
-                                    GetLong( wxT("value"), wxSP_DEFAULT_VALUE),
-                                    GetName()
-                                    );
+    XRC_MAKE_INSTANCE(control, wxSpinCtrl)
+    
+    control->Create(m_parentAsWindow,
+                    GetID(),
+                    GetText(wxT("value")),
+                    GetPosition(), GetSize(),
+                    GetStyle(wxT("style"), wxSP_ARROW_KEYS),
+                    GetLong(wxT("min"), wxSP_DEFAULT_MIN),
+                    GetLong(wxT("max"), wxSP_DEFAULT_MAX),
+                    GetLong(wxT("value"), wxSP_DEFAULT_VALUE),
+                    GetName());
 
     SetupWindow(control);
     
     return control;
 }
-
-
 
 bool wxSpinCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {

@@ -30,14 +30,14 @@
 wxHtmlWindowXmlHandler::wxHtmlWindowXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE(wxHW_SCROLLBAR_NEVER);
-    ADD_STYLE(wxHW_SCROLLBAR_AUTO);
+    XRC_ADD_STYLE(wxHW_SCROLLBAR_NEVER);
+    XRC_ADD_STYLE(wxHW_SCROLLBAR_AUTO);
     AddWindowStyles();
 }
 
 wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
 {
-    wxHtmlWindow *control = wxStaticCast(m_instance, wxHtmlWindow);
+    XRC_MAKE_INSTANCE(control, wxHtmlWindow)
 
     control->Create(m_parentAsWindow,
                     GetID(),
@@ -50,7 +50,7 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
         control->SetBorders(GetDimension(wxT("borders")));
     }
 
-    if( HasParam(wxT("url")))
+    if (HasParam(wxT("url")))
     {
         wxString url = GetParamValue(wxT("url"));
         wxFileSystem& fsys = GetCurFileSystem();
@@ -74,8 +74,6 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
     
     return control;
 }
-
-
 
 bool wxHtmlWindowXmlHandler::CanHandle(wxXmlNode *node)
 {

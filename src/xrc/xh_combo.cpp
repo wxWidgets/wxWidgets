@@ -27,10 +27,10 @@
 wxComboBoxXmlHandler::wxComboBoxXmlHandler() 
 : wxXmlResourceHandler() , m_insideBox(FALSE)
 {
-    ADD_STYLE(wxCB_SIMPLE);
-    ADD_STYLE(wxCB_SORT);
-    ADD_STYLE(wxCB_READONLY);
-    ADD_STYLE(wxCB_DROPDOWN);
+    XRC_ADD_STYLE(wxCB_SIMPLE);
+    XRC_ADD_STYLE(wxCB_SORT);
+    XRC_ADD_STYLE(wxCB_READONLY);
+    XRC_ADD_STYLE(wxCB_DROPDOWN);
     AddWindowStyles();
 }
 
@@ -43,23 +43,19 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
 
         // need to build the list of strings from children
         m_insideBox = TRUE;
-        CreateChildrenPrivately( NULL, GetParamNode(wxT("content")));
+        CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
-        if( strList.GetCount() > 0 )
+        if (strList.GetCount() > 0)
         {
             strings = new wxString[strList.GetCount()];
             int count = strList.GetCount();
-            for( int i = 0; i < count; i++ )
+            for (int i = 0; i < count; i++)
                 strings[i]=strList[i];
         }
 
+        XRC_MAKE_INSTANCE(control, wxComboBox)
 
-        wxComboBox *control = wxStaticCast(m_instance, wxComboBox);
-
-        if (!control)
-           control = new wxComboBox;
-            
-       control->Create(m_parentAsWindow,
+        control->Create(m_parentAsWindow,
                         GetID(),
                         GetText(wxT("value")),
                         GetPosition(), GetSize(),
@@ -69,13 +65,13 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
                         wxDefaultValidator,
                         GetName());
 
-        if( selection != -1 )
-            control->SetSelection( selection );
+        if (selection != -1)
+            control->SetSelection(selection);
 
         SetupWindow(control);
 
-        if( strings != NULL )
-            delete [] strings;
+        if (strings != NULL)
+            delete[] strings;
         strList.Clear();    // dump the strings   
 
         return control;
@@ -86,20 +82,16 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
         // handle <item>Label</item>
 
         // add to the list
-        strList.Add( GetNodeContent(m_node) );
+        strList.Add(GetNodeContent(m_node));
 
         return NULL;
     }
-
 }
-
-
 
 bool wxComboBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxComboBox")) ||
-           (m_insideBox && node->GetName() == wxT("item"))
-           );
+           (m_insideBox && node->GetName() == wxT("item")));
 }
 
 #endif
