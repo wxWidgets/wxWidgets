@@ -40,6 +40,11 @@
 
 #include "wx/msw/private.h"
 
+// this is for Win CE
+#ifndef WS_EX_TRANSPARENT
+    #define WS_EX_TRANSPARENT 0
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -115,7 +120,8 @@ bool wxStaticBox::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
 
-    if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX, pos, size, label, 0) )
+    if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX, pos, size, label,
+                           WS_EX_TRANSPARENT) )
         return false;
 
     return true;
