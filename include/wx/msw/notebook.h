@@ -160,6 +160,8 @@ public:
   // -------------------
   virtual void Command(wxCommandEvent& event);
   virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+  virtual void SetConstraintSizes(bool recurse = TRUE);
+  virtual bool DoPhase(int nPhase);
 
 protected:
   // common part of all ctors
@@ -167,7 +169,6 @@ protected:
 
   // helper functions
   void ChangePage(int nOldSel, int nSel); // change pages
-  void FitPage(wxNotebookPage *pPage);    // fit a page in the tab control
 
   wxImageList  *m_pImageList; // we can have an associated image list
   wxArrayPages  m_aPages;     // array of pages
