@@ -469,6 +469,13 @@
 // Recommended setting: 1 if the DirectX 7 SDK is installed (highly recommended), else 0
 #define wxUSE_DIRECTSHOW    0
 
+// Use GStreamer for Unix (req a lot of dependancies)
+//
+// Default is 0
+//
+// Recommended setting: 1 (wxMediaCtrl won't work by default without it)
+#define wxUSE_GSTREAMER    0
+
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
 // Default is 1
