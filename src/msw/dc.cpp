@@ -688,7 +688,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         bool ok = ::MaskBlt(GetHdc(), x, y, width, height,
                             hdcMem, 0, 0,
                             hbmpMask, 0, 0,
-                            MAKEROP4(SRCCOPY, SRCPAINT)) != 0;
+                            MAKEROP4(SRCCOPY, 0x00AA0029)) != 0;
         ::DeleteDC(hdcMem);
 
         if ( !ok )
@@ -696,6 +696,8 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         {
             // VZ: this is incorrect, Blit() doesn't (and can't) draw
             //     transparently, but it's still better than nothing at all
+
+            // GRG: Blit() *should* draw transparently when there is a mask.
 
             // Rather than reproduce wxDC::Blit, let's do it at the wxWin API level
             wxMemoryDC memDC;
@@ -1370,7 +1372,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         success = ::MaskBlt(GetHdc(), xdest, ydest, width, height,
                             GetHdcOf(*source), xsrc, ysrc,
                             hbmpMask, 0, 0,
-                            MAKEROP4(PATCOPY, dwRop)) != 0;
+                            MAKEROP4(0x00AA0029, dwRop)) != 0;
 
         if ( hbrNew )
         {
