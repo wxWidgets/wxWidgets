@@ -763,12 +763,6 @@ public:
 //----------------------------------------------------------------------
 
 
-enum {
-    /* event type */
-    wxEVT_END_PROCESS
-};
-
-
 enum wxKillError
 {
     wxKILL_OK,              // no error
@@ -777,6 +771,37 @@ enum wxKillError
     wxKILL_NO_PROCESS,      // no such process
     wxKILL_ERROR            // another, unspecified error
 };
+
+enum wxSignal
+{
+    wxSIGNONE = 0,  // verify if the process exists under Unix
+    wxSIGHUP,
+    wxSIGINT,
+    wxSIGQUIT,
+    wxSIGILL,
+    wxSIGTRAP,
+    wxSIGABRT,
+    wxSIGIOT = wxSIGABRT,   // another name
+    wxSIGEMT,
+    wxSIGFPE,
+    wxSIGKILL,
+    wxSIGBUS,
+    wxSIGSEGV,
+    wxSIGSYS,
+    wxSIGPIPE,
+    wxSIGALRM,
+    wxSIGTERM
+
+    // further signals are different in meaning between different Unix systems
+};
+
+
+
+enum {
+    /* event type */
+    wxEVT_END_PROCESS
+};
+
 
 
 class wxProcessEvent : public wxEvent {

@@ -6108,23 +6108,15 @@ static PyObject *_wrap_wxProcess_Kill(PyObject *self, PyObject *args, PyObject *
     PyObject * _resultobj;
     wxKillError  _result;
     int  _arg0;
-    wxSignal * _arg1 = (wxSignal *) &wxSIGTERM;
-    PyObject * _argo1 = 0;
+    wxSignal  _arg1 = (wxSignal ) (wxSIGTERM);
     char *_kwnames[] = { "pid","sig", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i|O:wxProcess_Kill",_kwnames,&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i|i:wxProcess_Kill",_kwnames,&_arg0,&_arg1)) 
         return NULL;
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxSignal_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxProcess_Kill. Expected _wxSignal_p.");
-        return NULL;
-        }
-    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxKillError )wxPyProcess::Kill(_arg0,*_arg1);
+    _result = (wxKillError )wxPyProcess::Kill(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10893,12 +10885,29 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxTraceResAlloc", PyInt_FromLong((long) wxTraceResAlloc));
 	 PyDict_SetItemString(d,"wxTraceRefCount", PyInt_FromLong((long) wxTraceRefCount));
 	 PyDict_SetItemString(d,"wxTraceOleCalls", PyInt_FromLong((long) wxTraceOleCalls));
-	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
 	 PyDict_SetItemString(d,"wxKILL_OK", PyInt_FromLong((long) wxKILL_OK));
 	 PyDict_SetItemString(d,"wxKILL_BAD_SIGNAL", PyInt_FromLong((long) wxKILL_BAD_SIGNAL));
 	 PyDict_SetItemString(d,"wxKILL_ACCESS_DENIED", PyInt_FromLong((long) wxKILL_ACCESS_DENIED));
 	 PyDict_SetItemString(d,"wxKILL_NO_PROCESS", PyInt_FromLong((long) wxKILL_NO_PROCESS));
 	 PyDict_SetItemString(d,"wxKILL_ERROR", PyInt_FromLong((long) wxKILL_ERROR));
+	 PyDict_SetItemString(d,"wxSIGNONE", PyInt_FromLong((long) wxSIGNONE));
+	 PyDict_SetItemString(d,"wxSIGHUP", PyInt_FromLong((long) wxSIGHUP));
+	 PyDict_SetItemString(d,"wxSIGINT", PyInt_FromLong((long) wxSIGINT));
+	 PyDict_SetItemString(d,"wxSIGQUIT", PyInt_FromLong((long) wxSIGQUIT));
+	 PyDict_SetItemString(d,"wxSIGILL", PyInt_FromLong((long) wxSIGILL));
+	 PyDict_SetItemString(d,"wxSIGTRAP", PyInt_FromLong((long) wxSIGTRAP));
+	 PyDict_SetItemString(d,"wxSIGABRT", PyInt_FromLong((long) wxSIGABRT));
+	 PyDict_SetItemString(d,"wxSIGIOT", PyInt_FromLong((long) wxSIGIOT));
+	 PyDict_SetItemString(d,"wxSIGEMT", PyInt_FromLong((long) wxSIGEMT));
+	 PyDict_SetItemString(d,"wxSIGFPE", PyInt_FromLong((long) wxSIGFPE));
+	 PyDict_SetItemString(d,"wxSIGKILL", PyInt_FromLong((long) wxSIGKILL));
+	 PyDict_SetItemString(d,"wxSIGBUS", PyInt_FromLong((long) wxSIGBUS));
+	 PyDict_SetItemString(d,"wxSIGSEGV", PyInt_FromLong((long) wxSIGSEGV));
+	 PyDict_SetItemString(d,"wxSIGSYS", PyInt_FromLong((long) wxSIGSYS));
+	 PyDict_SetItemString(d,"wxSIGPIPE", PyInt_FromLong((long) wxSIGPIPE));
+	 PyDict_SetItemString(d,"wxSIGALRM", PyInt_FromLong((long) wxSIGALRM));
+	 PyDict_SetItemString(d,"wxSIGTERM", PyInt_FromLong((long) wxSIGTERM));
+	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
 	 PyDict_SetItemString(d,"wxEXEC_ASYNC", PyInt_FromLong((long) wxEXEC_ASYNC));
 	 PyDict_SetItemString(d,"wxEXEC_SYNC", PyInt_FromLong((long) wxEXEC_SYNC));
 	 PyDict_SetItemString(d,"wxEXEC_NOHIDE", PyInt_FromLong((long) wxEXEC_NOHIDE));
