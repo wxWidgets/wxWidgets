@@ -32,244 +32,244 @@
 #include "winstyle.h"
 
 /*
- * Styles
- */
+* Styles
+*/
 
-  /* wxListBox */
+/* wxListBox */
 static wxWindowStylePair g_WindowStylesListBox[] = {
-  { "wxLB_SINGLE", wxLB_SINGLE },
-  { "wxLB_MULTIPLE", wxLB_MULTIPLE },
-  { "wxLB_EXTENDED", wxLB_EXTENDED },
-  { "wxLB_NEEDED_SB", wxLB_NEEDED_SB },
-  { "wxLB_ALWAYS_SB", wxLB_ALWAYS_SB },
-  { "wxLB_SORT", wxLB_SORT },
-  { "wxLB_OWNERDRAW", wxLB_OWNERDRAW },
-  { "wxLB_HSCROLL", wxLB_HSCROLL }
+    { "wxLB_SINGLE", wxLB_SINGLE },
+    { "wxLB_MULTIPLE", wxLB_MULTIPLE },
+    { "wxLB_EXTENDED", wxLB_EXTENDED },
+    { "wxLB_NEEDED_SB", wxLB_NEEDED_SB },
+    { "wxLB_ALWAYS_SB", wxLB_ALWAYS_SB },
+    { "wxLB_SORT", wxLB_SORT },
+    { "wxLB_OWNERDRAW", wxLB_OWNERDRAW },
+    { "wxLB_HSCROLL", wxLB_HSCROLL }
 };
 
 int g_WindowStylesListBoxCount = sizeof(g_WindowStylesListBox)/sizeof(wxWindowStylePair) ;
-  
-  /* wxComboxBox */
+
+/* wxComboxBox */
 static wxWindowStylePair g_WindowStylesComboBox[] = {
-  { "wxCB_SIMPLE", wxCB_SIMPLE },
-  { "wxCB_DROPDOWN", wxCB_DROPDOWN },
-  { "wxCB_READONLY", wxCB_READONLY },
-  { "wxCB_SORT", wxCB_SORT }
+    { "wxCB_SIMPLE", wxCB_SIMPLE },
+    { "wxCB_DROPDOWN", wxCB_DROPDOWN },
+    { "wxCB_READONLY", wxCB_READONLY },
+    { "wxCB_SORT", wxCB_SORT }
 };
 
 int g_WindowStylesComboBoxCount = sizeof(g_WindowStylesComboBox)/sizeof(wxWindowStylePair) ;
 
 #if 0
-  /* wxChoice */
+/* wxChoice */
 static wxWindowStylePair g_WindowStylesChoice[] = {
 };
 
 int g_WindowStylesChoiceCount = sizeof(g_WindowStylesChoice)/sizeof(wxWindowStylePair) ;
 #endif
-  
-  /* wxGauge */
+
+/* wxGauge */
 static wxWindowStylePair g_WindowStylesGauge[] = {
-  { "wxGA_PROGRESSBAR", wxGA_PROGRESSBAR },
-  { "wxGA_HORIZONTAL", wxGA_HORIZONTAL },
-  { "wxGA_VERTICAL", wxGA_VERTICAL }
+    { "wxGA_PROGRESSBAR", wxGA_PROGRESSBAR },
+    { "wxGA_HORIZONTAL", wxGA_HORIZONTAL },
+    { "wxGA_VERTICAL", wxGA_VERTICAL }
 };
 
 int g_WindowStylesGaugeCount = sizeof(g_WindowStylesGauge)/sizeof(wxWindowStylePair) ;
 
-  /* wxTextCtrl */
+/* wxTextCtrl */
 static wxWindowStylePair g_WindowStylesTextCtrl[] = {
-//  { "wxPASSWORD", wxPASSWORD},
-//  { "wxPROCESS_ENTER", wxPROCESS_ENTER},
-  { "wxTE_PASSWORD", wxTE_PASSWORD},
-  { "wxTE_READONLY", wxTE_READONLY},
-  { "wxTE_PROCESS_ENTER", wxTE_PROCESS_ENTER},
-  { "wxTE_MULTILINE", wxTE_MULTILINE}
+    //  { "wxPASSWORD", wxPASSWORD},
+    //  { "wxPROCESS_ENTER", wxPROCESS_ENTER},
+    { "wxTE_PASSWORD", wxTE_PASSWORD},
+    { "wxTE_READONLY", wxTE_READONLY},
+    { "wxTE_PROCESS_ENTER", wxTE_PROCESS_ENTER},
+    { "wxTE_MULTILINE", wxTE_MULTILINE}
 };
 
 int g_WindowStylesTextCtrlCount = sizeof(g_WindowStylesTextCtrl)/sizeof(wxWindowStylePair) ;
 
-  /* wxRadioButton */
+/* wxRadioButton */
 static wxWindowStylePair g_WindowStylesRadioButton[] = {
-  { "wxRB_GROUP", wxRB_GROUP }
+    { "wxRB_GROUP", wxRB_GROUP }
 };
 
 int g_WindowStylesRadioButtonCount = sizeof(g_WindowStylesRadioButton)/sizeof(wxWindowStylePair) ;
 
-  /* wxRadioBox */
+/* wxRadioBox */
 static wxWindowStylePair g_WindowStylesRadioBox[] = {
-  { "wxRA_SPECIFY_COLS", wxRA_SPECIFY_COLS },
-  { "wxRA_SPECIFY_ROWS", wxRA_SPECIFY_ROWS }
-/*
-  ,
-  { "wxRA_HORIZONTAL", wxRA_HORIZONTAL },
-  { "wxRA_VERTICAL", wxRA_VERTICAL }
-*/
+    { "wxRA_SPECIFY_COLS", wxRA_SPECIFY_COLS },
+    { "wxRA_SPECIFY_ROWS", wxRA_SPECIFY_ROWS }
+    /*
+    ,
+    { "wxRA_HORIZONTAL", wxRA_HORIZONTAL },
+    { "wxRA_VERTICAL", wxRA_VERTICAL }
+    */
 };
 
 int g_WindowStylesRadioBoxCount = sizeof(g_WindowStylesRadioBox)/sizeof(wxWindowStylePair) ;
 
-  /* wxSlider */
+/* wxSlider */
 static wxWindowStylePair g_WindowStylesSlider[] = {
-  { "wxSL_HORIZONTAL", wxSL_HORIZONTAL },
-  { "wxSL_VERTICAL", wxSL_VERTICAL },
-  { "wxSL_AUTOTICKS", wxSL_AUTOTICKS },
-  { "wxSL_LABELS", wxSL_LABELS },
-  { "wxSL_LEFT", wxSL_LEFT },
-  { "wxSL_TOP", wxSL_TOP },
-  { "wxSL_RIGHT", wxSL_RIGHT },
-  { "wxSL_BOTTOM", wxSL_BOTTOM },
-  { "wxSL_BOTH", wxSL_BOTH },
-  { "wxSL_SELRANGE", wxSL_SELRANGE }
+    { "wxSL_HORIZONTAL", wxSL_HORIZONTAL },
+    { "wxSL_VERTICAL", wxSL_VERTICAL },
+    { "wxSL_AUTOTICKS", wxSL_AUTOTICKS },
+    { "wxSL_LABELS", wxSL_LABELS },
+    { "wxSL_LEFT", wxSL_LEFT },
+    { "wxSL_TOP", wxSL_TOP },
+    { "wxSL_RIGHT", wxSL_RIGHT },
+    { "wxSL_BOTTOM", wxSL_BOTTOM },
+    { "wxSL_BOTH", wxSL_BOTH },
+    { "wxSL_SELRANGE", wxSL_SELRANGE }
 };
 
 int g_WindowStylesSliderCount = sizeof(g_WindowStylesSlider)/sizeof(wxWindowStylePair) ;
 
-  /* wxScrollBar */
+/* wxScrollBar */
 static wxWindowStylePair g_WindowStylesScrollBar[] = {
-  { "wxSB_HORIZONTAL", wxSB_HORIZONTAL },
-  { "wxSB_VERTICAL", wxSB_VERTICAL }
+    { "wxSB_HORIZONTAL", wxSB_HORIZONTAL },
+    { "wxSB_VERTICAL", wxSB_VERTICAL }
 };
 
 int g_WindowStylesScrollBarCount = sizeof(g_WindowStylesScrollBar)/sizeof(wxWindowStylePair) ;
 
-  /* wxButton */
+/* wxButton */
 static wxWindowStylePair g_WindowStylesButton[] = {
-  { "wxBU_AUTODRAW", wxBU_AUTODRAW },
-  { "wxBU_NOAUTODRAW", wxBU_NOAUTODRAW }
+    { "wxBU_AUTODRAW", wxBU_AUTODRAW },
+    { "wxBU_NOAUTODRAW", wxBU_NOAUTODRAW }
 };
 
 int g_WindowStylesButtonCount = sizeof(g_WindowStylesButton)/sizeof(wxWindowStylePair) ;
 
-  /* wxTreeCtrl */
+/* wxTreeCtrl */
 static wxWindowStylePair g_WindowStylesTreeCtrl[] = {
-  { "wxTR_HAS_BUTTONS", wxTR_HAS_BUTTONS },
-  { "wxTR_EDIT_LABELS", wxTR_EDIT_LABELS },
-  { "wxTR_LINES_AT_ROOT", wxTR_LINES_AT_ROOT }
+    { "wxTR_HAS_BUTTONS", wxTR_HAS_BUTTONS },
+    { "wxTR_EDIT_LABELS", wxTR_EDIT_LABELS },
+    { "wxTR_LINES_AT_ROOT", wxTR_LINES_AT_ROOT }
 };
 
 int g_WindowStylesTreeCtrlCount = sizeof(g_WindowStylesTreeCtrl)/sizeof(wxWindowStylePair) ;
 
-  /* wxListCtrl */
+/* wxListCtrl */
 static wxWindowStylePair g_WindowStylesListCtrl[] = {
-  { "wxLC_ICON", wxLC_ICON },
-  { "wxLC_SMALL_ICON", wxLC_SMALL_ICON },
-  { "wxLC_LIST", wxLC_LIST },
-  { "wxLC_REPORT", wxLC_REPORT },
-  { "wxLC_ALIGN_TOP", wxLC_ALIGN_TOP },
-  { "wxLC_ALIGN_LEFT", wxLC_ALIGN_LEFT },
-  { "wxLC_AUTOARRANGE", wxLC_AUTOARRANGE },
-  { "wxLC_USER_TEXT", wxLC_USER_TEXT },
-  { "wxLC_EDIT_LABELS", wxLC_EDIT_LABELS },
-  { "wxLC_NO_HEADER", wxLC_NO_HEADER },
-  { "wxLC_NO_SORT_HEADER", wxLC_NO_SORT_HEADER },
-  { "wxLC_SINGLE_SEL", wxLC_SINGLE_SEL },
-  { "wxLC_SORT_ASCENDING", wxLC_SORT_ASCENDING },
-  { "wxLC_SORT_DESCENDING", wxLC_SORT_DESCENDING }
+    { "wxLC_ICON", wxLC_ICON },
+    { "wxLC_SMALL_ICON", wxLC_SMALL_ICON },
+    { "wxLC_LIST", wxLC_LIST },
+    { "wxLC_REPORT", wxLC_REPORT },
+    { "wxLC_ALIGN_TOP", wxLC_ALIGN_TOP },
+    { "wxLC_ALIGN_LEFT", wxLC_ALIGN_LEFT },
+    { "wxLC_AUTOARRANGE", wxLC_AUTOARRANGE },
+    { "wxLC_USER_TEXT", wxLC_USER_TEXT },
+    { "wxLC_EDIT_LABELS", wxLC_EDIT_LABELS },
+    { "wxLC_NO_HEADER", wxLC_NO_HEADER },
+    { "wxLC_NO_SORT_HEADER", wxLC_NO_SORT_HEADER },
+    { "wxLC_SINGLE_SEL", wxLC_SINGLE_SEL },
+    { "wxLC_SORT_ASCENDING", wxLC_SORT_ASCENDING },
+    { "wxLC_SORT_DESCENDING", wxLC_SORT_DESCENDING }
 };
 
 int g_WindowStylesListCtrlCount = sizeof(g_WindowStylesListCtrl)/sizeof(wxWindowStylePair) ;
 
-  /* wxSpinButton */
+/* wxSpinButton */
 static wxWindowStylePair g_WindowStylesSpinButton[] = {
-  { "wxSP_VERTICAL", wxSP_VERTICAL},
-  { "wxSP_HORIZONTAL", wxSP_HORIZONTAL},
-  { "wxSP_ARROW_KEYS", wxSP_ARROW_KEYS},
-  { "wxSP_WRAP", wxSP_WRAP}
+    { "wxSP_VERTICAL", wxSP_VERTICAL},
+    { "wxSP_HORIZONTAL", wxSP_HORIZONTAL},
+    { "wxSP_ARROW_KEYS", wxSP_ARROW_KEYS},
+    { "wxSP_WRAP", wxSP_WRAP}
 };
 
 int g_WindowStylesSpinButtonCount = sizeof(g_WindowStylesSpinButton)/sizeof(wxWindowStylePair) ;
 
-  /* wxSplitterWindow */
+/* wxSplitterWindow */
 static wxWindowStylePair g_WindowStylesSplitterWindow[] = {
-  { "wxSP_NOBORDER", wxSP_NOBORDER},
-  { "wxSP_3D", wxSP_3D},
-  { "wxSP_BORDER", wxSP_BORDER}
+    { "wxSP_NOBORDER", wxSP_NOBORDER},
+    { "wxSP_3D", wxSP_3D},
+    { "wxSP_BORDER", wxSP_BORDER}
 };
 
 int g_WindowStylesSplitterWindowCount = sizeof(g_WindowStylesSplitterWindow)/sizeof(wxWindowStylePair) ;
 
-  /* wxTabCtrl */
+/* wxTabCtrl */
 static wxWindowStylePair g_WindowStylesTabCtrl[] = {
-  { "wxTC_MULTILINE", wxTC_MULTILINE},
-  { "wxTC_RIGHTJUSTIFY", wxTC_RIGHTJUSTIFY},
-  { "wxTC_FIXEDWIDTH", wxTC_FIXEDWIDTH},
-  { "wxTC_OWNERDRAW", wxTC_OWNERDRAW}
+    { "wxTC_MULTILINE", wxTC_MULTILINE},
+    { "wxTC_RIGHTJUSTIFY", wxTC_RIGHTJUSTIFY},
+    { "wxTC_FIXEDWIDTH", wxTC_FIXEDWIDTH},
+    { "wxTC_OWNERDRAW", wxTC_OWNERDRAW}
 };
 
 int g_WindowStylesTabCtrlCount = sizeof(g_WindowStylesTabCtrl)/sizeof(wxWindowStylePair) ;
 
-  /* wxStatusBar95 */
+/* wxStatusBar95 */
 static wxWindowStylePair g_WindowStylesStatusBar[] = {
-  { "wxST_SIZEGRIP", wxST_SIZEGRIP}
+    { "wxST_SIZEGRIP", wxST_SIZEGRIP}
 };
 
 int g_WindowStylesStatusBarCount = sizeof(g_WindowStylesStatusBar)/sizeof(wxWindowStylePair) ;
 
-  /* wxControl */
+/* wxControl */
 static wxWindowStylePair g_WindowStylesControl[] = {
-  { "wxFIXED_LENGTH", wxFIXED_LENGTH},
-  { "wxALIGN_LEFT", wxALIGN_LEFT},
-  { "wxALIGN_CENTRE", wxALIGN_CENTRE},
-  { "wxALIGN_RIGHT", wxALIGN_RIGHT},
-  { "wxCOLOURED", wxCOLOURED}
+    { "wxFIXED_LENGTH", wxFIXED_LENGTH},
+    { "wxALIGN_LEFT", wxALIGN_LEFT},
+    { "wxALIGN_CENTRE", wxALIGN_CENTRE},
+    { "wxALIGN_RIGHT", wxALIGN_RIGHT},
+    { "wxCOLOURED", wxCOLOURED}
 };
 
 int g_WindowStylesControlCount = sizeof(g_WindowStylesControl)/sizeof(wxWindowStylePair) ;
-  
-  /* wxToolBar */
+
+/* wxToolBar */
 static wxWindowStylePair g_WindowStylesToolBar[] = {
-  { "wxTB_3DBUTTONS", wxTB_3DBUTTONS},
-  { "wxTB_HORIZONTAL", wxTB_HORIZONTAL},
-  { "wxTB_VERTICAL", wxTB_VERTICAL},
-  { "wxTB_FLAT", wxTB_FLAT}
+    { "wxTB_3DBUTTONS", wxTB_3DBUTTONS},
+    { "wxTB_HORIZONTAL", wxTB_HORIZONTAL},
+    { "wxTB_VERTICAL", wxTB_VERTICAL},
+    { "wxTB_FLAT", wxTB_FLAT}
 };
 
 int g_WindowStylesToolBarCount = sizeof(g_WindowStylesToolBar)/sizeof(wxWindowStylePair) ;
 
-  /* Frame/dialog */
+/* Frame/dialog */
 static wxWindowStylePair g_WindowStylesDialog[] = {
-  { "wxSTAY_ON_TOP", wxSTAY_ON_TOP},
-  { "wxCAPTION", wxCAPTION},
-  { "wxICONIZE", wxICONIZE},
-  { "wxMINIMIZE", wxICONIZE},
-  { "wxMAXIMIZE", wxMAXIMIZE},
-  { "wxTHICK_FRAME", wxTHICK_FRAME},
-  { "wxRESIZE_BORDER", wxRESIZE_BORDER},
-  { "wxSYSTEM_MENU", wxSYSTEM_MENU},
-  { "wxMINIMIZE_BOX", wxMINIMIZE_BOX},
-  { "wxMAXIMIZE_BOX", wxMAXIMIZE_BOX},
-  { "wxRESIZE_BOX", wxRESIZE_BOX}
+    { "wxSTAY_ON_TOP", wxSTAY_ON_TOP},
+    { "wxCAPTION", wxCAPTION},
+    { "wxICONIZE", wxICONIZE},
+    { "wxMINIMIZE", wxICONIZE},
+    { "wxMAXIMIZE", wxMAXIMIZE},
+    { "wxTHICK_FRAME", wxTHICK_FRAME},
+    { "wxRESIZE_BORDER", wxRESIZE_BORDER},
+    { "wxSYSTEM_MENU", wxSYSTEM_MENU},
+    { "wxMINIMIZE_BOX", wxMINIMIZE_BOX},
+    { "wxMAXIMIZE_BOX", wxMAXIMIZE_BOX},
+    { "wxRESIZE_BOX", wxRESIZE_BOX}
 };
 
 int g_WindowStylesDialogCount = sizeof(g_WindowStylesDialog)/sizeof(wxWindowStylePair) ;
 
-  /* Generic */
+/* Generic */
 static wxWindowStylePair g_WindowStylesWindow[] = {
-  { "wxBORDER", wxBORDER},
-  { "wxDOUBLE_BORDER", wxDOUBLE_BORDER},
-  { "wxSUNKEN_BORDER", wxSUNKEN_BORDER},
-  { "wxRAISED_BORDER", wxRAISED_BORDER},
-  { "wxSIMPLE_BORDER", wxSIMPLE_BORDER},
-  { "wxSTATIC_BORDER", wxSTATIC_BORDER},
-  { "wxTRANSPARENT_WINDOW", wxTRANSPARENT_WINDOW},
-  { "wxNO_BORDER", wxNO_BORDER},
-  { "wxCLIP_CHILDREN", wxCLIP_CHILDREN}
-
-/* Would be duplicated with e.g. wxLB_HSCROLL
-  { "wxVSCROLL", wxVSCROLL },
-  { "wxHSCROLL", wxHSCROLL }
-*/
+    { "wxBORDER", wxBORDER},
+    { "wxDOUBLE_BORDER", wxDOUBLE_BORDER},
+    { "wxSUNKEN_BORDER", wxSUNKEN_BORDER},
+    { "wxRAISED_BORDER", wxRAISED_BORDER},
+    { "wxSIMPLE_BORDER", wxSIMPLE_BORDER},
+    { "wxSTATIC_BORDER", wxSTATIC_BORDER},
+    { "wxTRANSPARENT_WINDOW", wxTRANSPARENT_WINDOW},
+    { "wxNO_BORDER", wxNO_BORDER},
+    { "wxCLIP_CHILDREN", wxCLIP_CHILDREN}
+    
+    /* Would be duplicated with e.g. wxLB_HSCROLL
+    { "wxVSCROLL", wxVSCROLL },
+    { "wxHSCROLL", wxHSCROLL }
+    */
 };
 
 int g_WindowStylesWindowCount = sizeof(g_WindowStylesWindow)/sizeof(wxWindowStylePair) ;
 
 /*
- * A table holding all class style objects
- */
+* A table holding all class style objects
+*/
 
 
 wxWindowStyleTable::wxWindowStyleTable():
-  m_classes(wxKEY_STRING)
+m_classes(wxKEY_STRING)
 {
 }
 
@@ -294,7 +294,7 @@ void wxWindowStyleTable::Init()
     AddStyles("wxSlider", g_WindowStylesSliderCount, g_WindowStylesSlider);
     AddStyles("wxGauge", g_WindowStylesGaugeCount, g_WindowStylesGauge);
     AddStyles("wxComboBox", g_WindowStylesComboBoxCount, g_WindowStylesComboBox);
-//    AddStyles("wxChoice", g_WindowStylesChoice, g_WindowStylesChoice);
+    //    AddStyles("wxChoice", g_WindowStylesChoice, g_WindowStylesChoice);
     AddStyles("wxScrollBar", g_WindowStylesScrollBarCount, g_WindowStylesScrollBar);
 }
 
@@ -334,25 +334,25 @@ bool wxWindowStyleTable::GenerateStyleStrings(const wxString& className, long wi
     wxWindowStyleClass* styleClass = FindClass(className);
     if (!styleClass)
         return FALSE;
-
+    
     styleClass->GenerateStyleStrings(windowStyle, buf);
     return TRUE;
 }
 
 /*
- * Holds all the styles for a particular class
- */
+* Holds all the styles for a particular class
+*/
 
 wxWindowStyleClass::wxWindowStyleClass(int n, wxWindowStylePair *styles)
 {
     m_styleCount = n;
     m_styles = styles;
-/*
+    /*
     m_styles = new wxWindowStylePair[n];
     int i;
     for (i = 0; i < n; i++)
-        m_styles[i] = styles[i];
-*/
+    m_styles[i] = styles[i];
+    */
 }
 
 wxWindowStyleClass::~wxWindowStyleClass()
@@ -371,15 +371,15 @@ bool wxWindowStyleClass::GenerateStyle(char *buf, long windowStyle, long flag, c
     // Ignore zero flags
     if (flag == 0)
         return TRUE;
-
-  if ((windowStyle & flag) == flag)
-  {
-    if (strlen(buf) > 0)
-      strcat(buf, " | ");
-    strcat(buf, (const char*) strStyle);
-    return TRUE;
-  }
-  else
-    return FALSE;
+    
+    if ((windowStyle & flag) == flag)
+    {
+        if (strlen(buf) > 0)
+            strcat(buf, " | ");
+        strcat(buf, (const char*) strStyle);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
