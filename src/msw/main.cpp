@@ -155,7 +155,7 @@ DllMain(HANDLE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
 
 HINSTANCE wxhInstance = 0;
 
-HINSTANCE wxGetInstance()
+extern "C" HINSTANCE wxGetInstance()
 {
     return wxhInstance;
 }
