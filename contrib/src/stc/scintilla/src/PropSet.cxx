@@ -32,48 +32,39 @@ static inline bool IsLetter(char ch) {
 
 
 int CompareCaseInsensitive(const char *a, const char *b) {
-	while (*a && *b) {
-		if (*a != *b) {
-			if (IsLetter(*a) && IsLetter(*b)) {
-				char upperA = MakeUpperCase(*a);
-				char upperB = MakeUpperCase(*b);
-				if (upperA != upperB)
-					return upperA - upperB;
-			}
-			else {
-				return *a - *b;
-			}
-		}
-		a++;
-		b++;
-	}
-	// Either *a or *b is nul
-	return *a - *b;
+    while (*a && *b) {
+        if (*a != *b) {
+            char upperA = MakeUpperCase(*a);
+            char upperB = MakeUpperCase(*b);
+            if (upperA != upperB)
+                return upperA - upperB;
+        }
+        a++;
+        b++;
+    }
+    // Either *a or *b is nul
+    return *a - *b;
 }
 
 int CompareNCaseInsensitive(const char *a, const char *b, int len) {
-	while (*a && *b && len) {
-		if (*a != *b) {
-			if (IsLetter(*a) && IsLetter(*b)) {
-				char upperA = MakeUpperCase(*a);
-				char upperB = MakeUpperCase(*b);
-				if (upperA != upperB)
-					return upperA - upperB;
-			}
-			else {
-				return *a - *b;
-			}
-		}
-		a++;
-		b++;
-		len--;
-	}
-	if (len == 0)
-		return 0;
-	else
-		// Either *a or *b is nul
-		return *a - *b;
+    while (*a && *b && len) {
+        if (*a != *b) {
+            char upperA = MakeUpperCase(*a);
+            char upperB = MakeUpperCase(*b);
+            if (upperA != upperB)
+                return upperA - upperB;
+        }
+        a++;
+        b++;
+        len--;
+    }
+    if (len == 0)
+        return 0;
+    else
+        // Either *a or *b is nul
+        return *a - *b;
 }
+
 
 bool EqualCaseInsensitive(const char *a, const char *b) {
 	return 0 == CompareCaseInsensitive(a, b);
