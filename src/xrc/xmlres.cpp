@@ -652,7 +652,7 @@ public:
 
 wxXmlResourceHandler::wxXmlResourceHandler()
         : m_node(NULL), m_parent(NULL), m_instance(NULL),
-          m_parentAsWindow(NULL), m_instanceAsWindow(NULL)
+          m_parentAsWindow(NULL)
 {}
 
 
@@ -662,7 +662,7 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
     wxXmlNode *myNode = m_node;
     wxString myClass = m_class;
     wxObject *myParent = m_parent, *myInstance = m_instance;
-    wxWindow *myParentAW = m_parentAsWindow, *myInstanceAW = m_instanceAsWindow;
+    wxWindow *myParentAW = m_parentAsWindow;
 
     m_instance = instance;
     if (!m_instance && node->HasProp(wxT("subclass")) &&
@@ -692,14 +692,13 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
     m_class = node->GetPropVal(wxT("class"), wxEmptyString);
     m_parent = parent;
     m_parentAsWindow = wxDynamicCast(m_parent, wxWindow);
-    m_instanceAsWindow = wxDynamicCast(m_instance, wxWindow);
 
     wxObject *returned = DoCreateResource();
 
     m_node = myNode;
     m_class = myClass;
     m_parent = myParent; m_parentAsWindow = myParentAW;
-    m_instance = myInstance; m_instanceAsWindow = myInstanceAW;
+    m_instance = myInstance;
 
     return returned;
 }
@@ -1034,9 +1033,7 @@ wxSize wxXmlResourceHandler::GetSize(const wxString& param)
 
     if (is_dlg)
     {
-        if (m_instanceAsWindow)
-            return wxDLG_UNIT(m_instanceAsWindow, wxSize(sx, sy));
-        else if (m_parentAsWindow)
+        if (m_parentAsWindow)
             return wxDLG_UNIT(m_parentAsWindow, wxSize(sx, sy));
         else
         {
@@ -1075,9 +1072,7 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaul
 
     if (is_dlg)
     {
-        if (m_instanceAsWindow)
-            return wxDLG_UNIT(m_instanceAsWindow, wxSize(sx, 0)).x;
-        else if (m_parentAsWindow)
+        if (m_parentAsWindow)
             return wxDLG_UNIT(m_parentAsWindow, wxSize(sx, 0)).x;
         else
         {

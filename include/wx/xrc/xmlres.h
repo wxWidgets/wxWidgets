@@ -341,7 +341,7 @@ protected:
     wxXmlNode *m_node;
     wxString m_class;
     wxObject *m_parent, *m_instance;
-    wxWindow *m_parentAsWindow, *m_instanceAsWindow;
+    wxWindow *m_parentAsWindow;
 
     // --- Handy methods:
 
