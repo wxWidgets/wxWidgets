@@ -203,6 +203,16 @@ long wxExecute( const wxString& command, int flags, wxProcess *process )
 {
     wxCHECK_MSG( !command.IsEmpty(), 0, wxT("can't exec empty command") );
 
+#if wxUSE_THREADS
+    // fork() doesn't mix well with POSIX threads: on many systems the program
+    // deadlocks or crashes for some reason. Probably our code is buggy and
+    // doesn't do something which must be done to allow this to work, but I
+    // don't know what yet, so for now just warn the user (this is the least we
+    // can do) about it
+    wxASSERT_MSG( wxThread::IsMain(),
+                    _T("wxExecute() can be called only from the main thread") );
+#endif // wxUSE_THREADS
+
     int argc = 0;
     wxChar *argv[WXEXECUTE_NARGS];
     wxString argument;

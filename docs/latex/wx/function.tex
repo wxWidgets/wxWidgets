@@ -535,8 +535,13 @@ a process (always synchronously) and capture its output in the array
 {\it output}. The fourth version adds the possibility to additionally capture
 the messages from standard error output in the {\it errors} array.
 
-See also \helpref{wxShell}{wxshell}, \helpref{wxProcess}{wxprocess},
-\helpref{Exec sample}{sampleexec}.
+{\bf NB:} Currently wxExecute() can only be used from the main thread, calling
+this function from another thread will result in an assert failure in debug
+build and won't work.
+
+\wxheading{See also}
+
+\helpref{wxShell}{wxshell}, \helpref{wxProcess}{wxprocess}, \helpref{Exec sample}{sampleexec}.
 
 \wxheading{Parameters}
 

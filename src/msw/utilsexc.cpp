@@ -492,6 +492,14 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 {
     wxCHECK_MSG( !!cmd, 0, wxT("empty command in wxExecute") );
 
+#if wxUSE_THREADS
+    // for many reasons, the code below breaks down if it's called from another
+    // thread -- this could be fixed, but as Unix versions don't support this
+    // neither I don't want to waste time on this now
+    wxASSERT_MSG( wxThread::IsMain(),
+                    _T("wxExecute() can be called only from the main thread") );
+#endif // wxUSE_THREADS
+
     wxString command;
 
 #if wxUSE_IPC
