@@ -26,14 +26,16 @@ def wrap(app):
     app.MainLoop()
 
 
-def main(argv):
-    if len(argv) < 2:
-        print "Please specify a module name."
-        raise SystemExit
-    name = argv[1]
-    if name[-3:] == '.py':
-        name = name[:-3]
-    module = __import__(name)
+def main(modulename=None):
+    sys.path.insert(0, os.curdir)
+    if not modulename:
+        if len(sys.argv) < 2:
+            print "Please specify a module name."
+            raise SystemExit
+        modulename = sys.argv[1]
+        if modulename.endswith('.py'):
+            modulename = modulename[:-3]
+    module = __import__(modulename)
     # Find the App class.
     App = None
     d = module.__dict__
@@ -51,5 +53,4 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    sys.path.insert(0, os.curdir)
     main(sys.argv)

@@ -32,11 +32,12 @@ class App(wx.wxApp):
         return True
 
 def main(filename=None):
+    if not filename and len(sys.argv) > 1:
+        filename = sys.argv[1]
+    if filename:
+        filename = os.path.realpath(filename)
     app = App(filename)
     app.MainLoop()
 
 if __name__ == '__main__':
-    filename = None
-    if len(sys.argv) > 1:
-        filename = os.path.realpath(sys.argv[1])
-    main(filename)
+    main()
