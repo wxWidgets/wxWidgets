@@ -824,7 +824,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         // Get extent of month-name + year
         wxCoord monthw, monthh;
-        wxString headertext = m_date.Format("%B %Y");
+        wxString headertext = m_date.Format(wxT("%B %Y"));
         dc.GetTextExtent(headertext, &monthw, &monthh);
 
         // draw month-name centered above weekdays

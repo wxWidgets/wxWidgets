@@ -1577,7 +1577,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
         m_printData.SetFilename(filename);
     }
 
-    m_pstream = fopen( m_printData.GetFilename().fn_str(), "w+" );
+    m_pstream = wxFopen( m_printData.GetFilename().fn_str(), wxT("w+") );
 
     if (!m_pstream)
     {
