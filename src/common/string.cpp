@@ -391,13 +391,35 @@ void wxString::AllocBeforeWrite(size_t nLen)
 
   // must not share string and must have enough space
   wxStringData* pData = GetStringData();
-  if ( pData->IsShared() || (nLen > pData->nAllocLength) ) {
+  if ( pData->IsShared() || pData->IsEmpty() ) {
     // can't work with old buffer, get new one
     pData->Unlock();
     AllocBuffer(nLen);
   }
   else {
-    // update the string length
+    if ( nLen > pData->nAllocLength ) {
+      // realloc the buffer instead of calling malloc() again, this is more
+      // efficient
+      STATISTICS_ADD(Length, nLen);
+
+      nLen += EXTRA_ALLOC;
+
+      wxStringData *pDataOld = pData;
+      pData = (wxStringData*)
+          realloc(pData, sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
+      if ( !pData ) {
+        // out of memory
+        free(pDataOld);
+
+        // FIXME we're going to crash...
+        return;
+      }
+
+      pData->nAllocLength = nLen;
+      m_pchData = pData->data();
+    }
+
+    // now we have enough space, just update the string length
     pData->nDataLength = nLen;
   }
 
@@ -429,11 +451,15 @@ void wxString::Alloc(size_t nLen)
     else {
       nLen += EXTRA_ALLOC;
 
+      wxStringData *pDataOld = pData;
       wxStringData *p = (wxStringData *)
         realloc(pData, sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
 
       if ( p == NULL ) {
-        // @@@ what to do on memory error?
+        // don't leak memory
+        free(pDataOld);
+
+        // FIXME what to do on memory error?
         return;
       }
 
@@ -451,12 +477,15 @@ void wxString::Shrink()
 {
   wxStringData *pData = GetStringData();
 
-  // this variable is unused in release build, so avoid the compiler warning by
-  // just not declaring it
+  // this variable is unused in release build, so avoid the compiler warning
+  // by just not declaring it
 #ifdef __WXDEBUG__
   void *p =
 #endif
   realloc(pData, sizeof(wxStringData) + (pData->nDataLength + 1)*sizeof(wxChar));
+
+  // we rely on a reasonable realloc() implementation here - so far I haven't
+  // seen any which wouldn't behave like this
 
   wxASSERT( p != NULL );  // can't free memory?
   wxASSERT( p == pData ); // we're decrementing the size - block shouldn't move!
