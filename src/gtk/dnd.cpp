@@ -155,6 +155,8 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     wxDragResult result;
     if ( context->suggested_action == GDK_ACTION_COPY )
         result = wxDragCopy;
+    else if ( context->suggested_action == GDK_ACTION_LINK )
+        result = wxDragLink;
     else
         result = wxDragMove;
 
@@ -175,6 +177,8 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
         GdkDragAction action;
         if (result == wxDragCopy)
             action = GDK_ACTION_COPY;
+        else if (result == wxDragLink)
+            action = GDK_ACTION_LINK;
         else
             action = GDK_ACTION_MOVE;
 
@@ -325,6 +329,8 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
     wxDragResult result;
     if ( context->suggested_action == GDK_ACTION_COPY )
         result = wxDragCopy;
+    else if ( context->suggested_action == GDK_ACTION_LINK )
+        result = wxDragLink;
     else
         result = wxDragMove;
 
@@ -621,6 +627,7 @@ gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigur
 
     wxDragResult action = wxDragNone;
     if (source->m_dragContext->action == GDK_ACTION_COPY) action = wxDragCopy;
+    if (source->m_dragContext->action == GDK_ACTION_LINK) action = wxDragLink;
     if (source->m_dragContext->action == GDK_ACTION_MOVE) action = wxDragMove;
 
     source->GiveFeedback( action );
@@ -817,6 +824,8 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
 
         if (context->action == GDK_ACTION_COPY)
             m_retValue = wxDragCopy;
+        if (context->action == GDK_ACTION_LINK)
+            m_retValue = wxDragLink;
         if (context->action == GDK_ACTION_MOVE)
             m_retValue = wxDragMove;
     }
