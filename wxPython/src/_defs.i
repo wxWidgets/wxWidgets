@@ -190,13 +190,13 @@ typedef unsigned char   byte;
 // Set the autodoc and the docstring for a decl and then define the decl too.
 // Must use the full declaration of the item.
 #ifdef _DO_FULL_DOCS
-    %define DocDeclAStr(type, decl, astr, details, docstr)
+    %define DocDeclAStr(type, decl, astr, docstr, details)
         %feature("autodoc") decl astr;
         %feature("docstring") decl docstr details;
         type decl
     %enddef
 #else
-    %define DocDeclAStr(type, decl, astr, details, docstr)
+    %define DocDeclAStr(type, decl, astr, docstr, details)
         %feature("autodoc") decl astr;
         %feature("docstring") decl docstr;
         type decl
