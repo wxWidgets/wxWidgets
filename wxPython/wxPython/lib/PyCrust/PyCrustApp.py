@@ -18,6 +18,7 @@ class App(wxApp):
         self.crustFrame = CrustFrame(locals=locals)
         self.crustFrame.SetSize((750, 525))
         self.crustFrame.Show(true)
+        self.crustFrame.crust.shell.SetFocus()
         self.SetTopWindow(self.crustFrame)
         # Add the application object to the sys module's namespace.
         # This allows a shell user to do:

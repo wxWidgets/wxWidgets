@@ -18,6 +18,7 @@ class App(wxApp):
         self.shellFrame = ShellFrame(locals=locals)
         self.shellFrame.SetSize((750, 525))
         self.shellFrame.Show(true)
+        self.shellFrame.shell.SetFocus()
         self.SetTopWindow(self.shellFrame)
         # Add the application object to the sys module's namespace.
         # This allows a shell user to do:
