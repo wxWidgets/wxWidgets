@@ -341,20 +341,24 @@ void wxWindowMac::DragAcceptFiles(bool accept)
 // Get total size
 void wxWindowMac::DoGetSize(int *x, int *y) const
 {
-    *x = m_width ;
-    *y = m_height ;
+     if(x)   *x = m_width ;
+     if(y)   *y = m_height ;
 }
 
 void wxWindowMac::DoGetPosition(int *x, int *y) const
 {
-    *x = m_x ;
-    *y = m_y ;
+    int xx,yy;
+ 
+    xx = m_x ;
+    yy = m_y ;
     if (GetParent())
     {
         wxPoint pt(GetParent()->GetClientAreaOrigin());
-        *x -= pt.x;
-        *y -= pt.y;
+        xx -= pt.x;
+        yy -= pt.y;
     }
+    if(x)   *x = xx;
+    if(y)   *y = yy;
 }
 
 #if wxUSE_MENUS
@@ -378,9 +382,10 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
 {
 	WindowRef window = GetMacRootWindow() ;
 
-	Point		localwhere ;
-	localwhere.h = * x ;
-	localwhere.v = * y ;
+	Point		localwhere = {0,0} ;
+
+    if(x)   localwhere.h = * x ;
+    if(y)   localwhere.v = * y ;
 
 	GrafPtr		port ;	
 	::GetPort( &port ) ;
@@ -388,8 +393,8 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
 	::GlobalToLocal( &localwhere ) ;
 	::SetPort( port ) ;
 
-	*x = localwhere.h ;
-	*y = localwhere.v ;
+    if(x)   *x = localwhere.h ;
+    if(y)   *y = localwhere.v ;
 	
 	MacRootWindowToClient( x , y ) ;
 }
@@ -400,9 +405,9 @@ void wxWindowMac::DoClientToScreen(int *x, int *y) const
 	
 	MacClientToRootWindow( x , y ) ;
 	
-	Point		localwhere ;
-	localwhere.h = * x ;
-	localwhere.v = * y ;
+	Point		localwhere = { 0,0 };
+    if(x)   localwhere.h = * x ;
+    if(y)   localwhere.v = * y ;
 	
 	GrafPtr		port ;	
 	::GetPort( &port ) ;
@@ -410,32 +415,26 @@ void wxWindowMac::DoClientToScreen(int *x, int *y) const
 	::SetOrigin( 0 , 0 ) ;
 	::LocalToGlobal( &localwhere ) ;
 	::SetPort( port ) ;
-	*x = localwhere.h ;
-	*y = localwhere.v ;
+    if(x)   *x = localwhere.h ;
+    if(y)   *y = localwhere.v ;
 }
 
 void wxWindowMac::MacClientToRootWindow( int *x , int *y ) const
 {
-	if ( m_macWindowData )
+ 	if ( m_macWindowData == NULL)
 	{
-	}
-	else
-	{
-		*x += m_x ;
-		*y += m_y ;
+		if(x)   *x += m_x ;
+		if(y)   *y += m_y ;
 		GetParent()->MacClientToRootWindow( x , y ) ;
 	}
 }
 
 void wxWindowMac::MacRootWindowToClient( int *x , int *y ) const
 {
-	if ( m_macWindowData )
+	if ( m_macWindowData == NULL)
 	{
-	}
-	else
-	{
-		*x -= m_x ;
-		*y -= m_y ;
+		if(x)   *x -= m_x ;
+	    if(y)   *y -= m_y ;
 		GetParent()->MacRootWindowToClient( x , y ) ;
 	}
 }
@@ -480,11 +479,12 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMac::DoGetClientSize(int *x, int *y) const
 {
-    *x = m_width ;
-    *y = m_height ;
+    int ww, hh;
+    ww = m_width ;
+    hh = m_height ;
 
-	*x -= MacGetLeftBorderSize(  )  + MacGetRightBorderSize(  ) ;
-	*y -= MacGetTopBorderSize(  ) + MacGetBottomBorderSize( );
+	ww -= MacGetLeftBorderSize(  )  + MacGetRightBorderSize(  ) ;
+	hh -= MacGetTopBorderSize(  ) + MacGetBottomBorderSize( );
 	
   if ( (m_vScrollBar && m_vScrollBar->IsShown()) || (m_hScrollBar  && m_hScrollBar->IsShown()) )
   {
@@ -496,7 +496,6 @@ void wxWindowMac::DoGetClientSize(int *x, int *y) const
 	MacClientToRootWindow( &x1 , &y1 ) ;
 	MacClientToRootWindow( &w , &h ) ;
 	
-	WindowRef window = NULL ;
 	wxWindowMac *iter = (wxWindowMac*)this ;
 	
 	int totW = 10000 , totH = 10000;
@@ -514,21 +513,23 @@ void wxWindowMac::DoGetClientSize(int *x, int *y) const
 	
   	if (m_hScrollBar  && m_hScrollBar->IsShown() )
   	{
-  		(*y) -= MAC_SCROLLBAR_SIZE;
+  		hh -= MAC_SCROLLBAR_SIZE;
 		if ( h-y1 >= totH )
 		{
-			(*y)+= 1 ;
+			hh += 1 ;
 		}
     }
   	if (m_vScrollBar  && m_vScrollBar->IsShown() )
   	{
-    	(*x) -= MAC_SCROLLBAR_SIZE;
+    	ww -= MAC_SCROLLBAR_SIZE;
 		if ( w-x1 >= totW )
 		{
-    		(*x) += 1 ;
+    		ww += 1 ;
     	}
   	}
   }
+  if(x)   *x = ww;
+  if(y)   *y = hh;
 }
 
 
@@ -789,7 +790,7 @@ bool wxWindowMac::Show(bool show)
 	{
 	    WindowRef window = GetMacRootWindow() ;
 	    wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
-	    if ( !win->m_isBeingDeleted )
+	    if ( win && !win->m_isBeingDeleted )
    	        Refresh() ;	
 	}
 	else
@@ -1797,7 +1798,6 @@ void wxWindowMac::MacMouseDown( EventRecord *ev , short part)
 
 void wxWindowMac::MacMouseUp( EventRecord *ev , short part)
 {
-	WindowPtr frontWindow ;
 	switch (part)
 	{
 		case inContent:		
@@ -1810,7 +1810,6 @@ void wxWindowMac::MacMouseUp( EventRecord *ev , short part)
 
 void wxWindowMac::MacMouseMoved( EventRecord *ev , short part)
 {
-	WindowPtr frontWindow ;
 	switch (part)
 	{
 		case inContent:		
@@ -1843,7 +1842,7 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time)
 	// ownUpdateRgn is the area that this window has to invalidate i.e. its own area without its children
 	RgnHandle ownUpdateRgn = NewRgn() ;
 	CopyRgn( updatergn , ownUpdateRgn ) ;
-	wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
+
 	{
 		wxMacDrawingHelper focus( this ) ; // was client
 		if ( focus.Ok() )
@@ -2042,7 +2041,6 @@ void wxWindowMac::MacUpdate( EventRecord *ev )
 
 WindowRef wxWindowMac::GetMacRootWindow() const
 {
-	WindowRef window = NULL ;
 	wxWindowMac *iter = (wxWindowMac*)this ;
 	
 	while( iter )
@@ -2121,7 +2119,6 @@ void wxWindowMac::MacRepositionScrollBars()
 	MacClientToRootWindow( &x , &y ) ;
 	MacClientToRootWindow( &w , &h ) ;
 	
-	WindowRef window = NULL ;
 	wxWindowMac *iter = (wxWindowMac*)this ;
 	
 	int totW = 10000 , totH = 10000;

@@ -315,7 +315,7 @@ void wxFrameMac::DoGetClientSize(int *x, int *y) const
 	wxWindow::DoGetClientSize( x , y ) ;
 
 #if wxUSE_STATUSBAR
-  if ( GetStatusBar() )
+  if ( GetStatusBar() && y )
   {
     int statusX, statusY;
     GetStatusBar()->GetClientSize(&statusX, &statusY);
@@ -324,8 +324,10 @@ void wxFrameMac::DoGetClientSize(int *x, int *y) const
 #endif // wxUSE_STATUSBAR
 
   wxPoint pt(GetClientAreaOrigin());
-  *y -= pt.y;
-  *x -= pt.x;
+  if ( y )
+    *y -= pt.y;
+  if ( x ) 
+    *x -= pt.x;
 }
 
 void wxFrameMac::DoSetClientSize(int clientwidth, int clientheight)

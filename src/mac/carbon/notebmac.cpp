@@ -149,7 +149,8 @@ void wxNotebook::SetPageSize(const wxSize& size)
 
 int wxNotebook::SetSelection(int nPage)
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+  if( !IS_VALID_PAGE(nPage) ) 
+    return m_nSelection ;
 
     ChangePage(m_nSelection, nPage);
 	SetControlValue( m_macControl , m_nSelection + 1 ) ;

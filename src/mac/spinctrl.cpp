@@ -18,7 +18,9 @@
 
 #include "wx/spinctrl.h"
 
+#if 0
 
+// now using the generic impl
 //-----------------------------------------------------------------------------
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
@@ -36,6 +38,8 @@
 #endif
 
 #endif // wxUSE_SPINBTN/!wxUSE_SPINBTN
+
+#endif
 
 #endif   // wxUSE_SPINCTRL
 

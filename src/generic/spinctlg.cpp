@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if !(defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__)) || \
+#if !(defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__)) || defined(__WXMAC__) || \
     defined(__WXUNIVERSAL__)
 
 #ifndef WX_PRECOMP
@@ -147,7 +147,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     }
 
     SetBackgroundColour(*wxRED);
-
     m_text = new wxSpinCtrlText(this, value);
     m_btn = new wxSpinCtrlButton(this, style);
 
@@ -155,7 +154,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     m_btn->SetValue(initial);
 
     DoSetSize(pos.x, pos.y, size.x, size.y);
-
+#ifdef __WXMAC__
+    DoMoveWindow( pos.x, pos.y, size.x, size.y ) ;
+#endif
     // have to disable this window to avoid interfering it with message
     // processing to the text and the button... but pretend it is enabled to
     // make IsEnabled() return TRUE

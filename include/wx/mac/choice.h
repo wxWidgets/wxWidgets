@@ -83,6 +83,7 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase
   virtual inline int GetColumns() const { return 1 ; };
 */
 protected:
+    virtual wxSize DoGetBestSize() const ;
     virtual void DoSetItemClientData( int n, void* clientData );
     virtual void* DoGetItemClientData( int n ) const;
     virtual void DoSetItemClientObject( int n, wxClientData* clientData );

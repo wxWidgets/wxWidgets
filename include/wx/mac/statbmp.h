@@ -58,7 +58,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxStaticBitmapBase
 
   // overriden base class virtuals
   virtual bool AcceptsFocus() const { return FALSE; }
-  wxSize DoGetBestSize() const ;
+  virtual  wxSize DoGetBestSize() const ;
 
  protected:
   wxBitmap m_bitmap;

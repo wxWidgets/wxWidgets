@@ -53,7 +53,6 @@ public:
 
   virtual int GetValue() const ;
   virtual void SetValue(int);
-  bool Show(bool show);
 
   void SetRange(int minValue, int maxValue);
 
@@ -76,9 +75,20 @@ public:
   int GetThumbLength() const ;
   void SetTick(int tickPos) ;
 
+ 
+     // set min/max size of the slider
+     virtual void SetSizeHints( int minW, int minH,
+                                int maxW = -1, int maxH = -1,
+                                int incW = -1, int incH = -1 );
+ 
+   protected:
+     virtual wxSize DoGetBestSize() const;
+     virtual void   DoSetSize(int x, int y, int w, int h, int sizeFlags);
+     virtual void   DoMoveWindow(int x, int y, int w, int h);
+ 
   void Command(wxCommandEvent& event);
 	void 					MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
- protected:
+
  	wxStaticText*	m_macMinimumStatic ;
  	wxStaticText*	m_macMaximumStatic ;
  	wxStaticText*	m_macValueStatic ;
@@ -88,6 +98,7 @@ public:
   int           m_pageSize;
   int           m_lineSize;
   int           m_tickFreq;
+private :
 DECLARE_EVENT_TABLE()
 };
 

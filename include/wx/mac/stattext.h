@@ -48,7 +48,7 @@ class WXDLLEXPORT wxStaticText: public wxStaticTextBase
   void DrawParagraph(wxDC &dc, wxString paragraph);
   void OnPaint( wxPaintEvent &event ) ;
   void OnDraw( wxDC &dc ) ;
-  wxSize DoGetBestSize() const ;
+  virtual wxSize DoGetBestSize() const ;
   virtual bool AcceptsFocus() const { return FALSE; }
  private :
  	wxString	m_label ;

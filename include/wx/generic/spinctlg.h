@@ -20,7 +20,7 @@
 // without tons of #ifdefs.
 // ----------------------------------------------------------------------------
 
-#if wxUSE_SPINBTN && !defined(__WXMAC__)
+#if wxUSE_SPINBTN 
 
 #ifdef __GNUG__
     #pragma interface "spinctlg.h"

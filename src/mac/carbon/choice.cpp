@@ -216,6 +216,13 @@ void wxChoice::MacHandleControlClick( ControlHandle control , SInt16 controlpart
     event.SetString(GetStringSelection());
     ProcessCommand(event);
 }
+
+wxSize wxChoice::DoGetBestSize() const
+{
+    // TODO should modify this to take into account string length ala wxGTK
+    return wxSize(100,20);
+}
+
 /*
 void wxChoice::Command(wxCommandEvent & event)
 {

@@ -80,6 +80,7 @@ protected:
 	int               m_noRowsOrCols;
 
 // Internal functions 
+    virtual wxSize DoGetBestSize() const ;
 	virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);

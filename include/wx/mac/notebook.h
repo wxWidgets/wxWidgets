@@ -80,11 +80,11 @@ public:
 
   // control the appearance of the notebook pages
     // set the size (the same for all pages)
-  void SetPageSize(const wxSize& size);
+  virtual void SetPageSize(const wxSize& size);
     // set the padding between tabs (in pixels)
-  void SetPadding(const wxSize& padding);
+  virtual void SetPadding(const wxSize& padding);
     // sets the size of the tabs (assumes all tabs are the same size)
-  void SetTabSize(const wxSize& sz);
+  virtual void SetTabSize(const wxSize& sz);
 
 /*
     // get number of pages in the dialog

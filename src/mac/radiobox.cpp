@@ -120,8 +120,6 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 0 , 1, 
 	  	kControlGroupBoxTextTitleProc , (long) this ) ;
 	
-	MacPostControlCreate() ;
-
     for (i = 0; i < n; i++)
     {
         wxRadioButton *radBtn = new wxRadioButton(this, NewControlId(),choices[i],wxPoint(5,20*i+10),
@@ -132,7 +130,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     }
 
 	SetSelection(0);
-	SetSize(pos.x,pos.y,size.x,size.y);
+	MacPostControlCreate() ;
 
   return TRUE;
 }
@@ -481,6 +479,33 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 		}
 }
 
+wxSize wxRadioBox::DoGetBestSize() const
+{
+    int charWidth, charHeight;
+    int maxWidth, maxHeight;
+    int eachWidth, eachHeight;
+    int totWidth, totHeight;
+
+    wxFont font = GetParent()->GetFont();
+    GetTextExtent(wxString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+                  &charWidth, &charHeight, NULL, NULL, &font);
+    charWidth /= 52;
+
+   maxWidth = -1;
+   maxHeight = -1;
+   for (int i = 0 ; i < m_noItems; i++)
+   {
+        GetTextExtent(GetString(i), &eachWidth, &eachHeight);
+        eachWidth  = (int)(eachWidth + RADIO_SIZE) ;
+        eachHeight = (int)((3 * eachHeight) / 2);
+        if (maxWidth < eachWidth)     maxWidth = eachWidth;
+        if (maxHeight < eachHeight)   maxHeight = eachHeight;
+    }
+
+    totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight * 3/2;
+    totWidth  = GetColumnCount() * (maxWidth + charWidth) + charWidth;
+   return wxSize(totWidth, totHeight);
+}
 //-------------------------------------------------------------------------------------
 // 		¥ GetNumVer
 //-------------------------------------------------------------------------------------
