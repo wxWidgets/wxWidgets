@@ -302,6 +302,90 @@ release version is around 5 MB.
 See also the file docs/tech/tn0007.txt for further instructions and details
 of how to create your own project files.
 
+Borland C++ 5.5 compilation
+---------------------------
+
+Before compiling wxWindows with Borland C++ 5.5, there are a few 
+issues concerning the compiler installation: 
+
+1. The compiler must be installed to a path that does not contain 
+   spaces, such as c:\Borland\Bcc55 (in particular, do not install 
+   it below "C:\Program Files").
+
+2. Make sure that you downloaded and installed the service pack 1 
+   for Borland C++ 5.5.  This SP1 can be downloaded from:
+   http://www.borland.com/devsupport/bcppbuilder/file_supplements.html
+
+   IMPORTANT:
+   When installing SP1, make sure that you extract (UnZip) the files 
+   to the directory where you installed Borland C++ 5.5 (e.g., 
+   c:\Borland\Bcc55) with the option "use folder names" selected. 
+   This is necessary, to ensure that the files (mostly include files) 
+   are extracted to the right directory.
+
+3. Create the following two files in the same directory where you 
+   installed Borland C++ 5.5 (e.g., c:\Borland\Bcc55):
+
+   a. bcc32.cfg
+      text file containing the following two lines:
+      -I"c:\Borland\Bcc55\include"
+      -L"c:\Borland\Bcc55\lib"
+
+   b. ilink32.cfg
+      text file containing the following line:
+      -L"c:\Borland\Bcc55\lib"
+
+   (replace c:\Borland\Bcc55 with the actual path where you installed 
+   Borland C++ 5.5)
+
+4. Add the borland BIN directory to your path (e.g., c:\Borland\Bcc55\bin), 
+   and define the environment variable BCCDIR=<Borland C++ 5.5 path>
+   (e.g., set BCCDIR=c:\Borland\Bcc55)
+
+Compiling wxWindows:
+
+Once the compiler and its service pack are properly installed, you build 
+wxWindows using the provided makefile.b32 in the src/msw directory:
+
+a. To build wxWindows in DEBUG mode:
+
+    cd c:\wx2\src\msw
+    make -f makefile.b32
+
+    (replace c:\wx2 with the actual path where you installed wxWindows)
+
+b. To build wxWindows in RELEASE mode:
+
+    cd c:\wx2\src\msw
+    make -f makefile.b32 FINAL=1   
+
+    (if you had previously built wxWindows, you need to clean all of
+    the object and intermediate files.  Before the above make command, 
+    run: 'make -f makefile.b32 CLEANALL')
+
+IMPORTANT:
+The Service Pack 1 for Borland C++ 5.5 must be installed before wxWindows 
+is compiled.  If you compiled wxWindows before, it is advised that you 
+re-compile it following the next steps:
+
+    cd c:\wx2\src\msw
+    make -f makefile.b32 CLEANALL
+    make -f makefile.b32   (or make -f makefile.b32 FINAL=1)
+
+    (replace c:\wx2 with the actual path where you installed wxWindows)
+
+** REMEMBER **
+
+In all of your wxWindows applications, your source code should include 
+the following preprocessor directive:
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+(check the samples -- e.g., \wx2\samples\minimal\minimal.cpp -- for 
+more details) 
+
 Borland C++Builder compilation
 ------------------------------
 
@@ -312,7 +396,7 @@ Borland C++Builder compilation
 
 2. You can build samples using the makefiles as per the
    instructions for BC++ above, or you can follow the instructions
-   in docs/tech/tn0004.htm to use the IDE.
+   in docs/tech/tn0004.htm or http://biolpc22.york.ac.uk/wx/bc/.
 
 Watcom C++ 10.6/11 compilation
 ---------------------------
