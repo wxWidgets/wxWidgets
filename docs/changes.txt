@@ -67,6 +67,7 @@ All:
 - added support for POST method and alt ports to wxHTTP (Roger Chickering)
 - added wxSocket::IPAddress() (Chris Mellon)
 - wxDataStreams can read/write many elements at once (Mickael Gilabert)
+- added wxRecursionGuard class
 - added wxThreadHelper class (Daniel Howard)
 
 wxBase:
