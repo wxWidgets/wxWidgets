@@ -220,6 +220,19 @@ void wxCommandProcessor::Initialize()
     SetMenuStrings();
 }
 
+// This reduces flicker in wxGTK+
+static void wxSetMenuLabelOptimally(wxMenu* menu, int id, const wxString& label)
+{
+    wxString oldLabel = menu->GetLabel(id);
+    oldLabel = wxStripMenuCodes(oldLabel.BeforeFirst('\t'));
+#ifdef __WXGTK__
+    oldLabel.Replace(wxT("_"), wxT("")); // GTK+ only
+#endif
+    wxString label1 = wxStripMenuCodes(label.BeforeFirst('\t'));
+    if (oldLabel != label1)
+        menu->SetLabel(id, label);
+}
+
 void wxCommandProcessor::SetMenuStrings()
 {
 #if wxUSE_MENUS
@@ -237,7 +250,9 @@ void wxCommandProcessor::SetMenuStrings()
             else
                 buf = wxString(_("Can't &Undo ")) + commandName + m_undoAccelerator;
 
-            m_commandEditMenu->SetLabel(wxID_UNDO, buf);
+            //m_commandEditMenu->SetLabel(wxID_UNDO, buf);
+            wxSetMenuLabelOptimally(m_commandEditMenu, wxID_UNDO, buf);
+            
             m_commandEditMenu->Enable(wxID_UNDO, canUndo);
 
             // We can redo, if we're not at the end of the history.
@@ -247,23 +262,23 @@ void wxCommandProcessor::SetMenuStrings()
                 wxString redoCommandName(redoCommand->GetName());
                 if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
                 buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
-                m_commandEditMenu->SetLabel(wxID_REDO, buf);
+                wxSetMenuLabelOptimally(m_commandEditMenu, wxID_REDO, buf);
                 m_commandEditMenu->Enable(wxID_REDO, TRUE);
             }
             else
             {
-                m_commandEditMenu->SetLabel(wxID_REDO, _("&Redo") + m_redoAccelerator);
+                wxSetMenuLabelOptimally(m_commandEditMenu, wxID_REDO, _("&Redo") + m_redoAccelerator);
                 m_commandEditMenu->Enable(wxID_REDO, FALSE);
             }
         }
         else
         {
-            m_commandEditMenu->SetLabel(wxID_UNDO, _("&Undo") + m_undoAccelerator);
+            wxSetMenuLabelOptimally(m_commandEditMenu, wxID_UNDO, _("&Undo") + m_undoAccelerator);
             m_commandEditMenu->Enable(wxID_UNDO, FALSE);
 
             if (m_commands.Number() == 0)
             {
-                m_commandEditMenu->SetLabel(wxID_REDO, _("&Redo") + m_redoAccelerator);
+                wxSetMenuLabelOptimally(m_commandEditMenu, wxID_REDO, _("&Redo") + m_redoAccelerator);
                 m_commandEditMenu->Enable(wxID_REDO, FALSE);
             }
             else
@@ -274,7 +289,7 @@ void wxCommandProcessor::SetMenuStrings()
                 wxString redoCommandName(redoCommand->GetName());
                 if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
                 buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
-                m_commandEditMenu->SetLabel(wxID_REDO, buf);
+                wxSetMenuLabelOptimally(m_commandEditMenu, wxID_REDO, buf);
                 m_commandEditMenu->Enable(wxID_REDO, TRUE);
             }
         }
