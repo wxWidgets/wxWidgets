@@ -1225,7 +1225,12 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
             {
                 newDoc->SetDocumentName(temp->GetDocumentName());
                 newDoc->SetDocumentTemplate(temp);
-                newDoc->OnNewDocument();
+                if (!newDoc->OnNewDocument() )
+                {
+                     // Document is implicitly deleted by DeleteAllViews
+                     newDoc->DeleteAllViews();
+                     return NULL;
+                }
             }
             return newDoc;
         }
@@ -1248,7 +1253,12 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
             {
                 newDoc->SetDocumentName(temp->GetDocumentName());
                 newDoc->SetDocumentTemplate(temp);
-                newDoc->OnNewDocument();
+                if (!newDoc->OnNewDocument() )
+                {
+                     // Document is implicitly deleted by DeleteAllViews
+                     newDoc->DeleteAllViews();
+                     return NULL;
+                }
             }
             return newDoc;
         }
