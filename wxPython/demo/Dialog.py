@@ -26,7 +26,7 @@ class TestDialog(wx.Dialog):
         # This next step is the most important, it turns this Python
         # object into the real wrapper of the dialog (instead of pre)
         # as far as the wxPython extension is concerned.
-        self.this = pre.this
+        self.PostCreate(pre)
 
         # Now continue with the normal construction of the dialog
         # contents
