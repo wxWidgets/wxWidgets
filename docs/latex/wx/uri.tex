@@ -22,31 +22,6 @@ In short, a URL \em{is} a URI.  In other
 words, URL is a subset of a URI - most 
 acceptable URLs are also acceptable URIs.
 
-wxURI can be used to validate URIs:
-\begin{verbatim}
-URI myuri;
-
-//will not print "Bad URI" because this is a valid URI
-if(!myuri.Create(("ftp://mysiteftp.com/mydir")))
-	wxPrintf("Bad URI");
-
-URI mybaduri;
-
-//will print "Bad URI" because ::x:: is not a valid URI
-if(!mybaduri.Create(("::x::")))
-	wxPrintf("Bad URI");
-\end{verbatim}
-
-wxURI also has some uses that may not be apparent at first, 
-such as skipping past a URI in a string:
-\begin{verbatim}
-URI myuri;
-wxString mystring = wxT("http://mysite.com A Good Website");
-
-//mystring will contain " A Good Website" after URI::Create()
-mystring = myuri.Extract(mystring);
-\end{verbatim}
-
 wxURI supports copy construction and standard assignment
 operators.  wxURI can also be inherited from to provide
 furthur functionality.
@@ -75,7 +50,7 @@ one of the following methods:
 \helpref{GetFragment}{wxurigetfragment}
 
 However, you should check HasXXX before
-calling a get method:
+calling a get method:\\
  
 \helpref{HasScheme}{wxurihasscheme}\\
 \helpref{HasUser}{wxurihasuser}\\
@@ -93,11 +68,6 @@ wxURI myuri(wxT("http://mysite.com"));
 if(myuri.HasScheme())
    protocol = myuri.GetScheme();
 \end{verbatim}
-
-Also, you can get the numeric value of the URI's port
-component by calling \helpref{GetPortValue}{wxurigetportvalue},
-and the host type of the server component by calling 
-\helpref{GetHostType}{wxurigethosttype}
 
 \membersection{wxURI::wxURI}\label{wxuriwxuri}
 
@@ -124,11 +94,9 @@ Copies this URI from another URI.
 
 \membersection{wxURI::Create}\label{wxuricreate}
 
-\func{const wxChar*}{Create}{\param{const wxChar* }{uri}}
+\func{void}{Create}{\param{const wxChar* }{uri}}
 
-Creates this URI from a string, and parses \arg{uri} for validity.
-Returns the position where parsing stopped in string, 
-or false if \arg{uri} is not a valid URI.
+Creates this URI from the string {\tt uri}.
 
 \docparam{uri}{string to initialize from}
 
@@ -296,13 +264,6 @@ Returns true if the Server component of the URI exists.
 Returns true if the User component of the URI exists.
 
 
-\membersection{wxURI::IsOk}\label{wxuriisok}
-
-\constfunc{bool}{IsOk}{\void}
-
-Returns true if this is a valid URI. 
-
-
 \membersection{wxURI::IsReference}\label{wxuriisreference}
 
 \constfunc{bool}{IsReference}{\void}
@@ -320,18 +281,6 @@ Compares this URI to another URI, and returns true if
 this URI equals uricomp, otherwise it returns false.
 
 \docparam{uricomp}{URI to compare to}
-
-
-\membersection{wxURI::Extract}\label{wxuriextract}
-
-\func{static const wxChar*}{Extract}{\param{const wxChar*}{uri}}
-
-Used to determine where a URI ends in a string.
-
-Returns the position at which parsing stopped
-(will return NULL on malformed URIs).
-
-\docparam{uri}{String to create from}
 
 
 \membersection{wxURI::Resolve}\label{wxuriresolve}
