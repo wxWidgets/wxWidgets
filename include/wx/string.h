@@ -819,8 +819,7 @@ public:
     // type differs because a function may either return pointer to the buffer
     // directly or have to use intermediate buffer for translation.
 #if wxUSE_UNICODE
-    const wxCharBuffer mb_str(wxMBConv& conv = wxConvLibc) const
-        { return conv.cWC2MB(c_str()); }
+    const wxCharBuffer mb_str(wxMBConv& conv = wxConvLibc) const;
 
     const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
 
@@ -843,8 +842,7 @@ public:
     const wxWX2MBbuf mbc_str() const { return mb_str(); }
 
 #if wxUSE_WCHAR_T
-    const wxWCharBuffer wc_str(wxMBConv& conv) const
-        { return conv.cMB2WC(c_str()); }
+    const wxWCharBuffer wc_str(wxMBConv& conv) const;
 #endif // wxUSE_WCHAR_T
 
     const wxChar* fn_str() const { return c_str(); }

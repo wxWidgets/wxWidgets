@@ -362,13 +362,23 @@
     #define  wxCtime     _tctime
 #else /* !TCHAR-aware compilers */
 
+    #if __DARWIN__ && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 ) && !defined(__MWERKS__)
+        /* even though they are defined and "implemented", they are bad and just 
+           stubs so we need our own - we need these even in ANSI builds!! */
+        #define mbstowcs wxInternalMbstowcs
+        #define wcstombs wxInternalWcstombs
+        
+        WXDLLIMPEXP_BASE size_t wxInternalMbstowcs (wchar_t *, const char *, size_t);
+        WXDLLIMPEXP_BASE size_t	wxInternalWcstombs (char *, const wchar_t *, size_t);
+    #endif
+    
     /* No UNICODE in the c library except wchar_t typedef on mac OSX 10.2 and less - roll our own */
     #if wxUSE_UNICODE && __DARWIN__ && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 ) && !defined(__MWERKS__)
-
+        
         /* we need everything! */
         #define wxNEED_WX_STRING_H
         #define wxNEED_WX_CTYPE_H
-         
+        
         #define  wxFgetchar(c)  wxFgetc(c, stdin)
         #define  wxFputc     wxPutc
         #define  wxFputchar(c)  wxPutc(c, stdout)
@@ -397,15 +407,7 @@
         #define wxNEED_WX_STDIO_H
         #define wxNEED_WX_STDLIB_H
         #define wxNEED_WX_TIME_H
-        
-        /* even though they are defined and "implemented", they are bad and just 
-           stubs so we need our own */
-        #define mbstowcs wxInternalMbstowcs
-        #define wcstombs wxInternalWcstombs
-        
-        WXDLLIMPEXP_BASE size_t wxInternalMbstowcs (wchar_t *, const char *, size_t);
-        WXDLLIMPEXP_BASE size_t	wxInternalWcstombs (char *, const wchar_t *, size_t);
-        
+                
     #elif wxUSE_UNICODE
         #include <wctype.h>
 

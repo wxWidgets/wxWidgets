@@ -43,6 +43,7 @@ private:
 #if wxUSE_WCHAR_T
         CPPUNIT_TEST( ConstructorsWithConversion );
 #endif
+        CPPUNIT_TEST( Conversion );
         CPPUNIT_TEST( Extraction );
         CPPUNIT_TEST( Find );
         CPPUNIT_TEST( Tokenizer );
@@ -60,6 +61,7 @@ private:
 #if wxUSE_WCHAR_T
     void ConstructorsWithConversion();
 #endif
+    void Conversion();
     void Extraction();
     void Find();
     void SingleTokenizerTest( wxChar *str, wxChar *delims, size_t count , wxStringTokenizerMode mode );
@@ -175,6 +177,31 @@ void StringTestCase::ConstructorsWithConversion()
     CPPUNIT_ASSERT( s4 == sub );    
 }
 #endif
+
+void StringTestCase::Conversion()
+{
+#if wxUSE_UNICODE
+        wxString szTheString(wxT("TheString"));
+        szTheString.insert(3, 1, '\0');
+        wxCharBuffer theBuffer = szTheString.mb_str();
+        
+        CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String", 11) == 0 );     
+#else
+#	if wxUSE_WCHAR_T
+        wxString szTheString(wxT("TheString"));
+        szTheString.insert(3, 1, '\0');
+        wxWCharBuffer theBuffer = szTheString.wc_str(wxConvLibc);
+        
+        CPPUNIT_ASSERT( memcmp(theBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 ); 
+
+        wxString szLocalTheString(wxT("TheString"));
+        szLocalTheString.insert(3, 1, '\0');
+        wxWCharBuffer theLocalBuffer = szLocalTheString.wc_str(wxConvLocal);
+        
+        CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 ); 
+#	endif
+#endif
+}
 
 void StringTestCase::Extraction()
 {

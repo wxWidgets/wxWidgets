@@ -1043,6 +1043,36 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
             //else: the conversion failed -- leave the string empty (what else?)
         }
     }
+}        
+
+const wxCharBuffer wxString::mb_str(wxMBConv& conv) const
+{
+    const wxChar* szEnd = (*this).c_str() + length() + 1;
+    const wxChar* szPos = (*this).c_str();
+    const wxChar* szStart = szPos;
+    
+    wxCharBuffer buffer(length() + 1);
+    
+    //Convert the string until the length() is reached, continuing the
+    //loop every time a null character is reached
+    while(szPos != szEnd)
+    {
+        size_t nLen = conv.WC2MB(NULL, szPos, 0);
+        
+        wxASSERT(nLen != (size_t)-1); //should not be true!  If it is system wctomb could be bad
+
+        if ( conv.WC2MB(&buffer.data()[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+        {
+            //error - return empty buffer
+            wxFAIL_MSG(wxT("Error converting wide-character string to a multi-byte string"));
+            buffer.data()[0] = '\0';
+            return buffer;
+        }        
+        
+        szPos += nLen + 1;
+    }
+    
+    return buffer;
 }
 
 #else // ANSI
@@ -1101,6 +1131,37 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 
     // leave empty
 }
+
+const wxWCharBuffer wxString::wc_str(wxMBConv& conv) const
+{
+    const wxChar* szEnd = (*this).c_str() + length() + 1;
+    const wxChar* szPos = (*this).c_str();
+    const wxChar* szStart = szPos;
+    
+    wxWCharBuffer buffer(length() + 1);
+    
+    //Convert the string until the length() is reached, continuing the
+    //loop every time a null character is reached
+    while(szPos != szEnd)
+    {
+        size_t nLen = conv.MB2WC(NULL, szPos, 0);
+        
+        wxASSERT(nLen != (size_t)-1); //should not be true!  If it is system mbtowc could be bad
+        
+        if ( conv.MB2WC(&buffer.data()[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+        {
+            //error - return empty buffer
+            wxFAIL_MSG(wxT("Error converting multi-byte string to a wide-character string"));
+            buffer.data()[0] = '\0';
+            return buffer;
+        }        
+        
+        szPos += nLen + 1;
+    }
+    
+    return buffer;
+}
+    
 #endif // wxUSE_WCHAR_T
 
 #endif // Unicode/ANSI
