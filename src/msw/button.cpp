@@ -183,6 +183,34 @@ wxSize wxButtonBase::GetDefaultSize()
 // default button handling
 // ----------------------------------------------------------------------------
 
+/*
+   "Everything you ever wanted to know about the default buttons" or "Why do we
+   have to do all this?"
+
+   In MSW the default button should be activated when the user presses Enter
+   and the current control doesn't process Enter itself somehow. This is
+   handled by ::DefWindowProc() (or maybe ::DefDialogProc()) using DM_SETDEFID
+   Another aspect of "defaultness" is that the default button has different
+   appearance: this is due to BS_DEFPUSHBUTTON style which is completely
+   separate from DM_SETDEFID stuff (!).
+
+   Final complication is that when a button is active, it should be the default
+   one, i.e. pressing Enter on a button always activates it and not another
+   one.
+
+   We handle this by maintaining a permanent and a temporary default items in
+   wxControlContainer (both may be NULL). When a button becomes the current
+   control (i.e. gets focus) it sets itself as the temporary default which
+   ensures that it has the right appearance and that Enter will be redirected
+   to it. When the button loses focus, it unsets the temporary default and so
+   the default item will be the permanent default -- that is the default button
+   if any had been set or none otherwise, which is just what we want.
+
+   Remark that we probably don't need to send DM_SETDEFID as we don't use
+   ::IsDialogMessage() (which relies on it) any longer but OTOH it probably
+   doesn't hurt neither.
+ */
+
 // set this button as the (permanently) default one in its panel
 void wxButton::SetDefault()
 {
