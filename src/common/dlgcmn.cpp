@@ -142,21 +142,15 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
     wxButton *yes = (wxButton *) NULL;
     wxButton *no = (wxButton *) NULL;
 
-    // always show an OK button, unless only YES_NO is given
-    if ((flags & wxYES_NO) == 0) flags = flags | wxOK;
+    // always show an OK button, unless we have both YES and NO
+    if ( (flags & wxYES_NO) != wxYES_NO )
+        flags |= wxOK;
 
-    if (flags & wxYES_NO)
-    {
-        yes = new wxButton( this, wxID_YES, _("Yes"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
-        box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
-        no = new wxButton( this, wxID_NO, _("No") ,wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS);
-        box->Add( no, 0, wxLEFT|wxRIGHT, margin );
-    } else
     if (flags & wxYES)
     {
         yes = new wxButton( this, wxID_YES, _("Yes"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
         box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
-    } else
+    }
     if (flags & wxNO)
     {
         no = new wxButton( this, wxID_NO, _("No"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
@@ -190,6 +184,7 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
         box->Add( cancel, 0, wxLEFT|wxRIGHT, margin );
     }
 
+    // choose the default button
     if (flags & wxNO_DEFAULT)
     {
         if (no)
