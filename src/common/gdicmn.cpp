@@ -119,18 +119,6 @@ wxRect::wxRect(const wxPoint& point1, const wxPoint& point2)
     height++;
 }
 
-wxRect::wxRect(const wxPoint& point, const wxSize& size)
-{
-    x = point.x; y = point.y;
-    width = size.x; height = size.y;
-}
-
-wxRect::wxRect(const wxSize& size)
-{
-    x = 0; y = 0;
-    width = size.x; height = size.y;
-}
-
 bool wxRect::operator==(const wxRect& rect) const
 {
     return ((x == rect.x) &&
@@ -139,19 +127,32 @@ bool wxRect::operator==(const wxRect& rect) const
             (height == rect.height));
 }
 
-wxRect& wxRect::operator += (const wxRect& rect)
-{
-    *this = (*this + rect);
-    return ( *this ) ;
-}
-
-wxRect wxRect::operator + (const wxRect& rect) const
+wxRect wxRect::operator+(const wxRect& rect) const
 {
     int x1 = wxMin(this->x, rect.x);
     int y1 = wxMin(this->y, rect.y);
     int y2 = wxMax(y+height, rect.height+rect.y);
     int x2 = wxMax(x+width, rect.width+rect.x);
     return wxRect(x1, y1, x2-x1, y2-y1);
+}
+
+wxRect& wxRect::Union(const wxRect& rect)
+{
+    // ignore empty rectangles
+    if ( rect.width && rect.height )
+    {
+        int x1 = wxMin(x, rect.x);
+        int y1 = wxMin(y, rect.y);
+        int y2 = wxMax(y + height, rect.height + rect.y);
+        int x2 = wxMax(x + width, rect.width + rect.x);
+
+        x = x1;
+        y = y1;
+        width = x2 - x1;
+        height = y2 - y1;
+    }
+
+    return *this;
 }
 
 wxRect& wxRect::Inflate(wxCoord dx, wxCoord dy)

@@ -319,8 +319,12 @@ public:
         : x(xx), y(yy), width(ww), height(hh)
         { }
     wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
-    wxRect(const wxPoint& pos, const wxSize& size);
-    wxRect(const wxSize& size);
+    wxRect(const wxPoint& pt, const wxSize& size)
+        : x(pt.x), y(pt.y), width(size.x), height(size.y)
+        { }
+    wxRect(const wxSize& size)
+        : x(0), y(0), width(size.x), height(size.y)
+        { }
 
     // default copy ctor and assignment operators ok
 
@@ -392,8 +396,13 @@ public:
         return r;
     }
 
-    wxRect operator+(const wxRect& rect) const;
-    wxRect& operator+=(const wxRect& rect);
+    wxRect& Union(const wxRect& rect);
+    wxRect Union(const wxRect& rect) const
+    {
+        wxRect r = *this;
+        r.Union(rect);
+        return r;
+    }
 
     // compare rectangles
     bool operator==(const wxRect& rect) const;
@@ -405,6 +414,16 @@ public:
 
     // return true if the rectangles have a non empty intersection
     bool Intersects(const wxRect& rect) const;
+
+
+    // these are like Union() but don't ignore empty rectangles
+    wxRect operator+(const wxRect& rect) const;
+    wxRect& wxRect::operator+=(const wxRect& rect)
+    {
+        *this = *this + rect;
+        return *this;
+    }
+
 
 public:
     int x, y, width, height;

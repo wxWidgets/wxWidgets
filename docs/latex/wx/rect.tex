@@ -16,6 +16,7 @@ None
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxRect::wxRect}\label{wxrectctor}
 
 \func{}{wxRect}{\void}
@@ -38,11 +39,13 @@ Creates a wxRect object from position and size values.
 
 Creates a wxRect object from size values at the origin.
 
+
 \membersection{wxRect::x}\label{wxrectx}
 
 \member{int}{x}
 
 x coordinate of the top-level corner of the rectangle.
+
 
 \membersection{wxRect::y}\label{wxrecty}
 
@@ -50,17 +53,20 @@ x coordinate of the top-level corner of the rectangle.
 
 y coordinate of the top-level corner of the rectangle.
 
+
 \membersection{wxRect::width}\label{wxrectwidth}
 
 \member{int}{width}
 
 Width member.
 
+
 \membersection{wxRect::height}\label{wxrectheight}
 
 \member{int}{height}
 
 Height member.
+
 
 \membersection{wxRect::Deflate}\label{wxrectdeflate}
 
@@ -83,11 +89,13 @@ new rectangle leaving this one unchanged.
 
 \helpref{Inflate}{wxrectinflate}
 
+
 \membersection{wxRect::GetBottom}\label{wxrectgetbottom}
 
 \constfunc{int}{GetBottom}{\void}
 
 Gets the bottom point of the rectangle.
+
 
 \membersection{wxRect::GetHeight}\label{wxrectgetheight}
 
@@ -95,11 +103,13 @@ Gets the bottom point of the rectangle.
 
 Gets the height member.
 
+
 \membersection{wxRect::GetLeft}\label{wxrectgetleft}
 
 \constfunc{int}{GetLeft}{\void}
 
 Gets the left point of the rectangle (the same as \helpref{wxRect::GetX}{wxrectgetx}).
+
 
 \membersection{wxRect::GetPosition}\label{wxrectgetposition}
 
@@ -107,11 +117,13 @@ Gets the left point of the rectangle (the same as \helpref{wxRect::GetX}{wxrectg
 
 Gets the position.
 
+
 \membersection{wxRect::GetTopLeft}\label{wxrectgettopleft}
 
 \constfunc{wxPoint}{GetTopLeft}{\void}
 
 Gets the topleft position of the rectangle. (Same as GetPosition).
+
 
 \membersection{wxRect::GetBottomRight}\label{wxrectgetbottomright}
 
@@ -119,11 +131,13 @@ Gets the topleft position of the rectangle. (Same as GetPosition).
 
 Gets the the bottom right position. Returns the bottom right point inside the rectangle.
 
+
 \membersection{wxRect::GetRight}\label{wxrectgetright}
 
 \constfunc{int}{GetRight}{\void}
 
 Gets the right point of the rectangle.
+
 
 \membersection{wxRect::GetSize}\label{wxrectgetsize}
 
@@ -131,11 +145,13 @@ Gets the right point of the rectangle.
 
 Gets the size.
 
+
 \membersection{wxRect::GetTop}\label{wxrectgettop}
 
 \constfunc{int}{GetTop}{\void}
 
 Gets the top point of the rectangle (the same as \helpref{wxRect::GetY}{wxrectgety}).
+
 
 \membersection{wxRect::GetWidth}\label{wxrectgetwidth}
 
@@ -143,17 +159,20 @@ Gets the top point of the rectangle (the same as \helpref{wxRect::GetY}{wxrectge
 
 Gets the width member.
 
+
 \membersection{wxRect::GetX}\label{wxrectgetx}
 
 \constfunc{int}{GetX}{\void}
 
 Gets the x member.
 
+
 \membersection{wxRect::GetY}\label{wxrectgety}
 
 \constfunc{int}{GetY}{\void}
 
 Gets the y member.
+
 
 \membersection{wxRect::Inflate}\label{wxrectinflate}
 
@@ -176,6 +195,7 @@ new rectangle leaving this one unchanged.
 
 \helpref{Deflate}{wxrectdeflate}
 
+
 \membersection{wxRect::Inside}\label{wxrectinside}
 
 \constfunc{bool}{Inside}{\param{int }{x}, \param{int }{y}}
@@ -185,12 +205,14 @@ new rectangle leaving this one unchanged.
 Returns {\tt true} if the given point is inside the rectangle (or on its
 boundary) and {\tt false} otherwise.
 
+
 \membersection{wxRect::Intersects}\label{wxrectintersects}
 
 \constfunc{bool}{Intersects}{\param{const wxRect\& }{rect}}
 
 Returns {\tt true} if this rectangle has a non empty intersection with the
 rectangle {\it rect} and {\tt false} otherwise.
+
 
 \membersection{wxRect::Offset}\label{wxrectoffset}
 
@@ -202,11 +224,13 @@ Moves the rectangle by the specified offset. If {\it dx} is positive, the
 rectangle is moved to the right, if {\it dy} is positive, it is moved to the
 bottom, otherwise it is moved to the left or top respectively.
 
+
 \membersection{wxRect::SetHeight}\label{wxrectsetheight}
 
 \func{void}{SetHeight}{\param{int}{ height}}
 
 Sets the height.
+
 
 \membersection{wxRect::SetWidth}\label{wxrectsetwidth}
 
@@ -214,11 +238,13 @@ Sets the height.
 
 Sets the width.
 
+
 \membersection{wxRect::SetX}\label{wxrectsetx}
 
 \func{void}{SetX}{\param{int}{ x}}
 
 Sets the x position.
+
 
 \membersection{wxRect::SetY}\label{wxrectsety}
 
@@ -226,17 +252,31 @@ Sets the x position.
 
 Sets the y position.
 
+
+\membersection{wxRect::Union}\label{wxrectunion}
+
+\constfunc{wxRect}{Union}{\param{const wxRect\&}{ rect}}
+
+\func{wxRect\&}{Union}{\param{const wxRect\&}{ rect}}
+
+Modifies the rectangle to contain the bounding box of this rectangle and the
+one passed in as parameter. The const version returns the new rectangle, the
+other one modifies this rectangle in place.
+
+
 \membersection{wxRect::operator $=$}\label{wxrectassign}
 
 \func{void}{operator $=$}{\param{const wxRect\& }{rect}}
 
 Assignment operator.
 
+
 \membersection{wxRect::operator $==$}\label{wxrectequal}
 
 \func{bool}{operator $==$}{\param{const wxRect\& }{rect}}
 
 Equality operator.
+
 
 \membersection{wxRect::operator $!=$}\label{wxrectnotequal}
 
