@@ -2,7 +2,7 @@
 // Name:        sizer.h
 // Purpose:     provide wxSizer class for layout
 // Author:      Robert Roebling and Robin Dunn
-// Modified by: Ron Lee
+// Modified by: Ron Lee, Vadim Zeitlin (wxSizerFlags)
 // Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn, Robert Roebling
@@ -31,6 +31,74 @@ class WXDLLEXPORT wxSizerItem;
 class WXDLLEXPORT wxSizer;
 class WXDLLEXPORT wxBoxSizer;
 
+
+// ----------------------------------------------------------------------------
+// wxSizerFlags: flags used for an item in the sizer
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxSizerFlags
+{
+public:
+    // construct the flags object initialized with the given proportion (0 by
+    // default)
+    wxSizerFlags(int proportion = 0) : m_proportion(proportion)
+    {
+        m_flags = 0;
+        m_borderInPixels = 0;
+    }
+
+    // setters for all sizer flags, they all return the object itself so that
+    // calls to them can be chained
+
+    wxSizerFlags& Proportion(int proportion)
+    {
+        m_proportion = proportion;
+        return *this;
+    }
+
+    wxSizerFlags& Align(int alignment) // combination of wxAlignment values
+    {
+        m_flags &= wxALL;
+        m_flags |= alignment;
+
+        return *this;
+    }
+
+    // some shortcuts for Align()
+    wxSizerFlags& Expand() { return Align(wxEXPAND); }
+    wxSizerFlags& Centre() { return Align(wxCENTRE); }
+    wxSizerFlags& Center() { return Centre(); }
+
+
+    wxSizerFlags& Border(int direction, int borderInPixels)
+    {
+        m_flags &= ~wxALL;
+        m_flags |= direction;
+
+        m_borderInPixels = borderInPixels;
+
+        return *this;
+    }
+
+    wxSizerFlags& Border(int direction = wxALL)
+    {
+        // FIXME: default border size shouldn't be hardcoded
+        return Border(direction, 5);
+    }
+
+
+    // accessors for wxSizer only
+    int GetProportion() const { return m_proportion; }
+    int GetFlags() const { return m_flags; }
+    int GetBorderInPixels() const { return m_borderInPixels; }
+
+private:
+    int m_proportion;
+    int m_flags;
+    int m_borderInPixels;
+};
+
+
 //---------------------------------------------------------------------------
 // wxSizerItem
 //---------------------------------------------------------------------------
@@ -38,13 +106,21 @@ class WXDLLEXPORT wxBoxSizer;
 class WXDLLEXPORT wxSizerItem: public wxObject
 {
 public:
-    // spacer
-    wxSizerItem( int width,
-                 int height,
-                 int proportion,
-                 int flag,
-                 int border,
-                 wxObject* userData);
+    // window with flags
+    wxSizerItem(wxWindow *window, const wxSizerFlags& flags)
+    {
+        Init(flags);
+
+        m_window = window;
+    }
+
+    // sizer with flags
+    wxSizerItem(wxSizer *sizer, const wxSizerFlags& flags)
+    {
+        Init(flags);
+
+        m_sizer = sizer;
+    }
 
     // window
     wxSizerItem( wxWindow *window,
@@ -59,6 +135,14 @@ public:
                  int flag,
                  int border,
                  wxObject* userData );
+
+    // spacer
+    wxSizerItem( int width,
+                 int height,
+                 int proportion,
+                 int flag,
+                 int border,
+                 wxObject* userData);
 
     wxSizerItem();
     virtual ~wxSizerItem();
@@ -142,6 +226,13 @@ public:
         { return m_pos; }
 
 protected:
+    // common part of several ctors
+    void Init();
+
+    // common part of ctors taking wxSizerFlags
+    void Init(const wxSizerFlags& flags);
+
+
     wxWindow    *m_window;
     wxSizer     *m_sizer;
     wxSize       m_size;
@@ -168,6 +259,7 @@ private:
 };
 
 WX_DECLARE_EXPORTED_LIST( wxSizerItem, wxSizerItemList );
+
 
 //---------------------------------------------------------------------------
 // wxSizer
@@ -197,6 +289,8 @@ public:
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL );
+    inline void Add( wxWindow *window, const wxSizerFlags& flags );
+    inline void Add( wxSizer *sizer, const wxSizerFlags& flags );
     inline void Add( wxSizerItem *item );
 
     inline void AddSpacer(int size);
@@ -221,6 +315,12 @@ public:
                         int flag = 0,
                         int border = 0,
                         wxObject* userData = NULL );
+    inline void Insert( size_t index,
+                        wxWindow *window,
+                        const wxSizerFlags& flags );
+    inline void Insert( size_t index,
+                        wxSizer *sizer,
+                        const wxSizerFlags& flags );
     virtual void Insert( size_t index, wxSizerItem *item );
 
     inline void InsertSpacer(size_t index, int size);
@@ -242,6 +342,8 @@ public:
                          int flag = 0,
                          int border = 0,
                          wxObject* userData = NULL );
+    inline void Prepend( wxWindow *window, const wxSizerFlags& flags );
+    inline void Prepend( wxSizer *sizer, const wxSizerFlags& flags );
     inline void Prepend( wxSizerItem *item );
 
     inline void PrependSpacer(int size);
@@ -617,6 +719,18 @@ wxSizer::Add( int width, int height, int proportion, int flag, int border, wxObj
 }
 
 inline void
+wxSizer::Add( wxWindow *window, const wxSizerFlags& flags )
+{
+    Add( new wxSizerItem(window, flags) );
+}
+
+inline void
+wxSizer::Add( wxSizer *sizer, const wxSizerFlags& flags )
+{
+    Add( new wxSizerItem(sizer, flags) );
+}
+
+inline void
 wxSizer::Add( wxSizerItem *item )
 {
     Insert( m_children.GetCount(), item );
@@ -671,37 +785,61 @@ wxSizer::PrependStretchSpacer(int prop)
 }
 
 inline void
+wxSizer::Prepend( wxWindow *window, const wxSizerFlags& flags )
+{
+    Prepend( new wxSizerItem(window, flags) );
+}
+
+inline void
+wxSizer::Prepend( wxSizer *sizer, const wxSizerFlags& flags )
+{
+    Prepend( new wxSizerItem(sizer, flags) );
+}
+
+inline void
 wxSizer::Insert( size_t index,
-                      wxWindow *window,
-                      int proportion,
-                      int flag,
-                      int border,
-                      wxObject* userData )
+                 wxWindow *window,
+                 int proportion,
+                 int flag,
+                 int border,
+                 wxObject* userData )
 {
     Insert( index, new wxSizerItem( window, proportion, flag, border, userData ) );
 }
 
 inline void
 wxSizer::Insert( size_t index,
-                      wxSizer *sizer,
-                      int proportion,
-                      int flag,
-                      int border,
-                      wxObject* userData )
+                 wxSizer *sizer,
+                 int proportion,
+                 int flag,
+                 int border,
+                 wxObject* userData )
 {
     Insert( index, new wxSizerItem( sizer, proportion, flag, border, userData ) );
 }
 
 inline void
 wxSizer::Insert( size_t index,
-                      int width,
-                      int height,
-                      int proportion,
-                      int flag,
-                      int border,
-                      wxObject* userData )
+                 int width,
+                 int height,
+                 int proportion,
+                 int flag,
+                 int border,
+                 wxObject* userData )
 {
     Insert( index, new wxSizerItem( width, height, proportion, flag, border, userData ) );
+}
+
+inline void
+wxSizer::Insert( size_t index, wxWindow *window, const wxSizerFlags& flags )
+{
+    Insert( index, new wxSizerItem(window, flags) );
+}
+
+inline void
+wxSizer::Insert( size_t index, wxSizer *sizer, const wxSizerFlags& flags )
+{
+    Insert( index, new wxSizerItem(sizer, flags) );
 }
 
 inline void
