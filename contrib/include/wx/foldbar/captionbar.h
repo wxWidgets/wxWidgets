@@ -249,7 +249,7 @@ public:
 /** Defines an empty captionbar style */
 #define wxEmptyCaptionBarStyle wxCaptionBarStyle()
 
-class wxCaptionBar: public wxWindow
+class WXDLLIMPEXP_FOLDBAR wxCaptionBar: public wxWindow
 {
 private:
     wxString _caption;

@@ -101,7 +101,7 @@ WX_DEFINE_ARRAY_PTR(wxFoldPanelItem *, wxFoldPanelItemArray);
     expanded state.
 */
 
-class wxFoldPanelBar: public wxPanel
+class WXDLLIMPEXP_FOLDBAR wxFoldPanelBar: public wxPanel
 {
 private:
     DECLARE_CLASS( wxFoldPanelBar )
