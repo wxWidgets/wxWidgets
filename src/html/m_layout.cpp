@@ -30,8 +30,11 @@
 
 FORCE_LINK_ME(m_layout)
 
-
-#include <stdlib.h> // bsearch()
+#ifdef __WXWINCE__
+    #include "wx/msw/wince/missing.h"       // for bsearch()
+#else
+    #include <stdlib.h>                     // bsearch()
+#endif
 
 //-----------------------------------------------------------------------------
 // wxHtmlPageBreakCell

@@ -35,6 +35,9 @@
 #include "wx/dynarray.h"
 #include "wx/arrimpl.cpp"
 
+#ifdef __WXWINCE__
+    #include "wx/msw/wince/missing.h"       // for bsearch()
+#endif
 
 // DLL options compatibility check:
 #include "wx/app.h"
