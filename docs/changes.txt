@@ -28,11 +28,9 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - wxWindow::Clear() is now called ClearBackground()
 - pointer returned by wxFont::GetNativeFontInfo() must not be deleted now
 - wxMouseEvent::Moving() doesn't return true if mouse is being dragged any more
-- pointer returned by wxColourDatabase::FindColour() must now always (and
-  not just sometimes) be deleted, to avoid problems, don't use it at all,
-  use wxColourDatabase::Find() instead.
 - (most) controls now inherit parents colours by default, override
   ShouldInheritColours() to return false if you don't want this to happen
+- wxApp::SendIdleEvent() now takes 2 arguments
 
 
 
@@ -58,6 +56,8 @@ versions, please update your code to not use them.
 - [MSW only] wxWindow::GetUseCtl3D(), GetTransparentBackground() and
              SetTransparent() as well as wxNO_3D and wxUSER_COLOURS styles
 - wxList keyed interface: use wxHashMap instead
+- wxColourDatabase::FindColour(): use Find() instead (NB: different ret type)
+
 
 OTHER CHANGES
 =============

@@ -523,13 +523,12 @@ Returns true if unprocessed events are in the window system event queue.
 
 \membersection{wxApp::SendIdleEvents}\label{wxappsendidleevents}
 
-\func{bool}{SendIdleEvents}{\void}
-
-Sends idle events to all top-level windows.
-
-\func{bool}{SendIdleEvents}{\param{wxWindow*}{ win}}
+\func{bool}{SendIdleEvents}{\param{wxWindow*}{ win}, \param{wxIdleEvent\& }{event}}
 
 Sends idle events to a window and its children.
+
+Please note that this function is internal to wxWindows and shouldn't be used
+by user code.
 
 \wxheading{Remarks}
 
@@ -538,8 +537,6 @@ If true is returned, more OnIdle processing is requested by one or more window.
 
 \wxheading{See also}
 
-%% GD: OnXXX functions are not documented
-%%\helpref{wxApp::OnIdle}{wxapponidle}
 \helpref{wxIdleEvent}{wxidleevent}
 
 
