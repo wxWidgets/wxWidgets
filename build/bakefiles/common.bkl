@@ -128,7 +128,6 @@
         <set var="OBJS" make_var="1">objs_$(COMPILER)_$(CFG_NAME_PART)</set>
         <set var="BUILDDIR">$(OBJS)</set>
     </if>
-    $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-$(WXVER_MAJOR).$(WXVER_MINOR)
     
     <set var="LIBDIRNAME">
         <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
