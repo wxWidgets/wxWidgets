@@ -605,6 +605,7 @@ ALL_HEADERS = \
 		html/htmldefs.h \
 		html/htmlfilt.h \
 		html/htmlpars.h \
+		html/htmlproc.h \
 		html/htmltag.h \
 		html/htmlwin.h \
 		html/htmprint.h \

@@ -141,6 +141,7 @@ ALL_SOURCES = \
 		common/radiocmn.cpp \
 		common/regex.cpp \
 		common/resource.cpp \
+		common/rgncmn.cpp \
 		common/sckaddr.cpp \
 		common/sckfile.cpp \
 		common/sckipc.cpp \
@@ -622,6 +623,7 @@ ALL_HEADERS = \
 		html/htmldefs.h \
 		html/htmlfilt.h \
 		html/htmlpars.h \
+		html/htmlproc.h \
 		html/htmltag.h \
 		html/htmlwin.h \
 		html/htmprint.h \
@@ -729,6 +731,7 @@ COMMONOBJS = \
 		radiocmn.o \
 		regex.o \
 		resource.o \
+		rgncmn.o \
 		sckaddr.o \
 		sckfile.o \
 		sckipc.o \

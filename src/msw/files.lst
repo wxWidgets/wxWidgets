@@ -693,6 +693,7 @@ ALL_HEADERS = \
 		html/htmldefs.h \
 		html/htmlfilt.h \
 		html/htmlpars.h \
+		html/htmlproc.h \
 		html/htmltag.h \
 		html/htmlwin.h \
 		html/htmprint.h \
@@ -971,6 +972,7 @@ GUIOBJS = \
 		treectrl.o \
 		utils.o \
 		utilsexc.o \
+		uxtheme.o \
 		volume.o \
 		wave.o \
 		window.o
@@ -992,6 +994,8 @@ GUI_LOWLEVEL_OBJS = \
 		dde.o \
 		dialup.o \
 		dib.o \
+		dirdlg.o \
+		enhmeta.o \
 		evtloop.o \
 		font.o \
 		fontenum.o \
@@ -1020,7 +1024,6 @@ GUI_LOWLEVEL_OBJS = \
 		toplevel.o \
 		utils.o \
 		utilsexc.o \
-		uxtheme.o \
 		wave.o \
 		window.o
 
