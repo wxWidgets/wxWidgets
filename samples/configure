@@ -526,10 +526,12 @@ fi
 SAMPLES_SUBDIRS=$wx_cv_path_samplesubdirs
 
 
+IF_GNU_MAKE=$wx_cv_if_gnu_make
 PATH_IFS=$wx_cv_path_ifs
 PROGRAM_EXT=$wx_cv_program_ext
 WX_TARGET_LIBRARY=$wx_cv_target_library
 WX_TARGET_LIBRARY_GL=$wx_cv_target_library_gl
+
 
 
 
@@ -752,6 +754,7 @@ s%@oldincludedir@%$oldincludedir%g
 s%@infodir@%$infodir%g
 s%@mandir@%$mandir%g
 s%@SAMPLES_SUBDIRS@%$SAMPLES_SUBDIRS%g
+s%@IF_GNU_MAKE@%$IF_GNU_MAKE%g
 s%@PATH_IFS@%$PATH_IFS%g
 s%@PROGRAM_EXT@%$PROGRAM_EXT%g
 s%@WX_TARGET_LIBRARY@%$WX_TARGET_LIBRARY%g

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# From configure.in Id
+# From configure.in Id: configure.in
 # Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using autoconf version 2.13 
 # Copyright (C) 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
@@ -523,6 +523,9 @@ fi
 
 
 
+IF_GNU_MAKE=$wx_cv_if_gnu_make
+
+
 trap '' 1 2 15
 cat > confcache <<\EOF
 # This file is a shell script that caches the results of configure
@@ -675,6 +678,7 @@ s%@includedir@%$includedir%g
 s%@oldincludedir@%$oldincludedir%g
 s%@infodir@%$infodir%g
 s%@mandir@%$mandir%g
+s%@IF_GNU_MAKE@%$IF_GNU_MAKE%g
 
 CEOF
 EOF

@@ -3,6 +3,9 @@ AC_REVISION($Id$)dnl
 
 AC_INIT(Makefile.in)
 
+IF_GNU_MAKE=$wx_cv_if_gnu_make
+AC_SUBST(IF_GNU_MAKE)
+
 AC_OUTPUT([
             Makefile
             bombs/Makefile
