@@ -15,6 +15,7 @@ wx_generic_include_HEADERS = \
  fontdlgg.h \
  gridg.h \
  helpext.h \
+ helpwxht.h \
  helphtml.h \
  helpxlp.h \
  imaglist.h \
