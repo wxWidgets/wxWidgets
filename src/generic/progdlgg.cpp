@@ -268,7 +268,11 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     // Update the display (especially on X, GTK)
     wxYield();
+
+    // FIXME: shouldn't be needed
+#ifdef __WXX11__
     wxYield();
+#endif
 
 #ifdef __WXMAC__
     MacUpdateImmediately();
@@ -333,7 +337,11 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
         m_msg->SetLabel(newmsg);
 
         wxYield();
+
+        // FIXME: shouldn't be needed
+#ifdef __WXX11__
         wxYield();
+#endif
     }
 
     if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
@@ -347,7 +355,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
         SetTimeLabel(remaining, m_remaining);
     }
 
-    if ( (value == m_maximum ) )
+    if ( value == m_maximum )
     {
         // so that we return TRUE below and that out [Cancel] handler knew what
         // to do
@@ -360,7 +368,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
                 m_btnAbort->SetLabel(_("Close"));
             }
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-            else // enable the close button to give the user a way to close the dlg
+            else // enable the button to give the user a way to close the dlg
             {
                 EnableCloseButton(TRUE);
             }
@@ -373,21 +381,33 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
             }
 
             wxYield();
+
+            // FIXME: shouldn't be needed
+#ifdef __WXX11__
             wxYield();
+#endif
 
             (void)ShowModal();
         }
-        else
+        else // auto hide
         {
-            Hide();
+            // reenable other windows before hiding this one because otherwise
+            // Windows wouldn't give the focus back to the window which had
+            // been previously focused because it would still be disabled
             ReenableOtherWindows();
+
+            Hide();
         }
     }
     else
     {
         // update the display
         wxYield();
+
+        // FIXME: shouldn't be needed
+#ifdef __WXX11__
         wxYield();
+#endif
     }
 
 #ifdef __WXMAC__
