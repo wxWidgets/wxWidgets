@@ -115,7 +115,7 @@ MyFrame::AddSampleText(wxLayoutList &llist)
    llist.Insert("The quick brown fox jumps over the lazy dog.");
    llist.LineBreak();
    llist.Insert("Hello ");
-   llist.Insert(new wxLayoutObjectIcon(new wxICON(Micon_xpm)));
+   llist.Insert(new wxLayoutObjectIcon(new wxICON(Micon)));
    llist.LineBreak();
    llist.SetFontWeight(wxBOLD);
    llist.Insert("World! ");
