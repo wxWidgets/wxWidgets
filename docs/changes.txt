@@ -22,6 +22,10 @@ wxBase:
   by all derived classes, if you have user-defined event classes please
   add "wxEvent *Clone() const { return new MyEvent(*this); }" line to them
 
+- wxCondition now must be used with a mutex, please read the (updated) class
+  documentation for details and revise your code accordingly: this change was
+  unfortunately needed as the old class didn't behave correctly in all cases
+
 All (GUI):
 
 - the event type constants are not constants any more but are dynamically
@@ -94,13 +98,14 @@ OTHER CHANGES
 
 wxBase:
 
+- wxSemaphore class added, many fixed to wxCondition and wxThread (K.S. Sreeram)
 - fixes to the command line parsing error and usage messages
 - modified wxFileName::CreateTempFileName() to open the file atomically
   (if possible) and, especially, not to leak the file descriptors under Unix
 - memory leak in wxHTTP fixed (Dimitri)
 - fixes to AM_PATH_WXCONFIG autoconf macro
 - added wxHashMap class that replaces type-unsafe wxHashTable and is modelled
-  after STL hash_map
+  after (non standard) STL hash_map
 - wxLocale now works in Unicode mode
 - wxLocale can now load message catalogs in arbitrary encoding
 - fixed the bug related to the redrawing on resize introduced in 2.3.2
@@ -112,6 +117,8 @@ Unix (Base/GUI):
 
 All (GUI):
 
+- it is now possible to set the icons of different sizes for frames (e.g. a
+  small and big ones) using the new wxIconBundle class
 - implemented radio menu items and radio toolbar buttons
 - added possibility to show text in the toolbar buttons
 - added wxArtProvider class that can be used to customize the look of standard
