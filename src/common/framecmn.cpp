@@ -409,8 +409,8 @@ void wxFrameBase::AttachMenuBar(wxMenuBar *menubar)
 {
     if ( menubar )
     {
-        m_frameMenuBar = menubar;
         menubar->Attach((wxFrame *)this);
+        m_frameMenuBar = menubar;
     }
 }
 
