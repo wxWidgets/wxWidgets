@@ -95,25 +95,41 @@ bool wxApp::s_macSupportPCMenuShortcuts = true ;
 long wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 wxString wxApp::s_macHelpMenuTitleName = "&Help" ;
 
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon )
+#else
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
+#endif
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEODoc( (AppleEvent*) event , reply) ;
 }
 
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon )
+#else
 pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
+#endif
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEOApp( (AppleEvent*) event , reply ) ;
 }
 
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon )
+#else
 pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
+#endif
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEPDoc( (AppleEvent*) event , reply ) ;
 }
 
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon )
+#else
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
+#endif
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
@@ -347,13 +363,13 @@ bool wxApp::Initialize()
                            (long) wxTheApp , FALSE ) ;
 #else
 	AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,   NewAEEventHandlerProc(AEHandleODoc) ,
-						   (long) wxTheApp , FALSE ) ;
+			       (long) wxTheApp , FALSE ) ;
 	AEInstallEventHandler( kCoreEventClass , kAEOpenApplication , NewAEEventHandlerProc(AEHandleOApp) ,
-						   (long) wxTheApp , FALSE ) ;
+			       (long) wxTheApp , FALSE ) ;
 	AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,  NewAEEventHandlerProc(AEHandlePDoc) ,
-						   (long) wxTheApp , FALSE ) ;
+			       (long) wxTheApp , FALSE ) ;
 	AEInstallEventHandler( kCoreEventClass , kAEQuitApplication , NewAEEventHandlerProc(AEHandleQuit) ,
-						   (long) wxTheApp , FALSE ) ;
+			       (long) wxTheApp , FALSE ) ;
 #endif
 
 

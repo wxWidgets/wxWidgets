@@ -47,10 +47,6 @@
 class WXDLLEXPORT wxIcon;
 
 
-
-
-
-
 bool wxFileTypeImpl::GetCommand(wxString *command, const char *verb) const
 {
     return FALSE;
@@ -94,6 +90,11 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
 }
 
 bool wxFileTypeImpl::GetDescription(wxString *desc) const
+{
+    return FALSE;
+}
+
+bool wxFileTypeImpl::Unassociate()
 {
     return FALSE;
 }
@@ -186,3 +187,10 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
     return 0;
 }
 
+wxFileType *
+wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
+{
+    wxFAIL_MSG( _T("TODO") );
+
+    return NULL;
+}
