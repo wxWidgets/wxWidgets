@@ -1019,9 +1019,7 @@ void wxApp::OnIdle(wxIdleEvent& event)
 
 #if wxUSE_LOG
     // flush the logged messages if any
-    wxLog *pLog = wxLog::GetActiveTarget();
-    if ( pLog != NULL && pLog->HasPendingMessages() )
-        pLog->Flush();
+    wxLog::FlushActive();
 #endif // wxUSE_LOG
 
     // Send OnIdle events to all windows
@@ -1216,9 +1214,12 @@ void wxExit()
 // Yield to incoming messages
 bool wxYield()
 {
+    // disable log flushing from here because a call to wxYield() shouldn't
+    // normally result in message boxes popping up &c
+    wxLog::Suspend();
+
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
-
     MSG msg;
     while ( PeekMessage(&msg, (HWND)0, 0, 0, PM_NOREMOVE) &&
             msg.message != WM_QUIT )
@@ -1233,6 +1234,9 @@ bool wxYield()
 
     // If they are pending events, we must process them.
     wxTheApp->ProcessPendingEvents();
+
+    // let the logs be flashed again
+    wxLog::Resume();
 
     return TRUE;
 }

@@ -135,15 +135,25 @@ public:
         // flush the active target if any
     static void FlushActive()
     {
-        wxLog *log = GetActiveTarget();
-        if ( log )
-            log->Flush();
+        if ( !ms_suspendCount )
+        {
+            wxLog *log = GetActiveTarget();
+            if ( log && log->HasPendingMessages() )
+                log->Flush();
+        }
     }
         // get current log target, will call wxApp::CreateLogTarget() to
         // create one if none exists
     static wxLog *GetActiveTarget();
         // change log target, pLogger may be NULL
     static wxLog *SetActiveTarget(wxLog *pLogger);
+
+        // suspend the message flushing of the main target until the next call
+        // to Resume() - this is mainly for internal use (to prevent wxYield()
+        // from flashing the messages)
+    static void Suspend() { ms_suspendCount++; }
+        // must be called for each Suspend()!
+    static void Resume() { ms_suspendCount--; }
 
     // functions controlling the default wxLog behaviour
         // verbose mode is activated by standard command-line '-verbose'
@@ -204,6 +214,8 @@ private:
     static wxLog      *ms_pLogger;      // currently active log sink
     static bool        ms_doLog;        // FALSE => all logging disabled
     static bool        ms_bAutoCreate;  // create new log targets on demand?
+
+    static size_t      ms_suspendCount; // if positive, logs are not flushed
 
     // format string for strftime(), if NULL, time stamping log messages is
     // disabled

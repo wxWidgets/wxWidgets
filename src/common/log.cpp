@@ -448,6 +448,8 @@ wxLog          *wxLog::ms_pLogger      = (wxLog *)NULL;
 bool            wxLog::ms_doLog        = TRUE;
 bool            wxLog::ms_bAutoCreate  = TRUE;
 
+size_t          wxLog::ms_suspendCount = 0;
+
 #if wxUSE_GUI
     const wxChar *wxLog::ms_timestamp  = wxT("%X");  // time only, no date
 #else

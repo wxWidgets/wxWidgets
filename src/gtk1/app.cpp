@@ -99,10 +99,18 @@ bool wxYield()
         wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
     }
 
+    // disable log flushing from here because a call to wxYield() shouldn't
+    // normally result in message boxes popping up &c
+    wxLog::Suspend();
+
     /* it's necessary to call ProcessIdle() to update the frames sizes which
        might have been changed (it also will update other things set from
        OnUpdateUI() which is a nice (and desired) side effect) */
-    while (wxTheApp->ProcessIdle()) { }
+    while (wxTheApp->ProcessIdle())
+        ;
+
+    // let the logs be flashed again
+    wxLog::Resume();
 
     return TRUE;
 }
@@ -380,9 +388,7 @@ void wxApp::OnIdle( wxIdleEvent &event )
 
     /* flush the logged messages if any */
 #if wxUSE_LOG
-    wxLog *log = wxLog::GetActiveTarget();
-    if (log != NULL && log->HasPendingMessages())
-        log->Flush();
+    wxLog::FlushActive();
 #endif // wxUSE_LOG
 }
 
