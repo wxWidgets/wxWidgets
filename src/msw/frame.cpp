@@ -357,6 +357,27 @@ void wxFrame::SetIcon(const wxIcon& icon)
 #endif // __WIN95__
 }
 
+// generate an artificial resize event
+void wxFrame::SendSizeEvent()
+{
+    RECT r;
+#ifdef __WIN16__
+    ::GetWindowRect(GetHwnd(), &r);
+#else
+    if ( !::GetWindowRect(GetHwnd(), &r) )
+    {
+        wxLogLastError(_T("GetWindowRect"));
+    }
+#endif
+
+    if ( !m_iconized )
+    {
+        (void)::PostMessage(GetHwnd(), WM_SIZE,
+                            IsMaximized() ? SIZE_MAXIMIZED : SIZE_RESTORED,
+                            MAKELPARAM(r.right - r.left, r.bottom - r.top));
+    }
+}
+
 #if wxUSE_STATUSBAR
 wxStatusBar *wxFrame::OnCreateStatusBar(int number,
                                         long style,

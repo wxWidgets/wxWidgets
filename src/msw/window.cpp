@@ -3163,6 +3163,7 @@ bool wxWindow::HandleGetMinMaxInfo(void *mmInfo)
 }
 
 // generate an artificial resize event
+/* FUNCTION IS NOW A MEMBER OF wxFrame - gt
 void wxWindow::SendSizeEvent()
 {
     RECT r;
@@ -3178,6 +3179,7 @@ void wxWindow::SendSizeEvent()
     (void)::PostMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED,
                         MAKELPARAM(r.right - r.left, r.bottom - r.top));
 }
+*/
 
 // ---------------------------------------------------------------------------
 // command messages
