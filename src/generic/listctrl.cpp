@@ -75,6 +75,12 @@
 #ifdef __WXMAC__
     #include "wx/mac/private.h"
 #endif
+
+// NOTE: If using the wxListBox visual attributes works everywhere then this can
+// be removed, as well as the #else case below.
+#define _USE_VISATTR 0
+
+
 // ----------------------------------------------------------------------------
 // events
 // ----------------------------------------------------------------------------
@@ -5243,9 +5249,6 @@ bool wxGenericListCtrl::SetFont( const wxFont &font )
 }
 
 
-// NOTE: If using the wxListBox visual attributes works everywhere then this can
-// be removed, as well as the #else case below.
-#define _USE_VISATTR 0
 
 #include "wx/listbox.h"
 
