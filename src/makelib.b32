@@ -17,17 +17,17 @@ WXDIR = $(WXWIN)
 lib: $(LIBTARGET)
    
 $(LIBTARGET): $(OBJECTS)
-   -erase $(LIBTARGET)
+   -$(RM) $(LIBTARGET)
    tlib "$(LIBTARGET)" /P512 @&&!
 +$(OBJECTS:.obj =.obj +)
 !
 
 clean:
-        -erase *.obj
-        -erase *.exe
-        -erase *.res
-        -erase *.map
-        -erase *.rws
-        -erase $(LIBTARGET)
+        -$(RM) *.obj
+        -$(RM) *.exe
+        -$(RM) *.res
+        -$(RM) *.map
+        -$(RM) *.rws
+        -$(RM) $(LIBTARGET)
 
 
