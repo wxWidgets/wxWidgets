@@ -112,7 +112,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxString& name)
 {
     // base initialization
-    if ( !CreateBase(parent, id, pos, size, style, name) )
+    if ( !CreateBase(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
     SetValidator(validator);

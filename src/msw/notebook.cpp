@@ -122,7 +122,8 @@ bool wxNotebook::Create(wxWindow *parent,
                         const wxString& name)
 {
   // base init
-  CreateBase(parent, id, pos, size, style, name);
+  if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
+      return FALSE;
 
   // colors and font
   m_backgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));

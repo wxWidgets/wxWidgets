@@ -64,7 +64,7 @@ bool wxButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    if ( !CreateBase(parent, id, pos, size, style, name) )
+    if ( !CreateBase(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
     SetValidator(validator);

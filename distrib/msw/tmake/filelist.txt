@@ -52,8 +52,10 @@ textdlgg.cpp	G
 tipdlg.cpp	G
 treectrl.cpp	G	16
 
+choiccmn.cpp	C
 cmndata.cpp	C
 config.cpp	C
+ctrlcmn.cpp	C
 date.cpp	C
 datstrm.cpp	C
 db.cpp	C

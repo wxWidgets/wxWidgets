@@ -16,11 +16,8 @@
     #pragma interface "control.h"
 #endif
 
-#include "wx/window.h"
-#include "wx/list.h"
-
 // General item class
-class WXDLLEXPORT wxControl : public wxWindow
+class WXDLLEXPORT wxControl : public wxControlBase
 {
     DECLARE_ABSTRACT_CLASS(wxControl)
 
@@ -29,7 +26,10 @@ public:
    virtual ~wxControl();
 
    // Simulates an event
-   bool Command(wxCommandEvent& event) { return ProcessCommand(event); }
+   virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }
+
+   // implementation from now on
+   // --------------------------
 
    // Calls the callback and appropriate event handlers
    bool ProcessCommand(wxCommandEvent& event);
@@ -67,9 +67,17 @@ protected:
 
 protected:
    // For controls like radiobuttons which are really composite
-   wxList           m_subControls;
+   wxList m_subControls;
 
-    virtual wxSize DoGetBestSize();
+   virtual wxSize DoGetBestSize();
+
+   // create the control of the given class with the given style, returns FALSE
+   // if creation failed
+   bool MSWCreateControl(const wxChar *classname, WXDWORD style);
+
+   // determine the extended styles combination for this window (may slightly
+   // modify styl parameter)
+   WXDWORD GetExStyle(WXDWORD& style) const;
 
 private:
    DECLARE_EVENT_TABLE()
@@ -78,8 +86,8 @@ private:
 
 #if WXWIN_COMPATIBILITY
     inline void wxControl::Callback(const wxFunction f) { m_callback = f; };
-    inline wxFont& wxControl::GetLabelFont() const { return GetFont() ; }
-    inline wxFont& wxControl::GetButtonFont() const { return GetFont() ; }
+    inline wxFont& wxControl::GetLabelFont() const { return GetFont(); }
+    inline wxFont& wxControl::GetButtonFont() const { return GetFont(); }
     inline void wxControl::SetLabelFont(const wxFont& font) { SetFont(font); }
     inline void wxControl::SetButtonFont(const wxFont& font) { SetFont(font); }
 #endif // WXWIN_COMPATIBILITY

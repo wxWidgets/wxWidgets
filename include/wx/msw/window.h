@@ -201,9 +201,10 @@ public:
     wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
 
     // Make a Windows extended style from the given wxWindows window style
-    virtual WXDWORD MakeExtendedStyle(long style, bool eliminateBorders = TRUE);
+    static WXDWORD MakeExtendedStyle(long style,
+                                     bool eliminateBorders = TRUE);
     // Determine whether 3D effects are wanted
-    virtual WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D);
+    WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D) const;
 
     // MSW only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };

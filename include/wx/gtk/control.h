@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKCONTROLH__
@@ -29,27 +29,27 @@ class wxControl;
 // wxControl
 //-----------------------------------------------------------------------------
 
-class wxControl: public wxWindow
+class wxControl : public wxControlBase
 {
-DECLARE_DYNAMIC_CLASS(wxControl)
+    DECLARE_DYNAMIC_CLASS(wxControl)
 
 public:
-  wxControl();
-  wxControl( wxWindow *parent, wxWindowID id, 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = 0, const wxString &name = wxPanelNameStr  );
-  
-  virtual void Command( wxCommandEvent &event );
+    wxControl();
+    wxControl( wxWindow *parent,
+               wxWindowID id,
+               const wxPoint &pos = wxDefaultPosition,
+               const wxSize &size = wxDefaultSize,
+               long style = 0,
+               const wxString &name = wxPanelNameStr );
 
     // this function will filter out '&' characters and will put the accelerator
-    // char (the one immediately after '&') into m_chAccel (@@ not yet)
-  virtual void SetLabel( const wxString &label );
-  virtual wxString GetLabel() const;
-  
+    // char (the one immediately after '&') into m_chAccel (TODO not yet)
+    virtual void SetLabel( const wxString &label );
+    virtual wxString GetLabel() const;
+
 protected:
-  wxString   m_label;
-  char       m_chAccel;  // enabled to avoid breaking binary compatibility later on
-  
+    wxString   m_label;
+    char       m_chAccel;  // enabled to avoid breaking binary compatibility later on
 };
 
 #endif // __GTKCONTROLH__

@@ -58,6 +58,39 @@ wxControl::~wxControl()
     m_isBeingDeleted = TRUE;
 }
 
+bool wxControl::MSWCreateControl(const wxChar *classname, WXDWORD style)
+{
+    m_hWnd = (WXHWND)::CreateWindowEx
+                       (
+                        GetExStyle(style),  // extended style
+                        classname,          // the kind of control to create
+                        NULL,               // the window name
+                        style,              // the window style
+                        0, 0, 0, 0,         // the window position and size
+                        GetHwndOf(GetParent()),  // parent
+                        (HMENU)GetId(),     // child id
+                        wxGetInstance(),    // app instance
+                        NULL                // creation parameters
+                       );
+
+    if ( !m_hWnd )
+    {
+#ifdef __WXDEBUG__
+        wxLogError(_T("Failed to create a control of class '%s'"), classname);
+#endif // DEBUG
+
+        return FALSE;
+    }
+
+    // subclass again for purposes of dialog editing mode
+    SubclassWin(m_hWnd);
+
+    // controls use the same font and colours as their parent dialog by default
+    InheritAttributes();
+
+    return TRUE;
+}
+
 wxSize wxControl::DoGetBestSize()
 {
     return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);
@@ -145,6 +178,19 @@ void wxControl::OnEraseBackground(wxEraseEvent& event)
     ::FillRect ((HDC) event.GetDC()->GetHDC(), &rect, hBrush);
     ::DeleteObject(hBrush);
     ::SetMapMode((HDC) event.GetDC()->GetHDC(), mode);
+}
+
+WXDWORD wxControl::GetExStyle(WXDWORD& style) const
+{
+    bool want3D;
+    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+
+    // Even with extended styles, need to combine with WS_BORDER
+    // for them to look right.
+    if ( want3D || wxStyleHasBorder(m_windowStyle) )
+        style |= WS_BORDER;
+
+    return exStyle;
 }
 
 // ---------------------------------------------------------------------------

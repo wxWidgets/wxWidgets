@@ -36,10 +36,6 @@ wxControl::wxControl( wxWindow *parent,
 {
 }
 
-void wxControl::Command( wxCommandEvent &WXUNUSED(event) )
-{
-}
-
 void wxControl::SetLabel( const wxString &label )
 {
     m_label = _T("");

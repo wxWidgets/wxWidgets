@@ -297,7 +297,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 {
     wxCHECK_MSG( parent, FALSE, _T("can't create wxWindow without parent") );
 
-    CreateBase(parent, id, pos, size, style, name);
+    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
+        return FALSE;
 
     parent->AddChild(this);
 
@@ -856,7 +857,8 @@ WXDWORD wxWindow::MakeExtendedStyle(long style, bool eliminateBorders)
 // Determines whether native 3D effects or CTL3D should be used,
 // applying a default border style if required, and returning an extended
 // style to pass to CreateWindowEx.
-WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
+WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle,
+                                     bool *want3D) const
 {
     // If matches certain criteria, then assume no 3D effects
     // unless specifically requested (dealt with in MakeExtendedStyle)

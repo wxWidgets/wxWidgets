@@ -51,7 +51,7 @@ bool wxStaticLine::Create( wxWindow *parent,
                            long style,
                            const wxString &name)
 {
-    if ( !CreateBase(parent, id, pos, size, style, name) )
+    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
     parent->AddChild(this);

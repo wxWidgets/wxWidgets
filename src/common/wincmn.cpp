@@ -100,9 +100,9 @@ void wxWindowBase::InitBase()
     m_isShown = FALSE;
     m_isEnabled = TRUE;
 
-    // no client data
-    m_clientObject = (wxClientData *)NULL;
+    // no client data (yet)
     m_clientData = NULL;
+    m_clientDataType = ClientData_None;
 
     // the default event handler is just this window
     m_eventHandler = this;
@@ -154,6 +154,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               const wxPoint& WXUNUSED(pos),
                               const wxSize& WXUNUSED(size),
                               long style,
+                              const wxValidator& validator,
                               const wxString& name)
 {
     // m_isWindow is set to TRUE in wxWindowBase::Init() as well as many other
@@ -167,6 +168,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     SetName(name);
     SetWindowStyleFlag(style);
     SetParent(parent);
+    SetValidator(validator);
 
     return TRUE;
 }
@@ -1253,6 +1255,47 @@ wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt)
         pt2.y = (int) ((pt.y * charHeight) / 8) ;
 
     return pt2;
+}
+
+// ----------------------------------------------------------------------------
+// client data
+// ----------------------------------------------------------------------------
+
+void wxWindowBase::DoSetClientObject( wxClientData *data )
+{
+    wxASSERT_MSG( m_clientDataType != ClientData_Void,
+                  _T("can't have both object and void client data") );
+
+    if ( m_clientObject )
+        delete m_clientObject;
+
+    m_clientObject = data;
+    m_clientDataType = ClientData_Object;
+}
+
+wxClientData *wxWindowBase::DoGetClientObject() const
+{
+    wxASSERT_MSG( m_clientDataType == ClientData_Object,
+                  _T("this window doesn't have object client data") );
+
+    return m_clientObject;
+}
+
+void wxWindowBase::DoSetClientData( void *data )
+{
+    wxASSERT_MSG( m_clientDataType != ClientData_Object,
+                  _T("can't have both object and void client data") );
+
+    m_clientData = data;
+    m_clientDataType = ClientData_Void;
+}
+
+void *wxWindowBase::DoGetClientData() const
+{
+    wxASSERT_MSG( m_clientDataType == ClientData_Void,
+                  _T("this window doesn't have void client data") );
+
+    return m_clientData;
 }
 
 // ----------------------------------------------------------------------------
