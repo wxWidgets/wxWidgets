@@ -134,7 +134,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
   // add space at the end of the menu for the submenu expansion arrow
   // this will also allow offsetting the accel string from the right edge
-  *pwidth += GetDefaultMarginWidth()*1.5;
+  *pwidth += (size_t) (GetDefaultMarginWidth() * 1.5);
 
   // JACS: items still look too tightly packed, so adding 5 pixels.
   (*pheight) = (*pheight) + 5;
@@ -276,9 +276,9 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
     SIZE sizeRect;
     GetTextExtentPoint32(hdc,strMenuText.c_str(), strMenuText.Length(),&sizeRect);
-    ::DrawState(hdc, NULL, NULL, 
+    ::DrawState(hdc, NULL, NULL,
                 (LPARAM)strMenuText.c_str(), strMenuText.length(),
-                x, rc.y+((rc.GetHeight()-sizeRect.cy)/2.0)-1, // centre text vertically
+                x, rc.y+( (int) ((rc.GetHeight()-sizeRect.cy)/2.0) )-1, // centre text vertically
                 rc.GetWidth()-GetMarginWidth(), sizeRect.cy,
                 DST_PREFIXTEXT |
                 (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
@@ -287,9 +287,9 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     {
         // right align accel string with right edge of menu ( offset by the margin width )
         ::SetTextAlign(hdc, TA_RIGHT);
-        ::DrawState(hdc, NULL, NULL, 
+        ::DrawState(hdc, NULL, NULL,
                     (LPARAM)m_strAccel.c_str(), m_strAccel.length(),
-                    rc.GetWidth()-(GetMarginWidth()), rc.y+(rc.GetHeight()-sizeRect.cy)/2.0, 
+                    rc.GetWidth()-(GetMarginWidth()), rc.y+(int) ((rc.GetHeight()-sizeRect.cy)/2.0),
                     rc.GetWidth()-GetMarginWidth(), sizeRect.cy,
                     DST_TEXT |
                     (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
