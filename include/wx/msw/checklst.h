@@ -20,6 +20,8 @@
 // typedef   unsigned int  size_t;
 #include <stddef.h>
 
+#include "wx/setup.h"
+
 #if !wxUSE_OWNER_DRAWN
   #error  "wxCheckListBox class requires owner-drawn functionality."
 #endif

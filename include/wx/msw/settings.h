@@ -17,6 +17,8 @@
 #endif
 
 #include "wx/setup.h"
+#include "wx/colour.h"
+#include "wx/font.h"
 
 #define wxSYS_WHITE_BRUSH         0
 #define wxSYS_LTGRAY_BRUSH        1

@@ -19,6 +19,7 @@
 #include "wx/defs.h"
 #include "wx/event.h"
 #include "wx/dynarray.h"
+#include "wx/msw/accel.h"
 
 class WXDLLEXPORT wxMenuItem;
 class WXDLLEXPORT wxMenuBar;

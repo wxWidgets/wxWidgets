@@ -18,6 +18,7 @@
 #if wxUSE_HTML
 
 #include <wx/window.h>
+#include <wx/scrolwin.h>
 #include <wx/config.h>
 #include <wx/treectrl.h>
 #include <wx/html/htmlwinparser.h>
