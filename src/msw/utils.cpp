@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -27,7 +27,7 @@
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/cursor.h"
-#endif
+#endif  //WX_PRECOMP
 
 #include "wx/msw/private.h"
 #include "wx/timer.h"
@@ -37,17 +37,18 @@
 #ifndef __GNUWIN32__
 #include <direct.h>
 #include <dos.h>
-#endif
+#endif  //GNUWIN32
 
 #ifdef __GNUWIN32__
 #include <sys/unistd.h>
 #include <sys/stat.h>
 #ifndef __MINGW32__
 #include <std.h>
-#endif
+#endif  //MINGW32
 
-#define stricmp strcasecmp
-#endif
+#endif  //GNUWIN32
+
+#include "wx/log.h"
 
 #ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
                     // this (3.1 I believe) and how to test for it.
@@ -160,8 +161,8 @@ bool wxGetUserId(char *buf, int maxSize)
 
   // Can't assume we have NIS (PC-NFS) or some other ID daemon
   // So we ...
-  if (	(user = getenv("USER")) == NULL &&
-	(user = getenv("LOGNAME")) == NULL ) {
+  if (  (user = getenv("USER")) == NULL &&
+  (user = getenv("LOGNAME")) == NULL ) {
      // Use wxWindows configuration data (comming soon)
      GetProfileString(WX_SECTION, eUSERID, default_id, buf, maxSize - 1);
   } else
@@ -323,7 +324,7 @@ void wxFatalError(const wxString& msg, const wxString& title)
 void wxBell(void)
 {
 #ifdef __WIN32__
-  Beep(1000,1000) ;	// 1kHz during 1 sec.
+  Beep(1000,1000) ; // 1kHz during 1 sec.
 #else
   MessageBeep(-1) ;
 #endif
@@ -346,19 +347,19 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
     if (majorVsn) *majorVsn = info.dwMajorVersion;
     if (minorVsn) *minorVsn = info.dwMinorVersion;
     switch (info.dwPlatformId)
-	{
-	case VER_PLATFORM_WIN32s:
-		return wxWIN32S;
-		break;
-	case VER_PLATFORM_WIN32_WINDOWS:
-		return wxWIN95;
-		break;
-	case VER_PLATFORM_WIN32_NT:
-		return wxWINDOWS_NT;
-		break;
-	}
+  {
+  case VER_PLATFORM_WIN32s:
+    return wxWIN32S;
+    break;
+  case VER_PLATFORM_WIN32_WINDOWS:
+    return wxWIN95;
+    break;
+  case VER_PLATFORM_WIN32_NT:
+    return wxWINDOWS_NT;
+    break;
   }
-  return wxWINDOWS;	// error if we get here, return generic value
+  }
+  return wxWINDOWS; // error if we get here, return generic value
 #else
   // Win16 code...
   int retValue ;
@@ -508,6 +509,64 @@ bool wxIsBusy(void)
   return (wxBusyCursorCount > 0);
 }    
 
+const char* WXDLLEXPORT wxGetHomeDir(wxString *pstr)
+{
+  wxString& strDir = *pstr;
+
+  #ifdef __UNIX__
+    const char *szHome = getenv("HOME");
+    if ( szHome == NULL ) {
+      // we're homeless...
+      wxLogWarning(_("can't find user's HOME, using current directory."));
+      strDir = ".";
+    }
+    else
+       strDir = szHome;
+
+    // add a trailing slash if needed
+    if ( strDir.Last() != '/' )
+      strDir << '/';
+  #else   // Windows
+    #ifdef  __WIN32__
+      const char *szHome = getenv("HOMEDRIVE");
+      if ( szHome != NULL )
+        strDir << szHome;
+      szHome = getenv("HOMEPATH");
+      if ( szHome != NULL ) {
+        strDir << szHome;
+
+        // the idea is that under NT these variables have default values
+        // of "%systemdrive%:" and "\\". As we don't want to create our
+        // config files in the root directory of the system drive, we will
+        // create it in our program's dir. However, if the user took care
+        // to set HOMEPATH to something other than "\\", we suppose that he
+        // knows what he is doing and use the supplied value.
+        if ( strcmp(szHome, "\\") != 0 )
+          return strDir.c_str();
+      }
+
+    #else   // Win16
+      // Win16 has no idea about home, so use the working directory instead
+    #endif  // WIN16/32
+
+    // 260 was taken from windef.h
+    #ifndef MAX_PATH
+      #define MAX_PATH  260
+    #endif
+
+    wxString strPath;
+    ::GetModuleFileName(::GetModuleHandle(NULL),
+                        strPath.GetWriteBuf(MAX_PATH), MAX_PATH);
+    strPath.UngetWriteBuf();
+
+    // extract the dir name
+    wxSplitPath(strPath, &strDir, NULL, NULL);
+
+  #endif  // UNIX/Win
+
+  return strDir.c_str();
+}
+
 // Hack for MS-DOS
 char *wxGetUserHome (const wxString& user)
 {
@@ -518,14 +577,14 @@ char *wxGetUserHome (const wxString& user)
     char tmp[64];
     if (wxGetUserId(tmp, sizeof(tmp)/sizeof(char))) {
       // Guests belong in the temp dir
-      if (stricmp(tmp, "annonymous") == 0) {
-	if ((home = getenv("TMP")) != NULL ||
-	    (home = getenv("TMPDIR")) != NULL ||
-	    (home = getenv("TEMP")) != NULL)
-	  return *home ? home : "\\";
+      if (Stricmp(tmp, "annonymous") == 0) {
+        if ((home = getenv("TMP")) != NULL ||
+            (home = getenv("TMPDIR")) != NULL ||
+            (home = getenv("TEMP")) != NULL)
+            return *home ? home : "\\";
       }
-      if (stricmp(tmp, WXSTRINGCAST user1) == 0)
-	    user1 = "";
+      if (Stricmp(tmp, WXSTRINGCAST user1) == 0)
+        user1 = "";
     }
   }
   if (user1 == "")
@@ -542,19 +601,19 @@ char *wxGetUserHome (const wxString& user)
 // in long calculations.
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
-	if(wnd){
-		MSG msg;
-		HWND win= (HWND) wnd->GetHWND();
-		while(PeekMessage(&msg,win,0,0,PM_REMOVE)){
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		return TRUE;//*** temporary?
-	}
-	else{
-		wxError("wnd==NULL !!!");
-		return FALSE;//*** temporary?
-	}
+  if(wnd){
+    MSG msg;
+    HWND win= (HWND) wnd->GetHWND();
+    while(PeekMessage(&msg,win,0,0,PM_REMOVE)){
+      TranslateMessage(&msg);
+      DispatchMessage(&msg);
+    }
+    return TRUE;//*** temporary?
+  }
+  else{
+    wxError("wnd==NULL !!!");
+    return FALSE;//*** temporary?
+  }
 }
 
 // MSW only: get user-defined resource from the .res file.
