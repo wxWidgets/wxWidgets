@@ -16,36 +16,34 @@
 #pragma interface "flags.h"
 #endif
 
-#include <bitset>
-
-// wxFlags should be applied to an enum, then this can be used like
+// wxBitset should be applied to an enum, then this can be used like
 // bitwise operators but keeps the type safety and information, the
 // enums must be in a sequence , their value determines the bit position
 // that they represent
 // The api is made as close as possible to <bitset> 
 
-template <class T> class wxFlags
+template <class T> class wxBitset
 {
 	friend class wxEnumData ;
 public:
-    // creates a wxFlags<> object with all flags initialized to 0
-    wxFlags() { m_data = 0; }
+    // creates a wxBitset<> object with all flags initialized to 0
+    wxBitset() { m_data = 0; }
 
-    // created a wxFlags<> object initialized according to the bits of the 
+    // created a wxBitset<> object initialized according to the bits of the 
     // integral value val
-    wxFlags(unsigned long val) { m_data = val ; }
+    wxBitset(unsigned long val) { m_data = val ; }
 
-    // copies the content in the new wxFlags<> object from another one
-    wxFlags(const wxFlags &src) { m_data = src.m_data; }
+    // copies the content in the new wxBitset<> object from another one
+    wxBitset(const wxBitset &src) { m_data = src.m_data; }
 
-    // creates a wxFlags<> object that has the specific flag set
-    wxFlags(const T el) { m_data |= 1 << el; }
+    // creates a wxBitset<> object that has the specific flag set
+    wxBitset(const T el) { m_data |= 1 << el; }
 
     // returns the integral value that the bits of this object represent
     unsigned long to_ulong() const { return m_data ; }
 
     // assignment
-    wxFlags &operator =(const wxFlags &rhs)
+    wxBitset &operator =(const wxBitset &rhs)
     {
 		m_data = rhs.m_data;
 		return *this;
@@ -53,7 +51,7 @@ public:
 
     // bitwise or operator, sets all bits that are in rhs and leaves
     // the rest unchanged
-    wxFlags &operator |=(const wxFlags &rhs) 
+    wxBitset &operator |=(const wxBitset &rhs) 
     {
 		m_data |= rhs.m_data;
 		return *this;
@@ -61,7 +59,7 @@ public:
 
     // bitwsie exclusive-or operator, toggles the value of all bits
     // that are set in bits and leaves all others unchanged
-    wxFlags &operator ^=(const wxFlags &rhs) // difference
+    wxBitset &operator ^=(const wxBitset &rhs) // difference
     {
 		m_data ^= rhs.m_data;
 		return *this;
@@ -69,7 +67,7 @@ public:
 
     // bitwise and operator, resets all bits that are not in rhs and leaves
     // all others unchanged
-    wxFlags &operator &=(const wxFlags &rhs) // intersection
+    wxBitset &operator &=(const wxBitset &rhs) // intersection
     {
 		m_data &= rhs.m_data;
 		return *this;
@@ -77,47 +75,47 @@ public:
 
     // bitwise or operator, returns a new bitset that has all bits set that set are in 
     // bitset2 or in this bitset
-   wxFlags operator |(const wxFlags &bitset2) const // union
+   wxBitset operator |(const wxBitset &bitset2) const // union
     {
-		wxFlags<T> s;
+		wxBitset<T> s;
 		s.m_data = m_data | bitset2.m_data;
 		return s;
     }
 
     // bitwise exclusive-or operator, returns a new bitset that has all bits set that are set either in 
     // bitset2 or in this bitset but not in both
-    wxFlags operator ^(const wxFlags &bitset2) const // difference
+    wxBitset operator ^(const wxBitset &bitset2) const // difference
     {
-		wxFlags<T> s;
+		wxBitset<T> s;
 		s.m_data = m_data ^ bitset2.m_data;
 		return s;
     }
 
     // bitwise and operator, returns a new bitset that has all bits set that are set both in 
     // bitset2 and in this bitset
-    wxFlags operator &(const wxFlags &bitset2) const // intersection
+    wxBitset operator &(const wxBitset &bitset2) const // intersection
     {
-		wxFlags<T> s;
+		wxBitset<T> s;
 		s.m_data = m_data & bitset2.m_data;
 		return s;
     }
 
     // sets appropriate the bit to true
-    wxFlags& set(const T el) //Add element
+    wxBitset& set(const T el) //Add element
     {
 		m_data |= 1 << el;
 		return *this;
     }
     
     // clears the appropriate flag to false
-    wxFlags& reset(const T el) //remove element
+    wxBitset& reset(const T el) //remove element
     {
 		m_data &= ~(1 << el);
 		return *this;
     }
 
     // clear all flags
-    wxFlags& reset()
+    wxBitset& reset()
     {
 		m_data = 0;
 		return *this;
@@ -142,13 +140,13 @@ public:
     }
 
     // true if both have the same flags
-    bool operator ==(const wxFlags &rhs) const
+    bool operator ==(const wxBitset &rhs) const
     {
 		return m_data == rhs.m_data;
     }
 
     // true if both differ in their flags set
-    bool operator !=(const wxFlags &rhs) const
+    bool operator !=(const wxBitset &rhs) const
     {
 		return !operator==(rhs);
     }
@@ -159,5 +157,11 @@ private :
 	unsigned long m_data;
 };
 
+#define WX_DEFINE_FLAGS( flags ) \
+    struct flags \
+    {\
+    flags(long data=0) :m_data(data) {} \
+        long m_data ;\
+    } ;
 
 #endif

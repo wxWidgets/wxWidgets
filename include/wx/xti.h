@@ -143,7 +143,7 @@ private :
 //  Strawberry,
 // };
 //
-// typedef wxFlags<wxFlavor> wxCoupe ;
+// typedef wxBitset<wxFlavor> wxCoupe ;
 //
 // in the implementation file :
 //
@@ -164,7 +164,7 @@ private :
 void wxSetStringToArray( const wxString &s , wxArrayString &array ) ;
 
 template<typename e>
-void wxSetFromString(const wxString &s , wxFlags<e> &data )
+void wxSetFromString(const wxString &s , wxBitset<e> &data )
 {
     wxEnumData* edata = wxGetEnumData((e) 0) ;
     data.reset() ;
@@ -184,7 +184,7 @@ void wxSetFromString(const wxString &s , wxFlags<e> &data )
 }
 
 template<typename e>
-void wxSetToString( wxString &s , const wxFlags<e> &data )
+void wxSetToString( wxString &s , const wxBitset<e> &data )
 {
     wxEnumData* edata = wxGetEnumData((e) 0) ;
     int count = edata->GetEnumCount() ;
@@ -203,15 +203,15 @@ void wxSetToString( wxString &s , const wxFlags<e> &data )
     }
 }
 
-//  if the wxFlags specialization above does not work for all compilers, add this to the WX_IMPLEMENT_SET_STREAMING macro
+//  if the wxBitset specialization above does not work for all compilers, add this to the WX_IMPLEMENT_SET_STREAMING macro
 //  template<> const wxTypeInfo* wxGetTypeInfo( SetName * ){ static wxEnumTypeInfo s_typeInfo(wxT_SET , &s_enumData##e) ; return &s_typeInfo ; }
 
 #define WX_IMPLEMENT_SET_STREAMING(SetName,e) \
-    template<> void wxStringReadValue(const wxString &s , wxFlags<e> &data ) \
+    template<> void wxStringReadValue(const wxString &s , wxBitset<e> &data ) \
 { \
     wxSetFromString( s , data ) ; \
 } \
-    template<> void wxStringWriteValue( wxString &s , const wxFlags<e> &data ) \
+    template<> void wxStringWriteValue( wxString &s , const wxBitset<e> &data ) \
 { \
     wxSetToString( s , data ) ; \
 } \
@@ -222,6 +222,72 @@ template<> const wxTypeInfo* wxGetTypeInfo( SetName * ) \
     static wxEnumTypeInfo s_typeInfo(wxT_SET , &s_enumData##e , &wxToStringConverter<SetName> , &wxFromStringConverter<SetName> , &ToLong##SetName , &FromLong##SetName, #SetName ) ; return &s_typeInfo ; \
 } 
 
+template<typename e>
+void wxFlagsFromString(const wxString &s , e &data )
+{
+    wxEnumData* edata = wxGetEnumData((e*) 0) ;
+    data.m_data = 0 ;
+
+    wxArrayString array ;
+    wxSetStringToArray( s , array ) ;
+    wxString flag;
+    for ( int i = 0 ; i < array.Count() ; ++i )
+    {
+        flag = array[i] ;
+        int ivalue ;
+        if ( edata->HasEnumMemberValue( flag , &ivalue ) )
+        {
+            data.m_data |= ivalue ;
+        }
+    }
+}
+
+template<typename e>
+void wxFlagsToString( wxString &s , const e& data )
+{
+    wxEnumData* edata = wxGetEnumData((e*) 0) ;
+    int count = edata->GetEnumCount() ;
+    int i ;
+    s.Clear() ;
+    long dataValue = data.m_data ;
+    for ( i = 0 ; i < count ; i++ )
+    {
+        int value = edata->GetEnumMemberValueByIndex(i) ;
+        // make this to allow for multi-bit constants to work
+        if ( value && ( dataValue & value ) == value )
+        {
+            // clear the flags we just set
+            dataValue &= ~value ;
+            // this could also be done by the templated calls
+            if ( !s.IsEmpty() )
+                s +="|" ;
+            s += edata->GetEnumMemberNameByIndex(i) ;
+        }
+    }
+}
+
+#define WX_BEGIN_FLAGS( e ) \
+    wxEnumMemberData s_enumDataMembers##e[] = {
+
+#define WX_FLAGS_MEMBER( v ) { #v, v } ,
+
+#define WX_END_FLAGS( e ) { NULL , 0 } } ; \
+    wxEnumData s_enumData##e( s_enumDataMembers##e ) ; \
+    wxEnumData *wxGetEnumData(e*) { return &s_enumData##e ; } \
+    template<> void wxStringReadValue(const wxString &s , e &data ) \
+{ \
+    wxFlagsFromString<e>( s , data ) ; \
+} \
+    template<> void wxStringWriteValue( wxString &s , const e& data ) \
+{ \
+    wxFlagsToString<e>( s , data ) ; \
+} \
+    void FromLong##e( long data , wxxVariant& result ) { result = wxxVariant(e(data)) ;} \
+    void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.Get<e>().m_data ;} \
+template<> const wxTypeInfo* wxGetTypeInfo( e * ) \
+{ \
+    static wxEnumTypeInfo s_typeInfo(wxT_SET , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e, #e ) ; return &s_typeInfo ; \
+} 
 
 // ----------------------------------------------------------------------------
 // Type Information
@@ -247,7 +313,7 @@ enum wxTypeKind
     wxT_FLOAT,
     wxT_DOUBLE,
     wxT_STRING, // must be wxString
-    wxT_SET, // must be wxFlags<> template
+    wxT_SET, // must be wxBitset<> template
     wxT_ENUM,
     wxT_CUSTOM, // user defined type (e.g. wxPoint)
 
