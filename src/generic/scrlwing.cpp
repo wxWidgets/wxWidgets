@@ -392,34 +392,14 @@ void wxScrollHelper::DeleteEvtHandler()
     // search for m_handler in the handler list
     if ( m_win && m_handler )
     {
-        wxEvtHandler *handlerPrev = NULL,
-                     *handler = m_win->GetEventHandler();
-        while ( handler )
+        if ( m_win->RemoveEventHandler(m_handler) )
         {
-            if ( handler == m_handler )
-            {
-                wxEvtHandler *handlerNext = handler->GetNextHandler();
-                if ( handlerPrev )
-                {
-                    handlerPrev->SetNextHandler(handlerNext);
-                }
-                else
-                {
-                    m_win->SetEventHandler(handlerNext);
-                }
-
-                handler->SetNextHandler(NULL);
-                delete handler;
-                m_handler = NULL;
-
-                return;
-            }
-
-            handlerPrev = handler;
-            handler = handler->GetNextHandler();
+            delete m_handler;
         }
+        //else: something is very wrong, so better [maybe] leak memory than
+        //      risk a crash because of double deletion
 
-        wxFAIL_MSG( _T("where has our event handler gone?") );
+        m_handler = NULL;
     }
 }
 
