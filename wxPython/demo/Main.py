@@ -49,6 +49,7 @@ _treeList = [
         'wxColourDialog',
         'wxDirDialog',
         'wxFileDialog',
+        'wxFileDialog_Save',
         'wxFindReplaceDialog',
         'wxFontDialog',
         'wxMessageDialog',
