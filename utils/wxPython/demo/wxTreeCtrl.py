@@ -86,7 +86,7 @@ class TestTreeCtrlPanel(wxPanel):
 
     def OnLeftDClick(self, event):
         pt = event.GetPosition();
-        item = self.tree.HitTest(pt)
+        item = self.tree.HitTest(pt)[0]
         self.log.WriteText("OnLeftDClick: %s\n" % self.tree.GetItemText(item))
 
 
@@ -108,6 +108,7 @@ class TestTreeCtrlPanel(wxPanel):
         self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
         self.log.WriteText("BoundingRect: %s\n" %
                            self.tree.GetBoundingRect(self.item, true))
+
 
 
 #---------------------------------------------------------------------------

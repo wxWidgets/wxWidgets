@@ -276,6 +276,36 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
                 self.changeCallback(LocalEvent(value))
 
 
+class DirBrowseButton(FileBrowseButton):
+    def __init__(self, parent, id = -1,
+                 pos = wxDefaultPosition, size = wxDefaultSize,
+                 style = wxTAB_TRAVERSAL,
+                 labelText = 'Select a directory:',
+                 buttonText = 'Browse',
+                 toolTip = 'Type directory name or browse to select',
+                 dialogTitle = '',
+                 startDirectory = '.',
+                 changeCallback = None,
+                 dialogClass = wxDirDialog):
+        FileBrowseButton.__init__(self, parent, id, pos, size, style,
+                                  labelText, buttonText, toolTip,
+                                  dialogTitle, startDirectory,
+                                  changeCallback = changeCallback)
+        #
+        self._dirDialog = dialogClass(self,
+                                      message = dialogTitle,
+                                      defaultPath = startDirectory)
+    #
+    def OnBrowse(self, ev = None):
+        dialog = self._dirDialog
+        if dialog.ShowModal() == wxID_OK:
+            self.SetValue(dialog.GetPath())
+    #
+    def __del__(self):
+        if self.__dict__.has_key('_dirDialog'):
+            self._dirDialog.Destroy()
+
+
 #----------------------------------------------------------------------
 
 
@@ -288,7 +318,7 @@ if __name__ == "__main__":
             print self.tag, event.GetString()
     class DemoFrame( wxFrame ):
         def __init__(self, parent):
-            wxFrame.__init__(self, parent, 2400, "File entry with browse", size=(500,220) )
+            wxFrame.__init__(self, parent, 2400, "File entry with browse", size=(500,260) )
             panel = wxPanel (self,-1)
             innerbox = wxBoxSizer(wxVERTICAL)
             control = FileBrowseButton(
@@ -318,6 +348,11 @@ if __name__ == "__main__":
                 style = wxSUNKEN_BORDER|wxCLIP_CHILDREN ,
                 changeCallback= SimpleCallback( "With Callback" ),
             )
+            innerbox.Add(  control, 0, wxEXPAND)
+            self.bottommostcontrol = control = DirBrowseButton(
+                panel,
+                labelText = "Simple dir browse button",
+                style = wxSUNKEN_BORDER|wxCLIP_CHILDREN)
             innerbox.Add(  control, 0, wxEXPAND)
             ID = wxNewId()
             innerbox.Add( wxButton( panel, ID,"Change Label",  ), 1, wxEXPAND)

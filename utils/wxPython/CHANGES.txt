@@ -2,7 +2,7 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-New in 2.1.16
+New in 2.1.15
 -------------
 
 Fixed wxTreeCtrl.HitTest to return both the tree item as well as the

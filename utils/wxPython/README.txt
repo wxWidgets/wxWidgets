@@ -26,6 +26,12 @@ Service Pack 4+, or the HTML Workshop at
 
 http://msdn.microsoft.com/workshop/author/htmlhelp/download.asp.
 
+For some features, the latest common controls library from microsoft
+is required.  You can get this by installing IE 5.0 or Office 2000.
+You can also get it independently from here:
+
+http://download.microsoft.com/download/platformsdk/Comctl32/5.80.2614.3600/W9XNT4/EN-US/50comupd.exe
+
 
 
 Getting Help

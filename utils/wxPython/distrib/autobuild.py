@@ -3,6 +3,7 @@
 import sys, os, string, time
 from ftplib import FTP
 
+cwd = os.getcwd()
 
 logfile = 'c:\\temp\\autobuild.log'
 WXDIR   = os.environ['WXWIN']
@@ -62,11 +63,6 @@ def main():
         do('make cleandll FINAL=1')
         do('makeaddons clean FINAL=1')
 
-        #os.chdir(WXDIR + '/utils/ogl/src')
-        #do('wxm clean FINAL=1')
-        #os.chdir(WXDIR + '/utils/glcanvas/win')
-        #do('wxm clean FINAL=1')
-
         logSeparator("Building Documentation...")
         os.chdir(WXDIR + '/src/msw')
         do('make touchmanual htmlhelp')
@@ -76,10 +72,9 @@ def main():
         os.chdir(WXDIR + '/src/msw')
         do('make dll pch FINAL=1')
         validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
+        do("upx -9 " + WXDIR + '/lib/wx'+dllVer+'.dll')
 
         do('makeaddons FINAL=1')
-        #os.chdir(WXDIR + '/contrib/src/ogl')
-        #do('wxm FINAL=1')
         validateFile(WXDIR + '/contrib/lib/ogl.lib')
         validateFile(WXDIR + '/contrib/lib/stc.lib')
 
@@ -122,6 +117,8 @@ FINAL=1
         validateFile(WXDIR+'\\utils\\wxPython\\oglc.pyd')
         validateFile(WXDIR+'\\utils\\wxPython\\stc_c.pyd')
 
+        os.chdir(WXDIR+'\\utils\\wxPython')
+        do("upx -9 *.pyd")
 
         logSeparator("Building installer executable...")
         os.chdir(WXDIR+'\\utils\\wxPython\\distrib')
@@ -157,6 +154,13 @@ FINAL=1
             pass
 
 
+        logSeparator("Copying built files...")
+        do("copy %s %s" % (destName, cwd))
+        do("copy %s %s" % (destZName, cwd))
+        do("copy %s %s" % (destDName, cwd))
+
+
+
         # #*#*#*#*#*  Comment this out to allow upload...
         return
 
@@ -171,7 +175,7 @@ FINAL=1
         logSeparator("Finished!!!")
 
     finally:
-        os.system("list " + logfile)
+##        os.system("list " + logfile)
         pass
 
 

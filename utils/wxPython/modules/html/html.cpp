@@ -1896,11 +1896,12 @@ static PyObject *_wrap_wxHtmlWinParser_SetLinkColor(PyObject *self, PyObject *ar
     wxHtmlWinParser * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","clr", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWinParser_SetLinkColor",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWinParser_SetLinkColor",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1909,13 +1910,11 @@ static PyObject *_wrap_wxHtmlWinParser_SetLinkColor(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlWinParser_SetLinkColor. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxHtmlWinParser_SetLinkColor(_arg0,*_arg1);
@@ -1967,11 +1966,12 @@ static PyObject *_wrap_wxHtmlWinParser_SetActualColor(PyObject *self, PyObject *
     wxHtmlWinParser * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","clr", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWinParser_SetActualColor",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWinParser_SetActualColor",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1980,13 +1980,11 @@ static PyObject *_wrap_wxHtmlWinParser_SetActualColor(PyObject *self, PyObject *
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlWinParser_SetActualColor. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxHtmlWinParser_SetActualColor(_arg0,*_arg1);
@@ -3471,11 +3469,12 @@ static PyObject *_wrap_wxHtmlContainerCell_SetBackgroundColour(PyObject *self, P
     wxHtmlContainerCell * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","clr", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlContainerCell_SetBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlContainerCell_SetBackgroundColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3484,13 +3483,11 @@ static PyObject *_wrap_wxHtmlContainerCell_SetBackgroundColour(PyObject *self, P
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlContainerCell_SetBackgroundColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxHtmlContainerCell_SetBackgroundColour(_arg0,*_arg1);
@@ -3508,12 +3505,14 @@ static PyObject *_wrap_wxHtmlContainerCell_SetBorder(PyObject *self, PyObject *a
     wxColour * _arg1;
     wxColour * _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    wxColour  temp0;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","clr1","clr2", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxHtmlContainerCell_SetBorder",_kwnames,&_argo0,&_argo1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxHtmlContainerCell_SetBorder",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3522,20 +3521,16 @@ static PyObject *_wrap_wxHtmlContainerCell_SetBorder(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlContainerCell_SetBorder. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxHtmlContainerCell_SetBorder. Expected _wxColour_p.");
+}
+{
+    _arg2 = &temp0;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxHtmlContainerCell_SetBorder(_arg0,*_arg1,*_arg2);
@@ -3594,20 +3589,19 @@ static PyObject *_wrap_new_wxHtmlColourCell(PyObject *self, PyObject *args, PyOb
     wxHtmlColourCell * _result;
     wxColour * _arg0;
     int  _arg1 = (int ) (wxHTML_CLR_FOREGROUND);
-    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj0 = 0;
     char *_kwnames[] = { "clr","flags", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:new_wxHtmlColourCell",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:new_wxHtmlColourCell",_kwnames,&_obj0,&_arg1)) 
         return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxHtmlColourCell. Expected _wxColour_p.");
+{
+    _arg0 = &temp;
+    if (! wxColour_helper(_obj0, &_arg0))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxHtmlColourCell *)new_wxHtmlColourCell(*_arg0,_arg1);
