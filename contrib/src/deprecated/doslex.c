@@ -66,7 +66,7 @@
     #define YY_USE_CONST
   #endif
 
-  #ifdef __MINGW32__
+  #if defined(__MINGW32__) || defined(__WATCOMC__)
     #include <io.h>
   #endif
 
