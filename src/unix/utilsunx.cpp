@@ -28,6 +28,11 @@
 
 #include "wx/wfstream.h"
 
+#if defined( __MWERKS__ ) && defined(__MACH__)
+#define WXWIN_OS_DESCRIPTION "MacOS X"
+#define HAVE_NANOSLEEP
+#endif
+
 // not only the statfs syscall is called differently depending on platform, but
 // one of its incarnations, statvfs(), takes different arguments under
 // different platforms and even different versions of the same system (Solaris
@@ -655,8 +660,9 @@ long wxExecute(wxChar **argv,
         execvp (*mb_argv, mb_argv);
 
         fprintf(stderr, "execvp(");
-        for ( char **ppc = mb_argv; *ppc; ppc++ )
-            fprintf(stderr, "%s%s", ppc == mb_argv ? "" : ", ", *ppc);
+        // CS changed ppc to ppc_ as ppc is not available under mac os CW Mach-O
+        for ( char **ppc_ = mb_argv; *ppc_; ppc_++ )
+            fprintf(stderr, "%s%s", ppc_ == mb_argv ? "" : ", ", *ppc_);
         fprintf(stderr, ") failed with error %d!\n", errno);
 
         // there is no return after successful exec()
