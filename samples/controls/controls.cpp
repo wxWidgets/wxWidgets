@@ -105,7 +105,8 @@ public:
 #endif // wxUSE_SPINBUTTON
 
     wxListBox     *m_listbox;
-    wxChoice      *m_choice;
+    wxChoice      *m_choice,
+                  *m_choiceSorted;
     wxComboBox    *m_combo;
     wxRadioBox    *m_radio;
     wxGauge       *m_gauge;
@@ -234,6 +235,7 @@ const int  ID_CHOICE_APPEND     = 124;
 const int  ID_CHOICE_DELETE     = 125;
 const int  ID_CHOICE_FONT       = 126;
 const int  ID_CHOICE_ENABLE     = 127;
+const int  ID_CHOICE_SORTED     = 128;
 
 const int  ID_COMBO             = 140;
 const int  ID_COMBO_SEL_NUM     = 141;
@@ -275,6 +277,7 @@ EVT_BUTTON    (ID_LISTBOX_DELETE,       MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_FONT,         MyPanel::OnListBoxButtons)
 EVT_CHECKBOX  (ID_LISTBOX_ENABLE,       MyPanel::OnListBoxButtons)
 EVT_CHOICE    (ID_CHOICE,               MyPanel::OnChoice)
+EVT_CHOICE    (ID_CHOICE_SORTED,        MyPanel::OnChoice)
 EVT_BUTTON    (ID_CHOICE_SEL_NUM,       MyPanel::OnChoiceButtons)
 EVT_BUTTON    (ID_CHOICE_SEL_STR,       MyPanel::OnChoiceButtons)
 EVT_BUTTON    (ID_CHOICE_CLEAR,         MyPanel::OnChoiceButtons)
@@ -411,6 +414,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     panel = new wxPanel(m_notebook);
     m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 5, choices );
+    m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,-1),
+                                   5, choices, wxCB_SORT );
     m_choice->SetSelection(2);
     m_choice->SetBackgroundColour( "red" );
     (void)new wxButton( panel, ID_CHOICE_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
@@ -672,9 +677,11 @@ void MyPanel::OnChoice( wxCommandEvent &event )
     m_text->AppendText( "Choice event selection string is: " );
     m_text->AppendText( event.GetString() );
     m_text->AppendText( "\n" );
-    m_text->AppendText( "Choice control selection string is: " );
+    m_text->AppendText( "Choice control selection string is: '" );
     m_text->AppendText( m_choice->GetStringSelection() );
-    m_text->AppendText( "\n" );
+    m_text->AppendText( "' (for unsorted control)\nand '" );
+    m_text->AppendText( m_choiceSorted->GetStringSelection() );
+    m_text->AppendText( "' (for sorted control)\n" );
 }
 
 void MyPanel::OnChoiceButtons( wxCommandEvent &event )
@@ -684,37 +691,45 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
         case ID_CHOICE_ENABLE:
             {
                 m_choice->Enable( event.GetInt() == 0 );
+                m_choiceSorted->Enable( event.GetInt() == 0 );
                 break;
             }
         case ID_CHOICE_SEL_NUM:
             {
                 m_choice->SetSelection( 2 );
+                m_choiceSorted->SetSelection( 2 );
                 break;
             }
         case ID_CHOICE_SEL_STR:
             {
                 m_choice->SetStringSelection( "This" );
+                m_choiceSorted->SetStringSelection( "This" );
                 break;
             }
         case ID_CHOICE_CLEAR:
             {
                 m_choice->Clear();
+                m_choiceSorted->Clear();
                 break;
             }
         case ID_CHOICE_APPEND:
             {
                 m_choice->Append( "Hi!" );
+                m_choiceSorted->Append( "Hi!" );
                 break;
             }
         case ID_CHOICE_DELETE:
             {
                 int idx = m_choice->GetSelection();
                 m_choice->Delete( idx );
+                idx = m_choiceSorted->GetSelection();
+                m_choiceSorted->Delete( idx );
                 break;
             }
         case ID_CHOICE_FONT:
             {
                 m_choice->SetFont( *wxITALIC_FONT );
+                m_choiceSorted->SetFont( *wxITALIC_FONT );
                 break;
             }
     }
