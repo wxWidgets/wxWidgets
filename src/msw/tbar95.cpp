@@ -75,7 +75,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)
 #endif
 
 BEGIN_EVENT_TABLE(wxToolBar95, wxToolBarBase)
+    EVT_SIZE(wxToolBar95::OnSize)
+    EVT_PAINT(wxToolBar95::OnPaint)
     EVT_MOUSE_EVENTS(wxToolBar95::OnMouseEvent)
+    EVT_KILL_FOCUS(wxToolBar95::OnKillFocus)
     EVT_SYS_COLOUR_CHANGED(wxToolBar95::OnSysColourChanged)
 END_EVENT_TABLE()
 
