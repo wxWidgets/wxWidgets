@@ -1,16 +1,21 @@
 \section{\class{wxBitmapDataObject}}\label{wxbitmapdataobject}
 
-wxBitmapDataObject is a specialization of wxDataObject for bitmap data. It can be
-used without change to paste data into the \helpref{wxClipboard}{wxclipboard}
-or a \helpref{wxDropSource}{wxdropsource}. A user may wish to derive a new class
-from this class for providing a bitmap on-demand in order to minimize memory consumption
-when offering data in several formats, such as a bitmap and GIF.
+wxBitmapDataObject is a specialization of wxDataObject for bitmap data. It can
+be used without change to paste data into the 
+\helpref{wxClipboard}{wxclipboard} or a \helpref{wxDropSource}{wxdropsource}. A
+user may wish to derive a new class from this class for providing a bitmap
+on-demand in order to minimize memory consumption when offering data in several
+formats, such as a bitmap and GIF.
 
-In order to offer bitmap data on-demand \helpref{GetSize}{wxbitmapdataobjectgetsize} 
-and \helpref{WriteData}{wxbitmapdataobjectwritedata} will have to be overridden.
+\wxheading{Virtual functions to override}
+
+This class may be used as is, but 
+\helpref{GetBitmap}{wxbitmapdataobjectgetbitmap} may be overridden to increase
+efficiency.
 
 \wxheading{Derived from}
 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}
 \helpref{wxDataObject}{wxdataobject}
 
 \wxheading{Include files}
@@ -19,64 +24,17 @@ and \helpref{WriteData}{wxbitmapdataobjectwritedata} will have to be overridden.
 
 \wxheading{See also}
 
+\helpref{Clipboard and drag and drop overview}{wxclipboardonfigoverview}, 
+\helpref{wxDataObject}{wxdataobject}, 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}, 
+\helpref{wxFileDataObject}{wxfiledataobject}, 
+\helpref{wxTextDataObject}{wxtextdataobject}, 
 \helpref{wxDataObject}{wxdataobject}
 
-\latexignore{\rtfignore{\wxheading{Members}}}
+\func{}{wxBitmapDataObject}{\param{const wxBitmap\& }{bitmap = wxNullBitmap}}
 
-\membersection{wxBitmapDataObject::wxBitmapDataObject}\label{wxbitmapdataobjectwxbitmapdataobject}
-
-\func{}{wxBitmapDataObject}{\void}
-
-Default constructor. Call \helpref{SetBitmap}{wxbitmapdataobjectsetbitmap} later
-or override \helpref{WriteData}{wxbitmapdataobjectwritedata} and 
-\helpref{GetSize}{wxbitmapdataobjectgetsize} for providing data on-demand.
-
-\func{}{wxBitmapDataObject}{\param{const wxBitmap\& }{bitmap}}
-
-Constructor, passing a bitmap.
-
-\membersection{wxBitmapDataObject::GetSize}\label{wxbitmapdataobjectgetsize}
-
-\constfunc{virtual size\_t}{GetSize}{\void}
-
-Returns the data size. By default, returns the size of the bitmap data
-set in the constructor or using \helpref{SetBitmap}{wxbitmapdataobjectsetbitmap}.
-This can be overridden to provide size data on-demand. Note that you'd
-have to call the inherited GetSize method as this is the only way
-to get to know the transfer size of the bitmap in a platform dependent
-way - a bitmap has different size under GTK and Windows. In practice, 
-this would look like this:
-
-\begin{verbatim}
-size_t MyBitmapDataObject::GetSize()
-{
-  // Get bitmap from global container. This container
-  // should be able to "produce" data in all formats
-  // offered by the application but store it only in
-  // one format to reduce memory consumption.
-
-  wxBitmap my_bitmap = my_global_container->GetBitmap();
-  
-  // temporarily set bitmap
-  
-  SetBitmap( my_bitmap );
-
-  size_t ret = wxBitmapDataObject::GetSize();
-  
-  // unset bitmap again
-  
-  SetBitmap( wxNullBitmap );
-
-  retrun ret;
-}
-\end{verbatim}
-
-TODO: Offer a nicer way to do this. Maybe by providing a platform
-dependent function in this class like 
-
-\begin{verbatim}
-size_t GetBitmapSize( const wxBitmap &bitmap )
-\end{verbatim}
+Constructor, optionally passing a bitmap (otherwise use 
+\helpref{SetBitmap}{wxbitmapdataobjectsetbitmap} later)
 
 \membersection{wxBitmapDataObject::GetBitmap}\label{wxbitmapdataobjectgettext}
 
@@ -91,26 +49,8 @@ the \helpref{wxClipboard}{wxclipboard}.
 
 \func{virtual void}{SetBitmap}{\param{const wxBitmap\& }{bitmap}}
 
-Sets the bitmap associated with the data object. This method is called
-internally when retrieving data from the \helpref{wxClipboard}{wxclipboard}
-and may be used to paste data to the clipboard directly (instead of
-on-demand).
+Sets the bitmap associated with the data object. This method is called when the
+data object receives data. Usually there will be no reason to override this
+function.
 
-\membersection{wxBitmapDataObject::WriteData}\label{wxbitmapdataobjectwritedata}
-
-\constfunc{virtual void}{WriteData}{\param{void}{*dest} }
-
-Write the data owned by this class to {\it dest}. By default, this
-calls \helpref{WriteBitmap}{wxbitmapdataobjectwritebitmap} with the bitmap
-set in the constructor or using \helpref{SetBitmap}{wxbitmapdataobjectsetbitmap}.
-This can be overridden to provide bitmap data on-demand; in this case
-\helpref{WriteBitmap}{wxbitmapdataobjectwritebitmap} must be called from
-within th overriding WriteData() method.
-
-\membersection{wxBitmapDataObject::WriteBitmap}\label{wxbitmapdataobjectwritebitmap}
-
-\constfunc{void}{WriteBitmap}{\param{const wxBitmap\& }{bitmap}\param{void}{*dest} }
-
-Writes the the bitmap {\it bitmap} to {\it dest}. This method must be called
-from \helpref{WriteData}{wxbitmapdataobjectwritedata}.
 

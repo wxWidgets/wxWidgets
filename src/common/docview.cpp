@@ -1931,11 +1931,21 @@ void wxFileHistory::RemoveFileFromHistory(int i)
         // delete the last menu item which is unused now
         menu->Delete(wxID_FILE1 + m_fileHistoryN - 1);
 
-        // unfortunately, we can't delete separator (there is no function to
-        // delete item by position, only by id - and what if there are several
-        // separators in this menu?) - so we will be always left with at least
-        // one and, even worse, we will add another one if this was the last
-        // file... (FIXME)
+        // delete the last separator too if no more files are left
+        if ( m_fileHistoryN == 1 )
+        {
+            wxMenuItemList::Node *node = menu->GetMenuItems().GetLast();
+            if ( node )
+            {
+                wxMenuItem *menuItem = node->GetData();
+                if ( menuItem->IsSeparator() )
+                {
+                    menu->Delete(menuItem);
+                }
+                //else: should we search backwards for the last separator?
+            }
+            //else: menu is empty somehow
+        }
     }
 
     m_fileHistoryN--;

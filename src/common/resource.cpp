@@ -2890,7 +2890,7 @@ bool wxWindowBase::LoadFromResource(wxWindow *parent, const wxString& resourceNa
   else if (IsKindOf(CLASSINFO(wxPanel)))
   {
     wxPanel* panel = (wxPanel *)this;
-    if (!panel->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
+    if (!panel->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle | wxTAB_TRAVERSAL, name))
       return FALSE;
   }
   else

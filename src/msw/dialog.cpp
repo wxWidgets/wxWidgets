@@ -474,7 +474,9 @@ bool wxDialog::Show(bool show)
         if (hWndParent)
           ::BringWindowToTop(hWndParent);
       }
-      ShowWindow((HWND) GetHWND(), SW_HIDE);
+
+      if ( m_hWnd )
+        ShowWindow((HWND) GetHWND(), SW_HIDE);
     }
   }
   return TRUE;

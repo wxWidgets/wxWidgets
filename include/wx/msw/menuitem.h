@@ -45,11 +45,16 @@ public:
 
     // override base class virtuals
     virtual void SetText(const wxString& strName);
+    virtual wxString GetLabel() const;
     virtual void SetCheckable(bool checkable);
 
     virtual void Enable(bool bDoEnable = TRUE);
     virtual void Check(bool bDoCheck = TRUE);
     virtual bool IsChecked() const;
+
+#if wxUSE_ACCEL
+    virtual wxAcceleratorEntry *GetAccel() const;
+#endif // wxUSE_ACCEL
 
     // unfortunately needed to resolve ambiguity between
     // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()
@@ -59,9 +64,6 @@ public:
     // ::AppendMenu() API), so this function will return either the id or the
     // menu handle depending on what we're
     int GetRealId() const;
-
-    // delete the submenu
-    void DeleteSubMenu();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMenuItem)

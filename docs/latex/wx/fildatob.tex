@@ -1,9 +1,18 @@
 \section{\class{wxFileDataObject}}\label{wxfiledataobject}
 
-wxFileDataObject is a specialization of wxDataObject for file names.
+wxFileDataObject is a specialization of \helpref{wxDataObject}{wxdataobject} 
+for file names. Unlike other predefined wxDataObject derivations, it only works
+in one direction - the one of setting the data, i.e. the program can only
+receive files dropped on it using it and there is no way (currently) to
+initiate a drag and drop file operation.
+
+\wxheading{Virtual functions to override}
+
+None.
 
 \wxheading{Derived from}
 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}
 \helpref{wxDataObject}{wxdataobject}
 
 \wxheading{Include files}
@@ -12,31 +21,23 @@ wxFileDataObject is a specialization of wxDataObject for file names.
 
 \wxheading{See also}
 
+\helpref{wxDataObject}{wxdataobject}, 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}, 
+\helpref{wxTextDataObject}{wxtextdataobject}, 
+\helpref{wxBitmapDataObject}{wxbitmapdataobject}
 \helpref{wxDataObject}{wxdataobject}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxFileDataObject::wxFileDataObject}\label{wxfiledataobjectwxfiledataobject}
+\membersection{wxFileDataObject}\label{wxfiledataobjectwxfiledataobject}
 
 \func{}{wxFileDataObject}{\void}
 
 Constructor.
 
-\membersection{wxFileDataObject::GetFormat}\label{wxfiledataobjectgetformat}
+\membersection{wxFileDataObject::GetFilenames}\label{wxfiledataobjectgetfilenames}
 
-\constfunc{virtual wxDataFormat}{GetFormat}{\void}
+\constfunc{const wxArrayString\& }{GetFilenames}{\void}
 
-Returns wxDF\_FILENAME.
-
-\membersection{wxFileDataObject::AddFile}\label{wxfiledataobjectaddfile}
-
-\func{virtual void}{AddFile}{\param{const wxString\& }{file}}
-
-Adds a filename to the data object.
-
-\membersection{wxFileDataObject::GetFiles}\label{wxfiledataobjectgetfiles}
-
-\constfunc{virtual wxString}{GetFiles}{\void}
-
-Returns files as a zero-separated list.
+Returns the \helpref{array}{wxarraystring} of file names.
 

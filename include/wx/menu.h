@@ -20,20 +20,204 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/list.h"        // for wxMenuList
+#include "wx/list.h"        // for "template" list classes
 #include "wx/window.h"      // base class for wxMenuBar
+
+// also include this one to ensure compatibility with old code which only
+// included wx/menu.h
+#include "wx/menuitem.h"
 
 class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxMenuItem;
 
+// pseudo template list classes
+WX_DECLARE_LIST(wxMenu, wxMenuList);
+WX_DECLARE_LIST(wxMenuItem, wxMenuItemList);
+
 // ----------------------------------------------------------------------------
 // wxMenu
 // ----------------------------------------------------------------------------
 
-// for now, it's in platform-specific file
+class WXDLLEXPORT wxMenuBase : public wxEvtHandler
+{
+public:
+    // create a menu
+    static wxMenu *New(const wxString& title = wxEmptyString, long style = 0);
 
-WX_DECLARE_LIST(wxMenu, wxMenuList);
+    // ctors
+    wxMenuBase(const wxString& title, long style = 0) : m_title(title)
+        { Init(style); }
+    wxMenuBase(long style = 0)
+        { Init(style); }
+
+    // dtor deletes all the menu items we own
+    virtual ~wxMenuBase();
+
+    // menu construction
+    // -----------------
+
+    // append a separator to the menu
+    void AppendSeparator() { Append(wxID_SEPARATOR, wxEmptyString); }
+
+    // append a normal item to the menu
+    void Append(int id,
+                const wxString& text,
+                const wxString& help = wxEmptyString,
+                bool isCheckable = FALSE)
+    {
+        DoAppend(wxMenuItem::New((wxMenu *)this, id, text, help, isCheckable));
+    }
+
+    // append a submenu
+    void Append(int id,
+                const wxString& text,
+                wxMenu *submenu,
+                const wxString& help = wxEmptyString)
+    {
+        DoAppend(wxMenuItem::New((wxMenu *)this, id, text, help, FALSE, submenu));
+    }
+
+    // the most generic form of Append() - append anything
+    void Append(wxMenuItem *item) { DoAppend(item); }
+
+    // insert a break in the menu (only works when appending the items, not
+    // inserting them)
+    virtual void Break() { }
+
+    // insert an item before given position
+    bool Insert(size_t pos, wxMenuItem *item);
+
+    // detach an item from the menu, but don't delete it so that it can be
+    // added back later (but if it's not, the caller is responsible for
+    // deleting it!)
+    wxMenuItem *Remove(int id) { return Remove(FindChildItem(id)); }
+    wxMenuItem *Remove(wxMenuItem *item);
+
+    // delete an item from the menu (submenus are not destroyed by this
+    // function, see Destroy)
+    bool Delete(int id) { return Delete(FindChildItem(id)); }
+    bool Delete(wxMenuItem *item);
+
+    // delete the item from menu and destroy it (if it's a submenu)
+    bool Destroy(int id) { return Destroy(FindChildItem(id)); }
+    bool Destroy(wxMenuItem *item);
+
+    // menu items access
+    // -----------------
+
+    // get the items
+    size_t GetMenuItemCount() const { return m_items.GetCount(); }
+
+    const wxMenuItemList& GetMenuItems() const { return m_items; }
+    wxMenuItemList& GetMenuItems() { return m_items; }
+
+    // search
+    virtual int FindItem(const wxString& itemString) const;
+    wxMenuItem* FindItem(int id, wxMenu **menu = NULL) const;
+
+    // get/set items attributes
+    void Enable(int id, bool enable);
+    bool IsEnabled(int id) const;
+
+    void Check(int id, bool check);
+    bool IsChecked(int id) const;
+
+    void SetLabel(int id, const wxString& label);
+    wxString GetLabel(int id) const;
+
+    virtual void SetHelpString(int id, const wxString& helpString);
+    virtual wxString GetHelpString(int id) const;
+
+    // misc accessors
+    // --------------
+
+    // the title
+    virtual void SetTitle(const wxString& title) { m_title = title; }
+    const wxString GetTitle() const { return m_title; }
+
+    // client data
+    void SetClientData(void* clientData) { m_clientData = clientData; }
+    void* GetClientData() const { return m_clientData; }
+
+    // event handler
+    void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
+    wxEvtHandler *GetEventHandler() const { return m_eventHandler; }
+
+    // invoking window
+    void SetInvokingWindow(wxWindow *win) { m_invokingWindow = win; }
+    wxWindow *GetInvokingWindow() const { return m_invokingWindow; }
+
+    // style
+    long GetStyle() const { return m_style; }
+
+    // implementation helpers
+    // ----------------------
+
+    // Updates the UI for a menu and all submenus recursively. source is the
+    // object that has the update event handlers defined for it. If NULL, the
+    // menu or associated window will be used.
+    void UpdateUI(wxEvtHandler* source = (wxEvtHandler*)NULL);
+
+    // is the menu attached to a menu bar (or is it a popup one)?
+    bool IsAttached() const { return m_menuBar != NULL; }
+
+    // set/get the parent of this menu
+    void SetParent(wxMenu *parent) { m_menuParent = parent; }
+    wxMenu *GetParent() const { return m_menuParent; }
+
+#if WXWIN_COMPATIBILITY
+    // compatibility: these functions are deprecated, use the new ones instead
+    bool Enabled(int id) const { return IsEnabled(id); }
+    bool Checked(int id) const { return IsChecked(id); }
+
+    wxMenuItem* FindItemForId(int itemId, wxMenu **itemMenu) const
+        { return FindItem(itemId, itemMenu); }
+
+    wxList& GetItems() const { return (wxList &)m_items; }
+
+    // wxWin 1.6x compatible menu event handling
+    wxFunction GetCallback() const { return m_callback; }
+    void Callback(const wxFunction func) { m_callback = func; }
+    wxFunction m_callback;
+#endif // WXWIN_COMPATIBILITY
+
+protected:
+    // virtuals to override in derived classes
+    // ---------------------------------------
+
+    virtual bool DoAppend(wxMenuItem *item);
+    virtual bool DoInsert(size_t pos, wxMenuItem *item);
+
+    virtual wxMenuItem *DoRemove(wxMenuItem *item);
+    virtual bool DoDelete(wxMenuItem *item);
+    virtual bool DoDestroy(wxMenuItem *item);
+
+    // helpers
+    // -------
+
+    // common part of all ctors
+    void Init(long style);
+
+    // unlike FindItem(), this function doesn't recurse but only looks through
+    // our direct children and also may return the index of the found child if
+    // pos != NULL
+    wxMenuItem *FindChildItem(int id, size_t *pos = NULL) const;
+
+protected:
+    wxMenuBar     *m_menuBar;           // menubar we belong to or NULL
+    wxMenu        *m_menuParent;        // parent menu or NULL
+
+    wxString       m_title;             // the menu title or label
+    wxMenuItemList m_items;             // the list of menu items
+
+    wxWindow      *m_invokingWindow;    // for popup menus
+    void          *m_clientData;        // associated with the menu
+
+    long           m_style;             // combination of wxMENU_XXX flags
+
+    wxEvtHandler  *m_eventHandler;      // a pluggable in event handler
+};
 
 // ----------------------------------------------------------------------------
 // wxMenuBar
@@ -122,7 +306,7 @@ public:
 
     // compatibility only: these functions are deprecated, use the new ones
     // instead
-#ifdef WXWIN_COMPATIBILITY
+#if WXWIN_COMPATIBILITY
     bool Enabled(int id) const { return IsEnabled(id); }
     bool Checked(int id) const { return IsChecked(id); }
 
@@ -160,10 +344,6 @@ protected:
     #include "wx/stubs/menu.h"
 #endif
 #endif // wxUSE_BASE_CLASSES_ONLY/!wxUSE_BASE_CLASSES_ONLY
-
-// also include this one to ensure compatibility with old code which only
-// included wx/menu.h
-#include "wx/menuitem.h"
 
 #endif
     // _WX_MENU_H_BASE_

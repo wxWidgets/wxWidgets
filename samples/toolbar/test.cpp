@@ -71,8 +71,6 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE);
 
-    virtual ~MyFrame() { delete m_menu; }
-
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -94,8 +92,6 @@ private:
     bool                m_smallToolbar;
     wxTextCtrl*         m_textWindow;
 
-    wxMenu             *m_menu;
-
     DECLARE_EVENT_TABLE()
 };
 
@@ -109,10 +105,7 @@ enum
 {
     IDM_TOOLBAR_TOGGLETOOLBAR = 200,
     IDM_TOOLBAR_ENABLEPRINT,
-    IDM_TOOLBAR_TOGGLEHELP,
-    IDM_MENU_TOGGLE,
-    IDM_MENU_APPEND,
-    IDM_MENU_DELETE
+    IDM_TOOLBAR_TOGGLEHELP
 };
 
 // ----------------------------------------------------------------------------
@@ -129,10 +122,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBAR, MyFrame::OnToggleToolbar)
     EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, MyFrame::OnEnablePrint)
     EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
-
-    EVT_MENU(IDM_MENU_TOGGLE, MyFrame::OnToggleMenu)
-    EVT_MENU(IDM_MENU_APPEND, MyFrame::OnAppendMenu)
-    EVT_MENU(IDM_MENU_DELETE, MyFrame::OnDeleteMenu)
 
     EVT_MENU(-1, MyFrame::OnToolLeftClick)
 
@@ -261,7 +250,6 @@ MyFrame::MyFrame(wxFrame* parent,
                  long style)
        : wxFrame(parent, id, title, pos, size, style)
 {
-    m_menu = NULL;
     m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
     m_smallToolbar = FALSE;
 
@@ -280,11 +268,6 @@ MyFrame::MyFrame(wxFrame* parent,
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(wxID_EXIT, "E&xit", "Quit toolbar sample" );
 
-    wxMenu *menuMenu = new wxMenu;
-    menuMenu->Append(IDM_MENU_APPEND, "&Append menu");
-    menuMenu->Append(IDM_MENU_DELETE, "&Delete menu");
-    menuMenu->Append(IDM_MENU_TOGGLE, "&Toggle menu", "", TRUE);
-
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(wxID_HELP, "&About", "About toolbar sample");
 
@@ -292,7 +275,6 @@ MyFrame::MyFrame(wxFrame* parent,
 
     menuBar->Append(fileMenu, "&File");
     menuBar->Append(tbarMenu, "&Toolbar");
-    menuBar->Append(menuMenu, "&Menubar");
     menuBar->Append(helpMenu, "&Help");
 
     // Associate the menu bar with the frame
@@ -331,53 +313,6 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     (void)wxMessageBox("wxWindows toolbar sample", "About wxToolBar");
-}
-
-void MyFrame::OnDeleteMenu(wxCommandEvent& WXUNUSED(event))
-{
-    wxMenuBar *mbar = GetMenuBar();
-
-    size_t count = mbar->GetMenuCount();
-    if ( count == 3 )
-    {
-        // don't let delete the first 3 menus
-        wxLogError("Can't delete any more menus");
-    }
-    else
-    {
-        delete mbar->Remove(count - 1);
-    }
-}
-
-void MyFrame::OnAppendMenu(wxCommandEvent& WXUNUSED(event))
-{
-    static s_count = 0;
-
-    wxMenu *menu = new wxMenu;
-    menu->Append(0, "First item");
-    menu->AppendSeparator();
-    menu->Append(0, "Second item");
-
-    wxString title;
-    title.Printf("Dummy menu &%d", ++s_count);
-
-    GetMenuBar()->Append(menu, title);
-}
-
-void MyFrame::OnToggleMenu(wxCommandEvent& WXUNUSED(event))
-{
-    wxMenuBar *mbar = GetMenuBar();
-    if ( !m_menu )
-    {
-        // hide the menu
-        m_menu = mbar->Remove(1);
-    }
-    else
-    {
-        // restore it
-        mbar->Insert(1, m_menu, "&Toolbar");
-        m_menu = NULL;
-    }
 }
 
 void MyFrame::OnToolLeftClick(wxCommandEvent& event)

@@ -42,6 +42,10 @@
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
+#if wxUSE_ACCEL
+    #include "wx/accel.h"
+#endif // wxUSE_ACCEL
+
 #include "wx/msw/private.h"
 
 // ---------------------------------------------------------------------------
@@ -129,14 +133,6 @@ int wxMenuItem::GetRealId() const
     return m_subMenu ? (int)m_subMenu->GetHMenu() : GetId();
 }
 
-// delete the sub menu
-// -------------------
-void wxMenuItem::DeleteSubMenu()
-{
-    delete m_subMenu;
-    m_subMenu = NULL;
-}
-
 // get item state
 // --------------
 
@@ -148,41 +144,60 @@ bool wxMenuItem::IsChecked() const
     return (flag & MF_DISABLED) == 0;
 }
 
+wxString wxMenuItem::GetLabel() const
+{
+    return wxStripMenuCodes(m_text);
+}
+
+// accelerators
+// ------------
+
+#if wxUSE_ACCEL
+
+wxAcceleratorEntry *wxMenuItem::GetAccel() const
+{
+    return wxGetAccelFromString(GetText());
+}
+
+#endif // wxUSE_ACCEL
+
 // change item state
 // -----------------
 
-void wxMenuItem::Enable(bool bDoEnable)
+void wxMenuItem::Enable(bool enable)
 {
-    if ( m_isEnabled != bDoEnable ) {
-        long rc = EnableMenuItem(GetHMenuOf(m_parentMenu),
-                                 GetRealId(),
-                                 MF_BYCOMMAND |
-                                 (bDoEnable ? MF_ENABLED : MF_GRAYED));
+    if ( m_isEnabled == enable )
+        return;
 
-        if ( rc == -1 ) {
-            wxLogLastError("EnableMenuItem");
-        }
+    long rc = EnableMenuItem(GetHMenuOf(m_parentMenu),
+                             GetRealId(),
+                             MF_BYCOMMAND |
+                             (enable ? MF_ENABLED : MF_GRAYED));
 
-        wxMenuItemBase::Enable(m_isEnabled);
+    if ( rc == -1 ) {
+        wxLogLastError("EnableMenuItem");
     }
+
+    wxMenuItemBase::Enable(enable);
 }
 
-void wxMenuItem::Check(bool bDoCheck)
+void wxMenuItem::Check(bool check)
 {
     wxCHECK_RET( m_isCheckable, wxT("only checkable items may be checked") );
 
-    if ( m_isChecked != bDoCheck ) {
-        long rc = CheckMenuItem(GetHMenuOf(m_parentMenu),
-                                GetId(),
-                                MF_BYCOMMAND |
-                                (bDoCheck ? MF_CHECKED : MF_UNCHECKED));
+    if ( m_isChecked == check )
+        return;
 
-        if ( rc == -1 ) {
-            wxLogLastError("CheckMenuItem");
-        }
+    long rc = CheckMenuItem(GetHMenuOf(m_parentMenu),
+                            GetRealId(),
+                            MF_BYCOMMAND |
+                            (check ? MF_CHECKED : MF_UNCHECKED));
 
-        wxMenuItemBase::Check(m_isChecked);
+    if ( rc == -1 ) {
+        wxLogLastError("CheckMenuItem");
     }
+
+    wxMenuItemBase::Check(check);
 }
 
 void wxMenuItem::SetText(const wxString& text)
@@ -195,6 +210,11 @@ void wxMenuItem::SetText(const wxString& text)
     OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(text) );
 
     HMENU hMenu = GetHMenuOf(m_parentMenu);
+    wxCHECK_RET( hMenu, wxT("menuitem without menu") );
+
+#if wxUSE_ACCEL
+    m_parentMenu->UpdateAccel(this);
+#endif // wxUSE_ACCEL
 
     UINT id = GetRealId();
     UINT flagsOld = ::GetMenuState(hMenu, id, MF_BYCOMMAND);

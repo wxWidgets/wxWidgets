@@ -51,10 +51,6 @@ public:
     long             m_style;
     wxWindow        *m_invokingWindow;
 
-#if 0 // seems to be unused (VZ)
-    wxMenuList& GetMenus() { return m_menus; }
-#endif // 0
-
 private:
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };
@@ -63,92 +59,34 @@ private:
 // wxMenu
 //-----------------------------------------------------------------------------
 
-class wxMenu : public wxEvtHandler
+class wxMenu : public wxMenuBase
 {
-    DECLARE_DYNAMIC_CLASS(wxMenu)
-
 public:
-    wxMenu( const wxString& title, const wxFunction func)
-    {
-        Init(title, 0, func);
-    }
-    wxMenu( long style )
-    {
-        Init( wxEmptyString, style );
-    }
-    wxMenu( const wxString& title = wxEmptyString, long style = 0 )
-    {
-        Init(title, style);
-    }
+    // ctors & dtor
+    wxMenu(const wxString& title, long style = 0)
+        : wxMenuBase(title, style) { Init(); }
 
-    ~wxMenu();
+    wxMenu(long style = 0) : wxMenuBase(style) { Init(); }
 
-    // title
-    void SetTitle(const wxString& label);
-    const wxString GetTitle() const;
+    virtual ~wxMenu();
 
-    // menu creation
-    void AppendSeparator();
-    void Append(int id, const wxString &item,
-                const wxString &helpStr = "", bool checkable = FALSE);
-    void Append(int id, const wxString &item,
-                wxMenu *subMenu, const wxString &helpStr = "" );
-    void Append(wxMenuItem *pItem);
-    void Break() { }
+    // implement base class virtuals
+    virtual bool DoAppend(wxMenuItem *item);
+    virtual bool DoInsert(size_t pos, wxMenuItem *item);
+    virtual wxMenuItem *DoRemove(wxMenuItem *item);
 
-    // delete item. don't delete the wxMenu if it's a submenu
-    void Delete( int id );
-
-    // find item by name/id
-    int FindItem( const wxString itemString ) const;
-    wxMenuItem *FindItem( int id ) const;
-
-    // get/set item's state
-    void Enable( int id, bool enable );
-    bool IsEnabled( int id ) const;
-    void Check( int id, bool check );
-    bool IsChecked( int id ) const;
-
-    void SetLabel( int id, const wxString &label );
-    wxString GetLabel( int id ) const;
-
-        // helpstring
-    virtual void SetHelpString(int id, const wxString& helpString);
-    virtual wxString GetHelpString(int id) const ;
-
-        // accessors
-    wxList& GetItems() { return m_items; }
-
-    void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
-    wxEvtHandler *GetEventHandler() { return m_eventHandler; }
-
-    void SetClientData( void* clientData ) { m_clientData = clientData; }
-    void* GetClientData() const { return m_clientData; }
-
-    // Updates the UI for a menu and all submenus recursively.
-    // source is the object that has the update event handlers
-    // defined for it. If NULL, the menu or associated window
-    // will be used.
-    void UpdateUI(wxEvtHandler* source = (wxEvtHandler*) NULL);
-
-    wxMenuItem *FindItemForId( int id ) const { return FindItem( id ); }
-
-    wxFunction GetCallback() const { return m_callback; }
-    void Callback(const wxFunction func) { m_callback = func; }
-    wxFunction m_callback;
+    // TODO: virtual void SetTitle(const wxString& title);
 
 #ifdef WXWIN_COMPATIBILITY
-
-    // compatibility: these functions are deprecated
-    bool Enabled(int id) const { return IsEnabled(id); }
-    bool Checked(int id) const { return IsChecked(id); }
-
+    wxMenu(const wxString& title, const wxFunction func)
+        : wxMenuBase(title)
+    {
+        Callback(func);
+    }
 #endif // WXWIN_COMPATIBILITY
 
     // implementation
     int FindMenuIdByMenuItem( GtkWidget *menuItem ) const;
-    void SetInvokingWindow( wxWindow *win );
-    wxWindow *GetInvokingWindow();
 
     // implementation GTK only
     GtkWidget       *m_menu;  // GtkMenu
@@ -156,21 +94,11 @@ public:
     GtkAccelGroup   *m_accel;
     GtkItemFactory  *m_factory;
 
-    // used by wxMenuBar
-    long GetStyle(void) const { return m_style; }
-
 private:
-    // common code for both constructors:
-    void Init( const wxString& title,
-               long style,
-               const wxFunction func = (wxFunction) NULL );
+    // common code for all constructors:
+    void Init();
 
-    wxString       m_title;
-    wxList         m_items;
-    wxWindow      *m_invokingWindow;
-    wxEvtHandler  *m_eventHandler;
-    void          *m_clientData;
-    long           m_style;
+    DECLARE_DYNAMIC_CLASS(wxMenu)
 };
 
 #endif // __GTKMENUH__

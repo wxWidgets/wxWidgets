@@ -31,6 +31,10 @@
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
+#if (GTK_MINOR_VERSION > 0) && wxUSE_ACCEL
+static wxString GetHotKey( const wxMenuItem& item );
+#endif
+
 //-----------------------------------------------------------------------------
 // wxMenuBar
 //-----------------------------------------------------------------------------
@@ -355,7 +359,7 @@ int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemStr
 // Find a wxMenuItem using its id. Recurses down into sub-menus
 static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 {
-    wxMenuItem* result = menu->FindItem(id);
+    wxMenuItem* result = menu->FindChildItem(id);
 
     wxNode *node = ((wxMenu *)menu)->GetItems().First(); // const_cast
     while ( node && result == NULL )
@@ -440,7 +444,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     if (!menu->IsEnabled(id))
         return;
 
-    wxMenuItem* item = menu->FindItem( id );
+    wxMenuItem* item = menu->FindChildItem( id );
     wxCHECK_RET( item, wxT("error in menu item callback") );
 
     if (item->IsCheckable())
@@ -569,18 +573,40 @@ wxMenuItem::~wxMenuItem()
    // don't delete menu items, the menus take care of that
 }
 
-void wxMenuItem::SetText( const wxString& str ) 
-{ 
-    DoSetText(str); 
+// return the menu item text without any menu accels
+wxString wxMenuItem::GetLabel() const
+{
+    wxString label;
+#if (GTK_MINOR_VERSION > 0)
+    for ( const wxChar *pc = m_text.c_str(); *pc; pc++ )
+    {
+        if ( *pc == wxT('_') )
+        {
+            // this is the escape character for GTK+ - skip it
+            continue;
+        }
+
+        label += *pc;
+    }
+#else // GTK+ 1.0
+    label = m_text;
+#endif // GTK+ 1.2/1.0
+
+    return label;
+}
+
+void wxMenuItem::SetText( const wxString& str )
+{
+    DoSetText(str);
 
     if (m_menuItem)
     {
         GtkLabel *label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
-	
-	/* set new text */
+
+        /* set new text */
         gtk_label_set( label, m_text.mb_str());
-	
-	/* reparse key accel */
+
+        /* reparse key accel */
         guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), m_text.mb_str() );
         gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
     }
@@ -623,6 +649,25 @@ void wxMenuItem::DoSetText( const wxString& str )
 #endif
 }
 
+#if wxUSE_ACCEL
+
+wxAcceleratorEntry *wxMenuItem::GetAccel() const
+{
+    if ( !item.GetHotKey() )
+    {
+        // nothing
+        return (wxAcceleratorEntry *)NULL;
+    }
+
+    // as wxGetAccelFromString() looks for TAB, insert a dummy one here
+    wxString label;
+    label << wxT('\t') << item.GetHotKey();
+
+    return wxGetAccelFromString(label);
+}
+
+#endif // wxUSE_ACCEL
+
 void wxMenuItem::Check( bool check )
 {
     wxCHECK_RET( m_menuItem, wxT("invalid menu item") );
@@ -658,12 +703,8 @@ wxString wxMenuItem::GetFactoryPath() const
 {
     /* in order to get the pointer to the item we need the item text _without_ underscores */
     wxString path( wxT("<main>/") );
-    for ( const wxChar *pc = m_text; *pc != wxT('\0'); pc++ )
-    {
-        while (*pc == wxT('_')) pc++; /* skip it */
-        path << *pc;
-    }
-    
+    path += GetLabel();
+
     return path;
 }
 
@@ -673,17 +714,8 @@ wxString wxMenuItem::GetFactoryPath() const
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
-void
-wxMenu::Init( const wxString& title,
-              long style,
-              const wxFunction func
-            )
+void wxMenu::Init()
 {
-    m_title = title;
-    m_items.DeleteContents( TRUE );
-    m_invokingWindow = (wxWindow *) NULL;
-    m_style = style;
-
 #if (GTK_MINOR_VERSION > 0)
     m_accel = gtk_accel_group_new();
     m_factory = gtk_item_factory_new( GTK_TYPE_MENU, "<main>", m_accel );
@@ -691,18 +723,6 @@ wxMenu::Init( const wxString& title,
 #else
     m_menu = gtk_menu_new();  // Do not show!
 #endif
-
-    m_callback = func;
-
-    m_eventHandler = this;
-    m_clientData = (void*) NULL;
-
-    if (m_title.IsNull()) m_title = wxT("");
-    if (m_title != wxT(""))
-    {
-        Append(-2, m_title);
-        AppendSeparator();
-    }
 
     m_owner = (GtkWidget*) NULL;
 
@@ -722,242 +742,145 @@ wxMenu::Init( const wxString& title,
        //GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, "<main>/tearoff" );
     }
 #endif
+
+    // append the title as the very first entry if we have it
+    if ( !!m_title )
+    {
+        Append(-2, m_title);
+        AppendSeparator();
+    }
 }
 
 wxMenu::~wxMenu()
 {
-    wxNode *node = m_items.First();
-    while (node)
-    {
-        wxMenuItem *item = (wxMenuItem*)node->Data();
-        wxMenu *submenu = item->GetSubMenu();
-        if (submenu)
-           delete submenu;
-        node = node->Next();
-    }
-
    gtk_widget_destroy( m_menu );
 
    gtk_object_unref( GTK_OBJECT(m_factory) );
+
+   // the menu items are deleted by the base class dtor
 }
 
-void wxMenu::SetTitle( const wxString& title )
+virtual bool wxMenu::DoAppend(wxMenuItem *mitem)
 {
-    // TODO Waiting for something better
-    m_title = title;
-}
+    GtkWidget *menuItem;
 
-const wxString wxMenu::GetTitle() const
-{
-    return m_title;
-}
-
-void wxMenu::AppendSeparator()
-{
-    wxMenuItem *mitem = new wxMenuItem(this, wxID_SEPARATOR);
-
-#if (GTK_MINOR_VERSION > 0)
-    GtkItemFactoryEntry entry;
-    entry.path = "/sep";
-    entry.callback = (GtkItemFactoryCallback) NULL;
-    entry.callback_action = 0;
-    entry.item_type = "<Separator>";
-    entry.accelerator = (gchar*) NULL;
-
-    gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
-
-    /* this will be wrong for more than one separator. do we care? */
-    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, "<main>/sep" );
-#else
-    GtkWidget *menuItem = gtk_menu_item_new();
-    gtk_menu_append( GTK_MENU(m_menu), menuItem );
-    gtk_widget_show( menuItem );
-#endif
-
-    mitem->SetMenuItem(menuItem);
-    m_items.Append( mitem );
-}
-
-#if (GTK_MINOR_VERSION > 0) && wxUSE_ACCEL
-static wxString GetHotKey( const wxMenuItem& item )
-{
-    wxString hotkey;
-
-    // as wxGetAccelFromString() looks for TAB, insert a dummy one here
-    wxString label;
-    label << wxT('\t') << item.GetHotKey();
-
-    // but if the hotkey is empty don't do anything
-    if ( label.length() > 1 )
+    if ( mitem->IsSeparator() )
     {
-        wxAcceleratorEntry *accel = wxGetAccelFromString(label);
-        if ( accel )
-        {
-            int flags = accel->GetFlags();
-            if ( flags & wxACCEL_ALT )
-                hotkey += wxT("<alt>");
-            if ( flags & wxACCEL_CTRL )
-                hotkey += wxT("<control>");
-            if ( flags & wxACCEL_SHIFT )
-                hotkey += wxT("<shift>");
-
-            int code = accel->GetKeyCode();
-            switch ( code )
-            {
-                case WXK_F1:
-                case WXK_F2:
-                case WXK_F3:
-                case WXK_F4:
-                case WXK_F5:
-                case WXK_F6:
-                case WXK_F7:
-                case WXK_F8:
-                case WXK_F9:
-                case WXK_F10:
-                case WXK_F11:
-                case WXK_F12:
-                    hotkey << wxT('F') << code - WXK_F1 + 1;
-                    break;
-
-                // if there are any other keys wxGetAccelFromString() may return,
-                // we should process them here
-
-                default:
-                    if ( wxIsalnum(code) )
-                    {
-                        hotkey << (wxChar)code;
-
-                        break;
-                    }
-
-                    wxFAIL_MSG( wxT("unknown keyboard accel") );
-            }
-
-            delete accel;
-        }
-    }
-
-    return hotkey;
-}
-#endif // wxUSE_ACCEL
-
-void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool checkable )
-{
-    wxMenuItem *mitem = new wxMenuItem(this, id, item, helpStr, checkable);
-
 #if (GTK_MINOR_VERSION > 0)
-    /* text has "_" instead of "&" after mitem->SetText() */
-    wxString text( mitem->GetText() );
+        GtkItemFactoryEntry entry;
+        entry.path = "/sep";
+        entry.callback = (GtkItemFactoryCallback) NULL;
+        entry.callback_action = 0;
+        entry.item_type = "<Separator>";
+        entry.accelerator = (gchar*) NULL;
 
-    /* local buffer in multibyte form */
-    char buf[200];
-    strcpy( buf, "/" );
-    strcat( buf, text.mb_str() );
+        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
-    GtkItemFactoryEntry entry;
-    entry.path = buf;
-    entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
-    entry.callback_action = 0;
-    if (checkable)
-        entry.item_type = "<CheckItem>";
-    else
-        entry.item_type = "<Item>";
+        /* this will be wrong for more than one separator. do we care? */
+        menuItem = gtk_item_factory_get_widget( m_factory, "<main>/sep" );
+#else // GTK+ 1.0
+        menuItem = gtk_menu_item_new();
+#endif // GTK 1.2/1.0
+    }
+    else if ( mitem->IsSubMenu() )
+    {
+#if (GTK_MINOR_VERSION > 0)
+        /* text has "_" instead of "&" after mitem->SetText() */
+        wxString text( mitem->GetText() );
+
+        /* local buffer in multibyte form */
+        char buf[200];
+        strcpy( buf, "/" );
+        strcat( buf, text.mb_str() );
+
+        GtkItemFactoryEntry entry;
+        entry.path = buf;
+        entry.callback = (GtkItemFactoryCallback) 0;
+        entry.callback_action = 0;
+        entry.item_type = "<Branch>";
+
+        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
+
+        wxString path( mitem->GetFactoryPath() );
+        GtkWidget *menuItem = gtk_item_factory_get_item( m_factory, path.mb_str() );
+#else // GTK+ 1.0
+        GtkWidget *menuItem = gtk_menu_item_new_with_label(mitem->GetText().mbc_str());
+#endif // GTK 1.2/1.0
+
+        gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), subMenu->m_menu );
+    }
+    else // a normal item
+    {
+#if (GTK_MINOR_VERSION > 0)
+        /* text has "_" instead of "&" after mitem->SetText() */
+        wxString text( mitem->GetText() );
+
+        /* local buffer in multibyte form */
+        char buf[200];
+        strcpy( buf, "/" );
+        strcat( buf, text.mb_str() );
+
+        GtkItemFactoryEntry entry;
+        entry.path = buf;
+        entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
+        entry.callback_action = 0;
+        if (checkable)
+            entry.item_type = "<CheckItem>";
+        else
+            entry.item_type = "<Item>";
 
 #if wxUSE_ACCEL
-    // due to an apparent bug in GTK+, we have to use a static buffer here -
-    // otherwise GTK+ 1.2.2 manages to override the memory we pass to it
-    // somehow! (VZ)
-    static char s_accel[32]; // must be big enough for <control><alt><shift>F12
-    strncpy(s_accel, GetHotKey(*mitem).mb_str(), WXSIZEOF(s_accel));
-    entry.accelerator = s_accel;
-#else
-    entry.accelerator = (char*) NULL;
-#endif
+        // due to an apparent bug in GTK+, we have to use a static buffer here -
+        // otherwise GTK+ 1.2.2 manages to override the memory we pass to it
+        // somehow! (VZ)
+        static char s_accel[32]; // must be big enough for <control><alt><shift>F12
+        strncpy(s_accel, GetHotKey(*mitem).mb_str(), WXSIZEOF(s_accel));
+        entry.accelerator = s_accel;
+#else // !wxUSE_ACCEL
+        entry.accelerator = (char*) NULL;
+#endif // wxUSE_ACCEL/!wxUSE_ACCEL
 
-    gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
+        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
-    wxString path( mitem->GetFactoryPath() );
-    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, path.mb_str() );
+        wxString path( mitem->GetFactoryPath() );
+        GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, path.mb_str() );
+#else // GTK+ 1.0
+        GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label( mitem->GetText().mb_str() )
+                                        : gtk_menu_item_new_with_label( mitem->GetText().mb_str() );
 
-#else
+        gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
+                            GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
+                            (gpointer)this );
+#endif // GTK+ 1.2/1.0
+    }
 
-    GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label( mitem->GetText().mb_str() )
-                                    : gtk_menu_item_new_with_label( mitem->GetText().mb_str() );
+    if ( !mitem->IsSeparator() )
+    {
+        gtk_signal_connect( GTK_OBJECT(menuItem), "select",
+                            GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
+                            (gpointer)this );
 
-    gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
-                        GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
-                        (gpointer)this );
+        gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
+                            GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
+                            (gpointer)this );
+    }
 
+#if GTK_MINOR_VERSION == 0
     gtk_menu_append( GTK_MENU(m_menu), menuItem );
     gtk_widget_show( menuItem );
-
-#endif
-
-    gtk_signal_connect( GTK_OBJECT(menuItem), "select",
-                        GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
-                        (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
-                        GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
-                        (gpointer)this );
+#endif // GTK+ 1.0
 
     mitem->SetMenuItem(menuItem);
 
-    m_items.Append( mitem );
+    return wxMenuBase::DoAppend(mitem);
 }
 
-void wxMenu::Append( int id, const wxString &item, wxMenu *subMenu, const wxString &helpStr )
-{
-    wxMenuItem *mitem = new wxMenuItem(this, id, item, helpStr, FALSE, subMenu);
-
-#if (GTK_MINOR_VERSION > 0)
-    /* text has "_" instead of "&" after mitem->SetText() */
-    wxString text( mitem->GetText() );
-
-    /* local buffer in multibyte form */
-    char buf[200];
-    strcpy( buf, "/" );
-    strcat( buf, text.mb_str() );
-
-    GtkItemFactoryEntry entry;
-    entry.path = buf;
-    entry.callback = (GtkItemFactoryCallback) 0;
-    entry.callback_action = 0;
-    entry.item_type = "<Branch>";
-
-    gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
-
-    wxString path( mitem->GetFactoryPath() );
-    GtkWidget *menuItem = gtk_item_factory_get_item( m_factory, path.mb_str() );
-
-#else
-
-    GtkWidget *menuItem = gtk_menu_item_new_with_label(mitem->GetText().mbc_str());
-
-    gtk_menu_append( GTK_MENU(m_menu), menuItem );
-    gtk_widget_show( menuItem );
-
-#endif
-
-    gtk_signal_connect( GTK_OBJECT(menuItem), "select",
-                        GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
-                        (gpointer*)this );
-
-    gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
-                        GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
-                        (gpointer*)this );
-
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), subMenu->m_menu );
-
-    mitem->SetMenuItem(menuItem);
-
-    m_items.Append( mitem );
-}
-
+// VZ: this seems to be GTK+ 1.0 only code, I don't understand why there were
+//     both specialized versions of Append() and this one before my changes,
+//     but it seems that the others are better...
+#if 0
 void wxMenu::Append( wxMenuItem *item )
 {
-    m_items.Append( item );
-
     GtkWidget *menuItem = (GtkWidget*) NULL;
 
     if (item->IsSeparator())
@@ -988,126 +911,31 @@ void wxMenu::Append( wxMenuItem *item )
 
     gtk_menu_append( GTK_MENU(m_menu), menuItem );
     gtk_widget_show( menuItem );
+
     item->SetMenuItem(menuItem);
 }
+#endif // 0
 
-void wxMenu::Delete( int id )
+bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
-    wxNode *node = m_items.First();
-    while (node)
-    {
-        wxMenuItem *item = (wxMenuItem*)node->Data();
-        if (item->GetId() == id)
-        {
-	    /* TODO: this code doesn't delete the item factory item and
-	       this seems impossible as of GTK 1.2.6. */
-            gtk_widget_destroy( item->GetMenuItem() );
-            m_items.DeleteNode( node );
-            return;
-        }
-        node = node->Next();
-    }
+    if ( !wxMenuBase::DoInsert(pos, item) )
+        return FALSE;
+
+    wxFAIL_MSG(wxT("not implemented"));
+
+    return FALSE;
 }
 
-int wxMenu::FindItem( const wxString itemString ) const
+wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
-    wxString s = wxT("");
-    for ( const wxChar *pc = itemString; *pc != wxT('\0'); pc++ )
-    {
-        if (*pc == wxT('&'))
-        {
-            pc++; /* skip it */
-#if (GTK_MINOR_VERSION > 0)
-            s << wxT('_');
-#endif
-        }
-        s << *pc;
-    }
+    if ( !wxMenuBase::DoRemove(item) )
+        return (wxMenuItem *)NULL;
 
-    wxNode *node = m_items.First();
-    while (node)
-    {
-        wxMenuItem *item = (wxMenuItem*)node->Data();
-        if (item->GetText() == s)
-        {
-            return item->GetId();
-        }
-        node = node->Next();
-    }
+    // TODO: this code doesn't delete the item factory item and this seems
+    //       impossible as of GTK 1.2.6.
+    gtk_widget_destroy( item->GetMenuItem() );
 
-    return wxNOT_FOUND;
-}
-
-void wxMenu::Enable( int id, bool enable )
-{
-    wxMenuItem *item = FindItem(id);
-
-    wxCHECK_RET( item, wxT("wxMenu::Enable: no such item") );
-
-    item->Enable(enable);
-}
-
-bool wxMenu::IsEnabled( int id ) const
-{
-    wxMenuItem *item = FindItem(id);
-
-    wxCHECK_MSG( item, FALSE, wxT("wxMenu::IsEnabled: no such item") );
-
-    return item->IsEnabled();
-}
-
-void wxMenu::Check( int id, bool enable )
-{
-    wxMenuItem *item = FindItem(id);
-
-    wxCHECK_RET( item, wxT("wxMenu::Check: no such item") );
-
-    item->Check(enable);
-}
-
-bool wxMenu::IsChecked( int id ) const
-{
-    wxMenuItem *item = FindItem(id);
-
-    wxCHECK_MSG( item, FALSE, wxT("wxMenu::IsChecked: no such item") );
-
-    return item->IsChecked();
-}
-
-void wxMenu::SetLabel( int id, const wxString &label )
-{
-    wxMenuItem *item = FindItem(id);
-
-    wxCHECK_RET( item, wxT("wxMenu::SetLabel: no such item") );
-
-    item->SetText(label);
-}
-
-wxString wxMenu::GetLabel( int id ) const
-{
-    wxMenuItem *item = FindItem(id);
-
-    wxCHECK_MSG( item, wxT(""), wxT("wxMenu::GetLabel: no such item") );
-
-    return item->GetText();
-}
-
-void wxMenu::SetHelpString( int id, const wxString& helpString )
-{
-    wxMenuItem *item = FindItem(id);
-
-    wxCHECK_RET( item, wxT("wxMenu::SetHelpString: no such item") );
-
-    item->SetHelp( helpString );
-}
-
-wxString wxMenu::GetHelpString( int id ) const
-{
-    wxMenuItem *item = FindItem(id);
-
-    wxCHECK_MSG( item, wxT(""), wxT("wxMenu::GetHelpString: no such item") );
-
-    return item->GetHelp();
+    return item;
 }
 
 int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
@@ -1124,72 +952,62 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
     return wxNOT_FOUND;
 }
 
-wxMenuItem *wxMenu::FindItem(int id) const
+// ----------------------------------------------------------------------------
+// helpers
+// ----------------------------------------------------------------------------
+
+#if (GTK_MINOR_VERSION > 0) && wxUSE_ACCEL
+static wxString GetHotKey( const wxMenuItem& item )
 {
-    wxNode *node = m_items.First();
-    while (node)
+    wxString hotkey;
+
+    wxAcceleratorEntry *accel = item.GetAccel();
+    if ( accel )
     {
-        wxMenuItem *item = (wxMenuItem*)node->Data();
-        if (item->GetId() == id)
+        int flags = accel->GetFlags();
+        if ( flags & wxACCEL_ALT )
+            hotkey += wxT("<alt>");
+        if ( flags & wxACCEL_CTRL )
+            hotkey += wxT("<control>");
+        if ( flags & wxACCEL_SHIFT )
+            hotkey += wxT("<shift>");
+
+        int code = accel->GetKeyCode();
+        switch ( code )
         {
-            return item;
+            case WXK_F1:
+            case WXK_F2:
+            case WXK_F3:
+            case WXK_F4:
+            case WXK_F5:
+            case WXK_F6:
+            case WXK_F7:
+            case WXK_F8:
+            case WXK_F9:
+            case WXK_F10:
+            case WXK_F11:
+            case WXK_F12:
+                hotkey << wxT('F') << code - WXK_F1 + 1;
+                break;
+
+                // if there are any other keys wxGetAccelFromString() may return,
+                // we should process them here
+
+            default:
+                if ( wxIsalnum(code) )
+                {
+                    hotkey << (wxChar)code;
+
+                    break;
+                }
+
+                wxFAIL_MSG( wxT("unknown keyboard accel") );
         }
-        node = node->Next();
+
+        delete accel;
     }
 
-    /* Not finding anything here can be correct
-     * when search the entire menu system for
-     * an entry -> no error message. */
-
-    return (wxMenuItem *) NULL;
+    return hotkey;
 }
-
-void wxMenu::SetInvokingWindow( wxWindow *win )
-{
-    m_invokingWindow = win;
-}
-
-wxWindow *wxMenu::GetInvokingWindow()
-{
-    return m_invokingWindow;
-}
-
-// Update a menu and all submenus recursively. source is the object that has
-// the update event handlers defined for it. If NULL, the menu or associated
-// window will be used.
-void wxMenu::UpdateUI(wxEvtHandler* source)
-{
-  if (!source && GetInvokingWindow())
-    source = GetInvokingWindow()->GetEventHandler();
-  if (!source)
-    source = GetEventHandler();
-  if (!source)
-    source = this;
-
-  wxNode* node = GetItems().First();
-  while (node)
-  {
-    wxMenuItem* item = (wxMenuItem*) node->Data();
-    if ( !item->IsSeparator() )
-    {
-      wxWindowID id = item->GetId();
-      wxUpdateUIEvent event(id);
-      event.SetEventObject( source );
-
-      if (source->ProcessEvent(event))
-      {
-        if (event.GetSetText())
-          SetLabel(id, event.GetText());
-        if (event.GetSetChecked())
-          Check(id, event.GetChecked());
-        if (event.GetSetEnabled())
-          Enable(id, event.GetEnabled());
-      }
-
-      if (item->GetSubMenu())
-        item->GetSubMenu()->UpdateUI(source);
-    }
-    node = node->Next();
-  }
-}
+#endif // wxUSE_ACCEL
 

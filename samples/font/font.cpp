@@ -400,6 +400,8 @@ void MyFrame::OnSize(wxSizeEvent& event)
     wxSize size = event.GetSize();
 
     Resize(size);
+
+    event.Skip();
 }
 
 void MyFrame::Resize(const wxSize& size, const wxFont& font)

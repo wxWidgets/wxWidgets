@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Name:        tclipbrd.tex
 %% Purpose:     Data transfer (clipboard and drag and drop) overview
 %% Author:      Vadim Zeitlin
@@ -7,7 +7,7 @@
 %% RCS-ID:      $Id$
 %% Copyright:   (c) Vadim Zeitlin
 %% Licence:     wxWindows licence
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Clipboard and drag and drop overview}\label{wxclipboardonfigoverview}
 
@@ -17,23 +17,24 @@ Classes: \helpref{wxDataObject}{wxdataobject},
  \helpref{wxDropSource}{wxdropsource},
  \helpref{wxDropTarget}{wxdroptarget}
 
+See also: \helpref{DnD sample}{samplednd}
+
 This overview discusses data transfer through clipboard or drag and drop. In
 wxWindows, these two ways to transfer data (either between different
 applications or inside one and the same) are very similar which allows to
-implement both of them using almost the same code - or in other
+implement both of them using almost the same code - or, in other
 words, if you implement drag and drop support for your application, you get
 clipboard support for free and vice versa.
 
 In the heart of both clipboard and drag and drop operations lies the 
-\helpref{wxDataObject}{wxdataobject} class. The objects of this class (or, to be
-precise, classes derived from it) represent the data which is being carried by
-the mouse during drag and drop operation or copied to or pasted from the
-clipboard. wxDataObject is a "smart" piece of data
-because it knows which formats it supports (see 
-GetFormatCount and GetAllFormats) and knows how to render
-itself in any of them (see GetDataHere).
-It can also receive its value from the outside in a format it supports if it
-implements the SetData method.
+\helpref{wxDataObject}{wxdataobject} class. The objects of this class (or, to
+be precise, classes derived from it) represent the data which is being carried
+by the mouse during drag and drop operation or copied to or pasted from the
+clipboard. wxDataObject is a "smart" piece of data because it knows which
+formats it supports (see GetFormatCount and GetAllFormats) and knows how to
+render itself in any of them (see GetDataHere). It can also receive its value
+from the outside in a format it supports if it implements the SetData method.
+Please see the documentation of this class for more details.
 
 Both clipboard and drag and drop operations have two sides: the source and
 target, the data provider and the data receiver. These which may be in the same
@@ -44,10 +45,10 @@ should do.
 \subsection{The data provider (source) duties}{wxdataobjectsource}
 
 The data provider is responsible for creating a 
-\helpref{wxDataObject}{wxdataobjectwxdataobject} containing the data to be
-transfered. Then it should either pass it to the clipboard using
-\helpref{AddData}{wxclipboardadddata} or \helpref{SetData}{wxclipboardsetdata}
-functions or to \helpref{wxDropSource}{wxdropsource} and call 
+\helpref{wxDataObject}{wxdataobject} containing the data to be
+transfered. Then it should either pass it to the clipboard using 
+\helpref{SetData}{wxclipboardsetdata} function or to 
+\helpref{wxDropSource}{wxdropsource} and call 
 \helpref{DoDragDrop}{wxdropsourcedodragdrop} function.
 
 The only (but important) difference is that the object for the clipboard
@@ -74,9 +75,10 @@ data formats you need and pass it as argument to
 no data in (any of) the supported format(s) is available. If it returns {\tt
 TRUE}, the data has been successfully transfered to wxDataObject.
 
-{\bf TODO} document drag and drop side when the API is finalised
+For drag and drop case, the \helpref{wxDropTarget::OnData}{wxdroptargetondata} 
+virtual function will be called when a data object is dropped, from which the
+data itself may be requested by calling 
+\helpref{wxDropTarget::GetData}{wxdroptargetwxdroptarget} method which fills
+the data object.
 
-% !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-% Vadim, please remember the new line at the end of each file. Please
-% also remember to compile the .hlp file to check for bad references etc.,
-% before checking in. I have removed references that were unresolved. - JACS
+

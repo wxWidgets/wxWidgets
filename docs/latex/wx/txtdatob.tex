@@ -1,16 +1,28 @@
 \section{\class{wxTextDataObject}}\label{wxtextdataobject}
 
 wxTextDataObject is a specialization of wxDataObject for text data. It can be
-used without change to paste data into the \helpref{wxClipboard}{wxclipboard}
-or a \helpref{wxDropSource}{wxdropsource}. A user may wish to derive a new class
-from this class for providing text on-demand in order to minimize memory consumption
-when offering data in several formats, such as plain text and RTF.
+used without change to paste data into the \helpref{wxClipboard}{wxclipboard} 
+or a \helpref{wxDropSource}{wxdropsource}. A user may wish to derive a new
+class from this class for providing text on-demand in order to minimize memory
+consumption when offering data in several formats, such as plain text and RTF
+because by default the text is stored in a string in this class, but it might
+as well be generated when requested. For this, 
+\helpref{GetTextLength}{wxtextdataobjectgettextlength} and 
+\helpref{GetText}{wxtextdataobjectgettext} will have to be overridden.
 
-In order to offer text data on-demand \helpref{GetSize}{wxtextdataobjectgetsize} 
-and \helpref{WriteData}{wxtextdataobjectwritedata} will have to be overridden.
+Note that if you already have the text inside a string, you will not achieve
+any efficiency gain by overriding these functions because copying wxStrings is
+already a very efficient operation (data is not actualyl copied because
+wxStrings are reference counted).
+
+\wxheading{Virtual functions to override}
+
+This class may be used as is, but all of data transfer functions may be
+overridden to increase efficiency.
 
 \wxheading{Derived from}
 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}
 \helpref{wxDataObject}{wxdataobject}
 
 \wxheading{Include files}
@@ -19,25 +31,24 @@ and \helpref{WriteData}{wxtextdataobjectwritedata} will have to be overridden.
 
 \wxheading{See also}
 
-\helpref{wxDataObject}{wxdataobject}
+\helpref{Clipboard and drag and drop overview}{wxclipboardonfigoverview}, 
+\helpref{wxDataObject}{wxdataobject}, 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}, 
+\helpref{wxFileDataObject}{wxfiledataobject}, 
+\helpref{wxBitmapDataObject}{wxbitmapdataobject}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxTextDataObject::wxTextDataObject}\label{wxtextdataobjectwxtextdataobject}
 
-\func{}{wxTextDataObject}{\void}
+\func{}{wxTextDataObject}{\param{const wxString\& }{text = wxEmptyString}}
 
-Default constructor. Call \helpref{SetText}{wxtextdataobjectsettext} later
-or override \helpref{WriteData}{wxtextdataobjectwritedata} and 
-\helpref{GetSize}{wxtextdataobjectgetsize} for providing data on-demand.
+Constructor, may be used to initialise the text (otherwise 
+\helpref{SetText}{wxtextdataobjectsettext} should be used later)
 
-\func{}{wxTextDataObject}{\param{const wxString\& }{strText}}
+\membersection{wxTextDataObject::GetTextLength}\label{wxtextdataobjectgettextlength}
 
-Constructor, passing text.
-
-\membersection{wxTextDataObject::GetSize}\label{wxtextdataobjectgetsize}
-
-\constfunc{virtual size\_t}{GetSize}{\void}
+\constfunc{virtual size\_t}{GetTextLength}{\void}
 
 Returns the data size. By default, returns the size of the text data
 set in the constructor or using \helpref{SetText}{wxtextdataobjectsettext}.
@@ -59,25 +70,8 @@ the \helpref{wxClipboard}{wxclipboard}.
 \func{virtual void}{SetText}{\param{const wxString\& }{strText}}
 
 Sets the text associated with the data object. This method is called
-internally when retrieving data from the \helpref{wxClipboard}{wxclipboard}
-and may be used to paste data to the clipboard directly (instead of
-on-demand).
+when the data object receives the data and, by default, copies the text into
+the member variable. If you want to process the text on the fly you may wish to
+override this function.
 
-\membersection{wxTextDataObject::WriteData}\label{wxtextdataobjectwritedata}
-
-\constfunc{virtual void}{WriteData}{\param{void}{*dest} }
-
-Write the data owned by this class to {\it dest}. By default, this
-calls \helpref{WriteString}{wxtextdataobjectwritestring} with the string
-set in the constructor or using \helpref{SetText}{wxtextdataobjectsettext}.
-This can be overridden to provide text data on-demand; in this case 
-\helpref{WriteString}{wxtextdataobjectwritestring} must be called from
-within the overriding WriteData() method.
-
-\membersection{wxTextDataObject::WriteString}\label{wxtextdataobjectwritestring}
-
-\constfunc{void}{WriteString}{\param{const wxString\& }{str}\param{void}{*dest} }
-
-Writes the the string {\it str} to {\it dest}. This method must be called
-from \helpref{WriteData}{wxtextdataobjectwritedata}.
 

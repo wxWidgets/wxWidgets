@@ -15,7 +15,18 @@ A static text control displays one or more lines of read-only text.
 
 \wxheading{Window styles}
 
-There are no special styles for this control.
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxALIGN\_LEFT}}{Align the text to the left}
+\twocolitem{\windowstyle{wxALIGN\_RIGHT}}{Align the text to the right}
+\twocolitem{\windowstyle{wxALIGN\_CENTRE}}{Center the text (horisontally)}
+\twocolitem{\windowstyle{wxST\_NO\_AUTORESIZE}}{By default, the control will
+adjust its size to exactly fit to the size of the text when 
+\helpref{SetLabel}{wxstatictextsetlabel} is called. If this style flag is
+given, the control will not change its size (this style is especially useful
+with controls which also have wxALIGN\_RIGHT or CENTER style because otherwise
+they won't make sense any longer after a call to SetLabel)}
+\end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
 
@@ -75,7 +86,8 @@ Returns the contents of the control.
 
 \func{virtual void}{SetLabel}{\param{const wxString\& }{ label}}
 
-Sets the static text label.
+Sets the static text label and updates the controls size to exactly fit the
+label unless the control has wxST\_NO\_AUTORESIZE flag.
 
 \wxheading{Parameters}
 

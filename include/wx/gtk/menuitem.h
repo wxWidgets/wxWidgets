@@ -31,9 +31,14 @@ public:
 
     // implement base class virtuals
     virtual void SetText( const wxString& str );
+    virtual wxString GetLabel() const;
     virtual void Enable( bool enable = TRUE );
     virtual void Check( bool check = TRUE );
     virtual bool IsChecked() const;
+
+#if wxUSE_ACCEL
+    virtual wxAcceleratorEntry *GetAccel() const;
+#endif // wxUSE_ACCEL
 
     // implementation
     void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }

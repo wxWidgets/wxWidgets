@@ -33,6 +33,7 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxAcceleratorEntry;
 class WXDLLEXPORT wxMenuItem;
 class WXDLLEXPORT wxMenu;
 
@@ -52,6 +53,9 @@ public:
                            bool isCheckable = FALSE,
                            wxMenu *subMenu = (wxMenu *)NULL);
 
+    // destruction: wxMenuItem will delete its submenu
+    virtual ~wxMenuItemBase();
+
     // the menu we're in
     wxMenu *GetMenu() const { return m_parentMenu; }
 
@@ -60,8 +64,14 @@ public:
     int  GetId() const { return m_id; }
     bool IsSeparator() const { return m_id == wxID_SEPARATOR; }
 
-    // the item's text (or name, or label...)
+    // the item's text (or name)
+    //
+    // NB: the item's text includes the accelerators and mnemonics info (if
+    //     any), i.e. it may contain '&' or '_' or "\t..." and thus is
+    //     different from the item's label which only contains the text shown
+    //     in the menu
     virtual void SetText(const wxString& str) { m_text = str; }
+    virtual wxString GetLabel() const { return m_text; }
     const wxString& GetText() const { return m_text; }
 
     // what kind of menu item we are
@@ -75,12 +85,23 @@ public:
     // state
     virtual void Enable(bool enable = TRUE) { m_isEnabled = enable; }
     virtual bool IsEnabled() const { return m_isEnabled; }
+
     virtual void Check(bool check = TRUE) { m_isChecked = check; }
     virtual bool IsChecked() const { return m_isChecked; }
+    void Toggle() { Check(!m_isChecked); }
 
     // help string (displayed in the status bar by default)
     void SetHelp(const wxString& str) { m_help = str; }
     const wxString& GetHelp() const { return m_help; }
+
+#if wxUSE_ACCEL
+    // get our accelerator or NULL (caller must delete the pointer)
+    virtual wxAcceleratorEntry *GetAccel() const { return NULL; }
+
+    // set the accel for this item - this may also be done indirectly with
+    // SetText()
+    virtual void SetAccel(wxAcceleratorEntry *accel);
+#endif // wxUSE_ACCEL
 
     // compatibility only, use new functions in the new code
     void SetName(const wxString& str) { SetText(str); }
