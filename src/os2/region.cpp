@@ -555,6 +555,51 @@ WXHRGN wxRegion::GetHRGN() const
     return (WXHRGN) M_REGION;
 }
 
+//
+// Set a new PS, this means we have to recreate the old region in the new
+// PS
+//
+void wxRegion::SetPS(
+  HPS                               hPS
+)
+{
+    RGNRECT                     vRgnData;
+    PRECTL                      pRect = NULL;
+
+    if (::GpiQueryRegionRects( ((wxRegionRefData*)m_refData)->m_hPS
+                              ,((wxRegionRefData*)m_refData)->m_hRegion
+                              ,NULL
+                              ,&vRgnData
+                              ,NULL
+                             ))
+    {
+        pRect = new RECTL[vRgnData.crcReturned];
+        vRgnData.crc = vRgnData.crcReturned;
+        vRgnData.ircStart = 1;
+        if (::GpiQueryRegionRects( ((wxRegionRefData*)m_refData)->m_hPS
+                                  ,((wxRegionRefData*)m_refData)->m_hRegion
+                                  ,NULL
+                                  ,&vRgnData
+                                  ,pRect
+                                 ))
+        {
+            //
+            // First destroy the region out of the old PS
+            // and then create it in the new and set the new to current
+            //
+            ::GpiDestroyRegion( ((wxRegionRefData*)m_refData)->m_hPS
+                               ,M_REGION
+                              );
+            ((wxRegionRefData*)m_refData)->m_hRegion = ::GpiCreateRegion( hPS
+                                                                         ,vRgnData.crcReturned
+                                                                         ,pRect
+                                                                        );
+            ((wxRegionRefData*)m_refData)->m_hPS = hPS;
+        }
+        delete [] pRect;
+    }
+} // end of wxRegion::SetPS
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 //                             wxRegionIterator                              //
