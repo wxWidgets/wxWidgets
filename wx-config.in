@@ -164,10 +164,11 @@ makeabs()
 usage()
 {
     cat <<EOF
-Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--release]
+Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--inplace]
+                 [--version] [--release]
                  [--basename] [--static] [--libs] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
-                 [--cc] [--cxx] [--ld] [--inplace] [LIBRARIES]
+                 [--cc] [--cxx] [--ld] [LIBRARIES]
 
 wx-config returns configuration information about the installed
 version of wxWidgets. It may be used to query its version and
@@ -181,10 +182,10 @@ use it to enable builds with an uninstalled wxWidgets version for
 package building and bleeding edge developers.  To do so, use it like
 this:
 
-\${wx_builddir}/wx-config --prefix=\${wx_srcdir} --exec-prefix=\${wx_builddir}
+\${wx_builddir}/wx-config --inplace
 
-Note that any other options supplied must come *after* the prefix
-specification for it to take effect.
+Note that any other options supplied must come *after* --inplace
+for it to take effect.
 
 --static must come before --cppflags, --cflags, --cxxflags,
 --libs and --gl-libs and --libs must come before the other ones.
@@ -195,10 +196,6 @@ and contrib libraries. Special value "std" stands for all libraries linked
 in by default.
 
 --gl-libs option is deprecated, use "--libs gl" instead.
-
-The --inplace flag allows wx-config to be used from the wxWindows
-build directory and output flags to use the uninstalled version of
-the headers and libs in the build directory.
 
 EOF
 
