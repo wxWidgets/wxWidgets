@@ -1,3 +1,6 @@
+/* we must include wx/platform.h to define __WIN32__ */
+#include "wx/platform.h"
+
 #if defined(__WIN32__) || defined(__GNUWIN32__)
 /* all Win32 compilers can handle C++ comments, and C++ comments
    is the only C++ in setup.h */
