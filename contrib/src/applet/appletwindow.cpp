@@ -32,16 +32,31 @@
 
 // For compilers that support precompilation
 #include "wx/wxprec.h"
+#include "wx/html/forcelnk.h"
 
 // Include private headers
 #include "wx/applet/applet.h"
+#include "wx/applet/window.h"
+#include "wx/applet/loadpage.h"
 
+// Preprocessor Stuff
+#include "wx/applet/prepinclude.h"
+#include "wx/applet/prepecho.h"
+#include "wx/applet/prepifelse.h"
+
+
+/*---------------------------- Global variables ---------------------------*/
+
+wxHashTable wxHtmlAppletWindow::m_Cookies;		
+		
 /*------------------------- Implementation --------------------------------*/
 
 // Empty event handler. We include this event handler simply so that
 // sub-classes of wxApplet can reference wxApplet in the event tables
 // that they create as necessary.
 BEGIN_EVENT_TABLE(wxHtmlAppletWindow, wxHtmlWindow)
+	EVT_LOAD_PAGE(wxHtmlAppletWindow::OnLoadPage)
+    EVT_PAGE_LOADED(wxHtmlAppletWindow::OnPageLoaded)
 END_EVENT_TABLE()
 
 // Implement the class functions for wxHtmlAppletWindow
@@ -58,14 +73,37 @@ Constructor for the applet window class.
 wxHtmlAppletWindow::wxHtmlAppletWindow(
     wxWindow *parent,
     wxWindowID id,
+    wxToolBarBase *navBar,
+    int navBackId,
+    int navForwardId,
     const wxPoint& pos,
     const wxSize& size,
     long style,
     const wxString& name)
     : wxHtmlWindow(parent,id,pos,size,style,name)
 {
-    // Ensure all cookie data is destroyed when window is killed
-    m_Cookies.DeleteContents(true);
+    //setup client navbars
+    if (navBar) {
+        m_NavBar = navBar;
+        m_NavBackId = navBackId;
+        m_NavForwardId = navForwardId;
+        }
+    else {
+        m_NavBar = NULL;
+        }
+
+    //Add HTML preprocessors
+    // deleting preprocessors is done by the code within the window
+
+    incPreprocessor = new wxIncludePrep(); // #include preprocessor
+    wxEchoPrep * echoPreprocessor = new wxEchoPrep(); // #echo preprocessor
+    wxIfElsePrep * ifPreprocessor = new wxIfElsePrep();
+
+    this->AddProcessor(incPreprocessor);
+    this->AddProcessor(echoPreprocessor);
+    this->AddProcessor(ifPreprocessor);
+
+
 }
 
 /****************************************************************************
@@ -91,15 +129,13 @@ created dynamically based on string values embedded in the custom tags of an
 HTML page.
 ****************************************************************************/
 wxApplet *wxHtmlAppletWindow::CreateApplet(
-    const wxString& className,          
+    const wxString& classId,
+    const wxString& iName,
+    const wxHtmlTag& params,
     const wxSize& size)
 {
-    // We presently only allow one applet per page of the same class!
-    if (m_AppletList.Find(className))
-        return NULL;
-
     // Dynamically create the class instance at runtime
-    wxClassInfo *info = wxClassInfo::FindClass(className.c_str());
+    wxClassInfo *info = wxClassInfo::FindClass(classId.c_str());
     if (!info)
         return NULL;
     wxObject *obj = info->CreateObject();
@@ -108,11 +144,11 @@ wxApplet *wxHtmlAppletWindow::CreateApplet(
     wxApplet *applet = wxDynamicCast(obj,wxApplet);
     if (!applet)
         return NULL;
-    if (!applet->Create(this,size)) {
+    if (!applet->Create(this,params,size)) {
         delete applet;
         return NULL;
         }
-    m_AppletList.Append(className,applet);
+    m_AppletList.Append(iName,applet);
     return applet;
 }
 
@@ -133,7 +169,7 @@ wxApplet *wxHtmlAppletWindow::FindApplet(
     if (!node)
         return NULL;
     return node->GetData();
-}           
+}
 
 /****************************************************************************
 PARAMETERS:
@@ -156,7 +192,7 @@ bool wxHtmlAppletWindow::RemoveApplet(
             }
         }
     return false;
-}           
+}
 
 /****************************************************************************
 PARAMETERS:
@@ -169,11 +205,64 @@ REMARKS:
 Remove an applet from the manager. Called during applet destruction
 ****************************************************************************/
 bool wxHtmlAppletWindow::LoadPage(
-    const wxString& hRef)
+    const wxString& link)
 {
+    wxString    href(link);
+
+    // TODO: This needs to be made platform inde if possible.
+    if (link.GetChar(0) == '?'){
+        wxString cmd = link.BeforeFirst('=');
+        wxString cmdValue = link.AfterFirst('=');
+
+        if(!(cmd.CmpNoCase("?EXTERNAL"))){
+#ifdef  __WINDOWS__
+                ShellExecute(this ? (HWND)this->GetHWND() : NULL,NULL,cmdValue.c_str(),NULL,"",SW_SHOWNORMAL);
+#else
+                #error Platform not implemented yet!
+#endif
+            return true;
+            }
+        if (!(cmd.CmpNoCase("?EXECUTE"))){
+            wxMessageBox(cmdValue);
+            return true;
+            }
+        if (!(cmd.CmpNoCase("?VIRTUAL"))){
+            VirtualData& temp = *((VirtualData*)FindCookie(cmdValue));
+            if (&temp) {
+                href = temp.GetHref();
+                }
+            else {
+#ifdef CHECKED
+                wxMessageBox("VIRTUAL LINK ERROR: " + cmdValue + " does not exist.");
+#endif
+                return true;
+                }
+            }
+        }
+
+    // Grab the directory from the string for use in the include preprocessor
+    // make sure we get either type of / or \.
+    int ch = link.Find('\\', true);
+    if (ch == -1) ch = link.Find('/', true);
+    if (ch != -1) {
+        wxFileSystem fs;
+        wxString tmp = link.Mid(0, ch+1);
+        fs.ChangePathTo(incPreprocessor->GetDirectory(), true);
+        fs.ChangePathTo(tmp, true);
+        incPreprocessor->ChangeDirectory(fs.GetPath());
+        }
+
+    // Inform all the applets that the new page is being loaded
     for (wxAppletList::Node *node = m_AppletList.GetFirst(); node; node = node->GetNext())
-        (node->GetData())->OnLinkClicked(hRef);
-    return wxHtmlWindow::LoadPage(hRef);
+        (node->GetData())->OnLinkClicked(wxHtmlLinkInfo(href));
+    bool stat = wxHtmlWindow::LoadPage(href);
+
+    // Enable/Dis the navbar tools
+    if (m_NavBar) {
+        m_NavBar->EnableTool(m_NavForwardId,HistoryCanForward());
+        m_NavBar->EnableTool(m_NavBackId,HistoryCanBack());
+        }
+    return stat;
 }
 
 /****************************************************************************
@@ -187,9 +276,7 @@ call the LoadPage function above to load the new page and display it.
 void wxHtmlAppletWindow::OnLinkClicked(
     const wxHtmlLinkInfo& link)
 {
-    for (wxAppletList::Node *node = m_AppletList.GetFirst(); node; node = node->GetNext())
-        (node->GetData())->OnLinkClicked(link);
-    wxHtmlWindow::LoadPage(link.GetHref());
+    LoadPage(link.GetHref());
 }
 
 /****************************************************************************
@@ -200,10 +287,12 @@ command prior to being destructed when the current page is destroyed.
 ****************************************************************************/
 bool wxHtmlAppletWindow::HistoryForward()
 {
-    if (!HistoryCanForward())   
+    if (!HistoryCanForward())
         return false;
+
     for (wxAppletList::Node *node = m_AppletList.GetFirst(); node; node = node->GetNext())
         (node->GetData())->OnHistoryForward();
+
     return wxHtmlWindow::HistoryForward();
 }
 
@@ -215,10 +304,12 @@ command prior to being destructed when the current page is destroyed.
 ****************************************************************************/
 bool wxHtmlAppletWindow::HistoryBack()
 {
-    if (!HistoryCanBack())  
+    if (!HistoryCanBack())
         return false;
+
     for (wxAppletList::Node *node = m_AppletList.GetFirst(); node; node = node->GetNext())
         (node->GetData())->OnHistoryBack();
+
     return wxHtmlWindow::HistoryBack();
 }
 
@@ -239,21 +330,24 @@ value (ie: by default it is true).
 ****************************************************************************/
 void wxHtmlAppletWindow::SendMessage(
     wxEvent& msg)
-{   
+{
     // Preset the skip flag
     msg.Skip();
-    
+
     // Process all applets in turn and send them the message
     for (wxAppletList::Node *node = m_AppletList.GetFirst(); node; node = node->GetNext()) {
         (node->GetData())->OnMessage(msg);
-        if (!msg.GetSkipped())
+        if (!msg.GetSkipped()){
+            wxMessageBox("BREAK");
             break;
+            }
         }
 }
 
 /****************************************************************************
 PARAMETERS:
-msg - wxEvent message to be sent to all wxApplets
+name    - Uniq wxString used as hash key
+cookie  - wxObject data returned when name is found.
 
 RETURNS:
 True if new cookie was added, false if cookie with same name already exists.
@@ -281,13 +375,13 @@ bool wxHtmlAppletWindow::RegisterCookie(
     // Fail if the named cookie already exists!
     if (m_Cookies.Get(name))
         return false;
-    m_Cookies.Put(name,cookie); 
+    m_Cookies.Put(name,cookie);
     return true;
 }
 
 /****************************************************************************
 PARAMETERS:
-msg - wxEvent message to be sent to all wxApplets
+name - wxString uniq haskey used to remove item from hash
 
 RETURNS:
 True if found and deleted, false if not found in table.
@@ -326,6 +420,57 @@ wxObject *wxHtmlAppletWindow::FindCookie(
     return m_Cookies.Get(name);
 }
 
+/****************************************************************************
+PARAMETERS:
+event   - Event to handle
+
+REMARKS:
+This function handles delayed LoadPage events posted from applets that
+need to change the page for the current window to a new window.
+****************************************************************************/
+void wxHtmlAppletWindow::OnLoadPage(
+    wxLoadPageEvent &event)
+{
+    if (event.GetHtmlWindow() == this){
+        if (LoadPage(event.GetHRef())){
+            wxPageLoadedEvent evt;
+            }
+        }
+}
+
+/****************************************************************************
+PARAMETERS:
+event   - Event to handle
+
+REMARKS:
+This function handles delayed LoadPage events posted from applets that
+need to change the page for the current window to a new window.
+****************************************************************************/
+void wxHtmlAppletWindow::OnPageLoaded(
+    wxPageLoadedEvent &)
+{
+    Enable(true);
+}
+
+/****************************************************************************
+PARAMETERS:
+name    - name of the last applet that changed the data in this object
+group   - name of the group the allplet belongs to.
+href    - webpage to go to.
+
+REMARKS:
+VirtualData is used to store information on the virtual links.
+****************************************************************************/
+VirtualData::VirtualData(
+    wxString& name,
+    wxString& group,
+    wxString& href )
+{
+    m_name = name;
+    m_group = group;
+    m_href = href;
+}
+
 #include "wx/html/m_templ.h"
 
 /****************************************************************************
@@ -334,38 +479,62 @@ Implementation for the <embed> HTML tag handler. This handler takes care
 of automatically constructing the wxApplet objects of the appropriate
 class based on the <embed> tag information.
 ****************************************************************************/
-TAG_HANDLER_BEGIN(Embed, "EMBED")
+TAG_HANDLER_BEGIN(wxApplet, "WXAPPLET")
 
 TAG_HANDLER_PROC(tag)
 {
-    wxWindow            *wnd;
-    wxHtmlAppletWindow  *appletWindow;
-    wxApplet            *applet;
-    int                 width, height;
-    int                 floatPercent = 0;
+	wxWindow			*wnd;
+	wxHtmlAppletWindow	*appletWindow;
+	wxApplet			*applet;
+    wxString            classId;
+    wxString            name;
+    int 				width, height;
 
-    wnd = m_WParser->GetWindow();
-    if ((appletWindow = wxDynamicCast(wnd,wxHtmlAppletWindow)) != NULL) {
-        tag.ScanParam("WIDTH", "%i", &width);
-        tag.ScanParam("HEIGHT", "%i", &height);
-        if (tag.HasParam("FLOAT"))
-            tag.ScanParam("FLOAT", "%i", &floatPercent);
-        if (tag.HasParam("APPLET")) {
-            if ((applet = appletWindow->CreateApplet(tag.GetParam("APPLET"), wxSize(width, height))) != NULL) {
-                applet->Show(true);
-                m_WParser->OpenContainer()->InsertCell(new wxHtmlWidgetCell(applet,floatPercent));
+	wnd = m_WParser->GetWindow();
+
+	if ((appletWindow = wxDynamicCast(wnd,wxHtmlAppletWindow)) != NULL){
+		tag.ScanParam("WIDTH", "%i", &width);
+		tag.ScanParam("HEIGHT", "%i", &height);	
+        if (tag.HasParam("CLASSID")){
+            classId = tag.GetParam("CLASSID");
+            if ( classId.IsNull() || classId.Len() == 0 ){
+                wxMessageBox("wxApplet tag error: CLASSID is NULL or empty.","Error",wxICON_ERROR);
+                return false;
                 }
+            if (tag.HasParam("NAME"))
+                name = tag.GetParam("NAME");
+
+            // If the name is NULL or len is zero then we assume that the html guy
+            // didn't include the name param which is optional.
+            if ( name.IsNull() || name.Len() == 0 )
+                name = classId;
+
+            // We got all the params and can now create the applet
+			if ((applet = appletWindow->CreateApplet(classId, name, tag , wxSize(width, height))) != NULL){
+				applet->Show(true);
+				m_WParser->OpenContainer()->InsertCell(new wxHtmlWidgetCell(applet,0));
+				}
+            else
+                wxMessageBox("wxApplet error: Could not create:" + classId + "," + name);
+			}
+        else{
+            wxMessageBox("wxApplet tag error: Can not find CLASSID param.","Error",wxICON_ERROR);
+            return false;
             }
-        else if (tag.HasParam("TEXT")) {
-            // TODO: Somehow get the text returned from this class displayed on the page!
-            }
+        //Add more param parsing here. If or when spec changes.
+        //For now we'll ignore any other params those HTML guys
+        //might put in our tag.
         }
-    return false;
+
+	return false;
 }
 
-TAG_HANDLER_END(Embed)
+TAG_HANDLER_END(wxApplet)
 
-TAGS_MODULE_BEGIN(Embed)
-    TAGS_MODULE_ADD(Embed)
-TAGS_MODULE_END(Embed)
+TAGS_MODULE_BEGIN(wxApplet)
+    TAGS_MODULE_ADD(wxApplet)
+TAGS_MODULE_END(wxApplet)
+
+// This is our little forcelink hack.
+FORCE_LINK(loadpage)
 

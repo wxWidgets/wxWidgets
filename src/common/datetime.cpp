@@ -1330,8 +1330,6 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
     // check that the algorithm gave us something reasonable
     wxASSERT_MSG( (0 < month) && (month <= 12), _T("invalid month") );
     wxASSERT_MSG( (1 <= day) && (day < 32), _T("invalid day") );
-    wxASSERT_MSG( (INT_MIN <= year) && (year <= INT_MAX),
-                  _T("year range overflow") );
 
     // construct Tm from these values
     Tm tm;

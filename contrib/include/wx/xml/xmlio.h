@@ -28,7 +28,7 @@ public:
     virtual bool CanSave() { return FALSE; }
 
     virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
-    virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc) { return FALSE; }
+    virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc) { (void)stream; (void)doc; return FALSE; }
 };
 
 
@@ -36,10 +36,10 @@ class WXXMLDLLEXPORT wxXmlIOHandlerWriter : public wxXmlIOHandler
 {
 public:
     virtual wxXmlIOType GetType() { return wxXML_IO_TEXT_OUTPUT; }
-    virtual bool CanLoad(wxInputStream& stream) { return FALSE; }
+    virtual bool CanLoad(wxInputStream& stream) { (void)stream; return FALSE; }
     virtual bool CanSave() { return TRUE; }
 
-    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc) { return FALSE; }
+    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc) { (void)stream; (void)doc; return FALSE; }
     virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
 };
 

@@ -34,7 +34,10 @@
 #define __WX_APPLET_H
 
 #include "wx/panel.h"
-#include "wx/applet/window.h"
+#include "wx/html/htmlwin.h"
+
+// Forward declaration
+class wxHtmlAppletWindow;
 
 /*--------------------------- Class Definitions ---------------------------*/
 
@@ -46,38 +49,41 @@ class wxApplet : public wxPanel {
 private:
     DECLARE_ABSTRACT_CLASS(wxApplet);
     DECLARE_EVENT_TABLE();
-    
-protected:
-    wxHtmlAppletWindow  *m_Parent;
 
-            // Special handler for background erase messages            
+protected:
+    wxHtmlAppletWindow  *m_parent;
+
+            // Special handler for background erase messages
             void OnEraseBackground(wxEraseEvent&);
-        
+
 public:
             // Constructor (called during dynamic creation)
-            wxApplet() { m_Parent = NULL; }
-    
+            wxApplet() { m_parent = NULL; };
+
             // Psuedo virtual constructor
     virtual bool Create(
                 wxHtmlAppletWindow *parent,
+                const wxHtmlTag& params,
                 const wxSize& size,
                 long style = wxTAB_TRAVERSAL | wxNO_BORDER);
-                
+
             // Virtual destructor
     virtual ~wxApplet();
 
             // Handle HTML navigation to a new URL
-    virtual void OnLinkClicked(const wxHtmlLinkInfo& link) = 0; 
-            
+    virtual void OnLinkClicked(const wxHtmlLinkInfo& link) = 0;
+
             // Handle HTML navigation forward command in applet
     virtual void OnHistoryForward() = 0;
-            
+
             // Handle HTML navigation back command in applet
     virtual void OnHistoryBack() = 0;
-            
+
             // Handle messages from the wxAppletManager and other applets
     virtual void OnMessage(wxEvent& msg) = 0;
     };
-    
+
+
+
 #endif // __WX_APPLET_H
 

@@ -96,7 +96,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMHandler,wxImageHandler)
 
 bool wxXPMHandler::LoadFile(wxImage *image,
                             wxInputStream& stream,
-                            bool verbose, int WXUNUSED(index))
+                            bool WXUNUSED(verbose), int WXUNUSED(index))
 {
     wxXPMDecoder decoder;
 

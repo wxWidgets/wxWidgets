@@ -72,7 +72,7 @@ public:
     // After the page is loaded, the method calls SetPage() to display it.
     // Note : you can also use path relative to previously loaded page
     // Return value : same as SetPage
-    bool LoadPage(const wxString& location);
+    virtual bool LoadPage(const wxString& location);
 
     // Returns full location of opened page
     wxString GetOpenedPage() const {return m_OpenedPage;}

@@ -1879,13 +1879,6 @@ void wxArrayString::Grow()
     else {
       // otherwise when it's called for the first time, nIncrement would be 0
       // and the array would never be expanded
-#if defined(__VISAGECPP__) && defined(__WXDEBUG__)
-      int array_size = ARRAY_DEFAULT_INITIAL_SIZE;
-      wxASSERT( array_size != 0 );
-#else
-      wxASSERT( ARRAY_DEFAULT_INITIAL_SIZE != 0 );
-#endif
-
       // add 50% but not too much
       size_t nIncrement = m_nSize < ARRAY_DEFAULT_INITIAL_SIZE
                           ? ARRAY_DEFAULT_INITIAL_SIZE : m_nSize >> 1;

@@ -603,9 +603,9 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
         return wxNullColour;
     }
 
-    return wxColour((tmp & 0xFF0000) >> 16 ,
-                    (tmp & 0x00FF00) >> 8,
-                    (tmp & 0x0000FF));
+    return wxColour((unsigned char) ((tmp & 0xFF0000) >> 16) ,
+                    (unsigned char) ((tmp & 0x00FF00) >> 8),
+                    (unsigned char) ((tmp & 0x0000FF)));
 }
 
 

@@ -3,10 +3,17 @@ Copyright (c) 1998, 1999 Thai Open Source Software Center Ltd
 See the file copying.txt for copying permission.
 */
 
+#undef INVALID_LEAD_CASE
+
 #ifndef IS_INVALID_CHAR
 #define IS_INVALID_CHAR(enc, ptr, n) (0)
-#endif
-
+#define INVALID_LEAD_CASE(n, ptr, nextTokPtr) \
+    case BT_LEAD ## n: \
+      if (end - ptr < n) \
+	return XML_TOK_PARTIAL_CHAR; \
+      ptr += n; \
+      break;
+#else
 #define INVALID_LEAD_CASE(n, ptr, nextTokPtr) \
     case BT_LEAD ## n: \
       if (end - ptr < n) \
@@ -17,6 +24,7 @@ See the file copying.txt for copying permission.
       } \
       ptr += n; \
       break;
+#endif
 
 #define INVALID_CASES(ptr, nextTokPtr) \
   INVALID_LEAD_CASE(2, ptr, nextTokPtr) \
@@ -304,6 +312,7 @@ int PREFIX(cdataSectionTok)(const ENCODING *enc, const char *ptr, const char *en
 {
   if (ptr == end)
     return XML_TOK_NONE;
+#if !(MINBPC(enc) == 1)
   if (MINBPC(enc) > 1) {
     size_t n = end - ptr;
     if (n & (MINBPC(enc) - 1)) {
@@ -312,7 +321,8 @@ int PREFIX(cdataSectionTok)(const ENCODING *enc, const char *ptr, const char *en
 	return XML_TOK_PARTIAL;
       end = ptr + n;
     }
-  }
+ }
+#endif
   switch (BYTE_TYPE(enc, ptr)) {
   case BT_RSQB:
     ptr += MINBPC(enc);
@@ -574,7 +584,7 @@ int PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
 	hadColon = 0;
 #endif
 	for (;;) {
-	  
+	
 	  ptr += MINBPC(enc);
 	  if (ptr == end)
 	    return XML_TOK_PARTIAL;
@@ -783,6 +793,7 @@ int PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
 {
   if (ptr == end)
     return XML_TOK_NONE;
+#if !(MINBPC(enc) == 1)
   if (MINBPC(enc) > 1) {
     size_t n = end - ptr;
     if (n & (MINBPC(enc) - 1)) {
@@ -792,6 +803,7 @@ int PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
       end = ptr + n;
     }
   }
+#endif
   switch (BYTE_TYPE(enc, ptr)) {
   case BT_LT:
     return PREFIX(scanLt)(enc, ptr + MINBPC(enc), end, nextTokPtr);
@@ -971,6 +983,7 @@ int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
   int tok;
   if (ptr == end)
     return XML_TOK_NONE;
+#if !(MINBPC(enc) == 1)
   if (MINBPC(enc) > 1) {
     size_t n = end - ptr;
     if (n & (MINBPC(enc) - 1)) {
@@ -980,6 +993,7 @@ int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
       end = ptr + n;
     }
   }
+#endif
   switch (BYTE_TYPE(enc, ptr)) {
   case BT_QUOT:
     return PREFIX(scanLit)(BT_QUOT, enc, ptr + MINBPC(enc), end, nextTokPtr);
@@ -1086,6 +1100,7 @@ int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
     return XML_TOK_DECL_CLOSE;
   case BT_NUM:
     return PREFIX(scanPoundName)(enc, ptr + MINBPC(enc), end, nextTokPtr);
+#ifdef XML_MIN_SIZE
 #define LEAD_CASE(n) \
   case BT_LEAD ## n: \
     if (end - ptr < n) \
@@ -1102,6 +1117,14 @@ int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
     } \
     *nextTokPtr = ptr; \
     return XML_TOK_INVALID;
+#else
+#define LEAD_CASE(n) \
+    case BT_LEAD ## n: \
+    if (end - ptr < n) \
+      return XML_TOK_PARTIAL_CHAR; \
+    *nextTokPtr = ptr; \
+    return XML_TOK_INVALID;
+#endif
     LEAD_CASE(2) LEAD_CASE(3) LEAD_CASE(4)
 #undef LEAD_CASE
   case BT_NMSTRT:
@@ -1119,6 +1142,7 @@ int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
     ptr += MINBPC(enc);
     break;
   case BT_NONASCII:
+#ifdef XML_MIN_SIZE
     if (IS_NMSTRT_CHAR_MINBPC(enc, ptr)) {
       ptr += MINBPC(enc);
       tok = XML_TOK_NAME;
@@ -1129,6 +1153,7 @@ int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
       tok = XML_TOK_NMTOKEN;
       break;
     }
+#endif
     /* fall through */
   default:
     *nextTokPtr = ptr;
@@ -1413,7 +1438,7 @@ int PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
 }
 
 /* This must only be called for a well-formed start-tag or empty element tag.
-Returns the number of attributes.  Pointers to the first attsMax attributes 
+Returns the number of attributes.  Pointers to the first attsMax attributes
 are stored in atts. */
 
 static

@@ -7,7 +7,7 @@
 // Copyright:   (c) 2001 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 // nothing - already in xml.cpp
 #endif
@@ -87,9 +87,9 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
     ctx->lastAsText = NULL;
 }
 
-static void EndElementHnd(void *userData, const char *name)
+static void EndElementHnd(void *userData, const char* WXUNUSED(name))
 {
-    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;   
+    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
     ctx->node = ctx->node->GetParent();
     ctx->lastAsText = NULL;
@@ -97,19 +97,19 @@ static void EndElementHnd(void *userData, const char *name)
 
 static void TextHnd(void *userData, const char *s, int len)
 {
-    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;   
+    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
     char *buf = new char[len + 1];
-    
+
     buf[len] = '\0';
     memcpy(buf, s, (size_t)len);
-    
+
     if (ctx->lastAsText)
     {
-        ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() + 
+        ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() +
                                     CharToString(buf));
     }
     else
-    {    
+    {
         bool whiteOnly = TRUE;
         for (char *c = buf; *c != '\0'; c++)
             if (*c != ' ' && *c != '\t' && *c != '\n' && *c != '\r')
@@ -119,7 +119,7 @@ static void TextHnd(void *userData, const char *s, int len)
             }
         if (!whiteOnly)
         {
-            ctx->lastAsText = new wxXmlNode(wxXML_TEXT_NODE, wxT("text"), 
+            ctx->lastAsText = new wxXmlNode(wxXML_TEXT_NODE, wxT("text"),
                                             CharToString(buf));
             ctx->node->AddChild(ctx->lastAsText);
         }
@@ -130,14 +130,14 @@ static void TextHnd(void *userData, const char *s, int len)
 
 static void CommentHnd(void *userData, const char *data)
 {
-    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;   
- 
+    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
+
     if (ctx->node)
     {
         // VS: ctx->node == NULL happens if there is a comment before
         //     the root element (e.g. wxDesigner's output). We ignore such
         //     comments, no big deal...
-        ctx->node->AddChild(new wxXmlNode(wxXML_COMMENT_NODE, 
+        ctx->node->AddChild(new wxXmlNode(wxXML_COMMENT_NODE,
                             wxT("comment"), CharToString(data)));
     }
     ctx->lastAsText = NULL;
@@ -148,7 +148,7 @@ static void DefaultHnd(void *userData, const char *s, int len)
     // XML header:
     if (len > 6 && memcmp(s, "<?xml ", 6) == 0)
     {
-        wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;   
+        wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
         wxString buf = CharToString(s, (size_t)len);
         int pos;
@@ -158,7 +158,7 @@ static void DefaultHnd(void *userData, const char *s, int len)
         pos = buf.Find(wxT("version="));
         if (pos != wxNOT_FOUND)
             ctx->version = buf.Mid(pos + 9).BeforeFirst(buf[(size_t)pos+8]);
-    }    
+    }
 }
 
 bool wxXmlIOHandlerExpat::Load(wxInputStream& stream, wxXmlDocument& doc)
@@ -170,23 +170,23 @@ bool wxXmlIOHandlerExpat::Load(wxInputStream& stream, wxXmlDocument& doc)
     XML_Parser parser = XML_ParserCreate(NULL);
 
     ctx.root = ctx.node = NULL;
-    XML_SetUserData(parser, (void*)&ctx);   
+    XML_SetUserData(parser, (void*)&ctx);
     XML_SetElementHandler(parser, StartElementHnd, EndElementHnd);
     XML_SetCharacterDataHandler(parser, TextHnd);
     XML_SetCommentHandler(parser, CommentHnd);
     XML_SetDefaultHandler(parser, DefaultHnd);
 
-    do 
+    do
     {
         size_t len = stream.Read(buf, BUFSIZE).LastRead();
         done = (len < BUFSIZE);
-        if (!XML_Parse(parser, buf, len, done)) 
+        if (!XML_Parse(parser, buf, len, done))
         {
             wxLogError(_("XML parsing error: '%s' at line %d"),
                        XML_ErrorString(XML_GetErrorCode(parser)),
                        XML_GetCurrentLineNumber(parser));
           return FALSE;
-        }   
+        }
     } while (!done);
 
     doc.SetVersion(ctx.version);

@@ -288,7 +288,7 @@ wxWindow::~wxWindow()
     m_isBeingDeleted = TRUE;
 
     MSWDetachWindowMenu();
-    
+
     // VS: make sure there's no wxFrame with last focus set to us:
     for (wxWindow *win = GetParent(); win; win = win->GetParent())
     {
@@ -3461,6 +3461,9 @@ bool wxWindow::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
     return GetEventHandler()->ProcessEvent(event);
 
 #else
+    (void) wParam;
+    (void) lParam;
+
     return FALSE;
 #endif
 }

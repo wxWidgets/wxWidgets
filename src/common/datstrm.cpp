@@ -105,7 +105,7 @@ wxString wxDataInputStream::ReadString()
 #endif
     return s;
   }
-  else 
+  else
     return wxEmptyString;
 }
 
@@ -237,7 +237,7 @@ wxDataOutputStream& wxDataOutputStream::operator<<(const wxChar *string)
   return *this;
 }
 
-wxDataOutputStream& wxDataOutputStream::operator<<(wxString& string)
+wxDataOutputStream& wxDataOutputStream::operator<<(const wxString& string)
 {
   WriteString(string);
   return *this;
