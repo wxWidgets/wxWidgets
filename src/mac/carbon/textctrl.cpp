@@ -441,6 +441,10 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     MacPostControlCreate(pos,size) ;
 
+    // only now the embedding is correct and we can do a positioning update
+
+    MacSuperChangedPosition() ;
+
     if ( m_windowStyle & wxTE_READONLY)
     {
         SetEditable( false ) ;
