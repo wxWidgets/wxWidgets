@@ -319,7 +319,11 @@
 
 #define wxUSE_STATUSBAR    1
 
+#if defined(__WXMSW__) || defined(__WXMAC__)
 #define wxUSE_NATIVE_STATUSBAR        1
+#else
+#define wxUSE_NATIVE_STATUSBAR        0
+#endif
 
 #define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 1
@@ -333,6 +337,8 @@
 #define wxUSE_TAB_DIALOG    0
 
 #define wxUSE_GRID         1
+
+#define wxUSE_MINIFRAME 1
 
 
 #define wxUSE_ACCEL 1
@@ -486,17 +492,12 @@
 
 /* --- end common options --- */
 
-/* enable native status bar under Win32 */
-#if defined(__WIN95__) && !defined(__WXUNIVERSAL__)
-#define wxUSE_NATIVE_STATUSBAR 1
+/* for some features we don't have dedicated configure switches, so just choose
+ * the common values automatically */
+#if (defined(__WIN95__) && !defined(__WXUNIVERSAL__)) || defined(__WXPM__)
 #define wxUSE_OWNER_DRAWN 1
 #endif
 
-#if defined(__WXPM__)
-#define wxUSE_OWNER_DRAWN 1
-#endif
-
-/* enable rich edit under Win32 */
 #if defined(__WIN95__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
 #define wxUSE_RICHEDIT 1
 #else
@@ -570,10 +571,6 @@
  */
 #undef WX_NO_REGEX_ADVANCED
 /*
- * Use XML support
- */
-#define wxUSE_XML 0
-/*
  * Use SDL for audio (Unix)
  */
 #define wxUSE_LIBSDL 0
@@ -598,10 +595,8 @@
  */
 #define wxHAVE_LIB_XPM 0
 /*
- * Use font metric files in GetTextExtent for wxPostScriptDC
  * Use consistent PostScript fonts for AFM and printing (!)
  */
-#define wxUSE_AFM_FOR_POSTSCRIPT 0
 #define wxUSE_NORMALIZED_PS_FONTS 0
 
 /* compatibility */

@@ -567,10 +567,14 @@
 // or the wrapper around native control. For native look and feel the native
 // version should be used.
 //
-// Default is 1.
+// Default is 1 for the platforms where native status bar is supported.
 //
 // Recommended setting: 1 (there is no advantage in using the generic one)
+#if defined(__WXMSW__) || defined(__WXMAC__)
 #define wxUSE_NATIVE_STATUSBAR        1
+#else
+#define wxUSE_NATIVE_STATUSBAR        0
+#endif
 
 // wxToolBar related settings: if wxUSE_TOOLBAR is 0, don't compile any toolbar
 // classes at all. Otherwise, use the native toolbar class unless
@@ -618,11 +622,19 @@
 
 // wxGrid class
 //
-// Default is 1 for both options.
+// Default is 1, set to 0 to cut down compilation time and binaries size if you
+// don't use it.
 //
 // Recommended setting: 1
 //
 #define wxUSE_GRID         1
+
+// wxMiniFrame class: a frame with narrow title bar
+//
+// Default is 1.
+//
+// Recommended setting: 1 (it doesn't cost almost anything)
+#define wxUSE_MINIFRAME 1
 
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff
@@ -692,16 +704,6 @@
 
 // wxValidator class and related methods
 #define wxUSE_VALIDATORS 1
-
-// wxDC cacheing implementation
-#define wxUSE_DC_CACHEING 1
-
-// Set this to 1 to enable the use of DIB's for wxBitmap to support
-// bitmaps > 16MB on Win95/98/Me.  Set to 0 to use DDB's only.
-#define wxUSE_DIB_FOR_BITMAP 0
-
-// Set this to 1 to enable wxDIB
-#define wxUSE_WXDIB 1
 
 // ----------------------------------------------------------------------------
 // common dialogs
@@ -911,7 +913,7 @@
 // Use wxHTML-based help controller?
 #define wxUSE_WXHTML_HELP 1
 
-#define wxUSE_RESOURCES   1
+#define wxUSE_RESOURCES   0
                                 // 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1
                                 // 0 for no window layout constraint system
