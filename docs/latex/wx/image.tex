@@ -332,6 +332,45 @@ Gets the width of the image in pixels.
 
 Returns TRUE if there is a mask active, FALSE otherwise.
 
+\membersection{wxImage::GetOption}\label{wximagegetoption}
+
+\constfunc{wxString}{GetOption}{\param{const wxString\&}{ name}}
+
+Gets a user-defined option. The function is case-insensitive to {\it name}.
+
+For example, when saving as a JPEG file, the option {\bf quality} is
+used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
+
+\wxheading{See also}
+
+\helpref{wxImage::SetOption}{wximagesetoption},\rtfsp
+\helpref{wxImage::GetOptionInt}{wximagegetoptionint},\rtfsp
+\helpref{wxImage::HasOption}{wximagehasoption}
+
+\membersection{wxImage::GetOptionInt}\label{wximagegetoptionint}
+
+\constfunc{int}{GetOptionInt}{\param{const wxString\&}{ name}}
+
+Gets a user-defined option as an integer. The function is case-insensitive to {\it name}.
+
+\wxheading{See also}
+
+\helpref{wxImage::SetOption}{wximagesetoption},\rtfsp
+\helpref{wxImage::GetOption}{wximagegetoption},\rtfsp
+\helpref{wxImage::HasOption}{wximagehasoption}
+
+\membersection{wxImage::HasOption}\label{wximagehasoption}
+
+\constfunc{bool}{HasOption}{\param{const wxString\&}{ name}}
+
+Returns TRUE if the given option is present. The function is case-insensitive to {\it name}.
+
+\wxheading{See also}
+
+\helpref{wxImage::SetOption}{wximagesetoption},\rtfsp
+\helpref{wxImage::GetOption}{wximagegetoption},\rtfsp
+\helpref{wxImage::GetOptionInt}{wximagegetoptionint}
+
 \membersection{wxImage::InitStandardHandlers}
 
 \func{static void}{InitStandardHandlers}{\void}
@@ -596,6 +635,23 @@ Specifies whether there is a mask or not. The area of the mask is determined by 
 \func{void}{SetMaskColour}{\param{unsigned char }{red}, \param{unsigned char }{blue}, \param{unsigned char }{green}}
 
 Sets the mask colour for this image (and tells the image to use the mask).
+
+\membersection{wxImage::SetOption}\label{wximagesetoption}
+
+\func{void}{SetOption}{\param{const wxString\&}{ name}, \param{const wxString\&}{ value}}
+
+\func{void}{SetOption}{\param{const wxString\&}{ name}, \param{int}{ value}}
+
+Sets a user-defined option. The function is case-insensitive to {\it name}.
+
+For example, when saving as a JPEG file, the option {\bf quality} is
+used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
+
+\wxheading{See also}
+
+\helpref{wxImage::GetOption}{wximagegetoption},\rtfsp
+\helpref{wxImage::GetOptionInt}{wximagegetoptionint},\rtfsp
+\helpref{wxImage::HasOption}{wximagehasoption}
 
 \membersection{wxImage::SetRGB}\label{wximagesetrgb}
 

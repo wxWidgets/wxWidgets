@@ -325,6 +325,16 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     cinfo.input_components = 3;
     cinfo.in_color_space = JCS_RGB;
     jpeg_set_defaults(&cinfo);
+
+    // TODO: 3rd parameter is force_baseline, what value should this be?
+    // Code says: "If force_baseline is TRUE, the computed quantization table entries
+    // are limited to 1..255 for JPEG baseline compatibility."
+    // 'Quality' is a number between 0 (terrible) and 100 (very good).
+    // The default (in jcparam.c, jpeg_set_defaults) is 75,
+    // and force_baseline is TRUE.
+    if (image->HasOption(wxT("quality")))
+        jpeg_set_quality(&cinfo, image->GetOptionInt(wxT("quality")), TRUE);
+
     jpeg_start_compress(&cinfo, TRUE);
 
     stride = cinfo.image_width * 3;    /* JSAMPLEs per row in image_buffer */

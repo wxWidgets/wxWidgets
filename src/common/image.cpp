@@ -57,6 +57,9 @@ public:
     unsigned char   m_maskRed,m_maskGreen,m_maskBlue;
     bool            m_ok;
     bool            m_static;
+    wxPalette       m_palette;
+    wxArrayString   m_optionNames;
+    wxArrayString   m_optionValues;
 };
 
 wxImageRefData::wxImageRefData()
@@ -84,7 +87,7 @@ wxList wxImage::sm_handlers;
 
 #define M_IMGDATA ((wxImageRefData *)m_refData)
 
-    IMPLEMENT_DYNAMIC_CLASS(wxImage, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxImage, wxObject)
 
 wxImage::wxImage()
 {
@@ -610,6 +613,80 @@ int wxImage::GetHeight() const
     wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_height;
+}
+
+// Palette functions
+
+bool wxImage::HasPalette() const
+{
+    if (!Ok())
+        return FALSE;
+
+    return M_IMGDATA->m_palette.Ok();
+}
+
+const wxPalette& wxImage::GetPalette() const
+{
+    wxCHECK_MSG( Ok(), wxNullPalette, wxT("invalid image") );
+
+    return M_IMGDATA->m_palette;
+}
+
+void wxImage::SetPalette(const wxPalette& palette)
+{
+    wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    M_IMGDATA->m_palette = palette;
+}
+
+// Option functions (arbitrary name/value mapping)
+void wxImage::SetOption(const wxString& name, const wxString& value)
+{
+    wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    int idx = M_IMGDATA->m_optionNames.Index(name, FALSE);
+    if (idx == wxNOT_FOUND)
+    {
+        M_IMGDATA->m_optionNames.Add(name);
+        M_IMGDATA->m_optionValues.Add(value);
+    }
+    else
+    {
+        M_IMGDATA->m_optionNames[idx] = name;
+        M_IMGDATA->m_optionValues[idx] = value;
+    }
+}
+
+void wxImage::SetOption(const wxString& name, int value)
+{
+    wxString valStr;
+    valStr.Printf(wxT("%d"), value);
+    SetOption(name, valStr);
+}
+
+wxString wxImage::GetOption(const wxString& name) const
+{
+    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid image") );
+
+    int idx = M_IMGDATA->m_optionNames.Index(name, FALSE);
+    if (idx == wxNOT_FOUND)
+        return wxEmptyString;
+    else
+        return M_IMGDATA->m_optionValues[idx];
+}
+
+int wxImage::GetOptionInt(const wxString& name) const
+{
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+
+    return wxAtoi(GetOption(name));
+}
+
+bool wxImage::HasOption(const wxString& name) const
+{
+    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
+
+    return (M_IMGDATA->m_optionNames.Index(name, FALSE) != wxNOT_FOUND);
 }
 
 bool wxImage::LoadFile( const wxString& filename, long type )
