@@ -87,7 +87,7 @@ class WXDLLEXPORT wxClipboard : public wxObject
   char *GetClipboardData(char *format, long *length, long time);
 
   /* Get the clipboard client directly. Will be NULL if clipboard data
-     is a string, or if some other application owns the clipboard. 
+     is a string, or if some other application owns the clipboard.
      This can be useful for shortcutting data translation, if the
      clipboard user can check for a specific client. (This is used
      by the wxMediaEdit class.) */

@@ -3,7 +3,7 @@
 // Purpose:     wxCheckListBox class - a listbox with checkable items
 //              Note: this is an optional class.
 // Author:      AUTHOR
-// Modified by: 
+// Modified by:
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
@@ -30,7 +30,7 @@ public:
   wxCheckListBox(wxWindow *parent, wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 int nStrings = 0, 
+                 int nStrings = 0,
                  const wxString choices[] = NULL,
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
@@ -44,4 +44,4 @@ public:
 };
 
 #endif
-    // _WX_CHECKLST_H_
+   // _WX_CHECKLST_H_

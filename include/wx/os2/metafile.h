@@ -20,6 +20,7 @@
 #endif
 
 #include "wx/setup.h"
+#include "wx/dc.h"
 
 /*
  * Metafile and metafile device context classes - work in Windows 3.1 only
