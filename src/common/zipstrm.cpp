@@ -146,7 +146,7 @@ public:
     void Close() { m_pos = 0; m_lasterror = wxSTREAM_NO_ERROR; }
 
     virtual char Peek() { return wxInputStream::Peek(); }
-    virtual size_t GetSize() const { return m_len; }
+    virtual wxFileOffset GetLength() const { return m_len; }
 
 protected:
     virtual size_t OnSysRead(void *buffer, size_t size);
@@ -1751,7 +1751,7 @@ wxFileOffset wxZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
     {
         case wxFromCurrent : nextpos = seek + pos; break;
         case wxFromStart : nextpos = seek; break;
-        case wxFromEnd : nextpos = GetSize() - 1 + seek; break;
+        case wxFromEnd : nextpos = GetLength() - 1 + seek; break;
         default : nextpos = pos; break; /* just to fool compiler, never happens */
     }
 

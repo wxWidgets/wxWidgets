@@ -150,7 +150,7 @@ public:
     ~TestOutputStream() { delete [] m_data; }
 
     int GetOptions() const { return m_options; }
-    size_t GetSize() const { return m_size; }
+    wxFileOffset GetLength() const { return m_size; }
 
     // gives away the data, this stream is then empty, and can be reused
     void GetData(const char*& data, size_t& size);
@@ -209,7 +209,7 @@ wxFileOffset TestOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 
 wxFileOffset TestOutputStream::OnSysTell() const
 {
-    return (m_options & PipeOut) == 0 ? m_pos : wxInvalidOffset;
+    return (m_options & PipeOut) == 0 ? (wxFileOffset)m_pos : wxInvalidOffset;
 }
 
 size_t TestOutputStream::OnSysWrite(const void *buffer, size_t size)
@@ -282,7 +282,7 @@ public:
     ~TestInputStream() { delete [] m_data; }
 
     void Rewind();
-    size_t GetSize() const { return m_size; }
+    wxFileOffset GetLength() const { return m_size; }
     void SetData(TestOutputStream& out);
 
 private:
@@ -348,7 +348,7 @@ wxFileOffset TestInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 
 wxFileOffset TestInputStream::OnSysTell() const
 {
-    return (m_options & PipeIn) == 0 ? m_pos : wxInvalidOffset;
+    return (m_options & PipeIn) == 0 ? (wxFileOffset)m_pos : wxInvalidOffset;
 }
 
 size_t TestInputStream::OnSysRead(void *buffer, size_t size)
@@ -638,7 +638,7 @@ void ArchiveTestCase<Classes>::runTest()
         CreateArchive(out, m_archiver);
 
     // check archive could be created
-    CPPUNIT_ASSERT(out.GetSize() > 0);
+    CPPUNIT_ASSERT(out.GetLength() > 0);
 
     TestInputStream in(out);
 
@@ -975,8 +975,8 @@ void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in)
             testEntry.GetLength() == entry->GetSize() ||
             ((m_options & PipeIn) != 0 && entry->GetSize() == wxInvalidOffset));
         CPPUNIT_ASSERT_MESSAGE(
-            "arc->GetSize() == entry->GetSize()" + error_context,
-            arc->GetSize() == (size_t)entry->GetSize());
+            "arc->GetLength() == entry->GetSize()" + error_context,
+            arc->GetLength() == entry->GetSize());
 
         if (name.Last() != _T('/'))
         {
@@ -998,8 +998,8 @@ void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in)
         CPPUNIT_ASSERT_MESSAGE("entry size check" + error_context,
             testEntry.GetLength() == entry->GetSize());
         CPPUNIT_ASSERT_MESSAGE(
-            "arc->GetSize() == entry->GetSize()" + error_context,
-            arc->GetSize() == (size_t)entry->GetSize());
+            "arc->GetLength() == entry->GetSize()" + error_context,
+            arc->GetLength() == entry->GetSize());
 
         if ((m_options & PipeIn) == 0) {
             OnEntryExtracted(*entry, testEntry, arc.get());
@@ -1114,7 +1114,7 @@ void ArchiveTestCase<Classes>::VerifyDir(wxString& path, size_t rootlen /*=0*/)
                 CPPUNIT_ASSERT_MESSAGE(
                     "entry not found in archive" + error_entry, in.Ok());
 
-                size = in.GetSize();
+                size = in.GetLength();
                 wxCharBuffer buf(size);
                 CPPUNIT_ASSERT_MESSAGE("Read" + error_context,
                     in.Read(buf.data(), size).LastRead() == size);
