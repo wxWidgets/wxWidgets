@@ -13,7 +13,7 @@
 #define _WX_NETWORK_SOCKET_H
 
 #ifdef __GNUG__
-#pragma interface "socket.h"
+  #pragma interface "socket.h"
 #endif
 
 #include "wx/defs.h"
@@ -25,10 +25,10 @@
 // ---------------------------------------------------------------------------
 
 #ifdef WXPREC
-#  include "wx/wxprec.h"
+  #include "wx/wxprec.h"
 #else
-#  include "wx/event.h"
-#  include "wx/string.h"
+  #include "wx/event.h"
+  #include "wx/string.h"
 #endif
 
 #include "wx/sckaddr.h"
@@ -78,7 +78,6 @@ enum
   wxSOCKET_BLOCK = 4
 };
 
-// Type of socket
 enum wxSocketType
 {
   wxSOCKET_UNINIT,
@@ -91,14 +90,11 @@ enum wxSocketType
 typedef int wxSocketFlags;
 
 
-// old names
-
 #if WXWIN_COMPATIBILITY
-
-typedef wxSocketType wxSockType;
-typedef wxSocketFlags wxSockFlags;
-
+  typedef wxSocketType wxSockType;
+  typedef wxSocketFlags wxSockFlags;
 #endif // WXWIN_COMPATIBILITY
+
 
 // --------------------------------------------------------------------------
 // wxSocketBase
@@ -127,9 +123,9 @@ public:
     SOCK_INTERNAL = wxSOCKET_BASE,
     SOCK_DATAGRAM = wxSOCKET_DATAGRAM
   };
-#endif // WXWIN_COMPATIBILITY
 
   typedef void (*wxSockCbk)(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
+#endif // WXWIN_COMPATIBILITY
 
 public:
 
@@ -168,7 +164,7 @@ public:
   wxSocketBase& Write(const void *buffer, wxUint32 nbytes);
   wxSocketBase& WriteMsg(const void *buffer, wxUint32 nbytes);
 
-  void InterruptAllWaits() { m_interrupt = TRUE; };
+  void InterruptWait() { m_interrupt = TRUE; };
   bool Wait(long seconds = -1, long milliseconds = 0);
   bool WaitForRead(long seconds = -1, long milliseconds = 0);
   bool WaitForWrite(long seconds = -1, long milliseconds = 0);
@@ -185,19 +181,21 @@ public:
   void SetNotify(wxSocketEventFlags flags);
   void Notify(bool notify);
 
-  // callbacks - deprecated, avoid if possible
+  // callbacks are deprecated, use events instead
+#if WXWIN_COMPATIBILITY
   wxSockCbk Callback(wxSockCbk cbk_);
   char *CallbackData(char *data);
+#endif // WXWIN_COMPATIBILITY
 
 
   // Implementation from now on
   // --------------------------
 
-  // do not use, this should be private
-  void OnRequest(wxSocketNotify req_evt);
+  // do not use, should be private
+  void OnRequest(wxSocketNotify notify);
 
   // do not use, not documented nor supported
-  inline bool IsNoWait() const { return ((m_flags & wxSOCKET_NOWAIT) != 0); };
+  inline bool IsNoWait() const { return ((m_flags & wxSOCKET_NOWAIT) != 0); }
   inline wxSocketType GetType() const { return m_type; }
 
 private:
@@ -240,12 +238,14 @@ private:
   int           m_id;               // socket id
   wxEvtHandler *m_handler;          // event handler
   void         *m_clientData;       // client data for events
-  bool          m_notify_state;     // notify events to users?
-  wxSocketEventFlags  m_neededreq;  // event mask
+  bool          m_notify;           // notify events to users?
+  wxSocketEventFlags  m_eventmask;  // which events to notify?
 
-  // callbacks - deprecated, avoid if possible
+  // callbacks are deprecated, use events instead
+#if WXWIN_COMPATIBILITY
   wxSockCbk     m_cbk;              // callback
   char         *m_cdata;            // callback data
+#endif // WXWIN_COMPATIBILITY
 };
 
 

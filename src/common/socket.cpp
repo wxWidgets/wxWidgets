@@ -9,6 +9,10 @@
 // License:    see wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ==========================================================================
+// Declarations
+// ==========================================================================
+
 #ifdef __GNUG__
 #pragma implementation "socket.h"
 #endif
@@ -21,10 +25,6 @@
 #endif
 
 #if wxUSE_SOCKETS
-
-// ==========================================================================
-// Headers and constants
-// ==========================================================================
 
 #include "wx/app.h"
 #include "wx/defs.h"
@@ -44,6 +44,9 @@
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
 
+// --------------------------------------------------------------------------
+// macros and constants
+// --------------------------------------------------------------------------
 
 // discard buffer
 #define MAX_DISCARD_SIZE (10 * 1024)
@@ -55,12 +58,8 @@
   #define PROCESS_EVENTS()
 #endif
 
-// use wxPostEvent or not
-#define USE_DELAYED_EVENTS 1
-
-
 // --------------------------------------------------------------------------
-// ClassInfos
+// wxWin macros
 // --------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxSocketBase, wxObject)
@@ -69,19 +68,25 @@ IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
 IMPLEMENT_CLASS(wxDatagramSocket, wxSocketBase)
 IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
 
+// --------------------------------------------------------------------------
+// private classes
+// --------------------------------------------------------------------------
+
 class wxSocketState : public wxObject
 {
 public:
-  bool                     m_notify_state;
-  wxSocketEventFlags       m_neededreq;
   wxSocketFlags            m_flags;
+  wxSocketEventFlags       m_eventmask;
+  bool                     m_notify;
+  void                    *m_clientData;
+#if WXWIN_COMPATIBILITY
   wxSocketBase::wxSockCbk  m_cbk;
   char                    *m_cdata;
+#endif // WXWIN_COMPATIBILITY
 
 public:
   wxSocketState() : wxObject() {}
 };
-
 
 // ==========================================================================
 // wxSocketBase
@@ -116,10 +121,12 @@ void wxSocketBase::Init()
   m_id           = -1;
   m_handler      = NULL;
   m_clientData   = NULL;
-  m_notify_state = FALSE;
-  m_neededreq    = 0;
+  m_notify       = FALSE;
+  m_eventmask    = 0;
+#if WXWIN_COMPATIBILITY
   m_cbk          = NULL;
   m_cdata        = NULL;
+#endif // WXWIN_COMPATIBILITY
 }
 
 wxSocketBase::wxSocketBase()
@@ -166,9 +173,12 @@ bool wxSocketBase::Destroy()
   // Shutdown and close the socket
   Close();
 
+  // Supress events from now on
+  Notify(FALSE);
+
 #if wxUSE_GUI
-  if ( wxPendingDelete.Member(this) )
-      wxPendingDelete.Append(this);
+  if ( !wxPendingDelete.Member(this) )
+    wxPendingDelete.Append(this);
 #else
   delete this;
 #endif
@@ -176,9 +186,8 @@ bool wxSocketBase::Destroy()
   return TRUE;
 }
 
-
 // --------------------------------------------------------------------------
-// Basic IO operations
+// Basic IO calls
 // --------------------------------------------------------------------------
 
 // The following IO operations update m_error and m_lcount:
@@ -588,7 +597,8 @@ wxSocketBase& wxSocketBase::Discard()
 // timeout elapses. The polling loop calls PROCESS_EVENTS(), so
 // this won't block the GUI.
 
-bool wxSocketBase::_Wait(long seconds, long milliseconds,
+bool wxSocketBase::_Wait(long seconds,
+                         long milliseconds,
                          wxSocketEventFlags flags)
 {
   GSocketEventFlags result;
@@ -607,14 +617,12 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
   else
     timeout = m_timeout * 1000;
 
-  // Active polling (without using events)
+  // Wait in an active polling loop.
   //
-  // NOTE: this duplicates some of the code in OnRequest (lost
-  //   connection and connection establishment handling) but
-  //   this doesn't hurt. It has to be here because the event
-  //   might be a bit delayed, and it has to be in OnRequest
-  //   as well because maybe the Wait functions are not being
-  //   used.
+  // NOTE: We duplicate some of the code in OnRequest, but this doesn't
+  //   hurt. It has to be here because the (GSocket) event might arrive
+  //   a bit delayed, and it has to be in OnRequest as well because we
+  //   don't know whether the Wait functions are being used.
   //
   // Do this at least once (important if timeout == 0, when
   // we are just polling). Also, if just polling, do not yield.
@@ -737,11 +745,14 @@ void wxSocketBase::SaveState()
 
   state = new wxSocketState();
 
-  state->m_notify_state = m_notify_state;
-  state->m_neededreq    = m_neededreq;
-  state->m_flags        = m_flags;
-  state->m_cbk          = m_cbk;
-  state->m_cdata        = m_cdata;
+  state->m_flags      = m_flags;
+  state->m_notify     = m_notify;
+  state->m_eventmask  = m_eventmask;
+  state->m_clientData = m_clientData;
+#if WXWIN_COMPATIBILITY
+  state->m_cbk        = m_cbk;
+  state->m_cdata      = m_cdata;
+#endif // WXWIN_COMPATIBILITY
 
   m_states.Append(state);
 }
@@ -757,11 +768,14 @@ void wxSocketBase::RestoreState()
 
   state = (wxSocketState *)node->Data();
 
-  SetFlags(state->m_flags);
-  m_cbk       = state->m_cbk;
-  m_cdata     = state->m_cdata;
-  m_neededreq = state->m_neededreq;
-  Notify(state->m_notify_state);
+  m_flags      = state->m_flags;
+  m_notify     = state->m_notify;
+  m_eventmask  = state->m_eventmask;
+  m_clientData = state->m_clientData;
+#if WXWIN_COMPATIBILITY
+  m_cbk        = state->m_cbk;
+  m_cdata      = state->m_cdata;
+#endif // WXWIN_COMPATIBILITY
 
   delete node;
   delete state;
@@ -789,6 +803,8 @@ void wxSocketBase::SetFlags(wxSocketFlags flags)
 // Callbacks (now obsolete - use events instead)
 // --------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY
+
 wxSocketBase::wxSockCbk wxSocketBase::Callback(wxSockCbk cbk_)
 {
   wxSockCbk old_cbk = cbk_;
@@ -805,31 +821,47 @@ char *wxSocketBase::CallbackData(char *data)
   return old_data;
 }
 
+#endif // WXWIN_COMPATIBILITY
+
 // --------------------------------------------------------------------------
 // Event handling
 // --------------------------------------------------------------------------
 
-// Callback function from GSocket. All events are internally
-// monitored, but users only get these they are interested in.
+// A note on how events are processed, which is probably the most
+// difficult thing to get working right while keeping the same API
+// and functionality for all platforms.
+//
+// When GSocket detects an event, it calls wx_socket_callback, which in
+// turn just calls wxSocketBase::OnRequest in the corresponding wxSocket
+// object. OnRequest does some housekeeping, and if the event is to be
+// propagated to the user, it creates a new wxSocketEvent object and
+// posts it. The event is not processed immediately, but delayed with
+// AddPendingEvent instead. This is necessary in order to decouple the
+// event processing from wx_socket_callback; otherwise, subsequent IO
+// calls made from the user event handler would fail, as gtk callbacks
+// are not reentrant.
+//
+// Note that, unlike events, user callbacks (now deprecated) are _not_
+// decoupled from wx_socket_callback and thus they suffer from a variety
+// of problems. Avoid them where possible and use events instead.
 
 static void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
-                                           GSocketEvent notify,
+                                           GSocketEvent notification,
                                            char *cdata)
 {
   wxSocketBase *sckobj = (wxSocketBase *)cdata;
 
-  sckobj->OnRequest((wxSocketNotify) notify);
+  sckobj->OnRequest((wxSocketNotify) notification);
 }
 
-
-void wxSocketBase::OnRequest(wxSocketNotify req_evt)
+void wxSocketBase::OnRequest(wxSocketNotify notification)
 {
-  // This duplicates some code in _Wait, but this doesn't
-  // hurt. It has to be here because we don't know whether
-  // the Wait functions will be used, and it has to be in
-  // _Wait as well because the event might be a bit delayed.
+  // NOTE: We duplicate some of the code in _Wait, but this doesn't
+  //   hurt. It has to be here because the (GSocket) event might arrive
+  //   a bit delayed, and it has to be in _Wait as well because we don't
+  //   know whether the Wait functions are being used.
 
-  switch(req_evt)
+  switch(notification)
   {
     case wxSOCKET_CONNECTION:
       m_establishing = FALSE;
@@ -862,7 +894,7 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
   // Schedule the event
 
   wxSocketEventFlags flag = -1;
-  switch (req_evt)
+  switch (notification)
   {
     case GSOCK_INPUT:      flag = GSOCK_INPUT_FLAG; break;
     case GSOCK_OUTPUT:     flag = GSOCK_OUTPUT_FLAG; break;
@@ -870,34 +902,33 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
     case GSOCK_LOST:       flag = GSOCK_LOST_FLAG; break;
   }
 
-  if (((m_neededreq & flag) == flag) && m_notify_state)
+  if (((m_eventmask & flag) == flag) && m_notify)
   {
-    wxSocketEvent event(m_id);
-
-    event.m_event      = req_evt;
-    event.m_clientData = m_clientData;
-    event.SetEventObject(this);
-
     if (m_handler)
-#if USE_DELAYED_EVENTS
-      m_handler->AddPendingEvent(event);
-#else
-      m_handler->ProcessEvent(event);
-#endif
+    {
+      wxSocketEvent event(m_id);
+      event.m_event      = notification;
+      event.m_clientData = m_clientData;
+      event.SetEventObject(this);
 
+      m_handler->AddPendingEvent(event);
+    }
+
+#if WXWIN_COMPATIBILITY
     if (m_cbk)
-      m_cbk(*this, req_evt, m_cdata);
+      m_cbk(*this, notification, m_cdata);
+#endif // WXWIN_COMPATIBILITY
   }
 }
 
 void wxSocketBase::Notify(bool notify)
 {
-  m_notify_state = notify;
+  m_notify = notify;
 }
 
 void wxSocketBase::SetNotify(wxSocketEventFlags flags)
 {
-  m_neededreq = flags;
+  m_eventmask = flags;
 }
 
 void wxSocketBase::SetEventHandler(wxEvtHandler& handler, int id)
@@ -905,7 +936,6 @@ void wxSocketBase::SetEventHandler(wxEvtHandler& handler, int id)
   m_handler = &handler;
   m_id      = id;
 }
-
 
 // --------------------------------------------------------------------------
 // Pushback buffer
@@ -1201,12 +1231,11 @@ void wxSocketEvent::CopyObject(wxObject& object_dest) const
   event->m_clientData = m_clientData;
 }
 
-
 // ==========================================================================
 // wxSocketModule
 // ==========================================================================
 
-class WXDLLEXPORT wxSocketModule: public wxModule
+class WXDLLEXPORT wxSocketModule : public wxModule
 {
   DECLARE_DYNAMIC_CLASS(wxSocketModule)
 
