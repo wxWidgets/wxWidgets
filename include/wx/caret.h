@@ -19,10 +19,16 @@
 class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxWindowBase;
 
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// headers we have to include
+// ----------------------------------------------------------------------------
+
+#include "wx/gdicmn.h"  // for wxPoint, wxSize
+
+// ----------------------------------------------------------------------------
 // A caret is a blinking cursor showing the position where the typed text will
 // appear. It can be either a solid block or a custom bitmap (TODO)
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxCaretBase
 {
@@ -62,6 +68,9 @@ public:
 
         // is the caret valid?
     bool IsOk() const { return m_width != 0 && m_height != 0; }
+
+        // is the caret currently shown?
+    bool IsVisible() const { return m_countVisible > 0; }
 
         // get the caret position
     void GetPosition(int *x, int *y) const
@@ -167,11 +176,10 @@ private:
 // now include the real thing
 // ---------------------------------------------------------------------------
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__)
     #include "wx/msw/caret.h"
 #else
-    // not implemented yet
-    typedef wxCaretBase wxCaret;
+    #include "wx/generic/caret.h"
 #endif // platform
 
 #endif // _WX_CARET_H_BASE_
