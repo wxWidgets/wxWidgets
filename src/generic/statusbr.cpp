@@ -127,6 +127,17 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 
     m_statusStrings[number] = text;
 
+#ifdef __WXMAC__
+    int major,minor;
+    wxGetOsVersion( &major, &minor );
+    
+    if (major >= 10)
+    {
+        Refresh();
+        return;
+    }
+#endif
+
     wxRect rect;
     GetFieldRect(number, rect);
     wxClientDC dc(this);
