@@ -110,7 +110,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
 
     statusBar = new wxStatusBar(this, id,
         style, name);
-    statusBar->SetSize( 100 , 15 ) ;
+    statusBar->SetSize( 100 , WX_MAC_STATUSBAR_HEIGHT ) ;
     statusBar->SetFieldsCount(number);
     return statusBar;
 }
@@ -121,12 +121,10 @@ void wxFrame::PositionStatusBar()
     {
         int w, h;
         GetClientSize(&w, &h);
-        int sw, sh;
-        m_frameStatusBar->GetSize(&sw, &sh);
         
         // Since we wish the status bar to be directly under the client area,
         // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
-        m_frameStatusBar->SetSize(0, h, w, sh);
+        m_frameStatusBar->SetSize(0, h, w, WX_MAC_STATUSBAR_HEIGHT);
     }
 }
 
@@ -228,9 +226,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 #if wxUSE_STATUSBAR
     if ( GetStatusBar() && y )
     {
-        int statusX, statusY;
-        GetStatusBar()->GetSize(&statusX, &statusY);
-        if ( y) *y -= statusY;
+        if ( y) *y -= WX_MAC_STATUSBAR_HEIGHT;
     }
 #endif // wxUSE_STATUSBAR
     
