@@ -19,6 +19,8 @@
 class WXDLLEXPORT wxStaticText : public wxStaticTextBase
 {
 public:
+    wxStaticText() { }
+
     // usual ctor
     wxStaticText(wxWindow *parent,
                  const wxString& label,
