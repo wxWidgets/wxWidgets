@@ -70,8 +70,6 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
-    void OnPaint(wxPaintEvent& event);
-
 private:
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
@@ -191,4 +189,3 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
     wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
 }
-

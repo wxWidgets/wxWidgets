@@ -342,11 +342,15 @@ WXDLLEXPORT void wxRedirectIOToConsole();
 // Display and colorss (X only)
 // ----------------------------------------------------------------------------
 
+#ifdef __WXGTK__
+    void *wxGetDisplay();
+#endif
+
 #ifdef __X__
     WXDisplay *wxGetDisplay();
     bool wxSetDisplay(const wxString& display_name);
     wxString wxGetDisplayName();
-#endif
+#endif // X or GTK+
 
 #ifdef __X__
 

@@ -22,7 +22,7 @@
 // fonts with given attributes
 // ----------------------------------------------------------------------------
 
-class wxFontEnumerator
+class WXDLLEXPORT wxFontEnumerator
 {
 public:
     // start enumerating font families - will result in OnFontFamily() being

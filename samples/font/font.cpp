@@ -86,6 +86,7 @@ public:
         { DoEnumerateFamilies(FALSE); }
     void OnEnumerateFixedFamilies(wxCommandEvent& WXUNUSED(event))
         { DoEnumerateFamilies(TRUE); }
+    void OnEnumerateEncodings(wxCommandEvent& event);
 
 protected:
     void DoEnumerateFamilies(bool fixedWidthOnly);
@@ -129,6 +130,7 @@ enum
     Font_Create,
     Font_EnumFamilies,
     Font_EnumFixedFamilies,
+    Font_EnumEncodings,
     Font_Max
 };
 
@@ -146,6 +148,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Create, MyFrame::OnCreateFont)
     EVT_MENU(Font_EnumFamilies, MyFrame::OnEnumerateFamilies)
     EVT_MENU(Font_EnumFixedFamilies, MyFrame::OnEnumerateFixedFamilies)
+    EVT_MENU(Font_EnumEncodings, MyFrame::OnEnumerateEncodings)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -201,9 +204,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->Append(Font_Create, "&Create font...\tCtrl-C",
                      "Create a custom font");
     menuFont->AppendSeparator();
-    menuFont->Append(Font_EnumFamilies, "&Enumerate font families\tCtrl-E");
+    menuFont->Append(Font_EnumFamilies, "Enumerate font &families\tCtrl-F");
     menuFont->Append(Font_EnumFixedFamilies,
-                     "&Enumerate fixed font families\tCtrl-F");
+                     "Enumerate f&ixed font families\tCtrl-I");
+    menuFont->Append(Font_EnumEncodings,
+                     "Enumerate &encodings\tCtrl-E");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -222,6 +227,38 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 
 // event handlers
+void MyFrame::OnEnumerateEncodings(wxCommandEvent& WXUNUSED(event))
+{
+    class MyEncodingEnumerator : public wxFontEnumerator
+    {
+    public:
+        MyEncodingEnumerator() { m_n = 0; }
+
+        const wxString& GetText() const { return m_text; }
+
+    protected:
+        virtual bool OnFontEncoding(const wxString& family,
+                                    const wxString& encoding)
+        {
+            wxString text;
+            text.Printf("Encoding %d: %s (available in family '%s')\n",
+                         ++m_n, encoding.c_str(), family.c_str());
+            m_text += text;
+
+            return TRUE;
+        }
+
+    private:
+        size_t m_n;
+
+        wxString m_text;
+    } fontEnumerator;
+
+    fontEnumerator.EnumerateEncodings();
+
+    wxLogMessage("Enumerating all available encodings:\n%s",
+                 fontEnumerator.GetText().c_str());
+}
 
 void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly)
 {
@@ -230,21 +267,29 @@ void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly)
     public:
         MyFontEnumerator() { m_n = 0; }
 
+        const wxString& GetText() const { return m_text; }
+
     protected:
         virtual bool OnFontFamily(const wxString& family)
         {
-            wxLogMessage("Font family %d: %s\n", ++m_n, family.c_str());
+            wxString text;
+            text.Printf("Font family %d: %s\n", ++m_n, family.c_str());
+            m_text += text;
 
             return TRUE;
         }
 
     private:
         size_t m_n;
+
+        wxString m_text;
     } fontEnumerator;
 
-    wxLogMessage("Enumerating %s font families:",
-                 fixedWidthOnly ? "fixed width" : "all");
     fontEnumerator.EnumerateFamilies(fixedWidthOnly);
+
+    wxLogMessage("Enumerating %s font families:\n%s",
+                 fixedWidthOnly ? "fixed width" : "all",
+                 fontEnumerator.GetText().c_str());
 }
 
 void MyFrame::OnCreateFont(wxCommandEvent& WXUNUSED(event))

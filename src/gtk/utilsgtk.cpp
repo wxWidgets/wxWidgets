@@ -69,6 +69,11 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 // display characterstics
 // ----------------------------------------------------------------------------
 
+void *wxGetDisplay()
+{
+    return gdk_display;
+}
+
 void wxDisplaySize( int *width, int *height )
 {
     if (width) *width = gdk_screen_width();

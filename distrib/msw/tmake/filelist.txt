@@ -284,6 +284,7 @@ xpmhand.cpp	M
 gsocket.c	M	S
 
 dialup.cpp	U
+fontenum.cpp	U
 threadpsx.cpp	U
 utilsunx.cpp	U	B
 gsocket.c	U
@@ -371,7 +372,6 @@ dcscreen.cpp	X
 dialog.cpp	X
 filedlg.cpp	X
 font.cpp	X
-fontenum.cpp	X
 frame.cpp	X
 gauge.cpp	X
 gdiobj.cpp	X
