@@ -109,7 +109,7 @@ public:
         ScaleY = sy;
     }
 
-    int GetCustomScale( float* sx, float* sy ) const
+    void GetCustomScale( float* sx, float* sy ) const
     {
         *sx = ScaleX;
         *sy = ScaleY;
