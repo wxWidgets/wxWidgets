@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/app.h"
-#include "wx/statline.h"
+#include "wx/slider.h"
 
 #import <AppKit/NSView.h>
 

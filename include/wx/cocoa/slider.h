@@ -33,7 +33,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxSL_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxStaticTextNameStr)
+            const wxString& name = wxSliderNameStr)
     {
         Create(parent, winid, value, minValue, maxValue,
             pos, size, style, validator, name);
@@ -45,7 +45,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxSL_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxStaticTextNameStr);
+            const wxString& name = wxSliderNameStr);
     virtual ~wxSlider();
 
 // ------------------------------------------------------------------------
