@@ -749,6 +749,11 @@ void wxFrameLayout::SetBarState( cbBarInfo* pBar, int newState, bool updateNow )
         }
     }
 
+    if ( pBar->mDimInfo.GetDimHandler() )
+    {
+        pBar->mDimInfo.GetDimHandler()->OnChangeBarState( pBar, newState );
+    }
+
     pBar->mState = newState;
 
     DoSetBarState( pBar );
