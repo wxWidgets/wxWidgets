@@ -145,7 +145,12 @@ Source: "wxPython\tools\XRCed\*.xrc";       DestDir: "{app}\wxPython\tools\XRCed
 Source: "wxPython\tools\XRCed\*.ico";       DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "wxPython\tools\XRCed\*.sh";        DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 
-;; Where to put the scripts on Win32???
+Source: "scripts\*.bat";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\*.py";                     DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\img2png";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\img2py";                   DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\img2xpm";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\xrced";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 
 Source: "samples\doodle\*.py";              DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wxPython\samples\doodle"; Components: samples
@@ -180,6 +185,13 @@ Source: "samples\embedded\*.xpm";          DestDir: "{app}\wxPython\samples\embe
 
 ;;------------------------------------------------------------
 
+[Run]
+;; Recreate the tool scripts to use the paths on the users machine
+Filename: "{code:GetPythonDir}\python.exe";  Parameters: "CreateBatchFiles.py";  WorkingDir: "{code:GetPythonDir}\Scripts";  Components: tools
+
+
+;;------------------------------------------------------------
+
 [Icons]
 Name: "{group}\Run the DEMO";          Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "{app}\wxPython\demo";   Parameters: "demo.py"; IconFilename: "{app}\wxPython\demo\wxpdemo.ico"; Components: core
 Name: "{group}\PyCrust";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{app}\wxPython\lib\PyCrust\PyCrustApp.py";  IconFilename: "{app}\wxPython\lib\PyCrust\PyCrust.ico"; Components: core
@@ -206,6 +218,10 @@ Type: files; Name: "{app}\wxPython\lib\mixins\*.pyc";
 Type: files; Name: "{app}\wxPython\lib\mixins\*.pyo";
 Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyc";
 Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyo";
+Type: files; Name: "{app}\wxPython\tools\*.pyc";
+Type: files; Name: "{app}\wxPython\tools\*.pyo";
+Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyc";
+Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyo";
 Type: files; Name: "{app}\wxPython\demo\*.pyc";
 Type: files; Name: "{app}\wxPython\demo\*.pyo";
 Type: files; Name: "{app}\wxPython\demo\data\showTips";

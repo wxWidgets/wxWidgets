@@ -7,9 +7,7 @@ files...
 """
 
 import sys, string
-sys.path.insert(0, "../tools")
-
-import img2py
+from wxPython.tools import img2py
 
 
 command_lines = [

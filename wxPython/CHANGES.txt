@@ -139,7 +139,7 @@ other menu stuff.
 
 Added wxIEHtmlWin.  This is essentially the same as using IE with the
 ActiveXWrapper already in the library, but it is implemented all in
-C++ and therefore does not need any of the modules from win32 all and
+C++ and therefore does not need any of the modules from win32all and
 so it is less fragile in the face of changes.
 
 Fixed the ActiveXWrapper problem.  Looks like when the win32com
@@ -156,7 +156,9 @@ Changed the wxDateTime.Parse* methods to return an int that will be -1
 on failure, and the index where parsing stopped otherwise.
 
 Moved tools to be a Python package in wxPython.tools, added scripts to
-import and launch each tool.
+import and launch each tool.  This will let you import and use the
+tools in your own scripts or apps as needed.
+
 
 
 
