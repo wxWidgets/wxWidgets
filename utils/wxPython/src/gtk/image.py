@@ -35,9 +35,8 @@ class wxImageHandlerPtr :
     def __repr__(self):
         return "<C wxImageHandler instance at %s>" % (self.this,)
 class wxImageHandler(wxImageHandlerPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(imagec.new_wxImageHandler,_args,_kwargs)
-        self.thisown = 1
+    def __init__(self,this):
+        self.this = this
 
 
 

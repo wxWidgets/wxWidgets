@@ -310,6 +310,8 @@ enum {
     wxSP_NOBORDER,
     wxSP_3D,
     wxSP_BORDER,
+    wxSP_LIVE_UPDATE,
+    wxSP_PERMIT_UNSPLIT,
     wxFLOOD_SURFACE,
     wxFLOOD_BORDER,
     wxODDEVEN_RULE,

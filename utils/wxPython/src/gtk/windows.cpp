@@ -3087,6 +3087,33 @@ static PyObject *_wrap_wxWindow_SetAutoLayout(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxWindow_GetAutoLayout(_swigobj)  (_swigobj->GetAutoLayout())
+static PyObject *_wrap_wxWindow_GetAutoLayout(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetAutoLayout",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetAutoLayout. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxWindow_GetAutoLayout(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxWindow_SetBackgroundColour(_swigobj,_swigarg0)  (_swigobj->SetBackgroundColour(_swigarg0))
 static PyObject *_wrap_wxWindow_SetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7145,6 +7172,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_UnsetConstraints", (PyCFunction) _wrap_wxWindow_UnsetConstraints, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetConstraints", (PyCFunction) _wrap_wxWindow_SetConstraints, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetBackgroundColour", (PyCFunction) _wrap_wxWindow_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetAutoLayout", (PyCFunction) _wrap_wxWindow_GetAutoLayout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetAutoLayout", (PyCFunction) _wrap_wxWindow_SetAutoLayout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetAcceleratorTable", (PyCFunction) _wrap_wxWindow_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ScrollWindow", (PyCFunction) _wrap_wxWindow_ScrollWindow, METH_VARARGS | METH_KEYWORDS },

@@ -32,7 +32,7 @@
 
 class wxImageHandler {
 public:
-    wxImageHandler();
+    // wxImageHandler();    Abstract Base Class
     wxString GetName();
     wxString GetExtension();
     long GetType();

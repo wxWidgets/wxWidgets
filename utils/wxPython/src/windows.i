@@ -252,6 +252,7 @@ public:
     void ScrollWindow(int dx, int dy, const wxRect* rect = NULL);
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
     void SetAutoLayout(bool autoLayout);
+    bool GetAutoLayout();
     void SetBackgroundColour(const wxColour& colour);
     void SetConstraints(wxLayoutConstraints *constraints);
     void UnsetConstraints(wxLayoutConstraints *constraints);

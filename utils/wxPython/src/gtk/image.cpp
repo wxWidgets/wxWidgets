@@ -303,31 +303,6 @@ static PyObject *_wrap_wxInitAllImageHandlers(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define new_wxImageHandler() (new wxImageHandler())
-static PyObject *_wrap_new_wxImageHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxImageHandler * _result;
-    char *_kwnames[] = {  NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxImageHandler",_kwnames)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxImageHandler *)new_wxImageHandler();
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxImageHandler_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
 #define wxImageHandler_GetName(_swigobj)  (_swigobj->GetName())
 static PyObject *_wrap_wxImageHandler_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1679,7 +1654,6 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImageHandler_GetType", (PyCFunction) _wrap_wxImageHandler_GetType, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageHandler_GetExtension", (PyCFunction) _wrap_wxImageHandler_GetExtension, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageHandler_GetName", (PyCFunction) _wrap_wxImageHandler_GetName, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxImageHandler", (PyCFunction) _wrap_new_wxImageHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxInitAllImageHandlers", (PyCFunction) _wrap_wxInitAllImageHandlers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_AddHandler", (PyCFunction) _wrap_wxImage_AddHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromBitmap", (PyCFunction) _wrap_wxImageFromBitmap, METH_VARARGS | METH_KEYWORDS },

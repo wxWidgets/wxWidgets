@@ -328,6 +328,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetAutoLayout(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetAutoLayout,(self,) + _args, _kwargs)
         return val
+    def GetAutoLayout(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetAutoLayout,(self,) + _args, _kwargs)
+        return val
     def SetBackgroundColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetBackgroundColour,(self,) + _args, _kwargs)
         return val
