@@ -43,6 +43,7 @@ All (GUI):
 - polygon support in wxRegion (Klaas Holwerda)
 - wxStreamToTextRedirector to allow easily redirect cout to wxTextCtrl added
 - fixed bug with using wxExecute() to capture huge amounts of output
+- new wxCalendarCtrl styles added (Søren Erland Vestø)
 - wxDirSelector() added (Paul A. Thiessen)
 
 wxHTML:
