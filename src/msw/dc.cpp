@@ -44,6 +44,7 @@
 #include "wx/dcprint.h"
 #include "wx/module.h"
 #include "wx/dynload.h"
+#include "wx/rawbmp.h"
 
 #include <string.h>
 #include <math.h>
@@ -56,6 +57,10 @@
 
 #ifndef __WIN32__
     #include <print.h>
+#endif
+
+#ifndef AC_SRC_ALPHA
+#define AC_SRC_ALPHA 1
 #endif
 
 /* Quaternary raster codes */
@@ -108,6 +113,10 @@ static const int MM_METRIC = 10;
 
 // convert degrees to radians
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+
+// our (limited) AlphaBlend() replacement
+static void
+wxAlphaBlend(wxDC& dc, int x, int y, int w, int h, const wxBitmap& bmp);
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -983,10 +992,6 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             MemoryHDC hdcMem;
             SelectInHDC select(hdcMem, GetHbitmapOf(bmp));
 
-#ifndef AC_SRC_ALPHA
-    #define AC_SRC_ALPHA 1
-#endif
-
             BLENDFUNCTION bf;
             bf.BlendOp = AC_SRC_OVER;
             bf.BlendFlags = 0;
@@ -999,10 +1004,13 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             {
                 wxLogLastError(_T("AlphaBlend"));
             }
-
-            return;
         }
-        //else: AlphaBlend() not available
+        else // use our own (probably much slower) implementation
+        {
+            wxAlphaBlend(*this, x, y, width, height, bmp);
+        }
+
+        return;
     }
 #endif // defined(AC_SRC_OVER)
 
@@ -2146,6 +2154,10 @@ void wxDC::SetLogicalScale(double x, double y)
     m_logicalScaleY = y;
 }
 
+// ----------------------------------------------------------------------------
+// DC caching
+// ----------------------------------------------------------------------------
+
 #if wxUSE_DC_CACHEING
 
 /*
@@ -2281,6 +2293,61 @@ private:
 
 IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 
-#endif
-    // wxUSE_DC_CACHEING
+#endif // wxUSE_DC_CACHEING
+
+// ----------------------------------------------------------------------------
+// wxAlphaBlend: our fallback if ::AlphaBlend() is unavailable
+// ----------------------------------------------------------------------------
+
+static void
+wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
+{
+    // get the destination DC pixels
+    wxBitmap bmpDst(w, h, 32);
+    MemoryHDC hdcMem;
+    SelectInHDC select(hdcMem, GetHbitmapOf(bmpDst));
+
+    if ( !::BitBlt(hdcMem, 0, 0, w, h, GetHdcOf(dc), 0, 0, SRCCOPY) )
+    {
+        wxLogLastError(_T("BitBlt"));
+    }
+
+    // combine them with the source bitmap using alpha
+    wxRawBitmapData dataDst(bmpDst),
+                    dataSrc(bmpSrc);
+
+    wxRawBitmapIterator pDst(dataDst),
+                        pSrc(dataSrc);
+
+    for ( int y = 0; y < h; y++ )
+    {
+        wxRawBitmapIterator pDstRowStart = pDst,
+                            pSrcRowStart = pSrc;
+
+        for ( int x = 0; x < w; x++ )
+        {
+            // note that source bitmap uses premultiplied alpha (as required by
+            // the real AlphaBlend)
+            const unsigned beta = 255 - pSrc.Alpha();
+
+            pDst.Red() = pSrc.Red() + (beta * pDst.Red() + 127) / 255;
+            pDst.Blue() = pSrc.Blue() + (beta * pDst.Blue() + 127) / 255;
+            pDst.Green() = pSrc.Green() + (beta * pDst.Green() + 127) / 255;
+
+            ++pDst;
+            ++pSrc;
+        }
+
+        pDst = pDstRowStart;
+        pSrc = pSrcRowStart;
+        pDst.OffsetY(1);
+        pSrc.OffsetY(1);
+    }
+
+    // and finally blit them back to the destination DC
+    if ( !::BitBlt(GetHdcOf(dc), xDst, yDst, w, h, hdcMem, 0, 0, SRCCOPY) )
+    {
+        wxLogLastError(_T("BitBlt"));
+    }
+}
 
