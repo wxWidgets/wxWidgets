@@ -129,11 +129,12 @@ private:
     wxCoord m_maxWidth,
             m_maxHeight;
     
-    // the current tool or NULL
+    // the tool over which the mouse currently is or NULL
     wxToolBarToolBase *m_toolCurrent;
 
-    // the currently pressed tool or NULL
-    wxToolBarToolBase *m_toolPressed;
+    // the tool which currently has the mouse capture (i.e. the one user is
+    // pressing) or NULL
+    wxToolBarTool *m_toolPressed;
 
     DECLARE_DYNAMIC_CLASS(wxToolBar)
 };

@@ -67,12 +67,30 @@ public:
         // no position yet
         m_x =
         m_y = -1;
+
+        // not pressed yet
+        m_isInverted = FALSE;
     }
+
+    // is this tool pressed, even temporarily? (this is different from being
+    // permanently toggled which is what IsToggled() returns)
+    bool IsPressed() const
+        { return CanBeToggled() ? IsToggled() != m_isInverted : m_isInverted; }
+
+    // are we temporarily pressed/unpressed?
+    bool IsInverted() const { return m_isInverted; }
+
+    // press the tool temporarily by inverting its toggle state
+    void Invert() { m_isInverted = !m_isInverted; }
 
 public:
     // the tool position (the size is known by the toolbar itself)
     int m_x,
         m_y;
+
+private:
+    // TRUE if the tool is pressed
+    bool m_isInverted;
 };
 
 // ============================================================================
@@ -96,7 +114,7 @@ void wxToolBar::Init()
     m_maxWidth =
     m_maxHeight = 0;
 
-    m_toolPressed =
+    m_toolPressed = NULL;
     m_toolCurrent = NULL;
 
     wxRenderer *renderer = GetRenderer();
@@ -467,7 +485,10 @@ void wxToolBar::DoDraw(wxControlRenderer *renderer)
             flags |= wxCONTROL_DISABLED;
         }
 
-        if ( tool->IsToggled() )
+        if ( tool == m_toolPressed )
+            flags |= wxCONTROL_FOCUSED;
+
+        if ( ((wxToolBarTool *)tool)->IsPressed() )
             flags |= wxCONTROL_PRESSED;
 
         wxString label;
@@ -491,43 +512,35 @@ void wxToolBar::Press()
 {
     wxCHECK_RET( m_toolCurrent, _T("no tool to press?") );
 
-    m_toolPressed = m_toolCurrent;
-    if ( !m_toolPressed->IsToggled() )
-    {
-        m_toolPressed->Toggle(TRUE);
+    // this is the tool whose state is going to change
+    m_toolPressed = (wxToolBarTool *)m_toolCurrent;
 
-        RefreshTool(m_toolPressed);
-    }
+    // we must toggle it regardless of whether it is a checkable tool or not,
+    // so use Invert() and not Toggle() here
+    m_toolPressed->Invert();
+
+    RefreshTool(m_toolPressed);
 }
 
 void wxToolBar::Release()
 {
     wxCHECK_RET( m_toolPressed, _T("no tool to release?") );
 
-    if ( m_toolPressed->IsToggled() )
-    {
-        m_toolPressed->Toggle(FALSE);
+    wxASSERT_MSG( m_toolPressed->IsInverted(), _T("release unpressed button?") );
 
-        RefreshTool(m_toolPressed);
+    m_toolPressed->Invert();
 
-        m_toolPressed = NULL;
-    }
+    RefreshTool(m_toolPressed);
+
+    // we're going to lose the mouse capture
+    m_toolPressed = NULL;
 }
 
 void wxToolBar::Toggle()
 {
-    wxCHECK_RET( m_toolPressed, _T("no tool to toggle?") );
-
-    // the togglable tools should keep their state when the mouse is released
-    if ( !m_toolPressed->CanBeToggled() )
-    {
-        m_toolPressed->Toggle();
-    }
-
-    RefreshTool(m_toolPressed);
-
     m_toolCurrent = m_toolPressed;
-    m_toolPressed = NULL;
+
+    Release();
 
     Click();
 }
@@ -536,7 +549,21 @@ void wxToolBar::Click()
 {
     wxCHECK_RET( m_toolCurrent, _T("no tool to click?") );
 
-    OnLeftClick(m_toolCurrent->GetId(), m_toolCurrent->IsToggled());
+    bool isToggled;
+    if ( m_toolCurrent->CanBeToggled() )
+    {
+        m_toolCurrent->Toggle();
+
+        RefreshTool(m_toolCurrent);
+
+        isToggled = m_toolCurrent->IsToggled();
+    }
+    else // simple non-checkable tool
+    {
+        isToggled = FALSE;
+    }
+
+    OnLeftClick(m_toolCurrent->GetId(), isToggled);
 }
 
 bool wxToolBar::PerformAction(const wxControlAction& action,

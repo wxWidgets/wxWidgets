@@ -74,9 +74,7 @@ bool wxToolBarToolBase::Enable(bool enable)
 
 bool wxToolBarToolBase::Toggle(bool toggle)
 {
-    // wxUniv toolbar toggles even non-checkable tools temporarily - should we
-    // change the code there or just allow doing it?
-    //wxASSERT_MSG( m_isToggle, _T("can't toggle this tool") );
+    wxASSERT_MSG( m_isToggle, _T("can't toggle this tool") );
 
     if ( m_toggled == toggle )
         return FALSE;
