@@ -55,6 +55,11 @@
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
 
+#if !wxUSE_TOGGLEBTN
+    #define wxToggleButton wxCheckBox
+    #define EVT_TOGGLEBUTTON EVT_CHECKBOX
+#endif
+
 //----------------------------------------------------------------------
 // class definitions
 //----------------------------------------------------------------------
@@ -113,6 +118,7 @@ public:
     void OnChangeColour(wxCommandEvent& event);
     void OnTestButton(wxCommandEvent& event);
     void OnBmpButton(wxCommandEvent& event);
+    void OnBmpButtonToggle(wxCommandEvent& event);
 
     void OnSizerCheck (wxCommandEvent &event);
 
@@ -423,6 +429,7 @@ const int  ID_SPINCTRL          = 185;
 const int  ID_BUTTON_TEST1      = 190;
 const int  ID_BUTTON_TEST2      = 191;
 const int  ID_BITMAP_BTN        = 192;
+const int  ID_BITMAP_BTN_ENABLE = 193;
 
 const int  ID_CHANGE_COLOUR     = 200;
 
@@ -494,15 +501,12 @@ EVT_SPIN_UP   (ID_SPINCTRL,             MyPanel::OnSpinCtrlUp)
 EVT_SPIN_DOWN (ID_SPINCTRL,             MyPanel::OnSpinCtrlDown)
 EVT_TEXT      (ID_SPINCTRL,             MyPanel::OnSpinCtrlText)
 #endif // wxUSE_SPINCTRL
-#if wxUSE_TOGGLEBTN
 EVT_TOGGLEBUTTON(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
-#else
-EVT_CHECKBOX(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
-#endif // wxUSE_TOGGLEBTN
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
 EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BITMAP_BTN,           MyPanel::OnBmpButton)
+EVT_TOGGLEBUTTON(ID_BITMAP_BTN_ENABLE,  MyPanel::OnBmpButtonToggle)
 
 EVT_CHECKBOX  (ID_SIZER_CHECK1,         MyPanel::OnSizerCheck)
 EVT_CHECKBOX  (ID_SIZER_CHECK2,         MyPanel::OnSizerCheck)
@@ -788,8 +792,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_gaugeVert = new wxGauge( panel, wxID_ANY, 100,
                                wxPoint(195,35), wxSize(30, 90),
                                wxGA_VERTICAL | wxGA_SMOOTH | wxNO_BORDER );
-    m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,wxDefaultCoord),
-                             wxSL_AUTOTICKS | wxSL_LABELS );
+    m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200,
+                             wxPoint(18,85), wxSize(155,wxDefaultCoord),
+                             wxSL_AUTOTICKS | wxSL_LABELS);
     m_slider->SetTickFreq(40, 0);
 #if wxUSE_TOOLTIPS
     m_slider->SetToolTip(_T("This is a sliding slider"));
@@ -863,6 +868,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     dc.SelectObject( wxNullBitmap );
 
     (void)new wxBitmapButton(panel, ID_BITMAP_BTN, bitmap, wxPoint(100, 20));
+    (void)new wxToggleButton(panel, ID_BITMAP_BTN_ENABLE,
+                             _T("Enable/disable &bitmap"), wxPoint(100, 140));
 
 #if defined(__WXMSW__) || defined(__WXMOTIF__)
     // test for masked bitmap display
@@ -871,7 +878,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     {
        bitmap.SetMask(new wxMask(bitmap, *wxBLUE));
 
-       (void)new wxStaticBitmap /* wxBitmapButton */ (panel, wxID_ANY, bitmap, wxPoint(300, 120));
+       (void)new wxStaticBitmap(panel, wxID_ANY, bitmap, wxPoint(300, 120));
     }
 #endif
 
@@ -888,13 +895,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     bmpBtn->SetBitmapSelected(bmp2);
     bmpBtn->SetBitmapFocus(bmp3);
 
-#if wxUSE_TOGGLEBTN
     (void)new wxToggleButton(panel, ID_BUTTON_LABEL,
                              _T("&Toggle label"), wxPoint(250, 20));
-#else
-    (void)new wxCheckBox(panel, ID_BUTTON_LABEL,
-                         _T("&Toggle label"), wxPoint(250, 20));
-#endif // wxUSE_TOGGLEBTN
 
     m_label = new wxStaticText(panel, wxID_ANY, _T("Label with some long text"),
                                wxPoint(250, 60), wxDefaultSize,
@@ -1011,6 +1013,11 @@ void MyPanel::OnTestButton(wxCommandEvent& event)
 void MyPanel::OnBmpButton(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Bitmap button clicked."));
+}
+
+void MyPanel::OnBmpButtonToggle(wxCommandEvent& event)
+{
+    FindWindow(ID_BITMAP_BTN)->Enable(!event.IsChecked());
 }
 
 void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
