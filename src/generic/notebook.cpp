@@ -52,7 +52,7 @@ BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_MOUSE_EVENTS(wxNotebook::OnMouseEvent)
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
-    EVT_IDLE(wxNotebook::OnIdle)
+//    EVT_IDLE(wxNotebook::OnIdle)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
@@ -108,8 +108,10 @@ bool wxNotebook::Create(wxWindow *parent,
     m_windowId = id == -1 ? NewControlId() : id;
 
     // It's like a normal window...
-    if (!wxWindow::Create(parent, id, pos, size, style, name))
+    if (!wxWindow::Create(parent, id, pos, size, style|wxNO_BORDER, name))
         return FALSE;
+
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 
     SetTabView(new wxNotebookTabView(this));
 

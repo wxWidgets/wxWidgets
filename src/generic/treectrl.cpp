@@ -29,12 +29,12 @@
 #endif
 
 #include "wx/generic/treectrl.h"
+#include "wx/generic/imaglist.h"
 #include "wx/settings.h"
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
 #include "wx/dcclient.h"
-#include "wx/imaglist.h"
 #include "wx/msgdlg.h"
 
 // -----------------------------------------------------------------------------
@@ -1089,6 +1089,7 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     dc.DestroyClippingRegion();
   }
 
+  dc.SetBackgroundMode(wxTRANSPARENT);
   dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY() );
 
   // restore normal font for bold items
@@ -1197,7 +1198,8 @@ void wxTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxPaintDC dc(this);
     PrepareDC( dc );
 
-    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
+//    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
+    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) );
 
     dc.SetPen( m_dottedPen );
     m_lineHeight = (int)(dc.GetCharHeight() + 4);
@@ -1446,7 +1448,8 @@ void wxTreeCtrl::CalculatePositions()
   wxClientDC dc(this);
   PrepareDC( dc );
 
-  dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
+//    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
+    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) );
 
   dc.SetPen( m_dottedPen );
   m_lineHeight = (int)(dc.GetCharHeight() + 4);

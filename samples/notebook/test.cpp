@@ -20,7 +20,6 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/tab.h"
 #include "test.h"
 
 // If 1, use a dialog. Otherwise use a frame.
@@ -44,10 +43,9 @@ bool MyApp::OnInit(void)
 #else
   frame = new MyFrame((wxFrame*) NULL, -1, (char *) "Notebook", wxPoint(-1, -1), wxSize(365, 390), wxDEFAULT_FRAME_STYLE);
 
-  // Problem with Motif whereby it doesn't size properly unless
-  // you set the size again (to a different size than before,
-  // since SetSize is optimized)
-#ifdef __WXMOTIF__
+  // Problem with generic wxNotebook implementation whereby it doesn't size properly unless
+  // you set the size again (to a different size than before, since SetSize is optimized)
+#if defined(__WXMOTIF__) || defined(__WIN16__)
   frame->SetSize(-1, -1, 370, 390);
 #endif
 

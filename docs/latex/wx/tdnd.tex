@@ -15,37 +15,36 @@ Headers: <wx/dataobj.h>, <wx/dropsrc.h and <wx/droptgt.h>>
 
 This overview describes wxWindows support for drag and drop and clipboard
 operations. Both of these topics are discussed here because, in fact, they're
-quite related. Drag and drop and clipboard are just too ways of passing the
+quite related. Drag and drop and clipboard are just two ways of passing the
 data around and so the code required to implement both types of the operations
 is almost the same.
 
-Both operations involve passing some data from one program to another
-(although the data may be received in the same program as well). In the case
-of clipboard transfer, the data is first places on the clipboard and then
-pasted into the destination program while for a drag-and-drop operation the
+Both operations involve passing some data from one program to another,
+although the data can be received in the same program as the source. In the case
+of clipboard transfer, the data is first placed on the clipboard and then
+pasted into the destination program, while for a drag-and-drop operation the
 data object is not stored anywhere but is created when the user starts
-dragging and is destroyed as soon as he ends it (whether the operation was
-ended successfully or cancelled).
+dragging and is destroyed as soon as he ends it, whether the operation was
+ended successfully or cancelled.
 
 To be a {\it drag source}, i.e. to provide the data which may be dragged by
-user elsewhere you should implement the following steps:
+user elsewhere, you should implement the following steps:
 
 \begin{itemize}\itemsep=0pt
 \item {\bf Preparation:} First of all, the data object must be created and
-initilized with the data you wish to drag. For example:
+initialized with the data you wish to drag. For example:
 
 \begin{verbatim}
 	wxTextDataObject data("This string will be dragged.");
 \end{verbatim}
 
 Of course, the data object may contain arbitrary data of any type, but for
-this you should derive your own class from 
-\helpref{wxDataObject}{wxdataobject} overriding all of its pure virtual
+this you should derive your own class from \helpref{wxDataObject}{wxdataobject} overriding all of its pure virtual
 functions.
 
 \item{\bf Drag start:} To start dragging process (typically in response to a
-mouse click) you must call \helpref{DoDragDrop}{wxdropsourcedodragdrop}
-function of wxDropSource object which should be constructed like this:
+mouse click) you must call \helpref{DoDragDrop}{wxdropsourcedodragdrop} function
+of wxDropSource object which should be constructed like this:
 
 \begin{verbatim}
 	wxDropSource dragSource(data, this);
@@ -63,8 +62,8 @@ same drag-and-drop protocol (any program under Windows or any program supporting
 under X Windows), the corresponding \helpref{wxDropTarget}{wxdroptarget} methods
 are called - see below.
 
-\item {\bf Processing the result:} DoDragDrop() returns an {\it effect code}
-which is one of the values of \helpref{wxDragResult}{wxdragresult} enum. Codes
+\item {\bf Processing the result:} DoDragDrop() returns an {\it effect code} which
+is one of the values of \helpref{wxDragResult}{wxdragresult} enum. Codes
 of wxDragError, wxDragNone and wxDragCancel have the obvious meaning and mean
 that there is nothing to do on the sending end (except of possibly logging the
 error in the first case). wxDragCopy means that the data has been successfully
@@ -72,9 +71,7 @@ copied and doesn't require any specific actions neither. But wxDragMove is
 special because it means that the data must be deleted from where it was
 copied. If it doesn't make sense (dragging selected text from a read-only
 file) you should pass FALSE as parameter to DoDragDrop() in the previous step.
-
 \end{itemize}
-
 
 To be a {\it drop target}, i.e. to receive the data dropped by user you should
 follow the instructions below:
@@ -91,8 +88,8 @@ or OnDropFiles() method.
 
 \item {\bf Drop:} When the user releases the mouse over a window, wxWindows
 queries the associated wxDropTarget object if it accepts the data. For
-this, \helpref{GetFormatCount}{wxdroptargetgetformatcount} and
-\helpref{GetFormat}{wxdroptargetgetformat} are used and if the format is
+this, \helpref{GetFormatCount}{wxdroptargetgetformatcount} and \helpref{GetFormat}{wxdroptargetgetformat} are
+used and if the format is
 supported (i.e. is one of returned by GetFormat()), 
 then \helpref{OnDrop}{wxdroptargetondrop} is called. 
 Otherwise, \helpref{wxDragNone}{stdformat} is returned by DoDragDrop() and
@@ -102,6 +99,5 @@ nothing happens.
 wxDragCopy or wxDragMove depending on the state of the keys (<Ctrl>, <Shift>
 and <Alt>) at the moment of drop. There is currently no way for the drop
 target to change this return code.
-
 \end{itemize}
 

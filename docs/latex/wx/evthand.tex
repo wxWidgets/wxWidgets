@@ -28,6 +28,39 @@ Destructor. If the handler is part of a chain, the destructor will
 unlink itself and restore the previous and next handlers so that they point to
 each other.
 
+\membersection{wxEvtHandler::Connect}\label{wxevthandlerconnect}
+
+\func{void}{Connect}{\param{int}{ id},
+ \param{wxEventType }{eventType}, \param{wxObjectEventFunction}{ function},
+ \param{wxObject*}{ userData = NULL}}
+
+\func{void}{Connect}{\param{int}{ id}, \param{int}{ lastId},
+ \param{wxEventType }{eventType}, \param{wxObjectEventFunction}{ function},
+ \param{wxObject*}{ userData = NULL}}
+
+Connects the given function dynamically with the event handler, id and event type. This
+is an alternative to the use of static event tables. See the 'dynamic' sample for usage.
+
+\wxheading{Parameters}
+
+\docparam{id}{The identifier (or first of the identifier range) to be associated with the event handler function.}
+
+\docparam{lastId}{The second part of the identifier range to be associated with the event handler function.}
+
+\docparam{eventType}{The event type to be associated with this event handler.}
+
+\docparam{function}{The event handler function.}
+
+\docparam{userData}{Data to be associated with the event table entry.}
+
+\wxheading{Example}
+
+\begin{verbatim}
+  frame->Connect( wxID_EXIT,
+    wxEVT_COMMAND_MENU_SELECTED,
+    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) MyFrame::OnQuit );
+\end{verbatim}
+
 \membersection{wxEvtHandler::Default}\label{wxevthandlerdefault}
 
 \func{virtual long}{Default}{\void}

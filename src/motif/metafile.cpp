@@ -52,7 +52,7 @@ bool wxMetaFile::SetClipboard(int width, int height)
 bool wxMetaFile::Play(wxDC *dc)
 {
     // TODO
-    return false;
+    return FALSE;
 }
 
 /*

@@ -17,7 +17,7 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
-#include "wx/imaglist.h"
+#include "wx/generic/imaglist.h"
 #include "wx/control.h"
 #include "wx/timer.h"
 #include "wx/textctrl.h"

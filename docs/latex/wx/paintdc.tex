@@ -3,7 +3,8 @@
 A wxPaintDC must be constructed if an application wishes to paint on the
 client area of a window from within an {\bf OnPaint} event.
 This should normally be constructed as a temporary stack object; don't store
-a wxPaintDC object.
+a wxPaintDC object. If you have an OnPaint handler, you {\it must} create a wxPaintDC
+object within it even if you don't actually use it.
 
 Using wxPaintDC within OnPaint is important because it automatically
 sets the clipping area to the damaged area of the window. Attempts to draw

@@ -76,7 +76,8 @@ Creates a new icon.
 
 Creates an icon from XPM data.
 
-\func{}{wxIcon}{\param{const wxString\& }{name}, \param{long}{ type}}
+\func{}{wxIcon}{\param{const wxString\& }{name}, \param{long}{ type},
+  \param{int}{ desiredWidth = -1}, \param{int}{ desiredHeight = -1}}
 
 Loads an icon from a file or resource.
 
@@ -87,6 +88,14 @@ Loads an icon from a file or resource.
 \docparam{width}{Specifies the width of the icon.}
 
 \docparam{height}{Specifies the height of the icon.}
+
+\docparam{desiredWidth}{Specifies the desired width of the icon. This
+parameter only has an effect in Windows (32-bit) where icon resources can contain
+several icons of different sizes.}
+
+\docparam{desiredWidth}{Specifies the desired height of the icon. This
+parameter only has an effect in Windows (32-bit) where icon resources can contain
+several icons of different sizes.}
 
 \docparam{depth}{Specifies the depth of the icon. If this is omitted, the display depth of the
 screen is used.}

@@ -83,7 +83,6 @@ END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 
-// `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
   // Create the main frame window
@@ -278,8 +277,15 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
   m_imageListNormal = new wxImageList(16, 16, TRUE);
 
   // should correspond to TreeCtrlIcon_xxx enum
+#if defined(__WXMSW__) && defined(__WIN16__)
+  // This is required in 16-bit Windows mode only because we can't load a specific (16x16)
+  // icon image, so it comes out blank (using the empty 32x32 icon).
+  m_imageListNormal->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
+  m_imageListNormal->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
+#else
   m_imageListNormal->Add(wxICON(icon1));
   m_imageListNormal->Add(wxICON(icon2));
+#endif
 
   SetImageList(m_imageListNormal);
 

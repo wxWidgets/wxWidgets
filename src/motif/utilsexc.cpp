@@ -97,7 +97,7 @@ void xt_notify_end_process(XtPointer client, int *fid,
   /* wait4 is not part of any standard, use at own risk
    * not sure what wait4 does, but wait3 seems to be closest, whats a digit ;-)
    * --- offer@sgi.com */
-#if !defined(__sgi) && !defined(__ALPHA__)
+#if !defined(__sgi) && !defined(__SGI__) && !defined(__ALPHA__) && !defined(__SUNCC__)
   wait4(process_data->pid, NULL, 0, NULL);
 #else
   wait3((int *) NULL, 0, (rusage *) NULL);

@@ -178,6 +178,13 @@ bool wxICOResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long
       M_ICONHANDLERDATA->m_width = 32;
       M_ICONHANDLERDATA->m_height = 32;
 #endif
+      // Override the found values with desired values
+      if (desiredWidth > -1 && desiredHeight > -1)
+      {
+          M_ICONHANDLERDATA->m_width = desiredWidth;
+          M_ICONHANDLERDATA->m_height = desiredHeight;
+      }
+
       M_ICONHANDLERDATA->m_ok = (M_ICONHANDLERDATA->m_hIcon != 0);
       return M_ICONHANDLERDATA->m_ok;
   }

@@ -60,6 +60,11 @@ GENERICOBJS= \
   $(GENDIR)\tabg.obj \
   $(GENDIR)\textdlgg.obj
 
+#  $(GENDIR)\imaglist.obj \
+#  $(GENDIR)\treectrl.obj \
+#  $(GENDIR)\listctrl.obj \
+#  $(GENDIR)\notebook.obj \
+
 # These are generic things that don't need to be compiled on MSW,
 # but sometimes it's useful to do so for testing purposes.
 NONESSENTIALOBJS= \
@@ -169,11 +174,9 @@ MSWOBJS = \
   $(MSWDIR)\gdiobj.obj \
   $(MSWDIR)\helpwin.obj \
   $(MSWDIR)\icon.obj \
-  $(MSWDIR)\imaglist.obj \
   $(MSWDIR)\iniconf.obj \
   $(MSWDIR)\joystick.obj \
   $(MSWDIR)\listbox.obj \
-  $(MSWDIR)\listctrl.obj \
   $(MSWDIR)\main.obj \
   $(MSWDIR)\mdi.obj \
   $(MSWDIR)\menu.obj \
@@ -182,7 +185,6 @@ MSWOBJS = \
   $(MSWDIR)\minifram.obj \
   $(MSWDIR)\msgdlg.obj \
   $(MSWDIR)\nativdlg.obj \
-  $(MSWDIR)\notebook.obj \
   $(MSWDIR)\ownerdrw.obj \
   $(MSWDIR)\palette.obj \
   $(MSWDIR)\pen.obj \
@@ -211,11 +213,14 @@ MSWOBJS = \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\thread.obj \
   $(MSWDIR)\timer.obj \
-  $(MSWDIR)\treectrl.obj \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
+  $(MSWDIR)\notebook.obj \
+  $(MSWDIR)\listctrl.obj \
+  $(MSWDIR)\imaglist.obj \
+  $(MSWDIR)\treectrl.obj \
   $(OLEDIR)\droptgt.obj \
   $(OLEDIR)\dropsrc.obj \
   $(OLEDIR)\dataobj.obj \
@@ -1146,6 +1151,26 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(GENDIR)/textdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/treectrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/imaglist.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/listctrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/notebook.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

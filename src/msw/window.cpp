@@ -1468,10 +1468,18 @@ void wxWindow::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow 
         m_hWnd = (WXHWND) ::CreateDialog(wxGetInstance(), dialog_template, hParent,
             (DLGPROC)wxDlgProc);
 #else
+        // N.B.: if we _don't_ use this form,
+        // then with VC++ 1.5, it crashes horribly.
+#if 1
+       m_hWnd = (WXHWND) ::CreateDialog(wxGetInstance(), dialog_template, hParent,
+                            (DLGPROC)wxDlgProc);
+#else
+        // Crashes when we use this.
         DLGPROC dlgproc = (DLGPROC)MakeProcInstance((DLGPROC)wxWndProc, wxGetInstance());
 
         m_hWnd = (WXHWND) ::CreateDialog(wxGetInstance(), dialog_template, hParent,
             (DLGPROC)dlgproc);
+#endif
 #endif
 
         if (m_hWnd == 0)

@@ -603,7 +603,13 @@ void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
 
 void wxDC::DrawIcon(const wxIcon& icon, long x, long y)
 {
+#if defined(__WIN32__)
+  ::DrawIconEx((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), (HICON) icon.GetHICON(),
+      icon.GetWidth(), icon.GetHeight(), 0, 0, DI_NORMAL);
+#else
   ::DrawIcon((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), (HICON) icon.GetHICON());
+#endif
+
   CalcBoundingBox(x, y);
   CalcBoundingBox(x+icon.GetWidth(), y+icon.GetHeight());
 }

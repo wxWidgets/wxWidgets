@@ -18,7 +18,7 @@
 #pragma hdrstop
 #endif
 
-#include "wx/imaglist.h"
+#include "wx/generic/imaglist.h"
 
 //-----------------------------------------------------------------------------
 //  wxImageList
@@ -50,7 +50,10 @@ bool wxImageList::Create()
 
 int wxImageList::Add( const wxBitmap &bitmap )
 {
-    m_images.Append( new wxBitmap(bitmap) );
+    if (bitmap.IsKindOf(CLASSINFO(wxIcon)))
+        m_images.Append( new wxIcon( (const wxIcon&) bitmap ) );
+    else
+        m_images.Append( new wxBitmap(bitmap) );
     return m_images.Number();
 }
 
@@ -68,17 +71,23 @@ bool wxImageList::Replace( int index, const wxBitmap &bitmap )
     wxNode *node = m_images.Nth( index );
     
     wxCHECK_MSG( node, FALSE, "wrong index in image list" );
-  
+
+    wxBitmap* newBitmap = NULL;
+    if (bitmap.IsKindOf(CLASSINFO(wxIcon)))
+        newBitmap = new wxIcon( (const wxIcon&) bitmap );
+    else
+        newBitmap = new wxBitmap(bitmap) ;
+
     if (index == m_images.Number()-1)
     {
         m_images.DeleteNode( node );
-        m_images.Append( new wxBitmap(bitmap) );
+        m_images.Append( newBitmap );
     }
     else
     {
         wxNode *next = node->Next();
         m_images.DeleteNode( node );
-        m_images.Insert( next, new wxBitmap(bitmap) );
+        m_images.Insert( next, newBitmap );
     }
   
     return TRUE;
@@ -126,8 +135,11 @@ bool wxImageList::Draw( int index, wxDC &dc, int x, int y,
     wxCHECK_MSG( node, FALSE, "wrong index in image list" );
     
     wxBitmap *bm = (wxBitmap*)node->Data();
-  
-    dc.DrawBitmap( *bm, x, y, (flags & wxIMAGELIST_DRAW_TRANSPARENT) > 0 );
+
+    if (bm->IsKindOf(CLASSINFO(wxIcon)))
+        dc.DrawIcon( * ((wxIcon*) bm), x, y);
+    else
+        dc.DrawBitmap( *bm, x, y, (flags & wxIMAGELIST_DRAW_TRANSPARENT) > 0 );
 
     return TRUE;
 }

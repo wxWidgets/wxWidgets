@@ -5,3 +5,6 @@ aaaa     ICON "mondrian.ico"
 icon1   ICON "bitmaps\\file1.ico"
 icon2   ICON "bitmaps\\folder1.ico"
 
+bitmap1   BITMAP "bitmaps\\file1.bmp"
+bitmap2   BITMAP "bitmaps\\folder1.bmp"
+

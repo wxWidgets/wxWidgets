@@ -20,7 +20,8 @@
 
 #include "wx/dcscreen.h"
 #include "wx/app.h"
-#include "wx/listctrl.h"
+#include "wx/generic/listctrl.h"
+#include "wx/generic/imaglist.h"
 
 //-----------------------------------------------------------------------------
 //  wxListItemData
@@ -551,6 +552,7 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
                            m_bound_hilight.width, m_bound_hilight.height );
     }
     
+    dc->SetBackgroundMode(wxTRANSPARENT);
     if (m_mode == wxLC_REPORT)
     {
         wxString s;
@@ -741,6 +743,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     int y = 0;
     GetClientSize( &w, &h );
 
+    dc.SetBackgroundMode(wxTRANSPARENT);
     dc.SetTextForeground( *wxBLACK );
     if (m_foregroundColour.Ok()) dc.SetTextForeground( m_foregroundColour );
 
@@ -1037,12 +1040,14 @@ void wxListMainWindow::RefreshLine( wxListLineData *line )
 
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
+    // Note: a wxPaintDC must be constructed even if no drawing is
+    // done (a Windows requirement).
+    wxPaintDC dc( this );
+    PrepareDC( dc );
+
     if (m_dirty) return;
     
     if (m_lines.GetCount() == 0) return;
-
-    wxPaintDC dc( this );
-    PrepareDC( dc );
 
     dc.BeginDrawing();
 
