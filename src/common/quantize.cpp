@@ -1055,13 +1055,13 @@ pass2_fs_dither (j_decompress_ptr cinfo,
       dir = -1;
       dir3 = -3;
       errorptr = cquantize->fserrors + (width+1)*3; /* => entry after last column */
-      cquantize->on_odd_row = false; /* flip for next time */
+      cquantize->on_odd_row = FALSE; /* flip for next time */
     } else {
       /* work left to right in this row */
       dir = 1;
       dir3 = 3;
       errorptr = cquantize->fserrors; /* => entry before first real column */
-      cquantize->on_odd_row = true; /* flip for next time */
+      cquantize->on_odd_row = TRUE; /* flip for next time */
     }
     /* Preset error values: no error propagated to first pixel from left */
     cur0 = cur1 = cur2 = 0;
@@ -1221,7 +1221,7 @@ finish_pass1 (j_decompress_ptr cinfo)
   cinfo->colormap = cquantize->sv_colormap;
   select_colors(cinfo, cquantize->desired);
   /* Force next pass to zero the color index table */
-  cquantize->needs_zeroed = true;
+  cquantize->needs_zeroed = TRUE;
 }
 
 
@@ -1247,7 +1247,7 @@ start_pass_2_quant (j_decompress_ptr cinfo, bool is_pre_scan)
     /* Set up method pointers */
     cquantize->pub.color_quantize = prescan_quantize;
     cquantize->pub.finish_pass = finish_pass1;
-    cquantize->needs_zeroed = true; /* Always zero histogram */
+    cquantize->needs_zeroed = TRUE; /* Always zero histogram */
   } else {
     /* Set up method pointers */
     cquantize->pub.color_quantize = pass2_fs_dither;
@@ -1267,7 +1267,7 @@ start_pass_2_quant (j_decompress_ptr cinfo, bool is_pre_scan)
       /* Make the error-limit table if we didn't already. */
       if (cquantize->error_limiter == NULL)
 	init_error_limit(cinfo);
-      cquantize->on_odd_row = false;
+      cquantize->on_odd_row = FALSE;
     }
 
   }
@@ -1277,7 +1277,7 @@ start_pass_2_quant (j_decompress_ptr cinfo, bool is_pre_scan)
       memset((void  *) histogram[i], 0,
 		HIST_C1_ELEMS*HIST_C2_ELEMS * sizeof(histcell));
     }
-    cquantize->needs_zeroed = false;
+    cquantize->needs_zeroed = FALSE;
   }
 }
 
@@ -1292,7 +1292,7 @@ new_color_map_2_quant (j_decompress_ptr cinfo)
   my_cquantize_ptr cquantize = (my_cquantize_ptr) cinfo->cquantize;
 
   /* Reset the inverse color map */
-  cquantize->needs_zeroed = true;
+  cquantize->needs_zeroed = TRUE;
 }
 
 
@@ -1319,7 +1319,7 @@ jinit_2pass_quantizer (j_decompress_ptr cinfo)
   for (i = 0; i < HIST_C0_ELEMS; i++) {
     cquantize->histogram[i] = (hist2d) malloc(HIST_C1_ELEMS*HIST_C2_ELEMS * sizeof(histcell));
   }
-  cquantize->needs_zeroed = true; /* histogram is garbage now */
+  cquantize->needs_zeroed = TRUE; /* histogram is garbage now */
 
   /* Allocate storage for the completed colormap, if required.
    * We do this now since it is  storage and may affect
@@ -1408,11 +1408,11 @@ void wxQuantize::DoQuantize(unsigned w, unsigned h, unsigned char **in_rows, uns
     cquantize = (my_cquantize_ptr) dec.cquantize;
 
 
-    cquantize->pub.start_pass(&dec, true);
+    cquantize->pub.start_pass(&dec, TRUE);
     cquantize->pub.color_quantize(&dec, in_rows, out_rows, h);
     cquantize->pub.finish_pass(&dec);
 
-    cquantize->pub.start_pass(&dec, false);
+    cquantize->pub.start_pass(&dec, FALSE);
     cquantize->pub.color_quantize(&dec, in_rows, out_rows, h);
     cquantize->pub.finish_pass(&dec);
 
