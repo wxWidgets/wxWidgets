@@ -2076,9 +2076,11 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 
+#ifndef __WXMICROWIN__
         case WM_ACTIVATEAPP:
             wxTheApp->SetActive(wParam != 0, FindFocus());
             break;
+#endif
 
         case WM_ACTIVATE:
             {

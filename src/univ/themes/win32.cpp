@@ -44,6 +44,7 @@
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
 #include "wx/settings.h"
+#include "wx/menu.h"
 
 #include "wx/univ/scrtimer.h"
 

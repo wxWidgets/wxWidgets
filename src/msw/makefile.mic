@@ -51,7 +51,7 @@ GENERICOBJS = \
 		$(GENDIR)/panelg.$(OBJSUFF) \
 		$(GENDIR)/progdlgg.$(OBJSUFF) \
 		$(GENDIR)/sashwin.$(OBJSUFF) \
-		$(GENDIR)/scrolwin.$(OBJSUFF) \
+		$(GENDIR)/scrlwing.$(OBJSUFF) \
 		$(GENDIR)/spinctlg.$(OBJSUFF) \
 		$(GENDIR)/splash.$(OBJSUFF) \
 		$(GENDIR)/splitter.$(OBJSUFF) \
