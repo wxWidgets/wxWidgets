@@ -1580,6 +1580,8 @@ void wxWindowDC::Clear()
 
 void wxWindowDC::SetFont( const wxFont &font )
 {
+    wxCHECK_RET( font.Ok(), _T("invalid font in wxWindowDC::SetFont") );
+
     m_font = font;
 #ifdef __WXGTK20__
     // fix fontdesc?
