@@ -4,7 +4,7 @@ RCS file: /cvsroot/SWIG/Source/Swig/swig.h,v
 retrieving revision 1.76
 diff -u -4 -r1.76 swig.h
 --- Source/Swig/swig.h	11 Nov 2003 20:16:35 -0000	1.76
-+++ Source/Swig/swig.h	11 Dec 2003 18:12:49 -0000
++++ Source/Swig/swig.h	11 Dec 2003 19:24:42 -0000
 @@ -350,8 +350,10 @@
  extern void Swig_print_tags(File *obj, Node *root);
  extern void Swig_print_tree(Node *obj);
@@ -22,13 +22,13 @@ RCS file: /cvsroot/SWIG/Source/Modules/main.cxx,v
 retrieving revision 1.23
 diff -u -4 -r1.23 main.cxx
 --- Source/Modules/main.cxx	8 Dec 2003 23:42:37 -0000	1.23
-+++ Source/Modules/main.cxx	11 Dec 2003 18:12:50 -0000
++++ Source/Modules/main.cxx	11 Dec 2003 19:24:42 -0000
 @@ -85,15 +85,17 @@
       -v              - Run in verbose mode\n\
       -version        - Print SWIG version number\n\
       -Wall           - Enable all warning messages\n\
       -w<n>           - Suppress warning number <n>\n\
-+     -xmlout <file> - Write an XML version of the parse tree to file after normal processing\n\
++     -xmlout <file>  - Write an XML version of the parse tree to file after normal processing\n\
  \n";
  
  // Local variables
@@ -90,7 +90,7 @@ RCS file: /cvsroot/SWIG/Source/Modules/xml.cxx,v
 retrieving revision 1.8
 diff -u -4 -r1.8 xml.cxx
 --- Source/Modules/xml.cxx	31 Oct 2003 17:42:40 -0000	1.8
-+++ Source/Modules/xml.cxx	11 Dec 2003 18:12:50 -0000
++++ Source/Modules/xml.cxx	11 Dec 2003 19:24:42 -0000
 @@ -24,9 +24,8 @@
  //static Node *view_top = 0;
  static File *out = 0;
