@@ -38,8 +38,8 @@ public:
     bool Ok();
 
 #ifdef __WXMAC__
-    short GetMacTheme();
-    void SetMacTheme(short macThemeBrush);
+    short MacGetTheme();
+    void MacSetTheme(short macThemeBrush);
 #endif
 
     %pythoncode { def __nonzero__(self): return self.Ok() }

@@ -113,7 +113,7 @@ class GenStaticText(wx.PyControl):
         backBrush = wx.Brush(clr, wx.SOLID)
         if wx.Platform == "__WXMAC__" and clr == self.defBackClr:
             # if colour is still the default then use the striped background on Mac
-            backBrush.SetMacTheme(1) # 1 == kThemeBrushDialogBackgroundActive
+            backBrush.MacSetTheme(1) # 1 == kThemeBrushDialogBackgroundActive
         dc.SetBackground(backBrush)
 
         dc.SetTextForeground(self.GetForegroundColour())
