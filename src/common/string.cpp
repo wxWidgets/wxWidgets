@@ -2085,6 +2085,12 @@ void wxArrayString::RemoveAt(size_t nIndex)
   m_nCount--;
 }
 
+void wxArrayString::Remove(size_t nIndex)
+{
+    RemoveAt( nIndex );
+}
+
+
 // removes item from array (by value)
 void wxArrayString::Remove(const wxChar *sz)
 {
