@@ -17,10 +17,12 @@
 #include "wx/tabctrl.h"
 #include "wx/mac/uma.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTabCtrl, wxControl)
 END_EVENT_TABLE()
+#endif
 
 wxTabCtrl::wxTabCtrl()
 {
@@ -35,7 +37,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
   m_imageList = NULL;
 	
-	MacPreControlCreate( parent , id ,  "" , pos , size ,style, *((wxValidator*)NULL) , name , &bounds , title ) ;
+	MacPreControlCreate( parent , id ,  "" , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
 	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , 1, 
 	  	kControlTabSmallProc , (long) this ) ;

@@ -14,9 +14,12 @@
 
 #include "wx/region.h"
 #include "wx/gdicmn.h"
+#include "wx/mac/uma.h"
 
+#if !USE_SHARED_LIBRARY
 	IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
 	IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
+#endif
 
 //-----------------------------------------------------------------------------
 // wxRegionRefData implementation
@@ -195,7 +198,8 @@ void wxRegion::GetBox(long& x, long& y, long&w, long &h) const
 {
 	if (m_refData) 
 	{
-		Rect box = (**M_REGION).rgnBBox ;
+		Rect box ;
+		GetRegionBounds( M_REGION , &box ) ;
         x = box.left ;
         y = box.top ;
         w = box.right - box.left ;
@@ -329,7 +333,8 @@ void wxRegionIterator::Reset(const wxRegion& region)
     {
     	// we cannot dissolve it into rects on mac
         m_rects = new wxRect[1];
-        Rect rect = (**OTHER_M_REGION( region )).rgnBBox ;
+		Rect rect ;
+		GetRegionBounds( OTHER_M_REGION( region ) , &rect ) ;
         m_rects[0].x = rect.left;
         m_rects[0].y = rect.top;
         m_rects[0].width = rect.right - rect.left;

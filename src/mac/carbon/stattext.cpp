@@ -18,7 +18,9 @@
 
 #include <stdio.h>
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
+#endif
 
 #include <wx/mac/uma.h>
 
@@ -51,69 +53,208 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     return ret;
 }
 
+void wxStaticText::OnDraw( wxDC &dc )
+{
+    PrepareDC(dc);
+    dc.Clear() ;
+    
+    int x = 0 ;
+    int y = 0 ;
+    wxString text = m_label ;
+    wxString paragraph ;
+   	int i = 0 ;
+   	int laststop = 0 ;
+   	long width, height ;
+
+   	while( i < text.Length() )
+   	{
+		if( text[i] == 13 || text[i] == 10)
+		{
+   			paragraph = text.Mid( laststop , i - laststop ) ;
+   			while( paragraph.Length() > 0 )
+   			{
+   				dc.GetTextExtent( paragraph , &width , &height ) ;
+   				if ( width > m_width )
+   				{
+	   				for ( int p = paragraph.Length() -1 ; p > 0 ; --p )
+	   				{
+	   					if ( paragraph[p]=='.' )
+	   					{
+	   						dc.GetTextExtent( paragraph.Left(p+1) , &width , &height ) ;
+	   						if ( width <= m_width )
+	   						{	
+	   							int pos = x ;
+	   							if ( HasFlag( wxALIGN_CENTER ) )
+	   							{
+	   								pos += ( m_width - width ) / 2 ;
+								}
+	   							else if ( HasFlag( wxALIGN_RIGHT ) )
+	   							{
+	   								pos += ( m_width - width ) ;
+								}		
+	     						dc.DrawText( paragraph.Left(p+1), pos , y) ;
+	     						y += height ;
+	   							paragraph = paragraph.Mid(p+1) ;
+	   							break ;
+	   						}
+	   					}
+	   					if ( paragraph[p]==' ' )
+	   					{
+	   						dc.GetTextExtent( paragraph.Left(p) , &width , &height ) ;
+	   						if ( width <= m_width )
+	   						{
+	   							int pos = x ;
+	   							if ( HasFlag( wxALIGN_CENTER ) )
+	   							{
+	   								pos += ( m_width - width ) / 2 ;
+								}
+	   							else if ( HasFlag( wxALIGN_RIGHT ) )
+	   							{
+	   								pos += ( m_width - width ) ;
+								}		
+	     						dc.DrawText( paragraph.Left(p), pos , y) ;
+	     						y += height ;
+	   							paragraph = paragraph.Mid(p+1) ;
+	   							break ;
+	   						}
+	   					}
+	   				}
+	   			}
+	   			else
+	   			{
+	     			dc.DrawText( paragraph, x , y) ;
+	     			paragraph="";
+	     			y += height ;
+	   			}
+	   		}
+   			laststop = i+1 ;
+		}
+   		++i ;
+   	}
+   	paragraph = text.Mid( laststop , text.Length() - laststop ) ;
+	while( paragraph.Length() > 0 )
+	{
+		dc.GetTextExtent( paragraph , &width , &height ) ;
+		if ( width > m_width )
+		{
+			for ( int p = paragraph.Length() -1 ; p > 0 ; --p )
+			{
+				if ( paragraph[p]=='.' )
+				{
+					dc.GetTextExtent( paragraph.Left(p+1) , &width , &height ) ;
+					if ( width <= m_width )
+					{
+						int pos = x ;
+						if ( HasFlag( wxALIGN_CENTER ) )
+						{
+							pos += ( m_width - width ) / 2 ;
+						}
+						else if ( HasFlag( wxALIGN_RIGHT ) )
+						{
+							pos += ( m_width - width ) ;
+						}		
+ 						dc.DrawText( paragraph.Left(p+1), pos , y) ;
+ 						y += height ;
+						paragraph = paragraph.Mid(p+1) ;
+						break ;
+					}
+				}
+				if ( paragraph[p]==' ' )
+				{
+					dc.GetTextExtent( paragraph.Left(p) , &width , &height ) ;
+					if ( width <= m_width )
+					{
+						int pos = x ;
+						if ( HasFlag( wxALIGN_CENTER ) )
+						{
+							pos += ( m_width - width ) / 2 ;
+						}
+						else if ( HasFlag( wxALIGN_RIGHT ) )
+						{
+							pos += ( m_width - width ) ;
+						}		
+ 						dc.DrawText( paragraph.Left(p), pos , y) ;
+ 						y += height ;
+						paragraph = paragraph.Mid(p+1) ;
+						break ;
+					}
+				}
+			}
+		}
+		else
+		{
+			int pos = x ;
+			if ( HasFlag( wxALIGN_CENTER ) )
+			{
+				pos += ( m_width - width ) / 2 ;
+			}
+			else if ( HasFlag( wxALIGN_RIGHT ) )
+			{
+				pos += ( m_width - width ) ;
+			}		
+ 			dc.DrawText( paragraph, pos , y) ;
+ 			paragraph="";
+ 			y += height ;
+		}
+ 	}
+}
+
 void wxStaticText::OnPaint( wxPaintEvent &event ) 
 {
     wxPaintDC dc(this);
-    PrepareDC(dc);
-    dc.Clear() ;
-    dc.DrawText( m_label , 0 , 0 ) ;
+    OnDraw( dc ) ;
 }
 
 wxSize wxStaticText::DoGetBestSize() const
 {
 	int x , y  ;
-	GetTextExtent( m_label , &x , &y ) ;
-	return wxSize( x , y ) ;
+   int widthTextMax = 0, widthLine,
+        heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
+
+    wxString curLine;
+    for ( const wxChar *pc = m_label; ; pc++ ) {
+        if ( *pc == wxT('\n') || *pc == wxT('\0') ) {
+            if ( !curLine ) {
+                // we can't use GetTextExtent - it will return 0 for both width
+                // and height and an empty line should count in height
+                // calculation
+                if ( !heightLineDefault )
+                    heightLineDefault = heightLine;
+                if ( !heightLineDefault )
+                    GetTextExtent(_T("W"), NULL, &heightLineDefault);
+
+                heightTextTotal += heightLineDefault;
+            }
+            else {
+                GetTextExtent(curLine, &widthLine, &heightLine);
+                if ( widthLine > widthTextMax )
+                    widthTextMax = widthLine;
+                heightTextTotal += heightLine;
+            }
+
+            if ( *pc == wxT('\n') ) {
+               curLine.Empty();
+            }
+            else {
+               // the end of string
+               break;
+            }
+        }
+        else {
+            curLine += *pc;
+        }
+    }
+
+    return wxSize(widthTextMax, heightTextTotal);
 }
 
-void wxStaticText::SetLabel(const wxString& st , bool resize )
+void wxStaticText::SetLabel(const wxString& st )
 {
 	SetTitle( st ) ;
 	m_label = st ;
-	if ( resize )
+	if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
 		SetSizeOrDefault() ;
-	else
-		Refresh() ;
-}
-/*
-void wxStaticText::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxControl::SetSize( x , y , width , height , sizeFlags ) ;
-}
-
-bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
-{
-	Rect bounds ;
-	Str255 title ;
 	
-	MacPreControlCreate( parent , id ,  label , pos , size ,style, *((wxValidator*)NULL) , name , &bounds , title ) ;
-
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
-	  	kControlStaticTextProc , (long) this ) ;
-	::UMASetControlData( m_macControl, kControlLabelPart, kControlStaticTextTextTag , (long) title[0] , (char*) &title[1] ) ;
-	
-	MacPostControlCreate() ;
-
-  return TRUE;
+    wxClientDC dc(this);
+    OnDraw( dc ) ;
 }
-
-void wxStaticText::SetLabel(const wxString& st , bool resize )
-{
-	SetTitle( st ) ;
-	wxString label ;
-	
-	if( wxApp::s_macDefaultEncodingIsPC )
-		label = wxMacMakeMacStringFromPC( st ) ;
-	else
-		label = st ;
-		
-	::UMASetControlData( m_macControl, kControlLabelPart, kControlStaticTextTextTag , (long) label.Length() , (char*)(const char*) label ) ;
-	Refresh() ;
-}
-*/
-

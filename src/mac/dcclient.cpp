@@ -28,9 +28,11 @@
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
+#endif
 
 /*
  * wxWindowDC
@@ -38,11 +40,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
 
 #include <wx/mac/uma.h>
 
-wxWindowDC::wxWindowDC(void)
+wxWindowDC::wxWindowDC() 
 {
 }
 
-wxWindowDC::wxWindowDC(wxWindow *the_canvas)
+wxWindowDC::wxWindowDC(wxWindow *the_canvas) 
 {
 	WindowRef windowref ;
 	wxWindow* rootwindow ;
@@ -51,11 +53,16 @@ wxWindowDC::wxWindowDC(wxWindow *the_canvas)
 	
 	the_canvas->MacGetPortParams(&m_macLocalOrigin, &m_macClipRect , &windowref , &rootwindow );
 	m_macPort = UMAGetWindowPort( windowref ) ;
+	m_minY = m_minX =  0;
+	wxSize size = the_canvas->GetSize() ;
+	m_maxX = size.x  ;
+	m_maxY = size.y ; 
+
 	MacSetupPort() ;
  	m_ok = TRUE ;
 }
 
-wxWindowDC::~wxWindowDC(void)
+wxWindowDC::~wxWindowDC()
 {
 }
 
@@ -63,7 +70,7 @@ wxWindowDC::~wxWindowDC(void)
  * wxClientDC
  */
 
-wxClientDC::wxClientDC(void)
+wxClientDC::wxClientDC()
 {
 }
 
@@ -75,12 +82,16 @@ wxClientDC::wxClientDC(wxWindow *window)
 	window->MacGetPortClientParams(&m_macLocalOrigin, &m_macClipRect , &windowref , &rootwindow );
 	m_macPort = UMAGetWindowPort( windowref ) ;
 	MacSetupPort() ;
+	m_minY = m_minX =  0;
+	wxSize size = window->GetSize() ;
+	m_maxX = size.x  ;
+	m_maxY = size.y ; 
  	m_ok = TRUE ;
   	SetBackground(wxBrush(window->GetBackgroundColour(), wxSOLID));
 	SetFont( window->GetFont() ) ;
 }
 
-wxClientDC::~wxClientDC(void)
+wxClientDC::~wxClientDC()
 {
 }
 
@@ -88,7 +99,7 @@ wxClientDC::~wxClientDC(void)
  * wxPaintDC
  */
 
-wxPaintDC::wxPaintDC(void)
+wxPaintDC::wxPaintDC()
 {
 }
 
@@ -104,6 +115,10 @@ wxPaintDC::wxPaintDC(wxWindow *window)
  	m_ok = TRUE ;
 	long x , y ,w , h ;
 	window->GetUpdateRegion().GetBox( x , y , w , h ) ;
+	m_minY = m_minX =  0;
+	wxSize size = window->GetSize() ;
+	m_maxX = size.x  ;
+	m_maxY = size.y ; 
 	SetClippingRegion( x , y , w , h ) ;
   	SetBackground(wxBrush(window->GetBackgroundColour(), wxSOLID));
   	SetFont(window->GetFont() ) ;

@@ -32,10 +32,10 @@
 
 #define	__COMPILINGMOREFILES
 
-#include "MoreFile.h"
-#include "MoreExtr.h"
-#include "Search.h"
-#include "MoreDesk.h"
+#include "morefile.h"
+#include "moreextr.h"
+#include "mfsearch.h"
+#include "moredesk.h"
 
 /*****************************************************************************/
 
@@ -80,8 +80,12 @@ enum
 
 /* local data structures */
 
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=mac68k
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=mac68k
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(push, 2)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack(2)
 #endif
 
 struct IDRec
@@ -129,8 +133,12 @@ struct APPLRec
 typedef struct APPLRec APPLRec;
 typedef APPLRec *APPLRecPtr;
 
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=reset
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=reset
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(pop)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack()
 #endif
 
 /*****************************************************************************/
@@ -309,7 +317,11 @@ static	OSErr	GetAPPLFromDesktopFile(ConstStr255Param volName,
 				applResHandle = Get1Resource(kAPPLResType, 0);
 				if ( applResHandle != NULL )
 				{
+#if !TARGET_CARBON
 					applSize = InlineGetHandleSize((Handle)applResHandle);
+#else
+					applSize = GetHandleSize((Handle)applResHandle);
+#endif
 					if ( applSize != 0 )	/* make sure the APPL resource isn't empty */
 					{
 						foundCreator = false;
@@ -1105,7 +1117,11 @@ static	OSErr	GetCommentFromDesktopFile(short vRefNum,
 						commentHandle = (StringHandle)Get1Resource(kFCMTResType,commentID);
 						if ( commentHandle != NULL )
 						{
+#if !TARGET_CARBON
 							if ( InlineGetHandleSize((Handle)commentHandle) > 0 )
+#else
+							if ( GetHandleSize((Handle)commentHandle) > 0 )
+#endif
 							{
 								BlockMoveData(*commentHandle, comment, *commentHandle[0] + 1);
 							}

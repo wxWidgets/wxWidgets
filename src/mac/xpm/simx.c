@@ -35,7 +35,7 @@
 
 #include "xpm.h"
 #include "xpmi.h"			/* for XpmMalloc */
-
+#include "rgbtab.h"
 #ifdef FOR_MSW
 
 /*
@@ -310,6 +310,7 @@ XCreateImage(Display *d, Visual *v,
 		rect.bottom = height ;
 		
 		NewGWorld( &img->gworldptr , depth , &rect , NULL , NULL , 0 ) ;
+		LockPixels( GetGWorldPixMap( img->gworldptr ) ) ;
 		if (img->gworldptr == NULL)
 		{
 	    	XDestroyImage (img);
@@ -347,7 +348,10 @@ XDestroyImage(XImage *img)
 	DeleteObject(img->bitmap);	/* check return ??? */
 	#elif macintosh
 	if ( img->gworldptr )
+	{
+		UnlockPixels( GetGWorldPixMap( img->gworldptr ) ) ;
 		DisposeGWorld( img->gworldptr ) ;
+	}
 	#endif
 	XImageFree(img);
     }

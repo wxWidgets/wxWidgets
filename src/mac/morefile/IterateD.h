@@ -22,7 +22,7 @@
 #include <Types.h>
 #include <Files.h>
 
-#include "Optim.h"
+#include "optim.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -166,6 +166,6 @@ pascal	OSErr	FSpIterateDirectory(const FSSpec *spec,
 }
 #endif
 
-#include "OptimEnd.h"
+#include "optimend.h"
 
 #endif	/* __ITERATEDIRECTORY__ */

@@ -15,7 +15,9 @@
 
 #include "wx/statbmp.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
+#endif
 
 /*
  * wxStaticBitmap
@@ -28,11 +30,12 @@ END_EVENT_TABLE()
 bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
            const wxBitmap& bitmap,
            const wxPoint& pos,
-           const wxSize& size,
+           const wxSize& s,
            long style,
            const wxString& name)
 {
     SetName(name);
+	wxSize size = s ;
 
     m_backgroundColour = parent->GetBackgroundColour() ;
     m_foregroundColour = parent->GetForegroundColour() ;
@@ -47,9 +50,8 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     m_windowStyle = style;
 
     bool ret = wxControl::Create( parent, id, pos, size, style , wxDefaultValidator , name );
+	SetSizeOrDefault( size ) ;
     
-	SetSizeOrDefault() ;
-	
     return ret;
 }
 

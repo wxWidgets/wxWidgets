@@ -16,15 +16,18 @@
 #include "wx/control.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
+#include "wx/radiobox.h"
 #include "wx/spinbutt.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
-BEGIN_EVENT_TABLE(wxControl, wxControlBase)
+BEGIN_EVENT_TABLE(wxControl, wxWindow)
 	EVT_MOUSE_EVENTS( wxControl::OnMouseEvent ) 
 	EVT_CHAR( wxControl::OnKeyDown ) 
 	EVT_PAINT( wxControl::OnPaint ) 
 END_EVENT_TABLE()
+#endif
 
 #include <wx/mac/uma.h>
 
@@ -32,6 +35,7 @@ END_EVENT_TABLE()
 
 ControlActionUPP wxMacLiveScrollbarActionUPP = NULL ;
 
+pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCode partCode ) ;
 pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCode partCode )
 {
 	if ( partCode != 0)
@@ -46,9 +50,9 @@ pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCod
 
 wxControl::wxControl()
 {
-		m_macControl = NULL ;
-		m_macHorizontalBorder = 0 ; // additional pixels around the real control
-		m_macVerticalBorder = 0 ;
+	m_macControl = NULL ;
+	m_macHorizontalBorder = 0 ; // additional pixels around the real control
+	m_macVerticalBorder = 0 ;
     m_backgroundColour = *wxWHITE;
     m_foregroundColour = *wxBLACK;
 #if WXWIN_COMPATIBILITY
@@ -59,6 +63,24 @@ wxControl::wxControl()
 	{
 		wxMacLiveScrollbarActionUPP = NewControlActionProc( wxMacLiveScrollbarActionProc ) ;
 	}
+}
+
+bool wxControl::Create(wxWindow *parent, wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size, long style,
+                       const wxValidator& validator,
+                       const wxString& name)
+{
+	m_macControl = NULL ;
+	m_macHorizontalBorder = 0 ; // additional pixels around the real control
+	m_macVerticalBorder = 0 ;
+    bool rval = wxWindow::Create(parent, id, pos, size, style, name);
+    if (rval) {
+#if wxUSE_VALIDATORS
+        SetValidator(validator);
+#endif
+    }
+    return rval;
 }
 
 wxControl::~wxControl()
@@ -77,21 +99,6 @@ wxControl::~wxControl()
     	UMADisposeControl( m_macControl ) ;
     	m_macControl = NULL ;
     }
-}
-
-bool wxControl::Create(wxWindow *parent, wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size, long style,
-                       const wxValidator& validator,
-                       const wxString& name)
-{
-    bool rval = wxWindow::Create(parent, id, pos, size, style, name);
-    if (rval) {
-#if wxUSE_VALIDATORS
-        SetValidator(validator);
-#endif
-    }
-    return rval;
 }
 
 void wxControl::SetLabel(const wxString& title)
@@ -222,7 +229,7 @@ void wxControl::MacPostControlCreate()
 	{
 		// no font
 	}
-	else if ( IsKindOf( CLASSINFO( wxStaticBox ) ) )
+	else if ( IsKindOf( CLASSINFO( wxStaticBox ) ) || IsKindOf( CLASSINFO( wxRadioBox ) ) || IsKindOf( CLASSINFO( wxButton ) ) )
 	{
 		ControlFontStyleRec		controlstyle ;
 		controlstyle.flags = kControlUseFontMask ;
@@ -275,14 +282,16 @@ void wxControl::MacAdjustControlRect()
 		{
 			if ( IsKindOf( CLASSINFO( wxButton ) ) )
 			{
-				m_width = m_label.Length() * 8 + 12 + 2 * m_macHorizontalBorder;
+				m_width = m_label.Length() * 8 + 12 ;
 			}
 			else if ( IsKindOf( CLASSINFO( wxStaticText ) ) )
 			{
 				m_width = m_label.Length() * 8 ;
 			}
 			else
-				m_width = bestsize.right - bestsize.left + 2 * m_macHorizontalBorder;
+				m_width = bestsize.right - bestsize.left ;
+			
+			m_width += 2 * m_macHorizontalBorder ;
 		}
 		if ( m_height == -1 )
 		{
@@ -296,7 +305,7 @@ void wxControl::MacAdjustControlRect()
 		wxMacDrawingHelper helper ( wxFindWinFromMacWindow( GetMacRootWindow() ) ) ;
 		if ( helper.Ok() )
 		{
-	    UMASizeControl( m_macControl , m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
+	    	UMASizeControl( m_macControl , m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
   		}
 	}
 }
@@ -312,8 +321,10 @@ void wxControl::MacSuperChangedPosition()
 {
 	if ( m_macControl )
 	{
-		int former_mac_x = (**m_macControl).contrlRect.left ;
-		int former_mac_y = (**m_macControl).contrlRect.top ;
+		Rect contrlRect ;		
+		GetControlBounds( m_macControl , &contrlRect ) ; 
+		int former_mac_x = contrlRect.left ;
+		int former_mac_y = contrlRect.top ;
 		int mac_x = m_x ;
 		int mac_y = m_y ;
 		GetParent()->MacClientToRootWindow( & mac_x , & mac_y ) ;
@@ -327,12 +338,12 @@ void wxControl::MacSuperChangedPosition()
 		{
 			{
 				Rect inval = { former_mac_y , former_mac_x , former_mac_y + m_height , former_mac_x + m_width } ;
-				InvalRect( &inval ) ;
+				InvalWindowRect( rootwindow , &inval ) ;
 			}
-	  	UMAMoveControl( m_macControl , mac_x + m_macHorizontalBorder , mac_y + m_macVerticalBorder ) ;
+	  		UMAMoveControl( m_macControl , mac_x + m_macHorizontalBorder , mac_y + m_macVerticalBorder ) ;
 			{
 				Rect inval = { mac_y , mac_x , mac_y + m_height , mac_x + m_width } ;
-				InvalRect( &inval ) ;
+				InvalWindowRect( rootwindow , &inval ) ;
 			}
 		}
 		if ( wxrootwindow->IsKindOf( CLASSINFO( wxDialog ) ) )
@@ -378,7 +389,7 @@ void wxControl::MacSuperEnabled( bool enabled )
 		}
 	}
 	wxWindow::MacSuperEnabled( enabled ) ;
-	*/
+*/
 }
 
 void  wxControl::MacSuperShown( bool show ) 
@@ -418,8 +429,10 @@ void  wxControl::DoSetSize(int x, int y,
 	int former_w = m_width ;
 	int former_h = m_height ;
 	
-	int former_mac_x = (**m_macControl).contrlRect.left ;
-	int former_mac_y = (**m_macControl).contrlRect.top ;
+	Rect contrlRect ;		
+	GetControlBounds( m_macControl , &contrlRect ) ; 
+	int former_mac_x = contrlRect.left ;
+	int former_mac_y = contrlRect.top ;
 	
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -430,9 +443,9 @@ void  wxControl::DoSetSize(int x, int y,
   int actualHeight = height;
   int actualX = x;
   int actualY = y;
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+  if (x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
       actualX = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+  if (y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
       actualY = currentY;
   if (width == -1)
       actualWidth = currentW ;
@@ -443,7 +456,8 @@ void  wxControl::DoSetSize(int x, int y,
 		return ;
 		
 	AdjustForParentClientOrigin(actualX, actualY, sizeFlags);
-	wxMacDrawingHelper focus( wxFindWinFromMacWindow( GetMacRootWindow() ) ) ;
+	WindowRef macrootwindow = GetMacRootWindow() ;
+	wxMacDrawingHelper focus( wxFindWinFromMacWindow( macrootwindow ) ) ;
 
 	int mac_x = actualX ;
 	int mac_y = actualY ;
@@ -453,12 +467,12 @@ void  wxControl::DoSetSize(int x, int y,
 	{
 		{
 			Rect inval = { former_mac_y , former_mac_x , former_mac_y + m_height , former_mac_x + m_width } ;
-			InvalRect( &inval ) ;
+			InvalWindowRect( macrootwindow, &inval ) ;
 		}
-  	UMAMoveControl( m_macControl , mac_x + m_macHorizontalBorder , mac_y  + m_macVerticalBorder ) ;
+  		UMAMoveControl( m_macControl , mac_x + m_macHorizontalBorder , mac_y  + m_macVerticalBorder ) ;
 		{
 			Rect inval = { mac_y , mac_x , mac_y + m_height , mac_x + m_width } ;
-			InvalRect( &inval ) ;
+			InvalWindowRect(macrootwindow, &inval ) ;
 		}
 	}
 
@@ -477,15 +491,15 @@ void  wxControl::DoSetSize(int x, int y,
 	{
 		{
 			Rect inval = { mac_y , mac_x , mac_y + former_h , mac_x + former_w } ;
-			InvalRect( &inval ) ;
+			InvalWindowRect( macrootwindow, &inval ) ;
 		}
 		m_width = actualWidth ;
 		m_height = actualHeight ;
 
-   	UMASizeControl( m_macControl ,  m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
+   		UMASizeControl( m_macControl ,  m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
 		{
 			Rect inval = { mac_y , mac_x , mac_y + m_height , mac_x + m_width } ;
-			InvalRect( &inval ) ;
+			InvalWindowRect( macrootwindow , &inval ) ;
 		}
 
 		MacRepositionScrollBars() ;
@@ -555,6 +569,47 @@ void wxControl::Refresh(bool eraseBack, const wxRect *rect)
   }
 }
 
+void wxControl::MacRedrawControl()
+{
+	if ( m_macControl )
+	{
+		WindowRef window = GetMacRootWindow() ;
+		if ( window )
+		{
+			wxWindow* win = wxFindWinFromMacWindow( window ) ;
+			if ( win )
+			{
+				wxMacDrawingHelper help( win ) ;
+				// the mac control manager always assumes to have the origin at 0,0
+				SetOrigin( 0 , 0 ) ;
+				
+				bool			hasTabBehind = false ;
+				wxWindow* parent = GetParent() ;
+				while ( parent )
+				{
+					if( parent->MacGetWindowData() )
+					{
+						UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+						break ;
+					}
+					
+					if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
+					{
+						if ( ((wxControl*)parent)->m_macControl )
+							SetUpControlBackground( ((wxControl*)parent)->m_macControl , -1 , true ) ;
+						break ;
+					}
+					
+					parent = parent->GetParent() ;
+				} 
+				
+				UMADrawControl( m_macControl ) ;
+				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+			}
+		}
+	}
+}
+
 void wxControl::OnPaint(wxPaintEvent& event)
 {
 	if ( m_macControl )
@@ -566,6 +621,7 @@ void wxControl::OnPaint(wxPaintEvent& event)
 			if ( win )
 			{
 				wxMacDrawingHelper help( win ) ;
+				// the mac control manager always assumes to have the origin at 0,0
 				SetOrigin( 0 , 0 ) ;
 				
 				bool			hasTabBehind = false ;
@@ -629,7 +685,7 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
 		return ;
 	}
 		
-	if (event.GetEventType() == wxEVT_LEFT_DOWN )
+	if (event.GetEventType() == wxEVT_LEFT_DOWN || event.GetEventType() == wxEVT_LEFT_DCLICK )
 	{
 			
 		int x = event.m_x ;

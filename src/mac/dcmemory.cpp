@@ -33,10 +33,20 @@ wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
 
 wxMemoryDC::~wxMemoryDC(void)
 {
+	if ( m_selected.Ok() )
+	{
+		wxBitmapRefData * bmap = (wxBitmapRefData*) (m_selected.GetRefData()) ;
+		UnlockPixels( GetGWorldPixMap(  (CGrafPtr) bmap->m_hBitmap ) ) ;
+	}
 };
 
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
+	if ( m_selected.Ok() )
+	{
+		wxBitmapRefData * bmap = (wxBitmapRefData*) (m_selected.GetRefData()) ;
+		UnlockPixels( GetGWorldPixMap(  (CGrafPtr) bmap->m_hBitmap ) ) ;
+	}
   m_selected = bitmap;
   if (m_selected.Ok())
   {
@@ -44,6 +54,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 		if ( bmap->m_hBitmap )
 		{
 			m_macPort = (GrafPtr) bmap->m_hBitmap ;
+			LockPixels( GetGWorldPixMap(  (CGrafPtr)  m_macPort ) ) ;
 			wxMask * mask = bitmap.GetMask() ;
 			if ( mask )
 			{

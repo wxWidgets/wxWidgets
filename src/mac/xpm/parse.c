@@ -38,7 +38,7 @@
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
 
-#include "xpmi.h"
+#include "XpmI.h"
 #include <ctype.h>
 
 LFUNC(ParsePixels, int, (xpmData *data, unsigned int width,

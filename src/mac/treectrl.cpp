@@ -16,9 +16,11 @@
 #include "wx/stubs/textctrl.h"
 #include "wx/stubs/treectrl.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxTreeItem, wxObject)
 
+#endif
 
 wxTreeCtrl::wxTreeCtrl()
 {

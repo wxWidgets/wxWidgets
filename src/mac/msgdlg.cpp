@@ -16,7 +16,9 @@
 #include "wx/msgdlg.h"
 #include "wx/mac/uma.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
+#endif
 
 #define kMacOKAlertResourceID 128
 #define kMacYesNoAlertResourceID 129
@@ -69,7 +71,6 @@ int wxMessageDialog::ShowModal()
 	short result ;
 	Str255 pascalTitle ;
 	Str255 pascalText ;
-	
 	
 	if (wxApp::s_macDefaultEncodingIsPC)
 	{

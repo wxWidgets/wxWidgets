@@ -32,20 +32,22 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
+#include "wx/setup.h"
+
 #ifdef macintosh
 	#ifdef __std
 		#undef __std
 		#define __std()
 	#endif
-	#include <unistd.h>
 	#include <stat.h>
-	#include <fcntl.h>
 	#include <unix.h>
+	#include <unistd.h>
+	#include <fcntl.h>
 	#undef NO_ZPIPE
 	#define NO_ZPIPE
 #endif
 
-#include "xpmi.h"
+#include "XpmI.h"
 #ifndef macintosh
 #include <sys/stat.h>
 #if !defined(NO_ZPIPE) && defined(WIN32)

@@ -37,7 +37,7 @@
  * Lorens Younes (d93-hyo@nada.kth.se) 4/96
  */
 
-#include "xpmi.h"
+#include "XpmI.h"
 #ifdef macintosh
 	#undef NO_ZPIPE
 	#define NO_ZPIPE

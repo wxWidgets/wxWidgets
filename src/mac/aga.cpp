@@ -1,3 +1,5 @@
+#if !TARGET_CARBON
+
 #include <wx/mac/uma.h>
 #include <wx/mac/aga.h>
 #include <extcdef.h>
@@ -600,6 +602,10 @@ void AGADeactivateControl( ControlHandle inControl )
 			}
 		}
 	}
+	else
+	{
+		::HiliteControl( inControl , 255 ) ;
+	}
 }
 
 void AGAActivateControl( ControlHandle inControl ) 
@@ -614,6 +620,10 @@ void AGAActivateControl( ControlHandle inControl )
 				info->defProc( info->procID , inControl , kControlMsgActivate , 1 ) ;
 			}
 		}
+	}
+	else
+	{
+		::HiliteControl( inControl , 0 ) ;
 	}
 }
 
@@ -718,6 +728,7 @@ void DisposeExtCDEFInfo( ControlHandle theControl)
 			DisposeHandle( info->children ) ;
 			info->children = NULL ;
 			free( (void*) (**theControl).contrlRfCon ) ;
+			(**theControl).contrlRfCon = NULL ;
 		}
 	}
 }
@@ -922,51 +933,6 @@ void AGASetFontStyle( ControlFontStyleRec *fontstyle )
 		::RGBBackColor( &fontstyle->backColor ) ;
 } ;
 
-class AGAPortHelper 
-{
-public :
-	AGAPortHelper() 
-	{
-		GetPenState( &oldPenState ) ;
-		GetBackColor( &oldBackColor ) ;
-		GetForeColor( &oldForeColor ) ;
-
-		GetPort( &port ) ;
-		clip = NewRgn() ;
-		GetClip( clip );
-		font = port->txFont;
-		size = port->txSize;
-		style = port->txFace;
-		mode = port->txMode;	
-
-	}
-	~AGAPortHelper()
-	{
-			SetPort( port ) ;
-			SetClip( clip ) ;
-			DisposeRgn( clip ) ;
-			RGBForeColor(&oldForeColor);
-			RGBBackColor(&oldBackColor);
-			SetPenState(&oldPenState);				
-
-			TextFont( font );
-			TextSize( size );
-			TextFace( style );
-			TextMode( mode );
-	}
-
-private :
-				GrafPtr			port ;
-				PenState		oldPenState ;
-				RGBColor		oldForeColor ;
-				RGBColor		oldBackColor ;
-				RgnHandle		clip ;
-				short				font ;
-				short				size ;
-				short				style ;
-				short 			mode ;
-} ;
-
 pascal SInt32 AGAProgressBarDefProc (SInt16 procID, ControlHandle theControl, ControlDefProcMessage message, SInt32 param)
 {	
 	switch( message )
@@ -1079,7 +1045,7 @@ pascal SInt32 AGABevelButtonDefProc (SInt16 procID, ControlHandle theControl, Co
 					return 0 ;
 					
 				{
-					AGAPortHelper help() ;
+					AGAPortHelper help((**theControl).contrlOwner) ;
 					AGASetFontStyle( &info->fontStyle ) ;
 					Boolean mRadioBehavior = false ;
 					
@@ -1219,7 +1185,7 @@ pascal SInt32 AGAButtonDefProc (SInt16 procID, ControlHandle theControl, Control
 					return 0 ;
 					
 				{
-					AGAPortHelper help() ;
+					AGAPortHelper help((**theControl).contrlOwner) ;
 					AGASetFontStyle( &info->fontStyle ) ;
 					Boolean mRadioBehavior = false ;
 					
@@ -1456,7 +1422,7 @@ pascal SInt32 AGACheckBoxDefProc (SInt16 procID, ControlHandle theControl, Contr
 						return 0 ;
 						
 					{
-						AGAPortHelper help() ;
+						AGAPortHelper help((**theControl).contrlOwner) ;
 						Rect frame =  (**theControl).contrlRect ;
 						Boolean hasColor = true;
 						Boolean disabled = (*theControl)->contrlHilite == 255 ;
@@ -1844,7 +1810,7 @@ pascal SInt32 AGAStaticGroupBoxTextDefProc (SInt16 procID, ControlHandle theCont
 				{
 					bool disabled = false ;
 					bool hasColor = true ;
-					AGAPortHelper help() ;
+					AGAPortHelper help((**theControl).contrlOwner) ;
 					AGASetFontStyle( &info->fontStyle ) ;
 					FontInfo fi ;
 					::GetFontInfo( &fi ) ;
@@ -1930,7 +1896,7 @@ pascal SInt32 AGAStaticTextDefProc (SInt16 procID, ControlHandle theControl, Con
 					return 0 ;
 					
 				{
-					AGAPortHelper help() ;
+					AGAPortHelper help((**theControl).contrlOwner) ;
 					AGASetFontStyle( &info->fontStyle ) ;
 					int x =	(**theControl).contrlRect.left ;
 					int y =	(**theControl).contrlRect.top ;
@@ -2125,7 +2091,7 @@ pascal SInt32 AGAEditTextDefProc (SInt16 procID, ControlHandle theControl, Contr
 	{
 		case initCntl :
 			{
-				AGAPortHelper help() ;
+				AGAPortHelper help((**theControl).contrlOwner) ;
 				SetPort( (**theControl).contrlOwner ) ;
 				::TextFont( kFontIDGeneva ) ; 
 				::TextSize( 10 ) ;
@@ -2147,7 +2113,7 @@ pascal SInt32 AGAEditTextDefProc (SInt16 procID, ControlHandle theControl, Contr
 			break ;
 		case drawCntl :
 			{
-				AGAPortHelper help() ;
+				AGAPortHelper help((**theControl).contrlOwner) ;
 				AGASetFontStyle( &info->fontStyle ) ;
 				SetPort( (**theControl).contrlOwner ) ;
 				RGBBackColor( &gAGARamp[ kAGAWhite ] ) ;
@@ -2254,9 +2220,8 @@ pascal SInt32 AGAEditTextDefProc (SInt16 procID, ControlHandle theControl, Contr
 			break ;
 		case kControlMsgKeyDown :
 			{
-				AGAPortHelper help() ;
+				AGAPortHelper help( (**theControl).contrlOwner ) ;
 				AGASetFontStyle( &info->fontStyle ) ;
-				SetPort( (**theControl).contrlOwner ) ;
 				RGBBackColor( &gAGARamp[ kAGAWhite ] ) ;
 				RGBForeColor( &gAGARamp[ kAGABlack ] ) ;
 				ControlKeyDownRec * rec = (ControlKeyDownRec*) param ;
@@ -2364,7 +2329,7 @@ pascal SInt32 AGAListControlDefProc (SInt16 procID, ControlHandle theControl, Co
 			break ;
 		case drawCntl :
 			{
-				AGAPortHelper help() ;
+				AGAPortHelper help((**theControl).contrlOwner) ;
 				AGASetFontStyle( &info->fontStyle ) ;
 				RGBBackColor( &gAGARamp[ kAGAWhite ] ) ;
 				EraseRect( &(**theControl).contrlRect ) ;
@@ -2578,4 +2543,78 @@ void			AGASetThemeWindowBackground		(WindowRef 				inWindow,
 	SetPort( port ) ;
 }
 
+void AGAApplyThemeBackground(ThemeBackgroundKind 	inKind,
+								 const Rect *			bounds,
+								 ThemeDrawState 		inState,
+								 SInt16 				inDepth,
+								 Boolean 				inColorDev) 
+{
+}
+
+#endif
+AGAPortHelper::AGAPortHelper( GrafPtr newport) 
+{
+	GetPort( &port ) ;
+	SetPort( newport ) ;
+//	wxASSERT( newport->portRect.left == 0 && newport->portRect.top == 0 ) ; 
+	GetPenState( &oldPenState ) ;
+	GetBackColor( &oldBackColor ) ;
+	GetForeColor( &oldForeColor ) ;
+
+	clip = NewRgn() ;
+	GetClip( clip );
+	font = GetPortTextFont( newport);
+	size = GetPortTextSize( newport);
+	style = GetPortTextFace( newport);
+	mode = GetPortTextMode( newport);	
+	nport = newport ;
+
+}
+AGAPortHelper::AGAPortHelper()
+{
+	clip = NULL ;
+}
+void AGAPortHelper::Setup( GrafPtr newport )
+{
+	GetPort( &port ) ;
+	SetPort( newport ) ;
+//	wxASSERT( newport->portRect.left == 0 && newport->portRect.top == 0 ) ; 
+	GetPenState( &oldPenState ) ;
+	GetBackColor( &oldBackColor ) ;
+	GetForeColor( &oldForeColor ) ;
+
+	clip = NewRgn() ;
+	GetClip( clip );
+	font = GetPortTextFont( newport);
+	size = GetPortTextSize( newport);
+	style = GetPortTextFace( newport);
+	mode = GetPortTextMode( newport);	
+	nport = newport ;
+}
+void AGAPortHelper::Clear()
+{
+	if ( clip )
+	{
+		DisposeRgn( clip ) ;
+		clip = NULL ;
+	}
+}
+AGAPortHelper::~AGAPortHelper()
+{
+	if ( clip )
+	{
+		SetPort( nport ) ;
+		SetClip( clip ) ;
+		DisposeRgn( clip ) ;
+		RGBForeColor(&oldForeColor);
+		RGBBackColor(&oldBackColor);
+		SetPenState(&oldPenState);				
+
+		TextFont( font );
+		TextSize( size );
+		TextFace( style );
+		TextMode( mode );
+		SetPort( port ) ;
+	}
+}
 

@@ -14,8 +14,11 @@
 #endif
 
 #include "wx/dc.h"
+#include "wx/mac/uma.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+#endif
 
 //-----------------------------------------------------------------------------
 // constants
@@ -34,7 +37,7 @@ long wxDC::m_macCurrentPortId = 1 ;
 // wxDC
 //-----------------------------------------------------------------------------
 
-wxDC::wxDC(void)
+wxDC::wxDC()
 {
   m_ok = FALSE;
   m_optimize = FALSE;
@@ -42,8 +45,8 @@ wxDC::wxDC(void)
   m_colour = TRUE;
   m_clipping = FALSE;
   
-  m_mm_to_pix_x = 1.0;
-  m_mm_to_pix_y = 1.0;
+  m_mm_to_pix_x = mm2pt;
+  m_mm_to_pix_y = mm2pt;
   
   m_logicalOriginX = 0;
   m_logicalOriginY = 0;
@@ -102,20 +105,32 @@ wxDC::wxDC(void)
 
 wxDC::~wxDC(void)
 {
+	if ( !m_macPortHelper.IsCleared() )
+	{
+	GrafPtr port ;
+	GetPort( &port ) ;
+	SetPort( m_macPortHelper.GetCurrentPort() ) ;
+	SetOrigin( 0 , 0 ) ;
+	SetPort( port ) ;
+	}
+	/*
 	if ( m_macPort )
 	{
+		::SetPort( m_macPort ) ;
 		::SetOrigin( 0 , 0 ) ;
 		::ClipRect( &m_macPort->portRect ) ;
 		::PenNormal() ;
 		::SetPort( m_macOrigPort ) ;
 	}
+	*/
 	++m_macCurrentPortId ;
 };
 
 void wxDC::MacSetupPort() const
 {
+	AGAPortHelper* help = &m_macPortHelper ;
+	help->Setup( m_macPort ) ;
 	m_macPortId = ++m_macCurrentPortId ;
-	::SetPort(m_macPort);
 	::SetOrigin(-m_macLocalOrigin.h, -m_macLocalOrigin.v);
 	::ClipRect(&m_macClipRect);
 
@@ -124,8 +139,10 @@ void wxDC::MacSetupPort() const
 	m_macPenInstalled = false ;	
 }
 
-void wxDC::DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
+void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
 {
+	float scale = 1.0 ;
+	
   if (!Ok()) 
   	return;
   MacVerifySetup() ;
@@ -140,7 +157,7 @@ void wxDC::DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
     {
 			if ( bmap->m_bitmapType == kMacBitmapTypePict )
 			{ 
-    		Rect bitmaprect = { 0 , 0 , bmap->m_height , bmap->m_width } ;
+    		Rect bitmaprect = { 0 , 0 , bmap->m_height * scale , bmap->m_width * scale} ;
 				::OffsetRect( &bitmaprect , xx1 , yy1 ) ;
 				::DrawPicture( bmap->m_hPict , &bitmaprect ) ;
 			}
@@ -165,20 +182,21 @@ void wxDC::DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
 						source.bottom = bmap->m_height ;
 						dest.top = YLOG2DEV(y) ;
 						dest.left = XLOG2DEV(x) ;
-						dest.bottom = YLOG2DEV(y + bmap->m_height )  ;
-						dest.right = XLOG2DEV(x + bmap->m_width ) ;
+						dest.bottom = YLOG2DEV(y + bmap->m_height * scale)  ;
+						dest.right = XLOG2DEV(x + bmap->m_width * scale ) ;
 	
 						if ( useMask && bmp.GetMask() )
 						{
 							if ( LockPixels( GetGWorldPixMap( bmp.GetMask()->GetMaskBitmap( ) ) ) )
 							{
-								CopyMask( &GrafPtr( bmapworld )->portBits , &GrafPtr( bmp.GetMask()->GetMaskBitmap( ) )->portBits , &GrafPtr( m_macPort )->portBits ,
+								CopyMask( GetPortBitMapForCopyBits( bmapworld ) , GetPortBitMapForCopyBits( bmp.GetMask()->GetMaskBitmap( ) ) ,
+								 GetPortBitMapForCopyBits( m_macPort ) ,
 									&source, &source , &dest ) ;
 								UnlockPixels( GetGWorldPixMap( bmp.GetMask()->GetMaskBitmap( ) )  ) ;
 							}
 						}
 						else
-							CopyBits( &GrafPtr( bmapworld )->portBits , &GrafPtr( m_macPort )->portBits ,
+							CopyBits( GetPortBitMapForCopyBits( bmapworld ) , GetPortBitMapForCopyBits( m_macPort ),
 								&source, &dest, srcCopy, NULL ) ;
 
 						UnlockPixels( bmappixels ) ;
@@ -192,7 +210,7 @@ void wxDC::DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
 	}
 }
 
-void wxDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
+void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 {
   if (!Ok()) 
   	return;
@@ -213,69 +231,9 @@ void wxDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
 	}
 };
 
-void wxDC::DrawPoint( wxPoint& point ) 
-{ 
-  DrawPoint( point.x, point.y ); 
-};
-
-void wxDC::DrawPolygon( wxList *list, long xoffset, long yoffset, int fillStyle )
+void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-  int n = list->Number();
-  wxPoint *points = new wxPoint[n];
-
-  int i = 0;
-  for( wxNode *node = list->First(); node; node = node->Next() )
-  {
-    wxPoint *point = (wxPoint *)node->Data();
-    points[i].x = point->x;
-    points[i++].y = point->y;
-  };
-  DrawPolygon( n, points, xoffset, yoffset, fillStyle );
-  delete[] points;
-};
-
-void wxDC::DrawLines( wxList *list, long xoffset, long yoffset )
-{
-  int n = list->Number();
-  wxPoint *points = new wxPoint[n];
-
-  int i = 0;
-  for( wxNode *node = list->First(); node; node = node->Next() ) 
-  {
-    wxPoint *point = (wxPoint *)node->Data();
-    points[i].x = point->x;
-    points[i++].y = point->y;
-  };
-  DrawLines( n, points, xoffset, yoffset );
-  delete []points;
-};
-
-void wxDC::DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 )
-{
-  wxList list;
-  list.Append( (wxObject*)new wxPoint(x1, y1) );
-  list.Append( (wxObject*)new wxPoint(x2, y2) );
-  list.Append( (wxObject*)new wxPoint(x3, y3) );
-  DrawSpline(&list);
-  wxNode *node = list.First();
-  while (node)
-  {
-    wxPoint *p = (wxPoint*)node->Data();
-    delete p;
-    node = node->Next();
-  };
-};
-
-void wxDC::DrawSpline( int n, wxPoint points[] )
-{
-  wxList list;
-  for (int i = 0; i < n; i++) list.Append( (wxObject*)&points[i] );
-  DrawSpline( &list );
-};
-
-void wxDC::SetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
-{
-  MacVerifySetup() ;
+  	MacVerifySetup() ;
 	if( m_clipping )
 	{
 		m_clipX1 = wxMax( m_clipX1 , x ) ;
@@ -300,13 +258,24 @@ void wxDC::SetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord heigh
 	
 	Rect clip = { y1 , x1 , y2 , x2 } ;
 	
-  ::ClipRect( &clip ) ;
+  	::ClipRect( &clip ) ;
 
 };
 
-void wxDC::SetClippingRegion(const wxRect& rect)
-{ 
-	SetClippingRegion(rect.x, rect.y, rect.width, rect.height); 
+void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
+{
+    wxCHECK_RET( Ok(), wxT("invalid window dc") );
+
+  	MacVerifySetup() ;
+    if (region.Empty())
+    {
+        DestroyClippingRegion();
+        return;
+    }
+
+    wxCoord xx, yy, ww, hh;
+    region.GetBox( xx, yy, ww, hh );
+    wxDC::DoSetClippingRegion( xx, yy, ww, hh );
 }
 
 void wxDC::DestroyClippingRegion(void)
@@ -316,48 +285,14 @@ void wxDC::DestroyClippingRegion(void)
 //	Rect clip = { -32000 , -32000 , 32000 , 32000 } ;
 	::ClipRect(&m_macClipRect);
 };
-
-void wxDC::GetClippingBox( wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height ) const
-{
-  if (m_clipping)
-  {
-    if (x) *x = m_clipX1;
-    if (y) *y = m_clipY1;
-    if (width) *width = (m_clipX2 - m_clipX1);
-    if (height) *height = (m_clipY2 - m_clipY1);
-  }
-  else
-   *x = *y = *width = *height = 0;
-};
-
-void wxDC::GetClippingBox( long *x, long *y, long *width, long *height ) const
-{
-  if (m_clipping)
-  {
-    if (x) *x = m_clipX1;
-    if (y) *y = m_clipY1;
-    if (width) *width = (m_clipX2 - m_clipX1);
-    if (height) *height = (m_clipY2 - m_clipY1);
-  }
-  else
-   *x = *y = *width = *height = 0;
-};
-
-void wxDC::GetClippingBox(wxRect& rect) const
-{
-  // Necessary to use intermediate variables for 16-bit compilation
-  wxCoord x, y, w, h;
-  GetClippingBox(&x, &y, &w, &h);
-  rect.x = x; rect.y = y; rect.width = w; rect.height = h;
-}
     
-void wxDC::GetSize( int* width, int* height ) const
+void wxDC::DoGetSize( int* width, int* height ) const
 {
   *width = m_maxX-m_minX;
   *height = m_maxY-m_minY;
 };
 
-void wxDC::GetSizeMM( long* width, long* height ) const
+void wxDC::DoGetSizeMM( int* width, int* height ) const
 {
   int w = 0;
   int h = 0;
@@ -416,12 +351,6 @@ void wxDC::SetUserScale( double x, double y )
   ComputeScaleAndOrigin();
 };
 
-void wxDC::GetUserScale( double *x, double *y )
-{
-  if (x) *x = m_userScaleX;
-  if (y) *y = m_userScaleY;
-};
-
 void wxDC::SetLogicalScale( double x, double y )
 {
   // allow negative ?
@@ -430,40 +359,20 @@ void wxDC::SetLogicalScale( double x, double y )
   ComputeScaleAndOrigin();
 };
 
-void wxDC::GetLogicalScale( double *x, double *y )
-{
-  if (x) *x = m_logicalScaleX;
-  if (y) *y = m_logicalScaleY;
-};
-
-void wxDC::SetLogicalOrigin( long x, long y )
+void wxDC::SetLogicalOrigin( wxCoord x, wxCoord y )
 {
   m_logicalOriginX = x * m_signX;   // is this still correct ?
   m_logicalOriginY = y * m_signY;
   ComputeScaleAndOrigin();
 };
 
-void wxDC::GetLogicalOrigin( long *x, long *y )
-{
-  if (x) *x = m_logicalOriginX;
-  if (y) *y = m_logicalOriginY;
-};
-
-void wxDC::SetDeviceOrigin( long x, long y )
+void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
   m_externalDeviceOriginX = x;
   m_externalDeviceOriginY = y;
   ComputeScaleAndOrigin();
 };
-
-void wxDC::GetDeviceOrigin( long *x, long *y )
-{
-//  if (x) *x = m_externalDeviceOriginX;
-//  if (y) *y = m_externalDeviceOriginY;
-  if (x) *x = m_deviceOriginX;
-  if (y) *y = m_deviceOriginY;
-};
-
+/*
 void wxDC::SetInternalDeviceOrigin( long x, long y )
 {
   m_internalDeviceOriginX = x;
@@ -476,53 +385,14 @@ void wxDC::GetInternalDeviceOrigin( long *x, long *y )
   if (x) *x = m_internalDeviceOriginX;
   if (y) *y = m_internalDeviceOriginY;
 };
-
+*/
 void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
   m_signX = (xLeftRight ?  1 : -1);
   m_signY = (yBottomUp  ? -1 :  1);
   ComputeScaleAndOrigin();
 };
-
-long wxDC::DeviceToLogicalX(long x) const
-{
-  return XDEV2LOG(x);
-};
-
-long wxDC::DeviceToLogicalY(long y) const
-{
-  return YDEV2LOG(y);
-};
-
-long wxDC::DeviceToLogicalXRel(long x) const
-{
-  return XDEV2LOGREL(x);
-};
-
-long wxDC::DeviceToLogicalYRel(long y) const
-{
-  return YDEV2LOGREL(y);
-};
-
-long wxDC::LogicalToDeviceX(long x) const
-{
-  return XLOG2DEV(x);
-};
-
-long wxDC::LogicalToDeviceY(long y) const
-{
-  return YLOG2DEV(y);
-};
-
-long wxDC::LogicalToDeviceXRel(long x) const
-{
-  return XLOG2DEVREL(x);
-};
-
-long wxDC::LogicalToDeviceYRel(long y) const
-{
-  return YLOG2DEVREL(y);
-};
+/*
     
 void wxDC::CalcBoundingBox( long x, long y )
 {
@@ -531,6 +401,16 @@ void wxDC::CalcBoundingBox( long x, long y )
   if (x > m_maxX) m_maxX = x;
   if (y > m_maxY) m_maxY = y;
 };
+*/
+wxSize wxDC::GetPPI() const
+{
+    return wxSize(72, 72);
+}
+
+int wxDC::GetDepth() const
+{
+	return wxDisplayDepth() ;
+}
 
 void wxDC::ComputeScaleAndOrigin(void)
 {
@@ -547,12 +427,7 @@ void wxDC::ComputeScaleAndOrigin(void)
   // CMB: if scale has changed call SetPen to recalulate the line width 
   if (m_scaleX != origScaleX || m_scaleY != origScaleY)
   {
-    // this is a bit artificial, but we need to force wxDC to think
-    // the pen has changed
-    wxPen* pen = & GetPen();
-    wxPen tempPen;
-    m_pen = tempPen;
-    SetPen(* pen);
+  	// TODO : set internal flags for recalc
   }
 };
 
@@ -634,16 +509,17 @@ void  wxDC::SetLogicalFunction( int function )
 	m_macPenInstalled = false ;
 }
 
-void  wxDC::FloodFill( long x1, long y1, const wxColour& col, int style )
+void  wxDC::DoFloodFill( wxCoord x, wxCoord y, const wxColour& col,
+                             int style )
 {
 }
 
-bool  wxDC::GetPixel( long x1, long y1, wxColour *col ) const 
+bool  wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const 
 {
 	return true ;
 }
 
-void  wxDC::DrawLine( long x1, long y1, long x2, long y2 )
+void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 {
   if (!Ok()) 
   	return;
@@ -664,19 +540,22 @@ void  wxDC::DrawLine( long x1, long y1, long x2, long y2 )
   };
 }
 
-void  wxDC::CrossHair( long x, long y )
+void  wxDC::DoCrossHair( wxCoord x, wxCoord y )
 {
 }
 
-void  wxDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
+void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
+                           wxCoord x2, wxCoord y2,
+                           wxCoord xc, wxCoord yc )
 {
 }
 
-void  wxDC::DrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
+void  wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
+                                   double sa, double ea )
 {
 }
 
-void  wxDC::DrawPoint( long x, long y )
+void  wxDC::DoDrawPoint( wxCoord x, wxCoord y )
 {
   if (!Ok()) 
   	return;
@@ -694,7 +573,8 @@ void  wxDC::DrawPoint( long x, long y )
   };
 }
 
-void  wxDC::DrawLines( int n, wxPoint points[], long xoffset , long yoffset  )
+void  wxDC::DoDrawLines(int n, wxPoint points[],
+                             wxCoord xoffset, wxCoord yoffset)
 {
   if (!Ok()) 
   	return;
@@ -719,8 +599,9 @@ void  wxDC::DrawLines( int n, wxPoint points[], long xoffset , long yoffset  )
   }
 }
 
-void  wxDC::DrawPolygon( int n, wxPoint points[], long xoffset , long yoffset , 
-                              int fillStyle )
+void  wxDC::DoDrawPolygon(int n, wxPoint points[],
+                               wxCoord xoffset, wxCoord yoffset,
+                               int fillStyle )
 {
   if (!Ok()) 
   	return;
@@ -754,7 +635,7 @@ void  wxDC::DrawPolygon( int n, wxPoint points[], long xoffset , long yoffset ,
   KillPoly( polygon ) ;
 }
 
-void  wxDC::DrawRectangle( long x, long y, long width, long height )
+void  wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
   if (!Ok()) 
   	return;
@@ -797,7 +678,9 @@ void  wxDC::DrawRectangle( long x, long y, long width, long height )
 	};
 }
 
-void  wxDC::DrawRoundedRectangle( long x, long y, long width, long height, double radius  )
+void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
+                                        wxCoord width, wxCoord height,
+                                        double radius)
 {
   if (!Ok()) 
   	return;
@@ -843,7 +726,7 @@ void  wxDC::DrawRoundedRectangle( long x, long y, long width, long height, doubl
 	};
 }
 
-void  wxDC::DrawEllipse( long x, long y, long width, long height )
+void  wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
   if (!Ok()) 
   	return;
@@ -1001,7 +884,7 @@ static void wx_spline_draw_point_array(wxDC *dc)
   }
 }
 
-void  wxDC::DrawSpline( wxList *points )
+void  wxDC::DoDrawSpline(wxList *points)
 {
     wxPoint *p;
     double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
@@ -1059,8 +942,8 @@ bool  wxDC::CanDrawBitmap(void) const
 }
 
 
-bool  wxDC::Blit( long xdest, long ydest, long width, long height,
-       wxDC *source, long xsrc, long ysrc, int logical_func , bool useMask )
+bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
+                        wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask )
 {
   if (!Ok()) return FALSE;
   MacVerifySetup() ;
@@ -1069,8 +952,8 @@ bool  wxDC::Blit( long xdest, long ydest, long width, long height,
 	PixMapHandle	bmappixels =  GetGWorldPixMap( sourcePort ) ; 
 	RGBColor		white = { 0xFFFF, 0xFFFF,0xFFFF} ;
 	RGBColor		black = { 0,0,0} ;
-		RGBForeColor( &m_textForegroundColour.GetPixel() ) ;
-		RGBBackColor( &m_textBackgroundColour.GetPixel() ) ;
+	RGBForeColor( &m_textForegroundColour.GetPixel() ) ;
+	RGBBackColor( &m_textBackgroundColour.GetPixel() ) ;
 
 	if ( LockPixels(bmappixels) )
 	{
@@ -1094,7 +977,7 @@ bool  wxDC::Blit( long xdest, long ydest, long width, long height,
     	logical_func == wxXOR ? srcXor :
   //  	logical_func == wxOR_REVERSE ? MERGEPAINT :
   //  	logical_func == wxAND_REVERSE ? SRCERASE :
-    	logical_func == wxSRC_OR ? srcOr :
+  //  	logical_func == wxSRC_OR ? srcOr :
   //  	logical_func == wxSRC_AND ? SRCAND :
     		srcCopy );
 
@@ -1103,14 +986,15 @@ bool  wxDC::Blit( long xdest, long ydest, long width, long height,
 			wxASSERT( mode == srcCopy ) ;
 			if ( LockPixels( GetGWorldPixMap( source->m_macMask ) ) )
 			{
-				CopyMask( &GrafPtr( sourcePort )->portBits , &GrafPtr( source->m_macMask )->portBits , &GrafPtr( m_macPort )->portBits ,
+				CopyMask( GetPortBitMapForCopyBits( sourcePort ) , GetPortBitMapForCopyBits( source->m_macMask ) , 
+				GetPortBitMapForCopyBits( m_macPort ) ,
 					&srcrect, &srcrect , &dstrect ) ;
 				UnlockPixels( GetGWorldPixMap( source->m_macMask )  ) ;
 			}
 		}
 		else
 		{
-		CopyBits( &GrafPtr( sourcePort )->portBits , &GrafPtr( m_macPort )->portBits ,
+			CopyBits( GetPortBitMapForCopyBits( sourcePort ) , GetPortBitMapForCopyBits( m_macPort ) ,
 				&srcrect, &dstrect, mode, NULL ) ;
 		}
 		UnlockPixels( bmappixels ) ;
@@ -1123,7 +1007,11 @@ bool  wxDC::Blit( long xdest, long ydest, long width, long height,
   return TRUE;
 }
 
-void  wxDC::DrawText( const wxString &string, long x, long y, bool use16)
+void  wxDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
+                                   double angle)
+{
+}
+void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 {
   if (!Ok()) 
   	return;
@@ -1161,14 +1049,14 @@ void  wxDC::DrawText( const wxString &string, long x, long y, bool use16)
 
 		if ( wxApp::s_macDefaultEncodingIsPC )
 		{
-			macText = wxMacMakeMacStringFromPC( string ) ;
+			macText = wxMacMakeMacStringFromPC( strtext ) ;
 			text = macText ;
 			length = macText.Length() ;
 		}
 		else
 		{
-			text = string ;
-			length = string.Length() ;
+			text = strtext ;
+			length = strtext.Length() ;
 		}
 		
 		int laststop = 0 ;
@@ -1200,9 +1088,9 @@ bool  wxDC::CanGetTextExtent(void) const
 	return true ;
 }
 
-void  wxDC::GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent, long *externalLeading ,
-                     wxFont *theFont , bool use16  ) const
+void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,
+                     wxCoord *descent, wxCoord *externalLeading ,
+                     wxFont *theFont ) const
 {
   if (!Ok()) 
   	return;
@@ -1217,11 +1105,8 @@ void  wxDC::GetTextExtent( const wxString &string, long *width, long *height,
 	
 		if ( font )
 		{
-	  	long yy1 = YLOG2DEV(0);
-	 		long yy2 = YLOG2DEV(font->m_macFontSize);
-	
 			::TextFont( font->m_macFontNum ) ;
-			::TextSize( abs( yy2-yy1) ) ;
+			::TextSize( YLOG2DEVREL( font->m_macFontSize) ) ;
 			::TextFace( font->m_macFontStyle ) ;
 		}
 	}
@@ -1233,9 +1118,12 @@ void  wxDC::GetTextExtent( const wxString &string, long *width, long *height,
 	FontInfo fi ;
 	::GetFontInfo( &fi ) ;
 
-	*height = fi.descent + fi.ascent ;
-	*descent = fi.descent ;
-	*externalLeading = fi.leading ;
+	if ( height )
+		*height = YDEV2LOGREL( fi.descent + fi.ascent ) ;
+	if ( descent )
+		*descent =YDEV2LOGREL( fi.descent );
+	if ( externalLeading )
+		*externalLeading = YDEV2LOGREL( fi.leading ) ;
 	
 	const char *text = NULL ;
 	int length = 0 ;
@@ -1255,24 +1143,28 @@ void  wxDC::GetTextExtent( const wxString &string, long *width, long *height,
 	int laststop = 0 ;
 	int i = 0 ;
 	int curwidth = 0 ;
-	*width = 0 ;
-	
-	while( i < length )
+	if ( width )
 	{
-		if( text[i] == 13 || text[i] == 10)
+		*width = 0 ;
+	
+		while( i < length )
 		{
-			*height += fi.descent + fi.ascent + fi.leading;
-			curwidth = ::TextWidth( text , laststop , i - laststop ) ;
-			if ( curwidth > *width )
-				*width = curwidth ;
-			laststop = i+1 ;
+			if( text[i] == 13 || text[i] == 10)
+			{
+				if ( height )
+					*height += YDEV2LOGREL( fi.descent + fi.ascent + fi.leading ) ;
+				curwidth = ::TextWidth( text , laststop , i - laststop ) ;
+				if ( curwidth > *width )
+					*width = XDEV2LOGREL( curwidth ) ;
+				laststop = i+1 ;
+			}
+			i++ ;
 		}
-		i++ ;
+				
+		curwidth = ::TextWidth( text , laststop , i - laststop ) ;
+		if ( curwidth > *width )
+			*width = XDEV2LOGREL( curwidth ) ;
 	}
-			
-	curwidth = ::TextWidth( text , laststop , i - laststop ) ;
-	if ( curwidth > *width )
-		*width = curwidth ;
 
 	if ( theFont )
 	{
@@ -1292,7 +1184,7 @@ wxCoord   wxDC::GetCharWidth(void) const
 	FontInfo fi ;
 	::GetFontInfo( &fi ) ;
 
-	return (fi.descent + fi.ascent) / 2 ;
+	return YDEV2LOGREL((fi.descent + fi.ascent) / 2) ;
 }
 
 wxCoord   wxDC::GetCharHeight(void) const
@@ -1307,7 +1199,7 @@ wxCoord   wxDC::GetCharHeight(void) const
 	FontInfo fi ;
 	::GetFontInfo( &fi ) ;
 
-	return fi.descent + fi.ascent ;
+	return YDEV2LOGREL( fi.descent + fi.ascent );
 }
 
 void  wxDC::Clear(void)
@@ -1332,7 +1224,8 @@ void wxDC::MacInstallFont() const
 
 	if ( m_macFontInstalled )
 		return ;
-		
+	Pattern blackColor ;
+	
 	wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
 
 	if ( font )
@@ -1377,7 +1270,7 @@ void wxDC::MacInstallFont() const
 			mode = patCopy ;
 			break ;
 		case wxINVERT:     // NOT dst
-			::PenPat(&qd.black);
+			::PenPat(GetQDGlobalsBlack(&blackColor));
 			mode = patXor ;
 			break ;
 		case wxXOR:        // src XOR dst
@@ -1403,8 +1296,8 @@ void wxDC::MacInstallFont() const
 		case wxNAND:       // (NOT src) OR (NOT dst)
 		case wxOR:         // src OR dst
 		case wxSET:        // 1
-		case wxSRC_OR:     // source _bitmap_ OR destination
-		case wxSRC_AND:     // source _bitmap_ AND destination
+//		case wxSRC_OR:     // source _bitmap_ OR destination
+//		case wxSRC_AND:     // source _bitmap_ AND destination
 			break ;
 	}
 	::PenMode( mode ) ;
@@ -1447,6 +1340,8 @@ void wxDC::MacInstallPen() const
   	return;
   MacVerifySetup() ;
 
+	Pattern	 blackColor;
+
 	if ( m_macPenInstalled )
 		return ;
 
@@ -1460,7 +1355,7 @@ void wxDC::MacInstallPen() const
 	int penStyle = m_pen.GetStyle();
 	
 	if (penStyle == wxSOLID)
-		::PenPat(&qd.black);
+		::PenPat(GetQDGlobalsBlack(&blackColor));
 	else if (IS_HATCH(penStyle))
 	{
 		Pattern pat ;
@@ -1469,7 +1364,7 @@ void wxDC::MacInstallPen() const
 	}
 	else
 	{
-		::PenPat(&qd.black);
+		::PenPat(GetQDGlobalsBlack(&blackColor));
 	}
 
 	short mode = patCopy ;
@@ -1482,7 +1377,7 @@ void wxDC::MacInstallPen() const
 			mode = patCopy ;
 			break ;
 		case wxINVERT:     // NOT dst
-			::PenPat(&qd.black);
+			::PenPat(GetQDGlobalsBlack(&blackColor));
 			mode = patXor ;
 			break ;
 		case wxXOR:        // src XOR dst
@@ -1508,8 +1403,8 @@ void wxDC::MacInstallPen() const
 		case wxNAND:       // (NOT src) OR (NOT dst)
 		case wxOR:         // src OR dst
 		case wxSET:        // 1
-		case wxSRC_OR:     // source _bitmap_ OR destination
-		case wxSRC_AND:     // source _bitmap_ AND destination
+//		case wxSRC_OR:     // source _bitmap_ OR destination
+//		case wxSRC_AND:     // source _bitmap_ AND destination
 			break ;
 	}
 	::PenMode( mode ) ;
@@ -1523,7 +1418,7 @@ void wxDC::MacInstallBrush() const
   if (!Ok()) 
   	return;
   MacVerifySetup() ;
-
+	Pattern	 blackColor, whiteColor ;
 	if ( m_macBrushInstalled )
 		return ;
 
@@ -1534,7 +1429,7 @@ void wxDC::MacInstallBrush() const
 
 	int brushStyle = m_brush.GetStyle();
 	if (brushStyle == wxSOLID)
-		::PenPat(&qd.black);
+		::PenPat(GetQDGlobalsBlack(&blackColor));
 	else if (IS_HATCH(brushStyle))
 	{
 		Pattern pat ;
@@ -1543,7 +1438,7 @@ void wxDC::MacInstallBrush() const
 	}
 	else
 	{
-		::PenPat(&qd.black);
+		::PenPat(GetQDGlobalsBlack(&blackColor));
 	}
 
 	
@@ -1551,7 +1446,7 @@ void wxDC::MacInstallBrush() const
 	
 	brushStyle = m_backgroundBrush.GetStyle();
 	if (brushStyle == wxSOLID)
-		::BackPat(&qd.white);
+		::BackPat(GetQDGlobalsWhite(&whiteColor));
 	else if (IS_HATCH(brushStyle))
 	{
 		Pattern pat ;
@@ -1560,7 +1455,7 @@ void wxDC::MacInstallBrush() const
 	}
 	else
 	{
-		::BackPat(&qd.white);
+		::BackPat(GetQDGlobalsWhite(&whiteColor));
 	}
 	
 	short mode = patCopy ;
@@ -1573,7 +1468,7 @@ void wxDC::MacInstallBrush() const
 			mode = patCopy ;
 			break ;
 		case wxINVERT:     // NOT dst
-			::PenPat(&qd.black);
+			::PenPat(GetQDGlobalsBlack(&blackColor));
 			mode = patXor ;
 			break ;
 		case wxXOR:        // src XOR dst
@@ -1599,8 +1494,8 @@ void wxDC::MacInstallBrush() const
 		case wxNAND:       // (NOT src) OR (NOT dst)
 		case wxOR:         // src OR dst
 		case wxSET:        // 1
-		case wxSRC_OR:     // source _bitmap_ OR destination
-		case wxSRC_AND:     // source _bitmap_ AND destination
+//		case wxSRC_OR:     // source _bitmap_ OR destination
+//		case wxSRC_AND:     // source _bitmap_ AND destination
 			break ;
 	}
 	::PenMode( mode ) ;
@@ -1609,4 +1504,47 @@ void wxDC::MacInstallBrush() const
 	m_macFontInstalled = false ;
 }
 
+// ---------------------------------------------------------------------------
+// coordinates transformations
+// ---------------------------------------------------------------------------
 
+
+wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
+{
+    return ((wxDC *)this)->XDEV2LOG(x);
+}
+
+wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
+{
+    return ((wxDC *)this)->YDEV2LOG(y);
+}
+
+wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
+{
+    return ((wxDC *)this)->XDEV2LOGREL(x);
+}
+
+wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
+{
+    return ((wxDC *)this)->YDEV2LOGREL(y);
+}
+
+wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
+{
+    return ((wxDC *)this)->XLOG2DEV(x);
+}
+
+wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
+{
+    return ((wxDC *)this)->YLOG2DEV(y);
+}
+
+wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
+{
+    return ((wxDC *)this)->XLOG2DEVREL(x);
+}
+
+wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
+{
+    return ((wxDC *)this)->YLOG2DEVREL(y);
+}

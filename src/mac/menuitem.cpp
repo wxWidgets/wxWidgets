@@ -25,18 +25,151 @@
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
 
+#if !USE_SHARED_LIBRARY
   IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-
-void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutChar , short *outMacModifiers , const char *inItemName , bool useShortcuts ) ;
-
-wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
-{
-    return wxStripMenuCodes(text);
-}
+#endif  //USE_SHARED_LIBRARY
 
 // ----------------------------------------------------------------------------
 // wxMenuItem
 // ----------------------------------------------------------------------------
+
+//
+// Helper Functions to get Mac Menus the way they should be ;-)
+//
+
+void wxMacCtoPString(const char* theCString, Str255 thePString);
+
+// remove inappropriate characters, if useShortcuts is false, the ampersand will not auto-generate a mac menu-shortcut
+
+wxMenuItem::MacBuildMenuString(StringPtr outMacItemText, SInt16 *outMacShortcutChar , UInt8 *outMacModifiers , const char *inItemText , bool useShortcuts )
+{
+	char *p = (char *) &outMacItemText[1] ;
+	short macModifiers = 0 ;
+	char macShortCut = 0 ;
+	const char *inItemName ;
+	wxString inItemTextMac ;
+	
+	if (wxApp::s_macDefaultEncodingIsPC)
+	{
+		inItemTextMac =  wxMacMakeMacStringFromPC( inItemText ) ;
+		inItemName = inItemTextMac ;
+	}
+	else
+	{
+		inItemName = inItemText ;
+	}
+	
+	if ( useShortcuts && !wxApp::s_macSupportPCMenuShortcuts )
+		useShortcuts = false ;
+	
+	// we have problems with a leading hypen - it will be taken as a separator
+	
+	while ( *inItemName == '-' )
+		inItemName++ ;
+		
+	while( *inItemName )
+	{
+		switch ( *inItemName )
+		{
+			// special characters for macintosh menus -> use some replacement
+			case ';' :
+				*p++ = ',' ;
+				break ;
+			case '^' :
+				*p++ = ' ' ;
+				break ;
+			case '!' :
+				*p++ = ' ' ;
+				break ;
+			case '<' :
+				*p++ = '[' ;
+				break ;
+			case '>' :
+				*p++ = ']' ;
+				break ;
+			case '/' :
+				*p++ = '|' ;
+				break ;
+			case '(' :
+				*p++ = '[' ;
+				break ;
+			case ')' :	
+				*p++ = ']' ;
+				break ;
+			// shortcuts
+			case '&' :
+				{
+					++inItemName ;
+					if ( *inItemName )
+					{
+						*p++ = *inItemName ;
+						if ( useShortcuts )
+							macShortCut = *inItemName ;
+					}
+					else
+						--inItemName ;
+				}
+				break ;
+			// win-like accelerators
+			case '\t' :
+				{
+					++inItemName ;
+					while( *inItemName )
+					{
+						if (strncmp("Ctrl", inItemName, 4) == 0) 
+						{
+							inItemName = inItemName + 5;
+							macShortCut = *inItemName;
+						}
+						else if (strncmp("Cntrl", inItemName, 5) == 0) 
+						{
+							inItemName = inItemName + 6;
+							macShortCut = *inItemName;
+						}
+						else if (strncmp("Alt", inItemName, 3) == 0) 
+						{
+							inItemName = inItemName + 4;
+							macModifiers |= kMenuOptionModifier ;
+							macShortCut = *inItemName ;
+						}
+						else if (strncmp("Shift", inItemName, 5) == 0) 
+						{
+							inItemName = inItemName + 6;
+							macModifiers |= kMenuShiftModifier ;
+							macShortCut = *inItemName ;
+						}
+						else if (strncmp("F", inItemName, 1) == 0) 
+						{
+							inItemName += strlen( inItemName ) ;
+							// no function keys at the moment
+							// macModifiers |= kMenuShiftModifier ;
+							// macShortCut = *inItemName ;
+						}
+						else
+						{
+							break ;
+						}
+					}
+
+					if ( *inItemName == 0 )
+						--inItemName ;
+						
+				}
+				break ;
+			default :
+				*p++ = *inItemName ;
+		}
+		++inItemName ;
+	}
+
+	outMacItemText[0] = (p - (char *)outMacItemText) - 1;
+	if ( outMacShortcutChar )
+		*outMacShortcutChar = macShortCut ;
+	if ( outMacModifiers )
+		*outMacModifiers = macModifiers ;
+		
+	return 0 ;
+}
 
 // ctor & dtor
 // -----------
@@ -184,8 +317,8 @@ void wxMenuItem::SetText(const wxString& text)
    	 	if ( index >= 1 )
    	 	{
  			Str255 label;
-			wxMacBuildMenuString( label , NULL , NULL , text ,false);
-   	 		::SetMenuItemText( m_parentMenu->GetHMenu() , index , label ) ; // checkmark
+			MacBuildMenuString( label , NULL , NULL , text ,false);
+   	 		UMASetMenuItemText( m_parentMenu->GetHMenu() , index , label ) ; // checkmark
   	 	}
   	}
 
@@ -203,6 +336,12 @@ void wxMenuItem::SetCheckable(bool checkable)
 // ----------------------------------------------------------------------------
 // wxMenuItemBase
 // ----------------------------------------------------------------------------
+
+/* static */
+wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+{
+    return wxStripMenuCodes(text);
+}
 
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,

@@ -15,11 +15,13 @@
 
 #include "wx/bmpbuttn.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
+#endif
 
 #include <wx/mac/uma.h>
 
-PicHandle MakePict(GWorldPtr wp) ;
+PicHandle MakePict(GWorldPtr wp, GWorldPtr mask ) ;
 
 bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos,
@@ -48,8 +50,6 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
     if ( height == -1 && bitmap.Ok())
 	height = bitmap.GetHeight() + 2*m_marginY;
 
-	m_macHorizontalBorder = 0 ; // additional pixels around the real control
-	m_macVerticalBorder = 0 ;
 	Rect bounds ;
 	Str255 title ;
 	MacPreControlCreate( parent , id ,  "" , pos , wxSize( width , height ) ,style, validator , name , &bounds , title ) ;
@@ -68,7 +68,14 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 			icon = bmap->m_hPict ;
 		else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
 		{
-			icon = MakePict( bmap->m_hBitmap ) ;
+			if ( m_buttonBitmap.GetMask() )
+			{
+				icon = MakePict( bmap->m_hBitmap , m_buttonBitmap.GetMask()->GetMaskBitmap() ) ;
+			}
+			else
+			{
+				icon = MakePict( bmap->m_hBitmap , NULL ) ;
+			}
 		}
 	}
 	ControlButtonContentInfo info ;
@@ -94,7 +101,14 @@ void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 			icon = bmap->m_hPict ;
 		else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
 		{
-			icon = MakePict( bmap->m_hBitmap ) ;
+			if ( m_buttonBitmap.GetMask() )
+			{
+				icon = MakePict( bmap->m_hBitmap , m_buttonBitmap.GetMask()->GetMaskBitmap() ) ;
+			}
+			else
+			{
+				icon = MakePict( bmap->m_hBitmap , NULL ) ;
+			}
 		}
 	}
 	ControlButtonContentInfo info ;

@@ -37,8 +37,8 @@
 
 #define	__COMPILINGMOREFILES
 
-#include "MoreExtr.h"
-#include "FSpCompa.h"
+#include "moreextr.h"
+#include "fspcompa.h"
 
 /*****************************************************************************/
 

@@ -15,13 +15,48 @@
 
 #include "wx/timer.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
+#endif
+
+static void wxProcessTimer( unsigned long event , void *data ) ;
+
+pascal void MacTimerProc( TMTask * t )
+{
+	MacTimerInfo * tm = (MacTimerInfo*)  t ;
+	wxMacAddEvent( tm->m_table , wxProcessTimer, 0 , (void*) tm->m_timer , TRUE ) ;
+}
+
+void wxProcessTimer( unsigned long event , void *data )
+{
+	if ( !data )
+		return ;
+		
+	wxTimer* timer = (wxTimer*) data ;
+	if ( timer->IsOneShot() )
+		timer->Stop() ;
+		
+    timer->Notify();
+
+    if ( timer->m_info.m_task.tmAddr && !timer->IsOneShot() )
+    {
+	    PrimeTime( (QElemPtr)  &timer->m_info.m_task , timer->GetInterval() ) ;
+    }
+}
 
 wxTimer::wxTimer()
 {
-    m_milli = 0 ;
-    m_id = 0;
-    m_oneShot = FALSE;
+	m_info.m_task.tmAddr = NULL ;
+	m_info.m_task.tmWakeUp = 0 ;
+	m_info.m_task.tmReserved = 0 ;
+	m_info.m_task.qType = 0 ;
+	m_info.m_table = wxMacGetNotifierTable() ;
+	m_info.m_timer = this ;
+}
+
+bool wxTimer::IsRunning() const 
+{
+	return ( m_info.m_task.qType & kTMTaskActive ) ;
 }
 
 wxTimer::~wxTimer()
@@ -31,20 +66,31 @@ wxTimer::~wxTimer()
 
 bool wxTimer::Start(int milliseconds,bool mode)
 {
-    m_oneShot = mode ;
-    if (milliseconds <= 0)
-        return FALSE;
+    (void)wxTimerBase::Start(milliseconds, mode);
+
+    wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeour") );
+    wxCHECK_MSG( m_info.m_task.tmAddr == NULL , FALSE, wxT("attempting to restart a timer") );
 
     m_milli = milliseconds;
-
-    // TODO: set the timer going.
+	m_info.m_task.tmAddr = NewTimerProc( MacTimerProc ) ;
+	m_info.m_task.tmWakeUp = 0 ;
+	m_info.m_task.tmReserved = 0 ;
+    InsXTime((QElemPtr) &m_info.m_task ) ;
+    PrimeTime( (QElemPtr) &m_info.m_task , m_milli ) ;
     return FALSE;
 }
 
 void wxTimer::Stop()
 {
-    m_id = 0 ;
     m_milli = 0 ;
+    if ( m_info.m_task.tmAddr )
+    {
+    	RmvTime(  (QElemPtr) &m_info.m_task ) ;
+    	DisposeTimerUPP(m_info.m_task.tmAddr) ;
+    	m_info.m_task.tmAddr = NULL ;
+    }
+    wxMacRemoveAllNotifiersForData( wxMacGetNotifierTable() , this ) ;
 }
+
 
 

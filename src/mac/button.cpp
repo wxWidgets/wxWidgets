@@ -15,7 +15,9 @@
 
 #include "wx/button.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
+#endif
 
 #include <wx/mac/uma.h>
 // Button
@@ -29,8 +31,6 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 {
 	Rect bounds ;
 	Str255 title ;
-	m_macHorizontalBorder = 2 ; // additional pixels around the real control
-	m_macVerticalBorder = 2 ;
 	
 	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
@@ -66,22 +66,32 @@ void wxButton::SetDefault()
 
 wxSize wxButton::DoGetBestSize() const
 {
-    int wBtn = m_label.Length() * 8 + 12 + 2 * m_macHorizontalBorder;
-	int hBtn = 13 + 2 * m_macVerticalBorder;
+    int wBtn = m_label.Length() * 8 + 12 ;
+	int hBtn = 20 ;
+	
+	if ( wBtn < 80 )
+		wBtn = 80 ;
 
     return wxSize(wBtn, hBtn);
 }
 
 wxSize wxButton::GetDefaultSize()
 {
-    int wBtn = 15 * 8 + 12 + 2 * 2;
-	int hBtn = 13 + 2 * 2;
+    int wBtn = 80 /* + 2 * m_macHorizontalBorder */ ; 
+	int hBtn = 20 /* +  2 * m_macVerticalBorder */ ;
 
     return wxSize(wBtn, hBtn);
 }
 
 void wxButton::Command (wxCommandEvent & event)
 {
+	if ( m_macControl )
+	{
+		HiliteControl( m_macControl , kControlButtonPart ) ;
+		unsigned long finalTicks ;
+		Delay( 8 , &finalTicks ) ;
+		HiliteControl( m_macControl , 0 ) ;
+	}
     ProcessCommand (event);
 }
 

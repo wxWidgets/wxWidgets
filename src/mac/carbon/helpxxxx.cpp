@@ -17,7 +17,9 @@
 
 #include <string.h>
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxXXXXHelpController, wxHelpControllerBase)
+#endif
 
 wxXXXXHelpController::wxXXXXHelpController()
 {

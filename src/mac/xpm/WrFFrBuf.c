@@ -32,7 +32,7 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
-#include "xpmi.h"
+#include "XpmI.h"
 
 int
 XpmWriteFileFromBuffer(filename, buffer)

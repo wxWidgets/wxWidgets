@@ -15,7 +15,9 @@
 
 #include "wx/icon.h"
 
+#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
+#endif
 
 /*
  * Icons
@@ -58,6 +60,14 @@ wxIcon::wxIcon(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(he
 {
 }
 
+wxIcon::wxIcon( const char **bits, int width, int height )
+{
+}
+
+wxIcon::wxIcon( char **bits, int width, int height )
+{
+}
+
 wxIcon::wxIcon(const wxString& icon_file, long flags,
     int desiredWidth, int desiredHeight)
 
@@ -96,20 +106,23 @@ bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
 	c2pstr( (char*) theName ) ;
 	
 	Handle resHandle = GetNamedResource( 'cicn' , theName ) ;
-	GetResInfo( resHandle , &theId , &theType , theName ) ;
-	ReleaseResource( resHandle ) ;
-	
-	CIconHandle theIcon = (CIconHandle ) GetCIcon( theId ) ;
-	if ( theIcon )
+	if ( resHandle != 0L )
 	{
-		M_ICONHANDLERDATA->m_hIcon = theIcon ;
-		M_ICONHANDLERDATA->m_width =  32 ;
-		M_ICONHANDLERDATA->m_height = 32 ;
+		GetResInfo( resHandle , &theId , &theType , theName ) ;
+		ReleaseResource( resHandle ) ;
 		
-		M_ICONHANDLERDATA->m_depth = 8 ;
-		M_ICONHANDLERDATA->m_ok = true ;
-		M_ICONHANDLERDATA->m_numColors = 256 ;
-		return TRUE ;
+		CIconHandle theIcon = (CIconHandle ) GetCIcon( theId ) ;
+		if ( theIcon )
+		{
+			M_ICONHANDLERDATA->m_hIcon = theIcon ;
+			M_ICONHANDLERDATA->m_width =  32 ;
+			M_ICONHANDLERDATA->m_height = 32 ;
+			
+			M_ICONHANDLERDATA->m_depth = 8 ;
+			M_ICONHANDLERDATA->m_ok = true ;
+			M_ICONHANDLERDATA->m_numColors = 256 ;
+			return TRUE ;
+		}
 	}
 	return FALSE ;
 }

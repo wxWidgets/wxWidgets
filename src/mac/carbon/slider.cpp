@@ -16,10 +16,12 @@
 #include "wx/slider.h"
 #include "wx/mac/uma.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
 
 BEGIN_EVENT_TABLE(wxSlider, wxControl)
 END_EVENT_TABLE()
+#endif
 
 
 

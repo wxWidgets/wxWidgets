@@ -33,7 +33,7 @@
 *                                                                             *
 \*****************************************************************************/
 
-#include "xpmi.h"
+#include "XpmI.h"
 
 LFUNC(AtomMake, xpmHashAtom, (char *name, void *data));
 LFUNC(HashTableGrows, int, (xpmHashTable * table));

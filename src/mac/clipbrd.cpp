@@ -21,48 +21,214 @@
 #include "wx/metafile.h"
 #include "wx/clipbrd.h"
 
+#define wxUSE_DATAOBJ 1
+
 #include <string.h>
 
 // open/close
+
+bool clipboard_opened = false ;
+
 bool wxOpenClipboard()
 {
+	clipboard_opened = true ;
     return TRUE;
 }
 
 bool wxCloseClipboard()
 {
+	clipboard_opened = false ;
     return TRUE;
 }
 
 bool wxIsClipboardOpened()
 {
-     return TRUE;
+     return clipboard_opened;
 }
-
-// get/set data
 
 bool wxEmptyClipboard()
 {
-	ZeroScrap() ;
+	
+#if TARGET_CARBON
+	OSStatus err ;
+	err = ClearCurrentScrap( );
+#else
+	OSErr err ;
+	err = ZeroScrap( );
+#endif
+	if ( err )
+	{
+        wxLogSysError(_("Failed to empty the clipboard."));
+		return FALSE ;
+	}
     return TRUE;
 }
 
-bool wxSetClipboardData(wxDataFormat dataFormat,const void *data,int width , int height)
-{
-    return FALSE;
-}
-
-void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
-{
-    return NULL;
-}
-
+// get/set data
 
 // clipboard formats
 
 bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 {
+#if TARGET_CARBON
+	OSStatus err = noErr;
+	ScrapRef scrapRef;
+	
+	err = GetCurrentScrap( &scrapRef );
+	if ( err != noTypeErr && err != memFullErr )	
+	{
+		ScrapFlavorFlags	flavorFlags;
+		Size				byteCount;
+		
+		if (( err = GetScrapFlavorFlags( scrapRef, dataFormat.GetFormatId(), &flavorFlags )) == noErr)
+		{
+			if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
+			{
+				return TRUE ;
+			}
+		}
+	}
+	return FALSE;
+	
+#else
+	long offset ;
+	if ( GetScrap( NULL , dataFormat.GetFormatId() , &offset ) > 0 )
+	{
+		return TRUE ;
+	}
      return FALSE;
+#endif
+}
+
+bool wxSetClipboardData(wxDataFormat dataFormat,const void *data,int width , int height)
+{
+#if !TARGET_CARBON
+	OSErr err = noErr ;
+#else
+	OSStatus err = noErr ;
+#endif
+	
+    switch (dataFormat.GetType())
+    {
+        case wxDF_BITMAP:
+            {
+            	/*
+                wxBitmap *bitmap = (wxBitmap *)data;
+
+                HDC hdcMem = CreateCompatibleDC((HDC) NULL);
+                HDC hdcSrc = CreateCompatibleDC((HDC) NULL);
+                HBITMAP old = (HBITMAP)
+                    ::SelectObject(hdcSrc, (HBITMAP)bitmap->GetHBITMAP());
+                HBITMAP hBitmap = CreateCompatibleBitmap(hdcSrc,
+                                                         bitmap->GetWidth(),
+                                                         bitmap->GetHeight());
+                if (!hBitmap)
+                {
+                    SelectObject(hdcSrc, old);
+                    DeleteDC(hdcMem);
+                    DeleteDC(hdcSrc);
+                    return FALSE;
+                }
+
+                HBITMAP old1 = (HBITMAP) SelectObject(hdcMem, hBitmap);
+                BitBlt(hdcMem, 0, 0, bitmap->GetWidth(), bitmap->GetHeight(),
+                       hdcSrc, 0, 0, SRCCOPY);
+
+                // Select new bitmap out of memory DC
+                SelectObject(hdcMem, old1);
+
+                // Set the data
+                handle = ::SetClipboardData(CF_BITMAP, hBitmap);
+
+                // Clean up
+                SelectObject(hdcSrc, old);
+                DeleteDC(hdcSrc);
+                DeleteDC(hdcMem);
+                */
+                break;
+            }
+
+        case wxDF_DIB:
+            {
+            	/*
+#if wxUSE_IMAGE_LOADING_IN_MSW
+                wxBitmap *bitmap = (wxBitmap *)data;
+                HBITMAP hBitmap = (HBITMAP)bitmap->GetHBITMAP();
+                // NULL palette means to use the system one
+                HANDLE hDIB = wxBitmapToDIB(hBitmap, (HPALETTE)NULL); 
+                handle = SetClipboardData(CF_DIB, hDIB);
+#endif // wxUSE_IMAGE_LOADING_IN_MSW
+*/
+                break;
+            }
+
+#if wxUSE_METAFILE
+        case wxDF_METAFILE:
+            {
+                wxMetafile *wxMF = (wxMetafile *)data;
+				PicHandle pict = wxMF->GetHMETAFILE() ;
+				HLock( (Handle) pict ) ;
+#if !TARGET_CARBON
+				err = PutScrap( GetHandleSize(  (Handle) pict ) , 'PICT' , *pict ) ;
+#else
+				ScrapRef	scrap;
+				err = GetCurrentScrap (&scrap); 
+				if ( !err )
+				{
+					err = PutScrapFlavor (scrap, 'PICT', 0, GetHandleSize((Handle) pict), *pict);
+				}
+#endif
+				HUnlock(  (Handle) pict ) ;
+                break;
+            }
+#endif
+        case wxDF_SYLK:
+        case wxDF_DIF:
+        case wxDF_TIFF:
+        case wxDF_PALETTE:
+        default:
+            {
+                wxLogError(_("Unsupported clipboard format."));
+                return FALSE;
+            }
+
+        case wxDF_OEMTEXT:
+            dataFormat = wxDF_TEXT;
+            // fall through
+
+        case wxDF_TEXT:
+            {
+            	wxString mac ;
+            	if ( wxApp::s_macDefaultEncodingIsPC )
+            	{
+            		mac = wxMacMakeMacStringFromPC((char *)data) ;
+            	}
+            	else
+            	{
+            		mac = (char *)data ;
+            	}
+#if !TARGET_CARBON
+				err = PutScrap( mac.Length() , 'TEXT' , mac.c_str() ) ;
+#else
+				ScrapRef	scrap;
+				err = GetCurrentScrap (&scrap); 
+				if ( !err )
+				{
+					err = PutScrapFlavor (scrap, 'TEXT', 0, mac.Length(), mac.c_str());
+				}
+#endif
+                break;
+            }
+    }
+
+    if ( err )
+    {
+        wxLogSysError(_("Failed to set clipboard data."));
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat)
@@ -80,11 +246,17 @@ bool wxGetClipboardFormatName(wxDataFormat dataFormat, wxChar *formatName, int m
     return FALSE;
 }
 
+void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
+{
+    return NULL;
+}
+
+
 /*
  * Generalized clipboard implementation by Matthew Flatt
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxClipboardBase)
 
 wxClipboard::wxClipboard()
 {
@@ -143,9 +315,9 @@ bool wxClipboard::AddData( wxDataObject *data )
 #if wxUSE_DATAOBJ
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
-    wxDataFormat format = data->GetFormat();
+    wxDataFormat format = data->GetPreferredFormat();
 
-    switch ( format )
+    switch ( format.GetType() )
     {
         case wxDF_TEXT:
         case wxDF_OEMTEXT:
@@ -160,10 +332,10 @@ bool wxClipboard::AddData( wxDataObject *data )
         {
             wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
             wxBitmap bitmap(bitmapDataObject->GetBitmap());
-            return wxSetClipboardData(data->GetFormat(), &bitmap);
+            return wxSetClipboardData(format, &bitmap);
         }
 
-#if wxUSE_METAFILE
+#if 0 // wxUSE_METAFILE
         case wxDF_METAFILE:
         {
             wxMetafileDataObject* metaFileDataObject = 
@@ -176,11 +348,12 @@ bool wxClipboard::AddData( wxDataObject *data )
 #endif // wxUSE_METAFILE
 
         default:
-            return wxSetClipboardData(data);
+ //           return wxSetClipboardData(data);
+ 				break ;
     }
 #else // !wxUSE_DATAOBJ
-    return FALSE;
 #endif 
+    return FALSE;
 }
 
 void wxClipboard::Close()
@@ -188,7 +361,7 @@ void wxClipboard::Close()
     wxCloseClipboard();
 }
 
-bool wxClipboard::IsSupported( wxDataFormat format )
+bool wxClipboard::IsSupported( const wxDataFormat &format )
 {
     return wxIsClipboardFormatAvailable(format);
 }
@@ -198,7 +371,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 #if wxUSE_DATAOBJ
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
-    wxDataFormat format = data.GetFormat();
+    wxDataFormat format = data.GetPreferredFormat();
     switch ( format )
     {
         case wxDF_TEXT:
@@ -219,7 +392,7 @@ bool wxClipboard::GetData( wxDataObject& data )
         case wxDF_DIB:
         {
             wxBitmapDataObject& bitmapDataObject = (wxBitmapDataObject &)data;
-            wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(data->GetFormat());
+            wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(format );
             if ( !bitmap )
                 return FALSE;
 
@@ -228,7 +401,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 
             return TRUE;
         }
-#if wxUSE_METAFILE
+#if 0 // wxUSE_METAFILE
         case wxDF_METAFILE:
         {
             wxMetafileDataObject& metaFileDataObject = (wxMetafileDataObject &)data;

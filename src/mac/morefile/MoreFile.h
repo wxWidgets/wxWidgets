@@ -30,7 +30,7 @@
 #define false 0
 #endif
 
-#include "Optim.h"
+#include "optim.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -1239,6 +1239,6 @@ pascal	OSErr	GetUGEntry(short objType,
 }
 #endif
 
-#include "OptimEnd.h"
+#include "optimend.h"
 
 #endif	/* __MOREFILES__ */

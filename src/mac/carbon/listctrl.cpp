@@ -16,9 +16,11 @@
 #include "wx/stubs/textctrl.h"
 #include "wx/stubs/listctrl.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 
+#endif
 
 wxListCtrl::wxListCtrl()
 {

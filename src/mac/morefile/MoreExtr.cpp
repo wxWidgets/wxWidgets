@@ -34,13 +34,14 @@
 #include <Script.h>
 #include <Script.h>
 #include <stddef.h>
+#include <Math64.h>
 
 #define	__COMPILINGMOREFILES
 
-#include "MoreFile.h"
-#include "MoreExtr.h"
-#include "MoreDesk.h"
-#include "FSpCompa.h"
+#include "morefile.h"
+#include "moreextr.h"
+#include "moredesk.h"
+#include "fspcompa.h"
 
 /*****************************************************************************/
 
@@ -50,8 +51,12 @@
 ** stack space used when recursively calling DeleteLevel and to hold
 ** global information that might be needed at any time. */
 
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=mac68k
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=mac68k
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(push, 2)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack(2)
 #endif
 struct DeleteEnumGlobals
 {
@@ -59,8 +64,12 @@ struct DeleteEnumGlobals
 	Str63			itemName;			/* the name of the current item */
 	UniversalFMPB	myPB;				/* the parameter block used for PBGetCatInfo calls */
 };
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=reset
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=reset
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(pop)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack()
 #endif
 
 typedef struct DeleteEnumGlobals DeleteEnumGlobals;
@@ -82,7 +91,11 @@ pascal	void	TruncPString(StringPtr destination,
 			/* a multi-byte character. */
 			while (maxLength != 0)
 			{
+#if TARGET_CARBON
+				charType = CharacterByteType((Ptr)&source[1], maxLength,smAllScripts);
+#else
 				charType = CharByte((Ptr)&source[1], maxLength);
+#endif
 				if ( (charType == smSingleByte) || (charType == smLastByte) )
 					break;	/* source[maxLength] is now a valid last character */ 
 				--maxLength;
@@ -221,6 +234,9 @@ pascal	OSErr	GetVolumeInfoNoName(ConstStr255Param pathname,
 **	the parameter block is always returned as NULL (since it might point
 **	to the local tempPathname).
 */
+
+#if !TARGET_CARBON
+
 pascal	OSErr	XGetVolumeInfoNoName(ConstStr255Param pathname,
 									short vRefNum,
 									XVolumeParamPtr pb)
@@ -275,6 +291,8 @@ pascal	OSErr	XGetVolumeInfoNoName(ConstStr255Param pathname,
 	return ( error );
 }
 
+#endif
+
 /*****************************************************************************/
 
 pascal	OSErr GetCatInfoNoName(short vRefNum,
@@ -323,6 +341,7 @@ pascal	OSErr	DetermineVRefNum(ConstStr255Param pathname,
 
 /*****************************************************************************/
 
+#if !TARGET_CARBON
 pascal	OSErr	HGetVInfo(short volReference,
 						  StringPtr volName,
 						  short *vRefNum,
@@ -402,7 +421,7 @@ pascal	OSErr	HGetVInfo(short volReference,
 	
 	return ( result );
 }
-
+#endif
 /*****************************************************************************/
 
 /*
@@ -421,7 +440,12 @@ pascal	OSErr	HGetVInfo(short volReference,
 #undef	pascal
 #endif
 
+#if !TARGET_CARBON
+
 #if GENERATINGCFM
+
+#if UNIVERSAL_INTERFACES_VERSION < 0x0301
+
 pascal OSErr PBXGetVolInfoSync(XVolumeParamPtr paramBlock)
 {
 	enum
@@ -444,9 +468,15 @@ pascal OSErr PBXGetVolInfoSync(XVolumeParamPtr paramBlock)
 }
 #endif
 
+#endif
+
+#endif
+
 #if	__WANTPASCALELIMINATION
 #define	pascal	
 #endif
+
+#if !TARGET_CARBON
 
 /*****************************************************************************/
 
@@ -476,8 +506,8 @@ pascal	OSErr	XGetVInfo(short volReference,
 			*vRefNum = pb.ioVRefNum;
 			
 			/* return the freeBytes and totalBytes */
-			*totalBytes = pb.ioVTotalBytes;
-			*freeBytes = pb.ioVFreeBytes;
+			*totalBytes = UInt64ToUnsignedWide(pb.ioVTotalBytes);
+			*freeBytes = UInt64ToUnsignedWide(pb.ioVFreeBytes);
 		}
 	}
 	else
@@ -495,7 +525,7 @@ pascal	OSErr	XGetVInfo(short volReference,
 	}
 	return ( result );
 }
-
+#endif
 /*****************************************************************************/
 
 pascal	OSErr	CheckVolLock(ConstStr255Param pathname,
@@ -521,6 +551,8 @@ pascal	OSErr	CheckVolLock(ConstStr255Param pathname,
 }
 
 /*****************************************************************************/
+
+#if !TARGET_CARBON
 
 pascal	OSErr GetDriverName(short driverRefNum,
 							Str255 driverName)
@@ -554,7 +586,9 @@ pascal	OSErr GetDriverName(short driverRefNum,
 	return ( result );
 }
 
+#endif
 /*****************************************************************************/
+#if !TARGET_CARBON
 
 pascal	OSErr	FindDrive(ConstStr255Param pathname,
 						  short vRefNum,
@@ -619,8 +653,10 @@ pascal	OSErr	FindDrive(ConstStr255Param pathname,
 	
 	return ( result );
 }
+#endif 
 
 /*****************************************************************************/
+#if !TARGET_CARBON
 
 pascal	OSErr	GetDiskBlocks(ConstStr255Param pathname,
 							  short vRefNum,
@@ -757,6 +793,7 @@ pascal	OSErr	GetDiskBlocks(ConstStr255Param pathname,
 	
 	return ( result );
 }
+#endif
 
 /*****************************************************************************/
 
@@ -777,6 +814,7 @@ pascal	OSErr	GetVolFileSystemID(ConstStr255Param pathname,
 }
 
 /*****************************************************************************/
+#if !TARGET_CARBON
 
 pascal	OSErr	GetVolState(ConstStr255Param pathname,
 							short vRefNum,
@@ -875,8 +913,9 @@ pascal	OSErr	GetVolState(ConstStr255Param pathname,
 	
 	return ( error );
 }
-
+#endif
 /*****************************************************************************/
+#if !TARGET_CARBON
 
 pascal	OSErr	UnmountAndEject(ConstStr255Param pathname,
 								short vRefNum)
@@ -952,6 +991,7 @@ pascal	OSErr	UnmountAndEject(ConstStr255Param pathname,
 	
 	return ( error );
 }
+#endif
 
 /*****************************************************************************/
 
@@ -1011,6 +1051,8 @@ pascal	OSErr SetDefault(short newVRefNum,
 
 /*****************************************************************************/
 
+#if !TARGET_CARBON
+
 pascal	OSErr RestoreDefault(short oldVRefNum,
 							 long oldDirID)
 {
@@ -1038,7 +1080,7 @@ pascal	OSErr RestoreDefault(short oldVRefNum,
 	
 	return ( error );
 }
-
+#endif
 /*****************************************************************************/
 
 pascal	OSErr GetDInfo(short vRefNum,

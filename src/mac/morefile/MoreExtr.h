@@ -30,7 +30,7 @@
 #define false 0
 #endif
 
-#include "Optim.h"
+#include "optim.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -215,8 +215,12 @@ enum
 	
 /*****************************************************************************/
 
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=mac68k
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=mac68k
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(push, 2)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack(2)
 #endif
 
 /*
@@ -322,8 +326,12 @@ struct MyAFPXVolMountInfo
 typedef struct MyAFPXVolMountInfo MyAFPXVolMountInfo;
 typedef MyAFPXVolMountInfo *MyAFPXVolMountInfoPtr, **MyAFPXVolMountInfoHandle;
 
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=reset
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=reset
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(pop)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack()
 #endif
 
 /*****************************************************************************/
@@ -3136,6 +3144,6 @@ pascal	OSErr	GetUGEntries(short objType,
 }
 #endif
 
-#include "OptimEnd.h"
+#include "optimend.h"
 
 #endif	/* __MOREFILESEXTRAS__ */

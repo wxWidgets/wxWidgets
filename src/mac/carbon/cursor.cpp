@@ -16,17 +16,33 @@
 #include "wx/cursor.h"
 #include "wx/icon.h"
 
+#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
+#endif
 
 const short kwxCursorHandId = 9 ;
 const short kwxCursorSizeWEId = 10 ;
 const short kwxCursorSizeNSId = 11 ;
+#if !TARGET_CARBON
 Cursor*		MacArrowCursorPtr = &qd.arrow ;
 CursHandle	MacArrowCursor = &MacArrowCursorPtr ;
+#else
+bool		MacArrowInstalled = false ;
+Cursor 		MacArrow ;
+Cursor*		MacArrowCursorPtr = &MacArrow ;
+CursHandle	MacArrowCursor = &MacArrowCursorPtr ;
+#endif
 CursHandle	gMacCurrentCursor = NULL ;
 
 wxCursorRefData::wxCursorRefData()
 {
+#if TARGET_CARBON
+	if ( !MacArrowInstalled )
+	{
+		MacArrowCursorPtr = GetQDGlobalsArrow( &MacArrow ) ;
+		MacArrowInstalled = true ;
+	}
+#endif
     m_width = 32; 
     m_height = 32;
     m_hCursor = NULL ;
@@ -34,8 +50,8 @@ wxCursorRefData::wxCursorRefData()
 
 wxCursorRefData::~wxCursorRefData()
 {
-	if ( m_hCursor && ( m_hCursor != MacArrowCursor ) )
-		::DisposeHandle( (Handle) m_hCursor ) ;
+//	if ( m_hCursor && ( m_hCursor != MacArrowCursor ) )
+//		::ReleaseResource( (Handle) m_hCursor ) ;
 }
 
 // Cursors

@@ -5,8 +5,7 @@
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) AUTHORy
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -18,11 +17,17 @@
 #if wxUSE_TOOLBAR
 
 #include "wx/toolbar.h"
+#include "wx/notebook.h"
+#include "wx/tabctrl.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
+	EVT_MOUSE_EVENTS( wxToolBar::OnMouse ) 
+	EVT_PAINT( wxToolBar::OnPaint ) 
 END_EVENT_TABLE()
+#endif
 
 #include <wx/mac/uma.h>
 
@@ -45,14 +50,14 @@ public:
                             clientData, shortHelpString, longHelpString)
     {
         m_nSepCount = 0;
-        m_index = 0 ;
+        m_index = -1 ;
     }
 
     wxToolBarTool(wxToolBar *tbar, wxControl *control)
         : wxToolBarToolBase(tbar, control)
     {
         m_nSepCount = 1;
-        m_index = 0 ;
+        m_index = -1 ;
     }
 
     // set/get the number of separators which we use to cover the space used by
@@ -74,6 +79,9 @@ private:
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
+const short defwidth = 24 ;
+const short defheight = 22 ;
+
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxBitmap& bitmap1,
                                          const wxBitmap& bitmap2,
@@ -91,16 +99,12 @@ wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
     return new wxToolBarTool(this, control);
 }
 
-// ----------------------------------------------------------------------------
-// wxToolBar construction
-// ----------------------------------------------------------------------------
-
 void wxToolBar::Init()
 {
   m_maxWidth = -1;
   m_maxHeight = -1;
-  m_defaultWidth = 24;
-  m_defaultHeight = 22;
+  m_defaultWidth = defwidth;
+  m_defaultHeight = defheight;
   // TODO
 }
 
@@ -109,8 +113,8 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 {
   m_maxWidth = m_maxHeight = 0;
 
-  m_defaultWidth = 24;
-  m_defaultHeight = 22;
+  m_defaultWidth = defwidth;
+  m_defaultHeight = defheight;
   
   int x = pos.x;
   int y = pos.y;
@@ -125,16 +129,39 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     x = 0;
   if (y < 0)
     y = 0;
+#if 1
+	{
+	  SetName(name);
 
+	  m_windowStyle = style;
+	  parent->AddChild(this);
+
+	  m_backgroundColour = parent->GetBackgroundColour() ;
+	  m_foregroundColour = parent->GetForegroundColour() ;
+
+	  if (id == -1)
+	      m_windowId = NewControlId();
+	  else
+	      m_windowId = id;
+
+		m_width = size.x ;
+		m_height = size.y ;
+		int x = pos.x ;
+		int y = pos.y ;
+		AdjustForParentClientOrigin(x, y, wxSIZE_USE_EXISTING);
+		m_x = x ;
+		m_y = y ;
+	}
+#else
 	Rect bounds ;
 	Str255 title ;
 	
-	MacPreControlCreate( parent , id ,  "" , wxPoint( x , y ) , wxSize( width , height ) ,style, *((wxValidator*)NULL) , name , &bounds , title ) ;
+	MacPreControlCreate( parent , id ,  "" , wxPoint( x , y ) , wxSize( width , height ) ,style, wxDefaultValidator , name , &bounds , title ) ;
 
 	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
 	  	kControlPlacardProc , (long) this ) ;
 	MacPostControlCreate() ;
-
+#endif
   return TRUE;
 }
 
@@ -143,7 +170,8 @@ wxToolBar::~wxToolBar()
     // TODO
 }
 
-PicHandle MakePict(GWorldPtr wp)
+PicHandle MakePict(GWorldPtr wp, GWorldPtr mask ) ;
+PicHandle MakePict(GWorldPtr wp, GWorldPtr mask ) 
 {
 	CGrafPtr		origPort ;
 	GDHandle		origDev ;
@@ -151,52 +179,77 @@ PicHandle MakePict(GWorldPtr wp)
 	PicHandle		pict;				// this is the Picture we give back
 
 	RGBColor		gray = { 0xCCCC ,0xCCCC , 0xCCCC } ;
+	RGBColor		white = { 0xffff ,0xffff , 0xffff } ;
+	RGBColor		black = { 0x0000 ,0x0000 , 0x0000 } ;
 	
+	unsigned char *maskimage = NULL ;
+	Rect portRect ;
+	GetPortBounds( wp , &portRect ) ;
+	int width = portRect.right - portRect.left ;
+	int height = portRect.bottom - portRect.top ;
+	
+	LockPixels( GetGWorldPixMap( wp ) ) ;
 	GetGWorld( &origPort , &origDev ) ;
+
+	if ( mask )
+	{
+		
+		maskimage = (unsigned char*) malloc( width * height ) ;
+		SetGWorld( mask , NULL ) ;
+		LockPixels( GetGWorldPixMap( mask ) ) ;
+		for ( int y = 0 ; y < height ; ++y )
+		{
+			for( int x = 0 ; x < width ; ++x )
+			{
+				RGBColor col ;
+				
+				GetCPixel( x + portRect.left , y + portRect.top , &col ) ;
+				maskimage[y*width + x] = ( col.red == 0 ) ; // for monochrome masks
+			}
+		}
+		UnlockPixels( GetGWorldPixMap( mask ) ) ;
+	}
+	
 	SetGWorld( wp , NULL ) ;
 	
-	pict = OpenPicture(&wp->portRect);	// open a picture, this disables drawing
+	pict = OpenPicture(&portRect);	// open a picture, this disables drawing
 	if(!pict)	
 		return NULL;
-	
+
 	RGBBackColor( &gray ) ;
-	EraseRect(&wp->portRect) ;
-	CopyBits((BitMap*)*wp->portPixMap,			// src PixMap	- we copy image over itself -
-				(BitMap*)*wp->portPixMap,		// dst PixMap	- no drawing occurs -
-				&wp->portRect,			// srcRect		- it will be recorded and compressed -
-				&wp->portRect,			// dstRect		- into the picture that is open -
-				srcCopy,NULL);			// copyMode and no clip region
-
-	ClosePicture();						// We are done recording the picture
-	SetGWorld( origPort , origDev ) ;
-	return pict;						// return our groovy pict handle
-}
-
-PicHandle MakePictWhite(GWorldPtr wp)
-{
-	CGrafPtr		origPort ;
-	GDHandle		origDev ;
-	
-	PicHandle		pict;				// this is the Picture we give back
-
-	RGBColor		white = { 0xFFFF ,0xFFFF  , 0xFFFF  } ;
-	
-	GetGWorld( &origPort , &origDev ) ;
-	SetGWorld( wp , NULL ) ;
-	
-	pict = OpenPicture(&wp->portRect);	// open a picture, this disables drawing
-	if(!pict)	
-		return NULL;
-	
+	RGBForeColor( &black ) ;
+	EraseRect(&portRect) ;
 	RGBBackColor( &white ) ;
-	EraseRect(&wp->portRect) ;
-	CopyBits((BitMap*)*wp->portPixMap,			// src PixMap	- we copy image over itself -
-				(BitMap*)*wp->portPixMap,		// dst PixMap	- no drawing occurs -
-				&wp->portRect,			// srcRect		- it will be recorded and compressed -
-				&wp->portRect,			// dstRect		- into the picture that is open -
+
+	if ( maskimage )
+	{
+		for ( int y = 0 ; y < height ; ++y )
+		{
+			for( int x = 0 ; x < width ; ++x )
+			{
+				if ( maskimage[y*width + x] )
+				{
+					RGBColor col ;
+				
+					GetCPixel( x + portRect.left , y + portRect.top , &col ) ;
+					SetCPixel( x + portRect.left , y + portRect.top , &col ) ;
+				}
+			}
+		}
+		free( maskimage ) ;
+		maskimage = NULL ;
+	}
+	else
+	{
+		CopyBits(GetPortBitMapForCopyBits(wp),			// src PixMap	- we copy image over itself -
+				GetPortBitMapForCopyBits(wp),		// dst PixMap	- no drawing occurs -
+				&portRect,			// srcRect		- it will be recorded and compressed -
+				&portRect,			// dstRect		- into the picture that is open -
 				srcCopy,NULL);			// copyMode and no clip region
 
+	}
 	ClosePicture();						// We are done recording the picture
+	UnlockPixels( GetGWorldPixMap( wp ) ) ;
 	SetGWorld( origPort , origDev ) ;
 	return pict;						// return our groovy pict handle
 }
@@ -226,7 +279,7 @@ bool wxToolBar::Realize()
 		wxToolBarTool *tool = (wxToolBarTool *)node->Data();
 		wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetBitmap1().GetRefData()) ;
 		
-		if( !tool->IsSeparator() )
+		if(  !tool->IsSeparator()  )
 		{
 			Rect toolrect = { toolbarrect.top + kwxMacToolBarTopMargin , toolbarrect.left + x + kwxMacToolBarLeftMargin , 0 , 0 } ;
 			toolrect.right = toolrect.left + toolSize.x ;
@@ -239,12 +292,19 @@ bool wxToolBar::Realize()
 					icon = bmap->m_hPict ;
 				else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
 				{
-					icon = MakePict( bmap->m_hBitmap ) ;
+					if ( tool->GetBitmap1().GetMask() )
+					{
+						icon = MakePict( bmap->m_hBitmap , tool->GetBitmap1().GetMask()->GetMaskBitmap() ) ;
+					}
+					else
+					{
+						icon = MakePict( bmap->m_hBitmap , NULL ) ;
+					}
 				}
 			}
 			
 			ControlHandle m_macToolHandle ;
-				
+			
 			SInt16 behaviour = kControlBehaviorOffsetContents ;
 			if ( tool->CanBeToggled() )
 				behaviour += kControlBehaviorToggles ;
@@ -266,8 +326,19 @@ bool wxToolBar::Realize()
 						behaviour  , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
 			}
 			m_macToolHandles.Add( m_macToolHandle ) ;
+			tool->m_index = m_macToolHandles.Count() -1 ;
+			if ( !tool->IsEnabled() )
+			{
+				UMADeactivateControl( m_macToolHandle ) ;
+			}
+			if ( tool->CanBeToggled() && tool->IsToggled() )
+			{
+   				::SetControlValue( m_macToolHandle , 1 ) ;
+			}
 			UMASetControlFontStyle( m_macToolHandle , &controlstyle ) ;
-			UMAEmbedControl( m_macToolHandle , m_macControl ) ;
+			ControlHandle container = GetParent()->MacGetContainerForEmbedding() ;
+			wxASSERT_MSG( container != NULL , "No valid mac container control" ) ;
+			UMAEmbedControl( m_macToolHandle , container ) ;
 			
 			x += (int)toolSize.x;
 			noButtons ++;
@@ -311,7 +382,7 @@ void wxToolBar::SetToolBitmapSize(const wxSize& size)
 // The button size is bigger than the bitmap size
 wxSize wxToolBar::GetToolSize() const
 {
-    return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
+    return wxSize(m_defaultWidth + 4, m_defaultHeight + 4);
 }
 
 void wxToolBar::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
@@ -321,7 +392,13 @@ void wxToolBar::MacHandleControlClick( ControlHandle control , SInt16 controlpar
 	{
 		if ( m_macToolHandles[index] == (void*) control )
 		{
-			OnLeftClick( ( (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ) ->m_index , ( (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ) ->IsToggled() ) ;
+   			wxToolBarTool *tool = (wxToolBarTool *)m_tools.Nth( index )->Data();
+			if ( tool->CanBeToggled() )
+    		{
+        		tool->Toggle( GetControlValue( control ) ) ;
+    		}
+			OnLeftClick( tool->GetId() , tool -> IsToggled() ) ;
+			break ;
 		}
 	}
 }
@@ -340,43 +417,54 @@ void wxToolBar::SetRows(int nRows)
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
     MacClientToRootWindow( &x , &y ) ;
-    Point pt = { x ,y } ;
+    Point pt = { y ,x } ;
 
 	int index = 0 ;
 	for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
 	{
-		if ( PtInRect( pt , &(**(ControlHandle)(m_macToolHandles[index])).contrlRect) )
+		if ( m_macToolHandles[index] )
 		{
-			return  (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ;
+			Rect bounds ;
+			GetControlBounds((ControlHandle) m_macToolHandles[index], &bounds ) ;
+			if ( PtInRect( pt , &bounds ) )
+			{
+				return  (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ;
+			}
 		}
 	}
 
     return (wxToolBarToolBase *)NULL;
 }
 
+wxString wxToolBar::MacGetToolTipString( wxPoint &pt )
+{
+	wxToolBarToolBase* tool = FindToolForPosition( pt.x , pt.y ) ;
+	if ( tool )
+	{
+		return tool->GetShortHelp() ;
+	}
+	return "" ;
+}
+
 void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
 {
         wxToolBarTool *tool = (wxToolBarTool *)t;
+        if ( tool->m_index < 0 )
+        	return ;
+        	
         ControlHandle control = (ControlHandle) m_macToolHandles[ tool->m_index ] ;
-		if ( UMAHasAppearance() )
-		{
-			if ( enable )
-				::ActivateControl( control ) ;
-			else
-				::DeactivateControl( control ) ;
-		}
+
+		if ( enable )
+			UMAActivateControl( control ) ;
 		else
-		{
-			if ( enable )
-				::HiliteControl( control , 0 ) ;
-			else
-				::HiliteControl( control , 255 ) ;
-		}
+			UMADeactivateControl( control ) ;
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 {
        wxToolBarTool *tool = (wxToolBarTool *)t;
+        if ( tool->m_index < 0 )
+        	return ;
         
        ControlHandle control = (ControlHandle) m_macToolHandles[ tool->m_index ] ;
    		::SetControlValue( control , toggle ) ;
@@ -402,5 +490,116 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 {
 		return TRUE ;
 }
+
+void wxToolBar::OnPaint(wxPaintEvent& event)
+{
+	WindowRef window = GetMacRootWindow() ;
+	if ( window )
+	{
+		wxWindow* win = wxFindWinFromMacWindow( window ) ;
+		if ( win )
+		{
+			wxMacDrawingHelper help( win ) ;
+			// the mac control manager always assumes to have the origin at 0,0
+			SetOrigin( 0 , 0 ) ;
+			
+			bool			hasTabBehind = false ;
+			wxWindow* parent = GetParent() ;
+			while ( parent )
+			{
+				if( parent->MacGetWindowData() )
+				{
+					UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+					break ;
+				}
+				
+				if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
+				{
+					if ( ((wxControl*)parent)->GetMacControl() )
+						SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
+					break ;
+				}
+				
+				parent = parent->GetParent() ;
+			} 
+			Rect toolbarrect = { m_y , m_x , m_y + m_height , m_x + m_width } ;
+
+			UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+			{
+				int index = 0 ;
+				for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
+				{
+					if ( m_macToolHandles[index] )
+					{
+						UMADrawControl( (ControlHandle) m_macToolHandles[index] ) ;
+ 					}
+				}
+			}
+			UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+		}
+	}
+}
+void  wxToolBar::OnMouse( wxMouseEvent &event ) 
+{
+		
+	if (event.GetEventType() == wxEVT_LEFT_DOWN || event.GetEventType() == wxEVT_LEFT_DCLICK )
+	{
+			
+		int x = event.m_x ;
+		int y = event.m_y ;
+		
+		MacClientToRootWindow( &x , &y ) ;
+			
+		ControlHandle	control ;
+		Point		localwhere ;
+		GrafPtr		port ;
+		SInt16		controlpart ;
+		WindowRef	window = GetMacRootWindow() ;
+		
+		localwhere.h = x ;
+		localwhere.v = y ;
+	
+		short modifiers = 0;
+		
+		if ( !event.m_leftDown && !event.m_rightDown )
+			modifiers  |= btnState ;
+	
+		if ( event.m_shiftDown )
+			modifiers |= shiftKey ;
+			
+		if ( event.m_controlDown )
+			modifiers |= controlKey ;
+	
+		if ( event.m_altDown )
+			modifiers |= optionKey ;
+	
+		if ( event.m_metaDown )
+			modifiers |= cmdKey ;
+	
+		controlpart = FindControl( localwhere , window , &control ) ;
+		{
+			if ( AcceptsFocus() && FindFocus() != this )
+			{
+				SetFocus() ;
+			}
+			if ( control && UMAIsControlActive( control ) )
+			{
+				{
+					if ( controlpart == kControlIndicatorPart && !UMAHasAppearance() )
+						controlpart = UMAHandleControlClick( control , localwhere , modifiers , (ControlActionUPP) NULL ) ;
+					else
+						controlpart = UMAHandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
+					wxTheApp->s_lastMouseDown = 0 ;
+					if ( controlpart && ! ( ( UMAHasAppearance() || (controlpart != kControlIndicatorPart) ) 
+						&& (IsKindOf( CLASSINFO( wxScrollBar ) ) ) ) ) // otherwise we will get the event twice
+					{
+						MacHandleControlClick( control , controlpart ) ;
+					}
+				}
+			}
+		}
+	}
+}
+
 #endif // wxUSE_TOOLBAR
 

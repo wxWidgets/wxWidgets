@@ -27,6 +27,7 @@ wxList wxModalDialogs;
 wxList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList wxPendingDelete;
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
 
 BEGIN_EVENT_TABLE(wxDialog, wxPanel)
@@ -39,11 +40,11 @@ BEGIN_EVENT_TABLE(wxDialog, wxPanel)
   EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
+#endif
 
 wxDialog::wxDialog()
 {
-  m_isShown = FALSE;
-  m_modalShowing = FALSE;
+  	m_isShown = FALSE;
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
 
@@ -54,15 +55,8 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-  m_windowStyle = style;
-  m_isShown = FALSE;
-  m_modalShowing = FALSE;
 
-#if wxUSE_TOOLTIPS
-    m_hwndToolTip = 0;
-#endif
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-  SetName(name);
   
   if (!parent)
     wxTopLevelWindows.Append(this);
@@ -74,59 +68,26 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
   else
 	m_windowId = id;
 
-	Rect theBoundsRect;
+	MacCreateRealWindow( title , pos , size , MacRemoveBordersFromStyle(style)  , name ) ;
 
-  m_x = (int)pos.x;
-  m_y = (int)pos.y;
-  if ( m_y < 50 )
-  	m_y = 50 ;
-  if ( m_x < 20 )
-  	m_x = 20 ;
-  	
-  m_width = size.x;
-	if (m_width == -1) 
-		m_width = 20;
-  m_height = size.y;
-	if (m_height == -1) 
-		m_height = 20;
-
-	::SetRect(&theBoundsRect, m_x, m_y, m_x + m_width, m_y + m_height);
-	m_macWindowData = new MacWindowData() ;
-
-	WindowClass wclass = kMovableModalWindowClass ;
-	WindowAttributes attr = kWindowNoAttributes ;
-	
-	if ( ( m_windowStyle & wxMINIMIZE_BOX ) || ( m_windowStyle & wxMAXIMIZE_BOX ) )
-	{
-		attr |= kWindowFullZoomAttribute ;
-		attr |= kWindowResizableAttribute ;
-	}
-
-	UMACreateNewWindow( wclass , attr , &theBoundsRect , &m_macWindowData->m_macWindow ) ;
-	wxAssociateWinWithMacWindow( m_macWindowData->m_macWindow , this ) ;
-	wxString label ;
-	if( wxApp::s_macDefaultEncodingIsPC )
-		label = wxMacMakeMacStringFromPC( title ) ;
-	else
-		label = title ;
-	UMASetWTitleC( m_macWindowData->m_macWindow , label ) ;
 	m_macWindowData->m_macWindowBackgroundTheme = kThemeBrushDialogBackgroundActive ;
-	UMACreateRootControl( m_macWindowData->m_macWindow , &m_macWindowData->m_macRootControl ) ;
-	m_macWindowData->m_macFocus = NULL ;
   return TRUE;
 }
 
 void wxDialog::SetModal(bool flag)
 {
-	if ( flag )
-		m_windowStyle |= wxDIALOG_MODAL ;
-	else
-		if ( m_windowStyle & wxDIALOG_MODAL )
-  			m_windowStyle -= wxDIALOG_MODAL ;
-  
-  wxModelessWindows.DeleteObject(this);
-  if (!flag)
-    wxModelessWindows.Append(this);
+  if ( flag )
+    {
+        m_windowStyle |= wxDIALOG_MODAL;
+
+        wxModelessWindows.DeleteObject(this);
+    }
+    else
+    {
+        m_windowStyle &= ~wxDIALOG_MODAL;
+
+        wxModelessWindows.Append(this);
+    }
 }
 
 wxDialog::~wxDialog()
@@ -134,10 +95,10 @@ wxDialog::~wxDialog()
 	m_isBeingDeleted = TRUE ;
     wxTopLevelWindows.DeleteObject(this);
 
-  m_modalShowing = FALSE;
+  	Show(FALSE);
 
-  if ( (GetWindowStyleFlag() & wxDIALOG_MODAL) != wxDIALOG_MODAL )
-    wxModelessWindows.DeleteObject(this);
+    if ( !IsModal() )
+    	wxModelessWindows.DeleteObject(this);
 
     // If this is the last top-level window, exit.
     if (wxTheApp && (wxTopLevelWindows.Number() == 0))
@@ -184,19 +145,20 @@ void wxDialog::DoSetClientSize(int width, int height)
 	wxWindow::DoSetClientSize( width , height ) ;
 }
 
-void wxDialog::GetPosition(int *x, int *y) const
+void wxDialog::DoGetPosition(int *x, int *y) const
 {
-	DoGetPosition( x , y ) ;
-}
-
-bool wxDialog::IsShown() const
-{
-  return m_isShown;
+	wxWindow::DoGetPosition( x , y ) ;
 }
 
 bool wxDialog::IsModal() const
 {
-    return wxModalDialogs.Find((wxDialog *)this) != 0; // const_cast
+    return (GetWindowStyleFlag() & wxDIALOG_MODAL) != 0;
+}
+
+
+bool wxDialog::IsModalShowing() const
+{
+    return wxModalDialogs.Find((wxDialog *)this) != NULL; // const_cast
 }
 
 
@@ -204,121 +166,76 @@ extern bool s_macIsInModalLoop ;
 
 bool wxDialog::Show(bool show)
 {
-  m_isShown = show;
-
-  if (show)
-    InitDialog();
-
-  bool modal =  ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL) ;
-
-#if WXGARBAGE_COLLECTION_ON /* MATTHEW: GC */
-  if (!modal) 
-  {
-    if (show) 
+    if ( !wxDialogBase::Show(show) )
     {
-      if (!wxModelessWindows.Find(this))
-        wxModelessWindows.Append(this);
-    } 
-    else
-      wxModelessWindows.DeleteObject(this);
-  }
-  if (show) 
-  {
-    if (!wxTopLevelWindows.Find(this))
-      	wxTopLevelWindows.Append(this);
-  } 
-  else
-    	wxTopLevelWindows.DeleteObject(this);
-#endif
+        // nothing to do
+        return FALSE;
+    }
 
-	if ( modal )
+    if ( show )
+    {
+        // usually will result in TransferDataToWindow() being called
+        InitDialog();
+    }
+
+    if ( IsModal() )
+    {
+        if ( show )
+        {
+            DoShowModal();
+        }
+        else // end of modal dialog
+        {
+            // this will cause IsModalShowing() return FALSE and our local
+            // message loop will terminate
+            wxModalDialogs.DeleteObject(this);
+        }
+    }
+
+    return TRUE;
+}
+
+void wxDialog::DoShowModal()
+{
+    wxCHECK_RET( !IsModalShowing(), _T("DoShowModal() called twice") );
+
+    wxModalDialogs.Append(this);
+
+  	wxWindow *parent = GetParent();
+
+    // remember where the focus was
+    wxWindow *winFocus = FindFocus();
+    if ( !winFocus )
+    {
+        winFocus = parent;
+    }
+    if ( !winFocus )
+    {
+        winFocus = wxTheApp->GetTopWindow();
+    }
+	// TODO : test whether parent gets disabled
+
+	s_macIsInModalLoop = true ;
+
+	while ( IsModalShowing() )
 	{
-		s_macIsInModalLoop = true ;
-	  	if (show)
-	  	{
-     		if (m_modalShowing)
-      		{
-//        		BringWindowToTop((HWND) GetHWND());
-        		return TRUE;
-      		}
-
-      		m_modalShowing = TRUE;
-      		// if we don't do it, some window might be deleted while we have pointers
-      		// to them in our disabledWindows list and the program will crash when it
-      		// will try to reenable them after the modal dialog end
-     		wxTheApp->DeletePendingObjects();
-
-    		UMAShowWindow( m_macWindowData->m_macWindow ) ;
-    		UMASelectWindow( m_macWindowData->m_macWindow ) ;
-
-      	if (!wxModalDialogs.Member(this))
-        	wxModalDialogs.Append(this);
-
-      	while (wxModalDialogs.Member(this) )
-      	{
-      		wxTheApp->MacDoOneEvent() ;
-      	}
-	  }
-	  else
-	  {
-      	wxModalDialogs.DeleteObject(this);
-    	UMAHideWindow( m_macWindowData->m_macWindow ) ;
-	  }
-	  s_macIsInModalLoop = false ;
+		while ( !wxTheApp->Pending() && wxTheApp->ProcessIdle() )
+		{
+		}
+		wxTheApp->MacDoOneEvent() ;
 	}
-	else // !modal
-	{
-	  if (show)
-	  {
-    	UMAShowWindow( m_macWindowData->m_macWindow ) ;
-    	UMASelectWindow( m_macWindowData->m_macWindow ) ;
-	  }
-	  else
-	  {
-    	UMAHideWindow( m_macWindowData->m_macWindow ) ;
-	  }
-	}
-	return TRUE ;
+	
+	s_macIsInModalLoop = false ;
+
+    // TODO probably reenable the parent window if any
+
+    // and restore focus
+    if ( winFocus )
+    {
+        winFocus->SetFocus();
+    }
 }
 
-void wxDialog::SetTitle(const wxString& title)
-{
-	wxWindow::SetTitle( title ) ;
-}
-
-wxString wxDialog::GetTitle() const
-{
-	return wxWindow::GetTitle() ;
-}
-
-void wxDialog::Centre(int direction)
-{
-  int x_offset,y_offset ;
-  int display_width, display_height;
-  int  width, height, x, y;
-  wxWindow *parent = GetParent();
-  if ((direction & wxCENTER_FRAME) && parent)
-  {
-      parent->GetPosition(&x_offset,&y_offset) ;
-      parent->GetSize(&display_width,&display_height) ;
-  }
-  else
-  {
-    wxDisplaySize(&display_width, &display_height);
-    x_offset = 0 ;
-    y_offset = 0 ;
-  }
-
-  GetSize(&width, &height);
-  GetPosition(&x, &y);
-
-  if (direction & wxHORIZONTAL)
-    x = (int)((display_width - width)/2);
-  if (direction & wxVERTICAL)
-    y = (int)((display_height - height)/2);
-
-  SetSize(x+x_offset, y+y_offset, width, height);
-}
 
 // Replacement for Show(TRUE) for modal dialogs - returns return code
 int wxDialog::ShowModal()
@@ -328,6 +245,8 @@ int wxDialog::ShowModal()
   return GetReturnCode();
 }
 
+// NB: this function (surprizingly) may be called for both modal and modeless
+//     dialogs and should work for both of them
 void wxDialog::EndModal(int retCode)
 {
   SetReturnCode(retCode);
@@ -339,13 +258,7 @@ void wxDialog::OnOK(wxCommandEvent& event)
 {
   if ( Validate() && TransferDataFromWindow() )
   {
-        if ( IsModal() )
-            EndModal(wxID_OK);
-        else
-        {
-            SetReturnCode(wxID_OK);
-            this->Show(FALSE);
-        }
+      EndModal(wxID_OK);
   }
 }
 
@@ -358,20 +271,7 @@ void wxDialog::OnApply(wxCommandEvent& event)
 
 void wxDialog::OnCancel(wxCommandEvent& event)
 {
-    if ( IsModal() )
         EndModal(wxID_CANCEL);
-    else
-    {
-        SetReturnCode(wxID_CANCEL);
-        this->Show(FALSE);
-    }
-}
-
-void wxDialog::OnPaint(wxPaintEvent& event)
-{
-  // No: if you call the default procedure, it makes
-  // the following painting code not work.
-//  wxWindow::OnPaint(event);
 }
 
 void wxDialog::OnCloseWindow(wxCloseEvent& event)
@@ -407,30 +307,16 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
 // Destroy the window (delayed, if a managed window)
 bool wxDialog::Destroy()
 {
-  if (!wxPendingDelete.Member(this))
+    wxCHECK_MSG( !wxPendingDelete.Member(this), FALSE,
+                 _T("wxDialog destroyed twice") );
+
     wxPendingDelete.Append(this);
   return TRUE;
-}
-
-void wxDialog::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-  // if we're using constraints - do use them
-  #if wxUSE_CONSTRAINTS
-    if ( GetAutoLayout() )
-    {
-      Layout();
-    }
-  #endif
 }
 
 void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
   Refresh();
-}
-
-void wxDialog::Fit()
-{
-  wxWindow::Fit();
 }
 

@@ -29,7 +29,7 @@
 #include <Types.h>
 #include <Files.h>
 
-#include "Optim.h"
+#include "optim.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -536,6 +536,6 @@ pascal	OSErr	FSpDTCopyComment(const FSSpec *srcSpec,
 }
 #endif
 
-#include "OptimEnd.h"
+#include "optimend.h"
 
 #endif	/* __MOREDESKTOPMGR__ */

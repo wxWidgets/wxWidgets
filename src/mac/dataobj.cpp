@@ -44,56 +44,40 @@
 
 wxDataFormat::wxDataFormat()
 {
-    m_vType = wxDF_INVALID;
-    m_vFormat = 0;
+    m_type = wxDF_INVALID;
+    m_format = 0;
 }
 
-wxDataFormat::wxDataFormat(
-  wxDataFormatId                    vType
-)
+wxDataFormat::wxDataFormat(  wxDataFormatId   vType )
 {
-    PrepareFormats();
     SetType(vType);
 }
 
-wxDataFormat::wxDataFormat(
-  const wxChar*                     zId
-)
+wxDataFormat::wxDataFormat(  const wxChar*  zId)
 {
-    PrepareFormats();
     SetId(zId);
 }
 
-wxDataFormat::wxDataFormat(
-  const wxString&                   rId
-)
+wxDataFormat::wxDataFormat(  const wxString&   rId)
 {
-    PrepareFormats();
     SetId(rId);
 }
 
-wxDataFormat::wxDataFormat(
-  NativeFormat                      vFormat
-)
+wxDataFormat::wxDataFormat( NativeFormat vFormat)
 {
-    PrepareFormats();
     SetId(vFormat);
 }
 
-void wxDataFormat::SetType(
-  wxDataFormatId                    vType
-)
+void wxDataFormat::SetType(  wxDataFormatId  Type )
 {
-    m_vType = vType;
+    m_type = Type;
 
-    if (m_vType == wxDF_TEXT)
-        m_vFormat = 0;
-    else
-    if (m_vType == wxDF_BITMAP)
-        m_vFormat = 0;
-    else
-    if (m_vType == wxDF_FILENAME)
-        m_vFormat = 0;
+    if (m_type == wxDF_TEXT)
+        m_format = 'TEXT';
+    else if (m_type == wxDF_BITMAP || m_type == wxDF_METAFILE )
+        m_format = 'PICT';
+    else if (m_type == wxDF_FILENAME)
+        m_format = 'SPEC';
     else
     {
        wxFAIL_MSG( wxT("invalid dataformat") );
@@ -102,56 +86,37 @@ void wxDataFormat::SetType(
 
 wxDataFormatId wxDataFormat::GetType() const
 {
-    return m_vType;
+    return m_type;
 }
 
 wxString wxDataFormat::GetId() const
 {
-    wxString                        sRet("");  // TODO: gdk_atom_name( m_format ) );
+    wxString sRet("");  // TODO: to name of ( m_format ) );
     return sRet;
 }
 
-void wxDataFormat::SetId(
-  NativeFormat                      vFormat
-)
+void wxDataFormat::SetId(  NativeFormat  format )
 {
-    m_vFormat = vFormat;
-// TODO:
-/*
-    if (m_format == g_textAtom)
+    m_format = format;
+
+    if (m_format == 'TEXT')
         m_type = wxDF_TEXT;
     else
-    if (m_format == g_pngAtom)
+    if (m_format == 'PICT')
         m_type = wxDF_BITMAP;
     else
-    if (m_format == g_fileAtom)
+    if (m_format == 'SPEC')
         m_type = wxDF_FILENAME;
     else
         m_type = wxDF_PRIVATE;
-*/
 }
 
-void wxDataFormat::SetId(
-  const wxChar*                     zId
-)
+void wxDataFormat::SetId( const wxChar* zId )
 {
     wxString                        tmp(zId);
 
-    m_vType = wxDF_PRIVATE;
-    m_vFormat = 0;// TODO: get the format gdk_atom_intern( wxMBSTRINGCAST tmp.mbc_str(), FALSE );
-}
-
-void wxDataFormat::PrepareFormats()
-{
-// TODO:
-/*
-    if (!g_textAtom)
-        g_textAtom = gdk_atom_intern( "STRING", FALSE );
-    if (!g_pngAtom)
-        g_pngAtom = gdk_atom_intern( "image/png", FALSE );
-    if (!g_fileAtom)
-        g_fileAtom = gdk_atom_intern( "file:ALL", FALSE );
-*/
+    m_type = wxDF_PRIVATE;
+    m_format = 0;// TODO: get the format gdk_atom_intern( wxMBSTRINGCAST tmp.mbc_str(), FALSE );
 }
 
 //-------------------------------------------------------------------------

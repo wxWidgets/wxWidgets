@@ -43,7 +43,7 @@
  * Lorens Younes (d93-hyo@nada.kth.se) 4/96
  */
 
-#include "xpmi.h"
+#include "XpmI.h"
 #include <ctype.h>
 
 LFUNC(xpmVisualType, int, (Visual *visual));

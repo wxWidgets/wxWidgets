@@ -20,7 +20,9 @@
 #include "wx/radiobox.h"
 #include <wx/mac/uma.h>
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
+#endif
 
 #pragma mark -
 #pragma mark ### Constructors & destructor ###
@@ -93,7 +95,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 	Rect bounds ;
 	Str255 title ;
 	
-	MacPreControlCreate( parent , id ,  label , pos , size ,style, *((wxValidator*)NULL) , name , &bounds , title ) ;
+	MacPreControlCreate( parent , id ,  label , pos , size ,style, val , name , &bounds , title ) ;
 
 	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , 1, 
 	  	kControlGroupBoxTextTitleProc , (long) this ) ;
@@ -435,9 +437,9 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 	x_offset = x;
 	y_offset = y;
 	GetPosition(&x_current, &y_current);
-	if ((x == -1) || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+	if ((x == -1) && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
 		x_offset = x_current;
-	if ((y == -1) || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+	if ((y == -1)&& !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
 		y_offset = y_current;
 
 // define size
@@ -490,7 +492,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 	
 	
 	x_start = charWidth;
-	y_start = charHeight*3/2;
+	y_start = 15 ;
 	x_offset = x_start;
 	y_offset = y_start;
 	
@@ -507,7 +509,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
       		else
       			{
 				x_offset = x_start;
-        		y_offset += maxHeight + charHeight/2;
+        		y_offset += maxHeight ; /*+ charHeight/2;*/
 				}
 			}
 
@@ -515,7 +517,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 		current=current->NextInCycle();
 		
 		if (m_windowStyle & wxRA_SPECIFY_ROWS)
-			y_offset += maxHeight + charHeight/2;
+			y_offset += maxHeight ; /*+ charHeight/2;*/
 		else
 			x_offset += maxWidth + charWidth;
 		}

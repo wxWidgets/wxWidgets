@@ -147,6 +147,7 @@ bool wxDirData::Read(wxString *filename)
 		if ( err != noErr )
 			break ;
 			
+		p2cstr( m_name ) ;
 		if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (m_flags & wxDIR_DIRS) ) //  we have a directory
 			break ;
 			
@@ -156,17 +157,37 @@ bool wxDirData::Read(wxString *filename)
         if ( ( m_CPB.hFileInfo.ioFlFndrInfo.fdFlags & kIsInvisible ) && !(m_flags & wxDIR_HIDDEN) ) // its hidden but we don't want it
 			continue ;
 
+		wxString file( m_name ) ;
+		if ( m_filespec.IsEmpty() || m_filespec == "*.*" )
+		{
+		}
+		else if ( m_filespec.Length() > 1 && m_filespec.Left(1) =="*" )
+		{
+			if ( file.Right( m_filespec.Length() - 1 ).Upper() != m_filespec.Mid(1).Upper() )
+			{
+				continue ;
+			}
+		}
+		else if ( m_filespec.Length() > 1 && m_filespec.Right(1) == "*" )
+		{
+			if ( file.Left( m_filespec.Length() - 1 ).Upper() != m_filespec.Left( m_filespec.Length() - 1 ).Upper() )
+			{
+				continue ;
+			}
+		}
+		else if ( file.Upper() != m_filespec.Upper() )
+		{
+			continue ;
+		}
+
 		break ;
 	}
 	if ( err != noErr )
 	{
 		return FALSE ;
 	}
-	FSSpec spec ;
-	
-	FSMakeFSSpecCompat(m_CPB.hFileInfo.ioVRefNum, m_dirId, m_name,&spec) ;
-								  
-	*filename = wxMacFSSpec2UnixFilename( &spec ) ;
+
+	*filename = (char*) m_name ;
 
     return TRUE;
 }

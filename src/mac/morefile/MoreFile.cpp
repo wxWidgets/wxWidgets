@@ -25,8 +25,8 @@
 
 #define	__COMPILINGMOREFILES
 
-#include "MoreFile.h"
-#include "MoreExtr.h"
+#include "morefile.h"
+#include "moreextr.h"
 
 /*****************************************************************************/
 

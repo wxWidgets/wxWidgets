@@ -23,13 +23,14 @@
 #include <Errors.h>
 #include <Memory.h>
 #include <Files.h>
+#include <Math64.h>
 
 #define	__COMPILINGMOREFILES
 
-#include "MoreFile.h"
-#include "MoreExtr.h"
-#include "MoreDesk.h"
-#include "FileCopy.h"
+#include "morefile.h"
+#include "moreextr.h"
+#include "moredesk.h"
+#include "filecopy.h"
 
 /*****************************************************************************/
 
@@ -160,6 +161,8 @@ static	OSErr	CheckForForks(short vRefNum,
 
 /*****************************************************************************/
 
+#if !TARGET_CARBON
+
 static	OSErr	PreflightFileCopySpace(short srcVRefNum,
 									   long srcDirID,
 									   ConstStr255Param srcName,
@@ -182,7 +185,8 @@ static	OSErr	PreflightFileCopySpace(short srcVRefNum,
 		dstBlksPerAllocBlk = ((unsigned long)pb.xPB.ioVAlBlkSiz >> 9);
 		
 		/* Convert freeBytes to free disk blocks (512-byte blocks) */
-		dstFreeBlocks = (pb.xPB.ioVFreeBytes.hi << 23) + (pb.xPB.ioVFreeBytes.lo >> 9);
+		// dstFreeBlocks = (pb.xPB.ioVFreeBytes.hi << 23) + (pb.xPB.ioVFreeBytes.lo >> 9);
+		dstFreeBlocks = pb.xPB.ioVFreeBytes >> 9 ;
 		
 		/* Now, get the size of the file's data resource forks */
 		pb.hPB.fileParam.ioNamePtr = (StringPtr)srcName;
@@ -243,7 +247,7 @@ static	OSErr	PreflightFileCopySpace(short srcVRefNum,
 	
 	return ( error );
 }
-
+#endif
 /*****************************************************************************/
 
 pascal	OSErr	FileCopy(short srcVRefNum,

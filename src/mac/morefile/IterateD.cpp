@@ -22,8 +22,8 @@
 
 #define	__COMPILINGMOREFILES
 
-#include "MoreExtr.h"
-#include "IterateD.h"
+#include "moreextr.h"
+#include "iterated.h"
 
 /*
 **	Type definitions
@@ -33,9 +33,14 @@
 ** stack space used when recursively calling IterateDirectoryLevel
 ** and to hold global information that might be needed at any time.
 */
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=mac68k
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=mac68k
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(push, 2)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack(2)
 #endif
+
 struct IterateGlobals
 {
 	IterateFilterProcPtr	iterateFilter;	/* pointer to IterateFilterProc */
@@ -47,8 +52,13 @@ struct IterateGlobals
 	unsigned short			currentLevel;	/* The current level IterateLevel is on */
 	void					*yourDataPtr;	/* A pointer to caller data the filter may need to access */
 };
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=reset
+
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=reset
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(pop)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack()
 #endif
 
 typedef struct IterateGlobals IterateGlobals;

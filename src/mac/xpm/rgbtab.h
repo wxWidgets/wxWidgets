@@ -40,7 +40,7 @@
 
 typedef struct {
     char *name;
-    unsigned long rgb;			/* it's unsigned long */
+    RGBColor rgb;			/* it's unsigned long */
 }      rgbRecord;
 
 /*
@@ -50,10 +50,10 @@ typedef struct {
 #ifdef FOR_MSW
 #define myRGB(r,g,b)	RGB(r,g,b)	/* MSW has this macro */
 #else
-#define myRGB(r,g,b)((r<<16)+(g<<8)+(b))
-#define GetRValue(c) ((((c&0x00FF0000)>>16)<<8)+((c&0x00FF0000)>>16))
-#define GetGValue(c) ((((c&0x0000FF00)>>8)<<8)+((c&0x0000FF00)>>8))
-#define GetBValue(c) (((c&0x000000FF)<<8)+(c&0x000000FF))
+#define myRGB(r,g,b) { ((r) << 8) + (r) , ((g) << 8) + (g), ((b) << 8) + (b) }
+#define GetRValue(c) ((c).red)
+#define GetGValue(c) ((c).green)
+#define GetBValue(c) ((c).blue)
 #endif
 
 static rgbRecord theRGBRecords[] =

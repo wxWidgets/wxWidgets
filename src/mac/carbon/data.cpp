@@ -102,8 +102,8 @@ const wxChar *wxFrameNameStr = wxT("frame");
 const wxChar *wxGaugeNameStr = wxT("gauge");
 const wxChar *wxStaticBoxNameStr = wxT("groupBox");
 const wxChar *wxListBoxNameStr = wxT("listBox");
-const wxChar *wxStaticTextNameStr = wxT("message");
-const wxChar *wxStaticBitmapNameStr = wxT("message");
+const wxChar *wxStaticTextNameStr = wxT("statictext");
+const wxChar *wxStaticBitmapNameStr = wxT("staticbitmap");
 const wxChar *wxMultiTextNameStr = wxT("multitext");
 const wxChar *wxPanelNameStr = wxT("panel");
 const wxChar *wxRadioBoxNameStr = wxT("radioBox");
@@ -133,6 +133,18 @@ const wxChar *wxDirDialogDefaultFolderStr = wxT("/");
 // See wx/utils.h
 const wxChar *wxFloatToStringStr = wxT("%.2f");
 const wxChar *wxDoubleToStringStr = wxT("%.2f");
+
+#if wxUSE_SHARED_LIBRARY
+///// Event tables (also must be in one, statically-linked file for shared libraries)
+
+// This is the base, wxEvtHandler 'bootstrap' code which is expanded manually here
+const wxEventTable *wxEvtHandler::GetEventTable() const { return &wxEvtHandler::sm_eventTable; }
+
+const wxEventTable wxEvtHandler::sm_eventTable =
+	{ NULL, &wxEvtHandler::sm_eventTableEntries[0] };
+
+const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] = { { 0, 0, 0, NULL } };
+#endif
 
 const wxSize wxDefaultSize(-1, -1);
 const wxPoint wxDefaultPosition(-1, -1);

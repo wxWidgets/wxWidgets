@@ -74,7 +74,6 @@ wxColour wxSystemSettings::GetSystemColour(int index)
 			break ;
 		case wxSYS_COLOUR_INFOBK :
 		case wxSYS_COLOUR_APPWORKSPACE:	
-		case wxSYS_COLOUR_LISTBOX:
 			return *wxWHITE ;
 			break ;
 	}

@@ -35,8 +35,10 @@
 
 #include <stdlib.h>
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMacPrinter, wxPrinterBase)
 IMPLEMENT_CLASS(wxMacPrintPreview, wxPrintPreviewBase)
+#endif
 
 /*
  * Printer
@@ -92,31 +94,16 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
   else
     m_printDialogData.EnablePageNumbers(FALSE);
 
-  // Create a suitable device context  
  // Create a suitable device context  
   wxDC *dc = NULL;
   if (prompt)
   {
- 		PrOpen() ;
-  		m_printDialogData.ConvertToNative() ; // make sure we have a valid handle
-  		if ( m_printDialogData.m_macPrintInfo )
-  		{
-   			// todo incorporate the changes from a global page setup
- 			if  ( ::PrStlDialog( m_printDialogData.m_macPrintInfo ) ) // we should have the page setup dialog
- 			{
- 				PrClose() ;
-		        wxPrintDialog dialog(parent, & m_printDialogData);
-		        if (dialog.ShowModal() == wxID_OK)
-		        {
-		          dc = dialog.GetPrintDC();
-		          m_printDialogData = dialog.GetPrintData();
-		        }
- 			}
- 			else
- 			{
-  				PrClose() ;
-  			}
-  		}
+        wxPrintDialog dialog(parent, & m_printDialogData);
+        if (dialog.ShowModal() == wxID_OK)
+		{
+		     dc = dialog.GetPrintDC();
+		     m_printDialogData = dialog.GetPrintData();
+		}
   }
   else
   {
@@ -140,7 +127,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
   printout->SetDC(dc);
 
   int w, h;
-  long ww, hh;
+  wxCoord ww, hh;
   dc->GetSize(&w, &h);
   printout->SetPageSizePixels((int)w, (int)h);
   dc->GetSizeMM(&ww, &hh);
@@ -278,50 +265,35 @@ bool wxMacPrintPreview::Print(bool interactive)
 
 void wxMacPrintPreview::DetermineScaling(void)
 {
-/*
-    HDC dc = ::GetDC(NULL);
-    int screenWidth = ::GetDeviceCaps(dc, HORZSIZE);
-//    int screenHeight = ::GetDeviceCaps(dc, VERTSIZE);
-    int screenXRes = ::GetDeviceCaps(dc, HORZRES);
-//    int screenYRes = ::GetDeviceCaps(dc, VERTRES);
-    int logPPIScreenX = ::GetDeviceCaps(dc, LOGPIXELSX);
-    int logPPIScreenY = ::GetDeviceCaps(dc, LOGPIXELSY);
-    m_previewPrintout->SetPPIScreen(logPPIScreenX, logPPIScreenY);
-
-    ::ReleaseDC(NULL, dc);
+	int screenWidth , screenHeight ;
+	wxDisplaySize( &screenWidth , &screenHeight ) ;
+	
+	m_previewPrintout->SetPPIScreen( 72 , 72 ) ;
+	m_previewPrintout->SetPPIPrinter( 72 , 72 ) ;
+	m_previewPrintout->SetPageSizeMM( 8 * 25.6 , 11 * 25.6 ) ;
+	m_previewPrintout->SetPageSizePixels( 8 * 72 , 11 * 72 ) ;
+    m_pageWidth = 8 * 72 ;
+    m_pageHeight = 11 * 72 ;
+    m_previewScale = 1 ;
 
     // Get a device context for the currently selected printer
-    wxPrinterDC printerDC("", "", "", FALSE, m_printDialogData.GetOrientation());
-
-    int printerWidth = 150;
-    int printerHeight = 250;
-    int printerXRes = 1500;
-    int printerYRes = 2500;
-
-    if (printerDC.GetHDC())
+    wxPrinterDC printerDC(m_printDialogData.GetPrintData());
+    if (printerDC.Ok())
     {
-      printerWidth = ::GetDeviceCaps((HDC) printerDC.GetHDC(), HORZSIZE);
-      printerHeight = ::GetDeviceCaps((HDC) printerDC.GetHDC(), VERTSIZE);
-      printerXRes = ::GetDeviceCaps((HDC) printerDC.GetHDC(), HORZRES);
-      printerYRes = ::GetDeviceCaps((HDC) printerDC.GetHDC(), VERTRES);
+		int x , y ;
+  		wxCoord ww, hh;
+  		printerDC.GetSizeMM(&ww, &hh);
+		printerDC.GetSize( &x , &y ) ;
+		m_previewPrintout->SetPageSizeMM((int)ww, (int)hh);
+		m_previewPrintout->SetPageSizePixels( x , y) ;
+		m_pageWidth = x ;
+		m_pageHeight =  y ;
+		m_isOk = true ;
 
-      int logPPIPrinterX = ::GetDeviceCaps((HDC) printerDC.GetHDC(), LOGPIXELSX);
-      int logPPIPrinterY = ::GetDeviceCaps((HDC) printerDC.GetHDC(), LOGPIXELSY);
-
-      m_previewPrintout->SetPPIPrinter(logPPIPrinterX, logPPIPrinterY);
-      m_previewPrintout->SetPageSizeMM(printerWidth, printerHeight);
-      
-      if (logPPIPrinterX == 0 || logPPIPrinterY == 0 || printerWidth == 0 || printerHeight == 0)
-        m_isOk = FALSE;
-    }
-    else
-      m_isOk = FALSE;
-
-    m_pageWidth = printerXRes;
-    m_pageHeight = printerYRes;
-
+	}
     // At 100%, the page should look about page-size on the screen.
-    m_previewScale = (float)((float)screenWidth/(float)printerWidth);
-    m_previewScale = m_previewScale * (float)((float)screenXRes/(float)printerYRes);
-*/
+    // m_previewScale = (float)((float)screenWidth/(float)printerWidth);
+    // m_previewScale = m_previewScale * (float)((float)screenXRes/(float)printerXRes);
+    
+    m_previewScale = 1 ;
 }

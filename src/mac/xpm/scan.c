@@ -42,7 +42,7 @@
  * Lorens Younes (d93-hyo@nada.kth.se) 4/96
  */
 
-#include "xpmi.h"
+#include "XpmI.h"
 
 #define MAXPRINTABLE 92			/* number of printable ascii chars
 					 * minus \ and " for string compat

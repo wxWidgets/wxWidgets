@@ -16,7 +16,9 @@
 #include "wx/combobox.h"
 #include "wx/mac/uma.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
+#endif
 
 // right now we don't support editable comboboxes
 
@@ -44,7 +46,9 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 		SetControlData( m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
 		for ( int i = 0 ; i < n ; i++ )
 		{
-			appendmenu( m_macPopUpMenuHandle , choices[i] ) ;
+			Str255 label;
+			wxMenuItem::MacBuildMenuString( label , NULL , NULL , choices[i] ,false);
+			AppendMenu( m_macPopUpMenuHandle , label ) ;
 		}
 		SetControlMinimum( m_macControl , 0 ) ;
 		SetControlMaximum( m_macControl , m_noStrings) ;
@@ -125,7 +129,9 @@ void wxComboBox::SetSelection(long from, long to)
 
 void wxComboBox::Append(const wxString& item)
 {
-	appendmenu( m_macPopUpMenuHandle , item ) ;
+	Str255 label;
+	wxMenuItem::MacBuildMenuString( label , NULL , NULL , item ,false);
+	AppendMenu( m_macPopUpMenuHandle , label ) ;
     m_noStrings ++;
 	SetControlMaximum( m_macControl , m_noStrings) ;
 }

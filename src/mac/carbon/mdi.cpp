@@ -19,6 +19,7 @@
 
 extern wxList wxModelessWindows;
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
@@ -33,6 +34,7 @@ BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
   EVT_SCROLL(wxMDIClientWindow::OnScroll)
 END_EVENT_TABLE()
 
+#endif
 
 // Parent frame
 
@@ -61,7 +63,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     else
         m_windowId = (int)NewControlId();
 
-    // TODO: create MDI parent frame
+	// this window does not exist really
 
     wxModelessWindows.Append(this);
 
@@ -75,7 +77,7 @@ wxMDIParentFrame::~wxMDIParentFrame()
 // Get size *available for subwindows* i.e. excluding menu bar.
 void wxMDIParentFrame::DoGetClientSize(int *x, int *y) const
 {
-   wxFrame::DoGetClientSize( x , y ) ;
+	wxDisplaySize( x , y ) ;
 }
 
 void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
@@ -175,7 +177,9 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
     if (parent) parent->AddChild(this);
 
-    // TODO: create child frame
+  	MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
+  
+	m_macWindowData->m_macWindowBackgroundTheme = kThemeBrushDocumentWindowBackground ;
 
     wxModelessWindows.Append(this);
     return FALSE;

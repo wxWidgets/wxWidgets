@@ -53,7 +53,9 @@ static void DisposeExtLDEFInfo( ListHandle lh)
 	ExtLDEFInfo* info = (ExtLDEFInfo* )  (**lh).refCon ;
 	if ( info )
 	{
+	#if !TARGET_CARBON
 		DisposeRoutineDescriptor( (RoutineDescriptor*) info->drawProc ) ;
+	#endif
 		free( (void*) (**lh).refCon ) ;
 	}
 }

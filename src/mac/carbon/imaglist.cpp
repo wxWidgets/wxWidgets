@@ -15,7 +15,9 @@
 
 #include "wx/stubs/imaglist.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)
+#endif
 
 wxImageList::wxImageList()
 {

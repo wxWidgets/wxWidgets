@@ -17,7 +17,9 @@
 #include "wx/utils.h"
 #include "wx/pen.h"
 
+#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
+#endif
 
 wxPenRefData::wxPenRefData()
 {
@@ -26,7 +28,7 @@ wxPenRefData::wxPenRefData()
     m_join = wxJOIN_ROUND ;
     m_cap = wxCAP_ROUND ;
     m_nbDash = 0 ;
-    m_dash = (wxMACDash*)NULL;
+    m_dash = 0 ;
 /* TODO: null data
     m_hPen = 0;
 */
@@ -76,7 +78,7 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = (wxMACDash*)NULL;
+    M_PENDATA->m_dash = 0 ;
 
     RealizeResource();
 
@@ -94,7 +96,7 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = (wxMACDash*)NULL;
+    M_PENDATA->m_dash = 0 ;
 
     RealizeResource();
 
@@ -168,7 +170,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
     Unshare();
 
     M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxMACDash *)Dash;
+    M_PENDATA->m_dash = (wxDash *)Dash;
   
     RealizeResource();
 }

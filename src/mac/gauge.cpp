@@ -15,7 +15,9 @@
 
 #include "wx/gauge.h"
 
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
+#endif
 
 #include <wx/mac/uma.h>
 
@@ -31,15 +33,13 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
 	Rect bounds ;
 	Str255 title ;
 	m_rangeMax = range ;
-	m_macHorizontalBorder = 2 ; // additional pixels around the real control
-	m_macVerticalBorder = 2 ;
 	
 	if ( size.x == wxDefaultSize.x && size.y == wxDefaultSize.y)
 	{
 		size = wxSize( 200 , 16 ) ;
 	}
 	
-	MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
+	MacPreControlCreate( parent , id ,  "" , pos , size ,style & 0xE0FFFFFF /* no borders on mac */ , validator , name , &bounds , title ) ;
 
 	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , range, 
 	  	kControlProgressBarProc , (long) this ) ;
@@ -66,7 +66,7 @@ void wxGauge::SetRange(int r)
 void wxGauge::SetValue(int pos)
 {
     m_gaugePos = pos;
-   ::SetControlValue( m_macControl , m_gaugePos ) ;
+   	::SetControlValue( m_macControl , m_gaugePos ) ;
 }
 
 int wxGauge::GetShadowWidth() const
