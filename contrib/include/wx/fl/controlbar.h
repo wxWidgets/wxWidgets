@@ -823,7 +823,8 @@ public:
     inline cbBarDimHandlerBase* GetDimHandler() { return mpHandler; }
 };
 
-WX_DEFINE_ARRAY(float, cbArrayFloat);
+// FIXME: this array definition compiles but probably doesn't do what was intended (GD)
+WX_DEFINE_ARRAY_LONG(float, cbArrayFloat);
 
 /*
 Helper class used internally by the wxFrameLayout class.
