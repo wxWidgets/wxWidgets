@@ -339,6 +339,16 @@ static void DoCommonPostCleanup()
     FreeConvertedArgs();
 #endif // wxUSE_UNICODE
 
+    // check for memory leaks
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
+    {
+        wxLogDebug(wxT("There were memory leaks.\n"));
+        wxDebugContext::Dump();
+        wxDebugContext::PrintStatistics();
+    }
+#endif // Debug
+
 #if wxUSE_LOG
     // and now delete the last logger as well
     delete wxLog::SetActiveTarget(NULL);
@@ -361,17 +371,6 @@ void wxEntryCleanup()
 
 
     DoCommonPostCleanup();
-
-    // check for memory leaks
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
-    {
-        wxLogDebug(wxT("There were memory leaks.\n"));
-        wxDebugContext::Dump();
-        wxDebugContext::PrintStatistics();
-    }
-#endif // Debug
-
 }
 
 // ----------------------------------------------------------------------------
