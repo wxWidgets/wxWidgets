@@ -85,8 +85,9 @@ scrolwin.cpp	G
 splitter.cpp	G
 statline.cpp	G	U,R
 statusbr.cpp	G
-tabg.cpp	G
+tabg.cpp	G	16
 numdlgg.cpp	G
+tbarsmpl.cpp	G
 textdlgg.cpp	G
 tipdlg.cpp	G
 treectrl.cpp	G	16
@@ -100,6 +101,7 @@ config.cpp	C	B
 ctrlcmn.cpp	C
 ctrlsub.cpp	C
 date.cpp	C	B
+datetime.cpp	C	B
 datstrm.cpp	C
 db.cpp	C
 dbtable.cpp	C
@@ -144,6 +146,7 @@ layout.cpp	C
 lboxcmn.cpp	C
 list.cpp	C	B
 log.cpp	C	B
+longlong.cpp	C	B
 memory.cpp	C
 menucmn.cpp	C
 mimetype.cpp	C	32,B
@@ -168,7 +171,6 @@ stream.cpp	C	B
 strconv.cpp	C	B
 string.cpp	C	B
 tbarbase.cpp	C
-tbarsmpl.cpp	C
 textcmn.cpp	C
 textfile.cpp	C	B
 time.cpp	C	B
@@ -456,6 +458,7 @@ ctrlsub.h	W
 cursor.h	W
 dataobj.h	W
 date.h	W	B
+datetime.h	W	B
 datstrm.h	W
 db.h	W
 dbtable.h	W
@@ -878,7 +881,7 @@ caret.h	N
 choicdgg.h	N
 colrdlgg.h	N
 dcpsg.h	N
-dirdlgg.h	N
+dirdlgg.h	N	16
 fontdlgg.h	N
 filedlgg.h	N
 grid.h	N
@@ -889,7 +892,7 @@ helphtml.h	N
 helpxlp.h	N
 imaglist.h	N
 laywin.h	N
-listctrl.h	N
+listctrl.h	N	16
 msgdlgg.h	N
 notebook.h	N
 panelg.h	N
@@ -900,9 +903,9 @@ sashwin.h	N
 scrolwin.h	N
 splitter.h	N
 statusbr.h	N
-tabg.h	N
+tabg.h	N	16
 textdlgg.h	N
-treectrl.h	N
+treectrl.h	N	16
 wizard.h	N
 
 # vi: set noet ts=16 nolist:

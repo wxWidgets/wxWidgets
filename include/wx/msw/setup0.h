@@ -70,8 +70,37 @@
 // Recommended setting: 1
 #define wxUSE_CONFIG_NATIVE   1
 
+// If wxUSE_DIALUP_MANAGER is 1, compile in wxDialUpManager class which allows
+// to connect/disconnect from the network and be notified whenever the dial-up
+// network connection is established/terminated.
+//
+// Default is 1.
+//
+// Recommended setting: 1
 #define wxUSE_DIALUP_MANAGER   1
-                                // Use wxDialUpManager class
+
+// ----------------------------------------------------------------------------
+// Optional controls
+// ----------------------------------------------------------------------------
+
+// wxToolBar related settings: if wxUSE_TOOLBAR is 0, don't compile any toolbar
+// classes at all. Otherwise, use the native toolbar class unless
+// wxUSE_TOOLBAR_NATIVE is 0. Additionally, the generic toolbar class which
+// supports some features which might not be supported by the native wxToolBar
+// class may be compiled in if wxUSE_TOOLBAR_SIMPLE is 1.
+//
+// Default is 1 for all settings.
+//
+// Recommended setting: 1 for wxUSE_TOOLBAR and wxUSE_TOOLBAR_NATIVE and 0 for
+// wxUSE_TOOLBAR_SIMPLE (the default is 1 mainly for backwards compatibility).
+#define wxUSE_TOOLBAR 1
+#define wxUSE_TOOLBAR_NATIVE 1
+#define wxUSE_TOOLBAR_SIMPLE 1
+
+// ----------------------------------------------------------------------------
+// Postscript support settings
+// ----------------------------------------------------------------------------
+
 #define wxUSE_POSTSCRIPT  0
                                 // 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
@@ -309,12 +338,6 @@
 
 // text entry dialog and wxGetTextFromUser function
 #define wxUSE_TEXTDLG 1
-
-// use generic wxToolBar class instead of the native one?
-#define wxUSE_TOOLBAR 0
-
-// wxToolBar class
-#define wxUSE_TOOLBAR 1
 
 // wxStatusBar class
 #define wxUSE_STATUSBAR 1
