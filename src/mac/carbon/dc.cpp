@@ -1343,6 +1343,10 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 
     wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
+
+    status = ::ATSUSetTransientFontMatching( atsuLayout , true ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
+
     int iAngle = int( angle );
     int drawX = XLOG2DEVMAC(x) ;
     int drawY = YLOG2DEVMAC(y) ;
