@@ -57,11 +57,6 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     return ret;
 }
 
-void wxStaticBitmap::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxControl::SetSize( x , y , width , height , sizeFlags ) ;
-}
-
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
     m_bitmap = bitmap;
