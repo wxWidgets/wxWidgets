@@ -165,13 +165,22 @@ LIB_C_SRC=\
  ../common/extended.c
 
 EXTRA_C_SRC=\
-  combobox/combobox.c
+  xmcombo/xmcombo.c
+
+EXTRA_CPP_SRC=\
+  mdi/lib/XsComponent.C\
+  mdi/lib/XsMDICanvas.C\
+  mdi/lib/XsMDIWindow.C\
+  mdi/lib/XsMotifWindow.C\
+  mdi/lib/XsMoveOutline.C\
+  mdi/lib/XsOutline.C\
+  mdi/lib/XsResizeOutline.C
 
 all:    $(WXLIB)
 
 # Define library objects
 OBJECTS=\
- $(LIB_CPP_SRC:.cpp=.o) $(LIB_C_SRC:.c=.o) $(EXTRA_C_SRC:.c=.o)
+ $(LIB_CPP_SRC:.cpp=.o) $(LIB_C_SRC:.c=.o) $(EXTRA_C_SRC:.c=.o) $(EXTRA_CPP_SRC:.C=.o)
 
 $(WXLIB) : $(OBJECTS)
 	ar $(AROPTIONS) $@ $(OBJECTS)

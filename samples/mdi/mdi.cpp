@@ -23,7 +23,7 @@
 
 #include <wx/toolbar.h>
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
 #include "bitmaps/new.xpm"
 #include "bitmaps/open.xpm"
@@ -142,6 +142,8 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
       // Give it an icon
 #ifdef __WXMSW__
       subframe->SetIcon(wxIcon("chrt_icn"));
+#else
+      subframe->SetIcon(wxIcon( mondrian_xpm ));
 #endif
 
       // Make a menubar
@@ -186,7 +188,7 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
- wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER)
+ wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
 {
 }
 

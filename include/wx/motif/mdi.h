@@ -26,6 +26,9 @@ WXDLLEXPORT_DATA(extern const char*) wxStatusLineNameStr;
 class WXDLLEXPORT wxMDIClientWindow;
 class WXDLLEXPORT wxMDIChildFrame;
 
+class XsMDICanvas;
+class wxXsMDIWindow;
+
 class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 {
 DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
@@ -85,7 +88,6 @@ public:
 
 protected:
 
-  // TODO maybe have this member
   wxMDIClientWindow     *m_clientWindow;
 
 DECLARE_EVENT_TABLE()
@@ -120,13 +122,31 @@ public:
 
   // Set menu bar
   void SetMenuBar(wxMenuBar *menu_bar);
+  void SetTitle(const wxString& title);
   void SetClientSize(int width, int height);
+  void GetClientSize(int *width, int *height) const;
+  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void GetSize(int *width, int *height) const;
   void GetPosition(int *x, int *y) const ;
+
+  // Set icon
+  virtual void SetIcon(const wxIcon& icon);
 
   // MDI operations
   virtual void Maximize();
+  inline void Minimize() { Iconize(TRUE); };
+  virtual void Iconize(bool iconize);
   virtual void Restore();
   virtual void Activate();
+  virtual bool IsIconized() const ;
+
+  bool Show(bool show);
+  void BuildClientArea(WXWidget parent);
+  inline WXWidget GetTopWidget() const { return m_mainWidget; };
+  inline wxXsMDIWindow *GetMDIWindow() const { return m_mdiWindow; };
+
+protected:
+  wxXsMDIWindow*    m_mdiWindow ;
 };
 
 /* The client window is a child of the parent MDI frame, and itself
@@ -149,13 +169,28 @@ class WXDLLEXPORT wxMDIClientWindow: public wxWindow
 
   ~wxMDIClientWindow();
 
+   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+   void SetClientSize(int width, int height);
+   void GetClientSize(int *width, int *height) const;
+
+   void GetSize(int *width, int *height) const ;
+   void GetPosition(int *x, int *y) const ;
+
+
   // Note: this is virtual, to allow overridden behaviour.
   virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
 
   // Explicitly call default scroll behaviour
   void OnScroll(wxScrollEvent& event);
 
+  inline XsMDICanvas* GetMDICanvas() const { return m_mdiCanvas; }
+
+  WXWidget GetTopWidget() const { return m_topWidget; }
+
 protected:
+
+  XsMDICanvas*   m_mdiCanvas;
+  WXWidget       m_topWidget;
 
 DECLARE_EVENT_TABLE()
 };

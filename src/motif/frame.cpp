@@ -51,7 +51,7 @@
 #include "wx/motif/private.h"
 
 void wxCloseFrameCallback(Widget, XtPointer, XmAnyCallbackStruct *cbs);
-static void wxFrameFocusProc(Widget workArea, XtPointer clientData, 
+void wxFrameFocusProc(Widget workArea, XtPointer clientData, 
                       XmAnyCallbackStruct *cbs);
 static void wxFrameMapProc(Widget frameShell, XtPointer clientData, 
 			   XCrossingEvent * event);
@@ -310,14 +310,21 @@ wxFrame::~wxFrame()
     XtDestroyWidget (statusLineWidget);
  */
 
-  wxDeleteWindowFromTable((Widget) m_workArea);
+  if (m_workArea)
+  {
+      wxDeleteWindowFromTable((Widget) m_workArea);
 
-  XtDestroyWidget ((Widget) m_workArea);
-  XtDestroyWidget ((Widget) m_frameWidget);
+      XtDestroyWidget ((Widget) m_workArea);
+  }
 
-  wxDeleteWindowFromTable((Widget) m_frameWidget);
+  if (m_frameWidget)
+  {
+      wxDeleteWindowFromTable((Widget) m_frameWidget);
+      XtDestroyWidget ((Widget) m_frameWidget);
+  }
 
-  XtDestroyWidget ((Widget) m_frameShell);
+  if (m_frameShell)
+      XtDestroyWidget ((Widget) m_frameShell);
 
   SetMainWidget((WXWidget) NULL);
 
@@ -982,7 +989,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
 wxToolBar *wxFrame::GetToolBar() const
 { return m_frameToolBar; }
 
-static void wxFrameFocusProc(Widget workArea, XtPointer clientData, 
+void wxFrameFocusProc(Widget workArea, XtPointer clientData, 
                       XmAnyCallbackStruct *cbs)
 {
   wxFrame *frame = (wxFrame *)clientData;

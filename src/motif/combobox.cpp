@@ -18,7 +18,7 @@
 #if wxUSE_COMBOBOX
 
 #include <Xm/Xm.h>
-#include "combobox/combobox.h"
+#include "xmcombo/xmcombo.h"
 
 void  wxComboBoxCallback (Widget w, XtPointer clientData,
 		   XmComboBoxSelectionCallbackStruct * cbs);
