@@ -93,7 +93,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_WCHAR
+    #define TEST_LONGLONG
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -2169,9 +2169,9 @@ static void TestLongLongComparison()
 #endif // wxUSE_LONGLONG_WX
 }
 
-static void TestLongLongPrint()
+static void TestLongLongToString()
 {
-    wxPuts(_T("*** Testing wxLongLong printing ***\n"));
+    wxPuts(_T("*** Testing wxLongLong::ToString() ***\n"));
 
     for ( size_t n = 0; n < WXSIZEOF(testLongs); n++ )
     {
@@ -2184,6 +2184,20 @@ static void TestLongLongPrint()
 
     ll.Negate();
     wxPrintf(_T("-0x1234567887654321 = %s\n"), ll.ToString().c_str());
+}
+
+static void TestLongLongPrintf()
+{
+    wxPuts(_T("*** Testing wxLongLong printing ***\n"));
+
+#ifdef wxLongLongFmtSpec
+    wxLongLong ll = wxLL(0x1234567890abcdef);
+    wxString s = wxString::Format(_T("%") wxLongLongFmtSpec _T("x"), ll);
+    wxPrintf(_T("0x1234567890abcdef -> %s (%s)\n"),
+             s.c_str(), s == _T("1234567890abcdef") ? _T("ok") : _T("ERROR"));
+#else // !wxLongLongFmtSpec
+    #error "wxLongLongFmtSpec not defined for this compiler/platform"
+#endif
 }
 
 #undef MAKE_LL
@@ -2713,7 +2727,7 @@ I am ready for my first lesson today.");
   {
       wxChar buf[200];
 
-      wxSprintf (buf, _T("%07Lo"), (wxLongLong_t)040000000000ll);
+      wxSprintf(buf, _T("%07") wxLongLongFmtSpec _T("o"), wxLL(040000000000));
       wxPrintf (_T("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);
 
       if (wxStrcmp (buf, _T("40000000000")) != 0)
@@ -6424,7 +6438,8 @@ int main(int argc, char **argv)
         TestLongLongConversion();
         TestBitOperations();
         TestLongLongComparison();
-        TestLongLongPrint();
+        TestLongLongToString();
+        TestLongLongPrintf();
     }
 #endif // TEST_LONGLONG
 
