@@ -5090,6 +5090,9 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
 
 bool RTFGo(void)
 {
+  if (stopRunning)
+      return FALSE;
+
   // Reset variables
   indentLevel = 0;
   forbidParindent = 0;
@@ -5163,6 +5166,9 @@ bool RTFGo(void)
     fprintf(Chapters, "\\f2\\fs20\n");
 
     SetCurrentOutput(Chapters);
+
+    if (stopRunning)
+        return FALSE;
 
     OnInform("Converting...");
 

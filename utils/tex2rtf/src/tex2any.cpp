@@ -274,19 +274,19 @@ void TexOutput(char *s, bool ordinaryText)
 
 void ForbidWarning(TexMacroDef *def)
 {
-  char buf[100];
+  wxString informBuf;
   switch (def->forbidden)
   {
     case FORBID_WARN:
     {
-      sprintf(buf, "Warning: it is recommended that command %s is not used.", def->name);
-      OnInform(buf);
+      informBuf.Printf("Warning: it is recommended that command %s is not used.", def->name);
+      OnInform((char *)informBuf.c_str());
       break;
     }
     case FORBID_ABSOLUTELY:
     {
-      sprintf(buf, "Error: command %s cannot be used and will lead to errors.", def->name);
-      OnInform(buf);
+      informBuf.Printf("Error: command %s cannot be used and will lead to errors.", def->name);
+      OnInform((char *)informBuf.c_str());
       break;
     }
     default:
@@ -938,6 +938,14 @@ void MacroError(char *buffer)
   errBuf.Printf("Could not find macro: %s at line %d, file %s",
              macroBuf, (int)(LineNumbers[CurrentInputIndex]-1), FileNames[CurrentInputIndex]);
   OnError((char *)errBuf.c_str());
+
+  if (wxStrcmp(macroBuf,"\\end{document}") == 0)
+  {
+      wxString buf;
+      buf = "Halted build due to unrecoverable error.";
+      OnInform((char *)buf.c_str());
+      stopRunning = TRUE;
+  }
 }
 
 /*
@@ -1248,6 +1256,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
           CustomMacro *customMacro = FindCustomMacro(def->name);
 
           TexChunk *chunk = new TexChunk(CHUNK_TYPE_MACRO, def);
+
           chunk->no_args = def->no_args;
 //          chunk->name = copystring(def->name);
           chunk->macroId = def->macroId;
@@ -1604,6 +1613,19 @@ int ParseMacroBody(char *macro_name, TexChunk *parent,
         isOptional = TRUE;
         pos += 2;
       }
+      else if (i > 0)
+      {
+        wxString errBuf;
+        wxString tmpBuffer(buffer);
+        if (tmpBuffer.length() > 4)
+        {
+            if (tmpBuffer.Right(4) == "\\par")
+                tmpBuffer = tmpBuffer.Mid(0,tmpBuffer.length()-4);
+        }
+        errBuf.Printf("Missing macro argument in the line:\n\t%s\n",tmpBuffer.c_str());
+        OnError((char *)errBuf.c_str());
+      }
+
     }
     arg->optional = isOptional;
 
@@ -1853,14 +1875,16 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
         OnMacro(chunk->macroId, chunk->no_args, TRUE);
 
       wxNode *node = chunk->children.First();
+      TexChunk *child_chunk = NULL;
       while (node)
       {
-        TexChunk *child_chunk = (TexChunk *)node->Data();
+        child_chunk = (TexChunk *)node->Data();
         TraverseFromChunk(child_chunk, node);
         node = node->Next();
       }
 
-      if (thisNode && thisNode->Next()) nextChunk = (TexChunk *)thisNode->Next()->Data();
+      if (thisNode && thisNode->Next())
+          nextChunk = (TexChunk *)thisNode->Next()->Data();
 
       if (!childrenOnly)
         OnMacro(chunk->macroId, chunk->no_args, FALSE);
@@ -1888,7 +1912,8 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
 
       currentArgument = chunk;
 
-      if (thisNode && thisNode->Next()) nextChunk = (TexChunk *)thisNode->Next()->Data();
+      if (thisNode && thisNode->Next())
+          nextChunk = (TexChunk *)thisNode->Next()->Data();
 
       isArgOptional = chunk->optional;
       noArgs = chunk->no_args;
@@ -1906,7 +1931,9 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
         // If non-whitespace text, we no longer have a new paragraph.
         if (issuedNewParagraph && !((chunk->value[0] == 10 || chunk->value[0] == 13 || chunk->value[0] == 32)
                                     && chunk->value[1] == 0))
+        {
           issuedNewParagraph = FALSE;
+        }
         TexOutput(chunk->value, TRUE);
       }
       break;
@@ -3136,10 +3163,9 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         }
         else
         {
-          char buf[300];
-          TexOutput("??", TRUE);
-          sprintf(buf, "Warning: unresolved reference '%s'", refName); 
-          OnInform(buf);
+           wxString informBuf;
+           informBuf.Printf("Warning: unresolved reference '%s'", refName); 
+           OnInform((char *)informBuf.c_str());
         }
       }
       else TexOutput("??", TRUE);
@@ -3298,9 +3324,9 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
           TexOutput(ref->sectionNumber, TRUE);
           if (strcmp(ref->sectionNumber, "??") == 0)
           {
-            char buf[300];
-            sprintf(buf, "Warning: unresolved citation %s.", citeKey);
-            OnInform(buf);
+            wxString informBuf;
+            informBuf.Printf("Warning: unresolved citation %s.", citeKey);
+            OnInform((char *)informBuf.c_str());
           }
         }
         citeKey = ParseMultifieldString(citeKeys, &pos);

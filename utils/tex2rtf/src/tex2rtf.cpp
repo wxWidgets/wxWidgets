@@ -665,7 +665,16 @@ void MyFrame::OnGo(wxCommandEvent& event)
       Tex2RTFYield(TRUE);
       Go();
 
-      if (runTwice)
+      if (stopRunning)
+      {
+        SetStatusText("Build aborted!");
+        wxString errBuf;
+        errBuf.Printf("\nErrors encountered during this pass: %lu\n", errorCount);
+        OnInform((char *)errBuf.c_str());
+      }
+
+
+      if (runTwice && !stopRunning)
       {
         Tex2RTFYield(TRUE);
         Go();
@@ -907,7 +916,7 @@ bool Go(void)
   ChooseOutputFile();
 #endif
 
-  if (!InputFile || !OutputFile)
+  if (!InputFile || !OutputFile || stopRunning)
     return FALSE;
 
 #ifndef NO_GUI
@@ -980,6 +989,9 @@ bool Go(void)
     OkToClose = FALSE;
     OnInform("Reading LaTeX file...");
     TexLoadFile(InputFile);
+
+    if (stopRunning)
+        return FALSE;
 
     switch (convertMode)
     {
