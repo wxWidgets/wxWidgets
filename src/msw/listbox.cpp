@@ -210,6 +210,10 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
+    // always show the vertical scrollbar if necessary -- otherwise it is
+    // impossible to use the control with the mouse
+    msStyle |= WS_VSCROLL;
+
     // we always want to get the notifications
     msStyle |= LBS_NOTIFY;
 
