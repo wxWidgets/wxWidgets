@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2001-10-20 14:30-0700\n"
-"PO-Revision-Date: 2000-11-15 18:55ora solare Europa occidentale\n"
-"Last-Translator: Mattia barbon <mbarbon@dsi.unive.it>\n"
+"Project-Id-Version: wxWindows-2.2.10\n"
+"POT-Creation-Date: 2002-02-10 15:00+0100\n"
+"PO-Revision-Date: 2002-02-10 15:00+0100\n"
+"Last-Translator: Mattia Barbon <mbarbon@dsi.unive.it>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
-"Content-Transfer-Encoding: 8-bit\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/generic/dirdlgg.cpp:551
 msgid ""
@@ -116,11 +116,11 @@ msgstr "%s: sintassi errata nel file di risorsa."
 
 #: ../src/msw/mdi.cpp:187
 msgid "&Arrange Icons"
-msgstr ""
+msgstr "&Disponi icone"
 
 #: ../src/msw/mdi.cpp:183
 msgid "&Cascade"
-msgstr ""
+msgstr "&Sovrapponi finestre"
 
 #: ../src/generic/logg.cpp:477 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
@@ -139,9 +139,8 @@ msgid "&Log"
 msgstr "&Registro"
 
 #: ../src/msw/mdi.cpp:188
-#, fuzzy
 msgid "&Next"
-msgstr "&Successivo >"
+msgstr "&Successivo"
 
 #: ../src/generic/wizard.cpp:189 ../src/generic/wizard.cpp:286
 msgid "&Next >"
@@ -358,20 +357,19 @@ msgstr "Aggiunta del libro %s in corso"
 msgid "All"
 msgstr "Tutto"
 
-#: ../include/wx/defs.h:1689 ../src/generic/filedlgg.cpp:825
+#: ../include/wx/defs.h:1695 ../src/generic/filedlgg.cpp:825
 msgid "All files (*)|*"
 msgstr "Tutti i file (*)|*"
 
-#: ../include/wx/defs.h:1686
-#, fuzzy
+#: ../include/wx/defs.h:1692
 msgid "All files (*.*)|*.*"
-msgstr "Tutti i file (*)|*"
+msgstr "Tutti i file (*.*)|*.*"
 
 #: ../src/unix/dialup.cpp:359
 msgid "Already dialling ISP."
 msgstr "Chiamata verso l'ISP già in corso."
 
-#: ../src/generic/logg.cpp:1021
+#: ../src/generic/logg.cpp:1027
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Aggiungere registro al file '%s' (scegliere [No] per sovrascriverlo)?"
@@ -668,7 +666,7 @@ msgstr "Impossibile leggere il valore di '%s'"
 msgid "Can't read value of key '%s'"
 msgstr "Impossibile leggere il valore della chiave '%s'"
 
-#: ../src/generic/logg.cpp:535 ../src/generic/logg.cpp:932
+#: ../src/generic/logg.cpp:535 ../src/generic/logg.cpp:938
 msgid "Can't save log contents to file."
 msgstr "Impossibile salvare il contenuto del registro su file."
 
@@ -728,7 +726,7 @@ msgstr "Impossibile inizializzare OLE"
 msgid "Cannot open HTML document: %s"
 msgstr "Impossibile aprire il documento HTML: %s"
 
-#: ../src/html/helpdata.cpp:657
+#: ../src/html/helpdata.cpp:651
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Impossibile aprire il libro di help HTML: %s"
@@ -773,9 +771,8 @@ msgid "Celtic (ISO-8859-14)"
 msgstr "Celtico (ISO-8859-14)"
 
 #: ../src/common/fontmap.cpp:101
-#, fuzzy
 msgid "Central European (ISO-8859-2)"
-msgstr "Europeo Centrale (ISO-8859-2/Latin 2)"
+msgstr "Europeo Centrale (ISO-8859-2)"
 
 #: ../src/msw/dialup.cpp:767
 msgid "Choose ISP to dial"
@@ -941,9 +938,8 @@ msgid "Current directory:"
 msgstr "Cartella corrente:"
 
 #: ../src/common/fontmap.cpp:104
-#, fuzzy
 msgid "Cyrillic (ISO-8859-5)"
-msgstr "Celtico (ISO-8859-14)"
+msgstr "Cirillico (ISO-8859-5)"
 
 #: ../src/common/paper.cpp:106
 msgid "D sheet, 22 x 34 in"
@@ -1151,7 +1147,7 @@ msgstr ""
 msgid "Failed to create directory "
 msgstr "Impossibile creare la cartella "
 
-#: ../src/html/winpars.cpp:374
+#: ../src/html/winpars.cpp:375
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Impossibile mostrare la pagina HTML con la codifica %s"
@@ -1508,10 +1504,6 @@ msgstr ""
 msgid "Impossible to get child process input"
 msgstr "Impossibile ottenere l'input del processo figlio"
 
-#: ../src/html/helpdata.cpp:403
-msgid "Incorrect version of HTML help book"
-msgstr "Versione errata del libro di aiuto HTML"
-
 #: ../src/html/helpfrm.cpp:372
 msgid "Index"
 msgstr "Indice"
@@ -1536,7 +1528,7 @@ msgstr "Busta Italiana, 110 x 230 mm"
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr "JPEG: Caricamento impossibile - probabilmente il file è danneggiato."
 
-#: ../src/common/imagjpeg.cpp:315
+#: ../src/common/imagjpeg.cpp:316
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: Impossibile salvare l'immagine."
 
@@ -1681,14 +1673,15 @@ msgid "No entries found."
 msgstr "Voci non trovate."
 
 #: ../src/common/fontmap.cpp:716
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found.\n"
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
-"La codifica '%s' è sconosciuta.\n"
-"È possibile scegliere un carattere da utilizzare per questa codifica\n"
+"Impossibile trovare un tipo di carattere per la codifica '%s'.\n"
+"Si desidera selezionare un tipo di carattere da utilizzare per tale "
+"codifica\n"
 "(altrimenti il testo con tale codifica non verrà visualizzato correttamente)?"
 
 #: ../src/common/image.cpp:758
@@ -1976,7 +1969,7 @@ msgstr "Programma terminato."
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1023
+#: ../src/generic/logg.cpp:1029
 msgid "Question"
 msgstr "Domanda"
 
@@ -2296,11 +2289,11 @@ msgstr "Priorità del thread ignorata."
 
 #: ../src/msw/mdi.cpp:184
 msgid "Tile &Horizontally"
-msgstr ""
+msgstr "Affianca orizzontalmente"
 
 #: ../src/msw/mdi.cpp:185
 msgid "Tile &Vertically"
-msgstr ""
+msgstr "Affianca verticalmente"
 
 #: ../src/generic/filedlgg.cpp:536
 msgid "Time"
@@ -2463,14 +2456,12 @@ msgstr ""
 "Avviso: tentata la rimozione di un handler di tag HTML da uno stack vuoto."
 
 #: ../src/common/fontmap.cpp:100
-#, fuzzy
 msgid "Western European (ISO-8859-1)"
-msgstr "Europeo Occidentale (ISO-8859-1/Latin 1)"
+msgstr "Europeo Occidentale (ISO-8859-1)"
 
 #: ../src/common/fontmap.cpp:114
-#, fuzzy
 msgid "Western European with Euro (ISO-8859-15)"
-msgstr "Europeo Occidentale con Euro (ISO-8859-15/Latin 0)"
+msgstr "Europeo Occidentale con Euro (ISO-8859-15)"
 
 #: ../src/html/helpfrm.cpp:406
 msgid "Whole words only"
@@ -2878,7 +2869,7 @@ msgstr "iniziare"
 msgid "invalid eof() return value."
 msgstr "valore di ritorno di eof() non valido."
 
-#: ../src/generic/logg.cpp:1037
+#: ../src/generic/logg.cpp:1043
 msgid "invalid message box return value"
 msgstr "il riquadro di dialogo ha ritornato un valore non valido"
 
@@ -2920,7 +2911,7 @@ msgstr "nove"
 msgid "no DDE error."
 msgstr "nessun errore DDE."
 
-#: ../src/html/helpdata.cpp:644
+#: ../src/html/helpdata.cpp:638
 msgid "noname"
 msgstr "senzanome"
 
@@ -3016,9 +3007,8 @@ msgid "unknown error (error code %08x)."
 msgstr "errore sconosciuto (codice %08x)."
 
 #: ../src/common/textfile.cpp:237
-#, fuzzy
 msgid "unknown line terminator"
-msgstr "origine della seek sconosciuta"
+msgstr "carattere di fine riga sconosciuto"
 
 #: ../src/common/file.cpp:342
 msgid "unknown seek origin"
@@ -3075,10 +3065,3 @@ msgstr "wxWindows: impossibile trovare il nome di file temporaneo.\n"
 #: ../src/common/datetime.cpp:3013
 msgid "yesterday"
 msgstr "ieri"
-
-#, fuzzy
-#~ msgid "..."
-#~ msgstr ".."
-
-#~ msgid "Cyrillic (Latin 5)"
-#~ msgstr "Cirillico (Latin 5)"
