@@ -19,7 +19,7 @@
 // headers
 // ----------------------------------------------------------------------------
 #ifdef __GNUG__
-    #pragma interface "splittree.cpp"
+    #pragma implementation "splittree.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
