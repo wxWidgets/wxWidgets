@@ -38,8 +38,8 @@
 // wxTextInputStream
 // ----------------------------------------------------------------------------
 
-wxTextInputStream::wxTextInputStream(wxInputStream& s)
-  : m_input(&s)
+wxTextInputStream::wxTextInputStream(wxInputStream& s, const wxChar &sep)
+  : m_input(&s), m_string_separator(sep)
 {
 }
 
@@ -237,6 +237,11 @@ double wxTextInputStream::ReadDouble()
 
 wxString wxTextInputStream::ReadString()
 {
+  return ReadLine();
+}
+
+wxString wxTextInputStream::ReadLine()
+{
     wxChar c;
     wxString line;
 
@@ -277,9 +282,57 @@ wxString wxTextInputStream::ReadString()
     return line;
 }
 
-wxTextInputStream& wxTextInputStream::operator>>(wxString& line)
+wxString wxTextInputStream::ReadWord()
 {
-  line = ReadString();
+    wxChar c;
+    wxString word;
+
+    if (m_string_separator==wxT(' ')) c=NextNonWhiteSpace();
+    else c = m_input->GetC();
+
+    for (;;)
+    {
+        if (!m_input) break;
+	
+        if (c == m_string_separator)
+	  break;
+	
+        if (c == wxT('\n'))
+        {
+	    // eat on UNIX
+	    break;
+	}
+	
+        if (c == wxT('\r'))
+        {
+            // eat on both Mac and DOS
+	
+            wxChar c2 = m_input->GetC();
+	    if (!m_input) break;
+	
+	    if (c2 == wxT('\n'))
+            {
+	        // eat on DOS
+		break;
+	    }
+            else
+	    {
+	        // Don't eat on Mac
+                m_input->Ungetch( c2 );
+		break;
+	    }
+        }
+	
+        word += c;
+        c = m_input->GetC();
+    }
+
+    return word;
+}
+
+wxTextInputStream& wxTextInputStream::operator>>(wxString& word)
+{
+  word = ReadWord();
   return *this;
 }
 

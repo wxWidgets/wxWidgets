@@ -30,17 +30,22 @@ WXDLLEXPORT wxTextOutputStream &endl( wxTextOutputStream &stream );
 
 class WXDLLEXPORT wxTextInputStream {
 public:
-  wxTextInputStream(wxInputStream& s);
+  wxTextInputStream(wxInputStream& s,  const wxChar &sep=wxT(' '));
   ~wxTextInputStream();
 
   wxUint32 Read32();
   wxUint16 Read16();
-  wxUint8 Read8();
-  double ReadDouble();
-  wxString ReadString();
+  wxUint8  Read8();
+  double   ReadDouble();
+  wxString ReadString();  // deprecated use ReadLine or ReadWord instead
+  wxString ReadLine();
+  wxString ReadWord();
+
+  wxChar GetStringSeparator() const          { return m_string_separator;}
+  void   SetStringSeparator(const wxChar &c) { m_string_separator=c;}
 
   // Operators
-  wxTextInputStream& operator>>(wxString& line);
+  wxTextInputStream& operator>>(wxString& word);
   wxTextInputStream& operator>>(wxChar& c);
   wxTextInputStream& operator>>(wxInt16& i);
   wxTextInputStream& operator>>(wxInt32& i);
@@ -53,6 +58,7 @@ public:
   
  protected:
   wxInputStream *m_input;
+  wxChar m_string_separator;
   
   wxChar NextNonWhiteSpace();
   void SkipIfEndOfLine( wxChar c );
