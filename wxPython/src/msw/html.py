@@ -177,7 +177,6 @@ class wxHtmlWinParserPtr(wxHtmlParserPtr):
         return val
     def GetWindow(self, *_args, **_kwargs):
         val = htmlc.wxHtmlWinParser_GetWindow(self, *_args, **_kwargs)
-        if val: val = wxHtmlWindowPtr(val) 
         return val
     def SetFonts(self, *_args, **_kwargs):
         val = htmlc.wxHtmlWinParser_SetFonts(self, *_args, **_kwargs)
