@@ -104,7 +104,7 @@ void wxHashTableBase::DeleteContents(bool flag)
 
 wxNodeBase *wxHashTableBase::GetNode(long key, long value) const
 {
-    size_t slot = (size_t)abs(key % m_hashSize);
+    size_t slot = (size_t)abs(key % (long)m_hashSize);
 
     wxNodeBase *node;
     if ( m_hashTable[slot] )
@@ -161,7 +161,7 @@ void wxHashTableLong::Put(long key, long value)
 {
     wxCHECK_RET( m_hashSize, _T("must call Create() first") );
 
-    size_t slot = (size_t)abs(key % m_hashSize);
+    size_t slot = (size_t)abs(key % (long)m_hashSize);
 
     if ( !m_keys[slot] )
     {
@@ -179,7 +179,7 @@ long wxHashTableLong::Get(long key) const
 {
     wxCHECK_MSG( m_hashSize, wxNOT_FOUND, _T("must call Create() first") );
 
-    size_t slot = (size_t)abs(key % m_hashSize);
+    size_t slot = (size_t)abs(key % (long)m_hashSize);
 
     wxArrayLong *keys = m_keys[slot];
     if ( keys )
@@ -201,7 +201,7 @@ long wxHashTableLong::Delete(long key)
 {
     wxCHECK_MSG( m_hashSize, wxNOT_FOUND, _T("must call Create() first") );
 
-    size_t slot = (size_t)abs(key % m_hashSize);
+    size_t slot = (size_t)abs(key % (long)m_hashSize);
 
     wxArrayLong *keys = m_keys[slot];
     if ( keys )
