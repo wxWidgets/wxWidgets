@@ -101,26 +101,25 @@ struct HH_AKLINK
 
 // dll symbol handle
 static HTMLHELP gs_htmlHelp = 0;
-static wxPluginLibrary *gs_libHtmlHelp = NULL;
 
 static bool LoadHtmlHelpLibrary()
 {
-    gs_libHtmlHelp = wxPluginManager::LoadLibrary( _T("HHCTRL.OCX"), wxDL_DEFAULT | wxDL_VERBATIM );
+    wxPluginLibrary *lib = wxPluginManager::LoadLibrary( _T("HHCTRL.OCX"), wxDL_DEFAULT | wxDL_VERBATIM );
 
-    if( !gs_libHtmlHelp )
+    if( !lib )
     {
         wxLogError(_("MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."));
         return FALSE;
     }
     else
     {
-        gs_htmlHelp = (HTMLHELP)gs_libHtmlHelp->GetSymbol( HTMLHELP_NAME );
+        gs_htmlHelp = (HTMLHELP)lib->GetSymbol( HTMLHELP_NAME );
 
         if( !gs_htmlHelp )
         {
             wxLogError(_("Failed to initialize MS HTML Help."));
 
-            gs_libHtmlHelp->UnrefLib();
+            lib->UnrefLib();
             return FALSE ;
         }
     }
@@ -130,10 +129,9 @@ static bool LoadHtmlHelpLibrary()
 
 static void UnloadHtmlHelpLibrary()
 {
-    if( gs_htmlHelp )
+    if ( gs_htmlHelp )
     {
         wxPluginManager::UnloadLibrary( _T("HHCTRL.OCX") );
-        gs_libHtmlHelp->UnrefLib();
 
         gs_htmlHelp = 0;
     }
