@@ -69,6 +69,13 @@ a dialog or frame. This is most typically the case for any scripting
 languge that would work as a wrapper for wxWindows or programs where
 forms or similar datagrams can be created by the uses.
 
+\subsection{Exec sample}\label{sampleexec}
+
+The exec sample demonstrates the \helpref{wxExecute}{wxexecute} and 
+\helpref{wxShell}{wxshell} functions. Both of them are used to execute the
+external programs and the sample shows how to do this synchronously (waiting
+until the program terminates) or asynchronously (notification will come later).
+
 \subsection{Scroll subwindow sample}\label{samplescrollsub}
 
 This sample demonstrates the use of the \helpref{wxScrolledWindow}{wxscrolledwindow}
@@ -105,9 +112,11 @@ The middle of the sample window is taken by the log window which shows what is
 going on (of course, this only works in debug builds) and may be helpful to see
 the sequence of steps of data transfer.
 
-Finally, the last part is used for two things: you can drag text from it to
-either one of the listboxes (only one will accept it) or another application
-and, also, bitmap pasted from clipboard will be shown there.
+Finally, the last part is used for dragging text from it to either one of the
+listboxes (only one will accept it) or another application. The last
+functionality available from the main frame is to paste a bitmap from the
+clipboard (or, in the case of Windows version, also a metafile) - it will be
+shown in a new frame.
 
 So far, everything we mentioned was implemented with minimal amount of code
 using standard wxWindows classes. The more advanced features are demonstrated
@@ -118,11 +127,12 @@ private \helpref{wxDataFormat}{wxdataformat} which means that you may cut and
 paste it or drag and drop (between one and the same or different shapes) from
 one sample instance to another (or the same). However, chances are that no
 other program supports this format and so shapes can also be rendered as
-bitmaps which allows them to be pasted/dropped in many other applications.
+bitmaps which allows them to be pasted/dropped in many other applications
+(and, under Windows, also as metafiles which are supported by most of Windows
+programs as well - try Write/Wordpad, for example).
 
 Take a look at DnDShapeDataObject class to see how you may use 
 \helpref{wxDataObject}{wxdataobject} to achieve this.
-
 
 \subsection{HTML samples}\label{samplehtml}
 

@@ -1278,7 +1278,9 @@ void wxWindowBase::DoSetClientObject( wxClientData *data )
 
 wxClientData *wxWindowBase::DoGetClientObject() const
 {
-    wxASSERT_MSG( m_clientDataType == ClientData_Object,
+    // it's not an error to call GetClientObject() on a window which doesn't
+    // have client data at all - NULL will be returned
+    wxASSERT_MSG( m_clientDataType != ClientData_Void,
                   wxT("this window doesn't have object client data") );
 
     return m_clientObject;
@@ -1295,7 +1297,9 @@ void wxWindowBase::DoSetClientData( void *data )
 
 void *wxWindowBase::DoGetClientData() const
 {
-    wxASSERT_MSG( m_clientDataType == ClientData_Void,
+    // it's not an error to call GetClientData() on a window which doesn't have
+    // client data at all - NULL will be returned
+    wxASSERT_MSG( m_clientDataType != ClientData_Object,
                   wxT("this window doesn't have void client data") );
 
     return m_clientData;

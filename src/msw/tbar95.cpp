@@ -568,7 +568,6 @@ bool wxToolBar::Realize()
                     // the id is probably invalid?
                     wxLogLastError("TB_SETBUTTONINFO");
                 }
-
             }
             else
         #endif // comctl32.dll 4.71
@@ -581,7 +580,7 @@ bool wxToolBar::Realize()
                 TBBUTTON tbb;
                 wxZeroMemory(tbb);
                 tbb.idCommand = 0;
-                tbb.fsState = TBSTATE_ENABLED;
+                tbb.fsState = TBSTATE_ENABLED | TBSTATE_HIDDEN;
                 tbb.fsStyle = TBSTYLE_SEP;
 
                 size_t nSeparators = size.x / widthSep;
@@ -808,7 +807,10 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 
 void wxToolBar::UpdateSize()
 {
-    // we must refresh the frame after the toolbar size (possibly) changed
+    // the toolbar size changed
+    SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
+
+    // we must also refresh the frame after the toolbar size (possibly) changed
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if ( frame )
     {
@@ -822,7 +824,6 @@ void wxToolBar::UpdateSize()
         (void)::SendMessage(GetHwndOf(frame), WM_SIZE, SIZE_RESTORED,
                             MAKELPARAM(r.right - r.left, r.bottom - r.top));
     }
-
 }
 
 // ----------------------------------------------------------------------------

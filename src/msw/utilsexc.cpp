@@ -167,9 +167,13 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
             // asynchronous execution - we should do the clean up
             delete data;
         }
-    }
 
-    return 0;
+        return 0;
+    }
+    else
+    {
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
 }
 #endif
 
@@ -247,7 +251,8 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
                          NULL,       // security attributes: defaults for both
                          NULL,       //   the process and its main thread
                          FALSE,      // don't inherit handles
-                         CREATE_DEFAULT_ERROR_MODE,  // flags
+                         CREATE_DEFAULT_ERROR_MODE |
+                         CREATE_SUSPENDED,           // flags
                          NULL,       // environment (use the same)
                          NULL,       // current directory (use the same)
                          &si,        // startup info (unused here)
@@ -259,10 +264,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
         return 0;
     }
 
-    // close unneeded handle
-    if ( !::CloseHandle(pi.hThread) )
-        wxLogLastError("CloseHandle(hThread)");
-
+    // register the class for the hidden window used for the notifications
     if ( !gs_classForHiddenWindow )
     {
         gs_classForHiddenWindow = _T("wxHiddenWindow");
@@ -276,15 +278,14 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
         if ( !::RegisterClass(&wndclass) )
         {
             wxLogLastError("RegisterClass(hidden window)");
-
-            return FALSE;
         }
     }
 
     // create a hidden window to receive notification about process
     // termination
     HWND hwnd = ::CreateWindow(gs_classForHiddenWindow, NULL,
-                               0, 0, 0, 0, 0, NULL,
+                               WS_OVERLAPPEDWINDOW,
+                               0, 0, 0, 0, NULL,
                                (HMENU)NULL, wxGetInstance(), 0);
     wxASSERT_MSG( hwnd, wxT("can't create a hidden window for wxExecute") );
 
@@ -314,6 +315,18 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
                                     0,
                                     &tid);
 
+    // resume process we created now - whether the thread creation succeeded or
+    // not
+    if ( ::ResumeThread(pi.hThread) == (DWORD)-1 )
+    {
+        // ignore it - what can we do?
+        wxLogLastError("ResumeThread in wxExecute");
+    }
+
+    // close unneeded handle
+    if ( !::CloseHandle(pi.hThread) )
+        wxLogLastError("CloseHandle(hThread)");
+
     if ( !hThread )
     {
         wxLogLastError("CreateThread in wxExecute");
@@ -333,9 +346,19 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
         return pi.dwProcessId;
     }
 
-    // waiting until command executed
+    // waiting until command executed (disable everything while doing it)
+#if wxUSE_GUI
+    wxBeginBusyCursor();
+    wxEnableTopLevelWindows(FALSE);
+#endif // wxUSE_GUI
+
     while ( data->state )
         wxYield();
+
+#if wxUSE_GUI
+    wxEnableTopLevelWindows(TRUE);
+    wxEndBusyCursor();
+#endif // wxUSE_GUI
 
     DWORD dwExitCode = data->dwExitCode;
     delete data;

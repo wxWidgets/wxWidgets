@@ -1249,7 +1249,7 @@ the process (which terminates by the moment the function returns) and will be
 $-1$ if the process couldn't be started and typically 0 if the process
 terminated successfully. Also, while waiting for the process to
 terminate, wxExecute will call \helpref{wxYield}{wxyield}. The caller
-should ensure that this can cause no recursion, in the simples case by 
+should ensure that this can cause no recursion, in the simplest case by 
 calling \helpref{wxEnableTopLevelWindows(FALSE)}{wxenabletoplevelwindows}.
 
 For asynchronous execution, however, the return value is the process id and
@@ -1260,7 +1260,8 @@ parameter can not be non NULL for synchronous execution),
 \helpref{wxProcess::OnTerminate}{wxprocessonterminate} will be called when
 the process finishes.
 
-See also \helpref{wxShell}{wxshell}, \helpref{wxProcess}{wxprocess}.
+See also \helpref{wxShell}{wxshell}, \helpref{wxProcess}{wxprocess}, 
+\helpref{Exec sample}{sampleexec}.
 
 \wxheading{Include files}
 
@@ -1652,7 +1653,7 @@ See also \helpref{wxGetDisplayName}{wxgetdisplayname}.
 Executes a command in an interactive shell window. If no command is
 specified, then just the shell is spawned.
 
-See also \helpref{wxExecute}{wxexecute}.
+See also \helpref{wxExecute}{wxexecute}, \helpref{Exec sample}{sampleexec}.
 
 \wxheading{Include files}
 

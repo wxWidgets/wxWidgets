@@ -175,7 +175,7 @@ static void DDEDeleteConnection(HCONV hConv)
   if (found)
 	return;
 
-  node = wxDDEServerObjects.First();
+  node = wxDDEClientObjects.First();
   while (node && !found)
   {
     wxDDEClient *object = (wxDDEClient *)node->Data();
