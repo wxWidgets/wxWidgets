@@ -240,15 +240,18 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     }
                 }
 #endif
+                {
 #if wxMAC_USE_CORE_GRAPHICS
-                CGContextRef cgContext = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef) ;
-                thisWindow->MacSetCGContextRef( cgContext ) ;
+                    CGContextRef cgContext = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef) ;
+                    thisWindow->MacSetCGContextRef( cgContext ) ;
+                    wxMacCGContextStateSaver sg( cgContext ) ;
 #endif
-                if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
-                    result = noErr ;
+                    if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
+                        result = noErr ;
 #if wxMAC_USE_CORE_GRAPHICS
-                thisWindow->MacSetCGContextRef( NULL ) ;
+                    thisWindow->MacSetCGContextRef( NULL ) ;
 #endif
+                }
                 if ( allocatedRgn )
                     DisposeRgn( allocatedRgn ) ;
             }
@@ -1720,9 +1723,13 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
             RectRgn( updateOuter , &rect ) ;
             DiffRgn( updateOuter , updateInner ,updateOuter ) ;
             wxPoint parent(0,0);
+#if TARGET_API_MAC_OSX
+            // no offsetting needed when compositing
+#else
             GetParent()->MacWindowToRootWindow( &parent.x , &parent.y ) ;
             parent -= GetParent()->GetClientAreaOrigin() ;
             OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
+#endif
             CopyRgn( updateOuter , updateTotal ) ;
 
             rect = r ;
@@ -1734,7 +1741,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
             OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
             UnionRgn( updateOuter , updateTotal , updateTotal ) ;
 
-            GetParent()->m_peer->SetNeedsDisplay( true , updateTotal ) ;
+            GetParent()->m_peer->SetNeedsDisplay( true , updateTotal  ) ;
             DisposeRgn(updateOuter) ;
             DisposeRgn(updateInner) ;
             DisposeRgn(updateTotal) ;
@@ -2227,13 +2234,6 @@ void wxWindowMac::Thaw()
 #endif
 }
 
-/* TODO
-void wxWindowMac::OnPaint(wxPaintEvent& event)
-{
-    // why don't we skip that here ?
-}
-*/
-
 wxWindowMac *wxGetActiveWindow()
 {
     // actually this is a windows-only concept
@@ -2252,13 +2252,6 @@ void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
     if ( m_macBackgroundBrush.Ok() == false || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT )
     {
         event.Skip() ;
-    }
-    else if ( m_macBackgroundBrush.MacGetBrushKind() == kwxMacBrushTheme )
-    {
-        if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
-        {
-            CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
-        }
     }
     else
 #endif
@@ -2333,16 +2326,89 @@ void wxWindowMac::SetScrollPos(int orient, int pos, bool refresh)
     }
 }
 
-void wxWindowMac::MacPaintBorders( int left , int top )
+//
+// we draw borders and grow boxes, are already set up and clipped in the current port / cgContextRef
+// our own window origin is at leftOrigin/rightOrigin
+//
+
+void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
 {
     if( IsTopLevel() )
         return ;
 
     Rect rect ;
+    bool hasFocus = m_peer->NeedsFocusRect() && m_peer->HasFocus() ;
+    bool hasBothScrollbars = ( m_hScrollBar && m_hScrollBar->IsShown()) && ( m_vScrollBar && m_vScrollBar->IsShown()) ;
+
     m_peer->GetRect( &rect ) ;
     InsetRect( &rect, -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
 
-    if ( !IsTopLevel() )
+#if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+    if ( HIThemeDrawFrame != 0)
+    {
+        Rect srect = rect ;
+        HIThemeFrameDrawInfo info ;
+        memset( &info, 0 , sizeof( info ) ) ;
+        
+        info.version = 0 ;
+        info.kind = 0 ;
+        info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
+        info.isFocused = hasFocus ;
+        bool draw = false ;
+
+        CGContextRef cgContext = (CGContextRef) GetParent()->MacGetCGContextRef() ;
+        wxASSERT( cgContext ) ;
+         
+        if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+        {
+            SInt32 border = 0 ;
+            GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
+            InsetRect( &srect , border , border );
+            info.kind = kHIThemeFrameTextFieldSquare ;
+            draw = true ;
+        }
+        else if (HasFlag(wxSIMPLE_BORDER))
+        {
+            SInt32 border = 0 ;
+            GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+            InsetRect( &srect , border , border );
+            info.kind = kHIThemeFrameListBox ;
+            draw = true ;
+        }
+            
+        if ( draw )
+        {
+            CGRect cgrect = CGRectMake( srect.left , srect.top , srect.right - srect.left ,
+                srect.bottom - srect.top ) ;
+            HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+        }
+        else if ( hasFocus )
+        {
+            srect = rect ;
+            CGRect cgrect = CGRectMake( srect.left , srect.top , srect.right - srect.left ,
+                srect.bottom - srect.top ) ;
+            HIThemeDrawFocusRect( &cgrect , true , cgContext , kHIThemeOrientationNormal ) ;
+        }
+        
+        m_peer->GetRect( &rect ) ;
+        if ( hasBothScrollbars )
+        {
+            srect = rect ;
+            int size = m_hScrollBar->GetWindowVariant() == wxWINDOW_VARIANT_NORMAL ? 16 : 12 ;
+            CGRect cgrect = CGRectMake( srect.right - size , srect.bottom - size , size , size ) ;
+            CGPoint cgpoint = CGPointMake( srect.right - size , srect.bottom - size ) ;
+            HIThemeGrowBoxDrawInfo info ; 
+            memset( &info, 0 , sizeof( info ) ) ;
+            info.version = 0 ;
+            info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
+            info.kind = kHIThemeGrowBoxKindNone ;
+            info.size = kHIThemeGrowBoxSizeNormal ;
+            info.direction = kThemeGrowRight | kThemeGrowDown ;
+            HIThemeDrawGrowBox( &cgpoint , &info , cgContext , kHIThemeOrientationNormal ) ;
+        }
+    }
+    else
+#endif
     {
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
         if (top)
@@ -2354,23 +2420,34 @@ void wxWindowMac::MacPaintBorders( int left , int top )
             rect.top += pt.y ;
             rect.bottom += pt.y ;
         }
-    }
 
-    if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
-    {
-        Rect srect = rect ;
-        SInt32 border = 0 ;
-        GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
-        InsetRect( &srect , border , border );
-        DrawThemeEditTextFrame(&srect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
-    }
-    else if (HasFlag(wxSIMPLE_BORDER))
-    {
-        Rect srect = rect ;
-        SInt32 border = 0 ;
-        GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-        InsetRect( &srect , border , border );
-        DrawThemeListBoxFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+        if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+        {
+            Rect srect = rect ;
+            SInt32 border = 0 ;
+            GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
+            InsetRect( &srect , border , border );
+            DrawThemeEditTextFrame(&srect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+        }
+        else if (HasFlag(wxSIMPLE_BORDER))
+        {
+            Rect srect = rect ;
+            SInt32 border = 0 ;
+            GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+            InsetRect( &srect , border , border );
+            DrawThemeListBoxFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+        }
+        
+        if ( hasFocus )
+        {
+            Rect srect = rect ;
+            DrawThemeFocusRect( &srect , true ) ;
+        }
+        if ( hasBothScrollbars )
+        {
+            // GetThemeStandaloneGrowBoxBounds    
+                        //DrawThemeStandaloneNoGrowBox
+        }
     }
 }
 
@@ -2857,8 +2934,9 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
     Rect updatebounds ;
     GetRegionBounds( updatergn , &updatebounds ) ;
 
-//    wxLogDebug("update for %s bounds %d , %d , %d , %d",typeid(*this).name() , updatebounds.left , updatebounds.top , updatebounds.right , updatebounds.bottom ) ;
-    if ( !EmptyRgn(updatergn) )
+    // wxLogDebug(wxT("update for %s bounds %d , %d , %d , %d"),wxString(GetClassInfo()->GetClassName()).c_str(), updatebounds.left , updatebounds.top , updatebounds.right , updatebounds.bottom ) ;
+
+    if ( !EmptyRgn(updatergn) )  
     {
         RgnHandle newupdate = NewRgn() ;
         wxSize point = GetClientSize() ;
@@ -2868,11 +2946,20 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
 
         // first send an erase event to the entire update area
         {
-            wxWindowDC dc(this);
-            dc.SetClippingRegion(wxRegion(updatergn));
-            wxEraseEvent eevent( GetId(), &dc );
+            // for the toplevel window this really is the entire area
+            // for all the others only their client area, otherwise they
+            // might be drawing with full alpha and eg put blue into
+            // the grow-box area of a scrolled window (scroll sample)
+            wxDC* dc ;
+            if ( IsTopLevel() )
+                dc = new wxWindowDC(this);
+            else
+                dc = new wxClientDC(this);
+            dc->SetClippingRegion(wxRegion(updatergn));
+            wxEraseEvent eevent( GetId(), dc );
             eevent.SetEventObject( this );
             GetEventHandler()->ProcessEvent( eevent );
+            delete dc ;
         }
 
         // calculate a client-origin version of the update rgn and set m_updateRegion to that
@@ -2905,78 +2992,40 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             if (child->IsTopLevel()) continue;
             if (!child->IsShown()) continue;
 
+            // only draw those in the update region (add a safety margin of 10 pixels for shadow effects
+
             int x,y;
             child->GetPosition( &x, &y );
             int w,h;
             child->GetSize( &w, &h );
             Rect childRect = { y , x , y + h , x + w } ;
             OffsetRect( &childRect , clientOrigin.x , clientOrigin.y ) ;
-            if ( child->MacGetTopBorderSize() )
-            {
-                if ( RectInRgn( &childRect , updatergn ) )
-                {
-#if wxMAC_USE_CORE_GRAPHICS
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-                    if ( HIThemeDrawFrame )
-                    {
-                        Rect srect = childRect ;
-                        HIThemeFrameDrawInfo info ;
-                        info.version = 0 ;
-                        info.kind = 0 ;
-                        info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
-                        if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
-                        {
-                            SInt32 border = 0 ;
-                            GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
-                            InsetRect( &srect , border , border );
-                            info.kind = kHIThemeFrameTextFieldSquare ;
-                        }
-                        else if (HasFlag(wxSIMPLE_BORDER))
-                        {
-                            SInt32 border = 0 ;
-                            GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-                            InsetRect( &srect , border , border );
-                            info.kind = kHIThemeFrameListBox ;
-                        }
+            InsetRect( &childRect , -10 , -10) ;
 
-                        CGRect rect = CGRectMake( srect.left , srect.top , srect.right - srect.left ,
-                            srect.bottom - srect.top ) ;
-                        HIThemeDrawFrame( &rect , &info , (CGContextRef) MacGetCGContextRef() , kHIThemeOrientationNormal ) ;
-                    }
-#endif
-#else
-                    // paint custom borders
-                    wxNcPaintEvent eventNc( child->GetId() );
-                    eventNc.SetEventObject( child );
-                    if ( !child->GetEventHandler()->ProcessEvent( eventNc ) )
+            if ( RectInRgn( &childRect , updatergn ) )
+            {
+
+                // paint custom borders
+                wxNcPaintEvent eventNc( child->GetId() );
+                eventNc.SetEventObject( child );
+                if ( !child->GetEventHandler()->ProcessEvent( eventNc ) )
+                {
+#if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+                    if ( HIThemeDrawFrame != 0)
                     {
+                        child->MacPaintBorders(0,0) ;
+                    }
+                    else
+#endif
+                    {
+#if !wxMAC_USE_CORE_GRAPHICS
                         wxWindowDC dc(this) ;
                         dc.SetClippingRegion(wxRegion(updatergn));
                         wxMacPortSetter helper(&dc) ;
-                        child->MacPaintBorders( dc.m_macLocalOrigin.x + childRect.left , dc.m_macLocalOrigin.y + childRect.top)  ;
+                        child->MacPaintBorders(0,0)  ;
+#endif
                     }
-#endif
                 }
-            }
-            if ( child->m_peer->NeedsFocusRect() && child->m_peer->HasFocus() )
-            {
-#if wxMAC_USE_CORE_GRAPHICS
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-                if ( HIThemeDrawFocusRect )
-                {
-                    CGRect rect = CGRectMake( childRect.left , childRect.top , childRect.right - childRect.left ,
-                        childRect.bottom - childRect.top ) ;
-                    HIThemeDrawFocusRect( &rect , true , (CGContextRef) MacGetCGContextRef() , kHIThemeOrientationNormal ) ;
-                }
-#endif
-#else
-                wxWindowDC dc(this) ;
-                dc.SetClippingRegion(wxRegion(updatergn));
-                wxMacPortSetter helper(&dc) ;
-                Rect r = childRect ;
-                OffsetRect( &r , dc.m_macLocalOrigin.x , dc.m_macLocalOrigin.y ) ;
-                DrawThemeFocusRect( &r , true ) ;
-#endif
             }
         }
     }
@@ -3239,14 +3288,9 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
 
 void wxWindowMac::OnPaint( wxPaintEvent & event )
 {
-    // in the other case we already have drawn from the OnEraseBackground Handler
-    if ( !m_macBackgroundBrush.Ok() || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT || 
-        m_macBackgroundBrush.MacGetBrushKind() != kwxMacBrushTheme )
+    if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
     {
-        if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
-        {
-            CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
-        }
+        CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
     }
 }
 
