@@ -99,7 +99,7 @@ public:
     // flags may be combination of wxRE_NOTBOL and wxRE_NOTEOL
     //
     // may only be called after successful call to Compile()
-    bool Matches(const wxString& str, int flags = 0) const;
+    bool Matches(const wxChar *text, int flags = 0) const;
 
     // get the start index and the length of the match of the expression
     // (index 0) or a bracketed subexpression (index != 0)
@@ -118,7 +118,24 @@ public:
     // replaces the current regular expression in the string pointed to by
     // pattern, with the text in replacement and return number of matches
     // replaced (maybe 0 if none found) or -1 on error
-    int Replace(wxString *str, const wxString& replacement) const;
+    //
+    // the replacement text may contain backreferences (\number) which will be
+    // replaced with the value of the corresponding subexpression in the
+    // pattern match
+    //
+    // maxMatches may be used to limit the number of replacements made, setting
+    // it to 1, for example, will only replace first occurence (if any) of the
+    // pattern in the text while default value of 0 means replace all
+    int Replace(wxString *text, const wxString& replacement,
+                size_t maxMatches = 0) const;
+
+    // replace the first occurence
+    int ReplaceFirst(wxString *text, const wxString& replacement) const
+        { return Replace(text, replacement, 1); }
+
+    // replace all occurences: this is actually a synonym for Replace()
+    int ReplaceAll(wxString *text, const wxString& replacement) const
+        { return Replace(text, replacement, 0); }
 
     // dtor not virtual, don't derive from this class
     ~wxRegEx();

@@ -1827,6 +1827,55 @@ static void TestRegExSubmatch()
     }
 }
 
+static void TestRegExReplacement()
+{
+    wxPuts(_T("*** Testing RE replacement ***"));
+
+    static struct RegExReplTestData
+    {
+        const wxChar *text;
+        const wxChar *repl;
+        const wxChar *result;
+        size_t count;
+    } regExReplTestData[] =
+    {
+        { _T("foo123"), _T("bar"), _T("bar"), 1 },
+        { _T("foo123"), _T("\\2\\1"), _T("123foo"), 1 },
+        { _T("foo_123"), _T("\\2\\1"), _T("123foo"), 1 },
+        { _T("123foo"), _T("bar"), _T("123foo"), 0 },
+        { _T("123foo456foo"), _T("&&"), _T("123foo456foo456foo"), 1 },
+        { _T("foo123foo123"), _T("bar"), _T("barbar"), 2 },
+        { _T("foo123_foo456_foo789"), _T("bar"), _T("bar_bar_bar"), 3 },
+    };
+
+    const wxChar *pattern = _T("([a-z]+)[^0-9]*([0-9]+)");
+    wxRegEx re = pattern;
+
+    wxPrintf(_T("Using pattern '%s' for replacement.\n"), pattern);
+
+    for ( size_t n = 0; n < WXSIZEOF(regExReplTestData); n++ )
+    {
+        const RegExReplTestData& data = regExReplTestData[n];
+
+        wxString text = data.text;
+        size_t nRepl = re.Replace(&text, data.repl);
+
+        wxPrintf(_T("%s =~ s/RE/%s/g: %u match%s, result = '%s' ("),
+                 data.text, data.repl,
+                 nRepl, nRepl == 1 ? _T("") : _T("es"),
+                 text.c_str());
+        if ( text == data.result && nRepl == data.count )
+        {
+            wxPuts(_T("ok)"));
+        }
+        else
+        {
+            wxPrintf(_T("ERROR: should be %u and '%s')\n"),
+                     data.count, data.result);
+        }
+    }
+}
+
 static void TestRegExInteractive()
 {
     wxPuts(_T("*** Testing RE interactively ***"));
@@ -5074,8 +5123,9 @@ int main(int argc, char **argv)
         TestRegExCompile();
         TestRegExMatch();
         TestRegExSubmatch();
+        TestRegExInteractive();
     }
-    TestRegExInteractive();
+    TestRegExReplacement();
 #endif // TEST_REGEX
 
 #ifdef TEST_REGISTRY

@@ -58,10 +58,11 @@ public:
     bool IsValid() const { return m_isCompiled; }
 
     // RE operations
-    bool Compile(const wxString& expr, int flags);
-    bool Matches(const wxString& str, int flags) const;
-    bool GetMatch(size_t *start, size_t *len, size_t index) const;
-    int Replace(wxString *pattern, const wxString& replacement) const;
+    bool Compile(const wxString& expr, int flags = 0);
+    bool Matches(const wxChar *str, int flags = 0) const;
+    bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
+    int Replace(wxString *pattern, const wxString& replacement,
+                size_t maxMatches = 0) const;
 
 private:
     // return the string containing the error message for the given err code
@@ -180,7 +181,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     return IsValid();
 }
 
-bool wxRegExImpl::Matches(const wxString& str, int flags) const
+bool wxRegExImpl::Matches(const wxChar *str, int flags) const
 {
     wxCHECK_MSG( IsValid(), FALSE, _T("must successfully Compile() first") );
 
@@ -213,7 +214,7 @@ bool wxRegExImpl::Matches(const wxString& str, int flags) const
         default:
             // an error occured
             wxLogError(_("Failed to match '%s' in regular expression: %s"),
-                       str.c_str(), GetErrorMsg(rc).c_str());
+                       str, GetErrorMsg(rc).c_str());
             // fall through
 
         case REG_NOMATCH:
@@ -240,31 +241,115 @@ bool wxRegExImpl::GetMatch(size_t *start, size_t *len, size_t index) const
     return TRUE;
 }
 
-int wxRegExImpl::Replace(wxString *pattern, const wxString& replacement) const
+int wxRegExImpl::Replace(wxString *text,
+                         const wxString& replacement,
+                         size_t maxMatches) const
 {
-    wxCHECK_MSG( pattern, -1, _T("NULL pattern in wxRegEx::Replace") );
+    wxCHECK_MSG( text, -1, _T("NULL text in wxRegEx::Replace") );
+    wxCHECK_MSG( IsValid(), -1, _T("must successfully Compile() first") );
 
-    wxCHECK_MSG( IsValid(), FALSE, _T("must successfully Compile() first") );
+    // the replacement text
+    wxString textNew;
 
-    int replaced = 0;
-    size_t lastpos = 0;
-    wxString newstring;
+    // attempt at optimization: don't iterate over the string if it doesn't
+    // contain back references at all
+    bool mayHaveBackrefs =
+        replacement.find_first_of(_T("\\&")) != wxString::npos;
 
-    for ( size_t idx = 0;
-          m_Matches[idx].rm_so != -1 && idx < m_nMatches;
-          idx++ )
+    if ( !mayHaveBackrefs )
     {
-        // copy non-matching bits:
-        newstring << pattern->Mid(lastpos, m_Matches[idx].rm_so - lastpos);
-        // copy replacement:
-        newstring << replacement;
-        // remember how far we got:
-        lastpos = m_Matches[idx].rm_eo;
-        replaced ++;
+        textNew = replacement;
     }
-    if(replaced > 0)
-        *pattern = newstring;
-    return replaced;
+
+    // the position where we start looking for the match
+    //
+    // NB: initial version had a nasty bug because it used a wxChar* instead of
+    //     an index but the problem is that replace() in the loop invalidates
+    //     all pointers into the string so we have to use indices instead
+    size_t matchStart = 0;
+
+    // number of replacement made: we won't make more than maxMatches of them
+    // (unless maxMatches is 0 which doesn't limit the number of replacements)
+    size_t countRepl = 0;
+
+    // note that "^" shouldn't match after the first call to Matches() so we
+    // use wxRE_NOTBOL to prevent it from happening
+    while ( (!maxMatches || countRepl < maxMatches) &&
+            Matches(text->c_str() + matchStart, countRepl ? wxRE_NOTBOL : 0) )
+    {
+        // the string possibly contains back references: we need to calculate
+        // the replacement text anew after each match
+        if ( mayHaveBackrefs )
+        {
+            mayHaveBackrefs = FALSE;
+            textNew.clear();
+            textNew.reserve(replacement.length());
+
+            for ( const wxChar *p = replacement.c_str(); *p; p++ )
+            {
+                size_t index = (size_t)-1;
+
+                if ( *p == _T('\\') )
+                {
+                    if ( wxIsdigit(*++p) )
+                    {
+                        // back reference
+                        wxChar *end;
+                        index = (size_t)wxStrtoul(p, &end, 10);
+                        p = end - 1; // -1 to compensate for p++ in the loop
+                    }
+                    //else: backslash used as escape character
+                }
+                else if ( *p == _T('&') )
+                {
+                    // treat this as "\0" for compatbility with ed and such
+                    index = 0;
+                }
+
+                // do we have a back reference?
+                if ( index != (size_t)-1 )
+                {
+                    // yes, get its text
+                    size_t start, len;
+                    if ( !GetMatch(&start, &len, index) )
+                    {
+                        wxFAIL_MSG( _T("invalid back reference") );
+
+                        // just eat it...
+                    }
+                    else
+                    {
+                        textNew += wxString(text->c_str() + matchStart + start,
+                                            len);
+
+                        mayHaveBackrefs = TRUE;
+                    }
+                }
+                else // ordinary character
+                {
+                    textNew += *p;
+                }
+            }
+        }
+
+        size_t start, len;
+        if ( !GetMatch(&start, &len) )
+        {
+            // we did have match as Matches() returned true above!
+            wxFAIL_MSG( _T("internal logic error in wxRegEx::Replace") );
+
+            return -1;
+        }
+
+        matchStart += start;
+        text->replace(matchStart, len, textNew);
+
+        countRepl++;
+
+        matchStart += textNew.length();
+    }
+
+    return countRepl;
 }
 
 // ----------------------------------------------------------------------------
@@ -301,7 +386,7 @@ bool wxRegEx::Compile(const wxString& expr, int flags)
     return TRUE;
 }
 
-bool wxRegEx::Matches(const wxString& str, int flags) const
+bool wxRegEx::Matches(const wxChar *str, int flags) const
 {
     wxCHECK_MSG( IsValid(), FALSE, _T("must successfully Compile() first") );
 
@@ -310,7 +395,7 @@ bool wxRegEx::Matches(const wxString& str, int flags) const
 
 bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const
 {
-    wxCHECK_MSG( IsValid(), -1, _T("must successfully Compile() first") );
+    wxCHECK_MSG( IsValid(), FALSE, _T("must successfully Compile() first") );
 
     return m_impl->GetMatch(start, len, index);
 }
@@ -324,11 +409,13 @@ wxString wxRegEx::GetMatch(const wxString& text, size_t index) const
     return text.Mid(start, len);
 }
 
-int wxRegEx::Replace(wxString *pattern, const wxString& replacement) const
+int wxRegEx::Replace(wxString *pattern,
+                     const wxString& replacement,
+                     size_t maxMatches) const
 {
     wxCHECK_MSG( IsValid(), -1, _T("must successfully Compile() first") );
 
-    return m_impl->Replace(pattern, replacement);
+    return m_impl->Replace(pattern, replacement, maxMatches);
 }
 
 #endif // wxUSE_REGEX
