@@ -872,14 +872,15 @@ wxWindowDisabler::~wxWindowDisabler()
 
 // Yield to other apps/messages and disable user input to all windows except
 // the given one
-bool wxSafeYield(wxWindow *win, bool onlyIfNeeded = FALSE)
+bool wxSafeYield(wxWindow *win, bool onlyIfNeeded)
 {
     wxWindowDisabler wd(win);
 
+    bool rc
     if (onlyIfNeeded)
-        bool rc = wxYieldIfNeeded();
+        rc = wxYieldIfNeeded();
     else
-        bool rc = wxYield();
+        rc = wxYield();
 
     return rc;
 }
