@@ -175,6 +175,22 @@ bool wxChoice::Create(wxWindow *parent,
                   style, validator, name);
 }
 
+bool wxChoice::MSWShouldPreProcessMessage(WXMSG *pMsg)
+{
+    MSG *msg = (MSG *) pMsg;
+
+    // don't preprocess "ESC" if combobox is dropped down
+    if ( msg->message == WM_KEYDOWN && msg->wParam == VK_ESCAPE )
+    {
+        if (::SendMessage(GetHwndOf(this), CB_GETDROPPEDSTATE, 0, 0))
+        {
+            return false;
+        }
+    }
+
+    return wxControl::MSWShouldPreProcessMessage(pMsg);
+}
+
 WXDWORD wxChoice::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     // we never have an external border

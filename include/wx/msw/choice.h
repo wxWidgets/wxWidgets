@@ -101,6 +101,8 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
+    virtual bool MSWShouldPreProcessMessage(WXMSG *pMsg);
+
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     // update the height of the drop down list to fit the number of items we
