@@ -620,7 +620,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/image/makefile.unx $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/*.cpp $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/*.mms $(DISTDIR)/samples/image
-	cp $(SAMPDIR)/image/horse.* $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/horse*.* $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/smile.xbm $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/smile.xpm $(DISTDIR)/samples/image
 
