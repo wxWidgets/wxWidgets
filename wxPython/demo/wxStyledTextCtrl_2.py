@@ -53,8 +53,6 @@ class PythonSTC(wxStyledTextCtrl):
         self.SetEdgeMode(wxSTC_EDGE_BACKGROUND)
         self.SetEdgeColumn(78)
 
-        self.SetCaretForeground("red")
-
         # Setup a margin to hold fold markers
         #self.SetFoldFlags(16)  ###  WHAT IS THIS VALUE?  WHAT ARE THE OTHER FLAGS?  DOES IT MATTER?
         self.SetMarginType(2, wxSTC_MARGIN_SYMBOL)

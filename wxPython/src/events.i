@@ -169,6 +169,9 @@ public:
     bool ShiftDown();
     long KeyCode();
 
+    long GetKeyCode();
+    bool HasModifiers();
+
     long GetX();
     long GetY();
     wxPoint GetPosition();

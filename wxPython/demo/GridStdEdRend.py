@@ -39,7 +39,7 @@ class MyCustomRenderer(wxPyGridCellRenderer):
 
 
     def Clone(self):
-        return MyCustomRenderer
+        return MyCustomRenderer()
 
 
 #---------------------------------------------------------------------------

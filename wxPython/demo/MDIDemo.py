@@ -32,8 +32,7 @@ class MyParentFrame(wxMDIParentFrame):
     def OnNewWindow(self, evt):
         self.winCount = self.winCount + 1
         win = wxMDIChildFrame(self, -1, "Child Window: %d" % self.winCount)
-        cs = win.GetClientSize()
-        canvas = MyCanvas(win, size=cs)
+        canvas = MyCanvas(win)
         win.Show(true)
 
 

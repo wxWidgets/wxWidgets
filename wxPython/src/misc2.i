@@ -490,3 +490,113 @@ public:
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
+
+enum
+{
+    wxLOG_FatalError, // program can't continue, abort immediately
+    wxLOG_Error,      // a serious error, user must be informed about it
+    wxLOG_Warning,    // user is normally informed about it but may be ignored
+    wxLOG_Message,    // normal message (i.e. normal output of a non GUI app)
+    wxLOG_Info,       // informational message (a.k.a. 'Verbose')
+    wxLOG_Status,     // informational: might go to the status line of GUI app
+    wxLOG_Debug,      // never shown to the user, disabled in release mode
+    wxLOG_Trace,      // trace messages are also only enabled in debug mode
+    wxLOG_Progress,   // used for progress indicator (not yet)
+    wxLOG_User = 100  // user defined levels start here
+};
+
+
+class wxLog
+{
+public:
+    wxLog();
+
+    static bool IsEnabled();
+    static bool EnableLogging(bool doIt = TRUE);
+    static void OnLog(wxLogLevel level, const char *szString, int t=0);
+
+    virtual void Flush();
+    bool HasPendingMessages() const;
+
+    static void FlushActive();
+    static wxLog *GetActiveTarget();
+    static wxLog *SetActiveTarget(wxLog *pLogger);
+
+    static void Suspend();
+    static void Resume();
+
+    void SetVerbose(bool bVerbose = TRUE);
+
+    static void DontCreateOnDemand();
+    static void SetTraceMask(wxTraceMask ulMask);
+    static void AddTraceMask(const wxString& str);
+    static void RemoveTraceMask(const wxString& str);
+
+    bool GetVerbose() const { return m_bVerbose; }
+
+    static wxTraceMask GetTraceMask();
+    static bool IsAllowedTraceMask(const char *mask);
+
+};
+
+
+class wxLogStderr : public wxLog
+{
+public:
+    wxLogStderr(/* TODO: FILE *fp = (FILE *) NULL*/);
+};
+
+
+class wxLogTextCtrl : public wxLog
+{
+public:
+    wxLogTextCtrl(wxTextCtrl *pTextCtrl);
+};
+
+
+class wxLogGui : public wxLog
+{
+public:
+    wxLogGui();
+};
+
+class wxLogWindow : public wxLog
+{
+public:
+    wxLogWindow(wxFrame *pParent,         // the parent frame (can be NULL)
+            const char *szTitle,          // the title of the frame
+            bool bShow = TRUE,            // show window immediately?
+            bool bPassToOld = TRUE);      // pass log messages to the old target?
+
+    void Show(bool bShow = TRUE);
+    wxFrame *GetFrame() const;
+    wxLog *GetOldLog() const;
+    bool IsPassingMessages() const;
+    void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
+};
+
+
+class wxLogNull
+{
+public:
+    wxLogNull();
+    ~wxLogNull();
+};
+
+
+unsigned long wxSysErrorCode();
+const char* wxSysErrorMsg(unsigned long nErrCode = 0);
+void wxLogFatalError(const char *szFormat);
+void wxLogError(const char *szFormat);
+void wxLogWarning(const char *szFormat);
+void wxLogMessage(const char *szFormat);
+void wxLogInfo(const char *szFormat);
+void wxLogVerbose(const char *szFormat);
+void wxLogStatus(const char *szFormat);
+%name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const char *szFormat);
+void wxLogSysError(const char *szFormat);
+
+
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+

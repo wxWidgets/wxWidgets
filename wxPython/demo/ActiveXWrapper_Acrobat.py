@@ -29,9 +29,8 @@ if wxPlatform == '__WXMSW__':
 #----------------------------------------------------------------------
 
 class TestPanel(wxPanel):
-    def __init__(self, parent, log):
+    def __init__(self, parent):
         wxPanel.__init__(self, parent, -1)
-        self.log = log
         self.pdf = None
 
         sizer = wxBoxSizer(wxVERTICAL)
@@ -95,7 +94,7 @@ class TestPanel(wxPanel):
 
 def runTest(frame, nb, log):
     if wxPlatform == '__WXMSW__':
-        win = TestPanel(nb, log)
+        win = TestPanel(nb)
         return win
     else:
         dlg = wxMessageDialog(frame, 'This demo only works on MSW.',

@@ -451,6 +451,8 @@ class wxGridCellRenderer
 {
 public:
     void SetParameters(const wxString& params);
+    void IncRef();
+    void DecRef();
 
     virtual void Draw(wxGrid& grid,
                       wxGridCellAttr& attr,
@@ -600,6 +602,8 @@ public:
     void SetControl(wxControl* control);
 
     void SetParameters(const wxString& params);
+    void IncRef();
+    void DecRef();
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -612,6 +616,7 @@ public:
     virtual void SetSize(const wxRect& rect);
     virtual void Show(bool show, wxGridCellAttr *attr = NULL);
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void StartingKey(wxKeyEvent& event);
     virtual void StartingClick();
     virtual void HandleReturn(wxKeyEvent& event);
@@ -715,6 +720,7 @@ public:
 
     DEC_PYCALLBACK___pure(Reset);
     DEC_PYCALLBACK__constany(SetSize, wxRect);
+    DEC_PYCALLBACK_bool_any(IsAcceptedKey, wxKeyEvent);
     DEC_PYCALLBACK__any(StartingKey, wxKeyEvent);
     DEC_PYCALLBACK__any(HandleReturn, wxKeyEvent);
     DEC_PYCALLBACK__(StartingClick);
@@ -728,6 +734,7 @@ public:
 IMP_PYCALLBACK__STRING( wxPyGridCellEditor, wxGridCellEditor, SetParameters);
 IMP_PYCALLBACK___pure(wxPyGridCellEditor, wxGridCellEditor, Reset);
 IMP_PYCALLBACK__constany(wxPyGridCellEditor, wxGridCellEditor, SetSize, wxRect);
+IMP_PYCALLBACK_bool_any(wxPyGridCellEditor, wxGridCellEditor, IsAcceptedKey, wxKeyEvent);
 IMP_PYCALLBACK__any(wxPyGridCellEditor, wxGridCellEditor, StartingKey, wxKeyEvent);
 IMP_PYCALLBACK__any(wxPyGridCellEditor, wxGridCellEditor, HandleReturn, wxKeyEvent);
 IMP_PYCALLBACK__(wxPyGridCellEditor, wxGridCellEditor, StartingClick);

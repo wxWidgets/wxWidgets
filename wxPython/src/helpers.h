@@ -1016,6 +1016,29 @@ public:
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_bool_any(CBNAME, Type)           \
+    bool CBNAME(Type& a);                               \
+    bool base_##CBNAME(Type& a);
+
+
+#define IMP_PYCALLBACK_bool_any(CLASS, PCLASS, CBNAME, Type)    \
+    bool CLASS::CBNAME(Type& a) {                               \
+        bool rv;                                                \
+        bool doSave = wxPyRestoreThread();                      \
+        if (m_myInst.findCallback(#CBNAME))                     \
+            rv = m_myInst.callCallback(Py_BuildValue("(O)",     \
+                            wxPyConstructObject(&a, #Type)));   \
+        else                                                    \
+            rv = PCLASS::CBNAME(a);                             \
+        wxPySaveThread(doSave);                                 \
+        return rv;                                              \
+    }                                                           \
+    bool CLASS::base_##CBNAME(Type& a) {                        \
+        return PCLASS::CBNAME(a);                               \
+    }
+
+//---------------------------------------------------------------------------
+
 #endif
 
 

@@ -27,6 +27,7 @@ class NewEnterHandlingGrid(wxGrid):
             evt.Skip()
             return
 
+        self.DisableCellEditControl()
         success = self.MoveCursorRight(evt.ShiftDown())
         if not success:
             newRow = self.GetGridCursorRow() + 1

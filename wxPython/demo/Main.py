@@ -18,8 +18,6 @@ from   wxPython.html import wxHtmlWindow
 
 #---------------------------------------------------------------------------
 
-_useSplitter       = true
-_useNestedSplitter = true
 
 _treeList = [
     ('New since last release', ['wxDragImage', 'wxCalendarCtrl', 'wxSpinCtrl',
@@ -84,22 +82,8 @@ class wxPythonDemo(wxFrame):
         self.Centre(wxBOTH)
         self.CreateStatusBar(1, wxST_SIZEGRIP)
 
-        if _useSplitter:
-            splitter = wxSplitterWindow(self, -1, style=wxNO_3D|wxSP_3D)
-            if _useNestedSplitter:
-                splitter2 = wxSplitterWindow(splitter, -1, style=wxNO_3D|wxSP_3D)
-                logParent = nbParent = splitter2
-            else:
-                nbParent = splitter
-                logParent = wxFrame(self, -1, "wxPython Demo: log window",
-                                (0,0), (500, 150))
-                logParent.Show(true)
-        else:
-            nbParent = self
-            logParent = wxFrame(self, -1, "wxPython Demo: log window",
-                                (0,0), (500, 150))
-            logParent.Show(true)
-
+        splitter = wxSplitterWindow(self, -1, style=wxNO_3D|wxSP_3D)
+        splitter2 = wxSplitterWindow(splitter, -1, style=wxNO_3D|wxSP_3D)
 
 
         # Prevent TreeCtrl from displaying all items after destruction
@@ -140,33 +124,32 @@ class wxPythonDemo(wxFrame):
 
 
         # Create a TreeCtrl
-        if _useSplitter:
-            tID = wxNewId()
-            self.treeMap = {}
-            self.tree = wxTreeCtrl(splitter, tID,
-                                   style=wxTR_HAS_BUTTONS |
-                                   wxTR_EDIT_LABELS |
-                                   wxTR_HAS_VARIABLE_ROW_HEIGHT |
-                                   wxSUNKEN_BORDER)
-            #self.tree.SetBackgroundColour(wxNamedColour("Pink"))
-            root = self.tree.AddRoot("Overview")
-            firstChild = None
-            for item in _treeList:
-                child = self.tree.AppendItem(root, item[0])
-                if not firstChild: firstChild = child
-                for childItem in item[1]:
-                    theDemo = self.tree.AppendItem(child, childItem)
-                    self.treeMap[childItem] = theDemo
+        tID = wxNewId()
+        self.treeMap = {}
+        self.tree = wxTreeCtrl(splitter, tID,
+                               style=wxTR_HAS_BUTTONS |
+                               wxTR_EDIT_LABELS |
+                               wxTR_HAS_VARIABLE_ROW_HEIGHT |
+                               wxSUNKEN_BORDER)
+        #self.tree.SetBackgroundColour(wxNamedColour("Pink"))
+        root = self.tree.AddRoot("Overview")
+        firstChild = None
+        for item in _treeList:
+            child = self.tree.AppendItem(root, item[0])
+            if not firstChild: firstChild = child
+            for childItem in item[1]:
+                theDemo = self.tree.AppendItem(child, childItem)
+                self.treeMap[childItem] = theDemo
 
-            self.tree.Expand(root)
-            self.tree.Expand(firstChild)
-            EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
-            EVT_TREE_ITEM_COLLAPSED  (self.tree, tID, self.OnItemCollapsed)
-            EVT_TREE_SEL_CHANGED     (self.tree, tID, self.OnSelChanged)
-            EVT_LEFT_DOWN            (self.tree,      self.OnTreeLeftDown)
+        self.tree.Expand(root)
+        self.tree.Expand(firstChild)
+        EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
+        EVT_TREE_ITEM_COLLAPSED  (self.tree, tID, self.OnItemCollapsed)
+        EVT_TREE_SEL_CHANGED     (self.tree, tID, self.OnSelChanged)
+        EVT_LEFT_DOWN            (self.tree,      self.OnTreeLeftDown)
 
         # Create a Notebook
-        self.nb = wxNotebook(nbParent, -1)
+        self.nb = wxNotebook(splitter2, -1)
 
         # Set up a TextCtrl on the Overview Notebook page
         self.ovr = wxHtmlWindow(self.nb, -1)
@@ -181,59 +164,48 @@ class wxPythonDemo(wxFrame):
 
 
         # Set up a log on the View Log Notebook page
-        self.log = wxTextCtrl(logParent, -1,
+        self.log = wxTextCtrl(splitter2, -1,
                               style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
-        (w, self.charHeight) = self.log.GetTextExtent('X')
-        self.WriteText('wxPython Demo Log:\n')
+        # Set the wxWindows log target to be this textctrl
+        wxLog_SetActiveTarget(wxLogTextCtrl(self.log))
+
+
 
         self.Show(true)
 
         # add the windows to the splitter and split it.
-        if _useSplitter:
-            if _useNestedSplitter:
-                splitter2.SplitHorizontally(self.nb, self.log)
-                splitter2.SetSashPosition(450, true)
-                splitter2.SetMinimumPaneSize(20)
+        splitter2.SplitHorizontally(self.nb, self.log)
+        splitter2.SetSashPosition(450, true)
+        splitter2.SetMinimumPaneSize(20)
 
-                splitter.SplitVertically(self.tree, splitter2)
-            else:
-                splitter.SplitVertically(self.tree, self.nb)
+        splitter.SplitVertically(self.tree, splitter2)
+        splitter.SetSashPosition(180, true)
+        splitter.SetMinimumPaneSize(20)
 
-            splitter.SetSashPosition(180, true)
-            splitter.SetMinimumPaneSize(20)
-
-
-        # make our log window be stdout
-        #sys.stdout = self
 
         # select initial items
         self.nb.SetSelection(0)
-        if _useSplitter:
-            self.tree.SelectItem(root)
+        self.tree.SelectItem(root)
 
         if len(sys.argv) == 2:
             try:
                 selectedDemo = self.treeMap[sys.argv[1]]
             except:
                 selectedDemo = None
-            if selectedDemo and _useSplitter:
+            if selectedDemo:
                 self.tree.SelectItem(selectedDemo)
                 self.tree.EnsureVisible(selectedDemo)
 
 
-        self.WriteText('window handle: %s\n' % self.GetHandle())
+        wxLogMessage('window handle: %s' % self.GetHandle())
 
 
     #---------------------------------------------
     def WriteText(self, text):
-        self.log.WriteText(text)
-        w, h = self.log.GetClientSizeTuple()
-        numLines = h/self.charHeight
-        x, y = self.log.PositionToXY(self.log.GetLastPosition())
-        if y > numLines:
-            self.log.ShowPosition(self.log.XYToPosition(x, y-numLines))
-            ##self.log.ShowPosition(self.log.GetLastPosition())
-        self.log.SetInsertionPointEnd()
+        if text[-1:] == '\n':
+            text = text[:-1]
+        wxLogMessage(text)
+
 
     def write(self, txt):
         self.WriteText(txt)
@@ -241,12 +213,12 @@ class wxPythonDemo(wxFrame):
     #---------------------------------------------
     def OnItemExpanded(self, event):
         item = event.GetItem()
-        self.log.WriteText("OnItemExpanded: %s\n" % self.tree.GetItemText(item))
+        wxLogMessage("OnItemExpanded: %s" % self.tree.GetItemText(item))
 
     #---------------------------------------------
     def OnItemCollapsed(self, event):
         item = event.GetItem()
-        self.log.WriteText("OnItemCollapsed: %s\n" % self.tree.GetItemText(item))
+        wxLogMessage("OnItemCollapsed: %s" % self.tree.GetItemText(item))
 
 
     #---------------------------------------------
@@ -285,6 +257,7 @@ class wxPythonDemo(wxFrame):
         else:
             if os.path.exists(itemText + '.py'):
                 wxBeginBusyCursor()
+                wxLogMessage("Running demo %s.py..." % itemText)
                 try:
                     self.GetDemoFile(itemText + '.py')
                     module = __import__(itemText, globals())
@@ -296,7 +269,7 @@ class wxPythonDemo(wxFrame):
                 self.nb.Refresh();
                 wxYield()
 
-                self.window = module.runTest(self, self.nb, self)
+                self.window = module.runTest(self, self.nb, self) ###
                 if self.window:
                     self.nb.AddPage(self.window, 'Demo')
                     wxYield()
@@ -313,13 +286,10 @@ class wxPythonDemo(wxFrame):
     # Get the Demo files
     def GetDemoFile(self, filename):
         self.txt.Clear()
-        #if not self.txt.LoadFile(filename):
-        #    self.txt.WriteText("Cannot open %s file." % filename)
         try:
             self.txt.SetValue(open(filename).read())
         except IOError:
             self.txt.WriteText("Cannot open %s file." % filename)
-
 
         self.txt.SetInsertionPoint(0)
         self.txt.ShowPosition(0)
@@ -328,7 +298,7 @@ class wxPythonDemo(wxFrame):
     def SetOverview(self, name, text):
         self.curOverview = text
         lead = text[:6]
-        if lead != '<html>' and lead != '<HTML':
+        if lead != '<html>' and lead != '<HTML>':
             text = string.join(string.split(text, '\n'), '<br>')
             #text = '<font size="-1"><pre>' + text + '</pre></font>'
         self.ovr.SetPage(text)
@@ -341,13 +311,6 @@ class wxPythonDemo(wxFrame):
 
 
     def OnHelpAbout(self, event):
-        #about = wxMessageDialog(self,
-        #                        "wxPython is a Python extension module that\n"
-        #                        "encapsulates the wxWindows GUI classes.\n\n"
-        #                        "This demo shows off some of the capabilities\n"
-        #                        "of wxPython.\n\n"
-        #                        "          Developed by Robin Dunn",
-        #                       "About wxPython", wxOK)
         from About import MyAboutBox
         about = MyAboutBox(self)
         about.ShowModal()
@@ -370,25 +333,20 @@ class wxPythonDemo(wxFrame):
 
     #---------------------------------------------
     def OnDemoMenu(self, event):
-        if _useSplitter:
-            try:
-                selectedDemo = self.treeMap[self.mainmenu.GetLabel(event.GetId())]
-            except:
-                selectedDemo = None
-            if selectedDemo:
-                self.tree.SelectItem(selectedDemo)
-                self.tree.EnsureVisible(selectedDemo)
-        else:
-            self.RunDemo(self.mainmenu.GetLabel(event.GetId()))
+        try:
+            selectedDemo = self.treeMap[self.mainmenu.GetLabel(event.GetId())]
+        except:
+            selectedDemo = None
+        if selectedDemo:
+            self.tree.SelectItem(selectedDemo)
+            self.tree.EnsureVisible(selectedDemo)
 
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 
 class MyApp(wxApp):
     def OnInit(self):
-        wxImage_AddHandler(wxJPEGHandler())
-        wxImage_AddHandler(wxPNGHandler())
-        wxImage_AddHandler(wxGIFHandler())
+        wxInitAllImageHandlers()
 
         self.splash = SplashScreen(None, bitmapfile='bitmaps/splash.gif',
                               duration=4000, callback=self.AfterSplash)

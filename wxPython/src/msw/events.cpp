@@ -2345,6 +2345,60 @@ static PyObject *_wrap_wxKeyEvent_KeyCode(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxKeyEvent_GetKeyCode(_swigobj)  (_swigobj->GetKeyCode())
+static PyObject *_wrap_wxKeyEvent_GetKeyCode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxKeyEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxKeyEvent_GetKeyCode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_GetKeyCode. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxKeyEvent_GetKeyCode(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxKeyEvent_HasModifiers(_swigobj)  (_swigobj->HasModifiers())
+static PyObject *_wrap_wxKeyEvent_HasModifiers(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxKeyEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxKeyEvent_HasModifiers",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_HasModifiers. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxKeyEvent_HasModifiers(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxKeyEvent_GetX(_swigobj)  (_swigobj->GetX())
 static PyObject *_wrap_wxKeyEvent_GetX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5105,6 +5159,8 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxKeyEvent_GetPosition", (PyCFunction) _wrap_wxKeyEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_GetY", (PyCFunction) _wrap_wxKeyEvent_GetY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_GetX", (PyCFunction) _wrap_wxKeyEvent_GetX, METH_VARARGS | METH_KEYWORDS },
+	 { "wxKeyEvent_HasModifiers", (PyCFunction) _wrap_wxKeyEvent_HasModifiers, METH_VARARGS | METH_KEYWORDS },
+	 { "wxKeyEvent_GetKeyCode", (PyCFunction) _wrap_wxKeyEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_KeyCode", (PyCFunction) _wrap_wxKeyEvent_KeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_ShiftDown", (PyCFunction) _wrap_wxKeyEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_AltDown", (PyCFunction) _wrap_wxKeyEvent_AltDown, METH_VARARGS | METH_KEYWORDS },
