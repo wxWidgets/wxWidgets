@@ -19,12 +19,12 @@ Compilation
 a) under Win32 with Visual C++: open the provided wxBase.dsw workspace. From
    it, you can build wxBase as a static library and/or as a DLL. Please see
 
-            http://www.wxwindows.org/vadim/wxDocs/buildmsw.html
+            http://zeitlin.online.fr/wxWindows/buildmsw.html
 
    for the instructions on how to use wxBase in your own projects. You can
    also download the precompiled binaries from
 
-            http://www.wxwindows.org/vadim/wxDocs/binaries.html
+            http://zeitlin.online.fr/wxWindows/binaries.html
 
    NB: it should be possible to compile wxBase with other compilers as well,
        if you managed to do this, please let me know so that your makefiles
