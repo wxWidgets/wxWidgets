@@ -177,7 +177,11 @@ public:
     // file tests
 
         // is the filename valid at all?
-    bool IsOk() const { return m_dirs.size() != 0 || !m_name.IsEmpty(); }
+    bool IsOk() const
+    { 
+        // we're fine if we have the path or the name or if we're a root dir
+        return m_dirs.size() != 0 || !m_name.IsEmpty() || !m_relative;
+    }
 
         // does the file with this name exists?
     bool FileExists() const;
