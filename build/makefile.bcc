@@ -44,7 +44,7 @@ CXXFLAGS =
 !endif
 # Standard linker flags 
 !ifndef LDFLAGS
-LDFLAGS = 
+LDFLAGS = -L$(BCCDIR)\lib
 !endif
 # Multiple libraries or single huge monolithic one? [0,1]
 !ifndef MONOLITHIC
