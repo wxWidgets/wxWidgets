@@ -3185,6 +3185,14 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
 
     Set(tm);
 
+    // finally check that the week day is consistent -- if we had it
+    if ( haveWDay && GetWeekDay() != wday )
+    {
+        wxLogDebug(_T("inconsistsnet week day in wxDateTime::ParseFormat()"));
+
+        return NULL;
+    }
+
     return input;
 }
 
