@@ -1052,12 +1052,12 @@ wxToolkitInfo& wxAppTraits::GetToolkitInfo()
                 case VER_PLATFORM_WIN32_CE:
                     s_ver = wxWINDOWS_CE;
                     break;
-#endif                    
+#endif
             }
         }
     }
 
-    static wxToolkitInfo info;    
+    static wxToolkitInfo info;
     info.versionMajor = s_major;
     info.versionMinor = s_minor;
     info.os = s_ver;
@@ -1231,4 +1231,63 @@ extern long wxCharsetToCodepage(const wxChar *name)
 }
 
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
+
+/*
+  Creates a hidden window with supplied window proc registering the class for
+  it if necesssary (i.e. the first time only). Caller is responsible for
+  destroying the window and unregistering the class (note that this must be
+  done because wxWindows may be used as a DLL and so may be loaded/unloaded
+  multiple times into/from the same process so we cna't rely on automatic
+  Windows class unregistration).
+
+  pclassname is a pointer to a caller stored classname, which must initially be
+  NULL. classname is the desired wndclass classname. If function succesfully
+  registers the class, pclassname will be set to classname.
+ */
+extern "C" HWND
+wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc)
+{
+    wxCHECK_MSG( classname && pclassname && wndproc, NULL,
+                    _T("NULL parameter in wxCreateHiddenWindow") );
+
+    // register the class fi we need to first
+    if ( *pclassname == NULL )
+    {
+        WNDCLASS wndclass;
+        wxZeroMemory(wndclass);
+
+        wndclass.lpfnWndProc   = wndproc;
+        wndclass.hInstance     = wxGetInstance();
+        wndclass.lpszClassName = classname;
+
+        if ( !::RegisterClass(&wndclass) )
+        {
+            wxLogLastError(wxT("RegisterClass() in wxCreateHiddenWindow"));
+
+            return NULL;
+        }
+
+        *pclassname = classname;
+    }
+
+    // next create the window
+    HWND hwnd = ::CreateWindow
+                  (
+                    *pclassname,
+                    NULL,
+                    0, 0, 0, 0,
+                    0,
+                    (HWND) NULL,
+                    (HMENU)NULL,
+                    wxGetInstance(),
+                    (LPVOID) NULL
+                  );
+
+    if ( !hwnd )
+    {
+        wxLogLastError(wxT("CreateWindow() in wxCreateHiddenWindow"));
+    }
+
+    return hwnd;
+}
 

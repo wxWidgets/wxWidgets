@@ -35,6 +35,7 @@ protected:
     void Init();
 
     long m_id;
+    WXHWND m_hwnd;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTimer)

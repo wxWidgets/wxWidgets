@@ -84,7 +84,10 @@ HINSTANCE wxGetInstance(void);
 #endif
 
 #define CLASSNAME  TEXT("_GSocket_Internal_Window_Class")
-#define WINDOWNAME TEXT("_GSocket_Internal_Window_Name")
+
+/* implemented in utils.cpp */
+extern HWND
+wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 /* Maximum number of different GSocket objects at a given time.
  * This value can be modified at will, but it CANNOT be greater
@@ -109,28 +112,13 @@ static int firstAvailable;
 
 int _GSocket_GUI_Init(void)
 {
-  WNDCLASS winClass;
+  LPCTSTR pclassname;
   int i;
 
   /* Create internal window for event notifications */
-  winClass.style         = 0;
-  winClass.lpfnWndProc   = _GSocket_Internal_WinProc;
-  winClass.cbClsExtra    = 0;
-  winClass.cbWndExtra    = 0;
-  winClass.hInstance     = INSTANCE;
-  winClass.hIcon         = (HICON) NULL;
-  winClass.hCursor       = (HCURSOR) NULL;
-  winClass.hbrBackground = (HBRUSH) NULL;
-  winClass.lpszMenuName  = (LPCTSTR) NULL;
-  winClass.lpszClassName = CLASSNAME;
-
-  RegisterClass(&winClass);
-  hWin = CreateWindow(CLASSNAME,
-                      WINDOWNAME,
-                      0, 0, 0, 0, 0,
-                      (HWND) NULL, (HMENU) NULL, INSTANCE, (LPVOID) NULL);
-
-  if (!hWin) return FALSE;
+  hWin = wxCreateHiddenWindow(&pclassname, CLASSNAME, _GSocket_Internal_WinProc);
+  if (!hWin)
+      return FALSE;
 
   /* Initialize socket list */
   InitializeCriticalSection(&critical);
@@ -141,7 +129,7 @@ int _GSocket_GUI_Init(void)
   }
   firstAvailable = 0;
 
-  return 1;
+  return TRUE;
 }
 
 void _GSocket_GUI_Cleanup(void)

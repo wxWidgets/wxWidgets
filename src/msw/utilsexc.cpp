@@ -35,12 +35,12 @@
     #include "wx/log.h"
 #endif
 
-#ifdef __WIN32__
-    #include "wx/stream.h"
-    #include "wx/process.h"
-#endif
+#include "wx/stream.h"
+#include "wx/process.h"
 
 #include "wx/apptrait.h"
+
+#include "wx/module.h"
 
 #include "wx/msw/private.h"
 
@@ -58,14 +58,14 @@
     #include <sys/stat.h>
 #endif
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-#ifndef __UNIX__
-    #include <io.h>
-#endif
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+    #ifndef __UNIX__
+        #include <io.h>
+    #endif
 
-#ifndef __GNUWIN32__
-#include <shellapi.h>
-#endif
+    #ifndef __GNUWIN32__
+        #include <shellapi.h>
+    #endif
 #endif
 
 #include <stdio.h>
@@ -82,6 +82,10 @@
     #include "wx/dde.h"         // for WX_DDE hack in wxExecute
 #endif // wxUSE_IPC
 
+// implemented in utils.cpp
+extern "C" HWND
+wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -96,6 +100,7 @@
 // we need to create a hidden window to receive the process termination
 // notifications and for this we need a (Win) class name for it which we will
 // register the first time it's needed
+static const wxChar *wxMSWEXEC_WNDCLASSNAME = wxT("_wxExecute_Internal_Class");
 static const wxChar *gs_classForHiddenWindow = NULL;
 
 // ----------------------------------------------------------------------------
@@ -124,7 +129,28 @@ public:
     bool       state;         // set to FALSE when the process finishes
 };
 
-#if defined(__WIN32__) && wxUSE_STREAMS && !defined(__WXWINCE__)
+class wxExecuteModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit()
+    {
+        if ( *gs_classForHiddenWindow )
+        {
+            if ( !::UnregisterClass(wxMSWEXEC_WNDCLASSNAME, wxGetInstance()) )
+            {
+                wxLogLastError(_T("UnregisterClass(wxExecClass)"));
+            }
+
+            gs_classForHiddenWindow = NULL;
+        }
+    }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxExecuteModule)
+};
+
+#if wxUSE_STREAMS && !defined(__WXWINCE__)
 
 // ----------------------------------------------------------------------------
 // wxPipeStreams
@@ -257,8 +283,6 @@ private:
 // ============================================================================
 // implementation
 // ============================================================================
-
-#ifdef __WIN32__
 
 // ----------------------------------------------------------------------------
 // process termination detecting support
@@ -437,8 +461,6 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
 }
 
 #endif // wxUSE_STREAMS
-
-#endif // Win32
 
 // ============================================================================
 // wxExecute functions family
@@ -738,36 +760,15 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
     }
 #endif // wxUSE_STREAMS
 
-    // register the class for the hidden window used for the notifications
-    if ( !gs_classForHiddenWindow )
-    {
-        gs_classForHiddenWindow = _T("wxHiddenWindow");
-
-        WNDCLASS wndclass;
-        wxZeroMemory(wndclass);
-        wndclass.lpfnWndProc   = (WNDPROC)wxExecuteWindowCbk;
-        wndclass.hInstance     = wxGetInstance();
-        wndclass.lpszClassName = gs_classForHiddenWindow;
-
-        if ( !::RegisterClass(&wndclass) )
-        {
-            wxLogLastError(wxT("RegisterClass(hidden window)"));
-        }
-    }
-
     // create a hidden window to receive notification about process
     // termination
-#ifdef __WXWINCE__
-    HWND hwnd = ::CreateWindow(gs_classForHiddenWindow, NULL,
-                               WS_OVERLAPPED,
-                               0, 0, 0, 0, NULL,
-                               (HMENU)NULL, wxGetInstance(), 0);
-#else
-    HWND hwnd = ::CreateWindow(gs_classForHiddenWindow, NULL,
-                               WS_OVERLAPPEDWINDOW,
-                               0, 0, 0, 0, NULL,
-                               (HMENU)NULL, wxGetInstance(), 0);
-#endif
+    HWND hwnd = wxCreateHiddenWindow
+                (
+                    &gs_classForHiddenWindow,
+                    wxMSWEXEC_WNDCLASSNAME,
+                    (WNDPROC)wxExecuteWindowCbk
+                );
+
     wxASSERT_MSG( hwnd, wxT("can't create a hidden window for wxExecute") );
 
     // Alloc data
