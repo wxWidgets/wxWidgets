@@ -289,6 +289,10 @@ SOURCE=.\common\hash.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\hashmap.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\helpbase.cpp
 # End Source File
 # Begin Source File
@@ -1570,6 +1574,10 @@ SOURCE=..\include\wx\hash.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\hashmap.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\help.h
 # End Source File
 # Begin Source File
@@ -2019,10 +2027,6 @@ SOURCE=..\include\wx\txtstrm.h
 # Begin Source File
 
 SOURCE=..\include\wx\types.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\unzip.h
 # End Source File
 # Begin Source File
 

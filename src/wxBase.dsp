@@ -353,6 +353,10 @@ SOURCE=.\common\hash.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\hashmap.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\http.cpp
 # End Source File
 # Begin Source File
@@ -789,6 +793,10 @@ SOURCE=..\include\wx\hash.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\hashmap.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\intl.h
 # End Source File
 # Begin Source File
@@ -914,10 +922,6 @@ SOURCE=..\include\wx\tokenzr.h
 # Begin Source File
 
 SOURCE=..\include\wx\txtstrm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\unzip.h
 # End Source File
 # Begin Source File
 
