@@ -247,7 +247,10 @@ void yyerror(char *s)
 #define yywrap() 1
 #endif
 #else
-int yywrap() { return 1; }
+#  if !(defined(__VISAGECPP__) && __IBMC__ >= 400)
+/* VA 4.0 thinks this is multiply defined (in lex_yy.c) */
+   int yywrap() { return 1; }
+#  endif
 #endif
 #endif
 #line 247 "y_tab.c"
