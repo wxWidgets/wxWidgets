@@ -45,9 +45,11 @@ else:
 debug = 0
 
 g.helpText = """\
-<HTML><H2>Welcome to XRCed!</H2><H3><font color="green">DON'T PANIC :)</font></H3>
+<HTML><H2>Welcome to XRC<font color="blue">ed</font></H2><H3><font color="green">DON'T PANIC :)</font></H3>
+Read this note before clicking on anything!<P>
 To start select tree root, then popup menu with your right mouse button,
 select "Append Child", and then any command.<P>
+Or just press one of the buttons on the tools palette.<P>
 Enter XML ID, change properties, create children.<P>
 To test your interface select Test command (View menu).<P>
 Consult README file for the details.</HTML>
