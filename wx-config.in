@@ -15,8 +15,8 @@ inplace_flag=no
 usage()
 {
     cat <<EOF
-Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--static]
-                 [--libs] [--gl-libs]
+Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--release]
+                 [--basename] [--static] [--libs] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
                  [--cc] [--cxx] [--ld]
                  [--inplace]
@@ -105,6 +105,14 @@ while test $# -gt 0; do
       ;;
     --version)
       echo @WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
+      ;;
+    --release)
+      # Should echo @WX_RELEASE@ instead, but that doesn't seem to be replaced after 
+      # configure has run on this file.
+      echo @WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@
+      ;;
+    --basename)
+      echo @WX_LIBRARY_BASENAME@
       ;;
     --static)
       static_flag=yes
