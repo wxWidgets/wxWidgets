@@ -34,10 +34,6 @@
 
 #if wxUSE_TOOLBAR && defined(__WIN16__)
 
-#if !defined(__WIN32__) && !wxUSE_IMAGE_LOADING_IN_MSW
-    #error wxToolBar needs wxUSE_IMAGE_LOADING_IN_MSW under Win16
-#endif
-
 #if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
     #include "malloc.h"
 #endif

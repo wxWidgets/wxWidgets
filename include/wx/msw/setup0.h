@@ -859,12 +859,6 @@
                                 // supported this makes easier the issue
                                 // of portable icons and bitmaps.
 
-#define wxUSE_IMAGE_LOADING_IN_MSW        1
-                                // Use dynamic DIB loading/saving code in utils/dib under MSW.
-#define wxUSE_RESOURCE_LOADING_IN_MSW     1
-                                // Use dynamic icon/cursor loading/saving code
-                                // under MSW.
-
 // use wxExpr (a.k.a. PrologIO)
 #define wxUSE_PROLOGIO          0
 
