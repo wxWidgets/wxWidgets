@@ -36,10 +36,11 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/sizer.h"
 
 #include "widgets.h"
-#if 1
+
 #include "icons/button.xpm"
 
 // ----------------------------------------------------------------------------
@@ -321,7 +322,7 @@ void ButtonWidgetsPage::CreateButton()
 #ifdef __WXUNIVERSAL__
     if ( m_chkImage->GetValue() )
     {
-        m_button->SetImageLabel(wxTheApp->GetStdIcon(wxICON_INFORMATION));
+        m_button->SetImageLabel(wxArtProvider::GetIcon(wxART_INFORMATION));
     }
 #endif // wxUniv
 
@@ -370,4 +371,3 @@ void ButtonWidgetsPage::OnButton(wxCommandEvent& event)
     wxLogMessage(_T("Test button clicked."));
 }
 
-#endif
