@@ -68,7 +68,7 @@ calctrl.cpp	Generic
 caret.cpp	Generic	NotMSW
 choicdgg.cpp	Generic
 colrdlgg.cpp	Generic	Generic
-dcpsg.cpp	Generic	NotMSW
+dcpsg.cpp	Generic
 dirctrlg.cpp	Generic
 dirdlgg.cpp	Generic	NotWin32,NotOS2,NotMac
 dragimgg.cpp	Generic	NotOS2

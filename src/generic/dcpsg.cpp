@@ -37,7 +37,7 @@
 #include "wx/image.h"
 #include "wx/log.h"
 #include "wx/generic/dcpsg.h"
-#include "wx/generic/prntdlgg.h"
+#include "wx/printdlg.h"
 #include "wx/button.h"
 #include "wx/stattext.h"
 #include "wx/radiobox.h"
