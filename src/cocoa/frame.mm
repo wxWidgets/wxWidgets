@@ -9,13 +9,17 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/frame.h"
-#include "wx/menu.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+    #include "wx/frame.h"
+    #include "wx/menu.h"
+    #include "wx/toolbar.h"
+    #include "wx/statusbr.h"
+#endif // WX_PRECOMP
+
 #include "wx/menuitem.h"
-#include "wx/app.h"
-#include "wx/log.h"
-#include "wx/statusbr.h"
-#include "wx/toolbar.h"
 
 #include "wx/cocoa/autorelease.h"
 
@@ -95,8 +99,10 @@ void wxFrame::CocoaSetWxWindowSize(int width, int height)
 {
     if(m_frameStatusBar)
         height += m_frameStatusBar->GetSize().y;
+#if wxUSE_TOOLBAR
     if(m_frameToolBar)
         height += m_frameToolBar->GetSize().y;
+#endif //wxUSE_TOOLBAR
     wxTopLevelWindow::CocoaSetWxWindowSize(width,height);
 }
 
@@ -121,6 +127,7 @@ void wxFrame::UpdateFrameNSView()
     }
     NSRect frameRect = [m_frameNSView frame];
     float tbarheight = 0.0;
+#if wxUSE_TOOLBAR
     if(m_frameToolBar)
     {
         NSView *tbarNSView = m_frameToolBar->GetNSViewForSuperview();
@@ -135,6 +142,7 @@ void wxFrame::UpdateFrameNSView()
         [tbarNSView setAutoresizingMask: NSViewWidthSizable|NSViewMinYMargin];
         tbarheight = tbarRect.size.height;
     }
+#endif //wxUSE_TOOLBAR
     float sbarheight = 0.0;
     if(m_frameStatusBar)
     {
@@ -170,7 +178,7 @@ void wxFrame::SetStatusBar(wxStatusBar *statusbar)
         [m_frameStatusBar->GetNSViewForSuperview() removeFromSuperview];
         [m_frameStatusBar->GetNSViewForSuperview() setAutoresizingMask: NSViewMinYMargin];
         if(m_frameStatusBar->GetParent())
-            m_frameStatusBar->GetParent()->CocoaAddChild(m_frameToolBar);
+            m_frameStatusBar->GetParent()->CocoaAddChild(m_frameStatusBar);
     }
     m_frameStatusBar = statusbar;
     if(m_frameStatusBar)
@@ -194,6 +202,7 @@ wxStatusBar* wxFrame::CreateStatusBar(int number,
     return m_frameStatusBar;
 }
 
+#if wxUSE_TOOLBAR
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
     if(m_frameToolBar)
@@ -223,6 +232,7 @@ wxToolBar* wxFrame::CreateToolBar(long style,
     UpdateFrameNSView();
     return m_frameToolBar;
 }
+#endif // wxUSE_TOOLBAR
 
 void wxFrame::PositionStatusBar()
 {
