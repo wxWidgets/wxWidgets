@@ -323,7 +323,6 @@ bool wxAppBase::ProcessIdle()
     wxIdleEvent event;
     bool needMore = FALSE;
     wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
-    node = wxTopLevelWindows.GetFirst();
     while (node)
     {
         wxWindow* win = node->GetData();

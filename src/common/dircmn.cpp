@@ -100,7 +100,7 @@ size_t wxDir::Traverse(wxDirTraverser& sink,
         wxString dirname;
         for ( bool cont = GetFirst(&dirname, _T(""), wxDIR_DIRS | wxDIR_HIDDEN);
               cont;
-              cont = GetNext(&dirname) )
+              cont = cont && GetNext(&dirname) )
         {
             const wxString fulldirname = prefix + dirname;
 

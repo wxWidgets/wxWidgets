@@ -257,11 +257,10 @@ wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
 // (in seconds)
 static int GetTimeZone()
 {
+#ifdef WX_GMTOFF_IN_TM
     // set to TRUE when the timezone is set
     static bool s_timezoneSet = FALSE;
-#ifdef WX_GMTOFF_IN_TM
     static long gmtoffset = LONG_MAX; // invalid timezone
-#endif
 
     // ensure that the timezone variable is set by calling localtime
     if ( !s_timezoneSet )
@@ -274,19 +273,16 @@ static int GetTimeZone()
         tm = localtime(&t);
         s_timezoneSet = TRUE;
 
-#ifdef WX_GMTOFF_IN_TM
         // note that GMT offset is the opposite of time zone and so to return
         // consistent results in both WX_GMTOFF_IN_TM and !WX_GMTOFF_IN_TM
         // cases we have to negate it
         gmtoffset = -tm->tm_gmtoff;
-#endif
     }
 
-#ifdef WX_GMTOFF_IN_TM
     return (int)gmtoffset;
-#else
+#else // !WX_GMTOFF_IN_TM
     return (int)WX_TIMEZONE;
-#endif
+#endif // WX_GMTOFF_IN_TM/!WX_GMTOFF_IN_TM
 }
 
 // return the integral part of the JDN for the midnight of the given date (to
