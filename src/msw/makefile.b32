@@ -127,7 +127,7 @@ COMMONOBJS = \
   $(MSWDIR)\wxexpr.obj \
   $(MSWDIR)\y_tab.obj \
   $(MSWDIR)\stream.obj \
-  $(MSWDIR)\fstream.obj \
+  $(MSWDIR)\wfstream.obj \
   $(MSWDIR)\mstream.obj \
   $(MSWDIR)\zstream.obj \
   $(MSWDIR)\datstrm.obj \
@@ -542,7 +542,7 @@ $(MSWDIR)\mstream.obj:	$(COMMDIR)\mstream.$(SRCSUFF)
 
 $(MSWDIR)\zstream.obj:	$(COMMDIR)\zstream.$(SRCSUFF)
 
-$(MSWDIR)\fstream.obj:	$(COMMDIR)\fstream.$(SRCSUFF)
+$(MSWDIR)\wfstream.obj:	$(COMMDIR)\wfstream.$(SRCSUFF)
 
 $(MSWDIR)\stream.obj:	$(COMMDIR)\stream.$(SRCSUFF)
 

@@ -118,7 +118,7 @@ COMMONOBJS = \
   $(COMMDIR)/tokenzr.$(OBJSUFF) \
   $(COMMDIR)/y_tab.$(OBJSUFF) \
   $(COMMDIR)/stream.$(OBJSUFF) \
-  $(COMMDIR)/fstream.$(OBJSUFF) \
+  $(COMMDIR)/wfstream.$(OBJSUFF) \
   $(COMMDIR)/mstream.$(OBJSUFF) \
   $(COMMDIR)/zstream.$(OBJSUFF) \
   $(COMMDIR)/datstrm.$(OBJSUFF) \

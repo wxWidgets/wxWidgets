@@ -110,7 +110,7 @@ COMMONOBJS = \
   $(COMMDIR)\time.obj \
   $(COMMDIR)\y_tab.obj \
   $(COMMDIR)\stream.obj \
-  $(COMMDIR)\fstream.obj \
+  $(COMMDIR)\wfstream.obj \
   $(COMMDIR)\mstream.obj \
   $(COMMDIR)\zstream.obj \
   $(COMMDIR)\datstrm.obj \
@@ -853,7 +853,7 @@ $(COMMDIR)/stream.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(COMMDIR)/fstream.obj:     $*.$(SRCSUFF)
+$(COMMDIR)/wfstream.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
