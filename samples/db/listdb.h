@@ -84,7 +84,7 @@ class ClookUpDlg : public wxDialog
         //    1) 2 columns rather than one
         //    2) The ability to select DISTINCT column values
         //
-        // Only set distinctValues equal to TRUE if necessary.  In many cases, the constraints
+        // Only set distinctValues equal to true if necessary.  In many cases, the constraints
         // of the index(es) will enforce this uniqueness.  Selecting DISTINCT does require
         // overhead by the database to ensure that all values returned are distinct.  Therefore,
         // use this ONLY when you need it.
@@ -113,7 +113,7 @@ class ClookUpDlg : public wxDialog
                     bool     distinctValues,            // e.g. SELECT DISTINCT ...
                     wxChar  *selectStmt = 0,            // If you wish to query by SQLstmt (complicated lookups)
                     int      maxLenCol1 = 0,            // Mandatory if querying by SQLstmt
-                    bool     allowOk    = TRUE);        // is the OK button enabled
+                    bool     allowOk    = true);        // is the OK button enabled
 
         void        OnButton( wxCommandEvent &event );
         void        OnCommand(wxWindow& win, wxCommandEvent& event);
