@@ -26,6 +26,10 @@ Unix:
 wxGTK:
 
 - Improved wxSystemSettings::GetMetric() to work better with X11. (Mart Raudsepp)
+- Corrected wxListBox selection handling
+- Corrected default button size handling for different themes
+- Corrected splitter sash size and look for different themes
+- Fixed keyboard input for dead-keys
 
 wxPalmOS:
 
