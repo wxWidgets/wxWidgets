@@ -900,6 +900,15 @@ public:
 #endif // debug
 };
 
+class WXDLLEXPORT wxNcPaintEvent : public wxEvent
+{
+public:
+    wxNcPaintEvent(int id = 0) : wxEvent(id) { SetEventType(wxEVT_NC_PAINT); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxNcPaintEvent)
+};
+
 // Erase background event class
 /*
  wxEVT_ERASE_BACKGROUND
@@ -1639,6 +1648,7 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_END_SESSION(func)  { wxEVT_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL },
 #define EVT_QUERY_END_SESSION(func)  { wxEVT_QUERY_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL },
 #define EVT_PAINT(func)  { wxEVT_PAINT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaintEventFunction) & func, (wxObject *) NULL },
+#define EVT_NC_PAINT(func)  { wxEVT_NC_PAINT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaintEventFunction) & func, (wxObject *) NULL },
 #define EVT_ERASE_BACKGROUND(func)  { wxEVT_ERASE_BACKGROUND, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxEraseEventFunction) & func, (wxObject *) NULL },
 #define EVT_CHAR(func)  { wxEVT_CHAR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL },
 #define EVT_KEY_DOWN(func)  { wxEVT_KEY_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL },

@@ -702,6 +702,10 @@ static int gtk_window_expose_callback( GtkWidget *widget,
             eevent.SetEventObject( win );
             win->GetEventHandler()->ProcessEvent(eevent);
 
+            wxNcPaintEvent eventNc( win->GetId() );
+            eventNc.SetEventObject( win );
+            win->GetEventHandler()->ProcessEvent( eventNc );
+
             wxPaintEvent event( win->GetId() );
             event.SetEventObject( win );
             win->GetEventHandler()->ProcessEvent( event );
@@ -809,6 +813,10 @@ static void gtk_window_draw_callback( GtkWidget *widget,
     wxEraseEvent eevent( win->GetId(), &dc );
     eevent.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent(eevent);
+
+    wxNcPaintEvent eventNc( win->GetId() );
+    eventNc.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( eventNc );
 
     wxPaintEvent event( win->GetId() );
     event.SetEventObject( win );

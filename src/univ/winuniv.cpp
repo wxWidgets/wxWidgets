@@ -59,6 +59,7 @@ BEGIN_EVENT_TABLE(wxWindow, wxWindowNative)
     EVT_SIZE(wxWindow::OnSize)
 
     EVT_PAINT(wxWindow::OnPaint)
+    EVT_NC_PAINT(wxWindow::OnNcPaint)
     EVT_ERASE_BACKGROUND(wxWindow::OnErase)
 END_EVENT_TABLE()
 
@@ -168,7 +169,20 @@ void wxWindow::OnErase(wxEraseEvent& event)
     }
 }
 
-// the event handler executed when the window must be repainted
+// the event handlers executed when the window must be repainted
+void wxWindow::OnNcPaint(wxPaintEvent& event)
+{
+    if ( m_renderer )
+    {
+        // get the DC to use and create renderer on it
+        wxWindowDC dc(this);
+        wxControlRenderer renderer(this, dc, m_renderer);
+
+        // draw the border
+        DoDrawBorder(&renderer);
+    }
+}
+
 void wxWindow::OnPaint(wxPaintEvent& event)
 {
     if ( !m_renderer )
@@ -182,10 +196,7 @@ void wxWindow::OnPaint(wxPaintEvent& event)
         wxPaintDC dc(this);
         wxControlRenderer renderer(this, dc, m_renderer);
 
-        // first, draw the border
-        DoDrawBorder(&renderer);
-
-        // and then draw the control
+        // draw the control
         DoDraw(&renderer);
     }
 }

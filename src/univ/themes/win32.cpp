@@ -165,6 +165,8 @@ public:
         { return wxSize(13, 13); }
     virtual wxSize GetRadioBitmapSize() const
         { return wxSize(13, 13); }
+    virtual wxCoord GetCheckItemMargin() const
+        { return 0; }
 
 protected:
     // common part of DrawLabel() and DrawItem()

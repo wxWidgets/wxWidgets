@@ -7,4 +7,5 @@ MSW
 
 GTK
 
-* check/radio box remains pressed
+* check/radio box remains pressed in win32 mode
+* wxCheckListBox::HitTest doesn't work (clicking the check)

@@ -206,9 +206,9 @@ void wxCheckBox::Release()
 
 void wxCheckBox::Toggle()
 {
-    ChangeValue(!GetValue());
-
     m_isPressed = FALSE;
+
+    ChangeValue(!GetValue());
 }
 
 void wxCheckBox::ChangeValue(bool value)

@@ -223,6 +223,7 @@ public:
     // get the size of a checkbox/radio button bitmap
     virtual wxSize GetCheckBitmapSize() const = 0;
     virtual wxSize GetRadioBitmapSize() const = 0;
+    virtual wxCoord GetCheckItemMargin() const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -390,6 +391,8 @@ public:
         { return m_renderer->GetCheckBitmapSize(); }
     virtual wxSize GetRadioBitmapSize() const
         { return m_renderer->GetRadioBitmapSize(); }
+    virtual wxCoord GetCheckItemMargin() const
+        { return m_renderer->GetCheckItemMargin(); }
 
 protected:
     wxRenderer *m_renderer;

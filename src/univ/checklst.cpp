@@ -217,9 +217,13 @@ bool wxStdCheckListboxInputHandler::HandleMouse(wxControl *control,
 
         const wxPoint& pt = event.GetPosition();
         lbox->CalcUnscrolledPosition(pt.x, pt.y, &x, &y);
+
+        wxRenderer *renderer = lbox->GetRenderer();
+        x -= renderer->GetCheckItemMargin();
+
         int item = y / lbox->GetLineHeight();
         if ( x >= 0 &&
-             x < lbox->GetRenderer()->GetCheckBitmapSize().x &&
+             x < renderer->GetCheckBitmapSize().x &&
              item >= 0 &&
              item < lbox->GetCount() )
         {

@@ -150,6 +150,8 @@ public:
         { return wxSize(10, 10); }
     virtual wxSize GetRadioBitmapSize() const
         { return wxSize(11, 11); }
+    virtual wxCoord GetCheckItemMargin() const
+        { return 2; }
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -954,7 +956,17 @@ void wxGTKRenderer::DrawCheckItem(wxDC& dc,
                                   const wxRect& rect,
                                   int flags)
 {
-    DrawCheckButton(dc, label, bitmap, rect, flags);
+    wxRect rectBitmap = rect;
+    rectBitmap.x -= 1;
+    rectBitmap.width = GetCheckBitmapSize().x;
+    // never draw the focus rect around the check indicators here
+    DrawCheckButton(dc, _T(""), bitmap, rectBitmap, flags & ~wxCONTROL_FOCUSED);
+
+    wxRect rectLabel = rect;
+    wxCoord shift = rectBitmap.width + 2*GetCheckItemMargin(); 
+    rectLabel.x += shift;
+    rectLabel.width -= shift;
+    DrawItem(dc, label, rectLabel, flags);
 }
 
 // ----------------------------------------------------------------------------
