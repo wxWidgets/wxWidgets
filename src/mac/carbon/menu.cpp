@@ -551,8 +551,10 @@ void wxMenuBar::MacInstallMenuBar()
     verify_noerr( CreateNewMenu( kwxMacAppleMenuId , 0 , &appleMenu ) ) ;
     verify_noerr( SetMenuTitle( appleMenu , (ConstStr255Param) appleMenuTitle ) );
 
-//under 10.3 it is a standard to include a seperator between About and Preferences
-#if ( MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2 )
+//RN: under 10.3 it is a standard to include a seperator between About and Preferences
+//    10.2 and less are inconsistant about this, but in the interest of being more
+//    consistant with future OS's, we're choosing to include the seperator.
+#if TARGET_API_MAC_OSX
     MacInsertMenuItem( appleMenu , "\p-" , 0 ) ;
 #endif
 
