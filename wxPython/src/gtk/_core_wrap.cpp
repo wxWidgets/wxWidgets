@@ -26843,8 +26843,8 @@ static PyObject *_wrap_Window_PopupMenuXY(PyObject *self, PyObject *args, PyObje
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxMenu *arg2 = (wxMenu *) 0 ;
-    int arg3 ;
-    int arg4 ;
+    int arg3 = (int) -1 ;
+    int arg4 = (int) -1 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -26854,15 +26854,19 @@ static PyObject *_wrap_Window_PopupMenuXY(PyObject *self, PyObject *args, PyObje
         (char *) "self",(char *) "menu",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:Window_PopupMenuXY",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:Window_PopupMenuXY",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxMenu,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
-    arg4 = (int) SWIG_AsInt(obj3); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        arg4 = (int) SWIG_AsInt(obj3); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->PopupMenu(arg2,arg3,arg4);
@@ -26883,7 +26887,8 @@ static PyObject *_wrap_Window_PopupMenu(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxMenu *arg2 = (wxMenu *) 0 ;
-    wxPoint *arg3 = 0 ;
+    wxPoint const &arg3_defvalue = wxDefaultPosition ;
+    wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     bool result;
     wxPoint temp3 ;
     PyObject * obj0 = 0 ;
@@ -26893,14 +26898,16 @@ static PyObject *_wrap_Window_PopupMenu(PyObject *self, PyObject *args, PyObject
         (char *) "self",(char *) "menu",(char *) "pos", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Window_PopupMenu",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:Window_PopupMenu",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxMenu,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        arg3 = &temp3;
-        if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = &temp3;
+            if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();

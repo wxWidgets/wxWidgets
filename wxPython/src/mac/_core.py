@@ -6928,23 +6928,25 @@ class Window(EvtHandler):
 
     def PopupMenuXY(*args, **kwargs):
         """
-        PopupMenuXY(self, Menu menu, int x, int y) -> bool
+        PopupMenuXY(self, Menu menu, int x=-1, int y=-1) -> bool
 
-        Pops up the given menu at the specified coordinates, relative to this
-        window, and returns control when the user has dismissed the menu. If a
-        menu item is selected, the corresponding menu event is generated and
-        will be processed as usual.
+        Pops up the given menu at the specified coordinates, relative to this window,
+        and returns control when the user has dismissed the menu. If a menu item is
+        selected, the corresponding menu event is generated and will be processed as
+        usual.  If the default position is given then the current position of the
+        mouse cursor will be used.
         """
         return _core_.Window_PopupMenuXY(*args, **kwargs)
 
     def PopupMenu(*args, **kwargs):
         """
-        PopupMenu(self, Menu menu, Point pos) -> bool
+        PopupMenu(self, Menu menu, Point pos=DefaultPosition) -> bool
 
-        Pops up the given menu at the specified coordinates, relative to this
-        window, and returns control when the user has dismissed the menu. If a
-        menu item is selected, the corresponding menu event is generated and
-        will be processed as usual.
+        Pops up the given menu at the specified coordinates, relative to this window,
+        and returns control when the user has dismissed the menu. If a menu item is
+        selected, the corresponding menu event is generated and will be processed as
+        usual.  If the default position is given then the current position of the
+        mouse cursor will be used.
         """
         return _core_.Window_PopupMenu(*args, **kwargs)
 
