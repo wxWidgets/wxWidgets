@@ -503,12 +503,10 @@ DocStr(wxFontDialog,
 class wxFontDialog : public wxDialog {
 public:
     %pythonAppend wxFontDialog   "self._setOORInfo(self)"
-    %nokwargs wxFontDialog;
 
     DocStr(wxFontDialog,
-           "Constructor. Pass a parent window, and optionally the font data object to be\n"
+           "Constructor. Pass a parent window and the FontData object to be\n"
            "used to initialize the dialog controls.");
-    wxFontDialog(wxWindow* parent);
     wxFontDialog(wxWindow* parent, const wxFontData& data);
 
     
