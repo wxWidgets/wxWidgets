@@ -196,10 +196,11 @@ Source: "scripts\pyshell";                  DestDir: "{code:GetPythonDir}\Script
 Source: "scripts\pycrust";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: core
 Source: "scripts\pywrap";                   DestDir: "{code:GetPythonDir}\Scripts"; Components: core
 Source: "scripts\xrced";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: core
-Source: "%(WXDIR)s\lib\vc_dll\wxrc.exe";           DestDir: "{code:GetPythonDir}\Scripts"; Components: core
+Source: "%(WXDIR)s\lib\vc_dll\wxrc.exe";    DestDir: "{code:GetPythonDir}\Scripts"; Components: core
 
 Source: "samples\doodle\*.py";              DestDir: "{app}\wx\samples\doodle"; Components: samples
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wx\samples\doodle"; Components: samples
+Source: "samples\doodle\*.bat";             DestDir: "{app}\wx\samples\doodle"; Components: samples
 Source: "samples\doodle\sample.ddl";        DestDir: "{app}\wx\samples\doodle"; Components: samples
 Source: "samples\doodle\superdoodle.iss";   DestDir: "{app}\wx\samples\doodle"; Components: samples
 
