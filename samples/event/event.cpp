@@ -38,6 +38,33 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// event constants
+// ----------------------------------------------------------------------------
+
+// declare a custom event type
+//
+// note that in wxWin 2.3+ these macros expand simply into the following code:
+//
+//  extern const wxEventType wxEVT_MY_CUSTOM_COMMAND;
+//
+//  const wxEventType wxEVT_MY_CUSTOM_COMMAND = wxNewEventType();
+//
+// and you may use this code directly if you don't care about 2.2 compatibility
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_EVENT_TYPE(wxEVT_MY_CUSTOM_COMMAND, 7777)
+END_DECLARE_EVENT_TYPES()
+
+DEFINE_EVENT_TYPE(wxEVT_MY_CUSTOM_COMMAND)
+
+// it may also be convenient to define an event table macro for this event type
+#define EVT_MY_CUSTOM_COMMAND(id, fn) \
+    DECLARE_EVENT_TABLE_ENTRY( \
+        wxEVT_MY_CUSTOM_COMMAND, id, -1, \
+        (wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction)&fn, \
+        (wxObject *) NULL \
+    ),
+
+// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
@@ -69,6 +96,9 @@ public:
     void OnPushEventHandler(wxCommandEvent& event);
     void OnPopEventHandler(wxCommandEvent& event);
     void OnTest(wxCommandEvent& event);
+
+    void OnFireCustom(wxCommandEvent& event);
+    void OnProcessCustom(wxCommandEvent& event);
 
     void OnUpdateUIPop(wxUpdateUIEvent& event);
 
@@ -116,6 +146,7 @@ enum
     Event_Dynamic,
     Event_Push,
     Event_Pop,
+    Event_Custom,
     Event_Test
 };
 
@@ -140,11 +171,14 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Event_Connect, MyFrame::OnConnect)
 
+    EVT_MENU(Event_Custom, MyFrame::OnFireCustom)
     EVT_MENU(Event_Test, MyFrame::OnTest)
     EVT_MENU(Event_Push, MyFrame::OnPushEventHandler)
     EVT_MENU(Event_Pop, MyFrame::OnPopEventHandler)
 
     EVT_UPDATE_UI(Event_Pop, MyFrame::OnUpdateUIPop)
+
+    EVT_MY_CUSTOM_COMMAND(-1, MyFrame::OnProcessCustom)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
@@ -170,8 +204,8 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame("Event wxWindows Sample",
-                                 wxPoint(50, 50), wxSize(450, 340));
+    MyFrame *frame = new MyFrame(_T("Event wxWindows Sample"),
+                                 wxPoint(50, 50), wxSize(600, 340));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -197,35 +231,38 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Event_About, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->Append(Event_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
     menuFile->AppendSeparator();
-    menuFile->Append(Event_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(Event_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     wxMenu *menuEvent = new wxMenu;
-    menuEvent->Append(Event_Connect, "&Connect\tCtrl-C",
-                     "Connect or disconnect the dynamic event handler",
+    menuEvent->Append(Event_Connect, _T("&Connect\tCtrl-C"),
+                     _T("Connect or disconnect the dynamic event handler"),
                      TRUE /* checkable */);
-    menuEvent->Append(Event_Dynamic, "&Dynamic event\tCtrl-D",
-                      "Dynamic event sample - only works after Connect");
+    menuEvent->Append(Event_Dynamic, _T("&Dynamic event\tCtrl-D"),
+                      _T("Dynamic event sample - only works after Connect"));
     menuEvent->AppendSeparator();
-    menuEvent->Append(Event_Push, "&Push event handler\tCtrl-P",
-                      "Push event handler for test event");
-    menuEvent->Append(Event_Pop, "P&op event handler\tCtrl-O",
-                      "Pop event handler for test event");
-    menuEvent->Append(Event_Test, "Test event\tCtrl-T",
-                      "Test event processed by pushed event handler");
+    menuEvent->Append(Event_Push, _T("&Push event handler\tCtrl-P"),
+                      _T("Push event handler for test event"));
+    menuEvent->Append(Event_Pop, _T("P&op event handler\tCtrl-O"),
+                      _T("Pop event handler for test event"));
+    menuEvent->Append(Event_Test, _T("Test event\tCtrl-T"),
+                      _T("Test event processed by pushed event handler"));
+    menuEvent->AppendSeparator();
+    menuEvent->Append(Event_Custom, _T("Fire c&ustom event\tCtrl-U"),
+                      _T("Generate a custom event"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuEvent, "&Event");
+    menuBar->Append(menuFile, _T("&File"));
+    menuBar->Append(menuEvent, _T("&Event"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
 #if wxUSE_STATUSBAR
     CreateStatusBar(3);
-    SetStatusText("Welcome to wxWindows event sample");
+    SetStatusText(_T("Welcome to wxWindows event sample"));
     SetStatusText(_T("Dynamic: off"), Status_Dynamic);
     SetStatusText(_T("Push count: 0"), Status_Push);
 #endif // wxUSE_STATUSBAR
@@ -320,5 +357,21 @@ void MyFrame::OnTest(wxCommandEvent& event)
 void MyFrame::OnUpdateUIPop(wxUpdateUIEvent& event)
 {
     event.Enable( m_nPush > 0 );
+}
+
+// ----------------------------------------------------------------------------
+// custom event methods
+// ----------------------------------------------------------------------------
+
+void MyFrame::OnFireCustom(wxCommandEvent& event)
+{
+    wxCommandEvent eventCustom(wxEVT_MY_CUSTOM_COMMAND);
+
+    wxPostEvent(this, eventCustom);
+}
+
+void MyFrame::OnProcessCustom(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Got a custom event!"));
 }
 
