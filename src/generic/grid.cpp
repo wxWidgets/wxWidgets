@@ -392,11 +392,11 @@ void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
 
 void wxGridCellEditor::StartingKey(wxKeyEvent& event)
 {
-    wxASSERT_MSG(m_control,
-                 wxT("The wxGridCellEditor must be Created first!"));
+    event.Skip();
+}
 
-    // pass the event to the control
-    m_control->GetEventHandler()->ProcessEvent(event);
+void wxGridCellEditor::StartingClick()
+{
 }
 
 // ----------------------------------------------------------------------------
@@ -590,9 +590,9 @@ void wxGridCellBoolEditor::Reset()
     CBox()->SetValue(m_startValue);
 }
 
-void wxGridCellBoolEditor::StartingKey(wxKeyEvent& event)
+void wxGridCellBoolEditor::StartingClick()
 {
-    event.Skip();
+    CBox()->SetValue(!CBox()->GetValue());
 }
 
 // ----------------------------------------------------------------------------
@@ -3179,6 +3179,11 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                          CanEnableCellControl())
                     {
                         EnableCellEditControl();
+
+                        wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
+                        attr->GetEditor()->StartingClick();
+                        attr->DecRef();
+
                         m_waitForSlowClick = FALSE;
                     }
                     else

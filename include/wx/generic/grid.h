@@ -167,6 +167,10 @@ public:
     // that first key if desired.
     virtual void StartingKey(wxKeyEvent& event);
 
+    // if the editor is enabled by clicking on the cell, this method will be
+    // called
+    virtual void StartingClick();
+
     // Some types of controls on some platforms may need some help
     // with the Return key.
     virtual void HandleReturn(wxKeyEvent& event);
@@ -227,7 +231,7 @@ public:
     virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
 
     virtual void Reset();
-    virtual void StartingKey(wxKeyEvent& event);
+    virtual void StartingClick();
 
 protected:
     wxCheckBox *CBox() const { return (wxCheckBox *)m_control; }
