@@ -405,6 +405,27 @@ private:
    DECLARE_NO_COPY_CLASS(SelectInHDC)
 };
 
+// a class for temporary bitmaps
+class CompatibleBitmap
+{
+public:
+    CompatibleBitmap(HDC hdc, int w, int h)
+    {
+        m_hbmp = ::CreateCompatibleBitmap(hdc, w, h);
+    }
+
+    ~CompatibleBitmap()
+    {
+        if ( m_hbmp )
+            ::DeleteObject(m_hbmp);
+    }
+
+    operator HBITMAP() const { return m_hbmp; }
+
+private:
+    HBITMAP m_hbmp;
+};
+
 // when working with global pointers (which is unfortunately still necessary
 // sometimes, e.g. for clipboard) it is important to unlock them exactly as
 // many times as we lock them which just asks for using a "smart lock" class
