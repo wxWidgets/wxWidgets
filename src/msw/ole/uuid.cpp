@@ -2,7 +2,7 @@
 // Name:        ole/uuid.cpp
 // Purpose:     implements Uuid class, see uuid.h for details
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     12.09.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -48,8 +48,8 @@
 // copy ctor
 Uuid::Uuid(const Uuid& uuid)
 {
-  // bitwise copy Ok for UUIDs 
-  m_uuid = uuid.m_uuid;              
+  // bitwise copy Ok for UUIDs
+  m_uuid = uuid.m_uuid;
 
   // force the string to be allocated by RPC
   // (we free it later with RpcStringFree)
@@ -89,11 +89,11 @@ Uuid& Uuid::operator=(const Uuid& uuid)
 }
 
 // dtor
-Uuid::~Uuid() 
-{ 
+Uuid::~Uuid()
+{
   // this string must be allocated by RPC!
   // (otherwise you get a debug breakpoint deep inside RPC DLL)
-  if ( m_pszUuid ) 
+  if ( m_pszUuid )
 #ifdef _UNICODE
     RpcStringFree((unsigned short **)&m_pszUuid);
 #else
@@ -129,7 +129,7 @@ void Uuid::Create()
 
   // can't fail
   UuidCreate(&uuid);
-  
+
   Set(uuid);
 }
 
@@ -143,7 +143,7 @@ bool Uuid::Set(const wxChar *pc)
   if ( UuidFromString((wxUChar *)pc, &m_uuid) != RPC_S_OK)
 #endif
     // failed: probably invalid string
-    return FALSE;
+    return false;
 
   // transform it back to string to normalize it
 #ifdef _UNICODE
@@ -155,7 +155,7 @@ bool Uuid::Set(const wxChar *pc)
   // update m_pszCForm
   UuidToCForm();
 
-  return TRUE;
+  return true;
 }
 
 // stores m_uuid in m_pszCForm in a format required by

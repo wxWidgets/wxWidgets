@@ -60,15 +60,15 @@
 // Implementation
 // ============================================================================
 
-// return TRUE if the iid is in the array
+// return true if the iid is in the array
 bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
 {
   for ( size_t i = 0; i < nCount; i++ ) {
     if ( riid == *aIids[i] )
-      return TRUE;
+      return true;
   }
 
-  return FALSE;
+  return false;
 }
 
 #if wxUSE_DATAOBJ

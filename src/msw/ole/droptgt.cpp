@@ -294,7 +294,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
         }
         //else: *pdwEffect is already DROPEFFECT_NONE
     }
-    //else: OnDrop() returned FALSE, no need to copy data
+    //else: OnDrop() returned false, no need to copy data
 
     // release the held object
     RELEASE_AND_NULL(m_pIDataObject);
@@ -335,7 +335,7 @@ bool wxDropTarget::Register(WXHWND hwnd)
     // Or maybe we can dynamically load them from ceshell.dll
     // or similar.
 #if defined(__WXWINCE__) && _WIN32_WCE >= 400
-    return FALSE;
+    return false;
 #else
     HRESULT hr;
 
@@ -344,7 +344,7 @@ bool wxDropTarget::Register(WXHWND hwnd)
     hr = ::CoLockObjectExternal(m_pIDropTarget, TRUE, FALSE);
     if ( FAILED(hr) ) {
         wxLogApiError(wxT("CoLockObjectExternal"), hr);
-        return FALSE;
+        return false;
     }
 #endif
 
@@ -355,13 +355,13 @@ bool wxDropTarget::Register(WXHWND hwnd)
         ::CoLockObjectExternal(m_pIDropTarget, FALSE, FALSE);
 #endif
         wxLogApiError(wxT("RegisterDragDrop"), hr);
-        return FALSE;
+        return false;
     }
 
     // we will need the window handle for coords transformation later
     m_pIDropTarget->SetHwnd((HWND)hwnd);
 
-    return TRUE;
+    return true;
 #endif
 }
 
@@ -389,11 +389,11 @@ void wxDropTarget::Revoke(WXHWND hwnd)
 // base class pure virtuals
 // ----------------------------------------------------------------------------
 
-// OnDrop() is called only if we previously returned TRUE from
+// OnDrop() is called only if we previously returned true from
 // IsAcceptedData(), so no need to check anything here
 bool wxDropTarget::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 {
-    return TRUE;
+    return true;
 }
 
 // copy the data from the data source to the target data object
@@ -404,7 +404,7 @@ bool wxDropTarget::GetData()
         // this is strange because IsAcceptedData() succeeded previously!
         wxFAIL_MSG(wxT("strange - did supported formats list change?"));
 
-        return FALSE;
+        return false;
     }
 
     STGMEDIUM stm;
@@ -415,7 +415,7 @@ bool wxDropTarget::GetData()
     fmtMemory.lindex    = -1;
     fmtMemory.tymed     = TYMED_HGLOBAL;  // TODO to add other media
 
-    bool rc = FALSE;
+    bool rc = false;
 
     HRESULT hr = m_pIDataSource->GetData(&fmtMemory, &stm);
     if ( SUCCEEDED(hr) ) {
@@ -423,7 +423,7 @@ bool wxDropTarget::GetData()
 
         hr = dataObject->SetData(&fmtMemory, &stm, TRUE);
         if ( SUCCEEDED(hr) ) {
-            rc = TRUE;
+            rc = true;
         }
         else {
             wxLogApiError(wxT("IDataObject::SetData()"), hr);

@@ -199,12 +199,12 @@ public:
 // Navigation and Hierarchy
 
         // Retrieves the child element or child object at a given point on the screen.
-        // All visual objects support this method; sound objects do not support it.    
+        // All visual objects support this method; sound objects do not support it.
 
     STDMETHODIMP accHitTest(long xLeft, long yLeft, VARIANT* pVarID);
 
         // Retrieves the specified object's current screen location. All visual objects must
-        // support this method; sound objects do not support it.    
+        // support this method; sound objects do not support it.
 
     STDMETHODIMP accLocation ( long* pxLeft, long* pyTop, long* pcxWidth, long* pcyHeight, VARIANT varID);
 
@@ -215,29 +215,29 @@ public:
 
         // Retrieves the address of an IDispatch interface for the specified child.
         // All objects must support this property.
-    
+
     STDMETHODIMP get_accChild ( VARIANT varChildID, IDispatch** ppDispChild);
 
         // Retrieves the number of children that belong to this object.
         // All objects must support this property.
-    
+
     STDMETHODIMP get_accChildCount ( long* pCountChildren);
 
         // Retrieves the IDispatch interface of the object's parent.
         // All objects support this property.
-    
+
     STDMETHODIMP get_accParent ( IDispatch** ppDispParent);
 
 // Descriptive Properties and Methods
 
         // Performs the object's default action. Not all objects have a default
         // action.
-    
+
     STDMETHODIMP accDoDefaultAction(VARIANT varID);
 
         // Retrieves a string that describes the object's default action.
         // Not all objects have a default action.
-    
+
     STDMETHODIMP get_accDefaultAction ( VARIANT varID, BSTR* pszDefaultAction);
 
         // Retrieves a string that describes the visual appearance of the specified object.
@@ -253,18 +253,18 @@ public:
         // Retrieves the full path of the WinHelp file associated with the specified
         // object and the identifier of the appropriate topic within that file.
         // Not all objects support this property.
-        
+
     STDMETHODIMP get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChild, long* pidTopic);
 
         // Retrieves the specified object's shortcut key or access key, also known as
         // the mnemonic. All objects that have a shortcut key or access key support
         // this property.
-        
+
     STDMETHODIMP get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKeyboardShortcut);
 
         // Retrieves the name of the specified object.
         // All objects support this property.
-    
+
     STDMETHODIMP get_accName ( VARIANT varID, BSTR* pszName);
 
         // Retrieves information that describes the role of the specified object.
@@ -274,9 +274,9 @@ public:
 
         // Retrieves the current state of the specified object.
         // All objects support this property.
-    
+
     STDMETHODIMP get_accState ( VARIANT varID, VARIANT* pVarState);
-    
+
         // Retrieves the value of the specified object.
         // Not all objects have a value.
 
@@ -292,12 +292,12 @@ public:
 
         // Retrieves the object that has the keyboard focus. All objects
         // that receive the keyboard focus must support this property.
-        
+
     STDMETHODIMP get_accFocus ( VARIANT* pVarID);
 
         // Retrieves the selected children of this object. All objects
         // selected must support this property.
-        
+
     STDMETHODIMP get_accSelection ( VARIANT * pVarChildren);
 
 // Obsolete
@@ -322,9 +322,9 @@ public:
 
         // Invoke
 
-    STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, 
-                        WORD wFlags, DISPPARAMS *pDispParams, 
-                        VARIANT *pVarResult, EXCEPINFO *pExcepInfo, 
+    STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
+                        WORD wFlags, DISPPARAMS *pDispParams,
+                        VARIANT *pVarResult, EXCEPINFO *pExcepInfo,
                         unsigned int *puArgErr );
 
 // Helpers
@@ -366,7 +366,7 @@ wxIAccessible::wxIAccessible(wxAccessible *pAccessible)
 }
 
 // Retrieves the child element or child object at a given point on the screen.
-// All visual objects support this method; sound objects do not support it.    
+// All visual objects support this method; sound objects do not support it.
 
 STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
 {
@@ -374,16 +374,16 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     wxAccessible* childObject = NULL;
     int childId = 0;
     VariantInit(pVarID);
-    
+
     wxAccStatus status = m_pAccessible->HitTest(wxPoint(xLeft, yLeft), & childId, & childObject);
-    
+
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
@@ -393,7 +393,7 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
         else
             return stdInterface->accHitTest(xLeft, yLeft, pVarID);
     }
-    
+
     if (childObject)
     {
         if (childObject == m_pAccessible)
@@ -408,9 +408,9 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
             if (!childIA)
                 return E_NOTIMPL;
 
-	        if (childIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarID->pdispVal) != S_OK)
-	            return E_FAIL;
-            
+            if (childIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarID->pdispVal) != S_OK)
+                return E_FAIL;
+
             pVarID->vt = VT_DISPATCH;
             return S_OK;
         }
@@ -426,8 +426,8 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
         pVarID->vt = VT_EMPTY;
         return S_FALSE;
     }
-    
-    #if 0 
+
+    #if 0
     // all cases above already cause some return action so below line
     // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
@@ -435,7 +435,7 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
 }
 
 // Retrieves the specified object's current screen location. All visual objects must
-// support this method; sound objects do not support it.    
+// support this method; sound objects do not support it.
 
 STDMETHODIMP wxIAccessible::accLocation ( long* pxLeft, long* pyTop, long* pcxWidth, long* pcyHeight, VARIANT varID)
 {
@@ -443,13 +443,13 @@ STDMETHODIMP wxIAccessible::accLocation ( long* pxLeft, long* pyTop, long* pcxWi
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     wxRect rect;
 
     wxAccStatus status = m_pAccessible->GetLocation(rect, varID.lVal);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -491,7 +491,7 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
         return E_FAIL;
     wxLogTrace(wxT("access"), wxString(wxT("accNavigate for ")) + m_pAccessible->GetWindow()->GetClassInfo()->GetClassName());
 
-    if ((varStart.vt != VT_I4 && varStart.vt != VT_EMPTY) 
+    if ((varStart.vt != VT_I4 && varStart.vt != VT_EMPTY)
                                                           #if 0
                                                           // according to MSDN and sources varStart.vt is unsigned
                                                           // so below line cause warning "Condition is always false"
@@ -502,7 +502,7 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
         wxLogTrace(wxT("access"), wxT("Invalid arg for accNavigate"));
         return E_INVALIDARG;
     }
-    
+
     wxAccessible* elementObject = NULL;
     int elementId = 0;
     VariantInit(pVarEnd);
@@ -558,7 +558,7 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
         }
     }
     wxLogTrace(wxT("access"), navStr);
-    
+
     wxAccStatus status = m_pAccessible->Navigate(navDirWX, varStart.lVal, & elementId,
         & elementObject);
 
@@ -567,13 +567,13 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
         wxLogTrace(wxT("access"), wxT("wxAccessible::Navigate failed"));
         return E_FAIL;
     }
-    
+
     if (status == wxACC_FALSE)
     {
         wxLogTrace(wxT("access"), wxT("wxAccessible::Navigate found no object in this direction"));
         return S_FALSE;
     }
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         wxLogTrace(wxT("access"), wxT("Navigate not implemented"));
@@ -607,13 +607,13 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
                 return E_FAIL;
             }
 
-	        HRESULT hResult = objectIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarEnd->pdispVal);
+            HRESULT hResult = objectIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarEnd->pdispVal);
             if (hResult != S_OK)
             {
                 wxLogTrace(wxT("access"), wxT("QueryInterface failed"));
-	            return E_FAIL;
+                return E_FAIL;
             }
-            
+
             wxLogTrace(wxT("access"), wxT("Called QueryInterface for Navigate"));
             pVarEnd->vt = VT_DISPATCH;
             return S_OK;
@@ -639,14 +639,14 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
 
 // Retrieves the address of an IDispatch interface for the specified child.
 // All objects must support this property.
-    
+
 STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDispChild)
 {
     wxLogTrace(wxT("access"), wxT("get_accChild"));
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varChildID.vt != VT_I4)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accChild"));
@@ -659,7 +659,7 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
         AddRef();
         return S_OK;
     }
-    
+
     wxAccessible* child = NULL;
 
     wxAccStatus status = m_pAccessible->GetChild(varChildID.lVal, & child);
@@ -668,7 +668,7 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
         wxLogTrace(wxT("access"), wxT("GetChild failed"));
         return E_FAIL;
     }
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
@@ -689,12 +689,12 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
             if (!objectIA)
                 return E_NOTIMPL;
 
-	        if (objectIA->QueryInterface(IID_IDispatch, (LPVOID*) ppDispChild) != S_OK)
+            if (objectIA->QueryInterface(IID_IDispatch, (LPVOID*) ppDispChild) != S_OK)
             {
                 wxLogTrace(wxT("access"), wxT("QueryInterface failed in get_accChild"));
-	            return E_FAIL;
+                return E_FAIL;
             }
-            
+
             return S_OK;
         }
         else
@@ -704,7 +704,7 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
         }
     }
 
-    #if 0 
+    #if 0
     // all cases above already cause some return action so below line
     // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
@@ -713,19 +713,19 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
 
 // Retrieves the number of children that belong to this object.
 // All objects must support this property.
-    
+
 STDMETHODIMP wxIAccessible::get_accChildCount ( long* pCountChildren)
 {
     wxLogTrace(wxT("access"), wxT("get_accChildCount"));
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     int childCount = 0;
     wxAccStatus status = m_pAccessible->GetChildCount(& childCount);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
@@ -748,7 +748,7 @@ STDMETHODIMP wxIAccessible::get_accChildCount ( long* pCountChildren)
         return S_OK;
     }
 
-    #if 0 
+    #if 0
     // all cases above already cause some return action so below line
     // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
@@ -757,14 +757,14 @@ STDMETHODIMP wxIAccessible::get_accChildCount ( long* pCountChildren)
 
 // Retrieves the IDispatch interface of the object's parent.
 // All objects support this property.
-    
+
 STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
 {
     wxLogTrace(wxT("access"), wxT("get_accParent"));
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     wxAccessible* parent = NULL;
     wxAccStatus status = m_pAccessible->GetParent(& parent);
 
@@ -793,12 +793,12 @@ STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
                 return E_FAIL;
 
             wxLogTrace(wxT("access"), wxT("About to call QueryInterface"));
-	        if (objectIA->QueryInterface(IID_IDispatch, (LPVOID*) ppDispParent) != S_OK)
+            if (objectIA->QueryInterface(IID_IDispatch, (LPVOID*) ppDispParent) != S_OK)
             {
                 wxLogTrace(wxT("access"), wxT("Failed QueryInterface"));
-	            return E_FAIL;
+                return E_FAIL;
             }
-            
+
             wxLogTrace(wxT("access"), wxT("Returning S_OK for get_accParent"));
             return S_OK;
         }
@@ -812,7 +812,7 @@ STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
         }
     }
 
-    #if 0 
+    #if 0
     // all cases above already cause some return action so below line
     // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
@@ -821,27 +821,27 @@ STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
 
 // Performs the object's default action. Not all objects have a default
 // action.
-    
+
 STDMETHODIMP wxIAccessible::accDoDefaultAction(VARIANT varID)
 {
     wxLogTrace(wxT("access"), wxT("accDoDefaultAction"));
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varID.vt != VT_I4)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for accDoDefaultAction"));
         return E_INVALIDARG;
     }
-    
+
     wxAccStatus status = m_pAccessible->DoDefaultAction(varID.lVal);
     if (status == wxACC_FAIL)
         return E_FAIL;
 
     if (status == wxACC_NOT_SUPPORTED)
         return DISP_E_MEMBERNOTFOUND;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -866,28 +866,28 @@ STDMETHODIMP wxIAccessible::accDoDefaultAction(VARIANT varID)
 
 // Retrieves a string that describes the object's default action.
 // Not all objects have a default action.
-    
+
 STDMETHODIMP wxIAccessible::get_accDefaultAction ( VARIANT varID, BSTR* pszDefaultAction)
 {
     wxLogTrace(wxT("access"), wxT("get_accDefaultAction"));
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varID.vt != VT_I4)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accDefaultAction"));
         return E_INVALIDARG;
     }
-    
+
     wxString defaultAction;
     wxAccStatus status = m_pAccessible->GetDefaultAction(varID.lVal, & defaultAction);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_SUPPORTED)
         return DISP_E_MEMBERNOTFOUND;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -933,18 +933,18 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varID.vt != VT_I4)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accDescription"));
         return E_INVALIDARG;
     }
-    
+
     wxString description;
     wxAccStatus status = m_pAccessible->GetDescription(varID.lVal, & description);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -976,7 +976,7 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
             wxBasicString basicString(description);
             * pszDescription = basicString.Get();
             return S_OK;
-        }        
+        }
     }
     return E_NOTIMPL;
 }
@@ -990,18 +990,18 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varID.vt != VT_I4)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accHelp"));
         return E_INVALIDARG;
     }
-    
+
     wxString helpString;
     wxAccStatus status = m_pAccessible->GetHelpText(varID.lVal, & helpString);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1033,7 +1033,7 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
             wxBasicString basicString(helpString);
             * pszHelp = basicString.Get();
             return S_OK;
-        }        
+        }
     }
     return E_NOTIMPL;
 }
@@ -1043,24 +1043,24 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
 // Not all objects support this property.
 // NOTE: not supported by wxWidgets at this time. Use
 // GetHelpText instead.
-        
+
 STDMETHODIMP wxIAccessible::get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChild, long* pidTopic)
 {
     wxLogTrace(wxT("access"), wxT("get_accHelpTopic"));
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varChild.vt != VT_I4)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accHelpTopic"));
         return E_INVALIDARG;
     }
-    
+
     wxAccStatus status = wxACC_NOT_IMPLEMENTED;
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1086,7 +1086,7 @@ STDMETHODIMP wxIAccessible::get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChi
 // Retrieves the specified object's shortcut key or access key, also known as
 // the mnemonic. All objects that have a shortcut key or access key support
 // this property.
-        
+
 STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKeyboardShortcut)
 {
     wxLogTrace(wxT("access"), wxT("get_accKeyboardShortcut"));
@@ -1095,18 +1095,18 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varID.vt != VT_I4)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accKeyboardShortcut"));
         return E_INVALIDARG;
     }
-    
+
     wxString keyboardShortcut;
     wxAccStatus status = m_pAccessible->GetKeyboardShortcut(varID.lVal, & keyboardShortcut);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1138,14 +1138,14 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
             wxBasicString basicString(keyboardShortcut);
             * pszKeyboardShortcut = basicString.Get();
             return S_OK;
-        }        
+        }
     }
     return E_NOTIMPL;
 }
 
 // Retrieves the name of the specified object.
 // All objects support this property.
-    
+
 STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
 {
     wxLogTrace(wxT("access"), wxT("get_accName"));
@@ -1160,14 +1160,14 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accName"));
         return E_INVALIDARG;
     }
-    
+
     wxString name;
-    
+
     wxAccStatus status = m_pAccessible->GetName(varID.lVal, & name);
-    
+
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1205,22 +1205,22 @@ STDMETHODIMP wxIAccessible::get_accRole ( VARIANT varID, VARIANT* pVarRole)
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varID.vt != VT_I4)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accRole"));
         return E_INVALIDARG;
     }
-    
+
     VariantInit(pVarRole);
 
     wxAccRole role = wxROLE_NONE;
-    
+
     wxAccStatus status = m_pAccessible->GetRole(varID.lVal, & role);
-    
+
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1258,14 +1258,14 @@ STDMETHODIMP wxIAccessible::get_accRole ( VARIANT varID, VARIANT* pVarRole)
 
 // Retrieves the current state of the specified object.
 // All objects support this property.
-    
+
 STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
 {
     wxLogTrace(wxT("access"), wxT("get_accState"));
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varID.vt != VT_I4 && varID.vt != VT_EMPTY)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accState"));
@@ -1273,11 +1273,11 @@ STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
     }
 
     long wxstate = 0;
-    
+
     wxAccStatus status = m_pAccessible->GetState(varID.lVal, & wxstate);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1306,7 +1306,7 @@ STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
     }
     return E_NOTIMPL;
 }
-    
+
 // Retrieves the value of the specified object.
 // Not all objects have a value.
 
@@ -1316,20 +1316,20 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varID.vt != VT_I4)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accValue"));
         return E_INVALIDARG;
     }
-    
+
     wxString strValue;
-    
+
     wxAccStatus status = m_pAccessible->GetValue(varID.lVal, & strValue);
-    
+
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1368,19 +1368,19 @@ STDMETHODIMP wxIAccessible::accSelect ( long flagsSelect, VARIANT varID )
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     if (varID.vt != VT_I4 && varID.vt != VT_EMPTY)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for accSelect"));
         return E_INVALIDARG;
     }
-    
+
     wxAccSelectionFlags wxsel = wxConvertFromWindowsSelFlag(flagsSelect);
 
     wxAccStatus status = m_pAccessible->Select(varID.lVal, wxsel);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1408,22 +1408,22 @@ STDMETHODIMP wxIAccessible::accSelect ( long flagsSelect, VARIANT varID )
 
 // Retrieves the object that has the keyboard focus. All objects
 // that receive the keyboard focus must support this property.
-        
+
 STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
 {
     wxLogTrace(wxT("access"), wxT("get_accFocus"));
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
         return E_FAIL;
-    
+
     wxAccessible* childObject = NULL;
     int childId = 0;
     VariantInit(pVarID);
-    
+
     wxAccStatus status = m_pAccessible->GetFocus(& childId, & childObject);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
@@ -1446,9 +1446,9 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
             if (!childIA)
                 return E_NOTIMPL;
 
-	        if (childIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarID->pdispVal) != S_OK)
-	            return E_FAIL;
-            
+            if (childIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarID->pdispVal) != S_OK)
+                return E_FAIL;
+
             pVarID->vt = VT_DISPATCH;
             return S_OK;
         }
@@ -1464,8 +1464,8 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
         pVarID->vt = VT_EMPTY;
         return S_FALSE;
     }
-    
-    #if 0 
+
+    #if 0
     // all cases above already cause some return action so below line
     // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
@@ -1474,7 +1474,7 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
 
 // Retrieves the selected children of this object. All objects
 // selected must support this property.
-        
+
 STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
 {
     wxLogTrace(wxT("access"), wxT("get_accSelection"));
@@ -1483,12 +1483,12 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
         return E_FAIL;
 
     VariantInit(pVarChildren);
-    
+
     wxVariant selections;
     wxAccStatus status = m_pAccessible->GetSelections(& selections);
     if (status == wxACC_FAIL)
         return E_FAIL;
-    
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
@@ -1514,9 +1514,9 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
             if (!childIA)
                 return E_NOTIMPL;
 
-	        if (childIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarChildren->pdispVal) != S_OK)
-	            return E_FAIL;
-            
+            if (childIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarChildren->pdispVal) != S_OK)
+                return E_FAIL;
+
             pVarChildren->vt = VT_DISPATCH;
 
             return S_OK;
@@ -1564,9 +1564,9 @@ STDMETHODIMP wxIAccessible::GetIDsOfNames(REFIID WXUNUSED(riid), OLECHAR** WXUNU
 
 // Invoke
 
-STDMETHODIMP wxIAccessible::Invoke(DISPID WXUNUSED(dispIdMember), REFIID WXUNUSED(riid), LCID WXUNUSED(lcid), 
-                        WORD WXUNUSED(wFlags), DISPPARAMS *WXUNUSED(pDispParams), 
-                        VARIANT *WXUNUSED(pVarResult), EXCEPINFO *WXUNUSED(pExcepInfo), 
+STDMETHODIMP wxIAccessible::Invoke(DISPID WXUNUSED(dispIdMember), REFIID WXUNUSED(riid), LCID WXUNUSED(lcid),
+                        WORD WXUNUSED(wFlags), DISPPARAMS *WXUNUSED(pDispParams),
+                        VARIANT *WXUNUSED(pVarResult), EXCEPINFO *WXUNUSED(pExcepInfo),
                         unsigned int *WXUNUSED(puArgErr) )
 {
     return E_NOTIMPL;
@@ -1605,7 +1605,7 @@ IAccessible* wxIAccessible::GetChildStdAccessible(int id)
             else
             {
                 pDispatch->Release();
-            }                                    
+            }
         }
     }
 
@@ -1639,7 +1639,7 @@ IAccessible* wxIAccessible::GetChildStdAccessible(int id)
                         else
                         {
                             var.pdispVal->Release();
-                        }                        
+                        }
                     }
                 }
                 break;
@@ -1679,7 +1679,7 @@ IAccessible* wxIAccessible::GetChildAccessible(int id)
             else
             {
                 pDispatch->Release();
-            }                                    
+            }
         }
     }
     return NULL;

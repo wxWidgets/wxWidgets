@@ -241,11 +241,11 @@ bool wxDropSource::GiveFeedback(wxDragResult effect)
     {
         ::SetCursor((HCURSOR)cursor.GetHCURSOR());
 
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 

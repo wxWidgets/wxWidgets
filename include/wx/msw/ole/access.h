@@ -16,9 +16,7 @@
     #pragma interface
 #endif
 
-#if !wxUSE_ACCESSIBILITY
-  #error  "You should #define wxUSE_ACCESSIBILITY to 1 to compile this file!"
-#endif  //wxUSE_ACCESSIBILITY
+#if wxUSE_ACCESSIBILITY
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -67,6 +65,8 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxAccessible)
 };
+
+#endif  //wxUSE_ACCESSIBILITY
 
 #endif  //_WX_ACCESS_H_
 

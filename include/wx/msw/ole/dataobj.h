@@ -36,7 +36,7 @@ public:
     // it is deleted, it should delete us as well
     void SetAutoDelete();
 
-    // return TRUE if we support this format in "Get" direction
+    // return true if we support this format in "Get" direction
     bool IsSupportedFormat(const wxDataFormat& format) const
         { return wxDataObjectBase::IsSupported(format, Get); }
 

@@ -39,7 +39,7 @@ inline void ReleaseInterface(IUnknown *pIUnk)
 // release the interface pointer (if !NULL) and make it NULL
 #define   RELEASE_AND_NULL(p)   if ( (p) != NULL ) { p->Release(); p = NULL; };
 
-// return TRUE if the iid is in the array
+// return true if the iid is in the array
 extern bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 
 // ============================================================================
@@ -73,7 +73,7 @@ public:
 
     operator ULONG&() { return m_Value; }
     ULONG& operator=(ULONG value) { m_Value = value; return m_Value;  }
-    
+
     wxAutoULong& operator++() { ++m_Value; return *this; }
     const wxAutoULong operator++( int ) { wxAutoULong temp = *this; ++m_Value; return temp; }
 
@@ -176,20 +176,20 @@ public:
     wxBasicString(const char *sz);
     wxBasicString(const wxString& str);
     ~wxBasicString();
-    
+
     void Init(const char* sz);
-    
+
     // accessors
     // just get the string
     operator BSTR() const { return m_wzBuf; }
     // retrieve a copy of our string - caller must SysFreeString() it later!
     BSTR Get() const { return SysAllocString(m_wzBuf); }
-    
+
 private:
     // @@@ not implemented (but should be)
     wxBasicString(const wxBasicString&);
     wxBasicString& operator=(const wxBasicString&);
-    
+
     OLECHAR *m_wzBuf;     // actual string
 };
 

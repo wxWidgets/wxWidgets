@@ -16,9 +16,7 @@
     #pragma interface
 #endif
 
-#if !wxUSE_DRAG_AND_DROP
-  #error  "You should #define wxUSE_DRAG_AND_DROP to 1 to compile this file!"
-#endif  //WX_DRAG_DROP
+#if wxUSE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -79,5 +77,7 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxDropSource)
 };
+
+#endif  //wxUSE_DRAG_AND_DROP
 
 #endif  //_WX_OLEDROPSRC_H
