@@ -42,8 +42,14 @@ public:
 
   // Recommended constructor
   wxPostScriptDC(const wxPrintData& printData);
-
+  
   ~wxPostScriptDC();
+
+#if WXWIN_COMPATIBILITY_2_2
+  wxPostScriptDC( const wxString &output, bool interactive = FALSE, wxWindow *parent = NULL )
+      { Create( output, interactive, parent ); }
+  bool Create ( const wxString &output, bool interactive = FALSE, wxWindow *parent = NULL );
+#endif
 
   virtual bool Ok() const;
 

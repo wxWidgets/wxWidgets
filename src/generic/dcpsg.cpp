@@ -318,6 +318,31 @@ wxPostScriptDC::~wxPostScriptDC ()
     }
 }
 
+#if WXWIN_COMPATIBILITY_2_2
+bool wxPostScriptDC::Create( const wxString &output, bool interactive, wxWindow *parent )
+{
+    wxPrintData data;
+    data.SetFilename( output );
+    data.SetPrintMode( wxPRINT_MODE_FILE );
+    
+    if (interactive)
+    {
+        wxPrintDialogData ddata( data );
+        wxPrintDialog dialog( parent, &data );
+        dialog.GetPrintDialogData().SetSetupDialog(TRUE);
+        if (dialog.ShowModal() != wxID_OK)
+        {
+            m_ok = FALSE;
+            return FALSE;
+        }
+        data = dialog.GetPrintDialogData().GetPrintData();
+    }
+    
+    return TRUE;
+}
+#endif
+
+
 bool wxPostScriptDC::Ok() const
 {
   return m_ok;
