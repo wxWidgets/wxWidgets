@@ -179,6 +179,10 @@ typedef struct {
 #endif
 #endif
 
+#ifndef LVM_SETUNICODEFORMAT
+#define LVM_SETUNICODEFORMAT 0x2005
+#endif
+
 // ----------------------------------------------------------------------------
 // Toolbar define value missing 
 // ----------------------------------------------------------------------------
