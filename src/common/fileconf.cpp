@@ -532,6 +532,8 @@ bool wxFileConfig::Read(wxString   *pstr,
 
   ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
   if (pEntry == NULL) {
+     if(IsRecordingDefaults())
+        Write(szKey,szDefault);
     *pstr = ExpandEnvVars(szDefault);
     return FALSE;
   }

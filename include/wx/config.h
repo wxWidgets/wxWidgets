@@ -101,7 +101,7 @@ public:
 
   // ctor & virtual dtor
     // environment variable expansion is on by default
-  wxConfigBase() { m_bExpandEnvVars = TRUE; }
+  wxConfigBase() { m_bExpandEnvVars = TRUE; m_bRecordDefaults = FALSE; }
     // empty but ensures that dtor of all derived classes is virtual
   virtual ~wxConfigBase() { }
 
@@ -172,7 +172,10 @@ public:
     // (this option is on by default, you can turn it on/off at any time)
   bool IsExpandingEnvVars() const { return m_bExpandEnvVars; }
   void SetExpandEnvVars(bool bDoIt = TRUE) { m_bExpandEnvVars = bDoIt; }
-    // does expansion only if needed
+    // recording of default values
+  void SetRecordDefaults(bool bDoIt = TRUE) { m_bRecordDefaults = bDoIt; }
+  bool IsRecordingDefaults() const { return m_bRecordDefaults; }
+  // does expansion only if needed
   wxString ExpandEnvVars(const wxString& str) const
     {
         wxString tmp; // Required for BC++
@@ -211,7 +214,9 @@ protected:
 private:
   // are we doing automatic environment variable expansion?
   bool m_bExpandEnvVars;
-
+  // do we record default values?
+  bool m_bRecordDefaults;
+  
   // static variables
   static wxConfigBase *ms_pConfig;
   static bool          ms_bAutoCreate;

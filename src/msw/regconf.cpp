@@ -281,6 +281,9 @@ bool wxRegConfig::Read(wxString *pStr,
     return TRUE;
   }
 
+  if(IsRecordingDefaults())
+     Write(szKey,szDefault);
+
   // default value
   *pStr = szDefault;
   return FALSE;
