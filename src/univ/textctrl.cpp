@@ -19,6 +19,63 @@
    selection start and end.
  */
 
+/*
+   Some terminology:
+
+   Everywhere in this file LINE refers to a logical line of text, and ROW to a
+   physical line of text on the display. They are the same unless WrapLines()
+   is TRUE in which case a single LINE may correspond to multiple ROWs.
+
+   A text position is an unsigned int (which for reasons of compatibility is
+   still a long) from 0 to GetLastPosition() inclusive. The positions
+   correspond to the gaps between the letters so the position 0 is just
+   before the first character and the last position is the one beyond the last
+   character. For an empty text control GetLastPosition() returns 0.
+
+   Lines and columns returned/accepted by XYToPosition() and PositionToXY()
+   start from 0. The y coordinate is a LINE, not a ROW. Columns correspond to
+   the characters, the first column of a line is the first character in it,
+   the last one is length(line text). For compatibility, again, lines and
+   columns are also longs.
+
+   When translating lines/column coordinates to/from positions, the line and
+   column give the character after the given position. Thus, GetLastPosition()
+   doesn't have any corresponding column.
+
+   An example of positions and lines/columns for a control without wrapping
+   containing the text "Hello, Universe!\nGoodbye"
+
+                               1 1 1 1 1 1 1
+   pos:    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6
+            H e l l o ,   U n i v e r s e !         line 0
+   col:     0 1 2 3 4 5 6 7 8 9 1 1 1 1 1 1
+                                0 1 2 3 4 5
+
+   pos:    1 1 1 2 2 2 2 2
+           7 8 9 0 1 2 3 4
+            G o o d b y e                           line 1
+   col:     0 1 2 3 4 5 6
+
+
+   The same example for a control with line wrap assuming "Universe" is too
+   long to fit on the same line with "Hello,":
+
+   pos:    0 1 2 3 4 5 6
+            H e l l o ,                             line 0 (row 0)
+   col:     0 1 2 3 4 5
+
+                 1 1 1 1 1 1 1
+   pos:    7 8 9 0 1 2 3 4 5 6
+            U n i v e r s e !                       line 0 (row 1)
+   col:     6 7 8 9 1 1 1 1 1
+                    0 1 2 3 4
+
+    (line 1 == row 2 same as above)
+
+    Note that now columns are offset relative to positions as the positions 6
+    and 7 correspond to the same character.
+ */
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -1958,30 +2015,99 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
     pt += m_rectText.GetPosition();
     CalcUnscrolledPosition(pos.x - pt.x, pos.y - pt.y, &x, &y);
 
-    // row calculation is simple as we assume that all lines have the same
-    // height
-    int row = y / GetCharHeight();
-    int rowMax = GetNumberOfLines() - 1;
-    if ( row > rowMax )
-    {
-        // clicking below the text is the same as clicking on the last line
-        row = rowMax;
+    // calculate the row
+    int row;
 
-        res = wxTE_HT_AFTER;
-    }
-    else if ( row < 0 )
+    if ( IsSingleLine() )
     {
+        // there is only one row anyhow
         row = 0;
+    }
+    else // multi line
+    {
+        int rowMax = GetNumberOfLines() - 1;
+        int hLine = GetCharHeight();
 
-        res = wxTE_HT_BEFORE;
+        if ( WrapLines() )
+        {
+            // one line can take several rows in this case, so we need to
+            // rescan the text
+
+            // OPT: as for horz hit testing we might approximate the result
+            //      with y / hLine first and then scan from there, this is
+            //      probably much more efficient when there is a lot of text
+
+            int yCur = 0;
+            wxCoord wLine = m_rectText.w;
+            for ( row = 0; (yCur < y) && (row <= rowMax); row++ )
+            {
+                wxCoord widthLineTotal = GetTextWidth(GetLineText(row));
+                int nRowsPerLine = widthLineTotal == 0
+                                    ? 1
+                                    : (widthLineTotal + wLine - 1) / wLine;
+                yCur += nRowsPerLine*hLine;
+            }
+
+            if ( row > rowMax )
+            {
+                row = rowMax;
+
+                res = wxTE_HT_AFTER;
+            }
+        }
+        else // no line wrap
+        {
+            // in this case row calculation is simple as we all lines have the
+            // same height
+            row = y / hLine;
+            if ( row > rowMax )
+            {
+                // clicking below the text is the same as clicking on the last
+                // line
+                row = rowMax;
+
+                res = wxTE_HT_AFTER;
+            }
+            else if ( row < 0 )
+            {
+                // and clicking before it is the same as clicking on the first
+                // one
+                row = 0;
+
+                res = wxTE_HT_BEFORE;
+            }
+        }
     }
 
-    // now find the position in the line
-    wxTextCtrlHitTestResult res2 =
-        HitTestLine(GetTextToShow(GetLineText(row)), x, colOut);
     if ( res == wxTE_HT_ON_TEXT )
     {
-        res = res2;
+        // now find the position in the line
+        wxString line = GetLineText(row);
+        if ( ofsLineStart )
+        {
+            // 
+        }
+
+        res = HitTestLine(GetTextToShow(line), x, colOut);
+
+        if ( colOut )
+        {
+            // take into account that the line may not start in the beginning
+            // of the string
+            *colOut += ofsLineStart;
+        }
+    }
+    else // before/after vertical text span
+    {
+        if ( colOut )
+        {
+            // fill the column with the first/last position in the
+            // corresponding line
+            if ( res == wxTE_HT_BEFORE )
+                *colOut = 0;
+            else // res == wxTE_HT_AFTER
+                *colOut = GetLineText(GetNumberOfLines() - 1).length();
+        }
     }
 
     if ( rowOut )
