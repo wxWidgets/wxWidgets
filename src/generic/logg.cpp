@@ -826,7 +826,6 @@ void wxLogDialog::CreateDetailsControls()
         // Degrade gracefully.
         if ( !bmp.Ok() )
         {
-            wxLogError("FAILED fro %s:", icons[icon]);
             loadedIcons = FALSE;
 
             break;
