@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filename.cpp
-// Purpose:     wxFileName - encapsulates candy
+// Name:        src/common/filename.cpp
+// Purpose:     wxFileName - encapsulates a file path
 // Author:      Robert Roebling
 // Modified by:
 // Created:     28.12.2000
@@ -8,6 +8,14 @@
 // Copyright:   (c) 2000 Robert Roebling
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
     #pragma implementation "filename.h"
@@ -29,9 +37,13 @@
 #include "wx/tokenzr.h"
 #include "wx/utils.h"
 
-//----------------------------------------------------------------------------
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
 // wxFileName
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 wxFileName::wxFileName( const wxFileName &filepath )
 {
@@ -63,16 +75,16 @@ void wxFileName::Assign( const wxString &path, bool dir_only, wxPathFormat forma
     wxString seps;
     if (format == wxPATH_DOS)
     {
-        seps = "/\\";
+        seps = _T("/\\");
     }
     else
     if (format == wxPATH_UNIX)
     {
-        seps = "/";
+        seps = _T("/");
     }
     else
     {
-        seps = ":";
+        seps = _T(":");
     }
     
     wxStringTokenizer tn( path, seps, wxTOKEN_RET_EMPTY_ALL );
@@ -116,7 +128,7 @@ void wxFileName::Assign( const wxString &path, bool dir_only, wxPathFormat forma
             if (pos == -1)
             {
                 // add dot back
-                m_name.Prepend( "." );
+                m_name.Prepend( _T(".") );
                 return;
             }
         }
@@ -128,7 +140,7 @@ void wxFileName::Assign( const wxString &path, bool dir_only, wxPathFormat forma
         if (has_starting_dot && (format == wxPATH_UNIX))
         {
             // add dot back
-            m_name.Prepend( "." );
+            m_name.Prepend( _T(".") );
             return;
         }
     }
@@ -370,7 +382,7 @@ void wxFileName::SetFullName( const wxString name, wxPathFormat format )
             if (pos == -1)
             {
                 // add dot back
-                m_name.Prepend( "." );
+                m_name.Prepend( _T(".") );
                 return;
             }
     }
@@ -383,7 +395,7 @@ void wxFileName::SetFullName( const wxString name, wxPathFormat format )
     if (has_starting_dot && (format == wxPATH_UNIX))
     {
             // add dot back
-            m_name.Prepend( "." );
+            m_name.Prepend( _T(".") );
             return;
     }
 }
@@ -429,7 +441,7 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
         {
             ret += m_dirs[i];
             if (add_separator || (i != m_dirs.GetCount()-1))
-                ret += ":";
+                ret += _T(":");
         }
     }
     
