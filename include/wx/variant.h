@@ -268,7 +268,7 @@ public:
     void ClearList();
 
 // Implementation
-protected:
+public:
 // Type conversion
     bool Convert(long* value) const;
     bool Convert(bool* value) const;

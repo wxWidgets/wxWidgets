@@ -2244,9 +2244,11 @@ bool wxVariant::Convert(wxDateTime* value) const
 {
     wxString type(GetType());
     if (type == wxT("datetime"))
+    {
         *value = ((wxVariantDataDateTime*)GetData())->GetValue();
-    else
-        return FALSE;
-
-    return TRUE;
+    	return TRUE;
+    } 
+    // Fallback to string conversion
+    wxString val;
+    return Convert(&val) && (value->ParseDate(val));
 }
