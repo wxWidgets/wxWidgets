@@ -3424,11 +3424,14 @@ bool wxWindowMSW::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 
 #if wxUSE_CONTROLS
 
-    wxWindow *item = FindItem(id);
 #if wxUSE_OWNER_DRAWN
+    wxWindow *item = FindItem(id);
     if ( item && item->IsKindOf(CLASSINFO(wxControl)) )
         return ((wxControl *)item)->MSWOnDraw(itemStruct);
-#else
+#elif !defined(__WXUNIVERSAL__)
+    // we may still have owner-drawn buttons internally because we have to make
+    // them owner-drawn to support colour change
+    wxWindow *item = FindItem(id);
     if ( item && item->IsKindOf(CLASSINFO(wxButton)) )
         return ((wxButton *)item)->MSWOnDraw(itemStruct);
 #endif // USE_OWNER_DRAWN
