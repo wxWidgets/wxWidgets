@@ -62,7 +62,10 @@
     #endif
 
     // Place other OS/2 compiler environment defines here
-    #define LINKAGEMODE _Optlink
+    #if defined(__VISAGECPP__)
+        // VisualAge is the only thing that understands _Optlink
+        #define LINKAGEMODE _Optlink
+    #endif
 #else   // Windows
     #ifndef __WINDOWS__
         #define __WINDOWS__
