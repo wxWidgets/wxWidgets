@@ -2030,12 +2030,21 @@ equivalent variable and GTK+ is version 1.2.3 or above.
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
         ALL_OBJECTS="\$(GUI_LOWLEVEL_OBJS) \${UNIVOBJS}"
+
+        dnl ALL_SOURCES and ALL_HEADERS shouldn't include really all sources
+        dnl and headers as some/most are not needed for wxUniv but I don't
+        dnl have time to add GUI_LOWLEVEL_SOURCES/HEADERS stuff now (TODO!)
+        ALL_SOURCES="\$(ALL_SOURCES) \${UNIV_SOURCES}"
+        ALL_HEADERS="\$(ALL_HEADERS) \${UNIV_HEADERS}"
+
         PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
         TOOLKIT_VPATH="\${top_srcdir}/src/univ${PATH_IFS}\${top_srcdir}/src/univ/themes${PATH_IFS}\${top_srcdir}/src/${TOOLKIT_DIR}"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"
         WIDGET_SET=univ
     else
         ALL_OBJECTS="\$(GUIOBJS)"
+        ALL_SOURCES="\$(ALL_SOURCES)"
+        ALL_HEADERS="\$(ALL_HEADERS)"
     fi
 
     ALL_OBJECTS="${ALL_OBJECTS} \$(COMMONOBJS) \$(GENERICOBJS)"
@@ -4675,8 +4684,10 @@ AC_SUBST(WXCONFIG_LIBS_STATIC)
 AC_SUBST(WXCONFIG_LIBS_STATIC_GL)
 AC_SUBST(WXCONFIG_INCLUDE)
 
-dnl what to compile
+dnl the list of files to compile/install
 AC_SUBST(ALL_OBJECTS)
+AC_SUBST(ALL_HEADERS)
+AC_SUBST(ALL_SOURCES)
 
 dnl distribution vars
 AC_SUBST(GUIDIST)

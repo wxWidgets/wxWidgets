@@ -139,8 +139,8 @@ WX_LINGUAS = `cd $(top_srcdir)/locale && ls *.mo 2> /dev/null | sed -n 's/\.mo//
 # .d and .h/.inl files for the current toolkit
 include @PORT_FILES@
 
-SOURCES = $(ALL_SOURCES)
-HEADERS = $(ALL_HEADERS)
+SOURCES = @ALL_SOURCES@
+HEADERS = @ALL_HEADERS@
 
 # for the objects and depfiles, we might be bulding only part of them
 # depending on configure arguments, so select a subset of ALL
