@@ -3763,6 +3763,7 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxGrid, wxScrolledWindow,"wx/grid.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxGrid)
+    WX_HIDE_PROPERTY( Children )
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxGrid)

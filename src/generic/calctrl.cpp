@@ -108,7 +108,8 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxCalendarCtrl, wxControl,"wx/calctrl.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxCalendarCtrl)
-	WX_PROPERTY( Date,wxDateTime, SetDate , GetDate, )
+    WX_HIDE_PROPERTY( Children )
+	WX_PROPERTY( Date,wxDateTime, SetDate , GetDate, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxCalendarCtrl)

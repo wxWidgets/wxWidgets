@@ -433,9 +433,10 @@ bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericDirCtrl, wxControl,"wx/dirctrl.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxGenericDirCtrl)
-	WX_PROPERTY( DefaultPath , wxString , SetDefaultPath , GetDefaultPath  , )
-	WX_PROPERTY( Filter , wxString , SetFilter , GetFilter  , )
-	WX_PROPERTY( DefaultFilter , int , SetFilterIndex, GetFilterIndex, )
+    WX_HIDE_PROPERTY( Children )
+	WX_PROPERTY( DefaultPath , wxString , SetDefaultPath , GetDefaultPath  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Filter , wxString , SetFilter , GetFilter  ,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	WX_PROPERTY( DefaultFilter , int , SetFilterIndex, GetFilterIndex,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxGenericDirCtrl)
