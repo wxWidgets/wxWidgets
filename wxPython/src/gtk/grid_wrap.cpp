@@ -4779,6 +4779,32 @@ static PyObject *_wrap_GridCellAttr_IsReadOnly(PyObject *self, PyObject *args, P
 }
 
 
+static PyObject *_wrap_GridCellAttr_GetKind(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GridCellAttr_GetKind",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGridCellAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetKind();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_GridCellAttr_SetDefAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
@@ -15710,6 +15736,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GridCellAttr_GetRenderer", (PyCFunction) _wrap_GridCellAttr_GetRenderer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GridCellAttr_GetEditor", (PyCFunction) _wrap_GridCellAttr_GetEditor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GridCellAttr_IsReadOnly", (PyCFunction) _wrap_GridCellAttr_IsReadOnly, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_GetKind", (PyCFunction) _wrap_GridCellAttr_GetKind, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GridCellAttr_SetDefAttr", (PyCFunction) _wrap_GridCellAttr_SetDefAttr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GridCellAttr_swigregister", GridCellAttr_swigregister, METH_VARARGS },
 	 { (char *)"new_GridCellAttrProvider", (PyCFunction) _wrap_new_GridCellAttrProvider, METH_VARARGS | METH_KEYWORDS },

@@ -3273,7 +3273,11 @@ class DateTime(object):
 
     GetWeekDayName = staticmethod(GetWeekDayName)
     def GetAmPmStrings(*args, **kwargs):
-        """GetAmPmStrings() -> (am, pm)"""
+        """
+        GetAmPmStrings() -> (am, pm)
+
+        Get the AM and PM strings in the current locale (may be empty)
+        """
         return _misc_.DateTime_GetAmPmStrings(*args, **kwargs)
 
     GetAmPmStrings = staticmethod(GetAmPmStrings)
@@ -3747,7 +3751,11 @@ def DateTime_GetWeekDayName(*args, **kwargs):
     return _misc_.DateTime_GetWeekDayName(*args, **kwargs)
 
 def DateTime_GetAmPmStrings(*args, **kwargs):
-    """GetAmPmStrings() -> (am, pm)"""
+    """
+    GetAmPmStrings() -> (am, pm)
+
+    Get the AM and PM strings in the current locale (may be empty)
+    """
     return _misc_.DateTime_GetAmPmStrings(*args, **kwargs)
 
 def DateTime_IsDSTApplicable(*args, **kwargs):
@@ -4854,7 +4862,11 @@ class FileDataObject(DataObjectSimple):
         self.thisown = 1
         del newobj.thisown
     def GetFilenames(*args, **kwargs):
-        """GetFilenames(self) -> [names]"""
+        """
+        GetFilenames(self) -> [names]
+
+        Returns a list of file names.
+        """
         return _misc_.FileDataObject_GetFilenames(*args, **kwargs)
 
     def AddFile(*args, **kwargs):

@@ -708,6 +708,10 @@ class GridCellAttr(object):
         """IsReadOnly(self) -> bool"""
         return _grid.GridCellAttr_IsReadOnly(*args, **kwargs)
 
+    def GetKind(*args, **kwargs):
+        """GetKind(self) -> int"""
+        return _grid.GridCellAttr_GetKind(*args, **kwargs)
+
     def SetDefAttr(*args, **kwargs):
         """SetDefAttr(self, GridCellAttr defAttr)"""
         return _grid.GridCellAttr_SetDefAttr(*args, **kwargs)
