@@ -265,6 +265,12 @@ style=wx.BUFFER_VIRTUAL_AREA parameter.
 wx.gizmos.TreeListCtrl:  Add support for the EVT_TREE_ITEM_GETTOOLTIP
 event. 
 
+Added Resize, SetRGBRect, Size, and GetOrFindMaskColour methods to
+wx.Image. 
+
+Added wx.Rect.IsEmpty
+
+
 
 
 
