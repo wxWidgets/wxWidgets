@@ -58,6 +58,10 @@
     #include <dirent.h>
 #endif
 
+#ifdef __OS2__
+    #include <direct.h>
+    #include <process.h>
+#endif
 #ifdef __WINDOWS__
 #if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
     #include <direct.h>
@@ -471,8 +475,25 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
 #endif
 
     /* Expand inline environment variables */
+#ifdef __VISAGECPP__
+    while (*d)
+    {
+      *d++ = *s;
+      if(*s == _T('\\'))
+      {
+        *(d - 1) = *++s;
+        if (*d)
+        {
+          s++;
+          continue;
+        }
+        else
+           break;
+      }
+      else
+#else
     while ((*d++ = *s)) {
-#ifndef __WXMSW__
+#  ifndef __WXMSW__
         if (*s == _T('\\')) {
             if ((*(d - 1) = *++s)) {
                 s++;
@@ -480,6 +501,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             } else
                 break;
         } else
+#  endif
 #endif
 #ifdef __WXMSW__
         if (*s++ == _T('$') && (*s == _T('{') || *s == _T(')')))
@@ -490,7 +512,13 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             register wxChar  *start = d;
             register int     braces = (*s == _T('{') || *s == _T('('));
             register wxChar  *value;
+#ifdef __VISAGECPP__
+    // VA gives assignment in logical expr warning
+            while (*d)
+               *d++ = *s;
+#else
             while ((*d++ = *s))
+#endif
                 if (braces ? (*s == _T('}') || *s == _T(')')) : !(wxIsalnum(*s) || *s == _T('_')) )
                     break;
                 else
@@ -498,7 +526,12 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             *--d = 0;
             value = wxGetenv(braces ? start + 1 : start);
             if (value) {
+#ifdef __VISAGECPP__
+    // VA gives assignment in logical expr warning
+                for ((d = start - 1); (*d); *d++ = *value++);
+#else
                 for ((d = start - 1); (*d++ = *value++););
+#endif
                 d--;
                 if (braces && *s)
                     s++;
@@ -550,8 +583,13 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
           *(d - 1) = SEP;
     }
     s = nm;
+#ifdef __VISAGECPP__
+    // VA gives assignment in logical expr warning
+    while (*d)
+       *d++ = *s++;
+#else
     while ((*d++ = *s++));
-
+#endif
     delete[] nm_tmp; // clean up alloc
     /* Now clean up the buffer */
     return wxRealPath(buf);
@@ -632,7 +670,7 @@ wxChar *wxFileNameFromPath (wxChar *path)
 #endif
             return tcp + 1;
         }                        /* while */
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
       if (wxIsalpha (*path) && *(path + 1) == _T(':'))
         return path + 2;
 #endif
@@ -659,7 +697,7 @@ wxString wxFileNameFromPath (const wxString& path1)
 #endif
                 return wxString(tcp + 1);
             }                        /* while */
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
       if (wxIsalpha (*path) && *(path + 1) == _T(':'))
             return wxString(path + 2);
 #endif
@@ -703,7 +741,7 @@ wxPathOnly (wxChar *path)
         else i --;
       }
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
       // Try Drive specifier
       if (wxIsalpha (buf[0]) && buf[1] == _T(':'))
         {
@@ -751,7 +789,7 @@ wxString wxPathOnly (const wxString& path)
         else i --;
       }
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
       // Try Drive specifier
       if (wxIsalpha (buf[0]) && buf[1] == _T(':'))
         {
@@ -830,7 +868,7 @@ wxDos2UnixFilename (wxChar *s)
       {
         if (*s == _T('\\'))
           *s = _T('/');
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
         else
           *s = wxTolower(*s);        // Case INDEPENDENT
 #endif
@@ -839,14 +877,14 @@ wxDos2UnixFilename (wxChar *s)
 }
 
 void
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
 wxUnix2DosFilename (wxChar *s)
 #else
 wxUnix2DosFilename (wxChar *WXUNUSED(s))
 #endif
 {
 // Yes, I really mean this to happen under DOS only! JACS
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
   if (s)
     while (*s)
       {
@@ -992,12 +1030,12 @@ bool wxMkdir(const wxString& dir, int perm)
     const wxChar *dirname = dir.c_str();
 #endif // Mac/!Mac
 
-    // assume mkdir() has 2 args on non Windows platforms and on Windows too
+    // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
-#if !defined(__WXMSW__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
+#if (!(defined(__WXMSW__) || defined(__WXPM__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
-#else  // MSW
-    if ( mkdir(wxFNCONV(dirname)) != 0 )
+#else  // MSW and OS/2
+    if ( mkdir((char*)wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dirname);
@@ -1464,8 +1502,8 @@ wxString wxGetCwd()
 
 bool wxSetWorkingDirectory(const wxString& d)
 {
-#if defined( __UNIX__ ) || defined( __WXMAC__ )
-  return (chdir(d.fn_str()) == 0);
+#if defined( __UNIX__ ) || defined( __WXMAC__ ) || defined(__WXPM__)
+  return (chdir((char*)d.fn_str()) == 0);
 #elif defined(__WINDOWS__)
 
 #ifdef __WIN32__
@@ -1581,7 +1619,7 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
         pDot = NULL;
     }
 #endif // MSW/Unix
-    
+
     if ( pDot < pLastSeparator )
     {
         // the dot is part of the path, not the start of the extension
@@ -1590,7 +1628,7 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
 
     if ( pstrPath )
     {
-        if ( pLastSeparator )    
+        if ( pLastSeparator )
             *pstrPath = wxString(pszFileName, pLastSeparator - pszFileName);
         else
             pstrPath->Empty();

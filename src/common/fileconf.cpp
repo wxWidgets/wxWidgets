@@ -46,6 +46,13 @@
 #if       defined(__WXMSW__) && !defined(_WINDOWS_)
   #include  <windows.h>
 #endif  //windows.h
+#if defined(__WXPM__)
+  #define INCL_DOS
+  #include <os2.h>
+  #define LINKAGEMODE _Optlink
+#else
+  #define LINKAGEMODE
+#endif
 
 #include  <stdlib.h>
 #include  <ctype.h>
@@ -67,8 +74,8 @@
 // ----------------------------------------------------------------------------
 
 // compare functions for sorting the arrays
-static int CompareEntries(ConfigEntry *p1, ConfigEntry *p2);
-static int CompareGroups(ConfigGroup *p1, ConfigGroup *p2);
+static int LINKAGEMODE CompareEntries(ConfigEntry *p1, ConfigEntry *p2);
+static int LINKAGEMODE CompareGroups(ConfigGroup *p1, ConfigGroup *p2);
 
 // filter strings
 static wxString FilterInValue(const wxString& str);
@@ -93,6 +100,97 @@ wxString wxFileConfig::GetGlobalDir()
 
   #ifdef __UNIX__
     strDir = _T("/etc/");
+  #elif defined(__WXPM__)
+    ULONG                           aulSysInfo[QSV_MAX] = {0};
+    UINT                            drive;
+    APIRET                          rc;
+
+    rc = DosQuerySysInfo( 1L, QSV_MAX, (PVOID)aulSysInfo, sizeof(ULONG)*QSV_MAX);
+    if (rc == 0)
+    {
+        drive = aulSysInfo[QSV_BOOT_DRIVE - 1];
+        switch(drive)
+        {
+           case 1:
+              strDir = "A:\\OS2\\";
+              break;
+           case 2:
+              strDir = "B:\\OS2\\";
+              break;
+           case 3:
+              strDir = "C:\\OS2\\";
+              break;
+           case 4:
+              strDir = "D:\\OS2\\";
+              break;
+           case 5:
+              strDir = "E:\\OS2\\";
+              break;
+           case 6:
+              strDir = "F:\\OS2\\";
+              break;
+           case 7:
+              strDir = "G:\\OS2\\";
+              break;
+           case 8:
+              strDir = "H:\\OS2\\";
+              break;
+           case 9:
+              strDir = "I:\\OS2\\";
+              break;
+           case 10:
+              strDir = "J:\\OS2\\";
+              break;
+           case 11:
+              strDir = "K:\\OS2\\";
+              break;
+           case 12:
+              strDir = "L:\\OS2\\";
+              break;
+           case 13:
+              strDir = "M:\\OS2\\";
+              break;
+           case 14:
+              strDir = "N:\\OS2\\";
+              break;
+           case 15:
+              strDir = "O:\\OS2\\";
+              break;
+           case 16:
+              strDir = "P:\\OS2\\";
+              break;
+           case 17:
+              strDir = "Q:\\OS2\\";
+              break;
+           case 18:
+              strDir = "R:\\OS2\\";
+              break;
+           case 19:
+              strDir = "S:\\OS2\\";
+              break;
+           case 20:
+              strDir = "T:\\OS2\\";
+              break;
+           case 21:
+              strDir = "U:\\OS2\\";
+              break;
+           case 22:
+              strDir = "V:\\OS2\\";
+              break;
+           case 23:
+              strDir = "W:\\OS2\\";
+              break;
+           case 24:
+              strDir = "X:\\OS2\\";
+              break;
+           case 25:
+              strDir = "Y:\\OS2\\";
+              break;
+           case 26:
+              strDir = "Z:\\OS2\\";
+              break;
+        }
+    }
   #elif defined(__WXSTUBS__)
     wxASSERT_MSG( FALSE, _T("TODO") ) ;
   #elif defined(__WXMAC__)

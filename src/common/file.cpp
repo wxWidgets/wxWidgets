@@ -60,6 +60,11 @@
     #ifdef __GNUWIN32__
         #include <windows.h>
     #endif
+#elif (defined(__WXPM__))
+    #include <io.h>
+    #include <direct.h>
+    #define   W_OK        2
+    #define   R_OK        4
 #elif (defined(__WXSTUBS__))
     // Have to ifdef this for different environments
     #include <io.h>
@@ -479,6 +484,13 @@ bool wxTempFile::Open(const wxString& strName)
     static const wxChar *szMktempSuffix = _T("XXXXXX");
     m_strTemp << strName << szMktempSuffix;
     mktemp(MBSTRINGCAST m_strTemp.mb_str()); // will do because length doesn't change
+#elif  defined(__WXPM__)
+    // for now just create a file
+    // future enhancements can be to set some extended attributes for file systems
+    // OS/2 supports that have them (HPFS, FAT32) and security (HPFS386)
+    static const wxChar *szMktempSuffix = _T("XXX");
+    m_strTemp << strName << szMktempSuffix;
+    mkdir(m_strTemp.GetWriteBuf(MAX_PATH));
 #else // Windows
     wxString strPath;
     wxSplitPath(strName, &strPath, NULL, NULL);

@@ -26,7 +26,6 @@
 #ifdef __BORLANDC__
   #pragma hdrstop
 #endif
-
 #if wxUSE_DYNLIB_CLASS
 
 #include "wx/dynlib.h"
@@ -66,6 +65,14 @@
 #   endif  // Win32/16
 #   define wxDllGetSymbol(handle, name)    ::GetProcAddress(handle, name)
 #   define wxDllClose                      ::FreeLibrary
+
+#elif defined(__OS2__)
+
+#  define INCL_DOS
+#  include <os2.h>
+#  define wxDllOpen(error, lib, handle)     DosLoadModule(error, sizeof(error), lib, &handle)
+#  define wxDllGetSymbol(handle, modaddr)   DosQueryProcAddr(handle, 1L, NULL, (PFN*)modaddr)
+#  define wxDllClose(handle)                DosFreeModule(handle)
 #else
 #   error "Don't know how to load shared libraries on this platform."
 #endif // OS
@@ -92,7 +99,7 @@ static wxString ConstructLibraryName(const wxString& basename)
 #   else	//__HPUX__
         fullname << ".so";
 #   endif	//__HPUX__
-#elif defined(__WINDOWS__)
+#elif defined(__WINDOWS__) || defined(__OS2__)
     fullname << ".dll";
 #endif
 
@@ -179,7 +186,7 @@ wxDllLoader::GetProgramHandle(void)
 #ifdef __UNIX__
     return dlopen(NULL, RTLD_NOW/*RTLD_LAZY*/);
 #else
-    wxFAIL_MSG(_("This method is not implemented under Windows"));
+    wxFAIL_MSG(_("This method is not implemented under Windows or OS/2"));
 
     return 0;
 #endif
@@ -204,6 +211,9 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
         wxASSERT_MSG( 1 , (char*)myErrName ) ;
         return NULL ;
     }
+#elif defined(__OS2__)
+    char                            zError[256] = "";
+    wxDllOpen(zError, libname, handle);
 #else // !Mac
     handle = wxDllOpen(libname);
 #endif // OS
@@ -245,6 +255,8 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 
     if ( FindSymbol( dllHandle , symName , &symAddress , &symClass ) == noErr )
         symbol = (void *)symAddress ;
+#elif defined( __OS2__ )
+    wxDllGetSymbol(dllHandle, symbol);
 #else
     symbol = wxDllGetSymbol(dllHandle, name);
 #endif
@@ -283,9 +295,14 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     wxLibrary *lib;
     wxClassInfo *old_sm_first;
 
+#if defined(__VISAGECPP__)
+    node = m_loaded.Find(name.GetData());
+    if (node != NULL)
+        return ((wxLibrary *)node->Data());
+#else // !OS/2
     if ( (node = m_loaded.Find(name.GetData())) )
         return ((wxLibrary *)node->Data());
-
+#endif
     // If DLL shares data, this is necessary.
     old_sm_first = wxClassInfo::sm_first;
     wxClassInfo::sm_first = NULL;

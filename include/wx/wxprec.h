@@ -32,11 +32,6 @@
 #include "wx/msw/winundef.h"
 #endif
 
-#ifdef __WXPM__
-#define INCL_OS2
-#include <os2.h>
-#endif
-
 #include "wx/wx.h"
 
 

@@ -2,7 +2,7 @@
 // Name:        ownerdrw.h
 // Purpose:     interface for owner-drawn GUI elements
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     11.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -52,7 +52,7 @@ public:
   wxColour& GetBackgroundColour() const
       { return (wxColour&) m_colBack ; }
 
-  void SetBitmaps(const wxBitmap& bmpChecked, 
+  void SetBitmaps(const wxBitmap& bmpChecked,
                   const wxBitmap& bmpUnchecked = wxNullBitmap)
       { m_bmpChecked = bmpChecked;
         m_bmpUnchecked = bmpUnchecked;
@@ -94,10 +94,10 @@ public:
   // constants used in OnDrawItem
   // (they have the same values as corresponding Win32 constants)
   enum wxODAction
-  { 
+  {
     wxODDrawAll       = 0x0001,   // redraw entire control
     wxODSelectChanged = 0x0002,   // selection changed (see Status.Select)
-    wxODFocusChanged  = 0x0004,   // keyboard focus changed (see Status.Focus)
+    wxODFocusChanged  = 0x0004    // keyboard focus changed (see Status.Focus)
   };
 
   enum wxODStatus
@@ -107,7 +107,7 @@ public:
     wxODDisabled  = 0x0004,         // item is to be drawn as disabled
     wxODChecked   = 0x0008,         // item is to be checked
     wxODHasFocus  = 0x0010,         // item has the keyboard focus
-    wxODDefault   = 0x0020,         // item is the default item
+    wxODDefault   = 0x0020          // item is the default item
   };
 
   // virtual functions to implement drawing (return TRUE if processed)

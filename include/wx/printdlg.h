@@ -17,7 +17,7 @@
 #include "wx/generic/prntdlgg.h"
 #endif
 
-#if !defined(__WXMSW__) && !defined(__WXMAC__)
+#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXPM__)
 #define wxPrintDialog wxGenericPrintDialog
 #define sm_classwxPrintDialog sm_classwxGenericPrintDialog
 

@@ -42,6 +42,7 @@
     #include "wx/intl.h"
 #endif
 
+
 #ifdef __WXGTK__
     #include "wx/mdi.h"
 #endif
@@ -834,7 +835,7 @@ void wxDocManager::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 
     wxPrintDialogData data;
 
-    wxPrintDialog printerDialog(parentWin, & data);
+    wxPrintDialog printerDialog(parentWin, &data);
     printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
     printerDialog.ShowModal();
 #endif // wxUSE_PRINTING_ARCHITECTURE
