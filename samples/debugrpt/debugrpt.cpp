@@ -38,6 +38,7 @@ class MyDebugReport : public wxDebugReportUpload
 public:
     MyDebugReport() : wxDebugReportUpload
                        (
+                        //_T("http://iml2.hitchcock.org/intranet/crashes/wxtest"),
                         _T("http://your.url.here/"),
                         _T("report:file"),
                         _T("action")
@@ -135,7 +136,7 @@ public:
             case wxNO:
                 // example of manually generated report, this could be also
                 // used in wxApp::OnAssert()
-                GenerateReport(wxDebugReport::Context_Curent);
+                GenerateReport(wxDebugReport::Context_Current);
                 break;
 
             case wxCANCEL:

@@ -402,8 +402,8 @@ bool wxDebugReport::AddContext(wxDebugReport::Context ctx)
     wxXmlNode *nodeRoot = new wxXmlNode(wxXML_ELEMENT_NODE, _T("report"));
     xmldoc.SetRoot(nodeRoot);
     nodeRoot->AddProperty(_T("version"), _T("1.0"));
-    nodeRoot->AddProperty(_T("kind"), ctx == Context_Curent ? _T("user")
-                                                            : _T("exception"));
+    nodeRoot->AddProperty(_T("kind"), ctx == Context_Current ? _T("user")
+                                                             : _T("exception"));
 
     // add system information
     wxXmlNode *nodeSystemInfo = new wxXmlNode(wxXML_ELEMENT_NODE, _T("system"));
@@ -438,7 +438,7 @@ bool wxDebugReport::AddContext(wxDebugReport::Context ctx)
     {
         sw.WalkFromException();
     }
-    else // Context_Curent
+    else // Context_Current
     {
         sw.Walk();
     }
