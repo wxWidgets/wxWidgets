@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile for minimal example (UNIX).
+# Makefile for wiztest example (UNIX).
 
 top_srcdir = @top_srcdir@
 top_builddir = ../..
