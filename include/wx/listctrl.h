@@ -273,20 +273,19 @@ public:
 
     wxListItem    m_item;
 
-    inline int GetCode() { return m_code; }
-    inline long GetIndex() { return m_itemIndex; }
-    inline long GetOldIndex() { return m_oldItemIndex; }
-    inline long GetItem() { return m_itemIndex; }
-    inline long GetOldItem() { return m_oldItemIndex; }
-    inline int GetColumn() { return m_col; }
-    inline bool Cancelled() { return m_cancelled; }
-    inline wxPoint GetPoint() { return m_pointDrag; }
-    inline const wxString &GetLabel() const { return m_item.m_text; }
-    inline const wxString &GetText() const { return m_item.m_text; }
-    inline int GetImage() { return m_item.m_image; }
-    inline long GetData() { return m_item.m_data; }
-    inline long GetMask() { return m_item.m_mask; }
-    inline const wxListItem &GetItem() const { return m_item; }
+    int GetCode() const { return m_code; }
+    long GetIndex() const { return m_itemIndex; }
+    long GetOldIndex() const { return m_oldItemIndex; }
+    long GetOldItem() const { return m_oldItemIndex; }
+    int GetColumn() const { return m_col; }
+    bool Cancelled() const { return m_cancelled; }
+    wxPoint GetPoint() const { return m_pointDrag; }
+    const wxString& GetLabel() const { return m_item.m_text; }
+    const wxString& GetText() const { return m_item.m_text; }
+    int GetImage() const { return m_item.m_image; }
+    long GetData() const { return m_item.m_data; }
+    long GetMask() const { return m_item.m_mask; }
+    const wxListItem& GetItem() const { return m_item; }
 
     void CopyObject(wxObject& object_dest) const;
 

@@ -43,7 +43,7 @@
 #include  <stdlib.h>      // for _MAX_PATH
 
 #ifndef _MAX_PATH
-	#define _MAX_PATH 512
+    #define _MAX_PATH 512
 #endif
 
 // our header
@@ -430,7 +430,9 @@ bool wxRegKey::RenameValue(const wxChar *szValueOld, const wxChar *szValueNew)
         ok = FALSE;
     }
 
-    if ( !ok || !CopyValue(szValueOld, *this, szValueNew) ) {
+    if ( !ok ||
+         !CopyValue(szValueOld, *this, szValueNew) ||
+         !DeleteValue(szValueOld) ) {
         wxLogError(_("Failed to rename registry value '%s' to '%s'."),
                    szValueOld, szValueNew);
 
@@ -487,10 +489,65 @@ bool wxRegKey::CopyValue(const wxChar *szValue,
     }
 }
 
-bool wxRegKey::Copy(const wxString& strNewName)
+bool wxRegKey::Rename(const wxChar *szNewName)
+{
+    wxCHECK_MSG( !!m_strKey, FALSE, _T("registry hives can't be renamed") );
+
+    if ( !Exists() ) {
+        wxLogError(_("Registry key '%s' does not exist, cannot rename it."),
+                   GetFullName(this));
+
+        return FALSE;
+    }
+
+    // do we stay in the same hive?
+    bool inSameHive = !wxStrchr(szNewName, REG_SEPARATOR);
+
+    // construct the full new name of the key
+    wxRegKey keyDst;
+
+    if ( inSameHive ) {
+        // rename the key to the new name under the same parent
+        wxString strKey = m_strKey.BeforeLast(REG_SEPARATOR);
+        if ( !!strKey ) {
+            // don't add '\\' in the start if strFullNewName is empty
+            strKey += REG_SEPARATOR;
+        }
+
+        strKey += szNewName;
+
+        keyDst.SetName(GetStdKeyFromHkey(m_hRootKey), strKey);
+    }
+    else {
+        // this is the full name already
+        keyDst.SetName(szNewName);
+    }
+
+    bool ok = keyDst.Create(FALSE /* fail if alredy exists */);
+    if ( !ok ) {
+        wxLogError(_("Registry key '%s' already exists."),
+                   GetFullName(&keyDst));
+    }
+    else {
+        ok = Copy(keyDst) && DeleteSelf();
+    }
+
+    if ( !ok ) {
+        wxLogError(_("Failed to rename the registry key '%s' to '%s'."),
+                   GetFullName(this), GetFullName(&keyDst));
+    }
+    else {
+        m_hRootKey = keyDst.m_hRootKey;
+        m_strKey = keyDst.m_strKey;
+    }
+
+    return ok;
+}
+
+bool wxRegKey::Copy(const wxChar *szNewName)
 {
     // create the new key first
-    wxRegKey keyDst(strNewName);
+    wxRegKey keyDst(szNewName);
     bool ok = keyDst.Create(FALSE /* fail if alredy exists */);
     if ( ok ) {
         ok = Copy(keyDst);

@@ -1549,6 +1549,10 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     event.SetEventObject(this);
 
                     (void)GetEventHandler()->ProcessEvent(event);
+
+                    // if we don't do it, the tree seems to think that 2 items
+                    // are selected simultaneously which is quite weird
+                    TreeView_SelectDropTarget(GetHwnd(), 0);
                 }
                 break;
         }

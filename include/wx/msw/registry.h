@@ -144,12 +144,14 @@ public:
   bool  Create(bool bOkIfExists = TRUE);
     // rename a value from old name to new one
   bool  RenameValue(const wxChar *szValueOld, const wxChar *szValueNew);
+    // rename the key
+  bool  Rename(const wxChar *szNewName);
     // copy value to another key possibly changing its name (by default it will
     // remain the same)
   bool  CopyValue(const wxChar *szValue, wxRegKey& keyDst,
                   const wxChar *szNewName = NULL);
     // copy the entire contents of the key recursively to another location
-  bool  Copy(const wxString& strNewName);
+  bool  Copy(const wxChar *szNewName);
     // same as Copy() but using a key and not the name
   bool  Copy(wxRegKey& keyDst);
     // close the key (will be automatically done in dtor)

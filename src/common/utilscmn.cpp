@@ -954,21 +954,58 @@ int isascii( int c )
 
 void wxEnableTopLevelWindows(bool enable)
 {
-   wxWindowList::Node *node;
-   for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
-      node->GetData()->Enable(enable);
+    wxWindowList::Node *node;
+    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+        node->GetData()->Enable(enable);
 }
 
-// Yield to other apps/messages and disable user input
+static void wxFindDisabledWindows(wxWindowList& winDisabled, wxWindow *win)
+{
+    wxWindowList::Node *node;
+    for ( node = win->GetChildren().GetFirst(); node; node = node->GetNext() )
+    {
+        wxWindow *child = node->GetData();
+        if ( child->IsEnabled() )
+        {
+            winDisabled.Append(child);
+        }
+
+        wxFindDisabledWindows(winDisabled, child);
+    }
+}
+
+// Yield to other apps/messages and disable user input to all windows except
+// the given one
 bool wxSafeYield(wxWindow *win)
 {
-   wxEnableTopLevelWindows(FALSE);
-   // always enable ourselves
-   if ( win )
-      win->Enable(TRUE);
-   bool rc = wxYield();
-   wxEnableTopLevelWindows(TRUE);
-   return rc;
+    // remember all windows we're going to (temporarily) disable
+    wxWindowList winDisabled;
+
+    wxWindowList::Node *node;
+    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+    {
+        wxWindow *winTop = node->GetData();
+        wxFindDisabledWindows(winDisabled, winTop);
+
+        winTop->Disable();
+    }
+
+    if ( win )
+    {
+        // always enable ourselves
+        win->Enable();
+    }
+
+    bool rc = wxYield();
+
+    // don't call wxEnableTopLevelWindows(TRUE) because this will reenable even
+    // the window which had been disabled before, do it manually instead
+    for ( node = winDisabled.GetFirst(); node; node = node->GetNext() )
+    {
+        node->GetData()->Enable();
+    }
+
+    return rc;
 }
 
 // Don't synthesize KeyUp events holding down a key and producing KeyDown
@@ -977,7 +1014,7 @@ bool wxSafeYield(wxWindow *win)
 #ifndef __WXGTK__
 bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 {
-   return TRUE;          // detectable auto-repeat is the only mode MSW supports
+    return TRUE;    // detectable auto-repeat is the only mode MSW supports
 }
 #endif // !wxGTK
 

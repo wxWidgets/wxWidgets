@@ -729,7 +729,7 @@ void wxLogDialog::OnListSelect(wxListEvent& event)
     // we can't just disable the control because this looks ugly under Windows
     // (wrong bg colour, no scrolling...), but we still want to disable
     // selecting items - it makes no sense here
-    m_listctrl->SetItemState(event.GetItem(), 0, wxLIST_STATE_SELECTED);
+    m_listctrl->SetItemState(event.GetIndex(), 0, wxLIST_STATE_SELECTED);
 }
 
 void wxLogDialog::OnOk(wxCommandEvent& WXUNUSED(event))

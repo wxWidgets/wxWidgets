@@ -120,8 +120,6 @@ private:
 
 class WXDLLEXPORT wxMDIChildFrame : public wxFrame
 {
-    DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
-
 public:
     wxMDIChildFrame();
     wxMDIChildFrame(wxMDIParentFrame *parent,
@@ -146,7 +144,7 @@ public:
                 const wxString& name = wxFrameNameStr);
 
     virtual bool IsTopLevel() const { return FALSE; }
-    
+
     // MDI operations
     virtual void Maximize(bool maximize = TRUE);
     virtual void Restore();
@@ -155,7 +153,6 @@ public:
     // Handlers
 
     bool HandleMDIActivate(long bActivate, WXHWND, WXHWND);
-    bool HandleSize(int x, int y, WXUINT);
     bool HandleWindowPosChanging(void *lpPos);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
 
@@ -172,6 +169,8 @@ protected:
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoSetClientSize(int width, int height);
     virtual void InternalSetMenuBar();
+
+    DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 };
 
 // ---------------------------------------------------------------------------

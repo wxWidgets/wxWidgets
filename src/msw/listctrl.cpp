@@ -51,6 +51,14 @@
                 (LVHT_ONITEMICON | LVHT_ONITEMLABEL | LVHT_ONITEMSTATEICON)
 #endif
 
+#ifndef LVM_SETEXTENDEDLISTVIEWSTYLE
+    #define LVM_SETEXTENDEDLISTVIEWSTYLE 0x1054
+#endif
+
+#ifndef LVS_EX_FULLROWSELECT
+    #define LVS_EX_FULLROWSELECT 0x00000020
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -196,20 +204,19 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 
     if ( !m_hWnd )
     {
-        wxLogError(wxT("Can't create list control window."));
+        wxLogError(_("Can't create list control window, check "
+                     "that comctl32.dll is installed."));
 
         return FALSE;
     }
 
     // for comctl32.dll v 4.70+ we want to have this attribute because it's
     // prettier (and also because wxGTK does it like this)
-#ifdef ListView_SetExtendedListViewStyle
-    if ( wstyle & LVS_REPORT )
+    if ( (wstyle & LVS_REPORT) && wxTheApp->GetComCtl32Version() >= 470 )
     {
-        ListView_SetExtendedListViewStyle(GetHwnd(),
-                                          LVS_EX_FULLROWSELECT);
+        ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE,
+                      0, LVS_EX_FULLROWSELECT);
     }
-#endif // ListView_SetExtendedListViewStyle
 
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(GetParent()->GetForegroundColour());
@@ -1283,7 +1290,15 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     wxListEvent event(wxEVT_NULL, m_windowId);
     wxEventType eventType = wxEVT_NULL;
+
     NMHDR *nmhdr = (NMHDR *)lParam;
+
+    // almost all messages use NM_LISTVIEW
+    NM_LISTVIEW *nmLV = (NM_LISTVIEW *)nmhdr;
+
+    // this is true for almost all events
+    event.m_item.m_data = nmLV->lParam;
+
     switch ( nmhdr->code )
     {
         case LVN_BEGINRDRAG:
@@ -1296,12 +1311,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = wxEVT_COMMAND_LIST_BEGIN_DRAG;
             }
 
-            {
-                NM_LISTVIEW *hdr = (NM_LISTVIEW *)lParam;
-                event.m_itemIndex = hdr->iItem;
-                event.m_pointDrag.x = hdr->ptAction.x;
-                event.m_pointDrag.y = hdr->ptAction.y;
-            }
+            event.m_itemIndex = nmLV->iItem;
+            event.m_pointDrag.x = nmLV->ptAction.x;
+            event.m_pointDrag.y = nmLV->ptAction.y;
             break;
 
         case LVN_BEGINLABELEDIT:
@@ -1309,17 +1321,14 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
                 wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
-                break;
             }
+            break;
 
         case LVN_COLUMNCLICK:
-            {
-                eventType = wxEVT_COMMAND_LIST_COL_CLICK;
-                NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
-                event.m_itemIndex = -1;
-                event.m_col = hdr->iSubItem;
-                break;
-            }
+            eventType = wxEVT_COMMAND_LIST_COL_CLICK;
+            event.m_itemIndex = -1;
+            event.m_col = nmLV->iSubItem;
+            break;
 
         case LVN_DELETEALLITEMS:
             eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
@@ -1330,15 +1339,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 
         case LVN_DELETEITEM:
-            {
-                eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
-                NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
-                event.m_itemIndex = hdr->iItem;
+            eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
+            event.m_itemIndex = nmLV->iItem;
 
-                if ( m_hasAnyAttr )
-                {
-                    delete (wxListItemAttr *)m_attrs.Delete(hdr->iItem);
-                }
+            if ( m_hasAnyAttr )
+            {
+                delete (wxListItemAttr *)m_attrs.Delete(nmLV->iItem);
             }
             break;
 
@@ -1379,33 +1385,28 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
 
         case LVN_INSERTITEM:
-            {
-                eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
-                NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
-                event.m_itemIndex = hdr->iItem;
-                break;
-            }
+            eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
+            event.m_itemIndex = nmLV->iItem;
+            break;
 
         case LVN_ITEMCHANGED:
+            // This needs to be sent to wxListCtrl as a rather more concrete
+            // event. For now, just detect a selection or deselection.
+            if ( (nmLV->uNewState & LVIS_SELECTED) && !(nmLV->uOldState & LVIS_SELECTED) )
             {
-                // This needs to be sent to wxListCtrl as a rather more
-                // concrete event. For now, just detect a selection
-                // or deselection.
-                NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
-                if ( (hdr->uNewState & LVIS_SELECTED) && !(hdr->uOldState & LVIS_SELECTED) )
-                {
-                    eventType = wxEVT_COMMAND_LIST_ITEM_SELECTED;
-                    event.m_itemIndex = hdr->iItem;
-                }
-                else if ( !(hdr->uNewState & LVIS_SELECTED) && (hdr->uOldState & LVIS_SELECTED) )
-                {
-                    eventType = wxEVT_COMMAND_LIST_ITEM_DESELECTED;
-                    event.m_itemIndex = hdr->iItem;
-                }
-                else
-                    return FALSE;
-                break;
+                eventType = wxEVT_COMMAND_LIST_ITEM_SELECTED;
+                event.m_itemIndex = nmLV->iItem;
             }
+            else if ( !(nmLV->uNewState & LVIS_SELECTED) && (nmLV->uOldState & LVIS_SELECTED) )
+            {
+                eventType = wxEVT_COMMAND_LIST_ITEM_DESELECTED;
+                event.m_itemIndex = nmLV->iItem;
+            }
+            else
+            {
+                return FALSE;
+            }
+            break;
 
         case LVN_KEYDOWN:
             {
@@ -1429,8 +1430,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
                     event.m_code = wxCharCodeMSWToWX(wVKey);
                 }
-                break;
+
+                event.m_item.m_data = GetItemData(lItem);
             }
+            break;
 
         case NM_DBLCLK:
             // if the user processes it in wxEVT_COMMAND_LEFT_CLICK(), don't do
@@ -1442,46 +1445,46 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
             // if it happened on an item (and not on empty place)
+            if ( nmLV->iItem == -1 )
             {
-                NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
-                if ( hdr->iItem == -1 )
-                {
-                    // not on item
-                    return FALSE;
-                }
-
-                eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
-                event.m_itemIndex = hdr->iItem;
+                // not on item
+                return FALSE;
             }
+
+            eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+            event.m_itemIndex = nmLV->iItem;
+            event.m_item.m_data = GetItemData(nmLV->iItem);
             break;
 
         case NM_RCLICK:
-        /* TECH NOTE: NM_RCLICK isn't really good enough here. We want to
-           subclass and check for the actual WM_RBUTTONDOWN message, because
-           NM_RCLICK waits for the WM_RBUTTONUP message as well before firing off.
-           We want to have notify events for both down -and- up. */
-        {
-            // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(), don't do
-            // anything else
-            if ( wxControl::MSWOnNotify(idCtrl, lParam, result) ) {
-                return TRUE;
-            }
-
-            // else translate it into wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event
-            LV_HITTESTINFO lvhti;
-            wxZeroMemory(lvhti);
-
-            ::GetCursorPos(&(lvhti.pt));
-            ::ScreenToClient(GetHwnd(),&(lvhti.pt));
-            if ( ListView_HitTest(GetHwnd(),&lvhti) != -1 )
+            /* TECH NOTE: NM_RCLICK isn't really good enough here. We want to
+               subclass and check for the actual WM_RBUTTONDOWN message,
+               because NM_RCLICK waits for the WM_RBUTTONUP message as well
+               before firing off. We want to have notify events for both down
+               -and- up. */
             {
-                if ( lvhti.flags & LVHT_ONITEM )
+                // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(),
+                // don't do anything else
+                if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
                 {
-                    eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
-                    event.m_itemIndex = lvhti.iItem;
+                    return TRUE;
+                }
+
+                // else translate it into wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event
+                LV_HITTESTINFO lvhti;
+                wxZeroMemory(lvhti);
+
+                ::GetCursorPos(&(lvhti.pt));
+                ::ScreenToClient(GetHwnd(),&(lvhti.pt));
+                if ( ListView_HitTest(GetHwnd(),&lvhti) != -1 )
+                {
+                    if ( lvhti.flags & LVHT_ONITEM )
+                    {
+                        eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
+                        event.m_itemIndex = lvhti.iItem;
+                    }
                 }
             }
-        }
             break;
 
 #if 0
@@ -1601,7 +1604,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // post processing
     // ---------------
 
-    switch ( (int)nmhdr->code )
+    switch ( nmhdr->code )
     {
         case LVN_DELETEALLITEMS:
             // always return TRUE to suppress all additional LVN_DELETEITEM

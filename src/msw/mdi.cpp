@@ -122,9 +122,9 @@ static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
 // wxWin macros
 // ---------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
-    IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
-    IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
+IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
+IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_SIZE(wxMDIParentFrame::OnSize)
@@ -879,51 +879,6 @@ long wxMDIChildFrame::MSWWindowProc(WXUINT message,
         rc = wxFrame::MSWWindowProc(message, wParam, lParam);
 
     return rc;
-}
-
-bool wxMDIChildFrame::HandleSize(int x, int y, WXUINT id)
-{
-    HWND hwnd = GetHwnd();
-
-    if ( !hwnd || hwnd == invalidHandle )
-    {
-        return FALSE;
-    }
-
-    switch (id)
-    {
-        case SIZEFULLSCREEN:
-        case SIZENORMAL:
-            m_iconized = FALSE;
-            break;
-
-        case SIZEICONIC:
-            m_iconized = TRUE;
-            break;
-    }
-
-    if ( !m_iconized )
-    {
-        // forward WM_SIZE to status bar control
-#if wxUSE_NATIVE_STATUSBAR
-        if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
-        {
-            wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
-            event.SetEventObject( m_frameStatusBar );
-
-            ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
-        }
-#endif // wxUSE_NATIVE_STATUSBAR
-
-        PositionStatusBar();
-        PositionToolBar();
-
-        return wxWindow::HandleSize(x, y, id);
-    }
-    else
-    {
-        return FALSE;
-    }
 }
 
 bool wxMDIChildFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
