@@ -556,7 +556,6 @@ ALL_DIST: distclean
 	mkdir $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
-	cp $(ZLIBDIR)/*.mcp $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/README $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
 	mkdir $(DISTDIR)/src/regex
@@ -621,15 +620,12 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(HTMLDIR)/bitmaps/*.xpm $(DISTDIR)/src/html/bitmaps
 	cp $(PNGDIR)/*.h $(DISTDIR)/src/png
 	cp $(PNGDIR)/*.c $(DISTDIR)/src/png
-	cp $(PNGDIR)/*.mcp $(DISTDIR)/src/png
 	cp $(PNGDIR)/README $(DISTDIR)/src/png
 	cp $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
-	cp $(JPEGDIR)/*.mcp $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/README $(DISTDIR)/src/jpeg
 	cp $(TIFFDIR)/*.h $(DISTDIR)/src/tiff
 	cp $(TIFFDIR)/*.c $(DISTDIR)/src/tiff
-	cp $(TIFFDIR)/*.mcp $(DISTDIR)/src/tiff
 	cp $(TIFFDIR)/README $(DISTDIR)/src/tiff
 	cp $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
 	cp $(ODBCDIR)/*.c $(DISTDIR)/src/iodbc
@@ -702,7 +698,6 @@ MOTIF_DIST: ALL_GUI_DIST
 MACX_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/*.* $(DISTDIR)/include
 	cp $(INCDIR)/wx/mac/*.h $(DISTDIR)/include/wx/mac
-	cp $(SRCDIR)/*.mcp $(DISTDIR)/src
 	cp $(MACDIR)/files.lst $(DISTDIR)/src/mac
 	cp $(MACDIR)/*.cpp $(DISTDIR)/src/mac
 	cp $(MACDIR)/*.c $(DISTDIR)/src/mac
@@ -711,14 +706,6 @@ MACX_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/mac/morefile
 	cp $(MACDIR)/morefile/*.h $(DISTDIR)/src/mac/morefile
 	cp $(MACDIR)/morefile/*.c $(DISTDIR)/src/mac/morefile
-	mkdir $(DISTDIR)/src/mac/cdef
-	cp $(MACDIR)/cdef/*.h $(DISTDIR)/src/mac/cdef
-	cp $(MACDIR)/cdef/*.c $(DISTDIR)/src/mac/cdef
-	cp $(MACDIR)/cdef/*.mcp $(DISTDIR)/src/mac/cdef
-	mkdir $(DISTDIR)/src/mac/ldef
-	cp $(MACDIR)/ldef/*.h $(DISTDIR)/src/mac/ldef
-	cp $(MACDIR)/ldef/*.c $(DISTDIR)/src/mac/ldef
-	cp $(MACDIR)/ldef/*.mcp $(DISTDIR)/src/mac/cdef
 	mkdir $(DISTDIR)/src/mac/macsock
 	cp $(MACDIR)/macsock/*.lib $(DISTDIR)/src/mac/macsock
 
@@ -761,8 +748,6 @@ DEMOS_DIST: ALL_GUI_DIST
 	cp $(DEMODIR)/configure $(DISTDIR)/demos
 	cp $(DEMODIR)/configure.in $(DISTDIR)/demos
 
-	cp -R $(DEMODIR)/dbbrowse $(DISTDIR)/demos/dbbrowse
-
 	mkdir $(DISTDIR)/demos/bombs
 	cp $(DEMODIR)/bombs/Makefile.in $(DISTDIR)/demos/bombs
 	cp $(DEMODIR)/bombs/makefile.unx $(DISTDIR)/demos/bombs
@@ -770,6 +755,8 @@ DEMOS_DIST: ALL_GUI_DIST
 	cp $(DEMODIR)/bombs/*.h $(DISTDIR)/demos/bombs
 	cp $(DEMODIR)/bombs/*.xpm $(DISTDIR)/demos/bombs
 	cp $(DEMODIR)/bombs/readme.txt $(DISTDIR)/demos/bombs
+
+	cp -R $(DEMODIR)/dbbrowse $(DISTDIR)/demos/dbbrowse
 
 	mkdir $(DISTDIR)/demos/forty
 	cp $(DEMODIR)/forty/Makefile.in $(DISTDIR)/demos/forty
@@ -813,7 +800,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/calendar
 	cp $(SAMPDIR)/calendar/Makefile.in $(DISTDIR)/samples/calendar
 	cp $(SAMPDIR)/calendar/makefile.unx $(DISTDIR)/samples/calendar
-	cp $(SAMPDIR)/calendar/*.mcp $(DISTDIR)/samples/calendar
 	cp $(SAMPDIR)/calendar/*.cpp $(DISTDIR)/samples/calendar
 
 	mkdir $(DISTDIR)/samples/caret
@@ -825,7 +811,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/Makefile.in $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/makefile.unx $(DISTDIR)/samples/checklst
-	cp $(SAMPDIR)/checklst/*.mcp $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.cpp $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.xpm $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.mms $(DISTDIR)/samples/checklst
@@ -833,7 +818,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/config
 	cp $(SAMPDIR)/config/Makefile.in $(DISTDIR)/samples/config
 	cp $(SAMPDIR)/config/makefile.unx $(DISTDIR)/samples/config
-	cp $(SAMPDIR)/config/*.mcp $(DISTDIR)/samples/config
 	cp $(SAMPDIR)/config/*.cpp $(DISTDIR)/samples/config
 
 	mkdir $(DISTDIR)/samples/console
@@ -845,7 +829,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/controls/icons
 	cp $(SAMPDIR)/controls/Makefile.in $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/makefile.unx $(DISTDIR)/samples/controls
-	cp $(SAMPDIR)/controls/*.mcp $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.cpp $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.xpm $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.mms $(DISTDIR)/samples/controls
@@ -861,7 +844,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/Makefile.in $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/makefile.unx $(DISTDIR)/samples/dialogs
-	cp $(SAMPDIR)/dialogs/*.mcp $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.cpp $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.h $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.txt $(DISTDIR)/samples/dialogs
