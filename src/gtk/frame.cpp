@@ -108,6 +108,8 @@ wxFrame::wxFrame()
     m_frameStatusBar = (wxStatusBar *) NULL;
     m_frameToolBar = (wxToolBar *) NULL;
     m_sizeSet = FALSE;
+    m_miniEdge = 0;
+    m_miniTitle = 0;
 }
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -118,6 +120,8 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     m_frameStatusBar = (wxStatusBar *) NULL;
     m_frameToolBar = (wxToolBar *) NULL;
     m_sizeSet = FALSE;
+    m_miniEdge = 0;
+    m_miniTitle = 0;
     Create( parent, id, title, pos, size, style, name );
 }
 
@@ -213,7 +217,7 @@ bool wxFrame::Destroy()
 
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
-    wxPoint pt(0, 0);
+    wxPoint pt( m_miniEdge, m_miniEdge + m_miniTitle );
     if (m_frameMenuBar)
     {
         int h = 0;
@@ -325,6 +329,11 @@ void wxFrame::GetClientSize( int *width, int *height ) const
             m_frameToolBar->GetSize( (int *) NULL, &y );
             (*height) -= y;
         }
+        (*height) -= m_miniEdge*2 + m_miniTitle;
+    }
+    if (width)
+    {
+        (*width) -= m_miniEdge*2;
     }
 }
 
@@ -341,7 +350,7 @@ void wxFrame::SetClientSize( int const width, int const height )
         m_frameToolBar->GetSize( (int *) NULL, &y );
         h += y;
     }
-    wxWindow::SetClientSize( width, h );
+    wxWindow::SetClientSize( width + m_miniEdge*2, h  + m_miniEdge*2 + m_miniTitle );
 }
 
 void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
@@ -365,39 +374,57 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
     gtk_widget_set_usize( m_widget, m_width, m_height );
     
-    // This emulates the new wxMSW behaviour
+    // this emulates the new wxMSW behaviour of placing all
+    // frame-subwindows (menu, toolbar..) on one native window
+        // OK, this hurts in the eye, but I don't want to call SetSize()
+        // because I don't want to call any non-native functions here.
     
     if (m_frameMenuBar)
     {
-        m_frameMenuBar->m_x = 1;  
-        m_frameMenuBar->m_y = 1;
-        m_frameMenuBar->m_width = m_width-2;
-        m_frameMenuBar->m_height = wxMENU_HEIGHT-2;
-        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameMenuBar->m_widget, 1, 1 );
-        gtk_widget_set_usize( m_frameMenuBar->m_widget, m_width-2, wxMENU_HEIGHT-2 );
+        int xx = 1 + m_miniEdge;
+	int yy = 1 + m_miniEdge + m_miniTitle;
+	int ww = m_width - 2  - 2*m_miniEdge;
+	int hh = wxMENU_HEIGHT-2;
+        m_frameMenuBar->m_x = xx;
+        m_frameMenuBar->m_y = yy;
+        m_frameMenuBar->m_width = ww;
+        m_frameMenuBar->m_height = hh;
+	
+        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameMenuBar->m_widget, xx, yy );
+        gtk_widget_set_usize( m_frameMenuBar->m_widget, ww, hh );
     }
 
     if (m_frameToolBar)
     {
-        int y = 0;
-        if (m_frameMenuBar) y = wxMENU_HEIGHT;
-        int h = m_frameToolBar->m_height;
+        int xx = 1 + m_miniEdge;
+	int yy = m_miniEdge + m_miniTitle;
+        if (m_frameMenuBar) yy += wxMENU_HEIGHT;
+	int ww = m_width -2 - 2*m_miniEdge;
+        int hh = m_frameToolBar->m_height;
     
-        m_frameToolBar->m_x = 2;  
-        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameToolBar->m_widget, 2, y );
-        gtk_widget_set_usize( m_frameToolBar->m_widget, m_width-3, h );
+        m_frameToolBar->m_x = xx;  
+        m_frameToolBar->m_y = yy;
+        m_frameToolBar->m_height = hh;
+        m_frameToolBar->m_width = ww;
+	
+        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameToolBar->m_widget, xx, yy );
+        gtk_widget_set_usize( m_frameToolBar->m_widget, ww, hh );
     }
   
     if (m_frameStatusBar)
     {
-        // OK, this hurts in the eye, but I don't want to call SetSize()
-        // because I don't want to call any non-native functions here.
-        m_frameStatusBar->m_x = 0;  
-        m_frameStatusBar->m_y = m_height-wxSTATUS_HEIGHT;
-        m_frameStatusBar->m_width = m_width;
-        m_frameStatusBar->m_height = wxSTATUS_HEIGHT;
-        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameStatusBar->m_widget, 0, m_height-wxSTATUS_HEIGHT );
-        gtk_widget_set_usize( m_frameStatusBar->m_widget, m_width, wxSTATUS_HEIGHT );
+        int xx = 0 + m_miniEdge;
+	int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge;
+	int ww = m_width - 2*m_miniEdge;
+	int hh = wxSTATUS_HEIGHT;
+	
+        m_frameStatusBar->m_x = xx;
+        m_frameStatusBar->m_y = yy;
+        m_frameStatusBar->m_width = ww;
+        m_frameStatusBar->m_height = hh;
+	
+        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameStatusBar->m_widget, xx, yy );
+        gtk_widget_set_usize( m_frameStatusBar->m_widget, ww, hh );
     }
     
     m_sizeSet = TRUE;
@@ -606,3 +633,4 @@ void wxFrame::SetIcon( const wxIcon &icon )
   
     gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
 }
+

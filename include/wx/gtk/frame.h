@@ -99,7 +99,7 @@ public:
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );
   void OnCloseWindow( wxCloseEvent& event );
-  void OnIdle(wxIdleEvent& event);
+  void OnIdle(wxIdleEvent& event );
 
   // implementation
   
@@ -113,6 +113,7 @@ public:
   wxToolBar    *m_frameToolBar;
   wxString      m_title;
   wxIcon        m_icon;
+  int           m_miniEdge,m_miniTitle;
 
   DECLARE_EVENT_TABLE()
 };

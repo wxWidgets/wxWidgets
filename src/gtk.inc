@@ -95,6 +95,7 @@ LIB_CPP_SRC=\
  gtk/listbox.cpp \
  gtk/mdi.cpp \
  gtk/menu.cpp \
+ gtk/minifram.cpp \
  gtk/notebook.cpp \
  gtk/palette.cpp \
  gtk/pen.cpp \
