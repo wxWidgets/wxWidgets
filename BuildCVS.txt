@@ -114,7 +114,8 @@ library; cross-compiling errors can be pretty obscure and you'll want to be
 sure that your configure setup is basically sound.)
 
 To cross compile the windows library, do
--> cd win32
+-> cd win32 
+(or whatever you called it)
 Now run configure. There are two ways to do this
 -> ../configure --host=i586-mingw32 --build=i586-linux --with-mingw \
    --enable-dnd=no
@@ -130,15 +131,20 @@ yourself:
 (all assuming you're using mingw32)
 Drag'n'drop is disabled because mingw32 lacks (AFAIK) OLE headers.
 
+[ Update: some new mingw32 versions now have a new set of windows header 
+files, which apparently can handle ole. Untested at the moment ]
+
 Configure will conclude that shared libraries are out of the question and
 opt for a static one. I haven't looked into DLL creation yet.
 
 Type 
--> make -C src
+-> make
 and wait, wait, wait. Don't leave the room, because the minute you do there
 will be a compile error :-)
 
-If this is successful, try building the minimal sample:
+If this is successful, you end up with a libwx_msw.a in win32/lib.  Now try 
+building the minimal sample:
+
 -> cd samples/minimal
 -> make
 -> mv minimal minimal.exe
