@@ -3040,7 +3040,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
         size_t oldCurrent = m_current;
         bool cmdModifierDown = event.CmdDown();
-        if ( !(cmdModifierDown || event.ShiftDown()) )
+        if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
         {
             if( IsSingleSel() || !IsHighlighted(current) )
             {
