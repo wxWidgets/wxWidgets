@@ -115,6 +115,8 @@ wxWindowBase::wxWindowBase()
     m_parent = (wxWindow *)NULL;
     m_windowId = wxID_ANY;
 
+    m_initialSize = wxDefaultSize;
+    
     // no constraints on the minimal window size
     m_minWidth =
     m_minHeight =
@@ -222,13 +224,9 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     SetWindowStyleFlag(style);
     SetParent(parent);
 
-    // Set the minsize to be the size passed to the ctor (if any) for
-    // non-TLWs.  This is so items used in a sizer will use this explicitly
-    // set size for layout, instead of falling back the (probably smaller)
-    // bestsize.
-    if (! IsTopLevel())
-        SetSizeHints(size);
-
+    // Save the size passed to the ctor (if any.)  This will be used later as
+    // the minimal size if the window is added to a sizer.
+    m_initialSize = size;
     
 #if wxUSE_VALIDATORS
     SetValidator(validator);
@@ -546,7 +544,7 @@ wxSize wxWindowBase::DoGetBestSize() const
 #endif // wxUSE_CONSTRAINTS
     else if ( !GetChildren().empty() )
     {
-        // our minimal acceptable size is such that all our windows fit inside
+        // our minimal acceptable size is such that all our visible child windows fit inside
         int maxX = 0,
             maxY = 0;
 
@@ -555,7 +553,7 @@ wxSize wxWindowBase::DoGetBestSize() const
               node = node->GetNext() )
         {
             wxWindow *win = node->GetData();
-            if ( win->IsTopLevel()
+            if ( win->IsTopLevel()  || ( ! win->IsShown() )
 #if wxUSE_STATUSBAR
                     || wxDynamicCast(win, wxStatusBar)
 #endif // wxUSE_STATUSBAR
@@ -1627,6 +1625,26 @@ void wxWindowBase::SetSizerAndFit(wxSizer *sizer, bool deleteOld)
     sizer->SetSizeHints( (wxWindow*) this );
 }
 
+   
+void wxWindowBase::SetContainingSizer(wxSizer* sizer)
+{
+    // adding a window to a sizer twice is going to result in fatal and
+    // hard to debug problems later because when deleting the second
+    // associated wxSizerItem we're going to dereference a dangling
+    // pointer; so try to detect this as early as possible
+    wxASSERT_MSG( !sizer || m_containingSizer != sizer,
+                  _T("Adding a window to the same sizer twice?") );
+    
+    m_containingSizer = sizer;
+
+    // If there was an initial size for this window, and if a minsize has not
+    // been set, then set the initial size as the minsize.  This helps with
+    // sizer layout when a larger than GetBestSize size is needed for
+    // controls.
+    if (m_initialSize != wxDefaultSize && GetMinSize() == wxDefaultSize)
+        SetSizeHints(m_initialSize);
+}
+   
 #if wxUSE_CONSTRAINTS
 
 void wxWindowBase::SatisfyConstraints()

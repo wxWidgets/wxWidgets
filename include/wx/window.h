@@ -931,17 +931,7 @@ public:
     wxSizer *GetSizer() const { return m_windowSizer; }
 
     // Track if this window is a member of a sizer
-    void SetContainingSizer(wxSizer* sizer)
-    {
-        // adding a window to a sizer twice is going to result in fatal and
-        // hard to debug problems later because when deleting the second
-        // associated wxSizerItem we're going to dereference a dangling
-        // pointer; so try to detect this as early as possible
-        wxASSERT_MSG( !sizer || m_containingSizer != sizer,
-                        _T("Adding a window to the same sizer twice?") );
-
-        m_containingSizer = sizer;
-    }
+    void SetContainingSizer(wxSizer* sizer);
     wxSizer *GetContainingSizer() const { return m_containingSizer; }
 
     // accessibility
@@ -1121,6 +1111,9 @@ protected:
     wxAccessible*       m_accessible;
 #endif
 
+    // Initial window size, used as minimal size in Sizers
+    wxSize              m_initialSize;
+    
     // Virtual size (scrolling)
     wxSize                m_virtualSize;
 
