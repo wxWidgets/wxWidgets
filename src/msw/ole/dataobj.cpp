@@ -1065,7 +1065,8 @@ bool wxFileDataObject::GetDataHere(void *pData) const
 // wxURLDataObject
 // ----------------------------------------------------------------------------
 
-class CFSTR_SHELLURLDataObject:public wxCustomDataObject
+
+class CFSTR_SHELLURLDataObject : public wxCustomDataObject
 {
 public:
     CFSTR_SHELLURLDataObject() : wxCustomDataObject(CFSTR_SHELLURL) {}
@@ -1089,6 +1090,7 @@ protected:
     {
         return buffer;
     }
+
 #if wxUSE_UNICODE
     virtual bool GetDataHere( void* buffer ) const
     {
@@ -1103,6 +1105,8 @@ protected:
     }
 #endif
 };
+
+
 
 wxURLDataObject::wxURLDataObject()
 {
@@ -1143,8 +1147,13 @@ wxString wxURLDataObject::GetURL() const
 
 void wxURLDataObject::SetURL(const wxString& url)
 {
-    SetData(wxDataFormat(wxDF_TEXT), url.Length()+1, url.c_str());
-    SetData(wxDataFormat(CFSTR_SHELLURL), url.Length()+1, url.c_str());
+    SetData(wxDataFormat(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT),
+            url.Length()+1, url.c_str());
+
+    // CFSTR_SHELLURL is always supposed to be ANSI...
+    wxWX2MBbuf urlA = (wxWX2MBbuf)url.mbc_str();
+    size_t len = strlen(urlA);
+    SetData(wxDataFormat(CFSTR_SHELLURL), len+1, (const char*)urlA);
 }
 
 // ----------------------------------------------------------------------------
