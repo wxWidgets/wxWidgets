@@ -60,6 +60,17 @@ functions that take a \helpref{wxTreeEvent}{wxtreeevent} argument.
 \helpref{wxTreeItemData}{wxtreeitemdata}, \helpref{wxTreeCtrl overview}{wxtreectrloverview}, \helpref{wxListBox}{wxlistbox}, \helpref{wxListCtrl}{wxlistctrl},\rtfsp
 \helpref{wxImageList}{wximagelist}, \helpref{wxTreeEvent}{wxtreeevent}
 
+\wxheading{Win32 notes}
+
+wxTreeCtrl class uses the standard common treeview control under Win32
+implemented in the system library {\tt comctl32.dll}. Some versions of this
+library are known to have bugs with handling the tree control colours: the
+usual symptom is that the expanded items leave black (or otherwise incorrectly
+coloured) background behind them, especially for the controls using non
+default background colour. The recommended solution is to upgrade the {\tt comctl32.dll} 
+to a newer version: see 
+\urlref{http://www.microsoft.com/msdownload/ieplatform/ie/comctrlx86.asp}{http://www.microsoft.com/msdownload/ieplatform/ie/comctrlx86.asp}.
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxTreeCtrl::wxTreeCtrl}\label{wxtreectrlconstr}
