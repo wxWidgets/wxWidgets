@@ -48,7 +48,6 @@
 
 #include "wx/grid.h"
 
-
 // ----------------------------------------------------------------------------
 // array classes
 // ----------------------------------------------------------------------------
@@ -267,12 +266,20 @@ public:
     static size_t gs_nAttrCacheMisses = 0;
 #endif // DEBUG_ATTR_CACHE
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
 wxGridCellCoords wxGridNoCellCoords( -1, -1 );
 wxRect           wxGridNoCellRect( -1, -1, -1, -1 );
 
 // scroll line size
 // TODO: fixed so far - make configurable later (and also different for x/y)
 static const size_t GRID_SCROLL_LINE = 10;
+
+// the size of hash tables used a bit everywhere (the max number of elements
+// in these hash tables is the number of rows/columns)
+static const int GRID_HASH_SIZE = 100;
 
 // ============================================================================
 // implementation
@@ -2020,7 +2027,8 @@ wxGrid::wxGrid( wxWindow *parent,
                  const wxSize& size,
                  long style,
                  const wxString& name )
-  : wxScrolledWindow( parent, id, pos, size, style, name )
+  : wxScrolledWindow( parent, id, pos, size, style, name ),
+    m_colMinWidths(wxKEY_INTEGER, GRID_HASH_SIZE)
 {
     Create();
 }
@@ -2887,7 +2895,9 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
-                    x = wxMax( x, GetColLeft(m_dragRowOrCol) + WXGRID_MIN_COL_WIDTH );
+
+                    x = wxMax( x, GetColLeft(m_dragRowOrCol) +
+                                  GetColMinimalWidth(m_dragRowOrCol));
                     dc.SetLogicalFunction(wxINVERT);
                     if ( m_dragLastPos >= 0 )
                     {
@@ -3212,7 +3222,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
-            x = wxMax( x, GetColLeft(m_dragRowOrCol) + WXGRID_MIN_COL_WIDTH );
+            x = wxMax( x, GetColLeft(m_dragRowOrCol) +
+                          GetColMinimalWidth(m_dragRowOrCol) );
             dc.SetLogicalFunction(wxINVERT);
             if ( m_dragLastPos >= 0 )
             {
@@ -3482,7 +3493,8 @@ void wxGrid::DoEndDragResizeCol()
 
         int colLeft = GetColLeft(m_dragRowOrCol);
         SetColSize( m_dragRowOrCol,
-                    wxMax( m_dragLastPos - colLeft, WXGRID_MIN_COL_WIDTH ) );
+                    wxMax( m_dragLastPos - colLeft,
+                           GetColMinimalWidth(m_dragRowOrCol) ) );
 
         if ( !GetBatchCount() )
         {
@@ -6035,6 +6047,8 @@ void wxGrid::SetColSize( int col, int width )
 {
     wxCHECK_RET( col >= 0 && col < m_numCols, _T("invalid column index") );
 
+    // should we check that it's bigger than GetColMinimalWidth(col) here?
+
     if ( m_colWidths.IsEmpty() )
     {
         // need to really create the array
@@ -6053,6 +6067,17 @@ void wxGrid::SetColSize( int col, int width )
     CalcDimensions();
 }
 
+
+void wxGrid::SetColMinimalWidth( int col, int width )
+{
+    m_colMinWidths.Put(col, (wxObject *)width);
+}
+
+int wxGrid::GetColMinimalWidth(int col) const
+{
+    wxObject *obj = m_colMinWidths.Get(m_dragRowOrCol);
+    return obj ? (int)obj : WXGRID_MIN_COL_WIDTH;
+}
 
 //
 // ------ cell value accessor functions

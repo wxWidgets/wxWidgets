@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        grid.h
+// Name:        wx/generic/grid.h
 // Purpose:     wxGrid and related classes
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
 // Modified by:
@@ -22,6 +22,7 @@
 #pragma interface "grid.h"
 #endif
 
+#include "wx/hash.h"
 #include "wx/panel.h"
 #include "wx/scrolwin.h"
 #include "wx/string.h"
@@ -559,11 +560,13 @@ private:
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
+// ============================================================================
 //  Grid view classes
-//
-//////////////////////////////////////////////////////////////////////
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxGridCellCoords: location of a cell in the grid
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxGridCellCoords
 {
@@ -618,8 +621,6 @@ extern wxRect           wxGridNoCellRect;
 // An array of cell coords...
 //
 WX_DECLARE_EXPORTED_OBJARRAY(wxGridCellCoords, wxGridCellCoordsArray);
-
-
 
 // ----------------------------------------------------------------------------
 // wxGrid
@@ -842,6 +843,12 @@ public:
     void     SetDefaultColSize( int width, bool resizeExistingCols = FALSE );
 
     void     SetColSize( int col, int width );
+
+    // column won't be resized to be lesser width - this must be called during
+    // the grid creation because it won't resize the column if it's already
+    // narrower than the minimal width
+    void     SetColMinimalWidth( int col, int width );
+
     void     SetDefaultCellBackgroundColour( const wxColour& );
     void     SetCellBackgroundColour( int row, int col, const wxColour& );
     void     SetDefaultCellTextColour( const wxColour& );
@@ -1200,6 +1207,12 @@ protected:
     wxColour   m_gridLineColour;
     bool       m_gridLinesEnabled;
 
+    // if a column has a minimal width, it will be the value for it in this
+    // hash table
+    wxHashTable m_colMinWidths;
+
+    // get the minimal width of the given column
+    int        GetColMinimalWidth(int col) const;
 
     // do we have some place to store attributes in?
     bool CanHaveAttributes();
@@ -1322,12 +1335,9 @@ protected:
 };
 
 
-
-
-
-//
-// ------ Grid event class and event types
-//
+// ----------------------------------------------------------------------------
+// Grid event class and event types
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxGridEvent : public wxNotifyEvent
 {

@@ -110,7 +110,7 @@ GridFrame::GridFrame()
     int logW = gridW, logH = 100;
 
     wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append( ID_VTABLE, "&Virtual table test");
+    fileMenu->Append( ID_VTABLE, "&Virtual table test\tCtrl-V");
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, "E&xit\tAlt-X" );
 
@@ -220,8 +220,9 @@ GridFrame::GridFrame()
     attr->SetBackgroundColour(*wxBLUE);
     grid->SetRowAttr(5, attr);
 
-    // VZ: cell borders don't look nice otherwise :-) (for now...)
-    grid->SetDefaultCellBackgroundColour(wxColour(200, 200, 180));
+    grid->SetCellValue(2, 4, "a wider column");
+    grid->SetColSize(4, 120);
+    grid->SetColMinimalWidth(4, 120);
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
