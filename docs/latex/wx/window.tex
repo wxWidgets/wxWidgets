@@ -659,6 +659,12 @@ controls so it is mostly just a hint to wxWindows and not a mandatory
 directive.
 
 
+\membersection{wxWindow::GetAcceleratorTable}\label{wxwindowgetacceleratortable}
+
+\constfunc{wxAcceleratorTable*}{GetAcceleratorTable}{\void}
+
+Gets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxacceleratortable}.
+
 \membersection{wxWindow::GetAccessible}\label{wxwindowgetaccessible}
 
 \func{wxAccessibile*}{GetAccessible}{\void}
@@ -793,6 +799,15 @@ Returns a pointer to the window's layout constraints, or NULL if there are none.
 Return the sizer that this window is a member of, if any, otherwise
 {\tt NULL}.
 
+\membersection{wxWindow::GetCursor}\label{wxwindowgetcursor}
+
+\constfunc{const wxCursor\&}{GetCursor}{\void}
+
+Return the cursor associated with this window.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetCursor}{wxwindowsetcursor}
 
 \membersection{wxWindow::GetDropTarget}\label{wxwindowgetdroptarget}
 
@@ -1228,7 +1243,7 @@ only redrawing those areas, which have been exposed.
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{{\bf IsExposed(x,y, w=0,h=0}}{}
+\twocolitem{{\bf IsExposed(x,y, w=0,h=0)}}{}
 \twocolitem{{\bf IsExposedPoint(pt)}}{}
 \twocolitem{{\bf IsExposedRect(rect)}}{}
 \end{twocollist}}}
@@ -1295,8 +1310,7 @@ or frame).
 \func{virtual void}{MakeModal}{\param{bool }{flag}}
 
 Disables all other windows in the application so that
-the user can only interact with this window. (This function
-is not implemented anywhere).
+the user can only interact with this window.
 
 \wxheading{Parameters}
 
@@ -1964,7 +1978,7 @@ or frame).
 \func{virtual void}{Refresh}{\param{bool}{ eraseBackground = {\tt true}}, \param{const wxRect* }{rect
 = NULL}}
 
-Causes a message or event to be generated to repaint the
+Causes an event to be generated to repaint the
 window.
 
 \wxheading{Parameters}
@@ -2417,6 +2431,10 @@ you should use the style of
 {\tt wxDEFAULT\_FRAME\_STYLE \& \textasciitilde(wxMINIMIZE\_BOX | wxMAXIMIZE\_BOX)} for the
 frames having this style (the dialogs don't have minimize nor maximize box by
 default)}
+\twocolitem{\windowstyle{wxWS\_EX\_PROCESS\_IDLE}}{This window should always process idle events, even
+if the mode set by \helpref{wxIdleEvent::SetMode}{wxidleeventsetmode} is wxIDLE\_PROCESS\_SPECIFIED.}
+\twocolitem{\windowstyle{wxWS\_EX\_PROCESS\_UI\_UPDATES}}{This window should always process UI update events,
+even if the mode set by \helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode} is wxUPDATE\_UI\_PROCESS\_SPECIFIED.}
 \end{twocollist}
 
 
