@@ -105,6 +105,9 @@ COMMONOBJS = \
   $(MSWDIR)\time.obj \
   $(MSWDIR)\wxexpr.obj \
   $(MSWDIR)\y_tab.obj \
+  $(MSWDIR)\stream.obj \
+  $(MSWDIR)\fstream.obj \
+  $(MSWDIR)\mstream.obj \
   $(MSWDIR)\datstrm.obj \
   $(MSWDIR)\extended.obj
 
@@ -464,6 +467,12 @@ $(MSWDIR)\matrix.obj:     $(COMMDIR)\matrix.$(SRCSUFF)
 $(MSWDIR)\time.obj:     $(COMMDIR)\time.$(SRCSUFF)
 
 $(MSWDIR)\datstrm.obj:	$(COMMDIR)\datstrm.$(SRCSUFF)
+
+$(MSWDIR)\mstream.obj:	$(COMMDIR)\mstream.$(SRCSUFF)
+
+$(MSWDIR)\fstream.obj:	$(COMMDIR)\fstream.$(SRCSUFF)
+
+$(MSWDIR)\stream.obj:	$(COMMDIR)\stream.$(SRCSUFF)
 
 $(MSWDIR)\extended.obj:	$(COMMDIR)\extended.c
 

@@ -107,6 +107,9 @@ COMMONOBJS = \
   $(COMMDIR)\time.obj \
   $(COMMDIR)\wxexpr.obj \
   $(COMMDIR)\y_tab.obj \
+  $(COMMDIR)\stream.obj \
+  $(COMMDIR)\fstream.obj \
+  $(COMMDIR)\mstream.obj \
   $(COMMDIR)\datstrm.obj \
   $(COMMDIR)\extended.obj \
   $(COMMDIR)\process.obj

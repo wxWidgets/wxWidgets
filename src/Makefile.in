@@ -55,6 +55,9 @@ LIB_CPP_SRC=\
  common/time.cpp \
  common/timercmn.cpp \
  common/utilscmn.cpp \
+ common/stream.cpp \
+ common/fstream.cpp \
+ common/mstream.cpp \
  common/datstrm.cpp \
 \
  gtk/app.cpp \

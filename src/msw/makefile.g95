@@ -111,6 +111,9 @@ COMMONOBJS = \
   $(COMMDIR)/string.$(OBJSUFF) \
   $(COMMDIR)/time.$(OBJSUFF) \
   $(COMMDIR)/y_tab.$(OBJSUFF) \
+  $(COMMDIR)/stream.$(OBJSUFF) \
+  $(COMMDIR)/fstream.$(OBJSUFF) \
+  $(COMMDIR)/mstream.$(OBJSUFF) \
   $(COMMDIR)/datstrm.$(OBJSUFF) \
   $(COMMDIR)/extended.$(OBJSUFF)
 

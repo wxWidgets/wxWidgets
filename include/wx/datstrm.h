@@ -16,15 +16,12 @@
 #pragma interface "datstrm.h"
 #endif
 
-#include "wx/wx.h"
+#include <wx/stream.h>
 
-class wxDataStream {
+class wxDataStream: public wxFilterInputStream {
 public:
-  wxDataStream(iostream& s);
-  wxDataStream(istream& s);
-  wxDataStream(ostream& s);
-
-  virtual ~wxDataStream();
+  wxDataInputStream(wxInputStream& s);
+  virtual ~wxDataInputStream();
 
   unsigned long Read32();
   unsigned short Read16();
@@ -32,6 +29,12 @@ public:
   double ReadDouble();
   wxString ReadLine();
   wxString ReadString();
+};
+
+class wxDataOutputStream: public wxFilterOutputStream {
+ public:
+  wxDataOutputStream(wxOutputStream& s);
+  virtual ~wxDataOutputStream();
 
   void Write32(unsigned long i);
   void Write16(unsigned short i);
@@ -39,10 +42,7 @@ public:
   void WriteDouble(double d);
   void WriteLine(const wxString& line);
   void WriteString(const wxString& string);
-protected:
-  istream *m_istream;
-  ostream *m_ostream;
 };
 
 #endif
-    // __HELPBASEH__
+    // __DATSTREAMH__
