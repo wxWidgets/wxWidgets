@@ -374,6 +374,7 @@ void wxVScrolledWindow::OnScroll(wxScrollWinEvent& event)
     size_t lineFirstNew;
 
     const wxEventType evtType = event.GetEventType();
+
     if ( evtType == wxEVT_SCROLLWIN_TOP )
     {
         lineFirstNew = 0;
@@ -398,21 +399,19 @@ void wxVScrolledWindow::OnScroll(wxScrollWinEvent& event)
     {
         lineFirstNew = GetLastVisibleLine();
     }
+    else if ( evtType == wxEVT_SCROLLWIN_THUMBRELEASE )
+    {
+        lineFirstNew = event.GetPosition();
+    }
+    else if ( evtType == wxEVT_SCROLLWIN_THUMBTRACK )
+    {
+        lineFirstNew = event.GetPosition();
+    }
+        
     else // unknown scroll event?
     {
-        if ( evtType == wxEVT_SCROLLWIN_THUMBRELEASE )
-        {
-            lineFirstNew = event.GetPosition();
-        }
-        else
-        {
-            wxASSERT_MSG( evtType == wxEVT_SCROLLWIN_THUMBTRACK,
-                            _T("unknown scroll event type?") );
-
-            // don't do anything, otherwise dragging the thumb around would
-            // be too slow
-            return;
-        }
+        wxFAIL_MSG( _T("unknown scroll event type?") );
+        return;
     }
 
     ScrollToLine(lineFirstNew);
