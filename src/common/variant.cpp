@@ -20,10 +20,12 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_IOSTREAMH && wxUSE_STD_IOSTREAM
-#   include <fstream.h>
-#else
-#   include <fstream>
+#if wxUSE_STD_IOSTREAM
+    #if wxUSE_IOSTREAMH
+        #include <fstream.h>
+    #else
+        #include <fstream>
+    #endif
 #endif
 
 #if wxUSE_STREAMS

@@ -35,7 +35,7 @@
 /* we have these definitions from configure */
 #if defined(HAVE_DLOPEN)
     #define DLDAPI_SVR4_DLFCN
-#elif define(HAVE_SHL_LOAD)
+#elif defined(HAVE_SHL_LOAD)
     #define DLDAPI_HP_SHL
 #endif
 

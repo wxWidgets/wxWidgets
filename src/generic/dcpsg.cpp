@@ -476,7 +476,7 @@ void wxPostScriptDC::DoDrawArc (long x1, long y1, long x2, long y2, long xc, lon
 
     long dx = x1 - xc;
     long dy = y1 - yc;
-    long radius = (long) sqrt(dx*dx+dy*dy);
+    long radius = (long) sqrt( (double)(dx*dx+dy*dy) );
     double alpha1, alpha2;
 
     if (x1 == x2 && y1 == y2)

@@ -1735,14 +1735,16 @@ WX_ALL=
 WX_ALL_INSTALLED=
 
 if test "$wxUSE_SHARED" = "yes"; then
-    dnl set target to shared
-    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
-
     case "${host}" in
       *-hp-hpux* )
+        if test "$GCC" = yes ; then
+            SHARED_LD="${CC} -shared -o"
+            PIC_FLAG="-fPIC"
+        else
+            SHARED_LD="${CXX} -b -o"
+            PIC_FLAG="+Z"
+        fi
         WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}.sl"
-        SHARED_LD="${CXX} -b -o"
-        PIC_FLAG="+Z"
         WX_ALL=${WX_LIBRARY_NAME_SHARED}
       ;;
       *-*-linux* )
@@ -1822,6 +1824,8 @@ if test "$wxUSE_SHARED" = "yes"; then
         AC_MSG_ERROR(unknown system type ${host}.)
     esac
 
+    dnl set target to shared
+    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
 else
     dnl set target to static
     WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
