@@ -469,7 +469,7 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
     // We must build conversion table for expat. The easiest way to do so
     // is to let wxCSConv convert as string containing all characters to
     // wide character representation:
-    wxCSConv conv(name);
+    wxCSConv conv(wxString(name, wxConvLibc));
     char mbBuf[255];
     wchar_t wcBuf[255];
     size_t i;
@@ -559,7 +559,7 @@ inline static void OutputString(wxOutputStream& stream, const wxString& str,
 {
     if (str.IsEmpty()) return;
 #if wxUSE_UNICODE
-    const wxW2MBbuf *buf = str.mb_str(convFile ? *convFile : wxConvUTF8);
+    const wxWX2MBbuf buf(str.mb_str(convFile ? *convFile : wxConvUTF8));
     stream.Write((const char*)buf, strlen((const char*)buf));
 #else
     if ( convFile == NULL )
