@@ -33,7 +33,7 @@ struct tagCURFILERES {
 
 typedef struct tagCURFILERES CURFILERES;
 
-HANDLE  ReadCur( LPSTR szFileName, LPPOINT lpptHotSpot, int *W = 0, int *H = 0);
+HANDLE  ReadCur( LPTSTR szFileName, LPPOINT lpptHotSpot, int *W = 0, int *H = 0);
 HBITMAP ColorDDBToMonoDDB( HBITMAP hbm);
 HCURSOR MakeCursor( HANDLE hDIB, LPPOINT lpptHotSpot, HINSTANCE hInst);
 
