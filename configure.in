@@ -717,7 +717,7 @@ AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Mana
 AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" CACHE_MGL=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" CACHE_X11=1 TOOLKIT_GIVEN=1])
-WX_ARG_ENABLE(nanox    ,   [  --enable-nanox          use NanoX], wxUSE_NANOX)
+WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
 
 AC_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available (EXPERIMENTAL)],wxUSE_GTK2=1,wxUSE_GTK2=0)
 

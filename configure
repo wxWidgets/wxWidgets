@@ -1949,17 +1949,17 @@ if test "${with_x11+set}" = set; then
 fi
 
 
-          echo $ac_n "checking for --enable-nanox    ""... $ac_c" 1>&6
-echo "configure:1954: checking for --enable-nanox    " >&5
+          echo $ac_n "checking for --enable-nanox""... $ac_c" 1>&6
+echo "configure:1954: checking for --enable-nanox" >&5
           no_cache=0
-          # Check whether --enable-nanox     or --disable-nanox     was given.
-if test "${enable_nanox    +set}" = set; then
-  enableval="$enable_nanox    "
+          # Check whether --enable-nanox or --disable-nanox was given.
+if test "${enable_nanox+set}" = set; then
+  enableval="$enable_nanox"
   
                           if test "$enableval" = yes; then
-                            ac_cv_use_nanox    ='wxUSE_NANOX=yes'
+                            ac_cv_use_nanox='wxUSE_NANOX=yes'
                           else
-                            ac_cv_use_nanox    ='wxUSE_NANOX=no'
+                            ac_cv_use_nanox='wxUSE_NANOX=no'
                           fi
                         
 else
@@ -1971,14 +1971,14 @@ else
                             no_cache=1
                           fi
 
-                          ac_cv_use_nanox    ='wxUSE_NANOX='$DEFAULT_wxUSE_NANOX
+                          ac_cv_use_nanox='wxUSE_NANOX='$DEFAULT_wxUSE_NANOX
                         
 fi
 
 
-          eval "$ac_cv_use_nanox    "
+          eval "$ac_cv_use_nanox"
           if test "$no_cache" != 1; then
-            echo $ac_cv_use_nanox     >> ${wx_arg_cache_file}.tmp
+            echo $ac_cv_use_nanox >> ${wx_arg_cache_file}.tmp
           fi
 
           if test "$wxUSE_NANOX" = yes; then
