@@ -58,7 +58,6 @@ wxCursor = wx.gdi.Cursor
 wxCursorPtr = wx.gdi.CursorPtr
 wxStockCursor = wx.gdi.StockCursor
 wxCursorFromImage = wx.gdi.CursorFromImage
-wxCursorFromBits = wx.gdi.CursorFromBits
 wxOutRegion = wx.gdi.OutRegion
 wxPartRegion = wx.gdi.PartRegion
 wxInRegion = wx.gdi.InRegion

@@ -446,7 +446,7 @@ class ComboBox(core.Control,core.ItemContainer):
             List choices=[], long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
 
-        Actually create the GUI Choice control for 2-phase creation
+        Actually create the GUI wxComboBox control for 2-phase creation
         """
         return _controls.ComboBox_Create(*args, **kwargs)
 
@@ -862,7 +862,12 @@ class ListBox(core.ControlWithItems):
         return _controls.ListBox_Create(*args, **kwargs)
 
     def Insert(*args, **kwargs):
-        """Insert(String item, int pos, PyObject clientData=None)"""
+        """
+        Insert(String item, int pos, PyObject clientData=None)
+
+        Insert an item into the control before the item at the pos index,
+        optionally associating some data object with the item.
+        """
         return _controls.ListBox_Insert(*args, **kwargs)
 
     def InsertItems(*args, **kwargs):
@@ -882,7 +887,11 @@ class ListBox(core.ControlWithItems):
         return _controls.ListBox_SetSelection(*args, **kwargs)
 
     def Select(*args, **kwargs):
-        """Select(int n)"""
+        """
+        Select(int n)
+
+        Sets the item at index 'n' to be the selected item.
+        """
         return _controls.ListBox_Select(*args, **kwargs)
 
     def Deselect(*args, **kwargs):
@@ -988,11 +997,19 @@ class CheckListBox(ListBox):
         return _controls.CheckListBox_GetItemHeight(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pt) -> int"""
+        """
+        HitTest(Point pt) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _controls.CheckListBox_HitTest(*args, **kwargs)
 
     def HitTestXY(*args, **kwargs):
-        """HitTestXY(int x, int y) -> int"""
+        """
+        HitTestXY(int x, int y) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _controls.CheckListBox_HitTestXY(*args, **kwargs)
 
 
@@ -1502,6 +1519,8 @@ class ScrollBar(core.Control):
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=SB_HORIZONTAL, 
             Validator validator=DefaultValidator, String name=ScrollBarNameStr) -> bool
+
+        Do the 2nd phase and create the GUI control.
         """
         return _controls.ScrollBar_Create(*args, **kwargs)
 
@@ -1534,6 +1553,20 @@ class ScrollBar(core.Control):
         """
         SetScrollbar(int position, int thumbSize, int range, int pageSize, 
             bool refresh=True)
+
+        Sets the scrollbar properties of a built-in scrollbar.
+
+            orientation: Determines the scrollbar whose page size is to be
+                         set. May be wx.HORIZONTAL or wx.VERTICAL.
+
+            position:    The position of the scrollbar in scroll units.
+
+            thumbSize:   The size of the thumb, or visible portion of the
+                         scrollbar, in scroll units.
+
+            range:       The maximum position of the scrollbar.
+
+            refresh:     True to redraw the scrollbar, false otherwise.
         """
         return _controls.ScrollBar_SetScrollbar(*args, **kwargs)
 
@@ -2038,7 +2071,11 @@ class ToggleButton(core.Control):
         return _controls.ToggleButton_GetValue(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(String label)"""
+        """
+        SetLabel(String label)
+
+        Sets the item's text.
+        """
         return _controls.ToggleButton_SetLabel(*args, **kwargs)
 
 
@@ -3394,6 +3431,8 @@ class ListCtrl(core.Control):
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_ICON, 
             Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> bool
+
+        Do the 2nd phase and create the GUI control.
         """
         return _controls.ListCtrl_Create(*args, **kwargs)
 
@@ -3402,11 +3441,34 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl__setCallbackInfo(*args, **kwargs)
 
     def SetForegroundColour(*args, **kwargs):
-        """SetForegroundColour(Colour col) -> bool"""
+        """
+        SetForegroundColour(Colour col) -> bool
+
+        Sets the foreground colour of the window.  Returns True is the colour
+        was changed.  The interpretation of foreground colour is dependent on
+        the window class; it may be the text colour or other colour, or it may
+        not be used at all.
+        """
         return _controls.ListCtrl_SetForegroundColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(Colour col) -> bool"""
+        """
+        SetBackgroundColour(Colour col) -> bool
+
+        Sets the background colour of the window.  Returns True if the colour
+        was changed.  The background colour is usually painted by the default
+        EVT_ERASE_BACKGROUND event handler function under Windows and
+        automatically under GTK.
+
+        Note that setting the background colour does not cause an immediate
+        refresh, so you may wish to call ClearBackground or Refresh after
+        calling this function.
+
+        Use this function with care under GTK+ as the new appearance of the
+        window might not look equally well when used with themes, i.e GTK+'s
+        ability to change its look as the user wishes with run-time loadable
+        modules.
+        """
         return _controls.ListCtrl_SetBackgroundColour(*args, **kwargs)
 
     def GetColumn(*args, **kwargs):
@@ -3526,7 +3588,13 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_SetSingleStyle(*args, **kwargs)
 
     def SetWindowStyleFlag(*args, **kwargs):
-        """SetWindowStyleFlag(long style)"""
+        """
+        SetWindowStyleFlag(long style)
+
+        Sets the style of the window. Please note that some styles cannot be
+        changed after the window creation and that Refresh() might be called
+        after changing the others for the change to take place immediately.
+        """
         return _controls.ListCtrl_SetWindowStyleFlag(*args, **kwargs)
 
     def GetNextItem(*args, **kwargs):
@@ -3764,6 +3832,8 @@ class ListView(ListCtrl):
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_REPORT, 
             Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> bool
+
+        Do the 2nd phase and create the GUI control.
         """
         return _controls.ListView_Create(*args, **kwargs)
 
@@ -4068,6 +4138,8 @@ class TreeCtrl(core.Control):
             Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
             Validator validator=DefaultValidator, 
             String name=TreeCtrlNameStr) -> bool
+
+        Do the 2nd phase and create the GUI control.
         """
         return _controls.TreeCtrl_Create(*args, **kwargs)
 
@@ -4667,6 +4739,31 @@ EVT_DETAILED_HELP = wx.PyEventBinder( wxEVT_DETAILED_HELP, 1)
 EVT_DETAILED_HELP_RANGE = wx.PyEventBinder( wxEVT_DETAILED_HELP, 2)
 
 class HelpEvent(core.CommandEvent):
+    """
+    A help event is sent when the user has requested
+    context-sensitive help. This can either be caused by the
+    application requesting context-sensitive help mode via
+    wx.ContextHelp, or (on MS Windows) by the system generating a
+    WM_HELP message when the user pressed F1 or clicked on the query
+    button in a dialog caption.
+
+    A help event is sent to the window that the user clicked on, and
+    is propagated up the window hierarchy until the event is
+    processed or there are no more event handlers. The application
+    should call event.GetId to check the identity of the clicked-on
+    window, and then either show some suitable help or call
+    event.Skip if the identifier is unrecognised. Calling Skip is
+    important because it allows wxWindows to generate further events
+    for ancestors of the clicked-on window. Otherwise it would be
+    impossible to show help for container windows, since processing
+    would stop after the first window found.
+
+     Events
+        EVT_HELP            Sent when the user has requested context-
+                            sensitive help.
+        EVT_HELP_RANGE      Allows to catch EVT_HELP for a range of IDs
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHelpEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4676,27 +4773,53 @@ class HelpEvent(core.CommandEvent):
         self.thisown = 1
         del newobj.thisown
     def GetPosition(*args, **kwargs):
-        """GetPosition() -> Point"""
+        """
+        GetPosition() -> Point
+
+        Returns the left-click position of the mouse, in screen
+        coordinates. This allows the application to position the help
+        appropriately.
+        """
         return _controls.HelpEvent_GetPosition(*args, **kwargs)
 
     def SetPosition(*args, **kwargs):
-        """SetPosition(Point pos)"""
+        """
+        SetPosition(Point pos)
+
+        Sets the left-click position of the mouse, in screen coordinates.
+        """
         return _controls.HelpEvent_SetPosition(*args, **kwargs)
 
     def GetLink(*args, **kwargs):
-        """GetLink() -> String"""
+        """
+        GetLink() -> String
+
+        Get an optional link to further help
+        """
         return _controls.HelpEvent_GetLink(*args, **kwargs)
 
     def SetLink(*args, **kwargs):
-        """SetLink(String link)"""
+        """
+        SetLink(String link)
+
+        Set an optional link to further help
+        """
         return _controls.HelpEvent_SetLink(*args, **kwargs)
 
     def GetTarget(*args, **kwargs):
-        """GetTarget() -> String"""
+        """
+        GetTarget() -> String
+
+        Get an optional target to display help in. E.g. a window specification
+        """
         return _controls.HelpEvent_GetTarget(*args, **kwargs)
 
     def SetTarget(*args, **kwargs):
-        """SetTarget(String target)"""
+        """
+        SetTarget(String target)
+
+        Set an optional target to display help in. E.g. a window specification
+        """
         return _controls.HelpEvent_SetTarget(*args, **kwargs)
 
 
@@ -4708,10 +4831,39 @@ class HelpEventPtr(HelpEvent):
 _controls.HelpEvent_swigregister(HelpEventPtr)
 
 class ContextHelp(core.Object):
+    """
+    This class changes the cursor to a query and puts the application
+    into a 'context-sensitive help mode'. When the user left-clicks
+    on a window within the specified window, a EVT_HELP event is sent
+    to that control, and the application may respond to it by popping
+    up some help.
+
+    There are a couple of ways to invoke this behaviour implicitly:
+
+        * Use the wx.DIALOG_EX_CONTEXTHELP extended style for a
+          dialog (Windows only). This will put a question mark in the
+          titlebar, and Windows will put the application into
+          context-sensitive help mode automatically, with further
+          programming.
+
+        * Create a wx.ContextHelpButton, whose predefined behaviour
+          is to create a context help object. Normally you will write
+          your application so that this button is only added to a
+          dialog for non-Windows platforms (use
+          wx.DIALOG_EX_CONTEXTHELP on Windows).
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxContextHelp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window window=None, bool doNow=True) -> ContextHelp"""
+        """
+        __init__(Window window=None, bool doNow=True) -> ContextHelp
+
+        Constructs a context help object, calling BeginContextHelp if
+        doNow is true (the default).
+
+        If window is None, the top window is used.
+        """
         newobj = _controls.new_ContextHelp(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4723,11 +4875,26 @@ class ContextHelp(core.Object):
         except: pass
 
     def BeginContextHelp(*args, **kwargs):
-        """BeginContextHelp(Window window=None) -> bool"""
+        """
+        BeginContextHelp(Window window=None) -> bool
+
+        Puts the application into context-sensitive help mode. window is
+        the window which will be used to catch events; if NULL, the top
+        window will be used.
+
+        Returns true if the application was successfully put into
+        context-sensitive help mode. This function only returns when the
+        event loop has finished.
+        """
         return _controls.ContextHelp_BeginContextHelp(*args, **kwargs)
 
     def EndContextHelp(*args, **kwargs):
-        """EndContextHelp() -> bool"""
+        """
+        EndContextHelp() -> bool
+
+        Ends context-sensitive help mode. Not normally called by the
+        application.
+        """
         return _controls.ContextHelp_EndContextHelp(*args, **kwargs)
 
 
@@ -4739,12 +4906,27 @@ class ContextHelpPtr(ContextHelp):
 _controls.ContextHelp_swigregister(ContextHelpPtr)
 
 class ContextHelpButton(BitmapButton):
+    """
+    Instances of this class may be used to add a question mark button
+    that when pressed, puts the application into context-help
+    mode. It does this by creating a wx.ContextHelp object which
+    itself generates a EVT_HELP event when the user clicks on a
+    window.
+
+    On Windows, you may add a question-mark icon to a dialog by use
+    of the wx.DIALOG_EX_CONTEXTHELP extra style, but on other
+    platforms you will have to add a button explicitly, usually next
+    to OK, Cancel or similar buttons.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxContextHelpButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id=ID_CONTEXT_HELP, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=BU_AUTODRAW) -> ContextHelpButton
+
+        Constructor, creating and showing a context help button.
         """
         newobj = _controls.new_ContextHelpButton(*args, **kwargs)
         self.this = newobj.this
@@ -4761,34 +4943,88 @@ class ContextHelpButtonPtr(ContextHelpButton):
 _controls.ContextHelpButton_swigregister(ContextHelpButtonPtr)
 
 class HelpProvider(object):
+    """
+    wx.HelpProvider is an abstract class used by a program
+    implementing context-sensitive help to show the help text for the
+    given window.
+
+    The current help provider must be explicitly set by the
+    application using wx.HelpProvider.Set().
+    """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHelpProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Set(*args, **kwargs):
-        """Set(HelpProvider helpProvider) -> HelpProvider"""
+        """
+        Set(HelpProvider helpProvider) -> HelpProvider
+
+        Sset the current, application-wide help provider. Returns the
+        previous one.  Unlike some other classes, the help provider is
+        not created on demand. This must be explicitly done by the
+        application.
+        """
         return _controls.HelpProvider_Set(*args, **kwargs)
 
     Set = staticmethod(Set)
     def Get(*args, **kwargs):
-        """Get() -> HelpProvider"""
+        """
+        Get() -> HelpProvider
+
+        Return the current application-wide help provider.
+        """
         return _controls.HelpProvider_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
     def GetHelp(*args, **kwargs):
-        """GetHelp(Window window) -> String"""
+        """
+        GetHelp(Window window) -> String
+
+        Gets the help string for this window. Its interpretation is
+        dependent on the help provider except that empty string always
+        means that no help is associated with the window.
+        """
         return _controls.HelpProvider_GetHelp(*args, **kwargs)
 
     def ShowHelp(*args, **kwargs):
-        """ShowHelp(Window window) -> bool"""
+        """
+        ShowHelp(Window window) -> bool
+
+        Shows help for the given window. Uses GetHelp internally if
+        applicable.
+
+        Returns true if it was done, or false if no help was available
+        for this window.
+        """
         return _controls.HelpProvider_ShowHelp(*args, **kwargs)
 
     def AddHelp(*args, **kwargs):
-        """AddHelp(Window window, String text)"""
+        """
+        AddHelp(Window window, String text)
+
+        Associates the text with the given window.
+        """
         return _controls.HelpProvider_AddHelp(*args, **kwargs)
 
     def AddHelpById(*args, **kwargs):
-        """AddHelpById(int id, String text)"""
+        """
+        AddHelpById(int id, String text)
+
+        This version associates the given text with all windows with this
+        id. May be used to set the same help string for all Cancel
+        buttons in the application, for example.
+        """
         return _controls.HelpProvider_AddHelpById(*args, **kwargs)
+
+    def RemoveHelp(*args, **kwargs):
+        """
+        RemoveHelp(Window window)
+
+        Removes the association between the window pointer and the help
+        text. This is called by the wx.Window destructor. Without this,
+        the table of help strings will fill up and when window pointers
+        are reused, the wrong help string will be found.
+        """
+        return _controls.HelpProvider_RemoveHelp(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
         """Destroy()"""
@@ -4803,18 +5039,40 @@ class HelpProviderPtr(HelpProvider):
 _controls.HelpProvider_swigregister(HelpProviderPtr)
 
 def HelpProvider_Set(*args, **kwargs):
-    """HelpProvider_Set(HelpProvider helpProvider) -> HelpProvider"""
+    """
+    HelpProvider_Set(HelpProvider helpProvider) -> HelpProvider
+
+    Sset the current, application-wide help provider. Returns the
+    previous one.  Unlike some other classes, the help provider is
+    not created on demand. This must be explicitly done by the
+    application.
+    """
     return _controls.HelpProvider_Set(*args, **kwargs)
 
 def HelpProvider_Get(*args, **kwargs):
-    """HelpProvider_Get() -> HelpProvider"""
+    """
+    HelpProvider_Get() -> HelpProvider
+
+    Return the current application-wide help provider.
+    """
     return _controls.HelpProvider_Get(*args, **kwargs)
 
 class SimpleHelpProvider(HelpProvider):
+    """
+    wx.SimpleHelpProvider is an implementation of wx.HelpProvider
+    which supports only plain text help strings, and shows the string
+    associated with the control (if any) in a tooltip.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSimpleHelpProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> SimpleHelpProvider"""
+        """
+        __init__() -> SimpleHelpProvider
+
+        wx.SimpleHelpProvider is an implementation of wx.HelpProvider
+        which supports only plain text help strings, and shows the string
+        associated with the control (if any) in a tooltip.
+        """
         newobj = _controls.new_SimpleHelpProvider(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1

@@ -27,6 +27,8 @@ class Panel(core.Window):
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
             String name=PanelNameStr) -> bool
+
+        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows.Panel_Create(*args, **kwargs)
 
@@ -70,6 +72,8 @@ class ScrolledWindow(Panel):
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
             String name=PanelNameStr) -> bool
+
+        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows.ScrolledWindow_Create(*args, **kwargs)
 
@@ -230,11 +234,19 @@ class TopLevelWindow(core.Window):
         return _windows.TopLevelWindow_IsFullScreen(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
-        """SetTitle(String title)"""
+        """
+        SetTitle(String title)
+
+        Sets the window's title. Applicable only to frames and dialogs.
+        """
         return _windows.TopLevelWindow_SetTitle(*args, **kwargs)
 
     def GetTitle(*args, **kwargs):
-        """GetTitle() -> String"""
+        """
+        GetTitle() -> String
+
+        Gets the window's title. Applicable only to frames and dialogs.
+        """
         return _windows.TopLevelWindow_GetTitle(*args, **kwargs)
 
     def SetShape(*args, **kwargs):
@@ -280,7 +292,13 @@ class Frame(TopLevelWindow):
         return _windows.Frame_Create(*args, **kwargs)
 
     def GetClientAreaOrigin(*args, **kwargs):
-        """GetClientAreaOrigin() -> Point"""
+        """
+        GetClientAreaOrigin() -> Point
+
+        Get the origin of the client area of the window relative to the
+        window's top left corner (the client area may be shifted because of
+        the borders, scrollbars, other decorations...)
+        """
         return _windows.Frame_GetClientAreaOrigin(*args, **kwargs)
 
     def SendSizeEvent(*args, **kwargs):
@@ -1332,11 +1350,25 @@ class VScrolledWindow(Panel):
         return _windows.VScrolledWindow_ScrollToLine(*args, **kwargs)
 
     def ScrollLines(*args, **kwargs):
-        """ScrollLines(int lines) -> bool"""
+        """
+        ScrollLines(int lines) -> bool
+
+        If the platform and window class supports it, scrolls the window by
+        the given number of lines down, if lines is positive, or up if lines
+        is negative.  Returns True if the window was scrolled, False if it was
+        already on top/bottom and nothing was done.
+        """
         return _windows.VScrolledWindow_ScrollLines(*args, **kwargs)
 
     def ScrollPages(*args, **kwargs):
-        """ScrollPages(int pages) -> bool"""
+        """
+        ScrollPages(int pages) -> bool
+
+        If the platform and window class supports it,  scrolls the window by
+        the given number of pages down, if pages is positive, or up if pages
+        is negative.  Returns True if the window was scrolled, False if it was
+        already on top/bottom and nothing was done.
+        """
         return _windows.VScrolledWindow_ScrollPages(*args, **kwargs)
 
     def RefreshLine(*args, **kwargs):
@@ -1348,11 +1380,19 @@ class VScrolledWindow(Panel):
         return _windows.VScrolledWindow_RefreshLines(*args, **kwargs)
 
     def HitTestXT(*args, **kwargs):
-        """HitTestXT(int x, int y) -> int"""
+        """
+        HitTestXT(int x, int y) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _windows.VScrolledWindow_HitTestXT(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pt) -> int"""
+        """
+        HitTest(Point pt) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _windows.VScrolledWindow_HitTest(*args, **kwargs)
 
     def RefreshAll(*args, **kwargs):
@@ -2272,15 +2312,14 @@ class FontDialog(Dialog):
     """This class represents the font chooser dialog."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent) -> FontDialog
         __init__(Window parent, FontData data) -> FontDialog
 
-        Constructor. Pass a parent window, and optionally the font data object to be
+        Constructor. Pass a parent window and the FontData object to be
         used to initialize the dialog controls.
         """
-        newobj = _windows.new_FontDialog(*args)
+        newobj = _windows.new_FontDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown

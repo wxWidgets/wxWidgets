@@ -429,6 +429,8 @@ class TreeListCtrl(core.Control):
             Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
             Validator validator=DefaultValidator, 
             String name=TreeListCtrlNameStr) -> bool
+
+        Do the 2nd phase and create the GUI control.
         """
         return _gizmos.TreeListCtrl_Create(*args, **kwargs)
 
