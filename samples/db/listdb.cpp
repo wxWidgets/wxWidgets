@@ -203,7 +203,9 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
     {
         wxString tStr;
         tStr.Printf(wxT("Unable to open the table '%s'."), tableName.c_str());
-        wxMessageBox(tStr, wxT("ODBC Error..."));
+        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),lookup->GetDb(),__TFILE__,__LINE__),
+                    wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
+
         Close();
         return;
     }
@@ -212,7 +214,11 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
     lookup->SetWhereClause(where);
     if (!lookup->Query())
     {
-        wxMessageBox(wxT("ODBC error during Query()"), wxT("ODBC Error..."));
+        wxString tStr;
+        tStr = wxT("ODBC error during Query()\n\n");
+        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),lookup->GetDb(),__TFILE__,__LINE__),
+                    wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
+
         Close();
         return;
     }
@@ -318,10 +324,12 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
 
     // If displaying 2 columns, determine the maximum length of column1
     int maxColLen;
-    if (maxLenCol1)
+    if (maxLenCol1 > 0)
         maxColLen = col1Len = maxLenCol1;  // user passed in max col length for column 1
     else
     {
+        // NOTE: Some databases (Firebird/Interbase) cannot handle the "fn" and "MAX()" functions
+
         maxColLen = LOOKUP_COL_LEN;
         if (wxStrlen(dispCol2))
         {
@@ -337,14 +345,23 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
             }
             if (!lookup2->QueryBySqlStmt(q))
             {
-                wxMessageBox(wxT("ODBC error during QueryBySqlStmt()"),wxT("ODBC Error..."));
+                wxString tStr;
+                tStr = wxT("ODBC error during QueryBySqlStmt()\n\n");
+                wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),lookup2->GetDb(),__TFILE__,__LINE__),
+                            wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
+
                 Close();
                 return;
             }
             if (lookup2->GetNext())
                 maxColLen = col1Len = wxAtoi(lookup2->lookupCol1);
             else
-                wxMessageBox(wxT("ODBC error during GetNext()"),wxT("ODBC Error..."));
+            {
+                wxString tStr;
+                tStr = wxT("ODBC error during GetNext()\n\n");
+                wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),lookup2->GetDb(),__TFILE__,__LINE__),
+                            wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
+            }
         }
     }
 
@@ -353,7 +370,11 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
     {
         if (!lookup2->QueryBySqlStmt(selectStmt))
         {
-            wxMessageBox(wxT("ODBC error during QueryBySqlStmt()"),wxT("ODBC Error..."));
+            wxString tStr;
+            tStr = wxT("ODBC error during QueryBySqlStmt()\n\n");
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),lookup2->GetDb(),__TFILE__,__LINE__),
+                        wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
+
             Close();
             return;
         }
@@ -364,7 +385,11 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
         lookup2->SetWhereClause(where);
         if (!lookup2->Query(false, distinctValues))
         {
-            wxMessageBox(wxT("ODBC error during Query()"),wxT("ODBC Error..."));
+            wxString tStr;
+            tStr = wxT("ODBC error during Query()\n\n");
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),lookup2->GetDb(),__TFILE__,__LINE__),
+                        wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
+
             Close();
             return;
         }
