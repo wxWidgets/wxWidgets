@@ -339,7 +339,9 @@ wxCONSTRUCTOR_DUMMY(wxWindow)
 BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
     EVT_ERASE_BACKGROUND(wxWindowMSW::OnEraseBackground)
     EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
+#ifdef __WXWINCE__
     EVT_INIT_DIALOG(wxWindowMSW::OnInitDialog)
+#endif
 END_EVENT_TABLE()
 
 // ===========================================================================

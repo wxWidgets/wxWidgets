@@ -163,7 +163,9 @@ public:
 
     void OnEraseBackground(wxEraseEvent& event);
     void OnPaint(wxPaintEvent& event);
+#ifdef __WXWINCE__
     void OnInitDialog( wxInitDialogEvent& event );
+#endif
 
 public:
     // For implementation purposes - sometimes decorations make the client area
