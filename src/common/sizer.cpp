@@ -570,7 +570,7 @@ wxSize wxStaticBoxSizer::CalcMin()
     int other_border = 5;
 
     wxSize ret( wxBoxSizer::CalcMin() );
-    ret.x += 2*top_border;
+    ret.x += 2*other_border;
     ret.y += other_border + top_border;
 
     return ret;
