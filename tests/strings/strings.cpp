@@ -184,11 +184,7 @@ void StringTestCase::ConstructorsWithConversion()
 
 #if wxUSE_UNICODE
     CPPUNIT_ASSERT ( wxString("\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", 
-                               wxConvUTF8) == wxT("") ); //Pos 35 (funky e) is invalid UTF8
-//FIXME:
-//#else
-//    CPPUNIT_ASSERT ( wxString(L"\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", 
-//                               wxConvUTF8) == wxT("") ); //Pos 35 (funky e) is invalid UTF8
+                               wxConvUTF8) == wxT("") ); //should stop at pos 35 
 #endif
 }
 
@@ -220,7 +216,10 @@ void StringTestCase::Conversion()
 void StringTestCase::ConversionUTF7()
 {
     const wchar_t data[] = { 0x00A3, 0x00A3, 0x00A3, 0x00A3, 0 }; // pound signs
+
+    //utf7 and utf7alt are equivelent
     const char *utf7 = "+AKM-+AKM-+AKM-+AKM-";
+    const char *utf7alt = "+AKMAowCjAKM-";
 
 #if wxUSE_UNICODE
     wxString str(data);
@@ -229,8 +228,7 @@ void StringTestCase::ConversionUTF7()
 
     wxCharBuffer theBuffer = str.mb_str(conv);
 
-    if (theBuffer.data()[0u])
-        CPPUNIT_ASSERT( strcmp(theBuffer, utf7) == 0 );
+    CPPUNIT_ASSERT( strcmp(theBuffer, utf7) == 0 || strcmp(theBuffer, utf7alt) == 0);
 #else //ANSI
     wxString str(utf7);
 
@@ -238,11 +236,16 @@ void StringTestCase::ConversionUTF7()
 
     wxWCharBuffer theWBuffer = str.wc_str(conv);
 
-    if (theWBuffer.data()[0u])
-    {
-        CPPUNIT_ASSERT( wxWcslen(theWBuffer) == wxWcslen(data) );
-        CPPUNIT_ASSERT( memcmp(theWBuffer, data, wxWcslen(data) * sizeof(wchar_t)) == 0 );
-    }
+    CPPUNIT_ASSERT( wxWcslen(theWBuffer) == wxWcslen(data) );
+    CPPUNIT_ASSERT( memcmp(theWBuffer, data, wxWcslen(data) * sizeof(wchar_t)) == 0 );
+
+    wxString stralt(utf7alt);
+
+    wxWCharBuffer theWBufferAlt = stralt.wc_str(conv);
+
+    CPPUNIT_ASSERT( wxWcslen(theWBufferAlt) == wxWcslen(data) );
+    CPPUNIT_ASSERT( memcmp(theWBufferAlt, data, wxWcslen(data) * sizeof(wchar_t)) == 0 );
+
 #endif // wxUSE_UNICODE
 }
 

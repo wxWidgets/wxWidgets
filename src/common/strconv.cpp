@@ -1,12 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        strconv.cpp
 // Purpose:     Unicode conversion classes
-// Author:      Ove Kaaven, Robert Roebling, Vadim Zeitlin, Vaclav Slavik
+// Author:      Ove Kaaven, Robert Roebling, Vadim Zeitlin, Vaclav Slavik,
+//              Ryan Norton, Fredrik Roubert (UTF7)
 // Modified by:
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Ove Kaaven, Robert Roebling, Vaclav Slavik
 //              (c) 2000-2003 Vadim Zeitlin
+//              (c) 2004 Ryan Norton, Fredrik Roubert
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -228,34 +230,210 @@ size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
     return wxWC2MB(buf, psz, n);
 }
-
 // ----------------------------------------------------------------------------
-// UTF-7
+// UTF-7 
 // ----------------------------------------------------------------------------
 
-#if 0
-static char utf7_setD[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                        "abcdefghijklmnopqrstuvwxyz"
-                        "0123456789'(),-./:?";
-static char utf7_setO[]="!\"#$%&*;<=>@[]^_`{|}";
-static char utf7_setB[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                        "abcdefghijklmnopqrstuvwxyz"
-                        "0123456789+/";
-#endif
+// Implementation (C) 2004 Fredrik Roubert
 
-// TODO: write actual implementations of UTF-7 here
-size_t wxMBConvUTF7::MB2WC(wchar_t * WXUNUSED(buf),
-                           const char * WXUNUSED(psz),
-                           size_t WXUNUSED(n)) const
+//
+// BASE64 decoding table
+//
+static const unsigned char utf7unb64[] =
 {
-  return (size_t)-1;
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0x3e, 0xff, 0xff, 0xff, 0x3f,
+    0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b,
+    0x3c, 0x3d, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+    0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
+    0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16,
+    0x17, 0x18, 0x19, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20,
+    0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28,
+    0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30,
+    0x31, 0x32, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+};
+
+size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+
+    size_t len = 0;
+
+    while (*psz && ((!buf) || (len < n)))
+    {
+        unsigned char cc = *psz++;
+        if (cc != '+')
+        {
+            // plain ASCII char
+            if (buf)
+                *buf++ = cc;
+            len++;
+        }
+        else if (*psz == '-')
+        {
+            // encoded plus sign
+            if (buf)
+                *buf++ = cc;
+            len++;
+            psz++;
+        }
+        else
+        {
+            // BASE64 encoded string
+            bool lsb;
+            unsigned char c;
+            unsigned int d, l;
+            for (lsb = false, d = 0, l = 0;
+                (cc = utf7unb64[(unsigned char)*psz]) != 0xff; psz++)
+            {
+                d <<= 6;
+                d += cc;
+                for (l += 6; l >= 8; lsb = !lsb)
+                {
+                    c = (d >> (l -= 8)) % 256;
+                    if (lsb)
+                    {
+                        if (buf)
+                            *buf++ |= c;
+                        len ++;
+                    }
+                    else
+                        if (buf)
+                            *buf = c << 8;
+                }
+            }
+            if (*psz == '-')
+                psz++;
+        }
+    }
+    if (buf && (len < n))
+        *buf = 0;
+    return len;
 }
 
-size_t wxMBConvUTF7::WC2MB(char * WXUNUSED(buf),
-                           const wchar_t * WXUNUSED(psz),
-                           size_t WXUNUSED(n)) const
+//
+// BASE64 encoding table
+//
+static const unsigned char utf7enb64[] =
 {
-  return (size_t)-1;
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+    'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+    'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+    'w', 'x', 'y', 'z', '0', '1', '2', '3',
+    '4', '5', '6', '7', '8', '9', '+', '/'
+};
+
+//
+// UTF-7 encoding table
+//
+// 0 - Set D (directly encoded characters)
+// 1 - Set O (optional direct characters)
+// 2 - whitespace characters (optional)
+// 3 - special characters
+//
+static const unsigned char utf7encode[128] =
+{
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 2, 3, 3,
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+    2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 3, 0, 0, 0, 3,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 1, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 3
+};
+
+size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t 
+*psz, size_t n) const
+{
+
+
+    size_t len = 0;
+
+    while (*psz && ((!buf) || (len < n)))
+    {
+        wchar_t cc = *psz++;
+        if (cc < 0x80 && utf7encode[cc] < 1)
+        {
+            // plain ASCII char
+            if (buf)
+                *buf++ = (char)cc;
+            len++;
+        }
+#ifndef WC_UTF16
+        else if (cc > 0xffff)
+        {
+            // no surrogate pair generation (yet?)
+            return (size_t)-1;
+        }
+#endif
+        else
+        {
+            if (buf)
+                *buf++ = '+';
+            len++;
+            if (cc != '+')
+            {
+                // BASE64 encode string
+                unsigned int lsb, d, l;
+                for (d = 0, l = 0;; psz++)
+                {
+                    for (lsb = 0; lsb < 2; lsb ++)
+                    {
+                        d <<= 8;
+                        d += lsb ? cc & 0xff : (cc & 0xff00) >> 8;
+
+                        for (l += 8; l >= 6; )
+                        {
+                            l -= 6;
+                            if (buf)
+                                *buf++ = utf7enb64[(d >> l) % 64];
+                            len++;
+                        }
+                    }
+                    cc = *psz;
+                    if (!(cc) || (cc < 0x80 && utf7encode[cc] < 1))
+                        break;
+                }
+                if (l != 0)
+                {
+                    if (buf)
+                        *buf++ = utf7enb64[((d % 16) << (6 - l)) % 64];
+                    len++;
+                }
+            }
+            if (buf)
+                *buf++ = '-';
+            len++;
+        }
+    }
+    if (buf && (len < n))
+        *buf = 0;
+    return len;
 }
 
 // ----------------------------------------------------------------------------
