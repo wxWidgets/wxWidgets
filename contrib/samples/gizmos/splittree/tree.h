@@ -87,7 +87,7 @@ protected:
 class TestValueWindow: public wxTreeCompanionWindow
 {
 public:
-    TestValueWindow(wxWindow* parent, wxWindowID id = -1,
+    TestValueWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
       const wxPoint& pos = wxDefaultPosition,
       const wxSize& sz = wxDefaultSize,
       long style = 0);

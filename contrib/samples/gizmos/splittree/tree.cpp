@@ -138,12 +138,12 @@ bool MyApp::OnInit()
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
-    frame->Show(TRUE);
+    frame->Show(true);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -155,7 +155,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, idMAIN_FRAME, title, pos, size)
 {
     m_splitter = NULL;
-	m_scrolledWindow = NULL;
+    m_scrolledWindow = NULL;
     m_tree = NULL;
     m_valueWindow = NULL;
 #ifdef __WXMAC__
@@ -165,26 +165,26 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif
 
     m_scrolledWindow = new wxSplitterScrolledWindow(this, idSCROLLED_WINDOW, wxDefaultPosition,
-		wxSize(300, 400), wxNO_BORDER | wxCLIP_CHILDREN | wxVSCROLL);
+        wxSize(300, 400), wxNO_BORDER | wxCLIP_CHILDREN | wxVSCROLL);
     m_splitter = new wxThinSplitterWindow(m_scrolledWindow, idSPLITTER_WINDOW, wxDefaultPosition,
-		wxDefaultSize, wxSP_3DBORDER | wxCLIP_CHILDREN /* | wxSP_LIVE_UPDATE */);
-	m_splitter->SetSashSize(2);
+        wxDefaultSize, wxSP_3DBORDER | wxCLIP_CHILDREN /* | wxSP_LIVE_UPDATE */);
+    m_splitter->SetSashSize(2);
 
-	/* Note the wxTR_ROW_LINES style: draws horizontal lines between items */
+    /* Note the wxTR_ROW_LINES style: draws horizontal lines between items */
     m_tree = new TestTree(m_splitter , idTREE_CTRL, wxDefaultPosition,
-		wxDefaultSize, wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxNO_BORDER | wxTR_ROW_LINES );
+        wxDefaultSize, wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxNO_BORDER | wxTR_ROW_LINES );
     m_valueWindow = new TestValueWindow(m_splitter, idVALUE_WINDOW, wxDefaultPosition,
-		wxDefaultSize, wxNO_BORDER);
+        wxDefaultSize, wxNO_BORDER);
     m_splitter->SplitVertically(m_tree, m_valueWindow);
-	//m_splitter->AdjustScrollbars();
-	m_splitter->SetSashPosition(200);
-	m_scrolledWindow->SetTargetWindow(m_tree);
+    //m_splitter->AdjustScrollbars();
+    m_splitter->SetSashPosition(200);
+    m_scrolledWindow->SetTargetWindow(m_tree);
 
-	m_scrolledWindow->EnableScrolling(FALSE, FALSE);
+    m_scrolledWindow->EnableScrolling(false, false);
 
-	// Let the two controls know about each other
-	m_valueWindow->SetTreeCtrl(m_tree);
-	m_tree->SetCompanionWindow(m_valueWindow);
+    // Let the two controls know about each other
+    m_valueWindow->SetTreeCtrl(m_tree);
+    m_tree->SetCompanionWindow(m_valueWindow);
 
     // set the frame icon
     SetIcon(wxICON(mondrian));
@@ -212,8 +212,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -238,7 +238,7 @@ TestTree::TestTree(wxWindow* parent, wxWindowID id, const wxPoint& pt,
         const wxSize& sz, long style):
         wxRemotelyScrolledTreeCtrl(parent, id, pt, sz, style)
 {
-    m_imageList = new wxImageList(16, 16, TRUE);
+    m_imageList = new wxImageList(16, 16, true);
 #if !defined(__WXMSW__) // || wxUSE_XPM_IN_MSW
     m_imageList->Add(wxIcon(icon1_xpm));
     m_imageList->Add(wxIcon(icon2_xpm));
@@ -250,28 +250,28 @@ TestTree::TestTree(wxWindow* parent, wxWindowID id, const wxPoint& pt,
 #endif
     SetImageList(m_imageList);
 
-		
-	// Add some dummy items
-	wxTreeItemId rootId = AddRoot(_("Root"), -1, -1);
-	int i;
-	for (i = 1; i <= 20; i++)
-	{
-		wxString label;
-		label.Printf(wxT("Item %d"), i);
-		wxTreeItemId id = AppendItem(rootId, label, 0);
-		//SetItemImage( id, 1, wxTreeItemIcon_Expanded );
 
-		int j;
-		for (j = 0; j < 10; j++)
-			AppendItem(id, _("Child"), 1);
-	}
-	Expand(rootId);
+    // Add some dummy items
+    wxTreeItemId rootId = AddRoot(_("Root"), -1, -1);
+    int i;
+    for (i = 1; i <= 20; i++)
+    {
+        wxString label;
+        label.Printf(wxT("Item %d"), i);
+        wxTreeItemId id = AppendItem(rootId, label, 0);
+        //SetItemImage( id, 1, wxTreeItemIcon_Expanded );
+
+        int j;
+        for (j = 0; j < 10; j++)
+            AppendItem(id, _("Child"), 1);
+    }
+    Expand(rootId);
 }
 
 TestTree::~TestTree()
 {
-	SetImageList(NULL);
-	delete m_imageList;
+    SetImageList(NULL);
+    delete m_imageList;
 }
 
 /*
@@ -289,5 +289,5 @@ TestValueWindow::TestValueWindow(wxWindow* parent, wxWindowID id,
       long style):
       wxTreeCompanionWindow(parent, id, pos, sz, style)
 {
-	SetBackgroundColour(* wxWHITE);
+    SetBackgroundColour(* wxWHITE);
 }

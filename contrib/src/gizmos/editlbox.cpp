@@ -36,7 +36,7 @@ class CleverListCtrl : public wxListCtrl
 {
 public:
    CleverListCtrl(wxWindow *parent,
-                  wxWindowID id = -1,
+                  wxWindowID id = wxID_ANY,
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLC_ICON,
@@ -119,10 +119,10 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
 
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
-    wxPanel *subp = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize,
+    wxPanel *subp = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                 wxSUNKEN_BORDER | wxTAB_TRAVERSAL);
     wxSizer *subsizer = new wxBoxSizer(wxHORIZONTAL);
-    subsizer->Add(new wxStaticText(subp, -1, label), 1, wxALIGN_CENTRE_VERTICAL | wxLEFT, 4);
+    subsizer->Add(new wxStaticText(subp, wxID_ANY, label), 1, wxALIGN_CENTRE_VERTICAL | wxLEFT, 4);
 
 #ifdef __WXMSW__
     #define BTN_BORDER 4
@@ -165,7 +165,7 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     m_bDown->SetToolTip(_("Move down"));
 #endif
 
-    subp->SetAutoLayout(TRUE);
+    subp->SetAutoLayout(true);
     subp->SetSizer(subsizer);
     subsizer->Fit(subp);
 
@@ -181,7 +181,7 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
 
     sizer->Add(m_listCtrl, 1, wxEXPAND);
 
-    SetAutoLayout(TRUE);
+    SetAutoLayout(true);
     SetSizer(sizer);
     Layout();
 }

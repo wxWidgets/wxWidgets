@@ -66,7 +66,7 @@ wxLEDNumberCtrl::wxLEDNumberCtrl()
     m_DigitMargin(-1),
     m_LineLength(-1),
     m_LineWidth(-1),
-    m_DrawFaded(FALSE),
+    m_DrawFaded(false),
     m_LeftStartPos(-1)
 {
 }
@@ -80,7 +80,7 @@ wxLEDNumberCtrl::wxLEDNumberCtrl(wxWindow *parent, wxWindowID id,
     m_DigitMargin(-1),
     m_LineLength(-1),
     m_LineWidth(-1),
-    m_DrawFaded(FALSE),
+    m_DrawFaded(false),
     m_LeftStartPos(-1)
 {
     Create(parent, id, pos, size, style);
@@ -94,7 +94,7 @@ bool wxLEDNumberCtrl::Create(wxWindow *parent, wxWindowID id,
     bool RetVal = wxControl::Create(parent, id, pos, size, style);
 
     if ((style & wxLED_DRAW_FADED) != 0)
-        SetDrawFaded(TRUE);
+        SetDrawFaded(true);
     if ((style & wxLED_ALIGN_MASK) != 0)
         SetAlignment((wxLEDValueAlign)(style & wxLED_ALIGN_MASK));
 
@@ -113,7 +113,7 @@ void wxLEDNumberCtrl::SetAlignment(wxLEDValueAlign Alignment, bool Redraw)
         RecalcInternals(GetClientSize());
 
         if (Redraw)
-            Refresh(FALSE);
+            Refresh(false);
     }
 }
 
@@ -125,7 +125,7 @@ void wxLEDNumberCtrl::SetDrawFaded(bool DrawFaded, bool Redraw)
         m_DrawFaded = DrawFaded;
 
         if (Redraw)
-            Refresh(FALSE);
+            Refresh(false);
     }
 }
 
@@ -149,7 +149,7 @@ void wxLEDNumberCtrl::SetValue(wxString const &Value, bool Redraw)
         RecalcInternals(GetClientSize());
 
         if (Redraw)
-            Refresh(FALSE);
+            Refresh(false);
     }
 }
 
@@ -271,7 +271,7 @@ void wxLEDNumberCtrl::DrawDigit(wxDC &Dc, int Digit, int Column)
     {
         Dc.DrawLine(XPos + m_LineMargin*2, m_LineMargin,
             XPos + m_LineLength, m_LineMargin);
-	}
+    }
 
     if (Digit & LINE2)
     {

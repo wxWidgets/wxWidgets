@@ -25,17 +25,17 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-    wxDialog dlg(NULL, -1, _("Test dialog"), wxDefaultPosition, wxDefaultSize,
+    wxDialog dlg(NULL, wxID_ANY, _("Test dialog"), wxDefaultPosition, wxDefaultSize,
                  wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
 
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(new wxEditableListBox(&dlg, -1, _("Match these wildcards:"), 
+    sizer->Add(new wxEditableListBox(&dlg, wxID_ANY, _("Match these wildcards:"), 
                                      wxDefaultPosition,wxSize(300,200)),
                1, wxEXPAND|wxALL, 10);
                
     sizer->Add(5,5);
 
-    wxEditableListBox *lb = new wxEditableListBox(&dlg, -1, _("Except:"), 
+    wxEditableListBox *lb = new wxEditableListBox(&dlg, wxID_ANY, _("Except:"), 
                                      wxDefaultPosition,wxSize(300,200));
     wxArrayString ar;
     ar.Add(_T("*.cpp"));
@@ -48,10 +48,10 @@ bool MyApp::OnInit()
     sizer->Add(5,5);
                
     sizer->Add(new wxButton(&dlg, wxID_OK, _("OK")), 0, wxALIGN_RIGHT | wxALL, 10);
-    dlg.SetAutoLayout(TRUE);
+    dlg.SetAutoLayout(true);
     dlg.SetSizer(sizer);
     sizer->Fit(&dlg);
-	dlg.Centre();
+    dlg.Centre();
   
     dlg.ShowModal();
 
@@ -61,5 +61,5 @@ bool MyApp::OnInit()
         res << ar[i] << _T("\n");
     wxMessageBox(res);
     
-    return FALSE;
+    return false;
 }

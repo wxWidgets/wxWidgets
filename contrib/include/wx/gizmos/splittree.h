@@ -72,7 +72,7 @@ public:
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                              int noUnitsX, int noUnitsY,
                              int xPos = 0, int yPos = 0,
-                             bool noRefresh = FALSE );
+                             bool noRefresh = false );
 
     // In case we're using the generic tree control.
     // Get the view start
@@ -127,7 +127,7 @@ class WXDLLIMPEXP_GIZMOS wxTreeCompanionWindow: public wxWindow
 public:
     DECLARE_CLASS(wxTreeCompanionWindow)
 
-    wxTreeCompanionWindow(wxWindow* parent, wxWindowID id = -1,
+    wxTreeCompanionWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
       const wxPoint& pos = wxDefaultPosition,
       const wxSize& sz = wxDefaultSize,
       long style = 0);
@@ -166,7 +166,7 @@ class WXDLLIMPEXP_GIZMOS wxThinSplitterWindow: public wxSplitterWindow
 public:
     DECLARE_DYNAMIC_CLASS(wxThinSplitterWindow)
 
-    wxThinSplitterWindow(wxWindow* parent, wxWindowID id = -1,
+    wxThinSplitterWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
       const wxPoint& pos = wxDefaultPosition,
       const wxSize& sz = wxDefaultSize,
       long style = wxSP_3D | wxCLIP_CHILDREN);
@@ -210,7 +210,7 @@ class WXDLLIMPEXP_GIZMOS wxSplitterScrolledWindow: public wxScrolledWindow
 public:
     DECLARE_DYNAMIC_CLASS(wxSplitterScrolledWindow)
 
-    wxSplitterScrolledWindow(wxWindow* parent, wxWindowID id = -1,
+    wxSplitterScrolledWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
       const wxPoint& pos = wxDefaultPosition,
       const wxSize& sz = wxDefaultSize,
       long style = 0);

@@ -16,7 +16,7 @@
 #define __WX_MULTICELL_H__
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-	#pragma interface "multicell.h"
+    #pragma interface "multicell.h"
 #endif
 
 #include "wx/gizmos/gizmos.h"
@@ -33,10 +33,10 @@
 // ----------------------------------------------------------------------------
 enum wxResizable
 {
-	wxNOT_RESIZABLE =           0x00,
-	wxHORIZONTAL_RESIZABLE =    0x01,
-	wxVERTICAL_RESIZABLE =      0x10,
-	wxRESIZABLE =               0x11
+    wxNOT_RESIZABLE =           0x00,
+    wxHORIZONTAL_RESIZABLE =    0x01,
+    wxVERTICAL_RESIZABLE =      0x10,
+    wxRESIZABLE =               0x11
 };
 
 //---------------------------------------------------------------------------
@@ -49,33 +49,33 @@ enum wxResizable
 
 class WXDLLIMPEXP_GIZMOS wxMultiCellItemHandle: public wxObject
 {
-	DECLARE_CLASS(wxMultiCellItemHandle);
+    DECLARE_CLASS(wxMultiCellItemHandle);
 protected:
-	int             m_column;
-	int             m_row;
-	int             m_width;
-	int             m_height;
-	wxResizable     m_style;
-	wxSize          m_fixedSize;
-	int             m_alignment;
-	wxSize          m_weight;
+    int             m_column;
+    int             m_row;
+    int             m_width;
+    int             m_height;
+    wxResizable     m_style;
+    wxSize          m_fixedSize;
+    int             m_alignment;
+    wxSize          m_weight;
 
 public:
-	wxMultiCellItemHandle( int row, int column, int height = 1, int width = 1, wxSize size = wxDefaultSize, wxResizable style = wxNOT_RESIZABLE, wxSize weight = wxSize(1,1), int align = wxALIGN_NOT);
-	wxMultiCellItemHandle( int row, int column, wxSize size, wxResizable style = wxNOT_RESIZABLE, wxSize weight = wxSize(1,1), int align = wxALIGN_NOT);
-	wxMultiCellItemHandle( int row, int column, wxResizable style, wxSize weight = wxSize(1,1), int align = wxALIGN_NOT);
-	wxMultiCellItemHandle( int row, int column, int align);
-	int             GetColumn();
-	int             GetRow();
-	int             GetWidth();
-	int             GetHeight();
-	wxResizable     GetStyle();
-	wxSize          GetLocalSize();
-	int             GetAlignment();
-	wxSize          GetWeight();
+    wxMultiCellItemHandle( int row, int column, int height = 1, int width = 1, wxSize size = wxDefaultSize, wxResizable style = wxNOT_RESIZABLE, wxSize weight = wxSize(1,1), int align = wxALIGN_NOT);
+    wxMultiCellItemHandle( int row, int column, wxSize size, wxResizable style = wxNOT_RESIZABLE, wxSize weight = wxSize(1,1), int align = wxALIGN_NOT);
+    wxMultiCellItemHandle( int row, int column, wxResizable style, wxSize weight = wxSize(1,1), int align = wxALIGN_NOT);
+    wxMultiCellItemHandle( int row, int column, int align);
+    int             GetColumn();
+    int             GetRow();
+    int             GetWidth();
+    int             GetHeight();
+    wxResizable     GetStyle();
+    wxSize          GetLocalSize();
+    int             GetAlignment();
+    wxSize          GetWeight();
 
 private:
-	void Initialize( int row, int column, int height = 1, int width = 1, wxSize size = wxDefaultSize, wxResizable style = wxNOT_RESIZABLE, wxSize weight = wxSize(1,1), int align = wxALIGN_NOT);
+    void Initialize( int row, int column, int height = 1, int width = 1, wxSize size = wxDefaultSize, wxResizable style = wxNOT_RESIZABLE, wxSize weight = wxSize(1,1), int align = wxALIGN_NOT);
 
 };
 
@@ -85,43 +85,43 @@ private:
 
 class WXDLLIMPEXP_GIZMOS wxMultiCellSizer : virtual public wxSizer
 {
-	DECLARE_CLASS(wxMultiCellSizer);
+    DECLARE_CLASS(wxMultiCellSizer);
 
 protected:
-	wxSize m_cell_count;
+    wxSize m_cell_count;
 
 public:
-	wxMultiCellSizer(wxSize & size);
-	wxMultiCellSizer(int rows, int cols);
-	~wxMultiCellSizer();
+    wxMultiCellSizer(wxSize & size);
+    wxMultiCellSizer(int rows, int cols);
+    ~wxMultiCellSizer();
 
-	virtual void 	RecalcSizes();
-	virtual wxSize 	CalcMin();
-	bool 			SetDefaultCellSize(wxSize size);
-	bool 			SetColumnWidth(int column, int colSize = 5, bool expandable = FALSE);
-	bool 			SetRowHeight(int row, int rowSize = 5, bool expandable = FALSE);
-	bool			EnableGridLines(wxWindow *win);
-	bool			SetGridPen(wxPen *pen);
-	void 			OnPaint(wxDC& dc);
-
-private:
-	void 			GetMinimums();
-	int 			Sum(int *array, int x);
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
+    bool SetDefaultCellSize(wxSize size);
+    bool SetColumnWidth(int column, int colSize = 5, bool expandable = false);
+    bool SetRowHeight(int row, int rowSize = 5, bool expandable = false);
+    bool EnableGridLines(wxWindow *win);
+    bool SetGridPen(wxPen *pen);
+    void OnPaint(wxDC& dc);
 
 private:
-	int 			*m_maxHeight;
-	int 			*m_maxWidth;
-	int 			*m_rowStretch;
-	int 			*m_colStretch;
-	wxSize 			**m_weights;
-	wxSize			**m_minSizes;
-	int				m_maxWeights;
-	wxSize			m_defaultCellSize;
-	wxWindow		*m_win; // usually used for debugging
-	wxPen			*m_pen;
+    void GetMinimums();
+    int Sum(int *array, int x);
 
-	void			DrawGridLines(wxDC& dc);
-	void			Initialize(wxSize size);
+private:
+    int *m_maxHeight;
+    int *m_maxWidth;
+    int *m_rowStretch;
+    int *m_colStretch;
+    wxSize **m_weights;
+    wxSize **m_minSizes;
+    int m_maxWeights;
+    wxSize m_defaultCellSize;
+    wxWindow *m_win; // usually used for debugging
+    wxPen *m_pen;
+
+    void DrawGridLines(wxDC& dc);
+    void Initialize(wxSize size);
 };
 
 
@@ -136,23 +136,23 @@ class wxCell;
 class WXDLLIMPEXP_GIZMOS wxMultiCellCanvas : public wxFlexGridSizer
 {
 public:
-	wxMultiCellCanvas(wxWindow *parent, int numRows = 2, int numCols = 2);
-	void Add(wxWindow *win, unsigned int row, unsigned int col);
+    wxMultiCellCanvas(wxWindow *parent, int numRows = 2, int numCols = 2);
+    void Add(wxWindow *win, unsigned int row, unsigned int col);
 
-	void Resize(int numRows, int numCols);
-	int MaxRows()
-	{
-		return m_maxRows;
-	};
-	int MaxCols()
-	{
-		return m_maxCols;
-	};
-	void CalculateConstraints();
-	void SetMinCellSize(const wxSize size)
-	{
-		m_minCellSize = size;
-	};
+    void Resize(int numRows, int numCols);
+    int MaxRows()
+    {
+        return m_maxRows;
+    };
+    int MaxCols()
+    {
+        return m_maxCols;
+    };
+    void CalculateConstraints();
+    void SetMinCellSize(const wxSize size)
+    {
+        m_minCellSize = size;
+    };
 
   /* These are to hide Add() method of parents and to avoid Borland warning about hiding virtual functions */
   void Add( wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL )
@@ -165,11 +165,11 @@ public:
        { wxFlexGridSizer::Add( item); }
 
 private:
-	wxWindow            *m_parent;
-	unsigned int         m_maxRows, m_maxCols;
+    wxWindow            *m_parent;
+    unsigned int         m_maxRows, m_maxCols;
 
-	wxSize              m_minCellSize;
-	wxCell              **m_cells;
+    wxSize              m_minCellSize;
+    wxCell              **m_cells;
 };
 
 #endif

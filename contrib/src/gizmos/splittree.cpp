@@ -60,8 +60,8 @@ BEGIN_EVENT_TABLE(wxRemotelyScrolledTreeCtrl, wxTreeCtrl)
 #endif
     EVT_SIZE(wxRemotelyScrolledTreeCtrl::OnSize)
     EVT_PAINT(wxRemotelyScrolledTreeCtrl::OnPaint)
-    EVT_TREE_ITEM_EXPANDED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
-    EVT_TREE_ITEM_COLLAPSED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
+    EVT_TREE_ITEM_EXPANDED(wxID_ANY, wxRemotelyScrolledTreeCtrl::OnExpand)
+    EVT_TREE_ITEM_COLLAPSED(wxID_ANY, wxRemotelyScrolledTreeCtrl::OnExpand)
     EVT_SCROLLWIN(wxRemotelyScrolledTreeCtrl::OnScroll)
 END_EVENT_TABLE()
 
@@ -90,7 +90,7 @@ void wxRemotelyScrolledTreeCtrl::HideVScrollbar()
     if (!IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
 #endif
     {
-        ::ShowScrollBar((HWND) GetHWND(), SB_VERT, FALSE);
+        ::ShowScrollBar((HWND) GetHWND(), SB_VERT, false);
     }
 #if USE_GENERIC_TREECTRL
     else
@@ -122,7 +122,7 @@ void wxRemotelyScrolledTreeCtrl::SetScrollbars(
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
-        win->wxGenericTreeCtrl::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY, noUnitsX, 0, xPos, 0, /* noRefresh */ TRUE);
+        win->wxGenericTreeCtrl::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY, noUnitsX, 0, xPos, 0, /* noRefresh */ true);
 
         wxScrolledWindow* scrolledWindow = GetScrolledWindow();
         if (scrolledWindow)
@@ -541,7 +541,7 @@ void wxTreeCompanionWindow::OnScroll(wxScrollWinEvent& event)
         return;
 
     // TODO: scroll the window physically instead of just refreshing.
-    Refresh(TRUE);
+    Refresh(true);
 }
 
 void wxTreeCompanionWindow::OnExpand(wxTreeEvent& WXUNUSED(event))
@@ -674,37 +674,37 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
 {
     // Ensure that events being propagated back up the window hierarchy
     // don't cause an infinite loop
-    static bool inOnScroll = FALSE;
+    static bool inOnScroll = false;
     if (inOnScroll)
     {
         event.Skip();
         return;
     }
-    inOnScroll = TRUE;
+    inOnScroll = true;
 
     int orient = event.GetOrientation();
 
     int nScrollInc = CalcScrollInc(event);
     if (nScrollInc == 0)
     {
-        inOnScroll = FALSE;
+        inOnScroll = false;
         return;
     }
 
     if (orient == wxHORIZONTAL)
     {
-        inOnScroll = FALSE;
+        inOnScroll = false;
         event.Skip();
         return;
 #if 0
         int newPos = m_xScrollPosition + nScrollInc;
-        SetScrollPos(wxHORIZONTAL, newPos, TRUE );
+        SetScrollPos(wxHORIZONTAL, newPos, true );
 #endif
     }
     else
     {
         int newPos = m_yScrollPosition + nScrollInc;
-        SetScrollPos(wxVERTICAL, newPos, TRUE );
+        SetScrollPos(wxVERTICAL, newPos, true );
     }
 
     if (orient == wxHORIZONTAL)
@@ -735,6 +735,6 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
 
     m_targetWindow->Update() ;
 
-    inOnScroll = FALSE;
+    inOnScroll = false;
 }
 

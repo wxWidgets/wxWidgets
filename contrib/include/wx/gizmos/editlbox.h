@@ -12,7 +12,7 @@
 #define __WX_EDITLBOX_H__
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-	#pragma interface "editlbox.h"
+    #pragma interface "editlbox.h"
 #endif
 
 #include "wx/panel.h"
@@ -31,7 +31,7 @@ class WXDLLEXPORT wxListEvent;
 
 class WXDLLIMPEXP_GIZMOS wxEditableListBox : public wxPanel
 {
-	DECLARE_CLASS(wxEditableListBox);
+    DECLARE_CLASS(wxEditableListBox);
 
 public:
     wxEditableListBox(wxWindow *parent, wxWindowID id,

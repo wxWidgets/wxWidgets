@@ -37,7 +37,7 @@ public:
 
 class SashHtmlWindow : public wxHtmlWindow {
 public:
-    SashHtmlWindow(wxWindow *parent, wxWindowID id = -1,
+    SashHtmlWindow(wxWindow *parent, wxWindowID id = wxID_ANY,
                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                    long style = wxHW_SCROLLBAR_NEVER, const wxString& name = wxT("sashHtmlWindow"));
 
@@ -62,23 +62,23 @@ wxT("manages the scrollbars provided by <TT>wxDynamicSashWindow</TT> itself.");
 bool Demo::OnInit() {
     wxInitAllImageHandlers();
 
-    wxFrame *frame = new wxFrame(NULL, -1, wxT("Dynamic Sash Demo"));
+    wxFrame *frame = new wxFrame(NULL, wxID_ANY, wxT("Dynamic Sash Demo"));
     frame->SetSize(480, 480);
 
-    wxDynamicSashWindow *sash = new wxDynamicSashWindow(frame, -1);
-    wxHtmlWindow *html = new SashHtmlWindow(sash, -1);
+    wxDynamicSashWindow *sash = new wxDynamicSashWindow(frame, wxID_ANY);
+    wxHtmlWindow *html = new SashHtmlWindow(sash, wxID_ANY);
     html->SetPage(HTML_content);
 
     frame->Show();
 
-    return TRUE;
+    return true;
 }
 
 
 SashHtmlWindow::SashHtmlWindow(wxWindow *parent, wxWindowID id,
                                const wxPoint& pos, const wxSize& size, long style, const wxString& name) :
                                     wxHtmlWindow(parent, id, pos, size, style, name) {
-    Connect(-1, wxEVT_DYNAMIC_SASH_SPLIT, (wxObjectEventFunction)
+    Connect(wxID_ANY, wxEVT_DYNAMIC_SASH_SPLIT, (wxObjectEventFunction)
                                           (wxEventFunction)
                                           (wxDynamicSashSplitEventFunction)&SashHtmlWindow::OnSplit);
 
@@ -97,6 +97,6 @@ wxSize SashHtmlWindow::DoGetBestSize() const {
 }
 
 void SashHtmlWindow::OnSplit(wxDynamicSashSplitEvent& WXUNUSED(event)) {
-    wxHtmlWindow *html = new SashHtmlWindow(m_dyn_sash, -1);
+    wxHtmlWindow *html = new SashHtmlWindow(m_dyn_sash, wxID_ANY);
     html->SetPage(HTML_content);
 }

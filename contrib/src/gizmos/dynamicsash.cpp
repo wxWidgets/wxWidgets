@@ -230,22 +230,22 @@ bool wxDynamicSashWindow::Create(wxWindow *parent, wxWindowID id,
                                  const wxPoint& pos, const wxSize& size,
                                  long style, const wxString& name) {
     if (m_impl)
-        return FALSE;
+        return false;
 
     if (!wxWindow::Create(parent, id, pos, size, style, name))
-        return FALSE;
+        return false;
 
     m_impl = new wxDynamicSashWindowImpl(this);
     if (!m_impl)
-        return FALSE;
+        return false;
 
     if (!m_impl->Create()) {
         delete m_impl;
         m_impl = NULL;
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxDynamicSashWindow::AddChild(wxWindowBase *child) {
@@ -303,39 +303,39 @@ bool wxDynamicSashWindowImpl::Create() {
 
     m_leaf = new wxDynamicSashWindowLeaf(this);
     if (!m_leaf)
-        return FALSE;
+        return false;
 
     if (!m_leaf->Create()) {
         delete m_leaf;
         m_leaf = NULL;
-        return FALSE;
+        return false;
     }
 
     m_container->SetEventHandler(this);
 
-    Connect(-1, wxEVT_SIZE, (wxObjectEventFunction)
+    Connect(wxID_ANY, wxEVT_SIZE, (wxObjectEventFunction)
                             (wxEventFunction)
                             (wxSizeEventFunction)&wxDynamicSashWindowImpl::OnSize);
-    Connect(-1, wxEVT_PAINT, (wxObjectEventFunction)
+    Connect(wxID_ANY, wxEVT_PAINT, (wxObjectEventFunction)
                              (wxEventFunction)
                              (wxPaintEventFunction)&wxDynamicSashWindowImpl::OnPaint);
-    Connect(-1, wxEVT_MOTION, (wxObjectEventFunction)
+    Connect(wxID_ANY, wxEVT_MOTION, (wxObjectEventFunction)
                               (wxEventFunction)
                               (wxMouseEventFunction)&wxDynamicSashWindowImpl::OnMouseMove);
-    Connect(-1, wxEVT_ENTER_WINDOW, (wxObjectEventFunction)
+    Connect(wxID_ANY, wxEVT_ENTER_WINDOW, (wxObjectEventFunction)
                                     (wxEventFunction)
                                     (wxMouseEventFunction)&wxDynamicSashWindowImpl::OnMouseMove);
-    Connect(-1, wxEVT_LEAVE_WINDOW, (wxObjectEventFunction)
+    Connect(wxID_ANY, wxEVT_LEAVE_WINDOW, (wxObjectEventFunction)
                                     (wxEventFunction)
                                     (wxMouseEventFunction)&wxDynamicSashWindowImpl::OnLeave);
-    Connect(-1, wxEVT_LEFT_DOWN, (wxObjectEventFunction)
+    Connect(wxID_ANY, wxEVT_LEFT_DOWN, (wxObjectEventFunction)
                                  (wxEventFunction)
                                  (wxMouseEventFunction)&wxDynamicSashWindowImpl::OnPress);
-    Connect(-1, wxEVT_LEFT_UP, (wxObjectEventFunction)
+    Connect(wxID_ANY, wxEVT_LEFT_UP, (wxObjectEventFunction)
                                (wxEventFunction)
                                (wxMouseEventFunction)&wxDynamicSashWindowImpl::OnRelease);
 
-    return TRUE;
+    return true;
 }
 
 void wxDynamicSashWindowImpl::AddChild(wxWindow *window) {
@@ -573,7 +573,7 @@ void wxDynamicSashWindowImpl::Split(int px, int py) {
     m_add_child_target = NULL;
 
     m_child[0] = new wxDynamicSashWindowImpl(m_window);
-    m_child[0]->m_container = new wxWindow(m_container, -1);
+    m_child[0]->m_container = new wxWindow(m_container, wxID_ANY);
     m_child[0]->m_parent = this;
     m_child[0]->m_top = m_top;
     m_child[0]->Create();
@@ -583,7 +583,7 @@ void wxDynamicSashWindowImpl::Split(int px, int py) {
     }
 
     m_child[1] = new wxDynamicSashWindowImpl(m_window);
-    m_child[1]->m_container = new wxWindow(m_container, -1);
+    m_child[1]->m_container = new wxWindow(m_container, wxID_ANY);
     m_child[1]->m_parent = this;
     m_child[1]->m_top = m_top;
     m_child[1]->Create();
@@ -892,16 +892,16 @@ bool wxDynamicSashWindowLeaf::Create() {
     m_viewport = new wxWindow();
 
     if (!m_hscroll || !m_vscroll || !m_viewport) {
-        return FALSE;
+        return false;
     }
 
     wxDynamicSashWindowImpl *add_child_target = m_impl->m_add_child_target;
     m_impl->m_add_child_target = NULL;
-    success = m_hscroll->Create(m_impl->m_container, -1, wxDefaultPosition, wxDefaultSize,
+    success = m_hscroll->Create(m_impl->m_container, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                 wxSB_HORIZONTAL);
-    success = success && m_vscroll->Create(m_impl->m_container, -1, wxDefaultPosition, wxDefaultSize,
+    success = success && m_vscroll->Create(m_impl->m_container, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                             wxSB_VERTICAL);
-    success = success && m_viewport->Create(m_impl->m_container, -1);
+    success = success && m_viewport->Create(m_impl->m_container, wxID_ANY);
     m_impl->m_add_child_target = add_child_target;
 
     wxCursor cursor(wxCURSOR_ARROW);
@@ -910,44 +910,44 @@ bool wxDynamicSashWindowLeaf::Create() {
     m_viewport->SetCursor(cursor);
 
     m_viewport->SetEventHandler(this);
-    Connect(-1, wxEVT_DYNAMIC_SASH_REPARENT, (wxObjectEventFunction)&wxDynamicSashWindowLeaf::OnReparent);
+    Connect(wxID_ANY, wxEVT_DYNAMIC_SASH_REPARENT, (wxObjectEventFunction)&wxDynamicSashWindowLeaf::OnReparent);
 
     if (m_impl->m_window->GetWindowStyle() & wxDS_MANAGE_SCROLLBARS) {
         m_hscroll->SetEventHandler(this);
         m_vscroll->SetEventHandler(this);
 
-        Connect(-1, wxEVT_SET_FOCUS, (wxObjectEventFunction)
+        Connect(wxID_ANY, wxEVT_SET_FOCUS, (wxObjectEventFunction)
                                      (wxEventFunction)
                                      (wxFocusEventFunction)&wxDynamicSashWindowLeaf::OnFocus);
-        Connect(-1, wxEVT_SCROLL_TOP, (wxObjectEventFunction)
+        Connect(wxID_ANY, wxEVT_SCROLL_TOP, (wxObjectEventFunction)
                                       (wxEventFunction)
                                       (wxScrollEventFunction)&wxDynamicSashWindowLeaf::OnScroll);
-        Connect(-1, wxEVT_SCROLL_BOTTOM, (wxObjectEventFunction)
+        Connect(wxID_ANY, wxEVT_SCROLL_BOTTOM, (wxObjectEventFunction)
                                          (wxEventFunction)
                                          (wxScrollEventFunction)&wxDynamicSashWindowLeaf::OnScroll);
-        Connect(-1, wxEVT_SCROLL_LINEUP, (wxObjectEventFunction)
+        Connect(wxID_ANY, wxEVT_SCROLL_LINEUP, (wxObjectEventFunction)
                                          (wxEventFunction)
                                          (wxScrollEventFunction)&wxDynamicSashWindowLeaf::OnScroll);
-        Connect(-1, wxEVT_SCROLL_LINEDOWN, (wxObjectEventFunction)
+        Connect(wxID_ANY, wxEVT_SCROLL_LINEDOWN, (wxObjectEventFunction)
                                            (wxEventFunction)
                                            (wxScrollEventFunction)&wxDynamicSashWindowLeaf::OnScroll);
-        Connect(-1, wxEVT_SCROLL_PAGEUP, (wxObjectEventFunction)
+        Connect(wxID_ANY, wxEVT_SCROLL_PAGEUP, (wxObjectEventFunction)
                                          (wxEventFunction)
                                          (wxScrollEventFunction)&wxDynamicSashWindowLeaf::OnScroll);
-        Connect(-1, wxEVT_SCROLL_PAGEDOWN, (wxObjectEventFunction)
+        Connect(wxID_ANY, wxEVT_SCROLL_PAGEDOWN, (wxObjectEventFunction)
                                            (wxEventFunction)
                                            (wxScrollEventFunction)&wxDynamicSashWindowLeaf::OnScroll);
-        Connect(-1, wxEVT_SCROLL_THUMBTRACK, (wxObjectEventFunction)
+        Connect(wxID_ANY, wxEVT_SCROLL_THUMBTRACK, (wxObjectEventFunction)
                                              (wxEventFunction)
                                              (wxScrollEventFunction)&wxDynamicSashWindowLeaf::OnScroll);
-        Connect(-1, wxEVT_SCROLL_THUMBRELEASE, (wxObjectEventFunction)
+        Connect(wxID_ANY, wxEVT_SCROLL_THUMBRELEASE, (wxObjectEventFunction)
                                                (wxEventFunction)
                                                (wxScrollEventFunction)&wxDynamicSashWindowLeaf::OnScroll);
     }
 
     wxLayoutConstraints *layout = new wxLayoutConstraints();
     if (!layout)
-        return FALSE;
+        return false;
     wxSize size = m_hscroll->GetBestSize();
 #ifdef __WXMSW__
     size = m_hscroll->GetSize();
@@ -961,7 +961,7 @@ bool wxDynamicSashWindowLeaf::Create() {
 
     layout = new wxLayoutConstraints();
     if (!layout)
-        return FALSE;
+        return false;
     size = size = m_vscroll->GetBestSize();
 #ifdef __WXMSW__
     size = m_vscroll->GetSize();
@@ -975,7 +975,7 @@ bool wxDynamicSashWindowLeaf::Create() {
 
     layout = new wxLayoutConstraints();
     if (!layout)
-        return FALSE;
+        return false;
     layout->left.SameAs(m_impl->m_container, wxLeft, 3);
     layout->right.LeftOf(m_vscroll);
     layout->top.SameAs(m_impl->m_container, wxTop, 3);
