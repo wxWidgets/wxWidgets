@@ -312,7 +312,7 @@ enum wxMediaTimeFormat
     wxMEDIATIMEFORMAT_TIME=0
 };
 
-class WXDLLIMPEXP_MEDIA wxMediaEvent : public wxNotifyEvent
+class wxMediaEvent : public wxNotifyEvent
 {
 public:
     wxMediaEvent(wxEventType, int )    { wxPyRaiseNotImplemented(); }

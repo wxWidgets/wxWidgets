@@ -2080,7 +2080,6 @@ def PreGrid(*args, **kwargs):
     """PreGrid() -> Grid"""
     val = _grid.new_PreGrid(*args, **kwargs)
     val.thisown = 1
-    self._setOORInfo(self)
     return val
 
 def Grid_GetClassDefaultAttributes(*args, **kwargs):

@@ -1853,6 +1853,32 @@ static PyObject *_wrap_Palette_GetRGB(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
+static PyObject *_wrap_Palette_GetColoursCount(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPalette *arg1 = (wxPalette *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Palette_GetColoursCount",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPalette,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxPalette const *)arg1)->GetColoursCount();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_From_int((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Palette_Ok(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPalette *arg1 = (wxPalette *) 0 ;
@@ -14892,57 +14918,25 @@ static PyObject *_wrap_DC_SetLogicalFunction(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_DC_SetOptimization(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DC_ComputeScaleAndOrigin(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
-    bool arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "optimize", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DC_SetOptimization",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDC,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool)SWIG_As_bool(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetOptimization(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_DC_GetOptimization(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxDC *arg1 = (wxDC *) 0 ;
-    bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_GetOptimization",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_ComputeScaleAndOrigin",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDC,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->GetOptimization();
+        (arg1)->ComputeScaleAndOrigin();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -18583,6 +18577,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Palette", (PyCFunction) _wrap_delete_Palette, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Palette_GetPixel", (PyCFunction) _wrap_Palette_GetPixel, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Palette_GetRGB", (PyCFunction) _wrap_Palette_GetRGB, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Palette_GetColoursCount", (PyCFunction) _wrap_Palette_GetColoursCount, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Palette_Ok", (PyCFunction) _wrap_Palette_Ok, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Palette_swigregister", Palette_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_Pen", (PyCFunction) _wrap_new_Pen, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -18980,8 +18975,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DC_SetAxisOrientation", (PyCFunction) _wrap_DC_SetAxisOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_GetLogicalFunction", (PyCFunction) _wrap_DC_GetLogicalFunction, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_SetLogicalFunction", (PyCFunction) _wrap_DC_SetLogicalFunction, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"DC_SetOptimization", (PyCFunction) _wrap_DC_SetOptimization, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"DC_GetOptimization", (PyCFunction) _wrap_DC_GetOptimization, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"DC_ComputeScaleAndOrigin", (PyCFunction) _wrap_DC_ComputeScaleAndOrigin, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_CalcBoundingBox", (PyCFunction) _wrap_DC_CalcBoundingBox, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_CalcBoundingBoxPoint", (PyCFunction) _wrap_DC_CalcBoundingBoxPoint, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_ResetBoundingBox", (PyCFunction) _wrap_DC_ResetBoundingBox, METH_VARARGS | METH_KEYWORDS, NULL },

@@ -41,6 +41,28 @@ class Panel(_core.Window):
         """
         return _windows_.Panel_InitDialog(*args, **kwargs)
 
+    def SetFocus(*args, **kwargs):
+        """
+        SetFocus(self)
+
+        Overrides `wx.Window.SetFocus`.  This method uses the (undocumented)
+        mix-in class wxControlContainer which manages the focus and TAB logic
+        for controls which usually have child controls.  In practice, if you
+        call this method and the panel has at least one child window, then the
+        focus will be given to the child window.
+        """
+        return _windows_.Panel_SetFocus(*args, **kwargs)
+
+    def SetFocusIgnoringChildren(*args, **kwargs):
+        """
+        SetFocusIgnoringChildren(self)
+
+        In contrast to `SetFocus` (see above) this will set the focus to the
+        panel even of there are child windows in the panel. This is only
+        rarely needed.
+        """
+        return _windows_.Panel_SetFocusIgnoringChildren(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -1106,6 +1128,28 @@ class SplitterWindow(_core.Window):
         Returns the surrent sash position.
         """
         return _windows_.SplitterWindow_GetSashPosition(*args, **kwargs)
+
+    def SetSashGravity(*args, **kwargs):
+        """
+        SetSashGravity(self, double gravity)
+
+        Set the sash gravity.  Gravity is a floating-point factor between 0.0
+        and 1.0 which controls position of sash while resizing the
+        `wx.SplitterWindow`.  The gravity specifies how much the left/top
+        window will grow while resizing.
+        """
+        return _windows_.SplitterWindow_SetSashGravity(*args, **kwargs)
+
+    def GetSashGravity(*args, **kwargs):
+        """
+        GetSashGravity(self) -> double
+
+        Gets the sash gravity.
+
+        :see: `SetSashGravity`
+
+        """
+        return _windows_.SplitterWindow_GetSashGravity(*args, **kwargs)
 
     def SetMinimumPaneSize(*args, **kwargs):
         """
@@ -3278,7 +3322,7 @@ class MDIChildFrame(Frame):
         return _windows_.MDIChildFrame_Activate(*args, **kwargs)
 
     def Maximize(*args, **kwargs):
-        """Maximize(self, bool maximize)"""
+        """Maximize(self, bool maximize=True)"""
         return _windows_.MDIChildFrame_Maximize(*args, **kwargs)
 
     def Restore(*args, **kwargs):

@@ -45,12 +45,11 @@ class Panel(_core.Window):
         """
         SetFocus(self)
 
-        Overrides `wx.Window.SetFocus`.  This method
-        uses the (undocumented) mix-in class wxControlContainer which manages
-        the focus and TAB logic for controls which usually have child controls.
-        In practice, if you call this method and the panel has at least
-        one child window, then the focus will be given to the child window.
-
+        Overrides `wx.Window.SetFocus`.  This method uses the (undocumented)
+        mix-in class wxControlContainer which manages the focus and TAB logic
+        for controls which usually have child controls.  In practice, if you
+        call this method and the panel has at least one child window, then the
+        focus will be given to the child window.
         """
         return _windows_.Panel_SetFocus(*args, **kwargs)
 

@@ -3897,6 +3897,249 @@ static PyObject *_wrap_ComboBox_Remove(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_ComboBox_IsEditable(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_IsEditable",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxComboBox const *)arg1)->IsEditable();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_Undo(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_Undo",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->Undo();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_Redo(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_Redo",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->Redo();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_SelectAll(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_SelectAll",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SelectAll();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_CanCopy(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_CanCopy",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxComboBox const *)arg1)->CanCopy();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_CanCut(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_CanCut",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxComboBox const *)arg1)->CanCut();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_CanPaste(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_CanPaste",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxComboBox const *)arg1)->CanPaste();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_CanUndo(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_CanUndo",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxComboBox const *)arg1)->CanUndo();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_CanRedo(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_CanRedo",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxComboBox const *)arg1)->CanRedo();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_ComboBox_GetClassDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
@@ -31732,6 +31975,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComboBox_SetEditable", (PyCFunction) _wrap_ComboBox_SetEditable, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ComboBox_SetInsertionPointEnd", (PyCFunction) _wrap_ComboBox_SetInsertionPointEnd, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ComboBox_Remove", (PyCFunction) _wrap_ComboBox_Remove, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_IsEditable", (PyCFunction) _wrap_ComboBox_IsEditable, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_Undo", (PyCFunction) _wrap_ComboBox_Undo, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_Redo", (PyCFunction) _wrap_ComboBox_Redo, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_SelectAll", (PyCFunction) _wrap_ComboBox_SelectAll, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_CanCopy", (PyCFunction) _wrap_ComboBox_CanCopy, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_CanCut", (PyCFunction) _wrap_ComboBox_CanCut, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_CanPaste", (PyCFunction) _wrap_ComboBox_CanPaste, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_CanUndo", (PyCFunction) _wrap_ComboBox_CanUndo, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_CanRedo", (PyCFunction) _wrap_ComboBox_CanRedo, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ComboBox_GetClassDefaultAttributes", (PyCFunction) _wrap_ComboBox_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ComboBox_swigregister", ComboBox_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_Gauge", (PyCFunction) _wrap_new_Gauge, METH_VARARGS | METH_KEYWORDS, NULL },

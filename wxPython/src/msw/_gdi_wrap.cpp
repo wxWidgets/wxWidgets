@@ -15540,6 +15540,31 @@ static PyObject *_wrap_DC_SetLogicalFunction(PyObject *, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_DC_ComputeScaleAndOrigin(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDC *arg1 = (wxDC *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_ComputeScaleAndOrigin",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDC,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->ComputeScaleAndOrigin();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_DC_CalcBoundingBox(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
@@ -19868,6 +19893,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DC_SetAxisOrientation", (PyCFunction) _wrap_DC_SetAxisOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_GetLogicalFunction", (PyCFunction) _wrap_DC_GetLogicalFunction, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_SetLogicalFunction", (PyCFunction) _wrap_DC_SetLogicalFunction, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"DC_ComputeScaleAndOrigin", (PyCFunction) _wrap_DC_ComputeScaleAndOrigin, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_CalcBoundingBox", (PyCFunction) _wrap_DC_CalcBoundingBox, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_CalcBoundingBoxPoint", (PyCFunction) _wrap_DC_CalcBoundingBoxPoint, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DC_ResetBoundingBox", (PyCFunction) _wrap_DC_ResetBoundingBox, METH_VARARGS | METH_KEYWORDS, NULL },

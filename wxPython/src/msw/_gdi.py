@@ -3643,6 +3643,17 @@ class DC(_core.Object):
         """
         return _gdi_.DC_SetLogicalFunction(*args, **kwargs)
 
+    def ComputeScaleAndOrigin(*args, **kwargs):
+        """
+        ComputeScaleAndOrigin(self)
+
+        Performs all necessary computations for given platform and context
+        type after each change of scale and origin parameters. Usually called
+        automatically internally after such changes.
+
+        """
+        return _gdi_.DC_ComputeScaleAndOrigin(*args, **kwargs)
+
     def SetOptimization(self, optimize):
         pass
     def GetOptimization(self):

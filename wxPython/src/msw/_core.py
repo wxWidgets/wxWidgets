@@ -5174,6 +5174,24 @@ def GetApp(*args, **kwargs):
     Return a reference to the current wx.App object.
     """
     return _core_.GetApp(*args, **kwargs)
+
+def SetDefaultPyEncoding(*args, **kwargs):
+    """
+    SetDefaultPyEncoding(string encoding)
+
+    Sets the encoding that wxPython will use when it needs to convert a
+    Python string or unicode object to or from a wxString.
+    """
+    return _core_.SetDefaultPyEncoding(*args, **kwargs)
+
+def GetDefaultPyEncoding(*args, **kwargs):
+    """
+    GetDefaultPyEncoding() -> string
+
+    Gets the current encoding that wxPython will use when it needs to
+    convert a Python string or unicode object to or from a wxString.
+    """
+    return _core_.GetDefaultPyEncoding(*args, **kwargs)
 #----------------------------------------------------------------------
 
 class PyOnDemandOutputWindow:
@@ -10838,6 +10856,16 @@ assert MINOR_VERSION == _core_.MINOR_VERSION, "wxPython/wxWidgets version mismat
 if RELEASE_VERSION != _core_.RELEASE_VERSION:
     import warnings
     warnings.warn("wxPython/wxWidgets release number mismatch")
+
+#----------------------------------------------------------------------------
+
+# Set the default string conversion encoding from the locale
+import locale
+default = locale.getdefaultlocale()[1]
+if default:
+    wx.SetDefaultPyEncoding(default)
+del default
+del locale
 
 #----------------------------------------------------------------------------
 

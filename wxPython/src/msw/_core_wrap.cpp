@@ -1555,6 +1555,42 @@ wxPyApp *new_wxPyApp(){
     wxPyApp* wxPyGetApp() { return (wxPyApp*)wxTheApp; }
 
 
+SWIGSTATICINLINE(int)
+SWIG_AsCharPtr(PyObject *obj, char **val)
+{
+  char* cptr = 0;
+  if (SWIG_AsCharPtrAndSize(obj, &cptr, (size_t*)(0))) {
+    if (val) *val = cptr;
+    return 1;
+  }
+  if (val) {
+    PyErr_SetString(PyExc_TypeError, "a char* is expected");
+  }
+  return 0;
+}
+
+
+SWIGSTATICINLINE(PyObject *)
+SWIG_FromCharPtr(const char* cptr)
+{ 
+  if (cptr) {
+    size_t size = strlen(cptr);
+    if (size > INT_MAX) {
+      return SWIG_NewPointerObj(swig_const_cast(cptr,char*), 
+				SWIG_TypeQuery("char *"), 0);
+    } else {
+      if (size != 0) {
+	return PyString_FromStringAndSize(cptr, size);
+      } else {
+	return PyString_FromString(cptr);
+      }
+    }
+  }
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
+
 #ifdef __WXMAC__
 
 // A dummy class that raises an exception if used...    
@@ -21461,6 +21497,52 @@ static PyObject *_wrap_GetApp(PyObject *, PyObject *args, PyObject *kwargs) {
     {
         resultobj = wxPyMake_wxObject(result, 0); 
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_SetDefaultPyEncoding(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    char *arg1 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "encoding", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SetDefaultPyEncoding",kwnames,&obj0)) goto fail;
+    if (!SWIG_AsCharPtr(obj0, (char**)&arg1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxSetDefaultPyEncoding((char const *)arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_GetDefaultPyEncoding(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    char *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":GetDefaultPyEncoding",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (char *)wxGetDefaultPyEncoding();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromCharPtr(result);
     return resultobj;
     fail:
     return NULL;
@@ -42115,6 +42197,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PostEvent", (PyCFunction) _wrap_PostEvent, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"App_CleanUp", (PyCFunction) _wrap_App_CleanUp, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GetApp", (PyCFunction) _wrap_GetApp, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"SetDefaultPyEncoding", (PyCFunction) _wrap_SetDefaultPyEncoding, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GetDefaultPyEncoding", (PyCFunction) _wrap_GetDefaultPyEncoding, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_EventLoop", (PyCFunction) _wrap_new_EventLoop, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"delete_EventLoop", (PyCFunction) _wrap_delete_EventLoop, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"EventLoop_Run", (PyCFunction) _wrap_EventLoop_Run, METH_VARARGS | METH_KEYWORDS, NULL },

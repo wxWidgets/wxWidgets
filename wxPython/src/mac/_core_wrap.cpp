@@ -1556,6 +1556,42 @@ int PyApp_GetComCtl32Version(){ wxPyRaiseNotImplemented(); return 0; }
     wxPyApp* wxPyGetApp() { return (wxPyApp*)wxTheApp; }
 
 
+SWIGSTATICINLINE(int)
+SWIG_AsCharPtr(PyObject *obj, char **val)
+{
+  char* cptr = 0;
+  if (SWIG_AsCharPtrAndSize(obj, &cptr, (size_t*)(0))) {
+    if (val) *val = cptr;
+    return 1;
+  }
+  if (val) {
+    PyErr_SetString(PyExc_TypeError, "a char* is expected");
+  }
+  return 0;
+}
+
+
+SWIGSTATICINLINE(PyObject *)
+SWIG_FromCharPtr(const char* cptr)
+{ 
+  if (cptr) {
+    size_t size = strlen(cptr);
+    if (size > INT_MAX) {
+      return SWIG_NewPointerObj(swig_const_cast(cptr,char*), 
+				SWIG_TypeQuery("char *"), 0);
+    } else {
+      if (size != 0) {
+	return PyString_FromStringAndSize(cptr, size);
+      } else {
+	return PyString_FromString(cptr);
+      }
+    }
+  }
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
+
 #ifdef __WXMAC__
 
 // A dummy class that raises an exception if used...    
@@ -4583,7 +4619,7 @@ static PyObject *_wrap_Rect_Intersect(PyObject *, PyObject *args, PyObject *kwar
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxRect *arg2 = 0 ;
-    wxRect *result;
+    wxRect result;
     wxRect temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -4600,15 +4636,53 @@ static PyObject *_wrap_Rect_Intersect(PyObject *, PyObject *args, PyObject *kwar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxRect &_result_ref = (arg1)->Intersect((wxRect const &)*arg2);
-            result = (wxRect *) &_result_ref;
-        }
+        result = (arg1)->Intersect((wxRect const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRect, 0);
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect((wxRect &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRect, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Rect_Union(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRect *arg1 = (wxRect *) 0 ;
+    wxRect *arg2 = 0 ;
+    wxRect result;
+    wxRect temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "rect", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect_Union",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxRect,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->Union((wxRect const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect((wxRect &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRect, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21425,6 +21499,52 @@ static PyObject *_wrap_GetApp(PyObject *, PyObject *args, PyObject *kwargs) {
     {
         resultobj = wxPyMake_wxObject(result, 0); 
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_SetDefaultPyEncoding(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    char *arg1 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "encoding", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SetDefaultPyEncoding",kwnames,&obj0)) goto fail;
+    if (!SWIG_AsCharPtr(obj0, (char**)&arg1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxSetDefaultPyEncoding((char const *)arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_GetDefaultPyEncoding(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    char *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":GetDefaultPyEncoding",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (char *)wxGetDefaultPyEncoding();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromCharPtr(result);
     return resultobj;
     fail:
     return NULL;
@@ -40985,6 +41105,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Rect_OffsetXY", (PyCFunction) _wrap_Rect_OffsetXY, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect_Offset", (PyCFunction) _wrap_Rect_Offset, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect_Intersect", (PyCFunction) _wrap_Rect_Intersect, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Rect_Union", (PyCFunction) _wrap_Rect_Union, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect___add__", (PyCFunction) _wrap_Rect___add__, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect___iadd__", (PyCFunction) _wrap_Rect___iadd__, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect___eq__", (PyCFunction) _wrap_Rect___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -41576,6 +41697,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PostEvent", (PyCFunction) _wrap_PostEvent, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"App_CleanUp", (PyCFunction) _wrap_App_CleanUp, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GetApp", (PyCFunction) _wrap_GetApp, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"SetDefaultPyEncoding", (PyCFunction) _wrap_SetDefaultPyEncoding, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GetDefaultPyEncoding", (PyCFunction) _wrap_GetDefaultPyEncoding, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_EventLoop", (PyCFunction) _wrap_new_EventLoop, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"delete_EventLoop", (PyCFunction) _wrap_delete_EventLoop, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"EventLoop_Run", (PyCFunction) _wrap_EventLoop_Run, METH_VARARGS | METH_KEYWORDS, NULL },

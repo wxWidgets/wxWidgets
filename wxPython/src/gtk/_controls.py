@@ -700,6 +700,84 @@ class ComboBox(_core.Control,_core.ItemContainer):
         """
         return _controls_.ComboBox_Remove(*args, **kwargs)
 
+    def IsEditable(*args, **kwargs):
+        """
+        IsEditable(self) -> bool
+
+        Returns True if the combo is ediatable (not read-only.)
+        """
+        return _controls_.ComboBox_IsEditable(*args, **kwargs)
+
+    def Undo(*args, **kwargs):
+        """
+        Undo(self)
+
+        Redoes the last undo in the text field. Windows only.
+        """
+        return _controls_.ComboBox_Undo(*args, **kwargs)
+
+    def Redo(*args, **kwargs):
+        """
+        Redo(self)
+
+        Undoes the last edit in the text field. Windows only.
+        """
+        return _controls_.ComboBox_Redo(*args, **kwargs)
+
+    def SelectAll(*args, **kwargs):
+        """
+        SelectAll(self)
+
+        Select all the text in the combo's text field.
+        """
+        return _controls_.ComboBox_SelectAll(*args, **kwargs)
+
+    def CanCopy(*args, **kwargs):
+        """
+        CanCopy(self) -> bool
+
+        Returns True if the combobox is editable and there is a text selection
+        to copy to the clipboard.  Only available on Windows.
+        """
+        return _controls_.ComboBox_CanCopy(*args, **kwargs)
+
+    def CanCut(*args, **kwargs):
+        """
+        CanCut(self) -> bool
+
+        Returns True if the combobox is editable and there is a text selection
+        to copy to the clipboard.  Only available on Windows.
+        """
+        return _controls_.ComboBox_CanCut(*args, **kwargs)
+
+    def CanPaste(*args, **kwargs):
+        """
+        CanPaste(self) -> bool
+
+        Returns True if the combobox is editable and there is text on the
+        clipboard that can be pasted into the text field. Only available on
+        Windows.
+        """
+        return _controls_.ComboBox_CanPaste(*args, **kwargs)
+
+    def CanUndo(*args, **kwargs):
+        """
+        CanUndo(self) -> bool
+
+        Returns True if the combobox is editable and the last edit can be
+        undone.  Only available on Windows.
+        """
+        return _controls_.ComboBox_CanUndo(*args, **kwargs)
+
+    def CanRedo(*args, **kwargs):
+        """
+        CanRedo(self) -> bool
+
+        Returns True if the combobox is editable and the last undo can be
+        redone.  Only available on Windows.
+        """
+        return _controls_.ComboBox_CanRedo(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -3348,6 +3426,8 @@ class NotebookSizerPtr(NotebookSizer):
         self.__class__ = NotebookSizer
 _controls_.NotebookSizer_swigregister(NotebookSizerPtr)
 
+NotebookSizer = wx._deprecated(NotebookSizer, "NotebookSizer is no longer needed.") 
+BookCtrlSizer = wx._deprecated(BookCtrlSizer, "BookCtrlSizer is no longer needed.") 
 #---------------------------------------------------------------------------
 
 TOOL_STYLE_BUTTON = _controls_.TOOL_STYLE_BUTTON
