@@ -715,7 +715,7 @@ static void FoldPerlDoc(unsigned int startPos, int length, int, WordList *[],
 }
 
 static const char * const perlWordListDesc[] = {
-	"Perl keywords",
+	"Keywords",
 	0
 };
 
