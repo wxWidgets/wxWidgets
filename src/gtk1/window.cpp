@@ -3004,18 +3004,22 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
             m_x = x + pizza->xoffset;
             m_y = y + pizza->yoffset;
         }
-        if (width != -1) m_width = width;
-        if (height != -1) m_height = height;
 
-        if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
+        // calculate the best size if we should auto size the window
+        if ( (sizeFlags & wxSIZE_AUTO_WIDTH) ||
+                (sizeFlags & wxSIZE_AUTO_HEIGHT) )
         {
-             if (width == -1) m_width = 80;
+            const wxSize sizeBest = GetBestSize();
+            if ( sizeFlags & wxSIZE_AUTO_WIDTH )
+                width = sizeBest.x;
+            if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
+                height = sizeBest.y;
         }
 
-        if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
-        {
-             if (height == -1) m_height = 26;
-        }
+        if (width != -1)
+            m_width = width;
+        if (height != -1)
+            m_height = height;
 
         int minWidth = GetMinWidth(),
             minHeight = GetMinHeight(),
