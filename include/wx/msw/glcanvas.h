@@ -52,9 +52,9 @@ enum
   WX_GL_MIN_ACCUM_ALPHA  /* use blue buffer with most bits (> MIN_ACCUM_ALPHA bits) */
 };
 
-class WXDLLEXPORT wxGLCanvas;     /* forward reference */
+class WXDLLIMPEXP_GL wxGLCanvas;     /* forward reference */
 
-class WXDLLEXPORT wxGLContext: public wxObject
+class WXDLLIMPEXP_GL wxGLContext: public wxObject
 {
 public:
    wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette = wxNullPalette);
@@ -80,7 +80,7 @@ public:
    wxWindow*        m_window;
 };
 
-class WXDLLEXPORT wxGLCanvas: public wxWindow
+class WXDLLIMPEXP_GL wxGLCanvas: public wxWindow
 {
    DECLARE_CLASS(wxGLCanvas)
  public:
