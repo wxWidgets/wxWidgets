@@ -833,20 +833,18 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
 
     // avoid sending the event when a radio button is released, this is not
     // interesting
-    if ( tool->CanBeToggled() && tool->GetKind() == wxITEM_RADIO && !toggled )
+    if ( !tool->CanBeToggled() || tool->GetKind() != wxITEM_RADIO || toggled )
     {
-        return;
-    }
+        // OnLeftClick() can veto the button state change - for buttons which
+        // may be toggled only, of couse
+        if ( !OnLeftClick((int)id, toggled) && tool->CanBeToggled() )
+        {
+            // revert back
+            toggled = !toggled;
+            tool->SetToggle(toggled);
 
-    // OnLeftClick() can veto the button state change - for buttons which may
-    // be toggled only, of couse
-    if ( !OnLeftClick((int)id, toggled) && tool->CanBeToggled() )
-    {
-        // revert back
-        toggled = !toggled;
-        tool->SetToggle(toggled);
-
-        ::SendMessage(GetHwnd(), TB_CHECKBUTTON, id, MAKELONG(toggled, 0));
+            ::SendMessage(GetHwnd(), TB_CHECKBUTTON, id, MAKELONG(toggled, 0));
+        }
     }
 
     return TRUE;
