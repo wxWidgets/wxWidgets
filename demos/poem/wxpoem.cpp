@@ -727,9 +727,12 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
         int xx, yy;
         TheMainWindow->GetClientSize(&xx, &yy);
 
+        dc.DrawBitmap(* backingBitmap, 0, 0);
+#if 0        
         wxMemoryDC memDC;
         memDC.SelectObject(* backingBitmap);
         dc.Blit(0, 0, backingBitmap->GetWidth(), backingBitmap->GetHeight(), &memDC, 0, 0);
+#endif
   }
 }
 

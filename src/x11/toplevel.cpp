@@ -557,39 +557,44 @@ bool wxMWMIsRunning(Window w)
 // smaller
 wxPoint wxTopLevelWindowX11::GetClientAreaOrigin() const
 {
-    // In fact wxFrame::GetClientAreaOrigin
+    // wxFrame::GetClientAreaOrigin
     // does the required calculation already.
-#if 0
-    if (this->IsKindOf(CLASSINFO(wxFrame)))
-    {
-	wxFrame* frame = (wxFrame*) this;
-	if (frame->GetMenuBar())
-	    return wxPoint(0, frame->GetMenuBar()->GetSize().y);
-    }
-#endif
     return wxPoint(0, 0);
 }
 
 void wxTopLevelWindowX11::DoGetClientSize( int *width, int *height ) const
 {
+    XSync(wxGlobalDisplay(), False);
     wxWindowX11::DoGetClientSize(width, height);
-    // Done by wxTopLevelWindow
-#if 0
-    if (this->IsKindOf(CLASSINFO(wxFrame)))
-    {
-	wxFrame* frame = (wxFrame*) this;
-	if (frame->GetMenuBar())
-	    (*height) -= frame->GetMenuBar()->GetSize().y;
-	if (frame->GetStatusBar())
-	    (*height) -= frame->GetStatusBar()->GetSize().y;
-    }
-#endif
 }
 
 void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 {
     wxWindowX11::DoSetClientSize(width, height);
 
+    // Set the top-level window size
+    XSizeHints size_hints;
+    wxSize oldSize = GetSize();
+    wxSize oldClientSize = GetClientSize();
+
+    size_hints.flags = PSize;
+    size_hints.width = width + (oldSize.x - oldClientSize.x);
+    size_hints.height = height + (oldSize.y - oldClientSize.y);
+    XSetWMNormalHints( (Display*) GetXDisplay(), (Window) GetMainWindow(),
+                       &size_hints);
+
+    // This seems to be necessary or resizes don't get performed
+    XSync(wxGlobalDisplay(), False);
+    XSync(wxGlobalDisplay(), False);
+
+#if 0
+    wxLogDebug("DoSetClientSize: Tried to set size to %d, %d", (int) size_hints.width, (int) size_hints.height);
+
+    XSync(wxGlobalDisplay(), False);
+    wxSize newSize = GetSize();
+    wxLogDebug("New size is %d, %d", (int) newSize.x, (int) newSize.y);
+#endif
+    
 #if 0
     if (!GetMainWindow())
         return;
@@ -617,6 +622,33 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
     // wxLogDebug( "Setting pos: %d, %d", x, y );
     wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
 
+    XSizeHints size_hints;
+    size_hints.flags = 0;
+    if (x > -1 && y > -1)
+        size_hints.flags |= PPosition;
+    if (width > -1 && height > -1)
+        size_hints.flags |= PSize;
+    size_hints.width = width;
+    size_hints.height = height;
+    size_hints.x = x;
+    size_hints.y = y;
+    XSetWMNormalHints( (Display*) GetXDisplay(), (Window) GetMainWindow(),
+                       &size_hints);
+
+    // This seems to be necessary or resizes don't get performed.
+    // Take them out (or even just one of them), and the About
+    // box of the minimal sample probably won't be resized right.
+    XSync(wxGlobalDisplay(), False);
+    XSync(wxGlobalDisplay(), False);
+
+#if 0
+    wxLogDebug("DoSetSize: Tried to set size to %d, %d", (int) size_hints.width, (int) size_hints.height);
+
+    XSync(wxGlobalDisplay(), False);
+    wxSize newSize = GetSize();
+    wxLogDebug("New size is %d, %d", (int) newSize.x, (int) newSize.y);
+#endif
+    
 #if 0
     wxPoint pt = GetPosition();
     // wxLogDebug( "After, pos: %d, %d", pt.x, pt.y );
