@@ -2001,48 +2001,43 @@ void wxWindow::SetCursor( const wxCursor &cursor )
 
 void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
-  if (eraseBackground && m_wxwindow && m_wxwindow->window)
-  {
-    if (rect)
-      gdk_window_clear_area( m_wxwindow->window,
-        rect->x,
-        rect->y,
-        rect->width,
-        rect->height );
-    else
-      Clear();
-  }
-  if (!rect)
-  {
-    if (m_wxwindow)
+    if (eraseBackground && m_wxwindow && m_wxwindow->window)
     {
-      int w = 0;
-      int h = 0;
-      GetClientSize( &w, &h );
-
-      GdkRectangle gdk_rect;
-      gdk_rect.x = 0;
-      gdk_rect.y = 0;
-      gdk_rect.width = w;
-      gdk_rect.height = h;
-      gtk_widget_draw( m_wxwindow, &gdk_rect );
+        if (rect)
+        {
+            gdk_window_clear_area( m_wxwindow->window,
+                                   rect->x, rect->y,
+                                   rect->width,
+                                   rect->height );
+        }
+        else
+        {
+           Clear();
+        }
     }
-  }
-  else
-  {
-    GdkRectangle gdk_rect;
-    gdk_rect.x = rect->x;
-    gdk_rect.y = rect->y;
-    gdk_rect.width = rect->width;
-    gdk_rect.height = rect->height;
-
-    if (m_wxwindow)
-      gtk_widget_draw( m_wxwindow, &gdk_rect );
+    
+    if (!rect)
+    {
+        if (m_wxwindow)
+            gtk_widget_draw( m_wxwindow, (GdkRectangle*) NULL );
+	else
+            gtk_widget_draw( m_widget, (GdkRectangle*) NULL );
+    }
     else
-      gtk_widget_draw( m_widget, &gdk_rect );
-  }
+    {
+        GdkRectangle gdk_rect;
+        gdk_rect.x = rect->x;
+        gdk_rect.y = rect->y;
+        gdk_rect.width = rect->width;
+        gdk_rect.height = rect->height;
+
+        if (m_wxwindow)
+            gtk_widget_draw( m_wxwindow, &gdk_rect );
+        else
+            gtk_widget_draw( m_widget, &gdk_rect );
+    }
 }
 
 wxRegion wxWindow::GetUpdateRegion() const
