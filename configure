@@ -11849,9 +11849,9 @@ fi
 
             if test "x$PNG_LINK" = "x" ; then
                 if test "$wxUSE_LIBPNG" = "sys" ; then
-                    { echo "configure: error: system png library not found! Use --with-libpng=builtin to use built-in version" 1>&2; exit 1; }
+                    { echo "configure: error: system png library not found or too old! Use --with-libpng=builtin to use built-in version" 1>&2; exit 1; }
                 else
-                    echo "configure: warning: png library not found or too old, will use built-in instead" 1>&2
+                    echo "configure: warning: system png library not found or too old, will use built-in instead" 1>&2
                     wxUSE_LIBPNG=builtin
                 fi
             else
@@ -15617,9 +15617,9 @@ rm -f conftest*
     fi
 
     if test "$wxUSE_MAC" = 1; then
-        CPPFLAGS="$CPPFLAGS -fpascal-strings -I\${top_srcdir}/src/mac/morefile -I/Developer/Headers/FlatCarbon"
+        CPPFLAGS="$CPPFLAGS -fpascal-strings -I\${top_srcdir}/src/mac/morefilex -I/Developer/Headers/FlatCarbon"
 
-        TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefile"
+        TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefilex"
         TOOLKIT=MAC
                 GUIDIST=MACX_DIST
     fi
@@ -15901,7 +15901,7 @@ case "${host}" in
         ;;
 
     *-*-darwin* )
-                
+                        
         WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
         WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
 
@@ -22896,6 +22896,10 @@ echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT:-base 
 echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWindows be linked as a shared library?         ${wxUSE_SHARED:-no}"
 echo "  Should wxWindows be compiled in Unicode mode?           ${wxUSE_UNICODE:-no}"
+
+echo "  What level of wxWindows compatibility should be enabled?"
+echo "                                       wxWindows 2.0      ${WXWIN_COMPATIBILITY_2:-no}"
+echo "                                       wxWindows 2.2      ${WXWIN_COMPATIBILITY_2_2:-yes}"
 
 echo "  Which libraries should wxWindows use?"
 echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"

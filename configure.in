@@ -1821,9 +1821,9 @@ if test "$wxUSE_LIBPNG" != "no" ; then
 
             if test "x$PNG_LINK" = "x" ; then
                 if test "$wxUSE_LIBPNG" = "sys" ; then
-                    AC_MSG_ERROR([system png library not found! Use --with-libpng=builtin to use built-in version])
+                    AC_MSG_ERROR([system png library not found or too old! Use --with-libpng=builtin to use built-in version])
                 else
-                    AC_MSG_WARN([png library not found or too old, will use built-in instead])
+                    AC_MSG_WARN([system png library not found or too old, will use built-in instead])
                     wxUSE_LIBPNG=builtin
                 fi
             else
@@ -2529,9 +2529,9 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     fi
 
     if test "$wxUSE_MAC" = 1; then
-        CPPFLAGS="$CPPFLAGS -fpascal-strings -I\${top_srcdir}/src/mac/morefile -I/Developer/Headers/FlatCarbon"
+        CPPFLAGS="$CPPFLAGS -fpascal-strings -I\${top_srcdir}/src/mac/morefilex -I/Developer/Headers/FlatCarbon"
 
-        TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefile"
+        TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefilex"
         TOOLKIT=MAC
         dnl we can't call this MAC_DIST or autoconf thinks its a macro
         GUIDIST=MACX_DIST
@@ -2769,7 +2769,7 @@ case "${host}" in
     *-*-darwin* )
         dnl Under Mac OS X, the naming conventions for shared libraries
         dnl are different: the number precedes the suffix.
-
+        
         WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
         WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
 
@@ -5482,6 +5482,10 @@ echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT:-base 
 echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWindows be linked as a shared library?         ${wxUSE_SHARED:-no}"
 echo "  Should wxWindows be compiled in Unicode mode?           ${wxUSE_UNICODE:-no}"
+
+echo "  What level of wxWindows compatibility should be enabled?"
+echo "                                       wxWindows 2.0      ${WXWIN_COMPATIBILITY_2:-no}"
+echo "                                       wxWindows 2.2      ${WXWIN_COMPATIBILITY_2_2:-yes}"
 
 echo "  Which libraries should wxWindows use?"
 echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"
