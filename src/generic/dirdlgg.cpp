@@ -257,7 +257,7 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
 {
     wxTreeItemId id = m_dirCtrl->GetTreeCtrl()->GetSelection();
     if ((id == m_dirCtrl->GetTreeCtrl()->GetRootItem()) ||
-        (m_dirCtrl->GetTreeCtrl()->GetParent(id) == m_dirCtrl->GetTreeCtrl()->GetRootItem()))
+        (m_dirCtrl->GetTreeCtrl()->GetItemParent(id) == m_dirCtrl->GetTreeCtrl()->GetRootItem()))
     {
         wxMessageDialog msg(this, _("You cannot add a new directory to this section."),
                             _("Create directory"), wxOK | wxICON_INFORMATION );
@@ -265,7 +265,7 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
         return;
     }
 
-    wxTreeItemId parent = id ; // m_dirCtrl->GetTreeCtrl()->GetParent( id );
+    wxTreeItemId parent = id ; // m_dirCtrl->GetTreeCtrl()->GetItemParent( id );
     wxDirItemData *data = (wxDirItemData*)m_dirCtrl->GetTreeCtrl()->GetItemData( parent );
     wxASSERT( data );
 

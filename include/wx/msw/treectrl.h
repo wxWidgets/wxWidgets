@@ -222,7 +222,16 @@ public:
     size_t GetSelections(wxArrayTreeItemIds& selections) const;
 
         // get the parent of this item (may return NULL if root)
-    wxTreeItemId GetParent(const wxTreeItemId& item) const;
+    wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
+
+#if WXWIN_COMPATIBILITY_2_2
+        // deprecated:  Use GetItemParent instead.
+    wxTreeItemId GetParent(const wxTreeItemId& item) const
+    	{ return GetItemParent( item ); }
+
+    	// Expose the base class method hidden by the one above.
+    wxWindow *GetParent() const { return wxScrolledWindow::GetParent(); }
+#endif  // WXWIN_COMPATIBILITY_2_2
 
         // for this enumeration function you must pass in a "cookie" parameter
         // which is opaque for the application but is necessary for the library

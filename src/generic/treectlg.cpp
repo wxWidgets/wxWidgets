@@ -1121,7 +1121,7 @@ bool wxGenericTreeCtrl::IsBold(const wxTreeItemId& item) const
 // navigation
 // -----------------------------------------------------------------------------
 
-wxTreeItemId wxGenericTreeCtrl::GetParent(const wxTreeItemId& item) const
+wxTreeItemId wxGenericTreeCtrl::GetItemParent(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
 
@@ -1221,7 +1221,7 @@ wxTreeItemId wxGenericTreeCtrl::GetNext(const wxTreeItemId& item) const
          do
          {
               toFind = GetNextSibling(p);
-              p = GetParent(p);
+              p = GetItemParent(p);
          } while (p.IsOk() && !toFind.IsOk());
          return toFind;
     }
@@ -1766,13 +1766,13 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
         return;
 
-    wxTreeItemId parent = GetParent( itemId );
+    wxTreeItemId parent = GetItemParent( itemId );
     while (parent.IsOk())
     {
         if (!IsExpanded(parent))
             Expand( parent );
 
-        parent = GetParent( parent );
+        parent = GetItemParent( parent );
     }
 
     EnsureVisible( itemId );
@@ -2576,7 +2576,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                 wxTreeItemId prev = GetPrevSibling( m_key_current );
                 if (!prev)
                 {
-                    prev = GetParent( m_key_current );
+                    prev = GetItemParent( m_key_current );
                     if ((prev == GetRootItem()) && HasFlag(wxTR_HIDE_ROOT))
                     {
                         break;  // don't go to root if it is hidden
@@ -2615,7 +2615,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             // left arrow goes to the parent
         case WXK_LEFT:
             {
-                wxTreeItemId prev = GetParent( m_current );
+                wxTreeItemId prev = GetItemParent( m_current );
                 if ((prev == GetRootItem()) && HasFlag(wxTR_HIDE_ROOT))
                 {
                     // don't go to root if it is hidden
@@ -2651,7 +2651,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                         wxTreeItemId current = m_key_current;
                         while (current && !next)
                         {
-                            current = GetParent( current );
+                            current = GetItemParent( current );
                             if (current) next = GetNextSibling( current );
                         }
                     }
