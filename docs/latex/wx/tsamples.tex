@@ -1,0 +1,54 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        tsamples.tex
+%% Purpose:     Samples description
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     02.11.99
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWindows team
+%% Licence:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{wxWindows samples}\label{samples}
+
+Probably the best way to learn wxWindows is by reading the source of some 50+
+samples provided with it. Many aspects of wxWindows programming can be learnt
+from them, but sometimes it is not simple to just choose the right sample to
+look at. This overview aims at describing what each sample does/demonstrates to
+make it easier to find the relevant one if a simple grep through all sources
+didn't help. They also provide some notes about using the samples and what
+features of wxWindows are they supposed to test.
+
+\subsection{DnD sample}{samplednd}
+
+This sample shows both clipboard and drag and drop in action. It is quite non
+trivial and may be safely used as a basis for implementing the clipboard and
+drag and drop operations in a real-life program.
+
+When you run the sample, its screen is split in several parts. On the top,
+there are two listboxes which show the standard derivations of 
+\helpref{wxDropTarget}{wxdroptarget}: 
+\helpref{wxTextDropTarget}{wxtextdroptarget} and 
+\helpref{wxFileDropTarget}{wxfiledroptarget}.
+
+The middle of the sample window is taken by the log window which shows what is
+going on (of course, this only works in debug builds) and may be helpful to see
+the sequence of steps of data transfer.
+
+Finally, the last part is used for two things: you can drag text from it to
+either one of the listboxes (only one will accept it) or another application
+and, also, bitmap pasted from clipboard will be shown there.
+
+So far, everything we mentioned was implemented with minimal amount of code
+using standard wxWindows classes. The more advanced features are demonstrated
+if you create a shape frame from the main frame menu. A shape is a geometric
+object which has a position, size and color. It models some
+application-specific data in this sample. A shape object supports its own
+private \helpref{wxDataFormat}{wxdataformat} which means that you may cut and
+paste it or drag and drop (between one and the same or different shapes) from
+one sample instance to another (or the same). However, chances are that no
+other program supports this format and so shapes can also be rendered as
+bitmaps which allows them to be pasted/dropped in many other applications.
+
+Take a look at DnDShapeDataObject class to see how you may use 
+\helpref{wxDataObject}{wxdataobject} to achieve this.

@@ -1,0 +1,65 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dobjcomp.tex
+%% Purpose:     wxDataObjectComposite documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     02.11.99
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% Licence:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDataObjectComposite}}\label{wxdataobjectcomposite}
+
+wxDataObjectComposite is the simplest 
+\helpref{wxDataObject}{wxdataobject} derivation which may be sued to support
+multiple formats. It contains several 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple} objects and supports any
+format supported by at least one of them. Only one of these data objects is
+{\it preferred} (the first one if not explicitly changed by using the second
+parameter of \helpref{Add}{wxdataobjectcompositeadd}) and its format determines
+the preferred format of the composite data object as well.
+
+See \helpref{wxDataObject}{wxdataobject} documentation for the reasons why you
+might prefer to use wxDataObject directly instead of wxDataObjectComposite for
+efficiency reasons.
+
+\wxheading{Virtual functions to override}
+
+None, this class should be used directly.
+
+\wxheading{Derived from}
+
+\helpref{wxDataObject}{wxdataobject}
+
+\wxheading{Include files}
+
+<wx/dataobj.h>
+
+\wxheading{See also}
+
+\helpref{Clipboard and drag and drop overview}{wxclipboardonfigoverview}, 
+\helpref{wxDataObject}{wxdataobject}, 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}, 
+\helpref{wxFileDataObject}{wxfiledataobject}, 
+\helpref{wxTextDataObject}{wxtextdataobject}, 
+\helpref{wxBitmapDataObject}{wxbitmapdataobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDataObjectComposite::wxDataObjectComposite}\label{wxdataobjectcompositewxdataobjectcomposite}
+
+\func{}{wxDataObjectComposite}{\void}
+
+The default constructor.
+
+\membersection{wxDataObjectComposite::Add}\label{wxdataobjectcompositeadd}
+
+\func{void}{Add}{
+    \param{wxDataObjectSimple }{*dataObject},
+    \param{bool }{preferred = FALSE}}
+
+Adds the {\it dataObject} to the list of supported objects and it becomes the
+preferred object if {\it preferred} is TRUE.
+
+
