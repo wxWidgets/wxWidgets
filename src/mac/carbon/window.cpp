@@ -312,7 +312,11 @@ static pascal OSStatus wxMacWindowServiceEventHandler( EventHandlerCallRef handl
                 char *content = new char[textSize] ;
                 GetScrapFlavorData (scrapRef, kTXNTextData, &pastedSize, content );  
                 content[textSize-1] = 0 ;
+#if wxUSE_UNICODE
+                textCtrl->WriteText( wxString( content , wxConvLocal )  );
+#else
                 textCtrl->WriteText( wxString( content ) ) ;
+#endif
                 delete[] content ;
                 result = noErr ;
             }
