@@ -412,33 +412,41 @@ void wxTextOutputStream::WriteDouble(double d)
 
 void wxTextOutputStream::WriteString(const wxString& string)
 {
-    for (size_t i = 0; i < string.Len(); i++)
+    size_t len = string.length();
+
+    wxString out;
+    out.reserve(len);
+
+    for ( size_t i = 0; i < len; i++ )
     {
-        wxChar c = string[i];
-        if (c == wxT('\n'))
+        const wxChar c = string[i];
+        if ( c == wxT('\n') )
         {
-            if (m_mode == wxEOL_DOS)
+            switch ( m_mode )
             {
-                 c = wxT('\r');
-                 m_output.Write( (const void*)(&c), sizeof(wxChar) );
-                 c = wxT('\n');
-                 m_output.Write( (const void*)(&c), sizeof(wxChar) );
-            } else
-            if (m_mode == wxEOL_MAC)
-            {
-                 c = wxT('\r');
-                 m_output.Write( (const void*)(&c), sizeof(wxChar) );
-            } else
-            {
-                 c = wxT('\n');
-                 m_output.Write( (const void*)(&c), sizeof(wxChar) );
+                case wxEOL_DOS:
+                    out << _T("\r\n");
+                    continue;
+
+                case wxEOL_MAC:
+                    out << _T('\r');
+                    continue;
+
+                default:
+                    wxFAIL_MSG( _T("unknown EOL mode in wxTextOutputStream") );
+                    // fall through
+
+                case wxEOL_UNIX:
+                    // don't treat '\n' specially
+                    ;
             }
         }
-        else
-        {
-            m_output.Write( (const void*)(&c), sizeof(wxChar) );
-        }
+
+        out << c;
    }
+
+    // NB: we don't need to write the trailing NUL here
+    m_output.Write(out.c_str(), out.length() * sizeof(wxChar));
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(const wxChar *string)
