@@ -3092,6 +3092,7 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
 
     if ( numRows >= curNumRows )
     {
+        for (size_t i=0; i< m_data.GetCount(); i++) m_data[i].Clear();
         m_data.Empty();  // don't release memory just yet
     }
     else
@@ -3205,7 +3206,9 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
     {
         if ( numCols >= curNumCols )
         {
-            m_data[row].Clear();
+            for (size_t i=0; i< m_data[row].GetCount(); i++) (m_data[row])[i].Clear();
+            m_data[row].Empty();
+//            m_data[row].Clear();
         }
         else
         {
