@@ -456,7 +456,7 @@ def build_locale_string():
             if not os.path.isdir(filename):
                 lst.append( locale_template % (filename, dirname) )
 
-    os.path.walk('wxPython\\locale', walk_helper, stringlst)
+    os.path.walk('wx\\locale', walk_helper, stringlst)
     return '\n'.join(stringlst)
 
 def get_system_dir():
