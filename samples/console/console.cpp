@@ -785,6 +785,8 @@ static void TestSocketServer()
 
         delete socket;
     }
+
+    delete server;
 }
 
 static void TestSocketClient()
@@ -2606,9 +2608,9 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_SOCKETS
-    if ( 1 )
-        TestSocketServer();
     if ( 0 )
+        TestSocketServer();
+    if ( 1 )
     {
         TestSocketClient();
         TestProtocolFtp();
