@@ -43,17 +43,17 @@ void wxBell()
 void wxDisplaySize(int *width, int *height)
 {
     wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
-    if (width) *width = g_displayDC->sizex();
-    if (height) *height = g_displayDC->sizey();
+    if (width) *width = g_displayDC->sizex()+1;
+    if (height) *height = g_displayDC->sizey()+1;
 }
 
 void wxDisplaySizeMM(int *width, int *height)
 {
     wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
     if ( width ) 
-        *width = g_displayDC->sizex() * 25/72;
+        *width = (g_displayDC->sizex()+1) * 25/72;
     if ( height ) 
-        *height = g_displayDC->sizey() * 25/72;
+        *height = (g_displayDC->sizey()+1) * 25/72;
     // FIXME_MGL -- what about returning *real* monitor dimensions?
 }
 

@@ -1098,6 +1098,12 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
         return;
     }
     
+#if 0 // FIXME_MGL -- debugging stuff!
+    dc->setColorRGB(255,0,255);
+    dc->fillRect(-1000,-1000,2000,2000);
+    wxUsleep(100);
+#endif
+
     MGLRegion clip;
     dc->getClipRegion(clip);
     m_updateRegion = wxRegion(clip);

@@ -182,16 +182,9 @@ void wxDC::SetMGLDC(MGLDevCtx *mgldc, bool OwnsMGLDC)
     m_MGLDC = mgldc;
     m_OwnsMGLDC = OwnsMGLDC;
 	m_ok = TRUE;
-    
-    if ( mgldc->getDC()->a.clipRegion )
-    {
-        MGLRegion clip;
-        mgldc->getClipRegion(clip);
-        m_globalClippingRegion = wxRegion(clip);
-        // FIXME_MGL -- reuse wxWindows::m_updateRegion ?
-        m_currentClippingRegion = m_globalClippingRegion;
-        m_clipping = TRUE;
-    }
+
+    if ( !m_globalClippingRegion.IsNull() )
+        SetClippingRegion(m_globalClippingRegion);
     
     InitializeMGLDC();
 }
@@ -288,7 +281,7 @@ void wxDC::DestroyClippingRegion()
     }
     else
     {
-        m_MGLDC->setClipRect(MGLRect(0, 0, m_MGLDC->sizex(), m_MGLDC->sizey()));
+        m_MGLDC->setClipRect(MGLRect(0, 0, m_MGLDC->sizex()+1, m_MGLDC->sizey()+1));
         m_clipping = FALSE;
         m_currentClippingRegion.Clear();
     }
@@ -1370,8 +1363,8 @@ wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 
 void wxDC::DoGetSize(int *w, int *h) const
 {
-    if (w) *w = m_MGLDC->sizex();
-    if (h) *h = m_MGLDC->sizey();
+    if (w) *w = m_MGLDC->sizex()+1;
+    if (h) *h = m_MGLDC->sizey()+1;
 }
 
 void wxDC::DoGetSizeMM(int *width, int *height) const

@@ -77,7 +77,10 @@ bool wxTopLevelWindowMGL::Create(wxWindow *parent,
             size.y = sizeDpy.y / 5;
     }
     
-    wxWindow::Create(parent, id, pos, sizeOrig, style, name);
+    wxWindow::Create(NULL, id, pos, sizeOrig, style, name);
+    SetParent(parent);
+    if ( parent )
+        parent->AddChild(this);
 
     wxTopLevelWindows.Append(this);
 

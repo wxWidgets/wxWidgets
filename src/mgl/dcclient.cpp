@@ -35,12 +35,20 @@ wxWindowDC::wxWindowDC(wxWindow *win) : m_wnd(win)
     if ( dc )
     {
         m_inPaintHandler = TRUE;
+
+        m_globalClippingRegion = win->GetUpdateRegion();
         SetMGLDC(dc, FALSE);
     }
     else
     {
         m_inPaintHandler = FALSE;
-        SetMGLDC(new MGLDevCtx(MGL_wmBeginPaint(m_wnd->GetHandle())), TRUE);
+
+        dc = new MGLDevCtx(MGL_wmBeginPaint(win->GetHandle()));
+
+        MGLRegion clip;
+        dc->getClipRegion(clip);
+        m_globalClippingRegion = wxRegion(clip);
+        SetMGLDC(dc, TRUE);
         // TRUE means that dtor will delete MGLDevCtx object
         // but it won't destroy MGLDC returned by MGL_wmBeginPaint because
         // ~MGLDevCtx() doesn't call destroy()
@@ -49,14 +57,7 @@ wxWindowDC::wxWindowDC(wxWindow *win) : m_wnd(win)
 
 wxWindowDC::~wxWindowDC()
 {
-    if ( m_inPaintHandler )
-    {
-        // This is neccessary so that subsequently created wxPaintDCs won't get
-        // confused about clipping. Another reason is that the same MGL dc is reused
-        // for wxEraseEvent, wxNcPaintEvent and wxPaintEvent
-        DestroyClippingRegion();
-    }
-    else
+    if ( !m_inPaintHandler )
     {
         GetMGLDC()->setDC(NULL);
         MGL_wmEndPaint(m_wnd->GetHandle());
@@ -66,6 +67,6 @@ wxWindowDC::~wxWindowDC()
 wxClientDC::wxClientDC(wxWindow *win) : wxWindowDC(win)
 {
     wxRect r = m_wnd->GetClientRect();
-    SetClippingRegion(r);
+    m_globalClippingRegion.Intersect(r);
     SetDeviceOrigin(r.x, r.y);
 }
