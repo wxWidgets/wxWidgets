@@ -212,9 +212,8 @@ bool wxHtmlHelpController::DisplayTextPopup(const wxString& text, const wxPoint&
         return TRUE;
     }
 
-    return FALSE;
 #endif
-    return FALSE;    
+    return FALSE;
 }
 
 void wxHtmlHelpController::SetFrameParameters(const wxString& title,
