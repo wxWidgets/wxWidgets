@@ -690,7 +690,9 @@ bool wxApp::OnInitGui()
 
 #include <pango/pango.h>
 #include <pango/pangox.h>
-#include <pango/pangoxft.h>
+#ifdef HAVE_PANGO_XFT
+    #include <pango/pangoxft.h>
+#endif
 
 PangoContext* wxApp::GetPangoContext()
 {
@@ -700,7 +702,7 @@ PangoContext* wxApp::GetPangoContext()
 
     Display *xdisplay = (Display*) wxApp::GetDisplay();
 
-#if 1
+#ifdef HAVE_PANGO_XFT
     int xscreen = DefaultScreen(xdisplay);
     static int use_xft = -1;
     if (use_xft == -1)

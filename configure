@@ -25945,6 +25945,10 @@ echo "${ECHO_T}$PANGOXFT_LIBS" >&6
 
   if test $succeeded = yes; then
 
+                        cat >>confdefs.h <<\_ACEOF
+#define HAVE_PANGO_XFT 1
+_ACEOF
+
                         CXXFLAGS="$CXXFLAGS $PANGOXFT_CFLAGS"
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
 

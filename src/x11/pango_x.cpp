@@ -64,6 +64,7 @@ x11_draw_glyphs( Drawable            drawable,
 		         PangoGlyphString   *glyphs,
                  wxColour           &colour )
 {
+#ifdef HAVE_PANGO_XFT
     if (PANGO_XFT_IS_FONT (font))
     {
         Display* xdisplay = wxGlobalDisplay();
@@ -84,6 +85,7 @@ x11_draw_glyphs( Drawable            drawable,
         XftDrawDestroy( draw );
     }
     else
+#endif
     {
         pango_x_render( wxGlobalDisplay(), drawable, gc, font, glyphs, x, y );
     }

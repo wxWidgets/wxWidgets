@@ -2767,6 +2767,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 )
                 PKG_CHECK_MODULES(PANGOXFT, pangoxft,
                     [
+                        AC_DEFINE(HAVE_PANGO_XFT)
                         CXXFLAGS="$CXXFLAGS $PANGOXFT_CFLAGS"
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
                     ],

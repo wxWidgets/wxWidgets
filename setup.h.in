@@ -1306,6 +1306,9 @@
 /* Define if you have pango_font_family_is_monospace() (Pango >= 1.3.3) */
 #undef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
 
+/* Define if you have Pango xft support */
+#undef HAVE_PANGO_XFT
+
 /* -------------------------------------------------------------------------
    Win32 adjustments section
    ------------------------------------------------------------------------- */
