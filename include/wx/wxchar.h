@@ -194,8 +194,9 @@
 // define _T() and related macros
 // ----------------------------------------------------------------------------
 
-// BSD systems define _T() to be something different, override it
+// BSD systems define _T() to be something different in ctype.h, override it
 #if defined(__FreeBSD__) || defined(__DARWIN__)
+    #include <ctype.h>
     #undef _T
 #endif
 
