@@ -55,7 +55,7 @@
 #include "wx/debug.h"
 #include "wx/strconv.h"
 
-#ifdef WORDS_BIGENDIAN
+#if defined(WORDS_BIGENDIAN) || defined(__STDC_ISO_10646__)
 #define BSWAP_UCS4(str, len)
 #define BSWAP_UCS2(str, len)
 #else
