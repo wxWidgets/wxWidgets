@@ -39,11 +39,12 @@
     foreach $file (sort keys %wxMSW) {
         next if $wxMSW{$file} =~ /\b16\b/;
 
-        if ( $file =~ /^automtn/ ) {
-            #! comment in old makefile.b32 seems to imply that this file can not
-            #! be compiled with Borland (leads to crash in oleauto sample)
-            next;
-        }
+#!        if ( $file =~ /^automtn/ ) {
+#!            #! comment in old makefile.b32 seems to imply that this file can not
+#!            #! be compiled with Borland (leads to crash in oleauto sample)
+#!            No longer true, at least for BC++ 5.2
+#!            next;
+#!        }
 
         $isCFile = $file =~ /\.c$/;
 

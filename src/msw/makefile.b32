@@ -218,6 +218,7 @@ COMMONOBJS = \
 
 MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\app.obj \
+		$(MSWDIR)\automtn.obj \
 		$(MSWDIR)\bitmap.obj \
 		$(MSWDIR)\bmpbuttn.obj \
 		$(MSWDIR)\brush.obj \
@@ -516,6 +517,8 @@ $(MSWDIR)\nativdlg.obj: $(MSWDIR)\nativdlg.$(SRCSUFF)
 $(MSWDIR)\notebook.obj: $(MSWDIR)\notebook.$(SRCSUFF)
 
 $(MSWDIR)\oleutils.obj: $(OLEDIR)\oleutils.$(SRCSUFF)
+
+$(MSWDIR)\automtn.obj: $(OLEDIR)\automtn.$(SRCSUFF)
 
 $(MSWDIR)\ownerdrw.obj: $(MSWDIR)\ownerdrw.$(SRCSUFF)
 

@@ -913,10 +913,11 @@ bool RegTreeCtrl::TreeNode::OnExpand()
 
   if ( isEmpty ) {
     // this is for the case when our last child was just deleted
-    m_pTree->Collapse(Id());
+    wxTreeItemId theId(Id()); // Temp variable seems necessary for BC++
+    m_pTree->Collapse(theId);
 
     // we won't be expanded any more
-    m_pTree->SetItemHasChildren(Id(), FALSE);
+    m_pTree->SetItemHasChildren(theId, FALSE);
   }
 
   return TRUE;
@@ -935,14 +936,15 @@ void RegTreeCtrl::TreeNode::Refresh()
     if ( !IsKey() )
         return;
 
-    bool wasExpanded = m_pTree->IsExpanded(Id());
+    wxTreeItemId theId(Id()); // Temp variable seems necessary for BC++
+    bool wasExpanded = m_pTree->IsExpanded(theId);
     if ( wasExpanded )
-        m_pTree->Collapse(Id());
+        m_pTree->Collapse(theId);
 
     OnCollapse();
-    m_pTree->SetItemHasChildren(Id());
+    m_pTree->SetItemHasChildren(theId);
     if ( wasExpanded ) {
-        m_pTree->Expand(Id());
+        m_pTree->Expand(theId);
         OnExpand();
     }
 }
@@ -967,7 +969,8 @@ bool RegTreeCtrl::TreeNode::DeleteChild(TreeNode *child)
     }
 
     if ( ok ) {
-        m_pTree->Delete(child->Id());
+        wxTreeItemId theId(child->Id()); // Temp variable seems necessary for BC++
+        m_pTree->Delete(theId);
 
         Refresh();
     }
@@ -983,7 +986,8 @@ void RegTreeCtrl::TreeNode::DestroyChildren()
     long lId = m_aChildren[n]->Id();
     // no, wxTreeCtrl will do it
     //delete m_aChildren[n];
-    m_pTree->Delete(lId);
+    wxTreeItemId theId(lId); // Temp variable seems necessary for BC++
+    m_pTree->Delete(theId);
   }
 
   m_aChildren.Empty();

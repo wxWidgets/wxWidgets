@@ -683,7 +683,11 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 			variant = (bool) (oleVariant.bool != 0);
 #endif
 #else
+#ifndef HAVE_BOOL // Can't use bool operator if no native bool type
+			variant = (long) (oleVariant.boolVal != 0);
+#else
 			variant = (bool) (oleVariant.boolVal != 0);
+#endif
 #endif
 			break;
 		}
