@@ -14,6 +14,7 @@ erase %dest\wx200*.zip
 erase %dest\glcanvas.zip
 erase %dest\ogl3.zip
 erase %dest\tex2rtf2.zip
+erase %dest\jpeg.zip
 
 cd %src
 echo Zipping...
@@ -51,6 +52,9 @@ zip32 -@ %dest\tex2rtf2.zip < %src\distrib\msw\tex2rtf.rsp
 
 rem wxTreeLayout
 zip32 -@ %dest\treedraw.zip < %src\distrib\msw\wxtree.rsp
+
+rem JPEG source
+zip32 -@ %dest\jpeg.zip < %src\distrib\msw\jpeg.rsp
 
 copy %src\docs\changes.txt %dest
 copy %src\docs\msw\install.txt %dest\install_msw.txt

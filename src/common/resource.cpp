@@ -651,6 +651,9 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
   }
   dialogItem->SetStyle(windowStyle);
   dialogItem->SetValue1(isModal);
+  if (windowStyle & wxDIALOG_MODAL) // Uses style in wxWin 2
+    dialogItem->SetValue1(TRUE);
+
   dialogItem->SetName(name);
   dialogItem->SetTitle(title);
   dialogItem->SetSize(x, y, width, height);
@@ -1892,6 +1895,9 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
   { _T("wxTB_HORIZONTAL"), wxTB_HORIZONTAL},
   { _T("wxTB_VERTICAL"), wxTB_VERTICAL},
   { _T("wxTB_FLAT"), wxTB_FLAT},
+
+  /* wxDialog */
+  { _T("wxDIALOG_MODAL"), wxDIALOG_MODAL },
 
   /* Generic */
   { _T("wxVSCROLL"), wxVSCROLL },

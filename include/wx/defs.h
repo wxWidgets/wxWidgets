@@ -181,6 +181,12 @@
         // in VC++ 4.2 the bool keyword is reserved (hence can't be typedefed)
         // but not implemented, so we must #define it
         #define bool unsigned int
+    #elif defined(__VISUALC__) && (__VISUALC__ == 1010)
+        // For VisualC++ 4.1, we need to define
+        // bool as something between 4.0 & 5.0...
+        typedef unsigned int wxbool;
+        #define bool wxbool
+        #define HAVE_BOOL
     #elif defined(__VISUALC__) && (__VISUALC__ > 1020)
         // VC++ supports bool since 4.2
         #define HAVE_BOOL

@@ -1043,7 +1043,7 @@ bool wxTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(text);
     resource->SetStyle(flag);
 
-    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(text, this);
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(text, this);
     return TRUE;
   }
   else if (name == "readonly")
@@ -1062,7 +1062,7 @@ bool wxTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(text);
     resource->SetStyle(flag);
 
-    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(text, this);
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(text, this);
     return TRUE;
   }
   else
@@ -1158,7 +1158,7 @@ bool wxListBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(listBox);
     if (resource)
       resource->SetStyle(m_propertyWindow->GetWindowStyleFlag());
-    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(listBox, this);
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(listBox, this);
     return TRUE;
   }
   else
@@ -1322,7 +1322,7 @@ bool wxComboBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow);
     resource->SetStyle(m_propertyWindow->GetWindowStyleFlag());
 
-    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(m_propertyWindow, this);
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(m_propertyWindow, this);
     return TRUE;
   }
   else if (name == "style")
@@ -1343,7 +1343,7 @@ bool wxComboBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow);
     resource->SetStyle(m_propertyWindow->GetWindowStyleFlag());
 
-    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(m_propertyWindow, this);
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(m_propertyWindow, this);
 
     return TRUE;
   }
@@ -1418,7 +1418,7 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   if (name == "numberRowsOrCols")
   {
     radioBox->SetNumberOfRowsOrCols((int)property->GetValue().IntegerValue());
-    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
     return TRUE;
   }
   else if (name == "orientation")
@@ -1441,7 +1441,7 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(radioBox);
     resource->SetStyle(windowStyle);
     
-    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
     return TRUE;
   }
   else if (name == "values")
@@ -1463,7 +1463,7 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
       expr = expr->GetNext();
     }
     resource->SetStringValues(stringList);
-    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
     return TRUE;
   }
   return wxItemPropertyInfo::SetProperty(name, property);
@@ -1669,6 +1669,7 @@ bool wxSliderPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     
     slider = (wxSlider *)wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(slider, this);
     slider->SetSize(-1, -1, h, w);
+    m_propertyWindow = slider;
     
     return TRUE;
   }
@@ -1834,6 +1835,7 @@ bool wxScrollBarPropertyInfo::SetProperty(wxString& name, wxProperty *property)
  	} /* IF */
 
     scrollBar = (wxScrollBar *)wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(scrollBar, this);
+    m_propertyWindow = scrollBar;
 
     return TRUE;
   }
@@ -2031,6 +2033,7 @@ bool wxPanelPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     wxColour col(r,g,b);
     panelWindow->SetBackgroundColour(col);
     panelWindow = (wxPanel *)wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(panelWindow, this);
+    m_propertyWindow = panelWindow;
    return TRUE;
   }
   else if (name == "title")
@@ -2110,6 +2113,7 @@ bool wxPanelPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     }
     resource->SetResourceStyle(style);
     panelWindow = (wxPanel *)wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(panelWindow, this);
+    m_propertyWindow = panelWindow;
     // TODO: need to regenerate the width and height properties else they'll be inconsistent.
     return TRUE;
   }

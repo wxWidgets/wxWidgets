@@ -459,7 +459,6 @@ tabctrl.obj:     $(MSWDIR)\tabctrl.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 taskbar.obj:     $(MSWDIR)\taskbar.cpp
-        cl @<<
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 tbar95.obj:     $(MSWDIR)\tbar95.cpp
@@ -481,7 +480,6 @@ tooltip.obj:     $(MSWDIR)\tooltip.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 treectrl.obj:     $(MSWDIR)\treectrl.cpp
-        cl @<<
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 utils.obj:     $(MSWDIR)\utils.cpp
