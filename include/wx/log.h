@@ -89,7 +89,7 @@ public:
     // NB: the string is not copied, so it's lifetime must be long enough!
   void SetTimeStampFormat(const char *szTF) { m_szTimeFormat = szTF; }
     // trace mask (see wxTraceXXX constants for details)
-  void SetTraceMask(wxTraceMask ulMask) { m_ulTraceMask = ulMask; }
+  static void SetTraceMask(wxTraceMask ulMask) { ms_ulTraceMask = ulMask; }
 
   // accessors
     // gets the verbose status
@@ -97,7 +97,7 @@ public:
     // get current time format
   const char *GetTimeStampFormat() const { return m_szTimeFormat; }
     // get trace mask
-  wxTraceMask GetTraceMask() const { return m_ulTraceMask; }
+  static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
 
   // make dtor virtual for all derived classes
   virtual ~wxLog() { }
@@ -107,7 +107,6 @@ protected:
 
   bool          m_bVerbose;     // FALSE => ignore LogInfo messages
   const char   *m_szTimeFormat; // format for strftime()
-  wxTraceMask   m_ulTraceMask;  // controls wxLogTrace behaviour
 
   // the logging functions that can be overriden
     // default DoLog() prepends the time stamp and a prefix corresponding
@@ -120,8 +119,9 @@ protected:
 private:
   // static variables
   // ----------------
-  static wxLog *ms_pLogger;       // currently active log sink
-  static bool   ms_bInitialized;  // any log targets created?
+  static wxLog      *ms_pLogger;       // currently active log sink
+  static bool        ms_bInitialized;  // any log targets created?
+  static wxTraceMask ms_ulTraceMask;  // controls wxLogTrace behaviour
 };
 
 // ----------------------------------------------------------------------------
