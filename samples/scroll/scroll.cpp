@@ -96,7 +96,7 @@ IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_PAINT(                  MyCanvas::OnPaint)
-  EVT_LEFT_DOWN(              MyCanvas::OnMouseDown)
+  EVT_MOUSE_EVENTS(                  MyCanvas::OnMouseDown)
   EVT_BUTTON( ID_QUERYPOS,    MyCanvas::OnQueryPosition)
   EVT_BUTTON( ID_ADDBUTTON,   MyCanvas::OnAddButton)
   EVT_BUTTON( ID_DELBUTTON,   MyCanvas::OnDeleteButton)
@@ -178,10 +178,19 @@ MyCanvas::~MyCanvas()
 
 void MyCanvas::OnMouseDown( wxMouseEvent &event )
 {
-    wxPoint pt( event.GetPosition() );
-    int x,y;
-    CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
-    wxLogMessage( "Mouse down event at: %d %d, scrolled: %d %d", pt.x, pt.y, x, y );
+    if (event.LeftDown())
+    {
+        wxPoint pt( event.GetPosition() );
+        int x,y;
+        CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
+        wxLogMessage( "Mouse down event at: %d %d, scrolled: %d %d", pt.x, pt.y, x, y );
+    }
+    
+    if (event.LeftIsDown() &&
+        event.LeftDown())
+    {
+        wxLogMessage( "Error: both LeftDown() and LeftIsDown() are TRUE!" );
+    }
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )

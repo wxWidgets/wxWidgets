@@ -973,19 +973,19 @@ enum wxStretch
 /*
  * wxSpinButton flags
  */
-#define wxSP_VERTICAL       0x0004
-#define wxSP_HORIZONTAL     0x0008
-#define wxSP_ARROW_KEYS     0x0010
-#define wxSP_WRAP           0x0020
+#define wxSP_HORIZONTAL       wxHORIZONTAL // 4
+#define wxSP_VERTICAL         wxVERTICAL   // 8
+#define wxSP_ARROW_KEYS       0x0010
+#define wxSP_WRAP             0x0020
 
 /*
  * wxSplitterWindow flags
  */
-#define wxSP_NOBORDER       0x0000
-#define wxSP_3D             0x0004
-#define wxSP_BORDER         0x0008
-#define wxSP_PERMIT_UNSPLIT 0x0010
-#define wxSP_LIVE_UPDATE    0x0020
+#define wxSP_NOBORDER         0x0000
+#define wxSP_3D               0x0010
+#define wxSP_BORDER           0x0020
+#define wxSP_PERMIT_UNSPLIT   0x0040
+#define wxSP_LIVE_UPDATE      0x0080
 
 /*
  * wxFrame extra flags
@@ -997,14 +997,14 @@ enum wxStretch
  * wxTabCtrl flags
  */
 #define wxTC_MULTILINE        0x0000
-#define wxTC_RIGHTJUSTIFY     0x0004
-#define wxTC_FIXEDWIDTH       0x0008
-#define wxTC_OWNERDRAW        0x0010
+#define wxTC_RIGHTJUSTIFY     0x0010
+#define wxTC_FIXEDWIDTH       0x0020
+#define wxTC_OWNERDRAW        0x0040
 
 /*
  * wxNotebook flags
  */
-#define wxNB_FIXEDWIDTH       0x0008
+#define wxNB_FIXEDWIDTH       0x0010
 #define wxNB_LEFT             0x0020
 #define wxNB_RIGHT            0x0040
 #define wxNB_BOTTOM           0x0080
@@ -1012,7 +1012,7 @@ enum wxStretch
 /*
  * wxStatusBar95 flags
  */
-#define wxST_SIZEGRIP         0x0002
+#define wxST_SIZEGRIP         0x0010
 
 /*
  * wxStaticLine flags

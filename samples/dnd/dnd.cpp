@@ -1064,6 +1064,7 @@ DnDShape *DnDShapeDialog::GetShape() const
 
 bool DnDShapeDialog::TransferDataToWindow()
 {
+
     if ( m_shape )
     {
         m_radio->SetSelection(m_shape->GetKind());

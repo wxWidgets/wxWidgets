@@ -289,7 +289,6 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
     /* Owen Taylor: "call gtk_drag_finish() with
        success == TRUE" */
 
-//    printf( "data received.\n" );
 
     if ((data->length <= 0) || (data->format != 8))
     {
@@ -297,11 +296,11 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
            qualifies for junk */
         gtk_drag_finish (context, FALSE, FALSE, time);
 
-//        printf( "no data.\n" );
-
         return;
     }
 
+    wxLogDebug( wxT( "Drop target: data received") );
+    
     /* inform the wxDropTarget about the current GtkSelectionData.
        this is only valid for the duration of this call */
     drop_target->SetDragData( data );
@@ -348,11 +347,32 @@ void wxDropTarget::OnLeave()
 
 bool wxDropTarget::OnMove( long WXUNUSED(x), long WXUNUSED(y) )
 {
-    return TRUE;
+    if (GetFormatCount() == 0)
+        return FALSE;
+	
+    for (size_t i = 0; i < GetFormatCount(); i++)
+    {
+        if (IsSupported( GetFormat(i) ))
+	    return TRUE;
+    }
+    
+    return FALSE;
 }
 
 bool wxDropTarget::OnDrop( long WXUNUSED(x), long WXUNUSED(y) )
 {
+    if (GetFormatCount() == 0)
+        return FALSE;
+	
+    for (size_t i = 0; i < GetFormatCount(); i++)
+    {
+        if (IsSupported( GetFormat(i) ))
+	{
+            RequestData( GetFormat(i) );
+	    return TRUE;
+	}
+    }
+    
     return FALSE;
 }
 
@@ -400,8 +420,10 @@ bool wxDropTarget::IsSupported( wxDataFormat format )
     {
         GdkAtom formatAtom = (GdkAtom) GPOINTER_TO_INT(child->data);
 
-//        char *name = gdk_atom_name( formatAtom );
-//        if (name) printf( "Format available: %s.\n", name );
+#ifdef __WXDEBUG__
+        char *name = gdk_atom_name( formatAtom );
+        if (name) wxLogDebug( "Drop target: drag has format: %s", name );
+#endif
 
         if (formatAtom == format) return TRUE;
         child = child->next;
@@ -491,22 +513,6 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 // wxTextDropTarget
 //-------------------------------------------------------------------------
 
-bool wxTextDropTarget::OnMove( long WXUNUSED(x), long WXUNUSED(y) )
-{
-    return IsSupported( wxDF_TEXT );
-}
-
-bool wxTextDropTarget::OnDrop( long WXUNUSED(x), long WXUNUSED(y) )
-{
-    if (IsSupported( wxDF_TEXT ))
-    {
-        RequestData( wxDF_TEXT );
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
 bool wxTextDropTarget::OnData( long x, long y )
 {
     wxTextDataObject data;
@@ -565,22 +571,6 @@ bool wxPrivateDropTarget::OnData( long x, long y )
 // A drop target which accepts files (dragged from File Manager or Explorer)
 //----------------------------------------------------------------------------
 
-bool wxFileDropTarget::OnMove( long WXUNUSED(x), long WXUNUSED(y) )
-{
-    return IsSupported( wxDF_FILENAME );
-}
-
-bool wxFileDropTarget::OnDrop( long x, long y )
-{
-    if (IsSupported( wxDF_FILENAME ))
-    {
-        RequestData( wxDF_FILENAME );
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
 bool wxFileDropTarget::OnData( long x, long y )
 {
     wxFileDataObject data;
@@ -627,10 +617,10 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-//    printf( "Provide data!\n" );
-
-//    char *name = gdk_atom_name( selection_data->target );
-//    if (name) printf( "Format requested: %s.\n", name );
+#ifdef __WXDEBUG__
+    char *name = gdk_atom_name( selection_data->target );
+    if (name) wxLogDebug( wxT("Drop source: format requested: %s"), name );
+#endif
 
     drop_source->m_retValue = wxDragCancel;
     
@@ -788,19 +778,29 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
     wxASSERT_MSG( m_data, wxT("wxDragSource: no data") );
 
-    if (!m_data) return (wxDragResult) wxDragNone;
+    if (!m_data) 
+        return (wxDragResult) wxDragNone;
 
+    if (m_data->GetFormatCount() == 0) 
+        return (wxDragResult) wxDragNone;
+	
     g_blockEventsOnDrag = TRUE;
 
     RegisterWindow();
 
     m_waiting = TRUE;
 
-    GdkAtom atom = gdk_atom_intern( "STRING", FALSE );
-//    printf( "atom id: %d.\n", (int)atom );
-
     GtkTargetList *target_list = gtk_target_list_new( (GtkTargetEntry*) NULL, 0 );
-    gtk_target_list_add( target_list, atom, 0, 0 );
+    
+    wxDataFormat *array = new wxDataFormat[ m_data->GetFormatCount() ];
+    m_data->GetAllFormats( array, TRUE );
+    for (size_t i = 0; i < m_data->GetFormatCount(); i++)
+    {
+        GdkAtom atom = array[i];
+	wxLogDebug( wxT("Supported atom %s"), gdk_atom_name( atom ) );
+        gtk_target_list_add( target_list, atom, 0, 0 );
+    }
+    delete[] array;
 
     GdkEventMotion event;
     event.window = m_widget->window;

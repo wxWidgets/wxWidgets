@@ -79,6 +79,9 @@ public:
   /* fill data with data from the dragging source */
   bool GetData( wxDataObject *data );
 
+  virtual size_t GetFormatCount() const = 0;
+  virtual wxDataFormat GetFormat(size_t n) const = 0;
+  
 // implementation
 
   void RegisterWidget( GtkWidget *widget );
@@ -106,13 +109,15 @@ public:
 
   wxTextDropTarget() {}
 
-  virtual bool OnMove( long x, long y );
-  virtual bool OnDrop( long x, long y );
   virtual bool OnData( long x, long y );
 
   /* you have to override OnDropData to get at the text */
   virtual bool OnDropText( long x, long y, const wxChar *text ) = 0;
 
+  virtual size_t GetFormatCount() const
+    { return 1; }
+  virtual wxDataFormat GetFormat(size_t n) const
+    { return wxDF_TEXT; }
 };
 
 //-------------------------------------------------------------------------
@@ -152,11 +157,14 @@ public:
 
   wxFileDropTarget() {}
 
-  virtual bool OnMove( long x, long y );
-  virtual bool OnDrop( long x, long y );
   virtual bool OnData( long x, long y );
 
   virtual bool OnDropFiles( long x, long y, size_t nFiles, const wxChar * const aszFiles[] ) = 0;
+  
+  virtual size_t GetFormatCount() const
+    { return 1; }
+  virtual wxDataFormat GetFormat(size_t n) const
+    { return wxDF_FILENAME; }
 };
 
 //-------------------------------------------------------------------------
