@@ -547,7 +547,7 @@ if not GL_ONLY and BUILD_STC:
 
 
     swig_files = ['stc_.i']
-    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+    swig_sources = run_swig(swig_files, location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force,
                             swig_args + ['-I'+STC_H, '-I'+location],
                             [opj(STC_H, 'stc.h')])
