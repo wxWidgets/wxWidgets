@@ -84,7 +84,7 @@ private:
 wxRendererNative& wxRendererNative::GetDefault()
 {
     wxUxThemeEngine *themeEngine = wxUxThemeEngine::Get();
-    return themeEngine && themeEngine->IsThemeActive() ? wxRendererXP::Get()
+    return themeEngine && themeEngine->IsAppThemedEx() ? wxRendererXP::Get()
                                                        : wxRendererMSW::Get();
 }
 

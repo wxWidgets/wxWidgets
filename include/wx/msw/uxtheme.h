@@ -310,6 +310,10 @@ public:
     wxUX_THEME_DECLARE(PFNWXUDRAWTHEMEPARENTBACKGROUND, DrawThemeParentBackground)
     wxUX_THEME_DECLARE(PFNWXUENABLETHEMING, EnableTheming)
 
+    // This calls IsAppThemed but also checks the commctrl.dll version
+    // for a more reliable answer.
+    bool IsAppThemedEx() ;
+
 private:
     // construcor is private as only Get() can create us and is also trivial as
     // everything really happens in Initialize()

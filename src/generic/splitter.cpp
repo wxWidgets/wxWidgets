@@ -428,7 +428,8 @@ int wxSplitterWindow::GetBorderSize() const
 // Draw the sash
 void wxSplitterWindow::DrawSash(wxDC& dc)
 {
-    wxRendererNative::Get().DrawSplitterBorder
+    if (HasFlag(wxSP_3DBORDER))
+        wxRendererNative::Get().DrawSplitterBorder
                             (
                                 this,
                                 dc,

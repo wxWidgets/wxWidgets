@@ -172,5 +172,21 @@ bool wxUxThemeEngine::Initialize()
     return true;
 }
 
+// This calls IsAppThemed but also checks the commctrl.dll version
+// for a more reliable answer.
+bool wxUxThemeEngine::IsAppThemedEx()
+{
+    static bool g_TestedForTheme = FALSE;
+    static bool g_UseTheme = FALSE;
+    if (!g_TestedForTheme)
+    {
+        int commCtrlVersion = wxTheApp->GetComCtl32Version() ;
+        
+        g_UseTheme = (commCtrlVersion >= 600);
+        g_TestedForTheme = TRUE;
+    }
+    return IsAppThemed() && g_UseTheme;
+}
+
 #endif // wxUSE_UXTHEME
 
