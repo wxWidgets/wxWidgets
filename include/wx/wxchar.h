@@ -241,7 +241,7 @@
     /*  ctype.h functions */
     #define  wxIsalnum   _istalnum
     #define  wxIsalpha   _istalpha
-    #define  wxIsctrl    _istctrl
+    #define  wxIscntrl   _istcntrl
     #define  wxIsdigit   _istdigit
     #define  wxIsgraph   _istgraph
     #define  wxIslower   _istlower
@@ -349,7 +349,7 @@
             /*  ctype.h functions (wctype.h) */
             #define  wxIsalnum   iswalnum
             #define  wxIsalpha   iswalpha
-            #define  wxIsctrl    iswcntrl
+            #define  wxIscntrl   iswcntrl
             #define  wxIsdigit   iswdigit
             #define  wxIsgraph   iswgraph
             #define  wxIslower   iswlower
@@ -429,7 +429,7 @@
             /*  ctype.h functions (wctype.h) */
             #define  wxIsalnum   iswalnum
             #define  wxIsalpha   iswalpha
-            #define  wxIsctrl    iswcntrl
+            #define  wxIscntrl   iswcntrl
             #define  wxIsdigit   iswdigit
             #define  wxIsgraph   iswgraph
             #define  wxIslower   iswlower
@@ -519,7 +519,7 @@
         /*  ctype.h functions */
         #define  wxIsalnum   isalnum
         #define  wxIsalpha   isalpha
-        #define  wxIsctrl    isctrl
+        #define  wxIscntrl   iscntrl
         #define  wxIsdigit   isdigit
         #define  wxIsgraph   isgraph
         #define  wxIslower   islower
@@ -796,7 +796,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
 #ifdef wxNEED_WX_CTYPE_H
     WXDLLIMPEXP_BASE int wxIsalnum(wxChar ch);
     WXDLLIMPEXP_BASE int wxIsalpha(wxChar ch);
-    WXDLLIMPEXP_BASE int wxIsctrl(wxChar ch);
+    WXDLLIMPEXP_BASE int wxIscntrl(wxChar ch);
     WXDLLIMPEXP_BASE int wxIsdigit(wxChar ch);
     WXDLLIMPEXP_BASE int wxIsgraph(wxChar ch);
     WXDLLIMPEXP_BASE int wxIslower(wxChar ch);
@@ -816,6 +816,13 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
     #define wxIsspace(c) ((((unsigned)c) < 128) && isspace(c))
 #endif /*  VC++ */
 
+/*
+   we had goofed and defined wxIctrl() instead of (correct) wxIscntrl() in the
+   initial versions of this header -- now it is too late to remove it so
+   although we fixed the function/macro name above, still provide the
+   backwards-compatible synonym.
+ */
+#define wxIsctrl wxIscntrl
 
 /*  string.h functions */
 /*  */
