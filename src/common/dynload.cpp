@@ -197,7 +197,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
         wxString msg(_("Failed to load shared library '%s'"));
 #if defined(HAVE_DLERROR) && !defined(__EMX__)
 
-#if defined(__WXGTK__) && wxUSE_UNICODE
+#if wxUSE_UNICODE
         wxWCharBuffer buffer = wxConvLocal.cMB2WC( dlerror() );
         const wxChar *err = buffer;
 #else
@@ -278,7 +278,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
         wxString msg(_("wxDynamicLibrary failed to GetSymbol '%s'"));
 #if defined(HAVE_DLERROR) && !defined(__EMX__)
 
-#if defined(__WXGTK__) && wxUSE_UNICODE
+#if wxUSE_UNICODE
         wxWCharBuffer buffer = wxConvLocal.cMB2WC( dlerror() );
         const wxChar *err = buffer;
 #else
