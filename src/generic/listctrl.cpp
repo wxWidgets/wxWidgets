@@ -2672,22 +2672,24 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
 {
     if ( HasFlag(wxLC_REPORT) )
     {
-        size_t visibleFrom;
-        GetVisibleLinesRange(&visibleFrom, NULL);
+        size_t visibleFrom, visibleTo;
+        GetVisibleLinesRange(&visibleFrom, &visibleTo);
 
         if ( lineFrom < visibleFrom )
             lineFrom = visibleFrom;
+        else if ( lineFrom > visibleTo )
+            return;
 
         wxRect rect;
         rect.x = 0;
         rect.y = GetLineY(lineFrom);
+        CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
 
         wxSize size = GetClientSize();
         rect.width = size.x;
         // refresh till the bottom of the window
         rect.height = size.y - rect.y;
 
-        CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
         RefreshRect( rect );
     }
     else // !report
