@@ -95,16 +95,41 @@
 #    endif
 
     /*
-       see MSDN for the description of possible WINVER values, this one is the
-       highest one defined right now (Windows Server 2003) and we use it unless
-       it was explicitly overridden by the user to disable recent features
-       support as we check for all of the features we use which could be not
-       available on earlier Windows systems during run-time anyhow, so there is
-       almost no disadvantage in using it.
-     */
-#    ifndef WINVER
-#        define WINVER 0x0502
-#    endif
+        The library user may override the default setting of WINVER by defining
+        it in his own makefile or project file -- if it is defined, we don't
+        touch it at all.
+
+        It makes sense to define WINVER as:
+            - either some lowish value (e.g. 0x0302) to not even compile in the
+              features not available in Windows version lower than some given
+              one
+            - or to a higher value than the one used by default for the given
+              compiler if you updated its headers to newer version of Platform
+              SDK, e.g. VC6 ships with 0x0400 headers by default but may also
+              work with 0x0500 headers and beyond
+    */
+#   ifndef WINVER
+#       if defined(_MSC_VER) && _MSC_VER < 1300
+            /*
+                VC6 defines some stuff in its default headers which is normally
+                only present if WINVER >= 0x0500 (FLASHW_XXX constants) which
+                means that our usual tests not involving WINVER sometimes fail
+                with it, hence explicitly define a lower WINVER value for it.
+             */
+#           define WINVER 0x0400
+#       else /* !VC++ 6 */
+            /*
+               see MSDN for the description of possible WINVER values, this one
+               is the highest one defined right now (Windows Server 2003) and
+               we use it unless it was explicitly overridden by the user to
+               disable recent features support as we check for all of the
+               features we use which could be not available on earlier Windows
+               systems during run-time anyhow, so there is almost no
+               disadvantage in using it.
+             */
+#           define WINVER 0x0502
+#       endif /* VC++ 6/!VC++6 */
+#   endif
 
     /* Win95 means Win95-style UI, i.e. Win9x/NT 4+ */
 #    if !defined(__WIN95__) && (WINVER >= 0x0400)
