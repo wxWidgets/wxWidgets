@@ -103,6 +103,8 @@ public:
 
     void OnUpdateCopyAndCut(wxUpdateUIEvent& event);
 
+    void OnToggleFullScreen(wxCommandEvent& event);
+
 #if USE_GENERIC_TBAR
     virtual wxToolBar *OnCreateToolBar(long style,
                                        wxWindowID id,
@@ -138,6 +140,7 @@ enum
     IDM_TOOLBAR_DELETEPRINT,
     IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
+    IDM_TOOLBAR_TOGGLEFULLSCREEN,
 
     ID_COMBO = 1000
 };
@@ -161,6 +164,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_DELETEPRINT, MyFrame::OnDeletePrint)
     EVT_MENU(IDM_TOOLBAR_INSERTPRINT, MyFrame::OnInsertPrint)
     EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
+    EVT_MENU(IDM_TOOLBAR_TOGGLEFULLSCREEN, MyFrame::OnToggleFullScreen)
 
     EVT_MENU(-1, MyFrame::OnToolLeftClick)
 
@@ -334,6 +338,11 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->Append(IDM_TOOLBAR_INSERTPRINT, "&Insert print button\tCtrl-I", "");
     tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button\tCtrl-T", "");
 
+#ifdef __WXMSW__
+    tbarMenu->AppendSeparator();
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLEFULLSCREEN, "Toggle &full screen mode\tCtrl-F", "");
+#endif
+
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(wxID_EXIT, "E&xit", "Quit toolbar sample" );
 
@@ -484,5 +493,12 @@ void MyFrame::OnToolEnter(wxCommandEvent& event)
     }
     else
         SetStatusText("");
+}
+
+void MyFrame::OnToggleFullScreen(wxCommandEvent& event)
+{
+#ifdef __WXMSW__
+    ShowFullScreen(!IsFullScreen());
+#endif
 }
 
