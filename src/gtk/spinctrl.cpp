@@ -75,15 +75,8 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    wxSize new_size = size,
-           sizeBest = DoGetBestSize();
-    if (new_size.x == -1)
-        new_size.x = sizeBest.x;
-    if (new_size.y == -1)
-        new_size.y = sizeBest.y;
-
-    if (!PreCreation( parent, pos, new_size ) ||
-        !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxSpinCtrl creation failed") );
         return FALSE;
@@ -94,6 +87,16 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
     m_adjust = (GtkAdjustment*) gtk_adjustment_new( initial, min, max, 1.0, 5.0, 0.0);
 
     m_widget = gtk_spin_button_new( m_adjust, 1, 0 );
+    
+    wxSize new_size = size,
+           sizeBest = DoGetBestSize();
+    if (new_size.x == -1)
+        new_size.x = sizeBest.x;
+    if (new_size.y == -1)
+        new_size.y = sizeBest.y;
+
+    if ((new_size.x != size.x) || (new_size.y != size.y))
+        SetSize( new_size.x, new_size.y );
 
     gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
                               (int)(m_windowStyle & wxSP_WRAP) );
@@ -224,7 +227,8 @@ void wxSpinCtrl::ApplyWidgetStyle()
 
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    return wxSize(95, 26);
+    wxSize ret( wxControl::DoGetBestSize() );
+    return wxSize(95, ret.y);
 }
 
 #endif

@@ -108,8 +108,8 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         newSize.x = bestSize.x;
     if (newSize.y == -1)
         newSize.y = bestSize.y;
-    if (newSize.y > 30)
-        newSize.y = 30;
+    if (newSize.y > 22)
+        newSize.y = 22;
 
     if (!PreCreation( parent, pos, newSize ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
@@ -666,7 +666,7 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
 wxSize wxComboBox::DoGetBestSize() const
 {
     // totally bogus - should measure the strings in the combo!
-    return wxSize(100, 26);
+    return wxSize(100, 22);
 }
 
 #endif

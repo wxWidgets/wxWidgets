@@ -74,6 +74,9 @@ wxString wxControl::GetLabel() const
 
 wxSize wxControl::DoGetBestSize() const
 {
+    // Do not return any arbitrary default value...
+    wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
+
     GtkRequisition req;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request )
         (m_widget, &req );

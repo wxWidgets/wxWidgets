@@ -192,7 +192,15 @@ bool wxTextCtrl::Create( wxWindow *parent,
           m_text = gtk_entry_new();
     }
 
-    SetSizeOrDefault( size );
+    wxSize new_size = size,
+           sizeBest = DoGetBestSize();
+    if (new_size.x == -1)
+        new_size.x = sizeBest.x;
+    if (new_size.y == -1)
+        new_size.y = sizeBest.y;
+
+    if ((new_size.x != size.x) || (new_size.y != size.y))
+        SetSize( new_size.x, new_size.y );
 
     m_parent->DoAddChild( this );
 
@@ -977,5 +985,6 @@ void wxTextCtrl::OnInternalIdle()
 wxSize wxTextCtrl::DoGetBestSize() const
 {
     // FIXME should be different for multi-line controls...
-    return wxSize(80, 26);
+    wxSize ret( wxControl::DoGetBestSize() );
+    return wxSize(80, ret.y);
 }
