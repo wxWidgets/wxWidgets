@@ -4,6 +4,8 @@ ports.
 
 *** next release ***
 
+wxWakeUpIdle() works again
+
 wxGauge now supports wxGA_VERTICAL (Shane Forsythe)
 
 *** 29th January 2001: wxWindows 2.2.5 released ***
