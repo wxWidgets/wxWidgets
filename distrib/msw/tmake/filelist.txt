@@ -1,0 +1,228 @@
+###############################################################################
+# File:    src/msw/filelist.cpp
+# Purpose: The list of source files for MSW version of wxWindows.
+# Author:  Vadim Zeitlin
+# Created: 14.07.99
+# Version: $Id$
+#
+# Format of this file: TAB separated columns. The first column contains the
+# filename, the second 'G', 'C' or 'M' for generic/common/msw files. Flags
+# column may be empty or contain some additional info about this file (only
+# compile it in 16bit mode, don't compile it with this or that compiler, &c)
+#
+# Known flags:
+#  16	a generic file implementing Win32 control for Win16
+#  32	only can be compiled under Win32
+#  PS	PostScript related file, normally not compiled under Windows
+#  G	generic code which might be used instead of native one
+#  U	Unix-ish file, normally not compiled under Windows
+#  O	OLE file (needs Win32 and a decent compiler)
+#  S	Socket file (currently doesn't compile under Win16 nor with GNU)
+###############################################################################
+
+# File name 	Type	Flags
+
+busyinfo.cpp	G
+choicdgg.cpp	G
+colrdlgg.cpp	G	G
+dirdlgg.cpp	G	16
+extdlgg.cpp	G
+fontdlgg.cpp	G	G
+gridg.cpp	G
+helpxlp.cpp	G	G
+imaglist.cpp	G	16
+laywin.cpp	G
+listctrl.cpp	G	16
+msgdlgg.cpp	G	G
+notebook.cpp	G	16
+panelg.cpp	G
+printps.cpp	G	PS
+prntdlgg.cpp	G	PS,U
+progdlgg.cpp	G
+prop.cpp	G
+propform.cpp	G
+proplist.cpp	G
+sashwin.cpp	G
+scrolwin.cpp	G
+splitter.cpp	G
+statusbr.cpp	G
+tabg.cpp	G
+textdlgg.cpp	G
+tipdlg.cpp	G
+treectrl.cpp	G	16
+
+cmndata.cpp	C
+config.cpp	C
+date.cpp	C
+datstrm.cpp	C
+db.cpp	C
+dbtable.cpp	C
+dcbase.cpp	C
+dlgcmn.cpp	C
+docmdi.cpp	C
+docview.cpp	C
+dynarray.cpp	C
+dynlib.cpp	C
+event.cpp	C
+extended.c	C
+ffile.cpp	C
+file.cpp	C
+fileconf.cpp	C
+filefn.cpp	C
+filesys.cpp	C
+framecmn.cpp	C
+fs_inet.cpp	C
+fs_zip.cpp	C
+ftp.cpp	C	S
+gdicmn.cpp	C
+hash.cpp	C
+helpbase.cpp	C
+http.cpp	C	S
+imagbmp.cpp	C
+image.cpp	C
+imaggif.cpp	C
+imagjpeg.cpp	C
+imagpng.cpp	C
+intl.cpp	C
+ipcbase.cpp	C
+layout.cpp	C
+list.cpp	C
+log.cpp	C
+memory.cpp	C
+mimetype.cpp	C	32
+module.cpp	C
+mstream.cpp	C
+object.cpp	C
+objstrm.cpp	C
+odbc.cpp	C
+paper.cpp	C
+prntbase.cpp	C
+process.cpp	C	32
+protocol.cpp	C	S
+resource.cpp	C
+sckaddr.cpp	C	S
+sckfile.cpp	C	S
+sckint.cpp	C	S
+sckipc.cpp	C	S
+sckstrm.cpp	C	S
+socket.cpp	C	S
+stream.cpp	C
+string.cpp	C
+tbarbase.cpp	C
+tbarsmpl.cpp	C	16
+textcmn.cpp	C
+textfile.cpp	C
+time.cpp	C
+timercmn.cpp	C
+tokenzr.cpp	C
+txtstrm.cpp	C
+unzip.c	C
+url.cpp	C	S
+utilscmn.cpp	C
+valgen.cpp	C
+validate.cpp	C
+valtext.cpp	C
+variant.cpp	C
+wfstream.cpp	C
+wincmn.cpp	C
+wxchar.cpp	C
+wxexpr.cpp	C
+zipstream.cpp	C
+zstream.cpp	C
+
+accel.cpp	M
+app.cpp	M
+automtn.cpp	M	O
+bitmap.cpp	M
+bmpbuttn.cpp	M
+brush.cpp	M
+button.cpp	M
+caret.cpp	M
+checkbox.cpp	M
+checklst.cpp	M
+choice.cpp	M
+clipbrd.cpp	M
+colordlg.cpp	M
+colour.cpp	M
+combobox.cpp	M
+control.cpp	M
+curico.cpp	M
+cursor.cpp	M
+data.cpp	M
+dataobj.cpp	M	O
+dc.cpp	M
+dcclient.cpp	M
+dcmemory.cpp	M
+dcprint.cpp	M
+dcscreen.cpp	M
+dde.cpp	M
+dialog.cpp	M
+dib.cpp	M
+dibutils.cpp	M
+dirdlg.cpp	M	32
+dragimag.cpp	M
+dropsrc.cpp	M	O
+droptgt.cpp	M	O
+filedlg.cpp	M
+font.cpp	M
+fontdlg.cpp	M
+frame.cpp	M
+gauge95.cpp	M	32
+gaugemsw.cpp	M	16
+gdiobj.cpp	M
+helpwin.cpp	M
+icon.cpp	M
+imaglist.cpp	M	32
+iniconf.cpp	M
+joystick.cpp	M
+listbox.cpp	M
+listctrl.cpp	M	32
+main.cpp	M
+mdi.cpp	M
+menu.cpp	M
+menuitem.cpp	M
+metafile.cpp	M
+minifram.cpp	M
+msgdlg.cpp	M
+nativdlg.cpp	M
+notebook.cpp	M
+oleutils.cpp	M	O
+ownerdrw.cpp	M
+palette.cpp	M
+pen.cpp	M
+penwin.cpp	M
+pnghand.cpp	M
+printdlg.cpp	M
+printwin.cpp	M
+radiobox.cpp	M
+radiobut.cpp	M
+regconf.cpp	M	32
+region.cpp	M
+registry.cpp	M	32
+scrolbar.cpp	M
+settings.cpp	M
+slider95.cpp	M	32
+slidrmsw.cpp	M	16
+spinbutt.cpp	M
+statbmp.cpp	M
+statbox.cpp	M
+statbr95.cpp	M	32
+statline.cpp	M
+stattext.cpp	M
+tabctrl.cpp	M
+taskbar.cpp	M	32
+tbar95.cpp	M	32
+tbarmsw.cpp	M	16
+textctrl.cpp	M
+thread.cpp	M	32
+timer.cpp	M
+tooltip.cpp	M	32
+treectrl.cpp	M	32
+utils.cpp	M
+utilsexc.cpp	M
+uuid.cpp	M	O
+wave.cpp	M
+window.cpp	M
+xpmhand.cpp	M
+
+# vi: set noet ts=16:
