@@ -428,13 +428,24 @@
 // wxSound class
 #define wxUSE_SOUND      1
 
+// Use wxWidget's XRC XML-based resource system.  Recommended.
+//
+// Default is 1
+//
+// Recommended setting: 1 (requires XRC)
+#define wxUSE_XRC       1
+
 // XML parsing classes. Note that their API will change in the future, so
 // using wxXmlDocument and wxXmlNode in your app is not recommended.
 //
 // Default is 1
 //
-// Recommended setting: 1 (needed by XRC)
-#define wxUSE_XML       1
+// Recommended setting: 1 (required by XRC)
+#if wxUSE_XRC
+#  define wxUSE_XML       1
+#else
+#  define wxUSE_XML       0
+#endif
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls
