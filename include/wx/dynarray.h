@@ -454,10 +454,10 @@ WX_DEFINE_EXPORTED_ARRAY(void *, wxArrayPtrVoid);
 // append all element of one array to another one
 #define WX_APPEND_ARRAY(array, other)                                         \
     {                                                                         \
-        size_t count = other.Count();                                         \
+        size_t count = (other).Count();                                       \
         for ( size_t n = 0; n < count; n++ )                                  \
         {                                                                     \
-            array.Add(other[n]);                                              \
+            (array).Add((other)[n]);                                          \
         }                                                                     \
     }
 
@@ -469,13 +469,13 @@ WX_DEFINE_EXPORTED_ARRAY(void *, wxArrayPtrVoid);
 //     count on it)!
 #define WX_CLEAR_ARRAY(array)                                                 \
     {                                                                         \
-        size_t count = array.Count();                                         \
+        size_t count = (array).Count();                                       \
         for ( size_t n = 0; n < count; n++ )                                  \
         {                                                                     \
-            delete array[n];                                                  \
+            delete (array)[n];                                                \
         }                                                                     \
                                                                               \
-        array.Empty();                                                        \
+        (array).Empty();                                                      \
     }
 
 #endif // _DYNARRAY_H
