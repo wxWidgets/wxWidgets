@@ -154,7 +154,7 @@ void wxClipboard::SetClipboardClient(wxClipboardClient *client, long time)
       got_selection = wxCloseClipboard();
   } else
     got_selection = FALSE;
-  
+
   got_selection = FALSE; // Assume another process takes over
 
   if (!got_selection) {
@@ -225,7 +225,7 @@ char *wxClipboard::GetClipboardData(char *format, long *length, long time)
       return NULL;
   } else {
     if (wxOpenClipboard()) {
-      receivedString = (char *)wxGetClipboardData(FormatStringToID(format), 
+      receivedString = (char *)wxGetClipboardData(FormatStringToID(format),
                                                   length);
       wxCloseClipboard();
     } else

@@ -74,6 +74,7 @@ $(CPPFLAGS) /Fo$@ /Tp $<
 <<
 
 GENERICOBJS= \
+  ..\generic\$D\caret.obj \
   ..\generic\$D\choicdgg.obj \
   ..\generic\$D\gridg.obj \
   ..\generic\$D\laywin.obj \
@@ -97,6 +98,7 @@ GENERICOBJS= \
 #  ..\generic\$D\notebook.obj \
 
 GENLIBOBJS= \
+  caret.obj \
   choicdgg.obj \
   gridg.obj \
   laywin.obj \
@@ -287,7 +289,11 @@ OS2OBJS = \
   ..\os2\$D\bmpbuttn.obj \
   ..\os2\$D\brush.obj \
   ..\os2\$D\button.obj \
-  ..\os2\$D\caret.obj \
+  ..\os2\$D\checkbox.obj \
+  ..\os2\$D\checklst.obj \
+  ..\os2\$D\choice.obj \
+  ..\os2\$D\clipbrd.obj \
+  ..\os2\$D\colordlg.obj \
   ..\os2\$D\dc.obj \
   ..\os2\$D\dialog.obj \
   ..\os2\$D\frame.obj \
@@ -300,7 +306,11 @@ OS2LIBOBJS = \
   bmpbuttn.obj \
   brush.obj \
   button.obj \
-  caret.obj \
+  checkbox.obj \
+  checklst.obj \
+  choice.obj \
+  clipbrd.obj \
+  colordlg.obj \
   dc.obj \
   dialog.obj \
   frame.obj \
@@ -432,6 +442,7 @@ $(COMLIBOBJS2):
   copy ..\common\$D\fs_zip.obj
 
 $(GENLIBOBJS):
+  copy ..\generic\$D\caret.obj
   copy ..\generic\$D\choicdgg.obj
   copy ..\generic\$D\gridg.obj
   copy ..\generic\$D\laywin.obj
@@ -456,7 +467,11 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\bmpbuttn.obj
   copy ..\os2\$D\brush.obj
   copy ..\os2\$D\button.obj
-  copy ..\os2\$D\caret.obj
+  copy ..\os2\$D\checkbox.obj
+  copy ..\os2\$D\checklst.obj
+  copy ..\os2\$D\choice.obj
+  copy ..\os2\$D\clipbrd.obj
+  copy ..\os2\$D\colordlg.obj
   copy ..\os2\$D\dc.obj
   copy ..\os2\$D\dialog.obj
   copy ..\os2\$D\frame.obj

@@ -2,7 +2,7 @@
 // Name:        checklst.cpp
 // Purpose:     implementation of wxCheckListBox class
 // Author:      AUTHOR
-// Modified by: 
+// Modified by:
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
@@ -60,13 +60,13 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
 // check items
 // -----------
 
-bool wxCheckListBox::IsChecked(uint uiIndex) const
+bool wxCheckListBox::IsChecked(unsigned int uiIndex) const
 {
     // TODO
     return FALSE;
 }
 
-void wxCheckListBox::Check(uint uiIndex, bool bCheck)
+void wxCheckListBox::Check(unsigned int uiIndex, bool bCheck)
 {
     // TODO
 }
