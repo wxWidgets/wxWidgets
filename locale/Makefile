@@ -42,9 +42,19 @@ allmo:
 force-update:
 	$(RM) wxstd.po
 
-# targets depending on this one will be always remade
-FORCE:
+# print out the percentage of the trsnalted strings
+stats:
+	@for i in $(WX_LINGUAS); do \
+		x=`$(MSGFMT) -o /dev/null "$$i.po" 2>&1 | sed -e 's/[,\.]//g' \
+			-e 's/\([0-9]\+\) translated messages/TR=\1/' \
+			-e 's/\([0-9]\+\) fuzzy translations/FZ=\1/' \
+			-e 's/\([0-9]\+\) untranslated messages/UT=\1/'`; \
+		TR=0 FZ=0 UT=0; \
+		eval $$x; \
+		TOTAL=`expr $$TR + $$FZ + $$UT`; \
+		echo "$$i.po `expr 100 "*" $$TR / $$TOTAL`% of $$TOTAL strings"; \
+	done
 
-.PHONY: allpo allmo force-update
+.PHONY: allpo allmo force-update percentage
 
 # $Id$
