@@ -546,14 +546,14 @@ public:
     wxPyHtmlWindow(wxWindow *parent, int id = -1,
                  wxPoint& pos = wxDefaultPosition,
                  wxSize& size = wxDefaultSize,
-                 int flags=wxHW_SCROLLBAR_AUTO,
+                 int style=wxHW_SCROLLBAR_AUTO,
                  const wxString& name = wxPyHtmlWindowNameStr);
     %name(wxPreHtmlWindow)wxPyHtmlWindow();
 
     bool Create(wxWindow *parent, int id = -1,
                 wxPoint& pos = wxDefaultPosition,
                 wxSize& size = wxDefaultSize,
-                int flags=wxHW_SCROLLBAR_AUTO,
+                int style=wxHW_SCROLLBAR_AUTO,
                 const wxString& name = wxPyHtmlWindowNameStr);
 
 

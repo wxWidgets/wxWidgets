@@ -168,6 +168,7 @@ if UNICODE and os.name != 'nt':
 
 if UNICODE:
     BUILD_BASE = BUILD_BASE + '.unicode'
+    VERSION = VERSION + 'u'
 
 
 #----------------------------------------------------------------------

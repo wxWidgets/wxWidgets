@@ -659,7 +659,7 @@ class _wxPyDeadObject:
     prevent crashes due to referencing a bogus C++ pointer.
     """
     reprStr = "wxPython wrapper for DELETED %s object! (The C++ object no longer exists.)"
-    attrStr = "The C++ %s object has been deleted, attribute access no longer allowed."
+    attrStr = "The C++ part of the %s object has been deleted, attribute access no longer allowed."
 
     def __repr__( self ):
         if not hasattr(self, "_name"):
