@@ -93,7 +93,9 @@
     #undef TEST_ALL
     static const bool TEST_ALL = true;
 #else
-    #define TEST_UNICODE
+    #define TEST_HASH
+    #define TEST_HASHMAP
+    #define TEST_HASHSET
 
     static const bool TEST_ALL = false;
 #endif
@@ -1144,16 +1146,23 @@ WX_DECLARE_HASH(Foo, wxListFoos, wxHashFoos);
 
 WX_DEFINE_LIST(wxListFoos);
 
+#include "wx/timer.h"
+
 static void TestHash()
 {
     wxPuts(_T("*** Testing wxHashTable ***\n"));
+    const int COUNT = 100;
+
+    wxStopWatch sw;
+
+    sw.Start();
 
     {
         wxHashTable hash(wxKEY_INTEGER, 10), hash2(wxKEY_STRING);
         wxObject o;
         int i;
 
-        for ( i = 0; i < 100; ++i )
+        for ( i = 0; i < COUNT; ++i )
             hash.Put(i, &o + i);
 
         hash.BeginFind();
@@ -1166,37 +1175,37 @@ static void TestHash()
             it = hash.Next();
         }
 
-        if (i != 100)
+        if (i != COUNT)
             wxPuts(_T("Error in wxHashTable::compatibility_iterator\n"));
 
         for ( i = 99; i >= 0; --i )
             if( hash.Get(i) != &o + i )
                 wxPuts(_T("Error in wxHashTable::Get/Put\n"));
 
-        for ( i = 0; i < 100; ++i )
+        for ( i = 0; i < COUNT; ++i )
             hash.Put(i, &o + i + 20);
 
         for ( i = 99; i >= 0; --i )
             if( hash.Get(i) != &o + i)
                 wxPuts(_T("Error (2) in wxHashTable::Get/Put\n"));
 
-        for ( i = 0; i < 50; ++i )
+        for ( i = 0; i < COUNT/2; ++i )
             if( hash.Delete(i) != &o + i)
                 wxPuts(_T("Error in wxHashTable::Delete\n"));
 
-        for ( i = 50; i < 100; ++i )
+        for ( i = COUNT/2; i < COUNT; ++i )
             if( hash.Get(i) != &o + i)
                 wxPuts(_T("Error (3) in wxHashTable::Get/Put\n"));
 
-        for ( i = 0; i < 50; ++i )
+        for ( i = 0; i < COUNT/2; ++i )
             if( hash.Get(i) != &o + i + 20)
                 wxPuts(_T("Error (4) in wxHashTable::Put/Delete\n"));
 
-        for ( i = 0; i < 50; ++i )
+        for ( i = 0; i < COUNT/2; ++i )
             if( hash.Delete(i) != &o + i + 20)
                 wxPuts(_T("Error (2) in wxHashTable::Delete\n"));
 
-        for ( i = 0; i < 50; ++i )
+        for ( i = 0; i < COUNT/2; ++i )
             if( hash.Get(i) != NULL)
                 wxPuts(_T("Error (5) in wxHashTable::Put/Delete\n"));
 
@@ -1215,7 +1224,62 @@ static void TestHash()
         if (hash2.Get(_T("bar")) != &o + 2)
             wxPuts(_T("Error (2) in wxHashTable::Get/Put\n"));
     }
-#if !wxUSE_STL
+
+    // and now some corner-case testing; 3 and 13 hash to the same bucket
+    {
+        wxHashTable hash(wxKEY_INTEGER, 10);
+        wxObject dummy;
+
+        hash.Put(3, &dummy);
+        hash.Delete(3);
+
+        if (hash.Get(3) != NULL)
+            wxPuts(_T("Corner case 1 failure\n"));
+
+        hash.Put(3, &dummy);
+        hash.Put(13, &dummy);
+        hash.Delete(3);
+
+        if (hash.Get(3) != NULL)
+            wxPuts(_T("Corner case 2 failure\n"));
+
+        hash.Delete(13);
+
+        if (hash.Get(13) != NULL)
+            wxPuts(_T("Corner case 3 failure\n"));
+
+        hash.Put(3, &dummy);
+        hash.Put(13, &dummy);
+        hash.Delete(13);
+
+        if (hash.Get(13) != NULL)
+            wxPuts(_T("Corner case 4 failure\n"));
+
+        hash.Delete(3);
+
+        if (hash.Get(3) != NULL)
+            wxPuts(_T("Corner case 5 failure\n"));
+    }
+
+    {
+        wxHashTable hash(wxKEY_INTEGER, 10);
+        wxObject dummy;
+
+        hash.Put(3, 7, &dummy + 7);
+        hash.Put(4, 8, &dummy + 8);
+
+        if (hash.Get(7) != NULL) wxPuts(_T("Key/Hash 1 failure\n"));
+        if (hash.Get(3, 7) != &dummy + 7) wxPuts(_T("Key/Hash 2 failure\n"));
+        if (hash.Get(4) != NULL) wxPuts(_T("Key/Hash 3 failure\n"));
+        if (hash.Get(3) != NULL) wxPuts(_T("Key/Hash 4 failure\n"));
+        if (hash.Get(8) != NULL) wxPuts(_T("Key/Hash 5 failure\n"));
+        if (hash.Get(8, 4) != NULL) wxPuts(_T("Key/Hash 6 failure\n"));
+
+        if (hash.Delete(7) != NULL) wxPuts(_T("Key/Hash 7 failure\n"));
+        if (hash.Delete(3) != NULL) wxPuts(_T("Key/Hash 8 failure\n"));
+        if (hash.Delete(3, 7) != &dummy + 7) wxPuts(_T("Key/Hash 8 failure\n"));
+    }
+
     {
         wxHashFoos hash;
         hash.DeleteContents(true);
@@ -1264,11 +1328,20 @@ static void TestHash()
         {
             wxPuts(_T("ok (not found)"));
         }
+
+        Foo* foo = hash.Delete(0);
+
+        wxPrintf(_T("Removed 1 foo: %u foos still there\n"), Foo::count);
+
+        delete foo;
+
+        wxPrintf(_T("Foo deleted: %u foos left\n"), Foo::count);
     }
-#endif
 
     wxPrintf(_T("Hash destroyed: %u foos left\n"), Foo::count);
     wxPuts(_T("*** Testing wxHashTable finished ***\n"));
+
+    wxPrintf(_T("Time: %ld\n"), sw.Time());
 }
 
 #endif // TEST_HASH

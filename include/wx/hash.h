@@ -19,13 +19,14 @@
 #include "wx/defs.h"
 
 #if !wxUSE_STL
+    #include "wx/object.h"
     #include "wx/list.h"
+#else
+    class WXDLLIMPEXP_BASE wxObject;
 #endif
 #if WXWIN_COMPATIBILITY_2_4
     #include "wx/dynarray.h"
 #endif
-
-class WXDLLIMPEXP_BASE wxObject;
 
 // the default size of the hash
 #define wxHASH_SIZE_DEFAULT     (1000)
@@ -82,9 +83,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxHashTableBase)
 };
 
-#else
-
-#include "wx/hashmap.h"
+#else // if wxUSE_STL
 
 #if !defined(wxENUM_KEY_TYPE_DEFINED)
 #define wxENUM_KEY_TYPE_DEFINED
@@ -104,167 +103,116 @@ union wxHashKeyValue
     wxChar *string;
 };
 
-struct WXDLLIMPEXP_BASE wxHashTableHash
+class WXDLLIMPEXP_BASE wxHashTableBase_Node
 {
-    wxHashTableHash() { }
-    wxHashTableHash( wxKeyType keyType ) : m_keyType( keyType ) { }
-
-    wxKeyType m_keyType;
-
-    unsigned long operator ()( const wxHashKeyValue& k ) const
-    {
-        if( m_keyType == wxKEY_STRING )
-            return wxStringHash::wxCharStringHash( k.string );
-        else
-            return (unsigned long)k.integer;
-    }
-};
-
-struct WXDLLIMPEXP_BASE wxHashTableEqual
-{
-    wxHashTableEqual() { }
-    wxHashTableEqual( wxKeyType keyType ) : m_keyType( keyType ) { }
-
-    wxKeyType m_keyType;
-
-    bool operator ()( const wxHashKeyValue& k1, const wxHashKeyValue& k2 ) const
-    {
-        if( m_keyType == wxKEY_STRING )
-            return wxStrcmp( k1.string, k2.string ) == 0;
-        else
-            return k1.integer == k2.integer;
-    }
-};
-
-WX_DECLARE_EXPORTED_HASH_MAP( wxHashKeyValue, 
-                              void*,
-                              wxHashTableHash,
-                              wxHashTableEqual,
-                              wxHashTableBaseBaseBase );
-
-// hack: we should really have HASH_MULTI(MAP|SET), but this requires
-// less work
-
-class WXDLLIMPEXP_BASE wxHashTableBaseBase : public wxHashTableBaseBaseBase
-{
+    friend class WXDLLIMPEXP_BASE wxHashTableBase;
+    typedef class WXDLLIMPEXP_BASE wxHashTableBase_Node _Node;
 public:
-    wxHashTableBaseBase(size_t size, const wxHashTableHash& hash,
-                        const wxHashTableEqual& equal)
-        : wxHashTableBaseBaseBase(size, hash, equal)
-    { }
+    wxHashTableBase_Node( long key, void* value,
+                          wxHashTableBase* table );
+    wxHashTableBase_Node( const wxChar* key, void* value,
+                          wxHashTableBase* table );
+    ~wxHashTableBase_Node();
 
-    void multi_insert(const wxHashKeyValue& key, void* value)
-    {
-        CreateNodeLast(value_type(key, value));
-    }
+    long GetKeyInteger() const { return m_key.integer; }
+    const wxChar* GetKeyString() const { return m_key.string; }
+
+    void* GetData() const { return m_value; }
+    void SetData( void* data ) { m_value = data; }
+
+protected:
+    _Node* GetNext() const { return m_next; }
+
+protected:
+    // next node in the chain
+    wxHashTableBase_Node* m_next;
+
+    // key
+    wxHashKeyValue m_key;
+
+    // value
+    void* m_value;
+
+    // pointer to the hash containing the node, used to remove the
+    // node from the hash when the user deletes the node iterating
+    // through it
+    // TODO: move it to wxHashTable_Node (only wxHashTable supports
+    //       iteration)
+    wxHashTableBase* m_hashPtr;
 };
 
 class WXDLLIMPEXP_BASE wxHashTableBase
+#if !wxUSE_STL
+    : public wxObject
+#endif
 {
+    friend class WXDLLIMPEXP_BASE wxHashTableBase_Node;
 public:
-    wxHashTableBase( wxKeyType keyType = wxKEY_INTEGER,
-                     size_t size = wxHASH_SIZE_DEFAULT )
-        : m_map( size, wxHashTableHash( keyType ),
-                 wxHashTableEqual( keyType ) ),
-          m_keyType( keyType ) { }
+    typedef wxHashTableBase_Node Node;
 
-    ~wxHashTableBase() { Clear(); }
+    wxHashTableBase();
+    virtual ~wxHashTableBase();
 
-    size_t GetCount() const { return m_map.size(); }
+    void Create( wxKeyType keyType = wxKEY_INTEGER,
+                 size_t size = wxHASH_SIZE_DEFAULT );
+    void Clear();
+    void Destroy();
 
-    void Clear()
-    {
-        if( m_keyType == wxKEY_STRING )
-        {
-            for( wxHashTableBaseBase::iterator it = m_map.begin(),
-                                               en = m_map.end();
-                 it != en; )
-            {
-                wxChar* tmp = it->first.string;
-                ++it;
-                delete[] tmp; // used in operator++
-            }
-        }
-        m_map.clear();
-    }
+    size_t GetSize() const { return m_size; }
+    size_t GetCount() const { return m_count; }
+
+    void DeleteContents( bool flag ) { m_deleteContents = flag; }
+
+    static long MakeKey(const wxChar *string);
+
 protected:
-    void DoPut( long key, void* data )
-    {
-        wxASSERT( m_keyType == wxKEY_INTEGER );
+    void DoPut( long key, long hash, void* data );
+    void DoPut( const wxChar* key, long hash, void* data );
+    void* DoGet( long key, long hash ) const;
+    void* DoGet( const wxChar* key, long hash ) const;
+    void* DoDelete( long key, long hash );
+    void* DoDelete( const wxChar* key, long hash );
 
-        wxHashKeyValue k; k.integer = key;
-        m_map.multi_insert(k, data);
-    }
+private:
+    // Remove the node from the hash, *only called from
+    // ~wxHashTable*_Node destructor
+    void DoRemoveNode( wxHashTableBase_Node* node );
 
-    void DoPut( const wxChar* key, void* data )
-    {
-        wxASSERT( m_keyType == wxKEY_STRING );
+    // destroys data contained in the node if appropriate:
+    // deletes the key if it is a string and destrys
+    // the value if m_deleteContents is true
+    void DoDestroyNode( wxHashTableBase_Node* node );
 
-        wxHashKeyValue k;
-        k.string = wxStrcpy(new wxChar[wxStrlen(key) + 1], key);
-        m_map.multi_insert(k, data);
-    }
+    // inserts a node in the table (at the end of the chain)
+    void DoInsertNode( size_t bucket, wxHashTableBase_Node* node );
 
-    void* DoGet( long key ) const
-    {
-        wxASSERT( m_keyType == wxKEY_INTEGER );
+    // removes a node from the table (fiven a pointer to the previous
+    // but does not delete it (only deletes its contents)
+    void DoUnlinkNode( size_t bucket, wxHashTableBase_Node* node,
+                       wxHashTableBase_Node* prev );
 
-        wxHashKeyValue k; k.integer = key;
-        wxHashTableBaseBase::const_iterator it = m_map.find( k );
+    // unconditionally deletes node value (invoking the
+    // correct destructor)
+    virtual void DoDeleteContents( wxHashTableBase_Node* node ) = 0;
 
-        return it != m_map.end() ? it->second : NULL;
-    }
+protected:
+    // number of buckets
+    size_t m_size;
 
-    void* DoGet( const wxChar* key ) const
-    {
-        wxASSERT( m_keyType == wxKEY_STRING );
+    // number of nodes (key/value pairs)
+    size_t m_count;
 
-        wxHashKeyValue k; k.string = (wxChar*)key;
-        wxHashTableBaseBase::const_iterator it = m_map.find( k );
+    // table
+    Node** m_table;
 
-        return it != m_map.end() ? it->second : NULL;
-    }
-
-    void* DoDelete( long key )
-    {
-        wxASSERT( m_keyType == wxKEY_INTEGER );
-
-        wxHashKeyValue k; k.integer = key;
-        wxHashTableBaseBase::iterator it = m_map.find( k );
-        
-        if( it != m_map.end() )
-        {
-            void* data = it->second;
-
-            m_map.erase( it );
-            return data;
-        }
-
-        return NULL;
-    }
-
-    void* DoDelete( const wxChar* key )
-    {
-        wxASSERT( m_keyType == wxKEY_STRING );
-
-        wxHashKeyValue k; k.string = (wxChar*)key;
-        wxHashTableBaseBase::iterator it = m_map.find( k );
-        
-        if( it != m_map.end() )
-        {
-            void* data = it->second;
-            wxChar* k = it->first.string;
-
-            m_map.erase( it );
-            delete[] k;
-            return data;
-        }
-
-        return NULL;
-    }
-
-    wxHashTableBaseBase m_map;
+    // key typ (INTEGER/STRING)
     wxKeyType m_keyType;
+
+    // delete contents when hash is cleared
+    bool m_deleteContents;
+
+private:
+    DECLARE_NO_COPY_CLASS(wxHashTableBase)
 };
 
 #endif // !wxUSE_STL
@@ -354,92 +302,103 @@ private:
 
 #if wxUSE_STL
 
-class WXDLLIMPEXP_BASE wxHashTable : protected wxHashTableBase
+class WXDLLIMPEXP_BASE wxHashTable_Node : public wxHashTableBase_Node
 {
-    typedef wxHashTableBaseBase hash;
+    friend class WXDLLIMPEXP_BASE wxHashTable;
 public:
-    class dummy;
+    wxHashTable_Node( long key, void* value,
+                      wxHashTableBase* table )
+        : wxHashTableBase_Node( key, value, table ) { }
+    wxHashTable_Node( const wxChar* key, void* value,
+                      wxHashTableBase* table )
+        : wxHashTableBase_Node( key, value, table ) { }
 
-    struct compatibility_iterator
-    {
-        hash::iterator m_iter;
-        hash* m_hash;
+    wxObject* GetData() const
+        { return (wxObject*)wxHashTableBase_Node::GetData(); }
+    void SetData( wxObject* data )
+        { wxHashTableBase_Node::SetData( data ); }
 
-        operator bool() const { return m_iter != m_hash->end(); }
-        bool operator !() const { return m_iter == m_hash->end(); }
-        compatibility_iterator( hash* li, hash::iterator it )
-            : m_iter( it ), m_hash( li ) {}
-        compatibility_iterator() { }
+    wxHashTable_Node* GetNext() const
+        { return (wxHashTable_Node*)wxHashTableBase_Node::GetNext(); }
+};
 
-        dummy* operator->() { return (dummy*)this; }
-    };
-    typedef compatibility_iterator citer;
-
-    class dummy
-    {
-        typedef hash::iterator it;
-        typedef compatibility_iterator citer;
-    public:
-        wxObject* GetData() const
-        {
-            citer* i = (citer*)this;
-            return (wxObject*)i->m_iter->second;
-        }
-        citer GetNext() const
-        {
-            citer* i = (citer*)this;
-            it lit = i->m_iter;
-            return citer( i->m_hash, ++lit );
-        }
-        void SetData( wxObject* e )
-        {
-            citer* i = (citer*)this;
-            i->m_iter->second = e;
-        }
-    private:
-        dummy();
-    };
+// should inherit protectedly, but it is public for compatibility in
+// order to publicly inherit from wxObject
+class WXDLLIMPEXP_BASE wxHashTable : public wxHashTableBase
+{
+    typedef wxHashTableBase hash;
+public:
+    typedef wxHashTable_Node Node;
+    typedef wxHashTable_Node* compatibility_iterator;
 public:
     wxHashTable( wxKeyType keyType = wxKEY_INTEGER,
                  size_t size = wxHASH_SIZE_DEFAULT )
-        : wxHashTableBase( keyType, size ) { }
+        : wxHashTableBase() { Create( keyType, size ); BeginFind(); }
+    wxHashTable( const wxHashTable& table );
+
+    const wxHashTable& operator=( const wxHashTable& );
 
     void Destroy() { Clear(); }
 
     // key and value are the same
-    void Put(long value, wxObject *object) { DoPut( value, object ); }
-    void Put(const wxChar *value, wxObject *object) { DoPut( value, object ); }
+    void Put(long value, wxObject *object)
+        { DoPut( value, value, object ); }
+    void Put(long hash, long value, wxObject *object)
+        { DoPut( value, hash, object ); }
+    void Put(const wxChar *value, wxObject *object)
+        { DoPut( value, MakeKey( value ), object ); }
+    void Put(long hash, const wxChar *value, wxObject *object)
+        { DoPut( value, hash, object ); }
 
     // key and value are the same
-    wxObject *Get(long value) const { return (wxObject*)DoGet( value ); }
-    wxObject *Get(const wxChar *value) const { return (wxObject*)DoGet( value ); }
+    wxObject *Get(long value) const
+        { return (wxObject*)DoGet( value, value ); }
+    wxObject *Get(long hash, long value) const
+        { return (wxObject*)DoGet( value, hash ); }
+    wxObject *Get(const wxChar *value) const
+        { return (wxObject*)DoGet( value, MakeKey( value ) ); }
+    wxObject *Get(long hash, const wxChar *value) const
+        { return (wxObject*)DoGet( value, hash ); }
 
     // Deletes entry and returns data if found
-    wxObject *Delete(long key) { return (wxObject*)DoDelete( key ); }
-    wxObject *Delete(const wxChar *key) { return (wxObject*)DoDelete( key ); }
+    wxObject *Delete(long key)
+        { return (wxObject*)DoDelete( key, key ); }
+    wxObject *Delete(long hash, long key)
+        { return (wxObject*)DoDelete( key, hash ); }
+    wxObject *Delete(const wxChar *key)
+        { return (wxObject*)DoDelete( key, MakeKey( key ) ); }
+    wxObject *Delete(long hash, const wxChar *key)
+        { return (wxObject*)DoDelete( key, hash ); }
 
-#if 0
     // Construct your own integer key from a string, e.g. in case
     // you need to combine it with something
-    long MakeKey(const wxChar *string) const;
-#endif
+    long MakeKey(const wxChar *string) const
+        { return wxHashTableBase::MakeKey(string); }
+
     // Way of iterating through whole hash table (e.g. to delete everything)
     // Not necessary, of course, if you're only storing pointers to
     // objects maintained separately
-    void BeginFind() { m_iter = citer( &this->m_map, this->m_map.begin() ); }
-    compatibility_iterator Next()
-    {
-        compatibility_iterator it = m_iter;
-        if( m_iter )
-            m_iter = m_iter->GetNext();
-        return it;
-    }
+    void BeginFind() { m_curr = NULL; m_currBucket = 0; }
+    Node* Next();
 
     void Clear() { wxHashTableBase::Clear(); }
 
     size_t GetCount() const { return wxHashTableBase::GetCount(); }
+protected:
+    virtual void DoDeleteContents( wxHashTableBase_Node* node );
+
+    // copy helper
+    void DoCopy( const wxHashTable& copy );
+
+    // searches the next node starting from bucket bucketStart and sets
+    // m_curr to it and m_currBucket to its bucket
+    void GetNextNode( size_t bucketStart );
 private:
-    compatibility_iterator m_iter;
+    // current node
+    Node* m_curr;
+
+    // bucket the current node belongs to
+    size_t m_currBucket;
 };
 
 #else // if !wxUSE_STL
@@ -518,7 +477,7 @@ public:
     // objects maintained separately
 
     void BeginFind();
-    wxNode *Next();
+    Node* Next();
 
     void DeleteContents(bool flag);
     void Clear();
@@ -545,14 +504,25 @@ private:
     public:                                                                   \
         hashclass(wxKeyType keyType = wxKEY_INTEGER,                          \
                   size_t size = wxHASH_SIZE_DEFAULT)                          \
-            : wxHashTableBase(keyType, size) { }                              \
+            : wxHashTableBase() { Create(keyType, size); }                    \
                                                                               \
         ~hashclass() { Destroy(); }                                           \
                                                                               \
-        void Destroy() { m_map.clear(); }                                     \
-        void Put(long key, eltype *data) { DoPut(key, (void*)data); }         \
-        eltype *Get(long key) const { return (eltype*)DoGet(key); }           \
-        eltype *Delete(long key) { return (eltype*)DoDelete(key); }           \
+        void Destroy() { Clear(); }                                           \
+        void Put(long key, eltype *data) { DoPut(key, key, (void*)data); }    \
+        void Put(long hash, long key, eltype *data)                           \
+            { DoPut(key, hash, (void*)data); }                                \
+        eltype *Get(long key) const { return (eltype*)DoGet(key, key); }      \
+        eltype *Get(long hash, long key) const                                \
+            { return (eltype*)DoGet(key, hash); }                             \
+        eltype *Delete(long key) { return (eltype*)DoDelete(key, key); }      \
+        eltype *Delete(long hash, long key)                                   \
+            { return (eltype*)DoDelete(key, hash); }                          \
+    protected:                                                                \
+        virtual void DoDeleteContents( wxHashTableBase_Node* node )           \
+            { delete (eltype*)node->GetData(); }                              \
+                                                                              \
+        DECLARE_NO_COPY_CLASS(hashclass)                                      \
     }
 
 #else // if !wxUSE_STL

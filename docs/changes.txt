@@ -82,6 +82,8 @@ All:
 - wxFileName::Normalize(wxPATH_NORM_ALL) doesn't lower filename case any more
 - wxFileName::Normalize(wxPATH_NORM_ENV_VARS) now works
 - check if file exists in wxFileConfig::DeleteFile() (Christian Sturmlechner)
+- when wxUSE_STL == 1 wxHashTable will not be implemented using wxHashMap
+  (as in 2.5.0).
 
 All (GUI):
 

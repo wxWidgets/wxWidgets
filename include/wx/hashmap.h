@@ -70,7 +70,6 @@ protected:
     static void CopyHashTable( _wxHashTable_NodeBase** srcTable,
                                size_t srcBuckets, _wxHashTableBase2* dst,
                                _wxHashTable_NodeBase** dstTable,
-                               size_t dstBuckets,
                                BucketFromNode func, ProcessNode proc );
 
     static void** AllocTable( size_t sz )
@@ -298,19 +297,6 @@ protected: \
  \
         return node; \
     } \
-    void CreateNodeLast( const value_type& value )                           \
-    {                                                                        \
-        size_t bucket = m_hasher( m_getKey(value) ) % m_tableBuckets;        \
-        Node* curr = m_table[bucket],                                        \
-            * next = m_table[bucket];                                        \
-        while( next ) { curr = next; next = next->m_next(); }                \
-        Node** ptr = curr ? (Node**)&curr->m_nxt : &m_table[bucket];         \
-        *ptr = new Node( value );                                            \
-        /* must be after the node is inserted */                             \
-        ++m_items;                                                           \
-        if( SHOULD_GROW( m_tableBuckets, m_items ) )                         \
-            ResizeTable( m_tableBuckets );                                   \
-    }                                                                        \
     void CreateNode( const value_type& value ) \
     {\
         CreateNode(value, m_hasher( m_getKey(value) ) % m_tableBuckets ); \
@@ -358,7 +344,7 @@ protected: \
         m_tableBuckets = newSize; \
  \
         CopyHashTable( (_wxHashTable_NodeBase**)srcTable, srcBuckets, \
-                       this, (_wxHashTable_NodeBase**)m_table, newSize, \
+                       this, (_wxHashTable_NodeBase**)m_table, \
                        (BucketFromNode)GetBucketForNode,\
                        (ProcessNode)&DummyProcessNode ); \
         free(srcTable); \
@@ -370,7 +356,7 @@ protected: \
         ResizeTable( ht.size() ); \
         CopyHashTable( (_wxHashTable_NodeBase**)ht.m_table, ht.m_tableBuckets,\
                        (_wxHashTableBase2*)this, \
-                       (_wxHashTable_NodeBase**)m_table, m_tableBuckets, \
+                       (_wxHashTable_NodeBase**)m_table, \
                        (BucketFromNode)GetBucketForNode, \
                        (ProcessNode)CopyNode ); \
     } \
