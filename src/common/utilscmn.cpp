@@ -809,11 +809,19 @@ wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
 wxString wxGetPasswordFromUser(const wxString& message,
                                const wxString& caption,
                                const wxString& defaultValue,
-                               wxWindow *parent)
+                               wxWindow *parent,
+                               wxCoord x, wxCoord y, bool centre )
 {
     wxString str;
+    long style = wxTextEntryDialogStyle;
+
+    if (centre)
+        style |= wxCENTRE;
+    else
+        style &= ~wxCENTRE;
+
     wxTextEntryDialog dialog(parent, message, caption, defaultValue,
-                             wxOK | wxCANCEL | wxTE_PASSWORD);
+                             style | wxTE_PASSWORD, wxPoint(x, y));
     if ( dialog.ShowModal() == wxID_OK )
     {
         str = dialog.GetValue();

@@ -86,7 +86,10 @@ wxString WXDLLEXPORT
 wxGetPasswordFromUser(const wxString& message,
                       const wxString& caption = wxGetTextFromUserPromptStr,
                       const wxString& default_value = wxEmptyString,
-                      wxWindow *parent = (wxWindow *) NULL);
+                      wxWindow *parent = (wxWindow *) NULL,
+                      wxCoord x = wxDefaultCoord,
+                      wxCoord y = wxDefaultCoord,
+                      bool centre = true);
 
 #endif
     // wxUSE_TEXTDLG
