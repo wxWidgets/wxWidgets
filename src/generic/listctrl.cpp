@@ -2648,7 +2648,7 @@ void wxListMainWindow::RefreshSelected()
 
     for ( size_t line = from; line <= to; line++ )
     {
-        if ( IsHighlighted(line) )
+        if ( IsHighlighted(line) || (line == m_current) )
         {
             if ( line < selMin )
                 selMin = line;
