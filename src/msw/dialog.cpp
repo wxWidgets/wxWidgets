@@ -184,8 +184,6 @@ bool wxDialog::Create(wxWindow *parent,
     if ( !m_hasFont )
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     SetLeftMenu(wxID_OK, _("OK"));
 #endif

@@ -192,6 +192,8 @@ bool wxFrame::Create(wxWindow *parent,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
 
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
+
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     SetLeftMenu(wxID_EXIT, _("Done"));
 #endif

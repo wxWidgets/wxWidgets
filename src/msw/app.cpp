@@ -360,8 +360,8 @@ bool wxApp::RegisterWindowClasses()
     wndclass.hInstance     = wxhInstance;
     wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
 
-    // Register the frame window class.
-    wndclass.hbrBackground = (HBRUSH)(COLOR_APPWORKSPACE + 1);
+    // register the class for all normal windows
+    wndclass.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
     wndclass.lpszClassName = wxCanvasClassName;
     wndclass.style         = styleNormal;
 
