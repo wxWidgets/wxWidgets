@@ -249,6 +249,8 @@ void wxToolBar::Init()
     m_bg = (GdkColor *)NULL;
     m_toolbar = (GtkToolbar *)NULL;
     m_blockEvent = FALSE;
+    m_defaultWidth = 32;
+    m_defaultHeight = 32;
 }
 
 wxToolBar::~wxToolBar()
@@ -278,7 +280,7 @@ bool wxToolBar::Create( wxWindow *parent,
 #ifdef __WXGTK20__
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
     GtkSetStyle();
-    
+
     // Doesn't work this way.
     // GtkToolbarSpaceStyle space_style = GTK_TOOLBAR_SPACE_EMPTY;
     // gtk_widget_style_set (GTK_WIDGET (m_toolbar), "space_style", &space_style, NULL);
@@ -473,7 +475,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
                     return FALSE;
                 }
-                
+
                 gtk_signal_connect( GTK_OBJECT(tool->m_item),
                                     "enter_notify_event",
                                     GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
