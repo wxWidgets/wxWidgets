@@ -49,11 +49,11 @@
 #include "wx/statbmp.h"
 #include "wx/gauge.h"
 #include "wx/textctrl.h"
-#include "wx/treebase.h"
 #include "wx/msgdlg.h"
 #include "wx/intl.h"
 #endif
 
+#include "wx/treebase.h"
 #include "wx/listctrl.h"
 
 #if wxUSE_RADIOBTN
