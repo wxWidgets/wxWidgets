@@ -357,9 +357,10 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_DYNAMIC_LOADER  1
+#define wxUSE_DYNLIB_CLASS    1
 
-#define wxUSE_DYNLIB_CLASS    0
+// experimental, don't use for now
+#define wxUSE_DYNAMIC_LOADER  0
 
 // Set to 1 to use socket classes
 #define wxUSE_SOCKETS       1
