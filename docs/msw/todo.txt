@@ -5,23 +5,19 @@ Todo on wxWin 2, Windows platform
 HIGH PRIORITY
 -------------
 
-Add further controls and properties to Dialog Editor.
+Add automatic line wrap to wxStaticText
 
 Add centring, right justify styles to wxStaticText.
 
-Extend wxSystemSettings to get symbols for current nationality,
-e.g. ',' instead of '.' for decimal points.
-
-wxToolTip::Enable should be static for wxGTK compatibility (VZ)
+Extend wxLocale to get more locale settings (currence,
+date/time, decimal separator and so on)
 
 LOW PRIORITY (MEDIUM TERM)
 --------------------------
 
 Supply VC++ project generator utility.
 
-More wxSystemSettings (see comment in settings.cpp).
-
-Shell function to invoke a document with open, print, whatever...
+Add further controls and properties to Dialog Editor.
 
 Write tutorial.
 
@@ -32,29 +28,20 @@ in image list so we can get them later.
 
 Merge dib.cpp, dibutils.cpp (see also some DIB code in bitmap.cpp).
 
-Menu bitmaps - document Vadim's enhancements.
-
 wxCreateDynamicObject is apparently slow: ~ 2000 calls to strcmp. Need to
 use some kind of hash table scheme.
 
 Write wxDisplay class for querying settings and passing
 to wxFrame to mirror the X situation (multiple displays).
 
-Perhaps rewrite wxFile to use FILE* descriptors, so Eof and Flush
-can work.
-
-Find out how to set wxFileDialog position.
-
 Implement wxDC floating point transformations.
 
-A wxDC function (or two) for drawing 3D edges?
-
-LOW PRIORITY (LONG TERM)
-------------------------
+WISH LIST (LONG TERM)
+---------------------
 
 ActiveX support
 
-Look at porting to WinCE
+Porting to WinCE
 
 GDI objects could be optimised further in constructors by
 searching for a matching, pre-existing object, and assigning from
