@@ -38,6 +38,8 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/spinbutt.h"
+
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
@@ -106,6 +108,10 @@ public:
                            wxDirection dir,
                            const wxRect& rect,
                            int flags = 0);
+    virtual void DrawScrollbarArrow(wxDC& dc,
+                                    wxDirection dir,
+                                    const wxRect& rect,
+                                    int flags = 0);
     virtual void DrawScrollbarThumb(wxDC& dc,
                                     wxOrientation orient,
                                     const wxRect& rect,
@@ -513,6 +519,10 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_TEXTCTRL )
             handler = new wxGTKTextCtrlInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_TEXTCTRL
+#if wxUSE_SPINBTN
+        else if ( control == wxINP_HANDLER_SPINBTN )
+            handler = new wxStdSpinButtonInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_SPINBTN
         else
             handler = GetDefaultInputHandler();
 
@@ -583,7 +593,7 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
 
         case CONTROL:           return wxColour(0xd6d6d6);
         case CONTROL_PRESSED:   return wxColour(0xc3c3c3);
-        case CONTROL_CURRENT:   return wxColour(0xeaeaea);
+        case CONTROL_CURRENT:   return *wxBLUE; //wxColour(0xeaeaea);
 
         case CONTROL_TEXT:      return *wxBLACK;
         case CONTROL_TEXT_DISABLED:
@@ -1548,18 +1558,27 @@ void wxGTKRenderer::DrawArrowBorder(wxDC& dc,
     *rect = rectInner;
 }
 
-// gtk_default_draw_arrow() takes ~350 lines and we can't do much better here
-// these people are just crazy :-(
-void wxGTKRenderer::DrawArrow(wxDC& dc,
-                              wxDirection dir,
-                              const wxRect& rectArrow,
-                              int flags)
+void wxGTKRenderer::DrawScrollbarArrow(wxDC& dc,
+                                       wxDirection dir,
+                                       const wxRect& rectArrow,
+                                       int flags)
 {
     // first of all, draw the border around it - but we don't want the border
     // on the side opposite to the arrow point
     wxRect rect = rectArrow;
     DrawArrowBorder(dc, &rect, dir);
 
+    // then the arrow itself
+    DrawArrow(dc, dir, rect, flags);
+}
+
+// gtk_default_draw_arrow() takes ~350 lines and we can't do much better here
+// these people are just crazy :-(
+void wxGTKRenderer::DrawArrow(wxDC& dc,
+                              wxDirection dir,
+                              const wxRect& rect,
+                              int flags)
+{
     enum
     {
         Point_First,
@@ -1572,7 +1591,14 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
 
     wxColour colInside = GetBackgroundColour(flags);
     wxPen penShadow[4];
-    if ( flags & wxCONTROL_PRESSED )
+    if ( flags & wxCONTROL_DISABLED )
+    {
+        penShadow[0] = m_penDarkGrey;
+        penShadow[1] = m_penDarkGrey;
+        penShadow[2] = wxNullPen;
+        penShadow[3] = wxNullPen;
+    }
+    else if ( flags & wxCONTROL_PRESSED )
     {
         penShadow[0] = m_penDarkGrey;
         penShadow[1] = m_penHighlight;

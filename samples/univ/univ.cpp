@@ -49,23 +49,26 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/spinbutt.h"
+#include "wx/spinctrl.h"
 #include "wx/statbmp.h"
 #include "wx/statline.h"
 
 #include "wx/univ/theme.h"
 
-#define TEST_BMP_BUTTON
-#define TEST_BUTTON
-#define TEST_CHECKBOX
-#define TEST_CHECKLISTBOX
-#define TEST_COMBO
-#define TEST_LISTBOX
-#define TEST_RADIO
+//#define TEST_BMP_BUTTON
+//#define TEST_BUTTON
+//#define TEST_CHECKBOX
+//#define TEST_CHECKLISTBOX
+//#define TEST_COMBO
+//#define TEST_LISTBOX
+//#define TEST_RADIO
 #define TEST_SCROLL
-#define TEST_STATIC_BMP
-#define TEST_STATIC_BOX
-#define TEST_STATIC_LINE
-#define TEST_STATIC_TEXT
+#define TEST_SPIN
+//#define TEST_STATIC_BMP
+//#define TEST_STATIC_BOX
+//#define TEST_STATIC_LINE
+//#define TEST_STATIC_TEXT
 //#define TEST_TEXT
 
 // ----------------------------------------------------------------------------
@@ -130,8 +133,17 @@ protected:
     void OnTextChange(wxCommandEvent& event);
     void OnLeftUp(wxMouseEvent& event);
 
+#ifdef TEST_SPIN
+    void OnSpinCtrl(wxSpinEvent& event);
+#endif // TEST_SPIN
+
 private:
     void TestTextCtrlReplace(wxTextCtrl *text, const wxString& value);
+
+#ifdef TEST_SPIN
+    wxTextCtrl *m_textSpin1,
+               *m_textSpin2;
+#endif // TEST_SPIN
 
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
@@ -173,6 +185,10 @@ BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
     EVT_RADIOBUTTON(-1, MyUnivFrame::OnRadioBox)
     EVT_LISTBOX(-1, MyUnivFrame::OnListBox)
     EVT_TEXT(-1, MyUnivFrame::OnTextChange)
+
+#ifdef TEST_SPIN
+    EVT_SPIN(-1, MyUnivFrame::OnSpinCtrl)
+#endif // TEST_SPIN
 
     EVT_LEFT_UP(MyUnivFrame::OnLeftUp)
 END_EVENT_TABLE()
@@ -356,6 +372,19 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #endif
 
 #endif // TEST_SCROLL
+
+#ifdef TEST_SPIN
+    m_textSpin1 = new wxTextCtrl(this, -1, _T("Vertical spin"),
+                                 wxPoint(10, 30), wxDefaultSize);
+    m_textSpin2 = new wxTextCtrl(this, -1, _T("Horizontal spin"),
+                                 wxPoint(130, 30), wxDefaultSize);
+
+    wxSpinCtrl *spin = new wxSpinCtrl(this, -1, _T(""),
+                                      wxPoint(10, 60),
+                                      wxDefaultSize);
+    spin->SetValue(17);
+    new wxSpinButton(this, -1, wxPoint(10, 100), wxDefaultSize, wxSP_ARROW_KEYS);
+#endif // TEST_SPIN
 
 #ifdef TEST_BMP_BUTTON
     new wxButton(this, -1, open_xpm, _T("&Open..."), wxPoint(10, 420));
@@ -557,6 +586,20 @@ void MyUnivFrame::OnLeftUp(wxMouseEvent& event)
         Close();
     }
 }
+
+#ifdef TEST_SPIN
+
+void MyUnivFrame::OnSpinCtrl(wxSpinEvent& event)
+{
+    wxSpinButton *spin = (wxSpinButton *)event.GetEventObject();
+    wxTextCtrl *text = spin->IsVertical() ? m_textSpin1 : m_textSpin2;
+    text->SetValue(wxString::Format
+                   (
+                        _T("%d (%d)"), event.GetPosition(), spin->GetValue()
+                   ));
+}
+
+#endif // TEST_SPIN
 
 // ----------------------------------------------------------------------------
 // MyUnivCanvas

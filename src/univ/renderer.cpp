@@ -600,12 +600,6 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
     }
 
     // arrows
-    static const wxDirection arrowDirs[2][2] =
-    {
-        { wxLEFT, wxRIGHT },
-        { wxUP,   wxDOWN  }
-    };
-
     for ( int nArrow = 0; nArrow < 2; nArrow++ )
     {
         wxScrollBar::Element elem =
@@ -622,10 +616,13 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                        rectArrow.GetRight(),
                        rectArrow.GetBottom());
 
-            m_renderer->DrawArrow(m_dc,
-                                  arrowDirs[scrollbar->IsVertical()][nArrow],
-                                  rectArrow,
-                                  scrollbar->GetState(elem));
+            scrollbar->GetArrows().DrawArrow
+            (
+                (wxScrollArrows::Arrow)nArrow,
+                m_dc,
+                rectArrow,
+                TRUE // draw a scrollbar arrow, not just an arrow
+            );
         }
     }
 

@@ -32,6 +32,8 @@
 #ifndef WX_PRECOMP
 #endif
 
+#include "wx/spinbutt.h"
+
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
@@ -40,9 +42,41 @@
 // implementation of wxSpinButton
 // ============================================================================
 
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
+
 // ----------------------------------------------------------------------------
 // creation
 // ----------------------------------------------------------------------------
+
+#ifdef __VISUALC__
+    // warning C4355: 'this' : used in base member initializer list
+    #pragma warning(disable:4355)  // so what? disable it...
+#endif
+
+wxSpinButton::wxSpinButton()
+            : m_arrows(this)
+{
+    Init();
+}
+
+wxSpinButton::wxSpinButton(wxWindow *parent,
+                           wxWindowID id,
+                           const wxPoint& pos,
+                           const wxSize& size,
+                           long style,
+                           const wxString& name)
+            : m_arrows(this)
+{
+    Init();
+
+    (void)Create(parent, id, pos, size, style, name);
+}
+
+#ifdef __VISUALC__
+    // warning C4355: 'this' : used in base member initializer list
+    #pragma warning(default:4355)
+#endif
 
 void wxSpinButton::Init()
 {
@@ -70,7 +104,7 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     SetBestSize(size);
 
-    // TODO: create input handler
+    CreateInputHandler(wxINP_HANDLER_SPINBTN);
 
     return TRUE;
 }
@@ -89,7 +123,7 @@ void wxSpinButton::SetValue(int val)
     m_value = val;
 }
 
-int wxSpinButton::NormalizeValue(int value) const;
+int wxSpinButton::NormalizeValue(int value) const
 {
     if ( value > m_max )
         value = m_max;
@@ -116,7 +150,9 @@ bool wxSpinButton::ChangeValue(int inc)
 
     m_value = valueNew;
 
-    // FIXME: should we send wxEVT_SCROLL_THUMBTRACK too?
+    // send wxEVT_SCROLL_THUMBTRACK as well
+    event.SetEventType(wxEVT_SCROLL_THUMBTRACK);
+    (void)GetEventHandler()->ProcessEvent(event);
 
     return TRUE;
 }
@@ -143,76 +179,132 @@ wxSize wxSpinButton::DoGetBestClientSize() const
 }
 
 // ----------------------------------------------------------------------------
-// drawing
+// wxControlWithArrows methods
 // ----------------------------------------------------------------------------
 
-int wxSpinButton::GetArrowState(Arrow arrow) const
+int wxSpinButton::GetArrowState(wxScrollArrows::Arrow arrow) const
 {
     int state = m_arrowsState[arrow];
 
-    // the arrow may also be disabled: either...
-    if ( !IsEnabled() )
-    {
-        // ...because the control is completely disabled
-        state |= wxCONTROL_DISABLED;
-    }
-    else
+    // the arrow may also be disabled: either because the control is completely
+    // disabled
+    bool disabled = !IsEnabled();
+    if ( !disabled )
     {
         // ... or because we can't go any further
-        if ( ((arrow == Arrow_First) && (m_value == m_min)) ||
-             ((arrow == Arrow_Second) && (m_value == m_max)) )
-            state |= wxCONTROL_DISABLED;
+        if ( IsVertical() )
+        {
+            if ( arrow == wxScrollArrows::Arrow_First )
+                disabled = m_value == m_max;
+            else
+                disabled = m_value == m_min;
+        }
+        else // horizontal
+        {
+            if ( arrow == wxScrollArrows::Arrow_First )
+                disabled = m_value == m_min;
+            else
+                disabled = m_value == m_max;
+        }
+    }
+
+    if ( disabled )
+    {
+        state |= wxCONTROL_DISABLED;
     }
 
     return state;
 }
 
-void wxSpinButton::SetArrowSatte(Arrow arrow, int state)
+void wxSpinButton::SetArrowFlag(wxScrollArrows::Arrow arrow, int flag, bool set)
 {
-    m_arrowsState[arrow] = state;
-}
+    int state = m_arrowsState[arrow];
+    if ( set )
+        state |= flag;
+    else
+        state &= ~flag;
 
-void wxSpinButton::DrawArrow(Arrow arrow, wxDC& dc, const wxRect& rect)
-{
-    static const wxDirection arrowDirs[2][Arrow_Max] =
+    if ( state != m_arrowsState[arrow] )
     {
-        { wxLEFT, wxRIGHT },
-        { wxUP,   wxDOWN  }
-    };
-
-    m_renderer->DrawArrow(dc,
-                          arrowDirs[IsVertical()][arrow],
-                          rectArrow,
-                          GetArrowState(arrow));
+        m_arrowsState[arrow] = state;
+        Refresh();
+    }
 }
+
+bool wxSpinButton::OnArrow(wxScrollArrows::Arrow arrow)
+{
+    int valueOld = GetValue();
+
+    wxControlAction action;
+    if ( arrow == wxScrollArrows::Arrow_First )
+        action = IsVertical() ? wxACTION_SPIN_INC : wxACTION_SPIN_DEC;
+    else
+        action = IsVertical() ? wxACTION_SPIN_DEC : wxACTION_SPIN_INC;
+
+    PerformAction(action);
+
+    // did we scroll to the end?
+    return GetValue() != valueOld;
+}
+
+// ----------------------------------------------------------------------------
+// drawing
+// ----------------------------------------------------------------------------
 
 void wxSpinButton::DoDraw(wxControlRenderer *renderer)
+{
+    wxRect rectArrow1, rectArrow2;
+    CalcArrowRects(&rectArrow1, &rectArrow2);
+
+    wxDC& dc = renderer->GetDC();
+    m_arrows.DrawArrow(wxScrollArrows::Arrow_First, dc, rectArrow1);
+    m_arrows.DrawArrow(wxScrollArrows::Arrow_Second, dc, rectArrow2);
+}
+
+// ----------------------------------------------------------------------------
+// geometry
+// ----------------------------------------------------------------------------
+
+void wxSpinButton::CalcArrowRects(wxRect *rect1, wxRect *rect2) const
 {
     // calculate the rectangles for both arrows: note that normally the 2
     // arrows are adjacent to each other but if the total control width/height
     // is odd, we can have 1 pixel between them
-    wxRect rectArrow1, rectArrow2,
-           rectTotal = GetClientRect();
+    wxRect rectTotal = GetClientRect();
 
-    rectArrow1 =
-    rectArrow2 = rectTotal;
+    *rect1 =
+    *rect2 = rectTotal;
     if ( IsVertical() )
     {
-        rectArrow1.height /= 2;
-        rectArrow2.height /= 2;
+        rect1->height /= 2;
+        rect2->height /= 2;
+
+        rect2->y += rect1->height;
         if ( rectTotal.height % 2 )
-            rectArrow2.y++;
+            rect2->y++;
     }
     else // horizontal
     {
-        rectArrow1.width /= 2;
-        rectArrow2.width /= 2;
-        if ( rectTotal.width % 2 )
-            rectArrow2.x++;
-    }
+        rect1->width /= 2;
+        rect2->width /= 2;
 
-    DrawArrow(Arrow_First, renderer->GetDC(), rectArrow1);
-    DrawArrow(Arrow_Second, renderer->GetDC(), rectArrow2);
+        rect2->x += rect1->width;
+        if ( rectTotal.width % 2 )
+            rect2->x++;
+    }
+}
+
+wxScrollArrows::Arrow wxSpinButton::HitTest(const wxPoint& pt) const
+{
+    wxRect rectArrow1, rectArrow2;
+    CalcArrowRects(&rectArrow1, &rectArrow2);
+
+    if ( rectArrow1.Inside(pt) )
+        return wxScrollArrows::Arrow_First;
+    else if ( rectArrow2.Inside(pt) )
+        return wxScrollArrows::Arrow_Second;
+    else
+        return wxScrollArrows::Arrow_None;
 }
 
 // ----------------------------------------------------------------------------
@@ -239,7 +331,7 @@ bool wxSpinButton::PerformAction(const wxControlAction& action,
 
 wxStdSpinButtonInputHandler::
 wxStdSpinButtonInputHandler(wxInputHandler *inphand)
-    : wxStdInputHandler(handler)
+    : wxStdInputHandler(inphand)
 {
 }
 
@@ -277,11 +369,29 @@ bool wxStdSpinButtonInputHandler::HandleKey(wxControl *control,
 bool wxStdSpinButtonInputHandler::HandleMouse(wxControl *control,
                                               const wxMouseEvent& event)
 {
+    wxSpinButton *spinbtn = wxStaticCast(control, wxSpinButton);
+
+    if ( spinbtn->GetArrows().HandleMouse(event) )
+    {
+        // don't refresh, everything is already done
+        return FALSE;
+    }
+
+    return wxStdInputHandler::HandleMouse(control, event);
 }
 
 bool wxStdSpinButtonInputHandler::HandleMouseMove(wxControl *control,
                                                   const wxMouseEvent& event)
 {
+    wxSpinButton *spinbtn = wxStaticCast(control, wxSpinButton);
+
+    if ( spinbtn->GetArrows().HandleMouseMove(event) )
+    {
+        // processed by the arrows
+        return FALSE;
+    }
+
+    return wxStdInputHandler::HandleMouseMove(control, event);
 }
 
 

@@ -47,6 +47,7 @@ MSW
 
 GTK
 
+*   disabled arrows not drawn as disabled
 ?   listbox scrolling leaves unpainted areas
 *   focused textctrl doesn't have focus border
 

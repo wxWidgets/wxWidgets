@@ -323,7 +323,8 @@ public:
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
-    bool Inside(int cx, int cy) const;
+    bool Inside(int x, int y) const;
+    bool Inside(const wxPoint& pt) const { return Inside(pt.x, pt.y); }
 
 public:
     int x, y, width, height;

@@ -12,11 +12,102 @@
 #ifndef _WX_GENERIC_SPINCTRL_H_
 #define _WX_GENERIC_SPINCTRL_H_
 
-#include "wx/textctrl.h"
+// ----------------------------------------------------------------------------
+// wxSpinCtrl is a combination of wxSpinButton and wxTextCtrl, so if
+// wxSpinButton is available, this is what we do - but if it isn't, we still
+// define wxSpinCtrl class which then has the same appearance as wxTextCtrl but
+// the different interface. This allows to write programs using wxSpinCtrl
+// without tons of #ifdefs.
+// ----------------------------------------------------------------------------
+
+#if wxUSE_SPINBTN
+
+#ifdef __GNUG__
+    #pragma interface "spinctlg.h"
+#endif
+
+class WXDLLEXPORT wxSpinButton;
+class WXDLLEXPORT wxTextCtrl;
 
 // ----------------------------------------------------------------------------
-// generic wxSpinCtrl is just a text control
+// wxSpinCtrl is a combination of wxTextCtrl and wxSpinButton
 // ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxSpinCtrl : public wxControl
+{
+public:
+    wxSpinCtrl() { Init(); }
+
+    wxSpinCtrl(wxWindow *parent,
+               wxWindowID id = -1,
+               const wxString& value = wxEmptyString,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxSP_ARROW_KEYS,
+               int min = 0, int max = 100, int initial = 0,
+               const wxString& name = _T("wxSpinCtrl"))
+    {
+        Create(parent, id, value, pos, size, style, min, max, initial, name);
+    }
+
+    bool Create(wxWindow *parent,
+                wxWindowID id = -1,
+                const wxString& value = wxEmptyString,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxSP_ARROW_KEYS,
+                int min = 0, int max = 100, int initial = 0,
+                const wxString& name = _T("wxSpinCtrl"));
+
+    // operations
+    void SetValue(int val);
+    void SetValue(const wxString& text);
+    void SetRange(int min, int max);
+
+    // accessors
+    int GetValue() const;
+    int GetMin() const;
+    int GetMax() const;
+
+    // implementation from now on
+
+    // forward these functions to all subcontrols
+    virtual bool Enable(bool enable = TRUE);
+    virtual bool Show(bool show = TRUE);
+
+    // get the subcontrols
+    wxTextCtrl *GetText() const { return m_text; }
+    wxSpinButton *GetSpinButton() const { return m_btn; }
+
+    // set the value of the text (only)
+    void SetTextValue(int val);
+
+    // put the numeric value of the string in the text ctrl into val and return
+    // TRUE or return FALSE if the text ctrl doesn't contain a number or if the
+    // number is out of range
+    bool GetTextValue(int *val) const;
+
+protected:
+    // override the base class virtuals involved into geometry calculations
+    virtual wxSize DoGetBestClientSize() const;
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+
+    // common part of all ctors
+    void Init();
+
+private:
+    // the subcontrols
+    wxTextCtrl *m_text;
+    wxSpinButton *m_btn;
+};
+
+#else // !wxUSE_SPINBTN
+
+// ----------------------------------------------------------------------------
+// wxSpinCtrl is just a text control
+// ----------------------------------------------------------------------------
+
+#include "wx/textctrl.h"
 
 class WXDLLEXPORT wxSpinCtrl : public wxTextCtrl
 {
@@ -78,6 +169,8 @@ protected:
     int   m_min;
     int   m_max;
 };
+
+#endif // wxUSE_SPINBTN/!wxUSE_SPINBTN
 
 #endif // _WX_GENERIC_SPINCTRL_H_
 

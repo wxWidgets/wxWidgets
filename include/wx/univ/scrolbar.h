@@ -16,6 +16,8 @@
     #pragma interface "univscrolbar.h"
 #endif
 
+#include "wx/univ/scrarrow.h"
+
 // ----------------------------------------------------------------------------
 // the actions supported by this control
 // ----------------------------------------------------------------------------
@@ -37,7 +39,8 @@
 // wxScrollBar
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxScrollBar : public wxScrollBarBase
+class WXDLLEXPORT wxScrollBar : public wxScrollBarBase,
+                                public wxControlWithArrows
 {
 public:
     // scrollbar elements: they correspond to wxHT_SCROLLBAR_XXX constants but
@@ -54,19 +57,14 @@ public:
         Element_Max
     };
 
-    wxScrollBar() { Init(); }
+    wxScrollBar();
     wxScrollBar(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxScrollBarNameStr)
-    {
-        Init();
-
-        Create(parent, id, pos, size, style, validator, name);
-    }
+                const wxString& name = wxScrollBarNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -103,6 +101,18 @@ public:
     void SetState(Element which, int flags);
     int GetState(Element which) const;
 
+    // implement wxControlWithArrows methods
+    virtual wxRenderer *GetRenderer() const { return m_renderer; }
+    virtual wxWindow *GetWindow() { return this; }
+    virtual bool IsVertical() const { return wxScrollBarBase::IsVertical(); }
+    virtual int GetArrowState(wxScrollArrows::Arrow arrow) const;
+    virtual void SetArrowFlag(wxScrollArrows::Arrow arrow, int flag, bool set);
+    virtual bool OnArrow(wxScrollArrows::Arrow arrow);
+    virtual wxScrollArrows::Arrow HitTest(const wxPoint& pt) const;
+
+    // for wxControlRenderer::DrawScrollbar() only
+    const wxScrollArrows& GetArrows() const { return m_arrows; }
+
 protected:
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
@@ -137,6 +147,9 @@ private:
 
     // the dirty flag: if set, scrollbar must be updated
     bool m_dirty;
+
+    // the object handling the arrows
+    wxScrollArrows m_arrows;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
@@ -221,7 +234,7 @@ protected:
 
     // the timer for generating scroll events when the mouse stays pressed on
     // a scrollbar
-    class wxTimer *m_timerScroll;
+    wxScrollTimer *m_timerScroll;
 };
 
 #endif // _WX_UNIV_SCROLBAR_H_

@@ -16,6 +16,8 @@
     #pragma interface "univspinbutt.h"
 #endif
 
+#include "wx/univ/scrarrow.h"
+
 // ----------------------------------------------------------------------------
 // wxSpinButton
 // ----------------------------------------------------------------------------
@@ -24,21 +26,17 @@
 #define wxACTION_SPIN_INC    _T("inc")
 #define wxACTION_SPIN_DEC    _T("dec")
 
-class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase
+class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase,
+                                 public wxControlWithArrows
 {
 public:
-    wxSpinButton() { Init(); }
+    wxSpinButton();
     wxSpinButton(wxWindow *parent,
                  wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
-                 const wxString& name = )
-    {
-        Init();
-
-        (void)Create(parent, id, pos, size, style, name);
-    }
+                 const wxString& name = wxSPIN_BUTTON_NAME);
 
     bool Create(wxWindow *parent,
                 wxWindowID id = -1,
@@ -51,16 +49,17 @@ public:
     virtual int GetValue() const;
     virtual void SetValue(int val);
 
-    // implementation only from now on
-    enum
-    {
-        Arrow_First,        // left or top
-        Arrow_Second,       // right or bottom
-        Arrow_Max
-    } Arrow;
+    // implement wxControlWithArrows methods
+    virtual wxRenderer *GetRenderer() const { return m_renderer; }
+    virtual wxWindow *GetWindow() { return this; }
+    virtual bool IsVertical() const { return wxSpinButtonBase::IsVertical(); }
+    virtual int GetArrowState(wxScrollArrows::Arrow arrow) const;
+    virtual void SetArrowFlag(wxScrollArrows::Arrow arrow, int flag, bool set);
+    virtual bool OnArrow(wxScrollArrows::Arrow arrow);
+    virtual wxScrollArrows::Arrow HitTest(const wxPoint& pt) const;
 
-    int GetArrowState(Arrow arrow) const;
-    void SetArrowSatte(Arrow arrow, int state);
+    // for wxStdSpinButtonInputHandler
+    const wxScrollArrows& GetArrows() { return m_arrows; }
 
 protected:
     virtual wxSize DoGetBestClientSize() const;
@@ -71,6 +70,9 @@ protected:
                                long numArg = 0,
                                const wxString& strArg = wxEmptyString);
 
+    // the common part of all ctors
+    void Init();
+
     // normalize the value to fit into min..max range
     int NormalizeValue(int value) const;
 
@@ -78,18 +80,20 @@ protected:
     // changed
     bool ChangeValue(int inc);
 
-    // DoDraw() helper
-    void DrawArrow(Arrow arrow, wxDC& dc, const wxRect& rect);
-
-    // the common part of all ctors
-    void Init();
+    // get the rectangles for our 2 arrows
+    void CalcArrowRects(wxRect *rect1, wxRect *rect2) const;
 
     // the current controls value
     int m_value;
 
 private:
+    // the object which manages our arrows
+    wxScrollArrows m_arrows;
+
     // the state (combination of wxCONTROL_XXX flags) of the arrows
-    int m_arrowsState[Arrow_Max];
+    int m_arrowsState[wxScrollArrows::Arrow_Max];
+
+    DECLARE_DYNAMIC_CLASS(wxSpinButton)
 };
 
 // ----------------------------------------------------------------------------
@@ -107,15 +111,8 @@ public:
                            bool pressed);
     virtual bool HandleMouse(wxControl *control,
                              const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
-
-    virtual ~wxStdSpinButtonInputHandler();
-
-    // this method is called by wxScrollBarTimer only and may be overridden
-    //
-    // return TRUE to continue scrolling, FALSE to stop the timer
-    virtual bool OnScrollTimer(wxScrollBar *scrollbar,
-                               const wxControlAction& action);
+    virtual bool HandleMouseMove(wxControl *control,
+                                 const wxMouseEvent& event);
 };
 
 

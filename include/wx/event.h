@@ -596,8 +596,6 @@ public:
 
 class WXDLLEXPORT wxMouseEvent : public wxEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxMouseEvent)
-
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
 
@@ -618,6 +616,9 @@ public:
 
     // Was the given button 1,2,3 or any in Down state?
     bool ButtonIsDown(int but) const;
+
+    // Get the button which is changing state (-1 if none)
+    int GetButton() const;
 
     // Find state of shift/control keys
     bool ControlDown() const { return m_controlDown; }
@@ -720,6 +721,9 @@ public:
     bool          m_shiftDown;
     bool          m_altDown;
     bool          m_metaDown;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxMouseEvent)
 };
 
 // Cursor set event

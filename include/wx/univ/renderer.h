@@ -119,6 +119,12 @@ public:
                            const wxRect& rect,
                            int flags = 0) = 0;
 
+    // draw a scrollbar arrow (may be the same as arrow but may be not)
+    virtual void DrawScrollbarArrow(wxDC& dc,
+                                    wxDirection dir,
+                                    const wxRect& rect,
+                                    int flags = 0) = 0;
+
     // draw the scrollbar thumb
     virtual void DrawScrollbarThumb(wxDC& dc,
                                     wxOrientation orient,
@@ -355,6 +361,11 @@ public:
                            const wxRect& rect,
                            int flags = 0)
         { m_renderer->DrawArrow(dc, dir, rect, flags); }
+    virtual void DrawScrollbarArrow(wxDC& dc,
+                           wxDirection dir,
+                           const wxRect& rect,
+                           int flags = 0)
+        { m_renderer->DrawScrollbarArrow(dc, dir, rect, flags); }
     virtual void DrawScrollbarThumb(wxDC& dc,
                                     wxOrientation orient,
                                     const wxRect& rect,

@@ -313,7 +313,8 @@ bool wxMouseEvent::ButtonDown(int but) const
 // or any button up event (but = -1)
 bool wxMouseEvent::ButtonUp(int but) const
 {
-    switch (but) {
+    switch (but)
+    {
         case -1:
             return (LeftUp() || MiddleUp() || RightUp());
         case 1:
@@ -332,7 +333,8 @@ bool wxMouseEvent::ButtonUp(int but) const
 // True if the given button is currently changing state
 bool wxMouseEvent::Button(int but) const
 {
-    switch (but) {
+    switch (but)
+    {
         case -1:
             return (ButtonUp(-1) || ButtonDown(-1) || ButtonDClick(-1));
         case 1:
@@ -350,7 +352,8 @@ bool wxMouseEvent::Button(int but) const
 
 bool wxMouseEvent::ButtonIsDown(int but) const
 {
-    switch (but) {
+    switch (but)
+    {
         case -1:
             return (LeftIsDown() || MiddleIsDown() || RightIsDown());
         case 1:
@@ -364,6 +367,19 @@ bool wxMouseEvent::ButtonIsDown(int but) const
     }
 
     return FALSE;
+}
+
+int wxMouseEvent::GetButton() const
+{
+    for ( int i = 1; i <= 3; i++ )
+    {
+        if ( Button(i) )
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 // Find the logical position of the event given the DC

@@ -84,8 +84,8 @@
 #define wxUSE_SASH         0
 #define wxUSE_SCROLLBAR    1
 #define wxUSE_SLIDER       0
-#define wxUSE_SPINBTN      0
-#define wxUSE_SPINCTRL     0
+#define wxUSE_SPINBTN      1
+#define wxUSE_SPINCTRL     1
 #define wxUSE_STATBOX      1
 #define wxUSE_STATLINE     1
 #define wxUSE_STATTEXT     1

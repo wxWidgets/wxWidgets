@@ -39,6 +39,8 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/spinbutt.h"
+
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
@@ -148,6 +150,11 @@ public:
                            wxDirection dir,
                            const wxRect& rect,
                            int flags = 0);
+    virtual void DrawScrollbarArrow(wxDC& dc,
+                                    wxDirection dir,
+                                    const wxRect& rect,
+                                    int flags = 0)
+        { DrawArrow(dc, dir, rect, flags); }
     virtual void DrawScrollbarThumb(wxDC& dc,
                                     wxOrientation orient,
                                     const wxRect& rect,
@@ -819,6 +826,10 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_TEXTCTRL )
             handler = new wxWin32TextCtrlInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_TEXTCTRL
+#if wxUSE_SPINBTN
+        else if ( control == wxINP_HANDLER_SPINBTN )
+            handler = new wxStdSpinButtonInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_SPINBTN
         else
             handler = GetDefaultInputHandler();
 

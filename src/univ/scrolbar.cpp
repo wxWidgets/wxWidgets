@@ -53,26 +53,20 @@
 // given scroll action command periodically.
 // ----------------------------------------------------------------------------
 
-class wxScrollBarTimer : public wxTimer
+class wxScrollBarTimer : public wxScrollTimer
 {
 public:
     wxScrollBarTimer(wxStdScrollBarInputHandler *handler,
                      const wxControlAction& action,
                      wxScrollBar *control);
 
-    void StartAutoScroll();
-
-    virtual void Notify();
-
 protected:
-    void DoNotify();
+    virtual void DoNotify();
 
 private:
     wxStdScrollBarInputHandler *m_handler;
     wxControlAction m_action;
     wxScrollBar    *m_control;
-
-    bool m_skipNext;
 };
 
 // ============================================================================
@@ -88,6 +82,36 @@ END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 // creation
 // ----------------------------------------------------------------------------
+
+#ifdef __VISUALC__
+    // warning C4355: 'this' : used in base member initializer list
+    #pragma warning(disable:4355)  // so what? disable it...
+#endif
+
+wxScrollBar::wxScrollBar()
+           : m_arrows(this)
+{
+    Init();
+}
+
+wxScrollBar::wxScrollBar(wxWindow *parent,
+                         wxWindowID id,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxValidator& validator,
+                         const wxString& name)
+           : m_arrows(this)
+{
+    Init();
+
+    (void)Create(parent, id, pos, size, style, validator, name);
+}
+
+#ifdef __VISUALC__
+    // warning C4355: 'this' : used in base member initializer list
+    #pragma warning(default:4355)
+#endif
 
 void wxScrollBar::Init()
 {
@@ -229,13 +253,40 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize,
 }
 
 // ----------------------------------------------------------------------------
-// size management
+// geometry
 // ----------------------------------------------------------------------------
 
 wxSize wxScrollBar::DoGetBestClientSize() const
 {
-    // completely arbitrary
-    return wxSize(140, 140);
+    // this dimension is completely arbitrary
+    static const wxCoord SIZE = 140;
+
+    wxSize size = m_renderer->GetScrollbarArrowSize();
+    if ( IsVertical() )
+    {
+        size.y = SIZE;
+    }
+    else // horizontal
+    {
+        size.x = SIZE;
+    }
+
+    return size;
+}
+
+wxScrollArrows::Arrow wxScrollBar::HitTest(const wxPoint& pt) const
+{
+    switch ( m_renderer->HitTestScrollbar(this, pt) )
+    {
+        case wxHT_SCROLLBAR_ARROW_LINE_1:
+            return wxScrollArrows::Arrow_First;
+
+        case wxHT_SCROLLBAR_ARROW_LINE_2:
+            return wxScrollArrows::Arrow_Second;
+
+        default:
+            return wxScrollArrows::Arrow_None;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -316,6 +367,8 @@ void wxScrollBar::OnIdle(wxIdleEvent& event)
 
         m_dirty = FALSE;
     }
+
+    event.Skip();
 }
 
 void wxScrollBar::DoDraw(wxControlRenderer *renderer)
@@ -330,6 +383,30 @@ void wxScrollBar::DoDraw(wxControlRenderer *renderer)
 // ----------------------------------------------------------------------------
 // state flags
 // ----------------------------------------------------------------------------
+
+static inline wxScrollBar::Element ElementForArrow(wxScrollArrows::Arrow arrow)
+{
+    return arrow == wxScrollArrows::Arrow_First
+            ? wxScrollBar::Element_Arrow_Line_1
+            : wxScrollBar::Element_Arrow_Line_2;
+}
+
+int wxScrollBar::GetArrowState(wxScrollArrows::Arrow arrow) const
+{
+    return GetState(ElementForArrow(arrow));
+}
+
+void wxScrollBar::SetArrowFlag(wxScrollArrows::Arrow arrow, int flag, bool set)
+{
+    Element which = ElementForArrow(arrow);
+    int state = GetState(which);
+    if ( set )
+        state |= flag;
+    else
+        state &= ~flag;
+
+    SetState(which, state);
+}
 
 int wxScrollBar::GetState(Element which) const
 {
@@ -354,6 +431,17 @@ void wxScrollBar::SetState(Element which, int flags)
 // ----------------------------------------------------------------------------
 // input processing
 // ----------------------------------------------------------------------------
+
+bool wxScrollBar::OnArrow(wxScrollArrows::Arrow arrow)
+{
+    int oldThumbPos = GetThumbPosition();
+    PerformAction(arrow == wxScrollArrows::Arrow_First
+                    ? wxACTION_SCROLL_LINE_UP
+                    : wxACTION_SCROLL_LINE_DOWN);
+
+    // did we scroll till the end?
+    return GetThumbPosition() != oldThumbPos;
+}
 
 bool wxScrollBar::PerformAction(const wxControlAction& action,
                                 long numArg,
@@ -466,41 +554,11 @@ wxScrollBarTimer::wxScrollBarTimer(wxStdScrollBarInputHandler *handler,
     m_handler = handler;
     m_action = action;
     m_control = control;
-
-    m_skipNext = FALSE;
-}
-
-void wxScrollBarTimer::StartAutoScroll()
-{
-    // start scrolling immediately
-    DoNotify();
-
-    // there is an initial delay before the scrollbar starts scrolling -
-    // implement it by ignoring the first timer expiration and only start
-    // scrolling from the second one
-    m_skipNext = TRUE;
-    Start(200); // FIXME: hardcoded delay
 }
 
 void wxScrollBarTimer::DoNotify()
 {
     m_handler->OnScrollTimer(m_control, m_action);
-}
-
-void wxScrollBarTimer::Notify()
-{
-    if ( m_skipNext )
-    {
-        // scroll normally now - reduce the delay
-        Stop();
-        Start(50); // FIXME: hardcoded delay
-
-        m_skipNext = FALSE;
-    }
-    else
-    {
-        DoNotify();
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -628,21 +686,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxControl *control,
                                              const wxMouseEvent& event)
 {
     // is this a click event from an acceptable button?
-    int btn = -1;
-    if ( event.IsButton() )
-    {
-        for ( int i = 1; i <= 3; i++ )
-        {
-            if ( event.Button(i) )
-            {
-                btn = i;
-                break;
-            }
-        }
-
-        wxASSERT_MSG( btn != -1, _T("unknown mouse button") );
-    }
-
+    int btn = event.GetButton();
     if ( (btn != -1) && IsAllowedButton(btn) )
     {
         // determine which part of the window mouse is in
@@ -710,12 +754,9 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxControl *control,
                 // start dragging
                 if ( hasAction )
                 {
-                    // this slightly unreadable code is necessary because
-                    // m_timerScroll is of class wxTimer, not wxScrollBarTimer
-                    wxScrollBarTimer *timerScroll =
-                        new wxScrollBarTimer(this, action, scrollbar);
-                    m_timerScroll = timerScroll;
-                    timerScroll->StartAutoScroll();
+                    m_timerScroll = new wxScrollBarTimer(this, action,
+                                                         scrollbar);
+                    m_timerScroll->StartAutoScroll();
                 }
                 //else: no (immediate) action
 
@@ -771,6 +812,8 @@ bool wxStdScrollBarInputHandler::HandleMouseMove(wxControl *control,
         return FALSE;
     }
 
+    bool isArrow = scrollbar->GetArrows().HandleMouseMove(event);
+
     if ( event.Moving() )
     {
         wxHitTest ht = m_renderer->HitTestScrollbar
@@ -790,14 +833,19 @@ bool wxStdScrollBarInputHandler::HandleMouseMove(wxControl *control,
 
         Highlight(scrollbar, FALSE);
         m_htLast = ht;
-        Highlight(scrollbar, TRUE);
+
+        if ( !isArrow )
+            Highlight(scrollbar, TRUE);
+        //else: already done by wxScrollArrows::HandleMouseMove
     }
     else if ( event.Leaving() )
     {
-        Highlight(scrollbar, FALSE);
+        if ( !isArrow )
+            Highlight(scrollbar, FALSE);
+
         m_htLast = wxHT_NOWHERE;
     }
-    else
+    else // event.Entering()
     {
         // we don't process this event
         return FALSE;

@@ -50,7 +50,9 @@ protected:
 // include the platform-dependent class implementation
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__) && defined(__WIN32__)
+#if defined(__WXUNIVERSAL__
+    #include "wx/generic/spinctlg.h"
+#elif defined(__WXMSW__) && defined(__WIN32__)
     #include "wx/msw/spinctrl.h"
 #elif defined(__WXPM__)
     #include "wx/os2/spinctrl.h"
@@ -60,7 +62,6 @@ protected:
     #include "wx/generic/spinctlg.h"
 #endif // platform
 
-// Macro must be defined here, not event.h, since it must reference wxSpinEventFunction
 #define EVT_SPINCTRL(id, fn) { wxEVT_COMMAND_SPINCTRL_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & fn, (wxObject *) NULL },
 
 #endif // _WX_SPINCTRL_H_
