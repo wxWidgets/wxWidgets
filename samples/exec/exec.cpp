@@ -35,6 +35,9 @@
     #include "wx/app.h"
     #include "wx/frame.h"
     #include "wx/utils.h"
+    #include "wx/menu.h"
+    #include "wx/msgdlg.h"
+    #include "wx/textdlg.h"
 #endif
 
 #include "wx/process.h"
