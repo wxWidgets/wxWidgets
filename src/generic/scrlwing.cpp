@@ -675,7 +675,7 @@ void wxScrollHelper::AdjustScrollbars()
         }
 
         if (!m_targetWindow->GetBackingPixmap() &&
-           (noUnitsX != 0) && (noUnitsY != 0))
+           (m_xScrollLines != 0) && (m_yScrollLines != 0))
         {
             int depth = wxDisplayDepth();
             m_targetWindow->SetPixmapWidth(totalPixelWidth);
