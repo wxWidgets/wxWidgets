@@ -150,6 +150,8 @@ void csFrame::OnSize(wxSizeEvent& event)
 // Make sure the correct toolbars are showing for the active view
 void csFrame::OnIdle(wxIdleEvent& event)
 {
+    wxDocMDIParentFrame::OnIdle(event);
+
     wxSashLayoutWindow* paletteWin = wxGetApp().GetDiagramPaletteSashWindow();
     wxSashLayoutWindow* diagramToolBarWin = wxGetApp().GetDiagramToolBarSashWindow();
     if (!paletteWin || !diagramToolBarWin)
@@ -199,7 +201,6 @@ void csFrame::OnIdle(wxIdleEvent& event)
 #endif
 #endif
     }
-    event.Skip();
 }
 
 // General handler for disabling items

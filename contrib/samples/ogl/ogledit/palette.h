@@ -18,8 +18,11 @@
 
 #include <wx/wx.h>
 #include <wx/string.h>
-#include <wx/deprecated/setup.h>
+#if 0 // def __WXGTK__
+#include <wx/toolbar.h>
+#else
 #include <wx/deprecated/tbarsmpl.h>
+#endif
 
 /*
  * Object editor tool palette

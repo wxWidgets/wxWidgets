@@ -17,7 +17,6 @@
 #define _OGLSAMPLE_OGLEDIT_H_
 
 #include <wx/docview.h>
-#include <wx/deprecated/setup.h>
 
 // Define a new application
 class MyFrame;
