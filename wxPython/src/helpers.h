@@ -101,6 +101,9 @@ bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj);
 bool wxRect_helper(PyObject* source, wxRect** obj);
 bool wxColour_helper(PyObject* source, wxColour** obj);
 
+//----------------------------------------------------------------------
+// Other helpful stuff
+
 #if PYTHON_API_VERSION < 1009
 #define PySequence_Fast_GET_ITEM(o, i) \
      (PyList_Check(o) ? PyList_GET_ITEM(o, i) : PyTuple_GET_ITEM(o, i))
@@ -113,9 +116,9 @@ bool _4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
 PyObject* wxArrayString2PyList_helper(const wxArrayString& arr);
 PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr);
 
-
-#define RETURN_NONE()               { Py_INCREF(Py_None); return Py_None; }
-#define DECLARE_DEF_STRING(name)    static wxString wxPy##name(wx##name)
+#define RETURN_NONE()                 { Py_INCREF(Py_None); return Py_None; }
+#define DECLARE_DEF_STRING(name)      static const wxString wxPy##name(wx##name)
+#define DECLARE_DEF_STRING2(name,val) static const wxString wxPy##name(val)
 
 //----------------------------------------------------------------------
 
@@ -201,6 +204,18 @@ public:
 };
 
 
+
+//----------------------------------------------------------------------
+// Forward decalre a few things used in the exported API
+class wxPyClientData;
+class wxPyUserData;
+class wxPyOORClientData;
+
+void wxPyClientData_dtor(wxPyClientData* self);
+void wxPyUserData_dtor(wxPyUserData* self);
+void wxPyOORClientData_dtor(wxPyOORClientData* self);
+
+
 //---------------------------------------------------------------------------
 // Export a C API in a struct.  Other modules will be able to load this from
 // the wxc module and will then have safe access to these functions, even if
@@ -256,11 +271,69 @@ struct wxPyCoreAPI {
     void        (*p_wxPyPtrTypeMap_Add)(const char* commonName, const char* ptrName);
     PyObject*   (*p_wxArrayString2PyList_helper)(const wxArrayString& arr);
     PyObject*   (*p_wxArrayInt2PyList_helper)(const wxArrayInt& arr);
+
+    void        (*p_wxPyClientData_dtor)(wxPyClientData*);
+    void        (*p_wxPyUserData_dtor)(wxPyUserData*);
+    void        (*p_wxPyOORClientData_dtor)(wxPyOORClientData*);
 };
 
 #ifdef wxPyUSE_EXPORT
-static wxPyCoreAPI* wxPyCoreAPIPtr = NULL;  // Each module needs one, but may not use it.
+static wxPyCoreAPI* wxPyCoreAPIPtr = NULL;  // Each module needs one, but doesn't have to use it.
 #endif
+
+
+//---------------------------------------------------------------------------
+
+
+class wxPyUserData : public wxObject {
+public:
+    wxPyUserData(PyObject* obj) {
+        m_obj = obj;
+        Py_INCREF(m_obj);
+    }
+
+    ~wxPyUserData() {
+#ifdef wxPyUSE_EXPORT
+        wxPyCoreAPIPtr->p_wxPyUserData_dtor(this);
+#else
+        wxPyUserData_dtor(this);
+#endif
+    }
+    PyObject* m_obj;
+};
+
+
+class wxPyClientData : public wxClientData {
+public:
+    wxPyClientData(PyObject* obj) {
+        m_obj = obj;
+        Py_INCREF(m_obj);
+    }
+
+    ~wxPyClientData() {
+#ifdef wxPyUSE_EXPORT
+        wxPyCoreAPIPtr->p_wxPyClientData_dtor(this);
+#else
+        wxPyClientData_dtor(this);
+#endif
+    }
+    PyObject* m_obj;
+};
+
+
+class wxPyOORClientData : public wxPyClientData {
+public:
+    wxPyOORClientData(PyObject* obj)
+        : wxPyClientData(obj) {}
+
+    ~wxPyOORClientData() {
+#ifdef wxPyUSE_EXPORT
+        wxPyCoreAPIPtr->p_wxPyOORClientData_dtor(this);
+#else
+        wxPyOORClientData_dtor(this);
+#endif
+    }
+};
 
 //---------------------------------------------------------------------------
 // This class holds an instance of a Python Shadow Class object and assists
@@ -310,53 +383,6 @@ int  wxPyCBH_callCallback(const wxPyCallbackHelper& cbh, PyObject* argTuple);
 PyObject* wxPyCBH_callCallbackObj(const wxPyCallbackHelper& cbh, PyObject* argTuple);
 void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 
-
-
-//----------------------------------------------------------------------
-
-class wxPyUserData : public wxObject {
-public:
-    wxPyUserData(PyObject* obj) {
-        m_obj = obj;
-        Py_INCREF(m_obj);
-    }
-
-    ~wxPyUserData() {
-#ifdef wxPyUSE_EXPORT
-        wxPyCoreAPIPtr->p_wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyCoreAPIPtr->p_wxPyEndBlockThreads();
-#else
-        wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
-#endif
-    }
-    PyObject* m_obj;
-};
-
-
-
-class wxPyClientData : public wxClientData {
-public:
-    wxPyClientData(PyObject* obj) {
-        m_obj = obj;
-        Py_INCREF(m_obj);
-    }
-
-    ~wxPyClientData() {
-#ifdef wxPyUSE_EXPORT
-        wxPyCoreAPIPtr->p_wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyCoreAPIPtr->p_wxPyEndBlockThreads();
-#else
-        wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
-#endif
-    }
-    PyObject* m_obj;
-};
 
 
 

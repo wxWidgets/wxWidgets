@@ -866,14 +866,14 @@ class wxBufferedDC(wxBufferedDCPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxBufferedDC,_args,_kwargs)
         self.thisown = 1
-        self._dc = _args[0] # save a ref so it won't be deleted before self
+        self._dc = _args[0] # save a ref so the other dc won't be deleted before self
 
 
 
 def wxBufferedDCInternalBuffer(*_args,**_kwargs):
     val = wxBufferedDCPtr(apply(gdic.new_wxBufferedDCInternalBuffer,_args,_kwargs))
     val.thisown = 1
-    val._dc = _args[0] # save a ref so it won't be deleted before self
+    val._dc = _args[0] # save a ref so the other dc won't be deleted before self
     return val
 
 

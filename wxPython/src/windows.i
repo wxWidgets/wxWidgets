@@ -87,7 +87,7 @@ public:
 
     %addmethods {
         void _setOORInfo(PyObject* _self) {
-            self->SetClientObject(new wxPyClientData(_self));
+            self->SetClientObject(new wxPyOORClientData(_self));
         }
     }
 };

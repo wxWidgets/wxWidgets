@@ -295,6 +295,7 @@ void __wxCleanup() {
 static PyObject* wxPython_dict = NULL;
 static PyObject* wxPyPtrTypeMap = NULL;
 
+
 PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 {
 
@@ -334,6 +335,52 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
     return Py_None;
 }
 
+//---------------------------------------------------------------------------
+
+void wxPyClientData_dtor(wxPyClientData* self) {
+    wxPyBeginBlockThreads();
+    Py_DECREF(self->m_obj);
+    wxPyEndBlockThreads();
+}
+
+void wxPyUserData_dtor(wxPyUserData* self) {
+    wxPyBeginBlockThreads();
+    Py_DECREF(self->m_obj);
+    wxPyEndBlockThreads();
+}
+
+
+// This is called when an OOR controled object is being destroyed.  Although
+// the C++ object is going away there is no way to force the Python object
+// (and all references to it) to die too.  This causes problems (crashes) in
+// wxPython when a python shadow object attempts to call a C++ method using
+// the now bogus pointer... So to try and prevent this we'll do a little black
+// magic and change the class of the python instance to a class that will
+// raise an exception for any attempt to call methods with it.  See
+// _wxPyDeadObject in _extras.py for the implementation of this class.
+void wxPyOORClientData_dtor(wxPyOORClientData* self) {
+
+    static PyObject* deadObjectClass = NULL;
+
+    wxPyBeginBlockThreads();
+    if (deadObjectClass == NULL) {
+        deadObjectClass = PyDict_GetItemString(wxPython_dict, "_wxPyDeadObject");
+        wxASSERT_MSG(deadObjectClass != NULL, wxT("Can't get _wxPyDeadObject class!"));
+        Py_INCREF(deadObjectClass);
+    }
+
+    // Clear the instance's dictionary, put the name of the old class into the
+    // instance, and then reset the class to be the dead class.
+    if (self->m_obj->ob_refcnt > 1) {  // but only if there is more than one reference
+        wxASSERT_MSG(PyInstance_Check(self->m_obj), wxT("m_obj not an instance!?!?!"));
+        PyInstanceObject* inst = (PyInstanceObject*)self->m_obj;
+        PyDict_Clear(inst->in_dict);
+        PyDict_SetItemString(inst->in_dict, "_name", inst->in_class->cl_name);
+        inst->in_class = (PyClassObject*)deadObjectClass;
+        Py_INCREF(deadObjectClass);
+    }
+    wxPyEndBlockThreads();
+}
 
 //---------------------------------------------------------------------------
 // Stuff used by OOR to find the right wxPython class type to return and to
@@ -344,6 +391,7 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 // is not the same as the shadow class name, for example wxPyTreeCtrl
 // vs. wxTreeCtrl.  It needs to be referenced in Python as well as from C++,
 // so we'll just make it a Python dictionary in the wx module's namespace.
+// (See __wxSetDictionary)
 void wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName) {
     if (! wxPyPtrTypeMap)
         wxPyPtrTypeMap = PyDict_New();
@@ -379,7 +427,7 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
         if (checkEvtHandler && wxIsKindOf(source, wxEvtHandler)) {
             isEvtHandler = TRUE;
             wxEvtHandler* eh = (wxEvtHandler*)source;
-            wxPyClientData* data = (wxPyClientData*)eh->GetClientObject();
+            wxPyOORClientData* data = (wxPyOORClientData*)eh->GetClientObject();
             if (data) {
                 target = data->m_obj;
                 Py_INCREF(target);
@@ -400,9 +448,9 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
             if (info) {
                 target = wxPyConstructObject(source, name, klass, FALSE);
                 if (target && isEvtHandler)
-                    ((wxEvtHandler*)source)->SetClientObject(new wxPyClientData(target));
+                    ((wxEvtHandler*)source)->SetClientObject(new wxPyOORClientData(target));
             } else {
-                wxString msg("wxPython class not found for ");
+                wxString msg(wxT("wxPython class not found for "));
                 msg += source->GetClassInfo()->GetClassName();
                 PyErr_SetString(PyExc_NameError, msg.mbc_str());
                 target = NULL;
@@ -423,7 +471,7 @@ PyObject*  wxPyMake_wxSizer(wxSizer* source) {
         // already be a pointer to a Python object that we can use
         // in the OOR data.
         wxSizer* sz = (wxSizer*)source;
-        wxPyClientData* data = (wxPyClientData*)sz->GetClientObject();
+        wxPyOORClientData* data = (wxPyOORClientData*)sz->GetClientObject();
         if (data) {
             target = data->m_obj;
             Py_INCREF(target);
@@ -432,7 +480,7 @@ PyObject*  wxPyMake_wxSizer(wxSizer* source) {
     if (! target) {
         target = wxPyMake_wxObject(source, FALSE);
         if (target != Py_None)
-            ((wxSizer*)source)->SetClientObject(new wxPyClientData(target));
+            ((wxSizer*)source)->SetClientObject(new wxPyOORClientData(target));
     }
     return target;
 }

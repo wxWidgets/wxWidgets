@@ -1554,6 +1554,26 @@ def wxPyTypeCast(obj, typeStr):
     return theObj
 
 
+#----------------------------------------------------------------------------
+
+
+class _wxPyDeadObject:
+    """
+    Instances of wx objects that are OOR capable will have their __class__
+    changed to this class when the C++ object is deleted.  This should help
+    prevent crashes due to referencing a bogus C++ pointer.
+    """
+    def __repr__( self ):
+        if not hasattr(self, "_name"):
+            self._name = "[unknown]"
+        return 'wxPython wrapper for deleted %s object!!! Programming logic error' % self._name
+
+    def __getattr__( self, *args ):
+        if not hasattr(self, "_name"):
+            self._name = "[unknown]"
+        raise ValueError, 'Attempt to access attribute of a deleted %s object' % self._name
+
+
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
 
@@ -1670,10 +1690,10 @@ class wxPyWidgetTester(wxApp):
         self.frame.Show(true)
 
 #----------------------------------------------------------------------------
-# DO NOT hold any other references to this object.  This is how we know when
-# to cleanup system resources that wxWin is holding.  When this module is
-# unloaded, the refcount on __cleanMeUp goes to zero and it calls the
-# wxApp_CleanUp function.
+# DO NOT hold any other references to this object.  This is how we
+# know when to cleanup system resources that wxWin is holding.  When
+# the sys module is unloaded, the refcount on sys.__wxPythonCleanup
+# goes to zero and it calls the wxApp_CleanUp function.
 
 class __wxPyCleanup:
     def __init__(self):

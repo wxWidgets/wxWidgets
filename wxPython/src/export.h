@@ -74,6 +74,9 @@ static void wxPyCoreAPI_IMPORT() {
 #define wxArrayString2PyList_helper(a)      (wxPyCoreAPIPtr->p_wxArrayString2PyList_helper(a))
 #define wxArrayInt2PyList_helper(a)         (wxPyCoreAPIPtr->p_wxArrayInt2PyList_helper(a))
 
+#define wxPyClientData_dtor(a)              (wxPyCoreAPIPtr->p_wxPyClientData_dtor(a))
+#define wxPyUserData_dtor(a)                (wxPyCoreAPIPtr->p_wxPyUserData_dtor(a))
+#define wxPyOORClientData_dtor(a)           (wxPyCoreAPIPtr->p_wxPyOORClientData_dtor(a))
 
 // This one is special.  It's the first function called in SWIG generated
 // modules, so we'll use it to also import the API.

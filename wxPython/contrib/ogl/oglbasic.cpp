@@ -1249,7 +1249,7 @@ static PyObject *_wrap_wxPyShapeEvtHandler_Destroy(PyObject *self, PyObject *arg
 }
 
 static void  wxPyShapeEvtHandler__setOORInfo(wxPyShapeEvtHandler *self,PyObject * _self) {
-            self->SetClientObject(new wxPyClientData(_self));
+            self->SetClientObject(new wxPyOORClientData(_self));
         }
 static PyObject *_wrap_wxPyShapeEvtHandler__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

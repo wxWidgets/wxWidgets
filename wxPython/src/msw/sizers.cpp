@@ -860,7 +860,7 @@ static void *SwigwxSizerTowxObject(void *ptr) {
 }
 
 static void  wxSizer__setOORInfo(wxSizer *self,PyObject * _self) {
-            self->SetClientObject(new wxPyClientData(_self));
+            self->SetClientObject(new wxPyOORClientData(_self));
         }
 static PyObject *_wrap_wxSizer__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

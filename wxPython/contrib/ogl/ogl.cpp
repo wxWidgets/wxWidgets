@@ -172,7 +172,7 @@ PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
         // already be a pointer to a Python object that we can use
         // in the OOR data.
         wxShapeEvtHandler* seh = (wxShapeEvtHandler*)source;
-        wxPyClientData* data = (wxPyClientData*)seh->GetClientObject();
+        wxPyOORClientData* data = (wxPyOORClientData*)seh->GetClientObject();
         if (data) {
             target = data->m_obj;
             Py_INCREF(target);
@@ -181,7 +181,7 @@ PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
     if (! target) {
         target = wxPyMake_wxObject2(source, FALSE);
         if (target != Py_None)
-            ((wxShapeEvtHandler*)source)->SetClientObject(new wxPyClientData(target));
+            ((wxShapeEvtHandler*)source)->SetClientObject(new wxPyOORClientData(target));
     }
     return target;
 }
