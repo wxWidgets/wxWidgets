@@ -167,11 +167,14 @@ OBJECTS2=utilscmn.obj,\
 		zipstrm.obj,\
 		zstream.obj
 
+OBJECTS_MOTIF=bmpbase.obj
+
 SOURCES = \
 		parser.y,\
 		appcmn.cpp,\
 		artprov.cpp,\
 		artstd.cpp,\
+		bmpbase.cpp,\
 		choiccmn.cpp,\
 		clipcmn.cpp,\
 		clntdata.cpp,\
@@ -293,9 +296,11 @@ all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS1)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS2)
 .ifdef __WXMOTIF__
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_MOTIF)
 	library [--.lib]libwx_motif.olb $(OBJECTS)
 	library [--.lib]libwx_motif.olb $(OBJECTS1)
 	library [--.lib]libwx_motif.olb $(OBJECTS2)
+	library [--.lib]libwx_motif.olb $(OBJECTS_MOTIF)
 .else
 .ifdef __WXGTK__
 .ifdef __WXUNIVERSAL__
@@ -332,6 +337,7 @@ lexer.c : lexer.l
 appcmn.obj : appcmn.cpp
 artprov.obj : artprov.cpp
 artstd.obj : artstd.cpp
+bmpbase.obj : bmpbase.cpp
 choiccmn.obj : choiccmn.cpp
 clipcmn.obj : clipcmn.cpp
 clntdata.obj : clntdata.cpp

@@ -116,13 +116,21 @@
 #undef __WINDOWS__
 #endif
 
+#ifndef __WIN95__
 #undef __WIN95__
+#endif
 #ifndef __WIN32__
 #undef __WIN32__
 #endif
+#ifndef __GNUWIN32__
 #undef __GNUWIN32__
+#endif
+#ifndef STRICT
 #undef STRICT
+#endif
+#ifndef WINVER
 #undef WINVER
+#endif
 
 /* enable native status bar under Win32 */
 #if defined(__WIN95__) && !defined(__WXUNIVERSAL__)
@@ -768,11 +776,11 @@
 /*
  * Compatibility with 2.0 API.
  */
-#define WXWIN_COMPATIBILITY_2 0
+#define WXWIN_COMPATIBILITY_2 1
 /*
  * Compatibility with 2.2 API
  */
-#define WXWIN_COMPATIBILITY_2_2 0
+#define WXWIN_COMPATIBILITY_2_2 1
 /*
  * Compatibility with 2.4 API
  */
@@ -910,6 +918,9 @@
  
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #define SOCKLEN_T size_t
+
+/* The type of statvfs(2) argument */
+#undef WX_STATFS_T
 
 /* The signal handler prototype */
 #undef wxTYPE_SA_HANDLER

@@ -25,7 +25,11 @@
 #include "wx/app.h"
 
 #ifdef __VMS__
-    #pragma message disable nosimpint
+#define XtDisplay XTDISPLAY
+#define XtParent XTPARENT
+#define XtScreen XTSCREEN
+#define XtWindow XTWINDOW
+#pragma message disable nosimpint
 #endif
 
 #include <Xm/Xm.h>
