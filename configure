@@ -40194,15 +40194,22 @@ fi
 if test "$wxUSE_GUI" = "yes"; then
 
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs \
-                     drawing dynamic erase event exec font image \
-                     minimal propsize rotate shaped vscroll widgets render"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
+                     dynamic erase event exec font image minimal mobile \
+                     mobile/wxedit mobile/styles propsize render \
+                     richedit rotate shaped vscroll widgets"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS console"
     fi
     if test "$TOOLKIT" = "MSW"; then
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS nativdlg regtest richedit"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS regtest"
+        if test "$wxUSE_UNIVERSAL" != "yes"; then
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ownerdrw nativdlg"
+        fi
+    fi
+    if test "$TOOLKIT" = "PM" -a "$wxUSE_UNIVERSAL" != "yes"; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ownerdrw"
     fi
 else
     SAMPLES_SUBDIRS="console"
