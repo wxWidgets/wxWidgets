@@ -622,7 +622,8 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 
 bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 {
-    if (show == m_fsIsShowing) return FALSE; // return what?
+    if (show == m_fsIsShowing)
+        return FALSE; // return what?
 
     m_fsIsShowing = show;
     
@@ -641,9 +642,11 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
             gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
         else
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
+
+        return TRUE;
     }
     else
-#else
+#endif // GTK+ >= 2.2.0
     {
         GdkWindow *window = m_widget->window;
 
@@ -701,7 +704,6 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
                     m_fsSaveFrame.width, m_fsSaveFrame.height);
         }
     }
-#endif
 
     return TRUE;
 }
