@@ -1099,6 +1099,7 @@ enum wxBorder
  * wxRadioButton style flag
  */
 #define wxRB_GROUP          0x0004
+#define wxRB_SINGLE         0x0008
 
 /*
  * wxGauge flags
