@@ -101,6 +101,10 @@ protected:
     {
         return (void **)calloc(sz, sizeof(void*));
     }
+	static void FreeTable(void *table)
+	{
+		free(table);
+	}
 };
 
 #define _WX_DECLARE_HASHTABLE( VALUE_T, KEY_T, HASH_T, KEY_EX_T, KEY_EQ_T, CLASSNAME, CLASSEXP, SHOULD_GROW, SHOULD_SHRINK ) \
@@ -248,7 +252,7 @@ public: \
     { \
         clear(); \
  \
-        free(m_table); \
+        FreeTable(m_table); \
     } \
  \
     hasher hash_funct() { return m_hasher; } \
@@ -379,7 +383,7 @@ protected: \
                        this, (_wxHashTable_NodeBase**)m_table, \
                        (BucketFromNode)GetBucketForNode,\
                        (ProcessNode)&DummyProcessNode ); \
-        free(srcTable); \
+        FreeTable(srcTable); \
     } \
  \
     /* this must be called _after_ m_table has been cleaned */ \
