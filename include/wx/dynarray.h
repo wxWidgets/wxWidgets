@@ -308,7 +308,7 @@ public:                                                             \
                                                                     \
   T*   Detach(size_t uiIndex)                                       \
     { T* p = (T*)wxBaseArray::Item(uiIndex);                        \
-      wxBaseArray::Remove(uiIndex); return p; }                     \
+      wxBaseArray::RemoveAt(uiIndex); return p; }                   \
   void Remove(size_t uiIndex) { RemoveAt(uiIndex); }                \
   void RemoveAt(size_t uiIndex);                                    \
                                                                     \
