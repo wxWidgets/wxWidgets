@@ -238,38 +238,44 @@ int wxScrolledWindow::CalcScrollInc(wxScrollEvent& event)
   }
   if (orient == wxHORIZONTAL)
   {
-        int w, h;
-		GetClientSize(&w, &h);
+    if (m_xScrollPixelsPerLine > 0) {
+      int w, h;
+      GetClientSize(&w, &h);
 
-    	int nMaxWidth = m_xScrollLines*m_xScrollPixelsPerLine;
-    	int noPositions = (int) ( ((nMaxWidth - w)/(float)m_xScrollPixelsPerLine) + 0.5 );
-    	if (noPositions < 0)
-      		noPositions = 0;
+      int nMaxWidth = m_xScrollLines*m_xScrollPixelsPerLine;
+      int noPositions = (int) ( ((nMaxWidth - w)/(float)m_xScrollPixelsPerLine) + 0.5 );
+      if (noPositions < 0)
+	noPositions = 0;
 
-		if ( (m_xScrollPosition + nScrollInc) < 0 )
-			nScrollInc = -m_xScrollPosition; // As -ve as we can go
-		else if ( (m_xScrollPosition + nScrollInc) > noPositions )
-			nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
-
-        return nScrollInc;
+      if ( (m_xScrollPosition + nScrollInc) < 0 )
+	nScrollInc = -m_xScrollPosition; // As -ve as we can go
+      else if ( (m_xScrollPosition + nScrollInc) > noPositions )
+	nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
+    }
+    else
+      Refresh();
   }
   else
   {
-        int w, h;
-		GetClientSize(&w, &h);
-
-    	int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
-    	int noPositions = (int) ( ((nMaxHeight - h)/(float)m_yScrollPixelsPerLine) + 0.5 );
-    	if (noPositions < 0)
-      		noPositions = 0;
-
-		if ( (m_yScrollPosition + nScrollInc) < 0 )
-			nScrollInc = -m_yScrollPosition; // As -ve as we can go
-		else if ( (m_yScrollPosition + nScrollInc) > noPositions )
-			nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
-
-        return nScrollInc;
+    if (m_yScrollPixelsPerLine > 0) {
+      int w, h;
+      GetClientSize(&w, &h);
+      
+      int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
+      int noPositions = (int) ( ((nMaxHeight - h)/(float)m_yScrollPixelsPerLine) + 0.5 );
+      if (noPositions < 0)
+	noPositions = 0;
+      
+      if ( (m_yScrollPosition + nScrollInc) < 0 )
+	nScrollInc = -m_yScrollPosition; // As -ve as we can go
+      else if ( (m_yScrollPosition + nScrollInc) > noPositions )
+	nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
+    }
+    else
+      Refresh();
   }
+
+  return nScrollInc;
 }
 
 // Adjust the scrollbars - new version.
