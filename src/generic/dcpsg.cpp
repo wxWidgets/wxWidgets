@@ -46,6 +46,7 @@
 #include "wx/textctrl.h"
 #include "wx/prntbase.h"
 #include "wx/paper.h"
+#include "wx/filefn.h"
 
 #include <math.h>
 
@@ -1835,17 +1836,24 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         strcat(afmName,name);
         strcat(afmName,".afm");
         FILE *afmFile = fopen(afmName,"r");
+        if (afmFile==NULL)
+        {
+           strcpy( afmName, wxThePrintSetupData->GetAFMPath() );
+           strcat(afmName, wxString(wxFILE_SEP_PATH));
+           strcat(afmName,name);
+           strcat(afmName,".afm");
+           afmFile = fopen(afmName,"r");
+        }
 
 #ifdef __UNIX__
-        if (afmFile==NULL)
+        else if (afmFile==NULL)
         {
             strcpy( afmName, "/usr/local/share/wx/afm/" );
              strcat(afmName,name);
              strcat(afmName,".afm");
              afmFile = fopen(afmName,"r");
         }
-
-        if (afmFile==NULL)
+        else if (afmFile==NULL)
         {
             strcpy( afmName, "/usr/share/wx/afm/" );
             strcat(afmName,name);
