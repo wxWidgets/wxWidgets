@@ -273,7 +273,7 @@ try:
 
     class DemoCodeEditor(PythonSTC):
         def __init__(self, parent):
-            PythonSTC.__init__(self, parent, -1, wx.BORDER_NONE)
+            PythonSTC.__init__(self, parent, -1, style=wx.BORDER_NONE)
             self.SetUpEditor()
 
         # Some methods to make it compatible with how the wxTextCtrl is used
@@ -443,8 +443,8 @@ try:
 except ImportError:
     class DemoCodeEditor(wx.TextCtrl):
         def __init__(self, parent):
-            wx.TextCtrl.__init__(self, parent, -1, style = wx.TE_MULTILINE | 
-                                 wx.HSCROLL | wx.TE_RICH2 | wx.TE_NOHIDESEL)
+            wx.TextCtrl.__init__(self, parent, -1, style =
+                                 wx.TE_MULTILINE | wx.HSCROLL | wx.TE_RICH2 | wx.TE_NOHIDESEL)
 
         def RegisterModifiedEvent(self, eventHandler):
             self.Bind(wx.EVT_TEXT, eventHandler)
@@ -482,7 +482,8 @@ modDefault = modOriginal
 class DemoCodePanel(wx.Panel):
     """Panel for the 'Demo Code' tab"""
     def __init__(self, parent, mainFrame):
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, size=(1,1))
+        self.Hide()
         self.mainFrame = mainFrame
         self.editor = DemoCodeEditor(self)
         self.editor.RegisterModifiedEvent(self.OnCodeModified)

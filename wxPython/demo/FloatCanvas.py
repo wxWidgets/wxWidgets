@@ -21,69 +21,65 @@ NOTE: The Numeric module is substantially faster than numarray for this
 purpose, if you have lot's of objects
 """
 
-    import wx
-    def runTest(frame, nb, log):
-        dlg = wx.MessageDialog(frame, errorText, 'Sorry', wx.OK |
-                               wx.ICON_INFORMATION)
-        dlg.ShowModal()
-        dlg.Destroy()
+StartUpDemo = "all"
+if __name__ == "__main__": # parse options if run stand-alone
+    # check options:
+    import sys, getopt
+    optlist, args = getopt.getopt(sys.argv[1:],'l',["local","all","text","map","stext","hit","hitf","animate","speed","temp","props"])
 
-    overview = ""
-    
-else:
-    StartUpDemo = "all"
-    if __name__ == "__main__": # parse options if run stand-alone
-        # check options:
-        import sys, getopt
-        optlist, args = getopt.getopt(sys.argv[1:],'l',["local","all","text","map","stext","hit","hitf","animate","speed","temp","props"])
-        
-        for opt in optlist:
-            if opt[0] == "--all":
-                StartUpDemo = "all"
-            elif opt[0] == "--text":
-                StartUpDemo = "text"
-            elif opt[0] == "--map":
-                StartUpDemo = "map"
-            elif opt[0] == "--stext":
-                StartUpDemo = "stext"
-            elif opt[0] == "--hit":
-                StartUpDemo = "hit"
-            elif opt[0] == "--hitf":
-                StartUpDemo = "hitf"
-            elif opt[0] == "--animate":
-                StartUpDemo = "animate"
-            elif opt[0] == "--speed":
-                StartUpDemo = "speed"
-            elif opt[0] == "--temp":
-                StartUpDemo = "temp"
-            elif opt[0] == "--props":
-                StartUpDemo = "props"
-    import wx
-    import time, random
+    for opt in optlist:
+        if opt[0] == "--all":
+            StartUpDemo = "all"
+        elif opt[0] == "--text":
+            StartUpDemo = "text"
+        elif opt[0] == "--map":
+            StartUpDemo = "map"
+        elif opt[0] == "--stext":
+            StartUpDemo = "stext"
+        elif opt[0] == "--hit":
+            StartUpDemo = "hit"
+        elif opt[0] == "--hitf":
+            StartUpDemo = "hitf"
+        elif opt[0] == "--animate":
+            StartUpDemo = "animate"
+        elif opt[0] == "--speed":
+            StartUpDemo = "speed"
+        elif opt[0] == "--temp":
+            StartUpDemo = "temp"
+        elif opt[0] == "--props":
+            StartUpDemo = "props"
+import wx
+import time, random
 
-    #---------------------------------------------------------------------------
+#---------------------------------------------------------------------------
 
-    class TestPanel(wx.Panel):
-        def __init__(self, parent, log):
-            self.log = log
-            wx.Panel.__init__(self, parent, -1)
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
 
-            b = wx.Button(self, -1, "Show the FloatBar sample", (50,50))
-            self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+        b = wx.Button(self, -1, "Show the FloatBar sample", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
 
 
-        def OnButton(self, evt):
+    def OnButton(self, evt):
+        if not haveNumeric:
+            dlg = wx.MessageDialog(self, errorText, 'Sorry', wx.OK |
+                                   wx.ICON_INFORMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
+
+        else:
             win = DrawFrame(None, -1, "FloatCanvas Drawing Window",wx.DefaultPosition,(500,500))
             win.Show(True)
             win.DrawTest()
 
 
-    def runTest(frame, nb, log):
-        win = TestPanel(nb, log)
-        return win
+
+#---------------------------------------------------------------------------
 
 
-    
+if haveNumeric:
 
     try:
         from floatcanvas import NavCanvas, FloatCanvas
@@ -91,26 +87,26 @@ else:
         from wx.lib.floatcanvas import NavCanvas, FloatCanvas
 
     import wxPython.lib.colourdb
-    
+
     class DrawFrame(wx.Frame):
-    
+
         """
         A frame used for the FloatCanvas Demo
-        
+
         """
-        
-        
+
+
         def __init__(self,parent, id,title,position,size):
             wx.Frame.__init__(self,parent, id,title,position, size)
-            
+
             ## Set up the MenuBar
             MenuBar = wx.MenuBar()
-            
+
             file_menu = wx.Menu()
             item = file_menu.Append(-1, "&Close","Close this frame")
             self.Bind(wx.EVT_MENU, self.OnQuit, item)
             MenuBar.Append(file_menu, "&File")
-            
+
             draw_menu = wx.Menu()
 
             item = draw_menu.Append(-1, "&Draw Test","Run a test of drawing random components")
@@ -118,7 +114,7 @@ else:
 
             item = draw_menu.Append(-1, "&Line Test","Run a test of drawing random lines")
             self.Bind(wx.EVT_MENU, self.LineTest, item)
-            
+
             item = draw_menu.Append(-1, "Draw &Map","Run a test of drawing a map")
             self.Bind(wx.EVT_MENU, self.DrawMap, item)
             item = draw_menu.Append(-1, "&Text Test","Run a test of text drawing")
@@ -138,20 +134,20 @@ else:
             item = draw_menu.Append(-1, "Change &Properties","Run a test of Changing Object Properties")
             self.Bind(wx.EVT_MENU, self.PropertiesChangeTest, item)
             MenuBar.Append(draw_menu, "&Tests")
-            
+
             view_menu = wx.Menu()
             item = view_menu.Append(-1, "Zoom to &Fit","Zoom to fit the window")
             self.Bind(wx.EVT_MENU, self.ZoomToFit, item)
             MenuBar.Append(view_menu, "&View")
-            
+
             help_menu = wx.Menu()
             item = help_menu.Append(-1, "&About",
                                     "More information About this program")
             self.Bind(wx.EVT_MENU, self.OnAbout, item)
             MenuBar.Append(help_menu, "&Help")
-            
+
             self.SetMenuBar(MenuBar)
-            
+
             self.CreateStatusBar()            
             # Add the Canvas
             self.Canvas = NavCanvas.NavCanvas(self,
@@ -263,28 +259,28 @@ else:
 
         def OnAbout(self, event):
             print "OnAbout called"
-            
+
             dlg = wx.MessageDialog(self, "This is a small program to demonstrate\n"
                                                       "the use of the FloatCanvas\n",
                                                       "About Me", wx.OK | wx.ICON_INFORMATION)
             dlg.ShowModal()
             dlg.Destroy()
-            
+
         def ZoomToFit(self,event):
             self.Canvas.ZoomToBB()
-            
+
         def Clear(self,event = None):
             self.UnBindAllMouseEvents()
             self.Canvas.ClearAll()
             self.Canvas.SetProjectionFun(None)
             self.Canvas.Draw()
-            
+
         def OnQuit(self,event):
             self.Close(True)
-            
+
         def OnCloseWindow(self, event):
             self.Destroy()
-            
+
         def DrawTest(self,event=None):
             wx.GetApp().Yield()
 #            import random
@@ -299,7 +295,7 @@ else:
             Canvas.SetProjectionFun(None)
 
             ##		Random tests of everything:
-            
+
             # Rectangles
             for i in range(3):
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
@@ -308,7 +304,7 @@ else:
                 h = random.randint(1,5)
                 w = random.randint(1,5)
                 Canvas.AddRectangle(x,y,w,h,LineWidth = lw,FillColor = colors[cf])
-              
+
             # Ellipses
             for i in range(3):
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
@@ -317,14 +313,14 @@ else:
                 h = random.randint(1,5)
                 w = random.randint(1,5)
                 Canvas.AddEllipse(x,y,h,w,LineWidth = lw,FillColor = colors[cf])
-              
+
             # Points
             for i in range(5):
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
                 D = random.randint(1,50)
                 cf = random.randint(0,len(colors)-1)
                 Canvas.AddPoint((x,y), Color = colors[cf], Diameter = D)
-              
+
                 # Circles
             for i in range(5):
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
@@ -334,7 +330,7 @@ else:
                 cl = random.randint(0,len(colors)-1)
                 Canvas.AddCircle(x,y,D,LineWidth = lw,LineColor = colors[cl],FillColor = colors[cf])
                 Canvas.AddText("Circle # %i"%(i),x,y,Size = 12,BackgroundColor = None,Position = "cc")
-              
+
                 # Lines
             for i in range(5):
                 points = []
@@ -345,7 +341,7 @@ else:
                 cf = random.randint(0,len(colors)-1)
                 cl = random.randint(0,len(colors)-1)
                 Canvas.AddLine(points, LineWidth = lw, LineColor = colors[cl])
-              
+
                 # Polygons
             for i in range(3):
                 points = []
@@ -360,7 +356,7 @@ else:
                                        LineColor = colors[cl],
                                        FillColor = colors[cf],
                                        FillStyle = 'Solid')
-                                
+
             ## Pointset
             for i in range(4):
                 points = []
@@ -368,7 +364,7 @@ else:
                 cf = random.randint(0,len(colors)-1)
                 D = random.randint(1,4)
                 Canvas.AddPointSet(points, Color = colors[cf], Diameter = D)
-            
+
             # Text
             String = "Unscaled text"
             for i in range(3):
@@ -417,7 +413,7 @@ else:
                 h = random.randint(1,5)
                 w = random.randint(1,5)
                 Canvas.AddRectangle(x,y,h,w,LineWidth = lw,FillColor = colors[cf])
-              
+
             # Ellipses
             for i in range(3):
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
@@ -426,7 +422,7 @@ else:
                 h = random.randint(1,5)
                 w = random.randint(1,5)
                 Canvas.AddEllipse(x,y,h,w,LineWidth = lw,FillColor = colors[cf])
-              
+
             # Circles
             for i in range(5):
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
@@ -436,7 +432,7 @@ else:
                 cl = random.randint(0,len(colors)-1)
                 Canvas.AddCircle(x,y,D,LineWidth = lw,LineColor = colors[cl],FillColor = colors[cf])
                 Canvas.AddText("Circle # %i"%(i),x,y,Size = 12,BackgroundColor = None,Position = "cc")
-              
+
             # Lines
             for i in range(5):
                 points = []
@@ -447,7 +443,7 @@ else:
                 cf = random.randint(0,len(colors)-1)
                 cl = random.randint(0,len(colors)-1)
                 Canvas.AddLine(points, LineWidth = lw, LineColor = colors[cl])
-              
+
             # Polygons
             for i in range(3):
                 points = []
@@ -462,7 +458,7 @@ else:
                                        LineColor = colors[cl],
                                        FillColor = colors[cf],
                                        FillStyle = 'Solid')
-                                
+
             # Scaled Text
             String = "Scaled text"
             for i in range(3):
@@ -480,7 +476,7 @@ else:
 
             self.Timer = wx.PyTimer(self.ShowFrame)
             self.FrameDelay = 50 # milliseconds
-            
+
             Canvas.ZoomToBB()
 
         def ShowFrame(self):
@@ -499,7 +495,7 @@ else:
                 wx.GetApp().Yield(True)
             else:
                 self.Timer.Stop()
-            
+
 
         def MoveMe(self, Object):
             self.MovingObject = Object
@@ -512,7 +508,7 @@ else:
             self.TimeStep = 1
             self.Timer.Start(self.FrameDelay)
             #print "Did %i frames in %f seconds"%(N, (time.time() - start) )
-                
+
         def TestHitTest(self,event=None):
             wx.GetApp().Yield()
 
@@ -529,11 +525,11 @@ else:
             dy = 40
             x,y = 20, 20
             FontSize = 8
-            
+
             #Add one that is not HitAble
             Canvas.AddRectangle(x, y, w, h, LineWidth = 2)
             Canvas.AddText("Not Hit-able", x, y, Size = FontSize, Position = "bl")
-            
+
 
             x += dx
             R = Canvas.AddRectangle(x, y, w, h, LineWidth = 2)
@@ -739,7 +735,7 @@ else:
             dx = 80
             dy = 40
             x,y = 20, 20
-            
+
             color = "Red"
             R = Canvas.AddRectangle(x, y, w, h, LineWidth = 2, FillColor = color, InForeground = False)
             R.Name = color + "Rectangle"
@@ -749,10 +745,10 @@ else:
             Canvas.AddText(R.Name, x, y+h, Position = "tl")
 
             ## A set of Rectangles that move together
-            
+
             ## NOTE: In a real app, it might be better to create a new
             ## custom FloatCanvas DrawObject
-            
+
             self.MovingRects = []
             x += dx
             color = "LightBlue"
@@ -789,16 +785,16 @@ else:
 
         def RectMoveLeft(self,Object):
             self.MoveRects("left")
-            
+
         def RectMoveRight(self,Object):
             self.MoveRects("right")
-                        
+
         def RectMoveUp(self,Object):
             self.MoveRects("up")
-                        
+
         def RectMoveDown(self,Object):
             self.MoveRects("down")
-                        
+
         def MoveRects(self, Dir):
             for Object in self.MovingRects:
                 X,Y = Object.XY
@@ -808,8 +804,8 @@ else:
                 elif Dir == "down": Y -= 10
                 Object.SetXY(X,Y)
             self.Canvas.Draw()
-                
-                        
+
+
         def PointSetGotHit(self, Object):
             print Object.Name, "Got Hit\n"
 
@@ -852,19 +848,19 @@ else:
             Canvas.AddPointSet((x,y), Color = "White", Diameter = 2)
 
             x,y  = (0, 2)
-            
+
             Canvas.AddPointSet((x,y), Color = "White", Diameter = 2)
             self.Canvas.AddText("Top Center",x,y,Size = 14,Color = "Black",Position = "tc")
             self.Canvas.AddText("Bottom Center",x,y,Size = 14,Color = "White",Position = "bc")
 
             x,y  = (0, 4)
-            
+
             Canvas.AddPointSet((x,y), Color = "White", Diameter = 2)
             self.Canvas.AddText("Center Right",x,y,Size = 14,Color = "Black",Position = "cr")
             self.Canvas.AddText("Center Left",x,y,Size = 14,Color = "Black",Position = "cl")
 
             x,y  = (0, -2)
-            
+
             Canvas.AddPointSet((x,y), Color = "White", Diameter = 2)
             self.Canvas.AddText("Center Center",x,y,Size = 14,Color = "Black",Position = "cc")
 
@@ -903,13 +899,13 @@ else:
 
 
             x,y  = (0, 20)
-            
+
             Canvas.AddScaledText("Top Center",x,y,Size = 7,Color = "Black",Position = "tc")
             Canvas.AddScaledText("Bottom Center",x,y,Size = 7,Color = "White",Position = "bc")
             Canvas.AddPointSet((x,y), Color = "White", Diameter = 4)
 
             x,y  = (0, -20)
-          
+
             Canvas.AddScaledText("Center Right",x,y,Size = 9,Color = "Black",Position = "cr")
             Canvas.AddScaledText("Center Left",x,y,Size = 9,Color = "Black",Position = "cl")
             Canvas.AddPointSet((x,y), Color = "White", Diameter = 4)
@@ -935,12 +931,12 @@ else:
             T = self.Canvas.AddScaledText("Bookman Font", x, y, Size = 8, Font = Font)
 
             self.Canvas.ZoomToBB()
-            
+
         def DrawMap(self,event = None):
             wx.GetApp().Yield()
             import os, time
             self.BindAllMouseEvents()
-            
+
         ## Test of Actual Map Data
             self.Canvas.ClearAll()
             self.Canvas.SetProjectionFun("FlatEarth")
@@ -954,8 +950,8 @@ else:
             #start = time.clock()
             self.Canvas.ZoomToBB()
             #print "It took %f seconds to draw %i shorelines"%(time.clock() - start,len(Shorelines) )
-    
- 
+
+
         def LineTest(self,event = None):
             wx.GetApp().Yield()
             import os, time
@@ -1033,7 +1029,7 @@ else:
             w = random.randint(1,5)
             self.Rectangle = Canvas.AddRectangle(x,y,w,h,LineWidth = lw,FillColor = colors[cf])
             self.ColorObjectsAll.append(self.Rectangle)
-              
+
             # Ellipse
             x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
             lw = random.randint(1,5)
@@ -1042,7 +1038,7 @@ else:
             w = random.randint(1,5)
             self.Ellipse = Canvas.AddEllipse(x,y,h,w,LineWidth = lw,FillColor = colors[cf])
             self.ColorObjectsAll.append(self.Ellipse)
-              
+
             # Point 
             xy = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
             D = random.randint(1,50)
@@ -1050,7 +1046,7 @@ else:
             cf = random.randint(0,len(colors)-1)
             cl = random.randint(0,len(colors)-1)
             self.ColorObjectsColor.append(Canvas.AddPoint(xy, colors[cf], D))
-              
+
             # Circle
             x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
             D = random.randint(1,5)
@@ -1069,7 +1065,7 @@ else:
             cf = random.randint(0,len(colors)-1)
             cl = random.randint(0,len(colors)-1)
             self.ColorObjectsLine.append(Canvas.AddLine(points, LineWidth = lw, LineColor = colors[cl]))
-              
+
             # Polygon
 ##            points = []
 ##            for j in range(random.randint(2,6)):
@@ -1084,21 +1080,21 @@ else:
                                                        LineColor = colors[cl],
                                                        FillColor = colors[cf],
                                                        FillStyle = 'Solid'))
-                                
+
             ## Pointset
             points = RandomArray.uniform(Range[0],Range[1],(100,2))
             cf = random.randint(0,len(colors)-1)
             D = random.randint(1,4)
             self.PointSet = Canvas.AddPointSet(points, Color = colors[cf], Diameter = D)
             self.ColorObjectsColor.append(self.PointSet)
-            
+
             ## Point
             point = RandomArray.uniform(Range[0],Range[1],(2,))
             cf = random.randint(0,len(colors)-1)
             D = random.randint(1,4)
             self.Point = Canvas.AddPoint(point, Color = colors[cf], Diameter = D)
             self.ColorObjectsColor.append(self.Point)
-            
+
             # Text
             String = "Unscaled text"
             ts = random.randint(10,40)
@@ -1151,7 +1147,7 @@ else:
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
                 w,h = random.randint(1,5), random.randint(1,5)
                 Object.SetShape(x,y,w,h)
-            
+
             self.Canvas.Draw(Force = True)
 
         def TempTest(self, event= None):
@@ -1180,7 +1176,7 @@ else:
             self.SelectedPoly = None
             self.SelectPoints = []
             self.SelectedPoint = None
-            
+
             Canvas.ZoomToBB()
 
         def SelectPoly(self, Object):
@@ -1206,65 +1202,65 @@ else:
             print "Point Num: %i Hit"%Point.VerticeNum
             self.SelectedPoint = Point
 
-            
-   
+
+
     class DemoApp(wx.App):
         """
         How the demo works:
-        
+
         Under the Draw menu, there are three options:
-        
+
         *Draw Test: will put up a picture of a bunch of randomly generated
         objects, of each kind supported.
-        
+
         *Draw Map: will draw a map of the world. Be patient, it is a big map,
         with a lot of data, and will take a while to load and draw (about 10 sec 
         on my 450Mhz PIII). Redraws take about 2 sec. This demonstrates how the
         performance is not very good for large drawings.
-        
+
         *Clear: Clears the Canvas.
-        
+
         Once you have a picture drawn, you can zoom in and out and move about
         the picture. There is a tool bar with three tools that can be
         selected. 
-        
+
         The magnifying glass with the plus is the zoom in tool. Once selected,
         if you click the image, it will zoom in, centered on where you
         clicked. If you click and drag the mouse, you will get a rubber band
         box, and the image will zoom to fit that box when you release it.
-        
+
         The magnifying glass with the minus is the zoom out tool. Once selected,
         if you click the image, it will zoom out, centered on where you
         clicked. (note that this takes a while when you are looking at the map,
         as it has a LOT of lines to be drawn. The image is double buffered, so
         you don't see the drawing in progress)
-        
+
         The hand is the move tool. Once selected, if you click and drag on the
         image, it will move so that the part you clicked on ends up where you
         release the mouse. Nothing is changed while you are dragging. The
         drawing is too slow for that.
-        
+
         I'd like the cursor to change as you change tools, but the stock
         wxCursors didn't include anything I liked, so I stuck with the
         pointer. Please let me know if you have any nice cursor images for me to
         use.
-        
-        
+
+
         Any bugs, comments, feedback, questions, and especially code are welcome:
-        
+
         -Chris Barker
-        
+
         Chris.Barker@noaa.gov
-    
+
         """
 
         def __init__(self, *args, **kwargs):
             wx.App.__init__(self, *args, **kwargs)
-        
+
         def OnInit(self):
             wx.InitAllImageHandlers()
             frame = DrawFrame(None, -1, "FloatCanvas Demo App",wx.DefaultPosition,(700,700))
-    
+
             self.SetTopWindow(frame)
             frame.Show()
 
@@ -1294,25 +1290,25 @@ else:
             elif StartUpDemo == "props":
                 "starting PropertiesChange Test"
                 frame.PropertiesChangeTest()
-                
+
             return True
-                
+
     def Read_MapGen(filename,stats = 0,AllLines=0):
         """
         This function reads a MapGen Format file, and
         returns a list of NumPy arrays with the line segments in them.
-        
+
         Each NumPy array in the list is an NX2 array of Python Floats.
-        
+
         The demo should have come with a file, "world.dat" that is the
         shorelines of the whole world, in MapGen format.
-        
+
         """
         import string
         file = open(filename,'rt')
         data = file.readlines()
         data = map(string.strip,data)
-        
+
         Shorelines = []
         segment = []
         for line in data:
@@ -1323,7 +1319,7 @@ else:
                 else:
                     segment.append(map(float,string.split(line)))
         if segment: Shorelines.append(Numeric.array(segment))
-        
+
         if stats:
             NumSegments = len(Shorelines)
             NumPoints = 0
@@ -1343,14 +1339,28 @@ else:
             return Lines
         else:
             return Shorelines
-    
-    ## for the wxPython demo:
+
+#---------------------------------------------------------------------------
+## for the wxPython demo:
+
+def runTest(frame, nb, log):
+    win = TestPanel(nb, log)
+    return win
+
+
+if haveNumeric:    
     try:
         import floatcanvas
     except ImportError: # if it's not there locally, try the wxPython lib.
         from wx.lib import floatcanvas
 
     overview = floatcanvas.__doc__
+
+else:
+    overview = ""
+    
+
+
       
 if __name__ == "__main__":
     if not haveNumeric:
