@@ -76,8 +76,7 @@ public:
  */
 wxRegion::wxRegion()
 {
-    m_refData = new wxRegionRefData;
-    M_REGION = ::CreateRectRgn(0, 0, 0, 0);
+    m_refData = (wxRegionRefData *)NULL;
 }
 
 wxRegion::wxRegion(WXHRGN hRegion)
