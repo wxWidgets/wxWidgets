@@ -191,13 +191,13 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
     m_rright = WXK_RIGHT;
 }
 
-TestGLCanvas::TestGLCanvas(wxWindow *parent, const TestGLCanvas &other,
+TestGLCanvas::TestGLCanvas(wxWindow *parent, const TestGLCanvas *other,
     wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
     const wxString& name )
-    : wxGLCanvas(parent, other.GetContext(), id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
+    : wxGLCanvas(parent, other->GetContext(), id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
 {
     m_init = false;
-    m_gllist = other.m_gllist; // share display list
+    m_gllist = other->m_gllist; // share display list
     m_rleft = WXK_LEFT;
     m_rright = WXK_RIGHT;
 }

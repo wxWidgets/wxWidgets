@@ -56,7 +56,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = 0, const wxString& name = _T("TestGLCanvas") );
 
-    TestGLCanvas( wxWindow *parent, const TestGLCanvas &other,
+    TestGLCanvas( wxWindow *parent, const TestGLCanvas *other,
         wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
         const wxString& name = _T("TestGLCanvas") );
