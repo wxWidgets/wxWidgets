@@ -99,6 +99,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   
   (void) new wxRadioBox( this, -1, "This", wxPoint(10,200), wxDefaultSize, 5, choices, 2, wxRA_SPECIFY_COLS );
 
+  (void) new wxRadioBox( this, -1, "This", wxPoint(10,300), wxDefaultSize, 5, choices, 2, wxRA_SPECIFY_ROWS );
+
   wxListCtrl *m_listCtrl = new wxListCtrl(
 	this, -1, wxPoint(200, 10), wxSize(180, 120),
 	wxLC_REPORT | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );

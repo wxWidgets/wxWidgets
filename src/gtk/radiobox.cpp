@@ -184,16 +184,29 @@ wxSize wxRadioBox::LayoutItems()
 
     wxSize res( 0, 0 );
 
-    if (m_windowStyle & wxRA_HORIZONTAL)
+    int num_of_cols = 0;
+    int num_of_rows = 0;
+    if (HasFlag(wxRA_SPECIFY_COLS))
     {
-
-        for (int j = 0; j < m_majorDim; j++)
+        num_of_cols = m_majorDim;
+        num_of_rows = num_per_major;
+    }
+    else
+    {
+        num_of_cols = num_per_major;
+        num_of_rows = m_majorDim;
+    }
+	
+    if ( HasFlag(wxRA_SPECIFY_COLS) ||
+         (HasFlag(wxRA_SPECIFY_ROWS) && (num_of_cols > 1)) )
+    {
+        for (int j = 0; j < num_of_cols; j++)
         {
             y = 15;
 
             int max_len = 0;
-            wxNode *node = m_boxes.Nth( j*num_per_major );
-            for (int i1 = 0; i1< num_per_major; i1++)
+            wxNode *node = m_boxes.Nth( j*num_of_rows );
+            for (int i1 = 0; i1< num_of_rows; i1++)
             {
                 GtkWidget *button = GTK_WIDGET( node->Data() );
                 GtkLabel *label = GTK_LABEL( GTK_BUTTON(button)->child );
@@ -210,8 +223,8 @@ wxSize wxRadioBox::LayoutItems()
 
             // we don't know the max_len before
 
-            node = m_boxes.Nth( j*num_per_major );
-            for (int i2 = 0; i2< num_per_major; i2++)
+            node = m_boxes.Nth( j*num_of_rows );
+            for (int i2 = 0; i2< num_of_rows; i2++)
             {
                 GtkWidget *button = GTK_WIDGET( node->Data() );
 
