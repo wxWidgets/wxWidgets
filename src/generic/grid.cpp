@@ -1564,11 +1564,12 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
     int hAlign, vAlign;
     attr.GetAlignment(&hAlign, &vAlign);
 
+    int overflowCols = 0;
+
     if (attr.GetOverflow())
     {
         int cols = grid.GetNumberCols();
         int best_width = GetBestSize(grid,attr,dc,row,col).GetWidth();
-        int overflowCols = 0;
         int cell_rows, cell_cols;
         attr.GetSize( &cell_rows, &cell_cols ); // shouldn't get here if <=0
         if ((best_width > rectCell.width) && (col < cols) && grid.GetTable())
@@ -1576,54 +1577,64 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
             int i, c_cols, c_rows;
             for (i = col+cell_cols; i < cols; i++)
             {
-                // check w/ anchor cell for multicell block
-                grid.GetCellSize(row, i, &c_rows, &c_cols);
-                if (c_rows > 0) c_rows = 0;
-                if (grid.GetTable()->IsEmptyCell(row+c_rows, i))
+	        bool is_empty = TRUE;
+                for (int j=row; j<row+cell_rows; j++)
                 {
-                    rect.width += grid.GetColSize(i);
-                    if (rect.width >= best_width) break;
+                    // check w/ anchor cell for multicell block
+                    grid.GetCellSize(row, i, &c_rows, &c_cols);
+                    if (c_rows > 0) c_rows = 0;
+                    if (grid.GetTable()->IsEmptyCell(row+c_rows, i))
+                    {
+		        is_empty = FALSE;
+                       break;
+                    }
                 }
+                if (is_empty)
+                    rect.width += grid.GetColSize(i);
                 else
                 {
                     i--;
                     break;
                 }
-            }
-            overflowCols = i - col - cell_cols;
-            if (overflowCols >= cols) overflowCols = cols - 1;
-       }
+                if (rect.width >= best_width) break;
+	    }
+            overflowCols = i - col - cell_cols + 1;
+	    if (overflowCols >= cols) overflowCols = cols - 1;
+        }
 
         if (overflowCols > 0) // redraw overflow cells w/ proper hilight
         {
+            hAlign = wxALIGN_LEFT; // if oveflowed then it's left aligned
             wxRect clip = rect; 
-
+            clip.x += rectCell.width;
             // draw each overflow cell individually
             int col_end = col+cell_cols+overflowCols;
             if (col_end >= grid.GetNumberCols())
-                col_end = grid.GetNumberCols() - 1;
-
+	        col_end = grid.GetNumberCols() - 1;
             for (int i = col+cell_cols; i <= col_end; i++)
             {
-                clip.x += grid.GetColSize(i-1) - 1;
                 clip.width = grid.GetColSize(i) - 1;
                 dc.DestroyClippingRegion();
                 dc.SetClippingRegion(clip);
- 
-                SetTextColoursAndFont(grid, attr, dc, grid.IsInSelection(row,i));
+
+                SetTextColoursAndFont(grid, attr, dc,
+				      grid.IsInSelection(row,i));
+
                 grid.DrawTextRectangle(dc, grid.GetCellValue(row, col),
                                        rect, hAlign, vAlign);
+                clip.x += grid.GetColSize(i) - 1;
             }
 
-            rect = rectCell; 
-            rect.Inflate(-1);
+            rect = rectCell;
+	    rect.Inflate(-1);
             rect.width++;
-            dc.DestroyClippingRegion(); // DrawTextRectangle sets it again
+            dc.DestroyClippingRegion();
         }
-    }    
+    }
 
     // now we only have to draw the text
     SetTextColoursAndFont(grid, attr, dc, isSelected);
+
     grid.DrawTextRectangle(dc, grid.GetCellValue(row, col),
                            rect, hAlign, vAlign);
 }
@@ -7254,35 +7265,36 @@ void wxGrid::ShowCellEditControl()
             editor->Show( TRUE, attr );
 
             // resize editor to overflow into righthand cells if allowed
-            wxCoord maxRight = rect.width;
+            int maxWidth = rect.width;
             wxString value = GetCellValue(row, col);
             if ( (value != wxEmptyString) && (attr->GetOverflow()) )
             {
-                wxClientDC dc(m_gridWin);
-                wxCoord y = 0;
-                dc.SetFont(attr->GetFont());
-                dc.GetTextExtent(value, &maxRight, &y);
-                if (maxRight > m_gridWin->GetClientSize().GetWidth())
-                    maxRight = m_gridWin->GetClientSize().GetWidth();
+                int y;
+                GetTextExtent(value, &maxWidth, &y,
+			      NULL, NULL, &attr->GetFont());
+                if (maxWidth < rect.width) maxWidth = rect.width;
+            }
+            int client_right = m_gridWin->GetClientSize().GetWidth();
+            if (rect.x+maxWidth > client_right)
+	        maxWidth = client_right - rect.x;
 
-                int cell_rows, cell_cols;
-                attr->GetSize( &cell_rows, &cell_cols );
-
-                if ((maxRight > rect.width) && (col < m_numCols) && m_table)
-                {
-                    int i;
-                    for (i = col+cell_cols; i < m_numCols; i++)
-                    {
-                      int c_rows, c_cols;
-                      // looks weird going over a multicell
-                      GetCellSize( row, i, &c_rows, &c_cols );
-                      if (m_table->IsEmptyCell(row,i) && (rect.GetRight() < maxRight) && (c_rows == 1))
-                          rect.width += GetColWidth(i);
-                      else
-                          break;
-                    }
-                    if (rect.GetRight() > maxRight) rect.SetRight(maxRight-1);
-                }
+	    if ((maxWidth > rect.width) && (col < m_numCols) && m_table)
+	    {
+                GetCellSize( row, col, &cell_rows, &cell_cols );
+		// may have changed earlier
+		for (int i = col+cell_cols; i < m_numCols; i++)
+		{
+                    int c_rows, c_cols;
+                    GetCellSize( row, i, &c_rows, &c_cols );
+		    // looks weird going over a multicell
+		    if (m_table->IsEmptyCell(row,i) &&
+			(rect.width < maxWidth) && (c_rows == 1))
+		        rect.width += GetColWidth(i);
+		    else
+		      break;
+		}
+                if (rect.GetRight() > client_right)
+		    rect.SetRight(client_right-1);
             }
             editor->SetSize( rect );
 
