@@ -27,7 +27,8 @@ class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxImage;
 
-// A mask is a mono bitmap used for drawing bitmaps
+// A mask is a bitmap used for drawing bitmaps
+// it can be a monochrome bitmap or a multi-bit bitmap which transfers to alpha channels
 // transparently.
 class WXDLLEXPORT wxMask: public wxObject
 {
@@ -58,8 +59,11 @@ public:
   bool PointMasked(int x, int y);
   inline WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
   inline void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
+  int GetDepth() const { return m_depth ; }
+  void SetDepth( int depth ) { m_depth = depth ; }
 protected:
   WXHBITMAP m_maskBitmap;
+  int m_depth ;
 };
 
 enum { kMacBitmapTypeUnknownType , kMacBitmapTypeGrafWorld, kMacBitmapTypePict , kMacBitmapTypeIcon } ;
