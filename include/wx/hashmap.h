@@ -16,8 +16,6 @@
 #pragma interface "hashmap.h"
 #endif
 
-#include <stddef.h>         // for ptrdiff_t
-
 #include "wx/string.h"
 
 // private
