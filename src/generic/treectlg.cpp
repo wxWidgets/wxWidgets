@@ -59,49 +59,49 @@ static const int NO_IMAGE = -1;
 // Aqua arrows
 // ----------------------------------------------------------------------------
 
-        /* XPM */
-        static char *aqua_arrow_right[] = {
-        /* columns rows colors chars-per-pixel */
-        "13 11 4 1",
-        "  c None",
-        "b c #C0C0C0",
-        "c c #707070",
-        "d c #A0A0A0",
-        /* pixels */
-        "    b        ",
-        "    ddb      ",
-        "    cccdb    ",
-        "    cccccd   ",
-        "    ccccccdb ",
-        "    ccccccccd",
-        "    ccccccdb ",
-        "    cccccb   ",
-        "    cccdb    ",
-        "    ddb      ",
-        "    b        "
-        };
+/* XPM */
+static const char *aqua_arrow_right[] = {
+/* columns rows colors chars-per-pixel */
+"13 11 4 1",
+"  c None",
+"b c #C0C0C0",
+"c c #707070",
+"d c #A0A0A0",
+/* pixels */
+"    b        ",
+"    ddb      ",
+"    cccdb    ",
+"    cccccd   ",
+"    ccccccdb ",
+"    ccccccccd",
+"    ccccccdb ",
+"    cccccb   ",
+"    cccdb    ",
+"    ddb      ",
+"    b        "
+};
 
-        /* XPM */
-        static char *aqua_arrow_down[] = {
-        /* columns rows colors chars-per-pixel */
-        "13 11 4 1",
-        "  c None",
-        "b c #C0C0C0",
-        "c c #707070",
-        "d c #A0A0A0",
-        /* pixels */
-        "             ",
-        "             ",
-        " bdcccccccdb ",
-        "  dcccccccd  ",
-        "  bcccccccb  ",
-        "   dcccccd   ",
-        "   bcccccb   ",
-        "    bcccd    ",
-        "     dcd     ",
-        "     bcb     ",
-        "      d      "
-        };
+/* XPM */
+static const char *aqua_arrow_down[] = {
+/* columns rows colors chars-per-pixel */
+"13 11 4 1",
+"  c None",
+"b c #C0C0C0",
+"c c #707070",
+"d c #A0A0A0",
+/* pixels */
+"             ",
+"             ",
+" bdcccccccdb ",
+"  dcccccccd  ",
+"  bcccccccb  ",
+"   dcccccd   ",
+"   bcccccb   ",
+"    bcccd    ",
+"     dcd     ",
+"     bcb     ",
+"      d      "
+};
 
 // -----------------------------------------------------------------------------
 // private classes
