@@ -332,7 +332,7 @@ private:
     // common part of all ctors
     void Init();
 
-    DECLARE_NO_COPY_CLASS(wxWindow);
+    DECLARE_NO_COPY_CLASS(wxWindow)
     DECLARE_EVENT_TABLE()
 };
 

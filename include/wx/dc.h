@@ -721,7 +721,7 @@ protected:
     wxPalette         m_palette;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxDCBase);
+    DECLARE_NO_COPY_CLASS(wxDCBase)
     DECLARE_ABSTRACT_CLASS(wxDCBase)
 };
 
