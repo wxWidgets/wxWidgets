@@ -530,6 +530,7 @@ wxString wxTextCtrl::GetRange(long from, long to) const
             if ( to == -1 )
                 to = len;
 
+#if !wxUSE_UNICODE
             // we must use EM_STREAMOUT if we don't want to lose all characters
             // not representable in the current character set (EM_GETTEXTRANGE
             // simply replaces them with question marks...)
@@ -556,6 +557,7 @@ wxString wxTextCtrl::GetRange(long from, long to) const
 
             // StreamOut() wasn't used or failed, try to do it in normal way
             if ( str.empty() )
+#endif // !wxUSE_UNICODE
             {
                 // alloc one extra WORD as needed by the control
                 wxStringBuffer tmp(str, ++len);
@@ -563,7 +565,7 @@ wxString wxTextCtrl::GetRange(long from, long to) const
 
                 TEXTRANGE textRange;
                 textRange.chrg.cpMin = from;
-                textRange.chrg.cpMax = to == -1 ? len : to;
+                textRange.chrg.cpMax = to;
                 textRange.lpstrText = p;
 
                 (void)SendMessage(GetHwnd(), EM_GETTEXTRANGE,
