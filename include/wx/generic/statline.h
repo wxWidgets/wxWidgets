@@ -30,7 +30,7 @@ public:
     wxStaticLine() { m_statbox = NULL; }
 
     wxStaticLine( wxWindow *parent,
-                  wxWindowID id,
+                  wxWindowID id = wxID_ANY,
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
@@ -42,7 +42,7 @@ public:
     virtual ~wxStaticLine();
 
     bool Create( wxWindow *parent,
-                 wxWindowID id,
+                 wxWindowID id = wxID_ANY,
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,

@@ -23,14 +23,12 @@ class wxStaticBox;
 
 class WXDLLEXPORT wxStaticLine : public wxStaticLineBase
 {
-    DECLARE_DYNAMIC_CLASS(wxStaticLine)
-
 public:
     // constructors and pseudo-constructors
     wxStaticLine() : m_statbox(NULL) { }
 
     wxStaticLine( wxWindow *parent,
-                  wxWindowID id,
+                  wxWindowID id = wxID_ANY,
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
@@ -41,7 +39,7 @@ public:
     }
 
     bool Create( wxWindow *parent,
-                 wxWindowID id,
+                 wxWindowID id = wxID_ANY,
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
@@ -51,10 +49,12 @@ public:
     // will want to return the main widget for m_statbox
     //
     WXWidget GetMainWidget() const;
-        
+
 protected:
     // we implement the static line using a static box
     wxStaticBox *m_statbox;
+
+    DECLARE_DYNAMIC_CLASS(wxStaticLine)
 };
 
 #endif // _WX_GENERIC_STATLINE_H_

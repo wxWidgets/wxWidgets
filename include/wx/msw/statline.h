@@ -26,9 +26,9 @@ public:
     wxStaticLine() { }
 
     wxStaticLine( wxWindow *parent,
-                  wxWindowID id,
-                  const wxPoint &pos = wxDefaultPosition,
-                  const wxSize &size = wxDefaultSize,
+                  wxWindowID id = wxID_ANY,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
                   const wxString &name = wxStaticTextNameStr )
     {
@@ -36,9 +36,9 @@ public:
     }
 
     bool Create( wxWindow *parent,
-                 wxWindowID id,
-                 const wxPoint &pos = wxDefaultPosition,
-                 const wxSize &size = wxDefaultSize,
+                 wxWindowID id = wxID_ANY,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
                  const wxString &name = wxStaticTextNameStr );
 

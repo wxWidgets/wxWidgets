@@ -27,7 +27,7 @@ class WXDLLEXPORT wxStaticLine: public wxStaticLineBase// , protected wxCocoaNSB
 // ------------------------------------------------------------------------
 public:
     wxStaticLine() { }
-    wxStaticLine(wxWindow *parent, wxWindowID winid,
+    wxStaticLine(wxWindow *parent, wxWindowID winid = wxID_ANY,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = 0, const wxString& name = wxStaticTextNameStr)
@@ -35,7 +35,7 @@ public:
         Create(parent, winid, pos, size, style, name);
     }
 
-    bool Create(wxWindow *parent, wxWindowID winid,
+    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = 0, const wxString& name = wxStaticTextNameStr);
