@@ -2876,7 +2876,7 @@ long wxListCtrl::HitTest( const wxPoint &point, int &flags )
 long wxListCtrl::InsertItem( wxListItem& info )
 {
     m_mainWin->InsertItem( info );
-    return 0;
+    return info.m_itemId;
 }
 
 long wxListCtrl::InsertItem( long index, const wxString &label )
