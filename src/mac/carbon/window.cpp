@@ -1795,7 +1795,7 @@ wxPoint wxWindowMac::GetClientAreaOrigin() const
 {
     RgnHandle rgn = NewRgn() ;
     Rect content ;
-    if ( m_peer->GetRegion( kControlContentMetaPart , rgn ) )
+    if ( m_peer->GetRegion( kControlContentMetaPart , rgn ) == noErr )
     {
         GetRegionBounds( rgn , &content ) ;
     }
