@@ -79,11 +79,25 @@ IMPLEMENT_DYNAMIC_CLASS(wxWizardEvent, wxNotifyEvent)
 // wxWizardPage
 // ----------------------------------------------------------------------------
 
+void wxWizardPage::Init()
+{
+    m_bitmap = wxNullBitmap;
+}
+
 wxWizardPage::wxWizardPage(wxWizard *parent,
                            const wxBitmap& bitmap,
                            const wxChar *resource)
-            : wxPanel(parent)
 {
+    Create(parent, bitmap, resource);
+}
+    
+bool wxWizardPage::Create(wxWizard *parent,
+                          const wxBitmap& bitmap,
+                          const wxChar *resource)
+{
+    if ( !wxPanel::Create(parent, -1) )
+        return FALSE;
+
     if ( resource != NULL )
     {
 #if wxUSE_WX_RESOURCES
@@ -98,6 +112,8 @@ wxWizardPage::wxWizardPage(wxWizard *parent,
 
     // initially the page is hidden, it's shown only when it becomes current
     Hide();
+    
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------

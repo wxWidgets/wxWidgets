@@ -46,11 +46,19 @@ class WXDLLEXPORT wxWizard;
 class WXDLLEXPORT wxWizardPage : public wxPanel
 {
 public:
+    wxWizardPage() { Init(); }
+    // common part of ctors:
+    void Init();
+
     // ctor accepts an optional bitmap which will be used for this page instead
     // of the default one for this wizard (should be of the same size). Notice
     // that no other parameters are needed because the wizard will resize and
     // reposition the page anyhow
     wxWizardPage(wxWizard *parent,
+                 const wxBitmap& bitmap = wxNullBitmap,
+                 const wxChar* resource = NULL);
+
+    bool Create(wxWizard *parent,
                 const wxBitmap& bitmap = wxNullBitmap,
                 const wxChar* resource = NULL);
 
@@ -84,16 +92,32 @@ private:
 class WXDLLEXPORT wxWizardPageSimple : public wxWizardPage
 {
 public:
+    wxWizardPageSimple() { Init(); }
+    // common part of ctors:
+    void Init()
+    {
+        m_prev = m_next = NULL;
+    }
+
     // ctor takes the previous and next pages
-    wxWizardPageSimple(wxWizard *parent = NULL, // let it be default ctor too
+    wxWizardPageSimple(wxWizard *parent,
                        wxWizardPage *prev = (wxWizardPage *)NULL,
                        wxWizardPage *next = (wxWizardPage *)NULL,
                        const wxBitmap& bitmap = wxNullBitmap,
                        const wxChar* resource = NULL)
-        : wxWizardPage(parent, bitmap, resource)
+    {
+        Create(parent, prev, next, bitmap, resource);
+    }
+
+    bool Create(wxWizard *parent = NULL, // let it be default ctor too
+                wxWizardPage *prev = (wxWizardPage *)NULL,
+                wxWizardPage *next = (wxWizardPage *)NULL,
+                const wxBitmap& bitmap = wxNullBitmap,
+                const wxChar* resource = NULL)
     {
         m_prev = prev;
         m_next = next;
+        return wxWizardPage::Create(parent, bitmap, resource);
     }
 
     // the pointers may be also set later - but before starting the wizard
