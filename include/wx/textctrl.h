@@ -476,13 +476,18 @@ public:
 typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 
 #define wxTextEventHandler(func) wxCommandEventHandler(func)
+#define wxTextUrlEventHandler(func) \
+    (wxObjectEventFunction)wxStaticCastEvent(wxTextUrlEventFunction, &func)
 
 #define wx__DECLARE_TEXTEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_TEXT_ ## evt, id, wxTextEventHandler(fn))
 
+#define wx__DECLARE_TEXTURLEVT(evt, id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_TEXT_ ## evt, id, wxTextUrlEventHandler(fn))
+
 #define EVT_TEXT(id, fn) wx__DECLARE_TEXTEVT(UPDATED, id, fn)
 #define EVT_TEXT_ENTER(id, fn) wx__DECLARE_TEXTEVT(ENTER, id, fn)
-#define EVT_TEXT_URL(id, fn) wx__DECLARE_TEXTEVT(URL, id, fn)
+#define EVT_TEXT_URL(id, fn) wx__DECLARE_TEXTURLEVT(URL, id, fn)
 #define EVT_TEXT_MAXLEN(id, fn) wx__DECLARE_TEXTEVT(MAXLEN, id, fn)
 
 #ifndef NO_TEXT_WINDOW_STREAM
