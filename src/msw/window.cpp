@@ -904,11 +904,12 @@ void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
     else
     {
         pr = NULL;
+
     }
 
 #ifdef __WXWINCE__
     // FIXME: is this the exact equivalent of the line below?
-    ::ScrollWindowEx(GetHwnd(), dx, dy, pr, pr, 0, 0, SW_ERASE|SW_INVALIDATE);
+    ::ScrollWindowEx(GetHwnd(), dx, dy, pr, pr, 0, 0, SW_SCROLLCHILDREN|SW_ERASE|SW_INVALIDATE);
 #else
     ::ScrollWindow(GetHwnd(), dx, dy, pr, pr);
 #endif
