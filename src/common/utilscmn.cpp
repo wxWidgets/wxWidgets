@@ -880,12 +880,32 @@ wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
                         const wxString& defaultValue, wxWindow *parent,
                         int x, int y, bool WXUNUSED(centre) )
 {
+    wxString str;
     wxTextEntryDialog dialog(parent, message, caption, defaultValue, wxOK|wxCANCEL, wxPoint(x, y));
     if (dialog.ShowModal() == wxID_OK)
-        return dialog.GetValue();
-    else
-        return wxString("");
+    {
+        str = dialog.GetValue();
+    }
+
+    return str;
 }
+
+wxString wxGetPasswordFromUser(const wxString& message,
+                               const wxString& caption,
+                               const wxString& defaultValue,
+                               wxWindow *parent)
+{
+    wxString str;
+    wxTextEntryDialog dialog(parent, message, caption, defaultValue,
+                             wxOK | wxCANCEL | wxTE_PASSWORD);
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        str = dialog.GetValue();
+    }
+
+    return str;
+}
+
 #endif // wxUSE_TEXTDLG
 
 #ifdef __MWERKS__
