@@ -199,6 +199,7 @@ public:
     static wxString GetOption(const wxString& name) ;
     static int GetOptionInt(const wxString& name) ;
     static bool HasOption(const wxString& name) ;
+    static bool IsFalse(const wxString& name);
 };
 
 
