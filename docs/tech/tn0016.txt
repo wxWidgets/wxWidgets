@@ -37,6 +37,22 @@ IMPORTANT NOTE: Don't forget to run autoconf in wxWindows root directory if
                 in .bkl files! You will know that this happened if
                 $(wx)/autoconf_inc.m4 content changed.
 
+You can use Bakefile to generate makefiles or projects customized to your
+needs, too. See Makefile for details on bakefile commands used to generate
+makefiles. For example, you can use this command to generate VC++ project
+files without wxUniversal configurations:
+    bakefile -v -fmsvc6prj -o../wxmy.dsw -DRUNTIME_LIBS=dynamic
+             -DOFFICIAL_BUILD=0 -DUSE_HTML=1 -DUSE_OPENGL=1
+             -DMONOLITHIC=0 -DUSE_GUI=1 -DWXUNIV=0 wx.bkl
+Or monolithic instead of multilib (the default):
+    bakefile -v -fmsvc6prj -o../wxmono.dsw -DRUNTIME_LIBS=dynamic
+             -DOFFICIAL_BUILD=0 -DUSE_HTML=1 -DUSE_OPENGL=1
+             -DMONOLITHIC=1 -DUSE_GUI=1 wx.bkl
+Or monolithic wxBase:
+    bakefile -v -fmsvc6prj -o../wxBase.dsw -DRUNTIME_LIBS=dynamic
+             -DOFFICIAL_BUILD=0 -DUSE_HTML=0 -DUSE_OPENGL=0
+             -DMONOLITHIC=1 -DUSE_GUI=0 wx.bkl
+
 
 2. Bakefile files organization
 ------------------------------
