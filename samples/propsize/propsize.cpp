@@ -164,9 +164,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetStatusText(_T("Resize the frame to see how controls react"));
 #endif // wxUSE_STATUSBAR
 
-#define AddLine(orient) \
-    Add( new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxSize(2,2), orient), \
-    0, wxEXPAND)
+#if wxUSE_STATLINE
+    #define AddLine(orient) \
+        Add( new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxSize(2,2), orient), \
+        0, wxEXPAND)
+#else
+    #define AddLine(orient) \
+        Add( 2, 2)
+#endif // wxUSE_STATLINE
 
 #define AddButton(label,align) Add( \
     new wxButton( this, wxID_ANY, label, wxDefaultPosition, wxSize(100,50)), \
