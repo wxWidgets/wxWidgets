@@ -59,6 +59,7 @@ protected:
     virtual void DoShow();
     virtual void DoHide();
     virtual void DoMove();
+    virtual void DoSize();
 
     // blink the caret once
     void Blink();

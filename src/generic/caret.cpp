@@ -150,6 +150,23 @@ void wxCaret::DoMove()
     //else: will be shown at the correct location when it is shown
 }
 
+void wxCaret::DoSize()
+{
+    int countVisible = m_countVisible;
+    if (countVisible > 0)
+    {
+        m_countVisible = 0;
+        DoHide();
+    }
+    // Change bitmap size
+    m_bmpUnderCaret = wxBitmap(m_width, m_height);
+    if (countVisible > 0)
+    {
+        m_countVisible = countVisible;
+        DoShow();
+    }
+}
+
 // ----------------------------------------------------------------------------
 // handling the focus
 // ----------------------------------------------------------------------------
