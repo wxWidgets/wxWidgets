@@ -147,6 +147,9 @@ public:
     wxClientDC() { }
     wxClientDC( wxWindow *win );
 
+protected:
+    virtual void DoGetSize(int *width, int *height) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxClientDC)
 };

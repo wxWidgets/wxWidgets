@@ -2262,7 +2262,7 @@ void wxClientDC::DoGetSize(int *width, int *height) const
 {
     wxCHECK_RET( m_owner, _T("GetSize() doesn't work without window") );
 
-    m_owner->GetClientSize( &width, &height );
+    m_owner->GetClientSize( width, height );
 }
 
 // ----------------------------------------------------------------------------
