@@ -39,6 +39,7 @@
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
+#include "wx/univ/colschem.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -160,6 +161,30 @@ void wxButton::DoDraw(wxControlRenderer *renderer)
     }
 
     renderer->DrawLabel(m_bitmap, m_marginBmpX, m_marginBmpY);
+}
+
+bool wxButton::DoDrawBackground(wxDC& dc)
+{
+    wxRect rect;
+    wxSize size = GetSize();
+    rect.width = size.x;
+    rect.height = size.y;
+    
+    if ( GetBackgroundBitmap().Ok() )
+    {
+        // get the bitmap and the flags
+        int alignment;
+        wxStretch stretch;
+        wxBitmap bmp = GetBackgroundBitmap(&alignment, &stretch);
+        wxControlRenderer::DrawBitmap(dc, bmp, rect, alignment, stretch);
+    }
+    else
+    {
+        m_renderer->DrawButtonSurface(dc, wxTHEME_BG_COLOUR(this),
+                                      rect, GetStateFlags());
+    }
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------

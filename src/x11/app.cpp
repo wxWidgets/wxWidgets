@@ -924,8 +924,6 @@ bool wxApp::SendIdleEvents(wxWindow* win)
 
     win->GetEventHandler()->ProcessEvent(event);
 
-    win->OnInternalIdle();
-
     if (event.MoreRequested())
         needMore = TRUE;
 
@@ -938,6 +936,8 @@ bool wxApp::SendIdleEvents(wxWindow* win)
 
         node = node->Next();
     }
+
+    win->OnInternalIdle();
 
     return needMore;
 }
@@ -1202,7 +1202,7 @@ void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
 {
     // While the GUI isn't working that well, just print out the
     // message.
-#if 0
+#if 1
     wxAppBase::OnAssert(file, line, msg);
 #else
     wxString msg2;

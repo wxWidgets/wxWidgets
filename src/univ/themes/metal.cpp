@@ -143,12 +143,20 @@ public:
 
     // ctor
     wxMetalRenderer(const wxColourScheme *scheme);
+    
+    // Metal gradient
+    void DrawMetal(wxDC &dc, const wxRect &rect );
 
     // implement the base class pure virtuals
     virtual void DrawBackground(wxDC& dc,
                                 const wxColour& col,
                                 const wxRect& rect,
-                                int flags = 0);
+                                int flags = 0,
+                                wxWindow *window = NULL );
+    virtual void DrawButtonSurface(wxDC& dc,
+                                const wxColour& col,
+                                const wxRect& rect,
+                                int flags );
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
@@ -404,7 +412,8 @@ protected:
     // DrawButtonBorder() helper
     void DoDrawBackground(wxDC& dc,
                           const wxColour& col,
-                          const wxRect& rect);
+                          const wxRect& rect,
+                          wxWindow *window = NULL );
 
     // DrawBorder() helpers: all of them shift and clip the DC after drawing
     // the border
@@ -1331,12 +1340,6 @@ wxColour wxMetalColourScheme::GetBackground(wxWindow *win) const
     }
     else
     {
-        if ( win->HasDialogBackground() )
-        {
-            col = win->GetParent()->GetBackgroundColour();
-            return col;
-        }
-        
         int flags = win->GetStateFlags();
 
         // the colour set by the user should be used for the normal state
@@ -3204,39 +3207,52 @@ void wxMetalRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
 }
 
 // ----------------------------------------------------------------------------
+// metal gradient
+// ----------------------------------------------------------------------------
+
+void wxMetalRenderer::DrawMetal(wxDC &dc, const wxRect &rect )
+{
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    for (int y = rect.y; y < rect.height+rect.y; y++)
+    {
+       int intens = 230 + 80 * (rect.y-y) / rect.height;
+       dc.SetBrush( wxBrush( wxColour(intens,intens,intens), wxSOLID ) );
+       dc.DrawRectangle( rect.x, y, rect.width, 1 );
+    }
+}
+   
+// ----------------------------------------------------------------------------
 // background
 // ----------------------------------------------------------------------------
 
+void wxMetalRenderer::DrawButtonSurface(wxDC& dc,
+                                        const wxColour& col,
+                                        const wxRect& rect,
+                                        int flags )
+{
+    DrawMetal( dc, rect );
+}
+
 void wxMetalRenderer::DoDrawBackground(wxDC& dc,
                                        const wxColour& col,
-                                       const wxRect& rect)
+                                       const wxRect& rect,
+                                       wxWindow *window )
 {
     dc.SetPen(*wxTRANSPARENT_PEN);
-    if (col == wxTheme::Get()->GetColourScheme()->Get( wxColourScheme::CONTROL ))
-    {
-        for (int y = rect.y; y < rect.height+rect.y; y++)
-        {
-           int intens = 230 + 80 * (rect.y-y) / rect.height;
-           dc.SetBrush( wxBrush( wxColour(intens,intens,intens), wxSOLID ) );
-           dc.DrawRectangle( rect.x, y, rect.width, 1 );
-        }
-    }
-    else
-    {
-        wxBrush brush(col, wxSOLID);
-        dc.SetBrush(brush);
-        dc.DrawRectangle(rect);
-    }
+    wxBrush brush(col, wxSOLID);
+    dc.SetBrush(brush);
+    dc.DrawRectangle(rect);
 }
 
 void wxMetalRenderer::DrawBackground(wxDC& dc,
                                      const wxColour& col,
                                      const wxRect& rect,
-                                     int flags)
+                                     int flags,
+                                     wxWindow *window )
 {
     // just fill it with the given or default bg colour
     wxColour colBg = col.Ok() ? col : wxSCHEME_COLOUR(m_scheme, CONTROL);
-    DoDrawBackground(dc, colBg, rect);
+    DoDrawBackground(dc, colBg, rect, window);
 }
 
 // ----------------------------------------------------------------------------
@@ -3302,7 +3318,7 @@ void wxMetalRenderer::DrawArrowButton(wxDC& dc,
                                       wxArrowStyle arrowStyle)
 {
     wxRect rect = rectAll;
-    DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
+    DrawMetal( dc, rect );
     DrawArrowBorder(dc, &rect, arrowStyle == Arrow_Pressed);
     DrawArrow(dc, rect, arrowDir, arrowStyle);
 }
@@ -3315,7 +3331,7 @@ void wxMetalRenderer::DrawScrollbarThumb(wxDC& dc,
     // we don't use the flags, the thumb never changes appearance
     wxRect rectThumb = rect;
     DrawArrowBorder(dc, &rectThumb);
-    DrawBackground(dc, wxNullColour, rectThumb);
+    DrawMetal( dc, rectThumb );
 }
 
 void wxMetalRenderer::DrawScrollbarShaft(wxDC& dc,
@@ -3323,10 +3339,7 @@ void wxMetalRenderer::DrawScrollbarShaft(wxDC& dc,
                                          const wxRect& rectBar,
                                          int flags)
 {
-    wxColourScheme::StdColour col = flags & wxCONTROL_PRESSED
-                                    ? wxColourScheme::SCROLLBAR_PRESSED
-                                    : wxColourScheme::SCROLLBAR;
-    DoDrawBackground(dc, m_scheme->Get(col), rectBar);
+    DrawMetal( dc, rectBar );
 }
 
 void wxMetalRenderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)

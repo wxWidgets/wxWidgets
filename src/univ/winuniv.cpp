@@ -111,8 +111,6 @@ void wxWindow::Init()
     
     m_oldSize.x = -1;
     m_oldSize.y = -1;
-    
-    m_hasDialogBackground = FALSE;
 }
 
 bool wxWindow::Create(wxWindow *parent,
@@ -304,7 +302,7 @@ bool wxWindow::DoDrawBackground(wxDC& dc)
 void wxWindow::EraseBackground(wxDC& dc, const wxRect& rect)
 {
     // TODO: handle bg bitmaps here!
-
+    
     m_renderer->DrawBackground(dc, wxTHEME_BG_COLOUR(this), rect, GetStateFlags());
 }
 

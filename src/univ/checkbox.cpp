@@ -70,8 +70,6 @@ bool wxCheckBox::Create(wxWindow *parent,
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
-    m_hasDialogBackground = TRUE;
-
     SetLabel(label);
     SetBestSize(size);
 

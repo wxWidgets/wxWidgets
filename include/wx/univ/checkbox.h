@@ -101,6 +101,8 @@ public:
     // overridden base class virtuals
     virtual bool IsPressed() const { return m_isPressed; }
 
+    virtual bool HasTransparentBackground() { return TRUE; }
+    
 protected:
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = -1,

@@ -114,9 +114,9 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
     {
         wxEventType command = wxEVT_SCROLL_THUMBRELEASE;
         int value = (int)ceil(win->m_adjust->value);
-        int dir = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
+        int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
 
-        wxScrollEvent event( command, value, dir );
+        wxScrollEvent event( command, win->GetId(), value, orient );
         event.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent( event );
     }

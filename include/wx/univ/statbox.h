@@ -51,6 +51,8 @@ public:
     // take account of this
     virtual wxPoint GetBoxAreaOrigin() const;
 
+    virtual bool HasTransparentBackground() { return TRUE; }
+    
 protected:
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer);

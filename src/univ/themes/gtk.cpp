@@ -77,7 +77,8 @@ public:
     virtual void DrawBackground(wxDC& dc,
                                 const wxColour& col,
                                 const wxRect& rect,
-                                int flags = 0);
+                                int flags = 0,
+                                wxWindow *window = NULL );
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
@@ -336,7 +337,8 @@ protected:
     // draw the background with any colour, not only the default one(s)
     void DoDrawBackground(wxDC& dc,
                           const wxColour& col,
-                          const wxRect& rect);
+                          const wxRect& rect,
+                          wxWindow *window = NULL);
 
     // DrawBorder() helpers: all of them shift and clip the DC after drawing
     // the border
@@ -2280,7 +2282,8 @@ void wxGTKRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
 
 void wxGTKRenderer::DoDrawBackground(wxDC& dc,
                                      const wxColour& col,
-                                     const wxRect& rect)
+                                     const wxRect& rect,
+                                     wxWindow *window )
 {
     wxBrush brush(col, wxSOLID);
     dc.SetBrush(brush);
@@ -2291,10 +2294,11 @@ void wxGTKRenderer::DoDrawBackground(wxDC& dc,
 void wxGTKRenderer::DrawBackground(wxDC& dc,
                                    const wxColour& col,
                                    const wxRect& rect,
-                                   int flags)
+                                   int flags,
+                                   wxWindow *window )
 {
     wxColour colBg = col.Ok() ? col : GetBackgroundColour(flags);
-    DoDrawBackground(dc, colBg, rect);
+    DoDrawBackground(dc, colBg, rect, window );
 }
 
 // ----------------------------------------------------------------------------

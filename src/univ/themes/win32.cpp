@@ -148,7 +148,8 @@ public:
     virtual void DrawBackground(wxDC& dc,
                                 const wxColour& col,
                                 const wxRect& rect,
-                                int flags = 0);
+                                int flags = 0,
+                                wxWindow *window = NULL);
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
@@ -404,7 +405,8 @@ protected:
     // DrawButtonBorder() helper
     void DoDrawBackground(wxDC& dc,
                           const wxColour& col,
-                          const wxRect& rect);
+                          const wxRect& rect,
+                          wxWindow *window = NULL );
 
     // DrawBorder() helpers: all of them shift and clip the DC after drawing
     // the border
@@ -3203,7 +3205,8 @@ void wxWin32Renderer::GetComboBitmaps(wxBitmap *bmpNormal,
 
 void wxWin32Renderer::DoDrawBackground(wxDC& dc,
                                        const wxColour& col,
-                                       const wxRect& rect)
+                                       const wxRect& rect,
+                                       wxWindow *window )
 {
     wxBrush brush(col, wxSOLID);
     dc.SetBrush(brush);
@@ -3214,11 +3217,12 @@ void wxWin32Renderer::DoDrawBackground(wxDC& dc,
 void wxWin32Renderer::DrawBackground(wxDC& dc,
                                      const wxColour& col,
                                      const wxRect& rect,
-                                     int flags)
+                                     int flags,
+                                     wxWindow *window )
 {
     // just fill it with the given or default bg colour
     wxColour colBg = col.Ok() ? col : wxSCHEME_COLOUR(m_scheme, CONTROL);
-    DoDrawBackground(dc, colBg, rect);
+    DoDrawBackground(dc, colBg, rect, window );
 }
 
 // ----------------------------------------------------------------------------

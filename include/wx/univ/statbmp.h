@@ -63,6 +63,8 @@ public:
 
     wxIcon GetIcon() const;
 
+    virtual bool HasTransparentBackground() { return TRUE; }
+    
 private:
     virtual void DoDraw(wxControlRenderer *renderer);
 

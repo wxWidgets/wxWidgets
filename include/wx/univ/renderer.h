@@ -69,7 +69,16 @@ public:
     virtual void DrawBackground(wxDC& dc,
                                 const wxColour& col,
                                 const wxRect& rect,
-                                int flags) = 0;
+                                int flags,
+                                wxWindow *window = NULL ) = 0;
+
+    // draw the button surface
+    virtual void DrawButtonSurface(wxDC& dc,
+                                const wxColour& col,
+                                const wxRect& rect,
+                                int flags )
+        { DrawBackground( dc, col, rect, flags ); }
+                                
 
     // draw the label inside the given rectangle with the specified alignment
     // and optionally emphasize the character with the given index
@@ -497,8 +506,9 @@ public:
     virtual void DrawBackground(wxDC& dc,
                                 const wxColour& col,
                                 const wxRect& rect,
-                                int flags)
-        { m_renderer->DrawBackground(dc, col, rect, flags); }
+                                int flags,
+                                wxWindow *window = NULL )
+        { m_renderer->DrawBackground(dc, col, rect, flags, window ); }
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,

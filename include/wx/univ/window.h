@@ -171,6 +171,16 @@ public:
     // control (e.g. a button, checkbox, ...)
     virtual bool IsContainerWindow() const { return FALSE; }
 
+    // returns TRUE if the control has "transparent" areas such
+    // as a wxStaticText and wxCheckBox and the background should
+    // be adapted from a parent window
+    virtual bool HasTransparentBackground() { return FALSE; }
+    
+    // to be used with function above: transparent windows get
+    // their background from parents that return TRUE here,
+    // so this is mostly for wxPanel, wxTopLevelWindow etc.
+    virtual bool ProvidesBackground() { return FALSE; }
+
     // return TRUE if this control can be highlighted when the mouse is over
     // it (the theme decides itself whether it is really highlighted or not)
     virtual bool CanBeHighlighted() const { return FALSE; }
@@ -201,9 +211,6 @@ public:
     // erase part of the control
     virtual void EraseBackground(wxDC& dc, const wxRect& rect);
     
-    // see below
-    bool HasDialogBackground() { return m_hasDialogBackground; }
-
     // overridden base class methods
     // -----------------------------
 
@@ -270,10 +277,6 @@ protected:
     // the renderer we use
     wxRenderer *m_renderer;
     
-    // background like a dialog (e.g. wxStaticText,
-    // wxRadioButton), not with a surface (wxButton)
-    bool m_hasDialogBackground;
-
     // background bitmap info
     wxBitmap  m_bitmapBg;
     int       m_alignBgBitmap;

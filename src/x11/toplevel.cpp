@@ -264,7 +264,10 @@ void wxTopLevelWindowX11::OnInternalIdle()
 {
     wxWindow::OnInternalIdle();
     
-    if (m_needResizeInIdle)
+    // Do this only after the last idle event so that
+    // all windows have been updated before a new
+    // round of size events is sent
+    if (m_needResizeInIdle && !wxTheApp->Pending())
     {
         wxSizeEvent event( GetClientSize(), GetId() );
         event.SetEventObject( this );
@@ -280,30 +283,14 @@ void wxTopLevelWindowX11::OnInternalIdle()
 
 bool wxTopLevelWindowX11::Show(bool show)
 {
-    // Nano-X has to force a size event,
-    // else there's no initial size.
-#if wxUSE_NANOX
     if (show)
-#else
-    if (show && m_needResizeInIdle)
-#endif
     {
         wxSizeEvent event(GetSize(), GetId());
+        
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
         
         m_needResizeInIdle = FALSE;
-    }
-    if (show)
-    {
-        // This does the layout _before_ the
-        // window is shown, else the items are
-        // drawn first at the wrong positions,
-        // then at the correct positions.
-        if (GetAutoLayout())
-        {
-            Layout();
-        }
     }
 
     bool ret = wxWindowX11::Show(show);

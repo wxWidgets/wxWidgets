@@ -81,6 +81,10 @@ public:
 
     virtual void InitDialog();
 
+#ifdef __WXUNIV__
+    virtual bool ProvidesBackground() { return TRUE; }
+#endif
+
     WX_DECLARE_CONTROL_CONTAINER();
 
 protected:

@@ -143,6 +143,8 @@ public:
     virtual int GetMinWidth() const;
     virtual int GetMinHeight() const;
 
+    virtual bool ProvidesBackground() { return TRUE; }
+    
 protected:
     // handle titlebar button click event
     virtual void ClickTitleBarButton(long button);
