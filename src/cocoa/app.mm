@@ -98,11 +98,12 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     [super sendEvent: anEvent];
 }
 
+// NOTE: Terminate means that the event loop does NOT return and thus
+// cleanup code doesn't properly execute.  Furthermore, wxWindows has its
+// own exit on frame delete mechanism.
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication
 {
-    BOOL ret = wxTheApp->GetExitOnFrameDelete();
-    wxLogDebug("applicationShouldTermintaeAfterLastWindowClosed=%d",ret);
-    return ret;
+    return NO;
 }
 
 @end // wxPoserNSApplication
