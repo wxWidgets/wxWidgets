@@ -49,6 +49,7 @@ src/makelib.twn
 src/makefile.bcc
 src/makefile.dos
 src/makefile.vc
+src/version.mak
 src/*.bat
 
 src/common/dosyacc.c

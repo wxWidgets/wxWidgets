@@ -215,6 +215,8 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 
   WXDWORD exflags;
   WXDWORD msflags = MSWGetCreateWindowFlags(&exflags);
+  msflags &= ~WS_VSCROLL;
+  msflags &= ~WS_HSCROLL;
 
   if ( !wxWindow::MSWCreate(wxMDIFrameClassName,
                             title,
