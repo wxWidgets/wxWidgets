@@ -1,0 +1,88 @@
+#
+# File:		makefile.bcc
+# Author:	Julian Smart
+# Created:	1996
+# Updated:	
+# Copyright:	(c) 1996
+#
+# "%W% %G%"
+#
+# Makefile : Builds OGL example for BC++, 32-bit.
+
+!if "$(BCCDIR)" == ""
+!error You must define the BCCDIR variable in autoexec.bat, e.g. BCCDIR=d:\bc4
+!endif
+
+!if "$(WXWIN)" == ""
+!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
+!endif
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+WXDIR = $(WXWIN)
+!include $(WXDIR)\src\makeb32.env
+
+THISDIR = $(WXDIR)\utils\ogl\samples\ogledit
+
+OGLDIR = ..\.. # $(WXDIR)\utils\ogl # Command line too long!
+OGLINC = $(OGLDIR)\src
+OGLLIB = $(WXDIR)\lib\ogl.lib
+
+WXLIB = $(WXDIR)\lib\wx32.lib
+LIBS=$(WXLIB) $(OGLLIB) cw32 import32
+INC=/I$(OGLINC)
+CFG=$(WXDIR)\src\wxwin32.cfg
+
+!if "$(FINAL)" == "0"
+LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
+OPT = -Od
+DEBUG_FLAGS= -v -DDEBUG=$(DEBUG)
+!else
+LINKFLAGS=/Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
+OPT = -O2
+DEBUG_FLAGS = -DDEBUG=$(DEBUG)
+!endif
+
+CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
+
+OBJECTS = ogledit.obj doc.obj view.obj palette.obj
+
+all:    ogl ogledit.exe
+
+ogl:
+    cd $(OGLDIR)\src
+    make -f makefile.b32
+    cd $(THISDIR)
+
+ogledit.exe:      $(WXLIB) $(OBJECTS) ogledit.def ogledit.res
+        tlink32 $(LINKFLAGS) @&&!
+c0w32.obj $(OBJECTS)
+ogledit
+nul
+$(LIBS)
+ogledit.def
+!
+        brc32 -K ogledit.res
+
+.$(SRCSUFF).obj:
+	bcc32 $(CPPFLAGS) $(INC) -c {$< }
+
+ogledit.obj:      ogledit.$(SRCSUFF)
+
+doc.obj:      doc.$(SRCSUFF)
+
+view.obj:      view.$(SRCSUFF)
+
+palette.obj:      palette.$(SRCSUFF)
+
+ogledit.res :      ogledit.rc $(WXDIR)\include\msw\wx.rc
+    brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa ogledit
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.rws

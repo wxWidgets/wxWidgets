@@ -373,7 +373,7 @@ class EditorToolBar: public wxToolBar
 {
 public:
   EditorToolBar(wxFrame *frame, const wxPoint& pos = wxPoint(0, 0), const wxSize& size = wxSize(0, 0),
-            long style = 0, int direction = wxVERTICAL, int RowsOrColumns = 2);
+            long style = wxTB_HORIZONTAL);
   bool OnLeftClick(int toolIndex, bool toggled);
   void OnMouseEnter(int toolIndex);
   void OnPaint(wxPaintEvent& event);

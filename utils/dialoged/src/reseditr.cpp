@@ -732,10 +732,8 @@ wxToolBarBase *wxResourceManager::OnCreateToolBar(wxFrame *parent)
 #endif
 
   // Create the toolbar
-  EditorToolBar *toolbar = new EditorToolBar(parent, wxPoint(0, 0), wxSize(-1, -1), wxNO_BORDER,
-                                        wxVERTICAL, 1);
+  EditorToolBar *toolbar = new EditorToolBar(parent, wxPoint(0, 0), wxSize(-1, -1), wxNO_BORDER|wxTB_HORIZONTAL);
   toolbar->SetMargins(2, 2);
-//  toolbar->GetDC()->SetBackground(wxLIGHT_GREY_BRUSH);
 
 #ifdef __WXMSW__
   int width = 24;
@@ -792,11 +790,9 @@ wxToolBarBase *wxResourceManager::OnCreateToolBar(wxFrame *parent)
                    FALSE, (float)currentX, -1, NULL, "Help");
   currentX += width + dx;
   
-  toolbar->CreateTools();
+  toolbar->Realize();
 
   return toolbar;
-
-//  parent->OnSize(-1, -1);
 }
 
 void wxResourceManager::UpdateResourceList()
@@ -1965,8 +1961,8 @@ BEGIN_EVENT_TABLE(EditorToolBar, wxToolBar)
 END_EVENT_TABLE()
 
 EditorToolBar::EditorToolBar(wxFrame *frame, const wxPoint& pos, const wxSize& size,
-            long style, int direction, int RowsOrColumns):
-  wxToolBar(frame, -1, pos, size, style, direction, RowsOrColumns)
+            long style):
+  wxToolBar(frame, -1, pos, size, style)
 {
 }
 

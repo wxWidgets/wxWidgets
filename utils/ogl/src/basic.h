@@ -102,8 +102,8 @@ class wxShapeRegion;
 class wxShape;
 
 #ifdef PROLOGIO
-class wxExpr;
-class wxDatabase;
+class WXDLLEXPORT wxExpr;
+class WXDLLEXPORT wxExprDatabase;
 #endif
 
 class wxShapeEvtHandler: public wxObject

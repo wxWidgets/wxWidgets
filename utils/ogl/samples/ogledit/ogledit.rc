@@ -1,0 +1,10 @@
+ogl_icn                 ICON    ogl.ico
+
+TOOL1           BITMAP "bitmaps/tool1.bmp"
+TOOL2           BITMAP "bitmaps/tool2.bmp"
+TOOL3           BITMAP "bitmaps/tool3.bmp"
+TOOL4           BITMAP "bitmaps/tool4.bmp"
+ARROWTOOL       BITMAP "bitmaps/arrow.bmp"
+
+#include "wx/msw/wx.rc"
+

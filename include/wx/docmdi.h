@@ -27,8 +27,9 @@ class wxDocMDIParentFrame: public wxMDIParentFrame
 {
   DECLARE_CLASS(wxDocMDIParentFrame)
  public:
-  wxDocMDIParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size,
-    long style, const wxString& name);
+  wxDocMDIParentFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id,
+      const wxString& title, const wxPoint& pos = wxDefaultPosition,
+      const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
 
   bool OnClose(void);
   // Extend event processing to search the document manager's event table
@@ -55,8 +56,8 @@ class WXDLLEXPORT wxDocMDIChildFrame: public wxMDIChildFrame
   DECLARE_CLASS(wxDocMDIChildFrame)
 
  public:
-  wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID id, const wxString& title,
-    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+  wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID id,
+    const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
     long type = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
   ~wxDocMDIChildFrame(void);
 

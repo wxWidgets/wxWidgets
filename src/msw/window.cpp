@@ -81,7 +81,7 @@
 #endif
 
 #ifdef  __WXDEBUG__
-  static const char *GetMessageName(int message);
+const char *wxGetMessageName(int message);
 #endif  //WXDEBUG
 
 #define WINDOW_MARGIN 3 // This defines sensitivity of Leave events
@@ -954,7 +954,7 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
   #ifdef __WXDEBUG__
-    wxLogTrace(wxTraceMessages, "Processing %s", GetMessageName(message));
+    wxLogTrace(wxTraceMessages, "Processing %s", wxGetMessageName(message));
   #endif // WXDEBUG
 
   HWND hWnd = (HWND)m_hWnd;
@@ -1938,7 +1938,7 @@ long wxWindow::Default()
 
     #ifdef __WXDEBUG__
         wxLogTrace(wxTraceMessages, "Forwarding %s to DefWindowProc.",
-                  GetMessageName(m_lastMsg));
+                  wxGetMessageName(m_lastMsg));
     #endif // WXDEBUG
 
     return this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
@@ -4593,10 +4593,8 @@ bool wxWindow::IsExposed(const wxRect& rect) const
     return (m_updateRegion.Contains(rect) != wxOutRegion);
 }
 
-
-
 #ifdef __WXDEBUG__
-static const char *GetMessageName(int message)
+const char *wxGetMessageName(int message)
 {
   switch ( message ) {
     case 0x0000: return "WM_NULL";
