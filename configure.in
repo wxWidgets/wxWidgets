@@ -465,6 +465,7 @@ dnl ------------------------------------------------------------------------
 
 dnl assume Unix
 USE_UNIX=1
+USE_WIN32=0
 USE_LINUX=
 USE_SGI=
 USE_HPUX=
@@ -583,6 +584,7 @@ case "${host}" in
 
   *-*-cygwin32* )
     USE_UNIX=0
+    USE_WIN32=1
     AC_DEFINE(__WIN32__)
     AC_DEFINE(__WIN95__)
     AC_DEFINE(__WINDOWS__)
@@ -593,6 +595,7 @@ case "${host}" in
   ;;
   *-*-mingw32* )
     USE_UNIX=0
+    USE_WIN32=1
     AC_DEFINE(__WIN32__)
     AC_DEFINE(__WIN95__)
     AC_DEFINE(__WINDOWS__)
@@ -2562,10 +2565,21 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
         wxUSE_DRAG_AND_DROP=no
     fi
 
+    if test "$USE_WIN32" = 1; then
+        dnl check for ole headers and disable DnD if not present (earlier
+        dnl versions of mingw32 don't have them)
+        AC_CHECK_HEADERS(ole2.h)
+        if test "x$HAVE_OLE2_H" = x ; then
+            AC_MSG_WARN(Drag and drop disabled because OLE headers not found)
+            wxUSE_DRAG_AND_DROP=no
+        fi
+    fi
+
     if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
         AC_DEFINE(wxUSE_DRAG_AND_DROP)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
     fi
+
 fi
 
 if test "$wxUSE_SPLINES" = "yes" ; then
