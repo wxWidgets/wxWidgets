@@ -2891,7 +2891,8 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
         return TRUE;
     }
 
-    if (m_wxwindow)
+    if ((m_wxwindow) &&
+        (m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE)))
     {
         /* wxMSW doesn't clear the window here. I don't do that either to
           provide compatibility. call Clear() to do the job. */
@@ -2900,17 +2901,7 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
         gdk_window_set_background( window, m_backgroundColour.GetColor() );
     }
 
-    wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-    if (sysbg == m_backgroundColour)
-    {
-        m_backgroundColour = wxNullColour;
-        ApplyWidgetStyle();
-        m_backgroundColour = sysbg;
-    }
-    else
-    {
-        ApplyWidgetStyle();
-    }
+    ApplyWidgetStyle();
 
     return TRUE;
 }
@@ -2943,17 +2934,7 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
         return TRUE;
     }
 
-    wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-    if ( sysbg == m_backgroundColour )
-    {
-        m_backgroundColour = wxNullColour;
-        ApplyWidgetStyle();
-        m_backgroundColour = sysbg;
-    }
-    else
-    {
-        ApplyWidgetStyle();
-    }
+    ApplyWidgetStyle();
 
     return TRUE;
 }
