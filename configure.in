@@ -237,6 +237,7 @@ dnl ------------------------------------------------------------------------
 
 SEARCH_INCLUDE="\
     /usr/Motif1.2/include     \
+    /usr/dt/include/Xm        \
 			      \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
@@ -289,6 +290,7 @@ SEARCH_INCLUDE="\
     "
 
 SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` \
+    /usr/dt/lib \
     "
 
 dnl ------------------------------------------------------------------------
