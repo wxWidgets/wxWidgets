@@ -167,6 +167,7 @@ gdicmn.cpp	Common
 geometry.cpp	Common
 gifdecod.cpp	Common
 hash.cpp	Common	Base
+hashmap.cpp	Common	Base
 helpbase.cpp	Common
 http.cpp	Common	Socket,Base
 imagall.cpp	Common
@@ -793,6 +794,7 @@ glcanvas.h	WXH
 grid.h	WXH
 gsocket.h	WXH	Base
 hash.h	WXH	Base
+hashmap.h	WXH	Base
 help.h	WXH
 helpbase.h	WXH
 helphtml.h	WXH
