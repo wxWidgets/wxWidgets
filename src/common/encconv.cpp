@@ -157,7 +157,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
                     m_Table[128 + i] = (wchar_t)(128 + i);
 #else
                     m_Table[128 + i] = (char)(128 + i);
-#endif					
+#endif
             }
 
             delete[] rev;
@@ -182,7 +182,7 @@ void wxEncodingConverter::Convert(const char* input, char* output)
         return;
     }
 
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+    wxCHECK_RET(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
 
     for (i = input, o = output; *i != 0;)
         *(o++) = (char)(m_Table[(wxUint8)*(i++)]);
@@ -208,7 +208,7 @@ void wxEncodingConverter::Convert(const char* input, wchar_t* output)
         return;
     }
 
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+    wxCHECK_RET(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
 
     for (i = input, o = output; *i != 0;)
         *(o++) = (wchar_t)(m_Table[(wxUint8)*(i++)]);
@@ -233,7 +233,7 @@ void wxEncodingConverter::Convert(const wchar_t* input, char* output)
         return;
     }
 
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+    wxCHECK_RET(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
 
     for (i = input, o = output; *i != 0;)
         *(o++) = (char)(m_Table[(wxUint16)*(i++)]);
@@ -259,7 +259,7 @@ void wxEncodingConverter::Convert(const wchar_t* input, wchar_t* output)
         return;
     }
 
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+    wxCHECK_RET(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
 
     for (i = input, o = output; *i != 0;)
         *(o++) = (wchar_t)(m_Table[(wxUint8)*(i++)]);
@@ -276,14 +276,19 @@ wxString wxEncodingConverter::Convert(const wxString& input)
     wxString s;
     const wxChar *i;
 
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+    wxCHECK_RET(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
 
     if (m_UnicodeInput)
+    {
         for (i = input.c_str(); *i != 0; i++)
             s << (wxChar)(m_Table[(wxUint16)*i]);
+    }
     else
+    {
         for (i = input.c_str(); *i != 0; i++)
             s << (wxChar)(m_Table[(wxUint8)*i]);
+    }
+
     return s;
 }
 
