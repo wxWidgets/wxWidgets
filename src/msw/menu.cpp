@@ -36,6 +36,7 @@
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/mdi.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN
@@ -1059,6 +1060,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
             }
         }
 #else
+#if wxUSE_MDI_ARCHITECTURE
         //MDI - window menu stuff
         if (GetFrame() && GetFrame()->IsKindOf(CLASSINFO(wxMDIParentFrame)))
         {
@@ -1130,6 +1132,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
                 }//end if child == wxMDIChildFrame
             }//end children iteration loop
         }//end if GetFrame()->IsKindOf(CLASSINFO(wxMDIParentFrame))
+#endif //wxUSE_MDI_ARCHITECTURE
 
         if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
         {
