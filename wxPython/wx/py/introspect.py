@@ -169,6 +169,8 @@ def getCallTip(command='', locals=None):
             temp = argspec.split(',')
             if len(temp) == 1:  # No other arguments.
                 argspec = '()'
+            elif temp[0][:2] == '(*': # first param is like *args, not self
+                pass 
             else:  # Drop the first argument.
                 argspec = '(' + ','.join(temp[1:]).lstrip()
         tip1 = name + argspec
@@ -184,7 +186,7 @@ def getCallTip(command='', locals=None):
         # tip3 is the rest of the docstring, like:
         # "The call tip information will be based on ... <snip>
         firstline = doc.split('\n')[0].lstrip()
-        if tip1 == firstline:
+        if tip1 == firstline or firstline[:len(name)+1] == name+'(':
             tip1 = ''
         else:
             tip1 += '\n\n'
