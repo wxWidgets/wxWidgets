@@ -108,9 +108,9 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
     {
         wxClassInfo::sm_classTable->BeginFind();
 
-        wxClassInfo* classInfo = NextBackend();
+        wxClassInfo* classInfo;
 
-        while(classInfo)
+        while((classInfo = NextBackend()) != NULL)
         {
             if(!DoCreate(classInfo, parent, id,
                          pos, size, style, validator, name))
@@ -131,8 +131,6 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
                 SetBestFittingSize(size);
                 return true;
             }
-
-            classInfo = NextBackend();
         }
 
         m_imp = NULL;
@@ -172,9 +170,9 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
     {
         wxClassInfo::sm_classTable->BeginFind();
 
-        wxClassInfo* classInfo = NextBackend();
+        wxClassInfo* classInfo;
 
-        while(classInfo)
+        while((classInfo = NextBackend()) != NULL)
         {
             if(!DoCreate(classInfo, parent, id,
                          pos, size, style, validator, name))
@@ -187,8 +185,6 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
             }
             else
                 delete m_imp;
-
-            classInfo = NextBackend();
         }
 
         m_imp = NULL;
