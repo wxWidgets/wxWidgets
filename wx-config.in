@@ -44,7 +44,7 @@ while test $# -gt 0; do
           includes=-I@includedir@
         fi
       fi
-      includes="$includes -I@includedir@ -I@datadir@/@PACKAGE@/include"
+      includes="$includes -I@datadir@/@PACKAGE@/include"
       echo $includes @WXDEBUG_DEFINE@ @TOOLKIT_DEF@ @TOOLKIT_INCLUDE@
       ;;
     --libs)

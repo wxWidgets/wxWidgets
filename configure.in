@@ -752,10 +752,6 @@ dnl install checks
 dnl   defines INSTALL with the appropriate command
 AC_PROG_INSTALL
 
-dnl does ln -s works
-dnl   defines LN_S with the appropriate command
-AC_PROG_LN_S
-
 dnl strip command
 dnl   defines STRIP as strip or nothing if not found
 AC_CHECK_PROG(STRIP, strip, strip, true)
@@ -806,6 +802,9 @@ dnl   defines YYTEXT_POINTER  if yytext is char*
 dnl   defines LEX_OUTPUT_ROOT as to the base of the
 dnl                           filename output by the lexer
 AM_PROG_LEX
+
+dnl needed for making link to setup.h
+AC_PROG_LN_S
 
 dnl libtool checks (disable static libs by default, this takes too much time...)
 AM_DISABLE_STATIC
@@ -1930,9 +1929,11 @@ AC_SUBST(EXTRA_LIBS)
 AC_SUBST(LIBS)
 
 dnl create the configuration header file from the template
-SETUPH_DIR=include/wx/${TOOLKIT_DIR}
-AC_SUBST(SETUPH_DIR)
-AM_CONFIG_HEADER(${SETUPH_DIR}/setup.h:include/wx/unix/setup.h.in)
+dnl
+dnl NB: automake can't work correctly if our header lives in a directory which
+dnl     is only determined at configure time, so we create it on the top-level
+dnl     and make a link to allow '#include "wx/setup.h"' to still work
+AM_CONFIG_HEADER(setup.h:include/wx/unix/setup.h.in)
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
 dnl itself (this is macro is required if SUBDIRS variable is used in Makefile.am
@@ -2004,9 +2005,13 @@ AC_OUTPUT([
           ],
           [
             chmod +x wx-config
+            if test ! -e include/wx/${TOOLKIT_DIR}/setup.h; then
+              ${LN_S} `pwd`/setup.h include/wx/${TOOLKIT_DIR}/setup.h
+            fi
           ],
           [
-            SETUPH_DIR=${SETUPH_DIR}
+            LN_S="${ac_cv_prog_LN_S}"
+            TOOLKIT_DIR="${TOOLKIT_DIR}"
           ]
          )
 
