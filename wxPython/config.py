@@ -721,7 +721,8 @@ if UNICODE:
     VER_FLAGS += 'u'
 
 if os.path.exists('DAILY_BUILD'):
-    VER_FLAGS += '.' + open('DAILY_BUILD').read()
+    
+    VER_FLAGS += '.' + open('DAILY_BUILD').read().strip()
 
 VERSION = "%s.%s.%s.%s%s" % (VER_MAJOR, VER_MINOR, VER_RELEASE,
                              VER_SUBREL, VER_FLAGS)
