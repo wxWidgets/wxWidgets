@@ -301,7 +301,7 @@ void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
 {
     wxLogMessage( "Scrolling 2 units up.\nThe white square and the controls should move equally!" );
     int x,y;
-    ViewStart( &x, &y );
+    GetViewStart( &x, &y );
     Scroll( -1, y+2 );
 }
 
