@@ -90,6 +90,16 @@
     #endif
 #endif
 
+// current mingw32 headers forget to define _puttchar, this will probably be
+// fixed in the next versions but for now do it ourselves
+#if defined( __MINGW32__ ) && !defined( _puttchar )
+    #ifdef wxUSE_UNICODE
+        #define  _puttchar   putwchar
+    #else
+        #define  _puttchar   puttchar
+    #endif
+#endif
+
 
 #endif
   /* _WX_MSW_GCCPRIV_H_ */
