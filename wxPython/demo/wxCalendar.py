@@ -229,7 +229,8 @@ class TestPanel(wxPanel):
 
 class CalendFrame(wxFrame):
     def __init__(self, parent, id, title, log):
-        wxFrame.__init__(self, parent, id, title, wxPyDefaultPosition, wxSize(400, 400))
+        wxFrame.__init__(self, parent, id, title, size=wxSize(400, 400),
+                         style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
         EVT_CLOSE(self, self.OnCloseWindow)
 
         self.log = log

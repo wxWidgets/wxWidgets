@@ -455,7 +455,7 @@ class wxCalendar(wxWindow):
         self.set_day = None
 
         EVT_PAINT(self, self.OnPaint)
-
+        EVT_SIZE(self, self.OnSize)
 
 # control some of the main calendar attributes
 
@@ -610,6 +610,10 @@ class wxCalendar(wxWindow):
 
     def SetBusType(self):
         self.cal_type = "BUS"
+
+    def OnSize(self, evt):
+        self.Refresh(false)
+        evt.Skip()
 
     def OnPaint(self, event):
         DC = wxPaintDC(self)
