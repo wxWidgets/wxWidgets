@@ -243,7 +243,8 @@ void MyFrame::OnInsertPage(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDeletePage(wxCommandEvent& WXUNUSED(event))
 {
-    m_notebook->DeletePage( m_notebook->GetPageCount()-1 );
+    if (m_notebook->GetPageCount() > 0)
+        m_notebook->DeletePage( m_notebook->GetPageCount()-1 );
 }
 
 void MyFrame::OnNextPage(wxCommandEvent& WXUNUSED(event))

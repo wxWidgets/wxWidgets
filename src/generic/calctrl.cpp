@@ -121,6 +121,7 @@ wxMonthComboBox::wxMonthComboBox(wxCalendarCtrl *cal)
     }
 
     SetSelection(m_cal->GetDate().GetMonth());
+    SetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
 }
 
 wxYearSpinCtrl::wxYearSpinCtrl(wxCalendarCtrl *cal)
