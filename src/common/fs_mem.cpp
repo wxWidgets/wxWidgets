@@ -231,7 +231,6 @@ wxMemoryFSHandler::AddFile(const wxString& filename, wxImage& image, long type)
         wxLogError(s);
     }
 }
-#endif // wxUSE_IMAGE
 
 /*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, const wxBitmap& bitmap, long type)
 {
@@ -239,7 +238,9 @@ wxMemoryFSHandler::AddFile(const wxString& filename, wxImage& image, long type)
     AddFile(filename, img, type);
 }
 
-#endif
+#endif // wxUSE_IMAGE
+
+#endif // wxUSE_GUI
 
 
 #endif // wxUSE_FILESYSTEM && wxUSE_FS_ZIP

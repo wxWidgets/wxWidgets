@@ -234,7 +234,9 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 wxMDIParentFrame::~wxMDIParentFrame()
 {
     // see comment in ~wxMDIChildFrame
+#if wxUSE_TOOLBAR
     m_frameToolBar = NULL;
+#endif
     m_frameStatusBar = NULL;
 
     DestroyChildren();
@@ -732,7 +734,9 @@ wxMDIChildFrame::~wxMDIChildFrame()
 {
     // will be destroyed by DestroyChildren() but reset them before calling it
     // to avoid using dangling pointers if a callback comes in the meanwhile
+#if wxUSE_TOOLBAR
     m_frameToolBar = NULL;
+#endif
     m_frameStatusBar = NULL;
 
     DestroyChildren();
@@ -1027,11 +1031,13 @@ bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
             lpPos->cx = rectClient.right - rectClient.left;
             lpPos->cy = rectClient.bottom - rectClient.top;
         }
+#if wxUSE_TOOLBAR
         wxMDIParentFrame* pFrameWnd = (wxMDIParentFrame *)GetParent();
         if (pFrameWnd && pFrameWnd->GetToolBar() && pFrameWnd->GetToolBar()->IsShown())
         {
             pFrameWnd->GetToolBar()->Refresh();
         }
+#endif
     }
 #endif // Win95
 

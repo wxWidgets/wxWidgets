@@ -91,11 +91,12 @@ public:
 
 #if wxUSE_IMAGE
     static void AddFile(const wxString& filename, wxImage& image, long type);
-#endif // wxUSE_IMAGE
 
     static void AddFile(const wxString& filename,
                         const wxBitmap& bitmap,
                         long type);
+#endif // wxUSE_IMAGE
+
 };
 
 #else // !wxUSE_GUI

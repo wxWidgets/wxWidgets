@@ -50,9 +50,15 @@ wxBitmap wxRegion::ConvertToBitmap() const
 
 //---------------------------------------------------------------------------
 
+#if wxUSE_IMAGE
 bool wxRegion::Union(const wxBitmap& bmp,
                      const wxColour& transColour,
                      int   tolerance)
+#else
+bool wxRegion::Union(const wxBitmap& WXUNUSED(bmp),
+                     const wxColour& WXUNUSED(transColour),
+                     int   WXUNUSED(tolerance))
+#endif
 {
 #if wxUSE_IMAGE
     unsigned char loR, loG, loB;
@@ -116,10 +122,10 @@ bool wxRegion::Union(const wxBitmap& bmp,
         }
     }
 
-    return TRUE;
+    return true;
 #else
     // No wxImage support
-    return FALSE;
+    return false;
 #endif
 }
 

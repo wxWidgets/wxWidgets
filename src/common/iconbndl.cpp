@@ -54,7 +54,11 @@ void wxIconBundle::DeleteIcons()
     m_icons.Empty();
 }
 
+#if wxUSE_IMAGE
 void wxIconBundle::AddIcon( const wxString& file, long type )
+#else
+void wxIconBundle::AddIcon( const wxString& WXUNUSED(file), long WXUNUSED(type) )
+#endif
 {
 #if wxUSE_IMAGE
     size_t count = wxImage::GetImageCount( file, type );

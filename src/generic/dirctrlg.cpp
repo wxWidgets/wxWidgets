@@ -1528,7 +1528,7 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
     return m_smallImageList;
 }
 
-#if wxUSE_MIMETYPE
+#if wxUSE_MIMETYPE && wxUSE_IMAGE
 // VS: we don't need this function w/o wxMimeTypesManager because we'll only have
 //     one icon and we won't resize it
 
@@ -1684,6 +1684,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     {
         m_smallImageList->Add(bmp);
     }
+#if wxUSE_IMAGE
     else
     {
         wxImage img = bmp.ConvertToImage();
@@ -1694,7 +1695,8 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         else
             m_smallImageList->Add(CreateAntialiasedBitmap(img));
     }
-    
+#endif // wxUSE_IMAGE
+
     m_HashTable->Put(extension, new wxFileIconEntry(id));
     return id;
 

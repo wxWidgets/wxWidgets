@@ -429,7 +429,11 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 }
 
 // Create from XPM data
+#if wxUSE_IMAGE && wxUSE_XPM
 bool wxBitmap::CreateFromXpm(const char **data)
+#else
+bool wxBitmap::CreateFromXpm(const char **WXUNUSED(data))
+#endif
 {
 #if wxUSE_IMAGE && wxUSE_XPM
     Init();
