@@ -2447,6 +2447,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 {
                     event.Skip();
                 }
+                break;
 
             case WXK_RETURN:
                 if ( event.ControlDown() )

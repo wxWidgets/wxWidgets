@@ -72,6 +72,8 @@ public:
     virtual void SetMenuBar( wxMenuBar *menuBar );
 
 #if wxUSE_STATUSBAR
+    virtual void PositionStatusBar();
+
     virtual wxStatusBar* CreateStatusBar(int number = 1,
                                          long style = wxST_SIZEGRIP,
                                          wxWindowID id = 0,

@@ -985,6 +985,13 @@ wxStatusBar* wxFrame::CreateStatusBar(int number,
     return wxFrameBase::CreateStatusBar( number, style, id, name );
 }
 
+void wxFrame::PositionStatusBar()
+{
+    if ( !m_frameStatusBar )
+        return;
+
+    m_sizeSet = FALSE;
+}
 #endif // wxUSE_STATUSBAR
 
 // ----------------------------------------------------------------------------
