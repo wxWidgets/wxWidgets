@@ -55,6 +55,11 @@
 #ifndef __DARWIN__
 #include <Scrap.h>
 #endif
+
+#ifndef wxMAC_AWAYS_USE_MLTE
+#define wxMAC_AWAYS_USE_MLTE 1
+#endif
+
 #include <MacTextEditor.h>
 #include <ATSUnicode.h>
 #include <TextCommon.h>
@@ -277,7 +282,7 @@ protected :
     OSType m_valueTag ;
 } ;
 
-#else
+#endif
 
 // implementation available under classic
 
@@ -298,10 +303,6 @@ public :
     // hack to make public until we have migrated all procs
     STPTextPaneVars*    m_macTXNvars ;
 } ;
-
-#endif
-// built-in TextCtrl
-
 
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
 
@@ -367,20 +368,28 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_windowStyle |= wxTE_PROCESS_ENTER;
         style |= wxTE_PROCESS_ENTER ;
     }
+
 #if TARGET_API_MAC_OSX
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     if ( UMAGetSystemVersion() >= 0x1030 )
     {
         m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
-    else
 #endif
+#if !wxMAC_AWAYS_USE_MLTE
+    if ( !m_peer )
     {     
         m_peer = new wxMacUnicodeTextControl( this , str , pos , size , style ) ;
     }
-#else
-    m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
 #endif
+#endif
+    if ( !m_peer )
+    {
+        // this control draws the border itself
+        if ( !HasFlag(wxNO_BORDER) )
+            m_windowStyle &= ~wxSUNKEN_BORDER ;
+        m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
+    }
 
     MacPostControlCreate(pos,size) ;
 
@@ -1853,8 +1862,6 @@ int  wxMacMLTEControl::GetLineLength(long lineNo) const
 // MLTE control implementation (classic part)
 // ----------------------------------------------------------------------------
 
-#if !TARGET_API_MAC_OSX
-
 // CS:TODO we still have a problem getting properly at the text events of a control because under Carbon
 // the MLTE engine registers itself for the key events thus the normal flow never occurs, the only measure for the
 // moment is to avoid setting the true focus on the control, the proper solution at the end would be to have
@@ -2071,7 +2078,20 @@ static pascal ControlPartCode TPPaneHitTestProc(ControlRef theControl, Point whe
         if (PtInRect(where, &varsp->fRBounds))
             result = kmUPTextPart;
         else 
-            result = 0;
+        {
+            // sometimes we get the coords also in control local coordinates, therefore test again
+            if ( textctrl->MacGetTopLevelWindow()->MacUsesCompositing() )
+            {
+                int x = 0 , y = 0 ;
+                textctrl->MacClientToRootWindow( &x , &y ) ;
+                where.h += x ;
+                where.v += y ;
+            }
+            if (PtInRect(where, &varsp->fRBounds))
+                result = kmUPTextPart;
+            else 
+                result = 0;
+        }
     }
     return result;
 }
@@ -2418,9 +2438,6 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     /* all done */
     return err;
 }
-
-
-#endif
 
 // ----------------------------------------------------------------------------
 // MLTE control implementation (OSX part)
