@@ -109,13 +109,13 @@ a \helpref{wxSocketEvent}{wxsocketevent} argument.
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
-\membersection{Construction and destruction}
+\membersection{Construction and destruction}\label{socketconstruction}
 
 \helpref{wxSocketBase}{wxsocketbaseconstruct}\\
 \helpref{\destruct{wxSocketBase}}{wxsocketbasedestruct}\\
 \helpref{Destroy}{wxsocketbasedestroy}
 
-\membersection{Socket state}
+\membersection{Socket state}\label{socketstate}
 
 Functions to retrieve current state and miscellaneous info.
 
@@ -131,7 +131,7 @@ Functions to retrieve current state and miscellaneous info.
 \helpref{SaveState}{wxsocketbasesavestate}\\
 \helpref{RestoreState}{wxsocketbaserestorestate}
 
-\membersection{Basic IO}
+\membersection{Basic IO}\label{socketbasicio}
 
 Functions that perform basic IO functionality.
 
@@ -163,7 +163,7 @@ Functions that allow applications to customize socket IO as needed.
 \helpref{SetFlags}{wxsocketbasesetflags}\\
 \helpref{SetTimeout}{wxsocketbasesettimeout}
 
-\membersection{Handling socket events}
+\membersection{Handling socket events}\label{socketevents}
 
 Functions that allow applications to receive socket events.
 
@@ -1063,7 +1063,7 @@ For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbaseset
 %
 % wxSocketClient
 %
-\membersection{wxSocketClient::wxSocketClient}
+\membersection{wxSocketClient::wxSocketClient}\label{wxsocketclientctor}
 
 \func{}{wxSocketClient}{\param{wxSocketFlags}{ flags = wxSOCKET\_NONE}}
 
@@ -1076,7 +1076,7 @@ Constructor.
 %
 % ~wxSocketClient
 %
-\membersection{wxSocketClient::\destruct{wxSocketClient}}
+\membersection{wxSocketClient::\destruct{wxSocketClient}}\label{wxsocketclientdtor}
 
 \func{}{\destruct{wxSocketClient}}{\void}
 
@@ -1209,7 +1209,7 @@ to member functions that take a wxSocketEvent argument.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxSocketEvent::wxSocketEvent}
+\membersection{wxSocketEvent::wxSocketEvent}\label{wxsocketeventctor}
 
 \func{}{wxSocketEvent}{\param{int}{ id = 0}}
 

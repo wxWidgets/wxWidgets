@@ -24,7 +24,7 @@ member.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxStringList::wxStringList}
+\membersection{wxStringList::wxStringList}\label{wxstringlistctor}
 
 \func{}{wxStringList}{\void}
 
@@ -35,44 +35,44 @@ Constructor.
 Constructor, taking NULL-terminated string argument list. wxStringList
 allocates memory for the strings.
 
-\membersection{wxStringList::\destruct{wxStringList}}
+\membersection{wxStringList::\destruct{wxStringList}}\label{wxstringlistdtor}
 
 \func{}{\destruct{wxStringList}}{\void}
 
 Deletes string list, deallocating strings.
 
-\membersection{wxStringList::Add}
+\membersection{wxStringList::Add}\label{wxstringlistadd}
 
 \func{wxNode *}{Add}{\param{const wxString\& }{s}}
 
 Adds string to list, allocating memory.
 
-\membersection{wxStringList::Clear}
+\membersection{wxStringList::Clear}\label{wxstringlistclear}
 
 \func{void}{Clear}{\void}
 
 Clears all strings from the list.
 
-\membersection{wxStringList::Delete}
+\membersection{wxStringList::Delete}\label{wxstringlistdelete}
 
 \func{void}{Delete}{\param{const wxString\& }{s}}
 
 Searches for string and deletes from list, deallocating memory.
 
-\membersection{wxStringList::ListToArray}
+\membersection{wxStringList::ListToArray}\label{wxstringlistlisttoarray}
 
 \func{char*}{ListToArray}{\param{bool}{ new\_copies = false}}
 
 Converts the list to an array of strings, only allocating new memory if
 \rtfsp{\bf new\_copies} is true.
 
-\membersection{wxStringList::Member}
+\membersection{wxStringList::Member}\label{wxstringlistmember}
 
 \func{bool}{Member}{\param{const wxString\& }{s}}
 
 Returns true if {\bf s} is a member of the list (tested using {\bf strcmp}).
 
-\membersection{wxStringList::Sort}
+\membersection{wxStringList::Sort}\label{wxstringlistsort}
 
 \func{void}{Sort}{\void}
 

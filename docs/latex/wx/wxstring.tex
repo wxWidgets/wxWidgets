@@ -1274,7 +1274,7 @@ None
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxStringBuffer::wxStringBuffer}
+\membersection{wxStringBuffer::wxStringBuffer}\label{wxstringbufferctor}
 
 \func{}{wxStringBuffer}{\param{const wxString\& }{str}, \param{size\_t }{len}}
 
@@ -1283,14 +1283,14 @@ and containing enough space for at least {\it len} characters. Basically, this
 is equivalent to calling \helpref{GetWriteBuf}{wxstringgetwritebuf} and
 saving the result.
 
-\membersection{wxStringBuffer::\destruct{wxStringBuffer}}
+\membersection{wxStringBuffer::\destruct{wxStringBuffer}}\label{wxstringbufferdtor}
 
 \func{}{\destruct{wxStringBuffer}}{\void}
 
 Restores the string passed to the constructor to the usable state by calling 
 \helpref{UngetWriteBuf}{wxstringungetwritebuf} on it.
 
-\membersection{wxStringBuffer::operator wxChar *}
+\membersection{wxStringBuffer::operator wxChar *}\label{wxstringbufferwxchar}
 
 \constfunc{wxChar *}{operator wxChar *}{\void}
 
