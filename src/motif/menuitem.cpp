@@ -113,7 +113,7 @@ void wxMenuItem::DeleteSubMenu()
 
 void wxMenuItem::Enable(bool bDoEnable)
 {
-    if ( m_isChecked != bDoEnable )
+    if ( m_isEnabled != bDoEnable )
     {
         if ( !IsSubMenu() )
         {
