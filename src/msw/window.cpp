@@ -940,22 +940,30 @@ void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
     ::ScrollWindow(GetHwnd(), dx, dy, prect ? &rect : NULL, NULL);
 }
 
-static void ScrollVertically(int kind, int count)
+static void ScrollVertically(HWND hwnd, int kind, int count)
 {
+    for ( int n = 0; n < count; n++ )
+    {
+        ::SendMessage(hwnd, WM_VSCROLL, kind, 0);
+    }
 }
 
 void wxWindowMSW::ScrollLines(int lines)
 {
     bool down = lines > 0;
 
-    ScrollVertically(down ? SB_LINEDOWN : SB_LINEUP, down ? lines : -lines);
+    ScrollVertically(GetHwnd(),
+                     down ? SB_LINEDOWN : SB_LINEUP,
+                     down ? lines : -lines);
 }
 
 void wxWindowMSW::ScrollPages(int pages)
 {
     bool down = pages > 0;
 
-    ScrollVertically(down ? SB_PAGEDOWN : SB_PAGEUP, down ? pages : -pages);
+    ScrollVertically(GetHwnd(),
+                     down ? SB_PAGEDOWN : SB_PAGEUP,
+                     down ? pages : -pages);
 }
 
 // ---------------------------------------------------------------------------
@@ -1225,6 +1233,10 @@ void wxWindowMSW::Freeze()
 void wxWindowMSW::Thaw()
 {
     SendSetRedraw(GetHwnd(), TRUE);
+
+    // we need to refresh everything or otherwise he invalidated area is not
+    // repainted
+    Refresh();
 }
 
 void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
