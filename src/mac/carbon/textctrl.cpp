@@ -2,7 +2,7 @@
 // Name:        textctrl.cpp
 // Purpose:     wxTextCtrl
 // Author:      Stefan Csomor
-// Modified by:
+// Modified by: Ryan Norton (MLTE GetLineLength and GetLineText)
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
