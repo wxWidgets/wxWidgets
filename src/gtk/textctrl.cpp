@@ -614,9 +614,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
                 wrap = GTK_WRAP_WORD_CHAR;
             }
             else
-#else
-            wrap = GTK_WRAP_WORD;
 #endif
+            wrap = GTK_WRAP_WORD;
         }
 
         gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), wrap );
