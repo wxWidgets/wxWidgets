@@ -63,11 +63,16 @@ the wizard (this event may also be vetoed).}
 
 \membersection{wxWizard::Create}\label{wxwizardcreate}
 
-\func{static wxWizard*}{Create}{\param{wxWindow* }{parent}, \param{int }{id = -1}, \param{const wxString\& }{title = wxEmptyString}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}}
+\func{static wxWizard*}{Create}{\param{wxWindow* }{parent}, \param{int }{id = -1}, \param{const wxString\& }{title = wxEmptyString}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}, \param{const wxPoint\& }{pos = wxDefaultPosition}}
 
 Creates the wizard dialog. The returned pointer should not be deleted
 directly, you should rather call {\tt Destroy()} on it and wxWindows will
 delete it itself.
+
+Notice that unlike almost all other wxWindows classes, there is no {\it size} 
+parameter in wxWizard constructor because the wizard will have a predefined
+default size by default. If you want to change this, you should use the 
+\helpref{SetPageSize}{wxwizardsetpagesize} function.
 
 \wxheading{Parameters}
 
@@ -82,9 +87,6 @@ also \helpref{GetBitmap}{wxwizardpagegetbitmap}.}
 
 \docparam{pos}{The position of the dialog, it will be centered on the screen
 by default.}
-
-\docparam{size}{The size of the dialog. Reasonable default size is used if
-this parameter is not specified.}
 
 \membersection{wxWizard::RunWizard}\label{wxwizardrunwizard}
 
@@ -106,4 +108,17 @@ Get the current page while the wizard is running. {\tt NULL} is returned if
 \constfunc{wxSize}{GetPageSize}{\void}
 
 Returns the size available for the pages.
+
+\membersection{wxWizard::SetPageSize}\label{wxwizardsetpagesize}
+
+\func{void}{SetPageSize}{\param{const wxSize\& }{sizePage}}
+
+Sets the minimal size to be made available for the wizard pages. The wizard
+will take into account the size of the bitmap (if any) itself. Also, the
+wizard will never be smaller than the default size.
+
+The recommended way to use this function is to layout all wizard pages using
+the sizers (even though the wizard is not resizeable) and then use 
+\helpref{wxSizer::CalcMin}{wxsizercalcmin} in a loop to calculate the maximum
+of minimal sizes of the pages and pass it to SetPageSize().
 

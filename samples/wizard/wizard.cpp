@@ -319,12 +319,12 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
 
     // a wizard page may be either an object of predefined class
     wxWizardPageSimple *page1 = new wxWizardPageSimple(wizard);
-    (void)new wxStaticText(page1, -1,
-                           "This wizard doesn't help you to do anything at "
-                           "all.\n"
-                           "\n"
-                           "The next pages will present you with more useless "
-                           "controls.");
+    wxStaticText *text = new wxStaticText(page1, -1,
+             "This wizard doesn't help you to do anything at all.\n"
+             "\n"
+             "The next pages will present you with more useless controls."
+        );
+    wxSize size = text->GetBestSize();
 
     // ... or a derived class
     wxRadioboxPage *page3 = new wxRadioboxPage(wizard);
@@ -340,6 +340,7 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
     page1->SetNext(page2);
     page3->SetPrev(page2);
 
+    wizard->SetPageSize(size);
     if ( wizard->RunWizard(page1) )
     {
         wxMessageBox("The wizard successfully completed", "That's all",
