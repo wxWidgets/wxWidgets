@@ -64,11 +64,11 @@ public:
     virtual int GetMinWidth() const;
     virtual int GetMinHeight() const;
 
-protected:
-    void OnSize(wxSizeEvent& event);
-
     // sends wxSizeEvent to itself (used after attaching xxxBar)
     void SendSizeEvent();
+
+protected:
+    void OnSize(wxSizeEvent& event);
 
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int height);
