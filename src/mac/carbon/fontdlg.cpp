@@ -37,6 +37,10 @@
 
 #if !USE_NATIVE_FONT_DIALOG_FOR_MACOSX
 
+#undef wxFontDialog
+
+#include "wx/mac/fontdlg.h"
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 #endif
