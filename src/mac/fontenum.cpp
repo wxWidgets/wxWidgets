@@ -105,7 +105,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
 {
 	MenuHandle	menu ;
 	Str255		p_name ;
-	char        c_name[256] ;
+
 	short 		lines ;
 	
 	menu = NewMenu( 32000 , "\pFont" )  ;
@@ -115,12 +115,8 @@ void wxFontEnumeratorHelper::DoEnumerate()
 	for ( int i = 1 ; i < lines+1  ; i ++ )
 	{
 	    GetMenuItemText( menu , i , p_name ) ;
-#if TARGET_CARBON
-	    p2cstrcpy( c_name, p_name ) ;
-#else
-		p2cstr( p_name ) ;
-	    strcpy( c_name, (char *)p_name ) ;
-#endif
+	    wxString c_name = wxMacMakeStringFromPascal(p_name) ;
+
 	    /*
 	      
 	      if ( m_fixedOnly )

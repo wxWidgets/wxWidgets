@@ -44,7 +44,8 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 #else
     OSStatus err = noErr ;
 #endif
-  void * data = NULL ;
+  	void * data = NULL ;
+	Size byteCount;
     
     switch (dataFormat.GetType())
     {
@@ -68,7 +69,6 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     if ( err != noTypeErr && err != memFullErr )    
     {
         ScrapFlavorFlags    flavorFlags;
-        Size                byteCount;
         
         if (( err = GetScrapFlavorFlags( scrapRef, dataFormat.GetFormatId(), &flavorFlags )) == noErr)
         {
@@ -101,7 +101,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     HUnlock( datahandle ) ;
     if ( GetHandleSize( datahandle ) > 0 )
     {
-      long byteCount = GetHandleSize( datahandle ) ;
+      byteCount = GetHandleSize( datahandle ) ;
       if ( dataFormat.GetType() == wxDF_TEXT )  
         data = new char[ byteCount + 1] ;
       else
@@ -110,7 +110,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
       memcpy( (char*) data , (char*) *datahandle , byteCount ) ;
       if ( dataFormat.GetType() == wxDF_TEXT )  
           ((char*)data)[byteCount] = 0 ;
-      * len = byteCount ;
+      *len = byteCount ;
     }
     DisposeHandle( datahandle ) ;
 #endif
@@ -122,7 +122,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     }
     if ( dataFormat.GetType() == wxDF_TEXT && wxApp::s_macDefaultEncodingIsPC )
     {
-      wxMacConvertToPC((char*)data) ;
+      wxMacConvertToPC((char*)data,(char*)data,byteCount) ;
     }
     return data;
 }
