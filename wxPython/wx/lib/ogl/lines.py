@@ -1018,7 +1018,8 @@ class LineShape(Shape):
 
         if sys.platform[:3]=="win":
             # For some reason, last point isn't drawn under Windows
-            dc.DrawPoint(points[-1])
+            pt = points[-1]
+            dc.DrawPoint(pt.x, pt.y)
 
         # Problem with pen - if not a solid pen, does strange things
         # to the arrowhead. So make (get) a new pen that's solid.
