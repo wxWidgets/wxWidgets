@@ -48,7 +48,7 @@
  */
 
 // what to test (in alphabetic order)? uncomment the line below to do all tests
-#define TEST_ALL
+//#define TEST_ALL
 #ifdef TEST_ALL
     #define TEST_ARRAYS
     #define TEST_CHARSET
@@ -93,7 +93,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_PRINTF
+    #define TEST_WCHAR
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -2713,7 +2713,7 @@ I am ready for my first lesson today.");
   {
       wxChar buf[200];
 
-      wxSprintf (buf, _T("%07Lo"), (wxLongLong_t)040000000000);
+      wxSprintf (buf, _T("%07Lo"), (wxLongLong_t)040000000000ll);
       wxPrintf (_T("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);
 
       if (wxStrcmp (buf, _T("40000000000")) != 0)
@@ -3858,7 +3858,7 @@ static void TestUnicodeToFromAscii()
 #include "wx/encconv.h"
 #include "wx/buffer.h"
 
-static const unsigned char textInUtf8_[] =
+static const char utf8koi8r[] =
 {
     208, 157, 208, 181, 209, 129, 208, 186, 208, 176, 208, 183, 208, 176,
     208, 189, 208, 189, 208, 190, 32, 208, 191, 208, 190, 209, 128, 208,
@@ -3869,7 +3869,36 @@ static const unsigned char textInUtf8_[] =
     178, 208, 190, 209, 129, 209, 130, 209, 140, 209, 142, 0
 };
 
-#define textInUtf8 ((const char *)textInUtf8_)
+static const char utf8iso8859_1[] =
+{
+    0x53, 0x79, 0x73, 0x74, 0xc3, 0xa8, 0x6d, 0x65, 0x73, 0x20, 0x49, 0x6e,
+    0x74, 0xc3, 0xa9, 0x67, 0x72, 0x61, 0x62, 0x6c, 0x65, 0x73, 0x20, 0x65,
+    0x6e, 0x20, 0x4d, 0xc3, 0xa9, 0x63, 0x61, 0x6e, 0x69, 0x71, 0x75, 0x65,
+    0x20, 0x43, 0x6c, 0x61, 0x73, 0x73, 0x69, 0x71, 0x75, 0x65, 0x20, 0x65,
+    0x74, 0x20, 0x51, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x71, 0x75, 0x65, 0
+};
+
+static const char utf8Invalid[] =
+{
+    0x3c, 0x64, 0x69, 0x73, 0x70, 0x6c, 0x61, 0x79, 0x3e, 0x32, 0x30, 0x30,
+    0x32, 0xe5, 0xb9, 0xb4, 0x30, 0x39, 0xe6, 0x9c, 0x88, 0x32, 0x35, 0xe6,
+    0x97, 0xa5, 0x20, 0x30, 0x37, 0xe6, 0x99, 0x82, 0x33, 0x39, 0xe5, 0x88,
+    0x86, 0x35, 0x37, 0xe7, 0xa7, 0x92, 0x3c, 0x2f, 0x64, 0x69, 0x73, 0x70,
+    0x6c, 0x61, 0x79, 0
+};
+
+static const struct Utf8Data
+{
+    const char *text;
+    size_t len;
+    const wxChar *charset;
+    wxFontEncoding encoding;
+} utf8data[] =
+{
+    { utf8Invalid, WXSIZEOF(utf8Invalid), _T("iso8859-1"), wxFONTENCODING_ISO8859_1 },
+    { utf8koi8r, WXSIZEOF(utf8koi8r), _T("koi8-r"), wxFONTENCODING_KOI8 },
+    { utf8iso8859_1, WXSIZEOF(utf8iso8859_1), _T("iso8859-1"), wxFONTENCODING_ISO8859_1 },
+};
 
 static void TestUtf8()
 {
@@ -3877,30 +3906,31 @@ static void TestUtf8()
 
     char buf[1024];
     wchar_t wbuf[1024];
-    if ( wxConvUTF8.MB2WC(wbuf, textInUtf8, WXSIZEOF(textInUtf8)) <= 0 )
+
+    for ( size_t n = 0; n < WXSIZEOF(utf8data); n++ )
     {
-        wxPuts(_T("ERROR: UTF-8 decoding failed."));
-    }
-    else
-    {
-        wxCSConv conv(_T("koi8-r"));
-        if ( conv.WC2MB(buf, wbuf, 0 /* not needed wcslen(wbuf) */) <= 0 )
+        const Utf8Data& u8d = utf8data[n];
+#if 0
+        if ( wxConvUTF8.MB2WC(wbuf, u8d.text, u8d.len) <= 0 )
         {
-            wxPuts(_T("ERROR: conversion to KOI8-R failed."));
+            wxPuts(_T("ERROR: UTF-8 decoding failed."));
         }
         else
         {
-            wxPrintf(_T("The resulting string (in KOI8-R): %s\n"), buf);
+            wxCSConv conv(u8d.charset);
+            if ( conv.WC2MB(buf, wbuf, 0 /* not needed wcslen(wbuf) */) <= 0 )
+            {
+                wxPrintf(_T("ERROR: conversion to %s failed."), u8d.charset);
+            }
+            else
+            {
+                wxPrintf(_T("String in %s: %s\n"), u8d.charset, buf);
+            }
         }
-    }
-
-    if ( wxConvUTF8.WC2MB(buf, L"à la", WXSIZEOF(buf)) <= 0 )
-    {
-        wxPuts(_T("ERROR: conversion to UTF-8 failed."));
-    }
-    else
-    {
-        wxPrintf(_T("The string in UTF-8: %s\n"), buf);
+#else
+        wxString s(wxConvUTF8.cMB2WC(u8d.text));// wxCSConv(u8d.charset));
+        wxPuts(s);
+#endif // 0
     }
 
     wxPuts(_T(""));
@@ -3913,7 +3943,7 @@ static void TestEncodingConverter()
     // using wxEncodingConverter should give the same result as above
     char buf[1024];
     wchar_t wbuf[1024];
-    if ( wxConvUTF8.MB2WC(wbuf, textInUtf8, WXSIZEOF(textInUtf8)) <= 0 )
+    if ( wxConvUTF8.MB2WC(wbuf, utf8koi8r, WXSIZEOF(utf8koi8r)) <= 0 )
     {
         wxPuts(_T("ERROR: UTF-8 decoding failed."));
     }
@@ -3922,7 +3952,7 @@ static void TestEncodingConverter()
         wxEncodingConverter ec;
         ec.Init(wxFONTENCODING_UNICODE, wxFONTENCODING_KOI8);
         ec.Convert(wbuf, buf);
-        wxPrintf(_T("The same string obtained using wxEC: %s\n"), buf);
+        wxPrintf(_T("The same KOI8-R string using wxEC: %s\n"), buf);
     }
 
     wxPuts(_T(""));
