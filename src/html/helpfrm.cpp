@@ -96,7 +96,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
         m_DataCreated = TRUE;
     }
 
-    m_ContentsImageList = new wxImageList(12, 12);
+    m_ContentsImageList = new wxImageList(16, 16);
     m_ContentsImageList -> Add(wxICON(book));
     m_ContentsImageList -> Add(wxICON(folder));
     m_ContentsImageList -> Add(wxICON(page));
@@ -137,7 +137,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
     if (m_Config)
         ReadCustomization(m_Config, m_ConfigRoot);
 
-    wxFrame::Create(parent, id, "", wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h));
+    wxFrame::Create(parent, id, _("Help"), wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h));
 
     int notebook_page = 0;
 
@@ -156,7 +156,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         toolBarBitmaps[2] = new wxBitmap("forward");
         int width = 24;
 #else
-toolBarBitmaps[0] = new wxBitmap(panel_xpm);
+        toolBarBitmaps[0] = new wxBitmap(panel_xpm);
         toolBarBitmaps[1] = new wxBitmap(back_xpm);
         toolBarBitmaps[2] = new wxBitmap(forward_xpm);
         int width = 16;
@@ -279,6 +279,10 @@ toolBarBitmaps[0] = new wxBitmap(panel_xpm);
         m_Splitter -> SetMinimumPaneSize(20);
         if (m_Cfg.navig_on)
             m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
+        else {
+            m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
+            m_Splitter -> Unsplit();
+        }
     }
     m_HtmlWin -> Show(TRUE);
     return TRUE;
@@ -574,10 +578,12 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
             if (m_Splitter -> IsSplit()) {
                 m_Cfg.sashpos = m_Splitter -> GetSashPosition();
                 m_Splitter -> Unsplit(m_NavigPan);
+                m_Cfg.navig_on = FALSE;
             } else {
                 m_NavigPan -> Show(TRUE);
                 m_HtmlWin -> Show(TRUE);
                 m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
+                m_Cfg.navig_on = TRUE;
             }
             break;
     }
@@ -618,8 +624,13 @@ void wxHtmlHelpFrame::OnSearch(wxCommandEvent& WXUNUSED(event))
 
 void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 {
+    GetSize(&m_Cfg.w, &m_Cfg.h);
+    GetPosition(&m_Cfg.x, &m_Cfg.y);
+    if (m_Splitter && m_Cfg.navig_on) m_Cfg.sashpos = m_Splitter -> GetSashPosition();
+
     if (m_Config)
         WriteCustomization(m_Config, m_ConfigRoot);
+
     evt.Skip();
 }
 

@@ -350,7 +350,7 @@ bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfil
     if (! path.IsEmpty())
         fsys.ChangePathTo(path, TRUE);
 
-    bookr = new wxHtmlBookRecord(path + '/', title, deftopic);
+    bookr = new wxHtmlBookRecord(fsys.GetPath(), title, deftopic);
 
     if (m_ContentsCnt % wxHTML_REALLOC_STEP == 0)
         m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
@@ -367,12 +367,12 @@ bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfil
 
     // Try to find cached binary versions:
     safetitle = SafeFileName(title);
-    fi = fsys.OpenFile(safetitle + ".cached");
-    if (fi == NULL) fi = fsys.OpenFile(m_TempPath + safetitle + ".cached");
+    fi = fsys.OpenFile(safetitle + wxT(".cached"));
+    if (fi == NULL) fi = fsys.OpenFile(m_TempPath + safetitle + wxT(".cached"));
     if ((fi == NULL) || (m_TempPath == wxEmptyString)) {
         LoadMSProject(bookr, fsys, indexfile, contfile);
         if (m_TempPath != wxEmptyString) {
-            wxFileOutputStream *outs = new wxFileOutputStream(m_TempPath + safetitle + ".cached");
+            wxFileOutputStream *outs = new wxFileOutputStream(m_TempPath + safetitle + wxT(".cached"));
             SaveCachedBook(bookr, outs);
             delete outs;
         }
@@ -394,49 +394,71 @@ bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfil
 
 bool wxHtmlHelpData::AddBook(const wxString& book)
 {
-    wxFSFile *fi;
-    wxFileSystem fsys;
-    wxInputStream *s;
-    wxString bookFull;
+    if (book.Right(4).Lower() == wxT(".zip") ||
+        book.Right(4).Lower() == wxT(".htb") /*html book*/) 
 
-    int sz;
-    char *buff, *lineptr;
-    char linebuf[300];
+    {
+        wxFileSystem fsys;
+        wxString s;
+        bool rt = FALSE;
 
-    wxString title = _("noname"),
-                     safetitle,
-                     start = wxEmptyString,
-                             contents = wxEmptyString, index = wxEmptyString;
+        s = fsys.FindFirst(book + wxT("#zip:") + wxT("*.hhp"), wxFILE);
+        while (!s.IsEmpty()) 
+        {
+            if (AddBook(s)) rt = TRUE;
+            s = fsys.FindNext();
+        }
+        
+        return rt;
+    }
 
-    if (wxIsAbsolutePath(book)) bookFull = book;
-    else bookFull = wxGetCwd() + "/" + book;
 
-    fi = fsys.OpenFile(bookFull);
-    if (fi == NULL) return FALSE;
-    fsys.ChangePathTo(bookFull);
-    s = fi -> GetStream();
-    sz = s -> GetSize();
-    buff = new char[sz + 1];
-    buff[sz] = 0;
-    s -> Read(buff, sz);
-    lineptr = buff;
-    delete fi;
+    else 
+    {       
+        wxFSFile *fi;
+        wxFileSystem fsys;
+        wxInputStream *s;
+        wxString bookFull;
 
-    do {
-        lineptr = ReadLine(lineptr, linebuf);
+        int sz;
+        char *buff, *lineptr;
+        char linebuf[300];
 
-        if (strstr(linebuf, "Title=") == linebuf)
-            title = linebuf + strlen("Title=");
-        if (strstr(linebuf, "Default topic=") == linebuf)
-            start = linebuf + strlen("Default topic=");
-        if (strstr(linebuf, "Index file=") == linebuf)
-            index = linebuf + strlen("Index file=");
-        if (strstr(linebuf, "Contents file=") == linebuf)
-            contents = linebuf + strlen("Contents file=");
-    } while (lineptr != NULL);
-    delete[] buff;
+        wxString title = _("noname"),
+                         safetitle,
+                         start = wxEmptyString,
+                                 contents = wxEmptyString, index = wxEmptyString;
 
-    return AddBookParam(title, contents, index, start, fsys.GetPath());
+        if (wxIsAbsolutePath(book)) bookFull = book;
+        else bookFull = wxGetCwd() + "/" + book;
+
+        fi = fsys.OpenFile(bookFull);
+        if (fi == NULL) return FALSE;
+        fsys.ChangePathTo(bookFull);
+        s = fi -> GetStream();
+        sz = s -> GetSize();
+        buff = new char[sz + 1];
+        buff[sz] = 0;
+        s -> Read(buff, sz);
+        lineptr = buff;
+        delete fi;
+
+        do {
+            lineptr = ReadLine(lineptr, linebuf);
+
+            if (strstr(linebuf, "Title=") == linebuf)
+                title = linebuf + strlen("Title=");
+            if (strstr(linebuf, "Default topic=") == linebuf)
+                start = linebuf + strlen("Default topic=");
+            if (strstr(linebuf, "Index file=") == linebuf)
+                index = linebuf + strlen("Index file=");
+            if (strstr(linebuf, "Contents file=") == linebuf)
+                contents = linebuf + strlen("Contents file=");
+        } while (lineptr != NULL);
+        delete[] buff;
+
+        return AddBookParam(title, contents, index, start, fsys.GetPath());
+    }
 }
 
 wxString wxHtmlHelpData::FindPageByName(const wxString& x)

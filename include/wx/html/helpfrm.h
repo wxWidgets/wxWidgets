@@ -61,7 +61,7 @@ enum
 
 typedef struct
 {
-    long x, y, w, h;
+    int x, y, w, h;
     long sashpos;
     bool navig_on;
 }
