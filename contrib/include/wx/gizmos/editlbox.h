@@ -31,7 +31,7 @@ class WXDLLEXPORT wxListEvent;
 
 class WXDLLIMPEXP_GIZMOS wxEditableListBox : public wxPanel
 {
-    DECLARE_CLASS(wxEditableListBox);
+    DECLARE_CLASS(wxEditableListBox)
 
 public:
     wxEditableListBox(wxWindow *parent, wxWindowID id,

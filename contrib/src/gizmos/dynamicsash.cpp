@@ -112,7 +112,7 @@ public:
 
     virtual wxEvent* Clone() const { return new wxDynamicSashReparentEvent(*this); }
 
-    DECLARE_DYNAMIC_CLASS(wxDynamicSashReparentEvent);
+    DECLARE_DYNAMIC_CLASS(wxDynamicSashReparentEvent)
 };
 
 

@@ -49,7 +49,7 @@ enum wxResizable
 
 class WXDLLIMPEXP_GIZMOS wxMultiCellItemHandle: public wxObject
 {
-    DECLARE_CLASS(wxMultiCellItemHandle);
+    DECLARE_CLASS(wxMultiCellItemHandle)
 protected:
     int             m_column;
     int             m_row;
@@ -85,7 +85,7 @@ private:
 
 class WXDLLIMPEXP_GIZMOS wxMultiCellSizer : virtual public wxSizer
 {
-    DECLARE_CLASS(wxMultiCellSizer);
+    DECLARE_CLASS(wxMultiCellSizer)
 
 protected:
     wxSize m_cell_count;

@@ -128,7 +128,7 @@ public:
     virtual wxEvent* Clone() const { return new wxDynamicSashUnifyEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDynamicSashUnifyEvent);
+    DECLARE_DYNAMIC_CLASS(wxDynamicSashUnifyEvent)
 };
 
 typedef void (wxEvtHandler::*wxDynamicSashSplitEventFunction)(wxDynamicSashSplitEvent&);
