@@ -182,9 +182,9 @@ public:
     wxPrintData(const wxPrintData& printData);
     ~wxPrintData();
 
-    int GetNoCopies() const { return m_printNoCopies; };
-    bool GetCollate() const { return m_printCollate; };
-    int  GetOrientation() const { return m_printOrientation; };
+    int GetNoCopies() const { return m_printNoCopies; }
+    bool GetCollate() const { return m_printCollate; }
+    int  GetOrientation() const { return m_printOrientation; }
 
     // Is this data OK for showing the print dialog?
     bool Ok() const ;
@@ -199,9 +199,9 @@ public:
     wxPrintBin GetBin() const { return m_bin; }
     wxPrintMode GetPrintMode() const { return m_printMode; }
 
-    void SetNoCopies(int v) { m_printNoCopies = v; };
-    void SetCollate(bool flag) { m_printCollate = flag; };
-    void SetOrientation(int orient) { m_printOrientation = orient; };
+    void SetNoCopies(int v) { m_printNoCopies = v; }
+    void SetCollate(bool flag) { m_printCollate = flag; }
+    void SetOrientation(int orient) { m_printOrientation = orient; }
 
     void SetPrinterName(const wxString& name) { m_printerName = name; }
     void SetColour(bool colour) { m_colour = colour; }
