@@ -56,7 +56,7 @@ int wxSpinButton::GetValue() const
 
 void wxSpinButton::SetValue(int value)
 {
-    return [(NSStepper*)m_cocoaNSView setIntValue:value];
+    [(NSStepper*)m_cocoaNSView setIntValue:value];
 }
 
 void wxSpinButton::SetRange(int minValue, int maxValue)
