@@ -1555,40 +1555,40 @@ public:
 
 // event types handled by plugins
 
-extern wxEventType cbEVT_PL_LEFT_DOWN;
-extern wxEventType cbEVT_PL_LEFT_UP;
-extern wxEventType cbEVT_PL_RIGHT_DOWN;
-extern wxEventType cbEVT_PL_RIGHT_UP;
-extern wxEventType cbEVT_PL_MOTION;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_LEFT_DOWN;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_LEFT_UP;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_RIGHT_DOWN;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_RIGHT_UP;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_MOTION;
 
-extern wxEventType cbEVT_PL_LEFT_DCLICK;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_LEFT_DCLICK;
 
-extern wxEventType cbEVT_PL_LAYOUT_ROW;
-extern wxEventType cbEVT_PL_RESIZE_ROW;
-extern wxEventType cbEVT_PL_LAYOUT_ROWS;
-extern wxEventType cbEVT_PL_INSERT_BAR;
-extern wxEventType cbEVT_PL_RESIZE_BAR;
-extern wxEventType cbEVT_PL_REMOVE_BAR;
-extern wxEventType cbEVT_PL_SIZE_BAR_WND;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_LAYOUT_ROW;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_RESIZE_ROW;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_LAYOUT_ROWS;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_INSERT_BAR;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_RESIZE_BAR;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_REMOVE_BAR;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_SIZE_BAR_WND;
 
-extern wxEventType cbEVT_PL_DRAW_BAR_DECOR;
-extern wxEventType cbEVT_PL_DRAW_ROW_DECOR;
-extern wxEventType cbEVT_PL_DRAW_PANE_DECOR;
-extern wxEventType cbEVT_PL_DRAW_BAR_HANDLES;
-extern wxEventType cbEVT_PL_DRAW_ROW_HANDLES;
-extern wxEventType cbEVT_PL_DRAW_ROW_BKGROUND;
-extern wxEventType cbEVT_PL_DRAW_PANE_BKGROUND;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_DRAW_BAR_DECOR;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_DRAW_ROW_DECOR;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_DRAW_PANE_DECOR;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_DRAW_BAR_HANDLES;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_DRAW_ROW_HANDLES;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_DRAW_ROW_BKGROUND;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_DRAW_PANE_BKGROUND;
 
-extern wxEventType cbEVT_PL_START_BAR_DRAGGING;
-extern wxEventType cbEVT_PL_DRAW_HINT_RECT;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_START_BAR_DRAGGING;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_DRAW_HINT_RECT;
 
-extern wxEventType cbEVT_PL_START_DRAW_IN_AREA;
-extern wxEventType cbEVT_PL_FINISH_DRAW_IN_AREA;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_START_DRAW_IN_AREA;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_FINISH_DRAW_IN_AREA;
 
-extern wxEventType cbEVT_PL_CUSTOMIZE_BAR;
-extern wxEventType cbEVT_PL_CUSTOMIZE_LAYOUT;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_CUSTOMIZE_BAR;
+extern WXDLLIMPEXP_FL wxEventType cbEVT_PL_CUSTOMIZE_LAYOUT;
 
-extern wxEventType wxCUSTOM_CB_PLUGIN_EVENTS_START_AT;
+extern WXDLLIMPEXP_FL wxEventType wxCUSTOM_CB_PLUGIN_EVENTS_START_AT;
 
 // Forward declarations, separated by categories.
 
