@@ -2609,6 +2609,7 @@ class SingleChoiceDialogPtr(SingleChoiceDialog):
         self.__class__ = SingleChoiceDialog
 _windows_.SingleChoiceDialog_swigregister(SingleChoiceDialogPtr)
 
+TextEntryDialogStyle = _windows_.TextEntryDialogStyle
 class TextEntryDialog(Dialog):
     """A dialog with text control, [ok] and [cancel] buttons"""
     def __repr__(self):
@@ -2617,7 +2618,7 @@ class TextEntryDialog(Dialog):
         """
         __init__(self, Window parent, String message, String caption=GetTextFromUserPromptStr, 
             String defaultValue=EmptyString, 
-            long style=wxTextEntryDialogStyle, Point pos=DefaultPosition) -> TextEntryDialog
+            long style=TextEntryDialogStyle, Point pos=DefaultPosition) -> TextEntryDialog
 
         Constructor.  Use ShowModal method to show the dialog.
         """
@@ -2659,7 +2660,7 @@ class PasswordEntryDialog(TextEntryDialog):
         """
         __init__(self, Window parent, String message, String caption=GetPasswordFromUserPromptStr, 
             String value=EmptyString, 
-            long style=wxTextEntryDialogStyle, Point pos=DefaultPosition) -> PasswordEntryDialog
+            long style=TextEntryDialogStyle, Point pos=DefaultPosition) -> PasswordEntryDialog
         """
         newobj = _windows_.new_PasswordEntryDialog(*args, **kwargs)
         self.this = newobj.this

@@ -27613,6 +27613,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"GetTextFromUserPromptStr",_wrap_GetTextFromUserPromptStr_get, _wrap_GetTextFromUserPromptStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"MessageBoxCaptionStr",_wrap_MessageBoxCaptionStr_get, _wrap_MessageBoxCaptionStr_set);
     PyDict_SetItemString(d,"CHOICEDLG_STYLE", SWIG_From_int((int)wxCHOICEDLG_STYLE));
+    PyDict_SetItemString(d,"TextEntryDialogStyle", SWIG_From_int((int)wxTextEntryDialogStyle));
     SWIG_addvarlink(SWIG_globals,(char*)"GetPasswordFromUserPromptStr",_wrap_GetPasswordFromUserPromptStr_get, _wrap_GetPasswordFromUserPromptStr_set);
     PyDict_SetItemString(d,"FR_DOWN", SWIG_From_int((int)wxFR_DOWN));
     PyDict_SetItemString(d,"FR_WHOLEWORD", SWIG_From_int((int)wxFR_WHOLEWORD));

@@ -1531,7 +1531,7 @@ static PyObject *_wrap_MediaCtrl_SetPlaybackRate(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_MediaCtrl_SetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MediaCtrl_SetMediaPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
     wxLongLong arg2 ;
@@ -1542,7 +1542,7 @@ static PyObject *_wrap_MediaCtrl_SetPosition(PyObject *, PyObject *args, PyObjec
         (char *) "self",(char *) "where", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_SetPosition",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_SetMediaPosition",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMediaCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
@@ -1564,7 +1564,7 @@ static PyObject *_wrap_MediaCtrl_SetPosition(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MediaCtrl_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MediaCtrl_GetMediaPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
     wxLongLong result;
@@ -1573,7 +1573,7 @@ static PyObject *_wrap_MediaCtrl_GetPosition(PyObject *, PyObject *args, PyObjec
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetPosition",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetMediaPosition",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMediaCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
@@ -1592,7 +1592,7 @@ static PyObject *_wrap_MediaCtrl_GetPosition(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MediaCtrl_GetDuration(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MediaCtrl_GetMediaDuration(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
     wxLongLong result;
@@ -1601,7 +1601,7 @@ static PyObject *_wrap_MediaCtrl_GetDuration(PyObject *, PyObject *args, PyObjec
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetDuration",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetMediaDuration",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMediaCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
@@ -1645,9 +1645,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MediaCtrl_GetState", (PyCFunction) _wrap_MediaCtrl_GetState, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MediaCtrl_GetPlaybackRate", (PyCFunction) _wrap_MediaCtrl_GetPlaybackRate, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MediaCtrl_SetPlaybackRate", (PyCFunction) _wrap_MediaCtrl_SetPlaybackRate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MediaCtrl_SetPosition", (PyCFunction) _wrap_MediaCtrl_SetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MediaCtrl_GetPosition", (PyCFunction) _wrap_MediaCtrl_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MediaCtrl_GetDuration", (PyCFunction) _wrap_MediaCtrl_GetDuration, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MediaCtrl_SetMediaPosition", (PyCFunction) _wrap_MediaCtrl_SetMediaPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MediaCtrl_GetMediaPosition", (PyCFunction) _wrap_MediaCtrl_GetMediaPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MediaCtrl_GetMediaDuration", (PyCFunction) _wrap_MediaCtrl_GetMediaDuration, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MediaCtrl_swigregister", MediaCtrl_swigregister, METH_VARARGS, NULL },
 	 { NULL, NULL, 0, NULL }
 };
