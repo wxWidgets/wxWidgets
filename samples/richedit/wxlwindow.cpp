@@ -212,7 +212,7 @@ void wxLayoutWindow::Refresh(bool eraseBackground, const wxRect *rect)
    wxScrolledWindow::Refresh(eraseBackground, rect);
 
    ResizeScrollbars();
-   ScrollToCursor();
+//FIXME is this needed? It causes problems...   ScrollToCursor();
 }
 
 void
