@@ -396,7 +396,7 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
 // format there anyhow (but there is a well-defined standard for X11 fonts used
 // by wxGTK and wxMotif)
 
-#if defined(wxNO_NATIVE_FONTINFO) || defined(__WXMSW__)
+#if defined(wxNO_NATIVE_FONTINFO) || defined(__WXMSW__) || defined (__WXPM__)
 
 wxString wxNativeFontInfo::ToUserString() const
 {
@@ -550,5 +550,5 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
     return TRUE;
 }
 
-#endif // generic or wxMSW
+#endif // generic or wxMSW or wxOS2
 
