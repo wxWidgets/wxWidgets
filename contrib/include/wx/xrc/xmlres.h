@@ -343,7 +343,9 @@ protected:
         { return m_resource->CreateResFromNode(node, parent, instance); }
 
     // helper
+#if wxUSE_FILESYSTEM
     wxFileSystem& GetCurFileSystem() { return m_resource->GetCurFileSystem(); }
+#endif
 };
 
 #define ADD_STYLE(style) AddStyle(wxT(#style), style)
