@@ -46,6 +46,9 @@ public:
     virtual int GetMin() const;
     virtual int GetMax() const;
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
     // implementation
     void OnSize( wxSizeEvent &event );
 

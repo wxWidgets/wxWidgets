@@ -97,4 +97,11 @@ void wxStaticBox::ApplyWidgetStyle()
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 
+// static
+wxVisualAttributes
+wxStaticBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_frame_new);
+}
+
 #endif // wxUSE_STATBOX

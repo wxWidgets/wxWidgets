@@ -207,6 +207,16 @@ wxSize wxToggleBitmapButton::DoGetBestSize() const
     }
     return best;
 }
+
+
+// static
+wxVisualAttributes
+wxToggleBitmapButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_toggle_button_new);
+}
+
+
 // ------------------------------------------------------------------------
 // wxToggleButton
 // ------------------------------------------------------------------------
@@ -337,6 +347,13 @@ wxSize wxToggleButton::DoGetBestSize() const
     
 
    return ret;
+}
+
+// static
+wxVisualAttributes
+wxToggleButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_toggle_button_new);
 }
 
 #endif // wxUSE_TOGGLEBTN

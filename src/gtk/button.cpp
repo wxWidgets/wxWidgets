@@ -232,5 +232,12 @@ wxSize wxButton::DoGetBestSize() const
     return ret;
 }
 
+// static
+wxVisualAttributes
+wxButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_button_new);
+}
+
 #endif // wxUSE_BUTTON
 

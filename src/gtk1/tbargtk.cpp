@@ -703,4 +703,22 @@ void wxToolBar::OnInternalIdle()
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
+
+// ----------------------------------------------------------------------------
+
+// static
+wxVisualAttributes
+wxToolBar::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+#ifdef __WXGTK20__
+    return GetDefaultAttributesFromGTKWidget(gtk_toolbar_new);
+#else
+    wxVisualAttributes attr;
+    GtkWidget* widget = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+    attr = GetDefaultAttributesFromGTKWidget(widget);
+    gtk_widget_destroy(widget);
+    return attr;
+#endif
+}
+
 #endif // wxUSE_TOOLBAR_NATIVE

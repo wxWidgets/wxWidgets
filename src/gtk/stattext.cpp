@@ -199,4 +199,11 @@ bool wxStaticText::SetForegroundColour(const wxColour& colour)
     return true;
 }
 
+// static
+wxVisualAttributes
+wxStaticText::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_label_new);
+}
+
 #endif // wxUSE_STATTEXT

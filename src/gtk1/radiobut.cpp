@@ -233,4 +233,16 @@ wxSize wxRadioButton::DoGetBestSize() const
     return wxControl::DoGetBestSize();
 }
 
+// static
+wxVisualAttributes
+wxRadioButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    wxVisualAttributes attr;
+    GtkWidget* widget = gtk_radio_button_new_with_label(NULL, "");
+    attr = GetDefaultAttributesFromGTKWidget(widget);
+    gtk_widget_destroy(widget);
+    return attr;
+}
+
+
 #endif

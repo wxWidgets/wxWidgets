@@ -303,7 +303,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         gtk_container_add( GTK_CONTAINER(m_widget), m_text );
 
         // Global settings which can be overridden by tags, I guess.
-        if (HasFlag( wxHSCROLL ))
+        if (HasFlag( wxHSCROLL ) || HasFlag( wxTE_DONTWRAP ))
             gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), GTK_WRAP_NONE );
         else
             gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), GTK_WRAP_WORD );
@@ -415,16 +415,16 @@ bool wxTextCtrl::Create( wxWindow *parent,
 #ifdef __WXGTK20__
         else
             gtk_text_view_set_editable( GTK_TEXT_VIEW( m_text), FALSE);
-    }
 #else
     }
     else
     {
         if (multi_line)
             gtk_text_set_editable( GTK_TEXT(m_text), 1 );
-    }
 #endif
+    }
 
+    
     // We want to be notified about text changes.
 #ifdef __WXGTK20__
     if (multi_line)
@@ -434,25 +434,20 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
     else
 #endif
+    
     {
         gtk_signal_connect( GTK_OBJECT(m_text), "changed",
             GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
     }
 
-    // we don't set a valid background colour, because the window
-    // manager should use a default one
-    m_backgroundColour = wxColour();
-
-    wxColour colFg = parent->GetForegroundColour();
-    SetForegroundColour( colFg );
-
     m_cursor = wxCursor( wxCURSOR_IBEAM );
 
-    wxTextAttr attrDef( colFg, m_backgroundColour, parent->GetFont() );
+    wxTextAttr attrDef(GetForegroundColour(), GetBackgroundColour(), GetFont());
     SetDefaultStyle( attrDef );
 
     return TRUE;
 }
+
 
 void wxTextCtrl::CalculateScrollbar()
 {
@@ -1522,11 +1517,11 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
 
 void wxTextCtrl::ApplyWidgetStyle()
 {
-    if (m_windowStyle & wxTE_MULTILINE)
-    {
-        // how ?
-    }
-    else
+//     if (m_windowStyle & wxTE_MULTILINE)
+//     {
+//         // how ?
+//     }
+//     else
     {
         SetWidgetStyle();
         gtk_widget_set_style( m_text, m_widgetStyle );
@@ -1724,3 +1719,10 @@ bool wxTextCtrl::ScrollPages(int pages)
 #endif
 }
 
+
+// static
+wxVisualAttributes
+wxTextCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_entry_new, true);
+}

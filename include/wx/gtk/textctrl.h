@@ -162,6 +162,9 @@ public:
     // should we ignore the changed signal? always resets the flag
     bool IgnoreTextUpdate();
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
 protected:
     virtual wxSize DoGetBestSize() const;
 
@@ -174,6 +177,10 @@ protected:
     // scroll the control by the given number of pixels, return true if the
     // scroll position changed
     bool DoScroll(GtkAdjustment *adj, int diff);
+
+    // Widgets that use the style->base colour for the BG colour should
+    // override this and return true.
+    virtual bool UseGTKStyleBase() const { return true; }
 
 private:
     // change the font for everything in this control

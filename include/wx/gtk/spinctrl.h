@@ -59,6 +59,9 @@ public:
     virtual int GetMin() const;
     virtual int GetMax() const;
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
     // implementation
     void OnChar( wxKeyEvent &event );
     
@@ -72,6 +75,10 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+
+    // Widgets that use the style->base colour for the BG colour should
+    // override this and return true.
+    virtual bool UseGTKStyleBase() const { return true; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)

@@ -45,6 +45,10 @@ public:
     bool Create(  wxWindow *parent, wxWindowID id,
             const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
             long style = wxLI_HORIZONTAL, const wxString &name = wxStaticTextNameStr );
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
 };
 
 #endif 

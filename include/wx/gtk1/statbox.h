@@ -40,6 +40,9 @@ public:
 
     virtual void SetLabel( const wxString &label );
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     // implementation
 
     virtual void ApplyWidgetStyle();

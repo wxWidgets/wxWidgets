@@ -59,6 +59,9 @@ public:
 
     bool SetFont( const wxFont &font );
     bool SetForegroundColour( const wxColour& colour );
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
     // implementation
     // --------------

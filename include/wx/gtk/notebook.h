@@ -98,6 +98,10 @@ public:
     // --------------------------
     void OnNavigationKey(wxNavigationKeyEvent& event);
 
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
     // implementation
     // --------------
 

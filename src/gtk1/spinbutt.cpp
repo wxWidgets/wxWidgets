@@ -236,4 +236,13 @@ wxSize wxSpinButton::DoGetBestSize() const
     return wxSize(15, 26);
 }
 
+// static
+wxVisualAttributes
+wxSpinButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    // TODO: overload to accept functions like gtk_spin_button_new?
+    // Until then use a similar type
+    return GetDefaultAttributesFromGTKWidget(gtk_button_new);
+}
+
 #endif

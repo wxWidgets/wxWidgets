@@ -866,6 +866,13 @@ bool  wxNotebook::SetFont(const wxFont& font)
 	return rc;
 }
 
+// static
+wxVisualAttributes
+wxNotebook::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_notebook_new);
+}
+
 //-----------------------------------------------------------------------------
 // wxNotebookEvent
 //-----------------------------------------------------------------------------

@@ -52,6 +52,9 @@ public:
         return (const wxIcon &)m_bitmap;
     }
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
 private:
     // creates the new pixmap widget
     void CreatePixmapWidget();

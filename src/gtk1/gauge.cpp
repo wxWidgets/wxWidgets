@@ -112,5 +112,22 @@ void wxGauge::ApplyWidgetStyle()
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 
+wxVisualAttributes wxGauge::GetDefaultAttributes() const
+{
+    // Visible gauge colours use a different colour state
+    return GetDefaultAttributesFromGTKWidget(m_widget,
+                                             UseGTKStyleBase(),
+                                             GTK_STATE_ACTIVE);
+
+}
+
+// static
+wxVisualAttributes
+wxGauge::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_progress_bar_new,
+                                             false, GTK_STATE_ACTIVE);
+}
+
 #endif // wxUSE_GAUGE
 

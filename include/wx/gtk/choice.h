@@ -77,6 +77,9 @@ public:
     wxString GetString( int n ) const;
     void SetString( int n, const wxString& string );
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
 protected:
     wxList m_clientList;    // contains the client data for the items
 
@@ -92,6 +95,7 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
     virtual bool IsOwnGtkWindow( GdkWindow *window );
+
 private:
     // common part of Create() and DoAppend()
     int GtkAddHelper(GtkWidget *menu, int pos, const wxString& item);

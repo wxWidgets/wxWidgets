@@ -66,7 +66,9 @@ public:
     void SetLabel(const wxBitmap& label);
     bool Enable(bool enable = TRUE);
 
- 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     // implementation
     bool      m_blockEvent;
     wxBitmap  m_bitmap;
@@ -81,6 +83,7 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxToggleBitmapButton)
 };
+
 //-----------------------------------------------------------------------------
 // wxToggleButton
 //-----------------------------------------------------------------------------
@@ -119,6 +122,8 @@ public:
     void SetLabel(const wxString& label);
     bool Enable(bool enable = TRUE);
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
  
     // implementation
     bool m_blockEvent;

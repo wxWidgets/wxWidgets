@@ -1087,5 +1087,13 @@ void wxListBox::FixUpMouseEvent(GtkWidget *widget, wxCoord& x, wxCoord& y)
     y += widget->allocation.y;
 }
 
+
+// static
+wxVisualAttributes
+wxListBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_list_new, true);
+}
+
 #endif // wxUSE_LISTBOX
 

@@ -79,4 +79,11 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
+// static
+wxVisualAttributes
+wxStaticLine::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_vseparator_new);
+}
+
 #endif

@@ -53,6 +53,8 @@ public:
     virtual void SetLabel( const wxString &label );
     virtual wxString GetLabel() const;
 
+    virtual wxVisualAttributes GetDefaultAttributes() const;
+
 protected:
     virtual wxSize DoGetBestSize() const;
     void PostCreation(const wxSize& size);
@@ -60,6 +62,29 @@ protected:
 #ifdef __WXGTK20__
     wxString PrepareLabelMnemonics( const wxString &label ) const;
 #endif
+
+    // These are used by GetDefaultAttributes
+    static wxVisualAttributes
+        GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
+                                          bool useBase = false,
+                                          int state = -1);
+    static wxVisualAttributes
+        GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(void),
+                                          bool useBase = false,
+                                          int state = -1);
+    static wxVisualAttributes
+        GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(const gchar*),
+                                          bool useBase = false,
+                                          int state = -1);
+
+    static wxVisualAttributes
+        GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(GtkAdjustment*),
+                                          bool useBase = false,
+                                          int state = -1);
+
+    // Widgets that use the style->base colour for the BG colour should
+    // override this and return true.
+    virtual bool UseGTKStyleBase() const { return false; }
 
     wxString   m_label;
     char       m_chAccel;  // enabled to avoid breaking binary compatibility later on

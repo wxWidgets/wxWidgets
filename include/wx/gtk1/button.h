@@ -71,6 +71,9 @@ public:
     // to override this here too...
     virtual bool ShouldInheritColours() const { return false; }
     
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
 protected:
     virtual wxSize DoGetBestSize() const;
 

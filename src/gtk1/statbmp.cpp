@@ -117,5 +117,13 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
     }
 }
 
+// static
+wxVisualAttributes
+wxStaticBitmap::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    // TODO: overload to allow using gtk_pixmap_new?
+    return GetDefaultAttributesFromGTKWidget(gtk_label_new);
+}
+
 #endif // wxUSE_STATBMP
 

@@ -336,4 +336,11 @@ wxSize wxScrollBar::DoGetBestSize() const
     return wxControl::DoGetBestSize();
 }
 
+// static
+wxVisualAttributes
+wxScrollBar::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_vscrollbar_new);
+}
+
 #endif

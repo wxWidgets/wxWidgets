@@ -45,6 +45,9 @@ public:
     virtual void SetLabel( const wxString& label );
     virtual bool Enable( bool enable = TRUE );
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
     // implementation
     // --------------
 

@@ -286,4 +286,11 @@ void wxSlider::GtkEnableEvents()
                         (gpointer) this );
 }
 
+// static
+wxVisualAttributes
+wxSlider::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_vscale_new);
+}
+
 #endif

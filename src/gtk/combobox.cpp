@@ -779,4 +779,11 @@ wxSize wxComboBox::DoGetBestSize() const
     return ret;
 }
 
+// static
+wxVisualAttributes
+wxComboBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_combo_new, true);
+}
+
 #endif

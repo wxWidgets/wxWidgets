@@ -68,6 +68,9 @@ public:
     void SetObjectLength( int objectLength );
     void SetViewLength( int viewLength );
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
     // implementation
     // --------------
 

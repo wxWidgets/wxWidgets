@@ -216,4 +216,11 @@ wxSize wxCheckBox::DoGetBestSize() const
     return wxControl::DoGetBestSize();
 }
 
+// static
+wxVisualAttributes
+wxCheckBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_check_button_new);
+}
+
 #endif

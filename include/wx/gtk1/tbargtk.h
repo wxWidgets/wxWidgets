@@ -56,6 +56,9 @@ public:
 
     virtual void SetWindowStyleFlag( long style );
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
     // implementation from now on
     // --------------------------
 

@@ -49,6 +49,9 @@ public:
     virtual bool GetValue() const;
     virtual bool Enable( bool enable = TRUE );
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     // implementation
 
     virtual bool IsRadioButton() const { return TRUE; }
