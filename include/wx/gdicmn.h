@@ -383,6 +383,11 @@ public:
     wxColour *FindColour(const wxString& colour) ;
     wxString FindName(const wxColour& colour) const;
     void Initialize();
+#ifdef __WXPM__
+    // PM keeps its own type of colour table
+    long*                           m_palTable;
+    size_t                          m_nSize;
+#endif
 };
 
 class WXDLLEXPORT wxBitmapList : public wxList

@@ -136,6 +136,9 @@ wxColourDatabase::~wxColourDatabase ()
       delete col;
       node = next;
     }
+#ifdef __WXPM__
+    delete [] m_palTable;
+#endif
 }
 
 // Colour database stuff
@@ -230,6 +233,15 @@ void wxColourDatabase::Initialize ()
         const wxColourDesc& cc = wxColourTable[n];
         Append(cc.name, new wxColour(cc.r,cc.g,cc.b));
     }
+#ifdef __WXPM__
+    m_palTable = new long[n];
+    for ( n = 0; n < WXSIZEOF(wxColourTable); n++ )
+    {
+        const wxColourDesc& cc = wxColourTable[n];
+        m_palTable[n] = OS2RGB(cc.r,cc.g,cc.b);
+    }
+    m_nSize = n;
+#endif
 }
 
 /*
