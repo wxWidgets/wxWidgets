@@ -557,8 +557,16 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     {
         if ( !m_penSelected ) 
             SelectPen();
-        m_MGLDC->rect(xx + m_penOfsX, yy + m_penOfsY, 
-                      xx + ww + m_penOfsX, yy + hh + m_penOfsY);
+
+        // VS: MGLDC::rect() does not render rectangles that have width
+        //     or height equal to 1, so we have to use MGLDC::line()
+        //     instead...
+        if ( hh == 1 || ww == 1 )
+            m_MGLDC->line(xx + m_penOfsX, yy + m_penOfsY, 
+                          xx + ww-1 + m_penOfsX, yy + hh-1 + m_penOfsY);
+        else
+            m_MGLDC->rect(xx + m_penOfsX, yy + m_penOfsY, 
+                          xx + ww + m_penOfsX, yy + hh + m_penOfsY);
     }    
 
     CalcBoundingBox(x, y);
