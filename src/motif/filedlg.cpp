@@ -190,7 +190,9 @@ static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
 
     // Change colour of the scrolled areas of the listboxes
     Widget listParent = XtParent (widget);
+#if 0
     wxWindow::DoChangeBackgroundColour((WXWidget) listParent, *wxWHITE, TRUE);
+#endif
 
     Widget hsb = (Widget) 0;
     Widget vsb = (Widget) 0;
@@ -277,11 +279,6 @@ int wxFileDialog::ShowModal()
         entirePath = m_fileName;
     }
 
-    if (entirePath != "")
-    {
-        XmTextSetString(selectionWidget, (char*) (const char*) entirePath);
-    }
-
     if (m_wildCard != "")
     {
         // return something understandable by Motif
@@ -300,14 +297,16 @@ int wxFileDialog::ShowModal()
     // file selector on Solaris 1.5.1.
     if ( m_dir != "" )
     {
-        XmString thePath = XmStringCreateLtoR ((char*) (const char*) m_dir,
-            XmSTRING_DEFAULT_CHARSET);
+        wxXmString thePath( m_dir );
 
         XtVaSetValues (fileSel,
-            XmNdirectory, thePath,
+            XmNdirectory, thePath(),
             NULL);
+    }
 
-        XmStringFree(thePath);
+    if (entirePath != "")
+    {
+        XmTextSetString(selectionWidget, (char*)entirePath.c_str());
     }
 
     XtAddCallback(fileSel, XmNcancelCallback, (XtCallbackProc)wxFileSelCancel, (XtPointer)NULL);
