@@ -523,11 +523,11 @@ void wxThread::Yield()
 
 void wxThread::Sleep(unsigned long milliseconds)
 {
-        clock_t start = clock() ;
-        do
-        {
-            YieldToAnyThread() ;
-        } while( clock() - start < milliseconds / CLOCKS_PER_SEC ) ;
+    clock_t start = clock();
+    do
+    {
+        YieldToAnyThread();
+    } while( clock() - start < (milliseconds * CLOCKS_PER_SEC) / 1000 ) ;
 }
 
 int wxThread::GetCPUCount()
