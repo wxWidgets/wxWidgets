@@ -292,11 +292,11 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
     rect = event.GetRect();
 
     if (mainWindow)
-        mainWindow->SetSize(rect.x, rect.y, rect.width, rect.height);
+        mainWindow->SetSize(rect.x, rect.y, wxMax(0, rect.width), wxMax(0, rect.height));
     else if (lastAwareWindow)
     {
         // Fit the remaining space
-        lastAwareWindow->SetSize(rect.x, rect.y, rect.width, rect.height);
+        lastAwareWindow->SetSize(rect.x, rect.y, wxMax(0, rect.width), wxMax(0, rect.height));
     }
 
     return TRUE;

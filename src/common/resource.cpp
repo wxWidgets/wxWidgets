@@ -2210,6 +2210,7 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
     { wxT("wxTRANSPARENT_WINDOW"), wxTRANSPARENT_WINDOW},
     { wxT("wxNO_BORDER"), wxNO_BORDER},
     { wxT("wxCLIP_CHILDREN"), wxCLIP_CHILDREN},
+    { wxT("wxCLIP_SIBLINGS"), wxCLIP_SIBLINGS},
     { wxT("wxTAB_TRAVERSAL"), 0}, // Compatibility only
     
     { wxT("wxTINY_CAPTION_HORIZ"), wxTINY_CAPTION_HORIZ},

@@ -316,6 +316,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     msflags |= WS_CHILD | WS_VISIBLE;
     if ( style & wxCLIP_CHILDREN )
         msflags |= WS_CLIPCHILDREN;
+    if ( style & wxCLIP_SIBLINGS )
+        msflags |= WS_CLIPSIBLINGS;
 
     bool want3D;
     WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);

@@ -862,6 +862,9 @@ enum wxStretch
 // splitter windows, but can't be used in a panel where a static box must be
 // 'transparent' (panel paints the background for it)
 #define wxCLIP_CHILDREN         0x00400000
+// Note we're reusing the wxCAPTION style because we won't need captions
+// for subwindows/controls
+#define wxCLIP_SIBLINGS         0x20000000
 
 // Add this style to a panel to get tab traversal working outside of dialogs
 // (on by default for wxPanel, wxDialog, wxScrolledWindow)
