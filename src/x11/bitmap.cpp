@@ -21,8 +21,13 @@
 
 #include "wx/x11/private.h"
 
+#if wxUSE_XPM
 #if wxHAVE_LIB_XPM
-    #include <X11/xpm.h>
+#include <X11/xpm.h>
+#else
+#include "wx/xpmdecod.h"
+#include "wx/wfstream.h"
+#endif
 #endif
 #include <math.h>
 
@@ -308,6 +313,8 @@ bool wxBitmap::Create( int width, int height, int depth )
 
 bool wxBitmap::CreateFromXpm( const char **bits )
 {
+#if wxUSE_XPM
+#if wxHAVE_LIB_XPM
     UnRef();
 
     wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
@@ -358,6 +365,7 @@ bool wxBitmap::CreateFromXpm( const char **bits )
             M_BMPDATA->m_mask->SetBitmap( (WXPixmap) mask );
             M_BMPDATA->m_mask->SetDisplay( xdisplay );
         }
+	return TRUE;
     }
     else
     {
@@ -365,8 +373,16 @@ bool wxBitmap::CreateFromXpm( const char **bits )
         
         return FALSE;
     }
-
-    return TRUE;
+#else
+    wxXPMDecoder decoder;
+    wxImage image(decoder.ReadData(bits));
+    if (image.Ok())
+	return CreateFromImage(image);
+    else
+	return FALSE;
+#endif
+#endif
+    return FALSE;
 }
 
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
@@ -970,6 +986,8 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
 
     if (type == wxBITMAP_TYPE_XPM)
     {
+#if wxUSE_XPM
+#if wxHAVE_LIB_XPM
         m_refData = new wxBitmapRefData();
 
         M_BMPDATA->m_display = wxGlobalDisplay();
@@ -1013,6 +1031,29 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
             
             return FALSE;
         }
+#else
+#if wxUSE_STREAMS
+	wxXPMDecoder decoder;
+	wxFileInputStream stream(name);
+	if (stream.Ok())
+	{
+            wxImage image(decoder.Read(stream));
+	    if (image.Ok())
+		return CreateFromImage(image);
+	    else
+		return FALSE;
+	}
+	else
+	    return FALSE;
+#else
+	return FALSE;
+#endif
+	// wxUSE_STREAMS
+#endif
+	// wxHAVE_LIB_XPM
+#endif
+	// wxUSE_XPM
+	return FALSE;
     }
     else // try if wxImage can load it
     {

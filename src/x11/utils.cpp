@@ -165,9 +165,11 @@ static void xt_notify_end_process(XtPointer data, int *WXUNUSED(fid),
 
     XtRemoveInput(*id);
 }
+#endif
 
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
+#ifdef __WXMOTIF__
     XtInputId id = XtAppAddInput((XtAppContext) wxTheApp->GetAppContext(),
                                  fd,
                                  (XtPointer *) XtInputReadMask,
@@ -175,8 +177,12 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
                                  (XtPointer) proc_data);
 
     return (int)id;
-}
 #endif
+#ifdef __WXX11__
+    // TODO
+    return 0;
+#endif
+}
 
 // ----------------------------------------------------------------------------
 // misc

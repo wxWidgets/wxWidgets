@@ -438,3 +438,81 @@ void wxSetCursor(const wxCursor& WXUNUSED(cursor))
 }
 
 
+// ----------------------------------------------------------------------------
+// busy cursor stuff
+// ----------------------------------------------------------------------------
+
+static int wxBusyCursorCount = 0;
+
+// Helper function
+static void
+wxXSetBusyCursor (wxWindow * win, wxCursor * cursor)
+{
+    Display *display = (Display*) win->GetXDisplay();
+
+    Window xwin = (Window) win->GetXWindow();
+    if (!xwin)
+       return;
+
+    XSetWindowAttributes attrs;
+
+    if (cursor)
+    {
+        attrs.cursor = (Cursor) cursor->GetXCursor(display);
+    }
+    else
+    {
+        // Restore old cursor
+        if (win->GetCursor().Ok())
+            attrs.cursor = (Cursor) win->GetCursor().GetXCursor(display);
+        else
+            attrs.cursor = None;
+    }
+    if (xwin)
+        XChangeWindowAttributes (display, xwin, CWCursor, &attrs);
+
+    XFlush (display);
+
+    for(wxNode *node = win->GetChildren().First (); node; node = node->Next())
+    {
+        wxWindow *child = (wxWindow *) node->Data ();
+        wxXSetBusyCursor (child, cursor);
+    }
+}
+
+// Set the cursor to the busy cursor for all windows
+void wxBeginBusyCursor(wxCursor *cursor)
+{
+    wxBusyCursorCount++;
+    if (wxBusyCursorCount == 1)
+    {
+        for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
+        {
+            wxWindow *win = (wxWindow *) node->Data ();
+            wxXSetBusyCursor (win, cursor);
+        }
+    }
+}
+
+// Restore cursor to normal
+void wxEndBusyCursor()
+{
+    if (wxBusyCursorCount == 0)
+        return;
+
+    wxBusyCursorCount--;
+    if (wxBusyCursorCount == 0)
+    {
+        for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
+        {
+            wxWindow *win = (wxWindow *) node->Data ();
+            wxXSetBusyCursor (win, NULL);
+        }
+    }
+}
+
+// TRUE if we're between the above two calls
+bool wxIsBusy()
+{
+    return (wxBusyCursorCount > 0);
+}
