@@ -33,6 +33,7 @@ public:
   bool  Create(const wxString& fileName, bool isResource = FALSE);
   bool  IsOk() const { return !m_sndname.IsEmpty(); }
 
+  void* GetHandle();
 protected:
   // prevent collision with some BSD definitions of macro Free()
   bool  FreeData();
@@ -40,12 +41,18 @@ protected:
   bool  DoPlay(unsigned flags) const;
 
 private:
-  void* m_sndChan;
+    wxString m_sndname; //file path
+    char* m_hSnd; //pointer to resource or memory location
+    int m_waveLength; //size of file in memory mode
+    void* m_pTimer; //timer
 
-  wxString m_sndname;
-  void* m_hSnd;
-  int   m_waveLength;
-  bool  m_isResource;
+    enum wxSoundType
+    {
+        wxSound_MEMORY,
+        wxSound_FILE,
+        wxSound_RESOURCE,
+        wxSound_NONE
+    } m_type; //mode
 };
 
 #endif
