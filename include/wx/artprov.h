@@ -59,10 +59,18 @@ typedef wxString wxArtID;
 #define wxART_GO_UP                    _T("go_up")
 #define wxART_GO_DOWN                  _T("go_down")
 #define wxART_GO_TO_PARENT             _T("go_to_parent")
+#define wxART_GO_HOME                  _T("go_home")
 #define wxART_FILE_OPEN                _T("file_open")
 #define wxART_PRINT                    _T("print")
 #define wxART_HELP                     _T("help")
 #define wxART_TIP                      _T("tip")
+#define wxART_REPORT_VIEW              _T("report_view")
+#define wxART_LIST_VIEW                _T("list_view")
+#define wxART_NEW_DIR                  _T("new_dir")
+#define wxART_FOLDER                   _T("folder")
+#define wxART_GO_DIR_UP                _T("go_dir_up")
+#define wxART_EXECUTABLE_FILE          _T("executable_file")
+#define wxART_NORMAL_FILE              _T("normal_file")
 
 // ----------------------------------------------------------------------------
 // wxArtProvider class

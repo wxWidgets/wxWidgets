@@ -84,6 +84,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxDefaultArtProviderModule, wxModule)
 #include "../../art/print.xpm"
 #include "../../art/helpicon.xpm"
 #include "../../art/tipicon.xpm"
+#include "../../art/home.xpm"
+#include "../../art/repview.xpm"
+#include "../../art/listview.xpm"
+#include "../../art/new_dir.xpm"
+#include "../../art/folder.xpm"
+#include "../../art/dir_up.xpm"
+#include "../../art/exefile.xpm"
+#include "../../art/deffile.xpm"
 
 #undef static
 
@@ -109,10 +117,18 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
     ART(wxART_GO_UP,                               up)
     ART(wxART_GO_DOWN,                             down)
     ART(wxART_GO_TO_PARENT,                        toparent)
+    ART(wxART_GO_HOME,                             home)
     ART(wxART_FILE_OPEN,                           fileopen)
     ART(wxART_PRINT,                               print)
     ART(wxART_HELP,                                helpicon)
     ART(wxART_TIP,                                 tipicon)
+    ART(wxART_REPORT_VIEW,                         repview)
+    ART(wxART_LIST_VIEW,                           listview)
+    ART(wxART_NEW_DIR,                             new_dir)
+    ART(wxART_FOLDER,                              folder)
+    ART(wxART_GO_DIR_UP,                           dir_up)
+    ART(wxART_EXECUTABLE_FILE,                     exefile)
+    ART(wxART_NORMAL_FILE,                         deffile)
 
     return wxNullBitmap;
 }

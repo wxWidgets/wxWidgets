@@ -46,6 +46,7 @@
 #include "wx/config.h"
 #include "wx/imaglist.h"
 #include "wx/dir.h"
+#include "wx/artprov.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -68,22 +69,6 @@
 
 # include <time.h>
 #include <unistd.h>
-
-// XPM hack: make the arrays const
-#define static static const
-
-#ifndef __DOS__
-#include "wx/generic/home.xpm"
-#endif
-#include "wx/generic/listview.xpm"
-#include "wx/generic/repview.xpm"
-#include "wx/generic/new_dir.xpm"
-#include "wx/generic/dir_up.xpm"
-#include "wx/generic/folder.xpm"
-#include "wx/generic/deffile.xpm"
-#include "wx/generic/exefile.xpm"
-
-#undef static
 
 //-----------------------------------------------------------------------------
 //  wxFileData
@@ -211,11 +196,14 @@ wxFileIconsTable::wxFileIconsTable() :
                     m_HashTable(wxKEY_STRING)
 {
     m_HashTable.DeleteContents(TRUE);
-    m_ImageList.Add(wxBitmap(folder_xpm));  // FI_FOLDER
-    m_ImageList.Add(wxBitmap(deffile_xpm)); // FI_UNKNOWN
+    // FI_FOLDER:
+    m_ImageList.Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_CMN_DIALOG));
+    // FI_UNKNOWN:
+    m_ImageList.Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_CMN_DIALOG)); 
+    // FI_EXECUTABLE:
     if (GetIconID(wxEmptyString, _T("application/x-executable")) == FI_UNKNOWN)
-    {                                       // FI_EXECUTABLE
-        m_ImageList.Add(wxBitmap(exefile_xpm));
+    {
+        m_ImageList.Add(wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE, wxART_CMN_DIALOG));
         m_HashTable.Delete(_T("exe"));
         m_HashTable.Put(_T("exe"), new wxFileIconEntry(FI_EXECUTABLE));
     }
@@ -1071,13 +1059,15 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     wxBitmapButton *but;
 
-    but = new wxBitmapButton( this, ID_LIST_MODE, wxBitmap( listview_xpm ) );
+    but = new wxBitmapButton(this, ID_LIST_MODE, 
+                             wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_CMN_DIALOG));
 #if wxUSE_TOOLTIPS
     but->SetToolTip( _("View files as a list view") );
 #endif
     buttonsizer->Add( but, 0, wxALL, 5 );
 
-    but = new wxBitmapButton( this, ID_REPORT_MODE, wxBitmap( repview_xpm ) );
+    but = new wxBitmapButton(this, ID_REPORT_MODE,
+                             wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_CMN_DIALOG));
 #if wxUSE_TOOLTIPS
     but->SetToolTip( _("View files as a detailed view") );
 #endif
@@ -1086,14 +1076,16 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     buttonsizer->Add( 30, 5, 1 );
 
     wxWindow *butDirUp = 
-        new wxBitmapButton( this, ID_UP_DIR, wxBitmap( dir_up_xpm ) );
+        new wxBitmapButton(this, ID_UP_DIR,
+                           wxArtProvider::GetBitmap(wxART_GO_DIR_UP, wxART_CMN_DIALOG));
 #if wxUSE_TOOLTIPS
     butDirUp->SetToolTip( _("Go to parent directory") );
 #endif
     buttonsizer->Add( butDirUp, 0, wxALL, 5 );
 
 #ifndef __DOS__ // VS: Home directory is meaningless in MS-DOS...
-    but = new wxBitmapButton( this, ID_PARENT_DIR, wxBitmap(home_xpm) );
+    but = new wxBitmapButton(this, ID_PARENT_DIR,
+                             wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_CMN_DIALOG));
 #if wxUSE_TOOLTIPS
     but->SetToolTip( _("Go to home directory") );
 #endif
@@ -1103,7 +1095,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 #endif //!__DOS__
 
     wxWindow *butNewDir = 
-        new wxBitmapButton( this, ID_NEW_DIR, wxBitmap(new_dir_xpm) );
+        new wxBitmapButton(this, ID_NEW_DIR,
+                           wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_CMN_DIALOG));
 #if wxUSE_TOOLTIPS
     butNewDir->SetToolTip( _("Create new directory") );
 #endif
