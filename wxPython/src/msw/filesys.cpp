@@ -389,7 +389,7 @@ static PyObject *_wrap_wxFSFile_GetStream(PyObject *self, PyObject *args, PyObje
     if (_result) {
         _ptr = new wxPyInputStream(_result);
     }
-    _resultobj = wxPyConstructObject(_ptr, "wxInputStream", TRUE);
+    _resultobj = wxPyConstructObject(_ptr, wxT("wxInputStream"), TRUE);
 }
     return _resultobj;
 }

@@ -106,7 +106,7 @@ PyObject* wxPyMake_##TYPE(TYPE* source) { \
         /* Otherwise make a new wrapper for it the old fashioned way and \
            give it the OOR treatment */ \
         if (! target) { \
-            target = wxPyConstructObject(source, #TYPE, FALSE); \
+            target = wxPyConstructObject(source, wxT(#TYPE), FALSE); \
             if (target) \
                 source->SetClientObject(new wxPyOORClientData(target)); \
         } \
@@ -541,7 +541,7 @@ public:
             PyObject* go = wxPyMake_wxObject(&grid);
             PyObject* dco = wxPyMake_wxObject(&dc);
             PyObject* ao = wxPyMake_wxGridCellAttr(&attr);
-            PyObject* ro = wxPyConstructObject((void*)&rect, "wxRect", 0);
+            PyObject* ro = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
 
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOOiii)", go, ao, dco, ro,
                                                          row, col, isSelected));
@@ -705,7 +705,7 @@ public:
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "PaintBackground)"))) {
             PyObject* ao = wxPyMake_wxGridCellAttr(attr);
-            PyObject* ro = wxPyConstructObject((void*)&rectCell, "wxRect", 0);
+            PyObject* ro = wxPyConstructObject((void*)&rectCell, wxT("wxRect"), 0);
 
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", ro, ao));
 

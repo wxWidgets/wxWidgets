@@ -191,7 +191,7 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() {
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPyBeginBlockThreads();
     if (m_myInst.findCallback("SetBitmap")) {
-        PyObject* bo = wxPyConstructObject((void*)&bitmap, "wxBitmap");
+        PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"));
         m_myInst.callCallback(Py_BuildValue("(O)", bo));
         Py_DECREF(bo);
     }

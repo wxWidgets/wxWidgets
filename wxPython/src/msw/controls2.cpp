@@ -214,8 +214,8 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = m_myInst.findCallback("OnCompareItems"))) {
-            PyObject *o1 = wxPyConstructObject((void*)&item1, "wxTreeItemId");
-            PyObject *o2 = wxPyConstructObject((void*)&item2, "wxTreeItemId");
+            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"));
+            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"));
             rval = m_myInst.callCallback(Py_BuildValue("(OO)",o1,o2));
             Py_DECREF(o1);
             Py_DECREF(o2);
@@ -7848,7 +7848,7 @@ static PyObject * wxPyTreeCtrl_GetSelections(wxPyTreeCtrl *self) {
             num = self->GetSelections(array);
             for (x=0; x < num; x++) {
                 wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
-                PyObject* item = wxPyConstructObject((void*)tii, "wxTreeItemId", TRUE);
+                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), TRUE);
                 PyList_Append(rval, item);
             }
             wxPyEndBlockThreads();
@@ -9384,7 +9384,7 @@ static PyObject * wxPyTreeCtrl_GetBoundingRect(wxPyTreeCtrl *self,const wxTreeIt
             if (self->GetBoundingRect(item, rect, textOnly)) {
                 wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
-                PyObject* val = wxPyConstructObject((void*)r, "wxRect");
+                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"));
                 wxPyEndBlockThreads();
                 return val;
             }
