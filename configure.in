@@ -1831,8 +1831,13 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/share/include"
 
+dnl prepend lib and lib32 for IRIX where the files in these directories should
+dnl be found before the ones in lib64 for 32bit compilation -- of course, this
+dnl probably/surely breaks 64bit compilation... IMO the only real solution is to
+dnl stop using WX_PATH_FIND_LIBRARIES() at all and use AC_CHECK_LIB() instead
+dnl
 dnl add 64 bit versions for Linux on AMD (this is not perfect but well...)
-SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` /usr/lib64 /usr/X11R6/lib64"
+SEARCH_LIB="/usr/lib /usr/lib32 `echo "$SEARCH_INCLUDE" | sed s/include/lib/g` /usr/lib64 /usr/X11R6/lib64"
 
 dnl ------------------------------------------------------------------------
 dnl Check for libraries
