@@ -11,7 +11,7 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-import sys, os, time
+import sys, os, time, string
 from   wxPython.wx import *
 from   wxPython.lib.splashscreen import SplashScreen
 from   wxPython.html import wxHtmlWindow
@@ -93,6 +93,13 @@ class MyLog(wxPyLog):
             message = time.strftime("%X", time.localtime(timeStamp)) + \
                       ": " + message
         self.tc.AppendText(message + '\n')
+
+
+#---------------------------------------------------------------------------
+
+def opj(path):
+    """Convert paths to the platform-specific separator"""
+    return apply(os.path.join, tuple(string.split(path, '/')))
 
 
 #---------------------------------------------------------------------------
@@ -374,7 +381,6 @@ class wxPythonDemo(wxFrame):
         lead = text[:6]
         if lead != '<html>' and lead != '<HTML>':
             text = string.join(string.split(text, '\n'), '<br>')
-            #text = '<font size="-1"><pre>' + text + '</pre></font>'
         self.ovr.SetPage(text)
         self.nb.SetPageText(0, name)
 
@@ -466,7 +472,7 @@ class wxPythonDemo(wxFrame):
 
 class MySplashScreen(wxSplashScreen):
     def __init__(self):
-        bmp = wxImage('bitmaps/splash.gif').ConvertToBitmap()
+        bmp = wxImage(opj("bitmaps/splash.gif")).ConvertToBitmap()
         wxSplashScreen.__init__(self, bmp,
                                 wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
                                 4000, None, -1)
@@ -480,15 +486,15 @@ class MySplashScreen(wxSplashScreen):
 
     def ShowTip(self, frame):
         try:
-            showTipText = open("data/showTips").read()
+            showTipText = open(opj("data/showTips")).read()
             showTip, index = eval(showTipText)
         except IOError:
             showTip, index = (1, 0)
         if showTip:
-            tp = wxCreateFileTipProvider("data/tips.txt", index)
+            tp = wxCreateFileTipProvider(opj("data/tips.txt"), index)
             showTip = wxShowTip(frame, tp)
             index = tp.GetCurrentTip()
-            open("data/showTips", "w").write(str( (showTip, index) ))
+            open(opj("data/showTips"), "w").write(str( (showTip, index) ))
 
 
 

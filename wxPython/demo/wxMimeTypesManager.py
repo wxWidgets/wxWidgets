@@ -2,6 +2,7 @@
 import pprint, string, os
 from wxPython.wx import *
 from mimetypes_wdr import *
+from Main import opj
 
 #----------------------------------------------------------------------------
 
@@ -166,7 +167,7 @@ overview = """\
 import mimetypes_wdr
 
 def MyBitmapsFunc( index ):
-    return wxImage( "bitmaps/noicon.png", wxBITMAP_TYPE_PNG ).ConvertToBitmap()
+    return wxImage( opj("bitmaps/noicon.png"), wxBITMAP_TYPE_PNG ).ConvertToBitmap()
 
 mimetypes_wdr.MyBitmapsFunc = MyBitmapsFunc
 

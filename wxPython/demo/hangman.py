@@ -294,7 +294,7 @@ class MyFrame(wxFrame):
         menu = wxMenu()
         #menu.Append(1010, "Internal", "Use internal dictionary", TRUE)
         menu.Append(1011, "ASCII File...")
-        urls = [ 'wxPython home', 'http://alldunn.com/wxPython/main.html',
+        urls = [ 'wxPython home', 'http://wxPython.org/',
                  'slashdot.org', 'http://slashdot.org/',
                  'cnn.com', 'http://cnn.com',
                  'The New York Times', 'http://www.nytimes.com',

@@ -705,6 +705,7 @@ if not GL_ONLY and BUILD_XRC:
                                 '%s/xh_frame.cpp' % XMLLOC,
 
                                 '%s/xh_gauge.cpp' % XMLLOC,
+                                '%s/xh_gdctl.cpp' % XMLLOC,
                                 '%s/xh_html.cpp' % XMLLOC,
                                 '%s/xh_listb.cpp' % XMLLOC,
                                 '%s/xh_listc.cpp' % XMLLOC,

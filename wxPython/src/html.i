@@ -146,7 +146,7 @@ public:
     wxDC* GetDC();
     int GetCharHeight();
     int GetCharWidth();
-    wxWindow* GetWindow();
+    wxHtmlWindow* GetWindow();
     //void SetFonts(wxString normal_face, wxString fixed_face, int *LIST);
     %addmethods {
         void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes) {

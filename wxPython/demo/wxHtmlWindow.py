@@ -5,6 +5,8 @@ from   wxPython.wx         import *
 from   wxPython.html       import *
 import wxPython.lib.wxpTag
 
+from Main import opj
+
 #----------------------------------------------------------------------
 
 # This shows how to catch the OnLinkClicked non-event.  (It's a virtual
@@ -104,7 +106,7 @@ class TestHtmlPanel(wxPanel):
 
 
     def OnShowDefault(self, event):
-        name = os.path.join(self.cwd, 'data/test.htm')
+        name = os.path.join(self.cwd, opj('data/test.htm'))
         self.html.LoadPage(name)
 
 
@@ -118,7 +120,7 @@ class TestHtmlPanel(wxPanel):
 
     def OnWithWidgets(self, event):
         os.chdir(self.cwd)
-        name = os.path.join(self.cwd, 'data/widgetTest.htm')
+        name = os.path.join(self.cwd, opj('data/widgetTest.htm'))
         self.html.LoadPage(name)
 
 

@@ -1,5 +1,6 @@
 
 from wxPython.wx import *
+from Main import opj
 
 #----------------------------------------------------------------------
 
@@ -15,9 +16,9 @@ class TestPanel(wxPanel):
         try:
             import time
             if int(time.time()) % 2 == 1:
-                wave = wxWave('data/anykey.wav')
+                wave = wxWave(opj('data/anykey.wav'))
             else:
-                wave = wxWave('data/plan.wav')
+                wave = wxWave(opj('data/plan.wav'))
             wave.Play()
         except NotImplementedError, v:
             wxMessageBox(str(v), "Exception Message")

@@ -1,10 +1,11 @@
 
 from wxPython.wx import *
 from wxPython.xrc import *
+from Main import opj
 
 #----------------------------------------------------------------------
 
-RESFILE = "data/resource_wdr.xrc"
+RESFILE = opj("data/resource_wdr.xrc")
 
 class TestPanel(wxPanel):
     def __init__(self, parent, log):

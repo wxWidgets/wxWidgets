@@ -1,13 +1,14 @@
 
 from wxPython.wx import *
+from Main import opj
 
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    bmp = wxImage('bitmaps/image.bmp', wxBITMAP_TYPE_BMP).ConvertToBitmap()
-    gif = wxImage('bitmaps/image.gif', wxBITMAP_TYPE_GIF).ConvertToBitmap()
-    png = wxImage('bitmaps/image.png', wxBITMAP_TYPE_PNG).ConvertToBitmap()
-    jpg = wxImage('bitmaps/image.jpg', wxBITMAP_TYPE_JPEG).ConvertToBitmap()
+    bmp = wxImage(opj('bitmaps/image.bmp'), wxBITMAP_TYPE_BMP).ConvertToBitmap()
+    gif = wxImage(opj('bitmaps/image.gif'), wxBITMAP_TYPE_GIF).ConvertToBitmap()
+    png = wxImage(opj('bitmaps/image.png'), wxBITMAP_TYPE_PNG).ConvertToBitmap()
+    jpg = wxImage(opj('bitmaps/image.jpg'), wxBITMAP_TYPE_JPEG).ConvertToBitmap()
 
     panel = wxPanel(nb, -1)
     pos = 10

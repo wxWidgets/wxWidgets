@@ -10025,25 +10025,23 @@ static PyObject *_wrap_new_wxGenericDirCtrl(PyObject *self, PyObject *args, PyOb
     wxGenericDirCtrl * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1 = (wxWindowID ) -1;
-    wxString * _arg2 = (wxString *) &wxDirDialogDefaultFolderStr;
+    char * _arg2 = (char *) wxDirDialogDefaultFolderStr;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) (wxDIRCTRL_3D_INTERNAL)|wxSUNKEN_BORDER;
-    wxString * _arg6 = (wxString *) &wxEmptyString;
+    char * _arg6 = (char *) wxEmptyString;
     int  _arg7 = (int ) 0;
     char * _arg8 = (char *) "dirCtrl";
     PyObject * _argo0 = 0;
-    PyObject * _obj2 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
-    PyObject * _obj6 = 0;
     char *_kwnames[] = { "parent","id","dir","pos","size","style","filter","defaultFilter","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOOlOis:new_wxGenericDirCtrl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_obj6,&_arg7,&_arg8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|isOOlsis:new_wxGenericDirCtrl",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6,&_arg7,&_arg8)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -10052,25 +10050,6 @@ static PyObject *_wrap_new_wxGenericDirCtrl(PyObject *self, PyObject *args, PyOb
         return NULL;
         }
     }
-    if (_obj2)
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
-}
     if (_obj3)
 {
     _arg3 = &temp;
@@ -10083,28 +10062,9 @@ static PyObject *_wrap_new_wxGenericDirCtrl(PyObject *self, PyObject *args, PyOb
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
-    if (_obj6)
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj6) && !PyUnicode_Check(_obj6)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj6, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg6 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj6)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg6 = new wxString(PyString_AS_STRING(_obj6), PyString_GET_SIZE(_obj6));
-#endif
-}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxGenericDirCtrl *)new_wxGenericDirCtrl(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7,_arg8);
+        _result = (wxGenericDirCtrl *)new_wxGenericDirCtrl(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,_arg8);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10115,14 +10075,6 @@ static PyObject *_wrap_new_wxGenericDirCtrl(PyObject *self, PyObject *args, PyOb
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
-{
-    if (_obj2)
-        delete _arg2;
-}
-{
-    if (_obj6)
-        delete _arg6;
-}
     return _resultobj;
 }
 
@@ -10159,25 +10111,23 @@ static PyObject *_wrap_wxGenericDirCtrl_Create(PyObject *self, PyObject *args, P
     wxGenericDirCtrl * _arg0;
     wxWindow * _arg1;
     wxWindowID  _arg2 = (wxWindowID ) -1;
-    wxString * _arg3 = (wxString *) &wxDirDialogDefaultFolderStr;
+    char * _arg3 = (char *) wxDirDialogDefaultFolderStr;
     wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg5 = (wxSize *) &wxDefaultSize;
     long  _arg6 = (long ) (wxDIRCTRL_3D_INTERNAL)|wxSUNKEN_BORDER;
-    wxString * _arg7 = (wxString *) &wxEmptyString;
+    char * _arg7 = (char *) wxEmptyString;
     int  _arg8 = (int ) 0;
     char * _arg9 = (char *) "dirCtrl";
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    PyObject * _obj3 = 0;
     wxPoint  temp;
     PyObject * _obj4 = 0;
     wxSize  temp0;
     PyObject * _obj5 = 0;
-    PyObject * _obj7 = 0;
     char *_kwnames[] = { "self","parent","id","dir","pos","size","style","filter","defaultFilter","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOOlOis:wxGenericDirCtrl_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_obj5,&_arg6,&_obj7,&_arg8,&_arg9)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|isOOlsis:wxGenericDirCtrl_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_obj4,&_obj5,&_arg6,&_arg7,&_arg8,&_arg9)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -10193,25 +10143,6 @@ static PyObject *_wrap_wxGenericDirCtrl_Create(PyObject *self, PyObject *args, P
         return NULL;
         }
     }
-    if (_obj3)
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg3 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
-#endif
-}
     if (_obj4)
 {
     _arg4 = &temp;
@@ -10224,40 +10155,13 @@ static PyObject *_wrap_wxGenericDirCtrl_Create(PyObject *self, PyObject *args, P
     if (! wxSize_helper(_obj5, &_arg5))
         return NULL;
 }
-    if (_obj7)
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj7) && !PyUnicode_Check(_obj7)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj7, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg7 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj7)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg7 = new wxString(PyString_AS_STRING(_obj7), PyString_GET_SIZE(_obj7));
-#endif
-}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxGenericDirCtrl_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,*_arg5,_arg6,*_arg7,_arg8,_arg9);
+        _result = (bool )wxGenericDirCtrl_Create(_arg0,_arg1,_arg2,_arg3,*_arg4,*_arg5,_arg6,_arg7,_arg8,_arg9);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj3)
-        delete _arg3;
-}
-{
-    if (_obj7)
-        delete _arg7;
-}
     return _resultobj;
 }
 

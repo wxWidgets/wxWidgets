@@ -1495,7 +1495,7 @@ static PyObject *_wrap_wxHtmlWinParser_GetCharWidth(PyObject *self, PyObject *ar
 #define wxHtmlWinParser_GetWindow(_swigobj)  (_swigobj->GetWindow())
 static PyObject *_wrap_wxHtmlWinParser_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxWindow * _result;
+    wxHtmlWindow * _result;
     wxHtmlWinParser * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
@@ -1512,7 +1512,7 @@ static PyObject *_wrap_wxHtmlWinParser_GetWindow(PyObject *self, PyObject *args,
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxWindow *)wxHtmlWinParser_GetWindow(_arg0);
+        _result = (wxHtmlWindow *)wxHtmlWinParser_GetWindow(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
