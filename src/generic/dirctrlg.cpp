@@ -504,8 +504,10 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     long treeStyle = wxTR_HAS_BUTTONS;
 
+#ifdef __WXMSW__
     if (style & wxDIRCTRL_EDITABLE)
         treeStyle |= wxTR_EDIT_LABELS;
+#endif
 
 #ifndef __WXMSW__
     // FIXME, doesn't work for some reason

@@ -22,8 +22,8 @@ src/regex/regex.dsw
 
 samples/samples.dsw
 
-samples/artprov/arttest.dsp
-samples/artprov/arttest.dsw
+samples/artprov/artprov.dsp
+samples/artprov/artprov.dsw
 
 samples/calendar/arttest.dsp
 samples/calendar/arttest.dsw
