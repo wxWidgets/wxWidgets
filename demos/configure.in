@@ -3,6 +3,12 @@ AC_REVISION($Id$)dnl
 
 AC_INIT(Makefile.in)
 
+dnl we need the values the main configure determined for us, so refuse
+dnl to run if we don't have them
+if test "x$wx_cv_if_gnu_make" = "x"; then
+    AC_MSG_ERROR([Please run configure from the top level directory.])
+fi
+
 IF_GNU_MAKE=$wx_cv_if_gnu_make
 AC_SUBST(IF_GNU_MAKE)
 
