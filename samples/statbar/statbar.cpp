@@ -146,6 +146,9 @@ class MyFrame : public wxMDIParentFrame
 
     void OnSetStatusFields(wxCommandEvent& event);
     void OnRecreateStatusBar(wxCommandEvent& event);
+    void OnSetStyleNormal(wxCommandEvent& event);
+    void OnSetStyleFlat(wxCommandEvent& event);
+    void OnSetStyleRaised(wxCommandEvent& event);
 
 private:
     enum StatBarKind
@@ -156,11 +159,17 @@ private:
     } m_statbarKind;
     void OnUpdateSetStatusFields(wxUpdateUIEvent& event);
     void OnUpdateStatusBarToggle(wxUpdateUIEvent& event);
+    void OnUpdateSetStyleNormal(wxUpdateUIEvent& event);
+    void OnUpdateSetStyleFlat(wxUpdateUIEvent& event);
+    void OnUpdateSetStyleRaised(wxUpdateUIEvent& event);
     void OnStatusBarToggle(wxCommandEvent& event);
     void DoCreateStatusBar(StatBarKind kind);
+    void ApplyStyle();
 
     wxStatusBar *m_statbarDefault;
     MyStatusBar *m_statbarCustom;
+
+    int m_statbarStyle;
 
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
@@ -186,7 +195,11 @@ enum
     StatusBar_Recreate,
     StatusBar_About,
     StatusBar_Toggle,
-    StatusBar_Checkbox = 1000
+    StatusBar_Checkbox = 1000,
+    StatusBar_SetStyle,
+    StatusBar_SetStyleNormal,
+    StatusBar_SetStyleFlat,
+    StatusBar_SetStyleRaised
 };
 
 static const int BITMAP_SIZE_X = 32;
@@ -209,8 +222,14 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(StatusBar_Recreate, MyFrame::OnRecreateStatusBar)
     EVT_MENU(StatusBar_About, MyFrame::OnAbout)
     EVT_MENU(StatusBar_Toggle, MyFrame::OnStatusBarToggle)
+    EVT_MENU(StatusBar_SetStyleNormal, MyFrame::OnSetStyleNormal)
+    EVT_MENU(StatusBar_SetStyleFlat, MyFrame::OnSetStyleFlat)
+    EVT_MENU(StatusBar_SetStyleRaised, MyFrame::OnSetStyleRaised)
     EVT_UPDATE_UI(StatusBar_Toggle, MyFrame::OnUpdateStatusBarToggle)
     EVT_UPDATE_UI(StatusBar_SetFields, MyFrame::OnUpdateSetStatusFields)
+    EVT_UPDATE_UI(StatusBar_SetStyleNormal, MyFrame::OnUpdateSetStyleNormal)
+    EVT_UPDATE_UI(StatusBar_SetStyleFlat, MyFrame::OnUpdateSetStyleFlat)
+    EVT_UPDATE_UI(StatusBar_SetStyleRaised, MyFrame::OnUpdateSetStyleRaised)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
@@ -267,6 +286,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_statbarDefault = NULL;
     m_statbarCustom = NULL;
 
+    m_statbarStyle = wxSB_NORMAL;
+
 #ifdef __WXMAC__
     // we need this in order to allow the about menu relocation, since ABOUT is
     // not the default id of the about menu
@@ -284,6 +305,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                         _T("Toggle the status bar display"), true);
     statbarMenu->Append(StatusBar_Recreate, _T("&Recreate\tCtrl-R"),
                         _T("Toggle status bar format"));
+
+    wxMenu *statbarStyleMenu = new wxMenu;
+    statbarStyleMenu->Append(StatusBar_SetStyleNormal, _T("&Normal"), _T("Sets the style of the first field to normal (sunken) look"), true);
+    statbarStyleMenu->Append(StatusBar_SetStyleFlat, _T("&Flat"), _T("Sets the style of the first field to flat look"), true);
+    statbarStyleMenu->Append(StatusBar_SetStyleRaised, _T("&Raised"), _T("Sets the style of the first field to raised look"), true);
+    statbarMenu->Append(StatusBar_SetStyle, _T("Field style"), statbarStyleMenu);
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(StatusBar_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
@@ -339,6 +366,7 @@ void MyFrame::DoCreateStatusBar(MyFrame::StatBarKind kind)
             wxFAIL_MSG(wxT("unknown stat bar kind"));
     }
 
+    ApplyStyle();
     GetStatusBar()->Show();
     PositionStatusBar();
 
@@ -347,12 +375,11 @@ void MyFrame::DoCreateStatusBar(MyFrame::StatBarKind kind)
 
 void MyFrame::OnUpdateSetStatusFields(wxUpdateUIEvent& event)
 {
-    // only allow the setting of the number of status fields for the default
+    // only allow the settings of the number of status fields for the default
     // status bar
     wxStatusBar *sb = GetStatusBar();
     event.Enable(sb == m_statbarDefault);
 }
-
 
 // event handlers
 void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
@@ -453,6 +480,55 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     MyAboutDialog dlg(this);
     dlg.ShowModal();
+}
+
+void MyFrame::OnUpdateSetStyleNormal(wxUpdateUIEvent &event)
+{
+    event.Check(m_statbarStyle == wxSB_NORMAL);
+}
+
+void MyFrame::OnUpdateSetStyleFlat(wxUpdateUIEvent &event)
+{
+    event.Check(m_statbarStyle == wxSB_FLAT);
+}
+
+void MyFrame::OnUpdateSetStyleRaised(wxUpdateUIEvent &event)
+{
+    event.Check(m_statbarStyle == wxSB_RAISED);
+}
+
+void MyFrame::OnSetStyleNormal(wxCommandEvent &event)
+{
+    m_statbarStyle = wxSB_NORMAL;
+    ApplyStyle();
+}
+
+void MyFrame::OnSetStyleFlat(wxCommandEvent &event)
+{
+    m_statbarStyle = wxSB_FLAT;
+    ApplyStyle();
+}
+
+void MyFrame::OnSetStyleRaised(wxCommandEvent &event)
+{
+    m_statbarStyle = wxSB_RAISED;
+    ApplyStyle();
+}
+
+void MyFrame::ApplyStyle()
+{
+    wxStatusBar *sb = GetStatusBar();
+    int fields = sb->GetFieldsCount();
+    int *styles = new int[fields];
+
+    for (int i = 1; i < fields; i++)
+        styles[i] = wxSB_NORMAL;
+
+    styles[0] = m_statbarStyle;
+
+    sb->SetStatusStyles(fields, styles);
+
+    delete [] styles;
 }
 
 // ----------------------------------------------------------------------------

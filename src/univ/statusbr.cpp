@@ -140,7 +140,12 @@ void wxStatusBarUniv::DoDraw(wxControlRenderer *renderer)
                 flags |= wxCONTROL_ISDEFAULT;
             }
 
-            m_renderer->DrawStatusField(dc, rect, m_statusText[n], flags);
+            int style;
+            if (m_statusStyles)
+                style = m_statusStyles[n];
+            else
+                style = wxSB_NORMAL;
+            m_renderer->DrawStatusField(dc, rect, m_statusText[n], flags, style);
         }
 
         rect.x += rect.width + borderBetweenFields;

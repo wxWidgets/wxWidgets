@@ -53,12 +53,14 @@ wxStatusBarBase::wxStatusBarBase()
 
     InitWidths();
     InitStacks();
+    InitStyles();
 }
 
 wxStatusBarBase::~wxStatusBarBase()
 {
     FreeWidths();
     FreeStacks();
+    InitStyles();
 }
 
 // ----------------------------------------------------------------------------
@@ -73,6 +75,20 @@ void wxStatusBarBase::InitWidths()
 void wxStatusBarBase::FreeWidths()
 {
     delete [] m_statusWidths;
+}
+
+// ----------------------------------------------------------------------------
+// styles array handling
+// ----------------------------------------------------------------------------
+
+void wxStatusBarBase::InitStyles()
+{
+    m_statusStyles = NULL;
+}
+
+void wxStatusBarBase::FreeStyles()
+{
+    delete [] m_statusStyles;
 }
 
 // ----------------------------------------------------------------------------
@@ -112,6 +128,26 @@ void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
             m_statusTextStacks = newStacks;
         }
 
+        // Resize styles array
+        if (m_statusStyles)
+        {
+            int *oldStyles = m_statusStyles;
+            m_statusStyles = new int[number];
+            int i, max = wxMin(number, m_nFields);
+
+            // copy old styles
+            for (i = 0; i < max; ++i)
+                m_statusStyles[i] = oldStyles[i];
+
+            // initialize new styles to wxSB_NORMAL
+            for (i = max; i < number; ++i)
+                m_statusStyles[i] = wxSB_NORMAL;
+
+            // free old styles
+            delete [] oldStyles;
+        }
+
+
         m_nFields = number;
 
         ReinitWidths();
@@ -145,6 +181,25 @@ void wxStatusBarBase::SetStatusWidths(int WXUNUSED_UNLESS_DEBUG(n),
     for ( int i = 0; i < m_nFields; i++ )
     {
         m_statusWidths[i] = widths[i];
+    }
+
+    // update the display after the widths changed
+    Refresh();
+}
+
+void wxStatusBarBase::SetStatusStyles(int WXUNUSED_UNLESS_DEBUG(n),
+                                      const int styles[])
+{
+    wxCHECK_RET( styles, _T("NULL pointer in SetStatusStyles") );
+
+    wxASSERT_MSG( n == m_nFields, _T("field number mismatch") );
+
+    if ( !m_statusStyles )
+        m_statusStyles = new int[m_nFields];
+
+    for ( int i = 0; i < m_nFields; i++ )
+    {
+        m_statusStyles[i] = styles[i];
     }
 
     // update the display after the widths changed

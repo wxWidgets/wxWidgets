@@ -140,12 +140,10 @@ void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
     for (i = m_nFields - 1; i >= number; --i)
         m_statusStrings.RemoveAt(i);
 
-    m_nFields = number;
+    wxStatusBarBase::SetFieldsCount(number, widths);
 
     wxASSERT_MSG( m_nFields == (int)m_statusStrings.GetCount(),
                   _T("This really should never happen, can we do away with m_nFields here?") );
-
-    SetStatusWidths(number, widths);
 }
 
 void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
@@ -269,43 +267,52 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
     wxRect rect;
     GetFieldRect(i, rect);
 
-    // Draw border
-    // Have grey background, plus 3-d border -
-    // One black rectangle.
-    // Inside this, left and top sides - dark grey. Bottom and right -
-    // white.
+    int style = wxSB_NORMAL;
+    if (m_statusStyles)
+        style = m_statusStyles[i];
 
-    dc.SetPen(m_hilightPen);
+    if (style != wxSB_FLAT)
+    {
+        // Draw border
+        // For wxSB_NORMAL:
+        // Have grey background, plus 3-d border -
+        // One black rectangle.
+        // Inside this, left and top sides - dark grey. Bottom and right -
+        // white.
+        // Reverse it for wxSB_RAISED
 
-#ifndef __WXPM__
+        dc.SetPen((style == wxSB_RAISED) ? m_mediumShadowPen : m_hilightPen);
 
-    // Right and bottom white lines
-    dc.DrawLine(rect.x + rect.width, rect.y,
-                rect.x + rect.width, rect.y + rect.height);
-    dc.DrawLine(rect.x + rect.width, rect.y + rect.height,
-                rect.x, rect.y + rect.height);
+    #ifndef __WXPM__
 
-    dc.SetPen(m_mediumShadowPen);
+        // Right and bottom lines
+        dc.DrawLine(rect.x + rect.width, rect.y,
+                    rect.x + rect.width, rect.y + rect.height);
+        dc.DrawLine(rect.x + rect.width, rect.y + rect.height,
+                    rect.x, rect.y + rect.height);
 
-    // Left and top grey lines
-    dc.DrawLine(rect.x, rect.y + rect.height,
-           rect.x, rect.y);
-    dc.DrawLine(rect.x, rect.y,
-        rect.x + rect.width, rect.y);
-#else
+        dc.SetPen((style == wxSB_RAISED) ? m_hilightPen : m_mediumShadowPen);
 
-    dc.DrawLine(rect.x + rect.width, rect.height + 2,
-                rect.x, rect.height + 2);
-    dc.DrawLine(rect.x + rect.width, rect.y,
-                rect.x + rect.width, rect.y + rect.height);
+        // Left and top lines
+        dc.DrawLine(rect.x, rect.y + rect.height,
+               rect.x, rect.y);
+        dc.DrawLine(rect.x, rect.y,
+            rect.x + rect.width, rect.y);
+    #else
 
-    dc.SetPen(m_mediumShadowPen);
-    dc.DrawLine(rect.x, rect.y,
-                rect.x + rect.width, rect.y);
-    dc.DrawLine(rect.x, rect.y + rect.height,
-                rect.x, rect.y);
+        dc.DrawLine(rect.x + rect.width, rect.height + 2,
+                    rect.x, rect.height + 2);
+        dc.DrawLine(rect.x + rect.width, rect.y,
+                    rect.x + rect.width, rect.y + rect.height);
+
+        dc.SetPen((style == wxSB_RAISED) ? m_hilightPen : m_mediumShadowPen);
+        dc.DrawLine(rect.x, rect.y,
+                    rect.x + rect.width, rect.y);
+        dc.DrawLine(rect.x, rect.y + rect.height,
+                   rect.x, rect.y);
 
 #endif
+    }
 
     DrawFieldText(dc, i);
 }

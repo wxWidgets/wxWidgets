@@ -42,6 +42,7 @@
     #include "wx/slider.h"
     #include "wx/textctrl.h"
     #include "wx/toolbar.h"
+    #include "wx/statusbr.h"
 
     #include "wx/settings.h"
 #endif // WX_PRECOMP
@@ -228,7 +229,7 @@ public:
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
-                                 int flags = 0);
+                                 int flags = 0, int style = 0);
 
     virtual void DrawFrameTitleBar(wxDC& dc,
                                    const wxRect& rect,
@@ -2236,7 +2237,7 @@ wxGTKRenderer::GetStatusBarBorders(wxCoord * WXUNUSED(borderBetweenFields)) cons
 void wxGTKRenderer::DrawStatusField(wxDC& WXUNUSED(dc),
                                     const wxRect& WXUNUSED(rect),
                                     const wxString& WXUNUSED(label),
-                                    int WXUNUSED(flags))
+                                    int WXUNUSED(flags), int WXUNUSED(style))
 {
 }
 

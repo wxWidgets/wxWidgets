@@ -288,7 +288,7 @@ public:
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
-                                 int flags = 0) = 0;
+                                 int flags = 0, int style = 0) = 0;
 
     // draw complete frame/dialog titlebar
     virtual void DrawFrameTitleBar(wxDC& dc,
@@ -701,8 +701,8 @@ public:
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
-                                 int flags = 0)
-        { m_renderer->DrawStatusField(dc, rect, label, flags); }
+                                 int flags = 0, inst style = 0)
+        { m_renderer->DrawStatusField(dc, rect, label, flags, style); }
 
     virtual void DrawFrameTitleBar(wxDC& dc,
                                    const wxRect& rect,

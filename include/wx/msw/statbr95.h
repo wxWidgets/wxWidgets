@@ -48,6 +48,9 @@ public:
     // set status line fields' widths
     virtual void SetStatusWidths(int n, const int widths_field[]);
 
+    // set status line fields' styles
+    virtual void SetStatusStyles(int n, const int styles[]);
+
     // sets the minimal vertical size of the status bar
     virtual void SetMinHeight(int height);
 

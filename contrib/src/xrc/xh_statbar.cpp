@@ -47,6 +47,7 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
 
     int fields = GetLong(wxT("fields"), 1);
     wxString widths = GetParamValue(wxT("widths"));
+    wxString styles = GetParamValue(wxT("styles"));
 
     if (fields > 1 && !widths.IsEmpty())
     {
@@ -63,6 +64,30 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
     }
     else
         statbar->SetFieldsCount(fields);
+
+    if (!styles.IsEmpty())
+    {
+        int *style = new int[fields];
+        for (int i = 0; i < fields; ++i)
+        {
+            style[i] = wxSB_NORMAL;
+
+            wxString first = styles.BeforeFirst(wxT(','));
+            if (first == wxT("wxSB_NORMAL"))
+                style[i] = wxSB_NORMAL;
+            else if (first == wxT("wxSB_FLAT"))
+                style[i] = wxSB_FLAT;
+            else if (first == wxT("wxSB_RAISED"))
+                style[i] = wxSB_RAISED;
+
+            if (!first.IsEmpty())
+                wxLogError(wxT("Error in resource, unknown statusbar field style: ") + first);
+            if(styles.Find(wxT(',')))
+                styles.Remove(0, styles.Find(wxT(',')) + 1);
+        }
+        statbar->SetStatusStyles(fields, style);
+        delete [] style;
+    }
 
     if (m_parentAsWindow)
     {

@@ -218,6 +218,7 @@ All (GUI):
 - added wxKeyEvent::GetUnicodeKey()
 - added wxKeyEvent::CmdDown() and wxMouseEvent::CmdDown()
 - implemented wxListCtrl::FindItem() for non-MSW (Robin Stoll)
+- added status bar fields styles support (Tim Kosse)
 
 Unix:
 

@@ -40,6 +40,7 @@
     #include "wx/textctrl.h"
     #include "wx/listbox.h"
     #include "wx/toolbar.h"
+    #include "wx/statusbr.h"
 
     #ifdef __WXMSW__
         // for COLOR_* constants
@@ -299,7 +300,7 @@ public:
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
-                                 int flags = 0);
+                                 int flags = 0, int style = 0);
 
     // titlebars
     virtual void DrawFrameTitleBar(wxDC& dc,
@@ -3224,7 +3225,7 @@ wxSize wxWin32Renderer::GetStatusBarBorders(wxCoord *borderBetweenFields) const
 void wxWin32Renderer::DrawStatusField(wxDC& dc,
                                       const wxRect& rect,
                                       const wxString& label,
-                                      int flags)
+                                      int flags, int style /*=0*/)
 {
     wxRect rectIn;
 
@@ -3240,9 +3241,15 @@ void wxWin32Renderer::DrawStatusField(wxDC& dc,
                 y2 = rect.GetBottom();
 
         // draw the upper left part of the rect normally
-        dc.SetPen(m_penDarkGrey);
-        dc.DrawLine(rect.GetLeft(), rect.GetTop(), rect.GetLeft(), y2);
-        dc.DrawLine(rect.GetLeft() + 1, rect.GetTop(), x2, rect.GetTop());
+        if (style != wxSB_FLAT)
+        {
+            if (style == wxSB_RAISED)
+                dc.SetPen(m_penHighlight);
+            else
+                dc.SetPen(m_penDarkGrey);
+            dc.DrawLine(rect.GetLeft(), rect.GetTop(), rect.GetLeft(), y2);
+            dc.DrawLine(rect.GetLeft() + 1, rect.GetTop(), x2, rect.GetTop());
+        }
 
         // draw the grey stripes of the grip
         size_t n;
@@ -3262,9 +3269,16 @@ void wxWin32Renderer::DrawStatusField(wxDC& dc,
         }
 
         // draw the remaining rect boundaries
-        ofs -= WIDTH_STATUSBAR_GRIP_BAND;
-        dc.DrawLine(x2, rect.GetTop(), x2, y2 - ofs + 1);
-        dc.DrawLine(rect.GetLeft(), y2, x2 - ofs + 1, y2);
+        if (style != wxSB_FLAT)
+        {
+            if (style == wxSB_RAISED)
+                dc.SetPen(m_penDarkGrey);
+            else
+                dc.SetPen(m_penHighlight);
+            ofs -= WIDTH_STATUSBAR_GRIP_BAND;
+            dc.DrawLine(x2, rect.GetTop(), x2, y2 - ofs + 1);
+            dc.DrawLine(rect.GetLeft(), y2, x2 - ofs + 1, y2);
+        }
 
         rectIn = rect;
         rectIn.Deflate(1);
@@ -3273,7 +3287,10 @@ void wxWin32Renderer::DrawStatusField(wxDC& dc,
     }
     else // normal pane
     {
-        DrawBorder(dc, wxBORDER_STATIC, rect, flags, &rectIn);
+        if (style == wxSB_RAISED)
+            DrawBorder(dc, wxBORDER_RAISED, rect, flags, &rectIn);
+        else if (style != wxSB_FLAT)
+            DrawBorder(dc, wxBORDER_STATIC, rect, flags, &rectIn);
     }
 
     rectIn.Deflate(STATBAR_BORDER_X, STATBAR_BORDER_Y);

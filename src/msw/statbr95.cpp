@@ -177,7 +177,30 @@ void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
     wxCHECK_RET( (nField >= 0) && (nField < m_nFields),
                  _T("invalid statusbar field index") );
 
-    if ( !StatusBar_SetText(GetHwnd(), nField, strText) )
+    // Get field style, if any
+    int style;
+    if (m_statusStyles)
+    {
+        switch(m_statusStyles[nField])
+        {
+        case wxSB_RAISED:
+            style = SBT_POPOUT;
+            break;
+        case wxSB_FLAT:
+            style = SBT_NOBORDERS;
+            break;
+        case wxSB_NORMAL:
+        default:
+            style = 0;
+            break;
+        }
+    }
+    else
+        style = 0;
+
+    // Pass both field number and style. MSDN library doesn't mention
+    // that nField and style have to be 'ORed'
+    if ( !StatusBar_SetText(GetHwnd(), nField | style, strText) )
     {
         wxLogLastError(wxT("StatusBar_SetText"));
     }
@@ -264,6 +287,40 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
         wxSizeEvent event(GetClientSize(), m_windowId);
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
+    }
+}
+
+void wxStatusBar95::SetStatusStyles(int n, const int styles[])
+{
+    wxStatusBarBase::SetStatusStyles(n, styles);
+
+    if (n != m_nFields)
+        return;
+
+    for (int i = 0; i < n; i++)
+    {
+        int style;
+        switch(styles[i])
+        {
+        case wxSB_RAISED:
+            style = SBT_POPOUT;
+            break;
+        case wxSB_FLAT:
+            style = SBT_NOBORDERS;
+            break;
+        case wxSB_NORMAL:
+        default:
+            style = 0;
+            break;
+        }
+        // The SB_SETTEXT message is both used to set the field's text as well as
+        // the fields' styles. MSDN library doesn't mention
+        // that nField and style have to be 'ORed'
+        wxString text = GetStatusText(i);
+        if (!StatusBar_SetText(GetHwnd(), style | i, text))
+        {
+            wxLogLastError(wxT("StatusBar_SetText"));
+        }
     }
 }
 

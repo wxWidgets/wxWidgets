@@ -232,3 +232,28 @@ integers.}
 
 \perlnote{In wxPerl this method takes as parameters the field widths.}
 
+\membersection{wxStatusBar::SetStatusStyles}\label{wxstatusbarsetstatusstyles}
+
+\func{virtual void}{SetStatusStyles}{\param{int}{ n}, \param{int *}{styles}}
+
+Sets the styles of the fields in the status line which can make fields appear flat
+or raised instead of the standard sunken 3D border.
+
+\wxheading{Parameters}
+
+\docparam{n}{The number of fields in the status bar. Must be equal to the
+number passed to \helpref{SetFieldsCount}{wxstatusbarsetfieldscount} the last
+time it was called.}
+
+\docparam{styles}{Contains an array of {\it n} integers with the styles for each field. There 
+are three possible styles:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxSB\_NORMAL}}{(default) The field appears sunken with a standard 3D border.}
+\twocolitem{\windowstyle{wxSB\_FLAT}}{No border is painted around the field so that it appears flat.}
+\twocolitem{\windowstyle{wxSB\_RAISED}}{A raised 3D border is painted around the field.}
+\end{twocollist}
+
+
+
