@@ -135,15 +135,8 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     }
 
     // set colours
-    //
-    // VZ: why don't we use wxSystemSettings for !MSW? (FIXME)
-#ifdef __WXMSW__
     SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
-#else
-    SetForegroundColour(*wxBLACK);
-    SetBackgroundColour(*wxWHITE);
-#endif
 
     // set size, position and show it
     m_view = new wxTipWindowView(this);
@@ -240,15 +233,8 @@ wxTipWindowView::wxTipWindowView(wxWindow *parent)
                           wxNO_BORDER)
 {
     // set colours
-    //
-    // VZ: why don't we use wxSystemSettings for !MSW? (FIXME)
-#ifdef __WXMSW__
     SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
-#else
-    SetForegroundColour(*wxBLACK);
-    SetBackgroundColour(*wxWHITE);
-#endif
 
 #if !wxUSE_POPUPWIN
     m_creationTime = wxGetLocalTime();
