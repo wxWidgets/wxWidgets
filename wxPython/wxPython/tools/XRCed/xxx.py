@@ -495,7 +495,7 @@ class xxxGenericDirCtrl(xxxObject):
     winStyles = ['wxDIRCTRL_DIR_ONLY', 'wxDIRCTRL_3D_INTERNAL', 'wxDIRCTRL_SELECT_FIRST',
                  'wxDIRCTRL_SHOW_FILTERS', 'wxDIRCTRL_EDIT_LABELS']
 
-class xxxScrolledWindow(xxxObject):
+class xxxScrolledWindow(xxxContainer):
     allParams = ['pos', 'size', 'style']
     winStyles = ['wxHSCROLL', 'wxVSCROLL']
 
