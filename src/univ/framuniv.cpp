@@ -37,31 +37,28 @@
 // implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxFrame, wxFrameNative)
+BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
     EVT_SIZE(wxFrame::OnSize)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 
 // ----------------------------------------------------------------------------
 // ctors
 // ----------------------------------------------------------------------------
 
-wxFrame::wxFrame()
-{
-}
-
-wxFrame::wxFrame(wxWindow *parent,
-                 wxWindowID id,
-                 const wxString& title,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 long style,
-                 const wxString& name)
-       : wxFrameNative(parent, id, title, pos, size, style, name)
+bool wxFrame::Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style,
+                const wxString& name)
 {
     m_renderer = NULL;
+    return wxTopLevelWindow::Create(parent, id, title, pos, size, style, name);
 }
+
 
 // ----------------------------------------------------------------------------
 // menu support
@@ -85,14 +82,7 @@ void wxFrame::PositionMenuBar()
         // the menubar is positioned above the client size, hence the negative
         // y coord
         wxCoord heightMbar = m_frameMenuBar->GetSize().y;
-        m_frameMenuBar->SetSize(0,
-
-// FIXME: why doesn't this work as expected in wxGTK??
-#ifdef __WXGTK__
-                                0,
-#else
-                                -heightMbar,
-#endif
+        m_frameMenuBar->SetSize(0, -heightMbar,
                                 GetClientSize().x, heightMbar);
     }
 }
@@ -101,7 +91,7 @@ void wxFrame::PositionMenuBar()
 
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
-    wxPoint pt = wxFrameNative::GetClientAreaOrigin();
+    wxPoint pt = wxFrameBase::GetClientAreaOrigin();
 
 #if wxUSE_MENUS
     if ( m_frameMenuBar )
@@ -113,9 +103,9 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return pt;
 }
 
-bool wxFrame::Enable( bool enable )
+bool wxFrame::Enable(bool enable)
 {
-    if (!wxFrameNative::Enable(enable))
+    if (!wxFrameBase::Enable(enable))
 	return FALSE;
 #ifdef __WXMICROWIN__
     if (m_frameMenuBar)
