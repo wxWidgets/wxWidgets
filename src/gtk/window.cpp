@@ -4289,9 +4289,7 @@ bool wxWindowGTK::IsOwnGtkWindow( GdkWindow *window )
 
 bool wxWindowGTK::SetFont( const wxFont &font )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid window") );
-
-    if (!wxWindowBase::SetFont(font))
+    if (!wxWindowBase::SetFont(font) || !m_widget)
     {
         return FALSE;
     }
