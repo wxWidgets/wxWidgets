@@ -207,10 +207,11 @@ bool wxConfigBase::Write(const wxString& key, bool value)
     return Write(key, l);
 }
 
-bool wxConfigBase::Write( const wxString &key, const wxChar *text )
+bool wxConfigBase::Write(const wxString &key, const wxChar *text)
 {
-    return Write(key, str) ;
+    return Write(key, text);
 }
+
 wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 {
     wxString tmp; // Required for BC++
