@@ -50,20 +50,6 @@ Some add-on libraries (such as the Object Graphics Library) are
 available in zip form only. In the following, x.y.z represents
 the current version number (for example, 2.2.1).
 
-wxBase (wxWindows without GUI) distribution
--------------------------------------------
-
-wxBase-x.y.z.tgz                    wxBase source distribution (the same files
-wxBase-x.y.z.zip                    but compressed using different formats)
-
-wxBase-x.y.z-0.i386.rpm             wxBase Linux binaries as an RPM
-wxBase-x.y.z-0.src.rpm              source for the i386 RPM above
-wxBase-devel-x.y.z-0.i386.rpm       wxBase headers (requires wxBase.rpm)
-
-wxBase doesn't include the documentation as you are likely to already have it
-from either wxGTK or wxMSW distributions. If you don't, please download the
-manual separately.
-
 wxWindows for GTK distribution
 ------------------------------
 
@@ -104,6 +90,24 @@ As well as the core source, the wxMSW distribution contains:
 - the JPEG library source;
 - the TIFF library source.
 
+wxBase (wxWindows without GUI) distribution
+-------------------------------------------
+
+wxBase-x.y.z.tgz                    wxBase source distribution (the same files
+wxBase-x.y.z.zip                    but compressed using different formats)
+
+wxBase-x.y.z-0.i386.rpm             wxBase Linux binaries as an RPM
+wxBase-x.y.z-0.src.rpm              source for the i386 RPM above
+wxBase-devel-x.y.z-0.i386.rpm       wxBase headers (requires wxBase.rpm)
+
+wxBase doesn't include the documentation as you are likely to already have it
+from either wxGTK or wxMSW distributions. If you don't, please download the
+manual separately.
+
+NB: you can also build wxBase from the files included in either wxMSW or wxGTK
+    distribution (follow the same instructions as for wxBase distribution in
+    doc/base/install.txt)
+    
 Documentation files
 -------------------
 
