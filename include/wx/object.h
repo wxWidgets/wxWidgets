@@ -84,7 +84,7 @@ public:
     static const wxClassInfo  *GetFirst() { return sm_first; }
     const wxClassInfo         *GetNext() const { return m_next; }
     static wxClassInfo        *FindClass(const wxChar *className);
-    
+
         // Climb upwards through inheritance hierarchy.
         // Dual inheritance is catered for.
 
@@ -382,18 +382,33 @@ public:
     virtual void Dump(wxSTD ostream& str);
 #endif
 
-        // make a 'clone' of the object
-  
+    // ref counted data handling methods
+
+    // get/set
+    wxObjectRefData *GetRefData() const { return m_refData; }
+    void SetRefData(wxObjectRefData *data) { m_refData = data; }
+
+    // make a 'clone' of the object
     void Ref(const wxObject& clone);
 
-        // destroy a reference
-  
+    // destroy a reference
     void UnRef();
 
-    inline wxObjectRefData *GetRefData() const { return m_refData; }
-    inline void SetRefData(wxObjectRefData *data) { m_refData = data; }
-
 protected:
+    // ensure that our data is not shared with anybody else: if we have no
+    // data, it is created using CreateRefData() below, if we have shared data
+    // it is copied using CloneRefData(), otherwise nothing is done
+    void AllocExclusive();
+
+    // both methods must be implemented if Unshare() is used, not pure virtual
+    // only because of the backwards compatibility reasons
+
+    // create a new m_refData
+    virtual wxObjectRefData *CreateRefData() const;
+
+    // create a new m_refData initialized with the given one
+    virtual wxObjectRefData *CloneRefData(wxObjectRefData *data) const;
+
     wxObjectRefData *m_refData;
 };
 

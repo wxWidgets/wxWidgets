@@ -227,14 +227,14 @@ wxObject *wxCreateDynamicObject(const wxChar *name)
 void wxObject::Ref(const wxObject& clone)
 {
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
- DEBUG_PRINTF(wxObject::Ref)
+    DEBUG_PRINTF(wxObject::Ref)
 #endif
 
     // delete reference to old data
     UnRef();
 
     // reference new data
-    if( clone.m_refData )
+    if ( clone.m_refData )
     {
         m_refData = clone.m_refData;
         ++(m_refData->m_count);
@@ -243,16 +243,50 @@ void wxObject::Ref(const wxObject& clone)
 
 void wxObject::UnRef()
 {
-    if( m_refData )
+    if ( m_refData )
     {
         wxASSERT_MSG( m_refData->m_count > 0, _T("invalid ref data count") );
 
         if ( !--m_refData->m_count )
             delete m_refData;
-        m_refData = 0;
+        m_refData = NULL;
     }
 }
 
+void wxObject::AllocExclusive()
+{
+    if ( !m_refData )
+    {
+        m_refData = CreateRefData();
+    }
+    else if ( m_refData->GetRefCount() > 1 )
+    {
+        // note that ref is not going to be destroyed in this case
+        wxObjectRefData* ref = m_refData;
+        UnRef();
+
+        // ... so we can still access it
+        m_refData = CloneRefData(ref);
+    }
+    //else: ref count is 1, we are exclusive owners of m_refData anyhow
+
+    wxASSERT_MSG( m_refData && m_refData->GetRefCount() == 1,
+                  _T("wxObject::AllocExclusive() failed.") );
+}
+
+wxObjectRefData *wxObject::CreateRefData() const
+{
+    return NULL;
+}
+
+wxObjectRefData *wxObject::CloneRefData(wxObjectRefData * WXUNUSED(data)) const
+{
+    return NULL;
+}
+
+// ----------------------------------------------------------------------------
+// misc
+// ----------------------------------------------------------------------------
 
 #if defined(__DARWIN__) && defined(DYLIB_INIT)
 
