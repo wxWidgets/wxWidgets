@@ -667,6 +667,7 @@ GTK_COMMONOBJS = \
 		imagjpeg.o \
 		imagpng.o \
 		imagpnm.o \
+		imagpcx.o \
 		intl.o \
 		ipcbase.o \
 		layout.o \
