@@ -1,0 +1,31 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for minimal example (UNIX).
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../..
+program_dir = samples/widgets
+
+PROGRAM=widgets
+
+OBJECTS=button.o \
+        combobox.o \
+        gauge.o \
+        listbox.o \
+        notebook.o \
+        radiobox.o \
+        slider.o \
+        spinbtn.o \
+        static.o \
+        textctrl.o \
+        widgets.o
+
+include ../../src/makeprog.env
+
