@@ -1204,8 +1204,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
                 wxFileExists( filename ) )
     {
         wxString msg;
-        msg.Printf( _("File '%s' already exists, do you really want to "
-                     "overwrite it?"), filename.c_str() );
+        msg.Printf( _("File '%s' already exists, do you really want to overwrite it?"), filename.c_str() );
 
         if (wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
             return;
