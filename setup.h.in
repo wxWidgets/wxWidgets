@@ -88,6 +88,9 @@
 /* PowerPC Darwin & Mac OS X */
 #undef __POWERPC__
 
+/* MS-DOS with DJGPP */
+#undef __DOS__
+
 /* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
 #ifndef __WINDOWS__
 #undef __WINDOWS__
