@@ -37,6 +37,9 @@ public:
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
     virtual int WaitForChild(wxExecuteData& execData);
 
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
+    virtual wxStandardPathsBase& GetStandardPaths();
+#endif
     virtual wxToolkitInfo& GetToolkitInfo();
 };
 

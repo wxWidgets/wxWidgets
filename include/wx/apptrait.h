@@ -49,6 +49,8 @@ struct WXDLLIMPEXP_BASE wxToolkitInfo
 // wxAppTraits: this class defines various configurable aspects of wxApp
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_BASE wxStandardPathsBase;
+
 class WXDLLIMPEXP_BASE wxAppTraitsBase
 {
 public:
@@ -75,6 +77,9 @@ public:
     // NB: returned pointer will be deleted by the caller
     virtual wxRendererNative *CreateRenderer() = 0;
 
+    // wxStandardPaths object is normally the same for wxBase and wxGUI
+    // except in the case of wxMac and wxCocoa
+    virtual wxStandardPathsBase& GetStandardPaths();
 
     // functions abstracting differences between GUI and console modes
     // ------------------------------------------------------------------------

@@ -24,10 +24,6 @@ public:
     wxStandardPathsCF();
     ~wxStandardPathsCF();
 
-    // return the global standard paths object
-    // Overrides wxStandardPathsBase version for GUI code.
-    static wxStandardPathsCF& Get();
-
     // wxMac specific: allow user to specify a different bundle
     wxStandardPathsCF(struct __CFBundle *bundle);
     void SetBundle(struct __CFBundle *bundle);
@@ -43,13 +39,14 @@ protected:
     struct __CFBundle *m_bundle;
 };
 
-// wxMac has its own base so it always uses this version.
-// Otherwise, we want to use this version only when compiling GUI code.
-// The CoreFoundation version is always available by its full name to all code.
-#if defined(__WXMAC__) || wxUSE_BASE == 0
-#define wxStandardPaths wxStandardPathsCF
-#else
+// If using UNIX (i.e. darwin) then use UNIX standard paths
+#if defined(__UNIX__)
 #include "wx/unix/stdpaths.h"
+#else
+// If compiling wxMac for CarbonLib then we are wxStandardPaths
+class WXDLLIMPEXP_BASE wxStandardPaths: public wxStandardPathsCF
+{
+};
 #endif
 
 #endif // _WX_MAC_STDPATHS_H_

@@ -27,6 +27,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif //WX_PRECOMP
+#include "wx/apptrait.h"
 
 #include "wx/filename.h"
 #include "wx/stdpaths.h"
@@ -42,7 +43,12 @@ static wxStandardPaths gs_stdPaths;
 // ============================================================================
 
 /* static */
-wxStandardPaths& wxStandardPathsBase::Get()
+wxStandardPathsBase& wxStandardPathsBase::Get()
+{
+    return wxTheApp->GetTraits()->GetStandardPaths();
+}
+
+wxStandardPathsBase& wxAppTraitsBase::GetStandardPaths()
 {
     return gs_stdPaths;
 }

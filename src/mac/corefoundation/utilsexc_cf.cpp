@@ -16,6 +16,8 @@
     #include "wx/utils.h"
 #endif //ndef WX_PRECOMP
 #include "wx/unix/execute.h"
+#include "wx/stdpaths.h"
+#include "wx/apptrait.h"
 
 #include <CoreFoundation/CFMachPort.h>
 #include <sys/wait.h>
@@ -107,5 +109,13 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     CFRelease(runloopsource);
     wxLogDebug(wxT("Successfully added notification to the runloop"));
     return 0;
+}
+
+// NOTE: This doens't really belong here but this was a handy file to
+// put it in because it's already compiled for wxCocoa and wxMac GUI lib.
+static wxStandardPathsCF gs_stdPaths;
+wxStandardPathsBase& wxGUIAppTraits::GetStandardPaths()
+{
+    return gs_stdPaths;
 }
 

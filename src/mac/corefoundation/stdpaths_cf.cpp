@@ -26,11 +26,6 @@
 #include <CFURL.h>
 #endif
 
-// See comment in include/wx/mac/corefoundation/stdpaths.h
-#ifndef wxStandardPaths
-#warning "wxStandardPaths should be defined to wxStandardPathsCF when compiling this file."
-#endif
-
 #if defined(__WXCOCOA__) || defined(__WXMAC_OSX__)
 #define kDefaultPathStyle kCFURLPOSIXPathStyle
 #else
@@ -46,50 +41,43 @@ static wxString BundleRelativeURLToPath(CFURLRef relativeURL)
     return wxMacCFStringHolder(cfStrPath).AsString(wxLocale::GetSystemEncoding());
 }
 
-
-static wxStandardPaths gs_stdPaths;
-/* static */ wxStandardPaths& wxStandardPaths::Get()
-{
-    return gs_stdPaths;
-}
-
-wxStandardPaths::wxStandardPaths()
+wxStandardPathsCF::wxStandardPathsCF()
 :   m_bundle(CFBundleGetMainBundle())
 {
     CFRetain(m_bundle);
 }
 
-wxStandardPaths::wxStandardPaths(struct __CFBundle *bundle)
+wxStandardPathsCF::wxStandardPathsCF(struct __CFBundle *bundle)
 :   m_bundle(bundle)
 {
     CFRetain(m_bundle);
 }
 
-wxStandardPaths::~wxStandardPaths()
+wxStandardPathsCF::~wxStandardPathsCF()
 {
     CFRelease(m_bundle);
 }
 
-void wxStandardPaths::SetBundle(struct __CFBundle *bundle)
+void wxStandardPathsCF::SetBundle(struct __CFBundle *bundle)
 {
     CFRetain(bundle);
     CFRelease(m_bundle);
     m_bundle = bundle;
 }
 
-wxString wxStandardPaths::GetConfigDir() const
+wxString wxStandardPathsCF::GetConfigDir() const
 {
     // TODO: What do we do for pure Carbon?
     return wxT("/Library/Preferences");
 }
 
-wxString wxStandardPaths::GetUserConfigDir() const
+wxString wxStandardPathsCF::GetUserConfigDir() const
 {
     // TODO: What do we do for pure Carbon?
     return wxFileName::GetHomeDir() + wxT("/Library/Preferences");
 }
 
-wxString wxStandardPaths::GetDataDir() const
+wxString wxStandardPathsCF::GetDataDir() const
 {
     wxCHECK_MSG(m_bundle, wxEmptyString, wxT("wxStandardPaths for CoreFoundation only works with bundled apps"));
     CFURLRef relativeURL = CFBundleCopySharedSupportURL(m_bundle);
@@ -99,17 +87,17 @@ wxString wxStandardPaths::GetDataDir() const
     return ret;
 }
 
-wxString wxStandardPaths::GetLocalDataDir() const
+wxString wxStandardPathsCF::GetLocalDataDir() const
 {
     return AppendAppName(wxT("/Library/Application Support"));
 }
 
-wxString wxStandardPaths::GetUserDataDir() const
+wxString wxStandardPathsCF::GetUserDataDir() const
 {
     return AppendAppName(wxFileName::GetHomeDir() + _T("/Library/Application Support"));
 }
 
-wxString wxStandardPaths::GetPluginsDir() const
+wxString wxStandardPathsCF::GetPluginsDir() const
 {
     wxCHECK_MSG(m_bundle, wxEmptyString, wxT("wxStandardPaths for CoreFoundation only works with bundled apps"));
     CFURLRef relativeURL = CFBundleCopyBuiltInPlugInsURL(m_bundle);

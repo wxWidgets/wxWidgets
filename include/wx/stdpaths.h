@@ -14,13 +14,6 @@
 
 #include "wx/string.h"
 
-#if defined(__WXMAC__)
-class WXDLLIMPEXP_BASE wxStandardPathsCF;
-#define wxStandardPaths wxStandardPathsCF
-#else
-class WXDLLIMPEXP_BASE wxStandardPaths;
-#endif
-
 // ----------------------------------------------------------------------------
 // wxStandardPaths returns the standard locations in the file system
 // ----------------------------------------------------------------------------
@@ -29,7 +22,7 @@ class WXDLLIMPEXP_BASE wxStandardPathsBase
 {
 public:
     // return the global standard paths object
-    static wxStandardPaths& Get();
+    static wxStandardPathsBase& Get();
 
 
     // return the directory with system config files:
@@ -89,7 +82,8 @@ protected:
 
 #if defined(__WXMSW__)
     #include "wx/msw/stdpaths.h"
-#elif defined(__WXMAC__) || defined(__WXCOCOA__)
+// We want CoreFoundation paths on both CarbonLib and Darwin (for all ports)
+#elif defined(__WXMAC__) || defined(__DARWIN__)
     #include "wx/mac/corefoundation/stdpaths.h"
 #elif defined(__OS2__)
     #include "wx/os2/stdpaths.h"
