@@ -268,7 +268,7 @@ Compiling using the makefiles (updated 24 Sept 02):
 6. You can use the WXUNIVERSAL widgets instead of the native MSW
    ones (eg if you want to build an application with the same
    look and feel on all platforms)
-   Use the command
+   Use the command (in src\msw directory)
    'make -f makefile.b32 WXUSINGUNIV=1'
    Then run
    'make -f makefile.b32 WXUSINGUNIV=1' in the sample directory  which you wish
@@ -278,7 +278,10 @@ Compiling using the makefiles (updated 24 Sept 02):
    and  do final releases by combinations of commandline parameters.
    At the time of writing, (Oct 02) not all the wxDialogs are working
 
-7. To make console mode applications with wxWindows functions go
+7. To use UNICODE for win2000 and XP systems edit wxWindows\wx\include\msw\setup.h
+   so that wxUSE_UNICODE is 1 instead of the default value of zero
+
+8. To make console mode applications with wxWindows functions go
    to the src\msw directory
    'make -f makebase.b32 clean'
    'make -f makebase.b32'
@@ -287,7 +290,6 @@ Compiling using the makefiles (updated 24 Sept 02):
 
 Note (0): This provides the ability to produce separate wxwindows libraries
    for different purposes, and only have to rebuild the applications
-
 
 Note (1): the wxWindows makefiles assume byte structure alignment. Please
 make sure that your own project or makefile settings use the
@@ -358,10 +360,10 @@ Borland C++Builder IDE compilation
 
 2. You can use the process_sample_bcb.bat command which is in
    wxwindows\distrib\msw to generate a .mak or .bpr file for most of the
-   samples [mak for Cbuilder 1-3; bpr for v4]. Execute this in the sample
-   directory, passing the name of the cpp files on the command line. For more
-   details, see the instructions in docs/tech/tn0004.htm or 
-   http://biolpc22.york.ac.uk/wx/bc/ide.html.
+   samples [mak for Cbuilder 1-6; v4 and after will convert this to bpr]. 
+   Execute this in the sampledirectory, passing the name of the cpp files 
+   on the command line. For more details, see the instructions in 
+   docs/tech/tn0004.htm or http://biolpc22.york.ac.uk/wx/bc/ide.html.
 
 Borland 16 Bit compilation for Windows 3.1
 ------------------------------------------
@@ -408,7 +410,10 @@ Note (2): if variant.cpp is compiled with date/time class options, the linker
           gives up. So the date/time option is switched off for Watcom C++.
           Also, wxAutomationObject is not compiled with Watcom C++ 10.
 
-Note (3): if Watcom can't read the precompiled header when building a sample,
+Note (3): RawBitmaps won't work at present because they use unsupported template
+          classes
+
+Note (4): if Watcom can't read the precompiled header when building a sample,
           try deleting src\msw\watcom.pch and compiling the sample again.
 
 
@@ -696,20 +701,21 @@ Symantec & DigitalMars C++ compilation
 ------------------------
 The DigitalMars compiler is a free succssor to the Symantec compiler
 and can be downloaded from http://www.digitalmars.com/
+   
+1. You need to download and unzip in turn (later packages will oevrwrite older files)
+    Digital Mars C/C++ Compiler Version 8.33 
+    Basic utilities
+    beta test C++ Compiler Version 8.34
+   from http://www.digitalmars.com/download/freecompiler.html [02 may 03, CE]
 
-1. Make sure your WXWIN variable is set, and uses the FAT (short
+2. Make sure your WXWIN variable is set, and uses the FAT (short
    name) form.
-2. Edit setup.h and set the following to 0
-        wxUSE_SOCKETS 0   //linker error digital mars library missing gethostbyname
-        wxUSE_OLE 0            // bug in macro
-        wxUSE_DRAG_AND_DROP 0   //linker error ??
-        wxUSE_DATAOBJ 0  //linker error ??
-        wxUSE_CLIPBOARD 0 // requires dataobj
-        wxUSE_ENH_METAFILE    0 // requires clipboard
+  
 3. Change directory to wx\src\msw. Type 'make -f makefile.sc' to
    make the wxWindows core library.
 4. Change directory to wx\samples\minimal and type 'make -f makefile.sc'
-   to make this sample.
+   to make this sample. The mdi and image sample also work; others may give
+   linker erros due to missing libraries
 
 16-bit compilation is no longer supported.
 
