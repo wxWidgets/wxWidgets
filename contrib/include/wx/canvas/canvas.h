@@ -89,6 +89,7 @@ class wxCanvasObjectGroup
 {
 public:
     wxCanvasObjectGroup();
+    virtual ~wxCanvasObjectGroup();
 
     void SetOwner(wxCanvas* canvas);
     wxCanvas *GetOwner()              { return m_owner; }

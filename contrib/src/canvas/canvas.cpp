@@ -77,7 +77,7 @@ void wxCanvasObject::Move( int x, int y )
 {
     int old_x = m_area.x;
     int old_y = m_area.y;
-
+    
     m_area.x = x;
     m_area.y = y;
 
@@ -132,7 +132,11 @@ void wxCanvasObject::WriteSVG( wxTextOutputStream &stream )
 
 wxCanvasObjectGroup::wxCanvasObjectGroup()
 {
-    m_validbounds=false;
+    m_validbounds = FALSE;
+}
+
+wxCanvasObjectGroup::~wxCanvasObjectGroup()
+{
 }
 
 void wxCanvasObjectGroup::SetOwner(wxCanvas* canvas)
@@ -151,60 +155,57 @@ void wxCanvasObjectGroup::SetOwner(wxCanvas* canvas)
 
 void wxCanvasObjectGroup::ExtendArea(int x, int y)
 {
-   if (m_validbounds)
-   {
-     if ( x < m_minx ) m_minx = x;
-     if ( y < m_miny ) m_miny = y;
-     if ( x > m_maxx ) m_maxx = x;
-     if ( y > m_maxy ) m_maxy = y;
-   }
-   else
-   {
-      m_validbounds = true;
+    if (m_validbounds)
+    {
+        if (x < m_minx) m_minx = x;
+        if (y < m_miny) m_miny = y;
+        if (x > m_maxx) m_maxx = x;
+        if (y > m_maxy) m_maxy = y;
+    }
+    else
+    {
+        m_validbounds = TRUE;
 
-      m_minx = x;
-      m_miny = y;
-      m_maxx = x;
-      m_maxy = y;
-   }
-
+        m_minx = x;
+        m_miny = y;
+        m_maxx = x;
+        m_maxy = y;
+    }
 }
-
 
 void wxCanvasObjectGroup::DeleteContents( bool flag)
 {
     m_objects.DeleteContents( flag );
-    m_validbounds=false;
+    m_validbounds = FALSE;
 }
-
 
 void wxCanvasObjectGroup::Prepend( wxCanvasObject* obj )
 {
     m_objects.Insert( obj );
-    m_validbounds=false;
+    m_validbounds = FALSE;
 }
 
 void wxCanvasObjectGroup::Append( wxCanvasObject* obj )
 {
     m_objects.Append( obj );
-    m_validbounds=false;
+    m_validbounds = FALSE;
 }
 
 void wxCanvasObjectGroup::Insert( size_t before, wxCanvasObject* obj )
 {
     m_objects.Insert( before, obj );
-    m_validbounds=false;
+    m_validbounds = FALSE;
 }
 
 void wxCanvasObjectGroup::Remove( wxCanvasObject* obj )
 {
     m_objects.DeleteObject( obj );
-    m_validbounds=false;
+    m_validbounds = FALSE;
 }
 
 void wxCanvasObjectGroup::Recreate()
 {
-    m_validbounds=false;
+    m_validbounds = FALSE;
     wxNode *node = m_objects.First();
     while (node)
     {
@@ -220,7 +221,6 @@ void wxCanvasObjectGroup::Recreate()
 
 void wxCanvasObjectGroup::Render(int xabs, int yabs, int x, int y, int width, int height )
 {
-    wxImage *image = m_owner->GetBuffer();
     // cycle through all objects
     wxNode *node = m_objects.First();
     while (node)
@@ -309,7 +309,8 @@ wxCanvasObject* wxCanvasObjectGroup::IsHitObject( int x, int y, int margin )
         }
         node = node->Previous();
     }
-    return 0;
+    
+    return (wxCanvasObject*) NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -368,9 +369,8 @@ void wxCanvasObjectGroupRef::Recreate()
 
 void wxCanvasObjectGroupRef::Render(int xabs, int yabs, int x, int y, int width, int height )
 {
-    wxImage *image = m_owner->GetBuffer();
-    xabs+=m_owner->GetDeviceX(GetPosX());
-    yabs+=m_owner->GetDeviceY(GetPosY());
+    xabs += m_owner->GetDeviceX(GetPosX());
+    yabs += m_owner->GetDeviceY(GetPosY());
 
     int clip_x = xabs + m_group->GetXMin();
     int clip_width = m_group->GetXMax()-m_group->GetXMin();
@@ -421,9 +421,6 @@ wxCanvasObject* wxCanvasObjectGroupRef::IsHitObject( int x, int y, int margin )
 
 void wxCanvasObjectGroupRef::Move( int x, int y )
 {
-    int old_x = m_x;
-    int old_y = m_y;
-
     m_x = x;
     m_y = y;
 

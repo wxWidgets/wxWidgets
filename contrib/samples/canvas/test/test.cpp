@@ -52,16 +52,17 @@ MywxCanvasImage::MywxCanvasImage( const wxImage &image, double x, double y, doub
 
 void MywxCanvasImage::OnMouse(wxMouseEvent &event)
 {
-    static bool first=false;
+    static bool first=FALSE;
     static int dx=0;
     static int dy=0;
 
     int x = event.GetX();
     int y = event.GetY();
     if (event.m_leftDown)
-    {   if (!first)
+    {   
+        if (!first)
         {
-           first=true;
+           first=TRUE;
            dx=x;
            dy=y;
         }
@@ -71,8 +72,9 @@ void MywxCanvasImage::OnMouse(wxMouseEvent &event)
     else if (IsCapturedMouse())
     {
         ReleaseMouse();
-        first=false;
-        dx=0;dy=0;
+        first=FALSE;
+        dx=0;
+        dy=0;
     }
 }
 
@@ -97,18 +99,19 @@ MywxCanvasObjectGroupRef::MywxCanvasObjectGroupRef(double x, double y,wxCanvasOb
 
 void MywxCanvasObjectGroupRef::OnMouse(wxMouseEvent &event)
 {
-    static bool first=false;
-    static dx=0;
-    static dy=0;
+    static bool first=FALSE;
+    static int dx=0;
+    static int dy=0;
 
     //new position of object
     int x = m_owner->GetDeviceX( event.GetX());
     int y = m_owner->GetDeviceY( event.GetY());
 
     if (event.m_leftDown)
-    {   if (!first)
+    {   
+        if (!first)
         {
-           first=true;
+           first=FALSE;
            dx=x;
            dy=y;
         }
@@ -118,8 +121,9 @@ void MywxCanvasObjectGroupRef::OnMouse(wxMouseEvent &event)
     else if (IsCapturedMouse())
     {
         ReleaseMouse();
-        first=false;
-        dx=0;dy=0;
+        first=FALSE;
+        dx=0;
+        dy=0;
     }
 }
 
