@@ -391,15 +391,19 @@ bool wxNativeFontInfo::FromXFontName(const wxString& fontname)
             return FALSE;
         }
 
-        fontElements[n] = tokenizer.GetNextToken();
+        wxString field = tokenizer.GetNextToken();
+        if ( !field.empty() && field != _T('*') )
+        {
+            // we're really initialized now
+            m_isDefault = FALSE;
+        }
+
+        fontElements[n] = field;
     }
 
     // this should be all
     if ( tokenizer.HasMoreTokens() )
         return FALSE;
-
-    // we're initialized now
-    m_isDefault = FALSE;
 
     return TRUE;
 }
