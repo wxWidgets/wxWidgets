@@ -101,25 +101,32 @@ wxBitmap::wxBitmap(void)
   
 wxBitmap::wxBitmap( int width, int height, int depth )
 {
+  wxCHECK_RET( (width > 0) && (height > 0), "invalid bitmap size" )
+  wxCHECK_RET( (depth > 0) || (depth == -1), "invalid bitmap depth" )
+
   m_refData = new wxBitmapRefData();
+  
+  GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
+  
   M_BMPDATA->m_mask = (wxMask *) NULL;
-  M_BMPDATA->m_pixmap = 
-    gdk_pixmap_new( (GdkWindow*) &gdk_root_parent, width, height, depth );
+  M_BMPDATA->m_pixmap = gdk_pixmap_new( parent, width, height, depth );
   M_BMPDATA->m_width = width;
   M_BMPDATA->m_height = height;
-  M_BMPDATA->m_bpp = depth;
+  M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;
    
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap( char **bits )
 {
+  wxCHECK_RET( bits != NULL, "invalid bitmap data" )
+  
   m_refData = new wxBitmapRefData();
 
-  GdkBitmap *mask = NULL;
+  GdkBitmap *mask = (GdkBitmap*) NULL;
+  GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
   
-  M_BMPDATA->m_pixmap = 
-    gdk_pixmap_create_from_xpm_d( (GdkWindow*) &gdk_root_parent, &mask, NULL, (gchar **) bits );
+  M_BMPDATA->m_pixmap = gdk_pixmap_create_from_xpm_d( parent, &mask, NULL, (gchar **) bits );
     
   if (mask)
   {
@@ -129,7 +136,7 @@ wxBitmap::wxBitmap( char **bits )
   
   gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
   
-  M_BMPDATA->m_bpp = 24; // ?
+  M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;  // ?
    
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
@@ -374,6 +381,20 @@ wxBitmap::wxBitmap( const wxImage &image )
   if (M_BMPDATA->m_bpp > 8) render_depth = M_BMPDATA->m_bpp;
   
   // Render
+
+  enum byte_order { RGB, RBG, BRG, BGR, GRB, GBR };
+  byte_order b_o;
+  
+  if (render_depth >= 24)
+  {
+    GdkVisual *visual = gdk_visual_get_system();
+    if ((visual->red_mask > visual->green_mask) && (visual->green_mask > visual->blue_mask))      b_o = RGB;
+    else if ((visual->red_mask > visual->blue_mask) && (visual->blue_mask > visual->green_mask))  b_o = RGB;
+    else if ((visual->blue_mask > visual->red_mask) && (visual->red_mask > visual->green_mask))   b_o = BRG;
+    else if ((visual->blue_mask > visual->green_mask) && (visual->green_mask > visual->red_mask)) b_o = BGR;
+    else if ((visual->green_mask > visual->red_mask) && (visual->red_mask > visual->blue_mask))   b_o = GRB;
+    else if ((visual->green_mask > visual->blue_mask) && (visual->blue_mask > visual->red_mask))  b_o = GBR;
+  }
   
   int r_mask = image.GetMaskRed();
   int g_mask = image.GetMaskGreen();
@@ -434,13 +455,20 @@ wxBitmap::wxBitmap( const wxImage &image )
 	    gdk_image_put_pixel( data_image, x, y, pixel );
 	    break;
 	  }
+	  case 32:
 	  case 24:
 	  {
-	    break;
-	  }
-	  case 32:
-	  {
-	    break;
+	    guint32 pixel = 0;
+	    switch (b_o)
+	    {
+	      case RGB: pixel = (r << 16) | (g << 8) | b; break;
+	      case RBG: pixel = (r << 16) | (b << 8) | g; break;
+	      case BRG: pixel = (b << 16) | (r << 8) | g; break;
+	      case BGR: pixel = (b << 16) | (g << 8) | r; break;
+	      case GRB: pixel = (g << 16) | (r << 8) | b; break;
+	      case GBR: pixel = (g << 16) | (b << 8) | r; break;
+	    }
+	    gdk_image_put_pixel( data_image, x, y, pixel );
 	  }
 	  default: break;
 	}

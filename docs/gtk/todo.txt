@@ -15,9 +15,6 @@ wxHelpController
   
 Fix printing of bitmaps
   -> No idea.
-
-wxImage
-  -> 24-bit support
   
 -------------------- Low priority ---------------------
     
