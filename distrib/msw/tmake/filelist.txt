@@ -281,7 +281,7 @@ glcanvas.cpp	M
 helpchm.cpp	M	32
 helpwin.cpp	M
 icon.cpp	M
-imaglist.cpp	M	32
+imaglist.cpp	M	32,L
 iniconf.cpp	M	16
 joystick.cpp	M
 listbox.cpp	M
