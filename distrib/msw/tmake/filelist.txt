@@ -14,11 +14,13 @@
 #  X	/src/motif   X for Xt
 #  U	/src/unix
 #  R	/src/gtk     R for Robert
+#  O	/src/os2
 #  H	/src/html
 #  W	/include/wx
 #  K	/include/wx/gtk        K for gtK
 #  F	/include/wx/motif      F for motiF
 #  9	/include/wx/msw        9 for Windows 9x
+#  2	/include/wx/os2        2 for os2
 #  N	/include/wx/generic    N for geNeric
 #  L	/include/wx/html       L for htmL
 #  P	/include/wx/protocol
@@ -411,6 +413,82 @@ textctrl.cpp	X
 timer.cpp	X
 utils.cpp	X
 window.cpp	X
+
+accel.cpp	O
+app.cpp	O
+bitmap.cpp	O
+bmpbuttn.cpp	O
+brush.cpp	O
+button.cpp	O
+checkbox.cpp	O
+checklst.cpp	O
+choice.cpp	O
+clipbrd.cpp	O
+colour.cpp	O
+combobox.cpp	O
+control.cpp	O
+cursor.cpp	O
+data.cpp	O
+dataobj.cpp	O
+dc.cpp	O
+dcclient.cpp	O
+dcmemory.cpp	O
+dcprint.cpp	O
+dcscreen.cpp	O
+dialog.cpp	O
+#dialup.cpp	O
+#dir.cpp	O	B
+dirdlg.cpp	O
+dnd.cpp	O
+filedlg.cpp	O
+font.cpp	O
+fontdlg.cpp	O
+frame.cpp	O
+gauge.cpp	O
+gdiimage.cpp	O
+gdiobj.cpp	O
+helpwin.cpp	O
+icon.cpp	O
+iniconf.cpp	O
+joystick.cpp	O
+listbox.cpp	O
+main.cpp	O
+mdi.cpp	O
+menu.cpp	O
+menuitem.cpp	O
+metafile.cpp	O
+minifram.cpp	O
+msgdlg.cpp	O
+nativdlg.cpp	O
+notebook.cpp	O
+ownerdrw.cpp	O
+palette.cpp	O
+pen.cpp	O
+print.cpp	O
+radiobox.cpp	O
+radiobut.cpp	O
+region.cpp	O
+scrolbar.cpp	O
+settings.cpp	O
+slider.cpp	O
+spinbutt.cpp	O
+spinctrl.cpp	O
+statbmp.cpp	O
+statbox.cpp	O
+statline.cpp	O
+stattext.cpp	O
+tabctrl.cpp	O
+taskbar.cpp	O
+textctrl.cpp	O
+timer.cpp	O
+thread.cpp	O
+toolbar.cpp	O
+tooltip.cpp	O
+utils.cpp	O	B
+utilsexc.cpp	O	B
+wave.cpp	O
+window.cpp	O
+gsocket.c	O
 
 helpdata.cpp	H
 helpfrm.cpp	H
@@ -860,6 +938,80 @@ xpmhand.h	9
 # watch1.cur	9
 # disable.bmp	9
 # wx.rc	9
+
+accel.h	2
+dataobj.h	2
+helpwin.h	2
+pngread.h	2
+statline.h	2
+app.h	2
+dataobj2.h	2
+icon.h	2
+stattext.h	2
+bitmap.h	2
+dc.h	2
+tabctrl.h	2
+dcclient.h	2
+print.h	2
+taskbar.h	2
+bmpbuttn.h	2
+dcmemory.h	2
+iniconf.h	2
+private.h	2
+textctrl.h	2
+brush.h	2
+dcprint.h	2
+joystick.h	2
+timer.h	2
+dcscreen.h	2
+listbox.h	2
+button.h	2
+dialog.h	2
+radiobox.h	2
+toolbar.h	2
+checkbox.h	2
+dirdlg.h	2
+mdi.h	2
+radiobut.h	2
+tooltip.h	2
+checklst.h	2
+dnd.h	2
+menu.h	2
+region.h	2
+menuitem.h	2
+choice.h	2
+filedlg.h	2
+metafile.h	2
+scrolbar.h	2
+wave.h	2
+clipbrd.h	2
+font.h	2
+minifram.h	2
+settings.h	2
+window.h	2
+fontdlg.h	2
+msgdlg.h	2
+setup.h	2
+colour.h	2
+frame.h	2
+setup0.h	2
+combobox.h	2
+gauge.h	2
+notebook.h	2
+control.h	2
+gdiimage.h	2
+palette.h	2
+slider.h	2
+cursor.h	2
+gdiobj.h	2
+spinbutt.h	2
+gsockos2.h	2
+pen.h	2
+spinctrl.h	2
+statbmp.h	2
+dataform.h	2
+pnghand.h	2
+statbox.h	2
 
 fontutil.h	S
 execute.h	S
