@@ -30,6 +30,7 @@
 
 
 #include "wx/listimpl.cpp"
+#include "wx/sysopt.h"
 #include "wx/mgl/private.h"
 
 #include <mgraph.h>
@@ -228,6 +229,8 @@ void wxMGLFontLibrary::DecRef()
     }
 }
 
+static int gs_antialiasingThreshold = -1;
+
 wxMGLFontInstance *wxMGLFontLibrary::GetFontInstance(wxFont *font, 
                                                      float scale, bool aa)
 {
@@ -235,9 +238,27 @@ wxMGLFontInstance *wxMGLFontLibrary::GetFontInstance(wxFont *font,
 
     wxString facename;
     bool slant;
-    bool antialiased = 
-        (m_fontLib->fontLibType == MGL_BITMAPFONT_LIB) ? FALSE : aa;
+    bool antialiased;
     float pt = (float)font->GetPointSize() * scale;
+
+    if ( gs_antialiasingThreshold == -1 )
+    {
+        gs_antialiasingThreshold = 10;
+#if wxUSE_SYSTEM_OPTIONS
+        if ( wxSystemOptions::HasOption(wxT("mgl.aa-threshold") )
+            gs_antialiasingThreshold = 
+                wxSystemOptions::GetOptionInt(wxT("mgl.aa-threshold"));
+        wxLogTrace("mgl_font", "AA threshold set to %i", gs_antialiasingThreshold);
+#endif
+    }
+
+    // Small characters don't look good when antialiased with the algorithm
+    // that FreeType uses (mere 2x2 supersampling), so lets disable it AA
+    // completely for small fonts.
+    if ( pt <= gs_antialiasingThreshold )
+        antialiased = FALSE;
+    else
+        antialiased = (m_fontLib->fontLibType == MGL_BITMAPFONT_LIB) ? FALSE : aa;
 
     slant = (((m_type & wxFONTFACE_ITALIC) == 0) &&
              (font->GetStyle() == wxSLANT || font->GetStyle() == wxITALIC));
