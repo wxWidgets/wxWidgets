@@ -80,7 +80,7 @@ DocStr(CLSID,
 specify the class of the ActiveX object that is to be created.  A
 CLSID can be constructed from either a ProgID string, (such as
 'WordPad.Document.1') or a classID string, (such as
-'{CA8A9783-280D-11CF-A24D-444553540000}').");
+'{CA8A9783-280D-11CF-A24D-444553540000}').", "");
 
 class CLSID {
 public:
@@ -512,7 +512,7 @@ get/set properties or call methods by name.  The Python
 implementation automatically handles converting parameters and
 return values to/from the types expected by the ActiveX code as
 specified by the TypeInfo.
-");
+", "");
 
 
 class wxActiveXWindow : public wxWindow
@@ -527,28 +527,28 @@ public:
                          long style = 0,
                          const wxString& name = wxPyPanelNameStr),
         "Creates an ActiveX control from the clsID given and makes it act
-as much like a regular wx.Window as possible.");
+as much like a regular wx.Window as possible.", "");
 
     DocDeclStr(
         const CLSID& , GetCLSID() const,
-        "Return the CLSID used to construct this ActiveX window");
+        "Return the CLSID used to construct this ActiveX window", "");
     
 
     DocDeclStr(
         int , GetAXEventCount() const,
-        "Number of events defined for this control");
+        "Number of events defined for this control", "");
 
     DocDeclStr(
         const wxFuncX& , GetAXEventDesc(int idx) const,
-        "Returns event description by index");
+        "Returns event description by index", "");
 
 
     DocDeclStr(
         int , GetAXPropCount() const,
-        "Number of properties defined for this control");
+        "Number of properties defined for this control", "");
 
     %nokwargs GetAXPropDesc;
-    DocStr(GetPropDesc, "Returns property description by index or by name");
+    DocStr(GetPropDesc, "Returns property description by index or by name", "");
     const wxPropX& GetAXPropDesc(int idx) const;
     const wxPropX& GetAXPropDesc(const wxString& name) const;
 
@@ -556,10 +556,10 @@ as much like a regular wx.Window as possible.");
 
     DocDeclStr(
         int , GetAXMethodCount() const,
-        "Number of methods defined for this control");
+        "Number of methods defined for this control", "");
 
     %nokwargs GetAXMethodDesc;
-    DocStr(GetMethodDesc, "Returns method description by index or name");
+    DocStr(GetMethodDesc, "Returns method description by index or name", "");
     const wxFuncX& GetAXMethodDesc(int idx) const;
     const wxFuncX& GetAXMethodDesc(const wxString& name) const;
 
@@ -567,35 +567,35 @@ as much like a regular wx.Window as possible.");
     DocDeclStr(
         const wxFuncXArray& , GetAXEvents(),
         "Returns a sequence of FuncX objects describing the events
-available for this ActiveX object.");
+available for this ActiveX object.", "");
 
     DocDeclStr(
         const wxFuncXArray& , GetAXMethods(),
         "Returns a sequence of FuncX objects describing the methods
-available for this ActiveX object.");
+available for this ActiveX object.", "");
 
     DocDeclStr(
         const wxPropXArray& , GetAXProperties(),
         "Returns a sequence of PropX objects describing the properties
-available for this ActiveX object.");
+available for this ActiveX object.", "");
 
 
 
     DocDeclStr(
         void , SetAXProp(const wxString& name, PyObject* value),
-        "Set a property of the ActiveX object by name.");
+        "Set a property of the ActiveX object by name.", "");
 
 
     DocDeclStr(
         PyObject* , GetAXProp(const wxString& name),
-        "Get the value of an ActiveX property by name.");
+        "Get the value of an ActiveX property by name.", "");
 
     
     %nokwargs _CallAXMethod;
     DocDeclStr(
         PyObject* , _CallAXMethod(const wxString& name, PyObject* args),
         "The implementation for CallMethod.  Calls an ActiveX method, by
-name passing the parameters given in args.");
+name passing the parameters given in args.", "");
     %pythoncode {
         def CallAXMethod(self, name, *args):
             """
@@ -611,7 +611,7 @@ name passing the parameters given in args.");
 
 DocDeclStr(
     wxEventType , RegisterActiveXEvent(const wxString& eventName),
-    "Creates a standard wx event ID for the given eventName.");
+    "Creates a standard wx event ID for the given eventName.", "");
 
 
 
@@ -620,7 +620,7 @@ DocStr(wxActiveXEvent,
 ActiveX events.  Any event parameters from the ActiveX cntrol are
 turned into attributes of the Python proxy for this event object.
 Additionally, there is a property called eventName that will
-return (surprisingly <wink>) the name of the ActiveX event.");
+return (surprisingly <wink>) the name of the ActiveX event.", "");
 
 class wxActiveXEvent : public wxCommandEvent
 {
