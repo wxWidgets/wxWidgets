@@ -210,7 +210,8 @@ protected:
     void OnDraw(wxDC& dc);
     void OnSize(wxSizeEvent& event);
     void OnMouseMove(wxMouseEvent& event);
-    void OnMouseButton(wxMouseEvent& event);
+    void OnMouseDown(wxMouseEvent& event);
+    void OnMouseUp(wxMouseEvent& event);
     void OnIdle(wxIdleEvent& event);
 
     // Returns new filter (will be stored into m_DefaultFilter variable)
@@ -252,7 +253,17 @@ protected:
 
     int m_Style;
 
+    // current text selection or NULL
+    wxHtmlSelection *m_selection;
+
+    // true if the user is dragging mouse to select text
+    bool m_makingSelection;
+
 private:
+    // variables used when user is selecting text
+    wxPoint     m_tmpSelFromPos;
+    wxHtmlCell *m_tmpSelFromCell;
+    
     // a flag indicated if mouse moved
     // (if TRUE we will try to change cursor in last call to OnIdle)
     bool m_tmpMouseMoved;

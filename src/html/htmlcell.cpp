@@ -119,12 +119,33 @@ const wxHtmlCell* wxHtmlCell::Find(int WXUNUSED(condition), const void* WXUNUSED
 wxHtmlCell *wxHtmlCell::FindCellByPos(wxCoord x, wxCoord y,
                                       unsigned flags) const
 {
-    if ( (flags & wxHTML_FIND_TERMINAL) &&
-         x >= 0 && x < m_Width && y >= 0 && y < m_Height )
+    if ( x >= 0 && x < m_Width && y >= 0 && y < m_Height )
     {
         return wxConstCast(this, wxHtmlCell);
     }
-    return NULL;
+    else
+    {
+        if ((flags & wxHTML_FIND_NEAREST_AFTER) &&
+                (y < 0 || (y == 0 && x <= 0)))
+            return wxConstCast(this, wxHtmlCell);
+        else if ((flags & wxHTML_FIND_NEAREST_BEFORE) &&
+                (y > m_Height-1 || (y == m_Height-1 && x >= m_Width)))
+            return wxConstCast(this, wxHtmlCell);
+        else
+            return NULL;
+    }
+}
+
+
+wxPoint wxHtmlCell::GetAbsPos() const
+{
+    wxPoint p(m_PosX, m_PosY);
+    for (wxHtmlCell *parent = m_Parent; parent; parent = parent->m_Parent)
+    {
+        p.x += parent->m_PosX;
+        p.y += parent->m_PosY;
+    }
+    return p;
 }
 
 
@@ -145,7 +166,7 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
                           int WXUNUSED(view_y1), int WXUNUSED(view_y2),
                           wxHtmlRenderingState& state)
 {
-    if (state.GetSelectionState() == wxHTML_SEL_IN &&
+    if (state.GetSelectionState() != wxHTML_SEL_OUT &&
         dc.GetBackgroundMode() != wxSOLID)
     {
         dc.SetBackgroundMode(wxSOLID);
@@ -440,10 +461,10 @@ void wxHtmlContainerCell::UpdateRenderingStatePost(wxHtmlRenderingState& state,
 {
     wxHtmlSelection *s = state.GetSelection();
     if (!s) return;
-    if (s->GetFromCell() == cell)
-        state.SetSelectionState(wxHTML_SEL_IN);
-    else if (s->GetToCell() == cell)
+    if (s->GetToCell() == cell)
         state.SetSelectionState(wxHTML_SEL_OUT);
+    else if (s->GetFromCell() == cell)
+        state.SetSelectionState(wxHTML_SEL_IN);
 }
 
 #define mMin(a, b) (((a) < (b)) ? (a) : (b))
@@ -616,24 +637,53 @@ const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) co
 wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
                                                unsigned flags) const
 {
-    for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
+    if (flags & wxHTML_FIND_EXACT)
     {
-        int cx = cell->GetPosX(),
-            cy = cell->GetPosY();
-
-        if ( (cx <= x) && (cx + cell->GetWidth() > x) &&
-             (cy <= y) && (cy + cell->GetHeight() > y) )
+        for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
         {
-            wxHtmlCell *c = cell->FindCellByPos(x - cx, y - cy, flags);
-            if (c == NULL && (flags & wxHTML_FIND_NONTERMINAL))
-                return wxConstCast(this, wxHtmlContainerCell);
-            else
-                return c;
+            int cx = cell->GetPosX(),
+                cy = cell->GetPosY();
+
+            if ( (cx <= x) && (cx + cell->GetWidth() > x) &&
+                 (cy <= y) && (cy + cell->GetHeight() > y) )
+            {
+                return cell->FindCellByPos(x - cx, y - cy, flags);
+            }
         }
+        return NULL;
     }
 
-    return (flags & wxHTML_FIND_NONTERMINAL) ? 
-                wxConstCast(this, wxHtmlContainerCell) : NULL;
+    if ( flags & wxHTML_FIND_NEAREST_AFTER )
+    {
+        wxHtmlCell *c;
+        int y2;
+        for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
+        {
+            y2 = cell->GetPosY() + cell->GetHeight() - 1;
+            if (y2 < y || (y2 == y && cell->GetPosX()+cell->GetWidth()-1 < x))
+                continue;
+            c = cell->FindCellByPos(x - cell->GetPosX(), y - cell->GetPosY(),
+                                    flags);
+            if (c) return c;
+        }
+        return NULL;
+    }
+
+    if ( flags & wxHTML_FIND_NEAREST_BEFORE )
+    {
+        wxHtmlCell *c = NULL;
+        wxHtmlCell *cx;
+        for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
+        {
+            if (cell->GetPosY() > y || 
+                    (cell->GetPosY() == y && cell->GetPosX() > x))
+                break;
+            cx = cell->FindCellByPos(x - cell->GetPosX(), y - cell->GetPosY(),
+                                     flags);
+            if (cx) c = cx;
+        }
+        return c;
+    }
 }
 
 
@@ -669,6 +719,26 @@ void wxHtmlContainerCell::GetHorizontalConstraints(int *left, int *right) const
         *right = cright;
 }
 
+    
+wxHtmlCell *wxHtmlContainerCell::GetFirstTerminal() const
+{
+    if (m_Cells)
+        return m_Cells->GetFirstTerminal();
+    else
+        return NULL;
+}
+
+wxHtmlCell *wxHtmlContainerCell::GetLastTerminal() const
+{
+    if (m_Cells)
+    {
+        wxHtmlCell *c;
+        for (c = m_Cells; c->GetNext(); c = c->GetNext()) {}
+        return c;
+    }
+    else
+        return NULL;
+}
 
 
 

@@ -101,8 +101,9 @@ private:
 // Flags for wxHtmlCell::FindCellByPos
 enum
 {
-    wxHTML_FIND_TERMINAL    = 0x0001,
-    wxHTML_FIND_NONTERMINAL = 0x0002
+    wxHTML_FIND_EXACT             = 1,
+    wxHTML_FIND_NEAREST_BEFORE    = 2,
+    wxHTML_FIND_NEAREST_AFTER     = 4,
 };
 
 
@@ -216,7 +217,17 @@ public:
     // nonterminal cells or both. In either case, returned cell is deepest
     // cell in cells tree that contains [x,y].
     virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
-                                  unsigned flags = wxHTML_FIND_TERMINAL) const;
+                                  unsigned flags = wxHTML_FIND_EXACT) const;
+
+    // Returns absolute position of the cell on HTML canvas
+    wxPoint GetAbsPos() const;
+
+    // Returns first (last) terminal cell inside this cell. It may return NULL,
+    // but it is rare -- only if there are no terminals in the tree.
+    virtual wxHtmlCell *GetFirstTerminal() const 
+        { return wxConstCast(this, wxHtmlCell); }
+    virtual wxHtmlCell *GetLastTerminal() const 
+        { return wxConstCast(this, wxHtmlCell); }
 
 protected:
     wxHtmlCell *m_Next;
@@ -325,7 +336,10 @@ public:
     virtual bool IsTerminalCell() const { return FALSE; }
 
     virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
-                                  unsigned flags = wxHTML_FIND_TERMINAL) const;
+                                  unsigned flags = wxHTML_FIND_EXACT) const;
+    
+    virtual wxHtmlCell *GetFirstTerminal() const;
+    virtual wxHtmlCell *GetLastTerminal() const;
 
 protected:
     void UpdateRenderingStatePre(wxHtmlRenderingState& state,

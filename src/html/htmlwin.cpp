@@ -92,6 +92,8 @@ void wxHtmlWindow::Init()
     m_Processors = NULL;
     m_Style = 0;
     SetBorders(10);
+    m_selection = NULL;
+    m_makingSelection = false;
 }
 
 bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
@@ -152,6 +154,8 @@ void wxHtmlWindow::SetFonts(wxString normal_face, wxString fixed_face, const int
 bool wxHtmlWindow::SetPage(const wxString& source)
 {
     wxString newsrc(source);
+
+    wxDELETE(m_selection);
 
     // pass HTML through registered processors:
     if (m_Processors || m_GlobalProcessors)
@@ -665,7 +669,7 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     dc.SetBackgroundMode(wxTRANSPARENT);
     GetViewStart(&x, &y);
 
-    wxHtmlRenderingState rstate(NULL);
+    wxHtmlRenderingState rstate(m_selection);
     m_Cell->Draw(dc, 0, 0,
                  y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
@@ -688,20 +692,44 @@ void wxHtmlWindow::OnMouseMove(wxMouseEvent& event)
     m_tmpMouseMoved = true;
 }
 
-void wxHtmlWindow::OnMouseButton(wxMouseEvent& event)
+void wxHtmlWindow::OnMouseDown(wxMouseEvent& event)
 {
+    if ( event.LeftDown() && IsSelectionEnabled() )
+    {
+        m_makingSelection = true;
+            
+        if ( m_selection )
+        {
+            wxDELETE(m_selection);
+            Refresh();
+        }
+        m_tmpSelFromPos = CalcUnscrolledPosition(event.GetPosition());
+        m_tmpSelFromCell = NULL;
+
+        CaptureMouse();
+    }
+}
+
+void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
+{
+    if ( m_makingSelection )
+    {
+        ReleaseMouse();
+        m_makingSelection = false;
+
+        // did the user move the mouse far enough from starting point?
+        if ( m_selection )
+        {
+            // we don't want mouse up event that ended selecting to be
+            // handled as mouse click and e.g. follow hyperlink:
+            return;
+        }
+    }
+    
     SetFocus();
     if ( m_Cell )
     {
-        int sx, sy;
-        GetViewStart(&sx, &sy);
-        sx *= wxHTML_SCROLL_STEP;
-        sy *= wxHTML_SCROLL_STEP;
-
-        wxPoint pos = event.GetPosition();
-        pos.x += sx;
-        pos.y += sy;
-
+        wxPoint pos = CalcUnscrolledPosition(event.GetPosition());
         wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
 
         // VZ: is it possible that we don't find anything at all?
@@ -724,18 +752,90 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 
     if (m_tmpMouseMoved && (m_Cell != NULL))
     {
-        int sx, sy;
-        GetViewStart(&sx, &sy);
-        sx *= wxHTML_SCROLL_STEP;
-        sy *= wxHTML_SCROLL_STEP;
-
-        int x, y;
-        wxGetMousePosition(&x, &y);
-        ScreenToClient(&x, &y);
-        x += sx;
-        y += sy;
+        int xc, yc, x, y;
+        wxGetMousePosition(&xc, &yc);
+        ScreenToClient(&xc, &yc);
+        CalcUnscrolledPosition(xc, yc, &x, &y);
 
         wxHtmlCell *cell = m_Cell->FindCellByPos(x, y);
+
+        // handle selection update:
+        if ( m_makingSelection )
+        {
+            bool goingDown = m_tmpSelFromPos.y < y ||
+                             m_tmpSelFromPos.y == y && m_tmpSelFromPos.x < x;
+
+            if ( !m_tmpSelFromCell )
+            {
+                if (goingDown)
+                {
+                    m_tmpSelFromCell = m_Cell->FindCellByPos(x, y,
+                                                 wxHTML_FIND_NEAREST_BEFORE);
+                    if (!m_tmpSelFromCell)
+                        m_tmpSelFromCell = m_Cell->GetFirstTerminal();
+                }
+                else
+                {
+                    m_tmpSelFromCell = m_Cell->FindCellByPos(x, y,
+                                                 wxHTML_FIND_NEAREST_AFTER);
+                    if (!m_tmpSelFromCell)
+                        m_tmpSelFromCell = m_Cell->GetLastTerminal();
+                }
+            }
+
+            wxHtmlCell *selcell = cell;
+            if (!selcell)
+            {
+                if (goingDown)
+                {
+                    selcell = m_Cell->FindCellByPos(x, y,
+                                                 wxHTML_FIND_NEAREST_AFTER);
+                    if (!selcell)
+                        selcell = m_Cell->GetLastTerminal();
+                }
+                else
+                {
+                    selcell = m_Cell->FindCellByPos(x, y,
+                                                 wxHTML_FIND_NEAREST_BEFORE);
+                    if (!selcell)
+                        selcell = m_Cell->GetFirstTerminal();
+                }
+            }
+
+            // NB: it may *rarely* happen that the code above didn't find one
+            //     of the cells, e.g. if wxHtmlWindow doesn't contain any
+            //     visible cells. 
+            if ( selcell && m_tmpSelFromCell )
+            {                
+                if ( !m_selection )
+                {
+                    // start selecting only if mouse movement was big enough
+                    // (otherwise it was meant as mouse click, not selection):
+                    const int PRECISION = 2;
+                    wxPoint diff = m_tmpSelFromPos - wxPoint(x,y);
+                    if (abs(diff.x) > PRECISION || abs(diff.y) > PRECISION)
+                    {
+                        m_selection = new wxHtmlSelection();
+                    }
+                }
+                if ( m_selection )
+                {
+                    if (goingDown)
+                    {
+                        m_selection->Set(m_tmpSelFromPos, m_tmpSelFromCell,
+                                         wxPoint(x,y), selcell);
+                    }
+                    else
+                    {
+                        m_selection->Set(wxPoint(x,y), selcell,
+                                         m_tmpSelFromPos, m_tmpSelFromCell);
+                    }
+                    Refresh(); // FIXME - optimize!
+                }
+            }
+        }
+        
+        // handle cursor and status bar text changes:
         if ( cell != m_tmpLastCell )
         {
             wxHtmlLinkInfo *lnk = cell ? cell->GetLink(x, y) : NULL;
@@ -776,8 +876,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindow,wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_SIZE(wxHtmlWindow::OnSize)
-    EVT_LEFT_UP(wxHtmlWindow::OnMouseButton)
-    EVT_RIGHT_UP(wxHtmlWindow::OnMouseButton)
+    EVT_LEFT_DOWN(wxHtmlWindow::OnMouseDown)
+    EVT_LEFT_UP(wxHtmlWindow::OnMouseUp)
+    EVT_RIGHT_UP(wxHtmlWindow::OnMouseUp)
     EVT_MOTION(wxHtmlWindow::OnMouseMove)
     EVT_IDLE(wxHtmlWindow::OnIdle)
 END_EVENT_TABLE()

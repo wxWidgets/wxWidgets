@@ -113,7 +113,9 @@ class wxHtmlHelpHtmlWindow : public wxHtmlWindow
         virtual void OnLinkClicked(const wxHtmlLinkInfo& link)
         {
             wxHtmlWindow::OnLinkClicked(link);
-            m_Frame->NotifyPageChanged();
+            const wxMouseEvent *e = link.GetEvent();
+            if (e == NULL || e->LeftUp())
+                m_Frame->NotifyPageChanged();
         }
 
     private:
