@@ -84,7 +84,7 @@ public:
                                 const wxRect& rect,
                                 int flags )
         { DrawBackground( dc, col, rect, flags ); }
-                                
+
 
     // draw the label inside the given rectangle with the specified alignment
     // and optionally emphasize the character with the given index
@@ -897,7 +897,7 @@ private:
     // common part of DrawItems() and DrawCheckItems()
     void DoDrawItems(const wxListBox *listbox,
                      size_t itemFirst, size_t itemLast,
-                     bool isCheckLbox = FALSE);
+                     bool isCheckLbox = false);
 
     wxWindow *m_window;
     wxRenderer *m_renderer;

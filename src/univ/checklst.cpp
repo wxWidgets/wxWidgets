@@ -96,11 +96,11 @@ bool wxCheckListBox::Create(wxWindow *parent,
 {
     if ( !wxListBox::Create(parent, id, pos, size,
                             n, choices, style, validator, name) )
-        return FALSE;
+        return false;
 
     CreateInputHandler(wxINP_HANDLER_CHECKLISTBOX);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -109,7 +109,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
 
 bool wxCheckListBox::IsChecked(size_t item) const
 {
-    wxCHECK_MSG( item < m_checks.GetCount(), FALSE,
+    wxCHECK_MSG( item < m_checks.GetCount(), false,
                  _T("invalid index in wxCheckListBox::IsChecked") );
 
     return m_checks[item] != 0;
@@ -148,7 +148,7 @@ int wxCheckListBox::DoAppend(const wxString& item)
     int pos = wxListBox::DoAppend(item);
 
     // the item is initially unchecked
-    m_checks.Insert(FALSE, pos);
+    m_checks.Insert(false, pos);
 
     return pos;
 }
@@ -160,7 +160,7 @@ void wxCheckListBox::DoInsertItems(const wxArrayString& items, int pos)
     size_t count = items.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        m_checks.Insert(FALSE, pos + n);
+        m_checks.Insert(false, pos + n);
     }
 }
 
@@ -172,7 +172,7 @@ void wxCheckListBox::DoSetItems(const wxArrayString& items, void **clientData)
     size_t count = items.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        m_checks.Add(FALSE);
+        m_checks.Add(false);
     }
 }
 
@@ -227,7 +227,7 @@ bool wxCheckListBox::PerformAction(const wxControlAction& action,
         return wxListBox::PerformAction(action, numArg, strArg);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -273,7 +273,7 @@ bool wxStdCheckListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
         {
             lbox->PerformAction(wxACTION_CHECKLISTBOX_TOGGLE, item);
 
-            return TRUE;
+            return true;
         }
     }
 

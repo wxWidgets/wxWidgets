@@ -65,12 +65,12 @@ bool wxGauge::Create(wxWindow *parent,
     if ( !wxGaugeBase::Create(parent, id, range, pos, size, style,
                               validator, name) )
     {
-        return FALSE;
+        return false;
     }
 
     SetBestSize(size);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -104,12 +104,12 @@ wxSize wxGauge::DoGetBestClientSize() const
     if ( IsVertical() )
     {
         size.x = (3*size.y) / 2 + 2;
-        size.y = -1;
+        size.y = wxDefaultCoord;
     }
     else
     {
         size.y = (3*size.x) / 2 + 2;
-        size.x = -1;
+        size.x = wxDefaultCoord;
     }
 
     return size;

@@ -541,7 +541,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
     }
 
     // do draw it
-    dc.DrawBitmap(bmp, x, y, TRUE /* use mask */);
+    dc.DrawBitmap(bmp, x, y, true /* use mask */);
 }
 
 void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
@@ -561,7 +561,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                    rectUpdate.GetBottom());
 
 #if 0 //def WXDEBUG_SCROLLBAR
-        static bool s_refreshDebug = FALSE;
+        static bool s_refreshDebug = false;
         if ( s_refreshDebug )
         {
             wxClientDC dc(wxConstCast(scrollbar, wxScrollBar));
@@ -628,7 +628,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                 (wxScrollArrows::Arrow)nArrow,
                 m_dc,
                 rectArrow,
-                TRUE // draw a scrollbar arrow, not just an arrow
+                true // draw a scrollbar arrow, not just an arrow
             );
         }
     }
@@ -750,7 +750,7 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
 void wxControlRenderer::DrawCheckItems(const wxCheckListBox *lbox,
                                        size_t itemFirst, size_t itemLast)
 {
-    DoDrawItems(lbox, itemFirst, itemLast, TRUE);
+    DoDrawItems(lbox, itemFirst, itemLast, true);
 }
 
 #endif // wxUSE_CHECKLISTBOX

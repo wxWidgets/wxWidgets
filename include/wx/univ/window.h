@@ -91,8 +91,8 @@ public:
                               int pos,
                               int page,
                               int range,
-                              bool refresh = TRUE );
-    virtual void SetScrollPos(int orient, int pos, bool refresh = TRUE);
+                              bool refresh = true );
+    virtual void SetScrollPos(int orient, int pos, bool refresh = true);
     virtual int GetScrollPos(int orient) const;
     virtual int GetScrollThumb(int orient) const;
     virtual int GetScrollRange(int orient) const;
@@ -126,8 +126,8 @@ public:
     // return all state flags at once (combination of wxCONTROL_XXX values)
     int GetStateFlags() const;
 
-    // set the "highlighted" flag and return TRUE if it changed
-    virtual bool SetCurrent(bool doit = TRUE);
+    // set the "highlighted" flag and return true if it changed
+    virtual bool SetCurrent(bool doit = true);
 
     // get the scrollbar (may be NULL) for the given orientation
     wxScrollBar *GetScrollbar(int orient) const
@@ -138,33 +138,33 @@ public:
     // methods used by wxColourScheme to choose the colours for this window
     // --------------------------------------------------------------------
 
-    // return TRUE if this is a panel/canvas window which contains other
+    // return true if this is a panel/canvas window which contains other
     // controls only
-    virtual bool IsCanvasWindow() const { return FALSE; }
+    virtual bool IsCanvasWindow() const { return false; }
 
-    // returns TRUE if the control has "transparent" areas such
+    // returns true if the control has "transparent" areas such
     // as a wxStaticText and wxCheckBox and the background should
     // be adapted from a parent window
-    virtual bool HasTransparentBackground() { return FALSE; }
+    virtual bool HasTransparentBackground() { return false; }
     
     // to be used with function above: transparent windows get
-    // their background from parents that return TRUE here,
+    // their background from parents that return true here,
     // so this is mostly for wxPanel, wxTopLevelWindow etc.
-    virtual bool ProvidesBackground() const { return FALSE; }
+    virtual bool ProvidesBackground() const { return false; }
 
-    // return TRUE if this control can be highlighted when the mouse is over
+    // return true if this control can be highlighted when the mouse is over
     // it (the theme decides itself whether it is really highlighted or not)
-    virtual bool CanBeHighlighted() const { return FALSE; }
+    virtual bool CanBeHighlighted() const { return false; }
 
-    // return TRUE if we should use the colours/fonts returned by the
+    // return true if we should use the colours/fonts returned by the
     // corresponding GetXXX() methods instead of the default ones
     bool UseBgCol() const { return m_hasBgCol; }
     bool UseFgCol() const { return m_hasFgCol; }
     bool UseFont() const { return m_hasFont; }
 
-    // return TRUE if this window serves as a container for the other windows
+    // return true if this window serves as a container for the other windows
     // only and doesn't get any input itself
-    virtual bool IsStaticBox() const { return FALSE; }
+    virtual bool IsStaticBox() const { return false; }
 
     // returns the (low level) renderer to use for drawing the control by
     // querying the current theme
@@ -187,11 +187,11 @@ public:
 
     // the rect coordinates are, for us, in client coords, but if no rect is
     // specified, the entire window is refreshed
-    virtual void Refresh(bool eraseBackground = TRUE,
+    virtual void Refresh(bool eraseBackground = true,
                          const wxRect *rect = (const wxRect *) NULL);
 
     // we refresh the window when it is dis/enabled
-    virtual bool Enable(bool enable = TRUE);
+    virtual bool Enable(bool enable = true);
 
     // should we use the standard control colours or not?
     virtual bool ShouldInheritColours() const { return false; }
@@ -222,7 +222,7 @@ protected:
     void OnKeyUp(wxKeyEvent& event);
 #endif // wxUSE_MENUS
 
-    // draw the control background, return TRUE if done
+    // draw the control background, return true if done
     virtual bool DoDrawBackground(wxDC& dc);
 
     // draw the controls border

@@ -26,9 +26,9 @@ public:
                  wxCoord length,
                  long style = wxLI_HORIZONTAL)
     {
-        Create(parent, -1, pos,
-               style & wxLI_VERTICAL ? wxSize(-1, length)
-                                     : wxSize(length, -1),
+        Create(parent, wxID_ANY, pos,
+               style & wxLI_VERTICAL ? wxSize(wxDefaultCoord, length)
+                                     : wxSize(length, wxDefaultCoord),
                style);
     }
 

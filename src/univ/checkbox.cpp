@@ -54,7 +54,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 
 void wxCheckBox::Init()
 {
-    m_isPressed = FALSE;
+    m_isPressed = false;
     m_status = Status_Unchecked;
 }
 
@@ -68,14 +68,14 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxString &name)
 {
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
-        return FALSE;
+        return false;
 
     SetLabel(label);
     SetBestSize(size);
 
     CreateInputHandler(wxINP_HANDLER_CHECKBOX);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -207,7 +207,7 @@ void wxCheckBox::Press()
 {
     if ( !m_isPressed )
     {
-        m_isPressed = TRUE;
+        m_isPressed = true;
 
         Refresh();
     }
@@ -217,7 +217,7 @@ void wxCheckBox::Release()
 {
     if ( m_isPressed )
     {
-        m_isPressed = FALSE;
+        m_isPressed = false;
 
         Refresh();
     }
@@ -225,7 +225,7 @@ void wxCheckBox::Release()
 
 void wxCheckBox::Toggle()
 {
-    m_isPressed = FALSE;
+    m_isPressed = false;
 
     ChangeValue(!GetValue());
 }
@@ -258,15 +258,15 @@ bool wxCheckBox::PerformAction(const wxControlAction& action,
     else if ( action == wxACTION_BUTTON_RELEASE )
         Release();
     if ( action == wxACTION_CHECKBOX_CHECK )
-        ChangeValue(TRUE);
+        ChangeValue(true);
     else if ( action == wxACTION_CHECKBOX_CLEAR )
-        ChangeValue(FALSE);
+        ChangeValue(false);
     else if ( action == wxACTION_CHECKBOX_TOGGLE )
         Toggle();
     else
         return wxControl::PerformAction(action, numArg, strArg);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------

@@ -62,10 +62,10 @@ bool wxRadioButton::Create(wxWindow *parent,
     if ( !wxCheckBox::Create(parent, id, label, pos, size, style,
                              validator, name) )
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -134,7 +134,7 @@ void wxRadioButton::ClearValue()
 {
     if ( IsChecked() )
     {
-        SetValue(FALSE);
+        SetValue(false);
     }
 }
 

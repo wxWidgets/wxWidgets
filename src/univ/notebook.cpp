@@ -68,7 +68,7 @@ class wxNotebookSpinBtn : public wxSpinButton
 {
 public:
     wxNotebookSpinBtn(wxNotebook *nb)
-        : wxSpinButton(nb, -1,
+        : wxSpinButton(nb, wxID_ANY,
                        wxDefaultPosition, wxDefaultSize,
                        nb->IsVertical() ? wxSP_VERTICAL : wxSP_HORIZONTAL)
     {
@@ -88,7 +88,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxNotebookSpinBtn, wxSpinButton)
-    EVT_SPIN(-1, wxNotebookSpinBtn::OnSpin)
+    EVT_SPIN(wxID_ANY, wxNotebookSpinBtn::OnSpin)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -127,7 +127,7 @@ bool wxNotebook::Create(wxWindow *parent,
 {
     if ( !wxControl::Create(parent, id, pos, size, style,
                             wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     m_sizePad = GetRenderer()->GetTabPadding();
 
@@ -135,7 +135,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
     CreateInputHandler(wxINP_HANDLER_NOTEBOOK);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -151,7 +151,7 @@ wxString wxNotebook::GetPageText(size_t nPage) const
 
 bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("invalid notebook page") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), false, _T("invalid notebook page") );
 
     if ( strText != m_titles[nPage] )
     {
@@ -169,7 +169,7 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 int wxNotebook::GetPageImage(size_t nPage) const
@@ -181,9 +181,9 @@ int wxNotebook::GetPageImage(size_t nPage) const
 
 bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("invalid notebook page") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), false, _T("invalid notebook page") );
 
-    wxCHECK_MSG( m_imageList && nImage < m_imageList->GetImageCount(), FALSE,
+    wxCHECK_MSG( m_imageList && nImage < m_imageList->GetImageCount(), false,
                  _T("invalid image index in SetPageImage()") );
 
     if ( nImage != m_images[nPage] )
@@ -200,7 +200,7 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
             RefreshTab(nPage);
     }
 
-    return TRUE;
+    return true;
 }
 
 wxNotebook::~wxNotebook()
@@ -242,7 +242,7 @@ int wxNotebook::SetSelection(size_t nPage)
 
     if ( selOld != INVALID_PAGE )
     {
-        RefreshTab(selOld, TRUE /* this tab was selected */);
+        RefreshTab(selOld, true /* this tab was selected */);
 
         m_pages[selOld]->Hide();
     }
@@ -293,7 +293,7 @@ bool wxNotebook::InsertPage(size_t nPage,
                             int imageId)
 {
     size_t nPages = GetPageCount();
-    wxCHECK_MSG( nPage == nPages || IS_VALID_PAGE(nPage), FALSE,
+    wxCHECK_MSG( nPage == nPages || IS_VALID_PAGE(nPage), false,
                  _T("invalid notebook page in InsertPage()") );
 
     // modify the data
@@ -325,7 +325,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     if ( nPages == 0 )
     {
         // always select the first tab to have at least some selection
-        bSelect = TRUE;
+        bSelect = true;
 
         Relayout();
         Refresh();
@@ -344,13 +344,13 @@ bool wxNotebook::InsertPage(size_t nPage,
         pPage->Hide();
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxNotebook::DeleteAllPages()
 {
     if ( !wxNotebookBase::DeleteAllPages() )
-        return FALSE;
+        return false;
 
     // clear the other arrays as well
     m_titles.Clear();
@@ -366,7 +366,7 @@ bool wxNotebook::DeleteAllPages()
 
     Relayout();
 
-    return TRUE;
+    return true;
 }
 
 wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
@@ -470,7 +470,7 @@ void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
         wxMemoryDC dc;
         dc.SelectObject(bmp);
         dc.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
-        m_imageList->Draw(image, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL, TRUE);
+        m_imageList->Draw(image, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL, true);
         dc.SelectObject(wxNullBitmap);
 #else
         bmp = *m_imageList->GetBitmap(image);
@@ -833,7 +833,7 @@ void wxNotebook::ResizeTab(int page)
     wxSize sizeTab = CalcTabSize(page);
 
     // we only need full relayout if the page size changes
-    bool needsRelayout = FALSE;
+    bool needsRelayout = false;
 
     if ( IsVertical() )
     {
@@ -845,7 +845,7 @@ void wxNotebook::ResizeTab(int page)
 
     if ( sizeTab.y > m_heightTab )
     {
-        needsRelayout = TRUE;
+        needsRelayout = true;
 
         m_heightTab = sizeTab.y;
     }
@@ -1071,7 +1071,7 @@ void wxNotebook::UpdateSpinBtn()
     {
         // this case is special, get rid of it immediately: everything is
         // visible and we don't need any spin buttons
-        allTabsShown = TRUE;
+        allTabsShown = true;
 
         // have to reset them manually as we don't call CalcLastVisibleTab()
         m_firstVisible =
@@ -1301,15 +1301,15 @@ bool wxNotebook::PerformAction(const wxControlAction& action,
                                const wxString& strArg)
 {
     if ( action == wxACTION_NOTEBOOK_NEXT )
-        SetSelection(GetNextPage(TRUE));
+        SetSelection(GetNextPage(true));
     else if ( action == wxACTION_NOTEBOOK_PREV )
-        SetSelection(GetNextPage(FALSE));
+        SetSelection(GetNextPage(false));
     else if ( action == wxACTION_NOTEBOOK_GOTO )
         SetSelection((int)numArg);
     else
         return wxControl::PerformAction(action, numArg, strArg);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1365,7 +1365,7 @@ bool wxStdNotebookInputHandler::HandleKey(wxInputConsumer *consumer,
                 break;
         }
 
-        if ( !!action )
+        if ( !action.IsEmpty() )
         {
             return consumer->PerformAction(action, page);
         }
@@ -1385,7 +1385,7 @@ bool wxStdNotebookInputHandler::HandleMouse(wxInputConsumer *consumer,
         {
             consumer->PerformAction(wxACTION_NOTEBOOK_GOTO, page);
 
-            return FALSE;
+            return false;
         }
     }
 
@@ -1404,7 +1404,7 @@ wxStdNotebookInputHandler::HandleFocus(wxInputConsumer *consumer,
 {
     HandleFocusChange(consumer);
 
-    return FALSE;
+    return false;
 }
 
 bool wxStdNotebookInputHandler::HandleActivation(wxInputConsumer *consumer,
@@ -1413,7 +1413,7 @@ bool wxStdNotebookInputHandler::HandleActivation(wxInputConsumer *consumer,
     // we react to the focus change in the same way as to the [de]activation
     HandleFocusChange(consumer);
 
-    return FALSE;
+    return false;
 }
 
 void wxStdNotebookInputHandler::HandleFocusChange(wxInputConsumer *consumer)

@@ -108,7 +108,7 @@ struct WXDLLEXPORT wxThemeInfo
     WXDLLEXPORT_DATA(extern bool) wxThemeUse##themename;                    \
     static struct wxThemeUserFor##themename                                 \
     {                                                                       \
-        wxThemeUserFor##themename() { wxThemeUse##themename = TRUE; }       \
+        wxThemeUserFor##themename() { wxThemeUse##themename = true; }       \
     } wxThemeDoUse##themename
 
 // to declare a new theme, this macro must be used in the class declaration
@@ -121,7 +121,7 @@ struct WXDLLEXPORT wxThemeInfo
 
 // and this one must be inserted in the source file
 #define WX_IMPLEMENT_THEME(classname, themename, themedesc)                 \
-    WXDLLEXPORT_DATA(bool) wxThemeUse##themename = TRUE;                    \
+    WXDLLEXPORT_DATA(bool) wxThemeUse##themename = true;                    \
     wxTheme *wxCtorFor##themename() { return new classname; }               \
     wxThemeInfo classname::ms_info##themename(wxCtorFor##themename,         \
                                               wxT( #themename ), themedesc)

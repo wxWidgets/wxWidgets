@@ -101,13 +101,13 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     if ( !wxSpinButtonBase::Create(parent, id, pos, size, style,
                                    wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     SetBestSize(size);
 
     CreateInputHandler(wxINP_HANDLER_SPINBTN);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -167,7 +167,7 @@ bool wxSpinButton::ChangeValue(int inc)
     {
         // nothing changed - most likely because we are already at min/max
         // value
-        return FALSE;
+        return false;
     }
 
     wxSpinEvent event(inc > 0 ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN,
@@ -178,7 +178,7 @@ bool wxSpinButton::ChangeValue(int inc)
     if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
     {
         // programm has vetoed the event
-        return FALSE;
+        return false;
     }
 
     m_value = valueNew;
@@ -187,7 +187,7 @@ bool wxSpinButton::ChangeValue(int inc)
     event.SetEventType(wxEVT_SCROLL_THUMBTRACK);
     (void)GetEventHandler()->ProcessEvent(event);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -357,7 +357,7 @@ bool wxSpinButton::PerformAction(const wxControlAction& action,
     else
         return wxControl::PerformAction(action, numArg, strArg);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -390,11 +390,11 @@ bool wxStdSpinButtonInputHandler::HandleKey(wxInputConsumer *consumer,
                 break;
         }
 
-        if ( !!action )
+        if ( !action.IsEmpty() )
         {
             consumer->PerformAction(action);
 
-            return TRUE;
+            return true;
         }
     }
 
@@ -409,7 +409,7 @@ bool wxStdSpinButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
     if ( spinbtn->GetArrows().HandleMouse(event) )
     {
         // don't refresh, everything is already done
-        return FALSE;
+        return false;
     }
 
     return wxStdInputHandler::HandleMouse(consumer, event);
@@ -423,7 +423,7 @@ bool wxStdSpinButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     if ( spinbtn->GetArrows().HandleMouseMove(event) )
     {
         // processed by the arrows
-        return FALSE;
+        return false;
     }
 
     return wxStdInputHandler::HandleMouseMove(consumer, event);

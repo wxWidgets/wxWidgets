@@ -57,12 +57,12 @@ bool wxStaticText::Create(wxWindow *parent,
                           const wxString &name)
 {
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
         
     SetLabel(label);
     SetBestSize(size);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------

@@ -54,7 +54,7 @@ public:
     // show this menu at the given position (in screen coords) and optionally
     // select its first item
     void Popup(const wxPoint& pos, const wxSize& size,
-               bool selectFirst = TRUE);
+               bool selectFirst = true);
 
     // dismiss the menu
     void Dismiss();
@@ -65,11 +65,11 @@ public:
 
     // implementation only from here
 
-    // do as if this item were clicked, return TRUE if the resulting event was
-    // processed, FALSE otherwise
+    // do as if this item were clicked, return true if the resulting event was
+    // processed, false otherwise
     bool ClickItem(wxMenuItem *item);
 
-    // process the key event, return TRUE if done
+    // process the key event, return true if done
     bool ProcessKeyDown(int key);
 
 #if wxUSE_ACCEL
@@ -167,8 +167,8 @@ public:
     // get the next item for the givan accel letter (used by wxFrame), return
     // -1 if none
     //
-    // if unique is not NULL, filled with TRUE if there is only one item with
-    // this accel, FALSE if two or more
+    // if unique is not NULL, filled with true if there is only one item with
+    // this accel, false if two or more
     int FindNextItemForAccel(int idxStart,
                              int keycode,
                              bool *unique = NULL) const;
@@ -183,7 +183,7 @@ public:
 #endif // wxUSE_ACCEL
 
     // called by wxMenu when it is dismissed
-    void OnDismissMenu(bool dismissMenuBar = FALSE);
+    void OnDismissMenu(bool dismissMenuBar = false);
 
 protected:
     // common part of all ctors
@@ -195,7 +195,7 @@ protected:
     void OnKeyDown(wxKeyEvent& event);
     void OnKillFocus(wxFocusEvent& event);
 
-    // process the mouse move event, return TRUE if we did, FALSE to continue
+    // process the mouse move event, return true if we did, false to continue
     // processing as usual
     //
     // the coordinates are client coordinates of menubar, convert if necessary
@@ -236,7 +236,7 @@ protected:
     void DoSelectMenu(size_t pos);
 
     // popup the currently selected menu
-    void PopupCurrentMenu(bool selectFirst = TRUE);
+    void PopupCurrentMenu(bool selectFirst = true);
 
     // hide the currently selected menu
     void DismissMenu();

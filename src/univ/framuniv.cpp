@@ -105,7 +105,7 @@ void wxFrame::PositionMenuBar()
 #endif // wxUSE_TOOLBAR
 
         m_frameMenuBar->SetSize(0,
-#ifdef __WXPM__	 // FIXME -- remove this, make wxOS2/Univ behave as
+#ifdef __WXPM__   // FIXME -- remove this, make wxOS2/Univ behave as
                  //          the rest of the world!!!
                                 GetClientSize().y - heightMbar - heightTbar,
 #else
@@ -136,7 +136,7 @@ void wxFrame::PositionStatusBar()
     if ( m_frameStatusBar )
     {
         wxSize size = GetClientSize();
-        m_frameStatusBar->SetSize(0, size.y, size.x, -1);
+        m_frameStatusBar->SetSize(0, size.y, size.x, wxDefaultCoord);
     }
 }
 
@@ -319,10 +319,10 @@ int wxFrame::GetMinHeight() const
 bool wxFrame::Enable(bool enable)
 {
     if (!wxFrameBase::Enable(enable))
-    	return FALSE;
+        return false;
 #ifdef __WXMICROWIN__
     if (m_frameMenuBar)
         m_frameMenuBar->Enable(enable);
 #endif
-    return TRUE;
+    return true;
 }

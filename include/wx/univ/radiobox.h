@@ -95,12 +95,12 @@ public:
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
 
-    virtual void Enable(int n, bool enable = TRUE);
-    virtual void Show(int n, bool show = TRUE);
+    virtual void Enable(int n, bool enable = true);
+    virtual void Show(int n, bool show = true);
 
     // we also override the wxControl methods to avoid virtual function hiding
-    virtual bool Enable(bool enable = TRUE);
-    virtual bool Show(bool show = TRUE);
+    virtual bool Enable(bool enable = true);
+    virtual bool Show(bool show = true);
     virtual wxString GetLabel() const;
     virtual void SetLabel(const wxString& label);
 

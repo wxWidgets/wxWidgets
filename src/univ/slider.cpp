@@ -143,7 +143,7 @@ bool wxSlider::Create(wxWindow *parent,
 {
     if ( !wxSliderBase::Create(parent, id, pos, size, style,
                                validator, name) )
-        return FALSE;
+        return false;
 
     SetRange(minValue, maxValue);
     SetValue(value);
@@ -154,7 +154,7 @@ bool wxSlider::Create(wxWindow *parent,
 
     CreateInputHandler(wxINP_HANDLER_SLIDER);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -184,11 +184,11 @@ bool wxSlider::ChangeValueBy(int inc)
 bool wxSlider::ChangeValueTo(int value)
 {
     // check if the value is going to change at all
-    if (value == m_value) return FALSE;
+    if (value == m_value) return false;
 
     // this method is protected and we should only call it with normalized
     // value!
-    wxCHECK_MSG( IsInRange(value), FALSE, _T("invalid slider value") );
+    wxCHECK_MSG( IsInRange(value), false, _T("invalid slider value") );
 
     m_value = value;
 
@@ -201,7 +201,7 @@ bool wxSlider::ChangeValueTo(int value)
 
     (void)GetEventHandler()->ProcessEvent(event);
 
-    return TRUE;
+    return true;
 }
 
 void wxSlider::SetValue(int value)
@@ -773,7 +773,7 @@ bool wxSlider::PerformAction(const wxControlAction& action,
     else if ( action == wxACTION_SLIDER_THUMB_DRAG )
     {
         // no special processing for it
-        return TRUE;
+        return true;
     }
     else if ( action == wxACTION_SLIDER_THUMB_MOVE ||
               action == wxACTION_SLIDER_THUMB_RELEASE )
@@ -785,7 +785,7 @@ bool wxSlider::PerformAction(const wxControlAction& action,
         return wxControl::PerformAction(action, numArg, strArg);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -987,11 +987,11 @@ bool wxStdSliderButtonInputHandler::HandleKey(wxInputConsumer *consumer,
                 break;
         }
 
-        if ( !!action )
+        if ( !action.IsEmpty() )
         {
             consumer->PerformAction(action);
 
-            return TRUE;
+            return true;
         }
     }
 
@@ -1006,7 +1006,7 @@ bool wxStdSliderButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
     if ( slider->GetThumb().HandleMouse(event) )
     {
         // processed by the thumb
-        return FALSE;
+        return false;
     }
 
     return wxStdInputHandler::HandleMouse(consumer, event);
@@ -1020,7 +1020,7 @@ bool wxStdSliderButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     if ( slider->GetThumb().HandleMouseMove(event) )
     {
         // processed by the thumb
-        return FALSE;
+        return false;
     }
 
     return wxStdInputHandler::HandleMouseMove(consumer, event);
@@ -1031,7 +1031,7 @@ wxStdSliderButtonInputHandler::HandleFocus(wxInputConsumer * WXUNUSED(consumer),
                                            const wxFocusEvent& WXUNUSED(event))
 {
     // slider's appearance changes when it gets/loses focus
-    return TRUE;
+    return true;
 }
 
 #endif // wxUSE_SLIDER

@@ -49,16 +49,16 @@ public:
     // is the dialog in modal state right now?
     virtual bool IsModal() const;
 
-    // For now, same as Show(TRUE) but returns return code
+    // For now, same as Show(true) but returns return code
     virtual int ShowModal();
 
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
 
-    // returns TRUE if we're in a modal loop
+    // returns true if we're in a modal loop
     bool IsModalShowing() const;
 
-    bool Show(bool show = TRUE);
+    bool Show(bool show = true);
 
     // implementation only from now on
     // -------------------------------

@@ -44,7 +44,7 @@ public:
                 const wxString& name = wxFrameNameStr);
 
     virtual wxPoint GetClientAreaOrigin() const;
-    virtual bool Enable(bool enable = TRUE);
+    virtual bool Enable(bool enable = true);
 
 #if wxUSE_STATUSBAR
     virtual wxStatusBar* CreateStatusBar(int number = 1,
@@ -56,7 +56,7 @@ public:
 #if wxUSE_TOOLBAR
     // create main toolbar bycalling OnCreateToolBar()
     virtual wxToolBar* CreateToolBar(long style = -1,
-                                     wxWindowID id = -1,
+                                     wxWindowID id = wxID_ANY,
                                      const wxString& name = wxToolBarNameStr);
     virtual void PositionToolBar();
 #endif // wxUSE_TOOLBAR

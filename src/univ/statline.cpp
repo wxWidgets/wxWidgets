@@ -56,13 +56,13 @@ bool wxStaticLine::Create(wxWindow *parent,
                           const wxString &name)
 {
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     wxSize sizeReal = AdjustSize(size);
     if ( sizeReal != size )
         SetSize(sizeReal);
 
-    return TRUE;
+    return true;
 }
 
 void wxStaticLine::DoDraw(wxControlRenderer *renderer)

@@ -77,7 +77,7 @@ public:
     // called before showing the control to set the initial selection - notice
     // that the text passed to this method might not correspond to any valid
     // item (if the user edited it directly), in which case the method should
-    // just return FALSE but not emit any errors
+    // just return false but not emit any errors
     virtual bool SetSelection(const wxString& value) = 0;
 
     // called immediately after the control is shown
@@ -137,7 +137,7 @@ public:
     void ShowPopup();
     void HidePopup();
 
-    // return TRUE if the popup is currently shown
+    // return true if the popup is currently shown
     bool IsPopupShown() const { return m_isPopupShown; }
 
     // get the popup window containing the popup control
@@ -159,8 +159,8 @@ public:
     virtual void OnDismiss();
 
     // forward these functions to all subcontrols
-    virtual bool Enable(bool enable = TRUE);
-    virtual bool Show(bool show = TRUE);
+    virtual bool Enable(bool enable = true);
+    virtual bool Show(bool show = true);
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );

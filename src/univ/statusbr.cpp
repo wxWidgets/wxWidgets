@@ -68,7 +68,7 @@ bool wxStatusBarUniv::Create(wxWindow *parent,
                            wxDefaultPosition, wxDefaultSize,
                            style, name) )
     {
-        return FALSE;
+        return false;
     }
 
     SetFieldsCount(1);
@@ -77,7 +77,7 @@ bool wxStatusBarUniv::Create(wxWindow *parent,
 
     SetSize(DoGetBestSize());
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -254,7 +254,7 @@ void wxStatusBarUniv::OnSize(wxSizeEvent& event)
 
 bool wxStatusBarUniv::GetFieldRect(int n, wxRect& rect) const
 {
-    wxCHECK_MSG( n >= 0 && n < m_nFields, FALSE,
+    wxCHECK_MSG( n >= 0 && n < m_nFields, false,
                  _T("invalid field index in GetFieldRect()") );
 
     // this is a fix for a bug exhibited by the statbar sample: if
@@ -265,7 +265,7 @@ bool wxStatusBarUniv::GetFieldRect(int n, wxRect& rect) const
 
     rect = DoGetFieldRect(n);
 
-    return TRUE;
+    return true;
 }
 
 wxRect wxStatusBarUniv::DoGetFieldRect(int n) const

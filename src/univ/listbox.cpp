@@ -68,7 +68,7 @@ void wxListBox::Init()
     // no items hence no current item
     m_current = -1;
     m_selAnchor = -1;
-    m_currentChanged = FALSE;
+    m_currentChanged = false;
 
     // no need to update anything initially
     m_updateCount = 0;
@@ -77,7 +77,7 @@ void wxListBox::Init()
     m_updateScrollbarX =
     m_showScrollbarX =
     m_updateScrollbarY =
-    m_showScrollbarY = FALSE;
+    m_showScrollbarY = false;
 }
 
 wxListBox::wxListBox(wxWindow *parent,
@@ -137,7 +137,7 @@ bool wxListBox::Create(wxWindow *parent,
 
     if ( !wxControl::Create(parent, id, pos, size, style, 
                             validator, name) )
-        return FALSE;
+        return false;
 
     SetWindow(this);
 
@@ -152,7 +152,7 @@ bool wxListBox::Create(wxWindow *parent,
 
     CreateInputHandler(wxINP_HANDLER_LISTBOX);
 
-    return TRUE;
+    return true;
 }
 
 wxListBox::~wxListBox()
@@ -188,7 +188,7 @@ int wxListBox::DoAppend(const wxString& item)
 
     m_itemsClientData.Insert(NULL, index);
 
-    m_updateScrollbarY = TRUE;
+    m_updateScrollbarY = true;
 
     if ( HasHorzScrollbar() )
     {
@@ -199,7 +199,7 @@ int wxListBox::DoAppend(const wxString& item)
         {
             m_maxWidth = width;
             m_maxWidthItem = index;
-            m_updateScrollbarX = TRUE;
+            m_updateScrollbarX = true;
         }
     }
 
@@ -222,7 +222,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     }
 
     // the number of items has changed so we might have to show the scrollbar
-    m_updateScrollbarY = TRUE;
+    m_updateScrollbarY = true;
 
     // the max width also might have changed - just recalculate it instead of
     // keeping track of it here, this is probably more efficient for a typical
@@ -261,7 +261,7 @@ void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
         m_itemsClientData.Insert(clientData ? clientData[n] : NULL, index);
     }
 
-    m_updateScrollbarY = TRUE;
+    m_updateScrollbarY = true;
 
     RefreshAll();
 }
@@ -281,7 +281,7 @@ void wxListBox::SetString(int n, const wxString& s)
         {
             m_maxWidth = width;
             m_maxWidthItem = n;
-            m_updateScrollbarX = TRUE;
+            m_updateScrollbarX = true;
         }
         // or also decreased if the old string was the longest one
         else if ( n == m_maxWidthItem )
@@ -324,7 +324,7 @@ void wxListBox::Clear()
 {
     DoClear();
 
-    m_updateScrollbarY = TRUE;
+    m_updateScrollbarY = true;
 
     RefreshHorzScrollbar();
 
@@ -385,7 +385,7 @@ void wxListBox::Delete(int n)
     }
 
     // the number of items has changed, hence the scrollbar may disappear
-    m_updateScrollbarY = TRUE;
+    m_updateScrollbarY = true;
 
     // finally, if the longest item was deleted the scrollbar may disappear
     if ( n == m_maxWidthItem )
@@ -572,7 +572,7 @@ void wxListBox::RefreshAll()
 void wxListBox::RefreshHorzScrollbar()
 {
     m_maxWidth = 0; // recalculate it
-    m_updateScrollbarX = TRUE;
+    m_updateScrollbarX = true;
 }
 
 void wxListBox::UpdateScrollbars()
@@ -596,7 +596,7 @@ void wxListBox::UpdateScrollbars()
     else // never show it
     {
         charWidth = maxWidth = 0;
-        showScrollbarX = FALSE;
+        showScrollbarX = false;
     }
 
     // what should be the scrollbar range now?
@@ -656,7 +656,7 @@ void wxListBox::UpdateItems()
                    m_updateFrom, m_updateFrom + m_updateCount - 1,
                    rect.GetTop(), rect.GetBottom());
 
-        Refresh(TRUE, &rect);
+        Refresh(true, &rect);
     }
 }
 
@@ -667,14 +667,14 @@ void wxListBox::OnInternalIdle()
         UpdateScrollbars();
 
         m_updateScrollbarX =
-        m_updateScrollbarY = FALSE;
+        m_updateScrollbarY = false;
     }
 
     if ( m_currentChanged )
     {
         DoEnsureVisible(m_current);
 
-        m_currentChanged = FALSE;
+        m_currentChanged = false;
     }
 
     if ( m_updateCount )
@@ -741,13 +741,13 @@ void wxListBox::DoDrawRange(wxControlRenderer *renderer,
 bool wxListBox::SetFont(const wxFont& font)
 {
     if ( !wxControl::SetFont(font) )
-        return FALSE;
+        return false;
 
     CalcItemsPerPage();
 
     RefreshAll();
 
-    return TRUE;
+    return true;
 }
 
 void wxListBox::CalcItemsPerPage()
@@ -804,7 +804,7 @@ void wxListBox::OnSize(wxSizeEvent& event)
 
     // the scrollbars might [dis]appear
     m_updateScrollbarX =
-    m_updateScrollbarY = TRUE;
+    m_updateScrollbarY = true;
 
     event.Skip();
 }
@@ -909,7 +909,7 @@ void wxListBox::SetCurrentItem(int n)
 
         if ( m_current != -1 )
         {
-            m_currentChanged = TRUE;
+            m_currentChanged = true;
 
             RefreshItem(m_current);
         }
@@ -923,7 +923,7 @@ bool wxListBox::FindItem(const wxString& prefix, bool strictlyAfter)
     if ( !count )
     {
         // empty listbox, we can't find anything in it
-        return FALSE;
+        return false;
     }
 
     // start either from the current item or from the next one if strictlyAfter
@@ -964,12 +964,12 @@ bool wxListBox::FindItem(const wxString& prefix, bool strictlyAfter)
                     AnchorSelection(item);
             }
 
-            return TRUE;
+            return true;
         }
     }
 
     // nothing found
-    return FALSE;
+    return false;
 }
 
 void wxListBox::EnsureVisible(int n)
@@ -979,7 +979,7 @@ void wxListBox::EnsureVisible(int n)
         UpdateScrollbars();
 
         m_updateScrollbarX =
-        m_updateScrollbarY = FALSE;
+        m_updateScrollbarY = false;
     }
 
     DoEnsureVisible(n);
@@ -1193,7 +1193,7 @@ bool wxListBox::PerformAction(const wxControlAction& action,
     else
         return wxControl::PerformAction(action, numArg, strArg);
 
-    return TRUE;
+    return true;
 }
 
 // ============================================================================
@@ -1207,7 +1207,7 @@ wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler,
     m_btnCapture = 0;
     m_toggleOnPressAlways = toggleOnPressAlways;
     m_actionMouse = wxACTION_NONE;
-    m_trackMouseOutside = TRUE;
+    m_trackMouseOutside = true;
 }
 
 int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
@@ -1315,7 +1315,7 @@ wxStdListboxInputHandler::SetupCapture(wxListBox *lbox,
     }
 
     // by default we always do track it
-    m_trackMouseOutside = TRUE;
+    m_trackMouseOutside = true;
 
     return action;
 }
@@ -1327,7 +1327,7 @@ bool wxStdListboxInputHandler::HandleKey(wxInputConsumer *consumer,
     // we're only interested in the key press events
     if ( pressed && !event.AltDown() )
     {
-        bool isMoveCmd = TRUE;
+        bool isMoveCmd = true;
         int style = consumer->GetInputWindow()->GetWindowStyle();
 
         wxControlAction action;
@@ -1370,13 +1370,13 @@ bool wxStdListboxInputHandler::HandleKey(wxInputConsumer *consumer,
                 if ( style & wxLB_MULTIPLE )
                 {
                     action = wxACTION_LISTBOX_TOGGLE;
-                    isMoveCmd = FALSE;
+                    isMoveCmd = false;
                 }
                 break;
 
             case WXK_RETURN:
                 action = wxACTION_LISTBOX_ACTIVATE;
-                isMoveCmd = FALSE;
+                isMoveCmd = false;
                 break;
 
             default:
@@ -1387,7 +1387,7 @@ bool wxStdListboxInputHandler::HandleKey(wxInputConsumer *consumer,
                 }
         }
 
-        if ( !!action )
+        if ( !action.IsEmpty() )
         {
             consumer->PerformAction(action, -1, strArg);
 
@@ -1412,7 +1412,7 @@ bool wxStdListboxInputHandler::HandleKey(wxInputConsumer *consumer,
                 //else: nothing to do for multiple selection listboxes
             }
 
-            return TRUE;
+            return true;
         }
     }
 
@@ -1454,11 +1454,11 @@ bool wxStdListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
         action = wxACTION_LISTBOX_ACTIVATE;
     }
 
-    if ( !!action )
+    if ( !action.IsEmpty() )
     {
         lbox->PerformAction(action, item);
 
-        return TRUE;
+        return true;
     }
 
     return wxStdInputHandler::HandleMouse(consumer, event);
@@ -1478,7 +1478,7 @@ bool wxStdListboxInputHandler::HandleMouseMove(wxInputConsumer *consumer,
             // when we do it ourselves): in this case we only react to
             // the mouse messages when they happen inside the listbox
             if ( lbox->HitTest(event.GetPosition()) != wxHT_WINDOW_INSIDE )
-                return FALSE;
+                return false;
         }
 
         int item = HitTest(lbox, event);
@@ -1489,7 +1489,7 @@ bool wxStdListboxInputHandler::HandleMouseMove(wxInputConsumer *consumer,
             // events
             SetupCapture(lbox, event, item);
 
-            m_trackMouseOutside = FALSE;
+            m_trackMouseOutside = false;
         }
 
         if ( IsValidIndex(lbox, item) )

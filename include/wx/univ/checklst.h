@@ -75,7 +75,7 @@ public:
 
     // implement check list box methods
     virtual bool IsChecked(size_t item) const;
-    virtual void Check(size_t item, bool check = TRUE);
+    virtual void Check(size_t item, bool check = true);
 
     // and input handling
     virtual bool PerformAction(const wxControlAction& action,

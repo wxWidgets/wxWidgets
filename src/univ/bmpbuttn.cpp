@@ -66,11 +66,11 @@ bool wxBitmapButton::Create(wxWindow *parent,
     // typically too big for them
     if ( !wxButton::Create(parent, id, bitmap, _T(""),
                            pos, size, style | wxBU_EXACTFIT, validator, name) )
-        return FALSE;
+        return false;
 
     m_bmpNormal = bitmap;
 
-    return TRUE;
+    return true;
 }
 
 void wxBitmapButton::OnSetBitmap()
@@ -103,21 +103,21 @@ bool wxBitmapButton::ChangeBitmap(const wxBitmap& bmp)
     {
         m_bitmap = bitmap;
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxBitmapButton::Enable(bool enable)
 {
     if ( !wxButton::Enable(enable) )
-        return FALSE;
+        return false;
 
     if ( !enable && ChangeBitmap(m_bmpDisabled) )
         Refresh();
 
-    return TRUE;
+    return true;
 }
 
 bool wxBitmapButton::SetCurrent(bool doit)

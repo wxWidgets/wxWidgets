@@ -156,7 +156,7 @@ bool wxScrollThumb::HandleMouse(const wxMouseEvent& event) const
     if ( btn == -1 )
     {
         // no...
-        return FALSE;
+        return false;
     }
 
     // when the mouse is pressed on any scrollbar element, we capture it
@@ -166,7 +166,7 @@ bool wxScrollThumb::HandleMouse(const wxMouseEvent& event) const
         if ( HasCapture() )
         {
             // mouse already captured, nothing to do
-            return FALSE;
+            return false;
         }
 
         // determine which part of the window the user clicked in
@@ -175,7 +175,7 @@ bool wxScrollThumb::HandleMouse(const wxMouseEvent& event) const
         if ( shaftPart == Shaft_None )
         {
             // mouse pressed over something else
-            return FALSE;
+            return false;
         }
 
         // capture the mouse
@@ -219,15 +219,15 @@ bool wxScrollThumb::HandleMouse(const wxMouseEvent& event) const
         delete m_captureData;
         wxConstCast(this, wxScrollThumb)->m_captureData = NULL;
 
-        m_control->SetShaftPartState(shaftPart, wxCONTROL_PRESSED, FALSE);
+        m_control->SetShaftPartState(shaftPart, wxCONTROL_PRESSED, false);
     }
     else // another mouse button released
     {
         // we don't process this
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxScrollThumb::HandleMouseMove(const wxMouseEvent& event) const
@@ -242,7 +242,7 @@ bool wxScrollThumb::HandleMouseMove(const wxMouseEvent& event) const
         }
 
         // we process all mouse events while the mouse is captured by us
-        return TRUE;
+        return true;
     }
     else // no capture
     {
@@ -260,9 +260,9 @@ bool wxScrollThumb::HandleMouseMove(const wxMouseEvent& event) const
         if ( shaftPart != m_shaftPart )
         {
             // update the highlighted state
-            m_control->SetShaftPartState(m_shaftPart, wxCONTROL_CURRENT, FALSE);
+            m_control->SetShaftPartState(m_shaftPart, wxCONTROL_CURRENT, false);
             wxConstCast(this, wxScrollThumb)->m_shaftPart = shaftPart;
-            m_control->SetShaftPartState(m_shaftPart, wxCONTROL_CURRENT, TRUE);
+            m_control->SetShaftPartState(m_shaftPart, wxCONTROL_CURRENT, true);
         }
 
         // if the event happened on the shaft, it was for us and we processed

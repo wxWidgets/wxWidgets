@@ -87,19 +87,19 @@ public:
     virtual bool InsertPage(size_t nPage,
                             wxNotebookPage *pPage,
                             const wxString& strText,
-                            bool bSelect = FALSE,
+                            bool bSelect = false,
                             int imageId = -1);
 
     // style tests
     // -----------
 
-    // return TRUE if all tabs have the same width
+    // return true if all tabs have the same width
     bool FixedSizeTabs() const { return HasFlag(wxNB_FIXEDWIDTH); }
 
     // return wxTOP/wxBOTTOM/wxRIGHT/wxLEFT
     wxDirection GetTabOrientation() const;
 
-    // return TRUE if the notebook has tabs at the sidesand not at the top (or
+    // return true if the notebook has tabs at the sidesand not at the top (or
     // bottom) as usual
     bool IsVertical() const;
 
@@ -155,7 +155,7 @@ protected:
     void PositionSpinBtn();
 
     // refresh the given tab only
-    void RefreshTab(int page, bool forceSelected = FALSE);
+    void RefreshTab(int page, bool forceSelected = false);
 
     // refresh all tabs
     void RefreshAllTabs();
@@ -180,7 +180,7 @@ protected:
     wxCoord GetTabWidth(int page) const
         { return FixedSizeTabs() ? m_widthMax : m_widths[page]; }
 
-    // return TRUE if the tab has an associated image
+    // return true if the tab has an associated image
     bool HasImage(int page) const
         { return m_imageList && m_images[page] != -1; }
 

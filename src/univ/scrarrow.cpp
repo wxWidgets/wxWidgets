@@ -181,10 +181,10 @@ bool wxScrollArrows::HandleMouseMove(const wxMouseEvent& event) const
             if ( arrow == m_captureData->m_arrowPressed )
             {
                 // resume now
-                m_control->SetArrowFlag(arrow, wxCONTROL_PRESSED, TRUE);
+                m_control->SetArrowFlag(arrow, wxCONTROL_PRESSED, true);
                 timer->Start();
 
-                return TRUE;
+                return true;
             }
         }
         else // if ( 1 ) FIXME: m_control->ShouldPauseScrolling() )
@@ -194,14 +194,14 @@ bool wxScrollArrows::HandleMouseMove(const wxMouseEvent& event) const
             {
                 // stop as the mouse left the arrow
                 m_control->SetArrowFlag(m_captureData->m_arrowPressed,
-                                        wxCONTROL_PRESSED, FALSE);
+                                        wxCONTROL_PRESSED, false);
                 timer->Stop();
 
-                return TRUE;
+                return true;
             }
         }
 
-        return FALSE;
+        return false;
     }
 
     // reset the wxCONTROL_CURRENT flag for the arrows which don't have the
@@ -209,7 +209,7 @@ bool wxScrollArrows::HandleMouseMove(const wxMouseEvent& event) const
     UpdateCurrentFlag(Arrow_First, arrow);
     UpdateCurrentFlag(Arrow_Second, arrow);
 
-    // return TRUE if it was really an event for an arrow
+    // return true if it was really an event for an arrow
     return !event.Leaving() && arrow != Arrow_None;
 }
 
@@ -219,7 +219,7 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
     if ( btn == -1 )
     {
         // we only care about button press/release events
-        return FALSE;
+        return false;
     }
 
     if ( event.ButtonDown() || event.ButtonDClick() )
@@ -230,13 +230,13 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
             if ( arrow == Arrow_None )
             {
                 // mouse pressed over something else
-                return FALSE;
+                return false;
             }
 
             if ( m_control->GetArrowState(arrow) & wxCONTROL_DISABLED )
             {
                 // don't allow to press disabled arrows
-                return TRUE;
+                return true;
             }
 
             wxConstCast(this, wxScrollArrows)->m_captureData =
@@ -257,7 +257,7 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
             {
                 m_captureData->m_timerScroll = tmpTimerScroll;
 
-                m_control->SetArrowFlag(arrow, wxCONTROL_PRESSED, TRUE);
+                m_control->SetArrowFlag(arrow, wxCONTROL_PRESSED, true);
             }
             else
             {
@@ -274,14 +274,14 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
         delete m_captureData;
         wxConstCast(this, wxScrollArrows)->m_captureData = NULL;
 
-        m_control->SetArrowFlag(arrow, wxCONTROL_PRESSED, FALSE);
+        m_control->SetArrowFlag(arrow, wxCONTROL_PRESSED, false);
     }
     else
     {
         // we don't process this
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 

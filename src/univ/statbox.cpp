@@ -56,11 +56,11 @@ bool wxStaticBox::Create(wxWindow *parent,
                          const wxString &name)
 {
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     SetLabel(label);
 
-    return TRUE;
+    return true;
 }
 
 void wxStaticBox::DoDraw(wxControlRenderer *renderer)

@@ -35,7 +35,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0)
     {
-        Create(parent, -1, label, pos, size, style);
+        Create(parent, wxID_ANY, label, pos, size, style);
     }
 
     wxStaticBitmap(wxWindow *parent,
@@ -63,7 +63,7 @@ public:
 
     wxIcon GetIcon() const;
 
-    virtual bool HasTransparentBackground() { return TRUE; }
+    virtual bool HasTransparentBackground() { return true; }
     
 private:
     virtual void DoDraw(wxControlRenderer *renderer);

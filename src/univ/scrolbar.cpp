@@ -133,7 +133,7 @@ void wxScrollBar::Init()
         m_elementsState[n] = 0;
     }
 
-    m_dirty = FALSE;
+    m_dirty = false;
 }
 
 bool wxScrollBar::Create(wxWindow *parent,
@@ -148,7 +148,7 @@ bool wxScrollBar::Create(wxWindow *parent,
     style &= ~wxBORDER_MASK;
 
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
-        return FALSE;
+        return false;
 
     SetBestSize(size);
 
@@ -157,7 +157,7 @@ bool wxScrollBar::Create(wxWindow *parent,
 
     CreateInputHandler(wxINP_HANDLER_SCROLLBAR);
 
-    return TRUE;
+    return true;
 }
 
 wxScrollBar::~wxScrollBar()
@@ -173,7 +173,7 @@ bool wxScrollBar::IsStandalone() const
     wxWindow *parent = GetParent();
     if ( !parent )
     {
-        return TRUE;
+        return true;
     }
 
     return (parent->GetScrollbar(wxHORIZONTAL) != this) &&
@@ -222,7 +222,7 @@ void wxScrollBar::DoSetThumb(int pos)
     m_elementsState[Element_Thumb] |= wxCONTROL_DIRTY;
     m_elementsState[m_thumbPos > m_thumbPosOld
                         ? Element_Bar_1 : Element_Bar_2] |= wxCONTROL_DIRTY;
-    m_dirty = TRUE;
+    m_dirty = true;
 }
 
 int wxScrollBar::GetThumbPosition() const
@@ -376,7 +376,7 @@ void wxScrollBar::UpdateThumb()
                     }
 
 #ifdef WXDEBUG_SCROLLBAR
-        static bool s_refreshDebug = FALSE;
+        static bool s_refreshDebug = false;
         if ( s_refreshDebug )
         {
             wxClientDC dc(this);
@@ -392,14 +392,14 @@ void wxScrollBar::UpdateThumb()
         }
 #endif // WXDEBUG_SCROLLBAR
 
-                    Refresh(FALSE, &rect);
+                    Refresh(false, &rect);
                 }
 
                 m_elementsState[n] &= ~wxCONTROL_DIRTY;
             }
         }
 
-        m_dirty = FALSE;
+        m_dirty = false;
     }
 }
 
@@ -408,7 +408,7 @@ void wxScrollBar::DoDraw(wxControlRenderer *renderer)
     renderer->DrawScrollbar(this, m_thumbPosOld);
 
     // clear all dirty flags
-    m_dirty = FALSE;
+    m_dirty = false;
     m_thumbPosOld = -1;
 }
 
@@ -456,7 +456,7 @@ void wxScrollBar::SetState(Element which, int flags)
     {
         m_elementsState[which] = flags | wxCONTROL_DIRTY;
 
-        m_dirty = TRUE;
+        m_dirty = true;
     }
 }
 
@@ -481,7 +481,7 @@ bool wxScrollBar::PerformAction(const wxControlAction& action,
 {
     int thumbOld = m_thumbPos;
 
-    bool notify = FALSE; // send an event about the change?
+    bool notify = false; // send an event about the change?
 
     wxEventType scrollType;
 
@@ -536,7 +536,7 @@ bool wxScrollBar::PerformAction(const wxControlAction& action,
     else if ( action == wxACTION_SCROLL_THUMB_RELEASE )
     {
         // always notify about this
-        notify = TRUE;
+        notify = true;
         scrollType = wxEVT_SCROLLWIN_THUMBRELEASE;
     }
     else
@@ -562,7 +562,7 @@ bool wxScrollBar::PerformAction(const wxControlAction& action,
         GetParent()->GetEventHandler()->ProcessEvent(event);
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxScrollBar::ScrollToStart()
@@ -578,13 +578,13 @@ void wxScrollBar::ScrollToEnd()
 bool wxScrollBar::ScrollLines(int nLines)
 {
     DoSetThumb(m_thumbPos + nLines);
-    return TRUE;
+    return true;
 }
 
 bool wxScrollBar::ScrollPages(int nPages)
 {
     DoSetThumb(m_thumbPos + nPages*m_pageSize);
-    return TRUE;
+    return true;
 }
 
 // ============================================================================
@@ -654,12 +654,12 @@ bool wxStdScrollBarInputHandler::OnScrollTimer(wxScrollBar *scrollbar,
     int oldThumbPos = scrollbar->GetThumbPosition();
     scrollbar->PerformAction(action);
     if ( scrollbar->GetThumbPosition() != oldThumbPos )
-        return TRUE;
+        return true;
 
     // we scrolled till the end
     m_timerScroll->Stop();
 
-    return FALSE;
+    return false;
 }
 
 void wxStdScrollBarInputHandler::StopScrolling(wxScrollBar *control)
@@ -680,7 +680,7 @@ void wxStdScrollBarInputHandler::StopScrolling(wxScrollBar *control)
     }
 
     // unpress the arrow and highlight the current element
-    Press(control, FALSE);
+    Press(control, false);
 }
 
 wxCoord
@@ -721,11 +721,11 @@ bool wxStdScrollBarInputHandler::HandleKey(wxInputConsumer *consumer,
             case WXK_NEXT:      action = wxACTION_SCROLL_PAGE_DOWN; break;
         }
 
-        if ( !!action )
+        if ( !action.IsEmpty() )
         {
             consumer->PerformAction(action);
 
-            return TRUE;
+            return true;
         }
     }
 
@@ -758,7 +758,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxInputConsumer *consumer,
                 m_winCapture->CaptureMouse();
 
                 // generate the command
-                bool hasAction = TRUE;
+                bool hasAction = true;
                 wxControlAction action;
                 switch ( ht )
                 {
@@ -788,18 +788,18 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxInputConsumer *consumer,
                         // fall through: there is no immediate action
 
                     default:
-                        hasAction = FALSE;
+                        hasAction = false;
                 }
 
                 // remove highlighting
-                Highlight(scrollbar, FALSE);
+                Highlight(scrollbar, false);
                 m_htLast = ht;
 
                 // and press the arrow or highlight thumb now instead
                 if ( m_htLast == wxHT_SCROLLBAR_THUMB )
-                    Highlight(scrollbar, TRUE);
+                    Highlight(scrollbar, true);
                 else
-                    Press(scrollbar, TRUE);
+                    Press(scrollbar, true);
 
                 // start dragging
                 if ( hasAction )
@@ -827,7 +827,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxInputConsumer *consumer,
                 }
 
                 m_htLast = ht;
-                Highlight(scrollbar, TRUE);
+                Highlight(scrollbar, true);
             }
             else
             {
@@ -855,11 +855,11 @@ bool wxStdScrollBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
             // between the mouse position and the top/left of the thumb
             HandleThumbMove(scrollbar, event);
 
-            return TRUE;
+            return true;
         }
 
         // no other changes are possible while the mouse is captured
-        return FALSE;
+        return false;
     }
 
     bool isArrow = scrollbar->GetArrows().HandleMouseMove(event);
@@ -874,35 +874,35 @@ bool wxStdScrollBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
         if ( ht == m_htLast )
         {
             // nothing changed
-            return FALSE;
+            return false;
         }
 
 #ifdef DEBUG_MOUSE
         wxLogDebug("Scrollbar::OnMouseMove: ht = %d", ht);
 #endif // DEBUG_MOUSE
 
-        Highlight(scrollbar, FALSE);
+        Highlight(scrollbar, false);
         m_htLast = ht;
 
         if ( !isArrow )
-            Highlight(scrollbar, TRUE);
+            Highlight(scrollbar, true);
         //else: already done by wxScrollArrows::HandleMouseMove
     }
     else if ( event.Leaving() )
     {
         if ( !isArrow )
-            Highlight(scrollbar, FALSE);
+            Highlight(scrollbar, false);
 
         m_htLast = wxHT_NOWHERE;
     }
     else // event.Entering()
     {
         // we don't process this event
-        return FALSE;
+        return false;
     }
 
     // we did something
-    return TRUE;
+    return true;
 }
 
 #endif // wxUSE_SCROLLBAR
@@ -913,7 +913,7 @@ bool wxStdScrollBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 
 wxScrollTimer::wxScrollTimer()
 {
-    m_skipNext = FALSE;
+    m_skipNext = false;
 }
 
 void wxScrollTimer::StartAutoScroll()
@@ -928,7 +928,7 @@ void wxScrollTimer::StartAutoScroll()
     // there is an initial delay before the scrollbar starts scrolling -
     // implement it by ignoring the first timer expiration and only start
     // scrolling from the second one
-    m_skipNext = TRUE;
+    m_skipNext = true;
     Start(200); // FIXME: hardcoded delay
 }
 
@@ -940,7 +940,7 @@ void wxScrollTimer::Notify()
         Stop();
         Start(50); // FIXME: hardcoded delay
 
-        m_skipNext = FALSE;
+        m_skipNext = false;
     }
     else
     {

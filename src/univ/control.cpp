@@ -73,10 +73,10 @@ bool wxControl::Create(wxWindow *parent,
     if ( !wxControlBase::Create(parent, id, pos, size, style, validator, name) )
     {
         // underlying window creation failed?
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------

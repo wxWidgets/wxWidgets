@@ -143,7 +143,7 @@ public:
     virtual int GetMinWidth() const;
     virtual int GetMinHeight() const;
 
-    virtual bool ProvidesBackground() const { return TRUE; }
+    virtual bool ProvidesBackground() const { return true; }
     
 protected:
     // handle titlebar button click event
@@ -161,9 +161,9 @@ protected:
     void OnNcPaint(wxNcPaintEvent& event);
     void OnSystemMenu(wxCommandEvent& event);
 
-    // TRUE if wxTLW should render decorations (aka titlebar) itself
+    // true if wxTLW should render decorations (aka titlebar) itself
     static int ms_drawDecorations;
-    // TRUE if wxTLW can be iconized
+    // true if wxTLW can be iconized
     static int ms_canIconize;
     // true for currently active frame
     bool m_isActive:1;

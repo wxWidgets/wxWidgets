@@ -114,7 +114,7 @@ public:
 
     virtual void SetShaftPartState(wxScrollThumb::Shaft shaftPart,
                                    int flag,
-                                   bool set = TRUE);
+                                   bool set = true);
 
     virtual void OnThumbDragStart(int pos);
     virtual void OnThumbDrag(int pos);
@@ -149,7 +149,7 @@ protected:
     // normalize the value to fit in the range
     int NormalizeValue(int value) const;
 
-    // change the value by the given increment, return TRUE if really changed
+    // change the value by the given increment, return true if really changed
     bool ChangeValueBy(int inc);
 
     // change the value to the given one

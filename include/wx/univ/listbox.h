@@ -110,7 +110,7 @@ public:
 
     virtual bool IsSelected(int n) const
         { return m_selections.Index(n) != wxNOT_FOUND; }
-    virtual void SetSelection(int n, bool select = TRUE);
+    virtual void SetSelection(int n, bool select = true);
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
 
@@ -147,10 +147,10 @@ public:
     void Activate(int item = -1);
 
     // select or unselect the specified or current (if -1) item
-    void DoSelect(int item = -1, bool sel = TRUE);
+    void DoSelect(int item = -1, bool sel = true);
 
     // more readable wrapper
-    void DoUnselect(int item) { DoSelect(item, FALSE); }
+    void DoUnselect(int item) { DoSelect(item, false); }
 
     // select an item and send a notification about it
     void SelectAndNotify(int item);
@@ -159,10 +159,10 @@ public:
     virtual void EnsureVisible(int n);
 
     // find the first item [strictly] after the current one which starts with
-    // the given string and make it the current one, return TRUE if the current
+    // the given string and make it the current one, return true if the current
     // item changed
-    bool FindItem(const wxString& prefix, bool strictlyAfter = FALSE);
-    bool FindNextItem(const wxString& prefix) { return FindItem(prefix, TRUE); }
+    bool FindItem(const wxString& prefix, bool strictlyAfter = false);
+    bool FindNextItem(const wxString& prefix) { return FindItem(prefix, true); }
 
     // extend the selection to span the range from the anchor (see below) to
     // the specified or current item
@@ -306,11 +306,11 @@ class WXDLLEXPORT wxStdListboxInputHandler : public wxStdInputHandler
 {
 public:
     // if pressing the mouse button in a multiselection listbox should toggle
-    // the item under mouse immediately, then specify TRUE as the second
+    // the item under mouse immediately, then specify true as the second
     // parameter (this is the standard behaviour, under GTK the item is toggled
     // only when the mouse is released in the multi selection listbox)
     wxStdListboxInputHandler(wxInputHandler *inphand,
-                             bool toggleOnPressAlways = TRUE);
+                             bool toggleOnPressAlways = true);
 
     // base class methods
     virtual bool HandleKey(wxInputConsumer *consumer,
@@ -328,7 +328,7 @@ protected:
 
     // parts of HitTest(): first finds the pseudo (because not in range) index
     // of the item and the second one adjusts it if necessary - that is if the
-    // third one returns FALSE
+    // third one returns false
     int HitTestUnsafe(const wxListBox *listbox, const wxMouseEvent& event);
     int FixItemIndex(const wxListBox *listbox, int item);
     bool IsValidIndex(const wxListBox *listbox, int item);

@@ -122,7 +122,7 @@ protected:
     void DrawShadedRect(wxDC& dc, wxRect *rect,
                         const wxPen& pen1, const wxPen& pen2);
 
-    void DrawArrowBorder(wxDC& dc, wxRect *rect, bool isPressed = FALSE);
+    void DrawArrowBorder(wxDC& dc, wxRect *rect, bool isPressed = false);
 
     void DrawArrow(wxDC& dc, const wxRect& rect,
                    wxArrowDirection arrowDir, wxArrowStyle arrowStyle);
@@ -575,7 +575,7 @@ void wxMetalRenderer::DrawArrow(wxDC& dc,
         x--;
 
     // draw it
-    dc.DrawBitmap(bmp, x, y, TRUE /* use mask */);
+    dc.DrawBitmap(bmp, x, y, true /* use mask */);
 }
 
 // ----------------------------------------------------------------------------

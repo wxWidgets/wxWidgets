@@ -176,8 +176,8 @@ public:
     // -----------------------
 
     // caret stuff
-    virtual void ShowCaret(bool show = TRUE);
-    void HideCaret() { ShowCaret(FALSE); }
+    virtual void ShowCaret(bool show = true);
+    void HideCaret() { ShowCaret(false); }
     void CreateCaret(); // for the current font size
 
     // helpers for cursor movement
@@ -231,7 +231,7 @@ public:
 
     // override these methods to handle the caret
     virtual bool SetFont(const wxFont &font);
-    virtual bool Enable(bool enable = TRUE);
+    virtual bool Enable(bool enable = true);
 
     // more readable flag testing methods
     bool IsPassword() const { return (GetWindowStyle() & wxTE_PASSWORD) != 0; }
@@ -295,7 +295,7 @@ protected:
     wxRect GetRealTextArea() const;
 
     // refresh the text in the given (in logical coords) rect
-    void RefreshTextRect(const wxRect& rect, bool textOnly = TRUE);
+    void RefreshTextRect(const wxRect& rect, bool textOnly = true);
 
     // refresh the line wrap marks for the given range of lines (inclusive)
     void RefreshLineWrapMarks(wxTextCoord rowFirst, wxTextCoord rowLast);
@@ -330,7 +330,7 @@ protected:
                                 wxCoord *widthReal = NULL) const;
 
     // get the start and end of the selection for this line: if the line is
-    // outside the selection, both will be -1 and FALSE will be returned
+    // outside the selection, both will be -1 and false will be returned
     bool GetSelectedPartOfLine(wxTextCoord line,
                                wxTextPos *start, wxTextPos *end) const;
 
@@ -377,7 +377,7 @@ protected:
                                      wxTextCoord *colStart,
                                      wxTextCoord *colEnd,
                                      wxTextCoord *colRowStart,
-                                     bool devCoords = TRUE) const;
+                                     bool devCoords = true) const;
 
     // HitTest() version which takes the logical text coordinates and not the
     // device ones
@@ -386,7 +386,7 @@ protected:
                                            wxTextCoord *row) const;
 
     // get the line and the row in this line corresponding to the given row,
-    // return TRUE if ok and FALSE if row is out of range
+    // return true if ok and false if row is out of range
     //
     // NB: this function can only be called for controls which wrap lines
     bool GetLineAndRow(wxTextCoord row,
@@ -456,7 +456,7 @@ private:
     inline const wxArrayString& GetLines() const;
     inline size_t GetLineCount() const;
 
-    // replace a line (returns TRUE if the number of rows in thel ine changed)
+    // replace a line (returns true if the number of rows in thel ine changed)
     bool ReplaceLine(wxTextCoord line, const wxString& text);
 
     // remove a line

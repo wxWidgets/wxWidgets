@@ -30,7 +30,7 @@ public:
     wxStatusBarUniv() { Init(); }
 
     wxStatusBarUniv(wxWindow *parent,
-                    wxWindowID id = -1,
+                    wxWindowID id = wxID_ANY,
                     long style = 0,
                     const wxString& name = wxPanelNameStr)
     {
@@ -40,7 +40,7 @@ public:
     }
 
     bool Create(wxWindow *parent,
-                wxWindowID id = -1,
+                wxWindowID id = wxID_ANY,
                 long style = 0,
                 const wxString& name = wxPanelNameStr);
 

@@ -27,7 +27,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize)
     {
-        Create(parent, -1, label, pos, size, 0, wxStaticTextNameStr);
+        Create(parent, wxID_ANY, label, pos, size, 0, wxStaticTextNameStr);
     }
 
     // full form
@@ -55,9 +55,9 @@ public:
 
     virtual void SetLabel(const wxString& label);
 
-    virtual bool HasTransparentBackground() { return TRUE; }
+    virtual bool HasTransparentBackground() { return true; }
 
-    virtual bool IsFocused() const { return FALSE; }
+    virtual bool IsFocused() const { return false; }
 
 protected:
     // calculate the optimal size for the label

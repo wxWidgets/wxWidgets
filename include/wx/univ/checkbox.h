@@ -22,8 +22,8 @@
 // the actions supported by wxCheckBox
 // ----------------------------------------------------------------------------
 
-#define wxACTION_CHECKBOX_CHECK   _T("check")   // SetValue(TRUE)
-#define wxACTION_CHECKBOX_CLEAR   _T("clear")   // SetValue(FALSE)
+#define wxACTION_CHECKBOX_CHECK   _T("check")   // SetValue(true)
+#define wxACTION_CHECKBOX_CLEAR   _T("clear")   // SetValue(false)
 #define wxACTION_CHECKBOX_TOGGLE  _T("toggle")  // toggle the check state
 
 // additionally it accepts wxACTION_BUTTON_PRESS and RELEASE
@@ -101,7 +101,7 @@ public:
     // overridden base class virtuals
     virtual bool IsPressed() const { return m_isPressed; }
 
-    virtual bool HasTransparentBackground() { return TRUE; }
+    virtual bool HasTransparentBackground() { return true; }
     
 protected:
     virtual bool PerformAction(const wxControlAction& action,
@@ -110,7 +110,7 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxSize DoGetBestClientSize() const;
 
-    virtual bool CanBeHighlighted() const { return TRUE; }
+    virtual bool CanBeHighlighted() const { return true; }
 
     // get the size of the bitmap using either the current one or the default
     // one (query renderer then)

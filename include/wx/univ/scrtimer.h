@@ -32,7 +32,7 @@ public:
 
 protected:
     // to implement in derived classes: perform the scroll action and return
-    // TRUE to continue scrolling or FALSE to stop
+    // true to continue scrolling or false to stop
     virtual bool DoNotify() = 0;
 
     // should we skip the next timer event?

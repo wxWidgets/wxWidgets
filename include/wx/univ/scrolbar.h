@@ -88,7 +88,7 @@ public:
     virtual void SetThumbPosition(int thumbPos);
     virtual void SetScrollbar(int position, int thumbSize,
                               int range, int pageSize,
-                              bool refresh = TRUE);
+                              bool refresh = true);
 
     // wxScrollBar actions
     void ScrollToStart();
@@ -128,7 +128,7 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
-    // forces update of thumb's visual appearence (does nothing if m_dirty=FALSE)
+    // forces update of thumb's visual appearence (does nothing if m_dirty=false)
     void UpdateThumb();
 
     // SetThumbPosition() helper
@@ -192,14 +192,14 @@ public:
 
     // this method is called by wxScrollBarTimer only and may be overridden
     //
-    // return TRUE to continue scrolling, FALSE to stop the timer
+    // return true to continue scrolling, false to stop the timer
     virtual bool OnScrollTimer(wxScrollBar *scrollbar,
                                const wxControlAction& action);
 
 protected:
     // the methods which must be overridden in the derived class
 
-    // return TRUE if the mouse button can be used to activate scrollbar, FALSE
+    // return true if the mouse button can be used to activate scrollbar, false
     // if not (only left mouse button can do it under Windows, any button under
     // GTK+)
     virtual bool IsAllowedButton(int button) = 0;

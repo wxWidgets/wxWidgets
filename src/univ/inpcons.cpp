@@ -66,13 +66,13 @@ void wxInputConsumer::CreateInputHandler(const wxString& inphandler)
 
 void wxInputConsumer::OnKeyDown(wxKeyEvent& event)
 {
-    if ( !m_inputHandler || !m_inputHandler->HandleKey(this, event, TRUE) )
+    if ( !m_inputHandler || !m_inputHandler->HandleKey(this, event, true) )
         event.Skip();
 }
 
 void wxInputConsumer::OnKeyUp(wxKeyEvent& event)
 {
-    if ( !m_inputHandler || !m_inputHandler->HandleKey(this, event, FALSE) )
+    if ( !m_inputHandler || !m_inputHandler->HandleKey(this, event, false) )
         event.Skip();
 }
 
@@ -103,6 +103,6 @@ bool wxInputConsumer::PerformAction(const wxControlAction& WXUNUSED(action),
                                     long WXUNUSED(numArg),
                                     const wxString& WXUNUSED(strArg))
 {
-    return FALSE;
+    return false;
 }
 

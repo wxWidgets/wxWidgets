@@ -61,7 +61,7 @@ int wxTopLevelWindow::ms_canIconize = -1;
 
 void wxTopLevelWindow::Init()
 {
-    m_isActive = FALSE;
+    m_isActive = false;
     m_windowStyle = 0;
     m_pressedButton = 0;
 }
@@ -108,7 +108,7 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
 
     if ( !wxTopLevelWindowNative::Create(parent, id, title, pos,
                                          size, style, name) )
-        return FALSE;
+        return false;
 
     if ( ms_drawDecorations )
     {
@@ -116,12 +116,12 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
         m_exStyle = exstyleOrig;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxTopLevelWindow::ShowFullScreen(bool show, long style)
 {
-    if ( show == IsFullScreen() ) return FALSE;
+    if ( show == IsFullScreen() ) return false;
 
     if ( ms_drawDecorations )
     {
@@ -305,7 +305,7 @@ void wxTopLevelWindow::SetIcons(const wxIconBundle& icons)
         wxSize size = m_renderer->GetFrameIconSize();
         const wxIcon& icon = icons.GetIcon( size );
 
-        if ( !icon.Ok() || size.x == -1  )
+        if ( !icon.Ok() || size.x == wxDefaultCoord  )
             m_titlebarIcon = icon;
         else
         {
@@ -353,16 +353,16 @@ static bool wxGetResizingCursor(long hitTestResult, wxCursor& cursor)
                 cursor = wxCursor(wxCURSOR_SIZENWSE);
                 break;
             default:
-                return FALSE;
+                return false;
                 #if 0
                 // not rachable due to earlier return
                 break;
                 #endif
         }
-        return TRUE;
+        return true;
     }
     
-    return FALSE;
+    return false;
 }
 
 #define wxINTERACTIVE_RESIZE_DIR \
@@ -426,25 +426,25 @@ void wxApplyResize(wxInteractiveMoveData& data, const wxPoint& diff)
         data.m_rect.height += diff.y;
     }
     
-    if ( data.m_minSize.x != -1 && data.m_rect.width < data.m_minSize.x )
+    if ( data.m_minSize.x != wxDefaultCoord && data.m_rect.width < data.m_minSize.x )
     {
         if ( data.m_flags & wxINTERACTIVE_RESIZE_W )
             data.m_rect.x -= data.m_minSize.x - data.m_rect.width;
         data.m_rect.width = data.m_minSize.x;
     }
-    if ( data.m_maxSize.x != -1 && data.m_rect.width > data.m_maxSize.x )
+    if ( data.m_maxSize.x != wxDefaultCoord && data.m_rect.width > data.m_maxSize.x )
     {
         if ( data.m_flags & wxINTERACTIVE_RESIZE_W )
             data.m_rect.x -= data.m_minSize.x - data.m_rect.width;
         data.m_rect.width = data.m_maxSize.x;
     }
-    if ( data.m_minSize.y != -1 && data.m_rect.height < data.m_minSize.y )
+    if ( data.m_minSize.y != wxDefaultCoord && data.m_rect.height < data.m_minSize.y )
     {
         if ( data.m_flags & wxINTERACTIVE_RESIZE_N )
             data.m_rect.y -= data.m_minSize.y - data.m_rect.height;
         data.m_rect.height = data.m_minSize.y;
     }
-    if ( data.m_maxSize.y != -1 && data.m_rect.height > data.m_maxSize.y )
+    if ( data.m_maxSize.y != wxDefaultCoord && data.m_rect.height > data.m_maxSize.y )
     {
         if ( data.m_flags & wxINTERACTIVE_RESIZE_N )
             data.m_rect.y -= data.m_minSize.y - data.m_rect.height;
@@ -484,7 +484,7 @@ void wxInteractiveMoveHandler::OnMouseDown(wxMouseEvent& WXUNUSED(event))
 
 void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
 {
-    wxPoint diff(-1,-1);
+    wxPoint diff(wxDefaultCoord,wxDefaultCoord);
     
     switch ( event.GetKeyCode() )
     {
@@ -501,7 +501,7 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
             return;
     }
     
-    if ( diff.x != -1 )
+    if ( diff.x != wxDefaultCoord )
     {
         if ( m_data.m_flags & wxINTERACTIVE_WAIT_FOR_INPUT )
         {
@@ -509,7 +509,7 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
             if ( m_data.m_sizingCursor )
             {
                 wxEndBusyCursor();
-                m_data.m_sizingCursor = FALSE;
+                m_data.m_sizingCursor = false;
             }
 
             if ( m_data.m_flags & wxINTERACTIVE_MOVE )
@@ -520,7 +520,7 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
         }
 
         wxPoint warp;
-        bool changeCur = FALSE;
+        bool changeCur = false;
         
         if ( m_data.m_flags & wxINTERACTIVE_MOVE )
         {
@@ -537,14 +537,14 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
                 {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_N;
                     m_data.m_pos.y = m_data.m_window->GetPosition().y;
-                    changeCur = TRUE;
+                    changeCur = true;
                 }
                 else if ( diff.y > 0 )
                 {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_S;
                     m_data.m_pos.y = m_data.m_window->GetPosition().y +
                                      m_data.m_window->GetSize().y;
-                    changeCur = TRUE;
+                    changeCur = true;
                 }
             }
             if ( !(m_data.m_flags & 
@@ -554,14 +554,14 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
                 {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_W;
                     m_data.m_pos.x = m_data.m_window->GetPosition().x;
-                    changeCur = TRUE;
+                    changeCur = true;
                 }
                 else if ( diff.x > 0 )
                 {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_E;
                     m_data.m_pos.x = m_data.m_window->GetPosition().x +
                                      m_data.m_window->GetSize().x;
-                    changeCur = TRUE;
+                    changeCur = true;
                 }
             }
 
@@ -595,7 +595,7 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
                 if ( m_data.m_sizingCursor )
                     wxEndBusyCursor();
                 wxBeginBusyCursor(&cur);
-                m_data.m_sizingCursor = TRUE;
+                m_data.m_sizingCursor = true;
             }
         }
     }
@@ -627,11 +627,11 @@ void wxTopLevelWindow::InteractiveMove(int flags)
     {
         wxCursor sizingCursor(wxCURSOR_SIZING);
         wxBeginBusyCursor(&sizingCursor);
-        data.m_sizingCursor = TRUE;
+        data.m_sizingCursor = true;
     }
     else
 #endif
-        data.m_sizingCursor = FALSE;
+        data.m_sizingCursor = false;
 
     data.m_window = this;
     data.m_evtLoop = &loop;
@@ -705,21 +705,21 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
             m_isActive = isActive;
             RefreshTitleBar();
         }
-        return TRUE;
+        return true;
     }
 
     else if ( action == wxACTION_TOPLEVEL_BUTTON_PRESS )
     {
         m_pressedButton = numArg;
         RefreshTitleBar();
-        return TRUE;
+        return true;
     }
 
     else if ( action == wxACTION_TOPLEVEL_BUTTON_RELEASE )
     {
         m_pressedButton = 0;
         RefreshTitleBar();
-        return TRUE;
+        return true;
     }
 
     else if ( action == wxACTION_TOPLEVEL_BUTTON_CLICK )
@@ -727,13 +727,13 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
         m_pressedButton = 0;
         RefreshTitleBar();
         ClickTitleBarButton(numArg);
-        return TRUE;
+        return true;
     }
 
     else if ( action == wxACTION_TOPLEVEL_MOVE )
     {
         InteractiveMove(wxINTERACTIVE_MOVE);
-        return TRUE;
+        return true;
     }
 
     else if ( action == wxACTION_TOPLEVEL_RESIZE )
@@ -748,16 +748,16 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
         if ( numArg & wxHT_TOPLEVEL_BORDER_E )
             flags |= wxINTERACTIVE_RESIZE_E;
         InteractiveMove(flags);
-        return TRUE;
+        return true;
     }
 
     else
-        return FALSE;
+        return false;
 }
 
 void wxTopLevelWindow::OnSystemMenu(wxCommandEvent& event)
 {
-    bool ret = TRUE;
+    bool ret = true;
     
     switch (event.GetId())
     {
@@ -785,7 +785,7 @@ void wxTopLevelWindow::OnSystemMenu(wxCommandEvent& event)
             break;
 
         default:
-            ret = FALSE;
+            ret = false;
     }
     
     if ( !ret )
@@ -803,7 +803,7 @@ wxStdFrameInputHandler::wxStdFrameInputHandler(wxInputHandler *inphand)
     m_winCapture = NULL;
     m_winHitTest = 0;
     m_winPressed = 0;
-    m_borderCursorOn = FALSE;
+    m_borderCursorOn = false;
 }
 
 bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
@@ -831,18 +831,18 @@ bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
                 m_winHitTest = hit;
                 m_winPressed = hit;
                 consumer->PerformAction(wxACTION_TOPLEVEL_BUTTON_PRESS, m_winPressed);
-                return TRUE;
+                return true;
             }
             else if ( (hit & wxHT_TOPLEVEL_TITLEBAR) && !w->IsMaximized() )
             {
                 consumer->PerformAction(wxACTION_TOPLEVEL_MOVE);
-                return TRUE;
+                return true;
             }
             else if ( (consumer->GetInputWindow()->GetWindowStyle() & wxRESIZE_BORDER)
                       && (hit & wxHT_TOPLEVEL_ANY_BORDER) )
             {
                 consumer->PerformAction(wxACTION_TOPLEVEL_RESIZE, hit);
-                return TRUE;
+                return true;
             }
         }
 
@@ -856,7 +856,7 @@ bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
                 if ( m_winHitTest == m_winPressed )
                 {
                     consumer->PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK, m_winPressed);
-                    return TRUE;
+                    return true;
                 }
             }
             //else: the mouse was released outside the window, this doesn't
@@ -882,7 +882,7 @@ bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                 consumer->PerformAction(wxACTION_TOPLEVEL_BUTTON_PRESS, m_winPressed);
 
             m_winHitTest = hit;
-            return TRUE;
+            return true;
         }
     }
     else if ( consumer->GetInputWindow()->GetWindowStyle() & wxRESIZE_BORDER )
@@ -897,7 +897,7 @@ bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 
             if ( m_borderCursorOn )
             {
-                m_borderCursorOn = FALSE;
+                m_borderCursorOn = false;
                 win->SetCursor(m_origCursor);
             }
 
@@ -924,8 +924,8 @@ bool wxStdFrameInputHandler::HandleActivation(wxInputConsumer *consumer,
     if ( m_borderCursorOn )
     {
         consumer->GetInputWindow()->SetCursor(m_origCursor);
-        m_borderCursorOn = FALSE;
+        m_borderCursorOn = false;
     }
     consumer->PerformAction(wxACTION_TOPLEVEL_ACTIVATE, activated);
-    return FALSE;
+    return false;
 }

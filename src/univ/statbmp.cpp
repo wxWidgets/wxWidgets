@@ -58,7 +58,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
                             const wxString &name)
 {
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     // set bitmap first
     SetBitmap(label);
@@ -66,7 +66,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // and adjust our size to fit it after this
     SetBestSize(size);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------

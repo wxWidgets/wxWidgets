@@ -75,7 +75,7 @@ public:
         m_width = 0;
     }
 
-    void SetEnabled(bool enabled = TRUE) { m_isEnabled = enabled; }
+    void SetEnabled(bool enabled = true) { m_isEnabled = enabled; }
 
     // accessors
 
@@ -136,7 +136,7 @@ public:
     virtual void OnDismiss();
 
     // called when a submenu is dismissed
-    void OnSubmenuDismiss() { m_hasOpenSubMenu = FALSE; }
+    void OnSubmenuDismiss() { m_hasOpenSubMenu = false; }
 
     // get the currently selected item (may be NULL)
     wxMenuItem *GetCurrentItem() const
@@ -153,7 +153,7 @@ public:
     // preselect the first item
     void SelectFirst() { SetCurrent(m_menu->GetMenuItems().GetFirst()); }
 
-    // process the key event, return TRUE if done
+    // process the key event, return true if done
     bool ProcessKeyDown(int key);
 
     // process mouse move event
@@ -190,7 +190,7 @@ protected:
     void ChangeCurrent(wxMenuItemList::compatibility_iterator node);
 
     // activate item, i.e. call either ClickItem() or OpenSubmenu() depending
-    // on what it is, return TRUE if something was done (i.e. it's not a
+    // on what it is, return true if something was done (i.e. it's not a
     // separator...)
     bool ActivateItem(wxMenuItem *item, InputMethod how = WithKeyboard);
 
@@ -258,7 +258,7 @@ public:
         }
         else
         {
-            // return FALSE;
+            // return false;
 
             return wxEvtHandler::ProcessEvent(event);
         }
@@ -304,7 +304,7 @@ END_EVENT_TABLE()
 wxPopupMenuWindow::wxPopupMenuWindow(wxWindow *parent, wxMenu *menu)
 {
     m_menu = menu;
-    m_hasOpenSubMenu = FALSE;
+    m_hasOpenSubMenu = false;
 
     ResetCurrent();
 
@@ -473,7 +473,7 @@ void wxPopupMenuWindow::OnDismiss()
 {
     // when we are dismissed because the user clicked elsewhere or we lost
     // focus in any other way, hide the parent menu as well
-    HandleDismiss(TRUE);
+    HandleDismiss(true);
 }
 
 void wxPopupMenuWindow::HandleDismiss(bool dismissParent)
@@ -486,7 +486,7 @@ void wxPopupMenuWindow::HandleDismiss(bool dismissParent)
 void wxPopupMenuWindow::DismissAndNotify()
 {
     Dismiss();
-    HandleDismiss(TRUE);
+    HandleDismiss(true);
 }
 
 // ----------------------------------------------------------------------------
@@ -648,7 +648,7 @@ void wxPopupMenuWindow::OpenSubmenu(wxMenuItem *item, InputMethod how)
                    wxSize(m_menu->GetGeometryInfo().GetSize().x, 0),
                    how == WithKeyboard /* preselect first item then */);
 
-    m_hasOpenSubMenu = TRUE;
+    m_hasOpenSubMenu = true;
 }
 
 bool wxPopupMenuWindow::ActivateItem(wxMenuItem *item, InputMethod how)
@@ -656,7 +656,7 @@ bool wxPopupMenuWindow::ActivateItem(wxMenuItem *item, InputMethod how)
     // don't activate disabled items
     if ( !item || !item->IsEnabled() )
     {
-        return FALSE;
+        return false;
     }
 
     // normal menu items generate commands, submenus can be opened and
@@ -671,10 +671,10 @@ bool wxPopupMenuWindow::ActivateItem(wxMenuItem *item, InputMethod how)
     }
     else // separator, can't activate
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -696,19 +696,19 @@ bool wxPopupMenuWindow::ProcessLeftDown(wxMouseEvent& event)
         {
             wxPopupMenuWindow *win = menu->m_popupMenu;
 
-            wxCHECK_MSG( win, FALSE, _T("parent menu not shown?") );
+            wxCHECK_MSG( win, false, _T("parent menu not shown?") );
 
             pos = ClientToScreen(pos);
             if ( win->GetMenuItemFromPoint(win->ScreenToClient(pos)) )
             {
                 // eat the event
-                return TRUE;
+                return true;
             }
             //else: it is outside the parent menu as well, do dismiss this one
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 void wxPopupMenuWindow::OnLeftUp(wxMouseEvent& event)
@@ -833,7 +833,7 @@ void wxPopupMenuWindow::OnMouseLeave(wxMouseEvent& event)
         else
         {
             // this menu is the last opened
-            resetCurrent = TRUE;
+            resetCurrent = true;
         }
 
         if ( resetCurrent )
@@ -866,14 +866,14 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
     // to open it inspit of this)
     if ( HasOpenSubmenu() )
     {
-        wxCHECK_MSG( CanOpen(item), FALSE,
+        wxCHECK_MSG( CanOpen(item), false,
                      _T("has open submenu but another item selected?") );
 
         if ( item->GetSubMenu()->ProcessKeyDown(key) )
-            return TRUE;
+            return true;
     }
 
-    bool processed = TRUE;
+    bool processed = true;
 
     // handle the up/down arrows, home, end, esc and return here, pass the
     // left/right arrows to the menu bar except when the right arrow can be
@@ -885,7 +885,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
             // menubar
             if ( !m_menu->GetParent() )
             {
-                processed = FALSE;
+                processed = false;
                 break;
             }
 
@@ -894,7 +894,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
         case WXK_ESCAPE:
             // close just this menu
             Dismiss();
-            HandleDismiss(FALSE);
+            HandleDismiss(false);
             break;
 
         case WXK_RETURN:
@@ -939,7 +939,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
                 }
                 else
                 {
-                    processed = FALSE;
+                    processed = false;
                 }
             }
             break;
@@ -952,7 +952,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
             }
             else
             {
-                processed = FALSE;
+                processed = false;
             }
             break;
 
@@ -966,7 +966,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
                 wxMenuItemList::compatibility_iterator nodeStart = GetNextNode();
 
                 // do we have more than one item with this accel?
-                bool notUnique = FALSE;
+                bool notUnique = false;
 
                 // translate everything to lower case before comparing
                 wxChar chAccel = wxTolower(key);
@@ -998,7 +998,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
                         }
                         else // we already had found such item
                         {
-                            notUnique = TRUE;
+                            notUnique = true;
 
                             // no need to continue further, we won't find
                             // anything we don't already know
@@ -1031,12 +1031,12 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
                     //else: just select it but don't activate as the user might
                     //      have wanted to activate another item
 
-                    // skip "processed = FALSE" below
+                    // skip "processed = false" below
                     break;
                 }
             }
 
-            processed = FALSE;
+            processed = false;
     }
 
     return processed;
@@ -1124,11 +1124,6 @@ void wxMenu::EndRadioGroup()
 
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 {
-    #if 0
-    // not used at all
-    bool check = FALSE;
-    #endif
-
     if ( item->GetKind() == wxITEM_RADIO )
     {
         int count = GetMenuItemCount();
@@ -1141,12 +1136,6 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
             // for now it has just one element
             item->SetAsRadioGroupStart();
             item->SetRadioGroupEnd(m_startRadioGroup);
-
-            // ensure that we have a checked item in the radio group
-            #if 0
-            // not used at all
-            check = TRUE;
-            #endif
         }
         else // extend the current radio group
         {
@@ -1330,7 +1319,7 @@ void wxMenu::OnDismiss(bool dismissParent)
         {
             // dismissParent is recursive
             m_menuParent->Dismiss();
-            m_menuParent->OnDismiss(TRUE);
+            m_menuParent->OnDismiss(true);
         }
     }
     else // no parent menu
@@ -1396,7 +1385,7 @@ void wxMenu::Dismiss()
 
 bool wxMenu::ProcessKeyDown(int key)
 {
-    wxCHECK_MSG( m_popupMenu, FALSE,
+    wxCHECK_MSG( m_popupMenu, false,
                  _T("can't process key events if not shown") );
 
     return m_popupMenu->ProcessKeyDown(key);
@@ -1447,12 +1436,12 @@ bool wxMenu::ProcessAccelEvent(const wxKeyEvent& event)
             // try its elements
             if ( item->GetSubMenu()->ProcessAccelEvent(event) )
             {
-                return TRUE;
+                return true;
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 void wxMenu::AddAccelFor(wxMenuItem *item)
@@ -1494,10 +1483,10 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
           : wxMenuItemBase(parentMenu, id, text, help, kind, subMenu)
 {
     m_posY =
-    m_height = -1;
+    m_height = wxDefaultCoord;
 
     m_radioGroup.start = -1;
-    m_isRadioGroupStart = FALSE;
+    m_isRadioGroupStart = false;
 
     m_bmpDisabled = wxNullBitmap;
 
@@ -1630,7 +1619,7 @@ void wxMenuItem::Check(bool check)
         {
             if ( n != pos )
             {
-                node->GetData()->m_isChecked = FALSE;
+                node->GetData()->m_isChecked = false;
             }
             node = node->GetNext();
         }
@@ -1646,7 +1635,7 @@ void wxMenuItem::Check(bool check)
 
 void wxMenuItem::SetAsRadioGroupStart()
 {
-    m_isRadioGroupStart = TRUE;
+    m_isRadioGroupStart = true;
 }
 
 void wxMenuItem::SetRadioGroupStart(int start)
@@ -1677,7 +1666,7 @@ void wxMenuBar::Init()
 
     m_menuShown = NULL;
 
-    m_shouldShowMenu = FALSE;
+    m_shouldShowMenu = false;
 }
 
 void wxMenuBar::Attach(wxFrame *frame)
@@ -1701,14 +1690,14 @@ void wxMenuBar::Attach(wxFrame *frame)
     else // not created yet, do it now
     {
         // we have no way to return the error from here anyhow :-(
-        (void)Create(frame, -1);
+        (void)Create(frame, wxID_ANY);
 
         SetCursor(wxCURSOR_ARROW);
 
         SetFont(wxSystemSettings::GetFont(wxSYS_SYSTEM_FONT));
 
         // calculate and set our height (it won't be changed any more)
-        SetSize(-1, GetBestSize().y);
+        SetSize(wxDefaultCoord, GetBestSize().y);
     }
 
     // remember the last frame which had us to avoid unnecessarily reparenting
@@ -1743,14 +1732,14 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
-        return FALSE;
+        return false;
 
     wxMenuInfo *info = new wxMenuInfo(title);
     m_menuInfos.Insert(info, pos);
 
     RefreshAllItemsAfter(pos);
 
-    return TRUE;
+    return true;
 }
 
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
@@ -1814,7 +1803,7 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
 
 bool wxMenuBar::IsEnabledTop(size_t pos) const
 {
-    wxCHECK_MSG( pos < GetCount(), FALSE, _T("invalid index in IsEnabledTop") );
+    wxCHECK_MSG( pos < GetCount(), false, _T("invalid index in IsEnabledTop") );
 
     return m_menuInfos[pos].IsEnabled();
 }
@@ -2025,7 +2014,7 @@ void wxMenuBar::DoSelectMenu(size_t pos)
         if ( IsShowingMenu() )
         {
             // restore m_shouldShowMenu flag after DismissMenu() which resets
-            // it to FALSE
+            // it to false
             bool old = m_shouldShowMenu;
 
             DismissMenu();
@@ -2094,14 +2083,14 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
         }
         else // on item
         {
-	        wxLogTrace(_T("mousecapture"), _T("Capturing mouse from wxMenuBar::OnLeftDown"));
+            wxLogTrace(_T("mousecapture"), _T("Capturing mouse from wxMenuBar::OnLeftDown"));
             CaptureMouse();
 
             // show it as selected
             RefreshItem((size_t)m_current);
 
             // show the menu
-            PopupCurrentMenu(FALSE /* don't select first item - as Windows does */);
+            PopupCurrentMenu(false /* don't select first item - as Windows does */);
         }
     }
 }
@@ -2128,7 +2117,7 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
     static wxPoint s_ptLast;
     if ( pt == s_ptLast )
     {
-        return FALSE;
+        return false;
     }
 
     s_ptLast = pt;
@@ -2137,7 +2126,7 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
     int currentNew = GetMenuFromPoint(pt);
     if ( (currentNew == -1) || (currentNew == m_current) )
     {
-        return FALSE;
+        return false;
     }
 
     // select the new active item
@@ -2148,10 +2137,10 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
     if ( m_shouldShowMenu && !m_menuShown)
     {
         // open the new menu if the old one we closed had been opened
-        PopupCurrentMenu(FALSE /* don't select first item - as Windows does */);
+        PopupCurrentMenu(false /* don't select first item - as Windows does */);
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxMenuBar::OnKeyDown(wxKeyEvent& event)
@@ -2303,7 +2292,7 @@ int wxMenuBar::FindNextItemForAccel(int idxStart, int key, bool *unique) const
 
     // do we have more than one item with this accel?
     if ( unique )
-        *unique = TRUE;
+        *unique = true;
 
     // translate everything to lower case before comparing
     wxChar chAccel = wxTolower(key);
@@ -2343,7 +2332,7 @@ int wxMenuBar::FindNextItemForAccel(int idxStart, int key, bool *unique) const
             else // we already had found such item
             {
                 if ( unique )
-                    *unique = FALSE;
+                    *unique = false;
 
                 // no need to continue further, we won't find
                 // anything we don't already know
@@ -2384,13 +2373,13 @@ bool wxMenuBar::ProcessAccelEvent(const wxKeyEvent& event)
             if ( node->GetData()->ProcessAccelEvent(event) )
             {
                 // menu processed it
-                return TRUE;
+                return true;
             }
         }
     }
 
     // not found
-    return FALSE;
+    return false;
 }
 
 #endif // wxUSE_ACCEL
@@ -2407,7 +2396,7 @@ void wxMenuBar::PopupCurrentMenu(bool selectFirst)
     wxASSERT_MSG( !m_menuShown, _T("shouldn't show two menus at once!") );
 
     // in any case, we should show it - even if we won't
-    m_shouldShowMenu = TRUE;
+    m_shouldShowMenu = true;
 
     if ( IsEnabledTop(m_current) )
     {
@@ -2445,7 +2434,7 @@ void wxMenuBar::DismissMenu()
 
 void wxMenuBar::OnDismissMenu(bool dismissMenuBar)
 {
-    m_shouldShowMenu = FALSE;
+    m_shouldShowMenu = false;
     m_menuShown = NULL;
     if ( dismissMenuBar )
     {
@@ -2485,7 +2474,7 @@ wxEventLoop *wxWindow::ms_evtLoopPopup = NULL;
 
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {
-    wxCHECK_MSG( !ms_evtLoopPopup, FALSE,
+    wxCHECK_MSG( !ms_evtLoopPopup, false,
                  _T("can't show more than one popup menu at a time") );
 
 #ifdef __WXMSW__
@@ -2535,7 +2524,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     ms_evtLoopPopup = NULL;
 
     // remove the handler
-    PopEventHandler(TRUE /* delete it */);
+    PopEventHandler(true /* delete it */);
 
     menu->SetInvokingWindow(NULL);
 
@@ -2543,7 +2532,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     SetCursor(cursorOld);
 #endif // __WXMSW__
 
-    return TRUE;
+    return true;
 }
 
 void wxWindow::DismissPopupMenu()

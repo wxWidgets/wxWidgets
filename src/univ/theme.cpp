@@ -86,7 +86,7 @@ wxThemeInfo::wxThemeInfo(Constructor c,
     if ( ms_theme )
     {
         // we already have a theme
-        return TRUE;
+        return true;
     }
 
     wxString nameDefTheme;
@@ -121,13 +121,13 @@ wxThemeInfo::wxThemeInfo(Constructor c,
     {
         wxLogError(_("Failed to initialize GUI: no built-in themes found."));
 
-        return FALSE;
+        return false;
     }
 
     // Set the theme as current.
     wxTheme::Set(theme);
 
-    return TRUE;
+    return true;
 }
 
 /* static */ wxTheme *wxTheme::Set(wxTheme *theme)

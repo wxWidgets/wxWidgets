@@ -54,7 +54,7 @@ public:
     // draws the arrow on the given DC in the given rectangle, uses
     // wxControlWithArrows::GetArrowState() to get its current state
     void DrawArrow(Arrow arrow, wxDC& dc, const wxRect& rect,
-                   bool scrollbarLike = FALSE) const;
+                   bool scrollbarLike = false) const;
 
     // process a mouse move, enter or leave event, possibly calling
     // wxControlWithArrows::SetArrowState() if wxControlWithArrows::HitTest()
@@ -100,13 +100,13 @@ public:
     // set or clear the specified flag in the arrow state: this function is
     // responsible for refreshing the control
     virtual void SetArrowFlag(wxScrollArrows::Arrow arrow,
-                              int flag, bool set = TRUE) = 0;
+                              int flag, bool set = true) = 0;
 
     // hit testing: return on which arrow the point is (or Arrow_None)
     virtual wxScrollArrows::Arrow HitTest(const wxPoint& pt) const = 0;
 
-    // called when the arrow is pressed, return TRUE to continue scrolling and
-    // FALSE to stop it
+    // called when the arrow is pressed, return true to continue scrolling and
+    // false to stop it
     virtual bool OnArrow(wxScrollArrows::Arrow arrow) = 0;
 };
 

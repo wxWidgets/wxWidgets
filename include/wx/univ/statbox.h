@@ -26,7 +26,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize)
     {
-        Create(parent, -1, label, pos, size);
+        Create(parent, wxID_ANY, label, pos, size);
     }
 
     wxStaticBox(wxWindow *parent, wxWindowID id,
@@ -51,7 +51,7 @@ public:
     // take account of this
     virtual wxPoint GetBoxAreaOrigin() const;
 
-    virtual bool HasTransparentBackground() { return TRUE; }
+    virtual bool HasTransparentBackground() { return true; }
     
 protected:
     // draw the control
@@ -60,9 +60,9 @@ protected:
     // get the size of the border
     wxRect GetBorderGeometry() const;
 
-    // returning TRUE from here ensures that we act as a container window for
+    // returning true from here ensures that we act as a container window for
     // our children
-    virtual bool IsStaticBox() const { return TRUE; }
+    virtual bool IsStaticBox() const { return true; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBox)

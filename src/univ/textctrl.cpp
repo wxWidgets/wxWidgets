@@ -44,7 +44,7 @@
 
    Everywhere in this file LINE refers to a logical line of text, and ROW to a
    physical line of text on the display. They are the same unless WrapLines()
-   is TRUE in which case a single LINE may correspond to multiple ROWs.
+   is true in which case a single LINE may correspond to multiple ROWs.
 
    A text position is an unsigned int (which for reasons of compatibility is
    still a long) from 0 to GetLastPosition() inclusive. The positions
@@ -270,7 +270,7 @@ struct WXDLLEXPORT wxTextMultiLineData
         m_scrollRangeY = 0;
 
         m_updateScrollbarX =
-        m_updateScrollbarY = FALSE;
+        m_updateScrollbarY = false;
 
         m_widthMax = -1;
         m_lineLongest = 0;
@@ -367,14 +367,14 @@ public:
 
     // this code is unused any longer
 #if 0
-    // return TRUE if the column is in the start of the last row (hence the row
+    // return true if the column is in the start of the last row (hence the row
     // it is in is not wrapped)
     bool IsLastRow(wxTextCoord colRowStart) const
     {
         return colRowStart == GetRowStart(m_rowsStart.GetCount());
     }
 
-    // return TRUE if the column is the last column of the row starting in
+    // return true if the column is the last column of the row starting in
     // colRowStart
     bool IsLastColInRow(wxTextCoord colRowStart,
                         wxTextCoord colRowEnd,
@@ -400,7 +400,7 @@ public:
         // caller got it wrong
         wxFAIL_MSG( _T("this column is not in the start of the row!") );
 
-        return FALSE;
+        return false;
     }
 #endif // 0
 
@@ -501,12 +501,12 @@ struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
 class wxTextCtrlCommand : public wxCommand
 {
 public:
-    wxTextCtrlCommand(const wxString& name) : wxCommand(TRUE, name) { }
+    wxTextCtrlCommand(const wxString& name) : wxCommand(true, name) { }
 
     // we don't use these methods as they don't make sense for us as we need a
     // wxTextCtrl to be applied
-    virtual bool Do() { wxFAIL_MSG(_T("shouldn't be called")); return FALSE; }
-    virtual bool Undo() { wxFAIL_MSG(_T("shouldn't be called")); return FALSE; }
+    virtual bool Do() { wxFAIL_MSG(_T("shouldn't be called")); return false; }
+    virtual bool Undo() { wxFAIL_MSG(_T("shouldn't be called")); return false; }
 
     // instead, our command processor uses these methods
     virtual bool Do(wxTextCtrl *text) = 0;
@@ -572,7 +572,7 @@ class wxTextCtrlCommandProcessor : public wxCommandProcessor
 public:
     wxTextCtrlCommandProcessor(wxTextCtrl *text)
     {
-        m_compressInserts = FALSE;
+        m_compressInserts = false;
 
         m_text = text;
     }
@@ -581,7 +581,7 @@ public:
     virtual void Store(wxCommand *command);
 
     // stop compressing insert commands when this is called
-    void StopCompressing() { m_compressInserts = FALSE; }
+    void StopCompressing() { m_compressInserts = false; }
 
     // accessors
     wxTextCtrl *GetTextCtrl() const { return m_text; }
@@ -601,7 +601,7 @@ private:
     // the control we're associated with
     wxTextCtrl *m_text;
 
-    // if the flag is TRUE we're compressing subsequent insert commands into
+    // if the flag is true we're compressing subsequent insert commands into
     // one so that the entire typing could be undone in one call to Undo()
     bool m_compressInserts;
 };
@@ -628,8 +628,8 @@ void wxTextCtrl::Init()
     m_selStart =
     m_selEnd = -1;
 
-    m_isModified = FALSE;
-    m_isEditable = TRUE;
+    m_isModified = false;
+    m_isEditable = true;
 
     m_posLast =
     m_curPos =
@@ -704,7 +704,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( !wxControl::Create(parent, id, pos, size, style,
                             validator, name) )
     {
-        return FALSE;
+        return false;
     }
 
     SetCursor(wxCURSOR_IBEAM);
@@ -737,14 +737,14 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     // we can't show caret right now as we're not shown yet and so it would
     // result in garbage on the screen - we'll do it after first OnPaint()
-    m_hasCaret = FALSE;
+    m_hasCaret = false;
 
     CreateInputHandler(wxINP_HANDLER_TEXTCTRL);
 
     wxSizeEvent sizeEvent(GetSize(), GetId());
     GetEventHandler()->ProcessEvent(sizeEvent);
 
-    return TRUE;
+    return true;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -877,7 +877,7 @@ bool wxTextCtrl::ReplaceLine(wxTextCoord line,
             }
 
             // the number of rows changed
-            return TRUE;
+            return true;
         }
     }
     else // no line wrap
@@ -886,7 +886,7 @@ bool wxTextCtrl::ReplaceLine(wxTextCoord line,
     }
 
     // the number of rows didn't change
-    return FALSE;
+    return false;
 }
 
 void wxTextCtrl::RemoveLine(wxTextCoord line)
@@ -1003,7 +1003,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
         //     as if it does we need to refresh everything below the changed
         //     text (it will be shifted...) and we can avoid it if there is no
         //     row relayout
-        bool rowsNumberChanged = FALSE;
+        bool rowsNumberChanged = false;
 
         // (1) join lines
         const wxArrayString& linesOld = GetLines();
@@ -1111,7 +1111,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
                 // we have the replacement line for this one
                 if ( ReplaceLine(line, lines[nReplaceLine]) )
                 {
-                    rowsNumberChanged = TRUE;
+                    rowsNumberChanged = true;
                 }
 
                 UpdateMaxWidth(line);
@@ -1120,13 +1120,13 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
             {
                 // (4b) delete all extra lines (note that we need to delete
                 //      them backwards because indices shift while we do it)
-                bool deletedLongestLine = FALSE;
+                bool deletedLongestLine = false;
                 for ( wxTextCoord lineDel = lineEnd; lineDel >= line; lineDel-- )
                 {
                     if ( lineDel == MData().m_lineLongest )
                     {
                         // we will need to recalc the max line width
-                        deletedLongestLine = TRUE;
+                        deletedLongestLine = true;
                     }
 
                     RemoveLine(lineDel);
@@ -1138,7 +1138,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
                 }
 
                 // even the line number changed
-                rowsNumberChanged = TRUE;
+                rowsNumberChanged = true;
 
                 // update line to exit the loop
                 line = lineEnd + 1;
@@ -1149,7 +1149,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
         if ( nReplaceLine < nReplaceCount )
         {
             // even the line number changed
-            rowsNumberChanged = TRUE;
+            rowsNumberChanged = true;
 
             do
             {
@@ -1207,7 +1207,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
             RefreshLineRange(lineEnd + 1, 0);
 
             // the vert scrollbar might [dis]appear
-            MData().m_updateScrollbarY = TRUE;
+            MData().m_updateScrollbarY = true;
         }
 
         // must recalculate it - will do later
@@ -1526,7 +1526,7 @@ bool wxTextCtrl::GetSelectedPartOfLine(wxTextCoord line,
     if ( !HasSelection() )
     {
         // no selection at all, hence no selection in this line
-        return FALSE;
+        return false;
     }
 
     wxTextCoord lineStart, colStart;
@@ -1534,7 +1534,7 @@ bool wxTextCtrl::GetSelectedPartOfLine(wxTextCoord line,
     if ( lineStart > line )
     {
         // this line is entirely above the selection
-        return FALSE;
+        return false;
     }
 
     wxTextCoord lineEnd, colEnd;
@@ -1542,7 +1542,7 @@ bool wxTextCtrl::GetSelectedPartOfLine(wxTextCoord line,
     if ( lineEnd < line )
     {
         // this line is entirely below the selection
-        return FALSE;
+        return false;
     }
 
     if ( line == lineStart )
@@ -1567,7 +1567,7 @@ bool wxTextCtrl::GetSelectedPartOfLine(wxTextCoord line,
             *end = GetLineLength(line);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1587,12 +1587,12 @@ bool wxTextCtrl::IsEditable() const
 
 void wxTextCtrl::MarkDirty()
 {
-    m_isModified = TRUE;
+    m_isModified = true;
 }
 
 void wxTextCtrl::DiscardEdits()
 {
-    m_isModified = FALSE;
+    m_isModified = false;
 }
 
 void wxTextCtrl::SetEditable(bool editable)
@@ -1670,7 +1670,7 @@ wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
     // if they are out of range
     if ( IsSingleLine() )
     {
-        return x > GetLastPosition() || y > 0 ? -1 : x;
+        return x > GetLastPosition() || y > 0 ? wxDefaultCoord : x;
     }
     else // multiline
     {
@@ -1705,14 +1705,14 @@ bool wxTextCtrl::PositionToXY(wxTextPos pos,
     if ( IsSingleLine() )
     {
         if ( (size_t)pos > m_value.length() )
-            return FALSE;
+            return false;
 
         if ( x )
             *x = pos;
         if ( y )
             *y = 0;
 
-        return TRUE;
+        return true;
     }
     else // multiline
     {
@@ -1737,7 +1737,7 @@ bool wxTextCtrl::PositionToXY(wxTextPos pos,
                               _T("XYToPosition() or PositionToXY() broken") );
 #endif // WXDEBUG_TEXT
 
-                return TRUE;
+                return true;
             }
             else // go further down
             {
@@ -1746,7 +1746,7 @@ bool wxTextCtrl::PositionToXY(wxTextPos pos,
         }
 
         // beyond the last line
-        return FALSE;
+        return false;
     }
 }
 
@@ -1820,7 +1820,7 @@ bool wxTextCtrl::PositionToLogicalXY(wxTextPos pos,
     else // must really calculate col/line from pos
     {
         if ( !PositionToXY(pos, &col, &line) )
-            return FALSE;
+            return false;
     }
 
     int hLine = GetLineHeight();
@@ -1849,7 +1849,7 @@ bool wxTextCtrl::PositionToLogicalXY(wxTextPos pos,
     if ( yOut )
         *yOut = y;
 
-    return TRUE;
+    return true;
 }
 
 bool wxTextCtrl::PositionToDeviceXY(wxTextPos pos,
@@ -1858,13 +1858,13 @@ bool wxTextCtrl::PositionToDeviceXY(wxTextPos pos,
 {
     wxCoord x, y;
     if ( !PositionToLogicalXY(pos, &x, &y) )
-        return FALSE;
+        return false;
 
     // finally translate the logical text rect coords into physical client
     // coords
     CalcScrolledPosition(m_rectText.x + x, m_rectText.y + y, xOut, yOut);
 
-    return TRUE;
+    return true;
 }
 
 wxPoint wxTextCtrl::GetCaretPosition() const
@@ -2138,13 +2138,13 @@ void wxTextCtrl::Cut()
 bool wxTextCtrl::DoCut()
 {
     if ( !HasSelection() )
-        return FALSE;
+        return false;
 
     Copy();
 
     RemoveSelection();
 
-    return TRUE;
+    return true;
 }
 
 void wxTextCtrl::Paste()
@@ -2168,12 +2168,12 @@ bool wxTextCtrl::DoPaste()
         {
             WriteText(text);
 
-            return TRUE;
+            return true;
         }
     }
 #endif // wxUSE_CLIPBOARD
 
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -2213,7 +2213,7 @@ void wxTextCtrlCommandProcessor::Store(wxCommand *command)
         }
 
         // append the following insert commands to this one
-        m_compressInserts = TRUE;
+        m_compressInserts = true;
 
         // let the base class version will do the job normally
     }
@@ -2248,17 +2248,17 @@ bool wxTextCtrlInsertCommand::Do(wxTextCtrl *text)
     // and now do insert it
     text->WriteText(m_text);
 
-    return TRUE;
+    return true;
 }
 
 bool wxTextCtrlInsertCommand::Undo(wxTextCtrl *text)
 {
-    wxCHECK_MSG( CanUndo(), FALSE, _T("impossible to undo insert cmd") );
+    wxCHECK_MSG( CanUndo(), false, _T("impossible to undo insert cmd") );
 
     // remove the text from where we inserted it
     text->Remove(m_from, m_from + m_text.length());
 
-    return TRUE;
+    return true;
 }
 
 bool wxTextCtrlRemoveCommand::CanUndo() const
@@ -2273,7 +2273,7 @@ bool wxTextCtrlRemoveCommand::Do(wxTextCtrl *text)
     m_textDeleted = text->GetSelectionText();
     text->RemoveSelection();
 
-    return TRUE;
+    return true;
 }
 
 bool wxTextCtrlRemoveCommand::Undo(wxTextCtrl *text)
@@ -2284,7 +2284,7 @@ bool wxTextCtrlRemoveCommand::Undo(wxTextCtrl *text)
     text->SetInsertionPoint(m_from > posLast ? posLast : m_from);
     text->WriteText(m_textDeleted);
 
-    return TRUE;
+    return true;
 }
 
 void wxTextCtrl::Undo()
@@ -2481,7 +2481,7 @@ void wxTextCtrl::OnSize(wxSizeEvent& event)
 #endif // 0
 
         MData().m_updateScrollbarX =
-        MData().m_updateScrollbarY = TRUE;
+        MData().m_updateScrollbarY = true;
     }
 
     event.Skip();
@@ -2665,7 +2665,7 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
 
     wxString s(text);
     wxTextCoord col;
-    wxCoord wReal = -1;
+    wxCoord wReal = wxDefaultCoord;
     switch ( HitTestLine(s, m_rectText.width, &col) )
     {
             /*
@@ -2690,7 +2690,7 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
                     col--;
 
                     // recalc the width
-                    wReal = -1;
+                    wReal = wxDefaultCoord;
                 }
                 //else: we can just see it
 
@@ -2709,7 +2709,7 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
                         if ( colWordStart != col )
                         {
                             // will have to recalc the real width
-                            wReal = -1;
+                            wReal = wxDefaultCoord;
 
                             col = colWordStart;
                         }
@@ -2732,7 +2732,7 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
 
     if ( widthReal )
     {
-        if ( wReal == -1 )
+        if ( wReal == wxDefaultCoord )
         {
             // calc it if not done yet
             wReal = GetTextWidth(s.Truncate(col));
@@ -2975,7 +2975,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLogical(const wxPoint& pos,
                                                    wxTextCoord *colOut,
                                                    wxTextCoord *rowOut) const
 {
-    return HitTest2(pos.y, pos.x, 0, rowOut, colOut, NULL, NULL, FALSE);
+    return HitTest2(pos.y, pos.x, 0, rowOut, colOut, NULL, NULL, false);
 }
 
 wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y0,
@@ -3179,7 +3179,7 @@ bool wxTextCtrl::GetLineAndRow(wxTextCoord row,
                 rowInLine = 0;
 
     if ( row < 0 )
-        return FALSE;
+        return false;
 
     int nLines = GetNumberOfLines();
     if ( WrapLines() )
@@ -3202,13 +3202,13 @@ bool wxTextCtrl::GetLineAndRow(wxTextCoord row,
         if ( line == nLines )
         {
             // the row is out of range
-            return FALSE;
+            return false;
         }
     }
     else // no line wrapping, everything is easy
     {
         if ( row >= nLines )
-            return FALSE;
+            return false;
 
         line = row;
     }
@@ -3218,7 +3218,7 @@ bool wxTextCtrl::GetLineAndRow(wxTextCoord row,
     if ( rowInLineOut )
         *rowInLineOut = rowInLine;
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -3363,7 +3363,7 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
         if ( dx > 0 )
         {
             // refresh the uncovered part on the left
-            Refresh(TRUE, &rect);
+            Refresh(true, &rect);
 
             // and now the area on the right
             rect.x = m_rectText.x + posLastVisible;
@@ -3376,7 +3376,7 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
             rect.width += m_rectText.width - posLastVisible;
         }
 
-        Refresh(TRUE, &rect);
+        Refresh(true, &rect);
 
         // I don't know exactly why is this needed here but without it we may
         // scroll the window again (from the same method) before the previously
@@ -3544,7 +3544,7 @@ void wxTextCtrl::UpdateScrollbars()
         // just to suppress compiler warnings about using uninit vars below
         charWidth = maxWidth = 0;
 
-        showScrollbarX = FALSE;
+        showScrollbarX = false;
     }
 
     // calc the scrollbars ranges
@@ -3581,7 +3581,7 @@ void wxTextCtrl::UpdateScrollbars()
         SetScrollbars(charWidth, lineHeight,
                       scrollRangeX, scrollRangeY,
                       x, y,
-                      TRUE /* no refresh */);
+                      true /* no refresh */);
 
         if ( scrollRangeXOld )
         {
@@ -3598,7 +3598,7 @@ void wxTextCtrl::UpdateScrollbars()
     }
 
     MData().m_updateScrollbarX =
-    MData().m_updateScrollbarY = FALSE;
+    MData().m_updateScrollbarY = false;
 }
 
 void wxTextCtrl::OnInternalIdle()
@@ -3837,7 +3837,7 @@ void wxTextCtrl::RefreshTextRect(const wxRect& rectClient, bool textOnly)
     rect.Offset(m_rectText.GetPosition());
 
     // don't refresh beyond the text area unless we're refreshing the line wrap
-    // marks in which case textOnly is FALSE
+    // marks in which case textOnly is false
     if ( textOnly )
     {
         if ( rect.GetRight() > m_rectText.GetRight() )
@@ -3874,7 +3874,7 @@ void wxTextCtrl::RefreshTextRect(const wxRect& rectClient, bool textOnly)
     wxLogTrace(_T("text"), _T("Refreshing (%d, %d)-(%d, %d)"),
                rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
 
-    Refresh(TRUE, &rect);
+    Refresh(true, &rect);
 }
 
 void wxTextCtrl::RefreshLineWrapMarks(wxTextCoord rowFirst,
@@ -3888,7 +3888,7 @@ void wxTextCtrl::RefreshLineWrapMarks(wxTextCoord rowFirst,
         rectMarks.y = rowFirst*GetLineHeight();
         rectMarks.height = (rowLast - rowFirst)*GetLineHeight();
 
-        RefreshTextRect(rectMarks, FALSE /* don't limit to text area */);
+        RefreshTextRect(rectMarks, false /* don't limit to text area */);
     }
 }
 
@@ -4215,7 +4215,7 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     {
         ShowCaret();
 
-        m_hasCaret = TRUE;
+        m_hasCaret = true;
     }
 }
 
@@ -4226,7 +4226,7 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
 bool wxTextCtrl::SetFont(const wxFont& font)
 {
     if ( !wxControl::SetFont(font) )
-        return FALSE;
+        return false;
 
     // and refresh everything, of course
     InitInsertionPoint();
@@ -4246,20 +4246,20 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 
     Refresh();
 
-    return TRUE;
+    return true;
 }
 
 bool wxTextCtrl::Enable(bool enable)
 {
     if ( !wxTextCtrlBase::Enable(enable) )
-        return FALSE;
+        return false;
 
     if (FindFocus() == this && GetCaret() &&
         ((enable && !GetCaret()->IsVisible()) ||
          (!enable && GetCaret()->IsVisible())))
         ShowCaret(enable);
 
-    return TRUE;
+    return true;
 }
 
 void wxTextCtrl::CreateCaret()
@@ -4387,28 +4387,28 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
                                const wxString& strArg)
 {
     // has the text changed as result of this action?
-    bool textChanged = FALSE;
+    bool textChanged = false;
 
     // the remembered cursor abscissa for multiline text controls is usually
     // reset after each user action but for ones which do use it (UP and DOWN
     // for example) we shouldn't do it - as indicated by this flag
-    bool rememberAbscissa = FALSE;
+    bool rememberAbscissa = false;
 
     // the command this action corresponds to or NULL if this action doesn't
     // change text at all or can't be undone
     wxTextCtrlCommand *command = (wxTextCtrlCommand *)NULL;
 
     wxString action;
-    bool del = FALSE,
-         sel = FALSE;
+    bool del = false,
+         sel = false;
     if ( actionOrig.StartsWith(wxACTION_TEXT_PREFIX_DEL, &action) )
     {
         if ( IsEditable() )
-            del = TRUE;
+            del = true;
     }
     else if ( actionOrig.StartsWith(wxACTION_TEXT_PREFIX_SEL, &action) )
     {
-        sel = TRUE;
+        sel = true;
     }
     else // not selection nor delete action
     {
@@ -4448,7 +4448,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
             if ( newPos != INVALID_POS_VALUE )
             {
                 // remember where the cursor original had been
-                rememberAbscissa = TRUE;
+                rememberAbscissa = true;
             }
         }
     }
@@ -4461,7 +4461,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
             if ( newPos != INVALID_POS_VALUE )
             {
                 // remember where the cursor original had been
-                rememberAbscissa = TRUE;
+                rememberAbscissa = true;
             }
         }
     }
@@ -4488,7 +4488,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
             // inserting text can be undone
             command = new wxTextCtrlInsertCommand(strArg);
 
-            textChanged = TRUE;
+            textChanged = true;
         }
     }
     else if ( (action == wxACTION_TEXT_PAGE_UP) ||
@@ -4505,7 +4505,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
             }
 
             // remember where the cursor original had been
-            rememberAbscissa = TRUE;
+            rememberAbscissa = true;
 
             bool goUp = action == wxACTION_TEXT_PAGE_UP;
             for ( size_t line = 0; line < count; line++ )
@@ -4552,7 +4552,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
             }
 
             // scroll vertically only
-            Scroll(-1, y);
+            Scroll(wxDefaultCoord, y);
         }
     }
     else if ( action == wxACTION_TEXT_SEL_WORD )
@@ -4667,7 +4667,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         m_cmdProcessor->Submit(command);
 
         // undoable commands always change text
-        textChanged = TRUE;
+        textChanged = true;
     }
     else // no undoable command
     {
@@ -4684,10 +4684,10 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         GetEventHandler()->ProcessEvent(event);
 
         // as the text changed...
-        m_isModified = TRUE;
+        m_isModified = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
@@ -4762,7 +4762,7 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxInputConsumer *consumer,
 {
     // we're only interested in key presses
     if ( !pressed )
-        return FALSE;
+        return false;
 
     int keycode = event.GetKeyCode();
 
@@ -4875,7 +4875,7 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxInputConsumer *consumer,
     {
         consumer->PerformAction(action, -1, str);
 
-        return TRUE;
+        return true;
     }
 
     return wxStdInputHandler::HandleKey(consumer, event, pressed);
@@ -4958,7 +4958,7 @@ wxStdTextCtrlInputHandler::HandleFocus(wxInputConsumer *consumer,
     }
 
     // never refresh entirely
-    return FALSE;
+    return false;
 }
 
 #endif // wxUSE_TEXTCTRL

@@ -110,7 +110,7 @@ protected:
     void RefreshTool(wxToolBarToolBase *tool);
 
     // (re)calculate the tool positions, should only be called if it is
-    // necessary to do it, i.e. m_needsLayout == TRUE
+    // necessary to do it, i.e. m_needsLayout == true
     void DoLayout();
     
     // get the rect limits depending on the orientation: top/bottom for a
