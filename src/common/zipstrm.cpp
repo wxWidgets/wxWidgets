@@ -40,7 +40,7 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
 
     m_Pos = 0;
     m_Size = 0;
-    m_Archive = (void*) unzOpen(archive.fn_str());
+    m_Archive = (void*) unzOpen(archive.mb_str(wxConvFile));
     if (m_Archive == NULL)
     {
         m_lasterror = wxSTREAM_READ_ERROR;

@@ -151,7 +151,7 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
 
     m_ZipFile = left;
     wxString nativename = wxFileSystem::URLToFileName(m_ZipFile).GetFullPath();
-    m_Archive = (void*) unzOpen(nativename.fn_str());
+    m_Archive = (void*) unzOpen(nativename.mb_str(wxConvFile));
     m_Pattern = right.AfterLast(wxT('/'));
     m_BaseDir = right.BeforeLast(wxT('/'));
 
