@@ -349,7 +349,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
-    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOW ) );
+    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
     SetForegroundColour( parent->GetForegroundColour() );
     SetFont( parent->GetFont() );
 

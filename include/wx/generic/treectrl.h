@@ -440,6 +440,7 @@ protected:
     int                  m_lineHeight;
     wxPen                m_dottedPen;
     wxBrush             *m_hilightBrush;
+    wxBrush             *m_normalBrush;
     wxImageList         *m_imageListNormal,
                         *m_imageListState;
     int                  m_dragCount;
