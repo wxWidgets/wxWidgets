@@ -23,9 +23,17 @@
 #endif
 
 #ifdef __WXGTK__
+#include <gdk/gdk.h>
+#include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkprivate.h>
 #include <wx/gtk/win_gtk.h>
+#define GetXWindow(wxwin)   GDK_WINDOW_XWINDOW((wxwin)->m_widget->window)
+#endif
+
+#ifdef __WXX11__
+#include "wx/x11/privx.h"
+#define GetXWindow(wxwin)   ((Window)(wxwin)->GetHandle())
 #endif
 
 #ifdef __WXMAC__
@@ -1805,20 +1813,10 @@ long wxPyGetWinHandle(wxWindow* win) {
     return (long)win->GetHandle();
 #endif
 
-    // Find and return the actual X-Window.
-#ifdef __WXGTK__
-    if (win->m_wxwindow) {
-#ifdef __WXGTK20__
-        return (long) GDK_WINDOW_XWINDOW(GTK_PIZZA(win->m_wxwindow)->bin_window);
-#else
-        GdkWindowPrivate* bwin = (GdkWindowPrivate*)GTK_PIZZA(win->m_wxwindow)->bin_window;
-        if (bwin) {
-            return (long)bwin->xwindow;
-        }
+#if defined(__WXGTK__) || defined(__WXX11)
+    return (long)GetXWindow(win);
 #endif
-    }
-#endif
-
+    
 #ifdef __WXMAC__
     return (long)MAC_WXHWND(win->MacGetRootWindow());
 #endif
