@@ -221,10 +221,6 @@ Source: "samples\StyleEditor\*.txt";        DestDir: "{app}\wx\samples\StyleEdit
 Source: "samples\StyleEditor\*.py";         DestDir: "{app}\wx\samples\StyleEditor"; Components: samples
 Source: "samples\StyleEditor\*.cfg";        DestDir: "{app}\wx\samples\StyleEditor"; Components: samples
 
-Source: "samples\wx_examples\basic\*.py";   DestDir: "{app}\wx\samples\wx_examples\basic"; Components: samples
-Source: "samples\wx_examples\hello\*.py";   DestDir: "{app}\wx\samples\wx_examples\hello"; Components: samples
-Source: "samples\wx_examples\hello\*.jpg";  DestDir: "{app}\wx\samples\wx_examples\hello"; Components: samples
-
 Source: "samples\wxProject\*.txt";          DestDir: "{app}\wx\samples\wxProject"; Components: samples
 Source: "samples\wxProject\*.py";           DestDir: "{app}\wx\samples\wxProject"; Components: samples
 
@@ -256,12 +252,9 @@ Name: "{group}\Resource Editor";       Filename: "{code:GetPythonDir}\pythonw.ex
 Name: "{group}\Sample Apps";           Filename: "{app}\wx\samples"; Components: samples
 
 Name: "{group}\wxWindows Reference";   Filename: "{app}\wx\docs\wx.chm";                Components: docs
-Name: "{group}\wxOGL Reference";       Filename: "{app}\wx\docs\ogl.chm";               Components: docs
-Name: "{group}\licence.txt";           Filename: "{app}\wx\docs\licence\licence.txt";   Components: core
-Name: "{group}\README.txt";            Filename: "{app}\wx\docs\README.txt";            Components: docs
-Name: "{group}\CHANGES.txt";           Filename: "{app}\wx\docs\CHANGES.txt";           Components: docs
 Name: "{group}\Migration Guide";       Filename: "{app}\wx\docs\MigrationGuide.html";   Components: docs
-Name: "{group}\Other wxPython Docs";   Filename: "{app}\wx\docs\wxPythonDocs.html";     Components: docs
+Name: "{group}\CHANGES";               Filename: "{app}\wx\docs\CHANGES.html";          Components: docs
+Name: "{group}\Other Docs";            Filename: "{app}\wx\docs";                       Components: docs
 
 
 ;;------------------------------------------------------------
