@@ -58,8 +58,8 @@
                 ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
 
                 <!-- ditto wxWindows resources and icons: -->
-                ln -f $(BUNDLE_RESOURCE) $(BUNDLE)/Resources/$(id).rsrc
-                ln -f $(BUNDLE_ICONS) $(BUNDLE)/Resources/wxmac.icns
+                ln -sf $(BUNDLE_RESOURCE) $(BUNDLE)/Resources/$(id).rsrc
+                ln -sf $(BUNDLE_ICONS) $(BUNDLE)/Resources/wxmac.icns
             </command>            
         </modify-target>
         
