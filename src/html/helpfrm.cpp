@@ -582,21 +582,13 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
 
 static void SetFontsToHtmlWin(wxHtmlWindow *win, wxString scalf, int scalit, wxString fixf, int fixit, int size)
 {
-#ifdef __WXMSW__
     static int f_sizes[3][7] = 
         {
+            { 8,  9, 12, 14, 16, 19, 22},
             {10, 12, 14, 16, 19, 24, 32},
-            {12, 14, 16, 18, 24, 32, 38},
             {14, 16, 18, 24, 32, 38, 45}
         };
-#else
-    static int f_sizes[3][7] = 
-        {
-            {10, 12, 14, 16, 19, 24, 32},
-            {12, 14, 16, 18, 24, 32, 38},
-            {14, 16, 18, 24, 32, 38, 45}
-        };
-#endif
+
     win -> SetFonts(scalf, scalit, fixf, fixit, f_sizes[size]);
 }
 
@@ -604,15 +596,15 @@ static void SetFontsToHtmlWin(wxHtmlWindow *win, wxString scalf, int scalit, wxS
 class wxHtmlHelpFrameOptionsDialog : public wxDialog
 {
     public:
-        wxListBox *NormalFont, *FixedFont;
+        wxComboBox *NormalFont, *FixedFont;
         wxRadioButton *SFI_i, *SFI_s, *FFI_i, *FFI_s;
         wxRadioBox *RadioBox;
         wxHtmlWindow *TestWin;
 
         wxHtmlHelpFrameOptionsDialog(wxWindow *parent) : wxDialog(parent, -1, wxString(_("Help Browser Options")))
             {
-                static wxString choices[3] = {_("small"), _("medium"), _("large")};
-                static wxString choices2[2] = {_("italic"), _("slant")};
+                wxString choices[3] = {_("small"), _("medium"), _("large")};
+                wxString choices2[2] = {_("italic"), _("slant")};
                 wxBoxSizer *topsizer, *sizer, *sizer2, *sizer3;
 
                 topsizer = new wxBoxSizer(wxVERTICAL);
@@ -622,7 +614,7 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                 sizer2 = new wxBoxSizer(wxVERTICAL);
                 sizer2 -> Add(new wxStaticText(this, -1, _("Normal font:")), 
                               0, wxLEFT | wxTOP, 10);
-                sizer2 -> Add(NormalFont = new wxListBox(this, -1, wxDefaultPosition, wxSize(200, 150)), 
+                sizer2 -> Add(NormalFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY),
                               1, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
                 sizer3 = new wxBoxSizer(wxHORIZONTAL);
@@ -637,7 +629,7 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                 sizer2 = new wxBoxSizer(wxVERTICAL);
                 sizer2 -> Add(new wxStaticText(this, -1, _("Fixed font:")), 
                               0, wxLEFT | wxTOP, 10);
-                sizer2 -> Add(FixedFont = new wxListBox(this, -1, wxDefaultPosition, wxSize(200, 150)), 
+                sizer2 -> Add(FixedFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY), 
                               1, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
                 sizer3 = new wxBoxSizer(wxHORIZONTAL);
@@ -711,7 +703,7 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
 };
 
 BEGIN_EVENT_TABLE(wxHtmlHelpFrameOptionsDialog, wxDialog)
-    EVT_LISTBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
+    EVT_COMBOBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
     EVT_RADIOBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
     EVT_RADIOBUTTON(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
 END_EVENT_TABLE()
