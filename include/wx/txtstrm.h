@@ -121,6 +121,9 @@ public:
     wxTextOutputStream& operator<<(const wxChar *string);
     wxTextOutputStream& operator<<(const wxString& string);
     wxTextOutputStream& operator<<(char c);
+#if wxUSE_WCHAR_T && wxWCHAR_T_IS_REAL_TYPE
+    wxTextOutputStream& operator<<(wchar_t wc);
+#endif // wxUSE_WCHAR_T
     wxTextOutputStream& operator<<(wxInt16 c);
     wxTextOutputStream& operator<<(wxInt32 c);
     wxTextOutputStream& operator<<(wxUint16 c);
