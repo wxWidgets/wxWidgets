@@ -122,6 +122,10 @@ public:
    virtual void Add( wxSizer *sizer, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
    virtual void Add( int width, int height, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
 
+   virtual void Insert( int before, wxWindow *window, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+   virtual void Insert( int before, wxSizer *sizer, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+   virtual void Insert( int before, int width, int height, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+
    virtual void Prepend( wxWindow *window, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
    virtual void Prepend( wxSizer *sizer, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
    virtual void Prepend( int width, int height, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );

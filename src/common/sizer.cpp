@@ -269,6 +269,21 @@ void wxSizer::Prepend( int width, int height, int option, int flag, int border, 
     m_children.Insert( new wxSizerItem( width, height, option, flag, border, userData ) );
 }
 
+void wxSizer::Insert( int before, wxWindow *window, int option, int flag, int border, wxObject* userData )
+{
+    m_children.Insert( before, new wxSizerItem( window, option, flag, border, userData ) );
+}
+
+void wxSizer::Insert( int before, wxSizer *sizer, int option, int flag, int border, wxObject* userData )
+{
+    m_children.Insert( before, new wxSizerItem( sizer, option, flag, border, userData ) );
+}
+
+void wxSizer::Insert( int before, int width, int height, int option, int flag, int border, wxObject* userData )
+{
+    m_children.Insert( before, new wxSizerItem( width, height, option, flag, border, userData ) );
+}
+
 bool wxSizer::Remove( wxWindow *window )
 {
     wxASSERT( window );
