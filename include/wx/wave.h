@@ -17,7 +17,11 @@
 #if wxUSE_SOUND
 
 #if WXWIN_COMPATIBILITY_2_4
+#ifdef __DMC__
+    #pragma message "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
+#else
     #warning "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
+#endif
     #include "wx/sound.h"
     // wxSound used to be called wxWave before wxWindows 2.5.1:
     typedef wxSound wxWave;
