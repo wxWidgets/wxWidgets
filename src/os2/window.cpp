@@ -2394,6 +2394,7 @@ bool wxWindow::OS2Create(
         wxLogError("Can't create window of class %s!. Error: %s\n", zClass, sError);
         return FALSE;
     }
+    ::WinSetWindowULong(m_hWnd, QWL_USER, (ULONG) this);
     wxWndHook = NULL;
 
 #ifdef __WXDEBUG__

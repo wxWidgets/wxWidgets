@@ -351,7 +351,6 @@ void wxFrame::DoShowWindow(
 )
 {
     ::WinShowWindow(m_hFrame, (BOOL)bShowCmd);
-    ::WinShowWindow(GetHwnd(), (BOOL)bShowCmd);
 } // end of wxFrame::DoShowWindow
 
 bool wxFrame::Show(
@@ -852,7 +851,7 @@ bool wxFrame::OS2Create(
                                       ,HWND_TOP              // Sibling
                                       ,(ULONG)nId            // ID
                                       ,(PVOID)&vFrameCtlData // Creation data
-                                     ,NULL                   // Window Pres Params
+                                      ,NULL                  // Window Pres Params
                                      )) == 0L)
     {
         return FALSE;
@@ -867,7 +866,7 @@ bool wxFrame::OS2Create(
                              ,0L
                              ,0L
                              ,m_hFrame
-                             ,HWND_BOTTOM
+                             ,HWND_TOP
                              ,(unsigned long)FID_CLIENT
                              ,NULL
                              ,NULL
@@ -885,7 +884,7 @@ bool wxFrame::OS2Create(
                            ,nY
                            ,nWidth
                            ,nHeight
-                           ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE
+                           ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE | SWP_ZORDER
                           ))
         return FALSE;
 
@@ -901,10 +900,6 @@ bool wxFrame::OS2Create(
         else if (vSwp[i].hwnd == m_hTitleBar)
             memcpy(&m_vSwpTitleBar, &vSwp[i], sizeof(SWP));
     }
-
-    //
-    // Set the client window's background, otherwise it is transparent!
-    //
     return TRUE;
 } // end of wxFrame::OS2Create
 

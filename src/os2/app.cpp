@@ -184,7 +184,7 @@ bool wxApp::RegisterWindowClasses(
     if (!::WinRegisterClass( vHab
                             ,wxFrameClassName
                             ,(PFNWP)wxWndProc
-                            ,CS_SIZEREDRAW | CS_SYNCPAINT
+                            ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT
                             ,sizeof(ULONG)
                            ))
     {
@@ -210,7 +210,7 @@ bool wxApp::RegisterWindowClasses(
     if (!::WinRegisterClass( vHab
                             ,wxMDIFrameClassName
                             ,(PFNWP)wxWndProc
-                            ,CS_SIZEREDRAW | CS_SYNCPAINT
+                            ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT
                             ,0
                            ))
     {
