@@ -39,7 +39,7 @@ protected:
         m_objects = (void **) mem;
         m_capacity = sz;
         return true;
-    };
+    }
 
     // untyped destructor of elements - must be overriden
     virtual void Free(void *) = 0;
@@ -50,14 +50,14 @@ protected:
     {
         wxASSERT(idx >= 0 && idx < m_size);
         return m_objects[idx];
-    };
+    }
 
     void Append(void *obj)
     {
         wxASSERT(m_size < m_capacity);
         m_objects[m_size] = obj;
         m_size++;
-    };
+    }
 
     void RemoveAt(size_type idx)
     {
@@ -69,7 +69,7 @@ protected:
                 m_objects + idx + 1,
                 ( m_size - idx - 1 ) * sizeof(void*) );
         m_size--;
-    };
+    }
 
     bool copy(const wxVectorBase& vb)
     {
@@ -83,10 +83,10 @@ protected:
             if (! o)
                 return false;
             Append(o);
-        };
+        }
 
         return true;
-    };
+    }
 
 public:
     wxVectorBase() : m_allocsize(16), m_size(0), m_capacity(0), m_objects(0) {}
@@ -99,7 +99,7 @@ public:
         free(m_objects);
         m_objects = 0;
         m_size = m_capacity = 0;
-    };
+    }
 
     void reserve(size_type n)
     {
@@ -107,7 +107,7 @@ public:
         {
             wxFAIL_MSG( _T("out of memory in wxVector::reserve()") );
         }
-    };
+    }
 
     size_type size() const
     {
@@ -117,12 +117,12 @@ public:
     size_type capacity() const
     {
         return m_capacity;
-    };
+    }
 
     bool empty() const
     {
         return size() == 0;
-    };
+    }
 
     wxVectorBase& operator = (const wxVectorBase& vb)
     {
@@ -136,11 +136,11 @@ private:\
     virtual void Free(void *o)\
     {\
         delete (obj *) o;\
-    };\
+    }\
     virtual void *Copy(const void *o) const\
     {\
         return new obj(*(obj *) o);\
-    };\
+    }\
 public:\
     cls() {}\
     cls(const cls& c)\
@@ -161,48 +161,48 @@ public:\
     {\
         wxCHECK2(Alloc(size() + 1), return);\
         Append(new obj(o));\
-    };\
+    }\
     void pop_back()\
     {\
         RemoveAt(size() - 1);\
-    };\
+    }\
     const obj& at(size_type idx) const\
     {\
         return *(obj *) GetItem(idx);\
-    };\
+    }\
     obj& at(size_type idx)\
     {\
         return *(obj *) GetItem(idx);\
-    };\
+    }\
     const obj& operator[](size_type idx) const\
     {\
         return at(idx);\
-    };\
+    }\
     obj& operator[](size_type idx)\
     {\
         return at(idx);\
-    };\
+    }\
     const obj& front() const\
     {\
         return at(0);\
-    };\
+    }\
     obj& front()\
     {\
         return at(0);\
-    };\
+    }\
     const obj& back() const\
     {\
         return at(size() - 1);\
-    };\
+    }\
     obj& back()\
     {\
         return at(size() - 1);\
-    };\
+    }\
     size_type erase(size_type idx)\
     {\
         RemoveAt(idx);\
         return idx;\
-    };\
+    }\
 }
 
 #define WX_DECLARE_VECTOR(obj, cls) \
