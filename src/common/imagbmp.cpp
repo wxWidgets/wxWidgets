@@ -748,8 +748,6 @@ bool wxBMPHandler::DoLoadDib (wxImage * image, int width, int height, int bpp, i
 
 bool wxBMPHandler::LoadDib( wxImage *image, wxInputStream& stream, bool verbose, bool IsBmp  )
 {
-
-    wxUint8         aByte;
     wxUint16        aWord;
     wxInt32         dbuf[4];
     wxInt8          bbuf[4];
@@ -844,7 +842,7 @@ bool wxBMPHandler::LoadDib( wxImage *image, wxInputStream& stream, bool verbose,
     {
         //read Icon mask which is monochrome
         //there is no palette, so we will create one
-        wxImage mask ;
+        wxImage mask;
         if (!DoLoadDib (&mask, width, height, 1, 2, BI_RGB, offset, stream,
             verbose, IsBmp, FALSE ) )
         {
@@ -852,7 +850,7 @@ bool wxBMPHandler::LoadDib( wxImage *image, wxInputStream& stream, bool verbose,
                 wxLogError( _("ICO: Error in reading mask DIB.") );
             return FALSE;
         }
-        image -> ApplyMask ( &mask );
+        image->SetMaskFromImage(mask, 255, 255, 255);
 
     }
      return TRUE;

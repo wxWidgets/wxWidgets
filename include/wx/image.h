@@ -151,9 +151,14 @@ public:
     unsigned char GetGreen( int x, int y ) const;
     unsigned char GetBlue( int x, int y ) const;
 
-    // used to manipulate the icons while extracting from .ico files   
-    bool GetUnusedColour(  unsigned char *r,  unsigned char *g,  unsigned char *b );
-    bool ApplyMask( const wxImage & mask );
+    // find first colour that is not used in the image and has higher
+    // RGB values than <startR,startG,startB>
+    bool FindFirstUnusedColour( unsigned char *r, unsigned char *g, unsigned char *b,
+                                unsigned char startR = 1, unsigned char startG = 0, 
+                                unsigned char startB = 0 );
+    // Set image's mask to the area of 'mask' that has <r,g,b> colour
+    bool SetMaskFromImage(const wxImage & mask, 
+                          unsigned char mr, unsigned char mg, unsigned char mb);
 
     static bool CanRead( const wxString& name );
     virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY );

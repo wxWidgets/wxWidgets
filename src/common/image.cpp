@@ -721,33 +721,33 @@ int wxImage::GetHeight() const
 }
 
 
-bool wxImage::GetUnusedColour (  unsigned char * r,  unsigned char * g,  unsigned char * b )
+bool wxImage::FindFirstUnusedColour(
+            unsigned char *r, unsigned char *g, unsigned char *b,
+            unsigned char startR, unsigned char startG, unsigned char startB)
 {
     wxHashTable hTable;
     unsigned long key;
    
     ComputeHistogram( hTable );
     
-    // start with blackest color and work to lightest
-    // 0,0,0 is quite likely to be a used color
-    unsigned char r2 = 1;
-    unsigned char g2 = 0;
-    unsigned char b2 = 0;
+    unsigned char r2 = startR;
+    unsigned char g2 = startG;
+    unsigned char b2 = startB;
     
     key = (r2 << 16) | (g2 << 8) | b2;
 
     while ( (wxHNode *) hTable.Get(key) )
     {
         // color already used
-        r2 ++ ;
+        r2++;
         if ( r2 >= 255 )
         {
             r2 = 0;
-            g2 ++ ;
+            g2++;
             if ( g2 >= 255 )
             {
-                g2 = 0 ;
-                b2 ++ ;
+                g2 = 0;
+                b2++;
                 if ( b2 >= 255 )
                 {
                     wxLogError( _("GetUnusedColour:: No Unused Color in image ") );            
@@ -759,19 +759,17 @@ bool wxImage::GetUnusedColour (  unsigned char * r,  unsigned char * g,  unsigne
         key = (r2 << 16) | (g2 << 8) | b2;
     }
     
+    if (r) *r = r2;
+    if (g) *g = g2;
+    if (b) *b = b2;
+    
     return TRUE;
 }
 
 
-bool wxImage::ApplyMask ( const wxImage & mask )
+bool wxImage::SetMaskFromImage(const wxImage& mask, 
+                               unsigned char mr, unsigned char mg, unsigned char mb)
 {
-    // what to do if we already have a mask ??
-    if (M_IMGDATA->m_hasMask || mask.HasMask() )
-    {
-        wxLogError( _("Image already masked") );            
-        return FALSE;
-    }
-    
     // check that the images are the same size
     if ( (M_IMGDATA->m_height != mask.GetHeight() ) || (M_IMGDATA->m_width != mask.GetWidth () ) )
     {
@@ -781,7 +779,7 @@ bool wxImage::ApplyMask ( const wxImage & mask )
     
     // find unused colour
     unsigned char r,g,b ;
-    if (!GetUnusedColour (&r, &g, &b))
+    if (!FindFirstUnusedColour(&r, &g, &b))
     {
         wxLogError( _("No Unused Color in image being masked") );            
         return FALSE ;
@@ -794,9 +792,10 @@ bool wxImage::ApplyMask ( const wxImage & mask )
     const int h = GetHeight();
 
     for (int j = 0; j < h; j++)
+    {
         for (int i = 0; i < w; i++)
         {
-            if ((maskdata[0] > 128) && (maskdata[1] > 128) && (maskdata[2] > 128 ))
+            if ((maskdata[0] == mr) && (maskdata[1]  == mg) && (maskdata[2] == mb))
             {
                 imgdata[0] = r;
                 imgdata[1] = g;
@@ -805,11 +804,10 @@ bool wxImage::ApplyMask ( const wxImage & mask )
             imgdata  += 3;
             maskdata += 3;
         }
+    }
 
-    M_IMGDATA->m_maskRed = r;
-    M_IMGDATA->m_maskGreen = g;
-    M_IMGDATA->m_maskBlue = b;
-    M_IMGDATA->m_hasMask = TRUE;
+    SetMaskColour(r, g, b);
+    SetMask(TRUE);
     
     return TRUE;
 }
