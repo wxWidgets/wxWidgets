@@ -41,6 +41,21 @@
 #endif /* !defined(wxUSE_GUI) */
 
 /*
+    If we're compiling without support for threads/exceptions we have to
+    disable the corresponding features.
+ */
+#ifdef wxNO_THREADS
+#   undef wxUSE_THREADS
+#   define wxUSE_THREADS 0
+#endif /* wxNO_THREADS */
+
+#ifdef wxNO_EXCEPTIONS
+#   undef wxUSE_EXCEPTIONS
+#   define wxUSE_EXCEPTIONS 0
+#endif /* wxNO_EXCEPTIONS */
+
+
+/*
    tests for non GUI features
  */
 
