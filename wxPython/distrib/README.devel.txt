@@ -1,6 +1,6 @@
 This tarball contains all the files needed (I hope!) to allow you to
 write win32 programs or Python extension modules that link to the same
-wxWindows DLL that wxPython does.  Files for both the normal (ANSI)
+wxWidgets DLL that wxPython does.  Files for both the normal (ANSI)
 and Unicode builds are included.
 
 You'll need to add the following directories to your Include path (the
