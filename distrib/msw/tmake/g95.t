@@ -236,17 +236,25 @@ JPEGOBJS    = \
 		$(JPEGDIR)/jquant2.$(OBJSUFF) \
 		$(JPEGDIR)/jdmerge.$(OBJSUFF)
 
-XPMOBJS =    $(XPMDIR)/crbuffri.o\
+XPMOBJS =    $(XPMDIR)/attrib.o\
+		$(XPMDIR)/crbuffri.o\
 		$(XPMDIR)/crdatfri.o\
-		$(XPMDIR)/create.o $(XPMDIR)/crifrbuf.o\
+		$(XPMDIR)/create.o\
+		$(XPMDIR)/crifrbuf.o\
 		$(XPMDIR)/crifrdat.o\
 		$(XPMDIR)/data.o\
-		$(XPMDIR)/hashtab.o $(XPMDIR)/misc.o\
-		$(XPMDIR)/parse.o $(XPMDIR)/rdftodat.o\
+		$(XPMDIR)/image.o\
+		$(XPMDIR)/info.o\
+		$(XPMDIR)/hashtab.o\
+		$(XPMDIR)/misc.o\
+		$(XPMDIR)/parse.o\
+		$(XPMDIR)/rdftodat.o\
 		$(XPMDIR)/rdftoi.o\
-		$(XPMDIR)/rgb.o $(XPMDIR)/scan.o\
-		$(XPMDIR)/simx.o $(XPMDIR)/wrffrdat.o\
-		$(XPMDIR)/wrffrp.o $(XPMDIR)/wrffri.o
+		$(XPMDIR)/rgb.o\
+		$(XPMDIR)/scan.o\
+		$(XPMDIR)/simx.o\
+		$(XPMDIR)/wrffrdat.o\
+		$(XPMDIR)/wrffri.o
 
 TIFFOBJS = $(TIFFDIR)/tif_aux.o \
 		$(TIFFDIR)/tif_close.o \
