@@ -129,6 +129,7 @@ sckaddr.cpp	C	S
 sckfile.cpp	C	S
 sckipc.cpp	C	S
 sckstrm.cpp	C	S
+sizer.cpp	C
 socket.cpp	C	S
 stream.cpp	C
 strconv.cpp	C

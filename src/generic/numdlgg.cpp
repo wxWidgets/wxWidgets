@@ -182,10 +182,11 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     
     topsizer->Add( buttonsizer, 0, wxCENTRE | wxALL, 10 );
 
-    topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
     SetSizer( topsizer );
     SetAutoLayout( TRUE );
+
+    topsizer->SetSizeHints( this );
+    topsizer->Fit( this );
 
     Centre( wxBOTH );
 

@@ -26,6 +26,7 @@
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/utils.h"
+#include "wx/menu.h"
 #endif
 
 #if defined(__WIN95__) && !defined(__TWIN32__)

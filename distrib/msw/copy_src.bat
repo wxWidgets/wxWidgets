@@ -532,6 +532,7 @@ cd minifram
 md \wxmsw_dist\wxMSW\samples\minifram
 copy Makefile.* \wxmsw_dist\wxMSW\samples\minifram
 copy *.cpp \wxmsw_dist\wxMSW\samples\minifram
+copy *.h \wxmsw_dist\wxMSW\samples\minifram
 copy *.xpm \wxmsw_dist\wxMSW\samples\minifram
 copy *.ico \wxmsw_dist\wxMSW\samples\minifram
 copy *.def \wxmsw_dist\wxMSW\samples\minifram
