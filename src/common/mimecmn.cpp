@@ -32,13 +32,10 @@
 #if wxUSE_MIMETYPE
 
 #ifndef WX_PRECOMP
-    #include "wx/module.h"
-#endif
-
-#ifndef WX_PRECOMP
   #include "wx/string.h"
 #endif //WX_PRECOMP
 
+#include "wx/module.h"
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/iconloc.h"
