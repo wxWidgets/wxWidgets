@@ -1229,7 +1229,6 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                                 }
                             }
                         }
-                        // wxFAIL_MSG("unimplemented emulated mode") ;
                     }
                 }
                 else
@@ -1247,28 +1246,65 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 		}
 		else
 		{
+            RgnHandle clipRgn = NewRgn() ;
+            SetRectRgn( clipRgn , dstrect.left , dstrect.top , dstrect.right , dstrect.bottom ) ;
 		    if ( mode == kEmulatedMode )
 		    {
+                Pattern pat ;
+	            ::PenPat(GetQDGlobalsBlack(&pat));
+                if ( logical_func == wxSET )
+                {
+                    RGBColor col= { 0xFFFF, 0xFFFF, 0xFFFF } ;
+	                ::RGBForeColor( &col  ) ;
+                    ::PaintRgn( clipRgn ) ;
+                }
+                else if ( logical_func == wxCLEAR )
+                {
+                    RGBColor col= { 0x0000, 0x0000, 0x0000 } ;
+	                ::RGBForeColor( &col  ) ;
+                    ::PaintRgn( clipRgn ) ;
+                }
+                else if ( logical_func == wxINVERT )
+                {
+                    MacInvertRgn( clipRgn ) ;
+                }
+                else
+                {
+                    for ( int y = 0 ; y < srcrect.right - srcrect.left ; ++y )
+                    {
+                        for ( int x = 0 ; x < srcrect.bottom - srcrect.top ; ++x )
+                        {
+                            Point dstPoint = { dstrect.top + y , dstrect.left + x } ;
+                            Point srcPoint = { srcrect.top + y , srcrect.left + x } ;
+
+                            {
+                                RGBColor srcColor ;
+                                RGBColor dstColor ;
+                                
+                                SetPort( (GrafPtr) sourcePort ) ;
+                                GetCPixel(  srcPoint.h , srcPoint.v , &srcColor) ;
+                                SetPort( (GrafPtr) m_macPort ) ;
+                                GetCPixel( dstPoint.h , dstPoint.v , &dstColor ) ;
+                                
+                                wxMacCalculateColour( logical_func , srcColor ,  dstColor ) ;
+                                SetCPixel( dstPoint.h , dstPoint.v , &dstColor ) ;
+                            }
+                        }
+                    }
+                }
+
+    		}
+    		else
+    		{
+                if ( invertDestinationFirst )
+                {
+                    MacInvertRgn( clipRgn ) ;
+                }
     			CopyBits( GetPortBitMapForCopyBits( sourcePort ) , 
     			    GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ) ,
     				&srcrect, &dstrect, mode, NULL ) ;
     		}
-    		else
-    		{
-                    Pattern pat ;
-		            ::PenPat(GetQDGlobalsBlack(&pat));
-                    if ( logical_func == wxSET )
-                    {
-                        RGBColor col= { 0xFFFF, 0xFFFF, 0xFFFF } ;
-		                ::RGBForeColor( &col  ) ;
-                    }
-                    else
-                    {
-                        RGBColor col= { 0x0000, 0x0000, 0x0000 } ;
-		                ::RGBForeColor( &col  ) ;
-                    }
-                    ::PaintRect( &dstrect ) ;
-    		}
+    		DisposeRgn( clipRgn ) ;
 		}
 		UnlockPixels( bmappixels ) ;
 	} 
@@ -1871,10 +1907,13 @@ void wxDC::MacInstallBrush() const
 	bool backgroundTransparent = (GetBackgroundMode() == wxTRANSPARENT) ;
 
 	::RGBForeColor( &MAC_WXCOLORREF( m_brush.GetColour().GetPixel()) );
+	::RGBBackColor( &MAC_WXCOLORREF( m_backgroundBrush.GetColour().GetPixel()) );
 
 	int brushStyle = m_brush.GetStyle();
 	if (brushStyle == wxSOLID)
+	{
 		::PenPat(GetQDGlobalsBlack(&blackColor));
+    }
 	else if (IS_HATCH(brushStyle))
 	{
 		Pattern pat ;
@@ -1911,6 +1950,7 @@ void wxDC::MacInstallBrush() const
 	    if ( isMonochrome )
 	    {
 	        ::RGBForeColor( &MAC_WXCOLORREF( m_textForegroundColour.GetPixel()) );
+	        ::RGBForeColor( &MAC_WXCOLORREF( m_textBackgroundColour.GetPixel()) );
 
             BitMap* gwbitmap = (BitMap*) *gwpixmaphandle ; // since the color depth is 1 it is a BitMap
             UInt8 *gwbits = (UInt8*) gwbitmap->baseAddr ;
@@ -1968,10 +2008,7 @@ void wxDC::MacInstallBrush() const
     {
 	    ::PenPat(GetQDGlobalsBlack(&blackColor));
 	}
-	
-    if ( !backgroundTransparent )
-        ::RGBBackColor( &MAC_WXCOLORREF( m_textBackgroundColour.GetPixel()) ) ;
-	
+		
 	short mode = patCopy ;
 	switch( m_logicalFunction )
 	{
