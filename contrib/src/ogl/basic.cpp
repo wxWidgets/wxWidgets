@@ -834,9 +834,9 @@ void wxShape::NameRegions(const wxString& parentName)
     buff.Empty();
     wxShape *child = (wxShape *)node->Data();
     if (parentName.Length() > 0)
-      buff << parentName << "." << i;
+      buff << parentName << "." << j;
     else
-      buff << i;
+      buff << j;
     child->NameRegions(buff);
     node = node->Next();
     j ++;
