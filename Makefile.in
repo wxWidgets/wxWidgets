@@ -845,6 +845,13 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/configure $(DISTDIR)/samples
 	cp $(SAMPDIR)/configure.in $(DISTDIR)/samples
 
+	mkdir $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/Makefile.in $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/makefile.unx $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/*.cpp $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/*.h $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/*.xpm $(DISTDIR)/samples/artprov
+
 	mkdir $(DISTDIR)/samples/calendar
 	cp $(SAMPDIR)/calendar/Makefile.in $(DISTDIR)/samples/calendar
 	cp $(SAMPDIR)/calendar/makefile.unx $(DISTDIR)/samples/calendar
@@ -1056,6 +1063,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/joytest/*.h $(DISTDIR)/samples/joytest
 	cp $(SAMPDIR)/joytest/*.wav $(DISTDIR)/samples/joytest
 
+	mkdir $(DISTDIR)/samples/keyboard
+	cp $(SAMPDIR)/keyboard/Makefile.in $(DISTDIR)/samples/keyboard
+	cp $(SAMPDIR)/keyboard/*.cpp $(DISTDIR)/samples/keyboard
+
 	mkdir $(DISTDIR)/samples/layout
 	cp $(SAMPDIR)/layout/Makefile.in $(DISTDIR)/samples/layout
 	cp $(SAMPDIR)/layout/makefile.unx $(DISTDIR)/samples/layout
@@ -1113,6 +1124,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/mobile/wxedit/Makefile.in $(DISTDIR)/samples/mobile/wxedit
 	cp $(SAMPDIR)/mobile/wxedit/*.cpp $(DISTDIR)/samples/mobile/wxedit
 	cp $(SAMPDIR)/mobile/wxedit/*.h $(DISTDIR)/samples/mobile/wxedit
+	mkdir $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/Makefile.in $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/*.cpp $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/*.h $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/*.jpg $(DISTDIR)/samples/mobile/styles
     
 	mkdir $(DISTDIR)/samples/dialup
 	cp $(SAMPDIR)/dialup/Makefile.in $(DISTDIR)/samples/dialup
@@ -1308,6 +1324,18 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
 	cp $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
 
+	mkdir $(DISTDIR)/utils/emulator
+	mkdir $(DISTDIR)/utils/emulator/src
+	mkdir $(DISTDIR)/utils/emulator/docs
+	cp $(UTILSDIR)/emulator/*.in $(DISTDIR)/utils/emulator
+	cp $(UTILSDIR)/emulator/src/*.h $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.in $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.cpp $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.jpg $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.wxe $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/docs/*.txt $(DISTDIR)/utils/emulator/docs
+	cp $(UTILSDIR)/emulator/docs/*.jpg $(DISTDIR)/utils/emulator/docs
+
 	mkdir $(DISTDIR)/utils/makegen
 	mkdir $(DISTDIR)/utils/makegen/templates
 	cp $(UTILSDIR)/makegen/Makefile.in $(DISTDIR)/utils/makegen
@@ -1322,7 +1350,28 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/HelpGen/Makefile.in $(DISTDIR)/utils/HelpGen
 	cp $(UTILSDIR)/HelpGen/src/*.* $(DISTDIR)/utils/HelpGen/src
 
-	cp -R $(UTILSDIR)/dialoged $(DISTDIR)/utils/dialoged
+	mkdir $(DISTDIR)/utils/dialoged
+	mkdir $(DISTDIR)/utils/dialoged/src
+	mkdir $(DISTDIR)/utils/dialoged/src/bitmaps
+	mkdir $(DISTDIR)/utils/dialoged/docs
+	cp $(UTILSDIR)/dialoged/Makefile.in $(DISTDIR)/utils/dialoged
+	cp $(UTILSDIR)/dialoged/src/*.h $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/*.cpp $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/Makefile.in $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/makefile.unx $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/bitmaps/*.xpm $(DISTDIR)/utils/dialoged/src/bitmaps
+	cp $(UTILSDIR)/dialoged/docs/*.tex $(DISTDIR)/utils/dialoged/docs
+	cp $(UTILSDIR)/dialoged/docs/*.init $(DISTDIR)/utils/dialoged/docs
+	cp $(UTILSDIR)/dialoged/docs/*.gif $(DISTDIR)/utils/dialoged/docs
+
+	mkdir $(DISTDIR)/utils/helpview
+	mkdir $(DISTDIR)/utils/helpview/src
+	mkdir $(DISTDIR)/utils/helpview/src/bitmaps
+	cp $(UTILSDIR)/helpview/Makefile.in $(DISTDIR)/utils/helpview
+	cp $(UTILSDIR)/helpview/src/*.h $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/*.cpp $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/Makefile.in $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/test.zip $(DISTDIR)/utils/helpview/src
 
 MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc
