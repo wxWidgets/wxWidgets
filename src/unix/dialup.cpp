@@ -454,10 +454,11 @@ wxDialUpManagerImpl::CheckConnect(void)
       return -1;  // no info
    }
    
-   if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
+   if( connect(sockfd, (struct sockaddr *) &serv_addr,
+               sizeof(serv_addr)) >= 0)
    {
       close(sockfd);
-      return 1; // we can connect, so we have a network!
+      return 1; // we cant connect, so we have a network!
    }
    //connected!
    close(sockfd);
