@@ -90,12 +90,12 @@ private:
 // some pages for our wizard
 // ----------------------------------------------------------------------------
 
-// this shows how to simply control the validity of the user input by just
+// This shows how to simply control the validity of the user input by just
 // overriding TransferDataFromWindow() - of course, in a real program, the
 // check wouldn't be so trivial and the data will be probably saved somewhere
-// too
+// too.
 //
-// it also shows how to use a different bitmap for one of the pages
+// It also shows how to use a different bitmap for one of the pages.
 class wxValidationPage : public wxWizardPageSimple
 {
 public:
@@ -219,7 +219,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-// this shows how to dynamically (i.e. during run-time) arrange the page order
+// This shows how to dynamically (i.e. during run-time) arrange the page order.
 class wxCheckboxPage : public wxWizardPage
 {
 public:
