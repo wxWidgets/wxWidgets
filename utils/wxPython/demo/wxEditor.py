@@ -6,8 +6,8 @@ from wxPython.lib.editor import wxEditor, wxPyEditor
 
 def runTest(frame, nb, log):
     win = wxPanel(nb, -1)
-    ed = wxEditor(win)
-    pyed = wxPyEditor(win)
+    ed = wxEditor(win, -1, style=wxSUNKEN_BORDER)
+    pyed = wxPyEditor(win, -1, style=wxSUNKEN_BORDER)
     box = wxBoxSizer(wxVERTICAL)
     box.Add(ed, 1, wxALL|wxGROW, 5)
     box.Add(pyed, 1, wxALL|wxGROW, 5)

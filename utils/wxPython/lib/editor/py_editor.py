@@ -18,8 +18,9 @@ class wxPyEditor(wxEditor):
 
     # ------------------------------------------------------------------
 
-    def __init__(self, parent, id=-1):
-        wxEditor.__init__(self, parent, id)
+    def __init__(self, parent, id,
+                 pos=wxDefaultPosition, size=wxDefaultSize, style=0):
+        wxEditor.__init__(self, parent, id, pos, size, style)
         self.SetFontTab([
             wxNamedColour('black'),
             wxNamedColour('blue'),

@@ -44,15 +44,16 @@ class Line:
 
 class wxEditor(wxScrolledWindow):
 
-    def __init__(self, parent, id=-1):
+    def __init__(self, parent, id,
+                 pos=wxDefaultPosition, size=wxDefaultSize, style=0):
     ###############################################################
         """
         Alles hat einen Anfang
         """
 
         wxScrolledWindow.__init__(self, parent, id,
-                                  wxDefaultPosition, wxSize(500,400),
-                                  wxSUNKEN_BORDER|wxWANTS_CHARS)
+                                  pos, size,
+                                  style|wxWANTS_CHARS)
 
         # the syntax informations, if they don't exist,
         # all syntax stuff will be ignored
