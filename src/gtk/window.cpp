@@ -2203,6 +2203,11 @@ bool wxWindow::Destroy()
     return wxWindowBase::Destroy();
 }
 
+void wxWindow::DoMoveWindow(int x, int y, int width, int height)
+{
+    gtk_pizza_set_size( GTK_PIZZA(m_parent->m_wxwindow), m_widget, x, y, width, height );
+}
+    
 void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
@@ -2263,12 +2268,10 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
             bottom_border = 5;
         }
 
-        gtk_pizza_set_size( GTK_PIZZA(m_parent->m_wxwindow),
-                              m_widget,
-                              m_x-border,
-                              m_y-border,
-                              m_width+2*border,
-                              m_height+border+bottom_border );
+        DoMoveWindow( m_x-border,
+                      m_y-border,
+                      m_width+2*border,
+                      m_height+border+bottom_border );
     }
 
 /*

@@ -1,4 +1,4 @@
-\section{Drag-and-drop and clipboard overview}\label{wxdndoverview}
+\section{Drag'n'Drop overview}\label{wxdndoverview}
 
 Classes: \helpref{wxDataObject}{wxdataobject}, 
 \helpref{wxTextDataObject}{wxtextdataobject}, 
@@ -10,53 +10,51 @@ Classes: \helpref{wxDataObject}{wxdataobject},
 Note that wxUSE\_DRAG\_AND\_DROP must be defined in setup.h in order
 to use Drag'n'Drop in wxWindows.
 
-This overview describes wxWindows support for drag and drop and clipboard
-operations. Both of these topics are discussed here because, in fact, they're
-quite related. Drag and drop and clipboard are just two ways of passing the
-data around and so the code required to implement both types of the operations
-is almost the same.
+See also: \helpref{wxDataObject overview}{wxdataobjectoverview} and \helpref{DnD sample}{samplednd}
 
-Both operations involve passing some data from one program to another,
-although the data can be received in the same program as the source. In the case
-of clipboard transfer, the data is first placed on the clipboard and then
-pasted into the destination program, while for a drag-and-drop operation the
-data object is not stored anywhere but is created when the user starts
-dragging and is destroyed as soon as he ends it, whether the operation was
-ended successfully or cancelled.
+It may be noted that data transfer to and from the clipboard is quite
+similar to data transfer with Drag'n'Drop and the code to implement
+these two types is almost the same. In particular, both data transfer
+mechanisms store data in some kind of \helpref{wxDataObject}{wxdataobject}
+and identify its format(s) using the \helpref{wxDataFormat}{wxdataformat}
+class.
 
 To be a {\it drag source}, i.e. to provide the data which may be dragged by
 user elsewhere, you should implement the following steps:
 
 \begin{itemize}\itemsep=0pt
-\item {\bf Preparation:} First of all, the data object must be created and
+\item {\bf Preparation:} First of all, a data object must be created and
 initialized with the data you wish to drag. For example:
 
 \begin{verbatim}
-	wxDataObject *my_data = new wxTextDataObject data("This string will be dragged.");
+	wxTextDataObject my_data("This text will be dragged.");
 \end{verbatim}
 \item{\bf Drag start:} To start dragging process (typically in response to a
-mouse click) you must call \helpref{DoDragDrop}{wxdropsourcedodragdrop} function
-of wxDropSource object which should be constructed like this:
+mouse click) you must call \helpref{wxDropSource::DoDragDrop}{wxdropsourcedodragdrop}
+like this:
 
 \begin{verbatim}
 	wxDropSource dragSource( this );
 	dragSource.SetData( my_data );
+	wxDragResult result = dragSource.DoDragDrop( TRUE );
 \end{verbatim}
-\item {\bf Dragging:} The call to DoDragDrop() blocks until the user release the
+\item {\bf Dragging:} The call to DoDragDrop() blocks the program until the user release the
 mouse button (unless you override \helpref{GiveFeedback}{wxdropsourcegivefeedback} function
 to do something special). When the mouse moves in a window of a program which understands the
 same drag-and-drop protocol (any program under Windows or any program supporting the
 XDnD protocol under X Windows), the corresponding \helpref{wxDropTarget}{wxdroptarget} methods
 are called - see below.
 \item {\bf Processing the result:} DoDragDrop() returns an {\it effect code} which
-is one of the values of \helpref{wxDragResult}{wxdropsource} enum. Codes
-of wxDragError, wxDragNone and wxDragCancel have the obvious meaning and mean
-that there is nothing to do on the sending end (except of possibly logging the
-error in the first case). wxDragCopy means that the data has been successfully
-copied and doesn't require any specific actions neither. But wxDragMove is
-special because it means that the data must be deleted from where it was
-copied. If it doesn't make sense (dragging selected text from a read-only
-file) you should pass FALSE as parameter to DoDragDrop() in the previous step.
+is one of the values of {\tt wxDragResult} enum (explained \helpref{here}{wxdroptarget}):
+
+\begin{verbatim}
+	switch (result)
+	{
+	    case wxDragCopy: /* copy the data */ break;
+	    case wxDragMove: /* move the data */ break;
+	    default:         /* do nothing */ break;
+	}
+\end{verbatim}
 \end{itemize}
 
 To be a {\it drop target}, i.e. to receive the data dropped by user you should

@@ -1,7 +1,5 @@
 \section{\class{wxDropTarget}}\label{wxdroptarget}
 
-\overview{Overview}{wxdndoverview}
-
 This class represents a target for a drag and drop operation. A \helpref{wxDataObject}{wxdataobject}
 can be associated with it and by default, this object will be filled with the data from the
 drag source, if the data formats supported by the data object match the drag source data 
@@ -12,6 +10,9 @@ to give visual feedback or react in a more fine-tuned way, e.g. by not accepting
 the whole window area, but only a small portion of it. The normal sequence of calls is
 \helpref{OnEnter}{wxdroptargetonenter}, possibly many times \helpref{OnDragOver}{wxdroptargetondragover},
 \helpref{OnDrop}{wxdroptargetondrop} and finally \helpref{OnData}{wxdroptargetondata}.
+
+See \helpref{Drag'n'Drop overview}{wxdndoverview} and \helpref{wxDataObject overview}{wxdataobjectoverview}
+for more information.
 
 \wxheading{Derived from}
 
@@ -39,7 +40,7 @@ enum wxDragResult
 
 \wxheading{See also}
 
-\helpref{Drag and drop overview}{wxdndoverview}, \helpref{wxDropSource}{wxdropsource}, 
+\helpref{wxDropSource}{wxdropsource}, 
 \helpref{wxTextDropTarget}{wxtextdroptarget}, \helpref{wxFileDropTarget}{wxfiledroptarget},
 \helpref{wxDataFormat}{wxdataformat}, \helpref{wxDataObject}{wxdataobject}
 

@@ -532,6 +532,11 @@ bool wxFrame::Show( bool show )
     return wxWindow::Show( show );
 }
 
+void wxFrame::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
+{
+    wxFAIL_MSG( wxT("DoMoveWindow called for wxFrame") );
+}
+    
 void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );

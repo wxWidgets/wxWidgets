@@ -470,6 +470,11 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
     }
 }
 
+void wxDialog::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
+{
+    wxFAIL_MSG( wxT("DoMoveWindow called for wxDialog") );
+}
+    
 void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid dialog") );
