@@ -53,7 +53,7 @@
     #include "wx/msw/mimetype.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/mimetype.h"
-#elif defined(__WXPM__)
+#elif defined(__WXPM__) || defined (__EMX__)
     #include "wx/os2/mimetype.h"
 #else // Unix
     #include "wx/unix/mimetype.h"
