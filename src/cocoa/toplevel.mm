@@ -177,7 +177,16 @@ bool wxTopLevelWindowCocoa::Show(bool show)
 {
     wxAutoNSAutoreleasePool pool;
     if(show)
+    {
+        // Send the window a size event because wxWindows apps expect it
+        // NOTE: This should really only be done the first time a window
+        // is shown.  I doubt this will cause any problems though.
+        wxSizeEvent event(GetSize(), GetId());
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+
         [m_cocoaNSWindow makeKeyAndOrderFront:m_cocoaNSWindow];
+    }
     else
         [m_cocoaNSWindow orderOut:m_cocoaNSWindow];
     return true;
