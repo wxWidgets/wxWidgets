@@ -67,6 +67,8 @@ public:
     virtual bool Read(wxString& str) = 0;
     // What type is it? Return a string name.
     virtual wxString GetType() const = 0;
+    // If it based on wxObject return the ClassInfo.
+    virtual wxClassInfo* GetValueClassInfo() { return NULL; }
 };
 
 /*
@@ -95,6 +97,7 @@ public:
     wxVariant(const wxStringList& val, const wxString& name = wxEmptyString);
     wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
     wxVariant(void* ptr, const wxString& name = wxEmptyString); // void* (general purpose)
+    wxVariant(wxObject* ptr, const wxString& name = wxEmptyString); //wxObject 
     wxVariant(wxVariantData* data, const wxString& name = wxEmptyString); // User-defined data
 //TODO: Need to document
 #if wxUSE_DATETIME
@@ -181,6 +184,9 @@ public:
     inline operator long () const {  return GetLong(); }
     inline operator bool () const {  return GetBool(); }
     inline operator void* () const {  return GetVoidPtr(); }
+    // No implicit conversion to wxObject, as that would really
+    //  confuse people between conversion to our contained data
+    //  and downcasting to see our base type.
 //TODO: Need to document
 #if wxUSE_DATETIME
     inline operator wxDateTime () const { return GetDateTime(); }
@@ -203,6 +209,7 @@ public:
     wxString GetType() const;
 
     bool IsType(const wxString& type) const;
+    bool IsValueKindOf(const wxClassInfo* type) const;
 
     // Return the number of elements in a list
     int GetCount() const;
@@ -219,6 +226,7 @@ public:
     wxStringList& GetStringList() const ;
 
     void* GetVoidPtr() const ;
+    wxObject* GetWxObjectPtr()  ;
 //TODO: Need to document
 #if wxUSE_DATETIME
     wxDateTime GetDateTime() const ;
@@ -267,6 +275,14 @@ protected:
     wxVariantData*  m_data;
     wxString        m_name;
 };
+
+//Since we want type safety wxVariant we need to fetch and dynamic_cast
+//in a seemingly safe way so the compiler can check, so we define 
+//a dynamic_cast /wxDynamicCast analogue.
+
+#define wxGetVariantCast(var,classname) \
+	((classname*)(var.IsValueKindOf(&classname::sm_class##classname) ?\
+		      var.GetWxObjectPtr() : NULL));
 
 extern wxVariant WXDLLEXPORT wxNullVariant;
 

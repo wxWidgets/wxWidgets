@@ -1052,6 +1052,15 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     {
         textCtrl << _T("var1[") << (int) i << _T("] (type ") << var1[i].GetType() << _T(") = ") << var1[i].MakeString() << _T("\n");
     }
+
+    var1 = wxVariant(new wxFont(wxSystemSettings::GetFont(wxSYS_OEM_FIXED_FONT)));
+    textCtrl << _T("var1 = (wxfont)\"");
+    wxFont* font = wxGetVariantCast(var1,wxFont);
+    if (font) {
+    	textCtrl << font->GetNativeFontInfoDesc() << _T("\"\n");
+    } else {
+	textCtrl << _T("(null)\"\n");
+    }
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)

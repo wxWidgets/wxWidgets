@@ -906,6 +906,111 @@ bool wxVariantDataVoidPtr::Read(wxString& WXUNUSED(str))
 }
 
 /*
+ * wxVariantDataWxObjectPtr
+ */
+
+class wxVariantDataWxObjectPtr: public wxVariantData
+{
+DECLARE_DYNAMIC_CLASS(wxVariantDataWxObjectPtr)
+public:
+    wxVariantDataWxObjectPtr() { }
+    wxVariantDataWxObjectPtr(wxObject* value) { m_value = value; }
+
+    inline wxObject* GetValue() const { return m_value; }
+    inline void SetValue(wxObject* value) { m_value = value; }
+
+    virtual void Copy(wxVariantData& data);
+    virtual bool Eq(wxVariantData& data) const;
+#if wxUSE_STD_IOSTREAM
+    virtual bool Write(wxSTD ostream& str) const;
+#endif
+    virtual bool Write(wxString& str) const;
+#if wxUSE_STD_IOSTREAM
+    virtual bool Read(wxSTD istream& str);
+#endif
+    virtual bool Read(wxString& str);
+    virtual wxString GetType() const ;
+    virtual wxVariantData* Clone() { return new wxVariantDataWxObjectPtr; }
+
+    virtual wxClassInfo* GetValueClassInfo() ; 
+protected:
+    wxObject* m_value;
+
+    DECLARE_NO_COPY_CLASS(wxVariantDataWxObjectPtr)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxVariantDataWxObjectPtr, wxVariantData)
+
+void wxVariantDataWxObjectPtr::Copy(wxVariantData& data)
+{
+    wxASSERT_MSG(  wxIsKindOf((&data), wxVariantDataWxObjectPtr) ,\
+                   wxT("wxVariantDataWxObjectPtr::Copy: Can't copy to this type of data") \
+                 );
+
+    wxVariantDataWxObjectPtr& otherData = (wxVariantDataWxObjectPtr&) data;
+
+    otherData.m_value = m_value;
+}
+
+bool wxVariantDataWxObjectPtr::Eq(wxVariantData& data) const
+{
+    wxASSERT_MSG(   wxIsKindOf((&data), wxVariantDataWxObjectPtr), wxT("wxVariantDataWxObjectPtr::Eq: argument mismatch") );
+
+    wxVariantDataWxObjectPtr& otherData = (wxVariantDataWxObjectPtr&) data;
+
+    return (otherData.m_value == m_value);
+}
+
+wxString wxVariantDataWxObjectPtr::GetType() const
+{
+    wxString returnVal(wxT("wxObject"));
+    if (m_value) {
+        returnVal = m_value->GetClassInfo()->GetClassName();
+    }
+    return returnVal;
+}
+
+wxClassInfo* wxVariantDataWxObjectPtr::GetValueClassInfo()
+{
+    wxClassInfo* returnVal=NULL;
+    
+    if (m_value) returnVal = m_value->GetClassInfo(); 
+
+    return returnVal;
+}
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataWxObjectPtr::Write(wxSTD ostream& str) const
+{
+    wxString s;
+    Write(s);
+    str << (const char*) s.mb_str();
+    return TRUE;
+}
+#endif
+
+bool wxVariantDataWxObjectPtr::Write(wxString& str) const
+{
+    str.Printf(wxT("%s(%ld)"), GetType().mb_str() ,(long) m_value);
+    return TRUE;
+}
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataWxObjectPtr::Read(wxSTD istream& WXUNUSED(str))
+{
+    // Not implemented
+    return FALSE;
+}
+#endif
+
+bool wxVariantDataWxObjectPtr::Read(wxString& WXUNUSED(str))
+{
+    // Not implemented
+    return FALSE;
+}
+
+
+/*
  * wxVariantDataDateTime
  */
 
@@ -1170,6 +1275,12 @@ wxVariant::wxVariant(const wxList& val, const wxString& name) // List of variant
 wxVariant::wxVariant( void* val, const wxString& name)
 {
    m_data = new wxVariantDataVoidPtr(val);
+   m_name = name;
+}
+
+wxVariant::wxVariant( wxObject* val, const wxString& name)
+{
+   m_data = new wxVariantDataWxObjectPtr(val);
    m_name = name;
 }
 
@@ -1697,6 +1808,12 @@ bool wxVariant::IsType(const wxString& type) const
     return (GetType() == type);
 }
 
+bool wxVariant::IsValueKindOf(const wxClassInfo* type) const
+{
+    wxClassInfo* info=m_data->GetValueClassInfo(); 
+    return info ? info->IsKindOf(type) : false ;
+}
+
 
 // Value accessors
 double wxVariant::GetReal() const
@@ -1763,6 +1880,12 @@ void* wxVariant::GetVoidPtr() const
     wxASSERT( (GetType() == wxT("void*")) );
 
     return (void*) ((wxVariantDataVoidPtr*) m_data)->GetValue();
+}
+
+wxObject* wxVariant::GetWxObjectPtr() 
+{
+    wxASSERT(wxIsKindOf(m_data, wxVariantDataWxObjectPtr));
+    return (wxObject*) ((wxVariantDataWxObjectPtr*) m_data)->GetValue();
 }
 
 #if wxUSE_DATETIME
