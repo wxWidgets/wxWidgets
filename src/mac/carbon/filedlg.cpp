@@ -410,6 +410,12 @@ int wxFileDialog::ShowModal()
         if (numFilters < 2)
             dialogCreateOptions.optionFlags |= kNavPreserveSaveFileExtension;
 
+#if TARGET_API_MAC_OSX
+        if (!(m_dialogStyle & wxOVERWRITE_PROMPT))
+        {
+	        dialogCreateOptions.optionFlags |= kNavDontConfirmReplacement;
+        }
+#endif
         err = ::NavCreatePutFileDialog(&dialogCreateOptions,
                                        // Suppresses the 'Default' (top) menu item
                                        kNavGenericSignature, kNavGenericSignature,
