@@ -95,7 +95,7 @@ wxIcon::wxIcon(const wxIconLocation& loc)
     }
     //else: 0 is default
 
-    LoadFile(fullname);
+    LoadFile(fullname, wxBITMAP_TYPE_ICO);
 }
 
 wxIcon::~wxIcon()
