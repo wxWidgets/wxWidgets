@@ -85,6 +85,10 @@
     #define TB_HITTEST              (WM_USER + 69)
 #endif
 
+#ifndef TB_GETMAXSIZE
+    #define TB_GETMAXSIZE           (WM_USER + 83)
+#endif
+
 // these values correspond to those used by comctl32.dll
 #define DEFAULTBITMAPX   16
 #define DEFAULTBITMAPY   15
@@ -338,11 +342,31 @@ wxToolBar::~wxToolBar()
 
 wxSize wxToolBar::DoGetBestSize() const
 {
-    wxSize sizeBest = GetToolSize();
-    sizeBest.x *= GetToolsCount();
+    wxSize sizeBest;
 
-    // reverse horz and vertical components if necessary
-    return HasFlag(wxTB_VERTICAL) ? wxSize(sizeBest.y, sizeBest.x) : sizeBest;
+    SIZE size;
+    if ( !::SendMessage(GetHwnd(), TB_GETMAXSIZE, 0, (LPARAM)&size) )
+    {
+        // maybe an old (< 0x400) Windows version? try to approximate the
+        // toolbar size ourselves
+        sizeBest = GetToolSize();
+        sizeBest.x *= GetToolsCount();
+
+        // reverse horz and vertical components if necessary
+        if ( HasFlag(wxTB_VERTICAL) )
+        {
+            int t = sizeBest.x;
+            sizeBest.x = sizeBest.y;
+            sizeBest.y = t;
+        }
+    }
+    else
+    {
+        sizeBest.x = size.cx;
+        sizeBest.y = size.cy;
+    }
+
+    return sizeBest;
 }
 
 WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
