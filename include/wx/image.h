@@ -32,6 +32,19 @@
 
 #define wxIMAGE_OPTION_FILENAME wxString(_T("FileName"))
 
+#define wxIMAGE_OPTION_RESOLUTION            wxString(_T("Resolution"))
+#define wxIMAGE_OPTION_RESOLUTIONX           wxString(_T("ResolutionX"))
+#define wxIMAGE_OPTION_RESOLUTIONY           wxString(_T("ResolutionY"))
+
+#define wxIMAGE_OPTION_RESOLUTIONUNIT        wxString(_T("ResolutionUnit"))
+
+// constants used with wxIMAGE_OPTION_RESOLUTIONUNIT
+enum
+{
+    wxIMAGE_RESOLUTION_INCHES = 1,
+    wxIMAGE_RESOLUTION_CM = 2
+};
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------

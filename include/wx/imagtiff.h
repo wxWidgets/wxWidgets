@@ -16,6 +16,11 @@
 
 #include "wx/image.h"
 
+// defines for wxImage::SetOption
+#define wxIMAGE_OPTION_BITSPERSAMPLE               wxString(_T("BitsPerSample"))
+#define wxIMAGE_OPTION_SAMPLESPERPIXEL             wxString(_T("SamplesPerPixel"))
+#define wxIMAGE_OPTION_COMPRESSION                 wxString(_T("Compression"))
+#define wxIMAGE_OPTION_IMAGEDESCRIPTOR             wxString(_T("ImageDescriptor"))
 
 //-----------------------------------------------------------------------------
 // wxTIFFHandler

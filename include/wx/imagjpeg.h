@@ -16,15 +16,6 @@
 
 #include "wx/image.h"
 
-// defines for wxImage::SetOption
-#define wxIMAGE_OPTION_RESOLUTION            wxString(_T("Resolution"))
-#define wxIMAGE_OPTION_RESOLUTIONUNIT        wxString(_T("ResolutionUnit"))
-
-enum
-{
-    wxIMAGE_RESOLUTION_INCHES = 1,
-    wxIMAGE_RESOLUTION_CM = 2
-};
 
 //-----------------------------------------------------------------------------
 // wxJPEGHandler
@@ -53,8 +44,5 @@ private:
 };
 #endif
 
-
-
-#endif
-  // _WX_IMAGJPEG_H_
+#endif // _WX_IMAGJPEG_H_
 

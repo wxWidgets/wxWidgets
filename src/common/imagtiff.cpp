@@ -333,19 +333,48 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
         return false;
     }
 
+    TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
     TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,  (uint32)image->GetWidth());
     TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (uint32)image->GetHeight());
     TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
-    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
     TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
 
-    tsize_t linebytes = (tsize_t)image->GetWidth() * 3;
+    if ( image->HasOption(wxIMAGE_OPTION_RESOLUTIONX) &&
+            image->HasOption(wxIMAGE_OPTION_RESOLUTIONY) )
+    {
+        TIFFSetField(tif, TIFFTAG_XRESOLUTION,
+                        image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX));
+        TIFFSetField(tif, TIFFTAG_YRESOLUTION,
+                        image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY));
+    }
+
+    int spp = image->GetOptionInt(wxIMAGE_OPTION_SAMPLESPERPIXEL);
+    if ( !spp )
+        spp = 3;
+
+    int bpp = image->GetOptionInt(wxIMAGE_OPTION_BITSPERSAMPLE);
+    if ( !bpp )
+        bpp=8;
+
+    int compression = image->GetOptionInt(wxIMAGE_OPTION_COMPRESSION);
+    if ( !compression )
+        compression=COMPRESSION_LZW;
+
+    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp);
+    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bpp);
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, spp*bpp == 1 ? PHOTOMETRIC_MINISBLACK
+                                                        : PHOTOMETRIC_RGB);
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, compression);
+
+    // scanlinesize if determined by spp and bpp
+    tsize_t linebytes = (tsize_t)image->GetWidth() * spp * bpp / 8;
+
+    if ( (image->GetWidth() % 8 > 0) && (spp * bpp < 8) )
+        linebytes+=1;
+
     unsigned char *buf;
 
-    if (TIFFScanlineSize(tif) > linebytes)
+    if (TIFFScanlineSize(tif) > linebytes || (spp * bpp < 24))
     {
         buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
         if (!buf)
@@ -363,16 +392,49 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
         buf = NULL;
     }
 
-    TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,
-        TIFFDefaultStripSize(tif, (uint32) -1));
+    TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (uint32) -1));
+
+    uint8 bitmask;
 
     unsigned char *ptr = image->GetData();
-    for (int row = 0; row < image->GetHeight(); row++)
+    for ( int row = 0; row < image->GetHeight(); row++ )
     {
-        if (buf)
-            memcpy(buf, ptr, image->GetWidth());
+        if ( buf )
+        {
+            if ( spp * bpp > 1 )
+            {
+                // color image
+                memcpy(buf, ptr, image->GetWidth());
+            }
+            else // black and white image
+            {
+                for ( int column = 0; column < linebytes; column++ )
+                {
+                    uint8 reverse = 0;
+                    bitmask = 1;
+                    for ( int bp = 0; bp < 8; bp++ )
+                    {
+                        if ( ptr[column*24 + bp*3] > 0 )
+                        {
+                            // check only red as this is sufficient
+                            reverse = reverse | 128 >> bp;
+                        }
 
-        if (TIFFWriteScanline(tif, buf ? buf : ptr, (uint32)row, 0) < 0)
+                        bitmask <<= 1;
+                    }
+
+                    // FIXME: what's this??
+#ifdef __WXGTK__
+                    buf[column]=~reverse;
+
+#else
+                    buf[column]=reverse;
+#endif
+                }
+            }
+        }
+
+        if ( TIFFWriteScanline(tif, buf ? buf : ptr, (uint32)row, 0) < 0 )
         {
             if (verbose)
                 wxLogError( _("TIFF: Error writing image.") );
@@ -383,13 +445,14 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
             return false;
         }
+
         ptr += image->GetWidth()*3;
     }
 
     (void) TIFFClose(tif);
 
     if (buf)
-    _TIFFfree(buf);
+        _TIFFfree(buf);
 
     return true;
 }
