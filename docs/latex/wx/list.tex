@@ -35,7 +35,7 @@ macros):
 
     // declare our list class: this macro declares and partly implements MyList
     // class (which derives from wxListBase)
-    WX_DECLARE_LIST(MyListElement, MyList)
+    WX_DECLARE_LIST(MyListElement, MyList);
 
     ...
 
@@ -44,7 +44,7 @@ macros):
     // usually it will be found in the source file and not in the header
 
     #include <wx/listimpl.cpp>
-    WX_DEFINE_LIST(MyList)
+    WX_DEFINE_LIST(MyList);
 
     // now MyList class may be used as a usual wxList, but all of its methods
     // will take/return the objects of the right (i.e. MyListElement) type. You
