@@ -265,7 +265,6 @@ public:
     virtual bool Enable(bool enable = TRUE);
 
     // more readable flag testing methods
-    bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
     bool IsPassword() const { return (GetWindowStyle() & wxTE_PASSWORD) != 0; }
     bool WrapLines() const
         { return !IsSingleLine() && !(GetWindowStyle() & wxHSCROLL); }
