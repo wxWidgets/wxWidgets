@@ -86,11 +86,11 @@ static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEvent
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
-/* we cannot MWM hints before the widget has been realized, 
+/* we cannot MWM hints and icons before the widget has been realized, 
    so we do this directly after realization */
 
 static gint 
-gtk_dialog_realized_callback( GtkWidget *widget, wxWindow *win )
+gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
 {
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
@@ -120,6 +120,14 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxWindow *win )
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
+    
+    /* reset the icon */
+    if (win->m_icon != wxNullIcon)
+    {
+        wxIcon icon( win->m_icon );
+        win->m_icon = wxNullIcon;
+	win->SetIcon( icon );
+    }
     
     return FALSE;
 }

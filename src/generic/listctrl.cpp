@@ -2335,6 +2335,8 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
     else
         m_headerWin = (wxListHeaderWindow *) NULL;
 
+    SetBackgroundColour( *wxWHITE );
+
     return ret;
 }
 
@@ -2795,6 +2797,8 @@ void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 
 void wxListCtrl::SetBackgroundColour( const wxColour &colour )
 {
+    wxWindow::SetBackgroundColour( colour );
+
     if (m_mainWin)
     {
         m_mainWin->SetBackgroundColour( colour );
@@ -2809,6 +2813,8 @@ void wxListCtrl::SetBackgroundColour( const wxColour &colour )
 
 void wxListCtrl::SetForegroundColour( const wxColour &colour )
 {
+    wxWindow::SetForegroundColour( colour );
+    
     if (m_mainWin)
     {
         m_mainWin->SetForegroundColour( colour );
@@ -2823,6 +2829,8 @@ void wxListCtrl::SetForegroundColour( const wxColour &colour )
 
 void wxListCtrl::SetFont( const wxFont &font )
 {
+    wxWindow::SetFont( font );
+    
     if (m_mainWin)
     {
         m_mainWin->SetFont( font );

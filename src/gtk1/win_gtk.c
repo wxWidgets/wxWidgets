@@ -319,18 +319,21 @@ gtk_myfixed_realize (GtkWidget *widget)
   attributes.window_type = GDK_WINDOW_CHILD;
   
 #if (GTK_MINOR_VERSION > 0)
+  attributes.x = widget->allocation.x;
+  attributes.y = widget->allocation.y;
+  attributes.width = widget->allocation.width;
+  attributes.height = widget->allocation.height;
+
   if (myfixed->shadow_type != GTK_SHADOW_NONE)
-    {
-      attributes.x = 2;
-      attributes.y = 2;
-    }
-  else
-    {
-      attributes.x = 0;
-      attributes.y = 0;
-    }
-  attributes.width = MAX (1, (gint)widget->allocation.width - attributes.x * 2 );
-  attributes.height = MAX (1, (gint)widget->allocation.height - attributes.y * 2 );
+  {
+      attributes.x += 2;
+      attributes.y += 2;
+      attributes.width -= 4;
+      attributes.height -= 4;
+  }
+    
+  if (attributes.width < 2) attributes.width = 2;
+  if (attributes.height < 2) attributes.height = 2;
 #else
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;

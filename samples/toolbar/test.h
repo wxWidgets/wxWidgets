@@ -22,7 +22,7 @@ class MyTimer : public wxTimer
 public:
   MyTimer(wxFrame *frame) { m_frame = frame; }
 
-  virtual void Notify() { wxLogStatus(m_frame, "Timer arrived!"); }
+  virtual void Notify() { wxLogStatus(m_frame, _T("Timer arrived!") ); }
 
 private:
   wxFrame *m_frame;

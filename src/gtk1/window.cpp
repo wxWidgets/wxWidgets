@@ -1314,14 +1314,14 @@ gtk_window_realized_callback( GtkWidget *widget, wxWindow *win )
     if (win->m_backgroundColour != wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ))
     {
         wxColour bg( win->m_backgroundColour );
-	win->m_backgroundColour = wxNullColour;
+	win->SetBackgroundColour( wxNullColour );
 	win->SetBackgroundColour( bg );
     }
     
     if (win->m_foregroundColour != *wxBLACK)
     {
         wxColour fg( win->m_foregroundColour );
-	win->m_foregroundColour = wxNullColour;
+	win->SetForegroundColour( wxNullColour );
 	win->SetForegroundColour( fg );
     }
     
@@ -1489,9 +1489,10 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     m_vAdjust = gtk_range_get_adjustment( GTK_RANGE(s_window->vscrollbar) );
 
     m_wxwindow = gtk_myfixed_new();
+    gtk_widget_show( m_wxwindow );
 
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
-    
+
 #if (GTK_MINOR_VERSION > 0)
     GtkMyFixed *myfixed = GTK_MYFIXED(m_wxwindow);
 
@@ -1588,8 +1589,6 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
           (GtkSignalFunc) gtk_window_hscroll_change_callback, (gpointer) this );
     gtk_signal_connect(GTK_OBJECT(m_vAdjust), "changed",
           (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
-
-    gtk_widget_show( m_wxwindow );
 
     if (m_parent) m_parent->AddChild( this );
 
@@ -3095,7 +3094,7 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
         m_vAdjust->page_size = fthumb;
     }
 
-    if (m_wxwindow->window)
+    if (m_wxwindow)
     {
         if (orient == wxHORIZONTAL)
             gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );

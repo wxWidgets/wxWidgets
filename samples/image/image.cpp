@@ -144,9 +144,6 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   dc.DrawText( "Loaded image", 30, 10 );
   if (my_square && my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
   
-  wxBitmap bm( 1200, 1, 1 );
-  dc.DrawBitmap( bm, 10, 10 );
-
   dc.DrawText( "Drawn directly", 150, 10 );
   dc.SetBrush( wxBrush( "orange", wxSOLID ) );
   dc.SetPen( *wxWHITE_PEN );

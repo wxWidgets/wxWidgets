@@ -150,11 +150,11 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
-/* we cannot MWM hints before the widget has been realized, 
+/* we cannot MWM hints and icons before the widget has been realized, 
    so we do this directly after realization */
 
 static gint 
-gtk_frame_realized_callback( GtkWidget *widget, wxWindow *win )
+gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 {
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
@@ -184,6 +184,14 @@ gtk_frame_realized_callback( GtkWidget *widget, wxWindow *win )
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
+    
+    /* reset the icon */
+    if (win->m_icon != wxNullIcon)
+    {
+        wxIcon icon( win->m_icon );
+        win->m_icon = wxNullIcon;
+	win->SetIcon( icon );
+    }
     
     return FALSE;
 }
@@ -334,7 +342,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     PostCreation();
 
-    /*  we cannot set MWM hints  before the widget has
+    /*  we cannot set MWM hints and icons before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
 			GTK_SIGNAL_FUNC(gtk_frame_realized_callback), (gpointer) this );
@@ -926,6 +934,8 @@ void wxFrame::SetIcon( const wxIcon &icon )
 
     m_icon = icon;
     if (!icon.Ok()) return;
+
+    if (!m_widget->window) return;
 
     wxMask *mask = icon.GetMask();
     GdkBitmap *bm = (GdkBitmap *) NULL;

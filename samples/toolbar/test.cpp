@@ -191,7 +191,7 @@ void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 void MyFrame::OnToolLeftClick(wxCommandEvent& event)
 {
   wxString str;
-  str.Printf("Clicked on tool %d", event.GetId());
+  str.Printf( _T("Clicked on tool %d"), event.GetId());
   SetStatusText(str);
 }
 
@@ -200,7 +200,7 @@ void MyFrame::OnToolEnter(wxCommandEvent& event)
   if (event.GetSelection() > -1)
   {
     wxString str;
-    str.Printf("This is tool number %d", event.GetSelection());
+    str.Printf(_T("This is tool number %d"), event.GetSelection());
     SetStatusText(str);
   }
   else
