@@ -256,6 +256,8 @@ wxInputStream *wxURL::GetInputStream(void)
   }
 
 #if wxUSE_SOCKETS
+    wxIPV4address addr;
+
   // m_protoinfo is NULL when we use a proxy
   if (!m_useProxy && m_protoinfo->m_needhost) {
     if (!addr.Hostname(m_hostname)) {
@@ -263,7 +265,6 @@ wxInputStream *wxURL::GetInputStream(void)
       return NULL;
     }
 
-    wxIPV4address addr;
     addr.Service(m_servname);
 
     if (!m_protocol->Connect(addr, TRUE)) // Watcom needs the 2nd arg for some reason
@@ -373,14 +374,14 @@ wxString wxURL::ConvertToValidURI(const wxString& uri)
     if (c == _T(' '))
       out_str += _T('+');
     else {
-      if (!isalpha(c) && c != _T('.') && c != _T('+') && c != _T('/')) { 
+      if (!isalpha(c) && c != _T('.') && c != _T('+') && c != _T('/')) {
         hexa_code.Printf(_T("%%%02X"), c);
         out_str += hexa_code;
       } else
         out_str += c;
     }
   }
-  
+
   return out_str;
 }
 
