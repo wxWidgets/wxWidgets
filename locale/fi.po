@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: wxWindows-2.2.1\n"
 "POT-Creation-Date: 1999-07-06 13:24+0100\n"
 "PO-Revision-Date: 1999-07-08 14:04+0200\n"
 "Last-Translator: Lauri Jutila <ljuti@hangar.keskiespoo.net>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Type: text/plain; charset=iso8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/generic/dirdlgg.cpp:461 ../src/generic/dirdlgg.cpp:465
 #: ../src/generic/dirdlgg.cpp:489 ../src/generic/dirdlgg.cpp:493
@@ -1958,40 +1958,3 @@ msgstr "alt"
 msgid "shift"
 msgstr "shift"
 
-#: ../src/generic/tipdlg.cpp:161
-msgid "Tip of the Day"
-msgstr "P=E4iv=E4n vinkki"
-
-#: ../src/generic/tipdlg.cpp:172
-msgid "&Show tips at startup"
-msgstr "&N=E4yt=E4 vinkit k=E4ynnistyksess=E4"
-
-#: ../src/generic/tipdlg.cpp:173
-msgid "&Next"
-msgstr "&Seuraava"
-
-#: ../src/generic/tipdlg.cpp:175
-msgid "Did you know..."
-msgstr "Tiesitk=F6..."
-
-#: ../src/msw/clipbrd.cpp:149
-#, c-format
-msgid "Failed to allocate %dKb of memory for clipboard transfer."
-msgstr "%dKb "
-
-#: ../src/msw/clipbrd.cpp:164
-#, c-format
-msgid "Failed to set clipboard data in format %s"
-msgstr "Leikep=F6yd=E4n datan formatointi muotoon %s ep=E4onnistui"
-
-#: ../src/msw/menu.cpp:156
-msgid "ctrl"
-msgstr "ctrl"
-
-#: ../src/msw/menu.cpp:158
-msgid "alt"
-msgstr "alt"
-
-#: ../src/msw/menu.cpp:160
-msgid "shift"
-msgstr "shift"
