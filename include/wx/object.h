@@ -74,6 +74,27 @@ public:
         , m_next(sm_first)
         { sm_first = this; }
 
+    ~wxClassInfo()
+    {
+        if (sm_first == this)
+        {
+            sm_first = m_next;
+        }
+        else
+        {
+            wxClassInfo * info = sm_first;
+            while (info)
+            {
+                if (info->m_next == this)
+                {
+                    info->m_next = m_next;
+                    break;
+                }
+                info = info->m_next;
+            }
+        }
+    }
+
     wxObject *CreateObject() { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
 
     const wxChar       *GetClassName() const { return m_className; }

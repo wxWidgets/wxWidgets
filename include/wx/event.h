@@ -546,6 +546,9 @@ class WXDLLEXPORT wxScrollWinEvent : public wxEvent
 public:
     wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
                      int pos = 0, int orient = 0);
+	wxScrollWinEvent(const wxScrollWinEvent & event) : wxEvent(event)
+		{	m_commandInt = event.m_commandInt;
+			m_extraLong = event.m_extraLong;	}
 
     int GetOrientation() const { return (int) m_extraLong ; }
     int GetPosition() const { return m_commandInt ; }
@@ -603,12 +606,13 @@ enum
 
 class WXDLLEXPORT wxMouseEvent : public wxEvent
 {
+private:
+    wxMouseEvent& operator=(const wxMouseEvent& event);
+	
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
-    wxMouseEvent(const wxMouseEvent& event) { Assign(event); }
-
-    wxMouseEvent& operator=(const wxMouseEvent& event)
-        { Assign(event); return *this; }
+    wxMouseEvent(const wxMouseEvent& event)	: wxEvent(event)
+		{ Assign(event); }
 
     // Was it a button event? (*doesn't* mean: is any button *down*?)
     bool IsButton() const { return Button(wxMOUSE_BTN_ANY); }
@@ -776,6 +780,11 @@ public:
           m_x(x), m_y(y), m_cursor()
         { }
 
+	wxSetCursorEvent(const wxSetCursorEvent & event) : wxEvent(event)
+		{	m_x = event.m_x;
+			m_y = event.m_y;
+			m_cursor = event.m_cursor;	}
+
     wxCoord GetX() const { return m_x; }
     wxCoord GetY() const { return m_y; }
 
@@ -806,6 +815,22 @@ class WXDLLEXPORT wxKeyEvent : public wxEvent
 {
 public:
     wxKeyEvent(wxEventType keyType = wxEVT_NULL);
+	wxKeyEvent(const wxKeyEvent& evt) : wxEvent(evt)
+    {
+        m_x = evt.m_x;
+        m_y = evt.m_y;
+		
+        m_keyCode = evt.m_keyCode;
+		
+        m_controlDown = evt.m_controlDown;
+        m_shiftDown = evt.m_shiftDown;
+        m_altDown = evt.m_altDown;
+        m_metaDown = evt.m_metaDown;
+        m_scanCode = evt.m_scanCode;
+        m_rawCode = evt.m_rawCode;
+        m_rawFlags = evt.m_rawFlags;
+    }
+	
 
     // Find state of shift/control keys
     bool ControlDown() const { return m_controlDown; }
@@ -910,7 +935,11 @@ public:
         : wxEvent(id, wxEVT_SIZE),
           m_size(sz)
         { }
-
+    wxSizeEvent(const wxSizeEvent & event)
+		: wxEvent(event),
+		  m_size(event.m_size)
+		{ }
+	
     wxSize GetSize() const { return m_size; }
 
     virtual wxEvent *Clone() const { return new wxSizeEvent(*this); }
@@ -938,7 +967,11 @@ public:
         : wxEvent(id, wxEVT_MOVE),
           m_pos(pos)
         { }
-
+    wxMoveEvent(const wxMoveEvent& event)
+        : wxEvent(event),
+		  m_pos(event.m_pos)
+	{ }
+	
     wxPoint GetPosition() const { return m_pos; }
 
     virtual wxEvent *Clone() const { return new wxMoveEvent(*this); }
@@ -1092,7 +1125,10 @@ public:
     wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = TRUE, int Id = 0)
         : wxEvent(Id, type)
         { m_active = active; }
-
+    wxActivateEvent(const wxActivateEvent& event)
+        : wxEvent(event)
+	{ m_active = event.m_active; }
+	
     bool GetActive() const { return m_active; }
 
     virtual wxEvent *Clone() const { return new wxActivateEvent(*this); }
@@ -1135,7 +1171,10 @@ public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0)
         : wxEvent(id, type)
         { m_menuId = id; }
-
+    wxMenuEvent(const wxMenuEvent & event)
+        : wxEvent(event)
+	{ m_menuId = event.m_menuId; }
+	
     // only for wxEVT_MENU_HIGHLIGHT
     int GetMenuId() const { return m_menuId; }
 
@@ -1170,7 +1209,17 @@ public:
         m_force = FALSE;
 #endif // WXWIN_COMPATIBILITY
     }
-
+    wxCloseEvent(const wxCloseEvent & event)
+        : wxEvent(event),
+		m_loggingOff(event.m_loggingOff),
+		m_veto(event.m_veto),
+		m_canVeto(event.m_canVeto)
+    {
+#if WXWIN_COMPATIBILITY
+        m_force = event.m_force;
+#endif // WXWIN_COMPATIBILITY
+	}
+	
     void SetLoggingOff(bool logOff) { m_loggingOff = logOff; }
     bool GetLoggingOff() const { return m_loggingOff; }
 
@@ -1220,7 +1269,10 @@ public:
     wxShowEvent(int id = 0, bool show = FALSE)
         : wxEvent(id, wxEVT_SHOW)
         { m_show = show; }
-
+    wxShowEvent(const wxShowEvent & event)
+        : wxEvent(event)
+	{ m_show = event.m_show; }
+	
     void SetShow(bool show) { m_show = show; }
     bool GetShow() const { return m_show; }
 
@@ -1243,7 +1295,10 @@ public:
     wxIconizeEvent(int id = 0, bool iconized = TRUE)
         : wxEvent(id, wxEVT_ICONIZE)
         { m_iconized = iconized; }
-
+    wxIconizeEvent(const wxIconizeEvent & event)
+        : wxEvent(event)
+	{ m_iconized = event.m_iconized; }
+	
     // return true if the frame was iconized, false if restored
     bool Iconized() const { return m_iconized; }
 
@@ -1318,7 +1373,15 @@ public:
           m_joyStick(joystick)
     {
     }
-
+    wxJoystickEvent(const wxJoystickEvent & event)
+		: wxEvent(event),
+		  m_pos(event.m_pos),
+		  m_zPosition(event.m_zPosition),
+		  m_buttonChange(event.m_buttonChange),
+		  m_buttonState(event.m_buttonState),
+		  m_joyStick(event.m_joyStick)
+    { }
+	
     wxPoint GetPosition() const { return m_pos; }
     int GetZPosition() const { return m_zPosition; }
     int GetButtonState() const { return m_buttonState; }
@@ -1432,7 +1495,16 @@ public:
         m_setText = 
         m_setChecked = FALSE;
     }
-
+    wxUpdateUIEvent(const wxUpdateUIEvent & event)
+        : wxCommandEvent(event),
+		  m_checked(event.m_checked),
+		  m_enabled(event.m_enabled),
+		  m_setEnabled(event.m_setEnabled),
+		  m_setText(event.m_setText),
+		  m_setChecked(event.m_setChecked),
+		  m_text(event.m_text)
+	{ }
+	
     bool GetChecked() const { return m_checked; }
     bool GetEnabled() const { return m_enabled; }
     wxString GetText() const { return m_text; }
@@ -1567,7 +1639,11 @@ public:
         : wxEvent(id, wxEVT_QUERY_NEW_PALETTE),
           m_paletteRealized(FALSE)
         { }
-
+    wxQueryNewPaletteEvent(const wxQueryNewPaletteEvent & event)
+        : wxEvent(event),
+		m_paletteRealized(event.m_paletteRealized)
+	{ }
+	
     // App sets this if it changes the palette.
     void SetPaletteRealized(bool realized) { m_paletteRealized = realized; }
     bool GetPaletteRealized() const { return m_paletteRealized; }
@@ -1698,7 +1774,13 @@ public:
         : wxCommandEvent(type, id),
           m_pos(pt), m_target(), m_link()
     { }
-
+    wxHelpEvent(const wxHelpEvent & event)
+        : wxCommandEvent(event),
+		  m_pos(event.m_pos),
+		  m_target(event.m_target),
+		  m_link(event.m_link)
+    { }
+	
     // Position of event (in screen coordinates)
     const wxPoint& GetPosition() const { return m_pos; }
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
@@ -1739,7 +1821,11 @@ public:
         : wxCommandEvent(type, id),
           m_pos(pt)
     { }
-
+    wxContextMenuEvent(const wxContextMenuEvent & event)
+        : wxCommandEvent(event),
+		m_pos(event.m_pos)
+    { }
+	
     // Position of event (in screen coordinates)
     const wxPoint& GetPosition() const { return m_pos; }
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
@@ -1765,7 +1851,11 @@ public:
         : wxEvent(0, wxEVT_IDLE),
           m_requestMore(FALSE)
         { }
-
+    wxIdleEvent(const wxIdleEvent & event)
+        : wxEvent(event),
+		m_requestMore(event.m_requestMore)
+	{ }
+	
     void RequestMore(bool needMore = TRUE) { m_requestMore = needMore; }
     bool MoreRequested() const { return m_requestMore; }
 
