@@ -49,6 +49,8 @@ class wxMask: public wxObject
     GdkBitmap *GetBitmap() const;
 
   protected:
+  
+    friend wxBitmap;
 
     GdkBitmap *m_bitmap;
 

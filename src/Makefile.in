@@ -81,7 +81,9 @@ install::
 	@echo "  Copying shared library"
 	@cd $(WXBASEDIR)/lib/$(OS) ; \
 	  rm -f $(libdir)/$(SHARED_LIBRARY) ; \
-	  $(INSTALL_PROGRAM) $(SHARED_LIBRARY) $(libdir)/$(SHARED_LIBRARY)
+	  $(INSTALL_PROGRAM) $(SHARED_LIBRARY) $(libdir)/$(SHARED_LIBRARY) ; \
+	  $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so.$(LIB_MAJOR) ; \
+	  $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so
 	@echo " "
 	@echo "Installation complete. You may have to run ldconfig!"
 	@echo " "
