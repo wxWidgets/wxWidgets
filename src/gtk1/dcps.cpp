@@ -1349,10 +1349,15 @@ void wxPostScriptDC::EndPage ()
     *m_pstream << "showpage\n";
 }
 
-bool wxPostScriptDC::Blit (long xdest, long ydest, long fwidth, long fheight,
-      wxDC *source, long xsrc, long ysrc, int WXUNUSED(rop), bool WXUNUSED(useMask))
+bool wxPostScriptDC::Blit( long WXUNUSED(xdest), long WXUNUSED(ydest), 
+                           long WXUNUSED(fwidth), long WXUNUSED(fheight),
+                           wxDC *WXUNUSED(source), 
+			   long WXUNUSED(xsrc), long WXUNUSED(ysrc), 
+			   int WXUNUSED(rop), bool WXUNUSED(useMask) )
 {
     wxCHECK_MSG( m_ok && m_pstream, FALSE, "invalid postscript dc" );
+    
+    wxFAIL_MSG( "wxPostScriptDC::Blit no yet implemented." );
     
     return TRUE;
 }

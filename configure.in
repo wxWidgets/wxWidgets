@@ -671,7 +671,7 @@ dnl ------------------------------------------------------------------------
 
 AC_OVERRIDES_PREPARE
 
-DEFAULT_wxUSE_GTK=0
+DEFAULT_wxUSE_GTK=1
 DEFAULT_wxUSE_QT=0
 DEFAULT_wxUSE_MOTIF=0
 
