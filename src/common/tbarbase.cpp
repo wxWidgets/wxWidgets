@@ -554,11 +554,15 @@ void wxToolBarBase::DoToolbarUpdates()
     while (parent->GetParent())
         parent = parent->GetParent();
 
-#ifdef __WXMSW__
-    wxWindow* focusWin = wxFindFocusDescendant(parent);
-#else
+// This kind of #ifdef is a good way to annoy people. It breaks
+// apps, but only on one platform and due to a hack in officially
+// platform independent code. It took me hours to fix this. RR.
+//
+// #ifdef __WXMSW__
+//    wxWindow* focusWin = wxFindFocusDescendant(parent);
+// #else
     wxWindow* focusWin = (wxWindow*) NULL;
-#endif
+// #endif
 
     wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler() ;
 
