@@ -506,6 +506,7 @@ class TreeLayout(LayoutEngine):
 
     def layout(self, node):
         self.nodelist = []
+        self.NODE_HEIGHT = self.tree.GetFont().GetPointSize() * 2
         self.layoutwalk(node)
 
     def GetNodeList(self):
@@ -772,7 +773,7 @@ class wxMVCTree(wxScrolledWindow):
     def Refresh(self):
         if self.doubleBuffered:
             self.painter.ClearBuffer()
-        wxScrolledWindow.Refresh(self)
+        wxScrolledWindow.Refresh(self, false)
 
     def GetPainter(self):
         return self.painter
@@ -1034,6 +1035,7 @@ class wxMVCTree(wxScrolledWindow):
             if node:
                 self.painter.paint(dc, node, doubleBuffered = 0, paintBackground = 0)
         self.painter.ClearBuffer()
+
     def RemoveFromSelection(self, nodeTuple):
         if type(nodeTuple) != type(()):
             nodeTuple = (nodeTuple,)
