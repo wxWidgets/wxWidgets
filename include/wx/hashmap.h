@@ -523,7 +523,7 @@ public: \
     /* count() == 0 | 1 */ \
     size_type count( const const_key_type& key ) \
         { return GetNode( key ) ? 1 : 0; } \
-};
+}
 
 // these macros are to be used in the user code
 #define WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME) \
@@ -531,11 +531,11 @@ public: \
 
 #define WX_DECLARE_STRING_HASH_MAP( VALUE_T, CLASSNAME ) \
     _WX_DECLARE_HASH_MAP( wxString, VALUE_T, wxStringHash, wxStringEqual, \
-                          CLASSNAME, class );
+                          CLASSNAME, class )
 
 #define WX_DECLARE_VOIDPTR_HASH_MAP( VALUE_T, CLASSNAME ) \
     _WX_DECLARE_HASH_MAP( void*, VALUE_T, wxPointerHash, wxPointerEqual, \
-                          CLASSNAME, class );
+                          CLASSNAME, class )
 
 // and these do exactly the same thing but should be used inside the
 // library
@@ -544,11 +544,11 @@ public: \
 
 #define WX_DECLARE_EXPORTED_STRING_HASH_MAP( VALUE_T, CLASSNAME ) \
     _WX_DECLARE_HASH_MAP( wxString, VALUE_T, wxStringHash, wxStringEqual, \
-                          CLASSNAME, class WXDLLEXPORT );
+                          CLASSNAME, class WXDLLEXPORT )
 
 #define WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP( VALUE_T, CLASSNAME ) \
     _WX_DECLARE_HASH_MAP( void*, VALUE_T, wxPointerHash, wxPointerEqual, \
-                          CLASSNAME, class WXDLLEXPORT );
+                          CLASSNAME, class WXDLLEXPORT )
 
 #endif // _WX_HASHMAP_H_
 
