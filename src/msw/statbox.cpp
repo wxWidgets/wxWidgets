@@ -155,34 +155,43 @@ wxSize wxStaticBox::DoGetBestSize() const
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
 #ifndef __WXWINCE__
-    switch ( nMsg )
+    if ( nMsg == WM_NCHITTEST )
     {
-        case WM_NCHITTEST:
-            {
-                // This code breaks some other processing such as enter/leave tracking
-                // so it's off by default.
-                                
-                static int s_useHTClient = -1;
-                if (s_useHTClient == -1)
-                    s_useHTClient = wxSystemOptions::GetOptionInt(wxT("msw.staticbox.htclient"));
-                if (s_useHTClient == 1)
-                {
-                    int xPos = LOWORD(lParam);  // horizontal position of cursor
-                    int yPos = HIWORD(lParam);  // vertical position of cursor
+        // This code breaks some other processing such as enter/leave tracking
+        // so it's off by default.
 
-                    ScreenToClient(&xPos, &yPos);
+        static int s_useHTClient = -1;
+        if (s_useHTClient == -1)
+            s_useHTClient = wxSystemOptions::GetOptionInt(wxT("msw.staticbox.htclient"));
+        if (s_useHTClient == 1)
+        {
+            int xPos = LOWORD(lParam);  // horizontal position of cursor
+            int yPos = HIWORD(lParam);  // vertical position of cursor
 
-                    // Make sure you can drag by the top of the groupbox, but let
-                    // other (enclosed) controls get mouse events also
-                    if ( yPos < 10 )
-                        return (long)HTCLIENT;
-                }
-            }
-            break;
+            ScreenToClient(&xPos, &yPos);
+
+            // Make sure you can drag by the top of the groupbox, but let
+            // other (enclosed) controls get mouse events also
+            if ( yPos < 10 )
+                return (long)HTCLIENT;
+        }
     }
 #endif // !__WXWINCE__
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
+void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
+{
+    wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
+
+    // if not using correct (but backwards cojmpatible) text metrics
+    // calculations, we need to add some extra margin or otherwise static box
+    // title is clipped
+#if !wxDIALOG_UNIT_COMPATIBILITY
+    if ( !GetLabel().empty() )
+        *borderTop += GetCharHeight()/3;
+#endif // !wxDIALOG_UNIT_COMPATIBILITY
 }
 
 #endif // wxUSE_STATBOX

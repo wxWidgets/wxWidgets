@@ -39,13 +39,14 @@ public:
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
 
-    /// Implementation
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    /// Implementation only
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 
 protected:
     virtual wxSize DoGetBestSize() const;
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox)
