@@ -932,34 +932,27 @@ void wxApp::Dispatch()
  * the message. Some may have accelerator tables, or have
  * MDI complications.
  */
-bool wxApp::ProcessMessage(WXMSG *Msg)
+bool wxApp::ProcessMessage(WXMSG *wxmsg)
 {
-    MSG *msg = (MSG *)Msg;
-
-    HWND hWnd;
+    MSG *msg = (MSG *)wxmsg;
+    HWND hWnd = msg->hwnd;
+    wxWindow *wndThis = wxFindWinFromHandle((WXHWND)hWnd), *wnd;
 
     // Try translations first; find the youngest window with
     // a translation table.
-    for (hWnd = msg->hwnd; hWnd != (HWND) NULL; hWnd = ::GetParent(hWnd))
+    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
     {
-        wxWindow *wnd = wxFindWinFromHandle((WXHWND) hWnd);
-        if (wnd)
-        {
-            if (wnd->MSWTranslateMessage(Msg))
-                return TRUE;
-        }
+        if ( wnd->MSWTranslateMessage(wxmsg) )
+            return TRUE;
     }
 
     // Anyone for a non-translation message? Try youngest descendants first.
-    for (hWnd = msg->hwnd; hWnd != (HWND) NULL; hWnd = ::GetParent(hWnd))
+    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
     {
-        wxWindow *wnd = wxFindWinFromHandle((WXHWND) hWnd);
-        if (wnd)
-        {
-            if (wnd->MSWProcessMessage(Msg))
-                return TRUE;
-        }
+        if ( wnd->MSWProcessMessage(wxmsg) )
+            return TRUE;
     }
+
     return FALSE;
 }
 
