@@ -1444,8 +1444,13 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
 
 wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& WXUNUSED(flags))
 {
+    wxClientDC dc(this);
+    PrepareDC(dc);
+    long x = dc.DeviceToLogicalX( (long)point.x );
+    long y = dc.DeviceToLogicalY( (long)point.y );
+
     bool onButton = FALSE;
-    return m_anchor->HitTest( point, onButton );
+    return m_anchor->HitTest( wxPoint(x, y), onButton );
 }
 
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )
