@@ -31,7 +31,7 @@
 #include "wx/html/htmlwin.h"
 
 // utility function: read a wxString from a wxInputStream
-void wxPrivate_ReadString(wxString& str, wxInputStream* s, wxMBConv& conv)
+static void ReadString(wxString& str, wxInputStream* s, wxMBConv& conv)
 {
     size_t streamSize = s->GetSize();
 
@@ -88,7 +88,7 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     wxString doc, doc2;
 
     if (s == NULL) return wxEmptyString;
-    wxPrivate_ReadString(doc, s, wxConvISO8859_1);
+    ReadString(doc, s, wxConvISO8859_1);
 
     doc.Replace(wxT("&"), wxT("&amp;"), TRUE);
     doc.Replace(wxT("<"), wxT("&lt;"), TRUE);
@@ -136,18 +136,9 @@ wxString wxHtmlFilterImage::ReadFile(const wxFSFile& file) const
 
 
 //--------------------------------------------------------------------------------
-// wxHtmlFilterPlainText
-//          filter for text/plain or uknown
+// wxHtmlFilterHTML
+//          filter for text/html
 //--------------------------------------------------------------------------------
-
-class wxHtmlFilterHTML : public wxHtmlFilter
-{
-    DECLARE_DYNAMIC_CLASS(wxHtmlFilterHTML)
-
-    public:
-        virtual bool CanRead(const wxFSFile& file) const;
-        virtual wxString ReadFile(const wxFSFile& file) const;
-};
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterHTML, wxHtmlFilter)
@@ -184,12 +175,12 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     {
         wxString charset = file.GetMimeType().Mid(charsetPos + 10);
         wxCSConv conv(charset);
-        wxPrivate_ReadString(doc, s, conv);
+        ReadString(doc, s, conv);
     }
     else
     {
         wxString tmpdoc;
-        wxPrivate_ReadString(tmpdoc, s, wxConvISO8859_1);
+        ReadString(tmpdoc, s, wxConvISO8859_1);
         wxString charset = wxHtmlParser::ExtractCharsetInformation(tmpdoc);
         if (charset.empty())
             doc = tmpdoc;
@@ -200,7 +191,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
         }
     }
 #else // !wxUSE_UNICODE
-    wxPrivate_ReadString(doc, s, wxConvLibc);
+    ReadString(doc, s, wxConvLibc);
     // add meta tag if we obtained this through http:
     if (!file.GetMimeType().empty())
     {
