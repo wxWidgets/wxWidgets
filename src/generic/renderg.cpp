@@ -33,9 +33,8 @@
 
 #include "wx/settings.h"
 #include "wx/splitter.h"
-
 #include "wx/dcmirror.h"
-
+#include "wx/module.h"
 #include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
@@ -72,6 +71,11 @@ public:
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
+    // Cleanup by deleting standard renderer
+    static void Cleanup();
+
+    // Get the generic object
+    static wxRendererGeneric* DoGetGeneric();
 
 protected:
     // draw the rectange using the first pen for the left and top sides and
@@ -84,11 +88,21 @@ protected:
           m_penDarkGrey,
           m_penLightGrey,
           m_penHighlight;
+
+    static wxRendererGeneric* sm_rendererGeneric;
 };
 
 // ============================================================================
 // wxRendererGeneric implementation
 // ============================================================================
+
+// Get the generic object
+wxRendererGeneric* wxRendererGeneric::DoGetGeneric()
+{
+    if (!sm_rendererGeneric)
+        sm_rendererGeneric = new wxRendererGeneric;
+    return sm_rendererGeneric;
+}
 
 // ----------------------------------------------------------------------------
 // wxRendererGeneric creation
@@ -97,10 +111,18 @@ protected:
 /* static */
 wxRendererNative& wxRendererNative::GetGeneric()
 {
-    static wxRendererGeneric s_rendererGeneric;
-
-    return s_rendererGeneric;
+    return * wxRendererGeneric::DoGetGeneric();
 }
+
+void wxRendererGeneric::Cleanup()
+{
+    if (sm_rendererGeneric)
+        delete sm_rendererGeneric;
+    
+    sm_rendererGeneric = NULL;
+}
+
+wxRendererGeneric* wxRendererGeneric::sm_rendererGeneric = NULL;
 
 wxRendererGeneric::wxRendererGeneric()
     : m_penBlack(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW)),
@@ -299,4 +321,16 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
         dc.DrawLine(position + 6, offset, position + 6, h - 1 - offset);
     }
 }
+
+// A module to allow cleanup of generic renderer.
+class wxGenericRendererModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxGenericRendererModule)
+public:
+    wxGenericRendererModule() {}
+    bool OnInit() { return true; };
+    void OnExit() { wxRendererGeneric::Cleanup(); };
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxGenericRendererModule, wxModule)
 
