@@ -197,6 +197,16 @@
     }
 #endif
 
+// GetFirstChild
+
+#ifdef GetFirstChild
+    #undef GetFirstChild
+    inline HWND GetFirstChild(HWND hwnd)
+    {
+        return GetTopWindow(hwnd);
+    }
+#endif
+
 // For WINE
 
 #if defined(GetWindowStyle) || defined(__WXWINE__)
