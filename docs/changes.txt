@@ -39,31 +39,23 @@ All GUI ports:
 - support wxListCtrl columns alignment for all platforms and not just MSW
 - added wxToolBar Add/InsertTool(tool) (Janusz Piwowarski)
 - WXR resources can now be used in Unicode builds
-
-- Changed to type-safe wxSizerItemList for wxSizer child items.
-
+- changed to type-safe wxSizerItemList for wxSizer child items
     Deprecated:
-
         wxSizer::Remove( wxWindow* )
             - it does not function as Remove would usually be expected to
-              and destroy the window, use Detach instead.
-
+              and destroy the window, use Detach instead
         wxSizer::GetOption(),
         wxSizer::SetOption()
             - wxSizer 'option' parameter was renamed 'proportion' to better
-              reflect its action, use Get/SetProportion instead.
-
+              reflect its action, use Get/SetProportion instead
         wxKeyEvent::KeyCode()
-            - use GetKeyCode instead.
-
+            - use GetKeyCode instead
         wxList:: Number, First, Last, Nth
-            - use typesafe GetCount, GetFirst, GetLast, Item instead.
-
+            - use typesafe GetCount, GetFirst, GetLast, Item instead
         wxNode:: Next, Previous, Data
-            - use typesafe Get* instead.
-
+            - use typesafe Get* instead
         wxListBase::operator wxList&()
-            - use typesafe lists instead.
+            - use typesafe lists instead
 
 Unix:
 
@@ -72,13 +64,14 @@ Unix:
 
 wxGTK:
 
+- added native wxMessageDialog implementation for GTK+2 build
 - fixed wxMenu::Remove (John Skiff and Benjamin Williams)
 - made wxTextCtrl::EmulateKeyPress() work for Delete and Backspace
 - fixed wxTopLevelWindow::ShowFullScreen to work with kwin, IceWM and
   window managers that support _NET_WM_STATE_FULLSCREEN
-- Added wxEVT_MENU_OPEN event generation.
-- Fixed bug in generic file selector causing incomplete file extensions to
-  be appended to filenames with no extension.
+- added wxEVT_MENU_OPEN event generation
+- fixed bug in generic file selector causing incomplete file extensions to
+  be appended to filenames with no extension
 
 wxMSW:
 
