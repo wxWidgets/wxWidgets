@@ -202,7 +202,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\forty.exe
+all : .SYMBOLIC $(OBJS)\forty.exe data
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -221,6 +221,10 @@ $(OBJS)\forty.exe :  $(FORTY_OBJECTS) $(OBJS)\forty_forty.res
 	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\forty.lbc library %i
 	@%append $(OBJS)\forty.lbc option resource=$(OBJS)\forty_forty.res
 	wlink @$(OBJS)\forty.lbc
+
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (about.htm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\forty_forty.obj :  .AUTODEPEND .\forty.cpp
 	$(CXX) -zq -fo=$^@ $(FORTY_CXXFLAGS) $<

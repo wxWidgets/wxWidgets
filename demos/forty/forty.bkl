@@ -21,4 +21,10 @@
         <win32-res>forty.rc</win32-res>
     </exe>
 
+    <wx-data id="data">
+        <files>
+            about.htm
+        </files>
+    </wx-data>
+
 </makefile>
