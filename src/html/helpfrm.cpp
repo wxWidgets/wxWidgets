@@ -1632,8 +1632,13 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
 
                 if (displ++ == 0)
                 {
-                    m_IndexList->SetSelection(0);
-                    DisplayIndexItem(&index[i]);
+                    // don't automatically show topic selector if this
+                    // item points to multiple pages:
+                    if (index[i].items.size() == 1)
+                    {
+                        m_IndexList->SetSelection(0);
+                        DisplayIndexItem(&index[i]);
+                    }
                 }
 
                 // if this is nested item of the index, show its parent(s)
@@ -1677,7 +1682,12 @@ void wxHtmlHelpFrame::OnIndexAll(wxCommandEvent& WXUNUSED(event))
         m_IndexList->Append(index[i].name, (char*)(&index[i]));
         if (first)
         {
-            DisplayIndexItem(&index[i]);
+            // don't automatically show topic selector if this
+            // item points to multiple pages:
+            if (index[i].items.size() == 1)
+            {
+                DisplayIndexItem(&index[i]);
+            }
             first = false;
         }
     }
