@@ -953,15 +953,19 @@ private:
 
 // include the declaration of the platform-specific class
 #if defined(__WXMSW__)
-    #if !defined(__WXUNIVERSAL__)
+    #ifdef __WXUNIVERSAL__
+        #define wxWindowNative wxWindowMSW
+    #else // !wxUniv
         #define wxWindowMSW wxWindow
         #define sm_classwxWindowMSW sm_classwxWindow
-    #endif // wxUniv
+    #endif // wxUniv/!wxUniv
     #include "wx/msw/window.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/window.h"
 #elif defined(__WXGTK__)
-    #if !defined(__WXUNIVERSAL__)
+    #ifdef __WXUNIVERSAL__
+        #define wxWindowNative wxWindowGTK
+    #else // !wxUniv
         #define wxWindowGTK wxWindow
         #define sm_classwxWindowGTK sm_classwxWindow
     #endif // wxUniv
@@ -977,6 +981,10 @@ private:
 // for wxUniversal, we now derive the real wxWindow from wxWindow<platform>,
 // for the native ports we already have defined it above
 #if defined(__WXUNIVERSAL__)
+    #ifndef wxWindowNative
+        #error "wxWindowNative must be defined above!"
+    #endif
+
     #include "wx/univ/window.h"
 #endif // wxUniv
 
