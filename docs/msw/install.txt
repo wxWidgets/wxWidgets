@@ -316,7 +316,8 @@ Here are the steps required:
   socket-related files in src/msw/makefile.g95.
 
 - Set your WXWIN variable to where wxWindows is installed.
-  For Cygwin/Mingw32, use forward slashes in the path, not backslashes.
+  *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not
+  backslashes.
 
 - Use the makefile.g95 files for compiling wxWindows and samples,
   e.g.:

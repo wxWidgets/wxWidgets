@@ -79,7 +79,7 @@ static PAINTSTRUCT g_paintStruct;
     // created in resopnse to WM_PAINT message - doing this from elsewhere is a
     // common programming error among wxWindows programmers and might lead to
     // very subtle and difficult to debug refresh/repaint bugs.
-    extern bool g_isPainting = FALSE;
+    bool g_isPainting = FALSE;
 #endif // __WXDEBUG__
 
 // ===========================================================================

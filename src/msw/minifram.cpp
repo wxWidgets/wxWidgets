@@ -967,7 +967,11 @@ BOOL PASCAL DrawCaption( HDC hDC, HWND hWnd, LPRECT lprc,
             rgbText = SetTextColor( hDC, rgbText ) ;
             SetBkMode( hDC, nBkMode ) ;
             
+#ifdef __WIN16__
+            GlobalFreePtr( (unsigned int) lpsz ) ;
+#else
             GlobalFreePtr( lpsz ) ;
+#endif
         }
     }
     

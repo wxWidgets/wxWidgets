@@ -1183,6 +1183,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 void wxTextCtrl::AdjustSpaceLimit()
 {
+#ifndef __WIN16__
     unsigned int len = ::GetWindowTextLength(GetHwnd()),
     limit = ::SendMessage(GetHwnd(), EM_GETLIMITTEXT, 0, 0);
     if ( len > limit )
@@ -1198,6 +1199,7 @@ void wxTextCtrl::AdjustSpaceLimit()
         else
             ::SendMessage(GetHwnd(), EM_LIMITTEXT, limit, 0);
     }
+#endif
 }
 
 // For Rich Edit controls. Do we need it?

@@ -534,11 +534,11 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
 #endif // wxUSE_RESOURCES
 
 // ---------------------------------------------------------------------------
-// helper functiosn for showing a "busy" cursor
+// helper functions for showing a "busy" cursor
 // ---------------------------------------------------------------------------
 
-extern HCURSOR gs_wxBusyCursor = 0;     // new, busy cursor
-static HCURSOR gs_wxBusyCursorOld = 0;  // old cursor
+HCURSOR gs_wxBusyCursor = 0;     // new, busy cursor
+HCURSOR gs_wxBusyCursorOld = 0;  // old cursor
 static int gs_wxBusyCursorCount = 0;
 
 // Set the cursor to the busy cursor for all windows

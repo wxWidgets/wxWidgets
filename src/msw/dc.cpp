@@ -559,7 +559,7 @@ void wxDC::DoDrawRoundedRectangle(long x, long y, long width, long height, doubl
     long y2 = (y+height);
 
     (void)RoundRect(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2),
-        YLOG2DEV(y2), 2*XLOG2DEV(radius), 2*YLOG2DEV(radius));
+        YLOG2DEV(y2), (int) (2*XLOG2DEV(radius)), (int)( 2*YLOG2DEV(radius)));
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);

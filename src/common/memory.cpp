@@ -1146,7 +1146,11 @@ void wxTrace(const wxChar *fmt ...)
   }
   else
 #ifdef __WXMSW__
+#ifdef __WIN32__
     OutputDebugString((LPCTSTR)buffer) ;
+#else
+    OutputDebugString((const char*) buffer) ;
+#endif
 #else
     fprintf(stderr, buffer);
 #endif
@@ -1178,7 +1182,11 @@ void wxTraceLevel(int level, const wxChar *fmt ...)
   }
   else
 #ifdef __WXMSW__
+#ifdef __WIN32__
     OutputDebugString((LPCTSTR)buffer) ;
+#else
+    OutputDebugString((const char*) buffer) ;
+#endif
 #else
     fprintf(stderr, buffer);
 #endif

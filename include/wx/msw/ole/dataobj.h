@@ -33,7 +33,7 @@ public:
 
   // ctor & dtor
   wxDataObject();
-  ~wxDataObject();
+  virtual ~wxDataObject();
 
   // pure virtuals to override
     // get the best suited format for our data
@@ -114,9 +114,9 @@ public:
   virtual bool IsSupportedFormat(wxDataFormat format) const
     { return format == wxDF_BITMAP; }
   virtual size_t GetDataSize() const
-    { wxASSERT(false); return 0; } // BEMIMP
+    { wxASSERT(FALSE); return 0; } // BEMIMP
   virtual void GetDataHere(void *pBuf) const
-    { wxASSERT(false); } // BEMIMP
+    { wxASSERT(FALSE); } // BEMIMP
 
 private:
   wxBitmap  m_bitmap;

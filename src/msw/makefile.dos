@@ -84,6 +84,7 @@ GENERICOBJS= \
 COMMONOBJS = \
   $(COMMDIR)\config.obj \
   $(COMMDIR)\cmndata.obj \
+  $(COMMDIR)\dcbase.obj \
   $(COMMDIR)\docview.obj \
   $(COMMDIR)\docmdi.obj \
   $(COMMDIR)\dynarray.obj \
@@ -698,6 +699,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/cmndata.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/dcbase.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -27,6 +27,7 @@
 #include "wx/dcmemory.h"
 
 #include <windows.h>
+#include "wx/msw/winundef.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)

@@ -1561,7 +1561,7 @@ void wxWindow::UnpackScroll(WXWPARAM wParam, WXLPARAM lParam,
 void wxWindow::UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
                               WXWORD *nCtlColor, WXHDC *hdc, WXHWND *hwnd)
 {
-    *control = (WXHWND)LOWORD(lParam);
+    *hwnd = (WXHWND)LOWORD(lParam);
     *nCtlColor = (int)HIWORD(lParam);
     *hdc = (WXHDC)wParam;
 }
@@ -1945,7 +1945,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_GETMINMAXINFO:
-            processed = HandleGetMinMaxInfo((LPMINMAXINFO)lParam);
+            processed = HandleGetMinMaxInfo((MINMAXINFO*)lParam);
             break;
 
         case WM_SETCURSOR:

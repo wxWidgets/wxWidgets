@@ -65,7 +65,6 @@ COMMONOBJS = cmndata.obj &
   gdicmn.obj &
   image.obj &
   imagpng.obj &
-  imagjpeg.obj &
   intl.obj &
   ipcbase.obj &
   helpbase.obj &
@@ -95,6 +94,7 @@ COMMONOBJS = cmndata.obj &
   sckfile.obj &
   sckipc.obj &
   sckstrm.obj &
+  sckint.obj &
   url.obj &
   http.obj &
   protocol.obj &
@@ -115,6 +115,7 @@ COMMONOBJS = cmndata.obj &
   wxchar.obj
 
 # Can't compile these yet under Watcom C++
+#  imagjpeg.obj &
 #  odbc.obj &
 #  db.obj &
 #  dbtable.obj &
@@ -569,7 +570,7 @@ image.obj:     $(COMMDIR)\image.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 imagpng.obj:     $(COMMDIR)\imagpng.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+  *$(CCC) $(CPPFLAGS) -i=..\png -i=..\zlib $(IFLAGS) $<
 
 imagjpeg.obj:     $(COMMDIR)\imagjpeg.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
@@ -653,6 +654,9 @@ string.obj:     $(COMMDIR)\string.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 socket.obj:     $(COMMDIR)\socket.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+sckint.obj:     $(COMMDIR)\sckint.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 sckaddr.obj:     $(COMMDIR)\sckaddr.cpp

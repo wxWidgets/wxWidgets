@@ -20,14 +20,6 @@
  * This will produce a big PCH file.
  */
 
-#if defined(__BORLANDC__)
-#if !(defined(__WIN32__) || defined(__NT__) || defined(__WIN32__))
-#pragma hdrfile "c:\wx\src\msw\wx.pch"
-#endif
-
-#pragma hdrstart
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

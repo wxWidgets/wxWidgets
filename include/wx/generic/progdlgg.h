@@ -59,7 +59,7 @@ public:
    void Resume() { m_state = Continue; }
 
    /// Callback for optional abort button
-   void OnCancel(wxEvent& WXUNUSED(event)) { m_state = Canceled; }
+   void OnCancel(wxCommandEvent& WXUNUSED(event)) { m_state = Canceled; }
 
    /// callback to disable "hard" window closing
    void OnClose(wxCloseEvent& event);

@@ -31,7 +31,7 @@
 #include  <wx/log.h>
 #include  <wx/settings.h>
 #include  <wx/generic/imaglist.h>
-#include  <wx/generic/notebook.h>
+#include  <wx/notebook.h>
 #include  <wx/dcclient.h>
 
 // ----------------------------------------------------------------------------
@@ -479,7 +479,7 @@ bool wxNotebook::RefreshLayout(bool force)
   
         m_tabView->SetViewRect(rect);
 
-        m_tabView->Layout();
+        m_tabView->LayoutTabs();
 
         // Need to do it a 2nd time to get the tab height with
         // the new view width, since changing the view width changes the
@@ -492,7 +492,7 @@ bool wxNotebook::RefreshLayout(bool force)
   
         m_tabView->SetViewRect(rect);
 
-        m_tabView->Layout();
+        m_tabView->LayoutTabs();
 
         if (!force && (rect == oldRect))
           return FALSE;

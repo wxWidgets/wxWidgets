@@ -195,6 +195,10 @@ typedef  _TUCHAR     wxUChar;
   #endif
  #elif defined(__GNUWIN32__) && !defined(__MINGW32__) // Cygwin (not Mingw32) doesn't have wcslen.h, needed in buffer.h
   #define wxUSE_WCHAR_T 0
+ #elif defined(__BORLANDC__) // WIN16 BC++
+  #define wxUSE_WCHAR_T 0
+ #elif defined(__WATCOMC__)
+  #define wxUSE_WCHAR_T 0
  #else
   // add additional compiler checks if this fails
   #define wxUSE_WCHAR_T 1
@@ -319,7 +323,50 @@ typedef unsigned char   wxUChar;
 #define  wxSetlocale setlocale
 
    // string.h functions
-#define  wxStricmp   strcasecmp
+// #define  wxStricmp   strcasecmp
+
+// Taken from string.h since it tests for platform more correctly
+// portable strcasecmp/_stricmp
+inline int WXDLLEXPORT wxStricmp(const char *psz1, const char *psz2)
+{
+#if     defined(__VISUALC__) || ( defined(__MWERKS__) && defined(__INTEL__) )
+  return _stricmp(psz1, psz2);
+#elif     defined(__SC__)
+  return _stricmp(psz1, psz2);
+#elif     defined(__SALFORDC__)
+  return stricmp(psz1, psz2);
+#elif defined(__BORLANDC__)
+  return stricmp(psz1, psz2);
+#elif defined(__WATCOMC__)
+  return stricmp(psz1, psz2);
+#elif   defined(__UNIX__) || defined(__GNUWIN32__)
+  return strcasecmp(psz1, psz2);
+#elif defined(__MWERKS__) && !defined(__INTEL__)
+  register char c1, c2;
+  do {
+    c1 = tolower(*psz1++);
+    c2 = tolower(*psz2++);
+  } while ( c1 && (c1 == c2) );
+
+  return c1 - c2;
+#else
+  // almost all compilers/libraries provide this function (unfortunately under
+  // different names), that's why we don't implement our own which will surely
+  // be more efficient than this code (uncomment to use):
+  /*
+    register char c1, c2;
+    do {
+      c1 = tolower(*psz1++);
+      c2 = tolower(*psz2++);
+    } while ( c1 && (c1 == c2) );
+
+    return c1 - c2;
+  */
+
+  #error  "Please define string case-insensitive compare for your OS/compiler"
+#endif  // OS/compiler
+}
+
 // #define  wxStrtok    strtok_r // this needs a configure check
 
    // leave the rest to defaults below

@@ -31,11 +31,7 @@
 
 #ifdef __WXMSW__
 #include <windows.h>
-
-#ifdef DrawText
-#undef DrawText
-#endif
-
+#include "wx/msw/winundef.h"
 #endif
 
 #if !USE_SHARED_LIBRARY

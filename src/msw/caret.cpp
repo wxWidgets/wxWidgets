@@ -60,10 +60,14 @@ int wxCaretBase::GetBlinkTime()
 //static
 void wxCaretBase::SetBlinkTime(int milliseconds)
 {
+#ifdef __WIN16__
+    ::SetCaretBlinkTime(milliseconds) ;
+#else
     if ( !::SetCaretBlinkTime(milliseconds) )
     {
         wxLogLastError("SetCaretBlinkTime");
     }
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -77,6 +81,10 @@ bool wxCaret::MSWCreateCaret()
 
     if ( !m_hasCaret )
     {
+#ifdef __WIN16__
+        ::CreateCaret(GetWinHwnd(GetWindow()), 0, m_width, m_height) ;
+        m_hasCaret = TRUE;
+#else
         if ( !::CreateCaret(GetWinHwnd(GetWindow()), 0, m_width, m_height) )
         {
             wxLogLastError("CreateCaret");
@@ -85,6 +93,7 @@ bool wxCaret::MSWCreateCaret()
         {
             m_hasCaret = TRUE;
         }
+#endif
     }
 
     return m_hasCaret;
@@ -112,10 +121,14 @@ void wxCaret::OnKillFocus()
     {
         m_hasCaret = FALSE;
 
+#ifdef __WIN16__
+        ::DestroyCaret() ;
+#else
         if ( !::DestroyCaret() )
         {
             wxLogLastError("DestroyCaret");
         }
+#endif
     }
 }
 
@@ -133,20 +146,28 @@ void wxCaret::DoShow()
         (void)MSWCreateCaret();
     }
 
+#ifdef __WIN16__
+    ::ShowCaret(GetWinHwnd(GetWindow())) ;
+#else
     if ( !::ShowCaret(GetWinHwnd(GetWindow())) )
     {
         wxLogLastError("ShowCaret");
     }
+#endif
 }
 
 void wxCaret::DoHide()
 {
     if ( m_hasCaret )
     {
+#ifdef __WIN16__
+        ::HideCaret(GetWinHwnd(GetWindow())) ;
+#else
         if ( !::HideCaret(GetWinHwnd(GetWindow())) )
         {
             wxLogLastError("HideCaret");
         }
+#endif
     }
 }
 
@@ -158,10 +179,14 @@ void wxCaret::DoMove()
 {
     if ( m_hasCaret )
     {
+#ifdef __WIN16__
+        ::SetCaretPos(m_x, m_y) ;
+#else
         if ( !::SetCaretPos(m_x, m_y) )
         {
             wxLogLastError("SetCaretPos");
         }
+#endif
     }
     //else: we don't have caret right now, nothing to do (this does happen)
 }

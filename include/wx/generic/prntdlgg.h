@@ -72,6 +72,7 @@ enum
 // Windows using PostScript print/preview)
 // ----------------------------------------------------------------------------
 
+#if wxUSE_POSTSCRIPT
 class WXDLLEXPORT wxGenericPrintDialog : public wxDialog
 {
     DECLARE_DYNAMIC_CLASS(wxGenericPrintDialog)
@@ -150,6 +151,8 @@ public:
     wxPrintData&        GetPrintData() { return m_printData; }
 #endif // wxUSE_POSTSCRIPT
 };
+#endif
+    // wxUSE_POSTSCRIPT
 
 class WXDLLEXPORT wxGenericPageSetupDialog : public wxDialog
 {

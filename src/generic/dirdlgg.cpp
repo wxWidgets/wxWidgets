@@ -31,6 +31,7 @@
 #include "wx/gdicmn.h"
 #include "wx/intl.h"
 #include "wx/imaglist.h"
+#include "wx/icon.h"
 
 #include "wx/generic/dirdlgg.h"
 

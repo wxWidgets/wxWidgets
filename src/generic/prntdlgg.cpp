@@ -65,18 +65,21 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
+#if !USE_SHARED_LIBRARY
+
 #if wxUSE_POSTSCRIPT
 
-#if !USE_SHARED_LIBRARY
     IMPLEMENT_CLASS(wxGenericPrintDialog, wxDialog)
     IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
-    IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxDialog)
 
     BEGIN_EVENT_TABLE(wxGenericPrintDialog, wxDialog)
         EVT_BUTTON(wxID_OK, wxGenericPrintDialog::OnOK)
         EVT_BUTTON(wxPRINTID_SETUP, wxGenericPrintDialog::OnSetup)
         EVT_RADIOBOX(wxPRINTID_RANGE, wxGenericPrintDialog::OnRange)
     END_EVENT_TABLE()
+#endif
+
+    IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxDialog)
 
     BEGIN_EVENT_TABLE(wxGenericPageSetupDialog, wxDialog)
         EVT_BUTTON(wxPRINTID_SETUP, wxGenericPageSetupDialog::OnPrinter)
@@ -88,6 +91,8 @@
 // ----------------------------------------------------------------------------
 
 extern wxPrintPaperDatabase *wxThePrintPaperDatabase;
+
+#if wxUSE_POSTSCRIPT
 
 // ============================================================================
 // implementation

@@ -668,7 +668,11 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 	case VT_BOOL:
 		{
 #if defined(__WATCOMC__) || (defined(_MSC_VER) && (_MSC_VER <= 1000)) //GC
+#ifndef HAVE_BOOL // Can't use bool operator if no native bool type
+			variant = (long) (oleVariant.bool != 0);
+#else
 			variant = (bool) (oleVariant.bool != 0);
+#endif
 #else
 			variant = (bool) (oleVariant.boolVal != 0);
 #endif

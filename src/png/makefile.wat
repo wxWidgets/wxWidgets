@@ -7,6 +7,7 @@
 # Makefile : Builds PNG library for Watcom C++, WIN32
 
 WXDIR = ..\..
+EXTRACPPFLAGS=-i=..\zlib
 
 !include $(WXDIR)\src\makewat.env
 
@@ -33,8 +34,4 @@ clean:   .SYMBOLIC
     -erase *.lbc
 
 cleanall:   clean
-
-#accel.obj:     $(MSWDIR)\accel.cpp
-#  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
 

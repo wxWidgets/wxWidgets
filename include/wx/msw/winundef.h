@@ -9,8 +9,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/* THIS SHOULD NOT BE USED since you might include it once e.g. in window.h,
+ * then again _AFTER_ you've included windows.h, in which case it won't work
+ * a 2nd time -- JACS
 #ifndef _WX_WINUNDEF_H_
 #define _WX_WINUNDEF_H_
+ */
 
 // windows.h #defines the following identifiers which are also used in wxWin
 
@@ -117,7 +121,7 @@
 
 #ifdef StartDoc
    #undef StartDoc
-   #ifdef __MINGW32__
+   #ifdef __GNUWIN32__
       #define DOCINFOW DOCINFO
       #define DOCINFOA DOCINFO
    #endif
@@ -196,4 +200,5 @@
 //    #undef GetNextChild
 //endif
 
-#endif // _WX_WINUNDEF_H_
+// #endif // _WX_WINUNDEF_H_
+

@@ -158,7 +158,7 @@ class WXDLLEXPORT wxPrintData: public wxObject
     void operator=(const wxPrintSetupData& setupData);
 #endif
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__)
     // Convert to/from the DEVMODE structure
     void ConvertToNative();
     void ConvertFromNative();
