@@ -131,17 +131,15 @@ public:
 
   virtual wxDataFormat GetFormat() const { return wxDF_BITMAP; }
 
-/* ??
   // implement base class pure virtuals
   virtual wxDataFormat GetPreferredFormat() const
-    { return (wxDataFormat) wxDataObject::Text; }
+    { return (wxDataFormat) wxDataObject::Bitmap; }
   virtual bool IsSupportedFormat(wxDataFormat format) const
-    { return format == wxDataObject::Text || format == wxDataObject::Locale; }
+    { return format == wxDataObject::Bitmap; }
   virtual size_t GetDataSize() const
-    { return m_strText.Len() + 1; } // +1 for trailing '\0'of course
+    { wxASSERT(false); return 0; } // BEMIMP
   virtual void GetDataHere(void *pBuf) const
-    { memcpy(pBuf, m_strText.c_str(), GetDataSize()); }
-*/
+    { wxASSERT(false); } // BEMIMP
 
 private:
   wxBitmap  m_bitmap;
