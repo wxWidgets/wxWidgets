@@ -5,23 +5,29 @@ from wxPython.wx import *
 #----------------------------------------------------------------------
 
 # Some unicode strings
-chi_uni = (u'Python ?\u8200?\u619f\u8cdc?\u877a\u51fd?\u96a4\ued67?\u5697',
-            '(Python is best programming language)')
+chi_uni = (u'Python \u662f\u6700\u597d\u7684\u7de8\u7a0b\u8a9e\u8a00\uff01',
+            '(Python is the best programming language!)')
 
 lt1_uni = (u'Pythonas yra \u017eaviausia \u0161neka',
             '(Python is the best)')
 lt2_uni = (u'A\u0161 m\u0117gstu \u0161okolad\u0105',
             '(I like chocolate)')
 
+kor_uni = (u'\ud30c\uc774\uc36c\uc774 \ucd5c\uc120\uc774\ub2e4!',
+           '(Python is the best!)')
+
 
 # Equivalents in UTF-8.  Should I demo these somehow???
-chi_utf8 = ('Python ?\xe8\x88\x80?\xe6\x86\x9f\xe8\xb3\x9c?\xe8\x9d\xba\xe5\x87\xbd?\xe9\x9a\xa4\xee\xb5\xa7?\xe5\x9a\x97',
-            '(Python is best programming language)')
+chi_utf8 = ('Python \xe6\x98\xaf\xe6\x9c\x80\xe5\xa5\xbd\xe7\x9a\x84\xe7\xb7\xa8\xe7\xa8\x8b\xe8\xaa\x9e\xe8\xa8\x80\xef\xbc\x81',
+            '(Python is the best programming language)')
 
 lt1_utf8 = ('Pythonas yra \xc5\xbeaviausia \xc5\xa1neka',
             '(Python is the best)')
 lt2_utf8 = ('A\xc5\xa1 m\xc4\x97gstu \xc5\xa1okolad\xc4\x85',
             '(I like chocolate)')
+
+kor_utf8 = ('\xed\x8c\x8c\xec\x9d\xb4\xec\x8d\xac\xec\x9d\xb4 \xec\xb5\x9c\xec\x84\xa0\xec\x9d\xb4\xeb\x8b\xa4!'
+            '(Python is the best!)')
 
 #----------------------------------------------------------------------
 
@@ -50,6 +56,9 @@ class TestPanel(wxPanel):
             self.AddText(box, lt1_uni[0], lt1_uni[1], 'Lithuanian:', font)
             self.AddLine(box)
             self.AddText(box, lt2_uni[0], lt2_uni[1], 'Lithuanian:', font)
+            self.AddLine(box)
+
+            self.AddText(box, kor_uni[0], kor_uni[1], 'Korean:', font)
             self.AddLine(box)
 
 
