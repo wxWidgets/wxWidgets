@@ -191,3 +191,26 @@ Checking in wxWindows/src/msw/app.cpp;
 new revision: 1.186; previous revision: 1.185
 done
 
+
+23. Add Raise() to wxDialog and have wxBringWindowToTop only
+call SetWindowPos, so that raising child windows does not
+automatically raise the associated top-level window. For
+binary compatibility, can do a test for top-level-ness in
+wxBringWindowToTop.
+
+See: Bug [ 744199 ] wxBringWindowToTop, child window z-order
+
+Checking in include/wx/msw/dialog.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/dialog.h,v  <--  dialog.h
+new revision: 1.34; previous revision: 1.33
+done
+Checking in src/msw/dialog.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/dialog.cpp,v  <--  dialog.cpp
+new revision: 1.84; previous revision: 1.83
+done
+Checking in src/msw/window.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/window.cpp,v  <--  window.cpp
+new revision: 1.381; previous revision: 1.380
+done
+
+
