@@ -44,6 +44,7 @@
 #endif
 
 #include "wx/fdrepdlg.h"
+#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -102,6 +103,8 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     wxCHECK_MSG( m_FindReplaceData, false,
                  _T("can't create dialog without data") );
 
+    bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+    
     wxBoxSizer *leftsizer = new wxBoxSizer( wxVERTICAL );
 
     // 3 columns because there is a spacer in the middle
@@ -126,7 +129,7 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
                                         wxALIGN_CENTRE_VERTICAL |
                                         wxALIGN_RIGHT | wxTOP, 5);
 
-        sizer2Col->Add(10, 0);
+        sizer2Col->Add(isPda ? 2 : 10, 0);
 
         m_textRepl = new wxTextCtrl(this, wxID_ANY,
                                     m_FindReplaceData->GetReplaceString());
@@ -136,7 +139,7 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
 
     leftsizer->Add(sizer2Col, 0, wxEXPAND | wxALL, 5);
 
-    wxBoxSizer *optsizer = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer *optsizer = new wxBoxSizer( isPda ? wxVERTICAL : wxHORIZONTAL );
 
     wxBoxSizer *chksizer = new wxBoxSizer( wxVERTICAL);
 
@@ -149,11 +152,19 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     optsizer->Add(chksizer, 0, wxALL, 10);
 
     static const wxString searchDirections[] = {_("Up"), _("Down")};
+    int majorDimension = 0;
+    int rbStyle ;
+    if (isPda)
+        rbStyle = wxRA_SPECIFY_ROWS;
+    else
+        rbStyle = wxRA_SPECIFY_COLS;
+    
     m_radioDir = new wxRadioBox(this, wxID_ANY, _("Search direction"),
                                 wxDefaultPosition, wxDefaultSize,
-                                WXSIZEOF(searchDirections), searchDirections);
+                                WXSIZEOF(searchDirections), searchDirections,
+                                majorDimension, rbStyle);
 
-    optsizer->Add(m_radioDir, 0, wxALL, 10);
+    optsizer->Add(m_radioDir, 0, wxALL, isPda ? 5 : 10);
 
     leftsizer->Add(optsizer);
 
@@ -174,8 +185,8 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxHORIZONTAL );
 
-    topsizer->Add(leftsizer, 1, wxALL, 5);
-    topsizer->Add(bttnsizer, 0, wxALL, 5);
+    topsizer->Add(leftsizer, 1, wxALL, isPda ? 0 : 5);
+    topsizer->Add(bttnsizer, 0, wxALL, isPda ? 0 : 5);
 
     int flags = m_FindReplaceData->GetFlags();
 

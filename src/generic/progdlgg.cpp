@@ -39,12 +39,12 @@
     #include "wx/event.h"
     #include "wx/gauge.h"
     #include "wx/intl.h"
-    #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/timer.h"
 #endif
 
 #include "wx/generic/progdlgg.h"
+#include "wx/settings.h"
 
 // ---------------------------------------------------------------------------
 // macros
@@ -114,6 +114,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     m_hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
     m_hasSkipButton = (style & wxPD_CAN_SKIP) != 0;
 
+    bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+    
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // we have to remove the "Close" button from the title bar then as it is
     // confusing to have it - it doesn't work anyhow
@@ -258,13 +260,16 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     SetSizerAndFit(sizer);
 
-    sizeDlg.y += 2*LAYOUT_MARGIN;
+    if (!isPda)
+    {
+        sizeDlg.y += 2*LAYOUT_MARGIN;
 
-    // try to make the dialog not square but rectangular of reasonabel width
-    sizeDlg.x = (wxCoord)wxMax(widthText, 4*sizeDlg.y/3);
-    sizeDlg.x *= 3;
-    sizeDlg.x /= 2;
-    SetClientSize(sizeDlg);
+        // try to make the dialog not square but rectangular of reasonable width
+        sizeDlg.x = (wxCoord)wxMax(widthText, 4*sizeDlg.y/3);
+        sizeDlg.x *= 3;
+        sizeDlg.x /= 2;
+        SetClientSize(sizeDlg);
+    }
 
     Centre(wxCENTER_FRAME | wxBOTH);
 

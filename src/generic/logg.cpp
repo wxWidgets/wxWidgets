@@ -736,17 +736,19 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     m_btnSave = (wxButton *)NULL;
 #endif // wxUSE_FILE
 
+    bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+    
     // create the controls which are always shown and layout them: we use
     // sizers even though our window is not resizeable to calculate the size of
     // the dialog properly
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-    wxBoxSizer *sizerButtons = new wxBoxSizer(wxVERTICAL);
-    wxBoxSizer *sizerAll = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer *sizerButtons = new wxBoxSizer(isPda ? wxHORIZONTAL : wxVERTICAL);
+    wxBoxSizer *sizerAll = new wxBoxSizer(isPda ? wxVERTICAL : wxHORIZONTAL);
 
     wxButton *btnOk = new wxButton(this, wxID_OK);
-    sizerButtons->Add(btnOk, 0, wxCENTRE | wxBOTTOM, MARGIN/2);
+    sizerButtons->Add(btnOk, 0, isPda ? wxCENTRE : wxCENTRE|wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + EXPAND_SUFFIX);
-    sizerButtons->Add(m_btnDetails, 0, wxCENTRE | wxTOP, MARGIN/2 - 1);
+    sizerButtons->Add(m_btnDetails, 0, isPda ? wxCENTRE|wxLEFT : wxCENTRE | wxTOP, MARGIN/2 - 1);
 
     wxBitmap bitmap;
     switch ( style & wxICON_MASK )
@@ -775,13 +777,15 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
         default:
             wxFAIL_MSG(_T("incorrect log style"));
     }
-    sizerAll->Add(new wxStaticBitmap(this, wxID_ANY, bitmap), 0,
+    
+    if (!isPda)
+        sizerAll->Add(new wxStaticBitmap(this, wxID_ANY, bitmap), 0,
                   wxALIGN_CENTRE_VERTICAL);
 
     const wxString& message = messages.Last();
     sizerAll->Add(CreateTextSizer(message), 1,
                   wxALIGN_CENTRE_VERTICAL | wxLEFT | wxRIGHT, MARGIN);
-    sizerAll->Add(sizerButtons, 0, wxALIGN_RIGHT | wxLEFT, MARGIN);
+    sizerAll->Add(sizerButtons, 0, isPda ? wxCENTRE|wxTOP|wxBOTTOM : (wxALIGN_RIGHT | wxLEFT), MARGIN);
 
     sizerTop->Add(sizerAll, 0, wxALL | wxEXPAND, MARGIN);
 
@@ -804,6 +808,13 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     btnOk->SetFocus();
 
     Centre();
+    
+    if (isPda)
+    {
+        // Move up the screen so that when we expand the dialog,
+        // there's enough space.
+        Move(wxPoint(GetPosition().x, GetPosition().y / 2));
+    }
 }
 
 void wxLogDialog::CreateDetailsControls()
@@ -824,6 +835,11 @@ void wxLogDialog::CreateDetailsControls()
                                 wxLC_REPORT |
                                 wxLC_NO_HEADER |
                                 wxLC_SINGLE_SEL);
+#ifdef __WXWINCE__
+    // This maks a big aesthetic difference on WinCE but I
+    // don't want to risk problems on other platforms
+    m_listctrl->Hide();
+#endif                                
 
     // no need to translate these strings as they're not shown to the
     // user anyhow (we use wxLC_NO_HEADER style)
@@ -1007,7 +1023,9 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
         }
 
 #if wxUSE_STATLINE
-        sizer->Add(m_statline, 0, wxEXPAND | (wxALL & ~wxTOP), MARGIN);
+        bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+        if (!isPda)
+            sizer->Add(m_statline, 0, wxEXPAND | (wxALL & ~wxTOP), MARGIN);
 #endif // wxUSE_STATLINE
 
         sizer->Add(m_listctrl, 1, wxEXPAND | (wxALL & ~wxTOP), MARGIN);
@@ -1053,6 +1071,11 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
         m_maxHeight = size.y;
 
     SetSizeHints(size.x, size.y, m_maxWidth, m_maxHeight);
+
+#ifdef __WXWINCE__
+    if (m_showingDetails)
+        m_listctrl->Show();
+#endif                                
 
     // don't change the width when expanding/collapsing
     SetSize(wxDefaultCoord, size.y);

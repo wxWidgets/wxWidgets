@@ -37,7 +37,6 @@
     #include "wx/dialog.h"
     #include "wx/icon.h"
     #include "wx/intl.h"
-    #include "wx/settings.h"
     #include "wx/textctrl.h"
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
@@ -46,6 +45,7 @@
 
 #include "wx/statline.h"
 #include "wx/artprov.h"
+#include "wx/settings.h"
 
 #include "wx/tipdlg.h"
 
@@ -222,6 +222,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                       wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     m_tipProvider = tipProvider;
+    bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
     // 1) create all controls in tab order
 
@@ -240,11 +241,16 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     wxStaticText *text = new wxStaticText(this, wxID_ANY, _("Did you know..."));
 
-#ifndef __SMARTPHONE__
-    wxFont font = text->GetFont();
-    font.SetPointSize(int(1.6 * font.GetPointSize()));
-    font.SetWeight(wxFONTWEIGHT_BOLD);
-    text->SetFont(font);
+    // Currently this causes the bottom half to be chopped off,
+    // so disable the large font
+#ifndef __WXMSW__
+    if (!isPda)
+    {
+        wxFont font = text->GetFont();
+        font.SetPointSize(int(1.6 * font.GetPointSize()));
+        font.SetWeight(wxFONTWEIGHT_BOLD);
+        text->SetFont(font);
+    }
 #endif
 
     m_text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
@@ -288,19 +294,26 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     topsizer->Add( m_text, 1, wxEXPAND | wxLEFT|wxRIGHT, wxLARGESMALL(10,0) );
 
     wxBoxSizer *bottom = new wxBoxSizer( wxHORIZONTAL );
-    bottom->Add( m_checkbox, 0, wxCENTER );
+    if (isPda)
+        topsizer->Add( m_checkbox, 0, wxCENTER|wxTOP );
+    else
+        bottom->Add( m_checkbox, 0, wxCENTER );
 
     // smart phones does not support or do not waste space for wxButtons
 #ifdef __SMARTPHONE__
     SetRightMenu(wxID_NEXT_TIP, _("Next"));
     SetLeftMenu(wxID_CLOSE);
 #else
-    bottom->Add( 10,10,1 );
+    if (!isPda)
+        bottom->Add( 10,10,1 );
     bottom->Add( btnNext, 0, wxCENTER | wxLEFT, wxLARGESMALL(10,0) );
     bottom->Add( btnClose, 0, wxCENTER | wxLEFT, wxLARGESMALL(10,0) );
 #endif
 
-    topsizer->Add( bottom, 0, wxEXPAND | wxALL, wxLARGESMALL(10,0) );
+    if (isPda)
+        topsizer->Add( bottom, 0, wxCENTER | wxALL, 5 );
+    else
+        topsizer->Add( bottom, 0, wxEXPAND | wxALL, wxLARGESMALL(10,0) );
 
     SetTipText();
 

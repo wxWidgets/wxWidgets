@@ -1666,12 +1666,18 @@ void wxStaticBoxSizer::ShowItems( bool show )
 wxStdDialogButtonSizer::wxStdDialogButtonSizer()
     : wxBoxSizer(wxHORIZONTAL)
 {
+    // Vertical buttons with lots of space on either side
+    // looks rubbish on WinCE, so let's not do this for now.
+    // If we are going to use vertical buttons, we should
+    // put the sizer to the right of other controls in the dialog,
+    // and that's beyond the scope of this sizer.
+#ifndef __WXWINCE__
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-
     // If we have a PDA screen, put yes/no button over
     // all other buttons, otherwise on the left side.
     if (is_pda)
         m_orient = wxVERTICAL;
+#endif
 
     m_buttonAffirmative = NULL;
     m_buttonApply = NULL;
