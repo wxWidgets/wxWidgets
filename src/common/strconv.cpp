@@ -600,10 +600,11 @@ private:
 
     // true if the wide char encoding we use (i.e. ms_wcCharsetName) has
     // different endian-ness than the native one
-    static bool ms_wcNeedsSwap = FALSE;
+    static bool ms_wcNeedsSwap;
 };
 
 const char *IC_CharSet::ms_wcCharsetName = NULL;
+bool IC_CharSet::ms_wcNeedsSwap = FALSE;
 
 IC_CharSet::IC_CharSet(const wxChar *name)
           : wxCharacterSet(name)
@@ -677,6 +678,10 @@ IC_CharSet::IC_CharSet(const wxChar *name)
     if ( ms_wcCharsetName )
     {
         w2m = iconv_open(wxConvLibc.cWX2MB(name), ms_wcCharsetName);
+    }
+    else
+    {
+        w2m = (iconv_t)-1;
     }
 }
 
