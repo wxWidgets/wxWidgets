@@ -17,14 +17,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/cursor.h"
+    #include "wx/setup.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/cursor.h"
 #endif  //WX_PRECOMP
 
 #include "wx/msw/private.h"
@@ -36,16 +36,16 @@
 #include <ctype.h>
 
 #if !defined(__GNUWIN32__) && !defined(__WXWINE__) && !defined(__SALFORDC__)
-#include <direct.h>
+    #include <direct.h>
 
-#ifndef __MWERKS__
-#include <dos.h>
-#endif
+    #ifndef __MWERKS__
+        #include <dos.h>
+    #endif
 #endif  //GNUWIN32
 
 #if defined(__GNUWIN32__) && !defined(__TWIN32__)
-#include <sys/unistd.h>
-#include <sys/stat.h>
+    #include <sys/unistd.h>
+    #include <sys/stat.h>
 #endif  //GNUWIN32
 
 #include "wx/log.h"
@@ -53,15 +53,25 @@
 #ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
                     // this (3.1 I believe) and how to test for it.
                     // If this works for Borland 4.0 as well, then no worries.
-#include <dir.h>
+    #include <dir.h>
 #endif
+
+// VZ: there is some code using NetXXX() functions to get the full user name:
+//     I don't think it's a good idea because they don't work under Win95 and
+//     seem to return the same as wxGetUserId() under NT. If you really want
+//     to use them, just #define USE_NET_API
+#undef USE_NET_API
+
+#ifdef USE_NET_API
+    #include <lm.h>
+#endif // USE_NET_API
 
 #if defined(__WIN32__) && !defined(__WXWINE__)
-#include <io.h>
+    #include <io.h>
 
-#ifndef __GNUWIN32__
-#include <shellapi.h>
-#endif
+    #ifndef __GNUWIN32__
+        #include <shellapi.h>
+    #endif
 #endif
 
 #include <stdio.h>
@@ -142,64 +152,19 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 bool wxGetUserId(wxChar *buf, int maxSize)
 {
 #if defined(__WIN32__) && !defined(__win32s__) && !defined(__TWIN32__)
-
-    // VZ: why should it be so complicated??
-#if 0
-  // Gets the current user's full name according to the MS article PSS ID
-  // Number: Q119670
-  // Seems to be the same as the login name for me?
-  char *UserName = new char[256];
-  char *Domain = new char[256];
-  DWORD maxCharacters = 255;
-  GetUserName( UserName, &maxCharacters );
-  GetComputerName( Domain, &maxCharacters );
-
-  WCHAR  wszUserName[256];           // Unicode user name
-  WCHAR  wszDomain[256];
-  LPBYTE ComputerName;
-
-  struct _SERVER_INFO_100 *si100;   // Server structure
-  struct _USER_INFO_2 *ui;          // User structure
-
-  // Convert ASCII user name and domain to Unicode.
-
-  MultiByteToWideChar( CP_ACP, 0, UserName,
-     strlen(UserName)+1, wszUserName, sizeof(wszUserName) );
-  MultiByteToWideChar( CP_ACP, 0, Domain,
-     strlen(Domain)+1, wszDomain, sizeof(wszDomain) );
-
-  // Get the computer name of a DC for the specified domain.
-  // >If you get a link error on this, include netapi32.lib<
-
-  NetGetDCName( NULL, wszDomain, &ComputerName );
-
-  // Look up the user on the DC.
-
-  if(NetUserGetInfo( (LPWSTR) ComputerName,
-     (LPWSTR) &wszUserName, 2, (LPBYTE *) &ui))
-  {
-     printf( "Error getting user information.\n" );
-     return( FALSE );
-  }
-
-  // Convert the Unicode full name to ASCII.
-
-  WideCharToMultiByte( CP_ACP, 0, ui->usri2_full_name,
-     -1, buf, 256, NULL, NULL );
-  }
-  return( TRUE );
-#else   // 1
     DWORD nSize = maxSize;
     if ( ::GetUserName(buf, &nSize) == 0 )
     {
-        wxLogSysError(_T("Can not get user name"));
-
-        return FALSE;
+        // actually, it does happen on Win9x if the user didn't log on
+        DWORD res = ::GetEnvironmentVariable("username", buf, maxSize);
+        if ( res == 0 )
+        {
+            // not found
+            return FALSE;
+        }
     }
 
     return TRUE;
-#endif  // 0/1
-
 #else   // Win16 or Win32s
   wxChar *user;
   const wxChar *default_id = _T("anonymous");
@@ -207,11 +172,16 @@ bool wxGetUserId(wxChar *buf, int maxSize)
   // Can't assume we have NIS (PC-NFS) or some other ID daemon
   // So we ...
   if (  (user = wxGetenv(_T("USER"))) == NULL &&
-  (user = wxGetenv(_T("LOGNAME"))) == NULL ) {
+        (user = wxGetenv(_T("LOGNAME"))) == NULL )
+  {
      // Use wxWindows configuration data (comming soon)
      GetProfileString(WX_SECTION, eUSERID, default_id, buf, maxSize - 1);
-  } else
+  }
+  else
+  {
     wxStrncpy(buf, user, maxSize - 1);
+  }
+
   return *buf ? TRUE : FALSE;
 #endif
 }
@@ -231,6 +201,73 @@ bool wxGetUserName(wxChar *buf, int maxSize)
   else
 #endif
   {
+#ifdef USE_NET_API
+    CHAR szUserName[256];
+    if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )
+        return FALSE;
+
+    // TODO how to get the domain name?
+    CHAR *szDomain = "";
+
+    // the code is based on the MSDN example (also see KB article Q119670)
+    WCHAR wszUserName[256];          // Unicode user name
+    WCHAR wszDomain[256];
+    LPBYTE ComputerName;
+
+    USER_INFO_2 *ui2;         // User structure
+
+    // Convert ANSI user name and domain to Unicode
+    MultiByteToWideChar( CP_ACP, 0, szUserName, strlen(szUserName)+1,
+                          wszUserName, WXSIZEOF(wszUserName) );
+    MultiByteToWideChar( CP_ACP, 0, szDomain, strlen(szDomain)+1,
+                         wszDomain, WXSIZEOF(wszDomain) );
+
+    // Get the computer name of a DC for the domain.
+    if ( NetGetDCName( NULL, wszDomain, &ComputerName ) != NERR_Success )
+    {
+        wxLogError(_T("Can not find domain controller"));
+
+        goto error;
+    }
+
+    // Look up the user on the DC
+    NET_API_STATUS status = NetUserGetInfo( (LPWSTR)ComputerName,
+                                            (LPWSTR)&wszUserName,
+                                            2, // level - we want USER_INFO_2
+                                            (LPBYTE *) &ui2 );
+    switch ( status )
+    {
+        case NERR_Success:
+            // ok
+            break;
+
+        case NERR_InvalidComputer:
+            wxLogError(_T("Invalid domain controller name."));
+
+            goto error;
+
+        case NERR_UserNotFound:
+            wxLogError(_T("Invalid user name '%s'."), szUserName);
+
+            goto error;
+
+        default:
+            wxLogSysError(_T("Can't get information about user"));
+
+            goto error;
+    }
+
+    // Convert the Unicode full name to ANSI
+    WideCharToMultiByte( CP_ACP, 0, ui2->usri2_full_name, -1,
+                         buf, maxSize, NULL, NULL );
+
+    return TRUE;
+
+error:
+  wxLogError(_T("Couldn't look up full user name."));
+
+  return FALSE;
+#else  // !USE_NET_API
     // Could use NIS, MS-Mail or other site specific programs
     // Use wxWindows configuration data
     bool ok = GetProfileString(WX_SECTION, eUSERNAME, _T(""), buf, maxSize - 1) != 0;
@@ -243,6 +280,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     {
         wxStrncpy(buf, _T("Unknown User"), maxSize);
     }
+#endif // Win32/16
   }
 
   return TRUE;
