@@ -38,6 +38,8 @@ user's system preferences) can be retrieved with
 ", "");
 
 
+MustHaveApp( wxColour(const wxString& colorName) );
+
 class wxColour : public wxObject {
 public:
     
