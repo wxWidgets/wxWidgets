@@ -2726,6 +2726,9 @@ PNG_EXTERN png_int_32 png_get_int_32 PNGARG((png_bytep buf));
 PNG_EXTERN png_uint_32 png_get_uint_32 PNGARG((png_bytep buf));
 PNG_EXTERN png_uint_16 png_get_uint_16 PNGARG((png_bytep buf));
 #endif /* !PNG_READ_BIG_ENDIAN_SUPPORTED */
+/* RN: This define is blatent hack to get png to (hopefully) 
+   link on OSX 10.2 and earlier versions of 10.3 due to an 
+   Apple linking bug introduced in 10.2 */
 #define png_get_uint_31 wxpng_get_uint_31
 PNG_EXTERN png_uint_32 png_get_uint_31 PNGARG((png_structp png_ptr,
   png_bytep buf));
