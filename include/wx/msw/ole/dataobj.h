@@ -73,6 +73,9 @@ public:
     // retrieve IDataObject interface (for other OLE related classes)
   IDataObject *GetInterface() const { return m_pIDataObject; }
 
+  ////// wxGTK compatibility: hopefully to become the preferred API.
+  virtual wxDataFormat GetFormat() const { return GetPreferredFormat(); }
+
 private:
   IDataObject *m_pIDataObject; // pointer to the COM interface
 };
@@ -98,6 +101,11 @@ public:
   virtual void GetDataHere(void *pBuf) const
     { memcpy(pBuf, m_strText.c_str(), GetDataSize()); }
 
+  ////// wxGTK compatibility: hopefully to become the preferred API.
+  void SetText(const wxString& strText) { m_strText = strText; }
+  wxString GetText() const { return m_strText; }
+  virtual wxDataFormat GetFormat() const { return wxDF_TEXT; }
+
 private:
   wxString  m_strText;
 };
@@ -106,4 +114,42 @@ private:
 // @@@ TODO: wx{Bitmap|Metafile|...}DataObject
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// wxBitmapDataObject is a specialization of wxDataObject for bitmap data
+// ----------------------------------------------------------------------------
+
+// TODO: implement OLE side of things. At present, it's just for clipboard
+// use.
+class WXDLLEXPORT wxBitmapDataObject : public wxDataObject
+{
+public:
+  // ctors
+  wxBitmapDataObject() {};
+  wxBitmapDataObject(const wxBitmap& bitmap): m_bitmap(bitmap) {}
+  void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
+  wxBitmap GetBitmap() const { return m_bitmap; }
+
+  virtual wxDataFormat GetFormat() const { return wxDF_BITMAP; }
+
+/* ??
+  // implement base class pure virtuals
+  virtual wxDataFormat GetPreferredFormat() const
+    { return (wxDataFormat) wxDataObject::Text; }
+  virtual bool IsSupportedFormat(wxDataFormat format) const
+    { return format == wxDataObject::Text || format == wxDataObject::Locale; }
+  virtual size_t GetDataSize() const
+    { return m_strText.Len() + 1; } // +1 for trailing '\0'of course
+  virtual void GetDataHere(void *pBuf) const
+    { memcpy(pBuf, m_strText.c_str(), GetDataSize()); }
+*/
+
+private:
+  wxBitmap  m_bitmap;
+};
+
+// ----------------------------------------------------------------------------
+// wxMetaFileDataObject: see metafile.h is a specialization of wxDataObject for bitmap data
+// ----------------------------------------------------------------------------
+
 #endif  //_WX_OLEDATAOBJ_H
+

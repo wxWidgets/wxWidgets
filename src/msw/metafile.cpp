@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        metafile.cpp
-// Purpose:     wxMetaFileDC etc.
+// Purpose:     wxMetafileDC etc.
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -41,53 +41,90 @@
 extern bool wxClipboardIsOpen;
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxMetaFile, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxMetaFileDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxMetafile, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
 #endif
 
 /*
- * Metafiles - Windows 3.1 only
+ * Metafiles
  * Currently, the only purpose for making a metafile is to put
  * it on the clipboard.
  */
 
-wxMetaFile::wxMetaFile(const wxString& file)
+wxMetafileRefData::wxMetafileRefData(void)
 {
-  m_windowsMappingMode = MM_ANISOTROPIC;
-  m_metaFile = 0;
-  if (!file.IsNull() && file == "")
-    m_metaFile = (WXHANDLE) GetMetaFile(file);
+    m_metafile = 0;
+    m_windowsMappingMode = MM_ANISOTROPIC;
 }
 
-wxMetaFile::~wxMetaFile(void)
+wxMetafileRefData::~wxMetafileRefData(void)
 {
-  if (m_metaFile)
-    { DeleteMetaFile((HMETAFILE) m_metaFile); m_metaFile = 0; }
+    if (m_metafile)
+    {
+        DeleteMetaFile((HMETAFILE) m_metafile);
+        m_metafile = 0;
+    }
 }
 
-bool wxMetaFile::SetClipboard(int width, int height)
+wxMetafile::wxMetafile(const wxString& file)
 {
-  bool alreadyOpen=wxClipboardOpen();
-  if (!alreadyOpen)
-  {
-    wxOpenClipboard();
-    if (!wxEmptyClipboard()) return FALSE;
-  }
-  bool success = wxSetClipboardData(wxDF_METAFILE,this, width,height);
-  if (!alreadyOpen) wxCloseClipboard();
-  return (bool) success;
+    m_refData = new wxMetafileRefData;
+
+    M_METAFILEDATA->m_windowsMappingMode = MM_ANISOTROPIC;
+    M_METAFILEDATA->m_metafile = 0;
+    if (!file.IsNull() && file == "")
+        M_METAFILEDATA->m_metafile = (WXHANDLE) GetMetaFile(file);
 }
 
-bool wxMetaFile::Play(wxDC *dc)
+wxMetafile::~wxMetafile(void)
 {
-  dc->BeginDrawing();
+}
 
-  if (dc->GetHDC() && m_metaFile)
-    PlayMetaFile((HDC) dc->GetHDC(), (HMETAFILE) m_metaFile);
+bool wxMetafile::SetClipboard(int width, int height)
+{
+    if (!m_refData)
+        return FALSE;
 
-  dc->EndDrawing();
+    bool alreadyOpen=wxClipboardOpen();
+    if (!alreadyOpen)
+    {
+        wxOpenClipboard();
+        if (!wxEmptyClipboard()) return FALSE;
+    }
+    bool success = wxSetClipboardData(wxDF_METAFILE, this, width,height);
+    if (!alreadyOpen) wxCloseClipboard();
+    return (bool) success;
+}
 
-  return TRUE;
+bool wxMetafile::Play(wxDC *dc)
+{
+    if (!m_refData)
+        return FALSE;
+
+    dc->BeginDrawing();
+
+    if (dc->GetHDC() && M_METAFILEDATA->m_metafile)
+        PlayMetaFile((HDC) dc->GetHDC(), (HMETAFILE) M_METAFILEDATA->m_metafile);
+
+    dc->EndDrawing();
+
+    return TRUE;
+}
+
+void wxMetafile::SetHMETAFILE(WXHANDLE mf)
+{
+    if (m_refData)
+        m_refData = new wxMetafileRefData;
+
+    M_METAFILEDATA->m_metafile = mf;
+}
+
+void wxMetafile::SetWindowsMappingMode(int mm)
+{
+    if (m_refData)
+        m_refData = new wxMetafileRefData;
+
+    M_METAFILEDATA->m_windowsMappingMode = mm;
 }
 
 /*
@@ -96,8 +133,8 @@ bool wxMetaFile::Play(wxDC *dc)
  */
 
 // Original constructor that does not takes origin and extent. If you use this,
-// *DO* give origin/extent arguments to wxMakeMetaFilePlaceable.
-wxMetaFileDC::wxMetaFileDC(const wxString& file)
+// *DO* give origin/extent arguments to wxMakeMetafilePlaceable.
+wxMetafileDC::wxMetafileDC(const wxString& file)
 {
   m_metaFile = NULL;
   m_minX = 10000;
@@ -123,8 +160,8 @@ wxMetaFileDC::wxMetaFileDC(const wxString& file)
 }
 
 // New constructor that takes origin and extent. If you use this, don't
-// give origin/extent arguments to wxMakeMetaFilePlaceable.
-wxMetaFileDC::wxMetaFileDC(const wxString& file, int xext, int yext, int xorg, int yorg)
+// give origin/extent arguments to wxMakeMetafilePlaceable.
+wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, int yorg)
 {
   m_minX = 10000;
   m_minY = 10000;
@@ -144,12 +181,12 @@ wxMetaFileDC::wxMetaFileDC(const wxString& file, int xext, int yext, int xorg, i
   SetMapMode(MM_TEXT); // NOTE: does not set HDC mapmode (this is correct)
 }
 
-wxMetaFileDC::~wxMetaFileDC(void)
+wxMetafileDC::~wxMetafileDC(void)
 {
   m_hDC = 0;
 }
 
-void wxMetaFileDC::GetTextExtent(const wxString& string, long *x, long *y,
+void wxMetafileDC::GetTextExtent(const wxString& string, long *x, long *y,
                                  long *descent, long *externalLeading, wxFont *theFont, bool use16bit) const
 {
   wxFont *fontToUse = theFont;
@@ -171,14 +208,14 @@ void wxMetaFileDC::GetTextExtent(const wxString& string, long *x, long *y,
   if (externalLeading) *externalLeading = tm.tmExternalLeading;
 }
 
-wxMetaFile *wxMetaFileDC::Close(void)
+wxMetafile *wxMetafileDC::Close(void)
 {
   SelectOldObjects(m_hDC);
   HANDLE mf = CloseMetaFile((HDC) m_hDC);
   m_hDC = 0;
   if (mf)
   {
-    wxMetaFile *wx_mf = new wxMetaFile;
+    wxMetafile *wx_mf = new wxMetafile;
     wx_mf->SetHMETAFILE((WXHANDLE) mf);
     wx_mf->SetWindowsMappingMode(m_windowsMappingMode);
     return wx_mf;
@@ -186,7 +223,7 @@ wxMetaFile *wxMetaFileDC::Close(void)
   return NULL;
 }
 
-void wxMetaFileDC::SetMapMode(int mode)
+void wxMetafileDC::SetMapMode(int mode)
 {
   m_mappingMode = mode;
 
@@ -271,12 +308,12 @@ struct mfPLACEABLEHEADER {
  *
  */
  
-bool wxMakeMetaFilePlaceable(const wxString& filename, float scale)
+bool wxMakeMetafilePlaceable(const wxString& filename, float scale)
 {
-  return wxMakeMetaFilePlaceable(filename, 0, 0, 0, 0, scale, FALSE);
+  return wxMakeMetafilePlaceable(filename, 0, 0, 0, 0, scale, FALSE);
 }
 
-bool wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y1, int x2, int y2, float scale, bool useOriginAndExtent)
+bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, int y2, float scale, bool useOriginAndExtent)
 {
   // I'm not sure if this is the correct way of suggesting a scale
   // to the client application, but it's the only way I can find.

@@ -1626,10 +1626,10 @@ $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex
         -mkdir $(DOCDIR)\html\wx
         -start /w tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
         -erase $(DOCDIR)\html\wx\*.con
-#        -erase $(DOCDIR)\html\wx\*.ref
-#        -erase $(DOCDIR)\latex\wx\*.con
-#        -erase $(DOCDIR)\latex\wx\*.ref
-#        cd $(THISDIR)
+        -erase $(DOCDIR)\html\wx\*.ref
+        -erase $(DOCDIR)\latex\wx\*.con
+        -erase $(DOCDIR)\latex\wx\*.ref
+         cd $(THISDIR)
 
 $(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
         cd $(DOCDIR)\latex\porting

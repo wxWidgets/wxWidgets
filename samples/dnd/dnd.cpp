@@ -142,6 +142,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
           m_strText("wxWindows drag & drop works :-)")
 
 {
+  SetBackgroundColour(* wxWHITE);
 
   // frame icon and status bar
   SetIcon(wxICON(mondrian));
@@ -233,7 +234,7 @@ void DnDFrame::OnPaint(wxPaintEvent& /*event*/)
 
   wxPaintDC dc(this);
   dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL ) );
-  dc.DrawText( "Drag text from here!", 20, h-20 );
+  dc.DrawText( "Drag text from here!", 20, h-30 );
 }
 
 void DnDFrame::OnDrag(wxCommandEvent& /* event */)

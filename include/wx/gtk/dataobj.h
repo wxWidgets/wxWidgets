@@ -69,7 +69,7 @@ public:
   void SetText( const wxString& strText) 
     { m_strText = strText; }
     
-  wxString GetText() 
+  wxString GetText() const
     { return m_strText; }
 
 private:
@@ -95,7 +95,7 @@ public:
   void AddFile( const wxString &file )
     { m_files += file; m_files += (char)0; }
     
-  wxString GetFiles()
+  wxString GetFiles() const
     { return m_files; }
     
 private:
@@ -121,7 +121,7 @@ public:
   void SetBitmap( const wxBitmap &bitmap )
     { m_bitmap = bitmap; }
     
-  wxBitmap GetBitmap()
+  wxBitmap GetBitmap() const
     { return m_bitmap; }
     
 private:
@@ -154,16 +154,16 @@ public:
   void SetId( const wxString& id )
     { m_id = id; }
     
-  wxString GetId()
+  wxString GetId() const
     { return m_id; }
 
   // will make internal copy
   void SetData( const char *data, size_t size );
     
-  size_t GetDataSize()
+  size_t GetDataSize() const
     { return m_size; }
     
-  char* GetData()
+  char* GetData() const
     { return m_data; }
     
 private:
