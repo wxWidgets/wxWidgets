@@ -370,9 +370,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     m_wndProcBuddy = (WXFARPROC)wxSetWindowProc(GetBuddyHwnd(),
                                                 wxBuddyTextWndProc);
 
-    // should have the same font as the other controls
-    SetFont(GetParent()->GetFont());
-    
+    // set up fonts and colours  (This is nomally done in MSWCreateControl)
+    InheritAttributes();
+    SetFont(GetDefaultAttributes().font);
+
     // set the size of the text window - can do it only now, because we
     // couldn't call DoGetBestSize() before as font wasn't set
     if ( sizeText.y <= 0 )
@@ -383,8 +384,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
         sizeText.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
     }
 
-    DoMoveWindow(pos.x, pos.y,
-                 sizeText.x + sizeBtn.x + MARGIN_BETWEEN, sizeText.y);
+    //DoMoveWindow(pos.x, pos.y,
+    //             sizeText.x + sizeBtn.x + MARGIN_BETWEEN, sizeText.y);
+    SetBestSize(size);
 
     (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
 

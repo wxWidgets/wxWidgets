@@ -129,9 +129,6 @@ bool wxSpinButton::Create(wxWindow *parent,
     // basic initialization
     m_windowId = (id == -1) ? NewControlId() : id;
 
-    m_backgroundColour = parent->GetBackgroundColour() ;
-    m_foregroundColour = parent->GetForegroundColour() ;
-
     SetName(name);
 
     int x = pos.x;
@@ -198,6 +195,8 @@ bool wxSpinButton::Create(wxWindow *parent,
     }
 
     SubclassWin(m_hWnd);
+
+    SetBestSize(size);
 
     return TRUE;
 }
