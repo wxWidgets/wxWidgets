@@ -442,8 +442,11 @@ void wxInitializeStockObjects ()
 #else
 #endif
 */
-#if defined(__WXPM__) || defined(__WXMAC__)
+#if defined(__WXMAC__)
   static const int sizeFont = 12;
+  wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
+#elif defined(__WXPM__)
+  static const int sizeFont = 10;
   wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
 #else
   wxNORMAL_FONT = new wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
