@@ -21,7 +21,7 @@ class TestPanel(wxPanel):
         EVT_BUTTON(self, 20, self.OnClick)
         b.SetToolTipString("This is a Hello button...")
 
-        if 1:  # a test case for catching wxPyAssertionError
+        if 0:  # a test case for catching wxPyAssertionError
 
             #wxGetApp().SetAssertMode(wxPYAPP_ASSERT_SUPPRESS)
             #wxGetApp().SetAssertMode(wxPYAPP_ASSERT_EXCEPTION)
