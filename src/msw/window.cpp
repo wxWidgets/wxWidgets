@@ -189,6 +189,7 @@ bool wxWindow::MSWNotify(WXWPARAM WXUNUSED(wParam),
                          WXLPARAM* WXUNUSED(result))
 {
 #ifdef __WIN95__
+#if wxUSE_TOOLTIPS
     NMHDR* hdr = (NMHDR *)lParam;
     if ( hdr->code == TTN_NEEDTEXT && m_tooltip )
     {
@@ -198,6 +199,7 @@ bool wxWindow::MSWNotify(WXWPARAM WXUNUSED(wParam),
         // processed
         return TRUE;
     }
+#endif
 #endif
 
     return FALSE;
@@ -287,7 +289,9 @@ void wxWindow::Init()
     m_pDropTarget = NULL;
 #endif
 
+#if wxUSE_TOOLTIPS
     m_tooltip = NULL;
+#endif
 }
 
 wxWindow::wxWindow()
@@ -302,7 +306,9 @@ wxWindow::~wxWindow()
 
     // first of all, delete the things on which nothing else depends
 
+#if wxUSE_TOOLTIPS
     wxDELETE(m_tooltip);
+#endif
 
     // JACS - if behaviour is odd, restore this
     // to the start of ~wxWindow. Vadim has changed
@@ -542,6 +548,8 @@ void wxWindow::DragAcceptFiles(bool accept)
 // tooltips
 // ----------------------------------------------------------------------------
 
+#if wxUSE_TOOLTIPS
+
 void wxWindow::SetToolTip(const wxString &tip)
 {
     SetToolTip(new wxToolTip(tip));
@@ -555,6 +563,8 @@ void wxWindow::SetToolTip(wxToolTip *tooltip)
     m_tooltip = tooltip;
     m_tooltip->SetWindow(this);
 }
+
+#endif // wxUSE_TOOLTIPS
 
 // Get total size
 void wxWindow::GetSize(int *x, int *y) const

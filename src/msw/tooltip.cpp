@@ -27,6 +27,8 @@
     #include "wx/wx.h"
 #endif
 
+#if wxUSE_TOOLTIPS
+
 #include "wx/tooltip.h"
 #include "wx/msw/private.h"
 
@@ -196,3 +198,5 @@ void wxToolTip::SetTip(const wxString& tip)
         (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, 0, &ti);
     }
 }
+
+#endif // wxUSE_TOOLTIPS

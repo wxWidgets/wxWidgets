@@ -262,6 +262,7 @@ public:
   wxDropTarget *GetDropTarget() const { return m_pDropTarget; }
 #endif
 
+#if wxUSE_TOOLTIPS
   // tooltips
     // create a tooltip with this text
   void SetToolTip(const wxString &tip);
@@ -269,6 +270,7 @@ public:
   void SetToolTip(wxToolTip *tooltip);
     // get the current tooltip (may return NULL if none)
   wxToolTip* GetToolTip() const { return m_tooltip; }
+#endif // wxUSE_TOOLTIPS
 
   // Accept files for dragging
   virtual void DragAcceptFiles(bool accept);
@@ -761,7 +763,9 @@ private:
     void Init();
 
     // the associated tooltip (may be NULL if none)
+#if wxUSE_TOOLTIPS
     wxToolTip *m_tooltip;
+#endif
 
     DECLARE_EVENT_TABLE()
 };
