@@ -982,8 +982,12 @@ wxMenu::~wxMenu()
 
    if ( GTK_IS_WIDGET( m_menu ))
    {
-       gtk_widget_unref( m_menu ); // see wxMenu::Init
-       gtk_widget_destroy( m_menu );
+       // see wxMenu::Init
+       gtk_widget_unref( m_menu ); 
+       // if the menu is inserted in another menu at this time, there was
+       // one more reference to it:
+       if ( m_owner )
+           gtk_widget_destroy( m_menu );
    }
 }
 
