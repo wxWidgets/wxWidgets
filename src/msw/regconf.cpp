@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        msw/regconf.cpp
-// Purpose:     
+// Purpose:
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     27.04.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -23,7 +23,7 @@
 #include <wx/wx.h>
 #include <wx/config.h>
 #include <wx/regconf.h>
-#include <wx/registry.h>
+#include <wx/msw/registry.h>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -55,9 +55,9 @@ bool TryGetValue(const wxRegKey& key, const wxString& str, long *plVal)
 // ctor/dtor
 // ----------------------------------------------------------------------------
 wxRegConfig::wxRegConfig(const wxString& strRoot)
-           : m_keyLocalRoot(wxRegKey::HKCU, SOFTWARE_KEY + strRoot), 
+           : m_keyLocalRoot(wxRegKey::HKCU, SOFTWARE_KEY + strRoot),
              m_keyLocal(m_keyLocalRoot, ""),
-             m_keyGlobalRoot(wxRegKey::HKLM, SOFTWARE_KEY + strRoot), 
+             m_keyGlobalRoot(wxRegKey::HKLM, SOFTWARE_KEY + strRoot),
              m_keyGlobal(m_keyGlobalRoot, "")
 {
   // Create() will Open() if key already exists
@@ -115,7 +115,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
 // ----------------------------------------------------------------------------
 
 /*
-  We want to enumerate all local keys/values after the global ones, but, of 
+  We want to enumerate all local keys/values after the global ones, but, of
   course, we don't want to repeat a key which appears locally as well as
   globally twice.
 
@@ -184,6 +184,20 @@ bool wxRegConfig::GetNextEntry (wxString& str, long& lIndex)
 }
 
 // ----------------------------------------------------------------------------
+// tests for existence
+// ----------------------------------------------------------------------------
+
+bool wxRegConfig::HasGroup(const wxString& strName) const
+{
+  return m_keyLocal.HasSubKey(strName) || m_keyGlobal.HasSubKey(strName);
+}
+
+bool wxRegConfig::HasEntry(const wxString& strName) const
+{
+  return m_keyLocal.HasValue(strName) || m_keyGlobal.HasValue(strName);
+}
+
+// ----------------------------------------------------------------------------
 // reading/writing
 // ----------------------------------------------------------------------------
 
@@ -200,7 +214,7 @@ bool wxRegConfig::Read(wxString& str,
   if ( IsImmutable(path.Name()) ) {
     if ( TryGetValue(m_keyGlobal, path.Name(), str) ) {
       if ( m_keyLocal.HasValue(path.Name()) ) {
-        wxLogWarning("User value for immutable key '%s' ignored.", 
+        wxLogWarning("User value for immutable key '%s' ignored.",
                    path.Name().c_str());
       }
 
@@ -234,7 +248,7 @@ bool wxRegConfig::Read(long &lValue, const char *szKey, long lDefault) const
   if ( IsImmutable(path.Name()) ) {
     if ( TryGetValue(m_keyGlobal, path.Name(), &lValue) ) {
       if ( m_keyLocal.HasValue(path.Name()) ) {
-        wxLogWarning("User value for immutable key '%s' ignored.", 
+        wxLogWarning("User value for immutable key '%s' ignored.",
                      path.Name().c_str());
       }
 

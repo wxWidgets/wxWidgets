@@ -42,6 +42,10 @@ public:
   virtual bool GetFirstEntry(wxString& str, long& lIndex);
   virtual bool GetNextEntry (wxString& str, long& lIndex);
 
+  // tests for existence
+  virtual bool HasGroup(const wxString& strName) const;
+  virtual bool HasEntry(const wxString& strName) const;
+
   // read/write
   virtual bool Read(wxString&, const char *, const char * = 0) const;
   virtual bool Read(long&, const char *, long = 0) const;
