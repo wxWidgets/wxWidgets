@@ -91,6 +91,7 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
     DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     
     PYPRIVATE;
 };
@@ -122,6 +123,8 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, RemoveChild);
 
 IMP_PYCALLBACK_BOOL_(wxPyWindow, wxWindow, ShouldInheritColours);
+IMP_PYCALLBACK__COLOUR(wxPyWindow, wxWindow, ApplyParentThemeBackground);
+ 
 %}
 
 // And now the one for SWIG to see
@@ -129,6 +132,7 @@ class wxPyWindow : public wxWindow
 {
 public:
     %pythonAppend wxPyWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyWindow)"
+    %pythonAppend wxPyWindow()       ""
 
     wxPyWindow(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
@@ -136,6 +140,8 @@ public:
                long style = 0,
                const wxString& name = wxPyPanelNameStr);
 
+    %name(PrePyWindow) wxPyWindow();
+    
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
 
@@ -169,6 +175,9 @@ public:
 
     void base_AddChild(wxWindow* child);
     void base_RemoveChild(wxWindow* child);
+
+    bool base_ShouldInheritColours();
+    void base_ApplyParentThemeBackground(const wxColour& c);
 };
 
 //---------------------------------------------------------------------------
@@ -219,6 +228,7 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
     DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     
     PYPRIVATE;
 };
@@ -250,6 +260,7 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, RemoveChild);
 
 IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, ShouldInheritColours);
+IMP_PYCALLBACK__COLOUR(wxPyPanel, wxPanel, ApplyParentThemeBackground);
 %}
 
 // And now the one for SWIG to see
@@ -257,6 +268,7 @@ class wxPyPanel : public wxPanel
 {
 public:
     %pythonAppend wxPyPanel         "self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)"
+    %pythonAppend wxPyPanel()       ""
 
     wxPyPanel(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
@@ -264,9 +276,9 @@ public:
                long style = 0,
                const wxString& name = wxPyPanelNameStr);
 
+    %name(PrePyPanel) wxPyPanel();
+
     void _setCallbackInfo(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyPanel)"
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
 
     void base_DoMoveWindow(int x, int y, int width, int height);
@@ -299,6 +311,139 @@ public:
 
     void base_AddChild(wxWindow* child);
     void base_RemoveChild(wxWindow* child);
+
+    bool base_ShouldInheritColours();
+    void base_ApplyParentThemeBackground(const wxColour& c);
+};
+
+//---------------------------------------------------------------------------
+// and for wxScrolledWindow
+
+%{ // C++ version of Python aware wxScrolledWindow
+class wxPyScrolledWindow : public wxScrolledWindow
+{
+    DECLARE_DYNAMIC_CLASS(wxPyScrolledWindow)
+public:
+    wxPyScrolledWindow() : wxScrolledWindow() {}
+    wxPyScrolledWindow(wxWindow* parent, const wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxPyPanelNameStr)
+        : wxScrolledWindow(parent, id, pos, size, style, name) {}
+
+
+    DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
+    DEC_PYCALLBACK_VOID_INT5(DoSetSize);
+    DEC_PYCALLBACK_VOID_INTINT(DoSetClientSize);
+    DEC_PYCALLBACK_VOID_INTINT(DoSetVirtualSize);
+
+    DEC_PYCALLBACK_VOID_INTPINTP_const(DoGetSize);
+    DEC_PYCALLBACK_VOID_INTPINTP_const(DoGetClientSize);
+    DEC_PYCALLBACK_VOID_INTPINTP_const(DoGetPosition);
+
+    DEC_PYCALLBACK_SIZE_const(DoGetVirtualSize);
+    DEC_PYCALLBACK_SIZE_const(DoGetBestSize);
+
+    DEC_PYCALLBACK__(InitDialog);
+    DEC_PYCALLBACK_BOOL_(TransferDataFromWindow);
+    DEC_PYCALLBACK_BOOL_(TransferDataToWindow);
+    DEC_PYCALLBACK_BOOL_(Validate);
+
+    DEC_PYCALLBACK_BOOL_const(AcceptsFocus);
+    DEC_PYCALLBACK_BOOL_const(AcceptsFocusFromKeyboard);
+    DEC_PYCALLBACK_SIZE_const(GetMaxSize);
+
+    DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
+    DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
+
+    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
+    
+    PYPRIVATE;
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyScrolledWindow, wxScrolledWindow);
+
+IMP_PYCALLBACK_VOID_INT4(wxPyScrolledWindow, wxScrolledWindow, DoMoveWindow);
+IMP_PYCALLBACK_VOID_INT5(wxPyScrolledWindow, wxScrolledWindow, DoSetSize);
+IMP_PYCALLBACK_VOID_INTINT(wxPyScrolledWindow, wxScrolledWindow, DoSetClientSize);
+IMP_PYCALLBACK_VOID_INTINT(wxPyScrolledWindow, wxScrolledWindow, DoSetVirtualSize);
+
+IMP_PYCALLBACK_VOID_INTPINTP_const(wxPyScrolledWindow, wxScrolledWindow, DoGetSize);
+IMP_PYCALLBACK_VOID_INTPINTP_const(wxPyScrolledWindow, wxScrolledWindow, DoGetClientSize);
+IMP_PYCALLBACK_VOID_INTPINTP_const(wxPyScrolledWindow, wxScrolledWindow, DoGetPosition);
+
+IMP_PYCALLBACK_SIZE_const(wxPyScrolledWindow, wxScrolledWindow, DoGetVirtualSize);
+IMP_PYCALLBACK_SIZE_const(wxPyScrolledWindow, wxScrolledWindow, DoGetBestSize);
+
+IMP_PYCALLBACK__(wxPyScrolledWindow, wxScrolledWindow, InitDialog);
+IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, TransferDataFromWindow);
+IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, TransferDataToWindow);
+IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, Validate);
+
+IMP_PYCALLBACK_BOOL_const(wxPyScrolledWindow, wxScrolledWindow, AcceptsFocus);
+IMP_PYCALLBACK_BOOL_const(wxPyScrolledWindow, wxScrolledWindow, AcceptsFocusFromKeyboard);
+IMP_PYCALLBACK_SIZE_const(wxPyScrolledWindow, wxScrolledWindow, GetMaxSize);
+
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyScrolledWindow, wxScrolledWindow, AddChild);
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyScrolledWindow, wxScrolledWindow, RemoveChild);
+
+IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, ShouldInheritColours);
+IMP_PYCALLBACK__COLOUR(wxPyScrolledWindow, wxScrolledWindow, ApplyParentThemeBackground);
+%}
+
+// And now the one for SWIG to see
+class wxPyScrolledWindow : public wxScrolledWindow
+{
+public:
+    %pythonAppend wxPyScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)"
+    %pythonAppend wxPyScrolledWindow()       ""
+
+    wxPyScrolledWindow(wxWindow* parent, const wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxPyPanelNameStr);
+
+    %name(PrePyScrolledWindow) wxPyScrolledWindow();
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+
+
+    void base_DoMoveWindow(int x, int y, int width, int height);
+    void base_DoSetSize(int x, int y, int width, int height,
+                        int sizeFlags = wxSIZE_AUTO);
+    void base_DoSetClientSize(int width, int height);
+    void base_DoSetVirtualSize( int x, int y );
+
+    DocDeclA(
+        void, base_DoGetSize( int *OUTPUT, int *OUTPUT ) const,
+        "base_DoGetSize() -> (width, height)");
+    DocDeclA(
+        void, base_DoGetClientSize( int *OUTPUT, int *OUTPUT ) const,
+        "base_DoGetClientSize() -> (width, height)");
+    DocDeclA(
+        void, base_DoGetPosition( int *OUTPUT, int *OUTPUT ) const,
+        "base_DoGetPosition() -> (x,y)");
+
+    wxSize base_DoGetVirtualSize() const;
+    wxSize base_DoGetBestSize() const;
+
+    void base_InitDialog();
+    bool base_TransferDataToWindow();
+    bool base_TransferDataFromWindow();
+    bool base_Validate();
+
+    bool base_AcceptsFocus() const;
+    bool base_AcceptsFocusFromKeyboard() const;
+    wxSize base_GetMaxSize() const;
+
+    void base_AddChild(wxWindow* child);
+    void base_RemoveChild(wxWindow* child);
+
+    bool base_ShouldInheritColours();
+    void base_ApplyParentThemeBackground(const wxColour& c);
 };
 
 
