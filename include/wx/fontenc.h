@@ -69,10 +69,8 @@ enum wxFontEncoding
     wxFONTENCODING_UTF7,            // UTF-7 Unicode encoding
     wxFONTENCODING_UTF8,            // UTF-8 Unicode encoding
     wxFONTENCODING_EUC_JP,          // Extended Unix Codepage for Japanese
-    wxFONTENCODING_UTF16,           // UTF-16 Unicode encoding
     wxFONTENCODING_UTF16BE,         // UTF-16 Big Endian Unicode encoding
     wxFONTENCODING_UTF16LE,         // UTF-16 Little Endian Unicode encoding
-    wxFONTENCODING_UTF32,           // UTF-32 Unicode encoding
     wxFONTENCODING_UTF32BE,         // UTF-32 Big Endian Unicode encoding
     wxFONTENCODING_UTF32LE,         // UTF-32 Little Endian Unicode encoding
 
