@@ -107,11 +107,14 @@ bool wxFFile::ReadAll(wxString *str)
 {
     wxCHECK_MSG( str, false, wxT("invalid parameter") );
     wxCHECK_MSG( IsOpened(), false, wxT("can't read from closed file") );
+    wxCHECK_MSG( Length() >= 0, false, wxT("invalid length") );
+    size_t length = (size_t)Length();
+    wxCHECK_MSG( length == Length(), false, wxT("huge file not supported") );
 
     clearerr(m_fp);
 
     str->Empty();
-    str->Alloc(Length());
+    str->Alloc(length);
 
     wxChar buf[1024];
     static const size_t nSize = WXSIZEOF(buf) - 1; // -1 for trailing '\0'
@@ -206,16 +209,18 @@ bool wxFFile::Seek(wxFileOffset ofs, wxSeekMode mode)
             break;
     }
 
-#ifndef HAVE_FSEEKO 
+#ifndef HAVE_FSEEKO
     if ((long)ofs != ofs)
     {
         wxLogError(_("Seek error on file '%s' (large files not supported by stdio)"), m_name.c_str());
 
         return false;
     }
-#endif
 
+    if ( wxFseek(m_fp, (long)ofs, origin) != 0 )
+#else
     if ( wxFseek(m_fp, ofs, origin) != 0 )
+#endif
     {
         wxLogSysError(_("Seek error on file '%s'"), m_name.c_str());
 
@@ -260,7 +265,7 @@ wxFileOffset wxFFile::Length() const
         }
     }
 
-    return wxInvalidOffset; 
+    return wxInvalidOffset;
 }
 
 #endif // wxUSE_FFILE

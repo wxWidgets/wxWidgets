@@ -278,7 +278,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         for ( int i = 0; i < palette_size; i++ )
         {
             // if 1BPP_BW then the value should be either 0 or 255
-            wxUint8 c = (i > 0) && (format == wxBMP_1BPP_BW) ? 255 : i;
+            wxUint8 c = (wxUint8)((i > 0) && (format == wxBMP_1BPP_BW) ? 255 : i);
 
             rgbquad[i*4] =
             rgbquad[i*4+1] =
