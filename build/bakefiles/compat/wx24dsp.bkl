@@ -42,6 +42,7 @@
 
     <define-rule name="exe" extends="__fake"/>
     <define-rule name="dll" extends="__fake"/>
+    <define-rule name="module" extends="__fake"/>
     <define-rule name="lib" extends="__fake"/>
     <define-rule name="action" extends="__fake"/>
     <define-rule name="phony" extends="__fake"/>
