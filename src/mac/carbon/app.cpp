@@ -1595,6 +1595,11 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
         short keychar ;
         keychar = short(ev->message & charCodeMask);
         keycode = short(ev->message & keyCodeMask) >> 8 ;
+        // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
+        if ( ev->modifiers & controlKey && keychar >= 0 && keychar < 0x20 )
+        {
+            keychar += 0x40 ;
+        }
         long keyval = wxMacTranslateKey(keychar, keycode) ;
         bool handled = false ;
         wxWindow* focus = wxWindow::FindFocus() ;
@@ -1612,12 +1617,13 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
             event.m_timeStamp = ev->when;
             event.SetEventObject(focus);
             handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+            if ( handled && event.GetSkipped() )
+                handled = false ;
             if ( !handled )
             {
 #if wxUSE_ACCEL
                 if (!handled)
                 {
-                    /*
                     wxWindow *ancestor = focus;
                     while (ancestor)
                     {
@@ -1628,11 +1634,10 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
                             handled = ancestor->GetEventHandler()->ProcessEvent( command_event );
                             break;
                         }
-                        if (ancestor->m_isFrame)
+                        if (ancestor->IsTopLevel())
                             break;
                         ancestor = ancestor->GetParent();
                     }
-                    */
                 }
 #endif // wxUSE_ACCEL
             }
@@ -1649,10 +1654,18 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
                 event.m_timeStamp = ev->when;
                 event.SetEventObject(focus);
                 handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+                if ( handled && event.GetSkipped() )
+                    handled = false ;
             }
             if ( !handled &&
                  (keyval == WXK_TAB) &&
+// CS: copied the change below from wxGTK
+// VZ: testing for wxTE_PROCESS_TAB shouldn't be done here the control may
+//     have this style, yet choose not to process this particular TAB in which
+//     case TAB must still work as a navigational character
+#if 0
                  (!focus->HasFlag(wxTE_PROCESS_TAB)) &&
+#endif
                  (focus->GetParent()) &&
                  (focus->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
             {
@@ -1663,6 +1676,8 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
                 new_event.SetWindowChange( event.ControlDown() );
                 new_event.SetCurrentFocus( focus );
                 handled = focus->GetEventHandler()->ProcessEvent( new_event );
+                if ( handled && new_event.GetSkipped() )
+                    handled = false ;
             }
         }
         if ( !handled )
