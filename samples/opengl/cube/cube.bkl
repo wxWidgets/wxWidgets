@@ -5,7 +5,7 @@
 
     <include file="../../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="cube" template="wx_sample" template_append="wx_append">
+    <exe id="cube" template="wx_sample" template_append="wx_append" cond="USE_OPENGL=='1'">
         <sources>cube.cpp</sources>
         <wx-lib>gl</wx-lib>
         <wx-lib>core</wx-lib>

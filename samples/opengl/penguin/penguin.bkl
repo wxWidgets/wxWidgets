@@ -5,7 +5,7 @@
 
     <include file="../../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="penguin" template="wx_sample" template_append="wx_append">
+    <exe id="penguin" template="wx_sample" template_append="wx_append" cond="USE_OPENGL=='1'">
         <sources>
             penguin.cpp
             lw.cpp
@@ -16,7 +16,7 @@
         <wx-lib>base</wx-lib>
         <win32-res>penguin.rc</win32-res>
     </exe>
-    
+
     <wx-data id="data">
         <files>
             penguin.lwo
