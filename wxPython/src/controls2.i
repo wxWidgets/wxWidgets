@@ -358,7 +358,8 @@ public:
     wxListItem    m_item;
 %readwrite
 
-    int GetCode();
+    int GetKeyCode();
+    %pragma(python) addtoclass = "GetCode = GetKeyCode"
     long GetIndex();
     int GetColumn();
     wxPoint GetPoint();
@@ -1042,7 +1043,8 @@ public:
     wxTreeItemId GetOldItem();
     wxPoint GetPoint();
     const wxKeyEvent& GetKeyEvent();
-    int GetCode();
+    int GetKeyCode();
+    %pragma(python) addtoclass = "GetCode = GetKeyCode"
     const wxString& GetLabel();
 };
 

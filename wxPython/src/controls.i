@@ -857,6 +857,10 @@ public:
     void SelectAll();
     void SetEditable(bool editable);
 
+    bool IsSingleLine();
+    bool IsMultiLine();
+
+
     %addmethods {
         void write(const wxString& text) {
             self->AppendText(text);
@@ -866,7 +870,7 @@ public:
     // TODO: replace this when the method is really added to wxTextCtrl
     %addmethods {
         wxString GetString(long from, long to) {
-            return self->GetValue().Mid(from, to-from);
+            return self->GetValue().Mid(from, to - from);
         }
     }
 };
