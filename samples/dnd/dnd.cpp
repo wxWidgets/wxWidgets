@@ -935,7 +935,7 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
 
 {
     // frame icon and status bar
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
 #if wxUSE_STATUSBAR
     CreateStatusBar();
@@ -1011,19 +1011,20 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
 #endif // wxUSE_LOG
 #endif // wxUSE_DRAG_AND_DROP
 
-    wxBoxSizer *m_sizer_top = new wxBoxSizer( wxHORIZONTAL );
-    m_sizer_top->Add(m_ctrlFile, 1, wxEXPAND );
-    m_sizer_top->Add(m_ctrlText, 1, wxEXPAND );
+    wxBoxSizer *sizer_top = new wxBoxSizer( wxHORIZONTAL );
+    sizer_top->Add(m_ctrlFile, 1, wxEXPAND );
+    sizer_top->Add(m_ctrlText, 1, wxEXPAND );
 
-    wxBoxSizer *m_sizer = new wxBoxSizer( wxVERTICAL );
-    m_sizer->Add(m_sizer_top, 1, wxEXPAND );
+    wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
+    sizer->Add(sizer_top, 1, wxEXPAND );
 #if wxUSE_LOG
-    m_sizer->Add(m_ctrlLog, 1, wxEXPAND);
+    sizer->Add(m_ctrlLog, 2, wxEXPAND);
+    sizer->SetItemMinSize(m_ctrlLog, 450, 0);
 #endif // wxUSE_LOG
-    m_sizer->Add(0,50);
+    sizer->AddSpacer(50);
 
-    SetSizer( m_sizer );
-    m_sizer->SetSizeHints( this );
+    SetSizer(sizer);
+    sizer->SetSizeHints( this );
 
     // copy data by default but allow moving it as well
     m_moveByDefault = false;
