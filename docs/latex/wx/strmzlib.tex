@@ -3,8 +3,8 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxZlibInputStream}}\label{wxzlibinputstream}
 
-This stream uncompresses all data read from it. It uses the "filtered"
-stream to get new compressed data.
+This filter stream decompresses a stream that is in zlib or gzip format.
+Note that reading the gzip format requires zlib version 1.2.0 greater.
 
 The stream is not seekable, \helpref{SeekI()}{wxinputstreamseeki} returns
  {\it wxInvalidOffset}. Also \helpref{GetSize()}{wxstreambasegetsize} is
@@ -27,19 +27,23 @@ not supported, it always returns $0$.
 
 \membersection{wxZlibInputStream::wxZlibInputStream}
 
-\func{}{wxZlibInputStream}{\param{wxInputStream\&}{ stream}, \param{int}{ flags = 0}}
+\func{}{wxZlibInputStream}{\param{wxInputStream\&}{ stream}, \param{int}{ flags = wxZLIB\_ZLIB | wxZLIB\_GZIP}}
 
-{\it flags} should be omitted for normal usage. The flag {\it wxZLIB\_NO_HEADER}
- is needed when wxZlibInputStream is used as an 'inflate' decompressor for gzip
-or zip files.
+The {\it flags} wxZLIB\_ZLIB and wxZLIB\_GZIP specify whether the input data
+is in zlib or gzip format. If both are used, bitwise ored, then zlib will
+autodetect the stream type, this is the default.
+If {\it flags} is zero, then the data is assumed to be a raw deflate stream
+without either zlib or gzip headers.
 
-{\it wxZLIB\_NO_HEADER} is currently the only flag:
+The following symbols can be use for the flags:
 
 \begin{verbatim}
 // Flags
 enum {
-    wxZLIB_NO_HEADER = 1   // required for use in Gzip and Zip files
-}
+    wxZLIB_NO_HEADER = 0,   // raw deflate stream, no header or checksum
+    wxZLIB_ZLIB = 1,        // zlib header and checksum
+    wxZLIB_GZIP = 2         // gzip header and checksum, requires zlib 1.2+
+};
 \end{verbatim}
 
 
@@ -48,8 +52,9 @@ enum {
 % -----------------------------------------------------------------------------
 \section{\class{wxZlibOutputStream}}\label{wxzliboutputstream}
 
-This stream compresses all data written to it, and passes the compressed data
-to the "filtered" stream.
+This stream compresses all data written to it. The compressed output can be
+in zlib or gzip format.
+Note that writing the gzip format requires zlib version 1.2.0 greater.
 
 The stream is not seekable, \helpref{SeekO()}{wxoutputstreamseeko} returns
  {\it wxInvalidOffset}.
@@ -72,16 +77,17 @@ The stream is not seekable, \helpref{SeekO()}{wxoutputstreamseeko} returns
 
 \membersection{wxZlibOutputStream::wxZlibOutputStream}
 
-\func{}{wxZlibOutputStream}{\param{wxOutputStream\&}{ stream}, \param{int}{ level = -1}, \param{int}{ flags = 0}}
+\func{}{wxZlibOutputStream}{\param{wxOutputStream\&}{ stream}, \param{int}{ level = -1}, \param{int}{ flags = wxZLIB\_ZLIB}}
 
 Creates a new write-only compressed stream. {\it level} means level of 
 compression. It is number between 0 and 9 (including these values) where
 0 means no compression and 9 best but slowest compression. -1 is default
 value (currently equivalent to 6).
 
-{\it flags} should be omitted for normal usage. The flag {\it wxZLIB\_NO_HEADER}
- suppresses the generation of the zlib header and checksum, and is required
-when wxZlibOutputStream is used as a 'deflate' compressor for gzip or zip files.
+The {\it flags} wxZLIB\_ZLIB and wxZLIB\_GZIP specify whether the output data
+will be in zlib or gzip format. wxZLIB\_ZLIB is the default.
+If {\it flags} is zero, then a raw deflate stream is output without either
+zlib or gzip headers.
 
 The following symbols can be use for the compression level and flags:
 
@@ -92,11 +98,13 @@ enum {
     wxZ_NO_COMPRESSION = 0,
     wxZ_BEST_SPEED = 1,
     wxZ_BEST_COMPRESSION = 9
-}
+};
 
 // Flags
 enum {
-    wxZLIB_NO_HEADER = 1   // required for use in Gzip and Zip files
-}
+    wxZLIB_NO_HEADER = 0,   // raw deflate stream, no header or checksum
+    wxZLIB_ZLIB = 1,        // zlib header and checksum
+    wxZLIB_GZIP = 2         // gzip header and checksum, requires zlib 1.2+
+};
 \end{verbatim}
 

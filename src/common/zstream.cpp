@@ -68,7 +68,17 @@ wxZlibInputStream::wxZlibInputStream(wxInputStream& stream, int flags)
       m_inflate->next_in = NULL;
       m_inflate->next_out = NULL;
 
-      int bits = (flags & wxZLIB_NO_HEADER) ? -MAX_WBITS : MAX_WBITS;
+      wxASSERT((flags & ~(wxZLIB_ZLIB | wxZLIB_GZIP)) == 0);
+ 
+      // when autodetecting between gzip & zlib, silently drop gzip flag
+      // if the version of zlib doesn't support it
+      if (flags == (wxZLIB_ZLIB | wxZLIB_GZIP)
+              && strcmp(zlib_version, "1.2.") < 0)
+        flags &= ~wxZLIB_GZIP;
+
+      int bits = flags ? MAX_WBITS : -MAX_WBITS;
+      if (flags & wxZLIB_GZIP)
+        bits |= (flags & wxZLIB_ZLIB) ? 0x20 : 0x10;
 
       if (inflateInit2(m_inflate, bits) == Z_OK)
         return;
@@ -126,7 +136,10 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
     }
     m_lasterror = wxSTREAM_EOF;
   } else if (err != Z_OK) {
-    wxLogError(_("Can't read from inflate stream (zlib error %d)."), err);
+    wxString msg(m_inflate->msg, *wxConvCurrent);
+    if (!msg)
+      msg.Format(_("zlib error %d"), err);
+    wxLogError(_("Can't read from inflate stream: %s\n"), msg.c_str());
     m_lasterror = wxSTREAM_READ_ERROR;
   }
 
@@ -169,7 +182,11 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream,
         m_deflate->next_out = m_z_buffer;
         m_deflate->avail_out = m_z_size;
 
-        int bits = (flags & wxZLIB_NO_HEADER) ? -MAX_WBITS : MAX_WBITS;
+        wxASSERT(flags == 0 || flags == wxZLIB_ZLIB || flags == wxZLIB_GZIP);
+ 
+        int bits = flags ? MAX_WBITS : -MAX_WBITS;
+        if (flags & wxZLIB_GZIP)
+            bits |= 0x10;
 
         if (deflateInit2(m_deflate, level, Z_DEFLATED, bits, 
                          8, Z_DEFAULT_STRATEGY) == Z_OK)
@@ -253,7 +270,10 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
 
   if (err != Z_OK) {
     m_lasterror = wxSTREAM_WRITE_ERROR;
-    wxLogError(_("Can't write to deflate stream (zlib error %d)."), err);
+    wxString msg(m_deflate->msg, *wxConvCurrent);
+    if (!msg)
+      msg.Format(_("zlib error %d"), err);
+    wxLogError(_("Can't write to deflate stream: %s\n"), msg.c_str());
   }
 
   size -= m_deflate->avail_in;

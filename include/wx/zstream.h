@@ -31,12 +31,14 @@ enum {
 
 // Flags
 enum {
-    wxZLIB_NO_HEADER = 1   // required for use in Gzip and Zip files
+    wxZLIB_NO_HEADER = 1,   // raw deflate stream, no header or checksum
+    wxZLIB_ZLIB = 2,        // zlib header and checksum
+    wxZLIB_GZIP = 3         // gzip header and checksum, requires zlib 1.2+
 };
 
 class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
  public:
-  wxZlibInputStream(wxInputStream& stream, int flags = 0);
+  wxZlibInputStream(wxInputStream& stream, int flags = wxZLIB_ZLIB | wxZLIB_GZIP);
   virtual ~wxZlibInputStream();
 
   char Peek() { return wxInputStream::Peek(); }
@@ -57,7 +59,7 @@ class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
 
 class WXDLLIMPEXP_BASE wxZlibOutputStream: public wxFilterOutputStream {
  public:
-  wxZlibOutputStream(wxOutputStream& stream, int level = -1, int flags = 0);
+  wxZlibOutputStream(wxOutputStream& stream, int level = -1, int flags = wxZLIB_ZLIB);
   virtual ~wxZlibOutputStream();
 
   void Sync() { DoFlush(false); }
