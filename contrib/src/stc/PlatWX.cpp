@@ -481,7 +481,7 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positio
     // so figure it out and fix it!
     i = 0;
     size_t ui = 0;
-    while (i < len) {
+    while ((int)i < len) {
         unsigned char uch = (unsigned char)s[i];
         positions[i++] = tpos[ui];
         if (uch >= 0x80) {
@@ -1222,6 +1222,22 @@ double ElapsedTime::Duration(bool reset) {
 
 
 //----------------------------------------------------------------------
+
+#if wxUSE_UNICODE
+wxString stc2wx(const char* str, size_t len)
+{
+    char *buffer=new char[len+1];
+    strncpy(buffer, str, len);
+    buffer[len]=0;
+
+    wxString cstr(buffer, wxConvUTF8);
+
+    delete[] buffer;
+    return cstr;
+}
+#endif
+
+
 
 
 
