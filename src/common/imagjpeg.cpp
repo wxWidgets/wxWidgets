@@ -197,7 +197,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
        */
       if (verbose)
         wxLogError(_("JPEG: Couldn't load - file is probably corrupted."));
-      (cinfo.src->term_source) (&cinfo);;
+      (cinfo.src->term_source)(&cinfo);
       jpeg_destroy_decompress(&cinfo);
       if (image->Ok()) image->Destroy();
       return FALSE;
