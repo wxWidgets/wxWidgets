@@ -942,14 +942,12 @@ wxColour wxNotebook::GetThemeBackgroundColour()
             // This is total guesswork.
             // See PlatformSDK\Include\Tmschema.h for values
             COLORREF themeColor;
-            wxUxThemeEngine::Get()->GetThemeColor
-                                    (
+            wxUxThemeEngine::Get()->GetThemeColor(
                                         hTheme,
                                         10 /* TABP_BODY */,
                                         1 /* NORMAL */,
-                                        3821, /* FILLCOLORHINT */
-                                        & themeColor
-                                    );
+                                        3802 /* color of bg fill */,
+                                        &themeColor);
             
             wxColour colour(GetRValue(themeColor), GetGValue(themeColor), GetBValue(themeColor));
             return colour;
