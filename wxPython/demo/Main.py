@@ -194,7 +194,7 @@ _treeList = [
         'PythonEvents',
         'Threads',
         'Timer',
-        ##'infoframe',    # needs better explaination and some fixing
+        ##'infoframe',    # needs better explanation and some fixing
         ]),
 
     # Clipboard and DnD
@@ -219,7 +219,7 @@ _treeList = [
     # Other stuff
     ('Miscellaneous', [
         'ColourDB',
-        ##'DialogUnits',   # needs more explainations
+        ##'DialogUnits',   # needs more explanations
         'DrawXXXList',
         'FileHistory',
         'FontEnumerator',
@@ -668,7 +668,7 @@ class DemoCodePanel(wx.Panel):
             try:
                 os.makedirs(GetModifiedDirectory())
                 if not os.path.exists(GetModifiedDirectory()):
-                    wx.LogMessage("BUG: Created demo directory but it still doesn't exit")
+                    wx.LogMessage("BUG: Created demo directory but it still doesn't exist")
                     raise AssetionError
             except:
                 wx.LogMessage("Error creating demo directory: %s" % GetModifiedDirectory())
