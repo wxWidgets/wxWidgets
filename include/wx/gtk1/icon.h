@@ -48,6 +48,11 @@ public:
     wxIcon& operator = (const wxIcon& icon);
     inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
     inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
+
+    // create from bitmap (which should have a mask unless it's monochrome):
+    // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
+    // ctors, assignment operators...), but it's ok to have such function
+    void CopyFromBitmap(const wxBitmap& bmp);
   
 private:
     DECLARE_DYNAMIC_CLASS(wxIcon)
