@@ -860,6 +860,7 @@ STC_CMD_LINEENDWRAP = _stc.STC_CMD_LINEENDWRAP
 STC_CMD_LINEENDWRAPEXTEND = _stc.STC_CMD_LINEENDWRAPEXTEND
 STC_CMD_VCHOMEWRAP = _stc.STC_CMD_VCHOMEWRAP
 STC_CMD_VCHOMEWRAPEXTEND = _stc.STC_CMD_VCHOMEWRAPEXTEND
+STC_CMD_LINECOPY = _stc.STC_CMD_LINECOPY
 STC_CMD_WORDPARTLEFT = _stc.STC_CMD_WORDPARTLEFT
 STC_CMD_WORDPARTLEFTEXTEND = _stc.STC_CMD_WORDPARTLEFTEXTEND
 STC_CMD_WORDPARTRIGHT = _stc.STC_CMD_WORDPARTRIGHT
@@ -1894,9 +1895,205 @@ class StyledTextCtrl(core.Control):
         """SetFoldMarginHiColour(bool useSetting, Colour fore)"""
         return _stc.StyledTextCtrl_SetFoldMarginHiColour(*args, **kwargs)
 
+    def LineDown(*args, **kwargs):
+        """
+        LineDown()
+
+        This is just a wrapper for ScrollLines(1).
+        """
+        return _stc.StyledTextCtrl_LineDown(*args, **kwargs)
+
+    def LineDownExtend(*args, **kwargs):
+        """LineDownExtend()"""
+        return _stc.StyledTextCtrl_LineDownExtend(*args, **kwargs)
+
+    def LineUp(*args, **kwargs):
+        """
+        LineUp()
+
+        This is just a wrapper for ScrollLines(-1).
+        """
+        return _stc.StyledTextCtrl_LineUp(*args, **kwargs)
+
+    def LineUpExtend(*args, **kwargs):
+        """LineUpExtend()"""
+        return _stc.StyledTextCtrl_LineUpExtend(*args, **kwargs)
+
+    def CharLeft(*args, **kwargs):
+        """CharLeft()"""
+        return _stc.StyledTextCtrl_CharLeft(*args, **kwargs)
+
+    def CharLeftExtend(*args, **kwargs):
+        """CharLeftExtend()"""
+        return _stc.StyledTextCtrl_CharLeftExtend(*args, **kwargs)
+
+    def CharRight(*args, **kwargs):
+        """CharRight()"""
+        return _stc.StyledTextCtrl_CharRight(*args, **kwargs)
+
+    def CharRightExtend(*args, **kwargs):
+        """CharRightExtend()"""
+        return _stc.StyledTextCtrl_CharRightExtend(*args, **kwargs)
+
+    def WordLeft(*args, **kwargs):
+        """WordLeft()"""
+        return _stc.StyledTextCtrl_WordLeft(*args, **kwargs)
+
+    def WordLeftExtend(*args, **kwargs):
+        """WordLeftExtend()"""
+        return _stc.StyledTextCtrl_WordLeftExtend(*args, **kwargs)
+
+    def WordRight(*args, **kwargs):
+        """WordRight()"""
+        return _stc.StyledTextCtrl_WordRight(*args, **kwargs)
+
+    def WordRightExtend(*args, **kwargs):
+        """WordRightExtend()"""
+        return _stc.StyledTextCtrl_WordRightExtend(*args, **kwargs)
+
+    def Home(*args, **kwargs):
+        """Home()"""
+        return _stc.StyledTextCtrl_Home(*args, **kwargs)
+
+    def HomeExtend(*args, **kwargs):
+        """HomeExtend()"""
+        return _stc.StyledTextCtrl_HomeExtend(*args, **kwargs)
+
+    def LineEnd(*args, **kwargs):
+        """LineEnd()"""
+        return _stc.StyledTextCtrl_LineEnd(*args, **kwargs)
+
+    def LineEndExtend(*args, **kwargs):
+        """LineEndExtend()"""
+        return _stc.StyledTextCtrl_LineEndExtend(*args, **kwargs)
+
+    def DocumentStart(*args, **kwargs):
+        """DocumentStart()"""
+        return _stc.StyledTextCtrl_DocumentStart(*args, **kwargs)
+
+    def DocumentStartExtend(*args, **kwargs):
+        """DocumentStartExtend()"""
+        return _stc.StyledTextCtrl_DocumentStartExtend(*args, **kwargs)
+
+    def DocumentEnd(*args, **kwargs):
+        """DocumentEnd()"""
+        return _stc.StyledTextCtrl_DocumentEnd(*args, **kwargs)
+
+    def DocumentEndExtend(*args, **kwargs):
+        """DocumentEndExtend()"""
+        return _stc.StyledTextCtrl_DocumentEndExtend(*args, **kwargs)
+
+    def PageUp(*args, **kwargs):
+        """
+        PageUp()
+
+        This is just a wrapper for ScrollPages(-1).
+        """
+        return _stc.StyledTextCtrl_PageUp(*args, **kwargs)
+
+    def PageUpExtend(*args, **kwargs):
+        """PageUpExtend()"""
+        return _stc.StyledTextCtrl_PageUpExtend(*args, **kwargs)
+
+    def PageDown(*args, **kwargs):
+        """
+        PageDown()
+
+        This is just a wrapper for ScrollPages(1).
+        """
+        return _stc.StyledTextCtrl_PageDown(*args, **kwargs)
+
+    def PageDownExtend(*args, **kwargs):
+        """PageDownExtend()"""
+        return _stc.StyledTextCtrl_PageDownExtend(*args, **kwargs)
+
+    def EditToggleOvertype(*args, **kwargs):
+        """EditToggleOvertype()"""
+        return _stc.StyledTextCtrl_EditToggleOvertype(*args, **kwargs)
+
+    def Cancel(*args, **kwargs):
+        """Cancel()"""
+        return _stc.StyledTextCtrl_Cancel(*args, **kwargs)
+
+    def DeleteBack(*args, **kwargs):
+        """DeleteBack()"""
+        return _stc.StyledTextCtrl_DeleteBack(*args, **kwargs)
+
+    def Tab(*args, **kwargs):
+        """Tab()"""
+        return _stc.StyledTextCtrl_Tab(*args, **kwargs)
+
+    def BackTab(*args, **kwargs):
+        """BackTab()"""
+        return _stc.StyledTextCtrl_BackTab(*args, **kwargs)
+
+    def NewLine(*args, **kwargs):
+        """NewLine()"""
+        return _stc.StyledTextCtrl_NewLine(*args, **kwargs)
+
+    def FormFeed(*args, **kwargs):
+        """FormFeed()"""
+        return _stc.StyledTextCtrl_FormFeed(*args, **kwargs)
+
+    def VCHome(*args, **kwargs):
+        """VCHome()"""
+        return _stc.StyledTextCtrl_VCHome(*args, **kwargs)
+
+    def VCHomeExtend(*args, **kwargs):
+        """VCHomeExtend()"""
+        return _stc.StyledTextCtrl_VCHomeExtend(*args, **kwargs)
+
+    def ZoomIn(*args, **kwargs):
+        """ZoomIn()"""
+        return _stc.StyledTextCtrl_ZoomIn(*args, **kwargs)
+
+    def ZoomOut(*args, **kwargs):
+        """ZoomOut()"""
+        return _stc.StyledTextCtrl_ZoomOut(*args, **kwargs)
+
+    def DelWordLeft(*args, **kwargs):
+        """DelWordLeft()"""
+        return _stc.StyledTextCtrl_DelWordLeft(*args, **kwargs)
+
+    def DelWordRight(*args, **kwargs):
+        """DelWordRight()"""
+        return _stc.StyledTextCtrl_DelWordRight(*args, **kwargs)
+
+    def LineCut(*args, **kwargs):
+        """LineCut()"""
+        return _stc.StyledTextCtrl_LineCut(*args, **kwargs)
+
+    def LineDelete(*args, **kwargs):
+        """LineDelete()"""
+        return _stc.StyledTextCtrl_LineDelete(*args, **kwargs)
+
+    def LineTranspose(*args, **kwargs):
+        """LineTranspose()"""
+        return _stc.StyledTextCtrl_LineTranspose(*args, **kwargs)
+
     def LineDuplicate(*args, **kwargs):
         """LineDuplicate()"""
         return _stc.StyledTextCtrl_LineDuplicate(*args, **kwargs)
+
+    def LowerCase(*args, **kwargs):
+        """LowerCase()"""
+        return _stc.StyledTextCtrl_LowerCase(*args, **kwargs)
+
+    def UpperCase(*args, **kwargs):
+        """UpperCase()"""
+        return _stc.StyledTextCtrl_UpperCase(*args, **kwargs)
+
+    def LineScrollDown(*args, **kwargs):
+        """LineScrollDown()"""
+        return _stc.StyledTextCtrl_LineScrollDown(*args, **kwargs)
+
+    def LineScrollUp(*args, **kwargs):
+        """LineScrollUp()"""
+        return _stc.StyledTextCtrl_LineScrollUp(*args, **kwargs)
+
+    def DeleteBackNotLine(*args, **kwargs):
+        """DeleteBackNotLine()"""
+        return _stc.StyledTextCtrl_DeleteBackNotLine(*args, **kwargs)
 
     def HomeDisplay(*args, **kwargs):
         """HomeDisplay()"""
@@ -1913,6 +2110,30 @@ class StyledTextCtrl(core.Control):
     def LineEndDisplayExtend(*args, **kwargs):
         """LineEndDisplayExtend()"""
         return _stc.StyledTextCtrl_LineEndDisplayExtend(*args, **kwargs)
+
+    def HomeWrap(*args, **kwargs):
+        """HomeWrap()"""
+        return _stc.StyledTextCtrl_HomeWrap(*args, **kwargs)
+
+    def HomeWrapExtend(*args, **kwargs):
+        """HomeWrapExtend()"""
+        return _stc.StyledTextCtrl_HomeWrapExtend(*args, **kwargs)
+
+    def LineEndWrap(*args, **kwargs):
+        """LineEndWrap()"""
+        return _stc.StyledTextCtrl_LineEndWrap(*args, **kwargs)
+
+    def LineEndWrapExtend(*args, **kwargs):
+        """LineEndWrapExtend()"""
+        return _stc.StyledTextCtrl_LineEndWrapExtend(*args, **kwargs)
+
+    def VCHomeWrap(*args, **kwargs):
+        """VCHomeWrap()"""
+        return _stc.StyledTextCtrl_VCHomeWrap(*args, **kwargs)
+
+    def VCHomeWrapExtend(*args, **kwargs):
+        """VCHomeWrapExtend()"""
+        return _stc.StyledTextCtrl_VCHomeWrapExtend(*args, **kwargs)
 
     def LineCopy(*args, **kwargs):
         """LineCopy()"""
@@ -2142,6 +2363,22 @@ class StyledTextCtrl(core.Control):
         """SetHotspotSingleLine(bool singleLine)"""
         return _stc.StyledTextCtrl_SetHotspotSingleLine(*args, **kwargs)
 
+    def ParaDown(*args, **kwargs):
+        """ParaDown()"""
+        return _stc.StyledTextCtrl_ParaDown(*args, **kwargs)
+
+    def ParaDownExtend(*args, **kwargs):
+        """ParaDownExtend()"""
+        return _stc.StyledTextCtrl_ParaDownExtend(*args, **kwargs)
+
+    def ParaUp(*args, **kwargs):
+        """ParaUp()"""
+        return _stc.StyledTextCtrl_ParaUp(*args, **kwargs)
+
+    def ParaUpExtend(*args, **kwargs):
+        """ParaUpExtend()"""
+        return _stc.StyledTextCtrl_ParaUpExtend(*args, **kwargs)
+
     def PositionBefore(*args, **kwargs):
         """PositionBefore(int pos) -> int"""
         return _stc.StyledTextCtrl_PositionBefore(*args, **kwargs)
@@ -2173,6 +2410,74 @@ class StyledTextCtrl(core.Control):
     def GetLineSelEndPosition(*args, **kwargs):
         """GetLineSelEndPosition(int line) -> int"""
         return _stc.StyledTextCtrl_GetLineSelEndPosition(*args, **kwargs)
+
+    def LineDownRectExtend(*args, **kwargs):
+        """LineDownRectExtend()"""
+        return _stc.StyledTextCtrl_LineDownRectExtend(*args, **kwargs)
+
+    def LineUpRectExtend(*args, **kwargs):
+        """LineUpRectExtend()"""
+        return _stc.StyledTextCtrl_LineUpRectExtend(*args, **kwargs)
+
+    def CharLeftRectExtend(*args, **kwargs):
+        """CharLeftRectExtend()"""
+        return _stc.StyledTextCtrl_CharLeftRectExtend(*args, **kwargs)
+
+    def CharRightRectExtend(*args, **kwargs):
+        """CharRightRectExtend()"""
+        return _stc.StyledTextCtrl_CharRightRectExtend(*args, **kwargs)
+
+    def HomeRectExtend(*args, **kwargs):
+        """HomeRectExtend()"""
+        return _stc.StyledTextCtrl_HomeRectExtend(*args, **kwargs)
+
+    def VCHomeRectExtend(*args, **kwargs):
+        """VCHomeRectExtend()"""
+        return _stc.StyledTextCtrl_VCHomeRectExtend(*args, **kwargs)
+
+    def LineEndRectExtend(*args, **kwargs):
+        """LineEndRectExtend()"""
+        return _stc.StyledTextCtrl_LineEndRectExtend(*args, **kwargs)
+
+    def PageUpRectExtend(*args, **kwargs):
+        """PageUpRectExtend()"""
+        return _stc.StyledTextCtrl_PageUpRectExtend(*args, **kwargs)
+
+    def PageDownRectExtend(*args, **kwargs):
+        """PageDownRectExtend()"""
+        return _stc.StyledTextCtrl_PageDownRectExtend(*args, **kwargs)
+
+    def StutteredPageUp(*args, **kwargs):
+        """StutteredPageUp()"""
+        return _stc.StyledTextCtrl_StutteredPageUp(*args, **kwargs)
+
+    def StutteredPageUpExtend(*args, **kwargs):
+        """StutteredPageUpExtend()"""
+        return _stc.StyledTextCtrl_StutteredPageUpExtend(*args, **kwargs)
+
+    def StutteredPageDown(*args, **kwargs):
+        """StutteredPageDown()"""
+        return _stc.StyledTextCtrl_StutteredPageDown(*args, **kwargs)
+
+    def StutteredPageDownExtend(*args, **kwargs):
+        """StutteredPageDownExtend()"""
+        return _stc.StyledTextCtrl_StutteredPageDownExtend(*args, **kwargs)
+
+    def WordLeftEnd(*args, **kwargs):
+        """WordLeftEnd()"""
+        return _stc.StyledTextCtrl_WordLeftEnd(*args, **kwargs)
+
+    def WordLeftEndExtend(*args, **kwargs):
+        """WordLeftEndExtend()"""
+        return _stc.StyledTextCtrl_WordLeftEndExtend(*args, **kwargs)
+
+    def WordRightEnd(*args, **kwargs):
+        """WordRightEnd()"""
+        return _stc.StyledTextCtrl_WordRightEnd(*args, **kwargs)
+
+    def WordRightEndExtend(*args, **kwargs):
+        """WordRightEndExtend()"""
+        return _stc.StyledTextCtrl_WordRightEndExtend(*args, **kwargs)
 
     def SetWhitespaceChars(*args, **kwargs):
         """SetWhitespaceChars(String characters)"""

@@ -66,6 +66,7 @@ wxSP_PERMIT_UNSPLIT = wx.windows.SP_PERMIT_UNSPLIT
 wxSP_LIVE_UPDATE = wx.windows.SP_LIVE_UPDATE
 wxSP_3DSASH = wx.windows.SP_3DSASH
 wxSP_3DBORDER = wx.windows.SP_3DBORDER
+wxSP_NO_XP_THEME = wx.windows.SP_NO_XP_THEME
 wxSP_BORDER = wx.windows.SP_BORDER
 wxSP_3D = wx.windows.SP_3D
 wxSPLIT_HORIZONTAL = wx.windows.SPLIT_HORIZONTAL

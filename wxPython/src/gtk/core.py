@@ -5229,6 +5229,11 @@ def GetAccelFromString(*args, **kwargs):
     return _core.GetAccelFromString(*args, **kwargs)
 #---------------------------------------------------------------------------
 
+WINDOW_VARIANT_DEFAULT = _core.WINDOW_VARIANT_DEFAULT
+WINDOW_VARIANT_NORMAL = _core.WINDOW_VARIANT_NORMAL
+WINDOW_VARIANT_SMALL = _core.WINDOW_VARIANT_SMALL
+WINDOW_VARIANT_MINI = _core.WINDOW_VARIANT_MINI
+WINDOW_VARIANT_LARGE = _core.WINDOW_VARIANT_LARGE
 class Window(EvtHandler):
     """
     wx.Window is the base class for all windows and represents any visible
@@ -5350,12 +5355,13 @@ class Window(EvtHandler):
         """
         GetLabel() -> String
 
-        Generic way of getting a label from any window, for identification
-        purposes.  The interpretation of this function differs from class to
-        class. For frames and dialogs, the value returned is the title. For
-        buttons or static text controls, it is the button text. This function
-        can be useful for meta-programs (such as testing tools or
-        special-needs access programs) which need to identify windows by name.
+        Generic way of getting a label from any window, for
+        identification purposes.  The interpretation of this function
+        differs from class to class. For frames and dialogs, the value
+        returned is the title. For buttons or static text controls, it is
+        the button text. This function can be useful for meta-programs
+        (such as testing tools or special-needs access programs) which
+        need to identify windows by name.
         """
         return _core.Window_GetLabel(*args, **kwargs)
 
@@ -5363,8 +5369,8 @@ class Window(EvtHandler):
         """
         SetName(String name)
 
-        Sets the window's name.  The window name is used for ressource setting
-        in X, it is not the same as the window title/label
+        Sets the window's name.  The window name is used for ressource
+        setting in X, it is not the same as the window title/label
         """
         return _core.Window_SetName(*args, **kwargs)
 
@@ -5372,11 +5378,24 @@ class Window(EvtHandler):
         """
         GetName() -> String
 
-        Returns the window's name.  This name is not guaranteed to be unique;
-        it is up to the programmer to supply an appropriate name in the window
-        constructor or via wx.Window.SetName.
+        Returns the window's name.  This name is not guaranteed to be
+        unique; it is up to the programmer to supply an appropriate name
+        in the window constructor or via wx.Window.SetName.
         """
         return _core.Window_GetName(*args, **kwargs)
+
+    def SetWindowVariant(*args, **kwargs):
+        """
+        SetWindowVariant(int variant)
+
+        Sets the variant of the window/font size to use for this window,
+        if the platform supports variants, (for example, wxMac.)
+        """
+        return _core.Window_SetWindowVariant(*args, **kwargs)
+
+    def GetWindowVariant(*args, **kwargs):
+        """GetWindowVariant() -> int"""
+        return _core.Window_GetWindowVariant(*args, **kwargs)
 
     def SetId(*args, **kwargs):
         """
@@ -6384,9 +6403,10 @@ class Window(EvtHandler):
         """
         Freeze()
 
-        Freezes the window or, in other words, prevents any updates from
-        taking place on screen, the window is not redrawn at all. Thaw must be
-        called to reenable window redrawing.
+        Freezes the window or, in other words, prevents any updates from taking place
+        on screen, the window is not redrawn at all. Thaw must be called to reenable
+        window redrawing.  Calls to Freeze/Thaw may be nested, with the actual Thaw
+        being delayed until all the nesting has been undone.
 
         This method is useful for visual appearance optimization (for example,
         it is a good idea to use it before inserting large amount of text into
@@ -6400,7 +6420,9 @@ class Window(EvtHandler):
         """
         Thaw()
 
-        Reenables window updating after a previous call to Freeze.
+        Reenables window updating after a previous call to Freeze.  Calls to
+        Freeze/Thaw may be nested, so Thaw must be called the same number of times
+        that Freeze was before the window will be updated.
         """
         return _core.Window_Thaw(*args, **kwargs)
 
@@ -6453,16 +6475,16 @@ class Window(EvtHandler):
         """
         return _core.Window_IsExposedPoint(*args, **kwargs)
 
-    def isExposedRect(*args, **kwargs):
+    def IsExposedRect(*args, **kwargs):
         """
-        isExposedRect(Rect rect) -> bool
+        IsExposedRect(Rect rect) -> bool
 
         Returns true if the given point or rectangle area has been exposed
         since the last repaint. Call this in an paint event handler to
         optimize redrawing by only redrawing those areas, which have been
         exposed.
         """
-        return _core.Window_isExposedRect(*args, **kwargs)
+        return _core.Window_IsExposedRect(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
         """
@@ -6545,7 +6567,7 @@ class Window(EvtHandler):
         """
         GetFont() -> Font
 
-        Returns a reference to the font for this window.
+        Returns the default font used for this window.
         """
         return _core.Window_GetFont(*args, **kwargs)
 
@@ -7169,7 +7191,7 @@ def FindWindowByLabel(*args, **kwargs):
     return _core.FindWindowByLabel(*args, **kwargs)
 
 def Window_FromHWND(*args, **kwargs):
-    """Window_FromHWND(unsigned long hWnd) -> Window"""
+    """Window_FromHWND(Window parent, unsigned long _hWnd) -> Window"""
     return _core.Window_FromHWND(*args, **kwargs)
 #---------------------------------------------------------------------------
 
@@ -9311,7 +9333,7 @@ def CallAfter(callable, *args, **kw):
 
 class FutureCall:
     """
-    A convenience class for wxTimer, that calls the given callable
+    A convenience class for wx.Timer, that calls the given callable
     object once after the given amount of milliseconds, passing any
     positional or keyword args.  The return value of the callable is
     availbale after it has been run with the GetResult method.
@@ -9328,6 +9350,7 @@ class FutureCall:
         self.callable = callable
         self.SetArgs(*args, **kwargs)
         self.runCount = 0
+        self.running = False
         self.hasRun = False
         self.result = None
         self.timer = None
@@ -9349,6 +9372,7 @@ class FutureCall:
         self.Stop()
         self.timer = wx.PyTimer(self.Notify)
         self.timer.Start(self.millis, wx.TIMER_ONE_SHOT)
+        self.running = True
     Restart = Start
 
 
@@ -9395,9 +9419,12 @@ class FutureCall:
         """
         if self.callable and getattr(self.callable, 'im_self', True):
             self.runCount += 1
+            self.running = False
             self.result = self.callable(*self.args, **self.kwargs)
         self.hasRun = True
-        wx.CallAfter(self.Stop)
+        if not self.running:
+            # if it wasn't restarted, then cleanup
+            wx.CallAfter(self.Stop)
 
 
 #----------------------------------------------------------------------------

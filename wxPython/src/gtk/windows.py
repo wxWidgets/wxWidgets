@@ -320,8 +320,8 @@ class Frame(TopLevelWindow):
     Command = ProcessCommand 
     def CreateStatusBar(*args, **kwargs):
         """
-        CreateStatusBar(int number=1, long style=ST_SIZEGRIP, int winid=0, 
-            String name=StatusLineNameStr) -> StatusBar
+        CreateStatusBar(int number=1, long style=wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE, 
+            int winid=0, String name=StatusLineNameStr) -> StatusBar
         """
         return _windows.Frame_CreateStatusBar(*args, **kwargs)
 
@@ -579,7 +579,10 @@ class StatusBar(core.Window):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStatusBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, long style=ST_SIZEGRIP, String name=StatusLineNameStr) -> StatusBar"""
+        """
+        __init__(Window parent, int id=-1, long style=wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE, 
+            String name=StatusLineNameStr) -> StatusBar
+        """
         newobj = _windows.new_StatusBar(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -656,6 +659,7 @@ SP_PERMIT_UNSPLIT = _windows.SP_PERMIT_UNSPLIT
 SP_LIVE_UPDATE = _windows.SP_LIVE_UPDATE
 SP_3DSASH = _windows.SP_3DSASH
 SP_3DBORDER = _windows.SP_3DBORDER
+SP_NO_XP_THEME = _windows.SP_NO_XP_THEME
 SP_BORDER = _windows.SP_BORDER
 SP_3D = _windows.SP_3D
 SPLIT_HORIZONTAL = _windows.SPLIT_HORIZONTAL
@@ -1621,6 +1625,7 @@ class TaskBarIcon(core.EvtHandler):
         """IsOk() -> bool"""
         return _windows.TaskBarIcon_IsOk(*args, **kwargs)
 
+    def __nonzero__(self): return self.IsOk() 
     def IsIconInstalled(*args, **kwargs):
         """IsIconInstalled() -> bool"""
         return _windows.TaskBarIcon_IsIconInstalled(*args, **kwargs)
@@ -3408,9 +3413,12 @@ _windows.PageSetupDialog_swigregister(PageSetupDialogPtr)
 class PrintDialogData(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintDialogData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__() -> PrintDialogData"""
-        newobj = _windows.new_PrintDialogData(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__() -> PrintDialogData
+        __init__(PrintData printData) -> PrintDialogData
+        """
+        newobj = _windows.new_PrintDialogData(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
@@ -3886,9 +3894,12 @@ _windows.PreviewControlBar_swigregister(PreviewControlBarPtr)
 class PrintPreview(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(Printout printout, Printout printoutForPrinting, PrintData data=None) -> PrintPreview"""
-        newobj = _windows.new_PrintPreview(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__(Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PrintPreview
+        __init__(Printout printout, Printout printoutForPrinting, PrintData data) -> PrintPreview
+        """
+        newobj = _windows.new_PrintPreview(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
@@ -3992,9 +4003,12 @@ _windows.PrintPreview_swigregister(PrintPreviewPtr)
 class PyPrintPreview(PrintPreview):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(Printout printout, Printout printoutForPrinting, PrintData data=None) -> PyPrintPreview"""
-        newobj = _windows.new_PyPrintPreview(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__(Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PyPrintPreview
+        __init__(Printout printout, Printout printoutForPrinting, PrintData data) -> PyPrintPreview
+        """
+        newobj = _windows.new_PyPrintPreview(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown

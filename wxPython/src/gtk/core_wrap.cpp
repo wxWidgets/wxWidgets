@@ -1374,11 +1374,23 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
 }
 
 
-    wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
 #ifdef __WXMSW__
+#include <wx/msw/private.h>  // to get wxGetWindowId
+#endif
+
+
+    wxWindow* wxWindow_FromHWND(wxWindow* parent, unsigned long _hWnd) {
+#ifdef __WXMSW__
+        WXHWND hWnd = (WXHWND)_hWnd;
+        long id = wxGetWindowId(hWnd);
         wxWindow* win = new wxWindow;
-        win->SetHWND((WXHWND)hWnd);
-        win->SubclassWin((WXHWND)hWnd);
+        parent->AddChild(win);
+        win->SetEventHandler(win);
+        win->SetHWND(hWnd);
+        win->SetId(id);
+        win->SubclassWin(hWnd);
+        win->AdoptAttributesFromHWND();
+        win->SetupColours();
         return win;
 #else
         wxPyRaiseNotImplemented();
@@ -14990,7 +15002,10 @@ static PyObject *_wrap_SetCursorEvent_GetCursor(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCursor, 0);
+    {
+        wxCursor* resultptr = new wxCursor(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxCursor, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21336,6 +21351,61 @@ static PyObject *_wrap_Window_GetName(PyObject *self, PyObject *args, PyObject *
 }
 
 
+static PyObject *_wrap_Window_SetWindowVariant(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetWindowVariant",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (wxWindowVariant) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetWindowVariant((wxWindowVariant )arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_GetWindowVariant(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_GetWindowVariant",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxWindow const *)arg1)->GetWindowVariant();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Window_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -24721,7 +24791,7 @@ static PyObject *_wrap_Window_IsExposedPoint(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Window_isExposedRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_IsExposedRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRect *arg2 = 0 ;
@@ -24733,7 +24803,7 @@ static PyObject *_wrap_Window_isExposedRect(PyObject *self, PyObject *args, PyOb
         (char *) "self",(char *) "rect", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_isExposedRect",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_IsExposedRect",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
@@ -24937,7 +25007,10 @@ static PyObject *_wrap_Window_GetCursor(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCursor, 0);
+    {
+        wxCursor* resultptr = new wxCursor(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxCursor, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -25001,7 +25074,10 @@ static PyObject *_wrap_Window_GetFont(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFont, 0);
+    {
+        wxFont* resultptr = new wxFont(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxFont, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26816,19 +26892,23 @@ static PyObject *_wrap_FindWindowByLabel(PyObject *self, PyObject *args, PyObjec
 
 static PyObject *_wrap_Window_FromHWND(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    unsigned long arg1 ;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    unsigned long arg2 ;
     wxWindow *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "hWnd", NULL 
+        (char *) "parent",(char *) "_hWnd", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_FromHWND",kwnames,&obj0)) goto fail;
-    arg1 = (unsigned long) SWIG_AsUnsignedLong(obj0); 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_FromHWND",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (unsigned long) SWIG_AsUnsignedLong(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxWindow *)wxWindow_FromHWND(arg1);
+        result = (wxWindow *)wxWindow_FromHWND(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -31187,7 +31267,10 @@ static PyObject *_wrap_MenuItem_GetBitmap(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 0);
+    {
+        wxBitmap* resultptr = new wxBitmap(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBitmap, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -39386,6 +39469,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetLabel", (PyCFunction) _wrap_Window_GetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetName", (PyCFunction) _wrap_Window_SetName, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetName", (PyCFunction) _wrap_Window_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetWindowVariant", (PyCFunction) _wrap_Window_SetWindowVariant, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetWindowVariant", (PyCFunction) _wrap_Window_GetWindowVariant, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetId", (PyCFunction) _wrap_Window_SetId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetId", (PyCFunction) _wrap_Window_GetId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_NewControlId", (PyCFunction) _wrap_Window_NewControlId, METH_VARARGS | METH_KEYWORDS },
@@ -39496,7 +39581,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetUpdateClientRect", (PyCFunction) _wrap_Window_GetUpdateClientRect, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_IsExposed", (PyCFunction) _wrap_Window_IsExposed, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_IsExposedPoint", (PyCFunction) _wrap_Window_IsExposedPoint, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Window_isExposedRect", (PyCFunction) _wrap_Window_isExposedRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_IsExposedRect", (PyCFunction) _wrap_Window_IsExposedRect, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetBackgroundColour", (PyCFunction) _wrap_Window_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetForegroundColour", (PyCFunction) _wrap_Window_SetForegroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetBackgroundColour", (PyCFunction) _wrap_Window_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
@@ -41416,6 +41501,11 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"PRINT_POSTSCRIPT", SWIG_FromInt((int)wxPRINT_POSTSCRIPT));
     SWIG_addvarlink(SWIG_globals,(char*)"NullAcceleratorTable",_wrap_NullAcceleratorTable_get, _wrap_NullAcceleratorTable_set);
     SWIG_addvarlink(SWIG_globals,(char*)"PanelNameStr",_wrap_PanelNameStr_get, _wrap_PanelNameStr_set);
+    PyDict_SetItemString(d,"WINDOW_VARIANT_DEFAULT", SWIG_FromInt((int)wxWINDOW_VARIANT_DEFAULT));
+    PyDict_SetItemString(d,"WINDOW_VARIANT_NORMAL", SWIG_FromInt((int)wxWINDOW_VARIANT_NORMAL));
+    PyDict_SetItemString(d,"WINDOW_VARIANT_SMALL", SWIG_FromInt((int)wxWINDOW_VARIANT_SMALL));
+    PyDict_SetItemString(d,"WINDOW_VARIANT_MINI", SWIG_FromInt((int)wxWINDOW_VARIANT_MINI));
+    PyDict_SetItemString(d,"WINDOW_VARIANT_LARGE", SWIG_FromInt((int)wxWINDOW_VARIANT_LARGE));
     SWIG_addvarlink(SWIG_globals,(char*)"DefaultValidator",_wrap_DefaultValidator_get, _wrap_DefaultValidator_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ControlNameStr",_wrap_ControlNameStr_get, _wrap_ControlNameStr_set);
     PyDict_SetItemString(d,"FLEX_GROWMODE_NONE", SWIG_FromInt((int)wxFLEX_GROWMODE_NONE));

@@ -20,7 +20,8 @@ import images
 
 # For debugging
 ##wx.Trap();
-##print os.getpid(); raw_input("Press a key...")
+##print os.getpid();
+##raw_input("Press a key...")
 
 
 #---------------------------------------------------------------------------

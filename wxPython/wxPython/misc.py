@@ -565,6 +565,14 @@ wxClipboardPtr = wx.misc.ClipboardPtr
 wxTheClipboard = wx.misc.TheClipboard
 wxClipboardLocker = wx.misc.ClipboardLocker
 wxClipboardLockerPtr = wx.misc.ClipboardLockerPtr
+wxVideoMode = wx.misc.VideoMode
+wxVideoModePtr = wx.misc.VideoModePtr
+wxDefaultVideoMode = wx.misc.DefaultVideoMode
+wxDisplay = wx.misc.Display
+wxDisplayPtr = wx.misc.DisplayPtr
+wxDisplay_GetCount = wx.misc.Display_GetCount
+wxDisplay_GetFromPoint = wx.misc.Display_GetFromPoint
+wxDisplay_GetFromWindow = wx.misc.Display_GetFromWindow
 wxPyTimer = wx.misc.PyTimer
 wxPyDropTarget = wx.misc.PyDropTarget
 

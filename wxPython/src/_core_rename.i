@@ -602,6 +602,11 @@
 %rename(AcceleratorTable)                   wxAcceleratorTable;
 %rename(NullAcceleratorTable)               wxNullAcceleratorTable;
 %rename(GetAccelFromString)                 wxGetAccelFromString;
+%rename(WINDOW_VARIANT_DEFAULT)             wxWINDOW_VARIANT_DEFAULT;
+%rename(WINDOW_VARIANT_NORMAL)              wxWINDOW_VARIANT_NORMAL;
+%rename(WINDOW_VARIANT_SMALL)               wxWINDOW_VARIANT_SMALL;
+%rename(WINDOW_VARIANT_MINI)                wxWINDOW_VARIANT_MINI;
+%rename(WINDOW_VARIANT_LARGE)               wxWINDOW_VARIANT_LARGE;
 %rename(Window)                             wxWindow;
 %rename(FindWindowById)                     wxFindWindowById;
 %rename(FindWindowByName)                   wxFindWindowByName;

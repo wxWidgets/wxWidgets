@@ -1000,11 +1000,7 @@ class HtmlWindow(windows.ScrolledWindow):
         return _html.HtmlWindow_SetFonts(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
-        """
-        SetTitle(String title)
-
-        Sets the window's title. Applicable only to frames and dialogs.
-        """
+        """SetTitle(String title)"""
         return _html.HtmlWindow_SetTitle(*args, **kwargs)
 
     def SetBorders(*args, **kwargs):
