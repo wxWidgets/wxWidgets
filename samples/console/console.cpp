@@ -425,7 +425,7 @@ static void TestAddition()
 #if wxUSE_LONGLONG_NATIVE
         wxASSERT_MSG( c == wxLongLongNative(a.GetHi(), a.GetLo()) +
                            wxLongLongNative(b.GetHi(), b.GetLo()),
-                      "addition failure" ); 
+                      "addition failure" );
 #else // !wxUSE_LONGLONG_NATIVE
         wxASSERT_MSG( c - b == a, "addition failure" );
 #endif // wxUSE_LONGLONG_NATIVE
@@ -921,7 +921,7 @@ def GetMonthWeek(dt):
     if weekNumMonth < 0:
         weekNumMonth = weekNumMonth + 53
     return weekNumMonth
-    
+
 def GetLastSundayBefore(dt):
     if dt.iso_week[2] == 7:
         return dt
@@ -1322,7 +1322,7 @@ static void TestTimeArithmetics()
     {
         wxDateSpan span;
         const char *name;
-    } testArithmData[] = 
+    } testArithmData[] =
     {
         { wxDateSpan::Day(),           "day"                                },
         { wxDateSpan::Week(),          "week"                               },
@@ -1330,7 +1330,7 @@ static void TestTimeArithmetics()
         { wxDateSpan::Year(),          "year"                               },
         { wxDateSpan(1, 2, 3, 4),      "year, 2 months, 3 weeks, 4 days"    },
     };
-    
+
     wxDateTime dt(29, wxDateTime::Dec, 1999), dt1, dt2;
 
     for ( size_t n = 0; n < WXSIZEOF(testArithmData); n++ )
@@ -1701,6 +1701,37 @@ void PrintArray(const char* name, const wxArrayString& array)
 #include "wx/timer.h"
 #include "wx/tokenzr.h"
 
+static void TestStringConstruction()
+{
+    puts("*** Testing wxString constructores ***");
+
+    #define TEST_CTOR(args, res)                                               \
+        {                                                                      \
+            wxString s args ;                                                  \
+            printf("wxString%s = %s ", #args, s.c_str());                      \
+            if ( s == res )                                                    \
+            {                                                                  \
+                puts("(ok)");                                                  \
+            }                                                                  \
+            else                                                               \
+            {                                                                  \
+                printf("(ERROR: should be %s)\n", res);                        \
+            }                                                                  \
+        }
+
+    TEST_CTOR((_T('Z'), 4), _T("ZZZZ"));
+    TEST_CTOR((_T("Hello"), 4), _T("Hell"));
+    TEST_CTOR((_T("Hello"), 5), _T("Hello"));
+    // TEST_CTOR((_T("Hello"), 6), _T("Hello")); -- should give assert failure
+
+    static const wxChar *s = _T("?really!");
+    const wxChar *start = wxStrchr(s, _T('r'));
+    const wxChar *end = wxStrchr(s, _T('!'));
+    TEST_CTOR((start, end), _T("really"));
+
+    puts("");
+}
+
 static void TestString()
 {
     wxStopWatch sw;
@@ -1842,33 +1873,49 @@ static void TestStringTokenizer()
 {
     puts("*** Testing wxStringTokenizer ***");
 
+    static const wxChar *modeNames[] =
+    {
+        _T("default"),
+        _T("return empty"),
+        _T("return all empty"),
+        _T("with delims"),
+        _T("like strtok"),
+    };
+
     static const struct StringTokenizerTest
     {
-        const wxChar *str;      // string to tokenize
-        const wxChar *delims;   // delimiters to use
-        size_t        count;    // count of token
-        bool          with;     // return tokens with delimiters?
-    } tokenizerTestData[] = 
+        const wxChar *str;              // string to tokenize
+        const wxChar *delims;           // delimiters to use
+        size_t        count;            // count of token
+        wxStringTokenizerMode mode;     // how should we tokenize it
+    } tokenizerTestData[] =
     {
-        { _T(""), _T(" "), 0, FALSE },
-        { _T("Hello, world"), _T(" "), 2, FALSE },
-        { _T("Hello, world"), _T(","), 2, FALSE },
-        { _T("Hello, world!"), _T(",!"), 3, TRUE },
-        { _T("username:password:uid:gid:gecos:home:shell"), _T(":"), 7, FALSE },
-        { _T("1 \t3\t4  6   "), wxDEFAULT_DELIMITERS, 9, TRUE },
-        { _T("01/02/99"), _T("/-"), 3, FALSE },
+        { _T(""), _T(" "), 0 },
+        { _T("Hello, world"), _T(" "), 2 },
+        { _T("Hello,   world  "), _T(" "), 2 },
+        { _T("Hello, world"), _T(","), 2 },
+        { _T("Hello, world!"), _T(",!"), 2 },
+        { _T("Hello,, world!"), _T(",!"), 3 },
+        { _T("Hello, world!"), _T(",!"), 3, wxTOKEN_RET_EMPTY_ALL },
+        { _T("username:password:uid:gid:gecos:home:shell"), _T(":"), 7 },
+        { _T("1 \t3\t4  6   "), wxDEFAULT_DELIMITERS, 4 },
+        { _T("1 \t3\t4  6   "), wxDEFAULT_DELIMITERS, 6, wxTOKEN_RET_EMPTY },
+        { _T("1 \t3\t4  6   "), wxDEFAULT_DELIMITERS, 9, wxTOKEN_RET_EMPTY_ALL },
+        { _T("01/02/99"), _T("/-"), 3 },
+        { _T("01-02/99"), _T("/-"), 3, wxTOKEN_RET_DELIMS },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(tokenizerTestData); n++ )
     {
         const StringTokenizerTest& tt = tokenizerTestData[n];
-        wxStringTokenizer tkz(tt.str, tt.delims, tt.with);
+        wxStringTokenizer tkz(tt.str, tt.delims, tt.mode);
 
         size_t count = tkz.CountTokens();
-        printf(_T("String '%s' has %u tokens delimited by '%s' "),
-               tt.str,
+        printf(_T("String '%s' has %u tokens delimited by '%s' (mode = %s) "),
+               MakePrintable(tt.str).c_str(),
                count,
-               MakePrintable(tt.delims).c_str());
+               MakePrintable(tt.delims).c_str(),
+               modeNames[tkz.GetMode()]);
         if ( count == tt.count )
         {
             puts(_T("(ok)"));
@@ -1880,19 +1927,57 @@ static void TestStringTokenizer()
             continue;
         }
 
+        // if we emulate strtok(), check that we do it correctly
+        wxChar *buf, *s, *last;
+
+        if ( tkz.GetMode() == wxTOKEN_STRTOK )
+        {
+            buf = new wxChar[wxStrlen(tt.str) + 1];
+            wxStrcpy(buf, tt.str);
+
+            s = wxStrtok(buf, tt.delims, &last);
+        }
+        else
+        {
+            buf = NULL;
+        }
+
         // now show the tokens themselves
         size_t count2 = 0;
         while ( tkz.HasMoreTokens() )
         {
-            printf(_T("\ttoken %u: '%s'\n"),
+            wxString token = tkz.GetNextToken();
+
+            printf(_T("\ttoken %u: '%s'"),
                    ++count2,
-                   MakePrintable(tkz.GetNextToken()).c_str());
+                   MakePrintable(token).c_str());
+
+            if ( buf )
+            {
+                if ( token == s )
+                {
+                    puts(" (ok)");
+                }
+                else
+                {
+                    printf(" (ERROR: should be %s)\n", s);
+                }
+
+                s = wxStrtok(NULL, tt.delims, &last);
+            }
+            else
+            {
+                // nothing to compare with
+                puts("");
+            }
         }
 
         if ( count2 != count )
         {
-            puts(_T("ERROR: token count mismatch"));
+            puts(_T("\tERROR: token count mismatch"));
         }
+
+        delete [] buf;
     }
 
     puts("");
@@ -1959,11 +2044,12 @@ int main(int argc, char **argv)
     }
     if ( 0 )
     {
+        TestStringConstruction();
         TestStringSub();
         TestStringFormat();
         TestStringFind();
     }
-    TestStringTokenizer();
+        TestStringTokenizer();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS

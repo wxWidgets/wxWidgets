@@ -38,56 +38,104 @@
 // wxStringTokenizer construction
 // ----------------------------------------------------------------------------
 
-wxStringTokenizer::wxStringTokenizer(const wxString& to_tokenize,
+wxStringTokenizer::wxStringTokenizer(const wxString& str,
                                      const wxString& delims,
-                                     bool ret_delims)
+                                     wxStringTokenizerMode mode)
 {
-    SetString(to_tokenize, delims, ret_delims);
+    SetString(str, delims, mode);
 }
 
-void wxStringTokenizer::SetString(const wxString& to_tokenize,
+void wxStringTokenizer::SetString(const wxString& str,
                                   const wxString& delims,
-                                  bool ret_delim)
+                                  wxStringTokenizerMode mode)
 {
-    m_string = to_tokenize;
+    if ( mode == wxTOKEN_DEFAULT )
+    {
+        // by default, we behave like strtok() if the delimiters are only
+        // whitespace characters and as wxTOKEN_RET_EMPTY otherwise (for
+        // whitespace delimiters, strtok() behaviour is better because we want
+        // to count consecutive spaces as one delimiter)
+        const wxChar *p;
+        for ( p = delims.c_str(); *p; p++ )
+        {
+            if ( !wxIsspace(*p) )
+                break;
+        }
+
+        if ( *p )
+        {
+            // not whitespace char in delims
+            mode = wxTOKEN_RET_EMPTY;
+        }
+        else
+        {
+            // only whitespaces
+            mode = wxTOKEN_STRTOK;
+        }
+    }
+
     m_delims = delims;
-    m_retdelims = ret_delim;
+    m_mode = mode;
+
+    Reinit(str);
+}
+
+void wxStringTokenizer::Reinit(const wxString& str)
+{
+    wxASSERT_MSG( IsOk(), _T("you should call SetString() first") );
+
+    m_string = str;
     m_pos = 0;
 
     // empty string doesn't have any tokens
     m_hasMore = !m_string.empty();
 }
 
-wxStringTokenizer::~wxStringTokenizer()
+// ----------------------------------------------------------------------------
+// access to the tokens
+// ----------------------------------------------------------------------------
+
+// do we have more of them?
+bool wxStringTokenizer::HasMoreTokens() const
 {
+    wxCHECK_MSG( IsOk(), FALSE, _T("you should call SetString() first") );
+
+    if ( m_string.find_first_not_of(m_delims) == wxString::npos )
+    {
+        // no non empty tokens left, but in wxTOKEN_RET_EMPTY_ALL mode we
+        // still may return TRUE if GetNextToken() wasn't called yet for the
+        // last trailing empty token
+        return m_mode == wxTOKEN_RET_EMPTY_ALL ? m_hasMore : FALSE;
+    }
+    else
+    {
+        // there are non delimiter characters left, hence we do have more
+        // tokens
+        return TRUE;
+    }
 }
 
-// ----------------------------------------------------------------------------
 // count the number of tokens in the string
-// ----------------------------------------------------------------------------
-
 size_t wxStringTokenizer::CountTokens() const
 {
-    size_t pos = 0;
+    wxCHECK_MSG( IsOk(), 0, _T("you should call SetString() first") );
+
+    // VZ: this function is IMHO not very useful, so it's probably not very
+    //     important if it's implementation here is not as efficient as it
+    //     could be - but OTOH like this we're sure to get the correct answer
+    //     in all modes
+    wxStringTokenizer *self = (wxStringTokenizer *)this;    // const_cast
+    wxString stringInitial = m_string;
+
     size_t count = 0;
-    for ( ;; )
-    {
-        pos = m_string.find_first_of(m_delims, pos);
-        if ( pos == wxString::npos )
-            break;
-
-        count++;    // one more token found
-
-        pos++;      // skip delimiter
-    }
-
-    // normally, we didn't count the last token in the loop above - so add it
-    // unless the string was empty from the very beginning, in which case it
-    // still has 0 (and not 1) tokens
-    if ( !m_string.empty() )
+    while ( self->HasMoreTokens() )
     {
         count++;
+
+        (void)self->GetNextToken();
     }
+
+    self->Reinit(stringInitial);
 
     return count;
 }
@@ -98,33 +146,50 @@ size_t wxStringTokenizer::CountTokens() const
 
 wxString wxStringTokenizer::GetNextToken()
 {
+    // strtok() doesn't return empty tokens, all other modes do
+    bool allowEmpty = m_mode != wxTOKEN_STRTOK;
+
     wxString token;
-    if ( HasMoreTokens() )
+    do
     {
-        size_t pos = m_string.find_first_of(m_delims); // end of token
-        size_t pos2;                                   // start of the next one
-        if ( pos != wxString::npos )
+        if ( !HasMoreTokens() )
         {
-            // return the delimiter too
-            pos2 = pos + 1;
+            break;
+        }
+        // find the end of this token
+        size_t pos = m_string.find_first_of(m_delims);
+
+        // and the start of the next one
+        if ( pos == wxString::npos )
+        {
+            // no more delimiters, the token is everything till the end of
+            // string
+            token = m_string;
+
+            m_pos += m_string.length();
+            m_string.clear();
+
+            // no more tokens in this string, even in wxTOKEN_RET_EMPTY_ALL
+            // mode (we will return the trailing one right now in this case)
+            m_hasMore = FALSE;
         }
         else
         {
-            pos2 = m_string.length();
+            size_t pos2 = pos + 1;
 
-            // no more tokens in this string
-            m_hasMore = FALSE;
+            // in wxTOKEN_RET_DELIMS mode we return the delimiter character
+            // with token
+            token = wxString(m_string, m_mode == wxTOKEN_RET_DELIMS ? pos2
+                                                                    : pos);
+
+            // remove token with the following it delimiter from string
+            m_string.erase(0, pos2);
+
+            // keep track of the position in the original string too
+            m_pos += pos2;
         }
-
-        token = wxString(m_string, m_retdelims ? pos2 : pos);
-
-        // remove token with the following it delimiter from string
-        m_string.erase(0, pos2);
-
-        // keep track of the position in the original string too
-        m_pos += pos2;
     }
-    //else: no more tokens, return empty token
+    while ( !allowEmpty && token.empty() );
 
     return token;
 }

@@ -1,6 +1,8 @@
 \section{\class{wxStringTokenizer}}\label{wxstringtokenizer}
 
-wxStringTokenizer helps you to break a string up into a number of tokens.
+wxStringTokenizer helps you to break a string up into a number of tokens. It
+replaces the standard C function {\tt strtok()} and also extends it in a
+number of ways.
 
 To use this class, you should create a wxStringTokenizer object, give it the
 string to tokenize and also the delimiters which separate tokens in the string
@@ -14,7 +16,7 @@ For example:
 
 \begin{verbatim}
 
-wxStringTokenizer tkz("first:second:third::fivth", ":");
+wxStringTokenizer tkz("first:second:third:fourth", ":");
 while ( tkz.HasMoreTokens() )
 {
     wxString token = tkz.GetNextToken();
@@ -23,14 +25,36 @@ while ( tkz.HasMoreTokens() )
 }
 \end{verbatim}
 
-Another feature of this class is that it may return the delimiter which
-was found after the token with it. In a simple case like above, you are not
-interested in this because the delimiter is always {\tt ':'}, but if the
-delimiters string has several characters, you might need to know which of them
-follows the current token. In this case, pass {\tt TRUE} to wxStringTokenizer
-constructor or \helpref{SetString}{wxstringtokenizersetstring} method and
-the delimiter will be appended to each returned token (except for the last
-one).
+By default, wxStringTokenizer will behave in the same way as {\tt strtok()} if
+the delimiters string only contains white space characters but, unlike the
+standard function, it will return empty tokens if this is not the case. This
+is helpful for parsing strictly formatted data where the number of fields is
+fixed but some of them may be empty (i.e. {\tt TAB} or comma delimited text
+files).
+
+The behaviour is governed by the last 
+\helpref{constructor}{wxstringtokenizerwxstringtokenizer}/\helpref{SetString}{wxstringtokenizersetstring} 
+parameter {\tt mode} which may be one of the following:
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\tt wxTOKEN\_DEFAULT}}{Default behaviour (as described above):
+same as {\tt wxTOKEN\_STRTOK} if the delimiter string contains only
+whitespaces, same as {\tt wxTOKEN\_RET\_EMPTY} otherwise}
+\twocolitem{{\tt wxTOKEN\_RET\_EMPTY}}{In this mode, the empty tokens in the
+middle of the string will be returned, i.e. {\tt "a::b:"} will be tokenized in
+three tokens `a', `' and `b'.}
+\twocolitem{{\tt wxTOKEN\_RET\_EMPTY\_ALL}}{In this mode, empty trailing token
+(after the last delimiter character) will be returned as well. The string as
+above will contain four tokens: the already mentioned ones and another empty
+one as the last one.}
+\twocolitem{{\tt wxTOKEN\_RET\_DELIMS}}{In this mode, the delimiter character
+after the end of the current token (there may be none if this is the last
+token) is returned appended to the token. Otherwise, it is the same mode as 
+{\tt wxTOKEN\_RET\_EMPTY}.}
+\twocolitem{{\tt wxTOKEN\_STRTOK}}{In this mode the class behaves exactly like
+the standard {\tt strtok()} function. The empty tokens are never returned.}
+\end{twocollist}
 
 \wxheading{Derived from}
 
@@ -46,18 +70,14 @@ one).
 
 \func{}{wxStringTokenizer}{\void}
 
-Default constructor.
+Default constructor. You must call 
+\helpref{SetString}{wxstringtokenizersetstring} before calling any other
+methods.
 
-\func{}{wxStringTokenizer}{\param{const wxString\& }{to\_tokenize}, \param{const wxString\& }{delims = " $\backslash$t$\backslash$r$\backslash$n"}, \param{bool }{ret\_delim = FALSE}}
+\func{}{wxStringTokenizer}{\param{const wxString\& }{str}, \param{const wxString\& }{delims = " $\backslash$t$\backslash$r$\backslash$n"}, \param{wxStringTokenizerMode }{mode = wxTOKEN\_DEFAULT}}
 
-Constructor. Pass the string to tokenize, a string containing delimiters,
-a flag specifying whether to return delimiters with tokens.
-
-\membersection{wxStringTokenizer::\destruct{wxStringTokenizer}}\label{wxstringtokenizerdtor}
-
-\func{}{\destruct{wxStringTokenizer}}{\void}
-
-Destructor.
+Constructor. Pass the string to tokenize, a string containing delimiters
+and the mode specifying how the string should be tokenized.
 
 \membersection{wxStringTokenizer::CountTokens}\label{wxstringtokenizercounttokens}
 
@@ -69,11 +89,11 @@ Returns the number of tokens in the input string.
 
 \constfunc{bool}{HasMoreTokens}{\void}
 
-Returns TRUE if the tokenizer has further tokens.
+Returns TRUE if the tokenizer has further tokens, FALSE if none are left.
 
 \membersection{wxStringTokenizer::GetNextToken}\label{wxstringtokenizergetnexttoken}
 
-\constfunc{wxString}{GetNextToken}{\void}
+\func{wxString}{GetNextToken}{\void}
 
 Returns the next token or empty string if the end of string was reached.
 
@@ -93,10 +113,10 @@ Returns the part of the starting string without all token already extracted.
 
 \membersection{wxStringTokenizer::SetString}\label{wxstringtokenizersetstring}
 
-\func{void}{SetString}{\param{const wxString\& }{to\_tokenize}, \param{const wxString\& }{delims = " $\backslash$t$\backslash$r$\backslash$n"}, \param{bool }{ret\_delim = FALSE}}
+\func{void}{SetString}{\param{const wxString\& }{to\_tokenize}, \param{const wxString\& }{delims = " $\backslash$t$\backslash$r$\backslash$n"}, \param{wxStringTokenizerMode }{mode = wxTOKEN\_DEFAULT}}
 
 Initializes the tokenizer.
 
 Pass the string to tokenize, a string containing delimiters,
-a flag specifying whether to return delimiters with tokens.
+and the mode specifying how the string should be tokenized.
 
