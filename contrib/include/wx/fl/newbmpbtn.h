@@ -74,6 +74,7 @@ protected:
     bool      mDragStarted;
     bool      mIsPressed;
     bool      mIsInFocus;
+    bool      mIsToggled;
 
     bool      mHasFocusedBmp;
 
@@ -105,6 +106,10 @@ protected:
 
         // Returns TRUE if the given point is in the window.
     bool IsInWindow( int x, int y );
+
+    virtual void OnIdle(wxIdleEvent& event);
+    // (EVT_UPDATE_UI handler)
+    virtual void DoButtonUpdate();
 
 public:
 
@@ -175,6 +180,9 @@ public:
 
         // Enables/disables button
     virtual bool Enable(bool enable);
+
+        // Depress button
+    virtual bool Toggle(bool enable);
 
         // Responds to a left mouse button down event.
     void OnLButtonDown( wxMouseEvent& event );
