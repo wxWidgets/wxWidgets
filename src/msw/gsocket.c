@@ -18,16 +18,21 @@
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
 #ifndef __GSOCKET_STANDALONE__
-
-#include "wx/msw/gsockmsw.h"
-#include "wx/gsocket.h"
-
+#  include "wx/msw/gsockmsw.h"
+#  include "wx/gsocket.h"
 #else
-
-#include "gsockmsw.h"
-#include "gsocket.h"
-
+#  include "gsockmsw.h"
+#  include "gsocket.h"
 #endif /* __GSOCKET_STANDALONE__ */
+
+/* redefine some GUI-only functions to do nothing in console mode */
+#if defined(wxUSE_GUI) && !wxUSE_GUI
+#  define _GSocket_GUI_Init(socket) 1
+#  define _GSocket_GUI_Destroy(socket)
+#  define _GSocket_Enable_Events(socket)
+#  define _GSocket_Disable_Events(socket)
+#endif /* wxUSE_GUI */
+
 
 #include <assert.h>
 #include <string.h>
@@ -39,20 +44,20 @@
 
 /* if we use configure for MSW SOCKLEN_T will be already defined */
 #ifndef SOCKLEN_T
-#define SOCKLEN_T  int
+#  define SOCKLEN_T int
 #endif
 
+/* using FD_SET results in this warning */
 #ifdef _MSC_VER
-    /* using FD_SET results in this warning */
-    #pragma warning(disable:4127) /* conditional expression is constant */
-#endif /* Visual C++ */
+#  pragma warning(disable:4127) /* conditional expression is constant */
+#endif
 
 
 /* Constructors / Destructors for GSocket */
 
 GSocket *GSocket_new(void)
 {
-  int i;
+  int i, success;
   GSocket *socket;
 
   if ((socket = (GSocket *) malloc(sizeof(GSocket))) == NULL)
@@ -63,6 +68,7 @@ GSocket *GSocket_new(void)
   {
     socket->m_cbacks[i]     = NULL;
   }
+  socket->m_detected        = 0;
   socket->m_local           = NULL;     
   socket->m_peer            = NULL;     
   socket->m_error           = GSOCK_NOERROR;
@@ -71,10 +77,11 @@ GSocket *GSocket_new(void)
   socket->m_non_blocking    = FALSE;
   socket->m_timeout.tv_sec  = 10 * 60;  /* 10 minutes */
   socket->m_timeout.tv_usec = 0;
-  socket->m_detected        = 0;
+  socket->m_establishing    = FALSE;
 
   /* Per-socket GUI-specific initialization */
-  if (!_GSocket_GUI_Init(socket))
+  success = _GSocket_GUI_Init(socket);
+  if (!success)
   {
     free(socket);
     return NULL;
@@ -455,6 +462,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   sck->m_stream   = (stream == GSOCK_STREAMED);
   sck->m_oriented = TRUE;
   sck->m_server   = FALSE;
+  sck->m_establishing = FALSE;
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_peer->m_realfamily,
@@ -503,6 +511,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
      */
     if ((err == WSAEWOULDBLOCK) && (sck->m_non_blocking))
     {
+      sck->m_establishing = TRUE;
       sck->m_error = GSOCK_WOULDBLOCK;
       return GSOCK_WOULDBLOCK;
     }
@@ -674,9 +683,70 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
+#if defined(wxUSE_GUI) && !wxUSE_GUI
+
+  GSocketEventFlags result = 0;
+  fd_set readfds;
+  fd_set writefds;
+  fd_set exceptfds;
+  static const struct timeval tv = { 0, 0 };
+
   assert(socket != NULL);
 
+  FD_ZERO(&readfds);
+  FD_ZERO(&writefds);
+  FD_ZERO(&exceptfds);
+  FD_SET(socket->m_fd, &readfds);
+  FD_SET(socket->m_fd, &writefds);
+  FD_SET(socket->m_fd, &exceptfds);
+
+  /* Check known state first */
+  result |= (GSOCK_CONNECTION_FLAG & socket->m_detected & flags);
+  result |= (GSOCK_LOST_FLAG       & socket->m_detected & flags);
+
+  /* Try select now */
+  if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv) <= 0)
+    return result;
+
+  /* Check for readability */
+  if (FD_ISSET(socket->m_fd, &readfds))
+  {
+    /* Assume that closure of the socket is always reported via exceptfds */
+    if (socket->m_server && socket->m_stream)
+      result |= (GSOCK_CONNECTION_FLAG & flags);
+    else
+      result |= (GSOCK_INPUT_FLAG & flags);
+  }
+
+  /* Check for writability */
+  if (FD_ISSET(socket->m_fd, &writefds))
+  {
+    if (socket->m_establishing && !socket->m_server)
+    {
+      result |= (GSOCK_CONNECTION_FLAG & flags);
+      socket->m_establishing = FALSE;
+      socket->m_detected |= GSOCK_CONNECTION_FLAG;
+    }
+    else
+      result |= (GSOCK_OUTPUT_FLAG & flags);
+  }
+
+  /* Check for exceptions and errors */
+  if (FD_ISSET(socket->m_fd, &exceptfds))
+  {
+    result |= (GSOCK_LOST_FLAG & flags);
+    socket->m_establishing = FALSE;
+    socket->m_detected = GSOCK_LOST_FLAG;
+  }
+
+  return result;
+
+#else 
+
+  assert(socket != NULL);
   return flags & socket->m_detected;
+
+#endif /* !wxUSE_GUI */
 }
 
 /* Attributes */

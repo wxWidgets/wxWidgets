@@ -69,7 +69,7 @@ static int firstAvailable;
 
 /* Global initializers */
 
-bool GSocket_Init()
+bool GSocket_Init(void)
 {
   WSADATA wsaData;
   WNDCLASS winClass;
@@ -108,7 +108,7 @@ bool GSocket_Init()
   return (WSAStartup((1 << 8) | 1, &wsaData) == 0);
 }
 
-void GSocket_Cleanup()
+void GSocket_Cleanup(void)
 {
   /* Destroy internal window */
   DestroyWindow(hWin);
@@ -240,8 +240,13 @@ void _GSocket_Enable_Events(GSocket *socket)
 
   if (socket->m_fd != INVALID_SOCKET)
   {
-    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber,
-                   FD_READ | FD_WRITE | FD_ACCEPT | FD_CONNECT | FD_CLOSE);
+    /* We could probably just subscribe to all events regardless
+     * of the socket type, but MS recommends to do it this way.
+     */
+    long lEvent = socket->m_server?
+                  FD_ACCEPT : (FD_READ | FD_WRITE | FD_CONNECT | FD_CLOSE);
+
+    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, lEvent);
   }
 }
 
