@@ -1,0 +1,61 @@
+\section{\class{wxCondition}}\label{wxcondition}
+
+TODO
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{See also}
+
+\helpref{wxThread}{wxthread}, \helpref{wxMutex}{wxmutex}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCondition::wxCondition}\label{wxconditionconstr}
+
+\func{}{wxCondition}{\void}
+
+Default constructor.
+
+\membersection{wxCondition::\destruct{wxCondition}}
+
+\func{}{\destruct{wxCondition}}{\void}
+
+Destroys the wxCondition object.
+
+\membersection{wxCondition::Broadcast}\label{wxconditionbroadcast}
+
+\func{void}{Broadcast}{\void}
+
+Broadcasts to all waiting objects.
+
+\membersection{wxCondition::Signal}\label{wxconditionsignal}
+
+\func{void}{Signal}{\void}
+
+Signals the object.
+
+\membersection{wxCondition::Wait}\label{wxconditionwait}
+
+\func{void}{Wait}{\param{wxMutex\&}{ mutex}}
+
+Waits indefinitely.
+
+\func{bool}{Wait}{\param{wxMutex\&}{ mutex}, \param{unsigned long}{ sec}, \param{unsigned long}{ nsec}}
+
+Waits until a signal is raised or the timeout has elapsed.
+
+\wxheading{Parameters}
+
+\docparam{mutex}{wxMutex object.}
+
+\docparam{sec}{Timeout in seconds}
+
+\docparam{nsec}{Timeout nanoseconds component (added to {\it sec}).}
+
+\wxheading{Return value}
+
+The second form returns if the signal was raised, or FALSE if there was a timeout.
+
+

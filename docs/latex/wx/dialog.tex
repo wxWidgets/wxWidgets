@@ -53,11 +53,11 @@ See also \helpref{Generic window styles}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxDialog}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\func{}{wxDialog}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxString\& }{title},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxDEFAULT\_DIALOG\_STYLE},\rtfsp
+\param{long}{ style = wxDEFAULT\_DIALOG\_STYLE},\rtfsp
 \param{const wxString\& }{name = ``dialogBox"}}
 
 Constructor.
@@ -94,7 +94,7 @@ Destructor. Deletes any child windows before deleting the physical window.
 
 \membersection{wxDialog::Centre}\label{wxdialogcentre}
 
-\func{void}{Centre}{\param{const int}{ direction = wxBOTH}}
+\func{void}{Centre}{\param{int}{ direction = wxBOTH}}
 
 Centres the dialog box on the display.
 
@@ -104,11 +104,11 @@ Centres the dialog box on the display.
 
 \membersection{wxDialog::Create}\label{wxdialogcreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxString\& }{title},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxDEFAULT\_DIALOG\_STYLE},\rtfsp
+\param{long}{ style = wxDEFAULT\_DIALOG\_STYLE},\rtfsp
 \param{const wxString\& }{name = ``dialogBox"}}
 
 Used for two-step dialog box construction. See \helpref{wxDialog::wxDialog}{wxdialogconstr}\rtfsp

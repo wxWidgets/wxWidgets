@@ -30,7 +30,7 @@ Copy constructor. This uses reference counting so is a cheap operation.
 
 Copy constructor. This uses reference counting so is a cheap operation.
 
-\func{}{wxPalette}{\param{const int}{ n}, \param{const unsigned char* }{red},\\
+\func{}{wxPalette}{\param{int}{ n}, \param{const unsigned char* }{red},\\
  \param{const unsigned char* }{green}, \param{const unsigned char* }{blue}}
 
 Creates a palette from arrays of size {\it n}, one for each
@@ -60,7 +60,7 @@ Destructor.
 
 \membersection{wxPalette::Create}\label{wxpalettecreate}
 
-\func{bool}{Create}{\param{const int}{ n}, \param{const unsigned char* }{red},\rtfsp
+\func{bool}{Create}{\param{int}{ n}, \param{const unsigned char* }{red},\rtfsp
  \param{const unsigned char* }{green}, \param{const unsigned char* }{blue}}
 
 Creates a palette from arrays of size {\it n}, one for each
@@ -109,7 +109,7 @@ The nearest palette index.
 
 \membersection{wxPalette::GetRGB}\label{wxpalettegetrgb}
 
-\constfunc{bool}{GetPixel}{\param{const int}{ pixel}, \param{const unsigned char* }{red}, \param{const unsigned char* }{green},\rtfsp
+\constfunc{bool}{GetPixel}{\param{int}{ pixel}, \param{const unsigned char* }{red}, \param{const unsigned char* }{green},\rtfsp
  \param{const unsigned char* }{blue}}
 
 Returns RGB values for a given palette index.

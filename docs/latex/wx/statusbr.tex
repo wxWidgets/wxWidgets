@@ -31,7 +31,7 @@ from an {\bf OnSize} event handler.
 
 Default constructor.
 
-\func{}{wxStatusBar}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\func{}{wxStatusBar}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
 \param{const wxString\& }{name = ``statusBar"}}
@@ -68,7 +68,7 @@ Destructor.
 
 \membersection{wxStatusBar::Create}\label{wxstatusbarcreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
 \param{const wxString\& }{name = ``statusBar"}}
@@ -79,7 +79,7 @@ See \helpref{wxStatusBar::wxStatusBar}{wxstatusbarconstr} for details.
 
 \membersection{wxStatusBar::GetFieldRect}\label{wxstatusbargetfieldrect}
 
-\constfunc{virtual bool}{GetFieldRect}{\param{const int}{ i}, \param{wxRect\&}{ rect}}
+\constfunc{virtual bool}{GetFieldRect}{\param{int}{ i}, \param{wxRect\&}{ rect}}
 
 Returns the size and position of a fields internal bounding rectangle.
 
@@ -105,7 +105,7 @@ Returns the number of fields in the status bar.
 
 \membersection{wxStatusBar::GetStatusText}\label{wxstatusbargetstatustext}
 
-\constfunc{virtual wxString}{GetStatusText}{\param{const int}{ ir = 0}}
+\constfunc{virtual wxString}{GetStatusText}{\param{int}{ ir = 0}}
 
 Returns the string associated with a status bar field.
 
@@ -123,7 +123,7 @@ The status field string if the field is valid, otherwise the empty string.
 
 \membersection{wxStatusBar::DrawField}\label{wxstatusbardrawfield}
 
-\func{virtual void}{DrawField}{\param{wxDC\& }{dc}, \param{const int }{i}}
+\func{virtual void}{DrawField}{\param{wxDC\& }{dc}, \param{int }{i}}
 
 Draws a field, including shaded borders and text.
 
@@ -139,7 +139,7 @@ Draws a field, including shaded borders and text.
 
 \membersection{wxStatusBar::DrawFieldText}\label{wxstatusbardrawfieldtext}
 
-\func{virtual void}{DrawFieldText}{\param{wxDC\& }{dc}, \param{const int }{i}}
+\func{virtual void}{DrawFieldText}{\param{wxDC\& }{dc}, \param{int }{i}}
 
 Draws a field's text.
 
@@ -186,7 +186,7 @@ and refreshes the window.
 
 \membersection{wxStatusBar::SetFieldsCount}\label{wxstatusbarsetfieldscount}
 
-\func{virtual void}{SetFieldsCount}{\param{const int}{ number = 1}, \param{const int* }{widths = NULL}}
+\func{virtual void}{SetFieldsCount}{\param{int}{ number = 1}, \param{int* }{widths = NULL}}
 
 Sets the number of fields, and optionally the field widths.
 
@@ -200,7 +200,7 @@ field must be -1.}
 
 \membersection{wxStatusBar::SetStatusText}\label{wxstatusbarsetstatustext}
 
-\func{virtual void}{SetStatusText}{\param{const wxString\& }{text}, \param{const int}{ i = 0}}
+\func{virtual void}{SetStatusText}{\param{const wxString\& }{text}, \param{int}{ i = 0}}
 
 Sets the text for one field.
 
@@ -216,7 +216,7 @@ Sets the text for one field.
 
 \membersection{wxStatusBar::SetStatusWidths}\label{wxstatusbarsetstatuswidths}
 
-\func{virtual void}{SetStatusWidths}{\param{const int}{ n}, \param{const int *}{widths}}
+\func{virtual void}{SetStatusWidths}{\param{int}{ n}, \param{int *}{widths}}
 
 Sets the widths of the fields in the status line.
 

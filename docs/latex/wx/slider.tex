@@ -43,10 +43,10 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default slider.
 
-\func{}{wxSlider}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id}, \param{const int }{value },\rtfsp
-\param{const int}{ minValue}, \param{const int}{ maxValue},\rtfsp
+\func{}{wxSlider}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{int }{value },\rtfsp
+\param{int}{ minValue}, \param{int}{ maxValue},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxSL\_HORIZONTAL},\rtfsp
+\param{long}{ style = wxSL\_HORIZONTAL},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``slider"}}
 
@@ -104,10 +104,10 @@ Windows 95 only.
 
 \membersection{wxSlider::Create}\label{wxslidercreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id}, \param{const int }{value },\rtfsp
-\param{const int}{ minValue}, \param{const int}{ maxValue},\rtfsp
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{int }{value },\rtfsp
+\param{int}{ minValue}, \param{int}{ maxValue},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxSL\_HORIZONTAL},\rtfsp
+\param{long}{ style = wxSL\_HORIZONTAL},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``slider"}}
 
@@ -223,7 +223,7 @@ Gets the current slider value.
 
 \membersection{wxSlider::SetRange}\label{wxslidersetrange}
 
-\func{void}{SetRange}{\param{const int}{ minValue}, \param{const int}{ maxValue}}
+\func{void}{SetRange}{\param{int}{ minValue}, \param{int}{ maxValue}}
 
 Sets the minimum and maximum slider values.
 
@@ -233,7 +233,7 @@ Sets the minimum and maximum slider values.
 
 \membersection{wxSlider::SetTickFreq}\label{wxslidersettickfreq}
 
-\func{void}{SetTickFreq}{\param{const int }{n}, \param{const int }{pos}}
+\func{void}{SetTickFreq}{\param{int }{n}, \param{int }{pos}}
 
 Sets the tick mark frequency and position.
 
@@ -254,7 +254,7 @@ Windows 95 only.
 
 \membersection{wxSlider::SetLineSize}\label{wxslidersetlinesize}
 
-\func{void}{SetLineSize}{\param{const int }{lineSize}}
+\func{void}{SetLineSize}{\param{int }{lineSize}}
 
 Sets the line size for the slider.
 
@@ -268,7 +268,7 @@ Sets the line size for the slider.
 
 \membersection{wxSlider::SetPageSize}\label{wxslidersetpagesize}
 
-\func{void}{SetPageSize}{\param{const int }{pageSize}}
+\func{void}{SetPageSize}{\param{int }{pageSize}}
 
 Sets the page size for the slider.
 
@@ -282,7 +282,7 @@ Sets the page size for the slider.
 
 \membersection{wxSlider::SetSelection}\label{wxslidersetselection}
 
-\func{void}{SetSelection}{\param{const int }{startPos}, \param{const int }{endPos}}
+\func{void}{SetSelection}{\param{int }{startPos}, \param{int }{endPos}}
 
 Sets the selection.
 
@@ -302,7 +302,7 @@ Windows 95 only.
 
 \membersection{wxSlider::SetThumbLength}\label{wxslidersetthumblength}
 
-\func{void}{SetThumbLength}{\param{const int }{len}}
+\func{void}{SetThumbLength}{\param{int }{len}}
 
 Sets the slider thumb length.
 
@@ -320,7 +320,7 @@ Windows 95 only.
 
 \membersection{wxSlider::SetTick}\label{wxslidersettick}
 
-\func{void}{SetTick}{\param{const int}{ tickPos}}
+\func{void}{SetTick}{\param{int}{ tickPos}}
 
 Sets a tick position.
 
@@ -338,7 +338,7 @@ Windows 95 only.
 
 \membersection{wxSlider::SetValue}\label{wxslidersetvalue}
 
-\func{void}{SetValue}{\param{const int}{ value}}
+\func{void}{SetValue}{\param{int}{ value}}
 
 Sets the slider position.
 

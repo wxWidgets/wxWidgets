@@ -45,10 +45,10 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxWindow}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},
+\func{}{wxWindow}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},
  \param{const wxPoint\& }{pos = wxDefaultPosition},
  \param{const wxSize\& }{size = wxDefaultSize},
- \param{const long }{style = 0},
+ \param{long }{style = 0},
  \param{const wxString\& }{name = wxPanelNameStr}}
 
 Constructs a window, which can be a child of a frame, dialog or any other non-control window.
@@ -110,13 +110,13 @@ release the capture.
 
 \membersection{wxWindow::Center}\label{wxwindowcenter}
 
-\func{void}{Center}{\param{const int}{ direction}}
+\func{void}{Center}{\param{int}{ direction}}
 
 A synonym for \helpref{Centre}{wxwindowcentre}.
 
 \membersection{wxWindow::Centre}\label{wxwindowcentre}
 
-\func{virtual void}{Centre}{\param{const int}{ direction = wxHORIZONTAL}}
+\func{virtual void}{Centre}{\param{int}{ direction = wxHORIZONTAL}}
 
 Centres the window.
 
@@ -240,7 +240,7 @@ Enable or disable the window for user input.
 
 \membersection{wxWindow::FakePopupMenu}\label{wxwindowfakepopupmenu}
 
-\func{virtual bool}{FakePopupMenu}{\param{wxMenu* }{menu}, \param{const int }{x}, \param{const int }{y}}
+\func{virtual bool}{FakePopupMenu}{\param{wxMenu* }{menu}, \param{int }{x}, \param{int }{y}}
 
 A replacement for wxWindow::PopupMenu for cases where the PopupMenu implementation
 does not work correctly, in particular on Motif platforms.
@@ -479,7 +479,7 @@ a code to the application.
 
 \membersection{wxWindow::GetScrollThumb}\label{wxwindowgetscrollthumb}
 
-\func{virtual int}{GetScrollThumb}{\param{const int }{orientation}}
+\func{virtual int}{GetScrollThumb}{\param{int }{orientation}}
 
 Returns the built-in scrollbar thumb size.
 
@@ -489,7 +489,7 @@ Returns the built-in scrollbar thumb size.
 
 \membersection{wxWindow::GetScrollPos}\label{wxwindowgetscrollpos}
 
-\func{virtual int}{GetScrollPos}{\param{const int }{orientation}}
+\func{virtual int}{GetScrollPos}{\param{int }{orientation}}
 
 Returns the built-in scrollbar position.
 
@@ -499,7 +499,7 @@ See \helpref{wxWindow::SetScrollbar}{wxwindowsetscrollbar}
 
 \membersection{wxWindow::GetScrollRange}\label{wxwindowgetscrollrange}
 
-\func{virtual int}{GetScrollRange}{\param{const int }{orientation}}
+\func{virtual int}{GetScrollRange}{\param{int }{orientation}}
 
 Returns the built-in scrollbar range.
 
@@ -653,7 +653,7 @@ the user can only interact with this window. If FALSE, the effect is reversed.}
 
 \membersection{wxWindow::Move}\label{wxwindowmove}
 
-\func{void}{Move}{\param{const int}{ x}, \param{const int}{ y}}
+\func{void}{Move}{\param{int}{ x}, \param{int}{ y}}
 
 Moves the window to the given position.
 
@@ -1230,7 +1230,7 @@ default value is FALSE.}
 
 \membersection{wxWindow::PopupMenu}\label{wxwindowpopupmenu}
 
-\func{virtual bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{const int }{x}, \param{const int }{y}}
+\func{virtual bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{int }{x}, \param{int }{y}}
 
 Pops up the given menu at the specified coordinates, relative to this
 window, and returns control when the user has dismissed the menu. If a
@@ -1346,7 +1346,7 @@ Converts from screen to client window coordinates.
 
 \membersection{wxWindow::ScrollWindow}\label{wxwindowscrollwindow}
 
-\func{virtual void}{ScrollWindow}{\param{const int }{dx}, \param{const int }{dy}, \param{const wxRect*}{ rect = NULL}}
+\func{virtual void}{ScrollWindow}{\param{int }{dx}, \param{int }{dy}, \param{const wxRect*}{ rect = NULL}}
 
 Physically scrolls the pixels in the window.
 
@@ -1530,8 +1530,8 @@ a code to the application. The function \helpref{wxDialog::EndModal}{wxdialogend
 
 \membersection{wxWindow::SetScrollbar}\label{wxwindowsetscrollbar}
 
-\func{virtual void}{SetScrollbar}{\param{const int }{orientation}, \param{const int }{position},\rtfsp
-\param{const int }{thumbSize}, \param{const int }{range},\rtfsp
+\func{virtual void}{SetScrollbar}{\param{int }{orientation}, \param{int }{position},\rtfsp
+\param{int }{thumbSize}, \param{int }{range},\rtfsp
 \param{const bool }{refresh = TRUE}}
 
 Sets the scrollbar properties of a built-in scrollbar.
@@ -1581,7 +1581,7 @@ from your \helpref{wxWindow::OnSize}{wxwindowonsize} event handler function.
 \begin{comment}
 \membersection{wxWindow::SetScrollPage}\label{wxwindowsetscrollpage}
 
-\func{virtual void}{SetScrollPage}{\param{const int }{orientation}, \param{const int }{pageSize}, \param{const bool }{refresh = TRUE}}
+\func{virtual void}{SetScrollPage}{\param{int }{orientation}, \param{int }{pageSize}, \param{const bool }{refresh = TRUE}}
 
 Sets the page size of one of the built-in scrollbars.
 
@@ -1621,7 +1621,7 @@ handling of pages and ranges.
 
 \membersection{wxWindow::SetScrollPos}\label{wxwindowsetscrollpos}
 
-\func{virtual void}{SetScrollPos}{\param{const int }{orientation}, \param{const int }{pos}, \param{const bool }{refresh = TRUE}}
+\func{virtual void}{SetScrollPos}{\param{int }{orientation}, \param{int }{pos}, \param{const bool }{refresh = TRUE}}
 
 Sets the position of one of the built-in scrollbars.
 
@@ -1649,7 +1649,7 @@ application to take note of scrollbar attributes and redraw contents accordingly
 \begin{comment}
 \membersection{wxWindow::SetScrollRange}\label{wxwindowsetscrollrange}
 
-\func{virtual void}{SetScrollRange}{\param{const int }{orientation}, \param{const int }{range}, \param{const bool }{refresh = TRUE}}
+\func{virtual void}{SetScrollRange}{\param{int }{orientation}, \param{int }{range}, \param{const bool }{refresh = TRUE}}
 
 Sets the range of one of the built-in scrollbars.
 
@@ -1681,12 +1681,12 @@ and usually the scrollbar will be automatically hidden.
 
 \membersection{wxWindow::SetSize}\label{wxwindowsetsize}
 
-\func{virtual void}{SetSize}{\param{const int}{ x}, \param{const int}{ y}, \param{const int}{ width}, \param{int}{ height},
- \param{const int}{ sizeFlags = wxSIZE\_AUTO}}
+\func{virtual void}{SetSize}{\param{int}{ x}, \param{int}{ y}, \param{int}{ width}, \param{int}{ height},
+ \param{int}{ sizeFlags = wxSIZE\_AUTO}}
 
 Sets the size and position of the window in pixels.
 
-\func{virtual void}{SetSize}{\param{const int}{ width}, \param{const int}{ height}}
+\func{virtual void}{SetSize}{\param{int}{ width}, \param{int}{ height}}
 
 Sets the size of the window in pixels.
 
@@ -1733,8 +1733,8 @@ by wxWindows, or that the current value of the dimension should be used.
 
 \membersection{wxWindow::SetSizeHints}\label{wxwindowsetsizehints}
 
-\func{virtual void}{SetSizeHints}{\param{const int}{ minW=-1}, \param{const int}{ minH=-1}, \param{const int}{ maxW=-1}, \param{int}{ maxH=-1},
- \param{const int}{ incW=-1}, \param{const int}{ incH=-1}}
+\func{virtual void}{SetSizeHints}{\param{int}{ minW=-1}, \param{int}{ minH=-1}, \param{int}{ maxW=-1}, \param{int}{ maxH=-1},
+ \param{int}{ incW=-1}, \param{int}{ incH=-1}}
 
 Allows specification of minimum and maximum window sizes, and window size increments.
 If a pair of values is not set (or set to -1), the default values will be used.
@@ -1762,7 +1762,7 @@ The resizing increments are only significant under Motif or Xt.
 
 \membersection{wxWindow::SetClientSize}
 
-\func{virtual void}{SetClientSize}{\param{const int}{ width}, \param{const int}{ height}}
+\func{virtual void}{SetClientSize}{\param{int}{ width}, \param{int}{ height}}
 
 This sets the size of the window client area in pixels. Using this function to size a window
 tends to be more device-independent than \helpref{wxWindow::SetSize}{wxwindowsetsize}, since the application need not

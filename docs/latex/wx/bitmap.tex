@@ -28,16 +28,16 @@ Default constructor.
 
 Copy constructors.
 
-\func{}{wxBitmap}{\param{void*}{ data}, \param{const int}{ type}, \param{const int}{ width}, \param{const int}{ height}, \param{const int}{ depth = -1}}
+\func{}{wxBitmap}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a bitmap from the given data, which can be of arbitrary type.
 
-\func{}{wxBitmap}{\param{const char}{ bits[]}, \param{const int}{ width}, \param{const int}{ height}\\
-  \param{const int}{ depth = 1}}
+\func{}{wxBitmap}{\param{const char}{ bits[]}, \param{int}{ width}, \param{int}{ height}\\
+  \param{int}{ depth = 1}}
 
 Creates a bitmap from an array of bits.
 
-\func{}{wxBitmap}{\param{const int}{ width}, \param{const int}{ height}, \param{const int}{ depth = -1}}
+\func{}{wxBitmap}{\param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a new bitmap.
 
@@ -45,7 +45,7 @@ Creates a new bitmap.
 
 Creates a bitmap from XPM data.
 
-\func{}{wxBitmap}{\param{const wxString\& }{name}, \param{const long}{ type}}
+\func{}{wxBitmap}{\param{const wxString\& }{name}, \param{long}{ type}}
 
 Loads a bitmap from a file or resource.
 
@@ -158,12 +158,12 @@ This function is called by wxWindows on exit.
 
 \membersection{wxBitmap::Create}
 
-\func{virtual bool}{Create}{\param{const int}{ width}, \param{const int}{ height}, \param{const int}{ depth = -1}}
+\func{virtual bool}{Create}{\param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a fresh bitmap. If the final argument is omitted, the display depth of
 the screen is used.
 
-\func{virtual bool}{Create}{\param{void*}{ data}, \param{const int}{ type}, \param{const int}{ width}, \param{const int}{ height}, \param{const int}{ depth = -1}}
+\func{virtual bool}{Create}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a bitmap from the given data, which can be of arbitrary type.
 
@@ -304,7 +304,7 @@ of a given handler class in an application session.}
 
 \membersection{wxBitmap::LoadFile}\label{wxbitmaploadfile}
 
-\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{const long}{ type}}
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{long}{ type}}
 
 Loads a bitmap from a file or resource.
 
@@ -556,7 +556,7 @@ Destroys the wxBitmapHandler object.
 
 \membersection{wxBitmapHandler::Create}
 
-\func{virtual bool}{Create}{\param{wxBitmap* }{bitmap}, \param{void*}{ data}, \param{const int}{ type}, \param{const int}{ width}, \param{const int}{ height}, \param{const int}{ depth = -1}}
+\func{virtual bool}{Create}{\param{wxBitmap* }{bitmap}, \param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a bitmap from the given data, which can be of arbitrary type. The wxBitmap object {\it bitmap} is
 manipulated by this function.
@@ -600,7 +600,7 @@ Gets the bitmap type associated with this handler.
 
 \membersection{wxBitmapHandler::LoadFile}\label{wxbitmaphandlerloadfile}
 
-\func{bool}{LoadFile}{\param{wxBitmap* }{bitmap}, \param{const wxString\&}{ name}, \param{const long}{ type}}
+\func{bool}{LoadFile}{\param{wxBitmap* }{bitmap}, \param{const wxString\&}{ name}, \param{long}{ type}}
 
 Loads a bitmap from a file or resource, putting the resulting data into {\it bitmap}.
 

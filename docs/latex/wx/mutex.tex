@@ -1,0 +1,85 @@
+\section{\class{wxMutex}}\label{wxmutex}
+
+A wxMutex controls mutual exclusion, to prevent two or more threads accessing
+the same piece of code.
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{See also}
+
+\helpref{wxThread}{wxthread}, \helpref{wxCondition}{wxcondition}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMutex::wxMutex}\label{wxmutexconstr}
+
+\func{}{wxMutex}{\void}
+
+Default constructor.
+
+\membersection{wxMutex::\destruct{wxMutex}}
+
+\func{}{\destruct{wxMutex}}{\void}
+
+Destroys the wxMutex object.
+
+\membersection{wxMutex::IsLocked}\label{wxmutexislocked}
+
+\constfunc{bool}{IsLocked}{\void}
+
+Returns TRUE if the mutex is locked, FALSE otherwise.
+
+\membersection{wxMutex::Lock}\label{wxmutexlock}
+
+\func{wxMutexError}{Lock}{\void}
+
+Locks the mutex object.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf MUTEX\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf MUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
+\twocolitem{{\bf MUTEX\_BUSY}}{The thread is already running.}
+\end{twocollist}
+
+\membersection{wxMutex::TryLock}\label{wxmutextrylock}
+
+\func{wxMutexError}{TryLock}{\void}
+
+Tries to lock the mutex object. If it can't, returns immediately with an error.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf MUTEX\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf MUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
+\twocolitem{{\bf MUTEX\_BUSY}}{The thread is already running.}
+\end{twocollist}
+
+\membersection{wxMutex::Unlock}\label{wxmutexunlock}
+
+\func{wxMutexError}{Unlock}{\void}
+
+Unlocks the mutex object.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf MUTEX\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf MUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
+\twocolitem{{\bf MUTEX\_BUSY}}{The thread is already running.}
+\end{twocollist}
+
+

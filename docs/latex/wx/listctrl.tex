@@ -48,9 +48,9 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxListCtrl}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{}{wxListCtrl}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
+\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
 
 Constructor, creating and showing a list control.
 
@@ -83,7 +83,7 @@ Destructor, destroying the list control.
 
 \membersection{wxListCtrl::Arrange}\label{wxlistctrlarrange}
 
-\func{bool}{Arrange}{\param{const int }{flag = wxLIST\_ALIGN\_DEFAULT}}
+\func{bool}{Arrange}{\param{int }{flag = wxLIST\_ALIGN\_DEFAULT}}
 
 Arranges the items in icon or small icon view. {\it flag} is one of:
 
@@ -97,15 +97,15 @@ Arranges the items in icon or small icon view. {\it flag} is one of:
 
 \membersection{wxListCtrl::Create}\label{wxlistctrlcreate}
 
-\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
+\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
 
 Creates the list control. See \helpref{wxListCtrl::wxListCtrl}{wxlistctrlconstr} for further details.
 
 \membersection{wxListCtrl::DeleteItem}\label{wxlistctrldeleteitem}
 
-\func{bool}{DeleteItem}{\param{const long }{item}}
+\func{bool}{DeleteItem}{\param{long }{item}}
 
 Deletes the specified item.
 
@@ -117,49 +117,49 @@ Deletes all the items in the list control.
 
 \membersection{wxListCtrl::DeleteColumn}\label{wxlistctrldeletecolumn}
 
-\func{bool}{DeleteColumn}{\param{const int }{col}}
+\func{bool}{DeleteColumn}{\param{int }{col}}
 
 Deletes a column.
 
 \membersection{wxListCtrl::Edit}\label{wxlistctrledit}
 
-\func{wxTextCtrl\&}{Edit}{\param{const long }{item}}
+\func{wxTextCtrl\&}{Edit}{\param{long }{item}}
 
 Starts editing a label.
 
 \membersection{wxListCtrl::EnsureVisible}\label{wxlistctrlensurevisible}
 
-\func{bool}{EnsureVisible}{\param{const long }{item}}
+\func{bool}{EnsureVisible}{\param{long }{item}}
 
 Ensures this item is visible.
 
 \membersection{wxListCtrl::FindItem}\label{wxlistctrlfinditem}
 
-\func{long}{FindItem}{\param{const long }{start}, \param{const wxString\& }{str}, \param{const bool }{partial = FALSE}}
+\func{long}{FindItem}{\param{long }{start}, \param{const wxString\& }{str}, \param{const bool }{partial = FALSE}}
 
 Find an item whose label matches this string, starting from the item after {\it start} or
 the beginning if {\it start} is -1.
 
-\func{long}{FindItem}{\param{const long }{start}, \param{const long }{data}}
+\func{long}{FindItem}{\param{long }{start}, \param{long }{data}}
 
 Find an item whose data matches this data, starting from the item after {\it start} or
 the beginning if 'start' is -1.
 
-\func{long}{FindItem}{\param{const long }{start}, \param{const wxPoint\& }{pt}, \param{const int }{direction}}
+\func{long}{FindItem}{\param{long }{start}, \param{const wxPoint\& }{pt}, \param{int }{direction}}
 
 Find an item nearest this position in the specified direction, starting from
 the item after {\it start} or the beginning if {\it start} is -1.
 
 \membersection{wxListCtrl::GetColumn}\label{wxlistctrlgetcolumn}
 
-\constfunc{bool}{GetColumn}{\param{const int }{col}, \param{wxListItem\& }{item}}
+\constfunc{bool}{GetColumn}{\param{int }{col}, \param{wxListItem\& }{item}}
 
 Gets information about this column. See \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem} for more
 information.
 
 \membersection{wxListCtrl::GetColumnWidth}\label{wxlistctrlgetcolumnwidth}
 
-\constfunc{int}{GetColumnWidth}{\param{const int }{col}}
+\constfunc{int}{GetColumnWidth}{\param{int }{col}}
 
 Gets the column width (report view only).
 
@@ -180,7 +180,7 @@ Gets the edit control for editing labels.
 
 \membersection{wxListCtrl::GetImageList}\label{wxlistctrlgetimagelist}
 
-\constfunc{wxImageList*}{GetImageList}{\param{const int }{which}}
+\constfunc{wxImageList*}{GetImageList}{\param{int }{which}}
 
 Returns the specified image list. {\it which} may be one of:
 
@@ -200,19 +200,19 @@ information.
 
 \membersection{wxListCtrl::GetItemData}\label{wxlistctrlgetitemdata}
 
-\constfunc{long}{GetItemData}{\param{const long }{item}}
+\constfunc{long}{GetItemData}{\param{long }{item}}
 
 Gets the application-defined data associated with this item.
 
 \membersection{wxListCtrl::GetItemPosition}\label{wxlistctrlgetitemposition}
 
-\constfunc{bool}{GetItemPosition}{\param{const long }{item}, \param{wxPoint\& }{pos}}
+\constfunc{bool}{GetItemPosition}{\param{long }{item}, \param{wxPoint\& }{pos}}
 
 Returns the position of the item, in icon or small icon view.
 
 \membersection{wxListCtrl::GetItemRect}\label{wxlistctrlgetitemrect}
 
-\constfunc{bool}{GetItemRect}{\param{const long }{item}, \param{wxRect\& }{rect}, \param{const int }{code = wxLIST\_RECT\_BOUNDS}}
+\constfunc{bool}{GetItemRect}{\param{long }{item}, \param{wxRect\& }{rect}, \param{int }{code = wxLIST\_RECT\_BOUNDS}}
 
 Returns the rectangle representing the item's size and position, in client coordinates.
 
@@ -220,7 +220,7 @@ Returns the rectangle representing the item's size and position, in client coord
 
 \membersection{wxListCtrl::GetItemState}\label{wxlistctrlgetitemstate}
 
-\constfunc{int}{GetItemState}{\param{const long }{item}, \param{const long }{stateMask}}
+\constfunc{int}{GetItemState}{\param{long }{item}, \param{long }{stateMask}}
 
 Gets the item state. For a list of state flags, see \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
 
@@ -242,13 +242,13 @@ view, otherwise the large icon view.
 
 \membersection{wxListCtrl::GetItemText}\label{wxlistctrlgetitemtext}
 
-\constfunc{wxString}{GetItemText}{\param{const long }{item}}
+\constfunc{wxString}{GetItemText}{\param{long }{item}}
 
 Gets the item text for this item.
 
 \membersection{wxListCtrl::GetNextItem}\label{wxlistctrlgetnextitem}
 
-\constfunc{long}{GetNextItem}{\param{const long }{item}, \param{int }{geometry = wxLIST\_NEXT\_ALL}, \param{int }{state = wxLIST\_STATE\_DONTCARE}}
+\constfunc{long}{GetNextItem}{\param{long }{item}, \param{int }{geometry = wxLIST\_NEXT\_ALL}, \param{int }{state = wxLIST\_STATE\_DONTCARE}}
 
 Searches for an item with the given goemetry or state, starting from {\it item}. {\it item} can be -1
 to find the first item that matches the specified flags.
@@ -320,12 +320,12 @@ wxLIST\_HITTEST\_ONITEMSTATEICON.}
 
 \membersection{wxListCtrl::InsertColumn}\label{wxlistctrlinsertcolumn}
 
-\func{long}{InsertColumn}{\param{const long }{col}, \param{wxListItem\& }{info}}
+\func{long}{InsertColumn}{\param{long }{col}, \param{wxListItem\& }{info}}
 
 For list view mode (only), inserts a column. For more details, see \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
 
-\func{long}{InsertColumn}{\param{const long }{col}, \param{const wxString\& }{heading}, \param{const int }{format = wxLIST\_FORMAT\_LEFT},\rtfsp
-\param{const int }{width = -1}}
+\func{long}{InsertColumn}{\param{long }{col}, \param{const wxString\& }{heading}, \param{int }{format = wxLIST\_FORMAT\_LEFT},\rtfsp
+\param{int }{width = -1}}
 
 For list view mode (only), inserts a column. For more details, see \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
 
@@ -336,21 +336,21 @@ For list view mode (only), inserts a column. For more details, see \helpref{wxLi
 Inserts an item, returning the index of the new item if successful,
 -1 otherwise.
 
-\func{long}{InsertItem}{\param{const long }{index}, \param{const wxString\& }{label}}
+\func{long}{InsertItem}{\param{long }{index}, \param{const wxString\& }{label}}
 
 Inserts a string item.
 
-\func{long}{InsertItem}{\param{const long }{index}, \param{const int }{imageIndex}}
+\func{long}{InsertItem}{\param{long }{index}, \param{int }{imageIndex}}
 
 Inserts an image item.
 
-\func{long}{InsertItem}{\param{const long }{index}, \param{const wxString\& }{label}, \param{const int }{imageIndex}}
+\func{long}{InsertItem}{\param{long }{index}, \param{const wxString\& }{label}, \param{int }{imageIndex}}
 
 Insert an image/string item.
 
 \membersection{wxListCtrl::ScrollList}\label{wxlistctrlscrolllist}
 
-\func{bool}{ScrollList}{\param{const int }{dx}, \param{const int }{dy}}
+\func{bool}{ScrollList}{\param{int }{dx}, \param{int }{dy}}
 
 Scrolls the list control. If in icon, small icon or report view mode,
 dx specifies the number of pixels to scroll. If in list view mode, dx
@@ -368,14 +368,14 @@ wxWindow class).
 
 \membersection{wxListCtrl::SetColumn}\label{wxlistctrlsetcolumn}
 
-\func{bool}{SetColumn}{\param{const int }{col}, \param{wxListItem\& }{item}}
+\func{bool}{SetColumn}{\param{int }{col}, \param{wxListItem\& }{item}}
 
 Sets information about this column. See \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem} for more
 information.
 
 \membersection{wxListCtrl::SetColumnWidth}\label{wxlistctrlsetcolumnwidth}
 
-\func{bool}{SetColumnWidth}{\param{const int }{col}, \param{const int }{width}}
+\func{bool}{SetColumnWidth}{\param{int }{col}, \param{int }{width}}
 
 Sets the column width (report view only).
 
@@ -383,7 +383,7 @@ Sets the column width (report view only).
 
 \membersection{wxListCtrl::SetImageList}\label{wxlistctrlsetimagelist}
 
-\func{void}{SetImageList}{\param{wxImageList*}{ imageList}, \param{const int }{which}}
+\func{void}{SetImageList}{\param{wxImageList*}{ imageList}, \param{int }{which}}
 
 Sets the image list associated with the control. {\it which} is one of
 wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL, wxIMAGE\_LIST\_STATE (the last is unimplemented).
@@ -434,32 +434,32 @@ The {\bf m\_stateMask} and {\bf m\_state} members take flags from the following:
 \twocolitem{wxLIST\_STATE\_CUT}{The item is in the cut state.}
 \end{twocollist}
 
-\func{long}{SetItem}{\param{const long }{index}, \param{const int }{col}, \param{const wxString\& }{label}, \param{const int }{imageId = -1}}
+\func{long}{SetItem}{\param{long }{index}, \param{int }{col}, \param{const wxString\& }{label}, \param{int }{imageId = -1}}
 
 Sets a string field at a particular column.
 
 \membersection{wxListCtrl::SetItemData}\label{wxlistctrlsetitemdata}
 
-\func{bool}{SetItemData}{\param{const long }{item}, \param{long }{data}}
+\func{bool}{SetItemData}{\param{long }{item}, \param{long }{data}}
 
 Associates application-defined data with this item.
 
 \membersection{wxListCtrl::SetItemImage}\label{wxlistctrlsetitemimage}
 
-\func{bool}{SetItemImage}{\param{const long }{item}, \param{const int }{image}, \param{const int }{selImage}}
+\func{bool}{SetItemImage}{\param{long }{item}, \param{int }{image}, \param{int }{selImage}}
 
 Sets the unselected and selected images associated with the item. The images are indices into the
 image list associated with the list control.
 
 \membersection{wxListCtrl::SetItemPosition}\label{wxlistctrlsetitemposition}
 
-\func{bool}{SetItemPosition}{\param{const long }{item}, \param{const wxPoint\& }{pos}}
+\func{bool}{SetItemPosition}{\param{long }{item}, \param{const wxPoint\& }{pos}}
 
 Sets the position of the item, in icon or small icon view.
 
 \membersection{wxListCtrl::SetItemState}\label{wxlistctrlsetitemstate}
 
-\func{bool}{SetItemState}{\param{const long }{item}, \param{const long }{state}, \param{const long }{stateMask}}
+\func{bool}{SetItemState}{\param{long }{item}, \param{long }{state}, \param{long }{stateMask}}
 
 Sets the item state. For a list of state flags, see \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
 
@@ -467,13 +467,13 @@ The {\bf stateMask} indicates which state flags are valid.
 
 \membersection{wxListCtrl::SetItemText}\label{wxlistctrlsetitemtext}
 
-\func{void}{SetItemText}{\param{const long }{item}, \param{const wxString\& }{text}}
+\func{void}{SetItemText}{\param{long }{item}, \param{const wxString\& }{text}}
 
 Sets the item text for this item.
 
 \membersection{wxListCtrl::SetSingleStyle}\label{wxlistctrlsetsinglestyle}
 
-\func{void}{SetSingleStyle}{\param{const long }{style}, \param{const bool }{add = TRUE}}
+\func{void}{SetSingleStyle}{\param{long }{style}, \param{const bool }{add = TRUE}}
 
 Adds or removes a single window style.
 
@@ -485,7 +485,7 @@ Sets the text colour of the list control.
 
 \membersection{wxListCtrl::SetWindowStyleFlag}\label{wxlistctrlsetwindowstyleflag}
 
-\func{void}{SetWindowStyleFlag}{\param{const long }{style}}
+\func{void}{SetWindowStyleFlag}{\param{long }{style}}
 
 Sets the whole window style.
 

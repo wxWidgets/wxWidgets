@@ -61,16 +61,16 @@ Default constructor.
 
 Copy constructors.
 
-\func{}{wxIcon}{\param{void*}{ data}, \param{const int}{ type}, \param{const int}{ width}, \param{const int}{ height}, \param{const int}{ depth = -1}}
+\func{}{wxIcon}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates an icon from the given data, which can be of arbitrary type.
 
-\func{}{wxIcon}{\param{const char}{ bits[]}, \param{const int}{ width}, \param{const int}{ height}\\
-  \param{const int}{ depth = 1}}
+\func{}{wxIcon}{\param{const char}{ bits[]}, \param{int}{ width}, \param{int}{ height}\\
+  \param{int}{ depth = 1}}
 
 Creates an icon from an array of bits.
 
-\func{}{wxIcon}{\param{const int}{ width}, \param{const int}{ height}, \param{const int}{ depth = -1}}
+\func{}{wxIcon}{\param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a new icon.
 
@@ -78,7 +78,7 @@ Creates a new icon.
 
 Creates an icon from XPM data.
 
-\func{}{wxIcon}{\param{const wxString\& }{name}, \param{const long}{ type}}
+\func{}{wxIcon}{\param{const wxString\& }{name}, \param{long}{ type}}
 
 Loads an icon from a file or resource.
 
@@ -171,12 +171,12 @@ Do not delete an icon that is selected into a memory device context.
 \begin{comment}
 \membersection{wxIcon::Create}\label{wxiconcreate}
 
-\func{virtual bool}{Create}{\param{const int}{ width}, \param{const int}{ height}, \param{const int}{ depth = -1}}
+\func{virtual bool}{Create}{\param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a fresh icon. If the final argument is omitted, the display depth of
 the screen is used.
 
-\func{virtual bool}{Create}{\param{void*}{ data}, \param{const int}{ type}, \param{const int}{ width}, \param{const int}{ height}, \param{const int}{ depth = -1}}
+\func{virtual bool}{Create}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates an icon from the given data, which can be of arbitrary type.
 
@@ -233,7 +233,7 @@ Gets the width of the icon in pixels.
 
 \membersection{wxIcon::LoadFile}\label{wxiconloadfile}
 
-\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{const long}{ type}}
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{long}{ type}}
 
 Loads an icon from a file or resource.
 

@@ -49,10 +49,10 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxListBox}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{}{wxListBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const int}{ n}, \param{const wxString }{choices[] = NULL},\rtfsp
-\param{const long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listBox"}}
+\param{int}{ n}, \param{const wxString }{choices[] = NULL},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listBox"}}
 
 Constructor, creating and showing a list box.
 
@@ -112,10 +112,10 @@ Clears all strings from the list box.
 
 \membersection{wxListBox::Create}\label{wxlistboxcreate}
 
-\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const int}{ n}, \param{const wxString }{choices[] = NULL},\rtfsp
-\param{const long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listBox"}}
+\param{int}{ n}, \param{const wxString }{choices[] = NULL},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listBox"}}
 
 Creates the listbox for two-step construction. See \helpref{wxListBox::wxListBox}{wxlistboxconstr}\rtfsp
 for further details.
@@ -160,7 +160,7 @@ The zero-based position of the item, or -1 if the string was not found.
 
 \membersection{wxListBox::GetClientData}\label{wxlistboxgetclientdata}
 
-\constfunc{char*}{GetClientData}{\param{const int}{ n}}
+\constfunc{char*}{GetClientData}{\param{int}{ n}}
 
 Returns a pointer to the client data associated with the given item (if any).
 
@@ -219,7 +219,7 @@ Use this with a multiple selection listbox.
 
 \membersection{wxListBox::GetString}\label{wxlistboxgetstring}
 
-\constfunc{wxString}{GetString}{\param{const int}{ n}}
+\constfunc{wxString}{GetString}{\param{int}{ n}}
 
 Returns the string at the given position.
 
@@ -253,7 +253,7 @@ Returns the number of items in the listbox.
 
 \membersection{wxListBox::Selected}\label{wxlistboxselected}
 
-\constfunc{bool}{Selected}{\param{const int}{ n}}
+\constfunc{bool}{Selected}{\param{int}{ n}}
 
 Determines whether an item is selected.
 
@@ -267,7 +267,7 @@ TRUE if the given item is selected, FALSE otherwise.
 
 \membersection{wxListBox::Set}\label{wxlistboxset}
 
-\func{void}{Set}{\param{const int}{ n}, \param{const wxString*}{ choices}}
+\func{void}{Set}{\param{int}{ n}, \param{const wxString*}{ choices}}
 
 Clears the list box and adds the given strings.
 
@@ -284,7 +284,7 @@ after this function has been called.
 
 \membersection{wxListBox::SetClientData}\label{wxlistboxsetclientdata}
 
-\func{void}{SetClientData}{\param{const int}{ n}, \param{char* }{data}}
+\func{void}{SetClientData}{\param{int}{ n}, \param{char* }{data}}
 
 Associates the given client data pointer with the given item.
 
@@ -310,7 +310,7 @@ Set the specified item to be the first visible item.
 
 \membersection{wxListBox::SetSelection}\label{wxlistboxsetselection}
 
-\func{void}{SetSelection}{\param{const int}{ n}, \param{const bool }{select = TRUE}}
+\func{void}{SetSelection}{\param{int}{ n}, \param{const bool }{select = TRUE}}
 
 Selects or deselects the given item.
 
@@ -322,7 +322,7 @@ Selects or deselects the given item.
 
 \membersection{wxListBox::SetString}\label{wxlistboxsetstring}
 
-\func{void}{SetString}{\param{const int}{ n}, \param{const wxString\& }{ string}}
+\func{void}{SetString}{\param{int}{ n}, \param{const wxString\& }{ string}}
 
 Sets the string value of an item.
 

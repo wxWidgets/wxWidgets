@@ -9,6 +9,10 @@ This class represents a tab control, which manages multiple tabs.
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
 
+\wxheading{See also}
+
+\helpref{wxTabEvent}{wxtabevent}, \helpref{wxImageList}{wximagelist}
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxTabCtrl::wxTabCtrl}\label{wxtabctrlconstr}
@@ -17,8 +21,8 @@ This class represents a tab control, which manages multiple tabs.
 
 Default constructor.
 
-\func{}{wxTabCtrl}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
- \param{const wxSize\&}{ size}, \param{const long}{ style = 0}, \param{const wxString\& }{name = "tabCtrl"}}
+\func{}{wxTabCtrl}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size}, \param{long}{ style = 0}, \param{const wxString\& }{name = "tabCtrl"}}
 
 Constructs a tab control.
 
@@ -43,11 +47,23 @@ Destroys the wxTabCtrl object.
 
 \membersection{wxTabCtrl::Create}\label{wxtabctrlcreate}
 
-\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
- \param{const wxSize\&}{ size}, \param{const long}{ style = 0}, \param{const wxString\& }{name = "tabCtrl"}}
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size}, \param{long}{ style = 0}, \param{const wxString\& }{name = "tabCtrl"}}
 
 Creates a tab control. See \helpref{wxTabCtrl::wxTabCtrl}{wxtabctrlconstr} for a description
 of the parameters.
+
+\membersection{wxTabCtrl::DeleteAllItems}\label{wxtabctrldeleteallitems}
+
+\func{bool}{DeleteAllItems}{\void}
+
+Deletes all tab items.
+
+\membersection{wxTabCtrl::DeleteItem}\label{wxtabctrldeleteitem}
+
+\func{bool}{DeleteItem}{\param{int}{ item}}
+
+Deletes the specified tab item.
 
 \membersection{wxTabCtrl::GetImageList}\label{wxtabctrlgetimagelist}
 
@@ -65,15 +81,33 @@ Returns the associated image list.
 
 Returns the number of tabs in the tab control.
 
+\membersection{wxTabCtrl::GetItemData}\label{wxtabctrlgetitemdata}
+
+\constfunc{void*}{GetItemData}{\void}
+
+Returns the client data for the given tab.
+
+\membersection{wxTabCtrl::GetItemImage}\label{wxtabctrlgetitemimage}
+
+\constfunc{int}{GetItemImage}{\void}
+
+Returns the image index for the given tab.
+
 \membersection{wxTabCtrl::GetItemRect}\label{wxtabctrlgetitemrect}
 
-\constfunc{bool}{GetItemRect}{\param{const int item}, \param{wxRect\&}{ rect}}
+\constfunc{bool}{GetItemRect}{\param{int }{item}, \param{wxRect\&}{ rect}}
 
 Returns the rectangle bounding the given tab.
 
 \wxheading{See also}
 
 \helpref{wxRect}{wxrect}
+
+\membersection{wxTabCtrl::GetItemText}\label{wxtabctrlgetitemtext}
+
+\constfunc{wxString}{GetItemText}{\void}
+
+Returns the string for the given tab.
 
 \membersection{wxTabCtrl::GetRowCount}\label{wxtabctrlgetrowcount}
 
@@ -91,5 +125,102 @@ Returns the index for the currently selected tab.
 
 \helpref{wxTabCtrl::SetSelection}{wxtabctrlsetselection}
 
+\membersection{wxTabCtrl::HitTest}\label{wxtabctrlhittest}
+
+\func{int}{HitTest}{\param{const wxPoint\&}{ pt}, \param{long\&}{ flags}}
+
+Tests whether a tab is at the specified position.
+
+\wxheading{Parameters}
+
+\docparam{pt}{Specifies the point for the hit test.}
+
+\docparam{flags}{Return value for detailed information. One of the following values:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxTAB\_HITTEST\_NOWHERE}}{There was no tab under this point.}
+\twocolitem{{\bf wxTAB\_HITTEST\_ONICON}}{The point was over an icon.}
+\twocolitem{{\bf wxTAB\_HITTEST\_ONLABEL}}{The point was over a label.}
+\twocolitem{{\bf wxTAB\_HITTEST\_ONITEM}}{The point was over an item, but not on the label or icon.}
+\end{twocollist}
+}
+
+\wxheading{Return value}
+
+Returns the zero-based tab index or -1 if no tab is at the specified position.
+
+\membersection{wxTabCtrl::InsertItem}\label{wxtabctrlinsertitem}
+
+\func{void}{InsertItem}{\param{int}{ item}, \param{const wxString\&}{ text}, \param{int }{imageId = -1},
+ \param{void*}{ clientData = NULL}}
+
+Inserts a new tab.
+
+\wxheading{Parameters}
+
+\docparam{item}{Specifies the index for the new item.}
+
+\docparam{text}{Specifies the text for the new item.}
+
+\docparam{imageId}{Specifies the optional image index for the new item.}
+
+\docparam{clientData}{Specifies the optional client data for the new item.}
+
+\wxheading{Return value}
+
+TRUE if successful, FALSE otherwise.
+
+\membersection{wxTabCtrl::SetItemData}\label{wxtabctrlsetitemdata}
+
+\func{bool}{SetItemData}{\param{int}{ item}, \param{void*}{ data}}
+
+Sets the client data for a tab.
+
+\membersection{wxTabCtrl::SetItemImage}\label{wxtabctrlsetitemimage}
+
+\func{bool}{SetItemImage}{\param{int}{ item}, \param{int }{image}}
+
+Sets the image index for the given tab. {\it image} is an index into
+the image list which was set with \helpref{wxTabCtrl::SetImageList}{setimagelist}.
+
+\membersection{wxTabCtrl::SetImageList}\label{wxtabctrlsetimagelist}
+
+\func{void}{SetImageList}{\param{wxImageList*}{ imageList}}
+
+Sets the image list for the tab control.
+
+\wxheading{See also}
+
+\helpref{wxImageList}{wximagelist}
+
+\membersection{wxTabCtrl::SetItemSize}\label{wxtabctrlsetitemsize}
+
+\func{void}{SetItemSize}{\param{const wxSize\&}{ size}}
+
+Sets the width and height of the tabs.
+
+\membersection{wxTabCtrl::SetItemText}\label{wxtabctrlsetitemtext}
+
+\func{bool}{SetItemText}{\param{int}{ item}, \param{const wxString\& }{text}}
+
+Sets the text for the given tab.
+
+\membersection{wxTabCtrl::SetPadding}\label{wxtabctrlsetpadding}
+
+\func{void}{SetPadding}{\param{const wxSize\&}{ padding}}
+
+Sets the amount of space around each tab's icon and label.
+
+\membersection{wxTabCtrl::SetSelection}\label{wxtabctrlsetselection}
+
+\func{int}{SetSelection}{\param{int}{ item}}
+
+Sets the selection for the given tab, returning the index of the previously
+selected tab. Returns -1 if the call was unsuccessful.
+
+\wxheading{See also}
+
+\helpref{wxTabCtrl::GetSelection}{wxtabctrlgetselection}
 
 

@@ -55,12 +55,12 @@ Destructor, destroying the menu.
 
 \membersection{wxMenu::Append}\label{wxmenuappend}
 
-\func{void}{Append}{\param{const int}{ id}, \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
+\func{void}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
 \param{const bool}{ checkable = FALSE}}
 
 Adds a string item to the end of the menu.
 
-\func{void}{Append}{\param{const int}{ id}, \param{const wxString\& }{ item}, \param{wxMenu *}{subMenu},\rtfsp
+\func{void}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{wxMenu *}{subMenu},\rtfsp
 \param{const wxString\& }{helpString = ""}}
 
 Adds a pull-right submenu to the end of the menu.
@@ -115,7 +115,7 @@ Inserts a break in a menu, causing the next appended item to appear in a new col
 
 \membersection{wxMenu::Check}\label{wxmenucheck}
 
-\func{void}{Check}{\param{const int}{ id}, \param{const bool}{ check}}
+\func{void}{Check}{\param{int}{ id}, \param{const bool}{ check}}
 
 Checks or unchecks the menu item.
 
@@ -131,7 +131,7 @@ Checks or unchecks the menu item.
 
 \membersection{wxMenu::Enable}\label{wxmenuenable}
 
-\func{void}{Enable}{\param{const int}{ id}, \param{const bool}{ enable}}
+\func{void}{Enable}{\param{int}{ id}, \param{const bool}{ enable}}
 
 Enables or disables (greys out) a menu item.
 
@@ -170,7 +170,7 @@ before matching.
 
 \membersection{wxMenu::FindItemForId}\label{wxmenufinditemforid}
 
-\constfunc{wxMenuItem*}{FindItemForId}{\param{const int}{ id}}
+\constfunc{wxMenuItem*}{FindItemForId}{\param{int}{ id}}
 
 Finds the menu item object associated with the given menu item identifier.
 
@@ -188,7 +188,7 @@ Returns the menu item object, or NULL if it is not found.
 
 \membersection{wxMenu::GetHelpString}\label{wxmenugethelpstring}
 
-\constfunc{wxString}{GetHelpString}{\param{const int}{ id}}
+\constfunc{wxString}{GetHelpString}{\param{int}{ id}}
 
 Returns the help string associated with a menu item.
 
@@ -207,7 +207,7 @@ item was not found.
 
 \membersection{wxMenu::GetLabel}\label{wxmenugetlabel}
 
-\constfunc{wxString}{GetLabel}{\param{const int}{ id}}
+\constfunc{wxString}{GetLabel}{\param{int}{ id}}
 
 Returns a menu item label.
 
@@ -239,7 +239,7 @@ This is relevant only to popup menus.
 
 \membersection{wxMenu::IsChecked}\label{wxmenuischecked}
 
-\constfunc{bool}{IsChecked}{\param{const int}{ id}}
+\constfunc{bool}{IsChecked}{\param{int}{ id}}
 
 Determines whether a menu item is checked.
 
@@ -257,7 +257,7 @@ TRUE if the menu item is checked, FALSE otherwise.
 
 \membersection{wxMenu::IsEnabled}\label{wxmenuisenabled}
 
-\constfunc{bool}{IsEnabled}{\param{const int}{ id}}
+\constfunc{bool}{IsEnabled}{\param{int}{ id}}
 
 Determines whether a menu item is enabled.
 
@@ -275,7 +275,7 @@ TRUE if the menu item is enabled, FALSE otherwise.
 
 \membersection{wxMenu::SetHelpString}\label{wxmenusethelpstring}
 
-\func{void}{SetHelpString}{\param{const int}{ id}, \param{const wxString\& }{helpString}}
+\func{void}{SetHelpString}{\param{int}{ id}, \param{const wxString\& }{helpString}}
 
 Sets an item's help string.
 
@@ -291,7 +291,7 @@ Sets an item's help string.
 
 \membersection{wxMenu::SetLabel}\label{wxmenusetlabel}
 
-\func{void}{SetLabel}{\param{const int}{ id}, \param{const wxString\& }{label}}
+\func{void}{SetLabel}{\param{int}{ id}, \param{const wxString\& }{label}}
 
 Sets the label of a menu item.
 
@@ -349,7 +349,7 @@ that contains the menu bar.
 
 Default constructor.
 
-\func{void}{wxMenuBar}{\param{const int}{ n}, \param{wxMenu*}{ menus[]}, \param{const wxString }{titles[]}}
+\func{void}{wxMenuBar}{\param{int}{ n}, \param{wxMenu*}{ menus[]}, \param{const wxString }{titles[]}}
 
 Construct a menu bar from arrays of menus and titles.
 
@@ -382,7 +382,7 @@ Adds the item to the end of the menu bar.
 
 \membersection{wxMenuBar::Check}\label{wxmenubarcheck}
 
-\func{void}{Check}{\param{const int}{ id}, \param{const bool}{ check}}
+\func{void}{Check}{\param{int}{ id}, \param{const bool}{ check}}
 
 Checks or unchecks a menu item.
 
@@ -399,7 +399,7 @@ with a frame; otherwise, use the wxMenu equivalent call.
 
 \membersection{wxMenuBar::Enable}\label{wxmenubarenable}
 
-\func{void}{Enable}{\param{const int}{ id}, \param{const bool}{ enable}}
+\func{void}{Enable}{\param{int}{ id}, \param{const bool}{ enable}}
 
 Enables or disables (greys out) a menu item.
 
@@ -416,7 +416,7 @@ associated with a frame; otherwise, use the wxMenu equivalent call.
 
 \membersection{wxMenuBar::EnableTop}\label{wxmenubarenabletop}
 
-\func{void}{EnableTop}{\param{const int}{ pos}, \param{const bool}{ enable}}
+\func{void}{EnableTop}{\param{int}{ pos}, \param{const bool}{ enable}}
 
 Enables or disables a whole menu.
 
@@ -454,7 +454,7 @@ before matching.
 
 \membersection{wxMenuBar::FindItemById}\label{wxmenubarfinditembyid}
 
-\constfunc{wxMenuItem *}{FindItemById}{\param{const int}{ id}}
+\constfunc{wxMenuItem *}{FindItemById}{\param{int}{ id}}
 
 Finds the menu item object associated with the given menu item identifier,
 
@@ -468,7 +468,7 @@ The found menu item object, or NULL if one was not found.
 
 \membersection{wxMenuBar::GetHelpString}\label{wxmenubargethelpstring}
 
-\constfunc{wxString}{GetHelpString}{\param{const int}{ id}}
+\constfunc{wxString}{GetHelpString}{\param{int}{ id}}
 
 Gets the help string associated with the menu item identifer.
 
@@ -487,7 +487,7 @@ was not found.
 
 \membersection{wxMenuBar::GetLabel}\label{wxmenubargetlabel}
 
-\constfunc{wxString}{GetLabel}{\param{const int}{ id}}
+\constfunc{wxString}{GetLabel}{\param{int}{ id}}
 
 Gets the label associated with a menu item.
 
@@ -505,7 +505,7 @@ Use only after the menubar has been associated with a frame.
 
 \membersection{wxMenuBar::GetLabelTop}\label{wxmenubargetlabeltop}
 
-\constfunc{wxString}{GetLabelTop}{\param{const int}{ pos}}
+\constfunc{wxString}{GetLabelTop}{\param{int}{ pos}}
 
 Returns the label of a top-level menu.
 
@@ -527,7 +527,7 @@ Use only after the menubar has been associated with a frame.
 
 \membersection{wxMenuBar::IsChecked}\label{wxmenubarischecked}
 
-\constfunc{bool}{IsChecked}{\param{const int}{ id}}
+\constfunc{bool}{IsChecked}{\param{int}{ id}}
 
 Determines whether an item is checked.
 
@@ -541,7 +541,7 @@ TRUE if the item was found and is checked, FALSE otherwise.
 
 \membersection{wxMenuBar::IsEnabled}\label{wxmenubarisenabled}
 
-\constfunc{bool}{IsEnabled}{\param{const int}{ id}}
+\constfunc{bool}{IsEnabled}{\param{int}{ id}}
 
 Determines whether an item is enabled.
 
@@ -555,7 +555,7 @@ TRUE if the item was found and is enabled, FALSE otherwise.
 
 \membersection{wxMenuBar::SetHelpString}\label{wxmenubarsethelpstring}
 
-\func{void}{SetHelpString}{\param{const int}{ id}, \param{const wxString\& }{helpString}}
+\func{void}{SetHelpString}{\param{int}{ id}, \param{const wxString\& }{helpString}}
 
 Sets the help string associated with a menu item.
 
@@ -571,7 +571,7 @@ Sets the help string associated with a menu item.
 
 \membersection{wxMenuBar::SetLabel}\label{wxmenubarsetlabel}
 
-\func{void}{SetLabel}{\param{const int}{ id}, \param{const wxString\& }{label}}
+\func{void}{SetLabel}{\param{int}{ id}, \param{const wxString\& }{label}}
 
 Sets the label of a menu item.
 
@@ -591,7 +591,7 @@ Use only after the menubar has been associated with a frame.
 
 \membersection{wxMenuBar::SetLabelTop}\label{wxmenubarsetlabeltop}
 
-\func{void}{SetLabelTop}{\param{const int}{ pos}, \param{const wxString\& }{label}}
+\func{void}{SetLabelTop}{\param{int}{ pos}, \param{const wxString\& }{label}}
 
 Sets the label of a top-level menu.
 

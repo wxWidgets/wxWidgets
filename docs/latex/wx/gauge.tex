@@ -33,9 +33,9 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxGauge}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
-\param{const int}{ range}, \param{const wxPoint\& }{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxGA\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``gauge"}}
+\func{}{wxGauge}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
+\param{int}{ range}, \param{const wxPoint\& }{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxGA\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``gauge"}}
 
 Constructor, creating and showing a gauge.
 
@@ -72,9 +72,9 @@ Destructor, destroying the gauge.
 
 \membersection{wxGauge::Create}\label{wxgaugecreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
-\param{const int}{ range}, \param{const wxPoint\& }{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxGA\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``gauge"}}
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
+\param{int}{ range}, \param{const wxPoint\& }{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxGA\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``gauge"}}
 
 Creates the gauge for two-step construction. See \helpref{wxGauge::wxGauge}{wxgaugeconstr}\rtfsp
 for further details.
@@ -129,7 +129,7 @@ Returns the current position of the gauge.
 
 \membersection{wxGauge::SetBezelFace}\label{wxgaugesetbezelface}
 
-\func{void}{SetBezelFace}{\param{const int }{width}}
+\func{void}{SetBezelFace}{\param{int }{width}}
 
 Sets the 3D bezel face width.
 
@@ -143,7 +143,7 @@ Windows only, not for {\bf wxGA\_PROGRESSBAR}.
 
 \membersection{wxGauge::SetRange}\label{wxgaugesetrange}
 
-\func{void}{SetRange}{\param{const int }{range}}
+\func{void}{SetRange}{\param{int }{range}}
 
 Sets the range (maximum value) of the gauge.
 
@@ -153,7 +153,7 @@ Sets the range (maximum value) of the gauge.
 
 \membersection{wxGauge::SetShadowWidth}\label{wxgaugesetshadowwidth}
 
-\func{void}{SetShadowWidth}{\param{const int }{width}}
+\func{void}{SetShadowWidth}{\param{int }{width}}
 
 Sets the 3D shadow width.
 
@@ -163,7 +163,7 @@ Windows only, not for {\bf wxGA\_PROGRESSBAR}.
 
 \membersection{wxGauge::SetValue}\label{wxgaugesetvalue}
 
-\func{void}{SetValue}{\param{const int }{pos}}
+\func{void}{SetValue}{\param{int }{pos}}
 
 Sets the position of the gauge.
 

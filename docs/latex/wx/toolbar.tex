@@ -77,7 +77,7 @@ Adds a separator for spacing groups of tools.
 
 \membersection{wxToolBarBase::AddTool}\label{wxtoolbarbaseaddtool}
 
-\func{wxToolBarBaseTool*}{AddTool}{\param{const int}{ toolIndex}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
+\func{wxToolBarBaseTool*}{AddTool}{\param{int}{ toolIndex}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxBitmap\&}{ bitmap2 = (wxBitmap *)NULL}, \param{const bool}{ isToggle = FALSE},\rtfsp
 \param{const float}{ xPos = -1}, \param{const float}{ yPos = -1},\rtfsp
 \param{wxObject *}{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
@@ -152,7 +152,7 @@ For internal use only.
 
 \membersection{wxToolBarBase::EnableTool}\label{wxtoolbarbaseenabletool}
 
-\func{void}{EnableTool}{\param{const int }{toolIndex}, \param{const bool}{ enable}}
+\func{void}{EnableTool}{\param{int }{toolIndex}, \param{const bool}{ enable}}
 
 Enables or disables the tool.
 
@@ -246,7 +246,7 @@ This can be used to size a frame around the toolbar canvas.
 
 \membersection{wxToolBarBase::GetToolClientData}\label{wxtoolbarbasegettoolclientdata}
 
-\constfunc{wxObject*}{GetToolClientData}{\param{const int }{toolIndex}}
+\constfunc{wxObject*}{GetToolClientData}{\param{int }{toolIndex}}
 
 Get any client data associated with the tool.
 
@@ -260,7 +260,7 @@ Client data, or NULL if there is none.
 
 \membersection{wxToolBarBase::GetToolEnabled}\label{wxtoolbarbasegettoolenabled}
 
-\constfunc{bool}{GetToolEnabled}{\param{const int }{toolIndex}}
+\constfunc{bool}{GetToolEnabled}{\param{int }{toolIndex}}
 
 Called to determine whether a tool is enabled (responds to user input).
 
@@ -278,7 +278,7 @@ TRUE if the tool is enabled, FALSE otherwise.
 %
 \membersection{wxToolBarBase::GetToolLongHelp}\label{wxtoolbarbasegettoollonghelp}
 
-\constfunc{wxString}{GetToolLongHelp}{\param{const int }{toolIndex}}
+\constfunc{wxString}{GetToolLongHelp}{\param{int }{toolIndex}}
 
 Returns the long help for the given tool.
 
@@ -313,7 +313,7 @@ Returns the default separator size.
 
 \membersection{wxToolBarBase::GetToolShortHelp}\label{wxtoolbarbasegettoolshorthelp}
 
-\constfunc{wxString}{GetToolShortHelp}{\param{const int }{toolIndex}}
+\constfunc{wxString}{GetToolShortHelp}{\param{int }{toolIndex}}
 
 Returns the short help for the given tool.
 
@@ -330,7 +330,7 @@ Returns the long help for the given tool.
 
 \membersection{wxToolBarBase::GetToolState}\label{wxtoolbarbasegettoolstate}
 
-\constfunc{bool}{GetToolState}{\param{const int }{toolIndex}}
+\constfunc{bool}{GetToolState}{\param{int }{toolIndex}}
 
 Gets the on/off state of a toggle tool.
 
@@ -448,7 +448,7 @@ and not the eventual size of the tool button.
 
 \func{void}{SetMargins}{\param{const wxSize\&}{ size}}
 
-\func{void}{SetMargins}{\param{const int}{ x}, \param{const int}{ y}}
+\func{void}{SetMargins}{\param{int}{ x}, \param{int}{ y}}
 
 Set the values to be used as margins for the toolbar.
 
@@ -492,7 +492,7 @@ You might use the long help for displaying the tool purpose on the status line.
 
 \membersection{wxToolBarBase::SetToolPacking}\label{wxtoolbarbasesettoolpacking}
 
-\func{void}{SetToolPacking}{\param{const int}{ packing}}
+\func{void}{SetToolPacking}{\param{int}{ packing}}
 
 Sets the value used for spacing tools. The default value is 1.
 
@@ -511,7 +511,7 @@ and for spacing in the horizontal direction if the toolbar is vertical.
 
 \membersection{wxToolBarBase::SetToolShortHelp}\label{wxtoolbarbasesettoolshorthelp}
 
-\func{void}{SetToolShortHelp}{\param{const int }{toolIndex}, \param{const wxString\& }{helpString}}
+\func{void}{SetToolShortHelp}{\param{int }{toolIndex}, \param{const wxString\& }{helpString}}
 
 Sets the short help for the given tool.
 
@@ -531,7 +531,7 @@ An application might use short help for identifying the tool purpose in a toolti
 
 \membersection{wxToolBarBase::SetToolSeparation}\label{wxtoolbarbasesettoolseparation}
 
-\func{void}{SetToolSeparation}{\param{const int}{ separation}}
+\func{void}{SetToolSeparation}{\param{int}{ separation}}
 
 Sets the default separator size. The default value is 5.
 
@@ -545,7 +545,7 @@ Sets the default separator size. The default value is 5.
 
 \membersection{wxToolBarBase::ToggleTool}\label{wxtoolbarbasetoggletool}
 
-\func{void}{ToggleTool}{\param{const int }{toolIndex}, \param{const bool}{ toggle}}
+\func{void}{ToggleTool}{\param{int }{toolIndex}, \param{const bool}{ toggle}}
 
 Toggles a tool on or off.
 
@@ -600,10 +600,10 @@ For member functions, see the documentation for \helpref{wxToolBarBase}{wxtoolba
 
 \membersection{wxToolBar95::wxToolBar95}\label{wxtoolbar95constr}
 
-\func{}{wxToolBar95}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\func{}{wxToolBar95}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long }{style = 0}, \param{const int }{orientation = wxVERTICAL},\rtfsp
-\param{const int }{nRowsOrColumns = 1}, \param{const wxString\& }{name = ``toolBar"}}
+\param{long }{style = 0}, \param{int }{orientation = wxVERTICAL},\rtfsp
+\param{int }{nRowsOrColumns = 1}, \param{const wxString\& }{name = ``toolBar"}}
 
 Constructs a toolbar.
 
@@ -666,10 +666,10 @@ For member functions, see the documentation for \helpref{wxToolBarBase}{wxtoolba
 
 \membersection{wxToolBarMSW::wxToolBarMSW}\label{wxtoolbarmswconstr}
 
-\func{}{wxToolBarMSW}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\func{}{wxToolBarMSW}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long }{style = 0}, \param{const int }{orientation = wxVERTICAL},\rtfsp
-\param{const int }{nRowsOrColumns = 1}, \param{const wxString\& }{name = ``toolBar"}}
+\param{long }{style = 0}, \param{int }{orientation = wxVERTICAL},\rtfsp
+\param{int }{nRowsOrColumns = 1}, \param{const wxString\& }{name = ``toolBar"}}
 
 Constructs a toolbar.
 
@@ -736,10 +736,10 @@ For member functions, see the documentation for \helpref{wxToolBarBase}{wxtoolba
 
 \membersection{wxToolBarSimple::wxToolBarSimple}\label{wxtoolbarsimpleconstr}
 
-\func{}{wxToolBarSimple}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\func{}{wxToolBarSimple}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long }{style = 0}, \param{const int }{orientation = wxVERTICAL},\rtfsp
-\param{const int }{nRowsOrColumns = 1}, \param{const wxString\& }{name = ``toolBar"}}
+\param{long }{style = 0}, \param{int }{orientation = wxVERTICAL},\rtfsp
+\param{int }{nRowsOrColumns = 1}, \param{const wxString\& }{name = ``toolBar"}}
 
 Constructs a toolbar.
 

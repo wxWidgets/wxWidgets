@@ -47,7 +47,7 @@ frame to respond to system close events, for example so that related data and su
 
 Default constructor.
 
-\func{}{wxFrame}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\func{}{wxFrame}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxDEFAULT\_FRAME\_STYLE},\rtfsp
 \param{const wxString\& }{name = ``frame"}}
@@ -92,7 +92,7 @@ Destructor. Destroys all child windows and menu bar if present.
 
 \membersection{wxFrame::Centre}\label{wxframecentre}
 
-\func{void}{Centre}{\param{const int}{ direction = wxBOTH}}
+\func{void}{Centre}{\param{int}{ direction = wxBOTH}}
 
 Centres the frame on the display.
 
@@ -112,7 +112,7 @@ Simulate a menu command.
 
 \membersection{wxFrame::Create}\label{wxframecreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxDEFAULT\_FRAME\_STYLE},\rtfsp
 \param{const wxString\& }{name = ``frame"}}
@@ -122,7 +122,7 @@ for further details.
 
 \membersection{wxFrame::CreateStatusBar}\label{wxframecreatestatusbar}
 
-\func{virtual bool}{CreateStatusBar}{\param{const int}{ number = 1}}
+\func{virtual bool}{CreateStatusBar}{\param{int}{ number = 1}}
 
 Creates a status bar at the bottom of the frame.
 
@@ -269,7 +269,7 @@ If you call wxFrame::LoadAccelerators, you need to override this function e.g.
 
 \membersection{wxFrame::OnCreateStatusBar}\label{wxframeoncreatestatusbar}
 
-\func{virtual wxStatusBar*}{OnCreateStatusBar}{\param{const int }{number}}
+\func{virtual wxStatusBar*}{OnCreateStatusBar}{\param{int }{number}}
 
 Virtual function called when a status bar is requested by \helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}.
 
@@ -390,7 +390,7 @@ Note that it is not possible to call this function twice for the same frame obje
 
 \membersection{wxFrame::SetStatusText}\label{wxframesetstatustext}
 
-\func{virtual void}{SetStatusText}{\param{const wxString\& }{ text}, \param{const int}{ number = 0}}
+\func{virtual void}{SetStatusText}{\param{const wxString\& }{ text}, \param{int}{ number = 0}}
 
 Sets the status bar text and redraws the status bar.
 
@@ -410,7 +410,7 @@ Use an empty string to clear the status bar.
 
 \membersection{wxFrame::SetStatusWidths}\label{wxframesetstatuswidths}
 
-\func{virtual void}{SetStatusWidths}{\param{const int}{ n}, \param{const int *}{widths}}
+\func{virtual void}{SetStatusWidths}{\param{int}{ n}, \param{int *}{widths}}
 
 Sets the widths of the fields in the status bar.
 

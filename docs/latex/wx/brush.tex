@@ -47,11 +47,11 @@ TODO: an overview for wxBrush.
 Default constructor. The brush will be uninitialised, and \helpref{wxBrush::Ok}{wxbrushok} will
 return FALSE.
 
-\func{}{wxBrush}{\param{const wxColour\&}{ colour}, \param{const int}{ style}}
+\func{}{wxBrush}{\param{const wxColour\&}{ colour}, \param{int}{ style}}
 
 Constructs a brush from a colour object and style.
 
-\func{}{wxBrush}{\param{const wxString\& }{colourName}, \param{const int}{ style}}
+\func{}{wxBrush}{\param{const wxString\& }{colourName}, \param{int}{ style}}
 
 Constructs a brush from a colour name and style.
 
@@ -210,7 +210,7 @@ same for both platforms.
 
 \membersection{wxBrush::SetStyle}\label{wxbrushsetstyle}
 
-\func{void}{SetStyle}{\param{const int}{ style}}
+\func{void}{SetStyle}{\param{int}{ style}}
 
 Sets the brush style.
 
@@ -314,12 +314,12 @@ Used internally by wxWindows to add a brush to the list.
 
 \membersection{wxBrushList::FindOrCreateBrush}\label{wxbrushlistfindorcreatebrush}
 
-\func{wxBrush *}{FindOrCreateBrush}{\param{const wxColour\& }{colour}, \param{const int}{ style}}
+\func{wxBrush *}{FindOrCreateBrush}{\param{const wxColour\& }{colour}, \param{int}{ style}}
 
 Finds a brush with the specified attributes and returns it, else creates a new brush, adds it
 to the brush list, and returns it.
 
-\func{wxBrush *}{FindOrCreateBrush}{\param{const wxString\& }{colourName}, \param{const int}{ style}}
+\func{wxBrush *}{FindOrCreateBrush}{\param{const wxString\& }{colourName}, \param{int}{ style}}
 
 Finds a brush with the specified attributes and returns it, else creates a new brush, adds it
 to the brush list, and returns it.

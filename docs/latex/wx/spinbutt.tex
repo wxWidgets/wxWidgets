@@ -59,9 +59,9 @@ functions that take a \helpref{wxScrollEvent}{wxscrollevent} argument:
 
 Default constructor.
 
-\func{}{wxSpinButton}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\func{}{wxSpinButton}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxSP\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{long}{ style = wxSP\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``spinButton"}}
 
 Constructor, creating and showing a spin button.
@@ -94,9 +94,9 @@ Destructor, destroying the spin button.
 
 \membersection{wxSpinButton::Create}\label{wxspinbuttoncreate}
 
-\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxSP\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{long}{ style = wxSP\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``spinButton"}}
 
 Scrollbar creation function called by the spin button constructor.
@@ -134,7 +134,7 @@ Returns the current spin button value.
 
 \membersection{wxSpinButton::SetRange}\label{wxspinbuttonsetrange}
 
-\func{void}{SetRange}{\param{const int}{ min}, \param{const int}{ max}}
+\func{void}{SetRange}{\param{int}{ min}, \param{int}{ max}}
 
 Sets the range of the spin button.
 
@@ -150,7 +150,7 @@ Sets the range of the spin button.
 
 \membersection{wxSpinButton::SetValue}\label{wxspinbuttonsetvalue}
 
-\func{void}{SetValue}{\param{const int}{ value}}
+\func{void}{SetValue}{\param{int}{ value}}
 
 Sets the value of the spin button.
 

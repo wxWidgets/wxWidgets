@@ -37,9 +37,9 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxTreeCtrl}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{}{wxTreeCtrl}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxTR\_HAS\_BUTTONS}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
+\param{long}{ style = wxTR\_HAS\_BUTTONS}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
 
 Constructor, creating and showing a tree control.
 
@@ -72,9 +72,9 @@ Destructor, destroying the list control.
 
 \membersection{wxTreeCtrl::Create}\label{wxtreectrlcreate}
 
-\func{bool}{wxTreeCtrl}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{bool}{wxTreeCtrl}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxTR\_HAS\_BUTTONS}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
+\param{long}{ style = wxTR\_HAS\_BUTTONS}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
 
 Creates the tree control. See \helpref{wxTreeCtrl::wxTreeCtrl}{wxtreectrlconstr} for further details.
 
@@ -86,25 +86,25 @@ Deletes all the items in the control.
 
 \membersection{wxTreeCtrl::DeleteItem}\label{wxtreectrldeleteitem}
 
-\func{bool}{DeleteItem}{\param{const long }{item}}
+\func{bool}{DeleteItem}{\param{long }{item}}
 
 Deletes the specified item.
 
 \membersection{wxTreeCtrl::Edit}\label{wxtreectrledit}
 
-\func{wxTextCtrl\&}{Edit}{\param{const long }{item}}
+\func{wxTextCtrl\&}{Edit}{\param{long }{item}}
 
 Starts editing the label of the given item, returning the text control that the tree control uses for editing.
 
 \membersection{wxTreeCtrl::EnsureVisible}\label{wxtreectrlensurevisible}
 
-\func{bool}{EnsureVisible}{\param{const long }{item}}
+\func{bool}{EnsureVisible}{\param{long }{item}}
 
 Scrolls and/or expands items to ensure that the given item is visible.
 
 \membersection{wxTreeCtrl::ExpandItem}\label{wxtreectrlexpanditem}
 
-\func{bool}{ExpandItem}{\param{const long }{item}, \param{const int }{action}}
+\func{bool}{ExpandItem}{\param{long }{item}, \param{int }{action}}
 
 Expands the given item.
 
@@ -120,7 +120,7 @@ Expands the given item.
 
 \membersection{wxTreeCtrl::GetChild}\label{wxtreectrlgetchild}
 
-\constfunc{long}{GetChild}{\param{const long }{item}}
+\constfunc{long}{GetChild}{\param{long }{item}}
 
 Call this function to retrieve the tree view item that is the first child of the item specified by {\it item}.
 
@@ -144,7 +144,7 @@ Returns the first visible item.
 
 \membersection{wxTreeCtrl::GetImageList}\label{wxtreectrlgetimagelist}
 
-\constfunc{wxImageList*}{GetImageList}{\param{const int }{which = wxIMAGE\_LIST\_NORMAL}}
+\constfunc{wxImageList*}{GetImageList}{\param{int }{which = wxIMAGE\_LIST\_NORMAL}}
 
 Returns the specified image list. {\it which} may be one of:
 
@@ -170,31 +170,31 @@ information.
 
 \membersection{wxTreeCtrl::GetItemData}\label{wxtreectrlgetitemdata}
 
-\constfunc{long}{GetItemData}{\param{const long }{item}}
+\constfunc{long}{GetItemData}{\param{long }{item}}
 
 Returns the client data associated with the item, if any.
 
 \membersection{wxTreeCtrl::GetItemRect}\label{wxtreectrlgetitemrect}
 
-\constfunc{bool}{GetItemRect}{\param{const long }{item}, \param{wxRect\& }{rect}, \param{bool }{textOnly = FALSE}}
+\constfunc{bool}{GetItemRect}{\param{long }{item}, \param{wxRect\& }{rect}, \param{bool }{textOnly = FALSE}}
 
 Returns the position and size of the rectangle bounding the item.
 
 \membersection{wxTreeCtrl::GetItemState}\label{wxtreectrlgetitemstate}
 
-\constfunc{int}{GetItemState}{\param{const long }{item}, \param{const long }{stateMask}}
+\constfunc{int}{GetItemState}{\param{long }{item}, \param{long }{stateMask}}
 
 Gets the item state. For a list of state flags, see \helpref{wxTreeCtrl::SetItem}{wxtreectrlsetitem}.
 
 \membersection{wxTreeCtrl::GetItemText}\label{wxtreectrlgetitemtext}
 
-\constfunc{wxString}{GetItemText}{\param{const long }{item}}
+\constfunc{wxString}{GetItemText}{\param{long }{item}}
 
 Returns the item label.
 
 \membersection{wxTreeCtrl::GetNextItem}\label{wxtreectrlgetnextitem}
 
-\constfunc{long}{GetNextItem}{\param{const long }{item}, \param{int }{code}}
+\constfunc{long}{GetNextItem}{\param{long }{item}, \param{int }{code}}
 
 Searches for an item using the given criterion, starting from {\it item}.
 
@@ -218,13 +218,13 @@ Returns the item or 0 if unsuccessful.
 
 \membersection{wxTreeCtrl::GetNextVisibleItem}\label{wxtreectrlgetnextvisibleitem}
 
-\constfunc{long}{GetNextVisibleItem}{\param{const long }{item}}
+\constfunc{long}{GetNextVisibleItem}{\param{long }{item}}
 
 Returns the next visible item.
 
 \membersection{wxTreeCtrl::GetParent}\label{wxtreectrlgetparent}
 
-\constfunc{long}{GetParent}{\param{const long }{item}}
+\constfunc{long}{GetParent}{\param{long }{item}}
 
 Returns the item's parent.
 
@@ -264,11 +264,11 @@ in {\it flags}. {\it flags} is a bitlist of the following:
 
 \membersection{wxTreeCtrl::InsertItem}\label{wxtreectrlinsertitem}
 
-\func{long}{InsertItem}{\param{const long }{parent}, \param{wxTreeItem\& }{info}, \param{const long }{insertAfter = wxTREE\_INSERT\_LAST}}
+\func{long}{InsertItem}{\param{long }{parent}, \param{wxTreeItem\& }{info}, \param{long }{insertAfter = wxTREE\_INSERT\_LAST}}
 
 Inserts an item. For more information on {\it info}, see \helpref{wxTreeCtrl::SetItem}{wxtreectrlsetitem}.
 
-\func{long}{InsertItem}{\param{const long }{parent}, \param{const wxString\& }{label}, \param{const int }{image = -1}, \param{const int }{selImage = -1}, \param{const long }{insertAfter = wxTREE\_INSERT\_LAST}}
+\func{long}{InsertItem}{\param{long }{parent}, \param{const wxString\& }{label}, \param{int }{image = -1}, \param{int }{selImage = -1}, \param{long }{insertAfter = wxTREE\_INSERT\_LAST}}
 
 Inserts an item.
 
@@ -277,19 +277,19 @@ both selected and unselected items.
 
 \membersection{wxTreeCtrl::ItemHasChildren}\label{wxtreectrlitemhaschildren}
 
-\constfunc{bool}{ItemHasChildren}{\param{const long }{item}}
+\constfunc{bool}{ItemHasChildren}{\param{long }{item}}
 
 Returns TRUE if the item has children.
 
 \membersection{wxTreeCtrl::ScrollTo}\label{wxtreectrlscrollto}
 
-\func{bool}{ScrollTo}{\param{const long }{item}}
+\func{bool}{ScrollTo}{\param{long }{item}}
 
 selects the specified item and scrolls the item into view,
 
 \membersection{wxTreeCtrl::SelectItem}\label{wxtreectrlselectitem}
 
-\func{bool}{SelectItem}{\param{const long }{item}}
+\func{bool}{SelectItem}{\param{long }{item}}
 
 Selects the given item.
 
@@ -301,7 +301,7 @@ Sets the indentation for the tree control.
 
 \membersection{wxTreeCtrl::SetImageList}\label{wxtreectrlsetimagelist}
 
-\func{void}{SetImageList}{\param{wxImageList*}{ imageList}, \param{const int }{which = wxIMAGE\_LIST\_NORMAL}}
+\func{void}{SetImageList}{\param{wxImageList*}{ imageList}, \param{int }{which = wxIMAGE\_LIST\_NORMAL}}
 
 Sets the image list. {\it which} should be one of wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL and
 wxIMAGE\_LIST\_STATE.
@@ -357,31 +357,31 @@ Only one item can have the focus.}
 
 \membersection{wxTreeCtrl::SetItemImage}\label{wxtreectrlsetitemimage}
 
-\func{bool}{SetItemImage}{\param{const long }{item}, \param{const int }{image}, \param{const int }{selImage}}
+\func{bool}{SetItemImage}{\param{long }{item}, \param{int }{image}, \param{int }{selImage}}
 
 Sets the item image and selected image. These are indices into the assciated image list.
 
 \membersection{wxTreeCtrl::SetItemState}\label{wxtreectrlsetitemstate}
 
-\func{bool}{SetItemState}{\param{const long }{item}, \param{const long }{state}, \param{const long }{stateMask}}
+\func{bool}{SetItemState}{\param{long }{item}, \param{long }{state}, \param{long }{stateMask}}
 
 Sets the item state. See \helpref{wxTreeCtrl::SetItem}{wxtreectrlsetitem} for valid state and state mask flags.
 
 \membersection{wxTreeCtrl::SetItemText}\label{wxtreectrlsetitemtext}
 
-\func{void}{SetItemText}{\param{const long }{item}, \param{const wxString\& }{text}}
+\func{void}{SetItemText}{\param{long }{item}, \param{const wxString\& }{text}}
 
 Sets the item label.
 
 \membersection{wxTreeCtrl::SetItemData}\label{wxtreectrlsetitemdata}
 
-\func{bool}{SetItemData}{\param{const long }{item}, \param{long }{data}}
+\func{bool}{SetItemData}{\param{long }{item}, \param{long }{data}}
 
 Sets the item client data.
 
 \membersection{wxTreeCtrl::SortChildren}\label{wxtreectrlsortchildren}
 
-\func{bool}{SortChildren}{\param{const long }{item}}
+\func{bool}{SortChildren}{\param{long }{item}}
 
 Sorts the children of the given item in ascending alphabetical order.
 

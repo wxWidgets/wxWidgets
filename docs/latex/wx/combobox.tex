@@ -38,10 +38,10 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxComboBox}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{}{wxComboBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxString\& }{value = ``"}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const int}{ n}, \param{const wxString }{choices[]},\rtfsp
-\param{const long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+\param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
 
 Constructor, creating and showing a combobox.
 
@@ -101,10 +101,10 @@ Clears all strings from the combobox.
 
 \membersection{wxComboBox::Create}\label{wxcomboboxcreate}
 
-\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxString\& }{value = ``"}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{const int}{ n}, \param{const wxString }{choices[]},\rtfsp
-\param{const long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+\param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
 
 Creates the combobox for two-step construction. Derived classes
 should call or replace this function. See \helpref{wxComboBox::wxComboBox}{wxcomboboxconstr}\rtfsp
@@ -124,7 +124,7 @@ Copies the selected text to the clipboard and removes the selection.
 
 \membersection{wxComboBox::Delete}\label{wxcomboboxdelete}
 
-\func{void}{Delete}{\param{const int}{ n}}
+\func{void}{Delete}{\param{int}{ n}}
 
 Deletes an item from the combobox.
 
@@ -148,7 +148,7 @@ The position if found, or -1 if not found.
 
 \membersection{wxComboBox::GetClientData}\label{wxcomboboxgetclientdata}
 
-\constfunc{char*}{GetClientData}{\param{const int}{ n}}
+\constfunc{char*}{GetClientData}{\param{int}{ n}}
 
 Returns a pointer to the client data associated with the given item (if any).
 
@@ -220,7 +220,7 @@ Pastes text from the clipboard to the text field.
 
 \membersection{wxComboBox::Replace}\label{wxcomboboxreplace}
 
-\func{void}{Replace}{\param{const long}{ from}, \param{const long}{ to}, \param{const wxString\& }{text}}
+\func{void}{Replace}{\param{long}{ from}, \param{long}{ to}, \param{const wxString\& }{text}}
 
 Replaces the text between two positions with the given text, in the combobox text field.
 
@@ -234,7 +234,7 @@ Replaces the text between two positions with the given text, in the combobox tex
 
 \membersection{wxComboBox::Remove}\label{wxcomboboxremove}
 
-\func{void}{Remove}{\param{const long}{ from}, \param{const long}{ to}}
+\func{void}{Remove}{\param{long}{ from}, \param{long}{ to}}
 
 Removes the text between the two positions in the combobox text field.
 
@@ -246,7 +246,7 @@ Removes the text between the two positions in the combobox text field.
 
 \membersection{wxComboBox::SetClientData}\label{wxcomboboxsetclientdata}
 
-\func{void}{SetClientData}{\param{const int}{ n}, \param{char* }{data}}
+\func{void}{SetClientData}{\param{int}{ n}, \param{char* }{data}}
 
 Associates the given client data pointer with the given item.
 
@@ -258,7 +258,7 @@ Associates the given client data pointer with the given item.
 
 \membersection{wxComboBox::SetInsertionPoint}\label{wxcomboboxsetinsertionpoint}
 
-\func{void}{SetInsertionPoint}{\param{const long}{ pos}}
+\func{void}{SetInsertionPoint}{\param{long}{ pos}}
 
 Sets the insertion point in the combobox text field.
 
@@ -274,11 +274,11 @@ Sets the insertion point at the end of the combobox text field.
 
 \membersection{wxComboBox::SetSelection}\label{wxcomboboxsetselection}
 
-\func{void}{SetSelection}{\param{const int}{ n}}
+\func{void}{SetSelection}{\param{int}{ n}}
 
 Selects the given item in the combobox list.
 
-\func{void}{SetSelection}{\param{const long}{ from}, \param{const long}{ to}}
+\func{void}{SetSelection}{\param{long}{ from}, \param{long}{ to}}
 
 Selects the text between the two positions, in the combobox text field.
 

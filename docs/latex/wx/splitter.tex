@@ -32,9 +32,9 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxSplitterWindow}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id}, \param{int }{x},\rtfsp
+\func{}{wxSplitterWindow}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id}, \param{int }{x},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long }{style=wxSP\_3D}, \param{const wxString\&}{ name = "splitterWindow"}}
+\param{long }{style=wxSP\_3D}, \param{const wxString\&}{ name = "splitterWindow"}}
 
 Constructor for creating the window.
 
@@ -76,9 +76,9 @@ Destroys the wxSplitterWindow and its children.
 
 \membersection{wxSplitterWindow::Create}\label{wxsplitterwindowcreate}
 
-\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id}, \param{int }{x},\rtfsp
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id}, \param{int }{x},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long }{style=wxSP\_3D}, \param{const wxString\&}{ name = "splitterWindow"}}
+\param{long }{style=wxSP\_3D}, \param{const wxString\&}{ name = "splitterWindow"}}
 
 Creation function, for two-step construction. See \helpref{wxSplitterWindow::wxSplitterWindow}{wxsplitterwindowconstr} for
 details.
@@ -195,7 +195,7 @@ may wish to delete the window.
 
 \membersection{wxSplitterWindow::SetSashPosition}\label{wxsplitterwindowsetsashposition}
 
-\func{void}{SetSashPosition}{\param{const int }{position}, \param{const bool}{ redraw = TRUE}}
+\func{void}{SetSashPosition}{\param{int }{position}, \param{const bool}{ redraw = TRUE}}
 
 Sets the sash position.
 
@@ -215,7 +215,7 @@ Does not currently check for an out-of-range value.
 
 \membersection{wxSplitterWindow::SetMinimumPaneSize}\label{wxsplitterwindowsetminimumpanesize}
 
-\func{void}{SetMinimumPaneSize}{\param{const int }{paneSize}}
+\func{void}{SetMinimumPaneSize}{\param{int }{paneSize}}
 
 Sets the minimum pane size.
 
@@ -235,7 +235,7 @@ set a minimum size, for example 20 pixels.
 
 \membersection{wxSplitterWindow::SetSplitMode}\label{wxsplitterwindowsetsplitmode}
 
-\func{void}{SetSplitMode}{\param{const int }{mode}}
+\func{void}{SetSplitMode}{\param{int }{mode}}
 
 Sets the split mode.
 
@@ -255,7 +255,7 @@ Only sets the internal variable; does not update the display.
 \membersection{wxSplitterWindow::SplitHorizontally}\label{wxsplitterwindowsplithorizontally}
 
 \func{bool}{SplitHorizontally}{\param{wxWindow* }{window1}, \param{wxWindow* }{window2},
- \param{const int}{ sashPosition = -1}}
+ \param{int}{ sashPosition = -1}}
 
 Initializes the top and bottom panes of the splitter window.
 
@@ -285,7 +285,7 @@ but the application should check that the window is not currently split using \h
 \membersection{wxSplitterWindow::SplitVertically}\label{wxsplitterwindowsplitvertically}
 
 \func{bool}{SplitVertically}{\param{wxWindow* }{window1}, \param{wxWindow* }{window2},
- \param{const int}{ sashPosition = -1}}
+ \param{int}{ sashPosition = -1}}
 
 Initializes the left and right panes of the splitter window.
 

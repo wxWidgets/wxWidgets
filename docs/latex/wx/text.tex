@@ -58,9 +58,9 @@ wxTextCtrl header file.
 
 Default constructor.
 
-\func{}{wxTextCtrl}{\param{wxWindow* }{parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{}{wxTextCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxString\& }{value = ``"}, \param{const wxPosition\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``text"}}
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``text"}}
 
 Constructor, creating and showing a text control.
 
@@ -112,9 +112,9 @@ Copies the selected text to the clipboard under Motif and MS Windows.
 
 \membersection{wxTextCtrl::Create}\label{wxtextctrlcreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxString\& }{value = ``"}, \param{const wxPosition\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``text"}}
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``text"}}
 
 Creates the text control for two-step construction. Derived classes
 should call or replace this function. See \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}\rtfsp
@@ -160,7 +160,7 @@ The length of the line, or -1 if {\it lineNo} was invalid.
 
 \membersection{wxTextCtrl::GetLineText}\label{wxtextctrlgetlinetext}
 
-\constfunc{wxString}{GetLineText}{\param{const long}{ lineNo}}
+\constfunc{wxString}{GetLineText}{\param{long}{ lineNo}}
 
 Returns the contents of a given line in the text control.
 
@@ -255,7 +255,7 @@ Pastes text from the clipboard to the text item.
 
 \membersection{wxTextCtrl::PositionToXY}\label{wxtextctrlpositiontoxy}
 
-\constfunc{long}{PositionToXY}{\param{const long }{pos}, \param{long *}{x}, \param{long *}{y}}
+\constfunc{long}{PositionToXY}{\param{long }{pos}, \param{long *}{x}, \param{long *}{y}}
 
 Converts given character and line position to a position.
 
@@ -273,7 +273,7 @@ Converts given character and line position to a position.
 
 \membersection{wxTextCtrl::Remove}\label{wxtextctrlremove}
 
-\func{virtual void}{Remove}{\param{const long}{ from}, \param{const long}{ to}}
+\func{virtual void}{Remove}{\param{long}{ from}, \param{long}{ to}}
 
 Removes the text between the two positions.
 
@@ -285,7 +285,7 @@ Removes the text between the two positions.
 
 \membersection{wxTextCtrl::Replace}\label{wxtextctrlreplace}
 
-\func{virtual void}{Replace}{\param{const long}{ from}, \param{const long}{ to}, \param{const wxString\& }{value}}
+\func{virtual void}{Replace}{\param{long}{ from}, \param{long}{ to}, \param{const wxString\& }{value}}
 
 Replaces the text between two positions with the given text.
 
@@ -323,7 +323,7 @@ Makes the text item editable or read-only.
 
 \membersection{wxTextCtrl::SetInsertionPoint}\label{wxtextctrlsetinsertionpoint}
 
-\func{virtual void}{SetInsertionPoint}{\param{const long}{ pos}}
+\func{virtual void}{SetInsertionPoint}{\param{long}{ pos}}
 
 Sets the insertion point. Windows only. ??
 
@@ -339,7 +339,7 @@ Sets the insertion point at the end of the text control.
 
 \membersection{wxTextCtrl::SetSelection}\label{wxtextctrlsetselection}
 
-\func{virtual void}{SetSelection}{\param{const long}{ from}, \param{const long}{ to}}
+\func{virtual void}{SetSelection}{\param{long}{ from}, \param{long}{ to}}
 
 Selects the text between the two positions.
 
@@ -361,7 +361,7 @@ Sets the text value.
 
 \membersection{wxTextCtrl::ShowPosition}\label{wxtextctrlshowposition}
 
-\func{void}{ShowPosition}{\param{const long}{ pos}}
+\func{void}{ShowPosition}{\param{long}{ pos}}
 
 Makes the line containing the given position visible.
 
@@ -388,7 +388,7 @@ window.
 
 \membersection{wxTextCtrl::XYToPosition}\label{wxtextctrlxytoposition}
 
-\func{long}{XYToPosition}{\param{const long}{ x}, \param{const long}{ y}}
+\func{long}{XYToPosition}{\param{long}{ x}, \param{long}{ y}}
 
 Converts the given character and line position to a position.
 

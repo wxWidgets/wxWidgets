@@ -33,21 +33,21 @@ global \helpref{::wxSetCursor}{wxsetcursor} is also available for MS Windows use
 
 Default constructor.
 
-\func{}{wxCursor}{\param{const char}{ bits[]}, \param{const int }{width},
- \param{const int }{ height}, \param{const int }{hotSpotX=-1}, \param{const int }{hotSpotY=-1}, \param{const char }{maskBits[]=NULL}}
+\func{}{wxCursor}{\param{const char}{ bits[]}, \param{int }{width},
+ \param{int }{ height}, \param{int }{hotSpotX=-1}, \param{int }{hotSpotY=-1}, \param{const char }{maskBits[]=NULL}}
 
 Constructs a cursor by passing an array of bits (Motif and Xt only). {\it maskBits} is used only under Motif.
 
 If either {\it hotSpotX} or {\it hotSpotY} is -1, the hotspot will be the centre of the cursor image (Motif only).
 
-\func{}{wxCursor}{\param{const wxString\& }{cursorName}, \param{const long }{type}, \param{const int }{hotSpotX=0}, \param{const int }{hotSpotY=0}}
+\func{}{wxCursor}{\param{const wxString\& }{cursorName}, \param{long }{type}, \param{int }{hotSpotX=0}, \param{int }{hotSpotY=0}}
 
 Constructs a cursor by passing a string resource name or filename.
 
 {\it hotSpotX} and {\it hotSpotY} are currently only used under Windows when loading from an
 icon file, to specify the cursor hotspot relative to the top left of the image.
 
-\func{}{wxCursor}{\param{const int}{ cursorId}}
+\func{}{wxCursor}{\param{int}{ cursorId}}
 
 Constructs a cursor using a cursor identifier.
 

@@ -76,9 +76,9 @@ functions that take a \helpref{wxScrollEvent}{wxscrollevent} argument:
 
 Default constructor.
 
-\func{}{wxScrollBar}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\func{}{wxScrollBar}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxSB\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{long}{ style = wxSB\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``scrollBar"}}
 
 Constructor, creating and showing a scrollbar.
@@ -111,9 +111,9 @@ Destructor, destroying the scrollbar.
 
 \membersection{wxScrollBar::Create}\label{wxscrollbarcreate}
 
-\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxSB\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{long}{ style = wxSB\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``scrollBar"}}
 
 Scrollbar creation function called by the scrollbar constructor.
@@ -164,7 +164,7 @@ Returns the thumb or `view' size.
 \begin{comment}
 \membersection{wxScrollBar::SetObjectLength}\label{wxscrollbarsetobjectlength}
 
-\func{void}{SetObjectLength}{\param{const int}{ objectLength}}
+\func{void}{SetObjectLength}{\param{int}{ objectLength}}
 
 Sets the object length for the scrollbar. This is the total object size (virtual size). You must
 call \helpref{SetViewLength}{wxscrollbarsetviewlength} {\it before} calling SetObjectLength.
@@ -189,7 +189,7 @@ contents (the object length).
 
 \membersection{wxScrollBar::SetPageSize}\label{wxscrollbarsetpagesize}
 
-\func{void}{SetPageSize}{\param{const int}{ pageSize}}
+\func{void}{SetPageSize}{\param{int}{ pageSize}}
 
 Sets the page size for the scrollbar. This is the number of scroll units which are scrolled when the
 user pages down (clicks on the scrollbar outside the thumbtrack area).
@@ -209,7 +209,7 @@ At present, this needs to be called {\it before} other set functions.
 
 \membersection{wxScrollBar::SetPosition}\label{wxscrollbarsetposition}
 
-\func{void}{SetPosition}{\param{const int}{ viewStart}}
+\func{void}{SetPosition}{\param{int}{ viewStart}}
 
 Sets the position of the scrollbar.
 
@@ -223,9 +223,9 @@ Sets the position of the scrollbar.
 
 \membersection{wxScrollBar::SetScrollbar}\label{wxscrollbarsetscrollbar}
 
-\func{virtual void}{SetScrollbar}{\param{const int }{position},\rtfsp
-\param{const int }{thumbSize}, \param{const int }{range},\rtfsp
-\param{const int }{pageSize},\rtfsp
+\func{virtual void}{SetScrollbar}{\param{int }{position},\rtfsp
+\param{int }{thumbSize}, \param{int }{range},\rtfsp
+\param{int }{pageSize},\rtfsp
 \param{const bool }{refresh = TRUE}}
 
 Sets the scrollbar properties.
@@ -280,7 +280,7 @@ from a \helpref{wxWindow::OnSize}{wxwindowonsize} event handler function.
 \begin{comment}
 \membersection{wxScrollBar::SetViewLength}\label{wxscrollbarsetviewlength}
 
-\func{void}{SetViewLength}{\param{const int}{ viewLength}}
+\func{void}{SetViewLength}{\param{int}{ viewLength}}
 
 Sets the view length for the scrollbar.
 

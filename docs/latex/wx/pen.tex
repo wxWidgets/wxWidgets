@@ -35,15 +35,15 @@ TODO: an overview for wxPen.
 Default constructor. The pen will be uninitialised, and \helpref{wxPen::Ok}{wxpenok} will
 return FALSE.
 
-\func{}{wxPen}{\param{const wxColour\&}{ colour}, \param{const int}{ width}, \param{const int}{ style}}
+\func{}{wxPen}{\param{const wxColour\&}{ colour}, \param{int}{ width}, \param{int}{ style}}
 
 Constructs a pen from a colour object, pen width and style.
 
-\func{}{wxPen}{\param{const wxString\& }{colourName}, \param{const int}{ width}, \param{const int}{ style}}
+\func{}{wxPen}{\param{const wxString\& }{colourName}, \param{int}{ width}, \param{int}{ style}}
 
 Constructs a pen from a colour name, pen width and style.
 
-\func{}{wxPen}{\param{const wxBitmap\&}{ stipple}, \param{const int}{ width}}
+\func{}{wxPen}{\param{const wxBitmap\&}{ stipple}, \param{int}{ width}}
 
 Constructs a stippled pen from a stipple bitmap and a width.
 
@@ -216,7 +216,7 @@ Sets the pen cap style, which may be one of {\bf wxCAP\_ROUND}, {\bf wxCAP\_PROJ
 
 \func{void}{SetColour}{\param{const wxString\& }{colourName}}
 
-\func{void}{SetColour}{\param{const int}{ red}, \param{const int}{ green}, \param{const int}{ blue}}
+\func{void}{SetColour}{\param{int}{ red}, \param{int}{ green}, \param{int}{ blue}}
 
 The pen's colour is changed to the given colour.
 
@@ -272,7 +272,7 @@ Set the pen style.
 
 \membersection{wxPen::SetWidth}\label{wxpensetwidth}
 
-\func{void}{SetWidth}{\param{const int}{ width}}
+\func{void}{SetWidth}{\param{int}{ width}}
 
 Sets the pen width.
 
@@ -353,12 +353,12 @@ Used internally by wxWindows to add a pen to the list.
 
 \membersection{wxPenList::FindOrCreatePen}\label{wxpenlistfindorcreatepen}
 
-\func{wxPen*}{FindOrCreatePen}{\param{const wxColour\& }{colour}, \param{const int}{ width}, \param{const int}{ style}}
+\func{wxPen*}{FindOrCreatePen}{\param{const wxColour\& }{colour}, \param{int}{ width}, \param{int}{ style}}
 
 Finds a pen with the specified attributes and returns it, else creates a new pen, adds it
 to the pen list, and returns it.
 
-\func{wxPen*}{FindOrCreatePen}{\param{const wxString\& }{colourName}, \param{const int}{ width}, \param{const int}{ style}}
+\func{wxPen*}{FindOrCreatePen}{\param{const wxString\& }{colourName}, \param{int}{ width}, \param{int}{ style}}
 
 Finds a pen with the specified attributes and returns it, else creates a new pen, adds it
 to the pen list, and returns it.

@@ -34,10 +34,10 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxRadioBox}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
+\func{}{wxRadioBox}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const int}{ n = 0}, \param{const wxString}{ choices[] = NULL},\rtfsp
-\param{const int}{ majorDimension = 0}, \param{const long}{ style = wxRA\_HORIZONTAL},\rtfsp
+\param{int}{ n = 0}, \param{const wxString}{ choices[] = NULL},\rtfsp
+\param{int}{ majorDimension = 0}, \param{long}{ style = wxRA\_HORIZONTAL},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``radioBox"}}
 
@@ -80,10 +80,10 @@ Destructor, destroying the radiobox item.
 
 \membersection{wxRadioBox::Create}\label{wxradioboxcreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const int}{ n = 0}, \param{const wxString}{ choices[] = NULL},\rtfsp
-\param{const int}{ majorDimension = 0}, \param{const long}{ style = wxRA\_HORIZONTAL},\rtfsp
+\param{int}{ n = 0}, \param{const wxString}{ choices[] = NULL},\rtfsp
+\param{int}{ majorDimension = 0}, \param{long}{ style = wxRA\_HORIZONTAL},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``radioBox"}}
 
@@ -96,7 +96,7 @@ for further details.
 
 Enables or disables the entire radiobox.
 
-\func{void}{Enable}{\param{const int}{ n}, \param{const bool}{ enable}}
+\func{void}{Enable}{\param{int}{ n}, \param{const bool}{ enable}}
 
 Enables or disables an individual button in the radiobox.
 
@@ -123,7 +123,7 @@ Finds a button matching the given string, returning the position if found, or
 
 Returns the radiobox label.
 
-\constfunc{wxString}{GetLabel}{\param{const int }{n}}
+\constfunc{wxString}{GetLabel}{\param{int }{n}}
 
 Returns the label for the given button.
 
@@ -159,7 +159,7 @@ Returns the number of buttons in the radiobox.
 
 Sets the radiobox label.
 
-\func{void}{SetLabel}{\param{const int }{n}, \param{const wxString\&}{ label}}
+\func{void}{SetLabel}{\param{int }{n}, \param{const wxString\&}{ label}}
 
 Sets a label for a radio button.
 
@@ -171,7 +171,7 @@ Sets a label for a radio button.
 
 \membersection{wxRadioBox::SetSelection}\label{wxradioboxsetselection}
 
-\func{void}{SetSelection}{\param{const int}{ n}}
+\func{void}{SetSelection}{\param{int}{ n}}
 
 Sets a button by passing the desired string position.
 
@@ -195,7 +195,7 @@ Sets a button by passing the desired string.
 
 Shows or hides the entire radiobox.
 
-\func{void}{Show}{\param{const int }{item}, \param{const bool}{ show}}
+\func{void}{Show}{\param{int }{item}, \param{const bool}{ show}}
 
 Shows or hides individual buttons.
 
@@ -207,7 +207,7 @@ Shows or hides individual buttons.
 
 \membersection{wxRadioBox::GetString}\label{wxradioboxgetstring}
 
-\constfunc{wxString}{GetString}{\param{const int}{ n}}
+\constfunc{wxString}{GetString}{\param{int}{ n}}
 
 Returns the label for the button at the given position.
 

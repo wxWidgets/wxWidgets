@@ -22,11 +22,11 @@ Default constructor.
 
 Copy constructor.
 
-\func{}{wxDate}{\param{const int}{ month}, \param{const int}{ day}, \param{const int}{ year}}
+\func{}{wxDate}{\param{int}{ month}, \param{int}{ day}, \param{int}{ year}}
 
 Constructor taking month, day and year.
 
-\func{}{wxDate}{\param{const long}{ julian}}
+\func{}{wxDate}{\param{long}{ julian}}
 
 Constructor taking an integer representing the Julian date. This is the number of days since
 1st January 4713 B.C., so to convert from the number of days since 1st January 1901,
@@ -59,25 +59,25 @@ Destructor.
 
 \membersection{wxDate::AddMonths}\label{wxdateaddmonths}
 
-\func{wxDate\&}{AddMonths}{\param{const int}{ months=1}}
+\func{wxDate\&}{AddMonths}{\param{int}{ months=1}}
 
 Adds the given number of months to the date, returning a reference to `this'.
 
 \membersection{wxDate::AddWeeks}\label{wxdateaddweeks}
 
-\func{wxDate\&}{AddWeeks}{\param{const int}{ weeks=1}}
+\func{wxDate\&}{AddWeeks}{\param{int}{ weeks=1}}
 
 Adds the given number of weeks to the date, returning a reference to `this'.
 
 \membersection{wxDate::AddYears}\label{wxdateaddyears}
 
-\func{wxDate\&}{AddYears}{\param{const int}{ years=1}}
+\func{wxDate\&}{AddYears}{\param{int}{ years=1}}
 
 Adds the given number of months to the date, returning a reference to `this'.
 
 \membersection{wxDate::FormatDate}\label{wxdateformatdate}
 
-\constfunc{wxString}{FormatDate}{\param{const int}{ type=-1}}
+\constfunc{wxString}{FormatDate}{\param{int}{ type=-1}}
 
 Formats the date according to {\it type} if not -1, or according
 to the current display type if -1.
@@ -202,11 +202,11 @@ Returns TRUE if the year of this date is a leap year.
 
 Sets the date to current system date, returning a reference to `this'.
 
-\func{wxDate\&}{Set}{\param{const long}{ julian}}
+\func{wxDate\&}{Set}{\param{long}{ julian}}
 
 Sets the date to the given Julian date, returning a reference to `this'.
 
-\func{wxDate\&}{Set}{\param{const int}{ month}, \param{const int}{ day}, \param{const int}{ year}}
+\func{wxDate\&}{Set}{\param{int}{ month}, \param{int}{ day}, \param{int}{ year}}
 
 Sets the date to the given date, returning a reference to `this'.
 
@@ -218,7 +218,7 @@ Sets the date to the given date, returning a reference to `this'.
 
 \membersection{wxDate::SetFormat}\label{wxdatesetformat}
 
-\func{void}{SetFormat}{\param{const int}{ format}}
+\func{void}{SetFormat}{\param{int}{ format}}
 
 Sets the current format type.
 
@@ -237,7 +237,7 @@ Sets the current format type.
 
 \membersection{wxDate::SetOption}\label{wxdatesetoption}
 
-\func{int}{SetOption}{\param{const int}{ option}, \param{const bool}{ enable=TRUE}}
+\func{int}{SetOption}{\param{int}{ option}, \param{const bool}{ enable=TRUE}}
 
 Enables or disables an option for formatting.
 
@@ -259,17 +259,17 @@ Conversion operator, to convert wxDate to wxString by calling FormatDate.
 
 \membersection{wxDate::operator $+$}\label{wxdateplus}
 
-\func{wxDate}{operator $+$}{\param{const long}{ i}}
+\func{wxDate}{operator $+$}{\param{long}{ i}}
 
-\func{wxDate}{operator $+$}{\param{const int}{ i}}
+\func{wxDate}{operator $+$}{\param{int}{ i}}
 
 Adds an integer number of days to the date, returning a date.
 
 \membersection{wxDate::operator $-$}\label{wxdateminus}
 
-\func{wxDate}{operator $-$}{\param{const long}{ i}}
+\func{wxDate}{operator $-$}{\param{long}{ i}}
 
-\func{wxDate}{operator $-$}{\param{const int}{ i}}
+\func{wxDate}{operator $-$}{\param{int}{ i}}
 
 Subtracts an integer number of days from the date, returning a date.
 
@@ -279,14 +279,14 @@ Subtracts one date from another, return the number of intervening days.
 
 \membersection{wxDate::operator $+=$}\label{wxdateplusequals}
 
-\func{wxDate\&}{operator $+=$}{\param{const long}{ i}}
+\func{wxDate\&}{operator $+=$}{\param{long}{ i}}
 
 Postfix operator: adds an integer number of days to the date, returning
 a reference to `this' date.
 
 \membersection{wxDate::operator $-=$}\label{wxdateminusequals}
 
-\func{wxDate\&}{operator $-=$}{\param{const long}{ i}}
+\func{wxDate\&}{operator $-=$}{\param{long}{ i}}
 
 Postfix operator: subtracts an integer number of days from the date, returning
 a reference to `this' date.

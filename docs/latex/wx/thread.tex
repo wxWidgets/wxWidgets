@@ -1,0 +1,125 @@
+\section{\class{wxThread}}\label{wxthread}
+
+A wxThread manages a system thread, code which executes as a mini-process within the application.
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{See also}
+
+\helpref{wxMutex}{wxmutex}, \helpref{wxCondition}{wxcondition}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxThread::wxThread}\label{wxthreadconstr}
+
+\func{}{wxThread}{\void}
+
+Default constructor.
+
+\membersection{wxThread::\destruct{wxThread}}
+
+\func{}{\destruct{wxThread}}{\void}
+
+Destroys the wxThread object.
+
+\membersection{wxThread::Create}\label{wxthreadcreate}
+
+\func{wxThreadError}{Create}{\void}
+
+Creates a thread control.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf THREAD\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf THREAD\_NO\_RESOURCE}}{There were insufficient resources to create a new thread.}
+\twocolitem{{\bf THREAD\_RUNNING}}{The thread is already running.}
+\end{twocollist}
+
+\membersection{wxThread::DeferDestroy}\label{wxthreaddeferdestroy}
+
+\func{void}{DeferDestroy}{\param{bool}{ defer}}
+
+If {\it defer} is TRUE, defers thread destruction.
+
+\membersection{wxThread::Destroy}\label{wxthreaddestroy}
+
+\func{wxThreadError}{Destroy}{\void}
+
+Destroys the thread immediately unless the application has specified deferral via \helpref{wxThread::DeferDestroy}{deferdestroy}.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf THREAD\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf THREAD\_NOT\_RUNNING}}{The thread is not running.}
+\end{twocollist}
+
+\membersection{wxThread::GetID}\label{wxthreadgetid}
+
+\constfunc{unsigned long}{GetID}{\void}
+
+Gets the thread identifier.
+
+\membersection{wxThread::GetPriority}\label{wxthreadgetpriority}
+
+\constfunc{int}{GetPriority}{\void}
+
+Gets the priority of the thread, between zero and 100.
+
+The following priorities are already defined:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf WXTHREAD_MIN_PRIORITY}}{0}
+\twocolitem{{\bf WXTHREAD_DEFAULT_PRIORITY}}{50}
+\twocolitem{{\bf WXTHREAD_MAX_PRIORITY}}{100}
+\end{twocollist}
+
+\membersection{wxThread::IsAlive}\label{wxthreadisalive}
+
+\constfunc{bool}{IsAlive}{\void}
+
+Returns TRUE if the thread is alive.
+
+\membersection{wxThread::IsMain}\label{wxthreadismain}
+
+\constfunc{bool}{IsMain}{\void}
+
+Returns TRUE if the thread is the main application thread.
+
+\membersection{wxThread::Join}\label{wxthreadjoin}
+
+\func{void*}{Join}{\void}
+
+Waits for the termination of the thread. Returns a platform-specific exit code. TODO
+
+\membersection{wxThread::OnExit}\label{wxthreadonexit}
+
+\func{void}{OnExit}{\void}
+
+Called when the thread exits. The default implementation calls \helpref{wxThread::Join}{wxthreadjoin}.
+
+\membersection{wxThread::SetPriority}\label{wxthreadsetpriority}
+
+\func{void}{SetPriority}{\param{int}{ priority}}
+
+Sets the priority of the thread, between zero and 100. This must be set before the thread is created.
+
+The following priorities are already defined:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf WXTHREAD_MIN_PRIORITY}}{0}
+\twocolitem{{\bf WXTHREAD_DEFAULT_PRIORITY}}{50}
+\twocolitem{{\bf WXTHREAD_MAX_PRIORITY}}{100}
+\end{twocollist}
+

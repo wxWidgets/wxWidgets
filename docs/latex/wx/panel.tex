@@ -35,10 +35,10 @@ A panel may be loaded from a wxWindows resource file (extension {\tt wxr}).
 
 Default constructor.
 
-\func{}{wxPanel}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\func{}{wxPanel}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxTAB\_TRAVERSAL},\rtfsp
+\param{long}{ style = wxTAB\_TRAVERSAL},\rtfsp
 \param{const wxString\& }{name = ``panel"}}
 
 Constructor.
@@ -73,10 +73,10 @@ Destructor. Deletes any child windows before deleting the physical window.
 
 \membersection{wxPanel::Create}\label{wxpanelcreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{const long}{ style = wxTAB\_TRAVERSAL},\rtfsp
+\param{long}{ style = wxTAB\_TRAVERSAL},\rtfsp
 \param{const wxString\& }{name = ``panel"}}
 
 Used for two-step panel construction. See \helpref{wxPanel::wxPanel}{wxpanelconstr}\rtfsp

@@ -29,10 +29,10 @@ See also \helpref{window styles overview}{windowstyles}.
 
 Default constructor.
 
-\func{}{wxChoice}{\param{wxWindow *}{parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{}{wxChoice}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
-\param{const int}{ n}, \param{const wxString }{choices[]},\rtfsp
-\param{const long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``choice"}}
+\param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``choice"}}
 
 Constructor, creating and showing a choice.
 
@@ -85,10 +85,10 @@ Clears the strings from the choice item.
 
 \membersection{wxChoice::Create}\label{wxchoicecreate}
 
-\func{bool}{Create}{\param{wxWindow *}{parent}, \param{const wxWindowID}{ id},\rtfsp
+\func{bool}{Create}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
-\param{const int}{ n}, \param{const wxString }{choices[]},\rtfsp
-\param{const long}{ style = 0}, \param{const wxString\& }{name = ``choice"}}
+\param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxString\& }{name = ``choice"}}
 
 Creates the choice for two-step construction. See \helpref{wxChoice::wxChoice}{wxchoiceconstr}.
 
@@ -124,7 +124,7 @@ Gets the id (position) of the selected string, or -1 if there is no selection.
 
 \membersection{wxChoice::GetString}\label{wxchoicegetstring}
 
-\constfunc{wxString}{GetString}{\param{const int}{ n}}
+\constfunc{wxString}{GetString}{\param{int}{ n}}
 
 Returns the string at the given position.
 
@@ -150,7 +150,7 @@ Returns the number of strings in the choice control.
 
 \membersection{wxChoice::SetColumns}\label{wxchoicesetcolumns}
 
-\func{void}{SetColumns}{\param{const int}{ n = 1}}
+\func{void}{SetColumns}{\param{int}{ n = 1}}
 
 Sets the number of columns in this choice item.
 
@@ -164,7 +164,7 @@ This is implemented for Motif only.
 
 \membersection{wxChoice::SetSelection}\label{wxchoicesetselection}
 
-\func{void}{SetSelection}{\param{const int}{ n}}
+\func{void}{SetSelection}{\param{int}{ n}}
 
 Sets the choice by passing the desired string position.
 
