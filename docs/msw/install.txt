@@ -1,11 +1,9 @@
 
-Installing wxWindows 2.1
+Installing wxWindows 2.2
 ------------------------
 
-This is a beta release of wxWindows 2.1 for Microsoft
-Windows 95, 98 and NT. This is not a production release,
-although a huge number of bugs found in earlier versions
-of wxWindows have been fixed.
+This is wxWindows 2.2 for Microsoft Windows 3.1, 95, 98 and
+Windows NT/Windows 2000. This is an official, stable release.
 
 IMPORTANT NOTE: If you experience problems installing, please
 re-read this instructions and other related files (changes.txt,
@@ -188,7 +186,7 @@ the project. After this, delete everything (including PCH) and recompile.
 
 Note (5): for some further notes about upgrading your project
 files to be compatible with wxWindows 2.1.14, please see
-"Highlights of wxWindows 2.1.14" from the Download page of the
+"Highlights of wxWindows" from the Download page of the
 web site or CD-ROM.
 
 Note (6): to create your own IDE files, see the technical note on the
@@ -427,7 +425,7 @@ src\xpm\xpmi.h:
 Metrowerks CodeWarrior compilation
 ----------------------------------
 
-1. Downloaded and unzip wx2_x_y_cw.zip.
+1. Downloaded and unzip wxWindows-x.y.z-cw.zip.
 2. Load the make_cw.mcp project in wx\src, and compile.
 3. Load the make_cw.mcp project in wx\samples\minimal, and compile.
    Further project files for samples will be available in due

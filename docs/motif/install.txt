@@ -1,4 +1,4 @@
-wxWindows 2.1 for Motif installation
+wxWindows 2.2 for Motif installation
 ------------------------------------
 
 IMPORTANT NOTE:
@@ -11,7 +11,7 @@ IMPORTANT NOTE:
   
   When sending bug reports tell us what version of wxWindows you are 
   using (including the beta) and what compiler on what system. One 
-  example: wxMotif 2.1 beta 6, egcs 1.1.1, Redhat 5.0
+  example: wxMotif 2.2.0, egcs 1.1.1, Redhat 5.0
 
 First steps
 -----------

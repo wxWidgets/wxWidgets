@@ -5,7 +5,7 @@ set dest=%src\deliver
 set wise=0
 
 Rem Set this to the required version
-set version=2.1.16
+set version=2.2.0
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -30,6 +30,7 @@ erase %dest\tiff.zip
 erase %dest\dialoged.zip
 erase %dest\utils.zip
 erase %dest\extradoc.zip
+erase %dest\*-win32.zip
 
 if direxist %dest\wx deltree /Y %dest\wx
 
@@ -126,6 +127,13 @@ Rem Skip WISE setup if wise is 0.
 if "%wise" == "0" goto end
 
 :dounzip
+
+Rem Make dialoged-win32.zip and tex2rtf-win32.zip
+
+cd %src\bin
+
+zip32 %dest\dialoged-win32.zip dialoged.*
+zip32 %dest\tex2rtf-win32.zip tex2rtf.*
 
 cd %dest
 

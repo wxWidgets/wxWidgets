@@ -3,7 +3,7 @@
 # Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
 
 init=""
-WXVER=2.1.16
+WXVER=2.2.0
 if [ $1 = "" ]
 then
   exit
