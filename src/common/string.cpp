@@ -1093,26 +1093,26 @@ int wxString::Find(const wxChar *pszSub) const
 // conversion to numbers
 // ----------------------------------------------------------------------------
 
-bool wxString::ToLong(long *val) const
+bool wxString::ToLong(long *val, int base) const
 {
     wxCHECK_MSG( val, FALSE, _T("NULL pointer in wxString::ToLong") );
 
     const wxChar *start = c_str();
     wxChar *end;
-    *val = wxStrtol(start, &end, 10);
+    *val = wxStrtol(start, &end, base);
 
     // return TRUE only if scan was stopped by the terminating NUL and if the
     // string was not empty to start with
     return !*end && (end != start);
 }
 
-bool wxString::ToULong(unsigned long *val) const
+bool wxString::ToULong(unsigned long *val, int base) const
 {
     wxCHECK_MSG( val, FALSE, _T("NULL pointer in wxString::ToULong") );
 
     const wxChar *start = c_str();
     wxChar *end;
-    *val = wxStrtoul(start, &end, 10);
+    *val = wxStrtoul(start, &end, base);
 
     // return TRUE only if scan was stopped by the terminating NUL and if the
     // string was not empty to start with

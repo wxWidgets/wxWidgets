@@ -689,9 +689,9 @@ public:
     // conversion to numbers: all functions return TRUE only if the whole string
     // is a number and put the value of this number into the pointer provided
         // convert to a signed integer
-    bool ToLong(long *val) const;
+    bool ToLong(long *val, int base = 0) const;
         // convert to an unsigned integer
-    bool ToULong(unsigned long *val) const;
+    bool ToULong(unsigned long *val, int base = 0) const;
         // convert to a double
     bool ToDouble(double *val) const;
 
