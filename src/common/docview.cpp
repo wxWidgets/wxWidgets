@@ -261,7 +261,7 @@ bool wxDocument::SaveAs()
 
     if (docTemplate->GetViewClassInfo() && docTemplate->GetDocClassInfo())
     {
-        wxObjectListNode* node = wxDocManager::GetDocumentManager()->GetTemplates().GetFirst();
+        wxList::compatibility_iterator node = wxDocManager::GetDocumentManager()->GetTemplates().GetFirst();
         while (node)
         {
             wxDocTemplate *t = (wxDocTemplate*) node->GetData();
