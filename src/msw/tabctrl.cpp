@@ -90,7 +90,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
   m_windowId = (id < 0 ? NewControlId() : id);
 
-  long tabStyle = 0;
+  long tabStyle = WS_CHILD;
   if (m_windowStyle & wxTC_MULTILINE)
     tabStyle |= TCS_MULTILINE;
   if (m_windowStyle & wxTC_RIGHTJUSTIFY)

@@ -594,8 +594,11 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
             wxIAccessible* objectIA = child->GetIAccessible();
             if (!objectIA)
                 return E_FAIL;
-            *ppDispChild = objectIA;
-            objectIA->AddRef();
+
+	        if (objectIA->QueryInterface(IID_IDispatch, (LPVOID*) ppDispChild) != S_OK)
+	            return E_FAIL;
+            
+            (*ppDispChild)->AddRef();
             return S_OK;
         }
         else

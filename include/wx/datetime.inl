@@ -36,7 +36,7 @@
 // ----------------------------------------------------------------------------
 
 // only define this once, when included from datetime.cpp
-#if 1 // def wxDEFINE_TIME_CONSTANTS
+#ifdef wxDEFINE_TIME_CONSTANTS
     const long wxDateTime::TIME_T_FACTOR = 1000l;
 #endif // wxDEFINE_TIME_CONSTANTS
 
