@@ -44,6 +44,9 @@ wxGTK:
 
 - fixed wxFileDialog::SetWildcard()
 - native file dialog is now used if available (Zbigniew Zagorski)
+- implemented wxTextCtrl::Freeze() and Thaw(). The GtkTextBuffer
+  is not a valid one during frozen state. Get a pointer to it right
+  after wxTextCtrl creation if you really need to. (Mart Raudsepp)
 
 wxMac:
 
