@@ -567,7 +567,7 @@
 #define wxUSE_TOOLBAR_NATIVE 1
 
 // wxNotebook is a control with several "tabs" located on one of its sides. It
-// may be used ot logically organise the data presented to the user instead of
+// may be used to logically organise the data presented to the user instead of
 // putting everything in one huge dialog. It replaces wxTabControl and related
 // classes of wxWin 1.6x.
 //
