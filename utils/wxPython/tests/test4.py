@@ -41,7 +41,7 @@ class TestSimpleControlsDlg(wxDialog):
         y_pos = y_pos + delta
 
         rb = wxRadioBox(self, 30, "wxRadioBox", wxPoint(80, y_pos), wxDefaultSize,
-                        sampleList, 3, wxRA_HORIZONTAL| wxNO_BORDER)
+                        sampleList, 3, wxRA_SPECIFY_COLS | wxNO_BORDER)
         EVT_RADIOBOX(self, 30, self.EvtRadioBox)
         width, height = rb.GetSizeTuple()
         y_pos = y_pos + height + 5
@@ -1000,6 +1000,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.14  1999/02/27 04:20:50  RD
+# minor tweaks for testing
+#
 # Revision 1.13  1999/02/20 09:04:44  RD
 # Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 # window handle.  If you can get the window handle into the python code,
