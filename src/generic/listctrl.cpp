@@ -5262,6 +5262,7 @@ wxGenericListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
     // Use the same color scheme as wxListBox
     return wxListBox::GetClassDefaultAttributes(variant);
 #else
+    wxUnusedVar(variant);
     wxVisualAttributes attr;
     attr.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     attr.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
