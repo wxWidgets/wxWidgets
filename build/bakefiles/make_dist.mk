@@ -847,6 +847,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/splash/Makefile.in $(DISTDIR)/samples/splash
 	cp $(SAMPDIR)/splash/*.cpp $(DISTDIR)/samples/splash
 	cp $(SAMPDIR)/splash/*.png $(DISTDIR)/samples/splash
+	cp $(SAMPDIR)/splash/*.mpg $(DISTDIR)/samples/splash
 
 	mkdir $(DISTDIR)/samples/splitter
 	cp $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter

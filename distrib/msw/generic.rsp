@@ -1113,6 +1113,7 @@ samples/splash/*.txt
 samples/splash/*.ico
 samples/splash/*.bmp
 samples/splash/*.png
+samples/splash/*.mpg
 samples/splash/*.pro
 samples/splash/*.bkl
 

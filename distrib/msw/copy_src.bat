@@ -595,6 +595,7 @@ copy *.def \wxmsw_dist\wxMSW\samples\splash
 copy *.rc \wxmsw_dist\wxMSW\samples\splash
 copy *.ico \wxmsw_dist\wxMSW\samples\splash
 copy *.png \wxmsw_dist\wxMSW\samples\splash
+copy *.mpg \wxmsw_dist\wxMSW\samples\splash
 cd ..
 
 echo Splitter sample..
