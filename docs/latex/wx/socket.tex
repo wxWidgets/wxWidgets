@@ -11,6 +11,9 @@
 
 \section{\class{wxSocketBase}}\label{wxsocketbase}
 
+wxSocketBase is the base class for all socket-related objects, and it
+defines all basic IO functionality.
+
 \wxheading{Derived from}
 
 \helpref{wxEvtHandler}{wxevthandler}
@@ -77,12 +80,13 @@ a delayed connection request fails.
 
 \wxheading{Event handling}
 
-To process events from a socket, use the following event handler macro to direct
-input to member functions that take a \helpref{wxSocketEvent}{wxsocketevent} argument.
+To process events coming from a socket object, use the following event
+handler macro to direct events to member functions that take a
+\helpref{wxSocketEvent}{wxsocketevent} argument.
 
 \twocolwidtha{7cm}%
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_SOCKET(id, func)}}{A socket event occured.}
+\twocolitem{{\bf EVT\_SOCKET(id, func)}}{Process a wxEVT\_SOCKET event.}
 \end{twocollist}
 
 \wxheading{See also}
@@ -93,32 +97,382 @@ input to member functions that take a \helpref{wxSocketEvent}{wxsocketevent} arg
 \helpref{Sockets sample}{samplesockets}
 
 % ---------------------------------------------------------------------------
-% Members
+% Function groups
 % ---------------------------------------------------------------------------
 
-\latexignore{\rtfignore{\wxheading{Members}}}
+\latexignore{\rtfignore{\wxheading{Function groups}}}
 
-\membersection{wxSocketBase::wxSocketBase}
+\membersection{Construction and destruction}
+
+\helpref{wxSocketBase}{wxsocketbaseconstruct}\\
+\helpref{\destruct{wxSocketBase}}{wxsocketbasedestruct}
+
+\membersection{Socket state}
+
+Functions to retrieve current state and miscellaneous info.
+
+\helpref{Error}{wxsocketbaseerror}\\
+\helpref{GetLocal}{wxsocketbasegetlocal}\\
+\helpref{GetPeer}{wxsocketbasegetpeer}
+\helpref{IsConnected}{wxsocketbaseisconnected}\\
+\helpref{IsData}{wxsocketbaseisdata}\\
+\helpref{IsDisconnected}{wxsocketbaseisdisconnected}\\
+\helpref{LastCount}{wxsocketbaselastcount}\\
+\helpref{LastError}{wxsocketbaselasterror}\\
+\helpref{Ok}{wxsocketbaseok}\\
+\helpref{SaveState}{wxsocketbasesavestate}\\
+\helpref{RestoreState}{wxsocketbaserestorestate}
+
+\membersection{Basic IO}
+
+Functions that perform basic IO functionality.
+
+\helpref{Close}{wxsocketbaseclose}\\
+\helpref{Discard}{wxsocketbasediscard}\\
+\helpref{Peek}{wxsocketbasepeek}\\
+\helpref{Read}{wxsocketbaseread}\\
+\helpref{ReadMsg}{wxsocketbasereadmsg}\\
+\helpref{Unread}{wxsocketbaseunread}\\
+\helpref{Write}{wxsocketbasewrite}\\
+\helpref{WriteMsg}{wxsocketbasewritemsg}
+
+Functions that perform a timed wait on a certain IO condition.
+
+\helpref{Wait}{wxsocketbasewait}\\
+\helpref{WaitForRead}{wxsocketbasewaitforread}\\
+\helpref{WaitForWrite}{wxsocketbasewaitforwrite}\\
+\helpref{WaitForLost}{wxsocketbasewaitforlost}
+
+Functions that allow applications to customize socket IO as needed.
+
+\helpref{SetFlags}{wxsocketbasesetflags}\\
+\helpref{SetTimeout}{wxsocketbasesettimeout}
+
+\membersection{Handling socket events}
+
+Functions that allow applications to receive socket events.
+
+\helpref{Notify}{wxsocketbasenotify}\\
+\helpref{SetNotify}{wxsocketbasesetnotify}\\
+\helpref{SetEventHandler}{wxsocketbaseseteventhandler}
+
+Callback functions are also available, but they are provided for backwards
+compatibility only. Their use is discouraged in favour of events, and should
+be considered deprecated.
+
+\helpref{Callback}{wxsocketbasecallback}\\
+\helpref{CallbackData}{wxsocketbasecallbackdata}
+
+
+% ---------------------------------------------------------------------------
+% Members here
+% ---------------------------------------------------------------------------
+
+\helponly{\insertatlevel{2}{
+
+\wxheading{Members}
+
+}}
+
+\membersection{wxSocketBase::wxSocketBase}\label{wxsocketbaseconstruct}
 
 \func{}{wxSocketBase}{\void}
 
-Default constructor. Don't use it; use \helpref{wxSocketClient}{wxsocketclient} 
-or \helpref{wxSocketServer}{wxsocketserver}.
+Default constructor. Don't use it directly; instead, use
+\helpref{wxSocketClient}{wxsocketclient} to construct a socket client, or
+\helpref{wxSocketServer}{wxsocketserver} to construct a socket server.
 
-\membersection{wxSocketBase::\destruct{wxSocketBase}}
+\membersection{wxSocketBase::\destruct{wxSocketBase}}\label{wxsocketbasedestruct}
 
 \func{}{\destruct{wxSocketBase}}{\void}
 
 Destructor.
 
-% ---------------------------------------------------------------------------
-% State functions
-% ---------------------------------------------------------------------------
+%
+% Callback
+%
+\membersection{wxSocketBase::Callback}\label{wxsocketbasecallback}
+
+\func{wxSocketBase::wxSockCbk}{Callback}{\param{wxSocketBase::wxSockCbk}{ callback}}
+
+You can setup a callback function to be called when an event occurs.
+The function will be called only for those events for which notification
+has been enabled with \helpref{Notify}{wxsocketbasenotify} and
+\helpref{SetNotify}{wxsocketbasesetnotify}. The prototype of the
+callback must be as follows:
+
+\begin{verbatim}
+void SocketCallback(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
+\end{verbatim}
+
+The first parameter is a reference to the socket object in which the
+event occured. The second parameter tells you which event occured.
+(See \helpref{wxSocket events}{wxsocketbase}). The third parameter
+is the user data you specified using
+\helpref{CallbackData}{wxsocketbasecallbackdata}.
+
+Note that events are preferred over callbacks where possible.
+
+\wxheading{Return value}
+
+A pointer to the previous callback.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::CallbackData}{wxsocketbasecallbackdata}, 
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
+\helpref{wxSocketBase::Notify}{wxsocketbasenotify}
+
+%
+% CallbackData
+%
+\membersection{wxSocketBase::CallbackData}\label{wxsocketbasecallbackdata}
+
+\func{char *}{CallbackData}{\param{char *}{cdata}}
+
+This function sets the the user data which will be passed to a
+callback function set via \helpref{Callback}{wxsocketbasecallback}.
+
+Note that events are preferred over callbacks where possible.
+
+\wxheading{Return value}
+
+A pointer to the previous user data.
+
+\helpref{wxSocketBase::Callback}{wxsocketbasecallback}, 
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
+\helpref{wxSocketBase::Notify}{wxsocketbasenotify}
+
+%
+% Close
+%
+\membersection{wxSocketBase::Close}\label{wxsocketbaseclose}
+
+\func{void}{Close}{\void}
+
+This function shuts down the socket, disabling further transmission and
+reception of data; it also disables events for the socket and frees the
+associated system resources. If you destroy a socket, Close is automatically
+called.
+
+\wxheading{Remark/Warning}
+
+Although Close immediately disables events for the socket, it is possible
+that event messages may be waiting in the application's event queue. The
+application must therefore be prepared to handle socket event messages
+even after calling Close.
+
+%
+% Discard
+%
+\membersection{wxSocketBase::Discard}\label{wxsocketbasediscard}
+
+\func{wxSocketBase\&}{Discard}{\void}
+
+This function simply deletes all bytes in the incoming queue. This function
+always returns immediately and its operation is not affected by IO flags.
+
+Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually discarded.
+
+If you use \helpref{Error}{wxsocketbaseerror}, it will always return FALSE.
+
+%
+% Error
+%
+\membersection{wxSocketBase::Error}\label{wxsocketbaseerror}
+
+\constfunc{bool}{Error}{\void}
+
+Returns TRUE if an error occured in the last IO operation.
+
+Use this function to check for an error condition after one of the
+following calls: Discard, Peek, Read, ReadMsg, Unread, Write, WriteMsg.
+
+%
+% GetLocal
+%
+\membersection{wxSocketBase::GetLocal}\label{wxsocketbasegetlocal}
+
+\constfunc{bool}{GetLocal}{\param{wxSockAddress\& }{addr\_man}}
+
+This function returns the local address field of the socket. The local
+address field contains the complete local address of the socket (local
+address, local port, ...).
+
+\wxheading{Return value}
+
+It returns TRUE if no errors happened, FALSE otherwise.
+
+%
+% GetPeer
+%
+\membersection{wxSocketBase::GetPeer}\label{wxsocketbasegetpeer}
+
+\constfunc{bool}{GetPeer}{\param{wxSockAddress\& }{addr\_man}}
+
+This function returns the peer address field of the socket. The peer 
+address field contains the complete peer host address of the socket
+(address, port, ...).
+
+\wxheading{Return value}
+
+It returns TRUE if no errors happened, FALSE otherwise.
+
+%
+% IsConnected
+%
+\membersection{wxSocketBase::IsConnected}\label{wxsocketbaseisconnected}
+
+\constfunc{bool}{IsConnected}{\void}
+
+Returns TRUE if the socket is connected.
+
+%
+% IsData
+%
+\membersection{wxSocketBase::IsData}\label{wxsocketbaseisdata}
+
+\constfunc{bool}{IsData}{\void}
+
+Returns TRUE if the socket is readable. This might mean that
+queued data is available for reading or, for streamed sockets, that
+the connection has been closed, so that a \helpref{Read}{wxsocketbaseread},
+\helpref{ReadMsg}{wxsocketbasereadmsg} or \helpref{Peek}{wxsocketbasepeek}
+operation is guaranteed to complete immediately (unless the
+{\bf wxSOCKET\_WAITALL} flag is set).
+
+\membersection{wxSocketBase::IsDisconnected}\label{wxsocketbaseisdisconnected}
+
+%
+% IsDisconnected
+%
+\constfunc{bool}{IsDisconnected}{\void}
+
+Returns TRUE if the socket is not connected.
+
+\membersection{wxSocketBase::LastCount}\label{wxsocketbaselastcount}
+
+%
+% LastCount
+%
+\constfunc{wxUint32}{LastCount}{\void}
+
+Returns the number of bytes read or written by the last IO call.
+
+Use this function to get the number of bytes actually transferred
+after using one of the following IO calls: Discard, Peek, Read,
+ReadMsg, Unread, Write, WriteMsg.
+
+%
+% LastError
+%
+\membersection{wxSocketBase::LastError}\label{wxsocketbaselasterror}
+
+\constfunc{wxSocketError}{LastError}{\void}
+
+Returns the last wxSocket error. See \helpref{wxSocket errors}{wxsocketbase}.
+
+Please note that this function merely returns the last error code,
+but it should not be used to determine if an error has occured (this
+is because successful operations do not change the LastError value).
+Use \helpref{Error}{wxsocketbaseerror} first, in order to determine
+if the last IO call failed. If this returns TRUE, use LastError
+to discover the cause of the error.
+
+%
+% Notify
+%
+\membersection{wxSocketBase::Notify}\label{wxsocketbasenotify}
+
+\func{void}{Notify}{\param{bool}{ notify}}
+
+According to the {\it notify} value, this function enables
+or disables socket events. If {\it notify} is TRUE, the events
+configured with \helpref{SetNotify}{wxsocketbasesetnotify} will
+be sent to the application. If {\it notify} is FALSE; no events
+will be sent.
+
+% 
+% Ok
+%
+\membersection{wxSocketBase::Ok}\label{wxsocketbaseok}
+
+\constfunc{bool}{Ok}{\void}
+
+Returns TRUE if the socket is initialized and ready and FALSE in other
+cases.
+
+%
+% RestoreState
+%
+\membersection{wxSocketBase::RestoreState}\label{wxsocketbaserestorestate}
+
+\func{void}{RestoreState}{\void}
+
+This function restores the previous state of the socket, as saved
+with \helpref{SaveState}{wxsocketbasesavestate}
+
+Calls to SaveState and RestoreState can be nested.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::SaveState}{wxsocketbasesavestate}
+
+%
+% SaveState
+%
+\membersection{wxSocketBase::SaveState}\label{wxsocketbasesavestate}
+
+\func{void}{SaveState}{\void}
+
+This function saves the current state of the socket in a stack. Socket
+state includes flags, as set with \helpref{SetFlags}{wxsocketbasesetflags},
+event mask, as set with \helpref{SetNotify}{wxsocketbasesetnotify} and
+\helpref{Notify}{wxsocketbasenotify}, and current settings for the
+asynchronous callbacks, as set with \helpref{Callback}{wxsocketbasecallback}
+and \helpref{CallbackData}{wxsocketbasecallbackdata}.
+
+Calls to SaveState and RestoreState can be nested.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::RestoreState}{wxsocketbaserestorestate}
+
+%
+% SetEventHandler
+%
+\membersection{wxSocketBase::SetEventHandler}\label{wxsocketbaseseteventhandler}
+
+\func{void}{SetEventHandler}{\param{wxEvtHandler\&}{ evt\_hdlr}, \param{int}{ id = -1}}
+
+Sets an event handler to be called when a socket event occurs. The
+handler will be called for those events for which notification is
+enabled with \helpref{SetNotify}{wxsocketbasesetnotify} and
+\helpref{Notify}{wxsocketbasenotify}.
+
+You can also specify a callback function to be called when an event
+occurs, although if possible, events should be used instead of callbacks.
+See \helpref{Callback}{wxsocketbasecallback} and
+\helpref{CallbackData}{wxsocketbasecallbackdata}.
+
+\wxheading{Parameters}
+
+\docparam{evt\_hdlr}{Specifies the event handler you want to use.}
+
+\docparam{id}{The id of socket event.}
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
+\helpref{wxSocketBase::Notify}{wxsocketbasenotify}, 
+\helpref{wxSocketEvent}{wxsocketevent}, 
+\helpref{wxEvtHandler}{wxevthandler}, 
+\helpref{wxSocketBase::Callback}{wxsocketbasecallback}, 
+\helpref{wxSocketBase::CallbackData}{wxsocketbasecallbackdata}
 
 %
 % SetFlags
 %
-
 \membersection{wxSocketBase::SetFlags}\label{wxsocketbasesetflags}
 
 \func{void}{SetFlags}{\param{wxSocketBase::wxSockFlags}{ flags}}
@@ -219,83 +573,6 @@ family of functions if you don't specify a wait interval. Initially, the
 default is set to 10 minutes.
 
 %
-% Notify
-%
-\membersection{wxSocketBase::Notify}\label{wxsocketbasenotify}
-
-\func{void}{Notify}{\param{bool}{ notify}}
-
-According to the {\it notify} value, this function enables
-or disables socket events. If {\it notify} is TRUE, the events
-configured with \helpref{SetNotify}{wxsocketbasesetnotify} will
-be sent to the application. If {\it notify} is FALSE; no events
-will be sent.
-
-% 
-% Ok
-%
-
-\membersection{wxSocketBase::Ok}\label{wxsocketbaseok}
-
-\constfunc{bool}{Ok}{\void}
-
-Returns TRUE if the socket is initialized and ready and FALSE in other
-cases.
-
-\membersection{wxSocketBase::Error}\label{wxsocketbaseerror}
-
-\constfunc{bool}{Error}{\void}
-
-Returns TRUE if an error occured in the last IO operation.
-
-Use this function to check for an error condition after one of the
-following calls: Read, Write, ReadMsg, WriteMsg, Peek, Unread, Discard.
-
-\membersection{wxSocketBase::IsConnected}\label{wxsocketbaseisconnected}
-
-\constfunc{bool}{IsConnected}{\void}
-
-Returns TRUE if the socket is connected.
-
-\membersection{wxSocketBase::IsData}\label{wxsocketbaseisdata}
-
-\constfunc{bool}{IsData}{\void}
-
-Returns TRUE if there is data available to be read. 
-
-\membersection{wxSocketBase::IsDisconnected}\label{wxsocketbasedisconnected}
-
-\constfunc{bool}{IsDisconnected}{\void}
-
-Returns TRUE if the socket is not connected.
-
-\membersection{wxSocketBase::LastCount}\label{wxsocketbaselastcount}
-
-\constfunc{wxUint32}{LastCount}{\void}
-
-Returns the number of bytes read or written by the last IO call.
-
-Use this function to get the number of bytes actually transferred
-after using one of the following IO calls: Read, Write, ReadMsg,
-WriteMsg, Peek, Unread, Discard.
-
-\membersection{wxSocketBase::LastError}\label{wxsocketbaselasterror}
-
-\constfunc{wxSocketError}{LastError}{\void}
-
-Returns the last wxSocket error. See \helpref{wxSocket errors}{wxsocketbase}.
-
-Please note that this function merely returns the last error code,
-but it should not be used to determine if an error has occured (this
-is because successful operations do not change the LastError value).
-Use \helpref{Error}{wxsocketbaseerror} first, in order to determine
-if the last IO call failed. If this returns TRUE, use LastError()
-to discover the cause of the error.
-
-% ---------------------------------------------------------------------------
-% IO calls
-% ---------------------------------------------------------------------------
-%
 % Peek
 %
 \membersection{wxSocketBase::Peek}\label{wxsocketbasepeek}
@@ -321,7 +598,7 @@ Returns a reference to the current object.
 
 \wxheading{Remark/Warning}
 
-The exact behaviour of wxSocketBase::Peek() depends on the combination
+The exact behaviour of wxSocketBase::Peek depends on the combination
 of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
 
 \wxheading{See also}
@@ -356,7 +633,7 @@ Returns a reference to the current object.
 
 \wxheading{Remark/Warning}
 
-The exact behaviour of wxSocketBase::Read() depends on the combination
+The exact behaviour of wxSocketBase::Read depends on the combination
 of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
 
 \wxheading{See also}
@@ -365,83 +642,6 @@ of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetF
 \helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
 \helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
 \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
-
-%
-% Write
-%
-\membersection{wxSocketBase::Write}\label{wxsocketbasewrite}
-
-\func{wxSocketBase\&}{Write}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
-
-This function writes a buffer of {\it nbytes} bytes to the socket.
-
-Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually written.
-
-Use \helpref{Error}{wxsocketbaseerror} to determine if the operation succeeded.
-
-\wxheading{Parameters}
-
-\docparam{buffer}{Buffer with the data to be sent.}
-
-\docparam{nbytes}{Number of bytes.}
-
-\wxheading{Return value}
-
-Returns a reference to the current object.
-
-\wxheading{Remark/Warning}
-
-The exact behaviour of wxSocketBase::Write() depends on the combination
-of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
-
-\wxheading{See also}
-
-\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
-\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
-\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
-\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
-
-%
-% WriteMsg
-%
-\membersection{wxSocketBase::WriteMsg}\label{wxsocketbasewritemsg}
-
-\func{wxSocketBase\&}{WriteMsg}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
-
-This function writes a buffer of {\it nbytes} bytes from the socket, but it
-writes a short header before so that \helpref{ReadMsg}{wxsocketbasereadmsg}
-knows how much data should it actually read. So, a buffer sent with WriteMsg
-{\bf must} be read with ReadMsg. This function always waits for the entire
-buffer to be sent, unless an error occurs.
-
-Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually written.
-
-Use \helpref{Error}{wxsocketbaseerror} to determine if the operation succeeded.
-
-\wxheading{Parameters}
-
-\docparam{buffer}{Buffer with the data to be sent.}
-
-\docparam{nbytes}{Number of bytes to send.}
-
-\wxheading{Return value}
-
-Returns a reference to the current object.
-
-\wxheading{Remark/Warning}
-
-wxSocketBase::WriteMsg() will behave as if the {\bf wxSOCKET\_WAITALL} flag
-was always set and it will always ignore the {\bf wxSOCKET\_NOWAIT} flag.
-The exact behaviour of WriteMsg depends on the {\bf wxSOCKET\_BLOCK} flag.
-For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
-
-\wxheading{See also}
-
-\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
-\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
-\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
-\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}, 
-\helpref{wxSocketBase::ReadMsg}{wxsocketbasereadmsg}
 
 %
 % ReadMsg
@@ -471,7 +671,7 @@ Returns a reference to the current object.
 
 \wxheading{Remark/Warning}
 
-wxSocketBase::ReadMsg() will behave as if the {\bf wxSOCKET\_WAITALL} flag
+wxSocketBase::ReadMsg will behave as if the {\bf wxSOCKET\_WAITALL} flag
 was always set and it will always ignore the {\bf wxSOCKET\_NOWAIT} flag.
 The exact behaviour of ReadMsg depends on the {\bf wxSOCKET\_BLOCK} flag.
 For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
@@ -515,22 +715,8 @@ Returns a reference to the current object.
 \helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
 
 %
-% Discard
+% Wait
 %
-\membersection{wxSocketBase::Discard}\label{wxsocketbasediscard}
-
-\func{wxSocketBase\&}{Discard}{\void}
-
-This function simply deletes all bytes in the incoming queue. This function
-always returns immediately and its operation is not affected by IO flags.
-
-Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually discarded.
-
-If you use \helpref{Error}{wxsocketbaseerror}, it will always return FALSE.
-
-% ---------------------------------------------------------------------------
-% Wait functions
-% ---------------------------------------------------------------------------
 \membersection{wxSocketBase::Wait}\label{wxsocketbasewait}
 
 \func{bool}{Wait}{\param{long}{ seconds = -1}, \param{long}{ millisecond = 0}}
@@ -540,7 +726,7 @@ that it is recommended to use the individual Wait functions to wait for
 the required condition, instead of this one.
                                             
 \begin{itemize}
-\item There is data available for reading.
+\item The socket becomes readable.
 \item The socket becomes writable.
 \item An ongoing connection request has completed (only for clients)
 \item An incoming connection request has arrived (only for servers)
@@ -573,8 +759,12 @@ FALSE if the timeout was reached.
 
 \func{bool}{WaitForRead}{\param{long}{ seconds = -1}, \param{long}{ millisecond = 0}}
 
-This function waits until there is data available to be read, or until
-an error occurs.
+This function waits until the socket is readable. This might mean that
+queued data is available for reading or, for streamed sockets, that
+the connection has been closed, so that a \helpref{Read}{wxsocketbaseread},
+\helpref{ReadMsg}{wxsocketbasereadmsg} or \helpref{Peek}{wxsocketbasepeek}
+operation is guaranteed to complete immediately (unless the
+{\bf wxSOCKET\_WAITALL} flag is set).
 
 \wxheading{Parameters}
 
@@ -602,8 +792,11 @@ or an error occured.
 
 \func{bool}{WaitForWrite}{\param{long}{ seconds = -1}, \param{long}{ millisecond = 0}}
 
-This function waits until the socket is ready to send data,
-or until an error occurs.
+This function waits until the socket becomes writable. This might mean that
+the socket is ready to send new data, or for streamed sockets, that the
+connection has been closed, so that a \helpref{Write}{wxsocketbasewrite}
+or \helpref{ReadMsg}{wxsocketbasewritemsg} operation is guaranteed to
+complete immediately (unless the {\bf wxSOCKET\_WAITALL} flag is set).
 
 \wxheading{Parameters}
 
@@ -615,8 +808,7 @@ as set with \helpref{SetTimeout}{wxsocketbasesettimeout}.}
 
 \wxheading{Return value}
 
-Returns TRUE if you can write to the socket, FALSE if the timeout was
-reached or an error occured.
+Returns TRUE if the socket becomes writable, FALSE if the timeout was reached.
 
 \wxheading{See also}
 
@@ -652,160 +844,88 @@ Returns TRUE if the connection was lost, FALSE if the timeout was reached.
 \helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}, 
 \helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
 
-% ---------------------------------------------------------------------------
-% Socket state
-% ---------------------------------------------------------------------------
-
 %
-% RestoreState
+% Write
 %
-\membersection{wxSocketBase::RestoreState}\label{wxsocketbaserestorestate}
+\membersection{wxSocketBase::Write}\label{wxsocketbasewrite}
 
-\func{void}{RestoreState}{\void}
+\func{wxSocketBase\&}{Write}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
-This function restores the previous state of the socket, as saved
-with \helpref{SaveState}{wxsocketbasesavestate}
+This function writes a buffer of {\it nbytes} bytes to the socket.
 
-Calls to SaveState and RestoreState can be nested.
+Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually written.
 
-\wxheading{See also}
-
-\helpref{wxSocketBase::SaveState}{wxsocketbasesavestate}
-
-%
-% SaveState
-%
-\membersection{wxSocketBase::SaveState}\label{wxsocketbasesavestate}
-
-\func{void}{SaveState}{\void}
-
-This function saves the current state of the socket in a stack. Socket
-state includes flags, as set with \helpref{SetFlags}{wxsocketbasesetflags},
-event mask, as set with \helpref{SetNotify}{wxsocketbasesetnotify} and
-\helpref{Notify}{wxsocketbasenotify}, and current settings for the
-asynchronous callbacks, as set with \helpref{Callback}{wxsocketbasecallback}
-and \helpref{CallbackData}{wxsocketbasecallbackdata}.
-
-Calls to SaveState and RestoreState can be nested.
-
-\wxheading{See also}
-
-\helpref{wxSocketBase::RestoreState}{wxsocketbaserestorestate}
-
-%
-% GetLocal
-%
-\membersection{wxSocketBase::GetLocal}\label{wxsocketbasegetlocal}
-
-\constfunc{bool}{GetLocal}{\param{wxSockAddress\& }{addr\_man}}
-
-This function returns the local address field of the socket. The local
-address field contains the complete local address of the socket (local
-address, local port, ...).
-
-\wxheading{Return value}
-
-It returns TRUE if no errors happened, FALSE otherwise.
-
-%
-% GetPeer
-%
-\membersection{wxSocketBase::GetPeer}\label{wxsocketbasegetpeer}
-
-\constfunc{bool}{GetPeer}{\param{wxSockAddress\& }{addr\_man}}
-
-This function returns the peer address field of the socket. The peer 
-address field contains the complete peer host address of the socket
-(address, port, ...).
-
-\wxheading{Return value}
-
-It returns TRUE if no errors happened, FALSE otherwise.
-
-% ---------------------------------------------------------------------------
-% Socket callbacks
-% ---------------------------------------------------------------------------
-\membersection{wxSocketBase::SetEventHandler}\label{wxsocketbaseseteventhandler}
-
-\func{void}{SetEventHandler}{\param{wxEvtHandler\&}{ evt\_hdlr}, \param{int}{ id = -1}}
-
-Sets an event handler to be called when a socket event occurs. The
-handler will be called for those events for which notification is
-enabled with \helpref{SetNotify}{wxsocketbasesetnotify} and
-\helpref{Notify}{wxsocketbasenotify}.
-
-You can also specify a callback function to be called when an event
-occurs, although if possible, events should be used instead of callbacks.
-See \helpref{Callback}{wxsocketbasecallback} and
-\helpref{CallbackData}{wxsocketbasecallbackdata}.
+Use \helpref{Error}{wxsocketbaseerror} to determine if the operation succeeded.
 
 \wxheading{Parameters}
 
-\docparam{evt\_hdlr}{Specifies the event handler you want to use.}
+\docparam{buffer}{Buffer with the data to be sent.}
 
-\docparam{id}{The id of socket event.}
-
-\wxheading{See also}
-
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
-\helpref{wxSocketBase::Notify}{wxsocketbasenotify}, 
-\helpref{wxSocketEvent}{wxsocketevent}, 
-\helpref{wxEvtHandler}{wxevthandler}, 
-\helpref{wxSocketBase::Callback}{wxsocketbasecallback}, 
-\helpref{wxSocketBase::CallbackData}{wxsocketbasecallbackdata}
-
-\membersection{wxSocketBase::Callback}\label{wxsocketbasecallback}
-
-\func{wxSocketBase::wxSockCbk}{Callback}{\param{wxSocketBase::wxSockCbk}{ callback}}
-
-You can setup a callback function to be called when an event occurs.
-The function will be called only for those events for which notification
-has been enabled with \helpref{Notify}{wxsocketbasenotify} and
-\helpref{SetNotify}{wxsocketbasesetnotify}. The prototype of the
-callback must be as follows:
-
-\begin{verbatim}
-void SocketCallback(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
-\end{verbatim}
-
-The first parameter is a reference to the socket object in which the
-event occured. The second parameter tells you which event occured.
-(See \helpref{wxSocket events}{wxsocketbase}). The third parameter
-is the user data you specified using
-\helpref{CallbackData}{wxsocketbasecallbackdata}.
-
-Note that events are preferred over callbacks where possible.
+\docparam{nbytes}{Number of bytes.}
 
 \wxheading{Return value}
 
-A pointer to the previous callback.
+Returns a reference to the current object.
+
+\wxheading{Remark/Warning}
+
+The exact behaviour of wxSocketBase::Write depends on the combination
+of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::CallbackData}{wxsocketbasecallbackdata}, 
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
-\helpref{wxSocketBase::Notify}{wxsocketbasenotify}
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
+\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
 
-\membersection{wxSocketBase::CallbackData}\label{wxsocketbasecallbackdata}
+%
+% WriteMsg
+%
+\membersection{wxSocketBase::WriteMsg}\label{wxsocketbasewritemsg}
 
-\func{char *}{CallbackData}{\param{char *}{cdata}}
+\func{wxSocketBase\&}{WriteMsg}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
-This function sets the the user data which will be passed to a
-callback function set via \helpref{Callback}{wxsocketbasecallback}.
+This function writes a buffer of {\it nbytes} bytes from the socket, but it
+writes a short header before so that \helpref{ReadMsg}{wxsocketbasereadmsg}
+knows how much data should it actually read. So, a buffer sent with WriteMsg
+{\bf must} be read with ReadMsg. This function always waits for the entire
+buffer to be sent, unless an error occurs.
 
-Note that events are preferred over callbacks where possible.
+Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually written.
+
+Use \helpref{Error}{wxsocketbaseerror} to determine if the operation succeeded.
+
+\wxheading{Parameters}
+
+\docparam{buffer}{Buffer with the data to be sent.}
+
+\docparam{nbytes}{Number of bytes to send.}
 
 \wxheading{Return value}
 
-A pointer to the previous user data.
+Returns a reference to the current object.
 
-\helpref{wxSocketBase::Callback}{wxsocketbasecallback}, 
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
-\helpref{wxSocketBase::Notify}{wxsocketbasenotify}
+\wxheading{Remark/Warning}
+
+wxSocketBase::WriteMsg will behave as if the {\bf wxSOCKET\_WAITALL} flag
+was always set and it will always ignore the {\bf wxSOCKET\_NOWAIT} flag.
+The exact behaviour of WriteMsg depends on the {\bf wxSOCKET\_BLOCK} flag.
+For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
+\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}, 
+\helpref{wxSocketBase::ReadMsg}{wxsocketbasereadmsg}
+
 
 % ---------------------------------------------------------------------------
 % CLASS wxSocketClient
 % ---------------------------------------------------------------------------
+
 \section{\class{wxSocketClient}}\label{wxsocketclient}
 
 \wxheading{Derived from}
@@ -1030,7 +1150,7 @@ If {\it wait} is FALSE, it will try to accept a pending connection
 if there is one, but it will always return immediately without blocking
 the GUI. If you want to use Accept in this way, you can either check for
 incoming connections with \helpref{WaitForAccept}{wxsocketserverwaitforaccept}
-or catch {\bf wxSOCKET\_CONNECTION} events, then call Accept() once you know
+or catch {\bf wxSOCKET\_CONNECTION} events, then call Accept once you know
 that there is an incoming connection waiting to be accepted.
 
 \wxheading{Return value}
