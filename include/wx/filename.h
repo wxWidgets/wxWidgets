@@ -410,6 +410,9 @@ public:
         { return GetPath(wxPATH_GET_SEPARATOR, format); }
 
 private:
+    // check whether this dir is valid for Append/Prepend/InsertDir()
+    static bool IsValidDirComponent(const wxString& dir);
+
     // the drive/volume/device specification (always empty for Unix)
     wxString        m_volume;
 

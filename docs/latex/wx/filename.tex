@@ -51,6 +51,7 @@ enum wxPathFormat
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
+
 \membersection{File name format}
 
 wxFileName currently supports the file names in the Unix, DOS/Windows, Mac OS
@@ -82,9 +83,11 @@ class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
 
 \helpref{IsRelative}{wxfilenameisrelative}
 
+
 \membersection{File name construction}
 
 TODO.
+
 
 \membersection{File tests}
 
@@ -96,6 +99,7 @@ with this name exists.
 
 File names should be compared using \helpref{SameAs}{wxfilenamesameas} method
 or \helpref{$==$}{wxfilenameoperatorequal}.
+
 
 \membersection{File name components}
 
@@ -120,6 +124,7 @@ following functions:
 \helpref{SetName}{wxfilenamesetname}\\
 \helpref{SetVolume}{wxfilenamesetvolume}\\
 
+
 \membersection{Operations}
 
 These methods allow to work with the file creation, access and modification
@@ -139,6 +144,7 @@ Other file system operations functions are:
 \helpref{Rmdir}{wxfilenamermdir}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
+
 
 \membersection{wxFileName::wxFileName}\label{wxfilenamewxfilename}
 
@@ -168,11 +174,16 @@ Constructor from a directory name, base file name and extension.
 
 Constructor from a volume name, a directory name, base file name and extension.
 
+
 \membersection{wxFileName::AppendDir}\label{wxfilenameappenddir}
 
 \func{void}{AppendDir}{\param{const wxString\& }{dir}}
 
-Appends a directory to the path.
+Appends a directory component to the path. This component should contain a
+single directory name level, i.e. not contain any path or volume separators nor
+should it be empty, otherwise the function does nothing (and generates an
+assert failure in debug build).
+
 
 \membersection{wxFileName::Assign}\label{wxfilenameassign}
 
@@ -188,6 +199,7 @@ Appends a directory to the path.
 
 Creates the file name from various combinations of data.
 
+
 \membersection{wxFileName::AssignCwd}\label{wxfilenameassigncwd}
 
 \func{static void}{AssignCwd}{\param{const wxString\& }{volume = wxEmptyString}}
@@ -199,6 +211,7 @@ volume (or current volume if {\it volume} is empty).
 
 \helpref{GetCwd}{wxfilenamegetcwd}
 
+
 \membersection{wxFileName::AssignDir}\label{wxfilenameassigndir}
 
 \func{void}{AssignDir}{\param{const wxString\& }{dir}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
@@ -206,11 +219,13 @@ volume (or current volume if {\it volume} is empty).
 Sets this file name object to the given directory name. The name and extension
 will be empty.
 
+
 \membersection{wxFileName::AssignHomeDir}\label{wxfilenameassignhomedir}
 
 \func{void}{AssignHomeDir}{\void}
 
 Sets this file name object to the home directory.
+
 
 \membersection{wxFileName::AssignTempFileName}\label{wxfilenameassigntempfilename}
 
@@ -221,11 +236,13 @@ create a temporary file and sets this object to the name of the file. If a
 temporary file couldn't be created, the object is put into the\rtfsp
 \helpref{invalid}{wxfilenameisok} state.
 
+
 \membersection{wxFileName::Clear}\label{wxfilenameclear}
 
 \func{void}{Clear}{\void}
 
 Reset all components to default, uninitialized state.
+
 
 \membersection{wxFileName::CreateTempFileName}\label{wxfilenamecreatetempfilename}
 
@@ -256,6 +273,7 @@ owner only to minimize the security problems.
 
 The full temporary file name or an empty string on error.
 
+
 \membersection{wxFileName::DirExists}\label{wxfilenamedirexists}
 
 \constfunc{bool}{DirExists}{\void}
@@ -264,12 +282,14 @@ The full temporary file name or an empty string on error.
 
 Returns {\tt true} if the directory with this name exists.
 
+
 \membersection{wxFileName::DirName}\label{wxfilenamedirname}
 
 \func{static wxFileName}{DirName}{\param{const wxString\& }{dir}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the object corresponding to the directory with the given name.
 The {\it dir} parameter may have trailing path separator or not.
+
 
 
 \membersection{wxFileName::FileExists}\label{wxfilenamefileexists}
@@ -285,12 +305,14 @@ Returns {\tt true} if the file with this name exists.
 \helpref{DirExists}{wxfilenamedirexists}
 
 
+
 \membersection{wxFileName::FileName}\label{wxfilenamefilename}
 
 \func{static wxFileName}{FileName}{\param{const wxString\& }{file}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the file name object corresponding to the given {\it file}. This
 function exists mainly for symmetry with \helpref{DirName}{wxfilenamedirname}.
+
 
 
 \membersection{wxFileName::GetCwd}\label{wxfilenamegetcwd}
@@ -310,11 +332,13 @@ error.
 
 \helpref{AssignCwd}{wxfilenameassigncwd}
 
+
 \membersection{wxFileName::GetDirCount}\label{wxfilenamegetdircount}
 
 \constfunc{size\_t}{GetDirCount}{\void}
 
 Returns the number of directories in the file name.
+
 
 \membersection{wxFileName::GetDirs}\label{wxfilenamegetdirs}
 
@@ -322,11 +346,13 @@ Returns the number of directories in the file name.
 
 Returns the directories in string array form.
 
+
 \membersection{wxFileName::GetExt}\label{wxfilenamegetext}
 
 \constfunc{wxString}{GetExt}{\void}
 
 Returns the file name extension.
+
 
 \membersection{wxFileName::GetForbiddenChars}\label{wxfilenamegetforbiddenchars}
 
@@ -334,11 +360,13 @@ Returns the file name extension.
 
 Returns the characters that can't be used in filenames and directory names for the specified format.
 
+
 \membersection{wxFileName::GetFormat}\label{wxfilenamegetformat}
 
 \func{static wxPathFormat}{GetFormat}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the canonical path format for this platform.
+
 
 \membersection{wxFileName::GetFullName}\label{wxfilenamegetfullname}
 
@@ -346,11 +374,13 @@ Returns the canonical path format for this platform.
 
 Returns the full name (including extension but excluding directories).
 
+
 \membersection{wxFileName::GetFullPath}\label{wxfilenamegetfullpath}
 
 \constfunc{wxString}{GetFullPath}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the full path with name and extension.
+
 
 \membersection{wxFileName::GetHomeDir}\label{wxfilenamegethomedir}
 
@@ -358,11 +388,13 @@ Returns the full path with name and extension.
 
 Returns the home directory.
 
+
 \membersection{wxFileName::GetLongPath}\label{wxfilenamegetlongpath}
 
 \constfunc{wxString}{GetLongPath}{\void}
 
 Return the long form of the path (returns identity on non-Windows platforms)
+
 
 \membersection{wxFileName::GetModificationTime}\label{wxfilenamegetmodificationtime}
 
@@ -370,11 +402,13 @@ Return the long form of the path (returns identity on non-Windows platforms)
 
 Returns the last time the file was last modified.
 
+
 \membersection{wxFileName::GetName}\label{wxfilenamegetname}
 
 \constfunc{wxString}{GetName}{\void}
 
 Returns the name part of the filename.
+
 
 \membersection{wxFileName::GetPath}\label{wxfilenamegetpath}
 
@@ -393,6 +427,7 @@ separator, if this flag is not given there will be no separator at the end of
 the path.}
 \end{twocollist}
 
+
 \membersection{wxFileName::GetPathSeparator}\label{wxfilenamegetpathseparator}
 
 \func{static wxChar}{GetPathSeparator}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
@@ -405,6 +440,7 @@ method.
 \wxheading{See also}
 
 \helpref{GetPathSeparators}{wxfilenamegetpathseparators}
+
 
 \membersection{wxFileName::GetPathSeparators}\label{wxfilenamegetpathseparators}
 
@@ -419,11 +455,13 @@ separators.
 
 \helpref{GetPathSeparator}{wxfilenamegetpathseparator}
 
+
 \membersection{wxFileName::GetShortPath}\label{wxfilenamegetshortpath}
 
 \constfunc{wxString}{GetShortPath}{\void}
 
 Return the short form of the path (returns identity on non-Windows platforms).
+
 
 \membersection{wxFileName::GetTimes}\label{wxfilenamegettimes}
 
@@ -444,6 +482,7 @@ needed.
 
 {\tt true} on success, {\tt false} if we failed to retrieve the times.
 
+
 \membersection{wxFileName::GetVolume}\label{wxfilenamegetvolume}
 
 \constfunc{wxString}{GetVolume}{\void}
@@ -452,11 +491,13 @@ Returns the string containing the volume for this file name, mepty if it
 doesn't have one or if the file system doesn't support volumes at all (for
 example, Unix).
 
+
 \membersection{wxFileName::GetVolumeSeparator}\label{wxfilenamegetvolumeseparator}
 
 \func{static wxString}{GetVolumeSeparator}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the string separating the volume from the path for this format.
+
 
 \membersection{wxFileName::HasExt}\label{wxfilenamehasext}
 
@@ -464,11 +505,13 @@ Returns the string separating the volume from the path for this format.
 
 Returns {\tt true} if an extension is present.
 
+
 \membersection{wxFileName::HasName}\label{wxfilenamehasname}
 
 \constfunc{bool}{HasName}{\void}
 
 Returns {\tt true} if a name is present.
+
 
 \membersection{wxFileName::HasVolume}\label{wxfilenamehasvolume}
 
@@ -476,11 +519,14 @@ Returns {\tt true} if a name is present.
 
 Returns {\tt true} if a volume specifier is present.
 
+
 \membersection{wxFileName::InsertDir}\label{wxfilenameinsertdir}
 
 \func{void}{InsertDir}{\param{int }{before}, \param{const wxString\& }{dir}}
 
-Inserts a directory before the zero-based position in the directory list.
+Inserts a directory component before the zero-based position in the directory
+list. Please see \helpref{AppendDir}{wxfilenameappenddir} for important notes.
+
 
 \membersection{wxFileName::IsAbsolute}\label{wxfilenameisabsolute}
 
@@ -488,11 +534,13 @@ Inserts a directory before the zero-based position in the directory list.
 
 Returns {\tt true} if this filename is absolute.
 
+
 \membersection{wxFileName::IsCaseSensitive}\label{wxfilenameiscasesensitive}
 
 \func{static bool}{IsCaseSensitive}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns {\tt true} if the file names of this type are case-sensitive.
+
 
 \membersection{wxFileName::IsOk}\label{wxfilenameisok}
 
@@ -503,17 +551,20 @@ initialized yet. The assignment functions and
 \helpref{Clear}{wxfilenameclear} may reset the object to the uninitialized,
 invalid state (the former only do it on failure).
 
+
 \membersection{wxFileName::IsPathSeparator}\label{wxfilenameispathseparator}
 
 \func{static bool}{IsPathSeparator}{\param{wxChar }{ch}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns {\tt true} if the char is a path separator for this format.
 
+
 \membersection{wxFileName::IsRelative}\label{wxfilenameisrelative}
 
 \func{bool}{IsRelative}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns {\tt true} if this filename is not absolute.
+
 
 \membersection{wxFileName::IsDir}\label{wxfilenameisdir}
 
@@ -524,6 +575,7 @@ Returns {\tt true} if this object represents a directory, {\tt false} otherwise
 directory or file really exists, you should use 
 \helpref{DirExists}{wxfilenamedirexists} or 
 \helpref{FileExists}{wxfilenamefileexists} for this.
+
 
 \membersection{wxFileName::MakeAbsolute}\label{wxfilenamemakeabsolute}
 
@@ -537,6 +589,7 @@ Make the file name absolute. This is a shortcut for
 \helpref{MakeRelativeTo}{wxfilenamemakerelativeto},
 \helpref{Normalize}{wxfilenamenormalize},
 \helpref{IsAbsolute}{wxfilenameisabsolute}
+
 
 \membersection{wxFileName::MakeRelativeTo}\label{wxfilenamemakerelativeto}
 
@@ -561,6 +614,7 @@ different from the volume specified by {\it pathBase}).
 
 \helpref{Normalize}{wxfilenamenormalize}
 
+
 \membersection{wxFileName::Mkdir}\label{wxfilenamemkdir}
 
 \func{bool}{Mkdir}{\param{int }{perm = 0777}, \param{int }{flags = $0$}}
@@ -579,6 +633,7 @@ if the target directory already exists.}
 
 Returns {\tt true} if the directory was successfully created, {\tt false}
 otherwise.
+
 
 \membersection{wxFileName::Normalize}\label{wxfilenamenormalize}
 
@@ -606,17 +661,22 @@ working directory in normalization.}
 
 \docparam{format}{The file name format, native by default.}
 
+
 \membersection{wxFileName::PrependDir}\label{wxfilenameprependdir}
 
 \func{void}{PrependDir}{\param{const wxString\& }{dir}}
 
-Prepends a directory name.
+Prepends a directory to the file path. Please see 
+\helpref{AppendDir}{wxfilenameappenddir} for important notes.
+
+
 
 \membersection{wxFileName::RemoveDir}\label{wxfilenameremovedir}
 
 \func{void}{RemoveDir}{\param{int }{pos}}
 
 Removes a directory name.
+
 
 \membersection{wxFileName::Rmdir}\label{wxfilenamermdir}
 
@@ -626,11 +686,13 @@ Removes a directory name.
 
 Deletes the specified directory from the file system.
 
+
 \membersection{wxFileName::SameAs}\label{wxfilenamesameas}
 
 \constfunc{bool}{SameAs}{\param{const wxFileName\& }{filepath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Compares the filename using the rules of this platform.
+
 
 \membersection{wxFileName::SetCwd}\label{wxfilenamesetcwd}
 
@@ -640,11 +702,13 @@ Compares the filename using the rules of this platform.
 
 Changes the current working directory.
 
+
 \membersection{wxFileName::SetExt}\label{wxfilenamesetext}
 
 \func{void}{SetExt}{\param{const wxString\& }{ext}}
 
 Sets the extension of this file name.
+
 
 \membersection{wxFileName::SetFullName}\label{wxfilenamesetfullname}
 
@@ -652,11 +716,13 @@ Sets the extension of this file name.
 
 The full name is the file name and extension (but without the path).
 
+
 \membersection{wxFileName::SetName}\label{wxfilenamesetname}
 
 \func{void}{SetName}{\param{const wxString\& }{name}}
 
 Sets the name.
+
 
 \membersection{wxFileName::SetTimes}\label{wxfilenamesettimes}
 
@@ -664,11 +730,13 @@ Sets the name.
 
 Sets the file creation and last access/modification times (any of the pointers may be NULL).
 
+
 \membersection{wxFileName::SetVolume}\label{wxfilenamesetvolume}
 
 \func{void}{SetVolume}{\param{const wxString\& }{volume}}
 
 Sets the volume specifier.
+
 
 \membersection{wxFileName::SplitPath}\label{wxfilenamesplitpath}
 
@@ -688,11 +756,13 @@ without leading dot. All three of them may be empty if the corresponding
 component is. The old contents of the strings pointed to by these parameters
 will be overwritten in any case (if the pointers are not {\tt NULL}).
 
+
 \membersection{wxFileName::Touch}\label{wxfilenametouch}
 
 \func{bool}{Touch}{\void}
 
 Sets the access and modification times to the current moment.
+
 
 \membersection{wxFileName::operator=}\label{wxfilenameoperatorassign}
 
@@ -702,6 +772,7 @@ Sets the access and modification times to the current moment.
 
 Assigns the new value to this filename object.
 
+
 \membersection{wxFileName::operator==}\label{wxfilenameoperatorequal}
 
 \constfunc{bool operator}{operator==}{\param{const wxFileName\& }{filename}}
@@ -710,6 +781,7 @@ Assigns the new value to this filename object.
 
 Returns {\tt true} if the filenames are equal. The string {\it filenames} is
 interpreted as a path in the native filename format.
+
 
 \membersection{wxFileName::operator!=}\label{wxfilenameoperatornotequal}
 

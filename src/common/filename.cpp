@@ -1177,19 +1177,44 @@ bool wxFileName::IsPathSeparator(wxChar ch, wxPathFormat format)
 // path components manipulation
 // ----------------------------------------------------------------------------
 
+/* static */ bool wxFileName::IsValidDirComponent(const wxString& dir)
+{
+    if ( dir.empty() )
+    {
+        wxFAIL_MSG( _T("empty directory passed to wxFileName::InsertDir()") );
+
+        return false;
+    }
+
+    const size_t len = dir.length();
+    for ( size_t n = 0; n < len; n++ )
+    {
+        if ( dir[n] == GetVolumeSeparator() || IsPathSeparator(dir[n]) )
+        {
+            wxFAIL_MSG( _T("invalid directory component in wxFileName") );
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void wxFileName::AppendDir( const wxString &dir )
 {
-    m_dirs.Add( dir );
+    if ( IsValidDirComponent(dir) )
+        m_dirs.Add( dir );
 }
 
 void wxFileName::PrependDir( const wxString &dir )
 {
-    m_dirs.Insert( dir, 0 );
+    InsertDir(0, dir);
 }
 
 void wxFileName::InsertDir( int before, const wxString &dir )
 {
-    m_dirs.Insert( dir, before );
+    if ( IsValidDirComponent(dir) )
+        m_dirs.Insert( dir, before );
 }
 
 void wxFileName::RemoveDir( int pos )
@@ -1229,47 +1254,48 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
         fullpath += wxGetVolumeString(GetVolume(), format);
     }
 
-    // the leading character
-    switch ( format )
-    {
-        case wxPATH_MAC:
-            if ( m_relative )
-                fullpath += wxFILE_SEP_PATH_MAC;
-            break;
-
-        case wxPATH_DOS:
-            if (!m_relative)
-                fullpath += wxFILE_SEP_PATH_DOS;
-            break;
-
-        default:
-            wxFAIL_MSG( wxT("Unknown path format") );
-            // fall through
-
-        case wxPATH_UNIX:
-            if ( !m_relative )
-            {
-                // normally the absolute file names starts with a slash with
-                // one exception: file names like "~/foo.bar" don't have it
-                if ( m_dirs.IsEmpty() || m_dirs[0u] != _T('~') )
-                {
-                    fullpath += wxFILE_SEP_PATH_UNIX;
-                }
-            }
-            break;
-
-        case wxPATH_VMS:
-            // no leading character here but use this place to unset
-            // wxPATH_GET_SEPARATOR flag: under VMS it doesn't make sense as,
-            // if I understand correctly, there should never be a dot before
-            // the closing bracket
-            flags &= ~wxPATH_GET_SEPARATOR;
-    }
-
-    // then concatenate all the path components using the path separator
-    size_t dirCount = m_dirs.GetCount();
+    const size_t dirCount = m_dirs.GetCount();
     if ( dirCount )
     {
+        // the leading character
+        switch ( format )
+        {
+            case wxPATH_MAC:
+                if ( m_relative )
+                    fullpath += wxFILE_SEP_PATH_MAC;
+                break;
+
+            case wxPATH_DOS:
+                if ( !m_relative )
+                    fullpath += wxFILE_SEP_PATH_DOS;
+                break;
+
+            default:
+                wxFAIL_MSG( wxT("Unknown path format") );
+                // fall through
+
+            case wxPATH_UNIX:
+                if ( !m_relative )
+                {
+                    // normally the absolute file names start with a slash
+                    // with one exception: the ones like "~/foo.bar" don't
+                    // have it
+                    if ( m_dirs[0u] != _T('~') )
+                    {
+                        fullpath += wxFILE_SEP_PATH_UNIX;
+                    }
+                }
+                break;
+
+            case wxPATH_VMS:
+                // no leading character here but use this place to unset
+                // wxPATH_GET_SEPARATOR flag: under VMS it doesn't make sense
+                // as, if I understand correctly, there should never be a dot
+                // before the closing bracket
+                flags &= ~wxPATH_GET_SEPARATOR;
+        }
+
+        // then concatenate all the path components using the path separator
         if ( format == wxPATH_VMS )
         {
             fullpath += wxT('[');
@@ -1318,6 +1344,12 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
         {
             fullpath += wxT(']');
         }
+    }
+    else // no directories
+    {
+        // still append path separator if requested
+        if ( flags & wxPATH_GET_SEPARATOR )
+            fullpath += GetPathSeparator(format);
     }
 
     return fullpath;
