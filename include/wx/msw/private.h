@@ -325,7 +325,8 @@ struct WinStruct : public T
     WinStruct()
     {
         ::ZeroMemory(this, sizeof(T));
-        // NB: gcc-3.4 would give syntax error without "this->"
+
+        // explicit qualification is required here for this to be valid C++
         this->cbSize = sizeof(T);
     }
 };
