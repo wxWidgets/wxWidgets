@@ -261,13 +261,21 @@ public :
 
 
     OSStatus SetParameter( EventParamName inName, EventParamType inType, UInt32 inSize, void * inData) ;
-    template <typename T> OSStatus SetParameter( EventParamName inName, EventParamType type , T *data )
+    template <typename T> OSStatus SetParameter( EventParamName inName, EventParamType inDesiredType , T *data )
     {
-        return SetParameter( inName, type , sizeof( T ) , data ) ;
+        return SetParameter( inName, inDesiredType , sizeof( T ) , data ) ;
+    }
+    template <typename T> OSStatus SetParameter( EventParamName inName, EventParamType inDesiredType , T data )
+    {
+        return SetParameter<T>( inName, inDesiredType , &data ) ;
     }
     template <typename T> OSStatus SetParameter( EventParamName inName, T *data )
     {
         return SetParameter<T>( inName, wxMacGetEventParamType<T>() , data ) ;
+    }
+    template <typename T> OSStatus SetParameter( EventParamName inName, T data )
+    {
+        return SetParameter<T>( inName, wxMacGetEventParamType<T>() , &data ) ;
     }
     
     EventKind GetKind()
