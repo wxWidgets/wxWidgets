@@ -79,7 +79,22 @@ dospinwxmotif()
 
   cp $WXDEST/wxmotif/release/*.tar.gz $WXDEST
   cp $WXDEST/wxmotif/release/*.tar.bz2 $WXDEST
-  mv $WXDEST/wxMOTIF-$WXVER.tar.gz $WXDEST/wxMotif-$WXVER.tar.gz
+
+  echo Rearchiving wxMotif tarballs to change wxMOTIF to wxMotif...
+  cd $WXDEST
+  mkdir wxMotif.tmp
+  cd wxMotif.tmp
+  rm -f -r *
+  tar xfz ../wxMOTIF-$WXVER.tar.gz
+  mv wxMOTIF-$WXVER wxMotif-$WXVER
+  rm -f ../wxMOTIF-$WXVER.tar.gz
+  rm -f ../wxMOTIF-$WXVER.tar.bz2
+  tar cf ../wxMotif-$WXVER.tar *
+  gzip -c ../wxMotif-$WXVER.tar > ../wxMotif-$WXVER.tar.gz
+  bzip2 -f9 ../wxMotif-$WXVER.tar
+  cd ..
+  rm -f -r wxMotif.tmp
+  rm -f -r $WXDEST/wxmotif
 }
 
 dospinwxmac()
@@ -105,7 +120,23 @@ dospinwxmac()
 
   cp $WXDEST/wxmac/release/*.tar.gz $WXDEST
   cp $WXDEST/wxmac/release/*.tar.bz2 $WXDEST
-  mv $WXDEST/wxMAC-$WXVER.tar.gz $WXDEST/wxMac-$WXVER.tar.gz
+
+  echo Rearchiving wxMac tarballs to change wxMAC to wxMAC...
+  cd $WXDEST
+  mkdir wxMac.tmp
+  cd wxMac.tmp
+  rm -f -r *
+  tar xfz ../wxMac-$WXVER.tar.gz
+  mv wxMAC-$WXVER wxMac-$WXVER
+  rm -f ../wxMAC-$WXVER.tar.gz
+  rm -f ../wxMAC-$WXVER.tar.bz2
+  tar cf ../wxMac-$WXVER.tar *
+  gzip -c ../wxMac-$WXVER.tar > ../wxMac-$WXVER.tar.gz
+  bzip2 -f9 ../wxMac-$WXVER.tar
+  cd ..
+  rm -f -r wxMac.tmp
+
+  rm -f -r $WXDEST/wxmac
 }
 
 docopydocs()
