@@ -182,7 +182,7 @@ and INSTALL (to point to the install script. If you omit this, configure
 might find something like the system's tcpip\pcomos\install.exe which will
 not do the thing you want), e.g.
 SET MAKESHELL=ash
-SET INSTALL=/wx/wxWindows-2.5.1/install-sh.
+SET INSTALL=/wx/wxWindows-2.5.1/install-sh -c
 
 Be warned that depending on the precise version of your make, the
 variable that needs to be set might be MAKE_SHELL instead of MAKESHELL.
