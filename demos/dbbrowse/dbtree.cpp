@@ -100,8 +100,10 @@ DBTree::~DBTree()
  (pDoc->db_Br+i_Which)->cl_BrowserDB = NULL;
  delete ct_BrowserDB;
  delete p_imageListNormal;
- delete popupMenu1;
- delete popupMenu2;
+ if (popupMenu1)       // If the DSN has no Tables, then no delete should be done !
+  delete popupMenu1;
+ if (popupMenu1)       // If the DSN has no Tables, then no delete should be done !
+  delete popupMenu2;
 }
 //----------------------------------------------------------------------------------------
 #undef TREE_EVENT_HANDLER
