@@ -2654,78 +2654,113 @@ bool wxWindow::OS2OnDrawItem(
 , WXDRAWITEMSTRUCT*                 pItemStruct
 )
 {
-    //
-    // I'll get to owner drawn stuff later
-    //
+    wxDC                            vDc;
 
     //
-    // is it a menu item or control?
+    // Is it a menu item?
     //
-    wxWindow*                       pItem = FindItem(vId);
+    if (vId == 0)
+    {
 
 #if wxUSE_OWNER_DRAWN
+        POWNERITEM                  pMeasureStruct = (POWNERITEM)pItemStruct;
+        wxMenuItem                  vMenuItem;
+        HDC                         hDC = ::GpiQueryDevice(pMeasureStruct->hps);
+
+        vDc.SetHDC( hDC
+                   ,FALSE
+                  );
+        vDc.SetHPS(pMeasureStruct->hps);
+
+        //
+        // We stored the CMenuItem itself into the menuitem text field so now
+        // we need to extract it.
+        //
+        ::WinSendMsg( pMeasureStruct->hItem
+                     ,MM_QUERYITEMTEXT
+                     ,MPFROM2SHORT( (USHORT)pMeasureStruct->idItem
+                                   ,(SHORT)(sizeof(wxMenuItem))
+                                  )
+                     ,(PSZ)&vMenuItem
+                    );
+
+        wxRect                      vRect( pMeasureStruct->rclItem.xLeft
+                                          ,pMeasureStruct->rclItem.yTop
+                                          ,pMeasureStruct->rclItem.xRight
+                                          ,pMeasureStruct->rclItem.yBottom
+                                         );
+
+        wxOwnerDrawn::wxODAction eAction;
+
+        //
+        // Attribute applies to menuitems, fsState to listbox and other controls
+        //
+        if (pMeasureStruct->fsAttribute == pMeasureStruct->fsAttributeOld)
+            eAction = wxOwnerDrawn::wxODDrawAll;
+        else
+            eAction = wxOwnerDrawn::wxODSelectChanged;
+
+        return(vMenuItem.OnDrawItem( vDc
+                                    ,vRect
+                                    ,eAction
+                                    ,(wxOwnerDrawn::wxODStatus)pMeasureStruct->fsAttribute
+                                   ));
+        //
+        // leave the fsAttribute and fsOldAttribute unchanged.  If different,
+        // the system will do the highlight or fraeming or disabling for us,
+        // otherwise, we'd have to do it ourselves.
+        //
+    }
+
+    wxWindow*                       pItem = FindItem(vId);
+
     if (pItem && pItem->IsKindOf(CLASSINFO(wxControl)))
     {
         return ((wxControl *)pItem)->OS2OnDraw(pItemStruct);
     }
-    else if (pItem && pItem->IsKindOf(CLASSINFO(wxMenu)))
-    {
-        /*
-        // TODO: draw a menu item
-        //
-        POWNERITEM                  pDrawStruct = (OWNERITEM *)pItemStruct;
-        wxMenuItem*                 pMenuItem = (wxMenuItem *)(pDrawStruct->pItemData);
-
-        wxCHECK(pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE);
-
-        //
-        // Prepare to call OnDrawItem()
-        //
-        HPSdc;
-        dc.SetHDC((WXHDC)pDrawStruct->hDC, FALSE);
-        wxRect rect(pDrawStruct->rcItem.left, pDrawStruct->rcItem.top,
-                    pDrawStruct->rcItem.right - pDrawStruct->rcItem.left,
-                    pDrawStruct->rcItem.bottom - pDrawStruct->rcItem.top);
-
-        return pMenuItem->OnDrawItem
-                          (
-                            dc, rect,
-                            (wxOwnerDrawn::wxODAction)pDrawStruct->itemAction,
-                            (wxOwnerDrawn::wxODStatus)pDrawStruct->itemState
-                          );
-        */
-    }
-
-    else
-        return FALSE;
 #endif
-    return TRUE;
+    return FALSE;
 } // end of wxWindow::OS2OnDrawItem
 
-bool wxWindow::OS2OnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
+bool wxWindow::OS2OnMeasureItem(
+  int                               lId
+, WXMEASUREITEMSTRUCT*              pItemStruct
+)
 {
-   // TODO: more owner drawn menu related stuff, get to it later
-/*
-#if wxUSE_OWNER_DRAWN
-    // is it a menu item?
-    if ( id == 0 )
+    //
+    // Is it a menu item?
+    //
+    if (lId == 0)
     {
-        MEASUREITEMSTRUCT *pMeasureStruct = (MEASUREITEMSTRUCT *)itemStruct;
-        wxMenuItem *pMenuItem = (wxMenuItem *)(pMeasureStruct->itemData);
+        POWNERITEM                  pMeasureStruct = (POWNERITEM)pItemStruct;
+        wxMenuItem                  vMenuItem;
 
-        wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
+        //
+        // We stored the CMenuItem itself into the menuitem text field so now
+        // we need to extract it.
+        //
+        ::WinSendMsg( pMeasureStruct->hItem
+                     ,MM_QUERYITEMTEXT
+                     ,MPFROM2SHORT( (USHORT)pMeasureStruct->idItem
+                                   ,(SHORT)(sizeof(wxMenuItem))
+                                  )
+                     ,(PSZ)&vMenuItem
+                    );
+        wxCHECK(vMenuItem.IsKindOf(CLASSINFO(wxMenuItem)), FALSE);
 
-        return pMenuItem->OnMeasureItem(&pMeasureStruct->itemWidth,
-                                        &pMeasureStruct->itemHeight);
+        size_t                      lWidth  = (size_t)(pMeasureStruct->rclItem.xRight - pMeasureStruct->rclItem.xLeft);
+        size_t                      lHeight = (size_t)(pMeasureStruct->rclItem.yTop - pMeasureStruct->rclItem.yBottom);
+
+        return(vMenuItem.OnMeasureItem( &lWidth
+                                       ,&lHeight
+                                      ));
     }
+    wxWindow*                      pItem = FindItem(id);
 
-    wxWindow *item = FindItem(id);
-    if ( item && item->IsKindOf(CLASSINFO(wxControl)) )
+    if (pItem && pItem->IsKindOf(CLASSINFO(wxControl)))
     {
-        return ((wxControl *)item)->MSWOnMeasure(itemStruct);
+        return ((wxControl *)pItem)->OS2OnMeasure(pItemStruct);
     }
-#endif  // owner-drawn menus
-*/
     return FALSE;
 }
 
