@@ -334,8 +334,6 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
     PostCreation(size);
 
-    SetFont( parent->GetFont() );
-
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
                             GTK_SIGNAL_FUNC(gtk_notebook_realized_callback), (gpointer) this );
 
@@ -685,7 +683,6 @@ bool wxNotebook::InsertPage( size_t position,
     if (nb_page->m_text.IsEmpty()) nb_page->m_text = wxT("");
 
     nb_page->m_label = GTK_LABEL( gtk_label_new(wxGTK_CONV(nb_page->m_text)) );
-	nb_page->SetFont(GetFont());
     gtk_box_pack_end( GTK_BOX(nb_page->m_box), GTK_WIDGET(nb_page->m_label), FALSE, FALSE, m_padding );
 
     /* show the label */
