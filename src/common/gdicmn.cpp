@@ -604,7 +604,8 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
                                      wxFontEncoding encoding)
 {
     wxFont *font = (wxFont *)NULL;
-    for ( wxNode * node = First(); node; node = node->Next() )
+    wxNode *node;
+    for ( node = First(); node; node = node->Next() )
     {
         font = (wxFont *)node->Data();
         if ( font->GetVisible() &&
@@ -685,31 +686,12 @@ wxSize wxGetDisplaySize()
 
 wxResourceCache::~wxResourceCache ()
 {
-  wxNode *node = First ();
-  while (node) {
-    wxGDIObject *item = (wxGDIObject *)node->Data();
-    if (item->IsKindOf(CLASSINFO(wxBrush))) {
-      wxBrush *brush = (wxBrush *)item;
-      delete brush;
-    }
+    wxNode *node = First ();
+    while (node) {
+        wxObject *item = (wxObject *)node->Data();
+        delete item;
 
-    if (item->IsKindOf(CLASSINFO(wxFont))) {
-      wxFont *font = (wxFont *)item;
-      delete font;
+        node = node->Next ();
     }
-
-    if (item->IsKindOf(CLASSINFO(wxBitmap))) {
-      wxBitmap *bitmap = (wxBitmap *)item;
-      delete bitmap;
-    }
-
-    if (item->IsKindOf(CLASSINFO(wxColour))) {
-      wxColour *colour = (wxColour *)item;
-      delete colour;
-    }
-
-    wxNode *next = node->Next ();
-    node = next;
-  }
 }
 
