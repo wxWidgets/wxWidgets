@@ -66,7 +66,8 @@ public:
                 const wxString& name = wxListBoxNameStr);
 
     virtual ~wxListBox();
-
+    virtual void Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL);
+    
     // implement base class pure virtuals
     virtual void Clear();
     virtual void Delete(int n);
