@@ -813,6 +813,8 @@ wxGetUserHome = miscc.wxGetUserHome
 
 wxGetProcessId = miscc.wxGetProcessId
 
+wxTrap = miscc.wxTrap
+
 def wxGetAccelFromString(*_args, **_kwargs):
     val = miscc.wxGetAccelFromString(*_args,**_kwargs)
     if val: val = wxAcceleratorEntryPtr(val)

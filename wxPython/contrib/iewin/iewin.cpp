@@ -967,9 +967,6 @@ SWIGEXPORT(void) initiewinc() {
 	 PyDict_SetItemString(d,"wxIEHTML_REFRESH_COMPLETELY", PyInt_FromLong((long) wxIEHTML_REFRESH_COMPLETELY));
 
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -324,8 +324,8 @@ class wxPythonDemo(wx.Frame):
         self.Centre(wx.BOTH)
         self.CreateStatusBar(1, wx.ST_SIZEGRIP)
 
-        splitter = wx.SplitterWindow(self, -1, style=wx.NO_3D|wx.SP_3D)
-        splitter2 = wx.SplitterWindow(splitter, -1, style=wx.NO_3D|wx.SP_3D)
+        splitter = wx.SplitterWindow(self, -1)
+        splitter2 = wx.SplitterWindow(splitter, -1)
 
         def EmptyHandler(evt): pass
         wx.EVT_ERASE_BACKGROUND(splitter, EmptyHandler)

@@ -1720,6 +1720,26 @@ public:
 
 //----------------------------------------------------------------------
 
+%{
+#ifdef __WXMSW__
+#include <wx/msw/private.h>
+#endif
+%}
+
+%inline %{
+
+void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc)
+{
+#ifdef __WXMSW__
+    ::SendMessage(GetHwndOf(window), WM_PAINT, (long)GetHdcOf(dc), 0);
+//     ::SendMessage(GetHwndOf(window), WM_PRINTCLIENT, (long)GetHdcOf(dc),
+//                   PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN );
+#endif
+}
+
+%}
+//----------------------------------------------------------------------
+
 
 %init %{
     wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");

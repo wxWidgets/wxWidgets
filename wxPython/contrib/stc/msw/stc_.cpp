@@ -13254,9 +13254,6 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxEVT_STC_CALLTIP_CLICK", PyInt_FromLong((long) wxEVT_STC_CALLTIP_CLICK));
 
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

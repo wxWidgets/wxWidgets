@@ -8670,9 +8670,6 @@ SWIGEXPORT(void) inithtmlc() {
 
     inithtmlhelpc();
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
     wxPyPtrTypeMap_Add("wxHtmlTagHandler", "wxPyHtmlTagHandler");
     wxPyPtrTypeMap_Add("wxHtmlWinTagHandler", "wxPyHtmlWinTagHandler");
     wxPyPtrTypeMap_Add("wxHtmlWindow", "wxPyHtmlWindow");

@@ -958,9 +958,6 @@ SWIGEXPORT(void) initglcanvasc() {
 	 PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_ALPHA", PyInt_FromLong((long) WX_GL_MIN_ACCUM_ALPHA));
 
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

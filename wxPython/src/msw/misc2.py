@@ -1311,6 +1311,8 @@ def wxWaveData(*_args, **_kwargs):
     if val: val = wxWavePtr(val); val.thisown = 1
     return val
 
+wxDrawWindowOnDC = misc2c.wxDrawWindowOnDC
+
 def wxSystemSettings_GetColour(*_args, **_kwargs):
     val = misc2c.wxSystemSettings_GetColour(*_args,**_kwargs)
     if val: val = wxColourPtr(val); val.thisown = 1

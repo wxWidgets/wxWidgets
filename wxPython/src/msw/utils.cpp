@@ -7860,9 +7860,6 @@ SWIGEXPORT(void) initutilsc() {
 	 PyDict_SetItemString(d,"wxCONFIG_USE_RELATIVE_PATH", PyInt_FromLong((long) wxCONFIG_USE_RELATIVE_PATH));
 	 PyDict_SetItemString(d,"wxCONFIG_USE_NO_ESCAPE_CHARACTERS", PyInt_FromLong((long) wxCONFIG_USE_NO_ESCAPE_CHARACTERS));
 
-    // These are no longer needed since utils is back in the core
-//      wxClassInfo::CleanUpClasses();
-//      wxClassInfo::InitializeClasses();
 	 PyDict_SetItemString(d,"wxConfigBase_Type_Unknown", PyInt_FromLong((long) wxConfigBase::Type_Unknown));
 	 PyDict_SetItemString(d,"wxConfigBase_Type_String", PyInt_FromLong((long) wxConfigBase::Type_String));
 	 PyDict_SetItemString(d,"wxConfigBase_Type_Boolean", PyInt_FromLong((long) wxConfigBase::Type_Boolean));

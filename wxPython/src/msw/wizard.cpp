@@ -2389,8 +2389,6 @@ SWIGEXPORT(void) initwizardc() {
 	 PyDict_SetItemString(d,"wxEVT_WIZARD_HELP", PyInt_FromLong((long) wxEVT_WIZARD_HELP));
 	 PyDict_SetItemString(d,"wxEVT_WIZARD_FINISHED", PyInt_FromLong((long) wxEVT_WIZARD_FINISHED));
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
