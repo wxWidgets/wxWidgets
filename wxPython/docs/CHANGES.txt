@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.5.1.4
+2.5.1.5
 -------
 
 (See also the MigrationGuide_ file for details about some of the
