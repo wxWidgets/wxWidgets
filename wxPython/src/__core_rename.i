@@ -574,7 +574,6 @@
 %rename(WakeUpIdle)                         wxWakeUpIdle;
 %rename(PostEvent)                          wxPostEvent;
 %rename(App_CleanUp)                        wxApp_CleanUp;
-%rename(GetApp)                             wxGetApp;
 %rename(AcceleratorEntry)                   wxAcceleratorEntry;
 %rename(AcceleratorTable)                   wxAcceleratorTable;
 %rename(NullAcceleratorTable)               wxNullAcceleratorTable;

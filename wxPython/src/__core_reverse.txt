@@ -2,6 +2,7 @@
 
 PyOnDemandOutputWindow
 App
+GetApp
 PySimpleApp
 PyWidgetTester
 

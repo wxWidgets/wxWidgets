@@ -334,13 +334,14 @@ Python shuts down.", "");
 %} 
 
 
-DocStr(wxGetApp,
-       "Return a reference to the current wx.App object.", "");
-%inline %{
-    wxPyApp* wxGetApp() {
-        return (wxPyApp*)wxTheApp;
-    }
+DocDeclStrName(
+    wxPyApp* , wxPyGetApp(),
+    "Return a reference to the current wx.App object.", "",
+    GetApp);
+%{
+    wxPyApp* wxPyGetApp() { return (wxPyApp*)wxTheApp; }
 %}
+
 
 
 //---------------------------------------------------------------------------

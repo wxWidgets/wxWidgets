@@ -1042,6 +1042,7 @@ wxLayoutConstraints = wx._core.LayoutConstraints
 wxLayoutConstraintsPtr = wx._core.LayoutConstraintsPtr
 wxPyOnDemandOutputWindow = wx._core.PyOnDemandOutputWindow
 wxApp = wx._core.App
+wxGetApp = wx._core.GetApp
 wxPySimpleApp = wx._core.PySimpleApp
 wxPyWidgetTester = wx._core.PyWidgetTester
 wxApp_GetMacSupportPCMenuShortcuts = wx._core.App_GetMacSupportPCMenuShortcuts
