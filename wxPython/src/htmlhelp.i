@@ -131,7 +131,7 @@ public:
     wxString FindPageByName(const wxString& page);
     wxString FindPageById(int id);
 
-    // **** this one needs fixed...
+    // TODO: this one needs fixed...
     const wxHtmlBookRecArray& GetBookRecArray();
 
     wxHtmlContentsItem* GetContents();
@@ -163,9 +163,23 @@ public:
 
 //---------------------------------------------------------------------------
 
+
+enum {
+    wxHF_TOOLBAR,
+    wxHF_FLATTOOLBAR,
+    wxHF_CONTENTS,
+    wxHF_INDEX,
+    wxHF_SEARCH,
+    wxHF_BOOKMARKS,
+    wxHF_OPENFILES,
+    wxHF_PRINT,
+    wxHF_DEFAULTSTYLE,
+};
+
+
 class wxHtmlHelpController : public wxEvtHandler {
 public:
-    wxHtmlHelpController();
+    wxHtmlHelpController(int style = wxHF_DEFAULTSTYLE);
     ~wxHtmlHelpController();
 
     void SetTitleFormat(const wxString& format);
