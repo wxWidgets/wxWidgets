@@ -774,8 +774,8 @@ void wxDB::Close(void)
 		tiu = (CstructTablesInUse *)pNode->Data();
 		if (tiu->pDb == this)
 		{
-			sprintf(s, "(%-20s)     tableID:[%6lu]     pDb:[%lu]", tiu->tableName,tiu->tableID,tiu->pDb);
-			sprintf(s2,"Orphaned found using pDb:[%lu]",this);
+			sprintf(s, "(%-20s)     tableID:[%6lu]     pDb:[%p]", tiu->tableName,tiu->tableID,tiu->pDb);
+			sprintf(s2,"Orphaned found using pDb:[%p]",this);
 			wxMessageBox (s,s2);
 		}
 		pNode = pNode->Next();
