@@ -9,6 +9,7 @@
 
 #include "wx/gtk/win_gtk.h"
 #include "gtk/gtksignal.h"
+#include "gtk/gtknotebook.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -450,7 +451,9 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
  
       /* please look at the text in wxWindow::DoSetSize() on why the
          test GTK_WIDGET_REALIZED() has to be here */
-      if (GTK_WIDGET_VISIBLE (child->widget) && GTK_WIDGET_REALIZED(child->widget) )
+      if (GTK_WIDGET_VISIBLE (child->widget) && 
+         !(!GTK_WIDGET_REALIZED(child->widget) &&
+	    GTK_IS_NOTEBOOK(child->widget) ))
 	{
 	  child_allocation.x = child->x;
 	  child_allocation.y = child->y;
