@@ -122,6 +122,15 @@ wxString wxFontBase::GetNativeFontInfoDesc() const
     return fontDesc;
 }
 
+void wxFontBase::SetNativeFontInfo(const wxString& info)
+{
+    wxNativeFontInfo fontInfo;
+    if ( !info.empty() && fontInfo.FromString(info) )
+    {
+        SetNativeFontInfo(fontInfo);
+    }
+}
+
 wxFont& wxFont::operator=(const wxFont& font)
 {
     if ( this != &font )
