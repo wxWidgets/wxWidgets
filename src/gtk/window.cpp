@@ -3428,7 +3428,8 @@ int wxWindowGTK::GetCharHeight() const
 {
     wxCHECK_MSG( (m_widget != NULL), 12, wxT("invalid window") );
 
-    wxCHECK_MSG( m_font.Ok(), 12, wxT("invalid font") );
+    wxFont font = GetFont();
+    wxCHECK_MSG( font.Ok(), 12, wxT("invalid font") );
 
 #ifdef __WXGTK20__
     PangoContext *context = NULL;
@@ -3438,7 +3439,7 @@ int wxWindowGTK::GetCharHeight() const
     if (!context)
         return 0;
 
-    PangoFontDescription *desc = m_font.GetNativeFontInfo()->description;
+    PangoFontDescription *desc = font.GetNativeFontInfo()->description;
     PangoLayout *layout = pango_layout_new(context);
     pango_layout_set_font_description(layout, desc);
     pango_layout_set_text(layout, "H", 1);
@@ -3451,9 +3452,9 @@ int wxWindowGTK::GetCharHeight() const
 
     return (int) (rect.height / PANGO_SCALE);
 #else
-    GdkFont *font = m_font.GetInternalFont( 1.0 );
+    GdkFont *gfont = font.GetInternalFont( 1.0 );
 
-    return font->ascent + font->descent;
+    return gfont->ascent + gfont->descent;
 #endif
 }
 
@@ -3461,7 +3462,8 @@ int wxWindowGTK::GetCharWidth() const
 {
     wxCHECK_MSG( (m_widget != NULL), 8, wxT("invalid window") );
 
-    wxCHECK_MSG( m_font.Ok(), 8, wxT("invalid font") );
+    wxFont font = GetFont();
+    wxCHECK_MSG( font.Ok(), 8, wxT("invalid font") );
 
 #ifdef __WXGTK20__
     PangoContext *context = NULL;
@@ -3471,7 +3473,7 @@ int wxWindowGTK::GetCharWidth() const
     if (!context)
         return 0;
 
-    PangoFontDescription *desc = m_font.GetNativeFontInfo()->description;
+    PangoFontDescription *desc = font.GetNativeFontInfo()->description;
     PangoLayout *layout = pango_layout_new(context);
     pango_layout_set_font_description(layout, desc);
     pango_layout_set_text(layout, "g", 1);
@@ -3484,9 +3486,9 @@ int wxWindowGTK::GetCharWidth() const
 
     return (int) (rect.width / PANGO_SCALE);
 #else
-    GdkFont *font = m_font.GetInternalFont( 1.0 );
+    GdkFont *gfont = font.GetInternalFont( 1.0 );
 
-    return gdk_string_width( font, "g" );
+    return gdk_string_width( gfont, "g" );
 #endif
 }
 
@@ -3497,8 +3499,7 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
                               int *externalLeading,
                               const wxFont *theFont ) const
 {
-    wxFont fontToUse = m_font;
-    if (theFont) fontToUse = *theFont;
+    wxFont fontToUse = theFont ? *theFont : GetFont();
 
     wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
 
