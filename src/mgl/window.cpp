@@ -29,6 +29,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
+    #include "wx/msgdlg.h"
     #include "wx/accel.h"
     #include "wx/setup.h"
     #include "wx/dc.h"
@@ -99,20 +100,28 @@ static wxWindowMGL* wxGetTopLevelParent(wxWindowMGL *win)
     return p;
 }
 
-#ifdef __WXDEBUG__
-// Add an easy way to capture screenshots:
-static void CaptureScreenshot()
+// An easy way to capture screenshots:
+static void wxCaptureScreenshot()
 {
-    wxBusyCursor bcur;
-    
+#ifdef __DOS__
+    #define SCREENSHOT_FILENAME _T("sshot%03i.png")
+#else
+    #define SCREENSHOT_FILENAME _T("screenshot-%03i.png")
+#endif
     static int screenshot_num = 0;
-    char screenshot[128];
-    sprintf(screenshot, "screenshot-%03i.png", screenshot_num++);
-    g_displayDC->savePNGFromDC(screenshot, 0, 0, 
+    wxString screenshot;
+    
+    do 
+    {
+        screenshot.Printf(SCREENSHOT_FILENAME, screenshot_num++);
+    } while ( wxFileExists(screenshot) && screenshot_num < 1000 );
+    
+    g_displayDC->savePNGFromDC(screenshot.mb_str(), 0, 0, 
                                g_displayDC->sizex(), 
                                g_displayDC->sizey());
+    
+    wxMessageBox(_("Screenshot captured: ") + wxString(screenshot));
 }
-#endif
 
 // ---------------------------------------------------------------------------
 // MGL_WM hooks:
@@ -399,6 +408,30 @@ static long wxScanToKeyCode(event_t *event, bool translate)
     return key;
 }
 
+static bool wxHandleSpecialKeys(wxKeyEvent& event)
+{
+    // Add an easy way to capture screenshots:
+    if ( event.m_keyCode == WXK_SNAPSHOT
+    #ifdef __WXDEBUG__ // FIXME_MGL - remove when KB_sysReq works in MGL!
+         || (event.m_keyCode == WXK_F1 && 
+            event.m_shiftDown && event.m_controlDown) 
+       )
+    #endif
+    {
+        wxCaptureScreenshot();
+        return TRUE;
+    }
+
+    if ( event.m_keyCode == WXK_F4 && event.m_altDown &&
+         gs_activeFrame != NULL )
+    {
+        gs_activeFrame->Close();
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
 static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
 {
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
@@ -436,35 +469,9 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
     
         ret = win->GetEventHandler()->ProcessEvent(event);
 
-
-#ifdef __WXDEBUG__
-        // Add an easy way to capture screenshots:
-        if ( event.m_keyCode == WXK_F1 && 
-             event.m_shiftDown && event.m_controlDown )
-            CaptureScreenshot();
-#endif
-
-#if wxUSE_ACCEL
-        if ( !ret )
-        {
-            for (wxWindowMGL *w = win; w; w = w->GetParent())
-            {
-                int command = w->GetAcceleratorTable()->GetCommand(event);
-                if ( command != -1 )
-                {
-                    wxCommandEvent eventc(wxEVT_COMMAND_MENU_SELECTED, command);
-                    ret = w->GetEventHandler()->ProcessEvent(eventc);
-                    break;
-                }
-                if ( w->IsTopLevel() )
-                    break;
-            }
-        }
-#endif // wxUSE_ACCEL
-
         // wxMSW doesn't send char events with Alt pressed
         // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
-        // will only be sent if it is not in an accelerator table.
+        // will only be sent if it is not in an accelerator table:
         event2.m_keyCode = wxScanToKeyCode(e, FALSE);
         if ( !ret && event2.m_keyCode != 0 )
         {
@@ -473,7 +480,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
         }
         
         // Synthetize navigation key event, but do it only if the TAB key
-        // wasn't handled yet.
+        // wasn't handled yet:
         if ( !ret && event.m_keyCode == WXK_TAB &&
              win->GetParent() && win->GetParent()->HasFlag(wxTAB_TRAVERSAL) )
         {
@@ -487,6 +494,11 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
             ret = win->GetParent()->GetEventHandler()->ProcessEvent(navEvent);
         }
         
+        // Finally, process special meaning keys that are usually 
+        // a responsibility of OS or window manager:
+        if ( !ret )
+            ret = wxHandleSpecialKeys(event);
+        
         return ret;
     }
 }
@@ -499,6 +511,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
 IMPLEMENT_ABSTRACT_CLASS(wxWindowMGL, wxWindowBase)
 
 BEGIN_EVENT_TABLE(wxWindowMGL, wxWindowBase)
+    EVT_IDLE(wxWindowMGL::OnIdle)
 END_EVENT_TABLE()
 
 // ===========================================================================
@@ -1204,4 +1217,14 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     window_t *wnd = MGL_wmGetWindowAtPosition(g_winMng, pt.x, pt.y);
     return (wxWindow*)wnd->userData;
+}
+
+
+// ---------------------------------------------------------------------------
+// idle events processing
+// ---------------------------------------------------------------------------
+
+void wxWindowMGL::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+    UpdateWindowUI();
 }
