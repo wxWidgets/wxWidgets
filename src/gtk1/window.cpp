@@ -2014,11 +2014,17 @@ wxWindow *wxWindowBase::FindFocus()
 // "destroy" event
 //-----------------------------------------------------------------------------
 
+// VZ: Robert commented the code using out so it generates warnings: should
+//     be either fixed or removed completely
+#if 0
+
 static void gtk_window_destroy_callback( GtkWidget* widget, wxWindow *win )
 {
     wxWindowDestroyEvent event(win);
     win->GetEventHandler()->ProcessEvent(event);
 }
+
+#endif // 0
 
 //-----------------------------------------------------------------------------
 // "realize" from m_widget
