@@ -1696,6 +1696,21 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
                 (const wxChar*) facename,
                 attr.GetTextColour().Red(), attr.GetTextColour().Green(), attr.GetTextColour().Blue(),
                 (const wxChar*) alignment);
+
+            if (attr.HasFont())
+            {
+                if (attr.GetFont().GetWeight() == wxBOLD)
+                    msg += wxT(" BOLD");
+                else if (attr.GetFont().GetWeight() == wxNORMAL)
+                    msg += wxT(" NORMAL");
+
+                if (attr.GetFont().GetStyle() == wxITALIC)
+                    msg += wxT(" ITALIC");
+
+                if (attr.GetFont().GetUnderlined())
+                    msg += wxT(" UNDERLINED");
+            }
+
             SetStatusText(msg);
         }
 #endif // wxUSE_STATUSBAR

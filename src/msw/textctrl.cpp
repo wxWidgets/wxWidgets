@@ -2496,6 +2496,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     (void) ::SendMessage(GetHwnd(), EM_GETCHARFORMAT,
                             SCF_SELECTION, (LPARAM)&cf) ;
 
+
     LOGFONT lf;
     lf.lfHeight = cf.yHeight;
     lf.lfWidth = 0;
@@ -2503,17 +2504,32 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     lf.lfClipPrecision = 0;
     lf.lfEscapement = 0;
     wxStrcpy(lf.lfFaceName, cf.szFaceName);
+
+    //NOTE:  we _MUST_ set each of these values to _something_ since we
+    //do not call wxZeroMemory on the LOGFONT lf 
     if (cf.dwEffects & CFE_ITALIC)
         lf.lfItalic = TRUE;
+    else
+        lf.lfItalic = FALSE;
+
     lf.lfOrientation = 0;
     lf.lfPitchAndFamily = cf.bPitchAndFamily;
     lf.lfQuality = 0;
+
     if (cf.dwEffects & CFE_STRIKEOUT)
         lf.lfStrikeOut = TRUE;
+    else
+        lf.lfStrikeOut = FALSE;
+
     if (cf.dwEffects & CFE_UNDERLINE)
         lf.lfUnderline = TRUE;
+    else
+        lf.lfUnderline = FALSE;
+
     if (cf.dwEffects & CFE_BOLD)
         lf.lfWeight = FW_BOLD;
+    else
+        lf.lfWeight = FW_NORMAL;
 
     wxFont font = wxCreateFontFromLogFont(& lf);
     if (font.Ok())
