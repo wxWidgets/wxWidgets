@@ -3792,6 +3792,36 @@ static PyObject *_wrap_wxHtmlContainerCell_SetBackgroundColour(PyObject *self, P
     return _resultobj;
 }
 
+#define wxHtmlContainerCell_GetBackgroundColour(_swigobj)  (_swigobj->GetBackgroundColour())
+static PyObject *_wrap_wxHtmlContainerCell_GetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxHtmlContainerCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContainerCell_GetBackgroundColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContainerCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContainerCell_GetBackgroundColour. Expected _wxHtmlContainerCell_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxHtmlContainerCell_GetBackgroundColour(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxHtmlContainerCell_SetBorder(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetBorder(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxHtmlContainerCell_SetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4023,6 +4053,14 @@ static PyObject *_wrap_new_wxHtmlWidgetCell(PyObject *self, PyObject *args, PyOb
         _resultobj = Py_None;
     }
     return _resultobj;
+}
+
+static void *SwigwxPyHtmlFilterTowxObject(void *ptr) {
+    wxPyHtmlFilter *src;
+    wxObject *dest;
+    src = (wxPyHtmlFilter *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 #define new_wxHtmlFilter() (new wxPyHtmlFilter())
@@ -6405,6 +6443,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "new_wxHtmlColourCell", (PyCFunction) _wrap_new_wxHtmlColourCell, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_GetFirstCell", (PyCFunction) _wrap_wxHtmlContainerCell_GetFirstCell, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_SetBorder", (PyCFunction) _wrap_wxHtmlContainerCell_SetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlContainerCell_GetBackgroundColour", (PyCFunction) _wrap_wxHtmlContainerCell_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_SetBackgroundColour", (PyCFunction) _wrap_wxHtmlContainerCell_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_SetMinHeight", (PyCFunction) _wrap_wxHtmlContainerCell_SetMinHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_SetWidthFloatFromTag", (PyCFunction) _wrap_wxHtmlContainerCell_SetWidthFloatFromTag, METH_VARARGS | METH_KEYWORDS },
@@ -6575,6 +6614,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxHtmlPrintout",SwigwxHtmlPrintoutTowxObject},
     { "_wxObject","_wxHtmlDCRenderer",SwigwxHtmlDCRendererTowxObject},
     { "_wxObject","_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxObject},
+    { "_wxObject","_wxPyHtmlFilter",SwigwxPyHtmlFilterTowxObject},
     { "_wxObject","_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxObject},
     { "_wxObject","_wxHtmlFontCell",SwigwxHtmlFontCellTowxObject},
     { "_wxObject","_wxHtmlColourCell",SwigwxHtmlColourCellTowxObject},
