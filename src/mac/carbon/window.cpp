@@ -44,9 +44,6 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
-#define wxWINDOW_HSCROLL 5998
-#define wxWINDOW_VSCROLL 5997
-
 #define MAC_SCROLLBAR_SIZE 15
 #define MAC_SMALL_SCROLLBAR_SIZE 11
 
@@ -2972,13 +2969,13 @@ void wxWindowMac::MacCreateScrollBars( long style )
 
         if ( style & wxVSCROLL )
         {
-            m_vScrollBar = new wxScrollBar(this, wxWINDOW_VSCROLL, vPoint,
+            m_vScrollBar = new wxScrollBar(this, wxID_ANY, vPoint,
                 vSize , wxVERTICAL);
         }
 
         if ( style  & wxHSCROLL )
         {
-            m_hScrollBar = new wxScrollBar(this, wxWINDOW_HSCROLL, hPoint,
+            m_hScrollBar = new wxScrollBar(this, wxID_ANY, hPoint,
                 hSize , wxHORIZONTAL);
         }
     }
