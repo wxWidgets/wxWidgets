@@ -99,7 +99,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="GTK MAC MGL MICROWIN MOTIF MSW PM WINE X11"
+ALL_TOOLKITS="GTK MAC MGL MICROWIN MOTIF MSW PM X11"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -110,7 +110,6 @@ DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_PM=0
-DEFAULT_wxUSE_WINE=0
 DEFAULT_wxUSE_X11=0
 
 dnl these are the values which are really default for the given platform -
@@ -123,7 +122,6 @@ DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_PM=0
-DEFAULT_DEFAULT_wxUSE_WINE=0
 DEFAULT_DEFAULT_wxUSE_X11=0
 
 PROGRAM_EXT=
@@ -686,7 +684,7 @@ WX_ARG_ENABLE(universal,   [  --enable-universal      use wxWindows GUI controls
 AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC="$withval" TOOLKIT_GIVEN=1])
-AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$withval" CACHE_WINE=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" wxUSE_UNIVERSAL="yes" CACHE_MGL=1 TOOLKIT_GIVEN=1])
@@ -1064,6 +1062,13 @@ dnl we have a default one
 
 AC_MSG_CHECKING(for toolkit)
 
+# In Wine, we need to default to MSW, not GTK or MOTIF
+if test "$wxUSE_WINE" = "yes"; then
+    DEFAULT_DEFAULT_wxUSE_GTK=0
+    DEFAULT_DEFAULT_wxUSE_MOTIF=0
+    DEFAULT_DEFAULT_wxUSE_MSW=1
+fi
+
 if test "$wxUSE_GUI" = "yes"; then
 
     if test "$USE_BEOS" = 1; then
@@ -1092,7 +1097,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MAC:-0}  \
-                  + ${wxUSE_WINE:-0} + ${wxUSE_MSW:-0} + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0} + ${wxUSE_X11:-0}`
+                  + ${wxUSE_MSW:-0} + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0} + ${wxUSE_X11:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
     case "${host}" in
@@ -1149,6 +1154,17 @@ case "${host}" in
       wants_win32=1
   ;;
 esac
+
+dnl ---------------------------------------------------------------------------
+dnl Wine is a virtual platform, we need to patch things up a bit
+dnl ---------------------------------------------------------------------------
+if test "$wxUSE_WINE" = "yes"; then
+    wants_win32=1
+    dnl FIXME: we should do a better job of testing for these
+    CC=winegcc
+    CXX=wineg++
+    RESCOMP=wrc
+fi
 
 dnl NB: The two tests bellow are *NOT* mutually exclusive! They should only
 dnl     take effect on Cygwin/Mingw and not other platforms.
@@ -1735,10 +1751,13 @@ if test "$wxUSE_ZLIB" != "no" ; then
                     ],
                     ac_cv_header_zlib_h=`cat conftestval`,
                     ac_cv_header_zlib_h=no,
-                    dnl cross-compiling: test if we have any zlib.h
-                    AC_CHECK_HEADER(zlib.h)
+                    dnl cross-compiling: don't have an answer, try later
+                    unset ac_cv_header_zlib_h
                 )
             )
+            dnl If the test above did not come up with a value (e.g. cross
+            dnl compiling) then this should give a definitive answer
+            AC_CHECK_HEADER(zlib.h)
 
             system_zlib_h_ok=$ac_cv_header_zlib_h
         fi
@@ -1810,10 +1829,11 @@ if test "$wxUSE_LIBPNG" != "no" ; then
                     ],
                     ac_cv_header_png_h=`cat conftestval`,
                     ac_cv_header_png_h=no,
-                    dnl cross-compiling: test if we have any png.h
-                    AC_CHECK_HEADER(png.h)
+                    dnl cross-compiling: test (later) if we have any png.h
+                    unset ac_cv_header_png_h
                 )
             )
+            AC_CHECK_HEADER(png.h)
 
             if test "$ac_cv_header_png_h" = "yes"; then
                 AC_CHECK_LIB(png, png_check_sig, PNG_LINK=" -lpng", , [-lz -lm])
@@ -2033,12 +2053,8 @@ if test "$wxUSE_GUI" = "yes"; then
         GUIDIST=MSW_DIST
 
         dnl -mwindows causes a heap of other default gui libs to be linked in.
-        dnl FIXME: If cygwin needs this, please push it above, if not, please
-        dnl        remove this comment :-)
-        case "${host}" in
-            *-*-mingw32* )
-                LDFLAGS="$LDFLAGS -Wl,--subsystem,windows -mwindows"
-        esac
+        dnl All platforms need this, except maybe cygwin
+        LDFLAGS="$LDFLAGS -Wl,--subsystem,windows -mwindows"
     fi
 
     if test "$wxUSE_GTK" = 1; then
@@ -2321,44 +2337,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLKIT_VPATH="\${top_srcdir}/src/x11"
         TOOLKIT=X11
         GUIDIST=X11_DIST
-    fi
-
-    if test "$wxUSE_WINE" = 1; then
-        AC_CHECK_HEADER(windows.h, [],
-        [
-            AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
-        ])
-
-        xpm_link=
-        AC_MSG_CHECKING(for Xpm library)
-        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
-        if test "$ac_find_libraries" != "" ; then
-            GUI_TK_LIBRARY="-L$ac_find_libraries"
-            xpm_link=" -lXpm"
-            AC_DEFINE(wxHAVE_LIB_XPM)
-            AC_MSG_RESULT(found at $ac_find_libraries)
-        else
-            AC_MSG_RESULT(no)
-            AC_MSG_WARN(library will be compiled without support for images in XPM format)
-        fi
-
-        mesa_link=
-        AC_MSG_CHECKING(for Mesa library)
-        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,MesaGL)
-        if test "$ac_find_libraries" != "" ; then
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -L$ac_find_libraries"
-            mesa_link=" -lMesaGL"
-            AC_MSG_RESULT(found at $ac_find_libraries)
-        else
-            mesa_link=""
-            AC_MSG_RESULT(no)
-            AC_MSG_WARN(library will be compiled without Mesa support)
-        fi
-
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwine$mesa_link$xpm_link -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
-        TOOLKIT=MSW
-        GUIDIST=MSW_DIST
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WINE__"
     fi
 
     if test "$wxUSE_MOTIF" = 1; then
@@ -3475,10 +3453,7 @@ if test "$TOOLKIT" != "MSW"; then
     THREADS_CFLAGS=
 
     if test "$wxUSE_THREADS" = "yes" ; then
-        if test "$wxUSE_WINE" = 1 ; then
-            AC_MSG_WARN([Threads are not supported under WINE... disabled])
-            wxUSE_THREADS="no"
-        elif test "$USE_BEOS" = 1; then
+        if test "$USE_BEOS" = 1; then
             AC_MSG_WARN([BeOS threads are not yet supported... disabled])
             wxUSE_THREADS="no"
         fi
@@ -4594,50 +4569,6 @@ if test "$wxUSE_MSW" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
     fi
 fi
 
-if test "$wxUSE_WINE" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
-                          -o "$wxUSE_CLIPBOARD"     = "yes" \
-                          -o "$wxUSE_OLE"     = "yes" \
-                          -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
-    AC_CHECK_HEADERS(ole2.h)
-
-    if test "$ac_cv_header_ole2_h" = "yes" ; then
-        if test "$GCC" = yes ; then
-            AC_LANG_SAVE
-            AC_LANG_CPLUSPLUS
-
-            AC_MSG_CHECKING([if g++ requires -fvtable-thunks])
-            AC_TRY_COMPILE([#include <windows.h>
-                            #include <ole2.h>],
-                           [],
-                           [AC_MSG_RESULT(no)],
-                           [AC_MSG_RESULT(yes)
-                            CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"])
-            AC_LANG_RESTORE
-            ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
-            LIBS=" -lwine_uuid$LIBS"
-            AC_DEFINE(wxUSE_OLE)
-
-        fi
-
-        dnl for OLE clipboard and dnd
-        AC_DEFINE(wxUSE_DATAOBJ)
-    else
-        AC_MSG_WARN([Some features disabled because OLE headers not found])
-
-        wxUSE_CLIPBOARD=no
-        wxUSE_DRAG_AND_DROP=no
-        wxUSE_DATAOBJ=no
-        wxUSE_OLE=no
-    fi
-
-    if test "$wxUSE_METAFILE" = "yes"; then
-        AC_DEFINE(wxUSE_METAFILE)
-
-        dnl this one should probably be made separately configurable
-        AC_DEFINE(wxUSE_ENH_METAFILE)
-    fi
-fi
-
 if test "$wxUSE_IPC" = "yes"; then
     if test "$wxUSE_SOCKETS" != "yes"; then
         AC_MSG_WARN(wxWindows IPC classes require sockets... disabled)
@@ -4857,12 +4788,8 @@ if test "$wxUSE_STATTEXT" = "yes"; then
 fi
 
 if test "$wxUSE_STATLINE" = "yes"; then
-    if test "$wxUSE_WINE" = 1 ; then
-        AC_MSG_WARN([wxStaticLine is not supported under WINE])
-    else
-        AC_DEFINE(wxUSE_STATLINE)
-        USES_CONTROLS=1
-    fi
+    AC_DEFINE(wxUSE_STATLINE)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_STATUSBAR" = "yes"; then
@@ -4926,14 +4853,10 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
     if test "$wxUSE_MOTIF" = 1; then
         AC_MSG_WARN([wxTooltip not supported yet under Motif... disabled])
     else
-        if test "$wxUSE_WINE" = 1; then
-            AC_MSG_WARN([wxTooltip not supported under WINE... disabled])
+        if test "$wxUSE_UNIVERSAL" = "yes"; then
+            AC_MSG_WARN([wxTooltip not supported yet in wxUniversal... disabled])
         else
-            if test "$wxUSE_UNIVERSAL" = "yes"; then
-                AC_MSG_WARN([wxTooltip not supported yet in wxUniversal... disabled])
-            else
-                AC_DEFINE(wxUSE_TOOLTIPS)
-            fi
+            AC_DEFINE(wxUSE_TOOLTIPS)
         fi
     fi
 fi
