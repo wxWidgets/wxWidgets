@@ -85,6 +85,7 @@ the corresponding topic.
 \helpref{wxFindWindowByLabel}{wxfindwindowbylabel}\\
 \helpref{wxFindWindowByName}{wxfindwindowbyname}\\
 \helpref{wxGetActiveWindow}{wxgetactivewindow}\\
+\helpref{wxGetApp}{wxgetapp}\\
 \helpref{wxGetClipboardData}{wxgetclipboarddata}\\
 \helpref{wxGetClipboardFormatName}{wxgetclipboardformatname}\\
 \helpref{wxGetColourFromUser}{wxgetcolourfromuser}\\
@@ -342,6 +343,21 @@ int CTheApp::ExitInstance()
 \wxheading{Include files}
 
 <wx/app.h>
+
+
+\membersection{::wxGetApp}\label{wxgetapp}
+
+\func{wxAppDerivedClass\&}{wxGetApp}{\void}
+
+This function doesn't exist in wxWindows but it is created by using
+the \helpref{IMPLEMENT\_APP}{implementapp} macro. Thus, before using it
+anywhere but in the same module where this macro is used, you must make it
+available using \helpref{DECLARE\_APP}{declareapp}.
+
+The advantage of using this function compared to directly using the global
+wxTheApp pointer is that the latter is of type {\tt wxApp *} and so wouldn't
+allow you to access the functions specific to your application class but not
+present in wxApp while wxGetApp() returns the object of the right type.
 
 \membersection{::wxHandleFatalExceptions}\label{wxhandlefatalexceptions}
 
@@ -2690,8 +2706,10 @@ class wxCommand: public wxObject
 
 \func{}{DECLARE\_APP}{className}
 
-This is used in headers to create a forward declaration of the wxGetApp function implemented
-by IMPLEMENT\_APP. It creates the declaration {\tt className\& wxGetApp(void)}.
+This is used in headers to create a forward declaration of the 
+\helpref{wxGetApp}{wxgetapp} function implemented by 
+\helpref{IMPLEMENT\_APP}{implementapp}. It creates the declaration 
+{\tt className\& wxGetApp(void)}.
 
 Example:
 
