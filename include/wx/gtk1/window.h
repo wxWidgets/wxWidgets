@@ -152,12 +152,8 @@ public:
 
   virtual bool IsShown() const;
 
-  // Raise the window to the top of the Z order
-  virtual void Raise(void) {};
-
-  // Lower the window to the bottom of the Z order
-  virtual void Lower(void) {};
-
+  virtual void Raise(void);
+  virtual void Lower(void);
 
   virtual bool IsRetained();
   virtual wxWindow *FindWindow( long id );

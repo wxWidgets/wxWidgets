@@ -82,7 +82,7 @@ void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gd
   win->ProcessEvent( event );
   
   win->m_updateRegion.Clear();
-};
+}
 
 //-----------------------------------------------------------------------------
 // draw (of m_wxwindow, not of m_widget)
@@ -114,7 +114,7 @@ void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, 
   win->ProcessEvent( event );
   
   win->m_updateRegion.Clear();
-};
+}
 
 //-----------------------------------------------------------------------------
 // size 
@@ -136,7 +136,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc
       (win->m_height == alloc->height))
   {
     return;
-  };
+  }
   
   printf( "OnResize from " );
   if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -154,7 +154,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc
   wxSizeEvent event( wxSize( alloc->width, alloc->height), win->GetId() );
   event.SetEventObject( win );
   win->ProcessEvent( event );
-};
+}
 */
 
 //-----------------------------------------------------------------------------
@@ -247,8 +247,8 @@ gint gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget), GdkEventKey *gd
     {
       if ((gdk_event->keyval >= 0x20) && (gdk_event->keyval <= 0xFF)) 
         key_code = gdk_event->keyval;
-    };
-  };
+    }
+  }
 
   if (!key_code) return FALSE;
   
@@ -267,7 +267,7 @@ gint gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget), GdkEventKey *gd
   if (ret) printf( "found.\n") ;
 */
   return ret;
-};
+}
 
 //-----------------------------------------------------------------------------
 // button_press
@@ -290,8 +290,8 @@ gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_ev
       printf( ".\n" );
 */
       
-    };
-  };
+    }
+  }
     
   if (!win->HasVMT()) return TRUE;
     
@@ -311,7 +311,7 @@ gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_ev
       case GDK_BUTTON_PRESS: event_type = wxEVT_LEFT_DOWN; break;
       case GDK_2BUTTON_PRESS: event_type = wxEVT_LEFT_DCLICK; break;
       default:  break;
-    };
+    }
   }
   else if (gdk_event->button == 2)
   {
@@ -320,7 +320,7 @@ gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_ev
       case GDK_BUTTON_PRESS: event_type = wxEVT_MIDDLE_DOWN; break;
       case GDK_2BUTTON_PRESS: event_type = wxEVT_MIDDLE_DCLICK; break;
       default:  break;
-    };
+    }
   }
   else if (gdk_event->button == 3)
   {
@@ -329,8 +329,8 @@ gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_ev
       case GDK_BUTTON_PRESS: event_type = wxEVT_RIGHT_DOWN; break;
       case GDK_2BUTTON_PRESS: event_type = wxEVT_RIGHT_DCLICK; break;
       default:  break;
-    };
-  };
+    }
+  }
   
   wxMouseEvent event( event_type );
   event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
@@ -348,7 +348,7 @@ gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_ev
   win->ProcessEvent( event );
   
   return TRUE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // button_release
@@ -375,7 +375,7 @@ gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_
     case 1: event_type = wxEVT_LEFT_UP; break;
     case 2: event_type = wxEVT_MIDDLE_UP; break;
     case 3: event_type = wxEVT_RIGHT_UP; break;
-  };
+  }
 
   wxMouseEvent event( event_type );
   event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
@@ -392,7 +392,7 @@ gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_
   win->ProcessEvent( event );
   
   return TRUE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // motion_notify
@@ -428,7 +428,7 @@ gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_e
   win->ProcessEvent( event );
   
   return TRUE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // focus_in
@@ -447,8 +447,8 @@ gint gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUS
         printf( win->GetClassInfo()->GetClassName() );
       printf( ".\n" );
 */
-    };
-  };
+    }
+  }
   
   if (!win->HasVMT()) return TRUE;
   
@@ -466,7 +466,7 @@ gint gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUS
   win->ProcessEvent( event );
   
   return TRUE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // focus out
@@ -478,7 +478,7 @@ gint gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNU
   {
     if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow))
       GTK_WIDGET_UNSET_FLAGS (win->m_wxwindow, GTK_HAS_FOCUS);
-  };
+  }
   
   if (!win->HasVMT()) return TRUE;
   
@@ -494,7 +494,7 @@ gint gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNU
   win->ProcessEvent( event );
   
   return TRUE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // vertical scroll
@@ -538,7 +538,7 @@ void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
   wxScrollEvent event( command, win->GetId(), value, wxVERTICAL );
   event.SetEventObject( win );
   win->ProcessEvent( event );
-};
+}
 
 //-----------------------------------------------------------------------------
 // horizontal scroll
@@ -582,7 +582,7 @@ void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
   wxScrollEvent event( command, win->GetId(), value, wxHORIZONTAL );
   event.SetEventObject( win );
   win->ProcessEvent( event );
-};
+}
 
 //-----------------------------------------------------------------------------
 // vertical scroll change
@@ -606,7 +606,7 @@ void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *
   wxScrollEvent event( command, win->GetId(), value, wxVERTICAL );
   event.SetEventObject( win );
   win->ProcessEvent( event );
-};
+}
 
 //-----------------------------------------------------------------------------
 // horizontal scroll change
@@ -630,7 +630,7 @@ void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *
   wxScrollEvent event( command, win->GetId(), value, wxHORIZONTAL );
   event.SetEventObject( win );
   win->ProcessEvent( event );
-};
+}
 
 //-----------------------------------------------------------------------------
 // drop
@@ -645,7 +645,7 @@ void gtk_window_drop_callback( GtkWidget *widget, GdkEvent *event, wxWindow *win
     int y = 0;
     gdk_window_get_pointer( widget->window, &x, &y, NULL );
     win->GetDropTarget()->Drop( event, x, y );
-  };
+  }
   
 /*
   g_free (event->dropdataavailable.data);
@@ -666,7 +666,7 @@ bool gtk_window_destroy_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSE
   printf( "     Robert Roebling.\n" );
   
   return FALSE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // enter
@@ -683,7 +683,7 @@ bool gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, 
   wxMouseEvent event( wxEVT_ENTER_WINDOW );
   event.SetEventObject( win );
   return win->ProcessEvent( event );
-};
+}
     
 //-----------------------------------------------------------------------------
 // leave
@@ -700,7 +700,7 @@ bool gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, 
   wxMouseEvent event( wxEVT_LEAVE_WINDOW );
   event.SetEventObject( win );
   return win->ProcessEvent( event );
-};
+}
     
 //-----------------------------------------------------------------------------
 // wxWindow implementation
@@ -752,7 +752,7 @@ wxWindow::wxWindow()
   m_drawingOffsetY = 0;
   m_pDropTarget = NULL;
   m_resizing = FALSE;
-};
+}
 
 wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
@@ -760,7 +760,7 @@ wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
 {
   m_cursor = NULL;
   Create( parent, id, pos, size, style, name );
-};
+}
 
 bool wxWindow::Create( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
@@ -813,7 +813,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
   else
   {
     gtk_viewport_set_shadow_type( viewport, GTK_SHADOW_NONE );
-  };
+  }
     
   m_wxwindow = gtk_myfixed_new();
   
@@ -853,7 +853,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
   Show( TRUE );
 
   return TRUE;  
-};
+}
 
 wxWindow::~wxWindow(void)
 {
@@ -900,7 +900,7 @@ wxWindow::~wxWindow(void)
   // class
   wxTopLevelWindows.DeleteObject(this);
     
-};
+}
 
 void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
@@ -960,7 +960,7 @@ void wxWindow::PostCreation(void)
       
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw", 
       GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
-  };
+  }
   
 /*
   gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate", 
@@ -1000,7 +1000,7 @@ void wxWindow::PostCreation(void)
       
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "leave_notify_event", 
       GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
-  };
+  }
   
 /*
   // Does destroy ever get called ?
@@ -1012,7 +1012,7 @@ void wxWindow::PostCreation(void)
   {
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "destroy_event", 
       GTK_SIGNAL_FUNC(gtk_window_destroy_callback), (gpointer)this );
-  };
+  }
 */
   
   if (m_widget && m_parent) gtk_widget_realize( m_widget );
@@ -1021,12 +1021,12 @@ void wxWindow::PostCreation(void)
   SetCursor( wxSTANDARD_CURSOR );
   
   m_hasVMT = TRUE;
-};
+}
 
 bool wxWindow::HasVMT(void)
 {
   return m_hasVMT;
-};
+}
 
 bool wxWindow::Close( bool force )
 {
@@ -1035,14 +1035,14 @@ bool wxWindow::Close( bool force )
   event.SetForce(force);
 
   return GetEventHandler()->ProcessEvent(event);
-};
+}
 
 bool wxWindow::Destroy(void)
 {
   m_hasVMT = FALSE;
   delete this;
   return TRUE;
-};
+}
 
 bool wxWindow::DestroyChildren(void)
 {
@@ -1056,21 +1056,21 @@ bool wxWindow::DestroyChildren(void)
       {
         delete child;
   if (GetChildren()->Member(child)) delete node;
-      };
-    };
-  };
+      }
+    }
+  }
   return TRUE;
-};
+}
 
 void wxWindow::PrepareDC( wxDC &WXUNUSED(dc) )
 {
   // are we to set fonts here ?
-};
+}
 
 void wxWindow::ImplementSetSize(void)
 { 
   gtk_widget_set_usize( m_widget, m_width, m_height );
-};
+}
 
 void wxWindow::ImplementSetPosition(void)
 {
@@ -1091,7 +1091,7 @@ void wxWindow::ImplementSetPosition(void)
     gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
     
   // Don't do anything for children of wxNotebook and wxMDIChildFrame   
-};
+}
 
 void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
@@ -1109,30 +1109,30 @@ void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
     if (newY == -1) newY = m_y;
     if (newW == -1) newW = m_width;
     if (newH == -1) newH = m_height;
-  };
+  }
   
   if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
   {
     if (newW == -1) newW = 80;
-  };
+  }
   
   if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
   {
     if (newH == -1) newH = 26;
-  };
+  }
   
   if ((m_x != newX) || (m_y != newY) || (!m_sizeSet))
   {
     m_x = newX;
     m_y = newY;
     ImplementSetPosition();
-  };
+  }
   if ((m_width != newW) || (m_height != newH) || (!m_sizeSet))
   {
     m_width = newW;
     m_height = newH;
     ImplementSetSize();
-  };
+  }
   m_sizeSet = TRUE;
   
   wxSizeEvent event( wxSize(m_width,m_height), GetId() );
@@ -1140,23 +1140,23 @@ void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
   ProcessEvent( event );
   
   m_resizing = FALSE;
-};
+}
 
 void wxWindow::SetSize( int width, int height )
 {
   SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
-};
+}
 
 void wxWindow::Move( int x, int y )
 {
   SetSize( x, y, -1, -1, wxSIZE_USE_EXISTING );
-};
+}
 
 void wxWindow::GetSize( int *width, int *height ) const
 {
   if (width) (*width) = m_width;
   if (height) (*height) = m_height;
-};
+}
 
 void wxWindow::SetClientSize( int width, int height )
 {
@@ -1197,24 +1197,24 @@ void wxWindow::SetClientSize( int width, int height )
       {
         dw += 2 * viewport_class->xthickness;
         dh += 2 * viewport_class->ythickness;
-      };
+      }
     
       if (GTK_WIDGET_VISIBLE(vscrollbar))
       {
         dw += vscrollbar->allocation.width;
         dw += scroll_class->scrollbar_spacing;
-      };
+      }
     
       if (GTK_WIDGET_VISIBLE(hscrollbar))
       {
         dh += hscrollbar->allocation.height;
         dw += scroll_class->scrollbar_spacing;
-      };
-    };
+      }
+    }
     
     SetSize( width+dw, height+dh );
-  };
-};
+  }
+}
 
 void wxWindow::GetClientSize( int *width, int *height ) const
 {
@@ -1256,33 +1256,33 @@ void wxWindow::GetClientSize( int *width, int *height ) const
       {
         dw += 2 * viewport_class->xthickness;
         dh += 2 * viewport_class->ythickness;
-      };
+      }
     
       if (GTK_WIDGET_VISIBLE(vscrollbar))
       {
 //        dw += vscrollbar->allocation.width;
         dw += 15;                               // range.slider_width = 11 + 2*2pts edge
         dw += scroll_class->scrollbar_spacing;
-      };
+      }
     
       if (GTK_WIDGET_VISIBLE(hscrollbar))
       {
 //        dh += hscrollbar->allocation.height;
         dh += 15;
         dh += scroll_class->scrollbar_spacing;
-      };
-    };
+      }
+    }
     
     if (width) (*width) = m_width - dw;
     if (height) (*height) = m_height - dh;
-  };
-};
+  }
+}
 
 void wxWindow::GetPosition( int *x, int *y ) const
 {
   if (x) (*x) = m_x;
   if (y) (*y) = m_y;
-};
+}
 
 void wxWindow::ClientToScreen( int *x, int *y )
 {
@@ -1304,12 +1304,12 @@ void wxWindow::ClientToScreen( int *x, int *y )
     {
       org_x += m_widget->allocation.x;
       org_y += m_widget->allocation.y;
-    };
-  };
+    }
+  }
   
   if (x) *x += org_x;  
   if (y) *y += org_y;  
-};
+}
 
 void wxWindow::ScreenToClient( int *x, int *y )
 {
@@ -1329,12 +1329,12 @@ void wxWindow::ScreenToClient( int *x, int *y )
     {
       org_x += m_widget->allocation.x;
       org_y += m_widget->allocation.y;
-    };
-  };
+    }
+  }
   
   if (x) *x -= org_x;  
   if (y) *y -= org_y;  
-};
+}
 
 void wxWindow::Centre( int direction )
 {
@@ -1354,9 +1354,9 @@ void wxWindow::Centre( int direction )
       if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (p_w - m_width) / 2;
       if (direction & wxVERTICAL == wxVERTICAL) m_y = (p_h - m_height) / 2;
       ImplementSetPosition();
-    };
+    }
   }
-};
+}
 
 void wxWindow::Fit(void)
 {
@@ -1377,12 +1377,12 @@ void wxWindow::Fit(void)
     node = node->Next();
   }
   SetClientSize(maxX + 5, maxY + 10);
-};
+}
 
 void wxWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
   //if (GetAutoLayout()) Layout();
-};
+}
 
 bool wxWindow::Show( bool show )
 {
@@ -1392,14 +1392,14 @@ bool wxWindow::Show( bool show )
     gtk_widget_hide( m_widget );
   m_isShown = show;  
   return TRUE;
-};
+}
 
 void wxWindow::Enable( bool enable )
 {
   m_isEnabled = enable;
   gtk_widget_set_sensitive( m_widget, enable );
   if (m_wxwindow) gtk_widget_set_sensitive( m_wxwindow, enable );
-};
+}
 
 void wxWindow::MakeModal( bool modal )
 {
@@ -1427,14 +1427,14 @@ void wxWindow::SetFocus(void)
     if (GTK_WIDGET_CAN_FOCUS(connect_widget) && !GTK_WIDGET_HAS_FOCUS (connect_widget) )
     {
       gtk_widget_grab_focus (connect_widget);
-    };
-  };
-};
+    }
+  }
+}
 
 bool wxWindow::OnClose(void)
 {
   return TRUE;
-};
+}
 
 void wxWindow::AddChild( wxWindow *child )
 {
@@ -1500,69 +1500,79 @@ void wxWindow::AddChild( wxWindow *child )
     child->m_x, child->m_y );
   
   gtk_widget_set_usize( child->m_widget, child->m_width, child->m_height );
-};
+}
 
 wxList *wxWindow::GetChildren(void)
 {
   return (&m_children);
-};
+}
 
 void wxWindow::RemoveChild( wxWindow *child )
 {
   if (GetChildren())
  GetChildren()->DeleteObject( child );
   child->m_parent = NULL;
-};
+}
 
 void wxWindow::SetReturnCode( int retCode )
 {
   m_retCode = retCode;
-};
+}
 
 int wxWindow::GetReturnCode(void)
 {
   return m_retCode;
-};
+}
 
 wxWindow *wxWindow::GetParent(void)
 {
   return m_parent;
-};
+}
+
+void wxWindow::Raise(void)
+{
+  if (m_widget) gdk_window_raise( m_widget->window );
+}
+
+void wxWindow::Lower(void)
+{
+  if (m_widget) gdk_window_lower( m_widget->window );
+}
 
 wxEvtHandler *wxWindow::GetEventHandler(void)
 {
   return m_eventHandler;
-};
+}
 
 void wxWindow::SetEventhandler( wxEvtHandler *handler )
 {
   m_eventHandler = handler;
-};
+}
 
 wxValidator *wxWindow::GetValidator(void)
 {
   return m_windowValidator;
-};
+}
 
 void wxWindow::SetValidator( wxValidator *validator )
 {
   m_windowValidator = validator;
-};
+}
 
 bool wxWindow::IsBeingDeleted(void)
 {
   return FALSE;
-};
+}
 
 void wxWindow::SetId( wxWindowID id )
 {
   m_windowId = id;
-};
+}
 
 wxWindowID wxWindow::GetId(void)
 {
   return m_windowId;
-};
+}
 
 void wxWindow::SetCursor( const wxCursor &cursor )
 {
@@ -1576,7 +1586,7 @@ void wxWindow::SetCursor( const wxCursor &cursor )
     gdk_window_set_cursor( m_widget->window, m_cursor->GetCursor() );
   if (m_wxwindow && m_wxwindow->window)
     gdk_window_set_cursor( m_wxwindow->window, m_cursor->GetCursor() );
-};
+}
 
 void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
 {
@@ -1590,7 +1600,7 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
         rect->height );
     else
       Clear(); 
-  };
+  }
   if (!rect)
   {
     if (m_wxwindow)
@@ -1611,7 +1621,7 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
       gdk_rect.width = w;
       gdk_rect.height = h;
       gtk_widget_draw( m_wxwindow, &gdk_rect );
-    };
+    }
   }
   else
   {
@@ -1625,28 +1635,28 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
       gtk_widget_draw( m_wxwindow, &gdk_rect );
     else
       gtk_widget_draw( m_widget, &gdk_rect );
-  };
-};
+  }
+}
 
 bool wxWindow::IsExposed( long x, long y )
 {
   return (m_updateRegion.Contains( x, y ) != wxOutRegion );
-};
+}
 
 bool wxWindow::IsExposed( long x, long y, long width, long height )
 {
   return (m_updateRegion.Contains( x, y, width, height ) != wxOutRegion );
-};
+}
 
 void wxWindow::Clear(void)
 {
   if (m_wxwindow && m_wxwindow->window) gdk_window_clear( m_wxwindow->window );
-};
+}
 
 wxColour wxWindow::GetBackgroundColour(void) const
 {
   return m_backgroundColour;
-};
+}
 
 void wxWindow::SetBackgroundColour( const wxColour &colour )
 {
@@ -1656,9 +1666,9 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
     m_backgroundColour.CalcPixel( m_wxwindow->style->colormap );
     gdk_window_set_background( m_wxwindow->window, m_backgroundColour.GetColor() );
     gdk_window_clear( m_wxwindow->window );
-  };
+  }
   // do something ?
-};
+}
 
 bool wxWindow::Validate(void)
 {
@@ -1669,9 +1679,9 @@ bool wxWindow::Validate(void)
     if (child->GetValidator() && /* child->GetValidator()->Ok() && */ !child->GetValidator()->Validate(this)) 
       { return FALSE; }
     node = node->Next();
-  };
+  }
   return TRUE;
-};
+}
 
 bool wxWindow::TransferDataToWindow(void)
 {
@@ -1684,11 +1694,11 @@ bool wxWindow::TransferDataToWindow(void)
     {
       wxMessageBox( _("Application Error"), _("Could not transfer data to window"), wxOK|wxICON_EXCLAMATION );
       return FALSE;
-    };
+    }
     node = node->Next();
-  };
+  }
   return TRUE;
-};
+}
 
 bool wxWindow::TransferDataFromWindow(void)
 {
@@ -1701,19 +1711,19 @@ bool wxWindow::TransferDataFromWindow(void)
    node = node->Next();
   }
   return TRUE;
-};
+}
 
 void wxWindow::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
 {
   TransferDataToWindow();
-};
+}
 
 void wxWindow::InitDialog(void)
 {
   wxInitDialogEvent event(GetId());
   event.SetEventObject( this );
   GetEventHandler()->ProcessEvent(event);
-};
+}
 
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
@@ -1725,8 +1735,8 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
     if (menuitem->IsSubMenu())
       SetInvokingWindow( menuitem->GetSubMenu(), win );
     node = node->Next();
-  };
-};
+  }
+}
 
 bool wxWindow::PopupMenu( wxMenu *menu, int WXUNUSED(x), int WXUNUSED(y) )
 {
@@ -1746,7 +1756,7 @@ void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
   
     m_pDropTarget->UnregisterWidget( dnd_widget );
     delete m_pDropTarget;
-  };
+  }
   m_pDropTarget = dropTarget;
   if (m_pDropTarget)
   {
@@ -1754,13 +1764,13 @@ void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
     
     gtk_signal_connect( GTK_OBJECT(dnd_widget), "drop_data_available_event",
       GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
-  };
-};
+  }
+}
 
 wxDropTarget *wxWindow::GetDropTarget() const
 {
   return m_pDropTarget;
-};
+}
 
 GtkWidget* wxWindow::GetConnectWidget(void)
 {
@@ -1782,22 +1792,22 @@ void wxWindow::SetFont( const wxFont &font )
   GtkStyle *style = gtk_style_new();
   ...
 */
-};
+}
 
 wxFont *wxWindow::GetFont(void)
 {
   return &m_font;
-};
+}
 
 void wxWindow::SetWindowStyleFlag( long flag )
 {
   m_windowStyle = flag;
-};
+}
 
 long wxWindow::GetWindowStyleFlag(void) const
 {
   return m_windowStyle;
-};
+}
 
 void wxWindow::CaptureMouse(void)
 {
@@ -1809,48 +1819,48 @@ void wxWindow::CaptureMouse(void)
         GDK_BUTTON_RELEASE_MASK |
         GDK_POINTER_MOTION_MASK), 
         NULL, NULL, GDK_CURRENT_TIME );
-};
+}
 
 void wxWindow::ReleaseMouse(void)
 {
   GtkWidget *connect_widget = GetConnectWidget();
   gtk_grab_remove( connect_widget );
   gdk_pointer_ungrab ( GDK_CURRENT_TIME );
-};
+}
 
 void wxWindow::SetTitle( const wxString &WXUNUSED(title) )
 {
-};
+}
 
 wxString wxWindow::GetTitle(void) const
 {
   return (wxString&)m_windowName;
-};
+}
 
 wxString wxWindow::GetLabel(void) const
 {
   return GetTitle();
-};
+}
 
 void wxWindow::SetName( const wxString &name )
 {
   m_windowName = name;
-};
+}
 
 wxString wxWindow::GetName(void) const
 {
   return (wxString&)m_windowName;
-};
+}
 
 bool wxWindow::IsShown(void) const
 {
   return m_isShown;
-};
+}
 
 bool wxWindow::IsRetained(void)
 {
   return FALSE;
-};
+}
 
 wxWindow *wxWindow::FindWindow( long id )
 {
@@ -1862,9 +1872,9 @@ wxWindow *wxWindow::FindWindow( long id )
     wxWindow *res = child->FindWindow( id );
     if (res) return res;
     node = node->Next();
-  };
+  }
   return NULL;
-};
+}
 
 wxWindow *wxWindow::FindWindow( const wxString& name )
 {
@@ -1876,9 +1886,9 @@ wxWindow *wxWindow::FindWindow( const wxString& name )
     wxWindow *res = child->FindWindow( name );
     if (res) return res;
     node = node->Next();
-  };
+  }
   return NULL;
-};
+}
 
 void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
       int range, bool WXUNUSED(refresh) )
@@ -1922,7 +1932,7 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
     m_vAdjust->step_increment = 1.0;
     m_vAdjust->page_increment = (float)(wxMax(fthumb-2,0));
     m_vAdjust->page_size = fthumb;
-  };
+  }
   
   if (m_wxwindow->window)
   {
@@ -1946,8 +1956,8 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
     }
       
     gtk_widget_set_usize( m_widget, m_width, m_height );
-  };
-};
+  }
+}
 
 void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
 {
@@ -1967,7 +1977,7 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
     m_oldVerticalPos = fpos;
     if (fabs(fpos-m_vAdjust->value) < 0.2) return;
     m_vAdjust->value = fpos;
-  };
+  }
   
   if (m_wxwindow->window)
   {  
@@ -1975,8 +1985,8 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
       gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
     else  
       gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
-  };
-};
+  }
+}
 
 int wxWindow::GetScrollThumb( int orient ) const
 {
@@ -1986,7 +1996,7 @@ int wxWindow::GetScrollThumb( int orient ) const
     return (int)(m_hAdjust->page_size+0.5);
   else
     return (int)(m_vAdjust->page_size+0.5);
-};
+}
 
 int wxWindow::GetScrollPos( int orient ) const
 {
@@ -1996,7 +2006,7 @@ int wxWindow::GetScrollPos( int orient ) const
     return (int)(m_hAdjust->value+0.5);
   else
     return (int)(m_vAdjust->value+0.5);
-};
+}
 
 int wxWindow::GetScrollRange( int orient ) const
 {
@@ -2006,7 +2016,7 @@ int wxWindow::GetScrollRange( int orient ) const
     return (int)(m_hAdjust->upper+0.5);
   else
     return (int)(m_vAdjust->upper+0.5);
-};
+}
 
 void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 {
@@ -2046,7 +2056,7 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     {
       Refresh();
       return;
-    };
+    }
     int s_x = 0;
     int s_y = 0;
     if (dx < 0) s_x = -dx;
@@ -2066,13 +2076,13 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
   
     Refresh( TRUE, &rect );
 */
-};
+}
 
 void wxWindow::GetDrawingOffset( long *x, long *y )
 {
   if (x) *x = m_drawingOffsetX;
   if (y) *y = m_drawingOffsetY;
-};
+}
 
 //-------------------------------------------------------------------------------------
 //          Layout
@@ -2081,7 +2091,7 @@ void wxWindow::GetDrawingOffset( long *x, long *y )
 wxLayoutConstraints *wxWindow::GetConstraints(void) const
 {
   return m_constraints;
-};
+}
 
 void wxWindow::SetConstraints( wxLayoutConstraints *constraints )
 {
@@ -2118,27 +2128,27 @@ void wxWindow::SetConstraints( wxLayoutConstraints *constraints )
 void wxWindow::SetAutoLayout( bool autoLayout )
 {
   m_autoLayout = autoLayout;
-};
+}
 
 bool wxWindow::GetAutoLayout(void) const
 {
   return m_autoLayout;
-};
+}
 
 wxSizer *wxWindow::GetSizer(void) const
 {
   return m_windowSizer;
-};
+}
 
 void wxWindow::SetSizerParent( wxWindow *win )
 {
   m_sizerParent = win;
-};
+}
 
 wxWindow *wxWindow::GetSizerParent(void) const
 {
   return m_sizerParent;
-};
+}
 
 // This removes any dangling pointers to this window
 // in other windows' constraintsInvolvedIn lists.

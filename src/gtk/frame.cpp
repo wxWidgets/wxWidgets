@@ -20,6 +20,7 @@
 #include "wx/toolbar.h"
 #include "wx/statusbr.h"
 #include "wx/mdi.h"
+#include "wx/dcclient.h"
 #include "wx/gtk/win_gtk.h"
 
 const wxMENU_HEIGHT    = 28;
@@ -47,7 +48,7 @@ void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc,
 */
 
   win->GtkOnSize( alloc->x, alloc->y, alloc->width, alloc->height );
-};
+}
 
 //-----------------------------------------------------------------------------
 // delete
@@ -64,7 +65,7 @@ bool gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(
   win->Close();
 
   return TRUE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // configure
@@ -77,7 +78,7 @@ gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigur
   win->m_y = event->y;
   
   return FALSE;
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -99,7 +100,7 @@ wxFrame::wxFrame()
   m_wxwindow = NULL;
   m_mainWindow = NULL;
   wxTopLevelWindows.Insert( this );
-};
+}
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
@@ -114,7 +115,7 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
   m_mainWindow = NULL;
   Create( parent, id, title, pos, size, style, name );
   wxTopLevelWindows.Insert( this );
-};
+}
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
@@ -164,7 +165,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
   gtk_widget_realize( m_mainWindow );
 
   return TRUE;
-};
+}
 
 wxFrame::~wxFrame()
 {
@@ -175,7 +176,7 @@ wxFrame::~wxFrame()
 
   wxTopLevelWindows.DeleteObject( this );
   if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
-};
+}
 
 bool wxFrame::Show( bool show )
 {
@@ -184,15 +185,15 @@ bool wxFrame::Show( bool show )
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     m_sizeSet = FALSE;
     ProcessEvent( event );
-  };
+  }
   return wxWindow::Show( show );
-};
+}
 
 void wxFrame::Enable( bool enable )
 {
   wxWindow::Enable( enable );
   gtk_widget_set_sensitive( m_mainWindow, enable );
-};
+}
 
 void wxFrame::OnCloseWindow( wxCloseEvent &event )
 {
@@ -200,7 +201,7 @@ void wxFrame::OnCloseWindow( wxCloseEvent &event )
     {
         this->Destroy();
     }
-};
+}
 
 bool wxFrame::Destroy()
 {
@@ -223,8 +224,8 @@ void wxFrame::GetClientSize( int *width, int *height ) const
       m_frameToolBar->GetSize( NULL, &y );
       (*height) -= y;
     }
-  };
-};
+  }
+}
 
 void wxFrame::SetClientSize( int const width, int const height )
 {
@@ -238,7 +239,7 @@ void wxFrame::SetClientSize( int const width, int const height )
     h += y;
   }
   wxWindow::SetClientSize( width, h );
-};
+}
 
 void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
 {
@@ -277,7 +278,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
   {
     main_y = wxMENU_HEIGHT;
     main_height -= wxMENU_HEIGHT;
-  };
+  }
 
   int toolbar_height = 0;
   if (m_frameToolBar) m_frameToolBar->GetSize( NULL, &toolbar_height );
@@ -292,25 +293,25 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
   {
     gtk_myfixed_move( GTK_MYFIXED(m_mainWindow), m_frameMenuBar->m_widget, 1, 1 );
     gtk_widget_set_usize( m_frameMenuBar->m_widget, width-2, wxMENU_HEIGHT-2 );
-  };
+  }
 
   if (m_frameToolBar)
   {
     gtk_myfixed_move( GTK_MYFIXED(m_mainWindow), m_frameToolBar->m_widget, 1, wxMENU_HEIGHT );
     gtk_widget_set_usize( m_frameToolBar->m_widget, width-2, toolbar_height );
-  };
+  }
   
   if (m_frameStatusBar)
   {
     m_frameStatusBar->SetSize( 0, main_height-wxSTATUS_HEIGHT, width, wxSTATUS_HEIGHT );
-  };
+  }
 
   m_sizeSet = TRUE;
 
   wxSizeEvent event( wxSize(m_width,m_height), GetId() );
   event.SetEventObject( this );
   ProcessEvent( event );
-};
+}
 
 void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
@@ -338,15 +339,15 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
           return;
 
         child = win;
-      };
-    };
+      }
+    }
 
     // yes: set it's size to fill all the frame
     int client_x, client_y;
     GetClientSize(&client_x, &client_y);
     child->SetSize( 1, 1, client_x-2, client_y);
   }
-};
+}
 
 void wxFrame::AddChild( wxWindow *child )
 {
@@ -379,7 +380,7 @@ void wxFrame::AddChild( wxWindow *child )
       
     gtk_widget_set_usize( child->m_widget, child->m_width, child->m_height );
   }    
-};
+}
 
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
@@ -391,8 +392,8 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
     if (menuitem->IsSubMenu())
       SetInvokingWindow( menuitem->GetSubMenu(), win );
     node = node->Next();
-  };
-};
+  }
+}
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
@@ -406,7 +407,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
       wxMenu *menu = (wxMenu*)node->Data();
       SetInvokingWindow( menu, this );
       node = node->Next();
-    };
+    }
     
     if (m_frameMenuBar->m_parent != this)
     {
@@ -415,61 +416,89 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
         m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
     }
   }
-};
+}
 
-wxMenuBar *wxFrame::GetMenuBar(void)
+wxMenuBar *wxFrame::GetMenuBar(void) const
 {
   return m_frameMenuBar;
-};
+}
 
-wxToolBar *wxFrame::CreateToolBar( long style , wxWindowID id, const wxString& name )
+wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
+  wxCHECK_MSG( m_frameToolBar == NULL, FALSE, "recreating toolbar in wxFrame" );
+
   m_addPrivateChild = TRUE;
-  
-  m_frameToolBar = new wxToolBar( this, id, wxDefaultPosition, wxDefaultSize, style, name );
-  
+  m_frameToolBar = OnCreateToolBar( style, id, name );
   m_addPrivateChild = FALSE;
   
   return m_frameToolBar;
-};
+}
 
-wxToolBar *wxFrame::GetToolBar(void)
+wxToolBar* wxFrame::OnCreateToolBar( long style, wxWindowID id, const wxString& name )
 {
-  return m_frameToolBar;
-};
+  return new wxToolBar( this, id, wxDefaultPosition, wxDefaultSize, style, name );
+}
+
+wxToolBar *wxFrame::GetToolBar(void) const 
+{ 
+  return m_frameToolBar; 
+}
 
 wxStatusBar* wxFrame::CreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
 {
-  if (m_frameStatusBar)
-  delete m_frameStatusBar;
+  wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, "recreating status bar in wxFrame" );
 
-  m_frameStatusBar = new wxStatusBar( this, id, wxPoint(0,0), wxSize(100,20), style, name );
-
-  m_frameStatusBar->SetFieldsCount( number );
+  m_frameStatusBar = OnCreateStatusBar( number, style, id, name );
   
   return m_frameStatusBar;
-};
+}
 
-void wxFrame::SetStatusText( const wxString &text, int number )
+wxStatusBar *wxFrame::OnCreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
 {
-  if (m_frameStatusBar) m_frameStatusBar->SetStatusText( text, number );
-};
+  wxStatusBar *statusBar = NULL;
+    
+  statusBar = new wxStatusBar(this, id, wxPoint(0, 0), wxSize(100, 20), style, name);
+    
+  // Set the height according to the font and the border size
+  wxClientDC dc(statusBar);
+  dc.SetFont( *statusBar->GetFont() );
 
-void wxFrame::SetStatusWidths( int n, int *width )
+  long x, y;
+  dc.GetTextExtent( "X", &x, &y );
+
+  int height = (int)( (y  * 1.1) + 2* statusBar->GetBorderY());
+
+  statusBar->SetSize( -1, -1, 100, height );
+
+  statusBar->SetFieldsCount( number );
+  return statusBar;
+}
+
+void wxFrame::SetStatusText(const wxString& text, int number)
 {
-  if (m_frameStatusBar) m_frameStatusBar->SetStatusWidths( n, width );
-};
+  wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set text for" );
 
-wxStatusBar *wxFrame::GetStatusBar(void)
+  m_frameStatusBar->SetStatusText(text, number);
+}
+
+void wxFrame::SetStatusWidths(int n, const int widths_field[] )
+{
+  wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set widths for" );
+
+  m_frameStatusBar->SetStatusWidths(n, widths_field);
+}
+
+wxStatusBar *wxFrame::GetStatusBar(void) const
 {
   return m_frameStatusBar;
-};
+}
 
 void wxFrame::SetTitle( const wxString &title )
 {
   m_title = title;
+  if (m_title.IsNull()) m_title = "";
   gtk_window_set_title( GTK_WINDOW(m_widget), title );
-};
+}
 
 void wxFrame::SetSizeHints(int minW, int minH, int maxW, int maxH, int WXUNUSED(incW) )
 {

@@ -70,16 +70,19 @@ public:
 
   virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
     const wxString& name = "statusBar");
-  virtual wxStatusBar *GetStatusBar();
+  virtual wxStatusBar *OnCreateStatusBar( int number, long style, wxWindowID id,
+    const wxString& name );
+  virtual wxStatusBar *GetStatusBar() const;
   virtual void SetStatusText( const wxString &text, int number = 0 );
-  virtual void SetStatusWidths( int n, int *width );
+  virtual void SetStatusWidths( int n, const int widths_field[] );
 
   virtual wxToolBar* CreateToolBar( long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1, 
                                     const wxString& name = wxToolBarNameStr);
-  virtual wxToolBar *GetToolBar();
+  virtual wxToolBar *OnCreateToolBar( long style, wxWindowID id, const wxString& name );
+  virtual wxToolBar *GetToolBar(void) const;
   
   virtual void SetMenuBar( wxMenuBar *menuBar );
-  virtual wxMenuBar *GetMenuBar();
+  virtual wxMenuBar *GetMenuBar() const;
 
   virtual void SetTitle( const wxString &title );
   virtual wxString GetTitle() const { return m_title; }
