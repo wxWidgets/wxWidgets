@@ -32,10 +32,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxListbookXmlHandler, wxXmlResourceHandler)
 wxListbookXmlHandler::wxListbookXmlHandler()
 : wxXmlResourceHandler(), m_isInside(false), m_listbook(NULL)
 {
+    XRC_ADD_STYLE(wxLB_DEFAULT);
     XRC_ADD_STYLE(wxLB_LEFT);
     XRC_ADD_STYLE(wxLB_RIGHT);
     XRC_ADD_STYLE(wxLB_TOP);
     XRC_ADD_STYLE(wxLB_BOTTOM);
+
     AddWindowStyles();
 }
 

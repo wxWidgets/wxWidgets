@@ -33,11 +33,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookXmlHandler, wxXmlResourceHandler)
 wxNotebookXmlHandler::wxNotebookXmlHandler()
 : wxXmlResourceHandler(), m_isInside(false), m_notebook(NULL)
 {
-    XRC_ADD_STYLE(wxNB_FIXEDWIDTH);
+    XRC_ADD_STYLE(wxNB_DEFAULT);
     XRC_ADD_STYLE(wxNB_LEFT);
     XRC_ADD_STYLE(wxNB_RIGHT);
     XRC_ADD_STYLE(wxNB_TOP);
     XRC_ADD_STYLE(wxNB_BOTTOM);
+
+    XRC_ADD_STYLE(wxNB_FIXEDWIDTH);
+    XRC_ADD_STYLE(wxNB_MULTILINE);
+    XRC_ADD_STYLE(wxNB_NOPAGETHEME);
+
     AddWindowStyles();
 }
 

@@ -32,10 +32,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxChoicebookXmlHandler, wxXmlResourceHandler)
 wxChoicebookXmlHandler::wxChoicebookXmlHandler()
 : wxXmlResourceHandler(), m_isInside(false), m_choicebook(NULL)
 {
-    XRC_ADD_STYLE(wxLB_LEFT);
-    XRC_ADD_STYLE(wxLB_RIGHT);
-    XRC_ADD_STYLE(wxLB_TOP);
-    XRC_ADD_STYLE(wxLB_BOTTOM);
+    XRC_ADD_STYLE(wxCB_DEFAULT);
+    XRC_ADD_STYLE(wxCB_LEFT);
+    XRC_ADD_STYLE(wxCB_RIGHT);
+    XRC_ADD_STYLE(wxCB_TOP);
+    XRC_ADD_STYLE(wxCB_BOTTOM);
+
     AddWindowStyles();
 }
 
