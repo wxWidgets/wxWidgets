@@ -344,19 +344,15 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     // here not just the size.  It makes SetScrollbars 'sticky'
     // emulating the old non-autoscroll behaviour.
 
+    int w = noUnitsX * pixelsPerUnitX;
+    int h = noUnitsY * pixelsPerUnitY;
+     
     wxSize sz = m_targetWindow->GetClientSize();
-#if 1
-    int x = wxMax(noUnitsX * pixelsPerUnitX, sz.x);
-    int y = wxMax(noUnitsY * pixelsPerUnitY, sz.y);
-#else
-    int x = noUnitsX * pixelsPerUnitX;
-    int y = noUnitsY * pixelsPerUnitY;
-#endif
-    m_targetWindow->SetVirtualSizeHints( x, y );
+    m_targetWindow->SetVirtualSizeHints( w, h );
 
     // The above should arguably be deprecated, this however we still need.
 
-    m_targetWindow->SetVirtualSize( x, y );
+    m_targetWindow->SetVirtualSize( w, h );
 
     if (do_refresh && !noRefresh)
         m_targetWindow->Refresh(TRUE, GetRect());
@@ -887,16 +883,19 @@ void wxScrollHelper::DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) co
 // Default OnSize resets scrollbars, if any
 void wxScrollHelper::HandleOnSize(wxSizeEvent& WXUNUSED(event))
 {
-    if( m_win->GetAutoLayout() )
+    if( m_win->GetAutoLayout() || m_targetWindow->GetAutoLayout() )
     {
         if ( m_targetWindow != m_win )
             m_targetWindow->FitInside();
 
         m_win->FitInside();
 
-#if wxUSE_CONSTRAINTS
-        m_win->Layout();
-#endif
+        // FIXME:  Something is really weird here...  This should be
+        // called by FitInside above (and apparently is), yet the
+        // scrollsub sample will get the scrollbar wrong if resized
+        // quickly.  This masks the bug, but is surely not the right
+        // answer at all.
+        AdjustScrollbars();
     }
     else
         AdjustScrollbars();
