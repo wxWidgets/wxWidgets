@@ -27203,6 +27203,28 @@ static PyObject *_wrap_Clipboard_UsePrimarySelection(PyObject *self, PyObject *a
 }
 
 
+static PyObject *_wrap_Clipboard_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxClipboard *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":Clipboard_Get",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxClipboard *)wxClipboard::Get();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxClipboard, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Clipboard_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -27210,20 +27232,6 @@ static PyObject * Clipboard_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static int _wrap_TheClipboard_set(PyObject *_val) {
-    PyErr_SetString(PyExc_TypeError,"Variable TheClipboard is read-only.");
-    return 1;
-}
-
-
-static PyObject *_wrap_TheClipboard_get() {
-    PyObject *pyobj;
-    
-    pyobj = SWIG_NewPointerObj((void *)(wxTheClipboard), SWIGTYPE_p_wxClipboard, 0);
-    return pyobj;
-}
-
-
 static PyObject *_wrap_new_ClipboardLocker(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxClipboard *arg1 = (wxClipboard *) NULL ;
@@ -28935,6 +28943,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Clipboard_Clear", (PyCFunction) _wrap_Clipboard_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Clipboard_Flush", (PyCFunction) _wrap_Clipboard_Flush, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Clipboard_UsePrimarySelection", (PyCFunction) _wrap_Clipboard_UsePrimarySelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Clipboard_Get", (PyCFunction) _wrap_Clipboard_Get, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Clipboard_swigregister", Clipboard_swigregister, METH_VARARGS },
 	 { (char *)"new_ClipboardLocker", (PyCFunction) _wrap_new_ClipboardLocker, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_ClipboardLocker", (PyCFunction) _wrap_delete_ClipboardLocker, METH_VARARGS | METH_KEYWORDS },
@@ -30112,7 +30121,6 @@ SWIGEXPORT(void) SWIG_init(void) {
     wxPyPtrTypeMap_Add("wxTextDropTarget", "wxPyTextDropTarget");
     wxPyPtrTypeMap_Add("wxFileDropTarget", "wxPyFileDropTarget");
     
-    SWIG_addvarlink(SWIG_globals,(char*)"TheClipboard",_wrap_TheClipboard_get, _wrap_TheClipboard_set);
     SWIG_addvarlink(SWIG_globals,(char*)"DefaultVideoMode",_wrap_DefaultVideoMode_get, _wrap_DefaultVideoMode_set);
 }
 

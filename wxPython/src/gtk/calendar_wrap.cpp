@@ -2254,12 +2254,11 @@ static PyObject *_wrap_CalendarCtrl_GetClassDefaultAttributes(PyObject *self, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxCalendarCtrl::GetClassDefaultAttributes((wxWindowVariant )arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         wxVisualAttributes * resultptr;
