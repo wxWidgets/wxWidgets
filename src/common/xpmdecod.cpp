@@ -134,12 +134,14 @@ bool wxXPMDecoder::CanRead(wxInputStream& stream)
 wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
 {
     size_t length = stream.GetSize();
-    wxCHECK_MSG(length != 0, wxNullImage, wxT("Cannot read XPM from stream of unknown size"));
+    wxCHECK_MSG( length != 0, wxNullImage,
+                 wxT("Cannot read XPM from stream of unknown size") );
 
-    char *xpm_buffer = new char[length+1];
-    char *p, *q;
-    size_t i;
+    // use a smart buffer to be sure to free memory even when we return on
+    // error
+    wxCharBuffer buffer(length);
 
+    char *xpm_buffer = (char *)buffer.data();
     if ( stream.Read(xpm_buffer, length).LastError() == wxSTREAM_READ_ERROR )
         return wxNullImage;
     xpm_buffer[length] = '\0';
@@ -147,6 +149,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
     /*
      *  Remove comments from the file:
      */
+    char *p, *q;
     for (p = xpm_buffer; *p != '\0'; p++)
     {
         if ( (*p == '"') || (*p == '\'') )
@@ -180,7 +183,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
     /*
      *  Remove unquoted characters:
      */
-    i = 0;
+    size_t i = 0;
     for (p = xpm_buffer; *p != '\0'; p++)
     {
         if ( *p != '"' )
@@ -232,12 +235,12 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
      */
     wxImage img = ReadData(xpm_lines);
 
-    delete[] xpm_buffer;
 #ifdef __WIN16__
     delete[] (char**) xpm_lines;
 #else
     delete[] xpm_lines;
 #endif
+
     return img;
 }
 #endif // wxUSE_STREAMS
