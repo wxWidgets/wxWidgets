@@ -1516,7 +1516,6 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/minifram.h \
 	wx/motif/msgdlg.h \
 	wx/motif/palette.h \
-	wx/motif/popupwin.h \
 	wx/motif/print.h \
 	wx/motif/private.h \
 	wx/motif/radiobox.h \
@@ -1821,7 +1820,7 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 @COND_TOOLKIT_COCOA@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_TOOLKIT_GTK@OPENGL_HDR = wx/gtk/glcanvas.h
 @COND_TOOLKIT_MAC@OPENGL_HDR = wx/mac/glcanvas.h
-@COND_TOOLKIT_MOTIF@OPENGL_HDR = wx/x11/glcanvas.h
+@COND_TOOLKIT_MOTIF@OPENGL_HDR = wx/motif/glcanvas.h
 @COND_TOOLKIT_MSW@OPENGL_HDR = wx/msw/glcanvas.h
 @COND_TOOLKIT_PM@OPENGL_HDR = wx/os2/glcanvas.h
 @COND_TOOLKIT_X11@OPENGL_HDR = wx/x11/glcanvas.h
@@ -3361,7 +3360,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_minifram.o \
 	monodll_msgdlg.o \
 	monodll_palette.o \
-	monodll_popupwin.o \
 	monodll_radiobox.o \
 	monodll_radiobut.o \
 	monodll_scrolbar.o \
@@ -3748,7 +3746,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_minifram.o \
 	monolib_msgdlg.o \
 	monolib_palette.o \
-	monolib_popupwin.o \
 	monolib_radiobox.o \
 	monolib_radiobut.o \
 	monolib_scrolbar.o \
@@ -4135,7 +4132,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_minifram.o \
 	coredll_msgdlg.o \
 	coredll_palette.o \
-	coredll_popupwin.o \
 	coredll_radiobox.o \
 	coredll_radiobut.o \
 	coredll_scrolbar.o \
@@ -4522,7 +4518,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_minifram.o \
 	corelib_msgdlg.o \
 	corelib_palette.o \
-	corelib_popupwin.o \
 	corelib_radiobox.o \
 	corelib_radiobut.o \
 	corelib_scrolbar.o \
@@ -8344,9 +8339,6 @@ coredll_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_popupwin.o: $(srcdir)/src/msw/popupwin.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_popupwin.o: $(srcdir)/src/motif/popupwin.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 coredll_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -10404,9 +10396,6 @@ corelib_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_popupwin.o: $(srcdir)/src/msw/popupwin.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_popupwin.o: $(srcdir)/src/motif/popupwin.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
 corelib_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -11077,46 +11066,46 @@ distclean: clean
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(SHARED_LD_CXX) $@ $(GLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__gldll___macinstnamecmd) $(__gldll___importlib) $(__gldll___soname_flags) $(dll___macver) $(EXTRALIBS_OPENGL)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p)
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(__gldll___so_symlinks_cmd)
 
-@COND_TOOLKIT_MOTIF@gldll_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp
-@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_X11@gldll_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MAC@gldll_glcanvas.o: $(srcdir)/src/mac/glcanvas.cpp
-@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM@gldll_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK@gldll_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp
-@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
+@COND_TOOLKIT_MOTIF@gldll_glcanvas.o: $(srcdir)/src/motif/glcanvas.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC@gldll_glcanvas.o: $(srcdir)/src/mac/glcanvas.cpp
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW@gldll_glcanvas.o: $(srcdir)/src/msw/glcanvas.cpp
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@gldll_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a: $(__gllib_PCH_DEP)  $(GLLIB_OBJECTS)
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	rm -f $@
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(AR) rcu $@ $(GLLIB_OBJECTS)
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(RANLIB) $@
 
-@COND_TOOLKIT_MOTIF@gllib_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp
-@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_X11@gllib_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MAC@gllib_glcanvas.o: $(srcdir)/src/mac/glcanvas.cpp
-@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM@gllib_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK@gllib_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp
-@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
+@COND_TOOLKIT_MOTIF@gllib_glcanvas.o: $(srcdir)/src/motif/glcanvas.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC@gllib_glcanvas.o: $(srcdir)/src/mac/glcanvas.cpp
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW@gllib_glcanvas.o: $(srcdir)/src/msw/glcanvas.cpp
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@gllib_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
 
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__htmldll_PCH_DEP)  $(HTMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__coredll___depname) $(__basedll___depname)
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(SHARED_LD_CXX) $@ $(HTMLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__htmldll___macinstnamecmd) $(__htmldll___importlib) $(__htmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
@@ -13162,9 +13151,6 @@ monodll_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_popupwin.o: $(srcdir)/src/msw/popupwin.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_popupwin.o: $(srcdir)/src/motif/popupwin.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -15708,9 +15694,6 @@ monolib_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_popupwin.o: $(srcdir)/src/msw/popupwin.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_popupwin.o: $(srcdir)/src/motif/popupwin.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
