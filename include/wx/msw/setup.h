@@ -163,6 +163,11 @@
  *
  */
 
+#define USE_APPLE_IEEE	  1
+				// if enabled, the float codec written by Apple
+				// will be used to write, in a portable way,
+				// float on the disk
+
 /*
  * Motif and XView
  *

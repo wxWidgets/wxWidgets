@@ -104,7 +104,9 @@ COMMONOBJS = \
   $(MSWDIR)\string.obj \
   $(MSWDIR)\time.obj \
   $(MSWDIR)\wxexpr.obj \
-  $(MSWDIR)\y_tab.obj
+  $(MSWDIR)\y_tab.obj \
+  $(MSWDIR)\datstrm.obj \
+  $(MSWDIR)\extended.obj
 
 #  $(MSWDIR)\matrix.obj \
 
@@ -184,6 +186,7 @@ MSWOBJS = \
   $(MSWDIR)\timer.obj \
   $(MSWDIR)\treectrl.obj \
   $(MSWDIR)\utils.obj \
+  $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
   $(MSWDIR)\droptgt.obj \
@@ -369,6 +372,8 @@ $(MSWDIR)\treectrl.obj:     $(MSWDIR)\treectrl.$(SRCSUFF)
 
 $(MSWDIR)\utils.obj:     $(MSWDIR)\utils.$(SRCSUFF)
 
+$(MSWDIR)\utilsexc.obj:	$(MSWDIR)\utilsexc.$(SRCSUFF)
+
 $(MSWDIR)\wave.obj:     $(MSWDIR)\wave.$(SRCSUFF)
 
 $(MSWDIR)\window.obj:     $(MSWDIR)\window.$(SRCSUFF)
@@ -455,6 +460,10 @@ $(MSWDIR)\string.obj:     $(COMMDIR)\string.$(SRCSUFF)
 $(MSWDIR)\matrix.obj:     $(COMMDIR)\matrix.$(SRCSUFF)
 
 $(MSWDIR)\time.obj:     $(COMMDIR)\time.$(SRCSUFF)
+
+$(MSWDIR)\datstrm.obj:	$(COMMDIR)\datstrm.$(SRCSUFF)
+
+$(MSWDIR)\extended.obj:	$(COMMDIR)\extended.c
 
 ########################################################
 # Generic objects (not always compiled, depending on

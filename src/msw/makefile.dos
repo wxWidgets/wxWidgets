@@ -104,7 +104,9 @@ COMMONOBJS = \
   $(COMMDIR)\list.obj \
   $(COMMDIR)\string.obj \
   $(COMMDIR)\time.obj \
-  $(COMMDIR)\y_tab.obj
+  $(COMMDIR)\y_tab.obj \
+  $(COMMDIR)\datstrm.obj \
+  $(COMMDIR)\extended.obj
 
 # Nested classes: won't comple
 #  $(COMMDIR)\fileconf.obj \
@@ -804,6 +806,16 @@ $(CPPFLAGS2) /Fo$@ /c /Tp $*.$(SRCSUFF)
 $(COMMDIR)/time.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/datstrm.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/extended.obj:     $*.c
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.c
 <<
 
 $(COMMDIR)/y_tab.obj:     $*.c $(COMMDIR)/lex_yy.c

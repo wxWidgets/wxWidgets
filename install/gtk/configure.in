@@ -696,6 +696,7 @@ DEFAULT_USE_ZLIB=1
 DEFAULT_USE_GDK_IMLIB=1
 DEFAULT_USE_LIBPNG=1
 
+DEFAULT_USE_APPLE_IEEE=1
 DEFAULT_USE_STORABLE_CLASSES=1
 DEFAULT_USE_AUTOTRANS=1
 DEFAULT_USE_AFM_FOR_POSTSCRIPT=1
@@ -764,31 +765,35 @@ dnl user options for libraries (no choice yet)
 dnl ----------------------------------------------------------------
 
 AC_OVERRIDES(zlib,zlib,
-**--with-zlib          use zlib (LZW comression),
+**--with-zlib             use zlib (LZW comression),
 USE_ZLIB)
 
 AC_OVERRIDES(gdk_imlib,gdk_imlib,
-**--with-gdk_imlib     use Raster's gdk_imlib (Image library),
+**--with-gdk_imlib        use Raster's gdk_imlib (Image library),
 USE_GDK_IMLIB)
 
 AC_OVERRIDES(libpng,libpng,
-**--with-libpng        use libpng (PNG image format),
+**--with-libpng           use libpng (PNG image format),
 USE_LIBPNG)
 
 AC_OVERRIDES(opengl,opengl,
-**--with-opengl        use opengl (OpenGL or Mesa),
+**--with-opengl           use opengl (OpenGL or Mesa),
 USE_OPENGL)
 
 dnl ----------------------------------------------------------------
 dnl user options for code features (no choice yet)
 dnl ----------------------------------------------------------------
 
+AC_OVERRIDES(apple-ieee, apple-ieee,
+**--with-apple-ieee	  use the Apple IEEE codec,
+USE_APPLE_IEEE)
+
 AC_OVERRIDES(storable,storable,
-**--with-storable          use storable classes,
+**--with-storable         use storable classes,
 USE_STORABLE_CLASSES)
 
 AC_OVERRIDES(autotrans,autotrans,
-**--with-autotrans         use gettext automatic translation,
+**--with-autotrans        use gettext automatic translation,
 USE_AUTOTRANS)
 
 AC_OVERRIDES(afmfonts,afmfonts,

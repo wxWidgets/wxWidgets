@@ -130,7 +130,7 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 #ifdef USE_STORABLE_CLASSES
 
 #define IMPLEMENT_STORABLE_CLASS(name, basename) \
-wxObject* WXDLLEXPORT_CTORFN wxStorableConstructorFor##name( fstream* stream, char* data )\
+wxObject* WXDLLEXPORT_CTORFN wxStorableConstructorFor##name( istream* stream, char* data )\
 	{ return new name( stream, data ); }\
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void)\
    { return new name; }\
@@ -138,7 +138,7 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void)\
    wxStorableConstructorFor##name );
 
 #define IMPLEMENT_STORABLE_CLASS2(name, basename1, basename2) \
-wxObject* WXDLLEXPORT_CTORFN wxStorableConstructorFor##name( fstream* stream, char* data )\
+wxObject* WXDLLEXPORT_CTORFN wxStorableConstructorFor##name( istream* stream, char* data )\
 	{ return new name( stream, data ); }\
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void)\
    { return new name; }\

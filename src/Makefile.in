@@ -55,6 +55,7 @@ LIB_CPP_SRC=\
  common/time.cpp \
  common/timercmn.cpp \
  common/utilscmn.cpp \
+ common/datstrm.cpp \
 \
  gtk/app.cpp \
  gtk/bitmap.cpp \
@@ -118,6 +119,7 @@ LIB_CPP_SRC=\
  generic/treectrl.cpp
  
 LIB_C_SRC=\
+ common/extended.c \
 \
  gtk/win_gtk.c \
 \

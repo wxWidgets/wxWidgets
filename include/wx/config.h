@@ -29,7 +29,7 @@
 
 /// shall we be case sensitive in parsing variable names?
 #ifndef APPCONF_CASE_SENSITIVE
-  #define  APPCONF_CASE_SENSITIVE       false
+  #define  APPCONF_CASE_SENSITIVE       FALSE
 #endif
 
 /// separates group and entry names
@@ -44,7 +44,7 @@
 
 /// should we use registry instead of configuration files under Win32?
 #ifndef   APPCONF_WIN32_NATIVE
-  #define APPCONF_WIN32_NATIVE          true
+  #define APPCONF_WIN32_NATIVE          TRUE
 #endif
 
 // ----------------------------------------------------------------------------
@@ -124,13 +124,13 @@ public:
   virtual bool Write(const char *szKey, const char *szValue) = 0;
   virtual bool Write(const char *szKey, long lValue) = 0;
     // permanently writes all changes
-  virtual bool Flush(bool bCurrentOnly = false) = 0;
+  virtual bool Flush(bool bCurrentOnly = FALSE) = 0;
 
   // delete entries/groups
     // deletes the specified entry and the group it belongs to if
     // it was the last key in it and the second parameter is true
   virtual bool DeleteEntry(const char *szKey,
-                           bool bDeleteGroupIfEmpty = true) = 0;
+                           bool bDeleteGroupIfEmpty = TRUE) = 0;
     // delete the group (with all subgroups)
   virtual bool DeleteGroup(const char *szKey) = 0;
     // delete the whole underlying object (disk file, registry key, ...)

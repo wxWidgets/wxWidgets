@@ -43,7 +43,7 @@ public:
   virtual bool Read(long&, const char *, long = 0) const;
   virtual bool Write(const char *szKey, const char *szValue);
   virtual bool Write(const char *szKey, long Value);
-  virtual bool Flush(bool /* bCurrentOnly = FALSE */ ) { return true; }
+  virtual bool Flush(bool /* bCurrentOnly = FALSE */ ) { return TRUE; }
 
   // delete
   virtual bool DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso);

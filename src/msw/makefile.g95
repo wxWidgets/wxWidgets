@@ -109,7 +109,9 @@ COMMONOBJS = \
   $(COMMDIR)/list.$(OBJSUFF) \
   $(COMMDIR)/string.$(OBJSUFF) \
   $(COMMDIR)/time.$(OBJSUFF) \
-  $(COMMDIR)/y_tab.$(OBJSUFF)
+  $(COMMDIR)/y_tab.$(OBJSUFF) \
+  $(COMMDIR)/datstrm.$(OBJSUFF) \
+  $(COMMDIR)/extended.$(OBJSUFF)
 
 #  $(COMMDIR)/wxstrgnu/wxstrgnu.$(OBJSUFF) \
 #  $(COMMDIR)/wxstrgnu/wxregex.$(OBJSUFF)
@@ -189,6 +191,7 @@ MSWOBJS = \
   timer.$(OBJSUFF) \
   treectrl.$(OBJSUFF) \
   utils.$(OBJSUFF) \
+  utilsexc.$(OBJSUFF) \
   wave.$(OBJSUFF) \
   window.$(OBJSUFF) \
   $(OLEDIR)/droptgt.$(OBJSUFF) \

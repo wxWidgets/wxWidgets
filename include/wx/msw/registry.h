@@ -111,7 +111,7 @@ public:
 
   // get infomation about the key
     // get the (full) key name. Abbreviate std root keys if bShortPrefix.
-  wxString GetName(bool bShortPrefix = true) const;
+  wxString GetName(bool bShortPrefix = TRUE) const;
     // return true if the key exists
   bool  Exists()   const;
     // return true if the key is opened
@@ -124,7 +124,7 @@ public:
     // which need the key to be opened if the key is not opened yet)
   bool  Open();
     // create the key: will fail if the key already exists and bOkIfExists
-  bool  Create(bool bOkIfExists = true);
+  bool  Create(bool bOkIfExists = TRUE);
     // close the key (will be automatically done in dtor)
   bool  Close();
 

@@ -176,6 +176,10 @@
 /*
  * Use wxTree
  */
+/*
+ * Use Apple Ieee-double converter
+ */
+#undef USE_APPLE_IEEE
 
 /********************** DO NOT CHANGE BELOW THIS POINT **********************/
 

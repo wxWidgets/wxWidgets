@@ -333,11 +333,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxInitDialogEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxUpdateUIEvent, wxEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
 
 #include "wx/utils.h"
 IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxList)
 
 IMPLEMENT_DYNAMIC_CLASS(wxRect, wxObject)
+
+#include "wx/process.h"
+IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
 
 #if USE_TIMEDATE
 #include "wx/date.h"

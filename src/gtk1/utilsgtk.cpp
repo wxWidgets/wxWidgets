@@ -337,10 +337,46 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 // subprocess routines
 //------------------------------------------------------------------------
 
-long wxExecute( char **argv, bool Async )
+typedef struct {
+  gint pid, tag;
+  wxProcess *process;
+} wxEndProcessData;
+
+static void GTK_EndProcessDetector(gpointer data, gint source,
+                                   GdkInputCondition condition)
 {
+  wxEndProcessData *proc_data = (wxEndProcessData *)data;
+  int pid;
+
+  pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
+
+  wait4(proc_data->pid, NULL, 0, NULL);
+
+  close(source);
+  gdk_input_remove(proc_data->tag);
+
+  if (proc_data->process)
+    proc_data->process->OnTerminate(proc_data->pid);
+
+  if (proc_data->pid > 0)
+    delete proc_data;
+  else
+    proc_data->pid = 0;
+};
+
+long wxExecute( char **argv, bool Async, wxProcess *process )
+{
+    wxEndProcessData *data = new wxEndProcessData;
+    int end_proc_detect[2];
+
     if (*argv == NULL)
-	return FALSE;
+	return 0;
+
+    /* Create pipes */
+    if (pipe(end_proc_detect) == -1) {
+      perror("pipe failed");
+      return 0;
+    }
 
     /* fork the process */
 #if defined(sun) || defined(__ultrix) || defined(__bsdi__)
@@ -350,8 +386,11 @@ long wxExecute( char **argv, bool Async )
 #endif
     if (pid == -1) {
 	perror ("fork failed");
-	return FALSE;
+	return 0;
     } else if (pid == 0) {
+        /* Close fd not useful */
+        close(end_proc_detect[0]); // close reading side
+
 	/* child */
 #ifdef _AIX
 	execvp ((const char *)*argv, (const char **)argv);
@@ -366,39 +405,26 @@ long wxExecute( char **argv, bool Async )
 	_exit (-1);
     }
 
-    // Code below is NOT really acceptable!
-    // One should NEVER use wait under X
-    // Ideas? A Sleep idle callback?
-    // WARNING: WARNING: WARNING: WARNING:
-    // The CODE BELOW IS BAD BAD BAD BAD!
+    close(end_proc_detect[1]); // close writing side
+    data->tag = gdk_input_add(end_proc_detect[0], GDK_INPUT_READ,
+                              GTK_EndProcessDetector, (gpointer)data);
+    data->pid = pid;
     if (Async) {
-	int status;
-/*
-	wxSleep(2);		// Give a little time
-*/
-#if !defined(DG) && \
-    !defined(__AIX__) && \
-    !defined(__xlC__) && \
-    !defined(__SVR4__) && \
-    !defined(__SUN__) && \
-    !defined(__ALPHA__) && \
-    !defined(__SGI__) && \
-    !defined(__HPUX__) && \
-    !defined(__SUNPRO_CC) && \
-    !defined(__FreeBSD__)
-        while (wait((union wait*)&status) != pid)
-#else
-	while (wait(&status) != pid)
-#endif
-      {};
-/*
-	    wxSleep(3);	// 3 sec?
-*/
-    };
-    return TRUE;
+      data->process = process;
+    } else {
+      data->process = NULL;
+      data->pid = -(data->pid);
+
+      while (data->pid != 0)
+        wxYield();
+
+      delete data;
+    }
+
+    return pid;
 };
 
-long wxExecute( const wxString& command, bool Async )
+long wxExecute( const wxString& command, bool Async, wxProcess *process )
 {
     if (command.IsNull() || command == "") return FALSE;
 
@@ -412,6 +438,6 @@ long wxExecute( const wxString& command, bool Async )
     argv[argc++] = strtok (tmp, IFS);
     while ((argv[argc++] = strtok(NULL, IFS)) != NULL)
 	/* loop */ ;
-    return wxExecute(argv, Async);
+    return wxExecute(argv, Async, process);
 };
 

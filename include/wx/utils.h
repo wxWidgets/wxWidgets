@@ -21,6 +21,7 @@
 #include "wx/list.h"
 #include "wx/window.h"
 #include "wx/filefn.h"
+#include "wx/process.h"
 
 #if USE_IOSTREAMH
 #include <iostream.h>
@@ -96,8 +97,10 @@ int WXDLLEXPORT wxHexToDec(char *buf);
 void WXDLLEXPORT wxDecToHex(int dec, char *buf);
 
 // Execute another program. Returns 0 if there was an error, a PID otherwise.
-long WXDLLEXPORT wxExecute(char **argv, bool Async = FALSE);
-long WXDLLEXPORT wxExecute(const wxString& command, bool Async = FALSE);
+long WXDLLEXPORT wxExecute(char **argv, bool Async = FALSE,
+                           wxProcess *process = NULL);
+long WXDLLEXPORT wxExecute(const wxString& command, bool Async = FALSE,
+                           wxProcess *process = NULL);
 
 #define wxSIGTERM 1
 

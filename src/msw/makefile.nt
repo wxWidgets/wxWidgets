@@ -106,7 +106,9 @@ COMMONOBJS = \
   $(COMMDIR)\string.obj \
   $(COMMDIR)\time.obj \
   $(COMMDIR)\wxexpr.obj \
-  $(COMMDIR)\y_tab.obj
+  $(COMMDIR)\y_tab.obj \
+  $(COMMDIR)\datstrm.obj \
+  $(COMMDIR)\extended.obj
 
 #  $(COMMDIR)\wxstrgnu\wxstrgnu.obj \
 #  $(COMMDIR)\wxstrgnu\wxregex.obj \
@@ -189,6 +191,7 @@ MSWOBJS = \
   $(MSWDIR)\timer.obj \
   $(MSWDIR)\treectrl.obj \
   $(MSWDIR)\utils.obj \
+  $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
   $(OLEDIR)\droptgt.obj \
@@ -646,6 +649,11 @@ $(MSWDIR)/utils.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
+$(MSWDIR)/utilsexc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
 $(MSWDIR)/wave.obj:     $*.$(SRCSUFF)
         echo $(CPPFLAGS)
         cl @<<
@@ -877,6 +885,16 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 $(COMMDIR)/time.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\datstrm.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/extended.obj:     $*.c
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.c /Fo$@
 <<
 
 $(COMMDIR)/y_tab.obj:     $*.c $(COMMDIR)/lex_yy.c

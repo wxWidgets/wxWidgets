@@ -189,7 +189,7 @@ bool wxRegConfig::Read(wxString& str,
 {
   PathChanger path(this, szKey);
 
-  bool bQueryGlobal = true;
+  bool bQueryGlobal = TRUE;
 
   // if immutable key exists in global key we must check that it's not
   // overriden by the local key with the same name
@@ -200,30 +200,30 @@ bool wxRegConfig::Read(wxString& str,
                    path.Name().c_str());
       }
 
-      return true;
+      return TRUE;
     }
     else {
       // don't waste time - it's not there anyhow
-      bQueryGlobal = false;
+      bQueryGlobal = FALSE;
     }
   }
 
   // first try local key
   if ( TryGetValue(m_keyLocal, path.Name(), str) ||
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), str)) ) {
-    return true;
+    return TRUE;
   }
 
   // default value
   str = szDefault;
-  return false;
+  return FALSE;
 }
 
 bool wxRegConfig::Read(long &lValue, const char *szKey, long lDefault) const
 {
   PathChanger path(this, szKey);
 
-  bool bQueryGlobal = true;
+  bool bQueryGlobal = TRUE;
 
   // if immutable key exists in global key we must check that it's not
   // overriden by the local key with the same name
@@ -234,23 +234,23 @@ bool wxRegConfig::Read(long &lValue, const char *szKey, long lDefault) const
                      path.Name().c_str());
       }
 
-      return true;
+      return TRUE;
     }
     else {
       // don't waste time - it's not there anyhow
-      bQueryGlobal = false;
+      bQueryGlobal = FALSE;
     }
   }
 
   // first try local key
   if ( TryGetValue(m_keyLocal, path.Name(), &lValue) ||
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), &lValue)) ) {
-    return true;
+    return TRUE;
   }
 
   // default
   lValue = lDefault;
-  return false;
+  return FALSE;
 }
 
 bool wxRegConfig::Write(const char *szKey, const char *szValue)
@@ -259,7 +259,7 @@ bool wxRegConfig::Write(const char *szKey, const char *szValue)
 
   if ( IsImmutable(path.Name()) ) {
     wxLogError("Can't change immutable entry '%s'.", path.Name().c_str());
-    return false;
+    return FALSE;
   }
 
   return m_keyLocal.SetValue(path.Name(), szValue);
@@ -271,7 +271,7 @@ bool wxRegConfig::Write(const char *szKey, long lValue)
 
   if ( IsImmutable(path.Name()) ) {
     wxLogError("Can't change immutable entry '%s'.", path.Name().c_str());
-    return false;
+    return FALSE;
   }
 
   return m_keyLocal.SetValue(path.Name(), lValue);
@@ -285,7 +285,7 @@ bool wxRegConfig::DeleteEntry(const char *szValue, bool bGroupIfEmptyAlso)
   PathChanger path(this, szValue);
 
   if ( !m_keyLocal.DeleteValue(path.Name()) )
-    return false;
+    return FALSE;
 
   if ( m_keyLocal.IsEmpty() ) {
     wxString strKey = GetPath().Right(APPCONF_PATH_SEPARATOR);
@@ -293,7 +293,7 @@ bool wxRegConfig::DeleteEntry(const char *szValue, bool bGroupIfEmptyAlso)
     return m_keyLocal.DeleteKey(strKey);
   }
 
-  return true;
+  return TRUE;
 }
 
 bool wxRegConfig::DeleteGroup(const char *szKey)
@@ -306,7 +306,7 @@ bool wxRegConfig::DeleteGroup(const char *szKey)
 bool wxRegConfig::DeleteAll()
 {
   // first of all, prevent the creation of new registry entries
-  Config::EnableAutosave(false);
+  Config::EnableAutosave(FALSE);
 
   m_keyLocal.Close();
   m_keyGlobal.Close();
