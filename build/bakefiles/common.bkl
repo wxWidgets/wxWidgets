@@ -22,11 +22,17 @@
     <set var="WXVER_MAJOR">$(wxwin.getVersionMajor())</set>
     <set var="WXVER_MINOR">$(wxwin.getVersionMinor())</set>
     <set var="WXVER_RELEASE">$(wxwin.getVersionRelease())</set>
-    <set var="WX_VERSION" make_var="1">
-        $(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)
-    </set>
     <set var="WX_RELEASE" make_var="1">
         $(WXVER_MAJOR).$(WXVER_MINOR)
+    </set>
+    <set var="WX_RELEASE_NODOT" make_var="1">
+        $(WXVER_MAJOR)$(WXVER_MINOR)
+    </set>
+    <set var="WX_VERSION" make_var="1">
+        $(WX_RELEASE).$(WXVER_RELEASE)
+    </set>
+    <set var="WX_VERSION_NODOT" make_var="1">
+        $(WX_RELEASE_NODOT)$(WXVER_RELEASE)
     </set>
 
     <set var="WX_STABLE_BRANCH">$(int(int(WXVER_MINOR) % 2 == 0))</set>
@@ -37,8 +43,8 @@
     </set>
     <set var="WXMACVERSION">$(WX_VERSION)</set>
     <set var="WXWIN32DLLVERSION">
-        <if cond="WX_STABLE_BRANCH=='1'">$(WXVER_MAJOR)$(WXVER_MINOR)</if>
-        <if cond="WX_STABLE_BRANCH=='0'">$(WXVER_MAJOR)$(WXVER_MINOR)$(WXVER_RELEASE)</if>
+        <if cond="WX_STABLE_BRANCH=='1'">$(WX_RELEASE_NODOT)</if>
+        <if cond="WX_STABLE_BRANCH=='0'">$(WX_VERSION_NODOT)</if>
     </set>
     
     
@@ -90,14 +96,14 @@
     <if cond="FORMAT=='autoconf'">
         <set var="WXNAMEPREFIX">wx_base$(WXBASEPORT)</set>
         <set var="WXNAMEPREFIXGUI">wx_$(PORTNAME)$(WXUNIVNAME)</set>
-        <set var="WXVERSIONTAG">-$(WXVER_MAJOR).$(WXVER_MINOR)</set>
+        <set var="WXVERSIONTAG">-$(WX_RELEASE)</set>
     </if>
     <if cond="FORMAT!='autoconf'">
         <set var="WXNAMEPREFIX">
-            wxbase$(WXBASEPORT)$(WXVER_MAJOR)$(WXVER_MINOR)
+            wxbase$(WXBASEPORT)$(WX_RELEASE_NODOT)
         </set>
         <set var="WXNAMEPREFIXGUI">
-            wx$(PORTNAME)$(WXUNIVNAME)$(WXVER_MAJOR)$(WXVER_MINOR)</set>
+            wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)</set>
         <set var="WXVERSIONTAG"></set>
     </if>
     <set var="WXDLLNAMEPREFIX">
@@ -263,7 +269,12 @@
     </template>
 
     <template id="3rdparty_lib" template="common_settings,anylib">
-        <libname>$(id)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
+        <if cond="FORMAT=='autoconf'">
+            <libname>$(id)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
+        </if>
+        <if cond="FORMAT!='autoconf'">
+            <libname>$(id)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)</libname>
+        </if>
         <!--
         we want to install 3rd party libs system-wide only with static
         version of wxWidgets; otherwise they are embedded in shared libs:
@@ -504,22 +515,14 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
 
     <if cond="WX_STABLE_BRANCH=='1'">
         <set var="PLUGIN_VERSION0">
-            <if cond="PLATFORM_UNIX=='1'">
-                $(WXVER_MAJOR).$(WXVER_MINOR)
-            </if>
-            <if cond="PLATFORM_UNIX=='0'">
-                $(WXVER_MAJOR)$(WXVER_MINOR)
-            </if>
+            <if cond="PLATFORM_UNIX=='1'">$(WX_RELEASE)</if>
+            <if cond="PLATFORM_UNIX=='0'">$(WX_RELEASE_NODOT)</if>
         </set>
     </if>
     <if cond="WX_STABLE_BRANCH=='0'">
         <set var="PLUGIN_VERSION0">
-            <if cond="PLATFORM_UNIX=='1'">
-                $(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)
-            </if>
-            <if cond="PLATFORM_UNIX=='0'">
-                $(WXVER_MAJOR)$(WXVER_MINOR)$(WXVER_RELEASE)
-            </if>
+            <if cond="PLATFORM_UNIX=='1'">$(WX_VERSION)</if>
+            <if cond="PLATFORM_UNIX=='0'">$(WX_VERSION_NODOT)</if>
         </set>
     </if>
     <set var="PLUGVERDELIM">

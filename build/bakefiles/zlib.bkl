@@ -3,13 +3,20 @@
 
     <if cond="FORMAT=='autoconf'">
         <option name="wxUSE_ZLIB"/>
+        <set var="LIB_ZLIB">
+            <if cond="wxUSE_ZLIB=='builtin'">
+                wxzlib$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            </if>
+        </set>
     </if>
     <if cond="FORMAT!='autoconf'">
         <set var="wxUSE_ZLIB">builtin</set>
+        <set var="LIB_ZLIB">
+            <if cond="wxUSE_ZLIB=='builtin'">
+                wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)
+            </if>
+        </set>
     </if>
-    <set var="LIB_ZLIB">
-        <if cond="wxUSE_ZLIB=='builtin'">wxzlib$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</if>
-    </set>
     <set var="INC_ZLIB">
         <if cond="wxUSE_ZLIB=='builtin'">$(TOP_SRCDIR)src/zlib</if>
     </set>

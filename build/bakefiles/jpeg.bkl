@@ -3,15 +3,20 @@
 
     <if cond="FORMAT=='autoconf'">
         <option name="wxUSE_LIBJPEG"/>
+        <set var="LIB_JPEG">
+            <if cond="wxUSE_LIBJPEG=='builtin' and USE_GUI=='1'">
+                wxjpeg$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            </if>
+        </set>
     </if>
     <if cond="FORMAT!='autoconf'">
         <set var="wxUSE_LIBJPEG">builtin</set>
+        <set var="LIB_JPEG">
+            <if cond="wxUSE_LIBJPEG=='builtin' and USE_GUI=='1'">
+                wxjpeg$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)
+            </if>
+        </set>
     </if>
-    <set var="LIB_JPEG">
-        <if cond="wxUSE_LIBJPEG=='builtin' and USE_GUI=='1'">
-            wxjpeg$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-        </if>
-    </set>
     <set var="INC_JPEG">
         <if cond="wxUSE_LIBJPEG=='builtin'">$(TOP_SRCDIR)src/jpeg</if>
     </set>

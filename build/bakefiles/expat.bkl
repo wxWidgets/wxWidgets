@@ -3,13 +3,20 @@
 
     <if cond="FORMAT=='autoconf'">
         <option name="wxUSE_EXPAT"/>
+        <set var="LIB_EXPAT">
+            <if cond="wxUSE_EXPAT=='builtin'">
+                wxexpat$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            </if>
+        </set>
     </if>
     <if cond="FORMAT!='autoconf'">
         <set var="wxUSE_EXPAT">builtin</set>
+        <set var="LIB_EXPAT">
+            <if cond="wxUSE_EXPAT=='builtin'">
+                wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)
+            </if>
+        </set>
     </if>
-    <set var="LIB_EXPAT">
-        <if cond="wxUSE_EXPAT=='builtin'">wxexpat$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</if>
-    </set>
     <set var="INC_EXPAT">
         <if cond="wxUSE_EXPAT=='builtin'">$(TOP_SRCDIR)src/expat/lib</if>
     </set>
