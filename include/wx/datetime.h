@@ -97,6 +97,13 @@ class WXDLLEXPORT wxDateSpan;
 
 class WXDLLEXPORT wxDateTime
 {
+private:
+    // invalid wxDateTime object - returned by all functions which return
+    // "wxDateTime &" on failure.
+    // This variable has to be declared at the start of the class,
+    // or some compilers (e.g. Watcom C++) won't like it being used further down.
+    static wxDateTime ms_InvDateTime;
+
 public:
     // types
     // ------------------------------------------------------------------------
@@ -903,10 +910,6 @@ private:
     // representation, as time_t is in seconds and we use milliseconds it's
     // fixed to 1000
     static const long TIME_T_FACTOR;
-
-    // invalid wxDateTime object - returned by all functions which return
-    // "wxDateTime &" on failure
-    static wxDateTime ms_InvDateTime;
 
     // returns TRUE if we fall in range in which we can use standard ANSI C
     // functions

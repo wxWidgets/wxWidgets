@@ -56,9 +56,12 @@
     #endif
 #else // no native long long type
     // both warning and pragma warning are not portable, but at least an
-    // unknown pragma should never be an error
+    // unknown pragma should never be an error.
+    // Err, actually, Watcom C++ doesn't like it.
+#ifndef __WATCOMC__
     #pragma warning "Your compiler does not appear to support 64 bit "\
                     "integers, using emulation class instead."
+#endif
 
     #define wxUSE_LONGLONG_WX 1
 #endif // compiler

@@ -276,6 +276,9 @@ Note (1): setup.h overrides wxUSE_LIBJPEG and sets it to 0, since
 imagjpeg.cpp doesn't compile.
 Note (2): makewat.env uses the odbc32.lib supplied in wxWindows' lib\watcom
 directory. See the notes in that directory.
+Note (3): makefile compilation seems broken (28/12/99) with a
+GPF in the linker. Too many object files? Could try switching
+some options off in setup.h.
 
 Metrowerks CodeWarrior compilation
 ----------------------------------
