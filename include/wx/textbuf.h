@@ -147,7 +147,7 @@ public:
 
     // remove all lines
     void Clear() { m_aLines.Clear(); m_nCurLine = 0; }
-    
+
     // change the buffer (default argument means "don't change type")
     // possibly in another format
     bool Write(wxTextFileType typeNew = wxTextFileType_None,
@@ -161,7 +161,7 @@ protected:
     // -----
 
     // default ctor, use Open(string)
-    wxTextBuffer() { }
+    wxTextBuffer() { m_isOpened = false; }
 
     // ctor from filename
     wxTextBuffer(const wxString& strBufferName);
