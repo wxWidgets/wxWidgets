@@ -541,12 +541,12 @@ bool wxTempFile::Commit()
     m_file.Close();
 
 #ifndef __WXMAC__
-    if ( wxFile::Exists(m_strName) && wxRemove(m_strName.fn_str()) != 0 ) {
+    if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
         wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
         return FALSE;
     }
 
-    if ( wxRename(m_strTemp.fn_str(), m_strName.fn_str()) != 0 ) {
+    if ( wxRename(m_strTemp, m_strName) != 0 ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
         return FALSE;
     }
@@ -569,7 +569,7 @@ void wxTempFile::Discard()
 {
     m_file.Close();
 #ifndef __WXMAC__
-    if ( wxRemove(m_strTemp.fn_str()) != 0 )
+    if ( wxRemove(m_strTemp) != 0 )
         wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
 #else
     if ( remove( wxUnix2MacFilename(m_strTemp.fn_str())) != 0 )

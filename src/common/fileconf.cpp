@@ -881,7 +881,7 @@ bool wxFileConfig::DeleteAll()
 {
   CleanUp();
 
-  if ( wxRemove(m_strLocalFile.fn_str()) == -1 )
+  if ( wxRemove(m_strLocalFile) == -1 )
     wxLogSysError(_("can't delete user configuration file '%s'"), m_strLocalFile.c_str());
 
   m_strLocalFile = m_strGlobalFile = wxT("");
