@@ -225,6 +225,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_main.o \
 	$(OBJS)\baselib_mslu.o \
 	$(OBJS)\baselib_volume.o
+BUILD_CFG_FILE = $(SETUPHDIR)\build.cfg
 COREDLL_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
@@ -9531,34 +9532,34 @@ $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a: $(BASELIB_OBJECTS)
 endif
 endif
 
-build_cfg_file: $(LIBDIRNAME)
-	@echo WXVER_MAJOR=2 >$(LIBDIRNAME)\build.cfg
-	@echo WXVER_MINOR=5 >>$(LIBDIRNAME)\build.cfg
-	@echo WXVER_RELEASE=1 >>$(LIBDIRNAME)\build.cfg
-	@echo BUILD=$(BUILD) >>$(LIBDIRNAME)\build.cfg
-	@echo MONOLITHIC=$(MONOLITHIC) >>$(LIBDIRNAME)\build.cfg
-	@echo SHARED=$(SHARED) >>$(LIBDIRNAME)\build.cfg
-	@echo UNICODE=$(UNICODE) >>$(LIBDIRNAME)\build.cfg
-	@echo WXUNIV=$(WXUNIV) >>$(LIBDIRNAME)\build.cfg
-	@echo CFG=$(CFG) >>$(LIBDIRNAME)\build.cfg
-	@echo VENDOR=$(VENDOR) >>$(LIBDIRNAME)\build.cfg
-	@echo OFFICIAL_BUILD=$(OFFICIAL_BUILD) >>$(LIBDIRNAME)\build.cfg
-	@echo DEBUG_FLAG=$(DEBUG_FLAG) >>$(LIBDIRNAME)\build.cfg
-	@echo DEBUG_INFO=$(DEBUG_INFO) >>$(LIBDIRNAME)\build.cfg
-	@echo RUNTIME_LIBS=$(RUNTIME_LIBS) >>$(LIBDIRNAME)\build.cfg
-	@echo MSLU=$(MSLU) >>$(LIBDIRNAME)\build.cfg
-	@echo USE_EXCEPTIONS=$(USE_EXCEPTIONS) >>$(LIBDIRNAME)\build.cfg
-	@echo USE_GUI=$(USE_GUI) >>$(LIBDIRNAME)\build.cfg
-	@echo USE_HTML=$(USE_HTML) >>$(LIBDIRNAME)\build.cfg
-	@echo USE_ODBC=$(USE_ODBC) >>$(LIBDIRNAME)\build.cfg
-	@echo USE_OPENGL=$(USE_OPENGL) >>$(LIBDIRNAME)\build.cfg
-	@echo COMPILER=gcc >>$(LIBDIRNAME)\build.cfg
-	@echo CC=$(CC) >>$(LIBDIRNAME)\build.cfg
-	@echo CXX=$(CXX) >>$(LIBDIRNAME)\build.cfg
-	@echo CFLAGS=$(CFLAGS) >>$(LIBDIRNAME)\build.cfg
-	@echo CPPFLAGS=$(CPPFLAGS) >>$(LIBDIRNAME)\build.cfg
-	@echo CXXFLAGS=$(CXXFLAGS) >>$(LIBDIRNAME)\build.cfg
-	@echo LDFLAGS=$(LDFLAGS) >>$(LIBDIRNAME)\build.cfg
+build_cfg_file: $(SETUPHDIR)
+	@echo WXVER_MAJOR=2 >$(BUILD_CFG_FILE)
+	@echo WXVER_MINOR=5 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=1 >>$(BUILD_CFG_FILE)
+	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
+	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
+	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
+	@echo UNICODE=$(UNICODE) >>$(BUILD_CFG_FILE)
+	@echo WXUNIV=$(WXUNIV) >>$(BUILD_CFG_FILE)
+	@echo CFG=$(CFG) >>$(BUILD_CFG_FILE)
+	@echo VENDOR=$(VENDOR) >>$(BUILD_CFG_FILE)
+	@echo OFFICIAL_BUILD=$(OFFICIAL_BUILD) >>$(BUILD_CFG_FILE)
+	@echo DEBUG_FLAG=$(DEBUG_FLAG) >>$(BUILD_CFG_FILE)
+	@echo DEBUG_INFO=$(DEBUG_INFO) >>$(BUILD_CFG_FILE)
+	@echo RUNTIME_LIBS=$(RUNTIME_LIBS) >>$(BUILD_CFG_FILE)
+	@echo MSLU=$(MSLU) >>$(BUILD_CFG_FILE)
+	@echo USE_EXCEPTIONS=$(USE_EXCEPTIONS) >>$(BUILD_CFG_FILE)
+	@echo USE_GUI=$(USE_GUI) >>$(BUILD_CFG_FILE)
+	@echo USE_HTML=$(USE_HTML) >>$(BUILD_CFG_FILE)
+	@echo USE_ODBC=$(USE_ODBC) >>$(BUILD_CFG_FILE)
+	@echo USE_OPENGL=$(USE_OPENGL) >>$(BUILD_CFG_FILE)
+	@echo COMPILER=gcc >>$(BUILD_CFG_FILE)
+	@echo CC=$(CC) >>$(BUILD_CFG_FILE)
+	@echo CXX=$(CXX) >>$(BUILD_CFG_FILE)
+	@echo CFLAGS=$(CFLAGS) >>$(BUILD_CFG_FILE)
+	@echo CPPFLAGS=$(CPPFLAGS) >>$(BUILD_CFG_FILE)
+	@echo CXXFLAGS=$(CXXFLAGS) >>$(BUILD_CFG_FILE)
+	@echo LDFLAGS=$(LDFLAGS) >>$(BUILD_CFG_FILE)
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
