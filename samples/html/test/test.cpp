@@ -131,7 +131,6 @@ class BoldProcessor : public wxHtmlProcessor
    // `Main program' equivalent: the program execution "starts" here
    bool MyApp::OnInit()
    {
-     wxLog::AddTraceMask(wxT("strconv"));
 #if wxUSE_SYSTEM_OPTIONS
      wxSystemOptions::SetOption(wxT("no-maskblt"), 1);
 #endif
