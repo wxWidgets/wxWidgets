@@ -387,6 +387,7 @@ const int  ID_LISTBOX_FONT      = 136;
 const int  ID_LISTBOX_ENABLE    = 137;
 const int  ID_LISTBOX_SORTED    = 138;
 const int  ID_LISTBOX_TOGGLE    = 139;
+const int  ID_LISTBOX_SETFIRST  = 140;
 
 const int  ID_CHOICE            = 120;
 const int  ID_CHOICE_SEL_NUM    = 121;
@@ -446,6 +447,7 @@ EVT_BUTTON    (ID_LISTBOX_APPEND,       MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_DELETE,       MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_FONT,         MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_TOGGLE,       MyPanel::OnListBoxButtons)
+EVT_BUTTON    (ID_LISTBOX_SETFIRST,     MyPanel::OnListBoxButtons)
 EVT_CHECKBOX  (ID_LISTBOX_ENABLE,       MyPanel::OnListBoxButtons)
 EVT_CHOICE    (ID_CHOICE,               MyPanel::OnChoice)
 EVT_CHOICE    (ID_CHOICE_SORTED,        MyPanel::OnChoice)
@@ -593,10 +595,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     wxPanel *panel = new wxPanel(m_notebook);
     m_listbox = new wxListBox( panel, ID_LISTBOX,
-                               wxPoint(10,10), wxSize(120,70),
+                               wxPoint(10,10), wxSize(120,50),
                                5, choices);
+    m_listbox->SetFirstItem( 1 );
     m_listboxSorted = new wxListBox( panel, ID_LISTBOX_SORTED,
-                                     wxPoint(10,90), wxSize(120,70),
+                                     wxPoint(10,90), wxSize(120,50),
                                      5, choices, wxLB_SORT);
 
     SetControlClientData("listbox", m_listbox);
@@ -613,6 +616,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new MyButton( panel, ID_LISTBOX_APPEND, "&Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_DELETE, "D&elete selected item", wxPoint(180,130), wxSize(140,30) );
     wxButton *button = new MyButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
+    (void)new wxButton( panel, ID_LISTBOX_SETFIRST, "#2 SetFirstItem", wxPoint(180,180), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_TOGGLE, "Toggle checkbox", wxPoint(340,180), wxSize(140,30) );
 
     button->SetDefault();
@@ -1032,6 +1036,11 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
         case ID_LISTBOX_TOGGLE:
             {
                 m_checkbox->SetValue( !m_checkbox->GetValue() );
+                break;
+            }
+        case ID_LISTBOX_SETFIRST:
+            {
+                m_listbox->SetFirstItem( 2 );
                 break;
             }
     }
