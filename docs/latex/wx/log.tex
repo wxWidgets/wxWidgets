@@ -40,7 +40,9 @@ of messages.
 \helpref{OnLog}{wxlogonlog}\\
 \helpref{GetActiveTarget}{wxloggetactivetarget}\\
 \helpref{SetActiveTarget}{wxlogsetactivetarget}\\
-\helpref{DontCreateOnDemand}{wxlogdontcreateondemand}
+\helpref{DontCreateOnDemand}{wxlogdontcreateondemand}\\
+\helpref{Suspend}{wxlogsuspend}\\
+\helpref{Resume}{wxlogresume}
 
 \membersection{Message buffering}
 
@@ -177,6 +179,33 @@ Returns the pointer to the active log target (may be NULL).
 
 Sets the specified log target as the active one. Returns the pointer to the
 previous active log target (may be NULL).
+
+\membersection{wxLog::Suspend}\label{wxlogsuspend}
+
+\func{static void}{Suspend}{\void}
+
+Suspends the logging until \helpref{Resume}{wxlogresume} is called. Note that
+the latter must be called the same number of times as the former to undo it,
+i.e. if you call Suspend() twice you must call Resume() twice as well.
+
+Note that suspending the logging means that the log sink won't be be flushed
+periodically, it doesn't have any effect if the current log target does the
+logging immediately without waiting for \helpref{Flush}{wxlogflush} to be
+called (the standard GUI log target only shows the log dialog when it is
+flushed, so Suspend() works as expected with it).
+
+\wxheading{See also:}
+
+\helpref{Resume}{wxlogresume},\\
+\helpref{wxLogNull}{wxlogoverview}
+
+\membersection{wxLog::Resume}\label{wxlogresume}
+
+\func{static void}{Resume}{\void}
+
+Resumes logging previously suspended by a call to 
+\helpref{Suspend|wxlogsuspend}. All messages logged in the meanwhile will be
+flushed soon.
 
 \membersection{wxLog::DontCreateOnDemand}\label{wxlogdontcreateondemand}
 
