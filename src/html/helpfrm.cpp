@@ -1099,6 +1099,14 @@ EVENT HANDLING :
 */
 
 
+void wxHtmlHelpFrame::OnActivate(wxActivateEvent& event)
+{
+    // This saves one mouse click when using the
+    // wxHTML for context sensitive help systems
+    if (event.GetActive() && m_HtmlWin)
+        m_HtmlWin->SetFocus();
+}
+
 void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
 {
     switch (event.GetId())
@@ -1448,6 +1456,7 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 }
 
 BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
+    EVT_ACTIVATE(wxHtmlHelpFrame::OnActivate)
     EVT_TOOL_RANGE(wxID_HTML_PANEL, wxID_HTML_OPTIONS, wxHtmlHelpFrame::OnToolbar)
     EVT_BUTTON(wxID_HTML_BOOKMARKSREMOVE, wxHtmlHelpFrame::OnToolbar)
     EVT_BUTTON(wxID_HTML_BOOKMARKSADD, wxHtmlHelpFrame::OnToolbar)

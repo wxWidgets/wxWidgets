@@ -164,6 +164,7 @@ protected:
     void OnSearch(wxCommandEvent& event);
     void OnBookmarksSel(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
+    void OnActivate(wxActivateEvent& event);
 
     // Images:
     enum {
