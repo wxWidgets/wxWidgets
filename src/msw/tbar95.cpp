@@ -437,15 +437,6 @@ wxSize wxToolBar95::GetMaxSize() const
   return wxSize(m_maxWidth, m_maxHeight);
 }
 
-void wxToolBar95::GetSize(int *w, int *h) const
-{
-  wxWindow::GetSize(w, h);
-  // For some reason, the returned height is several pixels bigger than that
-  // displayed!
-  // Taking this fudge factor out now, it seems fine without it.
-//  *h -= 2;
-}
-
 // The button size is bigger than the bitmap size
 wxSize wxToolBar95::GetToolSize() const
 {
