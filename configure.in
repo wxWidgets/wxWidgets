@@ -3036,70 +3036,11 @@ SHARED=0
 if test "$wxUSE_SHARED" = "yes"; then
     SHARED=1
 
-    dnl install targets
-    if test "$wxUSE_OPENGL" = "yes"; then
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
-        WX_ALL="\$(build_libdir)/${WX_LIBRARY_LINK1} \$(build_libdir)/${WX_LIBRARY_LINK1_GL}"
-    else
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="\$(build_libdir)/${WX_LIBRARY_LINK1}"
-    fi
-
-    dnl the extra compiler flags needed for compilation of shared library
-    if test "$GCC" = "yes"; then
-        dnl the switch for gcc is the same under all platforms
-        PIC_FLAG="-fPIC"
-    fi
-
-
     dnl use versioned symbols if available on the platform
     WX_VERSIONED_SYMBOLS([\$(top_builddir)version-script])
 
-    dnl the command to use for creating the shared library
-    SHARED_LD="${CXX} -shared -o"
-
     case "${host}" in
-      *-hp-hpux* )
-        dnl default settings are good for gcc but not for the native HP-UX
-        if test "$GCC" = "yes"; then
-            dnl -o flag must be after PIC flag
-            SHARED_LD="${CXX} -shared ${PIC_FLAG} -o"
-        else
-            dnl no idea why it wants it, but it does
-            LDFLAGS="$LDFLAGS -L/usr/lib"
-
-            SHARED_LD="${CXX} -b -o"
-            PIC_FLAG="+Z"
-        fi
-
-        dnl install shared libs without symlinks
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
-        else
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
-        fi
-      ;;
-
       *-*-linux* | *-*-gnu* )
-        if test "$GCC" != "yes"; then
-            AC_CACHE_CHECK([for Intel compiler], wx_cv_prog_icc,
-            [
-                AC_TRY_COMPILE([],
-                    [
-                        #ifndef __INTEL_COMPILER
-                        #error Not icc
-                        #endif
-                    ],
-                    wx_cv_prog_icc=yes,
-                    wx_cv_prog_icc=no
-                )
-            ])
-            if test "$wx_cv_prog_icc" = "yes"; then
-                PIC_FLAG="-KPIC"
-            fi
-        fi
-
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
       ;;
 
@@ -3141,40 +3082,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
 
-      *-*-darwin* )
-        dnl For Unix to MacOS X porting instructions, see:
-        dnl http://fink.sourceforge.net/doc/porting/porting.html
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXMAKINGDLL"
-        CFLAGS="$CFLAGS -fno-common"
-        CXXFLAGS="$CXXFLAGS -fno-common"
-        dnl wxWindows must be fully binded (lazy binding breaks RTTI classinfo)
-        dnl this can be done either with the exe linker flag -Wl,-bind_at_load
-        dnl or with a double stage link in order to create a single module
-        dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
-        SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace -o"
-        PIC_FLAG="-dynamic -fPIC"
-      ;;
-
-      *-*-aix* )
-        dnl default settings are ok for gcc
-        if test "$GCC" != "yes"; then
-            dnl the abs path below used to be hardcoded here so I guess it must
-            dnl be some sort of standard location under AIX?
-            AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
-                          makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
-
-            SHARED_LD="$(AIX_CXX_LD) -p 0 -o"
-        fi
-      ;;
-
       *-*-cygwin* | *-*-mingw32* )
-        WX_LIBRARY_IMPORTLIB="${WX_LIBRARY_NAME_SHARED}.a"
-
-        SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
-        TOOLCHAIN_DLL_DEFS="${TOOLCHAIN_DLL_DEFS} -DWXUSINGDLL=1"
-
-        PIC_FLAG="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
-
         dnl Don't build seperate GL library
         WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
@@ -3183,30 +3091,6 @@ if test "$wxUSE_SHARED" = "yes"; then
             LIBS="${LIBS} ${OPENGL_LIBS}"
         fi
       ;;
-
-      *-*-beos* )
-        dnl can't use gcc under BeOS for shared library creation because it
-        dnl complains about missing 'main'
-        SHARED_LD="${LD} -shared -o"
-      ;;
-
-      *-*-irix* )
-        dnl default settings are ok for gcc
-        if test "$GCC" != "yes"; then
-            PIC_FLAG="-KPIC"
-        fi
-      ;;
-
-      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
-      *-*-sunos4* | \
-      *-*-osf* | \
-      *-*-dgux5* | \
-      *-*-sysv5* )
-        dnl defaults are ok
-      ;;
-
-      *)
-        AC_MSG_ERROR(unknown system type $host.)
     esac
 
     dnl set target to shared if not explicitly chose static before
