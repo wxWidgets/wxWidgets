@@ -985,12 +985,12 @@ wxDateTime wxDateTime___add____SWIG_1(wxDateTime *self,wxDateSpan const &other){
 wxTimeSpan wxDateTime___sub____SWIG_0(wxDateTime *self,wxDateTime const &other){ return *self - other; }
 wxDateTime wxDateTime___sub____SWIG_1(wxDateTime *self,wxTimeSpan const &other){ return *self - other; }
 wxDateTime wxDateTime___sub____SWIG_2(wxDateTime *self,wxDateSpan const &other){ return *self - other; }
-bool wxDateTime___lt__(wxDateTime *self,wxDateTime const &other){ return *self <  other; }
-bool wxDateTime___le__(wxDateTime *self,wxDateTime const &other){ return *self <= other; }
-bool wxDateTime___gt__(wxDateTime *self,wxDateTime const &other){ return *self >  other; }
-bool wxDateTime___ge__(wxDateTime *self,wxDateTime const &other){ return *self >= other; }
-bool wxDateTime___eq__(wxDateTime *self,wxDateTime const &other){ return *self == other; }
-bool wxDateTime___ne__(wxDateTime *self,wxDateTime const &other){ return *self != other; }
+bool wxDateTime___lt__(wxDateTime *self,wxDateTime const *other){ return other ? (*self <  *other) : False; }
+bool wxDateTime___le__(wxDateTime *self,wxDateTime const *other){ return other ? (*self <= *other) : False; }
+bool wxDateTime___gt__(wxDateTime *self,wxDateTime const *other){ return other ? (*self >  *other) : True;  }
+bool wxDateTime___ge__(wxDateTime *self,wxDateTime const *other){ return other ? (*self >= *other) : True;  }
+bool wxDateTime___eq__(wxDateTime *self,wxDateTime const *other){ return other ? (*self == *other) : False; }
+bool wxDateTime___ne__(wxDateTime *self,wxDateTime const *other){ return other ? (*self != *other) : True;  }
 int wxDateTime_ParseRfc822Date(wxDateTime *self,wxString const &date){
             const wxChar* rv;
             const wxChar* _date = date;
@@ -1030,18 +1030,18 @@ wxTimeSpan wxTimeSpan___add__(wxTimeSpan *self,wxTimeSpan const &other){ return 
 wxTimeSpan wxTimeSpan___sub__(wxTimeSpan *self,wxTimeSpan const &other){ return *self - other; }
 wxTimeSpan wxTimeSpan___mul__(wxTimeSpan *self,int n){ return *self * n; }
 wxTimeSpan wxTimeSpan___rmul__(wxTimeSpan *self,int n){ return n * *self; }
-bool wxTimeSpan___lt__(wxTimeSpan *self,wxTimeSpan const &other){ return *self <  other; }
-bool wxTimeSpan___le__(wxTimeSpan *self,wxTimeSpan const &other){ return *self <= other; }
-bool wxTimeSpan___gt__(wxTimeSpan *self,wxTimeSpan const &other){ return *self >  other; }
-bool wxTimeSpan___ge__(wxTimeSpan *self,wxTimeSpan const &other){ return *self >= other; }
-bool wxTimeSpan___eq__(wxTimeSpan *self,wxTimeSpan const &other){ return *self == other; }
-bool wxTimeSpan___ne__(wxTimeSpan *self,wxTimeSpan const &other){ return *self != other; }
+bool wxTimeSpan___lt__(wxTimeSpan *self,wxTimeSpan const *other){ return other ? (*self <  *other) : False; }
+bool wxTimeSpan___le__(wxTimeSpan *self,wxTimeSpan const *other){ return other ? (*self <= *other) : False; }
+bool wxTimeSpan___gt__(wxTimeSpan *self,wxTimeSpan const *other){ return other ? (*self >  *other) : True;  }
+bool wxTimeSpan___ge__(wxTimeSpan *self,wxTimeSpan const *other){ return other ? (*self >= *other) : True;  }
+bool wxTimeSpan___eq__(wxTimeSpan *self,wxTimeSpan const *other){ return other ? (*self == *other) : False; }
+bool wxTimeSpan___ne__(wxTimeSpan *self,wxTimeSpan const *other){ return other ? (*self != *other) : True;  }
 wxDateSpan wxDateSpan___add__(wxDateSpan *self,wxDateSpan const &other){ return *self + other; }
 wxDateSpan wxDateSpan___sub__(wxDateSpan *self,wxDateSpan const &other){ return *self - other; }
 wxDateSpan wxDateSpan___mul__(wxDateSpan *self,int n){ return *self * n; }
 wxDateSpan wxDateSpan___rmul__(wxDateSpan *self,int n){ return n * *self; }
-bool wxDateSpan___eq__(wxDateSpan *self,wxDateSpan const &other){ return *self == other; }
-bool wxDateSpan___ne__(wxDateSpan *self,wxDateSpan const &other){ return *self != other; }
+bool wxDateSpan___eq__(wxDateSpan *self,wxDateSpan const *other){ return other ? (*self == *other) : False; }
+bool wxDateSpan___ne__(wxDateSpan *self,wxDateSpan const *other){ return other ? (*self != *other) : True;  }
 
 #include <wx/dataobj.h>
 
@@ -20254,7 +20254,7 @@ static PyObject *_wrap_DateTime___sub__(PyObject *self, PyObject *args) {
 static PyObject *_wrap_DateTime___lt__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime *arg2 = 0 ;
+    wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -20262,12 +20262,9 @@ static PyObject *_wrap_DateTime___lt__(PyObject *self, PyObject *args) {
     if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___lt__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxDateTime___lt__(arg1,(wxDateTime const &)*arg2);
+        result = (bool)wxDateTime___lt__(arg1,(wxDateTime const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20282,7 +20279,7 @@ static PyObject *_wrap_DateTime___lt__(PyObject *self, PyObject *args) {
 static PyObject *_wrap_DateTime___le__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime *arg2 = 0 ;
+    wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -20290,12 +20287,9 @@ static PyObject *_wrap_DateTime___le__(PyObject *self, PyObject *args) {
     if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___le__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxDateTime___le__(arg1,(wxDateTime const &)*arg2);
+        result = (bool)wxDateTime___le__(arg1,(wxDateTime const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20310,7 +20304,7 @@ static PyObject *_wrap_DateTime___le__(PyObject *self, PyObject *args) {
 static PyObject *_wrap_DateTime___gt__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime *arg2 = 0 ;
+    wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -20318,12 +20312,9 @@ static PyObject *_wrap_DateTime___gt__(PyObject *self, PyObject *args) {
     if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___gt__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxDateTime___gt__(arg1,(wxDateTime const &)*arg2);
+        result = (bool)wxDateTime___gt__(arg1,(wxDateTime const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20338,7 +20329,7 @@ static PyObject *_wrap_DateTime___gt__(PyObject *self, PyObject *args) {
 static PyObject *_wrap_DateTime___ge__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime *arg2 = 0 ;
+    wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -20346,12 +20337,9 @@ static PyObject *_wrap_DateTime___ge__(PyObject *self, PyObject *args) {
     if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___ge__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxDateTime___ge__(arg1,(wxDateTime const &)*arg2);
+        result = (bool)wxDateTime___ge__(arg1,(wxDateTime const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20366,7 +20354,7 @@ static PyObject *_wrap_DateTime___ge__(PyObject *self, PyObject *args) {
 static PyObject *_wrap_DateTime___eq__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime *arg2 = 0 ;
+    wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -20374,12 +20362,9 @@ static PyObject *_wrap_DateTime___eq__(PyObject *self, PyObject *args) {
     if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___eq__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxDateTime___eq__(arg1,(wxDateTime const &)*arg2);
+        result = (bool)wxDateTime___eq__(arg1,(wxDateTime const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20394,7 +20379,7 @@ static PyObject *_wrap_DateTime___eq__(PyObject *self, PyObject *args) {
 static PyObject *_wrap_DateTime___ne__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime *arg2 = 0 ;
+    wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -20402,12 +20387,9 @@ static PyObject *_wrap_DateTime___ne__(PyObject *self, PyObject *args) {
     if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___ne__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxDateTime___ne__(arg1,(wxDateTime const &)*arg2);
+        result = (bool)wxDateTime___ne__(arg1,(wxDateTime const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -21649,7 +21631,7 @@ static PyObject *_wrap_TimeSpan___rmul__(PyObject *self, PyObject *args, PyObjec
 static PyObject *_wrap_TimeSpan___lt__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTimeSpan *arg1 = (wxTimeSpan *) 0 ;
-    wxTimeSpan *arg2 = 0 ;
+    wxTimeSpan *arg2 = (wxTimeSpan *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -21660,12 +21642,9 @@ static PyObject *_wrap_TimeSpan___lt__(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan___lt__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxTimeSpan___lt__(arg1,(wxTimeSpan const &)*arg2);
+        result = (bool)wxTimeSpan___lt__(arg1,(wxTimeSpan const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -21680,7 +21659,7 @@ static PyObject *_wrap_TimeSpan___lt__(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_TimeSpan___le__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTimeSpan *arg1 = (wxTimeSpan *) 0 ;
-    wxTimeSpan *arg2 = 0 ;
+    wxTimeSpan *arg2 = (wxTimeSpan *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -21691,12 +21670,9 @@ static PyObject *_wrap_TimeSpan___le__(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan___le__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxTimeSpan___le__(arg1,(wxTimeSpan const &)*arg2);
+        result = (bool)wxTimeSpan___le__(arg1,(wxTimeSpan const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -21711,7 +21687,7 @@ static PyObject *_wrap_TimeSpan___le__(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_TimeSpan___gt__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTimeSpan *arg1 = (wxTimeSpan *) 0 ;
-    wxTimeSpan *arg2 = 0 ;
+    wxTimeSpan *arg2 = (wxTimeSpan *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -21722,12 +21698,9 @@ static PyObject *_wrap_TimeSpan___gt__(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan___gt__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxTimeSpan___gt__(arg1,(wxTimeSpan const &)*arg2);
+        result = (bool)wxTimeSpan___gt__(arg1,(wxTimeSpan const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -21742,7 +21715,7 @@ static PyObject *_wrap_TimeSpan___gt__(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_TimeSpan___ge__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTimeSpan *arg1 = (wxTimeSpan *) 0 ;
-    wxTimeSpan *arg2 = 0 ;
+    wxTimeSpan *arg2 = (wxTimeSpan *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -21753,12 +21726,9 @@ static PyObject *_wrap_TimeSpan___ge__(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan___ge__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxTimeSpan___ge__(arg1,(wxTimeSpan const &)*arg2);
+        result = (bool)wxTimeSpan___ge__(arg1,(wxTimeSpan const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -21773,7 +21743,7 @@ static PyObject *_wrap_TimeSpan___ge__(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_TimeSpan___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTimeSpan *arg1 = (wxTimeSpan *) 0 ;
-    wxTimeSpan *arg2 = 0 ;
+    wxTimeSpan *arg2 = (wxTimeSpan *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -21784,12 +21754,9 @@ static PyObject *_wrap_TimeSpan___eq__(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan___eq__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxTimeSpan___eq__(arg1,(wxTimeSpan const &)*arg2);
+        result = (bool)wxTimeSpan___eq__(arg1,(wxTimeSpan const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -21804,7 +21771,7 @@ static PyObject *_wrap_TimeSpan___eq__(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_TimeSpan___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTimeSpan *arg1 = (wxTimeSpan *) 0 ;
-    wxTimeSpan *arg2 = 0 ;
+    wxTimeSpan *arg2 = (wxTimeSpan *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -21815,12 +21782,9 @@ static PyObject *_wrap_TimeSpan___ne__(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan___ne__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxTimeSpan___ne__(arg1,(wxTimeSpan const &)*arg2);
+        result = (bool)wxTimeSpan___ne__(arg1,(wxTimeSpan const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -23203,7 +23167,7 @@ static PyObject *_wrap_DateSpan___rmul__(PyObject *self, PyObject *args, PyObjec
 static PyObject *_wrap_DateSpan___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateSpan *arg1 = (wxDateSpan *) 0 ;
-    wxDateSpan *arg2 = 0 ;
+    wxDateSpan *arg2 = (wxDateSpan *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -23214,12 +23178,9 @@ static PyObject *_wrap_DateSpan___eq__(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan___eq__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxDateSpan___eq__(arg1,(wxDateSpan const &)*arg2);
+        result = (bool)wxDateSpan___eq__(arg1,(wxDateSpan const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -23234,7 +23195,7 @@ static PyObject *_wrap_DateSpan___eq__(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_DateSpan___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateSpan *arg1 = (wxDateSpan *) 0 ;
-    wxDateSpan *arg2 = 0 ;
+    wxDateSpan *arg2 = (wxDateSpan *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -23245,12 +23206,9 @@ static PyObject *_wrap_DateSpan___ne__(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan___ne__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxDateSpan___ne__(arg1,(wxDateSpan const &)*arg2);
+        result = (bool)wxDateSpan___ne__(arg1,(wxDateSpan const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

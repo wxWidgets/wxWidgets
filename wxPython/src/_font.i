@@ -452,8 +452,10 @@ public:
     %pythoncode { def __nonzero__(self): return self.Ok() }
 
     // comparison
-    bool operator == (const wxFont& font) const;
-    bool operator != (const wxFont& font) const;
+    %extend {
+        bool __eq__(const wxFont* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxFont* other) { return other ? (*self != *other) : True;  }
+    }
 
     // accessors: get the font characteristics
     virtual int GetPointSize() const;

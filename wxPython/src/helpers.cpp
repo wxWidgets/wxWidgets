@@ -2228,12 +2228,20 @@ bool wxPySimple_typecheck(PyObject* source, const wxChar* classname, int seqLen)
 
 bool wxSize_helper(PyObject* source, wxSize** obj)
 {
+    if (source == Py_None) {
+        **obj = wxSize(-1,-1);
+        return True;
+    }
     return wxPyTwoIntItem_helper(source, obj, wxT("wxSize"));
 }
 
 
 bool wxPoint_helper(PyObject* source, wxPoint** obj)
 {
+    if (source == Py_None) {
+        **obj = wxPoint(-1,-1);
+        return True;
+    }
     return wxPyTwoIntItem_helper(source, obj, wxT("wxPoint"));
 }
 
@@ -2241,6 +2249,11 @@ bool wxPoint_helper(PyObject* source, wxPoint** obj)
 
 bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj) {
 
+    if (source == Py_None) {
+        **obj = wxRealPoint(-1,-1);
+        return True;
+    }
+    
     // If source is an object instance then it may already be the right type
     if (wxPySwigInstance_Check(source)) {
         wxRealPoint* ptr;
@@ -2272,6 +2285,11 @@ bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj) {
 
 
 bool wxRect_helper(PyObject* source, wxRect** obj) {
+
+    if (source == Py_None) {
+        **obj = wxRect(-1,-1,-1,-1);
+        return True;
+    }
 
     // If source is an object instance then it may already be the right type
     if (wxPySwigInstance_Check(source)) {
@@ -2312,6 +2330,11 @@ bool wxRect_helper(PyObject* source, wxRect** obj) {
 
 
 bool wxColour_helper(PyObject* source, wxColour** obj) {
+
+    if (source == Py_None) {
+        **obj = wxNullColour;
+        return True;
+    }
 
     // If source is an object instance then it may already be the right type
     if (wxPySwigInstance_Check(source)) {
@@ -2378,6 +2401,12 @@ bool wxColour_typecheck(PyObject* source) {
 
 
 bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj) {
+
+    if (source == Py_None) {
+        **obj = wxPoint2D(-1,-1);
+        return True;
+    }
+    
     // If source is an object instance then it may already be the right type
     if (wxPySwigInstance_Check(source)) {
         wxPoint2D* ptr;

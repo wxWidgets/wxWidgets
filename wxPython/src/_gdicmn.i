@@ -130,6 +130,11 @@ public:
 
     ~wxSize();
 
+//     %extend {
+//         bool __eq__(const wxSize* other) { return other ? (*self == *other) : False; }
+//         bool __ne__(const wxSize* other) { return other ? (*self != *other) : True;  }
+//     }
+
     DocDeclStr(
         bool, operator==(const wxSize& sz),
         "Test for equality of wx.Size objects.");

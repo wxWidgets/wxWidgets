@@ -63,7 +63,10 @@ public:
         }
     }
     
-    bool operator==(const wxPen& pen) /*const*/;
+    %extend {
+        bool __eq__(const wxPen* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxPen* other) { return other ? (*self != *other) : True;  }
+    }
 
 #ifndef __WXMAC__
 //  wxDash* GetDash() const;

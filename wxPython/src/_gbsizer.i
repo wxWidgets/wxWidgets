@@ -65,8 +65,10 @@ public:
     void SetRow(int row);
     void SetCol(int col);
     
-    bool operator==(const wxGBPosition& p) const;
-    bool operator!=(const wxGBPosition& p) const;
+    %extend {
+        bool __eq__(const wxGBPosition* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxGBPosition* other) { return other ? (*self != *other) : True;  }
+    }
 
     %extend {
         void Set(int row=0, int col=0) {
@@ -117,8 +119,10 @@ public:
     void SetRowspan(int rowspan);
     void SetColspan(int colspan);
     
-    bool operator==(const wxGBSpan& o) const;
-    bool operator!=(const wxGBSpan& o) const;
+    %extend {
+        bool __eq__(const wxGBSpan* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxGBSpan* other) { return other ? (*self != *other) : True;  }
+    }
 
     %extend {
         void Set(int rowspan=1, int colspan=1) {

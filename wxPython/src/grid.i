@@ -1392,42 +1392,6 @@ public:
 //---------------------------------------------------------------------------
 
 
-class wxGridCellCoords
-{
-public:
-    wxGridCellCoords( int r=-1, int c=-1 );
-    ~wxGridCellCoords();
-
-    int GetRow() const;
-    void SetRow( int n );
-    int GetCol() const;
-    void SetCol( int n );
-    void Set( int row, int col );
-
-    bool operator==( const wxGridCellCoords& other ) const;
-    bool operator!=( const wxGridCellCoords& other ) const;
-
-    %extend {
-        PyObject* asTuple() {
-            PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
-            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetCol()));
-            return tup;
-        }
-    }
-    %pythoncode {
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxGridCellCoords'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
-    def __getitem__(self, index):        return self.asTuple()[index]
-    def __setitem__(self, index, val):
-        if index == 0: self.SetRow(val)
-        elif index == 1: self.SetCol(val)
-        else: raise IndexError
-    }
-
-};
-
 // Typemap to allow conversion of sequence objects to wxGridCellCoords...
 %typemap(in) wxGridCellCoords& (wxGridCellCoords temp) {
     $1 = &temp;
@@ -1441,6 +1405,11 @@ public:
 // ...and here is the associated helper.
 %{
 bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
+
+    if (source == Py_None) {
+        **obj = wxGridCellCoords(-1,-1);
+        return True;
+    }
 
     // If source is an object instance then it may already be the right type
     if (wxPySwigInstance_Check(source)) {
@@ -1514,6 +1483,47 @@ PyObject* wxGridCellCoordsArray_helper(const wxGridCellCoordsArray& source)
     return list;
 }
 %}
+
+
+
+
+
+class wxGridCellCoords
+{
+public:
+    wxGridCellCoords( int r=-1, int c=-1 );
+    ~wxGridCellCoords();
+
+    int GetRow() const;
+    void SetRow( int n );
+    int GetCol() const;
+    void SetCol( int n );
+    void Set( int row, int col );
+
+    bool operator==( const wxGridCellCoords& other ) const;
+    bool operator!=( const wxGridCellCoords& other ) const;
+
+    %extend {
+        PyObject* asTuple() {
+            PyObject* tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
+            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetCol()));
+            return tup;
+        }
+    }
+    %pythoncode {
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return 'wxGridCellCoords'+str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.SetRow(val)
+        elif index == 1: self.SetCol(val)
+        else: raise IndexError
+    }
+
+};
+
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

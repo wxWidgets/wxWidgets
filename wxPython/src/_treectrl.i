@@ -96,15 +96,8 @@ public:
     bool IsOk() const;
 
     %extend {
-        bool operator==(const wxTreeItemId* other) {
-            if (!other) return False;
-            return *self == *other;
-        }
-
-        bool operator!=(const wxTreeItemId* other) {
-            if (!other) return True;
-            return *self != *other;
-        }
+        bool __eq__(const wxTreeItemId* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxTreeItemId* other) { return other ? (*self != *other) : True;  }
     }
 
     void*  m_pItem;

@@ -713,12 +713,12 @@ public:
         wxDateTime __sub__(const wxTimeSpan& other) { return *self - other; }
         wxDateTime __sub__(const wxDateSpan& other) { return *self - other; }
 
-        bool __lt__(const wxDateTime& other) { return *self <  other; }
-        bool __le__(const wxDateTime& other) { return *self <= other; }
-        bool __gt__(const wxDateTime& other) { return *self >  other; }
-        bool __ge__(const wxDateTime& other) { return *self >= other; }
-        bool __eq__(const wxDateTime& other) { return *self == other; }
-        bool __ne__(const wxDateTime& other) { return *self != other; }
+        bool __lt__(const wxDateTime* other) { return other ? (*self <  *other) : False; }
+        bool __le__(const wxDateTime* other) { return other ? (*self <= *other) : False; }
+        bool __gt__(const wxDateTime* other) { return other ? (*self >  *other) : True;  }
+        bool __ge__(const wxDateTime* other) { return other ? (*self >= *other) : True;  }
+        bool __eq__(const wxDateTime* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxDateTime* other) { return other ? (*self != *other) : True;  }
     }
 
         
@@ -889,12 +889,13 @@ public:
         wxTimeSpan __sub__(const wxTimeSpan& other) { return *self - other; }
         wxTimeSpan __mul__(int n)                   { return *self * n; }
         wxTimeSpan __rmul__(int n)                  { return n * *self; }
-        bool __lt__(const wxTimeSpan& other) { return *self <  other; }
-        bool __le__(const wxTimeSpan& other) { return *self <= other; }
-        bool __gt__(const wxTimeSpan& other) { return *self >  other; }
-        bool __ge__(const wxTimeSpan& other) { return *self >= other; }
-        bool __eq__(const wxTimeSpan& other) { return *self == other; }
-        bool __ne__(const wxTimeSpan& other) { return *self != other; }
+        
+        bool __lt__(const wxTimeSpan* other) { return other ? (*self <  *other) : False; }
+        bool __le__(const wxTimeSpan* other) { return other ? (*self <= *other) : False; }
+        bool __gt__(const wxTimeSpan* other) { return other ? (*self >  *other) : True;  }
+        bool __ge__(const wxTimeSpan* other) { return other ? (*self >= *other) : True;  }
+        bool __eq__(const wxTimeSpan* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxTimeSpan* other) { return other ? (*self != *other) : True;  }
     }
 
 
@@ -1074,12 +1075,14 @@ public:
         wxDateSpan __sub__(const wxDateSpan& other) { return *self - other; }
         wxDateSpan __mul__(int n)                   { return *self * n; }
         wxDateSpan __rmul__(int n)                  { return n * *self; }
-//         bool __lt__(const wxDateSpan& other) { return *self <  other; }
-//         bool __le__(const wxDateSpan& other) { return *self <= other; }
-//         bool __gt__(const wxDateSpan& other) { return *self >  other; }
-//         bool __ge__(const wxDateSpan& other) { return *self >= other; }
-        bool __eq__(const wxDateSpan& other) { return *self == other; }
-        bool __ne__(const wxDateSpan& other) { return *self != other; }
+        
+//         bool __lt__(const wxDateSpan* other) { return other ? (*self <  *other) : False; }
+//         bool __le__(const wxDateSpan* other) { return other ? (*self <= *other) : False; }
+//         bool __gt__(const wxDateSpan* other) { return other ? (*self >  *other) : True;  }
+//         bool __ge__(const wxDateSpan* other) { return other ? (*self >= *other) : True;  }
+        
+        bool __eq__(const wxDateSpan* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxDateSpan* other) { return other ? (*self != *other) : True;  }
     }
 };
 

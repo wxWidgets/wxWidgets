@@ -236,8 +236,12 @@ class Pen(GDIObject):
         return _gdi.Pen_GetDashes(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(Pen pen) -> bool"""
+        """__eq__(Pen other) -> bool"""
         return _gdi.Pen___eq__(*args, **kwargs)
+
+    def __ne__(*args, **kwargs):
+        """__ne__(Pen other) -> bool"""
+        return _gdi.Pen___ne__(*args, **kwargs)
 
     def GetDashCount(*args, **kwargs):
         """GetDashCount() -> int"""
@@ -1411,11 +1415,11 @@ class Font(GDIObject):
 
     def __nonzero__(self): return self.Ok() 
     def __eq__(*args, **kwargs):
-        """__eq__(Font font) -> bool"""
+        """__eq__(Font other) -> bool"""
         return _gdi.Font___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(Font font) -> bool"""
+        """__ne__(Font other) -> bool"""
         return _gdi.Font___ne__(*args, **kwargs)
 
     def GetPointSize(*args, **kwargs):

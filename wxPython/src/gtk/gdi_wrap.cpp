@@ -416,6 +416,8 @@ PyObject *wxPen_GetDashes(wxPen *self){
             wxPyEndBlockThreads();
             return retval;
         }
+bool wxPen___eq__(wxPen *self,wxPen const *other){ return other ? (*self == *other) : False; }
+bool wxPen___ne__(wxPen *self,wxPen const *other){ return other ? (*self != *other) : True;  }
 
 wxPyPen::~wxPyPen()
 {
@@ -597,6 +599,8 @@ wxFont *new_wxFont(wxString const &info){
 wxFont *new_wxFont(int pointSize,wxFontFamily family,int flags,wxString const &face,wxFontEncoding encoding){
             return wxFont::New(pointSize, family, flags, face, encoding);
         }
+bool wxFont___eq__(wxFont *self,wxFont const *other){ return other ? (*self == *other) : False; }
+bool wxFont___ne__(wxFont *self,wxFont const *other){ return other ? (*self != *other) : True;  }
 
 class wxPyFontEnumerator : public wxFontEnumerator {
 public:
@@ -1936,23 +1940,48 @@ static PyObject *_wrap_Pen_GetDashes(PyObject *self, PyObject *args, PyObject *k
 static PyObject *_wrap_Pen___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPen *arg1 = (wxPen *) 0 ;
-    wxPen *arg2 = 0 ;
+    wxPen *arg2 = (wxPen *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pen", NULL 
+        (char *) "self",(char *) "other", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Pen___eq__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPen,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxPen,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->operator ==((wxPen const &)*arg2);
+        result = (bool)wxPen___eq__(arg1,(wxPen const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Pen___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPen *arg1 = (wxPen *) 0 ;
+    wxPen *arg2 = (wxPen *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Pen___ne__",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPen,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxPen,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxPen___ne__(arg1,(wxPen const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -7367,23 +7396,20 @@ static PyObject *_wrap_Font_Ok(PyObject *self, PyObject *args, PyObject *kwargs)
 static PyObject *_wrap_Font___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFont *arg1 = (wxFont *) 0 ;
-    wxFont *arg2 = 0 ;
+    wxFont *arg2 = (wxFont *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "font", NULL 
+        (char *) "self",(char *) "other", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Font___eq__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxFont const *)arg1)->operator ==((wxFont const &)*arg2);
+        result = (bool)wxFont___eq__(arg1,(wxFont const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -7398,23 +7424,20 @@ static PyObject *_wrap_Font___eq__(PyObject *self, PyObject *args, PyObject *kwa
 static PyObject *_wrap_Font___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFont *arg1 = (wxFont *) 0 ;
-    wxFont *arg2 = 0 ;
+    wxFont *arg2 = (wxFont *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "font", NULL 
+        (char *) "self",(char *) "other", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Font___ne__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxFont const *)arg1)->operator !=((wxFont const &)*arg2);
+        result = (bool)wxFont___ne__(arg1,(wxFont const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17745,6 +17768,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Pen_SetDashes", (PyCFunction) _wrap_Pen_SetDashes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_GetDashes", (PyCFunction) _wrap_Pen_GetDashes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen___eq__", (PyCFunction) _wrap_Pen___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Pen___ne__", (PyCFunction) _wrap_Pen___ne__, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_GetDashCount", (PyCFunction) _wrap_Pen_GetDashCount, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_swigregister", Pen_swigregister, METH_VARARGS },
 	 { (char *)"new_PyPen", (PyCFunction) _wrap_new_PyPen, METH_VARARGS | METH_KEYWORDS },

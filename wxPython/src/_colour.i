@@ -33,7 +33,7 @@ public:
     %name(SetRGB) void Set(unsigned long colRGB);
 
     bool operator==(const wxColour& colour) const;
-    bool operator != (const wxColour& colour) const;
+    bool operator!=(const wxColour& colour) const;
 
     void InitFromName(const wxString& colourName);
 
