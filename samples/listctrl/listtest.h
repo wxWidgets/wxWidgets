@@ -126,12 +126,12 @@ protected:
 
 private:
     // recreate the list control with the new flags
-    void RecreateList(long flags, bool withText = TRUE);
+    void RecreateList(long flags, bool withText = true);
 
     // fill the control with items depending on the view
     void InitWithListItems();
     void InitWithReportItems();
-    void InitWithIconItems(bool withText, bool sameIcon = FALSE);
+    void InitWithIconItems(bool withText, bool sameIcon = false);
     void InitWithVirtualItems();
 
     // return true if the control is not in virtual view, give an error message

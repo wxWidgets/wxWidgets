@@ -133,16 +133,16 @@ bool MyApp::OnInit()
   MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"), 50, 50, 450, 340);
 
   // Show the frame
-  frame->Show(TRUE);
+  frame->Show(true);
 
   SetTopWindow(frame);
 
-  return TRUE;
+  return true;
 }
 
 // My frame constructor
 MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
-       : wxFrame((wxFrame *)NULL, -1, title, wxPoint(x, y), wxSize(w, h))
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     m_listCtrl = (MyListCtrl *) NULL;
     m_logWindow = (wxTextCtrl *) NULL;
@@ -151,8 +151,8 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     SetIcon( wxICON(mondrian) );
 
     // Make an image list containing large icons
-    m_imageListNormal = new wxImageList(32, 32, TRUE);
-    m_imageListSmall = new wxImageList(16, 16, TRUE);
+    m_imageListNormal = new wxImageList(32, 32, true);
+    m_imageListSmall = new wxImageList(16, 16, true);
 
 #ifdef __WXMSW__
     m_imageListNormal->Add( wxIcon(_T("icon1"), wxBITMAP_TYPE_ICO_RESOURCE) );
@@ -216,7 +216,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuList->Append(LIST_THAW, _T("Tha&w\tCtrl-W"));
     menuList->AppendSeparator();
     menuList->Append(LIST_TOGGLE_MULTI_SEL, _T("&Multiple selection\tCtrl-M"),
-            _T("Toggle multiple selection"), TRUE);
+            _T("Toggle multiple selection"), true);
 
     wxMenu *menuCol = new wxMenu;
     menuCol->Append(LIST_SET_FG_COL, _T("&Foreground colour..."));
@@ -229,8 +229,8 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menubar->Append(menuCol, _T("&Colour"));
     SetMenuBar(menubar);
 
-    m_panel = new wxPanel(this, -1);
-    m_logWindow = new wxTextCtrl(m_panel, -1, wxEmptyString,
+    m_panel = new wxPanel(this, wxID_ANY);
+    m_logWindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE | wxSUNKEN_BORDER);
 
@@ -280,7 +280,7 @@ bool MyFrame::CheckNonVirtual() const
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -373,7 +373,7 @@ void MyFrame::RecreateList(long flags, bool withText)
                 break;
 
             case wxLC_SMALL_ICON:
-                InitWithIconItems(withText, TRUE);
+                InitWithIconItems(withText, true);
                 break;
 
             case wxLC_REPORT:
@@ -490,7 +490,7 @@ void MyFrame::InitWithIconItems(bool withText, bool sameIcon)
 
 void MyFrame::OnIconView(wxCommandEvent& WXUNUSED(event))
 {
-    RecreateList(wxLC_ICON, FALSE);
+    RecreateList(wxLC_ICON, false);
 }
 
 void MyFrame::OnIconTextView(wxCommandEvent& WXUNUSED(event))
@@ -500,7 +500,7 @@ void MyFrame::OnIconTextView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSmallIconView(wxCommandEvent& WXUNUSED(event))
 {
-    RecreateList(wxLC_SMALL_ICON, FALSE);
+    RecreateList(wxLC_SMALL_ICON, false);
 }
 
 void MyFrame::OnSmallIconTextView(wxCommandEvent& WXUNUSED(event))
