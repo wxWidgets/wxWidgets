@@ -2056,8 +2056,8 @@ void wxListMainWindow::MoveToFocus()
 
     if (m_mode & wxLC_REPORT)
     {
-        if (item_y-5 < view_y )
-            Scroll( -1, (item_y-5)/m_yScroll );
+        if (item_y < view_y )
+            Scroll( -1, (item_y)/m_yScroll );
         if (item_y+item_h+5 > view_y+client_h)
             Scroll( -1, (item_y+item_h-client_h+15)/m_yScroll );
     }
@@ -2761,6 +2761,9 @@ void wxListMainWindow::CalculatePositions()
 
     if (m_mode & wxLC_REPORT)
     {
+         // scroll one line per step
+         m_yScroll = lineSpacing;
+         
         int x = 4;
         int y = 1;
         int entireHeight = m_lines.GetCount() * lineSpacing + 2;
@@ -2768,7 +2771,7 @@ void wxListMainWindow::CalculatePositions()
 #if wxUSE_GENERIC_LIST_EXTENSIONS
         int x_scroll_pos = GetScrollPos( wxHORIZONTAL );
 #else
-        SetScrollbars( m_xScroll, m_yScroll, 0, (entireHeight+15) / m_yScroll, 0, scroll_pos, TRUE );
+        SetScrollbars( m_xScroll, m_yScroll, 0, entireHeight/m_yScroll +1, 0, scroll_pos, TRUE );
 #endif
         GetClientSize( &clientWidth, &clientHeight );
 
@@ -2790,9 +2793,9 @@ void wxListMainWindow::CalculatePositions()
 #endif
             y += lineSpacing;  // one pixel blank line between items
         }
-                m_visibleLines = clientHeight / lineSpacing;
+        m_visibleLines = clientHeight / lineSpacing;
 #if wxUSE_GENERIC_LIST_EXTENSIONS
-                SetScrollbars( m_xScroll, m_yScroll, entireWidth / m_xScroll , (entireHeight+15) / m_yScroll, x_scroll_pos  , scroll_pos, TRUE );
+        SetScrollbars( m_xScroll, m_yScroll, entireWidth/m_xScroll +1, entireHeight/m_yScroll +1, x_scroll_pos  , scroll_pos, TRUE );
 #endif
     }
     else

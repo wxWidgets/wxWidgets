@@ -622,6 +622,7 @@ COMMONOBJS = \
 		list.o \
 		log.o \
 		longlong.o \
+		matrix.o \
 		memory.o \
 		menucmn.o \
 		mimecmn.o \

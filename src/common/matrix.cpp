@@ -27,7 +27,7 @@
 #include "wx/defs.h"
 #endif
 
-#include "wxmatrix.h"
+#include "wx/matrix.h"
 #include <math.h>
 
 const double pi = 3.1415926535;
