@@ -326,11 +326,14 @@ void wxApp::ExitMainLoop()
 // Is a message/event pending?
 bool wxApp::Pending()
 {
+    return m_eventLoop->Pending();
+#if 0
     XFlush(XtDisplay( (Widget) wxTheApp->GetTopLevelWidget() ));
 
     // Fix by Doug from STI, to prevent a stall if non-X event
     // is found.
     return ((XtAppPending( (XtAppContext) GetAppContext() ) & XtIMXEvent) != 0) ;
+#endif
 }
 
 // Dispatch a message.
