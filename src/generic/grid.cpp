@@ -5406,15 +5406,15 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
     {
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
+            if (m_winCapture)
+            {
+                if (m_winCapture->HasCapture()) m_winCapture->ReleaseMouse();
+                m_winCapture = NULL;
+            }
+
             if ( m_selectingTopLeft != wxGridNoCellCoords &&
                  m_selectingBottomRight != wxGridNoCellCoords )
             {
-                if (m_winCapture)
-                {
-                    if (m_winCapture->HasCapture()) m_winCapture->ReleaseMouse();
-                    m_winCapture = NULL;
-                }
-
                 if ( m_selection )
                 {
                     m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
