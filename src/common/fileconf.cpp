@@ -2031,7 +2031,7 @@ static wxString FilterOutEntryName(const wxString& str)
     //     should *not* be quoted
     if ( 
 #if !wxUSE_UNICODE
-            (c < 127) &&
+            ((unsigned char)c < 127) &&
 #endif // ANSI
          !wxIsalnum(c) && !wxStrchr(wxT("@_/-!.*%"), c) )
     {
