@@ -75,6 +75,14 @@ Added wxIconBundle and wxTopLevelWindow.SetIcons.
 
 Added wxLocale and wxEncodingConverter.
 
+A little black magic...  When the C++ object (for a window or
+whatever) is deleted there is no way to force the Python shadow object
+to also be destroyed and clean up all references to it.  This leads to
+crashes if the shadow object tries to call a method with the old C++
+pointer.  The black magic I've done is to replace the __class__ in the
+Python instance object with a class that raises an exception whenever
+a method call (or other attribute access) is attempted.  This works
+for any class that is OOR aware.
 
 
 
