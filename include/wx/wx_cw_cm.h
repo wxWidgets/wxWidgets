@@ -13,24 +13,6 @@
 #if (__MWERKS__ < 0x0900) || macintosh
     #define __MAC__
     #define __WXMAC__
-    #if TARGET_CARBON
-	    #define	USE_PRECOMPILED_MAC_HEADERS	0  /*Set to 0 if you don't want to use precompiled MacHeaders*/
-		#include "MacHeaders.c"
-		#if UNIVERSAL_INTERFACES_VERSION < 0x0340
-		    #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
-		#endif
-    	/*
-	    #define	USE_PRECOMPILED_MAC_HEADERS	0 
-	   		#ifdef __cplusplus
-					#include <MacHeadersPPCX++>
-			#else
-					#include <MacHeadersPPCX>
-			#endif
-			*/
-	#else
-        #define	USE_PRECOMPILED_MAC_HEADERS	1  /*Set to 0 if you don't want to use precompiled MacHeaders*/		
-    #endif
-// automatically includes MacHeaders
 #elif (__MWERKS__ >= 0x0900) && __INTEL__
     #define __WXMSW__
     #define __WINDOWS__
@@ -55,7 +37,12 @@
     #endif
     #endif
 #elif defined( __WXMAC__)
+	  #define	USE_PRECOMPILED_MAC_HEADERS	0  /*Set to 0 if you don't want to use precompiled MacHeaders*/
+		#include "MacHeaders.c"
     #include <ansi_prefix.mac.h>
+		#if UNIVERSAL_INTERFACES_VERSION < 0x0340
+		    #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
+		#endif
 #endif
 
 #define USE_DEFINE
