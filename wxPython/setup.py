@@ -11,7 +11,7 @@ from distutils.dep_util  import newer
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.4.0.2"
+VERSION          = "2.4.0.4p"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -52,9 +52,13 @@ UNICODE = 0        # This will pass the 'wxUSE_UNICODE' flag to SWIG and
                    # will ensure that the right headers are found and the
                    # right libs are linked.
 
-IN_CVS_TREE = 0    # Set to true if building in a full wxWindows CVS
-                   # tree, otherwise will assume all needed files are
-                   # available in the wxPython source distribution
+IN_CVS_TREE = 1    # Set to true if building in a full wxWindows CVS
+                   # tree, or the new style of a full wxPythonSrc tarball.
+                   # wxPython used to be distributed as a separate source
+                   # tarball without the wxWindows but with a copy of the
+                   # needed contrib code.  That's no longer the case and so
+                   # this setting is now defaulting to true.  Eventually it
+                   # should be removed entirly.
 
 UNDEF_NDEBUG = 1   # Python 2.2 on Unix/Linux by default defines NDEBUG,
                    # and distutils will pick this up and use it on the

@@ -2,9 +2,15 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+2.4.0.4
+-------
+Added missing wxRect methods
+
+
+
+
 2.4.0.2
 -------
-
 Several bug fixes.
 
 Added wxIntCtrl from Will Sadkin.
