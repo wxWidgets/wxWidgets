@@ -43,7 +43,7 @@ class wxImageRefData: public wxObjectRefData
 public:
   wxImageRefData(void);
   ~wxImageRefData(void);
-  
+
   int             m_width;
   int             m_height;
   unsigned char  *m_data;
@@ -98,25 +98,25 @@ wxImage::wxImage( wxInputStream& stream, long type )
     LoadFile( stream, type );
 }
 
-wxImage::wxImage( const wxImage& image )  
-{  
-    Ref(image); 
+wxImage::wxImage( const wxImage& image )
+{
+    Ref(image);
 }
 
-wxImage::wxImage( const wxImage* image )  
-{ 
-    if (image) Ref(*image); 
+wxImage::wxImage( const wxImage* image )
+{
+    if (image) Ref(*image);
 }
 
 void wxImage::Create( int width, int height )
 {
     m_refData = new wxImageRefData();
-  
+
     M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
     if (M_IMGDATA->m_data)
     {
         for (int l = 0; l < width*height*3; l++) M_IMGDATA->m_data[l] = 0;
-  
+
         M_IMGDATA->m_width = width;
         M_IMGDATA->m_height = height;
         M_IMGDATA->m_ok = TRUE;
@@ -135,49 +135,49 @@ void wxImage::Destroy()
 wxImage wxImage::Scale( int width, int height )
 {
     wxImage image;
-    
+
     wxCHECK_MSG( Ok(), image, "invlaid image" );
-    
+
     wxCHECK_MSG( (width > 0) && (height > 0), image, "invalid image size" );
-    
+
     image.Create( width, height );
-    
+
     char unsigned *data = image.GetData();
-    
+
     wxCHECK_MSG( data, image, "unable to create image" );
-    
+
     if (M_IMGDATA->m_hasMask)
         image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
-    
+
     double xscale = (double)width / (double)M_IMGDATA->m_width;
     double yscale = (double)height / (double)M_IMGDATA->m_height;
-    
+
     for (int j = 0; j < height; j++)
     {
         for (int i = 0; i < width; i++)
-	{
-	    int new_pos = 3*(j*width + i);
-	    int old_pos = 3*((long)(j/yscale)*M_IMGDATA->m_width + (long)(i/xscale));
-	    data[ new_pos   ] = M_IMGDATA->m_data[ old_pos   ];
-	    data[ new_pos+1 ] = M_IMGDATA->m_data[ old_pos+1 ];
-	    data[ new_pos+2 ] = M_IMGDATA->m_data[ old_pos+2 ];
-	}
+        {
+            int new_pos = 3*(j*width + i);
+            int old_pos = 3*((long)(j/yscale)*M_IMGDATA->m_width + (long)(i/xscale));
+            data[ new_pos   ] = M_IMGDATA->m_data[ old_pos   ];
+            data[ new_pos+1 ] = M_IMGDATA->m_data[ old_pos+1 ];
+            data[ new_pos+2 ] = M_IMGDATA->m_data[ old_pos+2 ];
+        }
     }
-    
+
     return image;
 }
-  
+
 void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b )
 {
     wxCHECK_RET( Ok(), "invalid image" );
-    
+
     int w = M_IMGDATA->m_width;
     int h = M_IMGDATA->m_height;
-    
+
     wxCHECK_RET( (x>=0) && (y>=0) && (x<w) && (y<h), "invalid image index" );
-    
+
     long pos = (y * w + x) * 3;
-    
+
     M_IMGDATA->m_data[ pos   ] = r;
     M_IMGDATA->m_data[ pos+1 ] = g;
     M_IMGDATA->m_data[ pos+2 ] = b;
@@ -186,54 +186,54 @@ void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned c
 unsigned char wxImage::GetRed( int x, int y )
 {
     wxCHECK_MSG( Ok(), 0, "invalid image" );
-    
+
     int w = M_IMGDATA->m_width;
     int h = M_IMGDATA->m_height;
-    
+
     wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, "invalid image index" );
-    
+
     long pos = (y * w + x) * 3;
-    
+
     return M_IMGDATA->m_data[pos];
 }
 
 unsigned char wxImage::GetGreen( int x, int y )
 {
     wxCHECK_MSG( Ok(), 0, "invalid image" );
-    
+
     int w = M_IMGDATA->m_width;
     int h = M_IMGDATA->m_height;
-    
+
     wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, "invalid image index" );
-    
+
     long pos = (y * w + x) * 3;
-    
+
     return M_IMGDATA->m_data[pos+1];
 }
 
 unsigned char wxImage::GetBlue( int x, int y )
 {
     wxCHECK_MSG( Ok(), 0, "invalid image" );
-    
+
     int w = M_IMGDATA->m_width;
     int h = M_IMGDATA->m_height;
-    
+
     wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, "invalid image index" );
-    
+
     long pos = (y * w + x) * 3;
-    
+
     return M_IMGDATA->m_data[pos+2];
 }
-  
-bool wxImage::Ok() const 
-{ 
-    return (M_IMGDATA && M_IMGDATA->m_ok); 
+
+bool wxImage::Ok() const
+{
+    return (M_IMGDATA && M_IMGDATA->m_ok);
 }
 
 char unsigned *wxImage::GetData() const
 {
     wxCHECK_MSG( Ok(), (char unsigned *)NULL, "invalid image" );
-  
+
     return M_IMGDATA->m_data;
 }
 
@@ -245,7 +245,7 @@ void wxImage::SetData( char unsigned *WXUNUSED(data) )
 void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
 {
     wxCHECK_RET( Ok(), "invalid image" );
-  
+
     M_IMGDATA->m_maskRed = r;
     M_IMGDATA->m_maskGreen = g;
     M_IMGDATA->m_maskBlue = b;
@@ -255,50 +255,50 @@ void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
 unsigned char wxImage::GetMaskRed() const
 {
     wxCHECK_MSG( Ok(), 0, "invalid image" );
-  
+
     return M_IMGDATA->m_maskRed;
 }
 
 unsigned char wxImage::GetMaskGreen() const
 {
     wxCHECK_MSG( Ok(), 0, "invalid image" );
-   
+
     return M_IMGDATA->m_maskGreen;
 }
 
 unsigned char wxImage::GetMaskBlue() const
 {
     wxCHECK_MSG( Ok(), 0, "invalid image" );
-  
+
     return M_IMGDATA->m_maskBlue;
 }
-  
+
 void wxImage::SetMask( bool mask )
 {
     wxCHECK_RET( Ok(), "invalid image" );
-  
+
     M_IMGDATA->m_hasMask = mask;
 }
 
 bool wxImage::HasMask() const
 {
     wxCHECK_MSG( Ok(), FALSE, "invalid image" );
-  
+
     return M_IMGDATA->m_hasMask;
 }
 
-int wxImage::GetWidth() const 
-{ 
+int wxImage::GetWidth() const
+{
     wxCHECK_MSG( Ok(), 0, "invalid image" );
-    
-    return M_IMGDATA->m_width; 
+
+    return M_IMGDATA->m_width;
 }
 
-int wxImage::GetHeight() const 
-{ 
+int wxImage::GetHeight() const
+{
     wxCHECK_MSG( Ok(), 0, "invalid image" );
-    
-    return M_IMGDATA->m_height; 
+
+    return M_IMGDATA->m_height;
 }
 
 bool wxImage::LoadFile( const wxString& filename, long type )
@@ -319,12 +319,12 @@ bool wxImage::LoadFile( const wxString& filename, long type )
 bool wxImage::LoadFile( wxInputStream& stream, long type )
 {
     UnRef();
-  
+
     m_refData = new wxImageRefData;
 
     wxImageHandler *handler = FindHandler(type);
 
-    if (handler == NULL) 
+    if (handler == NULL)
     {
         wxLogWarning( "No image handler for type %d defined.", type );
 
@@ -347,10 +347,10 @@ bool wxImage::SaveFile( const wxString& filename, int type )
 bool wxImage::SaveFile( wxOutputStream& stream, int type )
 {
     wxCHECK_MSG( Ok(), FALSE, "invalid image" );
-    
+
     wxImageHandler *handler = FindHandler(type);
 
-    if (handler == NULL) 
+    if (handler == NULL)
     {
       wxLogWarning( "No image handler for type %d defined.", type );
 
@@ -362,11 +362,17 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type )
 
 void wxImage::AddHandler( wxImageHandler *handler )
 {
+    // make sure that the memory will be freed at the program end
+    sm_handlers.DeleteContents(TRUE);
+
     sm_handlers.Append( handler );
 }
 
 void wxImage::InsertHandler( wxImageHandler *handler )
 {
+    // make sure that the memory will be freed at the program end
+    sm_handlers.DeleteContents(TRUE);
+
     sm_handlers.Insert( handler );
 }
 
@@ -474,161 +480,176 @@ static void _PNG_stream_reader( png_structp png_ptr, png_bytep data, png_size_t 
 {
    ((wxInputStream*) png_get_io_ptr( png_ptr )) -> Read(data, length);
 }
-  
+
 static void _PNG_stream_writer( png_structp png_ptr, png_bytep data, png_size_t length )
 {
    ((wxOutputStream*) png_get_io_ptr( png_ptr )) -> Write(data, length);
 }
-  
+
 bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
 {
-//   png_structp         png_ptr;
- //  png_infop           info_ptr;
-  // unsigned char      *ptr, **lines, *ptr2;
-  // int                 transp,bit_depth,color_type,interlace_type;
-   //png_uint_32         width, height;
-   //unsigned int	       i;
-
+    // VZ: as this function uses setjmp() the only fool proof error handling
+    //     method is to use goto (setjmp is not really C++ dtors friendly...)
     image->Destroy();
-   
-    png_structp png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING, 
-                                                  (voidp) NULL, (png_error_ptr) NULL, (png_error_ptr) NULL );
-    if (!png_ptr) return FALSE;
 
-    png_infop info_ptr = png_create_info_struct( png_ptr );
+    unsigned int i;
+    unsigned char **lines = NULL;
+    png_infop info_ptr = NULL;
+
+    png_structp png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING,
+                                                  (voidp) NULL,
+                                                  (png_error_ptr) NULL,
+                                                  (png_error_ptr) NULL );
+    if (!png_ptr)
+        goto error;
+
+    info_ptr = png_create_info_struct( png_ptr );
     if (!info_ptr)
-    {
-        png_destroy_read_struct( &png_ptr, (png_infopp) NULL, (png_infopp) NULL );
-        return FALSE;
-    }
+        goto error;
 
     if (setjmp(png_ptr->jmpbuf))
-    {
-        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
-        return FALSE;
-    }
+        goto error;
 
     if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
-    {
-        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
-        return FALSE;
-    }   
+        goto error;
+
     png_set_read_fn( png_ptr, &stream, _PNG_stream_reader);
-   
+
     png_uint_32 width,height;
     int bit_depth,color_type,interlace_type;
 
     png_read_info( png_ptr, info_ptr );
     png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, (int*) NULL, (int*) NULL );
-   
-    if (color_type == PNG_COLOR_TYPE_PALETTE) png_set_expand( png_ptr );
-   
+
+    if (color_type == PNG_COLOR_TYPE_PALETTE)
+        png_set_expand( png_ptr );
+
     png_set_strip_16( png_ptr );
     png_set_packing( png_ptr );
-    if (png_get_valid( png_ptr, info_ptr, PNG_INFO_tRNS)) png_set_expand( png_ptr );
+    if (png_get_valid( png_ptr, info_ptr, PNG_INFO_tRNS))
+        png_set_expand( png_ptr );
     png_set_filler( png_ptr, 0xff, PNG_FILLER_AFTER );
-   
+
     image->Create( width, height );
-   
+
     if (!image->Ok())
-    {
-        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
-        return FALSE;
-    }
-   
-    unsigned char **lines = (unsigned char **)malloc( height * sizeof(unsigned char *) );
+        goto error;
+
+    lines = (unsigned char **)malloc( height * sizeof(unsigned char *) );
     if (lines == NULL)
-    {
-        image->Destroy();
-        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
-        return FALSE;
-    }
-   
-    for (unsigned int i = 0; i < height; i++)
+        goto error;
+
+    for (i = 0; i < height; i++)
     {
         if ((lines[i] = (unsigned char *)malloc(width * (sizeof(unsigned char) * 4))) == NULL)
         {
-            image->Destroy();
-            for (unsigned int n = 0; n < i; n++) free( lines[n] );
-            free( lines );
-            png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
-            return FALSE;
+            for ( unsigned int n = 0; n < i; n++ )
+                free( lines[n] );
+            goto error;
         }
     }
-     
-  
-    int transp = 0;
-    png_read_image( png_ptr, lines );
-    png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
-    unsigned char *ptr = image->GetData();
-    if ((color_type == PNG_COLOR_TYPE_GRAY) ||
-        (color_type == PNG_COLOR_TYPE_GRAY_ALPHA))
+
+    // loaded successfully!
     {
-	for (unsigned int y = 0; y < height; y++)
-	{
-	    unsigned char *ptr2 = lines[y];
-	    for (unsigned int x = 0; x < width; x++)
-	    {
-		unsigned char r = *ptr2++;
-		unsigned char a = *ptr2++;
-		if (a < 128)
-		{
-		    *ptr++ = 255;
-		    *ptr++ = 0;
-		    *ptr++ = 255;
-		    transp = 1;
-		}
-		else
-		{
-		    *ptr++ = r;
-		    *ptr++ = r;
-		    *ptr++ = r;
-	        }
-	    }
-	}
+        int transp = 0;
+        png_read_image( png_ptr, lines );
+        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+        unsigned char *ptr = image->GetData();
+        if ((color_type == PNG_COLOR_TYPE_GRAY) ||
+            (color_type == PNG_COLOR_TYPE_GRAY_ALPHA))
+        {
+            for (unsigned int y = 0; y < height; y++)
+            {
+                unsigned char *ptr2 = lines[y];
+                for (unsigned int x = 0; x < width; x++)
+                {
+                    unsigned char r = *ptr2++;
+                    unsigned char a = *ptr2++;
+                    if (a < 128)
+                    {
+                        *ptr++ = 255;
+                        *ptr++ = 0;
+                        *ptr++ = 255;
+                        transp = 1;
+                    }
+                    else
+                    {
+                        *ptr++ = r;
+                        *ptr++ = r;
+                        *ptr++ = r;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (unsigned int y = 0; y < height; y++)
+            {
+                unsigned char *ptr2 = lines[y];
+                for (unsigned int x = 0; x < width; x++)
+                {
+                    unsigned char r = *ptr2++;
+                    unsigned char g = *ptr2++;
+                    unsigned char b = *ptr2++;
+                    unsigned char a = *ptr2++;
+                    if (a < 128)
+                    {
+                        *ptr++ = 255;
+                        *ptr++ = 0;
+                        *ptr++ = 255;
+                        transp = 1;
+                    }
+                    else
+                    {
+                        if ((r == 255) && (g == 0) && (b == 255)) r = 254;
+                        *ptr++ = r;
+                        *ptr++ = g;
+                        *ptr++ = b;
+                    }
+                }
+            }
+        }
+
+        for ( unsigned int j = 0; j < height; j++ )
+            free( lines[j] );
+        free( lines );
+
+        if (transp)
+        {
+            image->SetMaskColour( 255, 0, 255 );
+        }
+        else
+        {
+            image->SetMask( FALSE );
+        }
     }
-    else
-    {
-	for (unsigned int y = 0; y < height; y++)
-	{
-	    unsigned char *ptr2 = lines[y];
-	    for (unsigned int x = 0; x < width; x++)
-	    {
-		unsigned char r = *ptr2++;
-		unsigned char g = *ptr2++;
-		unsigned char b = *ptr2++;
-		unsigned char a = *ptr2++;
-		if (a < 128)
-		{
-		    *ptr++ = 255;
-		    *ptr++ = 0;
-		    *ptr++ = 255;
-		    transp = 1;
-		}
-		else
-		{
-		    if ((r == 255) && (g == 0) && (b == 255)) r = 254;
-		    *ptr++ = r;
-		    *ptr++ = g;
-		    *ptr++ = b;
-		}
-	    }
-	}
-    }
-    
-    for (unsigned int j = 0; j < height; j++) free( lines[j] );
-    free( lines );
-    
-    if (transp)
-    {
-        image->SetMaskColour( 255, 0, 255 );
-    }
-    else
-    {
-        image->SetMask( FALSE );
-    }
-   
+
     return TRUE;
+
+error:
+    wxLogError(_("Couldn't load a PNG image - probably file is corrupted."));
+
+    if ( image->Ok() )
+    {
+        image->Destroy();
+    }
+
+    if ( lines )
+    {
+        free( lines );
+    }
+
+    if ( png_ptr )
+    {
+        if ( info_ptr )
+        {
+            png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+            free(info_ptr);
+        }
+        else
+            png_destroy_read_struct( &png_ptr, (png_infopp) NULL, (png_infopp) NULL );
+    }
+    return FALSE;
 }
 
 
@@ -636,29 +657,29 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
 {
   {
     png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!png_ptr) 
-    { 
-      return FALSE; 
+    if (!png_ptr)
+    {
+      return FALSE;
     }
-    
+
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL)
     {
       png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
       return FALSE;
     }
-    
+
     if (setjmp(png_ptr->jmpbuf))
     {
       png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
       return FALSE;
     }
-    
+
     png_set_write_fn( png_ptr, &stream, _PNG_stream_writer, NULL);
 
     png_set_IHDR( png_ptr, info_ptr, image->GetWidth(), image->GetHeight(), 8,
-	          PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
-		  PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+                  PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
+                  PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
     png_color_8 sig_bit;
     sig_bit.red = 8;
@@ -669,45 +690,45 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
     png_write_info( png_ptr, info_ptr );
     png_set_shift( png_ptr, &sig_bit );
     png_set_packing( png_ptr );
-    
+
     unsigned char *data = (unsigned char *)malloc( image->GetWidth()*4 );
     if (!data)
     {
       png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
       return FALSE;
     }
-    
+
     for (int y = 0; y < image->GetHeight(); y++)
     {
         unsigned char *ptr = image->GetData() + (y * image->GetWidth() * 3);
         for (int x = 0; x < image->GetWidth(); x++)
         {
-	    data[(x << 2) + 0] = *ptr++;
-	    data[(x << 2) + 1] = *ptr++;
-	    data[(x << 2) + 2] = *ptr++;
-	    if ((data[(x << 2) + 0] == image->GetMaskRed()) &&
-	        (data[(x << 2) + 1] == image->GetMaskGreen()) &&
-	        (data[(x << 2) + 2] == image->GetMaskBlue()))
-	    {
+            data[(x << 2) + 0] = *ptr++;
+            data[(x << 2) + 1] = *ptr++;
+            data[(x << 2) + 2] = *ptr++;
+            if ((data[(x << 2) + 0] == image->GetMaskRed()) &&
+                (data[(x << 2) + 1] == image->GetMaskGreen()) &&
+                (data[(x << 2) + 2] == image->GetMaskBlue()))
+            {
                 data[(x << 2) + 3] = 0;
-	    }
-	    else
-	    {
-	        data[(x << 2) + 3] = 255;
-	    }
+            }
+            else
+            {
+                data[(x << 2) + 3] = 255;
+            }
         }
         png_bytep row_ptr = data;
         png_write_rows( png_ptr, &row_ptr, 1 );
     }
-    
+
     free(data);
     png_write_end( png_ptr, info_ptr );
-    png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
+    png_destroy_write_struct( &png_ptr, (png_infopp)&info_ptr );
   }
   return TRUE;
 }
 
-#endif 
+#endif
 
   // wxUSE_LIBPNG
 
@@ -718,7 +739,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 #endif
-  
+
 bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
 {
    unsigned char      *data, *ptr;
@@ -732,7 +753,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
    signed char         bbuf[4];
    struct _cmap
      {
-	unsigned char       r, g, b;
+        unsigned char       r, g, b;
      }
                       *cmap = NULL;
 #ifndef BI_RGB
@@ -748,8 +769,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
   image->Destroy();
 
    done = 0;
-   /* 
-    * Reading the bmp header 
+   /*
+    * Reading the bmp header
     */
 
    stream.Read(&bbuf, 2);
@@ -764,13 +785,13 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
    int height = (int)dbuf[1];
    if (width > 32767)
      {
-	wxLogError( "Image width > 32767 pixels for file\n" );
-	return FALSE;
+        wxLogError( "Image width > 32767 pixels for file\n" );
+        return FALSE;
      }
    if (height > 32767)
      {
-	wxLogError( "Image height > 32767 pixels for file\n" );
-	return FALSE;
+        wxLogError( "Image height > 32767 pixels for file\n" );
+        return FALSE;
      }
    stream.Read(&word, 2);
    planes = (int)word;
@@ -778,15 +799,15 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
    bpp = (int)word;
    if (bpp != 1 && bpp != 4 && bpp != 8 && bpp && 16 && bpp != 24 && bpp != 32)
      {
-	wxLogError( "unknown bitdepth in file\n" );
-	return FALSE;
+        wxLogError( "unknown bitdepth in file\n" );
+        return FALSE;
      }
    stream.Read(dbuf, 4 * 4);
    comp = (int)dbuf[0];
    if (comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 && comp != BI_BITFIELDS)
      {
         wxLogError( "unknown encoding in Windows BMP file\n" );
-	return FALSE;
+        return FALSE;
      }
    stream.Read(dbuf, 4 * 2);
    ncolors = (int)dbuf[0];
@@ -796,29 +817,29 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
    if (((comp == BI_RLE4) && (bpp != 4)) || ((comp == BI_RLE8) && (bpp != 8)) || ((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
      {
         wxLogError( "encoding of BMP doesn't match bitdepth\n" );
-	return FALSE;
+        return FALSE;
      }
    if (bpp < 16)
      {
-	cmap = (struct _cmap *)malloc(sizeof(struct _cmap) * ncolors);
+        cmap = (struct _cmap *)malloc(sizeof(struct _cmap) * ncolors);
 
-	if (!cmap)
-	  {
-	     wxLogError( "Cannot allocate RAM for color map in BMP file\n" );
-	     return FALSE;
-	  }
+        if (!cmap)
+          {
+             wxLogError( "Cannot allocate RAM for color map in BMP file\n" );
+             return FALSE;
+          }
      }
    else
       cmap = NULL;
-      
-   image->Create( width, height );      
+
+   image->Create( width, height );
    ptr = image->GetData();
    if (!ptr)
      {
         wxLogError( "Cannot allocate RAM for RGB data in file\n" );
-	if (cmap)
-	   free(cmap);
-	return FALSE;
+        if (cmap)
+           free(cmap);
+        return FALSE;
      }
 
    /*
@@ -826,53 +847,53 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     */
    if (bpp < 16 && ncolors != 0)
      {
-	for (i = 0; i < ncolors; i++)
-	  {
-	     stream.Read(bbuf, 4);
-	     cmap[i].b = bbuf[0];
-	     cmap[i].g = bbuf[1];
-	     cmap[i].r = bbuf[2];
-	  }
+        for (i = 0; i < ncolors; i++)
+          {
+             stream.Read(bbuf, 4);
+             cmap[i].b = bbuf[0];
+             cmap[i].g = bbuf[1];
+             cmap[i].r = bbuf[2];
+          }
      }
    else if (bpp == 16 || bpp == 32)
      {
-	if (comp == BI_BITFIELDS)
-	  {
-	     int                 bit = 0;
+        if (comp == BI_BITFIELDS)
+          {
+             int                 bit = 0;
 
-	     stream.Read(dbuf, 4 * 3);
-	     bmask = dbuf[0];
-	     gmask = dbuf[1];
-	     rmask = dbuf[2];
-	     /* find shift amount.. ugly, but i can't think of a better way */
-	     for (bit = 0; bit < bpp; bit++)
-	       {
-		  if (bmask & (1 << bit))
-		     bshift = bit;
-		  if (gmask & (1 << bit))
-		     gshift = bit;
-		  if (rmask & (1 << bit))
-		     rshift = bit;
-	       }
-	  }
-	else if (bpp == 16)
-	  {
-	     rmask = 0x7C00;
-	     gmask = 0x03E0;
-	     bmask = 0x001F;
-	     rshift = 10;
-	     gshift = 5;
-	     bshift = 0;
-	  }
-	else if (bpp == 32)
-	  {
-	     rmask = 0x00FF0000;
-	     gmask = 0x0000FF00;
-	     bmask = 0x000000FF;
-	     rshift = 16;
-	     gshift = 8;
-	     bshift = 0;
-	  }
+             stream.Read(dbuf, 4 * 3);
+             bmask = dbuf[0];
+             gmask = dbuf[1];
+             rmask = dbuf[2];
+             /* find shift amount.. ugly, but i can't think of a better way */
+             for (bit = 0; bit < bpp; bit++)
+               {
+                  if (bmask & (1 << bit))
+                     bshift = bit;
+                  if (gmask & (1 << bit))
+                     gshift = bit;
+                  if (rmask & (1 << bit))
+                     rshift = bit;
+               }
+          }
+        else if (bpp == 16)
+          {
+             rmask = 0x7C00;
+             gmask = 0x03E0;
+             bmask = 0x001F;
+             rshift = 10;
+             gshift = 5;
+             bshift = 0;
+          }
+        else if (bpp == 32)
+          {
+             rmask = 0x00FF0000;
+             gmask = 0x0000FF00;
+             bmask = 0x000000FF;
+             rshift = 16;
+             gshift = 8;
+             bshift = 0;
+          }
      }
 
    /*
@@ -884,13 +905,13 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
    /* set the whole image to the background color */
    if (bpp < 16 && (comp == BI_RLE4 || comp == BI_RLE8))
      {
-	for (i = 0; i < width * height; i++)
-	  {
-	     *ptr++ = cmap[0].r;
-	     *ptr++ = cmap[0].g;
-	     *ptr++ = cmap[0].b;
-	  }
-	ptr = data;
+        for (i = 0; i < width * height; i++)
+          {
+             *ptr++ = cmap[0].r;
+             *ptr++ = cmap[0].g;
+             *ptr++ = cmap[0].b;
+          }
+        ptr = data;
      }
    line = 0;
    column = 0;
@@ -903,169 +924,169 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
    linesize = ((width * bpp + 31) / 32) * 4;
    for (line = (height - 1); line >= 0; line--)
      {
-	linepos = 0;
-	for (column = 0; column < width;)
-	  {
-	     if (bpp < 16)
-	       {
-		  int                 index;
+        linepos = 0;
+        for (column = 0; column < width;)
+          {
+             if (bpp < 16)
+               {
+                  int                 index;
 
-		  linepos++;
-		  aByte = stream.GetC();
-		  if (bpp == 1)
-		    {
-		       int                 bit = 0;
+                  linepos++;
+                  aByte = stream.GetC();
+                  if (bpp == 1)
+                    {
+                       int                 bit = 0;
 
-		       for (bit = 0; bit < 8; bit++)
-			 {
-			    index = ((aByte & (0x80 >> bit)) ? 1 : 0);
-			    ptr[poffset] = cmap[index].r;
-			    ptr[poffset + 1] = cmap[index].g;
-			    ptr[poffset + 2] = cmap[index].b;
-			    column++;
-			 }
-		    }
-		  else if (bpp == 4)
-		    {
-		       if (comp == BI_RLE4)
-			 {
-			    wxLogError( "can't deal with 4bit encoded yet.\n");
-			    image->Destroy();
-			    free(cmap);
-			    return FALSE;
-			 }
-		       else
-			 {
-			    int                 nibble = 0;
+                       for (bit = 0; bit < 8; bit++)
+                         {
+                            index = ((aByte & (0x80 >> bit)) ? 1 : 0);
+                            ptr[poffset] = cmap[index].r;
+                            ptr[poffset + 1] = cmap[index].g;
+                            ptr[poffset + 2] = cmap[index].b;
+                            column++;
+                         }
+                    }
+                  else if (bpp == 4)
+                    {
+                       if (comp == BI_RLE4)
+                         {
+                            wxLogError( "can't deal with 4bit encoded yet.\n");
+                            image->Destroy();
+                            free(cmap);
+                            return FALSE;
+                         }
+                       else
+                         {
+                            int                 nibble = 0;
 
-			    for (nibble = 0; nibble < 2; nibble++)
-			      {
-				 index = ((aByte & (0xF0 >> nibble * 4)) >> (!nibble * 4));
-				 if (index >= 16)
-				    index = 15;
-				 ptr[poffset] = cmap[index].r;
-				 ptr[poffset + 1] = cmap[index].g;
-				 ptr[poffset + 2] = cmap[index].b;
-				 column++;
-			      }
-			 }
-		    }
-		  else if (bpp == 8)
-		    {
-		       if (comp == BI_RLE8)
-			 {
-			    unsigned char       first;
+                            for (nibble = 0; nibble < 2; nibble++)
+                              {
+                                 index = ((aByte & (0xF0 >> nibble * 4)) >> (!nibble * 4));
+                                 if (index >= 16)
+                                    index = 15;
+                                 ptr[poffset] = cmap[index].r;
+                                 ptr[poffset + 1] = cmap[index].g;
+                                 ptr[poffset + 2] = cmap[index].b;
+                                 column++;
+                              }
+                         }
+                    }
+                  else if (bpp == 8)
+                    {
+                       if (comp == BI_RLE8)
+                         {
+                            unsigned char       first;
 
-			    first = aByte;
-			    aByte = stream.GetC();
-			    if (first == 0)
-			      {
-				 if (aByte == 0)
-				   {
+                            first = aByte;
+                            aByte = stream.GetC();
+                            if (first == 0)
+                              {
+                                 if (aByte == 0)
+                                   {
 /*                                    column = width; */
-				   }
-				 else if (aByte == 1)
-				   {
-				      column = width;
-				      line = -1;
-				   }
-				 else if (aByte == 2)
-				   {
-				      aByte = stream.GetC();
-				      column += aByte;
-				      linepos = column * bpp / 8;
-				      aByte = stream.GetC();
-				      line += aByte;
-				   }
-				 else
-				   {
-				      int                 absolute = aByte;
+                                   }
+                                 else if (aByte == 1)
+                                   {
+                                      column = width;
+                                      line = -1;
+                                   }
+                                 else if (aByte == 2)
+                                   {
+                                      aByte = stream.GetC();
+                                      column += aByte;
+                                      linepos = column * bpp / 8;
+                                      aByte = stream.GetC();
+                                      line += aByte;
+                                   }
+                                 else
+                                   {
+                                      int                 absolute = aByte;
 
-				      for (i = 0; i < absolute; i++)
-					{
-					   linepos++;
-					   aByte = stream.GetC();
-					   ptr[poffset] = cmap[aByte].r;
-					   ptr[poffset + 1] = cmap[aByte].g;
-					   ptr[poffset + 2] = cmap[aByte].b;
-					   column++;
-					}
-				      if (absolute & 0x01)
-					 aByte = stream.GetC();
-				   }
-			      }
-			    else
-			      {
-				 for (i = 0; i < first; i++)
-				   {
-				      ptr[poffset] = cmap[aByte].r;
-				      ptr[poffset + 1] = cmap[aByte].g;
-				      ptr[poffset + 2] = cmap[aByte].b;
-				      column++;
-				      linepos++;
-				   }
-			      }
-			 }
-		       else
-			 {
-			    ptr[poffset] = cmap[aByte].r;
-			    ptr[poffset + 1] = cmap[aByte].g;
-			    ptr[poffset + 2] = cmap[aByte].b;
-			    column++;
-			    linepos += size;
-			 }
-		    }
-	       }
-	     else if (bpp == 24)
-	       {
-	      stream.Read(&bbuf, 3);
-		  linepos += 3;		
-		  ptr[poffset] = (unsigned char)bbuf[2];
-		  ptr[poffset + 1] = (unsigned char)bbuf[1];
-		  ptr[poffset + 2] = (unsigned char)bbuf[0];
-		  column++;
-	       }
-	     else if (bpp == 16)
-	       {
-		  unsigned char       temp;
+                                      for (i = 0; i < absolute; i++)
+                                        {
+                                           linepos++;
+                                           aByte = stream.GetC();
+                                           ptr[poffset] = cmap[aByte].r;
+                                           ptr[poffset + 1] = cmap[aByte].g;
+                                           ptr[poffset + 2] = cmap[aByte].b;
+                                           column++;
+                                        }
+                                      if (absolute & 0x01)
+                                         aByte = stream.GetC();
+                                   }
+                              }
+                            else
+                              {
+                                 for (i = 0; i < first; i++)
+                                   {
+                                      ptr[poffset] = cmap[aByte].r;
+                                      ptr[poffset + 1] = cmap[aByte].g;
+                                      ptr[poffset + 2] = cmap[aByte].b;
+                                      column++;
+                                      linepos++;
+                                   }
+                              }
+                         }
+                       else
+                         {
+                            ptr[poffset] = cmap[aByte].r;
+                            ptr[poffset + 1] = cmap[aByte].g;
+                            ptr[poffset + 2] = cmap[aByte].b;
+                            column++;
+                            linepos += size;
+                         }
+                    }
+               }
+             else if (bpp == 24)
+               {
+              stream.Read(&bbuf, 3);
+                  linepos += 3;
+                  ptr[poffset] = (unsigned char)bbuf[2];
+                  ptr[poffset + 1] = (unsigned char)bbuf[1];
+                  ptr[poffset + 2] = (unsigned char)bbuf[0];
+                  column++;
+               }
+             else if (bpp == 16)
+               {
+                  unsigned char       temp;
 
-		  stream.Read(&word, 2);
-		  linepos += 2;
-		  temp = (word & rmask) >> rshift;
-		  ptr[poffset] = temp;
-		  temp = (word & gmask) >> gshift;
-		  ptr[poffset + 1] = temp;
-		  temp = (word & bmask) >> gshift;
-		  ptr[poffset + 2] = temp;
-		  column++;
-	       }
-	     else
-	       {
-		  unsigned char       temp;
+                  stream.Read(&word, 2);
+                  linepos += 2;
+                  temp = (word & rmask) >> rshift;
+                  ptr[poffset] = temp;
+                  temp = (word & gmask) >> gshift;
+                  ptr[poffset + 1] = temp;
+                  temp = (word & bmask) >> gshift;
+                  ptr[poffset + 2] = temp;
+                  column++;
+               }
+             else
+               {
+                  unsigned char       temp;
 
-		  stream.Read(&dword, 4);
-		  linepos += 4;
-		  temp = (dword & rmask) >> rshift;
-		  ptr[poffset] = temp;
-		  temp = (dword & gmask) >> gshift;
-		  ptr[poffset + 1] = temp;
-		  temp = (dword & bmask) >> bshift;
-		  ptr[poffset + 2] = temp;
-		  column++;
-	       }
-	  }
-	while ((linepos < linesize) && (comp != 1) && (comp != 2))
-	  {
-	     stream.Read(&aByte, 1);
-	     linepos += 1;
-	     if (stream.LastError() != wxStream_NOERROR)
-		break;
-	  }
+                  stream.Read(&dword, 4);
+                  linepos += 4;
+                  temp = (dword & rmask) >> rshift;
+                  ptr[poffset] = temp;
+                  temp = (dword & gmask) >> gshift;
+                  ptr[poffset + 1] = temp;
+                  temp = (dword & bmask) >> bshift;
+                  ptr[poffset + 2] = temp;
+                  column++;
+               }
+          }
+        while ((linepos < linesize) && (comp != 1) && (comp != 2))
+          {
+             stream.Read(&aByte, 1);
+             linepos += 1;
+             if (stream.LastError() != wxStream_NOERROR)
+                break;
+          }
      }
    if (cmap) free(cmap);
-      
+
    image->SetMask( FALSE );
-   
+
    return TRUE;
 }
 
@@ -1073,7 +1094,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
 
 wxBitmap wxImage::ConvertToBitmap() const
 {
-  
+
   wxBitmap bitmap;
   wxCHECK_MSG( Ok(), bitmap, "invalid image" );
   int width = GetWidth();
@@ -1120,23 +1141,23 @@ wxBitmap wxImage::ConvertToBitmap() const
     *(ptbits++) = *(ptdata  );
     ptdata += 3;
   }
- 
+
   HDC hdc = ::GetDC(NULL);
 
   HBITMAP hbitmap;
   hbitmap = CreateDIBitmap( hdc, &(lpDIBh->bmiHeader), CBM_INIT, lpBits, lpDIBh, DIB_RGB_COLORS );
-    
+
 // The above line is equivalent to the following two lines.
 //    hbitmap = ::CreateCompatibleBitmap( hdc, width, height );
 //    ::SetDIBits( hdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS);
 // or the following lines
 //    hbitmap = ::CreateCompatibleBitmap( hdc, width, height );
 //    HDC memdc = ::CreateCompatibleDC( hdc );
-//    ::SelectObject( memdc, hbitmap); 
+//    ::SelectObject( memdc, hbitmap);
 //    ::SetDIBitsToDevice( memdc, 0, 0, width, height,
-//	    0, 0, 0, height, (void *)lpBits, lpDIBh, DIB_RGB_COLORS);
-//    ::SelectObject( memdc, 0 ); 
-//    ::DeleteDC( memdc ); 
+//          0, 0, 0, height, (void *)lpBits, lpDIBh, DIB_RGB_COLORS);
+//    ::SelectObject( memdc, 0 );
+//    ::DeleteDC( memdc );
 
   bitmap.SetHBITMAP( (WXHBITMAP) hbitmap );
 
@@ -1176,7 +1197,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 */
   }
 
-  ::ReleaseDC(NULL, hdc);   
+  ::ReleaseDC(NULL, hdc);
   free(lpDIBh);
   free(lpBits);
 
@@ -1184,7 +1205,7 @@ wxBitmap wxImage::ConvertToBitmap() const
     bitmap.SetOk( TRUE );
   else
     bitmap.SetOk( FALSE );
-   
+
   return bitmap;
 }
 
@@ -1199,14 +1220,14 @@ wxImage::wxImage( const wxBitmap &bitmap )
 
   int width = bitmap.GetWidth();
   int height = bitmap.GetHeight();
-  Create( width, height ); 
+  Create( width, height );
   unsigned char *data = GetData();
   if( !data )
   {
       wxFAIL_MSG( "could not allocate data for image" );
       return;
   }
-    
+
   int headersize = sizeof(BITMAPINFOHEADER);
   LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
   if( !lpDIBh )
@@ -1240,12 +1261,12 @@ wxImage::wxImage( const wxBitmap &bitmap )
       free( lpDIBh );
       return;
   }
-    
+
   HBITMAP hbitmap;
   hbitmap = (HBITMAP) bitmap.GetHBITMAP();
   HDC hdc = ::GetDC(NULL);
   ::GetDIBits( hdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
-	
+
   unsigned char *ptdata = data, *ptbits = lpBits;
   for( int i=0; i<width*height; i++ )
   {
@@ -1253,8 +1274,8 @@ wxImage::wxImage( const wxBitmap &bitmap )
     *(ptdata++) = *(ptbits+1);
     *(ptdata++) = *(ptbits  );
     ptbits += 3;
-  }	
-      
+  }
+
   if( bitmap.GetMask() && bitmap.GetMask()->GetMaskBitmap() )
   {
     hbitmap = (HBITMAP) bitmap.GetMask()->GetMaskBitmap();
@@ -1262,7 +1283,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     ::SetTextColor( memdc, RGB( 0, 0, 0 ) );
     ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
     ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
-    ::DeleteDC( memdc ); 
+    ::DeleteDC( memdc );
     unsigned char r=16, g=16, b=16;  // background set to RGB(16,16,16)
     ptdata = data;
     ptbits = lpBits;
@@ -1275,11 +1296,11 @@ wxImage::wxImage( const wxBitmap &bitmap )
         *(ptdata++)  = b;
       }
       ptbits += 3;
-    }       
+    }
     SetMaskColour( r, g, b );
-  }	
-      
-  ::ReleaseDC(NULL, hdc);   
+  }
+
+  ::ReleaseDC(NULL, hdc);
   free(lpDIBh);
   free(lpBits);
 }
@@ -1321,10 +1342,10 @@ wxBitmap wxImage::ConvertToBitmap() const
 
         mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
 
-	wxMask *mask = new wxMask();
-	mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
+        wxMask *mask = new wxMask();
+        mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
 
-	bitmap.SetMask( mask );
+        bitmap.SetMask( mask );
     }
 
     // Retrieve depth
@@ -1332,9 +1353,9 @@ wxBitmap wxImage::ConvertToBitmap() const
     GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
     if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
     int bpp = visual->depth;
-    
+
     bitmap.SetDepth( bpp );
-    
+
     if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
     if (bpp < 8) bpp = 8;
 
@@ -1366,33 +1387,41 @@ wxBitmap wxImage::ConvertToBitmap() const
         for (int x = 0; x < width; x++)
         {
             int r = data[index];
-	    index++;
+            index++;
             int g = data[index];
-	    index++;
+            index++;
             int b = data[index];
-	    index++;
+            index++;
 
-	    if (HasMask())
-	    {
-	        if ((r == r_mask) && (b == b_mask) && (g == g_mask))
-	            gdk_image_put_pixel( mask_image, x, y, 1 );
-	        else
-	            gdk_image_put_pixel( mask_image, x, y, 0 );
-	    }
+            if (HasMask())
+            {
+                if ((r == r_mask) && (b == b_mask) && (g == g_mask))
+                    gdk_image_put_pixel( mask_image, x, y, 1 );
+                else
+                    gdk_image_put_pixel( mask_image, x, y, 0 );
+            }
 
-	    switch (bpp)
-	    {
-	        case 8:
-	        {
+            if (HasMask())
+            {
+                if ((r == r_mask) && (b == b_mask) && (g == g_mask))
+                    gdk_image_put_pixel( mask_image, x, y, 1 );
+                else
+                    gdk_image_put_pixel( mask_image, x, y, 0 );
+            }
+
+            switch (bpp)
+            {
+                case 8:
+                {
                     int pixel = -1;
-		    if (wxTheApp->m_colorCube)
-		    {
-		        pixel = wxTheApp->m_colorCube
-                           [ ((r & 0xf8) << 7) + ((g & 0xf8) << 2) + ((b & 0xf8) >> 3) ];  		      
-                    } 		    
+                    if (wxTheApp->m_colorCube)
+                    {
+                        pixel = wxTheApp->m_colorCube
+                           [ ((r & 0xf8) << 7) + ((g & 0xf8) << 2) + ((b & 0xf8) >> 3) ];
+                    }
                     else
-		    {
-	                GdkColormap *cmap = gtk_widget_get_default_colormap();
+                    {
+                        GdkColormap *cmap = gtk_widget_get_default_colormap();
                         GdkColor *colors = cmap->colors;
                         int max = 3 * (65536);
 
@@ -1403,42 +1432,42 @@ wxBitmap wxImage::ConvertToBitmap() const
                             int bdiff = (b << 8) - colors[i].blue;
                             int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
                             if (sum < max) { pixel = i; max = sum; }
-			}
+                        }
                     }
 
-	            gdk_image_put_pixel( data_image, x, y, pixel );
+                    gdk_image_put_pixel( data_image, x, y, pixel );
 
-	            break;
-	        }
-	        case 15:
-	        {
-	            guint32 pixel = ((r & 0xf8) << 7) | ((g & 0xf8) << 2) | ((b & 0xf8) >> 3);
-	            gdk_image_put_pixel( data_image, x, y, pixel );
-	            break;
-	        }
-	        case 16:
-	        {
-	            guint32 pixel = ((r & 0xf8) << 8) | ((g & 0xfc) << 3) | ((b & 0xf8) >> 3);
-	            gdk_image_put_pixel( data_image, x, y, pixel );
-	            break;
-	        }
-	        case 32:
-	        case 24:
-	        {
-	            guint32 pixel = 0;
-	            switch (b_o)
-	            {
-	                case RGB: pixel = (r << 16) | (g << 8) | b; break;
-	                case RBG: pixel = (r << 16) | (b << 8) | g; break;
-	                case BRG: pixel = (b << 16) | (r << 8) | g; break;
-	                case BGR: pixel = (b << 16) | (g << 8) | r; break;
-	                case GRB: pixel = (g << 16) | (r << 8) | b; break;
-	                case GBR: pixel = (g << 16) | (b << 8) | r; break;
-	            }
-	            gdk_image_put_pixel( data_image, x, y, pixel );
-	        }
-	        default: break;
-	    }
+                    break;
+                }
+                case 15:
+                {
+                    guint32 pixel = ((r & 0xf8) << 7) | ((g & 0xf8) << 2) | ((b & 0xf8) >> 3);
+                    gdk_image_put_pixel( data_image, x, y, pixel );
+                    break;
+                }
+                case 16:
+                {
+                    guint32 pixel = ((r & 0xf8) << 8) | ((g & 0xfc) << 3) | ((b & 0xf8) >> 3);
+                    gdk_image_put_pixel( data_image, x, y, pixel );
+                    break;
+                }
+                case 32:
+                case 24:
+                {
+                    guint32 pixel = 0;
+                    switch (b_o)
+                    {
+                        case RGB: pixel = (r << 16) | (g << 8) | b; break;
+                        case RBG: pixel = (r << 16) | (b << 8) | g; break;
+                        case BRG: pixel = (b << 16) | (r << 8) | g; break;
+                        case BGR: pixel = (b << 16) | (g << 8) | r; break;
+                        case GRB: pixel = (g << 16) | (r << 8) | b; break;
+                        case GBR: pixel = (g << 16) | (b << 8) | r; break;
+                    }
+                    gdk_image_put_pixel( data_image, x, y, pixel );
+                }
+                default: break;
+            }
         } // for
     }  // for
 
@@ -1472,7 +1501,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
 
     GdkImage *gdk_image = gdk_image_get( bitmap.GetPixmap(),
                                          0, 0,
-					 bitmap.GetWidth(), bitmap.GetHeight() );
+                                         bitmap.GetWidth(), bitmap.GetHeight() );
 
     wxCHECK_RET( gdk_image, "couldn't create image" );
 
@@ -1483,17 +1512,17 @@ wxImage::wxImage( const wxBitmap &bitmap )
     {
         gdk_image_destroy( gdk_image );
         wxFAIL_MSG( "couldn't create image" );
-	return;
+        return;
     }
 
     GdkImage *gdk_image_mask = (GdkImage*) NULL;
     if (bitmap.GetMask())
     {
         gdk_image_mask = gdk_image_get( bitmap.GetMask()->GetBitmap(),
-	                                0, 0,
-					bitmap.GetWidth(), bitmap.GetHeight() );
+                                        0, 0,
+                                        bitmap.GetWidth(), bitmap.GetHeight() );
 
-	SetMaskColour( 16, 16, 16 );  // anything unlikely and dividable
+        SetMaskColour( 16, 16, 16 );  // anything unlikely and dividable
     }
 
     GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
@@ -1531,16 +1560,16 @@ wxImage::wxImage( const wxBitmap &bitmap )
                 data[pos+2] = pixel & 0xff;
             }
 
-	    if (gdk_image_mask)
-	    {
-	        int mask_pixel = gdk_image_get_pixel( gdk_image_mask, i, j );
-	        if (mask_pixel == 0)
-	        {
+            if (gdk_image_mask)
+            {
+                int mask_pixel = gdk_image_get_pixel( gdk_image_mask, i, j );
+                if (mask_pixel == 0)
+                {
                     data[pos] = 16;
                     data[pos+1] = 16;
                     data[pos+2] = 16;
-	       }
-	    }
+               }
+            }
 
             pos += 3;
         }
