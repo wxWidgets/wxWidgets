@@ -2,7 +2,9 @@ This file contains the detailed log of wxGTK-specific changes, please see
 doc/changes.txt for the concise log of important changes in all wxWindows
 ports.
 
-*** next release ***
+*** 4th Jan 2001: wxWindows 2.2.9 released ***
+
+*** there was no wxWindows 2.2.8 official release ***
 
 *** 22th May 2001: wxWindows 2.2.7 released ***
 
