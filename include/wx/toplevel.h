@@ -66,7 +66,11 @@ class WXDLLEXPORT wxTopLevelWindowBase;
 // "close" but round instead of squared and just hides the applications
 // instead of closing it) in the title bar
 #ifdef __WXWINCE__
-    #define wxDEFAULT_FRAME_STYLE (0)
+	#ifdef __SMARTPHONE__
+		#define wxDEFAULT_FRAME_STYLE (wxMAXIMIZE)
+	#else
+		#define wxDEFAULT_FRAME_STYLE (0)
+	#endif
 #else // !__WXWINCE__
     #define wxDEFAULT_FRAME_STYLE \
             (wxSYSTEM_MENU | \

@@ -169,6 +169,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     }
     //else: WS_OVERLAPPED is 0 anyhow, so it is on by default
 
+#ifndef __SMARTPHONE__
     // border and caption styles
     if ( style & wxRESIZE_BORDER )
         msflags |= WS_THICKFRAME;
@@ -178,6 +179,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
         msflags |= WS_BORDER;
     else
         msflags |= WS_POPUP;
+#endif
 
     // normally we consider that all windows without caption must be popups,
     // but CE is an exception: there windows normally do not have the caption
@@ -208,7 +210,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     // Keep this here because it saves recoding this function in wxTinyFrame
     if ( style & (wxTINY_CAPTION_VERT | wxTINY_CAPTION_HORIZ) )
         msflags |= WS_CAPTION;
-        
+
     if ( exflags )
     {
         // there is no taskbar under CE, so omit all this
@@ -413,7 +415,7 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
 
 #if (defined(_WIN32_WCE) && _WIN32_WCE < 400) || \
     defined(WIN32_PLATFORM_PSPC) || \
-    defined(WIN32_PLATFORM_WFSP)
+    defined(__SMARTPHONE__)
 	// Always expand to fit the screen in PocketPC or SmartPhone
 	wxSize sz(wxDefaultSize);
 #else // other (including normal desktop) Windows
@@ -512,6 +514,12 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
             0
         );
     }
+
+	// Native look is full screen window on Smartphones
+#ifdef __SMARTPHONE__
+    if ( style & wxMAXIMIZE )
+	    Maximize();
+#endif
 
     return ret;
 }
