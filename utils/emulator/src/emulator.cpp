@@ -108,7 +108,9 @@ wxEmulatorApp::wxEmulatorApp()
 // 'Main program' equivalent: the program execution "starts" here
 bool wxEmulatorApp::OnInit()
 {
+#if wxUSE_LOG
     wxLog::SetTimestamp(NULL);
+#endif // wxUSE_LOG
     wxInitAllImageHandlers();
 
     wxString currentDir = wxGetCwd();

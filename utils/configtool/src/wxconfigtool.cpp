@@ -58,7 +58,9 @@ ctApp::~ctApp()
 
 bool ctApp::OnInit(void)
 {
+#if wxUSE_LOG
     wxLog::SetTimestamp(NULL);
+#endif // wxUSE_LOG
     
     wxHelpProvider::Set(new wxSimpleHelpProvider);
 
