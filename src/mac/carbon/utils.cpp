@@ -80,6 +80,146 @@ static int DoGetOSVersion(int *majorVsn, int *minorVsn)
 #endif
 }
 
+// ----------------------------------------------------------------------------
+// debugging support
+// ----------------------------------------------------------------------------
+
+#if defined(__WXMAC__) && !defined(__DARWIN__) && defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
+
+// MetroNub stuff doesn't seem to work in CodeWarrior 5.3 Carbon builds...
+
+#ifndef __MetroNubUtils__
+#include "MetroNubUtils.h"
+#endif
+
+#ifndef __GESTALT__
+#include <Gestalt.h>
+#endif
+
+#if TARGET_API_MAC_CARBON
+
+    #include <CodeFragments.h>
+
+    extern "C" long CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
+
+    ProcPtr gCallUniversalProc_Proc = NULL;
+
+#endif
+
+static MetroNubUserEntryBlock*    gMetroNubEntry = NULL;
+
+static long fRunOnce = false;
+
+/* ---------------------------------------------------------------------------
+        IsMetroNubInstalled
+   --------------------------------------------------------------------------- */
+
+Boolean IsMetroNubInstalled()
+{
+    if (!fRunOnce)
+    {
+        long result, value;
+
+        fRunOnce = true;
+        gMetroNubEntry = NULL;
+
+        if (Gestalt(gestaltSystemVersion, &value) == noErr && value < 0x1000)
+        {
+            /* look for MetroNub's Gestalt selector */
+            if (Gestalt(kMetroNubUserSignature, &result) == noErr)
+            {
+
+            #if TARGET_API_MAC_CARBON
+                if (gCallUniversalProc_Proc == NULL)
+                {
+                    CFragConnectionID   connectionID;
+                    Ptr                 mainAddress;
+                    Str255              errorString;
+                    ProcPtr             symbolAddress;
+                    OSErr               err;
+                    CFragSymbolClass    symbolClass;
+
+                    symbolAddress = NULL;
+                    err = GetSharedLibrary("\pInterfaceLib", kPowerPCCFragArch, kFindCFrag,
+                                           &connectionID, &mainAddress, errorString);
+
+                    if (err != noErr)
+                    {
+                        gCallUniversalProc_Proc = NULL;
+                        goto end;
+                    }
+
+                    err = FindSymbol(connectionID, "\pCallUniversalProc",
+                                    (Ptr *) &gCallUniversalProc_Proc, &symbolClass);
+
+                    if (err != noErr)
+                    {
+                        gCallUniversalProc_Proc = NULL;
+                        goto end;
+                    }
+                }
+            #endif
+
+                {
+                    MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
+
+                    /* make sure the version of the API is compatible */
+                    if (block->apiLowVersion <= kMetroNubUserAPIVersion &&
+                        kMetroNubUserAPIVersion <= block->apiHiVersion)
+                        gMetroNubEntry = block;        /* success! */
+                }
+
+            }
+        }
+    }
+
+end:
+
+#if TARGET_API_MAC_CARBON
+    return (gMetroNubEntry != NULL && gCallUniversalProc_Proc != NULL);
+#else
+    return (gMetroNubEntry != NULL);
+#endif
+}
+
+/* ---------------------------------------------------------------------------
+        IsMWDebuggerRunning                                            [v1 API]
+   --------------------------------------------------------------------------- */
+
+Boolean IsMWDebuggerRunning()
+{
+    if (IsMetroNubInstalled())
+        return CallIsDebuggerRunningProc(gMetroNubEntry->isDebuggerRunning);
+    else
+        return false;
+}
+
+/* ---------------------------------------------------------------------------
+        AmIBeingMWDebugged                                            [v1 API]
+   --------------------------------------------------------------------------- */
+
+Boolean AmIBeingMWDebugged()
+{
+    if (IsMetroNubInstalled())
+        return CallAmIBeingDebuggedProc(gMetroNubEntry->amIBeingDebugged);
+    else
+        return false;
+}
+
+extern bool WXDLLEXPORT wxIsDebuggerRunning()
+{
+    return IsMWDebuggerRunning() && AmIBeingMWDebugged();
+}
+
+#else
+
+extern bool WXDLLEXPORT wxIsDebuggerRunning()
+{
+    return false;
+}
+
+#endif // defined(__WXMAC__) && !defined(__DARWIN__) && (__MWERKS__ >= 0x2400)
+
 #if wxUSE_BASE
 
 #ifndef __DARWIN__
@@ -1331,146 +1471,6 @@ void wxMacControl::Flash( ControlPartCode part , UInt32 ticks )
     Delay( ticks , &finalTicks ) ;
     HiliteControl( m_controlRef , kControlNoPart ) ;
 }
-
-// ----------------------------------------------------------------------------
-// debugging support
-// ----------------------------------------------------------------------------
-
-#if defined(__WXMAC__) && !defined(__DARWIN__) && defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
-
-// MetroNub stuff doesn't seem to work in CodeWarrior 5.3 Carbon builds...
-
-#ifndef __MetroNubUtils__
-#include "MetroNubUtils.h"
-#endif
-
-#ifndef __GESTALT__
-#include <Gestalt.h>
-#endif
-
-#if TARGET_API_MAC_CARBON
-
-    #include <CodeFragments.h>
-
-    extern "C" long CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
-
-    ProcPtr gCallUniversalProc_Proc = NULL;
-
-#endif
-
-static MetroNubUserEntryBlock*    gMetroNubEntry = NULL;
-
-static long fRunOnce = false;
-
-/* ---------------------------------------------------------------------------
-        IsMetroNubInstalled
-   --------------------------------------------------------------------------- */
-
-Boolean IsMetroNubInstalled()
-{
-    if (!fRunOnce)
-    {
-        long result, value;
-
-        fRunOnce = true;
-        gMetroNubEntry = NULL;
-
-        if (Gestalt(gestaltSystemVersion, &value) == noErr && value < 0x1000)
-        {
-            /* look for MetroNub's Gestalt selector */
-            if (Gestalt(kMetroNubUserSignature, &result) == noErr)
-            {
-
-            #if TARGET_API_MAC_CARBON
-                if (gCallUniversalProc_Proc == NULL)
-                {
-                    CFragConnectionID   connectionID;
-                    Ptr                 mainAddress;
-                    Str255              errorString;
-                    ProcPtr             symbolAddress;
-                    OSErr               err;
-                    CFragSymbolClass    symbolClass;
-
-                    symbolAddress = NULL;
-                    err = GetSharedLibrary("\pInterfaceLib", kPowerPCCFragArch, kFindCFrag,
-                                           &connectionID, &mainAddress, errorString);
-
-                    if (err != noErr)
-                    {
-                        gCallUniversalProc_Proc = NULL;
-                        goto end;
-                    }
-
-                    err = FindSymbol(connectionID, "\pCallUniversalProc",
-                                    (Ptr *) &gCallUniversalProc_Proc, &symbolClass);
-
-                    if (err != noErr)
-                    {
-                        gCallUniversalProc_Proc = NULL;
-                        goto end;
-                    }
-                }
-            #endif
-
-                {
-                    MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
-
-                    /* make sure the version of the API is compatible */
-                    if (block->apiLowVersion <= kMetroNubUserAPIVersion &&
-                        kMetroNubUserAPIVersion <= block->apiHiVersion)
-                        gMetroNubEntry = block;        /* success! */
-                }
-
-            }
-        }
-    }
-
-end:
-
-#if TARGET_API_MAC_CARBON
-    return (gMetroNubEntry != NULL && gCallUniversalProc_Proc != NULL);
-#else
-    return (gMetroNubEntry != NULL);
-#endif
-}
-
-/* ---------------------------------------------------------------------------
-        IsMWDebuggerRunning                                            [v1 API]
-   --------------------------------------------------------------------------- */
-
-Boolean IsMWDebuggerRunning()
-{
-    if (IsMetroNubInstalled())
-        return CallIsDebuggerRunningProc(gMetroNubEntry->isDebuggerRunning);
-    else
-        return false;
-}
-
-/* ---------------------------------------------------------------------------
-        AmIBeingMWDebugged                                            [v1 API]
-   --------------------------------------------------------------------------- */
-
-Boolean AmIBeingMWDebugged()
-{
-    if (IsMetroNubInstalled())
-        return CallAmIBeingDebuggedProc(gMetroNubEntry->amIBeingDebugged);
-    else
-        return false;
-}
-
-extern bool WXDLLEXPORT wxIsDebuggerRunning()
-{
-    return IsMWDebuggerRunning() && AmIBeingMWDebugged();
-}
-
-#else
-
-extern bool WXDLLEXPORT wxIsDebuggerRunning()
-{
-    return false;
-}
-
-#endif // defined(__WXMAC__) && !defined(__DARWIN__) && (__MWERKS__ >= 0x2400)
 
 #endif // wxUSE_GUI
 
