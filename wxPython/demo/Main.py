@@ -40,6 +40,7 @@ _treeList = [
         'wxMaskedNumCtrl',
         'FloatCanvas',
         'wxXmlResourceSubclass',
+        'wxGridBagSizer',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -157,6 +158,7 @@ _treeList = [
         'Layoutf',
         'RowColSizer',
         'Sizers',
+        'wxGridBagSizer',
         'wxLayoutConstraints',
         'wxScrolledPanel',
         'wxXmlResource',
