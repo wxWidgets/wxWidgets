@@ -77,10 +77,10 @@ void wxCanvasObject::Move( int x, int y )
 {
     int old_x = m_area.x;
     int old_y = m_area.y;
-    
+
     m_area.x = x;
     m_area.y = y;
-    
+
     if (!m_isControl)
     {
         // TODO: sometimes faster to merge into 1 Update or
@@ -98,6 +98,22 @@ bool wxCanvasObject::IsHit( int x, int y, int margin )
             (y <= m_area.y+m_area.height+margin));
 }
 
+void wxCanvasObject::CaptureMouse()
+{
+    m_owner->SetCaptureMouse( this );
+}
+
+void wxCanvasObject::ReleaseMouse()
+{
+    m_owner->SetCaptureMouse( NULL );
+}
+
+bool wxCanvasObject::IsCapturedMouse()
+{
+    return m_owner->m_captureMouse==this;
+}
+
+
 void wxCanvasObject::Render( int clip_x, int clip_y, int clip_width, int clip_height )
 {
 }
@@ -114,7 +130,7 @@ void wxCanvasObject::WriteSVG( wxTextOutputStream &stream )
 // wxCanvasRect
 //----------------------------------------------------------------------------
 
-wxCanvasRect::wxCanvasRect( double x, double y, double w, double h, 
+wxCanvasRect::wxCanvasRect( double x, double y, double w, double h,
                             unsigned char red, unsigned char green, unsigned char blue )
    : wxCanvasObject()
 {
@@ -122,7 +138,7 @@ wxCanvasRect::wxCanvasRect( double x, double y, double w, double h,
     m_y = y;
     m_width = w;
     m_height = h;
-    
+
     m_red = red;
     m_green = green;
     m_blue = blue;
@@ -213,12 +229,12 @@ void wxCanvasLine::Render( int clip_x, int clip_y, int clip_width, int clip_heig
 
         ii = x2;
         jj = y2;
-  
+
         if (ai > aj)
         {
             // iterate over i
-            d = aj - (ai >> 1);        
-               
+            d = aj - (ai >> 1);
+
             while (ii != x1)
             {
                 if ((ii >= clip_x) && (ii <= clip_x+clip_width) &&
@@ -229,7 +245,7 @@ void wxCanvasLine::Render( int clip_x, int clip_y, int clip_width, int clip_heig
                 if (d >= 0)
                 {
                     jj += sj;
-                    d  -= ai;   
+                    d  -= ai;
                 }
                 ii += si;
                 d  += aj;
@@ -250,7 +266,7 @@ void wxCanvasLine::Render( int clip_x, int clip_y, int clip_width, int clip_heig
                 if (d >= 0)
                 {
                     ii += si;
-                    d  -= aj;   
+                    d  -= aj;
                 }
                 jj += sj;
                 d  += ai;
@@ -275,7 +291,7 @@ wxCanvasImage::wxCanvasImage( const wxImage &image, double x, double y, double w
     m_y = y;
     m_width = w;
     m_height = h;
-    
+
     m_image = image;
     m_isImage = TRUE;
 }
@@ -286,7 +302,7 @@ void wxCanvasImage::Recreate()
              m_owner->GetDeviceY( m_y ),
              m_owner->GetDeviceWidth( m_width ),
              m_owner->GetDeviceHeight( m_height ) );
-    
+
     if ((m_area.width == m_image.GetWidth()) &&
         (m_area.width == m_image.GetWidth()))
         m_tmp = m_image;
@@ -296,8 +312,8 @@ void wxCanvasImage::Recreate()
 
 void wxCanvasImage::Render( int clip_x, int clip_y, int clip_width, int clip_height )
 {
-    if ((clip_x == m_area.x) && 
-        (clip_y == m_area.y) && 
+    if ((clip_x == m_area.x) &&
+        (clip_y == m_area.y) &&
         (clip_width == m_area.width) &&
         (clip_height == m_area.height))
     {
@@ -308,7 +324,7 @@ void wxCanvasImage::Render( int clip_x, int clip_y, int clip_width, int clip_hei
         // local coordinates
         int start_x = clip_x - m_area.x;
         int start_y = clip_y - m_area.y;
-    
+
         wxRect rect( start_x, start_y, clip_width, clip_height );
         wxImage sub_image( m_tmp.GetSubImage( rect ) );
         m_owner->GetBuffer()->Paste( sub_image, clip_x, clip_y );
@@ -358,7 +374,7 @@ public:
      FT_Face   m_face;
 #else
      void     *m_dummy;
-#endif    
+#endif
 };
 
 wxCanvasText::wxCanvasText( const wxString &text, double x, double y, const wxString &fontFile, int size )
@@ -367,20 +383,20 @@ wxCanvasText::wxCanvasText( const wxString &text, double x, double y, const wxSt
     m_text = text;
     m_fontFileName = fontFile;
     m_size = size;
-    
+
     m_red = 0;
     m_green = 0;
     m_blue = 0;
-    
+
     m_alpha = NULL;
-    
+
     m_x = x;
     m_y = y;
-    
-#if wxUSE_FREETYPE    
+
+#if wxUSE_FREETYPE
     wxFaceData *data = new wxFaceData;
     m_faceData = data;
-    
+
     int error = FT_New_Face( g_freetypeLibrary,
                              m_fontFileName,
                              0,
@@ -444,7 +460,7 @@ void wxCanvasText::Render( int clip_x, int clip_y, int clip_width, int clip_heig
                 int red1 = (m_red * alpha) / 255;
                 int green1 = (m_green * alpha) / 255;
                 int blue1 = (m_blue * alpha) / 255;
-                
+
                 alpha = 255-alpha;
                 int red2 = image->GetRed( image_x, image_y );
                 int green2 = image->GetGreen( image_x, image_y );
@@ -465,10 +481,10 @@ void wxCanvasText::WriteSVG( wxTextOutputStream &stream )
 void wxCanvasText::Recreate()
 {
     if (m_alpha) delete [] m_alpha;
-    
+
     m_area.x = m_owner->GetDeviceX( m_x );
     m_area.y = m_owner->GetDeviceY( m_y );
-    
+
     m_area.width = 100;  // TODO, calculate length
     m_area.height = m_size;
     m_alpha = new unsigned char[100*m_size];
@@ -483,7 +499,7 @@ void wxCanvasText::Recreate()
     for (int n = 0; n < (int)m_text.Len(); n++)
     {
         FT_UInt index = FT_Get_Char_Index( face, m_text[n] );
-        
+
         int error = FT_Load_Glyph( face, index, FT_LOAD_DEFAULT );
         if (error) continue;
         
@@ -497,7 +513,7 @@ void wxCanvasText::Recreate()
             {
                 unsigned char alpha = buffer[ y*bitmap->pitch + x ];
                 if (alpha == 0) continue;
-                
+
                 int xx = pen_x + slot->bitmap_left + x;
                 int yy = pen_y - slot->bitmap_top + y;
                 m_alpha[ yy * m_area.width + xx ] = alpha;
@@ -562,11 +578,11 @@ void wxCanvas::SetColour( unsigned char red, unsigned char green, unsigned char 
     m_red = red;
     m_green = green;
     m_blue = blue;
-    
+
     if (m_frozen) return;
-    
+
     unsigned char *data = m_buffer.GetData();
-    
+
     for (int y = 0; y < m_buffer.GetHeight(); y++)
         for (int x = 0; x < m_buffer.GetWidth(); x++)
         {
@@ -579,16 +595,18 @@ void wxCanvas::SetColour( unsigned char red, unsigned char green, unsigned char 
         }
 }
 
-void wxCanvas::CaptureMouse( wxCanvasObject *obj )
+void wxCanvas::SetCaptureMouse( wxCanvasObject *obj )
 {
-    wxWindow::CaptureMouse();
-    m_captureMouse = obj;
-}
-
-void wxCanvas::ReleaseMouse()
-{
-    m_captureMouse = (wxCanvasObject*) NULL;
-    wxWindow::ReleaseMouse();
+    if (obj)
+    {
+        wxWindow::CaptureMouse();
+        m_captureMouse = obj;
+    }
+    else
+    {
+        wxWindow::ReleaseMouse();
+        m_captureMouse = NULL;
+    }
 }
 
 void wxCanvas::Freeze()
@@ -606,16 +624,16 @@ void wxCanvas::Thaw()
         m_updateRects.DeleteNode( node );
         node = m_updateRects.First();
     }
-    
+
     m_frozen = FALSE;
-    
+
     Update( 0, 0, m_buffer.GetWidth(), m_buffer.GetHeight() );
 }
 
 void wxCanvas::Update( int x, int y, int width, int height )
 {
     if (m_frozen) return;
-    
+
     // clip to buffer
     if (x < 0)
     {
@@ -623,33 +641,33 @@ void wxCanvas::Update( int x, int y, int width, int height )
         x = 0;
     }
     if (width < 0) return;
-    
+
     if (y < 0)
     {
         height -= y;
         y = 0;
     }
     if (height < 0) return;
-    
+
     if (x+width > m_buffer.GetWidth())
     {
         width = m_buffer.GetWidth() - x;
     }
     if (width < 0) return;
-    
+
     if (y+height > m_buffer.GetHeight())
     {
         height = m_buffer.GetHeight() - y;
     }
     if (height < 0) return;
-    
+
     // update is within the buffer
     m_needUpdate = TRUE;
-    
+
     // has to be blitted to screen later
     m_updateRects.Append(
         (wxObject*) new wxRect( x,y,width,height ) );
-    
+
     // speed up with direct access, maybe add wxImage::Clear(x,y,w,h,r,g,b)
     for (int yy = y; yy < y+height; yy++)
         for (int xx = x; xx < x+width; xx++)
@@ -660,7 +678,7 @@ void wxCanvas::Update( int x, int y, int width, int height )
     while (node)
     {
         wxCanvasObject *obj = (wxCanvasObject*) node->Data();
-        
+
         if (!obj->IsControl())
         {
             // If we have 10.000 objects, we will go through
@@ -677,7 +695,7 @@ void wxCanvas::Update( int x, int y, int width, int height )
             {
                 if (clip_x + clip_width > x + width)
                     clip_width = x+width-clip_x;
-                    
+
                 if (clip_width > 0)
                 {
                     int clip_y = obj->GetY();
@@ -691,14 +709,14 @@ void wxCanvas::Update( int x, int y, int width, int height )
                     {
                         if (clip_y + clip_height > y + height)
                             clip_height = y+height-clip_y;
-                
+
                         if (clip_height > 0)
                             obj->Render( clip_x, clip_y, clip_width, clip_height );
                     }
                 }
             }
         }
-            
+
         node = node->Next();
     }
 }
@@ -714,7 +732,7 @@ void wxCanvas::BlitBuffer( wxDC &dc )
         // DirectDraw here, please
 
 #ifdef __WXGTK__
-        int bpp = wxDisplayDepth(); 
+        int bpp = wxDisplayDepth();
         if (bpp > 8)
         {
             // the init code is doubled in wxImage
@@ -725,7 +743,7 @@ void wxCanvas::BlitBuffer( wxDC &dc )
                 gdk_rgb_init();
                 s_hasInitialized = TRUE;
             }
-            
+
             int x = rect->x;
             int y = rect->y;
             CalcScrolledPosition( x, y, &x, &y );
@@ -749,22 +767,22 @@ void wxCanvas::BlitBuffer( wxDC &dc )
         wxBitmap bitmap( sub_image.ConvertToBitmap() );
         dc.DrawBitmap( bitmap, rect->x, rect->y );
 #endif
-        
+
         delete rect;
         m_updateRects.DeleteNode( node );
         node = m_updateRects.First();
     }
-    
+
     m_needUpdate = FALSE;
 }
 
 void wxCanvas::UpdateNow()
 {
     if (!m_needUpdate) return;
-    
+
     wxClientDC dc( this );
     PrepareDC( dc );
-    
+
     BlitBuffer( dc );
 }
 
@@ -794,9 +812,9 @@ void wxCanvas::Recreate()
     while (node)
     {
         wxCanvasObject *obj = (wxCanvasObject*) node->Data();
-        
+
         obj->Recreate();
-        
+
         node = node->Next();
     }
 }
@@ -804,10 +822,10 @@ void wxCanvas::Recreate()
 void wxCanvas::Prepend( wxCanvasObject* obj )
 {
     m_objects.Insert( obj );
-    
+
     obj->SetOwner( this );
     obj->Recreate();
-    
+
     if (!obj->IsControl())
         Update( obj->GetX(), obj->GetY(), obj->GetWidth(), obj->GetHeight() );
 }
@@ -815,10 +833,10 @@ void wxCanvas::Prepend( wxCanvasObject* obj )
 void wxCanvas::Append( wxCanvasObject* obj )
 {
     m_objects.Append( obj );
-    
+
     obj->SetOwner( this );
     obj->Recreate();
-    
+
     if (!obj->IsControl())
         Update( obj->GetX(), obj->GetY(), obj->GetWidth(), obj->GetHeight() );
 }
@@ -826,10 +844,10 @@ void wxCanvas::Append( wxCanvasObject* obj )
 void wxCanvas::Insert( size_t before, wxCanvasObject* obj )
 {
     m_objects.Insert( before, obj );
-    
+
     obj->SetOwner( this );
     obj->Recreate();
-    
+
     if (!obj->IsControl())
         Update( obj->GetX(), obj->GetY(), obj->GetWidth(), obj->GetHeight() );
 }
@@ -841,9 +859,9 @@ void wxCanvas::Remove( wxCanvasObject* obj )
     int w = obj->GetWidth();
     int h = obj->GetHeight();
     bool ic = obj->IsControl();
-    
+
     m_objects.DeleteObject( obj );
-    
+
     if (!ic)
         Update( x, y, w, h );
 }
@@ -852,7 +870,7 @@ void wxCanvas::OnPaint(wxPaintEvent &event)
 {
     wxPaintDC dc(this);
     PrepareDC( dc );
-    
+
     m_needUpdate = TRUE;
 
     wxRegionIterator it( GetUpdateRegion() );
@@ -861,78 +879,94 @@ void wxCanvas::OnPaint(wxPaintEvent &event)
         int x = it.GetX();
         int y = it.GetY();
         CalcUnscrolledPosition( x, y, &x, &y );
-        
+
         int w = it.GetWidth();
         int h = it.GetHeight();
-        
+
         if (x+w > m_buffer.GetWidth())
             w = m_buffer.GetWidth() - x;
         if (y+h > m_buffer.GetHeight())
             h = m_buffer.GetHeight() - y;
-        
+
         if ((w > 0) && (h > 0))
             m_updateRects.Append( (wxObject*) new wxRect( x, y, w, h ) );
-        
+
         it++;
     }
-    
+
     BlitBuffer( dc );
 }
 
 void wxCanvas::OnMouse(wxMouseEvent &event)
 {
-    // should we implement mouse capture ?
-
     int x = event.GetX();
     int y = event.GetY();
     CalcUnscrolledPosition( x, y, &x, &y );
-    
+
     if (event.GetEventType() == wxEVT_MOTION)
     {
-        wxNode *node = m_objects.Last();
-        while (node)
+        if (m_captureMouse) //no matter what go to this one
         {
-            wxCanvasObject *obj = (wxCanvasObject*) node->Data();
-        
-            if (!obj->IsControl())
-            { 
-                if (obj->IsHit(x,y))
+            wxMouseEvent child_event( wxEVT_MOTION );
+            child_event.SetEventObject(m_captureMouse);
+            child_event.m_x = x - m_captureMouse->GetX();
+            child_event.m_y = y - m_captureMouse->GetY();
+            child_event.m_leftDown = event.m_leftDown;
+            child_event.m_rightDown = event.m_rightDown;
+            child_event.m_middleDown = event.m_middleDown;
+            child_event.m_controlDown = event.m_controlDown;
+            child_event.m_shiftDown = event.m_shiftDown;
+            child_event.m_altDown = event.m_altDown;
+            child_event.m_metaDown = event.m_metaDown;
+            m_captureMouse->ProcessEvent( child_event );
+        }
+        else
+        {
+            wxNode *node = m_objects.Last();
+            while (node)
+            {
+                wxCanvasObject *obj = (wxCanvasObject*) node->Data();
+
+                if (!obj->IsControl())
                 {
-                    wxMouseEvent child_event( wxEVT_MOTION );
-                    child_event.SetEventObject( obj );
-                    child_event.m_x = x - obj->GetX();
-                    child_event.m_y = y - obj->GetY();
-                    child_event.m_leftDown = event.m_leftDown;
-                    child_event.m_rightDown = event.m_rightDown;
-                    child_event.m_middleDown = event.m_middleDown;
-                    child_event.m_controlDown = event.m_controlDown;
-                    child_event.m_shiftDown = event.m_shiftDown;
-                    child_event.m_altDown = event.m_altDown;
-                    child_event.m_metaDown = event.m_metaDown;
-                    
-                    if ((obj != m_lastMouse) && (m_lastMouse != NULL))
+                    if (obj->IsHit(x,y))
                     {
-                        child_event.SetEventType( wxEVT_LEAVE_WINDOW );
-                        child_event.SetEventObject( m_lastMouse );
-                        child_event.m_x = x - m_lastMouse->GetX();
-                        child_event.m_y = y - m_lastMouse->GetY();
-                        m_lastMouse->ProcessEvent( child_event );
-                        
-                        m_lastMouse = obj;
-                        child_event.SetEventType( wxEVT_ENTER_WINDOW );
-                        child_event.SetEventObject( m_lastMouse );
-                        child_event.m_x = x - m_lastMouse->GetX();
-                        child_event.m_y = y - m_lastMouse->GetY();
-                        m_lastMouse->ProcessEvent( child_event );
-                        
-                        child_event.SetEventType( wxEVT_MOTION );
+                        wxMouseEvent child_event( wxEVT_MOTION );
                         child_event.SetEventObject( obj );
+                        child_event.m_x = x - obj->GetX();
+                        child_event.m_y = y - obj->GetY();
+                        child_event.m_leftDown = event.m_leftDown;
+                        child_event.m_rightDown = event.m_rightDown;
+                        child_event.m_middleDown = event.m_middleDown;
+                        child_event.m_controlDown = event.m_controlDown;
+                        child_event.m_shiftDown = event.m_shiftDown;
+                        child_event.m_altDown = event.m_altDown;
+                        child_event.m_metaDown = event.m_metaDown;
+
+                        if ((obj != m_lastMouse) && (m_lastMouse != NULL))
+                        {
+                            child_event.SetEventType( wxEVT_LEAVE_WINDOW );
+                            child_event.SetEventObject( m_lastMouse );
+                            child_event.m_x = x - m_lastMouse->GetX();
+                            child_event.m_y = y - m_lastMouse->GetY();
+                            m_lastMouse->ProcessEvent( child_event );
+
+                            m_lastMouse = obj;
+                            child_event.SetEventType( wxEVT_ENTER_WINDOW );
+                            child_event.SetEventObject( m_lastMouse );
+                            child_event.m_x = x - m_lastMouse->GetX();
+                            child_event.m_y = y - m_lastMouse->GetY();
+                            m_lastMouse->ProcessEvent( child_event );
+
+                            child_event.SetEventType( wxEVT_MOTION );
+                            child_event.SetEventObject( obj );
+                        }
+                        obj->ProcessEvent( child_event );
+                        return;
                     }
-                    obj->ProcessEvent( child_event );
-                    return;
                 }
+                node = node->Previous();
             }
-            node = node->Previous();
         }
         if (m_lastMouse)
         {
@@ -948,7 +982,7 @@ void wxCanvas::OnMouse(wxMouseEvent &event)
             child_event.m_altDown = event.m_altDown;
             child_event.m_metaDown = event.m_metaDown;
             m_lastMouse->ProcessEvent( child_event );
-            
+
             m_lastMouse = (wxCanvasObject*) NULL;
             return;
         }
