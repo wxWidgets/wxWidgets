@@ -1,0 +1,38 @@
+# WXXT base directory
+WXBASEDIR=@WXBASEDIR@
+
+# set the OS type for compilation
+OS=@OS@
+# compile a library only
+RULE=gslib
+
+# define common stuff
+
+# define library name
+LIB_TARGET=wxmmedia
+LIB_MAJOR=2
+LIB_MINOR=0
+# define library sources
+ADPCM_SRC=\
+g711.cpp g721.cpp g723_24.cpp g723_40.cpp g72x.cpp
+
+MMEDIA_SRC=\
+mmdata.cpp mmfile.cpp mmsolve.cpp sndsnd.cpp sndfrmt.cpp sndpcm.o \
+snduss.cpp sndfile.cpp sndwav.cpp mmriff.cpp vidbase.cpp vidxanm.cpp \
+cdbase.cpp cdunix.cpp
+
+LIB_SRC= $(ADPCM_SRC:%.cpp=adpcm/%.cpp) $(MMEDIA_SRC)
+
+#define library objects
+LIB_OBJ=\
+$(LIB_SRC:%.cpp=%.o)
+
+#additional things needed for compile
+ADD_COMPILE= -I$(UTILS)/wxthread
+
+all::
+	-mkdir -p adpcm
+
+# include the definitions now
+include ../../../template.mak
+
