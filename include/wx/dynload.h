@@ -128,6 +128,11 @@ public:
 
     bool Load(wxString libname, int flags = wxDL_DEFAULT);
 
+        // detach the library object from its handle, i.e. prevent the object
+        // from unloading the library in its dtor -- the caller is now
+        // responsible for doing this
+    wxDllType Detach() { wxDllType h = m_handle; m_handle = 0; return h; }
+
         // unload the library, also done automatically in dtor
 
     void Unload();

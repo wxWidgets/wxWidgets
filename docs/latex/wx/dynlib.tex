@@ -27,6 +27,14 @@ to \helpref{wxDllLoader}{wxdllloader}.
 
 Constructor. Second form calls \helpref{Load}{wxdynamiclibraryload}.
 
+\membersection{wxDynamicLibrary::Detach}\label{wxdynamiclibrarydetach}
+
+\func{wxDllType}{Detach}{\void}
+
+Detaches this object from its library handle, i.e. the object will not unload
+the library any longer in its destructor but it is now the callers
+responsability to do this.
+
 \membersection{wxDynamicLibrary::IsLoaded}\label{wxdynamiclibraryisloaded}
 
 \constfunc{bool}{IsLoaded}{\void}
