@@ -970,6 +970,20 @@
 #           define wxUSE_UNICODE_MSLU 0
 #       endif
 #   endif  /* wxUSE_UNICODE_MSLU */
+#   ifndef wxUSE_UXTHEME
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_UXTHEME must be defined."
+#       else
+#           define wxUSE_UXTHEME 0
+#       endif
+#   endif  /* wxUSE_UXTHEME */
+#   ifndef wxUSE_UXTHEME_AUTO
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_UXTHEME_AUTO must be defined."
+#       else
+#           define wxUSE_UXTHEME_AUTO 0
+#       endif
+#   endif  /* wxUSE_UXTHEME_AUTO */
 #   ifndef wxUSE_MS_HTML_HELP
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxUSE_MS_HTML_HELP must be defined."
