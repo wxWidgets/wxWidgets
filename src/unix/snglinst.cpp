@@ -44,7 +44,7 @@
 
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/stat.h>
+#include <sys/stat.h>           // for S_I[RW]USR
 #include <signal.h>             // for kill()
 #include <errno.h>
 
@@ -153,7 +153,7 @@ LockResult wxSingleInstanceCheckerImpl::CreateLockFile()
     // try to open the file
     m_fdLock = open(m_nameLock,
                     O_WRONLY | O_CREAT | O_EXCL,
-                    S_IREAD | S_IWRITE);
+                    S_IRUSR | S_IWUSR);
 
     if ( m_fdLock != -1 )
     {

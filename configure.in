@@ -3674,8 +3674,7 @@ if test "$wxUSE_DATETIME" = "yes"; then
                 ],
                 [
                     struct timeval tv;
-                    struct timezone tz;
-                    gettimeofday(&tv, &tz);
+                    gettimeofday(&tv, NULL);
                 ],
                 wx_cv_func_gettimeofday_has_2_args=yes,
                 AC_TRY_COMPILE(
@@ -3688,7 +3687,10 @@ if test "$wxUSE_DATETIME" = "yes"; then
                         gettimeofday(&tv);
                     ],
                     wx_cv_func_gettimeofday_has_2_args=no,
-                    wx_cv_func_gettimeofday_has_2_args=unknown
+                    [
+                        AC_MSG_WARN([failed to determine number of gettimeofday() arguments])
+                        wx_cv_func_gettimeofday_has_2_args=unknown
+                    ]
                 )
             )
             AC_LANG_RESTORE
