@@ -40,7 +40,7 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 #endif
 
 // Name of the table to be created/opened
-const wxString     CONTACT_TABLE_NAME       = wxT("contacts");
+const wxString     CONTACT_TABLE_NAME       = wxT("CONTACTS");
 
 #define wxODBC_BLOB_SUPPORT
 
