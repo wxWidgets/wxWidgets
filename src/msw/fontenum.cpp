@@ -110,12 +110,10 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     return TRUE;
 }
 
-// I've no idea what __GNUWIN32_OLD__ is. Anyway, I had to add the 2nd condition
-// for Cygwin b20 (JACS)
-#if (defined(__GNUWIN32_OLD__) || defined(__GNUWIN32__)) && !defined(__MINGW32__)
+#if defined(__GNUWIN32__) && !defined(__MINGW32__)
     #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
 #else
-    #define wxFONTENUMPROC FONTENUMPROC
+    #define wxFONTENUMPROC FONTENUMEXPROC
 #endif
 
 void wxFontEnumeratorHelper::DoEnumerate()

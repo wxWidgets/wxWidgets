@@ -80,7 +80,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 #  endif
 
 #  else
-#    if defined (__WIN32__) && defined(STRICT) 
+#    if defined (__WIN32__) && defined(STRICT)
        typedef long (_stdcall * WndProcCast) (HWND, unsigned int, unsigned int, long);
 #      define CASTWNDPROC (WndProcCast)
 #    elif defined(__WIN16__)

@@ -149,6 +149,8 @@ public:
         return TRUE;
     }
 
+    size_t GetCount() const { return m_selections.GetCount(); }
+
 private:
     wxArrayTreeItemIds& m_selections;
 };
@@ -978,7 +980,7 @@ size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
 {
     TraverseSelections selector(this, selections);
 
-    return selections.GetCount();
+    return selector.GetCount();
 }
 
 // ----------------------------------------------------------------------------

@@ -222,7 +222,7 @@ wxPrintData::~wxPrintData()
 
 #if defined(__WXMSW__) // && defined(__WIN32__)
 
-#ifdef __WIN32__
+#if defined(__WXDEBUG__) && defined(__WIN32__)
 static wxString wxGetPrintDlgError()
 {
     DWORD err = CommDlgExtendedError();
