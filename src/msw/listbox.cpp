@@ -657,7 +657,10 @@ wxSize wxListBox::DoGetBestSize() const
 
     wListbox += 3*cx;
 
-    int hListbox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*(wxMax(m_noItems, 7));
+    // don't make the listbox too tall (limit height to 10 items) but don't
+    // make it too small neither
+    int hListbox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*
+                    wxMin(wxMax(m_noItems, 3), 10);
 
     return wxSize(wListbox, hListbox);
 }
