@@ -13,16 +13,18 @@
 
 #include "wx/defs.h"
 
-class wxVectorBase
+class WXDLLEXPORT wxVectorBase
 {
 private:
-    int m_allocsize;
-    int m_size,
-        m_capacity;
+    typedef size_t size_type;
+
+    size_type m_allocsize;
+    size_type m_size,
+              m_capacity;
     void **m_objects;
 
 protected:
-    bool Alloc(int sz)
+    bool Alloc(size_type sz)
     {
         // work in multiples of m_allocsize;
         sz = (sz / m_allocsize + 1) * m_allocsize;
@@ -44,7 +46,7 @@ protected:
     // untyped copy constructor of elements - must be overriden
     virtual void *Copy(const void *) const = 0;
 
-    const void *GetItem(int idx) const
+    const void *GetItem(size_type idx) const
     {
         wxASSERT(idx >= 0 && idx < m_size);
         return m_objects[idx];
@@ -57,15 +59,15 @@ protected:
         m_size++;
     };
 
-    void RemoveAt(int idx)
+    void RemoveAt(size_type idx)
     {
         wxASSERT(idx >= 0 && idx < m_size);
         Free(m_objects[idx]);
         if (idx < m_size - 1)
             memcpy(
-                m_objects + idx * sizeof(void *),
-                m_objects + (idx + 1) * sizeof(void *),
-                m_size - idx - 1);
+                m_objects + idx,
+                m_objects + idx + 1,
+                ( m_size - idx - 1 ) * sizeof(void*) );
         m_size--;
     };
 
@@ -75,7 +77,7 @@ protected:
         if (! Alloc(vb.size()))
             return false;
 
-        for (int i = 0; i < vb.size(); i++)
+        for (size_type i = 0; i < vb.size(); i++)
         {
             void *o = vb.Copy(vb.GetItem(i));
             if (! o)
@@ -87,17 +89,19 @@ protected:
     };
 
 public:
-    wxVectorBase() : m_objects(0), m_allocsize(16), m_size(0), m_capacity(0) {}
+    wxVectorBase() : m_allocsize(16), m_size(0), m_capacity(0), m_objects(0) {}
+    virtual ~wxVectorBase() {} // calm down GCC
+
     void clear()
     {
-        for (int i = 0; i < size(); i++)
+        for (size_type i = 0; i < size(); i++)
             Free(m_objects[i]);
         free(m_objects);
         m_objects = 0;
         m_size = m_capacity = 0;
     };
 
-    void reserve(int n)
+    void reserve(size_type n)
     {
         if ( !Alloc(n) )
         {
@@ -105,12 +109,12 @@ public:
         }
     };
 
-    int size() const
+    size_type size() const
     {
         return m_size;
     }
 
-    int capacity() const
+    size_type capacity() const
     {
         return m_capacity;
     };
@@ -150,8 +154,8 @@ public:\
         clear();\
     }
 
-#define WX_DECLARE_VECTOR(obj, cls)\
-class cls : public wxVectorBase\
+#define _WX_DECLARE_VECTOR(obj, cls, exp)\
+class exp cls : public wxVectorBase\
 {\
     WX_DECLARE_VECTORBASE(obj, cls);\
 public:\
@@ -165,19 +169,19 @@ public:\
     {\
         RemoveAt(size() - 1);\
     };\
-    const obj& at(int idx) const\
+    const obj& at(size_type idx) const\
     {\
         return *(obj *) GetItem(idx);\
     };\
-    obj& at(int idx)\
+    obj& at(size_type idx)\
     {\
         return *(obj *) GetItem(idx);\
     };\
-    const obj& operator[](int idx) const\
+    const obj& operator[](size_type idx) const\
     {\
         return at(idx);\
     };\
-    obj& operator[](int idx)\
+    obj& operator[](size_type idx)\
     {\
         return at(idx);\
     };\
@@ -197,12 +201,15 @@ public:\
     {\
         return at(size() - 1);\
     };\
-    int erase(int idx)\
+    size_type erase(size_type idx)\
     {\
         RemoveAt(idx);\
         return idx;\
     };\
 }
+
+#define WX_DECLARE_VECTOR(obj, cls) \
+  _WX_DECLARE_VECTOR(obj, cls, WXDLLEXPORT)
 
 #endif // _WX_VECTOR_H_
 
