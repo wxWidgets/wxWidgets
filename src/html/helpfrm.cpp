@@ -281,7 +281,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_Config = NULL;
     m_ConfigRoot = wxEmptyString;
 
-    m_Cfg.x = m_Cfg.y = 0;
+    m_Cfg.x = m_Cfg.y = -1;
     m_Cfg.w = 700;
     m_Cfg.h = 480;
     m_Cfg.sashpos = 240;
