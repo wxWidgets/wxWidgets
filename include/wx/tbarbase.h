@@ -335,7 +335,7 @@ public:
     virtual void SetToolSeparation(int separation)
         { m_toolSeparation = separation; }
 
-    virtual wxSize GetToolMargins() { return GetToolMargins(); }
+    virtual wxSize GetToolMargins() { return GetMargins(); }
     virtual int GetToolPacking() { return m_toolPacking; }
     virtual int GetToolSeparation() { return m_toolSeparation; }
 
