@@ -42,7 +42,13 @@
     )
 
 
-#define USE_MODAL_PRESENTATION   1
+#define USE_MODAL_PRESENTATION                                                    \
+    (                                                                             \
+        defined(__WXMSW__) ||                                                     \
+        defined(__WXMAC__) ||                                                     \
+        defined(__WXGTK__) ||                                                     \
+        defined(__WXPM__)                                                         \
+    )
 
 // Define a new application type
 class MyApp: public wxApp
