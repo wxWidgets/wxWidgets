@@ -821,24 +821,25 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // An event handler can be enabled or disabled
     if ( GetEvtHandlerEnabled() )
     {
-        // Handle per-instance dynamic event tables first
-        if ( m_dynamicEvents && SearchDynamicEventTable(event) )
-            return TRUE;
-
+        // if we have a validator, it has higher priority than our own event
+        // table
 #if wxUSE_VALIDATORS
         if ( TryValidator(event) )
             return TRUE;
 #endif // wxUSE_VALIDATORS
 
-        // Then static per-class event tables
-        const wxEventTable *table = GetEventTable();
+        // Handle per-instance dynamic event tables first
+        if ( m_dynamicEvents && SearchDynamicEventTable(event) )
+            return TRUE;
 
-        // Search upwards through the inheritance hierarchy
-        while (table)
+        // Then static per-class event tables (and search upwards through the
+        // inheritance hierarchy)
+        for ( const wxEventTable *table = GetEventTable();
+              table;
+              table = table->baseTable )
         {
             if ( SearchEventTable((wxEventTable&)*table, event) )
                 return TRUE;
-            table = table->baseTable;
         }
     }
 
@@ -849,6 +850,8 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
             return TRUE;
     }
 
+    // Finally propagate the event upwards the window chain and/or to the
+    // application object as necessary
     return TryParent(event);
 }
 
