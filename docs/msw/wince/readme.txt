@@ -56,11 +56,11 @@ include/wx/msw/wince/setup.h
 wxWidgets/CE Compilation
 ================================
 
-NOTE: in lack of workspace and project files for eVC IDE 
-in source tree of wxWidgets you should build them yourself using Bakefile.
+NOTE: to generate targets not in the standard project files,
+you should rebuild the project files using Bakefile.
 See technote docs/tech/tn0016.txt for details.
 
-Open build/wince/wxWidgetsCE.vcw, select an
+Open build/wince/wx.vcw, select an
 ARM or x86 target (or emulator target for eVC++ 4),
 and compile.
 
@@ -74,7 +74,7 @@ to wait a long time for loading and saving the workspace.
 
 To compile using the emulator on eVC++3:
 
-- Open build/wince/wxWidgetsCE.vcw, select the
+- Open build/wince/wx.vcw, select the
   WIN32 (WCE x86) Debug Unicode configuration, close the dialog,
   then select Pocket PC 2002 and Pocket PC 2002 Emulation on the toolbar,
   and compile.
@@ -85,7 +85,7 @@ To compile using the emulator on eVC++3:
 
 To compile using the emulator on eVC++4:
 
-- Open build/wince/wxWidgetsCE.vcw, select the
+- Open build/wince/wx.vcw, select the
   WIN32 (WCE Emulator) Debug Unicode configuration, and compile.
 
 - Open samples/minimal/minimal.vcw with eCV 4.0, select the
