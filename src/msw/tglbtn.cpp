@@ -73,6 +73,12 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
+    // default border for this control is none
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+    {
+        style |= wxBORDER_NONE;
+    }
+    
    if (!CreateBase(parent, id, pos, size, style, validator, name))
       return FALSE;
 

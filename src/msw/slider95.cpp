@@ -72,9 +72,9 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
     SetBackgroundColour(parent->GetBackgroundColour()) ;
     SetForegroundColour(parent->GetForegroundColour()) ;
 
-    m_staticValue = (WXHWND) NULL;;
-    m_staticMin = (WXHWND) NULL;;
-    m_staticMax = (WXHWND) NULL;;
+    m_staticValue = (WXHWND) NULL;
+    m_staticMin = (WXHWND) NULL;
+    m_staticMax = (WXHWND) NULL;
     m_pageSize = 1;
     m_lineSize = 1;
     m_windowStyle = style;
@@ -98,7 +98,9 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
         msStyle |= SS_CENTER;
 
         WXDWORD exStyle = 0;
-        msStyle |= MSWGetStyle(GetWindowStyle(), & exStyle) ;
+        long valueStyle = m_windowStyle & ~wxBORDER_MASK;
+        valueStyle |= wxBORDER_SUNKEN;
+        msStyle |= MSWGetStyle(valueStyle, & exStyle) ;
 
         m_staticValue = (WXHWND) CreateWindowEx
             (
