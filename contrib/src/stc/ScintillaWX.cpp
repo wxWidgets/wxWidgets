@@ -211,6 +211,7 @@ void ScintillaWX::Finalise() {
     ScintillaBase::Finalise();
     SetTicking(false);
     SetIdle(false);
+    DestroySystemCaret();
 }
 
 
@@ -520,6 +521,70 @@ void ScintillaWX::ClaimSelection() {
 }
 
 
+void ScintillaWX::UpdateSystemCaret() {
+#ifdef __WXMSW__
+    if (hasFocus) {
+        if (HasCaretSizeChanged()) {
+            DestroySystemCaret();
+            CreateSystemCaret();
+        }
+        Point pos = LocationFromPosition(currentPos);
+        ::SetCaretPos(pos.x, pos.y);
+    }
+#endif
+}
+
+
+bool ScintillaWX::HasCaretSizeChanged() {
+#ifdef __WXMSW__
+    if (( (0 != vs.caretWidth) && (sysCaretWidth != vs.caretWidth) )
+        || (0 != vs.lineHeight) && (sysCaretHeight != vs.lineHeight)) {
+        return true;
+    }
+#endif
+    return false;
+}
+
+bool ScintillaWX::CreateSystemCaret() {
+#ifdef __WXMSW__
+    sysCaretWidth = vs.caretWidth;
+    if (0 == sysCaretWidth) {
+        sysCaretWidth = 1;
+    }
+    sysCaretHeight = vs.lineHeight;
+    int bitmapSize = (((sysCaretWidth + 15) & ~15) >> 3) * sysCaretHeight;
+    char *bits = new char[bitmapSize];
+    memset(bits, 0, bitmapSize);
+    sysCaretBitmap = ::CreateBitmap(sysCaretWidth, sysCaretHeight, 1,
+                                    1, reinterpret_cast<BYTE *>(bits));
+    delete [] bits;
+    BOOL retval = ::CreateCaret(GetHwndOf(stc), sysCaretBitmap,
+                                sysCaretWidth, sysCaretHeight);
+    ::ShowCaret(GetHwndOf(stc));
+    return retval != 0;
+#else
+    return false;
+#endif
+}
+
+bool ScintillaWX::DestroySystemCaret() {
+#ifdef __WXMSW__
+    ::HideCaret(GetHwndOf(stc));
+    BOOL retval = ::DestroyCaret();
+    if (sysCaretBitmap) {
+        ::DeleteObject(sysCaretBitmap);
+        sysCaretBitmap = 0;
+    }
+    return retval != 0;
+#else
+    return false;
+#endif
+}
+
+
+//----------------------------------------------------------------------
+
+
 long ScintillaWX::DefWndProc(unsigned int /*iMessage*/, unsigned long /*wParam*/, long /*lParam*/) {
     return 0;
 }
@@ -687,12 +752,15 @@ void ScintillaWX::DoLoseFocus(){
     focusEvent = true;
     SetFocusState(false);
     focusEvent = false;
+    DestroySystemCaret();
 }
 
 void ScintillaWX::DoGainFocus(){
     focusEvent = true;
     SetFocusState(true);
     focusEvent = false;
+    DestroySystemCaret();
+    CreateSystemCaret();
 }
 
 void ScintillaWX::DoSysColourChange() {

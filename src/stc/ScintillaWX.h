@@ -127,6 +127,8 @@ public:
 
     virtual void CancelModes();
 
+    virtual void UpdateSystemCaret();
+
     // Event delegates
     void DoPaint(wxDC* dc, wxRect rect);
     void DoHScroll(int type, int pos);
@@ -178,7 +180,16 @@ private:
 #endif
     int                 wheelRotation;
 
-
+    // For use in creating a system caret
+    bool HasCaretSizeChanged();
+    bool CreateSystemCaret();
+    bool DestroySystemCaret();
+#ifdef __WXMSW__
+    HBITMAP sysCaretBitmap;
+    int sysCaretWidth;
+    int sysCaretHeight;
+#endif
+    
     friend class wxSTCCallTip;
 };
 
