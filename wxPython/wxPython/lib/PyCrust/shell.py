@@ -233,7 +233,10 @@ class Shell(wxStyledTextCtrl):
         self.autoCallTip = 1
         self.CallTipSetBackground(wxColour(255, 255, 232))
         self.wrap()
-        self.SetEndAtLastLine(false)
+        try:
+            self.SetEndAtLastLine(false)
+        except AttributeError:
+            pass
 
     def showIntro(self, text=''):
         """Display introductory text in the shell."""
