@@ -30,7 +30,7 @@
 #include "wx/dynarray.h"
 
 // fwd decls
-class WXDLLEXPORT wxIcon;
+class WXDLLEXPORT wxIconLocation;
 class WXDLLEXPORT wxFileTypeImpl;
 class WXDLLEXPORT wxMimeTypesManagerImpl;
 
@@ -45,9 +45,6 @@ enum wxMailcapStyle
 
     wxMAILCAP_ALL = 15
 };
-
-#define wxICON_LARGE 0
-#define wxICON_SMALL 1
 
 /*
     TODO: would it be more convenient to have this class?
@@ -212,13 +209,8 @@ public:
         // fill passed in array with all extensions associated with this file
         // type
     bool GetExtensions(wxArrayString& extensions);
-        // get the icon corresponding to this file type, the name of the file
-        // where the icon resides is return in iconfile if !NULL and its index
-        // in this file (Win-only) is in iconIndex
-    bool GetIcon(wxIcon *icon,
-                 wxString *iconFile = NULL,
-                 int *iconIndex = NULL,
-                 int iconSize = wxICON_LARGE) const;
+        // get the icon corresponding to this file type and of the given size
+    bool GetIcon(wxIconLocation *iconloc) const;
         // get a brief file type description ("*.txt" => "text document")
     bool GetDescription(wxString *desc) const;
 

@@ -92,7 +92,7 @@ bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
         return FALSE;
 }
 
-bool wxFileTypeImpl::GetIcon(wxIcon *icon,  wxString *sCommand, int *iIndex) const
+bool wxFileTypeImpl::GetIcon(wxIconLocation *WXUNUSED(icon)) const
 {
     // no such file type or no value or incorrect icon entry
     return FALSE;

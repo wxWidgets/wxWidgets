@@ -39,13 +39,11 @@
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
-  #if wxUSE_GUI
-    #include "wx/icon.h"
-  #endif
 #endif //WX_PRECOMP
 
 #include "wx/log.h"
 #include "wx/file.h"
+#include "wx/iconloc.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
 #include "wx/confbase.h"
@@ -269,36 +267,22 @@ bool wxFileType::GetMimeTypes(wxArrayString& mimeTypes) const
     return m_impl->GetMimeTypes(mimeTypes);
 }
 
-bool wxFileType::GetIcon(wxIcon *icon,
-                         wxString *iconFile,
-                         int *iconIndex,
-                         int iconSize) const
+bool wxFileType::GetIcon(wxIconLocation *iconLoc) const
 {
     if ( m_info )
     {
-        if ( iconFile )
-            *iconFile = m_info->GetIconFile();
-        if ( iconIndex )
-            *iconIndex = m_info->GetIconIndex();
-
-#if wxUSE_GUI
-        if ( icon && !m_info->GetIconFile().empty() )
+        if ( iconLoc )
         {
-            // FIXME: what about the index?
-            icon->LoadFile(m_info->GetIconFile());
+            iconLoc->SetFileName(m_info->GetIconFile());
+#ifdef __WXMSW__
+            iconLoc->SetIndex(m_info->GetIconIndex());
+#endif // __WXMSW__
         }
-#endif // wxUSE_GUI
 
         return TRUE;
     }
 
-#if defined(__WXMSW__)
-    return m_impl->GetIcon(icon, iconFile, iconIndex, iconSize);
-#elif defined(__UNIX__)
-    return m_impl->GetIcon(icon, iconFile, iconIndex);
-#else
-    return m_impl->GetIcon(icon);
-#endif
+    return m_impl->GetIcon(iconLoc);
 }
 
 bool wxFileType::GetDescription(wxString *desc) const

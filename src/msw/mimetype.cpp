@@ -35,6 +35,7 @@
 
 #include "wx/log.h"
 #include "wx/file.h"
+#include "wx/iconloc.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
 #include "wx/confbase.h"
@@ -334,12 +335,8 @@ bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
 }
 
 
-bool wxFileTypeImpl::GetIcon(wxIcon *icon,
-                             wxString *iconFile,
-                             int *iconIndex,
-                             int iconSize) const
+bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const
 {
-#if wxUSE_GUI
     wxString strIconKey;
     strIconKey << m_strFileType << wxT("\\DefaultIcon");
 
@@ -364,39 +361,18 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon,
                 strIndex = wxT("0");
             }
 
-            wxString strExpPath = wxExpandEnvVars(strFullPath);
-            // here we need C based counting!
-            int nIndex = wxAtoi(strIndex);
+            if ( iconLoc )
+            {
+                iconLoc->SetFileName(wxExpandEnvVars(strFullPath));
 
-            HICON hIcon, hIconLarge, hIconSmall;
-            ExtractIconEx(strExpPath, nIndex, &hIconLarge, &hIconSmall, 1);
-
-            hIcon = (iconSize == wxICON_LARGE) ? hIconLarge : hIconSmall;
-
-
-            switch ( (int)hIcon ) {
-                case 0: // means no icons were found
-                case 1: // means no such file or it wasn't a DLL/EXE/OCX/ICO/...
-                    wxLogDebug(wxT("incorrect registry entry '%s': no such icon."),
-                               key.GetName().c_str());
-                    break;
-
-                default:
-                    icon->SetHICON((WXHICON)hIcon);
-                    wxSize size = wxGetHiconSize(hIcon);
-                    icon->SetSize(size);
-                    if ( iconIndex )
-                        *iconIndex = nIndex;
-                    if ( iconFile )
-                        *iconFile = strFullPath;
-                    return TRUE;
+                iconLoc->SetIndex(wxAtoi(strIndex));
             }
+
+            return TRUE;
         }
     }
 
     // no such file type or no value or incorrect icon entry
-#endif // wxUSE_GUI
-
     return FALSE;
 }
 

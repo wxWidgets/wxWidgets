@@ -177,8 +177,7 @@ public:
     bool GetMimeType(wxString *mimeType) const
         { *mimeType = m_manager->m_aTypes[m_index[0]]; return TRUE; }
     bool GetMimeTypes(wxArrayString& mimeTypes) const;
-    bool GetIcon(wxIcon *icon, wxString *iconFile = NULL,
-                 int *iconIndex = NULL) const;
+    bool GetIcon(wxIconLocation *iconLoc) const;
 
     bool GetDescription(wxString *desc) const
         { *desc = m_manager->m_aDescriptions[m_index[0]]; return TRUE; }
