@@ -341,7 +341,7 @@ size_t wxTextDataObject::GetSize() const
 
 void wxTextDataObject::WriteString( const wxString &str, void *dest ) const
 {
-    memcpy( dest, m_data.mbc_str(), GetSize() );
+    memcpy( dest, str.mb_str(), str.Len()+1 );
 }
     
 // ----------------------------------------------------------------------------

@@ -273,6 +273,8 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
            qualifies for junk */
         gtk_drag_finish (context, FALSE, FALSE, time);
 	
+//	printf( "no data.\n" );
+	
 	return;
     }
     
@@ -340,6 +342,12 @@ bool wxDropTarget::RequestData( wxDataFormat format )
     if (!m_dragContext) return FALSE;
     if (!m_dragWidget) return FALSE;
     
+/*
+    wxPrintf( _T("format: %s.\n"), format.GetId().c_str() );
+    if (format.GetType() == wxDF_PRIVATE) wxPrintf( _T("private data.\n") );
+    if (format.GetType() == wxDF_TEXT) wxPrintf( _T("text data.\n") );
+*/
+
     /* this should trigger an "drag_data_received" event */
     gtk_drag_get_data( m_dragWidget, 
 	               m_dragContext,
@@ -581,6 +589,8 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 		       guint               WXUNUSED(time),
 		       wxDropSource       *drop_source )
 {
+//    printf( "Provide data!\n" );
+
 //    char *name = gdk_atom_name( selection_data->target );
 //    if (name) printf( "Format requested: %s.\n", name );
     
@@ -590,10 +600,14 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
         wxDataObject *data_object = (wxDataObject*) node->Data();
 	if (data_object->GetFormat().GetAtom() == selection_data->target)
 	{
+//	    printf( "format found.\n" );
+	
 	    size_t data_size = data_object->GetSize();
 	    
 	    if (data_size > 0)
 	    {
+//	        printf( "data size: %d.\n", (int)data_size );
+	    
 	        guchar *buffer = new guchar[data_size];
 		data_object->WriteData( buffer );
 		
@@ -801,8 +815,6 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 				  bm,
 				  0,
 				  0 );
-    
-        gdk_flush();
     
         while (m_waiting) wxYield();
     }

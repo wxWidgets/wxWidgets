@@ -1370,6 +1370,8 @@ dnl wxSocket
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_SOCKETS" = "1"; then
+    AC_LANG_SAVE
+    AC_LANG_CPLUSPLUS
     dnl determine the type of third argument for getsockname
     AC_MSG_CHECKING(the type of the third argument of getsockname)
     AC_TRY_COMPILE(
@@ -1388,6 +1390,7 @@ if test "$wxUSE_SOCKETS" = "1"; then
 		)
         )
     )
+    AC_LANG_RESTORE
 fi
 
 dnl ------------------------------------------------------------------------

@@ -1327,14 +1327,17 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                 if (!prev)
                 {
                     prev = GetParent( m_current );
-                    long cockie = 0;
-                    wxTreeItemId current = m_current;
-                    if (current == GetFirstChild( prev, cockie ))
-                    {
-                        // otherwise we return to where we came from
-                        SelectItem( prev );
-                        EnsureVisible( prev );
-                        break;
+		    if (prev)
+		    {
+                        long cockie = 0;
+                        wxTreeItemId current = m_current;
+                        if (current == GetFirstChild( prev, cockie ))
+                        {
+                            // otherwise we return to where we came from
+                            SelectItem( prev );
+                            EnsureVisible( prev );
+                            break;
+			}
                     }
                 }
                 if (prev)

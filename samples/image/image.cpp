@@ -226,11 +226,11 @@ MyFrame::MyFrame()
                   wxPoint(20,20), wxSize(470,360) )
 {
   wxMenu *file_menu = new wxMenu();
-  file_menu->Append( ID_ABOUT, "About..");
-  file_menu->Append( ID_QUIT, "Exit");
+  file_menu->Append( ID_ABOUT, "&About..");
+  file_menu->Append( ID_QUIT, "E&xit");
 
   wxMenuBar *menu_bar = new wxMenuBar();
-  menu_bar->Append(file_menu, "File");
+  menu_bar->Append(file_menu, "&File");
 
   SetMenuBar( menu_bar );
 
