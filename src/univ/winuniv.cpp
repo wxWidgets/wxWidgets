@@ -111,6 +111,8 @@ void wxWindow::Init()
     
     m_oldSize.x = -1;
     m_oldSize.y = -1;
+    
+    m_hasDialogBackground = FALSE;
 }
 
 bool wxWindow::Create(wxWindow *parent,
@@ -265,10 +267,14 @@ void wxWindow::OnPaint(wxPaintEvent& event)
 
 bool wxWindow::DoDrawBackground(wxDC& dc)
 {
-    // FIXME: leaving this code in leads to partial bg redraws sometimes under
-    //        MSW
+    // FIXME: Leaving this code in leads to partial bg redraws
+    //        sometimes under MSW.
+    //        The same happens under X11 because it has a clear
+    //        region and an update region and these are sometimes
+    //        different. RR.
     wxRect rect;
-#ifndef __WXMSW__
+// #ifndef __WXMSW__
+#if 0
     rect = GetUpdateRegion().GetBox();
     if ( !rect.width && !rect.height )
 #endif

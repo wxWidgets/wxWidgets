@@ -99,6 +99,8 @@ wxThemeInfo::wxThemeInfo(Constructor c,
     {
         #if defined(__WXGTK__)
             nameDefTheme = _T("gtk");
+        #elif defined(__WXX11__)
+            nameDefTheme = _T("Metal");
         #else
             nameDefTheme = _T("win32");
         #endif

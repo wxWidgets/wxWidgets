@@ -333,6 +333,7 @@ MSWOBJS     = \
 		$(MSWDIR)/helpwin.$(OBJSUFF) \
 		$(MSWDIR)/icon.$(OBJSUFF) \
 		$(MSWDIR)/imaglist.$(OBJSUFF) \
+		$(MSWDIR)/iniconf.$(OBJSUFF) \
 		$(MSWDIR)/joystick.$(OBJSUFF) \
 		$(MSWDIR)/listbox.$(OBJSUFF) \
 		$(MSWDIR)/listctrl.$(OBJSUFF) \

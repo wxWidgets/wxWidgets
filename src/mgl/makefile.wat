@@ -150,6 +150,7 @@ COMMONOBJS = &
 	imagall.obj &
 	imagbmp.obj &
 	image.obj &
+	imagfill.obj &
 	imaggif.obj &
 	imagiff.obj &
 	imagjpeg.obj &
@@ -280,6 +281,7 @@ UNIVOBJS = bmpbuttn.obj &
 	winuniv.obj
 
 UNIVTHEMEOBJS = gtk.obj &
+	metal.obj &
 	win32.obj
 
 HTMLOBJS = helpctrl.obj &
@@ -519,6 +521,9 @@ winuniv.obj:     $(UNIVDIR)\winuniv.cpp
 gtk.obj:     $(UNIVTHEMEDIR)\gtk.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
+metal.obj:     $(UNIVTHEMEDIR)\metal.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
 win32.obj:     $(UNIVTHEMEDIR)\win32.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
@@ -708,6 +713,9 @@ imagbmp.obj:     $(COMMDIR)\imagbmp.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 image.obj:     $(COMMDIR)\image.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+imagfill.obj:     $(COMMDIR)\imagfill.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 imaggif.obj:     $(COMMDIR)\imaggif.cpp

@@ -215,6 +215,7 @@ ALL_SOURCES = \
 		msw/helpwin.cpp \
 		msw/icon.cpp \
 		msw/imaglist.cpp \
+		msw/iniconf.cpp \
 		msw/joystick.cpp \
 		msw/listbox.cpp \
 		msw/listctrl.cpp \
@@ -904,6 +905,7 @@ GUIOBJS = \
 		helpwin.o \
 		icon.o \
 		imaglist.o \
+		iniconf.o \
 		joystick.o \
 		listbox.o \
 		listctrl.o \

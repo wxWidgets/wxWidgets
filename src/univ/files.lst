@@ -17,6 +17,7 @@ UNIV_SOURCES = \
 		univ/inphand.cpp \
 		univ/listbox.cpp \
 		univ/menu.cpp \
+		univ/themes/metal.cpp \
 		univ/notebook.cpp \
 		univ/radiobox.cpp \
 		univ/radiobut.cpp \
@@ -95,6 +96,7 @@ UNIVOBJS = \
 		inphand.o \
 		listbox.o \
 		menu.o \
+		metal.o \
 		notebook.o \
 		radiobox.o \
 		radiobut.o \

@@ -319,6 +319,7 @@ MSWOBJS = $(MSWDIR)\$D\accel.obj \
 		$(MSWDIR)\$D\helpwin.obj \
 		$(MSWDIR)\$D\icon.obj \
 		$(MSWDIR)\$D\imaglist.obj \
+		$(MSWDIR)\$D\iniconf.obj \
 		$(MSWDIR)\$D\joystick.obj \
 		$(MSWDIR)\$D\listbox.obj \
 		$(MSWDIR)\$D\listctrl.obj \

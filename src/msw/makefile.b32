@@ -299,6 +299,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\helpwin.obj \
 		$(MSWDIR)\icon.obj \
 		$(MSWDIR)\imaglist.obj \
+		$(MSWDIR)\iniconf.obj \
 		$(MSWDIR)\joystick.obj \
 		$(MSWDIR)\listbox.obj \
 		$(MSWDIR)\listctrl.obj \
@@ -552,6 +553,8 @@ $(MSWDIR)\helpwin.obj: $(MSWDIR)\helpwin.$(SRCSUFF)
 $(MSWDIR)\icon.obj: $(MSWDIR)\icon.$(SRCSUFF)
 
 $(MSWDIR)\imaglist.obj: $(MSWDIR)\imaglist.$(SRCSUFF)
+
+$(MSWDIR)\iniconf.obj: $(MSWDIR)\iniconf.$(SRCSUFF)
 
 $(MSWDIR)\joystick.obj: $(MSWDIR)\joystick.$(SRCSUFF)
 
@@ -1117,7 +1120,7 @@ $(CFG): makefile.b32
 -w-hid # virtual function A hides virtual function B
 -tWM
 
--I$(ARCHINCDIR);$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/tiff
+-I$(ARCHINCDIR);-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/tiff
 -I$(WXDIR)\include\wx\msw\gnuwin32
 
 -L$(BCCDIR)\lib;$(BCCDIR)\lib\psdk

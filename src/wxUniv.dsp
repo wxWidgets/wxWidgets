@@ -1200,6 +1200,10 @@ SOURCE=.\univ\themes\gtk.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\univ\themes\metal.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\univ\themes\win32.cpp
 # End Source File
 

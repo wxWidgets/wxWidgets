@@ -410,6 +410,7 @@ theme.cpp	Univ
 gtk.cpp	Univ	Theme
 winuniv.cpp	Univ
 win32.cpp	Univ	Theme
+metal.cpp	Univ	Theme
 
 gsockgtk.c	GTK	LowLevel
 win_gtk.c	GTK	LowLevel

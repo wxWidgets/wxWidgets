@@ -200,6 +200,9 @@ public:
 
     // erase part of the control
     virtual void EraseBackground(wxDC& dc, const wxRect& rect);
+    
+    // see below
+    bool HasDialogBackground() { return m_hasDialogBackground; }
 
     // overridden base class methods
     // -----------------------------
@@ -266,6 +269,10 @@ protected:
 
     // the renderer we use
     wxRenderer *m_renderer;
+    
+    // background like a dialog (e.g. wxStaticText,
+    // wxRadioButton), not with a surface (wxButton)
+    bool m_hasDialogBackground;
 
     // background bitmap info
     wxBitmap  m_bitmapBg;
