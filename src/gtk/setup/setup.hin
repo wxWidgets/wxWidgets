@@ -127,6 +127,10 @@
  */
 #undef USE_POSTSCRIPT
 /*
+ * Use wxConfig system
+ */
+#undef USE_WXCONFIG
+/*
  * Use the print/preview architecture
  */
 #undef USE_PRINTING_ARCHITECTURE

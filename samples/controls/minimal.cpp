@@ -24,7 +24,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/tabctrl.h"
+#include "wx/notebook.h"
 
 //----------------------------------------------------------------------
 // class definitions
@@ -49,7 +49,7 @@ class MyPanel: public wxPanel
     wxListBox   *m_listbox;
     
     wxTextCtrl  *m_text;
-    wxTabCtrl   *m_tab;    
+    wxNotebook  *m_notebook;    
   
   DECLARE_EVENT_TABLE() 
 };
@@ -115,7 +115,7 @@ bool MyApp::OnInit(void)
 // MyPanel
 //----------------------------------------------------------------------
 
-const  MINIMAL_TAB          = 1000;
+const  ID_NOTEBOOK          = 1000;
 
 const  ID_LISTBOX           = 130;
 const  ID_LISTBOX_SEL_NUM   = 131;
@@ -137,7 +137,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 {
   m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
   
-  m_tab = new wxTabCtrl( this, MINIMAL_TAB, wxPoint(0,0), wxSize(200,150) );
+  m_notebook = new wxNotebook( this, ID_NOTEBOOK, wxPoint(0,0), wxSize(200,150) );
   
   wxString choices[4] =
   {
@@ -147,14 +147,15 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "wonderfull example."
   };
   
-  m_tab->InsertItem( 0, "wxList" );
-  m_listbox = new wxListBox( m_tab, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 4, choices );
-  (void)new wxButton( m_tab, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(140,30), wxSize(100,30) );
-  (void)new wxButton( m_tab, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(260,30), wxSize(100,30) );
-  (void)new wxButton( m_tab, ID_LISTBOX_CLEAR, "Clear", wxPoint(140,80), wxSize(100,30) );
-  (void)new wxButton( m_tab, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(260,80), wxSize(100,30) );
+  wxPanel *panel = m_notebook->CreatePage( 0, "wxList" );
   
-  m_tab->InsertItem( 1, "wxChoice" );
+  m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 4, choices );
+  (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(140,30), wxSize(100,30) );
+  (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(260,30), wxSize(100,30) );
+  (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(140,80), wxSize(100,30) );
+  (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(260,80), wxSize(100,30) );
+  
+  m_notebook->CreatePage( 1, "wxChoice" );
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
@@ -163,7 +164,7 @@ void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
   int y = 0;
   GetClientSize( &x, &y );
   
-  if (m_tab) m_tab->SetSize( 2, 2, x-4, y/2-4 );
+  if (m_notebook) m_notebook->SetSize( 2, 2, x-4, y/2-4 );
   if (m_text) m_text->SetSize( 2, y/2+2, x-4, y/2-4 );
 }
 

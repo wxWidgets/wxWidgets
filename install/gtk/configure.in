@@ -658,6 +658,7 @@ DEFAULT_USE_THREADS_SGI=0
 DEFAULT_USE_THREADS_POSIX=0
 DEFAULT_USE_OPENGL=0
 
+DEFAULT_USE_WXCONFIG=1
 DEFAULT_USE_POSTSCRIPT=1
 DEFAULT_USE_IPC=1
 DEFAULT_USE_RESOURCES=1
@@ -770,6 +771,10 @@ USE_PROLOGIO)
 AC_OVERRIDES(postscript, postscript,
 **--with-postscript       use postscript-device-context,
 USE_POSTSCRIPT)
+
+AC_OVERRIDES(wxconfig, wxconfig,
+**--with-wxconfig         use wxconfig,
+USE_WXCONFIG)
 
 AC_OVERRIDES(metafile, metafile,
 **--with-metafile         use metafile,
@@ -973,6 +978,10 @@ if test "$USE_POSTSCRIPT" = 1 ; then
   AC_DEFINE_UNQUOTED(USE_POSTSCRIPT)
 fi
 AC_SUBST(POSTSCRIPTDC)
+
+if test "$USE_WXCONFIG" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_WXCONFIG,$USE_WXCONFIG)
+fi
 
 METAFILE=NONE
 if test "$USE_METAFILE" = 1 ; then

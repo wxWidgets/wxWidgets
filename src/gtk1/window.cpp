@@ -25,7 +25,7 @@
 #include "wx/dcclient.h"
 #include "wx/dnd.h"
 #include "wx/mdi.h"
-#include "wx/tabctrl.h"
+#include "wx/notebook.h"
 #include "gdk/gdkkeysyms.h"
 #include <math.h>
 #include "wx/gtk/win_gtk.h"
@@ -1415,9 +1415,9 @@ void wxWindow::AddChild( wxWindow *child )
     };
   };
   
-  if (IsKindOf(CLASSINFO(wxTabCtrl)))
+  if (IsKindOf(CLASSINFO(wxNotebook)))
   {
-    wxTabCtrl *tab = (wxTabCtrl*)this;
+    wxNotebook *tab = (wxNotebook*)this;
     tab->AddChild( child );
     return;
   };

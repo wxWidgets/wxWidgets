@@ -6,7 +6,6 @@
 #elif defined(__MOTIF__)
 #include "wx/xt/tabctrl.h"
 #elif defined(__GTK__)
-#include "wx/gtk/tabctrl.h"
 #endif
 
 #endif

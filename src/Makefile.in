@@ -82,6 +82,7 @@ LIB_CPP_SRC=\
  gtk/listbox.cpp \
  gtk/mdi.cpp \
  gtk/menu.cpp \
+ gtk/notebook.cpp \
  gtk/palette.cpp \
  gtk/pen.cpp \
  gtk/radiobox.cpp \
@@ -93,7 +94,6 @@ LIB_CPP_SRC=\
  gtk/statbox.cpp \
  gtk/statbmp.cpp \
  gtk/stattext.cpp \
- gtk/tabctrl.cpp \
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \
  gtk/timer.cpp \
