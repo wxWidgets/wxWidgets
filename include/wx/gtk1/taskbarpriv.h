@@ -19,6 +19,10 @@
 #include "wx/toplevel.h"
 #include "wx/bitmap.h"
 
+#ifdef __WXGTK20__
+#include <gtk/gtkversion.h>
+#if GTK_CHECK_VERSION(2, 1, 0)
+
 class WXDLLIMPEXP_ADV wxTaskBarIconAreaBase : public wxTopLevelWindow
 {
 public:
@@ -34,4 +38,6 @@ public:
 #endif // wxUSE_MENUS_NATIVE
 };
 
+#endif // __WXGTK20__
+#endif // GTK_CHECK_VERSION(2, 1, 0)
 #endif // _WX_TASKBARPRIV_H_
