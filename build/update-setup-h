@@ -41,8 +41,8 @@ update_single_setup_h include/wx/msw/setup0.h
 update_single_setup_h include/wx/mac/setup0.h
 
 # get rid of C++ comments in this file
-#update_single_setup_h setup.h.in
-#sed -i -e '/^\/\//d' -e 's@ *//.*$@@' setup.h.in
+update_single_setup_h setup.h.in
+sed -i -e '/^\/\//d' -e 's@ *//.*$@@' setup.h.in
 
 exit $rc
 
