@@ -257,16 +257,27 @@ MOTIF_DIST: ALL_GUI_DIST
 
 MACX_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/*.* $(DISTDIR)/include
+	mkdir $(DISTDIR)/include/wx/mac/carbon
+	mkdir $(DISTDIR)/include/wx/mac/private
+	mkdir $(DISTDIR)/include/wx/mac/carbon/private
 	cp $(INCDIR)/wx/mac/*.h $(DISTDIR)/include/wx/mac
-	cp $(MACDIR)/*.cpp $(DISTDIR)/src/mac
-	cp $(MACDIR)/*.c $(DISTDIR)/src/mac
-	cp $(MACDIR)/*.h $(DISTDIR)/src/mac
-	cp $(MACDIR)/*.r $(DISTDIR)/src/mac
-	mkdir $(DISTDIR)/src/mac/morefile
-	cp $(MACDIR)/morefile/*.h $(DISTDIR)/src/mac/morefile
-	cp $(MACDIR)/morefile/*.c $(DISTDIR)/src/mac/morefile
-	mkdir $(DISTDIR)/src/mac/macsock
-	cp $(MACDIR)/macsock/*.lib $(DISTDIR)/src/mac/macsock
+	cp $(INCDIR)/wx/mac/carbon/*.h $(DISTDIR)/include/wx/mac/carbon
+	cp $(INCDIR)/wx/mac/carbon/private/*.h $(DISTDIR)/include/wx/mac/carbon/private
+	cp $(INCDIR)/wx/mac/private/*.h $(DISTDIR)/include/wx/mac/private
+	cp $(MACDIR)/carbon/*.cpp $(DISTDIR)/src/mac/carbon
+	cp $(MACDIR)/carbon/*.c $(DISTDIR)/src/mac/carbon
+	cp $(MACDIR)/carbon/*.h $(DISTDIR)/src/mac/carbon
+	cp $(MACDIR)/carbon/*.r $(DISTDIR)/src/mac/carbon
+	mkdir $(DISTDIR)/src/mac/carbon/morefile
+	cp $(MACDIR)/carbon/morefile/*.h $(DISTDIR)/src/mac/carbon/morefile
+	cp $(MACDIR)/carbon/morefile/*.c $(DISTDIR)/src/mac/carbon/morefile
+	mkdir $(DISTDIR)/src/mac/carbon/morefilex
+	cp $(MACDIR)/carbon/morefilex/*.h $(DISTDIR)/src/mac/carbon/morefilex
+	cp $(MACDIR)/carbon/morefilex/*.c $(DISTDIR)/src/mac/carbon/morefilex
+	cp $(MACDIR)/carbon/morefilex/*.cpp $(DISTDIR)/src/mac/carbon/morefilex
+# obsolete
+#	mkdir $(DISTDIR)/src/mac/macsock
+#	cp $(MACDIR)/macsock/*.lib $(DISTDIR)/src/mac/macsock
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 
