@@ -1,3 +1,0 @@
-bombs ICON "bombs.ico"
-
-#include "wx/msw/wx.rc"

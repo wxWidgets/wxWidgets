@@ -1,9 +1,0 @@
-# don't delete this file!
-# it servers as helper df for sizer items
-
-node sizeritem
-type sizeritem
-var option of integer
-var flag of flags wxEXPAND,wxALL,wxLEFT,wxRIGHT,wxTOP,wxBOTTOM,wxALIGN_CENTER,wxALIGN_LEFT,wxALIGN_TOP,wxALIGN_RIGHT,wxALIGN_BOTTOM,wxALIGN_CENTER_HORIZONTAL,wxALIGN_CENTER_VERTICAL,wxNORTH,wxSOUTH,wxEAST,wxWEST,wxGROW,wxSHAPED,wxSTRETCH_NOT
-var border of dimension
-var minsize of coord
