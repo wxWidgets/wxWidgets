@@ -4830,7 +4830,7 @@ inphand.o: $(srcdir)/src/univ/inphand.cpp
 	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -D__WXBASE__ -DwxUSE_BASE=1 -DWXMAKINGDLL $(CXXFLAGS) $(PIC_FLAG) $<
 
 lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r: 
-	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/apprsrc.r $(top_srcdir)/src/mac/carbrsrc.r ../src/mac/corersrc.r -o lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc
+	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/apprsrc.r $(top_srcdir)/src/mac/carbrsrc.r $(top_srcdir)/src/mac/corersrc.r -o lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc
 	$(DEREZ) lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc Carbon.r -useDF >lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 
 unzip.o: $(srcdir)/src/common/unzip.c
