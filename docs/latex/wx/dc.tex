@@ -163,6 +163,13 @@ and the current brush for filling the shape.
 
 The arc is drawn in an anticlockwise direction from the start point to the end point.
 
+\membersection{wxDC::DrawBitmap}\label{wxdcdrawbitmap}
+
+\func{void}{DrawBitmap}{\param{const wxBitmap\&}{ bitmap}, \param{long}{ x}, \param{long}{ y}, \param{bool}{ transparent}}
+
+Draw a bitmap on the device context at the specified point. If {\it transparent} is TRUE and the bitmap has
+a transparency mask, the bitmap will be drawn transparently.
+
 \membersection{wxDC::DrawEllipse}\label{wxdcdrawellipse}
 
 \func{void}{DrawEllipse}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}}

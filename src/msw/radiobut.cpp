@@ -150,10 +150,10 @@ void wxRadioButton::SetValue(bool value)
   SendMessage((HWND) GetHWND(), BM_SETCHECK, (WPARAM)value, 0L);
 }
 
-// Get single selection, for single choice list items
+// Get single selection
 bool wxRadioButton::GetValue(void) const
 {
-  return (SendMessage((HWND) GetHWND(), BM_SETCHECK, 0, 0L) != 0);
+  return (SendMessage((HWND) GetHWND(), BM_GETCHECK, 0, 0L) != 0);
 }
 
 WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,

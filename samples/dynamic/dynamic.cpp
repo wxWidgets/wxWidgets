@@ -25,7 +25,7 @@
 #include "wx/wx.h"
 #endif
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
 #endif
 

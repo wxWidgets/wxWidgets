@@ -616,6 +616,12 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
     int currentX, currentY;
     GetPosition(&currentX, &currentY);
+    int currentW,currentH;
+    GetSize(&currentW, &currentH);
+
+    if (x == currentX && y == currentY && width == currentW && height == currentH)
+        return;
+
     int actualWidth = width;
     int actualHeight = height;
     int actualX = x;
@@ -627,8 +633,6 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
 
     AdjustForParentClientOrigin(actualX, actualY, sizeFlags);
 
-    int currentW,currentH;
-    GetSize(&currentW, &currentH);
     if (width == -1)
         actualWidth = currentW ;
     if (height == -1)

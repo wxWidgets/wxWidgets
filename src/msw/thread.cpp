@@ -278,6 +278,16 @@ unsigned long wxThread::GetID() const
   return (unsigned long)p_internal->tid;
 }
 
+bool wxThread::IsRunning() const
+{
+  return (p_internal->state == STATE_RUNNING);
+}
+
+bool wxThread::IsAlive() const
+{
+  return (p_internal->state == STATE_RUNNING);
+}
+
 bool wxThread::IsMain()
 {
   return (GetCurrentThread() == p_mainid);
