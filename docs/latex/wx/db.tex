@@ -3930,3 +3930,204 @@ an introduction to using the ODBC classes.
 Simply initializes all member variables to a cleared state.  Called by
 the constructor automatically.
 
+\section{\class{wxDbGridColInfo}}\label{wxdbgridcolinfo}
+
+This class is used  to define columns to be shown, names of the columns,
+order and type of data, when using \helpref{wxdbGridTableBase}{wxdbgridtablebase} to display
+a Table or query in a \helpref{wxGrid}{wxgrid}
+
+See the database grid example in \helpref{wxDbGridTableBase}{wxdbgridtablebase} for
+an introduction to using the wxDbGrid classes.
+
+\wxheading{Include files}
+
+<wx/dbgrid.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDbGridColInfo::wxDbGridColInfo}\label{wxdbgridcolinfo}
+
+\func{}{wxDbGridColInfo}{\param{int }{colNo}, \param{wxString }{type},
+  \param{wxString }{title}, \param{wxDbGridColInfo *}{next}}
+
+Default constructor. See the database grid example in \helpref{wxDbGridTableBase}{wxdbgridtablebase} to
+see two different ways for adding columns.
+
+
+\wxheading{Parameters}
+
+\docparam{colNo}{Column number in the \helpref{wxDbTable}{wxdbtable} instance to be used (first column is 0).}
+\docparam{type}{Column type ,wxString specifying the grid name for the datatype in this column, or
+ use wxGRID_VALUE_DBAUTO to determine the type automatically from the \helpref{wxDbColDef}{wxdbcoldef} definition}
+\docparam{title}{The column label to be used in the grid display}
+\docparam{next}{A pointer to the next wxDbGridColInfo structure if using one-step
+construction, NULL  terminates the list. Use Null also if using two step construction.}
+See the database grid example in \helpref{wxDbGridTableBase}{wxdbgridtablebase} to
+see two different ways for adding columns.
+
+\membersection{wxDbGridColInfo::\destruct{wxDbGridColInfo}}
+
+\func{}{\destruct{wxDbGridColInfo}}{}
+
+Destructor.
+
+\membersection{wxDbGridColInfo::AddColInfo}\label{wxdbgridcolinfoaddcolinfo}
+
+\func{void}{AddColInfo}{\param{int }{colNo},
+\param{wxString }{type}, \param{wxString }{title}}
+
+Use this member function for adding columns. See the database
+grid example in \helpref{wxDbGridTableBase}{wxdbgridtablebase} to
+see two different ways for adding columns.
+
+It is important to note that this class is merely a specifier to the \helpref{wxDbGridTableBase}{wxdbgridtablebase} 
+constructor. Changes made to this datatype after the \helpref{wxDbGridTableBase}{wxdbgridtablebase} is called will
+not have any effect.
+
+\wxheading{Parameters}
+\docparam{colNo}{Column number in the \helpref{wxDbTable}{wxdbtable} instance to be used (first column is 0).}
+\docparam{type}{Column type ,wxString specifying the grid name for the datatype in this column, or
+ use wxGRID_VALUE_DBAUTO to determine the type automatically from the \helpref{wxDbColDef}{wxdbcoldef} definition}
+\docparam{title}{The column label to be used in the grid display}
+
+\wxheading{Remarks}
+
+As wxDbTable must be defined with to have columns which match those  to by a wxDbGridColInfo
+info structure as this is the structure which informs the grid of how you want to display your 
+\helpref{wxDbTable}{wxdbtable}. If no datatype conversion or the referenced column number does not exist the
+the behavior is undefined.
+
+See the example at \helpref{wxDbGridColInfo::wxDbGridColInfo}{wxdbgridcolinfo}.
+
+\section{\class{wxDbGridTableBase}}\label{wxdbgridtablebase}
+
+You can view a database table in a grid using this class.
+
+If you are deriving your own wxDbTable subclass for your table , then you may consider
+overriding GetCol() and SetCol() to provide calculated fields. This does work but care should
+be taken when using wxDbGridTableBase in this way.
+
+The constructor and AssignDbTable() call allows you to specify the ownership if the wxDbTable
+object pointer. If you tell wxGridTableBase to take ownership , it will delete the passed wxDbTable
+when an new on is assigned or wxGridTableBase's destructor is called.
+However no checks for aliasing are done so Assign(table,..,true); Assign(table,..,true); 
+is  an error. If you need to requery an table object the preferred way is
+that the client keeps ownership.
+
+\wxheading{Derived From}
+
+\helpref{wxGridTableBase}{wxgridtablebase}
+
+\wxheading{Include files}
+
+<wx/dbgrid.h>
+
+
+\wxheading{Example}
+
+\begin{verbatim}
+	// First step, let's define wxDbTable
+	int numColumns = 2;
+	wxDbTable *table = new wxDbTable (db, tblName, numColumns);
+	int int_var;
+	wxChar string_name[255];
+	table->SetColDef (0, "column 0", DB_DATA_TYPE_INTEGER, &int_var,
+			SQL_C_LONG, sizeof(int_var), TRUE);
+	table->SetColDef (1, "column 1", DB_DATA_TYPE_VARCHAR, &string_name,
+			SQL_C_LONG, sizeof(string_name), FALSE);
+
+    // now let's define columns in the grid
+
+    // first way to do it
+    wxDbGridColInfo *columns;
+    columns = new wxDbGridColInfo(0, wxGRID_VALUE_LONG, "first column",
+              new wxDbGridColInfo(1, wxGRID_VALUE_STRING, "second column",
+              NULL);
+
+    // second way to do it
+    wxDbGridColInfo *columns;
+    // first column is special
+    columns = new wxDbGridColInfo(0, wxGRID_VALUE_LONG, "first column", NULL);
+    // all the rest
+    columns->AddColInfo (1, wxGRID_VALUE_STRING, "second column");
+
+    // second way may be better when columns are not known at compile time
+
+    // now, let's open the table and make a Query()
+    table->Open();
+    // this step is very important
+    table->SetRowMode (wxDbTable::WX_ROW_MODE_QUERY);
+    // in the grid we will see only the rows of the result query
+    m_dbTable->Query();
+
+    wxDbGridTableBase *dbgrid = new wxDbGridTableBase(table, columns, wxUSE_QUERY, TRUE);
+    delete columns;  // not needed anymore
+    wxGrid *grid = new wxGrid ( ... );
+    grid->SetTable(dbgrid, TRUE);
+    grid->Fit();
+\end{verbatim}
+
+
+\wxheading{Include files}
+
+<wx/dbgrid.h>
+
+\wxheading{Helper classes and data structures}
+
+\membersection{wxDbGridTableBase::wxDbGridTableBase}\label{wxdbgridtablebaseconstr}
+
+\func{}{wxDbGridTableBase}{\param{wxDbTable *}{tab}, \param{wxDbGridColInfo *}{ColInfo},
+  \param{int }{count = wxUSE_QUERY}, \param{bool }{takeOwnership = TRUE}}
+
+Constructor.
+
+\wxheading{Parameters}
+
+\docparam{tab}{ The database table you want to display. Must be opened and queried before display the grid.
+See the example \helpref{above}{wxdbgridtablebase}.}
+\docparam{ColInfo}{ Columns titles, and other values. See \helpref{wxDbGridColInfo}{wxdbgridcolinfo}.}
+\docparam{count}{You can use a query result set (wxUSE_QUERY, to use wxDbTable::Count(wxDbTable::Count() 
+ or you can fix the total number of rows (count >= 0) to display, or specify it if you already know the size in avoid calling }
+
+\docparam{takeOwnership}{ If TRUE, this class deletes wxDbTable when it stops
+referring to it, if FALSE application must
+take care of deleting it.  }
+
+\membersection{wxDbGridTableBase::ValidateRow}\label{wxdbgridtablebasevalidate}
+
+\func{void}{ValidateRow}{\param{int }{row}}
+
+It ensures that the row data is fetched from the database, and it the wxDbTable local buffer,
+the row number passed should be the grid row.
+
+\wxheading{Parameters}
+
+\docparam{row}{ Row where validation must be done. }
+
+\membersection{wxDbGridTableBase::UpdateRow}\label{wxdbgridtablebaseupdaterow}
+
+\func{bool}{UpdateRow}{\param{int }{row}}
+
+If row has changed it forces that row to be written back to the database, however support
+for detecting whether insert/update is required is currently not in wxDbTable, so this 
+function is currently unsupported.
+
+\wxheading{Parameters}
+
+\docparam{row}{ Row you want to update. }
+
+\membersection{wxDbGridTableBase::AssignDbTable}\label{wxdbgridtablebaseassigndbtable}
+
+\func{bool}{AssignDbTable}{\param{wxDbTable *}{tab},\param{int }{count = wxUSE_QUERY},
+\param{bool }{takeOwnership = TRUE}}
+
+Resets the grid for using with a new database table, but using the same columns definition.
+This can be useful when re-querying the database and want to see the changes. 
+
+\wxheading{Parameters}
+
+\docparam{tab}{ Database table you want to assign to the grid. }
+\docparam{count}{ Number of rows you want to show or wxUSE_QUERY for using a query. }
+\docparam{takeOwnership}{ If FALSE, user must take care of deleting tab after deleting
+the wxDbGridTableBase. If TRUE, deletion is made by destructor class. }
+
