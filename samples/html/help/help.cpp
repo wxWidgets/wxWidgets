@@ -24,6 +24,8 @@
 
 #include <wx/image.h>
 #include <wx/wxhtml.h>
+#include <wx/filesys.h>
+#include <wx/fs_zip.h>
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -106,7 +108,9 @@
    bool MyApp::OnInit()
    {
       wxInitAllImageHandlers();
-
+#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
+      wxFileSystem::AddHandler(new wxZipFSHandler);
+#endif
       SetVendorName("wxWindows");
       SetAppName("wxHTMLHelp"); 
 
@@ -133,7 +137,7 @@
 
 // frame constructor
    MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-   : wxFrame((wxFrame *)NULL, -1, title, pos, size), help()
+   : wxFrame((wxFrame *)NULL, -1, title, pos, size), help(wxHF_DEFAULTSTYLE | wxHF_OPENFILES)
    {
     // create a menu bar
       wxMenu *menuFile = new wxMenu;
