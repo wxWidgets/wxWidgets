@@ -1476,6 +1476,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     int i = 0 ;
     int line = 0 ;
     {
+#if 0 // we don't have to do all that here
         while( i < length )
         {
             if( strtext[i] == 13 || strtext[i] == 10)
@@ -1515,6 +1516,21 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
                 {
                     wxCharBuffer text = linetext.mb_str(wxConvLocal) ; 
                     ::DrawText( text , 0 , strlen(text) ) ;
+                    if ( m_backgroundMode != wxTRANSPARENT )
+                    {
+                        Point bounds={0,0} ;
+                        Rect background = frame ;
+                        SInt16 baseline ;
+                        ::GetThemeTextDimensions( mString,
+                            kThemeCurrentPortFont,
+                            kThemeStateActive,
+                            false,
+                            &bounds,
+                            &baseline );
+                        background.right = background.left + bounds.h ;
+                        background.bottom = background.top + bounds.v ;
+                        ::EraseRect( &background ) ;
+                    }
                     line++ ;
                     ::MoveTo( xx , yy + line*(fi.descent + fi.ascent + fi.leading) );
                 }
@@ -1523,6 +1539,8 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
             i++ ;
         }
         wxString linetext = strtext.Mid( laststop , i - laststop ) ;
+#endif // 0
+        wxString linetext = strtext ;
 #if TARGET_CARBON
         if ( useDrawThemeText )
         {
@@ -1556,6 +1574,14 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 #endif
         {
             wxCharBuffer text = linetext.mb_str(wxConvLocal) ; 
+            if ( m_backgroundMode != wxTRANSPARENT )
+            {
+                Rect frame = { yy - fi.ascent + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy - fi.ascent + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
+                short width = ::TextWidth( text , 0 , strlen(text) ) ;
+                frame.right = frame.left + width ;
+
+                ::EraseRect( &frame ) ;
+            }
             ::DrawText( text , 0 , strlen(text) ) ;
          }
     }
@@ -1602,6 +1628,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
     if ( width )
     {
         *width = 0 ;
+#if 0 // apparently we don't have to do all that
         while( i < length )
         {
             if( strtext[i] == 13 || strtext[i] == 10)
@@ -1637,6 +1664,8 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
         }
         
         wxString linetext = strtext.Mid( laststop , i - laststop ) ;
+#endif // 0
+        wxString linetext = strtext ;
 #if TARGET_CARBON
         if ( useGetThemeText )
         {
