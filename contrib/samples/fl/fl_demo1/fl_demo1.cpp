@@ -78,8 +78,8 @@ bool MyApp::OnInit(void)
     SetTopWindow(frame);
     
     
-    wxMessageBox("Hello, this demo has a bunch of yet-not-fixed-bugs and misssing functionality\n" \
-                 "The ONLY purpose is to demostrate self-layouting toolbars,\nflat-bitmapped-buttons and 2-new FL-plugins" \
+    wxMessageBox("Hello, this demo has a bunch of yet-not-fixed-bugs and missing functionality\n" \
+                 "The ONLY purpose is to demonstrate self-layouting toolbars,\nflat-bitmapped-buttons and 2-new FL-plugins" \
                  "(cbRowDragPlugin & cbBarHintsPlugin)\n\n" \
                  "BTW, disabled images and label-text are rendered at run-time" );
     
@@ -203,7 +203,7 @@ MyFrame::MyFrame(wxFrame *frame)
                       sizes1, FL_ALIGN_TOP,     // alignment ( 0-top,1-bottom, etc)
                       0,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
-                      "ToolBar1",               // name to refere in customization pop-ups
+                      "ToolBar1",               // name to refer in customization pop-ups
                       TRUE
                     );
     
