@@ -1030,14 +1030,19 @@ wxToolkitInfo& wxAppTraits::GetToolkitInfo()
 // sleep functions
 // ----------------------------------------------------------------------------
 
-void wxUsleep(unsigned long milliseconds)
+void wxMilliSleep(unsigned long milliseconds)
 {
     ::Sleep(milliseconds);
 }
 
+void wxMicroSleep(unsigned long microseconds)
+{
+    wxMilliSleep(microseconds/1000);
+}
+
 void wxSleep(int nSecs)
 {
-    wxUsleep(1000*nSecs);
+    wxMilliSleep(1000*nSecs);
 }
 
 // ----------------------------------------------------------------------------

@@ -266,6 +266,11 @@ wxString wxNow()
 #endif
 }
 
+void wxUsleep(unsigned long milliseconds)
+{
+    wxMilliSleep(milliseconds);
+}
+
 const wxChar *wxGetInstallPrefix()
 {
     wxString prefix;

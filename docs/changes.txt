@@ -117,6 +117,7 @@ All:
 - fixed bug in wxDateTime::Set(jdn) when DST was in effect
 - support msgids in charsets other than C and languages other than English
   (based on patch by Stefan Kowski)
+- added wxMicroSleep() and wxMilliSleep() replacing deprecated wxUsleep()
 
 All (GUI):
 

@@ -257,7 +257,13 @@ WXDLLIMPEXP_BASE bool wxShell(const wxString& command, wxArrayString& output);
 WXDLLIMPEXP_BASE void wxSleep(int nSecs);
 
 // Sleep for a given amount of milliseconds
-WXDLLIMPEXP_BASE void wxUsleep(unsigned long milliseconds);
+WXDLLIMPEXP_BASE void wxMilliSleep(unsigned long milliseconds);
+
+// Sleep for a given amount of microseconds
+WXDLLIMPEXP_BASE void wxMicroSleep(unsigned long microseconds);
+
+// Sleep for a given amount of milliseconds (old, bad name), use wxMilliSleep
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxUsleep(unsigned long milliseconds) );
 
 // Get the process id of the current process
 WXDLLIMPEXP_BASE unsigned long wxGetProcessId();

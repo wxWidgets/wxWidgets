@@ -174,6 +174,8 @@ the corresponding topic.
 \helpref{wxMakeMetafilePlaceable}{wxmakemetafileplaceable}\\
 \helpref{wxMatchWild}{wxmatchwild}\\
 \helpref{wxMessageBox}{wxmessagebox}\\
+\helpref{wxMilliSleep}{wxmillisleep}\\
+\helpref{wxMicroSleep}{wxmicrosleep}\\
 \helpref{wxMkdir}{wxmkdir}\\
 \helpref{wxMutexGuiEnter}{wxmutexguienter}\\
 \helpref{wxMutexGuiLeave}{wxmutexguileave}\\
@@ -3843,6 +3845,33 @@ Returns the number of seconds since GMT 00:00:00 Jan 1st 1970.
 <wx/timer.h>
 
 
+\membersection{::wxMicroSleep}\label{wxmicrosleep}
+
+\func{void}{wxMicroSleep}{\param{unsigned long}{ microseconds}}
+
+Sleeps for the specified number of microseconds. The microsecond resolution may
+not, in fact, be available on all platforms (currently only Unix platforms with
+nanosleep(2) may provide it) in which case this is the same as 
+\helpref{wxMilliSleep}{wxmillisleep}(\arg{microseconds}$/1000$).
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+
+\membersection{::wxMilliSleep}\label{wxmillisleep}
+
+\func{void}{wxMilliSleep}{\param{unsigned long}{ milliseconds}}
+
+Sleeps for the specified number of milliseconds. Notice that usage of this
+function is encouraged instead of calling usleep(3) directly because the
+standard usleep() function is not MT safe.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+
 \membersection{::wxNow}\label{wxnow}
 
 \func{wxString}{wxNow}{\void}
@@ -3882,13 +3911,10 @@ See also \helpref{wxTimer}{wxtimer}.
 
 \func{void}{wxUsleep}{\param{unsigned long}{ milliseconds}}
 
-Sleeps for the specified number of milliseconds. Notice that usage of this
-function is encouraged instead of calling usleep(3) directly because the
-standard usleep() function is not MT safe.
-
-\wxheading{Include files}
-
-<wx/utils.h>
+This function is deprecated because its name is misleading: notice that the
+argument is in milliseconds, not microseconds. Please use either 
+\helpref{wxMilliSleep}{wxmillisleep} or \helpref{wxMicroSleep}{wxmicrosleep} 
+depending on the resolution you need.
 
 
 
