@@ -105,7 +105,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     wxBeginBusyCursor();
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-
+#if wxUSE_STATTEXT
     // 1) text message
     topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
 
@@ -114,6 +114,8 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     // prompt if any
     if (!prompt.IsEmpty())
         inputsizer->Add( new wxStaticText( this, wxID_ANY, prompt ), 0, wxCENTER | wxLEFT, 10 );
+#endif        
+        
     // spin ctrl
     wxString valStr;
     valStr.Printf(wxT("%ld"), m_value);
@@ -121,9 +123,11 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
 #if wxUSE_SPINCTRL
     m_spinctrl->SetRange((int)m_min, (int)m_max);
 #endif
+#if wxUSE_STATTEXT
     inputsizer->Add( m_spinctrl, 1, wxCENTER | wxLEFT | wxRIGHT, 10 );
     // add both
     topsizer->Add( inputsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
+#endif
 
     // smart phones does not support or do not waste space for wxButtons
 #ifdef __SMARTPHONE__
