@@ -287,7 +287,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
     int rc = pthread_setspecific(gs_keySelf, thread);
     if ( rc != 0 )
     {
-        wxLogSysError(rc, _("Can not start thread: error writing TLS."));
+        wxLogSysError(rc, _("Cannot start thread: error writing TLS"));
 
         return (void *)-1;
     }
@@ -464,7 +464,7 @@ wxThreadError wxThread::Create()
     int prio;
     if ( pthread_attr_getschedpolicy(&attr, &prio) != 0 )
     {
-        wxLogError(_("Can not retrieve thread scheduling policy."));
+        wxLogError(_("Cannot retrieve thread scheduling policy."));
     }
 
     int min_prio = sched_get_priority_min(prio),
@@ -472,7 +472,7 @@ wxThreadError wxThread::Create()
 
     if ( min_prio == -1 || max_prio == -1 )
     {
-        wxLogError(_("Can not get priority range for scheduling policy %d."),
+        wxLogError(_("Cannot get priority range for scheduling policy %d."),
                    prio);
     }
     else
@@ -484,6 +484,11 @@ wxThreadError wxThread::Create()
         pthread_attr_setschedparam(&attr, &sp);
     }
 #endif // HAVE_THREAD_PRIORITY_FUNCTIONS
+
+#ifdef HAVE_PTHREAD_ATTR_SETSCOPE
+    // this will make the threads created by this process really concurrent
+    pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
+#endif // HAVE_PTHREAD_ATTR_SETSCOPE
 
     // create the new OS thread object
     int rc = pthread_create(p_internal->GetIdPtr(), &attr,
@@ -737,10 +742,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 
 bool wxThreadModule::OnInit()
 {
-    if ( pthread_key_create(&gs_keySelf, NULL /* dtor function */) != 0 )
+    int rc = pthread_key_create(&gs_keySelf, NULL /* dtor function */);
+    if ( rc != 0 )
     {
-        wxLogError(_("Thread module initialization failed: "
-                     "failed to create pthread key."));
+        wxLogSysError(rc, _("Thread module initialization failed: "
+                            "failed to create thread key"));
 
         return FALSE;
     }
