@@ -97,7 +97,7 @@ WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
 
 #ifdef WC_UTF16
 
-static size_t encode_utf16(wxUint32 input, wxUint16 *output)
+static size_t encode_utf16(wxUint32 input, wchar_t *output)
 {
     if (input<=0xffff)
     {
@@ -119,7 +119,7 @@ static size_t encode_utf16(wxUint32 input, wxUint16 *output)
     }
 }
 
-static size_t decode_utf16(const wxUint16* input, wxUint32& output)
+static size_t decode_utf16(const wchar_t* input, wxUint32& output)
 {
     if ((*input<0xd800) || (*input>0xdfff))
     {
@@ -357,7 +357,7 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     {
         wxUint32 cc;
 #ifdef WC_UTF16
-        size_t pa = decode_utf16((wchar_t*) psz,cc);
+        size_t pa = decode_utf16(psz, cc);
         psz += (pa == (size_t)-1) ? 1 : pa;
 #else
         cc=(*psz++) & 0x7fffffff;
