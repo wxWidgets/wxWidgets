@@ -40,10 +40,20 @@ public:
 
     bool IsOk();
     bool IsVisible();
-    %name(GetPositionTuple)void GetPosition(int *OUTPUT, int *OUTPUT);
+
     wxPoint GetPosition();
-    %name(GetSizeTuple)void GetSize(int *OUTPUT, int *OUTPUT);
+    DocDeclAName(
+        void, GetPosition(int *OUTPUT, int *OUTPUT),
+        "GetPositionTuple() -> (x,y)",
+        GetPositionTuple);
+
     wxSize GetSize();
+    DocDeclAName(
+        void, GetSize( int *OUTPUT, int *OUTPUT ),
+        "GetSizeTuple() -> (width, height)",
+        GetSizeTuple);
+    
+
     wxWindow *GetWindow();
     %name(MoveXY)void Move(int x, int y);
     void Move(const wxPoint& pt);
@@ -52,7 +62,7 @@ public:
     void Show(int show = True);
     void Hide();
 
-    %pragma(python) addtoclass = "def __nonzero__(self): return self.IsOk()"
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
 };
 
 %inline %{

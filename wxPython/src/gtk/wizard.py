@@ -111,15 +111,15 @@ class PyWizardPage(WizardPage):
         return _wizard.PyWizardPage_base_DoSetVirtualSize(*args, **kwargs)
 
     def base_DoGetSize(*args, **kwargs):
-        """base_DoGetSize(int OUTPUT, int OUTPUT)"""
+        """base_DoGetSize() -> (width, height)"""
         return _wizard.PyWizardPage_base_DoGetSize(*args, **kwargs)
 
     def base_DoGetClientSize(*args, **kwargs):
-        """base_DoGetClientSize(int OUTPUT, int OUTPUT)"""
+        """base_DoGetClientSize() -> (width, height)"""
         return _wizard.PyWizardPage_base_DoGetClientSize(*args, **kwargs)
 
     def base_DoGetPosition(*args, **kwargs):
-        """base_DoGetPosition(int OUTPUT, int OUTPUT)"""
+        """base_DoGetPosition() -> (x,y)"""
         return _wizard.PyWizardPage_base_DoGetPosition(*args, **kwargs)
 
     def base_DoGetVirtualSize(*args, **kwargs):

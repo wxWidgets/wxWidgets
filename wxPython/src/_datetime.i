@@ -58,11 +58,12 @@
 
 //---------------------------------------------------------------------------
 
+//typedef unsigned short wxDateTime_t;
+#define wxDateTime_t int
 
 // wxDateTime represents an absolute moment in the time
 class wxDateTime {
 public:
-    typedef unsigned short wxDateTime_t;
 
     enum TZ
     {
@@ -362,8 +363,10 @@ public:
     static wxString GetWeekDayName(WeekDay weekday,
                                    NameFlags flags = Name_Full);
 
-        // get the AM and PM strings in the current locale (may be empty)
-    static void GetAmPmStrings(wxString *OUTPUT, wxString *OUTPUT);
+    DocDeclAStr(
+        static void, GetAmPmStrings(wxString *OUTPUT, wxString *OUTPUT),
+        "GetAmPmStrings() -> (am, pm)",
+        "Get the AM and PM strings in the current locale (may be empty)");
 
         // return True if the given country uses DST for this year
     static bool IsDSTApplicable(int year = Inv_Year,

@@ -138,8 +138,7 @@ public:
         "GetPositionTuple() -> (x,y)",
         GetPositionTuple);
 
-
-    
+   
     DocStr(GetSize, "Get the window size.");
     wxSize GetSize() const;
     DocDeclAName(

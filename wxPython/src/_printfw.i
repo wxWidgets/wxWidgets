@@ -334,17 +334,25 @@ public:
     wxDC* GetDC();
     void SetDC(wxDC *dc);
 
-    void GetPageSizePixels(int *OUTPUT, int *OUTPUT);
     void SetPageSizePixels(int w, int  h);
+    DocDeclA(
+        void, GetPageSizePixels(int *OUTPUT, int *OUTPUT),
+        "GetPageSizePixels() -> (w, h)");
 
     void SetPageSizeMM(int w, int  h);
-    void GetPageSizeMM(int *OUTPUT, int *OUTPUT);
+    DocDeclA(
+        void, GetPageSizeMM(int *OUTPUT, int *OUTPUT),
+        "GetPageSizeMM() -> (w, h)");
     
     void SetPPIScreen(int x, int y);
-    void GetPPIScreen(int *OUTPUT, int *OUTPUT);
+    DocDeclA(
+        void, GetPPIScreen(int *OUTPUT, int *OUTPUT),
+        "GetPPIScreen() -> (x,y)");
     
     void SetPPIPrinter(int x, int y);
-    void GetPPIPrinter(int *OUTPUT, int *OUTPUT);
+    DocDeclA(
+        void, GetPPIPrinter(int *OUTPUT, int *OUTPUT),
+        "GetPPIPrinter() -> (x,y)");
 
     bool IsPreview();
     void SetIsPreview(bool p);
@@ -355,8 +363,10 @@ public:
     void base_OnBeginPrinting();
     void base_OnEndPrinting();
     void base_OnPreparePrinting();
-    void base_GetPageInfo(int *OUTPUT, int *OUTPUT, int *OUTPUT, int *OUTPUT);
     bool base_HasPage(int page);
+    DocDeclA(
+        void, base_GetPageInfo(int *OUTPUT, int *OUTPUT, int *OUTPUT, int *OUTPUT),
+        "base_GetPageInfo() -> (minPage, maxPage, pageFrom, pageTo)");
 };
 
 //---------------------------------------------------------------------------

@@ -7611,16 +7611,13 @@ _core.LayoutConstraints_swigregister(LayoutConstraintsPtr)
 
 #----------------------------------------------------------------------------
 
-# Use Python's bool constants if available, make aliases if not
+# Use Python's bool constants if available, make some if not
 try:
     True
 except NameError:
-    True = 1==1
-    False = 1==0
+    __builtins__.True = 1==1
+    __builtins__.False = 1==0
 
-# Backwards compaatibility
-TRUE  = true  = True
-FALSE = false = False
 
 
 # workarounds for bad wxRTTI names

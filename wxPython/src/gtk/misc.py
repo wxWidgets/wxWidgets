@@ -256,7 +256,7 @@ def GetElapsedTime(*args, **kwargs):
     return _misc.GetElapsedTime(*args, **kwargs)
 
 def GetMousePosition(*args, **kwargs):
-    """GetMousePosition(int OUTPUT, int OUTPUT)"""
+    """GetMousePosition() -> (x,y)"""
     return _misc.GetMousePosition(*args, **kwargs)
 
 def IsBusy(*args, **kwargs):
@@ -276,7 +276,7 @@ def StartTimer(*args, **kwargs):
     return _misc.StartTimer(*args, **kwargs)
 
 def GetOsVersion(*args, **kwargs):
-    """GetOsVersion(int OUTPUT, int OUTPUT) -> int"""
+    """GetOsVersion() -> (platform, major, minor)"""
     return _misc.GetOsVersion(*args, **kwargs)
 
 def GetOsDescription(*args, **kwargs):
@@ -420,7 +420,7 @@ def GetDisplayDepth(*args, **kwargs):
     return _misc.GetDisplayDepth(*args, **kwargs)
 
 def DisplaySize(*args, **kwargs):
-    """DisplaySize(int OUTPUT, int OUTPUT)"""
+    """DisplaySize() -> (width, height)"""
     return _misc.DisplaySize(*args, **kwargs)
 
 def GetDisplaySize(*args, **kwargs):
@@ -428,7 +428,7 @@ def GetDisplaySize(*args, **kwargs):
     return _misc.GetDisplaySize(*args, **kwargs)
 
 def DisplaySizeMM(*args, **kwargs):
-    """DisplaySizeMM(int OUTPUT, int OUTPUT)"""
+    """DisplaySizeMM() -> (width, height)"""
     return _misc.DisplaySizeMM(*args, **kwargs)
 
 def GetDisplaySizeMM(*args, **kwargs):
@@ -436,7 +436,7 @@ def GetDisplaySizeMM(*args, **kwargs):
     return _misc.GetDisplaySizeMM(*args, **kwargs)
 
 def ClientDisplayRect(*args, **kwargs):
-    """ClientDisplayRect(int OUTPUT, int OUTPUT, int OUTPUT, int OUTPUT)"""
+    """ClientDisplayRect() -> (x, y, width, height)"""
     return _misc.ClientDisplayRect(*args, **kwargs)
 
 def GetClientDisplayRect(*args, **kwargs):
@@ -580,21 +580,21 @@ class Caret(object):
         """IsVisible() -> bool"""
         return _misc.Caret_IsVisible(*args, **kwargs)
 
-    def GetPositionTuple(*args, **kwargs):
-        """GetPositionTuple(int OUTPUT, int OUTPUT)"""
-        return _misc.Caret_GetPositionTuple(*args, **kwargs)
-
     def GetPosition(*args, **kwargs):
         """GetPosition() -> Point"""
         return _misc.Caret_GetPosition(*args, **kwargs)
 
-    def GetSizeTuple(*args, **kwargs):
-        """GetSizeTuple(int OUTPUT, int OUTPUT)"""
-        return _misc.Caret_GetSizeTuple(*args, **kwargs)
+    def GetPositionTuple(*args, **kwargs):
+        """GetPositionTuple() -> (x,y)"""
+        return _misc.Caret_GetPositionTuple(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
         """GetSize() -> Size"""
         return _misc.Caret_GetSize(*args, **kwargs)
+
+    def GetSizeTuple(*args, **kwargs):
+        """GetSizeTuple() -> (width, height)"""
+        return _misc.Caret_GetSizeTuple(*args, **kwargs)
 
     def GetWindow(*args, **kwargs):
         """GetWindow() -> Window"""
@@ -624,6 +624,7 @@ class Caret(object):
         """Hide()"""
         return _misc.Caret_Hide(*args, **kwargs)
 
+    def __nonzero__(self): return self.IsOk() 
 
 class CaretPtr(Caret):
     def __init__(self, this):
@@ -2902,12 +2903,12 @@ class DateTime(object):
 
     GetCentury = staticmethod(GetCentury)
     def GetNumberOfDaysinYear(*args, **kwargs):
-        """DateTime.GetNumberOfDaysinYear(int year, wxDateTime::Calendar cal=Gregorian) -> wxDateTime_t"""
+        """DateTime.GetNumberOfDaysinYear(int year, wxDateTime::Calendar cal=Gregorian) -> int"""
         return _misc.DateTime_GetNumberOfDaysinYear(*args, **kwargs)
 
     GetNumberOfDaysinYear = staticmethod(GetNumberOfDaysinYear)
     def GetNumberOfDaysInMonth(*args, **kwargs):
-        """DateTime.GetNumberOfDaysInMonth(wxDateTime::Month month, int year=Inv_Year, wxDateTime::Calendar cal=Gregorian) -> wxDateTime_t"""
+        """DateTime.GetNumberOfDaysInMonth(wxDateTime::Month month, int year=Inv_Year, wxDateTime::Calendar cal=Gregorian) -> int"""
         return _misc.DateTime_GetNumberOfDaysInMonth(*args, **kwargs)
 
     GetNumberOfDaysInMonth = staticmethod(GetNumberOfDaysInMonth)
@@ -2922,7 +2923,9 @@ class DateTime(object):
 
     GetWeekDayName = staticmethod(GetWeekDayName)
     def GetAmPmStrings(*args, **kwargs):
-        """DateTime.GetAmPmStrings(wxString OUTPUT, wxString OUTPUT)"""
+        """GetAmPmStrings() -> (am, pm)
+
+Get the AM and PM strings in the current locale (may be empty)"""
         return _misc.DateTime_GetAmPmStrings(*args, **kwargs)
 
     GetAmPmStrings = staticmethod(GetAmPmStrings)
@@ -2981,14 +2984,13 @@ class DateTime(object):
         return _misc.DateTime_SetJDN(*args, **kwargs)
 
     def SetHMS(*args, **kwargs):
-        """SetHMS(wxDateTime_t hour, wxDateTime_t minute=0, wxDateTime_t second=0, 
-    wxDateTime_t millisec=0) -> DateTime"""
+        """SetHMS(int hour, int minute=0, int second=0, int millisec=0) -> DateTime"""
         return _misc.DateTime_SetHMS(*args, **kwargs)
 
     def Set(*args, **kwargs):
-        """Set(wxDateTime_t day, wxDateTime::Month month=Inv_Month, 
-    int year=Inv_Year, wxDateTime_t hour=0, wxDateTime_t minute=0, 
-    wxDateTime_t second=0, wxDateTime_t millisec=0) -> DateTime"""
+        """Set(int day, wxDateTime::Month month=Inv_Month, int year=Inv_Year, 
+    int hour=0, int minute=0, int second=0, 
+    int millisec=0) -> DateTime"""
         return _misc.DateTime_Set(*args, **kwargs)
 
     def ResetTime(*args, **kwargs):
@@ -3004,23 +3006,23 @@ class DateTime(object):
         return _misc.DateTime_SetMonth(*args, **kwargs)
 
     def SetDay(*args, **kwargs):
-        """SetDay(wxDateTime_t day) -> DateTime"""
+        """SetDay(int day) -> DateTime"""
         return _misc.DateTime_SetDay(*args, **kwargs)
 
     def SetHour(*args, **kwargs):
-        """SetHour(wxDateTime_t hour) -> DateTime"""
+        """SetHour(int hour) -> DateTime"""
         return _misc.DateTime_SetHour(*args, **kwargs)
 
     def SetMinute(*args, **kwargs):
-        """SetMinute(wxDateTime_t minute) -> DateTime"""
+        """SetMinute(int minute) -> DateTime"""
         return _misc.DateTime_SetMinute(*args, **kwargs)
 
     def SetSecond(*args, **kwargs):
-        """SetSecond(wxDateTime_t second) -> DateTime"""
+        """SetSecond(int second) -> DateTime"""
         return _misc.DateTime_SetSecond(*args, **kwargs)
 
     def SetMillisecond(*args, **kwargs):
-        """SetMillisecond(wxDateTime_t millisecond) -> DateTime"""
+        """SetMillisecond(int millisecond) -> DateTime"""
         return _misc.DateTime_SetMillisecond(*args, **kwargs)
 
     def SetToWeekDayInSameWeek(*args, **kwargs):
@@ -3063,13 +3065,11 @@ class DateTime(object):
         return _misc.DateTime_GetLastWeekDay(*args, **kwargs)
 
     def SetToTheWeek(*args, **kwargs):
-        """SetToTheWeek(wxDateTime_t numWeek, wxDateTime::WeekDay weekday=Mon, 
-    wxDateTime::WeekFlags flags=Monday_First) -> bool"""
+        """SetToTheWeek(int numWeek, wxDateTime::WeekDay weekday=Mon, wxDateTime::WeekFlags flags=Monday_First) -> bool"""
         return _misc.DateTime_SetToTheWeek(*args, **kwargs)
 
     def GetWeek(*args, **kwargs):
-        """GetWeek(wxDateTime_t numWeek, wxDateTime::WeekDay weekday=Mon, 
-    wxDateTime::WeekFlags flags=Monday_First) -> DateTime"""
+        """GetWeek(int numWeek, wxDateTime::WeekDay weekday=Mon, wxDateTime::WeekFlags flags=Monday_First) -> DateTime"""
         return _misc.DateTime_GetWeek(*args, **kwargs)
 
     def SetToLastMonthDay(*args, **kwargs):
@@ -3081,11 +3081,11 @@ class DateTime(object):
         return _misc.DateTime_GetLastMonthDay(*args, **kwargs)
 
     def SetToYearDay(*args, **kwargs):
-        """SetToYearDay(wxDateTime_t yday) -> DateTime"""
+        """SetToYearDay(int yday) -> DateTime"""
         return _misc.DateTime_SetToYearDay(*args, **kwargs)
 
     def GetYearDay(*args, **kwargs):
-        """GetYearDay(wxDateTime_t yday) -> DateTime"""
+        """GetYearDay(int yday) -> DateTime"""
         return _misc.DateTime_GetYearDay(*args, **kwargs)
 
     def GetJulianDayNumber(*args, **kwargs):
@@ -3145,7 +3145,7 @@ class DateTime(object):
         return _misc.DateTime_GetMonth(*args, **kwargs)
 
     def GetDay(*args, **kwargs):
-        """GetDay(wxDateTime::TimeZone tz=LOCAL_TZ) -> wxDateTime_t"""
+        """GetDay(wxDateTime::TimeZone tz=LOCAL_TZ) -> int"""
         return _misc.DateTime_GetDay(*args, **kwargs)
 
     def GetWeekDay(*args, **kwargs):
@@ -3153,31 +3153,31 @@ class DateTime(object):
         return _misc.DateTime_GetWeekDay(*args, **kwargs)
 
     def GetHour(*args, **kwargs):
-        """GetHour(wxDateTime::TimeZone tz=LOCAL_TZ) -> wxDateTime_t"""
+        """GetHour(wxDateTime::TimeZone tz=LOCAL_TZ) -> int"""
         return _misc.DateTime_GetHour(*args, **kwargs)
 
     def GetMinute(*args, **kwargs):
-        """GetMinute(wxDateTime::TimeZone tz=LOCAL_TZ) -> wxDateTime_t"""
+        """GetMinute(wxDateTime::TimeZone tz=LOCAL_TZ) -> int"""
         return _misc.DateTime_GetMinute(*args, **kwargs)
 
     def GetSecond(*args, **kwargs):
-        """GetSecond(wxDateTime::TimeZone tz=LOCAL_TZ) -> wxDateTime_t"""
+        """GetSecond(wxDateTime::TimeZone tz=LOCAL_TZ) -> int"""
         return _misc.DateTime_GetSecond(*args, **kwargs)
 
     def GetMillisecond(*args, **kwargs):
-        """GetMillisecond(wxDateTime::TimeZone tz=LOCAL_TZ) -> wxDateTime_t"""
+        """GetMillisecond(wxDateTime::TimeZone tz=LOCAL_TZ) -> int"""
         return _misc.DateTime_GetMillisecond(*args, **kwargs)
 
     def GetDayOfYear(*args, **kwargs):
-        """GetDayOfYear(wxDateTime::TimeZone tz=LOCAL_TZ) -> wxDateTime_t"""
+        """GetDayOfYear(wxDateTime::TimeZone tz=LOCAL_TZ) -> int"""
         return _misc.DateTime_GetDayOfYear(*args, **kwargs)
 
     def GetWeekOfYear(*args, **kwargs):
-        """GetWeekOfYear(wxDateTime::WeekFlags flags=Monday_First, wxDateTime::TimeZone tz=LOCAL_TZ) -> wxDateTime_t"""
+        """GetWeekOfYear(wxDateTime::WeekFlags flags=Monday_First, wxDateTime::TimeZone tz=LOCAL_TZ) -> int"""
         return _misc.DateTime_GetWeekOfYear(*args, **kwargs)
 
     def GetWeekOfMonth(*args, **kwargs):
-        """GetWeekOfMonth(wxDateTime::WeekFlags flags=Monday_First, wxDateTime::TimeZone tz=LOCAL_TZ) -> wxDateTime_t"""
+        """GetWeekOfMonth(wxDateTime::WeekFlags flags=Monday_First, wxDateTime::TimeZone tz=LOCAL_TZ) -> int"""
         return _misc.DateTime_GetWeekOfMonth(*args, **kwargs)
 
     def IsWorkDay(*args, **kwargs):
@@ -3367,11 +3367,11 @@ def DateTime_GetCentury(*args, **kwargs):
     return _misc.DateTime_GetCentury(*args, **kwargs)
 
 def DateTime_GetNumberOfDaysinYear(*args, **kwargs):
-    """DateTime_GetNumberOfDaysinYear(int year, wxDateTime::Calendar cal=Gregorian) -> wxDateTime_t"""
+    """DateTime_GetNumberOfDaysinYear(int year, wxDateTime::Calendar cal=Gregorian) -> int"""
     return _misc.DateTime_GetNumberOfDaysinYear(*args, **kwargs)
 
 def DateTime_GetNumberOfDaysInMonth(*args, **kwargs):
-    """DateTime_GetNumberOfDaysInMonth(wxDateTime::Month month, int year=Inv_Year, wxDateTime::Calendar cal=Gregorian) -> wxDateTime_t"""
+    """DateTime_GetNumberOfDaysInMonth(wxDateTime::Month month, int year=Inv_Year, wxDateTime::Calendar cal=Gregorian) -> int"""
     return _misc.DateTime_GetNumberOfDaysInMonth(*args, **kwargs)
 
 def DateTime_GetMonthName(*args, **kwargs):
@@ -3383,7 +3383,9 @@ def DateTime_GetWeekDayName(*args, **kwargs):
     return _misc.DateTime_GetWeekDayName(*args, **kwargs)
 
 def DateTime_GetAmPmStrings(*args, **kwargs):
-    """DateTime_GetAmPmStrings(wxString OUTPUT, wxString OUTPUT)"""
+    """GetAmPmStrings() -> (am, pm)
+
+Get the AM and PM strings in the current locale (may be empty)"""
     return _misc.DateTime_GetAmPmStrings(*args, **kwargs)
 
 def DateTime_IsDSTApplicable(*args, **kwargs):
@@ -3423,16 +3425,15 @@ def DateTimeFromJDN(*args, **kwargs):
     return val
 
 def DateTimeFromHMS(*args, **kwargs):
-    """DateTimeFromHMS(wxDateTime_t hour, wxDateTime_t minute=0, wxDateTime_t second=0, 
-    wxDateTime_t millisec=0) -> DateTime"""
+    """DateTimeFromHMS(int hour, int minute=0, int second=0, int millisec=0) -> DateTime"""
     val = _misc.new_DateTimeFromHMS(*args, **kwargs)
     val.thisown = 1
     return val
 
 def DateTimeFromDMY(*args, **kwargs):
-    """DateTimeFromDMY(wxDateTime_t day, wxDateTime::Month month=Inv_Month, 
-    int year=Inv_Year, wxDateTime_t hour=0, wxDateTime_t minute=0, 
-    wxDateTime_t second=0, wxDateTime_t millisec=0) -> DateTime"""
+    """DateTimeFromDMY(int day, wxDateTime::Month month=Inv_Month, int year=Inv_Year, 
+    int hour=0, int minute=0, int second=0, 
+    int millisec=0) -> DateTime"""
     val = _misc.new_DateTimeFromDMY(*args, **kwargs)
     val.thisown = 1
     return val

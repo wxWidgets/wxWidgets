@@ -234,9 +234,15 @@ public:
     void base_DoSetClientSize(int width, int height);
     void base_DoSetVirtualSize( int x, int y );
 
-    void base_DoGetSize( int *OUTPUT, int *OUTPUT ) const;
-    void base_DoGetClientSize( int *OUTPUT, int *OUTPUT ) const;
-    void base_DoGetPosition( int *OUTPUT, int *OUTPUT ) const;
+    DocDeclA(
+        void, base_DoGetSize( int *OUTPUT, int *OUTPUT ) const,
+        "base_DoGetSize() -> (width, height)");
+    DocDeclA(
+        void, base_DoGetClientSize( int *OUTPUT, int *OUTPUT ) const,
+        "base_DoGetClientSize() -> (width, height)");
+    DocDeclA(
+        void, base_DoGetPosition( int *OUTPUT, int *OUTPUT ) const,
+        "base_DoGetPosition() -> (x,y)");
 
     wxSize base_DoGetVirtualSize() const;
     wxSize base_DoGetBestSize() const;

@@ -632,9 +632,12 @@ public:
     // the item after 'start' or the beginning if 'start' is -1.
     %name(FindItemAtPos) long FindItem(long start, const wxPoint& pt, int direction);
 
-    // Determines which item (if any) is at the specified point,
-    // giving details in the second return value (see wxLIST_HITTEST_... flags above)
-    long HitTest(const wxPoint& point, int& OUTPUT);
+
+    DocDeclAStr(
+        long, HitTest(const wxPoint& point, int& OUTPUT),
+        "HitTest(Point point) -> (item, where)",
+        "Determines which item (if any) is at the specified point,\n"
+        "giving details in the second return value (see wxLIST_HITTEST_... flags.)");
 
     // Inserts an item, returning the index of the new item if successful,
     // -1 otherwise.

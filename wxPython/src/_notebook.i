@@ -191,7 +191,10 @@ public:
 
     // hit test, returns which tab is hit and, optionally, where (icon, label)
     // (not implemented on all platforms)
-    virtual int HitTest(const wxPoint& pt, long* OUTPUT) const;
+    DocDeclAStr(
+        virtual int, HitTest(const wxPoint& pt, long* OUTPUT) const,
+        "HitTest(Point pt) -> (tab, where)",
+        "Returns the tab which is hit, and flags indicating where using wxNB_HITTEST_ flags.");
 
     // implement some base class functions
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;

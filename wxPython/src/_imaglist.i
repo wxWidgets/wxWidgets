@@ -61,7 +61,11 @@ public:
     int GetImageCount();
     bool Remove(int index);
     bool RemoveAll();
-    void GetSize(int index, int& OUTPUT, int& OUTPUT);
+
+    DocDeclA(
+        void, GetSize(int index, int& OUTPUT, int& OUTPUT),
+        "GetSize() -> (width,height)");
+        
 };
 
 //---------------------------------------------------------------------------

@@ -25,10 +25,14 @@ public:
     ~wxPalette();
 
     int GetPixel(byte red, byte green, byte blue);
-    bool GetRGB(int pixel, byte* OUTPUT, byte* OUTPUT, byte* OUTPUT);
+    
+    DocDeclA(
+        bool, GetRGB(int pixel, byte* OUTPUT, byte* OUTPUT, byte* OUTPUT),
+        "GetRGB(int pixel) -> (R,G,B)");
+
     bool Ok();
 
-    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
+    %pythoncode { def __nonzero__(self): return self.Ok() }
 };
 
 

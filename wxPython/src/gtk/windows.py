@@ -91,9 +91,7 @@ class ScrolledWindow(Panel):
     def GetScrollPixelsPerUnit(*args, **kwargs):
         """GetScrollPixelsPerUnit() -> (xUnit, yUnit)
 
-
-        get the size of one logical unit in physical ones
-        """
+Get the size of one logical unit in physical units."""
         return _windows.ScrolledWindow_GetScrollPixelsPerUnit(*args, **kwargs)
 
     def EnableScrolling(*args, **kwargs):
@@ -101,7 +99,9 @@ class ScrolledWindow(Panel):
         return _windows.ScrolledWindow_EnableScrolling(*args, **kwargs)
 
     def GetViewStart(*args, **kwargs):
-        """GetViewStart(int OUTPUT, int OUTPUT)"""
+        """GetViewStart() -> (x,y)
+
+Get the view start"""
         return _windows.ScrolledWindow_GetViewStart(*args, **kwargs)
 
     def SetScale(*args, **kwargs):
@@ -117,13 +117,17 @@ class ScrolledWindow(Panel):
         return _windows.ScrolledWindow_GetScaleY(*args, **kwargs)
 
     def CalcScrolledPosition(*args):
-        """CalcScrolledPosition(int x, int y, int OUTPUT, int OUTPUT)
-CalcScrolledPosition(Point pt) -> Point"""
+        """CalcScrolledPosition(Point pt) -> Point
+CalcScrolledPosition(int x, int y) -> (sx, sy)
+
+Translate between scrolled and unscrolled coordinates."""
         return _windows.ScrolledWindow_CalcScrolledPosition(*args)
 
     def CalcUnscrolledPosition(*args):
-        """CalcUnscrolledPosition(int x, int y, int OUTPUT, int OUTPUT)
-CalcUnscrolledPosition(Point pt) -> Point"""
+        """CalcUnscrolledPosition(Point pt) -> Point
+CalcUnscrolledPosition(int x, int y) -> (ux, uy)
+
+Translate between scrolled and unscrolled coordinates."""
         return _windows.ScrolledWindow_CalcUnscrolledPosition(*args)
 
     def AdjustScrollbars(*args, **kwargs):
@@ -2499,15 +2503,15 @@ class PyWindow(core.Window):
         return _windows.PyWindow_base_DoSetVirtualSize(*args, **kwargs)
 
     def base_DoGetSize(*args, **kwargs):
-        """base_DoGetSize(int OUTPUT, int OUTPUT)"""
+        """base_DoGetSize() -> (width, height)"""
         return _windows.PyWindow_base_DoGetSize(*args, **kwargs)
 
     def base_DoGetClientSize(*args, **kwargs):
-        """base_DoGetClientSize(int OUTPUT, int OUTPUT)"""
+        """base_DoGetClientSize() -> (width, height)"""
         return _windows.PyWindow_base_DoGetClientSize(*args, **kwargs)
 
     def base_DoGetPosition(*args, **kwargs):
-        """base_DoGetPosition(int OUTPUT, int OUTPUT)"""
+        """base_DoGetPosition() -> (x,y)"""
         return _windows.PyWindow_base_DoGetPosition(*args, **kwargs)
 
     def base_DoGetVirtualSize(*args, **kwargs):
@@ -2596,15 +2600,15 @@ class PyPanel(Panel):
         return _windows.PyPanel_base_DoSetVirtualSize(*args, **kwargs)
 
     def base_DoGetSize(*args, **kwargs):
-        """base_DoGetSize(int OUTPUT, int OUTPUT)"""
+        """base_DoGetSize() -> (width, height)"""
         return _windows.PyPanel_base_DoGetSize(*args, **kwargs)
 
     def base_DoGetClientSize(*args, **kwargs):
-        """base_DoGetClientSize(int OUTPUT, int OUTPUT)"""
+        """base_DoGetClientSize() -> (width, height)"""
         return _windows.PyPanel_base_DoGetClientSize(*args, **kwargs)
 
     def base_DoGetPosition(*args, **kwargs):
-        """base_DoGetPosition(int OUTPUT, int OUTPUT)"""
+        """base_DoGetPosition() -> (x,y)"""
         return _windows.PyPanel_base_DoGetPosition(*args, **kwargs)
 
     def base_DoGetVirtualSize(*args, **kwargs):
@@ -3296,20 +3300,20 @@ class Printout(core.Object):
         """SetDC(wxDC dc)"""
         return _windows.Printout_SetDC(*args, **kwargs)
 
-    def GetPageSizePixels(*args, **kwargs):
-        """GetPageSizePixels(int OUTPUT, int OUTPUT)"""
-        return _windows.Printout_GetPageSizePixels(*args, **kwargs)
-
     def SetPageSizePixels(*args, **kwargs):
         """SetPageSizePixels(int w, int h)"""
         return _windows.Printout_SetPageSizePixels(*args, **kwargs)
+
+    def GetPageSizePixels(*args, **kwargs):
+        """GetPageSizePixels() -> (w, h)"""
+        return _windows.Printout_GetPageSizePixels(*args, **kwargs)
 
     def SetPageSizeMM(*args, **kwargs):
         """SetPageSizeMM(int w, int h)"""
         return _windows.Printout_SetPageSizeMM(*args, **kwargs)
 
     def GetPageSizeMM(*args, **kwargs):
-        """GetPageSizeMM(int OUTPUT, int OUTPUT)"""
+        """GetPageSizeMM() -> (w, h)"""
         return _windows.Printout_GetPageSizeMM(*args, **kwargs)
 
     def SetPPIScreen(*args, **kwargs):
@@ -3317,7 +3321,7 @@ class Printout(core.Object):
         return _windows.Printout_SetPPIScreen(*args, **kwargs)
 
     def GetPPIScreen(*args, **kwargs):
-        """GetPPIScreen(int OUTPUT, int OUTPUT)"""
+        """GetPPIScreen() -> (x,y)"""
         return _windows.Printout_GetPPIScreen(*args, **kwargs)
 
     def SetPPIPrinter(*args, **kwargs):
@@ -3325,7 +3329,7 @@ class Printout(core.Object):
         return _windows.Printout_SetPPIPrinter(*args, **kwargs)
 
     def GetPPIPrinter(*args, **kwargs):
-        """GetPPIPrinter(int OUTPUT, int OUTPUT)"""
+        """GetPPIPrinter() -> (x,y)"""
         return _windows.Printout_GetPPIPrinter(*args, **kwargs)
 
     def IsPreview(*args, **kwargs):
@@ -3356,13 +3360,13 @@ class Printout(core.Object):
         """base_OnPreparePrinting()"""
         return _windows.Printout_base_OnPreparePrinting(*args, **kwargs)
 
-    def base_GetPageInfo(*args, **kwargs):
-        """base_GetPageInfo(int OUTPUT, int OUTPUT, int OUTPUT, int OUTPUT)"""
-        return _windows.Printout_base_GetPageInfo(*args, **kwargs)
-
     def base_HasPage(*args, **kwargs):
         """base_HasPage(int page) -> bool"""
         return _windows.Printout_base_HasPage(*args, **kwargs)
+
+    def base_GetPageInfo(*args, **kwargs):
+        """base_GetPageInfo() -> (minPage, maxPage, pageFrom, pageTo)"""
+        return _windows.Printout_base_GetPageInfo(*args, **kwargs)
 
 
 class PrintoutPtr(Printout):

@@ -1032,8 +1032,15 @@ public:
     wxColour GetTextColour() const;
     wxColour GetBackgroundColour() const;
     wxFont GetFont() const;
-    void GetAlignment(int *OUTPUT, int *OUTPUT) const;
-    void GetSize(int *OUTPUT, int *OUTPUT) const;
+
+    DocDeclA(
+        void, GetAlignment(int *OUTPUT, int *OUTPUT) const,
+        "GetAlignment() -> (hAlign, vAlign)");
+    
+    DocDeclA(
+        void, GetSize(int *OUTPUT, int *OUTPUT) const,
+        "GetSize() -> (num_rows, num_cols)");
+
     bool GetOverflow() const;
     wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
@@ -1583,9 +1590,10 @@ public:
 //      //
 //      void StringToLines( const wxString& value, wxArrayString& lines );
 
-    void GetTextBoxSize( wxDC& dc,
-                         wxArrayString& lines,
-                         long *OUTPUT, long *OUTPUT );
+    DocDeclA(
+        void, GetTextBoxSize( wxDC& dc, wxArrayString& lines,
+                              long *OUTPUT, long *OUTPUT ),
+        "GetTextBoxSize(DC dc, list lines) -> (width, height)");
 
 
     // ------
@@ -1679,8 +1687,15 @@ public:
     wxColour GetLabelBackgroundColour();
     wxColour GetLabelTextColour();
     wxFont   GetLabelFont();
-    void     GetRowLabelAlignment( int *OUTPUT, int *OUTPUT );
-    void     GetColLabelAlignment( int *OUTPUT, int *OUTPUT );
+
+    DocDeclA(
+        void, GetRowLabelAlignment( int *OUTPUT, int *OUTPUT ),
+        "GetRowLabelAlignment() -> (horiz, vert)");
+    
+    DocDeclA(
+        void, GetColLabelAlignment( int *OUTPUT, int *OUTPUT ),
+        "GetColLabelAlignment() -> (horiz, vert)");
+
     int      GetColLabelTextOrientation();
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
@@ -1742,11 +1757,21 @@ public:
     wxColour GetCellTextColour( int row, int col );
     wxFont   GetDefaultCellFont();
     wxFont   GetCellFont( int row, int col );
-    void     GetDefaultCellAlignment( int *OUTPUT, int *OUTPUT );
-    void     GetCellAlignment( int row, int col, int *OUTPUT, int *OUTPUT );
+
+    DocDeclA(
+        void, GetDefaultCellAlignment( int *OUTPUT, int *OUTPUT ),
+        "GetDefaultCellAlignment() -> (horiz, vert)");
+    
+    DocDeclA(
+        void, GetCellAlignment( int row, int col, int *OUTPUT, int *OUTPUT ),
+        "GetCellAlignment() -> (horiz, vert)");
+
     bool     GetDefaultCellOverflow();
     bool     GetCellOverflow( int row, int col );
-    void     GetCellSize( int row, int col, int *OUTPUT, int *OUTPUT );
+
+    DocDeclA(
+        void, GetCellSize( int row, int col, int *OUTPUT, int *OUTPUT ),
+        "GetCellSize(int row, int col) -> (num_rows, num_cols)");
 
     void     SetDefaultRowSize( int height, bool resizeExistingRows = False );
     void     SetRowSize( int row, int height );

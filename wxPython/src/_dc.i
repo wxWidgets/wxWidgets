@@ -226,7 +226,10 @@ public:
 
     virtual void DestroyClippingRegion();
 
-    void GetClippingBox(wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT) const;
+    DocDeclA(
+        void, GetClippingBox(wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT) const,
+        "GetClippingBox() -> (x, y, width, height)");
+    
     %extend {
         wxRect GetClippingRect() {
             wxRect rect;
@@ -243,27 +246,50 @@ public:
     virtual wxCoord GetCharHeight() const;
     virtual wxCoord GetCharWidth() const;
 
-    // only works for single line strings
-    void GetTextExtent(const wxString& string, wxCoord *OUTPUT, wxCoord *OUTPUT);
-    %name(GetFullTextExtent)void GetTextExtent(const wxString& string,
-                       wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord* OUTPUT,
-                       wxFont* font = NULL);
 
-    // works for single as well as multi-line strings
-    void GetMultiLineTextExtent(const wxString& text, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT,
-                                wxFont *font = NULL);
+    DocDeclAStr(
+        void, GetTextExtent(const wxString& string, wxCoord *OUTPUT, wxCoord *OUTPUT),
+        "GetTextExtent(wxString string) -> (width, height)",
+        "Get the width and height of the text using the current font.\n"
+        "Only works for single line strings.");
+    DocDeclAStrName(
+        void, GetTextExtent(const wxString& string,
+                            wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord* OUTPUT, 
+                            wxFont* font = NULL),
+        "GetFullTextExtent(wxString string, Font font=None) ->\n   (width, height, descent, externalLeading)",
+        "Get the width, height, decent and leading of the text using the current or specified font.\n"
+        "Only works for single line strings.",
+        GetFullTextExtent);
+
     
+    // works for single as well as multi-line strings
+    DocDeclAStr(
+        void, GetMultiLineTextExtent(const wxString& text,
+                                     wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT,
+                                     wxFont *font = NULL),
+        "GetMultiLineTextExtent(wxString string, Font font=None) ->\n   (width, height, descent, externalLeading)",
+        "Get the width, height, decent and leading of the text using the current or specified font.\n"
+        "Works for single as well as multi-line strings.");
+
 
     // size and resolution
     // -------------------
 
-    // in device units
-    %name(GetSizeTuple)void GetSize(int* OUTPUT, int* OUTPUT);
+    DocStr(GetSize, "Get the DC size in device units.");
     wxSize GetSize();
+    DocDeclAName(
+        void, GetSize( int *OUTPUT, int *OUTPUT ),
+        "GetSizeTuple() -> (width, height)",
+        GetSizeTuple);
+    
 
-    // in mm
-    %name(GetSizeMMWH)void GetSizeMM(int* OUTPUT, int* OUTPUT) const;
+    DocStr(GetSizeMM, "Get the DC size in milimeters.");
     wxSize GetSizeMM() const;
+    DocDeclAName(
+        void, GetSizeMM( int *OUTPUT, int *OUTPUT ) const,
+        "GetSizeMMTuple() -> (width, height)",
+        GetSizeMMTuple);
+    
     
 
     // coordinates conversions
@@ -310,19 +336,36 @@ public:
     int GetMapMode() const;
     virtual void SetMapMode(int mode);
 
-    virtual void GetUserScale(double *OUTPUT, double *OUTPUT) const;
+    
+    DocDeclA(
+        virtual void, GetUserScale(double *OUTPUT, double *OUTPUT) const,
+        "GetUserScale() -> (xScale, yScale)");
+    
     virtual void SetUserScale(double x, double y);
 
-    virtual void GetLogicalScale(double *OUTPUT, double *OUTPUT);
+    
+    DocDeclA(
+        virtual void, GetLogicalScale(double *OUTPUT, double *OUTPUT),
+        "GetLogicalScale() -> (xScale, yScale)");
+
     virtual void SetLogicalScale(double x, double y);
 
-    %name(GetLogicalOriginTuple) void GetLogicalOrigin(wxCoord *OUTPUT, wxCoord *OUTPUT) const;
+
     wxPoint GetLogicalOrigin() const;
+    DocDeclAName(
+        void, GetLogicalOrigin(wxCoord *OUTPUT, wxCoord *OUTPUT) const,
+        "GetLogicalOriginTuple() -> (x,y)",
+        GetLogicalOriginTuple);
+        
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
 
     
-    %name(GetDeviceOriginTuple) void GetDeviceOrigin(wxCoord *OUTPUT, wxCoord *OUTPUT) const;
     wxPoint GetDeviceOrigin() const;
+    DocDeclAName(
+        void, GetDeviceOrigin(wxCoord *OUTPUT, wxCoord *OUTPUT) const,
+        "GetDeviceOriginTuple() -> (x,y)",
+        GetDeviceOriginTuple);
+    
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
 
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
@@ -347,6 +390,8 @@ public:
     wxCoord MaxY() const;
 
 
+    DocA(GetBoundingBox,
+         "GetBoundingBox() -> (x1,y1, x2,y2)");
     %extend {
         void GetBoundingBox(int* OUTPUT, int* OUTPUT, int* OUTPUT, int* OUTPUT);
         // See below for implementation

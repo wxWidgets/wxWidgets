@@ -33,12 +33,20 @@ void wxBell();
 void wxEndBusyCursor();
 
 long wxGetElapsedTime(bool resetTimer = True);
-void wxGetMousePosition(int* OUTPUT, int* OUTPUT);
+
+DocDeclA(
+    void, wxGetMousePosition(int* OUTPUT, int* OUTPUT),
+    "GetMousePosition() -> (x,y)");
+
 bool wxIsBusy();
 wxString wxNow();
 bool wxShell(const wxString& command = wxPyEmptyString);
 void wxStartTimer();
-int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
+
+DocDeclA(
+    int, wxGetOsVersion(int *OUTPUT, int *OUTPUT),
+    "GetOsVersion() -> (platform, major, minor)");
+
 wxString wxGetOsDescription();
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
@@ -170,13 +178,19 @@ bool wxColourDisplay();
 int wxDisplayDepth();
 int wxGetDisplayDepth();
 
-void   wxDisplaySize(int* OUTPUT, int* OUTPUT);
+DocDeclA(
+    void, wxDisplaySize(int* OUTPUT, int* OUTPUT),
+    "DisplaySize() -> (width, height)");
 wxSize wxGetDisplaySize();
 
-void   wxDisplaySizeMM(int* OUTPUT, int* OUTPUT);
+DocDeclA(
+    void, wxDisplaySizeMM(int* OUTPUT, int* OUTPUT),
+    "DisplaySizeMM() -> (width, height)");
 wxSize wxGetDisplaySizeMM();
 
-void   wxClientDisplayRect(int *OUTPUT, int *OUTPUT, int *OUTPUT, int *OUTPUT);
+DocDeclA(
+    void, wxClientDisplayRect(int *OUTPUT, int *OUTPUT, int *OUTPUT, int *OUTPUT),
+    "ClientDisplayRect() -> (x, y, width, height)");
 wxRect wxGetClientDisplayRect();
 
 void wxSetCursor(wxCursor& cursor);

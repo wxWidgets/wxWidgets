@@ -4102,44 +4102,6 @@ static PyObject *_wrap_Caret_IsVisible(PyObject *self, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Caret_GetPositionTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxCaret *arg1 = (wxCaret *) 0 ;
-    int *arg2 = (int *) 0 ;
-    int *arg3 = (int *) 0 ;
-    int temp2 ;
-    int temp3 ;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    arg2 = &temp2;
-    arg3 = &temp3;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Caret_GetPositionTuple",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCaret,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->GetPosition(arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        PyObject *o = PyInt_FromLong((long) (*arg2));
-        resultobj = t_output_helper(resultobj,o);
-    }
-    {
-        PyObject *o = PyInt_FromLong((long) (*arg3));
-        resultobj = t_output_helper(resultobj,o);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_Caret_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCaret *arg1 = (wxCaret *) 0 ;
@@ -4169,7 +4131,7 @@ static PyObject *_wrap_Caret_GetPosition(PyObject *self, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Caret_GetSizeTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Caret_GetPositionTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCaret *arg1 = (wxCaret *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -4183,11 +4145,11 @@ static PyObject *_wrap_Caret_GetSizeTuple(PyObject *self, PyObject *args, PyObje
     
     arg2 = &temp2;
     arg3 = &temp3;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Caret_GetSizeTuple",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Caret_GetPositionTuple",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCaret,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->GetSize(arg2,arg3);
+        (arg1)->GetPosition(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -4229,6 +4191,44 @@ static PyObject *_wrap_Caret_GetSize(PyObject *self, PyObject *args, PyObject *k
         wxSize * resultptr;
         resultptr = new wxSize((wxSize &) result);
         resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxSize, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Caret_GetSizeTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxCaret *arg1 = (wxCaret *) 0 ;
+    int *arg2 = (int *) 0 ;
+    int *arg3 = (int *) 0 ;
+    int temp2 ;
+    int temp3 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    arg2 = &temp2;
+    arg3 = &temp3;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Caret_GetSizeTuple",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCaret,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->GetSize(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        PyObject *o = PyInt_FromLong((long) (*arg2));
+        resultobj = t_output_helper(resultobj,o);
+    }
+    {
+        PyObject *o = PyInt_FromLong((long) (*arg3));
+        resultobj = t_output_helper(resultobj,o);
     }
     return resultobj;
     fail:
@@ -15267,7 +15267,7 @@ static PyObject *_wrap_DateTime_GetNumberOfDaysinYear(PyObject *self, PyObject *
     PyObject *resultobj;
     int arg1 ;
     int arg2 = (int) wxDateTime::Gregorian ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     char *kwnames[] = {
         (char *) "year",(char *) "cal", NULL 
     };
@@ -15275,7 +15275,7 @@ static PyObject *_wrap_DateTime_GetNumberOfDaysinYear(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|i:DateTime_GetNumberOfDaysinYear",kwnames,&arg1,&arg2)) goto fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)wxDateTime::GetNumberOfDays(arg1,(wxDateTime::Calendar )arg2);
+        result = (int)wxDateTime::GetNumberOfDays(arg1,(wxDateTime::Calendar )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -15292,7 +15292,7 @@ static PyObject *_wrap_DateTime_GetNumberOfDaysInMonth(PyObject *self, PyObject 
     int arg1 ;
     int arg2 = (int) wxDateTime::Inv_Year ;
     int arg3 = (int) wxDateTime::Gregorian ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     char *kwnames[] = {
         (char *) "month",(char *) "year",(char *) "cal", NULL 
     };
@@ -15300,7 +15300,7 @@ static PyObject *_wrap_DateTime_GetNumberOfDaysInMonth(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|ii:DateTime_GetNumberOfDaysInMonth",kwnames,&arg1,&arg2,&arg3)) goto fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)wxDateTime::GetNumberOfDays((wxDateTime::Month )arg1,arg2,(wxDateTime::Calendar )arg3);
+        result = (int)wxDateTime::GetNumberOfDays((wxDateTime::Month )arg1,arg2,(wxDateTime::Calendar )arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -15630,34 +15630,16 @@ static PyObject *_wrap_new_DateTimeFromJDN(PyObject *self, PyObject *args, PyObj
 
 static PyObject *_wrap_new_DateTimeFromHMS(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    wxDateTime::wxDateTime_t arg1 ;
-    wxDateTime::wxDateTime_t arg2 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg3 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg4 = (wxDateTime::wxDateTime_t) 0 ;
+    int arg1 ;
+    int arg2 = (int) 0 ;
+    int arg3 = (int) 0 ;
+    int arg4 = (int) 0 ;
     wxDateTime *result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "hour",(char *) "minute",(char *) "second",(char *) "millisec", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOO:new_DateTimeFromHMS",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
-    arg1 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj0);
-    if (PyErr_Occurred()) SWIG_fail;
-    if (obj1) {
-        arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj2) {
-        arg3 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj2);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj3) {
-        arg4 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj3);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|iii:new_DateTimeFromHMS",kwnames,&arg1,&arg2,&arg3,&arg4)) goto fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxDateTime *)new wxDateTime(arg1,arg2,arg3,arg4);
@@ -15674,42 +15656,19 @@ static PyObject *_wrap_new_DateTimeFromHMS(PyObject *self, PyObject *args, PyObj
 
 static PyObject *_wrap_new_DateTimeFromDMY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    wxDateTime::wxDateTime_t arg1 ;
+    int arg1 ;
     int arg2 = (int) wxDateTime::Inv_Month ;
     int arg3 = (int) wxDateTime::Inv_Year ;
-    wxDateTime::wxDateTime_t arg4 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg5 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg6 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg7 = (wxDateTime::wxDateTime_t) 0 ;
+    int arg4 = (int) 0 ;
+    int arg5 = (int) 0 ;
+    int arg6 = (int) 0 ;
+    int arg7 = (int) 0 ;
     wxDateTime *result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj3 = 0 ;
-    PyObject * obj4 = 0 ;
-    PyObject * obj5 = 0 ;
-    PyObject * obj6 = 0 ;
     char *kwnames[] = {
         (char *) "day",(char *) "month",(char *) "year",(char *) "hour",(char *) "minute",(char *) "second",(char *) "millisec", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|iiOOOO:new_DateTimeFromDMY",kwnames,&obj0,&arg2,&arg3,&obj3,&obj4,&obj5,&obj6)) goto fail;
-    arg1 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj0);
-    if (PyErr_Occurred()) SWIG_fail;
-    if (obj3) {
-        arg4 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj3);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj4) {
-        arg5 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj4);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj5) {
-        arg6 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj5);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj6) {
-        arg7 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj6);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|iiiiii:new_DateTimeFromDMY",kwnames,&arg1,&arg2,&arg3,&arg4,&arg5,&arg6,&arg7)) goto fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxDateTime *)new wxDateTime(arg1,(wxDateTime::Month )arg2,arg3,arg4,arg5,arg6,arg7);
@@ -15840,36 +15799,18 @@ static PyObject *_wrap_DateTime_SetJDN(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_DateTime_SetHMS(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
-    wxDateTime::wxDateTime_t arg3 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg4 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg5 = (wxDateTime::wxDateTime_t) 0 ;
+    int arg2 ;
+    int arg3 = (int) 0 ;
+    int arg4 = (int) 0 ;
+    int arg5 = (int) 0 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
-    PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "hour",(char *) "minute",(char *) "second",(char *) "millisec", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOO:DateTime_SetHMS",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|iii:DateTime_SetHMS",kwnames,&obj0,&arg2,&arg3,&arg4,&arg5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
-    if (obj2) {
-        arg3 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj2);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj3) {
-        arg4 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj3);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj4) {
-        arg5 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj4);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -15890,44 +15831,21 @@ static PyObject *_wrap_DateTime_SetHMS(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_DateTime_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     int arg3 = (int) wxDateTime::Inv_Month ;
     int arg4 = (int) wxDateTime::Inv_Year ;
-    wxDateTime::wxDateTime_t arg5 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg6 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg7 = (wxDateTime::wxDateTime_t) 0 ;
-    wxDateTime::wxDateTime_t arg8 = (wxDateTime::wxDateTime_t) 0 ;
+    int arg5 = (int) 0 ;
+    int arg6 = (int) 0 ;
+    int arg7 = (int) 0 ;
+    int arg8 = (int) 0 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj4 = 0 ;
-    PyObject * obj5 = 0 ;
-    PyObject * obj6 = 0 ;
-    PyObject * obj7 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "day",(char *) "month",(char *) "year",(char *) "hour",(char *) "minute",(char *) "second",(char *) "millisec", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|iiOOOO:DateTime_Set",kwnames,&obj0,&obj1,&arg3,&arg4,&obj4,&obj5,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|iiiiii:DateTime_Set",kwnames,&obj0,&arg2,&arg3,&arg4,&arg5,&arg6,&arg7,&arg8)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
-    if (obj4) {
-        arg5 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj4);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj5) {
-        arg6 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj5);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj6) {
-        arg7 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj6);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj7) {
-        arg8 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj7);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16034,18 +15952,15 @@ static PyObject *_wrap_DateTime_SetMonth(PyObject *self, PyObject *args, PyObjec
 static PyObject *_wrap_DateTime_SetDay(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "day", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetDay",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetDay",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16066,18 +15981,15 @@ static PyObject *_wrap_DateTime_SetDay(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_DateTime_SetHour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "hour", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetHour",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetHour",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16098,18 +16010,15 @@ static PyObject *_wrap_DateTime_SetHour(PyObject *self, PyObject *args, PyObject
 static PyObject *_wrap_DateTime_SetMinute(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "minute", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetMinute",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetMinute",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16130,18 +16039,15 @@ static PyObject *_wrap_DateTime_SetMinute(PyObject *self, PyObject *args, PyObje
 static PyObject *_wrap_DateTime_SetSecond(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "second", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetSecond",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetSecond",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16162,18 +16068,15 @@ static PyObject *_wrap_DateTime_SetSecond(PyObject *self, PyObject *args, PyObje
 static PyObject *_wrap_DateTime_SetMillisecond(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "millisecond", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetMillisecond",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetMillisecond",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16462,20 +16365,17 @@ static PyObject *_wrap_DateTime_GetLastWeekDay(PyObject *self, PyObject *args, P
 static PyObject *_wrap_DateTime_SetToTheWeek(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     int arg3 = (int) wxDateTime::Mon ;
     int arg4 = (int) wxDateTime::Monday_First ;
     bool result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "numWeek",(char *) "weekday",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|ii:DateTime_SetToTheWeek",kwnames,&obj0,&obj1,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|ii:DateTime_SetToTheWeek",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->SetToTheWeek(arg2,(wxDateTime::WeekDay )arg3,(wxDateTime::WeekFlags )arg4);
@@ -16493,20 +16393,17 @@ static PyObject *_wrap_DateTime_SetToTheWeek(PyObject *self, PyObject *args, PyO
 static PyObject *_wrap_DateTime_GetWeek(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     int arg3 = (int) wxDateTime::Mon ;
     int arg4 = (int) wxDateTime::Monday_First ;
     wxDateTime result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "numWeek",(char *) "weekday",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|ii:DateTime_GetWeek",kwnames,&obj0,&obj1,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|ii:DateTime_GetWeek",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->GetWeek(arg2,(wxDateTime::WeekDay )arg3,(wxDateTime::WeekFlags )arg4);
@@ -16589,18 +16486,15 @@ static PyObject *_wrap_DateTime_GetLastMonthDay(PyObject *self, PyObject *args, 
 static PyObject *_wrap_DateTime_SetToYearDay(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "yday", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetToYearDay",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetToYearDay",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16621,18 +16515,15 @@ static PyObject *_wrap_DateTime_SetToYearDay(PyObject *self, PyObject *args, PyO
 static PyObject *_wrap_DateTime_GetYearDay(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxDateTime::wxDateTime_t arg2 ;
+    int arg2 ;
     wxDateTime result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "yday", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_GetYearDay",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_GetYearDay",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = (wxDateTime::wxDateTime_t) PyInt_AsLong(obj1);
-    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->GetYearDay(arg2);
@@ -17095,7 +16986,7 @@ static PyObject *_wrap_DateTime_GetDay(PyObject *self, PyObject *args, PyObject 
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17111,7 +17002,7 @@ static PyObject *_wrap_DateTime_GetDay(PyObject *self, PyObject *args, PyObject 
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)((wxDateTime const *)arg1)->GetDay((wxDateTime::TimeZone const &)*arg2);
+        result = (int)((wxDateTime const *)arg1)->GetDay((wxDateTime::TimeZone const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17173,7 +17064,7 @@ static PyObject *_wrap_DateTime_GetHour(PyObject *self, PyObject *args, PyObject
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17189,7 +17080,7 @@ static PyObject *_wrap_DateTime_GetHour(PyObject *self, PyObject *args, PyObject
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)((wxDateTime const *)arg1)->GetHour((wxDateTime::TimeZone const &)*arg2);
+        result = (int)((wxDateTime const *)arg1)->GetHour((wxDateTime::TimeZone const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17212,7 +17103,7 @@ static PyObject *_wrap_DateTime_GetMinute(PyObject *self, PyObject *args, PyObje
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17228,7 +17119,7 @@ static PyObject *_wrap_DateTime_GetMinute(PyObject *self, PyObject *args, PyObje
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)((wxDateTime const *)arg1)->GetMinute((wxDateTime::TimeZone const &)*arg2);
+        result = (int)((wxDateTime const *)arg1)->GetMinute((wxDateTime::TimeZone const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17251,7 +17142,7 @@ static PyObject *_wrap_DateTime_GetSecond(PyObject *self, PyObject *args, PyObje
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17267,7 +17158,7 @@ static PyObject *_wrap_DateTime_GetSecond(PyObject *self, PyObject *args, PyObje
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)((wxDateTime const *)arg1)->GetSecond((wxDateTime::TimeZone const &)*arg2);
+        result = (int)((wxDateTime const *)arg1)->GetSecond((wxDateTime::TimeZone const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17290,7 +17181,7 @@ static PyObject *_wrap_DateTime_GetMillisecond(PyObject *self, PyObject *args, P
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17306,7 +17197,7 @@ static PyObject *_wrap_DateTime_GetMillisecond(PyObject *self, PyObject *args, P
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)((wxDateTime const *)arg1)->GetMillisecond((wxDateTime::TimeZone const &)*arg2);
+        result = (int)((wxDateTime const *)arg1)->GetMillisecond((wxDateTime::TimeZone const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17329,7 +17220,7 @@ static PyObject *_wrap_DateTime_GetDayOfYear(PyObject *self, PyObject *args, PyO
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17345,7 +17236,7 @@ static PyObject *_wrap_DateTime_GetDayOfYear(PyObject *self, PyObject *args, PyO
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)((wxDateTime const *)arg1)->GetDayOfYear((wxDateTime::TimeZone const &)*arg2);
+        result = (int)((wxDateTime const *)arg1)->GetDayOfYear((wxDateTime::TimeZone const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17369,7 +17260,7 @@ static PyObject *_wrap_DateTime_GetWeekOfYear(PyObject *self, PyObject *args, Py
     int arg2 = (int) wxDateTime::Monday_First ;
     wxDateTime::TimeZone const &arg3_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg3 = (wxDateTime::TimeZone *) &arg3_defvalue ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -17385,7 +17276,7 @@ static PyObject *_wrap_DateTime_GetWeekOfYear(PyObject *self, PyObject *args, Py
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)((wxDateTime const *)arg1)->GetWeekOfYear((wxDateTime::WeekFlags )arg2,(wxDateTime::TimeZone const &)*arg3);
+        result = (int)((wxDateTime const *)arg1)->GetWeekOfYear((wxDateTime::WeekFlags )arg2,(wxDateTime::TimeZone const &)*arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17409,7 +17300,7 @@ static PyObject *_wrap_DateTime_GetWeekOfMonth(PyObject *self, PyObject *args, P
     int arg2 = (int) wxDateTime::Monday_First ;
     wxDateTime::TimeZone const &arg3_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg3 = (wxDateTime::TimeZone *) &arg3_defvalue ;
-    wxDateTime::wxDateTime_t result;
+    int result;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -17425,7 +17316,7 @@ static PyObject *_wrap_DateTime_GetWeekOfMonth(PyObject *self, PyObject *args, P
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDateTime::wxDateTime_t)((wxDateTime const *)arg1)->GetWeekOfMonth((wxDateTime::WeekFlags )arg2,(wxDateTime::TimeZone const &)*arg3);
+        result = (int)((wxDateTime const *)arg1)->GetWeekOfMonth((wxDateTime::WeekFlags )arg2,(wxDateTime::TimeZone const &)*arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24522,10 +24413,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Caret", (PyCFunction) _wrap_delete_Caret, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Caret_IsOk", (PyCFunction) _wrap_Caret_IsOk, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Caret_IsVisible", (PyCFunction) _wrap_Caret_IsVisible, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Caret_GetPositionTuple", (PyCFunction) _wrap_Caret_GetPositionTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Caret_GetPosition", (PyCFunction) _wrap_Caret_GetPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Caret_GetSizeTuple", (PyCFunction) _wrap_Caret_GetSizeTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Caret_GetPositionTuple", (PyCFunction) _wrap_Caret_GetPositionTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Caret_GetSize", (PyCFunction) _wrap_Caret_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Caret_GetSizeTuple", (PyCFunction) _wrap_Caret_GetSizeTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Caret_GetWindow", (PyCFunction) _wrap_Caret_GetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Caret_MoveXY", (PyCFunction) _wrap_Caret_MoveXY, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Caret_Move", (PyCFunction) _wrap_Caret_Move, METH_VARARGS | METH_KEYWORDS },

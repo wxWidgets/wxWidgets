@@ -117,11 +117,13 @@ public:
     // Parse the filter into an array of filters and an array of descriptions
 //     virtual int ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions);
     
-    // Find the child that matches the first part of 'path'.
-    // E.g. if a child path is "/usr" and 'path' is "/usr/include"
-    // then the child for /usr is returned.
-    // If the path string has been used (we're at the leaf), done is set to True
-    virtual wxTreeItemId FindChild(wxTreeItemId parentId, const wxString& path, bool& OUTPUT);
+    DocDeclAStr(
+        virtual wxTreeItemId, FindChild(wxTreeItemId parentId, const wxString& path, bool& OUTPUT),
+        "FindChild(wxTreeItemId parentId, wxString path) -> (item, done)",
+        "Find the child that matches the first part of 'path'.  E.g. if a child path is\n"
+        "\"/usr\" and 'path' is \"/usr/include\" then the child for /usr is returned.\n"
+        "If the path string has been used (we're at the leaf), done is set to True\n");
+        
     
     // Resize the components of the control
     virtual void DoResize();

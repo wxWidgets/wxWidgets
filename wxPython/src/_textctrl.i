@@ -192,8 +192,11 @@ public:
     bool IsSingleLine() const;
     bool IsMultiLine() const;
 
-    // If the return values from and to are the same, there is no selection.
-    virtual void GetSelection(long* OUTPUT, long* OUTPUT) const;
+
+    DocDeclAStr(
+        virtual void, GetSelection(long* OUTPUT, long* OUTPUT) const,
+        "GetSelection() -> (from, to)",
+        "If the return values from and to are the same, there is no selection.");
 
     virtual wxString GetStringSelection() const;
 
@@ -236,7 +239,9 @@ public:
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
     virtual long XYToPosition(long x, long y) const;
-    virtual /*bool*/ void PositionToXY(long pos, long *OUTPUT, long *OUTPUT) const;
+    DocDeclA(
+        virtual /*bool*/ void, PositionToXY(long pos, long *OUTPUT, long *OUTPUT) const,
+        "PositionToXY(long pos) -> (x, y)");
 
     virtual void ShowPosition(long pos);
 
