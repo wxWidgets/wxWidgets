@@ -71,6 +71,8 @@ public:
         { m_needResizeInIdle = set; }
     void SetConfigureGeometry( int x, int y, int width, int height )
         { m_x = x; m_y = y; m_width = width; m_height = height; }
+
+    virtual bool SetShape(const wxRegion& region);
     
 protected:
     // common part of all ctors
@@ -78,8 +80,6 @@ protected:
 
     // set the icon for the window
     void DoSetIcon( const wxIcon& icon );
-
-    virtual bool SetShape(const wxRegion& region);
 
     // For implementation purposes - sometimes decorations make the
     // client area smaller
