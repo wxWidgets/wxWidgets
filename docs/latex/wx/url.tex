@@ -28,7 +28,7 @@
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxURL::wxURL}\label{wxurlconstr}
+\membersection{wxURL::wxURL}\label{wxurlctor}
 
 \func{}{wxURL}{\param{const wxString\&}{ url}}
 
@@ -42,7 +42,7 @@ contain three consecutive slashes.
 
 \docparam{url}{Url string to parse.}
 
-\membersection{wxURL::\destruct{wxURL}}
+\membersection{wxURL::\destruct{wxURL}}\label{wxurldtor}
 
 \func{}{\destruct{wxURL}}{\void}
 
@@ -51,7 +51,7 @@ Destroys the URL object.
 %
 % GetProtocolName
 %
-\membersection{wxURL::GetProtocolName}
+\membersection{wxURL::GetProtocolName}\label{wxurlgetprotocolname}
 
 \constfunc{wxString}{GetProtocolName}{\void}
 
@@ -60,7 +60,7 @@ Returns the name of the protocol which will be used to get the URL.
 %
 % GetProtocol
 %
-\membersection{wxURL::GetProtocol}
+\membersection{wxURL::GetProtocol}\label{wxurlgetprotocol}
 
 \func{wxProtocol\&}{GetProtocol}{\void}
 
@@ -69,7 +69,7 @@ Returns a reference to the protocol which will be used to get the URL.
 %
 % GetPath
 %
-\membersection{wxURL::GetPath}
+\membersection{wxURL::GetPath}\label{wxurlgetpath}
 
 \func{wxString}{GetPath}{\void}
 
@@ -78,7 +78,7 @@ Returns the path of the file to fetch. This path was encoded in the URL.
 %
 % GetError
 %
-\membersection{wxURL::GetError}
+\membersection{wxURL::GetError}\label{wxurlgeterror}
 
 \constfunc{wxURLError}{GetError}{\void}
 
@@ -99,7 +99,7 @@ It can be one of these errors:
 %
 % GetInputStream
 %
-\membersection{wxURL::GetInputStream}
+\membersection{wxURL::GetInputStream}\label{wxurlgetinputstream}
 
 \func{wxInputStream *}{GetInputStream}{\void}
 
@@ -149,7 +149,7 @@ Sets the proxy to use for this URL.
 %
 % SetProxy
 %
-\membersection{wxURL::ConvertToValidURI}
+\membersection{wxURL::ConvertToValidURI}\label{wxurlconverttovaliduri}
 
 \func{static wxString}{ConvertToValidURI}{\param{const wxString\&}{ uri}}
 

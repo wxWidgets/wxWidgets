@@ -312,7 +312,7 @@ used, so that text won't be wrapped. No effect under GTK+.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles} and
-\helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}.
+\helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlctor}.
 
 \wxheading{wxTextCtrl text format}
 
@@ -470,7 +470,7 @@ into the control than the limit set by
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxTextCtrl::wxTextCtrl}\label{wxtextctrlconstr}
+\membersection{wxTextCtrl::wxTextCtrl}\label{wxtextctrlctor}
 
 \func{}{wxTextCtrl}{\void}
 
@@ -520,7 +520,7 @@ visible.
 \helpref{wxTextCtrl::Create}{wxtextctrlcreate}, \helpref{wxValidator}{wxvalidator}
 
 
-\membersection{wxTextCtrl::\destruct{wxTextCtrl}}
+\membersection{wxTextCtrl::\destruct{wxTextCtrl}}\label{wxtextctrldtor}
 
 \func{}{\destruct{wxTextCtrl}}{\void}
 
@@ -610,7 +610,7 @@ Copies the selected text to the clipboard under Motif and MS Windows.
 \param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxTextCtrlNameStr}}
 
 Creates the text control for two-step construction. Derived classes
-should call or replace this function. See \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}\rtfsp
+should call or replace this function. See \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlctor}\rtfsp
 for further details.
 
 
@@ -621,14 +621,14 @@ for further details.
 Copies the selected text to the clipboard and removes the selection.
 
 
-\membersection{wxTextCtrl::DiscardEdits}
+\membersection{wxTextCtrl::DiscardEdits}\label{wxtextctrldiscardedits}
 
 \func{void}{DiscardEdits}{\void}
 
 Resets the internal `modified' flag as if the current edits had been saved.
 
 
-\membersection{wxTextCtrl::EmulateKeyPress}
+\membersection{wxTextCtrl::EmulateKeyPress}\label{wxtextctrlemulatekeypress}
 
 \func{bool}{EmulateKeyPress}{\param{const wxKeyEvent\& }{event}}
 

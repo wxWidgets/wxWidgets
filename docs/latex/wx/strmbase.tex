@@ -27,13 +27,13 @@ None
 % ctor & dtor
 % -----------
 
-\membersection{wxStreamBase::wxStreamBase}
+\membersection{wxStreamBase::wxStreamBase}\label{wxstreambasector}
 
 \func{}{wxStreamBase}{\void}
 
 Creates a dummy stream object. It doesn't do anything.
 
-\membersection{wxStreamBase::\destruct{wxStreamBase}}
+\membersection{wxStreamBase::\destruct{wxStreamBase}}\label{wxstreambasedtor}
 
 \func{}{\destruct{wxStreamBase}}{\void}
 
@@ -70,21 +70,21 @@ This function returns the last error.
 Internal function. It is called when the stream wants to read data of the
 specified size. It should return the size that was actually read.
 
-\membersection{wxStreamBase::OnSysSeek}
+\membersection{wxStreamBase::OnSysSeek}\label{wxstreambaseonsysseek}
 
 \func{off\_t}{OnSysSeek}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode}}
 
 Internal function. It is called when the stream needs to change the
 current position.
 
-\membersection{wxStreamBase::OnSysTell}
+\membersection{wxStreamBase::OnSysTell}\label{wxstreambaseonsystell}
 
 \constfunc{off\_t}{OnSysTell}{\void}
 
 Internal function. Is is called when the stream needs to know the
 real position.
 
-\membersection{wxStreamBase::OnSysWrite}
+\membersection{wxStreamBase::OnSysWrite}\label{wxstreambaseonsyswrite}
 
 \func{size\_t}{OnSysWrite}{\param{void *}{buffer}, \param{size\_t}{ bufsize}}
 

@@ -36,7 +36,7 @@ Objects:
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
-\membersection{Constructors and assignment operators}
+\membersection{Constructors and assignment operators}\label{constructorsinwxstring}
 
 A string may be constructed either from a C string, (some number of copies of)
 a single character or a wide (UNICODE) string. For all constructors (except the
@@ -47,7 +47,7 @@ operator.
 \helpref{operator $=$}{wxstringoperatorassign}\\
 \helpref{\destruct{wxString}}{wxstringdestruct}
 
-\membersection{String length}
+\membersection{String length}\label{lengthfunctionsinwxstring}
 
 These functions return the string length and check whether the string is empty
 or empty it.
@@ -58,7 +58,7 @@ or empty it.
 \helpref{Empty}{wxstringempty}\\
 \helpref{Clear}{wxstringclear}
 
-\membersection{Character access}
+\membersection{Character access}\label{characteraccessinwxstring}
 
 Many functions in this section take a character index in the string. As with C
 strings and/or arrays, the indices start from $0$, so the first character of a
@@ -84,7 +84,7 @@ use it.
 \helpref{fn\_str}{wxstringfnstr}\\
 \helpref{operator const char*}{wxstringoperatorconstcharpt}
 
-\membersection{Concatenation}
+\membersection{Concatenation}\label{concatenationinwxstring}
 
 Anything may be concatenated (appended to) with a string. However, you can't
 append something to a C string (including literal constants), so to do this it
@@ -96,7 +96,7 @@ should be converted to a wxString first.
 \helpref{Append}{wxstringappend}\\
 \helpref{Prepend}{wxstringprepend}
 
-\membersection{Comparison}
+\membersection{Comparison}\label{comparisoninwxstring}
 
 The default comparison function \helpref{Cmp}{wxstringcmp} is case-sensitive and
 so is the default version of \helpref{IsSameAs}{wxstringissameas}. For case
@@ -121,7 +121,7 @@ length of the prefix then.
 \helpref{Matches}{wxstringmatches}\\
 \helpref{StartsWith}{wxstringstartswith}
 
-\membersection{Substring extraction}
+\membersection{Substring extraction}\label{substringextractioninwxstring}
 
 These functions allow to extract substring from this string. All of them don't
 modify the original string and return a new string containing the extracted
@@ -137,7 +137,7 @@ substring.
 \helpref{AfterLast}{wxstringafterlast}\\
 \helpref{StartsWith}{wxstringstartswith}
 
-\membersection{Case conversion}
+\membersection{Case conversion}\label{caseconversioninwxstring}
 
 The MakeXXX() variants modify the string in place, while the other functions
 return a new string which contains the original text converted to the upper or
@@ -148,7 +148,7 @@ lower case and leave the original string unchanged.
 \helpref{MakeLower}{wxstringmakelower}\\
 \helpref{Lower}{wxstringlower}
 
-\membersection{Searching and replacing}
+\membersection{Searching and replacing}\label{searchingandreplacinginwxstring}
 
 These functions replace the standard {\it strchr()} and {\it strstr()} 
 functions.
@@ -156,7 +156,7 @@ functions.
 \helpref{Find}{wxstringfind}\\
 \helpref{Replace}{wxstringreplace}
 
-\membersection{Conversion to numbers}
+\membersection{Conversion to numbers}\label{conversiontonumbersinwxstring}
 
 The string provides functions for conversion to signed and unsigned integer and
 floating point numbers. All three functions take a pointer to the variable to
@@ -167,7 +167,7 @@ converted to a number.
 \helpref{ToULong}{wxstringtoulong}\\
 \helpref{ToDouble}{wxstringtodouble}
 
-\membersection{Writing values into the string}
+\membersection{Writing values into the string}\label{writingintostringinwxstring}
 
 Both formatted versions (\helpref{Printf}{wxstringprintf}) and stream-like
 insertion operators exist (for basic types only). Additionally, the 
@@ -190,7 +190,7 @@ formatted value to a string:
 \helpref{PrintfV}{wxstringprintfv}\\
 \helpref{operator \cinsert}{wxstringoperatorout}
 
-\membersection{Memory management}
+\membersection{Memory management}\label{memoryinwxstring}
 
 These are "advanced" functions and they will be needed quite rarely. 
 \helpref{Alloc}{wxstringalloc} and \helpref{Shrink}{wxstringshrink} are only
@@ -206,7 +206,7 @@ must} be called!
 \helpref{GetWriteBuf}{wxstringgetwritebuf}\\
 \helpref{UngetWriteBuf}{wxstringungetwritebuf}
 
-\membersection{Miscellaneous}
+\membersection{Miscellaneous}\label{miscellaneousinwxstring}
 
 Other string functions.
 
@@ -214,7 +214,7 @@ Other string functions.
 \helpref{Pad}{wxstringpad}\\
 \helpref{Truncate}{wxstringtruncate}
 
-\membersection{wxWidgets 1.xx compatibility functions}
+\membersection{wxWidgets 1.xx compatibility functions}\label{backwardcompatibilityinwxstring}
 
 These functions are deprecated, please consider using new wxWidgets 2.0
 functions instead of them (or, even better, std::string compatible variants).

@@ -50,13 +50,13 @@ is being given to the application (call wxTreeEvent::SetToolTip). Windows only.}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxTreeEvent::wxTreeEvent}
+\membersection{wxTreeEvent::wxTreeEvent}\label{wxtreeeventctor}
 
 \func{}{wxTreeEvent}{\param{WXTYPE }{commandType = 0}, \param{int }{id = 0}}
 
 Constructor.
 
-\membersection{wxTreeEvent::GetKeyCode}
+\membersection{wxTreeEvent::GetKeyCode}\label{wxtreeeventgetkeycode}
 
 \constfunc{int}{GetKeyCode}{}
 
@@ -64,7 +64,7 @@ Returns the key code if the event was is a key event. Use
 \helpref{GetKeyEvent}{wxtreeeventgetkeyevent} to get the values of the
 modifier keys for this event (i.e. Shift or Ctrl).
 
-\membersection{wxTreeEvent::GetItem}
+\membersection{wxTreeEvent::GetItem}\label{wxtreeeventgetitem}
 
 \constfunc{wxTreeItemId}{GetItem}{}
 
@@ -76,32 +76,32 @@ Returns the item (valid for all events).
 
 Returns the key event for {\tt EVT\_TREE\_KEY\_DOWN} events.
 
-\membersection{wxTreeEvent::GetLabel}
+\membersection{wxTreeEvent::GetLabel}\label{wxtreeeventgetlabel}
 
 \constfunc{const wxString\&}{GetLabel}{}
 
 Returns the label if the event was a begin or end edit label event.
 
-\membersection{wxTreeEvent::GetOldItem}
+\membersection{wxTreeEvent::GetOldItem}\label{wxtreeeventgetolditem}
 
 \constfunc{wxTreeItemId}{GetOldItem}{}
 
 Returns the old item index (valid for EVT\_TREE\_ITEM\_CHANGING and CHANGED events)
 
-\membersection{wxTreeEvent::GetPoint()}
+\membersection{wxTreeEvent::GetPoint()}\label{wxtreeeventgetpoint}
 
 \constfunc{wxPoint}{GetPoint}{}
 
 Returns the position of the mouse pointer if the event is a drag event.
 
-\membersection{wxTreeEvent::IsEditCancelled()}
+\membersection{wxTreeEvent::IsEditCancelled()}\label{wxtreeeventiseditcancelled}
 
 \constfunc{bool}{IsEditCancelled}{}
 
 Returns true if the label edit was cancelled. This should be
 called from within an EVT\_TREE\_END\_LABEL\_EDIT handler.
 
-\membersection{wxTreeEvent::SetToolTip}
+\membersection{wxTreeEvent::SetToolTip}\label{wxtreeeventsettooltip}
 
 \func{void}{SetToolTip}{\param{const wxString\&}{ tooltip}}
 
