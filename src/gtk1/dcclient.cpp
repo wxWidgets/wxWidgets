@@ -1698,8 +1698,6 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    wxDC::DoSetClippingRegion( x, y, width, height );
-
     if (!m_window) return;
 
     wxRect rect;
@@ -1718,6 +1716,10 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
 #endif
 
+    wxCoord xx, yy, ww, hh;
+    m_currentClippingRegion.GetBox( xx, yy, ww, hh );
+    wxDC::DoSetClippingRegion( xx, yy, ww, hh );
+
     gdk_gc_set_clip_region( m_penGC, m_currentClippingRegion.GetRegion() );
     gdk_gc_set_clip_region( m_brushGC, m_currentClippingRegion.GetRegion() );
     gdk_gc_set_clip_region( m_textGC, m_currentClippingRegion.GetRegion() );
@@ -1734,11 +1736,6 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
         return;
     }
 
-    wxCoord x,y,w,h;
-    region.GetBox( x, y, w, h );
-
-    wxDC::DoSetClippingRegion( x, y, w, h );
-
     if (!m_window) return;
     
     if (!m_currentClippingRegion.IsNull())
@@ -1750,6 +1747,10 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
     if (!m_paintClippingRegion.IsNull())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
 #endif
+
+    wxCoord xx, yy, ww, hh;
+    m_currentClippingRegion.GetBox( xx, yy, ww, hh );
+    wxDC::DoSetClippingRegion( xx, yy, ww, hh );
 
     gdk_gc_set_clip_region( m_penGC, m_currentClippingRegion.GetRegion() );
     gdk_gc_set_clip_region( m_brushGC, m_currentClippingRegion.GetRegion() );
