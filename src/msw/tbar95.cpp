@@ -313,7 +313,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
         if ( tool2->IsControl() )
         {
-            pos += ((wxToolBarTool *)tool2)->GetSeparatorsCount();
+            pos += ((wxToolBarTool *)tool2)->GetSeparatorsCount() - 1;
         }
     }
 

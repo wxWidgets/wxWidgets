@@ -35,6 +35,7 @@ wxMSW:
   EVT_MOVE fixed (Imad Jureidini)
 - jpeg library compilation fixed for newer versions of mingw32 and cygwin
 - controls which don't accept focus don't get it on left mouse click
+- wxToolBar::DeleteTool() in presence of toolbar controls fixed
 - wxDC::DeviceToLogical[XY] fixed (Chuck Messenger)
 
 wxHTML:
