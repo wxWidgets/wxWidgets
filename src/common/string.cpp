@@ -962,12 +962,25 @@ int STRINGCLASS::compare(size_t nStart, size_t nLen,
 // from multibyte string
 wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 {
+    // if nLength != npos, then we have to make a NULL-terminated copy
+    // of first nLength bytes of psz first because the input buffer to MB2WC
+    // must always be NULL-terminated:
+    wxCharBuffer inBuf((const char *)NULL);
+    if (nLength != npos)
+    {
+        wxCharBuffer tmp(nLength);
+        memcpy(tmp.data(), psz, nLength);
+        tmp.data()[nLength] = '\0';
+        inBuf = tmp;
+        psz = inBuf.data();
+    }
+    
     // first get the size of the buffer we need
     size_t nLen;
     if ( psz )
     {
         // calculate the needed size ourselves or use the provided one
-        nLen = nLength == npos ? conv.MB2WC(NULL, psz, 0) : nLength;
+        nLen = conv.MB2WC(NULL, psz, 0);
     }
     else
     {
@@ -984,14 +997,9 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
         }
         else
         {
-            // the input buffer to MB2WC must always be NUL-terminated
-            wxCharBuffer inBuf(nLen);
-            memcpy(inBuf.data(), psz, nLen);
-            inBuf.data()[nLen] = '\0';
-
             wxWCharBuffer buf(nLen);
             // MB2WC wants the buffer size, not the string length hence +1
-            nLen = conv.MB2WC(buf.data(), inBuf.data(), nLen + 1);
+            nLen = conv.MB2WC(buf.data(), psz, nLen + 1);
 
             if ( nLen != (size_t)-1 )
             {
@@ -1011,12 +1019,25 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 // from wide string
 wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 {
+    // if nLength != npos, then we have to make a NULL-terminated copy
+    // of first nLength chars of psz first because the input buffer to WC2MB
+    // must always be NULL-terminated:
+    wxWCharBuffer inBuf((const wchar_t *)NULL);
+    if (nLength != npos)
+    {
+        wxWCharBuffer tmp(nLength);
+        memcpy(tmp.data(), pwz, nLength * sizeof(wchar_t));
+        tmp.data()[nLength] = '\0';
+        inBuf = tmp;
+        pwz = inBuf.data();
+    }
+    
     // first get the size of the buffer we need
     size_t nLen;
     if ( pwz )
     {
         // calculate the needed size ourselves or use the provided one
-        nLen = nLength == npos ? conv.WC2MB(NULL, pwz, 0) : nLength;
+        nLen = conv.WC2MB(NULL, pwz, 0);
     }
     else
     {
