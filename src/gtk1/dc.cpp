@@ -85,7 +85,7 @@ wxDC::~wxDC(void)
 
 bool wxDC::Ok(void) const 
 { 
-  wxASSERT_MSG( !ok, "invalid display context" );
+  wxASSERT_MSG( m_ok, "invalid display context" );
   return m_ok; 
 }
 

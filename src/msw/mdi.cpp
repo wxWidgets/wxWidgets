@@ -487,6 +487,7 @@ bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
     if (win)
       return win->MSWCommand(cmd, id);
 
+/*
     if (wxCurrentPopupMenu)
     {
         wxMenu *popupMenu = wxCurrentPopupMenu;
@@ -494,6 +495,7 @@ bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
         if (!popupMenu->MSWCommand(cmd, id))
             return TRUE;
     }
+*/
 
     switch (id)
     {
