@@ -235,6 +235,7 @@ $(WXDIR)\lib\$(WXLIBNAME).lib: $(DUMMYOBJ) $(OBJECTS)
 
 !if "$(USE_GLCANVAS)" == "1"
 GL_LIBS=opengl32.lib glu32.lib
+GL_LIBS_DELAY=/delayload:opengl32.dll
 !endif
 
 # Update the dynamic link library
@@ -246,7 +247,7 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
 	delayimp.lib
 	/delayload:ws2_32.dll /delayload:advapi32.dll /delayload:user32.dll /delayload:gdi32.dll
 	/delayload:comdlg32.dll /delayload:shell32.dll /delayload:comctl32.dll /delayload:ole32.dll
-	/delayload:oleaut32.dll /delayload:rpcrt4.dll /delayload:winmm.dll /delayload:opengl32.dll
+	/delayload:oleaut32.dll /delayload:rpcrt4.dll /delayload:winmm.dll $(GL_LIBS_DELAY)
 <<
 
 !endif
