@@ -403,19 +403,19 @@ REQUIRED_DIRS = ./lib ./src ./src/common ./src/gtk ./src/motif ./src/msw \
 all:    $(REQUIRED_DIRS) $(OBJECTS) @WX_TARGET_LIBRARY@ @WX_CREATE_LINKS@
 
 $(REQUIRED_DIRS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDIR)/include/wx/setup.h
-	@if test ! -d ./lib; then mkdir ./lib; fi
-	@if test ! -d ./src; then mkdir ./src; fi
-	@if test ! -d ./src/common; then mkdir ./src/common; fi
-	@if test ! -d ./src/msw; then mkdir ./src/msw; fi
-	@if test ! -d ./src/gtk; then mkdir ./src/gtk; fi
-	@if test ! -d ./src/motif; then mkdir ./src/motif; fi
-	@if test ! -d ./src/motif/xmcombo; then mkdir ./src/motif/xmcombo; fi
-	@if test ! -d ./src/generic; then mkdir ./src/generic; fi
-	@if test ! -d ./src/unix; then mkdir ./src/unix; fi
-	@if test ! -d ./src/html; then mkdir ./src/html; fi
-	@if test ! -d ./src/png; then mkdir ./src/png; fi
-	@if test ! -d ./src/jpeg; then mkdir ./src/jpeg; fi
-	@if test ! -d ./src/zlib; then mkdir ./src/zlib; fi
+	mkdir -p ./lib
+	mkdir -p ./src
+	mkdir -p ./src/common
+	mkdir -p ./src/msw
+	mkdir -p ./src/gtk
+	mkdir -p ./src/motif
+	mkdir -p ./src/motif/xmcombo
+	mkdir -p ./src/generic
+	mkdir -p ./src/unix
+	mkdir -p ./src/html
+	mkdir -p ./src/png
+	mkdir -p ./src/jpeg
+	mkdir -p ./src/zlib
 
 @WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
 	$(AR) $(AROPTIONS) ./lib/$@ $(OBJECTS)
@@ -471,20 +471,20 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(
 	$(INSTALL_SCRIPT) $(top_builddir)/wx-config $(bindir)/wx-config
 	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
 	
-	@if test ! -d $(libdir)/wx; then mkdir $(libdir)/wx; fi
-	@if test ! -d $(libdir)/wx/include; then mkdir $(libdir)/wx/include; fi
-	@if test ! -d $(libdir)/wx/include/wx; then mkdir $(libdir)/wx/include/wx; fi
-	@if test ! -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@; then mkdir $(libdir)/wx/include/wx/@TOOLKIT_DIR@; fi
+	@mkdir -p $(libdir)/wx
+	@mkdir -p $(libdir)/wx/include
+	@mkdir -p $(libdir)/wx/include/wx
+	@mkdir -p $(libdir)/wx/include/wx/@TOOLKIT_DIR@
 	$(INSTALL_DATA) $(top_builddir)/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	
-	@if test ! -d $(includedir)/wx; then mkdir $(includedir)/wx; fi
-	@if test ! -d $(includedir)/wx/msw; then mkdir $(includedir)/wx/msw; fi
-	@if test ! -d $(includedir)/wx/gtk; then mkdir $(includedir)/wx/gtk; fi
-	@if test ! -d $(includedir)/wx/motif; then mkdir $(includedir)/wx/motif; fi
-	@if test ! -d $(includedir)/wx/html; then mkdir $(includedir)/wx/html; fi
-	@if test ! -d $(includedir)/wx/protocol; then mkdir $(includedir)/wx/protocol; fi
-	@if test ! -d $(includedir)/wx/unix; then mkdir $(includedir)/wx/unix; fi
-	@if test ! -d $(includedir)/wx/generic; then mkdir $(includedir)/wx/generic; fi
+	@mkdir -p $(includedir)/wx
+	@mkdir -p $(includedir)/wx/msw
+	@mkdir -p $(includedir)/wx/gtk
+	@mkdir -p $(includedir)/wx/motif
+	@mkdir -p $(includedir)/wx/html
+	@mkdir -p $(includedir)/wx/protocol
+	@mkdir -p $(includedir)/wx/unix
+	@mkdir -p $(includedir)/wx/generic
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p; \
 	  echo "$(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p"; \

@@ -1,0 +1,36 @@
+#
+# File:		Makefile.in
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for wxsocket example (UNIX).
+
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
+VPATH = :$(top_srcdir)/samples/wxsocket
+
+# Clears all default suffixes
+.SUFFIXES:	.o .cpp .c .cxx
+
+.cpp.o :
+	$(CC) -c $(CPPFLAGS) -o $@ $<
+
+# Set defaults from configure
+include ../../src/make.env
+
+all:	client server
+
+client:	client.o ../../lib/@WX_TARGET_LIBRARY@
+	$(CC) $(LDFLAGS) -o client client.o $(LDLIBS)
+
+server:	server.o ../../lib/@WX_TARGET_LIBRARY@
+	$(CC) $(LDFLAGS) -o server server.o $(LDLIBS)
+
+clean:
+	rm -f $(OBJECTS) $(PROGRAM) core
+

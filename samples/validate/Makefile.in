@@ -9,6 +9,11 @@
 #
 # Makefile for validate example (UNIX).
 
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
+VPATH = :$(top_srcdir)/samples/validate
+
 PROGRAM=validate
 
 OBJECTS=$(PROGRAM).o

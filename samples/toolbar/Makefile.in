@@ -12,6 +12,8 @@
 top_srcdir = @top_srcdir@
 top_builddir = ../..
 
+VPATH = :$(top_srcdir)/samples/toolbar
+
 PROGRAM=test
 
 OBJECTS=$(PROGRAM).o
