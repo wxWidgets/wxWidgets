@@ -614,6 +614,7 @@ stattext.cpp	Motif
 toolbar.cpp	Motif
 textctrl.cpp	Motif
 timer.cpp	Motif
+toplevel.cpp	Motif
 utils.cpp	Motif
 window.cpp	Motif
 
@@ -1197,6 +1198,7 @@ stattext.h	MotifH
 textctrl.h	MotifH
 timer.h	MotifH
 toolbar.h	MotifH
+toplevel.h	MotifH
 window.h	MotifH
 
 app.h	X11H

@@ -25,7 +25,8 @@ class WXDLLEXPORT wxDialog : public wxDialogBase
         
 public:
     wxDialog();
-    
+
+#if WXWIN_COMPATIBILITY_2
     // Constructor with a modal flag, but no window id - the old convention
     wxDialog(wxWindow *parent,
         const wxString& title, bool modal,
@@ -36,7 +37,8 @@ public:
         long modalStyle = modal ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
         Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), style|modalStyle, name);
     }
-    
+#endif
+
     // Constructor with no modal flag - the new convention.
     wxDialog(wxWindow *parent, wxWindowID id,
         const wxString& title,
@@ -58,18 +60,10 @@ public:
     ~wxDialog();
     
     virtual bool Destroy();
-    
-    bool Show(bool show);
-    void Iconize(bool iconize);
-    void Raise();
-    void Lower();
-    
-    virtual bool IsIconized() const;
-    
-    virtual bool IsTopLevel() const { return TRUE; }
-    
+
+    virtual bool Show(bool show = TRUE);
+
     void SetTitle(const wxString& title);
-    wxString GetTitle() const ;
     
     void SetModal(bool flag);
     
@@ -91,8 +85,6 @@ public:
     void OnApply(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
     
-    void OnPaint(wxPaintEvent &event);
-    
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     
@@ -100,14 +92,18 @@ public:
     void OnCharHook(wxKeyEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
     
-    // Responds to size changes
-    void OnSize(wxSizeEvent& event);
-    
-public:
+private:
+    virtual bool DoCreate( wxWindow* parent, wxWindowID id,
+                           const wxString& title,
+                           const wxPoint& pos,
+                           const wxSize& size,
+                           long style,
+                           const wxString& name );
+    virtual void DoDestroy();
+
     //// Motif-specific
     bool          m_modalShowing;
-    wxString      m_dialogTitle;
-    
+
 protected:
     virtual void DoSetSize(int x, int y,
         int width, int height,

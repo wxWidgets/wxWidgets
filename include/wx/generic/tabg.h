@@ -21,6 +21,7 @@
 #include "wx/hash.h"
 #include "wx/string.h"
 #include "wx/dialog.h"
+#include "wx/panel.h"
 
 class WXDLLEXPORT wxTabView;
 
