@@ -222,9 +222,9 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
         ret = listbox->GetEventHandler()->ProcessEvent( new_event );
     }
     
-    if ((gdk_event->keyval == GDK_Return) && listbox->HasFlag(wxLB_SINGLE) && (!ret))
+    if ((gdk_event->keyval == GDK_Return) && (!ret))
     {
-        // eat return in single mode
+        // eat return in all modes
         ret = TRUE;
     }
         
@@ -409,6 +409,8 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
+    m_hasVMT = FALSE;
+
     Clear();
 }
 
