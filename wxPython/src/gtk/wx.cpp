@@ -1931,6 +1931,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxTE_AUTO_SCROLL", PyInt_FromLong((long) wxTE_AUTO_SCROLL));
 	 PyDict_SetItemString(d,"wxTE_NO_VSCROLL", PyInt_FromLong((long) wxTE_NO_VSCROLL));
 	 PyDict_SetItemString(d,"wxTE_AUTO_URL", PyInt_FromLong((long) wxTE_AUTO_URL));
+	 PyDict_SetItemString(d,"wxTE_NOHIDESEL", PyInt_FromLong((long) wxTE_NOHIDESEL));
 	 PyDict_SetItemString(d,"wxCB_SIMPLE", PyInt_FromLong((long) wxCB_SIMPLE));
 	 PyDict_SetItemString(d,"wxCB_DROPDOWN", PyInt_FromLong((long) wxCB_DROPDOWN));
 	 PyDict_SetItemString(d,"wxCB_SORT", PyInt_FromLong((long) wxCB_SORT));
