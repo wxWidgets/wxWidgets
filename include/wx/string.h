@@ -216,8 +216,7 @@ struct WXDLLIMPEXP_BASE wxStringData
 
   // VC++ will refuse to inline Unlock but profiling shows that it is wrong
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-//	RN - VC6  Refuses to inline this anyway and spits out 2 warnings...
-//  __forceinline
+	__forceinline
 #endif
   // VC++ free must take place in same DLL as allocation when using non dll
   // run-time library (e.g. Multithreaded instead of Multithreaded DLL)
@@ -332,8 +331,21 @@ public:
   wxStringBase(const void *pStart, const void *pEnd);
 
     // dtor is not virtual, this class must not be inherited from!
-  ~wxStringBase() { GetStringData()->Unlock(); }
+  ~wxStringBase() 
+  { 
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
+	//RN - according to the above VC++ does indeed inline this,
+	//even though it spits out two warnings
+	#pragma warning (disable:4714)
+#endif
 
+	  GetStringData()->Unlock(); 
+  }
+
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
+  	//re-enable inlining warning
+	#pragma warning (default:4714)
+#endif  
   // overloaded assignment
     // from another wxString
   wxStringBase& operator=(const wxStringBase& stringSrc);
