@@ -323,8 +323,7 @@ if not GL_ONLY:
                    'misc.i', 'misc2.i', 'gdi.i', 'mdi.i', 'controls.i',
                    'controls2.i', 'cmndlgs.i', 'stattool.i', 'frames.i', 'image.i',
                    'printfw.i', 'sizers.i', 'clip_dnd.i',
-                   'filesys.i', 'streams.i',
-                   ##'grid.i', 'html.i', 'htmlhelp.i', 'calendar.i', 'utils.i',
+                   'filesys.i', 'streams.i', 'utils.i'
                    ]
 
     swig_sources = run_swig(swig_files, 'src', GENDIR, PKGDIR,
@@ -380,20 +379,6 @@ if not GL_ONLY:
     swig_sources = run_swig(['html.i', 'htmlhelp.i'], 'src', GENDIR, PKGDIR,
                             USE_SWIG, swig_force, swig_args, swig_deps)
     ext = Extension('htmlc', swig_sources,
-                    include_dirs =  includes,
-                    define_macros = defines,
-                    library_dirs = libdirs,
-                    libraries = libs,
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-    wxpExtensions.append(ext)
-
-
-    # Extension for the utils module
-    swig_sources = run_swig(['utils.i'], 'src', GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
-    ext = Extension('utilsc', swig_sources,
                     include_dirs =  includes,
                     define_macros = defines,
                     library_dirs = libdirs,
