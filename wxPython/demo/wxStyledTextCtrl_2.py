@@ -29,8 +29,8 @@ else:
               'mono' : 'Courier',
               'helv' : 'Helvetica',
               'other': 'new century schoolbook',
-              'size' : 13,
-              'size2': 11,
+              'size' : 10,
+              'size2': 18,
              }
 
 
@@ -38,7 +38,8 @@ else:
 
 class PythonSTC(wxStyledTextCtrl):
     def __init__(self, parent, ID):
-        wxStyledTextCtrl.__init__(self, parent, ID)
+        wxStyledTextCtrl.__init__(self, parent, ID,
+                                  style = wxNO_FULL_REPAINT_ON_RESIZE)
 
         self.CmdKeyAssign(ord('B'), wxSTC_SCMOD_CTRL, wxSTC_CMD_ZOOMIN)
         self.CmdKeyAssign(ord('N'), wxSTC_SCMOD_CTRL, wxSTC_CMD_ZOOMOUT)
@@ -300,7 +301,7 @@ def runTest(frame, nb, log):
     if not _USE_PANEL:
         ed = p = PythonSTC(nb, -1)
     else:
-        p = wxPanel(nb, -1)
+        p = wxPanel(nb, -1, style = wxNO_FULL_REPAINT_ON_RESIZE)
         ed = PythonSTC(p, -1)
         s = wxBoxSizer(wxHORIZONTAL)
         s.Add(ed, 1, wxEXPAND)

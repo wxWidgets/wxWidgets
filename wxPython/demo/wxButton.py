@@ -7,7 +7,8 @@ import images
 
 class TestPanel(wxPanel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wxPanel.__init__(self, parent, -1,
+                         style=wxNO_FULL_REPAINT_ON_RESIZE)
         self.log = log
 
         b = wxButton(self, 10, "Hello", wxPoint(20, 20))

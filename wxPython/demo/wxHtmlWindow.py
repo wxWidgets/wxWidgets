@@ -13,7 +13,7 @@ from Main import opj
 # method in the C++ code...)
 class MyHtmlWindow(wxHtmlWindow):
     def __init__(self, parent, id, log):
-        wxHtmlWindow.__init__(self, parent, id)
+        wxHtmlWindow.__init__(self, parent, id, style=wxNO_FULL_REPAINT_ON_RESIZE)
         self.log = log
         EVT_SCROLLWIN( self, self.OnScroll )
 
@@ -45,7 +45,7 @@ class MyHtmlWindow(wxHtmlWindow):
 
 class TestHtmlPanel(wxPanel):
     def __init__(self, parent, frame, log):
-        wxPanel.__init__(self, parent, -1)
+        wxPanel.__init__(self, parent, -1, style=wxNO_FULL_REPAINT_ON_RESIZE)
         self.log = log
         self.frame = frame
         self.cwd = os.path.split(sys.argv[0])[0]

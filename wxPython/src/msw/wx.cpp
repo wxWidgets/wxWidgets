@@ -2182,6 +2182,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxMM_ANISOTROPIC", PyInt_FromLong((long) wxMM_ANISOTROPIC));
 	 PyDict_SetItemString(d,"wxMM_POINTS", PyInt_FromLong((long) wxMM_POINTS));
 	 PyDict_SetItemString(d,"wxMM_METRIC", PyInt_FromLong((long) wxMM_METRIC));
+	 PyDict_SetItemString(d,"wxTIMER_CONTINUOUS", PyInt_FromLong((long) wxTIMER_CONTINUOUS));
+	 PyDict_SetItemString(d,"wxTIMER_ONE_SHOT", PyInt_FromLong((long) wxTIMER_ONE_SHOT));
 	 PyDict_SetItemString(d,"wxBORDER_DEFAULT", PyInt_FromLong((long) wxBORDER_DEFAULT));
 	 PyDict_SetItemString(d,"wxBORDER_NONE", PyInt_FromLong((long) wxBORDER_NONE));
 	 PyDict_SetItemString(d,"wxBORDER_STATIC", PyInt_FromLong((long) wxBORDER_STATIC));

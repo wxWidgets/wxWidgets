@@ -202,6 +202,9 @@ class wxToolBarBasePtr(wxControlPtr):
     def InsertControl(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_InsertControl,(self,) + _args, _kwargs)
         return val
+    def FindControl(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarBase_FindControl,(self,) + _args, _kwargs)
+        return val
     def AddSeparator(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_AddSeparator,(self,) + _args, _kwargs)
         return val

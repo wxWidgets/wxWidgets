@@ -70,6 +70,8 @@ Please also see the following files in this directory:
 
        BUILD.win32.txt Instructions for building wxPython on Windows.
 
+       BUILD.osx.txt   Instructions for building wxPython on Mac OS X.
+
        licence/*       Text of the wxWindows license.
 
 

@@ -515,6 +515,8 @@ enum {
     wxMM_POINTS,
     wxMM_METRIC,
 
+    wxTIMER_CONTINUOUS,
+    wxTIMER_ONE_SHOT,
 };
 
 

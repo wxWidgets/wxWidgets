@@ -1896,6 +1896,35 @@ static PyObject *_wrap_wxToolBarBase_InsertControl(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxToolBarBase_FindControl(_swigobj,_swigarg0)  (_swigobj->FindControl(_swigarg0))
+static PyObject *_wrap_wxToolBarBase_FindControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxControl * _result;
+    wxToolBarBase * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToolBarBase_FindControl",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_FindControl. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxControl *)wxToolBarBase_FindControl(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
 #define wxToolBarBase_AddSeparator(_swigobj)  (_swigobj->AddSeparator())
 static PyObject *_wrap_wxToolBarBase_AddSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3499,6 +3528,7 @@ static PyMethodDef stattoolcMethods[] = {
 	 { "wxToolBarBase_RemoveTool", (PyCFunction) _wrap_wxToolBarBase_RemoveTool, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_InsertSeparator", (PyCFunction) _wrap_wxToolBarBase_InsertSeparator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_AddSeparator", (PyCFunction) _wrap_wxToolBarBase_AddSeparator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_FindControl", (PyCFunction) _wrap_wxToolBarBase_FindControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_InsertControl", (PyCFunction) _wrap_wxToolBarBase_InsertControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_AddControl", (PyCFunction) _wrap_wxToolBarBase_AddControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_InsertTool", (PyCFunction) _wrap_wxToolBarBase_InsertTool, METH_VARARGS | METH_KEYWORDS },

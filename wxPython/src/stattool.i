@@ -344,6 +344,7 @@ public:
 
     wxToolBarToolBase *AddControl(wxControl *control);
     wxToolBarToolBase *InsertControl(size_t pos, wxControl *control);
+    wxControl *FindControl( int id );
 
     wxToolBarToolBase *AddSeparator();
     wxToolBarToolBase *InsertSeparator(size_t pos);
