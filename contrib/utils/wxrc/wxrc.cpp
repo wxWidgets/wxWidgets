@@ -514,7 +514,7 @@ void XmlResApp::OutputGettext()
     else fout.Open(parOutput, _T("wt"));
     
     for (size_t i = 0; i < str.GetCount(); i++)
-        fout.Write(_T("_(\"") + str[i] + _T("\")\n"));
+        fout.Write(_T("_(\"") + str[i] + _T("\");\n"));
     
     if (!parOutput) fout.Detach();
 }
@@ -601,7 +601,8 @@ wxArrayString XmlResApp::FindStrings(wxXmlNode *node)
                 node/*not n!*/->GetName() == _T("longhelp") ||
                 node/*not n!*/->GetName() == _T("tooltip") ||
                 node/*not n!*/->GetName() == _T("htmlcode") ||
-                node/*not n!*/->GetName() == _T("title")
+                node/*not n!*/->GetName() == _T("title") ||
+                node/*not n!*/->GetName() == _T("item")
             ))
             // ...and known to contain translatable string
         {
