@@ -405,9 +405,8 @@ bool wxWindowMSW::Create(wxWindow *parent,
 
     parent->AddChild(this);
 
-    // note that all windows are created visible by default
     WXDWORD exstyle;
-    DWORD msflags = WS_VISIBLE | MSWGetCreateWindowFlags(&exstyle);
+    DWORD msflags = MSWGetCreateWindowFlags(&exstyle);
 
 #ifdef __WXUNIVERSAL__
     // no borders, we draw them ourselves
@@ -415,14 +414,16 @@ bool wxWindowMSW::Create(wxWindow *parent,
     msflags &= ~WS_BORDER;
 #endif // wxUniversal
 
+    // all windows are created visible by default except popup ones (which are
+    // like the wxTopLevelWindows in this aspect)
     if ( style & wxPOPUP_WINDOW )
     {
-        // a popup window floats on top of everything
-        exstyle |= WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
-
-        // it is also created hidden as other top level windows
         msflags &= ~WS_VISIBLE;
         m_isShown = FALSE;
+    }
+    else
+    {
+        msflags |= WS_VISIBLE;
     }
 
     return MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle);

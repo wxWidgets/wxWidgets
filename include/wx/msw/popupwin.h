@@ -12,6 +12,10 @@
 #ifndef _WX_MSW_POPUPWIN_H_
 #define _WX_MSW_POPUPWIN_H_
 
+#ifdef __GNUG__
+    #pragma interface "popup.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxPopupWindow
 // ----------------------------------------------------------------------------
@@ -24,24 +28,12 @@ public:
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE)
         { (void)Create(parent, flags); }
 
-    bool Create(wxWindow *parent, int flags = wxBORDER_NONE)
-    {
-        return wxPopupWindowBase::Create(parent) &&
-               wxWindow::Create(parent, -1,
-                                wxDefaultPosition, wxDefaultSize,
-                                (flags & wxBORDER_MASK) | wxPOPUP_WINDOW);
-    }
+    bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
 protected:
-    virtual void DoGetPosition(int *x, int *y) const
-    {
-        // the position of a "top level" window such as this should be in
-        // screen coordinates, not in the client ones which MSW gives us
-        // (because we are a child window)
-        wxPopupWindowBase::DoGetPosition(x, y);
+    virtual void DoGetPosition(int *x, int *y) const;
 
-        GetParent()->ClientToScreen(x, y);
-    }
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
 
     DECLARE_DYNAMIC_CLASS(wxPopupWindow)
 };
