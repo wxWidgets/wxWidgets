@@ -105,7 +105,6 @@ public:
     void OnChar( wxKeyEvent &event );
 
 private:
-    wxCaret  m_caret;
     wxFont   m_font;
 
     // the margin around the text (looks nicer)
@@ -276,14 +275,15 @@ MyCanvas::MyCanvas( wxWindow *parent )
     m_heightChar = dc.GetCharHeight();
     m_widthChar = dc.GetCharWidth();
 
-    m_caret.Create( this, m_widthChar, m_heightChar );
+    wxCaret *caret = new wxCaret(this, m_widthChar, m_heightChar);
+    SetCaret(caret);
 
     m_xCaret = m_yCaret =
     m_xChars = m_yChars = 0;
 
     m_xMargin = m_yMargin = 5;
-    m_caret.Move(m_xMargin, m_yMargin);
-    m_caret.Show();
+    caret->Move(m_xMargin, m_yMargin);
+    caret->Show();
 }
 
 MyCanvas::~MyCanvas()
@@ -303,10 +303,15 @@ void MyCanvas::OnSize( wxSizeEvent &event )
     free(m_text);
     m_text = (wxChar *)calloc(m_xChars * m_yChars, sizeof(wxChar));
 
-    wxString msg;
-    msg.Printf(_T("Panel size is (%d, %d)"), m_xChars, m_yChars);
+    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
 
-    ((wxFrame *)GetParent())->SetStatusText(msg, 1);
+    if ( frame && frame->GetStatusBar() )
+    {
+        wxString msg;
+        msg.Printf(_T("Panel size is (%d, %d)"), m_xChars, m_yChars);
+
+        frame->SetStatusText(msg, 1);
+    }
 
     event.Skip();
 }
@@ -382,8 +387,8 @@ void MyCanvas::OnChar( wxKeyEvent &event )
 
     wxLogStatus(_T("Caret is at (%d, %d)"), m_xCaret, m_yCaret);
 
-    m_caret.Move(m_xMargin + m_xCaret * m_widthChar,
-                 m_yMargin + m_yCaret * m_heightChar);
+    GetCaret()->Move(m_xMargin + m_xCaret * m_widthChar,
+                     m_yMargin + m_yCaret * m_heightChar);
 
     Refresh();
 }
