@@ -77,11 +77,15 @@
 #undef __OSF__
 #undef __BSD__
 #undef __FREEBSD__
+#undef __DARWIN__
 #undef __NETBSD__
 #undef __VMS__
 #undef __ULTRIX__
 #undef __DATA_GENERAL__
 #undef __EMX__
+
+/* PowerPC Darwin & Mac OS X */
+#undef __POWERPC__
 
 /* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
 #ifndef __WINDOWS__
