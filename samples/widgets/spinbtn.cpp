@@ -165,6 +165,13 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxNotebook *notebook,
                                        wxImageList *imaglist)
                   : WidgetsPage(notebook)
 {
+    m_chkVert = NULL;
+    m_chkWrap = NULL;
+    m_spinbtn = NULL;
+    m_spinctrl = NULL;
+    m_textValue = NULL;
+    m_textMin = NULL;
+    m_textMax = NULL;
     imaglist->Add(wxBitmap(spinbtn_xpm));
 
     // init everything
@@ -410,6 +417,8 @@ void SpinBtnWidgetsPage::OnSpinBtnDown(wxCommandEvent& event)
 
 void SpinBtnWidgetsPage::OnSpinCtrl(wxCommandEvent& event)
 {
+    if (!m_spinctrl)
+        return;
     int value = event.GetInt();
 
     wxASSERT_MSG( value == m_spinctrl->GetValue(),

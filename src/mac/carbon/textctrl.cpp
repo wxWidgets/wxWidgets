@@ -816,7 +816,8 @@ wxString wxTextCtrl::GetValue() const
      	else
      	{
      	  actualsize = GetHandleSize( theText ) ;
-     	  strncpy( wxBuffer , *theText , actualsize ) ;
+          if (actualsize != 0)
+     	      strncpy( wxBuffer , *theText , actualsize ) ;
      	  DisposeHandle( theText ) ;
      	}
      }
