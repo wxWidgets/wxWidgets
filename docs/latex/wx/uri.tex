@@ -45,7 +45,7 @@ To obtain individual components you can use
 one of the following methods
 
 \helpref{GetScheme}{wxurigetscheme}\\
-\helpref{GetUser}{wxurigetuser}\\
+\helpref{GetUserInfo}{wxurigetuserinfo}\\
 \helpref{GetServer}{wxurigetserver}\\
 \helpref{GetPort}{wxurigetserver}\\
 \helpref{GetPath}{wxurigetpath}\\
@@ -60,7 +60,7 @@ Consider an undefined component equivilent to a
 NULL C string.\\
 \\ 
 \helpref{HasScheme}{wxurihasscheme}\\
-\helpref{HasUser}{wxurihasuser}\\
+\helpref{HasUserInfo}{wxurihasuserinfo}\\
 \helpref{HasServer}{wxurihasserver}\\
 \helpref{HasPort}{wxurihasserver}\\
 \helpref{HasPath}{wxurihaspath}\\
@@ -156,6 +156,18 @@ wxURI::HostType:
 \twocolitem{{\bf wxURI\_IPVFUTURE}}{Server is an IP address, but not versions 4 or 6}
 \end{twocollist}
 
+
+\membersection{wxURI::GetPassword}\label{wxurigetpassword}
+
+\constfunc{const wxString&}{GetPassword}{\void}
+
+Returns the password part of the userinfo component of
+this URI.  Note that this is explicitly depreciated by
+RFC 1396 and should generally be avoided if possible.
+
+\tt{http://<user>:<password>@mysite.com/mypath}
+
+
 \membersection{wxURI::GetPath}\label{wxurigetpath}
 
 \constfunc{const wxString&}{GetPath}{\void}
@@ -229,12 +241,24 @@ server component.
 
 \constfunc{const wxString&}{GetUser}{\void}
 
-Returns the User component of the URI.
+Returns the username part of the userinfo component of
+this URI.  Note that this is explicitly depreciated by
+RFC 1396 and should generally be avoided if possible.
+
+\tt{http://<user>:<password>@mysite.com/mypath}
+
+
+\membersection{wxURI::GetUserInfo}\label{wxurigetuserinfo}
+
+\constfunc{const wxString&}{GetUserInfo}{\void}
+
+Returns the UserInfo component of the URI.
 
 The component of a URI before the server component
 that is postfixed by a '@' character.
 
-\tt{http://<user>@mysite.com/mypath}
+\tt{http://<userinfo>@mysite.com/mypath}
+
 
 \membersection{wxURI::HasFragment}\label{wxurihasfragment}
 
@@ -242,11 +266,13 @@ that is postfixed by a '@' character.
 
 Returns \true if the Fragment component of the URI exists.
 
+
 \membersection{wxURI::HasPath}\label{wxurihaspath}
 
 \constfunc{bool}{HasPath}{\void}
 
 Returns \true if the Path component of the URI exists.
+
 
 \membersection{wxURI::HasPort}\label{wxurihasport}
 

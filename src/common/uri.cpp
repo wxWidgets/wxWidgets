@@ -78,7 +78,7 @@ wxURI::~wxURI()
 
 void wxURI::Clear()
 {
-    m_scheme = m_user = m_server = m_port = m_path =
+    m_scheme = m_userinfo = m_server = m_port = m_path =
     m_query = m_fragment = wxEmptyString;
 
     m_hostType = wxURI_REGNAME;
@@ -160,6 +160,32 @@ bool wxURI::IsEscape(const wxChar*& uri)
 }
 
 // ---------------------------------------------------------------------------
+// GetUser
+// GetPassword
+//
+// Gets the username and password via the old URL method.
+// ---------------------------------------------------------------------------
+wxString wxURI::GetUser() const
+{
+      size_t dwPasswordPos = m_userinfo.find(':');
+
+      if (dwPasswordPos == wxString::npos)
+          dwPasswordPos = 0;
+          
+      return m_userinfo(0, dwPasswordPos);
+}
+
+wxString wxURI::GetPassword() const
+{
+      size_t dwPasswordPos = m_userinfo.find(':');
+
+      if (dwPasswordPos == wxString::npos)
+          return wxT("");
+      else
+          return m_userinfo(dwPasswordPos+1, m_userinfo.length() + 1);    
+}
+
+// ---------------------------------------------------------------------------
 // BuildURI
 //
 // BuildURI() builds the entire URI into a useable
@@ -180,8 +206,8 @@ wxString wxURI::BuildURI() const
     {
         ret += wxT("//");
 
-        if (HasUser())
-            ret = ret + m_user + wxT("@");
+        if (HasUserInfo())
+            ret = ret + m_userinfo + wxT("@");
 
         ret += m_server;
 
@@ -211,8 +237,8 @@ wxString wxURI::BuildUnescapedURI() const
     {
         ret += wxT("//");
 
-        if (HasUser())
-            ret = ret + wxURI::Unescape(m_user) + wxT("@");
+        if (HasUserInfo())
+            ret = ret + wxURI::Unescape(m_userinfo) + wxT("@");
 
         if (m_hostType == wxURI_REGNAME)
             ret += wxURI::Unescape(m_server);
@@ -245,7 +271,7 @@ wxURI& wxURI::Assign(const wxURI& uri)
 
     //ref over components
     m_scheme = uri.m_scheme;
-    m_user = uri.m_user;
+    m_userinfo = uri.m_userinfo;
     m_server = uri.m_server;
     m_hostType = uri.m_hostType;
     m_port = uri.m_port;
@@ -284,12 +310,12 @@ bool wxURI::operator == (const wxURI& uri) const
 
     if (HasServer())
     {
-        if (HasUser())
+        if (HasUserInfo())
         {
-            if (m_user != uri.m_user)
+            if (m_userinfo != uri.m_userinfo)
                 return false;
         }
-        else if (uri.HasUser())
+        else if (uri.HasUserInfo())
             return false;
 
         if (m_server != uri.m_server ||
@@ -416,7 +442,7 @@ const wxChar* wxURI::ParseAuthority(const wxChar* uri)
     {
         uri += 2;
 
-        uri = ParseUser(uri);
+        uri = ParseUserInfo(uri);
         uri = ParseServer(uri);
         return ParsePort(uri);
     }
@@ -424,7 +450,7 @@ const wxChar* wxURI::ParseAuthority(const wxChar* uri)
     return uri;
 }
 
-const wxChar* wxURI::ParseUser(const wxChar* uri)
+const wxChar* wxURI::ParseUserInfo(const wxChar* uri)
 {
     wxASSERT(uri != NULL);
 
@@ -437,20 +463,20 @@ const wxChar* wxURI::ParseUser(const wxChar* uri)
     {
         if(IsUnreserved(*uri) || IsEscape(uri) ||
            IsSubDelim(*uri) || *uri == wxT(':'))
-            m_user += *uri++;
+            m_userinfo += *uri++;
         else
-            Escape(m_user, *uri++);
+            Escape(m_userinfo, *uri++);
     }
 
     if(*uri == wxT('@'))
     {
         //valid userinfo
-        m_fields |= wxURI_USER;
+        m_fields |= wxURI_USERINFO;
 
         uricopy = ++uri;
     }
     else
-        m_user = wxEmptyString;
+        m_userinfo = wxEmptyString;
 
     return uricopy;
 }
@@ -755,10 +781,10 @@ void wxURI::Resolve(const wxURI& base, int flags)
     }
 
     //No authority - inherit
-    if (base.HasUser())
+    if (base.HasUserInfo())
     {
-        m_user = base.m_user;
-        m_fields |= wxURI_USER;
+        m_userinfo = base.m_userinfo;
+        m_fields |= wxURI_USERINFO;
     }
 
     m_server = base.m_server;

@@ -32,7 +32,7 @@ enum wxURIHostType
 enum wxURIFieldType
 {
     wxURI_SCHEME = 1,
-    wxURI_USER = 2,
+    wxURI_USERINFO = 2,
     wxURI_SERVER = 4,
     wxURI_PORT = 8,
     wxURI_PATH = 16,
@@ -64,7 +64,7 @@ public:
     const wxChar* Create(const wxString& uri);
 
     bool HasScheme() const      {   return (m_fields & wxURI_SCHEME) == wxURI_SCHEME;       }
-    bool HasUser() const        {   return (m_fields & wxURI_USER) == wxURI_USER;           }
+    bool HasUserInfo() const    {   return (m_fields & wxURI_USERINFO) == wxURI_USERINFO;   }
     bool HasServer() const      {   return (m_fields & wxURI_SERVER) == wxURI_SERVER;       }
     bool HasPort() const        {   return (m_fields & wxURI_PORT) == wxURI_PORT;           }
     bool HasPath() const        {   return (m_fields & wxURI_PATH) == wxURI_PATH;           }
@@ -76,10 +76,14 @@ public:
     const wxString& GetQuery() const            {   return m_query;     }
     const wxString& GetFragment() const         {   return m_fragment;  }
     const wxString& GetPort() const             {   return m_port;      }
-    const wxString& GetUser() const             {   return m_user;      }
+    const wxString& GetUserInfo() const         {   return m_userinfo;  }
     const wxString& GetServer() const           {   return m_server;    }
     const wxURIHostType& GetHostType() const    {   return m_hostType;  }
 
+    //Note that the following two get functions are explicitly depreciated by RFC 2396
+    wxString GetUser() const;
+    wxString GetPassword() const;
+    
     wxString BuildURI() const;
     wxString BuildUnescapedURI() const;
 
@@ -100,7 +104,7 @@ protected:
     const wxChar* Parse          (const wxChar* uri);
     const wxChar* ParseAuthority (const wxChar* uri);
     const wxChar* ParseScheme    (const wxChar* uri);
-    const wxChar* ParseUser      (const wxChar* uri);
+    const wxChar* ParseUserInfo  (const wxChar* uri);
     const wxChar* ParseServer    (const wxChar* uri);
     const wxChar* ParsePort      (const wxChar* uri);
     const wxChar* ParsePath      (const wxChar* uri,
@@ -137,7 +141,7 @@ protected:
     wxString m_query;
     wxString m_fragment;
 
-    wxString m_user;
+    wxString m_userinfo;
     wxString m_server;
     wxString m_port;
 

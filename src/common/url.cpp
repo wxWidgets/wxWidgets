@@ -239,16 +239,16 @@ wxInputStream *wxURL::GetInputStream()
   }
 
   m_error = wxURL_NOERR;
-  if (HasUser())
+  if (HasUserInfo())
   {
-      size_t dwPasswordPos = m_user.find(':');
+      size_t dwPasswordPos = m_userinfo.find(':');
 
       if (dwPasswordPos == wxString::npos)
-          m_protocol->SetUser(m_user);
+          m_protocol->SetUser(m_userinfo);
       else
       {
-          m_protocol->SetUser(m_user(0, dwPasswordPos));
-          m_protocol->SetPassword(m_user(dwPasswordPos+1, m_user.length() + 1));
+          m_protocol->SetUser(m_userinfo(0, dwPasswordPos));
+          m_protocol->SetPassword(m_userinfo(dwPasswordPos+1, m_userinfo.length() + 1));
       }
   }
 
