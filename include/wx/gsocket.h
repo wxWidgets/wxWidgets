@@ -67,7 +67,7 @@ typedef enum {
   GSOCK_WOULDBLOCK,
   GSOCK_TIMEDOUT,
   GSOCK_MEMERR,
-  GSOCK_OPTERR,
+  GSOCK_OPTERR
 } GSocketError;
 
 /* See below for an explanation on how events work.
