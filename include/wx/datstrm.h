@@ -25,6 +25,8 @@ class WXDLLEXPORT wxDataInputStream
 public:
     wxDataInputStream(wxInputStream& s);
     ~wxDataInputStream();
+    
+    bool IsOk() { return m_input->IsOk(); }
 
     wxUint32 Read32();
     wxUint16 Read16();
@@ -54,6 +56,8 @@ class WXDLLEXPORT wxDataOutputStream
 public:
     wxDataOutputStream(wxOutputStream& s);
     ~wxDataOutputStream();
+
+    bool IsOk() { return m_output->IsOk(); }
 
     void Write32(wxUint32 i);
     void Write16(wxUint16 i);
