@@ -225,6 +225,17 @@ return TRUE;
 // Set pointers to base class(es) to speed up IsKindOf
 void wxClassInfo::InitializeClasses()
 {
+    // using IMPLEMENT_DYNAMIC_CLASS() macro twice (which may happen if you
+    // link any object module twice mistakenly) will break this function
+    // because it will enter an infinite loop and eventually die with "out of
+    // memory" - as this is quite hard to detect if you're unaware of this,
+    // try to do some checks here
+#ifdef __WXDEBUG__
+    // more classes than we'll ever have
+    static const size_t nMaxClasses = 10000;
+    size_t nClass = 0;
+#endif // Debug
+
     wxClassInfo::sm_classTable = new wxHashTable(wxKEY_STRING);
 
     // Index all class infos by their class name
@@ -232,7 +243,15 @@ void wxClassInfo::InitializeClasses()
     while (info)
     {
         if (info->m_className)
+        {
+            wxASSERT_MSG( ++nClass < nMaxClasses,
+                          _T("an infinite loop detected - have you used "
+                            "IMPLEMENT_DYNAMIC_CLASS() twice (may be by "
+                            "linking some object module(s) twice)?") );
+
             sm_classTable->Put(info->m_className, (wxObject *)info);
+        }
+
         info = info->m_next;
     }
 
