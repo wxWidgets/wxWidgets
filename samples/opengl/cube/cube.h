@@ -12,7 +12,7 @@
 #ifndef _WX_CUBE_H_
 #define _WX_CUBE_H_
 
-#include <wx/glcanvas.h>
+#include "wx/glcanvas.h"
 
 // Define a new application type
 class MyApp: public wxApp

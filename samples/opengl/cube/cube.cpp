@@ -133,20 +133,21 @@ unsigned long wxStopWatch( unsigned long *sec_base )
 {
   unsigned long secs,msec;
 
-#ifndef __WXMSW__        // think every unice has gettimeofday
+#if defined(__WXMSW__)
+  struct timeb tb;
+  ftime( &tb );
+  secs = tb.time;
+  msec = tb.millitm;
+#elif defined(__WXMAC__) && !defined(__DARWIN__)
+  wxLongLong tl = wxGetLocalTimeMillis();
+  secs = (unsigned long) (tl.GetValue() / 1000);
+  msec = (unsigned long) (tl.GetValue() - secs*1000);
+#else
+  // think every unice has gettimeofday
   struct timeval tv;
   gettimeofday( &tv, (struct timezone *)NULL );
   secs = tv.tv_sec;
   msec = tv.tv_usec/1000;
-#else
-  struct timeb tb;
-
-  ftime( &tb );
-
-  secs = tb.time;
-
-  msec = tb.millitm;
-
 #endif
 
   if( *sec_base == 0 )
@@ -214,6 +215,11 @@ void TestGLCanvas::Render()
         m_init = TRUE;
     }
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-0.5F, 0.5F, -0.5F, 0.5F, 1.0F, 3.0F);
+    glMatrixMode(GL_MODELVIEW);
+
     /* clear color and depth buffers */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -269,15 +275,18 @@ void TestGLCanvas::OnPaint( wxPaintEvent& event )
 
 void TestGLCanvas::OnSize(wxSizeEvent& event)
 {
-    int width, height;
-    GetClientSize(& width, & height);
+    // this is also necessary to update the context on some platforms
+    wxGLCanvas::OnSize(event);
 
+    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
+		int w, h;
+		GetClientSize(&w, &h);
 #ifndef __WXMOTIF__
     if (GetContext())
 #endif
     {
         SetCurrent();
-        glViewport(0, 0, width, height);
+        glViewport(0, 0, (GLint) w, (GLint) h);
     }
 }
 
@@ -375,7 +384,11 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
     {
         Action( m_Key, m_LastTime-m_StartTime, currTime-m_StartTime );
 
+#if defined(__WXMAC__) && !defined(__DARWIN__)
+        m_LastRedraw = currTime;	// wxStopWatch() doesn't work on Mac...
+#else
         m_LastRedraw = wxStopWatch(&m_secbase) - m_gsynct;
+#endif
         m_LastTime = currTime;
     }
 
@@ -452,7 +465,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& event)
   frame->SetMenuBar(menuBar);
 
   frame->m_canvas = new TestGLCanvas( frame, *m_canvas, -1,
-               wxPoint(0, 0), wxSize(200, 200) );
+               wxDefaultPosition, wxDefaultSize );
 
   // Show the frame
   frame->Show(TRUE);
@@ -508,7 +521,7 @@ bool MyApp::OnInit(void)
 
   frame->SetMenuBar(menuBar);
 
-  frame->m_canvas = new TestGLCanvas(frame, -1, wxPoint(0, 0), wxSize(200, 200));
+  frame->m_canvas = new TestGLCanvas(frame, -1, wxDefaultPosition, wxDefaultSize);
 
   // Show the frame
   frame->Show(TRUE);

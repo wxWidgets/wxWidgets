@@ -45,6 +45,12 @@
 #  include <GL/glu.h>
 #endif
 
+// disabled because this has apparently changed in OpenGL 1.2, so doesn't link
+// correctly if this is on...
+#ifdef GL_EXT_vertex_array
+#undef GL_EXT_vertex_array
+#endif
+
 #include "isosurf.h"
 
 // The following part is taken largely unchanged from the original C Version
@@ -197,13 +203,6 @@ static void Init(void)
 #endif
 }
 
-
-static void Reshape(int width, int height)
-{
-  glViewport(0, 0, (GLint)width, (GLint)height);
-}
-
-
 static GLenum Args(int argc, char **argv)
 {
    GLint i;
@@ -282,7 +281,7 @@ bool MyApp::OnInit(void)
       doubleBuffer = GL_FALSE;
   }
  
-  frame->m_canvas = new TestGLCanvas(frame, -1, wxPoint(0, 0), wxSize(200, 200),
+  frame->m_canvas = new TestGLCanvas(frame, -1, wxDefaultPosition, wxDefaultSize,
                                      0, "TestGLCanvas", gl_attrib );
 
   // Show the frame
@@ -363,14 +362,19 @@ void TestGLCanvas::OnPaint( wxPaintEvent& event )
 
 void TestGLCanvas::OnSize(wxSizeEvent& event)
 {
+    // this is also necessary to update the context on some platforms
+    wxGLCanvas::OnSize(event);
+    
+    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
+		int w, h;
+		GetClientSize(&w, &h);
 #ifndef __WXMOTIF__
-    if (!GetContext()) return;
+    if (GetContext())
 #endif
-
+    {
     SetCurrent();
-    int width, height;
-    GetClientSize(& width, & height);
-    Reshape(width, height);
+        glViewport(0, 0, (GLint) w, (GLint) h);
+    }
 }
 
 void TestGLCanvas::OnChar(wxKeyEvent& event)
