@@ -633,19 +633,14 @@ int wxXmlResourceHandler::GetStyle(const wxString& param, int defaults)
 
 wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
 {
-    wxString str1;
+    wxString str1(GetParamValue(param));
     wxString str2;
     const wxChar *dt;
     wxChar amp_char;
 
-    if (translate && m_resource->GetFlags() & wxXRC_USE_LOCALE)
-        str1 = wxGetTranslation(GetParamValue(param));
-    else
-        str1 = GetParamValue(param);
-
-    // VS: First version of XRC resources used $ instead of & (which is illegal in XML),
-    //     but later I realized that '_' fits this purpose much better (because
-    //     &File means "File with F underlined").
+    // VS: First version of XRC resources used $ instead of & (which is 
+    //     illegal in XML), but later I realized that '_' fits this purpose 
+    //     much better (because &File means "File with F underlined").
     if (m_resource->CompareVersion(2,3,0,1) < 0)
         amp_char = wxT('$');
     else
@@ -674,7 +669,11 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
         else str2 << *dt;
     }
     
-    return str2;
+    if (translate && m_resource->GetFlags() & wxXRC_USE_LOCALE)
+        return wxGetTranslation(str2);
+    else
+        return str2;
+
 }
 
 
