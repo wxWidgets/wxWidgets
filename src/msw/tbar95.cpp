@@ -39,7 +39,7 @@
     #include "wx/control.h"
 #endif
 
-#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (!defined(_WIN32_WCE) || (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && defined(WIN32_PLATFORM_WFSP)))
+#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (!defined(_WIN32_WCE) || (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP)))
 
 #include "wx/toolbar.h"
 #include "wx/sysopt.h"

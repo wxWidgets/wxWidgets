@@ -214,7 +214,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     if ( exflags )
     {
         // there is no taskbar under CE, so omit all this
-#ifndef __WXWINCE__
+#if !defined(__WXWINCE__)
         if ( !(GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) )
         {
             if ( style & wxFRAME_TOOL_WINDOW )
@@ -388,7 +388,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         y = (sizeDpy.y - h) / 2;
     }
 
-#ifndef __WXWINCE__
+#if !defined(__WXWINCE__) || defined(WCE_PLATFORM_STANDARDSDK)
     if ( !::MoveWindow(GetHwnd(), x, y, w, h, FALSE) )
     {
         wxLogLastError(wxT("MoveWindow"));

@@ -545,6 +545,18 @@ void wxFrame::PositionToolBar()
         }
 #endif // wxUSE_STATUSBAR
 
+		int x = 0;
+		int y = 0;
+#if defined(__WXWINCE__)
+		// We're using a commandbar - so we have to allow for it.
+		if (GetMenuBar() && GetMenuBar()->GetCommandBar())
+		{
+			RECT rect;
+			::GetWindowRect((HWND) GetMenuBar()->GetCommandBar(), &rect);
+			y = rect.bottom - rect.top;
+		}
+#endif
+
         int tx, ty;
         int tw, th;
         toolbar->GetPosition(&tx, &ty);
@@ -600,7 +612,7 @@ void wxFrame::PositionToolBar()
         }
         
         if (tx != 0 || ty != 0 || widthChanging || heightChanging)
-            toolbar->SetSize(0, 0, desiredW, desiredH, wxSIZE_NO_ADJUSTMENTS);
+            toolbar->SetSize(x, y, desiredW, desiredH, wxSIZE_NO_ADJUSTMENTS);
         
 #endif // __WXWINCE__
     }
@@ -792,6 +804,23 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
 #if wxUSE_TOOLBAR
         PositionToolBar();
 #endif // wxUSE_TOOLBAR
+
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
+		// Position the menu command bar
+		if (GetMenuBar() && GetMenuBar()->GetCommandBar())
+		{
+			RECT rect;
+			::GetWindowRect((HWND) GetMenuBar()->GetCommandBar(), &rect);
+			wxSize clientSz = GetClientSize();
+
+			if ( !::MoveWindow((HWND) GetMenuBar()->GetCommandBar(), 0, 0, clientSz.x, rect.bottom - rect.top, true ) )
+			{
+				wxLogLastError(wxT("MoveWindow"));
+			}
+			
+		}
+#endif
+
 
         processed = wxWindow::HandleSize(x, y, id);
     }

@@ -778,6 +778,15 @@
 // Set to 0 to disable document/view architecture
 #define wxUSE_DOC_VIEW_ARCHITECTURE 1
 
+// Set to 0 to disable MDI support.
+//
+// Requires wxUSE_NOTEBOOK under platforms other than MSW.
+//
+// Default is 1.
+//
+// Recommended setting: 1, can be safely set to 0.
+#define wxUSE_MDI 0
+
 // Set to 0 to disable MDI document/view architecture
 #define wxUSE_MDI_ARCHITECTURE    0
 

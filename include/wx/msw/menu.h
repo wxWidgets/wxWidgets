@@ -178,6 +178,10 @@ public:
     wxToolBar* GetToolBar() const { return m_toolBar; }
 #endif
 
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
+    WXHWND GetCommandBar() const { return m_commandBar; }
+#endif
+
 #if wxUSE_ACCEL
     // get the accel table for all the menus
     const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }
@@ -220,7 +224,7 @@ protected:
     // Not using a combined wxToolBar/wxMenuBar? then use
     // a commandbar in WinCE .NET to implement the
     // menubar, since there is no ::SetMenu function.
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && defined(WIN32_PLATFORM_WFSP))
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
     WXHWND      m_commandBar;
 #endif
 

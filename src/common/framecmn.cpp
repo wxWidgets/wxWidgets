@@ -174,6 +174,15 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
     }
 #endif // wxUSE_TOOLBAR
 
+#if defined(__WXWINCE__) && defined(WCE_PLATFORM_STANDARDSDK)
+	if (GetMenuBar() && GetMenuBar()->GetCommandBar())
+	{
+		RECT rect;
+		::GetWindowRect((HWND) GetMenuBar()->GetCommandBar(), &rect);
+		pt.y += (rect.bottom - rect.top);
+	}
+#endif
+
     return pt;
 }
 

@@ -65,7 +65,7 @@ class WXDLLEXPORT wxTopLevelWindowBase;
 // "correctly", i.e. as full screen windows with a "hide" button (same as
 // "close" but round instead of squared and just hides the applications
 // instead of closing it) in the title bar
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && !defined(WCE_PLATFORM_STANDARDSDK)
 	#ifdef __SMARTPHONE__
 		#define wxDEFAULT_FRAME_STYLE (wxMAXIMIZE)
 	#else
