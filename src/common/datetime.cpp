@@ -130,7 +130,13 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
 #if defined(HAVE_STRPTIME) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     // configure detects strptime as linkable because it's in the OS X
     // System library but MSL headers don't declare it.
-    char *strptime(const char *, const char *, struct tm *);
+
+//    char *strptime(const char *, const char *, struct tm *);
+    // However, we DON'T want to just provide it here because we would
+    // crash and/or overwrite data when strptime from OS X tries
+    // to fill in MW's struct tm which is two fields shorter (no TZ stuff)
+    // So for now let's just say we don't have strptime
+    #undef HAVE_STRPTIME
 #endif
 
 #if defined(__MWERKS__) && wxUSE_UNICODE
