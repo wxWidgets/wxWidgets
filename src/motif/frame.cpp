@@ -36,6 +36,7 @@
 #include "wx/utils.h"
 #include "wx/log.h"
 #include "wx/app.h"
+#include "wx/icon.h"
 
 #ifdef __VMS__
     #pragma message disable nosimpint

@@ -20,13 +20,10 @@
     #pragma interface "gdicmn.h"
 #endif
 
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/hash.h"
-#include "wx/string.h"
 #include "wx/setup.h"
-#include "wx/colour.h"
-#include "wx/font.h"
+#include "wx/list.h"
+#include "wx/string.h"
+#include "wx/fontenc.h"
 
 // ---------------------------------------------------------------------------
 // forward declarations

@@ -16,6 +16,7 @@
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/brush.h"
+#include "wx/colour.h"
 
 //-----------------------------------------------------------------------------
 // wxBrush

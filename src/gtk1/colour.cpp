@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/gdicmn.h"
+#include "wx/colour.h"
 #include "wx/gtk/private.h"
 
 #include <gdk/gdk.h>

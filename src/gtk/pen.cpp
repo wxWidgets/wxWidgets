@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/pen.h"
+#include "wx/colour.h"
 
 #include <gdk/gdk.h>
 

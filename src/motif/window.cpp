@@ -46,6 +46,7 @@
 #include "wx/menuitem.h"
 #include "wx/log.h"
 #include "wx/evtloop.h"
+#include "wx/hash.h"
 
 #if  wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"

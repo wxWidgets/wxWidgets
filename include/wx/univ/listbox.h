@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/scrolwin.h"    // for wxScrollHelper
+#include "wx/dynarray.h"
 
 // ----------------------------------------------------------------------------
 // the actions supported by this control

@@ -24,6 +24,7 @@
     #include "wx/icon.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/bitmap.h"
 #endif
 
 #ifndef _WX_IMAGE_H_

@@ -22,6 +22,7 @@
 #include "wx/mdi.h"
 #include "wx/menu.h"
 #include "wx/settings.h"
+#include "wx/icon.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

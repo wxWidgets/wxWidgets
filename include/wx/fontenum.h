@@ -17,8 +17,6 @@
     #pragma interface "fontenum.h"
 #endif
 
-#include "wx/font.h"
-
 // ----------------------------------------------------------------------------
 // wxFontEnumerator enumerates all available fonts on the system or only the
 // fonts with given attributes

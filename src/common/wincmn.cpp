@@ -44,6 +44,7 @@
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
     #include "wx/statusbr.h"
+    #include "wx/dcclient.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_CONSTRAINTS

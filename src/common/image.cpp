@@ -31,6 +31,7 @@
 #include "wx/wfstream.h"
 #include "wx/intl.h"
 #include "wx/module.h"
+#include "wx/hash.h"
 
 // For memcpy
 #include <string.h>

@@ -36,6 +36,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/evtloop.h"
+#include "wx/hash.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"

@@ -42,6 +42,7 @@
 #include "wx/log.h"
 #include "wx/fontutil.h"
 #include "wx/univ/renderer.h"
+#include "wx/hash.h"
 
 #if  wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"

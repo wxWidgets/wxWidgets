@@ -12,6 +12,7 @@
 #endif
 
 #include "wx/brush.h"
+#include "wx/colour.h"
 
 #include <gdk/gdk.h>
 

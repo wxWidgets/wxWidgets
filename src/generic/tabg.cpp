@@ -25,6 +25,7 @@
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/intl.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include <stdio.h>

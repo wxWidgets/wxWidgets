@@ -21,6 +21,7 @@
 #if wxUSE_STATUSBAR
 
 #include "wx/list.h"
+#include "wx/dynarray.h"
 
 WX_DECLARE_LIST(wxString, wxListString);
 

@@ -18,7 +18,9 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/gdicmn.h"
-#include "wx/bitmap.h"
+#if WXWIN_COMPATIBILITY_2_2
+#  include "wx/bitmap.h"
+#endif
 #include "wx/hashmap.h"
 
 #if wxUSE_STREAMS
@@ -35,6 +37,7 @@
 
 class WXDLLEXPORT wxImageHandler;
 class WXDLLEXPORT wxImage;
+class WXDLLEXPORT wxPalette;
 
 //-----------------------------------------------------------------------------
 // wxImageHandler

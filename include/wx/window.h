@@ -33,7 +33,6 @@
 #include "wx/validate.h"        // for wxDefaultValidator (always include it)
 
 #if wxUSE_PALETTE
-    #include "wx/dcclient.h"
     #include "wx/palette.h"
 #endif // wxUSE_PALETTE
 

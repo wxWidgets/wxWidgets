@@ -55,6 +55,7 @@
 #include "wx/imaglist.h"
 #include "wx/dir.h"
 #include "wx/artprov.h"
+#include "wx/hash.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"

@@ -35,6 +35,7 @@
     #include "wx/bitmap.h"
     #include "wx/icon.h"
     #include "wx/cursor.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/ptr_scpd.h"

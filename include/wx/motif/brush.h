@@ -19,6 +19,7 @@
 #include "wx/gdicmn.h"
 #include "wx/gdiobj.h"
 #include "wx/bitmap.h"
+#include "wx/colour.h"
 
 class WXDLLEXPORT wxBrush;
 

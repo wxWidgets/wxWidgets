@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
 #  include "wx/defs.h"
+#  include "wx/palette.h"
 #endif
 
 #if wxUSE_STREAMS && wxUSE_GIF

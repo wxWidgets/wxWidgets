@@ -18,6 +18,7 @@
 
 #include "wx/gdiobj.h"
 #include "wx/bitmap.h"
+#include "wx/colour.h"
 
 typedef WXDWORD wxMSWDash;
 

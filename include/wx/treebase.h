@@ -24,6 +24,7 @@
 
 #include "wx/window.h"  // for wxClientData
 #include "wx/event.h"
+#include "wx/dynarray.h"
 
 // ----------------------------------------------------------------------------
 // wxTreeItemId identifies an element of the tree. In this implementation, it's

@@ -32,6 +32,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/listbox.h"
+    #include "wx/dynarray.h"
 #endif
 
 // ============================================================================
