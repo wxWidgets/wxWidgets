@@ -53,6 +53,8 @@
 #ifdef __UNIX_LIKE__
     #include <sys/types.h>
     #include <utime.h>
+    #include <sys/stat.h>
+    #include <unistd.h>
 #endif
 
 // ----------------------------------------------------------------------------
