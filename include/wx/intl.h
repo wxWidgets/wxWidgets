@@ -115,7 +115,7 @@ private:
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
-WXDLLEXPORT wxLocale* wxGetLocale();
+wxLocale* WXDLLEXPORT wxGetLocale();
 
 // get the translation of the string in the current locale  
 inline WXDLLEXPORT const char *wxGetTranslation(const char *sz)

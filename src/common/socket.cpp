@@ -1022,10 +1022,11 @@ void wxSocketBase::WantSpeedBuffer(char *buffer, size_t nbytes,
   switch (evt) {
   case EVT_PEEK:
   case EVT_READ:
-    ret = read(m_fd, buffer, nbytes);
+    ret = recv(m_fd, buffer, nbytes,
+               (evt == EVT_PEEK) ? MSG_PEEK : 0);
     break;
   case EVT_WRITE:
-    ret = write(m_fd, buffer, nbytes);
+    ret = send(m_fd, buffer, nbytes, 0);
     break;
   }
   if (ret < 0) {

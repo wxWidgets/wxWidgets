@@ -31,7 +31,6 @@
 
 #include  <wx/setup.h>
 
-#if USE_DRAG_AND_DROP
 
 #include  <wx/log.h>
 
@@ -59,6 +58,8 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
 
   return FALSE;
 }
+
+#if USE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------
 // Debug support

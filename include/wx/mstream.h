@@ -27,7 +27,7 @@ class wxMemoryStreamBase {
   int m_iolimit;
 };
 
-class wxMemoryInputStream: virtual public wxMemoryStreamBase, public wxInputStream {
+class wxMemoryInputStream: public virtual wxMemoryStreamBase, public wxInputStream {
  public:
   wxMemoryInputStream(const char *data, size_t length);
   virtual ~wxMemoryInputStream();
@@ -44,7 +44,7 @@ class wxMemoryInputStream: virtual public wxMemoryStreamBase, public wxInputStre
   off_t m_position_i;
 };
 
-class wxMemoryOutputStream: virtual public wxMemoryStreamBase, public wxOutputStream {
+class wxMemoryOutputStream: public virtual wxMemoryStreamBase, public wxOutputStream {
  public:
   wxMemoryOutputStream(char *data = NULL, size_t length = 0);
   virtual ~wxMemoryOutputStream();

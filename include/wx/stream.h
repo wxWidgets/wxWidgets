@@ -183,8 +183,8 @@ class WXDLLEXPORT wxOutputStream {
   wxStreamBuffer *m_o_streambuf;
 };
 
-class wxStream: virtual public wxInputStream,
-		virtual public wxOutputStream
+class wxStream: public virtual wxInputStream,
+		public virtual wxOutputStream
 {
  public:
   wxStream();
@@ -194,7 +194,7 @@ class wxStream: virtual public wxInputStream,
 // "Filter" streams
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFilterInputStream: virtual public wxInputStream {
+class WXDLLEXPORT wxFilterInputStream: public virtual wxInputStream {
  public:
   wxFilterInputStream();
   wxFilterInputStream(wxInputStream& stream);
@@ -215,7 +215,7 @@ class WXDLLEXPORT wxFilterInputStream: virtual public wxInputStream {
   wxInputStream *m_parent_i_stream;
 };
 
-class WXDLLEXPORT wxFilterOutputStream: virtual public wxOutputStream {
+class WXDLLEXPORT wxFilterOutputStream: public virtual wxOutputStream {
  public:
   wxFilterOutputStream();
   wxFilterOutputStream(wxOutputStream& stream);
@@ -237,8 +237,8 @@ class WXDLLEXPORT wxFilterOutputStream: virtual public wxOutputStream {
 };
 
 class WXDLLEXPORT wxFilterStream: public wxStream,
-				  virtual public wxFilterInputStream,
-				  virtual public wxFilterOutputStream {
+				  public virtual wxFilterInputStream,
+				  public virtual wxFilterOutputStream {
  public:
   wxFilterStream(wxStream& stream);
   wxFilterStream();

@@ -19,6 +19,12 @@
 !endif
 
 WXDIR = $(WXWIN)
+
+# Set all these to 1 if you want to build a dynamic library
+#DLL=1
+#WXMAKINGDLL=1
+#WXBUILDDLL=1
+
 !include $(WXDIR)\src\makeb32.env
 
 # Please set these according to the settings in wx_setup.h, so we can include
@@ -43,8 +49,18 @@ PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
 
-LIBTARGET= $(WXLIBDIR)\wx32.lib
+PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(PERIPH_LIBS)
+PERIPH_TARGET=zlib $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_zlib $(PERIPH_CLEAN_TARGET)
+
+!if "$(DLL)" == "0"
 DUMMY=dummy
+!else
+DUMMY=dummydll
+LIBS= cw32 import32 ole2w32
+!endif
+
+LIBTARGET=$(WXLIB)
 
 GENDIR=..\generic
 COMMDIR=..\common
@@ -89,7 +105,6 @@ COMMONOBJS = \
   $(MSWDIR)\memory.obj \
   $(MSWDIR)\module.obj \
   $(MSWDIR)\object.obj \
-  $(MSWDIR)\odbc.obj \
   $(MSWDIR)\postscrp.obj \
   $(MSWDIR)\prntbase.obj \
   $(MSWDIR)\resource.obj \
@@ -112,9 +127,22 @@ COMMONOBJS = \
   $(MSWDIR)\mstream.obj \
   $(MSWDIR)\zstream.obj \
   $(MSWDIR)\datstrm.obj \
+  $(MSWDIR)\sckstrm.obj \
   $(MSWDIR)\extended.obj \
-  $(MSWDIR)\wincmn.obj
+  $(MSWDIR)\wincmn.obj \
+  $(MSWDIR)\objstrm.obj \
+  $(MSWDIR)\dynlib.obj \
+  $(MSWDIR)\tokenzr.obj \
+  $(MSWDIR)\socket.obj \
+  $(MSWDIR)\sckaddr.obj \
+  $(MSWDIR)\protocol.obj \
+  $(MSWDIR)\url.obj \
+  $(MSWDIR)\http.obj \
+  $(MSWDIR)\ftp.obj \
+  $(MSWDIR)\sckfile.obj \
+  $(MSWDIR)\sckipc.obj
 
+#  $(MSWDIR)\odbc.obj \
 #  $(MSWDIR)\matrix.obj \
 
 MSWOBJS = \
@@ -200,8 +228,8 @@ MSWOBJS = \
   $(MSWDIR)\window.obj \
   $(MSWDIR)\droptgt.obj \
   $(MSWDIR)\dropsrc.obj \
-  $(MSWDIR)\dataobj.obj \
   $(MSWDIR)\oleutils.obj \
+  $(MSWDIR)\dataobj.obj \
   $(MSWDIR)\uuid.obj
 
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
@@ -212,11 +240,29 @@ wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
 all:	all_libs all_execs
 
+!if "$(DLL)" == "0"
+
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(BASEOBJECTS)
-	erase $(LIBTARGET)
+        erase $(LIBTARGET)
 	tlib $(LIBTARGET) /P512 @&&!
 -+$(OBJECTS:.obj =.obj -+) -+$(BASEOBJECTS:.obj =.obj -+) -+$(PERIPH_LIBS:.lib =.lib -+)
 !
+
+!else
+
+$(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(BASEOBJECTS)
+	erase $(LIBTARGET)
+	erase $(WXLIBDIR)\wx.dll
+        tlink32 $(LINK_FLAGS) /v @&&!
+c0d32.obj $(OBJECTS)
+$(WXLIBDIR)\wx
+nul
+$(PERIPH_LIBS) $(LIBS)
+wxb32
+!
+        implib -c $(LIBTARGET) $(WXLIBDIR)\wx.dll
+
+!endif
 
 dummy.obj: dummy.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
 dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
@@ -416,6 +462,8 @@ $(MSWDIR)\docmdi.obj:     $(COMMDIR)\docmdi.$(SRCSUFF)
 
 $(MSWDIR)\dynarray.obj:     $(COMMDIR)\dynarray.$(SRCSUFF)
 
+$(MSWDIR)\dynlib.obj:   $(COMMDIR)\dynlib.$(SRCSUFF)
+
 $(MSWDIR)\event.obj:     $(COMMDIR)\event.$(SRCSUFF)
 
 $(MSWDIR)\file.obj:     $(COMMDIR)\file.$(SRCSUFF)
@@ -482,6 +530,8 @@ $(MSWDIR)\time.obj:     $(COMMDIR)\time.$(SRCSUFF)
 
 $(MSWDIR)\datstrm.obj:	$(COMMDIR)\datstrm.$(SRCSUFF)
 
+$(MSWDIR)\sckstrm.obj:  $(COMMDIR)\sckstrm.$(SRCSUFF)
+
 $(MSWDIR)\mstream.obj:	$(COMMDIR)\mstream.$(SRCSUFF)
 
 $(MSWDIR)\zstream.obj:	$(COMMDIR)\zstream.$(SRCSUFF)
@@ -490,9 +540,29 @@ $(MSWDIR)\fstream.obj:	$(COMMDIR)\fstream.$(SRCSUFF)
 
 $(MSWDIR)\stream.obj:	$(COMMDIR)\stream.$(SRCSUFF)
 
+$(MSWDIR)\objstrm.obj:  $(COMMDIR)\objstrm.$(SRCSUFF)
+
 $(MSWDIR)\wincmn.obj:	$(COMMDIR)\wincmn.$(SRCSUFF)
 
 $(MSWDIR)\extended.obj:	$(COMMDIR)\extended.c
+
+$(MSWDIR)\tokenzr.obj:	$(COMMDIR)\tokenzr.$(SRCSUFF)
+
+$(MSWDIR)\socket.obj:	$(COMMDIR)\socket.$(SRCSUFF)
+
+$(MSWDIR)\sckaddr.obj:	$(COMMDIR)\sckaddr.$(SRCSUFF)
+
+$(MSWDIR)\protocol.obj: $(COMMDIR)\protocol.$(SRCSUFF)
+
+$(MSWDIR)\url.obj:	$(COMMDIR)\url.$(SRCSUFF)
+
+$(MSWDIR)\http.obj:	$(COMMDIR)\http.$(SRCSUFF)
+
+$(MSWDIR)\ftp.obj:	$(COMMDIR)\ftp.$(SRCSUFF)
+
+$(MSWDIR)\sckfile.obj:	$(COMMDIR)\sckfile.$(SRCSUFF)
+
+$(MSWDIR)\sckipc.obj:	$(COMMDIR)\sckipc.$(SRCSUFF)
 
 ########################################################
 # Generic objects (not always compiled, depending on
@@ -560,6 +630,16 @@ wxxpm:	$(CFG)
 	cd $(WXDIR)\src\common\wxxpm
 	make -f makefile.b32 -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
 	cd $(WXDIR)\src\msw
+
+zlib:   $(CFG)
+        cd $(WXDIR)\src\zlib
+        make -f makefile.b32 lib
+        cd $(WXDIR)\src\msw
+
+clean_zlib:
+        cd $(WXDIR)\src\zlib
+        make -f makefile.b32 clean
+        cd $(WXDIR)\src\msw
 
 $(CFG): makefile.b32
 	copy &&!

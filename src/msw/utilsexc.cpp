@@ -203,3 +203,16 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
   return(instanceID);
 #endif
 }
+
+long wxExecute(char **argv, bool sync, wxProcess *handler)
+{
+  wxString command = "";
+
+  while (*argv != NULL) {
+    command += *argv;
+    command += ' ';
+    argv++;
+  }
+  command.RemoveLast();
+  return wxExecute(command, sync, handler);
+}
