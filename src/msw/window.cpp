@@ -89,7 +89,7 @@
 #endif
 
 #if !defined(__GNUWIN32_OLD__) && !defined(__TWIN32__)
-    #ifndef __WIN95__
+    #ifdef __WIN95__
         #include <commctrl.h>
     #endif
 #else // broken compiler
