@@ -152,6 +152,8 @@ private:
 
 const int ID_TOOLBAR = 500;
 
+static const long TOOLBAR_STYLE = wxNO_BORDER | wxTB_FLAT | wxTB_DOCKABLE;
+
 enum
 {
     IDM_TOOLBAR_TOGGLETOOLBARSIZE = 200,
@@ -240,7 +242,7 @@ void MyFrame::RecreateToolbar()
 
     SetToolBar(NULL);
 
-    long style = wxNO_BORDER | wxTB_FLAT | wxTB_DOCKABLE;
+    long style = TOOLBAR_STYLE;
     style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
@@ -465,7 +467,7 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
     {
         m_tbar = new wxToolBar(this, -1,
                                wxDefaultPosition, wxDefaultSize,
-                               wxTB_VERTICAL);
+                               TOOLBAR_STYLE | wxTB_VERTICAL);
         m_tbar->AddTool(wxID_HELP, wxBITMAP(help),
                         wxNullBitmap, FALSE,
                         NULL,
