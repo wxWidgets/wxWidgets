@@ -206,6 +206,7 @@ wxGTK:
 - added SetSelection implementation for GTK+ 2
 - fixed a memory leak in generic wxFileDialog
 - implemented wxTextCtrl::Remove/Replace() for GTK2
+- improved X11 ShowFullScreen
 
 wxMSW:
 
