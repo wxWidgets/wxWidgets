@@ -70,7 +70,9 @@ class wxFrame: public wxWindow
     wxString GetTitle(void) const;
     void OnActivate( wxActivateEvent &WXUNUSED(event) ) {};
     
-    void GtkOnSize( int width, int height );
+  //private:    
+    
+    void GtkOnSize( int x, int y, int width, int height );
     
   private:
   

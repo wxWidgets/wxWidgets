@@ -133,6 +133,8 @@ const  ID_CHOICE_APPEND     = 124;
 
 const  ID_COMBO             = 140;
 
+const  ID_TEXT              = 150;
+
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                       MyPanel::OnSize)
   EVT_LISTBOX   (ID_LISTBOX,            MyPanel::OnListBox)
@@ -177,6 +179,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   panel = new wxPanel(m_notebook);
   m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 9, choices );
   m_notebook->AddPage(panel, "wxComboBox");
+  
+  wxTextCtrl *text = new wxTextCtrl( m_notebook, ID_TEXT, "Write text here.", wxPoint(0,20), wxSize(120,100), wxTE_MULTILINE );
+  m_notebook->AddPage( text, "wxTextCtrl" );
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )

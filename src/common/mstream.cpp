@@ -14,14 +14,14 @@
 #endif
 
 #include <stdlib.h>
-#include <wx/stream.h>
-#include <wx/mstream.h>
+#include "wx/stream.h"
+#include "wx/mstream.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxMemoryStreamBase, wxStream)
 IMPLEMENT_CLASS(wxMemoryInputStream, wxMemoryStreamBase)
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryOutputStream, wxMemoryStreamBase)
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryStream, wxMemoryStreamBase)
+//IMPLEMENT_DYNAMIC_CLASS(wxMemoryOutputStream, wxMemoryStreamBase)
+//IMPLEMENT_DYNAMIC_CLASS(wxMemoryStream, wxMemoryStreamBase)
 #endif
 
 wxMemoryStreamBase::wxMemoryStreamBase(char *data, size_t length, int iolimit)

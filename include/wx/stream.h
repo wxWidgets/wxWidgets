@@ -91,7 +91,7 @@ class wxFilterInputStream: public wxInputStream {
   wxInputStream *m_parent_i_stream;
 };
 
-class wxFilterOuputStream: pubilc wxOutputStream {
+class wxFilterOutputStream: public wxOutputStream {
   DECLARE_CLASS(wxFilterOutputStream)
  public:
   wxFilterOutputStream(wxOutputStream& stream);
@@ -102,8 +102,8 @@ class wxFilterOuputStream: pubilc wxOutputStream {
   virtual size_t SeekO(int pos, wxWhenceType whence = wxBeginPosition)
      { return m_parent_o_stream->SeekO(pos, whence); }
 
-  virtual bool Eof() const { return m_parent_o_sream->Eof(); }
-  virtual size_t LastRead() const { return m_parent_o_stream->LastRead(); }
+  virtual bool Bad() const { return m_parent_o_stream->Bad(); }
+  virtual size_t LastWrite() const { return m_parent_o_stream->LastWrite(); }
 
  protected:
   wxOutputStream *m_parent_o_stream;

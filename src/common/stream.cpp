@@ -13,8 +13,8 @@
 #pragma implementation "stream.h"
 #endif
 
-#include <wx/object.h>
-#include "stream.h"
+#include "wx/object.h"
+#include "wx/stream.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxInputStream, wxObject)
@@ -65,9 +65,19 @@ wxOutputStream& wxOutputStream::Write(wxInputStream& stream_in)
 wxFilterInputStream::wxFilterInputStream(wxInputStream& stream)
   : wxInputStream()
 {
-  m_parent_stream = &stream;
+  m_parent_i_stream = &stream;
 }
 
 wxFilterInputStream::~wxFilterInputStream()
+{
+}
+
+wxFilterOutputStream::wxFilterOutputStream(wxOutputStream& stream)
+  : wxOutputStream()
+{
+  m_parent_o_stream = &stream;
+}
+
+wxFilterOutputStream::~wxFilterOutputStream()
 {
 }

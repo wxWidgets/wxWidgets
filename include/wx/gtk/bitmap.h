@@ -102,6 +102,8 @@ class wxBitmap: public wxObject
     wxMask *GetMask(void) const;
     void SetMask( wxMask *mask );
     
+    void Resize( int height, int width );
+    
     bool SaveFile( const wxString &name, int type, wxPalette *palette = NULL );
     bool LoadFile( const wxString &name, int type );
 
@@ -120,6 +122,10 @@ class wxBitmap: public wxObject
 
     GdkPixmap *GetPixmap(void) const;
     GdkBitmap *GetBitmap(void) const;
+    
+    void DestroyImage(void);
+    void RecreateImage(void);
+    void Render(void);
     
     // no data :-)
 };

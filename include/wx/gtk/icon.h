@@ -40,11 +40,8 @@ public:
 
   inline wxIcon(const wxIcon& icon) { Ref(icon); }
   inline wxIcon(const wxIcon* icon) { if (icon) Ref(*icon); }
+  wxIcon( char **bits, int width=-1, int height=-1 );
   
-  // Don't change this. Robert.
-  wxIcon( char **bits, int WXUNUSED(width), int WXUNUSED(height) ) :
-    wxBitmap( bits ) {};
-    
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
   inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
   inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }

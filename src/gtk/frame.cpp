@@ -42,7 +42,7 @@ void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc,
   printf( ".\n" );
 */
 
-  win->GtkOnSize( alloc->width, alloc->height );
+  win->GtkOnSize( alloc->x, alloc->y, alloc->width, alloc->height );
 };
 
 //-----------------------------------------------------------------------------
@@ -194,8 +194,11 @@ void wxFrame::GetClientSize( int *width, int *height ) const
   };
 };
 
-void wxFrame::GtkOnSize( int width, int height )
+void wxFrame::GtkOnSize( int x, int y, int width, int height )
 {
+  m_x = x;
+  m_y = y;
+
   if ((m_height == height) && (m_width == width) &&
       (m_sizeSet)) return;
   if (!m_mainWindow) return;

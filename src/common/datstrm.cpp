@@ -44,7 +44,7 @@ unsigned long wxDataInputStream::Read32()
 {
   char buf[4];
 
-  if (!m_istream)
+  if (!m_parent_i_stream)
     return 0;
 
   Read(buf, 4);
@@ -59,7 +59,7 @@ unsigned short wxDataInputStream::Read16()
 {
   char buf[2];
 
-  if (!m_istream)
+  if (!m_parent_i_stream)
     return 0;
 
   Read(buf, 2);
@@ -72,7 +72,7 @@ unsigned char wxDataInputStream::Read8()
 {
   char buf;
 
-  if (!m_istream)
+  if (!m_parent_i_stream)
     return 0;
 
   Read(&buf, 1);
@@ -87,7 +87,7 @@ double wxDataInputStream::ReadDouble()
 #if USE_APPLE_IEEE
   char buf[10];
 
-  if (!m_istream)
+  if (!m_parent_i_stream)
     return 0.0;
 
   Read(buf, 10);
@@ -101,7 +101,7 @@ wxString wxDataInputStream::ReadLine()
 {
   char i_strg[255];
 
-  if (!m_istream)
+  if (!m_parent_i_stream)
     return "";
 
   // TODO: Implement ReadLine
@@ -114,7 +114,7 @@ wxString wxDataInputStream::ReadString()
   char *string;
   unsigned long len;
 
-  if (!m_istream)
+  if (!m_parent_i_stream)
     return "";
 
   len = Read32();
@@ -138,7 +138,7 @@ void wxDataOutputStream::Write32(unsigned long i)
 {
   char buf[4];
 
-  if (!m_ostream)
+  if (!m_parent_o_stream)
     return;
 
   buf[0] = i & 0xff;
@@ -152,7 +152,7 @@ void wxDataOutputStream::Write16(unsigned short i)
 {
   char buf[2];
 
-  if (!m_ostream)
+  if (!m_parent_o_stream)
     return;
 
   buf[0] = i & 0xff;
@@ -162,7 +162,7 @@ void wxDataOutputStream::Write16(unsigned short i)
 
 void wxDataOutputStream::Write8(unsigned char i)
 {
-  if (!m_ostream)
+  if (!m_parent_o_stream)
     return;
 
   Write(&i, 1);
@@ -176,7 +176,7 @@ void wxDataOutputStream::WriteLine(const wxString& line)
   wxString tmp_string = line + '\n';
 #endif
 
-  if (!m_ostream)
+  if (!m_parent_o_stream)
     return;
 
   Write((const char *) tmp_string, tmp_string.Length());
@@ -184,7 +184,7 @@ void wxDataOutputStream::WriteLine(const wxString& line)
 
 void wxDataOutputStream::WriteString(const wxString& string)
 {
-  if (!m_ostream)
+  if (!m_parent_o_stream)
     return;
 
   Write32(string.Length());
@@ -198,7 +198,7 @@ void wxDataOutputStream::WriteDouble(double d)
 {
   char buf[10];
 
-  if (!m_ostream)
+  if (!m_parent_o_stream)
     return;
 
 #if USE_APPLE_IEEE

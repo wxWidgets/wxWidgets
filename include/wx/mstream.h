@@ -11,7 +11,8 @@
 #ifndef __WXMMSTREAM_H__
 #define __WXMMSTREAM_H__
 
-#include <wx/stream.h>
+#include "wx/object.h"
+#include "wx/stream.h"
 
 class wxMemoryStreamBase: public wxStream {
   DECLARE_CLASS(wxMemoryStreamBase)

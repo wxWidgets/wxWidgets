@@ -47,7 +47,7 @@ class wxImageList: public wxObject
   public:
 
     wxImageList::wxImageList() { }
-    wxImageList(int width, int height, bool mask = TRUE, int initialCount = 1);
+    wxImageList( int width, int height, bool mask = TRUE, int initialCount = 1 );
     ~wxImageList();
     bool Create();
     int GetImageCount() const;
@@ -62,6 +62,8 @@ class wxImageList: public wxObject
   private:
 
     wxList  m_images;
+    int     m_width;
+    int     m_height;
 };
 
 #endif  // __IMAGELISTH_G__

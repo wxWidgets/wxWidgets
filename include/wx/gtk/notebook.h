@@ -31,6 +31,7 @@ class wxNotebookPage;
 // ----------------------------------------------------------------------------
 // notebook events
 // ----------------------------------------------------------------------------
+
 class wxNotebookEvent : public wxCommandEvent
 {
 public:
@@ -138,10 +139,6 @@ public:
 
   // base class virtuals
   virtual void AddChild(wxWindow *child);
-
-protected:
-  // wxWin callbacks
-  void OnSize(wxSizeEvent& event);
 
 private:
   // common part of all ctors

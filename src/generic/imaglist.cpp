@@ -20,8 +20,10 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)
 
-wxImageList::wxImageList(int width, int height, bool mask, int initialCount)
+wxImageList::wxImageList( int width, int height, bool WXUNUSED(mask), int WXUNUSED(initialCount) )
 {
+  m_width = width;
+  m_height = height;
   Create();
 };
 
@@ -81,6 +83,15 @@ bool wxImageList::RemoveAll()
 
 bool wxImageList::GetSize( int index, int &width, int &height ) const
 {
+#ifdef __WXGTK__
+
+  width = m_width;
+  height = m_height;
+  
+  return (m_images.Nth( index ) != NULL);
+  
+#else
+  
   wxNode *node = m_images.Nth( index );
   if (node)
   {
@@ -95,17 +106,33 @@ bool wxImageList::GetSize( int index, int &width, int &height ) const
     height = 0;
     return FALSE;
   };
+
+#endif  
 };
 
-bool wxImageList::Draw( int index, wxDC &dc, 
-                        int x, int y,
-                        int WXUNUSED(flags), bool WXUNUSED(solidBackground) )
+bool wxImageList::Draw( int index, wxDC &dc, int x, int y,
+                        int flags, bool WXUNUSED(solidBackground) )
 {
   wxNode *node = m_images.Nth( index );
   if (!node) return FALSE;
   wxBitmap *bm = (wxBitmap*)node->Data();
+  
+#ifdef __WXGTK__
+
+  // As X doesn't have a standard size for icons, we resize here.
+  // Otherwise we'd simply have to forbid different bitmap sizes.
+
+  if ((m_width != bm->GetWidth()) ||
+      (m_height != bm->GetHeight()))
+  {
+    bm->Resize( m_width, m_height );
+  };
+  
+#endif  
+  
   wxIcon *icon = (wxIcon*)bm;
-  dc.DrawIcon( *icon, x, y );
+  dc.DrawIcon( *icon, x, y, (flags & wxIMAGELIST_DRAW_TRANSPARENT) > 0 );
+
   return TRUE;
 };
 

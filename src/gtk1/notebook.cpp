@@ -20,12 +20,39 @@
 #include "wx/log.h"
 
 //-----------------------------------------------------------------------------
+// wxNotebookPage
+//-----------------------------------------------------------------------------
+
+class wxNotebookPage: public wxObject
+{
+public:
+  wxNotebookPage()
+  {
+    m_id = -1;
+    m_text = "";
+    m_image = -1;
+    m_page = NULL;
+    m_client = NULL;
+    m_parent = NULL;
+  };
+
+//private:
+  int                m_id;
+  wxString           m_text;
+  int                m_image;
+  GtkNotebookPage   *m_page;
+  GtkLabel          *m_label;
+  wxWindow          *m_client;
+  GtkNotebook       *m_parent;
+};
+
+//-----------------------------------------------------------------------------
 // GTK callbacks
 //-----------------------------------------------------------------------------
 
 // page change callback
-static void gtk_notebook_page_change_callback(GtkNotebook *widget,
-                                              GtkNotebookPage *page,
+static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
+                                              GtkNotebookPage *WXUNUSED(page),
                                               gint nPage,
                                               gpointer data)
 {
@@ -42,29 +69,24 @@ static void gtk_notebook_page_change_callback(GtkNotebook *widget,
   notebook->ProcessEvent(event);
 }
 
-//-----------------------------------------------------------------------------
-// wxNotebookPage
-//-----------------------------------------------------------------------------
-
-class wxNotebookPage: public wxObject
+static void gtk_notebook_client_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, 
+                                               wxNotebookPage *page )
 {
-public:
-  wxNotebookPage()
-  {
-    m_id = -1;
-    m_text = "";
-    m_image = -1;
-    m_page = NULL;
-    m_clientPanel = NULL;
-  };
+  if (!page->m_client->HasVMT()) return;
 
-//private:
-  int                m_id;
-  wxString           m_text;
-  int                m_image;
-  GtkNotebookPage   *m_page;
-  GtkLabel          *m_label;
-  wxWindow          *m_clientPanel;
+/*
+  printf( "OnResize from " );
+  if (page->m_client->GetClassInfo() && page->m_client->GetClassInfo()->GetClassName())
+    printf( page->m_client->GetClassInfo()->GetClassName() );
+  printf( ".\n" );
+
+  printf( "  New: X: %d  Y: %d ", alloc->x, alloc->y );
+  printf( "  W: %d  H: %d ", alloc->width, alloc->height );
+  printf( " .\n" );
+*/
+  
+  page->m_client->SetSize( alloc->x, alloc->y+26,
+                           alloc->width, alloc->height );
 };
 
 //-----------------------------------------------------------------------------
@@ -195,7 +217,7 @@ wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
     node = node->Next();
   };
 
-  wxLogDebug("Notebook page %d not found!", page);
+  wxLogDebug( "Notebook page %d not found!", page );
 
   return NULL;
 };
@@ -305,7 +327,7 @@ bool wxNotebook::DeletePage( int page )
 
   wxASSERT( child );
 
-  delete nb_page->m_clientPanel;
+  delete nb_page->m_client;
 
 //  Amazingly, this is not necessary
 //  gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page_num );
@@ -328,7 +350,7 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
   while (node)
   {
     page = (wxNotebookPage*)node->Data();
-    if ( page->m_clientPanel == win )
+    if ( page->m_client == win )
       break; // found
     node = node->Next();
   };
@@ -356,29 +378,36 @@ wxWindow *wxNotebook::GetPage( int page ) const
   if (!nb_page)
     return NULL;
   else
-    return nb_page->m_clientPanel;
+    return nb_page->m_client;
 };
 
 void wxNotebook::AddChild( wxWindow *win )
 {
   // @@@ normally done in wxWindow::AddChild but for some reason wxNotebook
   // case is special there (Robert?)
+  // Robert: Don't you think the code below looks different from the one
+  // in wxWindow::AddChild :-)
+  
   m_children.Append(win);
 
+  
   wxNotebookPage *page = new wxNotebookPage();
 
   page->m_id = GetPageCount();
-  page->m_label = (GtkLabel *)gtk_label_new("no caption");
-  page->m_clientPanel = win;
-  gtk_notebook_append_page(GTK_NOTEBOOK(m_widget), win->m_widget,
-                           (GtkWidget *)page->m_label);
+  page->m_label = (GtkLabel *)gtk_label_new("Handle");
+  page->m_client = win;
+  gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget,
+                            (GtkWidget *)page->m_label);
   gtk_misc_set_alignment(GTK_MISC(page->m_label), 0.0, 0.5);
 
-  page->m_page = (GtkNotebookPage*)
-                 (
-                    g_list_last(GTK_NOTEBOOK(m_widget)->children)->data
-                 );
+  page->m_page = 
+    (GtkNotebookPage*) (g_list_last(GTK_NOTEBOOK(m_widget)->children)->data);
+    
+  page->m_parent = GTK_NOTEBOOK(m_widget);
 
+  gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
+    GTK_SIGNAL_FUNC(gtk_notebook_client_size_callback), (gpointer)page );
+    
   if (!page->m_page)
   {
      wxLogFatalError( "Notebook page creation error" );
@@ -387,22 +416,6 @@ void wxNotebook::AddChild( wxWindow *win )
 
   m_pages.Append( page );
 };
-
-void wxNotebook::OnSize(wxSizeEvent& event)
-{
-  // forward this event to all pages
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    wxNotebookPage *page = (wxNotebookPage*)node->Data();
-    // @@@@ This -50 is completely wrong - instead, we should substract
-    //      the height of the tabs
-    page->m_clientPanel->SetSize(event.GetSize().GetX(),
-                                 event.GetSize().GetY() - 50);
-
-    node = node->Next();
-  };
-}
 
 //-----------------------------------------------------------------------------
 // wxNotebookEvent
