@@ -299,7 +299,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
     if (store.fail() || store.bad())
 #else
     wxFileOutputStream store( file );
-    if (store.LastError() != wxSTREAM_NOERROR)
+    if (store.GetLastError() != wxSTREAM_NO_ERROR)
 #endif
     {
         (void)wxMessageBox(_("Sorry, could not open this file for saving."), msgTitle, wxOK | wxICON_EXCLAMATION,
@@ -336,7 +336,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
     if (store.fail() || store.bad())
 #else
     wxFileInputStream store( file );
-    if (store.LastError() != wxSTREAM_NOERROR)
+    if (store.GetLastError() != wxSTREAM_NO_ERROR)
 #endif
     {
         (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
@@ -347,8 +347,8 @@ bool wxDocument::OnOpenDocument(const wxString& file)
     LoadObject(store);
     if ( !store && !store.eof() )
 #else
-    int res = LoadObject(store).LastError();
-    if ((res != wxSTREAM_NOERROR) &&
+    int res = LoadObject(store).GetLastError();
+    if ((res != wxSTREAM_NO_ERROR) &&
         (res != wxSTREAM_EOF))
 #endif
     {
@@ -2215,7 +2215,7 @@ bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
         return FALSE;
     }
 
-    int len = stream.StreamSize();
+    int len = stream.GetSize();
     // TODO: is this the correct test for EOF?
     while (stream.TellI() < (len - 1))
     {

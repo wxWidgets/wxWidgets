@@ -418,7 +418,7 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
 {
     DWORD bytesWritten;
 
-    m_lasterror = wxSTREAM_NOERROR;
+    m_lasterror = wxSTREAM_NO_ERROR;
     if ( !::WriteFile(m_hOutput, buffer, len, &bytesWritten, NULL) )
     {
         m_lasterror = ::GetLastError() == ERROR_BROKEN_PIPE

@@ -90,7 +90,7 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
     if (right.GetChar(0) == wxT('/')) right = right.Mid(1);
 
     s = new wxZipInputStream(left, right);
-    if (s && (s->LastError() == wxStream_NOERROR))
+    if (s && s->IsOk() )
     {
         return new wxFSFile(s,
                             left + wxT("#zip:") + right,

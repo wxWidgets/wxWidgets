@@ -964,7 +964,7 @@ bool wxImage::SaveFile( const wxString& filename, int type ) const
 
     wxFileOutputStream stream(filename);
 
-    if ( stream.LastError() == wxStream_NOERROR )
+    if ( stream.IsOk() )
     {
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, type);
@@ -981,7 +981,7 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) con
 
     wxFileOutputStream stream(filename);
 
-    if ( stream.LastError() == wxStream_NOERROR )
+    if ( stream.IsOk() )
     {
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, mimetype);

@@ -58,7 +58,7 @@
 
 void wxStreamBuffer::SetError(wxStreamError err)
 {
-   if ( m_stream->m_lasterror == wxStream_NOERROR )
+   if ( m_stream->m_lasterror == wxSTREAM_NO_ERROR )
        m_stream->m_lasterror = err;
 }
 
@@ -184,7 +184,7 @@ void wxStreamBuffer::ResetBuffer()
 {
     if ( m_stream )
     {
-        m_stream->m_lasterror = wxStream_NOERROR;
+        m_stream->Reset();
         m_stream->m_lastcount = 0;
     }
 
@@ -311,7 +311,7 @@ void wxStreamBuffer::PutChar(char c)
         if ( !GetDataLeft() && !FlushBuffer() )
         {
             // we don't
-            SetError(wxStream_WRITE_ERR);
+            SetError(wxSTREAM_WRITE_ERROR);
         }
         else
         {
@@ -328,7 +328,7 @@ char wxStreamBuffer::Peek()
 
     if ( !GetDataLeft() )
     {
-        SetError(wxStream_READ_ERR);
+        SetError(wxSTREAM_READ_ERROR);
         return 0;
     }
 
@@ -354,7 +354,7 @@ char wxStreamBuffer::GetChar()
     {
         if ( !GetDataLeft() )
         {
-            SetError(wxStream_READ_ERR);
+            SetError(wxSTREAM_READ_ERROR);
             c = 0;
         }
         else
@@ -371,7 +371,7 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
 {
     // lasterror is reset before all new IO calls
     if ( m_stream )
-        m_stream->m_lasterror = wxStream_NOERROR;
+        m_stream->Reset();
 
     size_t read;
     if ( !HasBuffer() )
@@ -400,7 +400,7 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
 
                 if ( !FillBuffer() )
                 {
-                    SetError(wxStream_EOF);
+                    SetError(wxSTREAM_EOF);
                     break;
                 }
             }
@@ -450,7 +450,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
     wxCHECK_MSG( outStream, 0, _T("should have a stream in wxStreamBuffer") );
 
     // lasterror is reset before all new IO calls
-    m_stream->m_lasterror = wxStream_NOERROR;
+    m_stream->Reset();
 
     if ( !HasBuffer() && m_fixed )
     {
@@ -481,7 +481,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
 
                 if ( !FlushBuffer() )
                 {
-                    SetError(wxStream_WRITE_ERR);
+                    SetError(wxSTREAM_WRITE_ERROR);
 
                     break;
                 }
@@ -634,7 +634,7 @@ off_t wxStreamBuffer::Tell() const
 
 wxStreamBase::wxStreamBase()
 {
-    m_lasterror = wxStream_NOERROR;
+    m_lasterror = wxSTREAM_NO_ERROR;
     m_lastcount = 0;
 }
 
@@ -812,7 +812,7 @@ char wxInputStream::Peek()
 {
     char c;
     Read(&c, sizeof(c));
-    if (m_lasterror == wxStream_NOERROR)
+    if (m_lasterror == wxSTREAM_NO_ERROR)
     {
         Ungetch(c);
         return c;
@@ -847,7 +847,7 @@ off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 
     // I don't know whether it should be put as well in wxFileInputStream::OnSysSeek
     if (m_lasterror==wxSTREAM_EOF)
-        m_lasterror=wxSTREAM_NOERROR;
+        m_lasterror=wxSTREAM_NO_ERROR;
 
     /* RR: A call to SeekI() will automatically invalidate any previous
        call to Ungetch(), otherwise it would be possible to SeekI() to
@@ -1062,7 +1062,7 @@ char wxBufferedInputStream::Peek()
 wxInputStream& wxBufferedInputStream::Read(void *buf, size_t size)
 {
     // reset the error flag
-    m_lasterror = wxStream_NOERROR;
+    Reset();
 
     // first read from the already cached data
     m_lastcount = GetWBack(buf, size);
@@ -1090,7 +1090,7 @@ off_t wxBufferedInputStream::SeekI(off_t pos, wxSeekMode mode)
     // RR: Look at wxInputStream for comments.
 
     if (m_lasterror==wxSTREAM_EOF)
-        m_lasterror=wxSTREAM_NOERROR;
+        Reset();
 
     if (m_wback)
     {

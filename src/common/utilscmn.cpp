@@ -1106,7 +1106,7 @@ static long wxDoExecuteWithCapture(const wxString& command,
             if ( !is->Eof() && is->IsOk() )
             {
                 wxString line = tis.ReadLine();
-                if ( is->LastError() )
+                if ( !*is )
                     break;
 
                 cont = TRUE;
@@ -1117,7 +1117,7 @@ static long wxDoExecuteWithCapture(const wxString& command,
             if ( error && !es->Eof() && es->IsOk() )
             {
                 wxString line = tes->ReadLine();
-                if ( es->LastError() )
+                if ( !*es )
                     break;
 
                 cont = TRUE;
