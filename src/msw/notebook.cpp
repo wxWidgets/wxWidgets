@@ -424,7 +424,8 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
             // for some unknown reason if the tab control shows the up-down
             // control (i.e. when there are too many pages) -- otherwise after
             // deleting a page nothing at all is shown
-            m_pages[m_nSelection]->Refresh();
+            if (m_nSelection >= 0)
+                m_pages[m_nSelection]->Refresh();
         }
 
         if ( selNew != -1 )
