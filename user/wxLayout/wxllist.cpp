@@ -297,76 +297,57 @@ wxLayoutStyleInfo::wxLayoutStyleInfo(int ifamily,
    underline = iul;
    if(fg)
    {
-      fg_valid = true;
-      fg_red = fg->Red();
-      fg_blue = fg->Blue();
-      fg_green = fg->Green();
+      m_fg = *fg;
+      m_fg_valid = TRUE;
    }
    else
-      fg_valid = false;
+      m_fg = *wxBLACK;
    if(bg)
    {
-      bg_valid = true;
-      bg_red = bg->Red();
-      bg_blue = bg->Blue();
-      bg_green = bg->Green();
+      m_bg = *bg;
+      m_bg_valid = TRUE;
    }
    else
-      bg_valid = false;
+      m_bg = *wxWHITE;
 }
 
-#define SET_SI(what) tmp.what = (what != -1) ? what : ( si ? si->what : wxNORMAL);
+#define COPY_SI_(what) if(right.what != -1) what = right.what;
 
-
-wxFont *
-wxLayoutStyleInfo::GetFont(wxLayoutStyleInfo *si)
+wxLayoutStyleInfo &
+wxLayoutStyleInfo::operator=(const wxLayoutStyleInfo &right)
 {
-   wxLayoutStyleInfo tmp;
-   
-   SET_SI(family);
-   SET_SI(size);
-   SET_SI(style);
-   SET_SI(weight);
-   SET_SI(underline);
-
-   return new wxFont(tmp.size,tmp.family,tmp.style,tmp.weight,tmp.underline);
-
+   COPY_SI_(family);
+   COPY_SI_(style);
+   COPY_SI_(size);
+   COPY_SI_(weight);
+   COPY_SI_(underline);
+   if(right.m_fg_valid) m_fg = right.m_fg;
+   if(right.m_bg_valid) m_bg = right.m_bg;
+   return *this;
 }
 
-wxLayoutObjectCmd::wxLayoutObjectCmd(int size, int family, int style, int
+wxLayoutObjectCmd::wxLayoutObjectCmd(int family, int size, int style, int
                                      weight, int underline,
                                      wxColour *fg, wxColour *bg)
    
 {
-   m_StyleInfo = new
-      wxLayoutStyleInfo(size,family,style,weight,underline,fg,bg);
-   m_font = NULL;
+   m_StyleInfo = new wxLayoutStyleInfo(family, size,style,weight,underline,fg,bg);
 }
 
 wxLayoutObject *
 wxLayoutObjectCmd::Copy(void)
 {
-   wxColour
-      * fg = NULL,
-      * bg = NULL;
-   if(m_StyleInfo->fg_valid)
-      fg = new
-         wxColour(m_StyleInfo->fg_red,m_StyleInfo->fg_green,m_StyleInfo->fg_blue);
-   if(m_StyleInfo->bg_valid)
-      bg = new
-         wxColour(m_StyleInfo->bg_red,m_StyleInfo->bg_green,m_StyleInfo->bg_blue);
-   
    wxLayoutObjectCmd *obj = new wxLayoutObjectCmd(
       m_StyleInfo->size,
       m_StyleInfo->family,
       m_StyleInfo->style,
       m_StyleInfo->weight,
       m_StyleInfo->underline,
-      fg, bg);
+      m_StyleInfo->m_fg_valid ?
+      &m_StyleInfo->m_fg : NULL,
+      m_StyleInfo->m_bg_valid ?
+      &m_StyleInfo->m_bg : NULL);
    obj->SetUserData(m_UserData);
-
-   if(fg) delete fg;
-   if(bg) delete bg;
    return obj;
 }
 
@@ -374,7 +355,6 @@ wxLayoutObjectCmd::Copy(void)
 wxLayoutObjectCmd::~wxLayoutObjectCmd()
 {
    delete m_StyleInfo;
-   if(m_font) delete m_font;
 }
 
 wxLayoutStyleInfo *
@@ -389,17 +369,12 @@ wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & /* coords */,
                         CoordType begin, CoordType /* len */)
 {
    wxASSERT(m_StyleInfo);
-   dc.SetFont(*m_font);
    wxllist->ApplyStyle(m_StyleInfo, dc);
 }
 
 void
 wxLayoutObjectCmd::Layout(wxDC &dc, class wxLayoutList * llist)
 {
-   if(m_font) delete m_font;
-   m_font = m_StyleInfo->GetFont(llist->GetStyleInfo());
-
-
    // this get called, so that recalculation uses right font sizes
    Draw(dc, wxPoint(0,0), llist);
 }
@@ -540,7 +515,7 @@ wxLayoutLine::FindObjectScreen(wxDC &dc,
     @return the cursoor coord where it was found or -1
 */
 CoordType
-wxLayoutLine::FindText(const wxString &needle, CoordType xpos = 0) const
+wxLayoutLine::FindText(const wxString &needle, CoordType xpos) const
 {
    int
       cpos = 0,
@@ -769,6 +744,7 @@ wxLayoutLine::Draw(wxDC &dc,
    CoordType xpos = 0; // cursorpos, lenght of line
 
    CoordType from, to, tempto;
+   llist->ApplyStyle(&((wxLayoutLine *)this)->m_StyleInfo, dc);
    int highlight = llist->IsSelected(this, &from, &to);
 //   WXLO_DEBUG(("highlight=%d",  highlight ));
    if(highlight == 1) // we need to draw the whole line inverted!
@@ -833,7 +809,8 @@ wxLayoutLine::Layout(wxDC &dc,
       *cursorPos = m_Position;
       if(cursorSize) *cursorSize = wxPoint(0,0);
    }
-   
+
+   llist->ApplyStyle(&m_StyleInfo, dc);
    for(i = m_ObjectList.begin(); i != NULLIT; i++)
    {
       (**i).Layout(dc, llist);
@@ -926,6 +903,7 @@ wxLayoutLine::Layout(wxDC &dc,
       if(m_BaseLine >= cursorSize->y) // the normal case anyway
          cursorPos->y += m_BaseLine-cursorSize->y;
    }
+   RecalculatePositions(1, llist);
 }
 
 
@@ -1150,10 +1128,7 @@ wxLayoutLine::Copy(wxLayoutList *llist,
 
 wxLayoutList::wxLayoutList()
 {
-   m_DefaultSetting = NULL;
    m_FirstLine = NULL;
-   m_ColourFG = *wxBLACK;
-   m_ColourBG = *wxWHITE;
    InvalidateUpdateRect();
    Clear();
 }
@@ -1183,19 +1158,20 @@ void
 wxLayoutList::InternalClear(void)
 {
    Empty();
-   if(m_DefaultSetting)
-   {
-      delete m_DefaultSetting;
-      m_DefaultSetting = NULL;
-   }
    m_Selection.m_selecting = false;
    m_Selection.m_valid = false;
 
-   m_CurrentSetting.family = wxSWISS;
-   m_CurrentSetting.size = WXLO_DEFAULTFONTSIZE;
-   m_CurrentSetting.style = wxNORMAL;
-   m_CurrentSetting.weight = wxNORMAL;
-   m_CurrentSetting.underline = 0;
+   m_DefaultSetting.family = wxSWISS;
+   m_DefaultSetting.size = WXLO_DEFAULTFONTSIZE;
+   m_DefaultSetting.style = wxNORMAL;
+   m_DefaultSetting.weight = wxNORMAL;
+   m_DefaultSetting.underline = 0;
+   m_DefaultSetting.m_fg_valid = TRUE;
+   m_DefaultSetting.m_fg = *wxBLACK;
+   m_DefaultSetting.m_bg_valid = TRUE;
+   m_DefaultSetting.m_bg = *wxWHITE;
+   
+   m_CurrentSetting = m_DefaultSetting;
 }
 
 void
@@ -1208,27 +1184,16 @@ wxLayoutList::SetFont(int family, int size, int style, int weight,
    if(style != -1)     m_CurrentSetting.style = style;
    if(weight != -1)    m_CurrentSetting.weight = weight;
    if(underline != -1) m_CurrentSetting.underline = underline != 0;
-   if(fg)
-   {
-      m_CurrentSetting.fg_valid = true;
-      m_CurrentSetting.fg_red = fg->Red();
-      m_CurrentSetting.fg_blue = fg->Blue();
-      m_CurrentSetting.fg_green = fg->Green();
-   }
-   if(bg)
-   {
-      m_CurrentSetting.bg_valid = true;
-      m_CurrentSetting.bg_red = bg->Red();
-      m_CurrentSetting.bg_blue = bg->Blue();
-      m_CurrentSetting.bg_green = bg->Green();
-   }
+   if(fg) m_CurrentSetting.m_fg = *fg;
+   if(bg) m_CurrentSetting.m_bg = *bg;
    Insert(
       new wxLayoutObjectCmd(
-         m_CurrentSetting.size,
          m_CurrentSetting.family,
+         m_CurrentSetting.size,
          m_CurrentSetting.style,
          m_CurrentSetting.weight,
-         m_CurrentSetting.underline, fg, bg));
+         m_CurrentSetting.underline,
+         fg, bg));
 }
 
 void
@@ -1245,7 +1210,7 @@ wxLayoutList::SetFont(int family, int size, int style, int weight,
    if( bg )
       cbg = wxTheColourDatabase->FindColour(bg);
    
-   SetFont(size,family,style,weight,underline,cfg,cbg);
+   SetFont(family,size,style,weight,underline,cfg,cbg);
 }
 
 void
@@ -1253,12 +1218,9 @@ wxLayoutList::Clear(int family, int size, int style, int weight,
                     int underline, wxColour *fg, wxColour *bg)
 {
    InternalClear();
-   
-   if(m_DefaultSetting)
-      delete m_DefaultSetting;
-
-   m_DefaultSetting = new 
-      wxLayoutStyleInfo(family,size,style,weight,underline,fg,bg);
+   m_DefaultSetting = wxLayoutStyleInfo(family, size, style, weight,
+                                        underline, fg, bg);
+   m_CurrentSetting = m_DefaultSetting;
 }
 
 wxPoint
@@ -1544,7 +1506,7 @@ wxLayoutList::Recalculate(wxDC &dc, CoordType bottom)
 
    // first, make sure everything is calculated - this might not be
    // needed, optimise it later
-   ApplyStyle(m_DefaultSetting, dc);
+   ApplyStyle(&m_DefaultSetting, dc);
    while(line)
    {
       line->RecalculatePosition(this); // so we don't need to do it all the time
@@ -1575,9 +1537,10 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom)
 
    // first, make sure everything is calculated - this might not be
    // needed, optimise it later
-   ApplyStyle(m_DefaultSetting, dc);
+   ApplyStyle(&m_DefaultSetting, dc);
    while(line)
    {
+      line->GetStyleInfo() = m_CurrentSetting;
       if(line == m_CursorLine)
          line->Layout(dc, this, (wxPoint *)&m_CursorScreenPos, (wxPoint *)&m_CursorSize, m_CursorPos.x);
       else
@@ -1606,9 +1569,8 @@ wxLayoutList::Draw(wxDC &dc,
 {
    wxLayoutLine *line = m_FirstLine;
 
-   Layout(dc, bottom);
-   ApplyStyle(m_DefaultSetting, dc);
-   wxBrush brush(m_ColourBG, wxSOLID);
+   ApplyStyle(&m_DefaultSetting, dc);
+   wxBrush brush(m_DefaultSetting.m_bg, wxSOLID);
    dc.SetBrush(brush);
    
    while(line)
@@ -1638,7 +1600,7 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
    wxPoint p;
    
    // we need to run a layout here to get font sizes right :-(
-   ApplyStyle(m_DefaultSetting, dc);
+   ApplyStyle(&m_DefaultSetting, dc);
    while(line)
    {
       p = line->GetPosition();
@@ -1892,8 +1854,8 @@ void
 wxLayoutList::StartHighlighting(wxDC &dc)
 {
 #if SHOW_SELECTIONS
-   dc.SetTextForeground(m_ColourBG);
-   dc.SetTextBackground(m_ColourFG);
+   dc.SetTextForeground(m_CurrentSetting.m_bg);
+   dc.SetTextBackground(m_CurrentSetting.m_fg);
 #endif
 }
 
@@ -1902,8 +1864,8 @@ void
 wxLayoutList::EndHighlighting(wxDC &dc)
 {
 #if SHOW_SELECTIONS
-   dc.SetTextForeground(m_ColourFG);
-   dc.SetTextBackground(m_ColourBG);
+   dc.SetTextForeground(m_CurrentSetting.m_fg);
+   dc.SetTextBackground(m_CurrentSetting.m_bg);
 #endif
 }
 
@@ -1979,41 +1941,30 @@ wxLayoutList::GetSelection(void)
 
 
 
-#define COPY_SI(what) if(si->what != -1) m_CurrentSetting.what = si->what;
+#define COPY_SI(what) if(si->what != -1) { m_CurrentSetting.what = si->what; fontChanged = TRUE; }
 
 void
 wxLayoutList::ApplyStyle(wxLayoutStyleInfo *si, wxDC &dc)
 {
+   bool fontChanged = FALSE;
    COPY_SI(family);
    COPY_SI(size);
    COPY_SI(style);
    COPY_SI(weight);
    COPY_SI(underline);
+   if(fontChanged)
+      dc.SetFont( m_FontCache.GetFont(m_CurrentSetting) );
 
-   
-   if(si->fg_valid)
+   if(si->m_fg_valid)
    {
-      m_CurrentSetting.fg_valid = true;
-      m_CurrentSetting.fg_red = si->fg_red;
-      m_CurrentSetting.fg_green = si->fg_green;
-      m_CurrentSetting.fg_blue = si->fg_blue;
+      m_CurrentSetting.m_fg = si->m_fg;
+      dc.SetTextForeground(m_CurrentSetting.m_fg);
    }
-   if(si->bg_valid)
+   if(si->m_bg_valid)
    {
-      m_CurrentSetting.bg_valid = true;
-      m_CurrentSetting.bg_red = si->bg_red;
-      m_CurrentSetting.bg_green = si->bg_green;
-      m_CurrentSetting.bg_blue = si->bg_blue;
+      m_CurrentSetting.m_bg = si->m_bg;
+      dc.SetTextBackground(m_CurrentSetting.m_bg);
    }
-
-   m_ColourFG = wxColour(m_CurrentSetting.fg_red,
-                         m_CurrentSetting.fg_green,
-                         m_CurrentSetting.fg_blue);
-   m_ColourBG = wxColour(m_CurrentSetting.bg_red,
-                         m_CurrentSetting.bg_green,
-                         m_CurrentSetting.bg_blue);
-   dc.SetTextForeground(m_ColourFG);
-   dc.SetTextBackground(m_ColourBG);
 }
 
 
@@ -2203,3 +2154,18 @@ wxLayoutPrintout::DrawHeader(wxDC &dc,
 #endif
 
 
+wxFont &
+wxFontCache::GetFont(int family, int size, int style, int weight, 
+                     bool underline)
+{
+   for(wxFCEList::iterator i = m_FontList.begin();
+       i != m_FontList.end(); i++)
+      if( (**i).Matches(family, size, style, weight, underline) )
+         return (**i).GetFont();
+   // not found:
+   wxFontCacheEntry *fce = new wxFontCacheEntry(family, size, style,
+                                                weight, underline);
+   m_FontList.push_back(fce);
+   return fce->GetFont();
+}
+ 

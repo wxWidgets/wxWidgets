@@ -115,7 +115,7 @@ wxLayoutWindow::Clear(int family,
                       wxColour *bg)
 {
    GetLayoutList()->Clear(family,size,style,weight,underline,fg,bg);
-   SetBackgroundColour(*GetLayoutList()->GetDefaults()->GetBGColour());
+   SetBackgroundColour(GetLayoutList()->GetDefaults()->GetBGColour());
    ResizeScrollbars(true);
    SetDirty();
    SetModified(false);
@@ -494,8 +494,8 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    }
 
    m_memDC->SetDeviceOrigin(0,0);
-   m_memDC->SetBrush(wxBrush(*m_llist->GetDefaults()->GetBGColour(),wxSOLID));
-   m_memDC->SetPen(wxPen(*m_llist->GetDefaults()->GetBGColour(),
+   m_memDC->SetBrush(wxBrush(m_llist->GetDefaults()->GetBGColour(),wxSOLID));
+   m_memDC->SetPen(wxPen(m_llist->GetDefaults()->GetBGColour(),
                          0,wxTRANSPARENT));                               
    m_memDC->SetLogicalFunction(wxCOPY);
 

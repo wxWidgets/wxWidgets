@@ -290,23 +290,61 @@ struct wxLayoutStyleInfo
                      int iul = -1,
                      wxColour *fg = NULL,
                      wxColour *bg = NULL);
-   wxColour * GetBGColour() const
+   wxColour & GetBGColour()
       {
-         return fg_valid ? new
-            wxColour(bg_red,bg_green,bg_blue)
-            : wxWHITE;
+         return m_bg;
       }
-   wxFont *GetFont(wxLayoutStyleInfo *);
+   wxLayoutStyleInfo & operator=(const wxLayoutStyleInfo &right);
    /// Font change parameters.
    int  size, family, style, weight, underline;
-   /// Is foreground colour valid to bet set?
-   bool fg_valid;
-   /// Is background colour valid to bet set?
-   bool bg_valid;
-   /// Foreground colour RGB values.
-   unsigned fg_red, fg_green, fg_blue;
-   /// Background colour RGB values.
-   unsigned bg_red, bg_green, bg_blue;
+   /// Colours
+   wxColour m_bg, m_fg;
+   bool m_fg_valid, m_bg_valid;
+};
+
+
+class wxFontCacheEntry
+{
+public:
+   wxFontCacheEntry(int family, int size, int style, int weight, 
+                    bool underline)
+      {
+         m_Family = family; m_Size = size; m_Style = style;
+         m_Weight = weight; m_Underline = underline;
+         m_Font = new wxFont(m_Size, m_Family,
+                             m_Style, m_Weight, m_Underline);
+      }
+   bool Matches(int family, int size, int style, int weight, 
+                bool underline) const
+      {
+         return size == m_Size && family == m_Family
+            && style == m_Style && weight == m_Weight
+            && underline == m_Underline;
+      }
+   wxFont & GetFont(void) { return *m_Font; }
+   ~wxFontCacheEntry()
+      {
+         delete m_Font;
+      }
+private:
+   wxFont *m_Font;
+   int  m_Family, m_Size, m_Style, m_Weight;
+   bool m_Underline;
+};
+
+KBLIST_DEFINE(wxFCEList, wxFontCacheEntry);
+
+class wxFontCache
+{
+public:
+   wxFont & GetFont(int family, int size, int style, int weight, 
+                   bool underline);
+   wxFont & GetFont(wxLayoutStyleInfo const &si)
+      {
+         return GetFont(si.family, si.size, si.style, si.weight, si.underline);
+      }
+private:
+   wxFCEList m_FontList;
 };
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -325,8 +363,8 @@ public:
                      class wxLayoutList *wxllist,
                      CoordType begin = -1,
                      CoordType end = -1);
-   wxLayoutObjectCmd(int size = -1,
-                     int family = -1,
+   wxLayoutObjectCmd(int family = -1,
+                     int size = -1,
                      int style = -1,
                      int weight = -1,
                      int underline = -1,
@@ -339,8 +377,6 @@ public:
     */
    virtual wxLayoutObject *Copy(void);
 private:
-   /// the font to use
-   wxFont *m_font;
    wxLayoutStyleInfo *m_StyleInfo;
 };
 
@@ -566,6 +602,7 @@ public:
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
 #endif
+   wxLayoutStyleInfo &GetStyleInfo() { return m_StyleInfo; }
    
 private:
    /// Destructor is private. Use DeleteLine() to remove it.
@@ -611,6 +648,8 @@ private:
    wxLayoutLine *m_Previous;
    /// Pointer to next line if it exists.
    wxLayoutLine *m_Next;
+   /// A StyleInfo structure, holding the current settings.
+   wxLayoutStyleInfo m_StyleInfo;
    /// Just to suppress gcc compiler warnings.
    friend class dummy;
 private:
@@ -760,10 +799,10 @@ public:
                 char const *bg = NULL);
    /// changes to the next larger font size
    inline void SetFontLarger(void)
-      { SetFont(-1,(12*m_FontPtSize)/10); }
+      { SetFont(-1,(12*m_CurrentSetting.size)/10); }
    /// changes to the next smaller font size
    inline void SetFontSmaller(void)
-      { SetFont(-1,(10*m_FontPtSize)/12); }
+      { SetFont(-1,(10*m_CurrentSetting.size)/12); }
    
    /// set font family
    inline void SetFontFamily(int family) { SetFont(family); }
@@ -789,7 +828,7 @@ public:
       anywhere.
       @return the default settings of the list
    */
-   wxLayoutStyleInfo *GetDefaults(void) { return m_DefaultSetting ; }
+   wxLayoutStyleInfo *GetDefaults(void) { return &m_DefaultSetting ; }
    wxLayoutStyleInfo *GetStyleInfo(void) { return &m_CurrentSetting ; }
    //@}
 
@@ -914,7 +953,6 @@ public:
    */
    int IsSelected(const wxLayoutLine *line, CoordType *from, CoordType *to);
 
-
    void ApplyStyle(wxLayoutStyleInfo *si, wxDC &dc);
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
@@ -954,14 +992,10 @@ private:
    } m_Selection;
    /** @name Font parameters. */
    //@{
-   int m_FontFamily, m_FontStyle, m_FontWeight;
-   int m_FontPtSize;
-   bool m_FontUnderline;
-   /// colours:
-   wxColour m_ColourFG;
-   wxColour m_ColourBG;
+   /// this object manages the fonts for us
+   wxFontCache m_FontCache;
    /// the default setting:
-   wxLayoutStyleInfo *m_DefaultSetting;
+   wxLayoutStyleInfo m_DefaultSetting;
    /// the current setting:
    wxLayoutStyleInfo m_CurrentSetting;
    //@}

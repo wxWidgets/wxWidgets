@@ -43,35 +43,23 @@ their sizes change:
   !!! GOOD: this can also be used to recalculate the wxLayoutObjectCmds'
             fonts! :-)
 
-- searching for text
-- moving cursor in non-edit mode
 - cursor screen positioning ignores font sizes once again :-(
    --> UpdateCursorScreenPos() cannot work as it ignores previous font formatting commands.
        Either draw cursor when drawing text, or wait for new wxLayoutObjectCmd to be fully
        implemented.
 
 RECENTLY FIXED (?)
-  - fix(simplify) cursor size calculation
   - delete in empty line doesn't work
-  - fix horiz scrollbar size OK here, a Mahogany problem?
-  - with a large number of lines, wraps to top of scrolled window
-    --> check where the problem lies, add a debug function showing all coordinates
   
 - update rectangle (needs support in wxllist and wxWindows)
   --> needs a bit of fixing still
       some code bits are commented out in wxlwindow.cpp
       offset handling seems a bit dodgy, white shadow to top/left of cursor
 
-
   - replacement of llist in window
   - undo
-  - font optimisations(!)
-  - occasionally wraps lines wongly (twice) ??
   - UNDO
-  later:
-    - DragNDrop ... broken in wxGTK at present
-    - cut&paste ... broken in wxGTK at present, Paste already implemented
-    - Selections
+  - DragNDrop
 
 - More optimisations:
   - let each line have a pointer to the last layoutcommand and let that

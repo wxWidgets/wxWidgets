@@ -77,17 +77,17 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
    
    html += "<font ";
 
-   if(si->fg_valid)
+   if(si->m_fg_valid)
    {
       html +="color=";
-      sprintf(buffer,"\"#%02X%02X%02X\"", si->fg_red,si->fg_green,si->fg_blue);
+      sprintf(buffer,"\"#%02X%02X%02X\"", si->m_fg.Red(),si->m_fg.Green(),si->m_fg.Blue());
       html += buffer;
    }
 
-   if(si->bg_valid)
+   if(si->m_bg_valid)
    {
       html += " bgcolor=";
-      sprintf(buffer,"\"#%02X%02X%02X\"", si->bg_red,si->bg_green,si->bg_blue);
+      sprintf(buffer,"\"#%02X%02X%02X\"", si->m_bg.Red(),si->m_bg.Green(),si->m_bg.Blue());
       html += buffer;
    }
    

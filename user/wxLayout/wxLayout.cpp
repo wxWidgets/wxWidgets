@@ -116,6 +116,15 @@ MyFrame::MyFrame(void) :
 void
 MyFrame::AddSampleText(wxLayoutList *llist)
 {
+#if 0
+   llist->Clear(wxSWISS,16,wxNORMAL,wxNORMAL, false);
+   llist->SetFont(-1,-1,-1,-1,-1,"blue");
+   llist->Insert("blue");
+   llist->SetFont(-1,-1,-1,-1,-1,"black");
+   llist->Insert("The quick brown fox jumps over the lazy dog.");
+   llist->LineBreak();
+#endif
+   
    llist->SetFont(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    llist->Insert("--");
    llist->LineBreak();
@@ -130,7 +139,6 @@ MyFrame::AddSampleText(wxLayoutList *llist)
    llist->SetFontWeight(wxNORMAL);
    llist->Insert("The quick brown fox jumps...");
    llist->LineBreak();
-
    llist->Insert("over the lazy dog.");
    llist->SetFont(-1,-1,-1,-1,true);
    llist->Insert("underlined");
@@ -143,7 +151,8 @@ MyFrame::AddSampleText(wxLayoutList *llist)
    llist->Insert("italics ");
    llist->SetFont(-1,-1,wxNORMAL);
    llist->LineBreak();
-   
+
+#if 0
    llist->Insert("and ");
    llist->SetFont(-1,-1,wxSLANT);
    llist->Insert("slanted");
@@ -188,6 +197,7 @@ MyFrame::AddSampleText(wxLayoutList *llist)
          llist->LineBreak();
       }
    }
+#endif
    llist->MoveCursorTo(wxPoint(0,0));
    m_lwin->SetDirty();
    m_lwin->Refresh();
