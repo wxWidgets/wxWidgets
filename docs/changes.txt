@@ -108,6 +108,7 @@ All:
 
 - number of fixes to wxPluginManager (Rick Brice, Hans Van Leemputten)
 - fixed memory leak in wxURL when using a proxy (Steven Van Ingelgem)
+- fixed bug in wxDateTime::Set(jdn) when DST was in effect
 - it's now possible to use msgids in other languages than English with
   wxLocale (based on patch by Stefan Kowski)
 

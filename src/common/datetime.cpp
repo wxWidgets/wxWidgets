@@ -1287,6 +1287,17 @@ wxDateTime& wxDateTime::Set(double jdn)
 
     jdn *= MILLISECONDS_PER_DAY;
 
+    // JDNs always suppose an UTC date, so bring it back to local time zone
+    // (also see GetJulianDayNumber() implementation)
+    long tzDiff = GetTimeZone();
+    if ( IsDST() == 1 )
+    {
+        // FIXME: again, we suppose that DST is always one hour
+        tzDiff -= 3600;
+    }
+
+    jdn += tzDiff*1000; // tzDiff is in seconds
+
     m_time.Assign(jdn);
 
     return *this;
@@ -1904,8 +1915,8 @@ wxDateTime& wxDateTime::SetToYearDay(wxDateTime::wxDateTime_t yday)
 
 double wxDateTime::GetJulianDayNumber() const
 {
-    // JDN are always expressed for the GMT dates
-    Tm tm(ToTimezone(GMT0).GetTm(GMT0));
+    // JDN are always expressed for the UTC dates
+    Tm tm(ToTimezone(UTC).GetTm(UTC));
 
     double result = GetTruncatedJDN(tm.mday, tm.mon, tm.year);
 
