@@ -139,11 +139,11 @@ MyThread::MyThread(MyFrame *frame)
 void MyThread::WriteText(const wxString& text)
 {
     wxString msg;
-    msg << wxTime().FormatTime() << ": " << text;
 
     // before doing any GUI calls we must ensure that this thread is the only
     // one doing it!
     wxMutexGuiLocker guiLocker;
+    msg << wxTime().FormatTime() << ": " << text;
 
     m_frame->WriteText(msg);
 }
