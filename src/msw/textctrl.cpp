@@ -178,6 +178,10 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if (m_windowStyle & wxTE_PASSWORD) // hidden input
         msStyle |= ES_PASSWORD;
 
+   if (m_windowStyle & wxTE_AUTO_SCROLL)
+        msStyle |=  ES_AUTOHSCROLL;
+
+
     // we always want the characters and the arrows
     m_lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
 
