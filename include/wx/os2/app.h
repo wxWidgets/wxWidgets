@@ -90,9 +90,6 @@ public:
     void OnEndSession(wxCloseEvent& rEvent);
     void OnQueryEndSession(wxCloseEvent& rEvent);
 
-    void SetAuto3D(bool bFlag) { m_bAuto3D = bFlag; }
-    bool GetAuto3D(void) const { return m_bAuto3D; }
-
     int AddSocketHandler(int handle, int mask,
                          void (*callback)(void*), void * gsock);
     void RemoveSocketHandler(int handle);
@@ -101,7 +98,6 @@ public:
 protected:
     bool                            m_bShowOnInit;
     int                             m_nPrintMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
-    bool                            m_bAuto3D ;   // Always use 3D controls, except where overriden
 
     //
     // PM-specific wxApp definitions */

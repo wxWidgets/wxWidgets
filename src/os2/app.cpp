@@ -498,7 +498,6 @@ wxApp::wxApp()
     argc = 0;
     argv = NULL;
     m_nPrintMode = wxPRINT_WINDOWS;
-    m_bAuto3D = TRUE;
     m_hMq = 0;
     m_maxSocketHandles = 0;
     m_maxSocketNr = 0;
