@@ -1258,15 +1258,11 @@ void wxListHeaderWindow::DrawCurrent()
 
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 {
-    // translate x coord as we're shifted with the horz scrollbar of the main
-    // window, but not the y one as we don't care about the vert scrollbar
-    wxCoord xLog,
-            x = (wxCoord)event.GetX(),
-            y = (wxCoord)event.GetY();
-    m_owner->CalcUnscrolledPosition( x, 0, &xLog, NULL );
-
-    m_owner->GetViewStart(&m_minX, NULL);
-
+    wxCoord x = (wxCoord)event.GetX();
+    wxCoord y = (wxCoord)event.GetY();
+    
+    m_owner->CalcUnscrolledPosition( x, 0, &x, NULL );
+    
     if (m_isDragging)
     {
         DrawCurrent();
@@ -1279,30 +1275,31 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
         else
         {
             int size_x = 0;
-            m_owner->GetVirtualSize( &size_x, NULL );
-            if (xLog > m_minX+7)
-                m_currentX = xLog;
+            int dummy;
+            GetClientSize( &size_x, & dummy );
+            if (x > m_minX+7)
+                m_currentX = x;
             else
                 m_currentX = m_minX+7;
-            if (m_currentX > size_x-7)
-                m_currentX = size_x-7;
+            if (m_currentX > size_x-7) m_currentX = size_x-7;
             DrawCurrent();
         }
         return;
     }
 
+    m_minX = 0;
     bool hit_border = FALSE;
     int xpos = 0;
     for (int j = 0; j < m_owner->GetColumnCount(); j++)
     {
         xpos += m_owner->GetColumnWidth( j );
         m_column = j;
-        if ((abs(xLog-xpos) < 3) && (y < 22) && (m_column < m_owner->GetColumnCount()-1))
+        if ((abs(x-xpos) < 3) && (y < 22) && (m_column < m_owner->GetColumnCount()-1))
         {
             hit_border = TRUE;
             break;
         }
-        if (xLog-xpos < 0)
+        if (x-xpos < 0)
         {
             break;
         }
@@ -1328,6 +1325,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
             return;
         }
     }
+
 
     if (event.Moving())
     {

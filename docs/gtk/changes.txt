@@ -1,12 +1,14 @@
-1st May '2000: wxWindows 2.1.16 release
+23rd May '2000: wxWindows pre-2.2 release
 
-It was time for another beta.
+Complete freeze now. Only vital bug-fixes allowed.
 
 Various enhancements to wxSizer.
 
 Added wxGridSizer and wxFlexGridSizer.
 
 Reworked wxURL.
+
+MANY bugfixes.
 
 22th March '2000: wxWindows 2.1.15 released
 

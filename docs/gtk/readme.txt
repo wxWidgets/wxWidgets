@@ -1,5 +1,5 @@
 
-   Welcome to wxWindows/Gtk 2.1.16
+   Welcome to wxWindows/Gtk pre 2.2
 
 you have downloaded a beta version of the GTK+ 1.2 port of 
 the wxWindows GUI library. Although this is not yet the
@@ -7,12 +7,12 @@ final stable release wxGTK 2.2, the current version has
 been tested carefully on many systems and has been found
 to work better than any other previous version.
 
-This is the last beta release. wxWindows is now in a code
-freeze and only bugs will be corrected.
+This is the a pre-release. wxWindows is now in a complete
+freeze and only vital bugs will be corrected.
 
 wxWindows no longer supports GTK 1.0 (as did some early
 snapshots) so that you will need GTK 1.2 when using it.
-GTK 1.2.6 is recommended although some programs will work
+GTK 1.2.7 is recommended although some programs will work
 with GTK 1.2.3 onwards.
 
 More information is available from my homepage at:
