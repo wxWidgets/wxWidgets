@@ -1,7 +1,7 @@
 Document Type: WSE
 item: Global
   Version=6.01
-  Title=wxPython 2.2 Installation
+  Title=wxPython 2.3 Installation
   Flags=10010111
   Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
   Japanese Font Name=MS Gothic
@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.2.2.exe
+  EXE Filename=wxPython-2.3b1.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -55,12 +55,12 @@ item: End Block
 end
 item: Set Variable
   Variable=APPTITLE
-  Value=wxPython 2.2
+  Value=wxPython 2.3
   Flags=10000000
 end
 item: Set Variable
   Variable=GROUP
-  Value=wxPython 2.2
+  Value=wxPython 2.3
   Flags=10000000
 end
 item: Set Variable
@@ -80,10 +80,6 @@ end
 item: Set Variable
   Variable=PYTHONVER
   Value=2.0
-end
-item: Set Variable
-  Variable=SAMEDIR
-  Value=1
 end
 item: Remark
 end
@@ -817,23 +813,10 @@ item: Install File
   Destination=%SYS%\Msvcrt.dll
   Flags=0000001010000011
 end
-item: If/While Statement
-  Variable=SAMEDIR
-  Value=0
-end
 item: Install File
-  Source=c:\projects\wx\lib\wx22_2.dll
-  Destination=%SYS%\wx22_2.dll
-  Flags=0000001010010010
-end
-item: Else Statement
-end
-item: Install File
-  Source=c:\projects\wx\lib\wx22_2.dll
-  Destination=%MAINDIR%\wxPython\wx22_2.dll
+  Source=c:\projects\wx\lib\wx23_0.dll
+  Destination=%MAINDIR%\wxPython\wx23_0.dll
   Flags=0000000010010010
-end
-item: End Block
 end
 item: Install File
   Source=c:\Projects\wx\wxPython\wxPython\*.py

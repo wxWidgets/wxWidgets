@@ -7,8 +7,8 @@ cwd = os.getcwd()
 
 logfile = 'c:\\temp\\autobuild.log'
 WXDIR   = os.environ['WXWIN']
-dllVer  = '22_1'
-wxpVer  = '2.2.1'
+dllVer  = '23_0'
+wxpVer  = '2.3b1'
 dateSt  = time.strftime("%Y%m%d", time.localtime(time.time()))
 
 base = os.path.split(sys.argv[0])[0]
@@ -71,7 +71,7 @@ def main():
         do('make touchmanual htmlhelp')
         validateFile(WXDIR + '/docs/htmlhelp/wx.chm')
 
-        logSeparator("Building wxWindows and other libraries...")
+        logSeparator("Building wxWindows...")
         os.chdir(WXDIR + '/src/msw')
         do('make dll pch FINAL=1')
         validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
@@ -80,33 +80,12 @@ def main():
 
         logSeparator("Cleaning wxPython build directory...")
         os.chdir(WXPYDIR)
-        do('buildall.bat -c')
-        os.rename('build.local', 'build.local.save')
-        f = open("build.local", "w")
-        f.write("""
-CRTFLAG='/MD'
-FINAL=1
-""")
-        f.close()
+        do('b.bat c')
 
-
-        logSeparator("Building core wxPython...")
+        logSeparator("Building wxPython...")
         os.chdir(WXPYDIR + '\\src')
-        do("build -b")
+        do("b.bat f")
         validateFile(WXPYDIR+'\\wxPython\\wxc.pyd')
-
-
-        logSeparator("Building wxPython addon modules...")
-        os.chdir(WXPYDIR+'\\contrib')
-        do("buildall -b")
-        validateFile(WXPYDIR+'\\wxPython\\glcanvasc.pyd')
-        validateFile(WXPYDIR+'\\wxPython\\oglc.pyd')
-        validateFile(WXPYDIR+'\\wxPython\\stc_c.pyd')
-
-
-        os.chdir(WXPYDIR)
-        os.unlink('build.local')
-        os.rename('build.local.save', 'build.local')
 
 
         logSeparator("Building installer executable...")
@@ -123,19 +102,12 @@ FINAL=1
             logSeparator("****** UNABLE TO RENAME FILE ******")
 
 
-        logSeparator("Building source and docs zip files...")
+        logSeparator("Building docs zip file...")
         os.chdir(WXPYDIR)
         do("distrib\\zipit.bat %s" % wxpVer)
-        srcZName =  WXPYDIR+'\\distrib\\wxPython-src-'+wxpVer+'.zip'
-        destZName = WXPYDIR+'\\distrib\\wxPython-src-'+wxpVer+'-'+dateSt+'.zip'
-        validateFile(srcZName)
-        try:
-            os.rename(srcZName, destZName)
-        except:
-            pass
 
-        srcDName  = WXPYDIR+'\\distrib\\wxPython-docs-'+wxpVer+'.zip'
-        destDName = WXPYDIR+'\\distrib\\wxPython-docs-'+wxpVer+'-'+dateSt+'.zip'
+        srcDName  = WXPYDIR+'\\distrib\\wxPython-docs-'+wxpVer+'.tar.gz'
+        destDName = WXPYDIR+'\\distrib\\wxPython-docs-'+wxpVer+'-'+dateSt+'.tar.gz'
         validateFile(srcDName)
         try:
             os.rename(srcDName, destDName)
@@ -145,12 +117,11 @@ FINAL=1
 
 
         # #*#*#*#*#*  Comment this out to allow upload...
-        return
+        #return
 
         logSeparator("Uploading to website...")
         do('python c:\\utils\\sendwxp.py %s' % destName)
-        #do('python c:\\utils\\sendwxp.py %s' % destZName)
-        do('python c:\\utils\\sendwxp.py %s' % destDName)
+        #do('python c:\\utils\\sendwxp.py %s' % destDName)
 
 
         logSeparator("Finished!!!")
