@@ -367,7 +367,8 @@ wxSizer *WidgetsPage::CreateSizerWithText(wxControl *control,
                                           wxTextCtrl **ppText)
 {
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    wxTextCtrl *text = new wxTextCtrl(this, id, _T(""));
+    wxTextCtrl *text = new wxTextCtrl(this, id, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+
     sizerRow->Add(control, 0, wxRIGHT | wxALIGN_CENTRE_VERTICAL, 5);
     sizerRow->Add(text, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
 
