@@ -543,6 +543,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
     Parse(memText, true /* local */);
 
     SetRootPath();
+    ResetDirty();
 }
 
 #endif // wxUSE_STREAMS
@@ -587,7 +588,7 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
     {
       LineListAppend(strLine);
 
-      // let the root group have it start line as well
+      // let the root group have its start line as well
       if ( !n )
       {
         m_pCurrentGroup->SetLine(m_linesTail);
@@ -1256,6 +1257,9 @@ void wxFileConfig::LineListRemove(wxFileConfigLineList *pLine)
     else
         pNext->SetPrev(pPrev);
 
+    if ( m_pRootGroup->GetGroupLine() == pLine )
+        m_pRootGroup->SetLine(m_linesHead);
+
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
                 ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
@@ -1315,7 +1319,8 @@ wxFileConfigGroup::~wxFileConfigGroup()
 
 void wxFileConfigGroup::SetLine(wxFileConfigLineList *pLine)
 {
-    wxASSERT( m_pLine == 0 ); // shouldn't be called twice
+    // shouldn't be called twice unless we are resetting the line
+    wxASSERT( m_pLine == 0 || pLine == 0 );
     m_pLine = pLine;
 }
 
