@@ -456,10 +456,6 @@ SOURCE=.\common\http.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\iffdecod.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\imagall.cpp
 # End Source File
 # Begin Source File
@@ -1863,10 +1859,6 @@ SOURCE=..\include\wx\helpwin.h
 # Begin Source File
 
 SOURCE=..\include\wx\icon.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\iffdecod.h
 # End Source File
 # Begin Source File
 

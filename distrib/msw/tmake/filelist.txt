@@ -166,7 +166,6 @@ gaugecmn.cpp	Common
 gdicmn.cpp	Common
 geometry.cpp	Common
 gifdecod.cpp	Common
-iffdecod.cpp	Common
 hash.cpp	Common	Base
 helpbase.cpp	Common
 http.cpp	Common	Socket,Base
@@ -797,7 +796,6 @@ helpbase.h	WXH
 helphtml.h	WXH
 helpwin.h	WXH
 icon.h	WXH
-iffdecod.h	WXH
 image.h	WXH
 imaggif.h	WXH
 imagiff.h	WXH
