@@ -48,9 +48,11 @@ extern bool gUseNavServices ;
 
 struct OpenUserDataRec {
   int           currentfilter ;
+  bool				saveMode ;
   wxArrayString      name ;
   wxArrayString      extensions ;
   wxArrayLong		filtermactypes ;
+  NavMenuItemSpecArrayHandle menuitems ;
 };
 
 typedef struct OpenUserDataRec
@@ -73,23 +75,40 @@ NavEventProc(
 	NavCBRecPtr					ioParams,
 	NavCallBackUserData	ioUserData	)
 {
-	  OpenUserDataRec * data = ( OpenUserDataRec *) ioUserData ;
+	OpenUserDataRec * data = ( OpenUserDataRec *) ioUserData ;
 	if (inSelector == kNavCBEvent) {	
-			// In Universal Headers 3.2, Apple changed the definition of
-		/*
-		#if UNIVERSAL_INTERFACES_VERSION >= 0x0320 // Universal Headers 3.2
-			UModalAlerts::ProcessModalEvent(*(ioParams->eventData.eventDataParms.event));
-			
-		#else
-			UModalAlerts::ProcessModalEvent(*(ioParams->eventData.event));
-		#endif
-		*/
-		
          wxTheApp->MacHandleOneEvent(ioParams->eventData.eventDataParms.event);
-	} else if ( inSelector == kNavCBPopupMenuSelect )
+	} 
+	else if ( inSelector == kNavCBStart )
 	{
-	  NavMenuItemSpec * menu = (NavMenuItemSpec *) ioParams->eventData.eventDataParms.param ;
-	  data->currentfilter = menu->menuType ;
+		if ( data->menuitems )
+			NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &(*data->menuitems)[data->currentfilter]);
+	}
+	else if ( inSelector == kNavCBPopupMenuSelect )
+	{
+		NavMenuItemSpec * menu = (NavMenuItemSpec *) ioParams->eventData.eventDataParms.param ;
+		if ( menu->menuCreator == 'WXNG' )
+		{
+			data->currentfilter = menu->menuType ;
+			if ( data->saveMode )
+			{
+				int i = menu->menuType ;
+				wxString extension =  data->extensions[i].AfterLast('.') ;
+				extension.MakeLower() ;
+				Str255 filename ;
+				// get the current filename
+				NavCustomControl(ioParams->context, kNavCtlGetEditFileName, &filename);
+				CopyPascalStringToC( filename , (char*) filename ) ;
+				wxString sfilename( filename ) ;
+				int pos = sfilename.Find('.',TRUE) ;
+				if ( pos != wxNOT_FOUND )
+				{
+					sfilename = sfilename.Left(pos+1)+extension ;
+					CopyCStringToPascal( sfilename.c_str() , filename ) ;
+					NavCustomControl(ioParams->context, kNavCtlSetEditFileName, &filename);
+				}
+			}
+	  	}
 	}
 }
 
@@ -115,8 +134,10 @@ OSType gfiltersmac[] =
 
 void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
 {
-  myData->currentfilter = 0 ;
-  
+	myData->menuitems = NULL ;
+  	myData->currentfilter = 0 ;
+  	myData->saveMode = FALSE ;
+  	
 	if ( filter && filter[0] )
 	{
 	  wxString filter2(filter) ;
@@ -310,7 +331,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
         long style, const wxPoint& pos)
 {
-	  wxASSERT_MSG( NavServicesAvailable() , "Navigation Services are not running" ) ;
+	wxASSERT_MSG( NavServicesAvailable() , "Navigation Services are not running" ) ;
     m_message = message;
     m_dialogStyle = style;
     m_parent = parent;
@@ -318,7 +339,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;
-    m_filterIndex = 1;
+    m_filterIndex = 0;
 }
 
 
@@ -404,10 +425,30 @@ int wxFileDialog::ShowModal()
 		c2pstr((char *)mNavOptions.savedFileName ) ;
 #endif
 
+		OpenUserDataRec			myData;
+		MakeUserDataRec( &myData , m_wildCard ) ;
+		myData.currentfilter = m_filterIndex ;
+	  	if ( myData.extensions.GetCount() > 0 )
+	  	{
+		  	mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.extensions.GetCount() ) ;
+			myData.menuitems = mNavOptions.popupExtension ;
+		  	for ( int i = 0 ; i < myData.extensions.GetCount() ; ++i ) 
+		  	{
+		  	    (*mNavOptions.popupExtension)[i].version = kNavMenuItemSpecVersion ;
+		  	    (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
+		  	    (*mNavOptions.popupExtension)[i].menuType = i ;
+	          #if TARGET_CARBON
+	          		c2pstrcpy((StringPtr)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
+	          #else
+	          		strcpy((char *)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
+	          		c2pstr((char *)(*mNavOptions.popupExtension)[i].menuItemName ) ;
+	          #endif
+	  	 	}
+		}
 		if ( m_dialogStyle & wxSAVE )
 		{
-			
-			mNavOptions.dialogOptionFlags |= kNavNoTypePopup ;
+		  	myData.saveMode = true ;
+
 			mNavOptions.dialogOptionFlags |= kNavDontAutoTranslate ;
 			mNavOptions.dialogOptionFlags |= kNavDontAddTranslateItems ;
 			
@@ -416,34 +457,16 @@ int wxFileDialog::ShowModal()
 						&mNavReply,
 						&mNavOptions,
 						sStandardNavEventFilter ,
-						'TEXT',
-						'TEXT',
-						0L);					// User Data
+						NULL,
+						kNavGenericSignature,
+						&myData);					// User Data
+			m_filterIndex = myData.currentfilter ;
 		}
 		else
 		{
-	  	OpenUserDataRec			myData;
-	  	MakeUserDataRec( &myData , m_wildCard ) ;
-	  	NavTypeListHandle typelist = NULL ;
+		  	myData.saveMode = false ;
 
-	  	if ( myData.extensions.GetCount() > 0 )
-	  	{
-	  	  mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.extensions.GetCount() ) ;
-          const size_t extCount = myData.extensions.GetCount();
-	  	  for ( size_t i = 0 ; i < extCount; ++i ) {
-	  	    (*mNavOptions.popupExtension)[i].version = kNavMenuItemSpecVersion ;
-	  	    (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
-	  	    (*mNavOptions.popupExtension)[i].menuType = i ;
-          #if TARGET_CARBON
-          		c2pstrcpy((StringPtr)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
-          #else
-          		strcpy((char *)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
-          		c2pstr((char *)(*mNavOptions.popupExtension)[i].menuItemName ) ;
-          #endif
-	  	  }
-	  	}
-
-      mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
+      		mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
 			if ( m_dialogStyle & wxMULTIPLE )
 				mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
 			else
@@ -456,10 +479,9 @@ int wxFileDialog::ShowModal()
 						sStandardNavEventFilter ,
 						mNavPreviewUPP,
 						mNavFilterUPP,
-						typelist /*inFileTypes.TypeListHandle() */,
-						&myData);							// User Data
-			if ( typelist )
-			  DisposeHandle( (Handle) typelist ) ;
+						NULL ,
+						&myData);						
+			m_filterIndex = myData.currentfilter ;
 		}
 		
 		DisposeNavObjectFilterUPP(mNavFilterUPP);
