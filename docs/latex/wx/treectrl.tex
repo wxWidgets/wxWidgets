@@ -348,13 +348,14 @@ For this enumeration function you must pass in a `cookie' parameter
 which is opaque for the application but is necessary for the library
 to make these functions reentrant (i.e. allow more than one
 enumeration on one and the same object simultaneously). The cookie passed to
-GetFirstChild and GetNextChild should be the same.
+GetFirstChild and GetNextChild should be the same variable.
 
 Returns an invalid tree item if there are no further children.
 
 \wxheading{See also}
 
-\helpref{wxTreeCtrl::GetNextChild}{wxtreectrlgetnextchild}
+\helpref{wxTreeCtrl::GetNextChild}{wxtreectrlgetnextchild},
+\helpref{wxTreeCtrl::GetNextSibling}{wxtreectrlgetnextsibling}
 
 \pythonnote{In wxPython the returned wxTreeItemId and the new cookie
 value are both returned as a tuple containing the two values.}
@@ -440,6 +441,7 @@ Returns the last child of the item (or an invalid tree item if this item has no 
 \wxheading{See also}
 
 \helpref{GetFirstChild}{wxtreectrlgetfirstchild},
+\helpref{wxTreeCtrl::GetNextSibling}{wxtreectrlgetnextsibling},
 \helpref{GetLastChild}{wxtreectrlgetlastchild}
 
 \membersection{wxTreeCtrl::GetNextChild}\label{wxtreectrlgetnextchild}
