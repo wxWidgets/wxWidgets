@@ -17,6 +17,8 @@
 
 #include "wx/setup.h"
 
+class wxOwnerDrawn;	// so the compiler knows, it is a class.
+
 class wxCheckListBoxItem; // fwd decl, define in checklst.cpp
 
 class WXDLLEXPORT wxCheckListBox : public wxListBox
