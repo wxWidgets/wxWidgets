@@ -91,8 +91,9 @@ void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, wxTimerTick_t when)
     desc->shotTime = when;
     desc->running = TRUE;
 
-    wxLogTrace( wxT("timer"), wxT("queued timer %p at tick %ld"), 
-               desc->timer, (long) when);
+    wxLogTrace( wxT("timer"),
+                wxT("queued timer %p at tick %") wxLongLongFmtSpec _T("d"), 
+               desc->timer,  when.GetValue());
 
     if ( m_timers )
     {
@@ -145,8 +146,8 @@ void wxTimerScheduler::NotifyTimers()
             if ( !timerDeleted )
             {
                 wxLogTrace( wxT("timer"),
-                            wxT("notified timer %p sheduled for %" wxLongLongFmtSpec), 
-                            desc->timer, desc->shotTime );
+                            wxT("notified timer %p sheduled for %") wxLongLongFmtSpec _T("d"), 
+                            desc->timer, desc->shotTime.GetValue() );
 
                 desc->deleteFlag = NULL;
                 if ( !oneShot )
