@@ -144,6 +144,7 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "GENERIC\\DRAGIMGG.CPP"
       source "GENERIC\\FONTDLGG.CPP"
       source "GENERIC\\GRID.CPP"
+      source "GENERIC\\GRIDCTRL.CPP"
       source "GENERIC\\GRIDSEL.CPP"
       source "GENERIC\\HELPEXT.CPP"
       source "GENERIC\\HELPHTML.CPP"

@@ -159,6 +159,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "GENERIC\\DRAGIMGG.CPP"
       source type(cpp) "GENERIC\\FONTDLGG.CPP"
       source type(cpp) "GENERIC\\GRID.CPP"
+      source type(cpp) "GENERIC\\GRIDCTRL.CPP"
       source type(cpp) "GENERIC\\GRIDSEL.CPP"
       source type(cpp) "GENERIC\\HELPEXT.CPP"
       source type(cpp) "GENERIC\\HELPHTML.CPP"
