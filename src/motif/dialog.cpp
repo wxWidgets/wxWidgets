@@ -515,7 +515,8 @@ void wxDialog::EndModal(int retCode)
 
     SetReturnCode(retCode);
 
-    XtRemoveGrab((Widget) m_mainWidget);
+    // Strangely, we don't seem to need this now.
+    //    XtRemoveGrab((Widget) m_mainWidget);
 
     Show(FALSE);
 

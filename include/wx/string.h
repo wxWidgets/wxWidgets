@@ -73,6 +73,8 @@
  */
 // ---------------------------------------------------------------------------
 
+WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+
 /// checks whether the passed in pointer is NULL and if the string is empty
 inline bool WXDLLEXPORT IsEmpty(const char *p) { return !p || !*p; }
 

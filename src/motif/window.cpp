@@ -368,6 +368,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 
   m_scrolledWindow = (WXWidget) XtVaCreateManagedWidget ("scrolledWindow",
 					    xmScrolledWindowWidgetClass, m_borderWidget ? (Widget) m_borderWidget : parentWidget,
+                                  XmNresizePolicy, XmRESIZE_NONE,
                                   XmNspacing, 0,
 				  XmNscrollingPolicy, XmAPPLICATION_DEFINED,
  //                                  XmNscrollBarDisplayPolicy, XmAS_NEEDED,
@@ -420,8 +421,40 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   XtAddEventHandler ((Widget) m_drawingArea, PointerMotionHintMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask,
     False, (XtEventHandler) wxCanvasEnterLeave, (XtPointer) this);
 
+  // Scrolled widget needs to have its colour changed or we get
+  // a little blue square where the scrollbars abutt
+  wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+  DoChangeBackgroundColour(m_scrolledWindow, backgroundColour, TRUE);
+  DoChangeBackgroundColour(m_drawingArea, backgroundColour, TRUE);
+
+  XmScrolledWindowSetAreas ((Widget) m_scrolledWindow, (Widget) 0, (Widget) 0, (Widget) m_drawingArea);
+
+  /*
+  if (m_hScrollBar)
+	XtRealizeWidget ((Widget) m_hScrollBar);
+  if (m_vScrollBar)
+	XtRealizeWidget ((Widget) m_vScrollBar);
+	*/
+
+  // Without this, the cursor may not be restored properly
+  // (e.g. in splitter sample).
+  SetCursor(*wxSTANDARD_CURSOR);
+  SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+  SetSize(pos.x, pos.y, size.x, size.y);
+
+  return TRUE;
+}
+
+// Helper function
+void wxWindow::CreateScrollbar(int orientation)
+{
+  if (!m_drawingArea)
+    return;
+
+  XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_NONE, NULL);
+
   // Add scrollbars if required
-  if (m_windowStyle & wxHSCROLL)
+  if (orientation == wxHORIZONTAL)
   {
       Widget hScrollBar = XtVaCreateManagedWidget ("hsb",
 				     xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
@@ -446,9 +479,16 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
       wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
       DoChangeBackgroundColour(m_hScrollBar, backgroundColour, TRUE);
 
+      XtRealizeWidget(hScrollBar);
+
+      XtVaSetValues((Widget) m_scrolledWindow,
+             XmNhorizontalScrollBar, (Widget) m_hScrollBar,
+             NULL);
+
       m_hScroll = TRUE;
   }
-  if (m_windowStyle & wxVSCROLL)
+
+  if (orientation == wxVERTICAL)
   {
       Widget vScrollBar = XtVaCreateManagedWidget ("vsb",
 				     xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
@@ -472,29 +512,54 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
       wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
       DoChangeBackgroundColour(m_vScrollBar, backgroundColour, TRUE);
 
+      XtRealizeWidget(vScrollBar);
+
+      XtVaSetValues((Widget) m_scrolledWindow,
+             XmNverticalScrollBar, (Widget) m_vScrollBar,
+             NULL);
+
       m_vScroll = TRUE;
   }
 
-  // Scrolled widget needs to have its colour changed or we get
-  // a little blue square where the scrollbars abutt
-  wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
-  DoChangeBackgroundColour(m_scrolledWindow, backgroundColour, TRUE);
+  XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_ANY, NULL);
+}
+void wxWindow::DestroyScrollbar(int orientation)
+{
+  if (!m_drawingArea)
+    return;
 
-  if (m_hScrollBar || m_vScrollBar)
-    XmScrolledWindowSetAreas ((Widget) m_scrolledWindow, (Widget) m_hScrollBar, (Widget) m_vScrollBar, (Widget) m_drawingArea);
+  XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_NONE, NULL);
+  // Add scrollbars if required
+  if (orientation == wxHORIZONTAL)
+  {
+      if (m_hScrollBar)
+      {
+        XtDestroyWidget((Widget) m_hScrollBar);
+      }
+      m_hScrollBar = (WXWidget) 0;
+      m_hScroll = FALSE;
 
-  if (m_hScrollBar)
-	XtRealizeWidget ((Widget) m_hScrollBar);
-  if (m_vScrollBar)
-	XtRealizeWidget ((Widget) m_vScrollBar);
+      XtVaSetValues((Widget) m_scrolledWindow,
+             XmNhorizontalScrollBar, (Widget) 0,
+             NULL);
 
-  // Without this, the cursor may not be restored properly
-  // (e.g. in splitter sample).
-  SetCursor(*wxSTANDARD_CURSOR);
-  SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
-  SetSize(pos.x, pos.y, size.x, size.y);
+  }
 
-  return TRUE;
+  if (orientation == wxVERTICAL)
+  {
+      if (m_vScrollBar)
+      {
+        XtDestroyWidget((Widget) m_vScrollBar);
+      }
+      m_vScrollBar = (WXWidget) 0;
+      m_vScroll = TRUE;
+
+      XtVaSetValues((Widget) m_scrolledWindow,
+             XmNverticalScrollBar, (Widget) 0,
+             NULL);
+
+  }
+  XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_ANY, NULL);
 }
 
 void wxWindow::SetFocus()
@@ -692,6 +757,11 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
     useOldSize = TRUE;
   else if (width == oldW && height == oldH)
     useOldSize = TRUE;
+
+  if (!wxNoOptimize::CanOptimize())
+  {
+    useOldSize = FALSE; useOldPos = FALSE;
+  }
 
   if (useOldPos && useOldSize)
     return;
@@ -1166,9 +1236,8 @@ void wxWindow::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
     int range, bool WXUNUSED(refresh))
 {
-    Widget scrollBar = (Widget) ((orient == wxHORIZONTAL) ? m_hScrollBar : m_vScrollBar );
-    if (!scrollBar)
-        return;
+    int oldW, oldH;
+    GetSize(& oldW, & oldH);
 
     if (range == 0)
       range = 1;
@@ -1178,7 +1247,49 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
     if (thumbVisible > range)
       thumbVisible = range;
 
-    XtVaSetValues(scrollBar,
+    // Save the old state to see if it changed
+    WXWidget oldScrollBar =  ((orient == wxHORIZONTAL) ? m_hScrollBar : m_vScrollBar );
+
+    if (orient == wxHORIZONTAL)
+    {
+        if (thumbVisible == range)
+        {
+            if (m_hScrollBar)
+              DestroyScrollbar(wxHORIZONTAL);
+	}
+        else
+        {
+            if (!m_hScrollBar)
+              CreateScrollbar(wxHORIZONTAL);
+        }
+    }
+    if (orient == wxVERTICAL)
+    {
+        if (thumbVisible == range)
+        {
+            if (m_vScrollBar)
+              DestroyScrollbar(wxVERTICAL);
+	}
+        else
+        {
+            if (!m_vScrollBar)
+              CreateScrollbar(wxVERTICAL);
+        }
+    }
+    WXWidget newScrollBar =  ((orient == wxHORIZONTAL) ? m_hScrollBar : m_vScrollBar );
+
+    if (oldScrollBar != newScrollBar)
+    {
+      // This is important! Without it, scrollbars misbehave
+      // badly.
+      XtUnrealizeWidget((Widget) m_scrolledWindow);
+      XmScrolledWindowSetAreas ((Widget) m_scrolledWindow, (Widget) m_hScrollBar, (Widget) m_vScrollBar, (Widget) m_drawingArea);
+      XtRealizeWidget((Widget) m_scrolledWindow);
+      XtManageChild((Widget) m_scrolledWindow);
+    }
+
+    if (newScrollBar)
+      XtVaSetValues((Widget) newScrollBar,
          XmNvalue, pos,
          XmNminimum, 0,
          XmNmaximum, range,
@@ -1190,65 +1301,12 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
     else
         m_scrollPosY = pos;
 
-    // See notes below. If the scrollbars didn't leave a ghost presence,
-    // this would be OK.
-#if 0
-    if (range == thumbVisible)
-    {
-        XtUnmanageChild(scrollBar);
-        if (orient == wxHORIZONTAL)
-          XtVaSetValues((Widget) m_scrolledWindow,
-             XmNhorizontalScrollBar, (Widget) 0,
-             NULL);
-        else
-          XtVaSetValues((Widget) m_scrolledWindow,
-             XmNverticalScrollBar, (Widget) 0,
-             NULL);
-    }
-    else
-    {
-        XtManageChild(scrollBar);
-        if (orient == wxHORIZONTAL)
-          XtVaSetValues((Widget) m_scrolledWindow,
-             XmNhorizontalScrollBar, (Widget) m_hScrollBar,
-             NULL);
-        else
-          XtVaSetValues((Widget) m_scrolledWindow,
-             XmNverticalScrollBar, (Widget) m_vScrollBar,
-             NULL);
-    }
-#else
-    // Either both scrollbars are on, or they are off,
-    // otherwise you get a gap where one scrollbar
-    // isn't shown. TODO: try to eliminate this problem.
-    if ((GetScrollThumb(wxHORIZONTAL) >= GetScrollRange(wxHORIZONTAL)) && 
-        (GetScrollThumb(wxVERTICAL) >= GetScrollRange(wxVERTICAL)))
-    {
-        if (m_hScrollBar)
-            XtUnmanageChild((Widget) m_hScrollBar);
-        if (m_vScrollBar)
-            XtUnmanageChild((Widget) m_vScrollBar);
-        XtVaSetValues((Widget) m_scrolledWindow,
-           XmNhorizontalScrollBar, (Widget) 0,
-           XmNverticalScrollBar, (Widget) 0,
-           NULL);
-		      //        XmScrolledWindowSetAreas((Widget) m_scrolledWindow,
-		      //           (Widget) 0, (Widget) 0, (Widget) m_drawingArea);
-    }
-    else
-    {
-        if (m_hScrollBar)
-            XtManageChild((Widget) m_hScrollBar);
-        if (m_vScrollBar)
-            XtManageChild((Widget) m_vScrollBar);
-        XtVaSetValues((Widget) m_scrolledWindow,
-           XmNhorizontalScrollBar, (Widget) m_hScrollBar,
-           XmNverticalScrollBar, (Widget) m_vScrollBar,
-           NULL);
-	//        XmScrolledWindowSetAreas((Widget) m_scrolledWindow,
-	//           (Widget) m_hScrollBar, (Widget) m_vScrollBar, (Widget) m_drawingArea);
-    }
-#endif
+    int newW, newH;
+    GetSize(& newW, & newH);
+
+    // Adjusting scrollbars can resize the canvas accidentally
+    if (newW != oldW || newH != oldH)
+        SetSize(-1, -1, oldW, oldH);
 }
 
 // Does a physical scroll
@@ -2644,6 +2702,11 @@ void wxWindow::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
   else if (w == oldW && h == oldH)
     useOldSize = TRUE;
 
+  if (!wxNoOptimize::CanOptimize())
+  {
+    useOldSize = FALSE; useOldPos = FALSE;
+  }
+
   if (useOldPos && useOldSize)
     return;
 
@@ -2704,7 +2767,7 @@ void wxWindow::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
 
       w -= (spacing + wsbar);
 
-      XtVaSetValues ((Widget) m_drawingArea, XmNwidth, w, NULL);
+      //      XtVaSetValues ((Widget) m_drawingArea, XmNwidth, w, NULL);
     }
   if (h > -1)
     {
@@ -2735,7 +2798,8 @@ void wxWindow::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
 
       h -= (spacing + wsbar);
 
-      XtVaSetValues ((Widget) m_drawingArea, XmNheight, h, NULL);
+      //      XtVaSetValues ((Widget) m_drawingArea, XmNheight, h, NULL);
+
     }
   }
 
@@ -3202,12 +3266,16 @@ void wxWindow::ChangeBackgroundColour()
 {
     if (GetMainWidget())
         DoChangeBackgroundColour(GetMainWidget(), m_backgroundColour);
+    if (m_scrolledWindow && (GetMainWidget() != m_scrolledWindow))
+        DoChangeBackgroundColour(m_scrolledWindow, m_backgroundColour);
 }
 
 void wxWindow::ChangeForegroundColour()
 {
     if (GetMainWidget())
         DoChangeForegroundColour(GetMainWidget(), m_foregroundColour);
+    if (m_scrolledWindow && (GetMainWidget() != m_scrolledWindow))
+        DoChangeForegroundColour(m_scrolledWindow, m_foregroundColour);
 }
 
 // Change a widget's foreground and background colours.
@@ -3368,5 +3436,26 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
 
     // We didn't match the key event against an accelerator.
     return FALSE;
+}
+
+/*
+ * wxNoOptimize: switch off size optimization
+ */
+
+int wxNoOptimize::m_count = 0;
+
+wxNoOptimize::wxNoOptimize()
+{
+  m_count ++;
+}
+
+wxNoOptimize::~wxNoOptimize()
+{
+  m_count --;
+}
+
+bool wxNoOptimize::CanOptimize()
+{
+  return (m_count == 0);
 }
 

@@ -1,7 +1,7 @@
 wxMotif TODO
 ------------
 
-Updated: 12/11/98
+Updated: 28/12/98
 
          -------------------------------o-------------------------
 
@@ -40,32 +40,9 @@ High Priority
 
 - wxSpinButton
 
-- Tidy dialogs such as the colour and font selectors.
-
-- Use generic wxTreeCtrl, wxListCtrl: debug and enhance these.
-  We're close to having these working: mostly scrolling to work out.
-
-- Find out why modal dialogs give a grab warning.
-
-- wxSystemSettings. Eventually, should have control panel-like utility
-  to change colours/fonts but meanwhile should maybe read them
-  from a file.
-
-- wxThread (hopefully, similar to wxGTK)
-
-- wxGrid: scrollbars don't hide; problem with cell selection.
-
-- MDI: seems to be broken for a more complex application I'm testing.
-  Frame decorations don't draw properly, and a child window doesn't
-  process events properly. So probably we should have an alternative
-  implementation that uses tabs, a la wxGTK. The system menu could
-  be implemented using a pop-up menu that applies to the currently
-  active window.
-
-- Controls in a wxToolBar don't work. Probably due to form layout
-  problems; the workaround is to use a separate panel for controls.
-
 - Miscellaneous events.
+
+- Thread classes (copy wxGTK's).
 
 - Write makefiles for all samples and utilities.
 
@@ -75,14 +52,11 @@ Low Priority
 ------------
 
 - Better makefile system that can put objects in different dirs.
-  Use wxGTK config system? It's really complex to debug and
-  doesn't offer a way of compiling apps outside the wxWin
-  hierarchy.
 
 - Extra wxBitmap formats: PNG, BMP. Could use old wxWin 1.68
   wxImage code (derived from XV) for BMP/GIF but it's very bloated. However,
   when implemented as extra bitmap handlers, the code won't be linked
-  unless needed.
+  unless needed. Update: see if wxImage can handle these formats.
 
 - Print/preview framework in print.cpp (see wxGTK).
 
@@ -107,10 +81,6 @@ Low Priority
   - add the driver code to src/motif/helphtml.cpp (a frame, toolbar,
     history list).
 
-- Optimize screen refresh for non-native widgets, e.g. wxWindow
-  created with Create(), using technique in flicker patch for 1.68
-  (see JACS for latest patch).
-
 - Copy and paste, drag and drop. Use a standard X drag
   and drop standard - see http://www.cco.caltech.edu/~jafl/xdnd/
   or use Motif drag and drop as described here:
@@ -130,18 +100,10 @@ Low Priority
 - Reimplement combobox using Lesstif's widget (avoiding GPL'ed
   widget currently used).
 
-- Write generic wxDirDialog (directory selector)
-
-- Use native Motif dialogs for wxMessageBox
-
 - Miscellaneous classes e.g. wxJoystick (identical to GTK's one for
   Linux)
 
 - Blit scaling
-
-- Could eventually alter the MDI widgets to be more Windows-like
-  -- currently it's half-hearted (menus are on children, whereas
-  they should replace the main parent frame menu).
 
 - Get ODBC classes and sample working.
 

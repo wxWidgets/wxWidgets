@@ -121,7 +121,6 @@ void wxScrolledWindow::OnScroll(wxScrollEvent& event)
     int nScrollInc = CalcScrollInc(event);
     if (nScrollInc == 0) return;
 
-    // TODO: should we store the scroll position here as well as in wxWindow?
     if (orient == wxHORIZONTAL)
     {
         int newPos = m_xScrollPosition + nScrollInc;
@@ -132,19 +131,6 @@ void wxScrolledWindow::OnScroll(wxScrollEvent& event)
         int newPos = m_yScrollPosition + nScrollInc;
         SetScrollPos(wxVERTICAL, newPos, TRUE );
     }
-
-/*
-  // TODO We need to multiply the ScrollWindow amount by the scaling
-  // factor, but how do we know what this is in wxWin 2.0???
-  float scaleX = 1.0;
-  float scaleY = 1.0;
-
-  if ( this->IsKindOf(CLASSINFO(wxCanvas)) )
-  {
-    wxDC* dc = ((wxCanvas *)this)->GetDC();
-    dc->GetUserScale(&scaleX, &scaleY);
-  }
-*/
 
     if (orient == wxHORIZONTAL)
     {
@@ -234,6 +220,7 @@ int wxScrolledWindow::CalcScrollInc(wxScrollEvent& event)
       break;
     }
   }
+
   if (orient == wxHORIZONTAL)
   {
     if (m_xScrollPixelsPerLine > 0) {
@@ -295,7 +282,8 @@ void wxScrolledWindow::AdjustScrollbars(void)
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
 
         SetScrollbar(wxHORIZONTAL, m_xScrollPosition, noPagePositions, m_xScrollLines);
-//      SetScrollPageSize(wxHORIZONTAL, noPagePositions);
+        // The amount by which we scroll when paging
+        SetScrollPageSize(wxHORIZONTAL, noPagePositions);
     }
     else
     { 
@@ -316,7 +304,8 @@ void wxScrolledWindow::AdjustScrollbars(void)
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
 
         SetScrollbar(wxVERTICAL, m_yScrollPosition, noPagePositions, m_yScrollLines);
-//      SetScrollPageSize(wxVERTICAL, noPagePositions);
+        // The amount by which we scroll when paging
+        SetScrollPageSize(wxVERTICAL, noPagePositions);
     }
     else
     {

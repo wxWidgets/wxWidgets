@@ -14,6 +14,7 @@ erase %dest\wx200*.zip
 
 cd %src
 echo Zipping...
+
 zip32 -@ %dest\wx200gen.zip < %src\distrib\msw\generic.rsp
 zip32 -@ %dest\wx200msw.zip < %src\distrib\msw\msw.rsp
 zip32 -@ %dest\wx200gtk.zip < %src\distrib\msw\gtk.rsp
@@ -28,6 +29,7 @@ zip32 -@ %dest\wx200wrd.zip < %src\distrib\msw\wx_word.rsp
 
 rem VC++ project files
 zip32 -@ %dest\wx200vc.zip < %src\distrib\msw\vc.rsp
+
 rem CodeWarrior project files
 zip32 -@ %dest\wx200cw.zip < %src\distrib\msw\cw.rsp
 

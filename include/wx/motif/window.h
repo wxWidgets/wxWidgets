@@ -275,6 +275,10 @@ public:
   virtual void SetScrollbar(int orient, int pos, int thumbVisible,
     int range, bool refresh = TRUE);
 
+  // Helper functions for Motif
+  void CreateScrollbar(int orientation);
+  void DestroyScrollbar(int orientation);
+
   virtual void SetScrollPos(int orient, int pos, bool refresh = TRUE);
   virtual int GetScrollPos(int orient) const;
   virtual int GetScrollRange(int orient) const;
@@ -685,6 +689,20 @@ inline int wxWindow::GetReturnCode() { return m_returnCode; }
 wxWindow* WXDLLEXPORT wxGetActiveWindow();
 
 WXDLLEXPORT_DATA(extern wxList) wxTopLevelWindows;
+
+// A little class to switch off size optimization while an instance of the object
+// exists
+class WXDLLEXPORT wxNoOptimize: public wxObject
+{
+public:
+  wxNoOptimize();
+  ~wxNoOptimize();
+
+  static bool CanOptimize();
+
+protected:
+  static int m_count;
+};
 
 #endif
     // _WX_WINDOW_H_

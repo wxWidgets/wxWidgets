@@ -90,3 +90,13 @@ More recently:
 - Controls sample runs, though wxRadioBox doesn't appear and
   the notebook flickers for a while.
 - Cured wxTreeCtrl bug: now works pretty well!
+
+28/12/98
+--------
+
+- Cured scrolling problem: scrollbars now show/hide themselves
+  without (permanently) resizing the window.
+- Removed some commented-out lines in wxScrolledWindow::AdjustScrollbars
+  that disabled scrollbar paging.
+- Set background colour of drawing area in wxWindow, so e.g. wxListCtrl
+  colours correctly.

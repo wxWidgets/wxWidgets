@@ -57,14 +57,14 @@ wxMutexError wxMutex::Lock()
 {
     // TODO
     m_locked++;
-    return MUTEX_NO_ERROR;
+    return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::TryLock()
 {
     // TODO
     m_locked++;
-    return MUTEX_NO_ERROR;
+    return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::Unlock()
@@ -73,7 +73,7 @@ wxMutexError wxMutex::Unlock()
         m_locked--;
 
     // TODO
-    return MUTEX_NO_ERROR;
+    return wxMUTEX_NO_ERROR;
 }
 
 class wxConditionInternal {
@@ -134,25 +134,25 @@ public:
 wxThreadError wxThread::Create()
 {
     // TODO
-    return THREAD_NO_ERROR;
+    return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Destroy()
 {
     // TODO
-    return THREAD_NO_ERROR;
+    return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Pause()
 {
     // TODO
-    return THREAD_NO_ERROR;
+    return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Resume()
 {
     // TODO
-    return THREAD_NO_ERROR;
+    return wxTHREAD_NO_ERROR;
 }
 
 void wxThread::Exit(void *status)
@@ -193,11 +193,13 @@ unsigned long wxThread::GetID() const
     return 0;
 }
 
+/*
 wxThread *wxThread::GetThreadFromID(unsigned long id)
 {
     // TODO
     return NULL;
 }
+*/
 
 bool wxThread::IsAlive() const
 {
