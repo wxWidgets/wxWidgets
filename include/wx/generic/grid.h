@@ -1046,8 +1046,8 @@ public:
     // ------ Cell text drawing functions
     //
     void DrawTextRectangle( wxDC& dc, const wxString&, const wxRect&,
-                            int horizontalAlignment = wxLEFT,
-                            int verticalAlignment = wxTOP );
+                            int horizontalAlignment = wxALIGN_LEFT,
+                            int verticalAlignment = wxALIGN_TOP );
 
     // Split a string containing newline chararcters into an array of
     // strings and return the number of lines
@@ -1493,7 +1493,7 @@ public:
     void SetEditInPlace(bool WXUNUSED(edit) = TRUE) { }
 
     void SetCellAlignment( int align, int row, int col)
-    { SetCellAlignment(row, col, align, wxCENTER); }
+    { SetCellAlignment(row, col, align, wxALIGN_CENTER); }
     void SetCellAlignment( int WXUNUSED(align) ) {}
     void SetCellBitmap(wxBitmap *WXUNUSED(bitmap), int WXUNUSED(row), int WXUNUSED(col))
     { }

@@ -1559,7 +1559,7 @@ void wxGridCellNumberRenderer::Draw(wxGrid& grid,
     // draw the text right aligned by default
     int hAlign, vAlign;
     attr.GetAlignment(&hAlign, &vAlign);
-    hAlign = wxRIGHT;
+    hAlign = wxALIGN_RIGHT;
 
     wxRect rect = rectCell;
     rect.Inflate(-1);
@@ -1654,7 +1654,7 @@ void wxGridCellFloatRenderer::Draw(wxGrid& grid,
     // draw the text right aligned by default
     int hAlign, vAlign;
     attr.GetAlignment(&hAlign, &vAlign);
-    hAlign = wxRIGHT;
+    hAlign = wxALIGN_RIGHT;
 
     wxRect rect = rectCell;
     rect.Inflate(-1);
@@ -3374,7 +3374,7 @@ void wxGrid::Create()
 
     // Set default cell attributes
     m_defaultCellAttr->SetFont(GetFont());
-    m_defaultCellAttr->SetAlignment(wxLEFT, wxTOP);
+    m_defaultCellAttr->SetAlignment(wxALIGN_LEFT, wxALIGN_TOP);
     m_defaultCellAttr->SetTextColour(
         wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT));
     m_defaultCellAttr->SetBackgroundColour(
@@ -3506,11 +3506,11 @@ void wxGrid::Init()
     m_labelFont = this->GetFont();
     m_labelFont.SetWeight( m_labelFont.GetWeight() + 2 );
 
-    m_rowLabelHorizAlign = wxLEFT;
-    m_rowLabelVertAlign  = wxCENTRE;
+    m_rowLabelHorizAlign = wxALIGN_LEFT;
+    m_rowLabelVertAlign  = wxALIGN_CENTRE;
 
-    m_colLabelHorizAlign = wxCENTRE;
-    m_colLabelVertAlign  = wxTOP;
+    m_colLabelHorizAlign = wxALIGN_CENTRE;
+    m_colLabelVertAlign  = wxALIGN_TOP;
 
     m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
     m_defaultRowHeight = m_gridWin->GetCharHeight();
@@ -6043,15 +6043,15 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
         float x, y;
         switch ( horizAlign )
         {
-            case wxRIGHT:
+            case wxALIGN_RIGHT:
                 x = rect.x + (rect.width - textWidth - 1);
                 break;
 
-            case wxCENTRE:
+            case wxALIGN_CENTRE:
                 x = rect.x + ((rect.width - textWidth)/2);
                 break;
 
-            case wxLEFT:
+            case wxALIGN_LEFT:
             default:
                 x = rect.x + 1;
                 break;
@@ -6059,15 +6059,15 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
 
         switch ( vertAlign )
         {
-            case wxBOTTOM:
+            case wxALIGN_BOTTOM:
                 y = rect.y + (rect.height - textHeight - 1);
                 break;
 
-            case wxCENTRE:
+            case wxALIGN_CENTRE:
                 y = rect.y + ((rect.height - textHeight)/2);
                 break;
 
-            case wxTOP:
+            case wxALIGN_TOP:
             default:
                 y = rect.y + 1;
                 break;
@@ -7187,12 +7187,27 @@ void wxGrid::SetLabelFont( const wxFont& font )
 
 void wxGrid::SetRowLabelAlignment( int horiz, int vert )
 {
-    if ( horiz == wxLEFT || horiz == wxCENTRE || horiz == wxRIGHT )
+    // allow old (incorrect) defs to be used
+    switch ( horiz )
+    {
+        case wxLEFT:   horiz = wxALIGN_LEFT; break;
+        case wxRIGHT:  horiz = wxALIGN_RIGHT; break;
+        case wxCENTRE: horiz = wxALIGN_CENTRE; break;
+    }
+    
+    switch ( vert )
+    {
+        case wxTOP:    vert = wxALIGN_TOP;    break;
+        case wxBOTTOM: vert = wxALIGN_BOTTOM; break;
+        case wxCENTRE: vert = wxALIGN_CENTRE; break;
+    }
+    
+    if ( horiz == wxALIGN_LEFT || horiz == wxALIGN_CENTRE || horiz == wxALIGN_RIGHT )
     {
         m_rowLabelHorizAlign = horiz;
     }
 
-    if ( vert == wxTOP || vert == wxCENTRE || vert == wxBOTTOM )
+    if ( vert == wxALIGN_TOP || vert == wxALIGN_CENTRE || vert == wxALIGN_BOTTOM )
     {
         m_rowLabelVertAlign = vert;
     }
@@ -7205,12 +7220,27 @@ void wxGrid::SetRowLabelAlignment( int horiz, int vert )
 
 void wxGrid::SetColLabelAlignment( int horiz, int vert )
 {
-    if ( horiz == wxLEFT || horiz == wxCENTRE || horiz == wxRIGHT )
+    // allow old (incorrect) defs to be used
+    switch ( horiz )
+    {
+        case wxLEFT:   horiz = wxALIGN_LEFT; break;
+        case wxRIGHT:  horiz = wxALIGN_RIGHT; break;
+        case wxCENTRE: horiz = wxALIGN_CENTRE; break;
+    }
+    
+    switch ( vert )
+    {
+        case wxTOP:    vert = wxALIGN_TOP;    break;
+        case wxBOTTOM: vert = wxALIGN_BOTTOM; break;
+        case wxCENTRE: vert = wxALIGN_CENTRE; break;
+    }
+    
+    if ( horiz == wxALIGN_LEFT || horiz == wxALIGN_CENTRE || horiz == wxALIGN_RIGHT )
     {
         m_colLabelHorizAlign = horiz;
     }
 
-    if ( vert == wxTOP || vert == wxCENTRE || vert == wxBOTTOM )
+    if ( vert == wxALIGN_TOP || vert == wxALIGN_CENTRE || vert == wxALIGN_BOTTOM )
     {
         m_colLabelVertAlign = vert;
     }
