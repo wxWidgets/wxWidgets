@@ -30,7 +30,7 @@
 class wxStaticBox : public wxControl {
 public:
     %addtofunc wxStaticBox         "self._setOORInfo(self)"
-    %addtofunc wxStaticBox()       "val._setOORInfo(self)"
+    %addtofunc wxStaticBox()       ""
 
     wxStaticBox(wxWindow* parent, wxWindowID id, const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
@@ -54,7 +54,7 @@ public:
 class wxStaticLine : public wxControl {
 public:
     %addtofunc wxStaticLine         "self._setOORInfo(self)"
-    %addtofunc wxStaticLine()       "val._setOORInfo(self)"
+    %addtofunc wxStaticLine()       ""
 
     wxStaticLine( wxWindow *parent, wxWindowID id,
                   const wxPoint &pos = wxDefaultPosition,
@@ -84,7 +84,7 @@ public:
 class wxStaticText : public wxControl {
 public:
     %addtofunc wxStaticText         "self._setOORInfo(self)"
-    %addtofunc wxStaticText()       "val._setOORInfo(self)"
+    %addtofunc wxStaticText()       ""
 
     wxStaticText(wxWindow* parent, wxWindowID id, const wxString& label,
                  const wxPoint& pos = wxDefaultPosition,
@@ -106,7 +106,7 @@ public:
 class wxStaticBitmap : public wxControl {
 public:
     %addtofunc wxStaticText         "self._setOORInfo(self)"
-    %addtofunc wxStaticText()       "val._setOORInfo(self)"
+    %addtofunc wxStaticText()       ""
 
     wxStaticBitmap(wxWindow* parent, wxWindowID id,
                    const wxBitmap& bitmap,

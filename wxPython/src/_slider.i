@@ -27,7 +27,7 @@
 class wxSlider : public wxControl {
 public:
     %addtofunc wxSlider         "self._setOORInfo(self)"
-    %addtofunc wxSlider()       "val._setOORInfo(self)"
+    %addtofunc wxSlider()       ""
 
     wxSlider(wxWindow* parent, wxWindowID id,
              int value, int minValue, int maxValue,

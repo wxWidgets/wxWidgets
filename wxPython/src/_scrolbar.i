@@ -25,7 +25,7 @@
 class wxScrollBar : public wxControl {
 public:
     %addtofunc wxScrollBar         "self._setOORInfo(self)"
-    %addtofunc wxScrollBar()       "val._setOORInfo(self)"
+    %addtofunc wxScrollBar()       ""
 
     wxScrollBar(wxWindow* parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,

@@ -144,7 +144,7 @@ class wxCalendarCtrl : public wxControl
 {
 public:
     %addtofunc wxCalendarCtrl      "self._setOORInfo(self)"
-    %addtofunc wxCalendarCtrl()    "val._setOORInfo(val)"
+    %addtofunc wxCalendarCtrl()    ""
 
     wxCalendarCtrl(wxWindow *parent,
                    wxWindowID id,

@@ -28,7 +28,7 @@ class wxListBox : public wxControlWithItems
 {
 public:
     %addtofunc wxListBox         "self._setOORInfo(self)"
-    %addtofunc wxListBox()       "val._setOORInfo(self)"
+    %addtofunc wxListBox()       ""
 
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -116,7 +116,7 @@ class wxCheckListBox : public wxListBox
 {
 public:
     %addtofunc wxListBox         "self._setOORInfo(self)"
-    %addtofunc wxListBox()       "val._setOORInfo(self)"
+    %addtofunc wxListBox()       ""
 
     wxCheckListBox(wxWindow *parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition,

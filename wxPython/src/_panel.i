@@ -27,7 +27,7 @@ class wxPanel : public wxWindow
 {
 public:
     %addtofunc wxPanel         "self._setOORInfo(self)"
-    %addtofunc wxPanel()       "val._setOORInfo(self)"
+    %addtofunc wxPanel()       ""
 
     wxPanel(wxWindow* parent,
             const wxWindowID id,
@@ -60,7 +60,7 @@ class wxScrolledWindow : public wxPanel
 {
 public:
     %addtofunc wxScrolledWindow         "self._setOORInfo(self)"
-    %addtofunc wxScrolledWindow()       "val._setOORInfo(self)"
+    %addtofunc wxScrolledWindow()       ""
 
     wxScrolledWindow(wxWindow* parent,
                      const wxWindowID id = -1,

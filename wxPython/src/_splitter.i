@@ -64,7 +64,7 @@ class wxSplitterWindow: public wxWindow
 {
 public:
     %addtofunc wxSplitterWindow         "self._setOORInfo(self)"
-    %addtofunc wxSplitterWindow()       "val._setOORInfo(self)"
+    %addtofunc wxSplitterWindow()       ""
 
     wxSplitterWindow(wxWindow* parent, wxWindowID id,
                      const wxPoint& point = wxDefaultPosition,

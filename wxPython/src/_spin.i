@@ -48,7 +48,7 @@ class wxSpinButton : public wxControl
 {
 public:
     %addtofunc wxSpinButton         "self._setOORInfo(self)"
-    %addtofunc wxSpinButton()       "val._setOORInfo(self)"
+    %addtofunc wxSpinButton()       ""
 
     wxSpinButton(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -87,7 +87,7 @@ class wxSpinCtrl : public wxControl
 {
 public:
     %addtofunc wxSpinCtrl         "self._setOORInfo(self)"
-    %addtofunc wxSpinCtrl()       "val._setOORInfo(self)"
+    %addtofunc wxSpinCtrl()       ""
 
     wxSpinCtrl(wxWindow *parent,
                wxWindowID id = -1,

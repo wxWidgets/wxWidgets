@@ -195,7 +195,7 @@ class wxPyWizardPage : public wxWizardPage {
 public:
 
     %addtofunc wxPyWizardPage   "self._setCallbackInfo(self, PyWizardPage);self._setOORInfo(self)"
-    %addtofunc wxPyWizardPage() "val._setOORInfo(val)"
+    %addtofunc wxPyWizardPage() ""
     
     // ctor accepts an optional bitmap which will be used for this page instead
     // of the default one for this wizard (should be of the same size). Notice
@@ -267,7 +267,7 @@ class wxWizardPageSimple : public wxWizardPage
 public:
 
     %addtofunc wxWizardPageSimple   "self._setOORInfo(self)"
-    %addtofunc wxWizardPageSimple() "val._setOORInfo(val)"
+    %addtofunc wxWizardPageSimple() ""
     
     // ctor takes the previous and next pages
     wxWizardPageSimple(wxWizard *parent,
@@ -298,7 +298,7 @@ class  wxWizard : public wxDialog
 {
 public:
     %addtofunc wxWizard   "self._setOORInfo(self)"
-    %addtofunc wxWizard() "val._setOORInfo(val)"
+    %addtofunc wxWizard() ""
     
     // ctor
     wxWizard(wxWindow *parent,

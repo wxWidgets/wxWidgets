@@ -56,7 +56,7 @@ class wxSashWindow: public wxWindow
 {
 public:
     %addtofunc wxSashWindow         "self._setOORInfo(self)"
-    %addtofunc wxSashWindow()       "val._setOORInfo(self)"
+    %addtofunc wxSashWindow()       ""
 
     wxSashWindow(wxWindow* parent, wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
@@ -247,7 +247,7 @@ class wxSashLayoutWindow: public wxSashWindow
 {
 public:
     %addtofunc wxSashLayoutWindow         "self._setOORInfo(self)"
-    %addtofunc wxSashLayoutWindow()       "val._setOORInfo(self)"
+    %addtofunc wxSashLayoutWindow()       ""
     
     wxSashLayoutWindow(wxWindow* parent, wxWindowID id,
                        const wxPoint& pos = wxDefaultPosition,

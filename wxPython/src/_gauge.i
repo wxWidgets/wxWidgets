@@ -34,7 +34,7 @@ enum {
 class wxGauge : public wxControl {
 public:
     %addtofunc wxGauge         "self._setOORInfo(self)"
-    %addtofunc wxGauge()       "val._setOORInfo(self)"
+    %addtofunc wxGauge()       ""
 
     wxGauge(wxWindow* parent, wxWindowID id, int range,
             const wxPoint& pos = wxDefaultPosition,

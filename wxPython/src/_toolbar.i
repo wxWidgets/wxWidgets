@@ -386,7 +386,7 @@ public:
 class wxToolBar : public wxToolBarBase {
 public:
     %addtofunc wxToolBar         "self._setOORInfo(self)"
-    %addtofunc wxToolBar()       "val._setOORInfo(self)"
+    %addtofunc wxToolBar()       ""
     
     wxToolBar(wxWindow *parent,
               wxWindowID id,

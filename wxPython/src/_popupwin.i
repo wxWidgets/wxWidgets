@@ -29,7 +29,7 @@
 class wxPopupWindow : public wxWindow {
 public:
     %addtofunc wxPopupWindow         "self._setOORInfo(self)"
-    %addtofunc wxPopupWindow()       "val._setOORInfo(self)"
+    %addtofunc wxPopupWindow()       ""
     
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE);
     %name(PrePopupWindow)wxPopupWindow();
@@ -80,7 +80,7 @@ IMP_PYCALLBACK_BOOL_(wxPyPopupTransientWindow, wxPopupTransientWindow, CanDismis
 {
 public:
     %addtofunc wxPyPopupTransientWindow         "self._setOORInfo(self);self._setCallbackInfo(self, PopupTransientWindow)"
-    %addtofunc wxPyPopupTransientWindow()       "val._setOORInfo(self)"
+    %addtofunc wxPyPopupTransientWindow()       ""
     
     wxPyPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE);
     %name(PrePopupTransientWindow)wxPyPopupTransientWindow();

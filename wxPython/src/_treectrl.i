@@ -314,7 +314,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyTreeCtrl, wxTreeCtrl);
 %name(TreeCtrl)class wxPyTreeCtrl : public wxControl {
 public:
     %addtofunc wxPyTreeCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, TreeCtrl)"
-    %addtofunc wxPyTreeCtrl()       "val._setOORInfo(self)"
+    %addtofunc wxPyTreeCtrl()       ""
    
     wxPyTreeCtrl(wxWindow *parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,

@@ -27,7 +27,7 @@ class wxRadioBox : public wxControl
 {
 public:
     %addtofunc wxRadioBox         "self._setOORInfo(self)"
-    %addtofunc wxRadioBox()       "val._setOORInfo(self)"
+    %addtofunc wxRadioBox()       ""
 
     wxRadioBox(wxWindow* parent, wxWindowID id,
                const wxString& label,
@@ -94,7 +94,7 @@ class wxRadioButton : public wxControl
 {
 public:
     %addtofunc wxRadioButton         "self._setOORInfo(self)"
-    %addtofunc wxRadioButton()       "val._setOORInfo(self)"
+    %addtofunc wxRadioButton()       ""
 
     wxRadioButton(wxWindow* parent, wxWindowID id,
                   const wxString& label,

@@ -169,7 +169,7 @@ enum {
 class wxNotebook : public wxBookCtrl {
 public:
     %addtofunc wxNotebook         "self._setOORInfo(self)"
-    %addtofunc wxNotebook()       "val._setOORInfo(self)"
+    %addtofunc wxNotebook()       ""
 
     wxNotebook(wxWindow *parent,
                wxWindowID id,
@@ -289,7 +289,7 @@ class wxListbook : public wxBookCtrl
 {
 public:
     %addtofunc wxListbook         "self._setOORInfo(self)"
-    %addtofunc wxListbook()       "val._setOORInfo(self)"
+    %addtofunc wxListbook()       ""
 
     wxListbook(wxWindow *parent,
                wxWindowID id,

@@ -113,7 +113,7 @@ public:
 class wxFrame : public wxTopLevelWindow {
 public:
     %addtofunc wxFrame         "self._setOORInfo(self)"
-    %addtofunc wxFrame()       "val._setOORInfo(self)"
+    %addtofunc wxFrame()       ""
 
     wxFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
@@ -282,7 +282,7 @@ public:
 class wxMiniFrame : public wxFrame {
 public:
     %addtofunc wxMiniFrame         "self._setOORInfo(self)"
-    %addtofunc wxMiniFrame()       "val._setOORInfo(self)"
+    %addtofunc wxMiniFrame()       ""
 
     wxMiniFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,

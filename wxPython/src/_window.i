@@ -25,7 +25,7 @@ class wxWindow : public wxEvtHandler
 {
 public:
     %addtofunc wxWindow         "self._setOORInfo(self)"
-    %addtofunc wxWindow()       "val._setOORInfo(self)"
+    %addtofunc wxWindow()       ""
 
     wxWindow(wxWindow* parent, const wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,

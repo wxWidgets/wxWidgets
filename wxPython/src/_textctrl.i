@@ -156,7 +156,7 @@ class wxTextCtrl : public wxControl
 {
 public:
     %addtofunc wxTextCtrl         "self._setOORInfo(self)"
-    %addtofunc wxTextCtrl()       "val._setOORInfo(self)"
+    %addtofunc wxTextCtrl()       ""
 
     wxTextCtrl(wxWindow* parent, wxWindowID id,
                const wxString& value = wxPyEmptyString,

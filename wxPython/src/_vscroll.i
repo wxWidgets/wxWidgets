@@ -129,7 +129,7 @@ IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, Est
 {
 public:
     %addtofunc wxPyVScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, VScrolledWindow)"
-    %addtofunc wxPyVScrolledWindow()       "val._setOORInfo(self)"
+    %addtofunc wxPyVScrolledWindow()       ""
     
 
     wxPyVScrolledWindow(wxWindow *parent,
@@ -285,7 +285,7 @@ IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyVListBox, wxVListBox, OnDrawBackground
 {
 public:
     %addtofunc wxPyVListBox         "self._setOORInfo(self);self._setCallbackInfo(self, VListBox)"
-    %addtofunc wxPyVListBox()       "val._setOORInfo(self)"
+    %addtofunc wxPyVListBox()       ""
     
 
     wxPyVListBox(wxWindow *parent,
@@ -481,7 +481,7 @@ IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup
 {
 public:
     %addtofunc wxPyHtmlListBox         "self._setOORInfo(self);self._setCallbackInfo(self, HtmlListBox)"
-    %addtofunc wxPyHtmlListBox()       "val._setOORInfo(self)"
+    %addtofunc wxPyHtmlListBox()       ""
     
 
     // normal constructor which calls Create() internally

@@ -31,7 +31,7 @@ class wxControl : public wxWindow
 {
 public:
     %addtofunc wxControl         "self._setOORInfo(self)"
-    %addtofunc wxControl()       "val._setOORInfo(self)"
+    %addtofunc wxControl()       ""
 
     wxControl(wxWindow *parent,
               wxWindowID id,

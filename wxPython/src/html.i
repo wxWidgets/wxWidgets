@@ -768,7 +768,7 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
 %name(HtmlWindow) class wxPyHtmlWindow : public wxScrolledWindow {
 public:
     %addtofunc wxPyHtmlWindow      "self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)"
-    %addtofunc wxPyHtmlWindow()    "val._setOORInfo(val)"
+    %addtofunc wxPyHtmlWindow()    ""
     
     wxPyHtmlWindow(wxWindow *parent, int id = -1,
                  const wxPoint& pos = wxDefaultPosition,

@@ -374,7 +374,7 @@ public:
 class wxFindReplaceDialog : public wxDialog {
 public:
     %addtofunc wxFindReplaceDialog     "self._setOORInfo(self)"
-    %addtofunc wxFindReplaceDialog()   "val._setOORInfo(val)"
+    %addtofunc wxFindReplaceDialog()   ""
 
     wxFindReplaceDialog(wxWindow *parent,
                         wxFindReplaceData *data,

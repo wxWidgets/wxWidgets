@@ -26,7 +26,7 @@ class wxChoice : public wxControlWithItems
 {
 public:
     %addtofunc wxChoice         "self._setOORInfo(self)"
-    %addtofunc wxChoice()       "val._setOORInfo(self)"
+    %addtofunc wxChoice()       ""
 
     wxChoice(wxWindow *parent, wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,

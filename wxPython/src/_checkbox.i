@@ -50,7 +50,7 @@ class wxCheckBox : public wxControl
 {
 public:
     %addtofunc wxCheckBox         "self._setOORInfo(self)"
-    %addtofunc wxCheckBox()       "val._setOORInfo(self)"
+    %addtofunc wxCheckBox()       ""
     
     wxCheckBox(wxWindow* parent, wxWindowID id, const wxString& label,
                const wxPoint& pos = wxDefaultPosition,

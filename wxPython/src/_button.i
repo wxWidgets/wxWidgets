@@ -52,7 +52,7 @@ class wxButton : public wxControl
 {
 public:
     %addtofunc wxButton         "self._setOORInfo(self)"
-    %addtofunc wxButton()       "val._setOORInfo(self)"
+    %addtofunc wxButton()       ""
 
 
     // Constructor, creating and showing a button.
@@ -115,7 +115,7 @@ class wxBitmapButton : public wxButton
 {
 public:
     %addtofunc wxBitmapButton         "self._setOORInfo(self)"
-    %addtofunc wxBitmapButton()       "val._setOORInfo(self)"
+    %addtofunc wxBitmapButton()       ""
 
     wxBitmapButton(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
                    const wxPoint& pos = wxDefaultPosition,

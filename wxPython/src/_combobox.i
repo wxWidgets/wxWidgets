@@ -31,7 +31,7 @@ class wxComboBox : public wxControl, public wxItemContainer
 {
 public:
     %addtofunc wxComboBox         "self._setOORInfo(self)"
-    %addtofunc wxComboBox()       "val._setOORInfo(self)"
+    %addtofunc wxComboBox()       ""
 
     wxComboBox(wxWindow* parent, wxWindowID id,
                const wxString& value = wxPyEmptyString,

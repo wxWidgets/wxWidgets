@@ -27,7 +27,7 @@ class wxStatusBar : public wxWindow
 {
 public:
     %addtofunc wxStatusBar         "self._setOORInfo(self)"
-    %addtofunc wxStatusBar()       "val._setOORInfo(self)"
+    %addtofunc wxStatusBar()       ""
     
     wxStatusBar(wxWindow* parent, wxWindowID id = -1,
                 long style = wxST_SIZEGRIP,

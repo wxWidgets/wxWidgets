@@ -403,7 +403,7 @@ IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
 public:
 
     %addtofunc wxPyListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)"
-    %addtofunc wxPyListCtrl()       "val._setOORInfo(self)"
+    %addtofunc wxPyListCtrl()       ""
    
     wxPyListCtrl(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -757,7 +757,7 @@ class wxListView : public wxPyListCtrl
 {
 public:
     %addtofunc wxListView         "self._setOORInfo(self)"
-    %addtofunc wxListView()       "val._setOORInfo(self)"
+    %addtofunc wxListView()       ""
 
     wxListView( wxWindow *parent,
                 wxWindowID id = -1,
