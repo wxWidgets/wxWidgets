@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        generic/datectlg.cpp
-// Purpose:     generic wxDatePickerCtrl implementation
+// Purpose:     generic wxDatePickerCtrlGeneric implementation
 // Author:      Andreas Pflug
 // Modified by:
 // Created:     2005-01-19
@@ -23,6 +23,16 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_DATEPICKCTRL
+
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    #define HAS_NATIVE_VERSION
+#endif
+
+// use this version if we're explicitly requested to do it or if it's the only
+// one we have
+#if wxUSE_DATEPICKCTRL_GENERIC || !defined(HAS_NATIVE_VERSION)
+
 #ifndef WX_PRECOMP
     #include "wx/bmpbuttn.h"
     #include "wx/dialog.h"
@@ -32,7 +42,11 @@
     #include "wx/valtext.h"
 #endif
 
-#define _WX_DEFINE_DATE_EVENTS_
+// otherwise it's defined in the native version implementation
+#ifndef HAS_NATIVE_VERSION
+    #define _WX_DEFINE_DATE_EVENTS_
+#endif
+
 #include "wx/dateevt.h"
 
 #include "wx/datectrl.h"
@@ -56,13 +70,13 @@ enum
 #endif
 
 // ============================================================================
-// wxDatePickerCtrl implementation
+// wxDatePickerCtrlGeneric implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxDatePickerCtrl, wxDatePickerCtrlBase)
-    EVT_BUTTON(CTRLID_BTN, wxDatePickerCtrl::OnClick)
-    EVT_TEXT(CTRLID_TXT, wxDatePickerCtrl::OnText)
-    EVT_CHILD_FOCUS(wxDatePickerCtrl::OnChildSetFocus)
+BEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
+    EVT_BUTTON(CTRLID_BTN, wxDatePickerCtrlGeneric::OnClick)
+    EVT_TEXT(CTRLID_TXT, wxDatePickerCtrlGeneric::OnText)
+    EVT_CHILD_FOCUS(wxDatePickerCtrlGeneric::OnChildSetFocus)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxDatePickerCtrlBase)
@@ -71,26 +85,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxDatePickerCtrlBase)
 // creation
 // ----------------------------------------------------------------------------
 
-wxDatePickerCtrl::wxDatePickerCtrl(wxWindow *parent,
-                            wxWindowID id,
-                            const wxDateTime& date,
-                            const wxPoint& pos,
-                            const wxSize& size,
-                            long style,
-                            const wxString& name)
-{
-    Init();
-    Create(parent, id, date, pos, size, style, name);
-}
-
-
-bool wxDatePickerCtrl::Create(wxWindow *parent,
-                            wxWindowID id,
-                            const wxDateTime& date,
-                            const wxPoint& pos,
-                            const wxSize& size,
-                            long style,
-                            const wxString& name)
+bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
+                                     wxWindowID id,
+                                     const wxDateTime& date,
+                                     const wxPoint& pos,
+                                     const wxSize& size,
+                                     long style,
+                                     const wxString& name)
 {
     wxASSERT_MSG( !(style & wxDP_SPIN),
                   _T("wxDP_SPIN style not supported, use wxDP_DEFAULT") );
@@ -124,10 +125,10 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
 
     m_txt=new wxTextCtrl(this, CTRLID_TXT);
     m_txt->Connect(wxID_ANY, wxID_ANY, wxEVT_KEY_DOWN,
-                   (wxObjectEventFunction)&wxDatePickerCtrl::OnEditKey,
+                   (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnEditKey,
                    0, this);
     m_txt->Connect(wxID_ANY, wxID_ANY, wxEVT_KILL_FOCUS,
-                   (wxObjectEventFunction)&wxDatePickerCtrl::OnKillFocus,
+                   (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnKillFocus,
                    0, this);
 
     m_btn = new wxBitmapButton(this, CTRLID_BTN, bmp);
@@ -142,28 +143,28 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
                                wxPoint(0,0), wxDefaultSize,
                                wxCAL_SHOW_HOLIDAYS | wxSUNKEN_BORDER);
     m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_SEL_CHANGED,
-                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnSelChange,
                    0, this);
     m_cal->Connect(wxID_ANY, wxID_ANY, wxEVT_KEY_DOWN,
-                   (wxObjectEventFunction)&wxDatePickerCtrl::OnCalKey,
+                   (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnCalKey,
                    0, this);
     m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_DOUBLECLICKED,
-                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnSelChange,
                    0, this);
     m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_DAY_CHANGED,
-                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnSelChange,
                    0, this);
     m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_MONTH_CHANGED,
-                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnSelChange,
                    0, this);
     m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_YEAR_CHANGED,
-                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnSelChange,
                    0, this);
 
     wxWindow *yearControl = m_cal->GetYearControl();
 
     Connect(wxID_ANY, wxID_ANY, wxEVT_SET_FOCUS,
-            (wxObjectEventFunction)&wxDatePickerCtrl::OnSetFocus);
+            (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnSetFocus);
 
     wxClientDC dc(yearControl);
     dc.SetFont(m_font);
@@ -214,7 +215,7 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
 }
 
 
-void wxDatePickerCtrl::Init()
+void wxDatePickerCtrlGeneric::Init()
 {
     m_popup = NULL;
     m_txt = NULL;
@@ -226,7 +227,7 @@ void wxDatePickerCtrl::Init()
 }
 
 
-bool wxDatePickerCtrl::Destroy()
+bool wxDatePickerCtrlGeneric::Destroy()
 {
     if (m_cal)
         m_cal->Destroy();
@@ -249,7 +250,7 @@ bool wxDatePickerCtrl::Destroy()
 // overridden base class methods
 // ----------------------------------------------------------------------------
 
-void wxDatePickerCtrl::DoMoveWindow(int x, int y, int w, int h)
+void wxDatePickerCtrlGeneric::DoMoveWindow(int x, int y, int w, int h)
 {
     wxControl::DoMoveWindow(x, y, w, h);
     wxSize bs=m_btn->GetBestSize();
@@ -262,7 +263,7 @@ void wxDatePickerCtrl::DoMoveWindow(int x, int y, int w, int h)
         DropDown();
 }
 
-wxSize wxDatePickerCtrl::DoGetBestSize() const
+wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
 {
     int bh=m_btn->GetBestSize().y;
     int eh=m_txt->GetBestSize().y;
@@ -270,7 +271,7 @@ wxSize wxDatePickerCtrl::DoGetBestSize() const
 }
 
 
-bool wxDatePickerCtrl::Show(bool show)
+bool wxDatePickerCtrlGeneric::Show(bool show)
 {
     if ( !wxControl::Show(show) )
     {
@@ -290,7 +291,7 @@ bool wxDatePickerCtrl::Show(bool show)
 }
 
 
-bool wxDatePickerCtrl::Enable(bool enable)
+bool wxDatePickerCtrlGeneric::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
     {
@@ -308,17 +309,17 @@ bool wxDatePickerCtrl::Enable(bool enable)
 }
 
 // ----------------------------------------------------------------------------
-// wxDatePickerCtrl API
+// wxDatePickerCtrlGeneric API
 // ----------------------------------------------------------------------------
 
 bool
-wxDatePickerCtrl::SetDateRange(const wxDateTime& lowerdate,
-                               const wxDateTime& upperdate)
+wxDatePickerCtrlGeneric::SetDateRange(const wxDateTime& lowerdate,
+                                      const wxDateTime& upperdate)
 {
     return m_cal->SetDateRange(lowerdate, upperdate);
 }
 
-bool wxDatePickerCtrl::SetFormat(const wxChar *fmt)
+bool wxDatePickerCtrlGeneric::SetFormat(const wxChar *fmt)
 {
     wxString currentText;
     wxDateTime currentDate;
@@ -388,7 +389,7 @@ bool wxDatePickerCtrl::SetFormat(const wxChar *fmt)
 }
 
 
-wxDateTime wxDatePickerCtrl::GetValue() const
+wxDateTime wxDatePickerCtrlGeneric::GetValue() const
 {
     wxDateTime dt;
     wxString txt=m_txt->GetValue();
@@ -400,7 +401,7 @@ wxDateTime wxDatePickerCtrl::GetValue() const
 }
 
 
-void wxDatePickerCtrl::SetValue(const wxDateTime& date)
+void wxDatePickerCtrlGeneric::SetValue(const wxDateTime& date)
 {
     if (m_cal)
     {
@@ -412,7 +413,7 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& date)
 }
 
 
-bool wxDatePickerCtrl::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
+bool wxDatePickerCtrlGeneric::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
 {
     if (dt1)
         *dt1 = m_cal->GetLowerDateLimit();
@@ -422,7 +423,8 @@ bool wxDatePickerCtrl::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
 }
 
 
-void wxDatePickerCtrl::SetRange(const wxDateTime &dt1, const wxDateTime &dt2)
+void
+wxDatePickerCtrlGeneric::SetRange(const wxDateTime &dt1, const wxDateTime &dt2)
 {
     m_cal->SetDateRange(dt1, dt2);
 }
@@ -431,7 +433,7 @@ void wxDatePickerCtrl::SetRange(const wxDateTime &dt1, const wxDateTime &dt2)
 // event handlers
 // ----------------------------------------------------------------------------
 
-void wxDatePickerCtrl::DropDown(bool down)
+void wxDatePickerCtrlGeneric::DropDown(bool down)
 {
     if (m_popup)
     {
@@ -461,7 +463,7 @@ void wxDatePickerCtrl::DropDown(bool down)
 }
 
 
-void wxDatePickerCtrl::OnChildSetFocus(wxChildFocusEvent &ev)
+void wxDatePickerCtrlGeneric::OnChildSetFocus(wxChildFocusEvent &ev)
 {
     ev.Skip();
     m_ignoreDrop = false;
@@ -483,7 +485,7 @@ void wxDatePickerCtrl::OnChildSetFocus(wxChildFocusEvent &ev)
 }
 
 
-void wxDatePickerCtrl::OnClick(wxCommandEvent& event)
+void wxDatePickerCtrlGeneric::OnClick(wxCommandEvent& event)
 {
     if (m_ignoreDrop)
     {
@@ -498,7 +500,7 @@ void wxDatePickerCtrl::OnClick(wxCommandEvent& event)
 }
 
 
-void wxDatePickerCtrl::OnSetFocus(wxFocusEvent &ev)
+void wxDatePickerCtrlGeneric::OnSetFocus(wxFocusEvent &ev)
 {
     if (m_txt)
     {
@@ -508,7 +510,7 @@ void wxDatePickerCtrl::OnSetFocus(wxFocusEvent &ev)
 }
 
 
-void wxDatePickerCtrl::OnKillFocus(wxFocusEvent &ev)
+void wxDatePickerCtrlGeneric::OnKillFocus(wxFocusEvent &ev)
 {
     ev.Skip();
 
@@ -521,7 +523,7 @@ void wxDatePickerCtrl::OnKillFocus(wxFocusEvent &ev)
 }
 
 
-void wxDatePickerCtrl::OnSelChange(wxCalendarEvent &ev)
+void wxDatePickerCtrlGeneric::OnSelChange(wxCalendarEvent &ev)
 {
     if (m_cal)
     {
@@ -538,7 +540,7 @@ void wxDatePickerCtrl::OnSelChange(wxCalendarEvent &ev)
 }
 
 
-void wxDatePickerCtrl::OnText(wxCommandEvent &ev)
+void wxDatePickerCtrlGeneric::OnText(wxCommandEvent &ev)
 {
     ev.SetEventObject(this);
     ev.SetId(GetId());
@@ -564,7 +566,7 @@ void wxDatePickerCtrl::OnText(wxCommandEvent &ev)
 }
 
 
-void wxDatePickerCtrl::OnEditKey(wxKeyEvent & ev)
+void wxDatePickerCtrlGeneric::OnEditKey(wxKeyEvent & ev)
 {
     if (ev.GetKeyCode() == WXK_DOWN && !ev.HasModifiers())
         DropDown();
@@ -573,11 +575,15 @@ void wxDatePickerCtrl::OnEditKey(wxKeyEvent & ev)
 }
 
 
-void wxDatePickerCtrl::OnCalKey(wxKeyEvent & ev)
+void wxDatePickerCtrlGeneric::OnCalKey(wxKeyEvent & ev)
 {
     if (ev.GetKeyCode() == WXK_ESCAPE && !ev.HasModifiers())
         DropDown(false);
     else
         ev.Skip();
 }
+
+#endif // wxUSE_DATEPICKCTRL_GENERIC
+
+#endif // wxUSE_DATEPICKCTRL
 

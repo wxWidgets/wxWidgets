@@ -17,18 +17,23 @@ class WXDLLIMPEXP_ADV wxCalendarCtrl;
 class WXDLLIMPEXP_ADV wxCalendarEvent;
 class WXDLLIMPEXP_ADV wxPopupWindow;
 
-class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlBase
+class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric : public wxDatePickerCtrlBase
 {
 public:
     // creating the control
-    wxDatePickerCtrl() { Init(); }
-    wxDatePickerCtrl(wxWindow *parent,
-                   wxWindowID id,
-                   const wxDateTime& date = wxDefaultDateTime,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
-                   const wxString& name = wxDatePickerCtrlNameStr);
+    wxDatePickerCtrlGeneric() { Init(); }
+    wxDatePickerCtrlGeneric(wxWindow *parent,
+                            wxWindowID id,
+                            const wxDateTime& date = wxDefaultDateTime,
+                            const wxPoint& pos = wxDefaultPosition,
+                            const wxSize& size = wxDefaultSize,
+                            long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
+                            const wxString& name = wxDatePickerCtrlNameStr)
+    {
+        Init();
+
+        (void)Create(parent, id, date, pos, size, style, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -87,9 +92,8 @@ private:
     void OnKillFocus(wxFocusEvent &ev);
     void OnChildSetFocus(wxChildFocusEvent &ev);
 
-    DECLARE_DYNAMIC_CLASS(wxDatePickerCtrl)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxDatePickerCtrl)
+    DECLARE_NO_COPY_CLASS(wxDatePickerCtrlGeneric)
 };
 
 #endif // _WX_GENERIC_DATECTRL_H_

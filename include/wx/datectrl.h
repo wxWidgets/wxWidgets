@@ -70,6 +70,26 @@ public:
     #include "wx/msw/datectrl.h"
 #else
     #include "wx/generic/datectrl.h"
+
+    class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlGeneric
+    {
+    public:
+        wxDatePickerCtrl() { }
+        wxDatePickerCtrl(wxWindow *parent,
+                         wxWindowID id,
+                         const wxDateTime& date = wxDefaultDateTime,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
+                         const wxString& name = wxDatePickerCtrlNameStr)
+            : wxDatePickerCtrlGeneric(parent, id, date, pos, size, style, name)
+        {
+        }
+
+    private:
+        DECLARE_DYNAMIC_CLASS(wxDatePickerCtrl)
+        DECLARE_NO_COPY_CLASS(wxDatePickerCtrl)
+    };
 #endif
 
 #endif // _WX_DATECTRL_H_
