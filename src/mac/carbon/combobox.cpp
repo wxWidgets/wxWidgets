@@ -408,6 +408,10 @@ void wxComboBox::Append(const wxString& item)
 
 void wxComboBox::Delete(int n)
 {
+    if ( HasClientObjectData() )
+    {
+        SetClientObject(n, NULL);
+    }
     m_choice->Delete( n );
 }
 

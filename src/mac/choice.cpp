@@ -27,7 +27,15 @@ extern MenuHandle NewUniqueMenu() ;
 
 wxChoice::~wxChoice()
 {
-	// DeleteMenu( m_macPopUpMenuId ) ;
+    if ( HasClientObjectData() )
+    {
+        size_t i, max = GetCount();
+
+        for ( i = 0; i < max; ++i )
+            delete GetClientObject(i);
+    }
+
+        // DeleteMenu( m_macPopUpMenuId ) ;
 	// DisposeMenu( m_macPopUpMenuHandle ) ;
 }
 
@@ -271,3 +279,4 @@ wxSize wxChoice::DoGetBestSize() const
 	}
     return wxSize(lbWidth, lbHeight);
 }
+
