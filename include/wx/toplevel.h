@@ -145,6 +145,9 @@ protected:
 #elif defined(__WXMGL__)
     #include "wx/mgl/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMGL
+#elif defined(__WXMAC__)
+    #include "wx/mac/toplevel.h"
+    #define wxTopLevelWindowNative wxTopLevelWindowMac
 #endif
 
 #ifdef __WXUNIVERSAL__
