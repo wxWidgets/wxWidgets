@@ -80,13 +80,13 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_RIGHT_DCLICK,1556)
 END_DECLARE_EVENT_TYPES()
 
-#define EVT_TASKBAR_MOVE(fn)         DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_MOVE, -1, -1, (wxObjectEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_LEFT_DOWN(fn)    DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_DOWN, -1, -1, (wxObjectEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_LEFT_UP(fn)      DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_UP, -1, -1, (wxObjectEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_RIGHT_DOWN(fn)   DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_DOWN, -1, -1, (wxObjectEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_RIGHT_UP(fn)     DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_UP, -1, -1, (wxObjectEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_LEFT_DCLICK(fn)  DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_DCLICK, -1, -1, (wxObjectEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_RIGHT_DCLICK(fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
+#define EVT_TASKBAR_MOVE(fn)         DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
+#define EVT_TASKBAR_LEFT_DOWN(fn)    DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
+#define EVT_TASKBAR_LEFT_UP(fn)      DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
+#define EVT_TASKBAR_RIGHT_DOWN(fn)   DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
+#define EVT_TASKBAR_RIGHT_UP(fn)     DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
+#define EVT_TASKBAR_LEFT_DCLICK(fn)  DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
+#define EVT_TASKBAR_RIGHT_DCLICK(fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
 
 #endif
     // wxHAS_TASK_BAR_ICON
