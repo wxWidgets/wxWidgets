@@ -104,7 +104,7 @@ private:
   // structure describing a registry key/value
   class TreeNode : public wxTreeItemData
   {
-  WX_DEFINE_ARRAY_NO_PTR(TreeNode *, TreeChildren);
+  WX_DEFINE_ARRAY_PTR(TreeNode *, TreeChildren);
   public:
       RegTreeCtrl  *m_pTree;     // must be !NULL
       TreeNode     *m_pParent;    // NULL only for the root node
