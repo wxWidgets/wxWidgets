@@ -40,9 +40,9 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_arrays.obj \
 	$(OBJS)\test_datetimetest.obj \
 	$(OBJS)\test_fileconftest.obj \
+	$(OBJS)\test_filekind.obj \
 	$(OBJS)\test_filenametest.obj \
 	$(OBJS)\test_filesystest.obj \
-	$(OBJS)\test_filetype.obj \
 	$(OBJS)\test_fontmaptest.obj \
 	$(OBJS)\test_formatconvertertest.obj \
 	$(OBJS)\test_hashes.obj \
@@ -267,13 +267,13 @@ $(OBJS)\test_datetimetest.obj: .\datetime\datetimetest.cpp
 $(OBJS)\test_fileconftest.obj: .\fileconf\fileconftest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
+$(OBJS)\test_filekind.obj: .\filekind\filekind.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
 $(OBJS)\test_filenametest.obj: .\filename\filenametest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_filesystest.obj: .\filesys\filesystest.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
-
-$(OBJS)\test_filetype.obj: .\filetype\filetype.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_fontmaptest.obj: .\fontmap\fontmaptest.cpp

@@ -122,12 +122,12 @@ enum wxSeekMode
   wxFromEnd
 };
 
-enum wxFileTypeEnum
+enum wxFileKind
 {
-  wxFILE_TYPE_UNKNOWN,
-  wxFILE_TYPE_DISK,     // a file supporting seeking to arbitrary offsets
-  wxFILE_TYPE_TERMINAL, // a tty
-  wxFILE_TYPE_PIPE      // a pipe
+  wxFILE_KIND_UNKNOWN,
+  wxFILE_KIND_DISK,     // a file supporting seeking to arbitrary offsets
+  wxFILE_KIND_TERMINAL, // a tty
+  wxFILE_KIND_PIPE      // a pipe
 };
 
 // ----------------------------------------------------------------------------
@@ -464,8 +464,8 @@ WXDLLIMPEXP_BASE bool wxMkdir(const wxString& dir, int perm = 0777);
 WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 
 // Return the type of an open file
-WXDLLIMPEXP_BASE wxFileTypeEnum wxGetFileType(int fd);
-inline wxFileTypeEnum wxGetFileType(FILE *fp) { return wxGetFileType(fileno(fp)); }
+WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(int fd);
+inline wxFileKind wxGetFileKind (FILE *fp) { return wxGetFileKind(fileno(fp)); }
 
 // compatibility defines, don't use in new code
 #define wxDirExists wxPathExists

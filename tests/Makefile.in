@@ -49,9 +49,9 @@ TEST_OBJECTS =  \
 	test_arrays.o \
 	test_datetimetest.o \
 	test_fileconftest.o \
+	test_filekind.o \
 	test_filenametest.o \
 	test_filesystest.o \
-	test_filetype.o \
 	test_fontmaptest.o \
 	test_formatconvertertest.o \
 	test_hashes.o \
@@ -255,14 +255,14 @@ test_datetimetest.o: $(srcdir)/datetime/datetimetest.cpp $(TEST_ODEP)
 test_fileconftest.o: $(srcdir)/fileconf/fileconftest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/fileconf/fileconftest.cpp
 
+test_filekind.o: $(srcdir)/filekind/filekind.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/filekind/filekind.cpp
+
 test_filenametest.o: $(srcdir)/filename/filenametest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/filename/filenametest.cpp
 
 test_filesystest.o: $(srcdir)/filesys/filesystest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/filesys/filesystest.cpp
-
-test_filetype.o: $(srcdir)/filetype/filetype.cpp $(TEST_ODEP)
-	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/filetype/filetype.cpp
 
 test_fontmaptest.o: $(srcdir)/fontmap/fontmaptest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/fontmap/fontmaptest.cpp

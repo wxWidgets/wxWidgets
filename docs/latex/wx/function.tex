@@ -108,7 +108,7 @@ the corresponding topic.
 \helpref{wxGetElapsedTime}{wxgetelapsedtime}\\
 \helpref{wxGetEmailAddress}{wxgetemailaddress}\\
 \helpref{wxGetEnv}{wxgetenv}\\
-\helpref{wxGetFileType}{wxgetfiletype}\\
+\helpref{wxGetFileKind}{wxgetfilekind}\\
 \helpref{wxGetFontFromUser}{wxgetfontfromuser}\\
 \helpref{wxGetFreeMemory}{wxgetfreememory}\\
 \helpref{wxGetFullHostName}{wxgetfullhostname}\\
@@ -1016,21 +1016,21 @@ Mac OS and generic Unix provided the system has {\tt statfs()} function.
 This function first appeared in wxWidgets 2.3.2.
 
 
-\membersection{::wxGetFileType}\label{wxgetfiletype}
+\membersection{::wxGetFileKind}\label{wxgetfilekind}
 
-\func{wxFileTypeEnum}{wxGetFileType}{\param{int }{fd}}
+\func{wxFileKind}{wxGetFileKind}{\param{int }{fd}}
 
-\func{wxFileTypeEnum}{wxGetFileType}{\param{FILE *}{fp}}
+\func{wxFileKind}{wxGetFileKind}{\param{FILE *}{fp}}
 
 Returns the type of an open file. Possible return values are:
 
 \begin{verbatim}
-enum wxFileTypeEnum
+enum wxFileKind
 {
-  wxFILE_TYPE_UNKNOWN,
-  wxFILE_TYPE_DISK,     // a file supporting seeking to arbitrary offsets
-  wxFILE_TYPE_TERMINAL, // a tty
-  wxFILE_TYPE_PIPE      // a pipe
+  wxFILE_KIND_UNKNOWN,
+  wxFILE_KIND_DISK,     // a file supporting seeking to arbitrary offsets
+  wxFILE_KIND_TERMINAL, // a tty
+  wxFILE_KIND_PIPE      // a pipe
 };
 
 \end{verbatim}

@@ -97,7 +97,7 @@ public:
     // get the file name
   const wxString& GetName() const { return m_name; }
     // type such as disk or pipe
-  wxFileTypeEnum GetFileType() const { return wxGetFileType(m_fp); }
+  wxFileKind GetKind() const { return wxGetFileKind(m_fp); }
 
   // dtor closes the file if opened
   ~wxFFile() { Close(); }

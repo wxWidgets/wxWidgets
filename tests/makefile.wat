@@ -211,9 +211,9 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_arrays.obj &
 	$(OBJS)\test_datetimetest.obj &
 	$(OBJS)\test_fileconftest.obj &
+	$(OBJS)\test_filekind.obj &
 	$(OBJS)\test_filenametest.obj &
 	$(OBJS)\test_filesystest.obj &
-	$(OBJS)\test_filetype.obj &
 	$(OBJS)\test_fontmaptest.obj &
 	$(OBJS)\test_formatconvertertest.obj &
 	$(OBJS)\test_hashes.obj &
@@ -316,13 +316,13 @@ $(OBJS)\test_datetimetest.obj :  .AUTODEPEND .\datetime\datetimetest.cpp
 $(OBJS)\test_fileconftest.obj :  .AUTODEPEND .\fileconf\fileconftest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_filekind.obj :  .AUTODEPEND .\filekind\filekind.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_filenametest.obj :  .AUTODEPEND .\filename\filenametest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filesystest.obj :  .AUTODEPEND .\filesys\filesystest.cpp
-	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
-
-$(OBJS)\test_filetype.obj :  .AUTODEPEND .\filetype\filetype.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_fontmaptest.obj :  .AUTODEPEND .\fontmap\fontmaptest.cpp

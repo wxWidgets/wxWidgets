@@ -31,9 +31,9 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_arrays.o \
 	$(OBJS)\test_datetimetest.o \
 	$(OBJS)\test_fileconftest.o \
+	$(OBJS)\test_filekind.o \
 	$(OBJS)\test_filenametest.o \
 	$(OBJS)\test_filesystest.o \
-	$(OBJS)\test_filetype.o \
 	$(OBJS)\test_fontmaptest.o \
 	$(OBJS)\test_formatconvertertest.o \
 	$(OBJS)\test_hashes.o \
@@ -256,13 +256,13 @@ $(OBJS)\test_datetimetest.o: ./datetime/datetimetest.cpp
 $(OBJS)\test_fileconftest.o: ./fileconf/fileconftest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_filekind.o: ./filekind/filekind.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_filenametest.o: ./filename/filenametest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filesystest.o: ./filesys/filesystest.cpp
-	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
-
-$(OBJS)\test_filetype.o: ./filetype/filetype.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_fontmaptest.o: ./fontmap/fontmaptest.cpp

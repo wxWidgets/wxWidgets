@@ -473,6 +473,10 @@ SOURCE=.\fileconf\fileconftest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\filekind\filekind.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\filename\filenametest.cpp
 # End Source File
 # Begin Source File
@@ -482,10 +486,6 @@ SOURCE=.\streams\filestream.cpp
 # Begin Source File
 
 SOURCE=.\filesys\filesystest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\filetype\filetype.cpp
 # End Source File
 # Begin Source File
 

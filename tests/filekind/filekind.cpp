@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/filetype/filetype.cpp
-// Purpose:     Test wxGetFileType and wxStreamBase::IsSeekable
+// Purpose:     Test wxGetFileKind and wxStreamBase::IsSeekable
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$
 // Copyright:   (c) 2005 Mike Wetherell
@@ -35,9 +35,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // The test case
 
-class FileTypeTestCase : public CppUnit::TestCase
+class FileKindTestCase : public CppUnit::TestCase
 {
-    CPPUNIT_TEST_SUITE(FileTypeTestCase);
+    CPPUNIT_TEST_SUITE(FileKindTestCase);
         CPPUNIT_TEST(File);
 #if defined __UNIX__ || defined _MSC_VER || defined __MINGW32__
         CPPUNIT_TEST(Pipe);
@@ -63,11 +63,11 @@ class FileTypeTestCase : public CppUnit::TestCase
 
 // test a wxFFile and wxFFileInput/OutputStreams of a known type
 // 
-void FileTypeTestCase::TestFILE(wxFFile& file, bool expected)
+void FileKindTestCase::TestFILE(wxFFile& file, bool expected)
 {
     CPPUNIT_ASSERT(file.IsOpened());
-    CPPUNIT_ASSERT((wxGetFileType(file.fp()) == wxFILE_TYPE_DISK) == expected);
-    CPPUNIT_ASSERT((file.GetFileType() == wxFILE_TYPE_DISK) == expected);
+    CPPUNIT_ASSERT((wxGetFileKind(file.fp()) == wxFILE_KIND_DISK) == expected);
+    CPPUNIT_ASSERT((file.GetKind() == wxFILE_KIND_DISK) == expected);
 
     wxFFileInputStream inStream(file);
     CPPUNIT_ASSERT(inStream.IsSeekable() == expected);
@@ -78,11 +78,11 @@ void FileTypeTestCase::TestFILE(wxFFile& file, bool expected)
 
 // test a wxFile and wxFileInput/OutputStreams of a known type
 //
-void FileTypeTestCase::TestFd(wxFile& file, bool expected)
+void FileKindTestCase::TestFd(wxFile& file, bool expected)
 {
     CPPUNIT_ASSERT(file.IsOpened());
-    CPPUNIT_ASSERT((wxGetFileType(file.fd()) == wxFILE_TYPE_DISK) == expected);
-    CPPUNIT_ASSERT((file.GetFileType() == wxFILE_TYPE_DISK) == expected);
+    CPPUNIT_ASSERT((wxGetFileKind(file.fd()) == wxFILE_KIND_DISK) == expected);
+    CPPUNIT_ASSERT((file.GetKind() == wxFILE_KIND_DISK) == expected);
 
     wxFileInputStream inStream(file);
     CPPUNIT_ASSERT(inStream.IsSeekable() == expected);
@@ -99,7 +99,7 @@ struct TempFile
 
 // test with an ordinary file
 //
-void FileTypeTestCase::File()
+void FileKindTestCase::File()
 {
     TempFile tmp; // put first
     wxFile file;
@@ -114,7 +114,7 @@ void FileTypeTestCase::File()
 // test with a pipe
 //
 #if defined __UNIX__ || defined _MSC_VER || defined __MINGW32__
-void FileTypeTestCase::Pipe()
+void FileKindTestCase::Pipe()
 {
     int afd[2];
 #ifdef __UNIX__
@@ -136,7 +136,7 @@ void FileTypeTestCase::Pipe()
 // test with a socket
 //
 #if defined __UNIX__
-void FileTypeTestCase::Socket()
+void FileKindTestCase::Socket()
 {
     int s = socket(PF_INET, SOCK_STREAM, 0);
 
@@ -152,7 +152,7 @@ void FileTypeTestCase::Socket()
 // Socket streams should be non-seekable
 //
 #if wxUSE_SOCKETS
-void FileTypeTestCase::SocketStream()
+void FileKindTestCase::SocketStream()
 {
     wxSocketClient client;
     wxSocketInputStream inStream(client);
@@ -169,7 +169,7 @@ void FileTypeTestCase::SocketStream()
 
 // Memory streams should be seekable
 //
-void FileTypeTestCase::MemoryStream()
+void FileKindTestCase::MemoryStream()
 {
     char buf[20];
     wxMemoryInputStream inStream(buf, sizeof(buf));
@@ -185,18 +185,18 @@ void FileTypeTestCase::MemoryStream()
 
 // Stdin will usually be a terminal, if so then test it
 // 
-void FileTypeTestCase::Stdin()
+void FileKindTestCase::Stdin()
 {
     if (isatty(0))
-        CPPUNIT_ASSERT(wxGetFileType(0) == wxFILE_TYPE_TERMINAL);
+        CPPUNIT_ASSERT(wxGetFileKind(0) == wxFILE_KIND_TERMINAL);
     if (isatty(fileno(stdin)))
-        CPPUNIT_ASSERT(wxGetFileType(stdin) == wxFILE_TYPE_TERMINAL);
+        CPPUNIT_ASSERT(wxGetFileKind(stdin) == wxFILE_KIND_TERMINAL);
 }
 
 // register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION(FileTypeTestCase);
+CPPUNIT_TEST_SUITE_REGISTRATION(FileKindTestCase);
 
 // also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FileTypeTestCase, "FileTypeTestCase");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FileKindTestCase, "FileKindTestCase");
 
 #endif // wxUSE_STREAMS
