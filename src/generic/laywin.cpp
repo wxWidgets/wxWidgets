@@ -176,6 +176,8 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
  * wxLayoutAlgorithm
  */
 
+#if wxUSE_MDI_ARCHITECTURE
+
 // Lays out windows for an MDI frame. The MDI client area gets what's left
 // over.
 bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* r)
@@ -212,6 +214,8 @@ bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* r)
 
     return TRUE;
 }
+
+#endif // wxUSE_MDI_ARCHITECTURE
 
 // Layout algorithm for any window. mainWindow gets what's left over.
 bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
