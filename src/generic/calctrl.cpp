@@ -472,10 +472,9 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
     wxCoord width = 7*m_widthCol,
             height = 7*m_heightRow;
 
-    wxSize sizeCombo = m_comboMonth->GetBestSize(),
-           sizeSpin = m_spinYear->GetBestSize();
-
-    height += VERT_MARGIN + wxMax(sizeCombo.y, sizeSpin.y);
+    // the combobox doesn't report its height correctly (it returns the
+    // height including the drop down list) so don't use it
+    height += VERT_MARGIN + m_spinYear->GetBestSize().y;
 
     if ( GetWindowStyle() & (wxRAISED_BORDER | wxSUNKEN_BORDER) )
     {
