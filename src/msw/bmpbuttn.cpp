@@ -136,11 +136,14 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
     else
         m_windowId = id;
 
-    if ( width == -1 && bitmap.Ok())
-        width = bitmap.GetWidth() + 2*m_marginX;
-
-    if ( height == -1 && bitmap.Ok())
-        height = bitmap.GetHeight() + 2*m_marginY;
+    if ( bitmap.Ok() )
+    {
+        wxSize newSize = DoGetBestSize();
+        if ( width == -1 )
+            width = newSize.x;
+        if ( height == -1 )
+            height = newSize.y;
+    }
 
     long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ;
 
@@ -453,6 +456,17 @@ void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right,
 void wxBitmapButton::SetDefault()
 {
     wxButton::SetDefault();
+}
+
+wxSize wxBitmapButton::DoGetBestSize() const
+{
+    wxSize best;
+    if (m_bmpNormal.Ok())
+    {
+        best.x = m_bmpNormal.GetWidth() + 2*m_marginX;
+        best.y = m_bmpNormal.GetHeight() + 2*m_marginY;
+    }
+    return best;
 }
 
 #endif // wxUSE_BMPBUTTON

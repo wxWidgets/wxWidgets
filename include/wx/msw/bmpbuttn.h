@@ -54,6 +54,9 @@ public:
     virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );
     virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
 
+protected:
+    virtual wxSize DoGetBestSize() const;
+    
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton)
 };
