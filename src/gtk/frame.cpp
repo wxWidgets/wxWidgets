@@ -394,7 +394,6 @@ void wxFrame::Init()
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
     m_insertInClientArea = TRUE;
-    m_isFrame = FALSE;
 }
 
 bool wxFrame::Create( wxWindow *parent,
@@ -408,7 +407,6 @@ bool wxFrame::Create( wxWindow *parent,
     wxTopLevelWindows.Append( this );
 
     m_needParent = FALSE;
-    m_isFrame = TRUE;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))

@@ -839,7 +839,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
                 ret = ancestor->GetEventHandler()->ProcessEvent( command_event );
                 break;
             }
-            if (ancestor->m_isFrame)
+            if (ancestor->IsTopLevel())
                 break;
             ancestor = ancestor->GetParent();
         }
@@ -2578,7 +2578,7 @@ void wxWindow::OnInternalIdle()
            now do our full redraw and switch on expose event handling again. */
         
         bool child_already_resized = FALSE;
-        if (m_isFrame)
+        if (IsTopLevel() && !m_isFrame)
             child_already_resized = gtk_pizza_child_resized( GTK_PIZZA(m_wxwindow->parent), m_wxwindow );
         else
             child_already_resized = gtk_pizza_child_resized( GTK_PIZZA(m_widget->parent), m_widget );

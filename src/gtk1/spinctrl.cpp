@@ -222,7 +222,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
     if (event.KeyCode() == WXK_RETURN)
     {
         wxWindow *top_frame = m_parent;
-        while (top_frame->GetParent() && !(top_frame->GetParent()->m_isFrame))
+        while (top_frame->GetParent() && !(top_frame->GetParent()->IsTopLevel()))
             top_frame = top_frame->GetParent();
         GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
 
