@@ -143,7 +143,7 @@ void wxRemotelyScrolledTreeCtrl::PrepareDC(wxDC& dc)
         scrolledWindow->GetScrollPixelsPerUnit(& xppu2, & yppu2);
 
         dc.SetDeviceOrigin( -startX * xppu1, -startY * yppu2 );
-        dc.SetUserScale( m_scaleX, m_scaleY );
+        dc.SetUserScale( win->GetScaleX(), win->GetScaleY() );
     }
 }
 

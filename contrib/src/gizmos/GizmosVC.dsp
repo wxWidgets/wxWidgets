@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\lib\gizmos.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\gizmos.lib"
 
 !ELSEIF  "$(CFG)" == "GizmosVC - Win32 Debug"
 
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\lib\gizmosd.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\gizmosd.lib"
 
 !ENDIF 
 
