@@ -360,8 +360,9 @@ bool wxApp::Initialize()
 #ifndef __UNIX__
   // test the minimal configuration necessary
 
+	#if !TARGET_CARBON
 	long theSystem ;
-	long theMachine;
+	long theMachine; 
 
 	if (Gestalt(gestaltMachineType, &theMachine) != noErr)
 	{
@@ -379,7 +380,6 @@ bool wxApp::Initialize()
 	{
 		error = kMacSTROldSystem  ;
 	}
-	#if !TARGET_CARBON
 	else if ((long)GetApplLimit() - (long)ApplicationZone() < kMacMinHeap)
 	{
 		error = kMacSTRSmallSize;
