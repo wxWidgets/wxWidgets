@@ -40,9 +40,9 @@
 #   endif
 #endif
 
-#ifdef DBDEBUG_CONSOLE
+//#ifdef DBDEBUG_CONSOLE
     #include <iostream.h>
-#endif
+//#endif
 
 #ifdef    __BORLANDC__
     #pragma hdrstop
@@ -258,7 +258,7 @@ wxTable::~wxTable()
         TablesInUse.DeleteContents(TRUE);
         bool found = FALSE;
 
-        wxNode *pNode;
+	wxNode *pNode;
         pNode = TablesInUse.First();
         while (pNode && !found)
         {
@@ -280,6 +280,8 @@ wxTable::~wxTable()
     }
 #endif
 
+
+
     // Decrement the wxDB table count
     if (pDb)
         pDb->nTables--;
@@ -294,12 +296,14 @@ wxTable::~wxTable()
         if (hstmtInsert)
             if (SQLFreeStmt(hstmtInsert, SQL_DROP) != SQL_SUCCESS)
                 pDb->DispAllErrors(henv, hdbc);
+
         if (hstmtDelete)
             if (SQLFreeStmt(hstmtDelete, SQL_DROP) != SQL_SUCCESS)
-                pDb->DispAllErrors(henv, hdbc);
+
         if (hstmtUpdate)
             if (SQLFreeStmt(hstmtUpdate, SQL_DROP) != SQL_SUCCESS)
                 pDb->DispAllErrors(henv, hdbc);
+
     }
     if (hstmtInternal)
         if (SQLFreeStmt(hstmtInternal, SQL_DROP) != SQL_SUCCESS)
@@ -308,8 +312,10 @@ wxTable::~wxTable()
     // Delete dynamically allocated cursors
     if (hstmtDefault)
         DeleteCursor(hstmtDefault);
+
     if (hstmtCount)
         DeleteCursor(hstmtCount);
+
 
 }  // wxTable::~wxTable()
 
@@ -1671,6 +1677,7 @@ void wxTable::ClearMemberVars(void)
             pDt->second = 0;
             pDt->fraction = 0;
             break;
+	
         }
     }
 
@@ -1775,10 +1782,20 @@ wxColDataPtr* wxTable::SetColDefs (wxColInf *pColInfs, ULONG numCols)
             {
                 case DB_DATA_TYPE_VARCHAR:
                 {
-                    pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].bufferLength+1];
-                    pColDataPtrs[index].SzDataObj  = pColInfs[index].bufferLength;
-                    pColDataPtrs[index].SqlCtype   = SQL_C_CHAR;
-                    break;
+
+		  // Be sure to allocate enough memory
+		  if (pColInfs[index].bufferLength >= pColInfs[index].columnSize)
+		    {
+		      pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].bufferLength+1];
+		      pColDataPtrs[index].SzDataObj  = pColInfs[index].bufferLength;
+		    }
+		  else
+		    {
+		      pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].columnSize+1];
+		      pColDataPtrs[index].SzDataObj  = pColInfs[index].columnSize;
+		    }
+		  pColDataPtrs[index].SqlCtype   = SQL_C_CHAR;
+		  break;
                 }
                 case DB_DATA_TYPE_INTEGER:
                 {
