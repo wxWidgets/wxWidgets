@@ -485,7 +485,6 @@
 %rename(ImageHandler)                       wxImageHandler;
 %rename(ImageHistogram)                     wxImageHistogram;
 %rename(Image)                              wxImage;
-%rename(InitAllImageHandlers)               wxInitAllImageHandlers;
 %rename(NullImage)                          wxNullImage;
 %rename(IMAGE_RESOLUTION_INCHES)            wxIMAGE_RESOLUTION_INCHES;
 %rename(IMAGE_RESOLUTION_CM)                wxIMAGE_RESOLUTION_CM;

@@ -523,6 +523,8 @@ void __wxPyPreStart(PyObject* moduleDict)
 
     // Init the stock objects to a non-NULL value so SWIG doesn't create them as None
     wxPy_ReinitStockObjects(1);
+
+    wxInitAllImageHandlers();
 }
 
 

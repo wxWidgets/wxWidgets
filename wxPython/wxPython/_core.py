@@ -654,7 +654,6 @@ wxImage_AddHandler = wx._core.Image_AddHandler
 wxImage_InsertHandler = wx._core.Image_InsertHandler
 wxImage_RemoveHandler = wx._core.Image_RemoveHandler
 wxImage_GetImageExtWildcard = wx._core.Image_GetImageExtWildcard
-wxInitAllImageHandlers = wx._core.InitAllImageHandlers
 wxNullImage = wx._core.NullImage
 wxIMAGE_OPTION_BMP_FORMAT = wx._core.IMAGE_OPTION_BMP_FORMAT
 wxIMAGE_OPTION_CUR_HOTSPOT_X = wx._core.IMAGE_OPTION_CUR_HOTSPOT_X
@@ -1075,6 +1074,7 @@ wxDLG_PNT = wx._core.DLG_PNT
 wxDLG_SZE = wx._core.DLG_SZE
 wxPyAssertionError = wx._core.PyAssertionError
 wxMemoryFSHandler_AddFile = wx._core.MemoryFSHandler_AddFile
+wxInitAllImageHandlers = wx._core.InitAllImageHandlers
 
 
 d = globals()

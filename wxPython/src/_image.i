@@ -332,7 +332,17 @@ success flag and rgb values.", "");
 
 
 
-void wxInitAllImageHandlers();
+///void wxInitAllImageHandlers();
+
+%pythoncode {
+    def InitAllImageHandlers():
+        """
+        The former functionality of InitAllImageHanders is now done internal to
+        the _core_ extension module and so this function has become a simple NOP.
+        """
+        pass
+}
+
 
 
 // See also wxPy_ReinitStockObjects in helpers.cpp

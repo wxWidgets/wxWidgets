@@ -236,7 +236,6 @@ class PySimpleApp(wx.App):
         wx.App.__init__(self, redirect, filename, useBestVisual, clearSigInt)
         
     def OnInit(self):
-        wx.InitAllImageHandlers()
         return True
 
 

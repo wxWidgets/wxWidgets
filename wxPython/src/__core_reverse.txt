@@ -39,6 +39,7 @@ DLG_SZE
 PyAssertionError
 
 MemoryFSHandler_AddFile
+InitAllImageHandlers
 
 
 # With the * on the end these will cause code to be added that 

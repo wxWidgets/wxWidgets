@@ -42,6 +42,14 @@ inheritance the new way.  If you have custom controls of your own you
 should review stattxt.py or one of the others to see how it is to be
 done.
 
+wx.InitAllImageHandlers is now an empty function that does nothing but
+exist for backwards compatibility.  The C++ version is now called
+automatically when wxPython is initialized.  Since all the handlers
+are included in the wxWidgets shared library anyway, this imposes only
+a very small amount of overhead and removes several unneccessary
+problems.
+
+
 
 
 2.5.1.5
