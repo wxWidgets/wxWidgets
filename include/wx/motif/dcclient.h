@@ -90,6 +90,18 @@ public:
     void SetAutoSetting(bool flag) { m_autoSetting = flag; }
     
 protected:
+    // note that this function will call colour.SetPixel,
+    // and will do one of curCol = colour, curCol = wxWHITE, curCol = wxBLACK
+    // roundToWhite has an effect for monochrome display only
+    // if roundToWhite == TRUE then the colour will be set to white unless
+    // it is RGB 0x000000;if roundToWhite == FALSE the colour wull be set to
+    // black unless it id RGB 0xffffff
+    int CalculatePixel(wxColour& colour, wxColour& curCol,
+                       bool roundToWhite) const;
+    // sets the foreground pixel taking into account the
+    // currently selected logical operation
+    void SetForegroundPixelWithLogicalFunction(int pixel);
+
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
         int style = wxFLOOD_SURFACE);
     

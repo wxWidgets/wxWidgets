@@ -886,11 +886,35 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
     //  FreeGetPixelCache();
 
-    // Be sure that foreground pixels (1) of the Icon will be painted with pen
-    // colour. [m_pen.SetColour()] Background pixels (0) will be painted with
-    // last selected background color. [::SetBackground]
-    if (m_pen.Ok() && m_autoSetting)
-        SetPen (m_pen);
+    // Be sure that foreground pixels (1) of the Icon will be painted with
+    // foreground colour. [m_textForegroundColour] Background pixels (0)
+    // will be painted with backgound colour (m_textBackgroundColour)
+    // Using ::SetPen is horribly slow, so avoid doing it
+    int oldBackgroundPixel = -1;
+    int oldForegroundPixel = -1;
+
+    if (m_textBackgroundColour.Ok())
+    {
+        oldBackgroundPixel = m_backgroundPixel;
+        int pixel = m_textBackgroundColour.AllocColour(m_display);
+
+        XSetBackground ((Display*) m_display, (GC) m_gc, pixel);
+        if (m_window && m_window->GetBackingPixmap())
+            XSetBackground ((Display*) m_display,(GC) m_gcBacking,
+                            pixel);
+    }
+    if (m_textForegroundColour.Ok())
+    {
+        oldForegroundPixel = m_currentColour.GetPixel();
+
+        if( m_textForegroundColour.GetPixel() <= -1 )
+            CalculatePixel( m_textForegroundColour,
+                            m_textForegroundColour, TRUE);
+ 
+        int pixel = m_textForegroundColour.GetPixel();
+        if (pixel > -1)
+            SetForegroundPixelWithLogicalFunction(pixel);
+    }
 
     // Do bitmap scaling if necessary
 
@@ -898,6 +922,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
     Pixmap sourcePixmap = (Pixmap) NULL;
     double scaleX, scaleY;
     GetUserScale(& scaleX, & scaleY);
+    bool retVal = FALSE;
 
     /* TODO: use the mask origin when drawing transparently */
     if (xsrcMask == -1 && ysrcMask == -1)
@@ -979,7 +1004,9 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             }
 
         } else
-        {
+        {        //XGCValues values;
+        //XGetGCValues((Display*)m_display, (GC)m_gc, GCForeground, &values);   
+
             if (m_window && m_window->GetBackingPixmap())
             {
                 // +++ MARKUS (mho@comnets.rwth-aachen): error on blitting bitmaps with depth 1
@@ -1046,13 +1073,26 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
         SetLogicalFunction(orig);
 
-        if (scaledBitmap) delete scaledBitmap;
-
-        return TRUE;
+        retVal = TRUE;
   }
   if (scaledBitmap) delete scaledBitmap;
 
-  return FALSE;
+  if (oldBackgroundPixel > -1)
+  {
+      XSetBackground ((Display*) m_display, (GC) m_gc, oldBackgroundPixel);
+      if (m_window && m_window->GetBackingPixmap())
+          XSetBackground ((Display*) m_display,(GC) m_gcBacking,
+                          oldBackgroundPixel);
+  }
+  if (oldForegroundPixel > -1)
+  {
+      XSetForeground ((Display*) m_display, (GC) m_gc, oldForegroundPixel);
+      if (m_window && m_window->GetBackingPixmap())
+          XSetForeground ((Display*) m_display,(GC) m_gcBacking,
+                          oldForegroundPixel);
+  }
+
+  return retVal;
 }
 
 void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
@@ -1136,34 +1176,8 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
         if (!sameColour || !GetOptimization())
         {
-            int pixel = -1;
-            if (!m_colour) // Mono display
-            {
-                // Unless foreground is really white, draw it in black
-                unsigned char red = m_textForegroundColour.Red ();
-                unsigned char blue = m_textForegroundColour.Blue ();
-                unsigned char green = m_textForegroundColour.Green ();
-                if (red == (unsigned char) 255 && blue == (unsigned char) 255
-                    && green == (unsigned char) 255)
-                {
-                    m_currentColour = *wxWHITE;
-                    pixel = (int) WhitePixel ((Display*) m_display, DefaultScreen ((Display*) m_display));
-                    m_currentColour.SetPixel(pixel);
-                    m_textForegroundColour.SetPixel(pixel);
-                }
-                else
-                {
-                    m_currentColour = *wxBLACK;
-                    pixel = (int) BlackPixel ((Display*) m_display, DefaultScreen ((Display*) m_display));
-                    m_currentColour.SetPixel(pixel);
-                    m_textForegroundColour.SetPixel(pixel);
-                }
-            }
-            else
-            {
-                pixel = m_textForegroundColour.AllocColour((Display*) m_display);
-                m_currentColour.SetPixel(pixel);
-            }
+            int pixel = CalculatePixel(m_textForegroundColour,
+                                       m_currentColour, FALSE);
 
             // Set the GC to the required colour
             if (pixel > -1)
@@ -1510,6 +1524,67 @@ void wxWindowDC::SetFont( const wxFont &font )
         XSetFont ((Display*) m_display,(GC) m_gcBacking, fontId);
 }
 
+void wxWindowDC::SetForegroundPixelWithLogicalFunction(int pixel)
+{
+    if (m_logicalFunction == wxXOR)
+    {
+        XGCValues values;
+        XGetGCValues ((Display*) m_display, (GC) m_gc, GCBackground, &values);
+        XSetForeground ((Display*) m_display, (GC) m_gc,
+                        pixel ^ values.background);
+        if (m_window && m_window->GetBackingPixmap())
+            XSetForeground ((Display*) m_display,(GC) m_gcBacking,
+                            pixel ^ values.background);
+    }
+    else
+    {
+        XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
+        if (m_window && m_window->GetBackingPixmap())
+            XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
+    }
+}
+
+int wxWindowDC::CalculatePixel(wxColour& colour, wxColour& curCol,
+                               bool roundToWhite) const
+{
+    const unsigned char wp = (unsigned char)255;
+        
+    int pixel = -1;
+    if(!m_colour) // Mono display
+    {
+        unsigned char red = colour.Red ();
+        unsigned char blue = colour.Blue ();
+        unsigned char green = colour.Green ();
+        // white
+        if((red == wp && blue == wp && green == wp) ||
+           // not black and roundToWhite was specified
+           ((red != 0 || blue != 0 || green != 0) && roundToWhite))
+        {
+            curCol = *wxWHITE;
+            pixel = (int)WhitePixel((Display*) m_display,
+                                    DefaultScreen((Display*) m_display));
+            curCol.SetPixel(pixel);
+            colour.SetPixel(pixel);
+        }
+        else
+        {
+            curCol = *wxBLACK;
+            pixel = (int)BlackPixel((Display*) m_display,
+                                    DefaultScreen((Display*) m_display));
+            curCol.SetPixel(pixel);
+            colour.SetPixel(pixel);
+        }
+    }
+    else
+    {
+        curCol = colour;
+        pixel = colour.AllocColour((Display*) m_display);
+        curCol.SetPixel(pixel);
+    }
+
+    return pixel;
+}
+
 void wxWindowDC::SetPen( const wxPen &pen )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
@@ -1755,50 +1830,14 @@ void wxWindowDC::SetPen( const wxPen &pen )
         int pixel = -1;
         if (m_pen.GetStyle () == wxTRANSPARENT)
             pixel = m_backgroundPixel;
-        else if (!m_colour)
-        {
-            unsigned char red = m_pen.GetColour ().Red ();
-            unsigned char blue = m_pen.GetColour ().Blue ();
-            unsigned char green = m_pen.GetColour ().Green ();
-            if (red == (unsigned char) 255 && blue == (unsigned char) 255
-                && green == (unsigned char) 255)
-            {
-                pixel = (int) WhitePixel ((Display*) m_display, DefaultScreen ((Display*) m_display));
-                m_currentColour = *wxWHITE;
-                m_pen.GetColour().SetPixel(pixel);
-                m_currentColour.SetPixel(pixel);
-            }
-            else
-            {
-                pixel = (int) BlackPixel ((Display*) m_display, DefaultScreen ((Display*) m_display));
-                m_currentColour = *wxBLACK;
-                m_pen.GetColour().SetPixel(pixel);
-            }
-        }
         else
         {
-            pixel = m_pen.GetColour ().AllocColour(m_display);
-            m_currentColour.SetPixel(pixel);
+            pixel = CalculatePixel(m_pen.GetColour(), m_currentColour, FALSE);
         }
 
         // Finally, set the GC to the required colour
         if (pixel > -1)
-        {
-            if (m_logicalFunction == wxXOR)
-            {
-                XGCValues values;
-                XGetGCValues ((Display*) m_display, (GC) m_gc, GCBackground, &values);
-                XSetForeground ((Display*) m_display, (GC) m_gc, pixel ^ values.background);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel ^ values.background);
-            }
-            else
-            {
-                XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
-            }
-        }
+            SetForegroundPixelWithLogicalFunction(pixel);
     }
     else
         m_pen.GetColour().SetPixel(oldPenColour.GetPixel());
@@ -1930,64 +1969,10 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
     // must test m_logicalFunction, because it involves background!
     if (!sameColour || !GetOptimization() || m_logicalFunction == wxXOR)
     {
-        int pixel = -1;
-        if (!m_colour)
-        {
-            // Policy - on a monochrome screen, all brushes are white,
-            // except when they're REALLY black!!!
-            unsigned char red = m_brush.GetColour ().Red ();
-            unsigned char blue = m_brush.GetColour ().Blue ();
-            unsigned char green = m_brush.GetColour ().Green ();
-
-            if (red == (unsigned char) 0 && blue == (unsigned char) 0
-                && green == (unsigned char) 0)
-            {
-                pixel = (int) BlackPixel ((Display*) m_display, DefaultScreen ((Display*) m_display));
-                m_currentColour = *wxBLACK;
-                m_brush.GetColour().SetPixel(pixel);
-                m_currentColour.SetPixel(pixel);
-            }
-            else
-            {
-                pixel = (int) WhitePixel ((Display*) m_display, DefaultScreen ((Display*) m_display));
-                m_currentColour = *wxWHITE;
-                m_brush.GetColour().SetPixel(pixel);
-                m_currentColour.SetPixel(pixel);
-            }
-
-            // N.B. comment out the above line and uncomment the following lines
-            // if you want non-white colours to be black on a monochrome display.
-            /*
-            if (red == (unsigned char )255 && blue == (unsigned char)255
-            && green == (unsigned char)255)
-            pixel = (int)WhitePixel((Display*) m_display, DefaultScreen((Display*) m_display));
-            else
-            pixel = (int)BlackPixel((Display*) m_display, DefaultScreen((Display*) m_display));
-            */
-        }
-        else if (m_brush.GetStyle () != wxTRANSPARENT)
-        {
-            pixel = m_brush.GetColour().AllocColour(m_display);
-            m_currentColour.SetPixel(pixel);
-        }
+        int pixel = CalculatePixel(m_brush.GetColour(), m_currentColour, TRUE);
+ 
         if (pixel > -1)
-        {
-            // Finally, set the GC to the required colour
-            if (m_logicalFunction == wxXOR)
-            {
-                XGCValues values;
-                XGetGCValues ((Display*) m_display, (GC) m_gc, GCBackground, &values);
-                XSetForeground ((Display*) m_display, (GC) m_gc, pixel ^ values.background);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel ^ values.background);
-            }
-            else
-            {
-                XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
-            }
-        }
+            SetForegroundPixelWithLogicalFunction(pixel);
     }
     else
         m_brush.GetColour().SetPixel(oldBrushColour.GetPixel());
@@ -2002,7 +1987,7 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
     if (!m_backgroundBrush.Ok())
         return;
 
-    int pixel = m_backgroundBrush.GetColour().AllocColour(m_display);
+    m_backgroundPixel = m_backgroundBrush.GetColour().AllocColour(m_display);
 
     // New behaviour, 10/2/99: setting the background brush of a DC
     // doesn't affect the window background colour.
@@ -2014,9 +1999,10 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
 
     // Necessary for ::DrawIcon, which use fg/bg pixel or the GC.
     // And Blit,... (Any fct that use XCopyPlane, in fact.)
-    XSetBackground ((Display*) m_display, (GC) m_gc, pixel);
+    XSetBackground ((Display*) m_display, (GC) m_gc, m_backgroundPixel);
     if (m_window && m_window->GetBackingPixmap())
-        XSetBackground ((Display*) m_display,(GC) m_gcBacking, pixel);
+        XSetBackground ((Display*) m_display,(GC) m_gcBacking,
+                        m_backgroundPixel);
 }
 
 void wxWindowDC::SetLogicalFunction( int function )
