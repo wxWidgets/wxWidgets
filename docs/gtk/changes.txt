@@ -1,8 +1,21 @@
 
-XXth September: wxWindows 2.2.2 released
+20th September: wxWindows 2.2.2 released
 
 Fixed wxSizer bug that made items with option
 flags greater than 1 report a wrongn size.
+
+Fixed many incompatibilties with GTK themes -
+essentially a backport from the 2.3 branch.
+
+Added missing wxImage::Paste() for transparent
+images.
+
+Fixed a drawing error for ellipses and arc in both
+the DC code and the PostScript code.
+
+Fixed wxListCtrl::HitTest() for report mode.
+
+Other minor fixes.
 
 20th August 2000: wxWindows 2.2.1 released
 
