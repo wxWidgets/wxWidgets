@@ -1918,7 +1918,7 @@ IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyVListBox, wxVListBox, OnDrawBackground
 static PyObject *wxPyVListBox_GetFirstSelected(wxPyVListBox *self){
             unsigned long cookie = 0;
             int selected = self->GetFirstSelected(cookie);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(selected));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
@@ -1927,7 +1927,7 @@ static PyObject *wxPyVListBox_GetFirstSelected(wxPyVListBox *self){
         }
 static PyObject *wxPyVListBox_GetNextSelected(wxPyVListBox *self,unsigned long cookie){
             int selected = self->GetNextSelected(cookie);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(selected));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
@@ -2036,7 +2036,7 @@ public:
     wxMenu* CreatePopupMenu() {
         wxMenu *rval = NULL;
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "CreatePopupMenu"))) {
             PyObject* ro;
             wxMenu* ptr;
@@ -2340,7 +2340,7 @@ IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, HasTransparentBackgro
  static const wxString wxPyPreviewCanvasNameStr(wxT("previewcanvas")); 
 static PyObject *wxPrintData_GetPrivData(wxPrintData *self){
             PyObject* data;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             data = PyString_FromStringAndSize(self->GetPrivData(),
                                               self->GetPrivDataLen());
             wxPyEndBlockThreads(blocked);
@@ -2353,7 +2353,7 @@ static void wxPrintData_SetPrivData(wxPrintData *self,PyObject *data){
                 return /* NULL */ ;
             }
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             self->SetPrivData(PyString_AS_STRING(data), PyString_GET_SIZE(data));
             wxPyEndBlockThreads(blocked);
         }
@@ -2366,7 +2366,7 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
     bool hadErr = false;
     bool found;
 
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "GetPageInfo"))) {
         PyObject* result = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
         if (result && PyTuple_Check(result) && PyTuple_Size(result) == 4) {
@@ -2428,7 +2428,7 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
     bool CLASS::CBNAME(wxPreviewCanvas* a, wxDC& b) {                                   \
         bool rval=false;                                                                \
         bool found;                                                                     \
-        bool blocked = wxPyBeginBlockThreads();                                         \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                         \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                        \
             PyObject* win = wxPyMake_wxObject(a,false);                                 \
             PyObject* dc  = wxPyMake_wxObject(&b,false);                                \

@@ -1582,7 +1582,7 @@ static PyObject *wxCalendarCtrl_HitTest(wxCalendarCtrl *self,wxPoint const &pos)
             wxDateTime* date = new wxDateTime;
             wxDateTime::WeekDay wd;
             wxCalendarHitTestResult result = self->HitTest(pos, date, &wd);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(3);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(result));
             PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(date, wxT("wxDateTime"), 1));

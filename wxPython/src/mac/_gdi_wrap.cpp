@@ -1721,7 +1721,7 @@ SWIG_Check_int(PyObject* obj)
 static PyObject *wxPen_GetDashes(wxPen *self){
             wxDash* dashes;
             int count = self->GetDashes(&dashes);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* retval = PyList_New(0);
             for (int x=0; x<count; x++) {
                 PyObject* pyint = PyInt_FromLong(dashes[x]);
@@ -1732,7 +1732,7 @@ static PyObject *wxPen_GetDashes(wxPen *self){
             return retval;
         }
 static void wxPen__SetDashes(wxPen *self,PyObject *_self,PyObject *pyDashes){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             int size = PyList_Size(pyDashes);
             wxDash* dashes = (wxDash*)byte_LIST_helper(pyDashes);
 

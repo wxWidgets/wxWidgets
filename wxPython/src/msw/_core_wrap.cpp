@@ -1787,7 +1787,7 @@ SWIG_Check_int(PyObject* obj)
 }
 
 static PyObject *wxSize_Get(wxSize *self){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
@@ -1839,7 +1839,7 @@ static void wxRealPoint_Set(wxRealPoint *self,double x,double y){
             self->y = y;
         }
 static PyObject *wxRealPoint_Get(wxRealPoint *self){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->y));
@@ -1872,7 +1872,7 @@ static void wxPoint_Set(wxPoint *self,long x,long y){
             self->y = y;
         }
 static PyObject *wxPoint_Get(wxPoint *self){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
@@ -1886,7 +1886,7 @@ static void wxRect_Set(wxRect *self,int x=0,int y=0,int width=0,int height=0){
             self->height = height;
         }
 static PyObject *wxRect_Get(wxRect *self){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
@@ -1906,7 +1906,7 @@ static PyObject *wxRect_Get(wxRect *self){
         dest = reg1.GetBox();
 
         if (dest != wxRect(0,0,0,0)) {
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
             obj = wxPyConstructObject((void*)newRect, wxT("wxRect"), true);
             wxPyEndBlockThreads(blocked);
@@ -1949,7 +1949,7 @@ static void wxPoint2D_Set(wxPoint2D *self,double x=0,double y=0){
             self->m_y = y;
         }
 static PyObject *wxPoint2D_Get(wxPoint2D *self){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->m_x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->m_y));
@@ -2211,7 +2211,7 @@ static wxString FileSystem_URLToFileName(wxString const &url){
             return;
         }
 
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         void*  ptr = (void*)PyString_AsString(data);
         size_t size = PyString_Size(data);
         wxPyEndBlockThreads(blocked);
@@ -2374,7 +2374,7 @@ static void wxImage_SetDataBuffer(wxImage *self,PyObject *data){
             unsigned char* buffer;
             int size;
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (!PyArg_Parse(data, "t#", &buffer, &size))
                 goto done;
 
@@ -2422,7 +2422,7 @@ static void wxImage_SetAlphaBuffer(wxImage *self,PyObject *data){
             unsigned char* buffer;
             int size;
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (!PyArg_Parse(data, "t#", &buffer, &size))
                 goto done;
 
@@ -2794,7 +2794,7 @@ static void wxItemContainer_SetClientData(wxItemContainer *self,int n,PyObject *
 static wxSizerItem *new_wxSizerItem(wxWindow *window,int proportion,int flag,int border,PyObject *userData=NULL){
             wxPyUserData* data = NULL;
             if ( userData ) {
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 data = new wxPyUserData(userData);
                 wxPyEndBlockThreads(blocked);
             }
@@ -2803,7 +2803,7 @@ static wxSizerItem *new_wxSizerItem(wxWindow *window,int proportion,int flag,int
 static wxSizerItem *new_wxSizerItem(int width,int height,int proportion,int flag,int border,PyObject *userData=NULL){
             wxPyUserData* data = NULL;
             if ( userData ) {
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 data = new wxPyUserData(userData);
                 wxPyEndBlockThreads(blocked);
             }
@@ -2812,7 +2812,7 @@ static wxSizerItem *new_wxSizerItem(int width,int height,int proportion,int flag
 static wxSizerItem *new_wxSizerItem(wxSizer *sizer,int proportion,int flag,int border,PyObject *userData=NULL){
             wxPyUserData* data = NULL;
             if ( userData ) {
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 data = new wxPyUserData(userData);
                 wxPyEndBlockThreads(blocked);
             }
@@ -2971,7 +2971,7 @@ static void wxSizer__setOORInfo(wxSizer *self,PyObject *_self){
 static wxSizerItem *wxSizer_Add(wxSizer *self,PyObject *item,int proportion=0,int flag=0,int border=0,PyObject *userData=NULL){
 
             wxPyUserData* data = NULL;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
@@ -2991,7 +2991,7 @@ static wxSizerItem *wxSizer_Add(wxSizer *self,PyObject *item,int proportion=0,in
 static wxSizerItem *wxSizer_Insert(wxSizer *self,int before,PyObject *item,int proportion=0,int flag=0,int border=0,PyObject *userData=NULL){
 
             wxPyUserData* data = NULL;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
@@ -3011,7 +3011,7 @@ static wxSizerItem *wxSizer_Insert(wxSizer *self,int before,PyObject *item,int p
 static wxSizerItem *wxSizer_Prepend(wxSizer *self,PyObject *item,int proportion=0,int flag=0,int border=0,PyObject *userData=NULL){
 
             wxPyUserData* data = NULL;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
@@ -3029,7 +3029,7 @@ static wxSizerItem *wxSizer_Prepend(wxSizer *self,PyObject *item,int proportion=
                 return NULL;
         }
 static bool wxSizer_Remove(wxSizer *self,PyObject *item){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -3042,7 +3042,7 @@ static bool wxSizer_Remove(wxSizer *self,PyObject *item){
                 return false;
         }
 static bool wxSizer_Detach(wxSizer *self,PyObject *item){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -3055,7 +3055,7 @@ static bool wxSizer_Detach(wxSizer *self,PyObject *item){
                 return false;
         }
 static wxSizerItem *wxSizer_GetItem(wxSizer *self,PyObject *item){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -3068,7 +3068,7 @@ static wxSizerItem *wxSizer_GetItem(wxSizer *self,PyObject *item){
                 return NULL;
         }
 static void wxSizer__SetItemMinSize(wxSizer *self,PyObject *item,wxSize const &size){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -3083,7 +3083,7 @@ static PyObject *wxSizer_GetChildren(wxSizer *self){
             return wxPy_ConvertList(&list);
         }
 static bool wxSizer_Show(wxSizer *self,PyObject *item,bool show=true,bool recursive=false){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -3096,7 +3096,7 @@ static bool wxSizer_Show(wxSizer *self,PyObject *item,bool show=true,bool recurs
                 return false;
         }
 static bool wxSizer_IsShown(wxSizer *self,PyObject *item){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
@@ -3141,7 +3141,7 @@ static void wxGBPosition_Set(wxGBPosition *self,int row=0,int col=0){
             self->SetCol(col);
         }
 static PyObject *wxGBPosition_Get(wxGBPosition *self){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetCol()));
@@ -3153,7 +3153,7 @@ static void wxGBSpan_Set(wxGBSpan *self,int rowspan=1,int colspan=1){
             self->SetColspan(colspan);
         }
 static PyObject *wxGBSpan_Get(wxGBSpan *self){
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRowspan()));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetColspan()));
@@ -3163,7 +3163,7 @@ static PyObject *wxGBSpan_Get(wxGBSpan *self){
 static wxGBSizerItem *new_wxGBSizerItem(wxWindow *window,wxGBPosition const &pos,wxGBSpan const &span,int flag,int border,PyObject *userData=NULL){
                 wxPyUserData* data = NULL;
                 if ( userData ) {
-                    bool blocked = wxPyBeginBlockThreads();
+                    wxPyBlock_t blocked = wxPyBeginBlockThreads();
                     data = new wxPyUserData(userData);
                     wxPyEndBlockThreads(blocked);
                 }
@@ -3172,7 +3172,7 @@ static wxGBSizerItem *new_wxGBSizerItem(wxWindow *window,wxGBPosition const &pos
 static wxGBSizerItem *new_wxGBSizerItem(wxSizer *sizer,wxGBPosition const &pos,wxGBSpan const &span,int flag,int border,PyObject *userData=NULL){
                 wxPyUserData* data = NULL;
                 if ( userData ) {
-                    bool blocked = wxPyBeginBlockThreads();
+                    wxPyBlock_t blocked = wxPyBeginBlockThreads();
                     data = new wxPyUserData(userData);
                     wxPyEndBlockThreads(blocked);
                 }
@@ -3181,7 +3181,7 @@ static wxGBSizerItem *new_wxGBSizerItem(wxSizer *sizer,wxGBPosition const &pos,w
 static wxGBSizerItem *new_wxGBSizerItem(int width,int height,wxGBPosition const &pos,wxGBSpan const &span,int flag,int border,PyObject *userData=NULL){
                 wxPyUserData* data = NULL;
                 if ( userData ) {
-                    bool blocked = wxPyBeginBlockThreads();
+                    wxPyBlock_t blocked = wxPyBeginBlockThreads();
                     data = new wxPyUserData(userData);
                     wxPyEndBlockThreads(blocked);
                 }
@@ -3195,7 +3195,7 @@ static wxGBPosition wxGBSizerItem_GetEndPos(wxGBSizerItem *self){
 static wxGBSizerItem *wxGridBagSizer_Add(wxGridBagSizer *self,PyObject *item,wxGBPosition const &pos,wxGBSpan const &span=wxDefaultSpan,int flag=0,int border=0,PyObject *userData=NULL){
 
             wxPyUserData* data = NULL;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);

@@ -1841,7 +1841,7 @@ wxPyTimer::wxPyTimer(wxEvtHandler *owner, int id)
 
 void wxPyTimer::Notify() {
     bool found;
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "Notify")))
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
     wxPyEndBlockThreads(blocked);
@@ -2047,7 +2047,7 @@ public:
 
     virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t) {
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLog"))) {
             PyObject* s = wx2PyString(szString);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iOi)", level, s, t));
@@ -2060,7 +2060,7 @@ public:
 
     virtual void DoLogString(const wxChar *szString, time_t t) {
         bool found;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString"))) {
             PyObject* s = wx2PyString(szString);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", s, t));
@@ -2088,7 +2088,7 @@ IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
 class wxJoystick : public wxObject {
 public:
     wxJoystick(int joystick = wxJOYSTICK1) {
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxJoystick is not available on this platform.");
         wxPyEndBlockThreads(blocked);
@@ -2151,19 +2151,19 @@ class wxSound : public wxObject
 {
 public:
     wxSound() {
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
         wxPyEndBlockThreads(blocked);
     }
     wxSound(const wxString&/*, bool*/) {
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
         wxPyEndBlockThreads(blocked);
     }
     wxSound(int, const wxByte*) {
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
         wxPyEndBlockThreads(blocked);
@@ -2191,7 +2191,7 @@ static wxSound *new_wxSound(PyObject *data){
             unsigned char* buffer; int size;
             wxSound *sound = NULL;
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (!PyArg_Parse(data, "t#", &buffer, &size))
                 goto done;
             sound = new wxSound(size, buffer);
@@ -2205,7 +2205,7 @@ static bool wxSound_CreateFromData(wxSound *self,PyObject *data){
             int size;
             bool rv = false;
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (!PyArg_Parse(data, "t#", &buffer, &size))
                 goto done;
             rv = self->Create(size, buffer);
@@ -2213,7 +2213,7 @@ static bool wxSound_CreateFromData(wxSound *self,PyObject *data){
             wxPyEndBlockThreads(blocked);
             return rv;
         #else
-                 bool blocked = wxPyBeginBlockThreads();
+                 wxPyBlock_t blocked = wxPyBeginBlockThreads();
                  PyErr_SetString(PyExc_NotImplementedError,
                                  "Create from data is not available on this platform.");
                  wxPyEndBlockThreads(blocked);
@@ -2260,7 +2260,7 @@ static PyObject *wxFileType_GetIconInfo(wxFileType *self){
                 iconIndex = loc.GetIndex();
 
                 // Make a tuple and put the values in it
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(loc),
                                                               wxT("wxIcon"), true));
@@ -2298,7 +2298,7 @@ static PyObject *wxFileType_GetAllCommands(wxFileType *self,wxString const &file
             wxArrayString commands;
             if (self->GetAllCommands(&verbs, &commands,
                                      wxFileType::MessageParameters(filename, mimetype))) {
-                bool blocked = wxPyBeginBlockThreads();
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(2);
                 PyTuple_SetItem(tuple, 0, wxArrayString2PyList_helper(verbs));
                 PyTuple_SetItem(tuple, 1, wxArrayString2PyList_helper(commands));
@@ -2383,7 +2383,7 @@ public:
                                   const wxArtClient& client,
                                   const wxSize& size) {
         wxBitmap rval = wxNullBitmap;
-        bool blocked = wxPyBeginBlockThreads();
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((wxPyCBH_findCallback(m_myInst, "CreateBitmap"))) {
             PyObject* so = wxPyConstructObject((void*)&size, wxT("wxSize"), 0);
             PyObject* ro;
@@ -2519,7 +2519,7 @@ static PyObject *DateTime_GetAmPmStrings(){
             wxString am;
             wxString pm;
             wxDateTime::GetAmPmStrings(&am, &pm);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wx2PyString(am));
             PyTuple_SET_ITEM(tup, 1, wx2PyString(pm));
@@ -2625,7 +2625,7 @@ static PyObject *wxDataObject_GetAllFormats(wxDataObject *self,wxDataObject::Dir
             wxDataFormat* formats = new wxDataFormat[count];
             self->GetAllFormats(formats, dir);
 
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* list = PyList_New(count);
             for (size_t i=0; i<count; i++) {
                 wxDataFormat* format = new wxDataFormat(formats[i]);
@@ -2640,7 +2640,7 @@ static PyObject *wxDataObject_GetAllFormats(wxDataObject *self,wxDataObject::Dir
 static PyObject *wxDataObject_GetDataHere(wxDataObject *self,wxDataFormat const &format){
             PyObject* rval = NULL;
             size_t size = self->GetDataSize(format);            
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (size) {
                 char* buf = new char[size];
                 if (self->GetDataHere(format, buf)) 
@@ -2656,7 +2656,7 @@ static PyObject *wxDataObject_GetDataHere(wxDataObject *self,wxDataFormat const 
         }
 static bool wxDataObject_SetData(wxDataObject *self,wxDataFormat const &format,PyObject *data){
             bool rval;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (PyString_Check(data)) {
                 rval = self->SetData(format, PyString_Size(data), PyString_AsString(data));
             }
@@ -2671,7 +2671,7 @@ static bool wxDataObject_SetData(wxDataObject *self,wxDataFormat const &format,P
 static PyObject *wxDataObjectSimple_GetDataHere(wxDataObjectSimple *self){
             PyObject* rval = NULL;
             size_t size = self->GetDataSize();            
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (size) {
                 char* buf = new char[size];
                 if (self->GetDataHere(buf)) 
@@ -2687,7 +2687,7 @@ static PyObject *wxDataObjectSimple_GetDataHere(wxDataObjectSimple *self){
         }
 static bool wxDataObjectSimple_SetData(wxDataObjectSimple *self,PyObject *data){
             bool rval;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (PyString_Check(data)) {
                 rval = self->SetData(PyString_Size(data), PyString_AsString(data));
             }
@@ -2720,7 +2720,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
     // C++ version.
 
     bool rval = false;
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "GetDataHere")) {
         PyObject* ro;
         ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
@@ -2739,7 +2739,7 @@ bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) const{
     // For this one we simply need to make a string from buf and len
     // and send it to the Python method.
     bool rval = false;
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetData")) {
         PyObject* data = PyString_FromStringAndSize((char*)buf, len);
         rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", data));
@@ -2779,7 +2779,7 @@ public:
 
 wxBitmap wxPyBitmapDataObject::GetBitmap() const {
     wxBitmap* rval = &wxNullBitmap;
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "GetBitmap")) {
         PyObject* ro;
         wxBitmap* ptr;
@@ -2795,7 +2795,7 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() const {
 }
  
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetBitmap")) {
         PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"), false);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", bo));
@@ -2809,7 +2809,7 @@ static wxCustomDataObject *new_wxCustomDataObject__SWIG_1(wxString const &format
         }
 static bool wxCustomDataObject_SetData(wxCustomDataObject *self,PyObject *data){
             bool rval;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (PyString_Check(data)) {
                 rval = self->SetData(PyString_Size(data), PyString_AsString(data));
             }
@@ -2823,7 +2823,7 @@ static bool wxCustomDataObject_SetData(wxCustomDataObject *self,PyObject *data){
         }
 static PyObject *wxCustomDataObject_GetData(wxCustomDataObject *self){
             PyObject* obj;
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             obj = PyString_FromStringAndSize((char*)self->GetData(), self->GetSize());
             wxPyEndBlockThreads(blocked);
             return obj;
@@ -2884,7 +2884,7 @@ public:
 bool wxPyFileDropTarget::OnDropFiles(wxCoord x, wxCoord y,
                                      const wxArrayString& filenames) {
     bool rval = false;
-    bool blocked = wxPyBeginBlockThreads();
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "OnDropFiles")) {
         PyObject* list = wxArrayString2PyList_helper(filenames);
         rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iiO)",x,y,list));
@@ -2957,7 +2957,7 @@ public:
 static PyObject *wxDisplay_GetModes(wxDisplay *self,wxVideoMode const &mode=wxDefaultVideoMode){
             PyObject* pyList = NULL;
             wxArrayVideoModes arr = self->GetModes(mode);
-            bool blocked = wxPyBeginBlockThreads();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
             for (int i=0; i < arr.GetCount(); i++) {
                 wxVideoMode* m = new wxVideoMode(arr.Item(i));
