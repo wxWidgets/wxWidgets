@@ -667,6 +667,12 @@ void wxListBox::Clear()
     wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
 
     gtk_list_clear_items( m_list, 0, GetCount() );
+    
+    if ( GTK_LIST(m_list)->last_focus_child != NULL  )
+    {
+        // This should be NULL, I think.
+        GTK_LIST(m_list)->last_focus_child = NULL;
+    }
 
     if ( HasClientObjectData() )
     {

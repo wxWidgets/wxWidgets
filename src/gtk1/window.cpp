@@ -3237,6 +3237,13 @@ void wxWindowGTK::SetFocus()
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
+#if 0
+    wxPrintf( "SetFocus from " );
+    if (GetClassInfo() && GetClassInfo()->GetClassName())
+        wxPrintf( GetClassInfo()->GetClassName() );
+    wxPrintf( ".\n" );
+#endif
+
     if (m_wxwindow)
     {
         if (!GTK_WIDGET_HAS_FOCUS (m_wxwindow))
@@ -3261,6 +3268,14 @@ void wxWindowGTK::SetFocus()
            // ?
         }
     }
+    
+#if 0
+    wxPrintf( "SetFocus finished in " );
+    if (GetClassInfo() && GetClassInfo()->GetClassName())
+        wxPrintf( GetClassInfo()->GetClassName() );
+    wxPrintf( ".\n" );
+#endif
+
 }
 
 bool wxWindowGTK::AcceptsFocus() const
