@@ -39,6 +39,11 @@ BEGIN_EVENT_TABLE( wxDynamicToolBar, wxControl )
 
 END_EVENT_TABLE()
 
+/***** Implementation for class wxToolLayoutItem *****/
+        
+IMPLEMENT_DYNAMIC_CLASS(wxToolLayoutItem, wxObject)
+
+
 /***** Implementation for class wxDynToolInfo *****/
         
 IMPLEMENT_DYNAMIC_CLASS(wxDynToolInfo, wxToolLayoutItem)

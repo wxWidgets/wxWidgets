@@ -25,6 +25,8 @@ Tool layout item.
 
 class wxToolLayoutItem : public wxObject
 {
+    DECLARE_DYNAMIC_CLASS(wxToolLayoutItem)
+
 public:
     wxRect    mRect;
     bool      mIsSeparator;
@@ -99,8 +101,8 @@ wxDynamicToolBar manages containment and layout of tool windows.
 class wxDynamicToolBar : public wxToolBarBase
 {
     DECLARE_DYNAMIC_CLASS(wxDynamicToolBar)
-protected:
 
+protected:
     friend class wxDynamicToolBarSerializer;
 
     wxDynToolInfoArrayT mTools;
