@@ -3,22 +3,6 @@
 
 <makefile>
 
-    <!-- FIXME: temporary hack.
-         Override this on command line, e.g.
-         bakefile_gen -f autoconf -b ../../tests/*.bkl -DBUILD_STREAM_TESTS=1
-    -->
-    <set var="BUILD_STREAM_TESTS">0</set>
-
-    <set var="STREAMS_FILES">
-        <if cond="BUILD_STREAM_TESTS=='1'">
-            streams/bstream.cpp
-            streams/ffilestream.cpp
-            streams/filestream.cpp
-            streams/memstream.cpp
-            streams/zlibstream.cpp
-        </if>
-    </set>
-
     <include file="../build/bakefiles/common_samples.bkl"/>
 
     <exe id="test" template="wx_test_console"
@@ -31,7 +15,11 @@
             filesys/filesys.cpp
             arrays/arrays.cpp
             longlong/longlong.cpp
-            $(STREAMS_FILES)
+            streams/bstream.cpp
+            streams/ffilestream.cpp
+            streams/filestream.cpp
+            streams/memstream.cpp
+            streams/zlibstream.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>

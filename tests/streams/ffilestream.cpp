@@ -85,6 +85,7 @@ private:
 ffileStream::ffileStream()
 {
     m_bSeekInvalidBeyondEnd = false;
+    m_bEofAtLastRead = false;
 }
 
 ffileStream::~ffileStream()

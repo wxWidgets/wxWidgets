@@ -29,7 +29,12 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_regex.obj \
 	$(OBJS)\test_filesys.obj \
 	$(OBJS)\test_arrays.obj \
-	$(OBJS)\test_longlong.obj
+	$(OBJS)\test_longlong.obj \
+	$(OBJS)\test_bstream.obj \
+	$(OBJS)\test_ffilestream.obj \
+	$(OBJS)\test_filestream.obj \
+	$(OBJS)\test_memstream.obj \
+	$(OBJS)\test_zlibstream.obj
 
 ### Conditionally set variables: ###
 
@@ -231,4 +236,19 @@ $(OBJS)\test_arrays.obj: .\arrays\arrays.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_longlong.obj: .\longlong\longlong.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_bstream.obj: .\streams\bstream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_ffilestream.obj: .\streams\ffilestream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_filestream.obj: .\streams\filestream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_memstream.obj: .\streams\memstream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_zlibstream.obj: .\streams\zlibstream.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**

@@ -27,7 +27,12 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_regex.o \
 	$(OBJS)\test_filesys.o \
 	$(OBJS)\test_arrays.o \
-	$(OBJS)\test_longlong.o
+	$(OBJS)\test_longlong.o \
+	$(OBJS)\test_bstream.o \
+	$(OBJS)\test_ffilestream.o \
+	$(OBJS)\test_filestream.o \
+	$(OBJS)\test_memstream.o \
+	$(OBJS)\test_zlibstream.o
 
 ### Conditionally set variables: ###
 
@@ -169,6 +174,21 @@ $(OBJS)\test_arrays.o: ./arrays/arrays.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_longlong.o: ./longlong/longlong.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_bstream.o: ./streams/bstream.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_ffilestream.o: ./streams/ffilestream.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_filestream.o: ./streams/filestream.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_memstream.o: ./streams/memstream.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_zlibstream.o: ./streams/zlibstream.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 .PHONY: all clean

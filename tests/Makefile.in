@@ -42,7 +42,12 @@ TEST_OBJECTS =  \
 	test_regex.o \
 	test_filesys.o \
 	test_arrays.o \
-	test_longlong.o
+	test_longlong.o \
+	test_bstream.o \
+	test_ffilestream.o \
+	test_filestream.o \
+	test_memstream.o \
+	test_zlibstream.o
 
 ### Conditionally set variables: ###
 
@@ -124,6 +129,21 @@ test_arrays.o: $(srcdir)/arrays/arrays.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_longlong.o: $(srcdir)/longlong/longlong.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_bstream.o: $(srcdir)/streams/bstream.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_ffilestream.o: $(srcdir)/streams/ffilestream.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_filestream.o: $(srcdir)/streams/filestream.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_memstream.o: $(srcdir)/streams/memstream.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 

@@ -439,6 +439,18 @@ SOURCE=.\arrays\arrays.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\streams\bstream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\ffilestream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\filestream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\filesys\filesys.cpp
 # End Source File
 # Begin Source File
@@ -455,11 +467,19 @@ SOURCE=.\mbconv\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\streams\memstream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\regex\regex.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\test.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\zlibstream.cpp
 # End Source File
 # End Group
 # End Target

@@ -177,7 +177,12 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_regex.obj &
 	$(OBJS)\test_filesys.obj &
 	$(OBJS)\test_arrays.obj &
-	$(OBJS)\test_longlong.obj
+	$(OBJS)\test_longlong.obj &
+	$(OBJS)\test_bstream.obj &
+	$(OBJS)\test_ffilestream.obj &
+	$(OBJS)\test_filestream.obj &
+	$(OBJS)\test_memstream.obj &
+	$(OBJS)\test_zlibstream.obj
 
 
 all : $(OBJS)
@@ -225,4 +230,19 @@ $(OBJS)\test_arrays.obj :  .AUTODEPEND .\arrays\arrays.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_longlong.obj :  .AUTODEPEND .\longlong\longlong.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_bstream.obj :  .AUTODEPEND .\streams\bstream.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_ffilestream.obj :  .AUTODEPEND .\streams\ffilestream.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_filestream.obj :  .AUTODEPEND .\streams\filestream.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_memstream.obj :  .AUTODEPEND .\streams\memstream.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_zlibstream.obj :  .AUTODEPEND .\streams\zlibstream.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<

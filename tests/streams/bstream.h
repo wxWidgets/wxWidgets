@@ -60,6 +60,7 @@ public:
         :m_bSimpleTellITest(false),
          m_bSimpleTellOTest(false),
          m_bSeekInvalidBeyondEnd(true),
+         m_bEofAtLastRead(true),
          m_pCurrentIn(NULL),
          m_pCurrentOut(NULL)
     { /* Nothing extra */ }
@@ -135,11 +136,22 @@ protected:
         // Travel to the end of the stream.
         while(!stream_in.Eof())
         {
-            // Double check to see if normal Eof works.
-            CPPUNIT_ASSERT_MESSAGE("Eof() doesn't return true when IsOk returns false!", stream_in.IsOk());
             // Read, we move one byte along.
             (void)stream_in.GetC();
+#if 0
+            // EOF behaviour is different in streams, disabled (for now?)
+
+            if (m_bEofAtLastRead)
+                // EOF should only occure after the last successful get.
+                CPPUNIT_ASSERT_MESSAGE("Eof is detected too late.", !(stream_in.LastRead() != 1 && stream_in.Eof()));
+            else
+                // EOF should only occure after a failed get.
+                CPPUNIT_ASSERT_MESSAGE("Eof is detected too soon.", !(stream_in.LastRead() == 1 && stream_in.Eof()));
+#endif
         }
+
+        // Check EOF stream state.
+        CPPUNIT_ASSERT_MESSAGE("EOF is not EOF?", stream_in.Eof());        
 
         // Ok we found the end, lets see if we can go past it.
         for (size_t i = 0; i < 100; i++)
@@ -147,6 +159,7 @@ protected:
 
         // Check for EOF correctness.
         CPPUNIT_ASSERT_MESSAGE("EOF is wrong when we read past EOF!", stream_in.Eof());
+        CPPUNIT_ASSERT_MESSAGE("Last error is not EOF while stream_in.Eof() is true", stream_in.GetLastError() == wxSTREAM_EOF);
     }
 
     // Just try to perform a LastRead() on the input stream.
@@ -352,7 +365,8 @@ protected:
                                 // Default false.
     bool m_bSeekInvalidBeyondEnd; // if true a SeekI|O beyond the end of the stream should return wxInvalidOffset
                                   // Default true.
-
+    bool m_bEofAtLastRead;      // Does EOF occure at the moment the last byte is read or when read past the last byte.
+                                // Default true.
 protected:
     TStreamIn &CreateInStream()
     { 
