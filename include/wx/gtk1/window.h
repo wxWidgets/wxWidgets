@@ -29,7 +29,7 @@
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxFrameNameStr;
+extern const wxChar *wxFrameNameStr;
 extern wxWindowList wxTopLevelWindows;
 
 //-----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ typedef void (*wxInsertChildFunction)( wxWindow*, wxWindow* );
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxPanelNameStr;
+extern const wxChar *wxPanelNameStr;
 extern const wxSize wxDefaultSize;
 extern const wxPoint wxDefaultPosition;
 
@@ -434,7 +434,7 @@ public:
     virtual void ApplyWidgetStyle();
 
 #if wxUSE_TOOLTIPS
-    virtual void ApplyToolTip( GtkTooltips *tips, const char *tip );
+    virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
 
     /* private member variables */
