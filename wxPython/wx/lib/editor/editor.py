@@ -131,9 +131,12 @@ class Editor(wx.ScrolledWindow):
 
     def NiceFontForPlatform(self):
         if wx.Platform == "__WXMSW__":
-            return wx.Font(10, wx.MODERN, wx.NORMAL, wx.NORMAL)
+            font = wx.Font(10, wx.MODERN, wx.NORMAL, wx.NORMAL)
         else:
-            return wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL, False)
+            font = wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL, False)
+        if wx.Platform == "__WXMAC__":
+            font.SetNoAntiAliasing()
+        return font
 
     def UnixKeyHack(self, key):
         #
