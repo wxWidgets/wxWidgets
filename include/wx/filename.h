@@ -52,13 +52,14 @@ enum wxPathFormat
 {
     wxPATH_NATIVE = 0,      // the path format for the current platform
     wxPATH_UNIX,
+    wxPATH_BEOS = wxPATH_UNIX,
     wxPATH_MAC,
     wxPATH_DOS,
+    wxPATH_WIN = wxPATH_DOS,
+    wxPATH_OS2 = wxPATH_DOS,
     wxPATH_VMS,
 
-    wxPATH_BEOS = wxPATH_UNIX,
-    wxPATH_WIN = wxPATH_DOS,
-    wxPATH_OS2 = wxPATH_DOS
+    wxPATH_MAX // Not a valid value for specifying path format
 };
 
 // the kind of normalization to do with the file name: these values can be
@@ -246,7 +247,6 @@ public:
                                        wxFile *fileTemp = NULL);
 
     // directory creation and removal.
-    // if full is TRUE, will try to make each directory in the path.
     bool Mkdir( int perm = 0777, int flags = 0);
     static bool Mkdir( const wxString &dir, int perm = 0777, int flags = 0 );
 
@@ -269,7 +269,7 @@ public:
         //
         // pass an empty string to get a path relative to the working directory
         //
-        // returns TRUE if the file name was modified, FALSE if we failed to do
+        // returns true if the file name was modified, false if we failed to do
         // anything with it (happens when the file is on a different volume,
         // for example)
     bool MakeRelativeTo(const wxString& pathBase = wxEmptyString,
@@ -310,6 +310,10 @@ public:
         // is this filename relative?
     bool IsRelative(wxPathFormat format = wxPATH_NATIVE) const
         { return !IsAbsolute(format); }
+
+    // Returns the characters that aren't allowed in filenames
+    // on the specified platform.
+    static wxString GetForbiddenChars(wxPathFormat format = wxPATH_NATIVE);
 
     // Information about path format
 
@@ -419,9 +423,9 @@ private:
     // that our path is '/', i.e. the root directory
     //
     // we use m_relative to distinguish between these two cases, it will be
-    // TRUE in the former and FALSE in the latter
+    // true in the former and false in the latter
     //
-    // NB: the path is not absolute just because m_relative is FALSE, it still
+    // NB: the path is not absolute just because m_relative is false, it still
     //     needs the drive (i.e. volume) in some formats (Windows)
     bool            m_relative;
 };

@@ -44,6 +44,7 @@ OTHER CHANGES
 All:
 
 - added wxDateSpan::operator==() and !=() (Lukasz Michalski)
+- added wxFileName::GetForbiddenChars() (Dimitri Schoolwerth)
 - use true/false throughout the library instead of TRUE/FALSE
 - wxStopWatch::Start() resumes the stop watch if paused, as per the docs
 - added wxDirTraverser::OnOpenError() to customize the error handling
@@ -438,7 +439,7 @@ wxBase:
 - fixes to the command line parsing error and usage messages
 - modified wxFileName::CreateTempFileName() to open the file atomically
   (if possible) and, especially, not to leak the file descriptors under Unix
-- memory leak in wxHTTP fixed (Dimitri)
+- memory leak in wxHTTP fixed (Dimitri Schoolwerth)
 - fixes to AM_PATH_WXCONFIG autoconf macro
 - added wxHashMap class that replaces type-unsafe wxHashTable and is modelled
   after (non standard) STL hash_map

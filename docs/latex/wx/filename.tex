@@ -38,13 +38,14 @@ enum wxPathFormat
 {
     wxPATH_NATIVE = 0,      // the path format for the current platform
     wxPATH_UNIX,
+    wxPATH_BEOS = wxPATH_UNIX,
     wxPATH_MAC,
     wxPATH_DOS,
+    wxPATH_WIN = wxPATH_DOS,
+    wxPATH_OS2 = wxPATH_DOS,
     wxPATH_VMS,
 
-    wxPATH_BEOS = wxPATH_UNIX,
-    wxPATH_WIN = wxPATH_DOS,
-    wxPATH_OS2 = wxPATH_DOS
+    wxPATH_MAX // Not a valid value for specifying path format
 }
 \end{verbatim}
 
@@ -189,7 +190,7 @@ Creates the file name from various combinations of data.
 
 \membersection{wxFileName::AssignCwd}\label{wxfilenameassigncwd}
 
-\func{void}{AssignCwd}{\param{const wxString\& }{volume = ""}}
+\func{static void}{AssignCwd}{\param{const wxString\& }{volume = wxEmptyString}}
 
 Makes this object refer to the current working directory on the specified
 volume (or current volume if {\it volume} is empty).
@@ -261,7 +262,7 @@ The full temporary file name or an empty string on error.
 
 \func{static bool}{DirExists}{\param{const wxString\& }{dir}}
 
-Returns true if the directory with this name exists.
+Returns {\tt true} if the directory with this name exists.
 
 \membersection{wxFileName::DirName}\label{wxfilenamedirname}
 
@@ -277,7 +278,7 @@ The {\it dir} parameter may have trailing path separator or not.
 
 \func{static bool}{FileExists}{\param{const wxString\& }{file}}
 
-Returns true if the file with this name exists.
+Returns {\tt true} if the file with this name exists.
 
 \wxheading{See also}
 
@@ -294,7 +295,7 @@ function exists mainly for symmetry with \helpref{DirName}{wxfilenamedirname}.
 
 \membersection{wxFileName::GetCwd}\label{wxfilenamegetcwd}
 
-\func{wxString}{GetCwd}{\param{const wxString\& }{volume = ""}}
+\func{static wxString}{GetCwd}{\param{const wxString\& }{volume = ""}}
 
 Retrieves the value of the current working directory on the specified volume. If
 the volume is empty, the programs current working directory is returned for the
@@ -327,9 +328,15 @@ Returns the directories in string array form.
 
 Returns the file name extension.
 
+\membersection{wxFileName::GetForbiddenChars}\label{wxfilenamegetforbiddenchars}
+
+\func{static wxString}{GetForbiddenChars}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+Returns the characters that can't be used in filenames and directory names for the specified format.
+
 \membersection{wxFileName::GetFormat}\label{wxfilenamegetformat}
 
-\func{wxPathFormat}{GetFormat}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\func{static wxPathFormat}{GetFormat}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the canonical path format for this platform.
 
@@ -347,7 +354,7 @@ Returns the full path with name and extension.
 
 \membersection{wxFileName::GetHomeDir}\label{wxfilenamegethomedir}
 
-\func{wxString}{GetHomeDir}{\void}
+\func{static wxString}{GetHomeDir}{\void}
 
 Returns the home directory.
 
@@ -387,7 +394,7 @@ the path.}
 
 \membersection{wxFileName::GetPathSeparator}\label{wxfilenamegetpathseparator}
 
-\func{wxChar}{GetPathSeparator}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\func{static wxChar}{GetPathSeparator}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the usually used path separator for this format. For all formats but 
 {\tt wxPATH\_DOS} there is only one path separator anyhow, but for DOS there
@@ -400,7 +407,7 @@ method.
 
 \membersection{wxFileName::GetPathSeparators}\label{wxfilenamegetpathseparators}
 
-\func{wxString}{GetPathSeparators}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\func{static wxString}{GetPathSeparators}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the string containing all the path separators for this format. For all
 formats but {\tt wxPATH\_DOS} this string contains only one character but for
@@ -446,7 +453,7 @@ example, Unix).
 
 \membersection{wxFileName::GetVolumeSeparator}\label{wxfilenamegetvolumeseparator}
 
-\func{wxString}{GetVolumeSeparator}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\func{static wxString}{GetVolumeSeparator}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the string separating the volume from the path for this format.
 
@@ -454,19 +461,19 @@ Returns the string separating the volume from the path for this format.
 
 \constfunc{bool}{HasExt}{\void}
 
-Returns true if an extension is present.
+Returns {\tt true} if an extension is present.
 
 \membersection{wxFileName::HasName}\label{wxfilenamehasname}
 
 \constfunc{bool}{HasName}{\void}
 
-Returns true if a name is present.
+Returns {\tt true} if a name is present.
 
 \membersection{wxFileName::HasVolume}\label{wxfilenamehasvolume}
 
 \constfunc{bool}{HasVolume}{\void}
 
-Returns true if a volume specifier is present.
+Returns {\tt true} if a volume specifier is present.
 
 \membersection{wxFileName::InsertDir}\label{wxfilenameinsertdir}
 
@@ -478,13 +485,13 @@ Inserts a directory before the zero-based position in the directory list.
 
 \func{bool}{IsAbsolute}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Returns true if this filename is absolute.
+Returns {\tt true} if this filename is absolute.
 
 \membersection{wxFileName::IsCaseSensitive}\label{wxfilenameiscasesensitive}
 
-\func{bool}{IsCaseSensitive}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\func{static bool}{IsCaseSensitive}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Returns true if the file names of this type are case-sensitive.
+Returns {\tt true} if the file names of this type are case-sensitive.
 
 \membersection{wxFileName::IsOk}\label{wxfilenameisok}
 
@@ -497,7 +504,7 @@ invalid state (the former only do it on failure).
 
 \membersection{wxFileName::IsPathSeparator}\label{wxfilenameispathseparator}
 
-\func{bool}{IsPathSeparator}{\param{wxChar }{ch}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\func{static bool}{IsPathSeparator}{\param{wxChar }{ch}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns {\tt true} if the char is a path separator for this format.
 
@@ -532,7 +539,7 @@ Make the file name absolute. This is a shortcut for
 
 \membersection{wxFileName::MakeRelativeTo}\label{wxfilenamemakerelativeto}
 
-\func{bool}{MakeRelativeTo}{\param{const wxString\& }{pathBase = ""}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\func{bool}{MakeRelativeTo}{\param{const wxString\& }{pathBase = wxEmptyString}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 This function tries to put this file name in a form relative to {\it pathBase}.
 In other words, it returns the file name which should be used to access this
