@@ -18,7 +18,6 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma interface "numdlgg.cpp"
     #pragma implementation "numdlgg.cpp"
 #endif
 
