@@ -251,10 +251,8 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
-#ifdef __SMARTPHONE__
-
     // 1) text message
-    topsizer->Add( CreateTextSizer( message ), 0, wxEXPAND, 0 );
+    topsizer->Add( CreateTextSizer( message ), 0, wxEXPAND, wxLARGESMALL(10,0) );
 
     // 2) list box
     m_listbox = new wxListBox( this, wxID_LISTBOX,
@@ -264,24 +262,13 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
     if ( n > 0 )
         m_listbox->SetSelection(0);
 
-    topsizer->Add( m_listbox, 1, wxEXPAND, 0 );
+    topsizer->Add( m_listbox, 1, wxEXPAND, wxLARGESMALL(15,0) );
+
+#ifdef __SMARTPHONE__
 
     SetRightMenu(wxID_CANCEL, _("Cancel"));
 
 #else // __SMARTPHONE__/!__SMARTPHONE__
-
-    // 1) text message
-    topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
-
-    // 2) list box
-    m_listbox = new wxListBox( this, wxID_LISTBOX,
-                               wxDefaultPosition, wxDefaultSize,
-                               n, choices,
-                               styleLbox );
-    if ( n > 0 )
-        m_listbox->SetSelection(0);
-
-    topsizer->Add( m_listbox, 1, wxEXPAND | wxLEFT|wxRIGHT, 15 );
 
 #if wxUSE_STATLINE
     // 3) static line
@@ -324,11 +311,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxSingleChoiceDialog, wxDialog)
-#if defined(__SMARTPHONE__)
-    EVT_MENU(wxID_OK, wxSingleChoiceDialog::OnOK)
-#else
     EVT_BUTTON(wxID_OK, wxSingleChoiceDialog::OnOK)
-#endif
     EVT_LISTBOX_DCLICK(wxID_LISTBOX, wxSingleChoiceDialog::OnListBoxDClick)
 END_EVENT_TABLE()
 

@@ -189,6 +189,16 @@ enum wxStockCursor
     #define wxBITMAP(name) wxBitmap(name##_xpm, wxBITMAP_TYPE_XPM)
 #endif // platform
 
+/* Macro for avoiding #ifdefs when value have to be different depending on size of
+   device we display on
+ */
+
+#if defined(__SMARTPHONE__)
+    #define wxLARGESMALL(large,small) small
+#else
+    #define wxLARGESMALL(large,small) large
+#endif
+
 // ===========================================================================
 // classes
 // ===========================================================================

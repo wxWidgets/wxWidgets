@@ -110,15 +110,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 #endif
 
 BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
-#ifdef __SMARTPHONE__
-    EVT_MENU(wxID_OK, wxDialog::OnOK)
-    EVT_MENU(wxID_APPLY, wxDialog::OnApply)
-    EVT_MENU(wxID_CANCEL, wxDialog::OnCancel)
-#else
     EVT_BUTTON(wxID_OK, wxDialog::OnOK)
     EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
     EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-#endif
 
     EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
 
