@@ -885,7 +885,7 @@ void MyModelessDialog::OnClose(wxCloseEvent& event)
 // ----------------------------------------------------------------------------
 
 MyModalDialog::MyModalDialog(wxWindow *parent)
-             : wxDialog(parent, -1, _T("Modal dialog"))
+             : wxDialog(parent, -1, wxString(_T("Modal dialog")))
 {
     wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
