@@ -55,7 +55,7 @@ public:
        @param newmsg if used, new message to display
        @returns true if ABORT button has not been pressed
    */
-   bool Update(int value, const wxString& newmsg = wxT(""));
+   virtual bool Update(int value, const wxString& newmsg = wxT(""));
 
    /* Can be called to continue after the cancel button has been pressed, but
        the program decided to continue the operation (e.g., user didn't
