@@ -96,8 +96,8 @@ bool MyApp::OnInit()
     wxMenu *test_menu = new wxMenu;
 #if wxUSE_TIMEDATE
     test_menu->Append(TYPES_DATE, "&Date test");
-#endif // wxUSE_TIMEDATE
     test_menu->Append(TYPES_TIME, "&Time test");
+#endif // wxUSE_TIMEDATE
     test_menu->Append(TYPES_VARIANT, "&Variant test");
     test_menu->Append(TYPES_BYTEORDER, "&Byteorder test");
 #if wxUSE_UNICODE
