@@ -5,7 +5,7 @@
 
 CCC=c++
 WXWIN=../../..
-
+GENCODEDIR=gtk
 
 ## Pick one of these, or set your own
 #TARGETDIR=$(BINLIBDEST)/site-packages/wxPython

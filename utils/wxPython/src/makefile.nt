@@ -35,10 +35,11 @@ NOPCH=1
 THISDIR=$(WXDIR)\utils\wxPython
 
 EXTRALIBS=$(PYTHONDIR)\libs\python15.lib
-EXTRAINC=-I$(PYTHONDIR)\include
+EXTRAINC=-I$(PYTHONDIR)\include -I.
 EXTRAFLAGS=/Fpwxp.pch /YXhelpers.h -DSWIG_GLOBAL -DHAVE_CONFIG_H
 
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXMSW__
+GENCODEDIR=msw
 
 
 !include $(WXDIR)\src\ntwxwin.mak
@@ -114,6 +115,11 @@ $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
 $(CPPFLAGS) /c /Tp $<
 <<
 
+{$(GENCODEDIR)}.cpp{}.obj:
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $<
+<<
+
 
 clean:
         -erase *.obj
@@ -138,11 +144,17 @@ clean:
 .SUFFIXES : .i .py
 
 # Implicit rules to run SWIG
-{}.i{}.cpp:
-	swig $(SWIGFLAGS) -c -o $*.cpp $*.i
+{}.i{$(GENCODEDIR)}.cpp:
+	swig $(SWIGFLAGS) -c -o $@ $<
+	move $(@B).py $(GENCODEDIR)
 
-{}.i{}.py:
-	swig $(SWIGFLAGS) -c -o $*.cpp $*.i
+{}.i{$(GENCODEDIR)}.py:
+	swig $(SWIGFLAGS) -c -o $@ $<
+	move $(@B).py $(GENCODEDIR)
+
+
+{$(GENCODEDIR)}.py{$(TARGETDIR)}.py:
+	copy $< $@
 
 {}.py{$(TARGETDIR)}.py:
 	copy $< $@
@@ -154,37 +166,42 @@ clean:
 
 
 # This one must leave out the -c flag so we define the whole rule
-wxp.cpp wxp.py : wxp.i my_typemaps.i _defs.i _extras.py
-        swig $(SWIGFLAGS) -o wxp.cpp wxp.i
+$(GENCODEDIR)\wxp.cpp $(GENCODEDIR)\wxp.py : wxp.i my_typemaps.i _defs.i _extras.py
+        swig $(SWIGFLAGS) -o $(GENCODEDIR)\wxp.cpp wxp.i
+	move wxp.py $(GENCODEDIR)\wxp.py
 
 
 # define some dependencies
-windows.cpp   windows.py   : windows.i    my_typemaps.i _defs.i
-windows2.cpp  windows2.py  : windows2.i   my_typemaps.i _defs.i
-events.cpp    events.py    : events.i     my_typemaps.i _defs.i
-misc.cpp      misc.py      : misc.i       my_typemaps.i _defs.i
-gdi.cpp       gdi.py       : gdi.i        my_typemaps.i _defs.i
-mdi.cpp       mdi.py       : mdi.i        my_typemaps.i _defs.i
-controls.cpp  controls.py  : controls.i   my_typemaps.i _defs.i
-controls2.cpp controls2.py : controls2.i  my_typemaps.i _defs.i
-cmndlgs.cpp   cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
+$(GENCODEDIR)\windows.cpp   $(GENCODEDIR)\windows.py   : windows.i    my_typemaps.i _defs.i
+$(GENCODEDIR)\windows2.cpp  $(GENCODEDIR)\windows2.py  : windows2.i   my_typemaps.i _defs.i
+$(GENCODEDIR)\events.cpp    $(GENCODEDIR)\events.py    : events.i     my_typemaps.i _defs.i
+$(GENCODEDIR)\misc.cpp      $(GENCODEDIR)\misc.py      : misc.i       my_typemaps.i _defs.i
+$(GENCODEDIR)\gdi.cpp       $(GENCODEDIR)\gdi.py       : gdi.i        my_typemaps.i _defs.i
+$(GENCODEDIR)\mdi.cpp       $(GENCODEDIR)\mdi.py       : mdi.i        my_typemaps.i _defs.i
+$(GENCODEDIR)\controls.cpp  $(GENCODEDIR)\controls.py  : controls.i   my_typemaps.i _defs.i
+$(GENCODEDIR)\controls2.cpp $(GENCODEDIR)\controls2.py : controls2.i  my_typemaps.i _defs.i
+$(GENCODEDIR)\cmndlgs.cpp   $(GENCODEDIR)\cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
 
 
-$(TARGETDIR)\wxp.py       : wxp.py
-$(TARGETDIR)\windows.py   : windows.py
-$(TARGETDIR)\windows2.py  : windows2.py
-$(TARGETDIR)\events.py    : events.py
-$(TARGETDIR)\misc.py      : misc.py
-$(TARGETDIR)\gdi.py       : gdi.py
-$(TARGETDIR)\mdi.py       : mdi.py
-$(TARGETDIR)\controls.py  : controls.py
-$(TARGETDIR)\controls2.py : controls2.py
-$(TARGETDIR)\cmndlgs.py   : cmndlgs.py
+$(TARGETDIR)\wxp.py       : $(GENCODEDIR)\wxp.py
+$(TARGETDIR)\windows.py   : $(GENCODEDIR)\windows.py
+$(TARGETDIR)\windows2.py  : $(GENCODEDIR)\windows2.py
+$(TARGETDIR)\events.py    : $(GENCODEDIR)\events.py
+$(TARGETDIR)\misc.py      : $(GENCODEDIR)\misc.py
+$(TARGETDIR)\gdi.py       : $(GENCODEDIR)\gdi.py
+$(TARGETDIR)\mdi.py       : $(GENCODEDIR)\mdi.py
+$(TARGETDIR)\controls.py  : $(GENCODEDIR)\controls.py
+$(TARGETDIR)\controls2.py : $(GENCODEDIR)\controls2.py
+$(TARGETDIR)\cmndlgs.py   : $(GENCODEDIR)\cmndlgs.py
+$(TARGETDIR)\__init__.py  : __init__.py
 
 
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.4  1998/08/18 21:55:10  RD
+# New build directory structure
+#
 # Revision 1.3  1998/08/15 07:36:37  RD
 # - Moved the header in the .i files out of the code that gets put into
 # the .cpp files.  It caused CVS conflicts because of the RCS ID being

@@ -316,49 +316,41 @@ distclean:	clobber
 
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__
 
-ifndef FINAL
-PYEXT=pyc
-PYTHON=python
-else
-PYEXT=pyo
-PYTHON=python -O
-endif
 
-PYMODULES = wxp.py       events.py    windows.py   misc.py      \
-	    gdi.py       mdi.py       controls.py  controls2.py \
-            windows2.py  cmndlgs.py   __init__.py
-
+PYMODULES = $(GENCODEDIR)/wxp.py       $(GENCODEDIR)/events.py    \
+	    $(GENCODEDIR)/windows.py   $(GENCODEDIR)/misc.py      \
+	    $(GENCODEDIR)/gdi.py       $(GENCODEDIR)/mdi.py       \
+	    $(GENCODEDIR)/controls.py  $(GENCODEDIR)/controls2.py \
+            $(GENCODEDIR)/windows2.py  $(GENCODEDIR)/cmndlgs.py   \
+	    __init__.py
 
 
 # Implicit rules to run SWIG
-%.cpp : %.i
-	swig $(SWIGFLAGS) -c -o $*.cpp $*.i
+$(GENCODEDIR)/%.cpp : %.i
+	swig $(SWIGFLAGS) -c -o $@ $<
+	move $*.py $(GENCODEDIR)
 
-$(TARGETDIR)/%.py : %.py
-	cp $< $@
-
-$(TARGETDIR)/%.$(PYEXT) : %.py
-	$(PYTHON) -c "import py_compile; py_compile.compile('$<', '$@')"
-
-%.py : %.i
-	swig $(SWIGFLAGS) -c -o $*.cpp $*.i
+$(GENCODEDIR)/%.py : %.i
+	swig $(SWIGFLAGS) -c -o $@ $<
+	move $*.py $(GENCODEDIR)
 
 
 # This one must leave out the -c flag so we define the whole rule
-wxp.cpp wxp.py : wxp.i my_typemaps.i _defs.i _extras.py
-	swig $(SWIGFLAGS) -o wxp.cpp wxp.i
+$(GENCODEDIR)/wxp.cpp $(GENCODEDIR)/wxp.py : wxp.i my_typemaps.i _defs.i _extras.py
+	swig $(SWIGFLAGS) -o $(GENCODEDIR)/wxp.cpp wxp.i
+	move wxp.py $(GENCODEDIR)
 
 
 # define some dependencies
-windows.cpp   windows.py   : windows.i    my_typemaps.i _defs.i
-windows2.cpp  windows2.py  : windows2.i   my_typemaps.i _defs.i
-events.cpp    events.py    : events.i     my_typemaps.i _defs.i
-misc.cpp      misc.py      : misc.i       my_typemaps.i _defs.i
-gdi.cpp       gdi.py       : gdi.i        my_typemaps.i _defs.i
-mdi.cpp       mdi.py       : mdi.i        my_typemaps.i _defs.i
-controls.cpp  controls.py  : controls.i   my_typemaps.i _defs.i
-controls2.cpp controls2.py : controls2.i  my_typemaps.i _defs.i
-cmndlgs.cpp   cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
+$(GENCODEDIR)/windows.cpp   $(GENCODEDIR)/windows.py   : windows.i    my_typemaps.i _defs.i
+$(GENCODEDIR)/windows2.cpp  $(GENCODEDIR)/windows2.py  : windows2.i   my_typemaps.i _defs.i
+$(GENCODEDIR)/events.cpp    $(GENCODEDIR)/events.py    : events.i     my_typemaps.i _defs.i
+$(GENCODEDIR)/misc.cpp      $(GENCODEDIR)/misc.py      : misc.i       my_typemaps.i _defs.i
+$(GENCODEDIR)/gdi.cpp       $(GENCODEDIR)/gdi.py       : gdi.i        my_typemaps.i _defs.i
+$(GENCODEDIR)/mdi.cpp       $(GENCODEDIR)/mdi.py       : mdi.i        my_typemaps.i _defs.i
+$(GENCODEDIR)/controls.cpp  $(GENCODEDIR)/controls.py  : controls.i   my_typemaps.i _defs.i
+$(GENCODEDIR)/controls2.cpp $(GENCODEDIR)/controls2.py : controls2.i  my_typemaps.i _defs.i
+$(GENCODEDIR)/cmndlgs.cpp   $(GENCODEDIR)/cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
 
 
 
