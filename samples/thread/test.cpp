@@ -48,6 +48,7 @@ public:
     bool OnInit();
 };
 
+class MyThread;
 WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
 
 // Define a new frame type
@@ -66,6 +67,7 @@ public:
     void OnClear(wxCommandEvent& event);
 
     void OnStartThread(wxCommandEvent& event);
+    void OnStartThreads(wxCommandEvent& event);
     void OnStopThread(wxCommandEvent& event);
     void OnPauseThread(wxCommandEvent& event);
     void OnResumeThread(wxCommandEvent& event);
@@ -73,22 +75,37 @@ public:
     void OnIdle(wxIdleEvent &event);
     bool OnClose() { return TRUE; }
 
-    // called by dying thread
+    // called by dying thread _in_that_thread_context_
     void OnThreadExit(wxThread *thread);
 
-public:
+private:
+    // helper function - creates a new thread (but doesn't run it)
+    MyThread *CreateThread();
+    
+    // crit section protects access to all of the arrays below
+    wxCriticalSection m_critsect;
+
+    // all the threads currently alive - as soon as the thread terminates, it's
+    // removed from the array
     wxArrayThread m_threads;
 
-private:
-    // crit section protects access to the array below
-    wxCriticalSection m_critsect;
+    // both of these arrays are only valid between 2 iterations of OnIdle(),
+    // they're cleared each time it is excuted.
 
     // the array of threads which finished (either because they did their work
     // or because they were explicitly stopped)
-    wxArrayInt m_aToDelete;
+    wxArrayThread m_terminated;
 
+    // the array of threads which were stopped by the user and not terminated
+    // by themselves - these threads shouldn't be Delete()d second time from
+    // OnIdle()
+    wxArrayThread m_stopped;
+    
     // just some place to put our messages in
     wxTextCtrl *m_txtctrl;
+
+    // remember the number of running threads and total number of threads
+    size_t m_nRunning, m_nCount;
 
     DECLARE_EVENT_TABLE()
 };
@@ -168,12 +185,13 @@ enum
 {
     TEST_QUIT          = 1,
     TEST_TEXT          = 101,
-    TEST_ABOUT         = 102,
-    TEST_CLEAR         = 103,
-    TEST_START_THREAD  = 203,
-    TEST_STOP_THREAD   = 204,
-    TEST_PAUSE_THREAD  = 205,
-    TEST_RESUME_THREAD = 206
+    TEST_ABOUT,
+    TEST_CLEAR,
+    TEST_START_THREAD  = 201,
+    TEST_START_THREADS,
+    TEST_STOP_THREAD,
+    TEST_PAUSE_THREAD,
+    TEST_RESUME_THREAD
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -181,6 +199,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEST_ABOUT, MyFrame::OnAbout)
     EVT_MENU(TEST_CLEAR, MyFrame::OnClear)
     EVT_MENU(TEST_START_THREAD, MyFrame::OnStartThread)
+    EVT_MENU(TEST_START_THREADS, MyFrame::OnStartThreads)
     EVT_MENU(TEST_STOP_THREAD, MyFrame::OnStopThread)
     EVT_MENU(TEST_PAUSE_THREAD, MyFrame::OnPauseThread)
     EVT_MENU(TEST_RESUME_THREAD, MyFrame::OnResumeThread)
@@ -211,6 +230,7 @@ bool MyApp::OnInit()
 
     wxMenu *thread_menu = new wxMenu;
     thread_menu->Append(TEST_START_THREAD, "&Start a new thread");
+    thread_menu->Append(TEST_START_THREADS, "Start &many threads at once");
     thread_menu->Append(TEST_STOP_THREAD, "S&top a running thread");
     thread_menu->AppendSeparator();
     thread_menu->Append(TEST_PAUSE_THREAD, "&Pause a running thread");
@@ -231,14 +251,16 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
                  int x, int y, int w, int h)
        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
-    CreateStatusBar();
+    m_nRunning = m_nCount = 0;
+
+    CreateStatusBar(2);
 
     m_txtctrl = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(0, 0),
                                wxTE_MULTILINE | wxTE_READONLY);
 
 }
 
-void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
+MyThread *MyFrame::CreateThread()
 {
     MyThread *thread = new MyThread(this);
 
@@ -250,10 +272,52 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
     wxCriticalSectionLocker enter(m_critsect);
     m_threads.Add(thread);
 
+    return thread;
+}
+
+void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
+{
+    static wxString s_str;
+    s_str = wxGetTextFromUser("How many threads to start: ",
+                              "wxThread sample",
+                              s_str, this);
+    if ( s_str.IsEmpty() )
+        return;
+
+    size_t count, n;
+    sscanf(s_str, "%u", &count);
+    if ( count == 0 )
+        return;
+
+    wxArrayThread threads;
+
+    // first create them all...
+    for ( n = 0; n < count; n++ )
+    {
+        threads.Add(CreateThread());
+    }
+
+    wxString msg;
+    msg.Printf("%d new threads created.", count);
+    SetStatusText(msg, 1);
+
+    // ...and then start them
+    for ( n = 0; n < count; n++ )
+    {
+        threads[n]->Run();
+    }
+}
+
+void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
+{
+    MyThread *thread = CreateThread();
+
     if ( thread->Run() != wxTHREAD_NO_ERROR )
     {
         wxLogError("Can't start thread!");
     }
+
+    SetStatusText("New thread started.", 1);
 }
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
@@ -265,7 +329,19 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
     }
     else
     {
-        m_threads.Last()->Delete();
+        m_critsect.Enter();
+
+        wxThread *thread = m_threads.Last();
+        m_stopped.Add(thread);
+
+        // it's important to leave critical section before calling Delete()
+        // because delete will (implicitly) call OnThreadExit() which also tries
+        // to enter the same crit section - would dead lock.
+        m_critsect.Leave();
+
+        thread->Delete();
+
+        SetStatusText("Thread stopped.", 1);
     }
 }
 
@@ -279,9 +355,15 @@ void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
         n++;
 
     if ( n == count )
+    {
         wxLogError("No thread to resume!");
+    }
     else
+    {
         m_threads[n]->Resume();
+
+        SetStatusText("Thread resumed.", 1);
+    }
 }
 
 void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
@@ -294,27 +376,36 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
         n--;
 
     if ( n < 0 )
+    {
         wxLogError("No thread to pause!");
+    }
     else
+    {
         m_threads[n]->Pause();
+    
+        SetStatusText("Thread paused.", 1);
+    }
 }
 
 // set the frame title indicating the current number of threads
 void MyFrame::OnIdle(wxIdleEvent &event)
 {
-    // first remove from the array all the threads which died since last call
+    // first wait for all the threads which dies since the last call
     {
         wxCriticalSectionLocker enter(m_critsect);
 
-        size_t nCount = m_aToDelete.Count();
+        size_t nCount = m_terminated.GetCount();
         for ( size_t n = 0; n < nCount; n++ )
         {
-            // index should be shifted by n because we've already deleted 
-            // n-1 elements from the array
-            m_threads.Remove((size_t)m_aToDelete[n] - n);
+            // don't delete the threads which were stopped - they were already
+            // deleted in OnStopThread()
+            wxThread *thread = m_terminated[n];
+            if ( m_stopped.Index(thread) == wxNOT_FOUND )
+                thread->Delete();
         }
 
-        m_aToDelete.Empty();
+        m_stopped.Empty();
+        m_terminated.Empty();
     }
 
     size_t nRunning = 0,
@@ -325,7 +416,14 @@ void MyFrame::OnIdle(wxIdleEvent &event)
             nRunning++;
     }
 
-    wxLogStatus(this, "%u threads total, %u running.", nCount, nRunning);
+    if ( nCount != m_nCount || nRunning != m_nRunning )
+    {
+        m_nRunning = nRunning;
+        m_nCount = nCount;
+
+        wxLogStatus(this, "%u threads total, %u running.", nCount, nRunning);
+    }
+    //else: avoid flicker - don't print anything
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
@@ -357,10 +455,8 @@ void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnThreadExit(wxThread *thread)
 {
-    int index = m_threads.Index(thread);
-    wxCHECK_RET( index != -1, "unknown thread being deleted??" );
-
     wxCriticalSectionLocker enter(m_critsect);
 
-    m_aToDelete.Add(index);
+    m_threads.Remove(thread);
+    m_terminated.Add(thread);
 }

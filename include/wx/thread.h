@@ -105,14 +105,16 @@ class WXDLLEXPORT wxMutexLocker
 {
 public:
     // lock the mutex in the ctor
-    wxMutexLocker(wxMutex *mutex)
-        { m_isOk = mutex && ((m_mutex = mutex)->Lock() == wxMUTEX_NO_ERROR); }
+    wxMutexLocker(wxMutex& mutex) : m_mutex(mutex)
+        { m_isOk = m_mutex.Lock() == wxMUTEX_NO_ERROR; }
 
     // returns TRUE if mutex was successfully locked in ctor
-    bool IsOk() const { return m_isOk; }
+    bool IsOk() const
+        { return m_isOk; }
 
     // unlock the mutex in dtor
-    ~wxMutexLocker() { if ( IsOk() ) m_mutex->Unlock(); }
+    ~wxMutexLocker()
+        { if ( IsOk() ) m_mutex.Unlock(); }
 
 private:
     // no assignment operator nor copy ctor
@@ -120,7 +122,7 @@ private:
     wxMutexLocker& operator=(const wxMutexLocker&);
 
     bool     m_isOk;
-    wxMutex *m_mutex;
+    wxMutex& m_mutex;
 };
 
 // ----------------------------------------------------------------------------
