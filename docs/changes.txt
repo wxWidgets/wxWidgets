@@ -95,6 +95,7 @@ wxGTK:
 - Added wxRawBitmap support
 - Corrected Input method handler code (for Chinese etc.) and its
   interaction with wxWidgets' events.
+- wxTE_AUTO_URL implemention for wxGTK2 multiline wxTextCtrls (Mart Raudsepp)
 
 wxMac:
 
