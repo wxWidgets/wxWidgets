@@ -21,10 +21,11 @@
 //-----------------------------------------------------------------------------
 
 static char *wx_font_family [] = {
-    "wxDEFAULT", "wxDECORATIVE", "wxMODERN", "wxROMAN", "wxSCRIPT",
-    "wxSWISS", "wxTELETYPE",
+    "wxDEFAULT", "wxDECORATIVE", "wxROMAN", "wxSCRIPT",
+    "wxSWISS", "wxMODERN", "wxTELETYPE",
 };
 
+/*
 static char *wx_font_style [] = {
     "wxDEFAULT", "wxNORMAL", "wxSLANT", "wxITALIC",
 };
@@ -32,6 +33,7 @@ static char *wx_font_style [] = {
 static char *wx_font_weight [] = {
     "wxDEFAULT", "wxNORMAL", "wxBOLD", "wxLIGHT",
 };
+*/
 
 extern wxFontNameDirectory *wxTheFontNameDirectory;
 
@@ -216,7 +218,7 @@ int wxFont::GetFamily(void) const
 
 wxString wxFont::GetFamilyString(void) const
 {
-  wxString s = wx_font_family[M_FONTDATA->m_family];
+  wxString s = wx_font_family[M_FONTDATA->m_family - wxDEFAULT];
   return s;
 }
 
@@ -232,8 +234,27 @@ int wxFont::GetStyle(void) const
 
 wxString wxFont::GetStyleString(void) const
 {
-  wxString s =  wx_font_style[M_FONTDATA->m_style];
-  return s;
+    switch (M_FONTDATA->m_style)
+    {
+        case wxNORMAL:
+        {
+            return wxString("wxNORMAL");
+        }
+        case wxSLANT:
+        {
+            return wxString("wxSLANT");
+        }
+        case wxITALIC:
+        {
+            return wxString("wxITALIC");
+        }
+        case wxDEFAULT:
+        default:
+        {
+            return wxString("wxDEFAULT");
+        }
+    }
+    return wxString("wxDEFAULT");
 }
 
 int wxFont::GetWeight(void) const
@@ -243,8 +264,27 @@ int wxFont::GetWeight(void) const
 
 wxString wxFont::GetWeightString(void) const
 {
-  wxString s = wx_font_weight[M_FONTDATA->m_weight];
-  return s;
+    switch (M_FONTDATA->m_weight)
+    {
+        case wxNORMAL:
+        {
+            return wxString("wxNORMAL");
+        }
+        case wxBOLD:
+        {
+            return wxString("wxBOLD");
+        }
+        case wxLIGHT:
+        {
+            return wxString("wxLIGHT");
+        }
+        case wxDEFAULT:
+        default:
+        {
+            return wxString("wxDEFAULT");
+        }
+    }
+    return wxString("wxDEFAULT");
 }
 
 bool wxFont::GetUnderlined(void) const
