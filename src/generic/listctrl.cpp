@@ -577,6 +577,7 @@ public:
 
     void OnRenameTimer();
     bool OnRenameAccept(size_t itemEdit, const wxString& value);
+    void OnRenameCancelled(size_t itemEdit);
 
     void OnMouse( wxMouseEvent &event );
 
@@ -2105,6 +2106,7 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
 
         case WXK_ESCAPE:
             Finish();
+            m_owner->OnRenameCancelled( m_itemEdited );
             break;
 
         default:
@@ -2139,11 +2141,13 @@ void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
     if ( !m_finished )
     {
-        (void)AcceptChanges();
-
+        // We must finish regardless of success, otherwise we'll get focus problems
         Finish();
+    
+        if ( !AcceptChanges() )
+            m_owner->OnRenameCancelled( m_itemEdited );
     }
-
+        
     event.Skip();
 }
 
@@ -2885,6 +2889,30 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
     le.m_item.m_text = value;
     return !GetParent()->GetEventHandler()->ProcessEvent( le ) ||
                 le.IsAllowed();
+}
+
+void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
+{
+    // wxMSW seems not to notify the program about
+    // cancelled label edits.
+    return;
+
+    // let owner know that the edit was cancelled
+    wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
+    
+    // These only exist for wxTreeCtrl, which should probably be changed
+    // le.m_editCancelled = TRUE;
+    // le.m_label = wxEmptyString;
+    
+    le.SetEventObject( GetParent() );
+    le.m_itemIndex = itemEdit;
+
+    wxListLineData *data = GetLine(itemEdit);
+    wxCHECK_RET( data, _T("invalid index in OnRenameCancelled()") );
+
+    data->GetItem( 0, le.m_item );
+
+    GetEventHandler()->ProcessEvent( le );
 }
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )

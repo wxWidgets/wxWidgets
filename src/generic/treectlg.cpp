@@ -2928,7 +2928,7 @@ void wxGenericTreeCtrl::OnRenameCancelled(wxGenericTreeItem *item)
     le.m_item = (long) item;
     le.SetEventObject( this );
     le.m_label = wxEmptyString;
-    le.m_editCancelled = FALSE;
+    le.m_editCancelled = TRUE;
 
     GetEventHandler()->ProcessEvent( le );
 }
