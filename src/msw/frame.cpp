@@ -106,9 +106,6 @@ void wxFrame::Init()
 #if wxUSE_TOOLTIPS
     m_hwndToolTip = 0;
 #endif
-#ifdef __WXWINCE__
-    m_commandBar = 0;
-#endif
 
     // Data to save/restore when calling ShowFullScreen
     m_fsStatusBarFields = 0;
@@ -140,10 +137,6 @@ wxFrame::~wxFrame()
 {
     m_isBeingDeleted = TRUE;
     DeleteAllBars();
-#ifdef __WXWINCE__
-    RemoveCommandBar();
-#endif
-
 }
 
 // ----------------------------------------------------------------------------
@@ -271,6 +264,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
     }
     else // set new non NULL menu bar
     {
+#ifndef __WXWINCE__
         // Can set a menubar several times.
         if ( menubar->GetHMenu() )
         {
@@ -286,7 +280,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
                 return;
             }
         }
-
+#endif
         InternalSetMenuBar();
     }
 }
@@ -296,18 +290,14 @@ void wxFrame::InternalSetMenuBar()
 #ifdef __WXMICROWIN__
     // Nothing
 #elif defined(__WXWINCE__)
-    
-    CreateCommandBar() ;
 
-    if (m_commandBar)
+    if (!GetToolBar())
     {
-        if (!CommandBar_InsertMenubarEx((HWND) m_commandBar, NULL,
-            (LPTSTR) (HMENU) m_hMenu, 0))
-        {
-            wxFAIL_MSG( _T("failed to set menubar") );
-            return;
-        }
-        CommandBar_DrawMenuBar((HWND) m_commandBar, 0);
+        wxToolBar* toolBar = new wxToolBar(this, -1,
+                         wxDefaultPosition, wxDefaultSize,
+                         wxBORDER_NONE | wxTB_HORIZONTAL,
+                         wxToolBarNameStr, GetMenuBar());
+        SetToolBar(toolBar);
     }
 #else
     if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
@@ -434,6 +424,11 @@ bool wxFrame::ShowFullScreen(bool show, long style)
 
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
+#ifdef __WXWINCE__
+    // We may already have a toolbar from calling SetMenuBar.
+    if (GetToolBar())
+        return GetToolBar();
+#endif
     if ( wxFrameBase::CreateToolBar(style, id, name) )
     {
         PositionToolBar();
@@ -850,30 +845,3 @@ bool wxFrame::HandleInitMenuPopup(WXHMENU hMenu)
 
     return GetEventHandler()->ProcessEvent(event);
 }
-
-#ifdef __WXWINCE__
-WXHWND wxFrame::CreateCommandBar()
-{
-    if (m_commandBar)
-        return m_commandBar;
-
-    m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), GetHwnd(), NewControlId());
-    if (!m_commandBar)
-    {
-        wxFAIL_MSG( _T("failed to create commandbar") );
-        return 0;
-    }
-    return m_commandBar;
-}
-
-void wxFrame::RemoveCommandBar()
-{
-    if (m_commandBar)
-    {
-        ::DestroyWindow((HWND) m_commandBar);
-        m_commandBar = NULL;
-    }
-}
-#endif
-
-

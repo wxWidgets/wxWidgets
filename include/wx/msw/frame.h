@@ -102,12 +102,6 @@ public:
     // current size - this has an effect of refreshing the window layout
     virtual void SendSizeEvent();
 
-#ifdef __WXWINCE__
-    WXHWND GetCommandBar() { return m_commandBar; }
-    WXHWND CreateCommandBar() ;
-    void RemoveCommandBar() ;
-#endif
-
 protected:
     // common part of all ctors
     void Init();
@@ -155,9 +149,6 @@ private:
 #if wxUSE_TOOLTIPS
     WXHWND                m_hwndToolTip;
 #endif // tooltips
-#ifdef __WXWINCE__
-    WXHWND                m_commandBar;
-#endif
 
     // used by IconizeChildFrames(), see comments there
     bool m_wasMinimized;

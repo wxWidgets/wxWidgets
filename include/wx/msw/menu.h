@@ -25,6 +25,10 @@
 
 class WXDLLEXPORT wxFrame;
 
+#if defined(__WXWINCE__) && wxUSE_TOOLBAR
+class WXDLLEXPORT wxToolBar;
+#endif
+
 // ----------------------------------------------------------------------------
 // Menu
 // ----------------------------------------------------------------------------
@@ -153,6 +157,12 @@ public:
     virtual void Detach();
     virtual void Attach(wxFrame *frame);
 
+#if defined(__WXWINCE__) && wxUSE_TOOLBAR
+    // Under WinCE, a menubar is owned by the frame's toolbar
+    void SetToolBar(wxToolBar* toolBar) { m_toolBar = toolBar; }
+    wxToolBar* GetToolBar() const { return m_toolBar; }
+#endif
+
 #if wxUSE_ACCEL
     // get the accel table for all the menus
     const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }
@@ -188,6 +198,10 @@ protected:
     // the accelerator table for all accelerators in all our menus
     wxAcceleratorTable m_accelTable;
 #endif // wxUSE_ACCEL
+
+#if defined(__WXWINCE__) && wxUSE_TOOLBAR
+    wxToolBar*  m_toolBar;
+#endif
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMenuBar)

@@ -121,7 +121,11 @@ bool MyApp::OnInit()
 {
     // create the main application window
     MyFrame *frame = new MyFrame(_T("Minimal wxWindows App"),
-                                 wxPoint(50, 50), wxSize(450, 340));
+#ifdef __WXWINCE__
+        wxPoint(0, 0), wxDefaultSize, wxNO_BORDER);
+#else
+        wxPoint(50, 50), wxSize(450, 340));
+#endif
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -163,7 +167,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
-#if wxUSE_STATUSBAR
+#if wxUSE_STATUSBAR && !defined(__WXWINCE__)
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWindows!"));

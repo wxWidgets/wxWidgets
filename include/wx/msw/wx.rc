@@ -35,6 +35,10 @@
 	#include <windows.h>
 #endif
 
+#if defined(_WIN32_WCE)
+        #include <commctrl.h>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // This is the MDI Window menu
@@ -52,6 +56,34 @@ BEGIN
         MENUITEM "&Next",                       4004
     END
 END
+
+#ifdef _WIN32_WCE
+
+// Dummy menubar/toolbar for WinCE
+
+5000 RCDATA DISCARDABLE
+BEGIN
+  // Popup menu name
+  5000,
+  // Count of items to put on the menu
+  0
+END
+
+5000 MENU DISCARDABLE
+BEGIN
+    POPUP "Dummy"
+    BEGIN
+    MENUITEM "Dummy" 99
+    END
+END
+
+STRINGTABLE DISCARDABLE
+BEGIN
+    5001      "Dummy menu"
+END
+
+#endif
+
 
 //////////////////////////////////////////////////////////////////////////////
 //

@@ -200,7 +200,11 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
     if ( !hasCol )
     {
+#ifdef __WXWINCE__
+        colSys = ::GetSysColor(index|SYS_COLOR_INDEX_FLAG);
+#else
         colSys = ::GetSysColor(index);
+#endif
     }
 
     return wxRGBToColour(colSys);

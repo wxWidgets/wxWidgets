@@ -2978,18 +2978,37 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // do create the window
     wxWindowCreationHook hook(this);
 
-    m_hWnd = (WXHWND)::CreateWindowEx
-                       (
-                            extendedStyle,
-                            className,
-                            title ? title : wxEmptyString,
-                            style,
-                            x, y, w, h,
-                            (HWND)MSWGetParent(),
-                            (HMENU)controlId,
-                            wxGetInstance(),
-                            NULL                        // no extra data
-                       );
+#ifdef __WXWINCE__
+    if (extendedStyle == 0)
+    {
+        m_hWnd = (WXHWND)::CreateWindow
+            (
+            className,
+            title ? title : wxEmptyString,
+            style,
+            x, y, w, h,
+            (HWND)MSWGetParent(),
+            (HMENU)controlId,
+            wxGetInstance(),
+            NULL                        // no extra data
+            );
+    }
+    else
+#endif
+    {
+        m_hWnd = (WXHWND)::CreateWindowEx
+            (
+            extendedStyle,
+            className,
+            title ? title : wxEmptyString,
+            style,
+            x, y, w, h,
+            (HWND)MSWGetParent(),
+            (HMENU)controlId,
+            wxGetInstance(),
+            NULL                        // no extra data
+            );
+    }
 
     if ( !m_hWnd )
     {

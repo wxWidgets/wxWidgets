@@ -156,7 +156,12 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     if ( style & wxFRAME_TOOL_WINDOW )
         msflags |= WS_POPUP;
     else
-        msflags |= WS_OVERLAPPED;
+    {
+#ifdef __WXWINCE__
+        if (msflags & WS_BORDER)
+#endif
+            msflags |= WS_OVERLAPPED;
+    }
 
     // border and caption styles
     if ( style & wxRESIZE_BORDER )
@@ -167,13 +172,17 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     }
     else if ( !(style & wxBORDER_NONE) )
         msflags |= WS_BORDER;
+#ifndef __WXWINCE__
     else
         msflags |= WS_POPUP;
+#endif
 
     if ( style & wxCAPTION )
         msflags |= WS_CAPTION;
+#ifndef __WXWINCE__
     else
         msflags |= WS_POPUP;
+#endif
 
     // next translate the individual flags
     if ( style & wxMINIMIZE_BOX )
