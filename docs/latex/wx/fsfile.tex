@@ -67,39 +67,6 @@ class wxMyFSFile : public wxFSFile
 };
 \end{verbatim}
 
-\membersection{wxFSFile::GetStream}\label{wxfsfilegetstream}
-
-\constfunc{wxInputStream*}{GetStream}{\void}
-
-Returns pointer to the stream. You can use the returned
-stream to directly access data. You may suppose
-that the stream provide Seek and GetSize functionality
-(even in case of HTTP protocol which doesn't provide
-this by default. wxHtml is using local cache to workaround
-this and to speed up connection)
-
-\membersection{wxFSFile::GetMimeType}\label{wxfsfilegetmimetype}
-
-\constfunc{const wxString\&}{GetMimeType}{\void}
-
-Returns MIME type of the content of this file. It is either
-extension-based (see wxMimeTypesManager) or extracted from
-HTTP protocol Content-Type header.
-
-\membersection{wxFSFile::GetLocation}\label{wxfsfilegetlocation}
-
-\constfunc{const wxString\&}{GetLocation}{\void}
-
-Returns full location of the file, including path and protocol. 
-Examples : 
-
-\begin{verbatim}
-http://www.wxwindows.org
-http://www.ms.mff.cuni.cz/~vsla8348/wxhtml/archive.zip#zip:info.txt
-file:/home/vasek/index.htm
-relative-file.htm
-\end{verbatim}
-
 \membersection{wxFSFile::GetAnchor}\label{wxfsfilegetanchor}
 
 \constfunc{const wxString\&}{GetAnchor}{\void}
@@ -118,4 +85,37 @@ Usually anchor is presented only if mime type is 'text/html'.
 But it may have some meaning with other files
 (for example myanim.avi\#200 may refer to position in animation
 or reality.wrl\#MyView may refer to predefined view in VRML)
+
+\membersection{wxFSFile::GetLocation}\label{wxfsfilegetlocation}
+
+\constfunc{const wxString\&}{GetLocation}{\void}
+
+Returns full location of the file, including path and protocol. 
+Examples : 
+
+\begin{verbatim}
+http://www.wxwindows.org
+http://www.ms.mff.cuni.cz/~vsla8348/wxhtml/archive.zip#zip:info.txt
+file:/home/vasek/index.htm
+relative-file.htm
+\end{verbatim}
+
+\membersection{wxFSFile::GetMimeType}\label{wxfsfilegetmimetype}
+
+\constfunc{const wxString\&}{GetMimeType}{\void}
+
+Returns MIME type of the content of this file. It is either
+extension-based (see wxMimeTypesManager) or extracted from
+HTTP protocol Content-Type header.
+
+\membersection{wxFSFile::GetStream}\label{wxfsfilegetstream}
+
+\constfunc{wxInputStream*}{GetStream}{\void}
+
+Returns pointer to the stream. You can use the returned
+stream to directly access data. You may suppose
+that the stream provide Seek and GetSize functionality
+(even in case of HTTP protocol which doesn't provide
+this by default. wxHtml is using local cache to workaround
+this and to speed up connection)
 

@@ -28,6 +28,25 @@ wxObject
 
 Constructor. 
 
+\membersection{wxFileSystem::AddHandler}\label{wxfilesystemaddhandler}
+
+\func{static void}{AddHandler}{\param{wxFileSystemHandler }{*handler}}
+
+This static function adds new handler into the list of handlers.
+The \helpref{handlers}{wxfilesystemhandler} provide access to virtual FS.
+
+\wxheading{Note}
+
+You can call:
+
+\begin{verbatim}
+wxFileSystem::AddHandler(new My_FS_Handler);
+\end{verbatim}
+
+This is because (a) AddHandler is a static method, and (b) the handlers
+are deleted in wxFileSystem's destructor so that you don't have to
+care about it.
+
 \membersection{wxFileSystem::ChangePathTo}\label{wxfilesystemchangepathto}
 
 \func{void}{ChangePathTo}{\param{const wxString\& }{location}, \param{bool }{is\_dir = FALSE}}
@@ -74,23 +93,4 @@ Opens file and returns pointer to \helpref{wxFSFile}{wxfsfile} object
 or NULL if failed. It first tries to open the file in relative scope
 (based on value passed to ChangePathTo() method) and then as an
 absolute path.
-
-\membersection{wxFileSystem::AddHandler}\label{wxfilesystemaddhandler}
-
-\func{static void}{AddHandler}{\param{wxFileSystemHandler }{*handler}}
-
-This static function adds new handler into the list of handlers.
-The \helpref{handlers}{wxfilesystemhandler} provide access to virtual FS.
-
-\wxheading{Note}
-
-You can call:
-
-\begin{verbatim}
-wxFileSystem::AddHandler(new My_FS_Handler);
-\end{verbatim}
-
-This is because (a) AddHandler is a static method, and (b) the handlers
-are deleted in wxFileSystem's destructor so that you don't have to
-care about it.
 

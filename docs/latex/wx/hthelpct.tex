@@ -40,22 +40,6 @@ wxEvtHandler
 
 Constructor.
 
-\membersection{wxHtmlHelpController::SetTitleFormat}\label{wxhtmlhelpcontrollersettitleformat}
-
-\func{void}{SetTitleFormat}{\param{const wxString\& }{format}}
-
-Sets format of title of the frame. Must contain exactly one "\%s"
-(for title of displayed HTML page).
-
-\membersection{wxHtmlHelpController::SetTempDir}\label{wxhtmlhelpcontrollersettempdir}
-
-\func{void}{SetTempDir}{\param{const wxString\& }{path}}
-
-Sets path for storing temporary files (cached binary versions of index and contents files. These binary
-forms are much faster to read.) Default value is empty string (empty string means
-that no cached data are stored). Note that these files are NOT
-deleted when program exits!
-
 \membersection{wxHtmlHelpController::AddBook}\label{wxhtmlhelpcontrolleraddbook}
 
 \func{bool}{AddBook}{\param{const wxString\& }{book}, \param{bool }{show_wait_msg}}
@@ -117,6 +101,28 @@ Returns TRUE if the keyword was found.
 IMPORTANT! KeywordSearch searches only pages listed in .htc file(s)!
 (you should have all pages in contents file...)
 
+\membersection{wxHtmlHelpController::ReadCustomization}\label{wxhtmlhelpcontrollerreadcustomization}
+
+\func{void}{ReadCustomization}{\param{wxConfigBase* }{cfg}, \param{wxString }{path = wxEmptyString}}
+
+Reads controllers setting (position of window etc.)
+
+\membersection{wxHtmlHelpController::SetTempDir}\label{wxhtmlhelpcontrollersettempdir}
+
+\func{void}{SetTempDir}{\param{const wxString\& }{path}}
+
+Sets path for storing temporary files (cached binary versions of index and contents files. These binary
+forms are much faster to read.) Default value is empty string (empty string means
+that no cached data are stored). Note that these files are NOT
+deleted when program exits!
+
+\membersection{wxHtmlHelpController::SetTitleFormat}\label{wxhtmlhelpcontrollersettitleformat}
+
+\func{void}{SetTitleFormat}{\param{const wxString\& }{format}}
+
+Sets format of title of the frame. Must contain exactly one "\%s"
+(for title of displayed HTML page).
+
 \membersection{wxHtmlHelpController::UseConfig}\label{wxhtmlhelpcontrolleruseconfig}
 
 \func{void}{UseConfig}{\param{wxConfigBase* }{config}, \param{const wxString\& }{rootpath = wxEmptyString}}
@@ -127,12 +133,6 @@ If there is associated config object, wxHtmlHelpController automatically
 reads and writes settings (including wxHtmlWindow's settings) when needed.
 
 The only thing you must do is create wxConfig object and call UseConfig. 
-
-\membersection{wxHtmlHelpController::ReadCustomization}\label{wxhtmlhelpcontrollerreadcustomization}
-
-\func{void}{ReadCustomization}{\param{wxConfigBase* }{cfg}, \param{wxString }{path = wxEmptyString}}
-
-Reads controllers setting (position of window etc.)
 
 \membersection{wxHtmlHelpController::WriteCustomization}\label{wxhtmlhelpcontrollerwritecustomization}
 

@@ -60,6 +60,50 @@ bool MyHand::CanOpen(const wxString& location)
 
 Must be overwriten in derived handlers.
 
+\membersection{wxFileSystemHandler::GetAnchor}\label{wxfilesystemhandlergetanchor}
+
+\constfunc{wxString}{GetAnchor}{\param{const wxString\& }{location}}
+
+Returns anchor if present in the location.
+See \helpref{wxFSFile}{wxfsfilegetanchor} for details.
+
+Example : GetAnchor("index.htm\#chapter2") == "chapter2"
+
+{\bf Note:} anchor is NOT part of left location.
+
+\membersection{wxFileSystemHandler::GetLeftLocation}\label{wxfilesystemhandlergetleftlocation}
+
+\constfunc{wxString}{GetLeftLocation}{\param{const wxString\& }{location}}
+
+Returns left location string extracted from {\it location}. 
+
+Example: GetLeftLocation("file:myzipfile.zip\#zip:index.htm") == "file:myzipfile.zip"
+
+\membersection{wxFileSystemHandler::GetMimeTypeFromExt}\label{wxfilesystemhandlergetmimetypefromext}
+
+\func{wxString}{GetMimeTypeFromExt}{\param{const wxString\& }{location}}
+
+Returns MIME type based on {\bf extension} of {\it location}. (While wxFSFile::GetMimeType
+returns real MIME type - either extension-based or queried from HTTP)
+
+Example : GetMimeTypeFromExt("index.htm") == "text/html"
+
+\membersection{wxFileSystemHandler::GetProtocol}\label{wxfilesystemhandlergetprotocol}
+
+\constfunc{wxString}{GetProtocol}{\param{const wxString\& }{location}}
+
+Returns protocol string extracted from {\it location}. 
+
+Example: GetProtocol("file:myzipfile.zip\#zip:index.htm") == "zip"
+
+\membersection{wxFileSystemHandler::GetRightLocation}\label{wxfilesystemhandlergetrightlocation}
+
+\constfunc{wxString}{GetRightLocation}{\param{const wxString\& }{location}}
+
+Returns right location string extracted from {\it location}. 
+
+Example : GetRightLocation("file:myzipfile.zip\#zip:index.htm") == "index.htm"
+
 \membersection{wxFileSystemHandler::OpenFile}\label{wxfilesystemhandleropenfile}
 
 \func{virtual wxFSFile*}{OpenFile}{\param{wxFileSystem\& }{fs}, \param{const wxString\& }{location}}
@@ -74,48 +118,4 @@ Must be overwriten in derived handlers.
 for details how to use it.}
 
 \docparam{location}{The {\bf absolute} location of file.}
-
-\membersection{wxFileSystemHandler::GetProtocol}\label{wxfilesystemhandlergetprotocol}
-
-\constfunc{wxString}{GetProtocol}{\param{const wxString\& }{location}}
-
-Returns protocol string extracted from {\it location}. 
-
-Example: GetProtocol("file:myzipfile.zip\#zip:index.htm") == "zip"
-
-\membersection{wxFileSystemHandler::GetLeftLocation}\label{wxfilesystemhandlergetleftlocation}
-
-\constfunc{wxString}{GetLeftLocation}{\param{const wxString\& }{location}}
-
-Returns left location string extracted from {\it location}. 
-
-Example: GetLeftLocation("file:myzipfile.zip\#zip:index.htm") == "file:myzipfile.zip"
-
-\membersection{wxFileSystemHandler::GetAnchor}\label{wxfilesystemhandlergetanchor}
-
-\constfunc{wxString}{GetAnchor}{\param{const wxString\& }{location}}
-
-Returns anchor if present in the location.
-See \helpref{wxFSFile}{wxfsfilegetanchor} for details.
-
-Example : GetAnchor("index.htm\#chapter2") == "chapter2"
-
-{\bf Note:} anchor is NOT part of left location.
-
-\membersection{wxFileSystemHandler::GetRightLocation}\label{wxfilesystemhandlergetrightlocation}
-
-\constfunc{wxString}{GetRightLocation}{\param{const wxString\& }{location}}
-
-Returns right location string extracted from {\it location}. 
-
-Example : GetRightLocation("file:myzipfile.zip\#zip:index.htm") == "index.htm"
-
-\membersection{wxFileSystemHandler::GetMimeTypeFromExt}\label{wxfilesystemhandlergetmimetypefromext}
-
-\func{wxString}{GetMimeTypeFromExt}{\param{const wxString\& }{location}}
-
-Returns MIME type based on {\bf extension} of {\it location}. (While wxFSFile::GetMimeType
-returns real MIME type - either extension-based or queried from HTTP)
-
-Example : GetMimeTypeFromExt("index.htm") == "text/html"
 

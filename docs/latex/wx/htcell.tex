@@ -49,112 +49,6 @@ Usage :
 while (container->AdjustPagebreak(&p)) {}
 \end{verbatim}
 
-\membersection{wxHtmlCell::SetParent}\label{wxhtmlcellsetparent}
-
-\func{void}{SetParent}{\param{wxHtmlContainerCell }{*p}}
-
-Sets parent container of this cell. This is called from
-\helpref{wxHtmlContainerCell::InsertCell}{wxhtmlcontainercellinsertcell}.
-
-\membersection{wxHtmlCell::GetParent}\label{wxhtmlcellgetparent}
-
-\constfunc{wxHtmlContainerCell*}{GetParent}{\void}
-
-Returns pointer to parent container.
-
-\membersection{wxHtmlCell::GetPosX}\label{wxhtmlcellgetposx}
-
-\constfunc{int}{GetPosX}{\void}
-
-Returns X position within parent (the value is relative to parent's
-upper left corner). The returned value is meaningful only if
-parent's \helpref{Layout}{wxhtmlcelllayout} was called before!
-
-\membersection{wxHtmlCell::GetPosY}\label{wxhtmlcellgetposy}
-
-\constfunc{int}{GetPosY}{\void}
-
-Returns Y position within parent (the value is relative to parent's
-upper left corner). The returned value is meaningful only if
-parent's \helpref{Layout}{wxhtmlcelllayout} was called before!
-
-\membersection{wxHtmlCell::GetWidth}\label{wxhtmlcellgetwidth}
-
-\constfunc{int}{GetWidth}{\void}
-
-Returns width of the cell (m_Width member).
-
-\membersection{wxHtmlCell::GetHeight}\label{wxhtmlcellgetheight}
-
-\constfunc{int}{GetHeight}{\void}
-
-Returns height of the cell (m_Height member).
-
-\membersection{wxHtmlCell::GetDescent}\label{wxhtmlcellgetdescent}
-
-\constfunc{int}{GetDescent}{\void}
-
-Returns descent value of the cell (m_Descent member). See explanation:
-
-\image{}{descent.bmp}
-
-\membersection{wxHtmlCell::GetLink}\label{wxhtmlcellgetlink}
-
-\constfunc{virtual wxString}{GetLink}{\param{int }{x = 0}, \param{int }{y = 0}}
-
-Returns hypertext link if associated with this cell or empty string otherwise.
-(Note : this makes sense only for visible tags).
-
-\wxheading{Parameters}
-
-\docparam{x,y}{Coordinates of position where the user pressed mouse button.
-These coordinates are used e.g. by COLORMAP. Values are relative to the
-upper left corner of THIS cell (i.e. from 0 to m_Width or m_Height)}
-
-\membersection{wxHtmlCell::GetNext}\label{wxhtmlcellgetnext}
-
-\constfunc{wxHtmlCell*}{GetNext}{\void}
-
-Returns pointer to the next cell in list (see htmlcell.h if you're
-interested in details).
-
-\membersection{wxHtmlCell::SetPos}\label{wxhtmlcellsetpos}
-
-\func{void}{SetPos}{\param{int }{x}, \param{int }{y}}
-
-Sets cell's position within parent container.
-
-\membersection{wxHtmlCell::SetLink}\label{wxhtmlcellsetlink}
-
-\func{void}{SetLink}{\param{const wxString\& }{link}}
-
-Sets the hypertext link asocciated with this cell. (Default value
-is wxEmptyString (no link))
-
-\membersection{wxHtmlCell::SetNext}\label{wxhtmlcellsetnext}
-
-\func{void}{SetNext}{\param{wxHtmlCell }{*cell}}
-
-Sets the next cell in the list. This shouldn't be called by user - it is
-to be used only by \helpref{wxHtmlContainerCell::InsertCell}{wxhtmlcontainercellinsertcell}
-
-\membersection{wxHtmlCell::Layout}\label{wxhtmlcelllayout}
-
-\func{virtual void}{Layout}{\param{int }{w}}
-
-This method performs 2 actions:
-
-\begin{enumerate}
-\item adjusts cell's width according to the fact that maximal possible width is {\it w}.
-(this has sense when working with horizontal lines, tables etc.)
-\item prepares layout (=fill-in m\_PosX, m\_PosY (and sometimes m\_Height) members)
-based on actual width {\it w}
-\end{enumerate}
-
-It must be called before displaying cells structure because
-m\_PosX and m\_PosY are undefined (or invalid)
-before calling Layout.
-
 \membersection{wxHtmlCell::Draw}\label{wxhtmlcelldraw}
 
 \func{virtual void}{Draw}{\param{wxDC\& }{dc}, \param{int }{x}, \param{int }{y}, \param{int }{view\_y1}, \param{int }{view\_y2}}
@@ -220,6 +114,85 @@ HTML_COND_ISANCHOR condition)
 from this number}
 \end{twocollist}
 
+\membersection{wxHtmlCell::GetDescent}\label{wxhtmlcellgetdescent}
+
+\constfunc{int}{GetDescent}{\void}
+
+Returns descent value of the cell (m_Descent member). See explanation:
+
+\image{}{descent.bmp}
+
+\membersection{wxHtmlCell::GetHeight}\label{wxhtmlcellgetheight}
+
+\constfunc{int}{GetHeight}{\void}
+
+Returns height of the cell (m_Height member).
+
+\membersection{wxHtmlCell::GetLink}\label{wxhtmlcellgetlink}
+
+\constfunc{virtual wxString}{GetLink}{\param{int }{x = 0}, \param{int }{y = 0}}
+
+Returns hypertext link if associated with this cell or empty string otherwise.
+(Note : this makes sense only for visible tags).
+
+\wxheading{Parameters}
+
+\docparam{x,y}{Coordinates of position where the user pressed mouse button.
+These coordinates are used e.g. by COLORMAP. Values are relative to the
+upper left corner of THIS cell (i.e. from 0 to m_Width or m_Height)}
+
+\membersection{wxHtmlCell::GetNext}\label{wxhtmlcellgetnext}
+
+\constfunc{wxHtmlCell*}{GetNext}{\void}
+
+Returns pointer to the next cell in list (see htmlcell.h if you're
+interested in details).
+
+\membersection{wxHtmlCell::GetParent}\label{wxhtmlcellgetparent}
+
+\constfunc{wxHtmlContainerCell*}{GetParent}{\void}
+
+Returns pointer to parent container.
+
+\membersection{wxHtmlCell::GetPosX}\label{wxhtmlcellgetposx}
+
+\constfunc{int}{GetPosX}{\void}
+
+Returns X position within parent (the value is relative to parent's
+upper left corner). The returned value is meaningful only if
+parent's \helpref{Layout}{wxhtmlcelllayout} was called before!
+
+\membersection{wxHtmlCell::GetPosY}\label{wxhtmlcellgetposy}
+
+\constfunc{int}{GetPosY}{\void}
+
+Returns Y position within parent (the value is relative to parent's
+upper left corner). The returned value is meaningful only if
+parent's \helpref{Layout}{wxhtmlcelllayout} was called before!
+
+\membersection{wxHtmlCell::GetWidth}\label{wxhtmlcellgetwidth}
+
+\constfunc{int}{GetWidth}{\void}
+
+Returns width of the cell (m_Width member).
+
+\membersection{wxHtmlCell::Layout}\label{wxhtmlcelllayout}
+
+\func{virtual void}{Layout}{\param{int }{w}}
+
+This method performs 2 actions:
+
+\begin{enumerate}
+\item adjusts cell's width according to the fact that maximal possible width is {\it w}.
+(this has sense when working with horizontal lines, tables etc.)
+\item prepares layout (=fill-in m\_PosX, m\_PosY (and sometimes m\_Height) members)
+based on actual width {\it w}
+\end{enumerate}
+
+It must be called before displaying cells structure because
+m\_PosX and m\_PosY are undefined (or invalid)
+before calling Layout.
+
 \membersection{wxHtmlCell::OnMouseClick}\label{wxhtmlcellonmouseclick}
 
 \func{virtual void}{OnMouseClick}{\param{wxWindow* }{parent}, \param{int }{x}, \param{int }{y}, \param{bool }{left}, \param{bool }{middle}, \param{bool }{right}}
@@ -241,4 +214,31 @@ key events or whatsoever) you should use wxHtmlBinderCell instead.
 
 \docparam{left, middle, right}{boolean flags for mouse buttons. TRUE if the left/middle/right
 button is pressed, FALSE otherwise}
+
+\membersection{wxHtmlCell::SetLink}\label{wxhtmlcellsetlink}
+
+\func{void}{SetLink}{\param{const wxString\& }{link}}
+
+Sets the hypertext link asocciated with this cell. (Default value
+is wxEmptyString (no link))
+
+\membersection{wxHtmlCell::SetNext}\label{wxhtmlcellsetnext}
+
+\func{void}{SetNext}{\param{wxHtmlCell }{*cell}}
+
+Sets the next cell in the list. This shouldn't be called by user - it is
+to be used only by \helpref{wxHtmlContainerCell::InsertCell}{wxhtmlcontainercellinsertcell}
+
+\membersection{wxHtmlCell::SetParent}\label{wxhtmlcellsetparent}
+
+\func{void}{SetParent}{\param{wxHtmlContainerCell }{*p}}
+
+Sets parent container of this cell. This is called from
+\helpref{wxHtmlContainerCell::InsertCell}{wxhtmlcontainercellinsertcell}.
+
+\membersection{wxHtmlCell::SetPos}\label{wxhtmlcellsetpos}
+
+\func{void}{SetPos}{\param{int }{x}, \param{int }{y}}
+
+Sets cell's position within parent container.
 

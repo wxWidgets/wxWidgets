@@ -40,76 +40,19 @@ wxObject
 
 Constructor.
 
-\membersection{wxHtmlParser::SetFS}\label{wxhtmlparsersetfs}
+\membersection{wxHtmlParser::AddTag}\label{wxhtmlparseraddtag}
 
-\func{void}{SetFS}{\param{wxFileSystem }{*fs}}
+\func{void}{AddTag}{\param{const wxHtmlTag\& }{tag}}
 
-Sets the virtual file system that will be used to request additional
-files. (For example {\tt <IMG>} tag handler requests wxFSFile with the
-image data.)
+This may (and may not) be overwriten in derived class.
 
-\membersection{wxHtmlParser::GetFS}\label{wxhtmlparsergetfs}
+This method is called each time new tag is about to be added. 
+{\it tag} contains information about the tag. (See \helpref{wxHtmlTag}{wxhtmltag}
+for details.)
 
-\constfunc{wxFileSystem*}{GetFS}{\void}
-
-Returns pointer to the file system. Because each tag handler has
-reference to it's parent parser it can easily request the file by
-calling
-
-\begin{verbatim}
-wxFSFile *f = m_Parser -> GetFS() -> OpenFile("image.jpg");
-\end{verbatim}
-
-\membersection{wxHtmlParser::Parse}\label{wxhtmlparserparse}
-
-\func{wxObject*}{Parse}{\param{const wxString\& }{source}}
-
-Proceeds parsing of the document. This is end-user method. You can simply
-call it when you need to obtain parsed output (which is parser-specific)
-
-The method does these things:
-
-\begin{enumerate}
-\item calls \helpref{InitParser(source)}{wxhtmlparserinitparser}
-\item calls \helpref{DoParsing}{wxhtmlparserdoparsing}
-\item calls \helpref{GetProduct}{wxhtmlparsergetproduct}
-\item calls \helpref{DoneParser}{wxhtmlparserdoneparser}
-\item returns value returned by GetProduct
-\end{enumerate}
-
-You shouldn't use InitParser, DoParsing, GetProduct or DoneParser directly.
-
-\membersection{wxHtmlParser::InitParser}\label{wxhtmlparserinitparser}
-
-\func{virtual void}{InitParser}{\param{const wxString\& }{source}}
-
-Setups the parser for parsing the {\it source} string. (Should be overriden
-in derived class)
-
-\membersection{wxHtmlParser::DoneParser}\label{wxhtmlparserdoneparser}
-
-\func{virtual void}{DoneParser}{\void}
-
-This must be called after DoParsing().
-
-\membersection{wxHtmlParser::DoParsing}\label{wxhtmlparserdoparsing}
-
-\func{void}{DoParsing}{\param{int }{begin\_pos}, \param{int }{end\_pos}}
-
-\func{void}{DoParsing}{\void}
-
-Parses the m\_Source from begin\_pos to end\_pos-1.
-(in noparams version it parses whole m\_Source)
-
-\membersection{wxHtmlParser::GetProduct}\label{wxhtmlparsergetproduct}
-
-\func{virtual wxObject*}{GetProduct}{\void}
-
-Returns product of parsing. Returned value is result of parsing
-of the document. The type of this result depends on internal
-representation in derived parser (but it must be derived from wxObject!).
-
-See wxHtmlWinParser for details.
+Default (wxHtmlParser) behaviour is this:
+First it finds a handler capable of handling this tag and then it calls
+handler's HandleTag method.
 
 \membersection{wxHtmlParser::AddTagHandler}\label{wxhtmlparseraddtaghandler}
 
@@ -124,6 +67,54 @@ all objects of this class! (Static front-end to AddTagHandler is provided
 by wxHtmlWinParser).
 
 All handlers are deleted on object deletion.
+
+\membersection{wxHtmlParser::AddText}\label{wxhtmlparseraddword}
+
+\func{virtual void}{AddWord}{\param{const char* }{txt}}
+
+Must be overwriten in derived class.
+
+This method is called by \helpref{DoParsing}{wxhtmlparserdoparsing}
+each time a part of text is parsed. {\it txt} is NOT only one word, it is
+substring of input. It is not formatted or preprocessed (so white spaces are
+unmodified).
+
+\membersection{wxHtmlParser::DoParsing}\label{wxhtmlparserdoparsing}
+
+\func{void}{DoParsing}{\param{int }{begin\_pos}, \param{int }{end\_pos}}
+
+\func{void}{DoParsing}{\void}
+
+Parses the m\_Source from begin\_pos to end\_pos-1.
+(in noparams version it parses whole m\_Source)
+
+\membersection{wxHtmlParser::DoneParser}\label{wxhtmlparserdoneparser}
+
+\func{virtual void}{DoneParser}{\void}
+
+This must be called after DoParsing().
+
+\membersection{wxHtmlParser::GetFS}\label{wxhtmlparsergetfs}
+
+\constfunc{wxFileSystem*}{GetFS}{\void}
+
+Returns pointer to the file system. Because each tag handler has
+reference to it's parent parser it can easily request the file by
+calling
+
+\begin{verbatim}
+wxFSFile *f = m_Parser -> GetFS() -> OpenFile("image.jpg");
+\end{verbatim}
+
+\membersection{wxHtmlParser::GetProduct}\label{wxhtmlparsergetproduct}
+
+\func{virtual wxObject*}{GetProduct}{\void}
+
+Returns product of parsing. Returned value is result of parsing
+of the document. The type of this result depends on internal
+representation in derived parser (but it must be derived from wxObject!).
+
+See wxHtmlWinParser for details.
 
 \membersection{wxHtmlParser::GetSource}\label{wxhtmlparsergetsource}
 
@@ -157,28 +148,37 @@ must exist as long as the window is displaying text.
 
 GetTempData() solves the problem.
 
-\membersection{wxHtmlParser::AddText}\label{wxhtmlparseraddword}
+\membersection{wxHtmlParser::InitParser}\label{wxhtmlparserinitparser}
 
-\func{virtual void}{AddWord}{\param{const char* }{txt}}
+\func{virtual void}{InitParser}{\param{const wxString\& }{source}}
 
-Must be overwriten in derived class.
+Setups the parser for parsing the {\it source} string. (Should be overriden
+in derived class)
 
-This method is called by \helpref{DoParsing}{wxhtmlparserdoparsing}
-each time a part of text is parsed. {\it txt} is NOT only one word, it is
-substring of input. It is not formatted or preprocessed (so white spaces are
-unmodified).
+\membersection{wxHtmlParser::Parse}\label{wxhtmlparserparse}
 
-\membersection{wxHtmlParser::AddTag}\label{wxhtmlparseraddtag}
+\func{wxObject*}{Parse}{\param{const wxString\& }{source}}
 
-\func{void}{AddTag}{\param{const wxHtmlTag\& }{tag}}
+Proceeds parsing of the document. This is end-user method. You can simply
+call it when you need to obtain parsed output (which is parser-specific)
 
-This may (and may not) be overwriten in derived class.
+The method does these things:
 
-This method is called each time new tag is about to be added. 
-{\it tag} contains information about the tag. (See \helpref{wxHtmlTag}{wxhtmltag}
-for details.)
+\begin{enumerate}
+\item calls \helpref{InitParser(source)}{wxhtmlparserinitparser}
+\item calls \helpref{DoParsing}{wxhtmlparserdoparsing}
+\item calls \helpref{GetProduct}{wxhtmlparsergetproduct}
+\item calls \helpref{DoneParser}{wxhtmlparserdoneparser}
+\item returns value returned by GetProduct
+\end{enumerate}
 
-Default (wxHtmlParser) behaviour is this:
-First it finds a handler capable of handling this tag and then it calls
-handler's HandleTag method.
+You shouldn't use InitParser, DoParsing, GetProduct or DoneParser directly.
+
+\membersection{wxHtmlParser::SetFS}\label{wxhtmlparsersetfs}
+
+\func{void}{SetFS}{\param{wxFileSystem }{*fs}}
+
+Sets the virtual file system that will be used to request additional
+files. (For example {\tt <IMG>} tag handler requests wxFSFile with the
+image data.)
 

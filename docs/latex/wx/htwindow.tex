@@ -41,27 +41,59 @@ Constructor. The parameters are same as in wxScrollWindow ctor.
 \docparam{style}{wxHW\_SCROLLBAR\_NEVER,  or wxHW\_SCROLLBAR\_AUTO. 
 Affects appearance of vertical scrollbar in the window.}
 
-\membersection{wxHtmlWindow::SetPage}\label{wxhtmlwindowsetpage}
+\membersection{wxHtmlWindow::AddFilter}\label{wxhtmlwindowaddfilter}
 
-\func{bool}{SetPage}{\param{const wxString\& }{source}}
+\func{static void}{AddFilter}{\param{wxHtmlFilter }{*filter}}
 
-Sets HTML page and display it. This won't {\bf load} the page!!
-It will display the {\it source}. See example:
+Adds \helpref{input filter}{filters} to the static list of available
+filters. These filters are present by default:
 
-\begin{verbatim}
-htmlwin -> SetPage("<html><body>Hello, world!</body></html>");
-\end{verbatim}
+\begin{itemize}
+\item {\tt text/html} MIME type
+\item {\tt image/*} MIME types
+\item Plain Text filter (this filter is used if no other filter matches)
+\end{itemize}
 
-If you want to load document from some location use
-\helpref{LoadPage}{wxhtmlwindowloadpage} instead.
+\membersection{wxHtmlWindow::GetInternalRepresentation}\label{wxhtmlwindowgetinternalrepresentation}
 
-\wxheading{Parameters}
+\constfunc{wxHtmlContainerCell*}{GetInternalRepresentation}{\void}
 
-\docparam{source}{The HTML document source to be displayed.}
+Returns pointer to the top-level container.
 
-\wxheading{Return value}
+See also: \helpref{Cells Overview}{cells}, 
+\helpref{Printing Overview}{printing}
 
-FALSE if an error occured, TRUE otherwise
+\membersection{wxHtmlWindow::GetOpenedPage}\label{wxhtmlwindowgetopenedpage}
+
+\func{wxString}{GetOpenedPage}{\void}
+
+Returns full location of the opened page. If no page is opened or if the displayed page wasn't
+produced by call to LoadPage, empty string is returned.
+
+\membersection{wxHtmlWindow::GetRelatedFrame}\label{wxhtmlwindowgetrelatedframe}
+
+\constfunc{wxFrame*}{GetRelatedFrame}{\void}
+
+Returns the related frame.
+
+\membersection{wxHtmlWindow::HistoryBack}\label{wxhtmlwindowhistoryback}
+
+\func{bool}{HistoryBack}{\void}
+
+Moves back to the previous page. (each page displayed using 
+\helpref{LoadPage}{wxhtmlwindowloadpage} is stored in history list.)
+
+\membersection{wxHtmlWindow::HistoryClear}\label{wxhtmlwindowhistoryclear}
+
+\func{void}{HistoryClear}{\void}
+
+Clears history.
+
+\membersection{wxHtmlWindow::HistoryForward}\label{wxhtmlwindowhistoryforward}
+
+\func{bool}{HistoryForward}{\void}
+
+Moves to next page in history.
 
 \membersection{wxHtmlWindow::LoadPage}\label{wxhtmlwindowloadpage}
 
@@ -82,38 +114,40 @@ htmlwin -> SetPage("help/myproject/index.htm");
 
 FALSE if an error occured, TRUE otherwise
 
-\membersection{wxHtmlWindow::GetOpenedPage}\label{wxhtmlwindowgetopenedpage}
+\membersection{wxHtmlWindow::OnLinkClicked}\label{wxhtmlwindowonlinkclicked}
 
-\func{wxString}{GetOpenedPage}{\void}
+\func{virtual void}{OnLinkClicked}{\param{const wxString\& }{link}}
 
-Returns full location of the opened page. If no page is opened or if the displayed page wasn't
-produced by call to LoadPage, empty string is returned.
+Called when user clicks on hypertext link. Default behaviour is to call 
+\helpref{LoadPage}{wxhtmlwindowloadpage} and do nothing else.
 
-\membersection{wxHtmlWindow::SetRelatedFrame}\label{wxhtmlwindowsetrelatedframe}
+\membersection{wxHtmlWindow::ReadCustomization}\label{wxhtmlwindowreadcustomization}
 
-\func{void}{SetRelatedFrame}{\param{wxFrame* }{frame}, \param{const wxString\& }{format}}
+\func{virtual void}{ReadCustomization}{\param{wxConfigBase }{*cfg}, \param{wxString }{path = wxEmptyString}}
 
-Sets frame in which page title will be displayed. {\it format} is format of
-frame title, e.g. "HtmlHelp : \%s". It must contain exactly one \%s. This
-\%s is substituted with HTML page title.
+This reads custom settings from wxConfig. It uses the path 'path'
+if given, otherwise it saves info into currently selected path.
+The values are stored in sub-path {\tt wxHtmlWindow}
 
-\membersection{wxHtmlWindow::GetRelatedFrame}\label{wxhtmlwindowgetrelatedframe}
-
-\constfunc{wxFrame*}{GetRelatedFrame}{\void}
-
-Returns the related frame.
-
-\membersection{wxHtmlWindow::SetRelatedStatusBar}\label{wxhtmlwindowsetrelatedstatusbar}
-
-\func{void}{SetRelatedStatusBar}{\param{int }{bar}}
-
-{\bf After} calling \helpref{SetRelatedFrame}{wxhtmlwindowsetrelatedframe},
-this sets statusbar slot where messages will be displayed.
-(Default is -1 = no messages.)
+Read values : all things set by SetFonts, SetBorders.
 
 \wxheading{Parameters}
 
-\docparam{bar}{statusbar slot number (0..n)}
+\docparam{cfg}{wxConfig from which you wanna read configuration}
+
+\docparam{path}{Optional path in config tree. If not given current path is used.}
+
+\membersection{wxHtmlWindow::SetBorders}\label{wxhtmlwindowsetborders}
+
+\func{void}{SetBorders}{\param{int }{b}}
+
+This function sets the space between border of window and HTML contents. See image:
+
+\image{}{border.bmp}
+
+\wxheading{Parameters}
+
+\docparam{b}{indentation from borders in pixels}
 
 \membersection{wxHtmlWindow::SetFonts}\label{wxhtmlwindowsetfonts}
 
@@ -159,33 +193,47 @@ Under Windows:
 Athough it seems different the fact is that the fonts are of approximately
 same size under both platforms (due to wxMSW / wxGTK inconsistency)
 
-\membersection{wxHtmlWindow::SetBorders}\label{wxhtmlwindowsetborders}
+\membersection{wxHtmlWindow::SetPage}\label{wxhtmlwindowsetpage}
 
-\func{void}{SetBorders}{\param{int }{b}}
+\func{bool}{SetPage}{\param{const wxString\& }{source}}
 
-This function sets the space between border of window and HTML contents. See image:
+Sets HTML page and display it. This won't {\bf load} the page!!
+It will display the {\it source}. See example:
 
-\image{}{border.bmp}
+\begin{verbatim}
+htmlwin -> SetPage("<html><body>Hello, world!</body></html>");
+\end{verbatim}
 
-\wxheading{Parameters}
-
-\docparam{b}{indentation from borders in pixels}
-
-\membersection{wxHtmlWindow::ReadCustomization}\label{wxhtmlwindowreadcustomization}
-
-\func{virtual void}{ReadCustomization}{\param{wxConfigBase }{*cfg}, \param{wxString }{path = wxEmptyString}}
-
-This reads custom settings from wxConfig. It uses the path 'path'
-if given, otherwise it saves info into currently selected path.
-The values are stored in sub-path {\tt wxHtmlWindow}
-
-Read values : all things set by SetFonts, SetBorders.
+If you want to load document from some location use
+\helpref{LoadPage}{wxhtmlwindowloadpage} instead.
 
 \wxheading{Parameters}
 
-\docparam{cfg}{wxConfig from which you wanna read configuration}
+\docparam{source}{The HTML document source to be displayed.}
 
-\docparam{path}{Optional path in config tree. If not given current path is used.}
+\wxheading{Return value}
+
+FALSE if an error occured, TRUE otherwise
+
+\membersection{wxHtmlWindow::SetRelatedFrame}\label{wxhtmlwindowsetrelatedframe}
+
+\func{void}{SetRelatedFrame}{\param{wxFrame* }{frame}, \param{const wxString\& }{format}}
+
+Sets frame in which page title will be displayed. {\it format} is format of
+frame title, e.g. "HtmlHelp : \%s". It must contain exactly one \%s. This
+\%s is substituted with HTML page title.
+
+\membersection{wxHtmlWindow::SetRelatedStatusBar}\label{wxhtmlwindowsetrelatedstatusbar}
+
+\func{void}{SetRelatedStatusBar}{\param{int }{bar}}
+
+{\bf After} calling \helpref{SetRelatedFrame}{wxhtmlwindowsetrelatedframe},
+this sets statusbar slot where messages will be displayed.
+(Default is -1 = no messages.)
+
+\wxheading{Parameters}
+
+\docparam{bar}{statusbar slot number (0..n)}
 
 \membersection{wxHtmlWindow::WriteCustomization}\label{wxhtmlwindowwritecustomization}
 
@@ -204,52 +252,4 @@ Saved values : all things set by SetFonts, SetBorders.
 
 \docparam{path}{Optional path in config tree. If not given current path is used.}
 
-
-\membersection{wxHtmlWindow::GetInternalRepresentation}\label{wxhtmlwindowgetinternalrepresentation}
-
-\constfunc{wxHtmlContainerCell*}{GetInternalRepresentation}{\void}
-
-Returns pointer to the top-level container.
-
-See also: \helpref{Cells Overview}{cells}, 
-\helpref{Printing Overview}{printing}
-
-\membersection{wxHtmlWindow::AddFilter}\label{wxhtmlwindowaddfilter}
-
-\func{static void}{AddFilter}{\param{wxHtmlFilter }{*filter}}
-
-Adds \helpref{input filter}{filters} to the static list of available
-filters. These filters are present by default:
-
-\begin{itemize}
-\item {\tt text/html} MIME type
-\item {\tt image/*} MIME types
-\item Plain Text filter (this filter is used if no other filter matches)
-\end{itemize}
-
-\membersection{wxHtmlWindow::HistoryBack}\label{wxhtmlwindowhistoryback}
-
-\func{bool}{HistoryBack}{\void}
-
-Moves back to the previous page. (each page displayed using 
-\helpref{LoadPage}{wxhtmlwindowloadpage} is stored in history list.)
-
-\membersection{wxHtmlWindow::HistoryForward}\label{wxhtmlwindowhistoryforward}
-
-\func{bool}{HistoryForward}{\void}
-
-Moves to next page in history.
-
-\membersection{wxHtmlWindow::HistoryClear}\label{wxhtmlwindowhistoryclear}
-
-\func{void}{HistoryClear}{\void}
-
-Clears history.
-
-\membersection{wxHtmlWindow::OnLinkClicked}\label{wxhtmlwindowonlinkclicked}
-
-\func{virtual void}{OnLinkClicked}{\param{const wxString\& }{link}}
-
-Called when user clicks on hypertext link. Default behaviour is to call 
-\helpref{LoadPage}{wxhtmlwindowloadpage} and do nothing else.
 

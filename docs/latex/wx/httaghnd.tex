@@ -29,13 +29,6 @@ it can't be accessed by user but can be accessed from derived classes.
 
 Constructor.
 
-\membersection{wxHtmlTagHandler::SetParser}\label{wxhtmltaghandlersetparser}
-
-\func{virtual void}{SetParser}{\param{wxHtmlParser }{*parser}}
-
-Assigns {\it parser} to this handler. Each {\bf instance} of handler 
-is guaranteed to be called only from the parser.
-
 \membersection{wxHtmlTagHandler::GetSupportedTags}\label{wxhtmltaghandlergetsupportedtags}
 
 \func{virtual wxString}{GetSupportedTags}{\void}
@@ -84,4 +77,11 @@ for the string between this tag and paired ending tag:
 
 In this example, a call to ParseInner (with {\it tag} pointing to A tag)
 will parse 'Hello, world!'.
+
+\membersection{wxHtmlTagHandler::SetParser}\label{wxhtmltaghandlersetparser}
+
+\func{virtual void}{SetParser}{\param{wxHtmlParser }{*parser}}
+
+Assigns {\it parser} to this handler. Each {\bf instance} of handler 
+is guaranteed to be called only from the parser.
 
