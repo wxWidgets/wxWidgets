@@ -63,7 +63,7 @@ wxBEGIN_FLAGS( wxDialogStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -99,7 +99,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxDialog)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxDialog , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle) 
+wxCONSTRUCTOR_6( wxDialog , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle)
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
@@ -153,9 +153,9 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData);
 void wxDialog::Init()
 {
     m_oldFocus = (wxWindow *)NULL;
-    m_isShown = FALSE;
+    m_isShown = false;
     m_modalData = NULL;
-    m_endModalCalled = FALSE;
+    m_endModalCalled = false;
 }
 
 bool wxDialog::Create(wxWindow *parent,
@@ -175,14 +175,14 @@ bool wxDialog::Create(wxWindow *parent,
     style |= wxTAB_TRAVERSAL;
 
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
-        return FALSE;
+        return false;
 
     if ( !m_hasFont )
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
-    return TRUE;
+    return true;
 }
 
 // deprecated ctor
@@ -208,10 +208,10 @@ void wxDialog::SetModal(bool WXUNUSED(flag))
 
 wxDialog::~wxDialog()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
 
     // this will also reenable all the other windows for a modal dialog
-    Show(FALSE);
+    Show(false);
 }
 
 // ----------------------------------------------------------------------------
@@ -247,6 +247,9 @@ wxWindow *wxDialog::FindSuitableParent() const
 
 bool wxDialog::Show(bool show)
 {
+    if ( show == IsShown() )
+        return false;
+
     if ( !show && m_modalData )
     {
         // we need to do this before calling wxDialogBase version because if we
@@ -257,12 +260,15 @@ bool wxDialog::Show(bool show)
         m_modalData->ExitLoop();
     }
 
-    // ShowModal() may be called for already shown dialog
-    if ( !wxDialogBase::Show(show) && !(show && IsModal()) )
+    if ( show )
     {
-        // nothing to do
-        return FALSE;
+        // this usually will result in TransferDataToWindow() being called
+        // which will change the controls values so do it before showing as
+        // otherwise we could have some flicker
+        InitDialog();
     }
+
+    wxDialogBase::Show(show);
 
     if ( show )
     {
@@ -273,12 +279,9 @@ bool wxDialog::Show(bool show)
         // NB: normally we should call it just the first time but doing it
         //     every time is simpler than keeping a flag
         Layout();
-
-        // this usually will result in TransferDataToWindow() being called
-        InitDialog();
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxDialog::Raise()
@@ -291,7 +294,7 @@ int wxDialog::ShowModal()
 {
     wxASSERT_MSG( !IsModal(), _T("wxDialog::ShowModal() reentered?") );
 
-    m_endModalCalled = FALSE;
+    m_endModalCalled = false;
 
     Show();
 
@@ -348,10 +351,10 @@ void wxDialog::EndModal(int retCode)
 {
     wxASSERT_MSG( IsModal(), _T("EndModal() called for non modal dialog") );
 
-    m_endModalCalled = TRUE;
+    m_endModalCalled = true;
     SetReturnCode(retCode);
 
-    Show(FALSE);
+    Show(false);
 }
 
 // ----------------------------------------------------------------------------
@@ -427,7 +430,7 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
-    bool processed = FALSE;
+    bool processed = false;
 
     switch ( message )
     {
@@ -441,12 +444,12 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
                 {
                     // if we do have a cancel button, do press it
                     btn->MSWCommand(BN_CLICKED, 0 /* unused */);
-                    processed = TRUE;
+                    processed = true;
                     break;
                 }
             }
             break;
-#endif            
+#endif
         case WM_CLOSE:
             // if we can't close, tell the system that we processed the
             // message - otherwise it would close us
@@ -461,10 +464,10 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             // help with it - so we have to refresh it manually which certainly
             // creates flicker but at least doesn't show garbage on the screen
             rc = wxWindow::MSWWindowProc(message, wParam, lParam);
-            processed = TRUE;
+            processed = true;
             if ( HasFlag(wxFULL_REPAINT_ON_RESIZE) )
             {
-                ::InvalidateRect(GetHwnd(), NULL, FALSE /* erase bg */);
+                ::InvalidateRect(GetHwnd(), NULL, false /* erase bg */);
             }
             break;
 
@@ -484,14 +487,14 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
 
                 // in any case, stop here and don't let wxWindow process this
                 // message (it would set the busy cursor)
-                processed = TRUE;
+                processed = true;
 
-                // but return FALSE to tell the child window (if the event
+                // but return false to tell the child window (if the event
                 // comes from one of them and not from ourselves) that it can
                 // set its own cursor if it has one: thus, standard controls
                 // (e.g. text ctrl) still have correct cursors in a dialog
                 // invoked while wxIsBusy()
-                rc = FALSE;
+                rc = false;
             }
             break;
 #endif // __WXMICROWIN__
