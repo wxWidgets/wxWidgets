@@ -281,10 +281,12 @@ wxDLManifestEntry::wxDLManifestEntry( const wxString &libname )
 
 wxDLManifestEntry::~wxDLManifestEntry()
 {
-    UnregisterModules();
-    RestoreClassInfo();
-
-    wxDllLoader::UnloadLibrary(m_handle);
+    if( m_handle != 0 )
+    {
+        UnregisterModules();
+        RestoreClassInfo();
+        wxDllLoader::UnloadLibrary(m_handle);
+    }
 }
 
 bool wxDLManifestEntry::UnrefLib()
@@ -460,7 +462,7 @@ wxDLManifestEntry *wxDynamicLibrary::Link(const wxString &libname)
         }
         else
         {
-            wxCHECK_MSG( !entry->UnrefLib(), 0,
+            wxCHECK_MSG( entry->UnrefLib(), 0,
                          _T("Currently linked library is, ..not loaded??") );
             entry = 0;
         }

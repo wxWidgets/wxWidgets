@@ -18,18 +18,19 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "fontbase.h"
+#pragma implementation "fontbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/font.h"
+#include "wx/font.h"
+#include "wx/intl.h"
 #endif // WX_PRECOMP
 
 #include "wx/gdicmn.h"
