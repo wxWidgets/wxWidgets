@@ -10,7 +10,7 @@ add the manifest file to your program (this is not at all specific to
 wxWindows programs but is required for all Windows applications).
 
 
-For your convinience, below is an example manifest. It should be put in a
+For your convenience, below is an example manifest. It should be put in a
 file called "yourapp.exe.manifest" and put in the same directory where
 "yourapp.exe" resides. Alternatively, you can include the manifest in your
 applications resource section. Please see the MSDN documentation at

@@ -256,7 +256,7 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
   SetSizer( topsizer );      // actually set the sizer
 
   topsizer->Fit( this );            // set size to minimum size as calculated by the sizer
-  topsizer->SetSizeHints( this );   // set size hints to honour mininum size
+  topsizer->SetSizeHints( this );   // set size hints to honour minimum size
 }
 \end{verbatim}
 
@@ -286,7 +286,7 @@ sizer.
 
 In order to query the size of notebook page, this page needs to have its
 own sizer, otherwise the wxNotebookSizer will ignore it. Notebook pages
-get their size by assigning one to them using \helpref{wxWindow::SetSizer}{wxwindowsetsizer} 
+get their sizer by assigning one to them using \helpref{wxWindow::SetSizer}{wxwindowsetsizer} 
 and setting the auto-layout option to TRUE using 
 \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout}. Here is one
 example showing how to add a notebook page that the notebook sizer is

@@ -36,7 +36,7 @@ them is fast}
 
 There are 3 main classes declared in {\tt <wx/datetime.h>}: except 
 \helpref{wxDateTime}{wxdatetime} itself which represents an absolute
-moment in the time, there are also two classes - 
+moment in time, there are also two classes - 
 \helpref{wxTimeSpan}{wxtimespan} and \helpref{wxDateSpan}{wxdatespan} which
 represent the intervals of time.
 
@@ -86,7 +86,7 @@ describe a time interval.
 
 First, there is the direct and self-explaining way implemented by 
 \helpref{wxTimeSpan}{wxtimespan}: it is just a difference in milliseconds
-between two moments in the time. Adding and substracting such interval to
+between two moments in time. Adding or subtracting such an interval to
 wxDateTime is always well-defined and is a fast operation.
 
 But in the daily life other, calendar-dependent time interval specifications are
@@ -96,35 +96,35 @@ month later' Feb 15 is Mar 15 and not Mar 17 or Mar 16 (depending on whether
 the year is leap or not).
 
 This is why there is another class for representing such intervals called 
-\helpref{wxDateSpan}{wxdatespan}. It handles this sort of operations in the
-most natural way possible, but note that manipulating with thei ntervals of
+\helpref{wxDateSpan}{wxdatespan}. It handles these sort of operations in the
+most natural way possible, but note that manipulating with intervals of
 this kind is not always well-defined. Consider, for example, Jan 31 + `1
 month': this will give Feb 28 (or 29), i.e. the last day of February and not
-the non-existing Feb 31. Of course, this is what is usually wanted, but you
-still might be surprized to notice that now substracting back the same
+the non-existent Feb 31. Of course, this is what is usually wanted, but you
+still might be surprised to notice that now subtracting back the same
 interval from Feb 28 will result in Jan 28 and {\bf not} Jan 31 we started
 with!
 
 So, unless you plan to implement some kind of natural language parsing in the
 program, you should probably use wxTimeSpan instead of wxDateSpan (which is
 also more efficient). However, wxDateSpan may be very useful in situations
-when you do need to understand what does `in a month' mean (of course, it is
+when you do need to understand what `in a month' means (of course, it is
 just {\tt wxDateTime::Now() + wxDateSpan::Month()}).
 
 \subsection{Date arithmetics}\label{tdatearithm}
 
 Many different operations may be performed with the dates, however not all of
-them make sense. For example, multiplying date by a number is an invalid
-operation, even though multiplying either of time span classes by a number is
-perfectly valid.
+them make sense. For example, multiplying a date by a number is an invalid
+operation, even though multiplying either of the time span classes by a number
+is perfectly valid.
 
 Here is what can be done:
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf Addition}}{a wxTimeSpan or wxDateSpan can be added to wxDateTime
 resulting in a new wxDateTime object and also 2 objects of the same span class
-can be added together giving another object of the smae class.}
-\twocolitem{{\bf Substraction}}{the same types of operations as above are
+can be added together giving another object of the same class.}
+\twocolitem{{\bf Subtraction}}{the same types of operations as above are
 allowed and, additionally, a difference between two wxDateTime objects can be
 taken and this will yield wxTimeSpan.}
 \twocolitem{{\bf Multiplication}}{a wxTimeSpan or wxDateSpan object can be
@@ -135,7 +135,7 @@ direction.}
 \end{twocollist}
 
 For all these operations there are corresponding global (overloaded) operators
-and also member functions which are synonyms for them: Add(), Substract() and
+and also member functions which are synonyms for them: Add(), Subtract() and
 Multiply(). Unary minus as well as composite assignment operations (like $+=$)
 are only implemented as members and Neg() is the synonym for unary minus.
 
@@ -166,7 +166,7 @@ the target time zone. There are also special versions of these functions
 the most common case - when the date should be constructed in GMT.
 
 You also can just retrieve the value for some time zone without converting the
-obejct to it first. For this you may pass TimeZone argument to any of the
+object to it first. For this you may pass TimeZone argument to any of the
 methods which are affected by the time zone (all methods getting date
 components and the date formatting ones, for example). In particular, the
 Format() family of methods accepts a TimeZone parameter and this allows to

@@ -74,7 +74,7 @@ sizer and thus to create hierarchies of sizers (typically a vertical box as the 
 horizontal boxes on the level beneath).}
 
 \docparam{width and height}{The dimension of a spacer to be added to the sizer. Adding spacers to sizers
-gives more flexilibilty in the design of dialogs; imagine for example a horizontal box with two buttons at the
+gives more flexibility in the design of dialogs; imagine for example a horizontal box with two buttons at the
 bottom of a dialog: you might want to insert a space between the two buttons and make that space stretchable
 using the {\it option} flag and the result will be that the left button will be aligned with the left
 side of the dialog and the right button with the right side - the space in between will shrink and grow with
@@ -82,7 +82,7 @@ the dialog.}
 
 \docparam{option}{Although the meaning of this parameter is undefined in wxSizer, it is used in wxBoxSizer
 to indicate if a child of a sizer can change its size in the main orientation of the wxBoxSizer - where
-0 stands for not changable and a value of more than zero is interpreted relative to the value of other
+0 stands for not changeable and a value of more than zero is interpreted relative to the value of other
 children of the same wxBoxSizer. For example, you might have a horizontal wxBoxSizer with three children, two
 of which are supposed to change their size with the sizer. Then the two stretchable windows would get a
 value of 1 each to make them grow and shrink equally with the sizer's horizontal dimension.}
@@ -204,7 +204,7 @@ Removes a child from the sizer. {\it window} is the window to be removed, {\it s
 equivalent sizer and {\it nth} is the position of the child in the sizer, typically 0 for
 the first item. This method does not cause any layout or resizing to take place and does
 not delete the window itself. Call \helpref{wxSizer::Layout}{wxsizerlayout} to update
-the layout "on screen" after removing a child fom the sizer.
+the layout "on screen" after removing a child from the sizer.
 
 Returns TRUE if the child item was found and removed, FALSE otherwise.
 
@@ -213,7 +213,7 @@ Returns TRUE if the child item was found and removed, FALSE otherwise.
 \func{void}{SetDimension}{\param{int }{x}, \param{int }{y}, \param{int }{width}, \param{int }{height}}
 
 Call this to force the sizer to take the given dimension and thus force the items owned
-by the sizer to resize themselves according to the rules defined by the paramater in the 
+by the sizer to resize themselves according to the rules defined by the parameter in the 
 \helpref{Add}{wxsizeradd} and \helpref{Prepend}{wxsizerprepend} methods.
 
 \membersection{wxSizer::SetMinSize}\label{wxsizersetminsize}

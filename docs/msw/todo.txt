@@ -9,7 +9,7 @@ Add automatic line wrap to wxStaticText
 
 Add centring, right justify styles to wxStaticText.
 
-Extend wxLocale to get more locale settings (currence,
+Extend wxLocale to get more locale settings (currency,
 date/time, decimal separator and so on)
 
 LOW PRIORITY (MEDIUM TERM)

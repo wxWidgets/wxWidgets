@@ -30,7 +30,7 @@ Objects:
 
 \membersection{Constructors and assignment operators}
 
-A strign may be constructed either from a C string, (some number of copies of)
+A string may be constructed either from a C string, (some number of copies of)
 a single character or a wide (UNICODE) string. For all constructors (except the
 default which creates an empty string) there is also a corresponding assignment
 operator.
@@ -55,7 +55,7 @@ or empty it.
 Many functions in this section take a character index in the string. As with C
 strings and/or arrays, the indices start from $0$, so the first character of a
 string is string[$0$]. Attempt to access a character beyond the end of the
-string (which may be even $0$ if the string is empty) will provocate an assert
+string (which may be even $0$ if the string is empty) will provoke an assert
 failure in \helpref{debug build}{debuggingoverview}, but no checks are done in
 release builds.
 
@@ -101,7 +101,7 @@ interpreter.
 
 \helpref{StartsWith}{wxstringstartswith} is helpful when parsing a line of
 text which should start with some predefined prefix and is more efficient than
-doing direct string comparaison as you would also have to precalculate the
+doing direct string comparison as you would also have to precalculate the
 length of the prefix then.
 
 \helpref{Cmp}{wxstringcmp}\\
@@ -129,7 +129,7 @@ substring.
 \membersection{Case conversion}
 
 The MakeXXX() variants modify the string in place, while the other functions
-return a new string which containts the original text converted to the upper or
+return a new string which contains the original text converted to the upper or
 lower case and leave the original string unchanged.
 
 \helpref{MakeUpper}{wxstringmakeupper}\\
@@ -181,7 +181,7 @@ formatted value to a string:
 
 \membersection{Memory management}
 
-These are "advanced" functions and they will be needed quite rarily. 
+These are "advanced" functions and they will be needed quite rarely. 
 \helpref{Alloc}{wxstringalloc} and \helpref{Shrink}{wxstringshrink} are only
 interesting for optimization purposes. 
 \helpref{GetWriteBuf}{wxstringgetwritebuf} may be very useful when working with
@@ -1147,7 +1147,7 @@ None
 \func{}{wxStringBuffer}{\param{const wxString\& }{str}, \param{size\_t }{len}}
 
 Constructs a writable string buffer object associated with the given string
-and containing enough space for at least {\it len} characters. Basicly, this
+and containing enough space for at least {\it len} characters. Basically, this
 is equivalent to calling \helpref{GetWriteBuf}{wxstringgetwritebuf} and
 saving the result.
 

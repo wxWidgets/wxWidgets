@@ -95,7 +95,7 @@ streambuf\\
 the message wxEVENT\_TYPE\_TEXT\_ENTER\_COMMAND (otherwise pressing <Enter> is
 either processed internally by the control or used for navigation between
 dialog controls).}
-\twocolitem{\windowstyle{wxTE\_PROCESS\_TAB}}{The control will receieve
+\twocolitem{\windowstyle{wxTE\_PROCESS\_TAB}}{The control will receive
 EVT\_CHAR messages for TAB pressed - normally, TAB is used for passing to the
 next control in a dialog instead. For the control created with this style,
 you can still use Ctrl-Enter to pass to the next control from the keyboard.}
@@ -784,7 +784,7 @@ This function sets the maximum number of characters the user can enter into the
 control. In other words, it allows to limit the text value length to {\it len}
 not counting the terminating {\tt NUL} character.
 
-If {\it len} is $0$, the previously set max length limi, if any, is discarded
+If {\it len} is $0$, the previously set max length limit, if any, is discarded
 and the user may enter as much text as the underlying native text control
 widget supports (typically at least 32Kb).
 

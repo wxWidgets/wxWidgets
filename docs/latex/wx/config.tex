@@ -187,7 +187,7 @@ config file. All functions here return FALSE when there are no more items.
 
 You must pass the same index to GetNext and GetFirst (don't modify it).
 Please note that it is {\bf not} the index of the current item (you will have
-some great surprizes with wxRegConfig if you assume this) and you shouldn't
+some great surprises with wxRegConfig if you assume this) and you shouldn't
 even look at it: it is just a "cookie" which stores the state of the
 enumeration. It can't be stored inside the class because it would prevent you
 from running several enumerations simultaneously, that's why you must pass it

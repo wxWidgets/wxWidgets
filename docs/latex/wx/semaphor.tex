@@ -20,7 +20,7 @@ decrements the counter. As soon as it reaches $0$, any subsequent calls to
 counter becomes strictly positive again as the result of calling 
 \helpref{Post}{wxsemaphorepost} which increments the counter.
 
-In general, the semaphores are useful to restict access to a shared resource
+In general, the semaphores are useful to restrict access to a shared resource
 which can only be accessed by some fixed number of clients at once. For
 example, when modeling a hotel reservation system a semaphore with the counter
 equal to the total number of available rooms could be created. Each time a room
@@ -80,5 +80,5 @@ and then decrement it and return.
 \func{bool}{Wait}{\param{unsigned long }{timeout\_millis}}
 
 Same as the version above, but with a timeout limit: returns {\tt TRUE} if the
-semaphore was acquired and {\tt FALSE} if the timeout has ellapsed
+semaphore was acquired and {\tt FALSE} if the timeout has elapsed
 

@@ -88,7 +88,7 @@ and you will get a list of supported options.
 
 'make install' will install wx-config script that can (and should) be used
 to get compiler flags that are needed to build your program. wx-config --cxxflags
-will output neccessary C++ compiler flags and wx-config --libs will list all
+will output necessary C++ compiler flags and wx-config --libs will list all
 needed libraries. See an example of wxWindows application makefile:
 
 minimal: minimal.o

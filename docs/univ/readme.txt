@@ -39,7 +39,7 @@ wxGTK or wxX11. In any case, you should download the sources for the
 appropriate toolkit in addition to wxUniversal - in fact, you should download
 them first and then unpack wxUniversal in the same directory.
 
- The requirments for wxUniversal are the same as for the underlying low level
+ The requirements for wxUniversal are the same as for the underlying low level
 toolkit.
 
 2. Installing under Win32

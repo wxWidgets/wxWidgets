@@ -9,7 +9,7 @@ wxPlotWindow is a specialized window designed to display data that typically has
 been measured by machines, i.e. that may have thousands of values. One example of
 such data would be the well known ECG measuring the electrical activity of your
 heart: the measuring device will produce thousands of values per minute, several
-measurements are done simultanously and you might want to have a look at parts
+measurements are done simultaneously and you might want to have a look at parts
 of the curves, enlarging them or scrolling from one position to another. Note
 that this window is not useful for real-time measuring or for displaying charts
 with error bars etc.
@@ -33,7 +33,7 @@ sections of the displayed curves etc.
 \wxheading{Window styles}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxPLOT\_BUTTON\_MOVE}}{Display buttons to allao moving individual curves up or down.}
+\twocolitem{\windowstyle{wxPLOT\_BUTTON\_MOVE}}{Display buttons to allow moving individual curves up or down.}
 \twocolitem{\windowstyle{wxPLOT\_BUTTON\_ENLARGE}}{Display buttons to allow enlarging individual curves vertically.}
 \twocolitem{\windowstyle{wxPLOT\_BUTTON\_ZOOM}}{Display buttons to allow zooming all curves horizontally.}
 \twocolitem{\windowstyle{wxPLOT\_BUTTON\_ALL}}{Display all buttons.}
@@ -114,7 +114,7 @@ one will stretch the curve vertically. The Y axis will change accordingly.
 
 \func{void}{SetUnitsPerValue}{\param{double }{upv}}
 
-This sets the virtual untis per value. Normally, you will not be interested in
+This sets the virtual units per value. Normally, you will not be interested in
 what measured value you see, but what it stands for. If you want to display seconds
 on the X axis and the measuring device produced 50 values per second, set this
 value to 50. This will affect all curves being displayed.

@@ -7,11 +7,11 @@
 ----------------
 
 Most C++ compilers cannot compile the WINE sources yet (this includes
-all versions of g++ and ecgs) so you have to make a minimal change
+all versions of g++ and egcs) so you have to make a minimal change
 and recompile all of WINE in order to get anywhere.
 
 This change has do be applied to the /include/windef.h file, line 59
-in the section "Calling convention defintions", where the sources
+in the section "Calling convention definitions", where the sources
 reads:
 
 #if __i386__
@@ -39,7 +39,7 @@ install instructions just do (in the base dir):
 > exit
 
 On all variants of Unix except Linux (and maybe except *BSD), shared libraries 
-are not supportet out of the box due to the utter stupidity of libtool, so you'll 
+are not supported out of the box due to the utter stupidity of libtool, so you'll 
 have to do this to get shared library support:
 
 > ./configure --with-wine --disable-static --enable-shared
@@ -75,7 +75,7 @@ If you want to remove wxWindows on Unix you can do this:
 
 If you want to do some more serious cross-platform programming with wxWindows, 
 such as for GTK and Motif, you can now build two complete libraries and use 
-them concurretly. For this end, you have to create a directory for each build 
+them concurrently. For this end, you have to create a directory for each build 
 of wxWindows - you may also want to create different versions of wxWindows
 and test them concurrently. Most typically, this would be a version configured 
 with --enable-debug_flag and one without. Note, that only one build can currently 
@@ -108,7 +108,7 @@ wxWINE doesn't work yet as WINE isn't really up to the task yet.
 
 You get errors during compilation: The reason is that you probably have a broken 
 compiler, which includes almost everything that is called gcc. If you use gcc 2.8 
-you have to disable optimsation as the compiler will give up with an internal 
+you have to disable optimisation as the compiler will give up with an internal 
 compiler error.
 
 If there is just any way for you to use egcs, use egcs. We cannot fix gcc.
@@ -187,7 +187,7 @@ Given below are the commands to change the default behaviour,
 i.e. if it says "--disable-threads" it means that threads
 are enabled by default.
 
-Many of the confiugre options have been thoroughly tested
+Many of the configure options have been thoroughly tested
 in wxWindows snapshot 6, but not yet all (ODBC not).
 
 You must do this by running configure with either of:
@@ -242,7 +242,7 @@ The following options handle the kind of library you want to build.
 * Feature Options
 -------------------
 
-Many of the confiugre options have been thoroughly tested
+Many of the configure options have been thoroughly tested
 in wxWindows snapshot 6, but not yet all (ODBC not).
 
 When producing an executable that is linked statically with wxGTK
@@ -269,7 +269,7 @@ are
 	
 	--disable-clipboard     Disables Clipboard.
 	
-	--disable-serial        Disables object instance serialiasation.
+	--disable-serial        Disables object instance serialisation.
 	
 	--disable-streams       Disables the wxStream classes.
 	
@@ -303,9 +303,9 @@ make yourself some coffee, as it will take some time. On an old
 warning messages depending in your compiler.
 
 If you want to be more selective, you can change into a specific
-directiry and type "make" there.
+directory and type "make" there.
 
-Then you may install the library and it's header files under
+Then you may install the library and its header files under
 /usr/local/include/wx and /usr/local/lib respectively. You
 have to log in as root (i.e. run "su" and enter the root
 password) and type
@@ -346,7 +346,7 @@ clean:
 	rm -f *.o minimal
 
 This is certain to become the standard way unless we decide
-to sitch to tmake.
+to stick to tmake.
 
 2) The other way creates a project within the source code 
 directories of wxWindows. For this endeavour, you'll need

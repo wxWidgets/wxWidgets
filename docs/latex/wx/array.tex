@@ -97,7 +97,7 @@ class MyDirectory
 // now that we have MyDirectory declaration in scope we may finish the
 // definition of ArrayOfDirectories -- note that this expands into some C++
 // code and so should only be compiled once (i.e., don't put this in the
-// header, but into a source file or you will get linkin errors)
+// header, but into a source file or you will get linking errors)
 #include <wx/arrimpl.cpp> // this is a magic incantation which must be done!
 WX_DEFINE_OBJARRAY(ArrayOfDirectories);
 
@@ -177,7 +177,7 @@ amount, but no more than some maximal number which is defined by
 ARRAY\_MAXSIZE\_INCREMENT constant. Of course, this may lead to some memory
 being wasted (ARRAY\_MAXSIZE\_INCREMENT in the worst case, i.e. 4Kb in the
 current implementation), so the \helpref{Shrink()}{wxarrayshrink} function is
-provided to unallocate the extra memory. The \helpref{Alloc()}{wxarrayalloc} 
+provided to deallocate the extra memory. The \helpref{Alloc()}{wxarrayalloc} 
 function can also be quite useful if you know in advance how many items you are
 going to put in the array and will prevent the array code from reallocating the
 memory more times than needed.

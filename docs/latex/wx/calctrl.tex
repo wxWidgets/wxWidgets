@@ -29,7 +29,7 @@ font and without border, but setting custom attributes with
 create a custom attribute object and set it for the day you want to be
 displayed specially (note that the control will take ownership of the pointer,
 i.e. it will delete it itself). A day may be marked as being a holiday, even
-if it is not reckognized as oen by \helpref{wxDateTime}{tdateholidays} using 
+if it is not recognized as one by \helpref{wxDateTime}{tdateholidays} using 
 \helpref{SetHoliday}{wxcalendardateattrsetholiday} method.
 
 As the attributes are specified for each day, they may change when the month
@@ -70,7 +70,7 @@ direct input to member functions that take a
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=7pt
-\twocolitem{{\bf EVT\_CALENDAR(id, func)}}{A day was double clickedi n the calendar.}
+\twocolitem{{\bf EVT\_CALENDAR(id, func)}}{A day was double clicked in the calendar.}
 \twocolitem{{\bf EVT\_CALENDAR\_SEL\_CHANGED(id, func)}}{The selected date changed.}
 \twocolitem{{\bf EVT\_CALENDAR\_DAY(id, func)}}{The selected day changed.}
 \twocolitem{{\bf EVT\_CALENDAR\_MONTH(id, func)}}{The selected month changed.}
@@ -148,7 +148,7 @@ Gets the currently selected date.
 \func{void}{EnableYearChange}{\param{bool }{enable = TRUE}}
 
 This function should be used instead of changing {\tt wxCAL\_NO\_YEAR\_CHANGE}
-style bit directly. It allows or disallows the user to chaneg the year
+style bit directly. It allows or disallows the user to change the year
 interactively.
 
 \membersection{wxCalendarCtrl::EnableMonthChange}\label{wxcalendarctrlenablemonthchange}
@@ -231,7 +231,7 @@ window style includes {\tt wxCAL\_SHOW\_HOLIDAYS} flag).
 
 \constfunc{const wxColour\&}{GetHolidayColourFg}{\void}
 
-Return the foregound colour currently used for holiday highlighting.
+Return the foreground colour currently used for holiday highlighting.
 
 \wxheading{See also}
 

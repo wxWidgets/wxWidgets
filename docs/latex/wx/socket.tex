@@ -70,7 +70,7 @@ again the application will be notified with another
 {\bf wxSOCKET\_OUTPUT} event.
 
 The {\bf wxSOCKET\_CONNECTION} event is issued when a delayed connection
-request completes succesfully (client) or when a new connection arrives
+request completes successfully (client) or when a new connection arrives
 at the incoming queue (server).
 
 The {\bf wxSOCKET\_LOST} event is issued when a close indication is
@@ -577,7 +577,7 @@ enabled with \helpref{SetNotify}{wxsocketbasesetnotify} and
 \func{void}{SetFlags}{\param{wxSocketFlags}{ flags}}
 
 Use SetFlags to customize IO operation for this socket.
-The {\it flags} parameter may be a combination of flags ORed toghether.
+The {\it flags} parameter may be a combination of flags ORed together.
 The following flags can be used:
 
 \twocolwidtha{7cm}
@@ -640,7 +640,7 @@ it controls whether the GUI blocks.
 \func{void}{SetNotify}{\param{wxSocketEventFlags}{ flags}}
 
 SetNotify specifies which socket events are to be sent to the event handler.
-The {\it flags} parameter may be combination of flags ORed toghether. The
+The {\it flags} parameter may be combination of flags ORed together. The
 following flags can be used:
 
 \twocolwidtha{7cm}
@@ -1130,7 +1130,7 @@ as set with \helpref{SetTimeout}{wxsocketbasesettimeout}.}
 \wxheading{Return value}
 
 WaitOnConnect returns TRUE if the connection request completes. This
-does not necessarily mean that the connection was succesfully established;
+does not necessarily mean that the connection was successfully established;
 it might also happen that the connection was refused by the peer. Use 
 \helpref{IsConnected}{wxsocketbaseisconnected} to distinguish between
 these two situations.

@@ -25,7 +25,7 @@ threads, sockets and much more. Some of the other utility classes allow you to
 parse the command line, limit the number of instances of your program
 executing simultaneously (portably!) and so on.
 
-1. Requirments and supported platforms
+1. Requirements and supported platforms
 --------------------------------------
 
  wxBase can be compiled and used under Win32, mostly any modern Unix system

@@ -353,7 +353,7 @@ Returns the rectangle representing the item's size and position, in client coord
 ID and code and returns the wxRect.}
 
 \perlnote{In wxPerl this method takes only the {\bf item} parameter and
-retutrns a Wx::Rect ( or undef ).}
+returns a Wx::Rect ( or undef ).}
 
 \membersection{wxListCtrl::GetItemSpacing}\label{wxlistctrlgetitemspacing}
 
@@ -381,7 +381,7 @@ Gets the item text for this item.
 
 \constfunc{long}{GetNextItem}{\param{long }{item}, \param{int }{geometry = wxLIST\_NEXT\_ALL}, \param{int }{state = wxLIST\_STATE\_DONTCARE}}
 
-Searches for an item with the given goemetry or state, starting from
+Searches for an item with the given geometry or state, starting from
 {\it item} but excluding the {\it item} itself. If {\it item} is -1,
 the first item that matches the specified flags will be returned.
 
@@ -722,7 +722,7 @@ string or image at a given location.}
 This method can only be used with virtual list controls. It is used to indicate
 to the control the number of items it contains. After calling it, the main
 program should be ready to handle calls to various item callbacks (such as
-\helpref{OnGetItemText}{wxlistctrlongetitemtext}) for all vitems in the range
+\helpref{OnGetItemText}{wxlistctrlongetitemtext}) for all items in the range
 from $0$ to {\it count}.
 
 \membersection{wxListCtrl::SetItemData}\label{wxlistctrlsetitemdata}

@@ -45,7 +45,7 @@ are delimited by ','. Example : {\tt "I,B,FONT,P" }
 \func{virtual bool}{HandleTag}{\param{const wxHtmlTag\& }{tag}}
 
 This is the core method of each handler. It is called each time
-one of supported tags is detected. {\it tag} contains all neccessary
+one of supported tags is detected. {\it tag} contains all necessary
 info (see \helpref{wxHtmlTag}{wxhtmltag} for details).
 
 \wxheading{Return value}
@@ -66,14 +66,14 @@ bool MyHandler::HandleTag(const wxHtmlTag& tag)
 }
 \end{verbatim}
 
-You shouldn't call ParseInner if the tag is not paired with ending one.
+You shouldn't call ParseInner if the tag is not paired with an ending one.
 
 \membersection{wxHtmlTagHandler::ParseInner}\label{wxhtmltaghandlerparseinner}
 
 \func{void}{ParseInner}{\param{const wxHtmlTag\& }{tag}}
 
 This method calls parser's \helpref{DoParsing}{wxhtmlparserdoparsing} method
-for the string between this tag and paired ending tag:
+for the string between this tag and the paired ending tag:
 
 \begin{verbatim}
 ...<A HREF="x.htm">Hello, world!</A>...

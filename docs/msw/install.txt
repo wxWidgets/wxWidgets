@@ -131,7 +131,7 @@ Makefile notes:
   You MUST use the 'cleanall' target (with FINAL=1 or FINAL=0)
   before making a different configuration, because otherwise
   object files used to build the previous configuration may be
-  used accidentally for the current configuation. You might see
+  used accidentally for the current configuration. You might see
   this manifested in unexpected link errors or warnings. This problem
   doesn't occur when using project files to build wxWindows.
 
@@ -416,7 +416,7 @@ start address').
 32-bit compilation only (partially) supported at present, using SC++ 6.1.
 Some functionality is missing using this compiler (see makefile).
 Add -D__WIN95__ if your SC++ has Windows 95 support, and ignore
-Step (2). 16-bit compilation is left as an excercise for the user!
+Step (2). 16-bit compilation is left as an exercise for the user!
 
 Salford C++ compilation
 -----------------------

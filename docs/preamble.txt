@@ -40,7 +40,7 @@ Other relevant files:
   covered by the GNU Library General Public Licence, with an
   exception notice for binary distribution.
 
-- licencdoc.txt: the wxWindows Documentation Licence.
+- licendoc.txt: the wxWindows Documentation Licence.
 
 - lgpl.txt: the text of the GNU Library General Public Licence.
 

@@ -49,7 +49,7 @@ DETAILS:
   some reason.
 
 - On SGI IRIX 6.4, XtDestroyWidget in ~wxWindow causes a crash in
-  some cicumstances. This is being looked into. Meanwhile, a
+  some circumstances. This is being looked into. Meanwhile, a
   possible workaround is to remove the final XtDestroyWidget line in ~wxWindow
   (window.cpp). This will mean that child windows will only get
   destroyed when frames and dialogs are destroyed, so dynamic subwindow
@@ -207,7 +207,7 @@ DETAILS: Around line 1234 or the common/docview.cpp file following code exists..
 if (!theTemplate)
     theTemplate=templates[FilterIndex] ;
 
-The problem is tat FilterIndex is one based and the templates array is zero based. The correct
+The problem is that FilterIndex is one based and the templates array is zero based. The correct
 thing might be to use FilterIndex-1 as the index. Else the following scenario will
 cause a crash.
 
@@ -222,13 +222,13 @@ I understand that it is very
 hard to figure out the template
 when the user does not select
 one of the known extensions but
-this simple fix might atleast
+this simple fix might at least
 avoid the crash....
 
 I started playing with wxMSW
 just this morning and have not
 yet figured out exactly how to
-submit a fix. I atleast wanted
+submit a fix. I at least wanted
 to report it. Besides what I do
 for the MSW might not be correct
 for the other platforms :-)
@@ -292,7 +292,7 @@ output to freeze when the limit was reached.
 FIXED+BY: Vasu Harish
 IDENTIFIED+BY: Vasu Harish
 PLATFORMS: wxMSW
-SHORT+DESCRIPTION: wxTextCtrl clogs output occassionally when the text size limit is reached
+SHORT+DESCRIPTION: wxTextCtrl clogs output occasionally when the text size limit is reached
 WORKAROUND: In the check for (len > limit) condition in wxTextCtrl::AdjustSpaceLimit()
 call, added the condition to check for the len==limit. 
 visitor_email_address: vasuh@bullant.net
@@ -339,7 +339,7 @@ is used.
 FIXED+BY: Alexey V. Exarevsky (patched into wxWin 12/1/2000 by JACS)
 IDENTIFIED+BY: Alexey V. Exarevsky
 PLATFORMS: wxMSW, compiled by VC++ 6.0
-SHORT+DESCRIPTION: Print/Print preveiw to default printer in NT
+SHORT+DESCRIPTION: Print/Print preview to default printer in NT
 Submit: Submit
 WORKAROUND: I have moved lines that free
 memory below the lines that
@@ -351,7 +351,7 @@ wxWINDOWS+VERSION: 2.1.11
 DATE+FIXED:
 DATE+IDENTIFIED: 14/01/2000
 DETAILS: I run my linux boxes headless and use a Windows box for an XServer... every sample I have tried so far
-hangs in a loop tring to get an acceptable font for something or other... here is the GDB trace
+hangs in a loop trying to get an acceptable font for something or other... here is the GDB trace
 #1102 0x40203d19 in wxMessageBox ()
 #1103 0x401aee31 in wxFontMapper::GetAltForEncoding ()
 #1104 0x40287c45 in wxLoadQueryNearestFont ()

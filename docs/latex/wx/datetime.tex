@@ -546,14 +546,14 @@ DST convention and date and time formatting rules.
 
 \func{static bool}{IsDSTApplicable}{\param{int }{year = Inv\_Year}, \param{Country }{country = Country\_Default}}
 
-Returns {\tt TRUE} if DST was usedi n the given year (the current one by
+Returns {\tt TRUE} if DST was used n the given year (the current one by
 default) in the given country.
 
 \membersection{wxDateTime::Now}\label{wxdatetimenow}
 
 \func{static wxDateTime}{Now}{\void}
 
-Returns the object corresopnding to the current time.
+Returns the object corresponding to the current time.
 
 Example:
 
@@ -564,7 +564,7 @@ Example:
 
 Note that this function is accurate up to second: 
 \helpref{wxDateTime::UNow}{wxdatetimeunow} should be used for better precision
-(but it is less efficient and might not be availabel on all platforms).
+(but it is less efficient and might not be available on all platforms).
 
 \wxheading{See also}
 
@@ -599,7 +599,7 @@ same as \helpref{Now()}{wxdatetimenow}, but the time part is set to $0$).
 
 \func{static wxDateTime}{UNow}{\void}
 
-Returns the object corresopnding to the current time including the
+Returns the object corresponding to the current time including the
 milliseconds if a function to get time with such precision is available on the
 current platform (supported under most Unices and Win32).
 
@@ -677,7 +677,7 @@ since Jan 1, 1970.
 
 \func{wxDateTime\&}{Set}{\param{const struct tm\& }{tm}}
 
-Sets the date and tiem from the broken down representation in the standard
+Sets the date and time from the broken down representation in the standard
 {\tt tm} structure.
 
 \pythonnote{Unsupported.}
@@ -690,7 +690,7 @@ Sets the date from the so-called {\it Julian Day Number}.
 
 By definition, the Julian Day Number, usually abbreviated as JDN, of a
 particular instant is the fractional number of days since 12 hours Universal
-Coordinated Time (Greenwhich mean noon) on January 1 of the year -4712 in the
+Coordinated Time (Greenwich mean noon) on January 1 of the year -4712 in the
 Julian proleptic calendar.
 
 \pythonnote{This method is named {\tt SetJDN} in wxPython.}
@@ -916,7 +916,7 @@ Returns {\tt TRUE} if this date lies strictly between the two others,
 \constfunc{bool}{IsBetween}{\param{const wxDateTime\& }{t1}, \param{const wxDateTime\& }{t2}}
 
 Returns {\tt TRUE} if \helpref{IsStrictlyBetween}{wxdatetimeisstrictlybetween}
-is {\tt TRUE} or if the date is equal to one of the limi values.
+is {\tt TRUE} or if the date is equal to one of the limit values.
 
 \wxheading{See also}
 
@@ -1016,7 +1016,7 @@ the character immediately following the part of the string which could be
 parsed. If the entire string contains only the date in RFC 822 format,
 the returned pointer will be pointing to a {\tt NUL} character.
 
-This function is intenionally strict, it will return an error for any string
+This function is intentionally strict, it will return an error for any string
 which is not RFC 822 compliant. If you need to parse date formatted in more
 free ways, you should use \helpref{ParseDateTime}{wxdatetimeparsedatetime} or
 \helpref{ParseDate}{wxdatetimeparsedate} instead.
@@ -1088,7 +1088,7 @@ Please see its description for the meaning of {\it format} parameter.
 
 It also accepts a few wxWindows-specific extensions: you can optionally specify
 the width of the field to follow using {\tt printf(3)}-like syntax and the
-format specificator {\tt \%l} can be used to get the number of milliseconds.
+format specification {\tt \%l} can be used to get the number of milliseconds.
 
 \wxheading{See also}
 
@@ -1179,7 +1179,7 @@ Returns the copy of this object to which
 
 Sets the date to the {\it n}-th {\it weekday} in the given month of the given
 year (the current month and year are used by default). The parameter {\it n}
-may be either opsitive (counting from the beginning of the month) or negative
+may be either positive (counting from the beginning of the month) or negative
 (counting from the end of it).
 
 For example, {\tt SetToWeekDay(2, wxDateTime::Wed)} will set the date to the

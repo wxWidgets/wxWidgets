@@ -41,12 +41,12 @@ All (GUI):
   in the switch()es, you must rewrite them to use if()s instead
 
   You may also define WXWIN_COMPATIBILITY_EVENT_TYPES to get the old behaviour
-  but this is strongly discouraged, please consider changing your codei
+  but this is strongly discouraged, please consider changing your code
   instead!
 
 ! wxDialog does not derive from wxPanel any longer - if you were using it in
   your code, please update it. The quick fix for the most cases is to replace
-  the occurences of wxPanel with wxWindow.
+  the occurrences of wxPanel with wxWindow.
 
 ! if you handle (and don't skip) EVT_KEY_DOWN, the EVT_CHAR event is not
   generated at all, so you must call event.Skip() in your OnKeyDown() if
@@ -458,7 +458,7 @@ wxMSW:
 - fixed "missing" initial resize of wxMDIChildFrame
 - wxFrame restores focus better
 - Now ignore wxTHICK_FRAME in wxWindow constructor: only relevant to
-  frames anddialogs, interferes with other window styles otherwise
+  frames and dialogs, interferes with other window styles otherwise
   (sometimes you'd get a thick frame in a subwindow)
 - wxTextCtrl insertion point set to the beginning of the control by SetValue
 - Fix so wxMDIParentFrame is actually shown when Show(TRUE) is called.
@@ -541,7 +541,7 @@ all (GUI):
 
 - Added wxImage::Rotate.
 - new wxCalendarCtrl class for picking a date interactively
-- wxMenu(Bar)::Insert() and Remove() functions for dynamic menu menagament
+- wxMenu(Bar)::Insert() and Remove() functions for dynamic menu management
 - wxToolBar supports arbitrary controls (not only buttons) and can be
   dynamically changed (Delete/Insert functions)
 - vertical toolbars supported by MSW and GTK native wxToolBar classes
@@ -557,7 +557,7 @@ all (GUI):
 - wxScrolledWindow now has keyboard interface
 - wxTextEntryDialog may be used for entering passwords (supports wxTE_PASSWORD)
 - added wxEncodingConverter and improved wxFontMapper
-  for dealing with convertions between different encodings,
+  for dealing with conversions between different encodings,
   charsets support in wxLocale and wxHTML
 - wxDragImage class added
 - samples/help improved to show standard and advanced HTML help
@@ -599,11 +599,11 @@ wxHTML:
   including faster search, bookmarks, printing, setup dialog
   and cross-platform binary compatible .cached files for faster
   loading of large helpbooks, case insensitive search
-  splitted into 3 parts: wxHtmlHelpData, Frame and Controller
+  split into 3 parts: wxHtmlHelpData, Frame and Controller
 - added support for charsets and <meta> tag
 - added support for font faces and justified paragraphs,
   taken some steps to prepare wxHTML for frames
-- added dynamic pushing/poping of wxHtmlParser tag handlers
+- added dynamic pushing/popping of wxHtmlParser tag handlers
 - improved HTML printing
 - added extensive table of HTML characters substitutions (&nbsp; etc.)
 - fixed wxHtmlWindow flickering, several minor bugfixes
@@ -866,7 +866,7 @@ wxMotif:
   global memory operators (usually OK) and #defining new to be
   WXDEBUG_NEW (sometimes it might not be OK).
 - Added time.cpp to makefile; set wxUSE_DATETIME to 1.
-- Added a parent-existance check to popup menu code to make it not crash.
+- Added a parent-existence check to popup menu code to make it not crash.
 - Added some optimization in wxWindow::SetSize to produce less flicker.
   It remains to be seen whether this produces any resize bugs.
 
@@ -922,7 +922,7 @@ wxMSW:
 - wxConfig API improved, documentation updated.
 - Printing classes name conventions cleaned up.
 - wxUpdateUIEvent now derives from wxCommandEvent
-  so event can travel up the window hierachy.
+  so event can travel up the window hierarchy.
 
 Alpha 14, July 31st 1998
 ------------------------
@@ -1183,7 +1183,7 @@ Generic:
 - Added wxMouseEvent::GetPosition and
   wxMouseEvent::GetLogicalPosition, both returning wxPoints.
 - Made wxSize and wxRect contain longs not ints.
-- Cured some lemory leaks (thanks Vadim).
+- Cured some memory leaks (thanks Vadim).
 - Tidied up OnIdle and introduced RequestMore/MoreRequested so
   will only keep processing OnIdle if it returns TRUE from
   MoreRequested.
@@ -1212,7 +1212,7 @@ All:
   implementation updated to use these base classes.
 - wxHelpInstance now separated into wxHelpControllerBase (base
   for all implementations), wxWinHelpController (uses standard
-  WinHelp), wxXLPHelPController (talks to wxHelp by DDE or
+  WinHelp), wxXLPHelpController (talks to wxHelp by DDE or
   TCP/IP). There will be others eventually, such as
   wxHTMLHelpController for Microsoft (and Netscape?) HTML Help.
 - Added Vadim Zeitlin's wxString class plus
@@ -1293,7 +1293,7 @@ At this point, the following has been achieved:
   Windows types where needed e.g. WXHWND.
 - PrologIO revised.
 - wxScrolledWindow, wxStatusBar and new MDI classes added.
-  MDI is now achived using separate classes, not window styles.
+  MDI is now achieved using separate classes, not window styles.
 - wxSystemSettings added, and made use of to reflect standard
   Windows settings.
 - SetButtonFont/SetLabelFont replaced by SetFont; font and colour

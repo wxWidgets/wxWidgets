@@ -56,7 +56,7 @@ These parameters may be useful to the program used to open, edit, view or print
 the message, so, for example, an e-mail client program will have to pass them to
 this program. Because wxFileType itself can not know about these parameters,
 it uses MessageParameters class to query them. The default implementation only
-requiers the caller to provide the file name (always used by the program to be
+requires the caller to provide the file name (always used by the program to be
 called - it must know which file to open) and the MIME type and supposes that
 there are no other parameters. If you wish to supply additional parameters, you
 must derive your own class from MessageParameters and override GetParamValue()
@@ -191,7 +191,7 @@ retrieved from \helpref{MessageParameters}{wxfiletypemessageparameters} class.
 
 \func{static wxString}{ExpandCommand}{\param{const wxString\&}{ command}, \param{MessageParameters\&}{ params}}
 
-This function is primarly intended for GetOpenCommand and GetPrintCommand
+This function is primarily intended for GetOpenCommand and GetPrintCommand
 usage but may be also used by the application directly if, for example, you want
 to use some non default command to open the file.
 
@@ -199,7 +199,7 @@ The function replaces all occurrences of
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{format specificator}{with}
+\twocolitem{format specification}{with}
 \twocolitem{\%s}{the full file name}
 \twocolitem{\%t}{the MIME type}
 \twocolitem{\%\{param\}}{the value of the parameter {\it param}}

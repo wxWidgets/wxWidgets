@@ -45,7 +45,7 @@ ending tag.
 See explanation (returned position is marked with `|'):
 
 \begin{verbatim}
-bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
+bla bla bla <MYTAG> bla bla internal text</MYTAG> bla bla
                    |
 \end{verbatim}
 
@@ -59,7 +59,7 @@ ending tag.
 See explanation (returned position is marked with `|'):
 
 \begin{verbatim}
-bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
+bla bla bla <MYTAG> bla bla internal text</MYTAG> bla bla
                                         |
 \end{verbatim}
 
@@ -73,7 +73,7 @@ ending tag.
 See explanation (returned position is marked with `|'):
 
 \begin{verbatim}
-bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
+bla bla bla <MYTAG> bla bla internal text</MYTAG> bla bla
                                                |
 \end{verbatim}
 
@@ -158,7 +158,7 @@ is ending itself) of course doesn't have ending tag.
 
 \constfunc{bool}{HasParam}{\param{const wxString\& }{par}}
 
-Returns TRUE if the tag has parameter of the given name. 
+Returns TRUE if the tag has a parameter of the given name. 
 Example : {\tt <FONT SIZE=+2 COLOR="\#FF00FF">} has two parameters named
 "SIZE" and "COLOR".
 
@@ -177,17 +177,18 @@ Returns TRUE if this tag is ending one.
 
 \constfunc{wxString}{ScanParam}{\param{const wxString\& }{par}, \param{const wxChar *}{format}, \param{void *}{value}}
 
-This method scans given parameter. Usage is exactly the same as sscanf's 
-usage except that you don't pass string but parameter name as the first parameter
-and that you can only retrieve one value (i.e. you can use only one "\%" element
+This method scans the given parameter. Usage is exactly the same as sscanf's 
+usage except that you don't pass a string but a parameter name as the first
+argument
+and you can only retrieve one value (i.e. you can use only one "\%" element
 in {\it format}).
 
 
 \wxheading{Parameters}
 
-\docparam{par}{The name of tag you want to query}
+\docparam{par}{The name of the tag you want to query}
 
 \docparam{format}{scanf()-like format string.}
 
-\docparam{value}{pointer to a variable to store value in }
+\docparam{value}{pointer to a variable to store the value in }
 

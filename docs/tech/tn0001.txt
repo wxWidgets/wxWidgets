@@ -12,7 +12,7 @@ samples/ with demos/ where needed).
 
 3. Create the makefiles for Windows compilers. There are several ways to do
    it:
-   a) copy the makefiles from samples/minimal, replace all occurences of
+   a) copy the makefiles from samples/minimal, replace all occurrences of
       minimal with foo
    b) use makegen (sources are under utils/makegen)
    c) use projgen

@@ -13,7 +13,7 @@ First release Feb. 1999, detlev@reymann-online.de
 =====================================
 
 There are two IDE files. src\bc32.ide should help you to
-create the wxWindows libraries from within the Ide of Borlands
+create the wxWindows libraries from within the Ide of Borland's
 C++, v. 5.x. Note that this doesn't include debugging code: you
 need to change the settings if you wish to include debug
 information. Previously, bc32d.ide was supplied with debug

@@ -88,7 +88,7 @@ points to the correct library. There is no way to compile wxGTK if configure
 doesn't pass this test as all this test does is compile and link a GTK program.
 \item You get errors during compilation: The reason is that you probably have a broken 
 compiler, which includes almost everything that is called gcc. If you use gcc 2.8 
-you have to disable optimsation as the compiler will give up with an internal 
+you have to disable optimisation as the compiler will give up with an internal 
 compiler error.You get immediate segfault when starting any sample or application: This is either 
 due to having compiled the library with different flags or options than your program - 
 typically you might have the __WXDEBUG__ option set for the library but not for your 
@@ -120,7 +120,7 @@ report to one of the mailing lists.
 \wxheading{Libraries needed}
 
 wxWindows/GTK requires the GTK+ library to be installed on your system. It has to 
-be a stable version, preferebly version 1.2.3.
+be a stable version, preferably version 1.2.3.
 
 You can get the newest version of the GTK+ from the GTK homepage at:
 
@@ -188,7 +188,7 @@ as described above.
 
 If you have pthreads library installed, but have a gtk version
 which does not yet support threading, you need to explicitly
-diable threading by using the option --disable-threads.
+disable threading by using the option --disable-threads.
 
 Note that configure assumes your flex will generate files named
 "lexyy.c", not "lex.yy.c". If you have a version which does
@@ -300,9 +300,10 @@ The following options handle the kind of library you want to build.
 	--enable-no_deps        Enable compilation without creation of
 	                        dependency information.
 				
-	--enable-permissive     Enable compilation without creation of
-	                        giving erros as soon as you compile with
-				            Solaris' ANSI-defying headers.
+        --enable-permissive     Enable compilation without checking for strict
+                                ANSI conformance.  Useful to prevent the build
+                                dying with errors as soon as you compile with
+                                Solaris' ANSI-defying headers.
 				
 	--enable-mem_tracing    Add built-in memory tracing.
 				
@@ -359,7 +360,7 @@ are
 	
 	--disable-clipboard     Disables Clipboard.
 	
-	--disable-serial        Disables object instance serialiasation.
+	--disable-serial        Disables object instance serialisation.
 	
 	--disable-streams       Disables the wxStream classes.
 	
@@ -395,7 +396,7 @@ make yourself some coffee, as it will take some time. On an old
 warning messages depending in your compiler.
 
 If you want to be more selective, you can change into a specific
-directiry and type "make" there.
+directory and type "make" there.
 
 Then you may install the library and it's header files under
 /usr/local/include/wx and /usr/local/lib respectively. You
@@ -447,7 +448,7 @@ clean:
 \end{verbatim}
 
 This is certain to become the standard way unless we decide
-to sitch to tmake.
+to stick to tmake.
 
 2) The other way creates a project within the source code 
 directories of wxWindows. For this endeavour, you'll need

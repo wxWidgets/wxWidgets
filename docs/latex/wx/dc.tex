@@ -694,7 +694,7 @@ Gets the current text foreground colour (see \helpref{wxDC::SetTextForeground}{w
 
 Gets the current user scale factor (set by \helpref{SetUserScale}{wxdcsetuserscale}).
 
-\perlnote{In wxPerl this method takes no arguments and returna a two element
+\perlnote{In wxPerl this method takes no arguments and return a two element
  array {\tt ( x, y )}}
 
 \membersection{wxDC::LogicalToDeviceX}\label{wxdclogicaltodevicex}
@@ -913,7 +913,7 @@ measurement used to convert logical units to device units. Note that
 in X, text drawing isn't handled consistently with the mapping mode; a
 font is always specified in point size. However, setting the {\it
 user scale} (see \helpref{wxDC::SetUserScale}{wxdcsetuserscale}) scales the text appropriately. In
-Windows, scaleable TrueType fonts are always used; in X, results depend
+Windows, scalable TrueType fonts are always used; in X, results depend
 on availability of fonts, but usually a reasonable match is found.
 
 Note that the coordinate origin should ideally be selectable, but for
@@ -998,7 +998,7 @@ Starts a document page (only relevant when outputting to a printer).
 \section{\class{wxDCClipper}}\label{wxdcclipper}
 
 This is a small helper class which sets the specified to its constructor
-clipping region and then automatically destroyes it in its destructor. Using
+clipping region and then automatically destroys it in its destructor. Using
 it ensures that unwanted clipping region is not left set on the DC.
 
 \wxheading{Derived from}
@@ -1028,5 +1028,5 @@ specified rectangle.
 
 \func{}{\destruct{wxDCClipper}}{\void}
 
-Destructor: destroyes the clipping region set in the constructor.
+Destructor: destroys the clipping region set in the constructor.
 

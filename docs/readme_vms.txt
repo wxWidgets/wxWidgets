@@ -67,7 +67,7 @@ File $DISK2:[JOUKJ.PUBLIC.TIFF.TIFF.LIBTIFF]TIFFCOMP.H;1
        ( from http://www.openvms.digital.com/openvms/products/ips/gtk.html )
 
     -Redefine the logical SYS$LIBRARY in such a way that it also points
-     to the includefile/library directories of the obove packages:
+     to the includefile/library directories of the above packages:
      i.e.
 $ define sys$library sys$sysroot:[syslib],-
      $disk2:[joukj.public.xpm.xpm.lib],-
@@ -109,13 +109,13 @@ $  ass $disk2:[joukj.public.gtk.gtk.glib],-
        if You encounter these, replace mms by mms/ignore=warning in the
        following
 
-  -Now build evrything using one of the following
+  -Now build everything using one of the following
       mms
       mms gtk
       mms motif
     in the main directory of the distribution. Without an argument both wxGTK
-    and wxMOTIF are build. The libraies are build in the [.lib] directory.
-    All the samples I tried are build automatically.
+    and wxMOTIF are built. The libraries are built in the [.lib] directory.
+    All the samples I tried are built automatically.
 
   -I think in general wxGTK is better maintained, so that version is my
     first choice.

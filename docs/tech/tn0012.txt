@@ -15,7 +15,7 @@ installed together.
 
 To manage this sanely we need a sufficiently descriptive and logical
 labelling convention for file and install path names -- this document (at
-least at it's time of writing) describes the system we have adopted.
+least at its time of writing) describes the system we have adopted.
 
 It is not fine grained enough to include every possible build configuration
 for wxWindows, but is encompassing enough to maintain a relatively complete

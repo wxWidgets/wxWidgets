@@ -173,9 +173,9 @@ However, if you distribute wxGTK or wxMotif (with Lesstif) version
 of your application, don't forget that it is linked against
 GTK+ (or Lesstif) which is covered by LGPL *without* exception
 notice. Under Linux systems your app is probably linked
-against LGPL glibc as well. Please read carefuly LGPL, section 6.
+against LGPL glibc as well. Please read carefully LGPL, section 6.
 which describes conditions for distribution of closed source applications
-linked against LGPL library. Basically you should link dynamicaly and
+linked against LGPL library. Basically you should link dynamically and
 include source code of LGPL libraries with your product (unless it is
 already present in user's system - like glibc usually is).
 If compiled with --enable-odbc (Unix only), wxWindows library will 

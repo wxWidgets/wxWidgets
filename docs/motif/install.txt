@@ -75,7 +75,7 @@ If you want to remove wxWindows on Unix you can do this:
 
 If you want to do some more serious cross-platform programming with wxWindows, 
 such as for GTK and Motif, you can now build two complete libraries and use 
-them concurretly. For this end, you have to create a directory for each build 
+them concurrently. For this end, you have to create a directory for each build 
 of wxWindows - you may also want to create different versions of wxWindows
 and test them concurrently. Most typically, this would be a version configured 
 with --enable-debug_flag and one without. Note, that only one build can currently 
@@ -106,7 +106,7 @@ cd ..
 
 You get errors during compilation: The reason is that you probably have a broken 
 compiler, which includes almost everything that is called gcc. If you use gcc 2.8 
-you have to disable optimsation as the compiler will give up with an internal 
+you have to disable optimisation as the compiler will give up with an internal 
 compiler error.
 
 If there is just any way for you to use egcs, use egcs. We cannot fix gcc.
@@ -274,11 +274,11 @@ Given below are the commands to change the default behaviour,
 i.e. if it says "--disable-threads" it means that threads
 are enabled by default.
 
-Many of the confiugre options have been thoroughly tested
+Many of the configure options have been thoroughly tested
 in wxWindows snapshot 6, but not yet all (ODBC not).
 
 You have to add --with-motif on platforms, where Motif is
-not the default (on Linux, configure will deafult to GTK).
+not the default (on Linux, configure will default to GTK).
 
         --without-gtk            Don't use the GIMP ToolKit (GTK)
 	
@@ -316,9 +316,10 @@ The following options handle the kind of library you want to build.
 	--enable-no_deps        Enable compilation without creation of
 	                        dependency information.
 				
-	--enable-permissive     Enable compilation without creation of
-	                        giving erros as soon as you compile with
-				Solaris ANSI-defying headers...
+        --enable-permissive     Enable compilation without checking for strict
+                                ANSI conformance.  Useful to prevent the build
+                                dying with errors as soon as you compile with
+                                Solaris' ANSI-defying headers.
 				
 	--enable-mem_tracing    Add built-in memory tracing. 
 				
@@ -340,7 +341,7 @@ The following options handle the kind of library you want to build.
 * Feature Options
 -------------------
 
-Many of the confiugre options have been thoroughly tested
+Many of the configure options have been thoroughly tested
 in wxWindows snapshot 6, but not yet all (ODBC not).
 
 When producing an executable that is linked statically with wxGTK
@@ -367,7 +368,7 @@ are
 	
 	--disable-clipboard     Disables Clipboard.
 	
-	--disable-serial        Disables object instance serialiasation.
+	--disable-serial        Disables object instance serialisation.
 	
 	--disable-streams       Disables the wxStream classes.
 	
@@ -401,9 +402,9 @@ make yourself some coffee, as it will take some time. On an old
 warning messages depending in your compiler.
 
 If you want to be more selective, you can change into a specific
-directiry and type "make" there.
+directory and type "make" there.
 
-Then you may install the library and it's header files under
+Then you may install the library and its header files under
 /usr/local/include/wx and /usr/local/lib respectively. You
 have to log in as root (i.e. run "su" and enter the root
 password) and type
@@ -444,7 +445,7 @@ clean:
 	rm -f *.o minimal
 
 This is certain to become the standard way unless we decide
-to sitch to tmake.
+to stick to tmake.
 
 2) The other way creates a project within the source code 
 directories of wxWindows. For this endeavour, you'll need

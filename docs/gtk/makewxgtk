@@ -3,7 +3,7 @@
 # and makes wxGTK.
 # Call from top-level wxWindows directory.
 # Note that this uses standard (but commonly-used) configure options;
-# if you're feeling braven, you may wish to compile with threads.
+# if you're feeling brave, you may wish to compile with threads.
 # -- Julian Smart
 rm -f *.cache
 chmod a+x configure config.sub config.guess samples/configure demos/configure contrib/configure

@@ -26,14 +26,14 @@ array elements may be modified in place like this
     array.Last().MakeUpper();
 \end{verbatim}
 
-There is also a varian of wxArrayString called wxSortedArrayString which has
+There is also a variant of wxArrayString called wxSortedArrayString which has
 exactly the same methods as wxArrayString, but which always keeps the string
 in it in (alphabetical) order. wxSortedArrayString uses binary search in its 
-\helpref{Index}{wxarraystringindex} function (insteadf of linear search for
+\helpref{Index}{wxarraystringindex} function (instead of linear search for
 wxArrayString::Index) which makes it much more efficient if you add strings to
 the array rarely (because, of course, you have to pay for Index() efficiency
 by having Add() be slower) but search for them often. Several methods should
-not be used with sorted array (basicly, all which break the order of items)
+not be used with sorted array (basically, all which break the order of items)
 which is mentioned in their description.
 
 Final word: none of the methods of wxArrayString is virtual including its

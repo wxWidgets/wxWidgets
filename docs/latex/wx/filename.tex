@@ -71,7 +71,7 @@ enum wxPathNormalize
 
 wxFileName currently supports the file names in the Unix, DOS/Windows, Mac OS
 and VMS formats. Although these formats are quite different, wxFileName tries
-to treat them all in the sam generic way. It supposes that all file names
+to treat them all in the same generic way. It supposes that all file names
 consist of the following parts: the volume (also known as drive under Windows
 or device under VMS), the path which is a sequence of directory names separated
 by the \helpref{path separators}{wxfilenamegetpathseparators} and the full
@@ -169,7 +169,7 @@ Copy constructor.
 \func{}{wxFileName}{\param{const wxString\& }{fullpath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 From a full filename: if it terminates with a '/', a directory path
-is contructed (the name will be empty), otherwise a file name and
+is constructed (the name will be empty), otherwise a file name and
 extension are extracted from it
 
 \func{}{wxFileName}{\param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}

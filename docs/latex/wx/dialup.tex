@@ -11,7 +11,7 @@
 
 \section{\class{wxDialUpManager}}\label{wxdialupmanager}
 
-This class encapsulates functions dealing with veryfying the connection status
+This class encapsulates functions dealing with verifying the connection status
 of the workstation (connected to the Internet via a direct connection,
 connected through a modem or not connected at all) and to establish this
 connection if possible/required (i.e. in the case of the modem).
@@ -91,7 +91,7 @@ their number (may be $0$).
 
 \func{bool}{Dial}{\param{const wxString\& }{nameOfISP = wxEmptyString}, \param{const wxString\& }{username = wxEmptyString}, \param{const wxString\& }{password = wxEmptyString}, \param{bool }{async = TRUE}}
 
-Dial the given ISP, use {\it username} and {\it password} to authentificate.
+Dial the given ISP, use {\it username} and {\it password} to authenticate.
 
 The parameters are only used under Windows currently, for Unix you should use 
 \helpref{SetConnectCommand}{wxdialupmanagersetconnectcommand} to customize this
@@ -175,7 +175,7 @@ algorithm may think about it.
 
 \func{bool}{EnableAutoCheckOnlineStatus}{\param{size\_t }{nSeconds = 60}}
 
-Enable automatical checks for the connection status and sending of 
+Enable automatic checks for the connection status and sending of 
 {\tt wxEVT\_DIALUP\_CONNECTED/wxEVT\_DIALUP\_DISCONNECTED} events. The interval
 parameter is only for Unix where we do the check manually and specifies how
 often should we repeat the check (each minute by default). Under Windows, the

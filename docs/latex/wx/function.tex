@@ -466,7 +466,7 @@ calling \helpref{wxEnableTopLevelWindows(FALSE)}{wxenabletoplevelwindows}.
 
 For asynchronous execution, however, the return value is the process id and
 zero value indicates that the command could not be executed. As an added
-complication, the return value of $-1$ in this case indicattes that we didn't
+complication, the return value of $-1$ in this case indicates that we didn't
 launch a new process, but connected to the running one (this can only happen in
 case of using DDE under Windows for command execution). In particular, in this,
 and only this, case the calling code will not get the notification about
@@ -532,7 +532,7 @@ application. See \helpref{wxCloseEvent}{wxcloseevent} and \helpref{wxApp}{wxapp}
 \func{int}{wxKill}{\param{long}{ pid}, \param{int}{ sig = wxSIGTERM}, \param{wxKillError }{*rc = NULL}}
 
 Equivalent to the Unix kill function: send the given signal {\it sig} to the
-process with PID {\it pid}. The valud signal values are
+process with PID {\it pid}. The valid signal values are
 
 \begin{verbatim}
 enum wxSignal
@@ -814,7 +814,7 @@ TRUE if successful.
 
 Copies {\it file1} to {\it file2}, returning TRUE if successful. If
 {\it overwrite} parameter is TRUE (default), the destination file is overwritten
-if it exists, but if {\it overwrite} is FALSE, the functions failes in this
+if it exists, but if {\it overwrite} is FALSE, the functions fails in this
 case.
 
 \membersection{::wxGetCwd}\label{wxgetcwd}
@@ -2460,7 +2460,7 @@ data in big-endian format.
 
 wxWindows uses its own RTTI ("run-time type identification") system which
 predates the current standard C++ RTTI and so is kept for backwards
-compatribility reasons but also because it allows some things which the
+compatibility reasons but also because it allows some things which the
 standard RTTI doesn't directly support (such as creating a class from its
 name).
 

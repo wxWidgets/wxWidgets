@@ -229,7 +229,7 @@ cause an erase background event to be generated.
 
 \constfunc{virtual void}{ClientToScreen}{\param{int* }{x}, \param{int* }{y}}
 
-\perlnote{In wxPerl this method returns a 2-element list intead of
+\perlnote{In wxPerl this method returns a 2-element list instead of
 modifying its parameters.}
 
 \constfunc{virtual wxPoint}{ClientToScreen}{\param{const wxPoint\&}{ pt}}
@@ -348,7 +348,7 @@ Converts a point or size from pixels to dialog units.
 For the x dimension, the pixels are multiplied by 4 and then divided by the average
 character width.
 
-For the y dimension, the pixels are multipled by 8 and then divided by the average
+For the y dimension, the pixels are multiplied by 8 and then divided by the average
 character height.
 
 \wxheading{Remarks}
@@ -377,7 +377,7 @@ Destroys the window safely. Use this function instead of the delete operator, si
 different window classes can be destroyed differently. Frames and dialogs
 are not destroyed immediately when this function is called - they are added
 to a list of windows to be deleted on idle time, when all the window's events
-have been processed. This prevents problems with events being sent to non-existant
+have been processed. This prevents problems with events being sent to non-existent
 windows.
 
 \wxheading{Return value}
@@ -406,7 +406,7 @@ already disabled before the call to this function.
 
 \func{virtual void}{DragAcceptFiles}{\param{bool}{ accept}}
 
-Enables or disables elibility for drop file events (OnDropFiles).
+Enables or disables eligibility for drop file events (OnDropFiles).
 
 \wxheading{Parameters}
 
@@ -1026,7 +1026,7 @@ Returns {\tt TRUE} if the window is enabled for input, {\tt FALSE} otherwise.
 
 \constfunc{bool}{IsExposed}{\param{wxRect }{\&rect}}
 
-Returns {\tt TRUE} if the given point or rectange area has been exposed since the
+Returns {\tt TRUE} if the given point or rectangle area has been exposed since the
 last repaint. Call this in an paint event handler to optimize redrawing by
 only redrawing those areas, which have been exposed.
 
@@ -1277,7 +1277,7 @@ implements the following methods:\par
 %% or dialog box using the window manager (X) or system menu (Windows).
 %%
 %% {\bf Note:} This is an obsolete function.
-%% It is superceded by the \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow} event
+%% It is superseded by the \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow} event
 %% handler.
 %%
 %% \wxheading{Return value}
@@ -2098,7 +2098,7 @@ bits are:
 and Validate() methods will recursively descend into all children of the
 window if it has this style flag set.}
 \twocolitem{\windowstyle{wxWS\_EX\_BLOCK\_EVENTS}}{Normally, the command
-events are propagared upwards to the window parent recursively until a handler
+events are propagated upwards to the window parent recursively until a handler
 for them is found. Using this style allows to prevent them from being
 propagated beyond this window. Notice that wxDialog has this style on by
 default for the reasons explained in the
@@ -2106,7 +2106,7 @@ default for the reasons explained in the
 \twocolitem{\windowstyle{wxWS\_EX\_TRANSIENT}}{This can be used to prevent a
 window from being used as an implicit parent for the dialogs which were
 created without a parent. It is useful for the windows which can disappear at
-any moment as creating childs of such windows results in fatal problems.}
+any moment as creating children of such windows results in fatal problems.}
 \twocolitem{\windowstyle{wxFRAME\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
 caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
 a wxEVT\_HELP event if the user clicked on an application window.
@@ -2167,7 +2167,7 @@ to the window class; it may be the text colour or other colour, or it may not
 be used at all.
 
 Note that when using this functions under GTK, you will disable the so called "themes",
-i.e. the user chosen apperance of windows and controls, including the themes of
+i.e. the user chosen appearance of windows and controls, including the themes of
 their parent windows.
 
 \wxheading{See also}

@@ -30,7 +30,7 @@ You will be notified when the EOF is reached by an error.
 \wxheading{Note}
 
 You can know the size of the file you are getting using \helpref{wxStreamBase::GetSize()}{wxstreambasegetsize}.
-But there is a limitation: as HTTP servers aren't obliged to pass the size ofi
+But there is a limitation: as HTTP servers aren't obliged to pass the size of
 the file, in some case, you will be returned 0xfffffff by GetSize(). In these
 cases, you should use the value returned by \helpref{wxInputStream::LastRead()}{wxinputstreamlastread}:
 this value will be 0 when the stream is finished.
