@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -67,20 +67,20 @@ static long getint(FILE *fp)
   c = getc(fp);  c1 = getc(fp);  c2 = getc(fp);  c3 = getc(fp);
   long res = (long)((long) c) +
          (((long) c1) << 8) +
-	 (((long) c2) << 16) +
-	 (((long) c3) << 24);
+         (((long) c2) << 16) +
+         (((long) c3) << 24);
   return res;
 }
 
 
 /* Placeable metafile header
 struct mfPLACEABLEHEADER {
-	DWORD	key;         // 32-bit
-	HANDLE	hmf;         // 16-bit
-	RECT	bbox;        // 4x16 bit
-	WORD	inch;        // 16-bit
-	DWORD	reserved;    // 32-bit
-	WORD	checksum;    // 16-bit
+    DWORD  key;         // 32-bit
+    HANDLE hmf;         // 16-bit
+    RECT   bbox;        // 4x16 bit
+    WORD   inch;        // 16-bit
+    DWORD  reserved;    // 32-bit
+    WORD   checksum;    // 16-bit
 };
 */
 
@@ -92,7 +92,7 @@ wxMetaRecord::~wxMetaRecord(void)
 
 wxXMetaFile::wxXMetaFile(const wxChar *file)
 {
-  ok = FALSE;
+  ok = false;
   top = 0.0;
   bottom = 0.0;
   left = 0.0;
@@ -159,7 +159,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
   HandleTableSize = 0;
 
   FILE *handle = wxFopen(file, wxT("rb"));
-  if (!handle) return FALSE;
+  if (!handle) return false;
 
   // Read placeable metafile header, if any
   long key = getint(handle);
@@ -196,7 +196,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
   if (mtType != 1 && mtType != 2)
   {
     fclose(handle);
-    return FALSE;
+    return false;
   }
 
   /* int mtHeaderSize = */ getshort(handle);
@@ -205,7 +205,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
   if (mtVersion != 0x0300 && mtVersion != 0x0100)
   {
     fclose(handle);
-    return FALSE;
+    return false;
   }
 
   /* long mtSize = */ getint(handle);
@@ -723,7 +723,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
     }
   }
   fclose(handle);
-  return TRUE;
+  return true;
 }
 
 wxXMetaFile::~wxXMetaFile(void)
@@ -741,7 +741,7 @@ wxXMetaFile::~wxXMetaFile(void)
 
 bool wxXMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
 {
-  return FALSE;
+  return false;
 }
 
 bool wxXMetaFile::Play(wxDC *dc)
@@ -1082,6 +1082,6 @@ bool wxXMetaFile::Play(wxDC *dc)
     }
     node = node->GetNext();
   }
-  return TRUE;
+  return true;
 }
 

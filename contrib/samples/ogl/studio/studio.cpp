@@ -95,10 +95,16 @@ bool csApp::OnInit(void)
   if (!wxResourceParseFile(_T("studio_resources.wxr")))
   {
     wxMessageBox(_T("Could not find or parse resource file: studio_resources.wxr"), _T("Studio"));
-    return FALSE;
+    return false;
   }
 
-  m_helpController.Initialize(_T("studio.hlp"));
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
+  m_helpController = new wxWinHelpController;
+#else
+  m_helpController = new wxHtmlHelpController;
+#endif
+
+  m_helpController->Initialize(_T("studio.hlp"));
 
   ReadOptions();
 
@@ -121,7 +127,7 @@ bool csApp::OnInit(void)
 #define wxDEFAULT_FRAME_STYLE_NO_CLIP \
   (wxDEFAULT_FRAME_STYLE & ~wxCLIP_CHILDREN)
 
-  csFrame* frame = new csFrame(m_docManager, NULL, -1, _T("OGL Studio"), m_mainFramePos, m_mainFrameSize,
+  csFrame* frame = new csFrame(m_docManager, NULL, wxID_ANY, _T("OGL Studio"), m_mainFramePos, m_mainFrameSize,
    wxDEFAULT_FRAME_STYLE_NO_CLIP | wxHSCROLL | wxVSCROLL);
 
   // Give it an icon
@@ -184,11 +190,11 @@ bool csApp::OnInit(void)
   m_shapeEditMenu->AppendSeparator();
   m_shapeEditMenu->Append(ID_CS_CUT, _T("Cut"));
 
-  frame->Show(TRUE);
+  frame->Show(true);
 
   SetTopWindow(frame);
 
-  return TRUE;
+  return true;
 }
 
 int csApp::OnExit(void)
@@ -204,6 +210,9 @@ int csApp::OnExit(void)
     delete m_shapeEditMenu;
     m_shapeEditMenu = NULL;
 
+    delete m_helpController;
+    m_helpController = NULL;
+
     wxOGLCleanUp();
 
     return 0;
@@ -217,7 +226,7 @@ int csApp::OnExit(void)
 wxMDIChildFrame *csApp::CreateChildFrame(wxDocument *doc, wxView *view, wxMenu** editMenuRet)
 {
   //// Make a child frame
-  csMDIChildFrame *subframe = new csMDIChildFrame(doc, view, ((wxDocMDIParentFrame*)GetTopWindow()), -1, _T("Child Frame"),
+  csMDIChildFrame *subframe = new csMDIChildFrame(doc, view, ((wxDocMDIParentFrame*)GetTopWindow()), wxID_ANY, _T("Child Frame"),
         wxPoint(10, 10), wxSize(300, 300), wxDEFAULT_FRAME_STYLE);
 
 #ifdef __WXMSW__
@@ -336,28 +345,28 @@ void csApp::InitToolBar(wxToolBar* toolBar)
 #error "Not implemented for this platform."
 #endif
 
-  toolBar->AddTool(wxID_NEW, *bitmaps[0], wxNullBitmap, FALSE, -1, -1, NULL, _T("New file"));
-  toolBar->AddTool(wxID_OPEN, *bitmaps[1], wxNullBitmap, FALSE, -1, -1, NULL, _T("Open file"));
-  toolBar->AddTool(wxID_SAVE, *bitmaps[2], wxNullBitmap, FALSE, -1, -1, NULL, _T("Save file"));
+  toolBar->AddTool(wxID_NEW, *bitmaps[0], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("New file"));
+  toolBar->AddTool(wxID_OPEN, *bitmaps[1], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Open file"));
+  toolBar->AddTool(wxID_SAVE, *bitmaps[2], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Save file"));
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_PRINT, *bitmaps[6], wxNullBitmap, FALSE, -1, -1, NULL, _T("Print"));
+  toolBar->AddTool(wxID_PRINT, *bitmaps[6], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Print"));
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_COPY, *bitmaps[3], wxNullBitmap, FALSE, -1, -1, NULL, _T("Copy"));
-  toolBar->AddTool(wxID_CUT, *bitmaps[4], wxNullBitmap, FALSE, -1, -1, NULL, _T("Cut"));
-  toolBar->AddTool(wxID_PASTE, *bitmaps[5], wxNullBitmap, FALSE, -1, -1, NULL, _T("Paste"));
+  toolBar->AddTool(wxID_COPY, *bitmaps[3], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Copy"));
+  toolBar->AddTool(wxID_CUT, *bitmaps[4], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Cut"));
+  toolBar->AddTool(wxID_PASTE, *bitmaps[5], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Paste"));
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_UNDO, *bitmaps[8], wxNullBitmap, FALSE, -1, -1, NULL, _T("Undo"));
-  toolBar->AddTool(wxID_REDO, *bitmaps[9], wxNullBitmap, FALSE, -1, -1, NULL, _T("Redo"));
+  toolBar->AddTool(wxID_UNDO, *bitmaps[8], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Undo"));
+  toolBar->AddTool(wxID_REDO, *bitmaps[9], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Redo"));
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_HELP, *bitmaps[7], wxNullBitmap, FALSE, -1, -1, NULL, _T("Help"));
+  toolBar->AddTool(wxID_HELP, *bitmaps[7], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Help"));
 
   toolBar->Realize();
 
-  toolBar->EnableTool(wxID_COPY, FALSE);
-  toolBar->EnableTool(wxID_PASTE, FALSE);
-  toolBar->EnableTool(wxID_PRINT, FALSE);
-  toolBar->EnableTool(wxID_UNDO, FALSE);
-  toolBar->EnableTool(wxID_REDO, FALSE);
+  toolBar->EnableTool(wxID_COPY, false);
+  toolBar->EnableTool(wxID_PASTE, false);
+  toolBar->EnableTool(wxID_PRINT, false);
+  toolBar->EnableTool(wxID_UNDO, false);
+  toolBar->EnableTool(wxID_REDO, false);
 
   int i;
   for (i = 0; i < 10; i++)
@@ -375,10 +384,10 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
     win->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
     m_diagramToolBarSashWindow = win;
-    m_diagramToolBarSashWindow->Show(FALSE);
+    m_diagramToolBarSashWindow->Show(false);
 
     // Create the actual toolbar
-    m_diagramToolBar = new wxToolBar(win, -1, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxNO_BORDER|wxTB_FLAT);
+    m_diagramToolBar = new wxToolBar(win, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxNO_BORDER|wxTB_FLAT);
 
     wxBitmap* bitmaps[11];
 
@@ -410,18 +419,18 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
 #error "Not implemented for this platform."
 #endif
 
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNL, *bitmaps[0], wxNullBitmap, FALSE, -1, -1, NULL, _T("Align left"));
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNR, *bitmaps[1], wxNullBitmap, FALSE, -1, -1, NULL, _T("Align right"));
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNT, *bitmaps[2], wxNullBitmap, FALSE, -1, -1, NULL, _T("Align top"));
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNB, *bitmaps[3], wxNullBitmap, FALSE, -1, -1, NULL, _T("Align bottom"));
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGN_HORIZ, *bitmaps[4], wxNullBitmap, FALSE, -1, -1, NULL, _T("Align horizontally"));
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGN_VERT, *bitmaps[5], wxNullBitmap, FALSE, -1, -1, NULL, _T("Align vertically"));
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_COPY_SIZE, *bitmaps[6], wxNullBitmap, FALSE, -1, -1, NULL, _T("Copy size"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNL, *bitmaps[0], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Align left"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNR, *bitmaps[1], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Align right"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNT, *bitmaps[2], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Align top"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNB, *bitmaps[3], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Align bottom"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGN_HORIZ, *bitmaps[4], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Align horizontally"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGN_VERT, *bitmaps[5], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Align vertically"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_COPY_SIZE, *bitmaps[6], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Copy size"));
     m_diagramToolBar->AddSeparator();
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_LINE_ARROW, *bitmaps[7], wxNullBitmap, TRUE, -1, -1, NULL, _T("Toggle arrow"));
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_NEW_POINT, *bitmaps[8], wxNullBitmap, FALSE, -1, -1, NULL, _T("New line point"));
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_CUT_POINT, *bitmaps[9], wxNullBitmap, FALSE, -1, -1, NULL, _T("Cut line point"));
-    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_STRAIGHTEN, *bitmaps[10], wxNullBitmap, FALSE, -1, -1, NULL, _T("Straighten lines"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_LINE_ARROW, *bitmaps[7], wxNullBitmap, true, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Toggle arrow"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_NEW_POINT, *bitmaps[8], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("New line point"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_CUT_POINT, *bitmaps[9], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Cut line point"));
+    m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_STRAIGHTEN, *bitmaps[10], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, NULL, _T("Straighten lines"));
 
     m_diagramToolBar->Realize();
 
@@ -500,7 +509,7 @@ bool csApp::ReadOptions()
     config.Read(_T("gridStyle"), & m_gridStyle);
     config.Read(_T("gridSpacing"), & m_gridSpacing);
 
-    return TRUE;
+    return true;
 }
 
 bool csApp::WriteOptions()
@@ -516,6 +525,6 @@ bool csApp::WriteOptions()
 
     m_docManager->FileHistorySave(config);
 
-    return TRUE;
+    return true;
 }
 

@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -49,7 +49,7 @@ DiagramDocument::~DiagramDocument(void)
 bool DiagramDocument::OnCloseDocument(void)
 {
   diagram.DeleteAllShapes();
-  return TRUE;
+  return true;
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -130,7 +130,7 @@ wxInputStream& DiagramDocument::LoadObject(wxInputStream& stream)
 
 DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocument *ddoc, wxClassInfo *info, double xx, double yy,
   bool sel, wxShape *theShape, wxShape *fs, wxShape *ts):
-  wxCommand(TRUE, name)
+  wxCommand(true, name)
 {
   doc = ddoc;
   cmd = command;
@@ -143,11 +143,11 @@ DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocumen
   x = xx;
   y = yy;
   selected = sel;
-  deleteShape = FALSE;
+  deleteShape = false;
 }
 
 DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocument *ddoc, wxBrush *backgroundColour, wxShape *theShape):
-  wxCommand(TRUE, name)
+  wxCommand(true, name)
 {
   doc = ddoc;
   cmd = command;
@@ -157,14 +157,14 @@ DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocumen
   shapeInfo = NULL;
   x = 0.0;
   y = 0.0;
-  selected = FALSE;
-  deleteShape = FALSE;
+  selected = false;
+  deleteShape = false;
   shapeBrush = backgroundColour;
   shapePen = NULL;
 }
 
 DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocument *ddoc, const wxString& lab, wxShape *theShape):
-  wxCommand(TRUE, name)
+  wxCommand(true, name)
 {
   doc = ddoc;
   cmd = command;
@@ -174,8 +174,8 @@ DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocumen
   shapeInfo = NULL;
   x = 0.0;
   y = 0.0;
-  selected = FALSE;
-  deleteShape = FALSE;
+  selected = false;
+  deleteShape = false;
   shapeBrush = NULL;
   shapePen = NULL;
   shapeLabel = lab;
@@ -198,9 +198,9 @@ bool DiagramCommand::Do(void)
     {
       if (shape)
       {
-        deleteShape = TRUE;
+        deleteShape = true;
         
-        shape->Select(FALSE);
+        shape->Select(false);
         
         // Generate commands to explicitly remove each connected line.
         RemoveLines(shape);
@@ -214,7 +214,7 @@ bool DiagramCommand::Do(void)
         }
         shape->Unlink();
         
-        doc->Modify(TRUE);
+        doc->Modify(true);
         doc->UpdateAllViews();
       }
 
@@ -230,14 +230,14 @@ bool DiagramCommand::Do(void)
         theShape = (wxShape *)shapeInfo->CreateObject();
         theShape->AssignNewIds();
         theShape->SetEventHandler(new MyEvtHandler(theShape, theShape, wxEmptyString));
-        theShape->SetCentreResize(FALSE);
+        theShape->SetCentreResize(false);
         theShape->SetPen(wxBLACK_PEN);
         theShape->SetBrush(wxCYAN_BRUSH);
       
         theShape->SetSize(60, 60);
       }
       doc->GetDiagram()->AddShape(theShape);
-      theShape->Show(TRUE);
+      theShape->Show(true);
 
       wxClientDC dc(theShape->GetCanvas());
       theShape->GetCanvas()->PrepareDC(dc);
@@ -245,9 +245,9 @@ bool DiagramCommand::Do(void)
       theShape->Move(dc, x, y);
       
       shape = theShape;
-      deleteShape = FALSE;
+      deleteShape = false;
 
-      doc->Modify(TRUE);
+      doc->Modify(true);
       doc->UpdateAllViews();
       break;
     }
@@ -276,7 +276,7 @@ bool DiagramCommand::Do(void)
       
       fromShape->AddLine((wxLineShape *)theShape, toShape);
       
-      theShape->Show(TRUE);
+      theShape->Show(true);
 
       wxClientDC dc(theShape->GetCanvas());
       theShape->GetCanvas()->PrepareDC(dc);
@@ -287,9 +287,9 @@ bool DiagramCommand::Do(void)
       toShape->Move(dc, toShape->GetX(), toShape->GetY());
       
       shape = theShape;
-      deleteShape = FALSE;
+      deleteShape = false;
 
-      doc->Modify(TRUE);
+      doc->Modify(true);
       doc->UpdateAllViews();
       break;
     }
@@ -305,7 +305,7 @@ bool DiagramCommand::Do(void)
         shapeBrush = oldBrush;
         shape->Draw(dc);
         
-        doc->Modify(TRUE);
+        doc->Modify(true);
         doc->UpdateAllViews();
       }
 
@@ -326,14 +326,14 @@ bool DiagramCommand::Do(void)
         shape->FormatText(dc, /* (char*) (const char*) */ myHandler->label);
         shape->Draw(dc);
         
-        doc->Modify(TRUE);
+        doc->Modify(true);
         doc->UpdateAllViews();
       }
 
       break;
     }
   }
-  return TRUE;
+  return true;
 }
 
 bool DiagramCommand::Undo(void)
@@ -345,7 +345,7 @@ bool DiagramCommand::Undo(void)
       if (shape)
       {
         doc->GetDiagram()->AddShape(shape);
-        shape->Show(TRUE);
+        shape->Show(true);
 
         if (shape->IsKindOf(CLASSINFO(wxLineShape)))
         {
@@ -354,11 +354,11 @@ bool DiagramCommand::Undo(void)
           fromShape->AddLine(lineShape, toShape);
         }
         if (selected)
-          shape->Select(TRUE);
+          shape->Select(true);
 
-        deleteShape = FALSE;
+        deleteShape = false;
       }
-      doc->Modify(TRUE);
+      doc->Modify(true);
       doc->UpdateAllViews();
       break;
     }
@@ -370,12 +370,12 @@ bool DiagramCommand::Undo(void)
         wxClientDC dc(shape->GetCanvas());
         shape->GetCanvas()->PrepareDC(dc);
 
-        shape->Select(FALSE, &dc);
+        shape->Select(false, &dc);
         doc->GetDiagram()->RemoveShape(shape);
         shape->Unlink();
-        deleteShape = TRUE;
+        deleteShape = true;
       }
-      doc->Modify(TRUE);
+      doc->Modify(true);
       doc->UpdateAllViews();
       break;
     }
@@ -391,7 +391,7 @@ bool DiagramCommand::Undo(void)
         shapeBrush = oldBrush;
         shape->Draw(dc);
         
-        doc->Modify(TRUE);
+        doc->Modify(true);
         doc->UpdateAllViews();
       }
       break;
@@ -411,14 +411,14 @@ bool DiagramCommand::Undo(void)
         shape->FormatText(dc, /* (char*) (const char*) */ myHandler->label);
         shape->Draw(dc);
         
-        doc->Modify(TRUE);
+        doc->Modify(true);
         doc->UpdateAllViews();
       }
 
       break;
     }
   }
-  return TRUE;
+  return true;
 }
 
 // Remove each individual line connected to a shape by sending a command.
@@ -448,13 +448,13 @@ void MyEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys,
     // Selection is a concept the library knows about
     if (GetShape()->Selected())
     {
-      GetShape()->Select(FALSE, &dc);
+      GetShape()->Select(false, &dc);
       GetShape()->GetCanvas()->Redraw(dc); // Redraw because bits of objects will be are missing
     }
     else
     {
       // Ensure no other shape is selected, to simplify Undo/Redo code
-      bool redraw = FALSE;
+      bool redraw = false;
       wxNode *node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
       while (node)
       {
@@ -463,13 +463,13 @@ void MyEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys,
         {
           if (eachShape->Selected())
           {
-            eachShape->Select(FALSE, &dc);
-            redraw = TRUE;
+            eachShape->Select(false, &dc);
+            redraw = true;
           }
         }
         node = node->GetNext();
       }
-      GetShape()->Select(TRUE, &dc);
+      GetShape()->Select(true, &dc);
       if (redraw)
         GetShape()->GetCanvas()->Redraw(dc);
     }
@@ -535,7 +535,7 @@ void MyEvtHandler::OnEndDragRight(double x, double y, int WXUNUSED(keys), int WX
   {
     canvas->view->GetDocument()->GetCommandProcessor()->Submit(
       new DiagramCommand(_T("wxLineShape"), OGLEDIT_ADD_LINE, (DiagramDocument *)canvas->view->GetDocument(), CLASSINFO(wxLineShape),
-      0.0, 0.0, FALSE, NULL, GetShape(), otherShape));
+      0.0, 0.0, false, NULL, GetShape(), otherShape));
   }
 }
 
@@ -558,7 +558,7 @@ bool MyDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
   wxDiagram::OnShapeSave(db, shape, expr);
   MyEvtHandler *handler = (MyEvtHandler *)shape.GetEventHandler();
   expr.AddAttributeValueString(_T("label"), handler->label);
-  return TRUE;
+  return true;
 }
 
 bool MyDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
@@ -571,7 +571,7 @@ bool MyDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
   
   if (label)
     delete[] label;
-  return TRUE;
+  return true;
 }
 
 #endif

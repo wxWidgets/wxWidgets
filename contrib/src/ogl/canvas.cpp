@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -75,7 +75,7 @@ wxShapeCanvas::wxShapeCanvas(wxWindow *parent, wxWindowID id,
   m_oldDragY = 0;
   m_firstDragX = 0;
   m_firstDragY = 0;
-  m_checkTolerance = TRUE;
+  m_checkTolerance = true;
 }
 
 wxShapeCanvas::~wxShapeCanvas()
@@ -129,7 +129,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
       // If we've ignored the tolerance once, then ALWAYS ignore
       // tolerance in this drag, even if we come back within
       // the tolerance range.
-      m_checkTolerance = FALSE;
+      m_checkTolerance = false;
   }
 
   // Dragging - note that the effect of dragging is left entirely up
@@ -153,16 +153,16 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
   else if (dragging && m_draggedShape && m_dragState == ContinueDraggingLeft)
   {
     // Continue dragging
-    m_draggedShape->GetEventHandler()->OnDragLeft(FALSE, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
-    m_draggedShape->GetEventHandler()->OnDragLeft(TRUE, (double)x, (double)y, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnDragLeft(false, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnDragLeft(true, (double)x, (double)y, keys, m_draggedAttachment);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (event.LeftUp() && m_draggedShape && m_dragState == ContinueDraggingLeft)
   {
     m_dragState = NoDragging;
-    m_checkTolerance = TRUE;
+    m_checkTolerance = true;
 
-    m_draggedShape->GetEventHandler()->OnDragLeft(FALSE, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnDragLeft(false, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
 
     m_draggedShape->GetEventHandler()->OnEndDragLeft((double)x, (double)y, keys, m_draggedAttachment);
     m_draggedShape = NULL;
@@ -183,16 +183,16 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
   else if (dragging && m_draggedShape && m_dragState == ContinueDraggingRight)
   {
     // Continue dragging
-    m_draggedShape->GetEventHandler()->OnDragRight(FALSE, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
-    m_draggedShape->GetEventHandler()->OnDragRight(TRUE, (double)x, (double)y, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnDragRight(false, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnDragRight(true, (double)x, (double)y, keys, m_draggedAttachment);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (event.RightUp() && m_draggedShape && m_dragState == ContinueDraggingRight)
   {
     m_dragState = NoDragging;
-    m_checkTolerance = TRUE;
+    m_checkTolerance = true;
 
-    m_draggedShape->GetEventHandler()->OnDragRight(FALSE, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnDragRight(false, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
 
     m_draggedShape->GetEventHandler()->OnEndDragRight((double)x, (double)y, keys, m_draggedAttachment);
     m_draggedShape = NULL;
@@ -208,16 +208,16 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
   else if (dragging && !m_draggedShape && m_dragState == ContinueDraggingLeft)
   {
     // Continue dragging
-    OnDragLeft(FALSE, m_oldDragX, m_oldDragY, keys);
-    OnDragLeft(TRUE, (double)x, (double)y, keys);
+    OnDragLeft(false, m_oldDragX, m_oldDragY, keys);
+    OnDragLeft(true, (double)x, (double)y, keys);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (event.LeftUp() && !m_draggedShape && m_dragState == ContinueDraggingLeft)
   {
     m_dragState = NoDragging;
-    m_checkTolerance = TRUE;
+    m_checkTolerance = true;
 
-    OnDragLeft(FALSE, m_oldDragX, m_oldDragY, keys);
+    OnDragLeft(false, m_oldDragX, m_oldDragY, keys);
     OnEndDragLeft((double)x, (double)y, keys);
     m_draggedShape = NULL;
   }
@@ -230,16 +230,16 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
   else if (dragging && !m_draggedShape && m_dragState == ContinueDraggingRight)
   {
     // Continue dragging
-    OnDragRight(FALSE, m_oldDragX, m_oldDragY, keys);
-    OnDragRight(TRUE, (double)x, (double)y, keys);
+    OnDragRight(false, m_oldDragX, m_oldDragY, keys);
+    OnDragRight(true, (double)x, (double)y, keys);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (event.RightUp() && !m_draggedShape && m_dragState == ContinueDraggingRight)
   {
     m_dragState = NoDragging;
-    m_checkTolerance = TRUE;
+    m_checkTolerance = true;
 
-    OnDragRight(FALSE, m_oldDragX, m_oldDragY, keys);
+    OnDragRight(false, m_oldDragX, m_oldDragY, keys);
     OnEndDragRight((double)x, (double)y, keys);
     m_draggedShape = NULL;
   }
@@ -247,7 +247,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
   // Non-dragging events
   else if (event.IsButton())
   {
-    m_checkTolerance = TRUE;
+    m_checkTolerance = true;
 
     // Find the nearest object
     int attachment = 0;
@@ -358,7 +358,7 @@ wxShape *wxShapeCanvas::FindFirstSensitiveShape1(wxShape *image, int op)
   return NULL;
 }
 
-// Helper function: TRUE if 'contains' wholly contains 'contained'.
+// Helper function: true if 'contains' wholly contains 'contained'.
 static bool WhollyContains(wxShape *contains, wxShape *contained)
 {
   double xp1, yp1, xp2, yp2;

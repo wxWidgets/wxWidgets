@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -93,7 +93,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
   if (!formatted)
   {
     FormatRegionText();
-    formatted = TRUE;
+    formatted = true;
   }
 */
   if (GetDisableLabel()) return;
@@ -285,10 +285,10 @@ bool wxDividedShape::GetAttachmentPosition(int attachment, double *x, double *y,
     {
       *x = m_xpos;
       *y = m_ypos;
-      return FALSE;
+      return false;
     }
   }
-  return TRUE;
+  return true;
 }
 
 int wxDividedShape::GetNumberOfAttachments() const
@@ -317,9 +317,9 @@ bool wxDividedShape::AttachmentIsValid(int attachment) const
     return wxShape::AttachmentIsValid(attachment);
   }
   else if (attachment >= 0)
-    return TRUE;
+    return true;
   else
-    return FALSE;
+    return false;
 }
 
 void wxDividedShape::Copy(wxShape& copy)
@@ -524,7 +524,7 @@ void wxDividedShape::EditRegions()
 
   wxEndBusyCursor();
 
-  dialog->Show(TRUE);
+  dialog->Show(true);
 
   node = GetRegions().GetFirst();
   i = 0;

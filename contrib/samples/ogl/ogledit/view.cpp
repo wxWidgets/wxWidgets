@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -52,7 +52,7 @@ bool DiagramView::OnCreate(wxDocument *doc, long WXUNUSED(flags))
   canvas->view = this;
 
   SetFrame(frame);
-  Activate(TRUE);
+  Activate(true);
 
   // Initialize the edit menu Undo and Redo items
   doc->GetCommandProcessor()->SetEditMenu(((MyFrame *)frame)->editMenu);
@@ -63,10 +63,10 @@ bool DiagramView::OnCreate(wxDocument *doc, long WXUNUSED(flags))
   shapeCanvas->SetDiagram(diagramDoc->GetDiagram());
   diagramDoc->GetDiagram()->SetCanvas(shapeCanvas);
 
-  return TRUE;
+  return true;
 }
 
-#define CENTER  FALSE // Place the drawing to the center of the page
+#define CENTER  false // Place the drawing to the center of the page
 
 
 // Sneakily gets used for default print/preview
@@ -152,7 +152,7 @@ void DiagramView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 bool DiagramView::OnClose(bool WXUNUSED(deleteWindow))
 {
   if (!GetDocument()->Close())
-    return FALSE;
+    return false;
 
   DiagramDocument *diagramDoc = (DiagramDocument *)GetDocument();
   diagramDoc->GetDiagram()->SetCanvas(NULL);
@@ -168,9 +168,9 @@ bool DiagramView::OnClose(bool WXUNUSED(deleteWindow))
 
   SetFrame(NULL);
 
-  Activate(FALSE);
+  Activate(false);
 
-  return TRUE;
+  return true;
 }
 
 wxShape *DiagramView::FindSelectedShape(void)
@@ -197,7 +197,7 @@ void DiagramView::OnCut(wxCommandEvent& WXUNUSED(event))
 
   wxShape *theShape = FindSelectedShape();
   if (theShape)
-    doc->GetCommandProcessor()->Submit(new DiagramCommand(_T("Cut"), OGLEDIT_CUT, doc, NULL, 0.0, 0.0, TRUE, theShape));
+    doc->GetCommandProcessor()->Submit(new DiagramCommand(_T("Cut"), OGLEDIT_CUT, doc, NULL, 0.0, 0.0, true, theShape));
 }
 
 void DiagramView::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
@@ -208,7 +208,7 @@ void DiagramView::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
       if (theShape)
       {
         wxColourData data;
-        data.SetChooseFull(TRUE);
+        data.SetChooseFull(true);
         data.SetColour(theShape->GetBrush()->GetColour());
 
         wxColourDialog *dialog = new wxColourDialog(frame, &data);

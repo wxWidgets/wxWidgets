@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -51,7 +51,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDrawnShape, wxRectangleShape)
 
 wxDrawnShape::wxDrawnShape():wxRectangleShape(100.0, 50.0)
 {
-  m_saveToFile = TRUE;
+  m_saveToFile = true;
   m_currentAngle = oglDRAWN_ANGLE_0;
 }
 
@@ -225,7 +225,7 @@ bool wxDrawnShape::GetPerimeterPoint(double x1, double y1,
         wxDrawOp* op = (wxDrawOp*) node->GetData();
 
         if (op->GetPerimeterPoint(x1, y1, x2, y2, x3, y3, GetX(), GetY(), GetAttachmentMode()))
-            return TRUE;
+            return true;
     }
 
     // Default... just use a rectangle
@@ -815,10 +815,10 @@ void wxOpDraw::Rotate(double x, double y, double theta, double sinTheta, double 
       double newX2 = m_x2*cosTheta - m_y2*sinTheta + x*(1.0 - cosTheta) + y*sinTheta;
       double newY2 = m_x2*sinTheta + m_y2*cosTheta + y*(1.0 - cosTheta) + x*sinTheta;
 
-	  m_x1 = newX1;
-	  m_y1 = newY1;
-	  m_x2 = newX2;
-	  m_y2 = newY2;
+      m_x1 = newX1;
+      m_y1 = newY1;
+      m_x2 = newX2;
+      m_y2 = newY2;
       break;
     }
     case DRAWOP_DRAW_RECT:
@@ -861,12 +861,12 @@ void wxOpDraw::Rotate(double x, double y, double theta, double sinTheta, double 
       double newX3 = m_x3*cosTheta - m_y3*sinTheta + x*(1.0 - cosTheta) + y*sinTheta;
       double newY3 = m_x3*sinTheta + m_y3*cosTheta + y*(1.0 - cosTheta) + x*sinTheta;
 
-	  m_x1 = newX1;
-	  m_y1 = newY1;
-	  m_x2 = newX2;
-	  m_y2 = newY2;
-	  m_x3 = newX3;
-	  m_y3 = newY3;
+      m_x1 = newX1;
+      m_y1 = newY1;
+      m_x2 = newX2;
+      m_y2 = newY2;
+      m_x3 = newX3;
+      m_y3 = newY3;
 
       break;
     }
@@ -1209,7 +1209,7 @@ bool wxOpPolyDraw::OnDrawOutline(wxDC& dc, double x, double y, double w, double 
     }
     dc.DrawPolygon(n, intPoints, (long) x, (long) y);
     delete[] intPoints;
-    return TRUE;
+    return true;
 }
 
 // Assume (x1, y1) is centre of box (most generally, line end at box)
@@ -1239,13 +1239,13 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
         {
           *x3 = point->x + xOffset;
           *y3 = point->y + yOffset;
-          return TRUE;
+          return true;
         }
         else if ((y2 < y1) && (point->y < 0.0))
         {
           *x3 = point->x + xOffset;
           *y3 = point->y + yOffset;
-          return TRUE;
+          return true;
         }
       }
     }
@@ -1267,7 +1267,7 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
   delete[] xpoints;
   delete[] ypoints;
 
-  return TRUE;
+  return true;
 }
 
 
@@ -1363,7 +1363,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPseudoMetaFile, wxObject)
 wxPseudoMetaFile::wxPseudoMetaFile()
 {
   m_currentRotation = 0;
-  m_rotateable = TRUE;
+  m_rotateable = true;
   m_width = 0.0;
   m_height = 0.0;
   m_outlinePen = NULL;
@@ -1602,7 +1602,7 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
   // Read GDI objects
   wxChar buf[50];
   int i = 1;
-  bool keepGoing = TRUE;
+  bool keepGoing = true;
   while (keepGoing)
   {
     wxSprintf(buf, _T("gdi%d_%d"), whichAngle, i);
@@ -1610,7 +1610,7 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
     clause->GetAttributeValue(buf, &expr);
     if (!expr)
     {
-      keepGoing = FALSE;
+      keepGoing = false;
     }
     else
     {
@@ -1667,7 +1667,7 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
   }
 
   // Now read in the operations
-  keepGoing = TRUE;
+  keepGoing = true;
   i = 1;
   while (keepGoing)
   {
@@ -1676,7 +1676,7 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
     clause->GetAttributeValue(buf, &expr);
     if (!expr)
     {
-      keepGoing = FALSE;
+      keepGoing = false;
     }
     else
     {
@@ -1821,14 +1821,14 @@ void wxPseudoMetaFile::Copy(wxPseudoMetaFile& copy)
 bool wxPseudoMetaFile::LoadFromMetaFile(const wxString& filename, double *rwidth, double *rheight)
 {
   if (!wxFileExists(filename))
-    return FALSE;
+    return false;
 
   wxXMetaFile *metaFile = new wxXMetaFile;
 
   if (!metaFile->ReadFile(filename))
   {
     delete metaFile;
-    return FALSE;
+    return false;
   }
 
   double lastX = 0.0;
@@ -2165,7 +2165,7 @@ bool wxPseudoMetaFile::LoadFromMetaFile(const wxString& filename, double *rwidth
   m_height = *rheight;
 
   delete metaFile;
-  return TRUE;
+  return true;
 }
 
 // Scale to fit size

@@ -95,7 +95,7 @@ bool csDiagramView::OnCreate(wxDocument *doc, long WXUNUSED(flags))
   canvas->SetView(this);
 
   SetFrame(frame);
-  Activate(TRUE);
+  Activate(true);
 
   // Initialize the edit menu Undo and Redo items
   doc->GetCommandProcessor()->SetEditMenu(editMenu);
@@ -112,12 +112,12 @@ bool csDiagramView::OnCreate(wxDocument *doc, long WXUNUSED(flags))
     {
         case csGRID_STYLE_NONE:
         {
-            diagramDoc->GetDiagram()->SetSnapToGrid(FALSE);
+            diagramDoc->GetDiagram()->SetSnapToGrid(false);
             break;
         }
         case csGRID_STYLE_INVISIBLE:
         {
-            diagramDoc->GetDiagram()->SetSnapToGrid(TRUE);
+            diagramDoc->GetDiagram()->SetSnapToGrid(true);
             break;
         }
         case csGRID_STYLE_DOTTED:
@@ -128,7 +128,7 @@ bool csDiagramView::OnCreate(wxDocument *doc, long WXUNUSED(flags))
     }
 
 
-  return TRUE;
+  return true;
 }
 
 csDiagramView::~csDiagramView(void)
@@ -155,7 +155,7 @@ void csDiagramView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 bool csDiagramView::OnClose(bool deleteWindow)
 {
   if (!GetDocument()->Close())
-    return FALSE;
+    return false;
 
   csDiagramDocument *diagramDoc = (csDiagramDocument *)GetDocument();
   diagramDoc->GetDiagram()->SetCanvas(NULL);
@@ -170,15 +170,15 @@ bool csDiagramView::OnClose(bool deleteWindow)
   // Remove file menu from those managed by the command history
   wxGetApp().GetDocManager()->FileHistoryRemoveMenu(fileMenu);
 
-  Activate(FALSE);
-  frame->Show(FALSE);
+  Activate(false);
+  frame->Show(false);
 
   if (deleteWindow)
   {
     frame->Destroy();
   }
 
-  return TRUE;
+  return true;
 }
 
 // Adds or removes shape from m_selections
@@ -192,7 +192,7 @@ void csDiagramView::SelectShape(wxShape* shape, bool select)
 
 void csDiagramView::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 {
-    SelectAll(TRUE);
+    SelectAll(true);
 }
 
 wxShape *csDiagramView::FindFirstSelectedShape(void)
@@ -389,7 +389,7 @@ void csDiagramView::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
     if (selections.GetCount() > 0)
     {
         wxColourData data;
-        data.SetChooseFull(TRUE);
+        data.SetChooseFull(true);
         if (selections.GetCount() == 1)
         {
             wxShape* firstShape = (wxShape*) selections.GetFirst()->GetData();
@@ -404,7 +404,7 @@ void csDiagramView::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
           wxColour col = retData.GetColour();
           theBrush = wxTheBrushList->FindOrCreateBrush(col, wxSOLID);
         }
-        dialog->Close(TRUE);
+        dialog->Close(true);
         if (!theBrush)
             return;
 
@@ -535,8 +535,8 @@ void csDiagramView::SelectAll(bool select)
         while (node)
         {
             wxShape *theShape = (wxShape*) node->GetData();
-            theShape->Select(FALSE, &dc);
-            SelectShape(theShape, FALSE);
+            theShape->Select(false, &dc);
+            SelectShape(theShape, false);
 
             node = node->GetNext();
         }
@@ -552,8 +552,8 @@ void csDiagramView::SelectAll(bool select)
                 !eachShape->IsKindOf(CLASSINFO(wxControlPoint)) &&
                 !eachShape->IsKindOf(CLASSINFO(wxLabelShape)))
             {
-                eachShape->Select(TRUE, &dc);
-                SelectShape(eachShape, TRUE);
+                eachShape->Select(true, &dc);
+                SelectShape(eachShape, true);
             }
             node = node->GetNext();
         }
@@ -633,13 +633,13 @@ void csDiagramView::ReflectPointSize(int pointSize)
 // Make the arrow toggle button reflect the state of the line
 void csDiagramView::ReflectArrowState(wxLineShape* lineShape)
 {
-    bool haveArrow = FALSE;
+    bool haveArrow = false;
     wxNode *node = lineShape->GetArrows().GetFirst();
     while (node)
     {
       wxArrowHead *arrow = (wxArrowHead *)node->GetData();
       if (ARROW_POSITION_MIDDLE == arrow->GetArrowEnd())
-        haveArrow = TRUE;
+        haveArrow = true;
       node = node->GetNext();
     }
 
@@ -868,7 +868,7 @@ void csCanvas::OnLeftClick(double x, double y, int WXUNUSED(keys))
 
     if (palette->GetSelection() == PALETTE_ARROW)
     {
-        GetView()->SelectAll(FALSE);
+        GetView()->SelectAll(false);
 
         wxClientDC dc(this);
         PrepareDC(dc);
@@ -1010,8 +1010,8 @@ void csCanvas::OnEndDragLeft(double x, double y, int WXUNUSED(keys))
             if (image_x >= min_x && image_x <= max_x &&
                 image_y >= min_y && image_y <= max_y)
             {
-                shape->Select(TRUE, &dc);
-                GetView()->SelectShape(shape, TRUE);
+                shape->Select(true, &dc);
+                GetView()->SelectShape(shape, true);
             }
         }
         node = node->GetNext();

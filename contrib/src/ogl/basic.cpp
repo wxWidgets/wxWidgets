@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -137,7 +137,7 @@ bool wxShapeEvtHandler::OnMovePre(wxDC& dc, double x, double y, double old_x, do
   if (m_previousHandler)
     return m_previousHandler->OnMovePre(dc, x, y, old_x, old_y, display);
   else
-    return TRUE;
+    return true;
 }
 
 void wxShapeEvtHandler::OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display)
@@ -270,7 +270,7 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_eventHandler = this;
   SetShape(this);
   m_id = 0;
-  m_formatted = FALSE;
+  m_formatted = false;
   m_canvas = can;
   m_xpos = 0.0; m_ypos = 0.0;
   m_pen = g_oglBlackPen;
@@ -278,16 +278,16 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_font = g_oglNormalFont;
   m_textColour = wxT("BLACK");
   m_textColourName = wxT("BLACK");
-  m_visible = FALSE;
-  m_selected = FALSE;
+  m_visible = false;
+  m_selected = false;
   m_attachmentMode = ATTACHMENT_MODE_NONE;
-  m_spaceAttachments = TRUE;
-  m_disableLabel = FALSE;
-  m_fixedWidth = FALSE;
-  m_fixedHeight = FALSE;
-  m_drawHandles = TRUE;
+  m_spaceAttachments = true;
+  m_disableLabel = false;
+  m_fixedWidth = false;
+  m_fixedHeight = false;
+  m_drawHandles = true;
   m_sensitivity = OP_ALL;
-  m_draggable = TRUE;
+  m_draggable = true;
   m_parent = NULL;
   m_formatMode = FORMAT_CENTRE_HORIZ | FORMAT_CENTRE_VERT;
   m_shadowMode = SHADOW_NONE;
@@ -297,9 +297,9 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_textMarginX = 5;
   m_textMarginY = 5;
   m_regionName = wxT("0");
-  m_centreResize = TRUE;
-  m_maintainAspectRatio = FALSE;
-  m_highlighted = FALSE;
+  m_centreResize = true;
+  m_maintainAspectRatio = false;
+  m_highlighted = false;
   m_rotation = 0.0;
   m_branchNeckLength = 10;
   m_branchStemLength = 10;
@@ -349,9 +349,9 @@ void wxShape::SetHighlight(bool hi, bool recurse)
 void wxShape::SetSensitivityFilter(int sens, bool recursive)
 {
   if (sens & OP_DRAG_LEFT)
-    m_draggable = TRUE;
+    m_draggable = true;
   else
-    m_draggable = FALSE;
+    m_draggable = false;
 
   m_sensitivity = sens;
   if (recursive)
@@ -360,7 +360,7 @@ void wxShape::SetSensitivityFilter(int sens, bool recursive)
     while (node)
     {
       wxShape *obj = (wxShape *)node->GetData();
-      obj->SetSensitivityFilter(sens, TRUE);
+      obj->SetSensitivityFilter(sens, true);
       node = node->GetNext();
     }
   }
@@ -381,7 +381,7 @@ void wxShape::SetDraggable(bool drag, bool recursive)
     while (node)
     {
       wxShape *obj = (wxShape *)node->GetData();
-      obj->SetDraggable(drag, TRUE);
+      obj->SetDraggable(drag, true);
       node = node->GetNext();
     }
   }
@@ -463,7 +463,7 @@ void wxShape::InsertInCanvas(wxShapeCanvas *theCanvas)
 void wxShape::RemoveFromCanvas(wxShapeCanvas *theCanvas)
 {
   if (Selected())
-    Select(FALSE);
+    Select(false);
   theCanvas->RemoveShape(this);
   wxNode *node = m_children.GetFirst();
   while (node)
@@ -491,9 +491,9 @@ void wxShape::ClearText(int regionId)
 {
   if (regionId == 0)
   {
-    m_text.DeleteContents(TRUE);
+    m_text.DeleteContents(true);
     m_text.Clear();
-    m_text.DeleteContents(FALSE);
+    m_text.DeleteContents(false);
   }
   wxNode *node = m_regions.Item(regionId);
   if (!node)
@@ -533,7 +533,7 @@ void wxShape::SetDefaultRegionSize()
 bool wxShape::HitTest(double x, double y, int *attachment, double *distance)
 {
 //  if (!sensitive)
-//    return FALSE;
+//    return false;
 
   double width = 0.0, height = 0.0;
   GetBoundingBoxMin(&width, &height);
@@ -577,15 +577,15 @@ bool wxShape::HitTest(double x, double y, int *attachment, double *distance)
     }
     *attachment = nearest_attachment;
     *distance = nearest;
-    return TRUE;
+    return true;
   }
-  else return FALSE;
+  else return false;
 }
 
 // Format a text string according to the region size, adding
 // strings with positions to region text list
 
-static bool GraphicsInSizeToContents = FALSE; // Infinite recursion elimination
+static bool GraphicsInSizeToContents = false; // Infinite recursion elimination
 void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
 {
   double w, h;
@@ -632,7 +632,7 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
       if (topAncestor != this)
       {
         // Make sure we don't recurse infinitely
-        GraphicsInSizeToContents = TRUE;
+        GraphicsInSizeToContents = true;
 
         wxCompositeShape *composite = (wxCompositeShape *)topAncestor;
         composite->Erase(dc);
@@ -648,7 +648,7 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
         // Where infinite recursion might happen if we didn't stop it
         composite->Draw(dc);
 
-        GraphicsInSizeToContents = FALSE;
+        GraphicsInSizeToContents = false;
       }
       else
       {
@@ -662,7 +662,7 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
     }
   }
   oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, actualW-2*m_textMarginX, actualH-2*m_textMarginY, region->GetFormatMode());
-  m_formatted = TRUE;
+  m_formatted = true;
 }
 
 void wxShape::Recentre(wxDC& dc)
@@ -686,7 +686,7 @@ bool wxShape::GetPerimeterPoint(double WXUNUSED(x1), double WXUNUSED(y1),
                                      double WXUNUSED(x2), double WXUNUSED(y2),
                                      double *WXUNUSED(x3), double *WXUNUSED(y3))
 {
-  return FALSE;
+  return false;
 }
 
 void wxShape::SetPen(wxPen *the_pen)
@@ -924,7 +924,7 @@ void wxShape::OnDrawContents(wxDC& dc)
     if (!m_formatted)
     {
       oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, bound_x-2*m_textMarginX, bound_y-2*m_textMarginY, region->GetFormatMode());
-      m_formatted = TRUE;
+      m_formatted = true;
     }
     if (!GetDisableLabel())
     {
@@ -943,7 +943,7 @@ void wxShape::OnSize(double WXUNUSED(x), double WXUNUSED(y))
 
 bool wxShape::OnMovePre(wxDC& WXUNUSED(dc), double WXUNUSED(x), double WXUNUSED(y), double WXUNUSED(old_x), double WXUNUSED(old_y), bool WXUNUSED(display))
 {
-  return TRUE;
+  return true;
 }
 
 void wxShape::OnMovePost(wxDC& WXUNUSED(dc), double WXUNUSED(x), double WXUNUSED(y), double WXUNUSED(old_x), double WXUNUSED(old_y), bool WXUNUSED(display))
@@ -1043,7 +1043,7 @@ void wxShape::DrawLinks(wxDC& dc, int attachment, bool recurse)
   }
 }
 
-// Returns TRUE if pt1 <= pt2 in the sense that one point comes before another on an
+// Returns true if pt1 <= pt2 in the sense that one point comes before another on an
 // edge of the shape.
 // attachmentPoint is the attachment point (= side) in question.
 
@@ -1065,14 +1065,14 @@ bool wxShape::AttachmentSortTest(int attachmentPoint, const wxRealPoint& pt1, co
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
                                        double x, double y)
 {
   if (GetAttachmentMode() == ATTACHMENT_MODE_NONE)
-      return FALSE;
+      return false;
 
   int newAttachment, oldAttachment;
   double distance;
@@ -1081,7 +1081,7 @@ bool wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
   // the user has moved the point to
   bool hit = HitTest(x, y, &newAttachment, &distance);
   if (!hit)
-    return FALSE;
+    return false;
 
   EraseLinks(dc);
 
@@ -1109,7 +1109,7 @@ bool wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
   double old_y = (double) -99999.9;
 
   node = newOrdering.GetFirst();
-  bool found = FALSE;
+  bool found = false;
 
   while (!found && node)
   {
@@ -1136,7 +1136,7 @@ bool wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
 
       if (AttachmentSortTest(newAttachment, newPoint, thisPoint) && AttachmentSortTest(newAttachment, lastPoint, newPoint))
       {
-        found = TRUE;
+        found = true;
         newOrdering.Insert(node, to_move);
       }
 
@@ -1151,7 +1151,7 @@ bool wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
 
   GetEventHandler()->OnChangeAttachment(newAttachment, to_move, newOrdering);
 
-  return TRUE;
+  return true;
 }
 
 void wxShape::OnChangeAttachment(int attachment, wxLineShape* line, wxList& ordering)
@@ -1547,7 +1547,7 @@ void wxShape::Erase(wxDC& dc)
 {
   GetEventHandler()->OnErase(dc);
   GetEventHandler()->OnEraseControlPoints(dc);
-  GetEventHandler()->OnDrawBranches(dc, TRUE);
+  GetEventHandler()->OnDrawBranches(dc, true);
 }
 
 void wxShape::EraseContents(wxDC& dc)
@@ -1566,7 +1566,7 @@ void wxShape::AddText(const wxString& string)
       new wxShapeTextLine(0.0, 0.0, string);
   region->GetFormattedText().Append(new_line);
 
-  m_formatted = FALSE;
+  m_formatted = false;
 }
 
 void wxShape::SetSize(double x, double y, bool WXUNUSED(recursive))
@@ -1759,10 +1759,10 @@ void wxShape::WriteAttributes(wxExpr *clause)
     clause->AddAttributeValue(_T("fixed_height"), (long)m_fixedHeight);
   if (m_shadowMode != SHADOW_NONE)
     clause->AddAttributeValue(_T("shadow_mode"), (long)m_shadowMode);
-  if (m_centreResize != TRUE)
+  if (m_centreResize != true)
     clause->AddAttributeValue(_T("centre_resize"), (long)0);
   clause->AddAttributeValue(_T("maintain_aspect_ratio"), (long) m_maintainAspectRatio);
-  if (m_highlighted != FALSE)
+  if (m_highlighted != false)
     clause->AddAttributeValue(_T("hilite"), (long)m_highlighted);
 
   if (m_parent) // For composite objects
@@ -1882,7 +1882,7 @@ void wxShape::ReadAttributes(wxExpr *clause)
   wxExpr *strings = clause->AttributeValue(_T("text"));
   if (strings && strings->Type() == wxExprList)
   {
-    m_formatted = TRUE;  // Assume text is formatted unless we prove otherwise
+    m_formatted = true;  // Assume text is formatted unless we prove otherwise
     wxExpr *node = strings->value.first;
     while (node)
     {
@@ -1896,7 +1896,7 @@ void wxShape::ReadAttributes(wxExpr *clause)
       if (string_expr->Type() == wxExprString)
       {
         the_string = string_expr->StringValue();
-        m_formatted = FALSE;
+        m_formatted = false;
       }
       else if (string_expr->Type() == wxExprList)
       {
@@ -2068,7 +2068,7 @@ void wxShape::ReadRegions(wxExpr *clause)
   wxSprintf(regionNameBuf, _T("region%d"), regionNo);
   wxSprintf(textNameBuf, _T("text%d"), regionNo);
 
-  m_formatted = TRUE;  // Assume text is formatted unless we prove otherwise
+  m_formatted = true;  // Assume text is formatted unless we prove otherwise
 
   while ((regionExpr = clause->AttributeValue(regionNameBuf)) != NULL)
   {
@@ -2189,7 +2189,7 @@ void wxShape::ReadRegions(wxExpr *clause)
         if (string_expr->Type() == wxExprString)
         {
           the_string = string_expr->StringValue();
-          m_formatted = FALSE;
+          m_formatted = false;
         }
         else if (string_expr->Type() == wxExprList)
         {
@@ -2620,9 +2620,9 @@ bool wxShape::Selected() const
 
 bool wxShape::AncestorSelected() const
 {
-  if (m_selected) return TRUE;
+  if (m_selected) return true;
   if (!GetParent())
-    return FALSE;
+    return false;
   else
     return GetParent()->AncestorSelected();
 }
@@ -2661,10 +2661,10 @@ bool wxShape::AttachmentIsValid(int attachment) const
   {
     wxAttachmentPoint *point = (wxAttachmentPoint *)node->GetData();
     if (point->m_id == attachment)
-      return TRUE;
+      return true;
     node = node->GetNext();
   }
-  return FALSE;
+  return false;
 }
 
 bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y,
@@ -2673,7 +2673,7 @@ bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y,
     if (m_attachmentMode == ATTACHMENT_MODE_NONE)
     {
         *x = m_xpos; *y = m_ypos;
-        return TRUE;
+        return true;
     }
     else if (m_attachmentMode == ATTACHMENT_MODE_BRANCHING)
     {
@@ -2681,7 +2681,7 @@ bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y,
         GetBranchingAttachmentPoint(attachment, nth, pt, stemPt);
         *x = pt.x;
         *y = pt.y;
-        return TRUE;
+        return true;
     }
     else if (m_attachmentMode == ATTACHMENT_MODE_EDGE)
     {
@@ -2695,12 +2695,12 @@ bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y,
                 {
                     *x = (double)(m_xpos + point->m_x);
                     *y = (double)(m_ypos + point->m_y);
-                    return TRUE;
+                    return true;
                 }
                 node = node->GetNext();
             }
             *x = m_xpos; *y = m_ypos;
-            return FALSE;
+            return false;
         }
         else
         {
@@ -2753,13 +2753,13 @@ bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y,
                 }
                 default:
                 {
-                    return FALSE;
+                    return false;
                 }
             }
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 void wxShape::GetBoundingBoxMax(double *w, double *h)
@@ -2775,21 +2775,21 @@ void wxShape::GetBoundingBoxMax(double *w, double *h)
   *h = hh;
 }
 
-// Returns TRUE if image is a descendant of this composite
+// Returns true if image is a descendant of this composite
 bool wxShape::HasDescendant(wxShape *image)
 {
   if (image == this)
-    return TRUE;
+    return true;
   wxNode *node = m_children.GetFirst();
   while (node)
   {
     wxShape *child = (wxShape *)node->GetData();
     bool ans = child->HasDescendant(image);
     if (ans)
-      return TRUE;
+      return true;
     node = node->GetNext();
   }
-  return FALSE;
+  return false;
 }
 
 // Clears points from a list of wxRealPoints, and clears list
@@ -2814,7 +2814,7 @@ wxRealPoint wxShape::CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPo
     bool isEnd = (line && line->IsEnd(this));
 
     // Are we horizontal or vertical?
-    bool isHorizontal = (oglRoughlyEqual(pt1.y, pt2.y) == TRUE);
+    bool isHorizontal = (oglRoughlyEqual(pt1.y, pt2.y) == true);
 
     double x, y;
 
@@ -2854,7 +2854,7 @@ wxRealPoint wxShape::CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPo
     }
     else
     {
-        wxASSERT( oglRoughlyEqual(pt1.x, pt2.x) == TRUE );
+        wxASSERT( oglRoughlyEqual(pt1.x, pt2.x) == true );
 
         wxRealPoint firstPoint, secondPoint;
         if (pt1.y > pt2.y)
@@ -2911,7 +2911,7 @@ int wxShape::GetLinePosition(wxLineShape* line)
 //                      <- branching attachment point N-1
 
 // This function gets information about where branching connections go.
-// Returns FALSE if there are no lines at this attachment.
+// Returns false if there are no lines at this attachment.
 bool wxShape::GetBranchingAttachmentInfo(int attachment, wxRealPoint& root, wxRealPoint& neck,
     wxRealPoint& shoulder1, wxRealPoint& shoulder2)
 {
@@ -2921,7 +2921,7 @@ bool wxShape::GetBranchingAttachmentInfo(int attachment, wxRealPoint& root, wxRe
     int lineCount = GetAttachmentLineCount(attachment);
 
     if (lineCount == 0)
-        return FALSE;
+        return false;
 
     int totalBranchLength = m_branchSpacing * (lineCount - 1);
 
@@ -2984,7 +2984,7 @@ bool wxShape::GetBranchingAttachmentInfo(int attachment, wxRealPoint& root, wxRe
             break;
         }
     }
-    return TRUE;
+    return true;
 }
 
 // n is the number of the adjoining line, from 0 to N-1 where N is the number of lines
@@ -3044,7 +3044,7 @@ bool wxShape::GetBranchingAttachmentPoint(int attachment, int n, wxRealPoint& pt
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 // Get the number of lines at this attachment position.

@@ -31,8 +31,7 @@ BEGIN_EVENT_TABLE(csProjectTreeCtrl, wxTreeCtrl)
 END_EVENT_TABLE()
 
 // Define my frame constructor
-csProjectTreeCtrl::csProjectTreeCtrl(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
-	long style):
+csProjectTreeCtrl::csProjectTreeCtrl(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
 
   wxTreeCtrl(parent, id, pos, size, style),
   m_imageList(16, 16)
@@ -58,7 +57,7 @@ bool csApp::CreateProjectWindow(wxFrame *WXUNUSED(parent))
     win->SetOrientation(wxLAYOUT_VERTICAL);
     win->SetAlignment(wxLAYOUT_LEFT);
     win->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-    win->SetSashVisible(wxSASH_RIGHT, TRUE);
+    win->SetSashVisible(wxSASH_RIGHT, true);
     win->SetExtraBorderSize(5);
 
     m_projectSashWindow = win;
@@ -67,10 +66,10 @@ bool csApp::CreateProjectWindow(wxFrame *WXUNUSED(parent))
         wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxDOUBLE_BORDER);
 
     // For now, hide the window
-    m_projectSashWindow->Show(FALSE);
+    m_projectSashWindow->Show(false);
 #endif
 
-    return TRUE;
+    return true;
 }
 
 // Fill out the project tree control

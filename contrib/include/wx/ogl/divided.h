@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _OGL_DIVIDED_H_
@@ -39,7 +39,7 @@ class WXDLLIMPEXP_OGL wxDividedShape: public wxRectangleShape
   void OnDraw(wxDC& dc);
   void OnDrawContents(wxDC& dc);
 
-  void SetSize(double w, double h, bool recursive = TRUE);
+  void SetSize(double w, double h, bool recursive = true);
 
   void MakeControlPoints();
   void ResetControlPoints();

@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -121,9 +121,9 @@ bool MyApp::OnInit(void)
   frame->CreateStatusBar(1);
 
   frame->Centre(wxBOTH);
-  frame->Show(TRUE);
+  frame->Show(true);
 
-  return TRUE;
+  return true;
 }
 
 int MyApp::OnExit(void)
@@ -147,7 +147,7 @@ END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
     const wxPoint& pos, const wxSize& size, long type):
-  wxDocParentFrame(manager, frame, -1, title, pos, size, type)
+  wxDocParentFrame(manager, frame, wxID_ANY, title, pos, size, type)
 {
   canvas = NULL;
   palette = NULL;
@@ -197,7 +197,7 @@ MyCanvas *MyFrame::CreateCanvas(wxView *view, wxFrame *parent)
   parent->GetClientSize(&width, &height);
 
   // Non-retained canvas
-  MyCanvas *canvas = new MyCanvas(view, parent, -1, wxPoint(0, 0), wxSize(width, height), 0);
+  MyCanvas *canvas = new MyCanvas(view, parent, wxID_ANY, wxPoint(0, 0), wxSize(width, height), 0);
   canvas->SetCursor(wxCursor(wxCURSOR_HAND));
 
   // Give it scrollbars

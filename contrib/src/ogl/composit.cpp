@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -65,7 +65,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCompositeShape, wxRectangleShape)
 
 wxCompositeShape::wxCompositeShape(): wxRectangleShape(10.0, 10.0)
 {
-//  selectable = FALSE;
+//  selectable = false;
   m_oldX = m_xpos;
   m_oldY = m_ypos;
 }
@@ -136,7 +136,7 @@ bool wxCompositeShape::OnMovePre(wxDC& dc, double x, double y, double oldx, doub
 
     node = node->GetNext();
   }
-  return TRUE;
+  return true;
 }
 
 void wxCompositeShape::OnErase(wxDC& dc)
@@ -278,9 +278,9 @@ void wxCompositeShape::SetSize(double w, double h, bool recursive)
     // Scale the position first
     double newX = (double)(((object->GetX() - GetX())*xScale) + GetX());
     double newY = (double)(((object->GetY() - GetY())*yScale) + GetY());
-    object->Show(FALSE);
+    object->Show(false);
     object->Move(dc, newX, newY);
-    object->Show(TRUE);
+    object->Show(true);
 
     // Now set the scaled size
     object->GetBoundingBoxMin(&xBound, &yBound);
@@ -371,7 +371,7 @@ void wxCompositeShape::Copy(wxShape& copy)
   while (node)
   {
     wxShape *object = (wxShape *)node->GetData();
-    wxShape *newObject = object->CreateNewCopy(FALSE, FALSE);
+    wxShape *newObject = object->CreateNewCopy(false, false);
     if (newObject->GetId() == 0)
       newObject->SetId(wxNewId());
 
@@ -558,7 +558,7 @@ void wxCompositeShape::CalculateSize()
 bool wxCompositeShape::Recompute()
 {
   int noIterations = 0;
-  bool changed = TRUE;
+  bool changed = true;
   while (changed && (noIterations < 500))
   {
     changed = Constrain();
@@ -577,13 +577,13 @@ bool wxCompositeShape::Constrain()
 {
   CalculateSize();
 
-  bool changed = FALSE;
+  bool changed = false;
   wxNode *node = m_children.GetFirst();
   while (node)
   {
     wxShape *object = (wxShape *)node->GetData();
     if (object->Constrain())
-      changed = TRUE;
+      changed = true;
     node = node->GetNext();
   }
 
@@ -591,7 +591,7 @@ bool wxCompositeShape::Constrain()
   while (node)
   {
     wxOGLConstraint *constraint = (wxOGLConstraint *)node->GetData();
-    if (constraint->Evaluate()) changed = TRUE;
+    if (constraint->Evaluate()) changed = true;
     node = node->GetNext();
   }
   return changed;
@@ -681,7 +681,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
   // Constraints are output as constraint1 = (...), constraint2 = (...), etc.
   int constraintNo = 1;
   wxChar m_constraintNameBuf[20];
-  bool haveConstraints = TRUE;
+  bool haveConstraints = true;
 
   while (haveConstraints)
   {
@@ -690,7 +690,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
     clause->GetAttributeValue(m_constraintNameBuf, &constraintExpr);
     if (!constraintExpr)
     {
-      haveConstraints = FALSE;
+      haveConstraints = false;
       break;
     }
     wxString cName = wxEmptyString;
@@ -761,7 +761,7 @@ void wxCompositeShape::MakeContainer()
 
   division->Move(dc, GetX(), GetY());
   Recompute();
-  division->Show(TRUE);
+  division->Show(true);
 }
 
 wxDivisionShape *wxCompositeShape::OnCreateDivision()
@@ -782,11 +782,11 @@ wxShape *wxCompositeShape::FindContainerImage()
   return NULL;
 }
 
-// Returns TRUE if division is a descendant of this container
+// Returns true if division is a descendant of this container
 bool wxCompositeShape::ContainsDivision(wxDivisionShape *division)
 {
   if (m_divisions.Member(division))
-    return TRUE;
+    return true;
   wxNode *node = m_children.GetFirst();
   while (node)
   {
@@ -795,11 +795,11 @@ bool wxCompositeShape::ContainsDivision(wxDivisionShape *division)
     {
       bool ans = ((wxCompositeShape *)child)->ContainsDivision(division);
       if (ans)
-        return TRUE;
+        return true;
     }
     node = node->GetNext();
   }
-  return FALSE;
+  return false;
 }
 
 /*
@@ -812,8 +812,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxDivisionShape, wxCompositeShape)
 wxDivisionShape::wxDivisionShape()
 {
   SetSensitivityFilter(OP_CLICK_LEFT | OP_CLICK_RIGHT | OP_DRAG_RIGHT);
-  SetCentreResize(FALSE);
-  SetAttachmentMode(TRUE);
+  SetCentreResize(false);
+  SetAttachmentMode(true);
   m_leftSide = NULL;
   m_rightSide = NULL;
   m_topSide = NULL;
@@ -881,7 +881,7 @@ bool wxDivisionShape::OnMovePre(wxDC& dc, double x, double y, double oldx, doubl
     object->Move(dc, object->GetX() + diffX, object->GetY() + diffY, display);
     node = node->GetNext();
   }
-  return TRUE;
+  return true;
 }
 
 void wxDivisionShape::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
@@ -1026,11 +1026,11 @@ void wxDivisionShape::OnRightClick(double x, double y, int keys, int attachment)
     {
       if (Selected())
       {
-        Select(FALSE);
+        Select(false);
         GetParent()->Draw(dc);
       }
       else
-        Select(TRUE);
+        Select(true);
     }
   }
 */
@@ -1058,7 +1058,7 @@ bool wxDivisionShape::Divide(int direction)
   double oldWidth = GetWidth();
   double oldHeight = GetHeight();
   if (Selected())
-    Select(FALSE);
+    Select(false);
 
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
@@ -1072,7 +1072,7 @@ bool wxDivisionShape::Divide(int direction)
     double newXPos2 = GetX();
     double newYPos2 = (double)(y1 + (3.0*GetHeight()/4.0));
     wxDivisionShape *newDivision = compositeParent->OnCreateDivision();
-    newDivision->Show(TRUE);
+    newDivision->Show(true);
 
     Erase(dc);
 
@@ -1123,7 +1123,7 @@ bool wxDivisionShape::Divide(int direction)
     double newXPos2 = (double)(x1 + (3.0*GetWidth()/4.0));
     double newYPos2 = GetY();
     wxDivisionShape *newDivision = compositeParent->OnCreateDivision();
-    newDivision->Show(TRUE);
+    newDivision->Show(true);
 
     Erase(dc);
 
@@ -1162,7 +1162,7 @@ bool wxDivisionShape::Divide(int direction)
     compositeParent->MakeMandatoryControlPoints();
   }
   compositeParent->Draw(dc);
-  return TRUE;
+  return true;
 }
 
 // Make one control point for every visible line
@@ -1295,15 +1295,15 @@ void wxDivisionShape::ResetMandatoryControlPoints()
   }
 }
 
-// Adjust a side, returning FALSE if it's not physically possible.
+// Adjust a side, returning false if it's not physically possible.
 bool wxDivisionShape::AdjustLeft(double left, bool test)
 {
   double x2 = (double)(GetX() + (GetWidth()/2.0));
 
   if (left >= x2)
-    return FALSE;
+    return false;
   if (test)
-    return TRUE;
+    return true;
 
   double newW = x2 - left;
   double newX = (double)(left + newW/2.0);
@@ -1314,7 +1314,7 @@ bool wxDivisionShape::AdjustLeft(double left, bool test)
 
   Move(dc, newX, GetY());
 
-  return TRUE;
+  return true;
 }
 
 bool wxDivisionShape::AdjustTop(double top, bool test)
@@ -1322,9 +1322,9 @@ bool wxDivisionShape::AdjustTop(double top, bool test)
   double y2 = (double)(GetY() + (GetHeight()/2.0));
 
   if (top >= y2)
-    return FALSE;
+    return false;
   if (test)
-    return TRUE;
+    return true;
 
   double newH = y2 - top;
   double newY = (double)(top + newH/2.0);
@@ -1335,7 +1335,7 @@ bool wxDivisionShape::AdjustTop(double top, bool test)
 
   Move(dc, GetX(), newY);
 
-  return TRUE;
+  return true;
 }
 
 bool wxDivisionShape::AdjustRight(double right, bool test)
@@ -1343,9 +1343,9 @@ bool wxDivisionShape::AdjustRight(double right, bool test)
   double x1 = (double)(GetX() - (GetWidth()/2.0));
 
   if (right <= x1)
-    return FALSE;
+    return false;
   if (test)
-    return TRUE;
+    return true;
 
   double newW = right - x1;
   double newX = (double)(x1 + newW/2.0);
@@ -1356,7 +1356,7 @@ bool wxDivisionShape::AdjustRight(double right, bool test)
 
   Move(dc, newX, GetY());
 
-  return TRUE;
+  return true;
 }
 
 bool wxDivisionShape::AdjustBottom(double bottom, bool test)
@@ -1364,9 +1364,9 @@ bool wxDivisionShape::AdjustBottom(double bottom, bool test)
   double y1 = (double)(GetY() - (GetHeight()/2.0));
 
   if (bottom <= y1)
-    return FALSE;
+    return false;
   if (test)
-    return TRUE;
+    return true;
 
   double newH = bottom - y1;
   double newY = (double)(y1 + newH/2.0);
@@ -1377,13 +1377,13 @@ bool wxDivisionShape::AdjustBottom(double bottom, bool test)
 
   Move(dc, GetX(), newY);
 
-  return TRUE;
+  return true;
 }
 
 wxDivisionControlPoint::wxDivisionControlPoint(wxShapeCanvas *the_canvas, wxShape *object, double size, double the_xoffset, double the_yoffset, int the_type):
   wxControlPoint(the_canvas, object, size, the_xoffset, the_yoffset, the_type)
 {
-  SetEraseObject(FALSE);
+  SetEraseObject(false);
 }
 
 wxDivisionControlPoint::~wxDivisionControlPoint()
@@ -1434,51 +1434,51 @@ void wxDivisionControlPoint::OnEndDragLeft(double x, double y, int keys, int att
   double dx2 = (double)(division->GetX() + (division->GetWidth()/2.0));
   double dy2 = (double)(division->GetY() + (division->GetHeight()/2.0));
 
-  bool success = TRUE;
+  bool success = true;
   switch (division->GetHandleSide())
   {
     case DIVISION_SIDE_LEFT:
     {
       if ((x <= x1) || (x >= x2) || (x >= dx2))
-        success = FALSE;
+        success = false;
       // Try it out first...
-      else if (!division->ResizeAdjoining(DIVISION_SIDE_LEFT, x, TRUE))
-        success = FALSE;
+      else if (!division->ResizeAdjoining(DIVISION_SIDE_LEFT, x, true))
+        success = false;
       else
-        division->ResizeAdjoining(DIVISION_SIDE_LEFT, x, FALSE);
+        division->ResizeAdjoining(DIVISION_SIDE_LEFT, x, false);
 
       break;
     }
     case DIVISION_SIDE_TOP:
     {
       if ((y <= y1) || (y >= y2) || (y >= dy2))
-        success = FALSE;
-      else if (!division->ResizeAdjoining(DIVISION_SIDE_TOP, y, TRUE))
-        success = FALSE;
+        success = false;
+      else if (!division->ResizeAdjoining(DIVISION_SIDE_TOP, y, true))
+        success = false;
       else
-        division->ResizeAdjoining(DIVISION_SIDE_TOP, y, FALSE);
+        division->ResizeAdjoining(DIVISION_SIDE_TOP, y, false);
 
       break;
     }
     case DIVISION_SIDE_RIGHT:
     {
       if ((x <= x1) || (x >= x2) || (x <= dx1))
-        success = FALSE;
-      else if (!division->ResizeAdjoining(DIVISION_SIDE_RIGHT, x, TRUE))
-        success = FALSE;
+        success = false;
+      else if (!division->ResizeAdjoining(DIVISION_SIDE_RIGHT, x, true))
+        success = false;
       else
-        division->ResizeAdjoining(DIVISION_SIDE_RIGHT, x, FALSE);
+        division->ResizeAdjoining(DIVISION_SIDE_RIGHT, x, false);
 
       break;
     }
     case DIVISION_SIDE_BOTTOM:
     {
       if ((y <= y1) || (y >= y2) || (y <= dy1))
-        success = FALSE;
-      else if (!division->ResizeAdjoining(DIVISION_SIDE_BOTTOM, y, TRUE))
-        success = FALSE;
+        success = false;
+      else if (!division->ResizeAdjoining(DIVISION_SIDE_BOTTOM, y, true))
+        success = false;
       else
-        division->ResizeAdjoining(DIVISION_SIDE_BOTTOM, y, FALSE);
+        division->ResizeAdjoining(DIVISION_SIDE_BOTTOM, y, false);
 
       break;
     }
@@ -1518,7 +1518,7 @@ bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
         {
           bool success = division->AdjustRight(newPos, test);
           if (!success && test)
-            return FALSE;
+            return false;
         }
         break;
       }
@@ -1528,7 +1528,7 @@ bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
         {
           bool success = division->AdjustBottom(newPos, test);
           if (!success && test)
-            return FALSE;
+            return false;
         }
         break;
       }
@@ -1538,7 +1538,7 @@ bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
         {
           bool success = division->AdjustLeft(newPos, test);
           if (!success && test)
-            return FALSE;
+            return false;
         }
         break;
       }
@@ -1548,7 +1548,7 @@ bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
         {
           bool success = division->AdjustTop(newPos, test);
           if (!success && test)
-            return FALSE;
+            return false;
         }
         break;
       }
@@ -1558,7 +1558,7 @@ bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
     node = node->GetNext();
   }
 
-  return TRUE;
+  return true;
 }
 
 /*
@@ -1694,7 +1694,7 @@ void wxDivisionShape::EditEdge(int WXUNUSED(side))
   dialog->Centre(wxBOTH);
 
   wxEndBusyCursor();
-  dialog->Show(TRUE);
+  dialog->Show(true);
 
   int lineStyle = wxSOLID;
   if (*pStyle)
@@ -1732,13 +1732,13 @@ void wxDivisionShape::PopupMenu(double x, double y)
 
   oglPopupDivisionMenu->SetClientData((void *)this);
   if (m_leftSide)
-    oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_LEFT_EDGE, TRUE);
+    oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_LEFT_EDGE, true);
   else
-    oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_LEFT_EDGE, FALSE);
+    oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_LEFT_EDGE, false);
   if (m_topSide)
-    oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_TOP_EDGE, TRUE);
+    oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_TOP_EDGE, true);
   else
-    oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_TOP_EDGE, FALSE);
+    oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_TOP_EDGE, false);
 
   int x1, y1;
   m_canvas->GetViewStart(&x1, &y1);

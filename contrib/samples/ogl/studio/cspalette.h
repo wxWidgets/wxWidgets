@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _STUDIO_CSPALETTE_H_
@@ -37,7 +37,7 @@ class csEditorToolPalette: public TOOLPALETTECLASS
 {
 public:
 
-  csEditorToolPalette(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+  csEditorToolPalette(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
     const wxSize& size = wxDefaultSize,
     long style = wxTB_VERTICAL);
 

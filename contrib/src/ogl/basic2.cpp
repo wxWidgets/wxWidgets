@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -202,7 +202,7 @@ void wxPolygonShape::CalculatePolygonCentre()
 bool PolylineHitTest(double n, double xvec[], double yvec[],
                            double x1, double y1, double x2, double y2)
 {
-  bool isAHit = FALSE;
+  bool isAHit = false;
   int i;
   double lastx = xvec[0];
   double lasty = yvec[0];
@@ -216,7 +216,7 @@ bool PolylineHitTest(double n, double xvec[], double yvec[],
     oglCheckLineIntersection(x1, y1, x2, y2, lastx, lasty, xvec[i], yvec[i],
                             &line_ratio, &other_ratio);
     if (line_ratio != 1.0)
-      isAHit = TRUE;
+      isAHit = true;
     lastx = xvec[i];
     lasty = yvec[i];
 
@@ -230,7 +230,7 @@ bool PolylineHitTest(double n, double xvec[], double yvec[],
     oglCheckLineIntersection(x1, y1, x2, y2, lastx, lasty, xvec[0], yvec[0],
                             &line_ratio, &other_ratio);
     if (line_ratio != 1.0)
-      isAHit = TRUE;
+      isAHit = true;
 
   }
   return isAHit;
@@ -273,13 +273,13 @@ bool wxPolygonShape::HitTest(double x, double y, int *attachment, double *distan
 
   // We assume it's inside the polygon UNLESS one or more
   // lines don't hit the outline.
-  bool isContained = TRUE;
+  bool isContained = true;
 
   int noPoints = 4;
   for (i = 0; i < noPoints; i++)
   {
     if (!PolylineHitTest(np, xpoints, ypoints, x, y, endPointsX[i], endPointsY[i]))
-      isContained = FALSE;
+      isContained = false;
   }
 /*
   if (isContained)
@@ -291,7 +291,7 @@ bool wxPolygonShape::HitTest(double x, double y, int *attachment, double *distan
   delete[] ypoints;
 
   if (!isContained)
-    return FALSE;
+    return false;
 
   int nearest_attachment = 0;
 
@@ -315,7 +315,7 @@ bool wxPolygonShape::HitTest(double x, double y, int *attachment, double *distan
   }
   *attachment = nearest_attachment;
   *distance = nearest;
-  return TRUE;
+  return true;
 }
 
 // Really need to be able to reset the shape! Otherwise, if the
@@ -447,13 +447,13 @@ bool wxPolygonShape::GetPerimeterPoint(double x1, double y1,
         {
           *x3 = point->x + m_xpos;
           *y3 = point->y + m_ypos;
-          return TRUE;
+          return true;
         }
         else if ((y2 < y1) && (point->y < 0.0))
         {
           *x3 = point->x + m_xpos;
           *y3 = point->y + m_ypos;
-          return TRUE;
+          return true;
         }
       }
       node = node->GetNext();
@@ -480,7 +480,7 @@ bool wxPolygonShape::GetPerimeterPoint(double x1, double y1,
   delete[] xpoints;
   delete[] ypoints;
 
-  return TRUE;
+  return true;
 }
 
 void wxPolygonShape::OnDraw(wxDC& dc)
@@ -784,7 +784,7 @@ bool wxPolygonShape::GetAttachmentPosition(int attachment, double *x, double *y,
     wxRealPoint *point = (wxRealPoint *)m_points->Item(attachment)->GetData();
     *x = point->x + m_xpos;
     *y = point->y + m_ypos;
-    return TRUE;
+    return true;
   }
   else
   { return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line); }
@@ -793,20 +793,20 @@ bool wxPolygonShape::GetAttachmentPosition(int attachment, double *x, double *y,
 bool wxPolygonShape::AttachmentIsValid(int attachment) const
 {
   if (!m_points)
-    return FALSE;
+    return false;
 
   if ((attachment >= 0) && (attachment < (int) m_points->GetCount()))
-    return TRUE;
+    return true;
 
   wxNode *node = m_attachmentPoints.GetFirst();
   while (node)
   {
     wxAttachmentPoint *point = (wxAttachmentPoint *)node->GetData();
     if (point->m_id == attachment)
-      return TRUE;
+      return true;
     node = node->GetNext();
   }
-  return FALSE;
+  return false;
 }
 
 // Rotate about the given axis by the given amount in radians
@@ -928,7 +928,7 @@ bool wxRectangleShape::GetPerimeterPoint(double WXUNUSED(x1), double WXUNUSED(y1
   GetBoundingBoxMax(&bound_x, &bound_y);
   oglFindEndForBox(bound_x, bound_y, m_xpos, m_ypos, x2, y2, x3, y3);
 
-  return TRUE;
+  return true;
 }
 
 #if wxUSE_PROLOGIO
@@ -1036,7 +1036,7 @@ bool wxEllipseShape::GetPerimeterPoint(double x1, double y1,
 //  oglFindEndForBox(bound_x, bound_y, m_xpos, m_ypos, x2, y2, x3, y3);
   oglDrawArcToEllipse(m_xpos, m_ypos, bound_x, bound_y, x2, y2, x1, y1, x3, y3);
 
-  return TRUE;
+  return true;
 }
 
 void wxEllipseShape::OnDraw(wxDC& dc)
@@ -1177,10 +1177,10 @@ bool wxEllipseShape::GetAttachmentPosition(int attachment, double *x, double *y,
         return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line);
       }
     }
-    return TRUE;
+    return true;
   }
   else
-  { *x = m_xpos; *y = m_ypos; return TRUE; }
+  { *x = m_xpos; *y = m_ypos; return true; }
 }
 
 
@@ -1189,7 +1189,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCircleShape, wxEllipseShape)
 
 wxCircleShape::wxCircleShape(double diameter):wxEllipseShape(diameter, diameter)
 {
-    SetMaintainAspectRatio(TRUE);
+    SetMaintainAspectRatio(true);
 }
 
 void wxCircleShape::Copy(wxShape& copy)
@@ -1206,7 +1206,7 @@ bool wxCircleShape::GetPerimeterPoint(double WXUNUSED(x1), double WXUNUSED(y1),
                       x2, y2,  // Other end of line
                       x3, y3);
 
-  return TRUE;
+  return true;
 }
 
 // Control points
@@ -1232,8 +1232,8 @@ wxControlPoint::wxControlPoint(wxShapeCanvas *theCanvas, wxShape *object, double
   SetPen(g_oglBlackForegroundPen);
   SetBrush(wxBLACK_BRUSH);
   m_oldCursor = NULL;
-  m_visible = TRUE;
-  m_eraseObject = TRUE;
+  m_visible = true;
+  m_eraseObject = true;
 }
 
 wxControlPoint::~wxControlPoint()
@@ -1282,7 +1282,7 @@ bool wxControlPoint::GetAttachmentPosition(int WXUNUSED(attachment), double *x, 
                                          int WXUNUSED(nth), int WXUNUSED(no_arcs), wxLineShape *WXUNUSED(line))
 {
   *x = m_xpos; *y = m_ypos;
-  return TRUE;
+  return true;
 }
 
 // Control points ('handles') redirect control to the actual shape, to make it easier
@@ -1540,7 +1540,7 @@ void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, double WXUNUSED(x), double
   this->Erase(dc);
 /*
   if (!pt->m_eraseObject)
-    this->Show(FALSE);
+    this->Show(false);
 */
 
   this->SetSize(pt->sm_controlPointDragEndWidth, pt->sm_controlPointDragEndHeight);
@@ -1559,12 +1559,12 @@ void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, double WXUNUSED(x), double
 
 /*
   if (!eraseIt)
-    theObject->Show(TRUE);
+    theObject->Show(true);
 */
 
   // Recursively redraw links if we have a composite.
   if (theObject->GetChildren().GetCount() > 0)
-    theObject->DrawLinks(dc, -1, TRUE);
+    theObject->DrawLinks(dc, -1, true);
 
   double width, height;
   theObject->GetBoundingBoxMax(&width, &height);

@@ -73,8 +73,8 @@ public:
 
 // Overridables
     // Start/end copying
-    virtual bool OnStartCopy(wxDiagram* WXUNUSED(diagramTo)) { return TRUE; };
-    virtual bool OnEndCopy(wxDiagram* WXUNUSED(diagramTo)) { return TRUE; };
+    virtual bool OnStartCopy(wxDiagram* WXUNUSED(diagramTo)) { return true; };
+    virtual bool OnEndCopy(wxDiagram* WXUNUSED(diagramTo)) { return true; };
 
     // Override this to e.g. have the shape added through a Do/Undo command system.
     // By default, we'll just add it directly to the destination diagram, and

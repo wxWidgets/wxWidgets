@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _OGL_DRAWN_H_
@@ -100,8 +100,8 @@ public:
   virtual void SetClippingRect(const wxRect& rect);
   virtual void DestroyClippingRect();
 
-  virtual void SetPen(wxPen* pen, bool isOutline = FALSE);     // TODO: eventually, just store GDI object attributes, not actual
-  virtual void SetBrush(wxBrush* brush, bool isFill = FALSE);  // pens/brushes etc.
+  virtual void SetPen(wxPen* pen, bool isOutline = false);     // TODO: eventually, just store GDI object attributes, not actual
+  virtual void SetBrush(wxBrush* brush, bool isFill = false);  // pens/brushes etc.
   virtual void SetFont(wxFont* font);
   virtual void SetTextColour(const wxColour& colour);
   virtual void SetBackgroundColour(const wxColour& colour);
@@ -155,7 +155,7 @@ class WXDLLIMPEXP_OGL wxDrawnShape: public wxRectangleShape
   // Get current rotation
   inline double GetRotation() const { return m_rotation; }
 
-  void SetSize(double w, double h, bool recursive = TRUE);
+  void SetSize(double w, double h, bool recursive = true);
   bool LoadFromMetaFile(const wxString& filename);
 
   inline void SetSaveToFile(bool save) { m_saveToFile = save; }
@@ -188,8 +188,8 @@ class WXDLLIMPEXP_OGL wxDrawnShape: public wxRectangleShape
   virtual void SetClippingRect(const wxRect& rect);
   virtual void DestroyClippingRect();
 
-  virtual void SetDrawnPen(wxPen* pen, bool isOutline = FALSE);     // TODO: eventually, just store GDI object attributes, not actual
-  virtual void SetDrawnBrush(wxBrush* brush, bool isFill = FALSE);  // pens/brushes etc.
+  virtual void SetDrawnPen(wxPen* pen, bool isOutline = false);     // TODO: eventually, just store GDI object attributes, not actual
+  virtual void SetDrawnBrush(wxBrush* brush, bool isFill = false);  // pens/brushes etc.
   virtual void SetDrawnFont(wxFont* font);
   virtual void SetDrawnTextColour(const wxColour& colour);
   virtual void SetDrawnBackgroundColour(const wxColour& colour);

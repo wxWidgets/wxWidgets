@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -59,7 +59,7 @@ bool csEditorToolPalette::OnLeftClick(int toolIndex, bool toggled)
 {
   // BEGIN mutual exclusivity code
   if (toggled && (m_currentlySelected != -1) && (toolIndex != m_currentlySelected))
-    ToggleTool(m_currentlySelected, FALSE);
+    ToggleTool(m_currentlySelected, false);
 
   if (toggled)
     m_currentlySelected = toolIndex;
@@ -67,7 +67,7 @@ bool csEditorToolPalette::OnLeftClick(int toolIndex, bool toggled)
     m_currentlySelected = -1;
   //  END mutual exclusivity code
 
-  return TRUE;
+  return true;
 }
 
 void csEditorToolPalette::OnMouseEnter(int toolIndex)
@@ -93,10 +93,10 @@ void csEditorToolPalette::SetSelection(int sel)
 {
     if ((sel != m_currentlySelected) && (m_currentlySelected != -1))
     {
-        ToggleTool(m_currentlySelected, FALSE);
+        ToggleTool(m_currentlySelected, false);
     }
     m_currentlySelected = sel;
-    ToggleTool(m_currentlySelected, TRUE);
+    ToggleTool(m_currentlySelected, true);
 }
 
 bool csApp::CreatePalette(wxFrame *parent)
@@ -107,11 +107,11 @@ bool csApp::CreatePalette(wxFrame *parent)
     win->SetOrientation(wxLAYOUT_HORIZONTAL);
     win->SetAlignment(wxLAYOUT_TOP);
     win->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-    win->SetSashVisible(wxSASH_BOTTOM, TRUE);
+    win->SetSashVisible(wxSASH_BOTTOM, true);
 
     m_diagramPaletteSashWindow = win;
 
-    m_diagramPaletteSashWindow->Show(FALSE);
+    m_diagramPaletteSashWindow->Show(false);
 
   // Load palette bitmaps
 #ifdef __WXMSW__
@@ -124,14 +124,14 @@ bool csApp::CreatePalette(wxFrame *parent)
     wxSize toolBitmapSize(22, 22);
 #endif
 
-  csEditorToolPalette *palette = new csEditorToolPalette(m_diagramPaletteSashWindow, ID_DIAGRAM_PALETTE, wxPoint(0, 0), wxSize(-1, -1), wxTB_HORIZONTAL|wxNO_BORDER);
+  csEditorToolPalette *palette = new csEditorToolPalette(m_diagramPaletteSashWindow, ID_DIAGRAM_PALETTE, wxPoint(0, 0), wxDefaultSize, wxTB_HORIZONTAL|wxNO_BORDER);
 
   palette->SetMargins(2, 2);
 
   palette->SetToolBitmapSize(toolBitmapSize);
 
-  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, TRUE, 0, -1, NULL, _T("Pointer"));
-  palette->AddTool(PALETTE_TEXT_TOOL, TextTool, wxNullBitmap, TRUE, 0, -1, NULL, _T("Text"));
+  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Pointer"));
+  palette->AddTool(PALETTE_TEXT_TOOL, TextTool, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Text"));
 
   wxChar** symbols = new wxChar*[20];
   int noSymbols = 0;
@@ -171,7 +171,7 @@ bool csApp::CreatePalette(wxFrame *parent)
       if (symbol)
       {
            wxBitmap* bitmap = GetSymbolDatabase()->CreateToolBitmap(symbol, toolBitmapSize);
-           palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, TRUE, 0, -1, NULL, symbol->GetName());
+           palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, symbol->GetName());
 
            delete bitmap;
       }
@@ -185,7 +185,7 @@ bool csApp::CreatePalette(wxFrame *parent)
     csSymbol* symbol = (csSymbol*) node->Data();
 
     wxBitmap* bitmap = GetSymbolDatabase()->CreateToolBitmap(symbol, toolBitmapSize);
-    palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, TRUE, 0, -1, NULL, symbol->GetName());
+    palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, symbol->GetName());
 
     delete bitmap;
 
@@ -198,6 +198,6 @@ bool csApp::CreatePalette(wxFrame *parent)
   palette->SetSelection(PALETTE_ARROW);
   m_diagramPalette = palette;
 
-  return TRUE;
+  return true;
 }
 

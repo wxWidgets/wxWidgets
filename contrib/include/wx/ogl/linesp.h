@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _OGL_LINESP_H_
@@ -68,7 +68,7 @@ class WXDLLIMPEXP_OGL wxLabelShape: public wxRectangleShape
   void OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
   void OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
   void OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
-  bool OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
+  bool OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
 
 public:
   wxLineShape*      m_lineShape;

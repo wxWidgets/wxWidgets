@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _OGL_DRAWNP_H_
@@ -70,9 +70,9 @@ public:
 #endif
   inline int GetOp() const { return m_op; }
 
-  // Draw an outline using the current operation. By default, return FALSE (not drawn)
+  // Draw an outline using the current operation. By default, return false (not drawn)
   virtual bool OnDrawOutline(wxDC& WXUNUSED(dc), double WXUNUSED(x), double WXUNUSED(y), double WXUNUSED(w), double WXUNUSED(h),
-    double WXUNUSED(oldW), double WXUNUSED(oldH)) { return FALSE; }
+    double WXUNUSED(oldW), double WXUNUSED(oldH)) { return false; }
 
   // Get the perimeter point using this data
   virtual bool GetPerimeterPoint(double WXUNUSED(x1), double WXUNUSED(y1),
@@ -80,7 +80,7 @@ public:
                                      double *WXUNUSED(x3), double *WXUNUSED(y3),
                                      double WXUNUSED(xOffset), double WXUNUSED(yOffset),
                                      int WXUNUSED(attachmentMode))
-  { return FALSE; }
+  { return false; }
 
 protected:
   int           m_op;

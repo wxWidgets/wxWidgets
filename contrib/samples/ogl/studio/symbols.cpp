@@ -212,7 +212,7 @@ wxBitmap* csSymbolDatabase::CreateToolBitmap(csSymbol* symbol, const wxSize& too
     memDC.SetBackground(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE), wxSOLID));
     memDC.Clear();
 
-    symbol->GetShape()->Show(TRUE);
+    symbol->GetShape()->Show(true);
     symbol->GetShape()->Move(memDC, centreX, centreY);
 
     memDC.SelectObject(wxNullBitmap);

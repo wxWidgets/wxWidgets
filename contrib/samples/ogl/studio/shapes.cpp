@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -130,7 +130,7 @@ void csEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys,
     // If the shape was selected, deselect it and vice versa.
     bool selected = GetShape()->Selected();
 
-    view->SelectAll(FALSE);
+    view->SelectAll(false);
 
     selected = !selected;
 
@@ -143,13 +143,13 @@ void csEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys,
   {
     if (GetShape()->Selected())
     {
-        GetShape()->Select(FALSE, &dc);
-        view->SelectShape(GetShape(), FALSE);
+        GetShape()->Select(false, &dc);
+        view->SelectShape(GetShape(), false);
     }
     else
     {
-        GetShape()->Select(TRUE, &dc);
-        view->SelectShape(GetShape(), TRUE);
+        GetShape()->Select(true, &dc);
+        view->SelectShape(GetShape(), true);
     }
     GetShape()->GetCanvas()->Redraw(dc); // Redraw because bits of objects will be missing
   }
@@ -477,7 +477,7 @@ void csEvtHandler::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, i
         wxClientDC dc(canvas);
         canvas->PrepareDC(dc);
 
-        shape->SetDisableLabel(FALSE);
+        shape->SetDisableLabel(false);
 
         if (lpt->m_type == CONTROL_POINT_LINE)
         {
@@ -529,7 +529,7 @@ void csEvtHandler::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, i
   shape->Recompute();
   shape->ResetControlPoints();
   if (!pt->m_eraseObject)
-    shape->Show(FALSE);
+    shape->Show(false);
 */
 
   wxShape* newShape = shape->CreateNewCopy();
@@ -612,7 +612,7 @@ bool csEvtHandler::EditProperties()
 
     // For now, no line property editing
     if (shape->IsKindOf(CLASSINFO(wxLineShape)))
-        return FALSE;
+        return false;
 
     csDiagramView* view = ((csCanvas*)shape->GetCanvas())->GetView();
 
@@ -677,7 +677,7 @@ bool csEvtHandler::EditProperties()
     else
     {
         wxMessageBox(_T("Unrecognised shape."), _T("Studio"), wxICON_EXCLAMATION);
-        return FALSE;
+        return false;
     }
 
     csShapePropertiesDialog* dialog = new csShapePropertiesDialog(shape->GetCanvas()->GetParent(), title, attributeDialog, attributeDialogName);
@@ -685,7 +685,7 @@ bool csEvtHandler::EditProperties()
     if (dialog->ShowModal() == wxID_CANCEL)
     {
         dialog->Destroy();
-        return FALSE;
+        return false;
     }
 
     wxString newLabel = dialog->GetGeneralPropertiesDialog()->GetShapeLabel();
@@ -699,7 +699,7 @@ bool csEvtHandler::EditProperties()
     view->GetDocument()->GetCommandProcessor()->Submit(new csDiagramCommand(_T("Edit properties"), (csDiagramDocument*) view->GetDocument(),
                 new csCommandState(ID_CS_EDIT_PROPERTIES, newShape, shape)));
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -711,7 +711,7 @@ bool csDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
   wxDiagram::OnShapeSave(db, shape, expr);
   csEvtHandler *handler = (csEvtHandler *)shape.GetEventHandler();
   expr.AddAttributeValueString(_T("label"), handler->m_label);
-  return TRUE;
+  return true;
 }
 
 bool csDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
@@ -722,7 +722,7 @@ bool csDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
   csEvtHandler *handler = new csEvtHandler(&shape, &shape, label);
   shape.SetEventHandler(handler);
   
-  return TRUE;
+  return true;
 }
 
 IMPLEMENT_DYNAMIC_CLASS(csThinRectangleShape, wxDrawnShape)
@@ -741,7 +741,7 @@ csThinRectangleShape::csThinRectangleShape()
 
     SetAttachmentMode(ATTACHMENT_MODE_BRANCHING);
     SetBranchStyle(BRANCHING_ATTACHMENT_NORMAL|BRANCHING_ATTACHMENT_BLOB);
-    SetCentreResize(FALSE);
+    SetCentreResize(false);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(csWideRectangleShape, wxDrawnShape)
@@ -760,7 +760,7 @@ csWideRectangleShape::csWideRectangleShape()
 
     SetAttachmentMode(ATTACHMENT_MODE_BRANCHING);
     SetBranchStyle(BRANCHING_ATTACHMENT_NORMAL|BRANCHING_ATTACHMENT_BLOB);
-    SetCentreResize(FALSE);
+    SetCentreResize(false);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(csTriangleShape, wxDrawnShape)
@@ -814,7 +814,7 @@ csTriangleShape::csTriangleShape()
 
     SetAttachmentMode(ATTACHMENT_MODE_BRANCHING);
     SetBranchStyle(BRANCHING_ATTACHMENT_NORMAL|BRANCHING_ATTACHMENT_BLOB);
-    SetCentreResize(FALSE);
+    SetCentreResize(false);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(csSemiCircleShape, wxDrawnShape)
@@ -911,7 +911,7 @@ csSemiCircleShape::csSemiCircleShape()
 
     SetAttachmentMode(ATTACHMENT_MODE_BRANCHING);
     SetBranchStyle(BRANCHING_ATTACHMENT_NORMAL|BRANCHING_ATTACHMENT_BLOB);
-    SetCentreResize(FALSE);
+    SetCentreResize(false);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(csCircleShape, wxCircleShape)
@@ -926,7 +926,7 @@ csCircleShape::csCircleShape()
 
     SetAttachmentMode(ATTACHMENT_MODE_BRANCHING);
     SetBranchStyle(BRANCHING_ATTACHMENT_NORMAL|BRANCHING_ATTACHMENT_BLOB);
-    SetCentreResize(FALSE);
+    SetCentreResize(false);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(csCircleShadowShape, wxCircleShape)
@@ -941,7 +941,7 @@ csCircleShadowShape::csCircleShadowShape()
 
     SetAttachmentMode(ATTACHMENT_MODE_BRANCHING);
     SetBranchStyle(BRANCHING_ATTACHMENT_NORMAL|BRANCHING_ATTACHMENT_BLOB);
-    SetCentreResize(FALSE);
+    SetCentreResize(false);
     SetShadowMode(SHADOW_RIGHT);
 }
 
@@ -971,7 +971,7 @@ csOctagonShape::csOctagonShape()
 
     SetAttachmentMode(ATTACHMENT_MODE_BRANCHING);
     SetBranchStyle(BRANCHING_ATTACHMENT_NORMAL|BRANCHING_ATTACHMENT_BLOB);
-    SetCentreResize(FALSE);
+    SetCentreResize(false);
 }
 
 // This is a transparent shape for drawing around other shapes.
@@ -983,7 +983,7 @@ csGroupShape::csGroupShape()
     SetBrush(wxTRANSPARENT_BRUSH);
 
     SetSize(csSTANDARD_SHAPE_WIDTH, csSTANDARD_SHAPE_WIDTH);
-    SetCentreResize(FALSE);
+    SetCentreResize(false);
 }
 
 void csGroupShape::OnDraw(wxDC& dc)
@@ -1013,20 +1013,20 @@ bool csGroupShape::HitTest(double x, double y, int* attachment, double* distance
     if (x >= x1 && x <= x2)
     {
         if ((y >= y1 - edgeTolerance) && (y <= y1 + edgeTolerance))
-            return TRUE;
+            return true;
         if ((y <= y2 + edgeTolerance) && (y >= y2 - edgeTolerance))
-            return TRUE;
+            return true;
     }
     // Left/right edges
     if (y >= y1 && y <= y2)
     {
         if ((x >= x1 - edgeTolerance) && (x <= x1 + edgeTolerance))
-            return TRUE;
+            return true;
         if ((x <= x2 + edgeTolerance) && (x >= x2 - edgeTolerance))
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 IMPLEMENT_DYNAMIC_CLASS(csTextBoxShape, wxRectangleShape)
@@ -1040,7 +1040,7 @@ csTextBoxShape::csTextBoxShape()
 
     SetAttachmentMode(ATTACHMENT_MODE_NONE);
     SetBranchStyle(BRANCHING_ATTACHMENT_NORMAL|BRANCHING_ATTACHMENT_BLOB);
-    SetCentreResize(FALSE);
+    SetCentreResize(false);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(csLineShape, wxLineShape)
@@ -1066,7 +1066,7 @@ bool csLineShape::OnMoveMiddleControlPoint(wxDC& WXUNUSED(dc), wxLineControlPoin
     view->GetDocument()->GetCommandProcessor()->Submit(new csDiagramCommand(_T("Move line point"), (csDiagramDocument*) view->GetDocument(),
                 new csCommandState(ID_CS_MOVE_LINE_POINT, newShape, this)));
 
-    return TRUE;
+    return true;
 }
 
 wxLabelShape* csLineShape::OnCreateLabelShape(wxLineShape *parent, wxShapeRegion *region, double w, double h)
@@ -1085,7 +1085,7 @@ bool csLineShape::OnLabelMovePre(wxDC& dc, wxLabelShape* labelShape, double x, d
 
     view->GetDocument()->GetCommandProcessor()->Submit(new csDiagramCommand("Move label", (csDiagramDocument*) view->GetDocument(),
                 new csCommandState(ID_CS_MOVE_LABEL, newShape, this)));
-  return TRUE;
+  return true;
 }
 #endif
 

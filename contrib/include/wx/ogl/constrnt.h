@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _OGL_CONSTRNT_H_
@@ -69,7 +69,7 @@ class WXDLLIMPEXP_OGL wxOGLConstraint: public wxObject
   wxOGLConstraint(int type, wxShape *constraining, wxList& constrained);
   ~wxOGLConstraint();
 
-  // Returns TRUE if anything changed
+  // Returns true if anything changed
   bool Evaluate();
   inline void SetSpacing(double x, double y) { m_xSpacing = x; m_ySpacing = y; };
   bool Equals(double a, double b);

@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _OGL_BASICP_H_
@@ -73,7 +73,7 @@ public:
   double         m_yoffset;
   wxShape*      m_shape;
   wxCursor*     m_oldCursor;
-  bool          m_eraseObject; // If TRUE, erases object before dragging handle.
+  bool          m_eraseObject; // If true, erases object before dragging handle.
 
 /*
  * Store original top-left, bottom-right coordinates

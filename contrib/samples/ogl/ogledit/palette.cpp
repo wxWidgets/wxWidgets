@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -49,7 +49,7 @@
 
 EditorToolPalette::EditorToolPalette(wxWindow* parent, const wxPoint& pos, const wxSize& size,
             long style):
-  TOOLPALETTECLASS(parent, -1, pos, size, style)
+  TOOLPALETTECLASS(parent, wxID_ANY, pos, size, style)
 {
     currentlySelected = -1;
 }
@@ -58,7 +58,7 @@ bool EditorToolPalette::OnLeftClick(int toolIndex, bool toggled)
 {
   // BEGIN mutual exclusivity code
   if (toggled && (currentlySelected != -1) && (toolIndex != currentlySelected))
-    ToggleTool(currentlySelected, FALSE);
+    ToggleTool(currentlySelected, false);
 
   if (toggled)
     currentlySelected = toolIndex;
@@ -66,7 +66,7 @@ bool EditorToolPalette::OnLeftClick(int toolIndex, bool toggled)
     currentlySelected = -1;
   //  END mutual exclusivity code
 
-  return TRUE;
+  return true;
 }
 
 void EditorToolPalette::OnMouseEnter(int WXUNUSED(toolIndex))
@@ -96,21 +96,21 @@ EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
   wxBitmap PaletteArrow(arrow_xpm);
 #endif
 
-  EditorToolPalette *palette = new EditorToolPalette(parent, wxPoint(0, 0), wxSize(-1, -1),
+  EditorToolPalette *palette = new EditorToolPalette(parent, wxPoint(0, 0), wxDefaultSize,
       wxTB_VERTICAL);
 
   palette->SetMargins(2, 2);
   palette->SetToolBitmapSize(wxSize(22, 22));
 
-  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, TRUE, 0, -1, NULL, _T("Pointer"));
-  palette->AddTool(PALETTE_TOOL1, PaletteTool1, wxNullBitmap, TRUE, 0, -1, NULL, _T("Tool 1"));
-  palette->AddTool(PALETTE_TOOL2, PaletteTool2, wxNullBitmap, TRUE, 0, -1, NULL, _T("Tool 2"));
-  palette->AddTool(PALETTE_TOOL3, PaletteTool3, wxNullBitmap, TRUE, 0, -1, NULL, _T("Tool 3"));
-  palette->AddTool(PALETTE_TOOL4, PaletteTool4, wxNullBitmap, TRUE, 0, -1, NULL, _T("Tool 4"));
+  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Pointer"));
+  palette->AddTool(PALETTE_TOOL1, PaletteTool1, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Tool 1"));
+  palette->AddTool(PALETTE_TOOL2, PaletteTool2, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Tool 2"));
+  palette->AddTool(PALETTE_TOOL3, PaletteTool3, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Tool 3"));
+  palette->AddTool(PALETTE_TOOL4, PaletteTool4, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Tool 4"));
 
   palette->Realize();
 
-  palette->ToggleTool(PALETTE_ARROW, TRUE);
+  palette->ToggleTool(PALETTE_ARROW, true);
   palette->currentlySelected = PALETTE_ARROW;
   return palette;
 }

@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -45,8 +45,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxDiagram, wxObject)
 wxDiagram::wxDiagram()
 {
   m_diagramCanvas = NULL;
-  m_quickEditMode = FALSE;
-  m_snapToGrid = TRUE;
+  m_quickEditMode = false;
+  m_snapToGrid = true;
   m_gridSpacing = 5.0;
   m_shapeList = new wxList;
   m_mouseTolerance = DEFAULT_MOUSE_TOLERANCE;
@@ -250,7 +250,7 @@ bool wxDiagram::SaveFile(const wxString& filename)
   {
     wxEndBusyCursor();
     delete database;
-    return FALSE;
+    return false;
   }
 
   database->Write(file);
@@ -285,7 +285,7 @@ bool wxDiagram::SaveFile(const wxString& filename)
   }
 
   wxEndBusyCursor();
-  return TRUE;
+  return true;
 }
 
 bool wxDiagram::LoadFile(const wxString& filename)
@@ -296,7 +296,7 @@ bool wxDiagram::LoadFile(const wxString& filename)
   if (!database.Read(filename))
   {
     wxEndBusyCursor();
-    return FALSE;
+    return false;
   }
 
   DeleteAllShapes();
@@ -326,7 +326,7 @@ bool wxDiagram::LoadFile(const wxString& filename)
 
   wxEndBusyCursor();
 
-  return TRUE;
+  return true;
 }
 
 void wxDiagram::ReadNodes(wxExprDatabase& database)
@@ -348,7 +348,7 @@ void wxDiagram::ReadNodes(wxExprDatabase& database)
       OnShapeLoad(database, *shape, *clause);
 
       shape->SetCanvas(GetCanvas());
-      shape->Show(TRUE);
+      shape->Show(true);
 
       m_shapeList->Append(shape);
 
@@ -389,7 +389,7 @@ void wxDiagram::ReadLines(wxExprDatabase& database)
     if (classInfo)
     {
       wxLineShape *shape = (wxLineShape *)classInfo->CreateObject();
-      shape->Show(TRUE);
+      shape->Show(true);
 
       OnShapeLoad(database, *shape, *clause);
       shape->SetCanvas(GetCanvas());
@@ -519,12 +519,12 @@ void wxDiagram::ReadContainerGeometry(wxExprDatabase& database)
 // Allow for modifying file
 bool wxDiagram::OnDatabaseLoad(wxExprDatabase& WXUNUSED(db))
 {
-  return TRUE;
+  return true;
 }
 
 bool wxDiagram::OnDatabaseSave(wxExprDatabase& WXUNUSED(db))
 {
-  return TRUE;
+  return true;
 }
 
 bool wxDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
@@ -544,23 +544,23 @@ bool wxDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 bool wxDiagram::OnShapeLoad(wxExprDatabase& WXUNUSED(db), wxShape& shape, wxExpr& expr)
 {
   shape.ReadAttributes(&expr);
-  return TRUE;
+  return true;
 }
 
 bool wxDiagram::OnHeaderSave(wxExprDatabase& WXUNUSED(db), wxExpr& WXUNUSED(expr))
 {
-  return TRUE;
+  return true;
 }
 
 bool wxDiagram::OnHeaderLoad(wxExprDatabase& WXUNUSED(db), wxExpr& WXUNUSED(expr))
 {
-  return TRUE;
+  return true;
 }
 
 #endif

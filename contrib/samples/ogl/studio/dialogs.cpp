@@ -90,7 +90,7 @@ END_EVENT_TABLE()
 // For 400x400 settings dialog, size your panels to about 375x325 in dialog editor
 
 csSettingsDialog::csSettingsDialog(wxWindow* parent):
-    wxDialog(parent, -1, _T("Settings"), wxPoint(0, 0), wxSize(PROPERTY_DIALOG_WIDTH, PROPERTY_DIALOG_HEIGHT))
+    wxDialog(parent, wxID_ANY, _T("Settings"), wxPoint(0, 0), wxSize(PROPERTY_DIALOG_WIDTH, PROPERTY_DIALOG_HEIGHT))
 {
     m_generalSettings = NULL;
     m_diagramSettings = NULL;
@@ -105,7 +105,7 @@ csSettingsDialog::csSettingsDialog(wxWindow* parent):
     #endif
                    wxLoadFromResource(m_generalSettings, m_notebook, _T("general_settings_dialog"));
     wxASSERT_MSG( (success), _T("Could not load general settings panel."));
-    m_notebook->AddPage(m_generalSettings, _T("General"), TRUE);
+    m_notebook->AddPage(m_generalSettings, _T("General"), true);
 
     m_diagramSettings = new wxPanel;
 
@@ -181,7 +181,7 @@ bool csSettingsDialog::TransferDataToWindow()
     str.Printf(_T("%d"), wxGetApp().GetGridSpacing());
     gridSpacing->SetValue(str);
 
-    return TRUE;
+    return true;
 }
 
 bool csSettingsDialog::TransferDataFromWindow()
@@ -201,7 +201,7 @@ bool csSettingsDialog::TransferDataFromWindow()
     if (wxGetApp().GetGridStyle() == csGRID_STYLE_DOTTED)
     {
         wxMessageBox(_T("Dotted grid style not yet implemented."), _T("Studio"), wxICON_EXCLAMATION);
-        return FALSE;
+        return false;
     }
 
     // Apply settings to all open diagram documents
@@ -219,12 +219,12 @@ bool csSettingsDialog::TransferDataFromWindow()
             {
                 case csGRID_STYLE_NONE:
                 {
-                    diagram->SetSnapToGrid(FALSE);
+                    diagram->SetSnapToGrid(false);
                     break;
                 }
                 case csGRID_STYLE_INVISIBLE:
                 {
-                    diagram->SetSnapToGrid(TRUE);
+                    diagram->SetSnapToGrid(true);
                     break;
                 }
                 case csGRID_STYLE_DOTTED:
@@ -237,7 +237,7 @@ bool csSettingsDialog::TransferDataFromWindow()
         node = node->GetNext();
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -258,7 +258,7 @@ END_EVENT_TABLE()
 
 csShapePropertiesDialog::csShapePropertiesDialog(wxWindow* parent, const wxString& title,
   wxPanel* attributeDialog, const wxString& attributeDialogName):
-    wxDialog(parent, -1, title, wxPoint(0, 0), wxSize(SHAPE_PROPERTY_DIALOG_WIDTH, SHAPE_PROPERTY_DIALOG_HEIGHT))
+    wxDialog(parent, wxID_ANY, title, wxPoint(0, 0), wxSize(SHAPE_PROPERTY_DIALOG_WIDTH, SHAPE_PROPERTY_DIALOG_HEIGHT))
 {
     m_attributeDialog = attributeDialog;
     m_alternativeAttributeDialog = NULL;

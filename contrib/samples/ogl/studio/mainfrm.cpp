@@ -52,8 +52,7 @@ BEGIN_EVENT_TABLE(csFrame, wxDocMDIParentFrame)
 END_EVENT_TABLE()
 
 // Define my frame constructor
-csFrame::csFrame(wxDocManager* manager, wxFrame *parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size,
-	long style):
+csFrame::csFrame(wxDocManager* manager, wxFrame *parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style):
   wxDocMDIParentFrame(manager, parent, id, title, pos, size, style, _T("frame"))
 {
     CreateToolBar(wxNO_BORDER|wxTB_FLAT|wxTB_HORIZONTAL);
@@ -73,7 +72,10 @@ csFrame::csFrame(wxDocManager* manager, wxFrame *parent, wxWindowID id, const wx
 
 void csFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
-    wxGetApp().GetHelpController().DisplayContents();
+    wxHelpControllerBase* help;
+    help = wxGetApp().GetHelpController();
+    if (help)
+        help->DisplayContents();
 }
 
 void csFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
@@ -85,7 +87,7 @@ void csFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
 
 void csFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-      Close(TRUE);
+      Close(true);
 }
 
 void csFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -155,24 +157,24 @@ void csFrame::OnIdle(wxIdleEvent& event)
     wxSashLayoutWindow* diagramToolBarWin = wxGetApp().GetDiagramToolBarSashWindow();
     if (!paletteWin || !diagramToolBarWin)
         return;
-    bool doLayout = FALSE;
+    bool doLayout = false;
     if (GetActiveChild())
     {
         if (!paletteWin->IsShown() || !diagramToolBarWin->IsShown())
         {
-            paletteWin->Show(TRUE);
-            diagramToolBarWin->Show(TRUE);
+            paletteWin->Show(true);
+            diagramToolBarWin->Show(true);
 
-            doLayout = TRUE;
+            doLayout = true;
         }
     }
     else
     {
         if (paletteWin->IsShown() || diagramToolBarWin->IsShown())
         {
-            paletteWin->Show(FALSE);
-            diagramToolBarWin->Show(FALSE);
-            doLayout = TRUE;
+            paletteWin->Show(false);
+            diagramToolBarWin->Show(false);
+            doLayout = true;
         }
     }
     if (doLayout)
@@ -206,7 +208,7 @@ void csFrame::OnIdle(wxIdleEvent& event)
 // General handler for disabling items
 void csFrame::OnUpdateDisable(wxUpdateUIEvent& event)
 {
-    event.Enable(FALSE);
+    event.Enable(false);
 }
 
 void csFrame::OnSaveUpdate(wxUpdateUIEvent& event)

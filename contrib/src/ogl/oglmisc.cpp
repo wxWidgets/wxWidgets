@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -384,7 +384,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
   // Make new lines into NULL strings at this point
   int i = 0; int j = 0; int len = text.Length();
   wxChar word[200]; word[0] = 0;
-  bool end_word = FALSE; bool new_line = FALSE;
+  bool end_word = false; bool new_line = false;
   while (i < len)
   {
     switch (text[i])
@@ -397,7 +397,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
         else
         {
           if (text[i] == wxT('n'))
-          { new_line = TRUE; end_word = TRUE; i++; }
+          { new_line = true; end_word = true; i++; }
           else
           { word[j] = wxT('%'); j ++; word[j] = text[i]; j ++; i ++; }
         }
@@ -405,17 +405,17 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
       }
       case 10:
       {
-        new_line = TRUE; end_word = TRUE; i++;
+        new_line = true; end_word = true; i++;
         break;
       }
       case 13:
       {
-        new_line = TRUE; end_word = TRUE; i++;
+        new_line = true; end_word = true; i++;
         break;
       }
       case wxT(' '):
       {
-        end_word = TRUE;
+        end_word = true;
         i ++;
         break;
       }
@@ -426,18 +426,18 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
         break;
       }
     }
-    if (i == len) end_word = TRUE;
+    if (i == len) end_word = true;
     if (end_word)
     {
       word[j] = 0;
       j = 0;
       word_list.Add(word);
-      end_word = FALSE;
+      end_word = false;
     }
     if (new_line)
     {
       word_list.Append(NULL);
-      new_line = FALSE;
+      new_line = false;
     }
   }
   // Now, make a list of strings which can fit in the box

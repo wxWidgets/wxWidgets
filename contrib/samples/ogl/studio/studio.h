@@ -14,6 +14,13 @@
 
 #include <wx/docmdi.h>
 #include <wx/help.h>
+#include <wx/cshelp.h>
+#include <wx/helphtml.h>
+#ifdef __WXMSW__
+    #include <wx/msw/helpchm.h>
+#else
+    #include <wx/html/helpctrl.h>
+#endif
 
 #include <wx/ogl/ogl.h>
 #include <wx/ogl/canvas.h>
@@ -81,7 +88,7 @@ public:
     wxMenu* GetShapeEditMenu() const { return m_shapeEditMenu; }
     wxDiagramClipboard& GetDiagramClipboard() const { return (wxDiagramClipboard&) m_diagramClipboard; }
     wxDocManager* GetDocManager() const { return m_docManager; }
-    wxHelpController& GetHelpController() const { return (wxHelpController&) m_helpController; }
+    wxHelpControllerBase* GetHelpController() const { return m_helpController; }
 
     int GetGridStyle() const { return m_gridStyle; }
     void SetGridStyle(int style) { m_gridStyle = style; }
@@ -112,7 +119,7 @@ protected:
     csDiagramClipboard      m_diagramClipboard;
 
     // Help instance
-    wxHelpController        m_helpController;
+    wxHelpControllerBase*   m_helpController;
 };
 
 DECLARE_APP(csApp)

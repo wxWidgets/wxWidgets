@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -45,14 +45,14 @@ bool wxDiagramClipboard::Copy(wxDiagram* diagram)
 {
     DeleteAllShapes();
 
-    return DoCopy(diagram, this, FALSE, NULL);
+    return DoCopy(diagram, this, false, NULL);
 }
 
 // Copy contents to the diagram, with new ids.
 
 bool wxDiagramClipboard::Paste(wxDiagram* diagram, wxDC* dc, int offsetX, int offsetY)
 {
-    return DoCopy(this, diagram, TRUE, dc, offsetX, offsetY);
+    return DoCopy(this, diagram, true, dc, offsetX, offsetY);
 }
 
 // Universal copy function (to or from clipboard).
@@ -161,7 +161,7 @@ bool wxDiagramClipboard::DoCopy(wxDiagram* diagramFrom, wxDiagram* diagramTo, bo
 
     OnEndCopy(diagramTo);
 
-    return TRUE;
+    return true;
 }
 
 #ifdef __WXMSW__
@@ -194,7 +194,7 @@ bool wxDiagramClipboard::CopyToClipboard(double scale)
       wxChar buf[200];
       wxSprintf(buf, _T("Sorry, could not allocate clipboard bitmap (%dx%d)"), (maxX+10), (maxY+10));
       wxMessageBox(buf, _T("Clipboard copy problem"));
-      return FALSE;
+      return false;
     }
 
     wxMemoryDC memDC;
@@ -248,10 +248,10 @@ bool wxDiagramClipboard::OnAddShape(wxDiagram* diagramTo, wxShape* newShape, wxD
 
     if (dc && (diagramTo != this))
     {
-        newShape->Select(TRUE, dc);
+        newShape->Select(true, dc);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -265,24 +265,24 @@ bool csDiagramClipboard::OnStartCopy(wxDiagram* diagramTo)
 {
     // Do nothing if copying to the clipboard
     if (diagramTo == this)
-        return TRUE;
+        return true;
 
     // Deselect all objects initially.
 
     csDiagram* diagram = (csDiagram*) diagramTo;
     csDiagramDocument* doc = diagram->GetDocument();
-    ((csDiagramView*)doc->GetFirstView())->SelectAll(FALSE);
+    ((csDiagramView*)doc->GetFirstView())->SelectAll(false);
 
     m_currentCmd = new csDiagramCommand(_T("Paste"), doc);
 
-    return TRUE;
+    return true;
 }
 
 bool csDiagramClipboard::OnEndCopy(wxDiagram* diagramTo)
 {
     // Do nothing if copying to the clipboard
     if (diagramTo == this)
-        return TRUE;
+        return true;
 
     csDiagram* diagram = (csDiagram*) diagramTo;
     csDiagramDocument* doc = diagram->GetDocument();
@@ -299,7 +299,7 @@ bool csDiagramClipboard::OnEndCopy(wxDiagram* diagramTo)
             m_currentCmd = NULL;
         }
     }
-    return TRUE;
+    return true;
 }
 
 // Use the command framework to add the shapes, if we're copying to a diagram and
@@ -321,7 +321,7 @@ bool csDiagramClipboard::OnAddShape(wxDiagram* diagramTo, wxShape* newShape, wxD
             m_currentCmd->AddState(new csCommandState(ID_CS_ADD_SHAPE_SELECT, newShape, NULL));
     }
 
-    return TRUE;
+    return true;
 }
 
 

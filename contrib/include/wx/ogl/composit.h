@@ -6,7 +6,7 @@
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _OGL_COMPOSIT_H_
@@ -36,16 +36,16 @@ public:
   void OnDraw(wxDC& dc);
   void OnDrawContents(wxDC& dc);
   void OnErase(wxDC& dc);
-  bool OnMovePre(wxDC& dc, double x, double y, double oldX, double oldY, bool display = TRUE);
+  bool OnMovePre(wxDC& dc, double x, double y, double oldX, double oldY, bool display = true);
   void OnDragLeft(bool draw, double x, double y, int keys, int attachment = 0);
   void OnBeginDragLeft(double x, double y, int keys, int attachment = 0);
   void OnEndDragLeft(double x, double y, int keys, int attachment = 0);
 
   void OnRightClick(double x, double y, int keys, int attachment = 0);
 
-  void SetSize(double w, double h, bool recursive = TRUE);
+  void SetSize(double w, double h, bool recursive = true);
 
-  // Returns TRUE if it settled down
+  // Returns true if it settled down
   bool Recompute();
 
   // New members
@@ -69,7 +69,7 @@ public:
   // in case it had to find it recursively.
   wxOGLConstraint *FindConstraint(long id, wxCompositeShape **actualComposite = NULL);
 
-  // Returns TRUE if something changed
+  // Returns true if something changed
   bool Constrain();
 
   // Make this composite into a container by creating one wxDivisionShape
@@ -93,7 +93,7 @@ public:
   // of the composite that is not in the divisions list.
   wxShape *FindContainerImage();
 
-  // Returns TRUE if division is a descendant of this container
+  // Returns true if division is a descendant of this container
   bool ContainsDivision(wxDivisionShape *division);
 
   inline wxList& GetDivisions() const { return (wxList&) m_divisions; }
@@ -133,7 +133,7 @@ class WXDLLIMPEXP_OGL wxDivisionShape: public wxCompositeShape
 
   void OnDraw(wxDC& dc);
   void OnDrawContents(wxDC& dc);
-  bool OnMovePre(wxDC& dc, double x, double y, double oldX, double oldY, bool display = TRUE);
+  bool OnMovePre(wxDC& dc, double x, double y, double oldX, double oldY, bool display = true);
   void OnDragLeft(bool draw, double x, double y, int keys, int attachment = 0);
   void OnBeginDragLeft(double x, double y, int keys, int attachment = 0);
   void OnEndDragLeft(double x, double y, int keys, int attachment = 0);
@@ -142,7 +142,7 @@ class WXDLLIMPEXP_OGL wxDivisionShape: public wxCompositeShape
 
   // Don't want this kind of composite to resize its subdiagrams, so
   // override composite's SetSize.
-  void SetSize(double w, double h, bool recursive = TRUE);
+  void SetSize(double w, double h, bool recursive = true);
 
   // Similarly for calculating size: it's fixed at whatever SetSize
   // set it to, not in terms of children.
@@ -163,12 +163,12 @@ class WXDLLIMPEXP_OGL wxDivisionShape: public wxCompositeShape
   // Divide horizontally (wxHORIZONTAL) or vertically (wxVERTICAL)
   bool Divide(int direction);
 
-  // Resize adjoining divisions at the given side. If test is TRUE,
+  // Resize adjoining divisions at the given side. If test is true,
   // just see whether it's possible for each adjoining region,
-  // returning FALSE if it's not.
+  // returning false if it's not.
   bool ResizeAdjoining(int side, double newPos, bool test);
 
-  // Adjust a side, returning FALSE if it's not physically possible.
+  // Adjust a side, returning false if it's not physically possible.
   bool AdjustLeft(double left, bool test);
   bool AdjustTop(double top, bool test);
   bool AdjustRight(double right, bool test);
