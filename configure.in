@@ -328,7 +328,6 @@ case "${host}" in
     SO_SUFFIX=dylib
     AC_DEFINE(__BSD__)
     AC_DEFINE(__DARWIN__)
-    AC_DEFINE(__POWERPC__)
     AC_DEFINE(TARGET_CARBON)
     DEFAULT_DEFAULT_wxUSE_MAC=1
   ;;
@@ -1495,6 +1494,39 @@ dnl ------------------------------------------------------------------------
 dnl Platform specific tests
 dnl ------------------------------------------------------------------------
 
+dnl This case is for OS X vs. everything else
+case "${host}" in
+  powerpc-*-darwin* )
+    AC_MSG_CHECKING([if __POWERPC__ is already defined])
+    AC_TRY_COMPILE([],[#ifndef __POWERPC__
+        choke me for lack of PowerPC
+#endif
+],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_RESULT([no])
+        AC_DEFINE(__POWERPC__)
+    ])
+    AC_MSG_CHECKING([if CoreFoundation/CFBase.h is usable])
+    AC_TRY_COMPILE([#include <CoreFoundation/CFBase.h>
+],[],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_RESULT([no])
+        AC_MSG_CHECKING([if __CF_USE_FRAMEWORK_INCLUDES__ is required])
+        AC_TRY_COMPILE([#define __CF_USE_FRAMEWORK_INCLUDES__
+#include <CoreFoundation/CFBase.h>
+        ],[],
+        [AC_MSG_RESULT([yes])
+        dnl We must use -D so source files that don't include wx/setup.h
+        dnl but do include CFBase will work.
+        CPPFLAGS="$CPPFLAGS -D__CF_USE_FRAMEWORK_INCLUDES__"],
+        [AC_MSG_FAILURE([no.  CoreFoundation not available.])]
+        )
+        ]
+    )
+  ;;
+esac
+
+dnl This case is for OS/2 vs. everything else
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
       dnl ---------------------------------------------------------------------
