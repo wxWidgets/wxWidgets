@@ -43,14 +43,30 @@
         <dir cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL']">../../samples</dir>
     </subproject>
     
-    <!-- WXRC compiler is built by default: -->
-    <subproject id="wxrc" cond="FORMAT=='autoconf' and USE_XRC=='1'">
-        <dependency-of>all</dependency-of>
-        <installable>yes</installable>
-        <dir>utils/wxrc</dir>
-    </subproject>
-
-    <if cond="FORMAT=='autoconf'">       
+    <if cond="FORMAT=='autoconf'">
+    
+        <!-- WXRC compiler is built by default: -->
+        <!-- FIXME: this is dirty hack, better bakefile support for
+             conditional and optional subprojects is needed -->
+        <action id="wxrc" cond="USE_XRC=='1'">
+            <dependency-of>all</dependency-of>
+            <command>
+                (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) all) || true
+            </command>
+        </action>
+        <action id="clean-wxrc" cond="USE_XRC=='1'">
+            <dependency-of>clean</dependency-of>
+            <command>
+                (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) clean) || true
+            </command>
+        </action>
+        <action id="install-wxrc" cond="USE_XRC=='1'">
+            <dependency-of>install</dependency-of>
+            <command>
+                (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) install) || true
+            </command>
+        </action>
+    
         <!-- "make install": -->
 
         <data-files>

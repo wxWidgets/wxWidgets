@@ -6476,6 +6476,8 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_WITH_PLUGIN_SDL_1@__sound_sdl___depname = $(COND_WITH_PLUGIN_SDL_1___sound_sdl___depname)
 @COND_WITH_PLUGIN_SDL_1@__install_sound_sdl___depname = install_sound_sdl
 @COND_USE_XRC_1@__wxrc___depname = wxrc
+@COND_USE_XRC_1@__clean_wxrc___depname = clean-wxrc
+@COND_USE_XRC_1@__install_wxrc___depname = install-wxrc
 @COND_USE_GUI_1@__install_afm___depname = install-afm
 @COND_USE_GUI_1@__install_gsafm___depname = install-gsafm
 @COND_TOOLKIT_MAC@__macos_res___depname = lib/libwx_$(TOOLCHAIN_NAME).3.r
@@ -7406,8 +7408,7 @@ COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p = \
 
 all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__gldll___depname) $(__gllib___depname) $(__sound_sdl___depname) $(__wxrc___depname) $(__macos_res___depname) $(__cocoa_res___depname)
 
-install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_dbgriddll___depname) $(__install_dbgridlib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_xrcdll___depname) $(__install_xrclib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_sound_sdl___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig locale_install $(__macos_res_install___depname) $(__cocoa_res_install___depname)
-	(cd utils/wxrc && $(MAKE) install)
+install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_dbgriddll___depname) $(__install_dbgridlib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_xrcdll___depname) $(__install_xrclib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_sound_sdl___depname) $(__install_wxrc___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig locale_install $(__macos_res_install___depname) $(__cocoa_res_install___depname)
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/aclocal
 	(cd $(srcdir) ; $(INSTALL_DATA)  wxwin.m4 $(DESTDIR)$(datadir)/aclocal)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/include/$(TOOLCHAIN_FULLNAME)/wx
@@ -7450,9 +7451,8 @@ install-strip: install
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(PLUGINS_INST_DIR)/$(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
-	(cd utils/wxrc && $(MAKE) install-strip)
 
-clean: 
+clean: $(__clean_wxrc___depname)
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
@@ -7508,7 +7508,6 @@ clean:
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 	rm -f $(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 	(cd samples && $(MAKE) clean)
-	(cd utils/wxrc && $(MAKE) clean)
 	rm -f lib/libwx_$(TOOLCHAIN_NAME).3.rsrc lib/libwx_$(TOOLCHAIN_NAME).3.r
 	rm -f lib/libwx_$(TOOLCHAIN_NAME).3.rsrc lib/libwx_$(TOOLCHAIN_NAME).3.r
 
@@ -7875,7 +7874,13 @@ samples:
 	(cd samples && $(MAKE) all)
 
 @COND_USE_XRC_1@wxrc: 
-@COND_USE_XRC_1@	(cd utils/wxrc && $(MAKE) all)
+@COND_USE_XRC_1@	(test -d utils/wxrc && cd utils/wxrc && $(MAKE) all) || true
+
+@COND_USE_XRC_1@clean-wxrc: 
+@COND_USE_XRC_1@	(test -d utils/wxrc && cd utils/wxrc && $(MAKE) clean) || true
+
+@COND_USE_XRC_1@install-wxrc: 
+@COND_USE_XRC_1@	(test -d utils/wxrc && cd utils/wxrc && $(MAKE) install) || true
 
 @COND_USE_GUI_1@install-afm: 
 @COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/$(WX_RELEASE)/afm
@@ -22219,4 +22224,4 @@ rpm: bzip-dist
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean install_wxregex install_wxzlib install_wxpng install_wxjpeg install_wxtiff install_wxodbc install_wxexpat install_monodll install_monolib install_basedll install_baselib install_netdll install_netlib install_coredll install_corelib install_advdll install_advlib install_odbcdll install_odbclib install_dbgriddll install_dbgridlib install_htmldll install_htmllib install_xmldll install_xmllib install_xrcdll install_xrclib install_gldll install_gllib install_sound_sdl samples wxrc
+.PHONY: all install uninstall clean distclean install_wxregex install_wxzlib install_wxpng install_wxjpeg install_wxtiff install_wxodbc install_wxexpat install_monodll install_monolib install_basedll install_baselib install_netdll install_netlib install_coredll install_corelib install_advdll install_advlib install_odbcdll install_odbclib install_dbgriddll install_dbgridlib install_htmldll install_htmllib install_xmldll install_xmllib install_xrcdll install_xrclib install_gldll install_gllib install_sound_sdl samples
