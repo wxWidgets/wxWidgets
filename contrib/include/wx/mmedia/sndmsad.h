@@ -17,7 +17,7 @@
 #include "wx/mmedia/sndcodec.h"
 #include "wx/mmedia/sndbase.h"
 
-WX_DEFINE_EXPORTED_ARRAY(wxInt16, wxMSAdpcmCoeffs);
+WX_DEFINE_EXPORTED_ARRAY_INT(wxInt16, wxMSAdpcmCoeffs);
 
 //
 // MSADPCM format
