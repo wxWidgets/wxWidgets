@@ -186,7 +186,8 @@ methodOverrideMap = {
      '''void %s(int markerNumber, const wxBitmap& bmp) {
         // convert bmp to a xpm in a string
         wxMemoryOutputStream strm;
-        wxImage(bmp).SaveFile(strm, wxBITMAP_TYPE_XPM);
+        wxImage img = bmp.ConvertToImage();
+        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
         size_t len = strm.GetSize();
         char* buff = new char[len+1];
         strm.CopyTo(buff, len);
@@ -279,7 +280,8 @@ methodOverrideMap = {
      '''void %s(int type, const wxBitmap& bmp) {
         // convert bmp to a xpm in a string
         wxMemoryOutputStream strm;
-        wxImage(bmp).SaveFile(strm, wxBITMAP_TYPE_XPM);
+        wxImage img = bmp.ConvertToImage();
+        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
         size_t len = strm.GetSize();
         char* buff = new char[len+1];
         strm.CopyTo(buff, len);

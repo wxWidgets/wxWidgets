@@ -20,8 +20,10 @@
 #include "wx/stc/stc.h"
 #include "ScintillaWX.h"
 
+#include <wx/wx.h>
 #include <wx/tokenzr.h>
 #include <wx/mstream.h>
+#include <wx/image.h>
 
 
 //----------------------------------------------------------------------
@@ -460,7 +462,8 @@ int wxStyledTextCtrl::MarkerPrevious(int lineStart, int markerMask) {
 void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
         // convert bmp to a xpm in a string
         wxMemoryOutputStream strm;
-        wxImage(bmp).SaveFile(strm, wxBITMAP_TYPE_XPM);
+        wxImage img = bmp.ConvertToImage();
+        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
         size_t len = strm.GetSize();
         char* buff = new char[len+1];
         strm.CopyTo(buff, len);
@@ -837,7 +840,8 @@ bool wxStyledTextCtrl::AutoCompGetDropRestOfWord() {
 void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         // convert bmp to a xpm in a string
         wxMemoryOutputStream strm;
-        wxImage(bmp).SaveFile(strm, wxBITMAP_TYPE_XPM);
+        wxImage img = bmp.ConvertToImage();
+        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
         size_t len = strm.GetSize();
         char* buff = new char[len+1];
         strm.CopyTo(buff, len);

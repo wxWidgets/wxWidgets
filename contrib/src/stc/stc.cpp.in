@@ -20,8 +20,10 @@
 #include "wx/stc/stc.h"
 #include "ScintillaWX.h"
 
+#include <wx/wx.h>
 #include <wx/tokenzr.h>
 #include <wx/mstream.h>
+#include <wx/image.h>
 
 
 //----------------------------------------------------------------------
