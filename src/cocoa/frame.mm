@@ -91,21 +91,13 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return wxPoint(0,0);
 }
 
-void wxFrame::DoGetClientSize(int *width, int *height) const
+void wxFrame::CocoaSetWxWindowSize(int width, int height)
 {
-    wxFrameBase::DoGetClientSize(width,height);
-    if(height)
-    {
-        if(m_frameStatusBar && m_frameStatusBar->IsShown())
-            *height -= m_frameStatusBar->GetSize().y;
-    }
-}
-
-void wxFrame::DoSetClientSize(int width, int height)
-{
-    if(m_frameStatusBar && m_frameStatusBar->IsShown())
+    if(m_frameStatusBar)
         height += m_frameStatusBar->GetSize().y;
-    wxFrameBase::DoSetClientSize(width,height);
+    if(m_frameToolBar)
+        height += m_frameToolBar->GetSize().y;
+    wxTopLevelWindow::CocoaSetWxWindowSize(width,height);
 }
 
 void wxFrame::CocoaReplaceView(WX_NSView oldView, WX_NSView newView)

@@ -149,6 +149,10 @@ public:
     // Get/set client (application-useable) size
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int size);
+    // Set the size of the wxWindow (the contentView of an NSWindow)
+    // wxTopLevelWindow will override this and set the NSWindow size
+    // such that the contentView will be this size
+    virtual void CocoaSetWxWindowSize(int width, int height);
     // Set overall size and position
     virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
     virtual void DoMoveWindow(int x, int y, int width, int height);

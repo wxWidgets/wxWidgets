@@ -84,6 +84,7 @@ public:
     virtual bool Show( bool show = true );
     virtual bool Close( bool force = false );
     virtual void OnCloseWindow(wxCloseEvent& event);
+    virtual void CocoaSetWxWindowSize(int width, int height);
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetPosition(int *x, int *y) const;

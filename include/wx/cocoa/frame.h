@@ -53,6 +53,7 @@ protected:
 // ------------------------------------------------------------------------
 protected:
     virtual void Cocoa_wxMenuItemAction(wxMenuItem& item);
+    virtual void CocoaSetWxWindowSize(int width, int height);
 
     // Helper function to position status/tool bars
     void UpdateFrameNSView();
@@ -93,9 +94,6 @@ public:
     virtual void SetToolBar(wxToolBar *toolbar);
 protected:
     void PositionStatusBar();
-    // override base class virtuals
-    virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoSetClientSize(int width, int height);
 };
 
 #endif // _WX_COCOA_FRAME_H_

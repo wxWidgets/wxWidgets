@@ -221,6 +221,22 @@ bool wxTopLevelWindowCocoa::IsFullScreen() const
     return FALSE;
 }
 
+void wxTopLevelWindowCocoa::CocoaSetWxWindowSize(int width, int height)
+{
+    // Set the NSView size by setting the frame size to enclose it
+    unsigned int styleMask = [m_cocoaNSWindow styleMask];
+    NSRect frameRect = [m_cocoaNSWindow frame];
+    NSRect contentRect = [NSWindow
+        contentRectForFrameRect: frameRect
+        styleMask: styleMask];
+    contentRect.size.width = width;
+    contentRect.size.height = height;
+    frameRect = [NSWindow
+        frameRectForContentRect: contentRect
+        styleMask: styleMask];
+    [m_cocoaNSWindow setFrame: frameRect display: NO];
+}
+
 void wxTopLevelWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {
     wxLogDebug("wxTopLevelWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);

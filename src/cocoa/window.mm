@@ -600,7 +600,14 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
 void wxWindow::DoSetClientSize(int width, int height)
 {
     wxLogDebug("DoSetClientSize=(%d,%d)",width,height);
-    // TODO
+    if(m_cocoaScroller)
+        m_cocoaScroller->ClientSizeToSize(width,height);
+    CocoaSetWxWindowSize(width,height);
+}
+
+void wxWindow::CocoaSetWxWindowSize(int width, int height)
+{
+    wxWindowCocoa::DoSetSize(-1,-1,width,height,wxSIZE_USE_EXISTING);
 }
 
 int wxWindow::GetCharHeight() const
@@ -664,6 +671,7 @@ void wxWindow::CocoaCreateNSScrollView()
 void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
     int range, bool refresh)
 {
+    CocoaCreateNSScrollView();
     // TODO
 }
 
