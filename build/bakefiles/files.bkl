@@ -32,6 +32,7 @@
 <!-- ====================================================================== -->
 
 <set var="BASE_UNIX_SRC">
+    src/unix/baseunix.cpp
     src/unix/dialup.cpp
     src/unix/dir.cpp
     src/unix/gsocket.c
@@ -48,6 +49,7 @@
 <set var="BASE_WIN32_SRC">
     src/msw/gsocket.c
     src/msw/gsockmsw.c
+    src/msw/basemsw.cpp
     src/msw/dde.cpp
     src/msw/dir.cpp
     src/msw/main.cpp
@@ -78,6 +80,7 @@
 <set var="BASE_OS2_HDR">
 </set>
 <set var="BASE_CMN_SRC">
+    src/common/appbase.cpp
     src/common/appcmn.cpp
     src/common/clntdata.cpp
     src/common/cmdline.cpp
@@ -100,6 +103,7 @@
     src/common/filefn.cpp
     src/common/filename.cpp
     src/common/filesys.cpp
+    src/common/fmapbase.cpp
     src/common/fontmap.cpp
     src/common/fs_inet.cpp
     src/common/fs_mem.cpp
@@ -127,6 +131,7 @@
     src/common/sckipc.cpp
     src/common/sckstrm.cpp
     src/common/socket.cpp
+    src/common/stopwatch.cpp
     src/common/strconv.cpp
     src/common/stream.cpp
     src/common/string.cpp
@@ -830,6 +835,7 @@
     src/msw/timer.cpp
     src/msw/tooltip.cpp
     src/msw/toplevel.cpp
+    src/msw/utilsgui.cpp
     src/msw/wave.cpp
     src/msw/window.cpp
     src/msw/ole/automtn.cpp
