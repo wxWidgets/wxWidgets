@@ -282,6 +282,8 @@ class BuildConfig:
             self.LFLAGS = '-L$(WXPSRCDIR) `$(WXCONFIG) --libs`'
             self.LIBS   = '-l$(HELPERLIB)'
             self.RMCMD  = '-rm -f '
+            self.WXCONFIG = 'wx-config'
+
 
             # **** What to do when I start supporting Motif, etc.???
             self.GENCODEDIR = 'gtk'
@@ -322,12 +324,12 @@ class BuildConfig:
         # so we can do some sanity checking...
         if sys.platform != 'win32':
 	    if not self.CCC:
-                self.CCC = os.popen('$(WXCONFIG) --cxx', 'r').read()[:-1]
+                self.CCC = os.popen('%(WXCONFIG)s --cxx' % self.__dict__, 'r').read()[:-1]
                 if not self.CCC:
                     print "Warning: C++ compiler not specified (CCC). Assuming c++"
                     self.CCC = 'c++'
             if not self.CC:
-                self.CCC = os.popen('$(WXCONFIG) --cc', 'r').read()[:-1]
+                self.CCC = os.popen('%(WXCONFIG)s --cc' % self.__dict__, 'r').read()[:-1]
                 if not self.CC:
                     print "Warning: C compiler not specified (CC). Assuming cc"
                     self.CC = 'cc'
@@ -678,7 +680,7 @@ GENCODEDIR = %(GENCODEDIR)s
 WXPSRCDIR = %(WXPSRCDIR)s
 HELPERLIB = %(HELPERLIB)s
 HELPERLIBDIR = %(HELPERLIBDIR)s
-WXCONFIG=wx-config
+WXCONFIG=%(WXCONFIG)s
 TARGETDIR = %(TARGETDIR)s
 
 
