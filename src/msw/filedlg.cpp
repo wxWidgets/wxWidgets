@@ -53,9 +53,7 @@
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 
-#ifndef OFN_EXPLORER
-    #define OFN_EXPLORER 0x00080000
-#endif
+#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // constants

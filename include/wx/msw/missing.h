@@ -584,6 +584,14 @@ typedef struct {
     #define WC_NO_BEST_FIT_CHARS 0x400
 #endif
 
+#ifndef OFN_EXPLORER
+    #define OFN_EXPLORER 0x00080000
+#endif
+
+#ifndef OFN_ENABLESIZING
+    #define OFN_ENABLESIZING 0x00800000
+#endif
+
 // In addition, include stuff not defined in WinCE
 #ifdef __WXWINCE__
     #include "wx/msw/wince/missing.h"
