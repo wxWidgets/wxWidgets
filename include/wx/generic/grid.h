@@ -504,7 +504,7 @@ class WXDLLEXPORT wxGridCellChoiceEditor : public wxGridCellEditor
 public:
     // if !allowOthers, user can't type a string not in choices array
     wxGridCellChoiceEditor(size_t count = 0,
-                           const wxChar* choices[] = NULL,
+                           const wxString choices[] = NULL,
                            bool allowOthers = FALSE);
 
     virtual void Create(wxWindow* parent,

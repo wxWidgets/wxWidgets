@@ -855,7 +855,7 @@ enum Severity
     Sev_Max
 };
 
-static const wxChar* severities[] =
+static const wxString severities[] =
 {
     _T("wishlist"),
     _T("minor"),
