@@ -43,8 +43,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxChoiceNameStr);
     
-    void *GetClientData(int n) const { return wxItemContainer::GetClientData(n); }
-    
 private:
     void OnComboBox(wxCommandEvent &event);
     
