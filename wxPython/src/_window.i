@@ -482,7 +482,7 @@ the borders, scrollbars, other decorations...)", "");
 
     DocDeclStr(
         wxRect , GetClientRect() const,
-        "Get the client area position and size as a wx.Rect object.", "");
+        "Get the client area position and size as a `wx.Rect` object.", "");
     
 
     
