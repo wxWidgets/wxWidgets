@@ -42,7 +42,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
     SInt16 maxValue = 1 /* kControlCheckboxCheckedValue */;
-    if (style & wxCH_3STATE)
+    if (style & wxCHK_3STATE)
     {
         maxValue = 2 /* kControlCheckboxMixedValue */;
     }
