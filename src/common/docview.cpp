@@ -183,23 +183,43 @@ bool wxDocument::OnCloseDocument()
 bool wxDocument::DeleteAllViews()
 {
     wxDocManager* manager = GetDocumentManager();
-    wxList::iterator it, en;
 
-    for ( it = m_documentViews.begin(), en = m_documentViews.end();
-          it != en;
-          ++it )
+    // first check if all views agree to be closed
+    const wxList::iterator end = m_documentViews.end();
+    for ( wxList::iterator i = m_documentViews.begin(); i != end; ++i )
     {
-        wxView *view = (wxView *)*it;
-        if (!view->Close())
+        wxView *view = (wxView *)*i;
+        if ( !view->Close() )
             return false;
-
-        delete view; // Deletes node implicitly
     }
 
-    // If we haven't yet deleted the document (for example
-    // if there were no views) then delete it.
-    if (manager && manager->GetDocuments().Member(this))
-        delete this;
+    // all views agreed to close, now do close them
+    if ( m_documentViews.empty() )
+    {
+        // normally the document would be implicitly deleted when the last view
+        // is, but if don't have any views, do it here instead
+        if ( manager && manager->GetDocuments().Member(this) )
+            delete this;
+    }
+    else // have views
+    {
+        // as we delete elements we iterate over, don't use the usual "from
+        // begin to end" loop
+        for ( ;; )
+        {
+            wxView *view = (wxView *)*m_documentViews.begin();
+
+            bool isLastOne = m_documentViews.size() == 1;
+
+            // this always deletes the node implicitly and if this is the last
+            // view also deletes this object itself (also implicitly, great),
+            // so we can't test for m_documentViews.empty() after calling this!
+            delete view;
+
+            if ( isLastOne )
+                break;
+        }
+    }
 
     return true;
 }
