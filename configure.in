@@ -5614,7 +5614,12 @@ if test "$wxUSE_DRAGIMAGE" = "yes"; then
 fi
 
 if test "$wxUSE_EXCEPTIONS" = "yes"; then
-    AC_DEFINE(wxUSE_EXCEPTIONS)
+    if test "$wxUSE_NO_EXCEPTIONS" = "yes" ; then
+        AC_MSG_WARN([--enable-exceptions can't be used with --enable-no_exceptions])
+    else
+        AC_DEFINE(wxUSE_EXCEPTIONS)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS except"
+    fi
 fi
 
 USE_HTML=0
