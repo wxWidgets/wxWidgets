@@ -136,6 +136,9 @@ private:
     DECLARE_DYNAMIC_CLASS(wxDynamicSashUnifyEvent);
 };
 
+typedef void (wxEvtHandler::*wxDynamicSashSplitEventFunction)(wxDynamicSashSplitEvent&);
+typedef void (wxEvtHandler::*wxDynamicSashUnifyEventFunction)(wxDynamicSashSplitEvent&);
+
 /*
     wxDynamicSashWindow.  See above.
 */

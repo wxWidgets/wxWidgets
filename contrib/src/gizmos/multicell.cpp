@@ -38,7 +38,7 @@
 //---------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxMultiCellSizer, wxSizer);
-IMPLEMENT_ABSTRACT_CLASS(wxMultiCellItemHandle, wxRect);
+IMPLEMENT_ABSTRACT_CLASS(wxMultiCellItemHandle, wxObject);
 
 //---------------------------------------------------------------------------
 // wxMultiCellItemHandle

@@ -10,11 +10,25 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+// for all others, include the necessary headers (this file is usually all you
+// need because it includes almost all "standard" wxWindows headers)
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
 #include <wx/app.h>
 #include <wx/frame.h>
 #include <wx/gizmos/dynamicsash.h>
 #include <wx/html/htmlwin.h>
 #include <wx/image.h>
+#include <wx/cmdline.h>
 
 class Demo : public wxApp {
 public:
@@ -65,7 +79,8 @@ bool Demo::OnInit() {
 SashHtmlWindow::SashHtmlWindow(wxWindow *parent, wxWindowID id,
                                const wxPoint& pos, const wxSize& size, long style, const wxString& name) :
                                     wxHtmlWindow(parent, id, pos, size, style, name) {
-    Connect(-1, wxEVT_DYNAMIC_SASH_SPLIT, (wxObjectEventFunction)&SashHtmlWindow::OnSplit);
+    Connect(-1, wxEVT_DYNAMIC_SASH_SPLIT,
+        (wxObjectEventFunction)(wxCommandEventFunction)(wxDynamicSashSplitEventFunction) &SashHtmlWindow::OnSplit);
 
     m_dyn_sash = parent;
 }
