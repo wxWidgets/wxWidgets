@@ -2275,6 +2275,7 @@ public:
                   wxEvtHandler *eventSink = (wxEvtHandler *) NULL )
         { return Disconnect(winid, wxID_ANY, eventType, func, userData, eventSink); }
 
+    wxList* GetDynamicEventTable() const { return m_dynamicEvents ; }
 
     // User data can be associated with each wxEvtHandler
     void SetClientObject( wxClientData *data ) { DoSetClientObject(data); }
