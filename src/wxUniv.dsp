@@ -896,7 +896,7 @@ SOURCE=.\msw\app.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\automtn.cpp
+SOURCE=.\msw\ole\automtn.cpp
 # End Source File
 # Begin Source File
 
@@ -928,7 +928,7 @@ SOURCE=.\msw\data.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\dataobj.cpp
+SOURCE=.\msw\ole\dataobj.cpp
 # End Source File
 # Begin Source File
 
@@ -972,11 +972,11 @@ SOURCE=.\msw\dirdlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\dropsrc.cpp
+SOURCE=.\msw\ole\dropsrc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\droptgt.cpp
+SOURCE=.\msw\ole\droptgt.cpp
 # End Source File
 # Begin Source File
 
@@ -1040,7 +1040,7 @@ SOURCE=.\msw\mimetype.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\oleutils.cpp
+SOURCE=.\msw\ole\oleutils.cpp
 # End Source File
 # Begin Source File
 
@@ -1104,7 +1104,7 @@ SOURCE=.\msw\utilsexc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\uuid.cpp
+SOURCE=.\msw\ole\uuid.cpp
 # End Source File
 # Begin Source File
 

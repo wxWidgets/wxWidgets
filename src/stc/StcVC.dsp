@@ -111,7 +111,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /machine:IX86
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw250d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/stcdlld.dll" /libpath:"../../../lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/stcdlld.dll" /libpath:"../../../lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "stcVC - Win32 Release DLL"
@@ -129,10 +129,10 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\..\lib\stcd.lib"
-# ADD LIB32 /nologo /out:"..\..\..\lib\stcd.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\..\lib\stc.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\stc.lib"
 CPP=cl.exe
-# ADD BASE CPP /nologo /MDd /W3 /GX /Zi /Od /I "../../../include" /I "../../include" /I "../../../lib/mswdlld" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D WXUSINGDLL=1 /D "WXBUILD_STC_DLL" /YX /FD /c
+# ADD BASE CPP /nologo /MDd /W3 /GX /Zi /Od /I "../../../include" /I "../../include" /I "../../../lib/mswdll" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D WXUSINGDLL=1 /D "WXBUILD_STC_DLL" /YX /FD /c
 # SUBTRACT BASE CPP /u
 # ADD CPP /nologo /MD /W3 /GX /Zi /O2 /Ob2 /I "../../../include" /I "../../include" /I "../../../lib/mswdll" /I "./scintilla/include/" /I "./scintilla/src" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "WXUSINGDLL" /D "WXMAKING_STC_DLL" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WX__" /YX /FD /c
 # SUBTRACT CPP /u
@@ -144,9 +144,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw250d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/stcdlld.dll" /libpath:"../../../lib"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/stcdlld.dll" /libpath:"../../../lib"
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw250.lib /nologo /version:1.0 /dll /machine:IX86 /out:"../../../lib/stcdll.dll" /libpath:"../../../lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24.lib /nologo /version:1.0 /dll /machine:IX86 /out:"../../../lib/stcdll.dll" /libpath:"../../../lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no /debug
 
 !ENDIF
