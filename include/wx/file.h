@@ -42,7 +42,8 @@ const off_t ofsInvalid = (off_t)-1;
 #define wxS_IXOTH 00001
 
 // default mode for the new files: corresponds to umask 022
-#define wxS_DEFAULT   (wxS_IRUSR | wxS_IWUSR | wxS_IRGRP | wxS_IROTH)
+#define wxS_DEFAULT   (wxS_IRUSR | wxS_IWUSR | wxS_IRGRP | wxS_IWGRP |\
+                       wxS_IROTH | wxS_IWOTH)
 
 // ----------------------------------------------------------------------------
 // class wxFile: raw file IO
