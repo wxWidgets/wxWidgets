@@ -16,6 +16,10 @@
     #pragma interface "toplevel.h"
 #endif
 
+#if wxUSE_SYSTEM_OPTIONS
+    #define wxMAC_WINDOW_PLAIN_TRANSITION _T("MAC_WINDOW_PLAIN_TRANSITION")
+#endif
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMac
 // ----------------------------------------------------------------------------
@@ -94,6 +98,8 @@ public:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     void MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) ;
     short MacGetWindowBackgroundTheme() const { return m_macWindowBackgroundTheme ; }
+    static bool MacEnableCompositing( bool useCompositing ); 
+    bool MacUsesCompositing() { return m_macUsesCompositing; } 
 
 #if TARGET_CARBON
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
@@ -108,6 +114,7 @@ protected:
     // should the frame be maximized when it will be shown? set by Maximize()
     // when it is called while the frame is hidden
     bool m_maximizeOnShow;
+    bool m_macUsesCompositing ;
 
     short m_macWindowBackgroundTheme ;
     WXWindow m_macWindow ;
@@ -118,6 +125,7 @@ protected:
 
     static WXWindow s_macWindowInUpdate ;
     static wxTopLevelWindowMac *s_macDeactivateWindow;
+    static bool s_macWindowCompositing ;
 private :
 #if TARGET_CARBON
     WXEVENTHANDLERREF    m_macEventHandler ;
