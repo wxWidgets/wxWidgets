@@ -1557,7 +1557,7 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYield();
+    if (m_dirty) wxYieldIfNeeded();
 
     wxGenericTreeItem *gitem = (wxGenericTreeItem*) item.m_pItem;
 
@@ -2203,7 +2203,7 @@ wxTreeItemId wxGenericTreeCtrl::HitTest(const wxPoint& point, int& flags)
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYield();
+    if (m_dirty) wxYieldIfNeeded();
 
     wxClientDC dc(this);
     PrepareDC(dc);
@@ -2263,7 +2263,7 @@ void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYield();
+    if (m_dirty) wxYieldIfNeeded();
 
     wxString s = m_currentEdit->GetText();
     int x = m_currentEdit->GetX();
@@ -2406,7 +2406,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             // highlight the current drop target if any
             DrawDropEffect(m_dropTarget);
 
-            wxYield();
+            wxYieldIfNeeded();
         }
     }
     else if ( (event.LeftUp() || event.RightUp()) && m_isDragging )
@@ -2437,7 +2437,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
         SetCursor(m_oldCursor);
 
-        wxYield();
+        wxYieldIfNeeded();
     }
     else
     {
