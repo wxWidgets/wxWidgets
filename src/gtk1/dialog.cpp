@@ -385,13 +385,13 @@ void wxDialog::SetSize( int width, int height )
 
 void wxDialog::Centre( int direction )
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid dialog" );
 
     int x = 0;
     int y = 0;
 
-    if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
-    if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
+    if ((direction & wxHORIZONTAL) == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
+    if ((direction & wxVERTICAL) == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
 
     Move( x, y );
 }

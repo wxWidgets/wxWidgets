@@ -164,7 +164,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     gtk_window_set_title( GTK_WINDOW(m_widget), title );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
-    gtk_widget_set( m_widget, "GtkWindow::allow_shrink", TRUE, NULL );
+    gtk_window_set_policy( GTK_WINDOW(m_widget), 1, 1, 0 );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_frame_delete_callback), (gpointer)this );
@@ -313,12 +313,8 @@ void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
 
     if ((m_width != old_width) || (m_height != old_height))
     {
-       gtk_widget_set_usize( m_widget, m_width, m_height );
+       m_sizeSet = FALSE;
     }
-
-    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
 
     m_resizing = FALSE;
 }
@@ -335,8 +331,8 @@ void wxFrame::Centre( int direction )
     int x = 0;
     int y = 0;
 
-    if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
-    if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
+    if ((direction & wxHORIZONTAL) == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
+    if ((direction & wxVERTICAL) == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
 
     Move( x, y );
 }
@@ -400,6 +396,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
     gtk_widget_set_usize( m_widget, m_width, m_height );
+    gdk_window_resize( m_widget->window, m_width, m_height );
 
     // this emulates the new wxMSW behaviour of placing all
     // frame-subwindows (menu, toolbar..) on one native window
