@@ -402,13 +402,11 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         {
             if (win)
             {
-                win->AddUpdateRect(event->xexpose.x, event->xexpose.y,
-                               event->xexpose.width, event->xexpose.height);
-            
-                if (event -> xexpose.count == 0)
+                win->GetUpdateRegion().Union( event->xexpose.x, event->xexpose.y,
+                                              event->xexpose.width, event->xexpose.height);
+                if (event->xexpose.count == 0)
                 {
-                    win->DoPaint();
-                    win->ClearUpdateRects();
+                    win->X11SendPaintEvents();  // TODO let an idle handler do that
                 }
             }
 

@@ -103,10 +103,6 @@ void wxWindowX11::Init()
     m_needsRefresh = TRUE;
     m_mainWidget = (WXWindow) 0;
 
-    m_button1Pressed =
-    m_button2Pressed =
-    m_button3Pressed = FALSE;
-
     m_winCaptured = FALSE;
 
     m_isShown = TRUE;
@@ -123,13 +119,6 @@ void wxWindowX11::Init()
 
     m_scrollPosX =
     m_scrollPosY = 0;
-
-    m_backingPixmap = (WXPixmap) 0;
-    m_pixmapWidth =
-    m_pixmapHeight = 0;
-
-    m_pixmapOffsetX =
-    m_pixmapOffsetY = 0;
 
     m_lastTS = 0;
     m_lastButton = 0;
@@ -230,8 +219,6 @@ wxWindowX11::~wxWindowX11()
         // Removes event handlers
         //DetachWidget(wMain);
     }
-
-    ClearUpdateRects();
 
     if ( m_parent )
         m_parent->RemoveChild( this );
@@ -1280,31 +1267,39 @@ void wxWindowX11::Clear()
     dc.Clear();
 }
 
-void wxWindowX11::ClearUpdateRects()
+void wxWindowX11::X11SendPaintEvents()
 {
-    wxRectList::Node* node = m_updateRects.GetFirst();
-    while (node)
+    m_clipPaintRegion = TRUE;
+
+    if (!m_clearRegion.IsEmpty())
     {
-        wxRect* rect = node->GetData();
-        delete rect;
-        node = node->GetNext();
+        wxWindowDC dc( (wxWindow*)this );
+        dc.SetClippingRegion( m_clearRegion );
+        
+        wxEraseEvent erase_event( GetId(), &dc );
+        erase_event.SetEventObject( this );
+    
+        if (!GetEventHandler()->ProcessEvent(erase_event))
+        {
+            wxRegionIterator upd( m_clearRegion );
+            while (upd)
+            {
+                // XClearArea( ... , upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+                upd ++;
+            }
+        }
+        m_clearRegion.Clear();
     }
 
-    m_updateRects.Clear();
-}
+    wxNcPaintEvent nc_paint_event( GetId() );
+    nc_paint_event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( nc_paint_event );
 
-void wxWindowX11::DoPaint()
-{
-    // Set an erase event first
-    wxEraseEvent eraseEvent(GetId());
-    eraseEvent.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(eraseEvent);
-    
-    wxPaintEvent event(GetId());
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
-    
-    m_needsRefresh = FALSE;
+    wxPaintEvent paint_event( GetId() );
+    paint_event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( paint_event );
+
+    m_clipPaintRegion = FALSE;
 }
 
 // ----------------------------------------------------------------------------
@@ -1600,19 +1595,16 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
                 if (xevent->xbutton.button == Button1)
                 {
                     eventType = wxEVT_LEFT_DOWN;
-                    win->SetButton1(TRUE);
                     button = 1;
                 }
                 else if (xevent->xbutton.button == Button2)
                 {
                     eventType = wxEVT_MIDDLE_DOWN;
-                    win->SetButton2(TRUE);
                     button = 2;
                 }
                 else if (xevent->xbutton.button == Button3)
                 {
                     eventType = wxEVT_RIGHT_DOWN;
-                    win->SetButton3(TRUE);
                     button = 3;
                 }
 
@@ -1646,17 +1638,14 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
                 if (xevent->xbutton.button == Button1)
                 {
                     eventType = wxEVT_LEFT_UP;
-                    win->SetButton1(FALSE);
                 }
                 else if (xevent->xbutton.button == Button2)
                 {
                     eventType = wxEVT_MIDDLE_UP;
-                    win->SetButton2(FALSE);
                 }
                 else if (xevent->xbutton.button == Button3)
                 {
                     eventType = wxEVT_RIGHT_UP;
-                    win->SetButton3(FALSE);
                 }
                 else return FALSE;
             }

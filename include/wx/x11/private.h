@@ -13,10 +13,12 @@
 #define _WX_PRIVATE_H_
 
 #include "wx/defs.h"
+#include "wx/utils.h"
 #include "X11/Xlib.h"
 
 class wxMouseEvent;
 class wxKeyEvent;
+class wxWindow;
 
 // ----------------------------------------------------------------------------
 // common callbacks

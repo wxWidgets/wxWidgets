@@ -123,12 +123,6 @@ public:
     WXWindow GetXWindow() const;
     WXDisplay *GetXDisplay() const;
     
-    // called from Motif callbacks - and should only be called from there
-    
-    void SetButton1(bool pressed) { m_button1Pressed = pressed; }
-    void SetButton2(bool pressed) { m_button2Pressed = pressed; }
-    void SetButton3(bool pressed) { m_button3Pressed = pressed; }
-    
     void SetLastClick(int button, long timestamp)
     { m_lastButton = button; m_lastTS = timestamp; }
     
@@ -139,25 +133,8 @@ public:
     // arrange status bar, toolbar etc.
     virtual bool PreResize();
     
-    // Generates a paint event
-    virtual void DoPaint();
-    
-    // update rectangle/region manipulation
-    // (for wxWindowDC and Motif callbacks only)
-    // -----------------------------------------
-    
-    // read/write access to the update rect list
-    const wxRectList& GetUpdateRects() const { return m_updateRects; }
-    
-    // Adds a recangle to the updates list
-    void AddUpdateRect(int x, int y, int w, int h)
-    { m_updateRects.Append(new wxRect(x, y, w, h)); }
-    
-    // Empties the m_updateRects list
-    void ClearUpdateRects();
-    
-    void ClearUpdateRegion() { m_updateRegion.Clear(); }
-    void SetUpdateRegion(const wxRegion& region) { m_updateRegion = region; }
+    // Generates paint events
+    void X11SendPaintEvents();
     
     // sets the fore/background colour for the given widget
     static void DoChangeForegroundColour(WXWindow widget, wxColour& foregroundColour);
@@ -187,13 +164,6 @@ protected:
     void SetCanAddEventHandler(bool flag) { m_canAddEventHandler = flag; }
     
 public:
-    WXPixmap GetBackingPixmap() const { return m_backingPixmap; }
-    void SetBackingPixmap(WXPixmap pixmap) { m_backingPixmap = pixmap; }
-    int GetPixmapWidth() const { return m_pixmapWidth; }
-    int GetPixmapHeight() const { return m_pixmapHeight; }
-    void SetPixmapWidth(int w) { m_pixmapWidth = w; }
-    void SetPixmapHeight(int h) { m_pixmapHeight = h; }
-    
     // Change properties
     virtual void ChangeFont(bool keepOriginalSize = TRUE);             // Change to the current font (often overridden)
     
@@ -245,19 +215,17 @@ protected:
     
     bool m_needsRefresh:1;          // repaint backing store?
     bool m_canAddEventHandler:1;    // ???
-    bool m_button1Pressed:1;
-    bool m_button2Pressed:1;
-    bool m_button3Pressed:1;
     
     // For double-click detection
     long   m_lastTS;         // last timestamp
     int    m_lastButton;     // last pressed button
     
-    // List of wxRects representing damaged region
-    wxRectList m_updateRects;
-    
 protected:
     WXWindow              m_mainWidget;
+    
+    wxRegion              m_clearRegion;
+    bool                  m_clipPaintRegion;
+    
     WXWindow              m_hScrollBar;
     WXWindow              m_vScrollBar;
     WXWindow              m_borderWidget;
@@ -266,11 +234,6 @@ protected:
     bool                  m_winCaptured;
     bool                  m_hScroll;
     bool                  m_vScroll;
-    WXPixmap              m_backingPixmap;
-    int                   m_pixmapWidth;
-    int                   m_pixmapHeight;
-    int                   m_pixmapOffsetX;
-    int                   m_pixmapOffsetY;
     
     // Store the last scroll pos, since in wxWin the pos isn't set automatically
     // by system

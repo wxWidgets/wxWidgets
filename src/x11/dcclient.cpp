@@ -186,14 +186,6 @@ wxWindowDC::wxWindowDC( wxWindow *window )
         GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
         &gcvalues);
 
-    if (m_window->GetBackingPixmap())
-    {
-        m_gcBacking = (WXGC) XCreateGC (display, RootWindow (display,
-            DefaultScreen (display)),
-            GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
-            &gcvalues);
-    }
-
     m_backgroundPixel = (int) gcvalues.background;
 
     // Get the current Font so we can set it back later
@@ -209,9 +201,6 @@ wxWindowDC::~wxWindowDC()
     if (m_gc && (m_oldFont != (WXFont) 0) && ((long) m_oldFont != -1))
     {
         XSetFont ((Display*) m_display, (GC) m_gc, (Font) m_oldFont);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XSetFont ((Display*) m_display,(GC) m_gcBacking, (Font) m_oldFont);
     }
 
     if (m_gc)
@@ -269,11 +258,6 @@ void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 
     XDrawLine ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, x1d, y1d, x2d, y2d);
 
-    if (m_window && m_window->GetBackingPixmap())
-        XDrawLine ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-        XLOG2DEV_2(x1), YLOG2DEV_2(y1),
-        XLOG2DEV_2(x2), YLOG2DEV_2(y2));
-
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
 }
@@ -293,18 +277,6 @@ void wxWindowDC::DoCrossHair( wxCoord x, wxCoord y )
         ww, yy);
     XDrawLine ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xx, 0,
         xx, hh);
-
-    if (m_window && m_window->GetBackingPixmap())
-    {
-        xx = XLOG2DEV_2 (x);
-        yy = YLOG2DEV_2 (y);
-        XDrawLine ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-            0, yy,
-            ww, yy);
-        XDrawLine ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-            xx, 0,
-            xx, hh);
-    }
 }
 
 void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc )
@@ -369,10 +341,6 @@ void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCo
         XFillArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) (GC) m_gc,
             xxc - r, yyc - r, 2 * r, 2 * r, alpha1, alpha2);
 
-        if (m_window && m_window->GetBackingPixmap())
-            XFillArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-            xxc_2 - r, yyc_2 - r, 2 * r, 2 * r, alpha1, alpha2);
-
     }
 
     if (m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
@@ -381,10 +349,6 @@ void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCo
             SetPen (m_pen);
         XDrawArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc,
             xxc - r, yyc - r, 2 * r, 2 * r, alpha1, alpha2);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XDrawArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-            xxc_2 - r, yyc_2 - r, 2 * r, 2 * r, alpha1, alpha2);
     }
     CalcBoundingBox (x1, y1);
     CalcBoundingBox (x2, y2);
@@ -416,10 +380,6 @@ void wxWindowDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord
 
         SetBrush (m_brush);
         XFillArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd, wd, hd, start, end);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XFillArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y),wd,hd,start,end);
     }
 
     if (m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
@@ -427,10 +387,8 @@ void wxWindowDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord
         if (m_autoSetting)
             SetPen (m_pen);
         XDrawArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd, wd, hd, start,end);
-        if (m_window && m_window->GetBackingPixmap())
-            XDrawArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y),wd,hd,start,end);
     }
+    
     CalcBoundingBox (x, y);
     CalcBoundingBox (x + width, y + height);
 }
@@ -445,9 +403,7 @@ void wxWindowDC::DoDrawPoint( wxCoord x, wxCoord y )
         SetPen (m_pen);
 
     XDrawPoint ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, XLOG2DEV (x), YLOG2DEV (y));
-    if (m_window && m_window->GetBackingPixmap())
-        XDrawPoint ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, XLOG2DEV_2 (x), YLOG2DEV_2 (y));
-
+    
     CalcBoundingBox (x, y);
 }
 
@@ -472,15 +428,6 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord 
         }
         XDrawLines ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints, n, 0);
 
-        if (m_window && m_window->GetBackingPixmap())
-        {
-            for (i = 0; i < n; i++)
-            {
-                xpoints[i].x = XLOG2DEV_2 (points[i].x + xoffset);
-                xpoints[i].y = YLOG2DEV_2 (points[i].y + yoffset);
-            }
-            XDrawLines ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints, n, 0);
-        }
         delete[]xpoints;
     }
 }
@@ -516,13 +463,6 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[],
         XSetFillRule ((Display*) m_display, (GC) m_gc, fillStyle == wxODDEVEN_RULE ? EvenOddRule : WindingRule);
         XFillPolygon ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints1, n, Complex, 0);
         XSetFillRule ((Display*) m_display, (GC) m_gc, EvenOddRule);    // default mode
-        if (m_window && m_window->GetBackingPixmap())
-        {
-            XSetFillRule ((Display*) m_display,(GC) m_gcBacking,
-                fillStyle == wxODDEVEN_RULE ? EvenOddRule : WindingRule);
-            XFillPolygon ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints2, n, Complex, 0);
-            XSetFillRule ((Display*) m_display,(GC) m_gcBacking, EvenOddRule);    // default mode
-        }
     }
 
     if (m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
@@ -530,9 +470,6 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[],
         if (m_autoSetting)
             SetPen (m_pen);
         XDrawLines ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints1, n + 1, 0);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XDrawLines ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints2, n + 1, 0);
     }
 
     delete[]xpoints1;
@@ -562,11 +499,6 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
     {
         SetBrush (m_brush);
         XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd, wfd, hfd);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y),
-            wfd, hfd);
     }
 
     if (m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
@@ -574,12 +506,8 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
         if (m_autoSetting)
             SetPen (m_pen);
         XDrawRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd, wd, hd);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XDrawRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y),
-            wd, hd);
     }
+    
     CalcBoundingBox (x, y);
     CalcBoundingBox (x + width, y + height);
 }
@@ -663,29 +591,6 @@ void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wx
         // Bottom-left
         XFillArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd + hd - rh_d,
             rw_d, rh_d, 180 * 64, 90 * 64);
-
-        if (m_window && m_window->GetBackingPixmap())
-        {
-            XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2 + rd2, yd2, wd2 - rw_d2, hd2);
-            XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2, yd2 + rd2, wd2, hd2 - rh_d2);
-
-            XFillArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2, yd2, rw_d2, rh_d2, 90 * 64, 90 * 64);
-            XFillArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2 + wd2 - rw_d2, yd2,
-                //            rw_d2, rh_d2, 0, 90 * 64);
-                rw_d2, rh_d2, 0, 91 * 64);
-            XFillArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2 + wd2 - rw_d2,
-                yd2 + hd2 - rh_d2,
-                //            rw_d2, rh_d2, 270 * 64, 90 * 64);
-                rw_d2, rh_d2, 269 * 64, 92 * 64);
-            XFillArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2, yd2 + hd2 - rh_d2,
-                rw_d2, rh_d2, 180 * 64, 90 * 64);
-        }
     }
 
     if (m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
@@ -710,37 +615,6 @@ void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wx
             rw_d, rh_d, 269 * 64, 92 * 64);
         XDrawArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd + hd - rh_d,
             rw_d, rh_d, 180 * 64, 90 * 64);
-
-        if (m_window && m_window->GetBackingPixmap())
-        {
-            XDrawLine ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2 + rd2, yd2,
-                xd2 + wd2 - rd2 + 1, yd2);
-            XDrawLine ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2 + rd2, yd2 + hd2,
-                xd2 + wd2 - rd2, yd2 + hd2);
-
-            XDrawLine ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2, yd2 + rd2,
-                xd2, yd2 + hd2 - rd2);
-            XDrawLine ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2 + wd2, yd2 + rd2,
-                xd2 + wd2, yd2 + hd2 - rd2 + 1);
-            XDrawArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2, yd2,
-                rw_d2, rh_d2, 90 * 64, 90 * 64);
-            XDrawArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2 + wd2 - rw_d2, yd2,
-                //            rw_d2, rh_d2, 0, 90 * 64);
-                rw_d2, rh_d2, 0, 91 * 64);
-            XDrawArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2 + wd2 - rw_d2,
-                yd2 + hd2 - rh_d2,
-                rw_d2, rh_d2, 269 * 64, 92 * 64);
-            XDrawArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                xd2, yd2 + hd2 - rh_d2,
-                rw_d2, rh_d2, 180 * 64, 90 * 64);
-        }
     }
     CalcBoundingBox (x, y);
     CalcBoundingBox (x + width, y + height);
@@ -780,11 +654,6 @@ void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     {
         SetBrush (m_brush);
         XFillArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd, wd, hd, 0, angle);
-        if (m_window && m_window->GetBackingPixmap())
-            XFillArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y),
-            XLOG2DEVREL (width) - WX_GC_CF,
-            YLOG2DEVREL (height) - WX_GC_CF, 0, angle);
     }
 
     if (m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
@@ -792,11 +661,6 @@ void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
         if (m_autoSetting)
             SetPen (m_pen);
         XDrawArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd, wd, hd, 0, angle);
-        if (m_window && m_window->GetBackingPixmap())
-            XDrawArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y),
-            XLOG2DEVREL (width) - WX_GC_CF,
-            YLOG2DEVREL (height) - WX_GC_CF, 0, angle);
     }
     CalcBoundingBox (x, y);
     CalcBoundingBox (x + width, y + height);
@@ -840,21 +704,6 @@ void wxWindowDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
                 0, 0, width, height,
                 (int) XLOG2DEV (x), (int) YLOG2DEV (y));
         }
-
-
-        if (m_window && m_window->GetBackingPixmap())
-        {
-            if (icon.GetDepth() <= 1)
-            {
-                XCopyPlane ((Display*) m_display, iconPixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                    0, 0, width, height, (int) XLOG2DEV_2 (x), (int) YLOG2DEV_2 (y), 1);
-            }
-            else
-            {
-                XCopyArea  ((Display*) m_display, iconPixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                    0, 0, width, height,
-                    (int) XLOG2DEV_2 (x), (int) YLOG2DEV_2 (y));
-            }
         }
     } else { /* Remote copy (different (Display*) m_displays) */
         XImage *cache = NULL;
@@ -939,6 +788,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
         {
             XImage *cache = NULL;
 
+#if 0
             if (m_window && m_window->GetBackingPixmap())
                 XCopyRemote((Display*) sourceDC->m_display, (Display*) m_display,
                 (Pixmap) sourcePixmap, (Pixmap) m_window->GetBackingPixmap(),
@@ -949,6 +799,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
                 source->LogicalToDeviceYRel(height),
                 XLOG2DEV_2 (xdest), YLOG2DEV_2 (ydest),
                 TRUE, &cache);
+#endif
 
             if ( useMask && source->IsKindOf(CLASSINFO(wxMemoryDC)) )
             {
@@ -977,28 +828,6 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
         } else
         {
-            if (m_window && m_window->GetBackingPixmap())
-            {
-                // +++ MARKUS (mho@comnets.rwth-aachen): error on blitting bitmaps with depth 1
-                if (source->IsKindOf(CLASSINFO(wxMemoryDC)) && ((wxMemoryDC*) source)->GetBitmap().GetDepth() == 1)
-                {
-                    XCopyPlane ((Display*) m_display, (Pixmap) sourcePixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                        source->LogicalToDeviceX (xsrc),
-                        source->LogicalToDeviceY (ysrc),
-                        source->LogicalToDeviceXRel(width),
-                        source->LogicalToDeviceYRel(height),
-                        XLOG2DEV_2 (xdest), YLOG2DEV_2 (ydest), 1);
-                }
-                else
-                {
-                    XCopyArea ((Display*) m_display, (Pixmap) sourcePixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                        source->LogicalToDeviceX (xsrc),
-                        source->LogicalToDeviceY (ysrc),
-                        source->LogicalToDeviceXRel(width),
-                        source->LogicalToDeviceYRel(height),
-                        XLOG2DEV_2 (xdest), YLOG2DEV_2 (ydest));
-                }
-            }
             if ( useMask && source->IsKindOf(CLASSINFO(wxMemoryDC)) )
             {
                 wxMemoryDC *memDC = (wxMemoryDC *)source;
@@ -1107,17 +936,12 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
             if (pixel > -1)
             {
                 XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
             }
         }
         else
             m_textBackgroundColour = oldPenColour ;
 
         XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, XLOG2DEV (x), YLOG2DEV (y), cx, cy);
-        if (m_window && m_window->GetBackingPixmap())
-            XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y), cx, cy);
     }
 
     // Now set the text foreground and draw the text
@@ -1166,8 +990,6 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
             if (pixel > -1)
             {
                 XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
             }
         }
         else
@@ -1183,18 +1005,6 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     else
 #endif // 0
         XDrawString((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, XLOG2DEV (x), YLOG2DEV (y) + ascent, text, slen);
-
-    if (m_window && m_window->GetBackingPixmap()) {
-#if 0
-        if (use16)
-            XDrawString16((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent,
-            (XChar2b *)(char*) (const char*) text, slen);
-        else
-#endif // 0
-            XDrawString((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent, (char*) (const char*) text, slen);
-    }
 
     wxCoord w, h;
     GetTextExtent (text, &w, &h);
@@ -1319,17 +1129,12 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
             if (pixel > -1)
             {
                 XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
             }
         }
         else
             m_textBackgroundColour = oldPenColour ;
 
         XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, XLOG2DEV (x), YLOG2DEV (y), cx, cy);
-        if (m_window && m_window->GetBackingPixmap())
-            XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y), cx, cy);
     }
 #endif
 
@@ -1432,12 +1237,6 @@ void wxWindowDC::Clear()
     if (m_window)
     {
         m_window->GetSize(&w, &h);
-
-        if (m_window && m_window->GetBackingPixmap())
-        {
-            w = m_window->GetPixmapWidth();
-            h = m_window->GetPixmapHeight();
-        }
     }
     else
     {
@@ -1456,9 +1255,6 @@ void wxWindowDC::Clear()
 
     XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, 0, 0, w, h);
 
-    if (m_window && m_window->GetBackingPixmap())
-        XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, 0, 0, w, h);
-
     m_brush = saveBrush;
 }
 
@@ -1474,9 +1270,6 @@ void wxWindowDC::Clear(const wxRect& rect)
 
     XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, x, y, w, h);
 
-    if (m_window && m_window->GetBackingPixmap())
-        XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, x, y, w, h);
-
     m_brush = saveBrush;
 }
 
@@ -1491,9 +1284,6 @@ void wxWindowDC::SetFont( const wxFont &font )
         if ((m_oldFont != (WXFont) 0) && ((wxCoord) m_oldFont != -1))
         {
             XSetFont ((Display*) m_display, (GC) m_gc, (Font) m_oldFont);
-
-            if (m_window && m_window->GetBackingPixmap())
-                XSetFont ((Display*) m_display,(GC) m_gcBacking, (Font) m_oldFont);
         }
         return;
     }
@@ -1502,9 +1292,6 @@ void wxWindowDC::SetFont( const wxFont &font )
 
     Font fontId = ((XFontStruct*)pFontStruct)->fid;
     XSetFont ((Display*) m_display, (GC) m_gc, fontId);
-
-    if (m_window && m_window->GetBackingPixmap())
-        XSetFont ((Display*) m_display,(GC) m_gcBacking, fontId);
 }
 
 void wxWindowDC::SetPen( const wxPen &pen )
@@ -1615,18 +1402,12 @@ void wxWindowDC::SetPen( const wxPen &pen )
                 for (int i = 0; i < req_nb_dash; i++)
                     real_req_dash[i] = req_dash[i] * factor;
                 XSetDashes ((Display*) m_display, (GC) m_gc, 0, real_req_dash, req_nb_dash);
-
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetDashes ((Display*) m_display,(GC) m_gcBacking, 0, real_req_dash, req_nb_dash);
                 delete[]real_req_dash;
             }
             else
             {
                 // No Memory. We use non-scaled dash pattern...
                 XSetDashes ((Display*) m_display, (GC) m_gc, 0, req_dash, req_nb_dash);
-
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetDashes ((Display*) m_display,(GC) m_gcBacking, 0, req_dash, req_nb_dash);
             }
         }
 
@@ -1659,9 +1440,6 @@ void wxWindowDC::SetPen( const wxPen &pen )
         }
 
         XSetLineAttributes ((Display*) m_display, (GC) m_gc, scaled_width, style, cap, join);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XSetLineAttributes ((Display*) m_display,(GC) m_gcBacking, scaled_width, style, cap, join);
     }
 
     if (IS_HATCH(m_currentFill) && ((m_currentFill != oldFill) || !GetOptimization()))
@@ -1717,17 +1495,11 @@ void wxWindowDC::SetPen( const wxPen &pen )
             break;
         }
         XSetStipple ((Display*) m_display, (GC) m_gc, myStipple);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XSetStipple ((Display*) m_display,(GC) m_gcBacking, myStipple);
     }
     else if (m_currentStipple.Ok()
         && ((m_currentStipple != oldStipple) || !GetOptimization()))
     {
         XSetStipple ((Display*) m_display, (GC) m_gc, (Pixmap) m_currentStipple.GetPixmap());
-
-        if (m_window && m_window->GetBackingPixmap())
-            XSetStipple ((Display*) m_display,(GC) m_gcBacking, (Pixmap) m_currentStipple.GetPixmap());
     }
 
     if ((m_currentFill != oldFill) || !GetOptimization())
@@ -1741,8 +1513,6 @@ void wxWindowDC::SetPen( const wxPen &pen )
         else
             fill_style = FillSolid;
         XSetFillStyle ((Display*) m_display, (GC) m_gc, fill_style);
-        if (m_window && m_window->GetBackingPixmap())
-            XSetFillStyle ((Display*) m_display,(GC) m_gcBacking, fill_style);
     }
 
     // must test m_logicalFunction, because it involves background!
@@ -1786,14 +1556,10 @@ void wxWindowDC::SetPen( const wxPen &pen )
                 XGCValues values;
                 XGetGCValues ((Display*) m_display, (GC) m_gc, GCBackground, &values);
                 XSetForeground ((Display*) m_display, (GC) m_gc, pixel ^ values.background);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel ^ values.background);
             }
             else
             {
                 XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
             }
         }
     }
@@ -1848,15 +1614,11 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
                 // fill style should be solid or transparent
                 int style = (m_backgroundMode == wxSOLID ? FillOpaqueStippled : FillStippled);
                 XSetFillStyle ((Display*) m_display, (GC) m_gc, style);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetFillStyle ((Display*) m_display,(GC) m_gcBacking, style);
             }
             break;
         case wxSOLID:
         default:
             XSetFillStyle ((Display*) m_display, (GC) m_gc, FillSolid);
-            if (m_window && m_window->GetBackingPixmap())
-                XSetFillStyle ((Display*) m_display,(GC) m_gcBacking, FillSolid);
         }
     }
 
@@ -1911,17 +1673,12 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
             break;
         }
         XSetStipple ((Display*) m_display, (GC) m_gc, myStipple);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XSetStipple ((Display*) m_display,(GC) m_gcBacking, myStipple);
     }
     // X can forget the stipple value when resizing a window (apparently)
     // so always set the stipple.
     else if (m_currentStipple.Ok()) // && m_currentStipple != oldStipple)
     {
         XSetStipple ((Display*) m_display, (GC) m_gc, (Pixmap) m_currentStipple.GetPixmap());
-        if (m_window && m_window->GetBackingPixmap())
-            XSetStipple ((Display*) m_display,(GC) m_gcBacking, (Pixmap) m_currentStipple.GetPixmap());
     }
 
     // must test m_logicalFunction, because it involves background!
@@ -1975,14 +1732,10 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
                 XGCValues values;
                 XGetGCValues ((Display*) m_display, (GC) m_gc, GCBackground, &values);
                 XSetForeground ((Display*) m_display, (GC) m_gc, pixel ^ values.background);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel ^ values.background);
             }
             else
             {
                 XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
-                if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
             }
         }
     }
@@ -2012,8 +1765,6 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
     // Necessary for ::DrawIcon, which use fg/bg pixel or the GC.
     // And Blit,... (Any fct that use XCopyPlane, in fact.)
     XSetBackground ((Display*) m_display, (GC) m_gc, pixel);
-    if (m_window && m_window->GetBackingPixmap())
-        XSetBackground ((Display*) m_display,(GC) m_gcBacking, pixel);
 }
 
 void wxWindowDC::SetLogicalFunction( int function )
@@ -2080,8 +1831,6 @@ void wxWindowDC::SetLogicalFunction( int function )
     }
 
     XSetFunction((Display*) m_display, (GC) m_gc, x_function);
-    if (m_window && m_window->GetBackingPixmap())
-        XSetFunction((Display*) m_display, (GC) m_gcBacking, x_function);
 
     if ((m_logicalFunction == wxXOR) != (function == wxXOR))
         /* MATTHEW: [9] Need to redo pen simply */
@@ -2152,11 +1901,11 @@ void wxWindowDC::SetDCClipping()
         m_currentRegion = (WXRegion) NULL;
 
     if ((m_window && m_window->GetUpdateRegion().Ok()) && m_userRegion)
-        XIntersectRegion ((Region) m_window->GetUpdateRegion().GetXRegion(), (Region) m_userRegion, (Region) m_currentRegion);
+        XIntersectRegion ((Region) m_window->GetUpdateRegion().GetX11Region(), (Region) m_userRegion, (Region) m_currentRegion);
     else if (m_userRegion)
         XIntersectRegion ((Region) m_userRegion, (Region) m_userRegion, (Region) m_currentRegion);
     else if (m_window && m_window->GetUpdateRegion().Ok())
-        XIntersectRegion ((Region) m_window->GetUpdateRegion().GetXRegion(), (Region) m_window->GetUpdateRegion().GetXRegion(),
+        XIntersectRegion ((Region) m_window->GetUpdateRegion().GetX11Region(), (Region) m_window->GetUpdateRegion().GetX11Region(),
         (Region) m_currentRegion);
 
     if (m_currentRegion)
@@ -2185,18 +1934,6 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
     XUnionRectWithRegion (&r, (Region) m_userRegion, (Region) m_userRegion);
 
     SetDCClipping ();
-
-    // Needs to work differently for Pixmap: without this,
-    // there's a nasty (Display*) m_display bug. 8/12/94
-    if (m_window && m_window->GetBackingPixmap())
-    {
-        XRectangle rects[1];
-        rects[0].x = XLOG2DEV_2(x);
-        rects[0].y = YLOG2DEV_2(y);
-        rects[0].width = XLOG2DEVREL(width);
-        rects[0].height = YLOG2DEVREL(height);
-        XSetClipRectangles((Display*) m_display, (GC) m_gcBacking, 0, 0, rects, 1, Unsorted);
-    }
 }
 
 void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion& region )
@@ -2209,21 +1946,9 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion& region )
         XDestroyRegion ((Region) m_userRegion);
     m_userRegion = (WXRegion) XCreateRegion ();
 
-    XUnionRegion((Region) m_userRegion, (Region) region.GetXRegion(), (Region) m_userRegion);
+    XUnionRegion((Region) m_userRegion, (Region) region.GetX11Region(), (Region) m_userRegion);
 
     SetDCClipping ();
-
-    // Needs to work differently for Pixmap: without this,
-    // there's a nasty (Display*) m_display bug. 8/12/94
-    if (m_window && m_window->GetBackingPixmap())
-    {
-        XRectangle rects[1];
-        rects[0].x = XLOG2DEV_2(box.x);
-        rects[0].y = YLOG2DEV_2(box.y);
-        rects[0].width = XLOG2DEVREL(box.width);
-        rects[0].height = YLOG2DEVREL(box.height);
-        XSetClipRectangles((Display*) m_display, (GC) m_gcBacking, 0, 0, rects, 1, Unsorted);
-    }
 }
 
 
@@ -2239,8 +1964,6 @@ void wxWindowDC::DestroyClippingRegion()
 
     XGCValues gc_val;
     gc_val.clip_mask = None;
-    if (m_window && m_window->GetBackingPixmap())
-        XChangeGC((Display*) m_display, (GC) m_gcBacking, GCClipMask, &gc_val);
 }
 
 // Resolution in pixels per logical inch
@@ -2262,53 +1985,14 @@ int wxWindowDC::GetDepth() const
 // wxPaintDC
 // ----------------------------------------------------------------------------
 
-wxPaintDC::wxPaintDC(wxWindow* win) : wxWindowDC(win)
+wxPaintDC::wxPaintDC(wxWindow* win)
+  : wxWindowDC(win)
 {
-    wxRegion* region = NULL;
-
-    // Combine all the update rects into a region
-    const wxRectList& updateRects(win->GetUpdateRects());
-    if ( updateRects.GetCount() != 0 )
-    {
-        for ( wxRectList::Node *node = updateRects.GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxRect* rect = node->GetData();
-
-            if (!region)
-                region = new wxRegion(*rect);
-            else
-                // TODO: is this correct? In SetDCClipping above,
-                // XIntersectRegion is used to combine paint and user
-                // regions. XIntersectRegion appears to work in that case...
-                region->Union(*rect);
-        }
-    }
-    else
-    {
-        int cw, ch;
-        win->GetClientSize(&cw, &ch);
-        region = new wxRegion(wxRect(0, 0, cw, ch));
-    }
-
-    win->SetUpdateRegion(*region);
-
-    wxRegion& theRegion(win->GetUpdateRegion());
-    theRegion.SetRects(updateRects); // We also store in terms of rects, for iteration to work.
-
-    // Set the clipping region. Any user-defined region will be combined with this
-    // one in SetDCClipping.
-    XSetRegion ((Display*) m_display, (GC) m_gc, (Region) region->GetXRegion());
-
-    delete region;
+    // TODO clone GTK logic here
 }
 
 wxPaintDC::~wxPaintDC()
 {
-    XSetClipMask ((Display*) m_display, (GC) m_gc, None);
-    if (m_window)
-        m_window->ClearUpdateRegion();
 }
 
 // ----------------------------------------------------------------------------
