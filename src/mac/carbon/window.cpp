@@ -108,6 +108,8 @@ void wxRemoveMacWindowAssociation(wxWindow *win)
 // constructors and such
 // ----------------------------------------------------------------------------
 
+WindowRef wxWindow::s_macWindowInUpdate = NULL;
+
 void wxWindow::Init()
 {
     // generic
