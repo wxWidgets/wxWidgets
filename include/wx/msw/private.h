@@ -611,6 +611,57 @@ LocalFree (
 
 #endif
     // __WXWINCE__
+
+// ----------------------------------------------------------------------------
+// 32/64 bit helpers
+// ----------------------------------------------------------------------------
+
+#ifdef __WIN64__
+
+inline void *wxGetWindowProc(HWND hwnd)
+{
+    return (void *)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
+}
+
+inline void *wxGetWindowUserData(HWND hwnd)
+{
+    return (void *)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+}
+
+inline WNDPROC wxSetWindowProc(HWND hwnd, WNDPROC func)
+{
+    return (WNDPROC)::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)func);
+}
+
+inline void *wxSetWindowUserData(HWND hwnd, void *data)
+{
+    return (void *)::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)data);
+}
+
+#else // __WIN32__
+
+inline void *wxGetWindowProc(HWND hwnd)
+{
+    return (void *)::GetWindowLong(hwnd, GWL_WNDPROC);
+}
+
+inline void *wxGetWindowUserData(HWND hwnd)
+{
+    return (void *)::GetWindowLong(hwnd, GWL_USERDATA);
+}
+
+inline WNDPROC wxSetWindowProc(HWND hwnd, WNDPROC func)
+{
+    return (WNDPROC)::SetWindowLong(hwnd, GWL_WNDPROC, (LONG)func);
+}
+
+inline void *wxSetWindowUserData(HWND hwnd, void *data)
+{
+    return (void *)::SetWindowLong(hwnd, GWL_USERDATA, (LONG)data);
+}
+
+#endif // __WIN64__/__WIN32__
+
 #endif // wxUSE_GUI
 
 #endif
