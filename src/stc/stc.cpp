@@ -1608,9 +1608,237 @@ void wxStyledTextCtrl::SetFoldMarginHiColour(bool useSetting, const wxColour& fo
     SendMsg(2291, useSetting, wxColourAsLong(fore));
 }
 
+// Move caret down one line.
+void wxStyledTextCtrl::LineDown() {
+    SendMsg(2300, 0, 0);
+}
+
+// Move caret down one line extending selection to new caret position.
+void wxStyledTextCtrl::LineDownExtend() {
+    SendMsg(2301, 0, 0);
+}
+
+// Move caret up one line.
+void wxStyledTextCtrl::LineUp() {
+    SendMsg(2302, 0, 0);
+}
+
+// Move caret up one line extending selection to new caret position.
+void wxStyledTextCtrl::LineUpExtend() {
+    SendMsg(2303, 0, 0);
+}
+
+// Move caret left one character.
+void wxStyledTextCtrl::CharLeft() {
+    SendMsg(2304, 0, 0);
+}
+
+// Move caret left one character extending selection to new caret position.
+void wxStyledTextCtrl::CharLeftExtend() {
+    SendMsg(2305, 0, 0);
+}
+
+// Move caret right one character.
+void wxStyledTextCtrl::CharRight() {
+    SendMsg(2306, 0, 0);
+}
+
+// Move caret right one character extending selection to new caret position.
+void wxStyledTextCtrl::CharRightExtend() {
+    SendMsg(2307, 0, 0);
+}
+
+// Move caret left one word.
+void wxStyledTextCtrl::WordLeft() {
+    SendMsg(2308, 0, 0);
+}
+
+// Move caret left one word extending selection to new caret position.
+void wxStyledTextCtrl::WordLeftExtend() {
+    SendMsg(2309, 0, 0);
+}
+
+// Move caret right one word.
+void wxStyledTextCtrl::WordRight() {
+    SendMsg(2310, 0, 0);
+}
+
+// Move caret right one word extending selection to new caret position.
+void wxStyledTextCtrl::WordRightExtend() {
+    SendMsg(2311, 0, 0);
+}
+
+// Move caret to first position on line.
+void wxStyledTextCtrl::Home() {
+    SendMsg(2312, 0, 0);
+}
+
+// Move caret to first position on line extending selection to new caret position.
+void wxStyledTextCtrl::HomeExtend() {
+    SendMsg(2313, 0, 0);
+}
+
+// Move caret to last position on line.
+void wxStyledTextCtrl::LineEnd() {
+    SendMsg(2314, 0, 0);
+}
+
+// Move caret to last position on line extending selection to new caret position.
+void wxStyledTextCtrl::LineEndExtend() {
+    SendMsg(2315, 0, 0);
+}
+
+// Move caret to first position in document.
+void wxStyledTextCtrl::DocumentStart() {
+    SendMsg(2316, 0, 0);
+}
+
+// Move caret to first position in document extending selection to new caret position.
+void wxStyledTextCtrl::DocumentStartExtend() {
+    SendMsg(2317, 0, 0);
+}
+
+// Move caret to last position in document.
+void wxStyledTextCtrl::DocumentEnd() {
+    SendMsg(2318, 0, 0);
+}
+
+// Move caret to last position in document extending selection to new caret position.
+void wxStyledTextCtrl::DocumentEndExtend() {
+    SendMsg(2319, 0, 0);
+}
+
+// Move caret one page up.
+void wxStyledTextCtrl::PageUp() {
+    SendMsg(2320, 0, 0);
+}
+
+// Move caret one page up extending selection to new caret position.
+void wxStyledTextCtrl::PageUpExtend() {
+    SendMsg(2321, 0, 0);
+}
+
+// Move caret one page down.
+void wxStyledTextCtrl::PageDown() {
+    SendMsg(2322, 0, 0);
+}
+
+// Move caret one page down extending selection to new caret position.
+void wxStyledTextCtrl::PageDownExtend() {
+    SendMsg(2323, 0, 0);
+}
+
+// Switch from insert to overtype mode or the reverse.
+void wxStyledTextCtrl::EditToggleOvertype() {
+    SendMsg(2324, 0, 0);
+}
+
+// Cancel any modes such as call tip or auto-completion list display.
+void wxStyledTextCtrl::Cancel() {
+    SendMsg(2325, 0, 0);
+}
+
+// Delete the selection or if no selection, the character before the caret.
+void wxStyledTextCtrl::DeleteBack() {
+    SendMsg(2326, 0, 0);
+}
+
+// If selection is empty or all on one line replace the selection with a tab character.
+// If more than one line selected, indent the lines.
+void wxStyledTextCtrl::Tab() {
+    SendMsg(2327, 0, 0);
+}
+
+// Dedent the selected lines.
+void wxStyledTextCtrl::BackTab() {
+    SendMsg(2328, 0, 0);
+}
+
+// Insert a new line, may use a CRLF, CR or LF depending on EOL mode.
+void wxStyledTextCtrl::NewLine() {
+    SendMsg(2329, 0, 0);
+}
+
+// Insert a Form Feed character.
+void wxStyledTextCtrl::FormFeed() {
+    SendMsg(2330, 0, 0);
+}
+
+// Move caret to before first visible character on line.
+// If already there move to first character on line.
+void wxStyledTextCtrl::VCHome() {
+    SendMsg(2331, 0, 0);
+}
+
+// Like VCHome but extending selection to new caret position.
+void wxStyledTextCtrl::VCHomeExtend() {
+    SendMsg(2332, 0, 0);
+}
+
+// Magnify the displayed text by increasing the sizes by 1 point.
+void wxStyledTextCtrl::ZoomIn() {
+    SendMsg(2333, 0, 0);
+}
+
+// Make the displayed text smaller by decreasing the sizes by 1 point.
+void wxStyledTextCtrl::ZoomOut() {
+    SendMsg(2334, 0, 0);
+}
+
+// Delete the word to the left of the caret.
+void wxStyledTextCtrl::DelWordLeft() {
+    SendMsg(2335, 0, 0);
+}
+
+// Delete the word to the right of the caret.
+void wxStyledTextCtrl::DelWordRight() {
+    SendMsg(2336, 0, 0);
+}
+
+// Cut the line containing the caret.
+void wxStyledTextCtrl::LineCut() {
+    SendMsg(2337, 0, 0);
+}
+
+// Delete the line containing the caret.
+void wxStyledTextCtrl::LineDelete() {
+    SendMsg(2338, 0, 0);
+}
+
+// Switch the current line with the previous.
+void wxStyledTextCtrl::LineTranspose() {
+    SendMsg(2339, 0, 0);
+}
+
 // Duplicate the current line.
 void wxStyledTextCtrl::LineDuplicate() {
     SendMsg(2404, 0, 0);
+}
+
+// Transform the selection to lower case.
+void wxStyledTextCtrl::LowerCase() {
+    SendMsg(2340, 0, 0);
+}
+
+// Transform the selection to upper case.
+void wxStyledTextCtrl::UpperCase() {
+    SendMsg(2341, 0, 0);
+}
+
+// Scroll the document down, keeping the caret visible.
+void wxStyledTextCtrl::LineScrollDown() {
+    SendMsg(2342, 0, 0);
+}
+
+// Scroll the document up, keeping the caret visible.
+void wxStyledTextCtrl::LineScrollUp() {
+    SendMsg(2343, 0, 0);
+}
+
+// Delete the selection or if no selection, the character before the caret.
+// Will not delete the character before at the start of a line.
+void wxStyledTextCtrl::DeleteBackNotLine() {
+    SendMsg(2344, 0, 0);
 }
 
 // Move caret to first position on display line.
@@ -1633,6 +1861,30 @@ void wxStyledTextCtrl::LineEndDisplay() {
 // caret position.
 void wxStyledTextCtrl::LineEndDisplayExtend() {
     SendMsg(2348, 0, 0);
+}
+
+// These are like their namesakes Home(Extend)?, LineEnd(Extend)?, VCHome(Extend)?
+// except they behave differently when word-wrap is enabled:
+// They go first to the start / end of the display line, like (Home|LineEnd)Display
+// The difference is that, the cursor is already at the point, it goes on to the start
+// or end of the document line, as appropriate for (Home|LineEnd|VCHome)(Extend)?.
+void wxStyledTextCtrl::HomeWrap() {
+    SendMsg(2349, 0, 0);
+}
+void wxStyledTextCtrl::HomeWrapExtend() {
+    SendMsg(2450, 0, 0);
+}
+void wxStyledTextCtrl::LineEndWrap() {
+    SendMsg(2451, 0, 0);
+}
+void wxStyledTextCtrl::LineEndWrapExtend() {
+    SendMsg(2452, 0, 0);
+}
+void wxStyledTextCtrl::VCHomeWrap() {
+    SendMsg(2453, 0, 0);
+}
+void wxStyledTextCtrl::VCHomeWrapExtend() {
+    SendMsg(2454, 0, 0);
 }
 
 // Copy the line containing the caret.
@@ -1932,6 +2184,20 @@ void wxStyledTextCtrl::SetHotspotSingleLine(bool singleLine) {
     SendMsg(2421, singleLine, 0);
 }
 
+// Move caret between paragraphs (delimited by empty lines).
+void wxStyledTextCtrl::ParaDown() {
+    SendMsg(2413, 0, 0);
+}
+void wxStyledTextCtrl::ParaDownExtend() {
+    SendMsg(2414, 0, 0);
+}
+void wxStyledTextCtrl::ParaUp() {
+    SendMsg(2415, 0, 0);
+}
+void wxStyledTextCtrl::ParaUpExtend() {
+    SendMsg(2416, 0, 0);
+}
+
 // Given a valid document position, return the previous position taking code
 // page into account. Returns 0 if passed 0.
 int wxStyledTextCtrl::PositionBefore(int pos) {
@@ -1973,6 +2239,93 @@ int wxStyledTextCtrl::GetLineSelStartPosition(int line) {
 // Retrieve the position of the end of the selection at the given line (INVALID_POSITION if no selection on this line).
 int wxStyledTextCtrl::GetLineSelEndPosition(int line) {
     return SendMsg(2425, line, 0);
+}
+
+// Move caret down one line, extending rectangular selection to new caret position.
+void wxStyledTextCtrl::LineDownRectExtend() {
+    SendMsg(2426, 0, 0);
+}
+
+// Move caret up one line, extending rectangular selection to new caret position.
+void wxStyledTextCtrl::LineUpRectExtend() {
+    SendMsg(2427, 0, 0);
+}
+
+// Move caret left one character, extending rectangular selection to new caret position.
+void wxStyledTextCtrl::CharLeftRectExtend() {
+    SendMsg(2428, 0, 0);
+}
+
+// Move caret right one character, extending rectangular selection to new caret position.
+void wxStyledTextCtrl::CharRightRectExtend() {
+    SendMsg(2429, 0, 0);
+}
+
+// Move caret to first position on line, extending rectangular selection to new caret position.
+void wxStyledTextCtrl::HomeRectExtend() {
+    SendMsg(2430, 0, 0);
+}
+
+// Move caret to before first visible character on line.
+// If already there move to first character on line.
+// In either case, extend rectangular selection to new caret position.
+void wxStyledTextCtrl::VCHomeRectExtend() {
+    SendMsg(2431, 0, 0);
+}
+
+// Move caret to last position on line, extending rectangular selection to new caret position.
+void wxStyledTextCtrl::LineEndRectExtend() {
+    SendMsg(2432, 0, 0);
+}
+
+// Move caret one page up, extending rectangular selection to new caret position.
+void wxStyledTextCtrl::PageUpRectExtend() {
+    SendMsg(2433, 0, 0);
+}
+
+// Move caret one page down, extending rectangular selection to new caret position.
+void wxStyledTextCtrl::PageDownRectExtend() {
+    SendMsg(2434, 0, 0);
+}
+
+// Move caret to top of page, or one page up if already at top of page.
+void wxStyledTextCtrl::StutteredPageUp() {
+    SendMsg(2435, 0, 0);
+}
+
+// Move caret to top of page, or one page up if already at top of page, extending selection to new caret position.
+void wxStyledTextCtrl::StutteredPageUpExtend() {
+    SendMsg(2436, 0, 0);
+}
+
+// Move caret to bottom of page, or one page down if already at bottom of page.
+void wxStyledTextCtrl::StutteredPageDown() {
+    SendMsg(2437, 0, 0);
+}
+
+// Move caret to bottom of page, or one page down if already at bottom of page, extending selection to new caret position.
+void wxStyledTextCtrl::StutteredPageDownExtend() {
+    SendMsg(2438, 0, 0);
+}
+
+// Move caret left one word, position cursor at end of word.
+void wxStyledTextCtrl::WordLeftEnd() {
+    SendMsg(2439, 0, 0);
+}
+
+// Move caret left one word, position cursor at end of word, extending selection to new caret position.
+void wxStyledTextCtrl::WordLeftEndExtend() {
+    SendMsg(2440, 0, 0);
+}
+
+// Move caret right one word, position cursor at end of word.
+void wxStyledTextCtrl::WordRightEnd() {
+    SendMsg(2441, 0, 0);
+}
+
+// Move caret right one word, position cursor at end of word, extending selection to new caret position.
+void wxStyledTextCtrl::WordRightEndExtend() {
+    SendMsg(2442, 0, 0);
 }
 
 // Set the set of characters making up whitespace for when moving or selecting by word.

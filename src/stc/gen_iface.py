@@ -35,7 +35,7 @@ valPrefixes = [('SCI_', ''),
                ('SCWS_', 'WS_'),
 ]
 
-# Message function values that should have a CMD_ constant as well
+# Message function values that should have a CMD_ constant generated
 cmdValues = [ (2300, 2349),
               2011,
               2013,
@@ -45,8 +45,12 @@ cmdValues = [ (2300, 2349),
               2404,
               (2413, 2416),
               (2426, 2442),
-              (2450, 2454),
+              (2450, 2455),
             ]
+
+
+# Should a funciton be also generated for the CMDs?
+FUNC_FOR_CMD = True
 
 
 # Map some generic typenames to wx types, using return value syntax
@@ -550,7 +554,7 @@ methodOverrideMap = {
 
     'GrabFocus' : (None, 0, 0, 0),
 
-    # Rename some that woudl otherwise hid the wxWindow methods
+    # Rename some that would otherwise hide the wxWindow methods
     'SetFocus'  : ('SetSTCFocus', 0, 0, 0),
     'GetFocus'  : ('GetSTCFocus', 0, 0, 0),
     'SetCursor' : ('SetSTCCursor', 0, 0, 0),
@@ -558,82 +562,6 @@ methodOverrideMap = {
 
     'LoadLexerLibrary' : (None, 0,0,0),
 
-
-
-    # Remove all methods that are key commands since they can be
-    # executed with CmdKeyExecute
-    'LineDown' : (None, 0, 0, 0),
-    'LineDownExtend' : (None, 0, 0, 0),
-    'LineUp' : (None, 0, 0, 0),
-    'LineUpExtend' : (None, 0, 0, 0),
-    'CharLeft' : (None, 0, 0, 0),
-    'CharLeftExtend' : (None, 0, 0, 0),
-    'CharRight' : (None, 0, 0, 0),
-    'CharRightExtend' : (None, 0, 0, 0),
-    'WordLeft' : (None, 0, 0, 0),
-    'WordLeftExtend' : (None, 0, 0, 0),
-    'WordRight' : (None, 0, 0, 0),
-    'WordRightExtend' : (None, 0, 0, 0),
-    'Home' : (None, 0, 0, 0),
-    'HomeExtend' : (None, 0, 0, 0),
-    'LineEnd' : (None, 0, 0, 0),
-    'LineEndExtend' : (None, 0, 0, 0),
-    'DocumentStart' : (None, 0, 0, 0),
-    'DocumentStartExtend' : (None, 0, 0, 0),
-    'DocumentEnd' : (None, 0, 0, 0),
-    'DocumentEndExtend' : (None, 0, 0, 0),
-    'PageUp' : (None, 0, 0, 0),
-    'PageUpExtend' : (None, 0, 0, 0),
-    'PageDown' : (None, 0, 0, 0),
-    'PageDownExtend' : (None, 0, 0, 0),
-    'EditToggleOvertype' : (None, 0, 0, 0),
-    'Cancel' : (None, 0, 0, 0),
-    'DeleteBack' : (None, 0, 0, 0),
-    'Tab' : (None, 0, 0, 0),
-    'BackTab' : (None, 0, 0, 0),
-    'NewLine' : (None, 0, 0, 0),
-    'FormFeed' : (None, 0, 0, 0),
-    'VCHome' : (None, 0, 0, 0),
-    'VCHomeExtend' : (None, 0, 0, 0),
-    'ZoomIn' : (None, 0, 0, 0),
-    'ZoomOut' : (None, 0, 0, 0),
-    'DelWordLeft' : (None, 0, 0, 0),
-    'DelWordRight' : (None, 0, 0, 0),
-    'LineCut' : (None, 0, 0, 0),
-    'LineDelete' : (None, 0, 0, 0),
-    'LineTranspose' : (None, 0, 0, 0),
-    'LowerCase' : (None, 0, 0, 0),
-    'UpperCase' : (None, 0, 0, 0),
-    'LineScrollDown' : (None, 0, 0, 0),
-    'LineScrollUp' : (None, 0, 0, 0),
-    'DeleteBackNotLine' : (None, 0, 0, 0),
-    'HomeWrap' : (None, 0, 0, 0),
-    'HomeWrapExtend' : (None, 0, 0, 0),
-    'LineEndWrap' : (None, 0, 0, 0),
-    'LineEndWrapExtend' : (None, 0, 0, 0),
-    'VCHomeWrap' : (None, 0, 0, 0),
-    'VCHomeWrapExtend' : (None, 0, 0, 0),
-    'ParaDown' : (None, 0, 0, 0),
-    'ParaDownExtend' : (None, 0, 0, 0),
-    'ParaUp' : (None, 0, 0, 0),
-    'ParaUpExtend' : (None, 0, 0, 0),
-    'LineDownRectExtend' : (None, 0, 0, 0),
-    'LineUpRectExtend' : (None, 0, 0, 0),
-    'CharLeftRectExtend' : (None, 0, 0, 0),
-    'CharRightRectExtend' : (None, 0, 0, 0),
-    'HomeRectExtend' : (None, 0, 0, 0),
-    'VCHomeRectExtend' : (None, 0, 0, 0),
-    'LineEndRectExtend' : (None, 0, 0, 0),
-    'PageUpRectExtend' : (None, 0, 0, 0),
-    'PageDownRectExtend' : (None, 0, 0, 0),
-    'StutteredPageUp' : (None, 0, 0, 0),
-    'StutteredPageUpExtend' : (None, 0, 0, 0),
-    'StutteredPageDown' : (None, 0, 0, 0),
-    'StutteredPageDownExtend' : (None, 0, 0, 0),
-    'WordLeftEnd' : (None, 0, 0, 0),
-    'WordLeftEndExtend' : (None, 0, 0, 0),
-    'WordRightEnd' : (None, 0, 0, 0),
-    'WordRightEndExtend' : (None, 0, 0, 0),
 
     '' : ('', 0, 0, 0),
 
@@ -870,9 +798,12 @@ def parseFun(line, methods, docs, values):
     for v in cmdValues:
         if (type(v) == type(()) and v[0] <= num <= v[1]) or v == num:
             parseVal('CMD_%s=%s' % (string.upper(name), number), values, docs)
-
-    #if retType == 'void' and not param1 and not param2:
-
+            
+            # if we are not also doing a function for CMD values, then
+            # just return, otherwise fall through to the append blow.
+            if not FUNC_FOR_CMD:
+                return
+                
     methods.append( (retType, name, number, param1, param2, tuple(docs)) )
 
 

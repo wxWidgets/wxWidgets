@@ -1206,6 +1206,9 @@
 #define wxSTC_CMD_VCHOMEWRAP 2453
 #define wxSTC_CMD_VCHOMEWRAPEXTEND 2454
 
+// Copy the line containing the caret.
+#define wxSTC_CMD_LINECOPY 2455
+
 // Move to the previous change in capitalisation.
 #define wxSTC_CMD_WORDPARTLEFT 2390
 
@@ -2127,8 +2130,146 @@ public:
     void SetFoldMarginColour(bool useSetting, const wxColour& back);
     void SetFoldMarginHiColour(bool useSetting, const wxColour& fore);
 
+    // Move caret down one line.
+    void LineDown();
+
+    // Move caret down one line extending selection to new caret position.
+    void LineDownExtend();
+
+    // Move caret up one line.
+    void LineUp();
+
+    // Move caret up one line extending selection to new caret position.
+    void LineUpExtend();
+
+    // Move caret left one character.
+    void CharLeft();
+
+    // Move caret left one character extending selection to new caret position.
+    void CharLeftExtend();
+
+    // Move caret right one character.
+    void CharRight();
+
+    // Move caret right one character extending selection to new caret position.
+    void CharRightExtend();
+
+    // Move caret left one word.
+    void WordLeft();
+
+    // Move caret left one word extending selection to new caret position.
+    void WordLeftExtend();
+
+    // Move caret right one word.
+    void WordRight();
+
+    // Move caret right one word extending selection to new caret position.
+    void WordRightExtend();
+
+    // Move caret to first position on line.
+    void Home();
+
+    // Move caret to first position on line extending selection to new caret position.
+    void HomeExtend();
+
+    // Move caret to last position on line.
+    void LineEnd();
+
+    // Move caret to last position on line extending selection to new caret position.
+    void LineEndExtend();
+
+    // Move caret to first position in document.
+    void DocumentStart();
+
+    // Move caret to first position in document extending selection to new caret position.
+    void DocumentStartExtend();
+
+    // Move caret to last position in document.
+    void DocumentEnd();
+
+    // Move caret to last position in document extending selection to new caret position.
+    void DocumentEndExtend();
+
+    // Move caret one page up.
+    void PageUp();
+
+    // Move caret one page up extending selection to new caret position.
+    void PageUpExtend();
+
+    // Move caret one page down.
+    void PageDown();
+
+    // Move caret one page down extending selection to new caret position.
+    void PageDownExtend();
+
+    // Switch from insert to overtype mode or the reverse.
+    void EditToggleOvertype();
+
+    // Cancel any modes such as call tip or auto-completion list display.
+    void Cancel();
+
+    // Delete the selection or if no selection, the character before the caret.
+    void DeleteBack();
+
+    // If selection is empty or all on one line replace the selection with a tab character.
+    // If more than one line selected, indent the lines.
+    void Tab();
+
+    // Dedent the selected lines.
+    void BackTab();
+
+    // Insert a new line, may use a CRLF, CR or LF depending on EOL mode.
+    void NewLine();
+
+    // Insert a Form Feed character.
+    void FormFeed();
+
+    // Move caret to before first visible character on line.
+    // If already there move to first character on line.
+    void VCHome();
+
+    // Like VCHome but extending selection to new caret position.
+    void VCHomeExtend();
+
+    // Magnify the displayed text by increasing the sizes by 1 point.
+    void ZoomIn();
+
+    // Make the displayed text smaller by decreasing the sizes by 1 point.
+    void ZoomOut();
+
+    // Delete the word to the left of the caret.
+    void DelWordLeft();
+
+    // Delete the word to the right of the caret.
+    void DelWordRight();
+
+    // Cut the line containing the caret.
+    void LineCut();
+
+    // Delete the line containing the caret.
+    void LineDelete();
+
+    // Switch the current line with the previous.
+    void LineTranspose();
+
     // Duplicate the current line.
     void LineDuplicate();
+
+    // Transform the selection to lower case.
+    void LowerCase();
+
+    // Transform the selection to upper case.
+    void UpperCase();
+
+    // Scroll the document down, keeping the caret visible.
+    void LineScrollDown();
+
+    // Scroll the document up, keeping the caret visible.
+    void LineScrollUp();
+
+    // Delete the selection or if no selection, the character before the caret.
+    // Will not delete the character before at the start of a line.
+    void DeleteBackNotLine();
 
     // Move caret to first position on display line.
     void HomeDisplay();
@@ -2143,6 +2284,18 @@ public:
     // Move caret to last position on display line extending selection to new
     // caret position.
     void LineEndDisplayExtend();
+
+    // These are like their namesakes Home(Extend)?, LineEnd(Extend)?, VCHome(Extend)?
+    // except they behave differently when word-wrap is enabled:
+    // They go first to the start / end of the display line, like (Home|LineEnd)Display
+    // The difference is that, the cursor is already at the point, it goes on to the start
+    // or end of the document line, as appropriate for (Home|LineEnd|VCHome)(Extend)?.
+    void HomeWrap();
+    void HomeWrapExtend();
+    void LineEndWrap();
+    void LineEndWrapExtend();
+    void VCHomeWrap();
+    void VCHomeWrapExtend();
 
     // Copy the line containing the caret.
     void LineCopy();
@@ -2326,6 +2479,12 @@ public:
     // Limit hotspots to single line so hotspots on two lines don't merge.
     void SetHotspotSingleLine(bool singleLine);
 
+    // Move caret between paragraphs (delimited by empty lines).
+    void ParaDown();
+    void ParaDownExtend();
+    void ParaUp();
+    void ParaUpExtend();
+
     // Given a valid document position, return the previous position taking code
     // page into account. Returns 0 if passed 0.
     int PositionBefore(int pos);
@@ -2352,6 +2511,59 @@ public:
 
     // Retrieve the position of the end of the selection at the given line (INVALID_POSITION if no selection on this line).
     int GetLineSelEndPosition(int line);
+
+    // Move caret down one line, extending rectangular selection to new caret position.
+    void LineDownRectExtend();
+
+    // Move caret up one line, extending rectangular selection to new caret position.
+    void LineUpRectExtend();
+
+    // Move caret left one character, extending rectangular selection to new caret position.
+    void CharLeftRectExtend();
+
+    // Move caret right one character, extending rectangular selection to new caret position.
+    void CharRightRectExtend();
+
+    // Move caret to first position on line, extending rectangular selection to new caret position.
+    void HomeRectExtend();
+
+    // Move caret to before first visible character on line.
+    // If already there move to first character on line.
+    // In either case, extend rectangular selection to new caret position.
+    void VCHomeRectExtend();
+
+    // Move caret to last position on line, extending rectangular selection to new caret position.
+    void LineEndRectExtend();
+
+    // Move caret one page up, extending rectangular selection to new caret position.
+    void PageUpRectExtend();
+
+    // Move caret one page down, extending rectangular selection to new caret position.
+    void PageDownRectExtend();
+
+    // Move caret to top of page, or one page up if already at top of page.
+    void StutteredPageUp();
+
+    // Move caret to top of page, or one page up if already at top of page, extending selection to new caret position.
+    void StutteredPageUpExtend();
+
+    // Move caret to bottom of page, or one page down if already at bottom of page.
+    void StutteredPageDown();
+
+    // Move caret to bottom of page, or one page down if already at bottom of page, extending selection to new caret position.
+    void StutteredPageDownExtend();
+
+    // Move caret left one word, position cursor at end of word.
+    void WordLeftEnd();
+
+    // Move caret left one word, position cursor at end of word, extending selection to new caret position.
+    void WordLeftEndExtend();
+
+    // Move caret right one word, position cursor at end of word.
+    void WordRightEnd();
+
+    // Move caret right one word, position cursor at end of word, extending selection to new caret position.
+    void WordRightEndExtend();
 
     // Set the set of characters making up whitespace for when moving or selecting by word.
     // Should be called after SetWordChars.
