@@ -625,73 +625,81 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
     if (show == m_fsIsShowing) return FALSE; // return what?
 
     m_fsIsShowing = show;
-
-#if GTK_CHECK_VERSION(2,2,0)
-
-    if (show)
-        gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
-    else
-        gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
-
-#else
-
-    GdkWindow *window = m_widget->window;
+    
     wxX11FullScreenMethod method =
         wxGetFullScreenMethodX11((WXDisplay*)GDK_DISPLAY(),
                                  (WXWindow)GDK_ROOT_WINDOW());
 
-    if (show)
+#if GTK_CHECK_VERSION(2,2,0)
+    // NB: gtk_window_fullscreen() uses freedesktop.org's WMspec extensions
+    //     to switch to fullscreen, which is not always available. We must
+    //     check if WM supports the spec and use legacy methods if it
+    //     doesn't.
+    if (method == wxX11_FS_WMSPEC)
     {
-        m_fsSaveFlag = style;
-        GetPosition( &m_fsSaveFrame.x, &m_fsSaveFrame.y );
-        GetSize( &m_fsSaveFrame.width, &m_fsSaveFrame.height );
-
-        int screen_width,screen_height;
-        wxDisplaySize( &screen_width, &screen_height );
-
-		gint client_x, client_y, root_x, root_y;
-		gint width, height;
-
-        if (method != wxX11_FS_WMSPEC)
-        {
-            // don't do it always, Metacity hates it
-            m_fsSaveGdkFunc = m_gdkFunc;
-            m_fsSaveGdkDecor = m_gdkDecor;
-            m_gdkFunc = m_gdkDecor = 0;
-            gdk_window_set_decorations(window, (GdkWMDecoration)0);
-            gdk_window_set_functions(window, (GdkWMFunction)0);
-        }
-
-		gdk_window_get_origin (m_widget->window, &root_x, &root_y);
-		gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
-					 &width, &height, NULL);
-
-		gdk_window_move_resize (m_widget->window, -client_x, -client_y,
-					screen_width + 1, screen_height + 1);
-
-        wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
-                                (WXWindow)GDK_ROOT_WINDOW(),
-                                (WXWindow)GDK_WINDOW_XWINDOW(window),
-                                show, &m_fsSaveFrame, method);
+        if (show)
+            gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
+        else
+            gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
     }
     else
+#else
     {
-        if (method != wxX11_FS_WMSPEC)
+        GdkWindow *window = m_widget->window;
+
+        if (show)
         {
-            // don't do it always, Metacity hates it
-            m_gdkFunc = m_fsSaveGdkFunc;
-            m_gdkDecor = m_fsSaveGdkDecor;
-            gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
-            gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
+            m_fsSaveFlag = style;
+            GetPosition( &m_fsSaveFrame.x, &m_fsSaveFrame.y );
+            GetSize( &m_fsSaveFrame.width, &m_fsSaveFrame.height );
+
+            int screen_width,screen_height;
+            wxDisplaySize( &screen_width, &screen_height );
+
+            gint client_x, client_y, root_x, root_y;
+            gint width, height;
+
+            if (method != wxX11_FS_WMSPEC)
+            {
+                // don't do it always, Metacity hates it
+                m_fsSaveGdkFunc = m_gdkFunc;
+                m_fsSaveGdkDecor = m_gdkDecor;
+                m_gdkFunc = m_gdkDecor = 0;
+                gdk_window_set_decorations(window, (GdkWMDecoration)0);
+                gdk_window_set_functions(window, (GdkWMFunction)0);
+            }
+
+            gdk_window_get_origin (m_widget->window, &root_x, &root_y);
+            gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
+                         &width, &height, NULL);
+
+            gdk_window_move_resize (m_widget->window, -client_x, -client_y,
+                        screen_width + 1, screen_height + 1);
+
+            wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
+                                    (WXWindow)GDK_ROOT_WINDOW(),
+                                    (WXWindow)GDK_WINDOW_XWINDOW(window),
+                                    show, &m_fsSaveFrame, method);
         }
+        else
+        {
+            if (method != wxX11_FS_WMSPEC)
+            {
+                // don't do it always, Metacity hates it
+                m_gdkFunc = m_fsSaveGdkFunc;
+                m_gdkDecor = m_fsSaveGdkDecor;
+                gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
+                gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
+            }
 
-        wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
-                                (WXWindow)GDK_ROOT_WINDOW(),
-                                (WXWindow)GDK_WINDOW_XWINDOW(window),
-                                show, &m_fsSaveFrame, method);
+            wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
+                                    (WXWindow)GDK_ROOT_WINDOW(),
+                                    (WXWindow)GDK_WINDOW_XWINDOW(window),
+                                    show, &m_fsSaveFrame, method);
 
-        SetSize(m_fsSaveFrame.x, m_fsSaveFrame.y,
-                m_fsSaveFrame.width, m_fsSaveFrame.height);
+            SetSize(m_fsSaveFrame.x, m_fsSaveFrame.y,
+                    m_fsSaveFrame.width, m_fsSaveFrame.height);
+        }
     }
 #endif
 
