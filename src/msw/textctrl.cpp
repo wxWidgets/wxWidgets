@@ -709,7 +709,7 @@ void wxTextCtrl::ShowPosition(long pos)
     int linesToScroll = specifiedLineLineNo - currentLineLineNo;
 
     if (linesToScroll != 0)
-      (void)SendMessage(hWnd, EM_LINESCROLL, (WPARAM)0, (LPARAM)MAKELPARAM(linesToScroll, 0));
+      (void)SendMessage(hWnd, EM_LINESCROLL, (WPARAM)0, (LPARAM)linesToScroll);
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
