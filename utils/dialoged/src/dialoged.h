@@ -19,6 +19,8 @@
 #include "wx/proplist.h"
 #include "reseditr.h"
 
+extern void ObjectMenuProc(wxMenu *menu, wxCommandEvent& event);
+
 class MyChild;
 
 // Define a new application
@@ -28,6 +30,14 @@ class MyApp: public wxApp
     MyApp(void);
     bool OnInit(void);
     int OnExit(void);
+
+    void OnObjectPopupMenu(wxCommandEvent& event)
+    {
+        return ObjectMenuProc((wxMenu *)event.GetEventObject(), event);
+    }
+
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 DECLARE_APP(MyApp)

@@ -331,8 +331,8 @@ void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
       return;
     }
   
-    long x, y;
-    event.Position(&x, &y);
+    wxCoord x, y;
+    event.GetPosition(&x, &y);
 
     // Find which selection handle we're on, if any
     wxNode *node = handlerDialog->GetChildren().First();
@@ -401,7 +401,7 @@ void wxResourceEditorDialogHandler::OnItemEvent(wxControl *item, wxMouseEvent& e
 
   // Not a selection handle event: just a normal item event.
   // Transform to panel coordinates.
-  int x, y;
+  wxCoord x, y;
   item->GetPosition(&x, &y);
 
   event.m_x = event.m_x + x;
@@ -414,8 +414,8 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
 {
   wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
   
-  long x, y;
-  event.Position(&x, &y);
+  wxCoord x, y;
+  event.GetPosition(&x, &y);
   int keys = 0;
   if (event.ShiftDown()) keys = keys | wxKEY_SHIFT;
   if (event.ControlDown()) keys = keys | wxKEY_CTRL;
