@@ -108,7 +108,6 @@ public:
 
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
-    void OnScroll(wxScrollWinEvent& event) { HandleOnScroll(event); }
     void HandleOnSize(wxSizeEvent& event);
     void HandleOnPaint(wxPaintEvent& event);
     void HandleOnChar(wxKeyEvent& event);
@@ -117,6 +116,10 @@ public:
 #if wxUSE_MOUSEWHEEL
     void HandleOnMouseWheel(wxMouseEvent& event);
 #endif // wxUSE_MOUSEWHEEL
+
+    // FIXME: this is needed for now for wxPlot compilation, should be removed
+    //        once it is fixed!
+    void OnScroll(wxScrollWinEvent& event) { HandleOnScroll(event); }
 
 protected:
     // get pointer to our scroll rect if we use it or NULL
