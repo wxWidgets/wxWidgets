@@ -53,8 +53,8 @@ public:
 
     // get number of entries/subgroups in the current group, with or without
     // it's subgroups
-  virtual uint GetNumberOfEntries(bool bRecursive = FALSE) const;
-  virtual uint GetNumberOfGroups(bool bRecursive = FALSE) const;
+  virtual size_t GetNumberOfEntries(bool bRecursive = FALSE) const;
+  virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const;
 
   // read/write
   virtual bool Read(wxString *pStr, const char *szKey,

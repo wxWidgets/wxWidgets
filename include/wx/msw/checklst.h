@@ -16,7 +16,7 @@
 #pragma interface "checklst.h"
 #endif
 
-typedef   unsigned int  uint;
+typedef   unsigned int  size_t;
 
 #if !USE_OWNER_DRAWN
   #error  "wxCheckListBox class requires owner-drawn functionality."
@@ -41,16 +41,16 @@ public:
 //                 const wxFont& font = wxNullFont);
 
   // items may be checked
-  bool  IsChecked(uint uiIndex) const;
-  void  Check(uint uiIndex, bool bCheck = TRUE);
+  bool  IsChecked(size_t uiIndex) const;
+  void  Check(size_t uiIndex, bool bCheck = TRUE);
 
   // accessors
-  uint  GetItemHeight() const { return m_nItemHeight; }
+  size_t  GetItemHeight() const { return m_nItemHeight; }
 
 protected:
   // we create our items ourselves and they have non-standard size,
   // so we need to override these functions
-  virtual wxOwnerDrawn *CreateItem(uint n);
+  virtual wxOwnerDrawn *CreateItem(size_t n);
   virtual bool          MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
 
   // pressing space or clicking the check box toggles the item
@@ -58,7 +58,7 @@ protected:
   void OnLeftClick(wxMouseEvent& event);
 
 private:
-  uint    m_nItemHeight;  // height of checklistbox items (the same for all)
+  size_t    m_nItemHeight;  // height of checklistbox items (the same for all)
 
   DECLARE_EVENT_TABLE()
 };

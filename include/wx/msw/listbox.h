@@ -68,10 +68,10 @@ class WXDLLEXPORT wxListBox: public wxControl
   bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
 
   // plug-in for derived classes
-  virtual wxOwnerDrawn *CreateItem(uint n);
+  virtual wxOwnerDrawn *CreateItem(size_t n);
 
   // allows to get the item and use SetXXX functions to set it's appearance
-  wxOwnerDrawn *GetItem(uint n) const { return m_aItems[n]; }
+  wxOwnerDrawn *GetItem(size_t n) const { return m_aItems[n]; }
 #endif
 
   virtual void Append(const wxString& item);

@@ -83,9 +83,9 @@ public:
     // number of standard keys
   static const size_t nStdKeys;
     // get the name of a standard key
-  static const char *GetStdKeyName(uint key);
+  static const char *GetStdKeyName(size_t key);
     // get the short name of a standard key
-  static const char *GetStdKeyShortName(uint key);
+  static const char *GetStdKeyShortName(size_t key);
     // get StdKey from root HKEY
   static StdKey GetStdKeyFromHkey(HKEY hkey);
 
@@ -123,10 +123,10 @@ public:
     // get the info about key (any number of these pointers may be NULL)
 
 #ifdef __GNUWIN32__
-  bool  GetKeyInfo(uint *pnSubKeys,      // number of subkeys
-                   uint *pnMaxKeyLen,    // max len of subkey name
-                   uint *pnValues,       // number of values
-                   uint *pnMaxValueLen) const;
+  bool  GetKeyInfo(size_t *pnSubKeys,      // number of subkeys
+                   size_t *pnMaxKeyLen,    // max len of subkey name
+                   size_t *pnValues,       // number of values
+                   size_t *pnMaxValueLen) const;
 #else
   bool  GetKeyInfo(ulong *pnSubKeys,      // number of subkeys
                    ulong *pnMaxKeyLen,    // max len of subkey name
