@@ -8,7 +8,7 @@
   #include  "wx/msw/notebook.h"
 #endif
 #elif defined(__WXMOTIF__)
-  #include  "wx/motif/notebook.h"
+  #include  "wx/generic/notebook.h"
 #elif defined(__WXGTK__)
   #include  "wx/gtk/notebook.h"
 #elif defined(__WXQT__)

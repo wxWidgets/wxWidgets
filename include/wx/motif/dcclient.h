@@ -64,7 +64,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     virtual void DrawEllipse( long x, long y, long width, long height );
     
     virtual bool CanDrawBitmap(void) const;
-    virtual void DrawIcon( const wxIcon &icon, long x, long y, bool useMask=FALSE );
+    virtual void DrawIcon( const wxIcon &icon, long x, long y);
     virtual bool Blit( long xdest, long ydest, long width, long height,
        wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE );
 

@@ -109,7 +109,6 @@ LIB_CPP_SRC=\
  metafile.cpp \
  minifram.cpp \
  msgdlg.cpp \
- notebook.cpp \
  palette.cpp \
  pen.cpp \
  print.cpp \
@@ -143,6 +142,7 @@ LIB_CPP_SRC=\
  ../generic/listctrl.cpp \
  ../generic/laywin.cpp \
  ../generic/msgdlgg.cpp \
+ ../generic/notebook.cpp \
  ../generic/panelg.cpp \
  ../generic/printps.cpp \
  ../generic/prntdlgg.cpp \

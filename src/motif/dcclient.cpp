@@ -849,12 +849,15 @@ static void XCopyRemote(Display *src_display, Display *dest_display,
     XDestroyImage(image);
 }
 
-void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
+void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y)
 {
   if (!Ok()) return;
   
   if (!icon.Ok()) return;
-  
+
+  DrawBitmap(icon, x, y, TRUE);  
+
+#if 0
 //  FreeGetPixelCache();
 
   // Be sure that foreground pixels (1) of
@@ -909,7 +912,7 @@ void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
         (int) XLOG2DEV (x), (int) YLOG2DEV (y), FALSE, &cache);
   }
   CalcBoundingBox (x, y);
-
+#endif
 };
 
 bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,

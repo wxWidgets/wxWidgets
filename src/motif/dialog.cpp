@@ -475,7 +475,7 @@ int wxDialog::ShowModal()
     wxModalShowingStack.Insert((wxObject *)TRUE);
         
     m_modalShowing = TRUE;
-    //    XtAddGrab((Widget) m_mainWidget, TRUE, FALSE);
+    XtAddGrab((Widget) m_mainWidget, TRUE, FALSE);
 
     XEvent event;
 

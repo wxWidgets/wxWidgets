@@ -38,6 +38,13 @@ public:
   wxIcon();
   wxIcon( const wxIcon& icon);
   wxIcon( const char **bits, int width=-1, int height=-1 );
+
+  // For compatibility with wxMSW where desired size is sometimes required to
+  // distinguish between multiple icons in a resource.
+  wxIcon( const wxString& filename, int type = wxBITMAP_TYPE_XPM, int WXUNUSED(desiredWidth)=-1, int WXUNUSED(desiredHeight)=-1 ):
+    wxBitmap(filename, type)
+  {
+  }
   wxIcon( char **bits, int width=-1, int height=-1 );
 
   wxIcon& operator = (const wxIcon& icon);

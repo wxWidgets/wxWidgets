@@ -91,7 +91,7 @@ wxDC::~wxDC(void)
 {
 };
 
-void wxDC::DrawIcon( const wxIcon &WXUNUSED(icon), long WXUNUSED(x), long WXUNUSED(y), bool WXUNUSED(useMask) )
+void wxDC::DrawIcon( const wxIcon &WXUNUSED(icon), long WXUNUSED(x), long WXUNUSED(y))
 {
 };
 

@@ -29,7 +29,8 @@
 
 #include  <wx/string.h>
 #include  <wx/log.h>
-#include  <wx/imaglist.h>
+#include  <wx/settings.h>
+#include  <wx/generic/imaglist.h>
 #include  <wx/generic/notebook.h>
 #include  <wx/dcclient.h>
 

@@ -142,7 +142,7 @@ class WXDLLEXPORT wxDC: public wxObject
     
     virtual bool CanDrawBitmap(void) const = 0;
 
-    virtual void DrawIcon( const wxIcon &icon, long x, long y, bool useMask=FALSE );
+    virtual void DrawIcon( const wxIcon &icon, long x, long y);
     inline void DrawIcon(const wxIcon& icon, const wxPoint& pt)
     {
         DrawIcon(icon, pt.x, pt.y);
