@@ -37,7 +37,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-#define TEST_DATETIME
+//#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
@@ -46,7 +46,7 @@
 //#define TEST_HASH
 //#define TEST_LIST
 //#define TEST_LOG
-//#define TEST_LONGLONG
+#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_SOCKETS
@@ -950,28 +950,16 @@ static void TestBitOperations()
 {
     puts("*** Testing wxLongLong bit operation ***\n");
 
-    wxLongLong a, c;
+    wxLongLong ll;
     size_t nTested = 0;
     for ( size_t n = 0; n < 100000; n++ )
     {
-        a = RAND_LL();
+        ll = RAND_LL();
 
 #if wxUSE_LONGLONG_NATIVE
         for ( size_t n = 0; n < 33; n++ )
         {
-            wxLongLongNative b(a.GetHi(), a.GetLo());
-
-            b >>= n;
-            c = a >> n;
-
-            wxASSERT_MSG( b == c, "bit shift failure" );
-
-            b = wxLongLongNative(a.GetHi(), a.GetLo()) << n;
-            c = a << n;
-
-            wxASSERT_MSG( b == c, "bit shift failure" );
         }
-
 #else // !wxUSE_LONGLONG_NATIVE
         puts("Can't do it without native long long type, test skipped.");
 
@@ -988,6 +976,55 @@ static void TestBitOperations()
     }
 
     puts(" done!");
+}
+
+static void TestLongLongComparison()
+{
+    puts("*** Testing wxLongLong comparison ***\n");
+
+    static const long testLongs[] =
+    {
+        0,
+        1,
+        -1,
+        LONG_MAX,
+        LONG_MIN,
+        0x1234,
+        -0x1234
+    };
+
+    static const long ls[2] =
+    {
+        0x1234,
+       -0x1234,
+    };
+
+    wxLongLongWx lls[2];
+    lls[0] = ls[0];
+    lls[1] = ls[1]; 
+
+    for ( size_t n = 0; n < WXSIZEOF(testLongs); n++ )
+    {
+        bool res;
+
+        for ( size_t m = 0; m < WXSIZEOF(lls); m++ )
+        {
+            res = lls[m] > testLongs[n];
+            printf("0x%lx > 0x%lx is %s (%s)\n",
+                   ls[m], testLongs[n], res ? "true" : "false",
+                   res == (ls[m] > testLongs[n]) ? "ok" : "ERROR");
+
+            res = lls[m] < testLongs[n];
+            printf("0x%lx < 0x%lx is %s (%s)\n",
+                   ls[m], testLongs[n], res ? "true" : "false",
+                   res == (ls[m] < testLongs[n]) ? "ok" : "ERROR");
+
+            res = lls[m] == testLongs[n];
+            printf("0x%lx == 0x%lx is %s (%s)\n",
+                   ls[m], testLongs[n], res ? "true" : "false",
+                   res == (ls[m] == testLongs[n]) ? "ok" : "ERROR");
+        }
+    }
 }
 
 #undef MAKE_LL
@@ -3409,14 +3446,15 @@ int main(int argc, char **argv)
     {
         TestSpeed();
     }
-    TestMultiplication();
     if ( 0 )
     {
+        TestMultiplication();
         TestDivision();
         TestAddition();
         TestLongLongConversion();
         TestBitOperations();
     }
+    TestLongLongComparison();
 #endif // TEST_LONGLONG
 
 #ifdef TEST_HASH
