@@ -201,7 +201,7 @@ class PyPalette(canvas.Canvas):
             for x in range(0, width, self.HORIZONTAL_STEP):
                 hue = float(x) / float(width)
                 r,g,b = colorsys.hsv_to_rgb(hue, saturation, value)
-                colour = wxColour(r * 255.0, g * 255.0, b * 255.0)
+                colour = wxColour(int(r * 255.0), int(g * 255.0), int(b * 255.0))
                 self.buffer.SetPen(wxPen(colour, 1, wxSOLID))
                 self.buffer.SetBrush(wxBrush(colour, wxSOLID))
                 self.buffer.DrawRectangle(x, y,

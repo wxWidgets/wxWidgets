@@ -57,7 +57,7 @@ class PyColourBox(wxPanel):
     def SetColourTuple(self, colour):
         """Sets the box's current couple to the given tuple."""
         self.colour = colour
-        self.colour_box.SetBackgroundColour(apply(wxColour, self.colour))
+        self.colour_box.SetBackgroundColour(wxColour(*self.colour))
 
     def Update(self):
         wxPanel.Update(self)
