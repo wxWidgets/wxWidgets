@@ -452,6 +452,11 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     
     x_start = charWidth;
     y_start = 15 ;
+    if ( UMAGetSystemVersion() >= 0x1030 )
+    {
+		//need to add a few more pixels for the top border on panther
+		y_start = y_start + 5; //how many exactly should this be to meet the HIG?
+    }
     x_offset = x_start;
     y_offset = y_start;
     
@@ -509,6 +514,11 @@ wxSize wxRadioBox::DoGetBestSize() const
     totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight ;
     totWidth  = GetColumnCount() * (maxWidth + charWidth) + charWidth;
     
+    if ( UMAGetSystemVersion() >= 0x1030 )
+    {
+        //need to add a few more pixels for the static boxborder on panther
+        totHeight = totHeight + 10; //how many exactly should this be to meet the HIG?
+    }
     // handle radio box title as well
     GetTextExtent(GetTitle(), &eachWidth, NULL);
     eachWidth  = (int)(eachWidth + RADIO_SIZE) + 3 * charWidth ;
