@@ -52,7 +52,7 @@ class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxColourMap;
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxMenu;
-class WXDLLEXPORT wxRectangle;
+class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxSizer;
 class WXDLLEXPORT wxList;
@@ -227,7 +227,7 @@ public:
   virtual bool PopupMenu(wxMenu *menu, int x, int y);
 
   // Send the window a refresh event
-  virtual void Refresh(bool eraseBack = TRUE, const wxRectangle *rect = NULL);
+  virtual void Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL);
 
   // New functions that will replace the above.
   virtual void SetScrollbar(int orient, int pos, int thumbVisible,
@@ -238,7 +238,7 @@ public:
   virtual int GetScrollRange(int orient) const;
   virtual int GetScrollThumb(int orient) const;
 
-  virtual void ScrollWindow(int dx, int dy, const wxRectangle *rect = NULL);
+  virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
 
   // Caret manipulation
   virtual void CreateCaret(int w, int h);

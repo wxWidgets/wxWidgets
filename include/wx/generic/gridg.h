@@ -139,7 +139,7 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   inline wxScrollBar *GetVertScrollBar(void) { return m_vScrollBar; }
   inline bool GetEditable(void) { return m_editable; }
   void SetEditable(bool edit);
-  inline wxRectangle& GetCurrentRect(void) { return m_currentRect; }
+  inline wxRect& GetCurrentRect(void) { return m_currentRect; }
   inline bool CurrentCellVisible(void) { return m_currentRectVisible; }
   inline void SetDividerPen(wxPen *pen) { m_divisionPen = pen; }
   inline wxPen *GetDividerPen(void) { return m_divisionPen; }
@@ -200,14 +200,14 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   virtual void DrawEditableArea(wxDC *dc);
   virtual void DrawGridLines(wxDC *dc);
   virtual void DrawColumnLabels(wxDC *dc);
-  virtual void DrawColumnLabel(wxDC *dc, wxRectangle *rect, int col);
+  virtual void DrawColumnLabel(wxDC *dc, wxRect *rect, int col);
   virtual void DrawRowLabels(wxDC *dc);
-  virtual void DrawRowLabel(wxDC *dc, wxRectangle *rect, int row);
+  virtual void DrawRowLabel(wxDC *dc, wxRect *rect, int row);
   virtual void DrawCells(wxDC *dc);
-  virtual void DrawCellValue(wxDC *dc, wxRectangle *rect, int row, int col);
-  virtual void DrawCellBackground(wxDC *dc, wxRectangle *rect, int row, int col);
-  virtual void DrawTextRect(wxDC *dc, const wxString& text, wxRectangle *rect, int flag);
-  virtual void DrawBitmapRect(wxDC *dc, wxBitmap *bitmap, wxRectangle *rect, int flag);
+  virtual void DrawCellValue(wxDC *dc, wxRect *rect, int row, int col);
+  virtual void DrawCellBackground(wxDC *dc, wxRect *rect, int row, int col);
+  virtual void DrawTextRect(wxDC *dc, const wxString& text, wxRect *rect, int flag);
+  virtual void DrawBitmapRect(wxDC *dc, wxBitmap *bitmap, wxRect *rect, int flag);
 
   // Refresh cell and optionally set the text field
   void RefreshCell(int row, int col, bool setText = FALSE);
@@ -227,7 +227,7 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   wxScrollBar*              m_vScrollBar;
   int                       m_wCursorRow;
   int                       m_wCursorColumn;
-  wxRectangle               m_currentRect;
+  wxRect               m_currentRect;
   bool                      m_currentRectVisible;
   wxGridCell***             m_gridCells;
   wxGridCell**              m_rowLabelCells;
@@ -271,7 +271,7 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   wxBitmap*                 m_doubleBufferingBitmap;
 
   // Position of Edit control
-  wxRectangle               m_editControlPosition;
+  wxRect               m_editControlPosition;
 
   // Drag status
   int                       m_dragStatus;

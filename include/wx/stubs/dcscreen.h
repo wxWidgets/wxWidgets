@@ -30,7 +30,7 @@ class WXDLLEXPORT wxScreenDC: public wxWindowDC
   // Compatibility with X's requirements for
   // drawing on top of all windows
   static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return TRUE; }
-  static bool StartDrawingOnTop(wxRectangle* WXUNUSED(rect) = NULL) { return TRUE; }
+  static bool StartDrawingOnTop(wxRect* WXUNUSED(rect) = NULL) { return TRUE; }
   static bool EndDrawingOnTop() { return TRUE; }
 };
 

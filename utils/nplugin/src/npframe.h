@@ -65,7 +65,7 @@ public:
   virtual void OnNPPrint(NPPrint* printInfo);
 
   // Overridables: high-level
-  virtual void OnPrint(wxPrinterDC& dc, wxRectangle& rect);
+  virtual void OnPrint(wxPrinterDC& dc, wxRect& rect);
   virtual void OnDraw(wxDC& dc);
 
 protected:

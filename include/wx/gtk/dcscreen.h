@@ -31,7 +31,7 @@ public:
   ~wxScreenDC(void);
 
   static bool StartDrawingOnTop( wxWindow *window );
-  static bool StartDrawingOnTop( wxRectangle *rect = (wxRectangle *) NULL );
+  static bool StartDrawingOnTop( wxRect *rect = (wxRect *) NULL );
   static bool EndDrawingOnTop(void);
   
   // implementation

@@ -46,7 +46,7 @@ class WXDLLEXPORT wxGenericFontDialog: public wxDialog
   wxWindow *dialogParent;
 
   // Area reserved for font display
-  wxRectangle fontRect;
+  wxRect fontRect;
 
   wxChoice *familyChoice;
   wxChoice *styleChoice;

@@ -188,7 +188,7 @@ void wxStatusBar::DrawFieldText(wxDC& dc, int i)
 {
   int leftMargin = 2;
 
-  wxRectangle rect;
+  wxRect rect;
   GetFieldRect(i, rect);
 
   wxString text(GetStatusText(i));
@@ -209,7 +209,7 @@ void wxStatusBar::DrawFieldText(wxDC& dc, int i)
 
 void wxStatusBar::DrawField(wxDC& dc, int i)
 {
-  wxRectangle rect;
+  wxRect rect;
   GetFieldRect(i, rect);
 
     // Draw border
@@ -238,7 +238,7 @@ void wxStatusBar::DrawField(wxDC& dc, int i)
 }
 
   // Get the position and size of the field's internal bounding rectangle
-bool wxStatusBar::GetFieldRect(int n, wxRectangle& rect) const
+bool wxStatusBar::GetFieldRect(int n, wxRect& rect) const
 {
   if ((n < 0) || (n >= m_nFields))
     return FALSE;

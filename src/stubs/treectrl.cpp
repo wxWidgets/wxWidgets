@@ -252,7 +252,7 @@ bool wxTreeCtrl::SetItemData(long item, long data)
     return SetItem(info);
 }
 
-bool wxTreeCtrl::GetItemRect(long item, wxRectangle& rect, bool textOnly) const
+bool wxTreeCtrl::GetItemRect(long item, wxRect& rect, bool textOnly) const
 {
     // TODO
     return FALSE;

@@ -744,7 +744,7 @@ void wxGenericGrid::DrawColumnLabels(wxDC *dc)
     return;
 
   int i;
-  wxRectangle rect;
+  wxRect rect;
 
   // Draw letters for columns
   rect.y = m_topOfSheet + 1;
@@ -770,12 +770,12 @@ void wxGenericGrid::DrawColumnLabels(wxDC *dc)
   }
 }
 
-void wxGenericGrid::DrawColumnLabel(wxDC *dc, wxRectangle *rect, int col)
+void wxGenericGrid::DrawColumnLabel(wxDC *dc, wxRect *rect, int col)
 {
   wxGridCell *cell = GetLabelCell(wxHORIZONTAL, col);
   if (cell)
   {
-    wxRectangle rect2;
+    wxRect rect2;
     rect2 = *rect;
     rect2.x += 3;
     rect2.y += 2;
@@ -797,7 +797,7 @@ void wxGenericGrid::DrawRowLabels(wxDC *dc)
     return;
 
   int i;
-  wxRectangle rect;
+  wxRect rect;
 
   // Draw numbers for rows
   rect.x = m_leftOfSheet;
@@ -823,12 +823,12 @@ void wxGenericGrid::DrawRowLabels(wxDC *dc)
   }
 }
 
-void wxGenericGrid::DrawRowLabel(wxDC *dc, wxRectangle *rect, int row)
+void wxGenericGrid::DrawRowLabel(wxDC *dc, wxRect *rect, int row)
 {
   wxGridCell *cell = GetLabelCell(wxVERTICAL, row);
   if (cell)
   {
-    wxRectangle rect2;
+    wxRect rect2;
     rect2 = *rect;
     rect2.x += 3;
     rect2.y += 2;
@@ -869,7 +869,7 @@ void wxGenericGrid::DrawCells(wxDC *dc)
   dc->SetPen(*wxBLACK_PEN);
 }
 
-void wxGenericGrid::DrawCellBackground(wxDC *dc, wxRectangle *rect, int row, int col)
+void wxGenericGrid::DrawCellBackground(wxDC *dc, wxRect *rect, int row, int col)
 {
   wxGridCell *cell = GetCell(row, col);
   if (cell)
@@ -891,13 +891,13 @@ void wxGenericGrid::DrawCellBackground(wxDC *dc, wxRectangle *rect, int row, int
   }
 }
 
-void wxGenericGrid::DrawCellValue(wxDC *dc, wxRectangle *rect, int row, int col)
+void wxGenericGrid::DrawCellValue(wxDC *dc, wxRect *rect, int row, int col)
 {
   wxGridCell *cell = GetCell(row, col);
   if (cell)
   {
     wxBitmap *bitmap = cell->GetCellBitmap();
-    wxRectangle rect2;
+    wxRect rect2;
     rect2 = *rect;
     rect2.x += 3;
     rect2.y += 2;
@@ -1515,7 +1515,7 @@ void wxGenericGrid::DrawCellText(void)
 
   strcpy(szEdit, m_textItem->GetValue());
 
-  wxRectangle rect;
+  wxRect rect;
   rect = m_currentRect;
   rect.x += 3;
   rect.y += 2;
@@ -1555,7 +1555,7 @@ void wxGenericGrid::SetCurrentRect(int Row, int Column, int canvasW, int canvasH
   else m_currentRectVisible = TRUE;
 }
 
-static bool wxRectIntersection(wxRectangle *rect1, wxRectangle *rect2, wxRectangle *rect3)
+static bool wxRectIntersection(wxRect *rect1, wxRect *rect2, wxRect *rect3)
 {
   int x2_1 = rect1->x + rect1->width;
   int y2_1 = rect1->y + rect1->height;
@@ -1597,7 +1597,7 @@ static bool wxRectIntersection(wxRectangle *rect1, wxRectangle *rect2, wxRectang
   return TRUE;
 }
 
-void wxGenericGrid::DrawTextRect(wxDC *dc, const wxString& text, wxRectangle *rect, int flag)
+void wxGenericGrid::DrawTextRect(wxDC *dc, const wxString& text, wxRect *rect, int flag)
 {
   dc->BeginDrawing();
 
@@ -1609,8 +1609,8 @@ void wxGenericGrid::DrawTextRect(wxDC *dc, const wxString& text, wxRectangle *re
   // If we're already clipping, we need to find the intersection
   // between current clipping area and text clipping area.
 
-  wxRectangle clipRect;
-  wxRectangle clipRect2;
+  wxRect clipRect;
+  wxRect clipRect2;
   long clipX, clipY, clipW, clipH;
   dc->GetClippingBox(&clipX, &clipY, &clipW, &clipH);
   clipRect.x = (int)clipX; clipRect.y = (int)clipY;
@@ -1674,7 +1674,7 @@ void wxGenericGrid::DrawTextRect(wxDC *dc, const wxString& text, wxRectangle *re
   dc->EndDrawing();
 }
 
-void wxGenericGrid::DrawBitmapRect(wxDC *dc, wxBitmap *bitmap, wxRectangle *rect, int flag)
+void wxGenericGrid::DrawBitmapRect(wxDC *dc, wxBitmap *bitmap, wxRect *rect, int flag)
 {
   dc->BeginDrawing();
 
@@ -1686,8 +1686,8 @@ void wxGenericGrid::DrawBitmapRect(wxDC *dc, wxBitmap *bitmap, wxRectangle *rect
   // If we're already clipping, we need to find the intersection
   // between current clipping area and text clipping area.
 
-  wxRectangle clipRect;
-  wxRectangle clipRect2;
+  wxRect clipRect;
+  wxRect clipRect2;
   long clipX, clipY, clipW, clipH;
   dc->GetClippingBox(&clipX, &clipY, &clipW, &clipH);
   clipRect.x = (int)clipX; clipRect.y = (int)clipY;

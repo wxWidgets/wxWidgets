@@ -476,7 +476,7 @@ class WXDLLEXPORT wxMouseEvent: public wxEvent
   inline bool RightIsDown(void) const { return m_rightDown; }
 
   // True if a button is down and the mouse is moving
-  inline bool Dragging(void) const { return ((m_eventType == wxEVENT_TYPE_MOTION) && (LeftIsDown() || MiddleIsDown() || RightIsDown())); }
+  inline bool Dragging(void) const { return ((m_eventType == wxEVT_MOTION) && (LeftIsDown() || MiddleIsDown() || RightIsDown())); }
 
   // True if the mouse is moving, and no button is down
   inline bool Moving(void) const { return (m_eventType == wxEVT_MOTION); }

@@ -895,7 +895,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
     *externalLeading = 0;
 }
 
-void wxWindow::Refresh(bool eraseBack, const wxRectangle *rect)
+void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
     Display *display = XtDisplay((Widget) GetMainWidget());
     Window thisWindow = XtWindow((Widget) GetMainWidget());
@@ -1172,7 +1172,7 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
 }
 
 // Does a physical scroll
-void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
+void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
 //  cerr << "Scrolling. delta = " << dx << ", " << dy << endl;
   int x, y, w, h;

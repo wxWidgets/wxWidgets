@@ -258,7 +258,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   bool SetItemData(long item, long data) ;
 
   // Gets the item rectangle
-  bool GetItemRect(long item, wxRectangle& rect, int code = wxLIST_RECT_BOUNDS) const ;
+  bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;
 
   // Gets the item position
   bool GetItemPosition(long item, wxPoint& pos) const ;

@@ -622,7 +622,7 @@ bool wxListCtrl::SetItemData(long item, long data)
 }
 
 // Gets the item rectangle
-bool wxListCtrl::GetItemRect(long item, wxRectangle& rect, int code) const
+bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
 {
   RECT rect2;
 

@@ -246,7 +246,7 @@ void wxPluginFrame::OnNPPrint(NPPrint* printInfo)
             void* platformPrint = printInfo->print.embedPrint.platformPrint;
 
             HDC hDC = (HDC) platformPrint;
-            wxRectangle rect;
+            wxRect rect;
             rect.x = printWindow->x;
             rect.y = printWindow->y;
             rect.width = printWindow->width;
@@ -265,7 +265,7 @@ void wxPluginFrame::OnNPPrint(NPPrint* printInfo)
         }
  }
 
-void wxPluginFrame::OnPrint(wxPrinterDC& dc, wxRectangle& rect)
+void wxPluginFrame::OnPrint(wxPrinterDC& dc, wxRect& rect)
 {
     // We must do some transformations here
 	RECT winRect;

@@ -58,7 +58,7 @@ public:
   virtual void DrawField(wxDC& dc, int i);
 
   // Get the position and size of the field's internal bounding rectangle
-  virtual bool GetFieldRect(int i, wxRectangle& rect) const;
+  virtual bool GetFieldRect(int i, wxRect& rect) const;
 
   inline int GetBorderX() const { return m_borderX; }
   inline int GetBorderY() const { return m_borderY; }

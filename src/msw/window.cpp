@@ -778,7 +778,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
     //    fontToUse->ReleaseResource();
 }
 
-void wxWindow::Refresh(bool eraseBack, const wxRectangle *rect)
+void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
     HWND hWnd = (HWND) GetHWND();
     if (hWnd)
@@ -3311,7 +3311,7 @@ SetScrollPage(orient, thumbVisible, FALSE);
     }
 }
 
-void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
+void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
     RECT rect2;
     if ( rect )

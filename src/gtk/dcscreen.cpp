@@ -283,7 +283,7 @@ bool wxScreenDC::StartDrawingOnTop( wxWindow *window )
   window->GetSize( &w, &h );
   window->ClientToScreen( &x, &y );
   
-  wxRectangle rect;
+  wxRect rect;
   rect.x = x;
   rect.y = y;
   rect.width = 0;
@@ -292,7 +292,7 @@ bool wxScreenDC::StartDrawingOnTop( wxWindow *window )
   return StartDrawingOnTop( &rect );
 }
 
-bool wxScreenDC::StartDrawingOnTop( wxRectangle *rect )
+bool wxScreenDC::StartDrawingOnTop( wxRect *rect )
 {
   int x = 0;
   int y = 0;

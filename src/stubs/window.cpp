@@ -370,7 +370,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
     // TODO
 }
 
-void wxWindow::Refresh(bool eraseBack, const wxRectangle *rect)
+void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
     // TODO
 }
@@ -534,7 +534,7 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
 }
 
 // Does a physical scroll
-void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
+void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
     // TODO
     return;

@@ -35,9 +35,9 @@ class WXDLLEXPORT wxGenericColourDialog: public wxDialog
   wxWindow *dialogParent;
 
   // Area reserved for grids of colours
-  wxRectangle standardColoursRect;
-  wxRectangle customColoursRect;
-  wxRectangle singleCustomColourRect;
+  wxRect standardColoursRect;
+  wxRect customColoursRect;
+  wxRect singleCustomColourRect;
 
   // Size of each colour rectangle
   wxIntPoint smallRectangleSize;

@@ -190,7 +190,7 @@ public:
     }
 
       // bounding rect
-    bool GetItemRect(long item, wxRectangle& rect, bool textOnly = FALSE) const;
+    bool GetItemRect(long item, wxRect& rect, bool textOnly = FALSE) const;
       //
     wxTextCtrl* GetEditControl() const;
     

@@ -22,6 +22,11 @@
 #include "wx/control.h"
 #include "wx/event.h"
 
+#ifdef __MINGW32__
+#undef GetFirstChild()
+#undef GetNextSibling()
+#endif
+
 // the type for "untyped" data
 typedef long wxDataType;
 
@@ -388,7 +393,7 @@ public:
         // get the bounding rectangle of the item (or of its label only)
         // @@@ do we really need to expose this functions to the application?
     void GetBoundingRect(const wxTreeItemId& item,
-                         wxRectangle& rect,
+                         wxRect& rect,
                          bool textOnly = FALSE) const;
 
     // deprecated

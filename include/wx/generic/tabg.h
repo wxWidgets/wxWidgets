@@ -152,7 +152,7 @@ public:
   inline wxPen *GetBackgroundPen(void) const { return m_backgroundPen; }
   inline wxBrush *GetBackgroundBrush(void) const { return m_backgroundBrush; }
   
-  inline void SetViewRect(const wxRectangle& rect) { m_tabViewRect = rect; }
+  inline void SetViewRect(const wxRect& rect) { m_tabViewRect = rect; }
   inline wxRect GetViewRect(void) const { return m_tabViewRect; }
   
   // Calculate tab width to fit to view, and optionally adjust the view
