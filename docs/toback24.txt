@@ -171,3 +171,11 @@ This prevents mungeing of the config file after reading in
 entries (say, just one entry in one group), then adding entries
 to a different group.
 
+20. Bug fix for clicking on a panel not giving focus to it:
+
+http://sf.net/tracker/?func=detail&aid=215436&group_id=9863&atid=109863
+
+Checking in src/common/containr.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/containr.cpp,v  <--  containr.cpp
+new revision: 1.18; previous revision: 1.17
+
