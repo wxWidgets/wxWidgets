@@ -24,6 +24,9 @@
     #pragma hdrstop
 #endif
 
+// FIXME: there is no Mac implementation yet
+#ifndef __WXMAC__
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif //WX_PRECOMP
@@ -83,4 +86,6 @@ wxString wxStandardPathsBase::AppendAppName(const wxString& dir)
 
     return subdir;
 }
+
+#endif // !__WXMAC__
 
