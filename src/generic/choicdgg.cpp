@@ -81,9 +81,10 @@ int ConvertWXArrayToC(const wxArrayString& aChoices, wxString **choices)
 {
     int n = aChoices.GetCount();
     *choices = new wxString[n];
+
     for ( int i = 0; i < n; i++ )
     {
-        *choices[i] = aChoices[i];
+        (*choices)[i] = aChoices[i];   
     }
 
     return n;
