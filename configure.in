@@ -409,7 +409,7 @@ dnl WX_INTERFACE_AGE = 0
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=1
-WX_RELEASE_NUMBER=13
+WX_RELEASE_NUMBER=14
 
 WX_INTERFACE_AGE=0
 WX_BINARY_AGE=0
@@ -826,7 +826,7 @@ else
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
-  DEFAULT_wxUSE_NEW_GRID=no
+  DEFAULT_wxUSE_NEW_GRID=yes
   DEFAULT_wxUSE_IMAGLIST=yes
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
@@ -1044,7 +1044,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
-  DEFAULT_wxUSE_NEW_GRID=no
+  DEFAULT_wxUSE_NEW_GRID=yes
   DEFAULT_wxUSE_IMAGLIST=yes
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
@@ -1837,7 +1837,9 @@ fi
 
     dnl ODBC objects are Unix only
     if test "$TOOLKIT" != "MSW"; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
+        if test "$wxUSE_ODBC" = "yes" ; then
+            ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
+        fi
     fi
 
     if test "$wxUSE_LIBJPEG" = "yes" ; then

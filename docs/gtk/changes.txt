@@ -1,5 +1,5 @@
 
-12th January '2000: wxWindows 2.1.14 released
+20th February '2000: wxWindows 2.1.14 released
 
 Minor changes to socket code.
 

@@ -570,9 +570,11 @@ MSW_DIST: ALL_GUI_DIST
 DEMOS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/demos
 	cp $(DEMODIR)/Makefile.in $(DISTDIR)/demos
-	cp $(DEMODIR)/configure $(DISTDIR)/samples
-	cp $(DEMODIR)/configure.in $(DISTDIR)/samples
-
+	cp $(DEMODIR)/configure $(DISTDIR)/demos
+	cp $(DEMODIR)/configure.in $(DISTDIR)/demos
+	
+	cp -R $(DEMODIR)/dbbrowse $(DISTDIR)/demos/dbbrowse
+	    
 	mkdir $(DISTDIR)/demos/bombs
 	cp $(DEMODIR)/bombs/Makefile.in $(DISTDIR)/demos/bombs
 	cp $(DEMODIR)/bombs/makefile.unx $(DISTDIR)/demos/bombs

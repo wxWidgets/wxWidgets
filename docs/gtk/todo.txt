@@ -1,8 +1,6 @@
 
 -------------------- High priority ---------------------
 
-Finish and extend wxPlotWindow.
-
 Improve, update translations. Install *.mo files somewehere.
 
 -------------------- Medium priority ---------------------

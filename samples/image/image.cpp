@@ -142,12 +142,14 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     wxImage image( bitmap );
 
 #if wxUSE_LIBPNG
-    image.LoadFile( dir + wxString("test.png") );
-    my_square = new wxBitmap( image.ConvertToBitmap() );
-    
     if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ) )
         wxLogError("Can't save file");
         
+    image = wxImage( 100, 100 );
+
+    image.LoadFile( dir + wxString("test.png") );
+    my_square = new wxBitmap( image.ConvertToBitmap() );
+    
     image = wxImage( 100, 100 );
 
     if ( !image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG ) )

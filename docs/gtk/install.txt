@@ -240,9 +240,6 @@ Given below are the commands to change the default behaviour,
 i.e. if it says "--disable-threads" it means that threads
 are enabled by default.
 
-Many of the confiugre options have been thoroughly tested
-in wxWindows snapshot 6, but not yet all (ODBC not).
-
 Normally, you won't have to choose a toolkit, because when
 you download wxGTK, it will default to --with-gtk etc. But
 if you use all of our CVS repository you have to choose a 
@@ -286,7 +283,7 @@ The following options handle the kind of library you want to build.
 				
 	--enable-permissive     Enable compilation without creation of
 	                        giving erros as soon as you compile with
-				Solaris' ANSI-defying headers...
+				            Solaris' ANSI-defying headers.
 				
 	--enable-mem_tracing    Add built-in memory tracing.
 				
@@ -295,7 +292,7 @@ The following options handle the kind of library you want to build.
 				
 	--enable-debug_info	    Add debug info to object files and
 	                        executables for use with debuggers
-				such as gdb (or its many frontends).
+				            such as gdb (or its many frontends).
 
 	--enable-debug_flag	    Define __DEBUG__ and __WXDEBUG__ when
 	                        compiling. This enable wxWindows' very
@@ -308,26 +305,27 @@ The following options handle the kind of library you want to build.
 * Feature Options
 -------------------
 
-Many of the confiugre options have been thoroughly tested
-in wxWindows snapshot 6, but not yet all (ODBC not).
-
 When producing an executable that is linked statically with wxGTK
 you'll be surprised at its immense size. This can sometimes be
 drastically reduced by removing features from wxWindows that 
 are not used in your program. The most relevant such features
 are
 
+	--with-odbc             Enables ODBC code. This is disabled
+                            by default because iODBC is under the
+                            L-GPL license.
+	
 	--without-libpng	    Disables PNG image format code.
 	
 	--without-libjpeg	    Disables JPEG image format code.
 	
+	--without-libtiff	    Disables TIFF image format code.
+    
 	--disable-pnm		    Disables PNM image format code.
 	
 	--disable-gif		    Disables GIF image format code.
 	
 	--disable-pcx		    Disables PCX image format code.
-	
-	--without-odbc          Disables ODBC code.
 	
     --disable-resources     Disables the use of *.wxr type
 	                        resources.
@@ -401,12 +399,12 @@ in the various directories will do the work for you.
 1) The first way uses the installed libraries and header files
 automatically using wx-config
 
-g++ myfoo.cpp `wx-config --libs` `wx-config --cflags` -o myfoo
+gcc myfoo.cpp `wx-config --cflags --libs` -o myfoo
 
 Using this way, a make file for the minimal sample would look
 like this
 
-CC = g++
+CC = gcc
 
 minimal: minimal.o
     $(CC) -o minimal minimal.o `wx-config --libs` 
