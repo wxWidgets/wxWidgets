@@ -106,7 +106,7 @@ done
 
 cat > pythonw <<EOF
 #!/bin/sh
-exec /Applicaitons/Python.app/Contents/MacOS/python \$@
+exec /Applications/Python.app/Contents/MacOS/python \$@
 EOF
 chmod +x pythonw
 cd $curDir
