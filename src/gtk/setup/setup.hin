@@ -195,10 +195,6 @@
  */
 #undef WXDEBUG
 /*
- * Enables debugging: memory tracing, assert, etc., undefined if no debugging
- */
-#undef __WXDEBUG__
-/*
  * Enables debugging version of wxObject::new and wxObject::delete (IF WXDEBUG)
  * WARNING: this code may not work with all architectures, especially
  * if alignment is an issue.
