@@ -47,7 +47,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     Widget borderWidget =
         (Widget) wxCreateBorderWidget( (WXWidget)parentWidget, style );
-    wxXmString text( label );
+    wxXmString text( wxStripMenuCodes( label ) );
     WXFontType fontType = m_font.GetFontType(XtDisplay(parentWidget));
 
     m_labelWidget = XtVaCreateManagedWidget (wxConstCast(name.c_str(), char),
