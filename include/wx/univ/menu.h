@@ -142,11 +142,7 @@ private:
 #endif // wxUSE_ACCEL
 
     // it calls out OnDismiss()
-#ifdef __WXMAC__
     friend class wxPopupMenuWindow;
-#else
-    friend wxPopupMenuWindow;
-#endif
     DECLARE_DYNAMIC_CLASS(wxMenu)
 };
 
