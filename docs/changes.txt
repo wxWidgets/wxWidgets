@@ -37,6 +37,8 @@ All:
   datatype (if BLOB support is enabled and supported by the database)
 - added wxDynamicLibrary::ListLoaded()
 - wxGetPowerType() and wxGetBatteryState() addition
+- wxSystemSettings::GetSystem*() members deprecated and replaced with
+  wxSystemSettings::Get*()
 
 All (GUI):
 
