@@ -1924,7 +1924,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
     // WM_GETDLGCODE: if the control wants it for itself, don't process it
     // (except for Ctrl-Tab combination which is always processed)
-    LONG lDlgCode;
+    LONG lDlgCode = 0;
     if ( bProcess && !bCtrlDown ) {
       lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
     }
@@ -1933,7 +1933,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
     if ( bProcess ) {
       switch ( msg->wParam ) {
         case VK_TAB:
-          if ( lDlgCode & DLGC_WANTTAB )
+          if ( lDlgCode & DLGC_WANTTAB )  // this is FALSE for Ctrl-Tab
             bProcess = FALSE;
           else
             bForward = !(::GetKeyState(VK_SHIFT) & 0x100);
