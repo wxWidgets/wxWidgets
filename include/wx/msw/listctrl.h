@@ -342,9 +342,6 @@ public:
     // bring the control in sync with current m_windowStyle value
     void UpdateStyle();
 
-    // Gets the WIN32 style and extra style
-    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const ;
-
     // Event handlers
     ////////////////////////////////////////////////////////////////////////////
     // Necessary for drawing hrules and vrules, if specified
@@ -362,6 +359,10 @@ protected:
     // free memory taken by all internal data
     void FreeAllInternalData();
 
+    // convert our styles to Windows
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
+
     wxTextCtrl*       m_textCtrl;        // The control used for editing a label
     wxImageList *     m_imageListNormal; // The image list for normal icons
     wxImageList *     m_imageListSmall;  // The image list for small icons
@@ -370,7 +371,6 @@ protected:
                       m_ownsImageListSmall,
                       m_ownsImageListState;
 
-    long              m_baseStyle;  // Basic Windows style flags, for recreation purposes
     int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                     // keep track of inserted/deleted columns
     long              m_count;      // Keep track of item count to save calls to
@@ -396,8 +396,6 @@ protected:
     virtual wxListItemAttr *OnGetItemAttr(long item) const;
 
 private:
-    bool DoCreateControl(int x, int y, int w, int h);
-
     // process NM_CUSTOMDRAW notification message
     WXLPARAM OnCustomDraw(WXLPARAM lParam);
 
