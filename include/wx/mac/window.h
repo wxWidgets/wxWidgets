@@ -256,6 +256,7 @@ public :
 
 	static long							MacRemoveBordersFromStyle( long style ) ;
 	virtual void 						MacSuperChangedPosition() ;
+	virtual void                        MacTopLevelWindowChangedPosition() ;
 	virtual void						MacSuperShown( bool show ) ;
 	bool								MacIsReallyShown() const ;
 /*
