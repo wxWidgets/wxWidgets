@@ -119,7 +119,7 @@ public:
   void OnSelChange(wxNotebookEvent& event);
   void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
-  
+  void OnMouse(wxMouseEvent &event);  
 
     // implementation
     // --------------
