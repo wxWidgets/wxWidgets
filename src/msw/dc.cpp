@@ -398,7 +398,7 @@ wxDC::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
             self->m_clipping = false;
     }
 
-    return wxDCBase::DoGetClippingBox(x, y, w, h);
+    wxDCBase::DoGetClippingBox(x, y, w, h);
 }
 
 // common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
