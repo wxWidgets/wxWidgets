@@ -83,6 +83,14 @@ Clears the hash table of all nodes (but as usual, doesn't delete user data).
 
 Deletes entry in hash table and returns the user's data (if found).
 
+\membersection{wxHashTable::DeleteContents}
+
+\func{void}{DeleteContents}{\param{bool}{ flag}}
+
+If set to TRUE data stored in hash table will be deleted when hash table object
+is destroyed.
+
+
 \membersection{wxHashTable::Get}
 
 \func{wxObject *}{Get}{\param{long}{ key}}
