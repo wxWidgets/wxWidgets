@@ -181,12 +181,14 @@ public:
 protected:
     // our event handlers
     void OnSashPosChanged(wxSplitterEvent& event);
+    void OnSashPosChanging(wxSplitterEvent& event);
     void OnDoubleClick(wxSplitterEvent& event);
     void OnUnsplitEvent(wxSplitterEvent& event);
 
     void SendUnsplitEvent(wxWindow *winRemoved);
 
     int         m_splitMode;
+    bool        m_permitUnsplitAlways;
     wxWindow*   m_windowOne;
     wxWindow*   m_windowTwo;
     int         m_dragMode;
@@ -237,14 +239,16 @@ public:
     // all
     void SetSashPosition(int pos)
     {
-        wxASSERT( GetEventType() == wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED );
+        wxASSERT( GetEventType() == wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
+                || GetEventType() == wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING);
 
         m_data.pos = pos;
     }
 
     int GetSashPosition() const
     {
-        wxASSERT( GetEventType() == wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED );
+        wxASSERT( GetEventType() == wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
+                || GetEventType() == wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING);
 
         return m_data.pos;
     }
@@ -300,9 +304,18 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
     NULL                                                                    \
   },
 
-#define EVT_SPLITTER_DCLICK(id, fn)                                   \
+#define EVT_SPLITTER_SASH_POS_CHANGING(id, fn)                              \
   {                                                                         \
-    wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,                                    \
+    wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING,                               \
+    id,                                                                     \
+    -1,                                                                     \
+    (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
+    NULL                                                                    \
+  },
+
+#define EVT_SPLITTER_DCLICK(id, fn)                                         \
+  {                                                                         \
+    wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,                                   \
     id,                                                                     \
     -1,                                                                     \
     (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
