@@ -337,12 +337,6 @@ int wxFileDialog::ShowModal()
 	AEDesc					mDefaultLocation ;
 	bool					mSelectDefault = false ;
 		
-	// zero all data
-	
-	m_path = wxEmptyString ;
-	m_fileName = wxEmptyString ;
-	m_paths.Empty();
-	m_fileNames.Empty();
 	// setup dialog
 	::NavGetDefaultDialogOptions(&mNavOptions);
 	mNavFilterUPP	= nil;
@@ -389,6 +383,13 @@ int wxFileDialog::ShowModal()
 	strcpy((char *)mNavOptions.savedFileName, m_fileName) ;
 	c2pstr((char *)mNavOptions.savedFileName ) ;
 #endif
+	// zero all data
+	
+	m_path = wxEmptyString ;
+	m_fileName = wxEmptyString ;
+	m_paths.Empty();
+	m_fileNames.Empty();
+
 	OpenUserDataRec			myData;
 	MakeUserDataRec( &myData , m_wildCard ) ;
 	myData.currentfilter = m_filterIndex ;
