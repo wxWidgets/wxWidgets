@@ -1634,19 +1634,36 @@ wxImage::wxImage( const wxBitmap &bitmap )
     }
 
     int bpp = -1;
+    int red_shift_right = 0;
+    int green_shift_right = 0;
+    int blue_shift_right = 0;
+    int red_shift_left = 0;
+    int green_shift_left = 0;
+    int blue_shift_left = 0;
+    bool use_shift = FALSE;
+    
     if (bitmap.GetPixmap())
     {
         GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
 
         if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
         bpp = visual->depth;
-        if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
+        if (bpp == 16) bpp = visual->red_prec + visual->green_prec + visual->blue_prec;
+        red_shift_right = visual->red_shift;
+        red_shift_left = 8-visual->red_prec;
+        green_shift_right = visual->green_shift;
+        green_shift_left = 8-visual->green_prec;
+        blue_shift_right = visual->blue_shift;
+        blue_shift_left = 8-visual->blue_prec;
+        
+        use_shift = (visual->type == GDK_VISUAL_TRUE_COLOR) || (visual->type == GDK_VISUAL_DIRECT_COLOR);
     }
     if (bitmap.GetBitmap())
     {
         bpp = 1;
     }
 
+    
     GdkColormap *cmap = gtk_widget_get_default_colormap();
 
     long pos = 0;
@@ -1654,54 +1671,38 @@ wxImage::wxImage( const wxBitmap &bitmap )
     {
         for (int i = 0; i < bitmap.GetWidth(); i++)
         {
-            wxInt32 pixel = gdk_image_get_pixel( gdk_image, i, j );
-	    if (bpp == 1)
-	    {
-	        if (pixel == 0)
-		{
-                    data[pos] = 0;
+            wxUint32 pixel = gdk_image_get_pixel( gdk_image, i, j );
+	        if (bpp == 1)
+	        {
+	            if (pixel == 0)
+		        {
+                    data[pos]   = 0;
                     data[pos+1] = 0;
                     data[pos+2] = 0;
-		}
-		else
-		{
-                    data[pos] = 255;
+		        }
+		        else
+		        {
+                    data[pos]   = 255;
                     data[pos+1] = 255;
                     data[pos+2] = 255;
-		}
-	    } else if (bpp <= 8)
-            {
-                data[pos] = cmap->colors[pixel].red >> 8;
-                data[pos+1] = cmap->colors[pixel].green >> 8;
-                data[pos+2] = cmap->colors[pixel].blue >> 8;
-            } else if (bpp == 15)
-            {
-#if (wxBYTE_ORDER == wxBIG_ENDIAN)
-                // ?
-#endif
-                data[pos] = (pixel >> 7) & 0xf8;
-                data[pos+1] = (pixel >> 2) & 0xf8;
-                data[pos+2] = (pixel << 3) & 0xf8;
-            } else if (bpp == 16)
-            {
-#if (wxBYTE_ORDER == wxBIG_ENDIAN)
-                // ?
-#endif
-                data[pos] = (pixel >> 8) & 0xf8;
-                data[pos+1] = (pixel >> 3) & 0xfc;
-                data[pos+2] = (pixel << 3) & 0xf8;
-            } else
-            {
-#if (wxBYTE_ORDER == wxBIG_ENDIAN)
-                data[pos] = (pixel) & 0xff;		// Red
-                data[pos+1] = (pixel >> 8) & 0xff;	// Green
-                data[pos+2] = (pixel >> 16) & 0xff;	// Blue
-#else
-                data[pos] = (pixel >> 16) & 0xff;
-                data[pos+1] = (pixel >> 8) & 0xff;
-                data[pos+2] = pixel & 0xff;
-#endif
+		        }
             }
+            else if (use_shift)
+            {
+                data[pos] =   (pixel >> red_shift_right)   << red_shift_left;
+                data[pos+1] = (pixel >> green_shift_right) << green_shift_left;
+                data[pos+2] = (pixel >> blue_shift_right)  << blue_shift_left;
+	        } 
+            else if (cmap->colors)
+            {
+                data[pos] =   cmap->colors[pixel].red   >> 8;
+                data[pos+1] = cmap->colors[pixel].green >> 8;
+                data[pos+2] = cmap->colors[pixel].blue  >> 8;
+            } 
+            else
+            {
+                wxFAIL_MSG( wxT("Image conversion failed. Unknown visual type.") );
+            } 
 
             if (gdk_image_mask)
             {

@@ -80,7 +80,10 @@ public:
     virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
 
     // Get the view start
-    virtual void ViewStart(int *x, int *y) const;
+    virtual void GetViewStart(int *x, int *y) const;
+    // Compatibility
+    void ViewStart(int *x, int *y) const
+       { GetViewStart( x, y ); }
 
     // Actual size in pixels when scrolling is taken into account
     virtual void GetVirtualSize(int *x, int *y) const;

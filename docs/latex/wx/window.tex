@@ -1405,7 +1405,7 @@ void MyWindow::OnPaint(wxPaintEvent\& event)
 
   // Find Out where the window is scrolled to
   int vbX,vbY;                     // Top left corner of client
-  ViewStart(&vbX,&vbY);
+  GetViewStart(&vbX,&vbY);
 
   int vX,vY,vW,vH;                 // Dimensions of client area in pixels
   wxRegionIterator upd(GetUpdateRegion()); // get the update rect list

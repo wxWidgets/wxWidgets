@@ -115,8 +115,10 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     wxMemoryDC dc;
     dc.SelectObject( bitmap );
     dc.SetBrush( wxBrush( "orange", wxSOLID ) );
-    dc.SetPen( *wxWHITE_PEN );
+    dc.SetPen( *wxBLACK_PEN );
     dc.DrawRectangle( 0, 0, 100, 100 );
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.DrawRectangle( 20, 20, 60, 60 );
     dc.SelectObject( wxNullBitmap );
 
     // try to find the directory with our images
@@ -209,8 +211,10 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.DrawText( "Drawn directly", 150, 10 );
     dc.SetBrush( wxBrush( "orange", wxSOLID ) );
-    dc.SetPen( *wxWHITE_PEN );
+    dc.SetPen( *wxBLACK_PEN );
     dc.DrawRectangle( 150, 30, 100, 100 );
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.DrawRectangle( 170, 50, 60, 60 );
 
     if (my_anti && my_anti->Ok()) 
         dc.DrawBitmap( *my_anti, 280, 30 );

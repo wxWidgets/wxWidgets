@@ -1530,29 +1530,32 @@ void wxListMainWindow::MoveToFocus()
 {
     if (!m_current) return;
 
-    int x = 0;
-    int y = 0;
-    int w = 0;
-    int h = 0;
-    m_current->GetExtent( x, y, w, h );
+    int item_x = 0;
+    int item_y = 0;
+    int item_w = 0;
+    int item_h = 0;
+    m_current->GetExtent( item_x, item_y, item_w, item_h );
 
-    int w_p = 0;
-    int h_p = 0;
-    GetClientSize( &w_p, &h_p );
+    int client_w = 0;
+    int client_h = 0;
+    GetClientSize( &client_w, &client_h );
+    
+    int view_x = m_xScroll*GetScrollPos( wxHORIZONTAL );
+    int view_y = m_yScroll*GetScrollPos( wxVERTICAL );
 
     if (m_mode & wxLC_REPORT)
     {
-        int y_s = m_yScroll*GetScrollPos( wxVERTICAL );
-        if ((y > y_s) && (y+h < y_s+h_p)) return;
-        if (y-y_s < 5) { Scroll( -1, (y-5-h_p/2)/m_yScroll ); }
-        if (y+h+5 > y_s+h_p) { Scroll( -1, (y+h-h_p/2+h+15)/m_yScroll); }
+        if (item_y-5 < view_y ) 
+            Scroll( -1, (item_y-5)/m_yScroll ); 
+        if (item_y+item_h+5 > view_y+client_h) 
+            Scroll( -1, (item_y+item_h-client_h+15)/m_yScroll );
     }
     else
     {
-        int x_s = m_xScroll*GetScrollPos( wxHORIZONTAL );
-        if ((x > x_s) && (x+w < x_s+w_p)) return;
-        if (x-x_s < 5) { Scroll( (x-5)/m_xScroll, -1 ); }
-        if (x+w-5 > x_s+w_p) { Scroll( (x+w-w_p+15)/m_xScroll, -1 ); }
+        if (item_x-view_x < 5) 
+            Scroll( (item_x-5)/m_xScroll, -1 );
+        if (item_x+item_w-5 > view_x+client_w) 
+            Scroll( (item_x+item_w-client_w+15)/m_xScroll, -1 );
     }
 }
 
@@ -1561,12 +1564,12 @@ void wxListMainWindow::OnArrowChar( wxListLineData *newCurrent, bool shiftDown )
     if ((m_mode & wxLC_SINGLE_SEL) || (m_usedKeys == FALSE)) m_current->Hilight( FALSE );
     wxListLineData *oldCurrent = m_current;
     m_current = newCurrent;
-    MoveToFocus();
     if (shiftDown || (m_mode & wxLC_SINGLE_SEL)) m_current->Hilight( TRUE );
     RefreshLine( m_current );
     RefreshLine( oldCurrent );
     FocusLine( m_current );
     UnfocusLine( oldCurrent );
+    MoveToFocus();
 }
 
 void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
@@ -1722,11 +1725,11 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 m_current->ReverseHilight();
                 wxNode *node = m_lines.Member( m_current )->Next();
                 if (node) m_current = (wxListLineData*)node->Data();
-                MoveToFocus();
                 RefreshLine( oldCurrent );
                 RefreshLine( m_current );
                 UnfocusLine( oldCurrent );
                 FocusLine( m_current );
+                MoveToFocus();
             }
             break;
         }
