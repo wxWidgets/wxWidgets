@@ -415,9 +415,6 @@ static void skip_token( char*& cur )
 
 	if ( *cur == ',' || 
 		 *cur == ';' ||
-		 *cur == '<' ||
-		 *cur == '>' ||
-		 *cur == '=' ||
 		 *cur == ')' ||
 		 *cur == '(' 
 	   )
@@ -425,6 +422,20 @@ static void skip_token( char*& cur )
 		++cur;
 		return;
 	}
+
+    // special case of "!=", "<=", ... 2 character composite tokens
+    if ( *cur == '<' ||
+		 *cur == '>' ||
+		 *cur == '=' ||
+         *cur == '!'
+       )
+    {
+        cur++;
+        if ( *cur == '=' )
+            cur++;
+
+        return;
+    }
 
 	++cur; // leading character is always skipped
 
@@ -1539,6 +1550,27 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
 
 	pOp->mName = get_token_str( cur );
 
+    // checker whether it's not an operator
+    char chFirst = *pOp->mName.c_str();
+    if ( !isalpha(chFirst) && chFirst != '_' && chFirst != '~' ) 
+    {
+        // skip 'operator'
+	    skip_next_token_back( cur );
+        skip_token_back( cur );
+
+        string lastToken = get_token_str( cur );
+        if ( lastToken == "operator" )
+        {
+            lastToken += pOp->mName;
+            pOp->mName = lastToken;
+        }
+        else
+        {
+            // ok, it wasn't an operator after all
+            skip_token( cur );
+        }
+    }
+
 	// go backwards to method return type
 	skip_next_token_back( cur );
 
@@ -1602,8 +1634,12 @@ bool CJSourceParser::ParseArguments( char*& cur )
 		if ( blocksSkipped == 1 ) 
 		{
 			// check if the empty arg. list stressed with "void" inside
-			if ( cmp_tokens_fast( blocks[0] , "void", 4 ) )
-				return TRUE;
+            if ( cmp_tokens_fast( blocks[0] , "void", 4 ) )
+            {
+                cur++;  // skip ')'
+
+				break;
+            }
 
 			// FIXME:: TBD:: K&R-style function declarations!
 
