@@ -22,6 +22,13 @@ wxwindows2.3 (2.3.0) unstable; urgency=low
 
  -- Ron Lee <ron@debian.org>  Sat, 27 Jan 2001 01:51:24 -0800
 
+ wxwindows2.2 (2.2.8.5) unstable; urgency=low
+
+  * Add wxSIZE_T_IS defines to setup.h
+    Add automate that to my TODO list.
+
+ -- Ron Lee <ron@debian.org>  Tue, 27 Nov 2001 05:55:47 -0800
+
 wxwindows2.2 (2.2.8.4) unstable; urgency=low
 
   * Put the (modified) size_t == ulong kludge back into sndwav.cpp

@@ -699,9 +699,9 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STREAMS=no
   DEFAULT_wxUSE_SOCKETS=no
   DEFAULT_wxUSE_DIALUP_MANAGER=no
-  DEFAULT_wxUSE_SERIAL=no
   DEFAULT_wxUSE_JOYSTICK=no
   DEFAULT_wxUSE_DYNLIB_CLASS=no
+  DEFAULT_wxUSE_DYNAMIC_LOADER=no
   DEFAULT_wxUSE_LONGLONG=no
   DEFAULT_wxUSE_GEOMETRY=no
 
@@ -863,9 +863,9 @@ else
   DEFAULT_wxUSE_STREAMS=yes
   DEFAULT_wxUSE_SOCKETS=yes
   DEFAULT_wxUSE_DIALUP_MANAGER=yes
-  DEFAULT_wxUSE_SERIAL=yes
   DEFAULT_wxUSE_JOYSTICK=yes
-  DEFAULT_wxUSE_DYNLIB_CLASS=yes
+  DEFAULT_wxUSE_DYNLIB_CLASS=no
+  DEFAULT_wxUSE_DYNAMIC_LOADER=yes
   DEFAULT_wxUSE_LONGLONG=yes
   DEFAULT_wxUSE_GEOMETRY=yes
 
@@ -1083,6 +1083,7 @@ WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUS
 WX_ARG_ENABLE(wave,          [  --enable-wave           use wxWave class], wxUSE_WAVE)
 WX_ARG_ENABLE(fraction,      [  --enable-fraction       use wxFraction class], wxUSE_FRACTION)
 WX_ARG_ENABLE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
+WX_ARG_ENABLE(dynamicloader, [  --enable-dynamicloader  use (new) wxDynamicLibrary class], wxUSE_DYNAMIC_LOADER)
 WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
 WX_ARG_ENABLE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
 WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxUSE_LOG)
@@ -1111,7 +1112,6 @@ dnl "big" options (i.e. those which change a lot of things throughout the librar
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(threads,     [  --enable-threads        use threads], wxUSE_THREADS)
-WX_ARG_ENABLE(serial,      [  --enable-serial         use class serialization], wxUSE_SERIAL)
 
 if test "$wxUSE_GUI" = "yes"; then
 
@@ -4016,7 +4016,7 @@ if test "$TOOLKIT" != "MSW"; then
 
     HAVE_DL_FUNCS=0
     HAVE_SHL_FUNCS=0
-    if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
+    if test "$wxUSE_DYNAMIC_LOADER" = "yes" -o "$wxUSE_DYNLIB_CLASS" = "yes" ; then
         if test "$USE_DARWIN" = 1; then
             dnl dlopen/dlerror is implemented in dynlib.cpp for Darwin/Mac OS X
             HAVE_DL_FUNCS=1
@@ -4064,6 +4064,7 @@ if test "$TOOLKIT" != "MSW"; then
             if test "$HAVE_SHL_FUNCS" = 0; then
               if test "$USE_UNIX" = 1; then
                   AC_MSG_WARN([Missing dynamic loading support, several features will be disabled])
+                  wxUSE_DYNAMIC_LOADER=no
                   wxUSE_DYNLIB_CLASS=no
               else
                   AC_MSG_WARN([Assuming wxLibrary class works on this platform])
@@ -4073,11 +4074,10 @@ if test "$TOOLKIT" != "MSW"; then
     fi
 fi
 
-if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
+if test "$wxUSE_DYNAMIC_LOADER" = "yes" ; then
+    AC_DEFINE(wxUSE_DYNAMIC_LOADER)
+elif test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
     AC_DEFINE(wxUSE_DYNLIB_CLASS)
-else
-    wxUSE_ODBC=no
-    wxUSE_SERIAL=no
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -4096,13 +4096,6 @@ if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then
   AC_DEFINE(wxUSE_EXPERIMENTAL_PRINTF)
 fi
 
-dnl ----------------------------------------------------------------
-dnl serialization support
-dnl ----------------------------------------------------------------
-
-if test "$wxUSE_SERIAL" = "yes" ; then
-    AC_DEFINE(wxUSE_SERIAL)
-fi
 
 dnl ----------------------------------------------------------------
 dnl iODBC support

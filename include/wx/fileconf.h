@@ -95,6 +95,7 @@
 class WXDLLEXPORT wxFileConfigGroup;
 class WXDLLEXPORT wxFileConfigEntry;
 class WXDLLEXPORT wxFileConfigLineList;
+class WXDLLEXPORT wxInputStream;
 
 class WXDLLEXPORT wxFileConfig : public wxConfigBase
 {

@@ -42,6 +42,11 @@ void wxModule::RegisterModule(wxModule* module)
     m_modules.Append(module);
 }
 
+void wxModule::UnregisterModule(wxModule* module)
+{
+    m_modules.DeleteObject(module);
+}
+
 // Collect up all module-derived classes, create an instance of each,
 // and register them.
 void wxModule::RegisterModules()

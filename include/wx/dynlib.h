@@ -18,7 +18,11 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_DYNLIB_CLASS
+#if wxUSE_DYNAMIC_LOADER
+
+#include "wx/dynload.h"  // Use the new (version of) wxDynamicLibrary instead
+
+#elif wxUSE_DYNLIB_CLASS
 
 #include "wx/string.h"
 #include "wx/list.h"
@@ -85,7 +89,7 @@ public:
       if success pointer is not NULL, it will be filled with TRUE if everything
       went ok and FALSE otherwise
      */
-    static wxDllType LoadLibrary(const wxString& libname, bool *success = NULL);
+    static wxDllType LoadLibrary(const wxString& libname, bool *success = 0);
 
     /*
       This function unloads the shared library previously loaded with
@@ -109,14 +113,15 @@ public:
 
        Returns the pointer to the symbol or NULL on error.
      */
-    static void * GetSymbol(wxDllType dllHandle, const wxString &name);
+    static void *GetSymbol(wxDllType dllHandle, const wxString &name, bool success = 0);
 
     // return the standard DLL extension (with leading dot) for this platform
-    static wxString GetDllExt();
+    static const wxString &GetDllExt() { return ms_dllext; }
 
 private:
     // forbid construction of objects
     wxDllLoader();
+    static const wxString   ms_dllext;
 };
 
 // ----------------------------------------------------------------------------

@@ -240,9 +240,6 @@
 // Use standard C++ streams if 1. If 0, use wxWin streams implementation.
 #define wxUSE_STD_IOSTREAM  0
 
-// Use serialization (requires utils/serialize)
-#define wxUSE_SERIAL        0
-
 // ----------------------------------------------------------------------------
 // non GUI features selection
 // ----------------------------------------------------------------------------
@@ -345,14 +342,14 @@
 
 // If wxUSE_DIALUP_MANAGER is 1, compile in wxDialUpManager class which allows
 // to connect/disconnect from the network and be notified whenever the dial-up
-// network connection is established/terminated. Requires wxUSE_DYNLIB_CLASS.
+// network connection is established/terminated. Requires wxUSE_DYNAMIC_LOADER.
 //
 // Default is 1.
 //
 // Recommended setting: 1
 #define wxUSE_DIALUP_MANAGER   1
 
-// Compile in wxLibrary class for run-time DLL loading and function calling.
+// Compile in classes for run-time DLL loading and function calling.
 // Required by wxUSE_DIALUP_MANAGER.
 //
 // This setting is for Win32 only
@@ -360,7 +357,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_DYNLIB_CLASS  1
+#define wxUSE_DYNAMIC_LOADER  1
 
 // Set to 1 to use socket classes
 #define wxUSE_SOCKETS       1

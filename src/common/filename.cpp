@@ -61,19 +61,20 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "filename.h"
+#pragma implementation "filename.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+#pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/intl.h"
-    #include "wx/log.h"
+#include "wx/intl.h"
+#include "wx/log.h"
+#include "wx/file.h"
 #endif
 
 #include "wx/filename.h"
@@ -82,35 +83,34 @@
 #include "wx/utils.h"
 #include "wx/file.h"
 
-#if wxUSE_DYNLIB_CLASS
-    #include "wx/dynlib.h"
+#if wxUSE_DYNAMIC_LOADER || wxUSE_DYNLIB_CLASS
+#include "wx/dynlib.h"
 #endif
 
 // For GetShort/LongPathName
 #ifdef __WIN32__
-    #include <windows.h>
-
-    #include "wx/msw/winundef.h"
+#include <windows.h>
+#include "wx/msw/winundef.h"
 #endif
 
 // utime() is POSIX so should normally be available on all Unices
 #ifdef __UNIX_LIKE__
-    #include <sys/types.h>
-    #include <utime.h>
-    #include <sys/stat.h>
-    #include <unistd.h>
+#include <sys/types.h>
+#include <utime.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #endif
 
 #ifdef __MWERKS__
-    #include <stat.h>
-    #include <unistd.h>
-    #include <unix.h>
+#include <stat.h>
+#include <unistd.h>
+#include <unix.h>
 #endif
 
 #ifdef __WATCOMC__
-    #include <io.h>
-    #include <sys/utime.h>
-    #include <sys/stat.h>
+#include <io.h>
+#include <sys/utime.h>
+#include <sys/stat.h>
 #endif
 
 #ifdef __VISAGECPP__
@@ -1238,7 +1238,7 @@ wxString wxFileName::GetLongPath() const
     bool success = FALSE;
 
     // VZ: this code was disabled, why?
-#if 0 // wxUSE_DYNLIB_CLASS
+#if 0 // wxUSE_DYNAMIC_LOADER
     typedef DWORD (*GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
 
     static bool s_triedToLoad = FALSE;
@@ -1286,7 +1286,7 @@ wxString wxFileName::GetLongPath() const
     }
     if (success)
         return pathOut;
-#endif // wxUSE_DYNLIB_CLASS
+#endif // wxUSE_DYNAMIC_LOADER
 
     if (!success)
     {

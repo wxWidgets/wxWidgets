@@ -52,6 +52,8 @@
 #undef FindResource
 #endif
 
+class WXDLLEXPORT wxInputStream;
+
 /*
  * Internal format for control/panel item
  */
@@ -153,7 +155,7 @@ class WXDLLEXPORT wxResourceTable: public wxHashTable
     virtual bool DeleteResource(const wxString& name);
 
     virtual bool ParseResourceFile(const wxString& filename);
-	virtual bool ParseResourceFile( wxInputStream *is ) ;
+    virtual bool ParseResourceFile(wxInputStream *is);
     virtual bool ParseResourceData(const wxString& data);
     virtual bool SaveResource(const wxString& filename);
 

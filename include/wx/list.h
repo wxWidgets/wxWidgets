@@ -461,9 +461,17 @@ private:
     typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
     WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node, class WXDLLEXPORT)
 
+#define WX_DECLARE_USER_EXPORTED_LIST(elementtype, listname, usergoo)       \
+    typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
+    WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node, class usergoo)
+
 // this macro must be inserted in your program after
 //      #include <wx/listimpl.cpp>
 #define WX_DEFINE_LIST(name)    "don't forget to include listimpl.cpp!"
+
+#define WX_DEFINE_EXPORTED_LIST(name)      WX_DEFINE_LIST(name)
+#define WX_DEFINE_USER_EXPORTED_LIST(name) WX_DEFINE_LIST(name)
+
 
 // =============================================================================
 // now we can define classes 100% compatible with the old ones

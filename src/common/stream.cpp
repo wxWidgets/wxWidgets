@@ -38,7 +38,6 @@
 #include <ctype.h>
 #include "wx/stream.h"
 #include "wx/datstrm.h"
-#include "wx/objstrm.h"
 #include "wx/textfile.h"
 
 // ----------------------------------------------------------------------------
@@ -850,19 +849,6 @@ off_t wxInputStream::TellI() const
     return pos;
 }
 
-// --------------------
-// Overloaded operators
-// --------------------
-
-#if wxUSE_SERIAL
-wxInputStream& wxInputStream::operator>>(wxObject *& obj)
-{
-    wxObjectInputStream obj_s(*this);
-    obj = obj_s.LoadObject();
-    return *this;
-}
-#endif // wxUSE_SERIAL
-
 
 // ----------------------------------------------------------------------------
 // wxOutputStream
@@ -913,14 +899,6 @@ void wxOutputStream::Sync()
 {
 }
 
-#if wxUSE_SERIAL
-wxOutputStream& wxOutputStream::operator<<(wxObject& obj)
-{
-    wxObjectOutputStream obj_s(*this);
-    obj_s.SaveObject(obj);
-    return *this;
-}
-#endif // wxUSE_SERIAL
 
 // ----------------------------------------------------------------------------
 // wxCountingOutputStream

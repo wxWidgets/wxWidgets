@@ -122,9 +122,6 @@ public:
 
     // Operators
     wxInputStream& operator>>(wxOutputStream& out) { return Read(out); }
-#if wxUSE_SERIAL
-    wxInputStream& operator>>(wxObject *& obj);
-#endif
     wxInputStream& operator>>( __wxInputManip func) { return func(*this); }
 
 protected:
@@ -161,9 +158,6 @@ public:
     virtual void Sync();
 
     wxOutputStream& operator<<(wxInputStream& out) { return Write(out); }
-#if wxUSE_SERIAL
-    wxOutputStream& operator<<(wxObject& obj);
-#endif
     wxOutputStream& operator<<( __wxOutputManip func) { return func(*this); }
 
 protected:

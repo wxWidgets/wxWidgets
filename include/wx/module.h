@@ -32,21 +32,30 @@ public:
     wxModule() {}
     virtual ~wxModule() {}
 
-    // if module init routine returns FALSE application will fail to startup
+    	// if module init routine returns FALSE application
+	// will fail to startup
+
     bool Init() { return OnInit(); }
     void Exit() { OnExit(); }
 
-    // Override both of these
+	// Override both of these
         // called on program startup
+
     virtual bool OnInit() = 0;
-        // called just before program termination, but only if OnInit()
+
+    	// called just before program termination, but only if OnInit()
         // succeeded
+    
     virtual void OnExit() = 0;
 
     static void RegisterModule(wxModule* module);
     static void RegisterModules();
     static bool InitializeModules();
     static void CleanUpModules();
+
+    	// used by wxObjectLoader when unloading shared libs's
+
+    static void UnregisterModule(wxModule* module);
 
 protected:
     static wxModuleList m_modules;

@@ -555,10 +555,6 @@
  */
 #define wxUSE_STREAMS 0
 /*
- * Use class serialization
- */
-#define wxUSE_SERIAL 0
-/*
  * Use sockets
  */
 #define wxUSE_SOCKETS 0
@@ -575,6 +571,10 @@
  * wxLibrary class
  */
 #define wxUSE_DYNLIB_CLASS 0
+/*
+ * Use wxObjectLoader
+ */
+#define wxUSE_DYNAMIC_LOADER 0
 
 /*
  * Use wxTimer

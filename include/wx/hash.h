@@ -297,5 +297,8 @@ private:
 #define WX_DECLARE_EXPORTED_HASH(el, list, hash)  \
     _WX_DECLARE_HASH(el, list, hash, class WXDLLEXPORT)
 
+#define WX_DECLARE_USER_EXPORTED_HASH(el, list, hash, usergoo)  \
+    _WX_DECLARE_HASH(el, list, hash, class usergoo)
+
 #endif
     // _WX_HASH_H__
