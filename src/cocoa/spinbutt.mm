@@ -34,6 +34,8 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID winid,
         return false;
     SetNSControl([[NSStepper alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
+    [(NSStepper*)m_cocoaNSView setTarget: sm_cocoaTarget];
+    [(NSStepper*)m_cocoaNSView setAction:@selector(wxNSControlAction:)];
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
@@ -43,6 +45,35 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID winid,
 
 wxSpinButton::~wxSpinButton()
 {
+    [(NSStepper*)m_cocoaNSView setTarget: nil];
+    [(NSStepper*)m_cocoaNSView setAction: nil];
+}
+
+int wxSpinButton::GetValue() const
+{
+    return [(NSStepper*)m_cocoaNSView intValue];
+}
+
+void wxSpinButton::SetValue(int value)
+{
+    return [(NSStepper*)m_cocoaNSView setIntValue:value];
+}
+
+void wxSpinButton::SetRange(int minValue, int maxValue)
+{
+    [(NSStepper*)m_cocoaNSView setMinValue:minValue];
+    [(NSStepper*)m_cocoaNSView setMaxValue:maxValue];
+    wxSpinButtonBase::SetRange(minValue,maxValue);
+}
+
+void wxSpinButton::CocoaTarget_action()
+{
+    /* TODO: up/down events */
+    /* This sends the changed event (not specific on up or down) */
+    wxSpinEvent event(wxEVT_SCROLL_THUMBTRACK, GetId());
+    event.SetPosition(GetValue());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 #endif // wxUSE_SPINBTN

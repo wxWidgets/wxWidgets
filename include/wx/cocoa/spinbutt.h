@@ -47,16 +47,17 @@ public:
 // Cocoa callbacks
 // ------------------------------------------------------------------------
 protected:
+    virtual void CocoaTarget_action();
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
 public:
     // Pure Virtuals
-    virtual int GetValue() const { return 0; }
-    virtual void SetValue(int value) { }
+    virtual int GetValue() const;
+    virtual void SetValue(int value);
 
     // retrieve/change the range
-    virtual void SetRange(int minValue, int maxValue) { }
+    virtual void SetRange(int minValue, int maxValue);
 };
 
 #endif // __WX_COCOA_SPINBUTT_H__
