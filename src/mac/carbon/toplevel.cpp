@@ -668,7 +668,7 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
 // Raise the window to the top of the Z order
 void wxTopLevelWindowMac::Raise()
 {
-    ::BringToFront( (WindowRef)m_macWindow ) ;
+    ::SelectWindow( (WindowRef)m_macWindow ) ;
 }
 
 // Lower the window to the bottom of the Z order
