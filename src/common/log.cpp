@@ -227,7 +227,8 @@ wxLog *wxLog::GetActiveTarget()
         ms_pLogger = new wxLogStderr;
       #else
         // ask the application to create a log target for us
-        ms_pLogger = wxTheApp->CreateLogTarget();
+        if ( wxTheApp != NULL )
+          ms_pLogger = wxTheApp->CreateLogTarget();
       #endif
 
       // do nothing if it fails - what can we do?
