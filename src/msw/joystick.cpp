@@ -57,7 +57,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 	joysticks, counting from the first
 	available and upwards.
 */
-wxJoystick::wxJoystick(int joystick = wxJOYSTICK1)
+wxJoystick::wxJoystick(int joystick)
 {
     JOYINFO joyInfo;
 	int i, maxsticks;
