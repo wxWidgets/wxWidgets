@@ -28,8 +28,10 @@
 // ----------------------------------------------------------------------------
 
 // what to test?
-#define TEST_ARRAYS
-#undef TEST_THREADS
+
+//#define TEST_ARRAYS
+#define TEST_LOG
+//#define TEST_THREADS
 
 // ============================================================================
 // implementation
@@ -161,6 +163,23 @@ int main(int argc, char **argv)
     PrintArray("a2", a2);
     PrintArray("a3", a3);
 #endif // TEST_ARRAYS
+
+#ifdef TEST_LOG
+    wxString s;
+    for ( size_t n = 0; n < 8000; n++ )
+    {
+        s << (char)('A' + (n % 26));
+    }
+
+    wxString msg;
+    msg.Printf("A very very long message: '%s', the end!\n", s.c_str());
+
+    // this one shouldn't be truncated
+    printf(msg);
+
+    // but this one will because log functions use fixed size buffer
+    wxLogMessage("A very very long message 2: '%s', the end!\n", s.c_str());
+#endif // TEST_LOG
 
 #ifdef TEST_THREADS
     static const size_t nThreads = 3;

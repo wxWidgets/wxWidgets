@@ -412,6 +412,33 @@ should help to find the strings which were not yet translated. As this function
 is used very often, an alternative syntax is provided: the \_() macro is
 defined as wxGetTranslation().
 
+\membersection{::wxSnprintf}\label{wxsnprintf}
+
+\func{int}{wxSnprintf}{\param{wxChar *}{buf}, \param{size\_t }{len}, \param{const wxChar *}{format}, \param{}{...}}
+
+This function replaces the dangerous standard function {\tt sprintf()} and is
+like {\tt snprintf()} available on some platforms. The only difference with
+sprintf() is that an additional argument - buffer size - is taken and the
+buffer is never overflowed.
+
+Returns the number of characters copied to the buffer or -1 if there is not
+enough space.
+
+\wxheading{See also:}
+\helpref{wxVsnprintf}{wxvsnprintf},
+\helpref{wxString::Printf}{wxstringprintf}
+
+\membersection{::wxVsnprintf}\label{wxsnprintf}
+
+\func{int}{wxVsnprintf}{\param{wxChar *}{buf}, \param{size\_t }{len}, \param{const wxChar *}{format}, \param{va\_list }{argptr}}
+
+The same as \helpref{wxSnprintf}{wxsnprintf} but takes a {\tt va\_list}
+argument instead of arbitrary number of parameters.
+
+\wxheading{See also:}
+\helpref{wxSnprintf}{wxsnprintf},
+\helpref{wxString::PrintfV}{wxstringprintfv}
+
 \section{Dialog functions}\label{dialogfunctions}
 
 Below are a number of convenience functions for getting input from the

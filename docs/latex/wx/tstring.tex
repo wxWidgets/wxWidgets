@@ -144,6 +144,13 @@ and returns 0 for them and \helpref{Stricmp()}{Stricmp} is just a
 platform-independent version of case-insensitive string comparison function
 known either as stricmp() or strcasecmp() on different platforms.
 
+The {\tt <wx/string.h>} header also defines \helpref{wxSnprintf}{wxsnprintf} 
+and \helpref{wxVsnprintf}{wxvsnprintf} functions which should be used instead
+of the inherently dangerous standard {\tt sprintf()} and which use {\tt
+snprintf()} instead which does buffer size checks whenever possible. Of
+course, you may also use \helpref{wxString::Printf}{wxstringprintf} which is
+also safe.
+
 There is another class which might be useful when working with wxString: 
 \helpref{wxStringTokenizer}{wxstringtokenizer}. It is helpful when a string must
 be broken into tokens and replaces the standard C library {\it

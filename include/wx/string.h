@@ -156,6 +156,15 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
 #endif  // OS/compiler
 }
 
+// wxSnprintf() is like snprintf() if it's available and sprintf() (always
+// available, but dangerous!) if not
+extern int WXDLLEXPORT wxSnprintf(wxChar *buf, size_t len,
+                                  const wxChar *format, ...);
+
+// and wxVsnprintf() is like vsnprintf() or vsprintf()
+extern int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
+                                   const wxChar *format, va_list argptr);
+
 // return an empty wxString
 class WXDLLEXPORT wxString; // not yet defined
 inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; }

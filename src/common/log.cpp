@@ -97,7 +97,7 @@ void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
   if ( wxLog::GetActiveTarget() != NULL ) {
     va_list argptr;
     va_start(argptr, szFormat);
-    wxVsprintf(s_szBuf, szFormat, argptr);
+    wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
     va_end(argptr);
 
     wxLog::OnLog(level, s_szBuf, time(NULL));
@@ -110,7 +110,7 @@ void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
     if ( wxLog::GetActiveTarget() != NULL ) {                     \
       va_list argptr;                                             \
       va_start(argptr, szFormat);                                 \
-      wxVsprintf(s_szBuf, szFormat, argptr);                      \
+      wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);  \
       va_end(argptr);                                             \
                                                                   \
       wxLog::OnLog(wxLOG_##level, s_szBuf, time(NULL));           \
@@ -131,7 +131,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
   if ( pLog != NULL && pLog->GetVerbose() ) {
     va_list argptr;
     va_start(argptr, szFormat);
-    wxVsprintf(s_szBuf, szFormat, argptr);
+    wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
     va_end(argptr);
 
     wxLog::OnLog(wxLOG_Info, s_szBuf, time(NULL));
@@ -146,7 +146,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
     if ( wxLog::GetActiveTarget() != NULL ) {                     \
       va_list argptr;                                             \
       va_start(argptr, szFormat);                                 \
-      wxVsprintf(s_szBuf, szFormat, argptr);                      \
+      wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);  \
       va_end(argptr);                                             \
                                                                   \
       wxLog::OnLog(wxLOG_##level, s_szBuf, time(NULL));           \
@@ -160,7 +160,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
     if ( pLog != NULL && wxLog::IsAllowedTraceMask(mask) ) {
       va_list argptr;
       va_start(argptr, szFormat);
-      wxVsprintf(s_szBuf, szFormat, argptr);
+      wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
       va_end(argptr);
 
       wxLog::OnLog(wxLOG_Trace, s_szBuf, time(NULL));
@@ -177,7 +177,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
     if ( pLog != NULL && ((pLog->GetTraceMask() & mask) == mask) ) {
       va_list argptr;
       va_start(argptr, szFormat);
-      wxVsprintf(s_szBuf, szFormat, argptr);
+      wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
       va_end(argptr);
 
       wxLog::OnLog(wxLOG_Trace, s_szBuf, time(NULL));
@@ -198,7 +198,8 @@ IMPLEMENT_LOG_DEBUG_FUNCTION(Trace)
 void wxLogSysErrorHelper(long lErrCode)
 {
     wxChar szErrMsg[LOG_BUFFER_SIZE / 2];
-    wxSprintf(szErrMsg, _(" (error %ld: %s)"), lErrCode, wxSysErrorMsg(lErrCode));
+    wxSnprintf(szErrMsg, WXSIZEOF(szErrMsg),
+               _(" (error %ld: %s)"), lErrCode, wxSysErrorMsg(lErrCode));
     wxStrncat(s_szBuf, szErrMsg, WXSIZEOF(s_szBuf) - wxStrlen(s_szBuf));
 
     wxLog::OnLog(wxLOG_Error, s_szBuf, time(NULL));
@@ -208,7 +209,7 @@ void WXDLLEXPORT wxLogSysError(const wxChar *szFormat, ...)
 {
     va_list argptr;
     va_start(argptr, szFormat);
-    wxVsprintf(s_szBuf, szFormat, argptr);
+    wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
     va_end(argptr);
 
     wxLogSysErrorHelper(wxSysErrorCode());
@@ -218,7 +219,7 @@ void WXDLLEXPORT wxLogSysError(long lErrCode, const wxChar *szFormat, ...)
 {
     va_list argptr;
     va_start(argptr, szFormat);
-    wxVsprintf(s_szBuf, szFormat, argptr);
+    wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
     va_end(argptr);
 
     wxLogSysErrorHelper(lErrCode);
@@ -365,7 +366,7 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     fputs(str.mb_str(), m_fp);
     fflush(m_fp);
 
-    // under Windows, programs usually don't have stderr at all, so make show the
+    // under Windows, programs usually don't have stderr at all, so show the
     // messages also under debugger
 #ifdef __WXMSW__
     OutputDebugString(str + wxT('\r'));
@@ -558,12 +559,14 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 
     // make life easier for people using VC++ IDE: clicking on the message
     // will take us immediately to the place of the failed assert
+    wxSnprintf(szBuf, WXSIZEOF(szBuf),
 #ifdef __VISUALC__
-    wxSprintf(szBuf, wxT("%s(%d): assert failed"), szFile, nLine);
+               wxT("%s(%d): assert failed"),
 #else  // !VC++
     // make the error message more clear for all the others
-    wxSprintf(szBuf, wxT("Assert failed in file %s at line %d"), szFile, nLine);
+               wxT("Assert failed in file %s at line %d"),
 #endif // VC/!VC
+               szFile, nLine);
 
     if ( szMsg != NULL ) {
         wxStrcat(szBuf, wxT(": "));

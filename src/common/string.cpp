@@ -35,9 +35,7 @@
   #include "wx/defs.h"
   #include "wx/string.h"
   #include "wx/intl.h"
-#if wxUSE_THREADS
   #include "wx/thread.h"
-#endif
 #endif
 
 #include <ctype.h>
@@ -104,28 +102,32 @@ extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
 // we want to find out if the current platform supports vsnprintf()-like
 // function: for Unix this is done with configure, for Windows we test the
 // compiler explicitly.
+//
+// FIXME currently, this is only for ANSI (!Unicode) strings, so we call this
+//       function wxVsnprintfA (A for ANSI), should also find one for Unicode
+//       strings in Unicode build
 #ifdef __WXMSW__
     #ifdef __VISUALC__
-        #define wxVsnprintf     _vsnprintf
+        #define wxVsnprintfA     _vsnprintf
     #endif
 #else   // !Windows
     #ifdef HAVE_VSNPRINTF
-        #define wxVsnprintf       vsnprintf
+        #define wxVsnprintfA       vsnprintf
     #endif
 #endif  // Windows/!Windows
 
-#ifndef wxVsnprintf
+#ifndef wxVsnprintfA
     // in this case we'll use vsprintf() (which is ANSI and thus should be
     // always available), but it's unsafe because it doesn't check for buffer
     // size - so give a warning
-    #define wxVsnprintf(buffer,len,format,argptr) vsprintf(buffer,format, argptr)
+    #define wxVsnprintfA(buf, len, format, arg) vsprintf(buf, format, arg)
 
     #if defined(__VISUALC__)
         #pragma message("Using sprintf() because no snprintf()-like function defined")
     #elif defined(__GNUG__) && !defined(__UNIX__)
         #warning "Using sprintf() because no snprintf()-like function defined"
     #elif defined(__MWERKS__)
-             #warning "Using sprintf() because no snprintf()-like function defined"
+        #warning "Using sprintf() because no snprintf()-like function defined"
     #endif //compiler
 #endif // no vsnprintf
 
@@ -183,6 +185,37 @@ ostream& operator<<(ostream& os, const wxString& str)
 }
 
 #endif  //std::string compatibility
+
+extern int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
+                                   const wxChar *format, va_list argptr)
+{
+#if wxUSE_UNICODE
+    // FIXME should use wvsnprintf() or whatever if it's available
+    wxString s;
+    int iLen = s.PrintfV(format, argptr);
+    if ( iLen != -1 )
+    {
+        wxStrncpy(buf, s.c_str(), iLen);
+    }
+
+    return iLen;
+#else // ANSI
+    return wxVsnprintfA(buf, len, format, argptr);
+#endif // Unicode/ANSI
+}
+
+extern int WXDLLEXPORT wxSnprintf(wxChar *buf, size_t len,
+                                  const wxChar *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int iLen = wxVsnprintf(buf, len, format, argptr);
+
+    va_end(argptr);
+
+    return iLen;
+}
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -988,6 +1021,7 @@ wxString& wxString::operator<<(double d)
 // ---------------------------------------------------------------------------
 // formatted output
 // ---------------------------------------------------------------------------
+
 int wxString::Printf(const wxChar *pszFormat, ...)
 {
   va_list argptr;
@@ -1002,18 +1036,11 @@ int wxString::Printf(const wxChar *pszFormat, ...)
 
 int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 {
-  // static buffer to avoid dynamic memory allocation each time
-  char s_szScratch[1024]; // using static buffer causes internal compiler err
-#if 0
-#if wxUSE_THREADS
-  // protect the static buffer
-  static wxCriticalSection critsect;
-  wxCriticalSectionLocker lock(critsect);
-#endif
-#endif
-
 #if wxUSE_EXPERIMENTAL_PRINTF
-// the new implementation
+  // the new implementation
+
+  // buffer to avoid dynamic memory allocation each time for small strings
+  char szScratch[1024];
 
   Reinit();
   for (size_t n = 0; pszFormat[n]; n++)
@@ -1120,30 +1147,30 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
           s_szFlags[flagofs] = '\0';
           if (ilen == 0 ) {
             int val = va_arg(argptr, int);
-            ::sprintf(s_szScratch, s_szFlags, val);
+            ::sprintf(szScratch, s_szFlags, val);
           }
           else if (ilen == -1) {
             short int val = va_arg(argptr, short int);
-            ::sprintf(s_szScratch, s_szFlags, val);
+            ::sprintf(szScratch, s_szFlags, val);
           }
           else if (ilen == 1) {
             long int val = va_arg(argptr, long int);
-            ::sprintf(s_szScratch, s_szFlags, val);
+            ::sprintf(szScratch, s_szFlags, val);
           }
           else if (ilen == 2) {
 #if SIZEOF_LONG_LONG
             long long int val = va_arg(argptr, long long int);
-            ::sprintf(s_szScratch, s_szFlags, val);
+            ::sprintf(szScratch, s_szFlags, val);
 #else
             long int val = va_arg(argptr, long int);
-            ::sprintf(s_szScratch, s_szFlags, val);
+            ::sprintf(szScratch, s_szFlags, val);
 #endif
           }
           else if (ilen == 3) {
             size_t val = va_arg(argptr, size_t);
-            ::sprintf(s_szScratch, s_szFlags, val);
+            ::sprintf(szScratch, s_szFlags, val);
           }
-          *this += wxString(s_szScratch);
+          *this += wxString(szScratch);
           done = TRUE;
           break;
         case wxT('e'):
@@ -1156,12 +1183,12 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
           s_szFlags[flagofs] = '\0';
           if (ilen == 2) {
             long double val = va_arg(argptr, long double);
-            ::sprintf(s_szScratch, s_szFlags, val);
+            ::sprintf(szScratch, s_szFlags, val);
           } else {
             double val = va_arg(argptr, double);
-            ::sprintf(s_szScratch, s_szFlags, val);
+            ::sprintf(szScratch, s_szFlags, val);
           }
-          *this += wxString(s_szScratch);
+          *this += wxString(szScratch);
           done = TRUE;
           break;
         case wxT('p'):
@@ -1170,8 +1197,8 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             CHECK_PREC
             s_szFlags[flagofs++] = pszFormat[n];
             s_szFlags[flagofs] = '\0';
-            ::sprintf(s_szScratch, s_szFlags, val);
-            *this += wxString(s_szScratch);
+            ::sprintf(szScratch, s_szFlags, val);
+            *this += wxString(szScratch);
             done = TRUE;
           }
           break;
@@ -1245,39 +1272,43 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
     } else *this += pszFormat[n];
 
 #else
-  // NB: wxVsnprintf() may return either less than the buffer size or -1 if there
-  //     is not enough place depending on implementation
-  int iLen = wxVsnprintf(s_szScratch, WXSIZEOF(s_szScratch), pszFormat, argptr);
-  char *buffer;
-  if ( iLen < (int)WXSIZEOF(s_szScratch) ) {
-    buffer = s_szScratch;
+  // buffer to avoid dynamic memory allocation each time for small strings
+  char szScratch[1024];
+
+  // NB: wxVsnprintf() may return either less than the buffer size or -1 if
+  //     there is not enough place depending on implementation
+  int iLen = wxVsnprintfA(szScratch, WXSIZEOF(szScratch), pszFormat, argptr);
+  if ( iLen != -1 ) {
+    // the whole string is in szScratch
+    *this = szScratch;
   }
   else {
-      int size = WXSIZEOF(s_szScratch) * 2;
-      buffer = (char *)malloc(size);
-      while ( buffer != NULL ) {
-          iLen = wxVsnprintf(buffer, WXSIZEOF(s_szScratch), pszFormat, argptr);
-          if ( iLen < size ) {
+      bool outOfMemory = FALSE;
+      int size = 2*WXSIZEOF(szScratch);
+      while ( !outOfMemory ) {
+          char *buf = GetWriteBuf(size);
+          if ( buf )
+            iLen = wxVsnprintfA(buf, size, pszFormat, argptr);
+          else
+            outOfMemory = TRUE;
+
+          UngetWriteBuf();
+
+          if ( iLen != -1 ) {
               // ok, there was enough space
               break;
           }
 
           // still not enough, double it again
-          buffer = (char *)realloc(buffer, size *= 2);
+          size *= 2;
       }
 
-      if ( !buffer ) {
+      if ( outOfMemory ) {
           // out of memory
           return -1;
       }
   }
-
-  wxString s(buffer);
-  *this = s;
-
-  if ( buffer != s_szScratch )
-      free(buffer);
-#endif
+#endif // wxUSE_EXPERIMENTAL_PRINTF/!wxUSE_EXPERIMENTAL_PRINTF
 
   return Len();
 }
