@@ -3629,9 +3629,10 @@ void wxGrid::Create()
 
     m_cellEditCtrlEnabled = FALSE;
 
-    m_defaultCellAttr = new wxGridCellAttr(m_defaultCellAttr);
+    m_defaultCellAttr = new wxGridCellAttr();
 
     // Set default cell attributes
+    m_defaultCellAttr->SetDefAttr(m_defaultCellAttr);
     m_defaultCellAttr->SetKind(wxGridCellAttr::Default);
     m_defaultCellAttr->SetFont(GetFont());
     m_defaultCellAttr->SetAlignment(wxALIGN_LEFT, wxALIGN_TOP);
