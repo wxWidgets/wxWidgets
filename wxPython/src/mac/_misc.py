@@ -295,9 +295,14 @@ def Sleep(*args, **kwargs):
     """Sleep(int secs)"""
     return _misc_.Sleep(*args, **kwargs)
 
-def Usleep(*args, **kwargs):
-    """Usleep(unsigned long milliseconds)"""
-    return _misc_.Usleep(*args, **kwargs)
+def MilliSleep(*args, **kwargs):
+    """MilliSleep(unsigned long milliseconds)"""
+    return _misc_.MilliSleep(*args, **kwargs)
+
+def MicroSleep(*args, **kwargs):
+    """MicroSleep(unsigned long microseconds)"""
+    return _misc_.MicroSleep(*args, **kwargs)
+Usleep = MilliSleep 
 
 def EnableTopLevelWindows(*args, **kwargs):
     """EnableTopLevelWindows(bool enable)"""

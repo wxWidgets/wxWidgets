@@ -6323,6 +6323,30 @@ class Window(EvtHandler):
         """
         return _core_.Window_Navigate(*args, **kwargs)
 
+    def MoveAfterInTabOrder(*args, **kwargs):
+        """
+        MoveAfterInTabOrder(self, Window win)
+
+        Moves this window in the tab navigation order after the specified
+        sibling window.  This means that when the user presses the TAB key on
+        that other window, the focus switches to this window.
+
+        The default tab order is the same as creation order.  This function
+        and `MoveBeforeInTabOrder` allow to change it after creating all the
+        windows.
+
+        """
+        return _core_.Window_MoveAfterInTabOrder(*args, **kwargs)
+
+    def MoveBeforeInTabOrder(*args, **kwargs):
+        """
+        MoveBeforeInTabOrder(self, Window win)
+
+        Same as `MoveAfterInTabOrder` except that it inserts this window just
+        before win instead of putting it right after it.
+        """
+        return _core_.Window_MoveBeforeInTabOrder(*args, **kwargs)
+
     def GetChildren(*args, **kwargs):
         """
         GetChildren(self) -> PyObject

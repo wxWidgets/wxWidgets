@@ -601,6 +601,9 @@ class Dialog(TopLevelWindow):
         return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    def SendSizeEvent(self):
+        self.ProcessEvent(wx.SizeEvent((-1,-1)))
+
 
 class DialogPtr(Dialog):
     def __init__(self, this):
@@ -1764,7 +1767,14 @@ class VScrolledWindow(Panel):
         return _windows_.VScrolledWindow_ScrollToLine(*args, **kwargs)
 
     def ScrollLines(*args, **kwargs):
-        """ScrollLines(self, int lines) -> bool"""
+        """
+        ScrollLines(self, int lines) -> bool
+
+        If the platform and window class supports it, scrolls the window by
+        the given number of lines down, if lines is positive, or up if lines
+        is negative.  Returns True if the window was scrolled, False if it was
+        already on top/bottom and nothing was done.
+        """
         return _windows_.VScrolledWindow_ScrollLines(*args, **kwargs)
 
     def ScrollPages(*args, **kwargs):
@@ -1787,11 +1797,19 @@ class VScrolledWindow(Panel):
         return _windows_.VScrolledWindow_RefreshLines(*args, **kwargs)
 
     def HitTestXT(*args, **kwargs):
-        """HitTestXT(self, int x, int y) -> int"""
+        """
+        HitTestXT(self, int x, int y) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _windows_.VScrolledWindow_HitTestXT(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(self, Point pt) -> int"""
+        """
+        HitTest(self, Point pt) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _windows_.VScrolledWindow_HitTest(*args, **kwargs)
 
     def RefreshAll(*args, **kwargs):

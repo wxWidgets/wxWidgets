@@ -1069,6 +1069,7 @@ static PyObject *_wrap_new_NamedColour(PyObject *self, PyObject *args, PyObject 
         temp1 = True;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxColour *)new wxColour((wxString const &)*arg1);
         
