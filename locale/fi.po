@@ -8,7 +8,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets-2.5.2\n"
+"Project-Id-Version: wxWidgets-2.5.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-15 01:23+0100\n"
 "PO-Revision-Date: 2004-07-17 23:37+0300\n"
