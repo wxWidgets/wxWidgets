@@ -760,6 +760,7 @@ DEFAULT_wxUSE_INTL=1
 DEFAULT_wxUSE_CONFIG=1
 DEFAULT_wxUSE_STREAMS=1
 DEFAULT_wxUSE_SERIAL=1
+DEFAULT_wxUSE_DYNLIB_CLASS=1
 
 DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=1
 DEFAULT_WX_NORMALIZED_PS_FONTS=1
@@ -842,6 +843,10 @@ wxUSE_APPLE_IEEE)
 AC_OVERRIDES(threads,threads,
 **--with-threads          for enabling threads,
 wxUSE_THREADS)
+
+AC_OVERRIDES(dynlib,dynlib,
+**--with-dynlib           to compile wxLibrary class,
+wxUSE_DYNLIB_CLASS)
 
 dnl ----------------------------------------------------------------
 dnl user options for libraries
@@ -1229,6 +1234,31 @@ fi
 
 if test "$wxUSE_SERIAL" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_SERIAL,$wxUSE_SERIAL)
+fi
+
+dnl ------------------------------------------------------------------------
+dnl wxLibrary class
+dnl ------------------------------------------------------------------------
+
+HAVE_DL_FUNCS=0
+if test "$wxUSE_DYNLIB_CLASS" = "1"; then
+    dnl the test is a bit complicated because we check for dlopen() both with
+    dnl and without -ldl
+    AC_CHECK_FUNCS(dlopen,
+        [AC_DEFINE(HAVE_DLOPEN) HAVE_DL_FUNCS=1],
+        [AC_CHECK_LIB(dl, dlopen,
+            [AC_DEFINE(HAVE_DLOPEN) HAVE_DL_FUNCS=1])])
+    AC_CHECK_FUNCS(shl_load, [AC_DEFINE(HAVE_SHL_LOAD) HAVE_DL_FUNCS=1])
+
+    if test "$HAVE_DL_FUNCS" = 0; then
+        AC_MSG_WARN("--with-dynlib will be disabled because no function was found to load a shared library on this platform")
+
+        wxUSE_DYNLIB_CLASS=0
+    fi
+fi
+
+if test "$wxUSE_DYNLIB_CLASS" = 1 ; then
+  AC_DEFINE_UNQUOTED(wxUSE_DYNLIB_CLASS,$wxUSE_DYNLIB_CLASS)
 fi
 
 dnl ----------------------------------------------------------------
