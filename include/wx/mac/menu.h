@@ -185,6 +185,7 @@ public:
 protected:
     // common part of all ctors
     void Init();
+    wxWindow        *m_invokingWindow;
 
 #if WXWIN_COMPATIBILITY
     wxEvtHandler *m_eventHandler;
