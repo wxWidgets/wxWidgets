@@ -1006,8 +1006,8 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     wxString encname = GetSystemEncodingName();
     if ( !encname.empty() )
     {
-        return wxFontMapper::CharsetToEncoding(encname,
-                                               FALSE /* not interactive */);
+        return wxTheFontMapper->
+            CharsetToEncoding(encname, FALSE /* not interactive */);
     }
 #endif // Win32/Unix
 
