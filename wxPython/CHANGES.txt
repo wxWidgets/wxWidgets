@@ -40,7 +40,7 @@ UNICODE!
     wxWindows/wxPython can be compiled with unicode support enabled or
     disabled.  Previous to wxPython 2.3.3 non-unicode mode was always
     used.  Starting with 2.3.3 either mode is supported, but only if
-    it is also available in wxWindow on the platform.  Currently
+    it is also available in wxWindows on the platform.  Currently
     wxWindows only supports unicode on MS Windows platforms, but with
     the recent release of GTK+ 2.0 it is only a matter of time until
     it can be done on wxGTK (Linux and other unixes) as well.
@@ -48,14 +48,14 @@ UNICODE!
     Unicode works best on platforms in the NT branch of the Windows
     family tree (NT, win2k, XP) but it is now also possible to use the
     same unicode binaries on win95/98/ME platforms as well!  This is
-    done by using a special library and DLL in the application called
-    MSLU, (Microsoft Layer for Unicode).  It simply gets out of the
-    way if the app is run on an NT box, or if run on a win9x box it
-    loads a special DLL that provides the unicode versions of the
-    windows API.  So far I have not been able to get this to work
-    perfectly on win9x.  Most things work fine but wxTaskBarIcon for
-    example will cause a crash if used with the unicode build on
-    win95.
+    done by using a special library and DLL with the application
+    called MSLU, (Microsoft Layer for Unicode).  It simply gets out of
+    the way if the app is run on an NT box, otherwise if run on a
+    win9x box it loads a special DLL that provides the unicode
+    versions of the windows API.  So far I have not been able to get
+    this to work perfectly on win9x.  Most things work fine but
+    wxTaskBarIcon for example will cause a crash if used with the
+    unicode build on win95.
 
     So how do you use it?  It's very simple.  When unicode is enabled,
     then all functions and methods in wxPython that return a wxString
