@@ -46,6 +46,15 @@
 #   pragma warning(disable:4100)    // unreferenced formal parameter
 #endif
 
+// suppress some Salford C++ warnings
+#ifdef __SALFORDC__
+#   pragma suppress 353             // Possible nested comments
+#   pragma suppress 593             // Define not used
+#   pragma suppress 61              // enum has no name (doesn't suppress!)
+#   pragma suppress 106             // unnamed, unused parameter
+#   pragma suppress 571             // Virtual function hiding
+#endif
+
 //////////////////////////////////////////////////////////////////////////////////
 // Currently Only MS-Windows/NT, XView and Motif are supported
 //
@@ -108,6 +117,8 @@
         typedef unsigned int bool;
     #endif
 #elif defined(__SC__)
+    typedef unsigned int bool;
+#elif defined(__SALFORDC__)
     typedef unsigned int bool;
 #elif defined(_MSC_VER) && (_MSC_VER <= 1000)
     typedef unsigned int bool;

@@ -217,6 +217,7 @@ public:
         { wxASSERT( m_count==0 ); m_keyType = keyType; }
 
 protected:
+
     // all methods here are "overloaded" in derived classes to provide compile
     // time type checking
 
@@ -225,12 +226,18 @@ protected:
                                    void *data,
                                    const wxListKey& key = wxDefaultListKey) = 0;
 
+// Can't access these from derived classes otherwise (bug in Salford C++?)
+#ifdef __SALFORDC__
+public:
+#endif
+
     // ctors
         // from an array
     wxListBase(size_t count, void *elements[]);
         // from a sequence of objects
     wxListBase(void *object, ... /* terminate with NULL */);
 
+protected:
         // copy ctor and assignment operator
     wxListBase(const wxListBase& list)
         { DoCopy(list); }

@@ -30,6 +30,7 @@
 #if   defined(__WXMSW__) && !defined(__GNUWIN32__)
   #include  <io.h>
 
+#ifndef __SALFORDC__
   #define   WIN32_LEAN_AND_MEAN
   #define   NOSERVICE
   #define   NOIME
@@ -50,6 +51,8 @@
   #define   NOKANJI
   #define   NOCRYPT
   #define   NOMCX
+#endif
+
   #include  <windows.h>     // for GetTempFileName
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
   #include  <unistd.h>
@@ -72,6 +75,7 @@
 
 #include  <stdio.h>       // SEEK_xxx constants
 #include  <fcntl.h>       // O_RDONLY &c
+
 #ifndef __MWERKS__
 #include  <sys/types.h>   // needed for stat
 #include  <sys/stat.h>    // stat
@@ -125,6 +129,11 @@
   #define   O_BINARY    (0)
 #endif  //__UNIX__
 
+
+#ifdef __SALFORDC__
+#include <unix.h>
+#endif
+
 // wxWindows
 #include  <wx/string.h>
 #include  <wx/intl.h>
@@ -144,8 +153,13 @@
 // ----------------------------------------------------------------------------
 bool wxFile::Exists(const char *name)
 {
+#ifdef __SALFORDC__
+  struct _stat st;
+#else
   struct stat st;
-  return !access(name, 0) && !stat(name, &st) && (st.st_mode & S_IFREG);
+#endif
+
+  return !access(name, 0) && !stat((char*) name, &st) && (st.st_mode & S_IFREG);
 }
 
 bool wxFile::Access(const char *name, OpenMode mode)
@@ -188,12 +202,17 @@ wxFile::~wxFile()
 }
 
 // create the file, fail if it already exists and bOverwrite
-bool wxFile::Create(const char *szFileName, bool bOverwrite, int access)
+bool wxFile::Create(const char *szFileName, bool bOverwrite, int accessMode)
 {
   // if bOverwrite we create a new file or truncate the existing one,
   // otherwise we only create the new file and fail if it already exists
+#ifdef __SALFORDC__
   int fd = open(szFileName, O_WRONLY | O_CREAT | 
-                (bOverwrite ? O_TRUNC : O_EXCL), access);
+                (bOverwrite ? O_TRUNC : O_EXCL));
+#else
+  int fd = open(szFileName, O_WRONLY | O_CREAT |
+                (bOverwrite ? O_TRUNC : O_EXCL), accessMode);
+#endif
 
   if ( fd == -1 ) {
     wxLogSysError(_("can't create file '%s'"), szFileName);
@@ -206,7 +225,7 @@ bool wxFile::Create(const char *szFileName, bool bOverwrite, int access)
 }
 
 // open the file
-bool wxFile::Open(const char *szFileName, OpenMode mode, int access)
+bool wxFile::Open(const char *szFileName, OpenMode mode, int accessMode)
 {
   int flags = O_BINARY;
 
@@ -228,7 +247,11 @@ bool wxFile::Open(const char *szFileName, OpenMode mode, int access)
       break;
   }
 
-  int fd = open(szFileName, flags, access);
+#ifdef __SALFORDC__
+  int fd = open(szFileName, flags);
+#else
+  int fd = open(szFileName, flags, accessMode);
+#endif
 
   if ( fd == -1 ) {
     wxLogSysError(_("can't open file '%s'"), szFileName);
@@ -405,7 +428,7 @@ bool wxFile::Eof() const
 
   int iRc;
 
-  #if defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ )
+  #if defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ ) || defined(__SALFORDC__)
     // @@ this doesn't work, of course, on unseekable file descriptors
     off_t ofsCur = Tell(),
           ofsMax = Length();

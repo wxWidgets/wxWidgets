@@ -101,7 +101,7 @@ test: minigzip.exe example.exe
 	echo hello world | minigzip | minigzip -d >test
 	type test
 
-clean:
+clean: .SYMBOLIC
 	-erase *.obj
 	-erase *.exe
         -erase $(LIBTARGET)

@@ -57,7 +57,7 @@
 #endif
 
 #ifdef __WINDOWS__
-#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ )
+#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
 #include <direct.h>
 #include <dos.h>
 #endif
@@ -72,6 +72,11 @@
                     // this (3.1 I believe) and how to test for it.
                     // If this works for Borland 4.0 as well, then no worries.
 #include <dir.h>
+#endif
+
+#ifdef __SALFORDC__
+#include <dir.h>
+#include <unix.h>
 #endif
 
 #include "wx/setup.h"
@@ -240,7 +245,12 @@ wxFileExists (const wxString& filename)
     	return TRUE;
     return FALSE ;
 #else
+
+#ifdef __SALFORDC__
+  struct _stat stbuf;
+#else
   struct stat stbuf;
+#endif
 
   if ((filename != "") && stat ((char *)(const char *)filename, &stbuf) == 0)
     return TRUE;
@@ -992,7 +1002,13 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 	wxUnix2MacFilename( gwxMacFileName ) ;
   return (rmdir(WXSTRINGCAST gwxMacFileName) == 0);
 #else
+
+#ifdef __SALFORDC__
+  return FALSE; // What to do?
+#else
   return (rmdir(WXSTRINGCAST dir) == 0);
+#endif
+
 #endif
 }
 
@@ -1051,8 +1067,13 @@ bool wxPathExists(const char *pszPathName)
   if ( wxEndsWithPathSeparator(pszPathName) && pszPathName[1] != '\0' )
     strPath.Last() = '\0';
 
+#ifdef __SALFORDC__
+  struct _stat st;
+#else
   struct stat st;
-  return stat(strPath, &st) == 0 && (st.st_mode & S_IFDIR);
+#endif
+
+  return stat((char*) (const char*) strPath, &st) == 0 && (st.st_mode & S_IFDIR);
 }
 
 // Get a temporary filename, opening and closing the file.

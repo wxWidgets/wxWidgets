@@ -158,9 +158,9 @@ public:
   void SetMask( bool mask = TRUE );
   bool HasMask() const;
 
-  inline wxImage& operator = (const wxImage& image) 
+  inline wxImage& operator = (const wxImage& image)
     { if (*this == image) return (*this); Ref(image); return *this; }
-  inline bool operator == (const wxImage& image) 
+  inline bool operator == (const wxImage& image)
     { return m_refData == image.m_refData; }
   inline bool operator != (const wxImage& image) 
     { return m_refData != image.m_refData; }

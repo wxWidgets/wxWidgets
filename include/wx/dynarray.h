@@ -162,6 +162,9 @@ private:
 // types of sizeof()<=sizeof(long) or pointers if sizeof(pointer)<=sizeof(long)
 //
 // NB: it has only inline functions => takes no space at all
+// Mod by JACS: Salford C++ doesn't like 'var->operator=' syntax, as in:
+//    { ((wxBaseArray *)this)->operator=((const wxBaseArray&)src);
+// so using a temporary variable instead.
 // ----------------------------------------------------------------------------
 #define  _WX_DEFINE_ARRAY(T, name)                                  \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);       \
@@ -172,7 +175,8 @@ public:                                                             \
     { wxASSERT( sizeof(T) <= sizeof(long) ); }                      \
                                                                     \
   name& operator=(const name& src)                                  \
-    { ((wxBaseArray *)this)->operator=((const wxBaseArray&)src);    \
+    { wxBaseArray* temp = (wxBaseArray*) this;                      \
+      (*temp) = ((const wxBaseArray&)src);                          \
       return *this; }                                               \
                                                                     \
   T& operator[](size_t uiIndex) const                               \
@@ -216,6 +220,9 @@ public:                                                             \
 // the normal arrays otherwise.
 //
 // NB: it has only inline functions => takes no space at all
+// Mod by JACS: Salford C++ doesn't like 'var->operator=' syntax, as in:
+//    { ((wxBaseArray *)this)->operator=((const wxBaseArray&)src);
+// so using a temporary variable instead.
 // ----------------------------------------------------------------------------
 #define  _WX_DEFINE_SORTED_ARRAY(T, name)                           \
 typedef int (CMPFUNC_CONV *SCMPFUNC##T)(T pItem1, T pItem2);        \
@@ -226,7 +233,8 @@ public:                                                             \
     { wxASSERT( sizeof(T) <= sizeof(long) ); m_fnCompare = fn; }    \
                                                                     \
   name& operator=(const name& src)                                  \
-    { ((wxBaseArray *)this)->operator=((const wxBaseArray&)src);    \
+    { wxBaseArray* temp = (wxBaseArray*) this;                      \
+      (*temp) = ((const wxBaseArray&)src);                          \
       m_fnCompare = src.m_fnCompare;                                \
       return *this; }                                               \
                                                                     \

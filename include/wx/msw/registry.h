@@ -62,22 +62,22 @@ public:
     Type_Multi_String,               // Multiple Unicode strings
     Type_Resource_list,              // Resource list in the resource map
     Type_Full_resource_descriptor,   // Resource list in the hardware description
-    Type_Resource_requirements_list, // ???
+    Type_Resource_requirements_list  // ???
 #endif  //WIN32
   };
 
   // predefined registry keys
   enum StdKey
   {
-    HKCR,     // classes root
+    HKCR     // classes root
 #ifdef  __WIN32__
-    HKCU,     // current user
+    , HKCU,     // current user
     HKLM,     // local machine
     HKUSR,    // users
-    HKPD,     // performance data (@@ NT only?)
+    HKPD     // performance data (@@ NT only?)
 #if    WINVER >= 0x0400
-    HKCC,     // current config
-    HKDD,     // dynamic data
+    , HKCC,     // current config
+    HKDD     // dynamic data
 #endif  // Winver
 #endif  // Win32/16
   };

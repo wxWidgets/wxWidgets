@@ -18,13 +18,17 @@
 #endif
 
 #include "wx/defs.h"
-
-#ifdef wxUSE_CONFIG
-
-#include "wx/confbase.h"
 #include "wx/textfile.h"
 #include "wx/string.h"
 
+// ----------------------------------------------------------------------------
+// compile options
+// ----------------------------------------------------------------------------
+
+// it won't compile without it anyhow
+#ifndef wxUSE_CONFIG
+  #error "Please define wxUSE_CONFIG or remove fileconf.cpp from your makefile"
+#endif // wxUSE_CONFIG
 
 // ----------------------------------------------------------------------------
 // wxFileConfig
@@ -94,8 +98,37 @@
   (it's on by default, the current status can be retrieved with
    IsExpandingEnvVars function).
 */
+  class wxFileConfig; //linea nueva
+  class ConfigGroup;
+  class ConfigEntry;
 
-class WXDLLEXPORT wxFileConfig : public wxConfigBase
+  // we store all lines of the local config file as a linked list in memory
+  class LineList
+  {
+  public:
+    void      SetNext(LineList *pNext)  { m_pNext = pNext; }
+    void      SetPrev(LineList *pPrev)  { m_pPrev = pPrev; }
+
+    // ctor
+    LineList(const wxString& str, LineList *pNext = (LineList *) NULL) : m_strLine(str)
+      { SetNext(pNext); SetPrev((LineList *) NULL); }
+
+    //
+    LineList *Next() const              { return m_pNext;  }
+    LineList *Prev() const              { return m_pPrev;  }
+
+    //
+    void SetText(const wxString& str) { m_strLine = str;  }
+    const wxString& Text() const      { return m_strLine; }
+
+  private:
+    wxString  m_strLine;      // line contents
+    LineList *m_pNext,        // next node
+             *m_pPrev;        // previous one
+  };
+
+
+class wxFileConfig : public wxConfigBase
 {
 public:
   // construct the "standard" full name for global (system-wide) and
@@ -182,33 +215,6 @@ public:
 
 public:
   // fwd decl
-  class ConfigGroup;
-  class ConfigEntry;
-
-  // we store all lines of the local config file as a linked list in memory
-  class LineList
-  {
-  public:
-    void      SetNext(LineList *pNext)  { m_pNext = pNext; }
-    void      SetPrev(LineList *pPrev)  { m_pPrev = pPrev; }
-
-    // ctor
-    LineList(const wxString& str, LineList *pNext = (LineList *) NULL) : m_strLine(str)
-      { SetNext(pNext); SetPrev((LineList *) NULL); }
-
-    //
-    LineList *Next() const              { return m_pNext;  }
-    LineList *Prev() const              { return m_pPrev;  }
-
-    //
-    void SetText(const wxString& str) { m_strLine = str;  }
-    const wxString& Text() const      { return m_strLine; }
-
-  private:
-    wxString  m_strLine;      // line contents
-    LineList *m_pNext,        // next node
-             *m_pPrev;        // previous one
-  };
 
   // functions to work with this list
   LineList *LineListAppend(const wxString& str);
@@ -253,6 +259,8 @@ public:
   WX_DEFINE_SORTED_ARRAY(ConfigEntry *, ArrayEntries);
   WX_DEFINE_SORTED_ARRAY(ConfigGroup *, ArrayGroups);
 
+};
+
   class ConfigEntry
   {
   private:
@@ -289,8 +297,8 @@ public:
   private:
     wxFileConfig *m_pConfig;        // config object we belong to
     ConfigGroup  *m_pParent;        // parent group (NULL for root group)
-    ArrayEntries  m_aEntries;       // entries in this group
-    ArrayGroups   m_aSubgroups;     // subgroups
+    wxFileConfig::ArrayEntries  m_aEntries;       // entries in this group
+    wxFileConfig::ArrayGroups   m_aSubgroups;     // subgroups
     wxString      m_strName;        // group's name
     bool          m_bDirty;         // if FALSE => all subgroups are not dirty
     LineList     *m_pLine;          // pointer to our line in the linked list
@@ -313,8 +321,8 @@ public:
     wxFileConfig   *Config()  const { return m_pConfig; }
     bool            IsDirty() const { return m_bDirty;  }
 
-    const ArrayEntries& Entries() const { return m_aEntries;   }
-    const ArrayGroups&  Groups()  const { return m_aSubgroups; }
+    const wxFileConfig::ArrayEntries& Entries() const { return m_aEntries;   }
+    const wxFileConfig::ArrayGroups&  Groups()  const { return m_aSubgroups; }
     bool  IsEmpty() const { return Entries().IsEmpty() && Groups().IsEmpty(); }
 
     // find entry/subgroup (NULL if not found)
@@ -345,11 +353,11 @@ public:
     void SetLastEntry(ConfigEntry *pEntry) { m_pLastEntry = pEntry; }
     void SetLastGroup(ConfigGroup *pGroup) { m_pLastGroup = pGroup; }
   };
-};
 
-#endif
-   // wxUSE_CONFIG
+#endif  //_FILECONF_H
 
-#endif
-  //_FILECONF_H
+
+
+
+
 

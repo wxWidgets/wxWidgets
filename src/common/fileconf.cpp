@@ -14,21 +14,22 @@
 #pragma implementation "fileconf.h"
 #endif
 
+// ============================================================================
+// declarations
+// ============================================================================
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
 #include  "wx/wxprec.h"
-
-#include  "wx/fileconf.h"
-
-#ifdef wxUSE_CONFIG
 
 #ifdef    __BORLANDC__
   #pragma hdrstop
 #endif  //__BORLANDC__
 
 #ifndef   WX_PRECOMP
-  #include  "wx/wx.h"
+  #include  "wx/string.h"
+  #include  "wx/intl.h"
 #endif  //WX_PRECOMP
 
 #include  "wx/app.h"
@@ -37,6 +38,7 @@
 #include  "wx/log.h"
 #include  "wx/textfile.h"
 #include  "wx/config.h"
+#include  "wx/fileconf.h"
 
 #include  "wx/utils.h"    // for wxGetHomeDir
 
@@ -71,10 +73,10 @@
 inline bool IsValid(char c) { return isalnum(c) || strchr("@_/-!.*%", c); }
 
 // compare functions for sorting the arrays
-static int CompareEntries(wxFileConfig::ConfigEntry *p1,
-                          wxFileConfig::ConfigEntry *p2);
-static int CompareGroups(wxFileConfig::ConfigGroup *p1,
-                         wxFileConfig::ConfigGroup *p2);
+static int CompareEntries(ConfigEntry *p1,
+                          ConfigEntry *p2);
+static int CompareGroups(ConfigGroup *p1,
+                         ConfigGroup *p2);
 
 // filter strings
 static wxString FilterIn(const wxString& str);
@@ -94,8 +96,6 @@ wxString wxFileConfig::GetGlobalDir()
   #ifdef __UNIX__
     strDir = "/etc/";
   #elif defined(__WXSTUBS__)
-    wxASSERT_MSG( FALSE, "TODO" ) ;
-  #elif defined(__WXMAC__)
     wxASSERT_MSG( FALSE, "TODO" ) ;
   #else // Windows
     char szWinDir[MAX_PATH];
@@ -704,7 +704,7 @@ bool wxFileConfig::DeleteAll()
 // ----------------------------------------------------------------------------
 
 // append a new line to the end of the list
-wxFileConfig::LineList *wxFileConfig::LineListAppend(const wxString& str)
+LineList *wxFileConfig::LineListAppend(const wxString& str)
 {
   LineList *pLine = new LineList(str);
 
@@ -723,7 +723,7 @@ wxFileConfig::LineList *wxFileConfig::LineListAppend(const wxString& str)
 }
 
 // insert a new line after the given one or in the very beginning if !pLine
-wxFileConfig::LineList *wxFileConfig::LineListInsert(const wxString& str,
+LineList *wxFileConfig::LineListInsert(const wxString& str,
                                                      LineList *pLine)
 {
   if ( pLine == m_linesTail )
@@ -782,7 +782,7 @@ bool wxFileConfig::LineListIsEmpty()
 // ----------------------------------------------------------------------------
 
 // ctor
-wxFileConfig::ConfigGroup::ConfigGroup(wxFileConfig::ConfigGroup *pParent,
+ConfigGroup::ConfigGroup(ConfigGroup *pParent,
                                        const wxString& strName,
                                        wxFileConfig *pConfig)
                          : m_aEntries(CompareEntries),
@@ -799,7 +799,7 @@ wxFileConfig::ConfigGroup::ConfigGroup(wxFileConfig::ConfigGroup *pParent,
 }
 
 // dtor deletes all children
-wxFileConfig::ConfigGroup::~ConfigGroup()
+ConfigGroup::~ConfigGroup()
 {
   // entries
   size_t n, nCount = m_aEntries.Count();
@@ -816,7 +816,7 @@ wxFileConfig::ConfigGroup::~ConfigGroup()
 // line
 // ----------------------------------------------------------------------------
 
-void wxFileConfig::ConfigGroup::SetLine(LineList *pLine)
+void ConfigGroup::SetLine(LineList *pLine)
 {
   wxASSERT( m_pLine == NULL ); // shouldn't be called twice
 
@@ -857,7 +857,7 @@ void wxFileConfig::ConfigGroup::SetLine(LineList *pLine)
 // Return the line which contains "[our name]". If we're still not in the list,
 // add our line to it immediately after the last line of our parent group if we
 // have it or in the very beginning if we're the root group.
-wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetGroupLine()
+LineList *ConfigGroup::GetGroupLine()
 {
   if ( m_pLine == NULL ) {
     ConfigGroup *pParent = Parent();
@@ -882,12 +882,12 @@ wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetGroupLine()
 // Return the last line belonging to the subgroups of this group (after which
 // we can add a new subgroup), if we don't have any subgroups or entries our
 // last line is the group line (m_pLine) itself.
-wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetLastGroupLine()
+LineList *ConfigGroup::GetLastGroupLine()
 {
   // if we have any subgroups, our last line is the last line of the last
   // subgroup
   if ( m_pLastGroup != NULL ) {
-    wxFileConfig::LineList *pLine = m_pLastGroup->GetLastGroupLine();
+    LineList *pLine = m_pLastGroup->GetLastGroupLine();
 
     wxASSERT( pLine != NULL );  // last group must have !NULL associated line
     return pLine;
@@ -900,10 +900,10 @@ wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetLastGroupLine()
 // return the last line belonging to the entries of this group (after which
 // we can add a new entry), if we don't have any entries we will add the new
 // one immediately after the group line itself.
-wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetLastEntryLine()
+LineList *ConfigGroup::GetLastEntryLine()
 {
   if ( m_pLastEntry != NULL ) {
-    wxFileConfig::LineList *pLine = m_pLastEntry->GetLine();
+    LineList *pLine = m_pLastEntry->GetLine();
 
     wxASSERT( pLine != NULL );  // last entry must have !NULL associated line
     return pLine;
@@ -917,7 +917,7 @@ wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetLastEntryLine()
 // group name
 // ----------------------------------------------------------------------------
 
-wxString wxFileConfig::ConfigGroup::GetFullName() const
+wxString ConfigGroup::GetFullName() const
 {
   if ( Parent() )
     return Parent()->GetFullName() + wxCONFIG_PATH_SEPARATOR + Name();
@@ -930,14 +930,14 @@ wxString wxFileConfig::ConfigGroup::GetFullName() const
 // ----------------------------------------------------------------------------
 
 // use binary search because the array is sorted
-wxFileConfig::ConfigEntry *
-wxFileConfig::ConfigGroup::FindEntry(const char *szName) const
+ConfigEntry *
+ConfigGroup::FindEntry(const char *szName) const
 {
   size_t i,
        lo = 0,
        hi = m_aEntries.Count();
   int res;
-  wxFileConfig::ConfigEntry *pEntry;
+  ConfigEntry *pEntry;
 
   while ( lo < hi ) {
     i = (lo + hi)/2;
@@ -960,14 +960,14 @@ wxFileConfig::ConfigGroup::FindEntry(const char *szName) const
   return NULL;
 }
 
-wxFileConfig::ConfigGroup *
-wxFileConfig::ConfigGroup::FindSubgroup(const char *szName) const
+ConfigGroup *
+ConfigGroup::FindSubgroup(const char *szName) const
 {
   size_t i,
        lo = 0,
        hi = m_aSubgroups.Count();
   int res;
-  wxFileConfig::ConfigGroup *pGroup;
+  ConfigGroup *pGroup;
 
   while ( lo < hi ) {
     i = (lo + hi)/2;
@@ -995,8 +995,8 @@ wxFileConfig::ConfigGroup::FindSubgroup(const char *szName) const
 // ----------------------------------------------------------------------------
 
 // create a new entry and add it to the current group
-wxFileConfig::ConfigEntry *
-wxFileConfig::ConfigGroup::AddEntry(const wxString& strName, int nLine)
+ConfigEntry *
+ConfigGroup::AddEntry(const wxString& strName, int nLine)
 {
   wxASSERT( FindEntry(strName) == NULL );
 
@@ -1007,8 +1007,8 @@ wxFileConfig::ConfigGroup::AddEntry(const wxString& strName, int nLine)
 }
 
 // create a new group and add it to the current group
-wxFileConfig::ConfigGroup *
-wxFileConfig::ConfigGroup::AddSubgroup(const wxString& strName)
+ConfigGroup *
+ConfigGroup::AddSubgroup(const wxString& strName)
 {
   wxASSERT( FindSubgroup(strName) == NULL );
 
@@ -1029,7 +1029,7 @@ wxFileConfig::ConfigGroup::AddSubgroup(const wxString& strName)
   delete several of them.
  */
 
-bool wxFileConfig::ConfigGroup::DeleteSubgroupByName(const char *szName)
+bool ConfigGroup::DeleteSubgroupByName(const char *szName)
 {
   return DeleteSubgroup(FindSubgroup(szName));
 }
@@ -1037,7 +1037,7 @@ bool wxFileConfig::ConfigGroup::DeleteSubgroupByName(const char *szName)
 // doesn't delete the subgroup itself, but does remove references to it from
 // all other data structures (and normally the returned pointer should be
 // deleted a.s.a.p. because there is nothing much to be done with it anyhow)
-bool wxFileConfig::ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
+bool ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
 {
   wxCHECK( pGroup != NULL, FALSE ); // deleting non existing group?
 
@@ -1101,7 +1101,7 @@ bool wxFileConfig::ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
   return TRUE;
 }
 
-bool wxFileConfig::ConfigGroup::DeleteEntry(const char *szName)
+bool ConfigGroup::DeleteEntry(const char *szName)
 {
   ConfigEntry *pEntry = FindEntry(szName);
   wxCHECK( pEntry != NULL, FALSE );  // deleting non existing item?
@@ -1154,7 +1154,7 @@ bool wxFileConfig::ConfigGroup::DeleteEntry(const char *szName)
 // ----------------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------------
-void wxFileConfig::ConfigGroup::SetDirty()
+void ConfigGroup::SetDirty()
 {
   m_bDirty = TRUE;
   if ( Parent() != NULL )             // propagate upwards
@@ -1168,7 +1168,7 @@ void wxFileConfig::ConfigGroup::SetDirty()
 // ----------------------------------------------------------------------------
 // ctor
 // ----------------------------------------------------------------------------
-wxFileConfig::ConfigEntry::ConfigEntry(wxFileConfig::ConfigGroup *pParent,
+ConfigEntry::ConfigEntry(ConfigGroup *pParent,
                                        const wxString& strName,
                                        int nLine)
                          : m_strName(strName)
@@ -1190,7 +1190,7 @@ wxFileConfig::ConfigEntry::ConfigEntry(wxFileConfig::ConfigGroup *pParent,
 // set value
 // ----------------------------------------------------------------------------
 
-void wxFileConfig::ConfigEntry::SetLine(LineList *pLine)
+void ConfigEntry::SetLine(LineList *pLine)
 {
   if ( m_pLine != NULL ) {
     wxLogWarning(_("entry '%s' appears more than once in group '%s'"),
@@ -1203,7 +1203,7 @@ void wxFileConfig::ConfigEntry::SetLine(LineList *pLine)
 
 // second parameter is FALSE if we read the value from file and prevents the
 // entry from being marked as 'dirty'
-void wxFileConfig::ConfigEntry::SetValue(const wxString& strValue, bool bUser)
+void ConfigEntry::SetValue(const wxString& strValue, bool bUser)
 {
   if ( bUser && IsImmutable() ) {
     wxLogWarning(_("attempt to change immutable key '%s' ignored."),
@@ -1239,7 +1239,7 @@ void wxFileConfig::ConfigEntry::SetValue(const wxString& strValue, bool bUser)
   }
 }
 
-void wxFileConfig::ConfigEntry::SetDirty()
+void ConfigEntry::SetDirty()
 {
   m_bDirty = TRUE;
   Group()->SetDirty();
@@ -1253,8 +1253,8 @@ void wxFileConfig::ConfigEntry::SetDirty()
 // compare functions for array sorting
 // ----------------------------------------------------------------------------
 
-int CompareEntries(wxFileConfig::ConfigEntry *p1,
-                   wxFileConfig::ConfigEntry *p2)
+int CompareEntries(ConfigEntry *p1,
+                   ConfigEntry *p2)
 {
   #if wxCONFIG_CASE_SENSITIVE
     return strcmp(p1->Name(), p2->Name());
@@ -1263,8 +1263,8 @@ int CompareEntries(wxFileConfig::ConfigEntry *p1,
   #endif
 }
 
-int CompareGroups(wxFileConfig::ConfigGroup *p1,
-                  wxFileConfig::ConfigGroup *p2)
+int CompareGroups(ConfigGroup *p1,
+                  ConfigGroup *p2)
 {
   #if wxCONFIG_CASE_SENSITIVE
     return strcmp(p1->Name(), p2->Name());
@@ -1379,6 +1379,9 @@ wxString FilterOut(const wxString& str)
   return strResult;
 }
 
-#endif
 
-   // wxUSE_CONFIG
+
+
+
+
+

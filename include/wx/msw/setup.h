@@ -247,6 +247,18 @@
 #define wxUSE_NATIVE_STATUSBAR 0
 #endif
 
+// Salford C++ doesn't like some of the memory operator definitions
+#ifdef __SALFORDC__
+#undef  wxUSE_MEMORY_TRACING
+#define wxUSE_MEMORY_TRACING      0
+
+#undef wxUSE_GLOBAL_MEMORY_OPERATORS
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
+
+#undef wxUSE_DEBUG_NEW_ALWAYS
+#define wxUSE_DEBUG_NEW_ALWAYS 0
+#endif
+
 // Minimal setup e.g. for compiling small utilities
 #define MINIMAL_WXWINDOWS_SETUP 0
 

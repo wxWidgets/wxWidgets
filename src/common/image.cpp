@@ -30,6 +30,12 @@
 #include "wx/wfstream.h"
 #include "wx/intl.h"
 
+#ifdef __SALFORDC__
+#ifdef FAR
+#undef FAR
+#endif
+#endif
+
 #ifdef __WXMSW__
 #include <windows.h>
 #endif
@@ -396,6 +402,7 @@ wxImageHandler *wxImage::FindHandler( const wxString& name )
     {
         wxImageHandler *handler = (wxImageHandler*)node->Data();
         if (handler->GetName() == name) return handler;
+
         node = node->Next();
     }
     return (wxImageHandler *)NULL;

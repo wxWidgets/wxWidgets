@@ -54,7 +54,9 @@
 #define   wxSTD_STRING_COMPATIBILITY
 
 // define to derive wxString from wxObject
+#ifdef    WXSTRING_IS_WXOBJECT
 #undef    WXSTRING_IS_WXOBJECT
+#endif
 
 // maximum possible length for a string means "take all string" everywhere
 //  (as sizeof(StringData) is unknown here we substract 100)
@@ -85,6 +87,8 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
   return _stricmp(psz1, psz2);
 #elif     defined(__SC__)
   return _stricmp(psz1, psz2);
+#elif     defined(__SALFORDC__)
+  return stricmp(psz1, psz2);
 #elif defined(__BORLANDC__)
   return stricmp(psz1, psz2);
 #elif defined(__WATCOMC__)
@@ -801,41 +805,41 @@ private:
 // wxString comparison functions: operator versions are always case sensitive
 // ---------------------------------------------------------------------------
 //
-inline bool operator==(const wxString& s1, const wxString& s2) { return s1.Cmp(s2) == 0; }
+inline bool operator==(const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) == 0); }
 //
-inline bool operator==(const wxString& s1, const char  * s2) { return s1.Cmp(s2) == 0; }
+inline bool operator==(const wxString& s1, const char  * s2) { return (s1.Cmp(s2) == 0); }
 //
-inline bool operator==(const char  * s1, const wxString& s2) { return s2.Cmp(s1) == 0; }
+inline bool operator==(const char  * s1, const wxString& s2) { return (s2.Cmp(s1) == 0); }
 //
-inline bool operator!=(const wxString& s1, const wxString& s2) { return s1.Cmp(s2) != 0; }
+inline bool operator!=(const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) != 0); }
 //
-inline bool operator!=(const wxString& s1, const char  * s2) { return s1.Cmp(s2) != 0; }
+inline bool operator!=(const wxString& s1, const char  * s2) { return (s1.Cmp(s2) != 0); }
 //
-inline bool operator!=(const char  * s1, const wxString& s2) { return s2.Cmp(s1) != 0; }
+inline bool operator!=(const char  * s1, const wxString& s2) { return (s2.Cmp(s1) != 0); }
 //
-inline bool operator< (const wxString& s1, const wxString& s2) { return s1.Cmp(s2) <  0; }
+inline bool operator< (const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) < 0); }
 //
-inline bool operator< (const wxString& s1, const char  * s2) { return s1.Cmp(s2) <  0; }
+inline bool operator< (const wxString& s1, const char  * s2) { return (s1.Cmp(s2) <  0); }
 //
-inline bool operator< (const char  * s1, const wxString& s2) { return s2.Cmp(s1) >  0; }
+inline bool operator< (const char  * s1, const wxString& s2) { return (s2.Cmp(s1) >  0); }
 //
-inline bool operator> (const wxString& s1, const wxString& s2) { return s1.Cmp(s2) >  0; }
+inline bool operator> (const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) >  0); }
 //
-inline bool operator> (const wxString& s1, const char  * s2) { return s1.Cmp(s2) >  0; }
+inline bool operator> (const wxString& s1, const char  * s2) { return (s1.Cmp(s2) >  0); }
 //
-inline bool operator> (const char  * s1, const wxString& s2) { return s2.Cmp(s1) <  0; }
+inline bool operator> (const char  * s1, const wxString& s2) { return (s2.Cmp(s1) <  0); }
 //
-inline bool operator<=(const wxString& s1, const wxString& s2) { return s1.Cmp(s2) <= 0; }
+inline bool operator<=(const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) <= 0); }
 //
-inline bool operator<=(const wxString& s1, const char  * s2) { return s1.Cmp(s2) <= 0; }
+inline bool operator<=(const wxString& s1, const char  * s2) { return (s1.Cmp(s2) <= 0); }
 //
-inline bool operator<=(const char  * s1, const wxString& s2) { return s2.Cmp(s1) >= 0; }
+inline bool operator<=(const char  * s1, const wxString& s2) { return (s2.Cmp(s1) >= 0); }
 //
-inline bool operator>=(const wxString& s1, const wxString& s2) { return s1.Cmp(s2) >= 0; }
+inline bool operator>=(const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) >= 0); }
 //
-inline bool operator>=(const wxString& s1, const char  * s2) { return s1.Cmp(s2) >= 0; }
+inline bool operator>=(const wxString& s1, const char  * s2) { return (s1.Cmp(s2) >= 0); }
 //
-inline bool operator>=(const char  * s1, const wxString& s2) { return s2.Cmp(s1) <= 0; }
+inline bool operator>=(const char  * s1, const wxString& s2) { return (s2.Cmp(s1) <= 0); }
 
 wxString WXDLLEXPORT operator+(const wxString& string1,  const wxString& string2);
 wxString WXDLLEXPORT operator+(const wxString& string, char ch);

@@ -825,8 +825,6 @@ OBJ1 = adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) \
 OBJ2 = zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) \
   infutil$(O) inffast$(O) 
 
-all: $(LIBTARGET)
-
 adler32.obj: adler32.c zutil.h zlib.h zconf.h
 	$(CC) -c $(CFLAGS) $*.c
 

@@ -117,8 +117,11 @@ public:
 	void Reset(void) { m_current = 0; }
 	void Reset(const wxRegion& region);
 
-	operator bool (void) const { return m_current < m_numRects; }
-	bool HaveRects(void) const { return m_current < m_numRects; }
+#ifndef __SALFORDC__
+	operator bool (void) const { return (m_current < m_numRects); }
+#endif
+
+	bool HaveRects(void) const { return (m_current < m_numRects); }
 
 	void operator ++ (void);
 	void operator ++ (int);
