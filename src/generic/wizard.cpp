@@ -349,6 +349,7 @@ void wxWizard::AddStaticLine(wxBoxSizer *mainColumn)
 
 void wxWizard::AddBackNextPair(wxBoxSizer *buttonRow)
 {
+    wxASSERT_MSG(m_btnNext!=0 && m_btnPrev!=0, "You must create the buttons first before calling wxWizard::AddBackNextPair");
     // margin between Back and Next buttons
 #ifdef __WXMAC__
     static const int BACKNEXT_MARGIN = 10;
@@ -364,18 +365,26 @@ void wxWizard::AddBackNextPair(wxBoxSizer *buttonRow)
         5 // Border width
     );
     
-    m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"));
     backNextPair->Add(m_btnPrev);
     backNextPair->Add(BACKNEXT_MARGIN,0,
         0, // No horizontal stretching
         wxEXPAND // No border, (mostly useless) vertical stretching
     );
-    m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"));
     backNextPair->Add(m_btnNext);
 }
 
 void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
 {
+    // the order in which the buttons are created determines the TAB order - at least under MSWindows...
+    // although the 'back' button appears before the 'next' button, a more userfriendly tab order is
+    // to activate the 'next' button first (create the next button before the back button).
+    // The reason is: The user will repeatedly enter information in the wizard pages and then wants to
+    // press 'next'. If a user uses mostly the keyboard, he would have to skip the 'back' button
+    // everytime. This is annoying. There is a second reason: RETURN acts as TAB. If the 'next'
+    // button comes first in the TAB order, the user can enter information very fast using the RETURN
+    // key to TAB to the next entry field and page. This would not be possible, if the 'back' button
+    // was created before the 'next' button.
+
     wxBoxSizer *buttonRow = new wxBoxSizer(wxHORIZONTAL);
     mainColumn->Add(
         buttonRow,
@@ -383,9 +392,18 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
         wxALIGN_RIGHT // Right aligned, no border
     );
 
+    // Desired TAB order is 'next', 'cancel', 'help', 'back'. This makes the 'back' button the last control on the page.
+    // Create the buttons in the right order...
+    m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"));
+    wxButton *btnCancel=new wxButton(this, wxID_CANCEL, _("&Cancel"));
+    wxButton *btnHelp=0;
     if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
+        btnHelp=new wxButton(this, wxID_HELP, _("&Help"));
+    m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"));
+
+    if (btnHelp)
         buttonRow->Add(
-            new wxButton(this, wxID_HELP, _("&Help")),
+            btnHelp,
             0, // Horizontally unstretchable
             wxALL, // Border all around, top aligned
             5 // Border width
@@ -394,7 +412,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
     AddBackNextPair(buttonRow);
     
     buttonRow->Add(
-        new wxButton(this, wxID_CANCEL, _("&Cancel")),
+        btnCancel,
         0, // Horizontally unstretchable
         wxALL, // Border all around, top aligned
         5 // Border width
