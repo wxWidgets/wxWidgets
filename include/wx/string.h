@@ -220,10 +220,13 @@ class wxCharacterSet;
 class WXDLLEXPORT wxCSConv : public wxMBConv
 {
  private:
-  wxCharacterSet *cset;
+  wxChar *m_name;
+  wxCharacterSet *m_cset;
+  bool m_deferred;
  public:
   wxCSConv(const wxChar *charset);
-  virtual ~wxCSConv(void);
+  virtual ~wxCSConv();
+  void LoadNow();
   virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
   virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
