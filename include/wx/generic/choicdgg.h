@@ -23,7 +23,7 @@
 #define wxCHOICE_HEIGHT 150
 #define wxCHOICE_WIDTH 200
 
-#define wxCHOICEDLG_STYLE (wxOK | wxCANCEL | wxCENTRE)
+#define wxCHOICEDLG_STYLE (wxDEFAULT_DIALOG_STYLE|wxOK | wxCANCEL | wxCENTRE)
 
 class WXDLLEXPORT wxSingleChoiceDialog: public wxDialog
 {
