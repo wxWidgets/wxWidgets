@@ -272,6 +272,12 @@ Checking in src/x11/app.cpp;
 new revision: 1.94; previous revision: 1.93
 done
 
+37. no-remap system option, and tool centring
+Checking in src/msw/tbar95.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/tbar95.cpp,v  <--  tbar95.cpp
+new revision: 1.121; previous revision: 1.120
+done
+
 =======
 
 
