@@ -5834,6 +5834,7 @@ for subdir in `echo $SUBDIRS`; do
             if test ${subdir} = "samples"; then
                 dnl only take those samples which compile in the current
                 dnl configuration and which exist
+                makefiles="samples/Makefile.in $makefiles"
                 for sample in `echo $SAMPLES_SUBDIRS`; do
                     if test -d $srcdir/samples/$sample; then
                         makefiles="samples/$sample/Makefile.in $makefiles"
@@ -5846,7 +5847,7 @@ for subdir in `echo $SUBDIRS`; do
             dnl don't take all samples/utils, just those which build with
             dnl wxBase
             if test ${subdir} = "samples"; then
-                makefiles="samples/console/Makefile.in"
+                makefiles="samples/Makefile.in samples/console/Makefile.in"
             else dnl utils
                 makefiles="utils/HelpGen/Makefile.in \
                            utils/HelpGen/src/Makefile.in \
