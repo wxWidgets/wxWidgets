@@ -2115,7 +2115,7 @@ void wxFileHistory::Save(wxConfigBase& config)
     for (i = 0; i < m_fileHistoryN; i++)
     {
         wxString buf;
-        buf.Printf(wxT("file%d"), i+1);
+        buf.Printf(wxT("file%d"), (int)i+1);
         config.Write(buf, wxString(m_fileHistory[i]));
     }
 }
