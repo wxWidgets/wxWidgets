@@ -148,9 +148,9 @@ public:
     ~wxMemoryBuffer() { free(m_data); }
 
     // Accessors
-    void*  GetData()    { return m_data; }
-    size_t GetBufSize() { return m_size; }
-    size_t GetDataLen() { return m_len; }
+    void*  GetData() const    { return m_data; }
+    size_t GetBufSize() const { return m_size; }
+    size_t GetDataLen() const { return m_len; }
 
     void   SetBufSize(size_t size) { ResizeIfNeeded(size); }
     void   SetDataLen(size_t len)
@@ -179,7 +179,7 @@ public:
     // Other ways to append to the buffer
     void  AppendByte(char data) {
         ResizeIfNeeded(m_len + 1);
-        *((char*)m_data) = data;
+        *(((char*)m_data)+m_len) = data;
         m_len += 1;
     }
     void  AppendData(void* data, size_t len)
@@ -189,6 +189,35 @@ public:
     }
 
     operator const char *() const { return (const char*)m_data; }
+
+
+    // Copy and assignment
+    wxMemoryBuffer(const wxMemoryBuffer& src)
+    {
+        m_data = src.m_data;
+        m_size = src.m_size;
+        m_len  = src.m_len;
+
+        // no reference count yet...
+        ((wxMemoryBuffer*)&src)->m_data = NULL;
+        ((wxMemoryBuffer*)&src)->m_size = 0;
+        ((wxMemoryBuffer*)&src)->m_len  = 0;
+    }
+
+    wxMemoryBuffer& operator=(const wxMemoryBuffer& src)
+    {
+        m_data = src.m_data;
+        m_size = src.m_size;
+        m_len  = src.m_len;
+
+        // no reference count yet...
+        ((wxMemoryBuffer*)&src)->m_data = NULL;
+        ((wxMemoryBuffer*)&src)->m_size = 0;
+        ((wxMemoryBuffer*)&src)->m_len  = 0;
+
+        return *this;
+   }
+
 
 protected:
 
@@ -201,8 +230,6 @@ protected:
             m_size = newSize + wxMemoryBuffer::BLOCK_SIZE;
         }
     }
-
-    DECLARE_NO_COPY_CLASS(wxMemoryBuffer)
 
 private:
     void*       m_data;
