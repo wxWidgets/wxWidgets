@@ -3,6 +3,7 @@
 
 RPMBUILDARGS=
 PLATFORM=
+NORPMS=
 
 doupdatecvs()
 {
@@ -34,6 +35,11 @@ dospinwxgtk()
   echo Making...
   make -j1 dist bzip-dist-only
 
+  mkdir $WXDEST/$PLATFORM
+
+  if [ "$NORPMS" != "1" ]
+  then
+
   echo Setting up RPM build dir $RPM_ROOT...
   rm -f -r $RPM_ROOT
   mkdir $RPM_ROOT
@@ -63,10 +69,11 @@ dospinwxgtk()
   echo "RPMS/i386:"
   ls RPMS/i386
 
-  mkdir $WXDEST/$PLATFORM
-
   cp $RPM_ROOT/SRPMS/*.rpm $WXDEST/$PLATFORM
   cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST/$PLATFORM
+
+  fi
+
   cp $WXDEST/wxgtk/release/*.tar.gz $WXDEST/$PLATFORM
   cp $WXDEST/wxgtk/release/*.tar.bz2 $WXDEST/$PLATFORM
 
@@ -97,6 +104,9 @@ dospinwxmgl()
   $WXSRC/configure --with-mgl --no-recursion
   echo Making...
   make -j1 dist bzip-dist-only
+
+  if [ "$NORPMS" != "1" ]
+  then
 
   echo Setting up RPM build dir $RPM_ROOT...
   rm -f -r $RPM_ROOT
@@ -129,6 +139,9 @@ dospinwxmgl()
 
   cp $RPM_ROOT/SRPMS/*.rpm $WXDEST
   cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST
+
+  fi
+
   cp $WXDEST/wxmgl/release/*.tar.gz $WXDEST
   cp $WXDEST/wxmgl/release/*.tar.bz2 $WXDEST
 
@@ -159,6 +172,9 @@ dospinwxmotif()
   $WXSRC/configure --with-motif --no-recursion
   echo Making...
   make -j1 dist bzip-dist-only
+
+  if [ "$NORPMS" != "1" ]
+  then
 
   echo Setting up RPM build dir $RPM_ROOT...
   rm -f -r $RPM_ROOT
@@ -191,6 +207,9 @@ dospinwxmotif()
 
   cp $RPM_ROOT/SRPMS/*.rpm $WXDEST
   cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST
+
+  fi
+
   cp $WXDEST/wxmotif/release/*.tar.gz $WXDEST
   cp $WXDEST/wxmotif/release/*.tar.bz2 $WXDEST
 
@@ -279,6 +298,11 @@ dospinwxbase()
   echo Making...
   make -j1 dist bzip-dist-only
 
+  mkdir $WXDEST/$PLATFORM
+
+  if [ "$NORPMS" != "1" ]
+  then
+
   echo Setting up RPM build dir $RPM_ROOT...
   rm -f -r $RPM_ROOT
   mkdir $RPM_ROOT
@@ -308,10 +332,11 @@ dospinwxbase()
   echo "RPMS/i386:"
   ls RPMS/i386
 
-  mkdir $WXDEST/$PLATFORM
-
   cp $RPM_ROOT/SRPMS/*.rpm $WXDEST/$PLATFORM
   cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST/$PLATFORM
+
+  fi
+
   cp $WXDEST/wxbase/release/*.tar.gz $WXDEST/$PLATFORM
   cp $WXDEST/wxbase/release/*.tar.bz2 $WXDEST/$PLATFORM
 
@@ -341,6 +366,9 @@ dospinwxx11()
   $WXSRC/configure --with-x11 --no-recursion
   echo Making...
   make -j1 dist bzip-dist-only
+
+  if [ "$NORPMS" != "1" ]
+  then
 
   echo Setting up RPM build dir $RPM_ROOT...
   rm -f -r $RPM_ROOT
@@ -373,6 +401,9 @@ dospinwxx11()
 
   cp $RPM_ROOT/SRPMS/*.rpm $WXDEST
   cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST
+
+  fi
+
   cp $WXDEST/wxx11/release/*.tar.gz $WXDEST
   cp $WXDEST/wxx11/release/*.tar.bz2 $WXDEST
 
@@ -413,6 +444,7 @@ usage()
     echo "    --wxmac         Make wxMac tarball"
     echo "    --all           Spin EVERYTHING"
     echo "    --updatecvs     Update from CVS"
+    echo "    --norpms        No RPMS, just tarballs"
 
     exit 1
 }
@@ -451,6 +483,7 @@ for i in "$@"; do
 	--wxbaseunicode) SPINWXBASEUNICODE=1 ;;
 	--all) SPINEVERYTHING=1 ;;
 	--updatecvs) UPDATECVS=1 ;;
+	--norpms) NORPMS=1 ;;
 	*)
 	    usage
 	    exit
