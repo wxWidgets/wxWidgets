@@ -488,7 +488,7 @@ wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code)
     wbuf[0] = (wchar_t)code;
     wbuf[1] = 0;
     wxMBConv *conv = m_conv ? m_conv : &wxConvLocal;
-    if (conv->WC2MB(buf, wbuf, 1) == (size_t)-1)
+    if (conv->WC2MB(buf, wbuf, 2) == (size_t)-1)
         return '?';
     return buf[0];
 #else
