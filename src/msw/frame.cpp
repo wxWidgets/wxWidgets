@@ -680,8 +680,10 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
   if (style & wxSTAY_ON_TOP)
     extendedStyle |= WS_EX_TOPMOST;
 
+#ifndef __WIN16__
   if (m_exStyle & wxFRAME_EX_CONTEXTHELP)
     extendedStyle |= WS_EX_CONTEXTHELP;
+#endif
 
   m_iconized = FALSE;
   if ( !wxWindow::MSWCreate(id, parent, wclass, wx_win, title, x, y, width, height,
