@@ -322,6 +322,11 @@ fi
 
 if [ $KIND = daily ]; then 
 
+    echo "Copying to the local file server..."
+    destdir=/stuff/temp/$VERSION
+    mkdir -p $destdir
+    cp $STAGING_DIR/* $destdir
+
     destdir=$UPLOAD_DAILY_ROOT/$DAILY
     echo "Copying to the starship at $destdir..."
     ssh $UPLOAD_HOST "mkdir -p $destdir"
