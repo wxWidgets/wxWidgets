@@ -48,18 +48,56 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// MyTopLabels
+
+class MyTopLabels: public wxWindow
+{
+public:
+    MyTopLabels() {}
+    MyTopLabels( wxScrolledWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size );
+   
+    void OnPaint( wxPaintEvent &event );
+    
+private:
+    wxScrolledWindow   *m_owner;
+    
+    DECLARE_DYNAMIC_CLASS(MyTopLabels)
+    DECLARE_EVENT_TABLE()
+};
+
+// MyRightLabels
+
+class MyRightLabels: public wxWindow
+{
+public:
+    MyRightLabels() {}
+    MyRightLabels( wxScrolledWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size );
+   
+    void OnPaint( wxPaintEvent &event );
+    
+private:
+    wxScrolledWindow   *m_owner;
+    
+    DECLARE_DYNAMIC_CLASS(MyRightLabels)
+    DECLARE_EVENT_TABLE()
+};
+
 // MyCanvas
 
 class MyCanvas: public wxPanel
 {
 public:
     MyCanvas() {}
-    MyCanvas( wxScrolledWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size );
+    MyCanvas( wxScrolledWindow *parent, MyTopLabels *top, MyRightLabels *right,
+              wxWindowID id, const wxPoint &pos, const wxSize &size );
     ~MyCanvas();
     void OnPaint( wxPaintEvent &event );
+    void ScrollWindow( int dx, int dy, const wxRect *rect );
 
 private:
     wxScrolledWindow   *m_owner;
+    MyTopLabels        *m_topLabels;
+    MyRightLabels      *m_rightLabels;
 
     DECLARE_DYNAMIC_CLASS(MyCanvas)
     DECLARE_EVENT_TABLE()
@@ -107,7 +145,10 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER, "test canvas" )
 {
-    m_canvas = new MyCanvas( this, -1, wxDefaultPosition, wxDefaultSize );
+    MyTopLabels *top = new MyTopLabels( this, -1, wxDefaultPosition, wxSize(-1,25) );
+    MyRightLabels *right = new MyRightLabels( this, -1, wxDefaultPosition, wxSize(60,-1) );
+
+    m_canvas = new MyCanvas( this, top, right, -1, wxDefaultPosition, wxDefaultSize );
     
     SetTargetWindow( m_canvas );
 
@@ -115,13 +156,22 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
   
     SetCursor( wxCursor( wxCURSOR_HAND ) );
     
+    wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
     
-    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer *topsizer = new wxBoxSizer( wxHORIZONTAL );
+    topsizer->Add( 60,25 );
+    topsizer->Add( top, 1 );
     
-    topsizer->Add( m_canvas, 1, wxEXPAND|wxALL, 30 );
+    mainsizer->Add( topsizer, 0, wxEXPAND );
+    
+    wxBoxSizer *middlesizer = new wxBoxSizer( wxHORIZONTAL );
+    middlesizer->Add( right, 0, wxEXPAND );
+    middlesizer->Add( m_canvas, 1, wxEXPAND );
+    
+    mainsizer->Add( middlesizer, 1, wxEXPAND );
 
     SetAutoLayout( TRUE );
-    SetSizer( topsizer );
+    SetSizer( mainsizer );
 }
 
 MyScrolledWindow::~MyScrolledWindow()
@@ -132,12 +182,63 @@ void MyScrolledWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc( this );
 
+/*
     wxSize size( GetClientSize() );
     
     long w,h;
     dc.GetTextExtent( wxT("Headline"), &w, &h );
 
     dc.DrawText( wxT("Headline"), long (size.x / 2 - w / 2), 10 );
+*/
+}
+
+// MyTopLabels
+
+IMPLEMENT_DYNAMIC_CLASS(MyTopLabels,wxWindow)
+
+BEGIN_EVENT_TABLE(MyTopLabels, wxWindow)
+  EVT_PAINT(      MyTopLabels::OnPaint)
+END_EVENT_TABLE()
+
+MyTopLabels::MyTopLabels( wxScrolledWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size )
+  : wxWindow( parent, id, pos, size )
+{
+    m_owner = parent;
+}
+
+void MyTopLabels::OnPaint( wxPaintEvent &event )
+{
+    wxPaintDC dc(this);
+    m_owner->PrepareDC( dc );
+    dc.DrawText( "Colummn 1", 5, 5 );
+    dc.DrawText( "Colummn 2", 105, 5 );
+    dc.DrawText( "Colummn 3", 205, 5 );
+}
+
+// MyRightLabels
+
+IMPLEMENT_DYNAMIC_CLASS(MyRightLabels,wxWindow)
+
+BEGIN_EVENT_TABLE(MyRightLabels, wxWindow)
+  EVT_PAINT(      MyRightLabels::OnPaint)
+END_EVENT_TABLE()
+
+MyRightLabels::MyRightLabels( wxScrolledWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size )
+  : wxWindow( parent, id, pos, size )
+{
+    m_owner = parent;
+}
+
+void MyRightLabels::OnPaint( wxPaintEvent &event )
+{
+    wxPaintDC dc(this);
+    m_owner->PrepareDC( dc );
+    dc.DrawText( "Row 1", 5, 5 );
+    dc.DrawText( "Row 2", 5, 30 );
+    dc.DrawText( "Row 3", 5, 55 );
+    dc.DrawText( "Row 4", 5, 80 );
+    dc.DrawText( "Row 5", 5, 105 );
+    dc.DrawText( "Row 6", 5, 130 );
 }
 
 // MyCanvas
@@ -148,16 +249,21 @@ BEGIN_EVENT_TABLE(MyCanvas, wxPanel)
   EVT_PAINT(      MyCanvas::OnPaint)
 END_EVENT_TABLE()
 
-MyCanvas::MyCanvas( wxScrolledWindow *parent, wxWindowID id,
-                    const wxPoint &pos, const wxSize &size )
+MyCanvas::MyCanvas( wxScrolledWindow *parent, MyTopLabels *top, MyRightLabels *right,
+    wxWindowID id, const wxPoint &pos, const wxSize &size )
         : wxPanel( parent, id, pos, size, wxSUNKEN_BORDER, "test canvas" )
 {
     m_owner = parent;
+    m_topLabels = top;
+    m_rightLabels = right;
     
     (void)new wxButton( this, -1, "Hallo I", wxPoint(0,50), wxSize(100,25) );
     (void)new wxButton( this, -1, "Hallo II", wxPoint(200,50), wxSize(100,25) );
+    
+    (void)new wxTextCtrl( this, -1, "Text I", wxPoint(0,100), wxSize(100,25) );
+    (void)new wxTextCtrl( this, -1, "Text II", wxPoint(200,100), wxSize(100,25) );
 
-    SetBackgroundColour( *wxWHITE );
+    SetBackgroundColour( "WHEAT" );
   
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
 }
@@ -198,13 +304,13 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if ((0+100-scroll_x > 0) && (0+25-scroll_y > 0) &&
         (0-scroll_x < size_x) && (0-scroll_y < size_y))
     {
-        // Has the region an screen been exposed?
-	if (IsExposed(0,0,100,25))
-	{
-	    wxLogMessage( "Redraw first cell" );
+        // Has the region on screen been exposed?
+	    if (IsExposed(0,0,100,25))
+	    {
+	        wxLogMessage( "Redraw first cell" );
             dc.DrawRectangle( 0, 0, 100, 25 );
-	    dc.DrawText( "First Cell", 5, 5 );
-	}
+	        dc.DrawText( "First Cell", 5, 5 );
+	    }
     }
     
     
@@ -213,17 +319,23 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if ((200+100-scroll_x > 0) && (0+25-scroll_y > 0) &&
         (200-scroll_x < size_x) && (0-scroll_y < size_y))
     {
-        // Has the region an screen been exposed?
-	if (IsExposed(200,0,100,25))
-	{
-	    wxLogMessage( "Redraw second cell" );
+        // Has the region on screen been exposed?
+	    if (IsExposed(200,0,100,25))
+	    {
+	        wxLogMessage( "Redraw second cell" );
             dc.DrawRectangle( 200, 0, 100, 25 );
-	    dc.DrawText( "Second Cell", 205, 5 );
-	}
+	        dc.DrawText( "Second Cell", 205, 5 );
+	    }
     }
     
 }
 
+void MyCanvas::ScrollWindow( int dx, int dy, const wxRect *rect )
+{
+    wxPanel::ScrollWindow( dx, dy, rect );
+    m_topLabels->ScrollWindow( dx, 0, rect );
+    m_rightLabels->ScrollWindow( 0, dy, rect );
+}
 
 // MyFrame
 
@@ -254,7 +366,7 @@ MyFrame::MyFrame()
     int widths[] = { -1, 100 };
     SetStatusWidths( 2, widths );
 
-    m_scrolled = new MyScrolledWindow( this, -1, wxPoint(0,0), wxSize(100,100) );
+    m_scrolled = new MyScrolledWindow( this, -1, wxDefaultPosition, wxSize(100,100) );
     m_scrolled->SetScrollbars( 10, 10, 50, 100 );
   
     m_log = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
@@ -262,7 +374,6 @@ MyFrame::MyFrame()
     delete old_log;
     
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-    
     topsizer->Add( m_scrolled, 1, wxEXPAND );
     topsizer->Add( m_log, 0, wxEXPAND );
 
