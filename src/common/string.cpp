@@ -1289,7 +1289,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 
         UngetWriteBuf();
 
-        if ( len >= 0 )
+        if ( (len >= 0) && (len <= size) )
         {
             // ok, there was enough space
             break;
