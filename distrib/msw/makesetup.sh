@@ -15,6 +15,7 @@ SPINMAC=0
 SPINOS2=0
 SPINDOCS=1
 SPINALL=1
+SPINWXALL=1
 VERBOSE=0
 ZIPFLAGS=
 
@@ -220,6 +221,7 @@ dospinmsw()
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utils.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utilmake.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/univ.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/wince.rsp
 
 #    rearchive wxWidgets-$VERSION-win.zip wxWidgets-$VERSION $DESTDIR
 
@@ -237,6 +239,58 @@ dospinmsw()
     echo Copying readme files...
     cp $APPDIR/docs/msw/readme.txt README-MSW.txt
     cp $APPDIR/docs/msw/install.txt INSTALL-MSW.txt
+    cp $APPDIR/docs/licence.txt LICENCE.txt
+    cp $APPDIR/docs/lgpl.txt COPYING.LIB
+    cp $APPDIR/docs/changes.txt CHANGES.txt
+    cp $APPDIR/docs/readme.txt README.txt
+
+    cd $DESTDIR
+
+    rm -f wxWidgets-$VERSION-win.zip
+    zip $ZIPFLAGS -r wxWidgets-$VERSION-win.zip wxWidgets-$VERSION/*
+}
+
+dospinwxall()
+{
+    cd $APPDIR
+
+    # Create wxWidgets-$VERSION-win.zip which is used to create wxMSW
+    echo Zipping individual components
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/generic.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/makefile.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/msw.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/ogl.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/mmedia.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/stc.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/tex2rtf.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/jpeg.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/tiff.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/xml.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/contrib.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/deprecated.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utils.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utilmake.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/univ.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/wince.rsp
+
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/x11.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/motif.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/mac.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/wince.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/mgl.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/os2.rsp
+
+#    rearchive wxWidgets-$VERSION-win.zip wxWidgets-$VERSION $DESTDIR
+
+    if [ -d $DESTDIR/wxWidgets-$VERSION ]; then
+        rm -f -r $DESTDIR/wxWidgets-$VERSION
+    fi
+
+    mkdir $DESTDIR/wxWidgets-$VERSION
+    cd $DESTDIR/wxWidgets-$VERSION
+    unzip $ZIPFLAGS ../wxWidgets-$VERSION-win.zip
+
+    echo Copying readme files...
     cp $APPDIR/docs/licence.txt LICENCE.txt
     cp $APPDIR/docs/lgpl.txt COPYING.LIB
     cp $APPDIR/docs/changes.txt CHANGES.txt
@@ -307,6 +361,11 @@ dospinmisc()
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-VC.zip < $APPDIR/distrib/msw/vc.rsp
     # rearchive wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION $DESTDIR
 
+    # eVC++ project files
+    echo Creating $DESTDIR/wxWidgets-$VERSION-eVC.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-eVC.zip < $APPDIR/distrib/msw/wince.rsp
+    # rearchive wxWidgets-$VERSION-eVC.zip wxWidgets-$VERSION $DESTDIR
+
     # BC++ project files
     echo Creating $DESTDIR/wxWidgets-$VERSION-BC.zip
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-BC.zip < $APPDIR/distrib/msw/bc.rsp
@@ -325,7 +384,7 @@ dospinsetup()
     # Put all archives for transit to Linux in a zip file
     echo Creating $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
     rm -f $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
-    zip $ZIPFLAGS $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip wxWidgets-$VERSION-LinuxDocs.zip wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION-CW-Mac.zip
+    zip $ZIPFLAGS $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip wxWidgets-$VERSION-LinuxDocs.zip wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION-eVC.zip wxWidgets-$VERSION-CW-Mac.zip
 
     echo Unzipping the Windows files into wxWidgets-$VERSION
 
@@ -550,6 +609,11 @@ makesetup()
         dospinmsw
     fi
 
+    # Do wxAll spin
+    if [ "$SPINWXALL" = "1" ] || [ "$SPINALL" = "1" ]; then
+        dospinwxall
+    fi
+
     # Do docs spin
     if [ "$SPINDOCS" = "1" ] || [ "$SPINALL" = "1" ]; then
         dospindocs
@@ -634,6 +698,7 @@ usage()
     echo "    --wxmac           Build wxMac distribution"
     echo "    --wxmsw           Build wxMSW distribution"
     echo "    --wxos2           Build wxOS2 distribution"
+    echo "    --wxall           Build wxAll zip distribution"
     echo "    --docs            Build docs archives"
     echo "    --all             Build all distributions (the default)"
     echo "    --verbose         Verbose zip operation"
@@ -653,6 +718,7 @@ for i in "$@"; do
 	--wxmac) SPINMAC=1; SPINALL=0 ;;
 	--wxmsw) SPINMSW=1; SPINALL=0 ;;
 	--wxos2) SPINOS2=1; SPINALL=0 ;;
+	--wxall) SPINWXALL=1; SPINALL=0 ;;
 	--docs) SPINDOCS=1; SPINALL=0 ;;
 	--all) SPINALL=1 ;;
 	--verbose) VERBOSE=1 ;;

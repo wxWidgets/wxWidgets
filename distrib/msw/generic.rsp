@@ -176,6 +176,7 @@ samples/samples.bkl
 
 samples/*.txt
 samples/makefile*
+samples/*.xpm
 
 samples/access/*.cpp
 samples/access/*.h
