@@ -42,7 +42,7 @@ Name:      %{name}
 Version:   %{version}
 Release:   %{release}
 Source0:   %{tarname}-%{version}.tar.gz
-License:   wxWindows Library Licence, Version 3
+License:   wx Library Licence, Version 3
 URL:       http://wxPython.org/
 Packager:  Robin Dunn <robin@alldunn.com>
 Group:     Development/Python
@@ -64,11 +64,11 @@ Obsoletes: wxPython wxPython%{port}
 
 %description
 wxPython is a GUI toolkit for Python that is a wrapper around the
-wxWindows C++ GUI library.  wxPython provides a large variety of
+wxWidgets C++ GUI library.  wxPython provides a large variety of
 window types and controls, all implemented with a native look and feel
 (and native runtime speed) on the platforms it is supported on.
 
-This package is implemented using the %{port} port of wxWindows, and
+This package is implemented using the %{port} port of wxWidgets, and
 includes the wx%{port} shared libs and etc.
 
 
@@ -121,20 +121,12 @@ cd bld
 %endif
 
 
-# Build wxWindows and some contrib libs
+# Build wxWidgets and some contrib libs
 make 
 make -C contrib/src/gizmos 
 make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0"
 make -C contrib/src/stc
 make -C contrib/src/xrc
-
-
-# # Link the contrib header directories in place so we can build all of
-# # wxPython without installing wxWindows
-# if [ ! -e $WXDIR/include/wx/gizmos ]; then
-# 	cd $WXDIR/include/wx
-# 	ln -s ../../contrib/include/wx/* .
-# fi
 
 
 # Now build wxPython
@@ -144,7 +136,7 @@ cd $WXDIR/wxPython
 	WXPORT=%{lcport} \
 	UNICODE=%{unicode} \
 	WX_CONFIG="$WXDIR/bld/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/bld" \
-	CONTRIBS_INC="$WXDIR/include" \
+	CONTRIBS_INC="$WXDIR/contrib/include" \
 	build
 
 
@@ -160,8 +152,7 @@ strip wxrc
 WXDIR=`pwd`
 cd bld
 
-# Install wxWindows and the contribs so the wxPython build can find
-# all the headers it needs
+# Install wxWidgets and the contribs
 make prefix=$RPM_BUILD_ROOT%{wxpref} install
 make -C contrib/src/gizmos prefix=$RPM_BUILD_ROOT%{wxpref} install
 make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" prefix=$RPM_BUILD_ROOT%{wxpref} install
@@ -178,7 +169,6 @@ cd $WXDIR/wxPython
 	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	install \
 	--root=$RPM_BUILD_ROOT
-
 
 
 cd $WXDIR/wxPython
