@@ -1637,10 +1637,10 @@ char *ConvertCase(char *s)
   int i;
   if (upperCaseNames)
     for (i = 0; i < len; i ++)
-      buf[i] = wxToUpper(s[i]);
+      buf[i] = toupper(s[i]);
   else
     for (i = 0; i < len; i ++)
-      buf[i] = wxToLower(s[i]);
+      buf[i] = tolower(s[i]);
   buf[i] = 0;
   return buf;  
 }
