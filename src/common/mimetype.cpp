@@ -1067,6 +1067,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 
 void wxMimeTypesManagerImpl::AddFallback(const wxFileTypeInfo& filetype)
 {
+    wxString extensions;
     const wxArrayString& exts = filetype.GetExtensions();
     size_t nExts = exts.GetCount();
     for ( size_t nExt = 0; nExt < nExts; nExt++ ) {
