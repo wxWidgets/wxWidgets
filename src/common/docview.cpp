@@ -964,22 +964,26 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
-void wxDocManager::OnUndo(wxCommandEvent& WXUNUSED(event))
+void wxDocManager::OnUndo(wxCommandEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
     if (!doc)
         return;
     if (doc->GetCommandProcessor())
         doc->GetCommandProcessor()->Undo();
+    else
+        event.Skip();
 }
 
-void wxDocManager::OnRedo(wxCommandEvent& WXUNUSED(event))
+void wxDocManager::OnRedo(wxCommandEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
     if (!doc)
         return;
     if (doc->GetCommandProcessor())
         doc->GetCommandProcessor()->Redo();
+    else
+        event.Skip();
 }
 
 // Handlers for UI update commands
@@ -1021,17 +1025,29 @@ void wxDocManager::OnUpdateFileSaveAs(wxUpdateUIEvent& event)
 void wxDocManager::OnUpdateUndo(wxUpdateUIEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc && doc->GetCommandProcessor() && doc->GetCommandProcessor()->CanUndo()) );
-    if (doc && doc->GetCommandProcessor())
+    if (!doc)
+        event.Enable(FALSE);
+    else if (!doc->GetCommandProcessor())
+        event.Skip();
+    else
+    {
+        event.Enable( doc->GetCommandProcessor()->CanUndo() );
         doc->GetCommandProcessor()->SetMenuStrings();
+    }
 }
 
 void wxDocManager::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc && doc->GetCommandProcessor() && doc->GetCommandProcessor()->CanRedo()) );
-    if (doc && doc->GetCommandProcessor())
+    if (!doc)
+        event.Enable(FALSE);
+    else if (!doc->GetCommandProcessor())
+        event.Skip();
+    else
+    {
+        event.Enable( doc->GetCommandProcessor()->CanRedo() );
         doc->GetCommandProcessor()->SetMenuStrings();
+    }
 }
 
 void wxDocManager::OnUpdatePrint(wxUpdateUIEvent& event)
