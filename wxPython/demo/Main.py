@@ -1678,6 +1678,8 @@ class MyApp(wx.App):
         the main frame when it is time to do so.
         """
 
+        wx.SystemOptions.SetOptionInt("mac.window-plain-transition", 1)
+
         # For debugging
         #self.SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
 
