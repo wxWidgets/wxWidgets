@@ -355,6 +355,8 @@ bool wxFrameLayout::CanReparent()
 {
 #ifdef __WXMSW__
     return true;
+#elif defined(__WXGTK20__)
+    return TRUE;
 #elif defined (__WXGTK__)
     //return true;
     return false;
@@ -388,6 +390,10 @@ void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 
     pChild->SetParent( pNewParent );
 #endif
+    pChild->Reparent(pNewParent);
+
+    return;
+#elif defined(__WXGTK20__)
     pChild->Reparent(pNewParent);
 
     return;
@@ -598,6 +604,7 @@ void wxFrameLayout::AddBar( wxWindow*        pBarWnd,
     pInfo->mName      = name;
     pInfo->mpBarWnd   = pBarWnd;
     pInfo->mDimInfo   = dimInfo;
+    pInfo->mDimInfo.mLRUPane = alignment;
     pInfo->mState     = state;
     pInfo->mAlignment = alignment;
     pInfo->mRowNo     = rowNo;
@@ -945,6 +952,7 @@ void wxFrameLayout::DoSetBarState( cbBarInfo* pBar )
         }
 
         pMiniFrm->Show( true );
+        RepositionFloatedBar(pMiniFrm->GetBar());
 
         // FIXME:: this is excessive
         pBar->mpBarWnd->Show(true);
@@ -1814,7 +1822,8 @@ IMPLEMENT_DYNAMIC_CLASS( cbUpdateMgrData, wxObject )
 cbUpdateMgrData::cbUpdateMgrData() 
 
     : mPrevBounds( -1,-1,0,0 ),
-      mIsDirty( true )           // inidicate initial change
+      mIsDirty( true ),           // inidicate initial change
+      mpCustomData(0)
 {}
 
 void cbUpdateMgrData::StoreItemState( const wxRect& boundsInParent )

@@ -360,12 +360,6 @@ void wxToolWindow::SetHintCursor( int type )
         return;
     }
 
-    if ( !mMouseCaptured )
-    {
-        mMouseCaptured = true;
-        CaptureMouse();
-    }
-
     // did the cursor actually changed?
 
     if ( type != mCursorType )
@@ -389,6 +383,15 @@ void wxToolWindow::SetHintCursor( int type )
 
             default: break; 
         }
+
+        if (mMouseCaptured)
+            ReleaseMouse();
+    }
+
+    if ( !mMouseCaptured )
+    {
+        mMouseCaptured = true;
+        CaptureMouse();
     }
 }
 

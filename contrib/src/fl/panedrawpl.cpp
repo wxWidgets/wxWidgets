@@ -326,14 +326,14 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
 
             if ( !mResizeCursorOn || prevWasRowHandle != mRowHandleHitted )
             {
+                mpLayout->GetParentFrame().SetCursor( *pCurs );
+
                 if ( !mResizeCursorOn )
                 {
                     // caputre if not captured yet
                     mpLayout->CaptureEventsForPane( event.mpPane );
                     mpLayout->CaptureEventsForPlugin( this );
                 }
-
-                mpLayout->GetParentFrame().SetCursor( *pCurs );
             }
 
             mResizeCursorOn = true;
