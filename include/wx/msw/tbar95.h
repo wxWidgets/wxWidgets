@@ -102,6 +102,13 @@ protected:
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)
+
+    static bool sm_coloursInit; // Have we initialized the colour table yet?
+    static long sm_stdColours[6]; // The RGB values of the standard 6 colours
+
+public:
+    void MapBitmap(WXHBITMAP bitmap, int width, int height);
+
 };
 
 #endif // wxUSE_TOOLBAR
