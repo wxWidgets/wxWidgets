@@ -1,0 +1,759 @@
+# Microsoft Developer Studio Project File - Name="wxBase" - Package Owner=<4>
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
+# ** DO NOT EDIT **
+
+# TARGTYPE "Win32 (x86) Static Library" 0x0104
+
+CFG=wxBase - Win32 Debug
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
+!MESSAGE 
+!MESSAGE NMAKE /f "wxBase.mak".
+!MESSAGE 
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE 
+!MESSAGE NMAKE /f "wxBase.mak" CFG="wxBase - Win32 Debug"
+!MESSAGE 
+!MESSAGE Possible choices for configuration are:
+!MESSAGE 
+!MESSAGE "wxBase - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxBase - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE 
+
+# Begin Project
+# PROP AllowPerConfigDependencies 0
+# PROP Scc_ProjName ""
+# PROP Scc_LocalPath ""
+CPP=cl.exe
+RSC=rc.exe
+
+!IF  "$(CFG)" == "wxBase - Win32 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "lib"
+# PROP BASE Intermediate_Dir "..\BaseRelease"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "lib"
+# PROP Intermediate_Dir "..\BaseRelease"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/base" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 /D "_MT" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\lib\wxBase.lib"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "lib"
+# PROP BASE Intermediate_Dir "..\BaseDebug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "lib"
+# PROP Intermediate_Dir "..\BaseDebug"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/based" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D "__WXDEBUG__" /D WINVER=0x400 /D "_MT" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo /o"../lib/wxBase.bsc"
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\lib\wxBased.lib"
+
+!ENDIF 
+
+# Begin Target
+
+# Name "wxBase - Win32 Release"
+# Name "wxBase - Win32 Debug"
+
+# Begin Group "Common Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\common\appcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\cmdline.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\config.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\datetime.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\datstrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\db.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\dbtable.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\dircmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\dynarray.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\dynlib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\encconv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\event.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\ffile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\file.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\fileconf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\filefn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\filename.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\filesys.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\fontmap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\fs_inet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\fs_mem.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\fs_zip.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\ftp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\hash.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\http.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\intl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\ipcbase.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\list.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\log.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\longlong.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\memory.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\mimecmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\module.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\mstream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\object.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\objstrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\process.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\protocol.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\regex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\sckaddr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\sckfile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\sckipc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\sckstrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\serbase.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\socket.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\strconv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\stream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\string.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\sysopt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\textfile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\timercmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\tokenzr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\txtstrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\url.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\utilscmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\variant.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\wfstream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\wxchar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\zipstrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\zstream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\init.cpp
+# End Source File
+
+# Begin Source File
+
+SOURCE=.\common\extended.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\unzip.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+
+# End Group
+# Begin Group "MSW Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\msw\dummy.cpp
+# ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dde.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dir.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\main.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\mimetype.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\regconf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\registry.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\snglinst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\thread.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\utils.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\utilsexc.cpp
+# End Source File
+
+# Begin Source File
+
+SOURCE=.\msw\gsocket.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\gsockmsw.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+
+# End Group
+# Begin Group "Headers"
+
+# PROP Default_Filter ""
+# Begin Group "Setup"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\include\wx\msw\setup0.h
+
+!IF  "$(CFG)" == "wxBase - Win32 Release"
+
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/base/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\base\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
+
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/based/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\based\wx\setup.h
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Group "Common"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\include\wx\app.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\buffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\chkconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\cmdline.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\confbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\config.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\date.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\datetime.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\datetime.inl
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\datstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\db.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dbtable.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dde.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\debug.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\defs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dir.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dynarray.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dynlib.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\encconv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\event.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\ffile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\file.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fileconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\filefn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\filename.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\filesys.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fontenc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fontmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fs_inet.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fs_mem.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fs_zip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\gsocket.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\hash.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\intl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\ioswrap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\ipcbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\list.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\log.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\longlong.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\memconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\memory.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\mimetype.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\module.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\mstream.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\object.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\objstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\process.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\regex.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\sckaddr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\sckipc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\sckstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\serbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\snglinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\socket.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\strconv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\stream.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\string.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\sysopt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\textfile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\thread.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\time.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\timer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\tokenzr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\txtstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\url.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\utils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\variant.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\vector.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\version.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\wfstream.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\wx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\wxchar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\wxprec.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\zipstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\zstream.h
+# End Source File
+
+# End Group
+# Begin Group "MSW"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dde.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\mimetype.h
+# End Source File
+
+# End Group
+# End Group
+# End Target
+# End Project
