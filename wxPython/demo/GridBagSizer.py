@@ -117,12 +117,29 @@ assert when compiled in debug mode.""",
             print "item found: ", `item.GetPos()`, "--", `item.GetSpan()`
 
         
-#----------------------------------------------------------------------
+#---------------------------------------------------------------------------
+
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Show the GridBagSizer sample", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        win = TestFrame()
+        win.Show(True)
+
+
+
+#---------------------------------------------------------------------------
+
 
 def runTest(frame, nb, log):
-    win = TestFrame()
-    frame.otherWin = win
-    win.Show(True)
+    win = TestPanel(nb, log)
+    return win
 
 
 #----------------------------------------------------------------------

@@ -3,22 +3,40 @@ import  wx
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Create and Show a PageSetupDialog", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        data = wx.PageSetupDialogData()
+        data.SetMarginTopLeft( (15, 15) )
+        data.SetMarginBottomRight( (15, 15) )
+        #data.SetDefaultMinMargins(True)
+        data.SetPaperId(wx.PAPER_LETTER)
+
+        dlg = wx.PageSetupDialog(self, data)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            data = dlg.GetPageSetupData()
+            tl = data.GetMarginTopLeft()
+            br = data.GetMarginBottomRight()
+            self.log.WriteText('Margins are: %s %s\n' % (str(tl), str(br)))
+
+        dlg.Destroy()
+
+
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    data = wx.PageSetupDialogData()
-    data.SetMarginTopLeft( (15, 15) )
-    data.SetMarginBottomRight( (15, 15) )
-    #data.SetDefaultMinMargins(True)
-    data.SetPaperId(wx.PAPER_LETTER)
-                               
-    dlg = wx.PageSetupDialog(frame, data)
+    win = TestPanel(nb, log)
+    return win
 
-    if dlg.ShowModal() == wx.ID_OK:
-        data = dlg.GetPageSetupData()
-        tl = data.GetMarginTopLeft()
-        br = data.GetMarginBottomRight()
-        log.WriteText('Margins are: %s %s\n' % (str(tl), str(br)))
-
-    dlg.Destroy()
 
 #---------------------------------------------------------------------------
 

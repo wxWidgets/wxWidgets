@@ -118,12 +118,29 @@ class TestToolBar(wx.Frame):
 
 #---------------------------------------------------------------------------
 
-def runTest(frame, nb, log):
-    win = TestToolBar(frame, log)
-    frame.otherWin = win
-    win.Show(True)
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Show the ToolBar sample", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        win = TestToolBar(self, self.log)
+        win.Show(True)
+
 
 #---------------------------------------------------------------------------
+
+
+def runTest(frame, nb, log):
+    win = TestPanel(nb, log)
+    return win
+
+#---------------------------------------------------------------------------
+
 
 
 

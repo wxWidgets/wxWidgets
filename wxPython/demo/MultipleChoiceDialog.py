@@ -4,19 +4,37 @@ import  wx.lib.dialogs
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Create and Show a MultipleChoiceDialog", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        lst = [ 'apple', 'pear', 'banana', 'coconut', 'orange', 'grape', 'pineapple',
+                'blueberry', 'raspberry', 'blackberry', 'snozzleberry',
+                'etc', 'etc..', 'etc...' ]
+
+        dlg = wx.lib.dialogs.MultipleChoiceDialog(
+                                    self,
+                                    "Pick some from\n this list\nblah blah...",
+                                    "m.s.d.", lst)
+
+        if (dlg.ShowModal() == wx.ID_OK):
+            self.log.write("Selection: %s -> %s\n" % (dlg.GetValue(), dlg.GetValueString()))
+
+        dlg.Destroy()
+
+
+
+#---------------------------------------------------------------------------
+
 def runTest(frame, nb, log):
-    lst = [ 'apple', 'pear', 'banana', 'coconut', 'orange',
-            'etc', 'etc..', 'etc...' ]
-
-    dlg = wx.lib.dialogs.MultipleChoiceDialog(
-                                frame,
-                                "Pick some from\n this list\nblah blah...",
-                                "m.s.d.", lst)
-
-    if (dlg.ShowModal() == wx.ID_OK):
-        log.write("Selection: %s -> %s\n" % (dlg.GetValue(), dlg.GetValueString()))
-
-    dlg.Destroy()
+    win = TestPanel(nb, log)
+    return win
 
 #---------------------------------------------------------------------------
 

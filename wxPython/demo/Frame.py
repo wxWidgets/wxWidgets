@@ -26,11 +26,28 @@ class MyFrame(wx.Frame):
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Create and Show a Frame", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        win = MyFrame(self, -1, "This is a wx.Frame", size=(350, 200),
+                  style = wx.DEFAULT_FRAME_STYLE)
+        win.Show(True)
+
+        
+
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    win = MyFrame(frame, -1, "This is a wx.Frame", size=(350, 200),
-                  style = wx.DEFAULT_FRAME_STYLE)# |  wx.FRAME_TOOL_WINDOW )
-    frame.otherWin = win
-    win.Show(True)
+    win = TestPanel(nb, log)
+    return win
 
 
 #---------------------------------------------------------------------------

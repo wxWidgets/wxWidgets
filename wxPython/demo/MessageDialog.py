@@ -3,13 +3,32 @@ import  wx
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Create and Show a MessageDialog", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        dlg = wx.MessageDialog(self, 'Hello from Python and wxPython!',
+                               'A Message Box',
+                               wx.OK | wx.ICON_INFORMATION
+                               #wx.YES_NO | wx.NO_DEFAULT | wx.CANCEL | wx.ICON_INFORMATION
+                               )
+        dlg.ShowModal()
+        dlg.Destroy()
+
+
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    dlg = wx.MessageDialog(frame, 'Hello from Python and wxPython!',
-                          'A Message Box',
-                           wx.OK | wx.ICON_INFORMATION)
-                           #wx.YES_NO | wx.NO_DEFAULT | wx.CANCEL | wx.ICON_INFORMATION)
-    dlg.ShowModal()
-    dlg.Destroy()
+    win = TestPanel(nb, log)
+    return win
+
 
 #---------------------------------------------------------------------------
 

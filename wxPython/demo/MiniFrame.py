@@ -25,14 +25,29 @@ class MyMiniFrame(wx.MiniFrame):
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Create and Show a MiniFrame", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        win = MyMiniFrame(self, "This is a wx.MiniFrame",
+                          style=wx.DEFAULT_FRAME_STYLE | wx.TINY_CAPTION_HORIZ)
+        win.SetSize((200, 200))
+        win.CenterOnParent(wx.BOTH)
+        win.Show(True)
+
+        
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    win = MyMiniFrame(frame, "This is a wx.MiniFrame",
-                      #pos=(250,250), size=(200,200),
-                      style=wx.DEFAULT_FRAME_STYLE | wx.TINY_CAPTION_HORIZ)
-    win.SetSize((200, 200))
-    win.CenterOnParent(wx.BOTH)
-    frame.otherWin = win
-    win.Show(True)
+    win = TestPanel(nb, log)
+    return win
 
 
 #---------------------------------------------------------------------------

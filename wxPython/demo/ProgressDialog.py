@@ -12,30 +12,45 @@ import  wx
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Create and Show a ProgressDialog", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        max = 20
+
+        dlg = wx.ProgressDialog("Progress dialog example",
+                               "An informative message",
+                               maximum = max,
+                               parent=self,
+                               style = wx.PD_CAN_ABORT | wx.PD_APP_MODAL)
+
+        keepGoing = True
+        count = 0
+
+        while keepGoing and count < max:
+            count = count + 1
+            #print count
+            wx.Sleep(1)
+
+            if count == max / 2:
+                keepGoing = dlg.Update(count, "Half-time!")
+            else:
+                keepGoing = dlg.Update(count)
+
+        dlg.Destroy()
+
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    max = 20
-    
-    dlg = wx.ProgressDialog("Progress dialog example",
-                           "An informative message",
-                           maximum = max,
-                           parent=frame,
-                           style = wx.PD_CAN_ABORT | wx.PD_APP_MODAL)
-
-    keepGoing = True
-    count = 0
-
-    while keepGoing and count < max:
-        count = count + 1
-        #print count
-        wx.Sleep(1)
-
-        if count == max / 2:
-            keepGoing = dlg.Update(count, "Half-time!")
-        else:
-            keepGoing = dlg.Update(count)
-
-    dlg.Destroy()
-
+    win = TestPanel(nb, log)
+    return win
 
 #---------------------------------------------------------------------------
 

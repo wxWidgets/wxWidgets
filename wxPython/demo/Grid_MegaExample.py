@@ -4,6 +4,8 @@ import  wx.grid as  Grid
 
 import  images
 
+#---------------------------------------------------------------------------
+
 class MegaTable(Grid.PyGridTableBase):
     """
     A custom wx.Grid Table using user supplied data
@@ -444,10 +446,25 @@ class TestFrame(wx.Frame):
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Show the MegaGrid", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        win = TestFrame(self)
+        win.Show(True)
+
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    win = TestFrame(frame)
-    frame.otherWin = win
-    win.Show(True)
+    win = TestPanel(nb, log)
+    return win
 
 
 

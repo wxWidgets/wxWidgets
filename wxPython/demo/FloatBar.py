@@ -80,18 +80,34 @@ class TestFloatBar(wx.Frame):
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Show the FloatBar sample", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        if wx.Platform == "__WXMAC__":
+            dlg = wx.MessageDialog(
+                    self, 'FloatBar does not work well on this platform.',
+                    'Sorry', wx.OK | wx.ICON_INFORMATION
+                    )
+            dlg.ShowModal()
+            dlg.Destroy()
+        else:
+            win = TestFloatBar(self, self.log)
+            win.Show(True)
+
+
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    if wx.Platform == "__WXMAC__":
-        dlg = wx.MessageDialog(
-                frame, 'FloatBar does not work well on this platform.',
-                'Sorry', wx.OK | wx.ICON_INFORMATION
-                )
-        dlg.ShowModal()
-        dlg.Destroy()
-    else:
-        win = TestFloatBar(frame, log)
-        frame.otherWin = win
-        win.Show(True)
+    win = TestPanel(nb, log)
+    return win
 
 #---------------------------------------------------------------------------
 

@@ -59,16 +59,30 @@ else:
                 StartUpDemo = "props"
     import wx
     import time, random
-    
+
+    #---------------------------------------------------------------------------
+
+    class TestPanel(wx.Panel):
+        def __init__(self, parent, log):
+            self.log = log
+            wx.Panel.__init__(self, parent, -1)
+
+            b = wx.Button(self, -1, "Show the FloatBar sample", (50,50))
+            self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+        def OnButton(self, evt):
+            win = DrawFrame(None, -1, "FloatCanvas Drawing Window",wx.DefaultPosition,(500,500))
+            win.Show(True)
+            win.DrawTest()
+
+
     def runTest(frame, nb, log):
-        """
-        This method is used by the wxPython Demo Framework for integrating
-        this demo with the rest.
-        """
-        win = DrawFrame(None, -1, "FloatCanvas Drawing Window",wx.DefaultPosition,(500,500))
-        frame.otherWin = win
-        win.Show(True)
-        win.DrawTest()
+        win = TestPanel(nb, log)
+        return win
+
+
+    
 
     try:
         from floatcanvas import NavCanvas, FloatCanvas

@@ -4,13 +4,31 @@ import  wx.lib.dialogs
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Create and Show a ScrolledMessageDialog", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        f = open("Main.py", "r")
+        msg = f.read()
+        f.close()
+
+        dlg = wx.lib.dialogs.ScrolledMessageDialog(self, msg, "message test")
+        dlg.ShowModal()
+
+
+
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    f = open("Main.py", "r")
-    msg = f.read()
-    f.close()
-    
-    dlg = wx.lib.dialogs.ScrolledMessageDialog(frame, msg, "message test")
-    dlg.ShowModal()
+    win = TestPanel(nb, log)
+    return win
 
 #---------------------------------------------------------------------------
 

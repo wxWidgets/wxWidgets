@@ -84,7 +84,7 @@ class TestCustomStatusBar(wx.Frame):
         self.SetStatusBar(self.sb)
         tc = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY|wx.TE_MULTILINE)
 
-        self.SetSize((500, 300))
+        self.SetSize((640, 480))
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
     def OnCloseWindow(self, event):
@@ -94,10 +94,26 @@ class TestCustomStatusBar(wx.Frame):
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Show the StatusBar sample", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        win = TestCustomStatusBar(self, self.log)
+        win.Show(True)
+
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    win = TestCustomStatusBar(frame, log)
-    frame.otherWin = win
-    win.Show(True)
+    win = TestPanel(nb, log)
+    return win
+
 
 #---------------------------------------------------------------------------
 

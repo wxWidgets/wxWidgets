@@ -1,28 +1,45 @@
-
+ 
 import  wx
 
 #---------------------------------------------------------------------------
 
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+
+        b = wx.Button(self, -1, "Create and Show a ColourDialog", (50,50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+
+
+    def OnButton(self, evt):
+        dlg = wx.ColourDialog(self)
+
+        # Ensure the full colour dialog is displayed, 
+        # not the abbreviated version.
+        dlg.GetColourData().SetChooseFull(True)
+
+        if dlg.ShowModal() == wx.ID_OK:
+
+            # If the user selected OK, then the dialog's wx.ColourData will
+            # contain valid information. Fetch the data ...
+            data = dlg.GetColourData()
+
+            # ... then do something with it. The actual colour data will be
+            # returned as a three-tuple (r, g, b) in this particular case.
+            self.log.WriteText('You selected: %s\n' % str(data.GetColour().Get()))
+
+        # Once the dialog is destroyed, Mr. wx.ColourData is no longer your
+        # friend. Don't use it again!
+        dlg.Destroy()
+
+#---------------------------------------------------------------------------
+
+
 def runTest(frame, nb, log):
-    dlg = wx.ColourDialog(frame)
+    win = TestPanel(nb, log)
+    return win
 
-    # Ensure the full colour dialog is displayed, 
-    # not the abbreviated version.
-    dlg.GetColourData().SetChooseFull(True)
-
-    if dlg.ShowModal() == wx.ID_OK:
-
-        # If the user selected OK, then the dialog's wx.ColourData will
-        # contain valid information. Fetch the data ...
-        data = dlg.GetColourData()
-        
-        # ... then do something with it. The actual colour data will be
-        # returned as a three-tuple (r, g, b) in this particular case.
-        log.WriteText('You selected: %s\n' % str(data.GetColour().Get()))
-
-    # Once the dialog is destroyed, Mr. wx.ColourData is no longer your
-    # friend. Don't use it again!
-    dlg.Destroy()
 
 #---------------------------------------------------------------------------
 
