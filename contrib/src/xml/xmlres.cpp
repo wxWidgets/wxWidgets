@@ -255,7 +255,7 @@ void wxXmlResource::UpdateResources()
 {
     bool modif;
 #   if wxUSE_FILESYSTEM
-    wxFSFile *file;
+    wxFSFile *file = NULL;
     wxFileSystem fsys;
 #   endif
 
@@ -270,7 +270,7 @@ void wxXmlResource::UpdateResources()
             modif = file && file->GetModificationTime() > m_Data[i].Time;
             if (!file)
                 wxLogError(_("Cannot open file '%s'."), m_Data[i].File.c_str());
-            delete file;
+            wxDELETE(file);
 #           else
             modif = wxDateTime(wxFileModificationTime(m_Data[i].File)) > m_Data[i].Time;
 #           endif
@@ -278,11 +278,12 @@ void wxXmlResource::UpdateResources()
         
         if (modif)
         {
-            wxInputStream *stream;
+			wxInputStream *stream = NULL;
 
 #           if wxUSE_FILESYSTEM
             file = fsys.OpenFile(m_Data[i].File);
-            stream = file->GetStream();
+			if (file)
+				stream = file->GetStream();
 #           else
             stream = new wxFileInputStream(m_Data[i].File);
 #           endif
@@ -295,22 +296,23 @@ void wxXmlResource::UpdateResources()
             if (!stream || !m_Data[i].Doc->Load(*stream))
             {
                 wxLogError(_("Cannot load resources from file '%s'."), m_Data[i].File.c_str());
-                delete m_Data[i].Doc;
-                m_Data[i].Doc = NULL;
+                wxDELETE(m_Data[i].Doc);
             }
             else if (m_Data[i].Doc->GetRoot()->GetName() != wxT("resource")) 
             {
                 wxLogError(_("Invalid XML resource '%s': doesn't have root node 'resource'."), m_Data[i].File.c_str());
-                delete m_Data[i].Doc;
-                m_Data[i].Doc = NULL;
+                wxDELETE(m_Data[i].Doc);
             }
             else
+			{
                 ProcessPlatformProperty(m_Data[i].Doc->GetRoot());
+				m_Data[i].Time = file->GetModificationTime();
+			}
 
 #           if wxUSE_FILESYSTEM
-            delete file;
+				wxDELETE(file);
 #           else
-            delete stream;
+				wxDELETE(stream);
 #           endif
         }
     }
