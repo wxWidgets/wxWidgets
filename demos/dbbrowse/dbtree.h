@@ -59,10 +59,10 @@ class DBTree : public wxTreeCtrl
   int  OnPopulate();
   void OnSelChanged(wxTreeEvent& event);
   void OnRightSelect(wxTreeEvent& event);
-  void OnDBGrid(wxMenu& menu, wxCommandEvent& event);
-  void OnDBClass(wxMenu& menu, wxCommandEvent& event);
-  void OnTableClass(wxMenu& menu, wxCommandEvent& event);
-  void OnTableClassAll(wxMenu& menu, wxCommandEvent& event);
+  void OnDBGrid(wxCommandEvent& event);
+  void OnDBClass(wxCommandEvent& event);
+  void OnTableClass(wxCommandEvent& event);
+  void OnTableClassAll(wxCommandEvent& event);
   void OnMouseEvent(wxMouseEvent& event);
   void OnMouseMove(wxMouseEvent& event);
  public:

@@ -2684,10 +2684,15 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
     // first ask the user code - it may wish to set the cursor in some very
     // specific way (for example, depending on the current position)
     POINT pt;
+#ifdef __WIN32__
     if ( !::GetCursorPos(&pt) )
     {
         wxLogLastError("GetCursorPos");
     }
+#else
+    // In WIN16 it doesn't return a value.
+    ::GetCursorPos(&pt);
+#endif
 
     int x = pt.x,
         y = pt.y;

@@ -271,6 +271,9 @@ $(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\encconv.obj /c /Tp $(COMMDIR)\encconv.cpp
 $(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\fileconf.obj /c /Tp $(COMMDIR)\fileconf.cpp
 <<
 	cl @<<
+$(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\hash.obj /c /Tp $(COMMDIR)\hash.cpp
+<<
+	cl @<<
 $(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\resource.obj /c /Tp $(COMMDIR)\resource.cpp
 <<
 	cl @<<
@@ -281,6 +284,9 @@ $(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\choicdgg.obj /c /Tp $(GENDIR)\choicdgg.cpp
 <<
 	cl @<<
 $(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\grid.obj /c /Tp $(GENDIR)\grid.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\gridsel.obj /c /Tp $(GENDIR)\gridsel.cpp
 <<
 	cl @<<
 $(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\logg.obj /c /Tp $(GENDIR)\logg.cpp

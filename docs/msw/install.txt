@@ -4,8 +4,8 @@ Installing wxWindows 2.1
 
 This is a beta release of wxWindows 2.1 for Microsoft
 Windows 95, 98 and NT. This is not a production release,
-although a huge number of bugs found in wxWindows 2.0 have been
-fixed.
+although a huge number of bugs found in earlier versions
+of wxWindows have been fixed.
 
 IMPORTANT NOTE: If you experience problems installing, please
 re-read this instructions and other related files (release.txt,
@@ -29,6 +29,7 @@ program contains the following:
 - makefiles for most Windows compilers, plus BC++ and
   VC++ IDE files;
 - JPEG library source;
+- TIFF library source;
 - Object Graphics Library;
 - Tex2RTF source;
 - Dialog Editor binary.
@@ -94,6 +95,10 @@ Using project files (VC++ 5 and 6 only):
    Debug using Build | Set Active Configuration..., and compile.
    The project files don't use precompiled headers, to save disk
    space, but you can switch PCH compiling on for greater speed.
+   NOTE: you may also use samples/SamplesVC.dsw to access all
+   sample projects without opening each workspace individually.
+   You can use the Batch Build facility to make several samples
+   at a time.
 
 Using makefiles:
 

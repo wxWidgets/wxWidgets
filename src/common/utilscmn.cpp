@@ -48,8 +48,10 @@
     #endif // wxUSE_GUI
 #endif // WX_PRECOMP
 
+#ifndef __WIN16__
 #include "wx/process.h"
 #include "wx/txtstrm.h"
+#endif
 
 #include <ctype.h>
 #include <stdio.h>
@@ -970,7 +972,7 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
     HWND hwndFG = ::GetForegroundWindow();
     m_winTop = hwndFG ? wxFindWinFromHandle((WXHWND)hwndFG) : (wxWindow *)NULL;
 #else
-    HWND hwndFG = ::GetTopWindow();
+    HWND hwndFG = ::GetTopWindow(0);
     m_winTop = hwndFG ? wxFindWinFromHandle((WXHWND)hwndFG) : (wxWindow *)NULL;
 #endif
 #endif // MSW
@@ -1031,8 +1033,8 @@ wxWindowDisabler::~wxWindowDisabler()
     {
         // 16-bit SetForegroundWindow() replacement
         RECT reWin;
-        GetWindowRect(m_winTop, &reWin);
-        SetWindowPos (m_winTop, HWND_TOP,
+        GetWindowRect((HWND) m_winTop, &reWin);
+        SetWindowPos ((HWND) m_winTop, HWND_TOP,
                              reWin.left, reWin.top, 
                              reWin.right - reWin.left, reWin.bottom, 
                              SWP_SHOWWINDOW);
@@ -1209,6 +1211,10 @@ wxString wxGetCurrentDir()
 
 long wxExecute(const wxString& command, wxArrayString& output)
 {
+#ifdef __WIN16__
+    wxFAIL_MSG("Sorry, this version of wxExecute not implemented on WIN16.");
+    return 0;
+#else
     // create a wxProcess which will capture the output
     wxProcess *process = new wxProcess;
     process->Redirect();
@@ -1229,4 +1235,5 @@ long wxExecute(const wxString& command, wxArrayString& output)
     }
 
     return rc;
+#endif
 }

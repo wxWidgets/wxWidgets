@@ -142,7 +142,16 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
 #else // Win16
     // there are some functions in curico.cpp which probably could be used
     // here...
-    wxFAIL_MSG("not implemented");
+    // This probably doesn't work.
+    HBITMAP hBitmap = (HBITMAP) bmp.GetHBITMAP();
+    HICON hIcon = MakeIconFromBitmap((HINSTANCE) wxGetInstance(), hBitmap);
+    if (hIcon)
+    {
+        SetHICON((WXHICON)hIcon);
+        SetSize(bmp.GetWidth(), bmp.GetHeight());
+    }
+
+//    wxFAIL_MSG("Bitmap to icon conversion (including use of XPMs for icons) not implemented");
 #endif // Win32/16
 }
 

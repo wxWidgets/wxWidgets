@@ -49,10 +49,10 @@ class PgmCtrl : public wxTreeCtrl
 //----------------------------------------------------------------------------------------
  public:
   int  OnPopulate();
-  void OnSelChanged(wxTreeEvent& event);
+  void OnSelChanged(wxMouseEvent& event);
   void OnRightSelect(wxTreeEvent& event);
   void OnMouseMove(wxMouseEvent& event);
-  void OnUserPassword();
+  void OnUserPassword(wxCommandEvent& event);
 
  public:
 //----------------------------------------------------------------------------------------

@@ -85,6 +85,12 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     // be ignored by Windows
     wxIcon *icon = (wxIcon *)NULL;
     m_isIcon = bitmap.IsKindOf(CLASSINFO(wxIcon));
+
+#ifdef __WIN16__
+    wxASSERT_MSG( !m_isIcon, "Icons are not supported in wxStaticBitmap under WIN16." );
+#endif
+
+#ifndef __WIN16__
     if ( !m_isIcon )
     {
         const wxBitmap& bmp = (const wxBitmap&)bitmap;
@@ -97,6 +103,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
             m_isIcon = TRUE;
         }
     }
+#endif
 
 #ifdef __WIN32__
     // create a static control with either SS_BITMAP or SS_ICON style depending

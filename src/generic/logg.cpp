@@ -674,7 +674,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
                          long style)
            : wxDialog(parent, -1, caption )
 {
-    if ( ms_details )
+    if ( ms_details.IsEmpty() )
     {
         // ensure that we won't try to call wxGetTranslation() twice
         ms_details = _T("&Details");
@@ -715,8 +715,11 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + _T(" >>"));
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
 
+#ifndef __WIN16__
     wxIcon icon = wxTheApp->GetStdIcon((int)(style & wxICON_MASK));
     sizerAll->Add(new wxStaticBitmap(this, -1, icon), 0, wxCENTRE);
+#endif
+
     const wxString& message = messages.Last();
     sizerAll->Add(CreateTextSizer(message), 0, wxCENTRE|wxLEFT|wxRIGHT, MARGIN);
     sizerAll->Add(sizerButtons, 0, wxALIGN_RIGHT|wxLEFT, MARGIN);
@@ -797,6 +800,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
                 wxICON_INFORMATION
             };
 
+#ifndef __WIN16__
             for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
             {
                 wxBitmap bmp = wxTheApp->GetStdIcon(icons[icon]);
@@ -806,6 +810,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
             }
 
             m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
+#endif
 
             // and fill it
             wxString fmt = wxLog::GetTimestamp();
@@ -818,7 +823,8 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
             size_t count = m_messages.GetCount();
             for ( size_t n = 0; n < count; n++ )
             {
-                int image;
+                int image = -1;
+#ifndef __WIN16__
                 switch ( m_severity[n] )
                 {
                     case wxLOG_Error:
@@ -832,6 +838,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
                     default:
                         image = 2;
                 }
+#endif
 
                 m_listctrl->InsertItem(n, m_messages[n], image);
                 m_listctrl->SetItem(n, 1,

@@ -148,7 +148,7 @@ int  DBGrid::OnTableView(wxString Table)
  return 0;
 }
 //----------------------------------------------------------------------------------------
-void DBGrid::OnModusEdit(wxMenu& menu, wxCommandEvent& event)
+void DBGrid::OnModusEdit(wxCommandEvent& event)
 {
  b_EditModus = TRUE;             // Needed by PopupMenu
  EnableEditing(b_EditModus);     // Activate in-place Editing
@@ -156,7 +156,7 @@ void DBGrid::OnModusEdit(wxMenu& menu, wxCommandEvent& event)
  // wxLogMessage(_("-I-> DBGrid::OnModusEdit() - End"));
 }
 //----------------------------------------------------------------------------------------
-void DBGrid::OnModusBrowse(wxMenu& menu, wxCommandEvent& event)
+void DBGrid::OnModusBrowse(wxCommandEvent& event)
 {
  b_EditModus = FALSE;            // Needed by PopupMenu
  EnableEditing(b_EditModus);     // Deactivate in-place Editing

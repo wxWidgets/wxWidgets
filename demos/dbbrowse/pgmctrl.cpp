@@ -129,7 +129,7 @@ int  PgmCtrl::OnPopulate()
   return 0;
 }
 //----------------------------------------------------------------------------------------
-void PgmCtrl::OnSelChanged(wxTreeEvent& WXUNUSED(event))
+void PgmCtrl::OnSelChanged(wxMouseEvent& WXUNUSED(event))
 {
  int i;
  Temp0.Empty();   Temp1.Empty();
@@ -249,7 +249,7 @@ void PgmCtrl::OnMouseMove(wxMouseEvent &event)
  TreePos = event.GetPosition();
 }
 //----------------------------------------------------------------------------------------
-void PgmCtrl::OnUserPassword()
+void PgmCtrl::OnUserPassword(wxCommandEvent& WXUNUSED(event))
 {
  // wxMessageBox(SaveDSN);
  int i;

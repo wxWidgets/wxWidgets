@@ -34,8 +34,8 @@ class DBGrid: public wxGrid
   wxString logBuf,Temp0;
   wxPoint  MousePos;
  //---------------------------------------------------------------------------------------
- void OnModusEdit(wxMenu& menu, wxCommandEvent& event);
- void OnModusBrowse(wxMenu& menu, wxCommandEvent& event);
+ void OnModusEdit(wxCommandEvent& event);
+ void OnModusBrowse(wxCommandEvent& event);
  void OnMouseMove(wxMouseEvent& event);
  int  OnTableView(wxString Table);
  //-----

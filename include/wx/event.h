@@ -1591,6 +1591,7 @@ typedef void (wxEvtHandler::*wxQueryNewPaletteEventFunction)(wxQueryNewPaletteEv
 typedef void (wxEvtHandler::*wxWindowCreateEventFunction)(wxWindowCreateEvent&);
 typedef void (wxEvtHandler::*wxWindowDestroyEventFunction)(wxWindowDestroyEvent&);
 typedef void (wxEvtHandler::*wxSetCursorEventFunction)(wxSetCursorEvent&);
+typedef void (wxEvtHandler::*wxNotifyEventFunction)(wxNotifyEvent&);
 #endif // wxUSE_GUI
 
 // N.B. In GNU-WIN32, you *have* to take the address of a member function

@@ -18,6 +18,8 @@ src/png/png.dsw
 src/xpm/xpm.dsp
 src/xpm/xpm.dsw
 
+samples/SamplesVC.dsw
+
 samples/calendar/CalendarVC.dsp
 samples/calendar/CalendarVC.dsw
 

@@ -616,7 +616,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     panel = new wxPanel(m_notebook);
 
-#ifndef __WXMOTIF__  // wxStaticBitmap not working under Motif yet. MB
+#if !defined(__WXMOTIF__) && !defined(__WIN16__)  // wxStaticBitmap not working under Motif yet; and icons not allowed under WIN16.
     wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
     wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon,
                                                    wxPoint(10, 10));
@@ -642,6 +642,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     if (bitmap.Ok())
     {
        bitmap.SetMask(new wxMask(bitmap, *wxBLUE));
+
        (void)new wxStaticBitmap /* wxBitmapButton */ (panel, -1, bitmap, wxPoint(300, 120));
     }
 #endif

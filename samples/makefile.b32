@@ -112,6 +112,8 @@ all:
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\png
         make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\plot
+        make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\printing
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\proplist
@@ -229,6 +231,8 @@ clean:
         cd $(WXDIR)\samples\ownerdrw
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\png
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\plot
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\printing
         make -f makefile.b32 clean
