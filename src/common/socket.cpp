@@ -543,7 +543,9 @@ void wxSocketBase::SetNotify(wxRequestNotify flags)
   if (m_type != SOCK_SERVER)
     flags &= ~REQ_ACCEPT;
 
+  m_internal->AcquireData();
   m_neededreq = flags;
+  m_internal->ReleaseData();
   if (m_neededreq == 0)
     m_internal->StopWaiter();
   else
@@ -691,10 +693,10 @@ void wxSocketBase::WantBuffer(char *buffer, size_t nbytes,
   buf->timeout = 1000;
   buf_timed_out = FALSE;
 
-  if (m_flags & SPEED) 
+  if ((m_flags & SPEED) != 0) 
     m_internal->QueueRequest(buf, FALSE);
   else
-    if (m_flags & NOWAIT) 
+    if ((m_flags & NOWAIT) != 0) 
       m_internal->QueueRequest(buf, TRUE);
     else 
       m_internal->QueueRequest(buf, TRUE);
