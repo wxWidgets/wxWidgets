@@ -146,22 +146,22 @@ microsoft reuses the keyword DIALOG for other things
 
     while ((token!=_T("BEGIN"))&(token!=_T("{")))
     {
-    if (token==_T("CAPTION"))
+        if (token==_T("CAPTION"))
         {
-        title=GetQuoteField();
+            title=GetQuoteField();
         }
 
 //TODO fix face name so that it is cross platform name
 //  FONT 8, "MS Sans Serif"
     if (token==_T("FONT"))
-        {
+    {
         ptsize=GetToken();
         face=GetQuoteField();
         m_xmlfile.Write(_T("\t\t<font>\n"));
         m_xmlfile.Write(_T("\t\t\t<size>")+ptsize+_T("</size>\n"));
         m_xmlfile.Write(_T("\t\t\t<face>")+face+_T("</face>\n"));
         m_xmlfile.Write(_T("\t\t</font>\n"));
-        }
+    }
 
     token=GetToken();
     }
@@ -350,10 +350,10 @@ bool rc2xml::Seperator(int ch)
         return true;
 
     if (ch==EOF)
-        {
+    {
         m_done=true;
         return true;
-        }
+    }
 
     return false;
 }
@@ -477,23 +477,24 @@ wxString rc2xml::GetStringQuote()
     wxString phrase;
     //ASCII code 34 "
     bool done=false;
-    int p,ch=0,lastch=0;
+    int ch=0,lastch=0;
     ReadChar(ch);
 
     while (ch!=34)
         ReadChar(ch);
+
     ReadChar(ch);
     while (done==false)
-        {
+    {
         if ((ch==34)&&(lastch!='\\'))
-            {
-            p=m_rc.Tell();
+        {
+            wxFileOffset p = m_rc.Tell();
             ReadChar(ch);
-// RC supports "", for embedded quote, as well as  \"
+            // RC supports "", for embedded quote, as well as  \"
             if (ch==34)
                 phrase+='\\';
             else
-    {
+            {
                 m_rc.Seek(p);
                 done = true;
                 }
@@ -505,9 +506,10 @@ wxString rc2xml::GetStringQuote()
          if ((ch=='\n')&&(lastch=='\\'))      // lastch <should> be this
              phrase+='n';                     // escape
          else
-    phrase+=(char)ch;
+             phrase+=(char)ch;
+
          lastch=ch;
-    ReadChar(ch);
+         ReadChar(ch);
     }
 
     return phrase;
@@ -515,15 +517,14 @@ wxString rc2xml::GetStringQuote()
 
 void rc2xml::ReadChar(int &ch)
 {
-    int result;
-    result=m_rc.Tell();
+    wxFileOffset result = m_rc.Tell();
 
     if((result>=m_filesize))
         m_done=true;
 
-    result=m_rc.Read(&ch,1);
+    result = m_rc.Read(&ch,1);
 
-    if((result==-1))
+    if( result == wxInvalidOffset )
         m_done=true;
 
     if(ch==EOF)

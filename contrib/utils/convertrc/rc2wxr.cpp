@@ -1,99 +1,54 @@
 // rc2wxr.cpp: implementation of the rc2wxr class.
-
 //
-
 //////////////////////////////////////////////////////////////////////
-
 //Author:  Brian Gavin 9/24/00
-
 //License: wxWindows License
-
 /*
-
 WARNING- I know this code has some bugs to work out but
-
 I don't plan to fix them since I feel that wxr files will
-
 not be used much longer.
-
 This code was used as a starting point for my rc2xml converter
-
 */
 
 #ifdef __GNUG__
-
 #pragma implementation "rc2wxr.cpp"
-
 #pragma interface "rc2wxr.cpp"
-
 #endif
-
-
 
 // For compilers that support precompilation, includes "wx/wx.h".
-
 #include "wx/wxprec.h"
 
-
-
 #ifdef __BORLANDC__
-
-#pragma hdrstop
-
+    #pragma hdrstop
 #endif
-
-
 
 // for all others, include the necessary headers (this file is usually all you
 
 // need because it includes almost all "standard" wxWidgets headers
 
 #ifndef WX_PRECOMP
-
-#include <wx/wx.h>
-
+    #include "wx/wx.h"
 #endif
 
-
-
-
-
-#include "rc2wxr.h"
-
 #include "wx/image.h"
-
 #include "wx/deprecated/setup.h"
 #include "wx/deprecated/resource.h"
 
-//////////////////////////////////////////////////////////////////////
+#include "rc2wxr.h"
 
+//////////////////////////////////////////////////////////////////////
 // Construction/Destruction
-
 //////////////////////////////////////////////////////////////////////
-
-
 
 rc2wxr::rc2wxr()
-
 {
-
-m_done=false;
-
-m_controlid=6000;
-
+    m_done=false;
+    m_controlid=6000;
 }
-
-
 
 rc2wxr::~rc2wxr()
-
 {
-
-
-
 }
-
-
 
 void rc2wxr::Convert(wxString wxrfile, wxString rcfile)
 {
@@ -129,9 +84,6 @@ void rc2wxr::Convert(wxString wxrfile, wxString rcfile)
 }
 
 
-
-
-
 /*
 
 Example .rc
@@ -145,8 +97,6 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About Funimator"
 
 FONT 8, "MS Sans Serif"
-
-
 
   Borland 4.5 style rc
 
@@ -163,12 +113,6 @@ FONT 8, "MS Sans Serif"
  DEFPUSHBUTTON "Ok", IDOK, 114, 8, 50, 14
 
  PUSHBUTTON "Cancel", IDCANCEL, 114, 28, 50, 14
-
-
-
-
-
-
 
 */
 
@@ -215,12 +159,7 @@ wxFprintf(m_wxr,_T("static char *dialog%i = \"dialog(name = '%s',\\\n"),dlgid,dl
 //be lazy about style for now. add it later
 
 wxFprintf(m_wxr,_T("style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\\\n"));
-
-
-
 wxFprintf(m_wxr,_T("id = %i,\\\n"),dlgid);
-
-
 
 //Record x,y,width,height
 
@@ -229,9 +168,6 @@ int x,y,width,height;
 ReadRect(x,y,width,height);
 
 wxFprintf(m_wxr,_T("x = %i, y = %i, width = %i, height = %i,\\\n"),x,y,width,height);
-
-
-
 
 
 //CAPTION "About Funimator"
@@ -635,41 +571,25 @@ return tok;
 
 
 wxString rc2wxr::GetQuoteField()
-
 {
+    wxString phrase;
 
-wxString phrase;
+    //ASCII code 34 "
+    int ch=0;
+    ReadChar(ch);
 
-//ASCII code 34 "
+    while (ch!=34)
+        ReadChar(ch);
 
-int ch=0;
+    ReadChar(ch);
 
-ReadChar(ch);
+    while (ch!=34)
+    {
+        phrase+=(char)ch;
+        ReadChar(ch);
+    }
 
-
-
-while (ch!=34)
-
-  ReadChar(ch);
-
-
-
-  ReadChar(ch);
-
-
-
-while (ch!=34)
-
-{
-
-  phrase+=(char)ch;
-
-  ReadChar(ch);
-
-}
-
-return phrase;
-
+    return phrase;
 }
 
 
@@ -691,367 +611,193 @@ void rc2wxr::ReadChar(int &ch)
 }
 
 
-
+/* COMBOBOX        IDC_SCALECOMBO,10,110,48,52,CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP */
 void rc2wxr::ParseComboBox()
 {
+    int x,y,width,height;
+    wxString tok;
+    wxString varname = GetToken();
 
-/* COMBOBOX        IDC_SCALECOMBO,10,110,48,52,CBS_DROPDOWNLIST | CBS_SORT |
+    m_controlid++;
 
-                    WS_VSCROLL | WS_TABSTOP */
-
-wxString tok;
-
-wxString varname;
-
-varname=GetToken();
-
-m_controlid++;
-
-int x,y,width,height;
-
-ReadRect(x,y,width,height);
-
-
-
-wxFprintf(m_wxr,_T("  control = [%i,wxChoice,'','0','%s',"),m_controlid,varname.c_str());
-
-wxFprintf(m_wxr,_T("%i,%i,%i,%i,[],\\\n"),x,y,width,height);
-
-wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
-
-
-
-
-
+    ReadRect(x,y,width,height);
+    wxFprintf(m_wxr,_T("  control = [%i,wxChoice,'','0','%s',"),m_controlid,varname.c_str());
+    wxFprintf(m_wxr,_T("%i,%i,%i,%i,[],\\\n"),x,y,width,height);
+    wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 }
-
 
 
 void rc2wxr::ParseMenu(wxString name)
-
 {
+    wxString tok;
+    static int menuid=0;
+    menuid++;
+    wxFprintf(m_wxr,_T("static char *MenuBar%i = \"menu(name = '%s',\\\n"),menuid,name.c_str());
+    wxFprintf(m_wxr,_T("menu = \\\n"));
+    wxFprintf(m_wxr,_T("[\\\n"));
 
-wxString tok=wxEmptyString;
+    while ((tok!=_T("BEGIN"))&(tok!=_T("{")))
+        tok=GetToken();
 
-static int menuid=0;
-
-menuid++;
-
-wxFprintf(m_wxr,_T("static char *MenuBar%i = \"menu(name = '%s',\\\n"),menuid,name.c_str());
-
-wxFprintf(m_wxr,_T("menu = \\\n"));
-
-wxFprintf(m_wxr,_T("[\\\n"));
-
-
-
-while ((tok!=_T("BEGIN"))&(tok!=_T("{")))
-
-   tok=GetToken();
-
-
-
-while ((tok!=_T("END"))&(tok!=_T("}")))
-
-{
-
-   tok=GetToken();
-
-if (tok==_T("POPUP"))
-
+    while ((tok!=_T("END"))&(tok!=_T("}")))
     {
+        tok=GetToken();
 
-    ParsePopupMenu();
-
-    wxFprintf(m_wxr,_T("  ],\\\n"));
-
+        if (tok==_T("POPUP"))
+        {
+            ParsePopupMenu();
+            wxFprintf(m_wxr,_T("  ],\\\n"));
+        }
     }
 
+    wxFprintf(m_wxr,_T("]).\";\n\n"));
 }
-
-
-
-wxFprintf(m_wxr,_T("]).\";\n\n"));
-
-}
-
 
 
 void rc2wxr::ParsePopupMenu()
-
 {
+    static int menuitem=99;
 
-static int menuitem=99;
+    menuitem++;
 
-menuitem++;
+    wxString tok = GetQuoteField();
+    int spot;
 
+    //Remove /t because it causes problems
+    spot=tok.First(_T("\\t"));
+    tok=tok.Left(spot);
 
+    wxFprintf(m_wxr,_T("  ['%s',%i,'',\\\n"),tok.c_str(),menuitem);
 
-wxString tok;
+    while ((tok!=_T("BEGIN"))&(tok!=_T("{")))
+        tok=GetToken();
 
-tok=GetQuoteField();
+    while ((tok!=_T("END"))&(tok!=_T("}")))
+    {
+        tok=GetToken();
 
-int spot;
-
-//Remove /t because it causes problems
-
-spot=tok.First(_T("\\t"));
-
-tok=tok.Left(spot);
-
-wxFprintf(m_wxr,_T("  ['%s',%i,'',\\\n"),tok.c_str(),menuitem);
-
-while ((tok!=_T("BEGIN"))&(tok!=_T("{")))
-
-   tok=GetToken();
-
-
-
-while ((tok!=_T("END"))&(tok!=_T("}")))
-
-{
-
-   tok=GetToken();
-
-if (tok==_T("MENUITEM"))
-
-{
-
-if (PeekToken()==_T("SEPARATOR"))
-
-wxFprintf(m_wxr,_T("      [],\\\n"));
-
-else
-
-{
-
-tok=GetQuoteField();
-
-//Remove /t because it causes problems
-
-spot=tok.First(_T("\\t"));
-
-tok=tok.Left(spot);
-
-menuitem++;
-
-wxFprintf(m_wxr,_T("      ['%s',%i,''],\\\n"),tok.c_str(),menuitem);
-
-}
-
-}
-
-
-
-}
-
-
-
-
-
+        if (tok==_T("MENUITEM"))
+        {
+            if (PeekToken()==_T("SEPARATOR"))
+            {
+                wxFprintf(m_wxr,_T("      [],\\\n"));
+            }
+            else
+            {
+                tok=GetQuoteField();
+                //Remove /t because it causes problems
+                spot=tok.First(_T("\\t"));
+                tok=tok.Left(spot);
+                menuitem++;
+                wxFprintf(m_wxr,_T("      ['%s',%i,''],\\\n"),tok.c_str(),menuitem);
+            }
+        }
+    }
 }
 
 
 
 wxString rc2wxr::PeekToken()
-
 {
-
-wxString tok;
-
-int p;
-
-p=m_rc.Tell();
-
-tok=GetToken();
-
-
-
-m_rc.Seek(p);
-
-return tok;
-
+    wxFileOffset p = m_rc.Tell();
+    wxString tok = GetToken();
+    m_rc.Seek(p);
+    return tok;
 }
 
 //Windows pain in the butt CONTROL
-
 void rc2wxr::ParseControlMS()
-
 {
+    wxString tok;
+    wxString label=GetQuoteField();
+    wxString varname=GetToken();
+    wxString kindctrl=GetQuoteField();
 
-wxString label,varname,kindctrl,tok;
-
-label=GetQuoteField();
-
-varname=GetToken();
-
-kindctrl=GetQuoteField();
-
-kindctrl.MakeUpper();
-
-
-
-
-
-if (kindctrl==_T("MSCTLS_TRACKBAR32"))
-
-   ParseSlider(label,varname);
-
-if (kindctrl==_T("MSCTLS_PROGRESS32"))
-
-   ParseProgressBar(label,varname);
-
-if (kindctrl==_T("BUTTON"))
-
-   ParseCtrlButton(label,varname);
-
+    kindctrl.MakeUpper();
+    if (kindctrl==_T("MSCTLS_TRACKBAR32"))
+        ParseSlider(label,varname);
+    if (kindctrl==_T("MSCTLS_PROGRESS32"))
+        ParseProgressBar(label,varname);
+    if (kindctrl==_T("BUTTON"))
+        ParseCtrlButton(label,varname);
 }
 
 /*    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH |
-
                     TBS_NOTICKS | WS_TABSTOP,52,73,100,15
-
 */
-
-
-
 void rc2wxr::ParseSlider(wxString WXUNUSED(label), wxString varname)
-
 {
+    int x,y,width,height;
+    wxString tok;
 
-wxString tok;
-
-while (ReadOrs(tok))
-    ;
-
-wxFprintf(m_wxr,_T("  control = [%i,wxSlider,'','wxSL_HORIZONTAL','%s',"),m_controlid,varname.c_str());
-
-int x,y,width,height;
-
-ReadRect(x,y,width,height);
-
-wxFprintf(m_wxr,_T("%i,%i,%i,%i,"),x,y,width,height);
-
-wxFprintf(m_wxr,_T(" 1, 1, 10,\\\n"));
-
-wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
-
+    while (ReadOrs(tok))
+        ;
+    wxFprintf(m_wxr,_T("  control = [%i,wxSlider,'','wxSL_HORIZONTAL','%s',"),m_controlid,varname.c_str());
+    ReadRect(x,y,width,height);
+    wxFprintf(m_wxr,_T("%i,%i,%i,%i,"),x,y,width,height);
+    wxFprintf(m_wxr,_T(" 1, 1, 10,\\\n"));
+    wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 }
 
 /*
-
 CONTROL         "Progress1",CG_IDC_PROGDLG_PROGRESS,"msctls_progress32",
-
                     WS_BORDER,15,52,154,13
-
 */
-
 void rc2wxr::ParseProgressBar(wxString WXUNUSED(label), wxString varname)
-
 {
-
-wxString tok;
-
-while (ReadOrs(tok))
-    ;
-
-wxFprintf(m_wxr,_T("  control = [%i,wxGauge,'','wxGA_HORIZONTAL','%s',"),m_controlid,varname.c_str());
-
-int x,y,width,height;
-
-ReadRect(x,y,width,height);
-
-wxFprintf(m_wxr,_T("%i,%i,%i,%i,"),x,y,width,height);
-
-wxFprintf(m_wxr,_T(" 0, 10,\\\n"));
-
-wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
-
-}
-
-
-
-bool rc2wxr::ReadOrs(wxString & w)
-
-{
-
-wxString tok;
-
-tok=PeekToken();
-
-if (tok.IsNumber())
-
-   return false;
-
-w=GetToken();
-
-return true;
-
-}
-
-
-
-//Is it a check button or a radio button
-
-void rc2wxr::ParseCtrlButton(wxString label, wxString varname)
-
-{
-
-wxString tok;
-
-tok=GetToken();
-
-
-
-m_controlid++;
-
-int x,y,width,height;
-
-
-
-if (tok==_T("BS_AUTOCHECKBOX"))
-
-{
-
-    wxFprintf(m_wxr,_T("  control = [%i,wxCheckBox,'%s','0','%s',"),m_controlid,label.c_str(),varname.c_str());
+    int x,y,width,height;
+    wxString tok;
 
     while (ReadOrs(tok))
         ;
 
+    wxFprintf(m_wxr,_T("  control = [%i,wxGauge,'','wxGA_HORIZONTAL','%s',"),m_controlid,varname.c_str());
     ReadRect(x,y,width,height);
-
-    wxFprintf(m_wxr,_T("%i,%i,%i,%i,0,\\\n"),x,y,width,height);
-
+    wxFprintf(m_wxr,_T("%i,%i,%i,%i,"),x,y,width,height);
+    wxFprintf(m_wxr,_T(" 0, 10,\\\n"));
     wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
-
 }
 
 
-
-if (tok==_T("BS_AUTORADIOBUTTON"))
-
+bool rc2wxr::ReadOrs(wxString & w)
 {
-
-    wxFprintf(m_wxr,_T("  control = [%i,wxRadioButton,'%s','0','%s',"),m_controlid,label.c_str(),varname.c_str());
-
-    while(ReadOrs(tok))
-        ;
-
-    ReadRect(x,y,width,height);
-
-    wxFprintf(m_wxr,_T("%i,%i,%i,%i,0,\\\n"),x,y,width,height);
-
-    wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
-
+    wxString tok = PeekToken();
+    if (tok.IsNumber())
+        return false;
+    w=GetToken();
+    return true;
 }
 
 
+//Is it a check button or a radio button
+void rc2wxr::ParseCtrlButton(wxString label, wxString varname)
+{
+    int x,y,width,height;
+    wxString tok = GetToken();
 
+    m_controlid++;
 
+    if (tok==_T("BS_AUTOCHECKBOX"))
+    {
+        wxFprintf(m_wxr,_T("  control = [%i,wxCheckBox,'%s','0','%s',"),m_controlid,label.c_str(),varname.c_str());
+        while (ReadOrs(tok))
+            ;
 
+        ReadRect(x,y,width,height);
+        wxFprintf(m_wxr,_T("%i,%i,%i,%i,0,\\\n"),x,y,width,height);
+        wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
+    }
 
+    if (tok==_T("BS_AUTORADIOBUTTON"))
+    {
+        wxFprintf(m_wxr,_T("  control = [%i,wxRadioButton,'%s','0','%s',"),m_controlid,label.c_str(),varname.c_str());
+        while(ReadOrs(tok))
+            ;
 
+        ReadRect(x,y,width,height);
+        wxFprintf(m_wxr,_T("%i,%i,%i,%i,0,\\\n"),x,y,width,height);
+        wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
+    }
 }
-
-
 
