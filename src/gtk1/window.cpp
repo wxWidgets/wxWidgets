@@ -1111,29 +1111,27 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         return FALSE;
     if (g_blockEventsOnDrag)
         return FALSE;
-    
+
+
+    wxKeyEvent event( wxEVT_KEY_DOWN );
+    bool ret = false;
+    bool return_after_IM = false;
+
+    if( wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
+    {
+        // Emit KEY_DOWN event
+        ret = win->GetEventHandler()->ProcessEvent( event );
+    }
+    else 
+    {
+        // Return after IM processing as we cannot do
+        // anything with it anyhow.
+        return_after_IM = true;
+    }
+
 #ifdef __WXGTK20__
-#if 0
-    // We have to pass key press events through GTK+'s Input Method context
-    // object in order to get correct characters. By doing so, we lose the
-    // ability to let other GTK+'s handlers (namely, widgets' default signal
-    // handlers) handle the signal by returning false from this callback.
-    // Because GTK+ sends the events to parent widgets as well, we can't
-    // afford losing it, otherwise native widgets inserted into wxPanel
-    // would break in subtle ways (e.g. spacebar would no longer toggle
-    // wxCheckButton's state). Therefore, we only pass the event to IM if it
-    // originated in this window's widget, which we detect by checking if we've
-    // seen the same event before (no events from children are lost this way,
-    // because gtk_window_key_press_callback is installed for native controls
-    // as well and the wxKeyEvent it creates propagates upwards).
-    static GdkEventKey s_lastEvent;
-    bool useIM = (win->m_imData != NULL) &&
-                 memcmp(gdk_event, &s_lastEvent, sizeof(GdkEventKey)) != 0;
-    s_lastEvent = *gdk_event;
-#else
     // 2005.01.26 modified by Hong Jen Yee (hzysoft@sina.com.tw):
-    // There is no need to store lastEvent. The original code makes GTK+ IM 
-    // dysfunction. When we get a key_press event here, it could be originate
+    // When we get a key_press event here, it could be originate
     // from the current widget or its child widgets.  However, only the widget
     // with the INPUT FOCUS can generate the INITIAL key_press event.  That is, 
     // if the CURRENT widget doesn't have the FOCUS at all, this event definitely
@@ -1143,30 +1141,27 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     // widgets has both IM context and input focus, the event should be filtered 
     // by gtk_im_context_filter_keypress().
     // Then, we should, according to GTK+ 2.0 API doc, return whatever it returns.
-    bool useIM = (win->m_imData != NULL) && ( wxWindow::FindFocus() == win );
-#endif
-
-#endif
-    
-    bool IM_ret = FALSE;
-#ifdef __WXGTK20__
-    // 2005.01.26 modified by Hong Jen Yee (hzysoft@sina.com.tw):
-    // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
-    // docs, if IM filter returns true, no further processing should be done.
-    // wWe should send the key_down event anyway. 
-    if (useIM)
+    if ((!ret) && (win->m_imData != NULL) && ( wxWindow::FindFocus() == win ))
     {
-        // it may be useful for the input method, though:
-        IM_ret = gtk_im_context_filter_keypress(win->m_imData->context, gdk_event);
+        // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
+        // docs, if IM filter returns true, no further processing should be done.
+        // we should send the key_down event anyway. 
+        bool intercepted_by_IM = gtk_im_context_filter_keypress(win->m_imData->context, gdk_event);
         win->m_imData->lastKeyEvent = NULL;
-        if (IM_ret)
+        if (intercepted_by_IM)
+        {
             wxLogTrace(TRACE_KEYS, _T("Key event intercepted by IM"));
+            return true;
+        }
     }
 #endif
+    if (return_after_IM)
+        return true;
 
-    wxKeyEvent event( wxEVT_KEY_DOWN );
-    bool ret = FALSE;
-
+#ifndef __WXGTK20__     
+    // This is for GTK+ 1.2 only. The char event generatation for GTK+ 2.0 is done
+    // in the "commit" handler.
+    
     // 2005.02.02 modified by Hong Jen Yee (hzysoft@sina.com.tw).
     // In GTK+ 1.2, strings sent by IMs are also regarded as key_press events whose 
     // keyCodes cannot be recognized by wxWidgets. These MBCS strings, however, are 
@@ -1183,10 +1178,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     // When using Input Methods to support internationalized text input, the composed
     // characters appear here after the pre-editing has been completed.
 
-#ifndef __WXGTK20__     
-    // This is for GTK+ 1.2 only. The char event generatation for
-    // GTK+ 2.0 is done in the emit handler.
-    
     if ( (!ret) && (gdk_event->length > 1) ) // If this event contains a pre-edited string from IM.
     {
         // We should translate this key event into wxEVT_CHAR not wxEVT_KEY_DOWN.
@@ -1199,11 +1190,11 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         #endif
 
         // Implement OnCharHook by checking ancesteror top level windows
-        wxWindow *parent = window;
+        wxWindow *parent = win;
         while (parent && !parent->IsTopLevel())
             parent = parent->GetParent();
 
-        for( wxChar* pstr = string; *pstr; pstr++ )
+        for( const wxChar* pstr = string; *pstr; pstr++ )
         {
         #if wxUSE_UNICODE
             event.m_uniChar = *pstr;
@@ -1220,48 +1211,12 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
             if (!ret)
             {
                 event.SetEventType(wxEVT_CHAR);
-                window->GetEventHandler()->ProcessEvent( event );
+                win->GetEventHandler()->ProcessEvent( event );
             }
         }
         return true;
     }
-    // Only translate the key event when it's not sent with a pre-edited string.
-    else 
-#endif  // #ifndef  __WXGTK20__
-
-    if( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
-    {
-        // unknown key pressed, ignore (the event would be useless anyhow)
-        return false;
-    }
-    else // This event doesn't contain a pre-edited string and is not an invalid key either.
-    {
-        // Emit KEY_DOWN event
-        ret = win->GetEventHandler()->ProcessEvent( event );
-    }
-    if (IM_ret)
-        return false;
-
-#if wxUSE_ACCEL
-    if (!ret)
-    {
-        wxWindowGTK *ancestor = win;
-        while (ancestor)
-        {
-            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
-            if (command != -1)
-            {
-                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
-                ret = ancestor->GetEventHandler()->ProcessEvent( command_event );
-                break;
-            }
-            if (ancestor->IsTopLevel())
-                break;
-            ancestor = ancestor->GetParent();
-        }
-    }
-#endif // wxUSE_ACCEL
-
+    
     // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
     // will only be sent if it is not in an accelerator table.
     if (!ret)
@@ -1307,6 +1262,29 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
             }
         }
     }
+#endif  // #ifndef  __WXGTK20__
+
+
+#if wxUSE_ACCEL
+    if (!ret)
+    {
+        wxWindowGTK *ancestor = win;
+        while (ancestor)
+        {
+            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
+            if (command != -1)
+            {
+                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                ret = ancestor->GetEventHandler()->ProcessEvent( command_event );
+                break;
+            }
+            if (ancestor->IsTopLevel())
+                break;
+            ancestor = ancestor->GetParent();
+        }
+    }
+#endif // wxUSE_ACCEL
+
 
     // win is a control: tab can be propagated up
     if ( !ret &&
