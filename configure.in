@@ -1444,6 +1444,10 @@ AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
 [
     AC_TRY_RUN(
         [
+            /* DJGPP only has fake wchar_t: */
+            #ifdef __DJGPP__
+            #  error "fake wchar_t"
+            #endif
             #ifdef HAVE_WCHAR_H
             #  ifdef __CYGWIN__
             #    include <stddef.h>
@@ -1464,7 +1468,16 @@ AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
         ],
         wx_cv_sizeof_wchar_t=`cat conftestval`,
         wx_cv_sizeof_wchar_t=0,
-        wx_cv_sizeof_wchar_t=4
+        [
+            case "${host}" in
+              *-pc-msdosdjgpp )
+                wx_cv_sizeof_wchar_t=0
+                ;;
+              * )
+                wx_cv_sizeof_wchar_t=4
+                ;;
+            esac
+        ]
     )
 ])
 
