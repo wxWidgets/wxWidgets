@@ -1,0 +1,200 @@
+#!/bin/sh
+# Makes the wxWindows tarballs with 'make dist'
+
+doupdatecvs()
+{
+  cd $WXSRC
+  echo Updating from CVS...
+  cvswx update -d -P
+}
+
+dospinwxgtk()
+{
+  echo Making wxGTK tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxgtk
+  mkdir $WXDEST/wxgtk
+  mkdir $WXDEST/wxgtk/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxgtk/release
+  echo Configuring...
+  $WXSRC/configure --no-recursion
+  echo Making...
+  make -j1 dist
+  mv $WXDEST/wxgtk/release/*.gz $WXDEST/wxgtk/release/*.bz2 $WXDEST
+}
+
+dospinwxx11()
+{
+  echo Making wxX11 tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxx11
+  mkdir $WXDEST/wxx11
+  mkdir $WXDEST/wxx11/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxx11/release
+  echo Configuring...
+  $WXSRC/configure --with-x11 --no-recursion
+  echo Making...
+  make -j1 dist
+
+  cp $WXDEST/wxx11/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxx11/release/*.tar.bz2 $WXDEST
+}
+
+dospinwxmotif()
+{
+  echo Making wxMotif tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmotif
+  mkdir $WXDEST/wxmotif
+  mkdir $WXDEST/wxmotif/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmotif/release
+  echo Configuring...
+  $WXSRC/configure --with-motif --no-recursion
+  echo Making...
+  make -j1 dist
+
+  cp $WXDEST/wxmotif/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxmotif/release/*.tar.bz2 $WXDEST
+}
+
+dospinwxmac()
+{
+  echo Making wxMac tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmac
+  mkdir $WXDEST/wxmac
+  mkdir $WXDEST/wxmac/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmac/release
+  echo Configuring...
+  $WXSRC/configure --with-mac --no-recursion
+  echo Making...
+  make -j1 dist
+
+  cp $WXDEST/wxmac/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxmac/release/*.tar.bz2 $WXDEST
+}
+
+PROGNAME=$0
+WXSRC=$1
+WXDEST=$2
+WXVER=$3
+
+SPINWXX11=0
+SPINWXGTK=0
+SPINWXMOTIF=0
+SPINWXMAC=0
+SPINWXBASE=0
+SPINEVERYTHING=0
+UPDATECVS=0
+
+usage()
+{
+    echo Usage: $PROGNAME "src-dir dest-dir version-number [ options ]"
+    echo Options:
+    echo "    --help         Display this help message"
+    echo "    --wxgtk        Spin wxGTK"
+    echo "    --wxbase       Spin wxBase"
+    echo "    --wxx11        Spin wxX11"
+    echo "    --wxmotif      Spin wxMotif"
+    echo "    --wxmac        Spin wxMac"
+    echo "    --all          Spin EVERYTHING"
+    echo "    --updatecvs    Update from CVS"
+
+    exit 1
+}
+
+init=""
+if [ "$1" = "" ]
+then
+  usage
+  exit
+fi
+
+if [ "$2" = "" ]
+then
+  usage
+  exit
+fi
+
+if [ "$3" = "" ]
+then
+  usage
+  exit
+fi
+
+# Process command line options.
+shift 3
+for i in "$@"; do
+    case "$i" in
+	--wxx11) SPINWXX11=1 ;;
+	--wxgtk) SPINWXGTK=1 ;;
+	--wxmac) SPINWXMAC=1 ;;
+	--wxmotif) SPINWXMOTIF=1 ;;
+	--all) SPINEVERYTHING=1 ;;
+	--updatecvs) UPDATECVS=1 ;;
+	*)
+	    usage
+	    exit
+	    ;;
+    esac
+done
+
+echo About to make wxWindows RPMs:
+echo   From    $WXSRC
+echo   To      $WXDEST
+echo   Version $WXVER
+echo CTRL-C if this is not correct.
+read dummy
+
+if [ "$UPDATECVS" = "1" ]; then
+  doupdatecvs
+fi
+
+if [ "$SPINWXX11" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxx11
+fi
+
+if [ "$SPINWXGTK" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxgtk
+fi
+
+if [ "$SPINWXMOTIF" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmotif
+fi
+
+if [ "$SPINWXMAC" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmac
+fi
+
