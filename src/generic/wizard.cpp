@@ -227,7 +227,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     bool btnLabelWasNext = TRUE;
 
     // and this tells us whether we already had the default bitmap before
-    bool bmpWasDefault = TRUE;
+    int bmpWasDefault;
 
     if ( m_page )
     {
@@ -244,6 +244,11 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
         btnLabelWasNext = m_page->GetNext() != (wxWizardPage *)NULL;
         bmpWasDefault = !m_page->GetBitmap().Ok();
+    }
+    else // no previous page
+    {
+        // always set the bitmap
+        bmpWasDefault = -1;
     }
 
     // set the new one
@@ -268,7 +273,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     m_page->Show();
 
     // change the bitmap if necessary (and if we have it at all)
-    bool bmpIsDefault = !m_page->GetBitmap().Ok();
+    int bmpIsDefault = !m_page->GetBitmap().Ok();
     if ( m_statbmp && (bmpIsDefault != bmpWasDefault) )
     {
         wxBitmap bmp;
