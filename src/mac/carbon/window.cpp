@@ -1983,7 +1983,8 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
         // right now this is wx' window coordinates, as our native peer does not have borders, this is
         // inset
         OffsetRgn( update , -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
-        m_peer->SetNeedsDisplay( true , update) ;    
+        m_peer->SetNeedsDisplay( true , update) ; 
+        DisposeRgn( update ) ;   
     }
 #else
 /*
@@ -2696,11 +2697,10 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
         SetRectRgn( newupdate , origin.x , origin.y , origin.x + point.x , origin.y+point.y ) ;
         SectRgn( newupdate , updatergn , newupdate ) ;
         
+        if (!EmptyRgn(newupdate))
         {
             wxWindowDC dc(this);
-            if (!EmptyRgn(newupdate))
-                dc.SetClippingRegion(wxRegion(newupdate));
-
+            dc.SetClippingRegion(wxRegion(newupdate));
             wxEraseEvent eevent( GetId(), &dc );
             eevent.SetEventObject( this );
             GetEventHandler()->ProcessEvent( eevent );
