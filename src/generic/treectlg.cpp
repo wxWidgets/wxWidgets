@@ -1195,11 +1195,38 @@ wxTreeItemId wxGenericTreeCtrl::FindItem(const wxTreeItemId& idParent,
     // would be too bothersome
     wxString prefix = prefixOrig.Lower();
 
+    // determine the starting point: we shouldn't take the current item (this
+    // allows to switch between two items starting with the same letter just by
+    // pressing it) but we shouldn't jump to the next one if the user is
+    // continuing to type as otherwise he might easily skip the item he wanted
     wxTreeItemId id = idParent;
+    if ( prefix.length() == 1 )
+    {
+        id = GetNext(id);
+    }
 
+    // look for the item starting with the given prefix after it
     while ( id.IsOk() && !GetItemText(id).Lower().StartsWith(prefix) )
     {
         id = GetNext(id);
+    }
+
+    // if we haven't found anything...
+    if ( !id.IsOk() )
+    {
+        // ... wrap to the beginning
+        id = GetRootItem();
+        if ( HasFlag(wxTR_HIDE_ROOT) )
+        {
+            // can't select virtual root
+            id = GetNext(id);
+        }
+
+        // and try all the items (stop when we get to the one we started from)
+        while ( id != idParent && !GetItemText(id).Lower().StartsWith(prefix) )
+        {
+            id = GetNext(id);
+        }
     }
 
     return id;
