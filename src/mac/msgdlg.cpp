@@ -22,36 +22,6 @@
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 #endif
 
-short language = 0 ;
-
-void wxMacConvertNewlines( const char *source , char * destination ) ;
-void wxMacConvertNewlines( const char *source , char * destination )
-{
-    const char *s = source ;
-    char *d = destination ;
-    
-    while( *s  )
-    {
-        switch( *s )
-        {
-        case 0x0a :
-            *d++ = 0x0d ;
-            ++s ;
-            break ;
-        case 0x0d :
-            *d++ = 0x0d ;
-            ++s ;
-            if ( *s == 0x0a )
-                ++s ;
-            break ;
-        default :
-            *d++ = *s++ ;
-            break ;
-        }
-    }
-    *d = 0 ;
-}
-
 wxMessageDialog::wxMessageDialog(wxWindow *parent, const wxString& message, const wxString& caption,
                                  long style, const wxPoint& pos)
 {

@@ -46,9 +46,7 @@
 #include "TextCommon.h"
 #include "TextEncodingConverter.h"
 
-#if defined(__WXMAC__)
-  #include  "wx/mac/private.h"  // includes mac headers
-#endif
+#include  "wx/mac/private.h"  // includes mac headers
 
 #if defined(__MWERKS__) && wxUSE_UNICODE
     #include <wtime.h>
@@ -751,8 +749,10 @@ wxString wxMacMakeStringFromPascal( ConstStringPtr from )
 
 #if TARGET_CARBON
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
-void wxMacCFStringHolder::Assign( const wxString &str )
+void wxMacCFStringHolder::Assign( const wxString &st )
 {
+    wxString str = st ;
+    wxMacConvertNewlines13To10( &str ) ;
 #if wxUSE_UNICODE
   	m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
   		(const unsigned short*)str.wc_str(), str.Len() );
@@ -774,11 +774,72 @@ wxString wxMacCFStringHolder::AsString()
     CFStringGetCString( m_cfs , buf , len+1 , CFStringGetSystemEncoding() ) ;
 #endif
     buf[len] = 0 ;
+    wxMacConvertNewlines10To13( buf ) ;
     result.UngetWriteBuf() ;
     return result ;
 }
 
 #endif //TARGET_CARBON
+
+void wxMacConvertNewlines13To10( char * data ) 
+{        
+	char * buf = data ;
+    while( (buf=strchr(buf,0x0d)) != NULL )
+    {
+        *buf = 0x0a ;
+        buf++ ;
+    }
+}
+
+void wxMacConvertNewlines10To13( char * data )
+{        
+	char * buf = data ;
+    while( (buf=strchr(buf,0x0a)) != NULL )
+    {
+        *buf = 0x0d ;
+        buf++ ;
+    }
+}
+
+void wxMacConvertNewlines13To10( wxString * data ) 
+{        
+    if ( data->Length() == 0 )
+        return ;
+        
+	wxMacConvertNewlines13To10( data->GetWriteBuf( data->Length() ) ) ;
+    data->UngetWriteBuf() ;
+}
+
+void wxMacConvertNewlines10To13( wxString * data )
+{        
+    if ( data->Length() == 0 )
+        return ;
+	wxMacConvertNewlines10To13( data->GetWriteBuf( data->Length() ) ) ;
+    data->UngetWriteBuf() ;
+}
+
+
+#if wxUSE_UNICODE
+void wxMacConvertNewlines13To10( wxChar * data ) 
+{        
+	wxChar * buf = data ;
+    while( (buf=wxStrchr(buf,0x0d)) != NULL )
+    {
+        *buf = 0x0a ;
+        buf++ ;
+    }
+}
+
+void wxMacConvertNewlines10To13( wxChar * data )
+{        
+	wxChar * buf =  data ;
+    while( (buf=wxStrchr(buf,0x0a)) != NULL )
+    {
+        *buf = 0x0d ;
+        buf++ ;
+    }
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // debugging support

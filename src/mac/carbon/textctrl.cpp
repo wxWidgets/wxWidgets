@@ -748,7 +748,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     }
 
     wxString st = str ;
-    st.Replace(wxT("\n"), wxT("\r"));
+    wxMacConvertNewlines13To10( &st ) ;
     if ( !m_macUsesTXN )
     {
         m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , "\p" , false , 0 , 0 , 1,
@@ -865,7 +865,7 @@ wxString wxTextCtrl::GetValue() const
         }
 #endif
     }
-    result.Replace(wxT("\r"),wxT("\n")) ;
+    wxMacConvertNewlines10To13( &result ) ;
     return result ;
 }
 
@@ -885,7 +885,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 void wxTextCtrl::SetValue(const wxString& str)
 {
     wxString st = str ;
-    st.Replace(wxT("\n"), wxT("\r"));
+    wxMacConvertNewlines13To10( &st ) ;
     if ( !m_macUsesTXN )
     {
     	wxCharBuffer text =  st.mb_str(wxConvLocal) ;
@@ -1174,7 +1174,7 @@ long wxTextCtrl::GetLastPosition() const
 void wxTextCtrl::Replace(long from, long to, const wxString& str)
 {
     wxString value = str ;
-    value.Replace(wxT("\n"), wxT("\r"));
+    wxMacConvertNewlines13To10( &st ) ;
     if ( !m_macUsesTXN )
     {
         ControlEditTextSelectionRec selection ;
@@ -1279,7 +1279,7 @@ bool wxTextCtrl::LoadFile(const wxString& file)
 void wxTextCtrl::WriteText(const wxString& str)
 {
     wxString st = str ;
-    st.Replace(wxT("\n"), wxT("\r"));
+    wxMacConvertNewlines13To10( &st ) ;
     if ( !m_macUsesTXN )
     {
     	wxCharBuffer text =  st.mb_str(wxConvLocal) ;

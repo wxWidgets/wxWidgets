@@ -138,12 +138,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 
     if ( dataFormat.GetType() == wxDF_TEXT )
     {
-        char * buf = (char*) data ;
-        while( (buf=strchr(buf,0x0a)) != NULL )
-        {
-            *buf = 13 ;
-            buf++ ;
-        }
+        wxMacConvertNewlines10To13( (char*) data ) ;
     }
 
     return data;
