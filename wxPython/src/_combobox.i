@@ -53,6 +53,8 @@ Events
                         Note that calling `GetValue` in this handler 
                         will return the newly selected value.
     EVT_TEXT            Sent when the combobox text changes.
+    EVT_TEXT_ENTER      Sent when the RETURN/ENTER key is pressed in
+                        the combobox.
     ================    ===============================================
 ");
 
@@ -184,6 +186,54 @@ the combobox text field.", "",
     DocDeclStr(
         virtual void , Remove(long from, long to),
         "Removes the text between the two positions in the combobox text field.", "");
+
+
+
+    DocDeclStr(
+        bool , IsEditable() const,
+        "Returns True if the combo is ediatable (not read-only.)", "");
+    
+
+    DocDeclStr(
+        void , Undo(),
+        "Redoes the last undo in the text field. Windows only.", "");
+    
+    DocDeclStr(
+        void , Redo(),
+        "Undoes the last edit in the text field. Windows only.", "");
+    
+    DocDeclStr(
+        void , SelectAll(),
+        "Select all the text in the combo's text field.", "");
+    
+
+    DocDeclStr(
+        bool , CanCopy() const,
+        "Returns True if the combobox is editable and there is a text selection
+to copy to the clipboard.  Only available on Windows.", "");
+    
+    DocDeclStr(
+        bool , CanCut() const,
+        "Returns True if the combobox is editable and there is a text selection
+to copy to the clipboard.  Only available on Windows.", "");
+    
+    DocDeclStr(
+        bool , CanPaste() const,
+        "Returns True if the combobox is editable and there is text on the
+clipboard that can be pasted into the text field. Only available on
+Windows.", "");
+    
+    DocDeclStr(
+        bool , CanUndo() const,
+        "Returns True if the combobox is editable and the last edit can be
+undone.  Only available on Windows.", "");
+    
+    DocDeclStr(
+        bool , CanRedo() const,
+        "Returns True if the combobox is editable and the last undo can be
+redone.  Only available on Windows.", "");
+    
+
     
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
