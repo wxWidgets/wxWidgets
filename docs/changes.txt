@@ -57,6 +57,7 @@ wxMSW:
 
 - fixed enhanced metafiles loading from files (Andreas Goebel)
 - wxRadioButtons no longer have to be consecutive in a group
+- fixed spurious selection of combobox text during resize
 
 wxUniv:
 
