@@ -164,7 +164,7 @@ class ListCtrlAutoWidthMixin:
                  _OnResize method is called.
 
         This mix-in class was written by Erik Westra <ewestra@wave.co.nz>
-"""
+    """
     def __init__(self):
         """ Standard initialiser.
         """
@@ -268,6 +268,7 @@ def selectBeforePopup(event):
                 #    ctrl.SetItemState(i, 0, SEL_FOC)
                 ctrl.SetItemState(n, SEL_FOC, SEL_FOC)
 
+
 def getListCtrlSelection(listctrl, state=wx.LIST_STATE_SELECTED):
     """ Returns list of item indexes of given state (selected by defaults) """
     res = []
@@ -282,6 +283,7 @@ def getListCtrlSelection(listctrl, state=wx.LIST_STATE_SELECTED):
 wxEVT_DOPOPUPMENU = wx.NewEventType()
 EVT_DOPOPUPMENU = wx.PyEventBinder(wxEVT_DOPOPUPMENU, 0)
 
+
 class ListCtrlSelectionManagerMix:
     """Mixin that defines a platform independent selection policy
 
@@ -295,17 +297,21 @@ class ListCtrlSelectionManagerMix:
         self.Bind(EVT_DOPOPUPMENU, self.OnLCSMDoPopup)
 #        self.Connect(-1, -1, self.wxEVT_DOPOPUPMENU, self.OnLCSMDoPopup)
 
+
     def getPopupMenu(self):
         """ Override to implement dynamic menus (create) """
         return self._menu
+
 
     def setPopupMenu(self, menu):
         """ Must be set for default behaviour """
         self._menu = menu
 
+
     def afterPopupMenu(self, menu):
         """ Override to implement dynamic menus (destroy) """
         pass
+
 
     def getSelection(self):
         res = getListCtrlSelection(self)
@@ -316,6 +322,7 @@ class ListCtrlSelectionManagerMix:
                 return -1
         else:
             return res
+
 
     def OnLCSMRightDown(self, event):
         selectBeforePopup(event)
@@ -328,8 +335,129 @@ class ListCtrlSelectionManagerMix:
             evt.pos = event.GetPosition()
             wx.PostEvent(self, evt)
 
+
     def OnLCSMDoPopup(self, event):
         self.PopupMenu(event.menu, event.pos)
         self.afterPopupMenu(event.menu)
 
-#----------------------------------------------------------------------
+
+#----------------------------------------------------------------------------
+from bisect import bisect
+
+
+class TextEditMixin:
+    """
+    A mixin class that handles enables any text in any column of a
+    multi-column listctrl to be edited by clicking on the given row
+    and column.  You close the text editor by hitting the ENTER key or
+    clicking somewhere else on the listctrl. You switch to the next
+    column by hiting TAB.
+
+    To use the mixin you have to include it in the class definition
+    and call the __init__ function::
+
+        class TestListCtrl(wx.ListCtrl, TextEdit):
+            def __init__(self, parent, ID, pos=wx.DefaultPosition,
+                         size=wx.DefaultSize, style=0):
+                wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
+                TextEdit.__init__(self) 
+
+
+    Authors:     Steve Zatz, Pim Van Heuven (pim@think-wize.com)
+    """
+        
+    def __init__(self):
+        #editor = wx.TextCtrl(self, -1, pos=(-1,-1), size=(-1,-1),
+        #                     style=wx.TE_PROCESS_ENTER|wx.TE_PROCESS_TAB \
+        #                     |wx.TE_RICH2)
+        editor = wx.PreTextCtrl()
+        editor.Hide()
+        editor.Create(self, -1, style=wx.TE_PROCESS_ENTER|wx.TE_PROCESS_TAB|wx.TE_RICH2)
+        editor.SetBackgroundColour(wx.Colour(red=255,green=255,blue=175)) #Yellow
+        font = self.GetFont()
+        editor.SetFont(font)
+
+        self.editor = editor
+        self.Bind(wx.EVT_TEXT_ENTER, self.CloseEditor)
+        self.editor.Bind(wx.EVT_CHAR, self.OnChar)
+        self.editor.Bind(wx.EVT_KILL_FOCUS, self.CloseEditor)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDown)
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
+        self.curRow = -1
+
+        
+    def OnItemSelected(self, evt):
+        self.curRow = evt.GetIndex()
+        evt.Skip()
+        
+
+    def OnChar(self, event):
+        ''' Catch the TAB key code so we can open the editor at the next column (if any).'''
+        if event.GetKeyCode() == wx.WXK_TAB:
+            self.CloseEditor()
+            if self.curCol+1 < self.GetColumnCount():
+                self.OpenEditor(self.curCol+1, self.curRow)
+        else:
+            event.Skip()
+
+    
+    def OnLeftDown(self, evt=None):
+        ''' Examine the click and double
+        click events to see if a row has been click on twice. If so,
+        determine the current row and columnn and open the editor.'''
+        
+        if self.editor.IsShown():
+            self.CloseEditor()
+            
+        x,y = evt.GetPosition()
+        row,flags = self.HitTest((x,y))
+    
+        if row != self.curRow: # self.curRow keeps track of the current row
+            evt.Skip()
+            return
+        
+        # the following should really be done in the mixin's init but
+        # the wx.ListCtrl demo creates the columns after creating the
+        # ListCtrl (generally not a good idea) on the other hand,
+        # doing this here handles adjustable column widths
+        
+        self.col_locs = [0]
+        loc = 0
+        for n in range(self.GetColumnCount()):
+            loc = loc + self.GetColumnWidth(n)
+            self.col_locs.append(loc)
+        
+        col = bisect(self.col_locs, x) - 1
+        self.OpenEditor(col, row)
+
+
+    def OpenEditor(self, col, row):
+        ''' Opens an editor at the current position. '''
+    
+        x0 = self.col_locs[col]
+        x1 = self.col_locs[col+1] - x0
+
+        y0 = self.GetItemRect(row)[1]
+        
+        editor = self.editor
+        editor.SetDimensions(x0,y0, x1,-1)
+        editor.SetValue(self.GetItem(row, col).GetText()) 
+        editor.Show()
+        editor.Raise()
+        editor.SetSelection(-1,-1)
+        editor.SetFocus()
+    
+        self.curRow = row
+        self.curCol = col
+
+    
+    def CloseEditor(self, evt=None):
+        ''' Close the editor and save the new value to the ListCtrl. '''
+        text = self.editor.GetValue()
+        self.editor.Hide()
+        self.SetStringItem(self.curRow, self.curCol, text)
+
+
+
+#----------------------------------------------------------------------------

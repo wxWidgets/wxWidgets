@@ -26,6 +26,8 @@ implemetation.  In addition a set of renamed methods have been added
 that take wx.Point and/or wx.Size objects instead of individual
 parameters. 
 
+Added wx.lib.mixins.listctrl.TextEditMixin, a mixin class that allows
+all columns of a wx.ListCtrl in report mode to be edited.
 
 
 
