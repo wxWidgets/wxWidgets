@@ -131,6 +131,9 @@ public:
     // left to the derived classes
     virtual void SetParameters(const wxString& params);
 
+    // create a new object which is the copy of this one
+    virtual wxGridCellRenderer *Clone() const = 0;
+
 protected:
     // virtual dtor for any base class - private because only DecRef() can
     // delete us
@@ -162,6 +165,9 @@ public:
                                wxDC& dc,
                                int row, int col);
 
+    virtual wxGridCellRenderer *Clone() const
+        { return new wxGridCellStringRenderer; }
+
 protected:
     // set the text colours before drawing
     void SetTextColoursAndFont(wxGrid& grid,
@@ -191,6 +197,9 @@ public:
                                wxGridCellAttr& attr,
                                wxDC& dc,
                                int row, int col);
+
+    virtual wxGridCellRenderer *Clone() const
+        { return new wxGridCellNumberRenderer; }
 
 protected:
     wxString GetString(wxGrid& grid, int row, int col);
@@ -223,6 +232,8 @@ public:
     // parameters string format is "width[,precision]"
     virtual void SetParameters(const wxString& params);
 
+    virtual wxGridCellRenderer *Clone() const;
+
 protected:
     wxString GetString(wxGrid& grid, int row, int col);
 
@@ -251,6 +262,9 @@ public:
                                wxGridCellAttr& attr,
                                wxDC& dc,
                                int row, int col);
+
+    virtual wxGridCellRenderer *Clone() const
+        { return new wxGridCellBoolRenderer; }
 
 private:
     static wxSize ms_sizeCheckMark;

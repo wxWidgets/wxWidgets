@@ -1216,6 +1216,16 @@ wxGridCellFloatRenderer::wxGridCellFloatRenderer(int width, int precision)
     SetPrecision(precision);
 }
 
+wxGridCellRenderer *wxGridCellFloatRenderer::Clone() const
+{
+    wxGridCellFloatRenderer *renderer = new wxGridCellFloatRenderer;
+    renderer->m_width = m_width;
+    renderer->m_precision = m_precision;
+    renderer->m_format = m_format;
+
+    return renderer;
+}
+
 wxString wxGridCellFloatRenderer::GetString(wxGrid& grid, int row, int col)
 {
     wxGridTableBase *table = grid.GetTable();
@@ -6937,22 +6947,39 @@ wxGrid::GetDefaultEditorForType(const wxString& typeName) const
 wxGridCellRenderer*
 wxGrid::GetDefaultRendererForType(const wxString& typeName) const
 {
-    // the first part of the typename is the "real" type, anything after ':'
-    // are the parameters for the renderer
-    wxString type = typeName.BeforeFirst(_T(':'));
-
-    int index = m_typeRegistry->FindDataType(type);
+    // first try to find an exact match
+    wxGridCellRenderer *renderer;
+    int index = m_typeRegistry->FindDataType(typeName);
     if ( index == wxNOT_FOUND )
     {
-        wxFAIL_MSG(wxT("Unknown data type name"));
+        // then try to construct a renderer from the base name and parameters
+        // following it
 
-        return NULL;
+        // the first part of the typename is the "real" type, anything after ':'
+        // are the parameters for the renderer
+        index = m_typeRegistry->FindDataType(typeName.BeforeFirst(_T(':')));
+        if ( index == wxNOT_FOUND )
+        {
+            wxFAIL_MSG(wxT("Unknown data type name"));
+
+            return NULL;
+        }
+
+        renderer = m_typeRegistry->GetRenderer(index);
+        wxGridCellRenderer *rendererOld = renderer;
+        renderer = renderer->Clone();
+        rendererOld->DecRef();
+
+        // do it even if there are no parameters to reset them to defaults
+        renderer->SetParameters(typeName.AfterFirst(_T(':')));
+
+        // register the new typename
+        m_typeRegistry->RegisterDataType(typeName, renderer, NULL);
     }
-
-    wxGridCellRenderer *renderer = m_typeRegistry->GetRenderer(index);
-
-    // do it even if there are no parameters to reset them to defaults
-    renderer->SetParameters(typeName.AfterFirst(_T(':')));
+    else
+    {
+        renderer = m_typeRegistry->GetRenderer(index);
+    }
 
     return renderer;
 }
