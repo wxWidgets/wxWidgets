@@ -67,6 +67,9 @@ DISTDIR=./_dist_dir/$(DISTDIRNAME)
 ALL_DIST: distrib_clean
 	mkdir _dist_dir
 	mkdir $(DISTDIR)
+	cp $(WXDIR)/configure.in $(DISTDIR)
+	cp $(WXDIR)/configure $(DISTDIR)
+	cp $(WXDIR)/autoconf_inc.m4 $(DISTDIR)
 	cp $(WXDIR)/wxwin.m4 $(DISTDIR)
 	cp $(WXDIR)/aclocal.m4 $(DISTDIR)
 	cp $(WXDIR)/config.sub $(DISTDIR)
@@ -122,8 +125,6 @@ ALL_DIST: distrib_clean
 # this target is the common part of distribution script for all GUI toolkits,
 # but is not used when building wxBase distribution
 ALL_GUI_DIST: ALL_DIST
-	cp $(WXDIR)/configure.in $(DISTDIR)
-	cp $(WXDIR)/configure $(DISTDIR)
 	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
 	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
 	if test -f $(DOCDIR)/$(TOOLKITDIR)/changes.txt ; then \
