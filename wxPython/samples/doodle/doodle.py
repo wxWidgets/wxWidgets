@@ -32,8 +32,8 @@ class DoodleWindow(wxWindow):
 
 
     def __init__(self, parent, ID):
-        wxWindow.__init__(self, parent, ID)
-        self.SetBackgroundColour(wxWHITE)
+        wxWindow.__init__(self, parent, ID, style=wxNO_FULL_REPAINT_ON_RESIZE)
+        self.SetBackgroundColour("WHITE")
         self.listeners = []
         self.thickness = 1
         self.SetColour("Black")
@@ -41,18 +41,41 @@ class DoodleWindow(wxWindow):
         self.x = self.y = 0
         self.MakeMenu()
 
+        self.InitBuffer()
+
         # hook some mouse events
         EVT_LEFT_DOWN(self, self.OnLeftDown)
         EVT_LEFT_UP(self, self.OnLeftUp)
         EVT_RIGHT_UP(self, self.OnRightUp)
         EVT_MOTION(self, self.OnMotion)
 
+        # the window resize event and idle events for managing the buffer
+        EVT_SIZE(self, self.OnSize)
+        EVT_IDLE(self, self.OnIdle)
+
         # and the refresh event
         EVT_PAINT(self, self.OnPaint)
 
 
     def __del__(self):
-        self.menu.Destroy()
+        self.Cleanup()
+
+
+    def Cleanup(self):
+        if hasattr(self, "menu"):
+            self.menu.Destroy()
+            del self.menu
+
+
+    def InitBuffer(self):
+        """Initialize the bitmap used for buffering the display."""
+        size = self.GetClientSize()
+        self.buffer = wxEmptyBitmap(size.width, size.height)
+        dc = wxBufferedDC(None, self.buffer)
+        dc.SetBackground(wxBrush(self.GetBackgroundColour()))
+        dc.Clear()
+        self.DrawLines(dc)
+        self.reInitBuffer = false
 
 
     def SetColour(self, colour):
@@ -75,6 +98,7 @@ class DoodleWindow(wxWindow):
 
     def SetLinesData(self, lines):
         self.lines = lines[:]
+        self.InitBuffer()
         self.Refresh()
 
 
@@ -85,13 +109,13 @@ class DoodleWindow(wxWindow):
         keys.sort()
         for k in keys:
             text = self.menuColours[k]
-            menu.Append(k, text, checkable=true)
+            menu.Append(k, text, kind=wxITEM_CHECK)
         EVT_MENU_RANGE(self, 100, 200, self.OnMenuSetColour)
         EVT_UPDATE_UI_RANGE(self, 100, 200, self.OnCheckMenuColours)
         menu.Break()
 
         for x in range(1, self.maxThickness+1):
-            menu.Append(x, str(x), checkable=true)
+            menu.Append(x, str(x), kind=wxITEM_CHECK)
         EVT_MENU_RANGE(self, 1, self.maxThickness, self.OnMenuSetThickness)
         EVT_UPDATE_UI_RANGE(self, 1, self.maxThickness, self.OnCheckMenuThickness)
         self.menu = menu
@@ -121,9 +145,10 @@ class DoodleWindow(wxWindow):
 
     def OnLeftUp(self, event):
         """called when the left mouse button is released"""
-        self.lines.append( (self.colour, self.thickness, self.curLine) )
-        self.curLine = []
-        self.ReleaseMouse()
+        if self.HasCapture():
+            self.lines.append( (self.colour, self.thickness, self.curLine) )
+            self.curLine = []
+            self.ReleaseMouse()
 
 
     def OnRightUp(self, event):
@@ -140,7 +165,7 @@ class DoodleWindow(wxWindow):
         current one.  Save the coordinants for redraws.
         """
         if event.Dragging() and event.LeftIsDown():
-            dc = wxClientDC(self)
+            dc = wxBufferedDC(wxClientDC(self), self.buffer)
             dc.BeginDrawing()
             dc.SetPen(self.pen)
             pos = event.GetPositionTuple()
@@ -151,12 +176,41 @@ class DoodleWindow(wxWindow):
             dc.EndDrawing()
 
 
+    def OnSize(self, event):
+        """
+        Called when the window is resized.  We set a flag so the idle
+        handler will resize the buffer.
+        """
+        self.reInitBuffer = true
+
+
+    def OnIdle(self, event):
+        """
+        If the size was changed then resize the bitmap used for double
+        buffering to match the window size.  We do it in Idle time so
+        there is only one refresh after resizing is done, not lots while
+        it is happening.
+        """
+        if self.reInitBuffer:
+            self.InitBuffer()
+            self.Refresh(FALSE)
+
+
     def OnPaint(self, event):
         """
-        Called when the window is exposed.  Redraws all the lines that have
-        been drawn already.
+        Called when the window is exposed.
         """
-        dc = wxPaintDC(self)
+        # Create a buffered paint DC.  It will create the real
+        # wxPaintDC and then blit the bitmap to it when dc is
+        # deleted.  Since we don't need to draw anything else
+        # here that's all there is to it.
+        dc = wxBufferedPaintDC(self, self.buffer)
+
+
+    def DrawLines(self, dc):
+        """
+        Redraws all the lines that have been drawn already.
+        """
         dc.BeginDrawing()
         for colour, thickness, line in self.lines:
             pen = wxPen(wxNamedColour(colour), thickness, wxSOLID)
@@ -189,9 +243,9 @@ class DoodleWindow(wxWindow):
 
 class DoodleFrame(wxFrame):
     def __init__(self, parent):
-        wxFrame.__init__(self, parent, -1, "Doodle Frame", size=(800,600))
-        self.doodle = DoodleWindow(self, -1)
-
+        wxFrame.__init__(self, parent, -1, "Doodle Frame", size=(800,600),
+                         style=wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+        doodle = DoodleWindow(self, -1)
 
 #----------------------------------------------------------------------
 

@@ -35,7 +35,8 @@ class DoodleFrame(wxFrame):
     """
     title = "Do a doodle"
     def __init__(self, parent):
-        wxFrame.__init__(self, parent, -1, self.title, size=(800,600))
+        wxFrame.__init__(self, parent, -1, self.title, size=(800,600),
+                         style=wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
         self.CreateStatusBar()
         self.MakeMenu()
         self.filename = None
@@ -54,6 +55,13 @@ class DoodleFrame(wxFrame):
         # size events.
         self.SetAutoLayout(true)
         self.SetSizer(box)
+
+        EVT_CLOSE(self, self.OnCloseWindow)
+
+
+    def OnCloseWindow(self, event):
+        self.doodle.Cleanup()
+        self.Destroy()
 
 
     def SaveFile(self):
