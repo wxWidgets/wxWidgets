@@ -48,6 +48,7 @@ public:
                 const wxString& name = wxButtonNameStr);
 
     // Implementation
+    virtual bool SetBackgroundColour(const wxColour& colour);
     virtual void SetDefault();
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
     virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
@@ -57,7 +58,8 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
-private:
+    wxBrush m_brushDisabled;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton)
 };
 

@@ -111,8 +111,6 @@ const wxChar *wxMDIFrameClassNameNoRedraw = wxT("wxMDIFrameClassNR");
 const wxChar *wxMDIChildFrameClassName = wxT("wxMDIChildFrameClass");
 const wxChar *wxMDIChildFrameClassNameNoRedraw = wxT("wxMDIChildFrameClassNR");
 
-HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -325,20 +323,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     RegisterWindowClasses();
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-    // Create the brush for disabling bitmap buttons
-    LOGBRUSH lb;
-    lb.lbStyle = BS_PATTERN;
-    lb.lbColor = 0;
-    lb.lbHatch = (int)LoadBitmap( wxhInstance, wxT("wxDISABLE_BUTTON_BITMAP") );
-    if ( lb.lbHatch )
-    {
-        wxDisableButtonBrush = ::CreateBrushIndirect( &lb );
-        ::DeleteObject( (HGDIOBJ)lb.lbHatch );
-    }
-    //else: wxWidgets resources are probably not linked in
-#endif // !__WXMICROWIN__ && !__WXWINCE__
-
 #if wxUSE_PENWINDOWS
     wxRegisterPenWin();
 #endif
@@ -511,9 +495,6 @@ void wxApp::CleanUp()
 #if wxUSE_PENWINDOWS
     wxCleanUpPenWin();
 #endif
-
-    if ( wxDisableButtonBrush )
-        ::DeleteObject( wxDisableButtonBrush );
 
 #if wxUSE_OLE
 #ifdef __WXWINCE__
