@@ -505,7 +505,12 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
                 break;
             }
 
-            strTmp.append(wxConvertMB2WX(buf), inStream.LastRead());
+            // FIXME: this is broken because if we have part of multibyte
+            //        character in the buffer (and another part hasn't been
+            //        read yet) we're going to lose data because of conversion
+            //        errors
+            buf[inStream.LastRead()] = '\0';
+            strTmp += conv.cMB2WX(buf);
         }
         while ( !inStream.Eof() );
 
@@ -1014,7 +1019,9 @@ bool wxFileConfig::Save(wxOutputStream& os, wxMBConv& conv)
     {
         wxString line = p->Text();
         line += wxTextFile::GetEOL();
-        if ( !os.Write(line.mb_str(conv), line.length()) )
+
+        wxCharBuffer buf(line.mb_str(conv));
+        if ( !os.Write(buf, strlen(buf)) )
         {
             wxLogError(_("Error saving user configuration data."));
 
