@@ -89,7 +89,7 @@ extern wxApp *DatabaseDemoApp;
  * NOTE: The value returned by this function is for temporary use only and
  *       should be copied for long term use
  */
-const wxChar *GetExtendedDBErrorMsg2(wxDb *pDb, wxChar *ErrFile, int ErrLine)
+wxString GetExtendedDBErrorMsg2(wxDb *pDb, wxChar *ErrFile, int ErrLine)
 {
     static wxString msg;
     msg = wxT("");
@@ -125,17 +125,17 @@ const wxChar *GetExtendedDBErrorMsg2(wxDb *pDb, wxChar *ErrFile, int ErrLine)
     }
     msg += wxT("\n");
 
-    return msg.c_str();
+    return msg;
 }  // GetExtendedDBErrorMsg
 
 
 // Clookup constructor
 Clookup::Clookup(wxString tblName, wxString colName, wxDb *pDb, const wxString &defDir)
-   : wxDbTable(pDb, tblName, 1, wxEmptyString, !wxDB_QUERY_ONLY,
+   : wxDbTable(pDb, tblName, 1, (const wxString &)wxEmptyString, !wxDB_QUERY_ONLY,
                defDir)
 {
 
-    SetColDefs (0, colName, DB_DATA_TYPE_VARCHAR, lookupCol, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
+    SetColDefs (0, colName, DB_DATA_TYPE_VARCHAR, lookupCol, SQL_C_WXCHAR, LOOKUP_COL_LEN+1, false, false);
 
 }  // Clookup()
 
@@ -143,7 +143,7 @@ Clookup::Clookup(wxString tblName, wxString colName, wxDb *pDb, const wxString &
 // Clookup2 constructor
 Clookup2::Clookup2(wxString tblName, wxString colName1, wxString colName2,
                    wxDb *pDb, const wxString &defDir)
-   : wxDbTable(pDb, tblName, (UWORD)(1 + (wxStrlen(colName2) > 0)), wxEmptyString,
+   : wxDbTable(pDb, tblName, (UWORD)(1 + (wxStrlen(colName2) > 0)), (const wxString &)wxEmptyString,
                !wxDB_QUERY_ONLY, defDir)
 {
     wxASSERT(pDb);
@@ -153,10 +153,10 @@ Clookup2::Clookup2(wxString tblName, wxString colName1, wxString colName2,
 
     int i = 0;
 
-    SetColDefs ((UWORD)i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
+    SetColDefs ((UWORD)i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_WXCHAR, LOOKUP_COL_LEN+1, false, false);
 
     if (wxStrlen(colName2) > 0)
-        SetColDefs ((UWORD)(++i), colName2, DB_DATA_TYPE_VARCHAR, lookupCol2, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
+        SetColDefs ((UWORD)(++i), colName2, DB_DATA_TYPE_VARCHAR, lookupCol2, SQL_C_WXCHAR, LOOKUP_COL_LEN+1, false, false);
 
 }  // Clookup2()
 
@@ -165,12 +165,13 @@ BEGIN_EVENT_TABLE(ClookUpDlg, wxDialog)
     EVT_BUTTON(LOOKUP_DIALOG_OK,  ClookUpDlg::OnButton)
     EVT_BUTTON(LOOKUP_DIALOG_CANCEL,  ClookUpDlg::OnButton)
     EVT_CLOSE(ClookUpDlg::OnClose)
+    EVT_LISTBOX_DCLICK(LOOKUP_DIALOG_SELECT,  ClookUpDlg::OnDClick)
 END_EVENT_TABLE()
 
 
 // This is a generic lookup constructor that will work with any table and any column
-ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
-                       wxChar *colName, wxChar *where, wxChar *orderBy,
+ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxString &tableName,
+                       const wxString &colName, const wxString &where, const wxString &orderBy,
                        wxDb *pDb, const wxString &defDir)
    : wxDialog (parent, LOOKUP_DIALOG, wxT("Select..."), wxDefaultPosition, wxSize(400, 290))
 {
@@ -183,9 +184,9 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     noDisplayCols = 1;
     col1Len = 0;
 
-    pLookUpSelectList       = new wxListBox(this, LOOKUP_DIALOG_SELECT,                  wxPoint(  5,  15), wxSize(384, 195), 0, 0, wxLB_SINGLE|wxLB_ALWAYS_SB, wxDefaultValidator, wxT("LookUpSelectList"));
-    pLookUpOkBtn            = new wxButton(this,  LOOKUP_DIALOG_OK,      wxT("&Ok"),     wxPoint(113, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpOkBtn"));
-    pLookUpCancelBtn        = new wxButton(this,  LOOKUP_DIALOG_CANCEL,  wxT("C&ancel"), wxPoint(212, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpCancelBtn"));
+    pLookUpSelectList = new wxListBox(this, LOOKUP_DIALOG_SELECT,                  wxPoint(  5,  15), wxSize(384, 195), 0, 0, wxLB_SINGLE|wxLB_ALWAYS_SB, wxDefaultValidator, wxT("LookUpSelectList"));
+    pLookUpOkBtn      = new wxButton(this,  LOOKUP_DIALOG_OK,      wxT("&Ok"),     wxPoint(113, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpOkBtn"));
+    pLookUpCancelBtn  = new wxButton(this,  LOOKUP_DIALOG_CANCEL,  wxT("C&ancel"), wxPoint(212, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpCancelBtn"));
 
     widgetPtrsSet = true;
 
@@ -193,7 +194,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     lookup = new Clookup(tableName, colName, pDb, defDir);
     if (!lookup)
     {
-        wxMessageBox(wxT("Error allocating memory for 'Clookup'object."),wxT("Error..."));
+        wxMessageBox(wxT("Error allocating memory for 'Clookup' object."),wxT("Error..."));
         Close();
         return;
     }
@@ -201,8 +202,8 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     if (!lookup->Open())
     {
         wxString tStr;
-        tStr.Printf(wxT("Unable to open the table '%s'."),tableName);
-        wxMessageBox(tStr,wxT("ODBC Error..."));
+        tStr.Printf(wxT("Unable to open the table '%s'."), tableName);
+        wxMessageBox(tStr, wxT("ODBC Error..."));
         Close();
         return;
     }
@@ -211,7 +212,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     lookup->SetWhereClause(where);
     if (!lookup->Query())
     {
-        wxMessageBox(wxT("ODBC error during Query()"),wxT("ODBC Error..."));
+        wxMessageBox(wxT("ODBC error during Query()"), wxT("ODBC Error..."));
         Close();
         return;
     }
@@ -265,10 +266,11 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
 // records are being saved, but not committed to the db, yet should be included
 // in the lookup window.
 //
-ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
-                       wxChar *dispCol1, wxChar *dispCol2, wxChar *where, wxChar *orderBy,
+ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxString &tableName,
+                       const wxString &dispCol1, const wxString &dispCol2, 
+                       const wxString &where, const wxString &orderBy,
                        wxDb *pDb, const wxString &defDir, bool distinctValues,
-                       wxChar *selectStmt, int maxLenCol1, bool allowOk)
+                       const wxString &selectStmt, int maxLenCol1, bool allowOk)
    : wxDialog (parent, LOOKUP_DIALOG, wxT("Select..."), wxDefaultPosition, wxSize(400, 290))
 {
     wxBeginBusyCursor();
@@ -278,10 +280,11 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     widgetPtrsSet = false;
     lookup  = 0;
     lookup2 = 0;
-    noDisplayCols = (wxStrlen(dispCol2) ? 2 : 1);
+
+    noDisplayCols = (dispCol2.Length() == 0 ? 1 : 2);
     col1Len = 0;
 
-    wxFont fixedFont(12,wxMODERN,wxNORMAL,wxNORMAL);
+    wxFont fixedFont(12, wxMODERN, wxNORMAL, wxNORMAL);
 
     // this is done with fixed font so that the second column (if any) will be left
     // justified in the second column
@@ -423,6 +426,13 @@ void ClookUpDlg::OnClose(wxCloseEvent& event)
 }  // ClookUpDlg::OnClose
 
 
+void ClookUpDlg::OnDClick( wxCommandEvent &event )
+{
+  wxWindow *win = (wxWindow*) event.GetEventObject();
+  OnCommand( *win, event );
+}
+
+
 void ClookUpDlg::OnButton( wxCommandEvent &event )
 {
   wxWindow *win = (wxWindow*) event.GetEventObject();
@@ -436,8 +446,15 @@ void ClookUpDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 
     if (widgetPtrsSet)
     {
+        bool doubleclick = false;
+        // Double click
+        if (widgetName == pLookUpSelectList->GetName())
+        {
+            doubleclick = true;
+        }  // Double click
+
         // OK Button
-        if (widgetName == pLookUpOkBtn->GetName())
+        if (widgetName == pLookUpOkBtn->GetName() || doubleclick)
         {
             if (pLookUpSelectList->GetSelection() != -1)
             {
@@ -472,6 +489,7 @@ void ClookUpDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
             wxStrcpy (ListDB_Selection2,wxT(""));
             Close();
         }  // Cancel Button
+
     }
 
 };  // ClookUpDlg::OnCommand

@@ -68,14 +68,14 @@ class ClookUpDlg : public wxDialog
     public:
 
         // This is a generic lookup constructor that will work with any table and any column
-        ClookUpDlg(wxWindow *parent,
-                    wxChar  *windowTitle,
-                    wxChar  *tableName,
-                    wxChar  *colName,
-                    wxChar  *where,
-                    wxChar  *orderBy,
-                    wxDb    *pDb,
-                    const wxString &defDir);
+        ClookUpDlg(wxWindow         *parent,
+                    const wxString  &windowTitle,
+                    const wxString  &tableName,
+                    const wxString  &colName,
+                    const wxString  &where,
+                    const wxString  &orderBy,
+                    wxDb            *pDb,
+                    const wxString  &defDir);
 
         //
         // This is a generic lookup constructor that will work with any table and any column.
@@ -102,23 +102,24 @@ class ClookUpDlg : public wxDialog
         // in the lookup window.
         //
         ClookUpDlg(wxWindow *parent,
-                    wxChar  *windowTitle,
-                    wxChar  *tableName,
-                    wxChar  *dispCol1,                  // Must have at least 1 display column
-                    wxChar  *dispCol2,                  // Optional
-                    wxChar  *where,
-                    wxChar  *orderBy,
-                    wxDb    *pDb,                       // Database connection pointer
-                    const wxString &defDir,
-                    bool     distinctValues,            // e.g. SELECT DISTINCT ...
-                    wxChar  *selectStmt = 0,            // If you wish to query by SQLstmt (complicated lookups)
-                    int      maxLenCol1 = 0,            // Mandatory if querying by SQLstmt
-                    bool     allowOk    = true);        // is the OK button enabled
+                    const wxString  &windowTitle,
+                    const wxString  &tableName,
+                    const wxString  &dispCol1,                  // Must have at least 1 display column
+                    const wxString  &dispCol2,                  // Optional
+                    const wxString  &where,
+                    const wxString  &orderBy,
+                    wxDb            *pDb,                       // Database connection pointer
+                    const wxString  &defDir,
+                    bool             distinctValues,            // e.g. SELECT DISTINCT ...
+                    const wxString &selectStmt = wxEmptyString, // If you wish to query by SQLstmt (complicated lookups)
+                    int             maxLenCol1 = 0,             // Mandatory if querying by SQLstmt
+                    bool            allowOk    = true);         // is the OK button enabled
 
-        void        OnButton( wxCommandEvent &event );
+        void        OnButton(wxCommandEvent &event);
         void        OnCommand(wxWindow& win, wxCommandEvent& event);
         void        OnClose(wxCloseEvent& event);
         void        OnActivate(bool) {};  // necessary for hot keys
+        void        OnDClick(wxCommandEvent &event);
 
 DECLARE_EVENT_TABLE()
 };  // class ClookUpDlg
