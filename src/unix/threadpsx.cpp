@@ -277,7 +277,7 @@ private:
     //     state
     //  2. The Delete() function blocks until the condition is signaled when the
     //     thread exits.
-    wxMutex     m_mutex;
+    wxMutex     m_mutex, m_end_mutex;
     wxCondition m_cond;
 
     // another (mutex, cond) pair for Pause()/Resume() usage
@@ -359,6 +359,8 @@ wxThreadInternal::wxThreadInternal()
     // this mutex is locked during almost all thread lifetime - it will only be
     // unlocked in the very end
     m_mutex.Lock();
+ 
+    m_end_mutex.Lock();
 
     // this mutex is used in Pause()/Resume() and is also locked all the time
     // unless the thread is paused
@@ -372,6 +374,7 @@ wxThreadInternal::~wxThreadInternal()
 
     // note that m_mutex will be unlocked by the thread which waits for our
     // termination
+    m_end_mutex.Unlock();
 }
 
 wxThreadError wxThreadInternal::Run()
@@ -406,12 +409,12 @@ void wxThreadInternal::Wait()
     printf("Entering wait ...\n");
     // entering Wait() releases the mutex thus allowing SignalExit() to acquire
     // it and to signal us its termination
-    m_cond.Wait(m_mutex);
+    m_cond.Wait(m_end_mutex);
     printf("Exiting wait ...\n");
 
     // mutex is still in the locked state - relocked on exit from Wait(), so
     // unlock it - we don't need it any more, the thread has already terminated
-    m_mutex.Unlock();
+    m_end_mutex.Unlock();
 
     // reacquire GUI mutex
     if ( wxThread::IsMain() )
@@ -426,14 +429,14 @@ void wxThreadInternal::SignalExit()
 
     // as mutex is currently locked, this will block until some other thread
     // (normally the same which created this one) unlocks it by entering Wait()
-    m_mutex.Lock();
+    m_end_mutex.Lock();
     printf("Mutex acquired\n");
 
     // wake up all the threads waiting for our termination
     m_cond.Broadcast();
 
     // after this call mutex will be finally unlocked
-    m_mutex.Unlock();
+    m_end_mutex.Unlock();
     printf("Mutex unacquired\n");
 }
 
