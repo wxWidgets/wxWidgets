@@ -488,7 +488,8 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <libname>$(WXLIBNAME)</libname>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
-            <if cond="FORMAT!='autoconf' and TOOLKIT=='MSW'">
+                <error>HELL:$(TOOLKIT)</error>
+            <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','WINCE']">
                 <sources>$(WXTOPDIR)src/msw/dummy.cpp</sources>
                 <precomp-headers-gen>
                     $(WXTOPDIR)src/msw/dummy.cpp
