@@ -1951,6 +1951,8 @@ void wxTreeCtrl::UnselectAll()
             ::UnselectItem(GetHwnd(), HITEM_PTR(selections[n]));
 #endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE/!wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
         }
+
+        m_htSelStart.Unset();
     }
     else
     {
@@ -2439,64 +2441,79 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         bool bCtrl = wxIsCtrlDown(),
              bShift = wxIsShiftDown();
 
-        // we handle.arrows and space, but not page up/down and home/end: the
-        // latter should be easy, but not the former
-
         HTREEITEM htSel = (HTREEITEM)TreeView_GetSelection(GetHwnd());
-        if ( !m_htSelStart )
+        switch ( wParam )
         {
-            m_htSelStart = htSel;
-        }
-
-        if ( wParam == VK_SPACE )
-        {
-            if ( bCtrl )
-            {
-                ::ToggleItemSelection(GetHwnd(), htSel);
-            }
-            else
-            {
-                UnselectAll();
-
-                ::SelectItem(GetHwnd(), htSel);
-            }
-
-            processed = true;
-        }
-        else if ( wParam == VK_UP || wParam == VK_DOWN )
-        {
-            if ( !bCtrl && !bShift )
-            {
-                // no modifiers, just clear selection and then let the default
-                // processing to take place
-                UnselectAll();
-            }
-            else if ( htSel )
-            {
-                (void)wxControl::MSWWindowProc(nMsg, wParam, lParam);
-
-                HTREEITEM htNext = (HTREEITEM)(wParam == VK_UP
-                                    ? TreeView_GetPrevVisible(GetHwnd(), htSel)
-                                    : TreeView_GetNextVisible(GetHwnd(), htSel));
-
-                if ( !htNext )
+            case VK_SPACE:
+                if ( bCtrl )
                 {
-                    // at the top/bottom
-                    htNext = htSel;
+                    ::ToggleItemSelection(GetHwnd(), htSel);
                 }
+                else
+                {
+                    UnselectAll();
 
-                if ( bShift )
-                {
-                    SelectRange(GetHwnd(), HITEM(m_htSelStart), htNext);
-                }
-                else // bCtrl
-                {
-                    // without changing selection
-                    ::SetFocus(GetHwnd(), htNext);
+                    ::SelectItem(GetHwnd(), htSel);
                 }
 
                 processed = true;
-            }
+                break;
+
+            case VK_UP:
+            case VK_DOWN:
+                if ( !bCtrl && !bShift )
+                {
+                    // no modifiers, just clear selection and then let the default
+                    // processing to take place
+                    UnselectAll();
+                }
+                else if ( htSel )
+                {
+                    (void)wxControl::MSWWindowProc(nMsg, wParam, lParam);
+
+                    HTREEITEM htNext = (HTREEITEM)
+                        TreeView_GetNextItem
+                        (
+                            GetHwnd(),
+                            htSel,
+                            wParam == VK_UP ? TVGN_PREVIOUSVISIBLE
+                                            : TVGN_NEXTVISIBLE
+                        );
+
+                    if ( !htNext )
+                    {
+                        // at the top/bottom
+                        htNext = htSel;
+                    }
+
+                    if ( bShift )
+                    {
+                        if ( !m_htSelStart )
+                            m_htSelStart = htSel;
+
+                        SelectRange(GetHwnd(), HITEM(m_htSelStart), htNext);
+                    }
+                    else // bCtrl
+                    {
+                        // without changing selection
+                        ::SetFocus(GetHwnd(), htNext);
+                    }
+
+                    processed = true;
+                }
+                break;
+
+            case VK_HOME:
+            case VK_END:
+            case VK_PRIOR:
+            case VK_NEXT:
+                // TODO: handle Shift/Ctrl with these keys
+                if ( !bCtrl && !bShift )
+                {
+                    UnselectAll();
+
+                    m_htSelStart.Unset();
+                }
         }
     }
 #endif // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
