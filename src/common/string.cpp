@@ -251,7 +251,8 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
             return;
         }
 
-        if ( conv.MB2WC(m_pchData, psz, nLen) != (size_t)-1 )
+        // MB2WC wants the buffer size, not the string length
+        if ( conv.MB2WC(m_pchData, psz, nLen + 1) != (size_t)-1 )
         {
             // initialized ok
             return;
@@ -290,7 +291,8 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
             return;
         }
 
-        if ( conv.WC2MB(m_pchData, pwz, nLen) != (size_t)-1 )
+        // WC2MB wants the buffer size, not the string length
+        if ( conv.WC2MB(m_pchData, pwz, nLen + 1) != (size_t)-1 )
         {
             // initialized ok
             return;
