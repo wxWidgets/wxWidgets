@@ -48,6 +48,13 @@ class WXDLLEXPORT wxPrintSetupData;
 #define wxPRINTID_PRINTTOFILE   15
 #define wxPRINTID_SETUP         16
 
+#define wxPRINTID_PRINTCOLOUR       10
+#define wxPRINTID_ORIENTATION       11
+#define wxPRINTID_COMMAND           12
+#define wxPRINTID_OPTIONS           13
+#define wxPRINTID_PAPERSIZE         14
+
+#if wxUSE_POSTSCRIPT
 class WXDLLEXPORT wxGenericPrintDialog: public wxDialog
 {
   DECLARE_DYNAMIC_CLASS(wxGenericPrintDialog)
@@ -82,12 +89,6 @@ class WXDLLEXPORT wxGenericPrintDialog: public wxDialog
 DECLARE_EVENT_TABLE()
 };
 
-#define wxPRINTID_PRINTCOLOUR       10
-#define wxPRINTID_ORIENTATION       11
-#define wxPRINTID_COMMAND           12
-#define wxPRINTID_OPTIONS           13
-#define wxPRINTID_PAPERSIZE         14
-
 class WXDLLEXPORT wxGenericPrintSetupDialog: public wxDialog
 {
   DECLARE_CLASS(wxGenericPrintSetupDialog)
@@ -112,6 +113,7 @@ class WXDLLEXPORT wxGenericPrintSetupDialog: public wxDialog
 
   wxChoice *CreatePaperTypeChoice(int* x, int* y);
 };
+#endif
 
 #define wxPRINTID_LEFTMARGIN         30
 #define wxPRINTID_RIGHTMARGIN        31

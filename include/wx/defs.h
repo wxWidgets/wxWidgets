@@ -167,6 +167,11 @@
     typedef unsigned int bool;
 #elif defined(__VISUALC__) && (__VISUALC__ <= 1000)
     typedef unsigned int bool;
+#elif defined(__VISUALC__) && (__VISUALC__ == 1010)
+    // For VisualC++ 4.1, we need to define
+    // bool as something between 4.0 & 5.0...
+    typedef unsigned int wxbool;
+    #define bool wxbool
 #elif defined(__VISUALC__) && (__VISUALC__ == 1020)
     #define bool unsigned int
 #elif defined(__BORLANDC__) && (__BORLANDC__ < 0x500)

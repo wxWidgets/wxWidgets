@@ -1877,6 +1877,9 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
     { "wxTB_VERTICAL", wxTB_VERTICAL},
     { "wxTB_FLAT", wxTB_FLAT},
 
+    /* wxDialog */
+    { "wxDIALOG_MODAL", wxDIALOG_MODAL },
+
     /* Generic */
     { "wxVSCROLL", wxVSCROLL },
     { "wxHSCROLL", wxHSCROLL },

@@ -52,18 +52,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if wxUSE_POSTSCRIPT
-
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxGenericPrintDialog, wxDialog)
+
+#if wxUSE_POSTSCRIPT
 IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
-IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxDialog)
+
+IMPLEMENT_CLASS(wxGenericPrintDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxGenericPrintDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxGenericPrintDialog::OnOK)
     EVT_BUTTON(wxPRINTID_SETUP, wxGenericPrintDialog::OnSetup)
     EVT_RADIOBOX(wxPRINTID_RANGE, wxGenericPrintDialog::OnRange)
 END_EVENT_TABLE()
+#endif
+
+IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxGenericPageSetupDialog, wxDialog)
     EVT_BUTTON(wxPRINTID_SETUP, wxGenericPageSetupDialog::OnPrinter)
@@ -71,6 +74,8 @@ END_EVENT_TABLE()
 #endif
 
 extern wxPrintPaperDatabase *wxThePrintPaperDatabase;
+
+#if wxUSE_POSTSCRIPT
 
 /*
  * Generic print dialog for non-Windows printing use.
