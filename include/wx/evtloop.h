@@ -43,7 +43,7 @@ public:
 
     // is the event loop running now?
     virtual bool IsRunning() const;
-    
+
     // return currently active (running) event loop, may be NULL
     static wxEventLoop *GetActive() { return ms_activeLoop; }
 
