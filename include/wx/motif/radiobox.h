@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_RADIOBOX_H_
@@ -56,7 +56,7 @@ public:
     void SetLabel(int item, const wxString& label) ;
     wxString GetLabel(int item) const;
     wxString GetLabel() const { return wxControl::GetLabel(); };
-    void Enable(bool enable);
+    bool Enable(bool enable);
     void Enable(int item, bool enable);
     void Show(int item, bool show) ;
     bool Show(bool show) ;

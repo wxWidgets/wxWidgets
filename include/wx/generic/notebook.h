@@ -5,7 +5,7 @@
 // Modified by:
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_NOTEBOOK_H_
@@ -34,30 +34,6 @@ class WXDLLEXPORT wxWindow;
 // array of notebook pages
 typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
-
-// ----------------------------------------------------------------------------
-// notebook events
-// ----------------------------------------------------------------------------
-class WXDLLEXPORT wxNotebookEvent : public wxCommandEvent
-{
-public:
-  wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0, 
-                  int nSel = -1, int nOldSel = -1)
-    : wxCommandEvent(commandType, id) { m_nSel = nSel; m_nOldSel = nOldSel; }
-
-  // accessors
-  int GetSelection() const { return m_nSel; }
-  int GetOldSelection() const { return m_nOldSel; }
-
-  void SetSelection(int sel) { m_nSel = sel; }
-  void SetOldSelection(int oldSel) { m_nOldSel = oldSel; }
-
-private:
-  int m_nSel,     // currently selected page
-      m_nOldSel;  // previously selected page
-
-  DECLARE_DYNAMIC_CLASS(wxNotebookEvent)
-};
 
 // ----------------------------------------------------------------------------
 // wxNotebook
@@ -89,14 +65,14 @@ public:
   wxNotebook();
     // the same arguments as for wxControl (@@@ any special styles?)
   wxNotebook(wxWindow *parent,
-             wxWindowID id, 
+             wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = "notebook");
     // Create() function
   bool Create(wxWindow *parent,
-              wxWindowID id, 
+              wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
@@ -184,19 +160,19 @@ public:
   void OnSelChange(wxNotebookEvent& event);
   void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
-  
+
   // base class virtuals
   // -------------------
   virtual void Command(wxCommandEvent& event);
   virtual void SetConstraintSizes(bool recurse = TRUE);
   virtual bool DoPhase(int nPhase);
 
-// Implementation
+  // Implementation
 
   // wxNotebook on Motif uses a generic wxTabView to implement itself.
-  inline wxTabView *GetTabView() const { return m_tabView; }
-  inline void SetTabView(wxTabView *v) { m_tabView = v; }
-  
+  wxTabView *GetTabView() const { return m_tabView; }
+  void SetTabView(wxTabView *v) { m_tabView = v; }
+
   void OnMouseEvent(wxMouseEvent& event);
   void OnPaint(wxPaintEvent& event);
 
@@ -223,53 +199,5 @@ protected:
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()
 };
-
-// ----------------------------------------------------------------------------
-// event macros
-// ----------------------------------------------------------------------------
-typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
-
-// Because of name truncation!
-#if defined(__BORLANDC__) && defined(__WIN16__)
-
-#define EVT_NOTEBOOK_PAGE_CHANGED(id, fn)                                   \
-  {                                                                         \
-    wxEVT_COMMAND_NB_PAGE_CHANGED,                                    \
-    id,                                                                     \
-    -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
-    NULL                                                                    \
-  },
-
-#define EVT_NOTEBOOK_PAGE_CHANGING(id, fn)                                  \
-  {                                                                         \
-    wxEVT_COMMAND_NB_PAGE_CHANGING, \                                 \
-    id,                                                                     \
-    -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
-    NULL                                                                    \
-  },
-
-#else
-
-#define EVT_NOTEBOOK_PAGE_CHANGED(id, fn)                                   \
-  {                                                                         \
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,                                    \
-    id,                                                                     \
-    -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
-    NULL                                                                    \
-  },
-
-#define EVT_NOTEBOOK_PAGE_CHANGING(id, fn)                                  \
-  {                                                                         \
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, \                                 \
-    id,                                                                     \
-    -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
-    NULL                                                                    \
-  },
-
-#endif
 
 #endif // _WX_NOTEBOOK_H_

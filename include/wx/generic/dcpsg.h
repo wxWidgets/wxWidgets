@@ -22,8 +22,8 @@
 #include "wx/dialog.h"
 #include "wx/module.h"
 #include "wx/cmndata.h"
-#include <fstream.h>
 
+#include <fstream.h>
 
 //-----------------------------------------------------------------------------
 // classes
@@ -97,7 +97,7 @@ public:
   void SetClippingRegion(long x, long y, long width, long height);
   void SetClippingRegion( const wxRegion &region );
   void DestroyClippingRegion();
-  
+
   void DoSetClippingRegionAsRegion( const wxRegion &WXUNUSED(clip) ) {}
 
   bool StartDoc(const wxString& message);
@@ -125,12 +125,12 @@ public:
   inline void SetBackgroundMode(int WXUNUSED(mode)) {}
   inline void SetPalette(const wxPalette& WXUNUSED(palette)) {}
 
-  inline ofstream *GetStream(void) const { return m_pstream; }
+  ofstream *GetStream(void) const { return m_pstream; }
 
-  inline wxPrintData& GetPrintData() { return m_printData; }
-  inline void SetPrintData(const wxPrintData& data) { m_printData = data; }
-  
-  int GetDepth() const { return 24; }
+  wxPrintData& GetPrintData() { return m_printData; }
+  void SetPrintData(const wxPrintData& data) { m_printData = data; }
+
+  virtual int GetDepth() const { return 24; }
 
 protected:
 
@@ -170,13 +170,15 @@ public:
 #endif
 
 // Print Orientation (Should also add Left, Right)
-enum {
+enum
+{
   PS_PORTRAIT = 1,
   PS_LANDSCAPE = 2
 };// ps_orientation = PS_PORTRAIT;
 
 // Print Actions
-enum {
+enum
+{
   PS_NONE,
   PS_PREVIEW,
   PS_FILE,

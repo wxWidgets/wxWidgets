@@ -17,6 +17,12 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// A list of rectangles type used by wxWindow
+// ----------------------------------------------------------------------------
+
+WX_DECLARE_LIST(wxRect, wxRectList);
+
+// ----------------------------------------------------------------------------
 // wxWindow class for Motif - see also wxWindowBase
 // ----------------------------------------------------------------------------
 
@@ -70,6 +76,9 @@ public:
                           const wxRect *rect = (const wxRect *) NULL );
     virtual void Clear();
 
+    virtual bool SetBackgroundColour( const wxColour &colour );
+    virtual bool SetForegroundColour( const wxColour &colour );
+
     virtual bool SetCursor( const wxCursor &cursor );
     virtual bool SetFont( const wxFont &font );
 
@@ -93,6 +102,9 @@ public:
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = (wxRect *) NULL );
 
+    virtual void SetSizeHints(int minW, int minH,
+                              int maxW, int maxH,
+                              int incW, int incH);
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP
@@ -100,43 +112,11 @@ public:
     // Accept files for dragging
     virtual void DragAcceptFiles(bool accept);
 
-protected:
-    // event handlers (not virtual by design)
-    void OnIdle(wxIdleEvent& event);
+    // Get the unique identifier of a window
+    virtual WXWidget GetHandle() const { return GetMainWidget(); }
 
-    // For implementation purposes - sometimes decorations make the client area
-    // smaller
-    virtual wxPoint GetClientAreaOrigin() const;
-
-    // Makes an adjustment to the window position (for example, a frame that has
-    // a toolbar that it manages itself).
-    virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);
-
-    virtual void AddChild(wxWindow *child);         // Adds reference to the child object
-    virtual void RemoveChild(wxWindow *child);   // Removes reference to child
-    virtual void DestroyChildren();  // Removes and destroys all children
-
-    wxWindow *GetChild(int number) const
-        { return GetChildren().Item(number)->GetData(); }
-
-    // Responds to colour changes: passes event on to children.
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    // Motif-specific
-
-        // empties the m_updateRects list
-    void ClearUpdateRects();
-
-        // CanvasXXXSiize functions
-    void CanvasGetSize(int* width, int* height) const; // If have drawing area
-    void CanvasGetClientSize(int *width, int *height) const;
-    void CanvasGetPosition(int *x, int *y) const; // If have drawing area
-    void CanvasSetClientSize(int width, int size);
-    void CanvasSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-
-    // Gives window a chance to do something in response to a size message, e.g.
-    // arrange status bar, toolbar etc.
-    virtual bool PreResize() { return TRUE; }
+    // implementation from now on
+    // --------------------------
 
     // accessors
     // ---------
@@ -153,17 +133,77 @@ protected:
     // implements this window.
     virtual WXWidget GetTopWidget() const;
 
-    // base class pure virtual
-    virtual WXWidget GetHandle() const { return GetMainWidget(); }
+    // Get the underlying X window and display
+    WXWindow GetXWindow() const;
+    WXDisplay *GetXDisplay() const;
+
+    // called from Motif callbacks - and should only be called from there
+
+    void SetButton1(bool pressed) { m_button1Pressed = pressed; }
+    void SetButton2(bool pressed) { m_button2Pressed = pressed; }
+    void SetButton3(bool pressed) { m_button3Pressed = pressed; }
+
+    void SetLastClick(int button, long timestamp)
+        { m_lastButton = button; m_lastTS = timestamp; }
+
+    int GetLastClickedButton() const { return m_lastButton; }
+    long GetLastClickTime() const { return m_lastTS; }
+
+    // Gives window a chance to do something in response to a size message, e.g.
+    // arrange status bar, toolbar etc.
+    virtual bool PreResize();
+
+    // Generates a paint event
+    virtual void DoPaint();
+
+    // update rectangle/region manipulation
+    // (for wxWindowDC and Motif callbacks only)
+    // -----------------------------------------
+
+    // read/write access to the update rect list
+    const wxRectList& GetUpdateRects() const { return m_updateRects; }
+
+    // Adds a recangle to the updates list
+    void AddUpdateRect(int x, int y, int w, int h)
+        { m_updateRects.Append(new wxRect(x, y, w, h)); }
+
+    // Empties the m_updateRects list
+    void ClearUpdateRects();
+
+    void ClearUpdateRegion() { m_updateRegion.Clear(); }
+    void SetUpdateRegion(const wxRegion& region) { m_updateRegion = region; }
+
+protected:
+    // event handlers (not virtual by design)
+    void OnIdle(wxIdleEvent& event);
+
+    // For implementation purposes - sometimes decorations make the client area
+    // smaller
+    virtual wxPoint GetClientAreaOrigin() const;
+
+    // Makes an adjustment to the window position (for example, a frame that has
+    // a toolbar that it manages itself).
+    virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);
+
+    wxWindow *GetChild(int number) const
+        { return GetChildren().Item(number)->GetData(); }
+
+    // Responds to colour changes: passes event on to children.
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    // Motif-specific
+
+        // CanvasXXXSiize functions
+    void CanvasGetSize(int* width, int* height) const; // If have drawing area
+    void CanvasGetClientSize(int *width, int *height) const;
+    void CanvasGetPosition(int *x, int *y) const; // If have drawing area
+    void CanvasSetClientSize(int width, int size);
+    void CanvasSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
     void SetMainWidget(WXWidget w) { m_mainWidget = w; }
 
     bool CanAddEventHandler() const { return m_canAddEventHandler; }
     void SetCanAddEventHandler(bool flag) { m_canAddEventHandler = flag; }
-
-    // Get the underlying X window and display
-    WXWindow GetXWindow() const;
-    WXDisplay *GetXDisplay() const;
 
     WXPixmap GetBackingPixmap() const { return m_backingPixmap; }
     int GetPixmapWidth() const { return m_pixmapWidth; }
@@ -185,9 +225,6 @@ protected:
                       WXWidget formWidget, int x, int y, int width, int height);
     bool DetachWidget(WXWidget widget);
 
-    // Generates a paint event
-    virtual void DoPaint();
-
     // How to implement accelerators. If we find a key event, translate to
     // wxWindows wxKeyEvent form. Find a widget for the window. Now find a
     // wxWindow for the widget. If there isn't one, go up the widget hierarchy
@@ -202,13 +239,19 @@ protected:
     // event and send it.
     virtual bool ProcessAccelerator(wxKeyEvent& event);
 
-protected:
     // unmanage and destroy an X widget f it's !NULL (passing NULL is ok)
     void UnmanageAndDestroy(WXWidget widget);
 
     // map or unmap an X widget (passing NULL is ok), returns TRUE if widget was
     // mapped/unmapped
     bool MapOrUnmap(WXWidget widget, bool map);
+
+    // scrolling stuff
+    // ---------------
+
+    // create/destroy window scrollbars
+    void CreateScrollbar(wxOrientation orientation);
+    void DestroyScrollbar(wxOrientation orientation);
 
     // get either hor or vert scrollbar widget
     WXWidget GetScrollbar(wxOrientation orient) const
@@ -224,6 +267,8 @@ protected:
     }
 
     // Motif-specific flags
+    // --------------------
+
     bool m_needsRefresh:1;          // repaint backing store?
     bool m_canAddEventHandler:1;    // ???
     bool m_button1Pressed:1;
@@ -233,7 +278,9 @@ protected:
     // For double-click detection
     long   m_lastTS;         // last timestamp
     int    m_lastButton;     // last pressed button
-    wxList m_updateRects;    // List of wxRects representing damaged region
+
+    // List of wxRects representing damaged region
+    wxRectList m_updateRects;
 
 protected:
     WXWidget              m_mainWidget;
@@ -280,21 +327,26 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// A little class to switch off size optimization while an instance of the object
-// exists
+// A little class to switch off `size optimization' while an instance of the
+// object exists: this may be useful to temporarily disable the optimisation
+// which consists to do nothing when the new size is equal to the old size -
+// although quite useful usually to avoid flicker, sometimes it leads to
+// undesired effects.
 //
-// TODO what is it for??
+// Usage: create an instance of this class on the stack to disable the size
+// optimisation, it will be reenabled as soon as the object goes out from scope.
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxNoOptimize: public wxObject
+
+class WXDLLEXPORT wxNoOptimize
 {
 public:
-  wxNoOptimize();
-  ~wxNoOptimize();
+  wxNoOptimize() { ms_count++; }
+  ~wxNoOptimize() { ms_count--; }
 
-  static bool CanOptimize();
+  static bool CanOptimize() { return ms_count == 0; }
 
 protected:
-  static int m_count;
+  static int ms_count;
 };
 
 #endif

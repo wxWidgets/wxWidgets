@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -27,7 +27,7 @@
 #include <wx/motif/private.h>
 
 void wxRadioBoxCallback (Widget w, XtPointer clientData,
-		    XmToggleButtonCallbackStruct * cbs);
+                    XmToggleButtonCallbackStruct * cbs);
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
@@ -91,10 +91,10 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     XmString text = XmStringCreateSimple ((char*) (const char*) label1);
 
     Widget formWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
-					xmFormWidgetClass, parentWidget,
-					XmNmarginHeight, 0,
-					XmNmarginWidth, 0,
-					NULL);
+                                        xmFormWidgetClass, parentWidget,
+                                        XmNmarginHeight, 0,
+                                        XmNmarginWidth, 0,
+                                        NULL);
 
     m_formWidget = (WXWidget) formWidget;
 
@@ -104,25 +104,25 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
         text = XmStringCreateSimple ((char*) (const char*) label1);
         Widget labelWidget = XtVaCreateManagedWidget ((char*) (const char*) label1,
 #if wxUSE_GADGETS
-					     style & wxCOLOURED ?
-				    xmLabelWidgetClass : xmLabelGadgetClass,
-					     formWidget,
+                                             style & wxCOLOURED ?
+                                    xmLabelWidgetClass : xmLabelGadgetClass,
+                                             formWidget,
 #else
-					     xmLabelWidgetClass, formWidget,
+                                             xmLabelWidgetClass, formWidget,
 #endif
                                              XmNfontList, fontList,
-					     XmNlabelString, text,
-					     NULL);
+                                             XmNlabelString, text,
+                                             NULL);
 
         XmStringFree (text);
     }
 
     Widget frameWidget = XtVaCreateManagedWidget ("frame",
-					xmFrameWidgetClass, formWidget,
+                                        xmFrameWidgetClass, formWidget,
                                         XmNshadowType, XmSHADOW_IN,
-//					XmNmarginHeight, 0,
-//					XmNmarginWidth, 0,
-					NULL);
+//                                        XmNmarginHeight, 0,
+//                                        XmNmarginWidth, 0,
+                                        NULL);
 
     m_frameWidget = (WXWidget) frameWidget;
 
@@ -131,7 +131,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     majorDim = (n + majorDim - 1) / majorDim;
 
     XtSetArg (args[0], XmNorientation, ((style & wxHORIZONTAL) == wxHORIZONTAL ?
-  	                                XmHORIZONTAL : XmVERTICAL));
+                                          XmHORIZONTAL : XmVERTICAL));
     XtSetArg (args[1], XmNnumColumns, majorDim);
 
     Widget radioBoxWidget = XmCreateRadioBox (frameWidget, "radioBoxWidget", args, 2);
@@ -139,19 +139,19 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
 
     if (m_labelWidget)
-	    XtVaSetValues ((Widget) m_labelWidget,
-		       XmNtopAttachment, XmATTACH_FORM,
-		       XmNleftAttachment, XmATTACH_FORM,
-		       XmNalignment, XmALIGNMENT_BEGINNING,
-		       NULL);
+            XtVaSetValues ((Widget) m_labelWidget,
+                       XmNtopAttachment, XmATTACH_FORM,
+                       XmNleftAttachment, XmATTACH_FORM,
+                       XmNalignment, XmALIGNMENT_BEGINNING,
+                       NULL);
 
     XtVaSetValues (radioBoxWidget,
-	    XmNtopAttachment, m_labelWidget ? XmATTACH_WIDGET : XmATTACH_FORM,
-		     XmNtopWidget, m_labelWidget ? (Widget) m_labelWidget : formWidget,
-		     XmNbottomAttachment, XmATTACH_FORM,
-		     XmNleftAttachment, XmATTACH_FORM,
-		     XmNrightAttachment, XmATTACH_FORM,
-		     NULL);
+            XmNtopAttachment, m_labelWidget ? XmATTACH_WIDGET : XmATTACH_FORM,
+                     XmNtopWidget, m_labelWidget ? (Widget) m_labelWidget : formWidget,
+                     XmNbottomAttachment, XmATTACH_FORM,
+                     XmNleftAttachment, XmATTACH_FORM,
+                     XmNrightAttachment, XmATTACH_FORM,
+                     NULL);
 
     //    if (style & wxFLAT)
     //        XtVaSetValues (radioBoxWidget, XmNborderWidth, 1, NULL);
@@ -165,14 +165,14 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
         m_radioButtonLabels[i] = str;
         m_radioButtons[i] = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) str,
 #if wxUSE_GADGETS
-		            xmToggleButtonGadgetClass, radioBoxWidget,
+                            xmToggleButtonGadgetClass, radioBoxWidget,
 #else
-				    xmToggleButtonWidgetClass, radioBoxWidget,
+                                    xmToggleButtonWidgetClass, radioBoxWidget,
 #endif
                                     XmNfontList, fontList,
-						 NULL);
+                                                 NULL);
         XtAddCallback ((Widget) m_radioButtons[i], XmNvalueChangedCallback, (XtCallbackProc) wxRadioBoxCallback,
-		     (XtCallbackProc) this);
+                     (XtCallbackProc) this);
 
     }
     SetSelection (0);
@@ -219,8 +219,8 @@ wxString wxRadioBox::GetLabel(int item) const
     XmString text;
     char *s;
     XtVaGetValues (widget,
-		    XmNlabelString, &text,
-		    NULL);
+                    XmNlabelString, &text,
+                    NULL);
 
     if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
     {
@@ -248,9 +248,9 @@ void wxRadioBox::SetLabel(int item, const wxString& label)
         wxString label1(wxStripMenuCodes(label));
         XmString text = XmStringCreateSimple ((char*) (const char*) label1);
         XtVaSetValues (widget,
-		        XmNlabelString, text,
-		        XmNlabelType, XmSTRING,
-		        NULL);
+                        XmNlabelString, text,
+                        XmNlabelType, XmSTRING,
+                        NULL);
         XmStringFree (text);
     }
 }
@@ -309,10 +309,10 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         XtVaSetValues ((Widget) m_formWidget, XmNleftAttachment, XmATTACH_SELF,
-		   XmNx, xx, NULL);
+                   XmNx, xx, NULL);
     if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         XtVaSetValues ((Widget) m_formWidget, XmNtopAttachment, XmATTACH_SELF,
-		   XmNy, yy, NULL);
+                   XmNy, yy, NULL);
 
     // Must set the actual RadioBox to be desired size MINUS label size
     Dimension labelWidth = 0, labelHeight = 0, actualWidth = 0, actualHeight = 0;
@@ -345,13 +345,16 @@ void wxRadioBox::Enable(int n, bool enable)
 }
 
 // Enable all controls
-void wxRadioBox::Enable(bool enable)
+bool wxRadioBox::Enable(bool enable)
 {
-    wxControl::Enable(enable);
+    if ( !wxControl::Enable(enable) )
+        return FALSE;
 
     int i;
     for (i = 0; i < m_noItems; i++)
         XtSetSensitive ((Widget) m_radioButtons[i], (Boolean) enable);
+
+    return TRUE;
 }
 
 bool wxRadioBox::Show(bool show)
@@ -430,7 +433,7 @@ void wxRadioBox::ChangeFont(bool keepOriginalSize)
 
         XtVaSetValues ((Widget) radioButton,
                        XmNfontList, fontList,
-		       XmNtopAttachment, XmATTACH_FORM,
+                       XmNtopAttachment, XmATTACH_FORM,
                        NULL);
     }
 }
@@ -470,7 +473,7 @@ void wxRadioBox::ChangeForegroundColour()
 }
 
 void wxRadioBoxCallback (Widget w, XtPointer clientData,
-		    XmToggleButtonCallbackStruct * cbs)
+                    XmToggleButtonCallbackStruct * cbs)
 {
   if (!cbs->set)
     return;

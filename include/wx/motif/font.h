@@ -91,8 +91,8 @@ public:
   void SetUnderlined(bool underlined);
 
   inline wxFont& operator = (const wxFont& font) { if (*this == font) return (*this); Ref(font); return *this; }
-  inline bool operator == (const wxFont& font) { return m_refData == font.m_refData; }
-  inline bool operator != (const wxFont& font) { return m_refData != font.m_refData; }
+  inline bool operator == (const wxFont& font) const { return m_refData == font.m_refData; }
+  inline bool operator != (const wxFont& font) const { return m_refData != font.m_refData; }
 
 // Implementation
 

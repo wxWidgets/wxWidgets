@@ -65,7 +65,7 @@ public:
 
         m_mappingMode = wxMM_TEXT;
 
-        m_backgroundBrush = *wxWHITE_BRUSH;
+        m_backgroundBrush = *wxTRANSPARENT_BRUSH;
 
         m_textForegroundColour = *wxBLACK;
         m_textBackgroundColour = *wxWHITE;
@@ -201,11 +201,11 @@ public:
 
     virtual void Clear() = 0;
 
-    virtual bool StartDoc(const wxString& message) = 0;
-    virtual void EndDoc() = 0;
+    virtual bool StartDoc(const wxString& WXUNUSED(message)) { return TRUE; }
+    virtual void EndDoc() { }
 
-    virtual void StartPage() = 0;
-    virtual void EndPage() = 0;
+    virtual void StartPage() { }
+    virtual void EndPage() { }
 
     // set objects to use for drawing
     // ------------------------------
