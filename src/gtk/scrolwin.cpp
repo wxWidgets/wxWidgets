@@ -453,7 +453,7 @@ wxWindow *wxScrolledWindow::GetTargetWindow() const
 
 // Override this function if you don't want to have wxScrolledWindow
 // automatically change the origin according to the scroll position.
-void wxScrolledWindow::PrepareDC(wxDC& dc)
+void wxScrolledWindow::DoPrepareDC(wxDC& dc)
 {
     dc.SetDeviceOrigin( -m_xScrollPosition * m_xScrollPixelsPerLine,
                         -m_yScrollPosition * m_yScrollPixelsPerLine );

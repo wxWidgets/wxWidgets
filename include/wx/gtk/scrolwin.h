@@ -127,7 +127,7 @@ public:
 
     // Override this function if you don't want to have wxScrolledWindow
     // automatically change the origin according to the scroll position.
-    virtual void PrepareDC(wxDC& dc);
+    void PrepareDC(wxDC& dc) { DoPrepareDC(); }
 
     // lay out the window and its children
     virtual bool Layout();
@@ -163,6 +163,8 @@ public:
     // Compatibility
     void ViewStart(int *x, int *y) const { GetViewStart( x, y ); }
 #endif // WXWIN_COMPATIBILITY_2_2
+
+    virtual void DoPrepareDC(wxDC& dc);
 
 protected:
     wxWindow             *m_targetWindow;
