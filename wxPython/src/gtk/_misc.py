@@ -241,6 +241,18 @@ def GetCurrentId(*args, **kwargs):
     """GetCurrentId() -> long"""
     return _misc_.GetCurrentId(*args, **kwargs)
 
+def IsStockID(*args, **kwargs):
+    """IsStockID(int id) -> bool"""
+    return _misc_.IsStockID(*args, **kwargs)
+
+def IsStockLabel(*args, **kwargs):
+    """IsStockLabel(int id, String label) -> bool"""
+    return _misc_.IsStockLabel(*args, **kwargs)
+
+def GetStockLabel(*args, **kwargs):
+    """GetStockLabel(int id) -> String"""
+    return _misc_.GetStockLabel(*args, **kwargs)
+
 def Bell(*args, **kwargs):
     """Bell()"""
     return _misc_.Bell(*args, **kwargs)
