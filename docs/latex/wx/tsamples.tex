@@ -150,6 +150,14 @@ in particular using the \helpref{wxWindow::IsExposed}{wxwindowisexposed} method 
 the aim to prevent unnecessary drawing in the window and thus reducing or removing 
 flicker on screen.
 
+\subsection{Rotate sample}\label{samplerotate}
+
+This is a simple example which demonstrates how to rotate an image with
+the \helpref{wxImage::Rotate}{wximagerotate} method. The rotation can
+be done without interpolation (left mouse button) which will be faster,
+or with interpolation (right mouse button) which is slower but gives
+better results.
+
 \subsection{Font sample}\label{samplefont}
 
 The font sample demonstrates \helpref{wxFont}{wxfont}, 
@@ -316,12 +324,15 @@ Note that because both clients and connection objects in the server set
 up an event handler to catch {\bf wxSOCKET\_LOST} events, each one is
 immediately notified if the other end closes the connection.
 
+There is also an URL test which demonstrates how to use the \helpref{wxURL}{wxurl}
+class.
+
 The sockets sample is work in progress. Coming soon:
 
 \begin{itemize}\itemsep=0pt
 \item More tests for basic socket functionality.
+\item More tests for protocol classes (wxProtocol and its descendants).
 \item Tests for the recently added datagram socket classes.
-\item Tests for protocol classes (wxProtocol and its descendants).
 \item New samples which actually do something useful (suggestions accepted).
 \end{itemize}
 

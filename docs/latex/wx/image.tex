@@ -511,7 +511,9 @@ Returns the (modified) image itself.
  \param{bool}{ interpolating = TRUE}, \param{wxPoint*}{ offsetAfterRotation = NULL}}
 
 Rotates the image about the given point, by {\it angle} radians. Passing TRUE
-to {\it interpolating} results in better image quality, but is slower.
+to {\it interpolating} results in better image quality, but is slower. If the
+image has a mask, then the mask colour is used for the uncovered pixels in the
+rotated image background. Else, black (rgb 0, 0, 0) will be used.
 
 Returns the rotated image, leaving this image intact.
 
