@@ -237,7 +237,7 @@ protected:
     };
 
     // Copies selection to clipboard if the clipboard support is available
-    void CopySelection(ClipboardType t = Secondary);
+    bool CopySelection(ClipboardType t = Secondary);
 
 #if wxUSE_CLIPBOARD
     // Convert selection to text:

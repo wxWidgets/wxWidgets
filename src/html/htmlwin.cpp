@@ -918,7 +918,7 @@ void wxHtmlWindow::OnMouseDown(wxMouseEvent& event)
         {
             SelectLine(CalcUnscrolledPosition(event.GetPosition()));
 
-            CopySelection();
+            (void) CopySelection();
         }
         else
         {
@@ -1217,13 +1217,13 @@ void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
     if ( IsSelectionEnabled() &&
          event.GetKeyCode() == 'C' && event.ControlDown() )
     {
-        CopySelection();
+        (void) CopySelection();
     }
 }
 
 void wxHtmlWindow::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
-    CopySelection();
+    (void) CopySelection();
 }
 
 void wxHtmlWindow::OnDoubleClick(wxMouseEvent& event)
@@ -1233,7 +1233,7 @@ void wxHtmlWindow::OnDoubleClick(wxMouseEvent& event)
     {
         SelectWord(CalcUnscrolledPosition(event.GetPosition()));
 
-        CopySelection(Primary);
+        (void) CopySelection(Primary);
 
         m_lastDoubleClick = wxGetLocalTimeMillis();
     }
