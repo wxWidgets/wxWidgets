@@ -23,7 +23,6 @@
 #include "wx/event.h"
 #include "wx/app.h"
 #include "wx/utils.h"
-#include "wx/stream.h"
 
 #if wxUSE_GUI
 
@@ -83,6 +82,11 @@
 #if wxUSE_VALIDATORS
     #include "wx/valtext.h"
 #endif // wxUSE_VALIDATORS
+
+#if wxUSE_SERIAL
+    #include "wx/objstrm.h"
+    #include "wx/serbase.h"
+#endif // wxUSE_SERIAL
 
 #endif // wxUSE_GUI
 
