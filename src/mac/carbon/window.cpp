@@ -391,9 +391,9 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
 
     MacRootWindowToWindow( x , y ) ;
     if ( x )
-            (*x) -= MacGetLeftBorderSize() ;
+            *x -= MacGetLeftBorderSize() ;
     if ( y )
-            (*y) -= MacGetTopBorderSize() ;
+            *y -= MacGetTopBorderSize() ;
 }
 
 void wxWindowMac::DoClientToScreen(int *x, int *y) const
@@ -401,9 +401,9 @@ void wxWindowMac::DoClientToScreen(int *x, int *y) const
     WindowRef window = (WindowRef) MacGetRootWindow() ;
 
     if ( x )
-            (*x) += MacGetLeftBorderSize() ;
+            *x += MacGetLeftBorderSize() ;
     if ( y )
-            (*y) += MacGetTopBorderSize() ;
+            *y += MacGetTopBorderSize() ;
 
     MacWindowToRootWindow( x , y ) ;
 
@@ -1666,8 +1666,8 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
 
       SetRectRgn( tempRgn , 
       	x + parent->MacGetLeftBorderSize() , y + parent->MacGetTopBorderSize() , 
-      	x + size.x - parent->MacGetLeftBorderSize() - parent->MacGetRightBorderSize(), 
-      	y + size.y - parent->MacGetTopBorderSize() - parent->MacGetBottomBorderSize()) ;
+      	x + size.x - parent->MacGetRightBorderSize(), 
+      	y + size.y - parent->MacGetBottomBorderSize()) ;
 
       SectRgn( visRgn , tempRgn , visRgn ) ;
       if ( parent->IsTopLevel() )
