@@ -286,7 +286,7 @@ public:
                 p.Red() = r;
                 p.Green() = g;
                 p.Blue() = b;
-                p.Alpha() = x;
+                p.Alpha() = (x*255.)/REAL_SIZE;
 
                 ++p; // same as p.OffsetX(1)
             }
