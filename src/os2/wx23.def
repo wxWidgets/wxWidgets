@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -746,6 +746,12 @@ EXPORTS
       wx_spline_push__FdN71
       ;wx_spline_pop(double*,double*,double*,double*,double*,double*,double*,double*)
       wx_spline_pop__FPdN71
+  ;From object file:  ..\common\dircmn.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxDir::GetAllFiles(const wxString&,wxArrayString*,const wxString&,int)
+      GetAllFiles__5wxDirFRC8wxStringP13wxArrayStringT1i
+      ;wxDir::Traverse(wxDirTraverser&,const wxString&,int) const
+      Traverse__5wxDirCFR14wxDirTraverserRC8wxStringi
   ;From object file:  ..\common\dndcmn.cpp
   ;From object file:  ..\common\dlgcmn.cpp
     ;PUBDEFs (Symbols available from object file):
@@ -1491,6 +1497,8 @@ EXPORTS
       wxConstructorForwxPaintEvent__Fv
       ;wxConstructorForwxNotifyEvent()
       wxConstructorForwxNotifyEvent__Fv
+      ;wxConstructorForwxContextMenuEvent()
+      wxConstructorForwxContextMenuEvent__Fv
       ;wxConstructorForwxCloseEvent()
       wxConstructorForwxCloseEvent__Fv
       ;wxEvtHandler::sm_classwxEvtHandler
@@ -1616,6 +1624,8 @@ EXPORTS
       sm_classwxIdleEvent__11wxIdleEvent
       ;wxDropFilesEvent::sm_classwxDropFilesEvent
       sm_classwxDropFilesEvent__16wxDropFilesEvent
+      ;wxContextMenuEvent::sm_classwxContextMenuEvent
+      sm_classwxContextMenuEvent__18wxContextMenuEvent
       ;wxActivateEvent::sm_classwxActivateEvent
       sm_classwxActivateEvent__15wxActivateEvent
       __vft15wxUpdateUIEvent8wxObject
@@ -1652,7 +1662,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2720,14 +2730,14 @@ EXPORTS
       GetImageCount__14wxImageHandlerFR13wxInputStream
       ;wxImage::ConvertToMono(unsigned char,unsigned char,unsigned char) const
       ConvertToMono__7wxImageCFUcN21
-      ;wxImage::ConvertToBitmap() const
-      ConvertToBitmap__7wxImageCFv
+      ;wxImage::GetHeight() const
+      GetHeight__7wxImageCFv
       ;wxImage::SetData(unsigned char*,int,int)
       SetData__7wxImageFPUciT2
       ;wxImage::GetMaskBlue() const
       GetMaskBlue__7wxImageCFv
-      ;wxImage::GetHeight() const
-      GetHeight__7wxImageCFv
+      ;wxImage::ConvertToBitmap() const
+      ConvertToBitmap__7wxImageCFv
       ;wxImage::CleanUpHandlers()
       CleanUpHandlers__7wxImageFv
       ;wxImageHandler::CanRead(const wxString&)
@@ -3115,6 +3125,8 @@ EXPORTS
       wxLogTrace__FUlPCce
       ;wxLogStatus(const char*,...)
       wxLogStatus__FPCce
+      ;wxLog::ClearTraceMasks()
+      ClearTraceMasks__5wxLogFv
       ;wxLog::RemoveTraceMask(const wxString&)
       RemoveTraceMask__5wxLogFRC8wxString
       ;wxSysErrorMsg(unsigned long)
@@ -3127,6 +3139,8 @@ EXPORTS
       wxLogTrace__FPCcT1e
       ;wxLogSysError(const char*,...)
       wxLogSysError__FPCce
+      ;wxLog::DontCreateOnDemand()
+      DontCreateOnDemand__5wxLogFv
       ;Trap()
       Trap__Fv
       ;wxLog::TimeStamp(wxString*)
@@ -5263,7 +5277,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -10253,11 +10267,15 @@ EXPORTS
       wxTheApp
       ;wxApp::sm_classwxApp
       sm_classwxApp__5wxApp
-      ;wxConstructorForwxApp()
-      wxConstructorForwxApp__Fv
+      ;wxAppRemoveSocketHandler(int)
+      wxAppRemoveSocketHandler__Fi
+      ;wxAppAddSocketHandler(int,int,void(*)(void*),void*)
+      wxAppAddSocketHandler__FiT1PFPv_vPv
       ;wxWakeUpIdle()
       wxWakeUpIdle__Fv
       wxSTD_MDICHILDFRAME_ICON
+      ;wxConstructorForwxApp()
+      wxConstructorForwxApp__Fv
       vHabmain
       ;wxApp::~wxApp()
       __dt__5wxAppFv
@@ -10265,6 +10283,8 @@ EXPORTS
       Pending__5wxAppFv
       ;wxApp::DeletePendingObjects()
       DeletePendingObjects__5wxAppFv
+      ;wxApp::AddSocketHandler(int,int,void(*)(void*),void*)
+      AddSocketHandler__5wxAppFiT1PFPv_vPv
       CANTREGISTERCLASS
       ;wxApp::RegisterWindowClasses(unsigned long)
       RegisterWindowClasses__5wxAppFUl
@@ -10278,11 +10298,13 @@ EXPORTS
       wxMDIFrameClassName
       ;wxMsgArray::Insert(const _QMSG&,unsigned int)
       Insert__10wxMsgArrayFRC5_QMSGUi
-      ;wxApp::wxApp()
-      __ct__5wxAppFv
+      ;wxApp::HandleSockets()
+      HandleSockets__5wxAppFv
       ;wxYieldIfNeeded()
       wxYieldIfNeeded__Fv
       wxDEFAULT_MDIPARENTFRAME_ICON
+      ;wxApp::wxApp()
+      __ct__5wxAppFv
       ;wxApp::SendIdleEvents()
       SendIdleEvents__5wxAppFv
       ;wxApp::ProcessMessage(void**)
@@ -10298,6 +10320,8 @@ EXPORTS
       DoCopy__10wxMsgArrayFRC10wxMsgArray
       ;wxMsgArray::operator=(const wxMsgArray&)
       __as__10wxMsgArrayFRC10wxMsgArray
+      ;wxApp::RemoveSocketHandler(int)
+      RemoveSocketHandler__5wxAppFi
       ;wxYield()
       wxYield__Fv
       wxSTD_FRAME_ICON
@@ -11301,6 +11325,8 @@ EXPORTS
       __ct__9wxDirDataFRC8wxString
       ;wxDir::Open(const wxString&)
       Open__5wxDirFRC8wxString
+      ;wxDir::GetName() const
+      GetName__5wxDirCFv
   ;From object file:  ..\os2\dirdlg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDirDialog::sm_classwxDirDialog
@@ -11671,8 +11697,6 @@ EXPORTS
       GSocket_Shutdown
       GSocket_GetPeer
       GAddress_new
-      ;_GAddress_Init_UNIX(_GAddress*)
-      _GAddress_Init_UNIX__FP9_GAddress
       GSocket_SetNonBlocking
       GAddress_INET_SetAnyAddress
       GAddress_INET_GetHostAddress
@@ -11684,7 +11708,6 @@ EXPORTS
       _GAddress_Init_INET
       GSocket_Read
       GSocket_Connect
-      GAddress_UNIX_GetPath
       GAddress_INET_GetPort
       GSocket_destroy
       _GAddress_translate_from
@@ -11698,7 +11721,6 @@ EXPORTS
       _GSocket_Output_Timeout
       _GSocket_Detected_Read
       GSocket_SetTimeout
-      GAddress_UNIX_SetPath
       GAddress_INET_SetPort
       _GSocket_Recv_Stream
       _GSocket_Detected_Write
@@ -11707,6 +11729,14 @@ EXPORTS
       GSocket_SetServer
       GSocket_UnsetCallback
       _GAddress_translate_to
+  ;From object file:  ..\os2\gsockpm.c
+    ;PUBDEFs (Symbols available from object file):
+      _GSocket_GUI_Destroy
+      _GSocket_Install_Callback
+      _GSocket_Disable_Events
+      _GSocket_GUI_Init
+      _GSocket_Uninstall_Callback
+      _GSocket_Enable_Events
   ;From object file:  ..\os2\helpwin.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxWinHelpController::Initialize(const wxString&)

@@ -369,14 +369,6 @@ bool wxWindow::Create(
         }
         else
             nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
-#if 0
-        if (nTempy < 0)
-        {
-            nTempy = pParent->GetSize().y + (vPos.y + rSize.y);
-            pParent->SetSize(0, 0, pParent->GetSize().x, nTempy);
-            nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
-        }
-#endif
         vPos.y = nTempy;
         if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
              pParent->IsKindOf(CLASSINFO(wxScrolledWindow))

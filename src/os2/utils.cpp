@@ -35,6 +35,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//
+// already defined via nerror.h in app.h so undef them
+//
+#ifdef EEXIST
+#undef EEXIST
+#endif
+#ifdef ENOENT
+#undef ENOENT
+#endif
+#ifdef EMFILE
+#undef EMFILE
+#endif
+#ifdef EINTR
+#undef EINTR
+#endif
+#ifdef EINVAL
+#undef EINVAL
+#endif
+#ifdef ENOMEM
+#undef ENOMEM
+#endif
+#ifdef EACCES
+#undef EACCES
+#endif
 #include <errno.h>
 #include <stdarg.h>
 

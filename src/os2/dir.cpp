@@ -160,6 +160,7 @@ public:
     void SetFileSpec(const wxString& rsFilespec) { m_sFilespec = rsFilespec; }
     void SetFlags(int nFlags) { m_nFlags = nFlags; }
 
+    const wxString& GetName() const { return m_sDirname; }
     void Close();
     void Rewind();
     bool Read(wxString* rsFilename);
@@ -347,6 +348,28 @@ bool wxDir::IsOpened() const
 {
     return m_data != NULL;
 } // end of wxDir::IsOpen
+
+wxString wxDir::GetName() const
+{
+    wxString name;
+    if ( m_data )
+    {
+        name = M_DIR->GetName();
+        if ( !name.empty() )
+        {
+            // bring to canonical Windows form
+            name.Replace(_T("/"), _T("\\"));
+
+            if ( name.Last() == _T('\\') )
+            {
+                // chop off the last (back)slash
+                name.Truncate(name.length() - 1);
+            }
+        }
+    }
+
+    return name;
+}
 
 wxDir::~wxDir()
 {

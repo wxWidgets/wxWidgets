@@ -29,6 +29,7 @@
 
 #include <assert.h>
 #include <sys\types.h>
+
 #ifdef __EMX__
 #include <sys/time.h>
 #include <netinet/in.h>
@@ -38,24 +39,34 @@
 #include <unistd.h>
 #include <sys/un.h>
 #define HAVE_INET_ADDR
+
 #else
+
 #include <utils.h>
 #include <sys\time.h>
 #include <types.h>
 #include <in.h>
 #include <netdb.h>
 #include <nerrno.h>
+
 #endif
+
 #if defined(__VISAGECPP__) && __IBMCPP__ < 400
+
 #include <machine\endian.h>
 #include <socket.h>
 #include <ioctl.h>
 #include <select.h>
 #include <unistd.h>
+
+#define EBADF   SOCEBADF
+
 #else
+
 #include <sys\socket.h>
 #include <sys\ioctl.h>
 #include <sys\select.h>
+
 #ifdef __EMX__
 #define soclose(a) close(a)
 #else
@@ -367,11 +378,11 @@ GAddress *GSocket_GetPeer(GSocket *socket)
  *  Sets up this socket as a server. The local address must have been
  *  set with GSocket_SetLocal() before GSocket_SetServer() is called.
  *  Returns GSOCK_NOERROR on success, one of the following otherwise:
- * 
+ *
  *  Error codes:
  *    GSOCK_INVSOCK - the socket is in use.
  *    GSOCK_INVADDR - the local address has not been set.
- *    GSOCK_IOERR   - low-level error. 
+ *    GSOCK_IOERR   - low-level error.
  */
 GSocketError GSocket_SetServer(GSocket *sck)
 {
@@ -439,7 +450,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
  *    GSOCK_TIMEDOUT   - timeout, no incoming connections.
  *    GSOCK_WOULDBLOCK - the call would block and the socket is nonblocking.
  *    GSOCK_MEMERR     - couldn't allocate memory.
- *    GSOCK_IOERR      - low-level error. 
+ *    GSOCK_IOERR      - low-level error.
  */
 GSocket *GSocket_WaitConnection(GSocket *socket)
 {
@@ -542,7 +553,7 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
  *    GSOCK_TIMEDOUT   - timeout, the connection failed.
  *    GSOCK_WOULDBLOCK - connection in progress (nonblocking sockets only)
  *    GSOCK_MEMERR     - couldn't allocate memory.
- *    GSOCK_IOERR      - low-level error. 
+ *    GSOCK_IOERR      - low-level error.
  */
 GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 {
@@ -737,7 +748,7 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
     ret = _GSocket_Recv_Stream(socket, buffer, size);
   else
     ret = _GSocket_Recv_Dgram(socket, buffer, size);
-    
+
   if (ret == -1)
   {
     if (errno == EWOULDBLOCK)
@@ -745,16 +756,16 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
     else
       socket->m_error = GSOCK_IOERR;
   }
-  
+
   return ret;
 }
 
 int GSocket_Write(GSocket *socket, const char *buffer, int size)
-{                        
+{
   int ret;
 
   assert(socket != NULL);
-  
+
   GSocket_Debug(( "GSocket_Write #1, size %d\n", size ));
 
   if (socket->m_fd == INVALID_SOCKET || socket->m_server)
@@ -776,7 +787,7 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     ret = _GSocket_Send_Stream(socket, buffer, size);
   else
     ret = _GSocket_Send_Dgram(socket, buffer, size);
-    
+
   GSocket_Debug(( "GSocket_Write #4, size %d\n", size ));
 
   if (ret == -1)
@@ -800,7 +811,7 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     _GSocket_Enable(socket, GSOCK_OUTPUT);
     return -1;
   }
-  
+
   GSocket_Debug(( "GSocket_Write #5, size %d ret %d\n", size, ret ));
 
   return ret;
@@ -907,7 +918,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 
   return result;
 
-#else 
+#else
 
   assert(socket != NULL);
   return flags & socket->m_detected;
@@ -960,7 +971,7 @@ GSocketError GSocket_GetError(GSocket *socket)
  *   operation, there is still data available, the callback function will
  *   be called again.
  * GSOCK_OUTPUT:
- *   The socket is available for writing. That is, the next write call 
+ *   The socket is available for writing. That is, the next write call
  *   won't block. This event is generated only once, when the connection is
  *   first established, and then only if a call failed with GSOCK_WOULDBLOCK,
  *   when the output buffer empties again. This means that the app should
@@ -1181,10 +1192,13 @@ int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
 {
   int ret;
 
+#ifdef __EMX__
   MASK_SIGNAL();
   ret = send(socket->m_fd, buffer, size, 0);
   UNMASK_SIGNAL();
-
+#else
+  ret = send(socket->m_fd, buffer, size, 0);
+#endif
   return ret;
 }
 
@@ -1207,9 +1221,13 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
+#ifdef __EMX__
   MASK_SIGNAL();
   ret = sendto(socket->m_fd, buffer, size, 0, addr, len);
   UNMASK_SIGNAL();
+#else
+  ret = sendto(socket->m_fd, buffer, size, 0, addr, len);
+#endif
 
   /* Frees memory allocated from _GAddress_translate_to */
   free(addr);
@@ -1471,11 +1489,13 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   if (inet_aton(hostname, addr) == 0)
   {
 #elif defined(HAVE_INET_ADDR)
-  if ( (addr->s_addr = inet_addr(hostname)) == -1 )
+  addr->s_addr = inet_addr(hostname);
+  if ( (addr->s_addr == -1 )
   {
 #else
   /* Use gethostbyname by default */
-  if (1)
+  int val = 1;  //VA doesn't like constants in conditional expressions at all
+  if (val)
   {
 #endif
     struct in_addr *array_addr;
@@ -1528,7 +1548,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
     address->m_error = GSOCK_INVPORT;
     return GSOCK_INVPORT;
   }
- 
+
   se = getservbyname(port, protocol);
   if (!se)
   {
@@ -1558,7 +1578,7 @@ GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
 
   assert(address != NULL);
   CHECK_ADDRESS(address, INET);
- 
+
   addr = (struct sockaddr_in *)address->m_addr;
   addr->sin_port = htons(port);
 
@@ -1571,7 +1591,7 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t
   char *addr_buf;
   struct sockaddr_in *addr;
 
-  assert(address != NULL); 
+  assert(address != NULL);
   CHECK_ADDRESS(address, INET);
 
   addr = (struct sockaddr_in *)address->m_addr;
@@ -1593,8 +1613,8 @@ unsigned long GAddress_INET_GetHostAddress(GAddress *address)
 {
   struct sockaddr_in *addr;
 
-  assert(address != NULL); 
-  CHECK_ADDRESS_RETVAL(address, INET, 0); 
+  assert(address != NULL);
+  CHECK_ADDRESS_RETVAL(address, INET, 0);
 
   addr = (struct sockaddr_in *)address->m_addr;
 
@@ -1605,8 +1625,8 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
 {
   struct sockaddr_in *addr;
 
-  assert(address != NULL); 
-  CHECK_ADDRESS_RETVAL(address, INET, 0); 
+  assert(address != NULL);
+  CHECK_ADDRESS_RETVAL(address, INET, 0);
 
   addr = (struct sockaddr_in *)address->m_addr;
   return ntohs(addr->sin_port);
@@ -1641,9 +1661,9 @@ GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path)
 {
   struct sockaddr_un *addr;
 
-  assert(address != NULL); 
+  assert(address != NULL);
 
-  CHECK_ADDRESS(address, UNIX); 
+  CHECK_ADDRESS(address, UNIX);
 
   addr = ((struct sockaddr_un *)address->m_addr);
   memcpy(addr->sun_path, path, strlen(path));

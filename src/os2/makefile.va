@@ -202,6 +202,7 @@ COMMONOBJS = \
   ..\common\$D\dbtable.obj \
 !endif
   ..\common\$D\dcbase.obj \
+  ..\common\$D\dircmn.obj \
   ..\common\$D\dlgcmn.obj \
   ..\common\$D\dndcmn.obj \
   ..\common\$D\dobjcmn.obj \
@@ -315,6 +316,7 @@ COMLIBOBJS1 = \
   db.obj \
   dbtable.obj \
   dcbase.obj \
+  dircmn.obj \
   dndcmn.obj \
   dlgcmn.obj \
   dobjcmn.obj \
@@ -343,10 +345,10 @@ COMLIBOBJS1 = \
   geometry.obj \
   gifdecod.obj \
   hash.obj \
-  helpbase.obj \
-  http.obj
+  helpbase.obj
 
 COMLIBOBJS2 = \
+  http.obj \
   imagall.obj \
   imagbmp.obj \
   image.obj \
@@ -387,10 +389,10 @@ COMLIBOBJS2 = \
   sizer.obj \
   socket.obj \
   strconv.obj \
-  stream.obj \
-  string.obj
+  stream.obj
 
 COMLIBOBJS3 = \
+  string.obj \
   tbarbase.obj \
   textcmn.obj \
   textfile.obj \
@@ -450,6 +452,7 @@ OS2OBJS = \
   ..\os2\$D\gdiimage.obj \
   ..\os2\$D\gdiobj.obj \
   ..\os2\$D\gsocket.obj \
+  ..\os2\$D\gsockpm.obj \
   ..\os2\$D\helpwin.obj \
   ..\os2\$D\icon.obj \
   ..\os2\$D\iniconf.obj \
@@ -531,6 +534,7 @@ OS2LIBOBJS1 = \
   gdiimage.obj \
   gdiobj.obj \
   gsocket.obj \
+  gsockpm.obj \
   helpwin.obj \
   icon.obj \
   iniconf.obj \
@@ -539,10 +543,10 @@ OS2LIBOBJS1 = \
   main.obj \
   mdi.obj \
   menu.obj \
-  menuitem.obj \
-  metafile.obj
+  menuitem.obj
 
 OS2LIBOBJS2 = \
+  metafile.obj \
   mimetype.obj \
   minifram.obj \
   msgdlg.obj \
@@ -656,6 +660,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\dbtable.obj
   copy ..\common\$D\dcbase.obj
   copy ..\common\$D\dlgcmn.obj
+  copy ..\common\$D\dircmn.obj
   copy ..\common\$D\dndcmn.obj
   copy ..\common\$D\dobjcmn.obj
   copy ..\common\$D\docmdi.obj
@@ -684,9 +689,9 @@ $(COMLIBOBJS1):
   copy ..\common\$D\gifdecod.obj
   copy ..\common\$D\hash.obj
   copy ..\common\$D\helpbase.obj
-  copy ..\common\$D\http.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\http.obj
   copy ..\common\$D\imagall.obj
   copy ..\common\$D\imagbmp.obj
   copy ..\common\$D\image.obj
@@ -728,9 +733,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\socket.obj
   copy ..\common\$D\strconv.obj
   copy ..\common\$D\stream.obj
-  copy ..\common\$D\string.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\string.obj
   copy ..\common\$D\tbarbase.obj
   copy ..\common\$D\textcmn.obj
   copy ..\common\$D\textfile.obj
@@ -853,6 +858,7 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\gdiimage.obj
   copy ..\os2\$D\gdiobj.obj
   copy ..\os2\$D\gsocket.obj
+  copy ..\os2\$D\gsockpm.obj
   copy ..\os2\$D\helpwin.obj
   copy ..\os2\$D\icon.obj
   copy ..\os2\$D\iniconf.obj
@@ -862,9 +868,9 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\mdi.obj
   copy ..\os2\$D\menu.obj
   copy ..\os2\$D\menuitem.obj
-  copy ..\os2\$D\metafile.obj
 
 $(OS2LIBOBJS2):
+  copy ..\os2\$D\metafile.obj
   copy ..\os2\$D\mimetype.obj
   copy ..\os2\$D\minifram.obj
   copy ..\os2\$D\msgdlg.obj

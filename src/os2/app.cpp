@@ -37,22 +37,27 @@
 
 #include "wx/os2/private.h"
 
-#if defined(__VISAGECPP__) && __IBMCPP__ < 400
-#include <machine\endian.h>
-#include <ioctl.h>
-#include <select.h>
-#include <unistd.h>
-#else
+#ifdef __EMX__
+
 #include <sys\ioctl.h>
 #include <sys\select.h>
+
+#else
+
+#include <ioctl.h>
+#include <select.h>
+
+#endif // ndef for __EMX__
+
 #ifndef __EMX__
+
 #define select(a,b,c,d,e) bsdselect(a,b,c,d,e)
 int _System bsdselect(int,
                       struct fd_set *,
                       struct fd_set *,
                       struct fd_set *,
                       struct timeval *);
-#endif
+
 #endif
 
 #if wxUSE_THREADS
@@ -133,22 +138,34 @@ struct GsocketCallbackInfo{
 #define wxSockReadMask  0x01
 #define wxSockWriteMask 0x02
 
+#ifdef __EMX__
 extern "C"
 int wxAppAddSocketHandler(int handle, int mask,
-                          void (*callback)(void*), void * gsock)
+                           void (*callback)(void*), void * gsock)
 {
     return wxTheApp->AddSocketHandler(handle, mask, callback, gsock);
 }
-
 extern "C"
 void wxAppRemoveSocketHandler(int handle)
 {
     wxTheApp->RemoveSocketHandler(handle);
 }
+#else
+//  Linkage mode problems using callbacks with extern C in a .cpp module
+int wxAppAddSocketHandler(int handle, int mask,
+                           void (*callback)(void*), void * gsock)
+{
+    return wxTheApp->AddSocketHandler(handle, mask, callback, gsock);
+}
+void wxAppRemoveSocketHandler(int handle)
+{
+    wxTheApp->RemoveSocketHandler(handle);
+}
+#endif
 
 void wxApp::HandleSockets()
 {
-    bool pendingEvent = false;
+    bool pendingEvent = FALSE;
 
     // Check whether it's time for Gsocket operation
     if (m_maxSocketHandles > 0 && m_maxSocketNr > 0)
@@ -179,7 +196,7 @@ void wxApp::HandleSockets()
                     if (r < m_maxSocketHandles)
                     {
                         CallbackInfo[r].proc(CallbackInfo[r].gsock);
-                        pendingEvent = true;
+                        pendingEvent = TRUE;
                         wxYield();
                     }
                 }
@@ -193,7 +210,7 @@ void wxApp::HandleSockets()
                     if (r < m_maxSocketHandles)
                     {
                         CallbackInfo[r].proc(CallbackInfo[r].gsock);
-                        pendingEvent = true;
+                        pendingEvent = TRUE;
                         wxYield();
                     }
                 }
@@ -1126,7 +1143,7 @@ bool wxYieldIfNeeded()
 {
     if (gs_inYield)
         return FALSE;
-        
+
     return wxYield();
 }
 
