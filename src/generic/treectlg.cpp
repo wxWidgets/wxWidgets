@@ -670,6 +670,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     wxGetOsVersion( &major, &minor );
     
     if (style & wxTR_HAS_BUTTONS) style |= wxTR_MAC_BUTTONS;
+    if (style & wxTR_HAS_BUTTONS) style &= ~wxTR_HAS_BUTTONS;
     style &= ~wxTR_LINES_AT_ROOT;
     style |= wxTR_NO_LINES;
     if (major < 10)
