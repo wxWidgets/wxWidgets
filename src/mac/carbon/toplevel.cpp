@@ -509,7 +509,11 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 wxMacFindControlUnderMouse( windowMouseLocation , window , &dummyPart ) ) )
             {
                 EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
-                HandleControlClick( (ControlRef) currentMouseWindow->GetHandle() , windowMouseLocation ,
+                Point clickLocation = windowMouseLocation ;
+#if TARGET_API_MAC_OSX
+                currentMouseWindow->MacRootWindowToWindow( &clickLocation.h , &clickLocation.v ) ;
+#endif
+                HandleControlClick( (ControlRef) currentMouseWindow->GetHandle() , clickLocation ,
                     modifiers , (ControlActionUPP ) -1 ) ;
                 result = noErr ;
             }
@@ -968,14 +972,14 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     wxAssociateWinWithMacWindow( (WindowRef) m_macWindow , this ) ;
     UMASetWTitle( (WindowRef) m_macWindow , title , m_font.GetEncoding() ) ;
-    if ( m_macUsesCompositing )
-    {
-        ::GetRootControl( (WindowRef)m_macWindow, (ControlRef*)&m_macControl ) ;
-    }
-    else
-    {
-        ::CreateRootControl( (WindowRef)m_macWindow , (ControlRef*)&m_macControl ) ;
-    }
+#if TARGET_API_MAC_OSX
+    // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of 
+    // the content view, so we have to retrieve it explicitely
+    HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowContentID , 
+        (ControlRef*)&m_macControl ) ;
+#else
+    ::CreateRootControl( (WindowRef)m_macWindow , (ControlRef*)&m_macControl ) ;
+#endif
     // the root control level handleer
     MacInstallEventHandler() ;
 
