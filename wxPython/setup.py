@@ -354,7 +354,18 @@ ext = Extension('_html', swig_sources,
                 )
 wxpExtensions.append(ext)
 
-
+swig_sources = run_swig(['webkit.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('_webkit', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                **depends
+                )
+wxpExtensions.append(ext)
 
 swig_sources = run_swig(['wizard.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
