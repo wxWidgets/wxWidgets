@@ -2313,6 +2313,11 @@ if test "$wxUSE_OPENGL" = "yes"; then
   if test "$wxUSE_MAC" = 1; then
     OPENGL_LIBS="-framework OpenGL -framework AGL"
   else
+    dnl -lGL requires -lm with soem OpenGL versions - although it would, of
+    dnl course, be cleaner to test first without -lm and then with it, I don't
+    dnl have time for this now so just always add -lm
+    LIBS="$LIBS -lm"
+
     dnl check for OpenGL libs availability first
     AC_CHECK_HEADER(GL/gl.h, [
       AC_CHECK_LIB(GL, glFlush, [
