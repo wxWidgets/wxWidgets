@@ -198,7 +198,10 @@ public:
   inline bool IsNoWait() const { return ((m_flags & wxSOCKET_NOWAIT) != 0); };
   inline wxSocketType GetType() const { return m_type; }
 
-protected:
+private:
+  friend class wxSocketClient;
+  friend class wxSocketServer;
+  friend class wxDatagramSocket;
 
   // low level IO
   wxUint32 _Read(char* buffer, wxUint32 nbytes);
@@ -209,8 +212,7 @@ protected:
   void Pushback(const char *buffer, wxUint32 size);
   wxUint32 GetPushback(char *buffer, wxUint32 size, bool peek);
 
-protected:
-
+private:
   GSocket      *m_socket;           // GSocket
   wxSocketType  m_type;             // wxSocket type
 
