@@ -592,10 +592,11 @@ BASELIB_CFLAGS = $(CPPFLAGS)   -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1@VENDORTAG = _$(VENDOR)
 @COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1@VENDORTAG = 
+@COND_TOOLKIT_MAC@WXBASEPORT = _carbon
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
 @COND_BUILD_DEBUG@WXDEBUGFLAG = d
-@COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIX = wx_base
-@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIX = wxbase25
+@COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIX = wx_base$(WXBASEPORT)
+@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIX = wxbase$(WXBASEPORT)25
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
 @COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)25
 @COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -2.5
@@ -741,18 +742,18 @@ BASELIB_CFLAGS = $(CPPFLAGS)   -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top
 @COND_TOOLKIT_X11@__UNIV_TEXTCTRL_OBJECTS_3 = corelib_textctrl.o
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_MONOLITHIC_0_SHARED_1@__basedll___depname = $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_PLATFORM_WIN32_1@__basedll___importlib = -Wl,--out-implib,libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
-@COND_PLATFORM_WIN32_1@__basedll___importlib = -Wl,--out-implib,$(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@__basedll___importlib = -Wl,--out-implib,libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@__basedll___importlib = -Wl,--out-implib,$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
 @COND_PLATFORM_MACOSX_1@__basedll___macinstnamecmd = -install_name $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
-@COND_USE_SOSYMLINKS_1@__basedll___so_symlinks_cmd = rm -f $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@__basedll___so_symlinks_cmd = rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
-@COND_USE_SOSYMLINKS_1@__basedll___so_symlinks_inst_cmd = rm -f libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@__basedll___so_symlinks_inst_cmd = rm -f libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
 @COND_USE_SOVERLINUX_1@__basedll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOVERSOLARIS_1@__basedll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_0@__baselib___depname = $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
+@COND_MONOLITHIC_0_SHARED_0@__baselib___depname = $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@__coredll___depname = $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_PLATFORM_WIN32_1@__coredll___importlib = -Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
 @COND_PLATFORM_WIN32_1@__coredll___importlib = -Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
@@ -1138,7 +1139,7 @@ basedll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 basedll_zstream.o: $(srcdir)/src/common/zstream.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0@$(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a: baselib_appbase.o baselib_clntdata.o baselib_cmdline.o baselib_config.o baselib_datetime.o baselib_datstrm.o baselib_db.o baselib_dbtable.o baselib_dircmn.o baselib_dynarray.o baselib_dynlib.o baselib_dynload.o baselib_encconv.o baselib_extended.o baselib_ffile.o baselib_file.o baselib_fileconf.o baselib_filefn.o baselib_filename.o baselib_filesys.o baselib_fmapbase.o baselib_fs_inet.o baselib_fs_zip.o baselib_ftp.o baselib_hash.o baselib_hashmap.o baselib_http.o baselib_init.o baselib_intl.o baselib_ipcbase.o baselib_list.o baselib_log.o baselib_longlong.o baselib_memory.o baselib_mimecmn.o baselib_module.o baselib_mstream.o baselib_object.o baselib_process.o baselib_protocol.o baselib_regex.o baselib_sckaddr.o baselib_sckfile.o baselib_sckipc.o baselib_sckstrm.o baselib_socket.o baselib_stopwatch.o baselib_strconv.o baselib_stream.o baselib_string.o baselib_sysopt.o baselib_textbuf.o baselib_textfile.o baselib_tokenzr.o baselib_txtstrm.o baselib_unzip.o baselib_url.o baselib_variant.o baselib_wfstream.o baselib_wxchar.o baselib_zipstrm.o baselib_zstream.o $(__BASE_PLATFORM_SRC_OBJECTS_3) baselib_event.o baselib_fs_mem.o baselib_msgout.o baselib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3)
+@COND_MONOLITHIC_0_SHARED_0@$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a: baselib_appbase.o baselib_clntdata.o baselib_cmdline.o baselib_config.o baselib_datetime.o baselib_datstrm.o baselib_db.o baselib_dbtable.o baselib_dircmn.o baselib_dynarray.o baselib_dynlib.o baselib_dynload.o baselib_encconv.o baselib_extended.o baselib_ffile.o baselib_file.o baselib_fileconf.o baselib_filefn.o baselib_filename.o baselib_filesys.o baselib_fmapbase.o baselib_fs_inet.o baselib_fs_zip.o baselib_ftp.o baselib_hash.o baselib_hashmap.o baselib_http.o baselib_init.o baselib_intl.o baselib_ipcbase.o baselib_list.o baselib_log.o baselib_longlong.o baselib_memory.o baselib_mimecmn.o baselib_module.o baselib_mstream.o baselib_object.o baselib_process.o baselib_protocol.o baselib_regex.o baselib_sckaddr.o baselib_sckfile.o baselib_sckipc.o baselib_sckstrm.o baselib_socket.o baselib_stopwatch.o baselib_strconv.o baselib_stream.o baselib_string.o baselib_sysopt.o baselib_textbuf.o baselib_textfile.o baselib_tokenzr.o baselib_txtstrm.o baselib_unzip.o baselib_url.o baselib_variant.o baselib_wfstream.o baselib_wxchar.o baselib_zipstrm.o baselib_zstream.o $(__BASE_PLATFORM_SRC_OBJECTS_3) baselib_event.o baselib_fs_mem.o baselib_msgout.o baselib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3)
 @COND_MONOLITHIC_0_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@  baselib_appbase.o baselib_clntdata.o baselib_cmdline.o baselib_config.o baselib_datetime.o baselib_datstrm.o baselib_db.o baselib_dbtable.o baselib_dircmn.o baselib_dynarray.o baselib_dynlib.o baselib_dynload.o baselib_encconv.o baselib_extended.o baselib_ffile.o baselib_file.o baselib_fileconf.o baselib_filefn.o baselib_filename.o baselib_filesys.o baselib_fmapbase.o baselib_fs_inet.o baselib_fs_zip.o baselib_ftp.o baselib_hash.o baselib_hashmap.o baselib_http.o baselib_init.o baselib_intl.o baselib_ipcbase.o baselib_list.o baselib_log.o baselib_longlong.o baselib_memory.o baselib_mimecmn.o baselib_module.o baselib_mstream.o baselib_object.o baselib_process.o baselib_protocol.o baselib_regex.o baselib_sckaddr.o baselib_sckfile.o baselib_sckipc.o baselib_sckstrm.o baselib_socket.o baselib_stopwatch.o baselib_strconv.o baselib_stream.o baselib_string.o baselib_sysopt.o baselib_textbuf.o baselib_textfile.o baselib_tokenzr.o baselib_txtstrm.o baselib_unzip.o baselib_url.o baselib_variant.o baselib_wfstream.o baselib_wxchar.o baselib_zipstrm.o baselib_zstream.o $(__BASE_PLATFORM_SRC_OBJECTS_3) baselib_event.o baselib_fs_mem.o baselib_msgout.o baselib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3)
 @COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
@@ -1463,9 +1464,9 @@ clean:
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
 	rm -f $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-	rm -f $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
-	rm -f $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
-	rm -f $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
+	rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
 	rm -f $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
@@ -1477,7 +1478,7 @@ clean:
 	rm -f lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) coredll_event.o coredll_fs_mem.o coredll_msgout.o coredll_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4) $(__CORE_SRC_OBJECTS_2) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@  coredll_event.o coredll_fs_mem.o coredll_msgout.o coredll_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4) $(__CORE_SRC_OBJECTS_2) $(LDFLAGS) $(__coredll___importlib)   -L$(top_builddir)lib $(__coredll___macinstnamecmd) $(__coredll___importlib) $(__coredll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@  coredll_event.o coredll_fs_mem.o coredll_msgout.o coredll_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4) $(__CORE_SRC_OBJECTS_2) $(LDFLAGS) $(__coredll___importlib)   -L$(top_builddir)lib $(__coredll___macinstnamecmd) $(__coredll___importlib) $(__coredll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(__coredll___so_symlinks_cmd)
 
 coredll_MoreFilesX.o: $(srcdir)/src/mac/morefilex/MoreFilesX.c
@@ -5690,7 +5691,7 @@ distclean: clean
 	rm -f bk-deps shared-ld-sh
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) htmldll_helpdata.o htmldll_helpfrm.o htmldll_helpctrl.o htmldll_htmlcell.o htmldll_htmlfilt.o htmldll_htmlpars.o htmldll_htmltag.o htmldll_htmlwin.o htmldll_winpars.o htmldll_m_fonts.o htmldll_m_hline.o htmldll_m_image.o htmldll_m_layout.o htmldll_m_links.o htmldll_m_list.o htmldll_m_dflist.o htmldll_m_pre.o htmldll_m_tables.o htmldll_m_style.o htmldll_htmprint.o htmldll_helpbest.o htmldll_htmllbox.o $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@  htmldll_helpdata.o htmldll_helpfrm.o htmldll_helpctrl.o htmldll_htmlcell.o htmldll_htmlfilt.o htmldll_htmlpars.o htmldll_htmltag.o htmldll_htmlwin.o htmldll_winpars.o htmldll_m_fonts.o htmldll_m_hline.o htmldll_m_image.o htmldll_m_layout.o htmldll_m_links.o htmldll_m_list.o htmldll_m_dflist.o htmldll_m_pre.o htmldll_m_tables.o htmldll_m_style.o htmldll_htmprint.o htmldll_helpbest.o htmldll_htmllbox.o $(LDFLAGS) $(__htmldll___importlib)   -L$(top_builddir)lib $(__htmldll___macinstnamecmd) $(__htmldll___importlib) $(__htmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@  htmldll_helpdata.o htmldll_helpfrm.o htmldll_helpctrl.o htmldll_htmlcell.o htmldll_htmlfilt.o htmldll_htmlpars.o htmldll_htmltag.o htmldll_htmlwin.o htmldll_winpars.o htmldll_m_fonts.o htmldll_m_hline.o htmldll_m_image.o htmldll_m_layout.o htmldll_m_links.o htmldll_m_list.o htmldll_m_dflist.o htmldll_m_pre.o htmldll_m_tables.o htmldll_m_style.o htmldll_htmprint.o htmldll_helpbest.o htmldll_htmllbox.o $(LDFLAGS) $(__htmldll___importlib)   -L$(top_builddir)lib $(__htmldll___macinstnamecmd) $(__htmldll___importlib) $(__htmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(__htmldll___so_symlinks_cmd)
 
 htmldll_helpbest.o: $(srcdir)/src/msw/helpbest.cpp
@@ -5864,13 +5865,13 @@ install-wxconfig:
 
 @COND_MONOLITHIC_0_SHARED_1@install_basedll: 
 @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(libdir)
 @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_PROGRAM) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
 @COND_MONOLITHIC_0_SHARED_1@	(cd $(libdir) ; $(__basedll___so_symlinks_inst_cmd))
 
 @COND_MONOLITHIC_0_SHARED_0@install_baselib: 
 @COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DATA) $(top_builddir)lib/libwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a $(libdir)
+@COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DATA) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a $(libdir)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@install_coredll: 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DIR) $(libdir)
