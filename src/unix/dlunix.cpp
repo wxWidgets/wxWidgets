@@ -49,7 +49,7 @@
 #endif
 
 #ifndef RTLD_GLOBAL
-    #define RTLD_GLOBAL
+    #define RTLD_GLOBAL 0
 #endif
 
 
