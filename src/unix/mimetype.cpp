@@ -299,9 +299,12 @@ static bool IsKnownUnimportantField(const wxString& field);
 //  a) for "brief" format:
 //      <mime type>  <space separated list of extensions>
 //  b) for "expanded" format:
-//      type=<mime type> \ 
-//      desc="<description>" \ 
+//      type=<mime type> BACKSLASH
+//      desc="<description>" BACKSLASH
 //      exts="<comma separated list of extensions>"
+//
+// (where BACKSLASH is a literal '\\' which we can't put here because cpp
+// misinterprets it)
 //
 // We try to autodetect the format of mime.types: if a non-comment line starts
 // with "type=" we assume the second format, otherwise the first one.
