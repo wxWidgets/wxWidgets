@@ -78,6 +78,18 @@ public:
     //Recurse to find length.
     int Length() { return (m_next ? m_next->Length() +1 :  1); }
 
+    // Adds a new column info (2 step creation)
+    void AddColInfo (int colNo,
+                    wxString type,
+                    wxString title)
+    {
+        GetLast()->m_next = new wxDbGridColInfo (colNo, type, title, NULL);
+    }
+
+    // Searches last
+    wxDbGridColInfo *GetLast() { return (m_next ? m_next->GetLast() : this); }
+
+
     protected:
     wxDbGridColInfoBase  m_data;
     wxDbGridColInfo     *m_next;
