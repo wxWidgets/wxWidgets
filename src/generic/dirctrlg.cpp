@@ -53,6 +53,10 @@
 #include <ctype.h>
 #endif
 
+#ifdef __BORLANDC__
+#include "dos.h"
+#endif
+
 // If compiled under Windows, this macro can cause problems
 #ifdef GetFirstChild
 #undef GetFirstChild
