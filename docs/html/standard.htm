@@ -55,6 +55,7 @@ C++ portability guide</A> by David Williams.
   <BR>
   <LI>General recommendations</LI>
   <OL>
+    <LI><A HREF="#no_cppcommentsinc">No C++ comments in C code></A></LI>
     <LI><A HREF="#no_globals">No global variables with constructor</A></LI>
     <LI><A HREF="#no_warnings">Turn on all warnings and eradicate them</A></LI>
     <LI><A HREF="#no_assume_sizeof">Don't rely on <TT>sizeof(int) == 2</TT>...</A></LI>
@@ -361,6 +362,18 @@ which <B>must</B> be followed if you wish to write correct, i.e. working, progra
 also contains some C/C++ specific remarks in the end which are less
 important.
   <OL>
+    <P><LI><A NAME="no_cppcommentsinc"><B>No C++ comments in C code></B></LI><P>
+Never use C++ comments in C code - not all C compilers/preprocessors
+understand them. Although we're mainly concerned with C++ here, there are
+several files in wxWindows sources tree which are compiled with C compiler.
+Among them are <TT>include/wx/setup.h</TT> and <TT>include/wx/expr.h</TT>.
+
+Another thing related to C vs C++ preprocessor differences is that some old C
+preprocessors require that all directives start in the first column (while
+it's generally allowed to have any amount of whitespace before them in C++),
+so you should start them in the beginning of the line in files which are
+compiled with C compiler.
+
     <P><LI><A NAME="no_globals"></A><B>No global variables with constructors</B></LI><P>
 In C++, the constructors of global variables are called before the
 <TT>main()</TT> function (or <TT>WinMain()</TT> or any other program entry point)
