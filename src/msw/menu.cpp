@@ -720,8 +720,6 @@ wxMenu *wxMenuBar::Remove(size_t pos)
             wxLogLastError(wxT("RemoveMenu"));
         }
 
-        menu->Detach();
-
 #if wxUSE_ACCEL
         if ( menu->HasAccels() )
         {
