@@ -50,11 +50,13 @@ BUILD = @BUILD@
 SONAME_FLAG = @SONAME_FLAG@
 USE_MACVERSION = @USE_MACVERSION@
 PLATFORM_MACOSX = @PLATFORM_MACOSX@
+TOOLKIT_VERSION = @TOOLKIT_VERSION@
 WXUNIV = @WXUNIV@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
 DEPS_TYPE = @DEPS_TYPE@
 SHARED_LD_CXX = @SHARED_LD_CXX@
 CXX = @CXX@
+includedir = @includedir@
 LN_S = @LN_S@
 CFLAGS = @CFLAGS@
 exec_prefix = @exec_prefix@
@@ -75,7 +77,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX).0 $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
 @COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_DEP = $(__wxjpeg___depname)
 @COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
-@COND_SHARED_1_MONOLITHIC_1@__monodll___depname = $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX)$(__monodll___targetnamesuf)
+@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc
 @COND_WXUSE_ODBC_BUILTIN@__wxodbc___depname = $(top_builddir)/lib/libwxodbc.a
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS = fontenum.o fontutil.o utilsx11.o taskbarx11.o printps.o gsockgtk.o win_gtk.o app.o bitmap.o brush.o clipbrd.o colour.o cursor.o data.o dataobj.o dc.o dcclient.o dcmemory.o dcscreen.o dnd.o evtloop.o font.o toplevel.o gdiobj.o icon.o monodll-main.o pen.o popupwin.o region.o settings.o timer.o tooltip.o utilsgtk.o window.o paletteg.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS = fontenum.o fontutil.o utilsx11.o taskbarx11.o printps.o monodll-region.o monodll-pen.o monodll-brush.o monodll-bitmap.o utilsx.o
@@ -87,13 +89,14 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_SHARED_0_MONOLITHIC_1@__monolib___depname = $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
 @COND_SHARED_1_MONOLITHIC_1@__install_monodll___depname = install_monodll
-@COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarx11.o monolib-printps.o monolib-gsockgtk.o monolib-win_gtk.o monolib-app.o monolib-bitmap.o monolib-brush.o monolib-clipbrd.o monolib-colour.o monolib-cursor.o monolib-data.o monolib-dataobj.o monolib-dc.o monolib-dcclient.o monolib-dcmemory.o monolib-dcscreen.o monolib-dnd.o monolib-evtloop.o monolib-font.o monolib-toplevel.o monolib-gdiobj.o monolib-icon.o monolib-main1.o monolib-pen.o monolib-popupwin.o monolib-region.o monolib-settings.o monolib-timer.o monolib-tooltip.o monolib-utilsgtk.o monolib-window.o monolib-paletteg.o
-@COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarx11.o monolib-printps.o monolib-region1.o monolib-pen1.o monolib-brush1.o monolib-bitmap1.o monolib-utilsx.o
-@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_3 = monolib-app1.o monolib-bitmap2.o monolib-brush2.o monolib-caret.o monolib-clipbrd1.o monolib-colour1.o monolib-cursor1.o monolib-data1.o monolib-dc1.o monolib-dcclient1.o monolib-dcmemory1.o monolib-dcprint.o monolib-dcscreen1.o monolib-dialup.o monolib-dib.o monolib-dirdlg.o monolib-display.o monolib-enhmeta.o monolib-helpbest.o monolib-evtloop1.o monolib-font1.o monolib-fontenum1.o monolib-fontutil1.o monolib-gdiimage.o monolib-gdiobj1.o monolib-glcanvas.o monolib-helpchm.o monolib-helpwin.o monolib-icon1.o monolib-joystick.o monolib-minifram.o monolib-palette.o monolib-pen2.o monolib-popupwin1.o monolib-region2.o monolib-settings1.o monolib-taskbar.o monolib-timer1.o monolib-tooltip1.o monolib-toplevel1.o monolib-wave.o monolib-window1.o monolib-automtn.o monolib-dataobj1.o monolib-dropsrc.o monolib-droptgt.o monolib-oleutils.o monolib-uuid.o
-@COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_3 = 
-@COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_3 = 
-@COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarx11.o monolib-printps.o monolib-gsockx11.o monolib-nanox.o monolib-app2.o monolib-bitmap1.o monolib-brush1.o monolib-clipbrd2.o monolib-colour2.o monolib-cursor2.o monolib-data2.o monolib-dataobj2.o monolib-dc2.o monolib-dcclient2.o monolib-dcmemory2.o monolib-dcscreen2.o monolib-evtloop2.o monolib-font2.o monolib-gdiobj2.o monolib-glcanvas1.o monolib-icon2.o monolib-joystick1.o monolib-main2.o monolib-minifram1.o monolib-palette1.o monolib-pen1.o monolib-popupwin2.o monolib-region1.o monolib-reparent.o monolib-settings2.o monolib-toplevel2.o monolib-utils1.o monolib-utilsx.o monolib-window2.o monolib-timer2.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_3 = monolib-colour3.o monolib-dc3.o monolib-gdiobj3.o monolib-palette2.o monolib-region3.o monolib-brush3.o monolib-pen3.o monolib-font3.o monolib-data3.o monolib-fontenum2.o monolib-fontutil2.o monolib-evtloop3.o monolib-app3.o monolib-bitmap3.o monolib-dirmgl.o monolib-clipbrd3.o monolib-cursor3.o monolib-dcclient3.o monolib-dcmemory3.o monolib-dcscreen3.o monolib-toplevel3.o monolib-icon3.o monolib-settings3.o monolib-window3.o monolib-utils2.o monolib-timer2.o
+@COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = wx/unix/gsockunx.h \
+@COND_PLATFORM_UNIX_1@    wx/unix/mimetype.h
+@COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = wx/unix/gsockunx.h \
+@COND_PLATFORM_MACOSX_1@    wx/unix/mimetype.h
+@COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = wx/msw/dde.h \
+@COND_PLATFORM_WIN32_1@    wx/msw/gccpriv.h \
+@COND_PLATFORM_WIN32_1@    wx/msw/mimetype.h \
+@COND_PLATFORM_WIN32_1@    wx/msw/winundef.h
 @COND_USE_SOVERSION_1@__monodll___targetnamesuf = .0.0.0
 @COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_LIBR = $(top_builddir)/lib/libwxtiff.a
 @COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_LIBR = $(top_builddir)/lib/libwxpng.a
@@ -103,8 +106,8 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKIT_GTK@__GUI_SRC_OBJECTS_1 = monolib-imaglist.o monolib-colrdlgg.o monolib-listctrl.o monolib-filedlgg.o monolib-dirdlgg.o monolib-prntdlgg.o monolib-accel.o monolib-msgdlgg.o monolib-fdrepdlg.o monolib-tabg.o monolib-statusbr.o monolib-bmpbuttn.o monolib-button.o monolib-checkbox.o monolib-checklst.o monolib-choice.o monolib-combobox.o monolib-control.o monolib-dialog.o monolib-fontdlg.o monolib-frame.o monolib-gauge.o monolib-joystick2.o monolib-listbox.o monolib-mdi.o monolib-menu.o monolib-minifram2.o monolib-msgdlg.o monolib-notebook.o monolib-radiobox.o monolib-radiobut.o monolib-scrolbar.o monolib-scrolwin.o monolib-slider.o monolib-spinbutt.o monolib-spinctrl.o monolib-statbmp.o monolib-statbox.o monolib-statline.o monolib-stattext.o monolib-tbargtk.o monolib-textctrl.o monolib-tglbtn.o monolib-utilsres.o monolib-wave1.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_1 = monolib-gsockmot.o monolib-accel1.o monolib-app4.o monolib-bmpbuttn1.o monolib-bmpmotif.o monolib-button1.o monolib-checkbox1.o monolib-checklst1.o monolib-choice1.o monolib-clipbrd4.o monolib-colour4.o monolib-combobox1.o monolib-combobox_native.o monolib-control1.o monolib-cursor4.o monolib-data4.o monolib-dataobj3.o monolib-dc4.o monolib-dcclient4.o monolib-dcmemory4.o monolib-dcscreen4.o monolib-dialog1.o monolib-evtloop4.o monolib-filedlg.o monolib-font4.o monolib-frame1.o monolib-gauge1.o monolib-gdiobj4.o monolib-glcanvas2.o monolib-icon4.o monolib-listbox1.o monolib-main3.o monolib-mdi1.o monolib-menu1.o monolib-menuitem.o monolib-minifram3.o monolib-msgdlg1.o monolib-palette3.o monolib-radiobox1.o monolib-radiobut1.o monolib-scrolbar1.o monolib-settings4.o monolib-slider1.o monolib-spinbutt1.o monolib-statbmp1.o monolib-statbox1.o monolib-stattext1.o monolib-toolbar.o monolib-textctrl1.o monolib-timer3.o monolib-toplevel4.o monolib-utils3.o monolib-window4.o monolib-fdrepdlg.o monolib-listctrl.o monolib-imaglist.o monolib-notebook1.o monolib-fontdlgg.o monolib-colrdlgg.o monolib-statline1.o monolib-tabg.o monolib-dirdlgg.o monolib-prntdlgg.o monolib-statusbr.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_1 = monolib-access.o monolib-accel2.o monolib-bmpbuttn2.o monolib-button2.o monolib-checkbox2.o monolib-checklst2.o monolib-choice2.o monolib-colordlg.o monolib-combobox2.o monolib-control2.o monolib-dialog2.o monolib-dragimag.o monolib-fdrepdlg1.o monolib-filedlg1.o monolib-fontdlg1.o monolib-frame2.o monolib-gauge95.o monolib-imaglist1.o monolib-iniconf.o monolib-listbox2.o monolib-listctrl1.o monolib-mdi2.o monolib-menu2.o monolib-menuitem1.o monolib-metafile.o monolib-msgdlg2.o monolib-mslu.o monolib-nativdlg.o monolib-notebook2.o monolib-ownerdrw.o monolib-penwin.o monolib-printdlg.o monolib-printwin.o monolib-radiobox2.o monolib-radiobut2.o monolib-scrolbar2.o monolib-slider95.o monolib-spinbutt2.o monolib-spinctrl1.o monolib-statbmp2.o monolib-statbox2.o monolib-statbr95.o monolib-statline2.o monolib-stattext2.o monolib-tabctrl.o monolib-tbar95.o monolib-textctrl2.o monolib-tglbtn1.o monolib-treectrl.o monolib-mslu.o
-@COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_1 = monolib-gsocket2.o monolib-accel3.o monolib-aga.o monolib-app5.o monolib-bitmap4.o monolib-bmpbuttn3.o monolib-brush4.o monolib-button3.o monolib-checkbox3.o monolib-checklst3.o monolib-choice3.o monolib-clipbrd5.o monolib-colordlg1.o monolib-colour5.o monolib-combobox3.o monolib-control3.o monolib-cursor5.o monolib-data5.o monolib-dataobj4.o monolib-dc5.o monolib-dcclient5.o monolib-dcmemory5.o monolib-dcprint1.o monolib-dcscreen5.o monolib-dialog3.o monolib-dirdlg1.o monolib-dirmac.o monolib-dnd1.o monolib-filedlg2.o monolib-font5.o monolib-fontdlg2.o monolib-fontenum3.o monolib-fontutil3.o monolib-frame3.o monolib-gauge2.o monolib-gdiobj5.o monolib-icon5.o monolib-joystick3.o monolib-listbox3.o monolib-macnotfy.o monolib-mdi3.o monolib-menu3.o monolib-menuitem2.o monolib-metafile1.o monolib-mimetmac.o monolib-minifram4.o monolib-msgdlg3.o monolib-notebmac.o monolib-palette4.o monolib-pen4.o monolib-pnghand.o monolib-print.o monolib-printdlg1.o monolib-printmac.o monolib-radiobox3.o monolib-radiobut3.o monolib-region4.o monolib-scrolbar3.o monolib-settings5.o monolib-slider2.o monolib-spinbutt3.o monolib-statbmp3.o monolib-statbox3.o monolib-statbrma.o monolib-statlmac.o monolib-stattext3.o monolib-tabctrl1.o monolib-textctrl3.o monolib-thread1.o monolib-timer4.o monolib-toplevel5.o monolib-toolbar1.o monolib-tooltip2.o monolib-uma.o monolib-utils4.o monolib-utilsexc1.o monolib-wave2.o monolib-window5.o
-@COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS_1 = monolib-accel4.o monolib-app6.o monolib-bitmap5.o monolib-bmpbuttn4.o monolib-brush5.o monolib-button4.o monolib-checkbox4.o monolib-checklst4.o monolib-choice4.o monolib-clipbrd6.o monolib-colour6.o monolib-combobox4.o monolib-control4.o monolib-cursor6.o monolib-data6.o monolib-dataobj5.o monolib-dc6.o monolib-dcclient6.o monolib-dcmemory6.o monolib-dcprint2.o monolib-dcscreen6.o monolib-dialog4.o monolib-dnd2.o monolib-filedlg3.o monolib-font6.o monolib-fontdlg3.o monolib-fontenum4.o monolib-fontutil4.o monolib-frame4.o monolib-gauge3.o monolib-gdiimage1.o monolib-gdiobj6.o monolib-helpwin1.o monolib-icon6.o monolib-iniconf1.o monolib-joystick4.o monolib-listbox4.o monolib-main4.o monolib-menu4.o monolib-menuitem3.o monolib-metafile2.o monolib-mimetype2.o monolib-msgdlg4.o monolib-nativdlg1.o monolib-notebook3.o monolib-ownerdrw1.o monolib-palette5.o monolib-pen5.o monolib-print1.o monolib-radiobox4.o monolib-radiobut4.o monolib-region5.o monolib-scrolbar4.o monolib-settings6.o monolib-slider3.o monolib-spinbutt4.o monolib-spinctrl2.o monolib-statbmp4.o monolib-statbox4.o monolib-statline3.o monolib-stattext4.o monolib-tabctrl2.o monolib-textctrl4.o monolib-timer5.o monolib-thread2.o monolib-toolbar2.o monolib-tooltip3.o monolib-toplevel6.o monolib-wave3.o monolib-window6.o monolib-gsocket3.o monolib-gsockpm.o
+@COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_1 = monolib-gsocket2.o monolib-accel3.o monolib-aga.o monolib-app5.o monolib-bitmap4.o monolib-bmpbuttn3.o monolib-brush4.o monolib-button3.o monolib-checkbox3.o monolib-checklst3.o monolib-choice3.o monolib-clipbrd5.o monolib-colordlg1.o monolib-colour5.o monolib-combobox3.o monolib-control3.o monolib-cursor5.o monolib-data5.o monolib-dataobj4.o monolib-dc5.o monolib-dcclient5.o monolib-dcmemory5.o monolib-dcprint1.o monolib-dcscreen5.o monolib-dialog3.o monolib-dirdlg1.o monolib-dirmac.o monolib-dnd1.o monolib-filedlg2.o monolib-font5.o monolib-fontdlg2.o monolib-fontenum3.o monolib-fontutil3.o monolib-frame3.o monolib-gauge2.o monolib-gdiobj5.o monolib-icon5.o monolib-joystick3.o monolib-listbox3.o monolib-macnotfy.o monolib-mdi3.o monolib-menu3.o monolib-menuitem2.o monolib-metafile1.o monolib-mimetmac.o monolib-minifram4.o monolib-msgdlg3.o monolib-notebmac.o monolib-palette4.o monolib-pen4.o monolib-pnghand.o monolib-printdlg1.o monolib-printmac.o monolib-radiobox3.o monolib-radiobut3.o monolib-region4.o monolib-scrolbar3.o monolib-settings5.o monolib-slider2.o monolib-spinbutt3.o monolib-statbmp3.o monolib-statbox3.o monolib-statbrma.o monolib-statlmac.o monolib-stattext3.o monolib-tabctrl1.o monolib-textctrl3.o monolib-thread1.o monolib-timer4.o monolib-toplevel5.o monolib-toolbar1.o monolib-tooltip2.o monolib-uma.o monolib-utils4.o monolib-utilsexc1.o monolib-wave2.o monolib-window5.o
+@COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS_1 = monolib-accel4.o monolib-app6.o monolib-bitmap5.o monolib-bmpbuttn4.o monolib-brush5.o monolib-button4.o monolib-checkbox4.o monolib-checklst4.o monolib-choice4.o monolib-clipbrd6.o monolib-colour6.o monolib-combobox4.o monolib-control4.o monolib-cursor6.o monolib-data6.o monolib-dataobj5.o monolib-dc6.o monolib-dcclient6.o monolib-dcmemory6.o monolib-dcprint2.o monolib-dcscreen6.o monolib-dialog4.o monolib-dnd2.o monolib-filedlg3.o monolib-font6.o monolib-fontdlg3.o monolib-fontenum4.o monolib-fontutil4.o monolib-frame4.o monolib-gauge3.o monolib-gdiimage1.o monolib-gdiobj6.o monolib-helpwin1.o monolib-icon6.o monolib-iniconf1.o monolib-joystick4.o monolib-listbox4.o monolib-main4.o monolib-menu4.o monolib-menuitem3.o monolib-metafile2.o monolib-mimetype2.o monolib-msgdlg4.o monolib-nativdlg1.o monolib-notebook3.o monolib-ownerdrw1.o monolib-palette5.o monolib-pen5.o monolib-print.o monolib-radiobox4.o monolib-radiobut4.o monolib-region5.o monolib-scrolbar4.o monolib-settings6.o monolib-slider3.o monolib-spinbutt4.o monolib-spinctrl2.o monolib-statbmp4.o monolib-statbox4.o monolib-statline3.o monolib-stattext4.o monolib-tabctrl2.o monolib-textctrl4.o monolib-timer5.o monolib-thread2.o monolib-toolbar2.o monolib-tooltip3.o monolib-toplevel6.o monolib-wave3.o monolib-window6.o monolib-gsocket3.o monolib-gsockpm.o
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p_1 = -lwxodbc
 @COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
 @COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
@@ -323,7 +326,6 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKIT_MAC@    src/mac/palette.cpp \
 @COND_TOOLKIT_MAC@    src/mac/pen.cpp \
 @COND_TOOLKIT_MAC@    src/mac/pnghand.cpp \
-@COND_TOOLKIT_MAC@    src/mac/print.cpp \
 @COND_TOOLKIT_MAC@    src/mac/printdlg.cpp \
 @COND_TOOLKIT_MAC@    src/mac/printmac.cpp \
 @COND_TOOLKIT_MAC@    src/mac/radiobox.cpp \
@@ -432,6 +434,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_1 = monodll-colour2.o monodll-dc2.o monodll-gdiobj2.o monodll-palette1.o monodll-region2.o monodll-brush2.o monodll-pen2.o monodll-font2.o monodll-data2.o monodll-fontenum1.o monodll-fontutil1.o monodll-evtloop2.o monodll-app2.o monodll-bitmap2.o dirmgl.o monodll-clipbrd2.o monodll-cursor2.o monodll-dcclient2.o monodll-dcmemory2.o monodll-dcscreen2.o monodll-toplevel2.o monodll-icon2.o monodll-settings2.o monodll-window2.o monodll-utils1.o monodll-timer1.o
 @COND_WXUSE_LIBJPEG_BUILTIN@__wxjpeg___depname = $(top_builddir)/lib/libwxjpeg.a
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = monolib-dir.o monolib-gsocket.o monolib-mimetype.o monolib-snglinst.o monolib-threadpsx.o monolib-utilsunx.o
+@COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = monolib-dir.o monolib-gsocket.o monolib-mimetype.o monolib-snglinst.o monolib-threadpsx.o monolib-utilsunx.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = monolib-gsocket1.o monolib-gsockmsw.o monolib-dde.o monolib-dir1.o monolib-main.o monolib-mimetype1.o monolib-regconf.o monolib-registry.o monolib-snglinst1.o monolib-thread.o monolib-utils.o monolib-utilsexc.o monolib-volume.o
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_2 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarx11.o monolib-printps.o monolib-gsockgtk.o monolib-win_gtk.o monolib-app.o monolib-bitmap.o monolib-brush.o monolib-clipbrd.o monolib-colour.o monolib-cursor.o monolib-data.o monolib-dataobj.o monolib-dc.o monolib-dcclient.o monolib-dcmemory.o monolib-dcscreen.o monolib-dnd.o monolib-evtloop.o monolib-font.o monolib-toplevel.o monolib-gdiobj.o monolib-icon.o monolib-main1.o monolib-pen.o monolib-popupwin.o monolib-region.o monolib-settings.o monolib-timer.o monolib-tooltip.o monolib-utilsgtk.o monolib-window.o monolib-paletteg.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_2 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarx11.o monolib-printps.o monolib-region1.o monolib-pen1.o monolib-brush1.o monolib-bitmap1.o monolib-utilsx.o
@@ -444,8 +447,8 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKIT_GTK@__GUI_SRC_OBJECTS = imaglist.o colrdlgg.o listctrl.o filedlgg.o dirdlgg.o prntdlgg.o accel.o msgdlgg.o fdrepdlg.o tabg.o statusbr.o bmpbuttn.o button.o checkbox.o checklst.o choice.o combobox.o control.o dialog.o fontdlg.o frame.o gauge.o monodll-joystick1.o listbox.o mdi.o menu.o monodll-minifram1.o msgdlg.o notebook.o radiobox.o radiobut.o scrolbar.o scrolwin.o slider.o spinbutt.o spinctrl.o statbmp.o statbox.o statline.o stattext.o tbargtk.o textctrl.o tglbtn.o utilsres.o monodll-wave.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS = gsockmot.o monodll-accel.o monodll-app3.o monodll-bmpbuttn.o bmpmotif.o monodll-button.o monodll-checkbox.o monodll-checklst.o monodll-choice.o monodll-clipbrd3.o monodll-colour3.o monodll-combobox.o combobox_native.o monodll-control.o monodll-cursor3.o monodll-data3.o monodll-dataobj2.o monodll-dc3.o monodll-dcclient3.o monodll-dcmemory3.o monodll-dcscreen3.o monodll-dialog.o monodll-evtloop3.o filedlg.o monodll-font3.o monodll-frame.o monodll-gauge.o monodll-gdiobj3.o monodll-glcanvas1.o monodll-icon3.o monodll-listbox.o monodll-main2.o monodll-mdi.o monodll-menu.o menuitem.o monodll-minifram2.o monodll-msgdlg.o monodll-palette2.o monodll-radiobox.o monodll-radiobut.o monodll-scrolbar.o monodll-settings3.o monodll-slider.o monodll-spinbutt.o monodll-statbmp.o monodll-statbox.o monodll-stattext.o toolbar.o monodll-textctrl.o monodll-timer2.o monodll-toplevel3.o monodll-utils2.o monodll-window3.o fdrepdlg.o listctrl.o imaglist.o monodll-notebook.o fontdlgg.o colrdlgg.o monodll-statline.o tabg.o dirdlgg.o prntdlgg.o statusbr.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS = access.o monodll-accel1.o monodll-bmpbuttn1.o monodll-button1.o monodll-checkbox1.o monodll-checklst1.o monodll-choice1.o colordlg.o monodll-combobox1.o monodll-control1.o monodll-dialog1.o dragimag.o monodll-fdrepdlg.o monodll-filedlg.o monodll-fontdlg.o monodll-frame1.o gauge95.o monodll-imaglist.o iniconf.o monodll-listbox1.o monodll-listctrl.o monodll-mdi1.o monodll-menu1.o monodll-menuitem.o metafile.o monodll-msgdlg1.o mslu.o nativdlg.o monodll-notebook1.o ownerdrw.o penwin.o printdlg.o printwin.o monodll-radiobox1.o monodll-radiobut1.o monodll-scrolbar1.o slider95.o monodll-spinbutt1.o monodll-spinctrl.o monodll-statbmp1.o monodll-statbox1.o statbr95.o monodll-statline1.o monodll-stattext1.o tabctrl.o tbar95.o monodll-textctrl1.o monodll-tglbtn.o treectrl.o mslu.o
-@COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS = monodll-gsocket1.o monodll-accel2.o aga.o monodll-app4.o monodll-bitmap3.o monodll-bmpbuttn2.o monodll-brush3.o monodll-button2.o monodll-checkbox2.o monodll-checklst2.o monodll-choice2.o monodll-clipbrd4.o monodll-colordlg.o monodll-colour4.o monodll-combobox2.o monodll-control2.o monodll-cursor4.o monodll-data4.o monodll-dataobj3.o monodll-dc4.o monodll-dcclient4.o monodll-dcmemory4.o monodll-dcprint.o monodll-dcscreen4.o monodll-dialog2.o monodll-dirdlg.o dirmac.o monodll-dnd.o monodll-filedlg1.o monodll-font4.o monodll-fontdlg1.o monodll-fontenum2.o monodll-fontutil2.o monodll-frame2.o monodll-gauge1.o monodll-gdiobj4.o monodll-icon4.o monodll-joystick2.o monodll-listbox2.o macnotfy.o monodll-mdi2.o monodll-menu2.o monodll-menuitem1.o monodll-metafile.o mimetmac.o monodll-minifram3.o monodll-msgdlg2.o notebmac.o monodll-palette3.o monodll-pen3.o pnghand.o print.o monodll-printdlg.o printmac.o monodll-radiobox2.o monodll-radiobut2.o monodll-region3.o monodll-scrolbar2.o monodll-settings4.o monodll-slider1.o monodll-spinbutt2.o monodll-statbmp2.o monodll-statbox2.o statbrma.o statlmac.o monodll-stattext2.o monodll-tabctrl.o monodll-textctrl2.o monodll-thread.o monodll-timer3.o monodll-toplevel4.o monodll-toolbar.o monodll-tooltip1.o uma.o monodll-utils3.o monodll-utilsexc.o monodll-wave1.o monodll-window4.o
-@COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS = monodll-accel3.o monodll-app5.o monodll-bitmap4.o monodll-bmpbuttn3.o monodll-brush4.o monodll-button3.o monodll-checkbox3.o monodll-checklst3.o monodll-choice3.o monodll-clipbrd5.o monodll-colour5.o monodll-combobox3.o monodll-control3.o monodll-cursor5.o monodll-data5.o monodll-dataobj4.o monodll-dc5.o monodll-dcclient5.o monodll-dcmemory5.o monodll-dcprint1.o monodll-dcscreen5.o monodll-dialog3.o monodll-dnd1.o monodll-filedlg2.o monodll-font5.o monodll-fontdlg2.o monodll-fontenum3.o monodll-fontutil3.o monodll-frame3.o monodll-gauge2.o monodll-gdiimage.o monodll-gdiobj5.o monodll-helpwin.o monodll-icon5.o monodll-iniconf.o monodll-joystick3.o monodll-listbox3.o monodll-main3.o monodll-menu3.o monodll-menuitem2.o monodll-metafile1.o monodll-mimetype1.o monodll-msgdlg3.o monodll-nativdlg.o monodll-notebook2.o monodll-ownerdrw.o monodll-palette4.o monodll-pen4.o monodll-print.o monodll-radiobox3.o monodll-radiobut3.o monodll-region4.o monodll-scrolbar3.o monodll-settings5.o monodll-slider2.o monodll-spinbutt3.o monodll-spinctrl1.o monodll-statbmp3.o monodll-statbox3.o monodll-statline2.o monodll-stattext3.o monodll-tabctrl1.o monodll-textctrl3.o monodll-timer4.o monodll-thread1.o monodll-toolbar1.o monodll-tooltip2.o monodll-toplevel5.o monodll-wave2.o monodll-window5.o monodll-gsocket2.o gsockpm.o
+@COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS = monodll-gsocket1.o monodll-accel2.o aga.o monodll-app4.o monodll-bitmap3.o monodll-bmpbuttn2.o monodll-brush3.o monodll-button2.o monodll-checkbox2.o monodll-checklst2.o monodll-choice2.o monodll-clipbrd4.o monodll-colordlg.o monodll-colour4.o monodll-combobox2.o monodll-control2.o monodll-cursor4.o monodll-data4.o monodll-dataobj3.o monodll-dc4.o monodll-dcclient4.o monodll-dcmemory4.o monodll-dcprint.o monodll-dcscreen4.o monodll-dialog2.o monodll-dirdlg.o dirmac.o monodll-dnd.o monodll-filedlg1.o monodll-font4.o monodll-fontdlg1.o monodll-fontenum2.o monodll-fontutil2.o monodll-frame2.o monodll-gauge1.o monodll-gdiobj4.o monodll-icon4.o monodll-joystick2.o monodll-listbox2.o macnotfy.o monodll-mdi2.o monodll-menu2.o monodll-menuitem1.o monodll-metafile.o mimetmac.o monodll-minifram3.o monodll-msgdlg2.o notebmac.o monodll-palette3.o monodll-pen3.o pnghand.o monodll-printdlg.o printmac.o monodll-radiobox2.o monodll-radiobut2.o monodll-region3.o monodll-scrolbar2.o monodll-settings4.o monodll-slider1.o monodll-spinbutt2.o monodll-statbmp2.o monodll-statbox2.o statbrma.o statlmac.o monodll-stattext2.o monodll-tabctrl.o monodll-textctrl2.o monodll-thread.o monodll-timer3.o monodll-toplevel4.o monodll-toolbar.o monodll-tooltip1.o uma.o monodll-utils3.o monodll-utilsexc.o monodll-wave1.o monodll-window4.o
+@COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS = monodll-accel3.o monodll-app5.o monodll-bitmap4.o monodll-bmpbuttn3.o monodll-brush4.o monodll-button3.o monodll-checkbox3.o monodll-checklst3.o monodll-choice3.o monodll-clipbrd5.o monodll-colour5.o monodll-combobox3.o monodll-control3.o monodll-cursor5.o monodll-data5.o monodll-dataobj4.o monodll-dc5.o monodll-dcclient5.o monodll-dcmemory5.o monodll-dcprint1.o monodll-dcscreen5.o monodll-dialog3.o monodll-dnd1.o monodll-filedlg2.o monodll-font5.o monodll-fontdlg2.o monodll-fontenum3.o monodll-fontutil3.o monodll-frame3.o monodll-gauge2.o monodll-gdiimage.o monodll-gdiobj5.o monodll-helpwin.o monodll-icon5.o monodll-iniconf.o monodll-joystick3.o monodll-listbox3.o monodll-main3.o monodll-menu3.o monodll-menuitem2.o monodll-metafile1.o monodll-mimetype1.o monodll-msgdlg3.o monodll-nativdlg.o monodll-notebook2.o monodll-ownerdrw.o monodll-palette4.o monodll-pen4.o print.o monodll-radiobox3.o monodll-radiobut3.o monodll-region4.o monodll-scrolbar3.o monodll-settings5.o monodll-slider2.o monodll-spinbutt3.o monodll-spinctrl1.o monodll-statbmp3.o monodll-statbox3.o monodll-statline2.o monodll-stattext3.o monodll-tabctrl1.o monodll-textctrl3.o monodll-timer4.o monodll-thread1.o monodll-toolbar1.o monodll-tooltip2.o monodll-toplevel5.o monodll-wave2.o monodll-window5.o monodll-gsocket2.o gsockpm.o
 @COND_MONOLITHIC_0@WXLIB_CORE = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
 @COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p_1 = -lwxjpeg
 @COND_PLATFORM_MACOSX_1@__monodll___macinstname = -install_name $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX)$(__monodll___targetnamesuf)
@@ -458,7 +461,8 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKIT_MGL@__UNIV_TEXTCTRL_OBJECTS = monodll-textctrl5.o
 @COND_TOOLKIT_GTK@__UNIV_TEXTCTRL_OBJECTS = monodll-textctrl5.o
 @COND_TOOLKIT_MSW@__UNIV_TEXTCTRL_OBJECTS = monodll-textctrl5.o
-@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p_1 = -lwxpng
+@COND_USE_GUI_1@__install_gsafm___depname = install-gsafm
+@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_DEP = $(__wxodbc___depname)
 @COND_DEPS_TYPE_GCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_SRC = src/unix/dir.cpp \
@@ -467,6 +471,12 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_PLATFORM_UNIX_1@    src/unix/snglinst.cpp \
 @COND_PLATFORM_UNIX_1@    src/unix/threadpsx.cpp \
 @COND_PLATFORM_UNIX_1@    src/unix/utilsunx.cpp
+@COND_PLATFORM_MACOSX_1@BASE_PLATFORM_SRC = src/unix/dir.cpp \
+@COND_PLATFORM_MACOSX_1@    src/unix/gsocket.c \
+@COND_PLATFORM_MACOSX_1@    src/unix/mimetype.cpp \
+@COND_PLATFORM_MACOSX_1@    src/unix/snglinst.cpp \
+@COND_PLATFORM_MACOSX_1@    src/unix/threadpsx.cpp \
+@COND_PLATFORM_MACOSX_1@    src/unix/utilsunx.cpp
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_SRC = src/msw/gsocket.c \
 @COND_PLATFORM_WIN32_1@    src/msw/gsockmsw.c \
 @COND_PLATFORM_WIN32_1@    src/msw/dde.cpp \
@@ -484,20 +494,479 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKIT_MGL@UNIV_TEXTCTRL = src/univ/textctrl.cpp
 @COND_TOOLKIT_GTK@UNIV_TEXTCTRL = src/univ/textctrl.cpp
 @COND_TOOLKIT_MSW@UNIV_TEXTCTRL = src/univ/textctrl.cpp
-@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc
+@COND_SHARED_1_MONOLITHIC_1@__monodll___depname = $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX)$(__monodll___targetnamesuf)
 @COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
 @COND_WXUSE_REGEX_BUILTIN@__wxregex___depname = $(top_builddir)/lib/libwxregex.a
+@COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarx11.o monolib-printps.o monolib-gsockgtk.o monolib-win_gtk.o monolib-app.o monolib-bitmap.o monolib-brush.o monolib-clipbrd.o monolib-colour.o monolib-cursor.o monolib-data.o monolib-dataobj.o monolib-dc.o monolib-dcclient.o monolib-dcmemory.o monolib-dcscreen.o monolib-dnd.o monolib-evtloop.o monolib-font.o monolib-toplevel.o monolib-gdiobj.o monolib-icon.o monolib-main1.o monolib-pen.o monolib-popupwin.o monolib-region.o monolib-settings.o monolib-timer.o monolib-tooltip.o monolib-utilsgtk.o monolib-window.o monolib-paletteg.o
+@COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarx11.o monolib-printps.o monolib-region1.o monolib-pen1.o monolib-brush1.o monolib-bitmap1.o monolib-utilsx.o
+@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_3 = monolib-app1.o monolib-bitmap2.o monolib-brush2.o monolib-caret.o monolib-clipbrd1.o monolib-colour1.o monolib-cursor1.o monolib-data1.o monolib-dc1.o monolib-dcclient1.o monolib-dcmemory1.o monolib-dcprint.o monolib-dcscreen1.o monolib-dialup.o monolib-dib.o monolib-dirdlg.o monolib-display.o monolib-enhmeta.o monolib-helpbest.o monolib-evtloop1.o monolib-font1.o monolib-fontenum1.o monolib-fontutil1.o monolib-gdiimage.o monolib-gdiobj1.o monolib-glcanvas.o monolib-helpchm.o monolib-helpwin.o monolib-icon1.o monolib-joystick.o monolib-minifram.o monolib-palette.o monolib-pen2.o monolib-popupwin1.o monolib-region2.o monolib-settings1.o monolib-taskbar.o monolib-timer1.o monolib-tooltip1.o monolib-toplevel1.o monolib-wave.o monolib-window1.o monolib-automtn.o monolib-dataobj1.o monolib-dropsrc.o monolib-droptgt.o monolib-oleutils.o monolib-uuid.o
+@COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_3 = 
+@COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_3 = 
+@COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarx11.o monolib-printps.o monolib-gsockx11.o monolib-nanox.o monolib-app2.o monolib-bitmap1.o monolib-brush1.o monolib-clipbrd2.o monolib-colour2.o monolib-cursor2.o monolib-data2.o monolib-dataobj2.o monolib-dc2.o monolib-dcclient2.o monolib-dcmemory2.o monolib-dcscreen2.o monolib-evtloop2.o monolib-font2.o monolib-gdiobj2.o monolib-glcanvas1.o monolib-icon2.o monolib-joystick1.o monolib-main2.o monolib-minifram1.o monolib-palette1.o monolib-pen1.o monolib-popupwin2.o monolib-region1.o monolib-reparent.o monolib-settings2.o monolib-toplevel2.o monolib-utils1.o monolib-utilsx.o monolib-window2.o monolib-timer2.o
+@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_3 = monolib-colour3.o monolib-dc3.o monolib-gdiobj3.o monolib-palette2.o monolib-region3.o monolib-brush3.o monolib-pen3.o monolib-font3.o monolib-data3.o monolib-fontenum2.o monolib-fontutil2.o monolib-evtloop3.o monolib-app3.o monolib-bitmap3.o monolib-dirmgl.o monolib-clipbrd3.o monolib-cursor3.o monolib-dcclient3.o monolib-dcmemory3.o monolib-dcscreen3.o monolib-toplevel3.o monolib-icon3.o monolib-settings3.o monolib-window3.o monolib-utils2.o monolib-timer2.o
 @COND_WXUSE_LIBPNG_BUILTIN@__wxpng___depname = $(top_builddir)/lib/libwxpng.a
+@COND_TOOLKIT_GTK@GUI_HDR = wx/gtk/accel.h \
+@COND_TOOLKIT_GTK@    wx/gtk/app.h \
+@COND_TOOLKIT_GTK@    wx/gtk/bitmap.h \
+@COND_TOOLKIT_GTK@    wx/gtk/bmpbuttn.h \
+@COND_TOOLKIT_GTK@    wx/gtk/brush.h \
+@COND_TOOLKIT_GTK@    wx/gtk/button.h \
+@COND_TOOLKIT_GTK@    wx/gtk/checkbox.h \
+@COND_TOOLKIT_GTK@    wx/gtk/checklst.h \
+@COND_TOOLKIT_GTK@    wx/gtk/choice.h \
+@COND_TOOLKIT_GTK@    wx/gtk/clipbrd.h \
+@COND_TOOLKIT_GTK@    wx/gtk/colour.h \
+@COND_TOOLKIT_GTK@    wx/gtk/combobox.h \
+@COND_TOOLKIT_GTK@    wx/gtk/control.h \
+@COND_TOOLKIT_GTK@    wx/gtk/cursor.h \
+@COND_TOOLKIT_GTK@    wx/gtk/dataform.h \
+@COND_TOOLKIT_GTK@    wx/gtk/dataobj.h \
+@COND_TOOLKIT_GTK@    wx/gtk/dataobj2.h \
+@COND_TOOLKIT_GTK@    wx/gtk/dc.h \
+@COND_TOOLKIT_GTK@    wx/gtk/dcclient.h \
+@COND_TOOLKIT_GTK@    wx/gtk/dcmemory.h \
+@COND_TOOLKIT_GTK@    wx/gtk/dcscreen.h \
+@COND_TOOLKIT_GTK@    wx/gtk/dialog.h \
+@COND_TOOLKIT_GTK@    wx/gtk/dnd.h \
+@COND_TOOLKIT_GTK@    wx/gtk/filedlg.h \
+@COND_TOOLKIT_GTK@    wx/gtk/font.h \
+@COND_TOOLKIT_GTK@    wx/gtk/fontdlg.h \
+@COND_TOOLKIT_GTK@    wx/gtk/frame.h \
+@COND_TOOLKIT_GTK@    wx/gtk/toplevel.h \
+@COND_TOOLKIT_GTK@    wx/gtk/gauge.h \
+@COND_TOOLKIT_GTK@    wx/gtk/gdiobj.h \
+@COND_TOOLKIT_GTK@    wx/gtk/glcanvas.h \
+@COND_TOOLKIT_GTK@    wx/gtk/icon.h \
+@COND_TOOLKIT_GTK@    wx/gtk/joystick.h \
+@COND_TOOLKIT_GTK@    wx/gtk/listbox.h \
+@COND_TOOLKIT_GTK@    wx/gtk/mdi.h \
+@COND_TOOLKIT_GTK@    wx/gtk/menu.h \
+@COND_TOOLKIT_GTK@    wx/gtk/menuitem.h \
+@COND_TOOLKIT_GTK@    wx/gtk/minifram.h \
+@COND_TOOLKIT_GTK@    wx/gtk/msgdlg.h \
+@COND_TOOLKIT_GTK@    wx/gtk/notebook.h \
+@COND_TOOLKIT_GTK@    wx/gtk/pen.h \
+@COND_TOOLKIT_GTK@    wx/gtk/popupwin.h \
+@COND_TOOLKIT_GTK@    wx/gtk/radiobox.h \
+@COND_TOOLKIT_GTK@    wx/gtk/radiobut.h \
+@COND_TOOLKIT_GTK@    wx/gtk/region.h \
+@COND_TOOLKIT_GTK@    wx/gtk/scrolbar.h \
+@COND_TOOLKIT_GTK@    wx/gtk/scrolwin.h \
+@COND_TOOLKIT_GTK@    wx/gtk/slider.h \
+@COND_TOOLKIT_GTK@    wx/gtk/spinbutt.h \
+@COND_TOOLKIT_GTK@    wx/gtk/spinctrl.h \
+@COND_TOOLKIT_GTK@    wx/gtk/statbmp.h \
+@COND_TOOLKIT_GTK@    wx/gtk/statbox.h \
+@COND_TOOLKIT_GTK@    wx/gtk/statline.h \
+@COND_TOOLKIT_GTK@    wx/gtk/stattext.h \
+@COND_TOOLKIT_GTK@    wx/gtk/tbargtk.h \
+@COND_TOOLKIT_GTK@    wx/gtk/textctrl.h \
+@COND_TOOLKIT_GTK@    wx/gtk/tglbtn.h \
+@COND_TOOLKIT_GTK@    wx/gtk/timer.h \
+@COND_TOOLKIT_GTK@    wx/gtk/tooltip.h \
+@COND_TOOLKIT_GTK@    wx/gtk/treectrl.h \
+@COND_TOOLKIT_GTK@    wx/gtk/wave.h \
+@COND_TOOLKIT_GTK@    wx/gtk/win_gtk.h \
+@COND_TOOLKIT_GTK@    wx/gtk/window.h \
+@COND_TOOLKIT_GTK@    wx/generic/fdrepdlg.h \
+@COND_TOOLKIT_GTK@    wx/generic/tabg.h \
+@COND_TOOLKIT_GTK@    wx/generic/dirdlgg.h \
+@COND_TOOLKIT_GTK@    wx/generic/statusbr.h
+@COND_TOOLKIT_MOTIF@GUI_HDR = wx/motif/accel.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/app.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/bmpbuttn.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/bmpmotif.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/button.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/checkbox.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/checklst.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/choice.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/clipbrd.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/colour.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/combobox.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/control.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/cursor.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/dataform.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/dataobj.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/dc.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/dcclient.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/dcmemory.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/dcprint.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/dcscreen.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/dialog.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/dnd.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/filedlg.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/font.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/frame.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/gauge.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/gdiobj.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/glcanvas.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/icon.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/listbox.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/mdi.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/menu.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/menuitem.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/minifram.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/msgdlg.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/palette.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/print.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/private.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/radiobox.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/radiobut.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/region.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/scrolbar.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/settings.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/slider.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/spinbutt.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/statbmp.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/statbox.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/stattext.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/textctrl.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/tglbtn.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/timer.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/toolbar.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/toplevel.h \
+@COND_TOOLKIT_MOTIF@    wx/motif/window.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/fdrepdlg.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/listctrl.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/imaglist.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/notebook.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/fontdlgg.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/colrdlgg.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/statline.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/tabg.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/dirdlgg.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/prntdlgg.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/statusbr.h
+@COND_TOOLKIT_MSW@GUI_HDR = wx/msw/access.h \
+@COND_TOOLKIT_MSW@    wx/msw/accel.h \
+@COND_TOOLKIT_MSW@    wx/msw/app.h \
+@COND_TOOLKIT_MSW@    wx/msw/bitmap.h \
+@COND_TOOLKIT_MSW@    wx/msw/bmpbuttn.h \
+@COND_TOOLKIT_MSW@    wx/msw/brush.h \
+@COND_TOOLKIT_MSW@    wx/msw/button.h \
+@COND_TOOLKIT_MSW@    wx/msw/caret.h \
+@COND_TOOLKIT_MSW@    wx/msw/checkbox.h \
+@COND_TOOLKIT_MSW@    wx/msw/checklst.h \
+@COND_TOOLKIT_MSW@    wx/msw/choice.h \
+@COND_TOOLKIT_MSW@    wx/msw/clipbrd.h \
+@COND_TOOLKIT_MSW@    wx/msw/colordlg.h \
+@COND_TOOLKIT_MSW@    wx/msw/colour.h \
+@COND_TOOLKIT_MSW@    wx/msw/combobox.h \
+@COND_TOOLKIT_MSW@    wx/msw/control.h \
+@COND_TOOLKIT_MSW@    wx/msw/cursor.h \
+@COND_TOOLKIT_MSW@    wx/msw/dc.h \
+@COND_TOOLKIT_MSW@    wx/msw/dcclient.h \
+@COND_TOOLKIT_MSW@    wx/msw/dcmemory.h \
+@COND_TOOLKIT_MSW@    wx/msw/dcprint.h \
+@COND_TOOLKIT_MSW@    wx/msw/dcscreen.h \
+@COND_TOOLKIT_MSW@    wx/msw/dialog.h \
+@COND_TOOLKIT_MSW@    wx/msw/dib.h \
+@COND_TOOLKIT_MSW@    wx/msw/dirdlg.h \
+@COND_TOOLKIT_MSW@    wx/msw/dragimag.h \
+@COND_TOOLKIT_MSW@    wx/msw/enhmeta.h \
+@COND_TOOLKIT_MSW@    wx/msw/fdrepdlg.h \
+@COND_TOOLKIT_MSW@    wx/msw/filedlg.h \
+@COND_TOOLKIT_MSW@    wx/msw/font.h \
+@COND_TOOLKIT_MSW@    wx/msw/fontdlg.h \
+@COND_TOOLKIT_MSW@    wx/msw/frame.h \
+@COND_TOOLKIT_MSW@    wx/msw/gauge95.h \
+@COND_TOOLKIT_MSW@    wx/msw/gdiimage.h \
+@COND_TOOLKIT_MSW@    wx/msw/gdiobj.h \
+@COND_TOOLKIT_MSW@    wx/msw/glcanvas.h \
+@COND_TOOLKIT_MSW@    wx/msw/helpbest.h \
+@COND_TOOLKIT_MSW@    wx/msw/helpchm.h \
+@COND_TOOLKIT_MSW@    wx/msw/helpwin.h \
+@COND_TOOLKIT_MSW@    wx/msw/icon.h \
+@COND_TOOLKIT_MSW@    wx/msw/imaglist.h \
+@COND_TOOLKIT_MSW@    wx/msw/iniconf.h \
+@COND_TOOLKIT_MSW@    wx/msw/joystick.h \
+@COND_TOOLKIT_MSW@    wx/msw/listbox.h \
+@COND_TOOLKIT_MSW@    wx/msw/listctrl.h \
+@COND_TOOLKIT_MSW@    wx/msw/mdi.h \
+@COND_TOOLKIT_MSW@    wx/msw/menu.h \
+@COND_TOOLKIT_MSW@    wx/msw/menuitem.h \
+@COND_TOOLKIT_MSW@    wx/msw/metafile.h \
+@COND_TOOLKIT_MSW@    wx/msw/minifram.h \
+@COND_TOOLKIT_MSW@    wx/msw/missing.h \
+@COND_TOOLKIT_MSW@    wx/msw/msgdlg.h \
+@COND_TOOLKIT_MSW@    wx/msw/mslu.h \
+@COND_TOOLKIT_MSW@    wx/msw/msvcrt.h \
+@COND_TOOLKIT_MSW@    wx/msw/notebook.h \
+@COND_TOOLKIT_MSW@    wx/msw/palette.h \
+@COND_TOOLKIT_MSW@    wx/msw/pen.h \
+@COND_TOOLKIT_MSW@    wx/msw/printdlg.h \
+@COND_TOOLKIT_MSW@    wx/msw/printwin.h \
+@COND_TOOLKIT_MSW@    wx/msw/private.h \
+@COND_TOOLKIT_MSW@    wx/msw/radiobox.h \
+@COND_TOOLKIT_MSW@    wx/msw/radiobut.h \
+@COND_TOOLKIT_MSW@    wx/msw/regconf.h \
+@COND_TOOLKIT_MSW@    wx/msw/region.h \
+@COND_TOOLKIT_MSW@    wx/msw/registry.h \
+@COND_TOOLKIT_MSW@    wx/msw/scrolbar.h \
+@COND_TOOLKIT_MSW@    wx/msw/setup0.h \
+@COND_TOOLKIT_MSW@    wx/msw/slider95.h \
+@COND_TOOLKIT_MSW@    wx/msw/slidrmsw.h \
+@COND_TOOLKIT_MSW@    wx/msw/spinctrl.h \
+@COND_TOOLKIT_MSW@    wx/msw/spinbutt.h \
+@COND_TOOLKIT_MSW@    wx/msw/statbmp.h \
+@COND_TOOLKIT_MSW@    wx/msw/statbox.h \
+@COND_TOOLKIT_MSW@    wx/msw/statbr95.h \
+@COND_TOOLKIT_MSW@    wx/msw/statline.h \
+@COND_TOOLKIT_MSW@    wx/msw/stattext.h \
+@COND_TOOLKIT_MSW@    wx/msw/tabctrl.h \
+@COND_TOOLKIT_MSW@    wx/msw/taskbar.h \
+@COND_TOOLKIT_MSW@    wx/msw/tbar95.h \
+@COND_TOOLKIT_MSW@    wx/msw/tbarmsw.h \
+@COND_TOOLKIT_MSW@    wx/msw/textctrl.h \
+@COND_TOOLKIT_MSW@    wx/msw/tglbtn.h \
+@COND_TOOLKIT_MSW@    wx/msw/timer.h \
+@COND_TOOLKIT_MSW@    wx/msw/tooltip.h \
+@COND_TOOLKIT_MSW@    wx/msw/toplevel.h \
+@COND_TOOLKIT_MSW@    wx/msw/treectrl.h \
+@COND_TOOLKIT_MSW@    wx/msw/wave.h \
+@COND_TOOLKIT_MSW@    wx/msw/window.h \
+@COND_TOOLKIT_MSW@    wx/msw/access.h \
+@COND_TOOLKIT_MSW@    wx/msw/automtn.h \
+@COND_TOOLKIT_MSW@    wx/msw/dataform.h \
+@COND_TOOLKIT_MSW@    wx/msw/dataobj.h \
+@COND_TOOLKIT_MSW@    wx/msw/dataobj2.h \
+@COND_TOOLKIT_MSW@    wx/msw/dropsrc.h \
+@COND_TOOLKIT_MSW@    wx/msw/droptgt.h \
+@COND_TOOLKIT_MSW@    wx/msw/oleutils.h \
+@COND_TOOLKIT_MSW@    wx/msw/uuid.h
+@COND_TOOLKIT_MAC@GUI_HDR = wx/mac/accel.h \
+@COND_TOOLKIT_MAC@    wx/mac/aga.h \
+@COND_TOOLKIT_MAC@    wx/mac/app.h \
+@COND_TOOLKIT_MAC@    wx/mac/bitmap.h \
+@COND_TOOLKIT_MAC@    wx/mac/bmpbuttn.h \
+@COND_TOOLKIT_MAC@    wx/mac/brush.h \
+@COND_TOOLKIT_MAC@    wx/mac/button.h \
+@COND_TOOLKIT_MAC@    wx/mac/checkbox.h \
+@COND_TOOLKIT_MAC@    wx/mac/checklst.h \
+@COND_TOOLKIT_MAC@    wx/mac/choice.h \
+@COND_TOOLKIT_MAC@    wx/mac/clipbrd.h \
+@COND_TOOLKIT_MAC@    wx/mac/colordlg.h \
+@COND_TOOLKIT_MAC@    wx/mac/colour.h \
+@COND_TOOLKIT_MAC@    wx/mac/combobox.h \
+@COND_TOOLKIT_MAC@    wx/mac/control.h \
+@COND_TOOLKIT_MAC@    wx/mac/cursor.h \
+@COND_TOOLKIT_MAC@    wx/mac/dataform.h \
+@COND_TOOLKIT_MAC@    wx/mac/dataobj.h \
+@COND_TOOLKIT_MAC@    wx/mac/dataobj2.h \
+@COND_TOOLKIT_MAC@    wx/mac/dc.h \
+@COND_TOOLKIT_MAC@    wx/mac/dcclient.h \
+@COND_TOOLKIT_MAC@    wx/mac/dcmemory.h \
+@COND_TOOLKIT_MAC@    wx/mac/dcprint.h \
+@COND_TOOLKIT_MAC@    wx/mac/dcscreen.h \
+@COND_TOOLKIT_MAC@    wx/mac/dialog.h \
+@COND_TOOLKIT_MAC@    wx/mac/dirdlg.h \
+@COND_TOOLKIT_MAC@    wx/mac/dnd.h \
+@COND_TOOLKIT_MAC@    wx/mac/filedlg.h \
+@COND_TOOLKIT_MAC@    wx/mac/font.h \
+@COND_TOOLKIT_MAC@    wx/mac/fontdlg.h \
+@COND_TOOLKIT_MAC@    wx/mac/frame.h \
+@COND_TOOLKIT_MAC@    wx/mac/gauge.h \
+@COND_TOOLKIT_MAC@    wx/mac/gdiobj.h \
+@COND_TOOLKIT_MAC@    wx/mac/glcanvas.h \
+@COND_TOOLKIT_MAC@    wx/mac/gsockmac.h \
+@COND_TOOLKIT_MAC@    wx/mac/helpxxxx.h \
+@COND_TOOLKIT_MAC@    wx/mac/icon.h \
+@COND_TOOLKIT_MAC@    wx/mac/imaglist.h \
+@COND_TOOLKIT_MAC@    wx/mac/joystick.h \
+@COND_TOOLKIT_MAC@    wx/mac/listbox.h \
+@COND_TOOLKIT_MAC@    wx/mac/listctrl.h \
+@COND_TOOLKIT_MAC@    wx/mac/macnotfy.h \
+@COND_TOOLKIT_MAC@    wx/mac/macsock.h \
+@COND_TOOLKIT_MAC@    wx/mac/mdi.h \
+@COND_TOOLKIT_MAC@    wx/mac/menu.h \
+@COND_TOOLKIT_MAC@    wx/mac/menuitem.h \
+@COND_TOOLKIT_MAC@    wx/mac/metafile.h \
+@COND_TOOLKIT_MAC@    wx/mac/mimetype.h \
+@COND_TOOLKIT_MAC@    wx/mac/minifram.h \
+@COND_TOOLKIT_MAC@    wx/mac/msgdlg.h \
+@COND_TOOLKIT_MAC@    wx/mac/notebook.h \
+@COND_TOOLKIT_MAC@    wx/mac/palette.h \
+@COND_TOOLKIT_MAC@    wx/mac/pen.h \
+@COND_TOOLKIT_MAC@    wx/mac/pnghand.h \
+@COND_TOOLKIT_MAC@    wx/mac/pngread.h \
+@COND_TOOLKIT_MAC@    wx/mac/print.h \
+@COND_TOOLKIT_MAC@    wx/mac/printdlg.h \
+@COND_TOOLKIT_MAC@    wx/mac/printmac.h \
+@COND_TOOLKIT_MAC@    wx/mac/private.h \
+@COND_TOOLKIT_MAC@    wx/mac/radiobox.h \
+@COND_TOOLKIT_MAC@    wx/mac/radiobut.h \
+@COND_TOOLKIT_MAC@    wx/mac/region.h \
+@COND_TOOLKIT_MAC@    wx/mac/scrolbar.h \
+@COND_TOOLKIT_MAC@    wx/mac/settings.h \
+@COND_TOOLKIT_MAC@    wx/mac/slider.h \
+@COND_TOOLKIT_MAC@    wx/mac/spinbutt.h \
+@COND_TOOLKIT_MAC@    wx/mac/spinctrl.h \
+@COND_TOOLKIT_MAC@    wx/mac/statbmp.h \
+@COND_TOOLKIT_MAC@    wx/mac/statbox.h \
+@COND_TOOLKIT_MAC@    wx/mac/statline.h \
+@COND_TOOLKIT_MAC@    wx/mac/stattext.h \
+@COND_TOOLKIT_MAC@    wx/mac/statusbr.h \
+@COND_TOOLKIT_MAC@    wx/mac/tabctrl.h \
+@COND_TOOLKIT_MAC@    wx/mac/textctrl.h \
+@COND_TOOLKIT_MAC@    wx/mac/timer.h \
+@COND_TOOLKIT_MAC@    wx/mac/toolbar.h \
+@COND_TOOLKIT_MAC@    wx/mac/tooltip.h \
+@COND_TOOLKIT_MAC@    wx/mac/toplevel.h \
+@COND_TOOLKIT_MAC@    wx/mac/treectrl.h \
+@COND_TOOLKIT_MAC@    wx/mac/uma.h \
+@COND_TOOLKIT_MAC@    wx/mac/wave.h \
+@COND_TOOLKIT_MAC@    wx/mac/window.h
+@COND_TOOLKIT_OS2@GUI_HDR = wx/os2/accel.h \
+@COND_TOOLKIT_OS2@    wx/os2/dataobj.h \
+@COND_TOOLKIT_OS2@    wx/os2/helpwin.h \
+@COND_TOOLKIT_OS2@    wx/os2/pngread.h \
+@COND_TOOLKIT_OS2@    wx/os2/statline.h \
+@COND_TOOLKIT_OS2@    wx/os2/app.h \
+@COND_TOOLKIT_OS2@    wx/os2/dataobj2.h \
+@COND_TOOLKIT_OS2@    wx/os2/icon.h \
+@COND_TOOLKIT_OS2@    wx/os2/stattext.h \
+@COND_TOOLKIT_OS2@    wx/os2/bitmap.h \
+@COND_TOOLKIT_OS2@    wx/os2/dc.h \
+@COND_TOOLKIT_OS2@    wx/os2/tabctrl.h \
+@COND_TOOLKIT_OS2@    wx/os2/dcclient.h \
+@COND_TOOLKIT_OS2@    wx/os2/print.h \
+@COND_TOOLKIT_OS2@    wx/os2/bmpbuttn.h \
+@COND_TOOLKIT_OS2@    wx/os2/dcmemory.h \
+@COND_TOOLKIT_OS2@    wx/os2/iniconf.h \
+@COND_TOOLKIT_OS2@    wx/os2/private.h \
+@COND_TOOLKIT_OS2@    wx/os2/textctrl.h \
+@COND_TOOLKIT_OS2@    wx/os2/brush.h \
+@COND_TOOLKIT_OS2@    wx/os2/dcprint.h \
+@COND_TOOLKIT_OS2@    wx/os2/joystick.h \
+@COND_TOOLKIT_OS2@    wx/os2/timer.h \
+@COND_TOOLKIT_OS2@    wx/os2/dcscreen.h \
+@COND_TOOLKIT_OS2@    wx/os2/listbox.h \
+@COND_TOOLKIT_OS2@    wx/os2/button.h \
+@COND_TOOLKIT_OS2@    wx/os2/dialog.h \
+@COND_TOOLKIT_OS2@    wx/os2/radiobox.h \
+@COND_TOOLKIT_OS2@    wx/os2/toolbar.h \
+@COND_TOOLKIT_OS2@    wx/os2/checkbox.h \
+@COND_TOOLKIT_OS2@    wx/os2/radiobut.h \
+@COND_TOOLKIT_OS2@    wx/os2/tooltip.h \
+@COND_TOOLKIT_OS2@    wx/os2/checklst.h \
+@COND_TOOLKIT_OS2@    wx/os2/dnd.h \
+@COND_TOOLKIT_OS2@    wx/os2/menu.h \
+@COND_TOOLKIT_OS2@    wx/os2/region.h \
+@COND_TOOLKIT_OS2@    wx/os2/menuitem.h \
+@COND_TOOLKIT_OS2@    wx/os2/choice.h \
+@COND_TOOLKIT_OS2@    wx/os2/filedlg.h \
+@COND_TOOLKIT_OS2@    wx/os2/metafile.h \
+@COND_TOOLKIT_OS2@    wx/os2/scrolbar.h \
+@COND_TOOLKIT_OS2@    wx/os2/wave.h \
+@COND_TOOLKIT_OS2@    wx/os2/clipbrd.h \
+@COND_TOOLKIT_OS2@    wx/os2/font.h \
+@COND_TOOLKIT_OS2@    wx/os2/minifram.h \
+@COND_TOOLKIT_OS2@    wx/os2/settings.h \
+@COND_TOOLKIT_OS2@    wx/os2/window.h \
+@COND_TOOLKIT_OS2@    wx/os2/fontdlg.h \
+@COND_TOOLKIT_OS2@    wx/os2/msgdlg.h \
+@COND_TOOLKIT_OS2@    wx/os2/colour.h \
+@COND_TOOLKIT_OS2@    wx/os2/frame.h \
+@COND_TOOLKIT_OS2@    wx/os2/setup0.h \
+@COND_TOOLKIT_OS2@    wx/os2/combobox.h \
+@COND_TOOLKIT_OS2@    wx/os2/gauge.h \
+@COND_TOOLKIT_OS2@    wx/os2/notebook.h \
+@COND_TOOLKIT_OS2@    wx/os2/control.h \
+@COND_TOOLKIT_OS2@    wx/os2/gdiimage.h \
+@COND_TOOLKIT_OS2@    wx/os2/palette.h \
+@COND_TOOLKIT_OS2@    wx/os2/slider.h \
+@COND_TOOLKIT_OS2@    wx/os2/cursor.h \
+@COND_TOOLKIT_OS2@    wx/os2/gdiobj.h \
+@COND_TOOLKIT_OS2@    wx/os2/spinbutt.h \
+@COND_TOOLKIT_OS2@    wx/os2/gsockos2.h \
+@COND_TOOLKIT_OS2@    wx/os2/pen.h \
+@COND_TOOLKIT_OS2@    wx/os2/spinctrl.h \
+@COND_TOOLKIT_OS2@    wx/os2/statbmp.h \
+@COND_TOOLKIT_OS2@    wx/os2/dataform.h \
+@COND_TOOLKIT_OS2@    wx/os2/pnghand.h \
+@COND_TOOLKIT_OS2@    wx/os2/statbox.h \
+@COND_TOOLKIT_OS2@    wx/os2/toplevel.h
 @COND_WXUNIV_1@WXUNIVNAME = univ
+@COND_USE_GUI_1@__install_afm___depname = install-afm
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_LIBR = $(top_builddir)/lib/libwxregex.a
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p_1 = -lwxzlib
 @COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = dir.o gsocket.o mimetype.o snglinst.o threadpsx.o utilsunx.o
+@COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = dir.o gsocket.o mimetype.o snglinst.o threadpsx.o utilsunx.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = monodll-gsocket.o gsockmsw.o dde.o monodll-dir.o main.o monodll-mimetype.o regconf.o registry.o monodll-snglinst.o thread.o utils.o utilsexc.o volume.o
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_DEP = $(__wxzlib___depname)
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_DEP = $(__wxregex___depname)
-@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex
+@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p_1 = -lwxpng
+@COND_TOOLKIT_GTK@LOWLEVEL_HDR = wx/unix/fontutil.h \
+@COND_TOOLKIT_GTK@    wx/unix/utilsx11.h \
+@COND_TOOLKIT_GTK@    wx/unix/taskbarx11.h \
+@COND_TOOLKIT_GTK@    wx/generic/printps.h
+@COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = wx/unix/fontutil.h \
+@COND_TOOLKIT_MOTIF@    wx/unix/utilsx11.h \
+@COND_TOOLKIT_MOTIF@    wx/unix/taskbarx11.h \
+@COND_TOOLKIT_MOTIF@    wx/generic/printps.h
+@COND_TOOLKIT_MSW@LOWLEVEL_HDR = 
+@COND_TOOLKIT_MAC@LOWLEVEL_HDR = 
+@COND_TOOLKIT_OS2@LOWLEVEL_HDR = 
+@COND_TOOLKIT_X11@LOWLEVEL_HDR = wx/unix/fontutil.h \
+@COND_TOOLKIT_X11@    wx/unix/utilsx11.h \
+@COND_TOOLKIT_X11@    wx/unix/taskbarx11.h \
+@COND_TOOLKIT_X11@    wx/generic/printps.h \
+@COND_TOOLKIT_X11@    wx/x11/app.h \
+@COND_TOOLKIT_X11@    wx/x11/bitmap.h \
+@COND_TOOLKIT_X11@    wx/x11/brush.h \
+@COND_TOOLKIT_X11@    wx/x11/clipbrd.h \
+@COND_TOOLKIT_X11@    wx/x11/colour.h \
+@COND_TOOLKIT_X11@    wx/x11/cursor.h \
+@COND_TOOLKIT_X11@    wx/x11/dataform.h \
+@COND_TOOLKIT_X11@    wx/x11/dataobj.h \
+@COND_TOOLKIT_X11@    wx/x11/dataobj2.h \
+@COND_TOOLKIT_X11@    wx/x11/dc.h \
+@COND_TOOLKIT_X11@    wx/x11/dcclient.h \
+@COND_TOOLKIT_X11@    wx/x11/dcmemory.h \
+@COND_TOOLKIT_X11@    wx/x11/dcprint.h \
+@COND_TOOLKIT_X11@    wx/x11/dcscreen.h \
+@COND_TOOLKIT_X11@    wx/x11/dnd.h \
+@COND_TOOLKIT_X11@    wx/x11/font.h \
+@COND_TOOLKIT_X11@    wx/x11/gdiobj.h \
+@COND_TOOLKIT_X11@    wx/x11/glcanvas.h \
+@COND_TOOLKIT_X11@    wx/x11/icon.h \
+@COND_TOOLKIT_X11@    wx/x11/joystick.h \
+@COND_TOOLKIT_X11@    wx/x11/minifram.h \
+@COND_TOOLKIT_X11@    wx/x11/palette.h \
+@COND_TOOLKIT_X11@    wx/x11/pen.h \
+@COND_TOOLKIT_X11@    wx/x11/print.h \
+@COND_TOOLKIT_X11@    wx/x11/private.h \
+@COND_TOOLKIT_X11@    wx/x11/privx.h \
+@COND_TOOLKIT_X11@    wx/x11/region.h \
+@COND_TOOLKIT_X11@    wx/x11/reparent.h \
+@COND_TOOLKIT_X11@    wx/x11/textctrl.h \
+@COND_TOOLKIT_X11@    wx/x11/toplevel.h \
+@COND_TOOLKIT_X11@    wx/x11/window.h \
+@COND_TOOLKIT_X11@    src/generic/timer.h
+@COND_TOOLKIT_MGL@LOWLEVEL_HDR = wx/mgl/app.h \
+@COND_TOOLKIT_MGL@    wx/mgl/bitmap.h \
+@COND_TOOLKIT_MGL@    wx/mgl/brush.h \
+@COND_TOOLKIT_MGL@    wx/mgl/clipbrd.h \
+@COND_TOOLKIT_MGL@    wx/mgl/colour.h \
+@COND_TOOLKIT_MGL@    wx/mgl/cursor.h \
+@COND_TOOLKIT_MGL@    wx/mgl/dc.h \
+@COND_TOOLKIT_MGL@    wx/mgl/dcclient.h \
+@COND_TOOLKIT_MGL@    wx/mgl/dcmemory.h \
+@COND_TOOLKIT_MGL@    wx/mgl/dcscreen.h \
+@COND_TOOLKIT_MGL@    wx/mgl/font.h \
+@COND_TOOLKIT_MGL@    wx/mgl/fontutil.h \
+@COND_TOOLKIT_MGL@    wx/mgl/gdiobj.h \
+@COND_TOOLKIT_MGL@    wx/mgl/icon.h \
+@COND_TOOLKIT_MGL@    wx/mgl/palette.h \
+@COND_TOOLKIT_MGL@    wx/mgl/pen.h \
+@COND_TOOLKIT_MGL@    wx/mgl/popupwin.h \
+@COND_TOOLKIT_MGL@    wx/mgl/private.h \
+@COND_TOOLKIT_MGL@    wx/mgl/region.h \
+@COND_TOOLKIT_MGL@    wx/mgl/toplevel.h \
+@COND_TOOLKIT_MGL@    wx/mgl/window.h \
+@COND_TOOLKIT_MGL@    wx/generic/timer.h
 @COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_LIBR = $(top_builddir)/lib/libwxodbc.a
 @COND_WXUNIV_1@WXUNIV_DEFINE = __WXUNIVERSAL__
@@ -676,7 +1145,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKIT_MGL@    src/mgl/utils.cpp \
 @COND_TOOLKIT_MGL@    src/generic/timer.cpp
 @COND_USE_GUI_0@PORTNAME = base
-@COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)
+@COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_USE_GUI_0@CORE_SRC = src/common/init.cpp
 @COND_USE_GUI_1_WXUNIV_0@CORE_SRC = $(LOWLEVEL_SRC) $(GUI_SRC) src/generic/busyinfo.cpp \
 @COND_USE_GUI_1_WXUNIV_0@    src/generic/calctrl.cpp \
@@ -972,6 +1441,9 @@ monolib-region3.o: $(srcdir)/src/mgl/region.cpp
 
 monolib-control2.o: $(srcdir)/src/msw/control.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
+
+utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 dcbase.o: $(srcdir)/src/common/dcbase.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
@@ -1336,10 +1808,19 @@ gtk.o: $(srcdir)/src/univ/themes/gtk.cpp
 monolib-colour1.o: $(srcdir)/src/msw/colour.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
-install: $(__install_monodll___depname) $(__install_monolib___depname)
+install: $(__install_monodll___depname) $(__install_monolib___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig
 	(cd samples && $(MAKE) install)
 	$(INSTALL_DIR) $(datadir)/aclocal
-	(cd . ; $(INSTALL_DATA)  wxwin.m4 $(datadir)/aclocal)
+	(cd $(srcdir) ; $(INSTALL_DATA)  wxwin.m4 $(datadir)/aclocal)
+	$(INSTALL_DIR) $(libdir)/wx/include/$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5/wx
+	(cd ./ ; $(INSTALL_DATA)  lib/wx/include/$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5/wx/setup.h $(libdir)/wx/include/$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5/wx)
+	$(INSTALL_DIR) $(includedir)
+	for f in wx/arrimpl.cpp wx/listimpl.cpp wx/app.h wx/buffer.h wx/build.h wx/chkconf.h wx/clntdata.h wx/cmdline.h wx/confbase.h wx/config.h wx/datetime.h wx/datetime.inl wx/datstrm.h wx/db.h wx/dbtable.h wx/dde.h wx/debug.h wx/defs.h wx/dir.h wx/dynarray.h wx/dynlib.h wx/dynload.h wx/encconv.h wx/event.h wx/features.h wx/ffile.h wx/file.h wx/fileconf.h wx/filefn.h wx/filename.h wx/filesys.h wx/fontenc.h wx/fontmap.h wx/fs_inet.h wx/fs_zip.h wx/fs_mem.h wx/dbkeyg.h wx/gsocket.h wx/hash.h wx/hashmap.h wx/intl.h wx/iosfwrap.h wx/ioswrap.h wx/ipc.h wx/ipcbase.h wx/isql.h wx/isqlext.h wx/list.h wx/log.h wx/longlong.h wx/math.h wx/memory.h wx/memconf.h wx/memtext.h wx/mimetype.h wx/module.h wx/msgout.h wx/mstream.h wx/object.h wx/platform.h wx/process.h wx/regex.h wx/sckaddr.h wx/sckipc.h wx/sckstrm.h wx/socket.h wx/snglinst.h wx/strconv.h wx/stream.h wx/string.h wx/sysopt.h wx/textbuf.h wx/textfile.h wx/thread.h wx/thrimpl.cpp wx/timer.h wx/tokenzr.h wx/txtstrm.h wx/url.h wx/utils.h wx/variant.h wx/vector.h wx/version.h wx/volume.h wx/wfstream.h wx/wx.h wx/wxchar.h wx/wxprec.h wx/zipstrm.h wx/zstream.h $(BASE_PLATFORM_HDR) wx/generic/accel.h wx/generic/calctrl.h wx/generic/caret.h wx/generic/choicdgg.h wx/generic/colrdlgg.h wx/generic/dcpsg.h wx/generic/dirctrlg.h wx/generic/fontdlgg.h wx/generic/filedlgg.h wx/generic/grid.h wx/generic/gridctrl.h wx/generic/grid.h wx/generic/helpext.h wx/helphtml.h wx/generic/imaglist.h wx/generic/laywin.h wx/generic/msgdlgg.h wx/generic/notebook.h wx/generic/panelg.h wx/generic/prntdlgg.h wx/generic/progdlgg.h wx/generic/sashwin.h wx/generic/scrolwin.h wx/generic/spinctlg.h wx/generic/splash.h wx/generic/splitter.h wx/generic/textdlgg.h wx/generic/timer.h wx/generic/wizard.h wx/generic/treectlg.h $(GUI_HDR) $(LOWLEVEL_HDR); do \
+	if test ! -d $(includedir)/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
+	fi; \
+	$(INSTALL_DATA) $(srcdir)/include//$$f $(includedir)/$$f; \
+	done
 
 monodll-dc2.o: $(srcdir)/src/mgl/dc.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
@@ -1987,8 +2468,10 @@ monolib-main3.o: $(srcdir)/src/motif/main.cpp
 monolib-datstrm.o: $(srcdir)/src/common/datstrm.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
-utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+install-wxconfig: 
+	$(INSTALL_DIR) $(bindir)
+	$(INSTALL_PROGRAM) wx$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5-config $(bindir)
+	(cd $(bindir) && rm -f wx-config && $(LN_S) wx$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5-config wx-config)
 
 misc.o: $(srcdir)/src/iodbc/misc.c
 	$(CC) -c -o $@ $(CPPFLAGS) $(DEPS_FLAG) $(CFLAGS) $<
@@ -2065,9 +2548,6 @@ monolib-sckaddr.o: $(srcdir)/src/common/sckaddr.cpp
 monodll-timer2.o: $(srcdir)/src/motif/timer.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
-monolib-splash.o: $(srcdir)/src/generic/splash.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
-
 monolib-fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
@@ -2079,6 +2559,10 @@ tbarbase.o: $(srcdir)/src/common/tbarbase.cpp
 
 monodll-app3.o: $(srcdir)/src/motif/app.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+
+install-afm: 
+	$(INSTALL_DIR) $(datadir)/wx/2.5/afm
+	(cd $(srcdir) ; $(INSTALL_DATA)  misc/afm/*.afm $(datadir)/wx/2.5/afm)
 
 clntdata.o: $(srcdir)/src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
@@ -2338,7 +2822,7 @@ monolib-combobox.o: $(srcdir)/src/gtk/combobox.cpp
 monolib-colour2.o: $(srcdir)/src/x11/colour.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
-monolib-print1.o: $(srcdir)/src/os2/print.cpp
+monolib-frame.o: $(srcdir)/src/gtk/frame.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
 monolib-fontdlg1.o: $(srcdir)/src/msw/fontdlg.cpp
@@ -2538,6 +3022,10 @@ imagall.o: $(srcdir)/src/common/imagall.cpp
 
 monodll-button4.o: $(srcdir)/src/univ/button.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+
+install-gsafm: 
+	$(INSTALL_DIR) $(datadir)/wx/2.5/gs_afm
+	(cd $(srcdir) ; $(INSTALL_DATA)  misc/gs_afm/*.afm $(datadir)/wx/2.5/gs_afm)
 
 monolib-clipbrd1.o: $(srcdir)/src/msw/clipbrd.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
@@ -3569,7 +4057,7 @@ monolib-stattext3.o: $(srcdir)/src/mac/stattext.cpp
 monolib-popupwin.o: $(srcdir)/src/gtk/popupwin.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
-monolib-print.o: $(srcdir)/src/mac/print.cpp
+monolib-print.o: $(srcdir)/src/os2/print.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
 utilscmn.o: $(srcdir)/src/common/utilscmn.cpp
@@ -3733,9 +4221,6 @@ unzip.o: $(srcdir)/src/common/unzip.c
 
 monolib-window.o: $(srcdir)/src/gtk/window.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
-
-monodll-print.o: $(srcdir)/src/os2/print.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 monolib-uuid.o: $(srcdir)/src/msw/ole/uuid.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
@@ -4274,7 +4759,7 @@ monolib-dynarray.o: $(srcdir)/src/common/dynarray.cpp
 monodll-listbox3.o: $(srcdir)/src/os2/listbox.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
-print.o: $(srcdir)/src/mac/print.cpp
+print.o: $(srcdir)/src/os2/print.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 monolib-printmac.o: $(srcdir)/src/mac/printmac.cpp
@@ -4472,9 +4957,6 @@ listctrl.o: $(srcdir)/src/generic/listctrl.cpp
 datstrm.o: $(srcdir)/src/common/datstrm.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
-stream.o: $(srcdir)/src/common/stream.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
-
 fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
@@ -4583,8 +5065,8 @@ monolib-thread2.o: $(srcdir)/src/os2/thread.cpp
 monodll-bitmap1.o: $(srcdir)/src/msw/bitmap.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
-longlong.o: $(srcdir)/src/common/longlong.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+monolib-splash.o: $(srcdir)/src/generic/splash.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
 monolib-statbox2.o: $(srcdir)/src/msw/statbox.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
@@ -4789,8 +5271,8 @@ monodll-fontdlg1.o: $(srcdir)/src/mac/fontdlg.cpp
 gaugecmn.o: $(srcdir)/src/common/gaugecmn.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
-monolib-helpwin1.o: $(srcdir)/src/os2/helpwin.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
+stream.o: $(srcdir)/src/common/stream.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 monolib-font6.o: $(srcdir)/src/os2/font.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
@@ -4906,7 +5388,7 @@ monolib-dcmemory2.o: $(srcdir)/src/x11/dcmemory.cpp
 checkbox.o: $(srcdir)/src/gtk/checkbox.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
-monolib-frame.o: $(srcdir)/src/gtk/frame.cpp
+monolib-helpwin1.o: $(srcdir)/src/os2/helpwin.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
 monolib-minifram1.o: $(srcdir)/src/x11/minifram.cpp
@@ -5325,6 +5807,9 @@ minifram.o: $(srcdir)/src/msw/minifram.cpp
 
 monolib-dcmemory6.o: $(srcdir)/src/os2/dcmemory.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
+
+longlong.o: $(srcdir)/src/common/longlong.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 monodll-menu3.o: $(srcdir)/src/os2/menu.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
