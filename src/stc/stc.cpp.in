@@ -358,8 +358,10 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
 #if wxUSE_UNICODE
             wxMemoryBuffer buffer(len+1);
             success = (file.Read(buffer.GetData(), len) == len);
-            ((char*)buffer.GetData())[len] = 0;
-            contents = wxString(buffer, *wxConvCurrent);
+	    if (success) {
+                ((char*)buffer.GetData())[len] = 0;
+                contents = wxString(buffer, *wxConvCurrent, len);
+            }
 #else
             wxString buffer;
             success = (file.Read(wxStringBuffer(buffer, len), len) == len);
