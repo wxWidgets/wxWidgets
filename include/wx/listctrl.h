@@ -200,6 +200,10 @@ public:
     wxFont GetFont() const
         { return HasAttributes() ? m_attr->GetFont() : wxNullFont; }
 
+    // this conversion is necessary to make old code using GetItem() to
+    // compile
+    operator long() const { return m_itemId; }
+
     // these members are public for compatibility
 
     long            m_mask;     // Indicates what fields are valid
