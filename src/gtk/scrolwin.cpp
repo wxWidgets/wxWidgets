@@ -588,7 +588,7 @@ void wxScrolledWindow::GetViewStart (int *x, int *y) const
         *y = m_yScrollPosition;
 }
 
-void wxScrolledWindow::CalcScrolledPosition(int x, int y, int *xx, int *yy) const
+void wxScrolledWindow::DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const
 {
     if ( xx )
         *xx = x - m_xScrollPosition * m_xScrollPixelsPerLine;
@@ -596,7 +596,7 @@ void wxScrolledWindow::CalcScrolledPosition(int x, int y, int *xx, int *yy) cons
         *yy = y - m_yScrollPosition * m_yScrollPixelsPerLine;
 }
 
-void wxScrolledWindow::CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
+void wxScrolledWindow::DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
 {
     if ( xx )
         *xx = x + m_xScrollPosition * m_xScrollPixelsPerLine;

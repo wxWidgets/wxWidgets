@@ -67,8 +67,26 @@ public:
     double GetScaleY() const { return m_scaleY; }
 
     // translate between scrolled and unscrolled coordinates
-    virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const;
-    virtual void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
+    void CalcScrolledPosition(int x, int y, int *xx, int *yy) const
+        {  DoCalcScrolledPosition(x, y, xx, yy); }
+    wxPoint CalcScrolledPosition(const wxPoint& pt) const
+    {
+        wxPoint p2;
+        DoCalcScrolledPosition(pt.x, pt.y, &p2.x, &p2.y);
+        return p2;
+    }
+
+    void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
+        {  DoCalcUnscrolledPosition(x, y, xx, yy); }
+    wxPoint CalcUnscrolledPosition(const wxPoint& pt) const
+    {
+        wxPoint p2;
+        DoCalcUnscrolledPosition(pt.x, pt.y, &p2.x, &p2.y);
+        return p2;
+    }
+    
+    virtual void DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const;
+    virtual void DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
 
     // Adjust the scrollbars
     virtual void AdjustScrollbars(void);
