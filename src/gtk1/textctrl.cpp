@@ -1718,16 +1718,18 @@ void wxTextCtrl::Thaw()
 
 GtkAdjustment *wxTextCtrl::GetVAdj() const
 {
+    if ( !IsMultiLine() )
+        return NULL;
+
 #ifdef __WXGTK20__
-    return NULL;
+    return gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_widget));
 #else
-    return HasFlag(wxTE_MULTILINE) ? GTK_TEXT(m_text)->vadj : NULL;
+    return GTK_TEXT(m_text)->vadj;
 #endif
 }
 
 bool wxTextCtrl::DoScroll(GtkAdjustment *adj, int diff)
 {
-#ifndef __WXGTK20__
     float value = adj->value + diff;
 
     if ( value < 0 )
@@ -1746,39 +1748,38 @@ bool wxTextCtrl::DoScroll(GtkAdjustment *adj, int diff)
 
     adj->value = value;
 
+#ifdef __WXGTK20__
+    gtk_adjustment_value_changed(GTK_ADJUSTMENT(adj));
+#else
     gtk_signal_emit_by_name(GTK_OBJECT(adj), "value_changed");
-
 #endif
+
     return TRUE;
 }
 
 bool wxTextCtrl::ScrollLines(int lines)
 {
-#ifdef __WXGTK20__
-    return FALSE;
-#else
     GtkAdjustment *adj = GetVAdj();
     if ( !adj )
         return FALSE;
 
+#ifdef __WXGTK20__
+    int diff = (int)ceil(lines*adj->step_increment);
+#else
     // this is hardcoded to 10 in GTK+ 1.2 (great idea)
-    static const int KEY_SCROLL_PIXELS = 10;
-
-    return DoScroll(adj, lines*KEY_SCROLL_PIXELS);
+    int diff = 10*lines;
 #endif
+
+    return DoScroll(adj, diff);
 }
 
 bool wxTextCtrl::ScrollPages(int pages)
 {
-#ifdef __WXGTK20__
-    return FALSE;
-#else
     GtkAdjustment *adj = GetVAdj();
     if ( !adj )
         return FALSE;
 
     return DoScroll(adj, (int)ceil(pages*adj->page_increment));
-#endif
 }
 
 

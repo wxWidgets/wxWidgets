@@ -231,6 +231,7 @@ wxGTK:
 - fixed many rendering artifacts and wrong colours with lots of GTK+ themes
 - implemented wxColourDialog as native dialog
 - implemented wxTextCtrl::HitTest() (GTK+ >= 2)
+- implemented wxTextCtrl::ScrollLines() and ScrollPages for GTK+ 2.x
 - wxTreeCtrl::GetCount() counts root as well now (compatible with MSW)
 - added support for wxCHK_3STATE style (GTK2 only)
 - implemented text underlining under GTK2
