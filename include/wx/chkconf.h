@@ -63,11 +63,12 @@
 #   if !(wxUSE_SPINBTN && wxUSE_COMBOBOX)
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxCalendarCtrl requires wxSpinButton and wxComboBox"
-#   else
+#       else
 #           undef wxUSE_SPINBTN
 #           undef wxUSE_COMBOBOX
 #           define wxUSE_SPINBTN 1
 #           define wxUSE_COMBOBOX 1
+#       endif
 #   endif
 #endif /* wxUSE_CALENDAR */
 
