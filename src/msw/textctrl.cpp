@@ -69,6 +69,28 @@
     #define CFM_BACKCOLOR 0x04000000
 #endif
 
+// cygwin does not have these defined for richedit
+#ifndef ENM_LINK
+    #define ENM_LINK 0x04000000
+#endif
+
+#ifndef EM_AUTOURLDETECT
+    #define EM_AUTOURLDETECT (WM_USER + 91)
+#endif
+
+#ifndef EN_LINK
+    #define EN_LINK 0x070b
+
+    typedef struct _enlink
+    {
+        NMHDR nmhdr;
+        UINT msg;
+        WPARAM wParam;
+        LPARAM lParam;
+        CHARRANGE chrg;
+    } ENLINK;
+#endif // ENLINK
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
