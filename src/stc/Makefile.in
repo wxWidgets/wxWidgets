@@ -30,6 +30,7 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
         Document.o	        \
 	DocumentAccessor.o	\
         Editor.o		\
+	ExternalLexer.o		\
         Indicator.o	        \
         KeyMap.o		\
         KeyWords.o	        \
@@ -44,9 +45,11 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
 	LexCrontab.o		\
 	LexCSS.o		\
 	LexEiffel.o		\
+	LexEScript.o		\
 	LexFortran.o		\
 	LexHTML.o		\
 	LexLisp.o		\
+	LexLout.o		\
 	LexLua.o		\
 	LexOthers.o		\
 	LexPOV.o		\
