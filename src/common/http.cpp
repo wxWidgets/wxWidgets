@@ -197,7 +197,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   SetFlags(NONE);
   Notify(FALSE);
 
-  sprintf(buf, "%s %s\n\r", tmp_buf, pathbuf);
+  sprintf(buf, "%s %s\n\r", tmp_buf, (const char*) pathbuf);
   Write(buf, strlen(buf));
   SendHeaders();
   sprintf(buf, "\n\r");
