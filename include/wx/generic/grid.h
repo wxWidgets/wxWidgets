@@ -689,7 +689,7 @@ private:
     wxAttrKind m_attrkind;
 
     // use Clone() instead
-    DECLARE_NO_COPY_CLASS(wxGridCellAttr);
+    DECLARE_NO_COPY_CLASS(wxGridCellAttr)
 
     // suppress the stupid gcc warning about the class having private dtor and
     // no friends
