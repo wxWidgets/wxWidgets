@@ -118,6 +118,14 @@ class Diagram(object):
             return self._gridSpacing * int(x / self._gridSpacing + 0.5), self._gridSpacing * int(y / self._gridSpacing + 0.5)
         return x, y
 
+    def SetGridSpacing(self, spacing): 
+        """Sets grid spacing.""" 
+        self._gridSpacing = spacing 
+ 
+    def SetSnapToGrid(self, snap): 
+        """Sets snap-to-grid mode.""" 
+        self._snapToGrid = snap 
+
     def GetGridSpacing(self):
         """Return the grid spacing."""
         return self._gridSpacing
