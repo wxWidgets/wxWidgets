@@ -36,6 +36,7 @@
 #include "wx/defs.h"
 #include "wx/debug.h"
 #include "wx/object.h"
+#include "wx/string.h"
 
 // due to circular header dependencies this function has to be declared here
 // (normally it's found in utils.h which includes itself list.h...)
@@ -425,6 +426,8 @@ public:
     wxList(int key_type = wxKEY_NONE) : wxObjectList((wxKeyType)key_type) { }
 
     // compatibility methods
+    void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
+
     int Number() const { return GetCount(); }
     wxNode *First() const { return (wxNode *)GetFirst(); }
     wxNode *Last() const { return (wxNode *)GetLast(); }
