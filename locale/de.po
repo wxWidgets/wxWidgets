@@ -2747,12 +2747,12 @@ msgstr "Bedauere, das Format dieser Datei ist unbekannt."
 
 #: ../src/unix/sound.cpp:433
 msgid "Sound data are in unsupported format."
-msgstr ""
+msgstr "Klang Daten haben ein nicht unterstütztes Format."
 
 #: ../src/unix/sound.cpp:418
 #, c-format
 msgid "Sound file '%s' is in unsupported format."
-msgstr ""
+msgstr "Klang Datei '%s' beitzt ein nicht unterstütztes Format."
 
 #: ../src/common/paper.cpp:123
 msgid "Statement, 5 1/2 x 8 1/2 in"
@@ -3001,7 +3001,7 @@ msgstr "Das angeforderte HTML-Dokument konnte nicht geöffnet werden: %s"
 
 #: ../src/unix/sound.cpp:323
 msgid "Unable to play sound asynchronously."
-msgstr ""
+msgstr "Der Klang kann nicht asynchron abgespielt werden."
 
 #: ../src/generic/fontdlgg.cpp:250
 msgid "Underline"
