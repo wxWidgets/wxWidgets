@@ -586,6 +586,9 @@ void wxFatalError( const wxString &msg, const wxString &title )
         XFreeFont((Display *)wxGetDisplay(), font);
     }
 #elif defined(__WXGTK__)
+
+    #include "gdk/gdk.h"
+
     static inline wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
         return gdk_font_load( wxConvCurrent->cWX2MB(fontSpec) );

@@ -128,52 +128,6 @@ wxPalette wxGLContext::CreateDefaultPalette()
     return wxNullPalette;
 }
 
-//-----------------------------------------------------------------------------
-// "expose_event" of m_glWidget
-//-----------------------------------------------------------------------------
-
-static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxWindow *win )
-{
-    if (!win->m_hasVMT) return;
-
-    win->GetUpdateRegion().Union( gdk_event->area.x,
-                               gdk_event->area.y,
-                               gdk_event->area.width,
-                               gdk_event->area.height );
-
-    if (gdk_event->count > 0) return;
-
-/*
-    printf( "OnExpose from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
-*/
-
-    wxPaintEvent event( win->GetId() );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
-
-    win->GetUpdateRegion().Clear();
-}
-
-//-----------------------------------------------------------------------------
-// "draw" of m_glWidget
-//-----------------------------------------------------------------------------
-
-static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxWindow *win )
-{
-    if (!win->m_hasVMT) return;
-
-    win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
-
-    wxPaintEvent event( win->GetId() );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
-
-    win->GetUpdateRegion().Clear();
-}
-
 //---------------------------------------------------------------------------
 // wxGlCanvas
 //---------------------------------------------------------------------------
@@ -212,6 +166,16 @@ bool wxGLCanvas::Create( wxWindow *parent,
                          int *attribList, 
 			 const wxPalette& palette)
 {
+    m_needParent = TRUE;
+    m_acceptsFocus = TRUE;
+
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( _T("wxGLCanvas creation failed") );
+	return FALSE;
+    }
+
     if (!attribList)
     {
         int data[] = { GLX_RGBA, 
@@ -251,6 +215,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
       attribList = (int*) data;
     }
     
+    
     Display *dpy = GDK_DISPLAY();
     
     g_vi = glXChooseVisual( dpy, DefaultScreen(dpy), attribList );
@@ -262,45 +227,37 @@ bool wxGLCanvas::Create( wxWindow *parent,
     gtk_widget_push_visual( visual );
     
     m_glWidget = gtk_myfixed_new();
+    m_widget = m_glWidget;
     
     gtk_widget_pop_visual();
     gtk_widget_pop_colormap();
     
-    wxScrolledWindow::Create( parent, id, pos, size, style, name );
+    m_parent->DoAddChild( this );
   
-    GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-    GTK_WIDGET_SET_FLAGS( m_glWidget, GTK_CAN_FOCUS );
-    
-    gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), m_glWidget, 0, 0, m_width, m_height );
-
-    gtk_signal_connect( GTK_OBJECT(m_glWidget), "expose_event",
-      GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(m_glWidget), "draw",
-      GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
-      
-    /* connect to key press and mouse handlers etc. */  
-    ConnectWidget( m_glWidget );
-    
-
     /* must be realized for OpenGl output */
     gtk_widget_realize( m_glWidget );
  
-    gtk_widget_show( m_glWidget );
-    
     m_glContext = new wxGLContext( TRUE, this, palette, shared );
     
     XFree( g_vi );
     g_vi = (XVisualInfo*) NULL;
 
-    gdk_window_set_back_pixmap( m_glWidget->window, None, 0 );
+//    gdk_window_set_back_pixmap( m_glWidget->window, None, 0 );
      
+    /* we pretend to have a m_wxwindow so that PostCreation hooks
+       up the events for expose and draw */
+    m_wxwindow = m_glWidget;
+    PostCreation();
+    
+    Show( TRUE );
+    
     return TRUE;
 }
 
 wxGLCanvas::~wxGLCanvas()
 {
     if (m_glContext) delete m_glContext;
+    m_wxwindow = (GtkWidget*) NULL;
 }
 
 void wxGLCanvas::SwapBuffers()
@@ -333,78 +290,6 @@ void wxGLCanvas::SetCurrent()
 void wxGLCanvas::SetColour( const char *colour )
 {
     if (m_glContext) m_glContext->SetColour( colour );
-}
-
-void wxGLCanvas::DoSetSize( int x, int y, int width, int height, int sizeFlags )
-{
-    if (m_resizing) return; // I don't like recursions
-    m_resizing = TRUE;
-
-    if (m_parent->m_wxwindow == NULL) // i.e. wxNotebook
-    {
-        // don't set the size for children of wxNotebook, just take the values.
-        m_x = x;
-        m_y = y;
-        m_width = width;
-        m_height = height;
-    }
-    else
-    {
-        int old_width = m_width;
-        int old_height = m_height;
-
-        if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
-        {
-            if (x != -1) m_x = x;
-            if (y != -1) m_y = y;
-            if (width != -1) m_width = width;
-            if (height != -1) m_height = height;
-        }
-        else
-        {
-            m_x = x;
-            m_y = y;
-            m_width = width;
-            m_height = height;
-        }
-
-        if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
-        {
-             if (width == -1) m_width = 80;
-        }
-
-        if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
-        {
-             if (height == -1) m_height = 26;
-        }
-
-        if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
-        if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-        if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
-        if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
-
-        gtk_myfixed_set_size( GTK_MYFIXED(m_parent->m_wxwindow), 
-	                      m_widget, 
-			      m_x, 
-			      m_y,
-			      m_width,
-			      m_height );
-
-        gtk_myfixed_set_size( GTK_MYFIXED(m_wxwindow), 
-	                      m_glWidget,
-			      m_x, 
-			      m_y,
-			      m_width,
-			      m_height );
-    }
-
-    m_sizeSet = TRUE;
-
-    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
-
-    m_resizing = FALSE;
 }
 
 GtkWidget *wxGLCanvas::GetConnectWidget()

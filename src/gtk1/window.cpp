@@ -2657,9 +2657,23 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
     if (!rect)
     {
         if (m_wxwindow)
-            gtk_widget_draw( m_wxwindow, (GdkRectangle*) NULL );
+	{
+	    /* call the callback directly for preventing GTK from
+	       clearing the bakground */
+	    int w = 0;
+	    int h = 0;
+	    GetClientSize( &w, &h );
+            GdkRectangle gdk_rect;
+            gdk_rect.x = 0;
+            gdk_rect.y = 0;
+            gdk_rect.width = w;
+            gdk_rect.height = h;
+            gtk_window_draw_callback( m_wxwindow, &gdk_rect, this );
+	}
         else
+	{
             gtk_widget_draw( m_widget, (GdkRectangle*) NULL );
+	}
     }
     else
     {
@@ -2670,9 +2684,15 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
         gdk_rect.height = rect->height;
 
         if (m_wxwindow)
-            gtk_widget_draw( m_wxwindow, &gdk_rect );
+	{
+	    /* call the callback directly for preventing GTK from
+	       clearing the bakground */
+            gtk_window_draw_callback( m_wxwindow, &gdk_rect, this );
+	}
         else
+	{
             gtk_widget_draw( m_widget, &gdk_rect );
+	}
     }
 }
 
