@@ -127,6 +127,7 @@ wxString wxStaticText::GetLabel() const
 
 void wxStaticText::SetLabel( const wxString &label )
 {
+#if 0
     // Build the colorized version of the label
     wxString colorlabel = label;
     // If the color has been set, create a markup string to pass to the label setter
@@ -144,6 +145,13 @@ void wxStaticText::SetLabel( const wxString &label )
 #else
     gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( m_label ) );
 #endif
+
+#else
+
+    wxControl::SetLabel(label);
+    gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( m_label ) );
+#endif
+
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))
