@@ -232,7 +232,7 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
     while (subjectOfHelp && !eventProcessed)
     {
         wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), pt) ;
-        helpEvent.SetEventObject(this);
+        helpEvent.SetEventObject(subjectOfHelp);
 
         eventProcessed = win->GetEventHandler()->ProcessEvent(helpEvent);
 
