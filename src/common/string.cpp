@@ -509,13 +509,15 @@ size_t wxStringBase::rfind(wxChar ch, size_t nStart) const
         wxASSERT( nStart <= length() );
     }
 
-    const wxChar *p = wxStrrchr(c_str(), ch);
+    const wxChar *actual;
+    for ( actual = c_str() + ( nStart == npos ? length() : nStart + 1 );
+          actual > c_str(); --actual )
+    {
+        if ( *(actual - 1) == ch )
+            return (actual - 1) - c_str();
+    }
 
-    if ( p == NULL )
-        return npos;
-
-    size_t result = p - c_str();
-    return ( result > nStart ) ? npos : result;
+    return npos;
 }
 
 size_t wxStringBase::find_first_of(const wxChar* sz, size_t nStart) const
@@ -1959,6 +1961,11 @@ wxArrayString::~wxArrayString()
   Free();
 
   wxDELETEA(m_pItems);
+}
+
+void wxArrayString::reserve(size_t nSize)
+{
+    Alloc(nSize);
 }
 
 // pre-allocates memory (frees the previous data!)
