@@ -210,7 +210,12 @@ private:
     bool m_deferred;
 };
 
+#ifdef __WXOSX__
+#define wxConvFile wxConvUTF8
+#else
 #define wxConvFile wxConvLocal
+#endif
+
 WXDLLIMPEXP_DATA_BASE(extern wxCSConv&) wxConvLocal;
 WXDLLIMPEXP_DATA_BASE(extern wxCSConv&) wxConvISO8859_1;
 WXDLLIMPEXP_DATA_BASE(extern wxMBConv *) wxConvCurrent;
@@ -242,7 +247,11 @@ WXDLLIMPEXP_DATA_BASE(extern wxMBConv *) wxConvCurrent;
     #define wxFNCONV(name) wxConvFile.cWX2MB(name)
     #define wxFNSTRINGCAST wxMBSTRINGCAST
 #else
+#if defined( __WXOSX__ ) && wxMBFILES
+    #define wxFNCONV(name) wxConvFile.cWC2MB( wxConvLocal.cWX2WC(name) )
+#else
     #define wxFNCONV(name) name
+#endif
     #define wxFNSTRINGCAST WXSTRINGCAST
 #endif
 

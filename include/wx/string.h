@@ -830,8 +830,11 @@ public:
 #if wxUSE_WCHAR_T
     const wxWCharBuffer wc_str(wxMBConv& conv) const;
 #endif // wxUSE_WCHAR_T
-
+#ifdef __WXOSX__
+    const wxCharBuffer fn_str() const { return wxConvFile.cWC2WX( wc_str( wxConvLocal ) ); }
+#else
     const wxChar* fn_str() const { return c_str(); }
+#endif
 #endif // Unicode/ANSI
 
   // overloaded assignment
