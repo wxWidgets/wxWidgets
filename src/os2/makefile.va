@@ -22,6 +22,11 @@ LIBTARGET=$(WXDIR)\lib\$(WXLIBNAME).dll
 DUMMYOBJ=$D\dummydll.obj
 !else
 LIBTARGET=$(WXLIB)
+COMTEMPTGT1=$(WXDIR)\lib\wxcom1.lib
+COMTEMPTGT2=$(WXDIR)\lib\wxcom2.lib
+GENTEMPTGT=$(WXDIR)\lib\wxgen.lib
+NONESTEMPTGT=$(WXDIR)\lib\wxnones.lib
+OS2TEMPTGT=$(WXDIR)\lib\wxos2.lib
 DUMMYOBJ=$D\dummy.obj
 !endif
 
@@ -83,7 +88,6 @@ GENERICOBJS= \
   ..\generic\$D\statusbr.obj \
   ..\generic\$D\tabg.obj \
   ..\generic\$D\textdlgg.obj \
-  ..\generic\$D\extdlgg.obj \
   ..\generic\$D\tipdlg.obj \
   ..\generic\$D\busyinfo.obj
 
@@ -91,6 +95,24 @@ GENERICOBJS= \
 #  ..\generic\$D\treectrl.obj \
 #  ..\generic\$D\listctrl.obj \
 #  ..\generic\$D\notebook.obj \
+
+GENLIBOBJS= \
+  choicdgg.obj \
+  gridg.obj \
+  laywin.obj \
+  panelg.obj \
+  progdlgg.obj \
+  prop.obj \
+  propform.obj \
+  proplist.obj \
+  sashwin.obj \
+  scrolwin.obj \
+  splitter.obj \
+  statusbr.obj \
+  tabg.obj \
+  textdlgg.obj \
+  tipdlg.obj \
+  busyinfo.obj
 
 # These are generic things that don't need to be compiled on PM,
 # but sometimes it's useful to do so for testing purposes.
@@ -151,7 +173,6 @@ COMMONOBJS = \
   ..\common\$D\string.obj \
   ..\common\$D\socket.obj \
   ..\common\$D\sckaddr.obj \
-  ..\common\$D\sckint.obj \
   ..\common\$D\sckfile.obj \
   ..\common\$D\sckipc.obj \
   ..\common\$D\sckstrm.obj \
@@ -176,11 +197,88 @@ COMMONOBJS = \
   ..\common\$D\txtstrm.obj \
   ..\common\$D\wxchar.obj \
   ..\common\$D\unzip.obj \
-  ..\common\$D\zipstream.obj \
   ..\common\$D\filesys.obj \
   ..\common\$D\fs_inet.obj \
   ..\common\$D\fs_zip.obj
 
+COMLIBOBJS1 = \
+  cmndata.obj \
+  config.obj \
+  dcbase.obj \
+  db.obj \
+  dbtable.obj \
+  docview.obj \
+  docmdi.obj \
+  dynarray.obj \
+  dynlib.obj \
+  event.obj \
+  file.obj \
+  filefn.obj \
+  fileconf.obj \
+  framecmn.obj \
+  ftp.obj \
+  gdicmn.obj \
+  image.obj \
+  imagbmp.obj \
+  imagjpeg.obj \
+  imagpng.obj \
+  imaggif.obj \
+  intl.obj \
+  ipcbase.obj \
+  helpbase.obj \
+  layout.obj \
+  log.obj \
+  memory.obj \
+  mimetype.obj \
+  module.obj \
+  odbc.obj \
+  object.obj \
+  prntbase.obj \
+  resource.obj \
+  tbarbase.obj \
+  tbarsmpl.obj \
+  textfile.obj \
+  timercmn.obj \
+  utilscmn.obj \
+  validate.obj \
+  valgen.obj \
+  valtext.obj \
+  date.obj \
+  hash.obj \
+  list.obj \
+  paper.obj
+
+COMLIBOBJS2 = \
+  string.obj \
+  socket.obj \
+  sckaddr.obj \
+  sckfile.obj \
+  sckipc.obj \
+  sckstrm.obj \
+  url.obj \
+  http.obj \
+  protocol.obj \
+  time.obj \
+  tokenzr.obj \
+  wxexpr.obj \
+  y_tab.obj \
+  extended.obj \
+  process.obj \
+  wfstream.obj \
+  mstream.obj \
+  zstream.obj \
+  stream.obj \
+  datstrm.obj \
+  objstrm.obj \
+  variant.obj \
+  dlgcmn.obj \
+  wincmn.obj \
+  txtstrm.obj \
+  wxchar.obj \
+  unzip.obj \
+  filesys.obj \
+  fs_inet.obj \
+  fs_zip.obj
 
 OS2OBJS = \
   ..\os2\$D\dc.obj \
@@ -234,6 +332,103 @@ $(GENDIR)\$D:
 $(HTMLDIR)\$D:
     md $(HTMLDIR)\$D
 
+$(COMLIBOBJS1):
+  copy ..\common\$D\cmndata.obj
+  copy ..\common\$D\config.obj
+  copy ..\common\$D\dcbase.obj
+  copy ..\common\$D\db.obj
+  copy ..\common\$D\dbtable.obj
+  copy ..\common\$D\docview.obj
+  copy ..\common\$D\docmdi.obj
+  copy ..\common\$D\dynarray.obj
+  copy ..\common\$D\dynlib.obj
+  copy ..\common\$D\event.obj
+  copy ..\common\$D\file.obj
+  copy ..\common\$D\filefn.obj
+  copy ..\common\$D\fileconf.obj
+  copy ..\common\$D\framecmn.obj
+  copy ..\common\$D\ftp.obj
+  copy ..\common\$D\gdicmn.obj
+  copy ..\common\$D\image.obj
+  copy ..\common\$D\imagbmp.obj
+  copy ..\common\$D\imagjpeg.obj
+  copy ..\common\$D\imagpng.obj
+  copy ..\common\$D\imaggif.obj
+  copy ..\common\$D\intl.obj
+  copy ..\common\$D\ipcbase.obj
+  copy ..\common\$D\helpbase.obj
+  copy ..\common\$D\layout.obj
+  copy ..\common\$D\log.obj
+  copy ..\common\$D\memory.obj
+  copy ..\common\$D\mimetype.obj
+  copy ..\common\$D\module.obj
+  copy ..\common\$D\odbc.obj
+  copy ..\common\$D\object.obj
+  copy ..\common\$D\prntbase.obj
+  copy ..\common\$D\resource.obj
+  copy ..\common\$D\tbarbase.obj
+  copy ..\common\$D\tbarsmpl.obj
+  copy ..\common\$D\textfile.obj
+  copy ..\common\$D\timercmn.obj
+  copy ..\common\$D\utilscmn.obj
+  copy ..\common\$D\validate.obj
+  copy ..\common\$D\valgen.obj
+  copy ..\common\$D\valtext.obj
+  copy ..\common\$D\date.obj
+  copy ..\common\$D\hash.obj
+  copy ..\common\$D\list.obj
+  copy ..\common\$D\paper.obj
+
+$(COMLIBOBJS2):
+  copy ..\common\$D\string.obj
+  copy ..\common\$D\socket.obj
+  copy ..\common\$D\sckaddr.obj
+  copy ..\common\$D\sckfile.obj
+  copy ..\common\$D\sckipc.obj
+  copy ..\common\$D\sckstrm.obj
+  copy ..\common\$D\url.obj
+  copy ..\common\$D\http.obj
+  copy ..\common\$D\protocol.obj
+  copy ..\common\$D\time.obj
+  copy ..\common\$D\tokenzr.obj
+  copy ..\common\$D\wxexpr.obj
+  copy ..\common\$D\y_tab.obj
+  copy ..\common\$D\extended.obj
+  copy ..\common\$D\process.obj
+  copy ..\common\$D\wfstream.obj
+  copy ..\common\$D\mstream.obj
+  copy ..\common\$D\zstream.obj
+  copy ..\common\$D\stream.obj
+  copy ..\common\$D\datstrm.obj
+  copy ..\common\$D\objstrm.obj
+  copy ..\common\$D\variant.obj
+  copy ..\common\$D\dlgcmn.obj
+  copy ..\common\$D\wincmn.obj
+  copy ..\common\$D\txtstrm.obj
+  copy ..\common\$D\wxchar.obj
+  copy ..\common\$D\unzip.obj
+  copy ..\common\$D\filesys.obj
+  copy ..\common\$D\fs_inet.obj
+  copy ..\common\$D\fs_zip.obj
+
+$(GENLIBOBJS):
+  copy ..\generic\$D\choicdgg.obj
+  copy ..\generic\$D\gridg.obj
+  copy ..\generic\$D\laywin.obj
+  copy ..\generic\$D\panelg.obj
+  copy ..\generic\$D\progdlgg.obj
+  copy ..\generic\$D\prop.obj
+  copy ..\generic\$D\propform.obj
+  copy ..\generic\$D\proplist.obj
+  copy ..\generic\$D\sashwin.obj
+  copy ..\generic\$D\scrolwin.obj
+  copy ..\generic\$D\splitter.obj
+  copy ..\generic\$D\statusbr.obj
+  copy ..\generic\$D\tabg.obj
+  copy ..\generic\$D\textdlgg.obj
+  copy ..\generic\$D\tipdlg.obj
+  copy ..\generic\$D\busyinfo.obj
+
 # wxWindows library as DLL
 dll:
         nmake -f makefile.va all FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME)
@@ -269,12 +464,60 @@ pch1:   dirs $(DUMMYOBJ)
 
 ### Static library
 
-$(WXDIR)\lib\wx.lib: $D\dummy.obj $(OBJECTS) $(PERIPH_LIBS)
+$(WXDIR)\lib\wxcom1.lib: $(COMLIBOBJS1)
+ touch $(WXDIR)\lib\wxcom1.lib
+ del $(WXDIR)\lib\wxcom1.lib
+ ilib $(LIBFLAGS) $@ @<<
+    $**;
+<<
+
+$(WXDIR)\lib\wxcom2.lib: $(COMLIBOBJS2)
+ touch $(WXDIR)\lib\wxcom2.lib
+ del $(WXDIR)\lib\wxcom2.lib
+ ilib $(LIBFLAGS) $@ @<<
+    $**;
+<<
+
+$(WXDIR)\lib\wxgen.lib: $(GENLIBOBJS)
+ touch $(WXDIR)\lib\wxgen.lib
+ del $(WXDIR)\lib\wxgen.lib
+ ilib $(LIBFLAGS) $@ @<<
+    $**;
+<<
+ del *.obj
+
+$(WXDIR)\lib\wxnones.lib: $(NONESSENTIALOBJS)
+ touch $(WXDIR)\lib\wxnones.lib
+ del $(WXDIR)\lib\wxnones.lib
+ ilib $(LIBFLAGS) $@ @<<
+    $**;
+<<
+
+$(WXDIR)\lib\wxos2.lib: $(OS2OBJS)
+ touch $(WXDIR)\lib\wxos2.lib
+ del $(WXDIR)\lib\wxos2.lib
+ ilib $(LIBFLAGS) $@ @<<
+    $**;
+<<
+
+$(WXDIR)\lib\wx.lib: \
+  $D\dummy.obj \
+  $(COMTEMPTGT1) \
+  $(COMTEMPTGT2) \
+  $(GENTEMPTGT) \
+  $(NONESTEMPTGT) \
+  $(OS2TEMPTGT) \
+  $(PERIPH_LIBS)
  touch $(LIBTARGET)
  del $(LIBTARGET)
- ilib $(LINKFLAGS) $@ @<<
-    $**
+ ilib $(LIBFLAGS) $@ @<<
+    $**;
 <<
+  del $(COMTEMPTGT1)
+  del $(COMTEMPTGT2)
+  del $(GENTEMPTGT)
+  del $(NONESTEMPTGT)
+  del $(OS2TEMPTGT)
 
 !else
 

@@ -16,7 +16,7 @@
 #
 !include <makeva.env>
 
-THISDIR=$(WXWIN)\src
+THISDIR=$(WXDIR)\src
 
 all:
     cd os2

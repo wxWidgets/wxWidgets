@@ -184,7 +184,7 @@ int wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
   if (GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
     DoDefer();
 
-  // Wait for buffer completion. 
+  // Wait for buffer completion.
   while (m_defer_buffer != NULL)
     wxYield();
 
@@ -313,7 +313,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   else
     len2 = 0;
 
-  // The "len &&" in the following statements is necessary so 
+  // The "len &&" in the following statements is necessary so
   // that we don't attempt to read (and possibly hang the system)
   // if the message was zero bytes long
   if (len && Read(buffer, len).LastCount() != len)
@@ -400,7 +400,7 @@ int wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
   if (GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
     DoDefer();
 
-  // Wait for buffer completion. 
+  // Wait for buffer completion.
   while (m_defer_buffer != NULL)
     wxYield();
 
@@ -796,7 +796,7 @@ char *wxSocketBase::CallbackData(char *data)
 // wxSocketBase automatic notifier
 // --------------------------------------------------------------
 
-static void wx_socket_callback(GSocket *socket, GSocketEvent event, char *cdata)
+static void LINKAGEMODE wx_socket_callback(GSocket *socket, GSocketEvent event, char *cdata)
 {
   wxSocketBase *sckobj = (wxSocketBase *)cdata;
 
