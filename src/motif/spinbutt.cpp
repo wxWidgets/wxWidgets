@@ -11,6 +11,7 @@
 
 #ifdef __GNUG__
 #pragma implementation "spinbutt.h"
+#pragma implementation "spinctlg.h"
 #endif
 
 #include "wx/spinbutt.h"
