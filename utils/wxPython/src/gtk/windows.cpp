@@ -2386,6 +2386,107 @@ static PyObject *_wrap_wxWindow_IsEnabled(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxWindow_IsExposed(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->IsExposed(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxWindow_IsExposed(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3 = (int ) 0;
+    int  _arg4 = (int ) 0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","w","h", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|ii:wxWindow_IsExposed",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_IsExposed. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxWindow_IsExposed(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxWindow_IsExposedPoint(_swigobj,_swigarg0)  (_swigobj->IsExposed(_swigarg0))
+static PyObject *_wrap_wxWindow_IsExposedPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    wxPoint * _arg1;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_IsExposedPoint",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_IsExposedPoint. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxWindow_IsExposedPoint(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxWindow_IsExposedRect(_swigobj,_swigarg0)  (_swigobj->IsExposed(_swigarg0))
+static PyObject *_wrap_wxWindow_IsExposedRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    wxRect * _arg1;
+    PyObject * _argo0 = 0;
+    wxRect  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","rect", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_IsExposedRect",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_IsExposedRect. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxWindow_IsExposedRect(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxWindow_IsRetained(_swigobj)  (_swigobj->IsRetained())
 static PyObject *_wrap_wxWindow_IsRetained(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -8539,6 +8640,9 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_IsTopLevel", (PyCFunction) _wrap_wxWindow_IsTopLevel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_IsShown", (PyCFunction) _wrap_wxWindow_IsShown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_IsRetained", (PyCFunction) _wrap_wxWindow_IsRetained, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_IsExposedRect", (PyCFunction) _wrap_wxWindow_IsExposedRect, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_IsExposedPoint", (PyCFunction) _wrap_wxWindow_IsExposedPoint, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_IsExposed", (PyCFunction) _wrap_wxWindow_IsExposed, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_IsEnabled", (PyCFunction) _wrap_wxWindow_IsEnabled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_InitDialog", (PyCFunction) _wrap_wxWindow_InitDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Hide", (PyCFunction) _wrap_wxWindow_Hide, METH_VARARGS | METH_KEYWORDS },

@@ -268,6 +268,15 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def IsEnabled(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_IsEnabled,(self,) + _args, _kwargs)
         return val
+    def IsExposed(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_IsExposed,(self,) + _args, _kwargs)
+        return val
+    def IsExposedPoint(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_IsExposedPoint,(self,) + _args, _kwargs)
+        return val
+    def IsExposedRect(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_IsExposedRect,(self,) + _args, _kwargs)
+        return val
     def IsRetained(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_IsRetained,(self,) + _args, _kwargs)
         return val
