@@ -22,12 +22,9 @@
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapBase , wxGDIObject )
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandlerBase, wxObject ) 
-#endif
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject ) 
 
 #ifdef __DARWIN__
     #include <ApplicationServices/ApplicationServices.h>
@@ -354,9 +351,6 @@ wxBitmapRefData::~wxBitmapRefData()
 {
   DisposeBitmapRefData( this ) ;
 }
-
-wxList wxBitmapBase::sm_handlers;
-
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
@@ -1001,68 +995,6 @@ PicHandle wxBitmap::GetPict() const
    return picture;                  // return our groovy pict handle
 }
 
-void wxBitmap::AddHandler(wxBitmapHandler *handler)
-{
-    sm_handlers.Append(handler);
-}
-
-void wxBitmap::InsertHandler(wxBitmapHandler *handler)
-{
-    sm_handlers.Insert(handler);
-}
-
-bool wxBitmap::RemoveHandler(const wxString& name)
-{
-    wxBitmapHandler *handler = FindHandler(name);
-    if ( handler )
-    {
-        sm_handlers.DeleteObject(handler);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
-wxBitmapHandler *wxBitmap::FindHandler(const wxString& name)
-{
-    wxNode *node = sm_handlers.First();
-    while ( node )
-    {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-        if ( handler->GetName() == name )
-            return handler;
-        node = node->Next();
-    }
-    return NULL;
-}
-
-wxBitmapHandler *wxBitmap::FindHandler(const wxString& extension, wxBitmapType type)
-{
-    wxNode *node = sm_handlers.First();
-    while ( node )
-    {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-        if ( handler->GetExtension() == extension &&
-                    (type == -1 || handler->GetType() == type) )
-            return handler;
-        node = node->Next();
-    }
-    return NULL;
-}
-
-wxBitmapHandler *wxBitmap::FindHandler(wxBitmapType type)
-{
-    wxNode *node = sm_handlers.First();
-    while ( node )
-    {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-        if (handler->GetType() == type)
-            return handler;
-        node = node->Next();
-    }
-    return NULL;
-}
-
 /*
  * wxMask
  */
@@ -1223,8 +1155,6 @@ bool wxMask::PointMasked(int x, int y)
  * wxBitmapHandler
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
-
 bool wxBitmapHandler::Create(wxBitmap *bitmap, void *data, long type, int width, int height, int depth)
 {
     return FALSE;
@@ -1293,40 +1223,6 @@ bool  wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
 		return TRUE ;
 	}
 	return FALSE ;
-}
-
-#if 0   // The following is an example for creating a bitmap handler
-
-// TODO: bitmap handlers, a bit like this:
-class WXDLLEXPORT wxBMPResourceHandler: public wxBitmapHandler
-{
-    DECLARE_DYNAMIC_CLASS(wxBMPResourceHandler)
-public:
-    inline wxBMPResourceHandler()
-    {
-        m_name = "Windows bitmap resource";
-        m_extension = "";
-        m_type = wxBITMAP_TYPE_BMP_RESOURCE;
-    };
-
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-          int desiredWidth, int desiredHeight);
-};
-IMPLEMENT_DYNAMIC_CLASS(wxBMPResourceHandler, wxBitmapHandler)
-
-#endif
-
-void wxBitmap::CleanUpHandlers()
-{
-    wxNode *node = sm_handlers.First();
-    while ( node )
-    {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-        wxNode *next = node->Next();
-        delete handler;
-        delete node;
-        node = next;
-    }
 }
 
 void wxBitmap::InitStandardHandlers()

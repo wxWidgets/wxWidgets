@@ -196,17 +196,7 @@ public:
   inline bool operator == (const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
   inline bool operator != (const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
 
-  // Format handling
-  static inline wxList& GetHandlers() { return sm_handlers; }
-  static void AddHandler(wxBitmapHandler *handler);
-  static void InsertHandler(wxBitmapHandler *handler);
-  static bool RemoveHandler(const wxString& name);
-  static wxBitmapHandler *FindHandler(const wxString& name);
-  static wxBitmapHandler *FindHandler(const wxString& extension, wxBitmapType type);
-  static wxBitmapHandler *FindHandler(wxBitmapType type);
-
   static void InitStandardHandlers();
-  static void CleanUpHandlers();
 protected:
 
   // TODO: Implementation
