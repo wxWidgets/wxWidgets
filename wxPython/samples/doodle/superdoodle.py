@@ -181,7 +181,7 @@ class ControlPanel(wx.Panel):
     BMP_BORDER = 3
 
     def __init__(self, parent, ID, doodle):
-        wx.Panel.__init__(self, parent, ID, style=wx.RAISED_BORDER)
+        wx.Panel.__init__(self, parent, ID, style=wx.RAISED_BORDER, size=(20,20))
 
         numCols = 4
         spacing = 4
@@ -295,7 +295,7 @@ class ColourIndicator(wx.Window):
     def __init__(self, parent):
         wx.Window.__init__(self, parent, -1, style=wx.SUNKEN_BORDER)
         self.SetBackgroundColour(wx.WHITE)
-        self.SetSize( (-1, 45) )
+        self.SetSize( (45, 45) )
         self.colour = self.thickness = None
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
