@@ -107,7 +107,7 @@ wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
 			l = coords[ 0 ];
 			t = coords[ 1 ];
 			r = coords[ 2 ];
-			d = sqrt( ((x - l) * (x - l)) + ((y - t) * (y - t)) );
+			d = sqrt( (double) (((x - l) * (x - l)) + ((y - t) * (y - t))) );
 			if (d < (double)r)
 			{
 				return m_Link;

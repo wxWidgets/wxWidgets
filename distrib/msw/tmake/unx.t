@@ -503,7 +503,7 @@ DEPFILES = @ALL_DEPFILES@
 
 HEADERS = @ALL_HEADERS@
 
-all: @WX_CREATE_LINKS@
+all: @WX_ALL@
 
 @WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
 	@$(INSTALL) -d ./lib
@@ -514,7 +514,7 @@ all: @WX_CREATE_LINKS@
 	@$(INSTALL) -d ./lib
 	$(SHARED_LD) ./lib/$@ $(OBJECTS) $(EXTRALIBS)
 	
-CREATE_LINKS: @WX_TARGET_LIBRARY@
+CREATE_LINKS: @WX_LIBRARY_NAME_SHARED@
 	@$(RM) ./lib/@WX_LIBRARY_LINK1@
 	@$(RM) ./lib/@WX_LIBRARY_LINK2@
 	@$(RM) ./lib/@WX_LIBRARY_LINK3@
@@ -522,13 +522,13 @@ CREATE_LINKS: @WX_TARGET_LIBRARY@
 	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK2@
 	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK3@
 	
-CREATE_INSTALLED_LINKS:  $(libdir)/@WX_TARGET_LIBRARY@
+CREATE_INSTALLED_LINKS:  $(libdir)/@WX_LIBRARY_NAME_SHARED@
 	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
 	$(RM) $(libdir)/@WX_LIBRARY_LINK2@
 	$(RM) $(libdir)/@WX_LIBRARY_LINK3@
-	$(LN_S) @WX_TARGET_LIBRARY@ $(libdir)/@WX_LIBRARY_LINK1@
-	$(LN_S) @WX_TARGET_LIBRARY@ $(libdir)/@WX_LIBRARY_LINK2@
-	$(LN_S) @WX_TARGET_LIBRARY@ $(libdir)/@WX_LIBRARY_LINK3@
+	$(LN_S) @WX_LIBRARY_NAME_SHARED@ $(libdir)/@WX_LIBRARY_LINK1@
+	$(LN_S) @WX_LIBRARY_NAME_SHARED@ $(libdir)/@WX_LIBRARY_LINK2@
+	$(LN_S) @WX_LIBRARY_NAME_SHARED@ $(libdir)/@WX_LIBRARY_LINK3@
 	
 $(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDIR)/include/wx/setup.h
 
@@ -605,7 +605,7 @@ write_message:
 	@echo " Read the wxWindows Licence on licencing conditions."
 	@echo " "
 
-install: preinstall @WX_CREATE_INSTALLED_LINKS@ write_message
+install: preinstall @WX_ALL_INSTALLED@ write_message
 
 uninstall:
 	@echo " "

@@ -1714,95 +1714,101 @@ WX_LIBRARY_LINK3="lib${WX_LIBRARY}.so"
 dnl shared library settings
 SHARED_LD=
 PIC_FLAG=
-WX_CREATE_LINKS=
+WX_ALL=
+WX_ALL_INSTALLED=
 
 if test "$wxUSE_SHARED" = "yes"; then
     dnl set target to shared
     WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
 
-case "${host}" in
-  *-hp-hpux* )
-    WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}.sl"
-    SHARED_LD="${CXX} -b -o"
-    PIC_FLAG="+Z"
-  ;;
-  *-*-linux* )
-    SHARED_LD="${CC} -shared -o"
-    PIC_FLAG="-fPIC"
-    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
-    WX_CREATE_LINKS="CREATE_LINKS"
-  ;;
-  *-*-irix5* | *-*-irix6* )
-    if test "$GCC" = yes ; then
-       SHARED_LD="${CC} -shared -o"
-       PIC_FLAG="-fPIC"
-    else
-       SHARED_LD="${CXX} -shared -o"
-    fi
-    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
-    WX_CREATE_LINKS="CREATE_LINKS"
-  ;;
-  *-*-solaris2* )
-    if test "$GCC" = yes ; then
-       SHARED_LD="${CC} -shared -o"
-       PIC_FLAG="-fPIC"
-    else
-       SHARED_LD="${CXX} -G -o"
-       PIC_FLAG="PIC"
-    fi
-    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
-    WX_CREATE_LINKS="CREATE_LINKS"
-  ;;
-  *-*-sunos4* )
-    SHARED_LD="${CC} -shared -o"
-    PIC_FLAG="-fPIC"
-    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
-    WX_CREATE_LINKS="CREATE_LINKS"
-  ;;
-  *-*-freebsd* | *-*-netbsd*)
-    SHARED_LD="${CC} -shared -o"
-    PIC_FLAG="-fPIC"
-    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
-    WX_CREATE_LINKS="CREATE_LINKS"
-  ;;
-  *-*-osf* )
-    SHARED_LD="${CXX} -shared -o"
-    PIC_FLAG="-fPIC"
-    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
-    WX_CREATE_LINKS="CREATE_LINKS"
-  ;;
-  *-*-dgux5* )
-    SHARED_LD="${CXX} -shared -o"
-    PIC_FLAG="-fPIC"
-    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
-    WX_CREATE_LINKS="CREATE_LINKS"
-  ;;
-  *-*-sysv5* )
-    SHARED_LD="${CC} -shared -o"
-    PIC_FLAG="-fPIC"
-    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
-    WX_CREATE_LINKS="CREATE_LINKS"
-  ;;
-  *-*-aix* )
-    SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
-  ;;
-  *-*-cygwin32* )
-    dnl only static for now
-    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
-  ;;
-  *-*-mingw32* )
-    dnl only static for now
-    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
-  ;;
-  *-pc-os2_emx )
-  ;;
-  *)
-    AC_MSG_ERROR(unknown system type ${host}.)
-esac
+    case "${host}" in
+      *-hp-hpux* )
+        WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}.sl"
+        SHARED_LD="${CXX} -b -o"
+        PIC_FLAG="+Z"
+        WX_ALL=${WX_LIBRARY_NAME_SHARED}
+      ;;
+      *-*-linux* )
+        SHARED_LD="${CC} -shared -o"
+        PIC_FLAG="-fPIC"
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
+      ;;
+      *-*-irix5* | *-*-irix6* )
+        if test "$GCC" = yes ; then
+           SHARED_LD="${CC} -shared -o"
+           PIC_FLAG="-fPIC"
+        else
+           SHARED_LD="${CXX} -shared -o"
+        fi
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
+      ;;
+      *-*-solaris2* )
+        if test "$GCC" = yes ; then
+            SHARED_LD="${CC} -shared -o"
+            PIC_FLAG="-fPIC"
+        else
+            SHARED_LD="${CXX} -G -o"
+            PIC_FLAG="PIC"
+        fi
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
+      ;;
+      *-*-sunos4* )
+        SHARED_LD="${CC} -shared -o"
+        PIC_FLAG="-fPIC"
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
+      ;;
+      *-*-freebsd* | *-*-netbsd*)
+        SHARED_LD="${CC} -shared -o"
+        PIC_FLAG="-fPIC"
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
+      ;;
+      *-*-osf* )
+        SHARED_LD="${CXX} -shared -o"
+        PIC_FLAG="-fPIC"
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
+      ;;
+      *-*-dgux5* )
+        SHARED_LD="${CXX} -shared -o"
+        PIC_FLAG="-fPIC"
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
+      ;;
+      *-*-sysv5* )
+        SHARED_LD="${CC} -shared -o"
+        PIC_FLAG="-fPIC"
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
+      ;;
+      *-*-aix* )
+        SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
+        WX_ALL=${WX_LIBRARY_NAME_SHARED}
+      ;;
+      *-*-cygwin32* )
+        dnl only static for now
+        WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
+        WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+      ;;
+        *-*-mingw32* )
+        dnl only static for now
+        WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
+        WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+      ;;
+      *-pc-os2_emx )
+      ;;
+      *)
+        AC_MSG_ERROR(unknown system type ${host}.)
+    esac
 
 else
     dnl set target to static
     WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
+    WX_ALL="${WX_LIBRARY_NAME_STATIC}"
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2856,8 +2862,8 @@ AC_SUBST(WX_LIBRARY_LINK3)
 AC_SUBST(PROGRAM_EXT)
 
 dnl are we supposed to create the links?
-AC_SUBST(WX_CREATE_LINKS)
-AC_SUBST(WX_CREATE_INSTALLED_LINKS)
+AC_SUBST(WX_ALL)
+AC_SUBST(WX_ALL_INSTALLED)
 
 AC_SUBST(SHARED_LD)
 AC_SUBST(PIC_FLAG)

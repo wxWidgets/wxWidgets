@@ -211,7 +211,7 @@ void wxWindowDC::DoDrawArc( long x1, long y1, long x2, long y2,
     long yyc = YLOG2DEV(yc);
     double dx = xx1 - xxc;
     double dy = yy1 - yyc;
-    double radius = sqrt(dx*dx+dy*dy);
+    double radius = sqrt((double)(dx*dx+dy*dy));
     long   r      = (long)radius;
     double radius1, radius2;
 
