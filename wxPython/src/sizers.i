@@ -231,6 +231,15 @@ public:
     wxPoint GetPosition();
     wxSize GetMinSize();
 
+    %pragma(python) addtoclass = "
+    def GetSizeTuple(self):
+        return self.GetSize().asTuple()
+    def GetPositionTuple(self):
+        return self.GetPosition().asTuple()
+    def GetMinSizeTuple(self):
+        return self.GetMinSize().asTuple()
+    "
+
     // void RecalcSizes() = 0;
     // wxSize CalcMin() = 0;
 
