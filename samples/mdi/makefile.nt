@@ -13,7 +13,7 @@
 
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
-WXUSINGDLL=1
+WXUSINGDLL=0
 
 !include $(WXDIR)\src\ntwxwin.mak
 

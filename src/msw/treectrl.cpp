@@ -407,8 +407,10 @@ wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
 wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
                                       long& _cookie) const
 {
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetNextSibling(wxhWnd,
-                                                    (HTREEITEM) (WXHTREEITEM)_cookie));
+    wxTreeItemId l=wxTreeItemId((WXHTREEITEM) TreeView_GetNextSibling(wxhWnd,
+                (HTREEITEM) (WXHTREEITEM)_cookie));
+    _cookie=(long)l;
+    return l;
 }
 
 wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
