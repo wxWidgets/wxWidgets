@@ -36,14 +36,16 @@ class TestFrame(wxFrame):
                                    "TestWindow",
                                    size=(250, 150))
 
-        # The embedded window is the one exported from the DLL
-        print dw.GetEmbeddedWindow().GetClassName()
+        if dw.Ok():
+            # The embedded window is the one exported from the DLL
+            print dw.GetEmbeddedWindow().GetClassName()
 
-        # This shows that we can give it a child from this side of things.
-        # You can also call any wxWindow methods on it too.
-        wxStaticText(dw.GetEmbeddedWindow(), -1,
-                     "Loaded from test_dll...", pos=(10,10))
-
+            # This shows that we can give it a child from this side of things.
+            # You can also call any wxWindow methods on it too.
+            wxStaticText(dw.GetEmbeddedWindow(), -1,
+                         "Loaded from test_dll...", pos=(10,10))
+        else:
+            wxStaticText(dw, -1, "ERROR!!!!", pos=(20,20))
 
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(wxStaticLine(panel, -1), 0, wxGROW)

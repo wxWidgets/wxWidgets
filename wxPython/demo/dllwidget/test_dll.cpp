@@ -3,7 +3,7 @@
 #include <wx/window.h>
 #include <wx/msgdlg.h>
 
-#include "../dllwidget.h"
+#include "../../contrib/dllwidget/dllwidget.h"
 
 class TestWindow : public wxWindow
 {
