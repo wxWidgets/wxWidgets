@@ -1384,7 +1384,12 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     return;
   }
 */
-  if (!m_current) return;
+  if ( !m_current )
+  {
+      event.Skip();
+      return;
+  }
+
   switch (event.KeyCode())
   {
     case WXK_UP:
