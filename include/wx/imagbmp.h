@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imagbmp.h
-// Purpose:     wxImage BMP handler
-// Author:      Robert Roebling
+// Purpose:     wxImage BMP, ICO and CUR handlers
+// Author:      Robert Roebling, Chris Elliott
 // RCS-ID:      $Id$
-// Copyright:   (c) Robert Roebling
+// Copyright:   (c) Robert Roebling, Chris Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -43,25 +43,24 @@ class WXDLLEXPORT wxBMPHandler : public wxImageHandler
 public:
     wxBMPHandler()
     {
-        m_name = _T("BMP file");
+        m_name = _T("Windows bitmap file");
         m_extension = _T("bmp");
         m_type = wxBITMAP_TYPE_BMP;
-        m_mime = _T("image/bmp");
+        m_mime = _T("image/x-bmp");
     };
 
 #if wxUSE_STREAMS
-
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool DoCanRead( wxInputStream& stream );
+    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+    virtual bool DoCanRead( wxInputStream& stream );
                                 
 protected:
-  bool SaveDib(wxImage *image, wxOutputStream& stream, bool verbose, bool IsBmp, bool IsMask);
-  bool DoLoadDib (wxImage * image, int width, int height, int bpp, int ncolors, int comp,
-                off_t bmpOffset, wxInputStream& stream,
-                bool verbose, bool IsBmp, bool hasPalette  ) ;
-  bool LoadDib( wxImage *image, wxInputStream& stream, bool verbose, bool IsBmp  ) ;
-
+    bool SaveDib(wxImage *image, wxOutputStream& stream, bool verbose, 
+                 bool IsBmp, bool IsMask);
+    bool DoLoadDib(wxImage *image, int width, int height, int bpp, int ncolors, 
+                   int comp, off_t bmpOffset, wxInputStream& stream,
+                   bool verbose, bool IsBmp, bool hasPalette);
+    bool LoadDib(wxImage *image, wxInputStream& stream, bool verbose, bool IsBmp);
 #endif // wxUSE_STREAMS
 
 private:
@@ -78,25 +77,54 @@ class WXDLLEXPORT wxICOHandler : public wxBMPHandler
 public:
     wxICOHandler()
     {
-        m_name = _T("ICO file");
+        m_name = _T("Windows icon file");
         m_extension = _T("ico");
         m_type = wxBITMAP_TYPE_ICO;
-        m_mime = _T("image/icon");
+        m_mime = _T("image/x-ico");
     };
 
 #if wxUSE_STREAMS
-
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool DoCanRead( wxInputStream& stream );
-                
+    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+    virtual bool DoCanRead( wxInputStream& stream );
+    virtual int GetImagesCount( wxInputStream& stream );
 #endif // wxUSE_STREAMS
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxBMPHandler)
+    DECLARE_DYNAMIC_CLASS(wxICOHandler)
 };
 
 
-#endif
-  // _WX_IMAGBMP_H_
+// ----------------------------------------------------------------------------
+// wxCURHandler
+// ----------------------------------------------------------------------------
 
+// These two options are filled in upon reading CUR file and can (should) be
+// specified when saving a CUR file - they define the hotspot of the cursor:
+#define wxCUR_HOTSPOT_X  wxT("HotSpotX")
+#define wxCUR_HOTSPOT_Y  wxT("HotSpotY")
+
+class WXDLLEXPORT wxCURHandler : public wxICOHandler
+{
+public:
+    wxCURHandler()
+    {
+        m_name = _T("Windows cursor file");
+        m_extension = _T("cur");
+        m_type = wxBITMAP_TYPE_CUR;
+        m_mime = _T("image/x-cur");
+    };
+    
+    // VS: This handler's meat is implemented inside wxICOHandler (the two
+    //     formats are almost identical), but we hide this fact at
+    //     the API level, since it is a mere implementation detail.
+
+#if wxUSE_STREAMS
+    virtual bool DoCanRead( wxInputStream& stream );
+#endif // wxUSE_STREAMS
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxCURHandler)
+};
+
+#endif // _WX_IMAGBMP_H_
