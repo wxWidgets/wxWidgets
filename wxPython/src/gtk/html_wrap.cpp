@@ -441,9 +441,9 @@ class wxPyHtmlFilter : public wxHtmlFilter {
 public:
     wxPyHtmlFilter() : wxHtmlFilter() {}
 
-    // returns TRUE if this filter is able to open&read given file
+    // returns True if this filter is able to open&read given file
     virtual bool CanRead(const wxFSFile& file) const {
-        bool rval = FALSE;
+        bool rval = False;
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "CanRead"))) {
@@ -614,8 +614,8 @@ static PyObject *_wrap_new_HtmlLinkInfo(PyObject *self, PyObject *args, PyObject
     wxString const &arg2_defvalue = wxPyEmptyString ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     wxHtmlLinkInfo *result;
-    bool temp1 = false ;
-    bool temp2 = false ;
+    bool temp1 = False ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -626,13 +626,13 @@ static PyObject *_wrap_new_HtmlLinkInfo(PyObject *self, PyObject *args, PyObject
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = true;
+        temp1 = True;
     }
     if (obj1) {
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     {
@@ -876,7 +876,7 @@ static PyObject *_wrap_HtmlTag_HasParam(PyObject *self, PyObject *args, PyObject
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -888,7 +888,7 @@ static PyObject *_wrap_HtmlTag_HasParam(PyObject *self, PyObject *args, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -916,9 +916,9 @@ static PyObject *_wrap_HtmlTag_GetParam(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     wxString *arg2 = 0 ;
-    int arg3 = (int) FALSE ;
+    int arg3 = (int) False ;
     wxString result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -930,7 +930,7 @@ static PyObject *_wrap_HtmlTag_GetParam(PyObject *self, PyObject *args, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1157,7 +1157,7 @@ static PyObject *_wrap_HtmlParser_Parse(PyObject *self, PyObject *args, PyObject
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxString *arg2 = 0 ;
     wxObject *result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1169,7 +1169,7 @@ static PyObject *_wrap_HtmlParser_Parse(PyObject *self, PyObject *args, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1199,7 +1199,7 @@ static PyObject *_wrap_HtmlParser_InitParser(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1211,7 +1211,7 @@ static PyObject *_wrap_HtmlParser_InitParser(PyObject *self, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1372,7 +1372,6 @@ static PyObject *_wrap_HtmlParser_PushTagHandler(PyObject *self, PyObject *args,
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxHtmlTagHandler *arg2 = (wxHtmlTagHandler *) 0 ;
     wxString arg3 ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1383,8 +1382,12 @@ static PyObject *_wrap_HtmlParser_PushTagHandler(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HtmlParser_PushTagHandler",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlParser,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxHtmlTagHandler,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg3 = *argp3; 
+    {
+        wxString* sptr = wxString_in_helper(obj2);
+        if (sptr == NULL) SWIG_fail;
+        arg3 = *sptr;
+        delete sptr;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->PushTagHandler(arg2,arg3);
@@ -1594,8 +1597,6 @@ static PyObject *_wrap_HtmlWinParser_SetFonts(PyObject *self, PyObject *args, Py
     wxString arg2 ;
     wxString arg3 ;
     PyObject *arg4 = (PyObject *) NULL ;
-    wxString *argp2 ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1606,10 +1607,18 @@ static PyObject *_wrap_HtmlWinParser_SetFonts(PyObject *self, PyObject *args, Py
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:HtmlWinParser_SetFonts",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlWinParser,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
-    if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg3 = *argp3; 
+    {
+        wxString* sptr = wxString_in_helper(obj1);
+        if (sptr == NULL) SWIG_fail;
+        arg2 = *sptr;
+        delete sptr;
+    }
+    {
+        wxString* sptr = wxString_in_helper(obj2);
+        if (sptr == NULL) SWIG_fail;
+        arg3 = *sptr;
+        delete sptr;
+    }
     if (obj3) {
         arg4 = obj3;
     }
@@ -2154,7 +2163,7 @@ static PyObject *_wrap_HtmlWinParser_SetLink(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2166,7 +2175,7 @@ static PyObject *_wrap_HtmlWinParser_SetLink(PyObject *self, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4187,8 +4196,8 @@ static PyObject *_wrap_HtmlCell_IsTerminalCell(PyObject *self, PyObject *args, P
 static PyObject *_wrap_HtmlCell_FindCellByPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
-    wxCoord arg2 ;
-    wxCoord arg3 ;
+    int arg2 ;
+    int arg3 ;
     unsigned int arg4 = (unsigned int) wxHTML_FIND_EXACT ;
     wxHtmlCell *result;
     PyObject * obj0 = 0 ;
@@ -4395,7 +4404,7 @@ static PyObject *_wrap_new_HtmlWordCell(PyObject *self, PyObject *args, PyObject
     wxString *arg1 = 0 ;
     wxDC *arg2 = 0 ;
     wxHtmlWordCell *result;
-    bool temp1 = false ;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4406,7 +4415,7 @@ static PyObject *_wrap_new_HtmlWordCell(PyObject *self, PyObject *args, PyObject
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = true;
+        temp1 = True;
     }
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg2 == NULL) {
@@ -5087,7 +5096,7 @@ static PyObject *_wrap_new_HtmlWindow(PyObject *self, PyObject *args, PyObject *
     wxPyHtmlWindow *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = false ;
+    bool temp6 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -5114,7 +5123,7 @@ static PyObject *_wrap_new_HtmlWindow(PyObject *self, PyObject *args, PyObject *
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = true;
+            temp6 = True;
         }
     }
     {
@@ -5180,7 +5189,7 @@ static PyObject *_wrap_HtmlWindow_Create(PyObject *self, PyObject *args, PyObjec
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -5209,7 +5218,7 @@ static PyObject *_wrap_HtmlWindow_Create(PyObject *self, PyObject *args, PyObjec
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -5269,7 +5278,7 @@ static PyObject *_wrap_HtmlWindow_SetPage(PyObject *self, PyObject *args, PyObje
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5281,7 +5290,7 @@ static PyObject *_wrap_HtmlWindow_SetPage(PyObject *self, PyObject *args, PyObje
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5310,7 +5319,7 @@ static PyObject *_wrap_HtmlWindow_LoadPage(PyObject *self, PyObject *args, PyObj
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5322,7 +5331,7 @@ static PyObject *_wrap_HtmlWindow_LoadPage(PyObject *self, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5351,7 +5360,7 @@ static PyObject *_wrap_HtmlWindow_LoadFile(PyObject *self, PyObject *args, PyObj
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5363,7 +5372,7 @@ static PyObject *_wrap_HtmlWindow_LoadFile(PyObject *self, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5392,7 +5401,7 @@ static PyObject *_wrap_HtmlWindow_AppendToPage(PyObject *self, PyObject *args, P
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5404,7 +5413,7 @@ static PyObject *_wrap_HtmlWindow_AppendToPage(PyObject *self, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5526,7 +5535,7 @@ static PyObject *_wrap_HtmlWindow_SetRelatedFrame(PyObject *self, PyObject *args
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxFrame *arg2 = (wxFrame *) 0 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5540,7 +5549,7 @@ static PyObject *_wrap_HtmlWindow_SetRelatedFrame(PyObject *self, PyObject *args
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5622,8 +5631,6 @@ static PyObject *_wrap_HtmlWindow_SetFonts(PyObject *self, PyObject *args, PyObj
     wxString arg2 ;
     wxString arg3 ;
     PyObject *arg4 = (PyObject *) NULL ;
-    wxString *argp2 ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5634,10 +5641,18 @@ static PyObject *_wrap_HtmlWindow_SetFonts(PyObject *self, PyObject *args, PyObj
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:HtmlWindow_SetFonts",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
-    if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg3 = *argp3; 
+    {
+        wxString* sptr = wxString_in_helper(obj1);
+        if (sptr == NULL) SWIG_fail;
+        arg2 = *sptr;
+        delete sptr;
+    }
+    {
+        wxString* sptr = wxString_in_helper(obj2);
+        if (sptr == NULL) SWIG_fail;
+        arg3 = *sptr;
+        delete sptr;
+    }
     if (obj3) {
         arg4 = obj3;
     }
@@ -5659,7 +5674,7 @@ static PyObject *_wrap_HtmlWindow_SetTitle(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5671,7 +5686,7 @@ static PyObject *_wrap_HtmlWindow_SetTitle(PyObject *self, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5725,7 +5740,6 @@ static PyObject *_wrap_HtmlWindow_ReadCustomization(PyObject *self, PyObject *ar
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
     wxString arg3 = (wxString) wxPyEmptyString ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5737,8 +5751,12 @@ static PyObject *_wrap_HtmlWindow_ReadCustomization(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-        arg3 = *argp3; 
+        {
+            wxString* sptr = wxString_in_helper(obj2);
+            if (sptr == NULL) SWIG_fail;
+            arg3 = *sptr;
+            delete sptr;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5759,7 +5777,6 @@ static PyObject *_wrap_HtmlWindow_WriteCustomization(PyObject *self, PyObject *a
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
     wxString arg3 = (wxString) wxPyEmptyString ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5771,8 +5788,12 @@ static PyObject *_wrap_HtmlWindow_WriteCustomization(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-        arg3 = *argp3; 
+        {
+            wxString* sptr = wxString_in_helper(obj2);
+            if (sptr == NULL) SWIG_fail;
+            arg3 = *sptr;
+            delete sptr;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5967,7 +5988,7 @@ static PyObject *_wrap_HtmlWindow_ScrollToAnchor(PyObject *self, PyObject *args,
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5979,7 +6000,7 @@ static PyObject *_wrap_HtmlWindow_ScrollToAnchor(PyObject *self, PyObject *args,
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6008,7 +6029,7 @@ static PyObject *_wrap_HtmlWindow_HasAnchor(PyObject *self, PyObject *args, PyOb
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6020,7 +6041,7 @@ static PyObject *_wrap_HtmlWindow_HasAnchor(PyObject *self, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6102,7 +6123,7 @@ static PyObject *_wrap_HtmlWindow_base_OnSetTitle(PyObject *self, PyObject *args
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6114,7 +6135,7 @@ static PyObject *_wrap_HtmlWindow_base_OnSetTitle(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6142,8 +6163,8 @@ static PyObject *_wrap_HtmlWindow_base_OnCellMouseHover(PyObject *self, PyObject
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
-    wxCoord arg3 ;
-    wxCoord arg4 ;
+    int arg3 ;
+    int arg4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6171,8 +6192,8 @@ static PyObject *_wrap_HtmlWindow_base_OnCellClicked(PyObject *self, PyObject *a
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
-    wxCoord arg3 ;
-    wxCoord arg4 ;
+    int arg3 ;
+    int arg4 ;
     wxMouseEvent *arg5 = 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -6315,9 +6336,9 @@ static PyObject *_wrap_HtmlDCRenderer_SetHtmlText(PyObject *self, PyObject *args
     wxString *arg2 = 0 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
-    bool arg4 = (bool) TRUE ;
-    bool temp2 = false ;
-    bool temp3 = false ;
+    bool arg4 = (bool) True ;
+    bool temp2 = False ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6331,13 +6352,13 @@ static PyObject *_wrap_HtmlDCRenderer_SetHtmlText(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj3) {
@@ -6380,8 +6401,6 @@ static PyObject *_wrap_HtmlDCRenderer_SetFonts(PyObject *self, PyObject *args, P
     wxString arg2 ;
     wxString arg3 ;
     PyObject *arg4 = (PyObject *) NULL ;
-    wxString *argp2 ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6392,10 +6411,18 @@ static PyObject *_wrap_HtmlDCRenderer_SetFonts(PyObject *self, PyObject *args, P
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:HtmlDCRenderer_SetFonts",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlDCRenderer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
-    if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg3 = *argp3; 
+    {
+        wxString* sptr = wxString_in_helper(obj1);
+        if (sptr == NULL) SWIG_fail;
+        arg2 = *sptr;
+        delete sptr;
+    }
+    {
+        wxString* sptr = wxString_in_helper(obj2);
+        if (sptr == NULL) SWIG_fail;
+        arg3 = *sptr;
+        delete sptr;
+    }
     if (obj3) {
         arg4 = obj3;
     }
@@ -6419,7 +6446,7 @@ static PyObject *_wrap_HtmlDCRenderer_Render(PyObject *self, PyObject *args, PyO
     int arg2 ;
     int arg3 ;
     int arg4 = (int) 0 ;
-    int arg5 = (int) FALSE ;
+    int arg5 = (int) False ;
     int arg6 = (int) INT_MAX ;
     int *arg7 = (int *) NULL ;
     int arg8 = (int) 0 ;
@@ -6486,7 +6513,7 @@ static PyObject *_wrap_new_HtmlPrintout(PyObject *self, PyObject *args, PyObject
     wxString const &arg1_defvalue = wxPyHtmlPrintoutTitleStr ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
     wxHtmlPrintout *result;
-    bool temp1 = false ;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "title", NULL 
@@ -6497,7 +6524,7 @@ static PyObject *_wrap_new_HtmlPrintout(PyObject *self, PyObject *args, PyObject
         {
             arg1 = wxString_in_helper(obj0);
             if (arg1 == NULL) SWIG_fail;
-            temp1 = true;
+            temp1 = True;
         }
     }
     {
@@ -6528,9 +6555,9 @@ static PyObject *_wrap_HtmlPrintout_SetHtmlText(PyObject *self, PyObject *args, 
     wxString *arg2 = 0 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
-    bool arg4 = (bool) TRUE ;
-    bool temp2 = false ;
-    bool temp3 = false ;
+    bool arg4 = (bool) True ;
+    bool temp2 = False ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6544,13 +6571,13 @@ static PyObject *_wrap_HtmlPrintout_SetHtmlText(PyObject *self, PyObject *args, 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj3) {
@@ -6591,7 +6618,7 @@ static PyObject *_wrap_HtmlPrintout_SetHtmlFile(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     wxHtmlPrintout *arg1 = (wxHtmlPrintout *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6603,7 +6630,7 @@ static PyObject *_wrap_HtmlPrintout_SetHtmlFile(PyObject *self, PyObject *args, 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6632,7 +6659,7 @@ static PyObject *_wrap_HtmlPrintout_SetHeader(PyObject *self, PyObject *args, Py
     wxHtmlPrintout *arg1 = (wxHtmlPrintout *) 0 ;
     wxString *arg2 = 0 ;
     int arg3 = (int) wxPAGE_ALL ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6644,7 +6671,7 @@ static PyObject *_wrap_HtmlPrintout_SetHeader(PyObject *self, PyObject *args, Py
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6673,7 +6700,7 @@ static PyObject *_wrap_HtmlPrintout_SetFooter(PyObject *self, PyObject *args, Py
     wxHtmlPrintout *arg1 = (wxHtmlPrintout *) 0 ;
     wxString *arg2 = 0 ;
     int arg3 = (int) wxPAGE_ALL ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6685,7 +6712,7 @@ static PyObject *_wrap_HtmlPrintout_SetFooter(PyObject *self, PyObject *args, Py
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6715,8 +6742,6 @@ static PyObject *_wrap_HtmlPrintout_SetFonts(PyObject *self, PyObject *args, PyO
     wxString arg2 ;
     wxString arg3 ;
     PyObject *arg4 = (PyObject *) NULL ;
-    wxString *argp2 ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6727,10 +6752,18 @@ static PyObject *_wrap_HtmlPrintout_SetFonts(PyObject *self, PyObject *args, PyO
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:HtmlPrintout_SetFonts",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlPrintout,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
-    if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg3 = *argp3; 
+    {
+        wxString* sptr = wxString_in_helper(obj1);
+        if (sptr == NULL) SWIG_fail;
+        arg2 = *sptr;
+        delete sptr;
+    }
+    {
+        wxString* sptr = wxString_in_helper(obj2);
+        if (sptr == NULL) SWIG_fail;
+        arg3 = *sptr;
+        delete sptr;
+    }
     if (obj3) {
         arg4 = obj3;
     }
@@ -6835,7 +6868,7 @@ static PyObject *_wrap_new_HtmlEasyPrinting(PyObject *self, PyObject *args, PyOb
     wxString *arg1 = (wxString *) &arg1_defvalue ;
     wxWindow *arg2 = (wxWindow *) NULL ;
     wxHtmlEasyPrinting *result;
-    bool temp1 = false ;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6847,7 +6880,7 @@ static PyObject *_wrap_new_HtmlEasyPrinting(PyObject *self, PyObject *args, PyOb
         {
             arg1 = wxString_in_helper(obj0);
             if (arg1 == NULL) SWIG_fail;
-            temp1 = true;
+            temp1 = True;
         }
     }
     if (obj1) {
@@ -6903,7 +6936,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PreviewFile(PyObject *self, PyObject *ar
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6915,7 +6948,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PreviewFile(PyObject *self, PyObject *ar
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6945,8 +6978,8 @@ static PyObject *_wrap_HtmlEasyPrinting_PreviewText(PyObject *self, PyObject *ar
     wxString *arg2 = 0 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
-    bool temp2 = false ;
-    bool temp3 = false ;
+    bool temp2 = False ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6959,13 +6992,13 @@ static PyObject *_wrap_HtmlEasyPrinting_PreviewText(PyObject *self, PyObject *ar
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     {
@@ -7002,7 +7035,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PrintFile(PyObject *self, PyObject *args
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7014,7 +7047,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PrintFile(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7044,8 +7077,8 @@ static PyObject *_wrap_HtmlEasyPrinting_PrintText(PyObject *self, PyObject *args
     wxString *arg2 = 0 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
-    bool temp2 = false ;
-    bool temp3 = false ;
+    bool temp2 = False ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -7058,13 +7091,13 @@ static PyObject *_wrap_HtmlEasyPrinting_PrintText(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     {
@@ -7150,7 +7183,7 @@ static PyObject *_wrap_HtmlEasyPrinting_SetHeader(PyObject *self, PyObject *args
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
     int arg3 = (int) wxPAGE_ALL ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7162,7 +7195,7 @@ static PyObject *_wrap_HtmlEasyPrinting_SetHeader(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7191,7 +7224,7 @@ static PyObject *_wrap_HtmlEasyPrinting_SetFooter(PyObject *self, PyObject *args
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
     int arg3 = (int) wxPAGE_ALL ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7203,7 +7236,7 @@ static PyObject *_wrap_HtmlEasyPrinting_SetFooter(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7233,8 +7266,6 @@ static PyObject *_wrap_HtmlEasyPrinting_SetFonts(PyObject *self, PyObject *args,
     wxString arg2 ;
     wxString arg3 ;
     PyObject *arg4 = (PyObject *) NULL ;
-    wxString *argp2 ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -7245,10 +7276,18 @@ static PyObject *_wrap_HtmlEasyPrinting_SetFonts(PyObject *self, PyObject *args,
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:HtmlEasyPrinting_SetFonts",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlEasyPrinting,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
-    if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg3 = *argp3; 
+    {
+        wxString* sptr = wxString_in_helper(obj1);
+        if (sptr == NULL) SWIG_fail;
+        arg2 = *sptr;
+        delete sptr;
+    }
+    {
+        wxString* sptr = wxString_in_helper(obj2);
+        if (sptr == NULL) SWIG_fail;
+        arg3 = *sptr;
+        delete sptr;
+    }
     if (obj3) {
         arg4 = obj3;
     }
@@ -7330,10 +7369,10 @@ static PyObject *_wrap_new_HtmlBookRecord(PyObject *self, PyObject *args, PyObje
     wxString *arg3 = 0 ;
     wxString *arg4 = 0 ;
     wxHtmlBookRecord *result;
-    bool temp1 = false ;
-    bool temp2 = false ;
-    bool temp3 = false ;
-    bool temp4 = false ;
+    bool temp1 = False ;
+    bool temp2 = False ;
+    bool temp3 = False ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -7346,22 +7385,22 @@ static PyObject *_wrap_new_HtmlBookRecord(PyObject *self, PyObject *args, PyObje
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = true;
+        temp1 = True;
     }
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7613,7 +7652,7 @@ static PyObject *_wrap_HtmlBookRecord_SetTitle(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7625,7 +7664,7 @@ static PyObject *_wrap_HtmlBookRecord_SetTitle(PyObject *self, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7653,7 +7692,7 @@ static PyObject *_wrap_HtmlBookRecord_SetBasePath(PyObject *self, PyObject *args
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7665,7 +7704,7 @@ static PyObject *_wrap_HtmlBookRecord_SetBasePath(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7693,7 +7732,7 @@ static PyObject *_wrap_HtmlBookRecord_SetStart(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7705,7 +7744,7 @@ static PyObject *_wrap_HtmlBookRecord_SetStart(PyObject *self, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7734,7 +7773,7 @@ static PyObject *_wrap_HtmlBookRecord_GetFullPath(PyObject *self, PyObject *args
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString *arg2 = 0 ;
     wxString result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7746,7 +7785,7 @@ static PyObject *_wrap_HtmlBookRecord_GetFullPath(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8137,7 +8176,7 @@ static PyObject *_wrap_HtmlHelpData_SetTempDir(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8149,7 +8188,7 @@ static PyObject *_wrap_HtmlHelpData_SetTempDir(PyObject *self, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8178,7 +8217,7 @@ static PyObject *_wrap_HtmlHelpData_AddBook(PyObject *self, PyObject *args, PyOb
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8190,7 +8229,7 @@ static PyObject *_wrap_HtmlHelpData_AddBook(PyObject *self, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8219,7 +8258,7 @@ static PyObject *_wrap_HtmlHelpData_FindPageByName(PyObject *self, PyObject *arg
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     wxString *arg2 = 0 ;
     wxString result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8231,7 +8270,7 @@ static PyObject *_wrap_HtmlHelpData_FindPageByName(PyObject *self, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8437,12 +8476,12 @@ static PyObject *_wrap_new_HtmlHelpFrame(PyObject *self, PyObject *args, PyObjec
     int arg4 = (int) wxHF_DEFAULTSTYLE ;
     wxHtmlHelpData *arg5 = (wxHtmlHelpData *) NULL ;
     wxHtmlHelpFrame *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "parent",(char *) "wxWindowID",(char *) "title",(char *) "style",(char *) "data", NULL 
+        (char *) "parent","arg2",(char *) "title",(char *) "style",(char *) "data", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|OiO:new_HtmlHelpFrame",kwnames,&obj0,&arg2,&obj2,&arg4,&obj4)) goto fail;
@@ -8451,7 +8490,7 @@ static PyObject *_wrap_new_HtmlHelpFrame(PyObject *self, PyObject *args, PyObjec
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj4) {
@@ -8508,7 +8547,7 @@ static PyObject *_wrap_HtmlHelpFrame_SetTitleFormat(PyObject *self, PyObject *ar
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8520,7 +8559,7 @@ static PyObject *_wrap_HtmlHelpFrame_SetTitleFormat(PyObject *self, PyObject *ar
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8548,7 +8587,7 @@ static PyObject *_wrap_HtmlHelpFrame_Display(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8560,7 +8599,7 @@ static PyObject *_wrap_HtmlHelpFrame_Display(PyObject *self, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8662,7 +8701,7 @@ static PyObject *_wrap_HtmlHelpFrame_KeywordSearch(PyObject *self, PyObject *arg
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8674,7 +8713,7 @@ static PyObject *_wrap_HtmlHelpFrame_KeywordSearch(PyObject *self, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8704,7 +8743,7 @@ static PyObject *_wrap_HtmlHelpFrame_UseConfig(PyObject *self, PyObject *args, P
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -8719,7 +8758,7 @@ static PyObject *_wrap_HtmlHelpFrame_UseConfig(PyObject *self, PyObject *args, P
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     {
@@ -8749,7 +8788,6 @@ static PyObject *_wrap_HtmlHelpFrame_ReadCustomization(PyObject *self, PyObject 
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
     wxString arg3 = (wxString) wxPyEmptyString ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -8761,8 +8799,12 @@ static PyObject *_wrap_HtmlHelpFrame_ReadCustomization(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlHelpFrame,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-        arg3 = *argp3; 
+        {
+            wxString* sptr = wxString_in_helper(obj2);
+            if (sptr == NULL) SWIG_fail;
+            arg3 = *sptr;
+            delete sptr;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8783,7 +8825,6 @@ static PyObject *_wrap_HtmlHelpFrame_WriteCustomization(PyObject *self, PyObject
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
     wxString arg3 = (wxString) wxPyEmptyString ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -8795,8 +8836,12 @@ static PyObject *_wrap_HtmlHelpFrame_WriteCustomization(PyObject *self, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlHelpFrame,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-        arg3 = *argp3; 
+        {
+            wxString* sptr = wxString_in_helper(obj2);
+            if (sptr == NULL) SWIG_fail;
+            arg3 = *sptr;
+            delete sptr;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8870,7 +8915,7 @@ static PyObject *_wrap_HtmlHelpController_SetTitleFormat(PyObject *self, PyObjec
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8882,7 +8927,7 @@ static PyObject *_wrap_HtmlHelpController_SetTitleFormat(PyObject *self, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8910,7 +8955,7 @@ static PyObject *_wrap_HtmlHelpController_SetTempDir(PyObject *self, PyObject *a
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8922,7 +8967,7 @@ static PyObject *_wrap_HtmlHelpController_SetTempDir(PyObject *self, PyObject *a
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8950,9 +8995,9 @@ static PyObject *_wrap_HtmlHelpController_AddBook(PyObject *self, PyObject *args
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
-    int arg3 = (int) FALSE ;
+    int arg3 = (int) False ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8964,7 +9009,7 @@ static PyObject *_wrap_HtmlHelpController_AddBook(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8992,7 +9037,7 @@ static PyObject *_wrap_HtmlHelpController_Display(PyObject *self, PyObject *args
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9004,7 +9049,7 @@ static PyObject *_wrap_HtmlHelpController_Display(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9106,7 +9151,7 @@ static PyObject *_wrap_HtmlHelpController_KeywordSearch(PyObject *self, PyObject
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9118,7 +9163,7 @@ static PyObject *_wrap_HtmlHelpController_KeywordSearch(PyObject *self, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9148,7 +9193,7 @@ static PyObject *_wrap_HtmlHelpController_UseConfig(PyObject *self, PyObject *ar
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -9163,7 +9208,7 @@ static PyObject *_wrap_HtmlHelpController_UseConfig(PyObject *self, PyObject *ar
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     {
@@ -9193,7 +9238,6 @@ static PyObject *_wrap_HtmlHelpController_ReadCustomization(PyObject *self, PyOb
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
     wxString arg3 = (wxString) wxPyEmptyString ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -9205,8 +9249,12 @@ static PyObject *_wrap_HtmlHelpController_ReadCustomization(PyObject *self, PyOb
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlHelpController,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-        arg3 = *argp3; 
+        {
+            wxString* sptr = wxString_in_helper(obj2);
+            if (sptr == NULL) SWIG_fail;
+            arg3 = *sptr;
+            delete sptr;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9227,7 +9275,6 @@ static PyObject *_wrap_HtmlHelpController_WriteCustomization(PyObject *self, PyO
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
     wxString arg3 = (wxString) wxPyEmptyString ;
-    wxString *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -9239,8 +9286,12 @@ static PyObject *_wrap_HtmlHelpController_WriteCustomization(PyObject *self, PyO
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlHelpController,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-        arg3 = *argp3; 
+        {
+            wxString* sptr = wxString_in_helper(obj2);
+            if (sptr == NULL) SWIG_fail;
+            arg3 = *sptr;
+            delete sptr;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();

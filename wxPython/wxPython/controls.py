@@ -351,6 +351,11 @@ wxHelpProvider_Set = wx.controls.HelpProvider_Set
 wxHelpProvider_Get = wx.controls.HelpProvider_Get
 wxHelpProvider = wx.controls.HelpProvider
 wxSimpleHelpProvider = wx.controls.SimpleHelpProvider
+wxDragIcon = wx.controls.DragIcon
+wxDragString = wx.controls.DragString
+wxDragTreeItem = wx.controls.DragTreeItem
+wxDragListItem = wx.controls.DragListItem
+wxDragImage = wx.controls.DragImage
 
 
 d = globals()

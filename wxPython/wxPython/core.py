@@ -899,6 +899,7 @@ wxWakeUpIdle = wx.core.WakeUpIdle
 wxPostEvent = wx.core.PostEvent
 wxApp_CleanUp = wx.core.App_CleanUp
 wxGetApp = wx.core.GetApp
+wxPanelNameStr = wx.core.PanelNameStr
 wxPreWindow = wx.core.PreWindow
 wxWindow_NewControlId = wx.core.Window_NewControlId
 wxWindow_NextControlId = wx.core.Window_NextControlId

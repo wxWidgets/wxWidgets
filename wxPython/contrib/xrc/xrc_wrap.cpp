@@ -358,7 +358,7 @@ public:
     int GetStyle(const wxString& param = wxT("style"), int defaults = 0)
         { return wxXmlResourceHandler::GetStyle(param, defaults); }
 
-    wxString GetText(const wxString& param, bool translate = TRUE)
+    wxString GetText(const wxString& param, bool translate = True)
         { return wxXmlResourceHandler::GetText(param, translate); }
 
     int GetID()
@@ -367,7 +367,7 @@ public:
     wxString GetName()
         { return wxXmlResourceHandler::GetName(); }
 
-    bool GetBool(const wxString& param, bool defaultv = FALSE)
+    bool GetBool(const wxString& param, bool defaultv = False)
         { return wxXmlResourceHandler::GetBool(param, defaultv); }
 
     long GetLong( const wxString& param, long defaultv = 0 )
@@ -401,7 +401,7 @@ public:
     void SetupWindow(wxWindow *wnd)
         { wxXmlResourceHandler::SetupWindow(wnd); }
 
-    void CreateChildren(wxObject *parent, bool this_hnd_only = FALSE)
+    void CreateChildren(wxObject *parent, bool this_hnd_only = False)
         { wxXmlResourceHandler::CreateChildren(parent, this_hnd_only); }
 
     void CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL)
@@ -430,7 +430,7 @@ static PyObject *_wrap_new_XmlResource(PyObject *self, PyObject *args, PyObject 
     wxString *arg1 = 0 ;
     int arg2 = (int) wxXRC_USE_LOCALE ;
     wxXmlResource *result;
-    bool temp1 = false ;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "filemask",(char *) "flags", NULL 
@@ -440,7 +440,7 @@ static PyObject *_wrap_new_XmlResource(PyObject *self, PyObject *args, PyObject 
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = true;
+        temp1 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -516,7 +516,7 @@ static PyObject *_wrap_XmlResource_Load(PyObject *self, PyObject *args, PyObject
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -528,7 +528,7 @@ static PyObject *_wrap_XmlResource_Load(PyObject *self, PyObject *args, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -557,7 +557,7 @@ static PyObject *_wrap_XmlResource_LoadFromString(PyObject *self, PyObject *args
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -569,7 +569,7 @@ static PyObject *_wrap_XmlResource_LoadFromString(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -724,7 +724,7 @@ static PyObject *_wrap_XmlResource_LoadMenu(PyObject *self, PyObject *args, PyOb
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
     wxMenu *result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -736,7 +736,7 @@ static PyObject *_wrap_XmlResource_LoadMenu(PyObject *self, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -767,7 +767,7 @@ static PyObject *_wrap_XmlResource_LoadMenuBar(PyObject *self, PyObject *args, P
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
     wxMenuBar *result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -779,7 +779,7 @@ static PyObject *_wrap_XmlResource_LoadMenuBar(PyObject *self, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -811,7 +811,7 @@ static PyObject *_wrap_XmlResource_LoadMenuBarOnFrame(PyObject *self, PyObject *
     wxWindow *arg2 = (wxWindow *) 0 ;
     wxString *arg3 = 0 ;
     wxMenuBar *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -825,7 +825,7 @@ static PyObject *_wrap_XmlResource_LoadMenuBarOnFrame(PyObject *self, PyObject *
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -857,7 +857,7 @@ static PyObject *_wrap_XmlResource_LoadToolBar(PyObject *self, PyObject *args, P
     wxWindow *arg2 = (wxWindow *) 0 ;
     wxString *arg3 = 0 ;
     wxToolBar *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -871,7 +871,7 @@ static PyObject *_wrap_XmlResource_LoadToolBar(PyObject *self, PyObject *args, P
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -903,7 +903,7 @@ static PyObject *_wrap_XmlResource_LoadDialog(PyObject *self, PyObject *args, Py
     wxWindow *arg2 = (wxWindow *) 0 ;
     wxString *arg3 = 0 ;
     wxDialog *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -917,7 +917,7 @@ static PyObject *_wrap_XmlResource_LoadDialog(PyObject *self, PyObject *args, Py
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -948,7 +948,7 @@ static PyObject *_wrap_XmlResource_LoadOnDialog(PyObject *self, PyObject *args, 
     wxWindow *arg3 = (wxWindow *) 0 ;
     wxString *arg4 = 0 ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -964,7 +964,7 @@ static PyObject *_wrap_XmlResource_LoadOnDialog(PyObject *self, PyObject *args, 
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -994,7 +994,7 @@ static PyObject *_wrap_XmlResource_LoadPanel(PyObject *self, PyObject *args, PyO
     wxWindow *arg2 = (wxWindow *) 0 ;
     wxString *arg3 = 0 ;
     wxPanel *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1008,7 +1008,7 @@ static PyObject *_wrap_XmlResource_LoadPanel(PyObject *self, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1039,7 +1039,7 @@ static PyObject *_wrap_XmlResource_LoadOnPanel(PyObject *self, PyObject *args, P
     wxWindow *arg3 = (wxWindow *) 0 ;
     wxString *arg4 = 0 ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1055,7 +1055,7 @@ static PyObject *_wrap_XmlResource_LoadOnPanel(PyObject *self, PyObject *args, P
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1085,7 +1085,7 @@ static PyObject *_wrap_XmlResource_LoadFrame(PyObject *self, PyObject *args, PyO
     wxWindow *arg2 = (wxWindow *) 0 ;
     wxString *arg3 = 0 ;
     wxFrame *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1099,7 +1099,7 @@ static PyObject *_wrap_XmlResource_LoadFrame(PyObject *self, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1132,7 +1132,7 @@ static PyObject *_wrap_XmlResource_LoadOnFrame(PyObject *self, PyObject *args, P
     wxWindow *arg3 = (wxWindow *) 0 ;
     wxString *arg4 = 0 ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1148,7 +1148,7 @@ static PyObject *_wrap_XmlResource_LoadOnFrame(PyObject *self, PyObject *args, P
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1179,8 +1179,8 @@ static PyObject *_wrap_XmlResource_LoadObject(PyObject *self, PyObject *args, Py
     wxString *arg3 = 0 ;
     wxString *arg4 = 0 ;
     wxObject *result;
-    bool temp3 = false ;
-    bool temp4 = false ;
+    bool temp3 = False ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1195,12 +1195,12 @@ static PyObject *_wrap_XmlResource_LoadObject(PyObject *self, PyObject *args, Py
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1242,8 +1242,8 @@ static PyObject *_wrap_XmlResource_LoadOnObject(PyObject *self, PyObject *args, 
     wxString *arg4 = 0 ;
     wxString *arg5 = 0 ;
     bool result;
-    bool temp4 = false ;
-    bool temp5 = false ;
+    bool temp4 = False ;
+    bool temp5 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1260,12 +1260,12 @@ static PyObject *_wrap_XmlResource_LoadOnObject(PyObject *self, PyObject *args, 
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         arg5 = wxString_in_helper(obj4);
         if (arg5 == NULL) SWIG_fail;
-        temp5 = true;
+        temp5 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1302,7 +1302,7 @@ static PyObject *_wrap_XmlResource_LoadBitmap(PyObject *self, PyObject *args, Py
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
     wxBitmap result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1314,7 +1314,7 @@ static PyObject *_wrap_XmlResource_LoadBitmap(PyObject *self, PyObject *args, Py
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1347,7 +1347,7 @@ static PyObject *_wrap_XmlResource_LoadIcon(PyObject *self, PyObject *args, PyOb
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
     wxIcon result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1359,7 +1359,7 @@ static PyObject *_wrap_XmlResource_LoadIcon(PyObject *self, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1394,7 +1394,7 @@ static PyObject *_wrap_XmlResource_AttachUnknownControl(PyObject *self, PyObject
     wxWindow *arg3 = (wxWindow *) 0 ;
     wxWindow *arg4 = (wxWindow *) NULL ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1408,7 +1408,7 @@ static PyObject *_wrap_XmlResource_AttachUnknownControl(PyObject *self, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj3) {
@@ -1440,7 +1440,7 @@ static PyObject *_wrap_XmlResource_GetXRCID(PyObject *self, PyObject *args, PyOb
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     int result;
-    bool temp1 = false ;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "str_id", NULL 
@@ -1450,7 +1450,7 @@ static PyObject *_wrap_XmlResource_GetXRCID(PyObject *self, PyObject *args, PyOb
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = true;
+        temp1 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1699,8 +1699,8 @@ static PyObject *_wrap_new_XmlProperty(PyObject *self, PyObject *args, PyObject 
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     wxXmlProperty *arg3 = (wxXmlProperty *) NULL ;
     wxXmlProperty *result;
-    bool temp1 = false ;
-    bool temp2 = false ;
+    bool temp1 = False ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1713,14 +1713,14 @@ static PyObject *_wrap_new_XmlProperty(PyObject *self, PyObject *args, PyObject 
         {
             arg1 = wxString_in_helper(obj0);
             if (arg1 == NULL) SWIG_fail;
-            temp1 = true;
+            temp1 = True;
         }
     }
     if (obj1) {
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     if (obj2) {
@@ -1847,7 +1847,7 @@ static PyObject *_wrap_XmlProperty_SetName(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxXmlProperty *arg1 = (wxXmlProperty *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1859,7 +1859,7 @@ static PyObject *_wrap_XmlProperty_SetName(PyObject *self, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1887,7 +1887,7 @@ static PyObject *_wrap_XmlProperty_SetValue(PyObject *self, PyObject *args, PyOb
     PyObject *resultobj;
     wxXmlProperty *arg1 = (wxXmlProperty *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1899,7 +1899,7 @@ static PyObject *_wrap_XmlProperty_SetValue(PyObject *self, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1968,8 +1968,8 @@ static PyObject *_wrap_new_XmlNode(PyObject *self, PyObject *args, PyObject *kwa
     wxXmlProperty *arg5 = (wxXmlProperty *) NULL ;
     wxXmlNode *arg6 = (wxXmlNode *) NULL ;
     wxXmlNode *result;
-    bool temp3 = false ;
-    bool temp4 = false ;
+    bool temp3 = False ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -1987,14 +1987,14 @@ static PyObject *_wrap_new_XmlNode(PyObject *self, PyObject *args, PyObject *kwa
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj3) {
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     if (obj4) {
@@ -2064,8 +2064,8 @@ static PyObject *_wrap_new_XmlNodeEasy(PyObject *self, PyObject *args, PyObject 
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxXmlNode *result;
-    bool temp2 = false ;
-    bool temp3 = false ;
+    bool temp2 = False ;
+    bool temp3 = False ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -2076,13 +2076,13 @@ static PyObject *_wrap_new_XmlNodeEasy(PyObject *self, PyObject *args, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     {
@@ -2232,8 +2232,8 @@ static PyObject *_wrap_XmlNode_AddPropertyName(PyObject *self, PyObject *args, P
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
     wxString *arg3 = 0 ;
-    bool temp2 = false ;
-    bool temp3 = false ;
+    bool temp2 = False ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -2246,12 +2246,12 @@ static PyObject *_wrap_XmlNode_AddPropertyName(PyObject *self, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2288,7 +2288,7 @@ static PyObject *_wrap_XmlNode_DeleteProperty(PyObject *self, PyObject *args, Py
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2300,7 +2300,7 @@ static PyObject *_wrap_XmlNode_DeleteProperty(PyObject *self, PyObject *args, Py
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2517,8 +2517,8 @@ static PyObject *_wrap_XmlNode_GetPropVal(PyObject *self, PyObject *args, PyObje
     wxString *arg2 = 0 ;
     wxString *arg3 = 0 ;
     wxString result;
-    bool temp2 = false ;
-    bool temp3 = false ;
+    bool temp2 = False ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -2531,12 +2531,12 @@ static PyObject *_wrap_XmlNode_GetPropVal(PyObject *self, PyObject *args, PyObje
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2579,7 +2579,7 @@ static PyObject *_wrap_XmlNode_HasProp(PyObject *self, PyObject *args, PyObject 
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2591,7 +2591,7 @@ static PyObject *_wrap_XmlNode_HasProp(PyObject *self, PyObject *args, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2644,7 +2644,7 @@ static PyObject *_wrap_XmlNode_SetName(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2656,7 +2656,7 @@ static PyObject *_wrap_XmlNode_SetName(PyObject *self, PyObject *args, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2684,7 +2684,7 @@ static PyObject *_wrap_XmlNode_SetContent(PyObject *self, PyObject *args, PyObje
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2696,7 +2696,7 @@ static PyObject *_wrap_XmlNode_SetContent(PyObject *self, PyObject *args, PyObje
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2841,8 +2841,8 @@ static PyObject *_wrap_new_XmlDocument(PyObject *self, PyObject *args, PyObject 
     wxString const &arg2_defvalue = wxPyUTF8String ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     wxXmlDocument *result;
-    bool temp1 = false ;
-    bool temp2 = false ;
+    bool temp1 = False ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2853,13 +2853,13 @@ static PyObject *_wrap_new_XmlDocument(PyObject *self, PyObject *args, PyObject 
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = true;
+        temp1 = True;
     }
     if (obj1) {
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     {
@@ -2900,7 +2900,7 @@ static PyObject *_wrap_new_XmlDocumentFromStream(PyObject *self, PyObject *args,
     wxXmlDocument *result;
     wxPyInputStream *temp1 ;
     bool created1 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2911,22 +2911,22 @@ static PyObject *_wrap_new_XmlDocumentFromStream(PyObject *self, PyObject *args,
     {
         if (wxPyConvertSwigPtr(obj0, (void **)&temp1, wxT("wxPyInputStream"))) {
             arg1 = temp1->m_wxis;
-            created1 = false;
+            created1 = False;
         } else {
             PyErr_Clear();  // clear the failure of the wxPyConvert above
-            arg1 = wxPyCBInputStream_create(obj0, false);
+            arg1 = wxPyCBInputStream_create(obj0, False);
             if (arg1 == NULL) {
                 PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
                 SWIG_fail;
             }
-            created1 = true;
+            created1 = True;
         }
     }
     if (obj1) {
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     {
@@ -3012,8 +3012,8 @@ static PyObject *_wrap_XmlDocument_Load(PyObject *self, PyObject *args, PyObject
     wxString const &arg3_defvalue = wxPyUTF8String ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     bool result;
-    bool temp2 = false ;
-    bool temp3 = false ;
+    bool temp2 = False ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3026,13 +3026,13 @@ static PyObject *_wrap_XmlDocument_Load(PyObject *self, PyObject *args, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     {
@@ -3074,7 +3074,7 @@ static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *self, PyObject *args
     bool result;
     wxPyInputStream *temp2 ;
     bool created2 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3087,22 +3087,22 @@ static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *self, PyObject *args
     {
         if (wxPyConvertSwigPtr(obj1, (void **)&temp2, wxT("wxPyInputStream"))) {
             arg2 = temp2->m_wxis;
-            created2 = false;
+            created2 = False;
         } else {
             PyErr_Clear();  // clear the failure of the wxPyConvert above
-            arg2 = wxPyCBInputStream_create(obj1, false);
+            arg2 = wxPyCBInputStream_create(obj1, False);
             if (arg2 == NULL) {
                 PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
                 SWIG_fail;
             }
-            created2 = true;
+            created2 = True;
         }
     }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     {
@@ -3140,7 +3140,7 @@ static PyObject *_wrap_XmlDocument_Save(PyObject *self, PyObject *args, PyObject
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3152,7 +3152,7 @@ static PyObject *_wrap_XmlDocument_Save(PyObject *self, PyObject *args, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3350,7 +3350,7 @@ static PyObject *_wrap_XmlDocument_SetVersion(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3362,7 +3362,7 @@ static PyObject *_wrap_XmlDocument_SetVersion(PyObject *self, PyObject *args, Py
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3390,7 +3390,7 @@ static PyObject *_wrap_XmlDocument_SetFileEncoding(PyObject *self, PyObject *arg
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3402,7 +3402,7 @@ static PyObject *_wrap_XmlDocument_SetFileEncoding(PyObject *self, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3743,7 +3743,7 @@ static PyObject *_wrap_XmlResourceHandler_IsOfClass(PyObject *self, PyObject *ar
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
     wxString *arg3 = 0 ;
     bool result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3757,7 +3757,7 @@ static PyObject *_wrap_XmlResourceHandler_IsOfClass(PyObject *self, PyObject *ar
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3820,7 +3820,7 @@ static PyObject *_wrap_XmlResourceHandler_HasParam(PyObject *self, PyObject *arg
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3832,7 +3832,7 @@ static PyObject *_wrap_XmlResourceHandler_HasParam(PyObject *self, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3861,7 +3861,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParamNode(PyObject *self, PyObject 
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
     wxXmlNode *result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3873,7 +3873,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParamNode(PyObject *self, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3902,7 +3902,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParamValue(PyObject *self, PyObject
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
     wxString result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3914,7 +3914,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParamValue(PyObject *self, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3949,7 +3949,7 @@ static PyObject *_wrap_XmlResourceHandler_AddStyle(PyObject *self, PyObject *arg
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
     int arg3 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3961,7 +3961,7 @@ static PyObject *_wrap_XmlResourceHandler_AddStyle(PyObject *self, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4016,7 +4016,7 @@ static PyObject *_wrap_XmlResourceHandler_GetStyle(PyObject *self, PyObject *arg
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     int arg3 = (int) 0 ;
     int result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4029,7 +4029,7 @@ static PyObject *_wrap_XmlResourceHandler_GetStyle(PyObject *self, PyObject *arg
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     {
@@ -4058,9 +4058,9 @@ static PyObject *_wrap_XmlResourceHandler_GetText(PyObject *self, PyObject *args
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     wxString result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4073,7 +4073,7 @@ static PyObject *_wrap_XmlResourceHandler_GetText(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj2) {
         arg3 = PyInt_AsLong(obj2) ? true : false;
@@ -4167,9 +4167,9 @@ static PyObject *_wrap_XmlResourceHandler_GetBool(PyObject *self, PyObject *args
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4182,7 +4182,7 @@ static PyObject *_wrap_XmlResourceHandler_GetBool(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj2) {
         arg3 = PyInt_AsLong(obj2) ? true : false;
@@ -4216,7 +4216,7 @@ static PyObject *_wrap_XmlResourceHandler_GetLong(PyObject *self, PyObject *args
     wxString *arg2 = 0 ;
     long arg3 = (long) 0 ;
     long result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4228,7 +4228,7 @@ static PyObject *_wrap_XmlResourceHandler_GetLong(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4257,7 +4257,7 @@ static PyObject *_wrap_XmlResourceHandler_GetColour(PyObject *self, PyObject *ar
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
     wxColour result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4269,7 +4269,7 @@ static PyObject *_wrap_XmlResourceHandler_GetColour(PyObject *self, PyObject *ar
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4303,7 +4303,7 @@ static PyObject *_wrap_XmlResourceHandler_GetSize(PyObject *self, PyObject *args
     wxString const &arg2_defvalue = wxPySizeString ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     wxSize result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4316,7 +4316,7 @@ static PyObject *_wrap_XmlResourceHandler_GetSize(PyObject *self, PyObject *args
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     {
@@ -4351,7 +4351,7 @@ static PyObject *_wrap_XmlResourceHandler_GetPosition(PyObject *self, PyObject *
     wxString const &arg2_defvalue = wxPyPosString ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     wxPoint result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4364,7 +4364,7 @@ static PyObject *_wrap_XmlResourceHandler_GetPosition(PyObject *self, PyObject *
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     {
@@ -4397,9 +4397,9 @@ static PyObject *_wrap_XmlResourceHandler_GetDimension(PyObject *self, PyObject 
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
-    wxCoord arg3 = (wxCoord) 0 ;
-    wxCoord result;
-    bool temp2 = false ;
+    int arg3 = (int) 0 ;
+    int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4411,11 +4411,11 @@ static PyObject *_wrap_XmlResourceHandler_GetDimension(PyObject *self, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxCoord)(arg1)->GetDimension((wxString const &)*arg2,arg3);
+        result = (int)(arg1)->GetDimension((wxString const &)*arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -4444,7 +4444,7 @@ static PyObject *_wrap_XmlResourceHandler_GetBitmap(PyObject *self, PyObject *ar
     wxArtClient *arg3 = (wxArtClient *) &arg3_defvalue ;
     wxSize arg4 = (wxSize) wxDefaultSize ;
     wxBitmap result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     wxSize *argp4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -4460,7 +4460,7 @@ static PyObject *_wrap_XmlResourceHandler_GetBitmap(PyObject *self, PyObject *ar
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     if (obj2) {
@@ -4508,7 +4508,7 @@ static PyObject *_wrap_XmlResourceHandler_GetIcon(PyObject *self, PyObject *args
     wxArtClient *arg3 = (wxArtClient *) &arg3_defvalue ;
     wxSize arg4 = (wxSize) wxDefaultSize ;
     wxIcon result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     wxSize *argp4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -4524,7 +4524,7 @@ static PyObject *_wrap_XmlResourceHandler_GetIcon(PyObject *self, PyObject *args
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     if (obj2) {
@@ -4569,7 +4569,7 @@ static PyObject *_wrap_XmlResourceHandler_GetFont(PyObject *self, PyObject *args
     wxString const &arg2_defvalue = wxPyFontString ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     wxFont result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4582,7 +4582,7 @@ static PyObject *_wrap_XmlResourceHandler_GetFont(PyObject *self, PyObject *args
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     {
@@ -4642,7 +4642,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateChildren(PyObject *self, PyObjec
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxObject *arg2 = (wxObject *) 0 ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;

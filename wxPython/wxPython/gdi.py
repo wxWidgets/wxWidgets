@@ -493,11 +493,6 @@ wxTheFontList = wx.gdi.TheFontList
 wxThePenList = wx.gdi.ThePenList
 wxTheBrushList = wx.gdi.TheBrushList
 wxTheColourDatabase = wx.gdi.TheColourDatabase
-wxDragIcon = wx.gdi.DragIcon
-wxDragString = wx.gdi.DragString
-wxDragTreeItem = wx.gdi.DragTreeItem
-wxDragListItem = wx.gdi.DragListItem
-wxDragImage = wx.gdi.DragImage
 wxEffects = wx.gdi.Effects
 
 

@@ -311,7 +311,7 @@ PyObject* wxPyMake_##TYPE(TYPE* source) { \
         /* Otherwise make a new wrapper for it the old fashioned way and \
            give it the OOR treatment */ \
         if (! target) { \
-            target = wxPyConstructObject(source, wxT(#TYPE), FALSE); \
+            target = wxPyConstructObject(source, wxT(#TYPE), False); \
             if (target) \
                 source->SetClientObject(new wxPyOORClientData(target)); \
         } \
@@ -867,7 +867,7 @@ public:
 
 
     bool EndEdit(int row, int col, wxGrid* grid) {
-        bool rv = FALSE;
+        bool rv = False;
         wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "EndEdit")) {
             PyObject* go = wxPyMake_wxObject(grid);
@@ -1152,7 +1152,7 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
         if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxGridCellCoords")))
             goto error;
         *obj = ptr;
-        return TRUE;
+        return True;
     }
     // otherwise a 2-tuple of integers is expected
     else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
@@ -1166,12 +1166,12 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
         **obj = wxGridCellCoords(PyInt_AsLong(o1), PyInt_AsLong(o2));
         Py_DECREF(o1);
         Py_DECREF(o2);
-        return TRUE;
+        return True;
     }
 
  error:
     PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of integers or a wxGridCellCoords object.");
-    return FALSE;
+    return False;
 }
 
 
@@ -1180,13 +1180,13 @@ bool wxGridCellCoords_typecheck(PyObject* source) {
     
     if (wxPySwigInstance_Check(source) &&
         wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxGridCellCoords")))
-        return true;
+        return True;
 
     PyErr_Clear();
     if (PySequence_Check(source) && PySequence_Length(source) == 2)
-        return true;
+        return True;
     
-    return false;
+    return False;
 }
 
 
@@ -1275,7 +1275,7 @@ static PyObject *_wrap_GridCellRenderer_SetParameters(PyObject *self, PyObject *
     PyObject *resultobj;
     wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1287,7 +1287,7 @@ static PyObject *_wrap_GridCellRenderer_SetParameters(PyObject *self, PyObject *
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1553,7 +1553,7 @@ static PyObject *_wrap_PyGridCellRenderer_base_SetParameters(PyObject *self, PyO
     PyObject *resultobj;
     wxPyGridCellRenderer *arg1 = (wxPyGridCellRenderer *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1565,7 +1565,7 @@ static PyObject *_wrap_PyGridCellRenderer_base_SetParameters(PyObject *self, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1819,8 +1819,6 @@ static PyObject *_wrap_new_GridCellDateTimeRenderer(PyObject *self, PyObject *ar
     wxString arg1 = (wxString) wxPyDateTimeFormatStr ;
     wxString arg2 = (wxString) wxPyDateTimeFormatStr ;
     wxGridCellDateTimeRenderer *result;
-    wxString *argp1 ;
-    wxString *argp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1829,12 +1827,20 @@ static PyObject *_wrap_new_GridCellDateTimeRenderer(PyObject *self, PyObject *ar
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_GridCellDateTimeRenderer",kwnames,&obj0,&obj1)) goto fail;
     if (obj0) {
-        if ((SWIG_ConvertPtr(obj0,(void **) &argp1, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-        arg1 = *argp1; 
+        {
+            wxString* sptr = wxString_in_helper(obj0);
+            if (sptr == NULL) SWIG_fail;
+            arg1 = *sptr;
+            delete sptr;
+        }
     }
     if (obj1) {
-        if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-        arg2 = *argp2; 
+        {
+            wxString* sptr = wxString_in_helper(obj1);
+            if (sptr == NULL) SWIG_fail;
+            arg2 = *sptr;
+            delete sptr;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1862,7 +1868,7 @@ static PyObject *_wrap_new_GridCellEnumRenderer(PyObject *self, PyObject *args, 
     wxString const &arg1_defvalue = wxPyEmptyString ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
     wxGridCellEnumRenderer *result;
-    bool temp1 = false ;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "choices", NULL 
@@ -1873,7 +1879,7 @@ static PyObject *_wrap_new_GridCellEnumRenderer(PyObject *self, PyObject *args, 
         {
             arg1 = wxString_in_helper(obj0);
             if (arg1 == NULL) SWIG_fail;
-            temp1 = true;
+            temp1 = True;
         }
     }
     {
@@ -2098,7 +2104,7 @@ static PyObject *_wrap_GridCellEditor_SetParameters(PyObject *self, PyObject *ar
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2110,7 +2116,7 @@ static PyObject *_wrap_GridCellEditor_SetParameters(PyObject *self, PyObject *ar
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2186,7 +2192,7 @@ static PyObject *_wrap_GridCellEditor_Create(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxEvtHandler *arg4 = (wxEvtHandler *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -2860,7 +2866,7 @@ static PyObject *_wrap_PyGridCellEditor_base_SetParameters(PyObject *self, PyObj
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2872,7 +2878,7 @@ static PyObject *_wrap_PyGridCellEditor_base_SetParameters(PyObject *self, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3149,7 +3155,7 @@ static PyObject *_wrap_new_GridCellChoiceEditor(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxString *arg2 = (wxString *) NULL ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     wxGridCellChoiceEditor *result;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3222,7 +3228,7 @@ static PyObject *_wrap_new_GridCellEnumEditor(PyObject *self, PyObject *args, Py
     wxString const &arg1_defvalue = wxPyEmptyString ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
     wxGridCellEnumEditor *result;
-    bool temp1 = false ;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "choices", NULL 
@@ -3233,7 +3239,7 @@ static PyObject *_wrap_new_GridCellEnumEditor(PyObject *self, PyObject *args, Py
         {
             arg1 = wxString_in_helper(obj0);
             if (arg1 == NULL) SWIG_fail;
-            temp1 = true;
+            temp1 = True;
         }
     }
     {
@@ -3661,7 +3667,7 @@ static PyObject *_wrap_GridCellAttr_SetSize(PyObject *self, PyObject *args, PyOb
 static PyObject *_wrap_GridCellAttr_SetOverflow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3691,7 +3697,7 @@ static PyObject *_wrap_GridCellAttr_SetOverflow(PyObject *self, PyObject *args, 
 static PyObject *_wrap_GridCellAttr_SetReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4964,7 +4970,7 @@ static PyObject *_wrap_GridTableBase_SetValue(PyObject *self, PyObject *args, Py
     int arg2 ;
     int arg3 ;
     wxString *arg4 = 0 ;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -4976,7 +4982,7 @@ static PyObject *_wrap_GridTableBase_SetValue(PyObject *self, PyObject *args, Py
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5040,7 +5046,7 @@ static PyObject *_wrap_GridTableBase_CanGetValueAs(PyObject *self, PyObject *arg
     int arg3 ;
     wxString *arg4 = 0 ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -5052,7 +5058,7 @@ static PyObject *_wrap_GridTableBase_CanGetValueAs(PyObject *self, PyObject *arg
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5083,7 +5089,7 @@ static PyObject *_wrap_GridTableBase_CanSetValueAs(PyObject *self, PyObject *arg
     int arg3 ;
     wxString *arg4 = 0 ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -5095,7 +5101,7 @@ static PyObject *_wrap_GridTableBase_CanSetValueAs(PyObject *self, PyObject *arg
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5587,7 +5593,7 @@ static PyObject *_wrap_GridTableBase_SetRowLabelValue(PyObject *self, PyObject *
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -5599,7 +5605,7 @@ static PyObject *_wrap_GridTableBase_SetRowLabelValue(PyObject *self, PyObject *
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5628,7 +5634,7 @@ static PyObject *_wrap_GridTableBase_SetColLabelValue(PyObject *self, PyObject *
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -5640,7 +5646,7 @@ static PyObject *_wrap_GridTableBase_SetColLabelValue(PyObject *self, PyObject *
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5927,7 +5933,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanGetValueAs(PyObject *self, PyObje
     int arg3 ;
     wxString *arg4 = 0 ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -5939,7 +5945,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanGetValueAs(PyObject *self, PyObje
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5970,7 +5976,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanSetValueAs(PyObject *self, PyObje
     int arg3 ;
     wxString *arg4 = 0 ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -5982,7 +5988,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanSetValueAs(PyObject *self, PyObje
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6309,7 +6315,7 @@ static PyObject *_wrap_PyGridTableBase_base_SetRowLabelValue(PyObject *self, PyO
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -6321,7 +6327,7 @@ static PyObject *_wrap_PyGridTableBase_base_SetRowLabelValue(PyObject *self, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6350,7 +6356,7 @@ static PyObject *_wrap_PyGridTableBase_base_SetColLabelValue(PyObject *self, PyO
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -6362,7 +6368,7 @@ static PyObject *_wrap_PyGridTableBase_base_SetColLabelValue(PyObject *self, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7098,7 +7104,7 @@ static PyObject * GridCellCoords_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -7109,7 +7115,7 @@ static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs
     wxGrid *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = false ;
+    bool temp6 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -7136,7 +7142,7 @@ static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = true;
+            temp6 = True;
         }
     }
     {
@@ -7353,7 +7359,7 @@ static PyObject *_wrap_Grid_SetTable(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridTableBase *arg2 = (wxGridTableBase *) 0 ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     WXGRIDSELECTIONMODES arg4 = (WXGRIDSELECTIONMODES) wxGrid::wxGridSelectCells ;
     bool result;
     PyObject * obj0 = 0 ;
@@ -7413,7 +7419,7 @@ static PyObject *_wrap_Grid_InsertRows(PyObject *self, PyObject *args, PyObject 
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 0 ;
     int arg3 = (int) 1 ;
-    bool arg4 = (bool) TRUE ;
+    bool arg4 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
@@ -7445,7 +7451,7 @@ static PyObject *_wrap_Grid_AppendRows(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 1 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
@@ -7478,7 +7484,7 @@ static PyObject *_wrap_Grid_DeleteRows(PyObject *self, PyObject *args, PyObject 
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 0 ;
     int arg3 = (int) 1 ;
-    bool arg4 = (bool) TRUE ;
+    bool arg4 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
@@ -7511,7 +7517,7 @@ static PyObject *_wrap_Grid_InsertCols(PyObject *self, PyObject *args, PyObject 
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 0 ;
     int arg3 = (int) 1 ;
-    bool arg4 = (bool) TRUE ;
+    bool arg4 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
@@ -7543,7 +7549,7 @@ static PyObject *_wrap_Grid_AppendCols(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 1 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
@@ -7576,7 +7582,7 @@ static PyObject *_wrap_Grid_DeleteCols(PyObject *self, PyObject *args, PyObject 
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 0 ;
     int arg3 = (int) 1 ;
-    bool arg4 = (bool) TRUE ;
+    bool arg4 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
@@ -7646,7 +7652,7 @@ static PyObject *_wrap_Grid_DrawTextRectangle(PyObject *self, PyObject *args, Py
     int arg5 = (int) wxLEFT ;
     int arg6 = (int) wxTOP ;
     int arg7 = (int) wxHORIZONTAL ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxRect temp4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -7665,7 +7671,7 @@ static PyObject *_wrap_Grid_DrawTextRectangle(PyObject *self, PyObject *args, Py
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         arg4 = &temp4;
@@ -7864,7 +7870,7 @@ static PyObject *_wrap_Grid_ForceRefresh(PyObject *self, PyObject *args, PyObjec
 static PyObject *_wrap_Grid_Refresh(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     wxRect *arg3 = (wxRect *) NULL ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -7952,7 +7958,7 @@ static PyObject *_wrap_Grid_EnableEditing(PyObject *self, PyObject *args, PyObje
 static PyObject *_wrap_Grid_EnableCellEditControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8396,7 +8402,7 @@ static PyObject *_wrap_Grid_IsVisible(PyObject *self, PyObject *args, PyObject *
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
     int arg3 ;
-    bool arg4 = (bool) TRUE ;
+    bool arg4 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
@@ -9442,7 +9448,7 @@ static PyObject *_wrap_Grid_SetRowLabelValue(PyObject *self, PyObject *args, PyO
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -9454,7 +9460,7 @@ static PyObject *_wrap_Grid_SetRowLabelValue(PyObject *self, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9483,7 +9489,7 @@ static PyObject *_wrap_Grid_SetColLabelValue(PyObject *self, PyObject *args, PyO
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -9495,7 +9501,7 @@ static PyObject *_wrap_Grid_SetColLabelValue(PyObject *self, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9634,7 +9640,7 @@ static PyObject *_wrap_Grid_SetCellHighlightROPenWidth(PyObject *self, PyObject 
 static PyObject *_wrap_Grid_EnableDragRowSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9713,7 +9719,7 @@ static PyObject *_wrap_Grid_CanDragRowSize(PyObject *self, PyObject *args, PyObj
 static PyObject *_wrap_Grid_EnableDragColSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9792,7 +9798,7 @@ static PyObject *_wrap_Grid_CanDragColSize(PyObject *self, PyObject *args, PyObj
 static PyObject *_wrap_Grid_EnableDragGridSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -10035,7 +10041,7 @@ static PyObject *_wrap_Grid_SetColFormatCustom(PyObject *self, PyObject *args, P
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -10047,7 +10053,7 @@ static PyObject *_wrap_Grid_SetColFormatCustom(PyObject *self, PyObject *args, P
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10074,7 +10080,7 @@ static PyObject *_wrap_Grid_SetColFormatCustom(PyObject *self, PyObject *args, P
 static PyObject *_wrap_Grid_EnableGridLines(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -10582,7 +10588,7 @@ static PyObject *_wrap_Grid_SetDefaultRowSize(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -10639,7 +10645,7 @@ static PyObject *_wrap_Grid_SetDefaultColSize(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -10696,7 +10702,7 @@ static PyObject *_wrap_Grid_AutoSizeColumn(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -10727,7 +10733,7 @@ static PyObject *_wrap_Grid_AutoSizeRow(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -10757,7 +10763,7 @@ static PyObject *_wrap_Grid_AutoSizeRow(PyObject *self, PyObject *args, PyObject
 static PyObject *_wrap_Grid_AutoSizeColumns(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -10787,7 +10793,7 @@ static PyObject *_wrap_Grid_AutoSizeColumns(PyObject *self, PyObject *args, PyOb
 static PyObject *_wrap_Grid_AutoSizeRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -11633,7 +11639,7 @@ static PyObject *_wrap_Grid_SetCellValue(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     int arg3 ;
     wxString *arg4 = 0 ;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -11645,7 +11651,7 @@ static PyObject *_wrap_Grid_SetCellValue(PyObject *self, PyObject *args, PyObjec
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11701,7 +11707,7 @@ static PyObject *_wrap_Grid_SetReadOnly(PyObject *self, PyObject *args, PyObject
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
     int arg3 ;
-    bool arg4 = (bool) TRUE ;
+    bool arg4 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -11732,7 +11738,7 @@ static PyObject *_wrap_Grid_SelectRow(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -11763,7 +11769,7 @@ static PyObject *_wrap_Grid_SelectCol(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -11797,7 +11803,7 @@ static PyObject *_wrap_Grid_SelectBlock(PyObject *self, PyObject *args, PyObject
     int arg3 ;
     int arg4 ;
     int arg5 ;
-    bool arg6 = (bool) FALSE ;
+    bool arg6 = (bool) False ;
     PyObject * obj0 = 0 ;
     PyObject * obj5 = 0 ;
     char *kwnames[] = {
@@ -12316,7 +12322,7 @@ static PyObject *_wrap_Grid_RegisterDataType(PyObject *self, PyObject *args, PyO
     wxString *arg2 = 0 ;
     wxGridCellRenderer *arg3 = (wxGridCellRenderer *) 0 ;
     wxGridCellEditor *arg4 = (wxGridCellEditor *) 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12330,7 +12336,7 @@ static PyObject *_wrap_Grid_RegisterDataType(PyObject *self, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxGridCellRenderer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj3,(void **) &arg4, SWIGTYPE_p_wxGridCellEditor,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -12419,7 +12425,7 @@ static PyObject *_wrap_Grid_GetDefaultEditorForType(PyObject *self, PyObject *ar
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxString *arg2 = 0 ;
     wxGridCellEditor *result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -12431,7 +12437,7 @@ static PyObject *_wrap_Grid_GetDefaultEditorForType(PyObject *self, PyObject *ar
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12462,7 +12468,7 @@ static PyObject *_wrap_Grid_GetDefaultRendererForType(PyObject *self, PyObject *
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxString *arg2 = 0 ;
     wxGridCellRenderer *result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -12474,7 +12480,7 @@ static PyObject *_wrap_Grid_GetDefaultRendererForType(PyObject *self, PyObject *
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12650,11 +12656,11 @@ static PyObject *_wrap_new_GridEvent(PyObject *self, PyObject *args, PyObject *k
     int arg5 = (int) -1 ;
     int arg6 = (int) -1 ;
     int arg7 = (int) -1 ;
-    bool arg8 = (bool) TRUE ;
-    bool arg9 = (bool) FALSE ;
-    bool arg10 = (bool) FALSE ;
-    bool arg11 = (bool) FALSE ;
-    bool arg12 = (bool) FALSE ;
+    bool arg8 = (bool) True ;
+    bool arg9 = (bool) False ;
+    bool arg10 = (bool) False ;
+    bool arg11 = (bool) False ;
+    bool arg12 = (bool) False ;
     wxGridEvent *result;
     PyObject * obj2 = 0 ;
     PyObject * obj7 = 0 ;
@@ -12921,10 +12927,10 @@ static PyObject *_wrap_new_GridSizeEvent(PyObject *self, PyObject *args, PyObjec
     int arg4 = (int) -1 ;
     int arg5 = (int) -1 ;
     int arg6 = (int) -1 ;
-    bool arg7 = (bool) FALSE ;
-    bool arg8 = (bool) FALSE ;
-    bool arg9 = (bool) FALSE ;
-    bool arg10 = (bool) FALSE ;
+    bool arg7 = (bool) False ;
+    bool arg8 = (bool) False ;
+    bool arg9 = (bool) False ;
+    bool arg10 = (bool) False ;
     wxGridSizeEvent *result;
     PyObject * obj2 = 0 ;
     PyObject * obj6 = 0 ;
@@ -13135,11 +13141,11 @@ static PyObject *_wrap_new_GridRangeSelectEvent(PyObject *self, PyObject *args, 
     wxGrid *arg3 = (wxGrid *) 0 ;
     wxGridCellCoords *arg4 = 0 ;
     wxGridCellCoords *arg5 = 0 ;
-    bool arg6 = (bool) TRUE ;
-    bool arg7 = (bool) FALSE ;
-    bool arg8 = (bool) FALSE ;
-    bool arg9 = (bool) FALSE ;
-    bool arg10 = (bool) FALSE ;
+    bool arg6 = (bool) True ;
+    bool arg7 = (bool) False ;
+    bool arg8 = (bool) False ;
+    bool arg9 = (bool) False ;
+    bool arg10 = (bool) False ;
     wxGridRangeSelectEvent *result;
     wxGridCellCoords temp4 ;
     wxGridCellCoords temp5 ;

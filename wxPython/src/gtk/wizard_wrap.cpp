@@ -385,7 +385,7 @@ static PyObject *_wrap_new_WizardEvent(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) -1 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     wxWizardPage *arg4 = (wxWizardPage *) NULL ;
     wxWizardEvent *result;
     PyObject * obj2 = 0 ;
@@ -484,7 +484,7 @@ static PyObject *_wrap_WizardPage_Create(PyObject *self, PyObject *args, PyObjec
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -506,7 +506,7 @@ static PyObject *_wrap_WizardPage_Create(PyObject *self, PyObject *args, PyObjec
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     {
@@ -687,7 +687,7 @@ static PyObject *_wrap_PyWizardPage_Create(PyObject *self, PyObject *args, PyObj
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -709,7 +709,7 @@ static PyObject *_wrap_PyWizardPage_Create(PyObject *self, PyObject *args, PyObj
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     {
@@ -1509,7 +1509,7 @@ static PyObject *_wrap_new_Wizard(PyObject *self, PyObject *args, PyObject *kwar
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
     long arg6 = (long) wxDEFAULT_DIALOG_STYLE ;
     wxWizard *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp5 ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1525,7 +1525,7 @@ static PyObject *_wrap_new_Wizard(PyObject *self, PyObject *args, PyObject *kwar
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj3) {
@@ -1596,7 +1596,7 @@ static PyObject *_wrap_Wizard_Create(PyObject *self, PyObject *args, PyObject *k
     wxPoint const &arg6_defvalue = wxDefaultPosition ;
     wxPoint *arg6 = (wxPoint *) &arg6_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp6 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -1614,7 +1614,7 @@ static PyObject *_wrap_Wizard_Create(PyObject *self, PyObject *args, PyObject *k
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     if (obj4) {
@@ -1898,7 +1898,7 @@ static PyObject *_wrap_Wizard_ShowPage(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) 0 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;

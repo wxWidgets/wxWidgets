@@ -347,7 +347,7 @@ static PyObject *_wrap_GLContext_SetColour(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -359,7 +359,7 @@ static PyObject *_wrap_GLContext_SetColour(PyObject *self, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -552,7 +552,7 @@ static PyObject * GLContext_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 = (wxWindowID) -1 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -566,7 +566,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kw
     wxGLCanvas *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = false ;
+    bool temp6 = False ;
     int *temp7 ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
@@ -596,7 +596,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kw
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = true;
+            temp6 = True;
         }
     }
     if (obj6) {
@@ -651,7 +651,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxGLContext *arg2 = (wxGLContext *) NULL ;
-    wxWindowID arg3 = (wxWindowID) -1 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -665,7 +665,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     wxGLCanvas *result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     int *temp8 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -699,7 +699,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     if (obj7) {
@@ -778,7 +778,7 @@ static PyObject *_wrap_GLCanvas_SetColour(PyObject *self, PyObject *args, PyObje
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -790,7 +790,7 @@ static PyObject *_wrap_GLCanvas_SetColour(PyObject *self, PyObject *args, PyObje
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
