@@ -535,14 +535,9 @@
     #endif
 #endif // !defined(wxStricmp)
 
-// checks whether the passed in pointer is NULL and if the string is empty
-inline bool wxIsEmpty(const wxChar *p) { return !p || !*p; }
-
-// safe version of strlen() (returns 0 if passed NULL pointer)
-inline size_t wxStrlen(const wxChar *psz) { return psz ? wxStrlen_(psz) : 0; }
-
 // define wxWcslen() which should be always available if wxUSE_WCHAR_T == 1 (as
-// it's used in wx/buffer.h)
+// it's used in wx/buffer.h -- and also might be used just below by wxStrlen()
+// when wxStrlen_() is #define'd as wxWcslen so do it before defining wxStrlen)
 #if wxUSE_WCHAR_T
     #ifdef HAVE_WCSLEN
         #define wxWcslen wcslen
@@ -557,6 +552,12 @@ inline size_t wxStrlen(const wxChar *psz) { return psz ? wxStrlen_(psz) : 0; }
         }
     #endif
 #endif // wxUSE_WCHAR_T
+
+// checks whether the passed in pointer is NULL and if the string is empty
+inline bool wxIsEmpty(const wxChar *p) { return !p || !*p; }
+
+// safe version of strlen() (returns 0 if passed NULL pointer)
+inline size_t wxStrlen(const wxChar *psz) { return psz ? wxStrlen_(psz) : 0; }
 
 WXDLLEXPORT bool wxOKlibc(); // for internal use
 
