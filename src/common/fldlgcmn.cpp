@@ -244,34 +244,48 @@ int wxParseFileFilter(const wxString& filterStr,
                       wxArrayString& descriptions,
                       wxArrayString& filters)
 {
+    descriptions.Clear();
+    filters.Clear();
+
     wxString str(filterStr);
 
     wxString description, filter;
-    int pos = -1;
-    bool finished = FALSE;
-    do
+    for ( int pos = 0; pos != wxNOT_FOUND; )
     {
         pos = str.Find(wxT('|'));
-        if (pos == -1)
-            return 0; // Problem
+        if ( pos == wxNOT_FOUND )
+        {
+            // if there are no '|'s at all in the string just take the entire
+            // string as filter
+            if ( filters.IsEmpty() )
+            {
+                description.Add(wxEmptyString);
+                filters.Add(filterStr);
+            }
+            else
+            {
+                wxFAIL_MSG( _T("missing '|' in the wildcard string!") );
+            }
+
+            break;
+        }
+
         description = str.Left(pos);
-        str = str.Mid(pos+1);
+        str = str.Mid(pos + 1);
         pos = str.Find(wxT('|'));
-        if (pos == -1)
+        if ( pos == wxNOT_FOUND )
         {
             filter = str;
-            finished = TRUE;
         }
         else
         {
             filter = str.Left(pos);
-            str = str.Mid(pos+1);
+            str = str.Mid(pos + 1);
         }
 
         descriptions.Add(description);
         filters.Add(filter);
     }
-    while (!finished);
 
     return filters.GetCount();
 }
