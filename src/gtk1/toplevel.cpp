@@ -653,16 +653,15 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
         maxWidth = GetMaxWidth(),
         maxHeight = GetMaxHeight();
 
-    if (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA)
-    {
-        // GPE's window manager doesn't like size hints
-        // at all, esp. when the user has to use the
-        // virtual keyboard.
-        minWidth = -1;
-        minHeight = -1;
-        maxWidth = -1;
-        maxHeight = -1;
-    }
+#ifdef __WXGPE__
+    // GPE's window manager doesn't like size hints
+    // at all, esp. when the user has to use the
+    // virtual keyboard.
+    minWidth = -1;
+    minHeight = -1;
+    maxWidth = -1;
+    maxHeight = -1;
+#endif
     
     if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
     if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
@@ -745,16 +744,15 @@ void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
         maxWidth = GetMaxWidth(),
         maxHeight = GetMaxHeight();
 
-    if (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA)
-    {
-        // GPE's window manager doesn't like size hints
-        // at all, esp. when the user has to use the
-        // virtual keyboard.
-        minWidth = -1;
-        minHeight = -1;
-        maxWidth = -1;
-        maxHeight = -1;
-    }
+#ifdef __WXGPE__
+    // GPE's window manager doesn't like size hints
+    // at all, esp. when the user has to use the
+    // virtual keyboard.
+    minWidth = -1;
+    minHeight = -1;
+    maxWidth = -1;
+    maxHeight = -1;
+#endif
     
     if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
     if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;

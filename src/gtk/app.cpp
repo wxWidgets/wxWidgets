@@ -35,6 +35,10 @@
 #include "wx/module.h"
 #include "wx/image.h"
 
+#ifdef __WXGPE__
+#include <gpe/init.h>
+#endif
+
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"
     #include "wx/univ/renderer.h"
@@ -582,7 +586,12 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     argvGTK[argc] = NULL;
 
     int argcGTK = argc;
+    
+#ifdef __WXGPE__
+    gpe_application_init( &argcGTK, &argvGTK );
+#else
     gtk_init( &argcGTK, &argvGTK );
+#endif
 
     if ( argcGTK != argc )
     {
