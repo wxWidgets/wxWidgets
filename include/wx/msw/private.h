@@ -192,7 +192,7 @@ inline bool wxStyleHasBorder(long style)
 #define OutputDebugString OutputDebugStringW95
 #endif
 
-extern void OutputDebugStringW95(const char*, ...);
+extern void OutputDebugStringW95(const wxChar*, ...);
 #endif
 
 #endif
