@@ -49,6 +49,9 @@ the corresponding topic.
 \helpref{wxCopyFile}{wxcopyfile}\\
 \helpref{wxCreateDynamicObject}{wxcreatedynamicobject}\\
 \helpref{wxCreateFileTipProvider}{wxcreatefiletipprovider}\\
+\helpref{wxCRIT\_SECT\_DECLARE}{wxcritsectdeclare}\\
+\helpref{wxCRIT\_SECT\_LOCKER}{wxcritsectlocker}\\
+\helpref{wxCRITICAL\_SECTION}{wxcriticalsectionmacro}\\ % wxcs already taken!
 \helpref{wxDDECleanUp}{wxddecleanup}\\
 \helpref{wxDDEInitialize}{wxddeinitialize}\\
 \helpref{wxDROP\_ICON}{wxdropicon}\\
@@ -64,6 +67,7 @@ the corresponding topic.
 \helpref{wxEmptyClipboard}{wxemptyclipboard}\\
 \helpref{wxEnableTopLevelWindows}{wxenabletoplevelwindows}\\
 \helpref{wxEndBusyCursor}{wxendbusycursor}\\
+\helpref{wxENTER\_CRIT\_SECT}{wxentercritsect}\\
 \helpref{wxEntry}{wxentry}\\
 \helpref{wxEnumClipboardFormats}{wxenumclipboardformats}\\
 \helpref{wxError}{wxerror}\\
@@ -146,9 +150,11 @@ the corresponding topic.
 \helpref{wxIsClipboardFormatAvailable}{wxisclipboardformatavailable}\\
 \helpref{wxIsDebuggerRunning}{wxisdebuggerrunning}\\
 \helpref{wxIsEmpty}{wxisempty}\\
+\helpref{wxIsMainThread}{wxismainthread}\\
 \helpref{wxIsNaN}{wxisnan}\\
 \helpref{wxIsWild}{wxiswild}\\
 \helpref{wxKill}{wxkill}\\
+\helpref{wxLEAVE\_CRIT\_SECT}{wxleavecritsect}\\
 \helpref{wxLoadUserResource}{wxloaduserresource}\\
 \helpref{wxLogDebug}{wxlogdebug}\\
 \helpref{wxLogError}{wxlogerror}\\
@@ -672,6 +678,16 @@ and that this function is only implemented under Unix and Win32.
 
 \section{Thread functions}\label{threadfunctions}
 
+The functions and macros here mainly exist to make it writing the code which
+may be compiled in multi thread build ({\tt wxUSE\_THREADS} $= 1$) as well as
+in single thread configuration ({\tt wxUSE\_THREADS} $= 0$).
+
+For example, a static variable must be protected against simultaneous access by
+multiple threads in the former configuration but in the latter the extra
+overhead of using the critical section is not needed. To solve this problem,
+the \helpref{wxCRITICAL\_SECTION}{wxcriticalsectionmacro} macro may be used
+to create and use the critical section only when needed.
+
 \wxheading{Include files}
 
 <wx/thread.h>
@@ -679,6 +695,74 @@ and that this function is only implemented under Unix and Win32.
 \wxheading{See also}
 
 \helpref{wxThread}{wxthread}, \helpref{wxMutex}{wxmutex}, \helpref{Multithreading overview}{wxthreadoverview}
+
+
+\membersection{wxCRIT\_SECT\_DECLARE}\label{wxcritsectdeclare}
+
+\func{}{wxCRIT\_SECT\_DECLARE}{\param{}{cs}}
+
+This macro declares a (static) critical section object named {\it cs} if 
+{\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
+
+
+\membersection{wxCRIT\_SECT\_LOCKER}\label{wxcritsectlocker}
+
+\func{}{wxCRIT\_SECT\_LOCKER}{\param{}{name}, \param{}{cs}}
+
+This macro creates a \helpref{critical section lock}{wxcriticalsectionlocker} 
+object named {\it name} and associated with the critical section {\it cs} if 
+{\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
+
+
+\membersection{wxCRITICAL\_SECTION}\label{wxcriticalsectionmacro}
+
+\func{}{wxCRITICAL\_SECTION}{\param{}{name}}
+
+This macro combines \helpref{wxCRIT\_SECT\_DECLARE}{wxcritsectdeclare} and 
+\helpref{wxCRIT\_SECT\_LOCKER}{wxcritsectlocker}: it creates a static critical
+section object and also the lock object associated with it. Because of this, it
+can be only used inside a function, not at global scope. For example:
+
+\begin{verbatim}
+int IncCount()
+{
+    static int s_counter = 0;
+
+    wxCRITICAL_SECTION(counter);
+
+    return ++s_counter;
+}
+\end{verbatim}
+
+(note that we suppose that the function is called the first time from the main
+thread so that the critical section object is initialized correctly by the time
+other threads start calling it, if this is not the case this approach can 
+{\bf not} be used and the critical section must be made a global instead).
+
+
+\membersection{wxENTER\_CRIT\_SECT}\label{wxentercritsect}
+
+\func{}{wxENTER\_CRIT\_SECT}{\param{wxCriticalSection\& }{cs}}
+
+This macro is equivalent to \helpref{cs.Enter()}{wxcriticalsectionenter} if
+{\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
+
+
+\membersection{::wxIsMainThread}\label{wxismainthread}
+
+\func{bool}{wxIsMainThread}{\void}
+
+Returns {\tt true} if this thread is the main one. Always returns {\tt true} if
+{\tt wxUSE\_THREADS} is $0$.
+
+
+\membersection{wxLEAVE\_CRIT\_SECT}\label{wxleavecritsect}
+
+\func{}{wxLEAVE\_CRIT\_SECT}{\param{wxCriticalSection\& }{cs}}
+
+This macro is equivalent to \helpref{cs.Leave()}{wxcriticalsectionleave} if
+{\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
+
 
 \membersection{::wxMutexGuiEnter}\label{wxmutexguienter}
 
