@@ -284,9 +284,9 @@ class wxDbConnectInf
     public:
 
         wxDbConnectInf();
-        wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID="", 
-                       const wxString &password="", const wxString &defaultDir="", 
-                       const wxString &description="", const wxString &fileType="");
+        wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID=wxT(""), 
+                       const wxString &password=wxT(""), const wxString &defaultDir=wxT(""), 
+                       const wxString &description=wxT(""), const wxString &fileType=wxT(""));
 
         ~wxDbConnectInf();
 
@@ -296,8 +296,7 @@ class wxDbConnectInf
         void             FreeHenv();
 
         // Accessors
-        const HENV       GetHenv()          { return Henv; };
-        const HENV      &GetHenvAddress()   { return Henv; };
+        const HENV       &GetHenv()          { return Henv; };
 
         const wxChar    *GetDsn()           { return Dsn; };
 
@@ -352,6 +351,7 @@ public:
     wxDbColFor();
     ~wxDbColFor();
 
+    void           Initialize();
     int            Format(int Nation, int dbDataType, SWORD sqlDataType, short columnSize, short decimalDigits);
 };
 
@@ -409,6 +409,8 @@ public:
 
     wxDbInf();
     ~wxDbInf();
+
+    void          Initialize();
 };
 
 
@@ -565,10 +567,11 @@ public:
 #endif
 
     // Public member functions
-    wxDb(HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
+    wxDb(const HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
     void         Initialize();
 
     bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr);  // Data Source Name, User ID, Password
+    bool         Open(wxDbConnectInf *dbConnectInf);
     bool         Open(wxDb *copyDb);  // pointer to a wxDb whose connection info should be copied rather than re-queried
     void         Close(void);
     bool         CommitTrans(void);
@@ -615,7 +618,7 @@ public:
     wxDBMS       Dbms(void);
     bool         ModifyColumn(const wxString &tableName, const wxString &columnName,
                               int dataType, ULONG columnLength=0,
-                              const wxString &optionalParam="");
+                              const wxString &optionalParam=wxT(""));
 
     bool         FwdOnlyCursors(void)  {return fwdOnlyCursors;}
 
@@ -665,7 +668,7 @@ int   WXDLLEXPORT  wxDbConnectionsInUse(void);
 
 
 // This function sets the sql log state for all open wxDb objects
-bool wxDbSqlLog(wxDbSqlLogState state, const wxChar *filename = SQL_LOG_FILENAME);
+bool wxDbSqlLog(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME);
 
 
 #if 0
