@@ -36,30 +36,12 @@
     #include "wx/intl.h"
 #endif // WX_PRECOMP
 
-#include "wx/dir.h"
-#include "wx/hashmap.h"
-#include "wx/dynlib.h"
-#include "wx/arrimpl.cpp"
-
+#include "wx/arrstr.h"
 #include "wx/volume.h"
 
-#include "wx/palmos/missing.h"
+#include "VFSMgr.h"
 
 #if wxUSE_BASE
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Dynamic library function defs.
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static wxDynamicLibrary s_mprLib;
-
-typedef DWORD (WINAPI* WNetOpenEnumPtr)(DWORD, DWORD, DWORD, LPNETRESOURCE, LPHANDLE);
-typedef DWORD (WINAPI* WNetEnumResourcePtr)(HANDLE, LPDWORD, LPVOID, LPDWORD);
-typedef DWORD (WINAPI* WNetCloseEnumPtr)(HANDLE);
-
-static WNetOpenEnumPtr s_pWNetOpenEnum;
-static WNetEnumResourcePtr s_pWNetEnumResource;
-static WNetCloseEnumPtr s_pWNetCloseEnum;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Globals/Statics
@@ -82,7 +64,9 @@ struct FileInfo
     unsigned m_flags;
     wxFSVolumeKind m_type;
 };
+
 WX_DECLARE_STRING_HASH_MAP(FileInfo, FileInfoMap);
+
 // Cygwin bug (?) destructor for global s_fileInfo is called twice...
 static FileInfoMap& GetFileInfoMap()
 {
@@ -123,41 +107,6 @@ static bool FilteredAdd(wxArrayString& list, const wxChar* filename,
     return false;
 } // FilteredAdd
 
-//=============================================================================
-// Function: BuildListFromNN
-// Purpose: Append or remove items from the list
-// Notes: - There is no way to find all disconnected NN items, or even to find
-//          all items while determining which are connected and not.  So this
-//          function will find either all items or connected items.
-//=============================================================================
-static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc, 
-                            unsigned flagsSet, unsigned flagsUnset)
-{
-} // BuildListFromNN
-
-//=============================================================================
-// Function: CompareFcn
-// Purpose: Used to sort the NN list alphabetically, case insensitive.
-//=============================================================================
-static int CompareFcn(wxString* first, wxString* second)
-{
-    return wxStricmp(first->c_str(), second->c_str());
-} // CompareFcn
-
-//=============================================================================
-// Function: BuildRemoteList
-// Purpose: Append Network Neighborhood items to the list.
-// Notes: - Mounted gets transalated into Connected.  FilteredAdd is told
-//          to ignore the Mounted flag since we need to handle it in a weird
-//          way manually.
-//        - The resulting list is sorted alphabetically.
-//=============================================================================
-static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc, 
-                            unsigned flagsSet, unsigned flagsUnset)
-{
-    return false;
-} // BuildRemoteList
-
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // wxFSVolume
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -170,6 +119,27 @@ static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
 wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
 {
     wxArrayString list;
+
+    UInt16 refNum;
+    UInt32 it = vfsIteratorStart;
+
+    while (it != vfsIteratorStop)
+    {
+        status_t err = VFSVolumeEnumerate(&refNum, &it);
+        if (err == errNone)
+        {
+            // manual: "Volume labels can be up to 255 characters long."
+            char label[256];
+            err = VFSVolumeGetLabel(refNum,label,256);
+            if (err == errNone)
+            {
+                list.Add(wxString::FromAscii(label));
+            }
+        }
+
+        if (err != errNone)
+            break;
+    } 
 
     return list;
 } // GetVolumes
@@ -212,7 +182,7 @@ bool wxFSVolumeBase::Create(const wxString& name)
 
 //=============================================================================
 // Function: IsOk
-// Purpose: returns TRUE if the volume is legal.
+// Purpose: returns true if the volume is legal.
 // Notes: For fixed disks, it must exist.  For removable disks, it must also
 //        be present.  For Network Shares, it must also be logged in, etc.
 //=============================================================================
