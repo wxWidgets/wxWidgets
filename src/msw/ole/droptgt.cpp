@@ -79,6 +79,13 @@ private:
   static inline DWORD GetDropEffect(DWORD flags);
 };
 
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static wxDragResult ConvertDragEffectToResult(DWORD dwEffect);
+static DWORD ConvertDragResultToEffect(wxDragResult result);
+
 // ============================================================================
 // wxIDropTarget implementation
 // ============================================================================
@@ -138,16 +145,18 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
     return S_OK;
   }
 
-  // TODO should check the point also?
-
-  *pdwEffect = GetDropEffect(grfKeyState);
-
   // get hold of the data object
   m_pIDataObject = pIDataSource;
   m_pIDataObject->AddRef();
 
   // give some visual feedback
-  m_pTarget->OnEnter();
+  *pdwEffect = ConvertDragResultToEffect(
+                 m_pTarget->OnEnter(pt.x, pt.y,
+                   ConvertDragEffectToResult(
+                     GetDropEffect(grfKeyState)
+                   )
+                 )
+               );
 
   return S_OK;
 }
@@ -167,8 +176,19 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
 {
   // there are too many of them... wxLogDebug("IDropTarget::DragOver");
 
-  *pdwEffect = m_pIDataObject == NULL ? DROPEFFECT_NONE
-                                      : GetDropEffect(grfKeyState);
+  wxDragResult result;
+  if ( m_pIDataObject ) {
+      result = ConvertDragEffectToResult(GetDropEffect(grfKeyState));
+  }
+  else {
+      // can't accept data anyhow normally
+      result = wxDragNone;
+  }
+
+  *pdwEffect = ConvertDragResultToEffect(
+                 m_pTarget->OnDragOver(pt.x, pt.y, result)
+               );
+
   return S_OK;
 }
 
@@ -433,6 +453,46 @@ bool wxFileDropTarget::OnData(wxCoord x, wxCoord y)
 
     return OnDropFiles(x, y,
                        ((wxFileDataObject *)m_dataObject)->GetFilenames());
+}
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static wxDragResult ConvertDragEffectToResult(DWORD dwEffect)
+{
+    switch ( dwEffect ) {
+        case DROPEFFECT_COPY:
+            return wxDragCopy;
+
+        case DROPEFFECT_MOVE:
+            return wxDragMove;
+
+        default:
+            wxFAIL_MSG(wxT("invalid value in ConvertDragEffectToResult"));
+            // fall through
+
+        case DROPEFFECT_NONE:
+            return wxDragNone;
+    }
+}
+
+static DWORD ConvertDragResultToEffect(wxDragResult result)
+{
+    switch ( result ) {
+        case wxDragCopy:
+            return DROPEFFECT_COPY;
+
+        case wxDragMove:
+            return DROPEFFECT_MOVE;
+
+        default:
+            wxFAIL_MSG(wxT("invalid value in ConvertDragResultToEffect"));
+            // fall through
+
+        case wxDragNone:
+            return DROPEFFECT_NONE;
+    }
 }
 
 #endif

@@ -97,19 +97,28 @@ public:
         { if (m_dataObject) delete m_dataObject; 
 	  m_dataObject = dataObject; }
 
-    // called when mouse enters/leaves the window: might be used to give
-    // some visual feedback to the user
-    virtual void OnLeave() { }
-    
-    // this function is called when data enters over position (x, y) - if it
-    // returns TRUE, the dragging icon can indicate that the window would
-    // accept a drop here
-    virtual bool OnEnter(wxCoord x, wxCoord y) = 0;
+    // these functions are called when data is moved over position (x, y) and
+    // may return either wxDragCopy, wxDragMove or wxDragNone depending on
+    // what would happen if the data were dropped here.
+    //
+    // the last parameter is what would happen by default and is determined by
+    // the platform-specific logic (for example, under Windows it's wxDragCopy
+    // if Ctrl key is pressed and wxDragMove otherwise) except that it will
+    // always be wxDragNone if the carried data is in an unsupported format.
 
-    // this function is called when data is move over position (x, y) - if it
-    // returns TRUE, the dragging icon can indicate that the window would
-    // accept a drop here
-    virtual bool OnMove(wxCoord x, wxCoord y) = 0;
+    // called when the mouse enters the window (only once until OnLeave())
+    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
+        { return OnDragOver(x, y, def); }
+
+    // called when the mouse moves in the window - shouldn't take long to
+    // execute or otherwise mouse movement would be too slow
+    virtual wxDragResult OnDragOver(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                                    wxDragResult def)
+        { return def; }
+    
+    // called when mouse leaves the window: might be used to remove the
+    // feedback which was given in OnEnter()
+    virtual void OnLeave() { }
     
     // this function is called when data is dropped at position (x, y) - if it
     // returns TRUE, OnData() will be called immediately afterwards which will

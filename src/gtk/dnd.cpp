@@ -188,22 +188,24 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
        this is only valid for the duration of this call */
     drop_target->SetDragContext( context );
 
-    bool ret = FALSE;
+    /* TODO: what should be the default behaviour? Copy or move? */
+    wxDragResult result = wxDragMove;
 
     if (drop_target->m_firstMotion)
     {
         /* the first "drag_motion" event substitutes a "drag_enter" event */
-        ret = drop_target->OnEnter( x, y );
+        result = drop_target->OnEnter( x, y, result );
     }
     else
     {
         /* give program a chance to react (i.e. to say no by returning FALSE) */
-        ret = drop_target->OnMove( x, y );
+        result = drop_target->OnDragOver( x, y, result );
     }
 
     /* we don't yet handle which "actions" (i.e. copy or move)
        the target accepts. so far we simply accept the
        suggested action. TODO. */
+    bool ret = result != wxDragNone;
     if (ret)
         gdk_drag_status( context, context->suggested_action, time );
 
@@ -367,7 +369,17 @@ wxDropTarget::wxDropTarget( wxDataObject *data )
     m_dragTime = 0;
 }
 
-bool wxDropTarget::OnEnter( int WXUNUSED(x), int WXUNUSED(y) )
+wxDragResult wxDropTarget::OnDragOver( wxCoord WXUNUSED(x),
+                                       wxCoord WXUNUSED(y),
+                                       wxDragResult def )
+{
+    if (!m_dataObject)
+        return FALSE;
+	
+    return (GetMatchingPair() != (GdkAtom) 0) ? def : wxDragNone;
+}
+
+bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
 {
     if (!m_dataObject)
         return FALSE;
@@ -375,23 +387,7 @@ bool wxDropTarget::OnEnter( int WXUNUSED(x), int WXUNUSED(y) )
     return (GetMatchingPair() != (GdkAtom) 0);
 }
 
-bool wxDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
-{
-    if (!m_dataObject)
-        return FALSE;
-	
-    return (GetMatchingPair() != (GdkAtom) 0);
-}
-
-bool wxDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
-{
-    if (!m_dataObject)
-        return FALSE;
-	
-    return (GetMatchingPair() != (GdkAtom) 0);
-}
-
-bool wxDropTarget::OnData( int WXUNUSED(x), int WXUNUSED(y) )
+bool wxDropTarget::OnData( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
 {
     if (!m_dataObject)
         return FALSE;

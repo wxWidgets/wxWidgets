@@ -45,8 +45,7 @@ class wxDropTarget: public wxDropTargetBase
 public:
     wxDropTarget(wxDataObject *dataObject = (wxDataObject*) NULL );
     
-    virtual bool OnEnter(wxCoord x, wxCoord y) ;
-    virtual bool OnMove(wxCoord x, wxCoord y);
+    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool OnDrop(wxCoord x, wxCoord y);
     virtual bool OnData(wxCoord x, wxCoord y);
     virtual bool GetData();
