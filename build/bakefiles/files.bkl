@@ -1736,7 +1736,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/frame.mm
     src/cocoa/gauge.mm
     src/cocoa/gdiobj.cpp
-    src/cocoa/icon.cpp
+    src/cocoa/icon.mm
     src/cocoa/listbox.mm
     src/cocoa/main.cpp
     src/cocoa/mbarman.mm

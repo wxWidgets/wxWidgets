@@ -145,7 +145,7 @@ WXJPEG_OBJECTS =  \
 	wxjpeg_jquant1.o \
 	wxjpeg_jquant2.o \
 	wxjpeg_jdmerge.o
-WXTIFF_CFLAGS =      $(CPPFLAGS) $(CFLAGS)
+WXTIFF_CFLAGS =     $(__INC_ZLIB_p) $(__INC_JPEG_p)  $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(__TIFF_PLATFORM_SRC_OBJECTS) \
 	wxtiff_tif_aux.o \
@@ -1149,6 +1149,7 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/x11/window.h
 @COND_TOOLKIT_X11@LOWLEVEL_HDR = $(COND_TOOLKIT_X11_LOWLEVEL_HDR)
 COND_TOOLKIT_COCOA_GUI_HDR =  \
+	wx/cocoa/NSApplication.h \
 	wx/cocoa/NSBox.h \
 	wx/cocoa/NSButton.h \
 	wx/cocoa/NSControl.h \
@@ -1195,6 +1196,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/radiobox.h \
 	wx/cocoa/radiobut.h \
 	wx/cocoa/region.h \
+	wx/cocoa/slider.h \
 	wx/cocoa/spinbutt.h \
 	wx/cocoa/statbmp.h \
 	wx/cocoa/statbox.h \
@@ -1205,6 +1207,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/toplevel.h \
 	wx/cocoa/window.h \
 	wx/generic/caret.h \
+	wx/generic/dirdlgg.h \
 	wx/generic/fdrepdlg.h \
 	wx/generic/fontdlgg.h \
 	wx/generic/imaglist.h \
@@ -8163,7 +8166,7 @@ monodll_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_icon.o: $(srcdir)/src/mac/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_icon.o: $(srcdir)/src/cocoa/icon.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_icon.o: $(srcdir)/src/cocoa/icon.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_icon.o: $(srcdir)/src/os2/icon.cpp $(MONODLL_ODEP)
@@ -10767,7 +10770,7 @@ monolib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_icon.o: $(srcdir)/src/mac/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_icon.o: $(srcdir)/src/cocoa/icon.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_icon.o: $(srcdir)/src/cocoa/icon.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_icon.o: $(srcdir)/src/os2/icon.cpp $(MONOLIB_ODEP)
@@ -13635,7 +13638,7 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_icon.o: $(srcdir)/src/mac/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_icon.o: $(srcdir)/src/cocoa/icon.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_icon.o: $(srcdir)/src/cocoa/icon.mm $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_icon.o: $(srcdir)/src/os2/icon.cpp $(COREDLL_ODEP)
@@ -15744,7 +15747,7 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_icon.o: $(srcdir)/src/mac/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_icon.o: $(srcdir)/src/cocoa/icon.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_icon.o: $(srcdir)/src/cocoa/icon.mm $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_icon.o: $(srcdir)/src/os2/icon.cpp $(CORELIB_ODEP)
