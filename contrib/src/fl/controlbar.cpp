@@ -909,7 +909,7 @@ void wxFrameLayout::DoSetBarState( cbBarInfo* pBar )
                           wxPoint( 50,50 ),
                           wxSize ( 0, 0  ),
                           wxFRAME_FLOAT_ON_PARENT |
-                          wxFRAME_TOOL_WINDOW |
+                          wxNO_BORDER |
                           wxFRAME_NO_TASKBAR
                         );
 
