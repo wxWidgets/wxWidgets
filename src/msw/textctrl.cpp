@@ -534,24 +534,40 @@ wxString wxTextCtrl::GetRange(long from, long to) const
             // we must use EM_STREAMOUT if we don't want to lose all characters
             // not representable in the current character set (EM_GETTEXTRANGE
             // simply replaces them with question marks...)
-            //
-            // as EM_STREAMOUT only works for the entire controls contents (or
-            // just the selection but it's probably a bad idea to play games
-            // with selection here...), we can't use it unless we're called
-            // from GetValue(), i.e. we want to retrieve all text
-            if ( GetRichVersion() > 1 && (from == 0 && to >= len) )
+            if ( GetRichVersion() > 1 )
             {
+                // we must have some encoding, otherwise any 8bit chars in the
+                // control are simply *lost* (replaced by '?')
+                wxFontEncoding encoding = wxFONTENCODING_SYSTEM;
+
                 wxFont font = m_defaultStyle.GetFont();
                 if ( !font.Ok() )
                     font = GetFont();
 
                 if ( font.Ok() )
                 {
-                   wxFontEncoding encoding = font.GetEncoding();
-                   if ( encoding != wxFONTENCODING_SYSTEM )
-                   {
-                       str = StreamOut(encoding);
-                   }
+                   encoding = font.GetEncoding();
+                }
+
+                if ( encoding == wxFONTENCODING_SYSTEM )
+                {
+                    encoding = wxLocale::GetSystemEncoding();
+                }
+
+                if ( encoding == wxFONTENCODING_SYSTEM )
+                {
+                    encoding = wxFONTENCODING_ISO8859_1;
+                }
+
+                str = StreamOut(encoding);
+
+                if ( !str.empty() )
+                {
+                    // we have to manually extract the required part, luckily
+                    // this is easy in this case as EOL characters in richedit
+                    // version > 1 are just '\r's and so positions map to
+                    // string indices one to one (unlike with richedit 1)
+                    str = str.Mid(from, to - from + 1);
                 }
             }
 
@@ -1229,13 +1245,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     // Set selection and remove it
     DoSetSelection(from, to, FALSE /* don't scroll caret into view */);
 
-    SendMessage(GetHwnd(), EM_REPLACESEL,
-#ifdef __WIN32__
-                TRUE,
-#else
-                FALSE,
-#endif
-                (LPARAM)value.c_str());
+    DoWriteText(value, TRUE /* selection only */);
 }
 
 void wxTextCtrl::Remove(long from, long to)
