@@ -24,6 +24,16 @@ MAKE_CONST_WXSTRING(PanelNameStr);
 %newgroup
 
 
+enum wxWindowVariant 
+{
+    wxWINDOW_VARIANT_DEFAULT,       // Default size (usually == normal, may be set by a wxSystemOptions entry)
+    wxWINDOW_VARIANT_NORMAL,        // Normal size
+    wxWINDOW_VARIANT_SMALL,         // Smaller size (about 25 % smaller than normal )
+    wxWINDOW_VARIANT_MINI,          // Mini size (about 33 % smaller than normal )
+    wxWINDOW_VARIANT_LARGE,         // Large size (about 25 % larger than normal )
+};
+
+
 DocStr(wxWindow,
 "
 wx.Window is the base class for all windows and represents any visible
@@ -253,30 +263,40 @@ has been added to the list of windows pending real deletion.");
     
     DocDeclStr(
         virtual wxString , GetLabel() const,
-        "Generic way of getting a label from any window, for identification
-purposes.  The interpretation of this function differs from class to
-class. For frames and dialogs, the value returned is the title. For
-buttons or static text controls, it is the button text. This function
-can be useful for meta-programs (such as testing tools or
-special-needs access programs) which need to identify windows by name.");
+        "Generic way of getting a label from any window, for
+identification purposes.  The interpretation of this function
+differs from class to class. For frames and dialogs, the value
+returned is the title. For buttons or static text controls, it is
+the button text. This function can be useful for meta-programs
+(such as testing tools or special-needs access programs) which
+need to identify windows by name.");
     
 
     // the window name is used for ressource setting in X, it is not the
     // same as the window title/label
     DocDeclStr(
         virtual void , SetName( const wxString &name ),
-        "Sets the window's name.  The window name is used for ressource setting
-in X, it is not the same as the window title/label");
+        "Sets the window's name.  The window name is used for ressource
+setting in X, it is not the same as the window title/label");
     
     DocDeclStr(
         virtual wxString , GetName() const,
-        "Returns the window's name.  This name is not guaranteed to be unique;
-it is up to the programmer to supply an appropriate name in the window
-constructor or via wx.Window.SetName.");
+        "Returns the window's name.  This name is not guaranteed to be
+unique; it is up to the programmer to supply an appropriate name
+in the window constructor or via wx.Window.SetName.");
+
+    
+    
+    DocDeclStr(
+        void , SetWindowVariant( wxWindowVariant variant ),
+        "Sets the variant of the window/font size to use for this window,
+if the platform supports variants, (for example, wxMac.)");
+    
+    DocDeclStr(
+        wxWindowVariant , GetWindowVariant() const,
+        "");
     
 
-    // window id uniquely identifies the window among its siblings unless
-    // it is -1 which means "don't care"
     DocDeclStr(
         void , SetId( wxWindowID winid ),
         "Sets the identifier of the window.  Each window has an integer
