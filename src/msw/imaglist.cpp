@@ -264,10 +264,10 @@ bool wxImageList::Draw(int index,
     COLORREF clr = CLR_NONE;    // transparent by default
     if ( solidBackground )
     {
-        wxBrush *brush = & dc.GetBackground();
-        if ( brush && brush->Ok() )
+        const wxBrush& brush = dc.GetBackground();
+        if ( brush.Ok() )
         {
-            clr = wxColourToRGB(brush->GetColour());
+            clr = wxColourToRGB(brush.GetColour());
         }
     }
 
