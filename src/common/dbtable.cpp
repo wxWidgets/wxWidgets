@@ -571,7 +571,7 @@ bool wxDbTable::getRec(UWORD fetchType)
         UWORD   rowStatus;
 
         retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus);
-        if (retcode  != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+        if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
         {
             if (retcode == SQL_NO_DATA_FOUND)
                 return(FALSE);
@@ -1512,7 +1512,10 @@ bool wxDbTable::DropTable()
     cout << endl << sqlStmt.c_str() << endl;
 #endif
 
-     RETCODE retcode = SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
+
+
+
+    RETCODE retcode = SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
     if (retcode != SQL_SUCCESS)
     {
         // Check for "Base table not found" error and ignore
@@ -1529,7 +1532,7 @@ bool wxDbTable::DropTable()
                 pDb->DispNextError();
                 pDb->DispAllErrors(henv, hdbc, hstmt);
                 pDb->RollbackTrans();
-                CloseCursor(hstmt);
+//                CloseCursor(hstmt);
                 return(FALSE);
             }
         }
@@ -1675,12 +1678,13 @@ bool wxDbTable::DropIndex(const wxString &idxName)
 {
     // NOTE: This function returns TRUE if the Index does not exist, but
     //       only for identified databases.  Code will need to be added
-    //          below for any other databases when those databases are defined
+    //       below for any other databases when those databases are defined
     //       to handle this situation consistently
 
     wxString sqlStmt;
 
-    if (pDb->Dbms() == dbmsACCESS || pDb->Dbms() == dbmsMY_SQL)
+    if (pDb->Dbms() == dbmsACCESS || pDb->Dbms() == dbmsMY_SQL ||
+        pDb->Dbms() == dbmsDBASE /*|| Paradox needs this syntax too when we add support*/)
         sqlStmt.Printf(wxT("DROP INDEX %s ON %s"),idxName.c_str(), tableName.c_str());
     else if ((pDb->Dbms() == dbmsMS_SQL_SERVER) ||
              (pDb->Dbms() == dbmsSYBASE_ASE))

@@ -3221,30 +3221,35 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
     if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
         return(DispAllErrors(henv, hdbc, hstmt));
 
+    bool failed = FALSE;
     retcode = SQLFetch(hstmt);
     while (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
     {
         if (SQLGetData(hstmt, 1, SQL_C_CHAR, (UCHAR*) result.tableQual, sizeof(result.tableQual), &cbRetVal) != SQL_SUCCESS)
-            return(DispAllErrors(henv, hdbc, hstmt));
+            failed = true;
 
-        if (SQLGetData(hstmt, 2, SQL_C_CHAR, (UCHAR*) result.tableOwner, sizeof(result.tableOwner), &cbRetVal) != SQL_SUCCESS)
-            return(DispAllErrors(henv, hdbc, hstmt));
+        if (!failed && SQLGetData(hstmt, 2, SQL_C_CHAR, (UCHAR*) result.tableOwner, sizeof(result.tableOwner), &cbRetVal) != SQL_SUCCESS)
+            failed = true;
 
-        if (SQLGetData(hstmt, 3, SQL_C_CHAR, (UCHAR*) result.tableName, sizeof(result.tableName), &cbRetVal) != SQL_SUCCESS)
-            return(DispAllErrors(henv, hdbc, hstmt));
+        if (!failed && SQLGetData(hstmt, 3, SQL_C_CHAR, (UCHAR*) result.tableName, sizeof(result.tableName), &cbRetVal) != SQL_SUCCESS)
+            failed = true;
 
-        if (SQLGetData(hstmt, 4, SQL_C_CHAR, (UCHAR*) result.grantor, sizeof(result.grantor), &cbRetVal) != SQL_SUCCESS)
-            return(DispAllErrors(henv, hdbc, hstmt));
+        if (!failed && SQLGetData(hstmt, 4, SQL_C_CHAR, (UCHAR*) result.grantor, sizeof(result.grantor), &cbRetVal) != SQL_SUCCESS)
+            failed = true;
 
-        if (SQLGetData(hstmt, 5, SQL_C_CHAR, (UCHAR*) result.grantee, sizeof(result.grantee), &cbRetVal) != SQL_SUCCESS)
-            return(DispAllErrors(henv, hdbc, hstmt));
+        if (!failed && SQLGetData(hstmt, 5, SQL_C_CHAR, (UCHAR*) result.grantee, sizeof(result.grantee), &cbRetVal) != SQL_SUCCESS)
+            failed = true;
 
-        if (SQLGetData(hstmt, 6, SQL_C_CHAR, (UCHAR*) result.privilege, sizeof(result.privilege), &cbRetVal) != SQL_SUCCESS)
-            return(DispAllErrors(henv, hdbc, hstmt));
+        if (!failed && SQLGetData(hstmt, 6, SQL_C_CHAR, (UCHAR*) result.privilege, sizeof(result.privilege), &cbRetVal) != SQL_SUCCESS)
+            failed = true;
 
-        if (SQLGetData(hstmt, 7, SQL_C_CHAR, (UCHAR*) result.grantable, sizeof(result.grantable), &cbRetVal) != SQL_SUCCESS)
-            return(DispAllErrors(henv, hdbc, hstmt));
+        if (!failed && SQLGetData(hstmt, 7, SQL_C_CHAR, (UCHAR*) result.grantable, sizeof(result.grantable), &cbRetVal) != SQL_SUCCESS)
+            failed = true;
 
+        if (failed)
+        {
+            return(DispAllErrors(henv, hdbc, hstmt));
+        }
 #ifdef DBDEBUG_CONSOLE
         fprintf(stderr,wxT("Scanning %s privilege on table %s.%s granted by %s to %s\n"),
                 result.privilege,result.tableOwner,result.tableName,
