@@ -111,6 +111,8 @@ protected:
 
     friend class wxPopupWindowHandler;
     friend class wxPopupFocusHandler;
+
+    DECLARE_DYNAMIC_CLASS(wxPopupTransientWindow)
 };
 
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
@@ -138,6 +140,8 @@ protected:
 
     // the parent combobox
     wxComboControl *m_combo;
+
+    DECLARE_DYNAMIC_CLASS(wxPopupComboWindow)
 };
 
 #endif // wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
