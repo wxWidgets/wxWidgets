@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// Name:        grid.cpp
+// Name:        generic/grid.cpp
 // Purpose:     wxGrid and related classes
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
 // Modified by:

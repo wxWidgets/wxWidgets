@@ -685,7 +685,11 @@ public:
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
     void DrawAllGridLines( wxDC& dc, const wxRegion & reg );
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
-    void DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr );
+    void DrawHighlight(wxDC& dc);
+
+    // this function is called when the current cell highlight must be redrawn
+    // and may be overridden by the user
+    virtual void DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr );
 
     void DrawRowLabels( wxDC& dc );
     void DrawRowLabel( wxDC& dc, int row );
