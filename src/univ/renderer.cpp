@@ -630,10 +630,12 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
     }
 }
 
-void wxControlRenderer::DrawTextLine(const wxString& text)
+void wxControlRenderer::DrawTextLine(const wxString& text,
+                                     int selStart, int selEnd)
 {
     m_dc.SetFont(m_window->GetFont());
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 
-    m_renderer->DrawTextLine(m_dc, text, m_rect, m_window->GetStateFlags());
+    m_renderer->DrawTextLine(m_dc, text, m_rect, selStart, selEnd,
+                             m_window->GetStateFlags());
 }

@@ -75,6 +75,8 @@ public:
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect &rect,
+                              int selStart = -1,
+                              int selEnd = -1,
                               int flags = 0);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
@@ -914,9 +916,54 @@ void wxGTKRenderer::DrawButtonLabel(wxDC& dc,
 void wxGTKRenderer::DrawTextLine(wxDC& dc,
                                  const wxString& text,
                                  const wxRect &rect,
+                                 int selStart,
+                                 int selEnd,
                                  int flags)
 {
-    dc.DrawText(text, rect.x, rect.y);
+    if ( selStart == -1 )
+    {
+        // just draw it as is
+        dc.DrawText(text, rect.x, rect.y);
+    }
+    else // we have selection
+    {
+        wxCoord width,
+                x = rect.x;
+
+        // draw the part before selection
+        wxString s(text, (size_t)selStart);
+        if ( !s.empty() )
+        {
+            dc.DrawText(s, x, rect.y);
+
+            dc.GetTextExtent(s, &width, NULL);
+            x += width;
+        }
+
+        // draw the selection itself
+        s = wxString(text.c_str() + selStart, text.c_str() + selEnd);
+        if ( !s.empty() )
+        {
+            wxColour colFg = dc.GetTextForeground();
+            dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
+            dc.SetTextBackground(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT));
+            dc.SetBackgroundMode(wxSOLID);
+
+            dc.DrawText(s, x, rect.y);
+            dc.GetTextExtent(s, &width, NULL);
+            x += width;
+
+            dc.SetBackgroundMode(wxTRANSPARENT);
+            dc.SetTextForeground(colFg);
+        }
+
+        // draw the final part
+        s = text.c_str() + selEnd;
+        if ( !s.empty() )
+        {
+            dc.DrawText(s, x, rect.y);
+        }
+    }
 }
 
 void wxGTKRenderer::DrawItem(wxDC& dc,

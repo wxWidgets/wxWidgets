@@ -18,6 +18,8 @@
 
 class WXDLLEXPORT wxCaret;
 
+#include "wx/scrolwin.h"    // for wxScrollHelper
+
 // ----------------------------------------------------------------------------
 // wxTextCtrl actions
 // ----------------------------------------------------------------------------
@@ -48,11 +50,15 @@ class WXDLLEXPORT wxCaret;
 #define wxACTION_TEXT_PREFIX_SEL    _T("sel")
 #define wxACTION_TEXT_PREFIX_DEL    _T("del")
 
+// mouse selection
+#define wxACTION_TEXT_ANCHOR_SEL    _T("anchorsel")
+#define wxACTION_TEXT_EXTEND_SEL    _T("extendsel")
+
 // ----------------------------------------------------------------------------
 // wxTextCtrl
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
+class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase, public wxScrollHelper
 {
 public:
     // creation
@@ -155,12 +161,22 @@ public:
     long GetWordStart() const;
     long GetWordEnd() const;
 
+    // selection helpers
+    bool HasSelection() const { return m_selStart != -1; }
+    void ClearSelection();
+    void RemoveSelection();
+
     // implementation only from now on
     // -------------------------------
 
     // set the right colours
     virtual bool IsContainerWindow() const { return TRUE; }
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_SUNKEN; }
+
+    // perform an action
+    virtual bool PerformAction(const wxControlAction& action,
+                               long numArg = -1,
+                               const wxString& strArg = wxEmptyString);
 
 protected:
     // draw the text
@@ -170,9 +186,6 @@ protected:
     virtual wxSize DoGetBestClientSize() const;
 
     // input support
-    virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = -1,
-                               const wxString& strArg = wxEmptyString);
     virtual wxString GetInputHandlerType() const;
 
     // common part of all ctors
@@ -194,7 +207,8 @@ private:
          m_curRow;
 
     // selection
-    long m_selStart,
+    long m_selAnchor,
+         m_selStart,
          m_selEnd;
 
     // flags

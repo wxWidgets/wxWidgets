@@ -57,6 +57,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
 void wxTextCtrl::Init()
 {
+    m_selAnchor =
     m_selStart =
     m_selEnd = -1;
 
@@ -103,18 +104,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     if ( m_value == value )
         return;
 
-    m_value = value;
-
-    if ( IsSingleLine() )
-    {
-        SetInsertionPointEnd();
-    }
-    else
-    {
-        SetInsertionPoint(0);
-    }
-
-    Refresh();
+    Replace(0, GetLastPosition(), value);
 }
 
 wxString wxTextCtrl::GetValue() const
@@ -129,7 +119,7 @@ void wxTextCtrl::Clear()
 
 void wxTextCtrl::Replace(long from, long to, const wxString& text)
 {
-    wxCHECK_RET( from >= 0 && to >= 0 && from <= to,
+    wxCHECK_RET( from >= 0 && to >= 0 && from <= to && to <= GetLastPosition(),
                  _T("invalid range in wxTextCtrl::Replace") );
 
     // replace the part of the text with the new value
@@ -141,8 +131,12 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     }
     m_value = valueNew;
 
-    // update current position
+    // update the current position
     SetInsertionPoint(from + text.length());
+
+    // and the selection (do it after setting the cursor to have correct value
+    // for selection anchor)
+    ClearSelection();
 
     // FIXME shouldn't refresh everything of course
     Refresh();
@@ -240,13 +234,49 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 
 void wxTextCtrl::SetSelection(long from, long to)
 {
-    if ( from != m_selStart || to != m_selEnd )
+    if ( from == -1 || to == -1 )
     {
-        m_selStart = from;
-        m_selEnd = to;
-
-        // TODO: update display
+        ClearSelection();
     }
+    else // valid sel range
+    {
+        if ( from >= to )
+        {
+            long tmp = from;
+            from = to;
+            to = tmp;
+        }
+
+        wxCHECK_RET( to <= GetLastPosition(),
+                     _T("invalid range in wxTextCtrl::SetSelection") );
+
+        if ( from != m_selStart || to != m_selEnd )
+        {
+            m_selStart = from;
+            m_selEnd = to;
+
+            Refresh();
+        }
+        //else: nothing to do
+    }
+}
+
+void wxTextCtrl::ClearSelection()
+{
+    m_selStart =
+    m_selEnd = -1;
+
+    m_selAnchor = m_curPos;
+
+    Refresh();
+}
+
+void wxTextCtrl::RemoveSelection()
+{
+    if ( !HasSelection() )
+        return;
+
+    Remove(m_selStart, m_selEnd);
 }
 
 // ----------------------------------------------------------------------------
@@ -330,11 +360,11 @@ int wxTextCtrl::GetNumberOfLines() const
 
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
+    // note that this method should accept any values of x and y and return -1
+    // if they are out of range
     if ( IsSingleLine() )
     {
-        wxASSERT_MSG( y == 0, _T("invalid XYToPosition() parameter") );
-
-        return x;
+        return x > GetLastPosition() || y > 0 ? -1 : x;
     }
     else // multiline
     {
@@ -517,7 +547,7 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     if ( IsSingleLine() )
     {
         // just redraw everything
-        renderer->DrawTextLine(m_value);
+        renderer->DrawTextLine(m_value, (int)m_selStart, (int)m_selEnd);
     }
     else
     {
@@ -561,10 +591,15 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     bool textChanged = FALSE;
 
     wxString action;
-    bool del = FALSE;
+    bool del = FALSE,
+         sel = FALSE;
     if ( actionOrig.StartsWith(wxACTION_TEXT_PREFIX_DEL, &action) )
     {
         del = TRUE;
+    }
+    else if ( actionOrig.StartsWith(wxACTION_TEXT_PREFIX_SEL, &action) )
+    {
+        sel = TRUE;
     }
     else // not selection nor delete action
     {
@@ -600,10 +635,21 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     {
         if ( !strArg.empty() )
         {
+            // replace the selection with the new text
+            RemoveSelection();
+
             WriteText(strArg);
 
             textChanged = TRUE;
         }
+    }
+    else if ( action == wxACTION_TEXT_ANCHOR_SEL )
+    {
+        newPos = numArg;
+    }
+    else if ( action == wxACTION_TEXT_EXTEND_SEL )
+    {
+        SetSelection(m_selAnchor, numArg);
     }
     else
     {
@@ -622,18 +668,37 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
 
         if ( del )
         {
-            // delete everything between current opsition and the new one
-            if ( m_curPos != newPos )
+            // if we have the selection, remove just it
+            if ( HasSelection() )
             {
-                Remove(m_curPos, newPos);
+                RemoveSelection();
+            }
+            else
+            {
+                // otherwise delete everything between current position and
+                // the new one
+                if ( m_curPos != newPos )
+                {
+                    Remove(m_curPos, newPos);
 
-                textChanged = TRUE;
+                    textChanged = TRUE;
+                }
             }
         }
-        else
+        else // cursor movement command
         {
             // just go there
             SetInsertionPoint(newPos);
+
+            if ( sel )
+            {
+                SetSelection(m_selAnchor, m_curPos);
+            }
+            else // simple movement
+            {
+                // clear the existing selection
+                ClearSelection();
+            }
         }
     }
 
@@ -673,6 +738,114 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 wxStdTextCtrlInputHandler::wxStdTextCtrlInputHandler(wxInputHandler *inphand)
                          : wxStdInputHandler(inphand)
 {
+    m_winCapture = (wxTextCtrl *)NULL;
+}
+
+/* static */
+long wxStdTextCtrlInputHandler::HitTest(const wxTextCtrl *text,
+                                        const wxPoint& pos)
+{
+    int x, y;
+    text->CalcUnscrolledPosition(pos.x, pos.y, &x, &y);
+
+    // row calculation is simple as we assume that all lines have the same
+    // height
+    int row = y / text->GetCharHeight();
+    int rowMax = text->GetNumberOfLines() - 1;
+    if ( row > rowMax )
+    {
+        // clicking below the text is the same as clicking on the last line
+        row = rowMax;
+    }
+
+    // if the line is empty, the column can only be the first one
+    wxString line = text->GetLineText(row);
+    int col;
+    wxClientDC dc(wxConstCast(text, wxTextCtrl));
+    dc.SetFont(text->GetFont());
+
+    wxCoord width;
+    dc.GetTextExtent(line, &width, NULL);
+    if ( x >= width )
+    {
+        // clicking beyond the end of line is equivalent to clicking at
+        // the end of it
+        col = line.length();
+    }
+    else // we're inside the line
+    {
+        // now calculate the column: first, approximate it with fixed-width
+        // value and then calculate the correct value iteratively: note that
+        // we use the first character of the line instead of (average)
+        // GetCharWidth(): it is common to have lines of dashes, for example,
+        // and this should give us much better approximation in such case
+        dc.GetTextExtent(line[0], &width, NULL);
+        col = x / width;
+
+        // matchDir is -1 if we must move left, +1 to move right and 0 when
+        // we're exactly on the character we need
+        int matchDir = 0;
+        for ( ;; )
+        {
+            // check that we didn't go beyond the line boundary
+            if ( col < 0 )
+            {
+                col = 0;
+                break;
+            }
+            if ( col > line.length() )
+            {
+                col = line.length();
+                break;
+            }
+
+            wxString strBefore(line, (size_t)col);
+            dc.GetTextExtent(strBefore, &width, NULL);
+            if ( width >= x )
+            {
+                if ( matchDir == 1 )
+                {
+                    // we were going to the right and, finally, moved beyond
+                    // the original position: so the current is the next after
+                    // the correct one
+                    col--;
+
+                    break;
+                }
+                else if ( matchDir == 0 )
+                {
+                    // we just started iterating, now we know that we should
+                    // move to the left
+                    matchDir = -1;
+                }
+                //else: we are still to the right of the target, continue
+            }
+            else // width < x
+            {
+                // same logic as above ...
+                if ( matchDir == -1 )
+                {
+                    // ... except that we don't need to back track
+                    break;
+                }
+                else if ( matchDir == 0 )
+                {
+                    // go to the right
+                    matchDir = 1;
+                }
+            }
+
+            // this is not supposed to happen
+            wxASSERT_MSG( matchDir, _T("logic error in wxTextCtrl::HitTest") );
+
+            if ( matchDir == 1 )
+                col++;
+            else
+                col--;
+        }
+    }
+
+    return text->XYToPosition(col, row);
 }
 
 bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
@@ -720,9 +893,15 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
         case WXK_BACK:
             action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_LEFT;
             break;
+
+        // something else
+        default:
+            // reset the action as it could be already set to one of the
+            // prefixes
+            action = wxACTION_NONE;
     }
 
-    if ( !!action )
+    if ( action != wxACTION_NONE )
     {
         control->PerformAction(action, -1, str);
 
@@ -735,12 +914,55 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
 bool wxStdTextCtrlInputHandler::HandleMouse(wxControl *control,
                                             const wxMouseEvent& event)
 {
+    if ( event.LeftDown() )
+    {
+        wxASSERT_MSG( !m_winCapture, _T("left button going down twice?") );
+
+        wxTextCtrl *text = wxStaticCast(control, wxTextCtrl);
+
+        m_winCapture = text;
+        m_winCapture->CaptureMouse();
+
+        text->HideCaret();
+
+        long pos = HitTest(text, event.GetPosition());
+        if ( pos != -1 )
+        {
+            text->PerformAction(wxACTION_TEXT_ANCHOR_SEL, pos);
+        }
+    }
+    else if ( event.LeftDClick() )
+    {
+        // TODO: select the word the cursor is on
+    }
+    else if ( event.LeftUp() )
+    {
+        if ( m_winCapture )
+        {
+            m_winCapture->ShowCaret();
+
+            m_winCapture->ReleaseMouse();
+            m_winCapture = (wxTextCtrl *)NULL;
+        }
+    }
+
     return wxStdInputHandler::HandleMouse(control, event);
 }
 
 bool wxStdTextCtrlInputHandler::HandleMouseMove(wxControl *control,
                                                 const wxMouseEvent& event)
 {
+    if ( m_winCapture )
+    {
+        // track it
+        wxTextCtrl *text = wxStaticCast(m_winCapture, wxTextCtrl);
+        long pos = HitTest(text, event.GetPosition());
+        if ( pos != -1 )
+        {
+            text->PerformAction(wxACTION_TEXT_EXTEND_SEL, pos);
+        }
+    }
+
     return wxStdInputHandler::HandleMouseMove(control, event);
 }
 

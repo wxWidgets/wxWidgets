@@ -97,10 +97,13 @@ public:
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL) = 0;
 
-    // draw a line of the text ctrl
+    // draw a line of the text ctrl optionally highlighting the characters in
+    // the given range
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect &rect,
+                              int selStart = -1,
+                              int selEnd = -1,
                               int flags = 0) = 0;
 
     // draw the border and optionally return the rectangle containing the
@@ -300,6 +303,8 @@ public:
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect &rect,
+                              int selStart = -1,
+                              int selEnd = -1,
                               int flags = 0)
         { m_renderer->DrawTextLine(dc, text, rect, flags); }
     virtual void DrawBorder(wxDC& dc,
@@ -423,7 +428,7 @@ public:
     // operations
     void DrawLabel(const wxBitmap& bitmap = wxNullBitmap,
                    wxCoord marginX = 0, wxCoord marginY = 0);
-    void DrawTextLine(const wxString& text);
+    void DrawTextLine(const wxString& text, int selStart = -1, int selEnd = -1);
     void DrawItems(const wxListBox *listbox,
                    size_t itemFirst, size_t itemLast);
     void DrawCheckItems(const wxCheckListBox *listbox,

@@ -92,6 +92,8 @@ public:
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect &rect,
+                              int selStart = -1,
+                              int selEnd = -1,
                               int flags = 0);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
@@ -1394,6 +1396,8 @@ void wxWin32Renderer::DrawButtonLabel(wxDC& dc,
 void wxWin32Renderer::DrawTextLine(wxDC& dc,
                                    const wxString& text,
                                    const wxRect &rect,
+                                   int selStart,
+                                   int selEnd,
                                    int flags)
 {
     dc.DrawText(text, rect.x + 2, rect.y + 1);

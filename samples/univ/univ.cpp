@@ -407,7 +407,8 @@ void MyUnivFrame::OnListBox(wxCommandEvent& event)
 
 void MyUnivFrame::OnTextChange(wxCommandEvent& event)
 {
-    wxLogDebug(_T("Text control value changed: now '%s'"), event.GetString());
+    wxLogDebug(_T("Text control value changed: now '%s'"),
+               event.GetString().c_str());
 }
 
 void MyUnivFrame::OnLeftUp(wxMouseEvent& event)

@@ -25,6 +25,7 @@ class WXDLLEXPORT wxCheckListBox;
 class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxScrollBar;
+class WXDLLEXPORT wxTextCtrl;
 
 // ----------------------------------------------------------------------------
 // types of the standard input handlers which can be passed to
@@ -297,6 +298,13 @@ public:
                              const wxMouseEvent& event);
     virtual bool HandleMouseMove(wxControl *control,
                                  const wxMouseEvent& event);
+
+protected:
+    // get the position of the mouse click
+    static long HitTest(const wxTextCtrl *text, const wxPoint& pos);
+
+    // capture data
+    wxTextCtrl *m_winCapture;
 };
 
 #endif // _WX_UNIV_INPHAND_H_
