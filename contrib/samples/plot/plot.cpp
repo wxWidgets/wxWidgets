@@ -152,8 +152,8 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-  (void)wxMessageBox( _T("wxPlotWindow Demo\n"
-                         "Robert Roebling (c) 1999,2000"),
+  (void)wxMessageBox( _T("wxPlotWindow Demo\n")
+                      _T("Robert Roebling (c) 1999,2000"),
                       _T("About wxPlotWindow Demo"), wxICON_INFORMATION | wxOK );
 }
 

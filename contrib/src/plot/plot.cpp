@@ -229,10 +229,10 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
     x += view_x;
     y += view_y;
     
-    wxNode *node = m_owner->m_curves.First();
+    wxNode *node = m_owner->m_curves.GetFirst();
     while (node)
     {
-        wxPlotCurve *curve = (wxPlotCurve*)node->Data();
+        wxPlotCurve *curve = (wxPlotCurve*)node->GetData();
             
         double double_client_height = (double)client_height;
         double range = curve->GetEndY() - curve->GetStartY();
@@ -265,7 +265,7 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
             return;
         }
             
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -309,11 +309,11 @@ void wxPlotArea::DrawCurve( wxDC *dc, wxPlotCurve *curve, int from, int to )
     double end = curve->GetEndY();
     wxCoord offset_y = curve->GetOffsetY();
             
-    wxCoord y=0,last_y=0;
+    wxCoord last_y=0;
     for (int x = start_x; x < end_x; x++)
     {
         double dy = (end - curve->GetY( (wxInt32)(x/zoom) )) / range;
-        y = (wxCoord)(dy * double_client_height) - offset_y - 1;
+        wxCoord y = (wxCoord)(dy * double_client_height) - offset_y - 1;
             
         if (x != start_x)
            dc->DrawLine( x-1, last_y, x, y );
@@ -397,12 +397,12 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
     
     while (upd)
     {
-        int update_x = upd.GetX();
-        int update_y = upd.GetY();
+        int update_x = upd.GetX() + view_x;
+#if 0
+        // unused var
+        int update_y = upd.GetY() + view_y;
+#endif
         int update_width = upd.GetWidth();
-        
-        update_x += view_x;
-        update_y += view_y;
         
 /*
         if (m_owner->m_current)
@@ -413,10 +413,10 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 */
         
-        wxNode *node = m_owner->m_curves.First();
+        wxNode *node = m_owner->m_curves.GetFirst();
         while (node)
         {
-            wxPlotCurve *curve = (wxPlotCurve*) node->Data();
+            wxPlotCurve *curve = (wxPlotCurve*) node->GetData();
             
             if (curve == m_owner->GetCurrent())
                 dc.SetPen( *wxBLACK_PEN );
@@ -425,19 +425,19 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 
             DrawCurve( &dc, curve, update_x-1, update_x+update_width+2 );
 
-            node = node->Next();
+            node = node->GetNext();
         }
         
         dc.SetPen( *wxRED_PEN );
         
-        node = m_owner->m_onOffCurves.First();
+        node = m_owner->m_onOffCurves.GetFirst();
         while (node)
         {
-            wxPlotOnOffCurve *curve = (wxPlotOnOffCurve*) node->Data();
+            wxPlotOnOffCurve *curve = (wxPlotOnOffCurve*) node->GetData();
             
             DrawOnOffCurve( &dc, curve, update_x-1, update_x+update_width+2 );
             
-            node = node->Next();
+            node = node->GetNext();
         }
         
         upd ++;
@@ -481,12 +481,12 @@ void wxPlotXAxisArea::OnMouse( wxMouseEvent &event )
     view_x *= wxPLOT_SCROLL_STEP;
     view_y *= wxPLOT_SCROLL_STEP;
     
-    wxCoord x = event.GetX();
-    wxCoord y = event.GetY();
-    x += view_x;
-    y += view_y;
+    wxCoord x = event.GetX() + view_x;
+    wxCoord y = event.GetY() + view_y;
     
-    /* do something here */
+    /* TO DO: do something here */
+    wxUnusedVar(x);
+    wxUnusedVar(y);
 }
 
 void wxPlotXAxisArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -810,11 +810,11 @@ size_t wxPlotWindow::GetCount()
 
 wxPlotCurve *wxPlotWindow::GetAt( size_t n )
 {
-    wxNode *node = m_curves.Nth( n );
+    wxNode *node = m_curves.Item( n );
     if (!node)
         return (wxPlotCurve*) NULL;
         
-    return (wxPlotCurve*) node->Data();
+    return (wxPlotCurve*) node->GetData();
 }
 
 void wxPlotWindow::SetCurrent( wxPlotCurve* current )
@@ -869,11 +869,11 @@ size_t wxPlotWindow::GetOnOffCurveCount()
 
 wxPlotOnOffCurve *wxPlotWindow::GetOnOffCurveAt( size_t n )
 {
-    wxNode *node = m_onOffCurves.Nth( n );
+    wxNode *node = m_onOffCurves.Item( n );
     if (!node)
         return (wxPlotOnOffCurve*) NULL;
         
-    return (wxPlotOnOffCurve*) node->Data();
+    return (wxPlotOnOffCurve*) node->GetData();
 }
 
 void wxPlotWindow::Move( wxPlotCurve* curve, int pixels_up )
@@ -950,13 +950,13 @@ void wxPlotWindow::SetZoom( double zoom )
     GetViewStart( &view_x, &view_y );
     
     wxInt32 max = 0;
-    wxNode *node = m_curves.First();
+    wxNode *node = m_curves.GetFirst();
     while (node)
     {
-        wxPlotCurve *curve = (wxPlotCurve*) node->Data();
+        wxPlotCurve *curve = (wxPlotCurve*) node->GetData();
         if (curve->GetEndX() > max)
             max = curve->GetEndX();
-        node = node->Next();
+        node = node->GetNext();
     }
     SetScrollbars( wxPLOT_SCROLL_STEP, wxPLOT_SCROLL_STEP, 
                    (int)((max*m_xZoom)/wxPLOT_SCROLL_STEP)+1, 0, 
@@ -970,13 +970,13 @@ void wxPlotWindow::SetZoom( double zoom )
 void wxPlotWindow::ResetScrollbar()
 {
     wxInt32 max = 0;
-    wxNode *node = m_curves.First();
+    wxNode *node = m_curves.GetFirst();
     while (node)
     {
-        wxPlotCurve *curve = (wxPlotCurve*) node->Data();
+        wxPlotCurve *curve = (wxPlotCurve*) node->GetData();
         if (curve->GetEndX() > max)
             max = curve->GetEndX();
-        node = node->Next();
+        node = node->GetNext();
     }
     
     SetScrollbars( wxPLOT_SCROLL_STEP, wxPLOT_SCROLL_STEP, 
