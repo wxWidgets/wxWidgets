@@ -989,7 +989,7 @@ void Trap()
 }
 
 // this function is called when an assert fails
-void wxOnAssert(const char *szFile, int nLine, const wxChar *szMsg)
+void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 {
     // this variable can be set to true to suppress "assert failure" messages
     static bool s_bNoAsserts = FALSE;
@@ -1014,11 +1014,7 @@ void wxOnAssert(const char *szFile, int nLine, const wxChar *szMsg)
     wxSprintf(szBuf, _T("%s(%d): assert failed"), szFile, nLine);
 #else  // !VC++
     // make the error message more clear for all the others
-#ifdef wxSprintf
     wxSprintf(szBuf, _T("Assert failed in file %s at line %d"), szFile, nLine);
-#else
-    wxSprintf(szBuf, _T("Assert failed in file %hs at line %d"), szFile, nLine);
-#endif
 #endif // VC/!VC
 
     if ( szMsg != NULL ) {
