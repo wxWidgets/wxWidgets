@@ -39,18 +39,21 @@ if RELEASE_VERSION != _core_.RELEASE_VERSION:
 # different on different platforms.  For example, please see
 # http://www.alanwood.net/demos/charsetdiffs.html for differences
 # between the common latin/roman encodings.
-import locale
-import codecs
-try:
-    default = locale.getdefaultlocale()[1]
-    codecs.lookup(default)
-except (ValueError, LookupError):
-    default = _sys.getdefaultencoding()
+
+default = _sys.getdefaultencoding()
+if default == 'ascii':
+    import locale
+    import codecs
+    try:
+        default = locale.getdefaultlocale()[1]
+        codecs.lookup(default)
+    except (ValueError, LookupError):
+        default = _sys.getdefaultencoding()
+    del locale
+    del codecs
 if default:
     wx.SetDefaultPyEncoding(default)
 del default
-del locale
-del codecs
 
 #----------------------------------------------------------------------------
 
