@@ -160,12 +160,14 @@ bool wxHtmlWindow::SetPage(const wxString& source)
             prG = (nodeG) ? nodeG->GetData()->GetPriority() : -1;
             if (prL > prG)
             {
-                newsrc = nodeL->GetData()->Process(newsrc);
+                if (nodeL->GetData()->IsEnabled())
+                    newsrc = nodeL->GetData()->Process(newsrc);
                 nodeL = nodeL->GetNext();
             }
             else // prL <= prG
             {
-                newsrc = nodeG->GetData()->Process(newsrc);
+                if (nodeG->GetData()->IsEnabled())
+                    newsrc = nodeG->GetData()->Process(newsrc);
                 nodeG = nodeG->GetNext();
             }
         }
