@@ -727,6 +727,8 @@ wxCSConv::wxCSConv(const wxChar *charset)
 {
     m_name = (wxChar *)NULL;
     m_cset = (wxCharacterSet *) NULL;
+    m_deferred = TRUE;
+
     SetName(charset);
 }
 
