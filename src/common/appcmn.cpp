@@ -167,7 +167,7 @@ void wxAppBase::Exit()
 
 wxAppTraits *wxAppBase::CreateTraits()
 {
-    return wxAppTraits::CreateGUI();
+    return new wxGUIAppTraits;
 }
 
 // ----------------------------------------------------------------------------
@@ -303,14 +303,5 @@ void wxGUIAppTraitsBase::ScheduleForDestroy(wxObject *object)
 void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
 {
     wxPendingDelete.DeleteObject(object);
-}
-
-// ----------------------------------------------------------------------------
-// wxAppTraits
-// ----------------------------------------------------------------------------
-
-wxAppTraits *wxAppTraitsBase::CreateGUI()
-{
-    return new wxGUIAppTraits;
 }
 

@@ -208,7 +208,7 @@ void wxAppConsole::Exit()
 
 wxAppTraits *wxAppConsole::CreateTraits()
 {
-    return wxAppTraits::CreateConsole();
+    return new wxConsoleAppTraits;
 }
 
 wxAppTraits *wxAppConsole::GetTraits()
@@ -545,11 +545,6 @@ bool wxAppTraitsBase::ShowAssertDialog(const wxString& msg)
 }
 
 #endif // __WXDEBUG__
-
-wxAppTraits *wxAppTraitsBase::CreateConsole()
-{
-    return new wxConsoleAppTraits;
-}
 
 // ============================================================================
 // global functions implementation

@@ -24,21 +24,9 @@ class WXDLLEXPORT wxMessageOutput;
 // wxAppTraits: this class defines various configurable aspects of wxApp
 // ----------------------------------------------------------------------------
 
-#if wxUSE_BASE
 class WXDLLIMPEXP_BASE wxAppTraitsBase
-#else
-class WXDLLIMPEXP_CORE wxAppTraitsBase
-#endif
 {
 public:
-    // wxAppTraits is an ABC, but we also provide 2 standard implementations of
-    // it, one for the console apps and the other for the GUI ones
-    static wxAppTraits *CreateConsole();
-#if wxUSE_GUI
-    static wxAppTraits *CreateGUI();
-#endif // wxUSE_GUI
-
-
     // hooks for creating the global objects, may be overridden by the user
     // ------------------------------------------------------------------------
 
