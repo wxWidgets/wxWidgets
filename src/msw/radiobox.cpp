@@ -413,14 +413,20 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
 
     int extraHeight = cy1;
 
+    /* We'll assume the adjustments below are OK for Win 3.1 too
 #if defined(CTL3D) && !CTL3D
     // Requires a bigger group box in plain Windows
     extraHeight *= 3;
     extraHeight /= 2;
 #endif
-
+    */
+    
     int height = GetNumVer() * sizeBtn.y + cy1/2 + extraHeight;
     int width  = GetNumHor() * (sizeBtn.x + cx1) + cx1;
+
+    // Add extra space under the label, if it exists.
+    if (!wxControl::GetLabel().IsEmpty())
+        height += cy1/2;
 
     // and also wide enough for its label
     int widthLabel;
@@ -507,10 +513,9 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     x_offset += cx1;
     y_offset += cy1;
 
-#if defined(CTL3D) && (!CTL3D)
-    y_offset += (int)(cy1/2); // Fudge factor since buttons overlapped label
-    // JACS 2/12/93. CTL3D draws group label quite high.
-#endif
+    // Add extra space under the label, if it exists.
+    if (!wxControl::GetLabel().IsEmpty())
+        y_offset += cy1/2;
 
     int startX = x_offset;
     int startY = y_offset;
