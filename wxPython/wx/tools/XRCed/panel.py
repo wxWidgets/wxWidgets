@@ -165,6 +165,8 @@ class Panel(wxNotebook):
 class ParamPage(wxPanel):
     def __init__(self, parent, xxx):
         wxPanel.__init__(self, parent, -1)
+        self.SetBackgroundColour(parent.GetBackgroundColour())
+        self.SetForegroundColour(parent.GetForegroundColour())
         self.xxx = xxx
         # Register event handlers
         for id in paramIDs.values():

@@ -22,6 +22,8 @@ buttonSize = (35,-1)    # in dialog units, transformed to pixels in panel ctor
 class PPanel(wxPanel):
     def __init__(self, parent, name):
         wxPanel.__init__(self, parent, -1, name=name)
+        self.SetBackgroundColour(parent.GetBackgroundColour())
+        self.SetForegroundColour(parent.GetForegroundColour())
         self.modified = self.freeze = False
     def Enable(self, value):
         # Something strange is going on with enable so we make sure...
@@ -42,7 +44,6 @@ class ParamBinaryOr(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_CHOICES = wxNewId()
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
@@ -125,7 +126,6 @@ class ParamColour(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON = wxNewId()
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(65,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
@@ -154,7 +154,7 @@ class ParamColour(PPanel):
         if self.IsEnabled(): dc.SetPen(wxBLACK_PEN)
         else: dc.SetPen(wxGREY_PEN)
         size = self.button.GetSize()
-        dc.DrawRectangle((0, 0), size)
+        dc.DrawRectangle(0, 0, size.width, size.height)
     def OnLeftDown(self, evt):
         data = wxColourData()
         data.SetColour(self.GetValue())
@@ -185,7 +185,6 @@ class ParamFont(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_SELECT = wxNewId()
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
@@ -279,7 +278,6 @@ class ParamInt(PPanel):
         self.ID_SPIN_CTRL = wxNewId()
         sizer = wxBoxSizer()
         self.spin = wxSpinCtrl(self, self.ID_SPIN_CTRL, size=(50,-1))
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer.Add(self.spin)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
@@ -303,7 +301,6 @@ class ParamUnit(PPanel):
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(35,-1))
         self.spin = wxSpinButton(self, self.ID_SPIN_BUTTON, style = wxSP_VERTICAL, size=(-1,1))
         self.spin.SetRange(-10000, 10000)
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer.Add(self.text, 0, wxEXPAND | wxRIGHT, 2)
         sizer.Add(self.spin, 0, wxEXPAND)
         self.SetAutoLayout(True)
@@ -343,9 +340,7 @@ class ParamMultilineText(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_EDIT = wxNewId()
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
         self.button = wxButton(self, self.ID_BUTTON_EDIT, 'Edit...', size=buttonSize)
@@ -376,7 +371,6 @@ class ParamText(PPanel):
         self.ID_TEXT_CTRL = wxNewId()
         # We use sizer even here to have the same size of text control
         sizer = wxBoxSizer()
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(textWidth,-1))
         if textWidth == -1: option = 1
         else: option = 0
@@ -523,7 +517,6 @@ class ParamContent(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_EDIT = wxNewId()
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
@@ -666,7 +659,6 @@ class RadioBox(PPanel):
     def __init__(self, parent, id, choices,
                  pos=wxDefaultPosition, name='radiobox'):
         PPanel.__init__(self, parent, name)
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.choices = choices
         topSizer = wxBoxSizer()
         for i in choices:
@@ -717,7 +709,6 @@ class ParamFile(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_BROWSE = wxNewId()
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
@@ -765,10 +756,15 @@ class ParamBitmap(PPanel):
         g.frame.res.LoadOnPanel(pre, parent, 'PANEL_BITMAP')
         self.this = pre.this
 	self._setOORInfo(self)
+        self.SetBackgroundColour(parent.GetBackgroundColour())
+        self.SetForegroundColour(parent.GetForegroundColour())
         self.modified = self.freeze = False
-        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.radio_std = XRCCTRL(self, 'RADIO_STD')
+        self.radio_std.SetBackgroundColour(parent.GetBackgroundColour())
+        self.radio_std.SetForegroundColour(parent.GetForegroundColour())
         self.radio_file = XRCCTRL(self, 'RADIO_FILE')
+        self.radio_file.SetBackgroundColour(parent.GetBackgroundColour())
+        self.radio_file.SetForegroundColour(parent.GetForegroundColour())
         self.combo = XRCCTRL(self, 'COMBO_STD')
         self.text = XRCCTRL(self, 'TEXT_FILE')
         self.button = XRCCTRL(self, 'BUTTON_BROWSE')
