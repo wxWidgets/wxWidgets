@@ -158,7 +158,9 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
         return NULL;
     }
 
+#ifdef __WXGTK__
     wxTheApp->m_initialized = (wxTopLevelWindows.Number() > 0);
+#endif
 
     Py_INCREF(Py_None);
     return Py_None;
@@ -1071,6 +1073,9 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/08/18 21:54:12  RD
+// ifdef out some wxGTK specific code
+//
 // Revision 1.5  1998/08/18 19:48:17  RD
 // more wxGTK compatibility things.
 //
