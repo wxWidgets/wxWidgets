@@ -675,22 +675,21 @@ void wxFlexGridSizer::RecalcSizes()
     wxSize sz( GetSize() );
     wxSize minsz( CalcMin() );
     wxPoint pt( GetPosition() );
-    int delta;
-    int row;
-    int col;
+    int    delta;
+    size_t idx;
 
     if ((m_growableRows.GetCount() > 0) && (sz.y > minsz.y))
     {
         delta = (sz.y - minsz.y) / m_growableRows.GetCount();
-        for (row = 0; row < nrows; row++)
-            m_rowHeights[ row ] = m_rowHeights[ row ] + delta;
+        for (idx = 0; idx < m_growableRows.GetCount(); idx++)
+            m_rowHeights[ m_growableRows[idx] ] += delta;
     }
     
     if ((m_growableCols.GetCount() > 0) && (sz.x > minsz.x))
     {
         delta = (sz.x - minsz.x) / m_growableCols.GetCount();
-        for (col = 0; col < ncols; col++)
-            m_colWidths[ col ] = m_colWidths[ col ] + delta;
+        for (idx = 0; idx < m_growableCols.GetCount(); idx++)
+            m_colWidths[ m_growableCols[idx] ] += delta;
     }
     
     sz = wxSize( pt.x + sz.x, pt.y + sz.y );
