@@ -3,6 +3,11 @@ AC_REVISION($Id$)dnl
 
 AC_INIT(Makefile.in)
 
+AC_CANONICAL_SYSTEM
+
+AC_PROG_CC
+AC_PROG_CXX
+
 dnl we need the values the main configure determined for us, so refuse
 dnl to run if we don't have them
 if test "x$wx_cv_path_samplesubdirs" = "x"; then
@@ -17,12 +22,32 @@ PATH_IFS=$wx_cv_path_ifs
 PROGRAM_EXT=$wx_cv_program_ext
 WX_TARGET_LIBRARY=$wx_cv_target_library
 WX_TARGET_LIBRARY_GL=$wx_cv_target_library_gl
+USE_GUI=$wx_cv_use_gui
 
+AC_SUBST(top_builddir)
 AC_SUBST(IF_GNU_MAKE)
 AC_SUBST(PATH_IFS)
 AC_SUBST(PROGRAM_EXT)
 AC_SUBST(WX_TARGET_LIBRARY)
 AC_SUBST(WX_TARGET_LIBRARY_GL)
+
+AC_SUBST(wxUSE_ZLIB)
+AC_SUBST(wxUSE_REGEX)
+AC_SUBST(wxUSE_ODBC)
+AC_SUBST(wxUSE_LIBJPEG)
+AC_SUBST(wxUSE_LIBPNG)
+AC_SUBST(wxUSE_LIBTIFF)
+AC_SUBST(TOOLKIT)
+AC_SUBST(TOOLKIT_LOWERCASE)
+AC_SUBST(EXTRALIBS)
+AC_SUBST(UNICODE)
+AC_SUBST(BUILD)
+AC_SUBST(SHARED)
+AC_SUBST(USE_GUI)
+AC_SUBST(MONOLITHIC)
+AC_SUBST(SAMPLES_RPATH_FLAG)
+AC_BAKEFILE
+
 
 AC_OUTPUT([
             Makefile
