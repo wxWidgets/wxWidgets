@@ -4207,9 +4207,7 @@ void wxTreeListMainWindow::OnScroll(wxScrollWinEvent& event)
     if(event.GetOrientation() == wxHORIZONTAL)
     {
         m_owner->GetHeaderWindow()->Refresh();
-#ifdef __WXMAC__
-        m_owner->GetHeaderWindow()->MacUpdateImmediately();
-#endif
+        m_owner->GetHeaderWindow()->Update();
     }
 }
 
