@@ -177,6 +177,8 @@ bool wxRadioBox::Create(wxWindow *parent,
     if(m_pos.y==wxDefaultCoord)
         m_pos.y=0;
 
+    m_label = title;
+
     if(!wxControl::Create(parent, id, m_pos, m_size, style, val, name))
         return false;
 
@@ -273,7 +275,9 @@ void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
                 end.y = (use_cols ? ((j+1)*m_size.y)/minor : ((k+1)*m_size.y)/m_majorDim);
                 wxRadioButton* rb = GetRadioButton(i);
                 if(rb)
-                    rb->SetSize(end.x-start.x-1,end.y-start.y-1);
+                {
+                    rb->SetSize(start.x,start.y,end.x-start.x-1,end.y-start.y-1);
+                }
                 i++;
             }
         }
@@ -331,9 +335,12 @@ void wxRadioBox::SetFocus()
 {
 }
 
-bool wxRadioBox::Show(bool show)
+// Enable all subcontrols
+bool wxRadioBox::Enable(bool enable)
 {
-    return false;
+    for(int i=0; i<GetCount(); i++)
+        Enable(i, enable);
+    return true;
 }
 
 // Enable a specific button
@@ -345,17 +352,37 @@ bool wxRadioBox::Enable(int item, bool enable)
     return false;
 }
 
-// Enable all subcontrols
-bool wxRadioBox::Enable(bool enable)
+bool wxRadioBox::Show(bool show)
 {
-    for(int i=0; i<GetCount(); i++)
-        Enable(i, enable);
-    return true;
+    return false;
 }
 
 // Show a specific button
 void wxRadioBox::Show(int item, bool show)
 {
+}
+
+wxString wxRadioBox::GetLabel()
+{
+    return m_label;
+}
+
+void wxRadioBox::SetLabel(const wxString& label)
+{
+    m_label = label;
+}
+
+void wxRadioBox::Refresh(bool eraseBack, const wxRect *rect)
+{
+    wxRect area = GetRect();
+
+    if(rect)
+    {
+        area.Offset(rect->GetPosition());
+        area.SetSize(rect->GetSize());
+    }
+
+    GetParent()->Refresh( eraseBack , &area );
 }
 
 void wxRadioBox::Command(wxCommandEvent & event)

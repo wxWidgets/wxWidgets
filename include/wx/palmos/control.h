@@ -132,6 +132,14 @@ protected:
     // holds the ids (not HWNDs!) of the sub controls
     wxArrayLong m_subControls;
 
+    // m_label stores label in case of wxButton, wxCheckBox, wxToggleButton etc.
+    // We must ensure that it persists for as long as it is being displayed
+    // (that is, for as long as the control is displayed or until we call
+    // CtlSetLabel() with a new string), and we must free the string after
+    // it is no longer in use (typically after the form containing the
+    // control is freed).
+    wxString m_label;
+
 private:
 
     bool m_palmControl:1;
@@ -142,14 +150,6 @@ private:
 
     virtual void DoGetBounds( RectangleType &rect ) const;
     virtual void DoSetBounds( RectangleType &rect );
-
-    // m_label stores label in case of wxButton, wxCheckBox, wxToggleButton etc.
-    // We must ensure that it persists for as long as it is being displayed
-    // (that is, for as long as the control is displayed or until we call
-    // CtlSetLabel() with a new string), and we must free the string after
-    // it is no longer in use (typically after the form containing the
-    // control is freed).
-    wxString m_label;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxControl)
     DECLARE_EVENT_TABLE()

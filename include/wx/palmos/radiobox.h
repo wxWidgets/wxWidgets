@@ -95,8 +95,16 @@ public:
     virtual int GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
+
+    virtual bool Enable(bool enable = true);
     virtual bool Enable(int n, bool enable = true);
+
+    virtual bool Show(bool show = true);
     virtual void Show(int n, bool show = true);
+
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel();
+
     virtual int GetColumnCount() const;
     virtual int GetRowCount() const;
 
@@ -106,11 +114,12 @@ public:
 
     virtual wxPoint GetClientAreaOrigin() const;
 
-    virtual bool Show(bool show = true);
     void SetFocus();
-    virtual bool Enable(bool enable = true);
     void SetLabelFont(const wxFont& WXUNUSED(font)) {};
     void SetButtonFont(const wxFont& font) { SetFont(font); }
+
+    virtual void Refresh( bool eraseBackground = true,
+                          const wxRect *rect = NULL );
 
     void Command(wxCommandEvent& event);
 
