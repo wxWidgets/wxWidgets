@@ -1126,13 +1126,13 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     staticsizer->Add( m_static, 1 );
     mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
 
-    long style = ms_lastViewStyle | wxSUNKEN_BORDER;
+    long style2 = ms_lastViewStyle | wxSUNKEN_BORDER;
     if ( !(m_dialogStyle & wxMULTIPLE) )
-        style |= wxLC_SINGLE_SEL;
+        style2 |= wxLC_SINGLE_SEL;
 
     m_list = new wxFileCtrl( this, ID_LIST_CTRL, firstWild, ms_lastShowHidden,
                              wxDefaultPosition, wxSize(540,200),
-                             style);
+                             style2);
 
     m_list->SetNewDirControl(butNewDir);
     m_list->SetGoToParentControl(butDirUp);
