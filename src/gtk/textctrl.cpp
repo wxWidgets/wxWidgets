@@ -1157,27 +1157,36 @@ void wxTextCtrl::Cut()
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-#ifndef __WXGTK20__
-    gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG );
+#ifdef __WXGTK20__
+    if (m_windowStyle & wxTE_MULTILINE)
+        g_signal_emit_by_name(m_text, "cut-clipboard");
+    else
 #endif
+        gtk_editable_cut_clipboard(GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG);
 }
 
 void wxTextCtrl::Copy()
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-#ifndef __WXGTK20__
-    gtk_editable_copy_clipboard( GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG );
+#ifdef __WXGTK20__
+    if (m_windowStyle & wxTE_MULTILINE)
+        g_signal_emit_by_name(m_text, "copy-clipboard");
+    else
 #endif
+        gtk_editable_copy_clipboard(GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG);
 }
 
 void wxTextCtrl::Paste()
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-#ifndef __WXGTK20__
-    gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG );
+#ifdef __WXGTK20__
+    if (m_windowStyle & wxTE_MULTILINE)
+        g_signal_emit_by_name(m_text, "paste-clipboard");
+    else
 #endif
+        gtk_editable_paste_clipboard(GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG);
 }
 
 // Undo/redo
