@@ -3934,11 +3934,18 @@ if test "$GCC" = "yes" ; then
     esac
 fi
 
+OPTIMISE=
 if test "$wxUSE_OPTIMISE" = "no" ; then
-    OPTIMISE=
+    if test "$GCC" = yes ; then
+        dnl use -O0 because compiling with it is faster than compiling with no
+        dnl optimization options at all (at least with g++ 3.2)
+        OPTIMISE="-O0"
+    fi
 else
     if test "$GCC" = yes ; then
         OPTIMISE="-O2"
+
+        dnl VZ: does anybody know what does this do??
         case "${host}" in
             i586-*-*|i686-*-* )
             OPTIMISE="${OPTIMISE} "
