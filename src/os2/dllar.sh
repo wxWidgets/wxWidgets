@@ -92,13 +92,20 @@ CleanUp() {
 
 # Print usage and exit script with rc=1.
 PrintHelp() {
- echo 'Usage: dllar [-o[utput] output_file] [-d[escription] "dll descrption"]'
- echo '       [-cc "CC"] [-f[lags] "CFLAGS"] [-ord[inals]] -ex[clude] "symbol(s)"'
+ echo 'Usage: dllar [-o[utput] output_file] [-i[mport] importlib_name]'
+ echo '       [-d[escription] "dll descrption"] [-cc "CC"] [-f[lags] "CFLAGS"]'
+ echo '       [-ord[inals]] -ex[clude] "symbol(s)"'
  echo '       [-libf[lags] "{INIT|TERM}{GLOBAL|INSTANCE}"] [-nocrt[dll]] [-nolxl[ite]]'
  echo '       [*.o] [*.a]'
  echo '*> "output_file" should have no extension.'
  echo '   If it has the .o, .a or .dll extension, it is automatically removed.'
- echo '   The import library name is derived from this and is set to "name".a.'
+ echo '   The import library name is derived from this and is set to "name".a,'
+ echo '   unless overridden by -import'
+ echo '*> "importlib_name" should have no extension.'
+ echo '   If it has the .o, or .a extension, it is automatically removed.'
+ echo '   This name is used as the import library name and may be longer and'
+ echo '   more descriptive than the DLL name which has to follow the old '
+ echo '   8.3 convention of FAT.'
  echo '*> "cc" is used to use another GCC executable.   (default: gcc.exe)'
  echo '*> "flags" should be any set of valid GCC flags. (default: -s -Zcrtdll)'
  echo '   These flags will be put at the start of GCC command line.'
@@ -146,6 +153,7 @@ doCommand() {
 # setup globals
 cmdLine=$*
 outFile=""
+outimpFile=""
 inputFiles=""
 description=""
 CC=gcc.exe
@@ -175,6 +183,10 @@ while [ $1 ]; do
 	shift
         outFile=$1
 	;;
+    -i*)
+        shift
+        outimpFile=$1
+        ;;
     -d*)
         shift
         description=$1
@@ -339,9 +351,22 @@ case $outFile in
 *)
     ;;
 esac
+case $outimpFile in
+*.a)
+    outimpFile=\`basnam $outimpFile .a\`
+    ;;
+*.lib)
+    outimpFile=\`basnam $outimpFile .lib\`
+    ;;
+*)
+    ;;
+esac
+if [ -z $outimpFile ]; then
+    outimpFile=$outFile
+fi
 defFile="${outFile}.def"
-arcFile="${outFile}.a"
-arcFile2="${outFile}.lib"
+arcFile="${outimpFile}.a"
+arcFile2="${outimpFile}.lib"
 
 #create $dllFile as something matching 8.3 restrictions,
 dllFile="$outFile"
