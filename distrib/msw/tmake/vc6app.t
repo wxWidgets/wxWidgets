@@ -167,7 +167,7 @@
     if ( $text ne "" ) { $vc_def = $text . " ";  $text = ""; } else { $vc_def = ""; }
     if ( Config("wx") ) {
 	#! define wxWindows compilation flags
-	$vc_def .= '/D WIN32 /D WINVER=0x400 /D _MT ';
+	$vc_def .= '/D WIN32 /D WINVER=0x400 ';
 
 	if ( Config("wxbase") ) {
 	    $vc_def .= '/D wxUSE_GUI=0 ';
