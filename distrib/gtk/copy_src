@@ -16,7 +16,9 @@ echo Base dir..
 cd ../..
 cp wxGTK.spec ~/wxgtk_dist/wxGTK
 cp Makefile.am ~/wxgtk_dist/wxGTK
-cp Makefile.in ~/wxgtk_dist/wxGTK
+cp acconfig.h ~/wxgtk_dist/wxGTK
+cp aclocal.m4 ~/wxgtk_dist/wxGTK
+cp configure.in ~/wxgtk_dist/wxGTK
 cp configure ~/wxgtk_dist/wxGTK
 cp config.sub ~/wxgtk_dist/wxGTK
 cp config.guess ~/wxgtk_dist/wxGTK
@@ -27,6 +29,8 @@ cp missing ~/wxgtk_dist/wxGTK
 cp mkinstalldirs ~/wxgtk_dist/wxGTK
 cp wx-config.in ~/wxgtk_dist/wxGTK
 cp setup.h.in ~/wxgtk_dist/wxGTK
+cp stamp-h.in ~/wxgtk_dist/wxGTK
+cp Makefile.in ~/wxgtk_dist/wxGTK
 
 echo Docs..
 
@@ -57,6 +61,7 @@ cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx
 mkdir ~/wxgtk_dist/wxGTK/include/wx/generic
 cd generic
 cp *.h ~/wxgtk_dist/wxGTK/include/wx/generic
+cp *.xpm ~/wxgtk_dist/wxGTK/include/wx/generic
 cp Makefile.am ~/wxgtk_dist/wxGTK/include/wx/generic
 cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/generic
 cd ..
@@ -320,6 +325,16 @@ cp Makefile.in ~/wxgtk_dist/wxGTK/samples/bombs
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/bombs
 cp *.h ~/wxgtk_dist/wxGTK/samples/bombs
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/bombs
+cd ..
+
+echo Caret sample..
+
+cd caret
+mkdir ~/wxgtk_dist/wxGTK/samples/caret
+cp Makefile.am ~/wxgtk_dist/wxGTK/samples/caret
+cp Makefile.in ~/wxgtk_dist/wxGTK/samples/caret
+cp *.cpp ~/wxgtk_dist/wxGTK/samples/caret
+cp *.xpm ~/wxgtk_dist/wxGTK/samples/caret
 cd ..
 
 echo Checklst sample..
@@ -756,6 +771,5 @@ cd distrib/gtk
 cp README.txt ~/wxgtk_dist/wxGTK/utils/wxPython
 cp Setup ~/wxgtk_dist/wxGTK/utils/wxPython/src
 
-cd ..
-
-# tar ch | gzip -f9 > wxGTK-2.1.0-b6.tgz
+cd ~/wxgtk_dist
+# tar ch wxGTK | gzip -f9 > wxGTK-2.1.0-b6.tgz
