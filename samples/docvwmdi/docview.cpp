@@ -203,7 +203,7 @@ MyFrame::MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox("DocView Demo\nAuthor: Julian Smart julian.smart@ukonline.co.uk\nUsage: docview.exe", "About DocView");
+    (void)wxMessageBox("DocView Demo\nAuthor: Julian Smart\nUsage: docview.exe", "About DocView");
 }
 
 // Creates a canvas. Called from view.cpp when a new drawing

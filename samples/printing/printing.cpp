@@ -283,7 +283,7 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxMessageBox("wxWindows printing demo\nAuthor: Julian Smart julian.smart@ukonline.co.uk",
+    (void)wxMessageBox("wxWindows printing demo\nAuthor: Julian Smart",
         "About wxWindows printing demo", wxOK|wxCENTRE);
 }
 

@@ -240,7 +240,7 @@ wxDocParentFrame(manager, frame, id, title, pos, size, type)
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox("DocView Demo\nAuthor: Julian Smart julian.smart@ukonline.co.uk\nUsage: docview.exe [-single]", "About DocView");
+    (void)wxMessageBox("DocView Demo\nAuthor: Julian Smart\nUsage: docview.exe [-single]", "About DocView");
 }
 
 // Creates a canvas. Called either from view.cc when a new drawing
