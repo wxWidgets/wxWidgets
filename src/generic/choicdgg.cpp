@@ -466,6 +466,11 @@ void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)
 
 bool wxMultiChoiceDialog::TransferDataFromWindow()
 {
+    // VZ: I hate to do it but I can't fix wxMotif right now (FIXME)
+#ifdef __WXMOTIF__
+    #define IsSelected Selected
+#endif
+
     m_selections.Empty();
     size_t count = m_listbox->GetCount();
     for ( size_t n = 0; n < count; n++ )
