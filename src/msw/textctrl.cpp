@@ -2177,6 +2177,22 @@ bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 }
 
 // ----------------------------------------------------------------------------
+// default colors for MSW text control
+// ----------------------------------------------------------------------------
+
+wxVisualAttributes wxTextCtrl::GetDefaultAttributes() const
+{
+    // it is important to return valid values for all attributes from here,
+    // GetXXX() below rely on this
+    wxVisualAttributes attrs;
+    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+
+    return attrs;
+}
+
+// ----------------------------------------------------------------------------
 // colour setting for the rich edit controls
 // ----------------------------------------------------------------------------
 

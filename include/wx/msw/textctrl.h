@@ -252,6 +252,8 @@ protected:
     // code as to why this is needed)
     bool m_suppressNextUpdate;
 
+    virtual wxVisualAttributes GetDefaultAttributes() const;
+
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl)
