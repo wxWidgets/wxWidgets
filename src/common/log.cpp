@@ -387,9 +387,17 @@ wxLogStderr::wxLogStderr(FILE *fp)
 
 void wxLogStderr::DoLogString(const char *szString)
 {
-  fputs(szString, m_fp);
-  fputc('\n', m_fp);
+  wxString str(szString);
+  str << '\n';
+
+  fputs(str, m_fp);
   fflush(m_fp);
+
+  // under Windows, programs usually don't have stderr at all, so make show the
+  // messages also under debugger
+#ifdef __WXMSW__
+    OutputDebugString(str + '\r');
+#endif // MSW
 }
 
 // ----------------------------------------------------------------------------
@@ -524,18 +532,14 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
               OutputDebugString(strTime + szString + "\n\r");
           #else  
             // send them to stderr
-    /*
             fprintf(stderr, "%s %s: %s\n",
                     strTime.c_str(),
-                    level == wxLOG_Trace ? _("Trace") : _("Debug"),
-                    szString);
-     */
-            fprintf(stderr, "%s\n",
+                    level == wxLOG_Trace ? "Trace" : "Debug",
                     szString);
             fflush(stderr);
           #endif
         }
-      #endif
+      #endif // __WXDEBUG__
       break;
 
     case wxLOG_FatalError:
@@ -983,6 +987,8 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
   if ( s_bInAssert ) {
     // He-e-e-e-elp!! we're trapped in endless loop
     Trap();
+
+    s_bInAssert = FALSE;
 
     return;
   }
