@@ -188,6 +188,7 @@ All:
 All (GUI):
 
 - bug in wxWindow::RemoveEventHandler() fixed (Yingjun Zhang)
+- bug in wxColourDatabase::FindColour() which could led to crashes fixed
 
 wxMSW:
 

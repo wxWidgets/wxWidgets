@@ -336,7 +336,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
         const wxChar *key = node->GetKeyString();
         if ( colName == key || colName2 == key )
         {
-            return (wxColour *)node->Data();
+            return new wxColour(*((wxColour *)node->Data()));
         }
 
         node = node->Next();
