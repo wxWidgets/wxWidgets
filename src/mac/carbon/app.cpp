@@ -521,7 +521,7 @@ pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 op
 
 #if 1
     // flow into log
-    wxLogDebug( wxT("AssertMacros: %s %s %s file: %s, line: %d (value %d)\n"), 
+    wxLogDebug( wxT("AssertMacros: %s %s %s file: %s, line: %ld (value %p)\n"), 
         assertionStr.c_str() , 
         exceptionStr.c_str() , 
         errorStr.c_str(), 
@@ -530,7 +530,7 @@ pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 op
 #else
 
     wxOnAssert(fileNameStr, lineNumber , assertionStr ,
-        wxString::Format( wxT("%s %s value (%d)") ,exceptionStr, errorStr , value ) ) ;
+        wxString::Format( wxT("%s %s value (%p)") ,exceptionStr, errorStr , value ) ) ;
 #endif
 }
 
