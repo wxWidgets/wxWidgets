@@ -299,6 +299,15 @@ public:
             self->GetItem(*info);
             return info;
         }
+    }  // The OOR typemaps don't know what to do with the %new, so fix it up.
+    %pragma(python) addtoclass = "
+    def GetItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItem,(self,) + _args, _kwargs)
+        val.thisown = 1
+        return val
+    "
+
+    %addmethods {
         %new wxPoint* GetItemPosition(long item) {
             wxPoint* pos = new wxPoint;
             self->GetItemPosition(item, *pos);
