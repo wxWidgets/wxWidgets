@@ -1532,6 +1532,22 @@ public:
     wxWindow* GetGridColLabelWindow()    { return (wxWindow*)m_colLabelWin; }
     wxWindow* GetGridCornerLabelWindow() { return (wxWindow*)m_cornerLabelWin; }
 
+    // Allow adjustment of scroll increment. The default is (15, 15).
+    void SetScrollLineX(int x) { m_scrollLineX = x; }
+    void SetScrollLineY(int y) { m_scrollLineY = y; }
+    int GetScrollLineX() const { return m_scrollLineX; }
+    int GetScrollLineY() const { return m_scrollLineY; }
+
+    // Implementation
+    int GetScrollX(int x) const
+    {
+        return (x + GetScrollLineX() - 1) / GetScrollLineX();
+    }
+
+    int GetScrollY(int y) const
+    {
+        return (y + GetScrollLineY() - 1) / GetScrollLineY();
+    }
 
 
     // ------ For compatibility with previous wxGrid only...
@@ -1875,6 +1891,8 @@ protected:
     bool       m_editable;              // applies to whole grid
     bool       m_cellEditCtrlEnabled;   // is in-place edit currently shown?
 
+    int m_scrollLineX; // X scroll increment
+    int m_scrollLineY; // Y scroll increment
 
     void Create();
     void Init();
