@@ -38,6 +38,7 @@
 #endif
 
 #include "wx/toolbar.h"
+#include "wx/tbarsmpl.h"
 
 // ----------------------------------------------------------------------------
 // private classes
