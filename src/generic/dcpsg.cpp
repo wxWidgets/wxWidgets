@@ -416,10 +416,10 @@ void wxPostScriptDC::DoSetClippingRegion (wxCoord x, wxCoord y, wxCoord w, wxCoo
             "%d %d lineto\n"
             "%d %d lineto\n"
             "closepath clip newpath\n",
-            XLOG2DEV(x),   YLOG2DEV(y),
-            XLOG2DEV(x+w), YLOG2DEV(y),
-            XLOG2DEV(x+w), YLOG2DEV(y+h),
-            XLOG2DEV(x),   YLOG2DEV(y+h) );
+            LogicalToDeviceX(x),   LogicalToDeviceY(y),
+            LogicalToDeviceX(x+w), LogicalToDeviceY(y),
+            LogicalToDeviceX(x+w), LogicalToDeviceY(y+h),
+            LogicalToDeviceX(x),   LogicalToDeviceY(y+h) );
 }
 
 
@@ -470,8 +470,8 @@ void wxPostScriptDC::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
             "%d %d moveto\n"
             "%d %d lineto\n"
             "stroke\n",
-            XLOG2DEV(x1), YLOG2DEV(y1),
-            XLOG2DEV(x2), YLOG2DEV (y2) );
+            LogicalToDeviceX(x1), LogicalToDeviceY(y1),
+            LogicalToDeviceX(x2), LogicalToDeviceY (y2) );
 
     CalcBoundingBox( x1, y1 );
     CalcBoundingBox( x2, y2 );
@@ -521,8 +521,8 @@ void wxPostScriptDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
                 "%d %d lineto\n"
                 "closepath\n"
                 "fill\n",
-                XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL(radius), YLOG2DEVREL(radius), (wxCoord)alpha1, (wxCoord) alpha2,
-                XLOG2DEV(xc), YLOG2DEV(yc) );
+                LogicalToDeviceX(xc), LogicalToDeviceY(yc), LogicalToDeviceXRel(radius), LogicalToDeviceYRel(radius), (wxCoord)alpha1, (wxCoord) alpha2,
+                LogicalToDeviceX(xc), LogicalToDeviceY(yc) );
 
         CalcBoundingBox( xc-radius, yc-radius );
         CalcBoundingBox( xc+radius, yc+radius );
@@ -538,8 +538,8 @@ void wxPostScriptDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
                 "%d %d lineto\n"
                 "stroke\n"
                 "fill\n",
-                XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL(radius), YLOG2DEVREL(radius), (wxCoord)alpha1, (wxCoord) alpha2,
-                XLOG2DEV(xc), YLOG2DEV(yc) );
+                LogicalToDeviceX(xc), LogicalToDeviceY(yc), LogicalToDeviceXRel(radius), LogicalToDeviceYRel(radius), (wxCoord)alpha1, (wxCoord) alpha2,
+                LogicalToDeviceX(xc), LogicalToDeviceY(yc) );
 
         CalcBoundingBox( xc-radius, yc-radius );
         CalcBoundingBox( xc+radius, yc+radius );
@@ -568,7 +568,7 @@ void wxPostScriptDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,d
         fprintf( m_pstream,
                 "newpath\n"
                 "%d %d %d %d %d %d true ellipticarc\n",
-                XLOG2DEV(x+w/2), YLOG2DEV(y+h/2), XLOG2DEVREL(w/2), YLOG2DEVREL(h/2), (wxCoord)sa, (wxCoord)ea );
+                LogicalToDeviceX(x+w/2), LogicalToDeviceY(y+h/2), LogicalToDeviceXRel(w/2), LogicalToDeviceYRel(h/2), (wxCoord)sa, (wxCoord)ea );
 
         CalcBoundingBox( x ,y );
         CalcBoundingBox( x+w, y+h );
@@ -581,7 +581,7 @@ void wxPostScriptDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,d
         fprintf(m_pstream,
                 "newpath\n"
                 "%d %d %d %d %d %d false ellipticarc\n",
-                XLOG2DEV(x+w/2), YLOG2DEV(y+h/2), XLOG2DEVREL(w/2), YLOG2DEVREL(h/2), (wxCoord)sa, (wxCoord)ea );
+                LogicalToDeviceX(x+w/2), LogicalToDeviceY(y+h/2), LogicalToDeviceXRel(w/2), LogicalToDeviceYRel(h/2), (wxCoord)sa, (wxCoord)ea );
 
         CalcBoundingBox( x ,y );
         CalcBoundingBox( x+w, y+h );
@@ -601,8 +601,8 @@ void wxPostScriptDC::DoDrawPoint (wxCoord x, wxCoord y)
             "%d %d moveto\n"
             "%d %d lineto\n"
             "stroke\n",
-            XLOG2DEV(x),   YLOG2DEV(y),
-            XLOG2DEV(x+1), YLOG2DEV(y) );
+            LogicalToDeviceX(x),   LogicalToDeviceY(y),
+            LogicalToDeviceX(x+1), LogicalToDeviceY(y) );
 
     CalcBoundingBox( x, y );
 }
@@ -619,8 +619,8 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
 
         fprintf( m_pstream, "newpath\n" );
 
-        wxCoord xx = XLOG2DEV(points[0].x + xoffset);
-        wxCoord yy = YLOG2DEV(points[0].y + yoffset);
+        wxCoord xx = LogicalToDeviceX(points[0].x + xoffset);
+        wxCoord yy = LogicalToDeviceY(points[0].y + yoffset);
 
         fprintf( m_pstream, "%d %d moveto\n", xx, yy );
 
@@ -628,8 +628,8 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
 
         for (int i = 1; i < n; i++)
         {
-            xx = XLOG2DEV(points[i].x + xoffset);
-            yy = YLOG2DEV(points[i].y + yoffset);
+            xx = LogicalToDeviceX(points[i].x + xoffset);
+            yy = LogicalToDeviceY(points[i].y + yoffset);
 
             fprintf( m_pstream, "%d %d lineto\n", xx, yy );
 
@@ -645,8 +645,8 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
 
         fprintf( m_pstream, "newpath\n" );
 
-        wxCoord xx = XLOG2DEV(points[0].x + xoffset);
-        wxCoord yy = YLOG2DEV(points[0].y + yoffset);
+        wxCoord xx = LogicalToDeviceX(points[0].x + xoffset);
+        wxCoord yy = LogicalToDeviceY(points[0].y + yoffset);
 
         fprintf( m_pstream, "%d %d moveto\n", xx, yy );
 
@@ -654,8 +654,8 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
 
         for (int i = 1; i < n; i++)
         {
-            xx = XLOG2DEV(points[i].x + xoffset);
-            yy = YLOG2DEV(points[i].y + yoffset);
+            xx = LogicalToDeviceX(points[i].x + xoffset);
+            yy = LogicalToDeviceY(points[i].y + yoffset);
 
             fprintf( m_pstream, "%d %d lineto\n", xx, yy );
 
@@ -680,19 +680,19 @@ void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, wxCo
     int i;
     for ( i =0; i<n ; i++ )
     {
-        CalcBoundingBox( XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset));
+        CalcBoundingBox( LogicalToDeviceX(points[i].x+xoffset), LogicalToDeviceY(points[i].y+yoffset));
     }
 
     fprintf( m_pstream,
             "newpath\n"
             "%d %d moveto\n",
-            XLOG2DEV(points[0].x+xoffset), YLOG2DEV(points[0].y+yoffset) );
+            LogicalToDeviceX(points[0].x+xoffset), LogicalToDeviceY(points[0].y+yoffset) );
 
     for (i = 1; i < n; i++)
     {
         fprintf( m_pstream,
                 "%d %d lineto\n",
-                XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset) );
+                LogicalToDeviceX(points[i].x+xoffset), LogicalToDeviceY(points[i].y+yoffset) );
     }
 
     fprintf( m_pstream, "stroke\n" );
@@ -714,10 +714,10 @@ void wxPostScriptDC::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoo
                 "%d %d lineto\n"
                 "closepath\n"
                 "fill\n",
-                XLOG2DEV(x),         YLOG2DEV(y),
-                XLOG2DEV(x + width), YLOG2DEV(y),
-                XLOG2DEV(x + width), YLOG2DEV(y + height),
-                XLOG2DEV(x),         YLOG2DEV(y + height) );
+                LogicalToDeviceX(x),         LogicalToDeviceY(y),
+                LogicalToDeviceX(x + width), LogicalToDeviceY(y),
+                LogicalToDeviceX(x + width), LogicalToDeviceY(y + height),
+                LogicalToDeviceX(x),         LogicalToDeviceY(y + height) );
 
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -735,10 +735,10 @@ void wxPostScriptDC::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoo
                 "%d %d lineto\n"
                 "closepath\n"
                 "stroke\n",
-                XLOG2DEV(x),         YLOG2DEV(y),
-                XLOG2DEV(x + width), YLOG2DEV(y),
-                XLOG2DEV(x + width), YLOG2DEV(y + height),
-                XLOG2DEV(x),         YLOG2DEV(y + height) );
+                LogicalToDeviceX(x),         LogicalToDeviceY(y),
+                LogicalToDeviceX(x + width), LogicalToDeviceY(y),
+                LogicalToDeviceX(x + width), LogicalToDeviceY(y + height),
+                LogicalToDeviceX(x),         LogicalToDeviceY(y + height) );
 
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -780,14 +780,14 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
                 "%d %d lineto\n"
                 "closepath\n"
                 "fill\n",
-                XLOG2DEV(x + rad), YLOG2DEV(y + rad), XLOG2DEVREL(rad),
-                XLOG2DEV(x), YLOG2DEV(y + rad),
-                XLOG2DEV(x + rad), YLOG2DEV(y + height - rad), XLOG2DEVREL(rad),
-                XLOG2DEV(x + width - rad), YLOG2DEV(y + height),
-                XLOG2DEV(x + width - rad), YLOG2DEV(y + height - rad), XLOG2DEVREL(rad),
-                XLOG2DEV(x + width), YLOG2DEV(y + rad),
-                XLOG2DEV(x + width - rad), YLOG2DEV(y + rad), XLOG2DEVREL(rad),
-                XLOG2DEV(x + rad), YLOG2DEV(y) );
+                LogicalToDeviceX(x + rad), LogicalToDeviceY(y + rad), LogicalToDeviceXRel(rad),
+                LogicalToDeviceX(x), LogicalToDeviceY(y + rad),
+                LogicalToDeviceX(x + rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
+                LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + height),
+                LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
+                LogicalToDeviceX(x + width), LogicalToDeviceY(y + rad),
+                LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + rad), LogicalToDeviceXRel(rad),
+                LogicalToDeviceX(x + rad), LogicalToDeviceY(y) );
 
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -810,14 +810,14 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
                 "%d %d lineto\n"
                 "closepath\n"
                 "stroke\n",
-                XLOG2DEV(x + rad), YLOG2DEV(y + rad), XLOG2DEVREL(rad),
-                XLOG2DEV(x), YLOG2DEV(y + rad),
-                XLOG2DEV(x + rad), YLOG2DEV(y + height - rad), XLOG2DEVREL(rad),
-                XLOG2DEV(x + width - rad), YLOG2DEV(y + height),
-                XLOG2DEV(x + width - rad), YLOG2DEV(y + height - rad), XLOG2DEVREL(rad),
-                XLOG2DEV(x + width), YLOG2DEV(y + rad),
-                XLOG2DEV(x + width - rad), YLOG2DEV(y + rad), XLOG2DEVREL(rad),
-                XLOG2DEV(x + rad), YLOG2DEV(y) );
+                LogicalToDeviceX(x + rad), LogicalToDeviceY(y + rad), LogicalToDeviceXRel(rad),
+                LogicalToDeviceX(x), LogicalToDeviceY(y + rad),
+                LogicalToDeviceX(x + rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
+                LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + height),
+                LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
+                LogicalToDeviceX(x + width), LogicalToDeviceY(y + rad),
+                LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + rad), LogicalToDeviceXRel(rad),
+                LogicalToDeviceX(x + rad), LogicalToDeviceY(y) );
 
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -836,8 +836,8 @@ void wxPostScriptDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord
                 "newpath\n"
                 "%d %d %d %d 0 360 ellipse\n"
                 "fill\n",
-                XLOG2DEV(x + width / 2), YLOG2DEV(y + height / 2),
-                XLOG2DEVREL(width / 2), YLOG2DEVREL(height / 2) );
+                LogicalToDeviceX(x + width / 2), LogicalToDeviceY(y + height / 2),
+                LogicalToDeviceXRel(width / 2), LogicalToDeviceYRel(height / 2) );
 
         CalcBoundingBox( x - width, y - height );
         CalcBoundingBox( x + width, y + height );
@@ -851,8 +851,8 @@ void wxPostScriptDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord
                 "newpath\n"
                 "%d %d %d %d 0 360 ellipse\n"
                 "stroke\n",
-                XLOG2DEV(x + width / 2), YLOG2DEV(y + height / 2),
-                XLOG2DEVREL(width / 2), YLOG2DEVREL(height / 2) );
+                LogicalToDeviceX(x + width / 2), LogicalToDeviceY(y + height / 2),
+                LogicalToDeviceXRel(width / 2), LogicalToDeviceYRel(height / 2) );
 
         CalcBoundingBox( x - width, y - height );
         CalcBoundingBox( x + width, y + height );
@@ -888,11 +888,11 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
     wxCoord w = image.GetWidth();
     wxCoord h = image.GetHeight();
 
-    wxCoord ww = XLOG2DEVREL(image.GetWidth());
-    wxCoord hh = YLOG2DEVREL(image.GetHeight());
+    wxCoord ww = LogicalToDeviceXRel(image.GetWidth());
+    wxCoord hh = LogicalToDeviceYRel(image.GetHeight());
 
-    wxCoord xx = XLOG2DEV(x);
-    wxCoord yy = YLOG2DEV(y + bitmap.GetHeight());
+    wxCoord xx = LogicalToDeviceX(x);
+    wxCoord yy = LogicalToDeviceY(y + bitmap.GetHeight());
 
     fprintf( m_pstream,
             "/origstate save def\n"
@@ -1014,9 +1014,9 @@ void wxPostScriptDC::SetFont( const wxFont& font )
     fprintf( m_pstream, " findfont\n" );
 
     char buffer[100];
-    sprintf( buffer, "%f scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize() * 1000) / 1000.0F);
+    sprintf( buffer, "%f scalefont setfont\n", LogicalToDeviceYRel(m_font.GetPointSize() * 1000) / 1000.0F);
                 // this is a hack - we must scale font size (in pts) according to m_scaleY but
-                // YLOG2DEVREL works with wxCoord type (int or longint). Se we first convert font size
+                // LogicalToDeviceYRel works with wxCoord type (int or longint). Se we first convert font size
                 // to 1/1000th of pt and then back.
     for (int i = 0; i < 100; i++)
         if (buffer[i] == ',') buffer[i] = '.';
@@ -1036,9 +1036,9 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
     {
         char buffer[100];
         #ifdef __WXMSW__
-        sprintf( buffer, "%f setlinewidth\n", XLOG2DEVREL(1000 * m_pen.GetWidth()) / 1000.0f );
+        sprintf( buffer, "%f setlinewidth\n", LogicalToDeviceXRel(1000 * m_pen.GetWidth()) / 1000.0f );
         #else
-        sprintf( buffer, "%f setlinewidth\n", XLOG2DEVREL(1000 * m_pen.GetWidth()) / 1000.0f );
+        sprintf( buffer, "%f setlinewidth\n", LogicalToDeviceXRel(1000 * m_pen.GetWidth()) / 1000.0f );
         #endif
         for (int i = 0; i < 100; i++)
             if (buffer[i] == ',') buffer[i] = '.';
@@ -1224,7 +1224,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 //    commented by V. Slavik and replaced by accurate version
 //        - note that there is still rounding error in text_descent!
     wxCoord by = y + size - text_descent; // baseline
-    fprintf( m_pstream, "%d %d moveto\n", XLOG2DEV(x), YLOG2DEV(by) );
+    fprintf( m_pstream, "%d %d moveto\n", LogicalToDeviceX(x), LogicalToDeviceY(by) );
 
     fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
@@ -1264,9 +1264,9 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
                 "%d %d lineto\n"
                 "stroke\n"
                 "grestore\n",
-                XLOG2DEV(x), YLOG2DEV(uy),
+                LogicalToDeviceX(x), LogicalToDeviceY(uy),
                 m_underlineThickness,
-                XLOG2DEV(x + text_w), YLOG2DEV(uy) );
+                LogicalToDeviceX(x + text_w), LogicalToDeviceY(uy) );
         for (i = 0; i < 100; i++)
             if (buffer[i] == ',') buffer[i] = '.';
         fprintf( m_pstream, buffer );
@@ -1334,7 +1334,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
 
     // FIXME only correct for 90 degrees
     fprintf(m_pstream, "%d %d moveto\n",
-            XLOG2DEV((wxCoord)(x + size)), YLOG2DEV((wxCoord)by) );
+            LogicalToDeviceX((wxCoord)(x + size)), LogicalToDeviceY((wxCoord)by) );
 
     char buffer[100];
     sprintf(buffer, "%.8f rotate\n", angle);
@@ -1387,9 +1387,9 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
                  "%d %d lineto\n"
                  "stroke\n"
                  "grestore\n",
-                 XLOG2DEV(x), YLOG2DEV(uy),
+                 LogicalToDeviceX(x), LogicalToDeviceY(uy),
                  m_underlineThickness,
-                 XLOG2DEV(x + w), YLOG2DEV(uy) );
+                 LogicalToDeviceX(x + w), LogicalToDeviceY(uy) );
         for (i = 0; i < 100; i++)
             if (buffer[i] == ',') buffer[i] = '.';
         fprintf( m_pstream, buffer );
@@ -1434,8 +1434,8 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
             "newpath\n"
             "%d %d moveto\n"
             "%d %d lineto\n",
-            XLOG2DEV((wxCoord)x1), YLOG2DEV((wxCoord)y1),
-            XLOG2DEV((wxCoord)x3), YLOG2DEV((wxCoord)y3) );
+            LogicalToDeviceX((wxCoord)x1), LogicalToDeviceY((wxCoord)y1),
+            LogicalToDeviceX((wxCoord)x3), LogicalToDeviceY((wxCoord)y3) );
 
     CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
     CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
@@ -1455,9 +1455,9 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
 
         fprintf( m_pstream,
                 "%d %d %d %d %d %d DrawSplineSection\n",
-                XLOG2DEV((wxCoord)x1), YLOG2DEV((wxCoord)y1),
-                XLOG2DEV((wxCoord)x2), YLOG2DEV((wxCoord)y2),
-                XLOG2DEV((wxCoord)x3), YLOG2DEV((wxCoord)y3) );
+                LogicalToDeviceX((wxCoord)x1), LogicalToDeviceY((wxCoord)y1),
+                LogicalToDeviceX((wxCoord)x2), LogicalToDeviceY((wxCoord)y2),
+                LogicalToDeviceX((wxCoord)x3), LogicalToDeviceY((wxCoord)y3) );
 
         CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
         CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
@@ -1471,7 +1471,7 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     fprintf( m_pstream,
             "%d %d lineto\n"
             "stroke\n",
-            XLOG2DEV((wxCoord)c), YLOG2DEV((wxCoord)d) );
+            LogicalToDeviceX((wxCoord)c), LogicalToDeviceY((wxCoord)d) );
 }
 
 wxCoord wxPostScriptDC::GetCharWidth() const
@@ -1666,10 +1666,10 @@ void wxPostScriptDC::EndDoc ()
 
     // Compute the bounding box.  Note that it is in the default user
     // coordinate system, thus we have to convert the values.
-    wxCoord minX = (wxCoord) XLOG2DEV(m_minX);
-    wxCoord minY = (wxCoord) YLOG2DEV(m_minY);
-    wxCoord maxX = (wxCoord) XLOG2DEV(m_maxX);
-    wxCoord maxY = (wxCoord) YLOG2DEV(m_maxY);
+    wxCoord minX = (wxCoord) LogicalToDeviceX(m_minX);
+    wxCoord minY = (wxCoord) LogicalToDeviceY(m_minY);
+    wxCoord maxX = (wxCoord) LogicalToDeviceX(m_maxX);
+    wxCoord maxY = (wxCoord) LogicalToDeviceY(m_maxY);
 
     // LOG2DEV may have changed the minimum to maximum vice versa
     if ( minX > maxX ) { wxCoord tmp = minX; minX = maxX; maxX = tmp; }
@@ -2149,9 +2149,9 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         // VS: dirty, but is there any better solution?
         double *pt;
         pt = (double*) &m_underlinePosition;
-        *pt = YLOG2DEVREL((wxCoord)(UnderlinePosition * fontToUse->GetPointSize())) / 1000.0f;
+        *pt = LogicalToDeviceYRel((wxCoord)(UnderlinePosition * fontToUse->GetPointSize())) / 1000.0f;
         pt = (double*) &m_underlineThickness;
-        *pt = YLOG2DEVREL((wxCoord)(UnderlineThickness * fontToUse->GetPointSize())) / 1000.0f;
+        *pt = LogicalToDeviceYRel((wxCoord)(UnderlineThickness * fontToUse->GetPointSize())) / 1000.0f;
 
     }
 
