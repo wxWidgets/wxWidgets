@@ -26,9 +26,14 @@
 #endif
 
 #include "wx/defs.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
+    #include "wx/settings.h"
+#endif
+
 #include "wx/toplevel.h"
 #include "wx/univ/renderer.h"
-#include "wx/dcclient.h"
 #include "wx/bitmap.h"
 #include "wx/image.h"
 #include "wx/cshelp.h"
@@ -71,9 +76,8 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
          exstyleOrig = 0;
 
     if ( ms_drawDecorations == -1 )
-        ms_drawDecorations = TRUE;
-        // FIXME_MGL -- this is temporary; we assume for now that native TLW
-        //              can't do decorations, which is not true
+        ms_drawDecorations = !wxSystemSettings::HasFrameDecorations();
+        // FIXME -- wxUniv should provide a way to force non-native decorations!
 
     if ( ms_drawDecorations )
     {
