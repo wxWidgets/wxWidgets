@@ -660,7 +660,7 @@ BASE_DIST: ALL_DIST
 	cp $(WXDIR)/src/wxBase*.dsp $(DISTDIR)
 	cp $(WXDIR)/src/wxBase*.dsw $(DISTDIR)
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
-	cp $(DOCDIR)/install.txt $(DISTDIR)/README.txt
+	cp $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
 	cp $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
