@@ -136,6 +136,7 @@ END_EVENT_TABLE()
 
 ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     capturedMouse = false;
+    focusEvent = false;
     wMain = win;
     stc   = win;
     wheelRotation = 0;
@@ -330,6 +331,18 @@ void ScintillaWX::NotifyChange() {
 
 void ScintillaWX::NotifyParent(SCNotification scn) {
     stc->NotifyParent(&scn);
+}
+
+
+// This method is overloaded from ScintillaBase in order to prevent the
+// AutoComplete window from being destroyed when it gets the focus.  There is
+// a side effect that the AutoComp will also not be destroyed when switching
+// to another window, but I think that is okay.
+void ScintillaWX::CancelModes() {
+    if (! focusEvent)
+        AutoCompleteCancel();
+    ct.CallTipCancel();
+    Editor::CancelModes();
 }
 
 
@@ -606,11 +619,15 @@ void ScintillaWX::DoSize(int WXUNUSED(width), int WXUNUSED(height)) {
 }
 
 void ScintillaWX::DoLoseFocus(){
+    focusEvent = true;
     SetFocusState(false);
+    focusEvent = false;
 }
 
 void ScintillaWX::DoGainFocus(){
+    focusEvent = true;
     SetFocusState(true);
+    focusEvent = false;
 }
 
 void ScintillaWX::DoSysColourChange() {

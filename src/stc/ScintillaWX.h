@@ -124,6 +124,7 @@ public:
     virtual void NotifyChange();
     virtual void NotifyParent(SCNotification scn);
 
+    virtual void CancelModes();
 
     // Event delegates
     void DoPaint(wxDC* dc, wxRect rect);
@@ -164,6 +165,7 @@ public:
 
 private:
     bool                capturedMouse;
+    bool                focusEvent;
     wxStyledTextCtrl*   stc;
 
 #if wxUSE_DRAG_AND_DROP
