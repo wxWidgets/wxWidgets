@@ -29,10 +29,6 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/defs.h"
-#endif
-
 #include "wx/utils.h"
 #include "wx/intl.h"
 
@@ -66,8 +62,9 @@
     #include <dirent.h>
 #endif
 
-#ifdef __OS2__
+#ifdef __WXPM__
     #include <process.h>
+    #include "wx/os2/private.h"
 #endif
 #ifdef __WINDOWS__
 #if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
