@@ -210,10 +210,13 @@ wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 
 
-// Get the state of a key (true if pressed, false if not)
-// This is generally most useful getting the state of
-// the modifier or toggle keys.
-bool wxGetKeyState(wxKeyCode key);
+DocDeclStr(
+    bool , wxGetKeyState(wxKeyCode key),
+    "Get the state of a key (true if pressed or toggled on, false if not.)
+This is generally most useful getting the state of the modifier or
+toggle keys.  On some platforms those may be the only keys that work.
+", "");
+
 
 
 //---------------------------------------------------------------------------

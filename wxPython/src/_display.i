@@ -167,6 +167,7 @@ function is not supported at all on this platform.", "");
                 wxVideoMode* m = new wxVideoMode(arr.Item(i));
                 PyObject* pyObj = wxPyConstructObject(m, wxT("wxVideoMode"), true);
                 PyList_Append(pyList, pyObj);
+                Py_DECREF(pyObj);
             }
             wxPyEndBlockThreads(blocked);
             return pyList;
