@@ -95,6 +95,7 @@ public:
     virtual void MacInstallTopLevelWindowEventHandler() ;
 
     void MacSetMetalAppearance( bool on ) ;
+    bool MacGetMetalAppearance() const ;
 
     void MacChangeWindowAttributes( wxUint32 attributesToSet , wxUint32 attributesToClear ) ;
     wxUint32 MacGetWindowAttributes() const ;
