@@ -40,13 +40,14 @@ FOLLOWING CODE IS BY G.R.G. :
   Guillermo Rodriguez Garcia
   <guille@iies.es>
 
-  Version: 2.0
+  Version: 2.1
 *************************************************************************/
 
 typedef struct
 {
     int w;                  /* width */
     int h;                  /* height */
+    int transparent;        /* transparent color (-1 = none) */
     unsigned char *p;       /* bitmap */
     unsigned char *pal;     /* palette */
 } IMAGEN;
@@ -60,7 +61,7 @@ typedef struct
   Guillermo Rodriguez Garcia
   <guille@iies.es>
 
-  Version: 2.0
+  Version: 2.1
 *************************************************************************/
 
 
@@ -94,11 +95,18 @@ class gifDecoder
         int readgif(IMAGEN *img);
 	
     private:
-        int mygetc() {return (unsigned char)f -> GetC();}
+        unsigned char mygetc();
 	   // This is NEEDED! GetC is char (signed) why we need unsigned value
 	   // from here
 };
 
+
+unsigned char gifDecoder::mygetc()
+{
+    unsigned char c;
+    f -> Read(&c, 1);
+    return c;
+}
 
 
 /* getcode:
@@ -303,13 +311,26 @@ int gifDecoder::readgif(IMAGEN *img)
         f -> Read(pal, 3 * ncolors);
     }
 
-    /* skip extensions */
-    while (mygetc() == 0x21)            /* separator */
-    {
-        mygetc();                       /* function code */
+    /* assume no transparent color */
+    img->transparent = -1;
 
-        while ((i = mygetc()) != 0)      /* byte count */
-            f -> SeekI(i, wxFromCurrent);
+    /* skip most extensions */
+    while (mygetc() == 0x21)               /* separator */
+    {
+        wxLogDebug("ugh");
+        if (mygetc() == 0xF9)              /* graphic control ext. */
+        {
+	    wxLogDebug("...");
+            f->Read(buf, 6);
+	    wxLogDebug("buf[1] is %i (%i)", buf[1], buf[1] & 0x01);
+            if (buf[1] & 0x01) {
+	    wxLogDebug("setting transparen %i", buf[4]);
+                img->transparent = buf[4];
+	    }
+        }
+        else
+            while ((i = mygetc()) != 0)    /* byte count */
+                f->SeekI(i, wxFromCurrent);
     }
 
     /* read image descriptor block (IDB) */
@@ -392,6 +413,13 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream )
         *(ptr++) = pal[3 * (*src) + 2];
     }
 
+    if (igif.transparent != -1) {
+        wxLogDebug("oko");
+        image->SetMaskColour(pal[3 * (igif.transparent) + 0], pal[3 * (igif.transparent) + 0], pal[3 * (igif.transparent) + 0]);
+        image->SetMask(TRUE);
+    }
+
+    wxLogDebug("(unsigned int)%i", (unsigned int)-1);
     free(igif.pal);
     free(igif.p);
     return TRUE;
@@ -402,5 +430,10 @@ bool wxGIFHandler::SaveFile( wxImage *image, wxOutputStream& stream )
     wxLogDebug("wxGIFHandler is read-only!!");
     return FALSE;
 }
+
+
+
+
+
 
 
