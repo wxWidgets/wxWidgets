@@ -348,7 +348,7 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS) $(WXDIR)\lib\$(WXLIBNAME).
     $(link) @<<
     $(LINKFLAGS)
     -out:$(WXDIR)\lib\$(WXLIBNAME).dll
-    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\zlib.lib $(WXDIR)\lib\xpm.lib
+    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\zlib.lib $(WXDIR)\lib\xpm.lib $(WXDIR)\lib\jpeg.lib
 <<
 
 !endif
@@ -486,6 +486,7 @@ proppdfrtf: $(DOCDIR)/pdf/prop.rtf
 refpdfrtf: $(DOCDIR)/pdf/techref.rtf
 html:	wxhtml portinghtml
 wxhtml:	$(DOCDIR)\html\wx\wx.htm
+htmlhelp: $(DOCDIR)\html\wx\wx.chm
 prophtml: $(DOCDIR)\html\proplist\prop.htm
 ps:     wxps referencps
 wxps:	$(WXDIR)\docs\ps\wx.ps
@@ -646,6 +647,12 @@ $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex
         -erase $(DOCDIR)\latex\wx\*.con
         -erase $(DOCDIR)\latex\wx\*.ref
          cd $(THISDIR)
+
+$(DOCDIR)\html\wx\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
+	cd $(DOCDIR)\html\wx
+	-hhc wx.hhp
+	cd $(THISDIR)
+
 
 $(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
         cd $(DOCDIR)\latex\porting
