@@ -34,7 +34,7 @@ public:
                const wxString choices[] = (const wxString *) NULL,
                int majorDim = 1,
                long style = wxRA_HORIZONTAL,
-               const wxValidator& val = wxDefaultValidator, 
+               const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
     {
         Init();
@@ -52,40 +52,41 @@ public:
                 const wxString choices[] = (const wxString *) NULL,
                 int majorDim = 0,
                 long style = wxRA_HORIZONTAL,
-                const wxValidator& val = wxDefaultValidator, 
+                const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);
 
     int FindString( const wxString& s) const;
     void SetSelection( int n );
     int GetSelection() const;
-    
+
     wxString GetString( int n ) const;
-    
-    wxString GetLabel( int item ) const;
-    wxString GetLabel() const { return wxControl::GetLabel(); }
     void SetLabel( const wxString& label );
-    void SetLabel( int item, const wxString& label );
-    
-    /* doesn't work */
-    void SetLabel( int item, wxBitmap *bitmap );
-    
-    bool Show( bool show );
+
     void Show( int item, bool show );
-    
-    bool Enable( bool enable );
     void Enable( int item, bool enable );
-    
+
     virtual wxString GetStringSelection() const;
     virtual bool SetStringSelection( const wxString& s );
-    
-    int Number() const;
-    int GetCount() const { return Number(); }
+
+    int GetCount() const;
     int GetNumberOfRowsOrCols() const;
     void SetNumberOfRowsOrCols( int n );
-    
+
+    // for compatibility only, don't use these methods in new code!
+#if WXWIN_COMPATIBILITY_2_2
+    int Number() const { return GetCount(); }
+    wxString GetLabel(int n) const { return GetString(n); }
+    void SetLabel( int item, const wxString& label );
+#endif // WXWIN_COMPATIBILITY_2_2
+
+    // we have to override those to avoid virtual function name hiding
+    wxString GetLabel() const { return wxControl::GetLabel(); }
+    bool Show( bool show );
+    bool Enable( bool enable );
+
     // implementation
     // --------------
-    
+
     void SetFocus();
     void GtkDisableEvents();
     void GtkEnableEvents();
@@ -98,7 +99,7 @@ public:
 
     virtual void DoSetSize( int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO );
     virtual void OnInternalIdle();
-    
+
     bool             m_hasFocus,
                      m_lostFocus;
     int              m_majorDim;
