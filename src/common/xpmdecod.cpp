@@ -131,14 +131,14 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
 {
     size_t length = stream.GetSize();
     wxCHECK_MSG(length != 0, wxNullImage, wxT("Cannot read XPM from stream of unknown size"));
-    
+
     char *xpm_buffer = new char[length];
     char *p, *q;
     size_t i;
 
     if ( stream.Read(xpm_buffer, length).LastError() != wxSTREAM_NO_ERROR )
         return FALSE;
-        
+
     /*
      *  Remove comments from the file:
      */
@@ -178,7 +178,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
     i = 0;
     for (p = xpm_buffer; *p != '\0'; p++)
     {
-        if ( *p != '"' ) 
+        if ( *p != '"' )
             continue;
         for (q = p + 1; *q != '\0'; q++)
             if (*q == '"')
@@ -189,38 +189,38 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
         p = q + 1;
     }
     xpm_buffer[i] = '\0';
-    
+
     /*
      *  Create array of lines and convert \n's to \0's:
      */
     const char **xpm_lines;
     size_t lines_cnt = 0;
     size_t line;
-    
+
     for (p = xpm_buffer; *p != '\0'; p++)
     {
-        if ( *p == '\n' ) 
+        if ( *p == '\n' )
             lines_cnt++;
     }
-    
+
     xpm_lines = new const char*[lines_cnt];
     xpm_lines[0] = xpm_buffer;
     line = 1;
     for (p = xpm_buffer; (*p != '\0') && (line < lines_cnt); p++)
     {
-        if ( *p == '\n' ) 
+        if ( *p == '\n' )
         {
             xpm_lines[line] = p + 1;
             *p = '\0';
             line++;
         }
     }
-    
+
     /*
      *  Read the image:
      */
     wxImage img = ReadData(xpm_lines);
-    
+
     delete[] xpm_buffer;
     delete[] xpm_lines;
     return img;
@@ -243,7 +243,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
 \*****************************************************************************/
 
 
-typedef struct 
+typedef struct
 {
     char *name;
     wxUint32 rgb;
@@ -512,7 +512,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
         buf[0] = inname[5]; buf[1] = inname[6];
         *b = (unsigned char) wxHexToDec(buf);
         *isNone = FALSE;
-        
+
         return TRUE;
     }
 
@@ -522,7 +522,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
     // lot of gray...
 
     // so first extract ' '
-    while ((p = strchr(name, ' '))) 
+    while ((p = strchr(name, ' ')) != NULL)
     {
         while (*(p))            // till eof of string
         {
@@ -532,7 +532,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
     }
     // fold to lower case
     p = name;
-    while (*p) 
+    while (*p)
     {
         *p = tolower(*p);
         p++;
@@ -540,7 +540,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
 
     // substitute Grey with Gray, else rgbtab.h would have more than 100
     // 'duplicate' entries
-    if ( (grey = strstr(name, "grey")) )
+    if ( (grey = strstr(name, "grey")) != NULL )
         grey[2] = 'a';
 
     // check for special 'none' colour:
@@ -553,7 +553,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
     // binary search:
     left = 0;
     right = numTheRGBRecords - 1;
-    do 
+    do
     {
         middle = (left + right) / 2;
         cmp = strcmp(name, theRGBRecords[middle].name);
@@ -566,12 +566,12 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
             *isNone = FALSE;
             free(name);
             return TRUE;
-        } 
-        else if ( cmp < 0 ) 
+        }
+        else if ( cmp < 0 )
         {
             right = middle - 1;
-        } 
-        else 
+        }
+        else
         {           // > 0
             left = middle + 1;
         }
@@ -583,7 +583,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
 
 static const char *ParseColor(const char *data)
 {
-    static const char *targets[] = 
+    static const char *targets[] =
                         {"c ", "g ", "g4 ", "m ", "b ", "s ", NULL};
 
     const char *p, *r;
@@ -630,11 +630,11 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     bool hasMask;
     wxXPMColourMapData *clr_data;
     wxHashTable clr_tbl(wxKEY_STRING);
-    
+
     /*
      *  Read hints and initialize structures:
      */
-    count = sscanf(xpm_data[0], "%u %u %u %u", 
+    count = sscanf(xpm_data[0], "%u %u %u %u",
                    &width, &height, &colors_cnt, &chars_per_pixel);
     if ( count != 4 || width * height * colors_cnt == 0 )
     {
@@ -646,7 +646,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     //     92 possible values on each position, 92^64 is *way* larger space than
     //     8bit RGB...
     wxCHECK_MSG(chars_per_pixel < 64, wxNullImage, wxT("XPM colormaps this large not supported."));
-    
+
     img.Create(width, height);
     if ( !img.Ok() ) return img;
 
@@ -654,7 +654,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     key[chars_per_pixel] = '\0';
     hasMask = FALSE;
     clr_tbl.DeleteContents(TRUE);
-    
+
     /*
      *  Create colour map:
      */
@@ -672,7 +672,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
         else
         {
             bool isNone;
-            if ( !GetRGBFromName(clr_def, &isNone, 
+            if ( !GetRGBFromName(clr_def, &isNone,
                                  &clr_data->R, &clr_data->G, &clr_data->B) )
             {
                 wxLogError(_("XPM: malformed colour definition '%s'!"), xpm_data[1+i]);
@@ -689,7 +689,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
                 }
                 else
                 {
-                    if ( hasMask && clr_data->R == 255 && 
+                    if ( hasMask && clr_data->R == 255 &&
                                     clr_data->G == 0 && clr_data->B == 255 )
                         clr_data->B = 254;
                 }
@@ -701,13 +701,13 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     /*
      *  Parse image data:
      */
-     
+
     unsigned char *img_data = img.GetData();
     for (j = 0; j < height; j++)
     {
         for (i = 0; i < width; i++, img_data += 3)
         {
-            memcpy(key, 
+            memcpy(key,
                    xpm_data[1 + colors_cnt + j] + chars_per_pixel * i,
                    chars_per_pixel);
             clr_data = (wxXPMColourMapData*) clr_tbl.Get(key);
