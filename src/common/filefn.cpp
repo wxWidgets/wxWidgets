@@ -1679,11 +1679,21 @@ bool wxIsWild( const wxString& pattern )
         }
     }
     return FALSE;
-};
+}
+
+#if wxUSE_UNICODE && defined(__WXGTK20__)
+#include <glib.h>
+#endif
 
 bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 
-#ifdef HAVE_FNMATCH
+#if wxUSE_UNICODE && defined(__WXGTK20__)
+{
+    // treat dot_special somehow
+    return g_pattern_match_simple( wxConvUTF8.cWX2MB( pat ), wxConvUTF8.cWX2MB( text ) );
+}
+
+#elif defined(HAVE_FNMATCH)
 {
 // this probably won't work well for multibyte chars in Unicode mode?
    if(dot_special)
