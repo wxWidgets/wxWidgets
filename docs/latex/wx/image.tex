@@ -77,10 +77,10 @@ and forth without loss in that respect.
 
 Creates an image with the given width and height.
 
-\func{}{wxImage}{\param{int}{ width}, \param{int}{ height}, \param{unsigned char*}{ data}, \param{bool}{ static_data=FALSE}}
+\func{}{wxImage}{\param{int}{ width}, \param{int}{ height}, \param{unsigned char*}{ data}, \param{bool}{ static\_data=FALSE}}
 
 Creates an image from given data with the given width and height. If 
-{\it static_data} is TRUE, then wxImage will not delete the actual
+{\it static\_data} is TRUE, then wxImage will not delete the actual
 image data in its destructor, otherwise it will free it by calling
 {\it free()}.
 
@@ -177,7 +177,7 @@ of a given handler class in an application session.}
 
 \helpref{wxImageHandler}{wximagehandler}
 
-\pythonnote{In wxPython this static method is named {\tt wxImage_AddHandler}.}
+\pythonnote{In wxPython this static method is named {\tt wxImage\_AddHandler}.}
 \membersection{wxImage::CleanUpHandlers}
 
 \func{static void}{CleanUpHandlers}{\void}

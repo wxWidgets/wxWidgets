@@ -125,7 +125,7 @@ wxCSConv cust(user_encoding);
 printf("Data: %s\n", (const char*) str.mb_str(cust));
 \end{verbatim}
 
-Note: Since mb_str() returns a temporary wxCharBuffer to hold the result
+Note: Since mb\_str() returns a temporary wxCharBuffer to hold the result
 of the conversion, you need to explicitly cast it to const char* if you use
 it in a vararg context (like with printf).
 
@@ -171,7 +171,7 @@ process_data(tmp_str);
 \end{verbatim}
 
 If a conversion had taken place in cWX2MB (i.e. in a Unicode build),
-the buffer will be deallocated as soon as tmp_buf goes out of scope.
+the buffer will be deallocated as soon as tmp\_buf goes out of scope.
 (The macro wxWX2MBbuf reflects the correct return value of cWX2MB
 (either char* or wxCharBuffer), except for the const.)
 

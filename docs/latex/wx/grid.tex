@@ -296,7 +296,7 @@ Disables row sizing by dragging with the mouse. Equivalent to passing FALSE to
 \func{void}{EnableCellEditControl}{\param{bool }{enable = TRUE}}
 
 Enables or disables in-place editing of grid cell data. The grid will issue either a
-wxEVT_GRID_EDITOR_SHOWN or wxEVT_GRID_EDITOR_HIDDEN event.
+wxEVT\_GRID\_EDITOR\_SHOWN or wxEVT\_GRID\_EDITOR\_HIDDEN event.
 
 \membersection{wxGrid::EnableDragColSize}\label{wxgridenabledragcolsize}
 
@@ -370,8 +370,8 @@ the grid's batch count is greater than zero the display will not be updated.
 Sets the arguments to the horizontal and vertical text alignment values for the
 grid cell at the specified location.
 
-Horizontal alignment will be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT. \\
-Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
+Horizontal alignment will be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT. \\
+Vertical alignment will be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
 \membersection{wxGrid::GetCellBackgroundColour}\label{wxgridgetcellbackgroundcolour}
 
@@ -863,8 +863,8 @@ deselected; if TRUE the row will be added to the existing selection.
 
 Sets the horizontal and vertial alignment for grid cell text at the specified location.
 
-Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT. \\
-Vertical alignment should be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
+Horizontal alignment should be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT. \\
+Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
 \membersection{wxGrid::SetCellEditor}\label{wxgridsetcelleditor}
 
@@ -965,9 +965,9 @@ with custom data types.
 
 Sets the horizontal and vertical alignment of column label text.
 
-Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT.
+Horizontal alignment should be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT.
 
-Vertical alignment should be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
+Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
 \membersection{wxGrid::SetColLabelSize}\label{wxgridsetcollabelsize}
 
@@ -1012,9 +1012,9 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 Sets the default horizontal and vertial alignment for grid cell text.
 
-Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT.
+Horizontal alignment should be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT.
 
-Vertical alignment should be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
+Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
 \membersection{wxGrid::SetDefaultCellBackgroundColour}\label{wxgridsetdefaultcellbackgroundcolour}
 
@@ -1112,9 +1112,9 @@ about controlling cell attributes.
 
 Sets the horizontal and vertical alignment of row label text.
 
-Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT.
+Horizontal alignment should be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT.
 
-Vertical alignment should be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
+Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
 \membersection{wxGrid::SetRowLabelSize}\label{wxgridsetrowlabelsize}
 
@@ -1191,28 +1191,28 @@ Displays the in-place cell edit control for the current cell.
 \func{int}{XToCol}{\param{int }{x}}
 
 Returns the grid column that corresponds to the logical x coordinate. Returns
-wxNOT_FOUND if there is no column at the x position.
+wxNOT\_FOUND if there is no column at the x position.
 
 \membersection{wxGrid::XToEdgeOfCol}\label{wxgridxtoedgeofcol}
 
 \func{int}{XToEdgeOfCol}{\param{int }{x}}
 
 Returns the column whose right hand edge is close to the given logical x position.
-If no column edge is near to this position wxNOT_FOUND is returned.
+If no column edge is near to this position wxNOT\_FOUND is returned.
 
 \membersection{wxGrid::YToEdgeOfRow}\label{wxgridytoedgeofrow}
 
 \func{int}{YToEdgeOfRow}{\param{int }{y}}
 
 Returns the row whose bottom edge is close to the given logical y position.
-If no row edge is near to this position wxNOT_FOUND is returned.
+If no row edge is near to this position wxNOT\_FOUND is returned.
 
 \membersection{wxGrid::YToRow}\label{wxgridytorow}
 
 \func{int}{YToRow}{\param{int }{y}}
 
 Returns the grid row that corresponds to the logical y coordinate. Returns
-wxNOT_FOUND if there is no row at the y position.
+wxNOT\_FOUND if there is no row at the y position.
 
 
 
