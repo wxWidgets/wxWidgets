@@ -611,28 +611,6 @@ bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
         oleVariant.vt = VT_BSTR;
         oleVariant.bstrVal = wxConvertStringToOle(str);
     }
-// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
-// Now obsolete
-#if 0 // wxUSE_TIMEDATE && !defined(__WATCOMC__)
-    else if (type == wxT("date"))
-    {
-        wxDate date( variant.GetDate() );
-        oleVariant.vt = VT_DATE;
-
-        if (!OleDateFromTm(date.GetYear(), date.GetMonth(), date.GetDay(),
-                0, 0, 0, oleVariant.date))
-            return false;
-    }
-    else if (type == wxT("time"))
-    {
-        wxTime time( variant.GetTime() );
-        oleVariant.vt = VT_DATE;
-
-        if (!OleDateFromTm(time.GetYear(), time.GetMonth(), time.GetDay(),
-            time.GetHour(), time.GetMinute(), time.GetSecond(), oleVariant.date))
-            return false;
-    }
-#endif
 #if wxUSE_DATETIME
     else if (type == wxT("datetime"))
     {

@@ -465,7 +465,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     case CF_OEMTEXT:
                         size = strlen((const char *)pBuf);
                         break;
-#if !defined(__WATCOMC__) && ! (defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
+#if !(defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
                     case CF_UNICODETEXT:
 #if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) ) \
     || ( defined(__MWERKS__) && defined(__WXMSW__) )
