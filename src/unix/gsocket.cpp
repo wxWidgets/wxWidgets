@@ -700,7 +700,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
         int error;
         SOCKLEN_T len = sizeof(error);
 
-        getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (void*) &error, &len);
+        getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*) &error, &len);
 
         if (!error)
           return GSOCK_NOERROR;
@@ -987,7 +987,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
 
         m_establishing = false;
 
-        getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+        getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
 
         if (error)
         {
@@ -1138,7 +1138,7 @@ void GSocket::UnsetCallback(GSocketEventFlags flags)
 GSocketError GSocket::GetSockOpt(int level, int optname,
                                 void *optval, int *optlen)
 {
-    if (getsockopt(m_fd, level, optname, optval, (SOCKLEN_T*)optlen) == 0)
+    if (getsockopt(m_fd, level, optname, (char*)optval, (SOCKLEN_T*)optlen) == 0)
     {
         return GSOCK_NOERROR;
     }
@@ -1148,7 +1148,7 @@ GSocketError GSocket::GetSockOpt(int level, int optname,
 GSocketError GSocket::SetSockOpt(int level, int optname,
                                 const void *optval, int optlen)
 {
-    if (setsockopt(m_fd, level, optname, optval, optlen) == 0)
+    if (setsockopt(m_fd, level, optname, (const char*)optval, optlen) == 0)
     {
         return GSOCK_NOERROR;
     }
@@ -1409,7 +1409,7 @@ void GSocket::Detected_Write()
 
     m_establishing = false;
 
-    getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+    getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
 
     if (error)
     {
