@@ -1,4 +1,7 @@
 # Symantec C++ makefile 
 WXDIR = ..\..
+EXTRALIBS=
 TARGET=dialogs
-include $(WXDIR)\src\makeprog.sc 
+OBJECTS = $(TARGET).obj
+include $(WXDIR)\src\makeprog.sc
+

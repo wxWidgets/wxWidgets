@@ -1,7 +1,7 @@
 #Digital Mars (was Symantec) C++ makefile 
 WXDIR = $(WXWIN)
 EXTRALIBS=
-
-TARGET=joytest
-OBJECTS = $(TARGET).obj
+TARGET=hello
+$(TARGET).exe:	$(OBJECTS) $(TARGET).def $(TARGET).res
+$(TARGET)
 include $(WXDIR)\src\makeprog.sc
