@@ -108,6 +108,7 @@ void wxTextCtrl::Init()
     m_colLastVisible = -1;
     m_posLastVisible = -1;
 
+    m_posLast =
     m_curPos =
     m_curCol =
     m_curRow = 0;
@@ -556,6 +557,9 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     }
 #endif // 0/1
 
+    // update the (cached) last position
+    m_posLast += text.length() - to + from;
+
     // update the current position: note that we always put the cursor at the
     // end of the replacement text
     SetInsertionPoint(from + text.length());
@@ -643,6 +647,7 @@ long wxTextCtrl::GetLastPosition() const
     }
     else // multiline
     {
+#ifdef WXDEBUG_TEXT
         pos = 0;
         size_t nLineCount = m_lines.GetCount();
         for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
@@ -658,6 +663,12 @@ long wxTextCtrl::GetLastPosition() const
             // beginning of the next line after it
             pos--;
         }
+
+        // more probable reason of this would be to forget to update m_posLast
+        wxASSERT_MSG( pos == m_posLast, _T("bug in GetLastPosition()") );
+#endif // WXDEBUG_TEXT
+
+        pos = m_posLast;
     }
 
     return pos;
@@ -1070,11 +1081,14 @@ static inline bool IsWordChar(wxChar ch)
 
 long wxTextCtrl::GetWordStart() const
 {
-    // TODO
-    wxCHECK_MSG( IsSingleLine(), -1, _T("not implemented for multline") );
-
     if ( m_curPos == -1 || m_curPos == 0 )
         return 0;
+
+    if ( m_curCol == 0 )
+    {
+        // go to the end of the previous line
+        return m_curPos - 1;
+    }
 
     // it shouldn't be possible to learn where the word starts in the password
     // text entry zone
@@ -1082,8 +1096,8 @@ long wxTextCtrl::GetWordStart() const
         return 0;
 
     // start at the previous position
-    const wxChar *p0 = m_value.c_str();
-    const wxChar *p = p0 + m_curPos - 1;
+    const wxChar *p0 = GetLineText(m_curRow).c_str();
+    const wxChar *p = p0 + m_curCol - 1;
 
     // find the end of the previous word
     while ( (p > p0) && !IsWordChar(*p) )
@@ -1097,16 +1111,25 @@ long wxTextCtrl::GetWordStart() const
     if ( !IsWordChar(*p) )
         p++;
 
-    return p - p0;
+    return (m_curPos - m_curCol) + p - p0;
 }
 
 long wxTextCtrl::GetWordEnd() const
 {
-    // TODO
-    wxCHECK_MSG( IsSingleLine(), -1, _T("not implemented for multline") );
-
     if ( m_curPos == -1 )
         return 0;
+
+    wxString line = GetLineText(m_curRow);
+    if ( (size_t)m_curCol == line.length() )
+    {
+        // if we're on the last position in the line, go to the next one - if
+        // it exists
+        long pos = m_curPos;
+        if ( pos < GetLastPosition() )
+            pos++;
+
+        return pos;
+    }
 
     // it shouldn't be possible to learn where the word ends in the password
     // text entry zone
@@ -1114,8 +1137,8 @@ long wxTextCtrl::GetWordEnd() const
         return GetLastPosition();
 
     // start at the current position
-    const wxChar *p0 = m_value.c_str();
-    const wxChar *p = p0 + m_curPos;
+    const wxChar *p0 = line.c_str();
+    const wxChar *p = p0 + m_curCol;
 
     // find the start of the next word
     while ( *p && !IsWordChar(*p) )
@@ -1129,7 +1152,7 @@ long wxTextCtrl::GetWordEnd() const
     while ( *p && !IsWordChar(*p) )
         p++;
 
-    return p - p0;
+    return (m_curPos - m_curCol) + p - p0;
 }
 
 // ----------------------------------------------------------------------------
