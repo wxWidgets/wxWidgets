@@ -1,14 +1,11 @@
-
+#----------------------------------------------------------------------------
 # The global was removed  in favor of static accessor functions.  This is for
 # backwards compatibility:
+
 wxTheXmlResource = wxXmlResource_Get()
 
-wx.wxXmlNodePtr = wxXmlNodePtr
 
-
-
-
-#----------------------------------------------------------------------
+#----------------------------------------------------------------------------
 #  Create a factory for handling the subclass property of the object tag.
 
 
@@ -36,3 +33,4 @@ class wxXmlSubclassFactory_Python(wxXmlSubclassFactory):
 
 wxXmlResource_AddSubclassFactory(wxXmlSubclassFactory_Python())
 
+#----------------------------------------------------------------------------

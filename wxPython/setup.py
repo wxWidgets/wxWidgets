@@ -58,7 +58,7 @@ Topic :: Software Development :: User Interfaces
 BUILD_GLCANVAS = 0 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 0      # If true, build the contrib/ogl extension module
 BUILD_STC = 0      # If true, build the contrib/stc extension module
-BUILD_XRC = 0      # XML based resource system
+BUILD_XRC = 1      # XML based resource system
 BUILD_GIZMOS = 0   # Build a module for the gizmos contrib library
 BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
                    # to be loaded from a DLL and to be used from Python.
@@ -1053,11 +1053,17 @@ if BUILD_XRC:
     msg('Preparing XRC...')
     location = 'contrib/xrc'
 
-    swig_files = ['xrc.i']
-    swig_sources = run_swig(swig_files, location, '', PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
+    swig_sources = run_swig(['xrc.i'], location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps +
+                            [ '%s/_xrc_rename.i' % location,
+                              '%s/_xrc_ex.py' % location,
+                              '%s/_xmlres.i' % location,
+                              '%s/_xmlsub.i' % location,
+                              '%s/_xml.i' % location,
+                              '%s/_xmlhandler.i' % location,
+                              ])
 
-    ext = Extension('xrcc',
+    ext = Extension('_xrc',
                     swig_sources,
 
                     include_dirs =  includes,
