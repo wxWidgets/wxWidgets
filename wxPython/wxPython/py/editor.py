@@ -396,22 +396,15 @@ class EditorNotebook(wx.wxNotebook):
                 text += unchanged
         if text is not None:
             self.SetPageText(selection, text)
-                
+            self.Refresh()  # Needed on Win98.
 
     def OnPageChanging(self, event):
         """Page changing event handler."""
-##         old = event.GetOldSelection()
-##         print "Changing from old:", old
-##         new = event.GetOldSelection()
-##         print "Changing to new:", new
         event.Skip()
 
     def OnPageChanged(self, event):
         """Page changed event handler."""
-##         old = event.GetOldSelection()
-##         print "Changed from:", old
         new = event.GetSelection()
-##         print "Changed to new:", new
         window = self.GetPage(new)
         dispatcher.send(signal='EditorChange', sender=self,
                         editor=window.editor)
