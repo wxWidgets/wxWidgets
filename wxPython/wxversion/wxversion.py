@@ -15,10 +15,16 @@
 """
 If you have more than one version of wxPython installed this module
 allows your application to choose which version of wxPython will be
-imported when it does 'import wx'.  You use it like this:
+imported when it does 'import wx'.  You use it like this::
 
     import wxversion
-    wxversion.require('2.4')
+    wxversion.select('2.4')
+    import wx
+
+Or additional build options can also be selected, like this::
+
+    import wxversion
+    wxversion.select('2.5.3-unicode')
     import wx
 
 Of course the default wxPython version can also be controlled by
@@ -30,19 +36,41 @@ environment correctly.
 It works by searching the sys.path for directories matching wx-* and
 then comparing them to what was passed to the require function.  If a
 match is found then that path is inserted into sys.path.
+
+NOTE: If you are making a 'bundle' of your application with a tool
+like py2exe then you should *not* use the wxversion module since it
+looks at filesystem for the directories on sys.path, it will fail in a
+bundled environment.  Instead you should simply ensure that the
+version of wxPython that you want is found by default on the sys.path
+when making the bundled version by setting PYTHONPATH.  Then that
+version will be included in your bundle and your app will work as
+expected.  Py2exe and the others usually have a way to tell at runtime
+if they are running from a bundle or running raw, so you can check
+that and only use wxversion if needed.  For example, for py2exe::
+
+    if not hasattr(sys, 'frozen'):
+        import wxversion
+        wxversion.select('2.5')
+    import wx
+
 """
 
 import sys, os, glob, fnmatch
 
 
 _selected = None
-class wxversionError(Exception):
+class VersionError(Exception):
     pass
 
+#----------------------------------------------------------------------
 
-def require(versions):
+def select(versions):
     """
-    Search for a wxPython installation that matches version.
+    Search for a wxPython installation that matches version.  If one
+    is found then sys.path is modified so that version will be
+    imported with a 'import wx', otherwise a VersionError exception is
+    raised.  This funciton should only be caled once at the begining
+    of the application before wxPython is imported.
 
         :param version: Specifies the version to look for, it can
                         either be a string or a list of strings.  Each
@@ -62,8 +90,6 @@ def require(versions):
                         is increased for every specified optional component
                         that is specified and that matches.
     """
-    bestMatch = None
-    bestScore = 0
     if type(versions) == str:
         versions = [versions]
 
@@ -75,33 +101,72 @@ def require(versions):
             if _selected.Score(_wxPackageInfo(ver)) > 0:
                 return
         # otherwise, raise an exception
-        raise wxversionError("A previously selected wx version does not match the new request.")
+        raise VersionError("A previously selected wx version does not match the new request.")
 
     # If we get here then this is the first time wxversion is used.
     # Ensure that wxPython hasn't been imported yet.
     if sys.modules.has_key('wx') or sys.modules.has_key('wxPython'):
-        raise wxversionError("wxversion.require() must be called before wxPython is imported")
+        raise VersionError("wxversion.require() must be called before wxPython is imported")
 
     # Look for a matching version and manipulate the sys.path as
     # needed to allow it to be imported.
+    packages = _find_installed(True)
+    bestMatch = _get_best_match(packages, versions)
+    
+    if bestMatch is None:
+        raise VersionError("Requested version of wxPython not found")
+
+    sys.path.insert(0, bestMatch.pathname)
+    _selected = bestMatch
+        
+#----------------------------------------------------------------------
+
+def checkInstalled(versions):
+    """
+    Check if there is a version of wxPython installed that matches one
+    of the versions given.  Returns True if so, False if not.  This
+    can be used to determine if calling `select` will succeed or not.
+
+        :param version: Same as in `select`, either a string or a list
+                        of strings specifying the version(s) to check
+                        for.    
+    """
+    
+    if type(versions) == str:
+        versions = [versions]
     packages = _find_installed()
+    bestMatch = _get_best_match(packages, versions)
+    return bestMatch is not None
+
+#----------------------------------------------------------------------
+
+def getInstalled():
+    """
+    Returns a list of strings representing the installed wxPython
+    versions that are found on the system.
+    """
+    packages = _find_installed()
+    return [os.path.basename(p.pathname)[3:] for p in packages]
+
+
+
+#----------------------------------------------------------------------
+# private helpers...
+
+def _get_best_match(packages, versions):
+    bestMatch = None
+    bestScore = 0
     for pkg in packages:
         for ver in versions:
             score = pkg.Score(_wxPackageInfo(ver))
             if score > bestScore:
                 bestMatch = pkg
                 bestScore = score
-
-    if bestMatch is None:
-        raise wxversionError("Requested version of wxPython not found")
-
-    sys.path.insert(0, bestMatch.pathname)
-    _selected = bestMatch
-        
+    return bestMatch
 
 
 _pattern = "wx-[0-9].*"
-def _find_installed():
+def _find_installed(removeExisting=False):
     installed = []
     toRemove = []
     for pth in sys.path:
@@ -132,8 +197,9 @@ def _find_installed():
                 continue
             installed.append(_wxPackageInfo(name, True))
 
-    for rem in toRemove:
-        del sys.path[sys.path.index(rem)]
+    if removeExisting:
+        for rem in toRemove:
+            del sys.path[sys.path.index(rem)]
         
     installed.sort()
     installed.reverse()
@@ -153,14 +219,13 @@ class _wxPackageInfo(object):
 
     def Score(self, other):
         score = 0
+        
         # whatever version components given in other must match exactly
-        if len(self.version) > len(other.version):
-            v = self.version[:len(other.version)]
-        else:
-            v = self.version
-        if v != other.version:
-            return 0
-        score += 1
+        minlen = min(len(self.version), len(other.version))
+        if self.version[:minlen] != other.version[:minlen]:
+            return 0        
+        score += 1  # todo: should it be +=minlen to reward longer matches?
+        
         for opt in other.options:
             if opt in self.options:
                 score += 1
@@ -177,7 +242,7 @@ class _wxPackageInfo(object):
         
     
 
-
+#----------------------------------------------------------------------
 
 if __name__ == '__main__':
     import pprint
@@ -186,7 +251,7 @@ if __name__ == '__main__':
         savepath = sys.path[:]
 
         #test
-        require(version)
+        select(version)
         print "Asked for %s:\t got: %s" % (version, sys.path[0])
         #pprint.pprint(sys.path)
         #print
@@ -215,6 +280,10 @@ if __name__ == '__main__':
     
 
     # now run some tests
+    pprint.pprint( getInstalled())
+    print checkInstalled("2.4")
+    print checkInstalled("2.5-unicode")
+    print checkInstalled("2.99-bogus")
     test("2.4")
     test("2.5")
     test("2.5-gtk2")
@@ -232,14 +301,14 @@ if __name__ == '__main__':
     try:
         # expecting an error on this one
         test("2.6")
-    except wxversionError, e:
+    except VersionError, e:
         print "Asked for 2.6:\t got Exception:", e 
 
     # check for exception when incompatible versions are requested
     try:
-        require("2.4")
-        require("2.5")
-    except wxversionError, e:
+        select("2.4")
+        select("2.5")
+    except VersionError, e:
         print "Asked for incompatible versions, got Exception:", e 
 
     # cleanup
