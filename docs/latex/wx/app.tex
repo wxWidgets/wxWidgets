@@ -443,7 +443,6 @@ work and, in fact, probably won't.
 %%\helpref{wxWindow::Close}{wxwindowclose},\rtfsp
 %%\helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
 %%\helpref{wxCloseEvent}{wxcloseevent},\rtfsp
-%%\helpref{wxApp::OnQueryEndSession}{wxapponqueryendsession}
 
 
 \membersection{wxApp::OnInit}\label{wxapponinit}
@@ -471,42 +470,6 @@ immediately.
 Called from \helpref{OnInit}{wxapponinit} and may be used to initialize the
 parser with the command line options for this application. The base class
 versions adds support for a few standard options only.
-
-
-\membersection{wxApp::OnQueryEndSession}\label{wxapponqueryendsession}
-
-\func{void}{OnQueryEndSession}{\param{wxCloseEvent\& }{event}}
-
-This is an event handler function called when the operating system or GUI session is
-about to close down. Typically, an application will try to save unsaved documents
-at this point.
-
-If \helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto} returns true, the application
-is allowed to veto the shutdown by calling \helpref{wxCloseEvent::Veto}{wxcloseeventveto}.
-The application might veto the shutdown after prompting for documents to be saved, and the
-user has cancelled the save.
-
-Use the EVT\_QUERY\_END\_SESSION event table macro to handle query end session events.
-
-You should check whether the application is forcing the deletion of the window
-using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}. If this is true,
-destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
-If not, it is up to you whether you respond by destroying the window.
-
-The default handler calls \helpref{wxWindow::Close}{wxwindowclose} on the top-level window,
-and vetoes the shutdown if Close returns false. This will be sufficient for many applications.
-
-\wxheading{Remarks}
-
-Under X, OnQueryEndSession is called in response to the `save session' event.
-
-Under Windows, OnQueryEndSession is called in response to the WM\_QUERYENDSESSION message.
-
-\wxheading{See also}
-
-\helpref{wxWindow::Close}{wxwindowclose},\rtfsp
-\helpref{wxCloseEvent}{wxcloseevent}\rtfsp
-
 
 \membersection{wxApp::OnRun}\label{wxapponrun}
 

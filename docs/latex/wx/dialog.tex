@@ -236,20 +236,6 @@ Always returns false under Windows since dialogs cannot be iconized.
 
 Returns true if the dialog box is modal, false otherwise.
 
-\membersection{wxDialog::OnCharHook}\label{wxdialogoncharhook}
-
-\func{void}{OnCharHook}{\param{wxKeyEvent\&}{ event}}
-
-This member is called to allow the window to intercept keyboard events
-before they are processed by child windows.
-
-%For more information, see \helpref{wxWindow::OnCharHook}{wxwindowoncharhook}
-
-\wxheading{Remarks}
-
-wxDialog implements this handler to fake a cancel command if the escape key has been
-pressed. This will dismiss the dialog.
-
 \membersection{wxDialog::OnApply}\label{wxdialogonapply}
 
 \func{void}{OnApply}{\param{wxCommandEvent\& }{event}}
