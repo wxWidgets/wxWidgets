@@ -113,7 +113,8 @@ rm ${WORKDIR}/archives/html/$1/*
 cp ${WORKDIR}/wxWidgets/$3/docs/latex/$1/*.gif ${WORKDIR}/archives/html/$1
 cp ${WORKDIR}/wxWidgets/$3/docs/latex/$1/*.css ${WORKDIR}/archives/html/$1
 cd ${WORKDIR}/archives/html/$1
-zip -l -q -9 ${WORKDIR}/archives/htb/$1.htb *.html *.gif *.css wx.hhc wx.hhp wx.hhk
+zip -l -q -9 ${WORKDIR}/archives/htb/$1.htb *.html  *.css wx.hhc wx.hhp wx.hhk
+zip -q -9 ${WORKDIR}/archives/htb/$1.htb  *.gif 
 }
 
 ##this one for tex2rtf as its latex docs aren't in latex...
@@ -125,7 +126,8 @@ rm ${WORKDIR}/archives/html/$1/*
 cp ${WORKDIR}/wxWidgets/utils/$1/docs/*.gif ${WORKDIR}/archives/html/$1
 cp ${WORKDIR}/wxWidgets/utils/$1/docs/*.css ${WORKDIR}/archives/html/$1
 cd ${WORKDIR}/archives/html/$1
-zip -l -q -9 ${WORKDIR}/archives/htb/$1.htb *.html *.gif *.css wx.hhc wx.hhp wx.hhk
+zip -l -q -9 ${WORKDIR}/archives/htb/$1.htb *.html  *.css wx.hhc wx.hhp wx.hhk
+zip -q -9 ${WORKDIR}/archives/htb/$1.htb  *.gif 
 }
 
 do_docs ()
