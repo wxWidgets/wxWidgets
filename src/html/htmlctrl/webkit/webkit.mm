@@ -13,14 +13,14 @@
     #pragma implementation "webkit.h"
 #endif
 
-#if wxUSE_WEBKIT
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
+
+#if wxUSE_WEBKIT
 
 #ifdef __WXCOCOA__
 #include "wx/cocoa/autorelease.h"
