@@ -180,11 +180,6 @@ void *wxThreadInternal::PthreadStart(void *ptr)
   pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
   void* status = thread->Entry();
 
-  // Delete the current thread from the list
-  p_list_mutex.Lock();
-  delete node_thread;
-  p_list_mutex.Unlock();
-
   thread->Exit(status);
 
   return NULL;
