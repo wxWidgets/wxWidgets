@@ -97,6 +97,15 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
 
+    EVT_MENU( ID_DESELECT_CELL, GridFrame::DeselectCell)
+    EVT_MENU( ID_DESELECT_COL, GridFrame::DeselectCol)
+    EVT_MENU( ID_DESELECT_ROW, GridFrame::DeselectRow)
+    EVT_MENU( ID_DESELECT_ALL, GridFrame::DeselectAll)
+    EVT_MENU( ID_SELECT_CELL, GridFrame::SelectCell)
+    EVT_MENU( ID_SELECT_COL, GridFrame::SelectCol)
+    EVT_MENU( ID_SELECT_ROW, GridFrame::SelectRow)
+    EVT_MENU( ID_SELECT_ALL, GridFrame::SelectAll)
+
     EVT_GRID_LABEL_LEFT_CLICK( GridFrame::OnLabelLeftClick )
     EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
     EVT_GRID_ROW_SIZE( GridFrame::OnRowSize )
@@ -166,15 +175,24 @@ GridFrame::GridFrame()
     editMenu->Append( ID_DELETECOL, "Delete selected co&ls" );
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
 
+    wxMenu *selectMenu = new wxMenu;
+    selectMenu->Append( ID_SELECT_ALL, "Select all");
+    selectMenu->Append( ID_SELECT_ROW, "Select row 2");
+    selectMenu->Append( ID_SELECT_COL, "Select col 2");
+    selectMenu->Append( ID_SELECT_CELL, "Select cell (3, 1)");
+    selectMenu->Append( ID_DESELECT_ALL, "Deselect all");
+    selectMenu->Append( ID_DESELECT_ROW, "Deselect row 2");
+    selectMenu->Append( ID_DESELECT_COL, "Deselect col 2");
+    selectMenu->Append( ID_DESELECT_CELL, "Deselect cell (3, 1)");
     wxMenu *selectionMenu = new wxMenu;
-
-    editMenu->Append( ID_CHANGESEL, "Change &selection mode",
+    selectMenu->Append( ID_CHANGESEL, "Change &selection mode",
                       selectionMenu,
                       "Change selection mode" );
 
     selectionMenu->Append( ID_SELCELLS, "Select &Cells" );
     selectionMenu->Append( ID_SELROWS, "Select &Rows" );
     selectionMenu->Append( ID_SELCOLS, "Select C&ols" );
+
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append( ID_ABOUT, "&About wxGrid demo" );
@@ -184,6 +202,7 @@ GridFrame::GridFrame()
     menuBar->Append( viewMenu, "&View" );
     menuBar->Append( colMenu,  "&Colours" );
     menuBar->Append( editMenu, "&Edit" );
+    menuBar->Append( selectMenu, "&Select" );
     menuBar->Append( helpMenu, "&Help" );
 
     SetMenuBar( menuBar );
@@ -580,6 +599,46 @@ void GridFrame::SetCellBgColour( wxCommandEvent& WXUNUSED(ev) )
         grid->SetDefaultCellBackgroundColour(col);
         grid->Refresh();
     }
+}
+
+void GridFrame::DeselectCell(wxCommandEvent& WXUNUSED(event))
+{
+      grid->DeselectCell(3, 1);
+}
+
+void GridFrame::DeselectCol(wxCommandEvent& WXUNUSED(event))
+{
+      grid->DeselectCol(2);
+}
+
+void GridFrame::DeselectRow(wxCommandEvent& WXUNUSED(event))
+{
+      grid->DeselectRow(2);
+}
+
+void GridFrame::DeselectAll(wxCommandEvent& WXUNUSED(event))
+{
+      grid->ClearSelection();
+}
+
+void GridFrame::SelectCell(wxCommandEvent& WXUNUSED(event))
+{
+      grid->SelectBlock(3, 1, 3, 1);
+}
+
+void GridFrame::SelectCol(wxCommandEvent& WXUNUSED(event))
+{
+      grid->SelectCol(2, TRUE);
+}
+
+void GridFrame::SelectRow(wxCommandEvent& WXUNUSED(event))
+{
+      grid->SelectRow(2, TRUE);
+}
+
+void GridFrame::SelectAll(wxCommandEvent& WXUNUSED(event))
+{
+      grid->SelectAll();
 }
 
 void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
