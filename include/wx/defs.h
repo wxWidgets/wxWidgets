@@ -328,15 +328,23 @@ typedef int wxWindowID;
 // portable calling conventions macros
 // ----------------------------------------------------------------------------
 
-// wxCALLBACK should be used for the functions which are called back by
-// Windows (such as compare function for wxListCtrl)
-#if defined(__WIN32__)
-    #if defined(__MINGW32__) || defined(__GNUWIN32__)
+// stdcall is used for all functions called by Windows under Windows
+#ifdef __WINDOWS__
+    #if defined(__GNUWIN32__)
         #define wxCALLBACK __attribute__((stdcall))
     #else
         // both VC++ and Borland understand this
         #define wxCALLBACK _stdcall
     #endif
+#else // Win
+    // no such stupidness under Unix
+    #define wxSTDCALL
+#endif // platform
+
+// wxCALLBACK should be used for the functions which are called back by
+// Windows (such as compare function for wxListCtrl)
+#if defined(__WIN32__)
+    #define wxCALLBACK wxSTDCALL
 #else
     // no stdcall under Unix nor Win16
     #define wxCALLBACK
@@ -1780,6 +1788,17 @@ typedef WXHWND WXWidget;
 #define LPCTSTR LPSTR
 #endif
 #endif
+
+// the keywords needed for WinMain() declaration
+#ifdef __WIN16__
+    #ifndef FAR
+        #ifdef __VISUALC__
+            #define FAR __far
+        #else // !VC++
+            #define FAR _far
+        #endif
+    #endif // no FAR
+#endif // Win16/32
 
 #endif // MSW
 
