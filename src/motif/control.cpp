@@ -27,6 +27,8 @@
 #pragma message enable nosimpint
 #endif
 
+#include "wx/motif/private.h"
+
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxWindow)
@@ -68,11 +70,11 @@ void wxControl::SetLabel(const wxString& label)
     if (!widget)
         return;
 
-    wxString buf(wxStripMenuCodes());
+    wxString buf(wxStripMenuCodes(label));
     wxXmString label_str(buf);
 
     XtVaSetValues (widget,
-        XmNlabelString, label_str,
+        XmNlabelString, label_str(),
         XmNlabelType, XmSTRING,
         NULL);
 }
