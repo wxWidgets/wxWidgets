@@ -1,20 +1,27 @@
 
 # images converted with wxPython's img2py.py tool
 
-from wxPython.wx import wxBitmapFromXPMData, wxImageFromBitmap
-import cPickle, zlib
+from wxPython.wx import wxImageFromStream, wxBitmapFromImage
+import cStringIO
 
 ##----------- Common Functions
 
 def GetBitmap(ImageData):
-    return wxBitmapFromXPMData(ImageData)
+    return wxBitmapFromImage(GetImage(ImageData))
 
 def GetImage(ImageData):
-    return wxImageFromBitmap(GetBitmap(ImageData))
+    stream = cStringIO.StringIO(ImageData)
+    return wxImageFromStream(stream)
 
-##----------- Image Data 
+##----------- Image Data
 
-EofImageData = cPickle.loads(zlib.decompress(
-'x\xda\xd3\xc8)0\xe4\nV7W0W0R0T\xe7J\x0cV\xd7SHVp\xcaIL\xce\x06\xf3\x14\x80<\
-\xbf\xfc\xbcT(GA\x0f\x88\xa1l===\x18[\x0f\x04 l=\x08\xc0\x10GQ\x0f7G\x0f\x00\
-\xec\xa2\x19\x96' ))
+EofImageData = \
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x07\x00\x00\x00\x07\x08\x06\
+\x00\x00\x00\xc4RW\xd3\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\x00\
+\x00:IDATx\x9c]\x8e\xc1\r\x000\x08\x02\xc5\tn\xff)\xdd\xa0}\xd1`\xf9(\x9c\t\
+\n(kf\x0e \xfbN\x90\xf3\xc1\x0c\xd2\xab\xaa\x16Huv\xa4\x00\xb5\x97\x1f\xac\
+\x87\x1c\xe4\xe1\x05`2\x15\x9e\xc54\xca\xb4\x00\x00\x00\x00IEND\xaeB`\x82'
+
+
+
+
