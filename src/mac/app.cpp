@@ -647,6 +647,11 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     if ( !wxAppBase::Initialize(argc, argv) )
         return false;
 
+#if wxUSE_INTL
+    wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
+#endif
+
+
     wxWinMacWindowList = new wxList(wxKEY_INTEGER);
     wxWinMacControlList = new wxList(wxKEY_INTEGER);
 
