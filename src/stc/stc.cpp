@@ -75,12 +75,17 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
     EVT_RIGHT_UP                (wxStyledTextCtrl::OnMouseRightUp)
     EVT_CHAR                    (wxStyledTextCtrl::OnChar)
+    EVT_KEY_DOWN                (wxStyledTextCtrl::OnKeyDown)
     EVT_KILL_FOCUS              (wxStyledTextCtrl::OnLoseFocus)
     EVT_SET_FOCUS               (wxStyledTextCtrl::OnGainFocus)
     EVT_SYS_COLOUR_CHANGED      (wxStyledTextCtrl::OnSysColourChanged)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (-1, -1, wxStyledTextCtrl::OnMenu)
 END_EVENT_TABLE()
+
+
+IMPLEMENT_CLASS(wxStyledTextCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent)
 
 //----------------------------------------------------------------------
 // Constructor and Destructor
@@ -1325,20 +1330,23 @@ void wxStyledTextCtrl::OnMouseRightUp(wxMouseEvent& evt) {
 }
 
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
-    int  processed = 0;
     long key = evt.KeyCode();
     if ((key > WXK_ESCAPE) &&
         (key != WXK_DELETE) && (key < 255) &&
         !evt.ControlDown() && !evt.AltDown()) {
 
         m_swx->DoAddChar(key);
-        processed = true;
     }
     else {
-        key = toupper(key);
-        processed = m_swx->DoKeyDown(key, evt.ShiftDown(),
-                                     evt.ControlDown(), evt.AltDown());
+        evt.Skip();
     }
+}
+
+void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
+    long key = evt.KeyCode();
+    key = toupper(key);
+    int processed = m_swx->DoKeyDown(key, evt.ShiftDown(),
+                                     evt.ControlDown(), evt.AltDown());
     if (! processed)
         evt.Skip();
 }
@@ -1368,6 +1376,7 @@ void wxStyledTextCtrl::OnMenu(wxCommandEvent& evt) {
 
 //----------------------------------------------------------------------
 // Turn notifications from Scintilla into events
+
 
 void wxStyledTextCtrl::NotifyChange() {
     wxStyledTextEvent evt(wxEVT_STC_CHANGE, GetId());

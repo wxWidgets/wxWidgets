@@ -466,6 +466,7 @@ private:
     void OnMouseLeftUp(wxMouseEvent& evt);
     void OnMouseRightUp(wxMouseEvent& evt);
     void OnChar(wxKeyEvent& evt);
+    void OnKeyDown(wxKeyEvent& evt);
     void OnLoseFocus(wxFocusEvent& evt);
     void OnGainFocus(wxFocusEvent& evt);
     void OnSysColourChanged(wxSysColourChangedEvent& evt);
@@ -481,6 +482,7 @@ private:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxStyledTextCtrl)
 
     ScintillaWX*        m_swx;
     wxStopWatch         m_stopWatch;
@@ -497,7 +499,7 @@ private:
 
 class wxStyledTextEvent : public wxCommandEvent {
 public:
-    wxStyledTextEvent(wxEventType commandType, int id);
+    wxStyledTextEvent(wxEventType commandType=0, int id=0);
     ~wxStyledTextEvent() {}
 
     void SetPosition(int pos)        { m_position = pos; }
@@ -536,7 +538,10 @@ public:
 
     void CopyObject(wxObject& obj) const;
 
+#ifndef SWIG
 private:
+    DECLARE_DYNAMIC_CLASS(wxStyledTextEvent)
+
     int  m_position;
     int  m_key;
     int  m_modifiers;
@@ -554,7 +559,7 @@ private:
     int  m_message;             // wxEVT_STC_MACRORECORD
     int  m_wParam;
     int  m_lParam;
-
+#endif
 };
 
 
@@ -588,7 +593,9 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_DOUBLECLICK(id, fn) { wxEVT_STC_DOUBLECLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 #define EVT_STC_MODIFIED(id, fn) { wxEVT_STC_MODIFIED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 #define EVT_STC_CMDKEY(id, fn) { wxEVT_STC_CMDKEY, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_UNKNOWNCMDKEY(id, fn) { wxEVT_STC_UNKNOWNCMDKEY, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
+#define EVT_STC_MACRORECORD(id, fn) { wxEVT_STC_MACRORECORD, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
+#define EVT_STC_MARGINCLICK(id, fn) { wxEVT_STC_MARGINCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
+#define EVT_STC_NEEDSHOWN(id, fn) { wxEVT_STC_NEEDSHOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 
 #endif
 
