@@ -570,9 +570,13 @@ size_t wxMBConvUTF16straight::WC2MB(char *buf, const wchar_t *psz, size_t n) con
 
         if (buf)
         {
-            *((wxUint16*)buf)++ = cc[0];
+            *(wxUint16*)buf = cc[0];
+            buf += sizeof(wxUint16); 
             if (pa > 1)
-                *((wxUint16*)buf)++ = cc[1];
+            {
+                *(wxUint16*)buf = cc[1];
+                buf += sizeof(wxUint16);
+            }
         }
 
         len += pa*sizeof(wxUint16);
