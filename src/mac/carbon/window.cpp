@@ -108,6 +108,7 @@ static const EventTypeSpec eventList[] =
 	{ kEventClassControl , kEventControlDraw } ,
 //	{ kEventClassControl , kEventControlInvalidateForSizeChange } , // 10.3 only
 //  { kEventClassControl , kEventControlBoundsChanged } ,
+// kEventControlEnabledStateChanged , kEventControlVisibilityChanged , kEventControlHiliteChanged
 #else
     {}
 #endif
@@ -1347,6 +1348,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 
 wxSize wxWindowMac::DoGetBestSize() const
 {
+    /*
     Rect    bestsize = { 0 , 0 , 0 , 0 } ;
     short   baselineoffset ;
     int bestWidth, bestHeight ;
@@ -1378,6 +1380,8 @@ wxSize wxWindowMac::DoGetBestSize() const
         bestHeight = 13 ;
         
     return wxSize(bestWidth, bestHeight);
+    */
+    return wxWindowBase::DoGetBestSize() ;
 }
 
 
