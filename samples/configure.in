@@ -46,6 +46,7 @@ AC_OUTPUT([
             internat/Makefile
             ipc/Makefile
             joytest/Makefile
+            keyboard/Makefile
             layout/Makefile
             listctrl/Makefile
             mdi/Makefile

@@ -678,6 +678,7 @@ trap 'rm -fr `echo "
             internat/Makefile
             ipc/Makefile
             joytest/Makefile
+            keyboard/Makefile
             layout/Makefile
             listctrl/Makefile
             mdi/Makefile
@@ -828,6 +829,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             internat/Makefile
             ipc/Makefile
             joytest/Makefile
+            keyboard/Makefile
             layout/Makefile
             listctrl/Makefile
             mdi/Makefile
