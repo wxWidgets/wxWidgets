@@ -1748,6 +1748,11 @@ public:
     void     SetColMinimalWidth( int col, int width );
     void     SetRowMinimalHeight( int row, int width );
 
+    void     SetColMinimalAcceptableWidth( int width );
+    void     SetRowMinimalAcceptableHeight( int width );
+    int      GetColMinimalAcceptableWidth() const;
+    int      GetRowMinimalAcceptableHeight() const;
+
     void     SetDefaultCellBackgroundColour( const wxColour& );
     void     SetCellBackgroundColour( int row, int col, const wxColour& );
     void     SetDefaultCellTextColour( const wxColour& );

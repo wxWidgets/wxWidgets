@@ -223,6 +223,7 @@ public:
     int GetMaxPage();
     int GetMinPage();
     int GetNoCopies();
+    bool GetSelection();
     %addmethods {
         %new wxPrintData* GetPrintData() {
             return new wxPrintData(self->GetPrintData());  // force a copy
@@ -234,12 +235,14 @@ public:
     bool Ok();
 
     void SetCollate(bool flag);
+    void SetAllPages(bool flag);
     void SetFromPage(int page);
     void SetMaxPage(int page);
     void SetMinPage(int page);
     void SetNoCopies(int n);
     void SetPrintData(const wxPrintData& printData);
     void SetPrintToFile(bool flag);
+    void SetSelection(bool flag);
     void SetSetupDialog(bool flag);
     void SetToPage(int page);
 
