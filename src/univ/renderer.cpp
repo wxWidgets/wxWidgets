@@ -441,6 +441,7 @@ void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap,
         {
             for ( y = 0; y < rect.height; y += height )
             {
+                // no need to use mask here as we cover the entire window area
                 m_dc.DrawBitmap(bmp, x, y);
             }
         }

@@ -259,7 +259,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                                        wxPoint(10, 150),
                                        wxSize(500, 120));
     box->SetForegroundColour(*wxRED);
-    box->SetBackground(wxBITMAP(bricks), 0, wxTILE);
+    box->SetBackground(bricks_xpm, 0, wxTILE);
 
     x = 15;
     #define CREATE_STATIC_ALIGN_DEMO(align) \
@@ -280,8 +280,8 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxButton(this, Univ_Button1, _T("&Press me"), wxPoint(10, 300));
     new wxButton(this, Univ_Button2, _T("&And me"), wxPoint(100, 300));
 
-    new wxStaticBitmap(this, wxBITMAP(tip), wxPoint(10, 350));
-    new wxStaticBitmap(this, -1, wxBITMAP(tip), wxPoint(50, 350),
+    new wxStaticBitmap(this, tip_xpm, wxPoint(10, 350));
+    new wxStaticBitmap(this, -1, tip_xpm, wxPoint(50, 350),
                        wxDefaultSize, wxSUNKEN_BORDER);
 
 #if 0
@@ -306,7 +306,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     //win->Scroll(10, 0);
 #endif
 
-    new wxButton(this, -1, wxBITMAP(open), _T("&Open..."), wxPoint(10, 420));
+    new wxButton(this, -1, open_xpm, _T("&Open..."), wxPoint(10, 420));
 
     wxBitmap bmp1(wxTheApp->GetStdIcon(wxICON_INFORMATION)),
              bmp2(wxTheApp->GetStdIcon(wxICON_WARNING)),

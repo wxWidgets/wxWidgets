@@ -74,7 +74,10 @@ bool wxRadioButton::Create(wxWindow *parent,
 
 void wxRadioButton::ChangeValue(bool value)
 {
-    if ( !IsChecked() && value )
+    if ( value == IsChecked() )
+        return;
+
+    if ( !IsChecked() )
     {
         // clear all others radio buttons in our group: for this we need to
         // find the radio button which is the first in the group, i.e. the one
@@ -119,8 +122,11 @@ void wxRadioButton::ChangeValue(bool value)
 
         SendEvent();
     }
-    //else: either nothign chanegd or an attempt was made to clear a checked
-    //      radio button which can't be done
+    else // attempt to clear a radio button - this can't be done
+    {
+        // but still refresh as ou PRESSED flag changed
+        Refresh();
+    }
 }
 
 void wxRadioButton::ClearValue()

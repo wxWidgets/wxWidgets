@@ -206,8 +206,18 @@ protected:
                          wxArrowDirection arrowDir,
                          wxArrowStyle arrowStyle);
 
-    // helper of DrawCheckButton
+    // DrawCheckButton/DrawRadioButton helper
+    void DrawCheckOrRadioButton(wxDC& dc,
+                                const wxString& label,
+                                const wxBitmap& bitmap,
+                                const wxRect& rect,
+                                int flags,
+                                wxAlignment align,
+                                int indexAccel);
+
+    // get the standard check/radio button bitmap
     wxBitmap GetCheckBitmap(int flags);
+    wxBitmap GetRadioBitmap(int flags);
 
 private:
     const wxColourScheme *m_scheme;
@@ -1254,6 +1264,106 @@ static char *pressed_unchecked_xpm[] = {
 "hhhhhhhhhhhhh"
 };
 
+static char *checked_radio_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 6 1",
+"  c None",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"     dddd    ",
+"   ddbbbbdd  ",
+"  dbbwwwwbbh ",
+"  dbwwwwwwgh ",
+" dbwwwbbwwwgh",
+" dbwwbbbbwwgh",
+" dbwwbbbbwwgh",
+" dbwwwbbwwwgh",
+"  dbwwwwwwgh ",
+"  dggwwwwggh ",
+"   hhgggghh  ",
+"     hhhh    ",
+"             "
+};
+
+static char *pressed_checked_radio_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 6 1",
+"  c None",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"     dddd    ",
+"   ddbbbbdd  ",
+"  dbbggggbbh ",
+"  dbgggggggh ",
+" dbgggbbggggh",
+" dbggbbbbgggh",
+" dbggbbbbgggh",
+" dbgggbbggggh",
+"  dbgggggggh ",
+"  dggggggggh ",
+"   hhgggghh  ",
+"     hhhh    ",
+"             "
+};
+
+static char *unchecked_radio_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 6 1",
+"  c None",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"     dddd    ",
+"   ddbbbbdd  ",
+"  dbbwwwwbbh ",
+"  dbwwwwwwgh ",
+" dbwwwwwwwwgh",
+" dbwwwwwwwwgh",
+" dbwwwwwwwwgh",
+" dbwwwwwwwwgh",
+"  dbwwwwwwgh ",
+"  dggwwwwggh ",
+"   hhgggghh  ",
+"     hhhh    ",
+"             "
+};
+
+static char *pressed_unchecked_radio_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 6 1",
+"  c None",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"     dddd    ",
+"   ddbbbbdd  ",
+"  dbbggggbbh ",
+"  dbgggggggh ",
+" dbgggggggggh",
+" dbgggggggggh",
+" dbgggggggggh",
+" dbgggggggggh",
+"  dbgggggggh ",
+"  dggggggggh ",
+"   hhgggghh  ",
+"     hhhh    ",
+"             "
+};
+
 wxBitmap wxWin32Renderer::GetCheckBitmap(int flags)
 {
     char **xpm;
@@ -1271,13 +1381,30 @@ wxBitmap wxWin32Renderer::GetCheckBitmap(int flags)
     return wxBitmap(xpm);
 }
 
-void wxWin32Renderer::DrawCheckButton(wxDC& dc,
-                                      const wxString& label,
-                                      const wxBitmap& bitmap,
-                                      const wxRect& rect,
-                                      int flags,
-                                      wxAlignment align,
-                                      int indexAccel)
+wxBitmap wxWin32Renderer::GetRadioBitmap(int flags)
+{
+    char **xpm;
+    if ( flags & wxCONTROL_CHECKED )
+    {
+        xpm = flags & wxCONTROL_PRESSED ? pressed_checked_radio_xpm
+                                        : checked_radio_xpm;
+    }
+    else // unchecked
+    {
+        xpm = flags & wxCONTROL_PRESSED ? pressed_unchecked_radio_xpm
+                                        : unchecked_radio_xpm;
+    }
+
+    return wxBitmap(xpm);
+}
+
+void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
+                                             const wxString& label,
+                                             const wxBitmap& bitmap,
+                                             const wxRect& rect,
+                                             int flags,
+                                             wxAlignment align,
+                                             int indexAccel)
 {
     // calculate the position of the bitmap and of the label
     wxCoord xBmp,
@@ -1285,7 +1412,7 @@ void wxWin32Renderer::DrawCheckButton(wxDC& dc,
 
     wxRect rectLabel;
     dc.GetMultiLineTextExtent(label, NULL, &rectLabel.height);
-    rectLabel.y = rect.y + (rect.height - rectLabel.height) / 2 - 1;
+    rectLabel.y = rect.y + (rect.height - rectLabel.height) / 2;
 
     if ( align == wxALIGN_RIGHT )
     {
@@ -1314,8 +1441,22 @@ void wxWin32Renderer::DrawRadioButton(wxDC& dc,
                                       wxAlignment align,
                                       int indexAccel)
 {
-    // FIXME TODO
-    DrawCheckButton(dc, label, bitmap, rect, flags, align, indexAccel);
+    DrawCheckOrRadioButton(dc, label,
+                           bitmap.Ok() ? bitmap : GetRadioBitmap(flags),
+                           rect, flags, align, indexAccel);
+}
+
+void wxWin32Renderer::DrawCheckButton(wxDC& dc,
+                                      const wxString& label,
+                                      const wxBitmap& bitmap,
+                                      const wxRect& rect,
+                                      int flags,
+                                      wxAlignment align,
+                                      int indexAccel)
+{
+    DrawCheckOrRadioButton(dc, label,
+                           bitmap.Ok() ? bitmap : GetCheckBitmap(flags),
+                           rect, flags, align, indexAccel);
 }
 
 // ----------------------------------------------------------------------------
@@ -1698,8 +1839,8 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxControl *control,
 // ----------------------------------------------------------------------------
 
 bool wxWin32CheckboxInputHandler::HandleKey(wxControl *control,
-                                          const wxKeyEvent& event,
-                                          bool pressed)
+                                            const wxKeyEvent& event,
+                                            bool pressed)
 {
     if ( pressed )
     {
@@ -1711,19 +1852,21 @@ bool wxWin32CheckboxInputHandler::HandleKey(wxControl *control,
                 action = wxACTION_CHECKBOX_TOGGLE;
                 break;
 
-            case '-':
+            case WXK_SUBTRACT:
+            case WXK_NUMPAD_SUBTRACT:
                 action = wxACTION_CHECKBOX_CHECK;
                 break;
 
-            case '+':
-            case '=':
+            case WXK_ADD:
+            case WXK_NUMPAD_ADD:
+            case WXK_NUMPAD_EQUAL:
                 action = wxACTION_CHECKBOX_CLEAR;
                 break;
         }
 
         if ( !!action )
         {
-            control->PerformAction(wxACTION_CHECKBOX_TOGGLE);
+            control->PerformAction(action);
 
             return TRUE;
         }
