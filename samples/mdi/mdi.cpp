@@ -123,11 +123,11 @@ bool MyApp::OnInit()
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(MDI_NEW_WINDOW, "&New window", "Create a new child window");
-    file_menu->Append(MDI_QUIT, "&Exit", "Quit the program");
+    file_menu->Append(MDI_NEW_WINDOW, "&New window\tCtrl-N", "Create a new child window");
+    file_menu->Append(MDI_QUIT, "&Exit\tAlt-X", "Quit the program");
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(MDI_ABOUT, "&About");
+    help_menu->Append(MDI_ABOUT, "&About\tF1");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 

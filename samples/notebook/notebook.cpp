@@ -67,7 +67,6 @@ void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
   m_okButton->SetDefault();
 
   wxLayoutConstraints *c;
-
   c = new wxLayoutConstraints;
   c->right.SameAs(window, wxRight, 4);
   c->bottom.SameAs(window, wxBottom, 4);
