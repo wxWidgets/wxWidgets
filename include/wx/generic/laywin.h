@@ -63,6 +63,7 @@ public:
         SetEventType(wxEVT_QUERY_LAYOUT_INFO);
         m_requestedLength = 0;
         m_flags = 0;
+        m_id = id;
         m_alignment = wxLAYOUT_TOP;
         m_orientation = wxLAYOUT_HORIZONTAL;
     }
@@ -107,6 +108,7 @@ public:
     {
         SetEventType(wxEVT_CALCULATE_LAYOUT);
         m_flags = 0;
+	m_id = id;
     }
 // Read by the app
     inline void SetFlags(int flags) { m_flags = flags; }

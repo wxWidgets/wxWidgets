@@ -11,13 +11,13 @@
 
 #ifdef __WXMSW__
 #define wxHelpController wxWinHelpController
-#define classwxHelpController classwxWinHelpController
+#define sm_classwxHelpController sm_classwxWinHelpController
 #elif defined(__WXGTK__)
 #define wxHelpController wxHTMLHelpController
-#define classwxHelpController classwxHTMLHelpController
+#define sm_classwxHelpController sm_classwxHTMLHelpController
 #else
 #define wxHelpController wxXLPHelpController
-#define classwxHelpController classwxXLPHelpController
+#define sm_classwxHelpController sm_classwxXLPHelpController
 #endif
 
 #endif

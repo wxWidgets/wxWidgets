@@ -97,17 +97,17 @@ class WXDLLEXPORT wxList: public wxObject
   bool DeleteObject(wxObject *object);  // Finds object pointer and
                                         // deletes node (and object if
                                         // DeleteContents is on)
-  void Clear(void);                     // Delete all nodes
+  virtual void Clear(void);             // Delete all nodes
 
   inline wxNode *First(void) const { return first_node; }
   inline wxNode *Last(void) const { return last_node; }
   wxNode *Nth(int i) const;                  // nth node counting from 0
 
   // Keyed search
-  wxNode *Find(long key) const;
-  wxNode *Find(const char *key) const;
+  virtual wxNode *Find(long key) const;
+  virtual wxNode *Find(const char *key) const;
 
-  wxNode *Member(wxObject *object) const;
+  virtual wxNode *Member(wxObject *object) const;
 
   inline void DeleteContents(int destroy) { destroy_data = destroy; }
                                              // Instruct it to destroy user data
@@ -129,6 +129,7 @@ class WXDLLEXPORT wxStringList: public wxList
 
  public:
   wxStringList(void);
+  wxStringList(const wxStringList& list);
   wxStringList(const char *first ...);
   ~wxStringList(void);
 
@@ -137,6 +138,9 @@ class WXDLLEXPORT wxStringList: public wxList
   virtual char **ListToArray(bool new_copies = FALSE) const;
   virtual void Sort(void);
   virtual bool Member(const char *s) const;
+  virtual void Clear(void);
+  void operator= (const wxStringList& list);
+  char* operator[] (int i) const;
 };
 
 #endif

@@ -59,7 +59,7 @@ class WXDLLEXPORT wxClassInfo
    inline wxObjectConstructorFn GetConstructor() const { return m_objectConstructor; }
    inline wxClassInfo* GetFirst() const { return sm_first; }
    inline wxClassInfo* GetNext() const { return m_next; }
-   bool IsKindOf(wxClassInfo *info);
+   bool IsKindOf(wxClassInfo *info) const;
 
    static wxClassInfo *FindClass(char *c);
 
@@ -96,7 +96,7 @@ wxObject* WXDLLEXPORT wxCreateStoredObject( wxInputStream& stream );
 #define DECLARE_DYNAMIC_CLASS(name) \
  public:\
   static wxClassInfo sm_class##name;\
-  wxClassInfo *GetClassInfo() \
+  wxClassInfo *GetClassInfo() const \
    { return &name::sm_class##name; }
 
 #define DECLARE_ABSTRACT_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
@@ -174,9 +174,9 @@ class WXDLLEXPORT wxObject
   wxObject(void);
   virtual ~wxObject(void);
 
-  virtual wxClassInfo *GetClassInfo(void) { return &sm_classwxObject; }
+  virtual wxClassInfo *GetClassInfo(void) const { return &sm_classwxObject; }
 
-  bool IsKindOf(wxClassInfo *info);
+  bool IsKindOf(wxClassInfo *info) const;
 
 #if WXDEBUG && USE_MEMORY_TRACING
   void * operator new (size_t size, char * fileName = NULL, int lineNum = 0);

@@ -19,11 +19,11 @@
 #ifdef __WIN95__
 #include "wx/msw/gauge95.h"
 #define wxGauge wxGauge95
-#define classwxGauge classwxGauge95
+#define sm_classwxGauge sm_classwxGauge95
 #else
 #include "wx/msw/gaugemsw.h"
 #define wxGauge wxGaugeMSW
-#define classwxGauge classwxGaugeMSW
+#define sm_classwxGauge sm_classwxGaugeMSW
 #endif
 
 #endif

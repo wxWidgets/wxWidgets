@@ -19,11 +19,11 @@
 #ifdef __WIN95__
 #include "wx/msw/slider95.h"
 #define wxSlider wxSlider95
-#define classwxSlider classwxSlider95
+#define sm_classwxSlider sm_classwxSlider95
 #else
 #include "wx/msw/slidrmsw.h"
 #define wxSlider wxSliderMSW
-#define classwxSlider classwxSliderMSW
+#define sm_classwxSlider sm_classwxSliderMSW
 #endif
 
 #endif

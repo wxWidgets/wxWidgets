@@ -326,21 +326,27 @@ extern wxSize WXDLLEXPORT wxGetDisplaySize();
 
 extern void WXDLLEXPORT wxSetCursor(const wxCursor& cursor);
 
-// Useful macro for create icons portably
+// Useful macro for creating icons portably
 
 #ifdef __WXMSW__
-# define wxICON(X) wxIcon(X##_icon);
-#elif defined(__X__)
-# define wxICON(X) wxIcon(X##_bits, X##_width, X##_height);
+// Load from a resource
+# define wxICON(X) wxIcon("" #X "")
+
+#elif defined(__WXGTK__)
+// Initialize from an included XPM
+# define wxICON(X) wxIcon(X##_xpm)
 #else
-# define wxICON    wxIcon
+
+// This will usually mean something on any platform
+# define wxICON(X) wxIcon("" #X "")
 #endif
 
 /*
   Example:
-  #define wxbuild_icon "wxbuild"
- 
-  wxIcon *icon = new wxICON(wxbuild);
+    wxIcon *icon = new wxICON(mondrian);
+  expands into:
+    wxIcon *icon = new wxIcon("mondrian"); // On wxMSW
+    wxIcon *icon = new wxIcon(mondrian_xpm);   // On wxGTK
  */
 
 class WXDLLEXPORT wxResourceCache: public wxList

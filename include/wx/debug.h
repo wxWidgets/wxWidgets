@@ -65,9 +65,9 @@
 #endif  //WXDEBUG
 
   /// special form of assert: always triggers it (in debug mode)
-#define   wxFAIL                 wxASSERT(0)
+#define   wxFAIL                 wxASSERT(wxFalse)
   /// FAIL with some message
-#define   wxFAIL_MSG(msg)        wxASSERT_MSG(0, msg)
+#define   wxFAIL_MSG(msg)        wxASSERT_MSG(wxFalse, msg)
 //@}
 
 // NB: these macros work also in release mode!

@@ -6,11 +6,11 @@
 #if defined(__WXMSW__) && defined(__WIN95__)
 #   include "wx/msw/tbar95.h"
 #   define wxToolBar wxToolBar95
-#   define classwxToolBar classwxToolBar95
+#   define sm_classwxToolBar sm_classwxToolBar95
 #elif defined(__WXMSW__)
 #   include "wx/msw/tbarmsw.h"
 #   define wxToolBar wxToolBarMSW
-#   define classwxToolBar classwxToolBarMSW
+#   define sm_classwxToolBar sm_classwxToolBarMSW
 #elif defined(__WXGTK__)
 #   include "wx/gtk/tbargtk.h"
 #elif defined(__WXQT__)

@@ -230,6 +230,10 @@ enum  ErrCode
 /// size of statically declared array
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
 
+// Use of these suppresses some compiler warnings
+WXDLLEXPORT_DATA(extern const bool) wxTrue;
+WXDLLEXPORT_DATA(extern const bool) wxFalse;
+
 // ----------------------------------------------------------------------------
 // compiler and OS identification
 // ----------------------------------------------------------------------------
