@@ -143,7 +143,7 @@ protected:
     // the index of this display (0 is always the primary one)
     size_t m_index;
 
-    DECLARE_NO_COPY_CLASS(wxDisplayBase);
+    DECLARE_NO_COPY_CLASS(wxDisplayBase)
 };
 
 
