@@ -855,13 +855,11 @@ bool wxTextCtrl::CanRedo() const
 // implemenation details
 // ----------------------------------------------------------------------------
 
-/*
 void wxTextCtrl::Command(wxCommandEvent & event)
 {
     SetValue(event.GetString());
     ProcessCommand (event);
 }
-*/
 
 void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 {
