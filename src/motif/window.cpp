@@ -374,9 +374,6 @@ wxWindow::~wxWindow()
         DetachWidget(wMain);
     }
 
-    if ( m_parent )
-        m_parent->RemoveChild( this );
-
     // If m_drawingArea, we're a fully-fledged window with drawing area,
     // scrollbars etc. (what wxCanvas used to be)
     if ( m_drawingArea )

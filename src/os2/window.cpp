@@ -362,9 +362,6 @@ wxWindowOS2::~wxWindowOS2()
 
     DestroyChildren();
 
-    if (m_parent)
-        m_parent->RemoveChild(this);
-
     if (m_hWnd)
     {
         if(!::WinDestroyWindow(GetHWND()))

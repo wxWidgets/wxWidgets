@@ -2667,9 +2667,6 @@ wxWindowGTK::~wxWindowGTK()
 
     DestroyChildren();
 
-    if (m_parent)
-        m_parent->RemoveChild( this );
-
 #ifdef HAVE_XIM
     if (m_ic)
         gdk_ic_destroy (m_ic);

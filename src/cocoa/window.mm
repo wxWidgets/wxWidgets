@@ -281,9 +281,6 @@ wxWindow::~wxWindow()
     wxAutoNSAutoreleasePool pool;
     DestroyChildren();
 
-    if(m_parent)
-        m_parent->RemoveChild(this);
-
     CocoaRemoveFromParent();
     delete m_cocoaHider;
     delete m_cocoaScroller;

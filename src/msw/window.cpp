@@ -520,9 +520,6 @@ wxWindowMSW::~wxWindowMSW()
     //     find their parent frame (see above).
     DestroyChildren();
 
-    if ( m_parent )
-        m_parent->RemoveChild(this);
-
     if ( m_hWnd )
     {
         // VZ: test temp removed to understand what really happens here

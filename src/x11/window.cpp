@@ -348,9 +348,6 @@ wxWindowX11::~wxWindowX11()
 
     m_isBeingDeleted = TRUE;
 
-    if (m_parent)
-        m_parent->RemoveChild( this );
-
     DestroyChildren();
 
     if (m_clientWindow != m_mainWindow)

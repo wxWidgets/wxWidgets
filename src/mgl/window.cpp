@@ -591,13 +591,7 @@ wxWindowMGL::~wxWindowMGL()
     if ( gs_windowUnderMouse == this )
         gs_windowUnderMouse = NULL;
 
-    // VS: destroy children first and _then_ detach *this from its parent.
-    //     If we'd do it the other way around, children wouldn't be able
-    //     find their parent frame (see above).
     DestroyChildren();
-
-    if ( m_parent )
-        m_parent->RemoveChild(this);
 
     if ( m_wnd )
         MGL_wmDestroyWindow(m_wnd);

@@ -266,6 +266,17 @@ wxWindowBase::~wxWindowBase()
 
     wxASSERT_MSG( GetChildren().GetCount() == 0, wxT("children not destroyed") );
 
+    // reset the dangling pointer our parent window may keep to us
+    if ( m_parent )
+    {
+        if ( m_parent->GetDefaultItem() == this )
+        {
+            m_parent->SetDefaultItem(NULL);
+        }
+
+        m_parent->RemoveChild(this);
+    }
+
 #if wxUSE_CARET
     delete m_caret;
 #endif // wxUSE_CARET
@@ -305,12 +316,6 @@ wxWindowBase::~wxWindowBase()
 #if wxUSE_ACCESSIBILITY
     delete m_accessible;
 #endif
-
-    // reset the dangling pointer our parent window may keep to us
-    if ( m_parent && m_parent->GetDefaultItem() == this )
-    {
-        m_parent->SetDefaultItem(NULL);
-    }
 }
 
 bool wxWindowBase::Destroy()
@@ -342,10 +347,6 @@ bool wxWindowBase::DestroyChildren()
             break;
 
         wxWindow *child = node->GetData();
-
-        wxASSERT_MSG( child, wxT("children list contains empty nodes") );
-
-        child->Show(FALSE);
 
         child->Destroy();
 
