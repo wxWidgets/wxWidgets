@@ -243,7 +243,7 @@ private:
 
 static HTREEITEM GetItemFromPoint(HWND hwndTV, int x, int y)
 {
-    TVHITTESTINFO tvht;
+    TV_HITTESTINFO tvht;
     tvht.pt.x = x;
     tvht.pt.y = y;
 
