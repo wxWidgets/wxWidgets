@@ -57,6 +57,8 @@
     #define wxLongLong_t __int64
 #elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
     #define wxLongLong_t __int64
+#elif defined(__MINGW32__)
+    #define wxLongLong_t long long
 #elif defined(__MWERKS__)
     #if __option(longlong)
         #define wxLongLong_t long long
