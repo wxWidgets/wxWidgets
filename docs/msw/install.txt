@@ -436,9 +436,6 @@ Here are the steps required:
   If you have alread downloaded bison, flex, make, rm, cp, mv
   from elsewhere, you won't need this.
 
-  If using Mingw32 2.8.1, see also see mingw32.txt in this directory
-  (docs/msw) about a fix that has to be applied to a Mingw32 header file.
-
   If using Mingw32 2.95 and below with wxWindows 2.1 or above, you
   must hand-patch with Mingw32-gcc295.patches (located in the
   top-level of the wxWindows 2 installation). Mingw32 2.95.2
