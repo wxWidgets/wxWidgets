@@ -436,6 +436,21 @@ bool wxToolBar::Realize()
                     DoToggleTool(tool, true);
                 }
             }
+            else if (tool->IsToggled())
+            {
+                wxToolBarToolsList::compatibility_iterator nodePrev = node->GetPrevious();
+                while ( nodePrev )
+                {
+                    wxToolBarToolBase *tool = nodePrev->GetData();
+                    if ( !tool->IsButton() || (tool->GetKind() != wxITEM_RADIO) )
+                        break;
+                    if ( tool->Toggle(false) )
+                    {
+                        DoToggleTool(tool, false);
+                    }
+                    nodePrev = nodePrev->GetPrevious();
+                }
+            }
             isRadio = TRUE;
         }
         else
