@@ -520,6 +520,8 @@ private:
 
     bool           m_bConvertEncoding;
 
+    bool           m_initialized;
+
     static wxLanguageInfoArray *ms_languagesDB;
 
     DECLARE_NO_COPY_CLASS(wxLocale)

@@ -1369,6 +1369,7 @@ wxLocale::wxLocale()
   m_pszOldLocale = NULL;
   m_pMsgCat = NULL;
   m_language = wxLANGUAGE_UNKNOWN;
+  m_initialized = false;
 }
 
 // NB: this function has (desired) side effect of changing current locale
@@ -1378,6 +1379,10 @@ bool wxLocale::Init(const wxChar *szName,
                     bool        bLoadDefault,
                     bool        bConvertEncoding)
 {
+  wxASSERT_MSG( !m_initialized,
+                _T("you can't call wxLocale::Init more than once") );
+  
+  m_initialized = true;
   m_strLocale = szName;
   m_strShort = szShort;
   m_bConvertEncoding = bConvertEncoding;
