@@ -44,6 +44,9 @@ public:
     int Append(const wxString& item, wxClientData *clientData)
         { int n = DoAppend(item); SetClientObject(n, clientData); return n; }
 
+    // append several items at once to the control
+    void Append(const wxArrayString& strings);
+
     // deleting items
     // --------------
 
