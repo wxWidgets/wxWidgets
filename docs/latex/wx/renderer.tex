@@ -1,0 +1,39 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        renderer.tex
+%% Purpose:     wxRenderer and wxRendererNative documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     06.08.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxRenderer}}\label{wxrenderer}
+
+First, a brief introduction into what is wxRenderer and why is it needed.
+
+Usually wxWindows uses the underlying low level GUI system to draw all the
+controls -- this is what we mean when we say that it is a ``native'' framework.
+However not all controls exist under all (or even any) platforms and in this
+case wxWindows provides a default, generic, implementation of them written in
+wxWindows itself.
+
+These controls however don't have the native appearance if only the standard
+line drawing and other graphics primitives are used if only because the native
+appearance is different under different platforms while the lines are always
+drawn in the same way.
+
+This is why we have renderers: wxRenderer is a class which virtualizes the
+drawing, i.e. it abstracts the drawing operations and allows you to draw a,
+say, button, without caring about how exactly this is done. Of course, as we
+can draw the button differently in different renderers, this also allows us to
+emulate the native look and feel.
+
+
+So the renderers work by exposing a big set of high-level drawing functions
+which are used by the generic controls. There is always a default global
+renderer but it may be changed or extended by the user, see 
+\helpref{Render sample}{samplerender}.
+
+
