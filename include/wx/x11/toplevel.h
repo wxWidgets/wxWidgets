@@ -57,27 +57,28 @@ public:
     virtual void SetIcon(const wxIcon& icon);
     virtual void Restore();
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show( bool show = TRUE );
 
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+    virtual bool ShowFullScreen( bool show, long style = wxFULLSCREEN_ALL );
     virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
     
-    // implementation from now on
-    // --------------------------
+    // implementation
+    void SetNeedResizeInIdle( bool set = TRUE ) { m_needResizeInIdle = set; }
     
-    void SetFocusWidget( wxWindow *focus )   { m_focusWidget = focus; }
-    wxWindow *GetFocusWidget() const         { return m_focusWidget; }
-
 protected:
     // common part of all ctors
     void Init();
 
-    // For implementation purposes - sometimes decorations make the client area
-    // smaller
+    // For implementation purposes - sometimes decorations make the
+    // client area smaller
     virtual wxPoint GetClientAreaOrigin() const;
+
+    // For implementation of delayed resize events
+    bool m_needResizeInIdle;
+    virtual void OnInternalIdle();
 
     virtual void DoGetClientSize( int *width, int *height ) const;
     virtual void DoSetClientSize(int width, int height);
@@ -99,9 +100,6 @@ protected:
     bool                  m_fsIsMaximized;
     bool                  m_fsIsShowing;
     wxString              m_title;
-    
-    // This widget gets the key input
-    wxWindow*             m_focusWidget;
 };
 
 // list of all frames and modeless dialogs

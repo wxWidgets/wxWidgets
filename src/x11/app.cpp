@@ -526,10 +526,18 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #endif
             {
                 //wxLogDebug("ConfigureNotify: %s", windowClass.c_str());
-                wxSizeEvent sizeEvent( wxSize(XConfigureEventGetWidth(event), XConfigureEventGetHeight(event)), win->GetId() );
-                sizeEvent.SetEventObject( win );
+                if (win->IsTopLevel())
+                {
+                    wxTopLevelWindowX11 *tlw = (wxTopLevelWindowX11 *) win;
+                    tlw->SetNeedResizeInIdle();
+                }
+                else
+                {
+                    wxSizeEvent sizeEvent( wxSize(XConfigureEventGetWidth(event), XConfigureEventGetHeight(event)), win->GetId() );
+                    sizeEvent.SetEventObject( win );
                 
-                return win->GetEventHandler()->ProcessEvent( sizeEvent );
+                    return win->GetEventHandler()->ProcessEvent( sizeEvent );
+                }
             }
             return FALSE;
             break;

@@ -62,7 +62,7 @@ void wxTopLevelWindowX11::Init()
     m_fsIsMaximized = FALSE;
     m_fsIsShowing = FALSE;
     
-    m_focusWidget = NULL;
+    m_needResizeInIdle = FALSE;
 }
 
 bool wxTopLevelWindowX11::Create(wxWindow *parent,
@@ -225,6 +225,18 @@ wxTopLevelWindowX11::~wxTopLevelWindowX11()
     }
 }
 
+void wxTopLevelWindowX11::OnInternalIdle()
+{
+    wxWindow::OnInternalIdle();
+    
+    if (m_needResizeInIdle)
+    {
+        wxSizeEvent event( GetClientSize(), GetId() );
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowX11 showing
 // ----------------------------------------------------------------------------
@@ -235,12 +247,14 @@ bool wxTopLevelWindowX11::Show(bool show)
     // else there's no initial size.
 #if wxUSE_NANOX
     if (show)
+#else
+    if (show && m_needResizeInIdle)
+#endif
     {
         wxSizeEvent event(GetSize(), GetId());
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
     }
-#endif
 
     return wxWindowX11::Show(show);
 }
