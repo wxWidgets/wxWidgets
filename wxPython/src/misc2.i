@@ -791,6 +791,8 @@ public:
 class wxJoystick : public wxObject {
 public:
     wxJoystick(int joystick = wxJOYSTICK1);
+    ~wxJoystick();
+
     wxPoint GetPosition();
     int GetZPosition();
     int GetButtonState();

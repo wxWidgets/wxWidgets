@@ -146,6 +146,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def DestroyChildren(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_DestroyChildren,(self,) + _args, _kwargs)
         return val
+    def IsBeingDeleted(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_IsBeingDeleted,(self,) + _args, _kwargs)
+        return val
     def DragAcceptFiles(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_DragAcceptFiles,(self,) + _args, _kwargs)
         return val

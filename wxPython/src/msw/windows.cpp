@@ -1341,6 +1341,34 @@ static PyObject *_wrap_wxWindow_DestroyChildren(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxWindow_IsBeingDeleted(_swigobj)  (_swigobj->IsBeingDeleted())
+static PyObject *_wrap_wxWindow_IsBeingDeleted(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_IsBeingDeleted",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_IsBeingDeleted. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxWindow_IsBeingDeleted(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxWindow_DragAcceptFiles(_swigobj,_swigarg0)  (_swigobj->DragAcceptFiles(_swigarg0))
 static PyObject *_wrap_wxWindow_DragAcceptFiles(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10534,6 +10562,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_FindWindowById", (PyCFunction) _wrap_wxWindow_FindWindowById, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Enable", (PyCFunction) _wrap_wxWindow_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_DragAcceptFiles", (PyCFunction) _wrap_wxWindow_DragAcceptFiles, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_IsBeingDeleted", (PyCFunction) _wrap_wxWindow_IsBeingDeleted, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_DestroyChildren", (PyCFunction) _wrap_wxWindow_DestroyChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Destroy", (PyCFunction) _wrap_wxWindow_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Close", (PyCFunction) _wrap_wxWindow_Close, METH_VARARGS | METH_KEYWORDS },

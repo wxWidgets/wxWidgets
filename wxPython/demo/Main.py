@@ -24,6 +24,7 @@ import images
 _treeList = [
     ('New since last release', ['ColourSelect', 'ImageBrowser', 'infoframe',
                                 'ColourDB', 'wxToggleButton', 'OOR', 'wxWave',
+                                'wxJoystick',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -54,6 +55,7 @@ _treeList = [
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
                         'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
+                        'wxJoystick',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',

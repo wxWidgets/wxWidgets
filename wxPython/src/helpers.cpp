@@ -457,7 +457,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     Py_DECREF(tuple);
     if (result) {
         Py_DECREF(result);
-        PyErr_Clear();
+        PyErr_Clear();       // Just in case...
     } else {
         PyErr_Print();
     }

@@ -492,6 +492,9 @@ class wxJoystickPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxJoystick(self)
     def GetPosition(self, *_args, **_kwargs):
         val = apply(misc2c.wxJoystick_GetPosition,(self,) + _args, _kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1

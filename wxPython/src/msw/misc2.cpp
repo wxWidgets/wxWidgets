@@ -5714,6 +5714,33 @@ static PyObject *_wrap_new_wxJoystick(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
+#define delete_wxJoystick(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxJoystick(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxJoystick * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxJoystick",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxJoystick_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxJoystick. Expected _wxJoystick_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxJoystick(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxJoystick_GetPosition(_swigobj)  (_swigobj->GetPosition())
 static PyObject *_wrap_wxJoystick_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7060,6 +7087,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxJoystick_GetButtonState", (PyCFunction) _wrap_wxJoystick_GetButtonState, METH_VARARGS | METH_KEYWORDS },
 	 { "wxJoystick_GetZPosition", (PyCFunction) _wrap_wxJoystick_GetZPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxJoystick_GetPosition", (PyCFunction) _wrap_wxJoystick_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxJoystick", (PyCFunction) _wrap_delete_wxJoystick, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxJoystick", (PyCFunction) _wrap_new_wxJoystick, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_CloseOutput", (PyCFunction) _wrap_wxProcess_CloseOutput, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_GetOutputStream", (PyCFunction) _wrap_wxProcess_GetOutputStream, METH_VARARGS | METH_KEYWORDS },
