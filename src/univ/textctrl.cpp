@@ -1388,7 +1388,7 @@ void wxTextCtrl::UpdateLastVisible()
     w =
     wOld = 0;
 
-    m_colLastVisible = m_colStart - 1;
+    m_colLastVisible = m_colStart;
 
     const wxChar *pc = m_value.c_str() + (size_t)m_colStart;
     for ( ; *pc; pc++ )
