@@ -174,7 +174,7 @@ void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
     wxNode* node = Next();
     while (node)
     {
-        wxSocketTableEntry* entry = (wxSocketTableEntry*) node->Data();
+        wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
         
         if (entry->m_fdInput != -1)
         {
@@ -200,7 +200,7 @@ void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
     wxNode* node = Next();
     while (node)
     {
-        wxSocketTableEntry* entry = (wxSocketTableEntry*) node->Data();
+        wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
         
         if (entry->m_fdInput != -1 && FD_ISSET(entry->m_fdInput, readset))
         {

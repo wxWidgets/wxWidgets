@@ -549,7 +549,9 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
                 // Only erase background, paint in idle time.
                 win->SendEraseEvents();
-                // win->Update();
+
+                // EXPERIMENT
+                //win->Update();
             }
 
             return TRUE;
@@ -941,14 +943,14 @@ bool wxApp::SendIdleEvents(wxWindow* win)
     if (event.MoreRequested())
         needMore = TRUE;
 
-    wxNode* node = win->GetChildren().First();
+    wxWindowListNode* node = win->GetChildren().GetFirst();
     while (node)
     {
-        wxWindow* win = (wxWindow*) node->Data();
+        wxWindow* win = (wxWindow*) node->GetData();
         if (SendIdleEvents(win))
             needMore = TRUE;
 
-        node = node->Next();
+        node = node->GetNext();
     }
 
     win->OnInternalIdle();
@@ -958,10 +960,10 @@ bool wxApp::SendIdleEvents(wxWindow* win)
 
 void wxApp::DeletePendingObjects()
 {
-    wxNode *node = wxPendingDelete.First();
+    wxNode *node = wxPendingDelete.GetFirst();
     while (node)
     {
-        wxObject *obj = (wxObject *)node->Data();
+        wxObject *obj = (wxObject *)node->GetData();
 
         delete obj;
 
@@ -970,7 +972,7 @@ void wxApp::DeletePendingObjects()
 
         // Deleting one object may have deleted other pending
         // objects, so start from beginning of list again.
-        node = wxPendingDelete.First();
+        node = wxPendingDelete.GetFirst();
     }
 }
 

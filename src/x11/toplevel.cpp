@@ -248,7 +248,7 @@ wxTopLevelWindowX11::~wxTopLevelWindowX11()
     wxTopLevelWindows.DeleteObject(this);
 
     // If this is the last top-level window, exit.
-    if ( wxTheApp && (wxTopLevelWindows.Number() == 0) )
+    if ( wxTheApp && (wxTopLevelWindows.GetCount() == 0) )
     {
         wxTheApp->SetTopWindow(NULL);
 

@@ -424,12 +424,12 @@ void wxFontRefData::ClearX11Fonts()
 {
 #if wxUSE_UNICODE
 #else
-    wxNode* node = m_fonts.First();
+    wxNode* node = m_fonts.GetFirst();
     while (node)
     {
-        wxXFont* f = (wxXFont*) node->Data();
+        wxXFont* f = (wxXFont*) node->GetData();
         delete f;
-        node = node->Next();
+        node = node->GetNext();
     }
     m_fonts.Clear();
 #endif
@@ -872,13 +872,13 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     int pointSize = (M_FONTDATA->m_pointSize * 10 * intScale) / 100;
 
     // search existing fonts first
-    wxNode* node = M_FONTDATA->m_fonts.First();
+    wxNode* node = M_FONTDATA->m_fonts.GetFirst();
     while (node)
     {
-        wxXFont* f = (wxXFont*) node->Data();
+        wxXFont* f = (wxXFont*) node->GetData();
         if ((!display || (f->m_display == display)) && (f->m_scale == intScale))
             return f;
-        node = node->Next();
+        node = node->GetNext();
     }
 
     // not found, create a new one
