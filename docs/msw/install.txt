@@ -21,7 +21,7 @@ Please report bugs using the SourceForge bug tracker:
 
 
 Unarchiving
------------
+===========
 
 A setup program is provided (setup.exe) to automatically copy
 files to a directory on your hard disk. Do not install into a
@@ -59,7 +59,7 @@ Other add-on packages are available from the wxWindows Web site, such as:
 
 
 General installation notes
---------------------------
+==========================
 
 If installing from the CVS server, copy include/wx/msw/setup0.h to
 include/wx/msw/setup.h and edit the resulting file to choose
@@ -144,18 +144,14 @@ Using project files (VC++ 6 and later):
 
 Using makefiles:
 
-1. If you do NOT have the TIFF or JPEG source code, please remove
-   the tiff and jpeg targets from the 'all' target in
-   src\msw\makefile.vc. Also ensure the settings in
-   include\wx\msw\setup.h specify not to use JPEG or TIFF.
-2. Change directory to build\msw. Type:
+1. Change directory to build\msw. Type:
 
   'nmake -f makefile.vc'
 
    to make the wxWindows core library as release DLL.
    See "Configuring the build" for instruction how to build debug or static
    libraries.
-3. Change directory to samples and type 'nmake -f makefile.vc'
+2. Change directory to samples and type 'nmake -f makefile.vc'
    to make all the samples. You can also make them individually.
 
 Makefile notes:
@@ -436,7 +432,7 @@ All targets have 'clean' targets to allow removal of object files
 and other intermediate compiler files.
 
 Using configure
-===============
+---------------
 
 Instead of using the makefiles, you can use the configure
 system to generate appropriate makefiles, as used on Unix
@@ -531,7 +527,7 @@ OLD VERSIONS:
 
 
 Symantec & DigitalMars C++ compilation
-------------------------
+--------------------------------------
 The DigitalMars compiler is a free succssor to the Symantec compiler
 and can be downloaded from http://www.digitalmars.com/
    
@@ -554,24 +550,227 @@ and can be downloaded from http://www.digitalmars.com/
 Configuring the build
 =====================
 
-                   CONFIGURING THE BUILD
+So far the instructions only explained how to build release DLLs of wxWindows
+and did not cover any configuration. It is possible to change many aspects of
+the build, including debug/release and ANSI/Unicode settings. All makefiles in
+build\msw directory use same options (with a few exceptions documented below)
+and the only difference between them is in object files and library directory
+names and in make invocation command.
 
+Changing the settings
+---------------------
 
-  To build Unicode versions of the libraries, add UNICODE=1
-  to the nmake invocation (default is UNICODE=0). If you want to
-  be able to use Unicode version on Windows9x, you will need
-  MSLU (Microsoft Layer for Unicode) runtime DLL and import lib.
-  The former can be downloaded from Microsoft, the latter is part
-  of the latest Platform SDK from Microsoft (see msdn.microsoft.com
-  for details). An alternative implementation of import library can
-  be downloaded from http://libunicows.sourceforge.net - unlike the
-  official one, this one works with other compilers and does not
-  require 300+ MB Platform SDK update. Add MSLU=1 to the nmake
-  invocation to enable MSLU.
+There are two ways to modify the settings: either by passing the values as
+arguments when invoking make or by editing build\msw\config.$(compiler) file
+where $(compiler) is same extension as the makefile you use has (see below).
+The latter is good for setting options that never change in your development
+process (e.g. GCC_VERSION or VENDOR). If you want to build several versions of
+wxWindows and use them side by side, the former method is better. Settings in
+config.* files are shared by all makefiles (samples, contrib, main library),
+but if you pass the options as arguments, you must use same arguments you used
+for the library when building samples or contrib libraries!
+
+Examples of invoking make in Unicode debug build (other options described
+below are set analogically):
+
+Visual C++:
+  > nmake -f makefile.vc BUILD=debug UNICODE=1
+
+Borland C++:
+  > nmake -f makefile.bcc -DBUILD=debug -DUNICODE=1
+  (Note that you have to use -D to set the variable, unlike in other make
+  tools!)
+
+Watcom C/C++:
+  > wmake -f makefile.wat BUILD=debug UNICODE=1
+
+MinGW using native makefiles:
+  > mingw32-make -f makefile.gcc BUILD=debug UNICODE=1
+
+MinGW using configure or Cygwin:
+  > ./configure --enable-debug --enable-unicode
+  (see ./configure --help on details; configure is not covered in this
+  section)
+
+Brief explanation of options and possible values is in every
+build\msw\config.* file; more detailed description follows.
+
+Basic options
+-------------
+
+BUILD=debug
+  Builds debug version of the library (default is 'release'). This affects
+  name of the library ('d' is appended), __WXDEBUG__ is defined and debug
+  information compiled into object files and the executable.
+
+SHARED=0
+  Build static libraries instead of DLLs. By default, DLLs are build
+  (SHARED=1).
+
+UNICODE=1
+  To build Unicode versions of the libraries, add UNICODE=1 to make invocation
+  (default is UNICODE=0). If you want to be able to use Unicode version on
+  Windows9x, you will need to set MSLU=1 as well.
+
+  This option affect name of the library ('u' is appended) and the directory
+  where the library and setup.h are store (ditto).
+
+WXUNIV=1
+  Build wxUniversal instead of native wxMSW (see
+  http://www.wxwindows.org/wxuniv.htm for more information).
+
+Advanced options
+----------------
+
+MONOLITHIC=1
+  Starting with version 2.5.0, wxWindows has the ability to be built as 
+  several smaller libraries instead of single big one as used to be the case
+  in 2.4 and older versions. This is called "multilib build" and is the
+  default behaviour of makefiles. You can still build single library
+  ("monolithic build") by setting MONOLITHIC variable to 1.
+
+USE_GUI=0
+  Disable building GUI parts of the library, build only wxBase components used
+  by console applications. Note that if you leave USE_GUI=1 then both wxBase
+  and GUI libraries are built. If you are building monolithic library, then
+  you should set wxUSE_GUI to 1 in setup.h.
+
+USE_OPENGL=1
+  Build wxmsw25_gl.lib library with OpenGL integration class wxGLCanvas.
+  You must also modify your setup.h to #define wxUSE_GLCANVAS 1. Note that
+  OpenGL library is always built as additional library, even in monolithic
+  build!
+
+USE_ODBC=1
+  Build two additional libraries in multilib mode, one with database
+  classes and one with wxGrid database support. You must
+  #define wxUSE_ODBC 1 in setup.h
+
+USE_HTML=0
+  Do not build wxHTML library. If MONOLITHIC=1, then you must also
+  #define wxUSE_HTML 1 in setup.h.
+
+RUNTIME_LIBS=static
+  Links static version of C and C++ runtime libraries into the executable, so
+  that the program does not depend on DLLs provided with the compiler (e.g.
+  Visual C++'s msvcrt.dll or Borland's cc3250mt.dll).
+  Caution: Do not use static runtime libraries when building DLL (SHARED=1)!
+
+MSLU=1
+  Enables MSLU (Microsoft Layer for Unicode). This setting makes sense only if
+  used together with UNICODE=1. If you want to be able to use Unicode version
+  on Windows9x, you will need MSLU (Microsoft Layer for Unicode) runtime DLL
+  and import lib.  The former can be downloaded from Microsoft, the latter is
+  part of the latest Platform SDK from Microsoft (see msdn.microsoft.com for
+  details). An alternative implementation of import library can be downloaded
+  from http://libunicows.sourceforge.net - unlike the official one, this one
+  works with other compilers and does not require 300+ MB Platform SDK update.
+
+DEBUG_FLAG=0
+DEBUG_FLAG=1
+  If set to 1, define __WXDEBUG__ symbol, append 'd' to library name and do
+  sanity checks at runtime. If set to 0, don't do it. By default, this is
+  governed by BUILD option (if 'debug', DEBUG_FLAG=1, if 'release' it is 0),
+  but it is sometimes desirable to modify default behaviour and e.g. define
+  __WXDEBUG__ even in release builds.
+
+DEBUG_INFO=0
+DEBUG_INFO=1
+  Same as DEBUG_FLAG in behaviour, this option affects whether debugging
+  information is included in the executable or not.
+
+VENDOR=<your company name>
+  Set this to a short string identifying your company if you are planning to
+  distribute wxWindows DLLs with your application. Default value is 'custom'.
+  This string is included as part of DLL name. wxWindows DLLs contain compiler
+  name, version information and vendor name in them. For example
+  wxmsw250_core_bcc_custom.dll is one of DLLs build using Borland C++ with
+  default settings. If you set VENDOR=mycorp, the name will change to
+  wxmsw250_core_bcc_mycorp.dll.
+
+CFG=<configuration name>
+  Sets configuration name so that you can have multiple wxWindows build with
+  different setup.h settings coexisting in same tree. See "Object and library
+  directories" below for more information.
+
+Compiler specific options
+-------------------------
+
+* MinGW
+
+If you are using gcc-2.95 instead of gcc3, you must set GCC_VERSION to
+2.95. In build\msw\config.gcc, change 
+> GCC_VERSION = 3
+to
+> GCC_VERSION = 2.95
+
+* Visual C++
+
+DEBUG_RUNTIME_LIBS=0
+DEBUG_RUNTIME_LIBS=1
+  If set to 1, msvcrtd.dll is used, if to 0, msvcrt.dll is used. By default
+  msvcrtd.dll is used only if the executable contains debug info and
+  msvcrt.dll if it doesn't. It is sometimes desirable to build with debug info
+  and still link against msvcrt.dll (e.g. when you want to ship the app to
+  customers and still have usable .pdb files with debug information) and this
+  setting makes it possible.
+
+Fine-tuning the compiler
+------------------------
+
+All makefiles have variables that you can use to specify additional options
+passed to the compiler or linker. You won't need this in most cases, but if you
+do, simply add desired flags to CFLAGS (for C compiler), CXXFLAGS (for C++
+compiler), CPPFLAGS (for both C and C++ compiler) and LDFLAGS (the linker).
+
+Object and library directories
+------------------------------
+
+All object files produced during library build are stored in a directory under
+build\msw. It's name is derived from build settings and CFG variable and from
+compiler name. Examples of directory names:
+
+  build\msw\bcc_msw            SHARED=0
+  build\msw\bcc_mswdll         SHARED=1
+  build\msw\bcc_mswunivd       SHARED=0, WXUNIV=1, BUILD=debug
+  build\msw\vc_mswunivd        ditto, with Visual C++
+
+Libraries and DLLs are copied into subdirectory of lib directory with same
+name as the build\msw subdirectory used for object files:
+
+  lib\bcc_msw
+  lib\bcc_mswdll
+  lib\bcc_mswunivd
+  lib\vc_mswunivd
+
+Each lib\ subdirectory has wx subdirectory with setup.h. This file is copied
+there from include\wx\msw\setup.h (and if it doesn't exist, from
+include\wx\msw\setup0.h) and this is the copy of setup.h that is used by all
+samples and should be used by your apps as well. If you are doing changes to
+setup.h, you should do them in this file, _not_ in include\wx\msw\setup.h.
+
+If you set CFG to something, the value is appended to directory names. E.g.
+for CFG=MyBuild, you'll have object files in
+  
+  build\msw\bcc_mswMyBuild
+  build\msw\bcc_mswdllMyBuild
+  etc.
+
+and libraries in
+
+  lib\bcc_mswMyBuild
+  lib\bcc_mswdllMyBuild
+  etc.
+
+By now it is clear for CFG is for: builds with different CFG settings don't
+share any files and they use different setup.h files. This allows you to e.g. 
+have two static debug builds, one with wxUSE_SOCKETS=0 and one with sockets
+enabled (without CFG, both of them would be put into same directory and there
+would be conflict between the files).
 
 
 General Notes
--------------
+=============
 
 - Debugging: under Windows 95, debugging output isn't output in
   the same way that it is under NT or Windows 3.1.
