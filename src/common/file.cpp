@@ -190,7 +190,7 @@ bool wxFile::Close()
 // read
 off_t wxFile::Read(void *pBuf, off_t nCount)
 {
-  wxCHECK_RET( (pBuf != NULL) && IsOpened(), 0 );
+  wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
   int iRc = ::read(m_fd, pBuf, nCount);
   if ( iRc == -1 ) {
@@ -204,7 +204,7 @@ off_t wxFile::Read(void *pBuf, off_t nCount)
 // write
 bool wxFile::Write(const void *pBuf, uint nCount)
 {
-  wxCHECK_RET( (pBuf != NULL) && IsOpened(), 0 );
+  wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
   int iRc = ::write(m_fd, pBuf, nCount);
   if ( iRc == -1 ) {

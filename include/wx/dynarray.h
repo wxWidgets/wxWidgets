@@ -184,7 +184,8 @@ public:                                                             \
   void Remove(uint uiIndex) { wxBaseArray::Remove(uiIndex); }       \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
-      wxCHECK( iIndex != NOT_FOUND );                               \
+      wxCHECK2_MSG( iIndex != NOT_FOUND, return,                    \
+        "removing inexisting element in wxArray::Remove" );         \
       wxBaseArray::Remove((uint)iIndex); }                          \
                                                                     \
   void Sort(CMPFUNC##T fCmp) { wxBaseArray::Sort((CMPFUNC)fCmp); }  \

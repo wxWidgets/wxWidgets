@@ -139,7 +139,7 @@ void wxMenu::Break(void)
 // function appends a new item or submenu to the menu
 void wxMenu::Append(wxMenuItem *pItem)
 {
-  wxCHECK( pItem != NULL );
+  wxCHECK_RET( pItem != NULL, "can't append NULL item to the menu" );
 
   m_menuItems.Append(pItem);
 
@@ -269,7 +269,7 @@ void wxMenu::Delete(int id)
 void wxMenu::Enable(int Id, bool Flag)
 {
   wxMenuItem *item = FindItemForId(Id);
-  wxCHECK( item != NULL );
+  wxCHECK_RET( item != NULL, "can't enable non-existing menu item" );
 
   item->Enable(Flag);
 }
@@ -277,7 +277,7 @@ void wxMenu::Enable(int Id, bool Flag)
 bool wxMenu::Enabled(int Id) const
 {
   wxMenuItem *item = FindItemForId(Id);
-  wxCHECK_RET( item != NULL, FALSE );
+  wxCHECK( item != NULL, FALSE );
 
   return item->IsEnabled();
 }
@@ -285,7 +285,7 @@ bool wxMenu::Enabled(int Id) const
 void wxMenu::Check(int Id, bool Flag)
 {
   wxMenuItem *item = FindItemForId(Id);
-  wxCHECK( item != NULL );
+  wxCHECK_RET( item != NULL, "can't get status of non-existing menu item" );
 
   item->Check(Flag);
 }
@@ -293,7 +293,7 @@ void wxMenu::Check(int Id, bool Flag)
 bool wxMenu::Checked(int Id) const
 {
   wxMenuItem *item = FindItemForId(Id);
-  wxCHECK_RET( item != NULL, FALSE );
+  wxCHECK( item != NULL, FALSE );
 
   return item->IsChecked();
 }

@@ -1066,7 +1066,7 @@ static struct _find_t wxFileStruc;
 static wxString wxFileSpec = "";
 static int wxFindFileFlags;
 
-char *wxFindFirstFile(const wxString& spec, int flags)
+char *wxFindFirstFile(const char *spec, int flags)
 {
   wxFileSpec = spec;
   wxFindFileFlags = flags; /* MATTHEW: [5] Remember flags */
@@ -1284,7 +1284,8 @@ bool wxEndsWithPathSeparator(const char *pszFileName)
 bool wxFindFileInPath(wxString *pStr, const char *pszPath, const char *pszFile)
 {
   // we assume that it's not empty
-  wxCHECK_RET( Strlen(pszFile) != 0, FALSE);
+  wxCHECK_MSG( !IsEmpty(pszFile), FALSE, 
+               "empty file name in wxFindFileInPath");
 
   // skip path separator in the beginning of the file name if present
   if ( wxIsPathSeparator(*pszFile) )

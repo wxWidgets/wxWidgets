@@ -381,7 +381,8 @@ wxStatusBar *wxFrame::OnCreateStatusBar(const int number)
 bool wxFrame::CreateStatusBar(const int number)
 {
   // VZ: calling CreateStatusBar twice is an error - why anyone would do it?
-  wxCHECK_RET( m_frameStatusBar == NULL, FALSE );
+  wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, 
+               "recreating status bar in wxFrame" );
 
   m_frameStatusBar = OnCreateStatusBar(number);
   if ( m_frameStatusBar )
@@ -395,14 +396,14 @@ bool wxFrame::CreateStatusBar(const int number)
 
 void wxFrame::SetStatusText(const wxString& text, const int number)
 {
-  wxCHECK( m_frameStatusBar != NULL );
+  wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set text for" );
 
   m_frameStatusBar->SetStatusText(text, number);
 }
 
 void wxFrame::SetStatusWidths(const int n, const int *widths_field)
 {
-  wxCHECK( m_frameStatusBar != NULL );
+  wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set widths for" );
 
   m_frameStatusBar->SetStatusWidths(n, widths_field);
   PositionStatusBar();

@@ -134,7 +134,7 @@ void wxMenuItem::Enable(bool bDoEnable)
 
 void wxMenuItem::Check(bool bDoCheck)
 {
-  wxCHECK ( IsCheckable() );
+  wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
 
   if ( m_bChecked != bDoCheck ) {
     CheckMenuItem((HMENU)m_pParentMenu->GetHMenu(), m_idItem, 
