@@ -115,4 +115,4 @@ wxPython -a wxWindows wxWindows/utils wxWindows/utils/wxPython \
 	!wxWindows/utils/tex2rtf  !wxWindows/utils/wxMMedia2 \
 	!wxWindows/utils/wxOLE  !wxWindows/utils/wxtree !wxWindows/utils/wxStudio
 
-wxStudio -a wxWindows/utils/wxStudio
+wxStudio wxWindows/utils/wxStudio
