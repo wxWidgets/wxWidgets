@@ -115,9 +115,7 @@ def main(argv):
         print "Please specify a demo module name on the command-line"
         raise SystemExit
 
-    name = argv[1]
-    if name[-3:] == '.py':
-        name = name[:-3]
+    name, ext  = os.path.splitext(argv[1])
     module = __import__(name)
 
 
