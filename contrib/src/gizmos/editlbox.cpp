@@ -111,13 +111,9 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
                           const wxString& name)
    : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL, name), m_edittingNew(FALSE)
 {
-<<<<<<< editlbox.cpp
     m_style = style;
     m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = NULL;    
 
-=======
-    m_style = style;
->>>>>>> 1.10
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
     wxPanel *subp = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize,
