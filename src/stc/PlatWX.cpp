@@ -25,7 +25,8 @@ wxRect wxRectFromPRectangle(PRectangle prc) {
 }
 
 PRectangle PRectangleFromwxRect(wxRect rc) {
-    return PRectangle(rc.GetLeft(), rc.GetTop(), rc.GetRight(), rc.GetBottom());
+    return PRectangle(rc.GetLeft(), rc.GetTop(),
+                      rc.GetRight()+1, rc.GetBottom()+1);
 }
 
 Colour::Colour(long lcol) {
