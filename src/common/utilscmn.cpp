@@ -1062,6 +1062,38 @@ wxString wxGetCurrentDir()
 // wxExecute
 // ----------------------------------------------------------------------------
 
+// wxDoExecuteWithCapture() helper: reads an entire stream into one array
+//
+// returns TRUE if ok, FALSE if error
+static bool ReadAll(wxInputStream *is, wxArrayString& output)
+{
+    wxCHECK_MSG( is, FALSE, _T("NULL stream in wxExecute()?") );
+
+    // the stream could be already at EOF or in wxSTREAM_BROKEN_PIPE state
+    is->Reset();
+
+    wxTextInputStream tis(*is);
+
+    bool cont = TRUE;
+    while ( cont )
+    {
+        wxString line = tis.ReadLine();
+        if ( is->Eof() )
+            break;
+
+        if ( !*is )
+        {
+            cont = FALSE;
+        }
+        else
+        {
+            output.Add(line);
+        }
+    }
+
+    return cont;
+}
+
 // this is a private function because it hasn't a clean interface: the first
 // array is passed by reference, the second by pointer - instead we have 2
 // public versions of wxExecute() below
@@ -1083,51 +1115,15 @@ static long wxDoExecuteWithCapture(const wxString& command,
 #if wxUSE_STREAMS
     if ( rc != -1 )
     {
-        wxInputStream* is = process->GetInputStream();
-        wxCHECK_MSG( is, -1, _T("if wxExecute() succeded, stream can't be NULL") );
-        wxTextInputStream tis(*is);
+        if ( !ReadAll(process->GetInputStream(), output) )
+            rc = -1;
 
-        wxTextInputStream *tes = NULL;
-        wxInputStream *es = NULL;
         if ( error )
         {
-            es = process->GetErrorStream();
-
-            wxCHECK_MSG( es, -1, _T("stderr can't be NULL") );
-
-            tes = new wxTextInputStream(*es);
+            if ( !ReadAll(process->GetErrorStream(), *error) )
+                rc = -1;
         }
 
-        bool cont;
-        do
-        {
-            cont = FALSE;
-
-            if ( !is->Eof() && is->IsOk() )
-            {
-                wxString line = tis.ReadLine();
-                if ( !*is )
-                    break;
-
-                cont = TRUE;
-
-                output.Add(line);
-            }
-
-            if ( error && !es->Eof() && es->IsOk() )
-            {
-                wxString line = tes->ReadLine();
-                if ( !*es )
-                    break;
-
-                cont = TRUE;
-
-                error->Add(line);
-            }
-        }
-        while ( cont );
-
-        delete tes;
     }
 #endif // wxUSE_STREAMS
 

@@ -122,8 +122,7 @@ void wxProcess::SetPipeStreams(wxInputStream *inputSstream,
 
 bool wxProcess::IsInputOpened() const
 {
-    return m_inputStream &&
-                m_inputStream->GetLastError() != wxSTREAM_PIPE_ERROR;
+    return m_inputStream && m_inputStream->GetLastError() != wxSTREAM_EOF;
 }
 
 bool wxProcess::IsInputAvailable() const

@@ -377,7 +377,7 @@ bool wxPipeInputStream::CanRead() const
         wxPipeInputStream *self = wxConstCast(this, wxPipeInputStream);
 
         self->m_hInput = INVALID_HANDLE_VALUE;
-        self->m_lasterror = wxSTREAM_PIPE_ERROR;
+        self->m_lasterror = wxSTREAM_EOF;
 
         nAvailable = 0;
     }
@@ -388,6 +388,13 @@ bool wxPipeInputStream::CanRead() const
 
 size_t wxPipeInputStream::OnSysRead(void *buffer, size_t len)
 {
+    if ( !IsOpened() )
+    {
+        m_lasterror = wxSTREAM_EOF;
+
+        return 0;
+    }
+
     DWORD bytesRead;
     if ( !::ReadFile(m_hInput, buffer, len, &bytesRead, NULL) )
     {

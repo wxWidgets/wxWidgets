@@ -43,8 +43,7 @@ enum wxStreamError
     wxSTREAM_NO_ERROR = 0,      // stream is in good state
     wxSTREAM_EOF,               // EOF reached in Read() or similar
     wxSTREAM_WRITE_ERROR,       // generic write error
-    wxSTREAM_READ_ERROR,        // generic read error
-    wxSTREAM_PIPE_ERROR         // broken pipe: the other half was closed
+    wxSTREAM_READ_ERROR         // generic read error
 };
 
 // compatibility
