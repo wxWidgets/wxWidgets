@@ -612,6 +612,9 @@
 /* Define if you have wcslen function  */
 #undef HAVE_WCSLEN
 
+/* define if you have vsscanf function */
+#undef HAVE_VSSCANF
+
 @BOTTOM@
 
 #endif /* __WX_SETUP_H__ */

@@ -1277,6 +1277,32 @@ AC_CHECK_FUNCS(vsnprintf,
                AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
               )
 
+dnl check for vsscanf() - on some platforms (Linux, glibc 2.1.1) it's
+dnl available in the library but the prototype is missing, so we can't use
+dnl AC_CHECK_FUNCS here, do it manually
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
+[
+  AC_TRY_COMPILE(
+             [
+                #include <stdio.h>
+                #include <stdarg.h>
+             ],
+             [
+                va_list ap;
+                vsscanf("", "", ap);
+             ], [
+                wx_cv_func_vsscanf=yes
+                AC_DEFINE(HAVE_VSSCANF)
+             ], [
+                wx_cv_func_vsscanf=no
+             ])
+])
+
+AC_LANG_RESTORE
+
 dnl check for vfork() (even if it's the same as fork() in modern Unices)
 AC_CHECK_FUNCS(vfork)
 
@@ -1344,11 +1370,11 @@ if test "$wxUSE_THREADS" = "yes" ; then
                 ])
             ])
         ])
-fi
 
-if test -z "$THREADS_OBJ" ; then
-    wxUSE_THREADS=no
-    AC_MSG_WARN(No thread support on this system)
+    if test -z "$THREADS_OBJ" ; then
+        wxUSE_THREADS=no
+        AC_MSG_WARN(No thread support on this system)
+    fi
 fi
 
 dnl do other tests only if we are using threads
@@ -1737,9 +1763,6 @@ if test "$wxUSE_JOYSTICK" = 1; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
   fi
 fi
-
-
-AC_CHECK_FUNCS(vsscanf)
 
 dnl ------------------------------------------------------------------------
 dnl DLL support
