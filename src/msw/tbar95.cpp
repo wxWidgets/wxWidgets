@@ -659,9 +659,14 @@ bool wxToolBar::Realize()
     {
         wxToolBarToolBase *tool = node->GetData();
 
-        // don't add separators to the vertical toolbar - looks ugly
-        //if ( isVertical && tool->IsSeparator() )
-        //    continue;
+        // don't add separators to the vertical toolbar with old comctl32.dll
+        // versions as they didn't handle this properly
+        if ( isVertical && tool->IsSeparator() &&
+                wxTheApp->GetComCtl32Version() <= 472 )
+        {
+            continue;
+        }
+
 
         TBBUTTON& button = buttons[i];
 
@@ -1195,12 +1200,8 @@ bool wxToolBar::HandleSize(WXWPARAM wParam, WXLPARAM lParam)
                 h = r.bottom - r.top;
             if ( m_maxRows )
             {
-                // FIXME: 6 is hardcoded separator line height...
-                //h += 6;
-                if (HasFlag(wxTB_NODIVIDER))
-                    h += 4;
-                else
-                    h += 6;
+                // FIXME: hardcoded separator line height...
+                h += HasFlag(wxTB_NODIVIDER) ? 4 : 6;
                 h *= m_maxRows;
             }
         }
