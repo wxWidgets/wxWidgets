@@ -86,6 +86,10 @@ PYLIB=$PYPREFIX/lib/python$PYVER
 SITEPACKAGES=$PYLIB/site-packages
 SHORTVER=`echo $VERSION | cut -c 1,2,3`
 
+# TODO: enable selecting unicode or ansi builds, then set this accordingly...
+CHARTYPE=ansi
+
+
 
 if [ -z "$TARBALLDIR" ]; then
     # this is a spot on my fileserver where the tarballs go, adjust
@@ -332,9 +336,9 @@ EOF
 
 
     # Build the main Installer Package...
-    rm -rf wxPython${SHORTVER}-osx-$KIND.pkg
+    rm -rf wxPython${SHORTVER}-osx-$CHARTYPE-$KIND.pkg
     python $PROGDIR/../buildpkg.py \
-	--Title=wxPython${SHORTVER}-osx-$KIND \
+	--Title=wxPython${SHORTVER}-osx-$CHARTYPE-$KIND \
 	--Version=$VERSION \
 	--Description="wxPython $VERSION for $W_MSG MacPython-OSX $PYVER" \
 	--NeedsAuthorization="YES" \
@@ -343,7 +347,7 @@ EOF
 	$INSTALLROOT \
 	$RESOURCEDIR
 
-    mv wxPython${SHORTVER}-osx-$KIND.pkg $DMGDIR/root
+    mv wxPython${SHORTVER}-osx-$CHARTYPE-$KIND.pkg $DMGDIR/root
 
 
 
@@ -353,10 +357,10 @@ Welcome to wxPython!
 
 On this disk image you will find the installer for wxPython $VERSION for $W_MSG MacPython-OSX $PYVER.  MacPython-OSX is not included.
 
-   wxPython${SHORTVER}-osx-$KIND.pkg   The installer package.  It contains the wxPython
-                        extension modules, wxMac dynamic libraries and
-                        headers, and some scripts for the command-line
-                        tools.
+   wxPython${SHORTVER}-osx-$CHARTYPE-$KIND.pkg   The installer package.  
+                        It contains the wxPython extension modules,
+                        wxMac dynamic libraries and headers, and some
+                        scripts for the command-line tools.
 
 Everything else here is optional and you can drag them out of the disk
 image and drop them wherever you want.  You do need to install the above
@@ -496,10 +500,10 @@ EOF
 
 
     # and then finally make a disk image containing the packages and etc.
-    $PROGDIR/../makedmg $DMGDIR/root $DMGDIR wxPython${SHORTVER}-osx-$VERSION-$KIND-py$PYVER
+    $PROGDIR/../makedmg $DMGDIR/root $DMGDIR wxPython${SHORTVER}-osx-$CHARTYPE-$VERSION-$KIND-py$PYVER
 
-    echo Moving $DMGDIR/wxPython${SHORTVER}-osx-$VERSION-$KIND-py$PYVER.dmg to $DESTDIR
-    mv $DMGDIR/wxPython${SHORTVER}-osx-$VERSION-$KIND-py$PYVER.dmg  $DESTDIR
+    echo Moving $DMGDIR/wxPython${SHORTVER}-osx-$CHARTYPE-$VERSION-$KIND-py$PYVER.dmg to $DESTDIR
+    mv $DMGDIR/wxPython${SHORTVER}-osx-$CHARTYPE-$VERSION-$KIND-py$PYVER.dmg  $DESTDIR
 fi
 
 

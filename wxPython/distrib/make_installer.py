@@ -317,7 +317,7 @@ ISS_DocDemo_Template = r'''
 [Setup]
 AppName = wxPython%(SHORTVER)s-DocsDemo
 AppVerName = wxPython Docs and Demos %(VERSION)s
-OutputBaseFilename = wxPython%(SHORTVER)s-DocsDemo-%(VERSION)s
+OutputBaseFilename = wxPython%(SHORTVER)s-win32-DocsDemo-%(VERSION)s
 AppCopyright = Copyright © 2004 Total Control Software
 DefaultDirName = {pf}\wxPython%(SHORTVER)s Docs Demos and Tools
 DefaultGroupName = wxPython%(SHORTVER)s Docs Demos and Tools

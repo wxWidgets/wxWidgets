@@ -203,7 +203,7 @@ if [ $skipwin != yes ]; then
      ssh $WIN_HOST "cd $WIN_BUILD && $cmd $wxdir $WIN_BUILD $skipclean $VERSION $PYVER && rm $cmd"
 
      echo "Fetching the results..."
-     scp $WIN_HOST:$WIN_BUILD/wxPython*-win32*  $STAGING_DIR
+     scp "$WIN_HOST:$WIN_BUILD/wxPython*-win32*"  $STAGING_DIR
      ssh $WIN_HOST "rm $WIN_BUILD/wxPython*-win32*"
 fi
 
