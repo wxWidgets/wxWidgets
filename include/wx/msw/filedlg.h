@@ -61,10 +61,11 @@ public:
     int ShowModal(void);
 };
 
-#define wxOPEN 1
-#define wxSAVE 2
-#define wxOVERWRITE_PROMPT 4
-#define wxHIDE_READONLY 8
+#define wxOPEN              0x0001
+#define wxSAVE              0x0002
+#define wxOVERWRITE_PROMPT  0x0004
+#define wxHIDE_READONLY     0x0008
+#define wxFILE_MUST_EXIST   0x0010
 
 // File selector - backward compatibility
 char* WXDLLEXPORT wxFileSelector(const char *message = wxFileSelectorPromptStr, const char *default_path = NULL,
