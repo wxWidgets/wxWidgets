@@ -17,7 +17,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_FS_ZIP && wxUSE_STREAMS
+#if wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_STREAMS
 
 
 #ifndef WXPRECOMP
@@ -51,5 +51,5 @@ class WXDLLEXPORT wxZipFSHandler : public wxFileSystemHandler
 
 
 #endif
-  // wxUSE_FS_ZIP && wxUSE_STREAMS
+  // wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_STREAMS
 

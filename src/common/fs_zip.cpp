@@ -17,7 +17,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_FS_ZIP
+#if wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_ZIPSTREAM
 
 #ifndef WXPRECOMP
 #include "wx/wx.h"
@@ -177,4 +177,5 @@ wxString wxZipFSHandler::DoFind()
 
 
 
-#endif // wxUSE_FS_ZIP
+#endif 
+      //wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_ZIPSTREAM

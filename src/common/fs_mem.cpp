@@ -17,7 +17,7 @@
 #pragma hdrstop
 #endif
 
-#if (wxUSE_HTML || wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+#if wxUSE_FILESYSTEM && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
 #include "wx/wx.h"
@@ -204,4 +204,4 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
 
 
 
-#endif // wxUSE_FS_ZIP
+#endif // wxUSE_FILESYSTEM && wxUSE_FS_ZIP

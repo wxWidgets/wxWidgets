@@ -34,7 +34,7 @@ limitation)
     #define wxUSE_FS_INET 0
 #endif
 
-#if wxUSE_FS_INET
+#if wxUSE_FILESYSTEM && wxUSE_FS_INET
 
 #ifndef WXPRECOMP
 #include "wx/wx.h"
@@ -182,4 +182,4 @@ class wxFileSystemInternetModule : public wxModule
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileSystemInternetModule, wxModule)
 
-#endif // wxUSE_FS_INET
+#endif // wxUSE_FILESYSTEM && wxUSE_FS_INET

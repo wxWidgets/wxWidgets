@@ -17,12 +17,8 @@
 #pragma hdrstop
 #endif
 
-#if !wxUSE_SOCKETS
-    #undef wxUSE_FS_INET
-    #define wxUSE_FS_INET 0
-#endif
 
-#if (wxUSE_HTML || wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+#if wxUSE_FILESYSTEM
 
 #include "wx/wfstream.h"
 #include "wx/module.h"
@@ -451,7 +447,7 @@ class wxFileSystemModule : public wxModule
 IMPLEMENT_DYNAMIC_CLASS(wxFileSystemModule, wxModule)
 
 #endif
-  // (wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+  // wxUSE_FILESYSTEM
 
 
 

@@ -16,7 +16,15 @@
 
 #include "wx/setup.h"
 
-#if (wxUSE_HTML || wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+#if !wxUSE_STREAMS
+#error You cannot compile virtual file systems without wxUSE_STREAMS
+#endif
+
+#if wxUSE_HTML && !wxUSE_FILESYSTEM
+#error You cannot compile wxHTML without virtual file systems
+#endif
+
+#if wxUSE_FILESYSTEM
 
 #include "wx/stream.h"
 #include "wx/url.h"
@@ -215,7 +223,7 @@ special characters :
 */
 
 #endif
-  // (wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+  // wxUSE_FILESYSTEM
 
 #endif
   // __FILESYS_H__

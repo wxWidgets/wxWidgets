@@ -359,8 +359,12 @@
                                 // wxWindow::SetToolTip() method
 #define wxUSE_SOCKETS       1
                                 // Set to 1 to use socket classes
+#define wxUSE_FILESYSTEM    1   
+                                // Set to 1 to enable virtual file systems
+                                // (needed by wxHTML)
 #define wxUSE_FS_ZIP        1
-#define wxUSE_FS_INET       1   // Set to 1 to enable virtual file systems
+#define wxUSE_FS_INET       1   
+                                // Set to 1 to enable virtual file systems
 
 #define wxUSE_BUSYINFO      1
                                 // wxBusyInfo displays window with message

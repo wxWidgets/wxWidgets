@@ -29,7 +29,7 @@ limitation)
 #pragma hdrstop
 #endif
 
-#if wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
+#if wxUSE_FILESYSTEM && wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
 
 #ifndef WXPRECOMP
 #include "wx/wx.h"
@@ -54,5 +54,5 @@ class WXDLLEXPORT wxInternetFSHandler : public wxFileSystemHandler
 };
 
 #endif
-  // wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
+  // wxUSE_FILESYSTEM && wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
 

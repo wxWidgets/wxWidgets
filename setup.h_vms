@@ -569,6 +569,7 @@
 /*
  * (virtual) filesystems code
  */
+#define wxUSE_FILESYSTEM 1
 #define wxUSE_FS_INET 1
 #define wxUSE_FS_ZIP 1
 
