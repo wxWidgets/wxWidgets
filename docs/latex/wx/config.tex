@@ -2,7 +2,7 @@
 
 wxConfigBase class defines the basic interface of all config classes. It can
 not be used by itself (it is an abstract base class) and you will always use one
-of its derivations: wxIniConfig, \helpref{wxFileConfig}{wxfileconfig},
+of its derivations: \helpref{wxFileConfig}{wxfileconfig},
 wxRegConfig or any other.
 
 However, usually you don't even need to know the precise nature of the class
@@ -12,7 +12,7 @@ the registry under Win32 or text-based config files under Unix (or even
 Windows 3.1 .INI files if you're really unlucky). To make writing the portable
 code even easier, wxWidgets provides a typedef wxConfig
 which is mapped onto the native wxConfigBase implementation on the given
-platform: i.e. wxRegConfig under Win32 (optionally wxIniConfig) and
+platform: i.e. wxRegConfig under Win32 and
 wxFileConfig otherwise.
 
 See \helpref{config overview}{wxconfigoverview} for the descriptions of all
@@ -30,8 +30,7 @@ No base class
 <wx/config.h> (to let wxWidgets choose a wxConfig class for your platform)\\
 <wx/confbase.h> (base config class)\\
 <wx/fileconf.h> (wxFileConfig class)\\
-<wx/msw/regconf.h> (wxRegConfig class)\\
-<wx/msw/iniconf.h> (wxIniConfig class)
+<wx/msw/regconf.h> (wxRegConfig class)
 
 \wxheading{Example}
 
