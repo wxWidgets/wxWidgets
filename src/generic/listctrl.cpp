@@ -3192,12 +3192,16 @@ wxListCtrl::wxListCtrl()
     m_imageListNormal = (wxImageList *) NULL;
     m_imageListSmall = (wxImageList *) NULL;
     m_imageListState = (wxImageList *) NULL;
+    m_ownsImageListNormal = m_ownsImageListSmall = m_ownsImageListState = FALSE;
     m_mainWin = (wxListMainWindow*) NULL;
     m_headerWin = (wxListHeaderWindow*) NULL;
 }
 
 wxListCtrl::~wxListCtrl()
 {
+    if (m_ownsImageListNormal) delete m_imageListNormal;
+    if (m_ownsImageListSmall) delete m_imageListSmall;
+    if (m_ownsImageListState) delete m_imageListState;
 }
 
 bool wxListCtrl::Create(wxWindow *parent,
@@ -3211,6 +3215,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     m_imageListNormal = (wxImageList *) NULL;
     m_imageListSmall = (wxImageList *) NULL;
     m_imageListState = (wxImageList *) NULL;
+    m_ownsImageListNormal = m_ownsImageListSmall = m_ownsImageListState = FALSE;
     m_mainWin = (wxListMainWindow*) NULL;
     m_headerWin = (wxListHeaderWindow*) NULL;
 
@@ -3508,7 +3513,37 @@ wxImageList *wxListCtrl::GetImageList(int which) const
 
 void wxListCtrl::SetImageList( wxImageList *imageList, int which )
 {
+    if ( which == wxIMAGE_LIST_NORMAL )
+    {
+        if (m_ownsImageListNormal) delete m_imageListNormal;
+        m_imageListNormal = imageList;
+        m_ownsImageListNormal = FALSE;
+    }
+    else if ( which == wxIMAGE_LIST_SMALL )
+    {
+        if (m_ownsImageListSmall) delete m_imageListSmall;
+        m_imageListSmall = imageList;
+        m_ownsImageListSmall = FALSE;
+    }
+    else if ( which == wxIMAGE_LIST_STATE )
+    {
+        if (m_ownsImageListState) delete m_imageListState;
+        m_imageListState = imageList;
+        m_ownsImageListState = FALSE;
+    }
+
     m_mainWin->SetImageList( imageList, which );
+}
+
+void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
+{
+    SetImageList(imageList, which);
+    if ( which == wxIMAGE_LIST_NORMAL )
+        m_ownsImageListNormal = TRUE;
+    else if ( which == wxIMAGE_LIST_SMALL )
+        m_ownsImageListSmall = TRUE;
+    else if ( which == wxIMAGE_LIST_STATE )
+        m_ownsImageListState = TRUE;
 }
 
 bool wxListCtrl::Arrange( int WXUNUSED(flag) )

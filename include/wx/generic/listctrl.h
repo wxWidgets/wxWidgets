@@ -113,6 +113,7 @@ public:
     long GetNextItem( long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE ) const;
     wxImageList *GetImageList( int which ) const;
     void SetImageList( wxImageList *imageList, int which );
+    void AssignImageList( wxImageList *imageList, int which );
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
 
     void ClearAll();
@@ -166,6 +167,9 @@ public:
     wxImageList         *m_imageListNormal;
     wxImageList         *m_imageListSmall;
     wxImageList         *m_imageListState;  // what's that ?
+    bool                 m_ownsImageListNormal, 
+                         m_ownsImageListSmall,
+                         m_ownsImageListState;
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
 

@@ -129,6 +129,19 @@ Arranges the items in icon or small icon view. This only has effect on Win32. {\
 \twocolitem{wxLIST\_ALIGN\_SNAP\_TO\_GRID}{Snap to grid.}
 \end{twocollist}
 
+\membersection{wxListCtrl::AssignImageList}\label{wxlistctrlassignimagelist}
+
+\func{void}{AssignImageList}{\param{wxImageList*}{ imageList}, \param{int }{which}}
+
+Sets the image list associated with the control and 
+takes ownership of it (i.e. the control will, unlike when using
+SetImageList, delete the list when destroyed). {\it which} is one of
+wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL, wxIMAGE\_LIST\_STATE (the last is unimplemented).
+
+\wxheading{See also}
+
+\helpref{wxListCtrl::SetImageList}{wxlistctrlsetimagelist}
+
 \membersection{wxListCtrl::Create}\label{wxlistctrlcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
@@ -522,6 +535,14 @@ In small or normal icon view, {\it col} must be -1, and the column width is set 
 
 Sets the image list associated with the control. {\it which} is one of
 wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL, wxIMAGE\_LIST\_STATE (the last is unimplemented).
+
+This method does not take ownership of the image list, you have to
+delete it yourself.
+
+\wxheading{See also}
+
+\helpref{wxListCtrl::AssignImageList}{wxlistctrlassignimagelist}
+
 
 \membersection{wxListCtrl::SetItem}\label{wxlistctrlsetitem}
 

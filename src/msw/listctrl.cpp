@@ -130,6 +130,7 @@ void wxListCtrl::Init()
     m_imageListNormal = NULL;
     m_imageListSmall = NULL;
     m_imageListState = NULL;
+    m_ownsImageListNormal = m_ownsImageListSmall = m_ownsImageListState = FALSE;
     m_baseStyle = 0;
     m_colCount = 0;
     m_textCtrl = NULL;
@@ -284,6 +285,10 @@ wxListCtrl::~wxListCtrl()
         delete m_textCtrl;
         m_textCtrl = NULL;
     }
+    
+    if (m_ownsImageListNormal) delete m_imageListNormal;
+    if (m_ownsImageListSmall) delete m_imageListSmall;
+    if (m_ownsImageListState) delete m_imageListState;
 }
 
 // ----------------------------------------------------------------------------
@@ -912,19 +917,36 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
     if ( which == wxIMAGE_LIST_NORMAL )
     {
         flags = LVSIL_NORMAL;
+        if (m_ownsImageListNormal) delete m_imageListNormal;
         m_imageListNormal = imageList;
+        m_ownsImageListNormal = FALSE;
     }
     else if ( which == wxIMAGE_LIST_SMALL )
     {
         flags = LVSIL_SMALL;
+        if (m_ownsImageListSmall) delete m_imageListSmall;
         m_imageListSmall = imageList;
+        m_ownsImageListSmall = FALSE;
     }
     else if ( which == wxIMAGE_LIST_STATE )
     {
         flags = LVSIL_STATE;
+        if (m_ownsImageListState) delete m_imageListState;
         m_imageListState = imageList;
+        m_ownsImageListState = FALSE;
     }
     ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
+}
+
+void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
+{
+    SetImageList(imageList, which);
+    if ( which == wxIMAGE_LIST_NORMAL )
+        m_ownsImageListNormal = TRUE;
+    else if ( which == wxIMAGE_LIST_SMALL )
+        m_ownsImageListSmall = TRUE;
+    else if ( which == wxIMAGE_LIST_STATE )
+        m_ownsImageListState = TRUE;
 }
 
 // ----------------------------------------------------------------------------
