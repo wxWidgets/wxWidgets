@@ -253,7 +253,8 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
 
     event.m_commandInt = n;
 
-    listbox->GetEventHandler()->ProcessEvent( event );
+    listbox->GetEventHandler()->AddPendingEvent( event );
+//    listbox->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -483,9 +484,9 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
                            (GtkSignalFunc)gtk_listbox_key_press_callback,
                            (gpointer)this );
 
-    gtk_widget_show( list_item );
-
     ConnectWidget( list_item );
+
+    gtk_widget_show( list_item );
 
     if (GTK_WIDGET_REALIZED(m_widget))
     {
