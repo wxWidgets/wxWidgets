@@ -348,18 +348,43 @@ void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )
   wxFAIL_MSG( "wxTextCtrl::OnDropFiles not implemented" );
 }
 
-long wxTextCtrl::PositionToXY( long WXUNUSED(pos), long *WXUNUSED(x), long *WXUNUSED(y) ) const
+long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 {
-  wxFAIL_MSG( "wxTextCtrl::XYToPosition not implemented" );
+  if (!(m_windowStyle & wxTE_MULTILINE))
+    return 0;
+  gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+  char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
+  if(!text)
+    return 0;
+  if( pos >= len)
+    return pos=len-1;
   
-  return 0;
+  *x=1;   // Col 1
+  *y=1;   // Line 1
+  for (int i = 0; i < pos; i++ )
+    {
+      if (text[i] == '\n')
+	{
+	  (*y)++;
+	  *x=1;
+	}
+      else
+	(*x)++;
+    } 
+  g_free( text );
+  return 1;
 }
 
-long wxTextCtrl::XYToPosition( long WXUNUSED(x), long WXUNUSED(y) ) const
+long wxTextCtrl::XYToPosition(long x, long y ) const
 {
-  wxFAIL_MSG( "wxTextCtrl::XYToPosition not implemented" );
+  if (!(m_windowStyle & wxTE_MULTILINE))
+    return 0;
+  long pos=0;
   
-  return 0;
+  for(int i=1;i<y;i++)
+      pos +=GetLineLength(i);
+  pos +=x-1; // Pos start with 0
+  return pos;
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
