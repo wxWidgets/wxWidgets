@@ -97,12 +97,14 @@ class WXDLLEXPORT wxHtmlTag : public wxObject
                 //           <P IMG SRC="WhaT.jpg"> GetParam("SRC") returns (WhaT.jpg)
                 //                           (or ("WhaT.jpg") if with_commas == TRUE)
 
-        int ScanParam(const wxString& par, char *format, ...) const;
+        int ScanParam(const wxString& par, char *format, void *param) const;
                 // Scans param like scanf() functions family do.
                 // Example : ScanParam("COLOR", "\"#%X\"", &clr);
                 // This is always with with_commas=FALSE
 		// Returns number of scanned values
 		// (like sscanf() does)
+		// NOTE: unlike scanf family, this function only accepts
+		//       *one* parameter !
 
         inline const wxString& GetAllParams() const {return m_Params;};
                 // Returns string containing all params.

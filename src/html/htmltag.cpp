@@ -239,33 +239,10 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
 
 
 
-int wxHtmlTag::ScanParam(const wxString& par, char *format, ...) const
+int wxHtmlTag::ScanParam(const wxString& par, char *format, void *param) const
 {
-    int retval;
-    va_list argptr;
     wxString parval = GetParam(par);
-
-    va_start(argptr, format);
-
-//#if defined(__MINGW32__) || defined(__CYGWIN__) || defined(__VISUALC__)
-#ifndef HAVE_VSSCANF
-    retval = sscanf((const char*)parval, format, va_arg(argptr, void *));
-#else
-    retval = vsscanf((const char*)parval, format, argptr);
-#endif
-
-/*
-        --- vsscanf is not defined under some compilers
-            if this module doesn't compile with your compiler,
-            modify the def statement and let me know. Thanks...
-        
-            So far wxHtml functions are scanning only _one_ value
-            so I workarounded this by supposing that there is only
-            one ...-parameter 
-*/
-
-    va_end(argptr);
-    return retval;
+    return sscanf((const char*)parval, format, param);
 }
 
 #endif
