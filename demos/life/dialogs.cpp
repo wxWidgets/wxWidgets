@@ -172,7 +172,7 @@ LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
 {
     // logo
     wxBitmap bmp = wxBITMAP(life);
-#if !defined(__WXGTK__) && !defined(__WXMOTIF__)
+#if !defined(__WXGTK__) && !defined(__WXMOTIF__) && !defined(__WXMAC__)
     bmp.SetMask(new wxMask(bmp, *wxBLUE));
 #endif
     wxStaticBitmap *sbmp = new wxStaticBitmap(this, -1, bmp);

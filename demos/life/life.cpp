@@ -602,7 +602,7 @@ LifeNavigator::LifeNavigator(wxWindow *parent)
         bmpe = wxBITMAP(east),  
         bmps = wxBITMAP(south);
 
-#if !defined(__WXGTK__) && !defined(__WXMOTIF__)
+#if !defined(__WXGTK__) && !defined(__WXMOTIF__) && !defined(__WXMAC__)
     bmpn.SetMask(new wxMask(bmpn, *wxLIGHT_GREY));
     bmpw.SetMask(new wxMask(bmpw, *wxLIGHT_GREY));
     bmpc.SetMask(new wxMask(bmpc, *wxLIGHT_GREY));
