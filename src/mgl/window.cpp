@@ -434,8 +434,8 @@ static bool wxHandleSpecialKeys(wxKeyEvent& event)
     #ifdef __WXDEBUG__ // FIXME_MGL - remove when KB_sysReq works in MGL!
          || (event.m_keyCode == WXK_F1 && 
             event.m_shiftDown && event.m_controlDown) 
-       )
     #endif
+       )
     {
         wxCaptureScreenshot(event.m_altDown/*only active wnd?*/);
         return TRUE;
