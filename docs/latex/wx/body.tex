@@ -141,11 +141,13 @@ To make use of wxWidgets, you currently need one of the following setups.
 (a) MS-Windows:
 
 \begin{enumerate}\itemsep=0pt
-\item A 486 or higher PC running MS Windows.
-\item A Windows compiler: most are supported, but please see {\tt install.txt} for
-details. Supported compilers include Microsoft Visual C++ 4.0 or higher, Borland C++, Cygwin,
-MinGW, Metrowerks CodeWarrior.
-\item At least 60 MB of disk space.
+\item A 32-bit or 64-bit PC running MS Windows.
+\item A Windows compiler: MS Visual C++ (embedded Visual C++ for wxWinCE
+port), Borland C++, Watcom C++, Cygwin, MinGW, Metrowerks CodeWarrior,
+Digital Mars C++. See {\tt install.txt} for details about compiler 
+version supported.
+\item At least 100 MB of disk space for source tree and additional space for 
+libraries and application building (depends on compiler and build settings).
 \end{enumerate}
 
 (b) Unix:
@@ -154,7 +156,8 @@ MinGW, Metrowerks CodeWarrior.
 \item Almost any C++ compiler, including GNU C++ (EGCS 1.1.1 or above).
 \item Almost any Unix workstation, and one of: GTK+ 1.2, GTK+ 2.0, Motif 1.2 or higher, Lesstif.
 If using the wxX11 port, no such widget set is required.
-\item At least 60 MB of disk space.
+\item At least 100 MB of disk space for source tree and additional space for 
+libraries and application building (depends on compiler and build settings).
 \end{enumerate}
 
 (c) Mac OS/Mac OS X:
@@ -162,8 +165,9 @@ If using the wxX11 port, no such widget set is required.
 \begin{enumerate}\itemsep=0pt
 \item A PowerPC Mac running Mac OS 8.6/9.x (eg. Classic) or Mac OS X 10.x.
 \item CodeWarrior 5.3, 6 or 7 for Classic Mac OS.
-\item The Apple Developer Tools (eg. GNU C++) or CodeWarrior 7 for Mac OS X.
-\item At least 60 MB of disk space.
+\item The Apple Developer Tools (eg. GNU C++), CodeWarrior 7 or above for Mac OS X.
+\item At least 100 MB of disk space for source tree and additional space for 
+libraries and application building (depends on compiler and build settings).
 \end{enumerate}
 
 \section{Availability and location of wxWidgets}\label{where}
@@ -259,16 +263,9 @@ the following section before any other includes:
 
 The file {\tt "wx/wxprec.h"} includes {\tt "wx/wx.h"}. Although this incantation
 may seem quirky, it is in fact the end result of a lot of experimentation,
-and several Windows compilers to use precompilation (those tested are Microsoft Visual C++, Borland C++
-and Watcom C++).
-
-Borland precompilation is largely automatic. Visual C++ requires specification of {\tt "wx/wxprec.h"} as
-the file to use for precompilation. Watcom C++ is automatic apart from the specification of
-the .pch file. Watcom C++ is strange in requiring the precompiled header to be used only for
-object files compiled in the same directory as that in which the precompiled header was created.
-Therefore, the wxWidgets Watcom C++ makefiles go through hoops deleting and recreating
-a single precompiled header file for each module, thus preventing an accumulation of many
-multi-megabyte .pch files.
+and several Windows compilers to use precompilation which is largely automatic for
+compilers with necessary support. Currently it is used for Visual C++ (including 
+embedded Visual C++), Borland C++, Open Watcom C++ and newer versions of GCC.
 
 \section{Libraries}\label{libraries}
 
