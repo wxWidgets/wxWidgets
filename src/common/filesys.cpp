@@ -312,10 +312,10 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
         while (node)
     	{
             wxFileSystemHandler *h = (wxFileSystemHandler*) node -> GetData();
-            if (h->CanOpen(m_Path + location))
+            if (h->CanOpen(m_Path + loc))
 	        {
-                s = h->OpenFile(*this, m_Path + location);
-                if (s) { m_LastName = m_Path + location; break; }
+                s = h->OpenFile(*this, m_Path + loc);
+                if (s) { m_LastName = m_Path + loc; break; }
             }
             node = node->GetNext();
         }
@@ -328,10 +328,10 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
         while (node)
     	{
             wxFileSystemHandler *h = (wxFileSystemHandler*) node->GetData();
-            if (h->CanOpen(location))
+            if (h->CanOpen(loc))
     	    {
-                s = h->OpenFile(*this, location);
-                if (s) { m_LastName = location; break; }
+                s = h->OpenFile(*this, loc);
+                if (s) { m_LastName = loc; break; }
             }
             node = node->GetNext();
         }
