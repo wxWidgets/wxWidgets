@@ -829,6 +829,8 @@ void wxBitmap::InitStandardHandlers()
 
 WXPixmap wxBitmap::GetLabelPixmap (WXWidget w)
 {
+    if (!M_BITMAPDATA)
+        return (WXPixmap)NULL;
     if (M_BITMAPDATA->m_image == (WXPixmap) 0)
         return M_BITMAPDATA->m_pixmap;
 
@@ -905,7 +907,9 @@ WXPixmap wxBitmap::GetArmPixmap (WXWidget w)
 WXPixmap wxBitmap::GetInsensPixmap (WXWidget w)
 {
     Display *dpy = (Display*) M_BITMAPDATA->m_display;
-
+    
+    if (!M_BITMAPDATA)
+        return (WXPixmap)NULL;
     if (M_BITMAPDATA->m_insensPixmap)
         return M_BITMAPDATA->m_insensPixmap;
 
