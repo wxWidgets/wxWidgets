@@ -30,6 +30,10 @@ All about wxWindows Version Numbers
 Version: $Id$
 
 $Log$
+Revision 1.1  2001/06/08 04:26:35  RD
+move the tech note to a correctly named file
+
 Revision 1.1  2001/06/06 16:44:25  RD
+
 Added technote about where the version numbers are located.
 
