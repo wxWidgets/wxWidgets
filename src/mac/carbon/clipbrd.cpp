@@ -80,7 +80,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
           }
           else
           {
-            delete[] data ;
+            delete[] ((char *)data) ;
             data = NULL ;
           }
 	   		}
