@@ -364,6 +364,8 @@ void wxWindowBase::Centre(int direction)
             }
         }
 
+        // there is no wxTopLevelWindow under wxMotif yet
+#ifndef __WXMOTIF__
         // we shouldn't center the dialog on the iconized window: under
         // Windows, for example, this places it completely off the screen
         if ( parent )
@@ -374,6 +376,7 @@ void wxWindowBase::Centre(int direction)
                 parent = NULL;
             }
         }
+#endif // __WXMOTIF__
 
         // did we find the parent?
         if ( !parent )
