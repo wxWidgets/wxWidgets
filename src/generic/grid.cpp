@@ -52,6 +52,18 @@
 #include "wx/grid.h"
 #include "wx/generic/gridsel.h"
 
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+    #define WXUNUSED_GTK_AND_MOTIF(identifier)  WXUNUSED(identifier)
+#else
+    #define WXUNUSED_GTK_AND_MOTIF(identifier)  identifier
+#endif
+
+#if defined(__WXGTK__)
+    #define WXUNUSED_GTK(identifier)    WXUNUSED(identifier)
+#else
+    #define WXUNUSED_GTK(identifier)    identifier
+#endif
+
 // Required for wxIs... functions
 #include <ctype.h>
 
@@ -286,6 +298,7 @@ WX_DEFINE_ARRAY(wxGridDataTypeInfo*, wxGridDataTypeInfoArray);
 class WXDLLEXPORT wxGridTypeRegistry
 {
 public:
+  wxGridTypeRegistry() {}
     ~wxGridTypeRegistry();
 
     void RegisterDataType(const wxString& typeName,
@@ -606,7 +619,8 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
     event.Skip();
 }
 
-void wxGridCellTextEditor::HandleReturn(wxKeyEvent& event)
+void wxGridCellTextEditor::HandleReturn( wxKeyEvent&
+                                         WXUNUSED_GTK_AND_MOTIF(event) )
 {
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
     // wxMotif needs a little extra help...
@@ -1173,7 +1187,7 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
                               wxGridCellAttr& attr,
                               wxDC& dc,
                               const wxRect& rect,
-                              int row, int col,
+                              int WXUNUSED(row), int WXUNUSED(col),
                               bool isSelected)
 {
     dc.SetBackgroundMode( wxSOLID );
@@ -5519,7 +5533,7 @@ void wxGrid::DrawHighlight(wxDC& dc)
 // This is used to redraw all grid lines e.g. when the grid line colour
 // has been changed
 //
-void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
+void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED_GTK(reg) )
 {
     if ( !m_gridLinesEnabled ||
          !m_numRows ||
