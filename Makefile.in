@@ -1261,7 +1261,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/shaped/Makefile.in $(DISTDIR)/samples/shaped
 	cp $(SAMPDIR)/shaped/makefile.unx $(DISTDIR)/samples/shaped
 	cp $(SAMPDIR)/shaped/*.cpp $(DISTDIR)/samples/shaped
-	cp $(SAMPDIR)/shaped/*.h $(DISTDIR)/samples/shaped
 	cp $(SAMPDIR)/shaped/*.png $(DISTDIR)/samples/shaped
 
 	mkdir $(DISTDIR)/samples/sockets
