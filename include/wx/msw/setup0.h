@@ -50,7 +50,7 @@
 // Default is 0
 //
 // Recommended setting: 0 (please update your code)
-#define WXWIN_COMPATIBILITY_2_2 1
+#define WXWIN_COMPATIBILITY_2_2 0
 
 // This setting determines the compatibility with 2.4 API: set it to 0 to
 // flag all cases of using deprecated functions.
