@@ -363,9 +363,15 @@ public: \
 #define _WX_DECLARE_HASH_MAP_KEY_EX( KEY_T, PAIR_T, CLASSNAME, CLASSEXP ) \
 CLASSEXP CLASSNAME \
 { \
+    typedef KEY_T key_type; \
+    typedef PAIR_T pair_type; \
+    typedef const key_type const_key_type; \
+    typedef const pair_type const_pair_type; \
+    typedef const_key_type& const_key_reference; \
+    typedef const_pair_type& const_pair_reference; \
 public: \
     CLASSNAME() { } \
-    const KEY_T& operator()( const PAIR_T& pair ) const { return pair.first; }\
+    const_key_reference operator()( const_pair_reference pair ) const { return pair.first; }\
     \
     /* the dummy assignment operator is needed to suppress compiler */ \
     /* warnings from hash table class' operator=(): gcc complains about */ \
