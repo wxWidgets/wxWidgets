@@ -76,6 +76,7 @@ public:
 
     void OnToggleToolbarSize(wxCommandEvent& event);
     void OnToggleToolbarOrient(wxCommandEvent& event);
+    void OnToggleToolbarRows(wxCommandEvent& event);
 
     void OnEnablePrint(wxCommandEvent& event) { DoEnablePrint(); }
     void OnDeletePrint(wxCommandEvent& event) { DoDeletePrint(); }
@@ -96,6 +97,8 @@ private:
 
     bool                m_smallToolbar,
                         m_horzToolbar;
+    size_t              m_rows;             // 1 or 2 only
+
     wxTextCtrl*         m_textWindow;
 
     DECLARE_EVENT_TABLE()
@@ -111,6 +114,7 @@ enum
 {
     IDM_TOOLBAR_TOGGLETOOLBARSIZE = 200,
     IDM_TOOLBAR_TOGGLETOOLBARORIENT,
+    IDM_TOOLBAR_TOGGLETOOLBARROWS,
     IDM_TOOLBAR_ENABLEPRINT,
     IDM_TOOLBAR_DELETEPRINT,
     IDM_TOOLBAR_INSERTPRINT,
@@ -132,6 +136,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARSIZE, MyFrame::OnToggleToolbarSize)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARORIENT, MyFrame::OnToggleToolbarOrient)
+    EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARROWS, MyFrame::OnToggleToolbarRows)
 
     EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, MyFrame::OnEnablePrint)
     EVT_MENU(IDM_TOOLBAR_DELETEPRINT, MyFrame::OnDeletePrint)
@@ -166,14 +171,6 @@ bool MyApp::OnInit()
     MyFrame* frame = new MyFrame((wxFrame *) NULL, -1,
                                  "wxToolBar Sample",
                                  wxPoint(100, 100), wxSize(450, 300));
-
-    // VZ: what's this for??
-#if 0
-    // Force a resize. This should probably be replaced by a call to a wxFrame
-    // function that lays out default decorations and the remaining content window.
-    wxSizeEvent event(wxSize(-1, -1), frame->GetId());
-    frame->OnSize(event);
-#endif // 0
 
     frame->Show(TRUE);
 
@@ -257,6 +254,8 @@ void MyFrame::RecreateToolbar()
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
     toolBar->Realize();
+
+    toolBar->SetRows(m_horzToolbar ? m_rows : 10 / m_rows);
 }
 
 // ----------------------------------------------------------------------------
@@ -273,8 +272,10 @@ MyFrame::MyFrame(wxFrame* parent,
        : wxFrame(parent, id, title, pos, size, style)
 {
     m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
+
     m_smallToolbar = FALSE;
-    m_horzToolbar = FALSE;
+    m_horzToolbar = TRUE;
+    m_rows = 1;
 
     // Give it a status line
     CreateStatusBar();
@@ -291,6 +292,10 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBARORIENT,
                      "Toggle toolbar &orientation\tCtrl-O",
                      "Toggle toolbar orientation",
+                     TRUE);
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBARROWS,
+                     "Toggle number of &rows\tCtrl-R",
+                     "Toggle number of toolbar rows between 1 and 2",
                      TRUE);
 
     tbarMenu->AppendSeparator();
@@ -324,6 +329,16 @@ void MyFrame::OnToggleToolbarSize(wxCommandEvent& WXUNUSED(event))
     m_smallToolbar = !m_smallToolbar;
 
     RecreateToolbar();
+}
+
+void MyFrame::OnToggleToolbarRows(wxCommandEvent& WXUNUSED(event))
+{
+    // m_rows may be only 1 or 2
+    m_rows = 3 - m_rows;
+
+    GetToolBar()->SetRows(m_horzToolbar ? m_rows : 10 / m_rows);
+
+    //RecreateToolbar();
 }
 
 void MyFrame::OnToggleToolbarOrient(wxCommandEvent& WXUNUSED(event))
