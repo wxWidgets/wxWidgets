@@ -68,6 +68,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
     EVT_GRID_ROW_SIZE( GridFrame::OnRowSize )
     EVT_GRID_COL_SIZE( GridFrame::OnColSize )
+    EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
 END_EVENT_TABLE()
@@ -443,20 +444,22 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
     logBuf = "";
     if ( ev.GetRow() != -1 )
     {
-        logBuf << "row label " << ev.GetRow();
+        logBuf << "Left click on row label " << ev.GetRow();
     }
     else if ( ev.GetCol() != -1 )
     {
-        logBuf << "col label " << ev.GetCol();
+        logBuf << "Left click on col label " << ev.GetCol();
     }
     else
     {
-        logBuf << "corner label";
+        logBuf << "Left click on corner label";
     }
 
     if ( ev.ShiftDown() ) logBuf << " (shift down)";
     wxLogMessage( "%s", logBuf.c_str() );
     
+    // you must call event skip if you want default grid processing
+    //
     ev.Skip();
 }
 
@@ -464,7 +467,7 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
 void GridFrame::OnCellLeftClick( wxGridEvent& ev )
 {
     logBuf = "";
-    logBuf << "Cell at row " << ev.GetRow()
+    logBuf << "Left click at row " << ev.GetRow()
            << " col " << ev.GetCol();
     wxLogMessage( "%s", logBuf.c_str() );
 
@@ -491,6 +494,19 @@ void GridFrame::OnColSize( wxGridSizeEvent& ev )
     logBuf << "Resized col " << ev.GetRowOrCol();
     wxLogMessage( "%s", logBuf.c_str() );
     
+    ev.Skip();
+}
+
+
+void GridFrame::OnSelectCell( wxGridEvent& ev )
+{
+    logBuf = "";
+    logBuf << "Selected cell at row " << ev.GetRow()
+           << " col " << ev.GetCol();
+    wxLogMessage( "%s", logBuf.c_str() );
+    
+    // you must call Skip() if you want the default processing
+    // to occur in wxGrid
     ev.Skip();
 }
 
