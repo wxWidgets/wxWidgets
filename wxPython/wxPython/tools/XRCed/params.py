@@ -351,12 +351,12 @@ class ParamUnit(PPanel):
         self.Change(-1)
 
 # Dialog for editing multi-line text
-class TextDialog(wxDialogPtr):
+class TextDialog(wxDialog):
     def __init__(self, parent, value):
-        # Is this normal???
-        w = g.frame.res.LoadDialog(parent, 'DIALOG_TEXT')
-        wxDialogPtr.__init__(self, w.this)
-        self.thisown = 1
+	pre = wxPreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_TEXT')
+        self.this = pre.this
+	self._setOORInfo(self)
         self.text = self.FindWindowByName('TEXT')
         self.text.SetValue(value)
         self.SetAutoLayout(True)
@@ -432,13 +432,13 @@ class ParamEncoding(ParamText):
     def __init__(self, parent, name):
         ParamText.__init__(self, parent, name, 100)
 
-class ContentDialog(wxDialogPtr):
+class ContentDialog(wxDialog):
     def __init__(self, parent, value):
         # Load from resource
-        w = g.frame.res.LoadDialog(parent, 'DIALOG_CONTENT')
-        # Perform initialization with class pointer
-        wxDialogPtr.__init__(self, w.this)
-        self.thisown = 1
+	pre = wxPreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT')
+        self.this = pre.this
+	self._setOORInfo(self)
         self.list = self.FindWindowByName('LIST')
         # Set list items
         for v in value:
@@ -483,11 +483,12 @@ class ContentDialog(wxDialogPtr):
             evt.Enable(self.list.GetSelection() != -1 and \
                        self.list.GetSelection() < self.list.Number() - 1)
 
-class ContentCheckListDialog(wxDialogPtr):
+class ContentCheckListDialog(wxDialog):
     def __init__(self, parent, value):
-        w = g.frame.res.LoadDialog(parent, 'DIALOG_CONTENT_CHECK_LIST')
-        wxDialogPtr.__init__(self, w.this)
-        self.thisown = 1
+	pre = wxPreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECK_LIST')
+        self.this = pre.this
+	self._setOORInfo(self)
         self.list = self.FindWindowByName('CHECK_LIST')
         # Set list items
         i = 0
@@ -615,12 +616,12 @@ class ParamContentCheckList(ParamContent):
             self.textModified = False
         dlg.Destroy()
 
-class IntListDialog(wxDialogPtr):
+class IntListDialog(wxDialog):
     def __init__(self, parent, value):
-        # Is this normal???
-        w = g.frame.res.LoadDialog(parent, 'DIALOG_INTLIST')
-        wxDialogPtr.__init__(self, w.this)
-        self.thisown = 1
+	pre = wxPreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_INTLIST')
+        self.this = pre.this
+	self._setOORInfo(self)
         self.list = self.FindWindowByName('LIST')
         # Set list items
         value.sort()
@@ -784,11 +785,10 @@ class ParamFile(PPanel):
 
 class ParamBitmap(PPanel):
     def __init__(self, parent, name):
-        # Load from resource
-        w = g.frame.res.LoadPanel(parent, 'PANEL_BITMAP')
-        # Perform initialization with class pointer
-        wxPanelPtr.__init__(self, w.this)
-        self.thisown = 1
+	pre = wxPrePanel()
+        g.frame.res.LoadOnPanel(pre, parent, 'PANEL_BITMAP')
+        self.this = pre.this
+	self._setOORInfo(self)
         self.modified = self.freeze = False
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.radio_std = self.FindWindowByName('RADIO_STD')
