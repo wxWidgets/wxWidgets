@@ -16,7 +16,7 @@
 #pragma interface "iconbndl.h"
 #endif
 
-#include "dynarray.h"
+#include "wx/dynarray.h"
 // for wxSize
 #include "wx/gdicmn.h"
 
