@@ -487,7 +487,7 @@ void MyFrame::ResetStatus()
     m_mediactrl->GetPlaybackRate()
     );
 
-    m_slider->SetRange(0, (m_mediactrl->Length() / 1000));
+    m_slider->SetRange(0, (int)(m_mediactrl->Length() / 1000));
 
     m_nLoops = 0;
 }
@@ -631,7 +631,7 @@ void MyFrame::OnMediaStop(wxMediaEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void MyTimer::Notify()
 {
-    long lPosition = (m_frame->m_mediactrl->Tell() / 1000);
+    long lPosition = (long)( m_frame->m_mediactrl->Tell() / 1000 );
     m_frame->m_slider->SetValue(lPosition);
 
 #if wxUSE_STATUSBAR
