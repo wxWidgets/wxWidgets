@@ -18,6 +18,8 @@ else
     TOOLDIR=$DEST/bin
 fi
 
+# Make sure the dir exists
+mkdir -p $TOOLDIR
 
 # Make some links to the python executable
 if [ -e $TOOLDIR/python$PYVER]; then
