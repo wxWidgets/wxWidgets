@@ -1,14 +1,9 @@
 wxGTK -a wxWindows !wxWindows/docs/latex \
-	!wxWindows/docs/msw !wxWindows/docs/motif  wxWindows/include/wx \
+	!wxWindows/docs/msw !wxWindows/docs/motif \
 	!wxWindows/include/wx/msw !wxWindows/include/wx/motif  !wxWindows/include/wx/qt \
 	!wxWindows/include/wx/stubs !wxWindows/src/msw !wxWindows/src/qt !wxWindows/src/motif \
 	!wxWindows/include/wx/mac wxWindows/src/jpeg \
-	!wxWindows/src/stubs wxWindows/src/gdk_imlib wxWindows/src/generic wxWindows/src/common \
-	wxWindows/src/png wxWindows/src/zlib wxWindows/src/gtk wxWindows/src/unix \
-	wxWindows/lib wxWindows/src/gtk.inc wxWindows/setup \
-	wxWindows/configure.in wxWindows/configure wxWindows/config.sub \
-	wxWindows/config.guess wxWindows/wx-config.in wxWindows/src/Makefile wxWindows/src/Makefile.in \
-	!wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils 
+	!wxWindows/src/stubs !wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils 
 
 wxQt -a wxWindows/Makefile wxWindows/install/unix wxWindows/install-sh \
 	wxWindows/template.mak wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/msw \

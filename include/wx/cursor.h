@@ -17,5 +17,27 @@
 #include "wx/stubs/cursor.h"
 #endif
 
+#include "wx/utils.h"
+/* This is a small class which can be used by all ports
+   to temporarily suspend the busy cursor. Useful in modal
+   dialogs.
+*/
+class wxBusyCursorSuspender
+{
+public:
+   wxBusyCursorSuspender()
+      {
+         m_wasBusy = wxIsBusy();
+         if(m_wasBusy)
+            wxEndBusyCursor();
+      }
+   ~wxBusyCursorSuspender()
+      {
+         if(m_wasBusy)
+            wxBeginBusyCursor();
+      }
+ private:
+   bool m_wasBusy;
+};
 #endif
     // _WX_CURSOR_H_BASE_

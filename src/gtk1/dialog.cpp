@@ -18,6 +18,7 @@
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
+#include "wx/cursor.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -595,6 +596,8 @@ int wxDialog::ShowModal()
        return GetReturnCode();
     }
 
+    wxBusyCursorSuspender cs; // temporarily suppress the busy cursor
+    
     Show( TRUE );
 
     m_modalShowing = TRUE;
