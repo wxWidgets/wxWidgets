@@ -2,7 +2,7 @@ wx_root:[wxwindows.lib]libwx_gtk.olb/lib
 sys$library:libjpeg.olb/lib
 sys$library:libpng.olb/lib
 sys$library:libz.olb/lib
-sys$library:libtiff.olb/lib
+sys$library:tiff.olb/lib
 X11:libxpm.olb/lib
 sys$share:libgtk.exe/share
 sys$share:libgdk.exe/share

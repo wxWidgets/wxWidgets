@@ -13,6 +13,11 @@
 #pragma implementation "mdi.h"
 #endif
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#define XtWindow XTWINDOW
+#endif
+
 #include "wx/mdi.h"
 #include "wx/menu.h"
 #include "wx/settings.h"
