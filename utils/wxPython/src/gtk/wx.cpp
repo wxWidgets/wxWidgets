@@ -2354,8 +2354,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxNAND", PyInt_FromLong((long) wxNAND));
 	 PyDict_SetItemString(d,"wxOR", PyInt_FromLong((long) wxOR));
 	 PyDict_SetItemString(d,"wxSET", PyInt_FromLong((long) wxSET));
-	 PyDict_SetItemString(d,"wxSRC_OR", PyInt_FromLong((long) wxSRC_OR));
-	 PyDict_SetItemString(d,"wxSRC_AND", PyInt_FromLong((long) wxSRC_AND));
 	 PyDict_SetItemString(d,"WXK_BACK", PyInt_FromLong((long) WXK_BACK));
 	 PyDict_SetItemString(d,"WXK_TAB", PyInt_FromLong((long) WXK_TAB));
 	 PyDict_SetItemString(d,"WXK_RETURN", PyInt_FromLong((long) WXK_RETURN));
@@ -2590,6 +2588,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_PAGEUP", PyInt_FromLong((long) wxEVT_SCROLL_PAGEUP));
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_PAGEDOWN", PyInt_FromLong((long) wxEVT_SCROLL_PAGEDOWN));
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_THUMBTRACK", PyInt_FromLong((long) wxEVT_SCROLL_THUMBTRACK));
+	 PyDict_SetItemString(d,"wxEVT_SCROLL_THUMBRELEASE", PyInt_FromLong((long) wxEVT_SCROLL_THUMBRELEASE));
 	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_TOP", PyInt_FromLong((long) wxEVT_SCROLLWIN_TOP));
 	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_BOTTOM", PyInt_FromLong((long) wxEVT_SCROLLWIN_BOTTOM));
 	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_LINEUP", PyInt_FromLong((long) wxEVT_SCROLLWIN_LINEUP));
@@ -2597,6 +2596,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_PAGEUP", PyInt_FromLong((long) wxEVT_SCROLLWIN_PAGEUP));
 	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_PAGEDOWN", PyInt_FromLong((long) wxEVT_SCROLLWIN_PAGEDOWN));
 	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_THUMBTRACK", PyInt_FromLong((long) wxEVT_SCROLLWIN_THUMBTRACK));
+	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_THUMBRELEASE", PyInt_FromLong((long) wxEVT_SCROLLWIN_THUMBRELEASE));
 	 PyDict_SetItemString(d,"wxEVT_SIZE", PyInt_FromLong((long) wxEVT_SIZE));
 	 PyDict_SetItemString(d,"wxEVT_MOVE", PyInt_FromLong((long) wxEVT_MOVE));
 	 PyDict_SetItemString(d,"wxEVT_CLOSE_WINDOW", PyInt_FromLong((long) wxEVT_CLOSE_WINDOW));

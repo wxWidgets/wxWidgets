@@ -3096,7 +3096,7 @@ static PyObject *_wrap_wxPen_SetDashes(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-static wxBrush *new_wxBrush(wxColour *colour,int style) {
+static wxBrush *new_wxBrush(const wxColour *colour,int style) {
             return wxTheBrushList->FindOrCreateBrush(*colour, style);
         }
 
@@ -6297,8 +6297,8 @@ static PyObject *_wrap_new_wxScreenDC(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-#define wxScreenDC_StartDrawingOnTop(_swigobj,_swigarg0)  (_swigobj->StartDrawingOnTop(_swigarg0))
-static PyObject *_wrap_wxScreenDC_StartDrawingOnTop(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxScreenDC_StartDrawingOnTopWin(_swigobj,_swigarg0)  (_swigobj->StartDrawingOnTop(_swigarg0))
+static PyObject *_wrap_wxScreenDC_StartDrawingOnTopWin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxScreenDC * _arg0;
@@ -6308,33 +6308,33 @@ static PyObject *_wrap_wxScreenDC_StartDrawingOnTop(PyObject *self, PyObject *ar
     char *_kwnames[] = { "self","window", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxScreenDC_StartDrawingOnTop",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxScreenDC_StartDrawingOnTopWin",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScreenDC_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScreenDC_StartDrawingOnTop. Expected _wxScreenDC_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScreenDC_StartDrawingOnTopWin. Expected _wxScreenDC_p.");
         return NULL;
         }
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
         else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxScreenDC_StartDrawingOnTop. Expected _wxWindow_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxScreenDC_StartDrawingOnTopWin. Expected _wxWindow_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxScreenDC_StartDrawingOnTop(_arg0,_arg1);
+        _result = (bool )wxScreenDC_StartDrawingOnTopWin(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxScreenDC_StartDrawingOnTopRect(_swigobj,_swigarg0)  (_swigobj->StartDrawingOnTop(_swigarg0))
-static PyObject *_wrap_wxScreenDC_StartDrawingOnTopRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxScreenDC_StartDrawingOnTop(_swigobj,_swigarg0)  (_swigobj->StartDrawingOnTop(_swigarg0))
+static PyObject *_wrap_wxScreenDC_StartDrawingOnTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxScreenDC * _arg0;
@@ -6345,12 +6345,12 @@ static PyObject *_wrap_wxScreenDC_StartDrawingOnTopRect(PyObject *self, PyObject
     char *_kwnames[] = { "self","rect", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxScreenDC_StartDrawingOnTopRect",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxScreenDC_StartDrawingOnTop",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScreenDC_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScreenDC_StartDrawingOnTopRect. Expected _wxScreenDC_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScreenDC_StartDrawingOnTop. Expected _wxScreenDC_p.");
         return NULL;
         }
     }
@@ -6362,7 +6362,7 @@ static PyObject *_wrap_wxScreenDC_StartDrawingOnTopRect(PyObject *self, PyObject
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxScreenDC_StartDrawingOnTopRect(_arg0,_arg1);
+        _result = (bool )wxScreenDC_StartDrawingOnTop(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -7060,8 +7060,8 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxPaintDC", (PyCFunction) _wrap_new_wxPaintDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxClientDC", (PyCFunction) _wrap_new_wxClientDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScreenDC_EndDrawingOnTop", (PyCFunction) _wrap_wxScreenDC_EndDrawingOnTop, METH_VARARGS | METH_KEYWORDS },
-	 { "wxScreenDC_StartDrawingOnTopRect", (PyCFunction) _wrap_wxScreenDC_StartDrawingOnTopRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScreenDC_StartDrawingOnTop", (PyCFunction) _wrap_wxScreenDC_StartDrawingOnTop, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScreenDC_StartDrawingOnTopWin", (PyCFunction) _wrap_wxScreenDC_StartDrawingOnTopWin, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxScreenDC", (PyCFunction) _wrap_new_wxScreenDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDC_SelectObject", (PyCFunction) _wrap_wxMemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMemoryDC", (PyCFunction) _wrap_new_wxMemoryDC, METH_VARARGS | METH_KEYWORDS },

@@ -567,7 +567,6 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def HitTest(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_HitTest,(self,) + _args, _kwargs)
-        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
         return val
     def SetItemTextColour(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetItemTextColour,(self,) + _args, _kwargs)
@@ -658,3 +657,17 @@ wxTreeItemIcon_Selected = controls2c.wxTreeItemIcon_Selected
 wxTreeItemIcon_Expanded = controls2c.wxTreeItemIcon_Expanded
 wxTreeItemIcon_SelectedExpanded = controls2c.wxTreeItemIcon_SelectedExpanded
 wxTreeItemIcon_Max = controls2c.wxTreeItemIcon_Max
+wxTREE_HITTEST_ABOVE = controls2c.wxTREE_HITTEST_ABOVE
+wxTREE_HITTEST_BELOW = controls2c.wxTREE_HITTEST_BELOW
+wxTREE_HITTEST_NOWHERE = controls2c.wxTREE_HITTEST_NOWHERE
+wxTREE_HITTEST_ONITEMBUTTON = controls2c.wxTREE_HITTEST_ONITEMBUTTON
+wxTREE_HITTEST_ONITEMICON = controls2c.wxTREE_HITTEST_ONITEMICON
+wxTREE_HITTEST_ONITEMINDENT = controls2c.wxTREE_HITTEST_ONITEMINDENT
+wxTREE_HITTEST_ONITEMLABEL = controls2c.wxTREE_HITTEST_ONITEMLABEL
+wxTREE_HITTEST_ONITEMRIGHT = controls2c.wxTREE_HITTEST_ONITEMRIGHT
+wxTREE_HITTEST_ONITEMSTATEICON = controls2c.wxTREE_HITTEST_ONITEMSTATEICON
+wxTREE_HITTEST_TOLEFT = controls2c.wxTREE_HITTEST_TOLEFT
+wxTREE_HITTEST_TORIGHT = controls2c.wxTREE_HITTEST_TORIGHT
+wxTREE_HITTEST_ONITEMUPPERPART = controls2c.wxTREE_HITTEST_ONITEMUPPERPART
+wxTREE_HITTEST_ONITEMLOWERPART = controls2c.wxTREE_HITTEST_ONITEMLOWERPART
+wxTREE_HITTEST_ONITEM = controls2c.wxTREE_HITTEST_ONITEM

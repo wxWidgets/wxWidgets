@@ -7204,6 +7204,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "new_wxSpinButton", (PyCFunction) _wrap_new_wxSpinButton, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_SetScrollbar", (PyCFunction) _wrap_wxScrollBar_SetScrollbar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_SetThumbPosition", (PyCFunction) _wrap_wxScrollBar_SetThumbPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrollBar_GetThumbLength", (PyCFunction) _wrap_wxScrollBar_GetThumbSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_GetThumbSize", (PyCFunction) _wrap_wxScrollBar_GetThumbSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_GetThumbPosition", (PyCFunction) _wrap_wxScrollBar_GetThumbPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_GetPageSize", (PyCFunction) _wrap_wxScrollBar_GetPageSize, METH_VARARGS | METH_KEYWORDS },
