@@ -16,7 +16,9 @@
     #pragma interface "timerbase.h"
 #endif
 
+#include "wx/setup.h"
 #include "wx/object.h"
+#include "wx/longlong.h"
 
 // ----------------------------------------------------------------------------
 // wxTimer
@@ -99,62 +101,44 @@ class WXDLLEXPORT wxStopWatch
 {
 public: 
     // ctor starts the stop watch
-    wxStopWatch() { Start(); }
+    wxStopWatch()        { Start(); }
+    void Start(long t = 0);
+    inline void Pause()  { m_pause = GetElapsedTime(); }
+    inline void Resume() { Start(m_pause); }
 
-    void Start(long t = 0); // (re)start it t milliseconds ago
-    inline void Pause();
-    void Resume() { Start(m_pause); }
-
-    // get the elapsed time since the last Start() or Pause() in milliseconds
+    // get elapsed time since the last Start() or Pause() in milliseconds
     long Time() const;
 
 protected:
     // returns the elapsed time since t0
-    inline long GetElapsedTime() const;
+    long GetElapsedTime() const;
     
 private:
-    long m_t0;          // the time of the last Start()
-    long m_pause;       // the time of the last Pause() or 0
+    wxLongLong m_t0;      // the time of the last Start()
+    long m_pause;         // the time of the last Pause() or 0
 };
 
-// the old name
-#ifdef WXWIN_COMPATIBILITY_2
-    typedef wxStopWatch wxChrono;
-#endif // WXWIN_COMPATIBILITY_2
+
+// Starts a global timer 
+// -- DEPRECATED: use wxStopWatch instead
+void WXDLLEXPORT wxStartTimer();
+
+// Gets elapsed milliseconds since last wxStartTimer or wxGetElapsedTime
+// -- DEPRECATED: use wxStopWatch instead
+long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
+
 
 // ----------------------------------------------------------------------------
 // global time functions
 // ----------------------------------------------------------------------------
 
-// Timer functions (milliseconds) -- use wxStopWatch instead
-void WXDLLEXPORT wxStartTimer();
+// Get number of seconds since local time 00:00:00 Jan 1st 1970.
+long WXDLLEXPORT wxGetLocalTime();
 
-// Gets time since last wxStartTimer or wxGetElapsedTime -- use wxStopWatch
-// instead
-long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
+// Get number of seconds since GMT 00:00:00, Jan 1st 1970.
+long WXDLLEXPORT wxGetUTCTime();
 
-// Get the local time
-bool WXDLLEXPORT wxGetLocalTime(long *timeZone, int *dstObserved);
 
-// Get number of seconds since 00:00:00 GMT, Jan 1st 1970.
-long WXDLLEXPORT wxGetCurrentTime();
-
-// Get number of milliseconds since 00:00:00 GMT, Jan 1st 1970.
-long WXDLLEXPORT wxGetCurrentMTime();
-
-// ----------------------------------------------------------------------------
-// inline functions
-// ----------------------------------------------------------------------------
-
-inline long wxStopWatch::GetElapsedTime() const
-{
-    return wxGetCurrentMTime() - m_t0;
-}
-
-inline void wxStopWatch::Pause()
-{
-    m_pause = GetElapsedTime();
-}
 
 #endif
     // _WX_TIMER_H_BASE_
