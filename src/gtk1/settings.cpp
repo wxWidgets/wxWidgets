@@ -14,7 +14,7 @@
 
 #include "wx/settings.h"
 #include "wx/debug.h"
-
+#include "wx/module.h"
 #include "wx/cmndata.h"
 
 #include <gdk/gdk.h>
@@ -73,18 +73,34 @@ wxColour *g_systemBtnTextColour       = (wxColour *) NULL;
 
 wxFont *g_systemFont = (wxFont *) NULL;
 
-void wxSystemSettings::Done()
+// ----------------------------------------------------------------------------
+// wxSystemSettingsModule
+// ----------------------------------------------------------------------------
+
+class wxSystemSettingsModule : public wxModule
 {
-//    delete g_systemWinColour;
-    delete g_systemBtnFaceColour;
-    delete g_systemBtnShadowColour;
-    delete g_systemBtnHighlightColour;
-    delete g_systemHighlightColour;
-    delete g_systemHighlightTextColour;
-    delete g_systemListBoxColour;
-    delete g_systemFont;
-    delete g_systemBtnTextColour;
-}
+public:
+    bool OnInit() { return TRUE; }
+    void OnExit()
+    {
+        //delete g_systemWinColour;
+        delete g_systemBtnFaceColour;
+        delete g_systemBtnShadowColour;
+        delete g_systemBtnHighlightColour;
+        delete g_systemHighlightColour;
+        delete g_systemHighlightTextColour;
+        delete g_systemListBoxColour;
+        delete g_systemFont;
+        delete g_systemBtnTextColour;
+    }
+    DECLARE_DYNAMIC_CLASS(wxSystemSettingsModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule)
+
+// ----------------------------------------------------------------------------
+// wxSystemSettings implementation
+// ----------------------------------------------------------------------------
 
 // kind of widget to use in GetColourFromGTKWidget
 enum wxGtkWidgetType
@@ -166,7 +182,7 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
     return ok;
 }
 
-wxColour wxSystemSettings::GetSystemColour( int index )
+wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
 {
     switch (index)
     {
@@ -315,7 +331,7 @@ wxColour wxSystemSettings::GetSystemColour( int index )
   return *wxWHITE;
 }
 
-wxFont wxSystemSettings::GetSystemFont( int index )
+wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 {
     switch (index)
     {
@@ -350,12 +366,13 @@ wxFont wxSystemSettings::GetSystemFont( int index )
             }
             return *g_systemFont;
         }
-    }
 
-    return wxNullFont;
+        default:
+            return wxNullFont;
+    }
 }
 
-int wxSystemSettings::GetSystemMetric( int index )
+int wxSystemSettingsNative::GetMetric( wxSystemMetric index )
 {
     switch (index)
     {
@@ -363,21 +380,22 @@ int wxSystemSettings::GetSystemMetric( int index )
         case wxSYS_SCREEN_Y:   return gdk_screen_height();
         case wxSYS_HSCROLL_Y:  return 15;
         case wxSYS_VSCROLL_X:  return 15;
+        default:               
+            wxFAIL_MSG( wxT("wxSystemSettings::GetMetric not fully implemented") );
+            return 0;
     }
-
-    wxCHECK_MSG( index, 0, wxT("wxSystemSettings::GetSystemMetric not fully implemented") );
-
-    return 0;
 }
 
-bool wxSystemSettings::GetCapability(int index)
+bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 {
     switch (index)
     {
         case wxSYS_CAN_ICONIZE_FRAME: 
-            return FALSE; break;
+            return FALSE; 
+            break;
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
-            return TRUE; break;
+            return TRUE; 
+            break;
         default:
             return FALSE;
     }

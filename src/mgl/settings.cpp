@@ -21,6 +21,7 @@
 #include "wx/settings.h"
 #include "wx/colour.h"
 #include "wx/font.h"
+#include "wx/gdicmn.h"
 #include "wx/module.h"
 
 // ----------------------------------------------------------------------------
@@ -47,13 +48,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule)
 
 
 
-wxColour wxSystemSettings::GetSystemColour(int WXUNUSED(index))
+wxColour wxSystemSettingsNative::GetColour(wxSystemColour WXUNUSED(index))
 {
-    // FIXME_MGL
+    // not implemented, the mean is in wxUniversal
     return wxColour(0,0,0);
 }
 
-wxFont wxSystemSettings::GetSystemFont(int index)
+wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
     switch (index)
     {
@@ -77,7 +78,7 @@ wxFont wxSystemSettings::GetSystemFont(int index)
     }
 }
 
-int wxSystemSettings::GetSystemMetric(int index)
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
 {
     int val;
     
@@ -99,7 +100,7 @@ int wxSystemSettings::GetSystemMetric(int index)
     }
 }
 
-bool wxSystemSettings::GetCapability(int index)
+bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 {
     switch (index)
     {
