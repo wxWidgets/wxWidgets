@@ -27,6 +27,9 @@ class TestHtmlPanel(wxPanel):
         wxPanel.__init__(self, parent, -1)
         self.log = log
         self.frame = frame
+        self.cwd = os.path.split(sys.argv[0])[0]
+        if not self.cwd:
+            self.cwd = os.getcwd()
 
 
         self.html = MyHtmlWindow(self, -1, log)
@@ -74,7 +77,7 @@ class TestHtmlPanel(wxPanel):
 
 
     def OnShowDefault(self, event):
-        name = os.path.join(os.path.split(sys.argv[0])[0], 'data/test.htm')
+        name = os.path.join(self.cwd, 'data/test.htm')
         self.html.LoadPage(name)
 
 
@@ -87,10 +90,11 @@ class TestHtmlPanel(wxPanel):
 
 
     def OnWithWidgets(self, event):
-        os.chdir(os.path.split(sys.argv[0])[0])
-        name = os.path.join(os.path.split(sys.argv[0])[0], 'data/widgetTest.htm')
+        print self.cwd
+        os.chdir(self.cwd)
+        name = os.path.join(self.cwd, 'data/widgetTest.htm')
         self.html.LoadPage(name)
-        #self.html.SetPage(_widgetTest)
+
 
     def OnOk(self, event):
         self.log.WriteText("It works!\n")
@@ -137,22 +141,6 @@ It is not intended to be a high-end HTML browser.  If you're looking for somethi
 
 
 
-_widgetTest = '''\
-<html><body>
-The widgets on this page were created dynamically on the fly by a custom
-wxTagHandler found in wxPython.lib.wxpTag.
-
-<hr>
-<center>
-<wxp class="wxButton" width="50%">
-    <param name="label" value="It works!">
-    <param name="id"    value="wxID_OK">
-</wxp>
-</center>
-<hr>
-after
-</body></html>
-'''
 
 
 

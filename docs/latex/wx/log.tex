@@ -52,6 +52,7 @@ empty, {\it HasPendingMessages()} is also provided which allows to explicitly
 verify it.
 
 \helpref{Flush}{wxlogflush}\\
+\helpref{FlushActive}{wxlogflushactive}\\
 \helpref{HasPendingMessages}{haspendingmessages}
 
 \membersection{Customization}\label{wxlogcustomization}
@@ -141,6 +142,16 @@ currently. (Almost) for internal use only.
 
 Shows all the messages currently in buffer and clears it. If the buffer
 is already empty, nothing happens.
+
+\membersection{wxLog::FlushActive}\label{wxlogflushactive}
+
+\func{static void}{FlushActive}{\void}
+
+Flushes the current log target if any, does nothing if there is none.
+
+See also:
+
+\helpref{Flush}{wxlogflush}
 
 \membersection{wxLog::HasPendingMessages}\label{haspendingmessages}
 

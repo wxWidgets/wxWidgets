@@ -28,5 +28,6 @@ cp ../../../docs/gpl.txt /usr/doc/wxPython-$1
 rpm -bb wxPython.spec
 
 mv /usr/src/redhat/RPMS/*/wxPython*.rpm .
+chown rd:users wxPython*.rpm
 
 rm -r /usr/doc/wxPython-$1

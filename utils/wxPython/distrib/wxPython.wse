@@ -822,8 +822,8 @@ item: Install File
   Flags=0000001010000011
 end
 item: Install File
-  Source=e:\projects\wx\lib\wx21b9.dll
-  Destination=%SYS%\wx21b9.dll
+  Source=e:\projects\wx\lib\wx21b10.dll
+  Destination=%SYS%\wx21b10.dll
   Flags=0000001010010010
 end
 item: Install File
@@ -926,7 +926,7 @@ item: Install File
 end
 item: Install File
   Source=E:\PROJECTS\wx\docs\html\ogl\ogl.chm
-  Destination=%MAINDIR%\wxPython\docs\wx.chm
+  Destination=%MAINDIR%\wxPython\docs\ogl.chm
   Description=wxPython documentation
   Flags=0000000010000010
 end

@@ -19,7 +19,9 @@
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>
+#ifdef NOT_READY_YET
 #include <wx/fontenum.h>
+#endif
 %}
 
 //----------------------------------------------------------------------

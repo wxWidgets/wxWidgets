@@ -50,6 +50,7 @@ C++ portability guide</A> by David Williams.
     <LI><A HREF="#no_stl">Don't use STL</A></LI>
     <LI><A HREF="#no_fordecl">Don't declare variables inside <TT>for()</TT></A></LI>
     <LI><A HREF="#no_nestedclasses">Don't use nested classes</A></LI>
+    <LI><A HREF="#no_ternarywithobjects">Use ternary operator ?: carefully</A></LI>
   </OL>
   <BR>
   <LI>General recommendations</LI>
@@ -332,6 +333,25 @@ you can try the following:
 <P>A nice side effect is that you don't need to recompile all the files
 including the header if you change the PrivateLibClass declaration (it's
 an example of a more general interface/implementation separation idea).
+
+  <P><LI><A NAME="no_ternarywithobjects"></A><B>Use ternary operator ?: carefully</B></LI><P>
+  The ternary operator <TT>?:</TT> shouldn't be used with objects (i.e. if any
+of its operands are objects) because some compilers (notable Borland C++) fail
+to compile such code.
+<P><U>Workaround</U>: use <TT>if/else</TT> instead.
+<PRE>
+    wxString s1, s2;
+
+    // Borland C++ won't compile the line below
+    wxString s = s1.Len() < s2.Len() ? s1 : s2;
+
+    // but any C++ compiler will compile this
+    wxString s;
+    if ( s1.Len() < s2.Len() )
+        s = s1;
+    else
+        s = s2;
+</PRE>
 </OL>
 
   <BR>

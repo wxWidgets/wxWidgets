@@ -106,6 +106,34 @@ def makeSimpleBorder3(win):
     return bdr
 
 #----------------------------------------------------------------------
+
+def makeShapes(win):
+    box =wxBoxSizer(wxVERTICAL)
+    box.Add(wxStaticLine(win, -1), 0)
+    for line in (
+                 (wxANCHOR_NW, "NorthWest"),
+                 (wxANCHOR_NORTH, "North"),
+                 (wxANCHOR_NE, "NorthEast")
+                ), (
+                 (wxANCHOR_WEST, "West"),
+                 (wxANCHOR_NONE, "Center"),
+                 (wxANCHOR_EAST, "East")
+                ), (
+                 (wxANCHOR_SW, "SouthWest"),
+                 (wxANCHOR_SOUTH, "South"),
+                 (wxANCHOR_SE, "SouthEast")
+                ):
+        linebox =wxBoxSizer(wxHORIZONTAL)
+        linebox.Add(wxStaticLine(win, -1, style=wxVERTICAL), 0)
+        for (anchor, label) in line:
+            sizer =wxShapeSizer(anchor)
+            sizer.Add(wxButton(win, -1, label, size=wxSize(100, 50)))
+            linebox.Add(sizer, 1)
+            linebox.Add(wxStaticLine(win, -1, style=wxVERTICAL), 0)
+        box.Add(linebox, 1)
+        box.Add(wxStaticLine(win, -1), 0)
+    return box
+
 #----------------------------------------------------------------------
 
 def makeBoxInBox(win):
@@ -230,6 +258,13 @@ theTests = [
 
     ("", None, ""),
 
+
+    ("Proportional resize", makeShapes,
+     "The wxShapeSizer preserves the original proportions of the window."
+     ),
+
+    ("", None, ""),
+
     ("Boxes inside of boxes", makeBoxInBox,
      "This one shows nesting of boxes within boxes within boxes, using both "
      "orientations.  Notice also that button seven has a greater weighting "
@@ -275,7 +310,7 @@ class TestFrame(wxFrame):
 
 
 class TestSelectionPanel(wxPanel):
-    def __init__(self, parent, frame):
+    def __init__(self, parent, frame=NULL):
         wxPanel.__init__(self, parent, -1)
         self.frame = frame
 
