@@ -154,7 +154,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
-int wxSlider::GetValue(void) const
+int wxSlider::GetValue() const
 {
     return (int)(m_adjust->value+0.5);
 }
@@ -187,12 +187,12 @@ void wxSlider::SetRange( int minValue, int maxValue )
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 }
 
-int wxSlider::GetMin(void) const
+int wxSlider::GetMin() const
 {
     return (int)ceil(m_adjust->lower);
 }
 
-int wxSlider::GetMax(void) const
+int wxSlider::GetMax() const
 {
     return (int)ceil(m_adjust->upper);
 }
@@ -208,7 +208,7 @@ void wxSlider::SetPageSize( int pageSize )
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 }
 
-int wxSlider::GetPageSize(void) const
+int wxSlider::GetPageSize() const
 {
     return (int)ceil(m_adjust->page_increment);
 }
@@ -224,7 +224,7 @@ void wxSlider::SetThumbLength( int len )
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 }
 
-int wxSlider::GetThumbLength(void) const
+int wxSlider::GetThumbLength() const
 {
     return (int)ceil(m_adjust->page_size);
 }
@@ -233,7 +233,7 @@ void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
 {
 }
 
-int wxSlider::GetLineSize(void) const
+int wxSlider::GetLineSize() const
 {
     return 0;
 }
@@ -246,12 +246,12 @@ void wxSlider::SetTickFreq( int WXUNUSED(n), int WXUNUSED(pos) )
 {
 }
 
-int wxSlider::GetTickFreq(void) const
+int wxSlider::GetTickFreq() const
 {
     return 0;
 }
 
-void wxSlider::ClearTicks(void)
+void wxSlider::ClearTicks()
 {
 }
 
@@ -259,17 +259,17 @@ void wxSlider::SetSelection( int WXUNUSED(minPos), int WXUNUSED(maxPos) )
 {
 }
 
-int wxSlider::GetSelEnd(void) const
+int wxSlider::GetSelEnd() const
 {
     return 0;
 }
 
-int wxSlider::GetSelStart(void) const
+int wxSlider::GetSelStart() const
 {
     return 0;
 }
 
-void wxSlider::ClearSel(void)
+void wxSlider::ClearSel()
 {
 }
 
