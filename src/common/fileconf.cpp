@@ -133,7 +133,7 @@ wxString wxFileConfig::GetLocalDir()
 
 wxString wxFileConfig::GetGlobalFileName(const char *szFile)
 {
-  wxString str = GetLocalDir();
+  wxString str = GetGlobalDir();
   str << szFile;
 
   if ( strchr(szFile, '.') == NULL )
