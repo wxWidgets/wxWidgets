@@ -464,12 +464,16 @@ void wxHtmlImageCell::SetImage(const wxImage& img)
         if ( m_bmpH == -1 )
             m_bmpH = hh;
 
+        // Only scale the bitmap at the rendering stage,
+        // so we don't lose quality twice
+/*
         if ((m_bmpW != ww) || (m_bmpH != hh))
         {
             wxImage img2 = img.Scale(m_bmpW, m_bmpH);
             m_bitmap = new wxBitmap(img2);
         }
         else
+*/
             m_bitmap = new wxBitmap(img);
     }
 }
@@ -547,12 +551,21 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
     }
     if ( m_bitmap )
     {
+        // We add in the scaling from the desired bitmap width
+        // and height, so we only do the scaling once.
+        double imageScaleX = 1.0;
+        double imageScaleY = 1.0;
+        if (m_bmpW != m_bitmap->GetWidth())
+            imageScaleX = (double) m_bmpW / (double) m_bitmap->GetWidth();
+        if (m_bmpH != m_bitmap->GetHeight())
+            imageScaleY = (double) m_bmpH / (double) m_bitmap->GetHeight();
+        
         double us_x, us_y;
         dc.GetUserScale(&us_x, &us_y);
-        dc.SetUserScale(us_x * m_scale, us_y * m_scale);
+        dc.SetUserScale(us_x * m_scale * imageScaleX, us_y * m_scale * imageScaleY);
 
-        dc.DrawBitmap(*m_bitmap, (int) ((x + m_PosX) / m_scale),
-                                 (int) ((y + m_PosY) / m_scale), TRUE);
+        dc.DrawBitmap(*m_bitmap, (int) ((x + m_PosX) / (m_scale*imageScaleX)),
+                                 (int) ((y + m_PosY) / (m_scale*imageScaleY)), TRUE);
         dc.SetUserScale(us_x, us_y);
     }
 }
