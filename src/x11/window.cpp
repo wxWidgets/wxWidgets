@@ -966,16 +966,17 @@ void wxWindowX11::X11SendPaintEvents()
             wxRegionIterator upd( m_clearRegion );
             while (upd)
             {
-                // XClearArea( ... , upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+                XClearArea( wxGlobalDisplay(), (Window) m_mainWidget, 
+                            upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight(), False );
                 upd ++;
             }
         }
         m_clearRegion.Clear();
     }
 
-    // wxNcPaintEvent nc_paint_event( GetId() );
-    // nc_paint_event.SetEventObject( this );
-    // GetEventHandler()->ProcessEvent( nc_paint_event );
+    wxNcPaintEvent nc_paint_event( GetId() );
+    nc_paint_event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( nc_paint_event );
 
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );
