@@ -76,15 +76,8 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
   m_windowStyle = style;
 
-  SetFont(* (wxTheFontList->FindOrCreateFont(11, wxSWISS, wxNORMAL, wxNORMAL)));
-
   SetParent(parent);
 
-  DWORD msflags = 0;
-  if (style & wxBORDER)
-    msflags |= WS_BORDER;
-  msflags |= WS_CHILD | WS_VISIBLE;
-  
   if (width <= 0)
     width = 100;
   if (height <= 0)
@@ -105,6 +98,8 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     tabStyle |= TCS_FIXEDWIDTH;
   if (m_windowStyle & wxTC_OWNERDRAW)
     tabStyle |= TCS_OWNERDRAWFIXED;
+  if (m_windowStyle & wxBORDER)
+    tabStyle |= WS_BORDER;
 
   tabStyle |= TCS_TOOLTIPS;
 
@@ -112,7 +107,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
   HWND hWndTabCtrl = CreateWindowEx(0L,     // No extended styles.
     WC_TABCONTROL,                          // Class name for the tab control
     wxT(""),                                 // No default text.
-    WS_CHILD | WS_BORDER | WS_VISIBLE | tabStyle,    // Styles and defaults.
+    tabStyle,    // Styles and defaults.
     x, y, width, height,                    // Standard size and position.
     (HWND) parent->GetHWND(),               // Parent window
     (HMENU)m_windowId,                      // ID.
@@ -123,6 +118,8 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
   if (parent) parent->AddChild(this);
   
   SubclassWin((WXHWND) hWndTabCtrl);
+
+  SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
   return TRUE;
 }
