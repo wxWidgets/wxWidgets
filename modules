@@ -82,6 +82,8 @@ wxMac -a wxWindows/include/wx_cw.pch wxWindows/include/wx_cw.pch++ \
 
 wxEtc -a wxWindows/misc wxWindows/user wxWindows/samples wxWindows/utils
 
+wxSamples -a wxWindows/samples
+
 wxDocs -a wxWindows/docs
 
 wxDoc -a wxWindows/docs
