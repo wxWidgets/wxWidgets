@@ -99,9 +99,9 @@ public:
     void OnSelectFont(wxCommandEvent& event);
     void OnEnumerateFamiliesForEncoding(wxCommandEvent& event);
     void OnEnumerateFamilies(wxCommandEvent& WXUNUSED(event))
-        { DoEnumerateFamilies(FALSE); }
+        { DoEnumerateFamilies(false); }
     void OnEnumerateFixedFamilies(wxCommandEvent& WXUNUSED(event))
-        { DoEnumerateFamilies(TRUE); }
+        { DoEnumerateFamilies(true); }
     void OnEnumerateEncodings(wxCommandEvent& event);
 
     void OnCheckNativeToFromString(wxCommandEvent& event);
@@ -109,7 +109,7 @@ public:
 protected:
     bool DoEnumerateFamilies(bool fixedWidthOnly,
                              wxFontEncoding encoding = wxFONTENCODING_SYSTEM,
-                             bool silent = FALSE);
+                             bool silent = false);
 
     void DoResizeFont(int diff);
     void DoChangeFont(const wxFont& font, const wxColour& col = wxNullColour);
@@ -210,13 +210,13 @@ bool MyApp::OnInit()
                                  wxPoint(50, 50), wxSize(600, 400));
 
     // Show it and tell the application that it's our main window
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned 'false' here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -225,7 +225,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size), m_textctrl(NULL)
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size), m_textctrl(NULL)
 {
     m_fontSize = 12;
 
@@ -243,10 +243,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->Append(Font_IncSize, wxT("&Increase font size by 2 points\tCtrl-I"));
     menuFont->Append(Font_DecSize, wxT("&Decrease font size by 2 points\tCtrl-D"));
     menuFont->AppendSeparator();
-    menuFont->Append(Font_Bold, wxT("&Bold\tCtrl-B"), wxT("Toggle bold state"), TRUE);
-    menuFont->Append(Font_Italic, wxT("&Oblique\tCtrl-O"), wxT("Toggle italic state"), TRUE);
+    menuFont->Append(Font_Bold, wxT("&Bold\tCtrl-B"), wxT("Toggle bold state"), true);
+    menuFont->Append(Font_Italic, wxT("&Oblique\tCtrl-O"), wxT("Toggle italic state"), true);
     menuFont->Append(Font_Underlined, wxT("&Underlined\tCtrl-U"),
-                     wxT("Toggle underlined state"), TRUE);
+                     wxT("Toggle underlined state"), true);
 
     menuFont->AppendSeparator();
     menuFont->Append(Font_CheckNativeToFromString,
@@ -284,7 +284,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxSplitterWindow *splitter = new wxSplitterWindow(this);
 
-    m_textctrl = new wxTextCtrl(splitter, -1,
+    m_textctrl = new wxTextCtrl(splitter, wxID_ANY,
                                 wxT("Paste text here to see how it looks\nlike in the given font"),
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE);
@@ -317,7 +317,7 @@ protected:
         text.Printf(wxT("Encoding %d: %s (available in facename '%s')\n"),
                     ++m_n, encoding.c_str(), facename.c_str());
         m_text += text;
-        return TRUE;
+        return true;
     }
 
 private:
@@ -350,7 +350,7 @@ protected:
     virtual bool OnFacename(const wxString& facename)
     {
         m_facenames.Add(facename);
-        return TRUE;
+        return true;
     }
 
     private:
@@ -400,19 +400,19 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
         if ( !facename.IsEmpty() )
         {
             wxFont font(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-                        wxFONTWEIGHT_NORMAL, FALSE, facename, encoding);
+                        wxFONTWEIGHT_NORMAL, false, facename, encoding);
 
             DoChangeFont(font);
         }
 
-        return TRUE;
+        return true;
     }
     else if ( !silent )
     {
         wxLogWarning(wxT("No such fonts found."));
     }
 
-    return FALSE;
+    return false;
 }
 
 void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
@@ -452,7 +452,7 @@ void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
 
     if ( n != -1 )
     {
-        DoEnumerateFamilies(FALSE, encodings[n]);
+        DoEnumerateFamilies(false, encodings[n]);
     }
 }
 
@@ -521,9 +521,9 @@ void MyFrame::OnwxPointerFont(wxCommandEvent& event)
         default                 : font = wxFont(*wxNORMAL_FONT); break;
     }
 
-    GetMenuBar()->Check(Font_Bold, FALSE);
-    GetMenuBar()->Check(Font_Italic, FALSE);
-    GetMenuBar()->Check(Font_Underlined, FALSE);
+    GetMenuBar()->Check(Font_Bold, false);
+    GetMenuBar()->Check(Font_Italic, false);
+    GetMenuBar()->Check(Font_Underlined, false);
 
     DoChangeFont(font);
 }
@@ -568,8 +568,8 @@ void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
@@ -670,10 +670,10 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     }
 
     // and now create the correct font
-    if ( !DoEnumerateFamilies(FALSE, fontenc, TRUE /* silent */) )
+    if ( !DoEnumerateFamilies(false, fontenc, true /* silent */) )
     {
         wxFont font(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-                    wxFONTWEIGHT_NORMAL, FALSE /* !underlined */,
+                    wxFONTWEIGHT_NORMAL, false /* !underlined */,
                     wxEmptyString /* facename */, fontenc);
         if ( font.Ok() )
         {
@@ -704,7 +704,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxWindow)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent )
-        : wxWindow( parent, -1 ),
+        : wxWindow( parent, wxID_ANY ),
           m_colour(*wxRED), m_font(*wxNORMAL_FONT)
 {
 }
