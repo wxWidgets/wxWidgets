@@ -1116,7 +1116,8 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
         m_imageListNormal->Draw( item->GetSelectedImage(), dc,
-                                 item->GetX(), item->GetY()-1,
+                                 item->GetX(),
+                                 item->GetY()/* +((total_h > image_h)?((total_h-image_h)/2):0)*/,
                                  wxIMAGELIST_DRAW_TRANSPARENT );
         dc.DestroyClippingRegion();
     }
@@ -1124,14 +1125,15 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
         m_imageListNormal->Draw( item->GetImage(), dc,
-                                 item->GetX(), item->GetY()-1,
+                                 item->GetX(),
+                                 item->GetY() /*+((total_h > image_h)?((total_h-image_h)/2):0)*/,
                                  wxIMAGELIST_DRAW_TRANSPARENT );
         dc.DestroyClippingRegion();
     }
 
     dc.SetBackgroundMode(wxTRANSPARENT);
     dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY()
-                 + (total_h > text_h)? (total_h - text_h)/2 : 0);
+                 + ((total_h > text_h) ? (total_h - text_h)/2 : 0));
 
     // restore normal font for bold items
     if (fontOld.Ok())
