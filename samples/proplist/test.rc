@@ -1,5 +1,5 @@
-tick_bmp                BITMAP  "tick.bmp"
-cross_bmp               BITMAP  "cross.bmp"
+//tick_bmp                BITMAP  "tick.bmp"
+//cross_bmp               BITMAP  "cross.bmp"
 
 #include "wx/msw/wx.rc"
 
