@@ -1660,7 +1660,7 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     }
 
     dc.SetBackgroundMode(wxTRANSPARENT);
-    int extraH = (total_h > text_h) ? (total_h - text_h)/2 : 0;
+    long extraH = (total_h > text_h) ? (total_h - text_h)/2 : 0;
     dc.DrawText( item->GetText(),
                  (wxCoord)(image_w + item->GetX()),
                  (wxCoord)(item->GetY() + extraH));

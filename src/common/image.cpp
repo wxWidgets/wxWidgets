@@ -314,7 +314,7 @@ wxImage wxImage::Mirror( bool horizontally ) const
         for (long i = 0; i < height; i++)
         {
             target_data = data + 3*width*(height-1-i);
-            memcpy( target_data, source_data, 3*width );
+            memcpy( target_data, source_data, (size_t)3*width );
             source_data += 3*width;
         }
     }

@@ -403,6 +403,15 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
     // if didn't find it there, try to reckognise it ourselves
     if ( encoding == wxFONTENCODING_SYSTEM )
     {
+        // discard the optional quotes
+        if ( !!cs )
+        {
+            if ( cs[0u] == _T('"') && cs.Last() == _T('"') )
+            {
+                cs = wxString(cs.c_str(), cs.length() - 1);
+            }
+        }
+
         cs.MakeUpper();
 
         if ( !cs || cs == wxT("US-ASCII") )

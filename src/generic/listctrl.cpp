@@ -2879,7 +2879,7 @@ long wxListMainWindow::FindItem(long start, const wxString& str, bool WXUNUSED(p
     long pos = start;
     wxString tmp = str;
     if (pos < 0) pos = 0;
-    for (size_t i = pos; i < m_lines.GetCount(); i++)
+    for (size_t i = (size_t)pos; i < m_lines.GetCount(); i++)
     {
         wxListLineData *line = &m_lines[i];
         wxString s = "";
@@ -2894,7 +2894,7 @@ long wxListMainWindow::FindItem(long start, long data)
 {
     long pos = start;
     if (pos < 0) pos = 0;
-    for (size_t i = pos; i < m_lines.GetCount(); i++)
+    for (size_t i = (size_t)pos; i < m_lines.GetCount(); i++)
     {
         wxListLineData *line = &m_lines[i];
         wxListItem item;
