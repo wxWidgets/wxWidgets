@@ -84,20 +84,28 @@
 class wxRichEditModule : public wxModule
 {
 public:
+    enum Version
+    {
+        Version_1,          // riched32.dll
+        Version_2or3,       // both use riched20.dll
+        Version_41,         // msftedit.dll (XP SP1 and Windows 2003)
+        Version_Max
+    };
+
     virtual bool OnInit();
     virtual void OnExit();
 
-    // load the richedit DLL of at least of required version
-    static bool Load(int version = 1);
+    // load the richedit DLL for the specified version of rich edit
+    static bool Load(Version version);
 
 private:
     // the handles to richedit 1.0 and 2.0 (or 3.0) DLLs
-    static HINSTANCE ms_hRichEdit[2];
+    static HINSTANCE ms_hRichEdit[Version_Max];
 
     DECLARE_DYNAMIC_CLASS(wxRichEditModule)
 };
 
-HINSTANCE wxRichEditModule::ms_hRichEdit[2] = { NULL, NULL };
+HINSTANCE wxRichEditModule::ms_hRichEdit[Version_Max] = { NULL, NULL, NULL };
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule)
 
@@ -280,12 +288,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     // do create the control - either an EDIT or RICHEDIT
     wxString windowClass = wxT("EDIT");
-    
+
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
     // A control that capitalizes the first letter
     if (style & wxTE_CAPITALIZE)
         windowClass = wxT("CAPEDIT");
-#endif    
+#endif
 
 #if wxUSE_RICHEDIT
     if ( m_windowStyle & wxTE_AUTO_URL )
@@ -303,63 +311,58 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     // we need to load the richedit DLL before creating the rich edit control
     if ( m_windowStyle & wxTE_RICH )
     {
-        static bool s_errorGiven = false;// MT-FIXME
-
-        // Which version do we need? Use 1.0 by default because it is much more
-        // like the the standard EDIT or 2.0 if explicitly requested, but use
-        // only 2.0 in Unicode mode as 1.0 doesn't support Unicode at all
+        // versions 2.0, 3.0 and 4.1 of rich edit are mostly compatible with
+        // each other but not with version 1.0, so we have separate flags for
+        // the version 1.0 and the others (and so m_verRichEdit may be 0 (plain
+        // EDIT control), 1 for version 1.0 or 2 for any higher version)
         //
-        // TODO: RichEdit 3.0 is apparently capable of emulating RichEdit 1.0
-        //       (and thus EDIT) much better than RichEdit 2.0 so we probably
-        //       should use 3.0 if available as it is the best of both worlds -
-        //       but as I can't test it right now I don't do it (VZ)
+        // notice that 1.0 has no Unicode support at all so in Unicode build we
+        // must use another version
+
 #if wxUSE_UNICODE
-        const int verRichEdit = 2;
+        m_verRichEdit = 2;
 #else // !wxUSE_UNICODE
-        int verRichEdit = m_windowStyle & wxTE_RICH2 ? 2 : 1;
+        m_verRichEdit = m_windowStyle & wxTE_RICH2 ? 2 : 1;
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-        // only give the error msg once if the DLL can't be loaded
-        if ( !s_errorGiven )
+        if ( m_verRichEdit == 2 )
         {
-            // try to load the RichEdit DLL (will do nothing if already done)
-            if ( !wxRichEditModule::Load(verRichEdit) )
+            if ( wxRichEditModule::Load(wxRichEditModule::Version_41) )
             {
-#if !wxUSE_UNICODE
-                // try another version?
-                verRichEdit = 3 - verRichEdit; // 1 <-> 2
-
-                if ( !wxRichEditModule::Load(verRichEdit) )
-#endif // wxUSE_UNICODE
-                {
-                    wxLogError(_("Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"));
-
-                    s_errorGiven = true;
-                }
+                // yes, class name for version 4.1 really is 5.0
+                windowClass = _T("RICHEDIT50W");
+            }
+            else if ( wxRichEditModule::Load(wxRichEditModule::Version_2or3) )
+            {
+                windowClass = _T("RichEdit20")
+#if wxUSE_UNICODE
+                              _T("W");
+#else // ANSI
+                              _T("A");
+#endif // Unicode/ANSI
+            }
+            else // failed to load msftedit.dll and riched20.dll
+            {
+                m_verRichEdit = 1;
             }
         }
 
-        // have we managed to load any richedit version?
-        if ( !s_errorGiven )
+        if ( m_verRichEdit == 1 )
         {
-            m_verRichEdit = verRichEdit;
-            if ( m_verRichEdit == 1 )
+            if ( wxRichEditModule::Load(wxRichEditModule::Version_1) )
             {
-                windowClass = wxT("RICHEDIT");
+                windowClass = _T("RICHEDIT");
             }
-            else
+            else // failed to load any richedit control DLL
             {
-#ifndef RICHEDIT_CLASS
-                wxString RICHEDIT_CLASS;
-                RICHEDIT_CLASS.Printf(_T("RichEdit%d0"), m_verRichEdit);
-#if wxUSE_UNICODE
-                RICHEDIT_CLASS += _T('W');
-#else // ANSI
-                RICHEDIT_CLASS += _T('A');
-#endif // Unicode/ANSI
-#endif // !RICHEDIT_CLASS
+                // only give the error msg once if the DLL can't be loaded
+                static bool s_errorGiven = false; // MT ok as only used by GUI
 
-                windowClass = RICHEDIT_CLASS;
+                wxLogError(_("Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"));
+
+                s_errorGiven = true;
+
+                m_verRichEdit = 0;
             }
         }
     }
@@ -2619,6 +2622,8 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 // wxRichEditModule
 // ----------------------------------------------------------------------------
 
+static const HINSTANCE INVALID_HINSTANCE = (HINSTANCE)-1;
+
 bool wxRichEditModule::OnInit()
 {
     // don't do anything - we will load it when needed
@@ -2629,7 +2634,7 @@ void wxRichEditModule::OnExit()
 {
     for ( size_t i = 0; i < WXSIZEOF(ms_hRichEdit); i++ )
     {
-        if ( ms_hRichEdit[i] )
+        if ( ms_hRichEdit[i] && ms_hRichEdit[i] != INVALID_HINSTANCE )
         {
             ::FreeLibrary(ms_hRichEdit[i]);
             ms_hRichEdit[i] = NULL;
@@ -2638,17 +2643,9 @@ void wxRichEditModule::OnExit()
 }
 
 /* static */
-bool wxRichEditModule::Load(int version)
+bool wxRichEditModule::Load(Version version)
 {
-    // we don't support loading richedit 3.0 as I don't know how to distinguish
-    // it from 2.0 anyhow
-    wxCHECK_MSG( version == 1 || version == 2, false,
-                 _T("incorrect richedit control version requested") );
-
-    // make it the index in the array
-    version--;
-
-    if ( ms_hRichEdit[version] == (HINSTANCE)-1 )
+    if ( ms_hRichEdit[version] == INVALID_HINSTANCE )
     {
         // we had already tried to load it and failed
         return false;
@@ -2660,16 +2657,21 @@ bool wxRichEditModule::Load(int version)
         return true;
     }
 
-    wxString dllname = version ? _T("riched20") : _T("riched32");
-    dllname += _T(".dll");
+    static const wxChar *dllnames[] =
+    {
+        _T("riched32"),
+        _T("riched20"),
+        _T("msftedit"),
+    };
 
-    ms_hRichEdit[version] = ::LoadLibrary(dllname);
+    wxCOMPILE_TIME_ASSERT( WXSIZEOF(dllnames) == Version_Max,
+                            RichEditDllNamesVersionsMismatch );
+
+    ms_hRichEdit[version] = ::LoadLibrary(dllnames[version]);
 
     if ( !ms_hRichEdit[version] )
     {
-        wxLogSysError(_("Could not load Rich Edit DLL '%s'"), dllname.c_str());
-
-        ms_hRichEdit[version] = (HINSTANCE)-1;
+        ms_hRichEdit[version] = INVALID_HINSTANCE;
 
         return false;
     }
