@@ -860,6 +860,46 @@ bool wxSplitterWindow::DoSendEvent(wxSplitterEvent& event)
     return !GetEventHandler()->ProcessEvent(event) || event.IsAllowed();
 }
 
+wxSize wxSplitterWindow::DoGetBestSize() const
+{
+    // get best sizes of subwindows
+    wxSize size1, size2;
+    if ( m_windowOne )
+        size1 = m_windowOne->GetBestSize();
+    if ( m_windowTwo )
+        size2 = m_windowTwo->GetBestSize();
+
+    // sum them
+    //
+    // pSash points to the size component to which sash size must be added
+    int *pSash;
+    wxSize sizeBest;
+    if ( m_splitMode == wxSPLIT_VERTICAL )
+    {
+        sizeBest.y = wxMax(size1.y, size2.y);
+        sizeBest.x = wxMax(size1.x, m_minimumPaneSize) +
+                        wxMax(size2.x, m_minimumPaneSize);
+
+        pSash = &sizeBest.x;
+    }
+    else // wxSPLIT_HORIZONTAL
+    {
+        sizeBest.x = wxMax(size1.x, size2.x);
+        sizeBest.y = wxMax(size1.y, m_minimumPaneSize) +
+                        wxMax(size2.y, m_minimumPaneSize);
+
+        pSash = &sizeBest.y;
+    }
+
+    // account for the border and the sash
+    int border = 2*GetBorderSize();
+    *pSash += GetSashSize();
+    sizeBest.x += border;
+    sizeBest.y += border;
+
+    return sizeBest;
+}
+
 // ---------------------------------------------------------------------------
 // wxSplitterWindow virtual functions: they now just generate the events
 // ---------------------------------------------------------------------------

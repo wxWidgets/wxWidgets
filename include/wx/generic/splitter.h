@@ -221,6 +221,7 @@ public:
 #ifdef __WXMAC__
     virtual bool MacClipGrandChildren() const { return true ; }
 #endif
+
 protected:
     // event handlers
 #if defined(__WXMSW__) || defined(__WXMAC__)
@@ -231,7 +232,6 @@ protected:
     // by the user code
     inline bool DoSendEvent(wxSplitterEvent& event);
 
-protected:
     // common part of all ctors
     void Init();
 
@@ -269,6 +269,11 @@ protected:
 
     // redraw the splitter if its "hotness" changed if necessary
     void RedrawIfHotSensitive(bool isHot);
+
+    // return the best size of the splitter equal to best sizes of its
+    // subwindows
+    virtual wxSize DoGetBestSize() const;
+
 
     wxSplitMode m_splitMode;
     wxWindow*   m_windowOne;
