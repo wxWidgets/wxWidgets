@@ -44,6 +44,7 @@
     #include "wx/thread.h"
 #endif
 
+#include <ctype.h>
 #include <math.h>
 
 #include <gdk/gdk.h>
