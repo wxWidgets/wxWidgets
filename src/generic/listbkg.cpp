@@ -357,10 +357,12 @@ int wxListbook::SetSelection(size_t n)
 
     if ( (int)n != m_selection )
     {
-        m_selection = n;
+        m_list->Select(n);
+        m_list->Focus(n);
 
-        m_list->Select(m_selection);
-        m_list->Focus(m_selection);
+        // change m_selection only now, otherwise OnListSelected() would ignore
+        // the selection change event
+        m_selection = n;
     }
 
     return selOld;
