@@ -108,7 +108,11 @@ def runTest(frame, nb, log):
     h = nb.GetClientSize().height
     if w < 300: w = 300
     if h < 300: h = 300
-    win = TestPanel(nb, wxSize(w, h), log)
+    win = wxPanel(nb, -1)
+    tp = TestPanel(win, wxSize(w, h), log)
+    def OnPanelSize(evt, tp=tp):
+        tp.SetSize(evt.GetSize())
+    EVT_SIZE(win, OnPanelSize)
     return win
 
 #----------------------------------------------------------------------

@@ -39,7 +39,8 @@ elif [ "$1" = "d" ]; then
 # "t" --> touch *.i files
 elif [ "$1" = "t" ]; then
     shift
-    CMD="set CMD=touch src\*.i; touch contrib\glcanvas\*.i; touch contrib\ogl\*.i; touch contrib\stc\*.i"
+    #CMD="set CMD=touch src\*.i; touch contrib\glcanvas\*.i; touch contrib\ogl\*.i; touch contrib\stc\*.i"
+    CMD='find . -name "*.i" | xargs -l touch'
 
 # "i" --> install
 elif [ "$1" = "i" ]; then
@@ -110,7 +111,7 @@ fi
 
 
 echo $CMD
-$CMD
+eval $CMD
 
 
 if [ "$OTHERCMD" != "" ]; then

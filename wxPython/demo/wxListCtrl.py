@@ -122,6 +122,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
             self.list.InsertColumnInfo(2, info)
 
 
+
         items = musicdata.items()
         for x in range(len(items)):
             key, data = items[x]
@@ -138,6 +139,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
         self.list.SetColumnWidth(0, wxLIST_AUTOSIZE)
         self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
+        self.list.SetColumnWidth(2, 100)
 
         # show how to select an item
         self.list.SetItemState(5, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
