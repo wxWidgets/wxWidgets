@@ -102,7 +102,7 @@ CPP_MT_FLAG=-D_REENTRANT
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="GTK MAC MGL MICROWIN MOTIF MSW PM WINE"
+ALL_TOOLKITS="GTK MAC MGL MICROWIN MOTIF MSW PM WINE X11"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -114,6 +114,7 @@ DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_PM=0
 DEFAULT_wxUSE_WINE=0
+DEFAULT_wxUSE_X11=0
 
 dnl these are the values which are really default for the given platform -
 dnl they're not cached and are only used if no --with-toolkit was given *and*
@@ -126,6 +127,7 @@ DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_PM=0
 DEFAULT_DEFAULT_wxUSE_WINE=0
+DEFAULT_DEFAULT_wxUSE_X11=0
 
 PROGRAM_EXT=
 SO_SUFFIX=so
@@ -713,6 +715,7 @@ AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MS
 AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" CACHE_MGL=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" CACHE_X11=1 TOOLKIT_GIVEN=1])
 
 AC_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available (EXPERIMENTAL)],wxUSE_GTK2=1,wxUSE_GTK2=0)
 
@@ -1087,7 +1090,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MAC:-0}  \
-                  + ${wxUSE_WINE:-0} + ${wxUSE_MSW:-0} + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0}`
+                  + ${wxUSE_WINE:-0} + ${wxUSE_MSW:-0} + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0}+ ${wxUSE_X11:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
     dnl Path separator; ':' for unix.
@@ -1869,6 +1872,58 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         GUIDIST=MICROWIN_DIST
         
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__ -D__WXMSW__ -D__WIN95__ -D__WIN32__ -DMWIN -DMICROWIN_NOCONTROLS -DMICROWIN_TODO=1"
+    fi
+
+    if test "$wxUSE_X11" = 1; then
+        dnl use standard macros to check for X headers/libs, this brings support
+        dnl for the standard configure options --x-includes and --x-libraries
+        AC_PATH_XTRA
+
+        if test "$no_x" = "yes"; then
+          AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
+        fi
+
+        GUI_TK_LIBRARY="$X_LIBS"
+        TOOLKIT_INCLUDE="$X_CFLAGS"
+        AFMINSTALL=afminstall
+        COMPILED_X_PROGRAM=0
+
+        xpm_link=
+        AC_MSG_CHECKING(for Xpm library)
+        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+        if test "$ac_find_libraries" != "" ; then
+            WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+            xpm_link=" -lXpm"
+            AC_DEFINE(wxHAVE_LIB_XPM)
+            AC_MSG_RESULT(found at $ac_find_libraries)
+        else
+            AC_TRY_COMPILE(
+                [
+                    #include <X11/xpm.h>
+                ],
+                [
+                    int version;
+                    version = XpmLibraryVersion();
+                ],
+                [
+                    xpm_link=" -lXpm"
+                    AC_DEFINE(wxHAVE_LIB_XPM)
+                    AC_MSG_RESULT(found in default search path)
+                    COMPILED_X_PROGRAM=0
+                ],
+                [
+                    AC_MSG_RESULT(no)
+                    AC_MSG_WARN(library will be compiled without support for images in XPM format)
+                ]
+            )
+        fi
+
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXext -lXt -lX11"
+        TOOLKIT_VPATH="\${top_srcdir}/src/x11"
+        TOOLKIT=X11
+        GUIDIST=X11_DIST
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__ -D__WXX11__"
     fi
 
     if test "$wxUSE_WINE" = 1; then
@@ -3772,6 +3827,10 @@ if test "$wxUSE_GUI" = "yes"; then
         AC_MSG_WARN([Joystick not yet supported under Motif... disabled])
         wxUSE_JOYSTICK=no
      fi
+    if test "$TOOLKIT" = "X11"; then
+        AC_MSG_WARN([Joystick not yet supported under X11... disabled])
+        wxUSE_JOYSTICK=no
+     fi
 
     dnl under MSW we always have joystick support
     if test "$TOOLKIT" != "MSW"; then
@@ -4057,6 +4116,11 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
 
     if test "$wxUSE_MOTIF" = 1; then
         AC_MSG_WARN([Drag and drop not yet supported under Motif... disabled])
+        wxUSE_DRAG_AND_DROP=no
+    fi
+
+    if test "$wxUSE_X11" = 1; then
+        AC_MSG_WARN([Drag and drop not yet supported under X11... disabled])
         wxUSE_DRAG_AND_DROP=no
     fi
 
