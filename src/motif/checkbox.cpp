@@ -16,6 +16,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#endif
+
 #include "wx/defs.h"
 
 #include "wx/checkbox.h"
@@ -34,8 +38,7 @@
 #endif
 
 // define symbols that are missing in old versions of Motif.
-#if defined(__VMS) || (XmVersion < 2000)
-#define XtDisplay XTDISPLAY
+#if (XmVersion < 2000)
 #define XmNtoggleMode 0
 #define XmTOGGLE_INDETERMINATE 1
 #define XmTOGGLE_BOOLEAN 2
