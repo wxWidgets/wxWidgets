@@ -196,6 +196,7 @@ WXDLLEXPORT wxString wxGetHostName();
 
 // Get FQDN
 WXDLLEXPORT wxString wxGetFullHostName();
+WXDLLEXPORT bool wxGetFullHostName(wxChar *buf, int maxSize);
 
 // Get user ID e.g. jacs (this is known as login name under Unix)
 WXDLLEXPORT bool wxGetUserId(wxChar *buf, int maxSize);

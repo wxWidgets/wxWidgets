@@ -905,11 +905,12 @@ typedef enum
 #define wxCANCEL            0x0004
 #define wxYES               0x0008
 #define wxNO                0x0010
-
-#define wxICON_EXCLAMATION  0x0020
-#define wxICON_HAND         0x0040
-#define wxICON_QUESTION     0x0080
-#define wxICON_INFORMATION  0x0100
+#define wxNO_DEFAULT        0x0020
+#define wxYES_DEFAULT       0x0000  // has no effect
+#define wxICON_EXCLAMATION  0x0040
+#define wxICON_HAND         0x0080
+#define wxICON_QUESTION     0x0100
+#define wxICON_INFORMATION  0x0200
 
 #define wxICON_STOP         wxICON_HAND
 #define wxICON_ASTERISK     wxICON_INFORMATION

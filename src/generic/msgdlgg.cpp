@@ -131,8 +131,16 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString
     }
     else if (yes)
     {
-        yes->SetDefault();
-        yes->SetFocus();
+       if(style & wxNO_DEFAULT)
+       {
+          no->SetDefault();
+          no->SetFocus();
+       }
+       else
+       {
+          yes->SetDefault();
+          yes->SetFocus();
+       }
     }
     
     int w = m_buttons.GetCount() * 100;

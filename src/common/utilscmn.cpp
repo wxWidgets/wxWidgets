@@ -901,3 +901,18 @@ wxString wxGetHostName()
     return buf;
 }
 
+wxString wxGetFullHostName()
+{
+    static const size_t hostnameSize = 257;
+
+    wxString buf;
+    bool ok = wxGetFullHostName(buf.GetWriteBuf(hostnameSize), hostnameSize);
+
+    buf.UngetWriteBuf();
+
+    if ( !ok )
+        buf.Empty();
+
+    return buf;
+}
+
