@@ -1146,10 +1146,11 @@ void wxTextCtrl::AdjustSpaceLimit()
     }
     else
     {
-        ENTRYFDATA*                 pEfd;
+        ENTRYFDATA                  Efd;
         WNDPARAMS                   vParams;
 
         vParams.fsStatus = WPM_CBCTLDATA;
+	vParams.pCtlData = &Efd;
         vParams.cbCtlData = sizeof(ENTRYFDATA);
 
         if (::WinSendMsg( GetHwnd()
@@ -1157,10 +1158,7 @@ void wxTextCtrl::AdjustSpaceLimit()
                          ,&vParams
                          ,0
                         ))
-        {
-            pEfd = (ENTRYFDATA*)vParams.pCtlData;
-            uLimit = (unsigned int)pEfd->cchEditLimit;
-        }
+            uLimit = (unsigned int)Efd.cchEditLimit;
         else
             uLimit = 32; //PM's default
     }
@@ -1174,7 +1172,7 @@ void wxTextCtrl::AdjustSpaceLimit()
         if (m_bIsMLE)
             ::WinSendMsg(GetHwnd(), MLM_SETTEXTLIMIT, MPFROMLONG(uLimit), 0);
         else
-            ::WinSendMsg(GetHwnd(), EM_SETTEXTLIMIT, MPFROMLONG(uLimit), 0);
+            ::WinSendMsg(GetHwnd(), EM_SETTEXTLIMIT, MPFROMSHORT(uLimit), 0);
     }
 } // end of wxTextCtrl::AdjustSpaceLimit
 
