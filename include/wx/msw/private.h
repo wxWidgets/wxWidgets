@@ -461,6 +461,9 @@ private:
 #define GetHaccel()             ((HACCEL)GetHACCEL())
 #define GetHaccelOf(table)      ((HACCEL)((table).GetHACCEL()))
 
+#define GetHbrush()             ((HPEN)GetResourceHandle())
+#define GetHbrushOf(brush)      ((HPEN)(brush).GetResourceHandle())
+
 #define GetHmenu()              ((HMENU)GetHMenu())
 #define GetHmenuOf(menu)        ((HMENU)menu->GetHMenu())
 
