@@ -21,6 +21,8 @@
 
 #import <AppKit/NSPanel.h>
 #import <AppKit/NSApplication.h>
+#import <AppKit/NSEvent.h>
+#import <Foundation/NSRunLoop.h>
 
 // Lists to keep track of windows, so we can disable/enable them
 // for modal dialogs
@@ -120,6 +122,21 @@ bool wxDialog::Show(bool show)
             wxAutoNSAutoreleasePool pool;
             wxModalDialogs.Append(this);
             wxLogDebug("runModal");
+            NSApplication *theNSApp = wxTheApp->GetNSApplication();
+            // If the app hasn't started, flush the event queue
+            // If we don't do this, the Dock doesn't get the message that
+            // the app has started so will refuse to activate it.
+            if(![theNSApp isRunning])
+            {
+                while(NSEvent *event = [theNSApp
+                            nextEventMatchingMask:NSAnyEventMask
+                            untilDate:[NSDate distantPast]
+                            inMode:NSDefaultRunLoopMode
+                            dequeue: YES])
+                {
+                    [theNSApp sendEvent: event];
+                }
+            }
             [wxTheApp->GetNSApplication() runModalForWindow:m_cocoaNSWindow];
             wxLogDebug("runModal END");
         }
