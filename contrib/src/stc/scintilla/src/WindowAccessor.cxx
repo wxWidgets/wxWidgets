@@ -20,22 +20,14 @@
 WindowAccessor::~WindowAccessor() {
 }
 
-#if PLAT_WIN 
 bool WindowAccessor::InternalIsLeadByte(char ch) {
 	if (SC_CP_UTF8 == codePage)
 		// For lexing, all characters >= 0x80 are treated the
 		// same so none is considered a lead byte.
 		return false;	
 	else
-		return IsDBCSLeadByteEx(codePage, ch);
+		return Platform::IsDBCSLeadByte(codePage, ch);
 }
-#else
-// PLAT_GTK or PLAT_WX
-// TODO: support DBCS under GTK+ and WX
-bool WindowAccessor::InternalIsLeadByte(char) {
-	return false;
-}
-#endif 
 
 void WindowAccessor::Fill(int position) {
 	if (lenDoc == -1)

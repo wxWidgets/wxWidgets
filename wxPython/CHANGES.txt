@@ -32,6 +32,8 @@ Updated XRCed from Roman Rolinsky
 
 Added wxBufferedDC.
 
+Upgraded wxSTC from Scintilla 1.40 to Scintilla 1.45
+
 UNICODE!
 
 

@@ -26,7 +26,7 @@ static void ColouriseAveDoc(unsigned int startPos, int length, int initStyle, Wo
 
 	styler.StartAt(startPos);
 
-	bool fold = styler.GetPropertyInt("fold");
+	bool fold = styler.GetPropertyInt("fold") != 0;
 	int lineCurrent = styler.GetLine(startPos);
 	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 	int levelCurrent = levelPrev;

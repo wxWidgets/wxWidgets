@@ -29,6 +29,7 @@ public:
 	ColourPair colourSel;
 	ColourPair colourShade;
 	ColourPair colourLight;
+	bool unicodeMode;
 	
 	CallTip();
 	~CallTip();
@@ -40,7 +41,7 @@ public:
 	
 	/// Setup the calltip and return a rectangle of the area required.
 	PRectangle CallTipStart(int pos, Point pt, const char *defn, 
-		const char *faceName, int size);
+		const char *faceName, int size, bool unicodeMode_);
 		
 	void CallTipCancel();
 	

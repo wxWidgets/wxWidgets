@@ -2,7 +2,7 @@
 /** @file AutoComplete.h
  ** Defines the auto completion list box.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef AUTOCOMPLETE_H
@@ -25,6 +25,7 @@ public:
 	/// Should autocompletion be canceled if editor's currentPos <= startPos?
 	bool cancelAtStartPos;
 	bool autoHide;
+	bool dropRestOfWord;
 
 	AutoComplete();
 	~AutoComplete();

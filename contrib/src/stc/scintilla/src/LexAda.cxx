@@ -49,7 +49,7 @@ inline void classifyWordAda(unsigned int start, unsigned int end,
 }
 
 
-inline bool isAdaOperator(char ch) {
+static inline bool isAdaOperator(char ch) {
 	
 	if (ch == '&' || ch == '\'' || ch == '(' || ch == ')' ||
 	        ch == '*' || ch == '+' || ch == ',' || ch == '-' ||

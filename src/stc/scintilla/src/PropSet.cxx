@@ -2,7 +2,7 @@
 /** @file PropSet.cxx
  ** A Java style properties file module.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 // Maintain a dictionary of properties
@@ -27,44 +27,42 @@ static inline char MakeUpperCase(char ch) {
 }
 
 static inline bool IsLetter(char ch) {
-    return ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'));
+	return ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'));
 }
 
-
 int CompareCaseInsensitive(const char *a, const char *b) {
-    while (*a && *b) {
-        if (*a != *b) {
-            char upperA = MakeUpperCase(*a);
-            char upperB = MakeUpperCase(*b);
-            if (upperA != upperB)
-                return upperA - upperB;
-        }
-        a++;
-        b++;
-    }
-    // Either *a or *b is nul
-    return *a - *b;
+	while (*a && *b) {
+		if (*a != *b) {
+			char upperA = MakeUpperCase(*a);
+			char upperB = MakeUpperCase(*b);
+			if (upperA != upperB)
+				return upperA - upperB;
+		}
+		a++;
+		b++;
+	}
+	// Either *a or *b is nul
+	return *a - *b;
 }
 
 int CompareNCaseInsensitive(const char *a, const char *b, int len) {
-    while (*a && *b && len) {
-        if (*a != *b) {
-            char upperA = MakeUpperCase(*a);
-            char upperB = MakeUpperCase(*b);
-            if (upperA != upperB)
-                return upperA - upperB;
-        }
-        a++;
-        b++;
-        len--;
-    }
-    if (len == 0)
-        return 0;
-    else
-        // Either *a or *b is nul
-        return *a - *b;
+	while (*a && *b && len) {
+		if (*a != *b) {
+			char upperA = MakeUpperCase(*a);
+			char upperB = MakeUpperCase(*b);
+			if (upperA != upperB)
+				return upperA - upperB;
+		}
+		a++;
+		b++;
+		len--;
+	}
+	if (len == 0)
+		return 0;
+	else
+		// Either *a or *b is nul
+		return *a - *b;
 }
-
 
 bool EqualCaseInsensitive(const char *a, const char *b) {
 	return 0 == CompareCaseInsensitive(a, b);
@@ -100,8 +98,8 @@ void PropSet::Set(const char *key, const char *val, int lenKey, int lenVal) {
 		lenVal = strlen(val);
 	unsigned int hash = HashString(key, lenKey);
 	for (Property *p = props[hash % hashRoots]; p; p = p->next) {
-		if ((hash == p->hash) &&
-			((strlen(p->key) == static_cast<unsigned int>(lenKey)) &&
+		if ((hash == p->hash) && 
+			((strlen(p->key) == static_cast<unsigned int>(lenKey)) && 
 				(0 == strncmp(p->key, key, lenKey)))) {
 			// Replace current value
 			delete [](p->val);
@@ -561,7 +559,7 @@ bool WordList::InList(const char *s) {
  * The length of the word to compare is passed too.
  * Letter case can be ignored or preserved (default).
  */
-const char *WordList::GetNearestWord(const char *wordStart, int searchLen /*= -1*/, bool ignoreCase /*= false*/) {
+const char *WordList::GetNearestWord(const char *wordStart, int searchLen /*= -1*/, bool ignoreCase /*= false*/, SString wordCharacters /*='/0' */) {
 	int start = 0; // lower bound of the api array block to search
 	int end = len - 1; // upper bound of the api array block to search
 	int pivot; // index of api array element just being compared
@@ -579,8 +577,8 @@ const char *WordList::GetNearestWord(const char *wordStart, int searchLen /*= -1
 			pivot = (start + end) >> 1;
 			word = wordsNoCase[pivot];
 			cond = CompareNCaseInsensitive(wordStart, word, searchLen);
-			if (!cond && nonFuncChar(word[searchLen])) // maybe there should be a "non-word character" test here?
-				return word; // result must not be freed with free()
+			if (!cond && (!wordCharacters.contains(word[searchLen])))
+					return word; // result must not be freed with free()
 			else if (cond > 0)
 				start = pivot + 1;
 			else if (cond <= 0)
@@ -591,7 +589,7 @@ const char *WordList::GetNearestWord(const char *wordStart, int searchLen /*= -1
 			pivot = (start + end) >> 1;
 			word = words[pivot];
 			cond = strncmp(wordStart, word, searchLen);
-			if (!cond && nonFuncChar(word[searchLen])) // maybe there should be a "non-word character" test here?
+			if (!cond && (!wordCharacters.contains(word[searchLen])))
 				return word; // result must not be freed with free()
 			else if (cond > 0)
 				start = pivot + 1;
@@ -666,13 +664,13 @@ char *WordList::GetNearestWords(
 			if (!cond) {
 				// Find first match
 				while ((pivot > start) &&
-					(0 == CompareNCaseInsensitive(wordStart,
+					(0 == CompareNCaseInsensitive(wordStart, 
 						wordsNoCase[pivot-1], searchLen))) {
 					--pivot;
 				}
 				// Grab each match
 				while ((pivot <= end) &&
-					(0 == CompareNCaseInsensitive(wordStart,
+					(0 == CompareNCaseInsensitive(wordStart, 
 						wordsNoCase[pivot], searchLen))) {
 					wordlen = LengthWord(wordsNoCase[pivot], otherSeparator) + 1;
 					wordsNear.append(wordsNoCase[pivot], wordlen, ' ');
@@ -692,14 +690,14 @@ char *WordList::GetNearestWords(
 			if (!cond) {
 				// Find first match
 				while ((pivot > start) &&
-					(0 == strncmp(wordStart,
-						words[pivot-1], searchLen))) {
+					(0 == strncmp(wordStart, 
+						words[pivot-1], searchLen))) { 
 					--pivot;
 				}
 				// Grab each match
 				while ((pivot <= end) &&
-					(0 == strncmp(wordStart,
-						words[pivot], searchLen))) {
+					(0 == strncmp(wordStart, 
+						words[pivot], searchLen))) { 
 					wordlen = LengthWord(words[pivot], otherSeparator) + 1;
 					wordsNear.append(words[pivot], wordlen, ' ');
 					++pivot;

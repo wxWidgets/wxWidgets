@@ -21,7 +21,7 @@
 #include "SciLexer.h"
 
 
-inline bool isLispoperator(char ch) {
+static inline bool isLispoperator(char ch) {
 	if (isascii(ch) && isalnum(ch))
 		return false;
 	if (ch == '\'' || ch == '(' || ch == ')' )
@@ -29,7 +29,7 @@ inline bool isLispoperator(char ch) {
 	return false;
 }
 
-inline bool isLispwordstart(char ch) {
+static inline bool isLispwordstart(char ch) {
 	return isascii(ch) && ch != ';'  && !isspacechar(ch) && !isLispoperator(ch) &&
 		ch != '\n' && ch != '\r' &&  ch != '\"';
 }

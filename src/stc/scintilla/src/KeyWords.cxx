@@ -2,7 +2,7 @@
 /** @file KeyWords.cxx
  ** Colourise for particular languages.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -19,15 +19,15 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-LexerModule *LexerModule::base = 0;
+const LexerModule *LexerModule::base = 0;
 int LexerModule::nextLanguage = SCLEX_AUTOMATIC+1;
 
 LexerModule::LexerModule(int language_, LexerFunction fnLexer_,
 	const char *languageName_, LexerFunction fnFolder_) :
 	language(language_), 
-	languageName(languageName_), 
 	fnLexer(fnLexer_), 
-	fnFolder(fnFolder_) {
+	fnFolder(fnFolder_), 
+	languageName(languageName_) {
 	next = base;
 	base = this;
 	if (language == SCLEX_AUTOMATIC) {
@@ -36,8 +36,8 @@ LexerModule::LexerModule(int language_, LexerFunction fnLexer_,
 	}
 }
 
-LexerModule *LexerModule::Find(int language) {
-	LexerModule *lm = base;
+const LexerModule *LexerModule::Find(int language) {
+	const LexerModule *lm = base;
 	while (lm) {
 		if (lm->language == language) {
 			return lm;
@@ -47,9 +47,9 @@ LexerModule *LexerModule::Find(int language) {
 	return 0;
 }
 
-LexerModule *LexerModule::Find(const char *languageName) {
+const LexerModule *LexerModule::Find(const char *languageName) {
 	if (languageName) {
-		LexerModule *lm = base;
+		const LexerModule *lm = base;
 		while (lm) {
 			if (lm->languageName && 0 == strcmp(lm->languageName, languageName)) {
 				return lm;
@@ -61,13 +61,13 @@ LexerModule *LexerModule::Find(const char *languageName) {
 }
 
 void LexerModule::Lex(unsigned int startPos, int lengthDoc, int initStyle,
-	  WordList *keywordlists[], Accessor &styler) {
+	  WordList *keywordlists[], Accessor &styler) const {
 	if (fnLexer)
 		fnLexer(startPos, lengthDoc, initStyle, keywordlists, styler);
 }
 
 void LexerModule::Fold(unsigned int startPos, int lengthDoc, int initStyle,
-	  WordList *keywordlists[], Accessor &styler) {
+	  WordList *keywordlists[], Accessor &styler) const {
 	if (fnFolder) {
 		int lineCurrent = styler.GetLine(startPos);
 		// Move back one line in case deletion wrecked current line fold state
@@ -98,6 +98,10 @@ static void ColouriseNullDoc(unsigned int startPos, int length, int, WordList *[
 LexerModule lmNull(SCLEX_NULL, ColouriseNullDoc, "null");
 
 #ifdef __vms
+#define LINK_LEXERS
+#endif
+
+#ifdef LINK_LEXERS
 
 // The following code forces a reference to all of the Scintilla lexers.
 // If we don't do something like this, then the linker tends to "optimize"
@@ -106,8 +110,13 @@ LexerModule lmNull(SCLEX_NULL, ColouriseNullDoc, "null");
 // Taken from wxWindow's stc.cpp. Walter.
 
 int wxForceScintillaLexers(void) {
+	return Scintilla_LinkLexers();
+}
+
+int Scintilla_LinkLexers() {
   extern LexerModule lmAda;
   extern LexerModule lmAVE;
+  extern LexerModule lmBaan;
   extern LexerModule lmBatch;
   extern LexerModule lmConf;
   extern LexerModule lmCPP;
@@ -120,6 +129,7 @@ int wxForceScintillaLexers(void) {
   extern LexerModule lmLISP;
   extern LexerModule lmLua;
   extern LexerModule lmMake;
+  extern LexerModule lmMatlab;
   extern LexerModule lmPascal;
   extern LexerModule lmPerl;
   extern LexerModule lmProps;  
@@ -128,10 +138,12 @@ int wxForceScintillaLexers(void) {
   extern LexerModule lmSQL;
   extern LexerModule lmVB;
   extern LexerModule lmXML;
+  extern LexerModule lmBullant;
 
   if (
       &lmAda
       && &lmAVE
+      && &lmBaan
       && &lmConf
       && &lmDiff
       && &lmLatex
@@ -142,6 +154,7 @@ int wxForceScintillaLexers(void) {
       && &lmProps
       && &lmErrorList
       && &lmMake
+      && &lmMatlab
       && &lmBatch
       && &lmPerl
       && &lmPython
@@ -153,6 +166,7 @@ int wxForceScintillaLexers(void) {
       && &lmLISP
       && &lmLua
       && &lmNull
+      && &lmBullant
       )
     {
       return 1;

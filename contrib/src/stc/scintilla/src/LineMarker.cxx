@@ -10,7 +10,7 @@
 #include "Scintilla.h"
 #include "LineMarker.h"
 
-static void DrawBox(Surface *surface, int centreX, int centreY, int armSize, Colour fore, Colour back) {
+static void DrawBox(Surface *surface, int centreX, int centreY, int armSize, ColourAllocated fore, ColourAllocated back) {
 	PRectangle rc;
 	rc.left = centreX - armSize;
 	rc.top = centreY - armSize;
@@ -19,7 +19,7 @@ static void DrawBox(Surface *surface, int centreX, int centreY, int armSize, Col
 	surface->RectangleDraw(rc, back, fore);
 }
 
-static void DrawCircle(Surface *surface, int centreX, int centreY, int armSize, Colour fore, Colour back) {
+static void DrawCircle(Surface *surface, int centreX, int centreY, int armSize, ColourAllocated fore, ColourAllocated back) {
 	PRectangle rcCircle;
 	rcCircle.left = centreX - armSize;
 	rcCircle.top = centreY - armSize;
@@ -28,14 +28,14 @@ static void DrawCircle(Surface *surface, int centreX, int centreY, int armSize, 
 	surface->Ellipse(rcCircle, back, fore);
 }
 
-static void DrawPlus(Surface *surface, int centreX, int centreY, int armSize, Colour fore) {
+static void DrawPlus(Surface *surface, int centreX, int centreY, int armSize, ColourAllocated fore) {
 	PRectangle rcV(centreX, centreY - armSize + 2, centreX + 1, centreY + armSize - 2 + 1);
 	surface->FillRectangle(rcV, fore);
 	PRectangle rcH(centreX - armSize + 2, centreY, centreX + armSize - 2 + 1, centreY+1);
 	surface->FillRectangle(rcH, fore);
 }
 
-static void DrawMinus(Surface *surface, int centreX, int centreY, int armSize, Colour fore) {
+static void DrawMinus(Surface *surface, int centreX, int centreY, int armSize, ColourAllocated fore) {
 	PRectangle rcH(centreX - armSize + 2, centreY, centreX + armSize - 2 + 1, centreY+1);
 	surface->FillRectangle(rcH, fore);
 }
@@ -123,7 +123,7 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 		rcSmall.bottom = rc.bottom - 2;
 		surface->RectangleDraw(rcSmall, fore.allocated, back.allocated);
 		
-	} else if (markType == SC_MARK_EMPTY) {
+	} else if (markType == SC_MARK_EMPTY || markType == SC_MARK_BACKGROUND) {
 		// An invisible marker so don't draw anything
 		
 	} else if (markType == SC_MARK_VLINE) {

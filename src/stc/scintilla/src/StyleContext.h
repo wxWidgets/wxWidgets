@@ -55,25 +55,33 @@ public:
 		styler.ColourTo(currentPos - 1, state);
 	}
 	bool More() {
-		return currentPos <= endPos;
+		return currentPos < endPos;
 	}
 	void Forward() {
-		atLineStart = atLineEnd;
-		// A lot of this is repeated from the constructor - TODO: merge code
-		chPrev = ch;
-		currentPos++;
-		if (ch >= 0x100)
+		if (currentPos < endPos) {
+			atLineStart = atLineEnd;
+			// A lot of this is repeated from the constructor - TODO: merge code
+			chPrev = ch;
 			currentPos++;
-		ch = chNext;
-		chNext = static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+1));
-		if (styler.IsLeadByte(static_cast<char>(chNext))) {
-			chNext = chNext << 8;
-			chNext |= static_cast<unsigned char>(styler.SafeGetCharAt(currentPos + 2));
+			if (ch >= 0x100)
+				currentPos++;
+			ch = chNext;
+			chNext = static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+1));
+			if (styler.IsLeadByte(static_cast<char>(chNext))) {
+				chNext = chNext << 8;
+				chNext |= static_cast<unsigned char>(styler.SafeGetCharAt(currentPos + 2));
+			}
+			// Trigger on CR only (Mac style) or either on LF from CR+LF (Dos/Win) or on LF alone (Unix)
+			// Avoid triggering two times on Dos/Win
+			// End of line
+			atLineEnd = (ch == '\r' && chNext != '\n') || (ch == '\n') || (currentPos >= endPos);
+		} else {
+			atLineStart = false;
+			chPrev = ' ';
+			ch = ' ';
+			chNext = ' ';
+			atLineEnd = true;
 		}
-		// Trigger on CR only (Mac style) or either on LF from CR+LF (Dos/Win) or on LF alone (Unix)
-		// Avoid triggering two times on Dos/Win
-		// End of line
-		atLineEnd = (ch == '\r' && chNext != '\n') || (ch == '\n') || (currentPos >= endPos);
 	}
 	void ChangeState(int state_) {
 		state = state_;
@@ -108,6 +116,20 @@ public:
 		s++;
 		for (int n=2; *s; n++) {
 			if (*s != styler.SafeGetCharAt(currentPos+n))
+				return false;
+			s++;
+		}
+		return true;
+	}
+	bool MatchIgnoreCase(const char *s) {
+		if (tolower(ch) != *s)
+			return false;
+		s++;
+		if (tolower(chNext) != *s)
+			return false;
+		s++;
+		for (int n=2; *s; n++) {
+			if (*s != tolower((styler.SafeGetCharAt(currentPos+n))))
 				return false;
 			s++;
 		}

@@ -30,8 +30,8 @@
  * Modification history:
  *
  * $Log$
- * Revision 1.2  2001/10/18 01:24:58  RD
- * Updated to version 1.40 of Scintilla
+ * Revision 1.3  2002/03/18 22:31:00  RD
+ * Updated wxSTC from Scintilla 1.40 to Scintilla 1.45
  *
  * Revision 1.6  2001/04/29 13:32:10  nyamatongwe
  * Addition of new target methods - versions of ReplaceTarget that take counted

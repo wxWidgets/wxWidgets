@@ -21,7 +21,7 @@
 
 static void ClassifyWordRb(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler, char *prevWord) {
 	char s[100];
-	bool wordIsNumber = isdigit(styler[start]);
+	bool wordIsNumber = isdigit(styler[start]) != 0;
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
 		s[i] = styler[start + i];
 		s[i + 1] = '\0';
@@ -294,9 +294,9 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 		chPrev = ch;
 	}
 	if (state == SCE_P_WORD) {
-		ClassifyWordRb(styler.GetStartSegment(), lengthDoc, keywords, styler, prevWord);
+		ClassifyWordRb(styler.GetStartSegment(), lengthDoc-1, keywords, styler, prevWord);
 	} else {
-		styler.ColourTo(lengthDoc, state);
+		styler.ColourTo(lengthDoc-1, state);
 	}
 }
 

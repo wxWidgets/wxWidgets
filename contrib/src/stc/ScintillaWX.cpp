@@ -14,10 +14,10 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include <ctype.h>
 
 #include "ScintillaWX.h"
 #include "wx/stc/stc.h"
+#include "PlatWX.h"
 
 
 //----------------------------------------------------------------------
@@ -82,10 +82,10 @@ public:
 
     void OnPaint(wxPaintEvent& evt) {
         wxPaintDC dc(this);
-        Surface surfaceWindow;
-        surfaceWindow.Init(&dc);
-        m_ct->PaintCT(&surfaceWindow);
-        surfaceWindow.Release();
+        Surface* surfaceWindow = Surface::Allocate();
+        surfaceWindow->Init(&dc);
+        m_ct->PaintCT(surfaceWindow);
+        delete surfaceWindow;
     }
 
 #if wxUSE_POPUPWIN
@@ -184,7 +184,7 @@ void ScintillaWX::SetTicking(bool on) {
         if (timer.ticking) {
             steTimer = new wxSTCTimer(this);
             steTimer->Start(timer.tickSize);
-            timer.tickerID = (int)steTimer;
+            timer.tickerID = steTimer;
         } else {
             steTimer = (wxSTCTimer*)timer.tickerID;
             steTimer->Stop();
@@ -343,12 +343,12 @@ void ScintillaWX::CreateCallTipWindow(PRectangle) {
 
 void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
     if (!label[0])
-        popup.GetID()->AppendSeparator();
+        ((wxMenu*)popup.GetID())->AppendSeparator();
     else
-        popup.GetID()->Append(cmd, label);
+        ((wxMenu*)popup.GetID())->Append(cmd, label);
 
     if (!enabled)
-        popup.GetID()->Enable(cmd, enabled);
+        ((wxMenu*)popup.GetID())->Enable(cmd, enabled);
 }
 
 
@@ -379,13 +379,13 @@ long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lPar
 void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
 
     paintState = painting;
-    Surface surfaceWindow;
-    surfaceWindow.Init(dc);
+    Surface* surfaceWindow = Surface::Allocate();
+    surfaceWindow->Init(dc);
     PRectangle rcPaint = PRectangleFromwxRect(rect);
     dc->BeginDrawing();
-    Paint(&surfaceWindow, rcPaint);
+    Paint(surfaceWindow, rcPaint);
     dc->EndDrawing();
-    surfaceWindow.Release();
+    delete surfaceWindow;
     if (paintState == paintAbandoned) {
         // Painting area was insufficient to cover new styling or brace highlight positions
         FullPaint();
@@ -466,9 +466,10 @@ void ScintillaWX::DoMouseWheel(int rotation, int delta, int linesPerAction, int 
 
 
 void ScintillaWX::DoSize(int width, int height) {
-    PRectangle rcClient(0,0,width,height);
-    SetScrollBarsTo(rcClient);
-    DropGraphics();
+//      PRectangle rcClient(0,0,width,height);
+//      SetScrollBarsTo(rcClient);
+//      DropGraphics();
+    ChangeSize();
 }
 
 void ScintillaWX::DoLoseFocus(){
@@ -622,10 +623,10 @@ void ScintillaWX::FullPaint() {
     rcPaint = GetTextRectangle();
     paintingAllText = true;
     wxClientDC dc(stc);
-    Surface surfaceWindow;
-    surfaceWindow.Init(&dc);
-    Paint(&surfaceWindow, rcPaint);
-    surfaceWindow.Release();
+    Surface* surfaceWindow = Surface::Allocate();
+    surfaceWindow->Init(&dc);
+    Paint(surfaceWindow, rcPaint);
+    delete surfaceWindow;
 
 //     stc->Refresh(FALSE);
 

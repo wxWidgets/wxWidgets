@@ -62,7 +62,7 @@ unsigned int KeyMap::Find(int key, int modifiers) {
 	return 0;
 }
 
-KeyToCommand KeyMap::MapDefault[] = {
+const KeyToCommand KeyMap::MapDefault[] = {
     {SCK_DOWN,		SCI_NORM,	SCI_LINEDOWN},
     {SCK_DOWN,		SCI_SHIFT,	SCI_LINEDOWNEXTEND},
     {SCK_DOWN,		SCI_CTRL,	SCI_LINESCROLLDOWN},

@@ -15,136 +15,142 @@
 
 #include "PropSet.h"
 #include "Accessor.h"
+#include "StyleContext.h"
 #include "KeyWords.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
-
-static int classifyWordVB(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
-
-	char s[100];
-	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.') ||
-		(styler[start] == '&' && tolower(styler[start+1]) == 'h');
-	unsigned int i;
-	for (i = 0; i < end - start + 1 && i < 30; i++) {
-		s[i] = static_cast<char>(tolower(styler[start + i]));
-	}
-	s[i] = '\0';
-	char chAttr = SCE_C_DEFAULT;
-	if (wordIsNumber)
-		chAttr = SCE_C_NUMBER;
-	else {
-		if (strcmp(s, "rem") == 0)
-			chAttr = SCE_C_COMMENTLINE;
-		else if (keywords.InList(s))
-			chAttr = SCE_C_WORD;
-	}
-	styler.ColourTo(end, chAttr);
-	if (chAttr == SCE_C_COMMENTLINE)
-		return SCE_C_COMMENTLINE;
-	else
-		return SCE_C_DEFAULT;
-}
 
 static bool IsVBComment(Accessor &styler, int pos, int len) {
 	return len>0 && styler[pos]=='\'';
 }
 
+static inline bool IsTypeCharacter(const int ch) {
+	return ch == '%' || ch == '&' || ch == '@' || ch == '!' || ch == '#' || ch == '$';
+}
+
+static inline bool IsAWordChar(const int ch) {
+	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
+}
+
+static inline bool IsAWordStart(const int ch) {
+	return (ch < 0x80) && (isalnum(ch) || ch == '_');
+}
+
+static inline bool IsADateCharacter(const int ch) {
+	return (ch < 0x80) && 
+		(isalnum(ch) || ch == '|' || ch == '-' || ch == '/' || ch == ':' || ch == ' ' || ch == '\t');
+}
+
 static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
-                           WordList *keywordlists[], Accessor &styler) {
+                           WordList *keywordlists[], Accessor &styler, bool vbScriptSyntax) {
 
 	WordList &keywords = *keywordlists[0];
 
 	styler.StartAt(startPos);
 
 	int visibleChars = 0;
-	int state = initStyle;
-	char chNext = styler[startPos];
-	styler.StartSegment(startPos);
-	int lengthDoc = startPos + length;
-	for (int i = startPos; i < lengthDoc; i++) {
-		char ch = chNext;
-		chNext = styler.SafeGetCharAt(i + 1);
+				   
+	StyleContext sc(startPos, length, initStyle, styler);
 
-		if (styler.IsLeadByte(ch)) {
-			chNext = styler.SafeGetCharAt(i + 2);
-			i += 1;
-			continue;
-		}
+	for (; sc.More(); sc.Forward()) {
 
-		if (ch == '\r' || ch == '\n') {
-			// End of line
-			if (state == SCE_C_COMMENTLINE || state == SCE_C_PREPROCESSOR) {
-				styler.ColourTo(i - 1, state);
-				state = SCE_C_DEFAULT;
-			}
-			visibleChars = 0;
-		}
-		if (!isspacechar(ch))
-			visibleChars++;
-
-		if (state == SCE_C_DEFAULT) {
-			if (iswordstart(ch)) {
-				styler.ColourTo(i - 1, state);
-				state = SCE_C_WORD;
-			} else if (ch == '\'') {
-				styler.ColourTo(i - 1, state);
-				state = SCE_C_COMMENTLINE;
-			} else if (ch == '\"') {
-				styler.ColourTo(i - 1, state);
-				state = SCE_C_STRING;
-			} else if (ch == '#' && visibleChars == 1) {
-				// Preprocessor commands are alone on their line
-				styler.ColourTo(i - 1, state);
-				state = SCE_C_PREPROCESSOR;
-			} else if (ch == '&' && tolower(chNext) == 'h') {
-				styler.ColourTo(i - 1, state);
-				state = SCE_C_WORD;
-			} else if (isoperator(ch)) {
-				styler.ColourTo(i - 1, state);
-				styler.ColourTo(i, SCE_C_OPERATOR);
-			}
-		} else if (state == SCE_C_WORD) {
-			if (!iswordchar(ch)) {
-				state = classifyWordVB(styler.GetStartSegment(), i - 1, keywords, styler);
-				if (state == SCE_C_DEFAULT) {
-					if (ch == '\'') {
-						state = SCE_C_COMMENTLINE;
-					} else if (ch == '\"') {
-						state = SCE_C_STRING;
-					} else if (isoperator(ch)) {
-						styler.ColourTo(i - 1, state);
-						styler.ColourTo(i, SCE_C_OPERATOR);
+		if (sc.state == SCE_B_OPERATOR) {
+			sc.SetState(SCE_B_DEFAULT);
+		} else if (sc.state == SCE_B_KEYWORD) {
+			if (!IsAWordChar(sc.ch)) {
+				if (vbScriptSyntax || !IsTypeCharacter(sc.ch)) {
+					if (sc.ch == ']')
+						sc.Forward();
+					char s[100];
+					sc.GetCurrentLowered(s, sizeof(s));
+					if (keywords.InList(s)) {
+						if (strcmp(s, "rem") == 0) {
+							sc.ChangeState(SCE_B_COMMENT);
+							if (sc.atLineEnd) {
+								sc.SetState(SCE_B_DEFAULT);
+							}
+						} else {
+							sc.SetState(SCE_B_DEFAULT);
+						}
+					} else {
+						sc.ChangeState(SCE_B_IDENTIFIER);
+						sc.SetState(SCE_B_DEFAULT);
 					}
 				}
 			}
-		} else {
-			if (state == SCE_C_STRING) {
-				// VB doubles quotes to preserve them
-				if (ch == '\"') {
-					styler.ColourTo(i, state);
-					state = SCE_C_DEFAULT;
-					i++;
-					ch = chNext;
-					chNext = styler.SafeGetCharAt(i + 1);
-				}
+		} else if (sc.state == SCE_B_NUMBER) {
+			if (!IsAWordChar(sc.ch)) {
+				sc.SetState(SCE_B_DEFAULT);
 			}
-			if (state == SCE_C_DEFAULT) {    // One of the above succeeded
-				if (ch == '\'') {
-					state = SCE_C_COMMENTLINE;
-				} else if (ch == '\"') {
-					state = SCE_C_STRING;
-				} else if (iswordstart(ch)) {
-					state = SCE_C_WORD;
+		} else if (sc.state == SCE_B_STRING) {
+			// VB doubles quotes to preserve them, so just end this string 
+			// state now as a following quote will start again
+			if (sc.ch == '\"') {
+				if (tolower(sc.chNext) == 'c') {
+					sc.Forward();
 				}
+				sc.ForwardSetState(SCE_B_DEFAULT);
+			}
+		} else if (sc.state == SCE_B_COMMENT) {
+			if (sc.atLineEnd) {
+				sc.SetState(SCE_B_DEFAULT);
+			}
+		} else if (sc.state == SCE_B_PREPROCESSOR) {
+			if (sc.atLineEnd) {
+				sc.SetState(SCE_B_DEFAULT);
+			}
+		} else if (sc.state == SCE_B_DATE) {
+			if (sc.ch == '#' || !IsADateCharacter(sc.chNext)) {
+				sc.ForwardSetState(SCE_B_DEFAULT);
 			}
 		}
+		
+		if (sc.state == SCE_B_DEFAULT) {
+			if (sc.ch == '\'') {
+				sc.SetState(SCE_B_COMMENT);
+			} else if (sc.ch == '\"') {
+				sc.SetState(SCE_B_STRING);
+			} else if (sc.ch == '#' && visibleChars == 0) {
+				// Preprocessor commands are alone on their line
+				sc.SetState(SCE_B_PREPROCESSOR);
+			} else if (sc.ch == '#') {
+				int n = 1;
+				int chSeek = ' ';
+				while (chSeek == ' ' || chSeek == '\t') {
+					chSeek = sc.GetRelative(n);
+					n++;
+				}
+				if (IsADigit(chSeek)) {
+					sc.SetState(SCE_B_DATE);
+				} else {
+					sc.SetState(SCE_B_OPERATOR);
+				}
+			} else if (sc.ch == '&' && tolower(sc.chNext) == 'h') {
+				sc.SetState(SCE_B_NUMBER);
+			} else if (sc.ch == '&' && tolower(sc.chNext) == 'o') {
+				sc.SetState(SCE_B_NUMBER);
+			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
+				sc.SetState(SCE_B_NUMBER);
+			} else if (IsAWordStart(sc.ch) || (sc.ch == '[')) {
+				sc.SetState(SCE_B_KEYWORD);
+			} else if (isoperator(static_cast<char>(sc.ch)) || (sc.ch == '\\')) {
+				sc.SetState(SCE_B_OPERATOR);
+			}
+		}
+		
+		if (sc.atLineEnd) {
+			visibleChars = 0;
+		}
+		if (!IsASpace(sc.ch)) {
+			visibleChars++;
+		}
 	}
-	styler.ColourTo(lengthDoc, state);
+	sc.Complete();
 }
 
-static void FoldVBDoc(unsigned int startPos, int length, int initStyle,
+static void FoldVBDoc(unsigned int startPos, int length, int,
 						   WordList *[], Accessor &styler) {
-	int lengthDoc = startPos + length;
+	int endPos = startPos + length;
 
 	// Backtrack to previous line in case need to fix its fold status
 	int lineCurrent = styler.GetLine(startPos);
@@ -152,28 +158,18 @@ static void FoldVBDoc(unsigned int startPos, int length, int initStyle,
 		if (lineCurrent > 0) {
 			lineCurrent--;
 			startPos = styler.LineStart(lineCurrent);
-			if (startPos == 0)
-				initStyle = SCE_P_DEFAULT;
-			else
-				initStyle = styler.StyleAt(startPos-1);
 		}
 	}
-	int state = initStyle & 31;
 	int spaceFlags = 0;
 	int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, IsVBComment);
-	if ((state == SCE_P_TRIPLE) || (state == SCE_P_TRIPLEDOUBLE))
-		indentCurrent |= SC_FOLDLEVELWHITEFLAG;
 	char chNext = styler[startPos];
-	for (int i = startPos; i < lengthDoc; i++) {
+	for (int i = startPos; i < endPos; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
-		int style = styler.StyleAt(i) & 31;
 
-		if ((ch == '\r' && chNext != '\n') || (ch == '\n') || (i == lengthDoc)) {
+		if ((ch == '\r' && chNext != '\n') || (ch == '\n') || (i == endPos)) {
 			int lev = indentCurrent;
 			int indentNext = styler.IndentAmount(lineCurrent + 1, &spaceFlags, IsVBComment);
-			if ((style == SCE_P_TRIPLE) || (style== SCE_P_TRIPLEDOUBLE))
-				indentNext |= SC_FOLDLEVELWHITEFLAG;
 			if (!(indentCurrent & SC_FOLDLEVELWHITEFLAG)) {
 				// Only non whitespace lines can be headers
 				if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) < (indentNext & SC_FOLDLEVELNUMBERMASK)) {
@@ -194,4 +190,16 @@ static void FoldVBDoc(unsigned int startPos, int length, int initStyle,
 	}
 }
 
-LexerModule lmVB(SCLEX_VB, ColouriseVBDoc, "vb", FoldVBDoc);
+static void ColouriseVBNetDoc(unsigned int startPos, int length, int initStyle,
+                           WordList *keywordlists[], Accessor &styler) {
+	ColouriseVBDoc(startPos, length, initStyle, keywordlists, styler, false);
+}
+
+static void ColouriseVBScriptDoc(unsigned int startPos, int length, int initStyle,
+                           WordList *keywordlists[], Accessor &styler) {
+	ColouriseVBDoc(startPos, length, initStyle, keywordlists, styler, true);
+}
+
+LexerModule lmVB(SCLEX_VB, ColouriseVBNetDoc, "vb", FoldVBDoc);
+LexerModule lmVBScript(SCLEX_VBSCRIPT, ColouriseVBScriptDoc, "vbscript", FoldVBDoc);
+

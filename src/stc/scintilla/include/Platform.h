@@ -3,7 +3,7 @@
  ** Interface to platform facilities. Also includes some basic utilities.
  ** Implemented in PlatGTK.cxx for GTK+/Linux, PlatWin.cxx for Windows, and PlatWX.cxx for wxWindows.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef PLATFORM_H
@@ -18,8 +18,13 @@
 #define PLAT_GTK_WIN32 0
 #define PLAT_WIN 0
 #define PLAT_WX  0
+#define PLAT_FOX 0
 
-#if defined(__WX__)
+#if defined(FOX)
+#undef PLAT_FOX
+#define PLAT_FOX 1
+
+#elif defined(__WX__)
 #undef PLAT_WX
 #define PLAT_WX  1
 
@@ -39,79 +44,14 @@
 #endif
 
 
-// Include the main header for each platform
-
-#if PLAT_GTK
-#ifdef _MSC_VER
-#pragma warning(disable: 4505 4514 4710 4800)
-#endif
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-#endif
-
-#if PLAT_WIN
-#define _WIN32_WINNT  0x0400 // Otherwise some required stuff gets ifdef'd out
-// Vassili Bourdo: shut up annoying Visual C++ warnings:
-#ifdef _MSC_VER
-#pragma warning(disable: 4244 4309 4710 4800)
-#endif
-#include <windows.h>
-#include <commctrl.h>
-#include <richedit.h>
-#endif
-
-#if PLAT_WX
-#include <wx/wx.h>
-#endif
-
-#define ColourID        scColourID
-#define FontID          scFontID
-#define SurfaceID       scSurfaceID
-#define WindowID        scWindowID
-#define MenuID          scMenuID
-#define Point           scPoint
-#define PRectangle      scPRectangle
-#define Colour          scColour
-#define ColourPair      scColourPair
-#define Window          scWindow
-#define Palette         scPalette
-#define Font            scFont
-#define Surface         scSurface
-#define Window          scWindow
-#define ListBox         scListBox
-#define Menu            scMenu
-#define Platform        scPlatform
-#define TextRange       scTextRange
-#define KeyMap          scKeyMap
-#define Style           scStyle
-
-
 // Underlying the implementation of the platform classes are platform specific types.
 // Sometimes these need to be passed around by client code so they are defined here
 
-#if PLAT_GTK
-typedef GdkColor ColourID;
-typedef GdkFont* FontID;
-typedef GdkDrawable* SurfaceID;
-typedef GtkWidget* WindowID;
-typedef GtkItemFactory* MenuID;
-#endif
-
-#if PLAT_WIN
-typedef COLORREF ColourID;
-typedef HFONT FontID;
-typedef HDC SurfaceID;
-typedef HWND WindowID;
-typedef HMENU MenuID;
-#endif
-
-#if PLAT_WX
-typedef wxColour ColourID;
-typedef wxFont* FontID;
-typedef wxDC* SurfaceID;
-typedef wxWindow* WindowID;
-typedef wxMenu* MenuID;
-#endif
+typedef void *FontID;
+typedef void *SurfaceID;
+typedef void *WindowID;
+typedef void *MenuID;
+typedef void *TickerID;
 
 /**
  * A geometric point class.
@@ -168,42 +108,88 @@ public:
 	int Height() { return bottom - top; }
 };
 
-#if PLAT_WX
-wxRect wxRectFromPRectangle(PRectangle prc);
-PRectangle PRectangleFromwxRect(wxRect rc);
-#endif
+/**
+ * In some circumstances, including Win32 in paletted mode and GTK+, each colour
+ * must be allocated before use. The desired colours are held in the ColourDesired class,
+ * and after allocation the allocation entry is stored in the ColourAllocated class. In other
+ * circumstances, such as Win32 in true colour mode, the allocation process just copies
+ * the RGB values from the desired to the allocated class.
+ * As each desired colour requires allocation before it can be used, the ColourPair class
+ * holds both a ColourDesired and a ColourAllocated
+ * The Palette class is responsible for managing the palette of colours which contains a
+ * list of ColourPair objects and performs the allocation.
+ */
 
 /**
- * A colour class.
+ * Holds a desired RGB colour.
  */
-class Colour {
-	ColourID co;
+class ColourDesired {
+	long co;
 public:
-	Colour(long lcol=0);
-	Colour(unsigned int red, unsigned int green, unsigned int blue);
-	bool operator==(const Colour &other) const;
-	long AsLong() const;
-	unsigned int GetRed();
-	unsigned int GetGreen();
-	unsigned int GetBlue();
+	ColourDesired(long lcol=0) {
+		co = lcol;
+	}
 
-	friend class Surface;
-	friend class Palette;
+	ColourDesired(unsigned int red, unsigned int green, unsigned int blue) {
+		co = red | (green << 8) | (blue << 16);
+	}
+
+	bool operator==(const ColourDesired &other) const {
+		return co == other.co;
+	}
+
+	void Set(long lcol) {
+		co = lcol;
+	}
+
+	long AsLong() const {
+		return co;
+	}
+
+	unsigned int GetRed() {
+		return co & 0xff;
+	}
+
+	unsigned int GetGreen() {
+		return (co >> 8) & 0xff;
+	}
+
+	unsigned int GetBlue() {
+		return (co >> 16) & 0xff;
+	}
 };
 
 /**
- * Colour pairs hold a desired colour and the colour that the graphics engine
- * allocates to approximate the desired colour.
- * To make palette management more automatic, ColourPairs could register at
- * construction time with a palette management object.
+ * Holds an allocated RGB colour which may be an approximation to the desired colour.
+ */
+class ColourAllocated {
+	long coAllocated;
+
+public:
+
+	ColourAllocated(long lcol=0) {
+		coAllocated = lcol;
+	}
+
+	void Set(long lcol) {
+		coAllocated = lcol;
+	}
+
+	long AsLong() const {
+		return coAllocated;
+	}
+};
+
+/**
+ * Colour pairs hold a desired colour and an allocated colour.
  */
 struct ColourPair {
-	Colour desired;
-	Colour allocated;
+	ColourDesired desired;
+	ColourAllocated allocated;
 
-	ColourPair(Colour desired_=Colour(0,0,0)) {
+	ColourPair(ColourDesired desired_=ColourDesired(0,0,0)) {
 		desired = desired_;
-		allocated = desired;
+		allocated.Set(desired.AsLong());
 	}
 };
 
@@ -217,14 +203,13 @@ class Palette {
 	enum {numEntries = 100};
 	ColourPair entries[numEntries];
 #if PLAT_GTK
-	GdkColor *allocatedPalette;
+	void *allocatedPalette; // GdkColor *
 	int allocatedLen;
-#elif PLAT_WIN
-	HPALETTE hpal;
-#elif PLAT_WX
-	// wxPalette* pal;  // **** Is this needed?
 #endif
 public:
+#if PLAT_WIN
+	void *hpal;
+#endif
 	bool allowRealization;
 
 	Palette();
@@ -240,8 +225,6 @@ public:
 	void WantFind(ColourPair &cp, bool want);
 
 	void Allocate(Window &w);
-
-	friend class Surface;
 };
 
 /**
@@ -267,6 +250,7 @@ public:
 	// Alias another font - caller guarantees not to Release
 	void SetID(FontID id_) { id = id_; }
 	friend class Surface;
+        friend class SurfaceImpl;
 };
 
 /**
@@ -274,97 +258,67 @@ public:
  */
 class Surface {
 private:
-	bool unicodeMode;
-#if PLAT_GTK
-	GdkDrawable *drawable;
-	GdkGC *gc;
-	GdkPixmap *ppixmap;
-	int x;
-	int y;
-	bool inited;
-	bool createdGC;
-#elif PLAT_WIN
-	HDC hdc;
-	bool hdcOwned;
-	HPEN pen;
-	HPEN penOld;
-	HBRUSH brush;
-	HBRUSH brushOld;
-	HFONT font;
-	HFONT fontOld;
-	HBITMAP bitmap;
-	HBITMAP bitmapOld;
-	HPALETTE paletteOld;
-#elif PLAT_WX
-	wxDC* hdc;
-	bool hdcOwned;
-	wxBitmap* bitmap;
-	int x;
-	int y;
-#endif
-
 	// Private so Surface objects can not be copied
 	Surface(const Surface &) {}
 	Surface &operator=(const Surface &) { return *this; }
-#if PLAT_WIN || PLAT_WX
-	void BrushColor(Colour back);
-	void SetFont(Font &font_);
-#endif
 public:
-	Surface();
-	~Surface();
+	Surface() {};
+	virtual ~Surface() {};
+	static Surface *Allocate();
 
-	void Init();
-	void Init(SurfaceID hdc_);
-	void InitPixMap(int width, int height, Surface *surface_);
+	virtual void Init()=0;
+	virtual void Init(SurfaceID sid)=0;
+	virtual void InitPixMap(int width, int height, Surface *surface_)=0;
 
-	void Release();
-	bool Initialised();
-	void PenColour(Colour fore);
-	int LogPixelsY();
-	int DeviceHeightFont(int points);
-	void MoveTo(int x_, int y_);
-	void LineTo(int x_, int y_);
-	void Polygon(Point *pts, int npts, Colour fore, Colour back);
-	void RectangleDraw(PRectangle rc, Colour fore, Colour back);
-	void FillRectangle(PRectangle rc, Colour back);
-	void FillRectangle(PRectangle rc, Surface &surfacePattern);
-	void RoundedRectangle(PRectangle rc, Colour fore, Colour back);
-	void Ellipse(PRectangle rc, Colour fore, Colour back);
-	void Copy(PRectangle rc, Point from, Surface &surfaceSource);
+	virtual void Release()=0;
+	virtual bool Initialised()=0;
+	virtual void PenColour(ColourAllocated fore)=0;
+	virtual int LogPixelsY()=0;
+	virtual int DeviceHeightFont(int points)=0;
+	virtual void MoveTo(int x_, int y_)=0;
+	virtual void LineTo(int x_, int y_)=0;
+	virtual void Polygon(Point *pts, int npts, ColourAllocated fore, ColourAllocated back)=0;
+	virtual void RectangleDraw(PRectangle rc, ColourAllocated fore, ColourAllocated back)=0;
+	virtual void FillRectangle(PRectangle rc, ColourAllocated back)=0;
+	virtual void FillRectangle(PRectangle rc, Surface &surfacePattern)=0;
+	virtual void RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAllocated back)=0;
+	virtual void Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back)=0;
+	virtual void Copy(PRectangle rc, Point from, Surface &surfaceSource)=0;
 
-	void DrawText(PRectangle rc, Font &font_, int ybase, const char *s, int len, Colour fore, Colour back);
-	void DrawTextClipped(PRectangle rc, Font &font_, int ybase, const char *s, int len, Colour fore, Colour back);
-	void MeasureWidths(Font &font_, const char *s, int len, int *positions);
-	int WidthText(Font &font_, const char *s, int len);
-	int WidthChar(Font &font_, char ch);
-	int Ascent(Font &font_);
-	int Descent(Font &font_);
-	int InternalLeading(Font &font_);
-	int ExternalLeading(Font &font_);
-	int Height(Font &font_);
-	int AverageCharWidth(Font &font_);
+	virtual void DrawTextNoClip(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back)=0;
+	virtual void DrawTextClipped(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back)=0;
+	virtual void MeasureWidths(Font &font_, const char *s, int len, int *positions)=0;
+	virtual int WidthText(Font &font_, const char *s, int len)=0;
+	virtual int WidthChar(Font &font_, char ch)=0;
+	virtual int Ascent(Font &font_)=0;
+	virtual int Descent(Font &font_)=0;
+	virtual int InternalLeading(Font &font_)=0;
+	virtual int ExternalLeading(Font &font_)=0;
+	virtual int Height(Font &font_)=0;
+	virtual int AverageCharWidth(Font &font_)=0;
 
-	int SetPalette(Palette *pal, bool inBackGround);
-	void SetClip(PRectangle rc);
-	void FlushCachedState();
+	virtual int SetPalette(Palette *pal, bool inBackGround)=0;
+	virtual void SetClip(PRectangle rc)=0;
+	virtual void FlushCachedState()=0;
 
-	void SetUnicodeMode(bool unicodeMode_) {
-		unicodeMode=unicodeMode_;
-	}
+	virtual void SetUnicodeMode(bool unicodeMode_)=0;
 };
+
+/**
+ * A simple callback action passing one piece of untyped user data.
+ */
+typedef void (*CallBackAction)(void*);
 
 /**
  * Class to hide the details of window manipulation.
  * Does not own the window which will normally have a longer life than this object.
  */
 class Window {
-	friend class ListBox;
 protected:
 	WindowID id;
 public:
-	Window() : id(0) {}
-	Window(const Window &source) : id(source.id) {}
+	Window() : id(0), cursorLast(cursorInvalid) {}
+	Window(const Window &source) : id(source.id), cursorLast(cursorInvalid) {}
 	virtual ~Window();
 	Window &operator=(WindowID id_) {
 		id = id_;
@@ -382,20 +336,19 @@ public:
 	void InvalidateAll();
 	void InvalidateRectangle(PRectangle rc);
 	virtual void SetFont(Font &font);
-	enum Cursor { cursorText, cursorArrow, cursorUp, cursorWait, cursorHoriz, cursorVert, cursorReverseArrow };
+	enum Cursor { cursorInvalid, cursorText, cursorArrow, cursorUp, cursorWait, cursorHoriz, cursorVert, cursorReverseArrow };
 	void SetCursor(Cursor curs);
 	void SetTitle(const char *s);
-#if PLAT_WIN
-	LRESULT SendMessage(UINT msg, WPARAM wParam=0, LPARAM lParam=0);
-	int GetDlgCtrlID();
-	HINSTANCE GetInstance();
-#endif
+private:
+	Cursor cursorLast;
 };
 
 /**
  * Listbox management.
  */
+
 class ListBox : public Window {
+private:
 #if PLAT_GTK
 	WindowID list;
 	WindowID scroller;
@@ -404,6 +357,9 @@ class ListBox : public Window {
 	int desiredVisibleRows;
 	unsigned int maxItemCharacters;
 	unsigned int aveCharWidth;
+public:
+	CallBackAction doubleClickAction;
+	void *doubleClickActionData;
 public:
 	ListBox();
 	virtual ~ListBox();
@@ -420,6 +376,10 @@ public:
 	int Find(const char *prefix);
 	void GetValue(int n, char *value, int len);
 	void Sort();
+	void SetDoubleClickAction(CallBackAction action, void *data) {
+		doubleClickAction = action;
+		doubleClickActionData = data;
+	}
 };
 
 /**
@@ -435,6 +395,14 @@ public:
 	void Show(Point pt, Window &w);
 };
 
+class ElapsedTime {
+	long bigBit;
+	long littleBit;
+public:
+	ElapsedTime();
+	double Duration(bool reset=false);
+};
+
 /**
  * Platform class used to retrieve system wide parameters such as double click speed
  * and chrome colour. Not a creatable object, more of a module with several functions.
@@ -448,8 +416,8 @@ public:
 	// but gcc warns about this
 	Platform() {}
 	~Platform() {}
-	static Colour Chrome();
-	static Colour ChromeHighlight();
+	static ColourDesired Chrome();
+	static ColourDesired ChromeHighlight();
 	static const char *DefaultFont();
 	static int DefaultFontSize();
 	static unsigned int DoubleClickTime();
@@ -457,6 +425,7 @@ public:
 	static bool IsKeyDown(int key);
 	static long SendScintilla(
 		WindowID w, unsigned int msg, unsigned long wParam=0, long lParam=0);
+	static bool IsDBCSLeadByte(int codePage, char ch);
 
 	// These are utility functions not really tied to a platform
 	static int Minimum(int a, int b);
@@ -481,6 +450,11 @@ public:
 #define PLATFORM_ASSERT(c) ((void)0)
 #else
 #define PLATFORM_ASSERT(c) ((c) ? (void)(0) : Platform::Assert(#c, __FILE__, __LINE__))
+#endif
+
+// Shut up annoying Visual C++ warnings:
+#ifdef _MSC_VER
+#pragma warning(disable: 4244 4309 4514 4710)
 #endif
 
 #endif

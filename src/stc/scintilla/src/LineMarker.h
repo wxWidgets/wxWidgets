@@ -17,8 +17,8 @@ public:
 	ColourPair back;
 	LineMarker() {
 		markType = SC_MARK_CIRCLE;
-		fore = Colour(0,0,0);
-		back = Colour(0xff,0xff,0xff);
+		fore = ColourDesired(0,0,0);
+		back = ColourDesired(0xff,0xff,0xff);
 	}
 	void Draw(Surface *surface, PRectangle &rc, Font &fontForCharacter);
 };

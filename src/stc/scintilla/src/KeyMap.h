@@ -30,7 +30,7 @@ class KeyMap {
 	KeyToCommand *kmap;
 	int len;
 	int alloc;
-	static KeyToCommand MapDefault[];
+	static const KeyToCommand MapDefault[];
 
 public:
 	KeyMap();

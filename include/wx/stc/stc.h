@@ -73,6 +73,9 @@
 #define wxSTC_MARK_CIRCLEPLUSCONNECTED 19
 #define wxSTC_MARK_CIRCLEMINUS 20
 #define wxSTC_MARK_CIRCLEMINUSCONNECTED 21
+
+// Invisible mark that only sets the line background color
+#define wxSTC_MARK_BACKGROUND 22
 #define wxSTC_MARK_CHARACTER 10000
 
 // Markers used for outlining column
@@ -83,6 +86,7 @@
 #define wxSTC_MARKNUM_FOLDERSUB 29
 #define wxSTC_MARKNUM_FOLDER 30
 #define wxSTC_MARKNUM_FOLDEROPEN 31
+#define wxSTC_MASK_FOLDERS 0xFE000000
 #define wxSTC_MARGIN_SYMBOL 0
 #define wxSTC_MARGIN_NUMBER 1
 
@@ -127,10 +131,10 @@
 #define wxSTC_INDIC_TT 2
 #define wxSTC_INDIC_DIAGONAL 3
 #define wxSTC_INDIC_STRIKE 4
-#define wxSTC_INDIC0_MASK 32
-#define wxSTC_INDIC1_MASK 64
-#define wxSTC_INDIC2_MASK 128
-#define wxSTC_INDICS_MASK 224
+#define wxSTC_INDIC0_MASK 0x20
+#define wxSTC_INDIC1_MASK 0x40
+#define wxSTC_INDIC2_MASK 0x80
+#define wxSTC_INDICS_MASK 0xE0
 
 // PrintColourMode - use same colours as screen.
 #define wxSTC_PRINT_NORMAL 0
@@ -159,6 +163,12 @@
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
 #define wxSTC_FOLDLEVELNUMBERMASK 0x0FFF
 #define wxSTC_TIME_FOREVER 10000000
+#define wxSTC_WRAP_NONE 0
+#define wxSTC_WRAP_WORD 1
+#define wxSTC_CACHE_NONE 0
+#define wxSTC_CACHE_CARET 1
+#define wxSTC_CACHE_PAGE 2
+#define wxSTC_CACHE_DOCUMENT 3
 #define wxSTC_CMD_LINEDOWN 2300
 #define wxSTC_CMD_LINEDOWNEXTEND 2301
 #define wxSTC_CMD_LINEUP 2302
@@ -203,6 +213,7 @@
 #define wxSTC_CMD_UPPERCASE 2341
 #define wxSTC_CMD_LINESCROLLDOWN 2342
 #define wxSTC_CMD_LINESCROLLUP 2343
+#define wxSTC_CMD_DELETEBACKNOTLINE 2344
 #define wxSTC_EDGE_NONE 0
 #define wxSTC_EDGE_LINE 1
 #define wxSTC_EDGE_BACKGROUND 2
@@ -302,6 +313,12 @@
 #define wxSTC_LEX_EIFFELKW 24
 #define wxSTC_LEX_TCL 25
 #define wxSTC_LEX_NNCRONTAB 26
+#define wxSTC_LEX_BULLANT 27
+#define wxSTC_LEX_VBSCRIPT 28
+#define wxSTC_LEX_ASP 29
+#define wxSTC_LEX_PHP 30
+#define wxSTC_LEX_BAAN 31
+#define wxSTC_LEX_MATLAB 32
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -323,7 +340,7 @@
 #define wxSTC_P_COMMENTBLOCK 12
 #define wxSTC_P_STRINGEOL 13
 
-// Lexical states for SCLEX_CPP, SCLEX_VB
+// Lexical states for SCLEX_CPP
 #define wxSTC_C_DEFAULT 0
 #define wxSTC_C_COMMENT 1
 #define wxSTC_C_COMMENTLINE 2
@@ -343,6 +360,17 @@
 #define wxSTC_C_WORD2 16
 #define wxSTC_C_COMMENTDOCKEYWORD 17
 #define wxSTC_C_COMMENTDOCKEYWORDERROR 18
+
+// Lexical states for SCLEX_VB, SCLEX_VBSCRIPT
+#define wxSTC_B_DEFAULT 0
+#define wxSTC_B_COMMENT 1
+#define wxSTC_B_NUMBER 2
+#define wxSTC_B_KEYWORD 3
+#define wxSTC_B_STRING 4
+#define wxSTC_B_PREPROCESSOR 5
+#define wxSTC_B_OPERATOR 6
+#define wxSTC_B_IDENTIFIER 7
+#define wxSTC_B_DATE 8
 
 // Lexical states for SCLEX_HTML, SCLEX_XML
 #define wxSTC_H_DEFAULT 0
@@ -531,6 +559,11 @@
 #define wxSTC_LUA_OPERATOR 10
 #define wxSTC_LUA_IDENTIFIER 11
 #define wxSTC_LUA_STRINGEOL 12
+#define wxSTC_LUA_WORD2 13
+#define wxSTC_LUA_WORD3 14
+#define wxSTC_LUA_WORD4 15
+#define wxSTC_LUA_WORD5 16
+#define wxSTC_LUA_WORD6 17
 
 // Lexical states for SCLEX_ERRORLIST
 #define wxSTC_ERR_DEFAULT 0
@@ -602,6 +635,19 @@
 #define wxSTC_ADA_IDENTIFIER 7
 #define wxSTC_ADA_STRINGEOL 8
 
+// Lexical states for SCLEX_BAAN
+#define wxSTC_BAAN_DEFAULT 0
+#define wxSTC_BAAN_COMMENT 1
+#define wxSTC_BAAN_COMMENTDOC 2
+#define wxSTC_BAAN_NUMBER 3
+#define wxSTC_BAAN_WORD 4
+#define wxSTC_BAAN_STRING 5
+#define wxSTC_BAAN_PREPROCESSOR 6
+#define wxSTC_BAAN_OPERATOR 7
+#define wxSTC_BAAN_IDENTIFIER 8
+#define wxSTC_BAAN_STRINGEOL 9
+#define wxSTC_BAAN_WORD2 10
+
 // Lexical states for SCLEX_LISP
 #define wxSTC_LISP_DEFAULT 0
 #define wxSTC_LISP_COMMENT 1
@@ -636,21 +682,17 @@
 #define wxSTC_NNCRONTAB_ENVIRONMENT 9
 #define wxSTC_NNCRONTAB_IDENTIFIER 10
 
+// Lexical states for SCLEX_MATLAB
+#define wxSTC_MATLAB_DEFAULT 0
+#define wxSTC_MATLAB_COMMENT 1
+#define wxSTC_MATLAB_COMMAND 2
+#define wxSTC_MATLAB_NUMBER 3
+#define wxSTC_MATLAB_KEYWORD 4
+#define wxSTC_MATLAB_STRING 5
+#define wxSTC_MATLAB_OPERATOR 6
+#define wxSTC_MATLAB_IDENTIFIER 7
+
 // END of generated section
-//----------------------------------------------------------------------
-// Others
-
-#define wxSTC_MASK_FOLDERS     ((1 << wxSTC_MARKNUM_FOLDER) | \
-                                (1 << wxSTC_MARKNUM_FOLDEROPEN) | \
-                                (1 << wxSTC_MARKNUM_FOLDERSUB) | \
-                                (1 << wxSTC_MARKNUM_FOLDERTAIL) | \
-                                (1 << wxSTC_MARKNUM_FOLDERMIDTAIL) | \
-                                (1 << wxSTC_MARKNUM_FOLDEROPENMID) | \
-                                (1 << wxSTC_MARKNUM_FOLDEREND))
-
-
-
-
 //----------------------------------------------------------------------
 
 class  ScintillaWX;                      // forward declare
@@ -821,7 +863,7 @@ public:
     void SetCodePage(int codePage);
 
     // Set the symbol used for a particular marker number,
-    // and optionally the for and background colours.
+    // and optionally the fore and background colours.
     void MarkerDefine(int markerNumber, int markerSymbol,
                          const wxColour& foreground = wxNullColour,
                          const wxColour& background = wxNullColour);
@@ -832,8 +874,8 @@ public:
     // Set the background colour used for a particular marker number.
     void MarkerSetBackground(int markerNumber, const wxColour& back);
 
-    // Add a marker to a line.
-    void MarkerAdd(int line, int markerNumber);
+    // Add a marker to a line, returning an ID which can be used to find or delete the marker.
+    int MarkerAdd(int line, int markerNumber);
 
     // Delete a marker from a line
     void MarkerDelete(int line, int markerNumber);
@@ -980,7 +1022,7 @@ public:
     // Is the background of the line containing the caret in a different colour?
     bool GetCaretLineVisible();
 
-    // Display the background of the line containing the caret in a different colour.
+    // Dsplay the background of the line containing the caret in a different colour.
     void SetCaretLineVisible(bool show);
 
     // Get the colour of the background of the line containing the caret.
@@ -988,6 +1030,10 @@ public:
 
     // Set the colour of the background of the line containing the caret.
     void SetCaretLineBack(const wxColour& back);
+
+    // Set a style to be changeable or not (read only).
+    // Experimental feature, currently buggy.
+    void StyleSetChangeable(int style, bool changeable);
 
     // Display a auto-completion list.
     // The lenEntered parameter indicates how many characters before
@@ -1027,7 +1073,8 @@ public:
     // Retrieve whether auto-completion cancelled by backspacing before start.
     bool AutoCompGetCancelAtStart();
 
-    // Define a set of character that when typed fills up the selected word.
+    // Define a set of characters that when typed will cause the autocompletion to
+    // choose the selected item.
     void AutoCompSetFillUps(const wxString& characterSet);
 
     // Should a single item auto-completion list automatically choose the item.
@@ -1050,6 +1097,12 @@ public:
 
     // Retrieve whether or not autocompletion is hidden automatically when nothing matches
     bool AutoCompGetAutoHide();
+
+    // Set whether or not autocompletion deletes any word characters after the inserted text upon completion
+    void AutoCompSetDropRestOfWord(bool dropRestOfWord);
+
+    // Retrieve whether or not autocompletion deletes any word characters after the inserted text upon completion
+    bool AutoCompGetDropRestOfWord();
 
     // Set the number of spaces used for one level of indentation.
     void SetIndent(int indentSize);
@@ -1369,6 +1422,28 @@ public:
     // Retrieve the time the mouse must sit still to generate a mouse dwell event
     int GetMouseDwellTime();
 
+    // Get position of start of word
+    int WordStartPosition(int pos, bool onlyWordCharacters);
+
+    // Get position of end of word
+    int WordEndPosition(int pos, bool onlyWordCharacters);
+
+    // Sets whether text is word wrapped
+    void SetWrapMode(int mode);
+
+    // Retrieve whether text is word wrapped
+    int GetWrapMode();
+
+    // Sets the degree of caching of layout information
+    void SetLayoutCache(int mode);
+
+    // Retrieve the degree of caching of layout information
+    int GetLayoutCache();
+
+    // Delete the selection or if no selection, the character before the caret.
+    // Will not delete the chraacter before at the start of a line.
+    void DeleteBackNotLine();
+
     // Move the caret inside current view if it's not there already
     void MoveCaretInsideView();
 
@@ -1487,6 +1562,13 @@ public:
     // Get cursor type
     int GetCursor();
 
+    // Change the way control characters are displayed:
+    // If symbol is < 32, keep the drawn way, else, use the given character
+    void SetControlCharSymbol(int symbol);
+
+    // Get the way control characters are displayed
+    int GetControlCharSymbol();
+
     // Move to the previous change in capitalistion
     void WordPartLeft();
 
@@ -1507,6 +1589,10 @@ public:
 
     // Delete forwards from the current position to the end of the line
     void DelLineRight();
+
+    // Get and Set the xOffset (ie, horizonal scroll position)
+    void SetXOffset(int newOffset);
+    int GetXOffset();
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();

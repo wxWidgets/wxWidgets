@@ -2,7 +2,7 @@
 /** @file Document.cxx
  ** Text document that handles notifications, DBCS, styling, words and end of line.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -19,7 +19,7 @@
 #include "RESearch.h"
 
 // This is ASCII specific but is safe with chars >= 0x80
-inline bool isspacechar(unsigned char ch) {
+static inline bool isspacechar(unsigned char ch) {
 	return (ch == ' ') || ((ch >= 0x09) && (ch <= 0x0d));
 }
 
@@ -34,10 +34,9 @@ Document::Document() {
 	stylingBits = 5;
 	stylingBitsMask = 0x1F;
 	stylingMask = 0;
-	for (int ch = 0; ch < 256; ch++) {
-		wordchars[ch] = isalnum(ch) || ch == '_';
-	}
+	SetWordChars(0);
 	endStyled = 0;
+	styleClock = 0;
 	enteredCount = 0;
 	enteredReadOnlyCount = 0;
 	tabInChars = 8;
@@ -219,7 +218,6 @@ bool Document::IsCrLf(int pos) {
 	return (cb.CharAt(pos) == '\r') && (cb.CharAt(pos + 1) == '\n');
 }
 
-#if PLAT_WIN
 bool Document::IsDBCS(int pos) {
 	if (dbcsCodePage) {
 		if (SC_CP_UTF8 == dbcsCodePage) {
@@ -232,7 +230,7 @@ bool Document::IsDBCS(int pos) {
 			while (startLine > 0 && cb.CharAt(startLine) != '\r' && cb.CharAt(startLine) != '\n')
 				startLine--;
 			while (startLine <= pos) {
-				if (IsDBCSLeadByteEx(dbcsCodePage, cb.CharAt(startLine))) {
+				if (Platform::IsDBCSLeadByte(dbcsCodePage, cb.CharAt(startLine))) {
 					startLine++;
 					if (startLine >= pos)
 						return true;
@@ -243,13 +241,6 @@ bool Document::IsDBCS(int pos) {
 	}
 	return false;
 }
-#else
-// PLAT_GTK or PLAT_WX
-// TODO: support DBCS under GTK+ and WX
-bool Document::IsDBCS(int) {
-	return false;
-}
-#endif
 
 int Document::LenChar(int pos) {
 	if (IsCrLf(pos)) {
@@ -302,7 +293,6 @@ int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 
 	// Not between CR and LF
 
-#if PLAT_WIN
 	if (dbcsCodePage) {
 		if (SC_CP_UTF8 == dbcsCodePage) {
 			unsigned char ch = static_cast<unsigned char>(cb.CharAt(pos));
@@ -324,12 +314,11 @@ int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 			while (startLine < pos) {
 				if (atLeadByte)
 					atLeadByte = false;
-				else if (IsDBCSLeadByteEx(dbcsCodePage, cb.CharAt(startLine)))
+				else if (Platform::IsDBCSLeadByte(dbcsCodePage, cb.CharAt(startLine)))
 					atLeadByte = true;
 				else
 					atLeadByte = false;
 				startLine++;
-				//Platform::DebugPrintf("DBCS %s\n", atlead ? "D" : "-");
 			}
 
 
@@ -342,7 +331,6 @@ int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 			}
 		}
 	}
-#endif
 
 	return pos;
 }
@@ -634,19 +622,44 @@ int Document::GetColumn(int pos) {
 	int column = 0;
 	int line = LineFromPosition(pos);
 	if ((line >= 0) && (line < LinesTotal())) {
-		for (int i = LineStart(line);i < pos;i++) {
+		for (int i = LineStart(line);i < pos;) {
 			char ch = cb.CharAt(i);
-			if (ch == '\t')
+			if (ch == '\t') {
 				column = NextTab(column, tabInChars);
-			else if (ch == '\r')
+				i++;
+			} else if (ch == '\r') {
 				return column;
-			else if (ch == '\n')
+			} else if (ch == '\n') {
 				return column;
-			else
+			} else {
 				column++;
+				i = MovePositionOutsideChar(i + 1, 1);
+			}
 		}
 	}
 	return column;
+}
+
+int Document::FindColumn(int line, int column) {
+	int position = LineStart(line);
+	int columnCurrent = 0;
+	if ((line >= 0) && (line < LinesTotal())) {
+		while (columnCurrent < column) {
+			char ch = cb.CharAt(position);
+			if (ch == '\t') {
+				columnCurrent = NextTab(columnCurrent, tabInChars);
+				position++;
+			} else if (ch == '\r') {
+				return position;
+			} else if (ch == '\n') {
+				return position;
+			} else {
+				columnCurrent++;
+				position = MovePositionOutsideChar(position + 1, 1);
+			}
+		}
+	}
+	return position;
 }
 
 void Document::Indent(bool forwards, int lineBottom, int lineTop) {
@@ -700,72 +713,88 @@ void Document::ConvertLineEnds(int eolModeSet) {
 	EndUndoAction();
 }
 
-bool Document::IsWordChar(unsigned char ch) {
-	if ((SC_CP_UTF8 == dbcsCodePage) && (ch > 0x80))
-		return true;
-	return wordchars[ch];
+Document::charClassification Document::WordCharClass(unsigned char ch) {
+	if ((SC_CP_UTF8 == dbcsCodePage) && (ch >= 0x80))
+		return ccWord;
+	return charClass[ch];
 }
 
-int Document::ExtendWordSelect(int pos, int delta) {
+/**
+ * Used by commmands that want to select whole words.
+ * Finds the start of word at pos when delta < 0 or the end of the word when delta >= 0.
+ */
+int Document::ExtendWordSelect(int pos, int delta, bool onlyWordCharacters) {
+	charClassification ccStart = ccWord;
 	if (delta < 0) {
-		while (pos > 0 && IsWordChar(cb.CharAt(pos - 1)))
+		if (!onlyWordCharacters)
+			ccStart = WordCharClass(cb.CharAt(pos-1));
+		while (pos > 0 && (WordCharClass(cb.CharAt(pos - 1)) == ccStart))
 			pos--;
 	} else {
-		while (pos < (Length()) && IsWordChar(cb.CharAt(pos)))
-			pos++;
-	}
-	return pos;
-}
-
-int Document::NextWordStart(int pos, int delta) {
-	if (delta < 0) {
-		while (pos > 0 && (cb.CharAt(pos - 1) == ' ' || cb.CharAt(pos - 1) == '\t'))
-			pos--;
-		if (isspacechar(cb.CharAt(pos - 1))) {	// Back up to previous line
-			while (pos > 0 && isspacechar(cb.CharAt(pos - 1)))
-				pos--;
-		} else {
-			bool startAtWordChar = IsWordChar(cb.CharAt(pos - 1));
-			while (pos > 0 && !isspacechar(cb.CharAt(pos - 1)) && (startAtWordChar == IsWordChar(cb.CharAt(pos - 1))))
-				pos--;
-		}
-	} else {
-		bool startAtWordChar = IsWordChar(cb.CharAt(pos));
-		while (pos < (Length()) && isspacechar(cb.CharAt(pos)))
-			pos++;
-		while (pos < (Length()) && !isspacechar(cb.CharAt(pos)) && (startAtWordChar == IsWordChar(cb.CharAt(pos))))
-			pos++;
-		while (pos < (Length()) && (cb.CharAt(pos) == ' ' || cb.CharAt(pos) == '\t'))
+		if (!onlyWordCharacters)
+			ccStart = WordCharClass(cb.CharAt(pos));
+		while (pos < (Length()) && (WordCharClass(cb.CharAt(pos)) == ccStart))
 			pos++;
 	}
 	return pos;
 }
 
 /**
- * Check that the character before the given position
- * is not a word character.
+ * Find the start of the next word in either a forward (delta >= 0) or backwards direction 
+ * (delta < 0).
+ * This is looking for a transition between character classes although there is also some
+ * additional movement to transit white space.
+ * Used by cursor movement by word commands.
+ */
+int Document::NextWordStart(int pos, int delta) {
+	if (delta < 0) {
+		while (pos > 0 && (WordCharClass(cb.CharAt(pos - 1)) == ccSpace))
+			pos--;
+		if (pos > 0) {
+			charClassification ccStart = WordCharClass(cb.CharAt(pos-1));
+			while (pos > 0 && (WordCharClass(cb.CharAt(pos - 1)) == ccStart)) {
+				pos--;
+			}
+		}
+	} else {
+		charClassification ccStart = WordCharClass(cb.CharAt(pos));
+		while (pos < (Length()) && (WordCharClass(cb.CharAt(pos)) == ccStart))
+			pos++;
+		while (pos < (Length()) && (WordCharClass(cb.CharAt(pos)) == ccSpace))
+			pos++;
+	}
+	return pos;
+}
+
+/**
+ * Check that the character at the given position is a word or punctuation character and that
+ * the previous character is of a different character class.
  */
 bool Document::IsWordStartAt(int pos) {
 	if (pos > 0) {
-		return !IsWordChar(CharAt(pos - 1));
+		charClassification ccPos = WordCharClass(CharAt(pos));
+		return (ccPos == ccWord || ccPos == ccPunctuation) &&
+			(ccPos != WordCharClass(CharAt(pos - 1)));
 	}
 	return true;
 }
 
 /**
- * Check that the character after the given position
- * is not a word character.
+ * Check that the character at the given position is a word or punctuation character and that
+ * the next character is of a different character class.
  */
 bool Document::IsWordEndAt(int pos) {
 	if (pos < Length() - 1) {
-		return !IsWordChar(CharAt(pos));
+		charClassification ccPrev = WordCharClass(CharAt(pos-1));
+		return (ccPrev == ccWord || ccPrev == ccPunctuation) &&
+			(ccPrev != WordCharClass(CharAt(pos)));
 	}
 	return true;
 }
 
 /**
- * Check that the given range is delimited by
- * non word characters.
+ * Check that the given range is has transitions between character classes at both 
+ * ends and where the characters on the inside are word or punctuation characters.
  */
 bool Document::IsWordAt(int start, int end) {
 	return IsWordStartAt(start) && IsWordEndAt(end);
@@ -1018,16 +1047,22 @@ void Document::ChangeCase(Range r, bool makeUpperCase) {
 void Document::SetWordChars(unsigned char *chars) {
 	int ch;
 	for (ch = 0; ch < 256; ch++) {
-		wordchars[ch] = false;
+		if (ch == '\r' || ch == '\n')
+			charClass[ch] = ccNewLine;
+		else if (ch < 0x20 || ch == ' ')
+			charClass[ch] = ccSpace;
+		else
+			charClass[ch] = ccPunctuation;
 	}
 	if (chars) {
 		while (*chars) {
-			wordchars[*chars] = true;
+			charClass[*chars] = ccWord;
 			chars++;
 		}
 	} else {
 		for (ch = 0; ch < 256; ch++) {
-			wordchars[ch] = isalnum(ch) || ch == '_';
+			if (ch >= 0x80 || isalnum(ch) || ch == '_') 
+				charClass[ch] = ccWord;
 		}
 	}
 }
@@ -1066,6 +1101,7 @@ void Document::SetStyles(int length, char *styles) {
 		int prevEndStyled = endStyled;
 		bool didChange = false;
 		for (int iPos = 0; iPos < length; iPos++, endStyled++) {
+			PLATFORM_ASSERT(endStyled < Length());
 			if (cb.SetStyleAt(endStyled, styles[iPos], stylingMask)) {
 				didChange = true;
 			}
@@ -1080,6 +1116,12 @@ void Document::SetStyles(int length, char *styles) {
 }
 
 bool Document::EnsureStyledTo(int pos) {
+	if (pos > GetEndStyled()) {
+		styleClock++;
+		if (styleClock > 0x100000) {
+			styleClock = 0;
+		}
+	}
 	// Ask the watchers to style, and stop as soon as one responds.
 	for (int i = 0; pos > GetEndStyled() && i < lenWatchers; i++)
 		watchers[i].watcher->NotifyStyleNeeded(this, watchers[i].userData, pos);
@@ -1149,7 +1191,7 @@ void Document::NotifyModified(DocModification mh) {
 }
 
 bool Document::IsWordPartSeparator(char ch) {
-	return ispunct(ch) && IsWordChar(ch);
+	return ispunct(ch) && (WordCharClass(ch) == ccWord);
 }
 
 int Document::WordPartLeft(int pos) {

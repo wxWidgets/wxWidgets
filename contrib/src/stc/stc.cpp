@@ -22,53 +22,6 @@
 
 #include <wx/tokenzr.h>
 
-// The following code forces a reference to all of the Scintilla lexers.
-// If we don't do something like this, then the linker tends to "optimize"
-// them away. (eric@sourcegear.com)
-
-int wxForceScintillaLexers(void)
-{
-  extern LexerModule lmAda;
-  extern LexerModule lmAVE;
-  extern LexerModule lmConf;
-  extern LexerModule lmCPP;
-  extern LexerModule lmNncrontab;
-  extern LexerModule lmEiffel;
-  extern LexerModule lmHTML;
-  extern LexerModule lmLISP;
-  extern LexerModule lmLua;
-  extern LexerModule lmBatch;  // In LexOthers.cxx
-  extern LexerModule lmPascal;
-  extern LexerModule lmPerl;
-  extern LexerModule lmPython;
-  extern LexerModule lmRuby;
-  extern LexerModule lmSQL;
-  extern LexerModule lmVB;
-
-  if (  &lmAda
-     && &lmAVE
-     && &lmConf
-     && &lmCPP
-     && &lmNncrontab
-     && &lmEiffel
-     && &lmHTML
-     && &lmLISP
-     && &lmLua
-     && &lmBatch
-     && &lmPascal
-     && &lmPerl
-     && &lmPython
-     && &lmRuby
-     && &lmSQL
-     && &lmVB )
-    {
-      return 1;
-    }
-  else
-    {
-      return 0;
-    }
-}
 
 //----------------------------------------------------------------------
 
@@ -130,6 +83,9 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxStyledTextCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent)
 
+// forces the linking of the lexer modules
+int Scintilla_LinkLexers();
+
 //----------------------------------------------------------------------
 // Constructor and Destructor
 
@@ -143,7 +99,7 @@ wxStyledTextCtrl::wxStyledTextCtrl(wxWindow *parent,
               style | wxVSCROLL | wxHSCROLL | wxWANTS_CHARS | wxCLIP_CHILDREN,
               wxDefaultValidator, name)
 {
-    wxForceScintillaLexers();
+    Scintilla_LinkLexers();
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
     m_lastKeyDownConsumed = FALSE;
@@ -431,7 +387,7 @@ void wxStyledTextCtrl::SetCodePage(int codePage) {
 }
 
 // Set the symbol used for a particular marker number,
-// and optionally the for and background colours.
+// and optionally the fore and background colours.
 void wxStyledTextCtrl::MarkerDefine(int markerNumber, int markerSymbol,
                             const wxColour& foreground,
                             const wxColour& background) {
@@ -453,9 +409,9 @@ void wxStyledTextCtrl::MarkerSetBackground(int markerNumber, const wxColour& bac
     SendMsg(2042, markerNumber, wxColourAsLong(back));
 }
 
-// Add a marker to a line.
-void wxStyledTextCtrl::MarkerAdd(int line, int markerNumber) {
-    SendMsg(2043, line, markerNumber);
+// Add a marker to a line, returning an ID which can be used to find or delete the marker.
+int wxStyledTextCtrl::MarkerAdd(int line, int markerNumber) {
+    return SendMsg(2043, line, markerNumber);
 }
 
 // Delete a marker from a line
@@ -698,7 +654,7 @@ bool wxStyledTextCtrl::GetCaretLineVisible() {
     return SendMsg(2095, 0, 0) != 0;
 }
 
-// Display the background of the line containing the caret in a different colour.
+// Dsplay the background of the line containing the caret in a different colour.
 void wxStyledTextCtrl::SetCaretLineVisible(bool show) {
     SendMsg(2096, show, 0);
 }
@@ -712,6 +668,12 @@ wxColour wxStyledTextCtrl::GetCaretLineBack() {
 // Set the colour of the background of the line containing the caret.
 void wxStyledTextCtrl::SetCaretLineBack(const wxColour& back) {
     SendMsg(2098, wxColourAsLong(back), 0);
+}
+
+// Set a style to be changeable or not (read only).
+// Experimental feature, currently buggy.
+void wxStyledTextCtrl::StyleSetChangeable(int style, bool changeable) {
+    SendMsg(2099, style, changeable);
 }
 
 // Display a auto-completion list.
@@ -774,7 +736,8 @@ bool wxStyledTextCtrl::AutoCompGetCancelAtStart() {
     return SendMsg(2111, 0, 0) != 0;
 }
 
-// Define a set of character that when typed fills up the selected word.
+// Define a set of characters that when typed will cause the autocompletion to
+// choose the selected item.
 void wxStyledTextCtrl::AutoCompSetFillUps(const wxString& characterSet) {
     SendMsg(2112, 0, (long)characterSet.c_str());
 }
@@ -812,6 +775,16 @@ void wxStyledTextCtrl::AutoCompSetAutoHide(bool autoHide) {
 // Retrieve whether or not autocompletion is hidden automatically when nothing matches
 bool wxStyledTextCtrl::AutoCompGetAutoHide() {
     return SendMsg(2119, 0, 0) != 0;
+}
+
+// Set whether or not autocompletion deletes any word characters after the inserted text upon completion
+void wxStyledTextCtrl::AutoCompSetDropRestOfWord(bool dropRestOfWord) {
+    SendMsg(2270, dropRestOfWord, 0);
+}
+
+// Retrieve whether or not autocompletion deletes any word characters after the inserted text upon completion
+bool wxStyledTextCtrl::AutoCompGetDropRestOfWord() {
+    return SendMsg(2271, 0, 0) != 0;
 }
 
 // Set the number of spaces used for one level of indentation.
@@ -1405,6 +1378,42 @@ int wxStyledTextCtrl::GetMouseDwellTime() {
     return SendMsg(2265, 0, 0);
 }
 
+// Get position of start of word
+int wxStyledTextCtrl::WordStartPosition(int pos, bool onlyWordCharacters) {
+    return SendMsg(2266, pos, onlyWordCharacters);
+}
+
+// Get position of end of word
+int wxStyledTextCtrl::WordEndPosition(int pos, bool onlyWordCharacters) {
+    return SendMsg(2267, pos, onlyWordCharacters);
+}
+
+// Sets whether text is word wrapped
+void wxStyledTextCtrl::SetWrapMode(int mode) {
+    SendMsg(2268, mode, 0);
+}
+
+// Retrieve whether text is word wrapped
+int wxStyledTextCtrl::GetWrapMode() {
+    return SendMsg(2269, 0, 0);
+}
+
+// Sets the degree of caching of layout information
+void wxStyledTextCtrl::SetLayoutCache(int mode) {
+    SendMsg(2272, mode, 0);
+}
+
+// Retrieve the degree of caching of layout information
+int wxStyledTextCtrl::GetLayoutCache() {
+    return SendMsg(2273, 0, 0);
+}
+
+// Delete the selection or if no selection, the character before the caret.
+// Will not delete the chraacter before at the start of a line.
+void wxStyledTextCtrl::DeleteBackNotLine() {
+    SendMsg(2344, 0, 0);
+}
+
 // Move the caret inside current view if it's not there already
 void wxStyledTextCtrl::MoveCaretInsideView() {
     SendMsg(2401, 0, 0);
@@ -1598,6 +1607,17 @@ int wxStyledTextCtrl::GetCursor() {
     return SendMsg(2387, 0, 0);
 }
 
+// Change the way control characters are displayed:
+// If symbol is < 32, keep the drawn way, else, use the given character
+void wxStyledTextCtrl::SetControlCharSymbol(int symbol) {
+    SendMsg(2388, symbol, 0);
+}
+
+// Get the way control characters are displayed
+int wxStyledTextCtrl::GetControlCharSymbol() {
+    return SendMsg(2389, 0, 0);
+}
+
 // Move to the previous change in capitalistion
 void wxStyledTextCtrl::WordPartLeft() {
     SendMsg(2390, 0, 0);
@@ -1631,6 +1651,14 @@ void wxStyledTextCtrl::DelLineLeft() {
 // Delete forwards from the current position to the end of the line
 void wxStyledTextCtrl::DelLineRight() {
     SendMsg(2396, 0, 0);
+}
+
+// Get and Set the xOffset (ie, horizonal scroll position)
+void wxStyledTextCtrl::SetXOffset(int newOffset) {
+    SendMsg(2397, newOffset, 0);
+}
+int wxStyledTextCtrl::GetXOffset() {
+    return SendMsg(2398, 0, 0);
 }
 
 // Start notifying the container of all key presses and commands.
@@ -2027,10 +2055,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     case SCN_NEEDSHOWN:
         evt.SetEventType(wxEVT_STC_NEEDSHOWN);
         evt.SetLength(scn.length);
-        break;
-
-    case SCN_POSCHANGED:
-        evt.SetEventType(wxEVT_STC_POSCHANGED);
         break;
 
     case SCN_PAINTED:

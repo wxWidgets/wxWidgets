@@ -6,13 +6,17 @@
 
 #include <ctype.h>
 
+#include <wx/wx.h>
+
 #include "Platform.h"
+#include "PlatWX.h"
 #include "wx/stc/stc.h"
 
 
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
 #endif
+
 
 Point Point::FromLong(long lpoint) {
     return Point(lpoint & 0xFFFF, lpoint >> 16);
@@ -29,35 +33,12 @@ PRectangle PRectangleFromwxRect(wxRect rc) {
                       rc.GetRight()+1, rc.GetBottom()+1);
 }
 
-Colour::Colour(long lcol) {
-    co.Set(lcol & 0xff, (lcol >> 8) & 0xff, (lcol >> 16) & 0xff);
+wxColour wxColourFromCA(const ColourAllocated& ca) {
+    ColourDesired cd(ca.AsLong());
+    return wxColour(cd.GetRed(), cd.GetGreen(), cd.GetBlue());
 }
 
-Colour::Colour(unsigned int red, unsigned int green, unsigned int blue) {
-    co.Set(red, green, blue);
-}
-
-bool Colour::operator==(const Colour &other) const {
-    return co == other.co;
-}
-
-long Colour::AsLong() const {
-    return (((long)co.Blue()  << 16) |
-            ((long)co.Green() <<  8) |
-            ((long)co.Red()));
-}
-
-unsigned int Colour::GetRed() {
-    return co.Red();
-}
-
-unsigned int Colour::GetGreen() {
-    return co.Green();
-}
-
-unsigned int Colour::GetBlue() {
-    return co.Blue();
-}
+//----------------------------------------------------------------------
 
 Palette::Palette() {
     used = 0;
@@ -84,7 +65,7 @@ void Palette::WantFind(ColourPair &cp, bool want) {
 
         if (used < numEntries) {
             entries[used].desired = cp.desired;
-            entries[used].allocated = cp.desired;
+            entries[used].allocated.Set(cp.desired.AsLong());
             used++;
         }
     } else {
@@ -94,7 +75,7 @@ void Palette::WantFind(ColourPair &cp, bool want) {
                 return;
             }
         }
-        cp.allocated = cp.desired;
+        cp.allocated.Set(cp.desired.AsLong());
     }
 }
 
@@ -103,6 +84,8 @@ void Palette::Allocate(Window &) {
     }
 }
 
+
+//----------------------------------------------------------------------
 
 Font::Font() {
     id = 0;
@@ -113,36 +96,172 @@ Font::~Font() {
 }
 
 void Font::Create(const char *faceName, int characterSet, int size, bool bold, bool italic) {
-    // TODO:  what to do about the characterSet?
+    wxFontEncoding encoding;
 
     Release();
+
+    switch (characterSet) {
+        default:
+        case wxSTC_CHARSET_ANSI:
+        case wxSTC_CHARSET_DEFAULT:
+            encoding = wxFONTENCODING_DEFAULT;
+            break;
+
+        case wxSTC_CHARSET_BALTIC:
+            encoding = wxFONTENCODING_ISO8859_13;
+            break;
+
+        case wxSTC_CHARSET_CHINESEBIG5:
+            encoding = wxFONTENCODING_CP950;
+            break;
+
+        case wxSTC_CHARSET_EASTEUROPE:
+            encoding = wxFONTENCODING_ISO8859_2;
+            break;
+
+        case wxSTC_CHARSET_GB2312:
+            encoding = wxFONTENCODING_CP936;
+            break;
+
+        case wxSTC_CHARSET_GREEK:
+            encoding = wxFONTENCODING_ISO8859_7;
+            break;
+
+        case wxSTC_CHARSET_HANGUL:
+            encoding = wxFONTENCODING_CP949;
+            break;
+
+        case wxSTC_CHARSET_MAC:
+            encoding = wxFONTENCODING_DEFAULT;
+            break;
+
+        case wxSTC_CHARSET_OEM:
+            encoding = wxFONTENCODING_DEFAULT;
+            break;
+
+        case wxSTC_CHARSET_RUSSIAN:
+            encoding = wxFONTENCODING_KOI8;
+            break;
+
+        case wxSTC_CHARSET_SHIFTJIS:
+            encoding = wxFONTENCODING_CP932;
+            break;
+
+        case wxSTC_CHARSET_SYMBOL:
+            encoding = wxFONTENCODING_DEFAULT;
+            break;
+
+        case wxSTC_CHARSET_TURKISH:
+            encoding = wxFONTENCODING_ISO8859_9;
+            break;
+
+        case wxSTC_CHARSET_JOHAB:
+            encoding = wxFONTENCODING_DEFAULT;
+            break;
+
+        case wxSTC_CHARSET_HEBREW:
+            encoding = wxFONTENCODING_ISO8859_8;
+            break;
+
+        case wxSTC_CHARSET_ARABIC:
+            encoding = wxFONTENCODING_ISO8859_6;
+            break;
+
+        case wxSTC_CHARSET_VIETNAMESE:
+            encoding = wxFONTENCODING_DEFAULT;
+            break;
+
+        case wxSTC_CHARSET_THAI:
+            encoding = wxFONTENCODING_ISO8859_11;
+            break;
+    }
+
+    // TODO:  Use wxFontMapper and wxEncodingConverter if encoding not available.
+
     id = new wxFont(size,
                     wxDEFAULT,
                     italic ? wxITALIC :  wxNORMAL,
                     bold ? wxBOLD : wxNORMAL,
                     false,
                     faceName,
-                    wxFONTENCODING_DEFAULT);
+                    encoding);
 }
 
 
 void Font::Release() {
     if (id)
-        delete id;
+        delete (wxFont*)id;
     id = 0;
 }
 
+//----------------------------------------------------------------------
 
-Surface::Surface() :
+class SurfaceImpl : public Surface {
+private:
+    wxDC*       hdc;
+    bool        hdcOwned;
+    wxBitmap*   bitmap;
+    int         x;
+    int         y;
+    bool        unicodeMode;
+
+public:
+    SurfaceImpl();
+    ~SurfaceImpl();
+
+    void Init();
+    void Init(SurfaceID sid);
+    void InitPixMap(int width, int height, Surface *surface_);
+
+    void Release();
+    bool Initialised();
+    void PenColour(ColourAllocated fore);
+    int LogPixelsY();
+    int DeviceHeightFont(int points);
+    void MoveTo(int x_, int y_);
+    void LineTo(int x_, int y_);
+    void Polygon(Point *pts, int npts, ColourAllocated fore, ColourAllocated back);
+    void RectangleDraw(PRectangle rc, ColourAllocated fore, ColourAllocated back);
+    void FillRectangle(PRectangle rc, ColourAllocated back);
+    void FillRectangle(PRectangle rc, Surface &surfacePattern);
+    void RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAllocated back);
+    void Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back);
+    void Copy(PRectangle rc, Point from, Surface &surfaceSource);
+
+    void DrawTextNoClip(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back);
+    void DrawTextClipped(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back);
+    void MeasureWidths(Font &font_, const char *s, int len, int *positions);
+    int WidthText(Font &font_, const char *s, int len);
+    int WidthChar(Font &font_, char ch);
+    int Ascent(Font &font_);
+    int Descent(Font &font_);
+    int InternalLeading(Font &font_);
+    int ExternalLeading(Font &font_);
+    int Height(Font &font_);
+    int AverageCharWidth(Font &font_);
+
+    int SetPalette(Palette *pal, bool inBackGround);
+    void SetClip(PRectangle rc);
+    void FlushCachedState();
+
+    void SetUnicodeMode(bool unicodeMode_);
+
+    void BrushColour(ColourAllocated back);
+    void SetFont(Font &font_);
+};
+
+
+
+SurfaceImpl::SurfaceImpl() :
     hdc(0), hdcOwned(0), bitmap(0),
-    x(0), y(0) {
-}
+    x(0), y(0), unicodeMode(0)
+{}
 
-Surface::~Surface() {
+SurfaceImpl::~SurfaceImpl() {
     Release();
 }
 
-void Surface::Release() {
+void SurfaceImpl::Release() {
     if (bitmap) {
         ((wxMemoryDC*)hdc)->SelectObject(wxNullBitmap);
         delete bitmap;
@@ -156,24 +275,24 @@ void Surface::Release() {
 }
 
 
-bool Surface::Initialised() {
+bool SurfaceImpl::Initialised() {
     return hdc != 0;
 }
 
-void Surface::Init() {
+void SurfaceImpl::Init() {
     Release();
     hdc = new wxMemoryDC();
     hdcOwned = true;
 }
 
-void Surface::Init(SurfaceID hdc_) {
+void SurfaceImpl::Init(SurfaceID hdc_) {
     Release();
-    hdc = hdc_;
+    hdc = (wxDC*)hdc_;
 }
 
-void Surface::InitPixMap(int width, int height, Surface *surface_) {
+void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_) {
     Release();
-    hdc = new wxMemoryDC(surface_->hdc);
+    hdc = new wxMemoryDC();
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
@@ -181,64 +300,63 @@ void Surface::InitPixMap(int width, int height, Surface *surface_) {
     ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
 }
 
-void Surface::PenColour(Colour fore) {
-    hdc->SetPen(wxPen(fore.co, 1, wxSOLID));
+void SurfaceImpl::PenColour(ColourAllocated fore) {
+    hdc->SetPen(wxPen(wxColourFromCA(fore), 1, wxSOLID));
 }
 
-void Surface::BrushColor(Colour back) {
-    hdc->SetBrush(wxBrush(back.co, wxSOLID));
+void SurfaceImpl::BrushColour(ColourAllocated back) {
+    hdc->SetBrush(wxBrush(wxColourFromCA(back), wxSOLID));
 }
 
-void Surface::SetFont(Font &font_) {
+void SurfaceImpl::SetFont(Font &font_) {
   if (font_.GetID()) {
-      hdc->SetFont(*font_.GetID());
+      hdc->SetFont(*((wxFont*)font_.GetID()));
     }
 }
 
-int Surface::LogPixelsY() {
+int SurfaceImpl::LogPixelsY() {
     return hdc->GetPPI().y;
 }
 
-
-int Surface::DeviceHeightFont(int points) {
+int SurfaceImpl::DeviceHeightFont(int points) {
     return points;
+//      int logPix = LogPixelsY();
+//      return (points * logPix + logPix / 2) / 72;
 }
 
-
-void Surface::MoveTo(int x_, int y_) {
+void SurfaceImpl::MoveTo(int x_, int y_) {
     x = x_;
     y = y_;
 }
 
-void Surface::LineTo(int x_, int y_) {
+void SurfaceImpl::LineTo(int x_, int y_) {
     hdc->DrawLine(x,y, x_,y_);
     x = x_;
     y = y_;
 }
 
-void Surface::Polygon(Point *pts, int npts, Colour fore,
-                      Colour back) {
+void SurfaceImpl::Polygon(Point *pts, int npts, ColourAllocated fore, ColourAllocated back) {
     PenColour(fore);
-    BrushColor(back);
+    BrushColour(back);
     hdc->DrawPolygon(npts, (wxPoint*)pts);
 }
 
-void Surface::RectangleDraw(PRectangle rc, Colour fore, Colour back) {
+void SurfaceImpl::RectangleDraw(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
     PenColour(fore);
-    BrushColor(back);
+    BrushColour(back);
     hdc->DrawRectangle(wxRectFromPRectangle(rc));
 }
 
-void Surface::FillRectangle(PRectangle rc, Colour back) {
-    BrushColor(back);
+void SurfaceImpl::FillRectangle(PRectangle rc, ColourAllocated back) {
+    BrushColour(back);
     hdc->SetPen(*wxTRANSPARENT_PEN);
     hdc->DrawRectangle(wxRectFromPRectangle(rc));
 }
 
-void Surface::FillRectangle(PRectangle rc, Surface &surfacePattern) {
+void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
     wxBrush br;
-    if (surfacePattern.bitmap)
-        br = wxBrush(*surfacePattern.bitmap);
+    if (((SurfaceImpl&)surfacePattern).bitmap)
+        br = wxBrush(*((SurfaceImpl&)surfacePattern).bitmap);
     else    // Something is wrong so display in red
         br = wxBrush(*wxRED, wxSOLID);
     hdc->SetPen(*wxTRANSPARENT_PEN);
@@ -246,79 +364,112 @@ void Surface::FillRectangle(PRectangle rc, Surface &surfacePattern) {
     hdc->DrawRectangle(wxRectFromPRectangle(rc));
 }
 
-void Surface::RoundedRectangle(PRectangle rc, Colour fore, Colour back) {
+void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
     PenColour(fore);
-    BrushColor(back);
+    BrushColour(back);
     hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 4);
 }
 
-void Surface::Ellipse(PRectangle rc, Colour fore, Colour back) {
+void SurfaceImpl::Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
     PenColour(fore);
-    BrushColor(back);
+    BrushColour(back);
     hdc->DrawEllipse(wxRectFromPRectangle(rc));
 }
 
-void Surface::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
+void SurfaceImpl::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
     wxRect r = wxRectFromPRectangle(rc);
     hdc->Blit(r.x, r.y, r.width, r.height,
-              surfaceSource.hdc, from.x, from.y, wxCOPY);
+              ((SurfaceImpl&)surfaceSource).hdc,
+              from.x, from.y, wxCOPY);
 }
 
-void Surface::DrawText(PRectangle rc, Font &font, int ybase,
-                       const char *s, int len, Colour fore, Colour back) {
+void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, int ybase,
+                                 const char *s, int len,
+                                 ColourAllocated fore, ColourAllocated back) {
     SetFont(font);
-    hdc->SetTextForeground(fore.co);
-    hdc->SetTextBackground(back.co);
+    hdc->SetTextForeground(wxColourFromCA(fore));
+    hdc->SetTextBackground(wxColourFromCA(back));
     FillRectangle(rc, back);
+
+#if wxUSE_UNICODE
+#error fix this...  Convert s from UTF-8.
+#else
+    wxString str = wxString(s, len);
+#endif
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(wxString(s, len), rc.left, ybase - font.ascent);
+    hdc->DrawText(str, rc.left, ybase - font.ascent);
 }
 
-void Surface::DrawTextClipped(PRectangle rc, Font &font, int ybase, const char *s, int len, Colour fore, Colour back) {
+void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
+                                  const char *s, int len,
+                                  ColourAllocated fore, ColourAllocated back) {
     SetFont(font);
-    hdc->SetTextForeground(fore.co);
-    hdc->SetTextBackground(back.co);
+    hdc->SetTextForeground(wxColourFromCA(fore));
+    hdc->SetTextBackground(wxColourFromCA(back));
     FillRectangle(rc, back);
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
+#if wxUSE_UNICODE
+#error fix this...  Convert s from UTF-8.
+#else
+    wxString str = wxString(s, len);
+#endif
+
     // see comments above
-    hdc->DrawText(wxString(s, len), rc.left, ybase - font.ascent);
+    hdc->DrawText(str, rc.left, ybase - font.ascent);
     hdc->DestroyClippingRegion();
 }
 
-int Surface::WidthText(Font &font, const char *s, int len) {
+int SurfaceImpl::WidthText(Font &font, const char *s, int len) {
     SetFont(font);
     int w;
     int h;
-    hdc->GetTextExtent(wxString(s, len), &w, &h);
+
+#if wxUSE_UNICODE
+#error fix this...  Convert s from UTF-8.
+#else
+    wxString str = wxString(s, len);
+#endif
+
+    hdc->GetTextExtent(str, &w, &h);
     return w;
 }
 
-void Surface::MeasureWidths(Font &font, const char *s, int len, int *positions) {
+void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positions) {
+#if wxUSE_UNICODE
+#error fix this...  Convert s from UTF-8.
+#else
+    wxString str = wxString(s, len);
+#endif
+
     SetFont(font);
     int totalWidth = 0;
-    for (int i=0; i<len; i++) {
+    for (size_t i=0; i<(size_t)len; i++) {
         int w;
         int h;
-        hdc->GetTextExtent(s[i], &w, &h);
+        hdc->GetTextExtent(str[i], &w, &h);
         totalWidth += w;
         positions[i] = totalWidth;
     }
 }
 
-int Surface::WidthChar(Font &font, char ch) {
+int SurfaceImpl::WidthChar(Font &font, char ch) {
     SetFont(font);
     int w;
     int h;
+#if wxUSE_UNICODE
+#error fix this...  Convert s from UTF-8.
+#else
     hdc->GetTextExtent(ch, &w, &h);
+#endif
     return w;
 }
 
-#define EXTENT_TEST " `~!@#$%^&*()-_=+\\|[]{};:\"\'<,>.?/1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#define EXTENT_TEST wxT(" `~!@#$%^&*()-_=+\\|[]{};:\"\'<,>.?/1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-int Surface::Ascent(Font &font) {
+int SurfaceImpl::Ascent(Font &font) {
     SetFont(font);
     int w, h, d, e;
     hdc->GetTextExtent(EXTENT_TEST, &w, &h, &d, &e);
@@ -326,66 +477,81 @@ int Surface::Ascent(Font &font) {
     return font.ascent;
 }
 
-int Surface::Descent(Font &font) {
+int SurfaceImpl::Descent(Font &font) {
     SetFont(font);
     int w, h, d, e;
     hdc->GetTextExtent(EXTENT_TEST, &w, &h, &d, &e);
     return d;
 }
 
-int Surface::InternalLeading(Font &font) {
+int SurfaceImpl::InternalLeading(Font &font) {
     return 0;
 }
 
-int Surface::ExternalLeading(Font &font) {
+int SurfaceImpl::ExternalLeading(Font &font) {
     SetFont(font);
     int w, h, d, e;
     hdc->GetTextExtent(EXTENT_TEST, &w, &h, &d, &e);
     return e;
 }
 
-int Surface::Height(Font &font) {
+int SurfaceImpl::Height(Font &font) {
     SetFont(font);
     return hdc->GetCharHeight();
 }
 
-int Surface::AverageCharWidth(Font &font) {
+int SurfaceImpl::AverageCharWidth(Font &font) {
     SetFont(font);
     return hdc->GetCharWidth();
 }
 
-int Surface::SetPalette(Palette *pal, bool inBackGround) {
+int SurfaceImpl::SetPalette(Palette *pal, bool inBackGround) {
     return 0;
 }
 
-void Surface::SetClip(PRectangle rc) {
+void SurfaceImpl::SetClip(PRectangle rc) {
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 }
 
-void Surface::FlushCachedState() {
+void SurfaceImpl::FlushCachedState() {
 }
+
+void SurfaceImpl::SetUnicodeMode(bool unicodeMode_) {
+    // TODO:  Make this jive with wxUSE_UNICODE
+    unicodeMode=unicodeMode_;
+}
+
+Surface *Surface::Allocate() {
+    return new SurfaceImpl;
+}
+
+
+//----------------------------------------------------------------------
+
+
+inline wxWindow* GETWIN(WindowID id) { return (wxWindow*)id; }
 
 Window::~Window() {
 }
 
 void Window::Destroy() {
     if (id)
-        id->Destroy();
+        GETWIN(id)->Destroy();
     id = 0;
 }
 
 bool Window::HasFocus() {
-    return wxWindow::FindFocus() == id;
+    return wxWindow::FindFocus() == GETWIN(id);
 }
 
 PRectangle Window::GetPosition() {
-    wxRect rc(id->GetPosition(), id->GetSize());
+    wxRect rc(GETWIN(id)->GetPosition(), GETWIN(id)->GetSize());
     return PRectangleFromwxRect(rc);
 }
 
 void Window::SetPosition(PRectangle rc) {
     wxRect r = wxRectFromPRectangle(rc);
-    id->SetSize(r);
+    GETWIN(id)->SetSize(r);
 }
 
 void Window::SetPositionRelative(PRectangle rc, Window) {
@@ -393,25 +559,25 @@ void Window::SetPositionRelative(PRectangle rc, Window) {
 }
 
 PRectangle Window::GetClientPosition() {
-    wxSize sz = id->GetClientSize();
+    wxSize sz = GETWIN(id)->GetClientSize();
     return  PRectangle(0, 0, sz.x, sz.y);
 }
 
 void Window::Show(bool show) {
-    id->Show(show);
+    GETWIN(id)->Show(show);
 }
 
 void Window::InvalidateAll() {
-    id->Refresh(false);
+    GETWIN(id)->Refresh(false);
 }
 
 void Window::InvalidateRectangle(PRectangle rc) {
     wxRect r = wxRectFromPRectangle(rc);
-    id->Refresh(false, &r);
+    GETWIN(id)->Refresh(false, &r);
 }
 
 void Window::SetFont(Font &font) {
-    id->SetFont(*font.GetID());
+    GETWIN(id)->SetFont(*((wxFont*)font.GetID()));
 }
 
 void Window::SetCursor(Cursor curs) {
@@ -444,19 +610,23 @@ void Window::SetCursor(Cursor curs) {
         break;
     }
 
-    id->SetCursor(wxCursor(cursorId));
+    GETWIN(id)->SetCursor(wxCursor(cursorId));
 }
 
 
 void Window::SetTitle(const char *s) {
-    id->SetTitle(s);
+#if wxUSE_UNICODE
+#error Fix this...
+#else
+    GETWIN(id)->SetTitle(s);
+#endif
 }
 
 
 //----------------------------------------------------------------------
 // Helper classes for ListBox
 
-// A wxListBox that gives focus to its parent if it gets it.
+// A wxListBox that gives focus back to its parent if it gets it.
 class wxSTCListBox : public wxListBox {
 public:
     wxSTCListBox(wxWindow* parent, wxWindowID id)
@@ -532,7 +702,9 @@ BEGIN_EVENT_TABLE(wxSTCListBoxWin, wxSTCListBoxWinBase)
 END_EVENT_TABLE()
 
 
-#define GETLB(win)  (((wxSTCListBoxWin*)win)->GetLB())
+inline wxListBox* GETLB(WindowID win) {
+    return (((wxSTCListBoxWin*)win)->GetLB());
+}
 
 //----------------------------------------------------------------------
 
@@ -543,7 +715,7 @@ ListBox::~ListBox() {
 }
 
 void ListBox::Create(Window &parent, int ctrlID) {
-    id = new wxSTCListBoxWin(parent.id, ctrlID);
+    id = new wxSTCListBoxWin(GETWIN(parent.GetID()), ctrlID);
 }
 
 void ListBox::SetVisibleRows(int rows) {
@@ -569,7 +741,7 @@ void ListBox::SetAverageCharWidth(int width) {
 }
 
 void ListBox::SetFont(Font &font) {
-    GETLB(id)->SetFont(*font.GetID());
+    GETLB(id)->SetFont(*((wxFont*)font.GetID()));
 }
 
 void ListBox::Clear() {
@@ -605,14 +777,18 @@ int ListBox::Find(const char *prefix) {
 }
 
 void ListBox::GetValue(int n, char *value, int len) {
+#if wxUSE_UNICODE
+#error fix this...
     wxString text = GETLB(id)->GetString(n);
     strncpy(value, text.c_str(), len);
     value[len-1] = '\0';
+#endif
 }
 
 void ListBox::Sort() {
 }
 
+//----------------------------------------------------------------------
 
 Menu::Menu() : id(0) {
 }
@@ -624,26 +800,27 @@ void Menu::CreatePopUp() {
 
 void Menu::Destroy() {
     if (id)
-        delete id;
+        delete (wxMenu*)id;
     id = 0;
 }
 
 void Menu::Show(Point pt, Window &w) {
-    w.GetID()->PopupMenu(id, pt.x - 4, pt.y);
+    GETWIN(w.GetID())->PopupMenu((wxMenu*)id, pt.x - 4, pt.y);
     Destroy();
 }
 
+//----------------------------------------------------------------------
 
-Colour Platform::Chrome() {
+ColourDesired Platform::Chrome() {
     wxColour c;
     c = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    return Colour(c.Red(), c.Green(), c.Blue());
+    return ColourDesired(c.Red(), c.Green(), c.Blue());
 }
 
-Colour Platform::ChromeHighlight() {
+ColourDesired Platform::ChromeHighlight() {
     wxColour c;
     c = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHIGHLIGHT);
-    return Colour(c.Red(), c.Green(), c.Blue());
+    return ColourDesired(c.Red(), c.Green(), c.Blue());
 }
 
 const char *Platform::DefaultFont() {
@@ -744,6 +921,26 @@ int Platform::Clamp(int val, int minVal, int maxVal) {
 }
 
 
+bool Platform::IsDBCSLeadByte(int codePage, char ch) {
+    return false;
+}
+
+
+
+//----------------------------------------------------------------------
+
+ElapsedTime::ElapsedTime() {
+    wxStartTimer();
+}
+
+double ElapsedTime::Duration(bool reset) {
+    double result = wxGetElapsedTime(reset);
+    result /= 1000.0;
+    return result;
+}
+
+
+//----------------------------------------------------------------------
 
 
 

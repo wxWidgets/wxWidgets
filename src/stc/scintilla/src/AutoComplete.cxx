@@ -2,7 +2,7 @@
 /** @file AutoComplete.cxx
  ** Defines the auto completion list box.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -22,7 +22,8 @@ AutoComplete::AutoComplete() :
 	posStart(0),
 	startLen(0),
 	cancelAtStartPos(true),
-	autoHide(true) {
+	autoHide(true),
+	dropRestOfWord(false)	{
 	stopChars[0] = '\0';
 	fillUpChars[0] = '\0';
 }

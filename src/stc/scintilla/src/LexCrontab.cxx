@@ -199,6 +199,7 @@ static void ColouriseNncrontabDoc(unsigned int startPos, int length, int, WordLi
 				break;
 		}
 	}
+	delete []buffer;
 }
 
 LexerModule lmNncrontab(SCLEX_NNCRONTAB, ColouriseNncrontabDoc, "nncrontab");

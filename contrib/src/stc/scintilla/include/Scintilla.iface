@@ -2,6 +2,9 @@
 
 ## This file defines the interface to Scintilla
 
+## Copyright 2000-2002 by Neil Hodgson <neilh@scintilla.org>
+## The License.txt file describes the conditions under which this software may be distributed.
+
 ## A line starting with ## is a pure comment and should be stripped by readers.
 ## A line starting with #! is for future shbang use
 ## A line starting with # followed by a space is a documentation comment and refers
@@ -25,6 +28,9 @@
 ## The syntax for evt is <featureType><ws><returnType><ws><name>[=<number]([<param>[,<param>]*])
 ## Feature names that contain an underscore are defined by Windows, so in these
 ## cases, using the Windows definition is preferred where available.
+## The feature numbers are stable so features will not be renumbered.
+## Features may be removed but they will go through a period of deprecation
+## before removal which is signalled by moving them into the Deprecated category.
 
 ## Types:
 ##     void
@@ -35,19 +41,26 @@
 ##     string -> pointer to const character
 ##     stringresult -> pointer to character
 ##     cells -> pointer to array of cells, each cell containing a style byte and character byte
+##     textrange -> range of a min and a max position with an output string
+##     findtext -> searchrange, text -> foundposition
+##     keymod -> integer containing key in low half and modifiers in high half
+##     formatrange
+## Types no longer used:
+##     findtextex -> searchrange
 ##     charrange -> range of a min and a max position
 ##     charrangeresult -> like charrange, but output param
-##     textrange -> charrange + output string
-##     findtext -> searchrange, text -> foundposition
-##     findtextex -> searchrange
-##     keymod -> integer containing key in low half and modifiers in high half
 ##     countedstring
-##     formatrange
 ##     point -> x,y
 ##     pointresult  -> like point, but output param
 ##     rectangle -> left,top,right,bottom
 ## Client code should ignore definitions containing types it does not understand, except
 ## for possibly #defining the constants
+
+## String arguments may contain NUL ('\0') characters where the calls provide a length
+## argument and retrieve NUL characters. All retrieved strings except for those retrieved
+## by GetLine also have a NUL appended but client code should calculate the size that
+## will be returned rather than relying upon the NUL whenever possible. Allow for the
+## extra NUL character when allocating buffers.
 
 cat Basics
 
@@ -229,6 +242,9 @@ val SC_MARK_CIRCLEPLUSCONNECTED=19
 val SC_MARK_CIRCLEMINUS=20
 val SC_MARK_CIRCLEMINUSCONNECTED=21
 
+# Invisible mark that only sets the line background color
+val SC_MARK_BACKGROUND=22
+
 val SC_MARK_CHARACTER=10000
 
 # Markers used for outlining column
@@ -240,6 +256,8 @@ val SC_MARKNUM_FOLDERSUB=29
 val SC_MARKNUM_FOLDER=30
 val SC_MARKNUM_FOLDEROPEN=31
 
+val SC_MASK_FOLDERS=0xFE000000
+
 # Set the symbol used for a particular marker number.
 fun void MarkerDefine=2040(int markerNumber, int markerSymbol)
 
@@ -249,8 +267,8 @@ fun void MarkerSetFore=2041(int markerNumber, colour fore)
 # Set the background colour used for a particular marker number.
 fun void MarkerSetBack=2042(int markerNumber, colour back)
 
-# Add a marker to a line.
-fun void MarkerAdd=2043(int line, int markerNumber)
+# Add a marker to a line, returning an ID which can be used to find or delete the marker.
+fun int MarkerAdd=2043(int line, int markerNumber)
 
 # Delete a marker from a line
 fun void MarkerDelete=2044(int line, int markerNumber)
@@ -413,11 +431,10 @@ val INDIC_SQUIGGLE=1
 val INDIC_TT=2
 val INDIC_DIAGONAL=3
 val INDIC_STRIKE=4
-val INDIC0_MASK=32
-val INDIC1_MASK=64
-val INDIC2_MASK=128
-val INDICS_MASK=224
-##INDIC0_MASK | INDIC1_MASK | INDIC2_MASK
+val INDIC0_MASK=0x20
+val INDIC1_MASK=0x40
+val INDIC2_MASK=0x80
+val INDICS_MASK=0xE0
 
 # Set an indicator to plain, squiggle or TT.
 set void IndicSetStyle=2080(int indic, int style)
@@ -451,7 +468,7 @@ get int GetMaxLineState=2094(,)
 # Is the background of the line containing the caret in a different colour?
 get bool GetCaretLineVisible=2095(,)
 
-# Display the background of the line containing the caret in a different colour.
+# Dsplay the background of the line containing the caret in a different colour.
 set void SetCaretLineVisible=2096(bool show,)
 
 # Get the colour of the background of the line containing the caret.
@@ -459,6 +476,10 @@ get colour GetCaretLineBack=2097(,)
 
 # Set the colour of the background of the line containing the caret.
 set void SetCaretLineBack=2098(colour back,)
+
+# Set a style to be changeable or not (read only).
+# Experimental feature, currently buggy.
+set void StyleSetChangeable=2099(int style, bool changeable)
 
 # Display a auto-completion list.
 # The lenEntered parameter indicates how many characters before
@@ -498,7 +519,8 @@ set void AutoCSetCancelAtStart=2110(bool cancel,)
 # Retrieve whether auto-completion cancelled by backspacing before start.
 get bool AutoCGetCancelAtStart=2111(,)
 
-# Define a set of character that when typed fills up the selected word.
+# Define a set of characters that when typed will cause the autocompletion to
+# choose the selected item.
 set void AutoCSetFillUps=2112(, string characterSet)
 
 # Should a single item auto-completion list automatically choose the item.
@@ -521,6 +543,12 @@ set void AutoCSetAutoHide=2118(bool autoHide,)
 
 # Retrieve whether or not autocompletion is hidden automatically when nothing matches
 get bool AutoCGetAutoHide=2119(,)
+
+# Set whether or not autocompletion deletes any word characters after the inserted text upon completion
+set void AutoCSetDropRestOfWord=2270(bool dropRestOfWord,)
+
+# Retrieve whether or not autocompletion deletes any word characters after the inserted text upon completion
+get bool AutoCGetDropRestOfWord=2271(,)
 
 # Set the number of spaces used for one level of indentation.
 set void SetIndent=2122(int indentSize,)
@@ -878,6 +906,32 @@ set void SetMouseDwellTime=2264(int periodMilliseconds,)
 # Retrieve the time the mouse must sit still to generate a mouse dwell event
 get int GetMouseDwellTime=2265(,)
 
+# Get position of start of word
+fun int WordStartPosition=2266(position pos, bool onlyWordCharacters)
+
+# Get position of end of word
+fun int WordEndPosition=2267(position pos, bool onlyWordCharacters)
+
+val SC_WRAP_NONE=0
+val SC_WRAP_WORD=1
+
+# Sets whether text is word wrapped
+set void SetWrapMode=2268(int mode,)
+
+# Retrieve whether text is word wrapped
+get int GetWrapMode=2269(,)
+
+val SC_CACHE_NONE=0
+val SC_CACHE_CARET=1
+val SC_CACHE_PAGE=2
+val SC_CACHE_DOCUMENT=3
+
+# Sets the degree of caching of layout information
+set void SetLayoutCache=2272(int mode,)
+
+# Retrieve the degree of caching of layout information
+get int GetLayoutCache=2273(,)
+
 ## Start of key messages
 # Move caret down one line.
 fun void LineDown=2300(,)
@@ -1014,6 +1068,10 @@ fun void LineScrollDown=2342(,)
 # Scroll the document up, keeping the caret visible.
 fun void LineScrollUp=2343(,)
 
+# Delete the selection or if no selection, the character before the caret.
+# Will not delete the chraacter before at the start of a line.
+fun void DeleteBackNotLine=2344(,)
+
 # Move the caret inside current view if it's not there already
 fun void MoveCaretInsideView=2401(,)
 
@@ -1146,6 +1204,12 @@ set void SetCursor=2386(int cursorType,)
 # Get cursor type
 get int GetCursor=2387(,)
 
+# Change the way control characters are displayed:
+# If symbol is < 32, keep the drawn way, else, use the given character
+set void SetControlCharSymbol=2388(int symbol,)
+# Get the way control characters are displayed
+get int GetControlCharSymbol=2389(,)
+
 # Move to the previous change in capitalistion
 fun void WordPartLeft=2390(,)
 # Move to the previous change in capitalistion extending selection to new caret position.
@@ -1166,6 +1230,10 @@ fun void DelLineLeft=2395(,)
 
 # Delete forwards from the current position to the end of the line
 fun void DelLineRight=2396(,)
+
+# Get and Set the xOffset (ie, horizonal scroll position)
+set void SetXOffset=2397(int newOffset,)
+get int GetXOffset=2398(,)
 
 # Set the focus to this Scintilla widget.
 # GTK+ Specific
@@ -1273,6 +1341,13 @@ val SCLEX_EIFFEL=23
 val SCLEX_EIFFELKW=24
 val SCLEX_TCL=25
 val SCLEX_NNCRONTAB=26
+val SCLEX_BULLANT=27
+val SCLEX_VBSCRIPT=28
+val SCLEX_ASP=29
+val SCLEX_PHP=30
+val SCLEX_BAAN=31
+val SCLEX_MATLAB=32
+
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
 val SCLEX_AUTOMATIC=1000
@@ -1291,7 +1366,7 @@ val SCE_P_OPERATOR=10
 val SCE_P_IDENTIFIER=11
 val SCE_P_COMMENTBLOCK=12
 val SCE_P_STRINGEOL=13
-# Lexical states for SCLEX_CPP, SCLEX_VB
+# Lexical states for SCLEX_CPP
 val SCE_C_DEFAULT=0
 val SCE_C_COMMENT=1
 val SCE_C_COMMENTLINE=2
@@ -1311,6 +1386,16 @@ val SCE_C_COMMENTLINEDOC=15
 val SCE_C_WORD2=16
 val SCE_C_COMMENTDOCKEYWORD=17
 val SCE_C_COMMENTDOCKEYWORDERROR=18
+# Lexical states for SCLEX_VB, SCLEX_VBSCRIPT
+val SCE_B_DEFAULT=0
+val SCE_B_COMMENT=1
+val SCE_B_NUMBER=2
+val SCE_B_KEYWORD=3
+val SCE_B_STRING=4
+val SCE_B_PREPROCESSOR=5
+val SCE_B_OPERATOR=6
+val SCE_B_IDENTIFIER=7
+val SCE_B_DATE=8
 # Lexical states for SCLEX_HTML, SCLEX_XML
 val SCE_H_DEFAULT=0
 val SCE_H_TAG=1
@@ -1484,6 +1569,11 @@ val SCE_LUA_PREPROCESSOR=9
 val SCE_LUA_OPERATOR=10
 val SCE_LUA_IDENTIFIER=11
 val SCE_LUA_STRINGEOL=12
+val SCE_LUA_WORD2=13
+val SCE_LUA_WORD3=14
+val SCE_LUA_WORD4=15
+val SCE_LUA_WORD5=16
+val SCE_LUA_WORD6=17
 # Lexical states for SCLEX_ERRORLIST
 val SCE_ERR_DEFAULT=0
 val SCE_ERR_PYTHON=1
@@ -1548,6 +1638,18 @@ val SCE_ADA_CHARACTER=5
 val SCE_ADA_OPERATOR=6
 val SCE_ADA_IDENTIFIER=7
 val SCE_ADA_STRINGEOL=8
+# Lexical states for SCLEX_BAAN
+val SCE_BAAN_DEFAULT=0
+val SCE_BAAN_COMMENT=1
+val SCE_BAAN_COMMENTDOC=2
+val SCE_BAAN_NUMBER=3
+val SCE_BAAN_WORD=4
+val SCE_BAAN_STRING=5
+val SCE_BAAN_PREPROCESSOR=6
+val SCE_BAAN_OPERATOR=7
+val SCE_BAAN_IDENTIFIER=8
+val SCE_BAAN_STRINGEOL=9
+val SCE_BAAN_WORD2=10
 # Lexical states for SCLEX_LISP
 val SCE_LISP_DEFAULT=0
 val SCE_LISP_COMMENT=1
@@ -1579,6 +1681,15 @@ val SCE_NNCRONTAB_NUMBER=7
 val SCE_NNCRONTAB_STRING=8
 val SCE_NNCRONTAB_ENVIRONMENT=9
 val SCE_NNCRONTAB_IDENTIFIER=10
+# Lexical states for SCLEX_MATLAB
+val SCE_MATLAB_DEFAULT=0
+val SCE_MATLAB_COMMENT=1
+val SCE_MATLAB_COMMAND=2
+val SCE_MATLAB_NUMBER=3
+val SCE_MATLAB_KEYWORD=4
+val SCE_MATLAB_STRING=5
+val SCE_MATLAB_OPERATOR=6
+val SCE_MATLAB_IDENTIFIER=7
 
 # Events
 
@@ -1591,14 +1702,10 @@ evt void ModifyAttemptRO=2004(void)
 evt void Key=2005(int ch, int modifiers)
 evt void DoubleClick=2006(void)
 evt void UpdateUI=2007(void)
-# The old name for SCN_UPDATEUI
-val SCN_CHECKBRACE=2007
 evt void Modified=2008(int position, int modificationType, string text, int length, int linesAdded, int line, int foldLevelNow, int foldLevelPrev)
-# Optional module for macro recording
 evt void MacroRecord=2009(int message, int wParam, int lParam)
 evt void MarginClick=2010(int modifiers, int position, int margin)
 evt void NeedShown=2011(int position, int length)
-evt void PosChanged=2012(int position)
 evt void Painted=2013(void)
 evt void UserListSelection=2014(int listType, string text)
 evt void URIDropped=2015(string text)
@@ -1606,3 +1713,7 @@ evt void DwellStart=2016(int position)
 evt void DwellEnd=2017(int position)
 
 cat Deprecated
+
+# The old name for SCN_UPDATEUI
+val SCN_CHECKBRACE=2007
+evt void PosChanged=2012(int position)

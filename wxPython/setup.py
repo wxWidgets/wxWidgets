@@ -592,6 +592,7 @@ if not GL_ONLY and BUILD_STC:
     stc_defines = defines[:]
     stc_defines.append( ('__WX__', None) )
     stc_defines.append( ('SCI_LEXER', None) )
+    stc_defines.append( ('LINK_LEXERS', None) )
 
 
     ext = Extension('stc_c',
@@ -617,6 +618,8 @@ if not GL_ONLY and BUILD_STC:
 
                      '%s/scintilla/src/LexAda.cxx' % STCLOC,
                      '%s/scintilla/src/LexAVE.cxx' % STCLOC,
+                     '%s/scintilla/src/LexBaan.cxx' % STCLOC,
+                     '%s/scintilla/src/LexBullant.cxx' % STCLOC,
                      '%s/scintilla/src/LexCPP.cxx' % STCLOC,
                      '%s/scintilla/src/LexConf.cxx' % STCLOC,
                      '%s/scintilla/src/LexCrontab.cxx' % STCLOC,
@@ -624,6 +627,7 @@ if not GL_ONLY and BUILD_STC:
                      '%s/scintilla/src/LexHTML.cxx' % STCLOC,
                      '%s/scintilla/src/LexLisp.cxx' % STCLOC,
                      '%s/scintilla/src/LexLua.cxx' % STCLOC,
+                     '%s/scintilla/src/LexMatlab.cxx' % STCLOC,
                      '%s/scintilla/src/LexOthers.cxx' % STCLOC,
                      '%s/scintilla/src/LexPascal.cxx' % STCLOC,
                      '%s/scintilla/src/LexPerl.cxx' % STCLOC,

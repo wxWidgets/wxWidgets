@@ -19,6 +19,11 @@
 
 //----------------------------------------------------------------------
 
+#include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "Platform.h"
 
 #include "Scintilla.h"

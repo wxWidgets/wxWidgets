@@ -2,7 +2,7 @@
 /** @file LexSQL.cxx
  ** Lexer for SQL.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -43,7 +43,7 @@ static void ColouriseSQLDoc(unsigned int startPos, int length,
 
 	styler.StartAt(startPos);
 
-	bool fold = styler.GetPropertyInt("fold");
+	bool fold = styler.GetPropertyInt("fold") != 0;
 	int lineCurrent = styler.GetLine(startPos);
 	int spaceFlags = 0;
 

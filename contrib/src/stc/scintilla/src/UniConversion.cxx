@@ -52,9 +52,6 @@ unsigned int UCS2Length(const char *s, unsigned int len) {
 }
 
 unsigned int UCS2FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsigned int tlen) {
-#ifdef USE_API
-	return ::MultiByteToWideChar(CP_UTF8, 0, s, len, tbuf, tlen);
-#else 
 	unsigned int ui=0;
 	const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
 	unsigned int i=0;
@@ -76,5 +73,4 @@ unsigned int UCS2FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsign
 		ui++;
 	}
 	return ui;
-#endif
 }

@@ -2,7 +2,7 @@
 /** @file PropSet.h
  ** A Java style properties file module.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef PROPSET_H
@@ -41,7 +41,7 @@ public:
 	SString Expand(const char *withVars);
 	int GetInt(const char *key, int defaultValue=0);
 	SString GetWild(const char *keybase, const char *filename);
-	SString GetNewExpand(const char *keybase, const char *filename);
+	SString GetNewExpand(const char *keybase, const char *filename="");
 	void Clear();
 	char *ToString();	// Caller must delete[] the return value
 	bool GetFirst(char **key, char **val);
@@ -70,7 +70,8 @@ public:
 	char *Allocate(int size);
 	void SetFromAllocated();
 	bool InList(const char *s);
-	const char *GetNearestWord(const char *wordStart, int searchLen = -1, bool ignoreCase = false);
+	const char *GetNearestWord(const char *wordStart, int searchLen = -1, 
+		bool ignoreCase = false, SString wordCharacters="");
 	char *GetNearestWords(const char *wordStart, int searchLen=-1, 
 		bool ignoreCase=false, char otherSeparator='\0');
 };

@@ -26,6 +26,7 @@ protected:
 	char chFlags;
 	char chWhile;
 	unsigned int startSeg;
+	int startPosStyling;
 
 	bool InternalIsLeadByte(char ch);
 	void Fill(int position);
@@ -33,7 +34,8 @@ protected:
 public:
 	DocumentAccessor(Document *pdoc_, PropSet &props_, WindowID id_=0) : 
 		Accessor(), pdoc(pdoc_), props(props_), id(id_),
-		lenDoc(-1), validLen(0), chFlags(0), chWhile(0) {
+		lenDoc(-1), validLen(0), chFlags(0), chWhile(0), 
+		startSeg(0), startPosStyling(0) {
 	}
 	~DocumentAccessor();
 	char StyleAt(int position);

@@ -14,7 +14,7 @@ class Indicator {
 public:
 	int style;
 	ColourPair fore;
-	Indicator() : style(INDIC_PLAIN), fore(Colour(0,0,0)) {
+	Indicator() : style(INDIC_PLAIN), fore(ColourDesired(0,0,0)) {
 	}
 	void Draw(Surface *surface, PRectangle &rc);
 };

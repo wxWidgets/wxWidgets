@@ -154,7 +154,7 @@ methodOverrideMap = {
                                 MarkerSetBackground(markerNumber, background);''',
 
                       ('Set the symbol used for a particular marker number,',
-                       'and optionally the for and background colours.')),
+                       'and optionally the fore and background colours.')),
 
     'SetMarginTypeN' : ('SetMarginType', 0, 0, 0),
     'GetMarginTypeN' : ('GetMarginType', 0, 0, 0),
@@ -226,6 +226,8 @@ methodOverrideMap = {
     'AutoCGetIgnoreCase' : ('AutoCompGetIgnoreCase', 0, 0, 0),
     'AutoCSetAutoHide' : ('AutoCompSetAutoHide', 0, 0, 0),
     'AutoCGetAutoHide' : ('AutoCompGetAutoHide', 0, 0, 0),
+    'AutoCSetDropRestOfWord' : ('AutoCompSetDropRestOfWord', 0,0,0),
+    'AutoCGetDropRestOfWord' : ('AutoCompGetDropRestOfWord', 0,0,0),
 
 
     'SetHScrollBar' : ('SetUseHorizontalScrollBar', 0, 0, 0),

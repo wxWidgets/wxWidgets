@@ -21,11 +21,11 @@ CallTip::CallTip() {
 	startHighlight = 0;
 	endHighlight = 0;
 
-	colourBG.desired = Colour(0xff, 0xff, 0xff);
-	colourUnSel.desired = Colour(0x80, 0x80, 0x80);
-	colourSel.desired = Colour(0, 0, 0x80);
-	colourShade.desired = Colour(0, 0, 0);
-	colourLight.desired = Colour(0xc0, 0xc0, 0xc0);
+	colourBG.desired = ColourDesired(0xff, 0xff, 0xff);
+	colourUnSel.desired = ColourDesired(0x80, 0x80, 0x80);
+	colourSel.desired = ColourDesired(0, 0, 0x80);
+	colourShade.desired = ColourDesired(0, 0, 0);
+	colourLight.desired = ColourDesired(0xc0, 0xc0, 0xc0);
 }
 
 CallTip::~CallTip() {
@@ -81,7 +81,7 @@ void CallTip::PaintCT(Surface *surfaceWindow) {
 		rcClient.left = x;
 		rcClient.top = ytext - ascent - 1;
 		rcClient.right = xEnd;
-		surfaceWindow->DrawText(rcClient, font, ytext,
+		surfaceWindow->DrawTextNoClip(rcClient, font, ytext,
 		                        chunkVal, thisStartHighlight,
 		                        colourUnSel.allocated, colourBG.allocated);
 		x = xEnd;
@@ -91,7 +91,7 @@ void CallTip::PaintCT(Surface *surfaceWindow) {
 		rcClient.top = ytext;
 		rcClient.left = x;
 		rcClient.right = xEnd;
-		surfaceWindow->DrawText(rcClient, font, ytext,
+		surfaceWindow->DrawTextNoClip(rcClient, font, ytext,
 		                        chunkVal + thisStartHighlight, thisEndHighlight - thisStartHighlight,
 		                        colourSel.allocated, colourBG.allocated);
 		x = xEnd;
@@ -100,7 +100,7 @@ void CallTip::PaintCT(Surface *surfaceWindow) {
 		                                    chunkLength - thisEndHighlight);
 		rcClient.left = x;
 		rcClient.right = xEnd;
-		surfaceWindow->DrawText(rcClient, font, ytext,
+		surfaceWindow->DrawTextNoClip(rcClient, font, ytext,
 		                        chunkVal + thisEndHighlight, chunkLength - thisEndHighlight,
 		                        colourUnSel.allocated, colourBG.allocated);
 		chunkVal = chunkEnd + 1;
@@ -117,21 +117,25 @@ void CallTip::PaintCT(Surface *surfaceWindow) {
 }
 
 PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
-                                 const char *faceName, int size) {
-	Surface surfaceMeasure;
-	surfaceMeasure.Init();
-	int deviceHeight = surfaceMeasure.DeviceHeightFont(size);
-	font.Create(faceName, SC_CHARSET_DEFAULT, deviceHeight, false, false);
+                                 const char *faceName, int size, bool unicodeMode_) {
 	if (val)
 		delete []val;
 	val = new char[strlen(defn) + 1];
 	if (!val)
 		return PRectangle();
 	strcpy(val, defn);
+	unicodeMode = unicodeMode_;
+	Surface *surfaceMeasure = Surface::Allocate();
+	if (!surfaceMeasure)
+		return PRectangle();
+	surfaceMeasure->Init();
+	surfaceMeasure->SetUnicodeMode(unicodeMode);
 	startHighlight = 0;
 	endHighlight = 0;
 	inCallTipMode = true;
 	posStartCallTip = pos;
+	int deviceHeight = surfaceMeasure->DeviceHeightFont(size);
+	font.Create(faceName, SC_CHARSET_DEFAULT, deviceHeight, false, false);
 	// Look for multiple lines in the text
 	// Only support \n here - simply means container must avoid \r!
 	int width = 0;
@@ -139,16 +143,17 @@ PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
 	const char *newline;
 	const char *look = val;
 	while ((newline = strchr(look, '\n')) != NULL) {
-		int thisWidth = surfaceMeasure.WidthText(font, look, newline - look);
+		int thisWidth = surfaceMeasure->WidthText(font, look, newline - look);
 		width = Platform::Maximum(width, thisWidth);
 		look = newline + 1;
 		numLines++;
 	}
-	int lastWidth = surfaceMeasure.WidthText(font, look, strlen(look));
+	int lastWidth = surfaceMeasure->WidthText(font, look, strlen(look));
 	width = Platform::Maximum(width, lastWidth) + 10;
-	int lineHeight = surfaceMeasure.Height(font);
+	int lineHeight = surfaceMeasure->Height(font);
 	// Extra line for border and an empty line at top and bottom
-	int height = lineHeight * numLines - surfaceMeasure.InternalLeading(font) + 2 + 2;
+	int height = lineHeight * numLines - surfaceMeasure->InternalLeading(font) + 2 + 2;
+	delete surfaceMeasure;
 	return PRectangle(pt.x -5, pt.y + 1, pt.x + width - 5, pt.y + 1 + height);
 }
 

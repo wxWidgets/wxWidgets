@@ -103,11 +103,11 @@ void ViewStyle::Init() {
 	ResetDefaultStyle();
 
 	indicators[0].style = INDIC_SQUIGGLE;
-	indicators[0].fore = Colour(0, 0x7f, 0);
+	indicators[0].fore = ColourDesired(0, 0x7f, 0);
 	indicators[1].style = INDIC_TT;
-	indicators[1].fore = Colour(0, 0, 0xff);
+	indicators[1].fore = ColourDesired(0, 0, 0xff);
 	indicators[2].style = INDIC_PLAIN;
-	indicators[2].fore = Colour(0xff, 0, 0);
+	indicators[2].fore = ColourDesired(0xff, 0, 0);
 
 	lineHeight = 1;
 	maxAscent = 1;
@@ -116,18 +116,18 @@ void ViewStyle::Init() {
 	spaceWidth = 8;
 
 	selforeset = false;
-	selforeground.desired = Colour(0xff, 0, 0);
+	selforeground.desired = ColourDesired(0xff, 0, 0);
 	selbackset = true;
-	selbackground.desired = Colour(0xc0, 0xc0, 0xc0);
-	selbackground2.desired = Colour(0xb0, 0xb0, 0xb0);
+	selbackground.desired = ColourDesired(0xc0, 0xc0, 0xc0);
+	selbackground2.desired = ColourDesired(0xb0, 0xb0, 0xb0);
 	selbar.desired = Platform::Chrome();
 	selbarlight.desired = Platform::ChromeHighlight();
-	styles[STYLE_LINENUMBER].fore.desired = Colour(0, 0, 0);
+	styles[STYLE_LINENUMBER].fore.desired = ColourDesired(0, 0, 0);
 	styles[STYLE_LINENUMBER].back.desired = Platform::Chrome();
-	caretcolour.desired = Colour(0, 0, 0);
+	caretcolour.desired = ColourDesired(0, 0, 0);
 	showCaretLineBackground = false;
-	caretLineBackground.desired = Colour(0xff, 0xff, 0);
-	edgecolour.desired = Colour(0xc0, 0xc0, 0xc0);
+	caretLineBackground.desired = ColourDesired(0xff, 0xff, 0);
+	edgecolour.desired = ColourDesired(0xc0, 0xc0, 0xc0);
 	edgeState = EDGE_NONE;
 	caretWidth = 1;
 
@@ -215,10 +215,11 @@ void ViewStyle::Refresh(Surface &surface) {
 }
 
 void ViewStyle::ResetDefaultStyle() {
-	styles[STYLE_DEFAULT].Clear(Colour(0,0,0), Colour(0xff,0xff,0xff),
+	styles[STYLE_DEFAULT].Clear(ColourDesired(0,0,0), 
+		ColourDesired(0xff,0xff,0xff),
 	        Platform::DefaultFontSize(), fontNames.Save(Platform::DefaultFont()),
 		SC_CHARSET_DEFAULT,
-		false, false, false, false, Style::caseMixed, true);
+		false, false, false, false, Style::caseMixed, true, true);
 }
 
 void ViewStyle::ClearStyles() {

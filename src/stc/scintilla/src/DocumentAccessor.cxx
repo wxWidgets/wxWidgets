@@ -23,22 +23,14 @@
 DocumentAccessor::~DocumentAccessor() {
 }
 
-#if PLAT_WIN
 bool DocumentAccessor::InternalIsLeadByte(char ch) {
 	if (SC_CP_UTF8 == codePage)
 		// For lexing, all characters >= 0x80 are treated the
 		// same so none is considered a lead byte.
 		return false;
 	else
-		return IsDBCSLeadByteEx(codePage, ch);
+		return Platform::IsDBCSLeadByte(codePage, ch);
 }
-#else
-// PLAT_GTK or PLAT_WX
-// TODO: support DBCS under GTK+ and WX
-bool DocumentAccessor::InternalIsLeadByte(char) {
-	return false;
-}
-#endif
 
 void DocumentAccessor::Fill(int position) {
 	if (lenDoc == -1)
@@ -88,6 +80,7 @@ int DocumentAccessor::SetLineState(int line, int state) {
 
 void DocumentAccessor::StartAt(unsigned int start, char chMask) {
 	pdoc->StartStyling(start, chMask);
+	startPosStyling = start;
 }
 
 void DocumentAccessor::StartSegment(unsigned int pos) {
@@ -111,6 +104,7 @@ void DocumentAccessor::ColourTo(unsigned int pos, int chAttr) {
 				chFlags = 0;
 			chAttr |= chFlags;
 			for (unsigned int i = startSeg; i <= pos; i++) {
+				PLATFORM_ASSERT((startPosStyling + validLen) < Length());
 				styleBuf[validLen++] = static_cast<char>(chAttr);
 			}
 		}
@@ -128,6 +122,7 @@ void DocumentAccessor::Flush() {
 	if (validLen > 0) {
 		pdoc->SetStyles(validLen, styleBuf);
 		validLen = 0;
+		startPosStyling += validLen;
 	}
 }
 

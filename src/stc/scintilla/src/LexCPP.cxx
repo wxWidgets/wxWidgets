@@ -2,7 +2,7 @@
 /** @file LexCPP.cxx
  ** Lexer for C++, C, Java, and Javascript.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -24,22 +24,22 @@ static bool IsOKBeforeRE(const int ch) {
 	return (ch == '(') || (ch == '=') || (ch == ',');
 }
 
-inline bool IsAWordChar(const int ch) {
+static inline bool IsAWordChar(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
 }
 
-inline bool IsAWordStart(const int ch) {
+static inline bool IsAWordStart(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '_');
 }
 
-inline bool IsADoxygenChar(const int ch) {
+static inline bool IsADoxygenChar(const int ch) {
 	return (islower(ch) || ch == '$' || ch == '@' ||
 		    ch == '\\' || ch == '&' || ch == '<' ||
 			ch == '>' || ch == '#' || ch == '{' ||
 			ch == '}' || ch == '[' || ch == ']');
 }
 
-inline bool IsStateComment(const int state) {
+static inline bool IsStateComment(const int state) {
 	return ((state == SCE_C_COMMENT) ||
 		      (state == SCE_C_COMMENTLINE) ||
 		      (state == SCE_C_COMMENTDOC) ||
@@ -47,7 +47,7 @@ inline bool IsStateComment(const int state) {
 		      (state == SCE_C_COMMENTDOCKEYWORDERROR));
 }
 
-inline bool IsStateString(const int state) {
+static inline bool IsStateString(const int state) {
 	return ((state == SCE_C_STRING) || (state == SCE_C_VERBATIM));
 }
 
@@ -58,7 +58,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 	WordList &keywords2 = *keywordlists[1];
 	WordList &keywords3 = *keywordlists[2];
 
-	bool stylingWithinPreprocessor = styler.GetPropertyInt("styling.within.preprocessor");
+	bool stylingWithinPreprocessor = styler.GetPropertyInt("styling.within.preprocessor") != 0;
 
 	// Do not leak onto next line
 	if (initStyle == SCE_C_STRINGEOL)
@@ -66,7 +66,6 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 
 	int chPrevNonWhite = ' ';
 	int visibleChars = 0;
-	int noDocChars = 0;
 	bool lastWordWasUUID = false;
 
 	StyleContext sc(startPos, length, initStyle, styler);
@@ -126,12 +125,8 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 			if (sc.Match('*', '/')) {
 				sc.Forward();
 				sc.ForwardSetState(SCE_C_DEFAULT);
-			} else if ((sc.ch == '@' || sc.ch == '\\') && (noDocChars == 0)) {
+			} else if (sc.ch == '@' || sc.ch == '\\') {
 				sc.SetState(SCE_C_COMMENTDOCKEYWORD);
-			} else if (sc.atLineEnd) {
-				noDocChars = 0;
-			} else if (!isspace(sc.ch) && (sc.ch != '*')) {
-				noDocChars++;
 			}
 		} else if (sc.state == SCE_C_COMMENTLINE || sc.state == SCE_C_COMMENTLINEDOC) {
 			if (sc.atLineEnd) {
@@ -219,7 +214,6 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				}
 			} else if (sc.Match('/', '*')) {
 				if (sc.Match("/**") || sc.Match("/*!")) {	// Support of Qt/Doxygen doc. style
-					noDocChars = 0;
 					sc.SetState(SCE_C_COMMENTDOC);
 				} else {
 					sc.SetState(SCE_C_COMMENT);
@@ -268,8 +262,8 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 
 static void FoldCppDoc(unsigned int startPos, int length, int initStyle, WordList *[],
                             Accessor &styler) {
-	bool foldComment = styler.GetPropertyInt("fold.comment");
-	bool foldCompact = styler.GetPropertyInt("fold.compact", 1);
+	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	unsigned int endPos = startPos + length;
 	int visibleChars = 0;
 	int lineCurrent = styler.GetLine(startPos);

@@ -20,6 +20,11 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+static inline bool AtEOL(Accessor &styler, unsigned int i) {
+	return (styler[i] == '\n') ||
+		((styler[i] == '\r') && (styler.SafeGetCharAt(i + 1) != '\n'));
+}
+
 static void ColouriseBatchLine(
     char *lineBuffer,
     unsigned int lengthLine,
@@ -31,13 +36,13 @@ static void ColouriseBatchLine(
 	unsigned int i = 0;
 	unsigned int state = SCE_BAT_DEFAULT;
 
-	while (isspacechar(lineBuffer[i]) && (i < lengthLine)) {	// Skip initial spaces
+	while ((i < lengthLine) && isspacechar(lineBuffer[i])) {	// Skip initial spaces
 		i++;
 	}
 	if (lineBuffer[i] == '@') {	// Hide command (ECHO OFF)
 		styler.ColourTo(startLine + i, SCE_BAT_HIDE);
 		i++;
-		while (isspacechar(lineBuffer[i]) && (i < lengthLine)) {	// Skip next spaces
+		while ((i < lengthLine) && isspacechar(lineBuffer[i])) {	// Skip next spaces
 			i++;
 		}
 	}
@@ -130,23 +135,20 @@ static void ColouriseBatchDoc(
 
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
-	unsigned int linePos = 0, startLine = startPos;
-	for (unsigned int i = startPos; i <= startPos + length; i++) {
+	unsigned int linePos = 0;
+	unsigned int startLine = startPos;
+	for (unsigned int i = startPos; i < startPos + length; i++) {
 		lineBuffer[linePos++] = styler[i];
-		if (styler[i] == '\r' || styler[i] == '\n' || (linePos >=
-		        sizeof(lineBuffer) - 1)) {
+		if (AtEOL(styler, i) || (linePos >= sizeof(lineBuffer) - 1)) {
 			// End of line (or of line buffer) met, colourise it
-			if (styler[i + 1] == '\n') {
-				lineBuffer[linePos++] = styler[++i];
-			}
 			lineBuffer[linePos] = '\0';
 			ColouriseBatchLine(lineBuffer, linePos, startLine, i, keywords, styler);
 			linePos = 0;
 			startLine = i + 1;
 		}
 	}
-	if (linePos > 0) {
-		ColouriseBatchLine(lineBuffer, linePos, startLine, startPos + length,
+	if (linePos > 0) {	// Last line does not have ending characters
+		ColouriseBatchLine(lineBuffer, linePos, startLine, startPos + length - 1,
 		                   keywords, styler);
 	}
 }
@@ -182,13 +184,16 @@ static void ColouriseDiffDoc(unsigned int startPos, int length, int, WordList *[
 	unsigned int linePos = 0;
 	for (unsigned int i = startPos; i < startPos + length; i++) {
 		lineBuffer[linePos++] = styler[i];
-		if (styler[i] == '\r' || styler[i] == '\n' || (linePos >= sizeof(lineBuffer) - 1)) {
+		if (AtEOL(styler, i) || (linePos >= sizeof(lineBuffer) - 1)) {
+			// End of line (or of line buffer) met, colourise it
+			lineBuffer[linePos] = '\0';
 			ColouriseDiffLine(lineBuffer, i, styler);
 			linePos = 0;
 		}
 	}
-	if (linePos > 0)
-		ColouriseDiffLine(lineBuffer, startPos + length, styler);
+	if (linePos > 0) {	// Last line does not have ending characters
+		ColouriseDiffLine(lineBuffer, startPos + length - 1, styler);
+	}
 }
 
 static void ColourisePropsLine(
@@ -199,28 +204,32 @@ static void ColourisePropsLine(
     Accessor &styler) {
 
 	unsigned int i = 0;
-	while (isspacechar(lineBuffer[i]) && (i < lengthLine))	// Skip initial spaces
+	while ((i < lengthLine) && isspacechar(lineBuffer[i]))	// Skip initial spaces
 		i++;
-	if (lineBuffer[i] == '#' || lineBuffer[i] == '!' || lineBuffer[i] == ';') {
-		styler.ColourTo(endPos, 1);
-	} else if (lineBuffer[i] == '[') {
-		styler.ColourTo(endPos, 2);
-	} else if (lineBuffer[i] == '@') {
-		styler.ColourTo(startLine + i, 4);
-		if (lineBuffer[++i] == '=')
-			styler.ColourTo(startLine + i, 3);
-		styler.ColourTo(endPos, 0);
-	} else {
-		// Search for the '=' character
-		while (lineBuffer[i] != '=' && (i < lengthLine - 1))
-			i++;
-		if (lineBuffer[i] == '=') {
-			styler.ColourTo(startLine + i - 1, 0);
-			styler.ColourTo(startLine + i, 3);
+	if (i < lengthLine) {
+		if (lineBuffer[i] == '#' || lineBuffer[i] == '!' || lineBuffer[i] == ';') {
+			styler.ColourTo(endPos, 1);
+		} else if (lineBuffer[i] == '[') {
+			styler.ColourTo(endPos, 2);
+		} else if (lineBuffer[i] == '@') {
+			styler.ColourTo(startLine + i, 4);
+			if (lineBuffer[++i] == '=')
+				styler.ColourTo(startLine + i, 3);
 			styler.ColourTo(endPos, 0);
 		} else {
-			styler.ColourTo(endPos, 0);
+			// Search for the '=' character
+			while ((i < lengthLine) && (lineBuffer[i] != '='))
+				i++;
+			if ((i < lengthLine) && (lineBuffer[i] == '=')) {
+				styler.ColourTo(startLine + i - 1, 0);
+				styler.ColourTo(startLine + i, 3);
+				styler.ColourTo(endPos, 0);
+			} else {
+				styler.ColourTo(endPos, 0);
+			}
 		}
+	} else {
+		styler.ColourTo(endPos, 0);
 	}
 }
 
@@ -228,20 +237,21 @@ static void ColourisePropsDoc(unsigned int startPos, int length, int, WordList *
 	char lineBuffer[1024];
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
-	unsigned int linePos = 0, startLine = startPos;
-	for (unsigned int i = startPos; i <= startPos + length; i++) {
+	unsigned int linePos = 0;
+	unsigned int startLine = startPos;
+	for (unsigned int i = startPos; i < startPos + length; i++) {
 		lineBuffer[linePos++] = styler[i];
-		if ((styler[i] == '\r' && styler.SafeGetCharAt(i + 1) != '\n') ||
-		        styler[i] == '\n' ||
-		        (linePos >= sizeof(lineBuffer) - 1)) {
+		if (AtEOL(styler, i) || (linePos >= sizeof(lineBuffer) - 1)) {
+			// End of line (or of line buffer) met, colourise it
 			lineBuffer[linePos] = '\0';
 			ColourisePropsLine(lineBuffer, linePos, startLine, i, styler);
 			linePos = 0;
 			startLine = i + 1;
 		}
 	}
-	if (linePos > 0)
-		ColourisePropsLine(lineBuffer, linePos, startLine, startPos + length, styler);
+	if (linePos > 0) {	// Last line does not have ending characters
+		ColourisePropsLine(lineBuffer, linePos, startLine, startPos + length - 1, styler);
+	}
 }
 
 static void ColouriseMakeLine(
@@ -256,7 +266,7 @@ static void ColouriseMakeLine(
 	unsigned int state = SCE_MAKE_DEFAULT;
 	bool bSpecial = false;
 	// Skip initial spaces
-	while (isspacechar(lineBuffer[i]) && (i < lengthLine)) {
+	while ((i < lengthLine) && isspacechar(lineBuffer[i])) {
 		i++;
 	}
 	if (lineBuffer[i] == '#') {	// Comment
@@ -277,6 +287,8 @@ static void ColouriseMakeLine(
 		}
 		if (!bSpecial) {
 			if (lineBuffer[i] == ':') {
+				// We should check that no colouring was made since the beginning of the line,
+				// to avoid colouring stuff like /OUT:file
 				styler.ColourTo(startLine + lastNonSpace, SCE_MAKE_TARGET);
 				styler.ColourTo(startLine + i - 1, SCE_MAKE_DEFAULT);
 				styler.ColourTo(startLine + i, SCE_MAKE_OPERATOR);
@@ -306,18 +318,20 @@ static void ColouriseMakeDoc(unsigned int startPos, int length, int, WordList *[
 	char lineBuffer[1024];
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
-	unsigned int linePos = 0, startLine = startPos;
-	for (unsigned int i = startPos; i <= startPos + length; i++) {
+	unsigned int linePos = 0;
+	unsigned int startLine = startPos;
+	for (unsigned int i = startPos; i < startPos + length; i++) {
 		lineBuffer[linePos++] = styler[i];
-		if (styler[i] == '\r' || styler[i] == '\n' || (linePos >= sizeof(lineBuffer) - 1)) {
+		if (AtEOL(styler, i) || (linePos >= sizeof(lineBuffer) - 1)) {
+			// End of line (or of line buffer) met, colourise it
 			lineBuffer[linePos] = '\0';
 			ColouriseMakeLine(lineBuffer, linePos, startLine, i, styler);
 			linePos = 0;
 			startLine = i + 1;
 		}
 	}
-	if (linePos > 0) {
-		ColouriseMakeLine(lineBuffer, linePos, startLine, startPos + length, styler);
+	if (linePos > 0) {	// Last line does not have ending characters
+		ColouriseMakeLine(lineBuffer, linePos, startLine, startPos + length - 1, styler);
 	}
 }
 
@@ -347,15 +361,15 @@ static void ColouriseErrorListLine(
 		// Borland warning message
 		styler.ColourTo(endPos, SCE_ERR_BORLAND);
 	} else if (strstr(lineBuffer, "at line " ) &&
-	           strstr(lineBuffer, "at line " ) < lineBuffer + lengthLine &&
+	           (strstr(lineBuffer, "at line " ) < (lineBuffer + lengthLine)) &&
 	           strstr(lineBuffer, "file ") &&
-	           strstr(lineBuffer, "file ") < lineBuffer + lengthLine) {
+	           (strstr(lineBuffer, "file ") < (lineBuffer + lengthLine))) {
 		// Lua error message
 		styler.ColourTo(endPos, SCE_ERR_LUA);
 	} else if (strstr(lineBuffer, " at " ) &&
-	           strstr(lineBuffer, " at " ) < lineBuffer + lengthLine &&
+	           (strstr(lineBuffer, " at " ) < (lineBuffer + lengthLine)) &&
 	           strstr(lineBuffer, " line ") &&
-	           strstr(lineBuffer, " line ") < lineBuffer + lengthLine) {
+	           (strstr(lineBuffer, " line ") < (lineBuffer + lengthLine))) {
 		// perl error message
 		styler.ColourTo(endPos, SCE_ERR_PERL);
 	} else if ((memcmp(lineBuffer, "   at ", 6) == 0) &&
@@ -368,26 +382,26 @@ static void ColouriseErrorListLine(
 		// Look for <filename>(line,pos)message
 		int state = 0;
 		for (unsigned int i = 0; i < lengthLine; i++) {
-			if (state == 0 && lineBuffer[i] == ':' && isdigit(lineBuffer[i + 1])) {
+			if ((state == 0) && (lineBuffer[i] == ':') && isdigit(lineBuffer[i + 1])) {
 				state = 1;
-			} else if (state == 0 && lineBuffer[i] == '(') {
+			} else if ((state == 0) && (lineBuffer[i] == '(')) {
 				state = 10;
-			} else if (state == 1 && isdigit(lineBuffer[i])) {
+			} else if ((state == 1) && isdigit(lineBuffer[i])) {
 				state = 2;
-			} else if (state == 2 && lineBuffer[i] == ':') {
+			} else if ((state == 2) && (lineBuffer[i] == ':')) {
 				state = 3;
 				break;
-			} else if (state == 2 && !isdigit(lineBuffer[i])) {
+			} else if ((state == 2) && !isdigit(lineBuffer[i])) {
 				state = 99;
-			} else if (state == 10 && isdigit(lineBuffer[i])) {
+			} else if ((state == 10) && isdigit(lineBuffer[i])) {
 				state = 11;
-			} else if (state == 11 && lineBuffer[i] == ',') {
+			} else if ((state == 11) && (lineBuffer[i] == ',')) {
 				state = 14;
-			} else if (state == 11 && lineBuffer[i] == ')') {
+			} else if ((state == 11) && (lineBuffer[i] == ')')) {
 				state = 12;
-			} else if (state == 12 && lineBuffer[i] == ':') {
+			} else if ((state == 12) && (lineBuffer[i] == ':')) {
 				state = 13;
-			} else if (state == 14 && lineBuffer[i] == ')') {
+			} else if ((state == 14) && (lineBuffer[i] == ')')) {
 				state = 15;
 				break;
 			} else if (((state == 11) || (state == 14)) && !((lineBuffer[i] == ' ') || isdigit(lineBuffer[i]))) {
@@ -409,15 +423,18 @@ static void ColouriseErrorListDoc(unsigned int startPos, int length, int, WordLi
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
 	unsigned int linePos = 0;
-	for (unsigned int i = startPos; i <= startPos + length; i++) {
+	for (unsigned int i = startPos; i < startPos + length; i++) {
 		lineBuffer[linePos++] = styler[i];
-		if (styler[i] == '\r' || styler[i] == '\n' || (linePos >= sizeof(lineBuffer) - 1)) {
+		if (AtEOL(styler, i) || (linePos >= sizeof(lineBuffer) - 1)) {
+			// End of line (or of line buffer) met, colourise it
+			lineBuffer[linePos] = '\0';
 			ColouriseErrorListLine(lineBuffer, linePos, i, styler);
 			linePos = 0;
 		}
 	}
-	if (linePos > 0)
-		ColouriseErrorListLine(lineBuffer, linePos, startPos + length, styler);
+	if (linePos > 0) {	// Last line does not have ending characters
+		ColouriseErrorListLine(lineBuffer, linePos, startPos + length - 1, styler);
+	}
 }
 
 static int isSpecial(char s) {

@@ -2,7 +2,7 @@
 /** @file Document.h
  ** Text document that handles notifications, DBCS, styling, words and end of line.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef DOCUMENT_H
@@ -37,11 +37,21 @@ public:
 		return (start != invalidPosition) && (end != invalidPosition);
 	}
 
+	// Is the position within the range?
 	bool Contains(Position pos) const {
 		if (start < end) {
 			return (pos >= start && pos <= end);
 		} else {
 			return (pos <= start && pos >= end);
+		}
+	}
+
+	// Is the character after pos within the range?
+	bool ContainsCharacter(Position pos) const {
+		if (start < end) {
+			return (pos >= start && pos < end);
+		} else {
+			return (pos < start && pos >= end);
 		}
 	}
 
@@ -81,9 +91,11 @@ public:
 private:	
 	int refCount;
 	CellBuffer cb;
-	bool wordchars[256];
+	enum charClassification { ccSpace, ccNewLine, ccWord, ccPunctuation };
+	charClassification charClass[256];
 	char stylingMask;
 	int endStyled;
+	int styleClock;
 	int enteredCount;
 	int enteredReadOnlyCount;
 
@@ -140,6 +152,7 @@ public:
 	void SetLineIndentation(int line, int indent);
 	int GetLineIndentPosition(int line);
 	int GetColumn(int position);
+	int FindColumn(int line, int column);
 	void Indent(bool forwards, int lineBottom, int lineTop);
 	void ConvertLineEnds(int eolModeSet);
 	void SetReadOnly(bool set) { cb.SetReadOnly(set); }
@@ -175,7 +188,7 @@ public:
 	int GetFoldParent(int line);
 
 	void Indent(bool forwards);
-	int ExtendWordSelect(int pos, int delta);
+	int ExtendWordSelect(int pos, int delta, bool onlyWordCharacters=false);
 	int NextWordStart(int pos, int delta);
 	int Length() { return cb.Length(); }
 	long FindText(int minPos, int maxPos, const char *s, 
@@ -193,6 +206,7 @@ public:
 	void SetStyles(int length, char *styles);
 	int GetEndStyled() { return endStyled; }
 	bool EnsureStyledTo(int pos);
+	int GetStyleClock() { return styleClock; }
 
 	int SetLineState(int line, int state) { return cb.SetLineState(line, state); }
 	int GetLineState(int line) { return cb.GetLineState(line); }
@@ -209,7 +223,7 @@ public:
 
 private:
 	bool IsDBCS(int pos);
-	bool IsWordChar(unsigned char ch);
+	charClassification WordCharClass(unsigned char ch);
 	bool IsWordStartAt(int pos);
 	bool IsWordEndAt(int pos);
 	bool IsWordAt(int start, int end);
