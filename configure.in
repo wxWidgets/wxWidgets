@@ -2126,6 +2126,8 @@ if test "$wxUSE_SHARED" = "yes"; then
             WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
             WX_ALL="CREATE_LINKS"
         fi
+	dnl add the resources target
+	WX_ALL="${WX_ALL} lib${WX_LIBRARY}-${WX_RELEASE}.${WX_CURRENT}.r"
 	dnl the name of the shared library
 	WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.dylib"
 	WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.dylib"
@@ -2902,6 +2904,14 @@ if test "$wxUSE_MAC" = 1 ; then
   TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__POWERPC__ -DTARGET_CARBON"
   CFLAGS="${CFLAGS} -fno-common -fpascal-strings"
   CPPFLAGS="${CPPFLAGS} -fno-common -fpascal-strings"
+  AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
+  AC_CHECK_PROG(DEREZ, Derez, Derez, /Developer/Tools/Derez)
+  RESCOMP=${REZ}
+  REZFLAGS="-d __UNIX__ -useDF"
+  DEREZFLAGS="Carbon.r -useDF"
+  RESFLAGS="Carbon.r -t APPL"
+  LIBWXMACRES="\$(LIBWX_MACRES)"
+  LIBWXMACRESCOMP="\$(LIBWX_MACRESCOMP)"
 fi
 
 if test "$wxUSE_CYGWIN" = 1 ; then
@@ -4141,6 +4151,13 @@ AC_SUBST(RCOUTPUTSWITCH)
 AC_SUBST(RESPROGRAM)
 AC_SUBST(RESCOMP)
 AC_SUBST(RESFLAGS)
+dnl additional for Mac OS X
+AC_SUBST(REZ)
+AC_SUBST(REZFLAGS)
+AC_SUBST(DEREZ)
+AC_SUBST(DEREZFLAGS)
+AC_SUBST(LIBWXMACRES)
+AC_SUBST(LIBWXMACRESCOMP)
 
 dnl These seam to be missing
 AC_SUBST(DLLTOOL)
