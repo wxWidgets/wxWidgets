@@ -256,6 +256,10 @@ private:
     // if the date isn't visible (-1, -1) is put in (day, week) and false is returned
     bool GetDateCoord(const wxDateTime& date, int *day, int *week) const;
 
+    // Set the flag for SetDate(): otherwise it would overwrite the year
+    // typed in by the user
+    void SetUserChangedYear() { m_userChangedYear = TRUE; }
+
     // the subcontrols
     wxStaticText *m_staticMonth;
     wxComboBox *m_comboMonth;

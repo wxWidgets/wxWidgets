@@ -78,6 +78,9 @@ public:
 
     void HighlightSpecial(bool on);
 
+    void SetDate();
+    void Today();
+    
 private:
     wxCalendarCtrl *m_calendar;
     wxStaticText   *m_date;
@@ -106,6 +109,9 @@ public:
     void OnCalSeqMonth(wxCommandEvent& event);
     void OnCalShowSurroundingWeeks(wxCommandEvent& event);
 
+    void OnSetDate(wxCommandEvent& event);
+    void OnToday(wxCommandEvent& event);
+
     void OnAllowYearUpdate(wxUpdateUIEvent& event);
 
 private:
@@ -132,6 +138,8 @@ enum
     Calendar_Cal_Year,
     Calendar_Cal_SeqMonth,
     Calendar_Cal_SurroundWeeks,
+    Calendar_Cal_SetDate,
+    Calendar_Cal_Today,
     Calendar_CalCtrl = 1000
 };
 
@@ -155,6 +163,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Calendar_Cal_SeqMonth, MyFrame::OnCalSeqMonth)
     EVT_MENU(Calendar_Cal_SurroundWeeks, MyFrame::OnCalShowSurroundingWeeks)
+
+    EVT_MENU(Calendar_Cal_SetDate, MyFrame::OnSetDate)
+    EVT_MENU(Calendar_Cal_Today, MyFrame::OnToday)
+
 
     EVT_UPDATE_UI(Calendar_Cal_Year, MyFrame::OnAllowYearUpdate)
 END_EVENT_TABLE()
@@ -238,6 +250,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuCal->Append(Calendar_Cal_Year, _T("&Year can be changed\tCtrl-Y"),
                     _T("Allow changing the year in the calendar"),
                     TRUE);
+    menuCal->AppendSeparator();
+    menuCal->Append(Calendar_Cal_SetDate, "SetDate()", "Set date to 2005-12-24.");
+    menuCal->Append(Calendar_Cal_Today, "Today()", "Set the current date.");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -323,6 +338,16 @@ void MyFrame::OnCalShowSurroundingWeeks(wxCommandEvent& event)
 void MyFrame::OnAllowYearUpdate(wxUpdateUIEvent& event)
 {
     event.Enable( GetMenuBar()->IsChecked(Calendar_Cal_Month));
+}
+
+void MyFrame::OnSetDate(wxCommandEvent &event)
+{
+    m_panel->SetDate();
+}
+
+void MyFrame::OnToday(wxCommandEvent &event)
+{
+    m_panel->Today();
 }
 
 // ----------------------------------------------------------------------------
@@ -427,4 +452,15 @@ void MyPanel::HighlightSpecial(bool on)
     }
 
     m_calendar->Refresh();
+}
+
+void MyPanel::SetDate()
+{
+    wxDateTime date(24, wxDateTime::Dec, 2005, 23, 59, 59);
+    m_calendar->SetDate(date);
+}
+
+void MyPanel::Today()
+{
+    m_calendar->SetDate(wxDateTime::Today());
 }

@@ -68,7 +68,11 @@ class wxYearSpinCtrl : public wxSpinCtrl
 public:
     wxYearSpinCtrl(wxCalendarCtrl *cal);
 
-    void OnYearTextChange(wxCommandEvent& event) { m_cal->OnYearChange(event); }
+    void OnYearTextChange(wxCommandEvent& event) 
+    {
+        m_cal->SetUserChangedYear();
+        m_cal->OnYearChange(event);
+    }
     void OnYearChange(wxSpinEvent& event) { m_cal->OnYearChange(event); }
 
 private:
@@ -449,8 +453,6 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& date)
                     {
                         if ( !m_userChangedYear )
                             m_spinYear->SetValue(m_date.Format(_T("%Y")));
-                        else // don't overwrite what the user typed in
-                            m_userChangedYear = FALSE;
                     }
                 }
 
@@ -468,6 +470,8 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& date)
         }
     }
 
+    m_userChangedYear = FALSE;
+    
     return retval;
 }
 
@@ -1568,10 +1572,6 @@ void wxCalendarCtrl::OnYearChange(wxCommandEvent& event)
         // invalid year in the spin control, ignore it
         return;
     }
-
-    // set the flag for SetDate(): otherwise it would overwrite the year
-    // typed in by the user
-    m_userChangedYear = TRUE;
 
     wxDateTime::Tm tm = m_date.GetTm();
 
