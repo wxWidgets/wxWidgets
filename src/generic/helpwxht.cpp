@@ -19,7 +19,7 @@
 #   pragma hdrstop
 #endif
 
-#if wxUSE_HTML && wxUSE_STREAMS
+#if wxUSE_WXHTML_HELP
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -315,4 +315,5 @@ wxHelpControllerHtml::GetFrameParameters(wxSize *size,
    return m_Frame;
 }
 
-#endif // wxUSE_HTML
+#endif // wxUSE_WXHTML_HELP
+

@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "scrolwin.h"
+    #pragma implementation "genscrolwin.h"
 #endif
 
 #ifdef __VMS
@@ -31,6 +31,8 @@
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if !defined(__WXGTK__) || defined(__WXUNIVERSAL__)
 
 #include "wx/utils.h"
 #include "wx/dcclient.h"
@@ -1010,4 +1012,6 @@ void wxGenericScrolledWindow::CalcUnscrolledPosition(int x, int y, float *xx, fl
         *yy = (float)(y + m_yScrollPosition * m_yScrollPixelsPerLine);
 }
 #endif // WXWIN_COMPATIBILITY
+
+#endif // !wxGTK
 

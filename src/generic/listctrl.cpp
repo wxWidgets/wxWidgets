@@ -3142,7 +3142,7 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
     // FIXME
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     wxScrolledWindow::OnScroll(event);
 #else
     HandleOnScroll( event );
@@ -3898,7 +3898,11 @@ wxColour wxListCtrl::GetForegroundColour() const
 
 bool wxListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
 {
+#if wxUSE_MENUS
     return m_mainWin->PopupMenu( menu, x, y );
+#else
+    return FALSE;
+#endif // wxUSE_MENUS
 }
 
 void wxListCtrl::SetFocus()

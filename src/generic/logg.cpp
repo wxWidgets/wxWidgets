@@ -459,6 +459,7 @@ wxLogFrame::wxLogFrame(wxFrame *pParent, wxLogWindow *log, const wxChar *szTitle
             wxHSCROLL       |
             wxTE_READONLY);
 
+#if wxUSE_MENUS
     // create menu
     wxMenuBar *pMenuBar = new wxMenuBar;
     wxMenu *pMenu = new wxMenu;
@@ -470,6 +471,7 @@ wxLogFrame::wxLogFrame(wxFrame *pParent, wxLogWindow *log, const wxChar *szTitle
     pMenu->Append(Menu_Close, _("&Close"), _("Close this window"));
     pMenuBar->Append(pMenu, _("&Log"));
     SetMenuBar(pMenuBar);
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     // status bar for menu prompts

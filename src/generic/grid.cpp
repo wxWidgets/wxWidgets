@@ -518,6 +518,8 @@ void wxGridCellEditor::StartingClick()
 {
 }
 
+#if wxUSE_TEXTCTRL
+
 // ----------------------------------------------------------------------------
 // wxGridCellTextEditor
 // ----------------------------------------------------------------------------
@@ -1144,6 +1146,10 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
     return FALSE;
 }
 
+#endif // wxUSE_TEXTCTRL
+
+#if wxUSE_CHECKBOX
+
 // ----------------------------------------------------------------------------
 // wxGridCellBoolEditor
 // ----------------------------------------------------------------------------
@@ -1288,6 +1294,10 @@ bool wxGridCellBoolEditor::IsAcceptedKey(wxKeyEvent& event)
     return FALSE;
 }
 
+#endif // wxUSE_CHECKBOX
+
+#if wxUSE_COMBOBOX
+
 // ----------------------------------------------------------------------------
 // wxGridCellChoiceEditor
 // ----------------------------------------------------------------------------
@@ -1407,6 +1417,8 @@ void wxGridCellChoiceEditor::SetParameters(const wxString& params)
         m_choices.Add(tk.GetNextToken());
     }
 }
+
+#endif // wxUSE_COMBOBOX
 
 // ----------------------------------------------------------------------------
 // wxGridCellEditorEvtHandler
@@ -2456,19 +2468,24 @@ int wxGridTypeRegistry::FindDataType(const wxString& typeName)
     {
         // check whether this is one of the standard ones, in which case
         // register it "on the fly"
+#if wxUSE_TEXTCTRL
         if ( typeName == wxGRID_VALUE_STRING )
         {
             RegisterDataType(wxGRID_VALUE_STRING,
                              new wxGridCellStringRenderer,
                              new wxGridCellTextEditor);
-        }
-        else if ( typeName == wxGRID_VALUE_BOOL )
+        } else
+#endif // wxUSE_TEXTCTRL
+#if wxUSE_CHECKBOX
+        if ( typeName == wxGRID_VALUE_BOOL )
         {
             RegisterDataType(wxGRID_VALUE_BOOL,
                              new wxGridCellBoolRenderer,
                              new wxGridCellBoolEditor);
-        }
-        else if ( typeName == wxGRID_VALUE_NUMBER )
+        } else
+#endif // wxUSE_CHECKBOX
+#if wxUSE_TEXTCTRL
+        if ( typeName == wxGRID_VALUE_NUMBER )
         {
             RegisterDataType(wxGRID_VALUE_NUMBER,
                              new wxGridCellNumberRenderer,
@@ -2479,14 +2496,16 @@ int wxGridTypeRegistry::FindDataType(const wxString& typeName)
             RegisterDataType(wxGRID_VALUE_FLOAT,
                              new wxGridCellFloatRenderer,
                              new wxGridCellFloatEditor);
-        }
-        else if ( typeName == wxGRID_VALUE_CHOICE )
+        } else
+#endif // wxUSE_TEXTCTRL
+#if wxUSE_COMBOBOX
+        if ( typeName == wxGRID_VALUE_CHOICE )
         {
             RegisterDataType(wxGRID_VALUE_CHOICE,
                              new wxGridCellStringRenderer,
                              new wxGridCellChoiceEditor);
-        }
-        else
+        } else
+#endif // wxUSE_COMBOBOX
         {
             return wxNOT_FOUND;
         }
