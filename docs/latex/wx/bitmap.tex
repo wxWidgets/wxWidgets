@@ -98,9 +98,9 @@ If all possible wxWindows settings are used, the Windows platform supports BMP f
 XPM data, and XPM. Under wxGTK, the available formats are BMP file, XPM data, XPM file, and PNG file.
 Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.
 
-In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can 
-(wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_PNG, wxBITMAP\_TYPE\_GIF, wxBITMAP\_TYPE\_PCX, wxBITMAP\_TYPE\_PNM).
-(Of course you must have wxImage handlers loaded.) }
+In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can, which currently include 
+wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_TIF, wxBITMAP\_TYPE\_PNG, wxBITMAP\_TYPE\_GIF, wxBITMAP\_TYPE\_PCX, 
+and wxBITMAP\_TYPE\_PNM. Of course, you must have wxImage handlers loaded. }
 
 \wxheading{Remarks}
 
@@ -311,6 +311,13 @@ Gets the width of the bitmap in pixels.
 \wxheading{See also}
 
 \helpref{wxBitmap::GetHeight}{wxbitmapgetheight}
+
+\membersection{wxBitmap::GetSubBitmap}\label{wxbitmapgetsubbitmap}
+
+\constfunc{wxBitmap}{GetSubBitmap}{\param{const wxRect&}{rect}}
+
+Returns a sub bitmap of the current one as long as the rect belongs entirely to 
+the bitmap. This function preserves bit depth and mask information.
 
 \membersection{wxBitmap::InitStandardHandlers}
 

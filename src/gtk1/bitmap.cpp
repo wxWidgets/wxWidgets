@@ -15,6 +15,7 @@
 #include "wx/icon.h"
 #include "wx/filefn.h"
 #include "wx/image.h"
+#include "wx/dcmemory.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
@@ -67,14 +68,18 @@ bool wxMask::Create( const wxBitmap& bitmap,
     wxImage image( bitmap );
     if (!image.Ok()) return FALSE;
     
-    GdkVisual *visual = gdk_visual_get_system();
-    
-    GdkImage *mask_image = gdk_image_new( GDK_IMAGE_FASTEST, visual, image.GetWidth(), image.GetHeight() );
-    if (!mask_image) return FALSE;
-
     GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
     m_bitmap = gdk_pixmap_new( parent, image.GetWidth(), image.GetHeight(), 1 );
+    GdkGC *gc = gdk_gc_new( m_bitmap );
     
+    GdkColor color;
+    color.red = 65000;
+    color.green = 65000;
+    color.blue = 65000;
+    color.pixel = 1;
+    gdk_gc_set_foreground( gc, &color );
+    gdk_gc_set_fill( gc, GDK_SOLID );
+    gdk_draw_rectangle( m_bitmap, gc, TRUE, 0, 0, image.GetWidth(), image.GetHeight() );
     
     unsigned char *data = image.GetData();
     int index = 0;
@@ -83,6 +88,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
     unsigned char green = colour.Green();
     unsigned char blue = colour.Blue();
     
+    GdkVisual *visual = gdk_visual_get_system();
     int bpp = visual->depth;
     if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
     if (bpp == 15)
@@ -98,30 +104,42 @@ bool wxMask::Create( const wxBitmap& bitmap,
         green = green & 0xf8;
     }
     
+    color.red = 0;
+    color.green = 0;
+    color.blue = 0;
+    color.pixel = 0;
+    gdk_gc_set_foreground( gc, &color );
+    
     for (int j = 0; j < image.GetHeight(); j++)
-      for (int i = 0; i < image.GetWidth(); i++)
+    {
+      int start_x = -1;
+      int i;
+      for (i = 0; i < image.GetWidth(); i++)
         {
 	    if ((data[index] == red) &&
 	        (data[index+1] == green) &&
 	        (data[index+2] == blue))
 	    {
-	        gdk_image_put_pixel( mask_image, i, j, 1 );
+	        if (start_x == -1)
+		    start_x = i;
 	    }
 	    else
 	    {
-	        gdk_image_put_pixel( mask_image, i, j, 1 );
-	    }
-	    index += 3;
-	}
+	        if (start_x != -1)
+		{
+		    gdk_draw_line( m_bitmap, gc, start_x, j, i-1, j );
+		    start_x = -1;
+        	}
+            }
+            index += 3;
+        }
+        if (start_x != -1)
+            gdk_draw_line( m_bitmap, gc, start_x, j, i, j );
+    }
 
-    GdkGC *mask_gc = gdk_gc_new( m_bitmap );
+    gdk_gc_unref( gc );
 
-    gdk_draw_image( m_bitmap, mask_gc, mask_image, 0, 0, 0, 0, image.GetWidth(), image.GetHeight() );
-
-    gdk_gc_unref( mask_gc );
-    gdk_image_destroy( mask_image );
-    
-    return FALSE;
+    return TRUE;
 }
 
 bool wxMask::Create( const wxBitmap& WXUNUSED(bitmap),
