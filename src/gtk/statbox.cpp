@@ -39,7 +39,7 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
 
   PreCreation( parent, id, pos, size, style, name );
 
-  SetLabel(m_label);
+  SetLabel(label);
   m_widget = gtk_frame_new(m_label);
 
   PostCreation();
