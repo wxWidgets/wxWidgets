@@ -165,6 +165,8 @@ wxSoundCodec::wxSoundCodec()
 
 wxSoundCodec::~wxSoundCodec()
 {
+  if (m_mode != WAITING)
+    ExitMode();
 }
 
 void wxSoundCodec::InitIO(const wxSoundDataFormat& format)
@@ -172,13 +174,13 @@ void wxSoundCodec::InitIO(const wxSoundDataFormat& format)
   m_io_format = format;
 }
 
-void wxSoundCodec::InitMode(int mode)
+void wxSoundCodec::InitMode(ModeType mode)
 {
   wxStreamBuffer *buf_snd;
 
-  m_mode = (mode == 0) ? ENCODING : DECODING;
+  m_mode = mode;
   if (!m_chain_codec) {
-    if (mode == ENCODING) {
+    if (m_mode == ENCODING) {
       m_out_sound = new wxStreamBuffer(*this, wxStreamBuffer::write);
       m_out_sound->SetBufferIO(1024);
     } else {
@@ -219,6 +221,7 @@ void wxSoundCodec::ExitMode()
       m_out_sound = m_chain_codec->GetOutStream();
     }
   }
+  m_mode = WAITING;
 }
 
 bool wxSoundCodec::ChainCodecBefore(wxSoundDataFormat& format)

@@ -283,6 +283,8 @@ wxUint32 wxSndFileCodec::GetSize() const
 
 wxUint32 wxSndFileCodec::Available() const
 {
+  if (m_fstate == wxSFILE_STOPPED)
+    return 0;
   return m_fsize-m_fpos; 
 }
 

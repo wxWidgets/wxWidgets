@@ -38,10 +38,8 @@ wxSoundDataFormat wxSoundPcmCodec::GetPreferredFormat(int codec) const
 
 void wxSoundPcmCodec::Decode()
 {
-  InitMode(DECODING);
   if (m_io_format == m_orig_format) {
     CopyToOutput();
-    ExitMode();
     return;
   }
 
@@ -58,7 +56,6 @@ void wxSoundPcmCodec::Decode()
   default:
     break;
   }
-  ExitMode();
 }
 
 // ---------------------------------------------------------------------------
@@ -179,10 +176,8 @@ void wxSoundPcmCodec::OutputSwapAndSign16()
 
 void wxSoundPcmCodec::Encode()
 {
-  InitMode(ENCODING);
   if (m_io_format == m_orig_format) {
     CopyToOutput();
-    ExitMode();
     return;
   }
 
@@ -199,5 +194,4 @@ void wxSoundPcmCodec::Encode()
   default:
     break;
   }
-  ExitMode();
 }

@@ -75,6 +75,7 @@ protected:
   wxCondition m_sleep_cond;
 
   ///
+  bool InitBuffer(wxSndBuffer *buf);
   bool DoInput(wxSndBuffer *buf);
   bool DoOutput(wxSndBuffer *buf);
 

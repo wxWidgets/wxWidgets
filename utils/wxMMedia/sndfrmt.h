@@ -63,6 +63,12 @@ class wxSoundDataFormat {
 class wxSoundCodec : public wxObject, public wxStreamBase {
   DECLARE_ABSTRACT_CLASS(wxSoundCodec)
  public:
+  typedef enum {
+    WAITING = 0,
+    ENCODING,
+    DECODING
+  } ModeType;
+ public:
   wxSoundCodec();
   virtual ~wxSoundCodec();
 
@@ -70,8 +76,6 @@ class wxSoundCodec : public wxObject, public wxStreamBase {
   size_t Available();
 
   void InitIO(const wxSoundDataFormat& format);
-  void InitMode(int mode);
-  void ExitMode();
 
   inline void SetInStream(wxStreamBuffer *s)
           { m_in_sound = s; }
@@ -87,6 +91,8 @@ class wxSoundCodec : public wxObject, public wxStreamBase {
   virtual size_t GetByteRate() const = 0; 
   virtual wxSoundDataFormat GetPreferredFormat(int codec = 0) const = 0; 
 
+  virtual void InitMode(ModeType mode);
+  virtual void ExitMode();
   virtual void Decode() = 0;
   virtual void Encode() = 0;
 
@@ -113,11 +119,7 @@ class wxSoundCodec : public wxObject, public wxStreamBase {
   wxStreamBuffer *m_in_sound, *m_out_sound;
   wxSoundCodec *m_chain_codec;
   bool m_init, m_chain_before;
-
-  enum {
-    ENCODING = 0,
-    DECODING
-  } m_mode;
+  ModeType m_mode;
 };
 
 #endif

@@ -36,14 +36,16 @@
 
 wxStreamBuffer::wxStreamBuffer(wxStreamBase& stream, BufMode mode)
   : m_buffer_start(NULL), m_buffer_end(NULL), m_buffer_pos(NULL),
-    m_buffer_size(0), m_fixed(TRUE), m_flushable(TRUE), m_stream(&stream),
+    m_buffer_size(0), m_wback(NULL), m_wbacksize(0), m_wbackcur(0),
+    m_fixed(TRUE), m_flushable(TRUE), m_stream(&stream),
     m_mode(mode), m_destroybuf(FALSE), m_destroystream(FALSE)
 {
 }
 
 wxStreamBuffer::wxStreamBuffer(BufMode mode)
   : m_buffer_start(NULL), m_buffer_end(NULL), m_buffer_pos(NULL),
-    m_buffer_size(0), m_fixed(TRUE), m_flushable(FALSE), m_stream(NULL),
+    m_buffer_size(0), m_wback(NULL), m_wbacksize(0), m_wbackcur(0),
+    m_fixed(TRUE), m_flushable(FALSE), m_stream(NULL),
     m_mode(mode), m_destroybuf(FALSE), m_destroystream(TRUE)
 {
   m_stream = new wxStreamBase();
@@ -61,10 +63,15 @@ wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
   m_mode = buffer.m_mode;
   m_destroybuf = FALSE;
   m_destroystream = FALSE;
+  m_wback = NULL;
+  m_wbacksize = 0;
+  m_wbackcur = 0;
 }
 
 wxStreamBuffer::~wxStreamBuffer()
 {
+  if (m_wback)
+    free(m_wback);
   if (m_destroybuf)
     wxDELETEA(m_buffer_start);
   if (m_destroystream)
@@ -148,13 +155,16 @@ char *wxStreamBuffer::AllocSpaceWBack(size_t needed_size)
 
   if (!temp_b)
     return NULL;
-  return (char *)((size_t)m_wback+(m_wbacksize-needed_size));
+  m_wback = temp_b;
+  printf("Buffer(0x%x)->Write: 0x%x, %d\n", this, m_wback, m_wbacksize); 
+  return (char *)(m_wback+(m_wbacksize-needed_size));
 }
 
 size_t wxStreamBuffer::GetWBack(char *buf, size_t bsize)
 {
   size_t s_toget = m_wbacksize-m_wbackcur;
 
+  printf("Buffer(0x%x): 0x%x, %d\n", this, m_wback, m_wbacksize);
   if (bsize < s_toget)
     s_toget = bsize;
 
@@ -374,15 +384,13 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
 size_t wxStreamBuffer::Write(wxStreamBuffer *sbuf)
 {
   char buf[BUF_TEMP_SIZE];
-  size_t s = 0, bytes_count = BUF_TEMP_SIZE;
-  size_t s_size;
+  size_t s = 0, bytes_count = BUF_TEMP_SIZE, b_count2;
 
   while (bytes_count == BUF_TEMP_SIZE) {
-    s_size = (sbuf->GetDataLeft() < GetDataLeft()) ? sbuf->GetDataLeft() : GetDataLeft();
-    if (s_size < bytes_count)
-      bytes_count = s_size;
-    bytes_count = sbuf->Read(buf, bytes_count);
-    bytes_count = Write(buf, bytes_count);
+    b_count2 = sbuf->Read(buf, bytes_count);
+    bytes_count = Write(buf, b_count2);
+    if (b_count2 > bytes_count)
+      sbuf->WriteBack(buf+bytes_count, b_count2-bytes_count);
     s += bytes_count;
   }
   return s;

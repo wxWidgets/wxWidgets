@@ -103,7 +103,7 @@ void wxUssSound::USS_Sleep()
 bool wxUssSound::DoInput(wxSndBuffer *buf)
 {
   wxUint32 bufsize;
-  wxSoundCodec *codec = buf->GetFormat().GetCodec();
+  wxSoundCodec *codec = buf->GetCurrentCodec();
 
   m_sndbuf->ResetBuffer();
   codec->SetInStream(m_sndbuf);
@@ -117,7 +117,7 @@ bool wxUssSound::DoInput(wxSndBuffer *buf)
     buf->Clear(wxSND_BUFLOCKED | wxSND_BUFREADY);
     return false;
   }
-  read(m_fd, m_sndbuf, bufsize);
+  read(m_fd, m_sndbuf->GetBufferStart(), bufsize);
   codec->Encode();
 
   return true;
@@ -128,20 +128,36 @@ bool wxUssSound::DoOutput(wxSndBuffer *buf)
   wxSoundCodec *codec = buf->GetCurrentCodec();
 
   m_sndbuf->ResetBuffer();
-  codec->SetOutStream(m_sndbuf);
-  codec->InitIO(m_ussformat);
 
   if (!codec->Available()) {
     buf->Clear(wxSND_BUFLOCKED | wxSND_BUFREADY);
-    return false;
+    return FALSE;
   }
   codec->Decode();
-  write(m_fd, m_sndbuf, m_sndbuf->GetIntPosition());
+  write(m_fd, m_sndbuf->GetBufferStart(), m_sndbuf->GetIntPosition());
 
   // Well ... it's not accurate ! :-|
   buf->OnBufferOutFinished();
 
-  return true;
+  return TRUE;
+}
+
+bool wxUssSound::InitBuffer(wxSndBuffer *buf)
+{
+  wxSoundCodec *codec;
+
+  if (!OnSetupDriver(*buf, buf->GetMode())) {
+    if (buf->IsNotSet(wxSND_BUFREADY))
+      return FALSE;
+  }
+
+  codec = buf->GetCurrentCodec();
+  codec->SetOutStream(m_sndbuf);
+  codec->InitIO(m_ussformat);
+  // TODO: We need more tests here.
+  codec->InitMode((m_mode == wxSND_OUTPUT) ? wxSoundCodec::DECODING : wxSoundCodec::ENCODING);
+
+  return TRUE;
 }
 
 void *wxUssSound::Entry()
@@ -149,36 +165,45 @@ void *wxUssSound::Entry()
   wxNode *node;
   wxSndBuffer *buf;
 
-  while (!m_stop_thrd) {
-    node = m_buffers.First();
-    if (!node) {
-      USS_Sleep();
-      continue;
-    }
-    buf = (wxSndBuffer *)node->Data();
-    if (!OnSetupDriver(*buf, buf->GetMode()))
-      continue;
+  node = m_buffers.First();
+  if (!node) {
+    m_stop_thrd = FALSE;
+    return NULL;
+  }
 
+  buf = (wxSndBuffer *)node->Data();
+  InitBuffer(buf);
+
+  while (!m_stop_thrd) {
     buf->HardLock();
     if (buf->IsSet(wxSND_BUFSTOP)) {
       buf->HardUnlock();
-      delete node;
-      continue;
+      goto sound_clean_buffer;
     }
     switch(m_mode) {
     case wxSND_INPUT:
       if (!DoInput(buf))
-        delete node;
+        goto sound_clean_buffer;
       break;
     case wxSND_OUTPUT:
       if (!DoOutput(buf))
-        delete node;
+        goto sound_clean_buffer;
       break;
     case wxSND_DUPLEX:
     case wxSND_OTHER_IO:
+      goto sound_clean_buffer;
       break;
     }
     buf->HardUnlock();
+    continue;
+  sound_clean_buffer:
+    buf->GetCurrentCodec()->ExitMode();
+    delete node;
+    node = m_buffers.First();
+    if (!node)
+      USS_Sleep();
+    if (node)
+      buf = (wxSndBuffer *)node->Data();
   }
   return NULL;
 }
@@ -188,7 +213,7 @@ bool wxUssSound::OnSetupDriver(wxSndBuffer& buf, wxSndMode WXUNUSED(mode))
   wxSoundDataFormat format;
   wxSoundCodec *codec;
 
-  codec = buf.GetFormat().GetCodec();
+  codec = buf.GetCurrentCodec();
   format = codec->GetPreferredFormat(WXSOUND_PCM);
 
   if ((format.GetSampleRate() != m_srate) ||
@@ -200,17 +225,17 @@ bool wxUssSound::OnSetupDriver(wxSndBuffer& buf, wxSndMode WXUNUSED(mode))
       m_buffers.DeleteObject(&buf);
       buf.Clear(wxSND_BUFLOCKED | wxSND_BUFREADY);
       buf.SetError(wxSND_CANTSET);
-      return false;
+      return FALSE;
     }
     m_mode = wxSND_OTHER_IO;
   }
 
   if (buf.GetMode() != m_mode) {
     m_mode = buf.GetMode();
-    return false;
+    return FALSE;
   }
 
-  return true;
+  return TRUE;
 }
 
 wxUint32 wxUssSound::GetNbFragments()
