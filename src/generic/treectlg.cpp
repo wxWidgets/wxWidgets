@@ -390,6 +390,12 @@ bool wxTreeTextCtrl::AcceptChanges()
     if ( value == m_startValue )
     {
         // nothing changed, always accept
+        // when an item remains unchanged, the owner
+        // needs to be notified that the user decided
+        // not to change the tree item label, and that
+        // the edit has been cancelled
+
+        m_owner->OnRenameCancelled(m_itemEdited);
         return true;
     }
 
