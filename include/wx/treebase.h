@@ -114,7 +114,7 @@ protected:
     wxTreeItemId m_pItem;
 };
 
-WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxTreeItemIdValue, wxArrayTreeItemIdsBase);
+WX_DEFINE_EXPORTED_ARRAY_PTR(wxTreeItemIdValue, wxArrayTreeItemIdsBase);
 
 class WXDLLEXPORT wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
 {

@@ -21,7 +21,7 @@ class WXDLLEXPORT wxRadioButton;
 #include "wx/statbox.h"
 #include "wx/dynarray.h"
 
-WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxRadioButton *, wxArrayRadioButtons);
+WX_DEFINE_EXPORTED_ARRAY_PTR(wxRadioButton *, wxArrayRadioButtons);
 
 // ----------------------------------------------------------------------------
 // wxRadioBox: a box full of radio buttons

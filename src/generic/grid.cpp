@@ -69,7 +69,7 @@
 // array classes
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_ARRAY_WITH_DECL_NO_PTR(wxGridCellAttr *, wxArrayAttrs,
+WX_DEFINE_ARRAY_WITH_DECL_PTR(wxGridCellAttr *, wxArrayAttrs,
                                  class WXDLLIMPEXP_ADV);
 
 struct wxGridCellWithAttr
@@ -334,7 +334,7 @@ struct wxGridDataTypeInfo
 };
 
 
-WX_DEFINE_ARRAY_WITH_DECL_NO_PTR(wxGridDataTypeInfo*, wxGridDataTypeInfoArray,
+WX_DEFINE_ARRAY_WITH_DECL_PTR(wxGridDataTypeInfo*, wxGridDataTypeInfoArray,
                                  class WXDLLIMPEXP_ADV);
 
 

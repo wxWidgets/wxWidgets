@@ -312,13 +312,13 @@ public:                                                               \
   void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
 }
 
-#define  _WX_DEFINE_TYPEARRAY_NO_PTR(T, name, base, classexp)         \
+#define  _WX_DEFINE_TYPEARRAY_PTR(T, name, base, classexp)         \
 		_WX_DEFINE_TYPEARRAY(T, name, base, classexp)
 
 #else // if !wxUSE_STL
 
 // common declaration used by both _WX_DEFINE_TYPEARRAY and
-// _WX_DEFINE_TYPEARRAY_NO_PTR
+// _WX_DEFINE_TYPEARRAY_PTR
 #define  _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, ptrop)  \
 wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
                        TypeTooBigToBeStoredIn##base,                  \
@@ -482,7 +482,7 @@ public:                                                               \
 
 #define _WX_DEFINE_TYPEARRAY(T, name, base, classexp)                 \
     _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, _WX_PTROP)
-#define _WX_DEFINE_TYPEARRAY_NO_PTR(T, name, base, classexp)          \
+#define _WX_DEFINE_TYPEARRAY_PTR(T, name, base, classexp)          \
     _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, _WX_PTROP_NONE)
 
 #endif // !wxUSE_STL
@@ -644,28 +644,28 @@ private:                                                                 \
 #define WX_DEFINE_TYPEARRAY(T, name, base)                        \
     WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class wxARRAY_DEFAULT_EXPORT)
 
-#define WX_DEFINE_TYPEARRAY_NO_PTR(T, name, base)                        \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, base, class wxARRAY_DEFAULT_EXPORT)
+#define WX_DEFINE_TYPEARRAY_PTR(T, name, base)                        \
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DEFINE_EXPORTED_TYPEARRAY(T, name, base)               \
     WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class WXDLLEXPORT)
 
-#define WX_DEFINE_EXPORTED_TYPEARRAY_NO_PTR(T, name, base)               \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, base, class WXDLLEXPORT)
+#define WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, base)               \
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class WXDLLEXPORT)
 
 #define WX_DEFINE_USER_EXPORTED_TYPEARRAY(T, name, base, expdecl) \
     WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class expdecl)
 
-#define WX_DEFINE_USER_EXPORTED_TYPEARRAY_NO_PTR(T, name, base, expdecl) \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, base, class expdecl)
+#define WX_DEFINE_USER_EXPORTED_TYPEARRAY_PTR(T, name, base, expdecl) \
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class expdecl)
 
 #define WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, classdecl) \
     typedef T _wxArray##name;                                   \
     _WX_DEFINE_TYPEARRAY(_wxArray##name, name, base, classdecl)
 
-#define WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, base, classdecl) \
+#define WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, classdecl) \
     typedef T _wxArray##name;                                          \
-    _WX_DEFINE_TYPEARRAY_NO_PTR(_wxArray##name, name, base, classdecl)
+    _WX_DEFINE_TYPEARRAY_PTR(_wxArray##name, name, base, classdecl)
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_SORTED_TYPEARRAY: this is the same as the previous macro, but it
@@ -815,46 +815,46 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 
 #define WX_DEFINE_ARRAY(T, name)                                       \
     WX_DEFINE_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
-#define WX_DEFINE_ARRAY_NO_PTR(T, name)                                \
-    WX_DEFINE_TYPEARRAY_NO_PTR(T, name, wxBaseArrayPtrVoid)
+#define WX_DEFINE_ARRAY_PTR(T, name)                                \
+    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_EXPORTED_ARRAY(T, name)                              \
     WX_DEFINE_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
-#define WX_DEFINE_EXPORTED_ARRAY_NO_PTR(T, name)                       \
-    WX_DEFINE_EXPORTED_TYPEARRAY_NO_PTR(T, name, wxBaseArrayPtrVoid)
-#define WX_DEFINE_ARRAY_WITH_DECL_NO_PTR(T, name, decl)                \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, wxBaseArrayPtrVoid, decl)
+#define WX_DEFINE_EXPORTED_ARRAY_PTR(T, name)                       \
+    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayPtrVoid)
+#define WX_DEFINE_ARRAY_WITH_DECL_PTR(T, name, decl)                \
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayPtrVoid, decl)
 #define WX_DEFINE_USER_EXPORTED_ARRAY(T, name, expmode)                \
     WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, wxBaseArrayPtrVoid, expmode)
-#define WX_DEFINE_USER_EXPORTED_ARRAY_NO_PTR(T, name, expmode)         \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, wxBaseArrayPtrVoid, expmode)
+#define WX_DEFINE_USER_EXPORTED_ARRAY_PTR(T, name, expmode)         \
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayPtrVoid, expmode)
 
 #define WX_DEFINE_ARRAY_SHORT(T, name)                                 \
-    WX_DEFINE_TYPEARRAY_NO_PTR(T, name, wxBaseArrayShort)
+    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayShort)
 #define WX_DEFINE_EXPORTED_ARRAY_SHORT(T, name)                        \
-    WX_DEFINE_EXPORTED_TYPEARRAY_NO_PTR(T, name, wxBaseArrayShort)
+    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayShort)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_SHORT(T, name, expmode)          \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, wxBaseArrayShort, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayShort, expmode)
 
 #define WX_DEFINE_ARRAY_INT(T, name)                                   \
-    WX_DEFINE_TYPEARRAY_NO_PTR(T, name, wxBaseArrayInt)
+    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayInt)
 #define WX_DEFINE_EXPORTED_ARRAY_INT(T, name)                          \
-    WX_DEFINE_EXPORTED_TYPEARRAY_NO_PTR(T, name, wxBaseArrayInt)
+    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayInt)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_INT(T, name, expmode)            \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, wxBaseArrayInt, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayInt, expmode)
 
 #define WX_DEFINE_ARRAY_LONG(T, name)                                  \
-    WX_DEFINE_TYPEARRAY_NO_PTR(T, name, wxBaseArrayLong)
+    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayLong)
 #define WX_DEFINE_EXPORTED_ARRAY_LONG(T, name)                         \
-    WX_DEFINE_EXPORTED_TYPEARRAY_NO_PTR(T, name, wxBaseArrayLong)
+    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayLong)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_LONG(T, name, expmode)           \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, wxBaseArrayLong, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayLong, expmode)
 
 #define WX_DEFINE_ARRAY_DOUBLE(T, name)                                \
-    WX_DEFINE_TYPEARRAY_NO_PTR(T, name, wxBaseArrayDouble)
+    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayDouble)
 #define WX_DEFINE_EXPORTED_ARRAY_DOUBLE(T, name)                       \
-    WX_DEFINE_EXPORTED_TYPEARRAY_NO_PTR(T, name, wxBaseArrayDouble)
+    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayDouble)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_DOUBLE(T, name, expmode)         \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, wxBaseArrayDouble, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayDouble, expmode)
 
 // ----------------------------------------------------------------------------
 // Convenience macros to define sorted arrays from base arrays
@@ -935,7 +935,7 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_ARRAY_SHORT(short, wxArrayShort, class WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_ARRAY_INT(int, wxArrayInt, class WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_ARRAY_LONG(long, wxArrayLong, class WXDLLIMPEXP_BASE);
-WX_DEFINE_USER_EXPORTED_ARRAY_NO_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE);
+WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE);
 
 // -----------------------------------------------------------------------------
 // convenience macros

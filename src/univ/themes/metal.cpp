@@ -141,7 +141,7 @@ private:
 // wxMetalTheme
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_ARRAY_NO_PTR(wxInputHandler *, wxArrayHandlers);
+WX_DEFINE_ARRAY_PTR(wxInputHandler *, wxArrayHandlers);
 
 class wxMetalTheme : public wxTheme
 {

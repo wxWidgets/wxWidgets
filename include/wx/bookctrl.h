@@ -27,7 +27,7 @@
 #include "wx/control.h"
 #include "wx/dynarray.h"
 
-WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxWindow *, wxArrayPages);
+WX_DEFINE_EXPORTED_ARRAY_PTR(wxWindow *, wxArrayPages);
 
 class WXDLLEXPORT wxImageList;
 

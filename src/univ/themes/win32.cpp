@@ -658,7 +658,7 @@ protected:
 // wxWin32Theme
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_ARRAY_NO_PTR(wxInputHandler *, wxArrayHandlers);
+WX_DEFINE_ARRAY_PTR(wxInputHandler *, wxArrayHandlers);
 
 class wxWin32Theme : public wxTheme
 {
