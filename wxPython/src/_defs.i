@@ -620,6 +620,8 @@ enum {
     wxPD_ELAPSED_TIME,
     wxPD_ESTIMATED_TIME,
     wxPD_REMAINING_TIME,
+    wxPD_SMOOTH,
+    wxPD_CAN_SKIP,
 
     wxDD_NEW_DIR_BUTTON,
     wxDD_DEFAULT_STYLE,

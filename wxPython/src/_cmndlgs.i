@@ -653,9 +653,14 @@ Window Styles
 
     wx.PD_REMAINING_TIME     This flag tells the dialog that it should show
                              remaining time.
+
+    wx.PD_SMOOTH             Uses the wx.GA_SMOOTH style on the embedded
+                             wx.Gauge widget.
     ====================     =============================================
 ");
 
+
+// TODO: wxPD_CAN_SKIP
 
 MustHaveApp(wxProgressDialog);
 
@@ -673,12 +678,15 @@ public:
 for other windows, or, if wx.PD_APP_MODAL flag is not given, for its
 parent window only.", "");
 
+    // TODO: support getting the skipped value back in the return value, but
+    // only if style is set.  This is so the API doesn't change for existing
+    // users...
     DocDeclStr(
         virtual bool , Update(int value, const wxString& newmsg = wxPyEmptyString),
         "Updates the dialog, setting the progress bar to the new value and, if
 given changes the message above it. The value given should be less
 than or equal to the maximum value given to the constructor and the
-dialog is closed if it is equal to the maximum.  Returns true unless
+dialog is closed if it is equal to the maximum.  Returns True unless
 the Cancel button has been pressed.
 
 If false is returned, the application can either immediately destroy
