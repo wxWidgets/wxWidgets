@@ -23,7 +23,24 @@ WX_DECLARE_OBJC_HASHMAP(NSMenu);
 
 class wxCocoaNSMenu
 {
-    WX_DECLARE_OBJC_INTERFACE(NSMenu)
+    WX_DECLARE_OBJC_INTERFACE_HASHMAP(NSMenu)
+public:
+    void AssociateNSMenu(WX_NSMenu cocoaNSMenu, unsigned int flags = 0);
+    void DisassociateNSMenu(WX_NSMenu cocoaNSMenu);
+    enum
+    {   OBSERVE_DidAddItem          = 0x01
+    ,   OBSERVE_DidChangeItem       = 0x02
+    ,   OBSERVE_DidRemoveItem       = 0x04
+    ,   OBSERVE_DidSendAction       = 0x08
+    ,   OBSERVE_WillSendAction      = 0x10
+    };
+    void CocoaNotification_menuDidAddItem(WX_NSNotification userInfo) {}
+    void CocoaNotification_menuDidChangeItem(WX_NSNotification userInfo) {}
+    void CocoaNotification_menuDidRemoveItem(WX_NSNotification userInfo) {}
+    void CocoaNotification_menuDidSendAction(WX_NSNotification userInfo) {}
+    void CocoaNotification_menuWillSendAction(WX_NSNotification userInfo) {}
+protected:
+    static struct objc_object *sm_cocoaObserver;
 };
 
 #endif // _WX_COCOA_NSMENU_H_
