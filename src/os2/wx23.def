@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\lib\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -3494,6 +3494,10 @@ EXPORTS
       GetIcon__10wxFileTypeCFP6wxIconP8wxStringPi
       ;wxArrayFileTypeInfo::Add(const wxFileTypeInfo&)
       Add__19wxArrayFileTypeInfoFRC14wxFileTypeInfo
+      ;wxFileTypeInfo::wxFileTypeInfo(const wxArrayString&)
+      __ct__14wxFileTypeInfoFRC13wxArrayString
+      ;wxMimeTypesManager::Initialize(int,const wxString&)
+      Initialize__18wxMimeTypesManagerFiRC8wxString
       ;wxFileType::GetPrintCommand(wxString*,const wxFileType::MessageParameters&) const
       GetPrintCommand__10wxFileTypeCFP8wxStringRCQ2_10wxFileType17MessageParameters
       ;wxMimeTypesManager::GetFileTypeFromMimeType(const wxString&)
@@ -3504,6 +3508,8 @@ EXPORTS
       Associate__18wxMimeTypesManagerFRC14wxFileTypeInfo
       ;wxFileTypeInfo::wxFileTypeInfo(const char*,const char*,const char*,const char*,...)
       __ct__14wxFileTypeInfoFPCcN31e
+      ;wxFileType::SetDefaultIcon(const wxString&,int)
+      SetDefaultIcon__10wxFileTypeFRC8wxStringi
       ;wxArrayFileTypeInfo::DoCopy(const wxArrayFileTypeInfo&)
       DoCopy__19wxArrayFileTypeInfoFRC19wxArrayFileTypeInfo
       ;wxMimeTypesManager::ReadMimeTypes(const wxString&)
@@ -3512,6 +3518,8 @@ EXPORTS
       ExpandCommand__10wxFileTypeFRC8wxStringRCQ2_10wxFileType17MessageParameters
       ;wxMimeTypesManager::IsOfType(const wxString&,const wxString&)
       IsOfType__18wxMimeTypesManagerFRC8wxStringT1
+      ;wxMimeTypesManager::Unassociate(wxFileType*)
+      Unassociate__18wxMimeTypesManagerFP10wxFileType
       ;wxArrayFileTypeInfo::DoEmpty()
       DoEmpty__19wxArrayFileTypeInfoFv
       wxTheMimeTypesManager
@@ -3529,6 +3537,8 @@ EXPORTS
       GetDescription__10wxFileTypeCFP8wxString
       ;wxArrayFileTypeInfo::Index(const wxFileTypeInfo&,unsigned long) const
       Index__19wxArrayFileTypeInfoCFRC14wxFileTypeInfoUl
+      ;wxFileType::SetCommand(const wxString&,const wxString&,unsigned long)
+      SetCommand__10wxFileTypeFRC8wxStringT1Ul
       ;wxMimeTypesManager::ReadMailcap(const wxString&,unsigned long)
       ReadMailcap__18wxMimeTypesManagerFRC8wxStringUl
       ;wxArrayFileTypeInfo::Insert(const wxFileTypeInfo&,unsigned int)
@@ -3553,6 +3563,8 @@ EXPORTS
       __dt__18wxMimeTypesManagerFv
       ;wxMimeTypesManager::wxMimeTypesManager()
       __ct__18wxMimeTypesManagerFv
+      ;wxMimeTypesManager::ClearData()
+      ClearData__18wxMimeTypesManagerFv
       ;wxArrayFileTypeInfo::operator=(const wxArrayFileTypeInfo&)
       __as__19wxArrayFileTypeInfoFRC19wxArrayFileTypeInfo
       ;wxFileType::GetOpenCommand(wxString*,const wxFileType::MessageParameters&) const
@@ -4341,6 +4353,8 @@ EXPORTS
       CalcMin__11wxSizerItemFv
       ;wxSizer::Remove(wxWindow*)
       Remove__7wxSizerFP8wxWindow
+      ;wxSizer::FitSize(wxWindow*)
+      FitSize__7wxSizerFP8wxWindow
       __vft7wxSizer8wxObject
       ;wxSizer::Remove(int)
       Remove__7wxSizerFi
@@ -4358,6 +4372,8 @@ EXPORTS
       CreateArrays__15wxFlexGridSizerFv
       ;wxSizer::SetSizeHints(wxWindow*)
       SetSizeHints__7wxSizerFP8wxWindow
+      ;wxSizer::GetMaxWindowSize(wxWindow*)
+      GetMaxWindowSize__7wxSizerFP8wxWindow
       ;wxSizer::Add(wxSizer*,int,int,int,wxObject*)
       Add__7wxSizerFP7wxSizeriN22P8wxObject
       ;wxSizer::Prepend(int,int,int,int,int,wxObject*)
@@ -6221,6 +6237,14 @@ EXPORTS
       DeleteAttributeValue__6wxExprFRC8wxString
       ;wxExpr::AttributeValue(const wxString&) const
       AttributeValue__6wxExprCFRC8wxString
+  ;From object file:  ..\common\xpmdecod.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxXPMDecoder::CanRead(wxInputStream&)
+      CanRead__12wxXPMDecoderFR13wxInputStream
+      ;wxXPMDecoder::ReadFile(wxInputStream&)
+      ReadFile__12wxXPMDecoderFR13wxInputStream
+      ;wxXPMDecoder::ReadData(const char**)
+      ReadData__12wxXPMDecoderFPPCc
   ;From object file:  ..\common\y_tab.c
     ;PUBDEFs (Symbols available from object file):
       wxExprCleanUp
@@ -8800,61 +8824,63 @@ EXPORTS
       sm_eventTableEntries__12wxSashWindow
   ;From object file:  ..\generic\scrolwin.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxScrolledWindow::GetScrollPageSize(int) const
-      GetScrollPageSize__16wxScrolledWindowCFi
-      ;wxScrolledWindow::Scroll(int,int)
-      Scroll__16wxScrolledWindowFiT1
-      ;wxScrolledWindow::GetEventTable() const
-      GetEventTable__16wxScrolledWindowCFv
-      ;wxScrolledWindow::SetTargetWindow(wxWindow*)
-      SetTargetWindow__16wxScrolledWindowFP8wxWindow
-      ;wxScrolledWindow::sm_eventTable
-      sm_eventTable__16wxScrolledWindow
-      ;wxScrolledWindow::OnScroll(wxScrollWinEvent&)
-      OnScroll__16wxScrolledWindowFR16wxScrollWinEvent
-      ;wxScrolledWindow::SetScrollPageSize(int,int)
-      SetScrollPageSize__16wxScrolledWindowFiT1
-      ;wxScrolledWindow::AdjustScrollbars()
-      AdjustScrollbars__16wxScrolledWindowFv
-      ;wxScrolledWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
-      Create__16wxScrolledWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
-      ;wxScrolledWindow::PrepareDC(wxDC&)
-      PrepareDC__16wxScrolledWindowFR4wxDC
-      ;wxScrolledWindow::CalcUnscrolledPosition(int,int,int*,int*) const
-      CalcUnscrolledPosition__16wxScrolledWindowCFiT1PiT3
-      ;wxScrolledWindow::OnPaint(wxPaintEvent&)
-      OnPaint__16wxScrolledWindowFR12wxPaintEvent
-      ;wxScrolledWindow::OnChar(wxKeyEvent&)
-      OnChar__16wxScrolledWindowFR10wxKeyEvent
-      ;wxConstructorForwxScrolledWindow()
-      wxConstructorForwxScrolledWindow__Fv
-      ;wxScrolledWindow::wxScrolledWindow()
-      __ct__16wxScrolledWindowFv
-      ;wxScrolledWindow::CalcScrollInc(wxScrollWinEvent&)
-      CalcScrollInc__16wxScrolledWindowFR16wxScrollWinEvent
-      __vft16wxScrolledWindow8wxObject
-      ;wxScrolledWindow::OnSize(wxSizeEvent&)
-      OnSize__16wxScrolledWindowFR11wxSizeEvent
-      ;wxScrolledWindow::GetScrollPixelsPerUnit(int*,int*) const
-      GetScrollPixelsPerUnit__16wxScrolledWindowCFPiT1
-      ;wxScrolledWindow::GetVirtualSize(int*,int*) const
-      GetVirtualSize__16wxScrolledWindowCFPiT1
-      ;wxScrolledWindow::EnableScrolling(unsigned long,unsigned long)
-      EnableScrolling__16wxScrolledWindowFUlT1
-      ;wxScrolledWindow::~wxScrolledWindow()
-      __dt__16wxScrolledWindowFv
-      ;wxScrolledWindow::GetTargetWindow()
-      GetTargetWindow__16wxScrolledWindowFv
+      ;wxGenericScrolledWindow::OnChar(wxKeyEvent&)
+      OnChar__23wxGenericScrolledWindowFR10wxKeyEvent
+      __vft23wxGenericScrolledWindow8wxObject
+      ;wxGenericScrolledWindow::GetVirtualSize(int*,int*) const
+      GetVirtualSize__23wxGenericScrolledWindowCFPiT1
+      ;wxGenericScrolledWindow::sm_eventTable
+      sm_eventTable__23wxGenericScrolledWindow
+      ;wxGenericScrolledWindow::OnScroll(wxScrollWinEvent&)
+      OnScroll__23wxGenericScrolledWindowFR16wxScrollWinEvent
+      ;wxGenericScrolledWindow::OnSize(wxSizeEvent&)
+      OnSize__23wxGenericScrolledWindowFR11wxSizeEvent
+      ;wxGenericScrolledWindow::CalcScrollInc(wxScrollWinEvent&)
+      CalcScrollInc__23wxGenericScrolledWindowFR16wxScrollWinEvent
+      ;wxGenericScrolledWindow::Scroll(int,int)
+      Scroll__23wxGenericScrolledWindowFiT1
+      ;wxGenericScrolledWindow::GetViewStart(int*,int*) const
+      GetViewStart__23wxGenericScrolledWindowCFPiT1
+      ;wxGenericScrolledWindow::EnableScrolling(unsigned long,unsigned long)
+      EnableScrolling__23wxGenericScrolledWindowFUlT1
+      ;wxConstructorForwxGenericScrolledWindow()
+      wxConstructorForwxGenericScrolledWindow__Fv
+      ;wxGenericScrolledWindow::PrepareDC(wxDC&)
+      PrepareDC__23wxGenericScrolledWindowFR4wxDC
+      ;wxGenericScrolledWindow::sm_eventTableEntries
+      sm_eventTableEntries__23wxGenericScrolledWindow
+      ;wxGenericScrolledWindow::CalcUnscrolledPosition(int,int,int*,int*) const
+      CalcUnscrolledPosition__23wxGenericScrolledWindowCFiT1PiT3
+      ;wxGenericScrolledWindow::SetScrollbars(int,int,int,int,int,int,unsigned long)
+      SetScrollbars__23wxGenericScrolledWindowFiN51Ul
+      ;wxGenericScrolledWindow::GetEventTable() const
+      GetEventTable__23wxGenericScrolledWindowCFv
+      ;wxGenericScrolledWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
+      Create__23wxGenericScrolledWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
+      ;wxGenericScrolledWindow::SetTargetWindow(wxWindow*)
+      SetTargetWindow__23wxGenericScrolledWindowFP8wxWindow
+      ;wxGenericScrolledWindow::CalcScrolledPosition(int,int,int*,int*) const
+      CalcScrolledPosition__23wxGenericScrolledWindowCFiT1PiT3
+      ;wxGenericScrolledWindow::GetScrollPageSize(int) const
+      GetScrollPageSize__23wxGenericScrolledWindowCFi
+      ;wxGenericScrolledWindow::SetScrollPageSize(int,int)
+      SetScrollPageSize__23wxGenericScrolledWindowFiT1
+      ;wxGenericScrolledWindow::~wxGenericScrolledWindow()
+      __dt__23wxGenericScrolledWindowFv
       ;wxScrolledWindow::sm_classwxScrolledWindow
       sm_classwxScrolledWindow__16wxScrolledWindow
-      ;wxScrolledWindow::SetScrollbars(int,int,int,int,int,int,unsigned long)
-      SetScrollbars__16wxScrolledWindowFiN51Ul
-      ;wxScrolledWindow::GetViewStart(int*,int*) const
-      GetViewStart__16wxScrolledWindowCFPiT1
-      ;wxScrolledWindow::CalcScrolledPosition(int,int,int*,int*) const
-      CalcScrolledPosition__16wxScrolledWindowCFiT1PiT3
-      ;wxScrolledWindow::sm_eventTableEntries
-      sm_eventTableEntries__16wxScrolledWindow
+      ;wxGenericScrolledWindow::OnPaint(wxPaintEvent&)
+      OnPaint__23wxGenericScrolledWindowFR12wxPaintEvent
+      ;wxGenericScrolledWindow::GetScrollPixelsPerUnit(int*,int*) const
+      GetScrollPixelsPerUnit__23wxGenericScrolledWindowCFPiT1
+      ;wxGenericScrolledWindow::wxGenericScrolledWindow()
+      __ct__23wxGenericScrolledWindowFv
+      ;wxGenericScrolledWindow::GetTargetWindow()
+      GetTargetWindow__23wxGenericScrolledWindowFv
+      ;wxGenericScrolledWindow::AdjustScrollbars()
+      AdjustScrollbars__23wxGenericScrolledWindowFv
+      ;wxGenericScrolledWindow::sm_classwxGenericScrolledWindow
+      sm_classwxGenericScrolledWindow__23wxGenericScrolledWindow
   ;From object file:  ..\generic\splitter.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSplitterWindow::OnSize(wxSizeEvent&)
@@ -9257,6 +9283,8 @@ EXPORTS
       sm_eventTableEntries__17wxGenericTreeCtrl
       ;wxGenericTreeCtrl::SetItemFont(const wxTreeItemId&,const wxFont&)
       SetItemFont__17wxGenericTreeCtrlFRC12wxTreeItemIdRC6wxFont
+      ;wxGenericTreeCtrl::SetFont(const wxFont&)
+      SetFont__17wxGenericTreeCtrlFRC6wxFont
       ;wxGenericTreeCtrl::OnPaint(wxPaintEvent&)
       OnPaint__17wxGenericTreeCtrlFR12wxPaintEvent
       ;wxTreeTextCtrl::OnKeyUp(wxKeyEvent&)
@@ -9542,6 +9570,8 @@ EXPORTS
       wxConstructorForwxHtmlHelpData__Fv
       ;wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData*,const wxString&,unsigned long,unsigned long,const wxString&)
       __ct__18wxHtmlSearchStatusFP14wxHtmlHelpDataRC8wxStringUlT3T2
+      ;wxHtmlBookRecord::GetFullPath(const wxString&) const
+      GetFullPath__16wxHtmlBookRecordCFRC8wxString
       ;wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord*,wxFileSystem&,const wxString&,const wxString&)
       LoadMSProject__14wxHtmlHelpDataFP16wxHtmlBookRecordR12wxFileSystemRC8wxStringT3
       __vft14wxSearchEngine8wxObject
@@ -9760,6 +9790,8 @@ EXPORTS
       DoneParser__12wxHtmlParserFv
       ;wxHtmlParser::AddTagHandler(wxHtmlTagHandler*)
       AddTagHandler__12wxHtmlParserFP16wxHtmlTagHandler
+      ;wxHtmlParser::SetSource(const wxString&)
+      SetSource__12wxHtmlParserFRC8wxString
       ;wxHtmlParser::PopTagHandler()
       PopTagHandler__12wxHtmlParserFv
       ;wxHtmlTagHandler::sm_classwxHtmlTagHandler
@@ -10072,19 +10104,12 @@ EXPORTS
       _link_dummy_func_m_meta__Fv
   ;From object file:  ..\html\m_pre.cpp
     ;PUBDEFs (Symbols available from object file):
-      __vft13wxHtmlPRECell8wxObject
       ;HTML_ModulePre::sm_classHTML_ModulePre
       sm_classHTML_ModulePre__14HTML_ModulePre
       ;_link_dummy_func_m_pre()
       _link_dummy_func_m_pre__Fv
       ;wxConstructorForHTML_ModulePre()
       wxConstructorForHTML_ModulePre__Fv
-      ;wxHtmlPRECell::~wxHtmlPRECell()
-      __dt__13wxHtmlPRECellFv
-      ;wxHtmlPRECell::Draw(wxDC&,int,int,int,int)
-      Draw__13wxHtmlPRECellFR4wxDCiN32
-      ;wxHtmlPRECell::wxHtmlPRECell(const wxString&,wxDC&)
-      __ct__13wxHtmlPRECellFRC8wxStringR4wxDC
   ;From object file:  ..\html\m_tables.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxHtmlTableCell::ReallocRows(int)

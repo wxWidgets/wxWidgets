@@ -295,6 +295,7 @@ COMMONOBJS = \
   ..\common\$D\wincmn.obj \
   ..\common\$D\wxchar.obj \
   ..\common\$D\wxexpr.obj \
+  ..\common\$D\xpmdecod.obj \
   ..\common\$D\y_tab.obj \
   ..\common\$D\zipstrm.obj \
   ..\common\$D\zstream.obj
@@ -408,6 +409,7 @@ COMLIBOBJS3 = \
   wincmn.obj \
   wxchar.obj \
   wxexpr.obj \
+  xpmdecod.obj \
   y_tab.obj \
   zipstrm.obj \
   zstream.obj
@@ -747,6 +749,7 @@ $(COMLIBOBJS3):
   copy ..\common\$D\wincmn.obj
   copy ..\common\$D\wxchar.obj
   copy ..\common\$D\wxexpr.obj
+  copy ..\common\$D\xpmdecod.obj
   copy ..\common\$D\y_tab.obj
   copy ..\common\$D\zipstrm.obj
   copy ..\common\$D\zstream.obj
