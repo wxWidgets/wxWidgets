@@ -448,7 +448,7 @@ long wxDbGridTableBase::GetValueAsLong(int row, int col)
         (sqltype == SQL_C_SLONG) ||
         (sqltype == SQL_C_ULONG))
     {
-        wxVariant val = m_data->GetCol(m_ColInfo[col].DbCol);
+        wxVariant val = m_data->GetColumn(m_ColInfo[col].DbCol);
         return val.GetLong();
     }
     wxFAIL_MSG (_T("unknown column, "));
@@ -473,7 +473,7 @@ double wxDbGridTableBase::GetValueAsDouble(int row, int col)
         (sqltype == SQL_C_FLOAT) ||
         (sqltype == SQL_C_DOUBLE))
     {
-        wxVariant val = m_data->GetCol(m_ColInfo[col].DbCol);
+        wxVariant val = m_data->GetColumn(m_ColInfo[col].DbCol);
         return val.GetDouble();
     }
     wxFAIL_MSG (_T("unknown column"));
@@ -496,7 +496,7 @@ bool wxDbGridTableBase::GetValueAsBool(int row, int col)
         (sqltype == SQL_C_SLONG) ||
         (sqltype == SQL_C_ULONG))
     {
-        wxVariant val = m_data->GetCol(m_ColInfo[col].DbCol);
+        wxVariant val = m_data->GetColumn(m_ColInfo[col].DbCol);
         return val.GetBool();
     }
     wxFAIL_MSG (_T("unknown column, "));
@@ -525,7 +525,7 @@ void* wxDbGridTableBase::GetValueAsCustom(int row, int col, const wxString& type
             (sqltype == SQL_C_TIME) ||
             (sqltype == SQL_C_TIMESTAMP))
         {
-            wxVariant val = m_data->GetCol(m_ColInfo[col].DbCol);
+            wxVariant val = m_data->GetColumn(m_ColInfo[col].DbCol);
             return new wxDateTime(val.GetDateTime());
         }
     }
@@ -562,7 +562,7 @@ void wxDbGridTableBase::SetValueAsCustom(int row, int col, const wxString& typeN
             }
             wxVariant val(date);
             m_rowmodified = true;
-            m_data->SetCol(m_ColInfo[col].DbCol,val);
+            m_data->SetColumn(m_ColInfo[col].DbCol,val);
         }
     }
     wxFAIL_MSG (_T("unknown column data type"));
@@ -594,7 +594,7 @@ wxString wxDbGridTableBase::GetValue(int row, int col)
     wxLogDebug(wxT("GetValue() on %i,%i"),row,col);
 
     ValidateRow(row);
-    wxVariant val = m_data->GetCol(m_ColInfo[col].DbCol);
+    wxVariant val = m_data->GetColumn(m_ColInfo[col].DbCol);
     wxLogDebug(wxT("\tReturning \"%s\"\n"),val.GetString().c_str());
 
     return val.GetString();
@@ -609,7 +609,7 @@ void wxDbGridTableBase::SetValue(int row, int col,const wxString& value)
     wxVariant val(value);
 
     m_rowmodified = true;
-    m_data->SetCol(m_ColInfo[col].DbCol,val);
+    m_data->SetColumn(m_ColInfo[col].DbCol,val);
 }
 
 
@@ -621,7 +621,7 @@ void wxDbGridTableBase::SetValueAsLong(int row, int col, long value)
     wxVariant val(value);
 
     m_rowmodified = true;
-    m_data->SetCol(m_ColInfo[col].DbCol,val);
+    m_data->SetColumn(m_ColInfo[col].DbCol,val);
 }
 
 
@@ -633,7 +633,7 @@ void wxDbGridTableBase::SetValueAsDouble(int row, int col, double value)
     wxVariant val(value);
 
     m_rowmodified = true;
-    m_data->SetCol(m_ColInfo[col].DbCol,val);
+    m_data->SetColumn(m_ColInfo[col].DbCol,val);
 
 }
 
@@ -646,7 +646,7 @@ void wxDbGridTableBase::SetValueAsBool(int row, int col, bool value)
     wxVariant val(value);
 
     m_rowmodified = true;
-    m_data->SetCol(m_ColInfo[col].DbCol,val);
+    m_data->SetColumn(m_ColInfo[col].DbCol,val);
 }
 
 
