@@ -178,7 +178,7 @@ bool haveArgData = FALSE; // If TRUE, we're simulating the data.
 TexChunk *currentArgument = NULL;
 TexChunk *nextChunk = NULL;
 bool isArgOptional = FALSE;
-bool noArgs = 0;
+int noArgs = 0;
 
 TexChunk *TopLevel = NULL;
 // wxList MacroDefs(wxKEY_STRING);
