@@ -47,7 +47,7 @@ public :
     // returns 0 in case of no Error, otherwise platform specific error codes
     virtual wxUint32 GetStatus() const = 0 ;
     bool Ok() { return GetStatus() == 0 ; }
-    
+
     static wxNativePrinterDC* Create(wxPrintData* data) ;
 } ;
 
@@ -78,7 +78,7 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
 
     m_err = noErr ;
     wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) data->m_nativePrintData ;
-    
+
     PMRect rPage;
     m_err = PMGetAdjustedPageRect(native->m_macPageFormat, &rPage);
     if ( m_err != noErr )
@@ -99,7 +99,7 @@ wxNativePrinterDC* wxNativePrinterDC::Create(wxPrintData* data)
     return new wxMacCarbonPrinterDC(data) ;
 }
 
-bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED(message)  ) 
+bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED(message)  )
 {
     if ( m_err )
         return false ;
@@ -107,7 +107,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
     wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) dc->GetPrintData().m_nativePrintData ;
 
     m_err = PMSessionBeginDocument(native->m_macPrintSession,
-              native->m_macPrintSettings, 
+              native->m_macPrintSettings,
               native->m_macPageFormat);
     if ( m_err != noErr )
         return false;
@@ -117,12 +117,12 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
     if ( m_err != noErr )
         return false;
 
-    m_maxX = rPage.right - rPage.left ;
-    m_maxY = rPage.bottom - rPage.top ;
+    m_maxX = (wxCoord)(rPage.right - rPage.left);
+    m_maxY = (wxCoord)(rPage.bottom - rPage.top);
     return true ;
 }
 
-void wxMacCarbonPrinterDC::EndDoc( wxPrinterDC* dc ) 
+void wxMacCarbonPrinterDC::EndDoc( wxPrinterDC* dc )
 {
     if ( m_err )
         return ;
@@ -132,7 +132,7 @@ void wxMacCarbonPrinterDC::EndDoc( wxPrinterDC* dc )
     m_err = PMSessionEndDocument(native->m_macPrintSession);
 }
 
-void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc ) 
+void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
 {
     if ( m_err )
         return ;
@@ -142,14 +142,14 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
     m_err = PMSessionBeginPage(native->m_macPrintSession,
                  native->m_macPageFormat,
                  nil);
-    
+
     if ( m_err == noErr )
     {
-	    m_err = PMSessionGetGraphicsContext(native->m_macPrintSession,
-									nil,
-									(void**) &dc->m_macPort );
+        m_err = PMSessionGetGraphicsContext(native->m_macPrintSession,
+                                            nil,
+                                            (void**) &dc->m_macPort );
     }
-    
+
     if ( m_err != noErr )
     {
         PMSessionEndPage(native->m_macPrintSession);
@@ -158,19 +158,19 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
     else
     {
         PMRect rPage;
-        
+
         m_err = PMGetAdjustedPageRect(native->m_macPageFormat, &rPage);
         if ( !m_err )
         {
-            dc->m_macLocalOrigin.x = rPage.left ;
-            dc->m_macLocalOrigin.y = rPage.top ;
+            dc->m_macLocalOrigin.x = (int) rPage.left;
+            dc->m_macLocalOrigin.y = (int) rPage.top;
         }
         // since this is a non-critical error, we set the flag back
         m_err = noErr ;
     }
 }
 
-void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc ) 
+void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
 {
     if ( m_err )
         return ;
@@ -219,7 +219,7 @@ wxMacClassicPrinterDC::wxMacClassicPrinterDC(wxPrintData* data)
     m_err = PrError() ;
     if ( m_err != noErr )
         return;
-    
+
     wxMacClassicPrintData *native = (wxMacClassicPrintData*) data->m_nativePrintData ;
 
     if ( ::PrValidate( native->m_macPrintSettings ) )
@@ -246,7 +246,7 @@ wxMacClassicPrinterDC::~wxMacClassicPrinterDC()
     ::SetPort( LMGetWMgrPort() ) ;
 }
 
-bool wxMacClassicPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED(message)  ) 
+bool wxMacClassicPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED(message)  )
 {
     if ( m_err )
         return false ;
@@ -264,7 +264,7 @@ bool wxMacClassicPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSE
     return true ;
 }
 
-void wxMacClassicPrinterDC::EndDoc( wxPrinterDC* dc ) 
+void wxMacClassicPrinterDC::EndDoc( wxPrinterDC* dc )
 {
     if ( m_err )
         return ;
@@ -273,7 +273,7 @@ void wxMacClassicPrinterDC::EndDoc( wxPrinterDC* dc )
     m_err = PrError() ;
 }
 
-void wxMacClassicPrinterDC::StartPage( wxPrinterDC* dc ) 
+void wxMacClassicPrinterDC::StartPage( wxPrinterDC* dc )
 {
     if ( m_err )
         return ;
@@ -291,7 +291,7 @@ void wxMacClassicPrinterDC::StartPage( wxPrinterDC* dc )
         ::PrCloseDoc( m_macPrintingPort ) ;
 }
 
-void wxMacClassicPrinterDC::EndPage( wxPrinterDC* dc ) 
+void wxMacClassicPrinterDC::EndPage( wxPrinterDC* dc )
 {
     if ( m_err )
         return ;
@@ -310,14 +310,14 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
     m_printData = printdata ;
     m_printData.ConvertToNative() ;
     m_nativePrinterDC = wxNativePrinterDC::Create( &m_printData ) ;
-    if ( m_nativePrinterDC ) 
+    if ( m_nativePrinterDC )
     {
         m_ok = m_nativePrinterDC->Ok() ;
-        
+
         if ( !m_ok )
         {
             wxString message ;
-            message.Printf( wxT("Print Error %ld"), m_nativePrinterDC->GetStatus() ) ;
+            message.Printf( wxT("Print Error %u"), m_nativePrinterDC->GetStatus() ) ;
             wxMessageDialog dialog( NULL , message , wxEmptyString, wxICON_HAND | wxOK) ;
             dialog.ShowModal();
         }
@@ -329,10 +329,10 @@ wxPrinterDC::~wxPrinterDC(void)
     delete m_nativePrinterDC ;
 }
 
-bool wxPrinterDC::StartDoc( const wxString& message ) 
+bool wxPrinterDC::StartDoc( const wxString& message )
 {
     wxASSERT_MSG( Ok() , wxT("Called wxPrinterDC::StartDoc from an invalid object") ) ;
-    
+
     if ( !m_ok )
         return false ;
 
@@ -344,7 +344,7 @@ bool wxPrinterDC::StartDoc( const wxString& message )
     if ( !m_ok )
     {
         wxString message ;
-        message.Printf( wxT("Print Error %ld"), m_nativePrinterDC->GetStatus() ) ;
+        message.Printf( wxT("Print Error %u"), m_nativePrinterDC->GetStatus() ) ;
         wxMessageDialog dialog( NULL , message , wxEmptyString, wxICON_HAND | wxOK) ;
         dialog.ShowModal();
     }
@@ -352,7 +352,7 @@ bool wxPrinterDC::StartDoc( const wxString& message )
     return m_ok ;
 }
 
-void wxPrinterDC::EndDoc(void) 
+void wxPrinterDC::EndDoc(void)
 {
     if ( !m_ok )
         return ;
@@ -363,13 +363,13 @@ void wxPrinterDC::EndDoc(void)
     if ( !m_ok )
     {
         wxString message ;
-        message.Printf( wxT("Print Error %ld"), m_nativePrinterDC->GetStatus() ) ;
+        message.Printf( wxT("Print Error %u"), m_nativePrinterDC->GetStatus() ) ;
         wxMessageDialog dialog( NULL , message , wxEmptyString, wxICON_HAND | wxOK) ;
         dialog.ShowModal();
     }
 }
 
-void wxPrinterDC::StartPage(void) 
+void wxPrinterDC::StartPage(void)
 {
     if ( !m_ok )
         return ;
@@ -391,10 +391,10 @@ void wxPrinterDC::StartPage(void)
 
     m_nativePrinterDC->StartPage(this) ;
     m_ok = m_nativePrinterDC->Ok() ;
-        
+
 }
 
-void wxPrinterDC::EndPage(void) 
+void wxPrinterDC::EndPage(void)
 {
     if ( !m_ok )
         return ;

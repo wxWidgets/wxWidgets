@@ -527,27 +527,33 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
                 {
                   if ( trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) == FALSE )
                   {
-                    switch( result )
-                    {
-                      case wxDragCopy :
+                      switch( result )
                       {
-                        wxCursor cursor(wxCURSOR_COPY_ARROW) ;
-                        cursor.MacInstall() ;
+                          case wxDragCopy :
+                              {
+                                  wxCursor cursor(wxCURSOR_COPY_ARROW) ;
+                                  cursor.MacInstall() ;
+                              }
+                              break ;
+                          case wxDragMove :
+                              {
+                                  wxCursor cursor(wxCURSOR_ARROW) ;
+                                  cursor.MacInstall() ;
+                              }
+                              break ;
+                          case wxDragNone :
+                              {
+                                  wxCursor cursor(wxCURSOR_NO_ENTRY) ;
+                                  cursor.MacInstall() ;
+                              }
+                              break ;
+
+                          case wxDragError:
+                          case wxDragLink:
+                          case wxDragCancel:
+                              // put these here to make gcc happy
+                              ;
                       }
-                      break ;
-                      case wxDragMove :
-                      {
-                        wxCursor cursor(wxCURSOR_ARROW) ;
-                        cursor.MacInstall() ;
-                        }
-                      break ;
-                      case wxDragNone :
-                      {
-                        wxCursor cursor(wxCURSOR_NO_ENTRY) ;
-                        cursor.MacInstall() ;
-                      }
-                      break ;
-                    }
                   }
                 }
                 
