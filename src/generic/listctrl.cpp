@@ -2478,7 +2478,10 @@ long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
     if ( ld->HasImage() && GetLineIconRect(line).Inside(x, y) )
         return wxLIST_HITTEST_ONITEMICON;
 
-    if ( ld->HasText() )
+    // VS: Testing for "ld->HasText() || InReportView()" instead of
+    //     "ld->HasText()" is needed to make empty lines in report view
+    //     possible
+    if ( ld->HasText() || InReportView() )
     {
         wxRect rect = InReportView() ? GetLineRect(line)
                                      : GetLineLabelRect(line);
