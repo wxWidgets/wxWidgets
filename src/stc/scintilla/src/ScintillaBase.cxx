@@ -307,6 +307,7 @@ void ScintillaBase::AutoCompleteCharacterDeleted() {
 void ScintillaBase::AutoCompleteCompleted() {
 	int item = ac.lb->GetSelection();
 	char selected[1000];
+	selected[0] = '\0';
 	if (item != -1) {
 		ac.lb->GetValue(item, selected, sizeof(selected));
 	}
@@ -342,6 +343,36 @@ void ScintillaBase::AutoCompleteCompleted() {
 		SetEmptySelection(firstPos + piece.length());
 	}
 	pdoc->EndUndoAction();
+}
+
+void ScintillaBase::CallTipShow(Point pt, const char *defn) {
+	AutoCompleteCancel();
+	pt.y += vs.lineHeight;
+	PRectangle rc = ct.CallTipStart(currentPos, pt,
+									defn,
+									vs.styles[STYLE_DEFAULT].fontName,
+									vs.styles[STYLE_DEFAULT].sizeZoomed,
+									IsUnicodeMode(),
+									wMain);
+	// If the call-tip window would be out of the client
+	// space, adjust so it displays above the text.
+	PRectangle rcClient = GetClientRectangle();
+	if (rc.bottom > rcClient.bottom) {
+		int offset = vs.lineHeight + rc.Height();
+		rc.top -= offset;
+		rc.bottom -= offset;
+	}
+	// Now display the window.
+	CreateCallTipWindow(rc);
+	ct.wCallTip.SetPositionRelative(rc, wMain);
+	ct.wCallTip.Show();
+}
+
+void ScintillaBase::CallTipClick() {
+	SCNotification scn;
+	scn.nmhdr.code = SCN_CALLTIPCLICK;
+	scn.position = ct.clickPlace;
+	NotifyParent(scn);
 }
 
 void ScintillaBase::ContextMenu(Point pt) {
@@ -525,30 +556,9 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 	case SCI_AUTOCGETTYPESEPARATOR:
 		return ac.GetTypesep();
 
-	case SCI_CALLTIPSHOW: {
-			AutoCompleteCancel();
-			if (!ct.wCallTip.Created()) {
-				Point pt = LocationFromPosition(wParam);
-				pt.y += vs.lineHeight;
-				PRectangle rc = ct.CallTipStart(currentPos, pt,
-				                                reinterpret_cast<char *>(lParam),
-				                                vs.styles[STYLE_DEFAULT].fontName,
-				                                vs.styles[STYLE_DEFAULT].sizeZoomed,
-												IsUnicodeMode());
-				// If the call-tip window would be out of the client
-				// space, adjust so it displays above the text.
-				PRectangle rcClient = GetClientRectangle();
-				if (rc.bottom > rcClient.bottom) {
-					int offset = vs.lineHeight + rc.Height();
-					rc.top -= offset;
-					rc.bottom -= offset;
-				}
-				// Now display the window.
-				CreateCallTipWindow(rc);
-				ct.wCallTip.SetPositionRelative(rc, wMain);
-				ct.wCallTip.Show();
-			}
-		}
+	case SCI_CALLTIPSHOW:
+		CallTipShow(LocationFromPosition(wParam),
+			reinterpret_cast<const char *>(lParam));
 		break;
 
 	case SCI_CALLTIPCANCEL:
@@ -567,6 +577,16 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 
 	case SCI_CALLTIPSETBACK:
 		ct.colourBG = ColourDesired(wParam);
+		InvalidateStyleRedraw();
+		break;
+
+	case SCI_CALLTIPSETFORE:
+		ct.colourUnSel = ColourDesired(wParam);
+		InvalidateStyleRedraw();
+		break;
+
+	case SCI_CALLTIPSETFOREHLT:
+		ct.colourSel = ColourDesired(wParam);
 		InvalidateStyleRedraw();
 		break;
 
