@@ -1097,7 +1097,7 @@ BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledWindow)
   EVT_KEY_DOWN       (wxListMainWindow::OnKeyDown)
   EVT_SET_FOCUS      (wxListMainWindow::OnSetFocus)
   EVT_KILL_FOCUS     (wxListMainWindow::OnKillFocus)
-  EVT_SCROLLWIN                 (wxListMainWindow::OnScroll)
+  EVT_SCROLL                 (wxListMainWindow::OnScroll)
 END_EVENT_TABLE()
 
 wxListMainWindow::wxListMainWindow()
