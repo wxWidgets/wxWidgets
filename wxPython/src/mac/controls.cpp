@@ -2191,6 +2191,119 @@ static PyObject *_wrap_wxCheckBox_SetValue(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define wxCheckBox_Get3StateValue(_swigobj)  (_swigobj->Get3StateValue())
+static PyObject *_wrap_wxCheckBox_Get3StateValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCheckBoxState  _result;
+    wxCheckBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCheckBox_Get3StateValue",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCheckBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckBox_Get3StateValue. Expected _wxCheckBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxCheckBoxState )wxCheckBox_Get3StateValue(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCheckBox_Set3StateValue(_swigobj,_swigarg0)  (_swigobj->Set3StateValue(_swigarg0))
+static PyObject *_wrap_wxCheckBox_Set3StateValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCheckBox * _arg0;
+    wxCheckBoxState  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","state", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxCheckBox_Set3StateValue",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCheckBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckBox_Set3StateValue. Expected _wxCheckBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxCheckBox_Set3StateValue(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCheckBox_Is3State(_swigobj)  (_swigobj->Is3State())
+static PyObject *_wrap_wxCheckBox_Is3State(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCheckBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCheckBox_Is3State",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCheckBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckBox_Is3State. Expected _wxCheckBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxCheckBox_Is3State(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCheckBox_Is3rdStateAllowedForUser(_swigobj)  (_swigobj->Is3rdStateAllowedForUser())
+static PyObject *_wrap_wxCheckBox_Is3rdStateAllowedForUser(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCheckBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCheckBox_Is3rdStateAllowedForUser",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCheckBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckBox_Is3rdStateAllowedForUser. Expected _wxCheckBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxCheckBox_Is3rdStateAllowedForUser(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxChoiceTowxControlWithItems(void *ptr) {
     wxChoice *src;
     wxControlWithItems *dest;
@@ -4034,6 +4147,34 @@ static PyObject *_wrap_wxGauge_GetValue(PyObject *self, PyObject *args, PyObject
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (int )wxGauge_GetValue(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGauge_IsVertical(_swigobj)  (_swigobj->IsVertical())
+static PyObject *_wrap_wxGauge_IsVertical(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGauge * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGauge_IsVertical",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGauge_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGauge_IsVertical. Expected _wxGauge_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxGauge_IsVertical(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -7673,6 +7814,34 @@ static PyObject *_wrap_wxTextCtrl_SaveFile(PyObject *self, PyObject *args, PyObj
     if (_obj1)
         delete _arg1;
 }
+    return _resultobj;
+}
+
+#define wxTextCtrl_MarkDirty(_swigobj)  (_swigobj->MarkDirty())
+static PyObject *_wrap_wxTextCtrl_MarkDirty(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_MarkDirty",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_MarkDirty. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTextCtrl_MarkDirty(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -12128,6 +12297,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_WriteText", (PyCFunction) _wrap_wxTextCtrl_WriteText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetMaxLength", (PyCFunction) _wrap_wxTextCtrl_SetMaxLength, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_DiscardEdits", (PyCFunction) _wrap_wxTextCtrl_DiscardEdits, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_MarkDirty", (PyCFunction) _wrap_wxTextCtrl_MarkDirty, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SaveFile", (PyCFunction) _wrap_wxTextCtrl_SaveFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_LoadFile", (PyCFunction) _wrap_wxTextCtrl_LoadFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_Remove", (PyCFunction) _wrap_wxTextCtrl_Remove, METH_VARARGS | METH_KEYWORDS },
@@ -12213,6 +12383,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxGauge_SetShadowWidth", (PyCFunction) _wrap_wxGauge_SetShadowWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_SetRange", (PyCFunction) _wrap_wxGauge_SetRange, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_SetBezelFace", (PyCFunction) _wrap_wxGauge_SetBezelFace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGauge_IsVertical", (PyCFunction) _wrap_wxGauge_IsVertical, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_GetValue", (PyCFunction) _wrap_wxGauge_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_GetShadowWidth", (PyCFunction) _wrap_wxGauge_GetShadowWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_GetRange", (PyCFunction) _wrap_wxGauge_GetRange, METH_VARARGS | METH_KEYWORDS },
@@ -12256,6 +12427,10 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxChoice_Create", (PyCFunction) _wrap_wxChoice_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreChoice", (PyCFunction) _wrap_new_wxPreChoice, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxChoice", (PyCFunction) _wrap_new_wxChoice, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCheckBox_Is3rdStateAllowedForUser", (PyCFunction) _wrap_wxCheckBox_Is3rdStateAllowedForUser, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCheckBox_Is3State", (PyCFunction) _wrap_wxCheckBox_Is3State, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCheckBox_Set3StateValue", (PyCFunction) _wrap_wxCheckBox_Set3StateValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCheckBox_Get3StateValue", (PyCFunction) _wrap_wxCheckBox_Get3StateValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckBox_SetValue", (PyCFunction) _wrap_wxCheckBox_SetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckBox_IsChecked", (PyCFunction) _wrap_wxCheckBox_IsChecked, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckBox_GetValue", (PyCFunction) _wrap_wxCheckBox_GetValue, METH_VARARGS | METH_KEYWORDS },
@@ -12506,6 +12681,12 @@ SWIGEXPORT(void) initcontrolsc() {
 	 d = PyModule_GetDict(m);
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultValidator",_wrap_wxDefaultValidator_get, _wrap_wxDefaultValidator_set);
+	 PyDict_SetItemString(d,"wxCHK_2STATE", PyInt_FromLong((long) wxCHK_2STATE));
+	 PyDict_SetItemString(d,"wxCHK_3STATE", PyInt_FromLong((long) wxCHK_3STATE));
+	 PyDict_SetItemString(d,"wxCHK_ALLOW_3RD_STATE_FOR_USER", PyInt_FromLong((long) wxCHK_ALLOW_3RD_STATE_FOR_USER));
+	 PyDict_SetItemString(d,"wxCHK_UNCHECKED", PyInt_FromLong((long) wxCHK_UNCHECKED));
+	 PyDict_SetItemString(d,"wxCHK_CHECKED", PyInt_FromLong((long) wxCHK_CHECKED));
+	 PyDict_SetItemString(d,"wxCHK_UNDETERMINED", PyInt_FromLong((long) wxCHK_UNDETERMINED));
 	 PyDict_SetItemString(d,"wxTE_NO_VSCROLL", PyInt_FromLong((long) wxTE_NO_VSCROLL));
 	 PyDict_SetItemString(d,"wxTE_AUTO_SCROLL", PyInt_FromLong((long) wxTE_AUTO_SCROLL));
 	 PyDict_SetItemString(d,"wxTE_READONLY", PyInt_FromLong((long) wxTE_READONLY));

@@ -392,6 +392,12 @@ class wxListEventPtr(wxNotifyEventPtr):
     def GetCacheTo(self, *_args, **_kwargs):
         val = controls2c.wxListEvent_GetCacheTo(self, *_args, **_kwargs)
         return val
+    def IsEditCancelled(self, *_args, **_kwargs):
+        val = controls2c.wxListEvent_IsEditCancelled(self, *_args, **_kwargs)
+        return val
+    def SetEditCanceled(self, *_args, **_kwargs):
+        val = controls2c.wxListEvent_SetEditCanceled(self, *_args, **_kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "m_code" :
             controls2c.wxListEvent_m_code_set(self,value)
@@ -468,6 +474,10 @@ class wxListCtrlPtr(wxControlPtr):
     def GetCountPerPage(self, *_args, **_kwargs):
         val = controls2c.wxListCtrl_GetCountPerPage(self, *_args, **_kwargs)
         return val
+    def GetViewRect(self, *_args, **_kwargs):
+        val = controls2c.wxListCtrl_GetViewRect(self, *_args, **_kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
+        return val
     def GetItem(self, *_args, **_kwargs):
         val = controls2c.wxListCtrl_GetItem(self, *_args, **_kwargs)
         return val
@@ -517,6 +527,7 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def GetItemSpacing(self, *_args, **_kwargs):
         val = controls2c.wxListCtrl_GetItemSpacing(self, *_args, **_kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def SetItemSpacing(self, *_args, **_kwargs):
         val = controls2c.wxListCtrl_SetItemSpacing(self, *_args, **_kwargs)

@@ -2346,6 +2346,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxID_HELP_PROCEDURES", PyInt_FromLong((long) wxID_HELP_PROCEDURES));
 	 PyDict_SetItemString(d,"wxID_HELP_CONTEXT", PyInt_FromLong((long) wxID_HELP_CONTEXT));
 	 PyDict_SetItemString(d,"wxID_CLOSE_ALL", PyInt_FromLong((long) wxID_CLOSE_ALL));
+	 PyDict_SetItemString(d,"wxID_PREFERENCES", PyInt_FromLong((long) wxID_PREFERENCES));
 	 PyDict_SetItemString(d,"wxID_CUT", PyInt_FromLong((long) wxID_CUT));
 	 PyDict_SetItemString(d,"wxID_COPY", PyInt_FromLong((long) wxID_COPY));
 	 PyDict_SetItemString(d,"wxID_PASTE", PyInt_FromLong((long) wxID_PASTE));
@@ -2414,6 +2415,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxMENU_TEAROFF", PyInt_FromLong((long) wxMENU_TEAROFF));
 	 PyDict_SetItemString(d,"wxMB_DOCKABLE", PyInt_FromLong((long) wxMB_DOCKABLE));
 	 PyDict_SetItemString(d,"wxNO_FULL_REPAINT_ON_RESIZE", PyInt_FromLong((long) wxNO_FULL_REPAINT_ON_RESIZE));
+	 PyDict_SetItemString(d,"wxFULL_REPAINT_ON_RESIZE", PyInt_FromLong((long) wxFULL_REPAINT_ON_RESIZE));
 	 PyDict_SetItemString(d,"wxLEFT", PyInt_FromLong((long) wxLEFT));
 	 PyDict_SetItemString(d,"wxRIGHT", PyInt_FromLong((long) wxRIGHT));
 	 PyDict_SetItemString(d,"wxUP", PyInt_FromLong((long) wxUP));
