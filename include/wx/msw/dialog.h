@@ -20,7 +20,7 @@
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
 
-class WXDLLEXPORT wxWindowDisabler;
+class WXDLLEXPORT wxDialogModalData;
 
 // Dialog boxes
 class WXDLLEXPORT wxDialog : public wxDialogBase
@@ -116,9 +116,9 @@ protected:
 private:
     wxWindow *m_oldFocus;
 
-    // while we are showing a modal dialog we disable the other windows using
-    // this object
-    wxWindowDisabler *m_windowDisabler;
+    // this pointer is non-NULL only while the modal event loop is running
+    wxDialogModalData *m_modalData;
+
 
     DECLARE_DYNAMIC_CLASS(wxDialog)
     DECLARE_EVENT_TABLE()

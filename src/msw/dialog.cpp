@@ -59,13 +59,6 @@
 #define wxDIALOG_DEFAULT_HEIGHT 500
 
 // ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-// all modal dialogs currently shown
-static wxWindowList wxModalDialogs;
-
-// ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
@@ -138,6 +131,42 @@ BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
     EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
+// ----------------------------------------------------------------------------
+// wxDialogModalData
+// ----------------------------------------------------------------------------
+
+// this is simply a container for wxEventLoop and wxWindowDisabler which allows
+// to have a single opaque pointer in wxDialog itself
+class wxDialogModalData
+{
+public:
+    wxDialogModalData() { m_windowDisabler = NULL; }
+
+    void RunLoop(wxDialog *dialog)
+    {
+        m_windowDisabler = new wxWindowDisabler(dialog);
+
+        m_evtLoop.Run();
+    }
+
+    void ExitLoop()
+    {
+        delete m_windowDisabler;
+        m_windowDisabler = NULL;
+
+        m_evtLoop.Exit();
+    }
+
+    ~wxDialogModalData()
+    {
+        wxASSERT_MSG( !m_windowDisabler, _T("forgot to call ExitLoop?") );
+    }
+
+private:
+    wxEventLoop m_evtLoop;
+    wxWindowDisabler *m_windowDisabler;
+};
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -152,7 +181,7 @@ void wxDialog::Init()
 
     m_isShown = FALSE;
 
-    m_windowDisabler = (wxWindowDisabler *)NULL;
+    m_modalData = NULL;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 }
@@ -247,7 +276,7 @@ bool wxDialog::IsModal() const
 
 bool wxDialog::IsModalShowing() const
 {
-    return wxModalDialogs.Find(wxConstCast(this, wxDialog)) != NULL;
+    return m_modalData != NULL;
 }
 
 wxWindow *wxDialog::FindSuitableParent() const
@@ -277,8 +306,6 @@ void wxDialog::DoShowModal()
     wxCHECK_RET( !IsModalShowing(), _T("DoShowModal() called twice") );
     wxCHECK_RET( IsModal(), _T("can't DoShowModal() modeless dialog") );
 
-    wxModalDialogs.Append(this);
-
     wxWindow *parent = GetParent();
 
     wxWindow* oldFocus = m_oldFocus;
@@ -298,11 +325,6 @@ void wxDialog::DoShowModal()
             hwndOldFocus = GetHwndOf(parent);
     }
 
-    // disable all other app windows
-    wxASSERT_MSG( !m_windowDisabler, _T("disabling windows twice?") );
-
-    m_windowDisabler = new wxWindowDisabler(this);
-
     // before entering the modal loop, reset the "is in OnIdle()" flag (see
     // comment in app.cpp)
     extern bool wxIsInOnIdleFlag;
@@ -310,8 +332,10 @@ void wxDialog::DoShowModal()
     wxIsInOnIdleFlag = FALSE;
 
     // enter the modal loop
-    wxEventLoop evtLoop;
-    evtLoop.Run();
+    m_modalData = new wxDialogModalData;
+    m_modalData->RunLoop(this);
+    delete m_modalData;
+    m_modalData = NULL;
 
     wxIsInOnIdleFlag = wasInOnIdle;
 
@@ -329,16 +353,14 @@ void wxDialog::DoShowModal()
 
 bool wxDialog::Show(bool show)
 {
-    if ( !show )
+    if ( !show && m_modalData )
     {
-        // if we had disabled other app windows, reenable them back now because
+        // we need to do this before calling wxDialogBase version because if we
+        // had disabled other app windows, they must be reenabled right now as
         // if they stay disabled Windows will activate another window (one
-        // which is enabled, anyhow) and we will lose activation
-        if ( m_windowDisabler )
-        {
-            delete m_windowDisabler;
-            m_windowDisabler = NULL;
-        }
+        // which is enabled, anyhow) when we're hidden in the base class Show()
+        // and we will lose activation
+        m_modalData->ExitLoop();
     }
 
     // ShowModal() may be called for already shown dialog
@@ -358,32 +380,19 @@ bool wxDialog::Show(bool show)
         //     every time is simpler than keeping a flag
         Layout();
 
-        // usually will result in TransferDataToWindow() being called
+        // this usually will result in TransferDataToWindow() being called
         InitDialog();
     }
 
-    if ( IsModal() )
+    if ( show && IsModal() )
     {
-        if ( show )
+        // modal dialog needs a parent window, so try to find one
+        if ( !GetParent() )
         {
-            // modal dialog needs a parent window, so try to find one
-            if ( !GetParent() )
-            {
-                m_parent = FindSuitableParent();
-            }
-
-            DoShowModal();
+            m_parent = FindSuitableParent();
         }
-        else // end of modal dialog
-        {
-            // this will cause IsModalShowing() return FALSE and our local
-            // message loop will terminate
-            wxModalDialogs.DeleteObject(this);
 
-            // ensure that there is another message for this window so the
-            // ShowModal loop will exit and won't get stuck in GetMessage().
-            ::PostMessage(GetHwnd(), WM_NULL, 0, 0);
-        }
+        DoShowModal();
     }
 
     return TRUE;
