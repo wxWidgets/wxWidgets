@@ -178,7 +178,7 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
 
 	RETCODE retcode;
 
-#if wxODBC_FWD_ONLY_CURSORS
+#if !wxODBC_FWD_ONLY_CURSORS
 
 	// Specify that the ODBC cursor library be used, if needed.  This must be
 	// specified before the connection is made.
