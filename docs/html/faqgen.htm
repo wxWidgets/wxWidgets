@@ -30,10 +30,11 @@ different platforms. wxWindows defines a common API across platforms, but uses t
 so your program will take on the native 'look and feel' that users are familiar with.<P>
 
 Although GUI applications are mostly built programmatically, there is a dialog editor to help
-build attractive dialogs and panels.<P>
+build attractive dialogs and panels. Robert Roebling's <a href="http://www.roebling.com">wxDesigner</a>
+makes light work of resizable, portable dialogs.<P>
 
 You don't have to use C++ to use wxWindows: wxWindows 1 has been interfaced to several interpreted languages,
-such as CLIPS, Python, Scheme, XLisp and Perl, and there is a Python interface for wxWindows 2.
+such as CLIPS, Python, Scheme, XLisp and Perl, and there is a <a href="http://wxpython.org">Python interface</a> for wxWindows 2.
 <P>
 
 <h3>Can I use wxWindows 2 for both proprietary (commercial) projects, and GPL'ed projects?</h3>
@@ -61,34 +62,8 @@ wxWindows is obtained by many different means, and we cannot monitor
 distribution. The mailing list contains around 300-400 entries which is
 quite large for a list of this type.<P>
 
-<H3>I am about to start a wxWindows 1.xx project. Should I use 2 instead?</H3>
-
-wxWindows 2 is still in beta but it's actually pretty useable (Windows, GTK, Motif).<P>
-
-Porting to wxWindows 2 from 1.xx will not be too painful; see the next question
-for ways in which you can make it easier.<P>
-
-<H3>Why would I want to use wxWindows 2 in preference to wxWindows 1.xx?</H3>
-
-Some reasons:
-
-<ul>
-<li>In 2 there is far more flexibility, for example in the way windows can be
-nested, and the way events are intercepted.
-<li>There is more functionality for producing sophisticated applications,
-for example using the wxTreeCtrl and wxListCtrl classes.
-<li>There is better C++-conformance (such as usage of wxString and const) which
-will make your applications more reliable and easier to maintain.
-<li>wxWindows 2 will be better supported than 1.xx.
-<li>The GTK version is attractive for people interested in writing Linux and GNOME
-applications.
-<li>The Mac version will be one of the best frameworks available on that platform.
-</ul>
-
-<H3>How can I prepare for wxWindows 2?</H3>
-
-To make porting to wxWindows 2 easier in the future, take a look at some
-<a href="http://www.wxwindows.org/prepare.htm">tips</a> for writing existing code in a 2-compatible way.<P>
+See <a href="users.htm">Users</a> for a list of some users and their applications, and
+also <A href="feedback.htm">Feedback</a> for comments.<P>
 
 <H3>How much has the API changed since 1.xx?</H3>
 
@@ -124,18 +99,17 @@ While wxWindows 2 is being developed, there will be further patches to wxWindows
 Obviously we are investing most of our energy into the new code, but we're also trying
 to fix bugs in the current version.<P>
 
-<H3>What platforms will be supported by wxWindows 2?</H3>
+<H3>What platforms are supported by wxWindows 2?</H3>
 
 <ul>
 <li>Windows 3.1, Windows 95/98, Windows NT;
 <li>Linux and other Unix platforms with GTK+;
 <li>Unix with Motif or the free Motif clone Lesstif;
-<li>Mac (coming later in 1999);
+<li>Mac;
 <li>A BeOS port is being investigated.
 <li>A Windows CE port is being investigated.
-<li>There are no plans to support OS/2 or XView. However,
-you may be able to compile the GTK and Motif versions under OS/2 with X and GTK
-installed, or the Windows version with IBM's Open32 extensions.
+<li>An OS/2 port is in progress, and you can also compile wxWindows for GTK+ or Motif
+on OS/2.
 </ul>
 <P>
 
@@ -207,7 +181,7 @@ no wxWindows wrapper for these.
 <H3>How is wxWindows 2 being developed?</H3>
 
 We are using the <a href="cvs.htm">CVS</a> system to develop and maintain wxWindows. This allows
-us to make alterations and upload them instantly to the server in Edinburgh, from
+us to make alterations and upload them instantly to the SourceForge server, from
 which others can update their source.<P>
 
 To build source from CVS, see the file BuildCVS.txt in the top-level wxWindows distribution
