@@ -111,12 +111,11 @@ void wxStaticText::DoSetSize(int x, int y, int width, int height, int sizeFlags)
   int actualWidth = width;
   int actualHeight = height;
 
-  char buf[300];
   int current_width;
   int cyf;
 
-  ::GetWindowText((HWND) GetHWND(), buf, 300);
-  GetTextExtent(buf, &current_width, &cyf, NULL, NULL, & this->GetFont());
+  wxString text(wxGetWindowText(GetHWND()));
+  GetTextExtent(text, &current_width, &cyf, NULL, NULL, & GetFont());
 
   int ww, hh;
   GetSize(&ww, &hh);
@@ -128,7 +127,7 @@ void wxStaticText::DoSetSize(int x, int y, int width, int height, int sizeFlags)
   {
     int cx;
     int cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
     actualWidth = (int)(current_width + cx) ;
   }
 
@@ -145,14 +144,13 @@ void wxStaticText::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxStaticText::SetLabel(const wxString& label)
 {
-  int w, h;
-  RECT rect;
-
   wxWindow *parent = GetParent();
+
+  RECT rect;
   GetWindowRect((HWND) GetHWND(), &rect);
 
-  // Since we now have the absolute screen coords,
-  // if there's a parent we must subtract its top left corner
+  // Since we now have the absolute screen coords, if there's a parent we must
+  // subtract its top left corner
   POINT point;
   point.x = rect.left;
   point.y = rect.top;
@@ -161,9 +159,9 @@ void wxStaticText::SetLabel(const wxString& label)
     ::ScreenToClient((HWND) parent->GetHWND(), &point);
   }
 
-  GetTextExtent(label, &w, &h, NULL, NULL, & this->GetFont());
-  MoveWindow((HWND) GetHWND(), point.x, point.y, (int)(w + 10), (int)h,
-             TRUE);
+  int w, h;
+  GetTextExtent(label, &w, &h, NULL, NULL, & GetFont());
+  MoveWindow((HWND) GetHWND(), point.x, point.y, (int)(w + 10), (int)h, TRUE);
   SetWindowText((HWND) GetHWND(), (const char *)label);
 }
 
