@@ -340,7 +340,7 @@ int wxNotebook::GetSelection() const
     return m_selection;
 }
 
-wxString wxNotebook::GetPageText( int page ) const
+wxString wxNotebook::GetPageText( size_t page ) const
 {
     wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid notebook") );
 
@@ -351,7 +351,7 @@ wxString wxNotebook::GetPageText( int page ) const
         return wxT("");
 }
 
-int wxNotebook::GetPageImage( int page ) const
+int wxNotebook::GetPageImage( size_t page ) const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid notebook") );
 
@@ -371,11 +371,11 @@ wxGtkNotebookPage* wxNotebook::GetNotebookPage( int page ) const
     return m_pagesData.Item(page)->GetData();
 }
 
-int wxNotebook::SetSelection( int page )
+int wxNotebook::SetSelection( size_t page )
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid notebook") );
 
-    wxCHECK_MSG( page >= 0 && page < (int)m_pagesData.GetCount(), -1, wxT("invalid notebook index") );
+    wxCHECK_MSG( page < m_pagesData.GetCount(), -1, wxT("invalid notebook index") );
 
     int selOld = GetSelection();
 
@@ -390,7 +390,7 @@ int wxNotebook::SetSelection( int page )
     return selOld;
 }
 
-bool wxNotebook::SetPageText( int page, const wxString &text )
+bool wxNotebook::SetPageText( size_t page, const wxString &text )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid notebook") );
 
@@ -405,7 +405,7 @@ bool wxNotebook::SetPageText( int page, const wxString &text )
     return TRUE;
 }
 
-bool wxNotebook::SetPageImage( int page, int image )
+bool wxNotebook::SetPageImage( size_t page, int image )
 {
     /* HvdH 28-12-98: now it works, but it's a bit of a kludge */
 
@@ -539,7 +539,7 @@ bool wxNotebook::DeleteAllPages()
     return wxNotebookBase::DeleteAllPages();
 }
 
-bool wxNotebook::DeletePage( int page )
+bool wxNotebook::DeletePage( size_t page )
 {
     // GTK sets GtkNotebook.cur_page to NULL before sending the switch page
     // event so we have to store the selection internally
@@ -557,7 +557,7 @@ bool wxNotebook::DeletePage( int page )
     return wxNotebookBase::DeletePage(page);
 }
 
-wxNotebookPage *wxNotebook::DoRemovePage( int page )
+wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
 {
     wxNotebookPage *client = wxNotebookBase::DoRemovePage(page);
     if ( !client )
@@ -576,7 +576,7 @@ wxNotebookPage *wxNotebook::DoRemovePage( int page )
     return client;
 }
 
-bool wxNotebook::InsertPage( int position,
+bool wxNotebook::InsertPage( size_t position,
                              wxNotebookPage* win,
                              const wxString& text,
                              bool select,
@@ -587,7 +587,7 @@ bool wxNotebook::InsertPage( int position,
     wxCHECK_MSG( win->GetParent() == this, FALSE,
                wxT("Can't add a page whose parent is not the notebook!") );
 
-    wxCHECK_MSG( position >= 0 && position <= GetPageCount(), FALSE,
+    wxCHECK_MSG( position <= GetPageCount(), FALSE,
                  _T("invalid page index in wxNotebookPage::InsertPage()") );
 
     /* don't receive switch page during addition */

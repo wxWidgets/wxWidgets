@@ -86,7 +86,7 @@ public:
     // adds a new page to the notebook (it will be deleted ny the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
     // the same as AddPage(), but adds it at the specified position
-    bool InsertPage( int position,
+    bool InsertPage( size_t position,
                      wxNotebookPage *win,
                      const wxString& strText,
                      bool bSelect = FALSE,
