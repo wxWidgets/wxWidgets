@@ -856,6 +856,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/fontdlg.cpp
     src/gtk/frame.cpp
     src/gtk/gauge.cpp
+    src/gtk/gnome/gprint.cpp
     src/gtk/listbox.cpp
     src/gtk/mdi.cpp
     src/gtk/menu.cpp
@@ -898,6 +899,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/fontdlg.h
     wx/gtk/frame.h
     wx/gtk/gauge.h
+    wx/gtk/gnome/gprint.h
     wx/gtk/listbox.h
     wx/gtk/mdi.h
     wx/gtk/menu.h
@@ -2654,10 +2656,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/sound_sdl.cpp
 </set>
 
-<set var="GTK_PRINT_SRC_GNOME" hints="files">
-    src/gtk/gnome/gprint.cpp
-</set>
-
 <!-- ====================================================================== -->
 <!--                    Define sources for specific libraries:              -->
 <!-- ====================================================================== -->
@@ -2898,7 +2896,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="PLUGIN_ADV_SRC">
         <if cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_PLUGINS=='0'">
             $(UNIX_SOUND_SRC_SDL)
-            $(GTK_PRINT_SRC_GNOME)
         </if>
     </set>
 
