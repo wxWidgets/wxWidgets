@@ -603,7 +603,9 @@ public:
    void Debug(void);
 #endif
    wxLayoutStyleInfo &GetStyleInfo() { return m_StyleInfo; }
-   
+
+   /// Returns dirty state
+   bool IsDirty(void) const { return m_Dirty; }
 private:
    /// Destructor is private. Use DeleteLine() to remove it.
    ~wxLayoutLine();
@@ -848,8 +850,9 @@ public:
        actually draw it.
        @param dc the wxDC to draw on
        @param bottom optional y coordinate where to stop calculating
+       @param forceAll force re-layout of all lines
    */
-   void Layout(wxDC &dc, CoordType bottom = -1);
+   void Layout(wxDC &dc, CoordType bottom = -1, bool forceAll = false);
 
    /** Calculates new sizes for everything in the list, like Layout()
        but this is needed after the list got changed.

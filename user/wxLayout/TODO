@@ -20,36 +20,14 @@ Adding many lines makes it terribly slow.
 
 Printing produces empty pages only.
 
-Formatting of first text in message in M is broken.
-Large images in last line don't get displayed properly.
-Taking last line's height as default for next is rubbish,
-use "default height" and adjust as necessary.
-
 Selections:
   - moving in negative direction doesn't work
   - selection state not properly reset, only works once
   - selecting non-text objects is strange
 
-wxllist::GetSize() requires extra Layout() call, which should not be
-necessary. Find out why this is so.
-YES, it is necessary, because the normal drawing only happens within
-the visible window.
-I must find a way to re-Layout() objects. This is only required after
-their sizes change:
-- Just mark them as dirty:
-    - mark current line as dirty when editing it (so width gets recalculated)
-    - mark all following lines as dirty when changing font settings
-    - Let Layout() work only on the dirty lines.
-  !!! GOOD: this can also be used to recalculate the wxLayoutObjectCmds'
-            fonts! :-)
-
-- cursor screen positioning ignores font sizes once again :-(
-   --> UpdateCursorScreenPos() cannot work as it ignores previous font formatting commands.
-       Either draw cursor when drawing text, or wait for new wxLayoutObjectCmd to be fully
-       implemented.
-
-RECENTLY FIXED (?)
-  - delete in empty line doesn't work
+- Changing default settings in Clear() or changing/inserting/deleting
+  a wxLayoutObject needs to update the m_StyleInfo in all lines, only
+  then can we start using that one.
   
 - update rectangle (needs support in wxllist and wxWindows)
   --> needs a bit of fixing still
@@ -57,12 +35,8 @@ RECENTLY FIXED (?)
       offset handling seems a bit dodgy, white shadow to top/left of cursor
 
   - replacement of llist in window
-  - undo
   - UNDO
   - DragNDrop
 
-- More optimisations:
-  - let each line have a pointer to the last layoutcommand and let that
-    one only store the settings that changed, then we no longer need to
-    recalculate all the lines
-  
+  - Update docs, do full rtf/html editing. 
+  - Verify html export.

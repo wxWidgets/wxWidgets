@@ -400,7 +400,6 @@ wxLayoutLine::wxLayoutLine(wxLayoutLine *prev, wxLayoutList *llist)
       m_LineNumber = m_Previous->GetLineNumber()+1;
       m_Next = m_Previous->GetNextLine();
       m_Previous->m_Next = this;
-      m_Height = m_Previous->GetHeight();
    }
    if(m_Next)
    {
@@ -491,12 +490,10 @@ wxLayoutLine::FindObjectScreen(wxDC &dc,
    
    for(i = m_ObjectList.begin(); i != NULLIT; i++)
    {
-//FIXME!      (**i).Layout(dc, NULL);
       width = (**i).GetWidth();
       if( x <= xpos && xpos <= x + width )
       {
          *cxpos = cx + (**i).GetOffsetScreen(dc, xpos-x);
-//         WXLO_DEBUG(("wxLayoutLine::FindObjectScreen: cursor xpos = %ld", *cxpos));
          if(found) *found = true;
          return i;
       }
@@ -546,6 +543,8 @@ wxLayoutLine::Insert(CoordType xpos, wxLayoutObject *obj)
 {
    wxASSERT(xpos >= 0);
    wxASSERT(obj != NULL);
+   //FIXME: this could be optimised, for now be prudent:
+   m_Dirty = true;
    CoordType offset;
    wxLOiterator i = FindObject(xpos, &offset);
    if(i == NULLIT)
@@ -600,6 +599,8 @@ bool
 wxLayoutLine::Insert(CoordType xpos, wxString text)
 {
    wxASSERT(xpos >= 0);
+   //FIXME: this could be optimised, for now be prudent:
+   m_Dirty = true;
    CoordType offset;
    wxLOiterator i = FindObject(xpos, &offset);
    if(i != NULLIT && (**i).GetType() == WXLO_TYPE_TEXT)
@@ -621,6 +622,8 @@ wxLayoutLine::Delete(CoordType xpos, CoordType npos)
 
    wxASSERT(xpos >= 0);
    wxASSERT(npos >= 0);
+   //FIXME: this could be optimised, for now be prudent:
+   m_Dirty = true;
    wxLOiterator i = FindObject(xpos, &offset);
    while(npos > 0)
    {
@@ -674,6 +677,8 @@ wxLayoutLine::DeleteWord(CoordType xpos)
 {
    wxASSERT(xpos >= 0);
    CoordType offset;
+   //FIXME: this could be optimised, for now be prudent:
+   m_Dirty = true;
 
    wxLOiterator i = FindObject(xpos, &offset);
 
@@ -804,6 +809,8 @@ wxLayoutLine::Layout(wxDC &dc,
    wxPoint size;
    bool cursorFound = false;
 
+   m_Dirty = false;
+   
    if(cursorPos)
    {
       *cursorPos = m_Position;
@@ -869,18 +876,10 @@ wxLayoutLine::Layout(wxDC &dc,
 
    if(m_Height == 0)
    {
-      if(GetPreviousLine()) // empty line
-      {
-         m_Height = GetPreviousLine()->GetHeight();
-         m_BaseLine = GetPreviousLine()->m_BaseLine;
-      }
-      else
-      {
-            CoordType width, height, descent;
-            dc.GetTextExtent(WXLO_CURSORCHAR, &width, &height, &descent);
-            m_Height = height;
-            m_BaseLine = m_Height - descent;
-      }
+      CoordType width, height, descent;
+      dc.GetTextExtent(WXLO_CURSORCHAR, &width, &height, &descent);
+      m_Height = height;
+      m_BaseLine = m_Height - descent;
    }
 
    
@@ -911,6 +910,8 @@ wxLayoutLine *
 wxLayoutLine::Break(CoordType xpos, wxLayoutList *llist)
 {
    wxASSERT(xpos >= 0);
+   //FIXME: this could be optimised, for now be prudent:
+   m_Dirty = true;
    
    if(xpos == 0)
    { // insert an empty line before this one
@@ -971,6 +972,8 @@ wxLayoutLine::MergeNextLine(wxLayoutList *llist)
    wxASSERT(GetNextLine());
    wxLayoutObjectList &list = GetNextLine()->m_ObjectList;
    wxLOiterator i;
+   //FIXME: this could be optimised, for now be prudent:
+   m_Dirty = true;
    
    for(i = list.begin(); i != list.end();)
    {
@@ -1530,23 +1533,34 @@ wxLayoutList::GetCursorScreenPos(wxDC &dc)
    return m_CursorScreenPos;
 }
 
+/*
+  Is called before each Draw(). Now, it will re-layout all lines which 
+  have changed.
+*/
 void
-wxLayoutList::Layout(wxDC &dc, CoordType bottom)
+wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll)
 {
    wxLayoutLine *line = m_FirstLine;
-
+   
    // first, make sure everything is calculated - this might not be
    // needed, optimise it later
-   ApplyStyle(&m_DefaultSetting, dc);
+   //FIXME This doesn't work yet, needs updating afterr default
+   //settings for list or a wxLayoutObjectCmd have changed:
+   //   ApplyStyle(&m_DefaultSetting, dc);
    while(line)
    {
-      line->GetStyleInfo() = m_CurrentSetting;
-      if(line == m_CursorLine)
-         line->Layout(dc, this, (wxPoint *)&m_CursorScreenPos, (wxPoint *)&m_CursorSize, m_CursorPos.x);
-      else
-         line->Layout(dc, this);
-      // little condition to speed up redrawing:
-      if(bottom != -1 && line->GetPosition().y > bottom) break;
+      if(forceAll || line->IsDirty())
+      {
+         line->GetStyleInfo() = m_CurrentSetting;
+         if(line == m_CursorLine)
+            line->Layout(dc, this, (wxPoint *)&m_CursorScreenPos,
+                         (wxPoint *)&m_CursorSize, m_CursorPos.x);
+         else
+            line->Layout(dc, this);
+         line->RecalculatePosition(this);
+         // little    condition to speed up redrawing:
+         if(bottom != -1 && line->GetPosition().y > bottom) break;
+      }
       line = line->GetNextLine();
    }
 
@@ -1569,8 +1583,9 @@ wxLayoutList::Draw(wxDC &dc,
 {
    wxLayoutLine *line = m_FirstLine;
 
+   Layout(dc); 
    ApplyStyle(&m_DefaultSetting, dc);
-   wxBrush brush(m_DefaultSetting.m_bg, wxSOLID);
+   wxBrush brush(m_CurrentSetting.m_bg, wxSOLID);
    dc.SetBrush(brush);
    
    while(line)
