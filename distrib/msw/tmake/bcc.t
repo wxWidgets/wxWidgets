@@ -102,7 +102,7 @@ PERIPH_TARGET=
 PERIPH_CLEAN_TARGET=
 
 !if "$(USE_CTL3D)" == "1"
-PERIPH_LIBS=$(BCCDIR)\lib\ctl3dv2.lib $(PERIPH_LIBS)
+PERIPH_LIBS=$(WXDIR)\lib\bcc16\ctl3dv2.lib $(PERIPH_LIBS)
 !endif
 
 !if "$(USE_XPM_IN_MSW)" == "1"
@@ -174,7 +174,7 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     foreach (@objs) {
         $text .= $_ . ": ";
         $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
-        s/obj/$suffix/;
+        s/obj$/$suffix/;
         $text .= $_ . "\n\n";
     }
 #$}
@@ -189,7 +189,7 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
         $text .= $_ . ": ";
         $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
         s/MSWDIR/COMMDIR/;
-        s/obj/$suffix/;
+        s/obj$/$suffix/;
         $text .= $_ . "\n\n";
     }
 #$}
@@ -204,7 +204,7 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     foreach (@objs) {
         $text .= $_ . ": ";
         s/MSWDIR/GENDIR/;
-        s/obj/\$(SRCSUFF)/;
+        s/obj$/\$(SRCSUFF)/;
         $text .= $_ . "\n\n";
     }
 #$}
@@ -226,19 +226,14 @@ all_execs:
 
 all_libs:
     cd $(WXDIR)\src\msw
-    make -f makefile.bcc ctl3d dib fafa gauge hytext itsy prologio rcparser wx wxgraph\
+    make -f makefile.bcc dib fafa gauge hytext itsy prologio rcparser wx wxgraph\
           wxstring wxtree mfutils # wxxpm
 
 all_contribs:
     cd $(WXDIR)\src\msw
-    make -f makefile.bcc ctl3d fafa wxstring itsy gauge # wxxpm
+    make -f makefile.bcc fafa wxstring itsy gauge # wxxpm
 
 # CONTRIB
-ctl3d:  $(CFG)
-        cd $(WXDIR)\src\msw\ctl3d\borland
-        make -f makefile.bcc -DCFG=$(CFG)
-        cd $(WXDIR)\src\msw
-
 wxxpm:	$(CFG)
 	cd $(WXDIR)\src\xpm
 	make -f makefile.bcc -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
