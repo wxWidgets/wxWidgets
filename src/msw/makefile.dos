@@ -161,6 +161,7 @@ COMMONOBJS1 = \
 		$(COMMDIR)\memory.obj \
 		$(COMMDIR)\menucmn.obj \
 		$(COMMDIR)\module.obj \
+		$(COMMDIR)\msgout.obj \
 		$(COMMDIR)\mstream.obj \
 		$(COMMDIR)\nbkbase.obj \
 		$(COMMDIR)\object.obj \
@@ -1157,6 +1158,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/module.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/msgout.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

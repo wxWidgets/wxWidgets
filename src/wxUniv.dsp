@@ -409,6 +409,10 @@ SOURCE=.\common\module.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\msgout.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\mstream.cpp
 # End Source File
 # Begin Source File
@@ -1108,6 +1112,10 @@ SOURCE=.\univ\gauge.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\univ\gtk.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\univ\inpcons.cpp
 # End Source File
 # Begin Source File
@@ -1121,6 +1129,10 @@ SOURCE=.\univ\listbox.cpp
 # Begin Source File
 
 SOURCE=.\univ\menu.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\univ\metal.cpp
 # End Source File
 # Begin Source File
 
@@ -1196,25 +1208,16 @@ SOURCE=.\univ\topluniv.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\univ\win32.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\univ\winuniv.cpp
 # End Source File
 
 # Begin Group "Theme Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\univ\themes\gtk.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\themes\metal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\themes\win32.cpp
-# End Source File
-
 # End Group
 # End Group
 # Begin Group "Headers"
@@ -1799,6 +1802,10 @@ SOURCE=..\include\wx\module.h
 # Begin Source File
 
 SOURCE=..\include\wx\msgdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msgout.h
 # End Source File
 # Begin Source File
 

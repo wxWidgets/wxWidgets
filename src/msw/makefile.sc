@@ -140,6 +140,7 @@ COMMONOBJS = \
 		$(COMMDIR)\menucmn.obj \
 		$(COMMDIR)\mimecmn.obj \
 		$(COMMDIR)\module.obj \
+		$(COMMDIR)\msgout.obj \
 		$(COMMDIR)\mstream.obj \
 		$(COMMDIR)\nbkbase.obj \
 		$(COMMDIR)\object.obj \

@@ -149,6 +149,7 @@ COMMONOBJS_BASE  = \
 		$(COMMDIR)/memory.$(OBJSUFF) \
 		$(COMMDIR)/mimecmn.$(OBJSUFF) \
 		$(COMMDIR)/module.$(OBJSUFF) \
+		$(COMMDIR)/msgout.$(OBJSUFF) \
 		$(COMMDIR)/mstream.$(OBJSUFF) \
 		$(COMMDIR)/object.$(OBJSUFF) \
 		$(COMMDIR)/process.$(OBJSUFF) \

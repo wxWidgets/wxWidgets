@@ -216,6 +216,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\menucmn.obj \
 		$(COMMDIR)\$D\mimecmn.obj \
 		$(COMMDIR)\$D\module.obj \
+		$(COMMDIR)\$D\msgout.obj \
 		$(COMMDIR)\$D\mstream.obj \
 		$(COMMDIR)\$D\nbkbase.obj \
 		$(COMMDIR)\$D\object.obj \

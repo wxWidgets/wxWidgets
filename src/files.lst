@@ -39,6 +39,7 @@ ALL_SOURCES = \
 		common/memory.cpp \
 		common/mimecmn.cpp \
 		common/module.cpp \
+		common/msgout.cpp \
 		common/mstream.cpp \
 		common/object.cpp \
 		common/process.cpp \
@@ -90,6 +91,7 @@ ALL_HEADERS = \
 		app.h \
 		arrimpl.cpp \
 		buffer.h \
+		build.h \
 		chkconf.h \
 		clntdata.h \
 		cmdline.h \
@@ -140,6 +142,7 @@ ALL_HEADERS = \
 		memtext.h \
 		mimetype.h \
 		module.h \
+		msgout.h \
 		mstream.h \
 		object.h \
 		platform.h \
@@ -157,6 +160,7 @@ ALL_HEADERS = \
 		textbuf.h \
 		textfile.h \
 		thread.h \
+		thrimpl.cpp \
 		time.h \
 		timer.h \
 		tokenzr.h \
@@ -222,6 +226,7 @@ BASE_OBJS = \
 		memory.o \
 		mimecmn.o \
 		module.o \
+		msgout.o \
 		mstream.o \
 		object.o \
 		process.o \

@@ -176,6 +176,7 @@ COMMONOBJS = \
 		$(MSWDIR)\memory.obj \
 		$(MSWDIR)\menucmn.obj \
 		$(MSWDIR)\module.obj \
+		$(MSWDIR)\msgout.obj \
 		$(MSWDIR)\mstream.obj \
 		$(MSWDIR)\nbkbase.obj \
 		$(MSWDIR)\object.obj \
@@ -658,6 +659,8 @@ $(MSWDIR)\memory.obj: $(COMMDIR)\memory.$(SRCSUFF)
 $(MSWDIR)\menucmn.obj: $(COMMDIR)\menucmn.$(SRCSUFF)
 
 $(MSWDIR)\module.obj: $(COMMDIR)\module.$(SRCSUFF)
+
+$(MSWDIR)\msgout.obj: $(COMMDIR)\msgout.$(SRCSUFF)
 
 $(MSWDIR)\mstream.obj: $(COMMDIR)\mstream.$(SRCSUFF)
 

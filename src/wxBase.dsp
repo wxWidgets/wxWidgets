@@ -393,6 +393,10 @@ SOURCE=.\common\module.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\msgout.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\mstream.cpp
 # End Source File
 # Begin Source File
@@ -862,6 +866,10 @@ SOURCE=..\include\wx\mimetype.h
 # Begin Source File
 
 SOURCE=..\include\wx\module.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msgout.h
 # End Source File
 # Begin Source File
 

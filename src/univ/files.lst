@@ -12,12 +12,12 @@ UNIV_SOURCES = \
 		univ/dialog.cpp \
 		univ/framuniv.cpp \
 		univ/gauge.cpp \
-		univ/themes/gtk.cpp \
+		univ/gtk.cpp \
 		univ/inpcons.cpp \
 		univ/inphand.cpp \
 		univ/listbox.cpp \
 		univ/menu.cpp \
-		univ/themes/metal.cpp \
+		univ/metal.cpp \
 		univ/notebook.cpp \
 		univ/radiobox.cpp \
 		univ/radiobut.cpp \
@@ -36,7 +36,7 @@ UNIV_SOURCES = \
 		univ/theme.cpp \
 		univ/toolbar.cpp \
 		univ/topluniv.cpp \
-		univ/themes/win32.cpp \
+		univ/win32.cpp \
 		univ/winuniv.cpp
 
 UNIV_HEADERS = \

@@ -178,6 +178,7 @@ COMMONOBJS = &
 	menucmn.obj &
 	mimecmn.obj &
 	module.obj &
+	msgout.obj &
 	mstream.obj &
 	nbkbase.obj &
 	object.obj &
@@ -983,6 +984,9 @@ mimecmn.obj:     $(COMMDIR)\mimecmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 module.obj:     $(COMMDIR)\module.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+msgout.obj:     $(COMMDIR)\msgout.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 mstream.obj:     $(COMMDIR)\mstream.cpp

@@ -129,6 +129,7 @@ ALL_SOURCES = \
 		common/menucmn.cpp \
 		common/mimecmn.cpp \
 		common/module.cpp \
+		common/msgout.cpp \
 		common/mstream.cpp \
 		common/nbkbase.cpp \
 		common/object.cpp \
@@ -240,6 +241,7 @@ ALL_HEADERS = \
 		bmpbuttn.h \
 		brush.h \
 		buffer.h \
+		build.h \
 		busyinfo.h \
 		button.h \
 		calctrl.h \
@@ -371,6 +373,7 @@ ALL_HEADERS = \
 		minifram.h \
 		module.h \
 		msgdlg.h \
+		msgout.h \
 		mstream.h \
 		notebook.h \
 		object.h \
@@ -431,6 +434,7 @@ ALL_HEADERS = \
 		textfile.h \
 		tglbtn.h \
 		thread.h \
+		thrimpl.cpp \
 		time.h \
 		timer.h \
 		tipdlg.h \
@@ -612,6 +616,7 @@ COMMONOBJS = \
 		menucmn.o \
 		mimecmn.o \
 		module.o \
+		msgout.o \
 		mstream.o \
 		nbkbase.o \
 		object.o \
