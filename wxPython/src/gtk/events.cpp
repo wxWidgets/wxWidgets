@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -955,7 +954,7 @@ static PyObject *_wrap_wxCommandEvent_GetString(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2277,8 +2276,7 @@ static PyObject *_wrap_wxMouseEvent_GetLogicalPosition(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMouseEvent_GetLogicalPosition. Expected _wxDC_p.");
         return NULL;
         }
@@ -3332,8 +3330,7 @@ static PyObject *_wrap_wxSetCursorEvent_SetCursor(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSetCursorEvent_SetCursor. Expected _wxCursor_p.");
         return NULL;
         }
@@ -3565,34 +3562,6 @@ static PyObject *_wrap_wxKeyEvent_ShiftDown(PyObject *self, PyObject *args, PyOb
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxKeyEvent_KeyCode(_swigobj)  (_swigobj->KeyCode())
-static PyObject *_wrap_wxKeyEvent_KeyCode(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxKeyEvent * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxKeyEvent_KeyCode",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxKeyEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_KeyCode. Expected _wxKeyEvent_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (long )wxKeyEvent_KeyCode(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -6015,7 +5984,7 @@ static PyObject * wxDropFilesEvent_GetFiles(wxDropFilesEvent *self) {
 
             for (int i=0; i<count; i++) {
 #if wxUSE_UNICODE
-                PyList_SetItem(list, i, PyUnicode_FromUnicode(files[i], files[i].Len()));
+                PyList_SetItem(list, i, PyUnicode_FromWideChar(files[i], files[i].Len()));
 #else
                 PyList_SetItem(list, i, PyString_FromString((const char*)files[i]));
 #endif
@@ -6277,7 +6246,7 @@ static PyObject *_wrap_wxUpdateUIEvent_GetText(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -7322,8 +7291,7 @@ static PyObject *_wrap_new_wxTextUrlEvent(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iOll:new_wxTextUrlEvent",_kwnames,&_arg0,&_argo1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMouseEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMouseEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxTextUrlEvent. Expected _wxMouseEvent_p.");
         return NULL;
         }
@@ -7828,7 +7796,6 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxKeyEvent_GetRawKeyCode", (PyCFunction) _wrap_wxKeyEvent_GetRawKeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_HasModifiers", (PyCFunction) _wrap_wxKeyEvent_HasModifiers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_GetKeyCode", (PyCFunction) _wrap_wxKeyEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
-	 { "wxKeyEvent_KeyCode", (PyCFunction) _wrap_wxKeyEvent_KeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_ShiftDown", (PyCFunction) _wrap_wxKeyEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_AltDown", (PyCFunction) _wrap_wxKeyEvent_AltDown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_MetaDown", (PyCFunction) _wrap_wxKeyEvent_MetaDown, METH_VARARGS | METH_KEYWORDS },

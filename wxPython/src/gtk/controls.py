@@ -200,6 +200,9 @@ class wxCheckBoxPtr(wxControlPtr):
     def GetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxCheckBox_GetValue,(self,) + _args, _kwargs)
         return val
+    def IsChecked(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckBox_IsChecked,(self,) + _args, _kwargs)
+        return val
     def SetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxCheckBox_SetValue,(self,) + _args, _kwargs)
         return val
@@ -595,9 +598,12 @@ class wxTextAttrPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,controlsc=controlsc):
-        if self.thisown == 1 :
-            controlsc.delete_wxTextAttr(self)
+    def __del__(self, delfunc=controlsc.delete_wxTextAttr):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetTextColour(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextAttr_SetTextColour,(self,) + _args, _kwargs)
         return val
@@ -947,11 +953,8 @@ class wxRadioBoxPtr(wxControlPtr):
     def GetString(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_GetString,(self,) + _args, _kwargs)
         return val
-    def GetItemLabel(self, *_args, **_kwargs):
-        val = apply(controlsc.wxRadioBox_GetItemLabel,(self,) + _args, _kwargs)
-        return val
-    def SetItemLabel(self, *_args, **_kwargs):
-        val = apply(controlsc.wxRadioBox_SetItemLabel,(self,) + _args, _kwargs)
+    def SetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_SetString,(self,) + _args, _kwargs)
         return val
     def GetSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_GetSelection,(self,) + _args, _kwargs)
@@ -976,6 +979,10 @@ class wxRadioBoxPtr(wxControlPtr):
         return val
     def __repr__(self):
         return "<C wxRadioBox instance at %s>" % (self.this,)
+    
+    GetItemLabel = GetString
+    SetItemLabel = SetString
+    
     Number = GetCount
 class wxRadioBox(wxRadioBoxPtr):
     def __init__(self,*_args,**_kwargs):

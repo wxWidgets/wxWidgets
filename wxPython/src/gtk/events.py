@@ -10,9 +10,12 @@ class wxEventPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,eventsc=eventsc):
-        if self.thisown == 1 :
-            eventsc.delete_wxEvent(self)
+    def __del__(self, delfunc=eventsc.delete_wxEvent):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetEventObject(self, *_args, **_kwargs):
         val = apply(eventsc.wxEvent_GetEventObject,(self,) + _args, _kwargs)
         return val
@@ -452,9 +455,6 @@ class wxKeyEventPtr(wxEventPtr):
     def ShiftDown(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_ShiftDown,(self,) + _args, _kwargs)
         return val
-    def KeyCode(self, *_args, **_kwargs):
-        val = apply(eventsc.wxKeyEvent_KeyCode,(self,) + _args, _kwargs)
-        return val
     def GetKeyCode(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_GetKeyCode,(self,) + _args, _kwargs)
         return val
@@ -536,6 +536,7 @@ class wxKeyEventPtr(wxEventPtr):
         raise AttributeError,name
     def __repr__(self):
         return "<C wxKeyEvent instance at %s>" % (self.this,)
+    KeyCode = GetKeyCode
 class wxKeyEvent(wxKeyEventPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(eventsc.new_wxKeyEvent,_args,_kwargs)
@@ -1095,9 +1096,12 @@ class wxPyEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,eventsc=eventsc):
-        if self.thisown == 1 :
-            eventsc.delete_wxPyEvent(self)
+    def __del__(self, delfunc=eventsc.delete_wxPyEvent):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetSelf(self, *_args, **_kwargs):
         val = apply(eventsc.wxPyEvent_SetSelf,(self,) + _args, _kwargs)
         return val
@@ -1119,9 +1123,12 @@ class wxPyCommandEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,eventsc=eventsc):
-        if self.thisown == 1 :
-            eventsc.delete_wxPyCommandEvent(self)
+    def __del__(self, delfunc=eventsc.delete_wxPyCommandEvent):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetSelf(self, *_args, **_kwargs):
         val = apply(eventsc.wxPyCommandEvent_SetSelf,(self,) + _args, _kwargs)
         return val
