@@ -576,16 +576,31 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     wxCoord x2 = x + width;
     wxCoord y2 = y + height;
 
-    // Windows draws the filled rectangles without outline (i.e. drawn with a
-    // transparent pen) one pixel smaller in both directions and we want them
-    // to have the same size regardless of which pen is used - adjust
-    if ( m_pen.GetStyle() == wxTRANSPARENT )
+    if ((m_logicalFunction == wxCOPY) && (m_pen.GetStyle() == wxTRANSPARENT))
     {
-        x2++;
-        y2++;
+	    RECT rect;
+        rect.left = XLOG2DEV(x);
+        rect.top = YLOG2DEV(y);
+        rect.right = XLOG2DEV(x2);
+	    rect.bottom = YLOG2DEV(y2);
+	    (void)FillRect(GetHdc(), &rect, m_brush.GetResourceHandle() );
+    }
+    else
+    {
+        // Windows draws the filled rectangles without outline (i.e. drawn with a
+        // transparent pen) one pixel smaller in both directions and we want them
+	    // to have the same size regardless of which pen is used - adjust
+
+        // I wonder if this shouldn´t be done after the LOG2DEV() conversions. RR.
+        if ( m_pen.GetStyle() == wxTRANSPARENT )
+        {
+            x2++;
+            y2++;
+        }
+
+	    (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
     }
 
-    (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
