@@ -26,8 +26,8 @@
 typedef long wxDataType;
 
 // fwd decl
-class  wxImageList;
-struct wxTreeViewItem;
+class  WXDLLEXPORT wxImageList;
+struct WXDLLEXPORT wxTreeViewItem;
 
 // a callback function used for sorting tree items, it should return -1 if the
 // first item precedes the second, +1 if the second precedes the first or 0 if
@@ -106,15 +106,13 @@ public:
     // to "long" which used to be the type for tree item ids in previous
     // versions of wxWindows
 
-#ifdef wxHTREEITEM_DEFINED
     // for wxTreeCtrl usage only
-    wxTreeItemId(HTREEITEM itemId) { m_itemId = (long)itemId; }
-    operator HTREEITEM() const { return (HTREEITEM)m_itemId; }
-#else  // !wxHTREEITEM_DEFINED
-    // deprecated: only for compatibility
-    wxTreeItemId(long itemId) { m_itemId = itemId; }
-    operator long() const { return m_itemId; }
-#endif // wxHTREEITEM_DEFINED
+    wxTreeItemId(WXHTREEITEM itemId) { m_itemId = (long)itemId; }
+    operator WXHTREEITEM() const { return (WXHTREEITEM)m_itemId; }
+
+    void operator =(WXHTREEITEM item) { m_itemId = (long) item; }
+
+//    wxTreeItemId(long itemId) { m_itemId = itemId; }
 
 protected:
     long m_itemId;
@@ -276,9 +274,9 @@ public:
         // the same!
 
         // get the first child of this item
-    wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& cookie) const;
+    wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& _cookie) const;
         // get the next child
-    wxTreeItemId GetNextChild(const wxTreeItemId& item, long& cookie) const;
+    wxTreeItemId GetNextChild(const wxTreeItemId& item, long& _cookie) const;
 
         // get the next sibling of this item
     wxTreeItemId GetNextSibling(const wxTreeItemId& item) const;

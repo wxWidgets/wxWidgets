@@ -258,7 +258,10 @@ $(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
 # problems with lex_yy.c. See also note about LEX_SCANNER
 # above.
 $(COMMDIR)/lex_yy.c:	$(COMMDIR)/lexer.l
-	$(LEX) -o$(COMMDIR)/lex_yy.c $(COMMDIR)/lexer.l
+	$(LEX) $(COMMDIR)/lexer.l > $(COMMDIR)/lex_yy.c
+
+# The following may be required for some versions of LEX/FLEX
+#	$(LEX) -o$(COMMDIR)/lex_yy.c $(COMMDIR)/lexer.l
 
 #	sed -e "s/BUFSIZ/5000/g" < lex.yy.c | \
 #	sed -e "s/yyoutput(c)/void yyoutput(c)/g" | \

@@ -42,7 +42,18 @@
     #include <commctrl.h>
 #endif
 
-#define  wxHTREEITEM_DEFINED    // flag used in wx/msw/treectrl.h
+#ifdef GetFirstChild
+#undef GetFirstChild
+#endif
+
+#ifdef GetNextChild
+#undef GetNextChild
+#endif
+
+#ifdef GetNextSibling
+#undef GetNextSibling
+#endif
+
 #include "wx/treectrl.h"
 
 // Bug in headers, sometimes
@@ -62,7 +73,7 @@ struct wxTreeViewItem : public TV_ITEM
     {
         mask = mask_;
         stateMask = stateMask_;
-        hItem = (HTREEITEM)item;
+        hItem = (HTREEITEM) (WXHTREEITEM) item;
     }
 };
 
@@ -75,7 +86,7 @@ struct wxTreeViewItem : public TV_ITEM
 #endif
 
 // hide the ugly cast (of course, the macro is _quite_ ugly too...)
-#define hwnd    ((HWND)m_hWnd)
+#define wxhWnd    ((HWND)m_hWnd)
 
 // ----------------------------------------------------------------------------
 // variables
@@ -182,7 +193,7 @@ wxTreeCtrl::~wxTreeCtrl()
 
 bool wxTreeCtrl::DoGetItem(wxTreeViewItem* tvItem) const
 {
-    if ( !TreeView_GetItem(hwnd, tvItem) )
+    if ( !TreeView_GetItem(wxhWnd, tvItem) )
     {
         wxLogLastError("TreeView_GetItem");
 
@@ -194,7 +205,7 @@ bool wxTreeCtrl::DoGetItem(wxTreeViewItem* tvItem) const
 
 void wxTreeCtrl::DoSetItem(wxTreeViewItem* tvItem)
 {
-    if ( TreeView_SetItem(hwnd, tvItem) == -1 )
+    if ( TreeView_SetItem(wxhWnd, tvItem) == -1 )
     {
         wxLogLastError("TreeView_SetItem");
     }
@@ -202,17 +213,17 @@ void wxTreeCtrl::DoSetItem(wxTreeViewItem* tvItem)
 
 size_t wxTreeCtrl::GetCount() const
 {
-    return (size_t)TreeView_GetCount(hwnd);
+    return (size_t)TreeView_GetCount(wxhWnd);
 }
 
 unsigned int wxTreeCtrl::GetIndent() const
 {
-    return TreeView_GetIndent(hwnd);
+    return TreeView_GetIndent(wxhWnd);
 }
 
 void wxTreeCtrl::SetIndent(unsigned int indent)
 {
-    TreeView_SetIndent(hwnd, indent);
+    TreeView_SetIndent(wxhWnd, indent);
 }
 
 wxImageList *wxTreeCtrl::GetImageList() const
@@ -228,7 +239,7 @@ wxImageList *wxTreeCtrl::GetStateImageList() const
 void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
 {
     // no error return
-    TreeView_SetImageList(hwnd,
+    TreeView_SetImageList(wxhWnd,
                           imageList ? imageList->GetHIMAGELIST() : 0,
                           which);
 }
@@ -332,7 +343,10 @@ void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
 bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
     RECT rect;
-    return TreeView_GetItemRect(hwnd, (HTREEITEM)item, &rect, FALSE) != 0;
+//    return (TreeView_GetItemRect(wxhWnd, (HTREEITEM) (WXHTREEITEM)item, &rect, FALSE) != 0);
+    // Bug in Gnu-Win32 headers, so don't use the macro.
+    return (SendMessage((wxhWnd), TVM_GETITEMRECT, (WPARAM) FALSE, (LPARAM) & rect) != 0);
+
 }
 
 bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
@@ -368,48 +382,48 @@ bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
 
 wxTreeItemId wxTreeCtrl::GetRootItem() const
 {
-    return wxTreeItemId(TreeView_GetRoot(hwnd));
+    return wxTreeItemId(TreeView_GetRoot(wxhWnd));
 }
 
 wxTreeItemId wxTreeCtrl::GetSelection() const
 {
-    return wxTreeItemId(TreeView_GetSelection(hwnd));
+    return wxTreeItemId(TreeView_GetSelection(wxhWnd));
 }
 
 wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
 {
-    return wxTreeItemId(TreeView_GetParent(hwnd, item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetParent(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
-                                       long& cookie) const
+                                       long& _cookie) const
 {
     // remember the last child returned in 'cookie'
-    cookie = (long)TreeView_GetChild(hwnd, (HTREEITEM)item);
+    _cookie = (long)TreeView_GetChild(wxhWnd, (HTREEITEM) (WXHTREEITEM)item);
 
-    return wxTreeItemId((HTREEITEM)cookie);
+    return wxTreeItemId((WXHTREEITEM)_cookie);
 }
 
 wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
-                                      long& cookie) const
+                                      long& _cookie) const
 {
-    return wxTreeItemId(TreeView_GetNextSibling(hwnd,
-                                                    (HTREEITEM)cookie));
+    return wxTreeItemId(TreeView_GetNextSibling(wxhWnd,
+                                                    (HTREEITEM) (WXHTREEITEM)_cookie));
 }
 
 wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
 {
-    return wxTreeItemId(TreeView_GetNextSibling(hwnd, item));
+    return wxTreeItemId(TreeView_GetNextSibling(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
 {
-    return wxTreeItemId(TreeView_GetPrevSibling(hwnd, item));
+    return wxTreeItemId(TreeView_GetPrevSibling(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 {
-    return wxTreeItemId(TreeView_GetFirstVisible(hwnd));
+    return wxTreeItemId(TreeView_GetFirstVisible(wxhWnd));
 }
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
@@ -417,7 +431,7 @@ wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
     wxASSERT_MSG( IsVisible(item), "The item you call GetNextVisible() "
                                    "for must be visible itself!");
 
-    return wxTreeItemId(TreeView_GetNextVisible(hwnd, item));
+    return wxTreeItemId(TreeView_GetNextVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
@@ -425,7 +439,7 @@ wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
     wxASSERT_MSG( IsVisible(item), "The item you call GetPrevVisible() "
                                    "for must be visible itself!");
 
-    return wxTreeItemId(TreeView_GetPrevVisible(hwnd, item));
+    return wxTreeItemId(TreeView_GetPrevVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 // ----------------------------------------------------------------------------
@@ -439,8 +453,8 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
                                       wxTreeItemData *data)
 {
     TV_INSERTSTRUCT tvIns;
-    tvIns.hParent = (HTREEITEM)parent;
-    tvIns.hInsertAfter = hInsertAfter;
+    tvIns.hParent = (HTREEITEM) (WXHTREEITEM)parent;
+    tvIns.hInsertAfter = (HTREEITEM) (WXHTREEITEM) hInsertAfter;
     UINT mask = 0;
     if ( !text.IsEmpty() )
     {
@@ -468,13 +482,13 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     tvIns.item.mask = mask;
 
-    HTREEITEM id = TreeView_InsertItem(hwnd, &tvIns);
+    HTREEITEM id = (HTREEITEM) TreeView_InsertItem(wxhWnd, &tvIns);
     if ( id == 0 )
     {
         wxLogLastError("TreeView_InsertItem");
     }
 
-    return wxTreeItemId(id);
+    return wxTreeItemId((WXHTREEITEM)id);
 }
 
 // for compatibility only
@@ -483,7 +497,7 @@ wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
                                     int image, int selImage,
                                     long insertAfter)
 {
-    return DoInsertItem(parent, (HTREEITEM)insertAfter, text,
+    return DoInsertItem(parent, (WXHTREEITEM)insertAfter, text,
                         image, selImage, NULL);
 }
 
@@ -491,7 +505,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                                  int image, int selectedImage,
                                  wxTreeItemData *data)
 {
-    return DoInsertItem(wxTreeItemId(0), 0,
+    return DoInsertItem(wxTreeItemId((WXHTREEITEM) 0), (WXHTREEITEM) 0,
                         text, image, selectedImage, data);
 }
 
@@ -500,7 +514,7 @@ wxTreeItemId wxTreeCtrl::PrependItem(const wxTreeItemId& parent,
                                      int image, int selectedImage,
                                      wxTreeItemData *data)
 {
-    return DoInsertItem(parent, TVI_FIRST,
+    return DoInsertItem(parent, (WXHTREEITEM) TVI_FIRST,
                         text, image, selectedImage, data);
 }
 
@@ -518,7 +532,7 @@ wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parent,
                                     int image, int selectedImage,
                                     wxTreeItemData *data)
 {
-    return DoInsertItem(parent, TVI_LAST,
+    return DoInsertItem(parent, (WXHTREEITEM) TVI_LAST,
                         text, image, selectedImage, data);
 }
 
@@ -527,7 +541,7 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
     wxTreeItemData *data = GetItemData(item);
     delete data;    // may be NULL, ok
 
-    if ( !TreeView_DeleteItem(hwnd, (HTREEITEM)item) )
+    if ( !TreeView_DeleteItem(wxhWnd, (HTREEITEM)(WXHTREEITEM)item) )
     {
         wxLogLastError("TreeView_DeleteItem");
     }
@@ -535,7 +549,7 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
 
 void wxTreeCtrl::DeleteAllItems()
 {
-    if ( !TreeView_DeleteAllItems(hwnd) )
+    if ( !TreeView_DeleteAllItems(wxhWnd) )
     {
         wxLogLastError("TreeView_DeleteAllItems");
     }
@@ -549,7 +563,7 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
 
     // TreeView_Expand doesn't send TVN_ITEMEXPAND(ING) messages, so we must
     // emulate them
-    if ( TreeView_Expand(hwnd, item, flag) != 0 )
+    if ( TreeView_Expand(wxhWnd, (HTREEITEM) (WXHTREEITEM) item, flag) != 0 )
     {
         wxTreeEvent event(wxEVT_NULL, m_windowId);
         event.m_item = item;
@@ -594,12 +608,12 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 
 void wxTreeCtrl::Unselect()
 {
-    SelectItem(wxTreeItemId(0));
+    SelectItem(wxTreeItemId((WXHTREEITEM) 0));
 }
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item)
 {
-    if ( !TreeView_SelectItem(hwnd, item) )
+    if ( !TreeView_SelectItem(wxhWnd, (HTREEITEM) (WXHTREEITEM) item) )
     {
         wxLogLastError("TreeView_SelectItem");
     }
@@ -608,12 +622,12 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item)
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
     // no error return
-    TreeView_EnsureVisible(hwnd, item);
+    TreeView_EnsureVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item);
 }
 
 void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
 {
-    if ( !TreeView_SelectSetFirstVisible(hwnd, item) )
+    if ( !TreeView_SelectSetFirstVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item) )
     {
         wxLogLastError("TreeView_SelectSetFirstVisible");
     }
@@ -640,7 +654,7 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 {
     wxASSERT( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)) );
 
-    HWND hWnd = TreeView_EditLabel(hwnd, item);
+    HWND hWnd = (HWND) TreeView_EditLabel(wxhWnd, (HTREEITEM) (WXHTREEITEM) item);
 
     wxCHECK_MSG( hWnd, NULL, "Can't edit tree ctrl label" );
 
@@ -656,7 +670,7 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 // End label editing, optionally cancelling the edit
 void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges)
 {
-    TreeView_EndEditLabelNow(hwnd, discardChanges);
+    TreeView_EndEditLabelNow(wxhWnd, discardChanges);
 
     DeleteTextCtrl();
 }
@@ -667,7 +681,7 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
     hitTestInfo.pt.x = (int)point.x;
     hitTestInfo.pt.y = (int)point.y;
 
-    TreeView_HitTest(hwnd, &hitTestInfo);
+    TreeView_HitTest(wxhWnd, &hitTestInfo);
 
     flags = 0;
 
@@ -689,7 +703,7 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
 
     #undef TRANSLATE_FLAG
 
-    return wxTreeItemId(hitTestInfo.hItem);
+    return wxTreeItemId((WXHTREEITEM) hitTestInfo.hItem);
 }
 
 void wxTreeCtrl::SortChildren(const wxTreeItemId& item,
@@ -697,7 +711,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item,
 {
     if ( cmpFunction == NULL )
     {
-        TreeView_SortChildren(hwnd, item, 0);
+        TreeView_SortChildren(wxhWnd, (HTREEITEM) (WXHTREEITEM) item, 0);
     }
     else
     {
@@ -755,7 +769,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 
                 NM_TREEVIEW *tv = (NM_TREEVIEW *)lParam;
 
-                event.m_item = tv->itemNew.hItem;
+                event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
                 event.m_pointDrag = wxPoint(tv->ptDrag.x, tv->ptDrag.y);
                 break;
             }
@@ -765,7 +779,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
                 eventType = wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT;
                 TV_DISPINFO *info = (TV_DISPINFO *)lParam;
 
-                event.m_item = info->item.hItem;
+                event.m_item = (WXHTREEITEM) info->item.hItem;
                 break;
             }
 
@@ -774,7 +788,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
                 eventType = wxEVT_COMMAND_TREE_DELETE_ITEM;
                 NM_TREEVIEW *tv = (NM_TREEVIEW *)lParam;
 
-                event.m_item = tv->itemOld.hItem;
+                event.m_item = (WXHTREEITEM) tv->itemOld.hItem;
                 break;
             }
 
@@ -783,7 +797,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
                 eventType = wxEVT_COMMAND_TREE_END_LABEL_EDIT;
                 TV_DISPINFO *info = (TV_DISPINFO *)lParam;
 
-                event.m_item = info->item.hItem;
+                event.m_item = (WXHTREEITEM) info->item.hItem;
                 break;
             }
 
@@ -799,7 +813,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 
                 TV_DISPINFO *info = (TV_DISPINFO *)lParam;
 
-                event.m_item = info->item.hItem;
+                event.m_item = (WXHTREEITEM) info->item.hItem;
                 break;
             }
 
@@ -827,10 +841,10 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
                                    "message", tv->action);
                 }
 
-                bool ing = hdr->code == TVN_ITEMEXPANDING;
+                bool ing = (hdr->code == TVN_ITEMEXPANDING);
                 eventType = g_events[expand][ing];
 
-                event.m_item = tv->itemNew.hItem;
+                event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
                 break;
             }
 
@@ -855,8 +869,8 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 
                 NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
 
-                event.m_item = tv->itemNew.hItem;
-                event.m_itemOld = tv->itemOld.hItem;
+                event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
+                event.m_itemOld = (WXHTREEITEM) tv->itemOld.hItem;
                 break;
             }
 

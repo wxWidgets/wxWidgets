@@ -124,7 +124,7 @@ void wxTimer::Stop(void)
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
-static void wxProcessTimer(wxTimer& timer)
+void wxProcessTimer(wxTimer& timer)
 {
     // Avoid to process spurious timer events
     if ( timer.id == 0)
