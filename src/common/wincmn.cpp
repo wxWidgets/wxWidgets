@@ -9,6 +9,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/defs.h"
+#include "wx/window.h"
+
 // Do Update UI processing for child controls
 
 // TODO: should this be implemented for the child window rather

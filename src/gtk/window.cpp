@@ -2433,5 +2433,3 @@ void wxWindow::OnIdle(wxIdleEvent& event)
 {
   UpdateWindowUI();
 }
-
-#include "../common/wincmn.cpp"

@@ -372,5 +372,3 @@ void wxFrame::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW)
   //     no idea about what incW might be
   gtk_widget_set_usize(m_widget, minW, minH);
 }
-
-#include "../common/framecmn.cpp"
