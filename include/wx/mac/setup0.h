@@ -193,6 +193,9 @@
 // code will lead to undefined behaviour -- but the code itself will be
 // slightly smaller and faster.
 //
+// Note that like wxUSE_THREADS this option is automatically set to 0 if
+// wxNO_EXCEPTIONS is defined.
+//
 // Default is 1
 //
 // Recommended setting: depends on whether you intend to use C++ exceptions
@@ -246,7 +249,12 @@
 // library without it if you have no use for it - this will result in a
 // somewhat smaller and faster operation.
 //
-// This is ignored under Win16, threads are only supported under Win32.
+// Notice that if wxNO_THREADS is defined, wxUSE_THREADS is automatically reset
+// to 0 in wx/chkconf.h, so, for example, if you set USE_THREADS to 0 in
+// build/msw/config.* file this value will have no effectNotice that if
+// wxNO_THREADS is defined, wxUSE_THREADS is automatically reset to 0 in
+// wx/chkconf.h, so, for example, if you set USE_THREADS to 0 in
+// build/msw/config.* file this value will have no effect.
 //
 // Default is 1
 //

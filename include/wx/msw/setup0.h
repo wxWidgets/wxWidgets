@@ -117,16 +117,21 @@
 // This setting is for Win32 only and can only be enabled if your compiler
 // supports Win32 structured exception handling (currently only VC++ does)
 //
-// Default is 1 if supported by the compiler (VC++ and recent BC++ only).
+// Default is 1
 //
 // Recommended setting: 1 if your compiler supports it.
-#define wxUSE_ON_FATAL_EXCEPTION 1
+#if defined(_MSC_VER) || \
+    (defined(__BORLANDC__) && __BORLANDC__ >= 0x0550)
+    #define wxUSE_ON_FATAL_EXCEPTION 1
+#else
+    #define wxUSE_ON_FATAL_EXCEPTION 0
+#endif
 
 // Set this to 1 to be able to generate a human-readable (unlike
 // machine-readable minidumop created by wxCrashReport::Generate()) stack back
 // trace when your program crashes using wxStackWalker
 //
-// Default is 1 if supported by the compiler (VC++ and recent BC++ only).
+// Default is 1 if supported by the compiler.
 //
 // Recommended setting: 1, set to 0 if your programs never crash
 #define wxUSE_STACKWALKER 1
@@ -187,6 +192,9 @@
 // code will lead to undefined behaviour -- but the code itself will be
 // slightly smaller and faster.
 //
+// Note that like wxUSE_THREADS this option is automatically set to 0 if
+// wxNO_EXCEPTIONS is defined.
+//
 // Default is 1
 //
 // Recommended setting: depends on whether you intend to use C++ exceptions
@@ -240,7 +248,12 @@
 // library without it if you have no use for it - this will result in a
 // somewhat smaller and faster operation.
 //
-// This is ignored under Win16, threads are only supported under Win32.
+// Notice that if wxNO_THREADS is defined, wxUSE_THREADS is automatically reset
+// to 0 in wx/chkconf.h, so, for example, if you set USE_THREADS to 0 in
+// build/msw/config.* file this value will have no effectNotice that if
+// wxNO_THREADS is defined, wxUSE_THREADS is automatically reset to 0 in
+// wx/chkconf.h, so, for example, if you set USE_THREADS to 0 in
+// build/msw/config.* file this value will have no effect.
 //
 // Default is 1
 //
@@ -572,11 +585,7 @@
 // Default is 1 for the platforms where native status bar is supported.
 //
 // Recommended setting: 1 (there is no advantage in using the generic one)
-#if defined(__WXMSW__) || defined(__WXMAC__)
 #define wxUSE_NATIVE_STATUSBAR        1
-#else
-#define wxUSE_NATIVE_STATUSBAR        0
-#endif
 
 // wxToolBar related settings: if wxUSE_TOOLBAR is 0, don't compile any toolbar
 // classes at all. Otherwise, use the native toolbar class unless
