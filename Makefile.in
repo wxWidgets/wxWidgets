@@ -197,6 +197,7 @@ ALL_BASE_HEADERS =  \
 	wx/url.h \
 	$(NET_PLATFORM_HDR) \
 	wx/xml/xml.h \
+	wx/xtixml.h \
 	wx/db.h \
 	wx/dbkeyg.h \
 	wx/dbtable.h
@@ -305,6 +306,7 @@ ALL_BASE_SOURCES =  \
 	src/msw/gsocket.c \
 	src/mac/gsocket.c \
 	src/xml/xml.cpp \
+	src/common/xtixml.cpp \
 	src/common/db.cpp \
 	src/common/dbtable.cpp
 ALL_HEADERS =  \
@@ -647,7 +649,8 @@ MONODLL_OBJECTS =  \
 	monodll_url.o \
 	$(__NET_PLATFORM_SRC_OBJECTS) \
 	$(__MONOLIB_GUI_SRC_OBJECTS) \
-	monodll_xml.o
+	monodll_xml.o \
+	monodll_xtixml.o
 MONOLIB_CFLAGS = $(__monolib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
@@ -728,7 +731,8 @@ MONOLIB_OBJECTS =  \
 	monolib_url.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_1) \
 	$(__MONOLIB_GUI_SRC_OBJECTS_1) \
-	monolib_xml.o
+	monolib_xml.o \
+	monolib_xtixml.o
 NETDLL_CFLAGS = $(__netdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
@@ -939,13 +943,15 @@ XMLDLL_CXXFLAGS = $(__xmldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DWXUSINGDLL \
 	-DWXMAKINGDLL_XML $(CXXFLAGS) $(PIC_FLAG)
 XMLDLL_OBJECTS =  \
-	xmldll_xml.o
+	xmldll_xml.o \
+	xmldll_xtixml.o
 XMLLIB_CXXFLAGS = $(__xmllib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 $(CXXFLAGS)
 XMLLIB_OBJECTS =  \
-	xmllib_xml.o
+	xmllib_xml.o \
+	xmllib_xtixml.o
 
 ### Conditionally set variables: ###
 
@@ -13940,6 +13946,9 @@ monodll_xti.o: $(srcdir)/src/common/xti.cpp
 monodll_xtistrm.o: $(srcdir)/src/common/xtistrm.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+monodll_xtixml.o: $(srcdir)/src/common/xtixml.cpp
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -16477,6 +16486,9 @@ monolib_xti.o: $(srcdir)/src/common/xti.cpp
 monolib_xtistrm.o: $(srcdir)/src/common/xtistrm.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+monolib_xtixml.o: $(srcdir)/src/common/xtixml.cpp
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 monolib_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -17058,12 +17070,18 @@ wxzlib_zutil.o: $(srcdir)/src/zlib/zutil.c
 xmldll_xml.o: $(srcdir)/src/xml/xml.cpp
 	$(CXXC) -c -o $@ $(XMLDLL_CXXFLAGS) $<
 
+xmldll_xtixml.o: $(srcdir)/src/common/xtixml.cpp
+	$(CXXC) -c -o $@ $(XMLDLL_CXXFLAGS) $<
+
 @COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).a: $(__xmllib_PCH_DEP)  $(XMLLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@ $(XMLLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
 
 xmllib_xml.o: $(srcdir)/src/xml/xml.cpp
+	$(CXXC) -c -o $@ $(XMLLIB_CXXFLAGS) $<
+
+xmllib_xtixml.o: $(srcdir)/src/common/xtixml.cpp
 	$(CXXC) -c -o $@ $(XMLLIB_CXXFLAGS) $<
 
 

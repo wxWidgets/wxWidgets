@@ -2457,7 +2457,8 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_url.obj &
 	$(OBJS)\monodll_gsocket.obj &
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) &
-	$(OBJS)\monodll_xml.obj
+	$(OBJS)\monodll_xml.obj &
+	$(OBJS)\monodll_xtixml.obj
 MONOLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -i=..\..\src\tiff &
@@ -2553,7 +2554,8 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_url.obj &
 	$(OBJS)\monolib_gsocket.obj &
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) &
-	$(OBJS)\monolib_xml.obj
+	$(OBJS)\monolib_xml.obj &
+	$(OBJS)\monolib_xtixml.obj
 NETDLL_CFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -i=..\..\src\tiff &
@@ -2771,7 +2773,8 @@ XMLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(CXXFLAGS) /fh=$(OBJS)\wxprec_xmldll.pch
 XMLDLL_OBJECTS =  &
 	$(OBJS)\xmldll_dummy.obj &
-	$(OBJS)\xmldll_xml.obj
+	$(OBJS)\xmldll_xml.obj &
+	$(OBJS)\xmldll_xtixml.obj
 XMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -i=..\..\src\tiff &
@@ -2780,7 +2783,8 @@ XMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	/fh=$(OBJS)\wxprec_xmllib.pch
 XMLLIB_OBJECTS =  &
 	$(OBJS)\xmllib_dummy.obj &
-	$(OBJS)\xmllib_xml.obj
+	$(OBJS)\xmllib_xml.obj &
+	$(OBJS)\xmllib_xtixml.obj
 
 
 all : $(OBJS)
@@ -7471,6 +7475,9 @@ $(OBJS)\monodll_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
 $(OBJS)\monodll_xtistrm.obj :  .AUTODEPEND ..\..\src\common\xtistrm.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_zipstrm.obj :  .AUTODEPEND ..\..\src\common\zipstrm.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -9035,6 +9042,9 @@ $(OBJS)\monolib_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
 $(OBJS)\monolib_xtistrm.obj :  .AUTODEPEND ..\..\src\common\xtistrm.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_zipstrm.obj :  .AUTODEPEND ..\..\src\common\zipstrm.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -9488,10 +9498,16 @@ $(OBJS)\xmldll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 $(OBJS)\xmldll_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
 	$(CXX) -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
 
+$(OBJS)\xmldll_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
+	$(CXX) -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
+
 $(OBJS)\xmllib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(XMLLIB_CXXFLAGS) $<
 
 $(OBJS)\xmllib_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
+	$(CXX) -zq -fo=$^@ $(XMLLIB_CXXFLAGS) $<
+
+$(OBJS)\xmllib_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
 	$(CXX) -zq -fo=$^@ $(XMLLIB_CXXFLAGS) $<
 
 !ifeq MONOLITHIC 0

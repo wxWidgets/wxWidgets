@@ -2065,9 +2065,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="XML_SRC" hints="files">
     src/xml/xml.cpp
+    src/common/xtixml.cpp <!-- FIXME - temporary solution -->
 </set>
 <set var="XML_HDR" hints="files">
     wx/xml/xml.h
+    wx/xtixml.h <!-- FIXME - temporary solution -->
 </set>
 
 

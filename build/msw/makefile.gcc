@@ -456,7 +456,8 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_url.o \
 	$(OBJS)\monodll_gsocket.o \
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) \
-	$(OBJS)\monodll_xml.o
+	$(OBJS)\monodll_xml.o \
+	$(OBJS)\monodll_xtixml.o
 MONOLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
@@ -551,7 +552,8 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_url.o \
 	$(OBJS)\monolib_gsocket.o \
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) \
-	$(OBJS)\monolib_xml.o
+	$(OBJS)\monolib_xml.o \
+	$(OBJS)\monolib_xtixml.o
 NETDLL_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
@@ -766,7 +768,8 @@ XMLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	$(CXXFLAGS)
 XMLDLL_OBJECTS =  \
 	$(OBJS)\xmldll_dummy.o \
-	$(OBJS)\xmldll_xml.o
+	$(OBJS)\xmldll_xml.o \
+	$(OBJS)\xmldll_xtixml.o
 XMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
@@ -774,7 +777,8 @@ XMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 $(CXXFLAGS)
 XMLLIB_OBJECTS =  \
 	$(OBJS)\xmllib_dummy.o \
-	$(OBJS)\xmllib_xml.o
+	$(OBJS)\xmllib_xml.o \
+	$(OBJS)\xmllib_xtixml.o
 
 ### Conditionally set variables: ###
 
@@ -7378,6 +7382,9 @@ $(OBJS)\monodll_xti.o: ../../src/common/xti.cpp
 $(OBJS)\monodll_xtistrm.o: ../../src/common/xtistrm.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xtixml.o: ../../src/common/xtixml.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_zipstrm.o: ../../src/common/zipstrm.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -8942,6 +8949,9 @@ $(OBJS)\monolib_xti.o: ../../src/common/xti.cpp
 $(OBJS)\monolib_xtistrm.o: ../../src/common/xtistrm.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_xtixml.o: ../../src/common/xtixml.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_zipstrm.o: ../../src/common/zipstrm.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -9395,10 +9405,16 @@ $(OBJS)\xmldll_dummy.o: ../../src/msw/dummy.cpp
 $(OBJS)\xmldll_xml.o: ../../src/xml/xml.cpp
 	$(CXX) -c -o $@ $(XMLDLL_CXXFLAGS) $<
 
+$(OBJS)\xmldll_xtixml.o: ../../src/common/xtixml.cpp
+	$(CXX) -c -o $@ $(XMLDLL_CXXFLAGS) $<
+
 $(OBJS)\xmllib_dummy.o: ../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(XMLLIB_CXXFLAGS) $<
 
 $(OBJS)\xmllib_xml.o: ../../src/xml/xml.cpp
+	$(CXX) -c -o $@ $(XMLLIB_CXXFLAGS) $<
+
+$(OBJS)\xmllib_xtixml.o: ../../src/common/xtixml.cpp
 	$(CXX) -c -o $@ $(XMLLIB_CXXFLAGS) $<
 
 ifeq ($(MONOLITHIC),0)

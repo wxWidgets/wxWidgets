@@ -19,7 +19,7 @@ ADVDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_123) /DWIN32 \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DWXUSINGDLL /DWXMAKINGDLL_ADV $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/DWXUSINGDLL /DWXMAKINGDLL_ADV $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_advdll.pch"
 ADVDLL_OBJECTS =  \
 	$(OBJS)\advdll_dummy.obj \
@@ -45,7 +45,7 @@ ADVLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_132) /DWIN32 \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_advlib.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_advlib.pch"
 ADVLIB_OBJECTS =  \
 	$(OBJS)\advlib_dummy.obj \
 	$(OBJS)\advlib_calctrl.obj \
@@ -78,7 +78,8 @@ BASEDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_69) /DWIN32 \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\tiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
 	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_GUI=0 /DWXMAKINGDLL_BASE \
-	/DwxUSE_BASE=1 $(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_basedll.pch"
+	/DwxUSE_BASE=1 $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_basedll.pch"
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.obj \
 	$(OBJS)\basedll_appbase.obj \
@@ -166,7 +167,7 @@ BASELIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_78) /DWIN32 \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\tiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
 	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_GUI=0 /DwxUSE_BASE=1 \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_baselib.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_baselib.pch"
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.obj \
 	$(OBJS)\baselib_appbase.obj \
@@ -254,8 +255,8 @@ COREDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_105) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DWXUSINGDLL /DWXMAKINGDLL_CORE /DwxUSE_BASE=0 $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_coredll.pch"
+	/DWXUSINGDLL /DWXMAKINGDLL_CORE /DwxUSE_BASE=0 $(CXXFLAGS) /GR /GX \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_coredll.pch"
 COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_dummy.obj \
 	$(OBJS)\coredll_event.obj \
@@ -281,7 +282,8 @@ CORELIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_114) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DwxUSE_BASE=0 $(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_corelib.pch"
+	/DwxUSE_BASE=0 $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_corelib.pch"
 CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_dummy.obj \
 	$(OBJS)\corelib_event.obj \
@@ -299,7 +301,7 @@ DBGRIDDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_159) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DWXUSINGDLL /DWXMAKINGDLL_DBGRID $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/DWXUSINGDLL /DWXMAKINGDLL_DBGRID $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_dbgriddll.pch"
 DBGRIDDLL_OBJECTS =  \
 	$(OBJS)\dbgriddll_dummy.obj \
@@ -311,7 +313,7 @@ DBGRIDLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_168) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_dbgridlib.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_dbgridlib.pch"
 DBGRIDLIB_OBJECTS =  \
 	$(OBJS)\dbgridlib_dummy.obj \
 	$(OBJS)\dbgridlib_dbgrid.obj
@@ -322,7 +324,7 @@ GLDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_213) /DWIN32 \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DWXUSINGDLL /DWXMAKINGDLL_GL $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/DWXUSINGDLL /DWXMAKINGDLL_GL $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_gldll.pch"
 GLDLL_OBJECTS =  \
 	$(OBJS)\gldll_dummy.obj \
@@ -334,7 +336,7 @@ GLLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_222) /DWIN32 \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gllib.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gllib.pch"
 GLLIB_OBJECTS =  \
 	$(OBJS)\gllib_dummy.obj \
 	$(OBJS)\gllib_glcanvas.obj
@@ -345,7 +347,7 @@ HTMLDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_177) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DWXUSINGDLL /DWXMAKINGDLL_HTML $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/DWXUSINGDLL /DWXMAKINGDLL_HTML $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_htmldll.pch"
 HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_dummy.obj \
@@ -378,7 +380,7 @@ HTMLLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_186) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_htmllib.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_htmllib.pch"
 HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_dummy.obj \
 	$(OBJS)\htmllib_helpbest.obj \
@@ -426,7 +428,7 @@ MONODLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_51) /DWIN32 \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\tiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
 	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_BASE=1 /DWXMAKINGDLL \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_monodll.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_monodll.pch"
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.obj \
 	$(OBJS)\monodll_appbase.obj \
@@ -511,7 +513,8 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_url.obj \
 	$(OBJS)\monodll_gsocket.obj \
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) \
-	$(OBJS)\monodll_xml.obj
+	$(OBJS)\monodll_xml.obj \
+	$(OBJS)\monodll_xtixml.obj
 MONOLIB_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_60) /DWIN32 \
 	$(__DEBUGINFO_36) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).pdb \
@@ -525,7 +528,7 @@ MONOLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_60) /DWIN32 \
 	$(____DEBUGRUNTIME_59_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\tiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
-	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_BASE=1 $(CXXFLAGS) \
+	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_BASE=1 $(CXXFLAGS) /GR /GX \
 	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_monolib.pch"
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.obj \
@@ -611,7 +614,8 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_url.obj \
 	$(OBJS)\monolib_gsocket.obj \
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) \
-	$(OBJS)\monolib_xml.obj
+	$(OBJS)\monolib_xml.obj \
+	$(OBJS)\monolib_xtixml.obj
 NETDLL_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_87) /DWIN32 \
 	$(__DEBUGINFO_36) \
 	/Fd$(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net_vc$(VENDORTAG).pdb \
@@ -627,7 +631,7 @@ NETDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_87) /DWIN32 \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\tiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
 	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_GUI=0 /DWXUSINGDLL \
-	/DWXMAKINGDLL_NET $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/DWXMAKINGDLL_NET $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_netdll.pch"
 NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_dummy.obj \
@@ -655,7 +659,7 @@ NETLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_96) /DWIN32 \
 	$(____DEBUGRUNTIME_95_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\tiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
-	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_GUI=0 $(CXXFLAGS) \
+	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_GUI=0 $(CXXFLAGS) /GR /GX \
 	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_netlib.pch"
 NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_dummy.obj \
@@ -679,8 +683,8 @@ ODBCDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_141) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DwxUSE_GUI=0 /DWXUSINGDLL /DWXMAKINGDLL_ODBC $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_odbcdll.pch"
+	/DwxUSE_GUI=0 /DWXUSINGDLL /DWXMAKINGDLL_ODBC $(CXXFLAGS) /GR /GX \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_odbcdll.pch"
 ODBCDLL_OBJECTS =  \
 	$(OBJS)\odbcdll_dummy.obj \
 	$(OBJS)\odbcdll_db.obj \
@@ -692,7 +696,8 @@ ODBCLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_150) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DwxUSE_GUI=0 $(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_odbclib.pch"
+	/DwxUSE_GUI=0 $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_odbclib.pch"
 ODBCLIB_OBJECTS =  \
 	$(OBJS)\odbclib_dummy.obj \
 	$(OBJS)\odbclib_db.obj \
@@ -848,11 +853,12 @@ XMLDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_195) /DWIN32 \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DwxUSE_GUI=0 /DWXUSINGDLL /DWXMAKINGDLL_XML $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_xmldll.pch"
+	/DwxUSE_GUI=0 /DWXUSINGDLL /DWXMAKINGDLL_XML $(CXXFLAGS) /GR /GX \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xmldll.pch"
 XMLDLL_OBJECTS =  \
 	$(OBJS)\xmldll_dummy.obj \
-	$(OBJS)\xmldll_xml.obj
+	$(OBJS)\xmldll_xml.obj \
+	$(OBJS)\xmldll_xtixml.obj
 XMLLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_204) /DWIN32 \
 	$(__DEBUGINFO_36) \
 	/Fd$(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.pdb \
@@ -860,10 +866,12 @@ XMLLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_204) /DWIN32 \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\include /I$(SETUPHDIR) /I..\..\src\tiff /I..\..\src\jpeg \
 	/I..\..\src\png /I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib \
-	/DwxUSE_GUI=0 $(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xmllib.pch"
+	/DwxUSE_GUI=0 $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_xmllib.pch"
 XMLLIB_OBJECTS =  \
 	$(OBJS)\xmllib_dummy.obj \
-	$(OBJS)\xmllib_xml.obj
+	$(OBJS)\xmllib_xml.obj \
+	$(OBJS)\xmllib_xtixml.obj
 
 ### Conditionally set variables: ###
 
@@ -7582,6 +7590,9 @@ $(OBJS)\monodll_xti.obj: ..\..\src\common\xti.cpp
 $(OBJS)\monodll_xtistrm.obj: ..\..\src\common\xtistrm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
+$(OBJS)\monodll_xtixml.obj: ..\..\src\common\xtixml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+
 $(OBJS)\monodll_zipstrm.obj: ..\..\src\common\zipstrm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
@@ -9046,6 +9057,9 @@ $(OBJS)\monolib_xti.obj: ..\..\src\common\xti.cpp
 $(OBJS)\monolib_xtistrm.obj: ..\..\src\common\xtistrm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
+$(OBJS)\monolib_xtixml.obj: ..\..\src\common\xtixml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+
 $(OBJS)\monolib_zipstrm.obj: ..\..\src\common\zipstrm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
@@ -9499,10 +9513,16 @@ $(OBJS)\xmldll_dummy.obj: ..\..\src\msw\dummy.cpp
 $(OBJS)\xmldll_xml.obj: ..\..\src\xml\xml.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XMLDLL_CXXFLAGS) $**
 
+$(OBJS)\xmldll_xtixml.obj: ..\..\src\common\xtixml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XMLDLL_CXXFLAGS) $**
+
 $(OBJS)\xmllib_dummy.obj: ..\..\src\msw\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XMLLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\xmllib_xml.obj: ..\..\src\xml\xml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XMLLIB_CXXFLAGS) $**
+
+$(OBJS)\xmllib_xtixml.obj: ..\..\src\common\xtixml.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XMLLIB_CXXFLAGS) $**
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1"

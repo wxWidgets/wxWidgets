@@ -33,7 +33,7 @@ CFLAGS =
 
 # Standard preprocessor flags (common for CC and CXX) 
 !ifndef CPPFLAGS
-CPPFLAGS = -a8 -g0 -I$(BCCDIR)\include
+CPPFLAGS = -a8 -g0
 !endif
 
 # C++ compiler 
@@ -61,7 +61,7 @@ DEBUG_INFO = default
 
 # Standard linker flags 
 !ifndef LDFLAGS
-LDFLAGS = -L$(BCCDIR)\lib
+LDFLAGS = 
 !endif
 
 # Multiple libraries or single huge monolithic one? [0,1]

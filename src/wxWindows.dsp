@@ -855,6 +855,10 @@ SOURCE=.\common\xtistrm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\xtixml.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\zipstrm.cpp
 # End Source File
 # Begin Source File
@@ -2707,6 +2711,10 @@ SOURCE=..\include\wx\xti.h
 # Begin Source File
 
 SOURCE=..\include\wx\xtistrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xtixml.h
 # End Source File
 # Begin Source File
 
