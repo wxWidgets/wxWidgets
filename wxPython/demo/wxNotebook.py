@@ -14,7 +14,7 @@ import sys
 class TestNB(wxNotebook):
     def __init__(self, parent, id, log):
         wxNotebook.__init__(self, parent, id, style=
-                            #0
+                            #wxNB_TOP
                             wxNB_BOTTOM
                             #wxNB_LEFT
                             #wxNB_RIGHT
@@ -59,11 +59,11 @@ class TestNB(wxNotebook):
         win = self.makeColorPanel(wxCYAN)
         self.AddPage(win, "Cyan")
 
-        win = self.makeColorPanel(wxWHITE)
-        self.AddPage(win, "White")
+##         win = self.makeColorPanel(wxWHITE)
+##         self.AddPage(win, "White")
 
-        win = self.makeColorPanel(wxBLACK)
-        self.AddPage(win, "Black")
+##         win = self.makeColorPanel(wxBLACK)
+##         self.AddPage(win, "Black")
 
         win = self.makeColorPanel(wxNamedColour('MIDNIGHT BLUE'))
         self.AddPage(win, "MIDNIGHT BLUE")
