@@ -100,7 +100,7 @@ class MyPanel: public wxPanel
 {
 public:
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
-    virtual ~MyPanel() { wxLog::SetActiveTarget(m_logOld); }
+    virtual ~MyPanel() { delete wxLog::SetActiveTarget(m_logOld); }
 
 #if wxUSE_CLIPBOARD
     void DoPasteFromClipboard();
