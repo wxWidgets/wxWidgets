@@ -2624,8 +2624,10 @@ wxString wxWindowMac::MacGetToolTipString( wxPoint &pt )
 void wxWindowMac::Update()
 {
 #if TARGET_API_MAC_OSX
-    WindowRef window = (WindowRef)MacGetTopLevelWindowRef() ;
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+    WindowRef window = (WindowRef)MacGetTopLevelWindowRef() ;
+
     // for composited windows this also triggers a redraw of all
     // invalid views in the window
     if( UMAGetSystemVersion() >= 0x1030 )
