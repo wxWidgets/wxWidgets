@@ -1052,10 +1052,11 @@
 // Windows CE specific stuff
 // ----------------------------------------------------------------------------
 
-// stuff which doesn't work/compile/make sense under Windows CE in alphabetical
-// order (please keep it!)
+// list of things which don't make sense under Windows CE in alphabetical order
+// (please keep it!)
 //
-// TODO: explain why each item is disabled and whether it can be enabled
+// NB: stuff which doesn't work at all under CE is forcefully disabled in
+//     wx/msw/wince/chkconf.h
 
 // wxCheckListBox requires wxOwnerDrawn which is disabled below
 #undef wxUSE_CHECKLISTBOX
@@ -1067,7 +1068,7 @@
 
 // Windows CE doesn't use RAS so wxDialUpManager doesn't work under it
 #undef wxUSE_DIALUP_MANAGER
-#define wxUSE_DIALUP_MANAGER
+#define wxUSE_DIALUP_MANAGER 0
 
 #undef wxUSE_DYNAMIC_LOADER
 #define wxUSE_DYNAMIC_LOADER 0
@@ -1077,9 +1078,6 @@
 
 #undef wxUSE_FSVOLUME
 #define wxUSE_FSVOLUME 0
-
-#undef wxUSE_MEDIACTRL
-#define wxUSE_MEDIACTRL 0
 
 // MDI is not supported under CE
 #undef wxUSE_MDI
@@ -1103,11 +1101,6 @@
 // there is usually no printer attached to a PDA...
 #undef wxUSE_PRINTING_ARCHITECTURE
 #define wxUSE_PRINTING_ARCHITECTURE 0
-
-#ifdef __SMARTPHONE__
-    #undef wxUSE_STATUSBAR
-    #define wxUSE_STATUSBAR 0
-#endif
 
 // doesn't make much sense in absence of mouse...
 #undef wxUSE_TOOLTIPS

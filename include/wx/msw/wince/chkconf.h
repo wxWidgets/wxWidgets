@@ -19,5 +19,49 @@
     #define wxUSE_STDPATHS 0
 #endif // WCE_PLATFORM_STANDARDSDK
 
+// DDE doesn't exist under WinCE and wxIPC is DDE-based under MSW
+#undef wxUSE_IPC
+#define wxUSE_IPC 0
+
+// metafiles are not supported neither
+#undef wxUSE_ENH_METAFILE
+#define wxUSE_ENH_METAFILE 0
+
+#undef wxUSE_METAFILE
+#define wxUSE_METAFILE 0
+
+// eVC doesn't support SEH
+#undef wxUSE_ON_FATAL_EXCEPTION
+#define wxUSE_ON_FATAL_EXCEPTION 0
+
+// media stuff not supported under CE
+#undef wxUSE_DIRECTSHOW
+#define wxUSE_DIRECTSHOW 0
+
+#undef wxUSE_MEDIACTRL
+#define wxUSE_MEDIACTRL 0
+
+// libtiff and regex apparently don't compile with eVC (to check with eVC4?)
+// and they're disabled for WinCE in build/bakefiles/{tiff|regex}.bkl so can't
+// be enabled here
+#undef wxUSE_LIBTIFF
+#define wxUSE_LIBTIFF 0
+
+#undef wxUSE_REGEX
+#define wxUSE_REGEX 0
+
+
+// Disable controls which don't make sense for phones
+#if defined(__SMARTPHONE__)
+    #undef wxUSE_LISTBOOK
+    #define wxUSE_LISTBOOK 0
+
+    #undef wxUSE_NOTEBOOK
+    #define wxUSE_NOTEBOOK 0
+
+    #undef wxUSE_STATUSBAR
+    #define wxUSE_STATUSBAR 0
+#endif // __SMARTPHONE__
+
 #endif // _WX_MSW_WINCE_CHKCONF_H_
 
