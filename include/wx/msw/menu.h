@@ -212,6 +212,10 @@ public:
     // menubar construction
     WXHMENU Create();
     void Append(wxMenu *menu, const wxString& title);
+    void Insert(int pos, wxMenu * menu, const wxString& title);
+    void ReplaceMenu(int pos, wxMenu * new_menu, const wxString& title);
+    int  FindMenu(const wxString& title);
+    void Detach();
     virtual void Delete(wxMenu *menu, int index = 0); /* Menu not destroyed */
 
     // state control
