@@ -21,6 +21,9 @@
     #pragma interface "window.h"
 #endif
 
+// for HANDLE
+#include "wx/msw/wrapwin.h"
+
 // [at least] some version of Windows send extra mouse move messages after
 // a mouse click or a key press - to temporarily fix this problem, set the
 // define below to 1
