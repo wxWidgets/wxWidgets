@@ -12,23 +12,9 @@ need Python >= 2.2 installed on Unix and either use Bakefile installer or have
 Python on Windows.
 
 Once you have installed Bakefile, you can easily regenerate the makefiles using
-the makefile in $(wx)/build/bakefiles directory. The makefile uses Unix make
-syntax and works on Unix or using either Borland Make or GNU Make (including
-native Win32 port called mingw32-make from http://www.mingw.org/) on Windows.
-It is possible that other Windows make utilities work as well, but it wasn't
-tested. "make clean" only works on Unix or Cygwin or MSYS emulation layer on
-Windows.
-
-You can use following commands when generating the makefiles (must be run from
-$(wx)/build/bakefiles directory):
-
-make <filename>           generates one makefile (e.g. "make ../makefile.gcc")
-make all                  regenerates all makefiles that are out of date
-make library              only makefiles for the main library
-make <compiler>           only makefiles for given compiler; possible values
-                          are "borland", "watcom", "mingw", "autoconf", "msvc"
-                          and "mvsc6prj" (Visual C++ project files)
-make clean                deletes all generated files (Unix shell only)
+the bakefile_gen tool. Run it from $(wx)/build/bakefiles directory and it will
+regenerate all outdated makefiles. See $(wx)/build/bakefiles/README for more
+details.
 
 Note that it generates makefiles for samples and contrib libraries, too.
 
@@ -38,10 +24,9 @@ IMPORTANT NOTE: Don't forget to run autoconf in wxWindows root directory if
                 $(wx)/autoconf_inc.m4 content changed.
 
 You can use Bakefile to generate makefiles or projects customized to your
-needs, too. See Makefile for details on bakefile commands used to generate
-makefiles. For example, you can use this command to generate VC++ project
-files without wxUniversal configurations (you can find needed flags in
-DSWFLAGS variable of build/bakefiles/Makefile):
+needs, too. See Bakefiles.bkgen for details on bakefile commands used to
+generate makefiles. For example, you can use this command to generate
+VC++ project files without wxUniversal configurations:
     bakefile -v -fmsvc6prj -o../wxmy.dsw -DRUNTIME_LIBS=dynamic
              -DDEBUG_INFO=default -DDEBUG_FLAG=default
              -DOFFICIAL_BUILD=0 -DUSE_HTML=1 -DUSE_OPENGL=1 -DUSE_ODBC=1
