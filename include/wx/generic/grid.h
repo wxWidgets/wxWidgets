@@ -1502,7 +1502,6 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
     bool m_created;
-    bool m_displayed;
 
     wxGridWindow             *m_gridWin;
     wxGridRowLabelWindow     *m_rowLabelWin;
