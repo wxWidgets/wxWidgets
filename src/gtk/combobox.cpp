@@ -769,8 +769,8 @@ void wxComboBox::GetSelection( long* from, long* to ) const
 {
     if (IsEditable())
     {
-#ifdef __WXGTK20__
         GtkEditable *editable = GTK_EDITABLE(GTK_COMBO(m_widget)->entry);
+#ifdef __WXGTK20__
         gint start, end;
         gtk_editable_get_selection_bounds(editable, & start, & end);
         *from = start;
