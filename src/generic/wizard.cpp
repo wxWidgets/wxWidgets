@@ -349,7 +349,10 @@ void wxWizard::AddStaticLine(wxBoxSizer *mainColumn)
 
 void wxWizard::AddBackNextPair(wxBoxSizer *buttonRow)
 {
-    wxASSERT_MSG(m_btnNext!=0 && m_btnPrev!=0, "You must create the buttons first before calling wxWizard::AddBackNextPair");
+    wxASSERT_MSG( m_btnNext && m_btnPrev,
+                  _T("You must create the buttons before calling ")
+                  _T("wxWizard::AddBackNextPair") );
+
     // margin between Back and Next buttons
 #ifdef __WXMAC__
     static const int BACKNEXT_MARGIN = 10;
