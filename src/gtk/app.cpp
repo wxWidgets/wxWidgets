@@ -125,12 +125,13 @@ bool wxApp::Yield(bool onlyIfNeeded)
     while (gtk_events_pending())
         gtk_main_iteration();
 
-    /* it's necessary to call ProcessIdle() to update the frames sizes which
-       might have been changed (it also will update other things set from
-       OnUpdateUI() which is a nice (and desired) side effect) */
-    while ( ProcessIdle() )
-    {
-    }
+    // It's necessary to call ProcessIdle() to update the frames sizes which
+    // might have been changed (it also will update other things set from
+    // OnUpdateUI() which is a nice (and desired) side effect). But we 
+    // call ProcessIdle() only once since this is not meant for longish
+    // background jobs (controlled by wxIdleEvent::RequestMore() and the
+    // return value of Processidle().
+    ProcessIdle();
 
     // let the logs be flashed again
     wxLog::Resume();
@@ -190,17 +191,17 @@ gint wxapp_pending_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
 
-    // when getting called from GDK's time-out handler
+    // When getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
-    // thread so we must lock it here ourselves
+    // thread so we must lock it here ourselves.
     gdk_threads_enter();
 
-    // Sent idle event to all who request them
+    // Sent idle event to all who request them.
     wxTheApp->ProcessPendingEvents();
 
     g_pendingTag = 0;
 
-    /* flush the logged messages if any */
+    // Flush the logged messages if any.
 #if wxUSE_LOG
     wxLog::FlushActive();
 #endif // wxUSE_LOG
@@ -228,28 +229,26 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     }
 #endif // __WXDEBUG__
 
-    // when getting called from GDK's time-out handler
+    // When getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
-    // thread so we must lock it here ourselves
+    // thread so we must lock it here ourselves.
     gdk_threads_enter();
 
-    /* Indicate that we are now in idle mode - even so deeply
-       in idle mode that we don't get any idle events anymore.
-       this is like wxMSW where an idle event is sent only
-       once each time after the event queue has been completely
-       emptied */
+    // Indicate that we are now in idle mode and event handlers
+    // will have to reinstall the idle handler again.
     g_isIdle = TRUE;
     wxTheApp->m_idleTag = 0;
 
-    // Sent idle event to all who request them as long as they do
-    while (wxTheApp->ProcessIdle())
+    // Sent idle event to all who request them as long as
+    // no events have popped up in the event queue.
+    while (wxTheApp->ProcessIdle() && (gtk_events_pending() == 0))
         ;
 
     // Release lock again
     gdk_threads_leave();
 
     // Return FALSE to indicate that no more idle events are
-    // to be sent (single shot instead of continuous stream)
+    // to be sent (single shot instead of continuous stream).
     return FALSE;
 }
 
@@ -501,20 +500,20 @@ void wxApp::OnIdle( wxIdleEvent &event )
 {
     static bool s_inOnIdle = FALSE;
 
-    /* Avoid recursion (via ProcessEvent default case) */
+    // Avoid recursion (via ProcessEvent default case)
     if (s_inOnIdle)
         return;
 
     s_inOnIdle = TRUE;
 
-    /* Resend in the main thread events which have been prepared in other
-       threads */
+    // Resend in the main thread events which have been prepared in other
+    // threads
     ProcessPendingEvents();
 
-    /* 'Garbage' collection of windows deleted with Close(). */
+    // 'Garbage' collection of windows deleted with Close()
     DeletePendingObjects();
 
-    /* Send OnIdle events to all windows */
+    // Send OnIdle events to all windows
     bool needMore = SendIdleEvents();
 
     if (needMore)
