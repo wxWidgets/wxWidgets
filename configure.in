@@ -2007,6 +2007,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}.sl"
         WX_LIBRARY_NAME_SHARED_GL="libwx_${TOOLKIT_DIR}_gl.sl"
         if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL_INSTALLED="preinstall_gl"
             WX_ALL="${WX_LIBRARY_NAME_SHARED} ${WX_LIBRARY_NAME_SHARED_GL}"
         else
             WX_ALL="${WX_LIBRARY_NAME_SHARED}"
@@ -2098,13 +2099,23 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl only static for now
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
         WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
-        WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+        if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL_INSTALLED="preinstall_gl"
+            WX_ALL="${WX_LIBRARY_NAME_STATIC} ${WX_LIBRARY_NAME_STATIC_GL}"
+        else
+            WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+        fi
       ;;
       *-*-mingw32* )
         dnl only static for now
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
         WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
-        WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+        if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL_INSTALLED="preinstall_gl"
+            WX_ALL="${WX_LIBRARY_NAME_STATIC} ${WX_LIBRARY_NAME_STATIC_GL}"
+        else
+            WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+        fi
       ;;
       *-pc-os2_emx )
         dnl only static for now
@@ -2134,7 +2145,12 @@ else
     dnl set target to static
     WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
     WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
-    WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+    if test "$wxUSE_OPENGL" = "yes"; then
+        WX_ALL_INSTALLED="preinstall_gl"
+        WX_ALL="${WX_LIBRARY_NAME_STATIC} ${WX_LIBRARY_NAME_STATIC_GL}"
+    else
+        WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+    fi
     WX_TARGET_LIBRARY_TYPE="a"
 fi
 
