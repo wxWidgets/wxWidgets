@@ -621,7 +621,7 @@ public:
     void CLASS::CBNAME(bool a, double b, double c, int d, int e) {              \
         bool doSave = wxPyRestoreThread();                                      \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME))                                     \
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(idii)",                       \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iddii)",                       \
                                                 (int)a,b,c,d,e));               \
         else                                                                    \
             PCLASS::CBNAME(a, b, c, d, e);                                      \
