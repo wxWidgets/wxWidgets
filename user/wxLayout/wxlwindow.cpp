@@ -10,14 +10,27 @@
 #   pragma implementation "wxlwindow.h"
 #endif
 
-#include   "wxlwindow.h"
+//#include "Mpch.h"
 
-#define   VAR(x)   cout << #x"=" << x << endl;
+#ifdef M_BASEDIR
+#   ifndef USE_PCH
+#     include "Mcommon.h"
+#     include "gui/wxMenuDefs.h"
+#   endif // USE_PCH
+#   include "gui/wxlwindow.h"
+#else
+#   include "wxlwindow.h"
+#   define TRACEMESSAGE(x)
+#endif
+#  define   WXL_VAR(x)           cerr << #x " = " << x ;
 
 BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_PAINT    (wxLayoutWindow::OnPaint)
    EVT_CHAR     (wxLayoutWindow::OnChar)
-   EVT_LEFT_DOWN(wxLayoutWindow::OnMouse)
+
+   EVT_LEFT_DOWN(wxLayoutWindow::OnLeftMouseClick)
+   EVT_RIGHT_DOWN(wxLayoutWindow::OnRightMouseClick)
+   EVT_LEFT_DCLICK(wxLayoutWindow::OnMouseDblClick)
 END_EVENT_TABLE()
 
 wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
@@ -26,7 +39,15 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
 
 {
    m_ScrollbarsSet = false;
-   m_EventId = -1;
+   m_doSendEvents = false;
+   m_ViewStartX = 0; m_ViewStartY = 0;
+
+
+   CoordType
+      max_x, max_y, lineHeight;
+   m_llist.GetSize(&max_x, &max_y, &lineHeight);
+   SetScrollbars(10, lineHeight, max_x/10+1, max_y/lineHeight+1);
+   EnableScrolling(true,true);
 }
 
 #ifdef __WXMSW__
@@ -38,34 +59,45 @@ wxLayoutWindow::MSWGetDlgCode()
 }
 #endif //MSW
 
+void
+wxLayoutWindow::Update(void)
+{
+   wxClientDC  dc(this);
+   PrepareDC(dc);
+   if(IsDirty())
+   {
+      DoPaint(dc);
+      UpdateScrollbars();
+      ResetDirty();
+   }
+   m_llist.DrawCursor(dc);
+}
 
 void
-wxLayoutWindow::OnMouse(wxMouseEvent& event)
+wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 {
+   if(!m_doSendEvents) // nothing to do
+      return;
+
+   wxPaintDC dc( this );
+   PrepareDC( dc );     
    SetFocus();
 
-   if(m_EventId == -1) // nothing to do
-      return;
-   
-   m_FindPos.x = event.GetX();
-   m_FindPos.y = event.GetY();
-   m_FoundObject = (wxLayoutObjectBase *) NULL;
+   wxPoint findPos;
+   findPos.x = dc.DeviceToLogicalX(event.GetX());
+   findPos.y = dc.DeviceToLogicalY(event.GetY());
 
-#ifdef   WXLAYOUT_DEBUG
-   //doesn't work, undefined functions
-   //wxLogTrace("OnMouse: (%d, %d)", m_FindPos.x, m_FindPos.y);
-#endif
-   Refresh();
-   if(m_FoundObject)
+   TRACEMESSAGE(("wxLayoutWindow::OnMouse: (%d, %d) -> (%d, %d)",
+                 event.GetX(), event.GetY(), findPos.x, findPos.y));
+
+   // find the object at this position
+   wxLayoutObjectBase *obj = m_llist.Find(findPos);
+   if(obj)
    {
-      if(m_EventId != -1)
-      {
-         wxCommandEvent commandEvent(wxEVENT_TYPE_MENU_COMMAND, m_EventId);
-         commandEvent.SetEventObject( this );
-         commandEvent.SetClientData((char *)m_FoundObject);
-         m_ClickPosition = wxPoint(event.GetX(), event.GetY());
-         GetEventHandler()->ProcessEvent(commandEvent);
-      }
+      wxCommandEvent commandEvent(wxEVENT_TYPE_MENU_COMMAND, eventId);
+      commandEvent.SetEventObject( this );
+      commandEvent.SetClientData((char *)obj);
+      GetEventHandler()->ProcessEvent(commandEvent);
    }
 }
 
@@ -112,14 +144,14 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       break;
    case WXK_END:
       p = m_llist.GetCursor();
-      p.x = m_llist.GetLineLength(m_llist.FindCurrentObject((CoordType *) NULL));
+      p.x = m_llist.GetLineLength(m_llist.FindCurrentObject(NULL));
       m_llist.SetCursor(p);
       break;
    case WXK_DELETE :
       if(event.ControlDown()) // delete to end of line
       {
          help = m_llist.GetLineLength(
-            m_llist.FindCurrentObject((CoordType *) NULL))
+            m_llist.FindCurrentObject(NULL))
             - m_llist.GetCursor().x;
          m_llist.Delete(help ? help : 1);
       }
@@ -127,17 +159,20 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
          m_llist.Delete(1);
       break;
    case WXK_BACK: // backspace
-      if(m_llist.MoveCursor(-1))
+      if(m_llist.MoveCursor(-1)) {
          m_llist.Delete(1);
+      }
       break;
    case WXK_RETURN:
       m_llist.LineBreak();
       break;
-#ifdef WXLAYOUT_DEBUG   
+
+#ifdef WXLAYOUT_DEBUG
    case WXK_F1:
       m_llist.Debug();
       break;
-#endif 
+#endif
+      
    default:
       if(keyCode < 256 && keyCode >= 32)
       {
@@ -147,20 +182,75 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       }
       break;
    }
-   Refresh();
-   UpdateScrollbars();
+
+   /** Scroll so that cursor is visible! */
+   int x0,y0,x1,y1,ux,uy;
+   ViewStart(&x0,&y0);
+   GetScrollPixelsPerUnit(&ux,&uy);
+   x0*=ux; y0*=uy;
+   GetClientSize(&x1,&y1);
+
+   wxPoint cc = m_llist.GetCursorCoords();
+   int nx = x0, ny = y0;
+   // when within 10% of borders, scroll to center
+   if(cc.y > y0+(9*y1)/10)
+      ny = cc.y - y1/5;
+   else if (cc.y < y0+y1/10)
+   {
+      ny = cc.y-y1/2;
+      if(ny < 0) ny = 0;
+   }
+   if(cc.x > x0+(9*x1)/10)
+      nx = cc.x - x1/5;
+   else if (cc.x < x0+x1/10)
+   {
+      nx = cc.x-x1/2;
+      if(nx < 0) nx = 0;
+   }
+   Scroll(nx,ny);
+   
+   Update();
 }
 
 void
-wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event)w)  // or: OnDraw(wxDC& dc)
+wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))  // or: OnDraw(wxDC& dc)
 {
-   wxPaintDC dc( this );  // only when used as OnPaint for OnDraw we
-   PrepareDC( dc );       // can skip the first two lines
+   wxPaintDC dc( this );
+   PrepareDC( dc );
 
-   if(m_EventId != -1) // look for keyclicks
-      m_FoundObject = m_llist.Draw(dc,true,m_FindPos);
-   else
-      m_llist.Draw(dc);
+   DoPaint(dc);
+
+// wxGTK: wxMemoryDC broken?
+#if 0
+   int x0,y0,x1,y1;
+   ViewStart(&x0,&y0);
+   GetSize(&x1,&y1);
+   WXL_VAR(x0); WXL_VAR(y0);
+   WXL_VAR(x1); WXL_VAR(y1);
+   
+   wxMemoryDC(memdc);
+   wxBitmap bm(x1,y1);
+   memdc.SelectObject(bm);
+
+   // make temporary copy and edit this
+   memdc.SetDeviceOrigin(x0,y0);
+   memdc.Blit(x0,y0,x1,y1,&dc,x0,y0,wxCOPY,FALSE);
+   DoPaint(memdc);
+   // blit it back
+   dc.Blit(x0,y0,x1,y1,&memdc,x0,y0,wxCOPY,FALSE);
+#endif
+   
+}
+
+// does the actual painting
+void
+wxLayoutWindow::DoPaint(wxDC &dc)
+{
+   m_llist.EraseAndDraw(dc);
+   m_llist.DrawCursor(dc);
+   // FIXME: not strictly correct, this does only work for changes behind
+   //   the cursor position, not complete redraws
+
    if(! m_ScrollbarsSet)
    {
       m_ScrollbarsSet = true; // avoid recursion
@@ -173,17 +263,17 @@ wxLayoutWindow::UpdateScrollbars(void)
 {
    CoordType
       max_x, max_y, lineHeight;
-   
+
+   ViewStart(&m_ViewStartX, &m_ViewStartY);
    m_llist.GetSize(&max_x, &max_y, &lineHeight);
-   SetScrollbars(10, lineHeight, max_x/10+1, max_y/lineHeight+1);
-   EnableScrolling(true,true);
+   SetScrollbars(10, lineHeight, max_x/10+1, max_y/lineHeight+1,m_ViewStartX,m_ViewStartY,true);
+   //EnableScrolling(true,true);
+   //Scroll(m_ViewStartX, m_ViewStartY);
 }
 
 void
 wxLayoutWindow::Print(void)
 {
-   VAR(wxThePrintSetupData);
-
    wxPostScriptDC   dc("layout.ps",true,this);
    if (dc.Ok() && dc.StartDoc((char *)_("Printing message...")))
    {

@@ -10,10 +10,27 @@
 #   pragma implementation "wxlparser.h"
 #endif
 
-#include   "wxllist.h"
-#include   "wxlparser.h"
+//#include "Mpch.h"
+#ifdef M_BASEDIR
+#   include "gui/wxllist.h"
+#   include "gui/wxlparser.h"
+#else
+#   include "wxllist.h"
+#   include "wxlparser.h"
+#endif
 
 #define   BASE_SIZE 12
+
+inline static bool IsEndOfLine(const char *p)
+{
+   // in addition to Unix EOL convention we also (but not instead) understand
+   // the DOS one under Windows
+   return
+#ifdef OS_WIN
+      ((*p == '\r') && (*(p + 1) == '\n')) ||
+#endif
+      (*p == '\n');
+}
 
 void wxLayoutImportText(wxLayoutList &list, String const &str)
 {
@@ -23,15 +40,22 @@ void wxLayoutImportText(wxLayoutList &list, String const &str)
    
    for(;;)
    {
-      begin = cptr++;
-      while(*cptr && *cptr != '\n')
+      begin = cptr;
+      while( *cptr && !IsEndOfLine(cptr) )
          cptr++;
       backup = *cptr;
       *cptr = '\0';
       list.Insert(begin);
       *cptr = backup;
-      if(backup == '\n')
+
+      // check if it's the end of this line
+      if ( IsEndOfLine(cptr) )
+      {
+         // if it was "\r\n", skip the following '\n'
+         if ( *cptr == '\r' )
+            cptr++;
          list.LineBreak();
+      }
       else if(backup == '\0') // reached end of string
          break;
       cptr++;
@@ -168,8 +192,9 @@ String wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
          *str += '\n';
          break;
       case WXLO_TYPE_CMD:
-         //wxASSERT(mode == WXLO_EXPORT_AS_HTML,"reached cmd object in text mode")
-         assert(mode == WXLO_EXPORT_AS_HTML);
+         wxASSERT_MSG( mode == WXLO_EXPORT_AS_HTML,
+                       "reached cmd object in text mode" );
+         
          *str += wxLayoutExportCmdAsHTML(*(wxLayoutObjectCmd const
                                            *)*from, &s_si);
          break;

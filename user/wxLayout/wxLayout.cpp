@@ -54,25 +54,16 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
    END_EVENT_TABLE()
 
 
-
-
-
-
 int orientation = wxPORTRAIT;
 
-
-
-
-
-   
-   MyFrame::MyFrame(void) :
+MyFrame::MyFrame(void) :
       wxFrame( (wxFrame *) NULL, -1, (char *) "wxLayout", wxPoint(20,20), wxSize(600,360) )
 {
    CreateStatusBar( 1 );
   
    SetStatusText( "wxLayout by Karsten Ballüder." );
 
-   wxMenu *file_menu = new wxMenu( "Menu 1" );
+   wxMenu *file_menu = new wxMenu;
    file_menu->Append( ID_CLEAR, "Clear");
    file_menu->Append( ID_ADD_SAMPLE, "Example");
    file_menu->Append( ID_EDIT, "Edit");
@@ -104,7 +95,7 @@ int orientation = wxPORTRAIT;
    SetMenuBar( menu_bar );
 
    m_lwin = new wxLayoutWindow(this);
-   m_lwin->SetEventId(ID_CLICK);
+   m_lwin->SetMouseTracking(true);
    m_lwin->GetLayoutList().SetEditable(true);
    m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    m_lwin->SetFocus();
@@ -113,9 +104,11 @@ int orientation = wxPORTRAIT;
 void
 MyFrame::AddSampleText(wxLayoutList &llist)
 {
+   llist.SetFont(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    llist.Insert("--");
    llist.LineBreak();
 
+   llist.SetFont(wxROMAN);
    llist.Insert("The quick brown fox jumps over the lazy dog.");
    llist.LineBreak();
    llist.Insert("Hello ");
@@ -203,7 +196,7 @@ MyFrame::Clear(void)
 void MyFrame::Edit(void)
 {
    wxLayoutList & llist = m_lwin->GetLayoutList();
-   m_lwin->SetEventId(ID_CLICK);
+   //m_lwin->SetEventId(ID_CLICK);
   
    llist.MoveCursor(0);
    llist.MoveCursor(5);
@@ -307,8 +300,10 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 #endif
       wxPrinter printer;
       wxLayoutPrintout printout( m_lwin->GetLayoutList(),"My printout");
-      if (!printer.Print(this, &printout, TRUE))
-        wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK);
+      if (! printer.Print(this, &printout, TRUE))
+         wxMessageBox(
+            "There was a problem printing.\nPerhaps your current printer is not set correctly?",
+            "Printing", wxOK);  
 }
 
 void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
@@ -331,7 +326,9 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
       printData.SetOrientation(orientation);
 
       // Pass two printout objects: for preview, and possible printing.
-      wxPrintPreview *preview = new wxPrintPreview(new wxLayoutPrintout( m_lwin->GetLayoutList()), new wxLayoutPrintout( m_lwin->GetLayoutList()), & printData);
+      wxPrintPreview *preview = new wxPrintPreview(new
+                                                   wxLayoutPrintout(
+                                                      m_lwin->GetLayoutList()), new wxLayoutPrintout( m_lwin->GetLayoutList()), & printData);  
       if (!preview->Ok())
       {
         delete preview;
@@ -443,7 +440,7 @@ bool MyApp::OnInit(void)
 {
    wxFrame *frame = new MyFrame();
    frame->Show( TRUE );
-   wxSetAFMPath("/usr/local/src/wxWindows/misc/afm/");
+//   wxSetAFMPath("/usr/local/src/wxWindows/misc/afm/");
    return TRUE;
 };
 
