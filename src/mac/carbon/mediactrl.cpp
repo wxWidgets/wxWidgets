@@ -661,7 +661,7 @@ void wxQTMediaBackend::Move(int x, int y, int w, int h)
 
 
 //in source file that contains stuff you don't directly use
-#include <wx/html/forcelnk.h>
+#include "wx/html/forcelnk.h"
 FORCE_LINK_ME(basewxmediabackends);
 
 #endif //wxUSE_MEDIACTRL
