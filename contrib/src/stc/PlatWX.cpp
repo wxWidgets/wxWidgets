@@ -28,14 +28,14 @@ Point Point::FromLong(long lpoint) {
 }
 
 wxRect wxRectFromPRectangle(PRectangle prc) {
-    wxRect rc(prc.left, prc.top,
-              prc.right-prc.left, prc.bottom-prc.top);
-    return rc;
+    wxRect r(prc.left, prc.top,
+             prc.Width(), prc.Height());
+    return r;
 }
 
 PRectangle PRectangleFromwxRect(wxRect rc) {
     return PRectangle(rc.GetLeft(), rc.GetTop(),
-                      rc.GetRight()+1, rc.GetBottom()+1);
+                      rc.GetRight(), rc.GetBottom());
 }
 
 wxColour wxColourFromCA(const ColourAllocated& ca) {
@@ -411,7 +411,7 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, int ybase,
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent - 1);
+    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
 }
 
 void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
@@ -424,7 +424,7 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
     // see comments above
-    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent - 1);
+    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
     hdc->DestroyClippingRegion();
 }
 
@@ -439,7 +439,7 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, int ybase,
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent - 1);
+    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
 
     hdc->SetBackgroundMode(wxSOLID);
 }
@@ -531,7 +531,7 @@ int SurfaceImpl::ExternalLeading(Font &font) {
 
 int SurfaceImpl::Height(Font &font) {
     SetFont(font);
-    return hdc->GetCharHeight();
+    return hdc->GetCharHeight() + 1;
 }
 
 int SurfaceImpl::AverageCharWidth(Font &font) {
@@ -713,10 +713,9 @@ private:
     void*               doubleClickActionData;
 public:
     wxSTCListBoxWin(wxWindow* parent, wxWindowID id) :
-        wxWindow(parent, id, wxDefaultPosition, wxSize(0,0), wxNO_BORDER )
+        wxWindow(parent, id, wxDefaultPosition, wxSize(0,0), wxSIMPLE_BORDER )
     {
 
-        SetBackgroundColour(*wxBLACK);
         lv = new wxSTCListBox(this, id, wxDefaultPosition, wxDefaultSize,
                               wxLC_REPORT | wxLC_SINGLE_SEL | wxLC_NO_HEADER | wxNO_BORDER);
         lv->SetCursor(wxCursor(wxCURSOR_ARROW));
@@ -730,12 +729,20 @@ public:
         Hide();
     }
 
-        
+            
     // On OSX and (possibly others) there can still be pending
     // messages/events for the list control when Scintilla wants to
     // close it, so do a pending delete of it instead of destroying
     // immediately.
     bool Destroy() {
+#ifdef __WXMAC__
+        // There bottom edge of this window is not getting properly
+        // refreshed upon deletion, so help it out...
+        wxWindow* p = GetParent();
+        wxRect r(GetPosition(), GetSize());
+        r.SetHeight(r.GetHeight()+1);
+        p->Refresh(false, &r);
+#endif
         if ( !wxPendingDelete.Member(this) )
             wxPendingDelete.Append(this);
         return TRUE;
@@ -765,9 +772,9 @@ public:
     }
 
     void OnSize(wxSizeEvent& event) {
-        // resize the child, leaving a 1 pixel border
+        // resize the child
         wxSize sz = GetClientSize();
-        lv->SetSize(1, 1, sz.x-2, sz.y-2);
+        lv->SetSize(sz);
         // reset the column widths
         lv->SetColumnWidth(0, IconWidth()+4);
         lv->SetColumnWidth(1, sz.x - 2 - lv->GetColumnWidth(0) -
