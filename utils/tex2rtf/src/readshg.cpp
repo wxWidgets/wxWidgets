@@ -38,8 +38,8 @@
 // HotSpots *array;
 // int n = ParseSHG("thing.shg", &array);
 
-int   ParseSHG( const char* fileName, HotSpot **hotspots)
-{ FILE*   fSHG = fopen( fileName, "rb");
+int   ParseSHG( const wxChar* fileName, HotSpot **hotspots)
+{ FILE*   fSHG = wxFopen( fileName, _T("rb"));
   long    offset;
   int nHotspots = 0;
 
@@ -110,7 +110,7 @@ int   ParseSHG( const char* fileName, HotSpot **hotspots)
 
 // Convert Windows .SHG file to HTML map file
 
-bool SHGToMap(char *filename, char *defaultFile)
+bool SHGToMap(wxChar *filename, wxChar *defaultFile)
 {
   // Test the SHG parser
   HotSpot *hotspots = NULL;
@@ -118,41 +118,41 @@ bool SHGToMap(char *filename, char *defaultFile)
   if (n == 0)
     return FALSE;
 
-  char buf[100];
-  sprintf(buf, "Converting .SHG file to HTML map file: there are %d hotspots in %s.", n, filename);
+  wxChar buf[100];
+  wxSprintf(buf, _T("Converting .SHG file to HTML map file: there are %d hotspots in %s."), n, filename);
   OnInform(buf);
 
-  char outBuf[256];
-  strcpy(outBuf, filename);
+  wxChar outBuf[256];
+  wxStrcpy(outBuf, filename);
   StripExtension(outBuf);
-  strcat(outBuf, ".map");
+  wxStrcat(outBuf, _T(".map"));
 
-  FILE *fd = fopen(outBuf, "w");
+  FILE *fd = wxFopen(outBuf, _T("w"));
   if (!fd)
   {
-    OnError("Could not open .map file for writing.");
+    OnError(_T("Could not open .map file for writing."));
     delete[] hotspots;
     return FALSE;
   }
 
-  fprintf(fd, "default %s\n", defaultFile);
+  wxFprintf(fd, _T("default %s\n"), defaultFile);
   for (int i = 0; i < n; i++)
   {
-    char *refFilename = "??";
+    wxChar *refFilename = _T("??");
     
     TexRef *texRef = FindReference(hotspots[i].szHlpTopic_Macro);
     if (texRef)
       refFilename = texRef->refFile;
     else
     {
-      char buf[300];
-      sprintf(buf, "Warning: could not find hotspot reference %s", hotspots[i].szHlpTopic_Macro);
+      wxChar buf[300];
+      wxSprintf(buf, _T("Warning: could not find hotspot reference %s"), hotspots[i].szHlpTopic_Macro);
       OnInform(buf);
     }
-    fprintf(fd, "rect %s %d %d %d %d\n", refFilename, (int)hotspots[i].left, (int)hotspots[i].top,
+    wxFprintf(fd, _T("rect %s %d %d %d %d\n"), refFilename, (int)hotspots[i].left, (int)hotspots[i].top,
       (int)hotspots[i].right, (int)hotspots[i].bottom);
   }
-  fprintf(fd, "\n");
+  wxFprintf(fd, _T("\n"));
 
   fclose(fd);
 

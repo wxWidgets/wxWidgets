@@ -57,10 +57,10 @@ DECLARE_EVENT_TABLE()
 class Tex2RTFConnection: public wxDDEConnection
 {
  public:
-  Tex2RTFConnection(char *buf, int size);
+  Tex2RTFConnection(wxChar *buf, int size);
   ~Tex2RTFConnection(void);
-  bool OnExecute(const wxString& topic, char *data, int size, int format);
-  char *OnRequest(const wxString& topic, const wxString& item, int *size, int format);
+  bool OnExecute(const wxString& topic, wxChar *data, int size, wxIPCFormat format);
+  wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
 };
 
 class Tex2RTFServer: public wxDDEServer
@@ -124,7 +124,7 @@ class ItemizeStruc: public wxObject
 
 extern TexChunk *currentMember;
 extern bool startedSections;
-extern char *contentsString;
+extern wxChar *contentsString;
 extern bool suppressNameDecoration;
 extern wxList itemizeStack;
 
@@ -134,17 +134,17 @@ extern FILE *Sections;
 extern FILE *Subsections;
 extern FILE *Subsubsections;
 
-extern char *InputFile;
-extern char *OutputFile;
-extern char *MacroFile;
+extern wxChar *InputFile;
+extern wxChar *OutputFile;
+extern wxChar *MacroFile;
 
-extern char *FileRoot;
-extern char *ContentsName;    // Contents page from last time around
-extern char *TmpContentsName; // Current contents page
-extern char *TmpFrameContentsName; // Current frame contents page
-extern char *WinHelpContentsFileName; // WinHelp .cnt file
-extern char *RefName;         // Reference file name
-extern char *bulletFile;
+extern wxChar *FileRoot;
+extern wxChar *ContentsName;    // Contents page from last time around
+extern wxChar *TmpContentsName; // Current contents page
+extern wxChar *TmpFrameContentsName; // Current frame contents page
+extern wxChar *WinHelpContentsFileName; // WinHelp .cnt file
+extern wxChar *RefName;         // Reference file name
+extern wxChar *bulletFile;
 
 #ifndef NO_GUI
 void ChooseOutputFile(bool force = FALSE);

@@ -57,11 +57,11 @@ int currentRowNumber = 0;
  *
  */
 
-bool ParseTableArgument(char *value)
+bool ParseTableArgument(wxChar *value)
 {
   noColumns = 0;
   int i = 0;
-  int len = strlen(value);
+  int len = wxStrlen(value);
   bool isBorder = FALSE;
   while (i < len)
   {
@@ -111,7 +111,7 @@ bool ParseTableArgument(char *value)
     {
       i ++;
       int j = 0;
-      char numberBuf[50];
+      wxChar numberBuf[50];
       ch = value[i];
       if (ch == '{')
       {
@@ -145,8 +145,8 @@ bool ParseTableArgument(char *value)
     }
     else
     {
-      char *buf = new char[strlen(value) + 80];
-      sprintf(buf, "Tabular first argument \"%s\" too complex!", value);
+      wxChar *buf = new wxChar[wxStrlen(value) + 80];
+      wxSprintf(buf, _T("Tabular first argument \"%s\" too complex!"), value);
       OnError(buf);
       delete[] buf;
       return FALSE;

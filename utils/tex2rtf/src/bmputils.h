@@ -13,7 +13,7 @@
 static char hexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
   'C', 'D', 'E', 'F' };
 
-void DecToHex(int dec, char *buf)
+void DecToHex(int dec, wxChar *buf)
 {
   int firstDigit = (int)(dec/16.0);
   int secondDigit = (int)(dec - (firstDigit*16.0));
@@ -41,30 +41,46 @@ static unsigned long getint(FILE *fp)
 
 bool GetBMPHeader(FILE *fp, int *Width, int *Height, int *Planes, int *BitsPerPixel)
 {
-  unsigned long bfSize, bfOffBits, biSize, biWidth, biHeight, biPlanes;
-  unsigned long biBitCount, biCompression, biSizeImage, biXPelsPerMeter;
-  unsigned long biYPelsPerMeter, biClrUsed, biClrImportant;
+  // Remember about all fields but store only important ones
+  unsigned long /*
+                bfSize, 
+                bfOffBits, 
+                biSize, 
+                */ 
+                biWidth, 
+                biHeight, 
+                biPlanes,
+                biBitCount
+                /*        ,
+                biCompression,
+                biSizeImage, 
+                biXPelsPerMeter, 
+                biYPelsPerMeter, 
+                biClrUsed, 
+                biClrImportant
+                */
+                ;
 
   /* read the file type (first two bytes) */
   int c = getc(fp); int c1 = getc(fp);
   if (c!='B' || c1!='M') { return FALSE; }
 
-  bfSize = getint(fp);
+  /* bfSize = */          getint(fp);
   getshort(fp);         /* reserved and ignored */
   getshort(fp);
-  bfOffBits = getint(fp);
+  /* bfOffBits = */       getint(fp);
 
-  biSize          = getint(fp);
+  /* biSize          = */ getint(fp);
   biWidth         = getint(fp);
   biHeight        = getint(fp);
   biPlanes        = getshort(fp);
   biBitCount      = getshort(fp);
-  biCompression   = getint(fp);
-  biSizeImage     = getint(fp);
-  biXPelsPerMeter = getint(fp);
-  biYPelsPerMeter = getint(fp);
-  biClrUsed       = getint(fp);
-  biClrImportant  = getint(fp);
+  /* biCompression   = */ getint(fp);
+  /* biSizeImage     = */ getint(fp);
+  /* biXPelsPerMeter = */ getint(fp);
+  /* biYPelsPerMeter = */ getint(fp);
+  /* biClrUsed       = */ getint(fp);
+  /* biClrImportant  = */ getint(fp);
 
   *Width = (int)biWidth;
   *Height = (int)biHeight;
@@ -91,19 +107,19 @@ bool OutputBitmapHeader(FILE *fd, bool isWinHelp = FALSE)
   int goalW = 15*Width;
   int goalH = 15*Height;
 
-  TexOutput("{\\pict");
-  if (isWinHelp) TexOutput("\\wbitmap0");
-  else TexOutput("\\dibitmap");
+  TexOutput(_T("{\\pict"));
+  if (isWinHelp) TexOutput(_T("\\wbitmap0"));
+  else TexOutput(_T("\\dibitmap)"));
 
-  char buf[50];
-  TexOutput("\\picw"); sprintf(buf, "%d", Width); TexOutput(buf);
-  TexOutput("\\pich"); sprintf(buf, "%d", Height); TexOutput(buf);
-  TexOutput("\\wbmbitspixel"); sprintf(buf, "%d", BitsPerPixel); TexOutput(buf);
-  TexOutput("\\wbmplanes"); sprintf(buf, "%d", Planes); TexOutput(buf);
-  TexOutput("\\wbmwidthbytes"); sprintf(buf, "%d", scanLineWidth); TexOutput(buf);
-  TexOutput("\\picwgoal"); sprintf(buf, "%d", goalW); TexOutput(buf);
-  TexOutput("\\pichgoal"); sprintf(buf, "%d", goalH); TexOutput(buf);
-  TexOutput("\n");
+  wxChar buf[50];
+  TexOutput(_T("\\picw")); wxSprintf(buf, _T("%d"), Width); TexOutput(buf);
+  TexOutput(_T("\\pich")); wxSprintf(buf, _T("%d"), Height); TexOutput(buf);
+  TexOutput(_T("\\wbmbitspixel")); wxSprintf(buf, _T("%d"), BitsPerPixel); TexOutput(buf);
+  TexOutput(_T("\\wbmplanes")); wxSprintf(buf, _T("%d"), Planes); TexOutput(buf);
+  TexOutput(_T("\\wbmwidthbytes")); wxSprintf(buf, _T("%d"), scanLineWidth); TexOutput(buf);
+  TexOutput(_T("\\picwgoal")); wxSprintf(buf, _T("%d"), goalW); TexOutput(buf);
+  TexOutput(_T("\\pichgoal")); wxSprintf(buf, _T("%d"), goalH); TexOutput(buf);
+  TexOutput(_T("\n"));
   return TRUE;
 }
 
@@ -113,20 +129,20 @@ bool OutputBitmapData(FILE *fd)
   fseek(fd, 14, SEEK_SET);
   int bytesSoFar = 0;
   int ch = getc(fd);
-  char hexBuf[3];
+  wxChar hexBuf[3];
   while (ch != EOF)
   {
     if (bytesSoFar == scanLineWidth)
     {
       bytesSoFar = 0;
-      TexOutput("\n");
+      TexOutput(_T("\n"));
     }
     DecToHex(ch, hexBuf);
     TexOutput(hexBuf);
     bytesSoFar ++;
     ch = getc(fd);
   }
-  TexOutput("\n}\n");
+  TexOutput(_T("\n}\n"));
   return TRUE;
 }
 
@@ -158,7 +174,7 @@ bool GetMetafileHeader(FILE *handle, int *width, int *height)
   return TRUE;
 }
 
-bool OutputMetafileHeader(FILE *handle, bool isWinHelp, int userWidth, int userHeight)
+bool OutputMetafileHeader(FILE *handle, bool WXUNUSED(isWinHelp), int userWidth, int userHeight)
 {
   int Width, Height;
   if (!GetMetafileHeader(handle, &Width, &Height))
@@ -187,22 +203,22 @@ bool OutputMetafileHeader(FILE *handle, bool isWinHelp, int userWidth, int userH
     goalH = userHeight;
   }
 
-  TexOutput("{\\pict");
-  TexOutput("\\wmetafile8");
+  TexOutput(_T("{\\pict"));
+  TexOutput(_T("\\wmetafile8"));
 
-  char buf[50];
-  TexOutput("\\picw"); sprintf(buf, "%d", Width); TexOutput(buf);
-  TexOutput("\\pich"); sprintf(buf, "%d", Height); TexOutput(buf);
-  TexOutput("\\picwgoal"); sprintf(buf, "%d", goalW); TexOutput(buf);
-  TexOutput("\\pichgoal"); sprintf(buf, "%d", goalH); TexOutput(buf);
-  TexOutput("\n");
+  wxChar buf[50];
+  TexOutput(_T("\\picw")); wxSprintf(buf, _T("%d"), Width); TexOutput(buf);
+  TexOutput(_T("\\pich")); wxSprintf(buf, _T("%d"), Height); TexOutput(buf);
+  TexOutput(_T("\\picwgoal")); wxSprintf(buf, _T("%d"), goalW); TexOutput(buf);
+  TexOutput(_T("\\pichgoal")); wxSprintf(buf, _T("%d"), goalH); TexOutput(buf);
+  TexOutput(_T("\n"));
   return TRUE;
 }
 
 bool OutputMetafileData(FILE *handle)
 {
   int bytesSoFar = 0;
-  char hexBuf[3];
+  wxChar hexBuf[3];
   int ch;
   do
   {
@@ -210,7 +226,7 @@ bool OutputMetafileData(FILE *handle)
     if (bytesSoFar == scanLineWidth)
     {
       bytesSoFar = 0;
-      TexOutput("\n");
+      TexOutput(_T("\n"));
     }
     if (ch != EOF)
     {
@@ -219,7 +235,7 @@ bool OutputMetafileData(FILE *handle)
       bytesSoFar ++;
     }
   } while (ch != EOF);
-  TexOutput("\n}\n");
+  TexOutput(_T("\n}\n"));
   return TRUE;
 }
 
