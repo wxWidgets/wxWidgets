@@ -204,7 +204,7 @@ public:
         return LayoutWindow(frame, mainWindow);
     }
 
-    // mainWindow is sized to whatever's left over. This function for backward
+    // mainWindow is sized to whatever's left over.
     bool LayoutWindow(wxWindow* frame, wxWindow* mainWindow = (wxWindow*) NULL);
 };
 

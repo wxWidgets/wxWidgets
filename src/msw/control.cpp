@@ -89,7 +89,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         exstyle = GetExStyle(style, &want3D);
     }
 
-    // all controls have these childs (wxWindows creates all controls visible
+    // all controls have these styles (wxWindows creates all controls visible
     // by default)
     style |= WS_CHILD | WS_VISIBLE;
 

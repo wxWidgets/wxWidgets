@@ -157,7 +157,15 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
     {
         // If not in query mode, resize the window.
         // TODO: add wxRect& form to wxWindow::SetSize
+        wxSize sz = GetSize();
+        wxPoint pos = GetPosition();
         SetSize(thisRect.x, thisRect.y, thisRect.width, thisRect.height);
+
+        // Make sure the sash is erased when the window is resized
+        if ((pos.x != thisRect.x || pos.y != thisRect.y || sz.x != thisRect.width || sz.y != thisRect.height) &&
+            (GetSashVisible(wxSASH_TOP) || GetSashVisible(wxSASH_RIGHT) || GetSashVisible(wxSASH_BOTTOM) || GetSashVisible(wxSASH_LEFT)))
+            Refresh(TRUE);
+
     }
 
     event.SetRect(clientSize);

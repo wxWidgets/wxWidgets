@@ -1117,10 +1117,14 @@ enum wxStretch
  * wxSplitterWindow flags
  */
 #define wxSP_NOBORDER         0x0000
-#define wxSP_3D               0x0010
+#define wxSP_NOSASH           0x0010
 #define wxSP_BORDER           0x0020
 #define wxSP_PERMIT_UNSPLIT   0x0040
 #define wxSP_LIVE_UPDATE      0x0080
+#define wxSP_3DSASH           0x0100
+#define wxSP_3DBORDER         0x0200
+#define wxSP_FULLSASH         0x0400
+#define wxSP_3D               (wxSP_3DBORDER | wxSP_3DSASH)
 
 /*
  * wxFrame extra flags

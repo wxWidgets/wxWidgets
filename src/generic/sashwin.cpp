@@ -400,7 +400,7 @@ void wxSashWindow::DrawBorders(wxDC& dc)
     wxPen lightShadowPen(m_lightShadowColour, 1, wxSOLID);
     wxPen hilightPen(m_hilightColour, 1, wxSOLID);
 
-    if ( GetWindowStyleFlag() & wxSW_3D )
+    if ( GetWindowStyleFlag() & wxSW_3DBORDER )
     {
         dc.SetPen(mediumShadowPen);
         dc.DrawLine(0, 0, w-1, 0);
@@ -465,7 +465,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
         dc.SetBrush(faceBrush);
         dc.DrawRectangle(sashPosition, 0, GetEdgeMargin(edge), h);
 
-        if (GetWindowStyleFlag() & wxSW_3D)
+        if (GetWindowStyleFlag() & wxSW_3DSASH)
         {
             if (edge == wxSASH_LEFT)
             {
@@ -495,7 +495,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
         dc.SetBrush(faceBrush);
         dc.DrawRectangle(0, sashPosition, w, GetEdgeMargin(edge));
 
-        if (GetWindowStyleFlag() & wxSW_3D)
+        if (GetWindowStyleFlag() & wxSW_3DSASH)
         {
             if (edge == wxSASH_BOTTOM)
             {

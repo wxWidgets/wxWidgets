@@ -55,8 +55,11 @@ public:
  */
 
 #define wxSW_NOBORDER         0x0000
-#define wxSW_3D               0x0010
+//#define wxSW_3D               0x0010
 #define wxSW_BORDER           0x0020
+#define wxSW_3DSASH           0x0040
+#define wxSW_3DBORDER         0x0080
+#define wxSW_3D (wxSW_3DSASH | wxSW_3DBORDER)
 
 /*
  * wxSashWindow allows any of its edges to have a sash which can be dragged
