@@ -1,7 +1,7 @@
 
-   Welcome to wxWindows/Gtk 2.4
+   Welcome to wxWindows/Gtk 2.5
 
-you have downloaded version 2.4 of the GTK port of the 
+You have downloaded version 2.5 of the GTK port of the 
 wxWindows GUI library.
 
 wxWindows no longer supports GTK 1.0 (as did some early
@@ -10,31 +10,39 @@ GTK 1.2.6 or above is recommended although some programs
 will work with GTK 1.2.3 onwards. There is now support
 for GTK 2.0.
 
-More info about the wxWindows project (and the Windows
-and Motif ports in particular) can be found at Julian's 
-homepage at:
+More info about the wxWindows project (including the
+Windows, X11/Motif and other ports) can be found at the main
+wxWindows homepage at:
 
-  http://www.wxwindows.org
+                  http://www.wxwindows.org
   
 Information on how to install can be found in the file 
 INSTALL.txt, but if you cannot wait, this should work on
 many systems:
 
-./configure --with-gtk
-make
-su <type root password>
-make install
-ldconfig
-exit
+    mkdir gtk
+    cd gtk
+    ../configure --with-gtk
+    make
+    su <type root password>
+    make install
+    ldconfig
 
-In order to use wxGTK with GTK 2.0 and its unicode
-support, you need to configure
+In order to use wxGTK with GTK 2.0 you need to use --enable-gtk2
+configure option. To build the library in Unicode mode (all
+strings will be wide strings and so on) you need to configure
+with GTK 2.0 and add --enable-unicode.
 
-./configure --with-gtk --enable-gtk2 --enable-unicode
-etc.
-
-So far, support for GTK 2.0 has only been tested on
+Note that so far, support for GTK 2.0 has only been tested on
 Linux with glibc 2.2.
+
+
+Please note that it is strongly advised to build the library in
+a separate directory, as shown above, as it allows you to have
+different builds of it (for example with and without debug) in
+parallel. If you build in the source directory, don't forget to
+do "make clean" before changing the configuration!
+
 
 When you run into problems, please read the INSTALL.txt and 
 follow those instructions. If you still don't have any success,
@@ -44,10 +52,12 @@ VERSION OF GTK, WXGTK, WHAT DISTRIBUTION YOU USE AND WHAT ERROR
 WAS REPORTED. I know this has no effect, but I tried...
 
 The library produced by the install process will be called 
-libwx_gtk.a (static) and libwx_gtk-2.2.so.0.0.0 (shared) so 
-that once a binary incompatible version of wxWindows/Gtk comes 
-out we'll augment the library version number to avoid linking 
-problems.
+libwx_gtk.a (static, only buil if --disable-shared configure
+switch was used or if shared libraries are not supported at all
+on your platform which is quite unlikely) and
+libwx_gtk-2.2.so.0.0.0 (shared) so that once a binary
+incompatible version of wxWindows/Gtk comes out we'll augment
+the library version number to avoid linking problems.
 
 Please send problems concerning installation, feature requests, 
 bug reports or comments to the wxWindows users list. Information 
