@@ -162,7 +162,7 @@ public:
    virtual CoordType GetOffsetScreen(wxDC &dc, CoordType xpos) const { return 0; }
 
    /// constructor
-   wxLayoutObject() { m_UserData = NULL; m_Line = NULL; }
+   wxLayoutObject() { m_UserData = NULL; }
    /// delete the user data
    virtual ~wxLayoutObject() { if(m_UserData) m_UserData->DecRef(); }
 
@@ -182,20 +182,6 @@ public:
          if(m_UserData)
             m_UserData->IncRef();
       }
-
-   /// returns the line we belong to (or NULL)
-   wxLayoutLine *GetLine() const { return m_Line; }
-
-   /// attaches this object to the given line, it's an error to reattach us
-   void AttachToLine(wxLayoutLine *line)
-   {
-       wxASSERT_MSG( !m_Line, "this layout object already belongs to a line" );
-
-       m_Line = line;
-   }
-
-   /// unattaches the object (should reattach it immediately afterwards!)
-   void UnattachFromLine() { if ( m_Line ) m_Line = (wxLayoutLine *)NULL; }
 
    /** Return the user data.
     Increments the object's reference count. When no longer needed,
@@ -221,9 +207,6 @@ public:
 protected:
    /// optional data for application's use
    UserData *m_UserData;
-
-   /// the line of the text we belong to or NULL if we're not shown on screen
-   wxLayoutLine *m_Line;
 };
 
 /// Define a list type of wxLayoutObject pointers.
@@ -472,7 +455,7 @@ public:
        @param text  the text to insert
        @return true if that xpos existed and the object was inserted
    */
-   bool Insert(CoordType xpos, wxString text);
+   bool Insert(CoordType xpos, const wxString& text);
 
    /** This function appends an object to the line.
        @param obj  the object to insert
@@ -481,7 +464,6 @@ public:
       {
          wxASSERT(obj);
 
-         obj->AttachToLine(this);
          m_ObjectList.push_back(obj);
          m_Length += obj->GetLength();
       }
@@ -665,7 +647,19 @@ public:
    /// Returns dirty state
    bool IsDirty(void) const { return m_Dirty; }
    /// Marks line as diry.
-   void MarkDirty(void) { m_Dirty = true; }
+   void MarkDirty(CoordType left = -1)
+   {
+      if ( left != -1 )
+      {
+         if ( m_updateLeft == -1 || left < m_updateLeft )
+            m_updateLeft = left;
+      }
+
+      m_Dirty = true;
+   }
+   /// Reset the dirty flag
+   void MarkClean() { m_Dirty = false; m_updateLeft = -1; }
+
 private:
    /// Destructor is private. Use DeleteLine() to remove it.
    ~wxLayoutLine();
@@ -706,6 +700,8 @@ private:
    wxLayoutObjectList m_ObjectList;
    /// Have we been changed since the last layout?
    bool m_Dirty;
+   /// The coordinate of the left boundary of the update rectangle (if m_Dirty)
+   CoordType m_updateLeft;
    /// Pointer to previous line if it exists.
    wxLayoutLine *m_Previous;
    /// Pointer to next line if it exists.

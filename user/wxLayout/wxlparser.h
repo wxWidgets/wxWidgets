@@ -18,8 +18,8 @@
 
 enum wxLayoutExportType
 {
-   WXLO_EXPORT_TEXT,        
-   WXLO_EXPORT_HTML,        
+   WXLO_EXPORT_TEXT,
+   WXLO_EXPORT_HTML,
    WXLO_EXPORT_OBJECT,
    // this can be caused by empty lines:
    WXLO_EXPORT_EMPTYLINE
@@ -62,24 +62,17 @@ struct wxLayoutExportStatus
 };
 
 #ifdef OS_WIN
-/// import text into a wxLayoutList (including linefeeds):
-void wxLayoutImportText(wxLayoutList *list, wxString const &str,
-                        int withflag = WXLO_EXPORT_WITH_CRLF);
+    #define WXLO_DEFAULT_EXPORT_MODE WXLO_EXPORT_WITH_CRLF
+#else // Unix
+    #define WXLO_DEFAULT_EXPORT_MODE WXLO_EXPORT_WITH_LF_ONLY
+#endif // Win/Unix
 
-wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
-                                     int mode = WXLO_EXPORT_AS_TEXT,
-                                     int flags =
-                                     WXLO_EXPORT_WITH_CRLF); 
-#else
 /// import text into a wxLayoutList (including linefeeds):
-void wxLayoutImportText(wxLayoutList *list, wxString const &str,
-                        int withflag = WXLO_EXPORT_WITH_LF_ONLY);
+void wxLayoutImportText(wxLayoutList *list, wxString const &str);
 
 /// export text in a given format
 wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
                                      int mode = WXLO_EXPORT_AS_TEXT,
-                                     int flags =
-                                     WXLO_EXPORT_WITH_LF_ONLY);
-#endif
+                                     int flags = WXLO_DEFAULT_EXPORT_MODE);
 
 #endif //WXLPARSER_H

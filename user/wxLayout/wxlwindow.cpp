@@ -28,10 +28,7 @@
 #   include "gui/wxlparser.h"
 #else
 #   ifdef   __WXMSW__
-#       include <windows.h>
-#       undef FindWindow
-#       undef GetCharWidth
-#       undef StartDoc
+#       include <wx/msw/private.h>
 #   endif
 
 #   include "wxlwindow.h"
@@ -153,9 +150,13 @@ wxLayoutWindow::MSWGetDlgCode()
 void
 wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 {
-   wxPaintDC dc( this );
+   wxClientDC dc( this );
    PrepareDC( dc );
-   SetFocus();
+   if ( eventId != WXLOWIN_MENU_MOUSEMOVE )
+   {
+       // moving the mouse in a window shouldn't give it the focus!
+      SetFocus();
+   }
 
    wxPoint findPos;
    findPos.x = dc.DeviceToLogicalX(event.GetX());
@@ -512,10 +513,13 @@ wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))  // or: OnDraw(wxDC& dc)
 void
 wxLayoutWindow::DoPaint(const wxRect *updateRect)
 {
-#ifdef __WXGTK__
+#ifndef __WXMSW__
    InternalPaint(updateRect);
 #else
    Refresh(FALSE, updateRect); // Causes bad flicker under wxGTK!!!
+
+   if ( !::UpdateWindow(GetHwnd()) )
+      wxLogLastError("UpdateWindow");
 #endif
 }
 
@@ -876,12 +880,12 @@ void
 wxLayoutWindow::OnSetFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = true;
-//FIXME: need argument   DoPaint(); // to repaint the cursor
+   ev.Skip();
 }
 
 void
 wxLayoutWindow::OnKillFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = false;
-//FIXME: need argument   DoPaint(); // to repaint the cursor
+   ev.Skip();
 }

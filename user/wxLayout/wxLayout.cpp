@@ -38,7 +38,7 @@ IMPLEMENT_APP(MyApp)
              ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
              ID_WRAP, ID_NOWRAP, ID_PASTE, ID_COPY, ID_CUT, ID_FIND,
              ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT,
-             ID_TEST, ID_LONG_TEST };
+             ID_TEST, ID_LINEBREAKS_TEST, ID_LONG_TEST, ID_URL_TEST };
 
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
@@ -59,7 +59,8 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
 
 MyFrame::MyFrame(void) :
-   wxFrame( (wxFrame *) NULL, -1, (char *) "wxLayout", wxPoint(20,20), wxSize(600,360) )
+   wxFrame( (wxFrame *) NULL, -1, "wxLayout",
+             wxPoint(880,100), wxSize(256,256) )
 {
    CreateStatusBar( 2 );
 
@@ -80,24 +81,27 @@ MyFrame::MyFrame(void) :
    file_menu->Append(ID_PREVIEW_PS, "Print Preview PostScript", "Preview (PostScript)");
 #endif
    file_menu->AppendSeparator();
-   file_menu->Append( ID_TEXT, "Export Text");
-   file_menu->Append( ID_HTML, "Export HTML");
-   file_menu->Append( ID_QUIT, "Exit");
-   menu_bar->Append(file_menu, "File" );
+   file_menu->Append( ID_TEXT, "Export &Text");
+   file_menu->Append( ID_HTML, "Export &HTML");
+   file_menu->Append( ID_QUIT, "E&xit");
+   menu_bar->Append(file_menu, "&File" );
 
    wxMenu *edit_menu = new wxMenu;
-   edit_menu->Append( ID_CLEAR, "Clear");
-   edit_menu->Append( ID_ADD_SAMPLE, "Example");
-   edit_menu->Append( ID_LONG_TEST, "Add many lines");
+   edit_menu->Append( ID_CLEAR, "C&lear");
+   edit_menu->Append( ID_ADD_SAMPLE, "&Example");
+   edit_menu->Append( ID_LONG_TEST, "Add &many lines");
    edit_menu->AppendSeparator();
-   edit_menu->Append(ID_WRAP, "Wrap mode", "Activate wrapping at pixel 200.");
-   edit_menu->Append(ID_NOWRAP, "No-wrap mode", "Deactivate wrapping.");
+   edit_menu->Append( ID_LINEBREAKS_TEST, "Add &several lines");
+   edit_menu->Append( ID_URL_TEST, "Insert an &URL");
    edit_menu->AppendSeparator();
-   edit_menu->Append(ID_COPY, "Copy", "Copy text to clipboard.");
-   edit_menu->Append(ID_CUT, "Cut", "Cut text to clipboard.");
-   edit_menu->Append(ID_PASTE,"Paste", "Paste text from clipboard.");
-   edit_menu->Append(ID_FIND, "Find", "Find text.");
-   menu_bar->Append(edit_menu, "Edit" );
+   edit_menu->Append(ID_WRAP, "&Wrap mode", "Activate wrapping at pixel 200.");
+   edit_menu->Append(ID_NOWRAP, "&No-wrap mode", "Deactivate wrapping.");
+   edit_menu->AppendSeparator();
+   edit_menu->Append(ID_COPY, "&Copy", "Copy text to clipboard.");
+   edit_menu->Append(ID_CUT, "Cu&t", "Cut text to clipboard.");
+   edit_menu->Append(ID_PASTE,"&Paste", "Paste text from clipboard.");
+   edit_menu->Append(ID_FIND, "&Find", "Find text.");
+   menu_bar->Append(edit_menu, "&Edit" );
 
 #ifndef __WXMSW__
    menu_bar->Show( TRUE );
@@ -191,8 +195,7 @@ MyFrame::AddSampleText(wxLayoutList *llist)
          fgets(buffer,1024,in);
          if(feof(in))
             break;
-         llist->Insert(buffer);
-         llist->LineBreak();
+         wxLayoutImportText(llist, buffer);
       }
    }
    llist->MoveCursorTo(wxPoint(0,0));
@@ -300,6 +303,19 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       m_lwin->Refresh();
       break;
    }
+
+   case ID_LINEBREAKS_TEST:
+      wxLayoutImportText(m_lwin->GetLayoutList(),
+                         "This is a text\n"
+                         "with embedded line\n"
+                         "breaks.\n");
+      break;
+
+   case ID_URL_TEST:
+      // VZ: this doesn't work, of course, but I think it should -
+      //     wxLayoutWindow should have a flag m_highlightUrls and do it itself
+      //     (instead of doing it manually like M does now)
+      m_lwin->GetLayoutList()->Insert("http://www.wxwindows.org/");
    }
 };
 

@@ -28,29 +28,30 @@
 
 #define   BASE_SIZE 12
 
-inline static bool IsEndOfLine(const char *p, int mode)
+inline static bool IsEndOfLine(const char *p)
 {
-   // in addition to Unix EOL convention we also (but not instead) understand
-   // the DOS one under Windows
-   return
-      (mode == WXLO_EXPORT_WITH_CRLF) ?
-      ((*p == '\r') && (*(p + 1) == '\n')) 
-      :
-      (((*p == '\r') && (*(p + 1) == '\n'))||(*p == '\n'));
+   // the end of line is either just '\n' or "\r\n" - we understand both (even
+   // though the second is used only under DOS/Windows) to be able to import
+   // DOS text files even under Unix
+   return (*p == '\n') || ((*p == '\r') && (*(p + 1) == '\n'));
 }
 
-void wxLayoutImportText(wxLayoutList *list, wxString const &str, int withflag)
+void wxLayoutImportText(wxLayoutList *list, wxString const &str)
 {
-   if(str.Length() == 0)
+   if ( !str )
       return;
-   char * cptr = (char *)str.c_str(); // string gets changed only temporarily
+
+   // we change the string temporarily inside this function
+   wxString& s = (wxString &)str; // const_cast
+
+   char * cptr = s.GetWriteBuf(s.Len());
    const char * begin = cptr;
    char  backup;
-   
+
    for(;;)
    {
       begin = cptr;
-      while( *cptr && !IsEndOfLine(cptr, withflag) )
+      while( *cptr && !IsEndOfLine(cptr) )
          cptr++;
       backup = *cptr;
       *cptr = '\0';
@@ -58,7 +59,7 @@ void wxLayoutImportText(wxLayoutList *list, wxString const &str, int withflag)
       *cptr = backup;
 
       // check if it's the end of this line
-      if ( IsEndOfLine(cptr, withflag) )
+      if ( IsEndOfLine(cptr) )
       {
          // if it was "\r\n", skip the following '\n'
          if ( *cptr == '\r' )
@@ -69,6 +70,8 @@ void wxLayoutImportText(wxLayoutList *list, wxString const &str, int withflag)
          break;
       cptr++;
    }
+
+   s.UngetWriteBuf();
 }
 
 static
@@ -77,11 +80,11 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
 {
    static char buffer[20];
    wxString html;
-   
+
    wxLayoutStyleInfo *si = cmd.GetStyle();
 
    int size, sizecount;
-   
+
    html += "<font ";
 
    if(si->m_fg_valid)
@@ -97,7 +100,7 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
       sprintf(buffer,"\"#%02X%02X%02X\"", si->m_bg.Red(),si->m_bg.Green(),si->m_bg.Blue());
       html += buffer;
    }
-   
+
    switch(si->family)
    {
    case wxSWISS:
@@ -139,7 +142,7 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
 
    if(si->style == wxSLANT)
       si->style = wxITALIC; // the same for html
-   
+
    if((si->style == wxITALIC) && ( (!styleInfo) || (styleInfo->style != wxITALIC)))
       html += "<i>";
    else
@@ -151,9 +154,9 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
    else if(si->underline == false && ( styleInfo && styleInfo->underline))
       html += "</u>";
 
-   
+
    *styleInfo = *si; // update last style info
-   
+
    return html;
 }
 
@@ -165,7 +168,7 @@ wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list)
    m_line = list->GetFirstLine();
    m_iterator = m_line->GetFirstObject();
 }
-   
+
 
 
 #define   WXLO_IS_TEXT(type) \
@@ -179,7 +182,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
 {
    wxASSERT(status);
    wxLayoutExportObject * export;
-   
+
    if(status->m_iterator == NULLIT) // end of line
    {
       if(!status->m_line || status->m_line->GetNextLine() == NULL)
@@ -234,7 +237,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
             break; // end of list
       }
       if(! status->m_line)  // reached end of list, fall through
-         break; 
+         break;
       type = (** status->m_iterator).GetType();
       if(type == WXLO_TYPE_ICON)
          break;
