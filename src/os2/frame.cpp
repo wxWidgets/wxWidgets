@@ -1053,27 +1053,51 @@ void wxFrame::OnActivate(
   wxActivateEvent&                  rEvent
 )
 {
-    for (wxWindowList::Node* pNode = GetChildren().GetFirst();
-         pNode;
-         pNode = pNode->GetNext())
+    if ( rEvent.GetActive() )
     {
-        // FIXME all this is totally bogus - we need to do the same as wxPanel,
-        //       but how to do it without duplicating the code?
+        // restore focus to the child which was last focused
+        wxLogTrace(_T("focus"), _T("wxFrame %08x activated."), m_hWnd);
 
-        // restore focus
-        wxWindow*                   pChild = pNode->GetData();
+        wxWindow*                           pParent = m_pWinLastFocused ? m_pWinLastFocused->GetParent()
+                                            : NULL;
+        if (!pParent)
+        {
+            pParent = this;
+        }
 
-        if (!pChild->IsTopLevel()
+        wxSetFocusToChild( pParent
+                          ,&m_pWinLastFocused
+                         );
+    }
+    else // deactivating
+    {
+        //
+        // Remember the last focused child if it is our child
+        //
+        m_pWinLastFocused = FindFocus();
+
+        for (wxWindowList::Node* pNode = GetChildren().GetFirst();
+             pNode;
+             pNode = pNode->GetNext())
+        {
+            // FIXME all this is totally bogus - we need to do the same as wxPanel,
+            //       but how to do it without duplicating the code?
+
+            // restore focus
+            wxWindow*                   pChild = pNode->GetData();
+
+            if (!pChild->IsTopLevel()
 #if wxUSE_TOOLBAR
-             && !wxDynamicCast(pChild, wxToolBar)
+                 && !wxDynamicCast(pChild, wxToolBar)
 #endif // wxUSE_TOOLBAR
 #if wxUSE_STATUSBAR
-             && !wxDynamicCast(pChild, wxStatusBar)
+                 && !wxDynamicCast(pChild, wxStatusBar)
 #endif // wxUSE_STATUSBAR
-           )
-        {
-            pChild->SetFocus();
-            return;
+               )
+            {
+                pChild->SetFocus();
+                return;
+            }
         }
     }
 } // end of wxFrame::OnActivate
