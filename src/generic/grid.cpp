@@ -567,7 +567,11 @@ void wxGridCellTextEditor::Create(wxWindow* parent,
 #endif
                               );
 
-    // TODO: use m_maxChars
+    // set max length allowed in the textctrl, if the parameter was set
+    if (m_maxChars != 0)
+    {
+        ((wxTextCtrl*)m_control)->SetMaxLength(m_maxChars);
+    }
 
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
