@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        settings.cpp
+// Name:        gtk/settings.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -106,9 +106,13 @@ static bool GetColourFromGTKWidget(GtkWidgetType type, GtkStateType state,
     bool ok;
     if ( def )
     {
-        red = def->bg[state].red;
-        green = def->bg[state].green;
-        blue = def->bg[state].blue;
+        // ok, it's a hack: we really should have different functions to
+        // access GtkStyle::bg and ::base but as we only use base for listbox
+        // for now, this code works too
+        GdkColor *col = type == GTK_BUTTON ? def->bg : def->base;
+        red = col[state].red;
+        green = col[state].green;
+        blue = col[state].blue;
 
         ok = TRUE;
     }
