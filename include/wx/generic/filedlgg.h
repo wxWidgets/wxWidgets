@@ -162,6 +162,7 @@ public:
         is_drive = 0x0008
     };
 
+    wxFileData() { Init(); }
     // Full copy constructor
     wxFileData( const wxFileData& fileData ) { Copy(fileData); }
     // Create a filedata from this information
@@ -224,10 +225,10 @@ public:
     // initialize a wxListItem attributes
     void MakeItem( wxListItem &item );
 
-
+    // operators
     wxFileData& operator = (const wxFileData& fd) { Copy(fd); return *this; }
 
-private:
+protected:
     wxString m_fileName;
     wxString   m_filePath;
     long     m_size;
@@ -235,6 +236,9 @@ private:
     wxString m_permissions;
     int      m_type;
     int        m_image;
+    
+private:
+    void Init();
 };
 
 //-----------------------------------------------------------------------------
