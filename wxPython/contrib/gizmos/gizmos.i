@@ -48,7 +48,7 @@
 MAKE_CONST_WXSTRING2(DynamicSashNameStr,     wxT("dynamicSashWindow"));
 MAKE_CONST_WXSTRING2(EditableListBoxNameStr, wxT("editableListBox"));
 MAKE_CONST_WXSTRING2(TreeListCtrlNameStr,    wxT("treelistctrl"));
-MAKE_CONST_WXSTRING(StaticPictureNameStr);
+MAKE_CONST_WXSTRING(StaticPictureNameStr);                     
     
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
@@ -977,8 +977,8 @@ public:
     %pythonAppend wxStaticPicture         "self._setOORInfo(self)"
     %pythonAppend wxStaticPicture()       ""
 
-    wxStaticPicture( wxWindow* parent, wxWindowID id,
-                     const wxBitmap& label,
+    wxStaticPicture( wxWindow* parent, wxWindowID id=-1,
+                     const wxBitmap& label=wxNullBitmap,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = 0,
@@ -986,8 +986,8 @@ public:
 
     %RenameCtor(PreStaticPicture, wxStaticPicture());
 
-    bool Create( wxWindow* parent, wxWindowID id,
-                 const wxBitmap& label,
+    bool Create( wxWindow* parent, wxWindowID id=-1,
+                 const wxBitmap& label=wxNullBitmap,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
