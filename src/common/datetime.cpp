@@ -3217,11 +3217,48 @@ const wxChar *wxDateTime::ParseDateTime(const wxChar *date)
 {
     wxCHECK_MSG( date, (wxChar *)NULL, _T("NULL pointer in wxDateTime::Parse") );
 
-    // there is a public domain version of getdate.y, but it only works for
-    // English...
-    wxFAIL_MSG(_T("TODO"));
+    // Set to current day and hour, so strings like '14:00' becomes today at
+    // 14, not some other random date
+    wxDateTime dtDate = wxDateTime::Today();
+    wxDateTime dtTime = wxDateTime::Today();
 
-    return (wxChar *)NULL;
+    const wxChar* pchTime;
+
+    // Try to parse the beginning of the string as a date
+    const wxChar* pchDate = dtDate.ParseDate(date);
+
+    // We got a date in the beginning, see if there is a time specified after the date
+    if ( pchDate )
+    {
+        // Skip spaces, as the ParseTime() function fails on spaces
+        while ( wxIsspace(*pchDate) )
+            pchDate++;
+
+        pchTime = dtTime.ParseTime(pchDate);
+    }
+    else // no date in the beginning
+    {
+        // check and see if we have a time followed by a date
+        pchTime = dtTime.ParseTime(date);
+        if ( pchTime )
+        {
+            while ( wxIsspace(*pchTime) )
+                pchTime++;
+
+            pchDate = dtDate.ParseDate(pchTime);
+        }
+    }
+
+    // If we have a date specified, set our own data to the same date
+    if ( !pchDate || !pchTime )
+        return NULL;
+
+    Set(dtDate.GetDay(), dtDate.GetMonth(), dtDate.GetYear(),
+        dtTime.GetHour(), dtTime.GetMinute(), dtTime.GetSecond(),
+        dtTime.GetMillisecond());
+
+    // Return endpoint of scan
+    return pchDate > pchTime ? pchDate : pchTime;
 }
 
 const wxChar *wxDateTime::ParseDate(const wxChar *date)

@@ -43,6 +43,10 @@ OTHER CHANGES
 2.5.1
 -----
 
+Base:
+
+- wxDateTime::ParseDateTime() implemented (Linus McCabe)
+
 wxMSW:
 
 - fixed wxTE_*WRAP styles handling
