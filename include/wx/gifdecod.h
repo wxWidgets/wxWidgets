@@ -23,8 +23,38 @@
 #include "wx/image.h"
 
 
-typedef struct _IMAGEN
+// --------------------------------------------------------------------------
+// constants
+// --------------------------------------------------------------------------
+
+// disposal method
+enum
 {
+    wxGIF_D_UNSPECIFIED = -1,       /* not specified */
+    wxGIF_D_DONOTDISPOSE = 0,       /* do not dispose */
+    wxGIF_D_TOBACKGROUND = 1,       /* restore to background colour */
+    wxGIF_D_TOPREVIOUS = 2          /* restore to previous image */
+};
+
+// error codes
+enum
+{
+    wxGIF_OK = 0,                   /* everything was OK */
+    wxGIF_INVFORMAT = 1,            /* error in gif header */
+    wxGIF_MEMERR = 2                /* error allocating memory */
+};
+
+#define MAX_BLOCK_SIZE 256          /* max. block size */
+
+
+// --------------------------------------------------------------------------
+// wxGIFDecoder class
+// --------------------------------------------------------------------------
+
+// internal class for storing GIF image data
+class GIFImage
+{
+public:
     unsigned int w;                 /* width */
     unsigned int h;                 /* height */
     unsigned int left;              /* x coord (in logical screen) */
@@ -34,64 +64,42 @@ typedef struct _IMAGEN
     long delay;                     /* delay in ms (-1 = unused) */
     unsigned char *p;               /* bitmap */
     unsigned char *pal;             /* palette */
-    struct _IMAGEN *next;           /* next image */
-    struct _IMAGEN *prev;           /* prev image */
-} IMAGEN;
+    GIFImage *next;                 /* next image */
+    GIFImage *prev;                 /* prev image */
+};
 
-
-/* disposal method */
-#define D_UNSPECIFIED   -1          /* not specified */
-#define D_DONOTDISPOSE  0           /* do not dispose */
-#define D_TOBACKGROUND  1           /* restore to background colour */
-#define D_TOPREVIOUS    2           /* restore to previous image */
-
-/* error codes */
-#define E_OK            0           /* everything was OK */
-#define E_FORMATO       1           /* error in gif header */
-#define E_MEMORIA       2           /* error allocating memory */
-
-#define MAX_BLOCK_SIZE  256         /* max. block size */
 
 class WXDLLEXPORT wxGIFDecoder
 {
 private:
-    /* logical screen */
+    // logical screen
     unsigned int  m_screenw;        /* logical screen width */
     unsigned int  m_screenh;        /* logical screen height */
     int           m_background;     /* background color (-1 = none) */
 
-    /* image data */
+    // image data
     bool          m_anim;           /* animated GIF */
     int           m_nimages;        /* number of images */
     int           m_image;          /* current image */
-    IMAGEN        *m_pimage;        /* pointer to current image */
-    IMAGEN        *m_pfirst;        /* pointer to first image */
-    IMAGEN        *m_plast;         /* pointer to last image */
+    GIFImage      *m_pimage;        /* pointer to current image */
+    GIFImage      *m_pfirst;        /* pointer to first image */
+    GIFImage      *m_plast;         /* pointer to last image */
 
-    /* decoder state vars */
+    // decoder state vars
     int           m_restbits;       /* remaining valid bits */
     unsigned int  m_restbyte;       /* remaining bytes in this block */
     unsigned int  m_lastbyte;       /* last byte read */
     unsigned char m_buffer[MAX_BLOCK_SIZE];     /* buffer for reading */
     unsigned char *m_bufp;          /* pointer to next byte in buffer */
 
-    wxInputStream *m_f;             /* input file */
+    // input stream
+    wxInputStream *m_f;             /* input stream */
 
 private:
     int getcode(int bits, int abfin);
-    int dgif(IMAGEN *img, int interl, int bits);
+    int dgif(GIFImage *img, int interl, int bits);
 
-public:
-    // constructor, destructor, etc.
-    wxGIFDecoder(wxInputStream *s, bool anim = FALSE);
-    ~wxGIFDecoder();
-    bool CanRead();
-    int ReadGIF();
-    void Destroy();
-
-    // convert current frame to wxImage
-    bool ConvertToImage(wxImage *image) const;
-
+protected:
     // get data of current frame
     int GetFrameIndex() const;
     unsigned char* GetData() const;
@@ -117,6 +125,17 @@ public:
     bool GoNextFrame(bool cyclic = FALSE);
     bool GoPrevFrame(bool cyclic = FALSE);
     bool GoFrame(int which);
+
+public:
+    // constructor, destructor, etc.
+    wxGIFDecoder(wxInputStream *s, bool anim = FALSE);
+    ~wxGIFDecoder();
+    bool CanRead();
+    int ReadGIF();
+    void Destroy();
+
+    // convert current frame to wxImage
+    bool ConvertToImage(wxImage *image) const;
 };
 
 

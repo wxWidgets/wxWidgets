@@ -49,15 +49,15 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
     decod = new wxGIFDecoder(&stream, TRUE);
 
-    if ((error = decod->ReadGIF()) != E_OK)
+    if ((error = decod->ReadGIF()) != wxGIF_OK)
     {
         if (verbose)
         {
             switch (error)
             {
-                case E_FORMATO: wxLogError(_("GIF: Error in image format.")); break;
-                case E_MEMORIA: wxLogError(_("GIF: Couldn't allocate memory.")); break;
-                default:        wxLogError(_("GIF: Unknown error."));
+                case wxGIF_INVFORMAT: wxLogError(_("wxGIFHandler: error in GIF image format")); break;
+                case wxGIF_MEMERR:    wxLogError(_("wxGIFHandler: couldn't allocate enough memory")); break;
+                default:              wxLogError(_("wxGIFHandler: unknown error !!!"));
             }
         }
         delete decod;

@@ -57,7 +57,7 @@ wxGIFDecoder::~wxGIFDecoder()
 
 void wxGIFDecoder::Destroy()
 {
-    IMAGEN *pimg, *paux;
+    GIFImage *pimg, *paux;
 
     pimg = m_pfirst;
 
@@ -66,7 +66,7 @@ void wxGIFDecoder::Destroy()
         paux = pimg->next;
         free(pimg->p);
         free(pimg->pal);
-        free(pimg);
+        delete pimg;
         pimg = paux;
     }
 }
@@ -309,7 +309,7 @@ int wxGIFDecoder::getcode(int bits, int ab_fin)
 //  GIF decoding function. The initial code size (aka root size)
 //  is 'bits'. Supports interlaced images (interl == 1).
 //
-int wxGIFDecoder::dgif(IMAGEN *img, int interl, int bits)
+int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
 {
     int ab_prefix[4096];        /* alphabet (prefixes) */
     int ab_tail[4096];          /* alphabet (tails) */
@@ -461,9 +461,9 @@ bool wxGIFDecoder::CanRead()
 //  animated GIF support is enabled. Can read GIFs with any bit
 //  size (color depth), but the output images are always expanded
 //  to 8 bits per pixel. Also, the image palettes always contain
-//  256 colors, although some of them may be unused. Returns E_OK
-//  (== 0) on success, or an error code if something fails. Error
-//  codes are E_ARCHIVO, E_FORMATO, E_MEMORIA (see header file).
+//  256 colors, although some of them may be unused. Returns GIF_OK
+//  (== 0) on success, or an error code if something fails (see
+//  header file for details)
 //
 int wxGIFDecoder::ReadGIF()
 {
@@ -473,11 +473,11 @@ int wxGIFDecoder::ReadGIF()
     unsigned char type;
     unsigned char pal[768];
     unsigned char buf[16];
-    IMAGEN        **ppimg, *pimg, *pprev;
+    GIFImage      **ppimg, *pimg, *pprev;
 
     /* check GIF signature */
     if (!CanRead())
-        return E_FORMATO;
+        return wxGIF_INVFORMAT;
 
     /* check for and animated GIF support (ver. >= 89a) */
     m_f->Read(buf, 6);
@@ -562,12 +562,12 @@ int wxGIFDecoder::ReadGIF()
         if (type == 0x2C)
         {
             /* allocate memory for IMAGEN struct */
-            pimg = (*ppimg) = (IMAGEN *) malloc(sizeof(IMAGEN));
+            pimg = (*ppimg) = new GIFImage();
 
             if (pimg == NULL)
             {
                 Destroy();
-                return E_MEMORIA;
+                return wxGIF_MEMERR;
             }
 
             /* fill in the data */
@@ -594,7 +594,7 @@ int wxGIFDecoder::ReadGIF()
             if ((!pimg->p) || (!pimg->pal))
             {
                 Destroy();
-                return E_MEMORIA;
+                return wxGIF_MEMERR;
             }
 
             /* load local color map if available, else use global map */
@@ -628,7 +628,7 @@ int wxGIFDecoder::ReadGIF()
         m_pimage = m_pfirst;
     }
 
-    return E_OK;
+    return wxGIF_OK;
 }
 
 #endif // wxUSE_STREAMS && wxUSE_GIF

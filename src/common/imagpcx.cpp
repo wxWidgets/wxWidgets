@@ -86,21 +86,24 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
 #define HDR_NPLANES         65
 #define HDR_BYTESPERLINE    66
 
-/* image formats */
-#define IMAGE_8BIT  0       // 8 bpp, 1 plane (8 bit)
-#define IMAGE_24BIT 1       // 8 bpp, 3 planes (24 bit)
+// image formats
+enum {
+    wxPCX_8BIT,             // 8 bpp, 1 plane (8 bit)
+    wxPCX_24BIT             // 8 bpp, 3 planes (24 bit)
+};
 
-/* error codes */
-#define E_OK        0       // everything was OK
-#define E_FORMATO   1       // error in pcx file format
-#define E_MEMORIA   2       // error allocating memory
-#define E_VERSION   3       // error in pcx version number
-
+// error codes
+enum {
+    wxPCX_OK = 0,           // everything was OK
+    wxPCX_INVFORMAT = 1,    // error in pcx file format
+    wxPCX_MEMERR = 2,       // error allocating memory
+    wxPCX_VERERR = 3        // error in pcx version number
+};
 
 // ReadPCX:
 //  Loads a PCX file into the wxImage object pointed by image.
-//  Returns E_OK on success, or an error code otherwise (see
-//  above for error codes)
+//  Returns wxPCX_OK on success, or an error code otherwise
+//  (see above for error codes)
 //
 int ReadPCX(wxImage *image, wxInputStream& stream)
 {
@@ -122,7 +125,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     //
     stream.Read(hdr, 128);
 
-    if (hdr[HDR_VERSION] < 5) return E_VERSION;
+    if (hdr[HDR_VERSION] < 5) return wxPCX_VERERR;
 
     // Extract all image info from the PCX header.
     //
@@ -139,23 +142,23 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     // 8 bits (8 bpp, 1 plane) and 24 bits (8 bpp, 3 planes).
     //
     if ((nplanes == 3) && (bitsperpixel == 8))
-        format = IMAGE_24BIT;
+        format = wxPCX_24BIT;
     else if ((nplanes == 1) && (bitsperpixel == 8))
-        format = IMAGE_8BIT;
+        format = wxPCX_8BIT;
     else
-        return E_FORMATO;
+        return wxPCX_INVFORMAT;
 
-    // If the image is of type IMAGE_8BIT, then there is a
+    // If the image is of type wxPCX_8BIT, then there is a
     // palette at the end of the file. Read it now before
     // proceeding.
     //
-    if (format == IMAGE_8BIT)
+    if (format == wxPCX_8BIT)
     {
         pos = stream.TellI();
         stream.SeekI(-769, wxFromEnd);
 
         if (stream.GetC() != 12)
-            return E_FORMATO;
+            return wxPCX_INVFORMAT;
 
         stream.Read(pal, 768);
         stream.SeekI(pos, wxFromStart);
@@ -166,10 +169,10 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     image->Create(width, height);
 
     if (!image->Ok())
-        return E_MEMORIA;
+        return wxPCX_MEMERR;
 
     if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == NULL)
-        return E_MEMORIA;
+        return wxPCX_MEMERR;
 
     // Now start reading the file, line by line, and store
     // the data in the format required by wxImage.
@@ -185,7 +188,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 
         switch (format)
         {
-            case IMAGE_8BIT:
+            case wxPCX_8BIT:
             {
                 for (i = 0; i < width; i++)
                 {
@@ -195,7 +198,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
                 }
                 break;
             }
-            case IMAGE_24BIT:
+            case wxPCX_24BIT:
             {
                 for (i = 0; i < width; i++)
                 {
@@ -210,7 +213,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 
     free(p);
 
-    return E_OK;
+    return wxPCX_OK;
 }
 
 
@@ -236,16 +239,16 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
     image->Destroy();
 
-    if ((error = ReadPCX(image, stream)) != E_OK)
+    if ((error = ReadPCX(image, stream)) != wxPCX_OK)
     {
         if (verbose)
         {
             switch (error)
             {
-                case E_FORMATO: wxLogError(_("PCX: Image format unsupported.")); break;
-                case E_MEMORIA: wxLogError(_("PCX: Couldn't allocate memory.")); break;
-                case E_VERSION: wxLogError(_("PCX: Wrong version number.")); break;
-                default:        wxLogError(_("PCX: Unknown error."));
+                case wxPCX_INVFORMAT: wxLogError(_("wxPCXHandler: image format unsupported")); break;
+                case wxPCX_MEMERR:    wxLogError(_("wxPCXHandler: couldn't allocate memory")); break;
+                case wxPCX_VERERR:    wxLogError(_("wxPCXHandler: version number too low")); break;
+                default:              wxLogError(_("wxPCXHandler: unknown error !!!"));
             }
         }
         image->Destroy();
