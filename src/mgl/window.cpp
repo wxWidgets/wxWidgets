@@ -99,6 +99,14 @@ enum
 //      with desired settings
 
 // FIXME_MGL -- move to app.cpp??
+static void wxDesktopPainter(window_t *wnd, MGLDC *dc)
+{
+    // FIXME_MGL - for now...
+    MGL_setColorRGB(0x63, 0x63, 0x96);
+    MGL_fillRectCoord(0, 0, wnd->width, wnd->height);
+}
+
+
 bool wxCreateMGL_WM()
 {
     int mode;
@@ -106,6 +114,7 @@ bool wxCreateMGL_WM()
     int refresh = MGL_DEFAULT_REFRESH;
     
 #if wxUSE_SYSTEM_OPTIONS
+    // FIXME_MGL -- so what is The Proper Way?
     if ( wxSystemOptions::HasOption(wxT("mgl.screen-width") )
         width = wxSystemOptions::GetOptionInt(wxT("mgl.screen-width"));
     if ( wxSystemOptions::HasOption(wxT("mgl.screen-height") )
@@ -133,6 +142,8 @@ bool wxCreateMGL_WM()
     g_winMng = MGL_wmCreate(g_displayDC->getDC());
     if (!g_winMng)
         return FALSE;
+
+    MGL_wmSetWindowPainter(MGL_wmGetRootWindow(g_winMng), wxDesktopPainter);
     
     return TRUE;
 }
@@ -163,14 +174,109 @@ static void wxWindowPainter(window_t *wnd, MGLDC *dc)
         MGLDevCtx ctx(dc);
         w->HandlePaint(&ctx);
     }
+    // FIXME_MGL -- root window should be a regular window so that
+    // enter/leave and activate/deactivate events work correctly
+}
+
+static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
+{
+    wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
+    wxPoint where = win->ScreenToClient(wxPoint(e->where_x, e->where_y));
+    
+    wxEventType type = wxEVT_NULL;
+    wxMouseEvent event;
+    event.SetEventObject(win);
+    event.SetTimestamp(e->when);
+    event.m_x = where.x;
+    event.m_y = where.y;
+    event.m_shiftDown = e->modifiers & EVT_SHIFTKEY;
+    event.m_controlDown = e->modifiers & EVT_CTRLSTATE;
+    event.m_altDown = e->modifiers & EVT_LEFTALT;
+    event.m_metaDown = e->modifiers & EVT_RIGHTALT;
+    event.m_leftDown = e->modifiers & EVT_LEFTBUT;
+    event.m_middleDown = e->modifiers & EVT_MIDDLEBUT;
+    event.m_rightDown = e->modifiers & EVT_RIGHTBUT;
+    
+    switch (e->what)
+    {
+        case EVT_MOUSEDOWN:
+            if ( e->message & EVT_LEFTBMASK )
+                type = (e->message & EVT_DBLCLICK) ?
+                        wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN;
+            else if ( e->message & EVT_MIDDLEBMASK )
+                type = (e->message & EVT_DBLCLICK) ?
+                        wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN;
+            else if ( e->message & EVT_RIGHTBMASK )
+                type = (e->message & EVT_DBLCLICK) ? 
+                        wxEVT_RIGHT_DCLICK : wxEVT_RIGHT_DOWN;
+            break;
+
+        case EVT_MOUSEUP:
+            if ( e->message & EVT_LEFTBMASK )
+                type = wxEVT_LEFT_UP;
+            else if ( e->message & EVT_MIDDLEBMASK )
+                type = wxEVT_MIDDLE_UP;
+            else if ( e->message & EVT_RIGHTBMASK )
+                type = wxEVT_RIGHT_UP;
+            break;
+
+        case EVT_MOUSEMOVE:
+            if ( win != g_windowUnderMouse )
+            {
+                if ( g_windowUnderMouse )
+                {
+                    wxMouseEvent event2(event);
+                    wxPoint where2 = g_windowUnderMouse->ScreenToClient(
+                                            wxPoint(e->where_x, e->where_y));
+                    event2.m_x = where2.x;
+                    event2.m_y = where2.y;
+                    event2.SetEventObject(g_windowUnderMouse);
+                    event2.SetEventType(wxEVT_LEAVE_WINDOW);
+                    g_windowUnderMouse->GetEventHandler()->ProcessEvent(event2);
+                }
+                
+                wxMouseEvent event3(event);
+                event3.SetEventType(wxEVT_ENTER_WINDOW);
+                win->GetEventHandler()->ProcessEvent(event3);
+                
+                g_windowUnderMouse = win;
+            }
+            
+            type = wxEVT_MOTION;
+            break;
+
+        default:
+            break;
+    }
+    
+    if ( type == wxEVT_NULL )
+    {
+        return FALSE;
+    }
+    else
+    {
+        event.SetEventType(type);
+        return win->GetEventHandler()->ProcessEvent(event);
+    }
+}
+
+static ibool wxWindowKeybHandler(window_t *wnd, event_t *e)
+{
+    // FIXME_MGL
+    return FALSE;
+}
+
+static ibool wxWindowJoyHandler(window_t *wnd, event_t *e)
+{
+    // FIXME_MGL
+    return FALSE;
 }
 
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
 
-// in wxUniv/MSW this class is abstract because it doesn't have DoPopupMenu()
-// method
+// in wxUniv this class is abstract because it doesn't have DoPopupMenu()
 IMPLEMENT_ABSTRACT_CLASS(wxWindowMGL, wxWindowBase)
 
 BEGIN_EVENT_TABLE(wxWindowMGL, wxWindowBase)
@@ -190,9 +296,6 @@ void wxWindowMGL::Init()
     InitBase();
 
     // mgl specific:
-    if ( !g_winMng && !wxCreateMGL_WM() )
-        wxFatalError(_T("Can't initalize MGL, aborting!"));
-
     m_wnd = NULL;
     m_isShown = TRUE;
     m_isBeingDeleted = FALSE;
@@ -208,20 +311,8 @@ wxWindowMGL::~wxWindowMGL()
 
     if ( g_focusedWindow == this )
         KillFocus();
-
-#if 0 // -- fixme - do we need this?
-    // VS: make sure there's no wxFrame with last focus set to us:
-    for (wxWindow *win = GetParent(); win; win = win->GetParent())
-    {
-        wxFrame *frame = wxDynamicCast(win, wxFrame);
-        if ( frame )
-        {
-            if ( frame->GetLastFocus() == this )
-                frame->SetLastFocus((wxWindow*)NULL);
-            break;
-        }
-    }
-#endif
+    if ( g_windowUnderMouse == this )
+        g_windowUnderMouse = NULL;
 
     // VS: destroy children first and _then_ detach *this from its parent.
     //     If we'd do it the other way around, children wouldn't be able
@@ -260,12 +351,28 @@ bool wxWindowMGL::Create(wxWindow *parent,
         m_isShown = FALSE;
     }
 
+    int x, y, w, h;
+    x = pos.x, y = pos.y;
+    if ( x == -1 )
+        x = 0; // FIXME_MGL, something better, see GTK+
+    if ( y == -1 )
+        y = 0; // FIXME_MGL, something better, see GTK+
+    w = WidthDefault(size.x);
+    h = HeightDefault(size.y);
+
     m_wnd = MGL_wmCreateWindow(g_winMng,
                                parent ? parent->GetHandle() : NULL,
-                               pos.x, pos.y, size.x, size.y);
-    MGL_wmShowWindow(m_wnd, m_isShown);
+                               x, y, w, h);
+
     MGL_wmSetWindowUserData(m_wnd, (void*) this);
     MGL_wmSetWindowPainter(m_wnd, wxWindowPainter);
+    MGL_wmShowWindow(m_wnd, m_isShown);
+    MGL_wmSetWindowCursor(m_wnd, *wxSTANDARD_CURSOR->GetMGLCursor());
+
+    MGL_wmPushWindowEventHandler(m_wnd, wxWindowMouseHandler, EVT_MOUSEEVT, 0);
+    MGL_wmPushWindowEventHandler(m_wnd, wxWindowKeybHandler, EVT_KEYEVT, 0);
+    MGL_wmPushWindowEventHandler(m_wnd, wxWindowJoyHandler, EVT_JOYEVT, 0);
+
     return TRUE;
 }
 
@@ -280,7 +387,7 @@ void wxWindowMGL::SetFocus()
     
     g_focusedWindow = this;
     
-    MGL_wmCaptureEvents(GetHandle(), EVT_KEYEVT | EVT_JOYEVT, wxMGL_CAPTURE_KEYB);
+    MGL_wmCaptureEvents(GetHandle(), EVT_KEYEVT|EVT_JOYEVT, wxMGL_CAPTURE_KEYB);
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
@@ -289,7 +396,7 @@ void wxWindowMGL::SetFocus()
         caret->OnSetFocus();
 #endif // wxUSE_CARET
 
-    if (IsTopLevel())
+    if ( IsTopLevel() )
     {
         wxActivateEvent event(wxEVT_ACTIVATE, TRUE, GetId());
         event.SetEventObject(this);
@@ -389,6 +496,10 @@ bool wxWindowMGL::SetCursor(const wxCursor& cursor)
 
     if ( m_cursor.Ok() )
         MGL_wmSetWindowCursor(m_wnd, *m_cursor.GetMGLCursor());
+    else
+        MGL_wmSetWindowCursor(m_wnd, *wxSTANDARD_CURSOR->GetMGLCursor());
+    
+    // FIXME_MGL -- should it set children's cursor or not?!
 
     return TRUE;
 }
@@ -729,7 +840,7 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
         m_refreshAfterThaw = TRUE;
         return;
     }
-
+    
     MGLRegion clip;
     dc->getClipRegion(clip);
     m_updateRegion = wxRegion(clip);

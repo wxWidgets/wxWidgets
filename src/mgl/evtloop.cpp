@@ -46,11 +46,11 @@ public:
             SetKeepLooping(TRUE);
         }
 
-    // process a message
-    void ProcessEvent(event_t *evt);
+    // process an event
+    void Dispatch();
 
-    // generate an idle message, return TRUE if more idle time requested
-    bool SendIdleMessage();
+    // generate an idle event, return TRUE if more idle time requested
+    bool SendIdleEvent();
 
     // set/get the exit code
     void SetExitCode(int exitcode) { m_exitcode = exitcode; }
@@ -71,12 +71,18 @@ private:
 // wxEventLoopImpl implementation
 // ============================================================================
 
-void wxEventLoopImpl::ProcessEvent(event_t *evt)
+void wxEventLoopImpl::Dispatch()
 {
-    MGL_wmProcessEvent(g_winMng, evt);
+    event_t evt;
+    ibool rc;
+
+    MGL_wmUpdateDC(g_winMng);
+    
+    EVT_halt(&evt, EVT_EVERYEVT);
+    MGL_wmProcessEvent(g_winMng, &evt);
 }
 
-bool wxEventLoopImpl::SendIdleMessage()
+bool wxEventLoopImpl::SendIdleEvent()
 {
     wxIdleEvent event;
 
@@ -90,6 +96,8 @@ bool wxEventLoopImpl::SendIdleMessage()
 // ----------------------------------------------------------------------------
 // wxEventLoop running and exiting
 // ----------------------------------------------------------------------------
+
+wxEventLoop *wxEventLoop::ms_activeLoop = NULL;
 
 wxEventLoop::~wxEventLoop()
 {
@@ -107,6 +115,9 @@ int wxEventLoop::Run()
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
 
     m_impl = new wxEventLoopImpl;
+    
+    wxEventLoop *oldLoop = ms_activeLoop;
+    ms_activeLoop = this;
 
     for ( ;; )
     {
@@ -116,7 +127,7 @@ int wxEventLoop::Run()
 
         // generate and process idle events for as long as we don't have
         // anything else to do
-        while ( !Pending() && m_impl->SendIdleMessage() ) {}
+        while ( !Pending() && m_impl->SendIdleEvent() ) {}
 
         // a message came or no more idle processing to do, sit in Dispatch()
         // waiting for the next message
@@ -130,6 +141,8 @@ int wxEventLoop::Run()
     int exitcode = m_impl->GetExitCode();
     delete m_impl;
     m_impl = NULL;
+
+    ms_activeLoop = oldLoop;
 
     return exitcode;
 }
@@ -156,19 +169,6 @@ bool wxEventLoop::Dispatch()
 {
     wxCHECK_MSG( IsRunning(), FALSE, _T("can't call Dispatch() if not running") );
 
-    event_t evt;
-    ibool rc;
-    
-    rc = EVT_getNext(&evt, EVT_EVERYEVT);
-    while ( !rc )
-    {
-        wxUsleep(1000);
-        if ( !m_impl->GetKeepLooping() )
-            return FALSE;
-        rc = EVT_getNext(&evt, EVT_EVERYEVT);
-    }
-
-    m_impl->ProcessEvent(&evt);
-
+    m_impl->Dispatch();
     return m_impl->GetKeepLooping();
 }

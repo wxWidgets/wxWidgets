@@ -21,16 +21,15 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/fontutil.h"
+    #include "wx/fontmap.h"
+    #include "wx/tokenzr.h"
+    #include "wx/hash.h"
 #endif // PCH
 
 
-#include "wx/fontutil.h"
-#include "wx/fontmap.h"
-#include "wx/tokenzr.h"
-#include "wx/hash.h"
-#include "wx/module.h"
 #include "wx/listimpl.cpp"
-#include "wx/log.h"
 #include "wx/mgl/private.h"
 
 #include <mgraph.h>
@@ -430,24 +429,3 @@ wxMGLFontFamily *wxFontsManager::GetFamily(const wxString& name) const
 
 
 wxFontsManager *wxTheFontsManager = NULL;
-
-
-// A module that takes care of fonts DB initialization and destruction:
-
-class wxFontutilModule: public wxModule
-{
-DECLARE_DYNAMIC_CLASS(wxFontutilModule)
-public:
-    wxFontutilModule() {}
-    bool OnInit() 
-    {
-        wxTheFontsManager = new wxFontsManager;
-        return TRUE; 
-    }
-    void OnExit() 
-    { 
-        delete wxTheFontsManager;
-    }
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxFontutilModule, wxModule)

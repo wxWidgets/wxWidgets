@@ -269,8 +269,7 @@ protected:
     wxPalette         m_oldPalette;
     
     wxRegion          m_currentClippingRegion;
-    // clipping region m_MGLDC had when it was attached:
-    MGLRegion        *m_globalClippingRegion;
+    wxRegion          m_globalClippingRegion;
 
     // wxDC::Blit handles memoryDCs as special cases :(
     bool              m_isMemDC;

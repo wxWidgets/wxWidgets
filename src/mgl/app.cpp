@@ -28,6 +28,7 @@
 #endif
 
 #include "wx/app.h"
+#include "wx/fontutil.h"
 #include "wx/mgl/private.h"
 
 //-----------------------------------------------------------------------------
@@ -36,8 +37,6 @@
 
 wxApp *wxTheApp = NULL;
 wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
-
-static wxEventLoop *gs_mainEventLoop = NULL;
 
 
 //-----------------------------------------------------------------------------
@@ -70,8 +69,13 @@ bool wxYield()
 
     wxLog::Suspend();
 
-    while (gs_mainEventLoop->Pending())
-        gs_mainEventLoop->Dispatch();
+    if ( wxEventLoop::GetActive() )
+    {
+        while (wxEventLoop::GetActive()->Pending())
+            wxEventLoop::GetActive()->Dispatch();
+    }
+    else
+        MGL_wmUpdateDC(g_winMng); // FIXME_MGL -- temporary hack, please remove
         
     /* it's necessary to call ProcessIdle() to update the frames sizes which
        might have been changed (it also will update other things set from
@@ -124,7 +128,7 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
 END_EVENT_TABLE()
 
 
-wxApp::wxApp()
+wxApp::wxApp() : m_mainLoop(NULL)
 {
 }
 
@@ -227,16 +231,19 @@ bool wxApp::SendIdleEvents(wxWindow* win)
 int wxApp::MainLoop()
 {
     int rt;
-    gs_mainEventLoop = new wxEventLoop;
-    rt = gs_mainEventLoop->Run();
-    delete gs_mainEventLoop;
-    gs_mainEventLoop = NULL;
+    m_mainLoop = new wxEventLoop;
+
+    rt = m_mainLoop->Run();
+
+    delete m_mainLoop;
+    m_mainLoop = NULL;
     return rt;
 }
 
 void wxApp::ExitMainLoop()
 {
-    gs_mainEventLoop->Exit(0);
+    if ( m_mainLoop )
+        m_mainLoop->Exit(0);
 }
 
 bool wxApp::Initialized()
@@ -248,12 +255,12 @@ bool wxApp::Initialized()
 
 bool wxApp::Pending()
 {
-    return gs_mainEventLoop->Pending();
+    return wxEventLoop::GetActive()->Pending();
 }
 
 void wxApp::Dispatch()
 {
-    gs_mainEventLoop->Dispatch();
+    wxEventLoop::GetActive()->Dispatch();
 }
 
 void wxApp::DeletePendingObjects()
@@ -293,6 +300,9 @@ bool wxApp::Initialize()
 
     wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
     wxTheColourDatabase->Initialize();
+    
+    // Can't do this in wxModule, because fonts are needed by stock lists
+    wxTheFontsManager = new wxFontsManager;
 
     wxInitializeStockLists();
     wxInitializeStockObjects();
@@ -358,8 +368,11 @@ void wxApp::CleanUp()
     wxTheColourDatabase = (wxColourDatabase*) NULL;
 
     wxDeleteStockObjects();
-
     wxDeleteStockLists();
+
+    // Can't do this in wxModule, because fonts are needed by stock lists
+    delete wxTheFontsManager;
+    wxTheFontsManager = (wxFontsManager*) NULL;
 
     delete wxTheApp;
     wxTheApp = (wxApp*) NULL;

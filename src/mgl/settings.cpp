@@ -18,13 +18,13 @@
 wxColour wxSystemSettings::GetSystemColour(int WXUNUSED(index))
 {
     // FIXME_MGL
-    return wxColour(255,255,0);
+    return wxColour(0,0,0);
 }
 
 wxFont wxSystemSettings::GetSystemFont(int WXUNUSED(index))
 {
     // FIXME_MGL
-    return wxFont(12, wxSWISS, wxNORMAL, wxNORMAL);
+    return wxFont(9, wxSWISS, wxNORMAL, wxNORMAL);
 }
 
 int wxSystemSettings::GetSystemMetric(int WXUNUSED(index))

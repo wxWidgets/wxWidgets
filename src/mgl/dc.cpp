@@ -152,16 +152,10 @@ wxDC::wxDC()
     m_OwnsMGLDC = FALSE;
     m_ok = FALSE; // must call SetMGLDevCtx() before using it
 
-#if 0
     m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
                     (double)wxGetDisplaySizeMM().GetWidth();
     m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
                     (double)wxGetDisplaySizeMM().GetHeight();
-#endif
-    // FIXME_MGL -- not in wxUniversal branch (and not implementend anyway,
-    //              hardcode it for 75dpi for now)
-    m_mm_to_pix_x = ((double)wxGetDisplaySize().GetWidth() / 75) * inches2mm;
-    m_mm_to_pix_y = ((double)wxGetDisplaySize().GetHeight() / 75) * inches2mm;
 
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
@@ -172,7 +166,6 @@ wxDC::wxDC()
     m_downloadedPatterns[0] = m_downloadedPatterns[1] = FALSE;
     
     m_mglFont = NULL;
-    m_globalClippingRegion = NULL;
 }
 
 
@@ -180,7 +173,6 @@ wxDC::~wxDC()
 {
     if (m_OwnsMGLDC) 
         delete m_MGLDC;
-    delete m_globalClippingRegion;
 }
 
 void wxDC::SetMGLDC(MGLDevCtx *mgldc, bool OwnsMGLDC)
@@ -193,11 +185,13 @@ void wxDC::SetMGLDC(MGLDevCtx *mgldc, bool OwnsMGLDC)
     
     if ( mgldc->getDC()->a.clipRegion )
     {
-        m_globalClippingRegion = new MGLRegion;
-        mgldc->getClipRegion(*m_globalClippingRegion);
+        MGLRegion clip;
+        mgldc->getClipRegion(clip);
+        m_globalClippingRegion = wxRegion(clip);
+        // FIXME_MGL -- reuse wxWindows::m_updateRegion ?
+        m_currentClippingRegion = m_globalClippingRegion;
+        m_clipping = TRUE;
     }
-    else
-        m_globalClippingRegion = NULL;
     
     InitializeMGLDC();
 }
@@ -237,13 +231,7 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
     else
         m_currentClippingRegion.Union(rect);
 
-    if ( m_globalClippingRegion )
-    {
-        m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion()
-                               & *m_globalClippingRegion);
-    }
-    else
-        m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion());
+    m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion());
 
     m_clipping = TRUE;
     DO_SET_CLIPPING_BOX(m_currentClippingRegion)
@@ -253,7 +241,7 @@ void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    if ( region.Empty() )
+    if ( region.IsEmpty() )
     {
         DestroyClippingRegion();
         return;
@@ -282,13 +270,7 @@ void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
     else
         m_currentClippingRegion.Union(rg);
 
-    if ( m_globalClippingRegion )
-    {
-        m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion()
-                               & *m_globalClippingRegion);
-    }
-    else
-        m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion());
+    m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion());
 
     m_clipping = TRUE;
     DO_SET_CLIPPING_BOX(m_currentClippingRegion)
@@ -298,12 +280,18 @@ void wxDC::DestroyClippingRegion()
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
     
-    if ( m_globalClippingRegion )
-        m_MGLDC->setClipRegion(*m_globalClippingRegion);
+    if ( !m_globalClippingRegion.IsNull() )
+    {
+        m_MGLDC->setClipRegion(m_globalClippingRegion.GetMGLRegion());
+        m_currentClippingRegion = m_globalClippingRegion;
+        m_clipping = TRUE;
+    }
     else
+    {
         m_MGLDC->setClipRect(MGLRect(0, 0, m_MGLDC->sizex(), m_MGLDC->sizey()));
-    m_clipping = FALSE;
-    m_currentClippingRegion.Clear();    
+        m_clipping = FALSE;
+        m_currentClippingRegion.Clear();
+    }
 }
 
 // ---------------------------------------------------------------------------

@@ -48,10 +48,6 @@ static pixel_format_t gs_pixel_format_24 =
 static pixel_format_t gs_pixel_format_32 =
 	{0xFF,0x18,0, 0xFF,0x10,0, 0xFF,0x08,0, 0xFF,0x00,0}; // RGBA 32bpp
 
-// FIXME_MGL -- these formats will probably have to go into another place,
-//              where wxApp could use them to initialize g_displayDC
-
-
 //-----------------------------------------------------------------------------
 // wxMask
 //-----------------------------------------------------------------------------

@@ -125,6 +125,7 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
     m_valid = data.m_valid;
     if ( m_library )
         m_library->IncRef();
+    wxLogTrace("mgl_font", "created fntrefdata %p, library is %p", this, m_library);
 }
 
 wxFontRefData::wxFontRefData(int size, int family, int style,
@@ -133,10 +134,12 @@ wxFontRefData::wxFontRefData(int size, int family, int style,
                              wxFontEncoding encoding)
 {
     Init(size, family, style, weight, underlined, faceName, encoding);
+    wxLogTrace("mgl_font", "created fntrefdata %p, library is %p", this, m_library);
 }
 
 wxFontRefData::~wxFontRefData()
 {
+    wxLogTrace("mgl_font", "destructing fntrefdata %p, library is %p", this, m_library);
     if ( m_library )
         m_library->DecRef();
 }

@@ -24,7 +24,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 
-#include <mgraph.hpp>
+#include "wx/mgl/private.h"
 
 
 //-----------------------------------------------------------------------------
@@ -98,8 +98,6 @@ wxCursor::wxCursor(int cursorId)
         case wxCURSOR_BLANK:           cursorname = "blank.cur"; break;
 
         case wxCURSOR_NONE:
-            // FIXME_MGL - make sure wxWindow uses cursor with
-            //    GetMGLCursor() == NULL correctly, i.e. calls MS_hide()
             *this = wxNullCursor;
             return;
             break;
@@ -199,13 +197,14 @@ MGLCursor *wxCursor::GetMGLCursor() const
 // Global cursor setting
 // ----------------------------------------------------------------------------
 
+static wxCursor  g_globalCursor = wxNullCursor;
 
 void wxSetCursor(const wxCursor& cursor)
 {
     if ( cursor.Ok() )
     {
-        //MGL_setGlobalCursor(cursor.GetMGLCursor());
-        // FIXME_MGL -- needs MGL WM first
+        MGL_wmSetGlobalCursor(g_winMng, *cursor.GetMGLCursor());
+        g_globalCursor = cursor;
     }
 }
 
@@ -215,10 +214,7 @@ void wxSetCursor(const wxCursor& cursor)
 // busy cursor routines
 //-----------------------------------------------------------------------------
 
-// FIXME_MGL -- do we need this? It may be better to incorporate 
-//              support for it into MGL (a stack of global cursors?)
-static wxCursor  gs_savedCursor;
-static wxCursor  g_globalCursor;
+static wxCursor  gs_savedCursor = wxNullCursor;
 static int       gs_busyCount = 0;
 
 const wxCursor &wxBusyCursor::GetStoredCursor()
@@ -237,10 +233,9 @@ void wxEndBusyCursor()
 
     wxSetCursor(gs_savedCursor);
     gs_savedCursor = wxNullCursor;
-    //wxYield(); FIXME_MGL - needed?
 }
 
-void wxBeginBusyCursor(wxCursor *WXUNUSED(cursor))
+void wxBeginBusyCursor(wxCursor *cursor)
 {
     if ( gs_busyCount++ > 0 ) return;
 
@@ -248,8 +243,10 @@ void wxBeginBusyCursor(wxCursor *WXUNUSED(cursor))
                   wxT("forgot to call wxEndBusyCursor, will leak memory") );
 
     gs_savedCursor = g_globalCursor;
-    wxSetCursor(wxCursor(wxCURSOR_WAIT));
-    //wxYield(); FIXME_MGL - needed?
+    if ( cursor->Ok() )
+        wxSetCursor(*cursor);
+    else
+        wxSetCursor(wxCursor(wxCURSOR_WAIT));
 }
 
 bool wxIsBusy()

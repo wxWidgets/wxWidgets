@@ -23,6 +23,7 @@
 
 class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxLog;
+class WXDLLEXPORT wxEventLoop;
 
 //-----------------------------------------------------------------------------
 // wxApp
@@ -63,6 +64,8 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
+    
+    wxEventLoop *m_mainLoop;
 };
 
 int WXDLLEXPORT wxEntry(int argc, char *argv[]);
