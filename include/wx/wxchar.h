@@ -253,7 +253,7 @@ typedef  _TUCHAR     wxUChar;
 #    if defined(__VISUALC__) && (__VISUALC__ < 900)
 #      define wxUSE_WCHAR_T 0 // wchar_t is not available for MSVC++ 1.5
 #    elif defined(__UNIX__)
-#      if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H) || defined(__FreeBSD__)
+#      if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H) || defined(__FreeBSD__) || defined(__DARWIN__)
 #        define wxUSE_WCHAR_T 1
 #      else
 #        define wxUSE_WCHAR_T 0
@@ -276,7 +276,7 @@ typedef  _TUCHAR     wxUChar;
 #    ifdef HAVE_WCSTR_H
 #      include <wcstr.h>
 #    else
-#      ifndef __FreeBSD__
+#      if !defined(__FreeBSD__) && !defined(__DARWIN__)
 #        include <wchar.h>
 #      else
 #        include <stdlib.h>
@@ -366,7 +366,7 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #     define wxUChar unsigned char
 #   endif
 
-#   ifdef __FreeBSD__
+#   if defined(__FreeBSD__) || defined(__DARWIN__)
 #     undef _T
 #   endif
 
