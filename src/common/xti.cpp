@@ -28,7 +28,8 @@
 
 #include "wx/xml/xml.h"
 #include "wx/tokenzr.h"
-
+#include "wx/notebook.h"
+#include "wx/list.h"
 #include <string.h>
 
 #if wxUSE_EXTENDED_RTTI
@@ -104,89 +105,6 @@ const char * wxEnumData::GetEnumMemberNameByIndex( int idx )
 // ----------------------------------------------------------------------------
 // Type Information
 // ----------------------------------------------------------------------------
-
-template<> const wxTypeInfo* wxGetTypeInfo( void * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( bool * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_BOOL ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( char * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( unsigned char * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( int * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( unsigned int * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( long * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( unsigned long * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( float * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_FLOAT ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( double * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_DOUBLE ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( wxString * )
-{
-	static wxBuiltInTypeInfo s_typeInfo( wxT_STRING ) ;
-	return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( wxWindowList * )
-{
-    static wxCollectionTypeInfo s_typeInfo( (wxTypeInfo*) wxGetTypeInfo( (wxWindow **) NULL) ) ;
-    return &s_typeInfo ;
-}
-
-// this are compiler induced specialization which are never used anywhere
-
-WX_ILLEGAL_TYPE_SPECIALIZATION( char const * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( char * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( unsigned char * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( int * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( bool * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( long * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( wxString * )
-
 // ----------------------------------------------------------------------------
 // value streaming
 // ----------------------------------------------------------------------------
@@ -372,6 +290,100 @@ template<> void wxStringWriteValue(wxString & , wxSize * const & )
 
 WX_CUSTOM_TYPE_INFO(wxSize)
 
+
+template<> const wxTypeInfo* wxGetTypeInfo( void * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( bool * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_BOOL , &wxToStringConverter<bool> , &wxFromStringConverter<bool>) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( char * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR , &wxToStringConverter<char> , &wxFromStringConverter<char>) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( unsigned char * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR , &wxToStringConverter< unsigned char > , &wxFromStringConverter<unsigned char>) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( int * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR , &wxToStringConverter<int> , &wxFromStringConverter<int>) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( unsigned int * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR , &wxToStringConverter<unsigned int> , &wxFromStringConverter<unsigned int>) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( long * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_LONG , &wxToStringConverter<long> , &wxFromStringConverter<long>) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( unsigned long * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_ULONG , &wxToStringConverter<unsigned long> , &wxFromStringConverter<unsigned long>) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( float * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_FLOAT , &wxToStringConverter<float> , &wxFromStringConverter<float>) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( double * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_DOUBLE , &wxToStringConverter<double> , &wxFromStringConverter<double>) ;
+	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( wxString * )
+{
+	static wxBuiltInTypeInfo s_typeInfo( wxT_STRING , &wxToStringConverter<wxString> , &wxFromStringConverter<wxString>) ;
+	return &s_typeInfo ;
+}
+
+// this are compiler induced specialization which are never used anywhere
+
+WX_ILLEGAL_TYPE_SPECIALIZATION( char const * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( char * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( unsigned char * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( int * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( bool * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( long * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( wxString * )
+
+//
+
+// make wxWindowList known
+
+template<> const wxTypeInfo* wxGetTypeInfo( wxArrayString * )
+{
+    static wxCollectionTypeInfo s_typeInfo( (wxTypeInfo*) wxGetTypeInfo( (wxString *) NULL) ) ;
+    return &s_typeInfo ;
+}
+
+template<> void wxCollectionToVariantArray( wxArrayString const &theArray, wxxVariantArray &value)
+{
+    wxArrayCollectionToVariantArray( theArray , value ) ;
+}
+
+
+
 /*
 
 template<> void wxStringReadValue(const wxString &s , wxColour &data )
@@ -507,19 +519,23 @@ wxxVariant wxClassInfo::GetProperty(wxObject *object, const char *propertyName) 
 
     accessor = FindAccessor(propertyName);
     wxASSERT(accessor->HasGetter());
-    return accessor->GetProperty(object);
+    wxxVariant result ;
+    accessor->GetProperty(object,result);
+    return result ;
 }
 
-wxxVariantArray wxClassInfo::GetPropertyCollection(wxObject *object, const wxChar *propertyName) const 
+wxxVariantArray wxClassInfo::GetPropertyCollection(wxObject *object, const wxChar *propertyName) const
 {
     const wxPropertyAccessor *accessor;
 
     accessor = FindAccessor(propertyName);
     wxASSERT(accessor->HasGetter());
-    return accessor->GetPropertyCollection(object);
+    wxxVariantArray result ;
+    accessor->GetPropertyCollection(object,result);
+    return result ;
 }
 
-void wxClassInfo::AddToPropertyCollection(wxObject *object, const wxChar *propertyName , const wxxVariant& value) const 
+void wxClassInfo::AddToPropertyCollection(wxObject *object, const wxChar *propertyName , const wxxVariant& value) const
 {
     const wxPropertyAccessor *accessor;
 
@@ -555,7 +571,7 @@ struct wxDynamicObject::wxDynamicObjectInternal
 } ;
 
 // instantiates this object with an instance of its superclass
-wxDynamicObject::wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info) 
+wxDynamicObject::wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info)
 {
     m_superClassInstance = superClassInstance ;
     m_classInfo = info ;
@@ -585,7 +601,7 @@ wxxVariant wxDynamicObject::GetProperty (const wxChar *propertyName) const
 // ----------------------------------------------------------------------------
 
 wxDynamicClassInfo::wxDynamicClassInfo( const wxChar *unitName, const wxChar *className , const wxClassInfo* superClass ) :
-    wxClassInfo( unitName, className , new const wxClassInfo*[2]) 
+    wxClassInfo( unitName, className , new const wxClassInfo*[2])
 {
     GetParents()[0] = superClass ;
     GetParents()[1] = NULL ;
@@ -596,13 +612,13 @@ wxDynamicClassInfo::~wxDynamicClassInfo()
     delete[] GetParents() ;
 }
 
-wxObject *wxDynamicClassInfo::AllocateObject() const 
+wxObject *wxDynamicClassInfo::AllocateObject() const
 {
     wxObject* parent = GetParents()[0]->AllocateObject() ;
     return new wxDynamicObject( parent , this ) ;
 }
 
-void wxDynamicClassInfo::Create (wxObject *object, int paramCount, wxxVariant *params) const 
+void wxDynamicClassInfo::Create (wxObject *object, int paramCount, wxxVariant *params) const
 {
     wxDynamicObject *dynobj = dynamic_cast< wxDynamicObject *>( object ) ;
     wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::Create on an object other than wxDynamicObject") ) ;
@@ -610,13 +626,13 @@ void wxDynamicClassInfo::Create (wxObject *object, int paramCount, wxxVariant *p
 }
 
 // get number of parameters for constructor
-int wxDynamicClassInfo::GetCreateParamCount() const 
+int wxDynamicClassInfo::GetCreateParamCount() const
 {
     return GetParents()[0]->GetCreateParamCount() ;
 }
 
 // get i-th constructor parameter
-const wxChar* wxDynamicClassInfo::GetCreateParamName(int i) const 
+const wxChar* wxDynamicClassInfo::GetCreateParamName(int i) const
 {
     return GetParents()[0]->GetCreateParamName( i ) ;
 }
@@ -641,12 +657,12 @@ wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const char *propert
         return GetParents()[0]->GetProperty( dynobj->GetSuperClassInstance() , propertyName ) ;
 }
 
-void wxDynamicClassInfo::AddProperty( const wxChar *propertyName , const wxTypeInfo* typeInfo ) 
+void wxDynamicClassInfo::AddProperty( const wxChar *propertyName , const wxTypeInfo* typeInfo )
 {
     new wxPropertyInfo( m_firstProperty , propertyName , typeInfo , new wxGenericPropertyAccessor( propertyName ) , wxxVariant() ) ;
 }
 
-void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFunction address , const wxClassInfo* eventClassInfo ) 
+void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFunction address , const wxClassInfo* eventClassInfo )
 {
     new wxHandlerInfo( m_firstHandler , handlerName , address , eventClassInfo ) ;
 }
@@ -657,44 +673,33 @@ void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFu
 
 struct wxGenericPropertyAccessor::wxGenericPropertyAccessorInternal
 {
-    wxString m_propertyName ;
+    char filler ;
 } ;
 
-wxGenericPropertyAccessor::wxGenericPropertyAccessor( const wxChar* propertyName ) 
+wxGenericPropertyAccessor::wxGenericPropertyAccessor( const wxString& propertyName )
+: wxPropertyAccessor( NULL , NULL , NULL , NULL )
 {
     m_data = new wxGenericPropertyAccessorInternal ;
-    m_data->m_propertyName = propertyName ;
+    m_propertyName = propertyName ;
+    m_getterName = wxT("Get")+propertyName ;
+    m_setterName = wxT("Set")+propertyName ;
 }
 
 wxGenericPropertyAccessor::~wxGenericPropertyAccessor()
 {
     delete m_data ;
 }
-void wxGenericPropertyAccessor::SetProperty(wxObject *object, const wxxVariant &value) const 
+void wxGenericPropertyAccessor::SetProperty(wxObject *object, const wxxVariant &value) const
 {
     wxDynamicObject* dynobj = dynamic_cast< wxDynamicObject * >( object ) ;
     wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
-    dynobj->SetProperty(m_data->m_propertyName , value ) ;
+    dynobj->SetProperty(m_propertyName , value ) ;
 }
 
-wxxVariant wxGenericPropertyAccessor::GetProperty(const wxObject *object) const 
+void wxGenericPropertyAccessor::GetProperty(const wxObject *object, wxxVariant& value) const
 {
     const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject * >( object ) ;
     wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
-    return dynobj->GetProperty( m_data->m_propertyName ) ;
+    value = dynobj->GetProperty( m_propertyName ) ;
 }
-
-wxxVariant wxGenericPropertyAccessor::ReadValue( const wxString &value ) const 
-{
-    return wxxVariant(value) ;
-}
-
-void wxGenericPropertyAccessor::WriteValue( wxString& value , const wxObject *object ) const 
-{
-    const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject * >( object ) ;
-    wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
-    wxxVariant val = dynobj->GetProperty( m_data->m_propertyName ) ;
-    value = val.GetAsString() ;
-}
-
 #endif

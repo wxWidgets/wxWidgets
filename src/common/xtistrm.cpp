@@ -170,7 +170,8 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
             DoBeginWriteProperty( pi ) ;
             if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
             {
-                wxxVariantArray data = pi->GetAccessor()->GetPropertyCollection(obj) ;
+                wxxVariantArray data ;
+                pi->GetAccessor()->GetPropertyCollection(obj, data) ;
                 const wxTypeInfo * elementType = dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() )->GetElementType() ;
                 for ( size_t i = 0 ; i < data.GetCount() ; ++i )
                 {
@@ -216,7 +217,8 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
                 }
                 else
                 {
-                    wxxVariant value = pi->GetAccessor()->GetProperty(obj) ;
+                    wxxVariant value ;
+                    pi->GetAccessor()->GetProperty(obj, value) ;
                     if ( persister->BeforeWriteProperty( this , pi , value ) )
                     {
                         const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( pi->GetTypeInfo() ) ;
@@ -534,7 +536,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
             else
             {
                 createParamOids[i] = wxInvalidObjectID ;
-                createParams[i] = ReadValue( prop , pi->GetAccessor() ) ;
+                createParams[i] = ReadValue( prop , pi->GetTypeInfo() ) ;
                 createClassInfos[i] = NULL ;
             }
 
@@ -591,7 +593,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                         }
                         else
                         {
-                            wxxVariant elementValue = ReadValue( prop , pi->GetAccessor() ) ;
+                            wxxVariant elementValue = ReadValue( elementContent , elementType ) ;
                             if ( pi->GetAccessor()->HasAdder() )
                                 callbacks->AddToPropertyCollection( objectID , classInfo ,pi , elementValue ) ;
                         }
@@ -626,7 +628,8 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 }
                 else
                 {
-                    callbacks->SetProperty( objectID, classInfo ,pi , ReadValue( prop , pi->GetAccessor() ) ) ;
+                    wxxVariant nodeval ;
+                    callbacks->SetProperty( objectID, classInfo ,pi , ReadValue( prop , pi->GetTypeInfo() ) ) ;
                 }
             }
         }
@@ -640,12 +643,14 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
 }
 
 wxxVariant wxXmlReader::ReadValue(wxXmlNode *node,
-                                  wxPropertyAccessor *accessor )
+                                  const wxTypeInfo *type )
 {
     wxString content ;
     if ( node )
         content = node->GetContent() ;
-    return accessor->ReadValue(content) ;
+    wxxVariant result ;
+    type->ConvertFromString( content , result ) ;
+    return result ;
 }
 
 int wxXmlReader::ReadObject( const wxString &name , wxDepersister *callbacks)

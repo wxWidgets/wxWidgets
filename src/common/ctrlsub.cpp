@@ -58,6 +58,15 @@ wxString wxItemContainer::GetStringSelection() const
     return s;
 }
 
+wxArrayString wxItemContainer::GetStrings() const
+{
+    wxArrayString result ;
+    size_t count = GetCount() ;
+    for ( size_t n = 0 ; n < count ; n++ )
+        result.Add(GetString(n));
+    return result ;
+}
+
 // ----------------------------------------------------------------------------
 // appending items
 // ----------------------------------------------------------------------------
