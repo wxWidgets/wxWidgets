@@ -285,8 +285,8 @@ int name::Index(T lItem, CMPFUNC fnCompare) const                           \
                                                                             \
     return n < m_nCount &&                                                  \
            (*fnCompare)((const void *)(long)lItem,                          \
-                        ((const void *)(long)m_pItems[n])) ? (int)n         \
-                                                           : wxNOT_FOUND;   \
+                        ((const void *)(long)m_pItems[n])) ? wxNOT_FOUND    \
+                                                           : (int)n;        \
 }                                                                           \
                                                                             \
 /* add item at the end */                                                   \
