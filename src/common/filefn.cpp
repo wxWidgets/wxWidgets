@@ -272,8 +272,11 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
 bool
 wxFileExists (const wxString& filename)
 {
-#ifdef __GNUWIN32__ // (fix a B20 bug)
-    return GetFileAttributes(filename) != 0xFFFFFFFF;
+#ifdef __WINDOWS__
+    // GetFileAttributes can copy with network paths
+    DWORD ret = GetFileAttributes(filename);
+    DWORD isDir = (ret & FILE_ATTRIBUTE_DIRECTORY);
+    return ((ret != 0xffffffff) && (isDir == 0));
 #else
     wxStructStat stbuf;
     if ( !filename.empty() && wxStat (OS_FILENAME(filename), &stbuf) == 0 )
@@ -1186,6 +1189,13 @@ bool wxPathExists(const wxChar *pszPathName)
     }
 #endif // __WINDOWS__
 
+#ifdef __WINDOWS__
+    // Stat can't cope with network paths
+    DWORD ret = GetFileAttributes(strPath.c_str());
+    DWORD isDir = (ret & FILE_ATTRIBUTE_DIRECTORY);
+    return ((ret != 0xffffffff) && (isDir != 0));
+#else
+
     wxStructStat st;
 #ifndef __VISAGECPP__
     return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 &&
@@ -1196,6 +1206,7 @@ bool wxPathExists(const wxChar *pszPathName)
         (st.st_mode == S_IFDIR);
 #endif
 
+#endif
 }
 
 // Get a temporary filename, opening and closing the file.
