@@ -2201,55 +2201,61 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 rc.result = TRUE;
             }
             break;
+
 #ifdef __WIN32__
         case WM_HELP:
-        {
-            HELPINFO* info = (HELPINFO*) lParam;
-            // Don't yet process menu help events, just windows
-            if (info->iContextType == HELPINFO_WINDOW)
             {
-                wxWindow* subjectOfHelp = this;
-                bool eventProcessed = FALSE;
-                while (subjectOfHelp && !eventProcessed)
+                HELPINFO* info = (HELPINFO*) lParam;
+                // Don't yet process menu help events, just windows
+                if (info->iContextType == HELPINFO_WINDOW)
                 {
-                    wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), wxPoint(info->MousePos.x, info->MousePos.y) ) ; // info->iCtrlId);
-                    helpEvent.SetEventObject(this);
-                    eventProcessed = GetEventHandler()->ProcessEvent(helpEvent);
+                    wxWindow* subjectOfHelp = this;
+                    bool eventProcessed = FALSE;
+                    while (subjectOfHelp && !eventProcessed)
+                    {
+                        wxHelpEvent helpEvent(wxEVT_HELP,
+                                              subjectOfHelp->GetId(),
+                                              wxPoint(info->MousePos.x,
+                                              info->MousePos.y) );
+                        helpEvent.SetEventObject(this);
+                        eventProcessed =
+                            GetEventHandler()->ProcessEvent(helpEvent);
 
-                    // Go up the window hierarchy until the event is handled (or not)
-                    subjectOfHelp = subjectOfHelp->GetParent();
+                        // Go up the window hierarchy until the event is
+                        // handled (or not)
+                        subjectOfHelp = subjectOfHelp->GetParent();
+                    }
+
+                    processed = eventProcessed;
                 }
-                processed = eventProcessed;
-            }
-            else if (info->iContextType == HELPINFO_MENUITEM)
-            {
-                wxHelpEvent helpEvent(wxEVT_HELP, info->iCtrlId) ;
-                helpEvent.SetEventObject(this);
-                processed = GetEventHandler()->ProcessEvent(helpEvent);
+                else if (info->iContextType == HELPINFO_MENUITEM)
+                {
+                    wxHelpEvent helpEvent(wxEVT_HELP, info->iCtrlId);
+                    helpEvent.SetEventObject(this);
+                    processed = GetEventHandler()->ProcessEvent(helpEvent);
 
+                }
+                //else: processed is already FALSE
             }
-            else processed = FALSE;
             break;
-        }
+
         case WM_CONTEXTMENU:
-        {
-            HWND hWnd = (HWND) wParam;
-            
-            // we don't convert from screen to client coordinates as
-            // the event may be handled by a parent window
-            wxPoint p(LOWORD(lParam), HIWORD(lParam));
-            
-            wxContextMenuEvent contextEvent(wxEVT_CONTEXT_MENU, GetId(), p);
-            GetEventHandler()->ProcessEvent(contextEvent);
-            
-            // set processed to true even if the event is not handled because if we don't
-            // windows will propogate the WM_CONTEXTMENU up the parent window chain, which
-            // we have already done ourselves.
-            processed = true;
-            
+            {
+                // we don't convert from screen to client coordinates as
+                // the event may be handled by a parent window
+                wxPoint pt(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+
+                wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU, GetId(), pt);
+                GetEventHandler()->ProcessEvent(evtCtx);
+
+                // set processed to true even if the event is not handled
+                // because if we don't windows will propogate the
+                // WM_CONTEXTMENU up the parent window chain, which we have
+                // already done ourselves.
+                processed = true;
+            }
             break;
-        }
-#endif
+#endif // __WIN32__
     }
 
     if ( !processed )
@@ -4006,8 +4012,9 @@ void wxSetKeyboardHook(bool doIt)
     else
     {
         UnhookWindowsHookEx(wxTheKeyboardHook);
-		// avoids warning about statement with no effect (FreeProcInstance
-		// doesn't do anything under Win32)
+
+        // avoids warning about statement with no effect (FreeProcInstance
+        // doesn't do anything under Win32)
 #if !defined(WIN32) && !defined(_WIN32) && !defined(__WIN32__) && !defined(__NT__) && !defined(__GNUWIN32__)
         FreeProcInstance(wxTheKeyboardHookProc);
 #endif
