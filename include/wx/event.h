@@ -1700,7 +1700,7 @@ typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
         { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] }; \
     const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
-#define END_EVENT_TABLE() DECLARE_EVENT_TABLE_ENTRY( 0, 0, 0, 0, 0 ) };
+#define END_EVENT_TABLE() DECLARE_EVENT_TABLE_ENTRY( wxEVT_NULL, 0, 0, 0, 0 ) };
 
 /*
  * Event table macros
