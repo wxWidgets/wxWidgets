@@ -2791,9 +2791,15 @@ if test "$wxUSE_SHARED" = "yes"; then
         SHARED_LD="${LD} -shared -o"
       ;;
 
+      *-*-irix* )
+        dnl default settings are ok for gcc
+        if test "$GCC" != "yes"; then
+            PIC_FLAG="-KPIC"
+        fi
+      ;;
+
       *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
       *-*-sunos4* | \
-      *-*-irix5* | *-*-irix6* | \
       *-*-osf* | \
       *-*-dgux5* | \
       *-*-sysv5* )
