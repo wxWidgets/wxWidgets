@@ -514,6 +514,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
         /* prefix ~ */
         if (nm[1] == SEP || nm[1] == 0)
         {        /* ~/filename */
+	    // FIXME: wxGetUserHome could return temporary storage in Unicode mode
             if ((s = WXSTRINGCAST wxGetUserHome(_T(""))) != NULL) {
                 if (*++nm)
                     nm++;
@@ -527,6 +528,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             was_sep = (*s == SEP);
             nnm = *s ? s + 1 : s;
             *s = 0;
+	    // FIXME: wxGetUserHome could return temporary storage in Unicode mode
             if ((home = WXSTRINGCAST wxGetUserHome(wxString(nm + 1))) == NULL) {
                if (was_sep) /* replace only if it was there: */
                    *s = SEP;
