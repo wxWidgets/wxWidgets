@@ -59,8 +59,8 @@ wxSashWindow::wxSashWindow()
 
     m_minimumPaneSizeX = 0;
     m_minimumPaneSizeY = 0;
-    m_maximumPaneSizeX = 0;
-    m_maximumPaneSizeY = 0;
+    m_maximumPaneSizeX = 10000;
+    m_maximumPaneSizeY = 10000;
 }
 
 wxSashWindow::wxSashWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos,
@@ -77,8 +77,8 @@ wxSashWindow::wxSashWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos,
     m_extraBorderSize = 0;
     m_minimumPaneSizeX = 0;
     m_minimumPaneSizeY = 0;
-    m_maximumPaneSizeX = 0;
-    m_maximumPaneSizeY = 0;
+    m_maximumPaneSizeX = 10000;
+    m_maximumPaneSizeY = 10000;
     m_sashCursorWE = new wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = new wxCursor(wxCURSOR_SIZENS);
 
@@ -171,6 +171,8 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 if (y > (yp + h))
                     status = wxSASH_STATUS_OUT_OF_RANGE;
                 int newHeight = (h - y);
+		newHeight=wxMax(newHeight,m_minimumPaneSizeY);
+		newHeight=wxMin(newHeight,m_maximumPaneSizeY);
                 dragRect = wxRect(xp, (yp + h) - newHeight, w, newHeight);
                 break;
             }
@@ -179,6 +181,8 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 if (y < 0)
                     status = wxSASH_STATUS_OUT_OF_RANGE;
                 int newHeight = y;
+		newHeight=wxMax(newHeight,m_minimumPaneSizeY);
+		newHeight=wxMin(newHeight,m_maximumPaneSizeY);
                 dragRect = wxRect(xp, yp, w, newHeight);
                 break;
             }
@@ -187,6 +191,8 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 if (x > (xp + w))
                     status = wxSASH_STATUS_OUT_OF_RANGE;
                 int newWidth = (w - x);
+		newWidth=wxMax(newWidth,m_minimumPaneSizeX);
+		newWidth=wxMin(newWidth,m_maximumPaneSizeX);
                 dragRect = wxRect((xp + w) - newWidth, yp, newWidth, h);
                 break;
             }
@@ -195,6 +201,8 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 if (x < 0)
                     status = wxSASH_STATUS_OUT_OF_RANGE;
                 int newWidth = x;
+		newWidth=wxMax(newWidth,m_minimumPaneSizeX);
+		newWidth=wxMin(newWidth,m_maximumPaneSizeX);
                 dragRect = wxRect(xp, yp, newWidth, h);
                 break;
             }
