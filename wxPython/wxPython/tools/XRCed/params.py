@@ -305,6 +305,51 @@ class ParamInt(PPanel):
         self.spin.SetValue(int(value))
         self.freeze = False
 
+# Same as int but allows dialog units (XXXd)
+class ParamUnit(PPanel):
+    def __init__(self, parent, name):
+        PPanel.__init__(self, parent, name)
+        self.ID_TEXT_CTRL = wxNewId()
+        self.ID_SPIN_BUTTON = wxNewId()
+        sizer = wxBoxSizer()
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(35,-1))
+        self.spin = wxSpinButton(self, self.ID_SPIN_BUTTON, style = wxSP_VERTICAL)
+        self.spin.SetRange(-10000, 10000)
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
+        sizer.Add(self.text, 0, wxEXPAND | wxRIGHT, 2)
+        sizer.Add(self.spin)
+        self.SetAutoLayout(True)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+        EVT_SPIN_UP(self, self.ID_SPIN_BUTTON, self.OnSpinUp)
+        EVT_SPIN_DOWN(self, self.ID_SPIN_BUTTON, self.OnSpinDown)
+    def GetValue(self):
+        return self.text.GetValue()
+    def SetValue(self, value):
+        self.freeze = True
+        if not value: value = '0'
+        self.text.SetValue(value)
+        self.freeze = False
+    def Change(self, x):
+        # Check if we are working with dialog units
+        value = self.text.GetValue()
+        units = ''
+        if value[-1].upper() == 'D':
+            units = value[-1]
+            value = value[:-1]
+        try:
+            intValue = int(value) + x
+            self.spin.SetValue(intValue)
+            self.text.SetValue(str(intValue) + units)
+            self.SetModified()
+        except:
+            # !!! Strange, if I use wxLogWarning, event is re-generated
+            print 'incorrect unit format'
+    def OnSpinUp(self, evt):
+        self.Change(1)
+    def OnSpinDown(self, evt):
+        self.Change(-1)
+
 class ParamText(PPanel):
     def __init__(self, parent, name, textWidth=260):
         PPanel.__init__(self, parent, name)
@@ -768,8 +813,8 @@ paramDict = {
     'flag': ParamFlag,
     'style': ParamStyle, 'exstyle': ParamExStyle,
     'pos': ParamPosSize, 'size': ParamPosSize,
-    'border': ParamInt, 'cols': ParamInt, 'rows': ParamInt,
-    'vgap': ParamInt, 'hgap': ParamInt,
+    'border': ParamUnit, 'cols': ParamInt, 'rows': ParamInt,
+    'vgap': ParamUnit, 'hgap': ParamUnit,
     'checkable': ParamBool, 'accel': ParamAccel,
     'label': ParamText, 'title': ParamText, 'value': ParamText,
     'content': ParamContent, 'selection': ParamInt,
