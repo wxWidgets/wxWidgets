@@ -410,6 +410,8 @@ int wxEntryReal(int& argc, wxChar **argv)
             ~CallOnExit() { wxTheApp->OnExit(); }
         } callOnExit;
 
+        WX_SUPPRESS_UNUSED_WARN(callOnExit);
+
         // app execution
         return wxTheApp->OnRun();
     }
