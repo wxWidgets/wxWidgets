@@ -1046,9 +1046,10 @@ colour. Does not cause an erase background event to be generated.");
 
     DocDeclStr(
         virtual void , Freeze(),
-        "Freezes the window or, in other words, prevents any updates from
-taking place on screen, the window is not redrawn at all. Thaw must be
-called to reenable window redrawing.
+        "Freezes the window or, in other words, prevents any updates from taking place
+on screen, the window is not redrawn at all. Thaw must be called to reenable
+window redrawing.  Calls to Freeze/Thaw may be nested, with the actual Thaw
+being delayed until all the nesting has been undone.
 
 This method is useful for visual appearance optimization (for example,
 it is a good idea to use it before inserting large amount of text into
@@ -1059,7 +1060,9 @@ mandatory directive.");
 
     DocDeclStr(
         virtual void , Thaw(),
-        "Reenables window updating after a previous call to Freeze.");
+        "Reenables window updating after a previous call to Freeze.  Calls to
+Freeze/Thaw may be nested, so Thaw must be called the same number of times
+that Freeze was before the window will be updated.");
     
 
     DocDeclStr(
@@ -1087,7 +1090,7 @@ optimize redrawing by only redrawing those areas, which have been
 exposed.");
     bool IsExposed( int x, int y, int w=1, int h=1 ) const;
     %name(IsExposedPoint) bool IsExposed( const wxPoint& pt ) const;
-    %name(isExposedRect)  bool IsExposed( const wxRect& rect ) const;
+    %name(IsExposedRect)  bool IsExposed( const wxRect& rect ) const;
 
 
 
@@ -1156,7 +1159,7 @@ be reset back to default.");
     
     DocDeclStr(
         wxFont& , GetFont(),
-        "Returns a reference to the font for this window.");
+        "Returns the default font used for this window.");
 
     
 
@@ -1688,11 +1691,18 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
 
 
 %inline %{
-    wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
+    wxWindow* wxWindow_FromHWND(wxWindow* parent, unsigned long _hWnd) {
 #ifdef __WXMSW__
+        WXHWND hWnd = (WXHWND)_hWnd;
+        long id = wxGetWindowId(hWnd);
         wxWindow* win = new wxWindow;
-        win->SetHWND((WXHWND)hWnd);
-        win->SubclassWin((WXHWND)hWnd);
+        parent->AddChild(win);
+        win->SetEventHandler(win);
+        win->SetHWND(hWnd);
+        win->SetId(id);
+        win->SubclassWin(hWnd);
+        win->AdoptAttributesFromHWND();
+        win->SetupColours();
         return win;
 #else
         wxPyRaiseNotImplemented();
