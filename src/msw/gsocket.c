@@ -1175,7 +1175,7 @@ GSocketError _GAddress_Init_INET(GAddress *address)
   address->m_family = GSOCK_INET;
   address->m_realfamily = PF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_family = AF_INET;
-  ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr = INADDR_ANY;
+  ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr = INADDR_NONE;
 
   return GSOCK_NOERROR;
 }
