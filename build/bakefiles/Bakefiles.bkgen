@@ -1,0 +1,159 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<bakefile-gen>
+
+    <!-- These wildcards match all .bkl files in wxWindows tree: -->
+    <input>
+        wx.bkl
+        ../../contrib/build/*/*.bkl
+        ../../samples/*.bkl
+        ../../samples/*/*.bkl
+        ../../samples/*/*/*.bkl
+        ../../demos/*.bkl
+        ../../demos/*/*.bkl
+        ../../demos/*/*/*.bkl
+        ../../utils/*.bkl
+        ../../utils/*/*.bkl
+        ../../utils/*/*/*.bkl
+        ../../contrib/samples/*.bkl
+        ../../contrib/samples/*/*.bkl
+        ../../contrib/samples/*/*/*.bkl
+    </input>
+
+    <!-- List of output formats to generate: -->
+    <add-formats>autoconf,borland,mingw,msvc,msvc6prj,watcom</add-formats>
+    
+    <del-formats files="../../samples/*.bkl">autoconf,msvc6prj</del-formats>
+    <del-formats files="../../demos/*.bkl">msvc6prj</del-formats>
+    <del-formats files="../../samples/html/html_samples.bkl">msvc6prj</del-formats>
+    <del-formats files="../../samples/mobile/mobile_samples.bkl">msvc6prj</del-formats>
+    <del-formats files="../../samples/opengl/opengl_samples.bkl">msvc6prj</del-formats>
+    <del-formats files="../../utils/*.bkl">msvc6prj</del-formats>
+
+    
+    <!-- Default flags (for all formats and bakefiles): -->
+    <add-flags>-Icompat -Iformats</add-flags>
+    
+    
+    <!-- Directories where the files go: -->
+    <add-flags files="wx.bkl" formats="autoconf">
+        -o../../Makefile.in
+    </add-flags>
+    <add-flags files="wx.bkl" formats="borland">
+        -o../msw/makefile.bcc
+    </add-flags>
+    <add-flags files="wx.bkl" formats="mingw">
+        -o../msw/makefile.gcc
+    </add-flags>
+    <add-flags files="wx.bkl" formats="msvc">
+        -o../msw/makefile.vc
+    </add-flags>
+    <add-flags files="wx.bkl" formats="watcom">
+        -o../msw/makefile.wat
+    </add-flags>
+    <add-flags files="wx.bkl" formats="msvc6prj">
+        -o../msw/wx.dsw
+    </add-flags>
+    <add-flags files="../../contrib/build/*/*.bkl" formats="autoconf">
+        -o../../contrib/src/$(INPUT_FILE_BASENAME_NOEXT)/Makefile.in
+    </add-flags>
+    <add-flags files="../../contrib/build/*/*.bkl"
+               formats="mingw,borland,watcom,msvc,msvc6prj">
+        -DSRCDIR=../../src/$(INPUT_FILE_BASENAME_NOEXT)
+    </add-flags>
+
+    
+
+    <!-- Format specific settings: -->
+    <add-flags formats="autoconf">
+        -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4
+    </add-flags>
+
+    <add-formats files="wx.bkl">wx24dsp</add-formats>
+    <add-flags formats="wx24dsp">
+        -DUSE_GUI=1 -DWXUNIV=0 -o../../src/wxWindows.dsp
+    </add-flags>
+
+
+    <!-- Makefile specific settings: -->
+
+    <add-flags formats="borland,mingw,msvc,watcom">
+        -DWRITE_OPTIONS_FILE=0
+    </add-flags>
+    <del-flags files="wx.bkl">
+        -DWRITE_OPTIONS_FILE=0
+    </del-flags>
+    
+    <add-flags files="wx.bkl" formats="borland">
+        -DOPTIONS_FILE=config.bcc
+    </add-flags>
+    <add-flags files="wx.bkl" formats="mingw">
+        -DOPTIONS_FILE=config.gcc
+    </add-flags>
+    <add-flags files="wx.bkl" formats="msvc">
+        -DOPTIONS_FILE=config.vc
+    </add-flags>
+    <add-flags files="wx.bkl" formats="watcom">
+        -DOPTIONS_FILE=config.wat
+    </add-flags>
+
+    <add-flags files="../../*/*">-DWXTOPDIR=../</add-flags>
+    <add-flags files="../../*/*/*">-DWXTOPDIR=../../</add-flags>
+    <add-flags files="../../*/*/*/*">-DWXTOPDIR=../../../</add-flags>
+    <add-flags files="../../*/*/*/*/*">-DWXTOPDIR=../../../../</add-flags>
+    
+    <add-flags files="../../*/*" formats="borland">
+        -DOPTIONS_FILE=../build/msw/config.bcc
+    </add-flags>
+    <add-flags files="../../*/*" formats="mingw">
+        -DOPTIONS_FILE=../build/msw/config.gcc
+    </add-flags>
+    <add-flags files="../../*/*" formats="msvc">
+        -DOPTIONS_FILE=../build/msw/config.vc
+    </add-flags>
+    <add-flags files="../../*/*" formats="watcom">
+        -DOPTIONS_FILE=../build/msw/config.wat
+    </add-flags>
+    <add-flags files="../../*/*/*" formats="borland">
+        -DOPTIONS_FILE=../../build/msw/config.bcc
+    </add-flags>
+    <add-flags files="../../*/*/*" formats="mingw">
+        -DOPTIONS_FILE=../../build/msw/config.gcc
+    </add-flags>
+    <add-flags files="../../*/*/*" formats="msvc">
+        -DOPTIONS_FILE=../../build/msw/config.vc
+    </add-flags>
+    <add-flags files="../../*/*/*" formats="watcom">
+        -DOPTIONS_FILE=../../build/msw/config.wat
+    </add-flags>
+    <add-flags files="../../*/*/*/*" formats="borland">
+        -DOPTIONS_FILE=../../../build/msw/config.bcc
+    </add-flags>
+    <add-flags files="../../*/*/*/*" formats="mingw">
+        -DOPTIONS_FILE=../../../build/msw/config.gcc
+    </add-flags>
+    <add-flags files="../../*/*/*/*" formats="msvc">
+        -DOPTIONS_FILE=../../../build/msw/config.vc
+    </add-flags>
+    <add-flags files="../../*/*/*/*" formats="watcom">
+        -DOPTIONS_FILE=../../../build/msw/config.wat
+    </add-flags>
+    <add-flags files="../../*/*/*/*/*" formats="borland">
+        -DOPTIONS_FILE=../../../../build/msw/config.bcc
+    </add-flags>
+    <add-flags files="../../*/*/*/*/*" formats="mingw">
+        -DOPTIONS_FILE=../../../../build/msw/config.gcc
+    </add-flags>
+    <add-flags files="../../*/*/*/*/*" formats="msvc">
+        -DOPTIONS_FILE=../../../../build/msw/config.vc
+    </add-flags>
+    <add-flags files="../../*/*/*/*/*" formats="watcom">
+        -DOPTIONS_FILE=../../../../build/msw/config.wat
+    </add-flags>
+
+
+    <!-- Personal customizations (not in CVS): -->
+    <include file="Makefiles.local.xml" ignore_missing="1"/>
+
+</bakefile-gen>
