@@ -263,6 +263,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
 // "draw" of m_client
 //-----------------------------------------------------------------------------
 
+#ifndef __WXGTK20__
 
 static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxWindow *win )
 {
@@ -276,6 +277,8 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
                         (char *)"base",
                         0, 0, -1, -1);
 }
+
+#endif // GTK+ 1.x
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowGTK itself
@@ -847,9 +850,11 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
     wxTopLevelWindowBase::SetIcons( icons );
 
     DoSetIcon( icons.GetIcon( -1 ) );
-    if( window )
+    if ( window )
+    {
         wxSetIconsX11( (WXDisplay*)GDK_WINDOW_XDISPLAY( window ),
                        (WXWindow)GDK_WINDOW_XWINDOW( window ), icons );
+    }
 }
 
 // ----------------------------------------------------------------------------
