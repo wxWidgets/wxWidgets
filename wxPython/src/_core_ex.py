@@ -19,16 +19,16 @@ __wxPyPtrTypeMap['wxStatusBar95']   = 'wxStatusBar'
 
 #----------------------------------------------------------------------------
 # Load version numbers from __version__...  Ensure that major and minor
-# versions are the same for both wxPython and wxWindows.
+# versions are the same for both wxPython and wxWidgets.
 
 from __version__ import *
 __version__ = VERSION_STRING
 
-assert MAJOR_VERSION == _core_.MAJOR_VERSION, "wxPython/wxWindows version mismatch"
-assert MINOR_VERSION == _core_.MINOR_VERSION, "wxPython/wxWindows version mismatch"
+assert MAJOR_VERSION == _core_.MAJOR_VERSION, "wxPython/wxWidgets version mismatch"
+assert MINOR_VERSION == _core_.MINOR_VERSION, "wxPython/wxWidgets version mismatch"
 if RELEASE_VERSION != _core_.RELEASE_VERSION:
     import warnings
-    warnings.warn("wxPython/wxWindows release number mismatch")
+    warnings.warn("wxPython/wxWidgets release number mismatch")
 
 #----------------------------------------------------------------------------
 
