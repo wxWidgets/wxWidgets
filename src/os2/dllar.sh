@@ -405,7 +405,7 @@ for file in $inputFiles ; do
     *!)
         ;;
     *)
-        doCommand "emxexp -u $file >> $tmpdefFile"
+        doCommand "emxexp -u $file | grep -v weak$ >> $tmpdefFile || true"
         ;;
     esac
 done
