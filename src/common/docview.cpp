@@ -506,7 +506,8 @@ void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
     while (node)
     {
         wxView *view = (wxView *)node->Data();
-        view->OnUpdate(sender, hint);
+		if (view != sender)
+            view->OnUpdate(sender, hint);
         node = node->Next();
     }
 }
