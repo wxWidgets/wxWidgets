@@ -140,6 +140,8 @@ protected:
 
     // TRUE if wxTLW should render decorations (aka titlebar) itself
     static int ms_drawDecorations;
+    // TRUE if wxTLW can be iconized
+    static int ms_canIconize;
     // true for currently active frame
     bool m_isActive:1;
     // version of icon for titlebar (16x16)
