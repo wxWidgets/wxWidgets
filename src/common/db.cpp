@@ -150,8 +150,6 @@ wxDbConnectInf::wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &u
                        const wxString &password, const wxString &defaultDir,
                        const wxString &fileType, const wxString &description)
 {
-    wxASSERT(dsn.Length());
-
     Henv = 0;
     freeHenvOnDestroy = FALSE;
 
@@ -322,6 +320,8 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
             i_dbDataType = DB_DATA_TYPE_VARCHAR;
         if (i_sqlDataType == SQL_REAL)
             i_dbDataType = DB_DATA_TYPE_FLOAT;
+        if (i_sqlDataType == SQL_C_BINARY)
+            i_dbDataType = DB_DATA_TYPE_BLOB;
     }
 
     if ((i_dbDataType == DB_DATA_TYPE_INTEGER) && (i_sqlDataType == SQL_C_DOUBLE))
@@ -366,6 +366,9 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
                 s_Field = wxT("%02d/%02d/%04d %02d:%02d:%02d.%03d");
             }
             break;
+		  case DB_DATA_TYPE_BLOB:
+            s_Field.Printf(wxT("Unable to format(%d)-SQL(%d)"),dbDataType,sqlDataType);        //
+				break;
         default:
             s_Field.Printf(wxT("Unknown Format(%d)-SQL(%d)"),dbDataType,sqlDataType);        //
             break;
@@ -529,6 +532,12 @@ void wxDb::initialize()
     typeInfDate.CaseSensitive = 0;
     typeInfDate.MaximumScale  = 0;
 
+    typeInfBlob.TypeName.Empty();
+    typeInfBlob.FsqlType      = 0;
+    typeInfBlob.Precision     = 0;
+    typeInfBlob.CaseSensitive = 0;
+    typeInfBlob.MaximumScale  = 0;
+
     // Error reporting is turned OFF by default
     silent = TRUE;
 
@@ -643,7 +652,7 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
     // Query the data source regarding data type information
 
     //
-    // The way I determined which SQL data types to use was by calling SQLGetInfo
+    // The way it was determined which SQL data types to use was by calling SQLGetInfo
     // for all of the possible SQL data types to see which ones were supported.  If
     // a type is not supported, the SQLFetch() that's called from getDataTypeInfo()
     // fails with SQL_NO_DATA_FOUND.  This is ugly because I'm sure the three SQL data
@@ -692,7 +701,6 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
 
     // Float
     if (!getDataTypeInfo(SQL_DOUBLE,typeInfFloat))
-
         if (!getDataTypeInfo(SQL_REAL,typeInfFloat))
             if (!getDataTypeInfo(SQL_FLOAT,typeInfFloat))
                 if (!getDataTypeInfo(SQL_DECIMAL,typeInfFloat))
@@ -738,11 +746,24 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
             typeInfDate.FsqlType = SQL_DATE;
     }
 
+    if (!getDataTypeInfo(SQL_LONGVARBINARY, typeInfBlob))
+    {
+        if (!getDataTypeInfo(SQL_VARBINARY,typeInfBlob))
+            return(FALSE);
+        else
+            typeInfInteger.FsqlType = SQL_VARBINARY;
+    }
+    else
+        typeInfInteger.FsqlType = SQL_LONGVARBINARY;
+
+//typeInfBlob.TypeName = "BLOB";
+
 #ifdef DBDEBUG_CONSOLE
     cout << wxT("VARCHAR DATA TYPE: ") << typeInfVarchar.TypeName << endl;
     cout << wxT("INTEGER DATA TYPE: ") << typeInfInteger.TypeName << endl;
     cout << wxT("FLOAT   DATA TYPE: ") << typeInfFloat.TypeName << endl;
     cout << wxT("DATE    DATA TYPE: ") << typeInfDate.TypeName << endl;
+    cout << wxT("BLOB    DATA TYPE: ") << typeInfBlob.TypeName << endl;
     cout << endl;
 #endif
 
@@ -870,11 +891,19 @@ bool wxDb::Open(wxDb *copyDb)
     typeInfDate.CaseSensitive    = copyDb->typeInfDate.CaseSensitive;
     typeInfDate.MaximumScale     = copyDb->typeInfDate.MaximumScale;
 
+    // Blob
+    typeInfBlob.FsqlType         = copyDb->typeInfBlob.FsqlType;
+    typeInfBlob.TypeName         = copyDb->typeInfBlob.TypeName;
+    typeInfBlob.Precision        = copyDb->typeInfBlob.Precision;
+    typeInfBlob.CaseSensitive    = copyDb->typeInfBlob.CaseSensitive;
+    typeInfBlob.MaximumScale     = copyDb->typeInfBlob.MaximumScale;
+
 #ifdef DBDEBUG_CONSOLE
     cout << wxT("VARCHAR DATA TYPE: ") << typeInfVarchar.TypeName << endl;
     cout << wxT("INTEGER DATA TYPE: ") << typeInfInteger.TypeName << endl;
     cout << wxT("FLOAT   DATA TYPE: ") << typeInfFloat.TypeName << endl;
     cout << wxT("DATE    DATA TYPE: ") << typeInfDate.TypeName << endl;
+    cout << wxT("BLOB    DATA TYPE: ") << typeInfBlob.TypeName << endl;
     cout << endl;
 #endif
 
@@ -2186,13 +2215,14 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
 #endif
                             colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
                         }
-                        else if (!wxStricmp(typeInfInteger.TypeName,colInf[colNo].typeName))
+                        else if (!wxStricmp(typeInfInteger.TypeName, colInf[colNo].typeName))
                             colInf[colNo].dbDataType = DB_DATA_TYPE_INTEGER;
-                        else if (!wxStricmp(typeInfFloat.TypeName,colInf[colNo].typeName))
+                        else if (!wxStricmp(typeInfFloat.TypeName, colInf[colNo].typeName))
                             colInf[colNo].dbDataType = DB_DATA_TYPE_FLOAT;
-                        else if (!wxStricmp(typeInfDate.TypeName,colInf[colNo].typeName))
+                        else if (!wxStricmp(typeInfDate.TypeName, colInf[colNo].typeName))
                             colInf[colNo].dbDataType = DB_DATA_TYPE_DATE;
-
+                        else if (!wxStricmp(typeInfBlob.TypeName, colInf[colNo].typeName))
+                            colInf[colNo].dbDataType = DB_DATA_TYPE_BLOB;
                         colNo++;
                     }
                 }
@@ -2343,7 +2373,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 
                     // Determine the wxDb data type that is used to represent the native data type of this data source
                     colInf[colNo].dbDataType = 0;
-                    if (!wxStricmp(typeInfVarchar.TypeName,colInf[colNo].typeName))
+                    if (!wxStricmp(typeInfVarchar.TypeName, colInf[colNo].typeName))
                     {
 #ifdef _IODBC_
                         // IODBC does not return a correct columnSize, so we set
@@ -2357,12 +2387,14 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 
                         colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
                     }
-                    else if (!wxStricmp(typeInfInteger.TypeName,colInf[colNo].typeName))
+                    else if (!wxStricmp(typeInfInteger.TypeName, colInf[colNo].typeName))
                         colInf[colNo].dbDataType = DB_DATA_TYPE_INTEGER;
-                    else if (!wxStricmp(typeInfFloat.TypeName,colInf[colNo].typeName))
+                    else if (!wxStricmp(typeInfFloat.TypeName, colInf[colNo].typeName))
                         colInf[colNo].dbDataType = DB_DATA_TYPE_FLOAT;
-                    else if (!wxStricmp(typeInfDate.TypeName,colInf[colNo].typeName))
+                    else if (!wxStricmp(typeInfDate.TypeName, colInf[colNo].typeName))
                         colInf[colNo].dbDataType = DB_DATA_TYPE_DATE;
+                    else if (!wxStricmp(typeInfBlob.TypeName, colInf[colNo].typeName))
+                        colInf[colNo].dbDataType = DB_DATA_TYPE_BLOB;
 
                     colNo++;
                 }
@@ -2619,6 +2651,9 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
                             break;
                         case SQL_DATE:
                             colInf[colNo].dbDataType = DB_DATA_TYPE_DATE;
+                            break;
+                        case SQL_BINARY:
+                            colInf[colNo].dbDataType = DB_DATA_TYPE_BLOB;
                             break;
 #ifdef __WXDEBUG__
                         default:
@@ -3434,6 +3469,9 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
 		    break;
 	    case DB_DATA_TYPE_DATE :
 		    dataTypeName = typeInfDate.TypeName;
+		    break;
+	    case DB_DATA_TYPE_BLOB :
+		    dataTypeName = typeInfBlob.TypeName;
 		    break;
 	    default:
 		    return FALSE;

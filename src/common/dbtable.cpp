@@ -487,6 +487,15 @@ bool wxDbTable::bindParams(bool forUpdate)
                 else
                     colDefs[i].CbValue = 0;
                 break;
+            case DB_DATA_TYPE_BLOB:
+                fSqlType = pDb->GetTypeInfBlob().FsqlType;
+                precision = 50000;
+                scale = 0;
+                if (colDefs[i].Null)
+                    colDefs[i].CbValue = SQL_NULL_DATA;
+                else
+                    colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[i].SzDataObj);
+                break;
         }
         if (forUpdate)
         {
@@ -1315,6 +1324,9 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             case DB_DATA_TYPE_DATE:
                 cout << pDb->typeInfDate.TypeName;
                 break;
+            case DB_DATA_TYPE_BLOB:
+                cout << pDb->typeInfBlob.TypeName;
+                break;
         }
         cout << endl;
     }
@@ -1350,9 +1362,13 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             case DB_DATA_TYPE_DATE:
                 sqlStmt += pDb->GetTypeInfDate().TypeName;
                 break;
+            case DB_DATA_TYPE_BLOB:
+                sqlStmt += pDb->GetTypeInfBlob().TypeName;
+                break;
         }
         // For varchars, append the size of the string
-        if (colDefs[i].DbDataType == DB_DATA_TYPE_VARCHAR)
+        if (colDefs[i].DbDataType == DB_DATA_TYPE_VARCHAR)// ||
+//            colDefs[i].DbDataType == DB_DATA_TYPE_BLOB)
         {
             wxString s;
             s.Printf(wxT("(%d)"), colDefs[i].SzDataObj);
@@ -2119,8 +2135,26 @@ wxDbColDataPtr* wxDbTable::SetColDefs(wxDbColInf *pColInfs, ULONG numCols)
                     pColDataPtrs[index].SzDataObj  = sizeof(TIMESTAMP_STRUCT);
                     pColDataPtrs[index].SqlCtype   = SQL_C_TIMESTAMP;
                     break;
+                case DB_DATA_TYPE_BLOB:
+						  int notSupportedYet = 0;
+                    wxASSERT_MSG(notSupportedYet, wxT("This form of ::SetColDefs() cannot be used with BLOB columns"));
+                    pColDataPtrs[index].PtrDataObj = /*BLOB ADDITION NEEDED*/NULL;
+                    pColDataPtrs[index].SzDataObj  = /*BLOB ADDITION NEEDED*/sizeof(void *);
+                    pColDataPtrs[index].SqlCtype   = SQL_VARBINARY;
+                    break;
             }
-            SetColDefs (index,pColInfs[index].colName,pColInfs[index].dbDataType, pColDataPtrs[index].PtrDataObj, pColDataPtrs[index].SqlCtype, pColDataPtrs[index].SzDataObj);
+            if (pColDataPtrs[index].PtrDataObj != NULL)
+                SetColDefs (index,pColInfs[index].colName,pColInfs[index].dbDataType, pColDataPtrs[index].PtrDataObj, pColDataPtrs[index].SqlCtype, pColDataPtrs[index].SzDataObj);
+            else
+            {
+                // Unable to build all the column definitions, as either one of 
+                // the calls to "new" failed above, or there was a BLOB field
+                // to have a column definition for.  If BLOBs are to be used,
+                // the other form of ::SetColDefs() must be used, as it is impossible
+                // to know the maximum size to create the PtrDataObj to be.
+                delete [] pColDataPtrs;
+                return NULL;
+            }
         }
     }
 
