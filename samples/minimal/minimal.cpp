@@ -29,13 +29,13 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// need because it includes almost all "standard" wxWindows headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
 
 // ----------------------------------------------------------------------------
-// ressources
+// resources
 // ----------------------------------------------------------------------------
 // the application icon
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
@@ -114,7 +114,7 @@ IMPLEMENT_APP(MyApp)
 // the application class
 // ----------------------------------------------------------------------------
 
-// `Main program' equivalent: the program execution "starts" here
+// 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
     // create the main application window

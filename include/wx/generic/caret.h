@@ -48,13 +48,23 @@ public:
     // implementation
     // --------------
 
-    // blink the caret once
-    void Blink();
+    // called by wxWindow (not using the event tables)
+    virtual void OnSetFocus();
+    virtual void OnKillFocus();
+
+    // called by wxCaretTimer
+    void OnTimer();
 
 protected:
     virtual void DoShow();
     virtual void DoHide();
     virtual void DoMove();
+
+    // blink the caret once
+    void Blink();
+
+    // refresh the caret
+    void Refresh();
 
     // draw the caret on the given DC
     void DoDraw(wxDC *dc);
@@ -64,7 +74,8 @@ private:
     void InitGeneric();
 
     wxCaretTimer  m_timer;
-    bool          m_blinkedOut;   // TRUE => caret hidden right now
+    bool          m_blinkedOut,     // TRUE => caret hidden right now
+                  m_hasFocus;       // TRUE => our window has focus
 };
 
 #endif // _WX_CARET_H_

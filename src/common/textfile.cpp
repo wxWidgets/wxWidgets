@@ -67,10 +67,10 @@ const wxChar *wxTextFile::GetEOL(wxTextFileType type)
         wxFAIL_MSG(wxT("bad file type in wxTextFile::GetEOL."));
         // fall through nevertheless - we must return something...
 
-      case wxTextFileType_None: return wxT(_T(""));
-      case wxTextFileType_Unix: return wxT(_T("\n"));
-      case wxTextFileType_Dos:  return wxT(_T("\r\n"));
-      case wxTextFileType_Mac:  return wxT(_T("\r"));
+      case wxTextFileType_None: return wxT("");
+      case wxTextFileType_Unix: return wxT("\n");
+      case wxTextFileType_Dos:  return wxT("\r\n");
+      case wxTextFileType_Mac:  return wxT("\r");
     }
 }
 
@@ -118,6 +118,10 @@ wxString wxTextFile::Translate(const wxString& text, wxTextFileType type)
                 if ( chLast == _T('\r') ) {
                     // Mac line termination
                     result += eol;
+
+                    // reset chLast to avoid inserting another eol before the
+                    // next character
+                    chLast = 0;
                 }
 
                 // add to the current line
@@ -213,8 +217,7 @@ bool wxTextFile::Open()
 // if it fails, it assumes the native type for our platform.
 wxTextFileType wxTextFile::GuessType() const
 {
-  // file should be opened and we must be in it's beginning
-  wxASSERT( m_file.IsOpened() && m_file.Tell() == 0 );
+  wxASSERT( IsOpened() );
 
   // scan the file lines
   size_t nUnix = 0,     // number of '\n's alone
@@ -282,7 +285,7 @@ bool wxTextFile::Read()
   char ch, chLast = '\0';
   char buf[1024];
   int n, nRead;
-  while ( !m_file.Eof() ) {
+  do {
     nRead = m_file.Read(buf, WXSIZEOF(buf));
     if ( nRead == wxInvalidOffset ) {
       // read error (error message already given in wxFile::Read)
@@ -325,7 +328,7 @@ bool wxTextFile::Read()
           }
       }
     }
-  }
+  } while ( nRead == WXSIZEOF(buf) );
 
   // anything in the last line?
   if ( !str.IsEmpty() ) {

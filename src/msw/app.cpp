@@ -122,7 +122,6 @@
 // ---------------------------------------------------------------------------
 
 extern wxChar *wxBuffer;
-extern wxChar *wxOsVersion;
 extern wxList *wxWinHandleList;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern void wxSetKeyboardHook(bool doIt);
@@ -158,7 +157,9 @@ LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 // FIXME wxUSE_ON_FATAL_EXCEPTION is only supported for VC++ now because it
 //       needs compiler support for Win32 SEH. Others (especially Borland)
 //       probably have it too, but I'm not sure about how it works
-#ifndef __VISUALC__
+// JACS: get 'Cannot use __try in functions that require unwinding
+// in Unicode mode, so disabling.
+#if !defined(__VISUALC__) || defined(__WIN16__) || defined(UNICODE)
     #undef wxUSE_ON_FATAL_EXCEPTION
     #define wxUSE_ON_FATAL_EXCEPTION 0
 #endif // VC++
@@ -175,17 +176,38 @@ LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 // wxApp
 // ---------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
+IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
-    BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-        EVT_IDLE(wxApp::OnIdle)
-        EVT_END_SESSION(wxApp::OnEndSession)
-        EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
-    END_EVENT_TABLE()
+BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
+    EVT_IDLE(wxApp::OnIdle)
+    EVT_END_SESSION(wxApp::OnEndSession)
+    EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
+END_EVENT_TABLE()
 
 //// Initialize
 bool wxApp::Initialize()
 {
+    // the first thing to do is to check if we're trying to run an Unicode
+    // program under Win9x - if so, abort right now as it has no chance to
+    // work
+#if wxUSE_UNICODE
+    if ( wxGetOsVersion() != wxWINDOWS_NT )
+    {
+        // note that we can use MessageBoxW() as it's implemented even under
+        // Win9x - OTOH, we can't use wxGetTranslation() because the file APIs
+        // used by wxLocale are not
+        ::MessageBox
+        (
+         NULL,
+         _T("This program uses Unicode and requires Windows NT/2000.\nProgram aborted."),
+         _T("wxWindows Fatal Error"),
+         MB_ICONERROR | MB_OK
+        );
+
+        return FALSE;
+    }
+#endif // wxUSE_UNICODE
+
     // Some people may wish to use this, but
     // probably it shouldn't be here by default.
 #ifdef __WXDEBUG__
@@ -195,10 +217,6 @@ bool wxApp::Initialize()
     wxBuffer = new wxChar[1500]; // FIXME
 
     wxClassInfo::InitializeClasses();
-
-#if wxUSE_RESOURCES
-    wxGetResource(wxT("wxWindows"), wxT("OsVersion"), &wxOsVersion);
-#endif
 
 #if wxUSE_THREADS
     wxPendingEventsLocker = new wxCriticalSection;
@@ -319,7 +337,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(frame)");
+        wxLogLastError(wxT("RegisterClass(frame)"));
 
         return FALSE;
     }
@@ -330,7 +348,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw frame)");
+        wxLogLastError(wxT("RegisterClass(no redraw frame)"));
 
         return FALSE;
     }
@@ -342,7 +360,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(MDI parent)");
+        wxLogLastError(wxT("RegisterClass(MDI parent)"));
 
         return FALSE;
     }
@@ -353,7 +371,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw MDI parent frame)");
+        wxLogLastError(wxT("RegisterClass(no redraw MDI parent frame)"));
 
         return FALSE;
     }
@@ -365,7 +383,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(MDI child)");
+        wxLogLastError(wxT("RegisterClass(MDI child)"));
 
         return FALSE;
     }
@@ -376,7 +394,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw MDI child)");
+        wxLogLastError(wxT("RegisterClass(no redraw MDI child)"));
 
         return FALSE;
     }
@@ -388,7 +406,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(panel)");
+        wxLogLastError(wxT("RegisterClass(panel)"));
 
         return FALSE;
     }
@@ -399,7 +417,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw panel)");
+        wxLogLastError(wxT("RegisterClass(no redraw panel)"));
 
         return FALSE;
     }
@@ -410,7 +428,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(canvas)");
+        wxLogLastError(wxT("RegisterClass(canvas)"));
 
         return FALSE;
     }
@@ -419,7 +437,7 @@ bool wxApp::RegisterWindowClasses()
     wndclass.style         = styleNoRedraw;
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw canvas)");
+        wxLogLastError(wxT("RegisterClass(no redraw canvas)"));
 
         return FALSE;
     }
@@ -615,12 +633,12 @@ void wxApp::CleanUp()
 // Entry point helpers, used by wxPython
 //----------------------------------------------------------------------
 
-int  WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char** WXUNUSED(argv) )
+int WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char** WXUNUSED(argv) )
 {
     return wxApp::Initialize();
 }
 
-int  WXDLLEXPORT wxEntryInitGui()
+int WXDLLEXPORT wxEntryInitGui()
 {
     wxTheApp->OnInitGui();
     return 0;
@@ -746,14 +764,10 @@ int wxEntry(WXHINSTANCE hInstance,
     __except ( gs_handleExceptions ? EXCEPTION_EXECUTE_HANDLER
                                    : EXCEPTION_CONTINUE_SEARCH ) {
         if ( wxTheApp )
+        {
+           // give the user a chance to do something special about this
            wxTheApp->OnFatalException();
-
-        // using wxLog would be unsafe here
-        ::MessageBox(NULL,
-                     _("Unrecoverable program error detected: "
-                     " the application will terminate."),
-                     _("Fatal Error"),
-                     MB_APPLMODAL | MB_ICONSTOP | MB_OK);
+        }
 
         ::ExitProcess(3); // the same exit code as abort()
 
@@ -866,7 +880,7 @@ bool wxApp::DoMessage()
     else if ( rc == -1 )
     {
         // should never happen, but let's test for it nevertheless
-        wxLogLastError("GetMessage");
+        wxLogLastError(wxT("GetMessage"));
     }
     else
     {
@@ -1174,7 +1188,7 @@ int wxApp::GetComCtl32Version()
             // try to use DllGetVersion() if available in _headers_
             #ifdef DLLVER_PLATFORM_WINDOWS // defined in shlwapi.h
                 DLLGETVERSIONPROC pfnDllGetVersion = (DLLGETVERSIONPROC)
-                    ::GetProcAddress(hModuleComCtl32, _T("DllGetVersion"));
+                    ::GetProcAddress(hModuleComCtl32, "DllGetVersion");
                 if ( pfnDllGetVersion )
                 {
                     DLLVERSIONINFO dvi;
@@ -1203,11 +1217,7 @@ int wxApp::GetComCtl32Version()
                     FARPROC theProc = ::GetProcAddress
                                         (
                                          hModuleComCtl32,
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x520)
                                          "InitCommonControlsEx"
-#else
-                                         _T("InitCommonControlsEx")
-#endif
                                         );
 
                     if ( !theProc )
@@ -1222,11 +1232,7 @@ int wxApp::GetComCtl32Version()
                         theProc = ::GetProcAddress
                                     (
                                      hModuleComCtl32,
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x520)
                                      "InitializeFlatSB"
-#else
-                                     _T("InitializeFlatSB")
-#endif
                                     );
                         if ( !theProc )
                         {
@@ -1315,7 +1321,7 @@ void wxWakeUpIdle()
         if ( !::PostMessage(GetHwndOf(topWindow), WM_NULL, 0, 0) )
         {
             // should never happen
-            wxLogLastError("PostMessage(WM_NULL)");
+            wxLogLastError(wxT("PostMessage(WM_NULL)"));
         }
     }
 }

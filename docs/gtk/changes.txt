@@ -1,4 +1,178 @@
-19th March '2000: wxWindows 2.1.14 released
+This file contains the detailed log of wxGTK-specific changes, please see
+doc/changes.txt for the concise log of important changes in all wxWindows
+ports.
+
+
+
+*** 29th January 2001: wxWindows 2.2.5 released ***
+
+Synchronized with wxMSW 2.2.5, include macros
+for upwards 2.4.0 compatibility.
+
+Added missing wxEntry prototype to wx/gtk/app.h.
+
+Fixed compilation with --enable-no_rtti/no_exceptions
+with older egcs.
+
+*** 15th January 2001: wxWindows 2.2.4 released ***
+
+Corrected wxYield() to handle recursive calls
+more gracefully (and with a warning in debug mode).
+This fixes a problem with crashing wxTreeCtrl's 
+built-in drag'n'drop and probably some other as
+well.
+
+Corrected wxMenuItem::GetLabel() to handle deliberate '_'
+characters correctly.
+
+Patch for better 8-bit-display support.
+
+Corrected log error message box.
+
+Implememted wxCommandEvent::IsSelection() for wxListBox.
+
+Corrected wxListBox::Set() for sorted mode.
+
+Added EVT_TEXT_UPDATED for spin ctrl.
+
+Corrected wrongly rounded value in slider and scrollbar
+for negative values.
+
+Small fix for wxTextFile type guessing.
+
+Translation updates.
+
+Various other fixes.
+
+Synchronized release with wxMSW again.
+
+*** 3rd November: wxWindows 2.2.3 released ***
+
+Fixed bugs in HTTP code.
+
+Implemented wxNO_FULL_REPAINT_ON_RESIZE whenever possible
+and reduced flicker a little (no longer diables GTK's own
+anti-flicker code).
+
+Always have a clipping region equivalent to the update
+region in OnPaint events (such as under wxMSW and wxMac).
+
+Implemented wxListBox::SetFirstItem().
+
+Fixed some minor problems in HTML code, wxListCtrl,
+wxListBox.
+
+Fixed compilation on RedHat 7.0.
+
+Updated many translations, added Swedish.
+
+Changed default screenpixels-per-inch from 100 to 75 in
+printing code.
+
+Updated AFM font metrics for Ghostscript fonts and let
+Linux and FreeBSD default to using GS fonts (and not
+Adobe fonts).
+
+*** 20th September: wxWindows 2.2.2 released ***
+
+Fixed wxSizer bug that made items with option
+flags greater than 1 report a wrong size.
+
+Fixed many incompatibilties with GTK themes -
+essentially a backport from the 2.3 branch.
+
+Added missing wxImage::Paste() for transparent
+images.
+
+Fixed a drawing error for ellipses and arc in both
+the DC code and the PostScript code.
+
+Fixed wxListCtrl::HitTest() for report mode.
+
+Other minor fixes.
+
+*** 20th August 2000: wxWindows 2.2.1 released ***
+
+Minor build fixes.
+
+Use the wxCommmandEvent::IsChecked() function for checkable
+menu items. This mean that the m_int parameter no longer
+contains the ID of the menu!
+
+Fixed major problems in ODBC logging code. This change is
+binary backward incompatible.
+
+Fixed reentry problems in DnD code.
+
+Changed PostScript code so that it can handle a higher
+resolution (720dpi).
+
+Minor improvements to wxGrid code.
+
+Corrected guffow-scrolling so that no surplus expose
+events are generated.
+
+Corrected bug in wxMask creation on 16-bit displays.
+
+Minor correction to wxDC::DrawRoundedRectangle.
+
+Added support for <INSERT> and <DELETE> menu accelerators.
+
+Made wxComboBox case-sensitive.
+
+Minor correction to doc-view architecture.
+
+Minor wxCommandLineParser changes.
+
+*** 10th July 2000: wxWindows 2.2.0 released ***
+
+Added code for writing BMP images.
+
+Added code for writing TIFF images.
+
+Fixed problem with best visuals (on SGI)
+   
+Applied a number of compile fixes for various Unix variants.
+
+Fixed wrong background colours appearing sometimes and fix
+for resetting the default font in controls.
+   
+Speed-up to wxListCtrl.
+
+Fixed bug wxTextStream::ReadLine()
+   
+Various improvements commandline parser.
+ 
+Changed wxColour unequal operator to compare colours.
+   
+Fixed wxMenuBar::Replace bug.
+
+Added new position to slider update event.
+   
+Minor fix to idle handling (now wxGTK events come after all GTK events).
+
+Various fixes to the new wxGrid class.
+   
+Bug-fixes.
+
+*** 4th June 2000: wxWindows pre-2.2 release ***
+
+Complete freeze now. Only vital bug-fixes allowed.
+
+Various enhancements to wxSizer.
+
+Added wxGridSizer and wxFlexGridSizer.
+
+Reworked wxURL.
+
+MANY bugfixes.
+
+*** 22th March 2000: wxWindows 2.1.15 released ***
+
+Build fix. RPMs no loner require GTK's include files.
+
+An extra library for the OpenGl class now gets builts
+*** 19th March 2000: wxWindows 2.1.14 released ***
 
 An extra library for the OpenGl class now gets builts
 and installed. There is also an extra RPM for this 
@@ -59,7 +233,7 @@ style when using the default.
 The L-GPL iODBC library must now be enables explicitly so as
 to not mislead people into reading the license wrong.
 
-24th January '2000: wxWindows 2.1.13 released
+*** 24th January '2000: wxWindows 2.1.13 released ***
 
 Corrections to TAB handling in notebooks.
 
@@ -104,7 +278,7 @@ Updates to the ODBC classes (George Tasker).
 
 Build-fixes for various platforms and compilers.
 
-6th January '2000: wxWindows 2.1.12 released
+*** 6th January '2000: wxWindows 2.1.12 released ***
 
 Who has a BigEndian computer (e.g. Sparc or PowerPC) that runs a 15 
 and/or 16 bit colour mode? I need this for testing purposes, i.e. this
@@ -215,7 +389,7 @@ More minor changes and fixes.
 
 Began work on a new dialog and resource editor (wxDesigner).
 
-7st November '99: wxWindows 2.1.11 released
+*** 7st November '99: wxWindows 2.1.11 released ***
 
 There is still an unresolved problem with bitmap to image
 conversion on big-endian architectures (such as Solaris),
@@ -635,7 +809,7 @@ Note that the next release might bring about changes to keyboard
 handling and scroll event intercepting from wxScrolledWindow. 
  
 By and large much of the code has stabilized and won't be much
-different in the final wxWindows 2.1 release. Please test as
+*** different in the final wxWindows 2.1 release. Please test as ***
 much as you can.
  
 The next release will have a new build system.
@@ -762,7 +936,7 @@ gooddies, possibly world domination.
  
 
   
-5th March '99: wxWindows 2.0 released
+*** 5th March '99: wxWindows 2.0 released ***
   
  
 This is the final version of wxWindows 2.0 for GTK. The versions for
@@ -771,7 +945,7 @@ site. The Mac version is still under development.
  
 
   
-19th February '99: wxWindows 2.0 beta 5
+*** 19th February '99: wxWindows 2.0 beta 5 ***
   
  
 This is the fifth beta release and it contains mostly bug fixes and
@@ -781,7 +955,7 @@ Applied compile fixes for Solaris (different flavours and compilers).
  
 
   
-12th February '99: wxWindows 2.0 beta 4
+*** 12th February '99: wxWindows 2.0 beta 4 ***
   
  
 This is the fourth beta release and it contains mostly bug fixes and
@@ -800,7 +974,7 @@ Fixed many bugs. You guessed it.
  
 
   
-29th January '99: wxWindows 2.0 beta 3
+*** 29th January '99: wxWindows 2.0 beta 3 ***
   
  
 This is the third beta release and it contains mostly bug fixes. 
@@ -841,7 +1015,7 @@ SuSE 6.0 as SuSE decided to ship 6.0 with a broken GTK+ package.
  
 
   
-6th January '99: wxWindows 2.0 beta 2
+*** 6th January '99: wxWindows 2.0 beta 2 ***
   
  
 This is the second beta release and contains it mostly build and
@@ -850,7 +1024,7 @@ commercial Unices and Windows.
  
 			
   
-20th December '98: wxWindows 2.0 beta 1
+*** 20th December '98: wxWindows 2.0 beta 1 ***
   
  
 This is the first beta release and we have used the time before

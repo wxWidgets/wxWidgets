@@ -13,12 +13,12 @@ top_srcdir = @top_srcdir@/..
 top_builddir = ../..
 program_dir = samples/internat
 
-DATAFILES=fr/internat.po fr/internat.mo \
-	de/internat.po de/internat.mo \
-	fr/wxstd.po fr/wxstd.mo \
-	de/wxstd.po de/wxstd.mo
+DATAFILES=\
+    fr/internat.mo fr/wxstd.mo \
+	de/internat.mo de/wxstd.mo \
+	ru/internat.mo ru/wxstd.mo
 
-DATADIRS=fr de
+DATADIRS=fr de ru
 
 PROGRAM=internat
 

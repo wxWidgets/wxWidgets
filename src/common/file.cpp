@@ -62,7 +62,6 @@
     #endif
 #elif (defined(__WXPM__))
     #include <io.h>
-    #include <direct.h>
     #define   W_OK        2
     #define   R_OK        4
 #elif (defined(__WXSTUBS__))
@@ -87,36 +86,6 @@
     #include  <sys/stat.h>    // stat
 #endif
 
-// Microsoft compiler loves underscores, feed them to it
-#ifdef  __VISUALC__
-    // functions
-    #define   open        _open
-    #define   close       _close
-    #define   read        _read
-    #define   write       _write
-    #define   lseek       _lseek
-    #define   fsync       _commit
-    #define   access      _access
-    #define   eof         _eof
-
-    // types
-    #define   stat        _stat
-
-    // constants
-
-    #define   O_RDONLY    _O_RDONLY
-    #define   O_WRONLY    _O_WRONLY
-    #define   O_RDWR      _O_RDWR
-    #define   O_EXCL      _O_EXCL
-    #define   O_CREAT     _O_CREAT
-    #define   O_BINARY    _O_BINARY
-
-    #define   S_IFDIR     _S_IFDIR
-    #define   S_IFREG     _S_IFREG
-#else
-    #define   tell(fd)    lseek(fd, 0, SEEK_CUR)
-#endif  // VC++
-
 #if defined(__BORLANDC__) || defined(_MSC_VER)
     #define   W_OK        2
     #define   R_OK        4
@@ -132,12 +101,6 @@
     #include <unix.h>
 #endif
 
-// wxWindows
-#include  "wx/string.h"
-#include  "wx/intl.h"
-#include  "wx/file.h"
-#include  "wx/log.h"
-
 #ifndef MAX_PATH
     #define MAX_PATH 512
 #endif
@@ -150,6 +113,12 @@
     #define ACCESS(access)  , (access)
 #endif // Salford C
 
+// wxWindows
+#include  "wx/string.h"
+#include  "wx/intl.h"
+#include  "wx/file.h"
+#include  "wx/log.h"
+
 // ============================================================================
 // implementation of wxFile
 // ============================================================================
@@ -159,23 +128,23 @@
 // ----------------------------------------------------------------------------
 bool wxFile::Exists(const wxChar *name)
 {
-    struct stat st;
+    wxStructStat st;
 #if wxUSE_UNICODE && wxMBFILES
     wxCharBuffer fname = wxConvFile.cWC2MB(name);
 
 #ifdef __WXMAC__
   return !access(wxUnix2MacFilename( name ) , 0) && !stat(wxUnix2MacFilename( name ), &st) && (st.st_mode & S_IFREG);
 #else
-    return !access(fname, 0) &&
-           !stat(wxMBSTRINGCAST fname, &st) &&
+    return !wxAccess(fname, 0) &&
+           !wxStat(wxMBSTRINGCAST fname, &st) &&
            (st.st_mode & S_IFREG);
 #endif
 #else
 #ifdef __WXMAC__
   return !access(wxUnix2MacFilename( name ) , 0) && !stat(wxUnix2MacFilename( name ), &st) && (st.st_mode & S_IFREG);
 #else
-    return !access(name, 0) &&
-           !stat((wxChar*) name, &st) &&
+    return !wxAccess(name, 0) &&
+           !wxStat(name, &st) &&
            (st.st_mode & S_IFREG);
 #endif
 #endif
@@ -198,7 +167,7 @@ bool wxFile::Access(const wxChar *name, OpenMode mode)
             wxFAIL_MSG(wxT("bad wxFile::Access mode parameter."));
     }
 
-    return access(wxFNCONV(name), how) == 0;
+    return wxAccess(wxFNCONV(name), how) == 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -222,10 +191,10 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
 #ifdef __WXMAC__
     int fd = open(wxUnix2MacFilename( szFileName ), O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
 #else
-    int fd = open(wxFNCONV(szFileName),
-                  O_BINARY | O_WRONLY | O_CREAT |
-                  (bOverwrite ? O_TRUNC : O_EXCL)
-                  ACCESS(accessMode));
+    int fd = wxOpen(wxFNCONV(szFileName),
+                    O_BINARY | O_WRONLY | O_CREAT |
+                    (bOverwrite ? O_TRUNC : O_EXCL)
+                    ACCESS(accessMode));
 #endif
     if ( fd == -1 ) {
         wxLogSysError(_("can't create file '%s'"), szFileName);
@@ -247,12 +216,17 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
             flags |= O_RDONLY;
             break;
 
+        case write_append:
+            if ( wxFile::Exists(szFileName) )
+            {
+                flags |= O_WRONLY | O_APPEND;
+                break;
+            }
+            //else: fall through as write_append is the same as write if the
+            //      file doesn't exist
+
         case write:
             flags |= O_WRONLY | O_CREAT | O_TRUNC;
-            break;
-
-        case write_append:
-            flags |= O_WRONLY | O_APPEND;
             break;
 
         case read_write:
@@ -263,7 +237,7 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
 #ifdef __WXMAC__
     int fd = open(wxUnix2MacFilename( szFileName ), flags, access);
 #else
-    int fd = open(wxFNCONV(szFileName), flags ACCESS(accessMode));
+    int fd = wxOpen(wxFNCONV(szFileName), flags ACCESS(accessMode));
 #endif
     if ( fd == -1 ) {
         wxLogSysError(_("can't open file '%s'"), szFileName);
@@ -337,7 +311,7 @@ bool wxFile::Flush()
 {
     if ( IsOpened() ) {
 #if defined(__VISUALC__) || wxHAVE_FSYNC
-        if ( fsync(m_fd) == -1 )
+        if ( wxFsync(m_fd) == -1 )
         {
             wxLogSysError(_("can't flush file descriptor %d"), m_fd);
             return FALSE;
@@ -391,7 +365,7 @@ off_t wxFile::Tell() const
 {
     wxASSERT( IsOpened() );
 
-    int iRc = tell(m_fd);
+    int iRc = wxTell(m_fd);
     if ( iRc == -1 ) {
         wxLogSysError(_("can't get seek position on file descriptor %d"), m_fd);
         return wxInvalidOffset;
@@ -408,7 +382,7 @@ off_t wxFile::Length() const
 #ifdef __VISUALC__
     int iRc = _filelength(m_fd);
 #else // !VC++
-    int iRc = tell(m_fd);
+    int iRc = wxTell(m_fd);
     if ( iRc != -1 ) {
         // @ have to use const_cast :-(
         int iLen = ((wxFile *)this)->SeekEnd();
@@ -500,7 +474,7 @@ bool wxTempFile::Open(const wxString& strName)
     // OS/2 supports that have them (HPFS, FAT32) and security (HPFS386)
     static const wxChar *szMktempSuffix = wxT("XXX");
     m_strTemp << strName << szMktempSuffix;
-    mkdir(m_strTemp.GetWriteBuf(MAX_PATH));
+    ::DosCreateDir(m_strTemp.GetWriteBuf(MAX_PATH), NULL);
 #else // Windows
     wxString strPath;
     wxSplitPath(strName, &strPath, NULL, NULL);
@@ -522,7 +496,7 @@ bool wxTempFile::Open(const wxString& strName)
     mode_t umaskOld = 0; // just to suppress compiler warning
     bool changedUmask;
 
-    struct stat st;
+    wxStructStat st;
     if ( stat(strName.fn_str(), &st) == 0 )
     {
         // this assumes that only lower bits of st_mode contain the access
@@ -572,12 +546,12 @@ bool wxTempFile::Commit()
     m_file.Close();
 
 #ifndef __WXMAC__
-    if ( wxFile::Exists(m_strName) && remove(m_strName.fn_str()) != 0 ) {
+    if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
         wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
         return FALSE;
     }
 
-    if ( rename(m_strTemp.fn_str(), m_strName.fn_str()) != 0 ) {
+    if ( wxRename(m_strTemp, m_strName) != 0 ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
         return FALSE;
     }
@@ -600,7 +574,7 @@ void wxTempFile::Discard()
 {
     m_file.Close();
 #ifndef __WXMAC__
-    if ( remove(m_strTemp.fn_str()) != 0 )
+    if ( wxRemove(m_strTemp) != 0 )
         wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
 #else
     if ( remove( wxUnix2MacFilename(m_strTemp.fn_str())) != 0 )

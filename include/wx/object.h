@@ -170,6 +170,21 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
         ? (className *)(obj) \
         : (className *)0)
 
+#define wxConstCast(obj, className) ((className *)(obj))
+
+#ifdef __WXDEBUG__
+    inline void wxCheckCast(void *ptr)
+    {
+        wxASSERT_MSG( ptr, _T("wxStaticCast() used incorrectly") );
+    }
+
+    #define wxStaticCast(obj, className) \
+        (wxCheckCast(wxDynamicCast(obj, className)), ((className *)(obj)))
+
+#else // !Debug
+    #define wxStaticCast(obj, className) ((className *)(obj))
+#endif // Debug/!Debug
+
 // Unfortunately Borland seems to need this include.
 #ifdef __BORLANDC__
     #if wxUSE_IOSTREAMH
@@ -203,7 +218,7 @@ class WXDLLEXPORT wxObject
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-  void operator delete(void *buf, char*, int);
+  void operator delete(void *buf, wxChar*, int);
 #endif
 
     // Causes problems for VC++

@@ -37,20 +37,13 @@ wxWindowList wxTopLevelWindows;
 // List of windows pending deletion
 wxList WXDLLEXPORT wxPendingDelete;
 
-// Custom OS version, as optionally placed in wx.ini/.wxrc
-// Currently this can be Win95, Windows, Win32s, WinNT.
-// For some systems, you can't tell until run-time what services you
-// have. See wxGetOsVersion, which uses this string if present.
-char *wxOsVersion = NULL;
-
 int wxPageNumber;
 
 // GDI Object Lists
-wxBrushList *wxTheBrushList = NULL;
-wxPenList   *wxThePenList = NULL;
 wxFontList   *wxTheFontList = NULL;
-wxBitmapList   *wxTheBitmapList = NULL;
-
+wxPenList    *wxThePenList = NULL;
+wxBrushList  *wxTheBrushList = NULL;
+wxBitmapList *wxTheBitmapList = NULL;
 wxColourDatabase *wxTheColourDatabase = NULL;
 
 // Stock objects
@@ -58,8 +51,8 @@ wxFont *wxNORMAL_FONT;
 wxFont *wxSMALL_FONT;
 wxFont *wxITALIC_FONT;
 wxFont *wxSWISS_FONT;
-wxPen *wxRED_PEN;
 
+wxPen *wxRED_PEN;
 wxPen *wxCYAN_PEN;
 wxPen *wxGREEN_PEN;
 wxPen *wxBLACK_PEN;
@@ -95,14 +88,14 @@ wxCursor *wxCROSS_CURSOR = NULL;
 
 // 'Null' objects
 wxAcceleratorTable wxNullAcceleratorTable;
-wxBitmap wxNullBitmap;
-wxIcon   wxNullIcon;
-wxCursor wxNullCursor;
-wxPen    wxNullPen;
-wxBrush  wxNullBrush;
+wxBitmap  wxNullBitmap;
+wxIcon    wxNullIcon;
+wxCursor  wxNullCursor;
+wxPen     wxNullPen;
+wxBrush   wxNullBrush;
 wxPalette wxNullPalette;
-wxFont   wxNullFont;
-wxColour wxNullColour;
+wxFont    wxNullFont;
+wxColour  wxNullColour;
 
 // Default window names
 const wxChar *wxControlNameStr = wxT("control");

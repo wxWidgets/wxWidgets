@@ -9,7 +9,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
                         link(defaultlibsname, "..\\lib\\os2xpm.lib"),
                         link(defaultlibsname, "..\\lib\\os2jpeg.lib"),
                         link(defaultlibsname, "..\\lib\\os2zlib.lib"),
-                        link(defaultlibsname, "..\\lib\\os2tifd.lib"),
+                        link(defaultlibsname, "..\\lib\\os2tiff.lib"),
                         link(defaultlibsname, "NETAPI32.LIB"),
                         link(defaultlibsname, "UPM32.LIB"),
                         link(defaultlibsname, "TCP32DLL.LIB"),
@@ -32,6 +32,8 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
    {
        run before '-mkdir ' '..\\src\\common\\dbgos240dll'
        run before '-mkdir ' '..\\samples\\minimal\\dbgos240dll'
+       run before 'copy ' '..\\src\common\\dosyacc.c ' '..\\src\\common\\y_tab.c'
+       run before 'copy ' '..\\src\common\\doslex.c ' '..\\src\\common\\lex_yy.c'
    }
    target type("dll") "..\\lib\\Wxwindll.dll"
    {
@@ -284,6 +286,6 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
    target "..\\samples\\minimal\\dbgos240dll\\Minimal.exe"
    {
       source type(cpp) "..\\SAMPLES\\MINIMAL\\MINIMAL.CPP"
-      source type(rc) "..\\SAMPLES\\MINIMAL\\MINIMAL.RCO"
+      source type(rc) "..\\SAMPLES\\MINIMAL\\MINIMAL.RC4"
    }
 }

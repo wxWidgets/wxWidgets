@@ -63,16 +63,16 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
 // ----------------------------------------------------------------------------
 
 #if defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ > 1000)
-const char *GetIidName(REFIID riid)
+static wxString GetIidName(REFIID riid)
 {
   // an association between symbolic name and numeric value of an IID
   struct KNOWN_IID {
     const IID  *pIid;
-    const char *szName;
+    const wxChar *szName;
   };
 
   // construct the table containing all known interfaces
-  #define ADD_KNOWN_IID(name) { &IID_I##name, #name }
+  #define ADD_KNOWN_IID(name) { &IID_I##name, _T(#name) }
 
   static const KNOWN_IID aKnownIids[] = {
     ADD_KNOWN_IID(AdviseSink),
@@ -166,24 +166,24 @@ const char *GetIidName(REFIID riid)
   }
 
   // unknown IID, just transform to string
-  static Uuid s_uuid;
-  s_uuid.Set(riid);
-  return s_uuid;
+  Uuid uuid(riid);
+  return wxString((const wxChar *)uuid);
 }
 
-void wxLogQueryInterface(const char *szInterface, REFIID riid)
+void wxLogQueryInterface(const wxChar *szInterface, REFIID riid)
 {
-  wxLogTrace("%s::QueryInterface (iid = %s)", szInterface, GetIidName(riid));
+  wxLogTrace(wxT("%s::QueryInterface (iid = %s)"),
+             szInterface, GetIidName(riid).c_str());
 }
 
-void wxLogAddRef(const char *szInterface, ULONG cRef)
+void wxLogAddRef(const wxChar *szInterface, ULONG cRef)
 {
-  wxLogTrace("After %s::AddRef: m_cRef = %d", szInterface, cRef + 1);
+  wxLogTrace(wxT("After %s::AddRef: m_cRef = %d"), szInterface, cRef + 1);
 }
 
-void wxLogRelease(const char *szInterface, ULONG cRef)
+void wxLogRelease(const wxChar *szInterface, ULONG cRef)
 {
-  wxLogTrace("After %s::Release: m_cRef = %d", szInterface, cRef - 1);
+  wxLogTrace(wxT("After %s::Release: m_cRef = %d"), szInterface, cRef - 1);
 }
 
 #elif defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ <= 1000)

@@ -29,6 +29,9 @@
 
 #include "wx/msw/private.h"
 
+// Set this to 1 to be _absolutely_ sure that repainting will work for all comctl32.dll versions
+#define wxUSE_COMCTL32_SAFELY 0
+
 // Mingw32 is a bit mental even though this is done in winundef
 #ifdef GetFirstChild
     #undef GetFirstChild
@@ -112,7 +115,7 @@ static bool IsItemSelected(HWND hwndTV, HTREEITEM hItem)
 
     if ( !TreeView_GetItem(hwndTV, &tvi) )
     {
-        wxLogLastError("TreeView_GetItem");
+        wxLogLastError(wxT("TreeView_GetItem"));
     }
 
     return (tvi.state & TVIS_SELECTED) != 0;
@@ -128,7 +131,7 @@ static void SelectItem(HWND hwndTV, HTREEITEM hItem, bool select = TRUE)
 
     if ( TreeView_SetItem(hwndTV, &tvi) == -1 )
     {
-        wxLogLastError("TreeView_SetItem");
+        wxLogLastError(wxT("TreeView_SetItem"));
     }
 }
 
@@ -516,7 +519,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         return FALSE;
 
     DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
-                   TVS_HASLINES | TVS_SHOWSELALWAYS;
+                   TVS_HASLINES | TVS_SHOWSELALWAYS /* | WS_CLIPSIBLINGS */;
 
     if ( m_windowStyle & wxTR_HAS_BUTTONS )
         wstyle |= TVS_HASBUTTONS;
@@ -545,8 +548,23 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )
         return FALSE;
 
+#if wxUSE_COMCTL32_SAFELY
+    wxWindow::SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    wxWindow::SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
+#elif 1
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
+#else
+    // This works around a bug in the Windows tree control whereby for some versions
+    // of comctrl32, setting any colour actually draws the background in black.
+    // This will initialise the background to the system colour.
+    // THIS FIX NOW REVERTED since it caused problems on _other_ systems.
+    // Assume the user has an updated comctl32.dll.
+    ::SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0,-1);
+    wxWindow::SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
+#endif
+
 
     // VZ: this is some experimental code which may be used to get the
     //     TVS_CHECKBOXES style functionality for comctl32.dll < 4.71.
@@ -634,7 +652,7 @@ bool wxTreeCtrl::DoGetItem(wxTreeViewItem* tvItem) const
 {
     if ( !TreeView_GetItem(GetHwnd(), tvItem) )
     {
-        wxLogLastError("TreeView_GetItem");
+        wxLogLastError(wxT("TreeView_GetItem"));
 
         return FALSE;
     }
@@ -646,7 +664,7 @@ void wxTreeCtrl::DoSetItem(wxTreeViewItem* tvItem)
 {
     if ( TreeView_SetItem(GetHwnd(), tvItem) == -1 )
     {
-        wxLogLastError("TreeView_SetItem");
+        wxLogLastError(wxT("TreeView_SetItem"));
     }
 }
 
@@ -707,20 +725,24 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
 
 bool wxTreeCtrl::SetBackgroundColour(const wxColour &colour)
 {
+#if !wxUSE_COMCTL32_SAFELY
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return FALSE;
 
     SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0, colour.GetPixel());
+#endif
 
     return TRUE;
 }
 
 bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
 {
+#if !wxUSE_COMCTL32_SAFELY
     if ( !wxWindowBase::SetForegroundColour(colour) )
         return FALSE;
 
     SendMessage(GetHwnd(), TVM_SETTEXTCOLOR, 0, colour.GetPixel());
+#endif
 
     return TRUE;
 }
@@ -908,6 +930,12 @@ wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
 {
+    // first, associate this piece of data with this item
+    if ( data )
+    {
+        data->SetId(item);
+    }
+
     wxTreeViewItem tvItem(item, TVIF_PARAM);
 
     if ( HasIndirectData(item) )
@@ -982,6 +1010,7 @@ void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
     }
 
     attr->SetTextColour(col);
+    Refresh();
 }
 
 void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
@@ -998,6 +1027,7 @@ void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
     }
 
     attr->SetBackgroundColour(col);
+    Refresh();
 }
 
 void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
@@ -1013,6 +1043,7 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
     }
 
     attr->SetFont(font);
+    Refresh();
 }
 
 // ----------------------------------------------------------------------------
@@ -1142,16 +1173,14 @@ wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 {
-    wxASSERT_MSG( IsVisible(item), wxT("The item you call GetNextVisible() "
-                                      "for must be visible itself!"));
+    wxASSERT_MSG( IsVisible(item), wxT("The item you call GetNextVisible() for must be visible itself!"));
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetNextVisible(GetHwnd(), HITEM(item)));
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 {
-    wxASSERT_MSG( IsVisible(item), wxT("The item you call GetPrevVisible() "
-                                      "for must be visible itself!"));
+    wxASSERT_MSG( IsVisible(item), wxT("The item you call GetPrevVisible() for must be visible itself!"));
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevVisible(GetHwnd(), HITEM(item)));
 }
@@ -1219,6 +1248,11 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
         mask |= TVIF_TEXT;
         tvIns.item.pszText = (wxChar *)text.c_str();  // cast is ok
     }
+    else
+    {
+        tvIns.item.pszText = NULL;
+        tvIns.item.cchTextMax = 0;
+    }
 
     if ( image != -1 )
     {
@@ -1249,7 +1283,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     HTREEITEM id = (HTREEITEM) TreeView_InsertItem(GetHwnd(), &tvIns);
     if ( id == 0 )
     {
-        wxLogLastError("TreeView_InsertItem");
+        wxLogLastError(wxT("TreeView_InsertItem"));
     }
 
     if ( data != NULL )
@@ -1334,7 +1368,7 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
 {
     if ( !TreeView_DeleteItem(GetHwnd(), HITEM(item)) )
     {
-        wxLogLastError("TreeView_DeleteItem");
+        wxLogLastError(wxT("TreeView_DeleteItem"));
     }
 }
 
@@ -1357,7 +1391,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
     {
         if ( !TreeView_DeleteItem(GetHwnd(), (HTREEITEM)children[n]) )
         {
-            wxLogLastError("TreeView_DeleteItem");
+            wxLogLastError(wxT("TreeView_DeleteItem"));
         }
     }
 }
@@ -1366,7 +1400,7 @@ void wxTreeCtrl::DeleteAllItems()
 {
     if ( !TreeView_DeleteAllItems(GetHwnd()) )
     {
-        wxLogLastError("TreeView_DeleteAllItems");
+        wxLogLastError(wxT("TreeView_DeleteAllItems"));
     }
 }
 
@@ -1491,7 +1525,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item)
         {
             if ( !TreeView_SelectItem(GetHwnd(), HITEM(item)) )
             {
-                wxLogLastError("TreeView_SelectItem");
+                wxLogLastError(wxT("TreeView_SelectItem"));
             }
             else
             {
@@ -1513,7 +1547,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
 {
     if ( !TreeView_SelectSetFirstVisible(GetHwnd(), HITEM(item)) )
     {
-        wxLogLastError("TreeView_SelectSetFirstVisible");
+        wxLogLastError(wxT("TreeView_SelectSetFirstVisible"));
     }
 }
 
@@ -1544,6 +1578,14 @@ void wxTreeCtrl::DeleteTextCtrl()
 {
     if ( m_textCtrl )
     {
+        // the HWND corresponding to this control is deleted by the tree
+        // control itself and we don't know when exactly this happens, so check
+        // if the window still exists before calling UnsubclassWin()
+        if ( !::IsWindow(GetHwndOf(m_textCtrl)) )
+        {
+            m_textCtrl->SetHWND(0);
+        }
+
         m_textCtrl->UnsubclassWin();
         m_textCtrl->SetHWND(0);
         delete m_textCtrl;
@@ -1915,25 +1957,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     switch ( hdr->code )
     {
-        case NM_RCLICK:
-            {
-                if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
-                    return TRUE;
-
-                TV_HITTESTINFO tvhti;
-                ::GetCursorPos(&(tvhti.pt));
-                ::ScreenToClient(GetHwnd(),&(tvhti.pt));
-                if ( TreeView_HitTest(GetHwnd(),&tvhti) )
-                {
-                    if( tvhti.flags & TVHT_ONITEM )
-                    {
-                        event.m_item = (WXHTREEITEM) tvhti.hItem;
-                        eventType = wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
-                    }
-                }
-            }
-            break;
-
         case TVN_BEGINDRAG:
             eventType = wxEVT_COMMAND_TREE_BEGIN_DRAG;
             // fall through
@@ -2029,8 +2052,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         break;
 
                     default:
-                        wxLogDebug(wxT("unexpected code %d in TVN_ITEMEXPAND "
-                                      "message"), tv->action);
+                        wxLogDebug(wxT("unexpected code %d in TVN_ITEMEXPAND message"), tv->action);
                 }
 
                 bool ing = ((int)hdr->code == TVN_ITEMEXPANDING);
@@ -2082,7 +2104,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 
-#if defined(_WIN32_IE) && _WIN32_IE >= 0x300
+#if defined(_WIN32_IE) && _WIN32_IE >= 0x300 && !wxUSE_COMCTL32_SAFELY
         case NM_CUSTOMDRAW:
             {
                 LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW)lParam;
@@ -2179,6 +2201,30 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 #endif // _WIN32_IE >= 0x300
 
+        case NM_DBLCLK:
+        case NM_RCLICK:
+            {
+                TV_HITTESTINFO tvhti;
+                ::GetCursorPos(&tvhti.pt);
+                ::ScreenToClient(GetHwnd(), &tvhti.pt);
+                if ( TreeView_HitTest(GetHwnd(), &tvhti) )
+                {
+                    if ( tvhti.flags & TVHT_ONITEM )
+                    {
+                        event.m_item = (WXHTREEITEM) tvhti.hItem;
+                        eventType = (int)hdr->code == NM_DBLCLK
+                                    ? wxEVT_COMMAND_TREE_ITEM_ACTIVATED
+                                    : wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
+
+                        event.m_pointDrag.x = tvhti.pt.x;
+                        event.m_pointDrag.y = tvhti.pt.y;
+                    }
+
+                    break;
+                }
+            }
+            // fall through
+
         default:
             return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }
@@ -2191,6 +2237,14 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // post processing
     switch ( hdr->code )
     {
+        case NM_DBLCLK:
+            // we translate NM_DBLCLK into ACTIVATED event, so don't interpret
+            // the return code of this event handler as the return value for
+            // NM_DBLCLK - otherwise, double clicking the item to toggle its
+            // expanded status would never work
+            *result = FALSE;
+            break;
+
         case TVN_BEGINDRAG:
         case TVN_BEGINRDRAG:
             if ( event.IsAllowed() )
@@ -2238,8 +2292,12 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 
         case TVN_ENDLABELEDIT:
-            // return TRUE to set the label to the new string
+            // return TRUE to set the label to the new string: note that we
+            // also must pretend that we did process the message or it is going
+            // to be passed to DefWindowProc() which will happily return FALSE
+            // cancelling the label change
             *result = event.IsAllowed();
+            processed = TRUE;
 
             // ensure that we don't have the text ctrl which is going to be
             // deleted any more

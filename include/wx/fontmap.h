@@ -20,11 +20,18 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/font.h"        // for wxFont and wxFontEncoding
-#include "wx/fontutil.h"    // for wxNativeEncodingInfo
+#include "wx/fontenc.h"         // for wxFontEncoding
+#if wxUSE_GUI
+    #include "wx/fontutil.h"    // for wxNativeEncodingInfo
+#endif // wxUSE_GUI
 
-class WXDLLEXPORT wxConfigBase;
-class WXDLLEXPORT wxWindow;
+#if wxUSE_CONFIG
+    class WXDLLEXPORT wxConfigBase;
+#endif // wxUSE_CONFIG
+
+#if wxUSE_GUI
+    class WXDLLEXPORT wxWindow;
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // wxFontMapper manages user-definable correspondence between logical font
@@ -49,6 +56,7 @@ public:
     // virtual dtor for a base class
     virtual ~wxFontMapper();
 
+#if wxUSE_GUI
     // find an alternative for the given encoding (which is supposed to not be
     // available on this system). If successful, return TRUE and fill info
     // structure with the parameters required to create the font, otherwise
@@ -69,6 +77,7 @@ public:
     // If no facename is given, 
     virtual bool IsEncodingAvailable(wxFontEncoding encoding,
                                      const wxString& facename = wxEmptyString);
+#endif // wxUSE_GUI
 
     // returns the encoding for the given charset (in the form of RFC 2046) or
     // wxFONTENCODING_SYSTEM if couldn't decode it
@@ -90,11 +99,13 @@ public:
     // configure the appearance of the dialogs we may popup
     // ----------------------------------------------------
 
+#if wxUSE_GUI
     // the parent window for modal dialogs
     void SetDialogParent(wxWindow *parent) { m_windowParent = parent; }
 
     // the title for the dialogs (note that default is quite reasonable)
     void SetDialogTitle(const wxString& title) { m_titleDialog = title; }
+#endif // wxUSE_GUI
 
     // functions which allow to configure the config object used: by default,
     // the global one (from wxConfigBase::Get() will be used) and the default
@@ -102,6 +113,7 @@ public:
     // GetDefaultConfigPath()
     // ----------------------------------------------------------------------
 
+#if wxUSE_CONFIG
     // set the config object to use (may be NULL to use default)
     void SetConfig(wxConfigBase *config) { m_config = config; }
 
@@ -110,8 +122,11 @@ public:
 
     // return default config path
     static const wxChar *GetDefaultConfigPath();
+#endif
 
 protected:
+
+#if wxUSE_CONFIG
     // get the config object we're using - if it wasn't set explicitly, this
     // function will use wxConfig::Get() to get the global one
     wxConfigBase *GetConfig();
@@ -119,6 +134,7 @@ protected:
     // gets the root path for our settings - if itwasn't set explicitly, use
     // GetDefaultConfigPath()
     const wxString& GetConfigPath();
+#endif
 
     // change to the given (relative) path in the config, return TRUE if ok
     // (then GetConfig() will return something !NULL), FALSE if no config
@@ -131,6 +147,7 @@ protected:
     // restore the config path after use
     void RestorePath(const wxString& pathOld);
 
+#if wxUSE_GUI
     // GetAltForEncoding() helper: tests for the existence of the given
     // encoding and saves the result in config if ok - this results in the
     // following (desired) behaviour: when an unknown/unavailable encoding is
@@ -141,16 +158,22 @@ protected:
     bool TestAltEncoding(const wxString& configEntry,
                          wxFontEncoding encReplacement,
                          wxNativeEncodingInfo *info);
+#endif // wxUSE_GUI
 
+#if wxUSE_CONFIG
     // config object and path (in it) to use
     wxConfigBase *m_config;
+#endif
+
     wxString  m_configRootPath;
 
+#if wxUSE_GUI
     // the title for our dialogs
     wxString m_titleDialog;
 
     // the parent window for our dialogs
     wxWindow *m_windowParent;
+#endif // wxUSE_GUI
 
     friend class wxFontMapperPathChanger;
 };

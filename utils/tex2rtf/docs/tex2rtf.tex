@@ -1,5 +1,5 @@
 \documentstyle[a4,makeidx,verbatim,texhelp,fancyhea,mysober,mytitle]{report}%
-\input{psbox.tex}
+%\input{psbox.tex}
 \newcommand{\commandref}[2]{\helpref{{\tt $\backslash$#1}}{#2}}%
 \newcommand{\commandrefn}[2]{\helprefn{{\tt $\backslash$#1}}{#2}\index{#1}}%
 \newcommand{\commandpageref}[2]{\latexignore{\helprefn{{\tt $\backslash$#1}}{#2}}\latexonly{{\tt $\backslash$#1} {\it page \pageref{#2}}}\index{#1}}%
@@ -8,7 +8,7 @@
 \parskip=10pt%
 \parindent=0pt%
 %\backgroundcolour{255;255;255}\textcolour{0;0;0}% Has an effect in HTML only
-\winhelpignore{\title{Manual for Tex2RTF 2.0:\\A \LaTeX\ to RTF and HTML converter}%
+\winhelpignore{\title{Manual for Tex2RTF 2.0: A \LaTeX\ to RTF and HTML converter}%
 \author{Julian Smart}%
 \date{November 1999}%
 }%

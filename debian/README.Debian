@@ -3,11 +3,26 @@ wxwindows for Debian
 
 The following packages are built from the wxWindows CVS source.
 
-libwxgtk		wxGTK shared library
-libwxgtk-dev		Headers and static lib for building wxGTK apps
-libwxgtk-python		Python binding to wxGTK
+libwxbase		wxBase runtime shared libraries
+libwxbase-dev		extra files and static libs for building wxBase apps
+libwxbase-dbg		wxBase libraries built with -g and __WXDEBUG__
+
+libwxgtk		wxGTK runtime shared libraries
+libwxgtk-dev		extra files and static libs for building wxGTK apps
+libwxgtk-dbg		wxGTK libraries built with -g and __WXDEBUG__
+
+libwxgtk-python		Python binding to wxGTK  (from 2.2.3 onward, this
+			obsoletes the libwxgtk-python-contrib package as
+			all python modules are build into a single monolith)
+
+wxwin-contrib		wxWin contrib runtime shared libs (built with wxGTK)
+wxwin-contrib-dev	extra files and static contrib libs for building apps
+
+wxwin-headers		common header files for building wxWindows apps
 wxwin-doc		HTML version of the wxWindows manual
 wxwin-examples		wxWindows and wxPython demos and samples (source)
+wxwin-i18n		message catalogs for native language support
 
 
  -- Ron Lee <ron@debian.org>, Sun, 13 Feb 2000 18:40:00 +1030
+

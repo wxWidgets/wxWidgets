@@ -81,6 +81,8 @@ TROBJECTS= jpegtran.obj rdswitch.obj cdjpeg.obj transupp.obj
 
 !if "$(FINAL)" == "1"
 LIBTARGET=..\..\lib\jpeg.lib
+!else if "$(FINAL)" == "hybrid"
+LIBTARGET=..\..\lib\jpegh.lib
 !else
 LIBTARGET=..\..\lib\jpegd.lib
 !endif
@@ -96,7 +98,7 @@ defaulttarget:
 clean:
     -erase $(LIBTARGET)
     -erase *.obj
-    
+
 # Pull in standard variable definitions
 
 !include ..\makelib.vc

@@ -67,6 +67,8 @@ oldincludedir = /usr/include
 
 DESTDIR =
 
+localedir = $(datadir)/locale
+
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -123,17 +125,27 @@ DEMODIR  = $(WXDIR)/demos
 UTILSDIR = $(WXDIR)/utils
 MISCDIR  = $(WXDIR)/misc
 
-DOCDIR = $(WXDIR)/docs
+DOCDIR   = $(WXDIR)/docs
+INTLDIR  = $(WXDIR)/locale
 
 ########################## Archive name ###############################
 
-WXARCHIVE = @DISTDIR@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
-WXGLARCHIVE = @DISTDIR@-gl-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
-WXSAMPLES = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
-WXDEMOS = wx$(TOOLKIT)-demos-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
+WXARCHIVE = @DISTDIR@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
+WXGLARCHIVE = @DISTDIR@-gl-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
+WXSAMPLES = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
+WXDEMOS = wx$(TOOLKIT)-demos-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
+
+WXARCHIVE_BZIP = @DISTDIR@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
+WXGLARCHIVE_BZIP = @DISTDIR@-gl-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
+WXSAMPLES_BZIP = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
+WXDEMOS_BZIP = wx$(TOOLKIT)-demos-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
+
 DISTDIR = ./_dist_dir/@DISTDIR@
 
+
 ############################## Files ##################################
+
+WX_LINGUAS = `cd $(top_srcdir)/locale && ls *.mo 2> /dev/null | sed -n 's/\.mo//p'`
 
 # this line will include a file which defines ALL_SOURCES, ALL_OBJECTS,
 # ALL_DEPFILES and ALL_HEADERS variables with the complete list of .cpp, .o,
@@ -380,7 +392,7 @@ afminstall: preinstall
 
 # this is the real install target: copies the library, wx-config and the
 # headers to the installation directory
-preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_DIR@-config
+preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_NAME@-config
 	@echo " "
 	@echo " Installing wxWindows..."
 	@echo " "
@@ -389,15 +401,15 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_D
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) -d $(libdir)
 
-	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLKIT_DIR@-config $(bindir)/wx@TOOLKIT_DIR@-config
-	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLKIT_DIR@-config wx-config
+	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLKIT_NAME@-config $(bindir)/wx@TOOLKIT_NAME@-config
+	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLKIT_NAME@-config wx-config
 	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
 
 	$(INSTALL) -d $(libdir)/wx
 	$(INSTALL) -d $(libdir)/wx/include
 	$(INSTALL) -d $(libdir)/wx/include/wx
-	$(INSTALL) -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@
-	$(INSTALL_DATA) $(top_builddir)/include/wx/@TOOLKIT_DIR@/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
+	$(INSTALL) -d $(libdir)/wx/include/wx/@TOOLKIT_NAME@
+	$(INSTALL_DATA) $(top_builddir)/include/wx/@TOOLKIT_DIR@/setup.h $(libdir)/wx/include/wx/@TOOLKIT_NAME@/setup.h
 	
 	$(INSTALL) -d $(includedir)/wx
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/@TOOLKIT_DIR@; fi
@@ -408,6 +420,14 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_D
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p; \
 	  echo "$(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p"; \
+	done
+
+	$(INSTALL) -d $(localedir)
+	@for p in $(WX_LINGUAS); do \
+	  $(INSTALL) -d $(localedir)/$$p; \
+	  $(INSTALL) -d $(localedir)/$$p/LC_MESSAGES; \
+	  $(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo; \
+	  echo "$(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo"; \
 	done
 
 preinstall_gl: $(top_builddir)/lib/@WX_TARGET_LIBRARY_GL@
@@ -445,9 +465,9 @@ uninstall:
 	@$(RM) $(libdir)/@WX_LIBRARY_LINK2_GL@
 	@$(RM) $(libdir)/@WX_LIBRARY_LINK3_GL@
 	@echo " Removing helper files..."
-	@$(RM) $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
+	@$(RM) $(libdir)/wx/include/wx/@TOOLKIT_NAME@/setup.h
 	@$(RM) $(bindir)/wx-config
-	@$(RM) $(bindir)/wx@TOOLKIT_DIR@-config
+	@$(RM) $(bindir)/wx@TOOLKIT_NAME@-config
 	@$(RM) $(datadir)/wx/afm/*
 	@$(RM) $(datadir)/wx/gs_afm/*
 # FIXME: wxBase doesnt install these next 3 dirs.
@@ -458,8 +478,15 @@ uninstall:
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(RM) $(includedir)/wx/$$p; \
 	done
+	@echo " Removing i18n files..."
+	@-for p in $(WX_LINGUAS); do \
+	  $(RM) $(localedir)/$$p/LC_MESSAGES/wxstd.mo; \
+	  rmdir $(localedir)/$$p/LC_MESSAGES; \
+	  rmdir $(localedir)/$$p; \
+	done
 	@echo " Removing directories..."
-	@if test -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@; then rmdir $(libdir)/wx/include/wx/@TOOLKIT_DIR@; fi
+	@-rmdir $(localedir)
+	@if test -d $(libdir)/wx/include/wx/@TOOLKIT_NAME@; then rmdir $(libdir)/wx/include/wx/@TOOLKIT_NAME@; fi
 	@if test -d $(libdir)/wx/include/wx; then rmdir $(libdir)/wx/include/wx; fi
 	@if test -d $(libdir)/wx/include; then rmdir $(libdir)/wx/include; fi
 	@if test -d $(libdir)/wx; then rmdir $(libdir)/wx; fi
@@ -505,10 +532,13 @@ ALL_DIST: distclean
 # but is not used when building wxBase distribution
 ALL_GUI_DIST: ALL_DIST
 	cp $(WXDIR)/wx$(TOOLKIT).spec $(DISTDIR)
+	cp $(WXDIR)/wxBase.spec $(DISTDIR)
 	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
 	cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README.txt
 	cp $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt
+	cp $(DOCDIR)/base/todo.txt $(DISTDIR)/wxBASE.todo
+	cp $(DOCDIR)/base/install.txt $(DISTDIR)/wxBASE.install
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
 	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
@@ -577,13 +607,15 @@ BASE_DIST: ALL_DIST
 	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)/@PORT_FILES@
 	cp $(WXDIR)/@RPM_FILES@ $(DISTDIR)/@RPM_FILES@
 	cp $(WXDIR)/@RPM_SPEC@ $(DISTDIR)/@RPM_SPEC@
-	cp $(WXDIR)/wxBase.dsp $(DISTDIR)
-	cp $(DOCDIR)/install.txt $(DISTDIR)/INSTALL.txt
+	cp $(WXDIR)/wxBase*.ds[pw] $(DISTDIR)
+	cp $(DOCDIR)/base/install.txt $(DISTDIR)/INSTALL.txt
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
-	cp $(DOCDIR)/todo.txt $(DISTDIR)/TODO.txt
+	cp $(DOCDIR)/base/todo.txt $(DISTDIR)/TODO.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
-	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common/unzip.h
+	cp $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
+	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
+	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common
 	list='$(HEADERS)'; for p in $$list; do \
 	  cp $(WXDIR)/include/wx/$$p $(DISTDIR)/include/wx/$$p; \
 	done
@@ -591,8 +623,18 @@ BASE_DIST: ALL_DIST
 	  cp $(WXDIR)/src/$$p $(DISTDIR)/src/$$p; \
 	done
 
+	mkdir $(DISTDIR)/samples
+	cp $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
+	cp $(SAMPDIR)/configure $(DISTDIR)/samples
+	cp $(SAMPDIR)/configure.in $(DISTDIR)/samples
+
+	mkdir $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/Makefile.in $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/makefile.unx $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/console.cpp $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
+
 GTK_DIST: ALL_GUI_DIST
-	cp $(WXDIR)/wxGTK.spec $(DISTDIR)
 	cp $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
 	cp $(INCDIR)/wx/gtk/*.xpm $(DISTDIR)/include/wx/gtk
 	cp $(GTKDIR)/*.cpp $(DISTDIR)/src/gtk
@@ -657,6 +699,7 @@ DEMOS_DIST: ALL_GUI_DIST
 	cp $(DEMODIR)/life/*.h $(DISTDIR)/demos/life
 	cp $(DEMODIR)/life/*.xpm $(DISTDIR)/demos/life
 	cp $(DEMODIR)/life/*.inc $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/*.lif $(DISTDIR)/demos/life
 	cp $(DEMODIR)/life/bitmaps/*.xpm $(DISTDIR)/demos/life/bitmaps
 	
 	mkdir $(DISTDIR)/demos/poem
@@ -1144,6 +1187,12 @@ MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc/gs_afm
 	cp $(MISCDIR)/gs_afm/*.afm  $(DISTDIR)/misc/gs_afm
 
+INTL_DIST:
+	mkdir $(DISTDIR)/locale
+	cp $(INTLDIR)/Makefile $(DISTDIR)/locale
+	cp $(INTLDIR)/*.po $(DISTDIR)/locale
+	-cp $(INTLDIR)/*.mo $(DISTDIR)/locale
+
 MANUAL_DIST:
 	mkdir $(DISTDIR)/docs
 	mkdir $(DISTDIR)/docs/latex
@@ -1158,40 +1207,44 @@ MANUAL_DIST:
 # those files needed for the Debian source package.
 # see utils/wxPython/distrib for scripts to make a proper wxPython dist.
 PYTHON_DIST:
-	mkdir $(DISTDIR)/utils/wxPython
-	mkdir $(DISTDIR)/utils/wxPython/demo
-	mkdir $(DISTDIR)/utils/wxPython/demo/bitmaps
-	mkdir $(DISTDIR)/utils/wxPython/demo/data
-	mkdir $(DISTDIR)/utils/wxPython/distrib
-	mkdir $(DISTDIR)/utils/wxPython/lib
-	mkdir $(DISTDIR)/utils/wxPython/lib/editor
-	mkdir $(DISTDIR)/utils/wxPython/lib/sizers
-	mkdir $(DISTDIR)/utils/wxPython/modules
-	mkdir $(DISTDIR)/utils/wxPython/modules/html
-	mkdir $(DISTDIR)/utils/wxPython/modules/utils
-	mkdir $(DISTDIR)/utils/wxPython/modules/utils/gtk
-	mkdir $(DISTDIR)/utils/wxPython/src
-	mkdir $(DISTDIR)/utils/wxPython/src/gtk
+	mkdir $(DISTDIR)/wxPython
+	mkdir $(DISTDIR)/wxPython/contrib
+	mkdir $(DISTDIR)/wxPython/contrib/glcanvas
+	mkdir $(DISTDIR)/wxPython/contrib/glcanvas/gtk
+	mkdir $(DISTDIR)/wxPython/contrib/ogl
+	mkdir $(DISTDIR)/wxPython/contrib/stc
+	mkdir $(DISTDIR)/wxPython/demo
+	mkdir $(DISTDIR)/wxPython/demo/bitmaps
+	mkdir $(DISTDIR)/wxPython/demo/data
+	mkdir $(DISTDIR)/wxPython/src
+	mkdir $(DISTDIR)/wxPython/src/gtk
+	mkdir $(DISTDIR)/wxPython/wxPython
+	mkdir $(DISTDIR)/wxPython/wxPython/lib
+	mkdir $(DISTDIR)/wxPython/wxPython/lib/editor
+	mkdir $(DISTDIR)/wxPython/wxPython/lib/sizers
 
-	cp $(UTILSDIR)/wxPython/*.txt $(DISTDIR)/utils/wxPython
-	-cp $(UTILSDIR)/wxPython/demo/* $(DISTDIR)/utils/wxPython/demo
-	-cp $(UTILSDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/utils/wxPython/demo/bitmaps
-	-cp $(UTILSDIR)/wxPython/demo/data/* $(DISTDIR)/utils/wxPython/demo/data
-	cp $(UTILSDIR)/wxPython/distrib/build.py $(DISTDIR)/utils/wxPython/distrib
-	cp $(UTILSDIR)/wxPython/lib/*.py $(DISTDIR)/utils/wxPython/lib
-	cp $(UTILSDIR)/wxPython/lib/editor/*.py $(DISTDIR)/utils/wxPython/lib/editor
-	cp $(UTILSDIR)/wxPython/lib/sizers/*.py $(DISTDIR)/utils/wxPython/lib/sizers
-	-cp $(UTILSDIR)/wxPython/modules/html/* $(DISTDIR)/utils/wxPython/modules/html
-	-cp $(UTILSDIR)/wxPython/modules/utils/* $(DISTDIR)/utils/wxPython/modules/utils
-	cp $(UTILSDIR)/wxPython/modules/utils/gtk/utils.* $(DISTDIR)/utils/wxPython/modules/utils/gtk
-	-cp $(UTILSDIR)/wxPython/src/* $(DISTDIR)/utils/wxPython/src
-	cp $(UTILSDIR)/wxPython/src/gtk/*.py $(DISTDIR)/utils/wxPython/src/gtk
-	cp $(UTILSDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/utils/wxPython/src/gtk
+	cp $(WXDIR)/wxPython/*.txt $(DISTDIR)/wxPython
+	cp $(WXDIR)/wxPython/*.py $(DISTDIR)/wxPython
+	cp $(WXDIR)/wxPython/setup.cfg $(DISTDIR)/wxPython
+	cp $(WXDIR)/wxPython/MANIFEST.in $(DISTDIR)/wxPython
+	-cp $(WXDIR)/wxPython/contrib/glcanvas/* $(DISTDIR)/wxPython/contrib/glcanvas
+	cp $(WXDIR)/wxPython/contrib/glcanvas/gtk/glcanvas.* $(DISTDIR)/wxPython/contrib/glcanvas/gtk
+	-cp $(WXDIR)/wxPython/contrib/ogl/* $(DISTDIR)/wxPython/contrib/ogl
+	-cp $(WXDIR)/wxPython/contrib/stc/* $(DISTDIR)/wxPython/contrib/stc
+	-cp $(WXDIR)/wxPython/demo/* $(DISTDIR)/wxPython/demo
+	-cp $(WXDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/wxPython/demo/bitmaps
+	-cp $(WXDIR)/wxPython/demo/data/* $(DISTDIR)/wxPython/demo/data
+	-cp $(WXDIR)/wxPython/src/* $(DISTDIR)/wxPython/src
+	cp $(WXDIR)/wxPython/src/gtk/*.py $(DISTDIR)/wxPython/src/gtk
+	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
+	cp $(WXDIR)/wxPython/wxPython/lib/*.py $(DISTDIR)/wxPython/wxPython/lib
+	cp $(WXDIR)/wxPython/wxPython/lib/editor/*.py $(DISTDIR)/wxPython/wxPython/lib/editor
 
 distclean:
 	$(RM) -r _dist_dir
 
 dist: @GUIDIST@
+	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
 	cd _dist_dir; tar ch @DISTDIR@ | gzip -f9 > $(WXARCHIVE); mv $(WXARCHIVE) ..
 	@if test "$(USE_GUI)" = 1; then \
@@ -1201,6 +1254,20 @@ dist: @GUIDIST@
 	mv wxSamples samples; \
 	mv demos wxDemos; \
 	tar ch wxDemos | gzip -f9 > ../../$(WXDEMOS); \
+	mv wxDemos demos; \
+	fi
+
+bzip-dist: @GUIDIST@
+	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
+	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	cd _dist_dir; tar ch @DISTDIR@ | bzip2 -f9 > $(WXARCHIVE_BZIP); mv $(WXARCHIVE_BZIP) ..
+	@if test "$(USE_GUI)" = 1; then \
+	cd $(DISTDIR); \
+	mv samples wxSamples; \
+	tar ch wxSamples | bzip2 -f9 > ../../$(WXSAMPLES_BZIP); \
+	mv wxSamples samples; \
+	mv demos wxDemos; \
+	tar ch wxDemos | bzip2 -f9 > ../../$(WXDEMOS_BZIP); \
 	mv wxDemos demos; \
 	fi
 

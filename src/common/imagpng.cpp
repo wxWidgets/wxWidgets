@@ -93,6 +93,12 @@ LINKAGEMODE png_silent_warning(png_structp WXUNUSED(png_ptr), png_const_charp WX
 {
 }
 
+// temporarily disable the warning C4611 (interaction between '_setjmp' and
+// C++ object destruction is non-portable) - I don't see any dtors here
+#ifdef __VISUALC__
+    #pragma warning(disable:4611)
+#endif /* VC++ */
+
 bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
     // VZ: as this function uses setjmp() the only fool proof error handling
@@ -267,7 +273,6 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     return FALSE;
 }
 
-
 bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {
     {
@@ -345,6 +350,10 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     }
     return TRUE;
 }
+
+#ifdef __VISUALC__
+    #pragma warning(default:4611)
+#endif /* VC++ */
 
 bool wxPNGHandler::DoCanRead( wxInputStream& stream )
 {

@@ -48,6 +48,9 @@ class WXDLLEXPORT wxRadioButton: public wxControl
   virtual bool GetValue(void) const ;
 
   bool MSWCommand(WXUINT param, WXWORD id);
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
   void Command(wxCommandEvent& event);
 };
 

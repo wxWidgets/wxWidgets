@@ -21,7 +21,7 @@
 
 // declare a linked list of modules
 class wxModule;
-WX_DECLARE_LIST(wxModule, wxModuleList);
+WX_DECLARE_EXPORTED_LIST(wxModule, wxModuleList);
 
 // declaring a class derived from wxModule will automatically create an
 // instance of this class on program startup, call its OnInit() method and call

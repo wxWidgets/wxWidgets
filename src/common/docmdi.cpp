@@ -99,22 +99,22 @@ wxDocMDIChildFrame::wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParen
 
 wxDocMDIChildFrame::~wxDocMDIChildFrame(void)
 {
-	m_childView = (wxView *) NULL;
+    m_childView = (wxView *) NULL;
 }
 
 // Extend event processing to search the view's event table
 bool wxDocMDIChildFrame::ProcessEvent(wxEvent& event)
 {
-	if ( !m_childView || ! m_childView->ProcessEvent(event) )
+    if ( !m_childView || ! m_childView->ProcessEvent(event) )
     {
         // Only hand up to the parent if it's a menu command
         if (!event.IsKindOf(CLASSINFO(wxCommandEvent)) || !GetParent() || !GetParent()->ProcessEvent(event))
-		    return wxEvtHandler::ProcessEvent(event);
+            return wxEvtHandler::ProcessEvent(event);
         else
             return TRUE;
     }
-	else
-		return TRUE;
+    else
+        return TRUE;
 }
 
 void wxDocMDIChildFrame::OnActivate(wxActivateEvent& event)

@@ -436,10 +436,10 @@ private:
 static void usage()
 {
     wxString prog = g_argv[0];
-    wxString basename = prog.BeforeLast('/');
+    wxString basename = prog.AfterLast('/');
 #ifdef __WXMSW__
     if ( !basename )
-        basename = prog.BeforeLast('\\');
+        basename = prog.AfterLast('\\');
 #endif
     if ( !basename )
         basename = prog;
@@ -788,7 +788,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
 
     // the file name is built from the class name by removing the leading "wx"
     // if any and converting it to the lower case
-    wxString filename = m_directoryOut;
+    wxString filename;
     if ( name(0, 2) == "wx" ) {
         filename << name.c_str() + 2;
     }
@@ -798,6 +798,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
 
     filename.MakeLower();
     filename += ".tex";
+    filename.Prepend(m_directoryOut);
 
     if ( !m_overwrite && wxFile::Exists(filename) ) {
         wxLogError("Won't overwrite existing file '%s' - please use '-f'.",
@@ -1938,6 +1939,9 @@ static const char *GetCurrentTime(const char *timeFormat)
 
 /*
    $Log$
+   Revision 1.10.2.2  2000/03/27 15:33:10  VZ
+   don't trasnform output dir name to lower case
+
    Revision 1.10  2000/03/11 10:05:23  VS
    now compiles with wxBase
 

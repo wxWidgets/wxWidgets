@@ -104,6 +104,11 @@ class WXDLLEXPORT wxXLPHelpController: public wxHelpControllerBase
   virtual bool DisplayBlock(long blockNo);
   virtual bool KeywordSearch(const wxString& k);
 
+  virtual bool DisplaySection(const wxString& section)
+  {
+      return wxHelpControllerBase::DisplaySection(section);
+  }
+
   virtual bool Quit(void);
   virtual void OnQuit(void);
 

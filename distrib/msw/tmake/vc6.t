@@ -37,28 +37,41 @@
         next if $wxHTML{$file} =~ /\b16\b/;
         $project{"WXHTMLSRCS"} .= $file . " "
     }
+
+    $project{"WX_CFLAGS"} = '/D wxUSE_GUI=1 /D WIN95=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN32__"';
+    if ( Config("unicode") ) {
+	$project{"OUTDIR_SUFFIX"} = "Unicode";
+	$project{"WX_CFLAGS"} .= " /D _UNICODE /D UNICODE";
+	$project{"PROJECTNAME"} = "wxWindowsU";
+    }
+    else {
+	$project{"OUTDIR_SUFFIX"} = "";
+	$project{"PROJECTNAME"} = "wxWindows";
+    }
+
+    $project{"MAKEFILE"} = $project{"PROJECTNAME"} . ".mak";
 #$}
-# Microsoft Developer Studio Project File - Name="wxWindows" - Package Owner=<4>
+# Microsoft Developer Studio Project File - #$ Substitute('Name="$$PROJECTNAME" - Package Owner=<4>');
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=wxWindows - Win32 Debug
+CFG=#$ Substitute('$$PROJECTNAME - Win32 Debug');
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "wxWindows.mak".
+!MESSAGE NMAKE /f "#$ ExpandGlue('MAKEFILE','','','".');
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "wxWindows.mak" CFG="wxWindows - Win32 Debug"
+!MESSAGE NMAKE /f #$ Substitute('"$$MAKEFILE" CFG="$$PROJECTNAME - Win32 Debug"');
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "wxWindows - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxWindows - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE #$ Substitute('"$$PROJECTNAME - Win32 Release" (based on "Win32 (x86) Static Library")');
+!MESSAGE #$ Substitute('"$$PROJECTNAME - Win32 Debug" (based on "Win32 (x86) Static Library")');
 !MESSAGE 
 
 # Begin Project
@@ -68,20 +81,20 @@ CFG=wxWindows - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "wxWindows - Win32 Release"
+!IF  "$(CFG)" == #$ Substitute('"$$PROJECTNAME - Win32 Release"');
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "Release"
-# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Output_Dir #$ Substitute('"Release$$OUTDIR_SUFFIX"');
+# PROP BASE Intermediate_Dir #$ Substitute('"Release$$OUTDIR_SUFFIX"');
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
+# PROP Output_Dir #$ Substitute('"Release$$OUTDIR_SUFFIX"');
+# PROP Intermediate_Dir #$ Substitute('"Release$$OUTDIR_SUFFIX"');
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
-# ADD CPP /nologo /MT /W4 /Zi /O2 /I "$(wx)\include" /I "$(wx)\src\zlib" /D "NDEBUG" /D wxUSE_GUI=1 /D WIN95=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN32__" /D "_MT" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /Zi /O2 /I "$(wx)\include" /I "$(wx)\src\zlib" /I "$(wx)\src\jpeg" /I "$(wx)\src\png" /I "$(wx)\src\tiff" /D "NDEBUG" /D "_MT" #$ Substitute('$$WX_CFLAGS /Yu"wx/wxprec.h" /FD /c');
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -91,20 +104,20 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug"
+!ELSEIF  "$(CFG)" == #$ Substitute('"$$PROJECTNAME - Win32 Debug"');
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "Debug"
-# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Output_Dir #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
+# PROP BASE Intermediate_Dir #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
-# PROP Intermediate_Dir "Debug"
+# PROP Output_Dir #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
+# PROP Intermediate_Dir #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" -D "_MT" /YX /FD /c
-# ADD CPP /nologo /MTd /W4 /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /D "_DEBUG" /D DEBUG=1 /D WXDEBUG=1 /D "__WXDEBUG__" /D wxUSE_GUI=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /Fr /D "_MT" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" -D "_MT" /YX /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /I "$(wx)\src\jpeg" /I "$(wx)\src\png" /I "$(wx)\src\tiff" /D "_DEBUG" /D DEBUG=1 /D WXDEBUG=1 /D "__WXDEBUG__" /D "_MT" #$ Substitute('$$WX_CFLAGS /Yu"wx/wxprec.h" /FD /c');
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -118,8 +131,8 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "wxWindows - Win32 Release"
-# Name "wxWindows - Win32 Debug"
+# Name #$Substitute('"$$PROJECTNAME - Win32 Release"');
+# Name #$Substitute('"$$PROJECTNAME - Win32 Debug"');
 
 # PROP Default_Filter ""
 # Begin Source File
@@ -139,17 +152,8 @@ SOURCE=.\src\msw\dummy.cpp
 
 SOURCE=.\src\common\y_tab.c
 
-!IF  "$(CFG)" == "wxWindows - Win32 Release"
-
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug"
-
 # ADD CPP /W1
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # End Target
 # End Project

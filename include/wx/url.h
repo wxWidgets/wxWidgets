@@ -8,6 +8,7 @@
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_URL_H
 #define _WX_URL_H
 
@@ -42,11 +43,11 @@ public:
     virtual ~wxURL();
 
     wxString GetProtocolName() const { return m_protoinfo->m_protoname; }
-    wxString GetHostName() const { return m_hostname; }
-    wxString GetURL() const { return m_url; }
-    wxProtocol& GetProtocol() { return *m_protocol; }
-    wxURLError GetError() const { return m_error; }
-    wxString GetPath() const { return m_path; }
+    wxString GetHostName() const     { return m_hostname; }
+    wxString GetURL() const          { return m_url; }
+    wxProtocol& GetProtocol()        { return *m_protocol; }
+    wxURLError GetError() const      { return m_error; }
+    wxString GetPath() const         { return m_path; }
 
     wxInputStream *GetInputStream();
 
@@ -55,7 +56,10 @@ public:
     void SetProxy(const wxString& url_proxy);
 #endif // wxUSE_SOCKETS
 
-    static wxString ConvertToValidURI(const wxString& uri);
+    static wxString ConvertToValidURI(
+                        const wxString& uri,
+                        const wxChar* delims = wxT(";/?:@&=+$,")
+                    );
     static wxString ConvertFromURI(const wxString& uri);
 
 protected:

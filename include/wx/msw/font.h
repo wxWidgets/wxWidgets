@@ -78,6 +78,11 @@ public:
     virtual bool RealizeResource();
     virtual WXHANDLE GetResourceHandle();
     virtual bool FreeResource(bool force = FALSE);
+
+    // for consistency with other wxMSW classes and to have a const
+    // GetResourceHandle()-like function we have a synonym for it
+    WXHFONT GetHFONT() const;
+
     /*
        virtual bool UseResource();
        virtual bool ReleaseResource();

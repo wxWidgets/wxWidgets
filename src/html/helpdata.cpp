@@ -22,7 +22,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
 #include "wx/wx.h"
@@ -148,7 +148,122 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         return TRUE;
     }
     else { // "PARAM"
-        if (m_Name == wxEmptyString && tag.GetParam(wxT("NAME")) == wxT("Name")) m_Name = tag.GetParam(wxT("VALUE"));
+        if (m_Name == wxEmptyString && tag.GetParam(wxT("NAME")) == wxT("Name")) 
+        {
+            m_Name = tag.GetParam(wxT("VALUE"));
+            if (m_Name.Find(wxT('&')) != -1) 
+            {
+        #define ESCSEQ(escape, subst)  \
+                          { _T("&") _T(escape) _T(";"), _T("&") _T(escape) _T(" "), _T(subst) } 
+                static wxChar* substitutions[][3] = 
+                        {
+                        ESCSEQ("quot", "\""),
+                        ESCSEQ("lt", "<"),
+                        ESCSEQ("gt", ">"),
+
+                        ESCSEQ("nbsp", " "),
+                        ESCSEQ("iexcl", "!"),
+                        ESCSEQ("cent", "\242"/* ¢ */),
+
+                        ESCSEQ("yen", " "),
+                        ESCSEQ("brkbar", " "),
+                        ESCSEQ("sect", " "),
+                        ESCSEQ("uml", " "),
+
+                        ESCSEQ("copy", "(c)"),
+                        ESCSEQ("ordf", " "),
+                        ESCSEQ("laquo", " "),
+                        ESCSEQ("not", " "),
+
+                        ESCSEQ("reg", "(r)"),
+
+                        ESCSEQ("deg", " "),
+                        ESCSEQ("plusm", " "),
+
+                        ESCSEQ("acute", " "),
+                        ESCSEQ("micro", " "),
+                        ESCSEQ("para", " "),
+
+                        ESCSEQ("ordm", " "),
+                        ESCSEQ("raquo", " "),
+
+                        ESCSEQ("iquest", " "),
+                        ESCSEQ("Agrave", "\300"/* À */),
+
+                        ESCSEQ("Acirc", "\302"/* Â */),
+                        ESCSEQ("Atilde", "\303"/* Ã */),
+                        ESCSEQ("Auml", "\304"/* Ä */),
+                        ESCSEQ("Aring", " "),
+                        ESCSEQ("AElig", " "),
+                        ESCSEQ("Ccedil", "\347"/* ç */),
+                        ESCSEQ("Egrave", "\310"/* È */),
+                        ESCSEQ("Eacute", "\311"/* É */),
+                        ESCSEQ("Ecirc", "\312"/* Ê */),
+                        ESCSEQ("Euml", "\313"/* Ë */),
+                        ESCSEQ("Igrave", "\314"/* Ì */),
+
+                        ESCSEQ("Icirc", "\316"/* Î */),
+                        ESCSEQ("Iuml", "\317"/* Ï */),
+
+                        ESCSEQ("Ntilde", "\321"/* Ñ */),
+                        ESCSEQ("Ograve", "\322"/* Ò */),
+
+                        ESCSEQ("Ocirc", "\324"/* Ô */),
+                        ESCSEQ("Otilde", "\325"/* Õ */),
+                        ESCSEQ("Ouml", "\326"/* Ö */),
+
+                        ESCSEQ("Oslash", " "),
+                        ESCSEQ("Ugrave", "\331"/* Ù */),
+
+                        ESCSEQ("Ucirc", " "),
+                        ESCSEQ("Uuml", "\334"/* Ü */),
+
+                        ESCSEQ("szlig", "\247"/* § */),
+                        ESCSEQ("agrave;","à"),
+                        ESCSEQ("aacute", "\341"/* á */),
+                        ESCSEQ("acirc", "\342"/* â */),
+                        ESCSEQ("atilde", "\343"/* ã */),
+                        ESCSEQ("auml", "\344"/* ä */),
+                        ESCSEQ("aring", "a"),
+                        ESCSEQ("aelig", "ae"),
+                        ESCSEQ("ccedil", "\347"/* ç */),
+                        ESCSEQ("egrave", "\350"/* è */),
+                        ESCSEQ("eacute", "\351"/* é */),
+                        ESCSEQ("ecirc", "\352"/* ê */),
+                        ESCSEQ("euml", "\353"/* ë */),
+                        ESCSEQ("igrave", "\354"/* ì */),
+                        ESCSEQ("iacute", "\355"/* í */),
+                        ESCSEQ("icirc", " "),
+                        ESCSEQ("iuml", "\357"/* ï */),
+                        ESCSEQ("eth", " "),
+                        ESCSEQ("ntilde", "\361"/* ñ */),
+                        ESCSEQ("ograve", "\362"/* ò */),
+                        ESCSEQ("oacute", "\363"/* ó */),
+                        ESCSEQ("ocirc", "\364"/* ô */),
+                        ESCSEQ("otilde", "\365"/* õ */),
+                        ESCSEQ("ouml", "\366"/* ö */),
+                        ESCSEQ("divide", " "),
+                        ESCSEQ("oslash", " "),
+                        ESCSEQ("ugrave", "\371"/* ù */),
+                        ESCSEQ("uacute", "\372"/* ú */),
+                        ESCSEQ("ucirc", "\373"/* û */),
+                        ESCSEQ("uuml", "\374"/* ü */),
+
+                        ESCSEQ("yuml", ""),
+
+                        /* this one should ALWAYS stay the last one!!! */
+                        ESCSEQ("amp", "&"),
+
+                        { NULL, NULL, NULL }
+                        };
+
+                for (int i = 0; substitutions[i][0] != NULL; i++) 
+                {
+                    m_Name.Replace(substitutions[i][0], substitutions[i][2], TRUE);
+                    m_Name.Replace(substitutions[i][1], substitutions[i][2], TRUE);
+                }
+            }
+        }
         if (tag.GetParam(wxT("NAME")) == wxT("Local")) m_Page = tag.GetParam(wxT("VALUE"));
         if (tag.GetParam(wxT("NAME")) == wxT("ID")) tag.ScanParam(wxT("VALUE"), wxT("%i"), &m_ID);
         return FALSE;
@@ -235,7 +350,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
         delete[] buf;
     }
     else
-        wxLogError(_("Cannot open contents file: %s"), contentsfile.mb_str());
+        wxLogError(_("Cannot open contents file: %s"), contentsfile.c_str());
 
     f = ( indexfile.IsEmpty() ? (wxFSFile*) NULL : fsys.OpenFile(indexfile) );
     if (f) {
@@ -250,7 +365,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
         delete[] buf;
     }
     else if (!indexfile.IsEmpty())
-        wxLogError(_("Cannot open index file: %s"), indexfile.mb_str());
+        wxLogError(_("Cannot open index file: %s"), indexfile.c_str());
     return TRUE;
 }
 
@@ -538,10 +653,10 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
         fi = fsys.OpenFile(bookFull);
         if (fi == NULL) 
-	{
-	    wxLogError(_("Cannot open HTML help book: %s"), bookFull.mb_str());
-	    return FALSE;
-	}
+        {
+            wxLogError(_("Cannot open HTML help book: %s"), bookFull.c_str());
+            return FALSE;
+        }
         fsys.ChangePathTo(bookFull);
         s = fi -> GetStream();
         sz = s -> GetSize();

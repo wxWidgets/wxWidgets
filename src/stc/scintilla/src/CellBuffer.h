@@ -58,6 +58,7 @@ public:
 
 	void Expand(int sizeNew);
 	void ExpandLevels(int sizeNew=-1);
+    void ClearLevels();
 	void InsertValue(int pos, int value);
 	void SetValue(int pos, int value);
 	void Remove(int pos);
@@ -79,15 +80,52 @@ public:
 	int position;
 	char *data;
 	int lenData;
+	bool mayCoalesce;
 
 	Action();
 	~Action();
-	void Create(actionType at_, int position_=0, char *data_=0, int lenData_=0);
+	void Create(actionType at_, int position_=0, char *data_=0, int lenData_=0, bool mayCoalesce_=true);
 	void Destroy();
 	void Grab(Action *source);
 };
 
-enum undoCollectionType { undoCollectNone, undoCollectAutoStart, undoCollectManualStart };
+class UndoHistory {
+	Action *actions;
+	int lenActions;
+	int maxAction;
+	int currentAction;
+	int undoSequenceDepth;
+	int savePoint;
+
+	void EnsureUndoRoom();
+	
+public:
+	UndoHistory();
+	~UndoHistory();
+	
+	void AppendAction(actionType at, int position, char *data, int length);
+
+	void BeginUndoAction();
+	void EndUndoAction();
+	void DropUndoSequence();
+	void DeleteUndoHistory();
+	
+	// The save point is a marker in the undo stack where the container has stated that 
+	// the buffer was saved. Undo and redo can move over the save point.
+	void SetSavePoint();
+	bool IsSavePoint() const;
+
+	// To perform an undo, StartUndo is called to retrieve the number of steps, then UndoStep is 
+	// called that many times. Similarly for redo.
+	bool CanUndo() const;
+	int StartUndo();
+	const Action &GetUndoStep() const;
+	void CompletedUndoStep();
+	bool CanRedo() const;
+	int StartRedo();
+	const Action &GetRedoStep() const;
+	void CompletedRedoStep();
+};
 
 // Holder for an expandable array of characters that supports undo and line markers
 // Based on article "Data Structures in a Bit-Mapped Text Editor"
@@ -102,23 +140,15 @@ private:
 	char *part2body;
 	bool readOnly;
 
-	Action *actions;
-	int lenActions;
-	int maxAction;
-	int currentAction;
-	undoCollectionType collectingUndo;
-	int undoSequenceDepth;
-	int savePoint;
+	bool collectingUndo;
+	UndoHistory uh;
 
 	LineVector lv;
 
-	SVector<int, 4000> lineStates;
+	SVector lineStates;
 
 	void GapTo(int position);
 	void RoomFor(int insertionLength);
-
-	void EnsureUndoRoom();
-	void AppendAction(actionType at, int position, char *data, int length);
 
 	inline char ByteAt(int position);
 	void SetByteAt(int position, char ch);
@@ -143,7 +173,7 @@ public:
 	
 	// Setting styles for positions outside the range of the buffer is safe and has no effect.
 	// True is returned if the style of a character changed.
-	bool SetStyleAt(int position, char style, char mask=(char)0xff);
+	bool SetStyleAt(int position, char style, char mask='\377');
 	bool SetStyleFor(int position, int length, char style, char mask);
 	
 	const char *DeleteChars(int position, int deleteLength);
@@ -168,21 +198,22 @@ public:
 	void BasicInsertString(int position, char *s, int insertLength);
 	void BasicDeleteChars(int position, int deleteLength);
 
-	undoCollectionType SetUndoCollection(undoCollectionType collectUndo);
+	bool SetUndoCollection(bool collectUndo);
 	bool IsCollectingUndo();
-	void AppendUndoStartAction();
 	void BeginUndoAction();
 	void EndUndoAction();
 	void DeleteUndoHistory();
 	
-	// To perform an undo, StartUndo is called to retreive the number of steps, then UndoStep is 
+	// To perform an undo, StartUndo is called to retrieve the number of steps, then UndoStep is 
 	// called that many times. Similarly for redo.
 	bool CanUndo();
 	int StartUndo();
-	const Action &UndoStep();
+	const Action &GetUndoStep() const;
+	void PerformUndoStep();
 	bool CanRedo();
 	int StartRedo();
-	const Action &RedoStep();
+	const Action &GetRedoStep() const;
+	void PerformRedoStep();
 	
 	int SetLineState(int line, int state);
 	int GetLineState(int line);
@@ -190,6 +221,7 @@ public:
 		
 	int SetLevel(int line, int level);
 	int GetLevel(int line);
+    void ClearLevels();
 };
 
 #define CELL_SIZE	2
