@@ -413,7 +413,7 @@ public:
     wxChar& operator[](size_t n)
       { ASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
 
-#ifdef wxSIZE_T_IS_UINT
+#ifndef wxSIZE_T_IS_UINT
     // operator version of GetChar
     wxChar  operator[](unsigned int n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
