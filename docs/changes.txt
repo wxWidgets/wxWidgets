@@ -133,6 +133,9 @@ wxHTML:
 - improved tables and lists layout algorithms (Tim Kosse)
 - <div> handling fix (Xavier Nodet)
 
+Unix:
+- fixed priorities of mailcap entries (David Hart)
+
 
 2.5.1
 -----
