@@ -2,13 +2,11 @@
 <!-- $Id$ -->
 <makefile>
     
+    <set var="MONOLIB_GUI_SRC">
+        <if cond="USE_GUI=='1'">$(CORE_SRC) $(HTML_SRC)</if>
+    </set>
     <set var="MONOLIB_SRC">
-        <if cond="USE_GUI=='0'">
-            src/common/init.cpp $(BASE_SRC) $(BASE_AND_GUI_SRC)
-        </if>
-        <if cond="USE_GUI=='1'">
-            $(BASE_SRC) $(BASE_AND_GUI_SRC) $(CORE_SRC) $(HTML_SRC)
-        </if>
+        $(BASE_SRC) $(BASE_AND_GUI_SRC) $(MONOLIB_GUI_SRC)
     </set>
 
     <dll id="monodll" template="wx_dll"
