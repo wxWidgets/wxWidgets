@@ -3393,8 +3393,11 @@ bool wxWindow::MSWOnScroll(int orientation, WXWORD wParam,
         event.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
         break;
 
-    case SB_THUMBTRACK:
     case SB_THUMBPOSITION:
+        event.m_isScrolling = FALSE;
+        /* fall-through */
+
+    case SB_THUMBTRACK:
         event.m_eventType = wxEVT_SCROLLWIN_THUMBTRACK;
         break;
 
