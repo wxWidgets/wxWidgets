@@ -188,7 +188,7 @@ void ArraysTestCase::wxStringArrayTest()
 
     wxArrayString a2(a1);
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a2 , _T("thermit") , 
+    CPPUNIT_ASSERT( COMPARE_8_VALUES( a2 , _T("thermit") ,
                                            _T("condor") ,
                                            _T("lion") ,
                                            _T("lion") ,
@@ -200,7 +200,7 @@ void ArraysTestCase::wxStringArrayTest()
 
     wxSortedArrayString a3(a1);
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a3 , _T("alligator") , 
+    CPPUNIT_ASSERT( COMPARE_8_VALUES( a3 , _T("alligator") ,
                                            _T("condor") ,
                                            _T("dog") ,
                                            _T("human") ,
@@ -214,7 +214,7 @@ void ArraysTestCase::wxStringArrayTest()
     for (wxArrayString::iterator it = a1.begin(), en = a1.end(); it != en; ++it)
         a4.Add(*it);
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a4 , _T("alligator") , 
+    CPPUNIT_ASSERT( COMPARE_8_VALUES( a4 , _T("alligator") ,
                                            _T("condor") ,
                                            _T("dog") ,
                                            _T("human") ,
@@ -268,12 +268,12 @@ void ArraysTestCase::wxStringArrayTest()
                                            _T("thermit") ,
                                            _T("alligator") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
-    CPPUNIT_ASSERT( a1.Index( "dog" ) == 0 );
-    CPPUNIT_ASSERT( a1.Index( "human" ) == 1 );
-    CPPUNIT_ASSERT( a1.Index( "humann" ) == wxNOT_FOUND );
-    CPPUNIT_ASSERT( a1.Index( "condor" ) == 2 );
-    CPPUNIT_ASSERT( a1.Index( "thermit" ) == 3 );
-    CPPUNIT_ASSERT( a1.Index( "alligator" ) == 4 );
+    CPPUNIT_ASSERT( a1.Index( _T("dog") ) == 0 );
+    CPPUNIT_ASSERT( a1.Index( _T("human") ) == 1 );
+    CPPUNIT_ASSERT( a1.Index( _T("humann") ) == wxNOT_FOUND );
+    CPPUNIT_ASSERT( a1.Index( _T("condor") ) == 2 );
+    CPPUNIT_ASSERT( a1.Index( _T("thermit") ) == 3 );
+    CPPUNIT_ASSERT( a1.Index( _T("alligator") ) == 4 );
 }
 
 void ArraysTestCase::wxObjArrayTest()
