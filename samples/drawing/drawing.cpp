@@ -36,6 +36,7 @@
 #endif
 
 #include "wx/colordlg.h"
+#include "wx/image.h"
 
 // ----------------------------------------------------------------------------
 // ressources
@@ -569,19 +570,66 @@ void MyCanvas::DrawDefault(wxDC& dc)
 
     dc.DrawIcon( wxICON(mondrian), 410, 40 );
 
+
     dc.SetBrush( *wxBLACK_BRUSH );
     dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.DrawRectangle( 0, 100, 1000, 300 );
+    dc.DrawRectangle( 0, 160, 1000, 300 );
 
+    // draw lines
+    wxBitmap bitmap(20,70);
+    wxMemoryDC memdc;
+    memdc.SelectObject( bitmap );
+    memdc.SetBrush( *wxBLACK_BRUSH );
+    memdc.SetPen( *wxWHITE_PEN );
+    memdc.DrawRectangle(0,0,20,70);
+    memdc.DrawLine( 10,0,10,70 );
+    
+    memdc.DrawLine( 10, 5,10, 5 );
+    memdc.DrawLine( 10,10,11,10 );
+    memdc.DrawLine( 10,15,12,15 );
+    memdc.DrawLine( 10,20,13,20 );
+    
+    memdc.DrawLine( 12, 5,12, 5 );
+    memdc.DrawLine( 12,10,13,10 );
+    memdc.DrawLine( 12,15,14,15 );
+    memdc.DrawLine( 12,20,15,20 );
+    
+    // same to the left
+    memdc.DrawLine( 10,25,10,25 );
+    memdc.DrawLine( 10,30, 9,30 );
+    memdc.DrawLine( 10,35, 8,35 );
+    memdc.DrawLine( 10,40, 7,40 );
+
+    // XOR draw lines
+    memdc.SetLogicalFunction( wxINVERT );
+    memdc.SetPen( *wxWHITE_PEN );
+    memdc.DrawLine( 10,50,10,50 );
+    memdc.DrawLine( 10,55,11,55 );
+    memdc.DrawLine( 10,60,12,60 );
+    memdc.DrawLine( 10,65,13,65 );
+    
+    memdc.DrawLine( 12,50,12,50 );
+    memdc.DrawLine( 12,55,13,55 );
+    memdc.DrawLine( 12,60,14,60 );
+    memdc.DrawLine( 12,65,15,65 );
+    
+    memdc.SelectObject( wxNullBitmap );
+    dc.DrawBitmap( bitmap, 10, 170 );
+    wxImage image( bitmap );
+    image.Rescale( 60,210 );
+    bitmap = image.ConvertToBitmap();
+    dc.DrawBitmap( bitmap, 50, 170 );
+    
+    
     // test the rectangle outline drawing - there should be one pixel between
     // the rect and the lines
     dc.SetPen(*wxWHITE_PEN);
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
-    dc.DrawRectangle(100, 170, 49, 29);
     dc.DrawRectangle(150, 170, 49, 29);
+    dc.DrawRectangle(200, 170, 49, 29);
     dc.SetPen(*wxWHITE_PEN);
-    dc.DrawLine(200, 210, 200, 170);
-    dc.DrawLine(210, 200, 100, 200);
+    dc.DrawLine(250, 210, 250, 170);
+    dc.DrawLine(260, 200, 150, 200);
 
     // test the rectangle filled drawing - there should be one pixel between
     // the rect and the lines
@@ -606,11 +654,11 @@ void MyCanvas::DrawDefault(wxDC& dc)
     // the rect and the lines
     dc.SetPen(*wxWHITE_PEN);
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
-    dc.DrawRoundedRectangle(100, 270, 49, 29, 6);
     dc.DrawRoundedRectangle(150, 270, 49, 29, 6);
+    dc.DrawRoundedRectangle(200, 270, 49, 29, 6);
     dc.SetPen(*wxWHITE_PEN);
-    dc.DrawLine(200, 270, 200, 310);
-    dc.DrawLine(100, 300, 210, 300);
+    dc.DrawLine(250, 270, 250, 310);
+    dc.DrawLine(150, 300, 260, 300);
 
     // test the rectangle filled drawing - there should be one pixel between
     // the rect and the lines
