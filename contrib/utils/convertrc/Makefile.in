@@ -112,7 +112,7 @@ clean:
 	rm -f convertrc$(EXEEXT)
 
 convertrc$(EXEEXT): $(CONVERTRC_OBJECTS) $(__convertrc___win32rc)
-	$(CXX) -o $@ $(CONVERTRC_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI)  $(__WXLIB_CORE_p)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(EXTRALIBS_XML) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
+	$(CXX) -o $@ $(CONVERTRC_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(EXTRALIBS_XML) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__convertrc___mac_rezcmd)
 	$(__convertrc___mac_setfilecmd)
 
