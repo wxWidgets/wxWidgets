@@ -128,7 +128,7 @@ wxDbGridTableBase::wxDbGridTableBase(wxDbTable *tab, wxDbGridColInfo*  ColInfo,
     m_keys(),
     m_data(tab),
     m_dbowner(takeOwnership),
-    m_rowmodified(false)
+    m_rowmodified(FALSE)
 {
 
     if (count == wxUSE_QUERY)
@@ -197,7 +197,7 @@ bool wxDbGridTableBase::CanHaveAttributes()
         // use the default attr provider by default
         SetAttrProvider(new wxDbGridCellAttrProvider(m_data, m_ColInfo));
     }
-    return true;
+    return TRUE;
 }
 
 
@@ -255,8 +255,8 @@ bool wxDbGridTableBase::AssignDbTable(wxDbTable *tab, int count, bool takeOwners
         grid->EndBatch();
     }
     m_dbowner = takeOwnership;
-    m_rowmodified = false;
-    return true;
+    m_rowmodified = FALSE;
+    return TRUE;
 }
 
 wxString wxDbGridTableBase::GetTypeName(int row, int col)
@@ -327,19 +327,19 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
     if (typeName == wxGRID_VALUE_STRING)
     {
         //FIXME ummm What about blob field etc.
-        return true;
+        return TRUE;
     }
 
     if (m_data->IsColNull(m_ColInfo[col].DbCol))
     {
-        return false;
+        return FALSE;
     }
 
     if (m_data->GetNumberOfColumns() <= m_ColInfo[col].DbCol)
     {
         //If a virtual column then we can't find it's type. we have to
-        // return false to get using wxVariant.
-        return false;
+        // return FALSE to get using wxVariant.
+        return FALSE;
     }
     int sqltype = m_data->GetColDefs()[(m_ColInfo[col].DbCol)].SqlCtype;
 
@@ -349,9 +349,9 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
             (sqltype == SQL_C_TIME) ||
             (sqltype == SQL_C_TIMESTAMP))
         {
-            return true;
+            return TRUE;
         }
-        return false;
+        return FALSE;
     }
     if (typeName == wxGRID_VALUE_NUMBER)
     {
@@ -360,9 +360,9 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
             (sqltype == SQL_C_SLONG)  ||
             (sqltype == SQL_C_ULONG))
         {
-            return true;
+            return TRUE;
         }
-        return false;
+        return FALSE;
     }
     if (typeName == wxGRID_VALUE_FLOAT)
     {
@@ -373,11 +373,11 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
             (sqltype == SQL_C_FLOAT)  ||
             (sqltype == SQL_C_DOUBLE))
         {
-            return true;
+            return TRUE;
         }
-        return false;
+        return FALSE;
     }
-    return false;
+    return FALSE;
 }
 
 bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName)
@@ -387,25 +387,25 @@ bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName
 
     if (m_data->IsColNull(m_ColInfo[col].DbCol))
     {
-        return false;
+        return FALSE;
     }
 
     if (typeName == wxGRID_VALUE_STRING)
     {
         //FIXME ummm What about blob field etc.
-        return true;
+        return TRUE;
     }
 
     if (!(m_data->GetColDefs()[(m_ColInfo[col].DbCol)].Updateable))
     {
-        return false;
+        return FALSE;
     }
 
     if (m_data->GetNumberOfColumns() <= m_ColInfo[col].DbCol)
     {
         //If a virtual column then we can't find it's type. we have to faulse to
         //get using wxVairent.
-        return false;
+        return FALSE;
     }
 
     int sqltype = m_data->GetColDefs()[(m_ColInfo[col].DbCol)].SqlCtype;
@@ -415,9 +415,9 @@ bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName
             (sqltype == SQL_C_TIME) ||
             (sqltype == SQL_C_TIMESTAMP))
         {
-            return true;
+            return TRUE;
         }
-        return false;
+        return FALSE;
     }
     if (typeName == wxGRID_VALUE_NUMBER)
     {
@@ -426,9 +426,9 @@ bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName
             (sqltype == SQL_C_SLONG)  ||
             (sqltype == SQL_C_ULONG))
         {
-            return true;
+            return TRUE;
         }
-        return false;
+        return FALSE;
     }
     if (typeName == wxGRID_VALUE_FLOAT)
     {
@@ -439,11 +439,11 @@ bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName
             (sqltype == SQL_C_FLOAT)  ||
             (sqltype == SQL_C_DOUBLE))
         {
-            return true;
+            return TRUE;
         }
-        return false;
+        return FALSE;
     }
-    return false;
+    return FALSE;
 }
 
 long wxDbGridTableBase::GetValueAsLong(int row, int col)
@@ -574,7 +574,7 @@ void wxDbGridTableBase::SetValueAsCustom(int row, int col, const wxString& typeN
                 return;
             }
             wxVariant val(date);
-            m_rowmodified = true;
+            m_rowmodified = TRUE;
             m_data->SetCol(m_ColInfo[col].DbCol,val);
         }
     }
@@ -621,7 +621,7 @@ void wxDbGridTableBase::SetValue(int row, int col,const wxString& value)
     ValidateRow(row);
     wxVariant val(value);
 
-    m_rowmodified = true;
+    m_rowmodified = TRUE;
     m_data->SetCol(m_ColInfo[col].DbCol,val);
 }
 
@@ -633,7 +633,7 @@ void wxDbGridTableBase::SetValueAsLong(int row, int col, long value)
     ValidateRow(row);
     wxVariant val(value);
 
-    m_rowmodified = true;
+    m_rowmodified = TRUE;
     m_data->SetCol(m_ColInfo[col].DbCol,val);
 }
 
@@ -645,7 +645,7 @@ void wxDbGridTableBase::SetValueAsDouble(int row, int col, double value)
     ValidateRow(row);
     wxVariant val(value);
 
-    m_rowmodified = true;
+    m_rowmodified = TRUE;
     m_data->SetCol(m_ColInfo[col].DbCol,val);
 
 }
@@ -658,7 +658,7 @@ void wxDbGridTableBase::SetValueAsBool(int row, int col, bool value)
     ValidateRow(row);
     wxVariant val(value);
 
-    m_rowmodified = true;
+    m_rowmodified = TRUE;
     m_data->SetCol(m_ColInfo[col].DbCol,val);
 }
 
@@ -705,17 +705,17 @@ void wxDbGridTableBase::ValidateRow(int row)
 
         m_row = row;
     }
-    m_rowmodified = false;
+    m_rowmodified = FALSE;
 }
 
 bool wxDbGridTableBase::Writeback() const
 {
     if (!m_rowmodified)
     {
-        return true;
+        return TRUE;
     }
 
-    bool result=true;
+    bool result=TRUE;
     wxLogDebug(wxT("\trow key unknown"));
 
 // FIXME: this code requires dbtable support for record status

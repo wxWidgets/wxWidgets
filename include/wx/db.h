@@ -98,7 +98,7 @@ enum enumDummy {enumDum1};
         #define SQL_C_BLOB SQL_VARBINARY
     #endif
 #endif
-
+/*
 #ifndef TRUE
 #define TRUE true
 #endif
@@ -106,7 +106,7 @@ enum enumDummy {enumDum1};
 #ifndef FALSE
 #define FALSE false
 #endif
-
+*/
 const int wxDB_PATH_MAX                 = 254;
 
 extern wxChar const *SQL_LOG_FILENAME;
@@ -586,7 +586,7 @@ public:
     bool         DispAllErrors(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
     bool         GetNextError(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
     void         DispNextError(void);
-    bool         CreateView(const wxString &viewName, const wxString &colList, const wxString &pSqlStmt, bool attemptDrop=true);
+    bool         CreateView(const wxString &viewName, const wxString &colList, const wxString &pSqlStmt, bool attemptDrop=TRUE);
     bool         DropView(const wxString &viewName);
     bool         ExecSql(const wxString &pSqlStmt);
     bool         GetNext(void);
@@ -628,7 +628,7 @@ public:
                         { logError(errMsg, SQLState); }
     void         SetDebugErrorMessages(bool state) { silent = !state; }
     bool         SetSqlLogging(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME, 
-                               bool append = false);
+                               bool append = FALSE);
     bool         WriteSqlLog(const wxString &logMsg);
 
     wxDBMS       Dbms(void);
@@ -697,7 +697,7 @@ bool  WXDLLEXPORT  wxDbSqlLog(wxDbSqlLogState state, const wxString &filename = 
 #if 0
 // MSW/VC6 ONLY!!!  Experimental
 int WXDLLEXPORT wxDbCreateDataSource(const wxString &driverName, const wxString &dsn, const wxString &description=wxEmptyString,
-                                     bool sysDSN=false, const wxString &defDir=wxEmptyString, wxWindow *parent=NULL);
+                                     bool sysDSN=FALSE, const wxString &defDir=wxEmptyString, wxWindow *parent=NULL);
 #endif
 
 // This routine allows you to query a driver manager
