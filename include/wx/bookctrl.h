@@ -79,6 +79,14 @@ public:
     // get the panel which represents the given page
     virtual wxWindow *GetPage(size_t n) { return m_pages[n]; }
 
+    // get the current page or NULL if none
+    wxWindow *GetCurrentPage() const
+    {
+        int n = GetSelection();
+        return n == wxNOT_FOUND ? NULL
+                                : wx_const_cast(wxBookCtrl *, this)->GetPage(n);
+    }
+
     // get the currently selected page or wxNOT_FOUND if none
     virtual int GetSelection() const = 0;
 

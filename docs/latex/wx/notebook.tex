@@ -43,6 +43,7 @@ See also \helpref{window styles overview}{windowstyles}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxNotebook::wxNotebook}\label{wxnotebookctor}
 
 \func{}{wxNotebook}{\void}
@@ -70,11 +71,13 @@ Note that sometimes you can reduce flicker by passing the wxCLIP\_CHILDREN windo
 
 \docparam{name}{The name of the control (used only under Motif).}
 
+
 \membersection{wxNotebook::\destruct{wxNotebook}}\label{wxnotebookdtor}
 
 \func{}{\destruct{wxNotebook}}{\void}
 
 Destroys the wxNotebook object.
+
 
 \membersection{wxNotebook::AddPage}\label{wxnotebookaddpage}
 
@@ -109,6 +112,7 @@ Do not delete the page, it will be deleted by the notebook.
 
 \helpref{wxNotebook::InsertPage}{wxnotebookinsertpage}
 
+
 \membersection{wxNotebook::AdvanceSelection}\label{wxnotebookadvanceselection}
 
 \func{void}{AdvanceSelection}{\param{bool}{ forward = true}}
@@ -116,6 +120,7 @@ Do not delete the page, it will be deleted by the notebook.
 Cycles through the tabs.
 
 The call to this function generates the page changing events.
+
 
 \membersection{wxNotebook::AssignImageList}\label{wxnotebookassignimagelist}
 
@@ -129,6 +134,7 @@ the list.
 \helpref{wxImageList}{wximagelist},
 \helpref{SetImageList}{wxnotebooksetimagelist}
 
+
 \membersection{wxNotebook::Create}\label{wxnotebookcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
@@ -137,11 +143,13 @@ the list.
 Creates a notebook control. See \helpref{wxNotebook::wxNotebook}{wxnotebookctor} for a description
 of the parameters.
 
+
 \membersection{wxNotebook::DeleteAllPages}\label{wxnotebookdeleteallpages}
 
 \func{bool}{DeleteAllPages}{\void}
 
 Deletes all pages.
+
 
 \membersection{wxNotebook::DeletePage}\label{wxnotebookdeletepage}
 
@@ -150,6 +158,14 @@ Deletes all pages.
 Deletes the specified page, and the associated window.
 
 The call to this function generates the page changing events.
+
+
+\membersection{wxNotebook::GetCurrentPage}\label{wxnotebookgetcurrentpage}
+
+\constfunc{wxWindow *}{GetCurrentPage}{\void}
+
+Returns the currently selected notebook age or \texttt{NULL}.
+
 
 \membersection{wxNotebook::GetImageList}\label{wxnotebookgetimagelist}
 
@@ -161,11 +177,13 @@ Returns the associated image list.
 
 \helpref{wxImageList}{wximagelist}, \helpref{wxNotebook::SetImageList}{wxnotebooksetimagelist}
 
+
 \membersection{wxNotebook::GetPage}\label{wxnotebookgetpage}
 
 \func{wxNotebookPage*}{GetPage}{\param{size\_t}{ page}}
 
 Returns the window at the given page position.
+
 
 \membersection{wxNotebook::GetPageCount}\label{wxnotebookgetpagecount}
 
@@ -173,11 +191,13 @@ Returns the window at the given page position.
 
 Returns the number of pages in the notebook control.
 
+
 \membersection{wxNotebook::GetPageImage}\label{wxnotebookgetpageimage}
 
 \constfunc{int}{GetPageImage}{\param{size\_t }{nPage}}
 
 Returns the image index for the given page.
+
 
 \membersection{wxNotebook::GetPageText}\label{wxnotebookgetpagetext}
 
@@ -185,11 +205,13 @@ Returns the image index for the given page.
 
 Returns the string for the given page.
 
+
 \membersection{wxNotebook::GetRowCount}\label{wxnotebookgetrowcount}
 
 \constfunc{int}{GetRowCount}{\void}
 
 Returns the number of rows in the notebook control.
+
 
 \membersection{wxNotebook::GetSelection}\label{wxnotebookgetselection}
 
@@ -202,6 +224,7 @@ when called from the {\tt EVT\_NOTEBOOK\_PAGE\_CHANGED} handler depending on
 the platform and so\rtfsp
 \helpref{wxNotebookEvent::GetSelection}{wxnotebookeventgetselection} should be
 used instead in this case.
+
 
 \membersection{wxNotebook::HitTest}\label{wxnotebookhittest}
 
@@ -231,6 +254,7 @@ inside the tab is returned as well.
 
 Returns the zero-based tab index or {\tt wxNOT\_FOUND} if there is no tab is at
 the specified position.
+
 
 
 \membersection{wxNotebook::InsertPage}\label{wxnotebookinsertpage}
@@ -266,6 +290,7 @@ Do not delete the page, it will be deleted by the notebook.
 
 \helpref{wxNotebook::AddPage}{wxnotebookaddpage}
 
+
 \membersection{wxNotebook::OnSelChange}\label{wxnotebookonselchange}
 
 \func{void}{OnSelChange}{\param{wxNotebookEvent\&}{ event}}
@@ -276,11 +301,13 @@ An event handler function, called when the page selection is changed.
 
 \helpref{wxNotebookEvent}{wxnotebookevent}
 
+
 \membersection{wxNotebook::RemovePage}\label{wxnotebookremovepage}
 
 \func{bool}{RemovePage}{\param{size\_t}{ page}}
 
 Deletes the specified page, without deleting the associated window.
+
 
 \membersection{wxNotebook::SetImageList}\label{wxnotebooksetimagelist}
 
@@ -294,6 +321,7 @@ ownership of the image list, you must delete it yourself.
 \helpref{wxImageList}{wximagelist},
 \helpref{AssignImageList}{wxnotebookassignimagelist}
 
+
 \membersection{wxNotebook::SetPadding}\label{wxnotebooksetpadding}
 
 \func{void}{SetPadding}{\param{const wxSize\&}{ padding}}
@@ -301,6 +329,7 @@ ownership of the image list, you must delete it yourself.
 Sets the amount of space around each page's icon and label, in pixels.
 
 {\bf NB:} The vertical padding cannot be changed in wxGTK.
+
 
 \membersection{wxNotebook::SetPageSize}\label{wxnotebooksetpagesize}
 
@@ -310,6 +339,7 @@ Sets the width and height of the pages.
 
 {\bf NB:} This method is currently not implemented for wxGTK.
 
+
 \membersection{wxNotebook::SetPageImage}\label{wxnotebooksetpageimage}
 
 \func{bool}{SetPageImage}{\param{size\_t}{ page}, \param{int }{image}}
@@ -317,11 +347,13 @@ Sets the width and height of the pages.
 Sets the image index for the given page. {\it image} is an index into
 the image list which was set with \helpref{wxNotebook::SetImageList}{wxnotebooksetimagelist}.
 
+
 \membersection{wxNotebook::SetPageText}\label{wxnotebooksetpagetext}
 
 \func{bool}{SetPageText}{\param{size\_t}{ page}, \param{const wxString\& }{text}}
 
 Sets the text for the given page.
+
 
 \membersection{wxNotebook::SetSelection}\label{wxnotebooksetselection}
 
