@@ -666,7 +666,7 @@ bool wxLocale::Init(int language, int flags)
     wxString name = info->Description;
     wxString canonical = info->CanonicalName;
     wxString locale;
-    const wxChar *retloc;
+    wxString retloc;
 
     // Set the locale:
 #if defined(__UNIX__) && !defined(__WXMAC__)
@@ -677,12 +677,12 @@ bool wxLocale::Init(int language, int flags)
 
     retloc = wxSetlocale(LC_ALL, locale);
 
-    if (retloc == NULL)
+    if (retloc.empty())
     {
         // Some C libraries don't like xx_YY form and require xx only
         retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
     }
-    if (retloc == NULL)
+    if (retloc.empty())
     {
         // Some C libraries (namely glibc) still use old ISO 639,
         // so will translate the abbrev for them
@@ -692,13 +692,13 @@ bool wxLocale::Init(int language, int flags)
         else if (mid == wxT("yi")) locale = wxT("ji") + locale.Mid(3);
         retloc = wxSetlocale(LC_ALL, locale);
     }
-    if (retloc == NULL)
+    if (retloc.empty())
     {
         // (This time, we changed locale in previous if-branch, so try again.)
         // Some C libraries don't like xx_YY form and require xx only
         retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
     }
-    if (retloc == NULL)
+    if (retloc.empty())
     {
         wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
         return FALSE;
@@ -745,7 +745,7 @@ bool wxLocale::Init(int language, int flags)
     else
         retloc = wxSetlocale(LC_ALL, wxEmptyString);
 
-    if (retloc == NULL)
+    if (retloc.empty())
     {
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
         return FALSE;
@@ -756,7 +756,7 @@ bool wxLocale::Init(int language, int flags)
     return FALSE;
 #endif
 
-    return Init(name, canonical, wxString(retloc),
+    return Init(name, canonical, retloc,
                 (flags & wxLOCALE_LOAD_DEFAULT) != 0,
                 (flags & wxLOCALE_CONV_ENCODING) != 0);
 }
