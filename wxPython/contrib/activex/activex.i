@@ -829,7 +829,18 @@ public:
 
         // Get IWebBrowser2 Interface
         hret = m_webBrowser.QueryInterface(IID_IWebBrowser2, m_ActiveX);
-        wxASSERT(SUCCEEDED(hret));        
+        wxASSERT(SUCCEEDED(hret));
+
+        // web browser setup
+        m_webBrowser->put_MenuBar(VARIANT_FALSE);
+        m_webBrowser->put_AddressBar(VARIANT_FALSE);
+        m_webBrowser->put_StatusBar(VARIANT_FALSE);
+        m_webBrowser->put_ToolBar(VARIANT_FALSE);
+
+        m_webBrowser->put_RegisterAsBrowser(VARIANT_TRUE);
+        m_webBrowser->put_RegisterAsDropTarget(VARIANT_TRUE);
+
+        m_webBrowser->Navigate( L"about:blank", NULL, NULL, NULL, NULL );
     }
 
 
