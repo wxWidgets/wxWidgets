@@ -71,6 +71,7 @@ dragimgg.cpp	G	P
 fontdlgg.cpp	G	G,R,P
 filedlgg.cpp	G	U,X,P
 grid.cpp	G
+gridctrl.cpp	G
 gridsel.cpp	G
 helpext.cpp	G	G
 helphtml.cpp	G	G
@@ -630,6 +631,7 @@ gifdecod.h	W
 xpmdecod.h	W
 glcanvas.h	W
 grid.h	W
+gridctrl.h	W
 gsocket.h	W	B
 hash.h	W	B
 help.h	W
@@ -1112,6 +1114,7 @@ dragimgg.h	N	16
 fontdlgg.h	N
 filedlgg.h	N
 grid.h	N
+gridctrl.h	N
 gridg.h	N
 helpext.h	N
 helpwxht.h	N

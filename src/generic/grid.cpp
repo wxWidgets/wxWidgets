@@ -3230,8 +3230,8 @@ void wxGridRowLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     m_owner->CalcUnscrolledPosition( 0, 0, &x, &y );
     dc.SetDeviceOrigin( 0, -y );
 
-    m_owner->CalcRowLabelsExposed( GetUpdateRegion() );
-    m_owner->DrawRowLabels( dc );
+    wxArrayInt rows = m_owner->CalcRowLabelsExposed( GetUpdateRegion() );
+    m_owner->DrawRowLabels( dc , rows );
 }
 
 
@@ -3296,8 +3296,8 @@ void wxGridColLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     m_owner->CalcUnscrolledPosition( 0, 0, &x, &y );
     dc.SetDeviceOrigin( -x, 0 );
 
-    m_owner->CalcColLabelsExposed( GetUpdateRegion() );
-    m_owner->DrawColLabels( dc );
+    wxArrayInt cols = m_owner->CalcColLabelsExposed( GetUpdateRegion() );
+    m_owner->DrawColLabels( dc , cols );
 }
 
 
@@ -3427,13 +3427,13 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxPaintDC dc( this );
     m_owner->PrepareDC( dc );
     wxRegion reg = GetUpdateRegion();
-    m_owner->CalcCellsExposed( reg );
-    m_owner->DrawGridCellArea( dc );
+    wxGridCellCoordsArray DirtyCells = m_owner->CalcCellsExposed( reg );
+    m_owner->DrawGridCellArea( dc , DirtyCells);
 #if WXGRID_DRAW_LINES
     m_owner->DrawAllGridLines( dc, reg );
 #endif
     m_owner->DrawGridSpace( dc );
-    m_owner->DrawHighlight( dc );
+    m_owner->DrawHighlight( dc , DirtyCells );
 }
 
 
@@ -4173,13 +4173,13 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 }
 
 
-void wxGrid::CalcRowLabelsExposed( const wxRegion& reg )
+wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg )
 {
     wxRegionIterator iter( reg );
     wxRect r;
 
-    m_rowLabelsExposed.Empty();
-
+    wxArrayInt  rowlabels;           
+        
     int top, bottom;
     while ( iter )
     {
@@ -4214,20 +4214,22 @@ void wxGrid::CalcRowLabelsExposed( const wxRegion& reg )
             if ( GetRowTop(row) > bottom )
                 break;
 
-            m_rowLabelsExposed.Add( row );
+            rowlabels.Add( row );
         }
 
         iter++ ;
     }
+
+    return rowlabels;
 }
 
 
-void wxGrid::CalcColLabelsExposed( const wxRegion& reg )
+wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg )
 {
     wxRegionIterator iter( reg );
     wxRect r;
 
-    m_colLabelsExposed.Empty();
+    wxArrayInt colLabels;
 
     int left, right;
     while ( iter )
@@ -4263,22 +4265,21 @@ void wxGrid::CalcColLabelsExposed( const wxRegion& reg )
             if ( GetColLeft(col) > right )
                 break;
 
-            m_colLabelsExposed.Add( col );
+            colLabels.Add( col );
         }
 
         iter++ ;
     }
+    return colLabels;
 }
 
 
-void wxGrid::CalcCellsExposed( const wxRegion& reg )
+wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg )
 {
     wxRegionIterator iter( reg );
     wxRect r;
 
-    m_cellsExposed.Empty();
-    m_rowsExposed.Empty();
-    m_colsExposed.Empty();
+    wxGridCellCoordsArray  cellsExposed;
 
     int left, top, right, bottom;
     while ( iter )
@@ -4315,7 +4316,6 @@ void wxGrid::CalcCellsExposed( const wxRegion& reg )
             if ( GetRowTop(row) > bottom )
                 break;
 
-            m_rowsExposed.Add( row );
 
             for ( col = 0;  col < m_numCols;  col++ )
             {
@@ -4325,14 +4325,14 @@ void wxGrid::CalcCellsExposed( const wxRegion& reg )
                 if ( GetColLeft(col) > right )
                     break;
 
-                if ( m_colsExposed.Index( col ) == wxNOT_FOUND )
-                    m_colsExposed.Add( col );
-                m_cellsExposed.Add( wxGridCellCoords( row, col ) );
+                cellsExposed.Add( wxGridCellCoords( row, col ) );
             }
         }
 
         iter++;
     }
+
+    return cellsExposed;
 }
 
 
@@ -5781,7 +5781,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         if ( IsVisible( m_currentCellCoords, FALSE ) )
         {
             wxRect r;
-            r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
+            r = BlockToDeviceRect(m_currentCellCoords, coords);
             if ( !m_gridLinesEnabled )
             {
                 r.x--;
@@ -5790,12 +5790,12 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
                 r.height++;
             }
 
-            CalcCellsExposed( r );
+             wxGridCellCoordsArray cells = CalcCellsExposed( r );
 
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
-
-            DrawGridCellArea(dc);
+            
+            DrawGridCellArea(dc,cells);
             DrawAllGridLines( dc, r );
         }
     }
@@ -5986,16 +5986,16 @@ bool wxGrid::SetModelValues()
 // exposed cells (usually set from the update region by
 // CalcExposedCells)
 //
-void wxGrid::DrawGridCellArea( wxDC& dc )
+void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
 {
     if ( !m_numRows || !m_numCols ) return;
 
     size_t i;
-    size_t numCells = m_cellsExposed.GetCount();
+    size_t numCells = cells.GetCount();
 
     for ( i = 0;  i < numCells;  i++ )
     {
-        DrawCell( dc, m_cellsExposed[i] );
+        DrawCell( dc, cells[i] );
     }
 }
 
@@ -6150,7 +6150,7 @@ void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
                  GetColRight(col), GetRowBottom(row) );
 }
 
-void wxGrid::DrawHighlight(wxDC& dc)
+void wxGrid::DrawHighlight(wxDC& dc,const  wxGridCellCoordsArray& cells)
 {
     // This if block was previously in wxGrid::OnPaint but that doesn't
     // seem to get called under wxGTK - MB
@@ -6169,10 +6169,10 @@ void wxGrid::DrawHighlight(wxDC& dc)
 
     // if the active cell was repainted, repaint its highlight too because it
     // might have been damaged by the grid lines
-    size_t count = m_cellsExposed.GetCount();
+    size_t count = cells.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( m_cellsExposed[n] == m_currentCellCoords )
+        if ( cells[n] == m_currentCellCoords )
         {
             wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
             DrawCellHighlight(dc, attr);
@@ -6264,16 +6264,16 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 }
 
 
-void wxGrid::DrawRowLabels( wxDC& dc )
+void wxGrid::DrawRowLabels( wxDC& dc ,const wxArrayInt& rows)
 {
     if ( !m_numRows ) return;
 
     size_t i;
-    size_t numLabels = m_rowLabelsExposed.GetCount();
+    size_t numLabels = rows.GetCount();
 
     for ( i = 0;  i < numLabels;  i++ )
     {
-        DrawRowLabel( dc, m_rowLabelsExposed[i] );
+        DrawRowLabel( dc, rows[i] );
     }
 }
 
@@ -6312,16 +6312,16 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
 }
 
 
-void wxGrid::DrawColLabels( wxDC& dc )
+void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
 {
     if ( !m_numCols ) return;
 
     size_t i;
-    size_t numLabels = m_colLabelsExposed.GetCount();
+    size_t numLabels = cols.GetCount();
 
     for ( i = 0;  i < numLabels;  i++ )
     {
-        DrawColLabel( dc, m_colLabelsExposed[i] );
+        DrawColLabel( dc, cols[i] );
     }
 }
 
@@ -6364,19 +6364,36 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     DrawTextRectangle( dc, GetColLabelValue( col ), rect, hAlign, vAlign );
 }
 
-
 void wxGrid::DrawTextRectangle( wxDC& dc,
                                 const wxString& value,
                                 const wxRect& rect,
                                 int horizAlign,
                                 int vertAlign )
 {
-    long textWidth, textHeight;
-    long lineWidth, lineHeight;
     wxArrayString lines;
 
     dc.SetClippingRegion( rect );
     StringToLines( value, lines );
+
+
+    //Forward to new API.
+    DrawTextRectangle(  dc,
+                        lines,
+                        rect,
+                        horizAlign,
+                        vertAlign );
+
+}
+
+void wxGrid::DrawTextRectangle( wxDC& dc,
+                                const wxArrayString& lines,
+                                const wxRect& rect,
+                                int horizAlign,
+                                int vertAlign )
+{
+    long textWidth, textHeight;
+    long lineWidth, lineHeight;
+
     if ( lines.GetCount() )
     {
         GetTextBoxSize( dc, lines, &textWidth, &textHeight );
@@ -6461,7 +6478,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
 
 
 void wxGrid::GetTextBoxSize( wxDC& dc,
-                             wxArrayString& lines,
+                             const wxArrayString& lines,
                              long *width, long *height )
 {
     long w = 0;

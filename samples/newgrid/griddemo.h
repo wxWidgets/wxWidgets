@@ -208,7 +208,7 @@ public:
     virtual ~MyGridCellAttrProvider();
 
     virtual wxGridCellAttr *GetAttr(int row, int col,
-                   wxGridCellAttr::wxAttrKind  kind /* = wxGridCellAttr::Any */) const;
+                                    wxGridCellAttr::wxAttrKind  kind) const;
 
 private:
     wxGridCellAttr *m_attrForOddRows;

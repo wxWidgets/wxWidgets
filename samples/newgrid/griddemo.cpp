@@ -35,6 +35,7 @@
 #include "wx/colordlg.h"
 
 #include "wx/grid.h"
+#include "wx/generic/gridctrl.h"
 
 #include "griddemo.h"
 
@@ -241,7 +242,10 @@ GridFrame::GridFrame()
     grid->SetRowSize( 0, 60 );
     grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );
 
-    grid->SetCellValue( 0, 1, "Blah" );
+    grid->SetCellValue( 0, 1, "A long piece of text to demonstrate wrapping." );
+    grid->SetCellRenderer(0 , 1, new wxGridCellAutoWrapStringRenderer);
+    grid->SetCellEditor( 0,  1 , new wxGridCellAutoWrapStringEditor);
+    
     grid->SetCellValue( 0, 2, "Blah" );
     grid->SetCellValue( 0, 3, "Read only" );
     grid->SetReadOnly( 0, 3 );
@@ -1257,10 +1261,7 @@ BugsGridFrame::BugsGridFrame()
     grid->SetMargins(0, 0);
 
     grid->Fit();
-    wxSize size = grid->GetSize();
-    size.x += 10;
-    size.y += 10;
-    SetClientSize(size);
+    SetClientSize(grid->GetSize());
 }
 
 

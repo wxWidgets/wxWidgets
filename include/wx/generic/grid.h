@@ -1027,10 +1027,10 @@ public:
 
     // ------ display update functions
     //
-    void CalcRowLabelsExposed( const wxRegion& reg );
+    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg );
 
-    void CalcColLabelsExposed( const wxRegion& reg );
-    void CalcCellsExposed( const wxRegion& reg );
+    wxArrayInt CalcColLabelsExposed( const wxRegion& reg );
+    wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg );
 
 
     // ------ event handlers
@@ -1057,21 +1057,21 @@ public:
     bool AppendCols( int numCols = 1, bool updateLabels=TRUE );
     bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );
 
-    void DrawGridCellArea( wxDC& dc );
+    void DrawGridCellArea( wxDC& dc , const wxGridCellCoordsArray& cells );
     void DrawGridSpace( wxDC& dc );
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
     void DrawAllGridLines( wxDC& dc, const wxRegion & reg );
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
-    void DrawHighlight(wxDC& dc);
+    void DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells);
 
     // this function is called when the current cell highlight must be redrawn
     // and may be overridden by the user
     virtual void DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr );
 
-    void DrawRowLabels( wxDC& dc );
+    void DrawRowLabels( wxDC& dc, const wxArrayInt& rows );
     void DrawRowLabel( wxDC& dc, int row );
 
-    void DrawColLabels( wxDC& dc );
+    void DrawColLabels( wxDC& dc, const wxArrayInt& cols );
     void DrawColLabel( wxDC& dc, int col );
 
 
@@ -1080,6 +1080,11 @@ public:
     void DrawTextRectangle( wxDC& dc, const wxString&, const wxRect&,
                             int horizontalAlignment = wxALIGN_LEFT,
                             int verticalAlignment = wxALIGN_TOP );
+ 
+    void DrawTextRectangle( wxDC& dc, const wxArrayString& lines, const wxRect&,
+                            int horizontalAlignment = wxALIGN_LEFT,
+                            int verticalAlignment = wxALIGN_TOP );
+
 
     // Split a string containing newline chararcters into an array of
     // strings and return the number of lines
@@ -1087,7 +1092,7 @@ public:
     void StringToLines( const wxString& value, wxArrayString& lines );
 
     void GetTextBoxSize( wxDC& dc,
-                         wxArrayString& lines,
+                         const wxArrayString& lines,
                          long *width, long *height );
 
 
@@ -1703,12 +1708,6 @@ protected:
     // the default cell attr object for cells that don't have their own
     wxGridCellAttr*     m_defaultCellAttr;
 
-
-    wxGridCellCoordsArray  m_cellsExposed;
-    wxArrayInt             m_rowsExposed;
-    wxArrayInt             m_colsExposed;
-    wxArrayInt             m_rowLabelsExposed;
-    wxArrayInt             m_colLabelsExposed;
 
     bool m_inOnKeyDown;
     int  m_batchCount;
