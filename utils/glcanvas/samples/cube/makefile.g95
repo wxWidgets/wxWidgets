@@ -1,0 +1,37 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for cube example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/cube.$(OBJSUFF)
+
+all:    $(OBJDIR) cube$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+cube$(GUISUFFIX)$(EXESUFF):	$(OBJDIR)/cube.$(OBJSUFF) cube.res $(WXLIB)
+	$(CC) $(LDFLAGS) -o cube$(GUISUFFIX)$(EXESUFF) $(OBJDIR)/cube.$(OBJSUFF) $(LDLIBS)
+	$(RSRC) cube.$(RESSUFF) cube.exe
+
+$(OBJDIR)/cube.$(OBJSUFF):	cube.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ cube.$(SRCSUFF)
+
+cube.res:  cube.rc
+
+clean:
+	rm -f $(OBJECTS) cube$(GUISUFFIX).exe core *.rsc *.res

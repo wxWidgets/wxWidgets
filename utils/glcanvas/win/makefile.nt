@@ -1,0 +1,106 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds GLCanvas class library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+GLDIR = $(WXDIR)\utils\glcanvas
+THISDIR = $(GLDIR)\win
+EXTRALIBS=$(WXDIR)\lib\glcanvas.lib
+DOCDIR=$(WXDIR)\docs
+LOCALDOCDIR=$(WXDIR)\utils\glcanvas\docs
+
+!include $(WXDIR)\src\ntwxwin.mak
+
+PROGRAM=test
+ 
+OBJECTS = glcanvas.obj
+LIBTARGET=$(WXDIR)\lib\glcanvas.lib
+
+all:    $(LIBTARGET)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt clean
+        cd $(THISDIR)
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+glcanvas.obj:      glcanvas.h glcanvas.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+clean:
+        -erase *.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
+DOCSOURCES=$(LOCALDOCDIR)\manual.tex $(LOCALDOCDIR)\classes.tex
+
+html: $(DOCDIR)\html\glcanvas\glcanvas.htm
+hlp: $(DOCDIR)\winhelp\glcanvas.hlp
+ps: $(WXDIR)\docs\ps\glcanvas.ps
+
+$(DOCDIR)\winhelp\glcanvas.hlp:         $(LOCALDOCDIR)\glcanvas.rtf $(LOCALDOCDIR)\glcanvas.hpj
+        cd $(LOCALDOCDIR)
+        -erase glcanvas.ph
+        hc glcanvas
+        move glcanvas.hlp $(DOCDIR)\winhelp\glcanvas.hlp
+        move glcanvas.cnt $(DOCDIR)\winhelp\glcanvas.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\glcanvas.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start /w tex2rtf $(LOCALDOCDIR)\manual.tex $(LOCALDOCDIR)\glcanvas.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\html\glcanvas\glcanvas.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\glcanvas
+        -start /w tex2rtf $(LOCALDOCDIR)\manual.tex $(DOCDIR)\html\glcanvas\glcanvas.htm -twice -html
+        -erase $(DOCDIR)\html\glcanvas\*.con
+        -erase $(DOCDIR)\html\glcanvas\*.ref
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\manual.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex manual
+        -latex manual
+        -makeindx manual
+        -bibtex manual
+        -latex manual
+        -latex manual
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\glcanvas.ps:	$(LOCALDOCDIR)\manual.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o glcanvas.ps manual
+        move glcanvas.ps $(WXDIR)\docs\ps\glcanvas.ps
+        cd $(THISDIR)
+
+
