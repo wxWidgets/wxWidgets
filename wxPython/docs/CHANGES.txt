@@ -152,7 +152,17 @@ FloatCanvas updates from Chris Barker
 PyPlot updates from Gordon Williams:
    - Added bar graph demo
    - Modified line end shape from round to square.
-   - Removed FloatDCWrapper for conversion to ints and ints in arguments
+   - Removed FloatDCWrapper for conversion to ints and ints in
+     arguments
+   - Imported modules given leading underscore to name.
+   - Added Cursor Line Tracking and User Point Labels. 
+   - Demo for Cursor Line Tracking and Point Labels.
+   - Size of plot preview frame adjusted to show page better.
+   - Added helper functions PositionUserToScreen and
+     PositionScreenToUser in PlotCanvas.
+   - Added functions GetClosestPoints (all curves) and GetClosestPoint
+     (only closest curve) can be in either user coords or screen
+     coords.
 
 MaskedEdit updates from Will Sadkin:
     - Added '*' mask char that means "all ansii chars" (ords 32-255)
