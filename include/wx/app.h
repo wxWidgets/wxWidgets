@@ -384,7 +384,7 @@ public:
     // this includes <windows.h> which is a bad thing because it prevents
     // wxWindows to work with MFC, so for now I'm making this change for
     // mingw/cygwin only (these don't work with MFC yet). GRG Mar/2000
-    #ifdef(__GNUWIN32__)
+    #if defined(__GNUWIN32__)
         #include <windows.h>
         #include "wx/msw/winundef.h"
 
