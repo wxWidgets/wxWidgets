@@ -782,9 +782,28 @@ void wxListBox::SetSelection( int n, bool select )
     GtkEnableEvents();
 }
 
-void wxListBox::DoSetFirstItem( int WXUNUSED(n) )
+void wxListBox::DoSetFirstItem( int n )
 {
-    wxFAIL_MSG(wxT("wxListBox::SetFirstItem not implemented"));
+    wxCHECK_RET( m_list, wxT("invalid listbox") );
+
+    if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (m_list))
+        return;
+    
+    // terribly efficient    
+    const gchar *vadjustment_key = "gtk-vadjustment";
+    guint vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
+    
+    GtkAdjustment *adjustment = 
+       (GtkAdjustment*) gtk_object_get_data_by_id (GTK_OBJECT (m_list), vadjustment_key_id);
+    wxCHECK_RET( adjustment, wxT("invalid listbox code") );
+
+    GList *target = g_list_nth( m_list->children, n );
+    wxCHECK_RET( target, wxT("invalid listbox index") );
+    
+    GtkWidget *item = GTK_WIDGET(target->data);
+    wxCHECK_RET( item, wxT("invalid listbox code") );
+
+	gtk_adjustment_set_value( adjustment, item->allocation.y );
 }
 
 // ----------------------------------------------------------------------------
