@@ -196,6 +196,9 @@ wxSpinCtrl::~wxSpinCtrl()
 
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
+    if (!m_btn || !m_text)
+        return GetSize();
+    
     wxSize sizeBtn = m_btn->GetBestSize(),
            sizeText = m_text->GetBestSize();
 
