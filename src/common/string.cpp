@@ -168,6 +168,8 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
   #define STATISTICS_ADD(av, val)
 #endif // WXSTRING_STATISTICS
 
+#if !wxUSE_STL
+
 // ===========================================================================
 // wxStringData class deallocation
 // ===========================================================================
@@ -179,8 +181,6 @@ void wxStringData::Free()
     free(this);
 }
 #endif
-
-#if !wxUSE_STL
 
 // ===========================================================================
 // wxStringBase
