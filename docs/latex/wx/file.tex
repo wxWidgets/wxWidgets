@@ -160,7 +160,10 @@ in the file.
 
 Note also that this function doesn't work on unseekable file descriptors
 (examples include pipes, terminals and sockets under Unix) and an attempt to
-use it will result in an error message in such case.
+use it will result in an error message in such case. So, to read the entire
+file into memory, you should write a loop which uses 
+\helpref{Read}{wxfileread} repeatedly and tests its return condition instead
+of using Eof() as this will not work for special files under Unix.
 
 \membersection{wxFile::Exists}\label{wxfileexists}
 

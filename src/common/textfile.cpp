@@ -282,7 +282,7 @@ bool wxTextFile::Read()
   char ch, chLast = '\0';
   char buf[1024];
   int n, nRead;
-  while ( !m_file.Eof() ) {
+  do {
     nRead = m_file.Read(buf, WXSIZEOF(buf));
     if ( nRead == wxInvalidOffset ) {
       // read error (error message already given in wxFile::Read)
@@ -325,7 +325,7 @@ bool wxTextFile::Read()
           }
       }
     }
-  }
+  } while ( nRead == WXSIZEOF(buf) );
 
   // anything in the last line?
   if ( !str.IsEmpty() ) {
