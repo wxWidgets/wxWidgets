@@ -98,7 +98,7 @@ wxPostScriptPrintNativeData::wxPostScriptPrintNativeData()
 #if !defined(__VMS__) && !defined(__WXMSW__)
     m_printerCommand = wxT("lpr");
     m_printerOptions = wxEmptyString;
-    m_afmPath = wxEmptyString);
+    m_afmPath = wxEmptyString;
 #endif
 
     m_printerScaleX = 1.0;
