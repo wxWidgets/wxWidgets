@@ -3008,6 +3008,8 @@ EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE $INCLUDES"
 CFLAGS=`echo $CFLAGS $EXTRA_CFLAGS | sed 's/ \\+/ /g'`
 CXXFLAGS=`echo $CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
 
+LDFLAGS="$LDFLAGS $PROFILE"
+
 if test "$wxUSE_GUI" = "yes"; then
     dnl TODO add checks that these samples will really compile (i.e. all the
     dnl      library features they need are present)
@@ -3082,7 +3084,8 @@ AC_SUBST(DOCS_SUBDIRS)
 AC_SUBST(SAMPLES_SUBDIRS)
 AC_SUBST(USER_SUBDIRS)
 
-dnl additional libraries
+dnl additional libraries and linker settings
+AC_SUBST(LDFLAGS)
 AC_SUBST(EXTRA_LIBS)
 AC_SUBST(LIBS)
 AC_SUBST(LD_LIBS)

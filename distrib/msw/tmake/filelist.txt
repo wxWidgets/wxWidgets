@@ -219,6 +219,7 @@ dialog.cpp	M
 dialup.cpp	M
 dib.cpp	M
 dibutils.cpp	M
+dir.cpp	M	B
 dirdlg.cpp	M	32
 dragimag.cpp	M
 dropsrc.cpp	M	O
@@ -291,6 +292,7 @@ xpmhand.cpp	M
 gsocket.c	M	S
 
 dialup.cpp	U
+dir.cpp	U	B
 fontenum.cpp	U
 fontutil.cpp	U
 threadpsx.cpp	U	B
@@ -469,6 +471,7 @@ debug.h	W	B
 defs.h	W	B
 dialog.h	W
 dialup.h	W
+dir.h	W	B
 dirdlg.h	W
 dnd.h	W
 docmdi.h	W

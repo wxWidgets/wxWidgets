@@ -3,7 +3,8 @@
 A wxFile performs raw file I/O. This is a very small class designed to
 minimize the overhead of using it - in fact, there is hardly any overhead at
 all, but using it brings you automatic error checking and hides differences
-between platforms and compilers.
+between platforms and compilers. wxFile also automatically closes the file in
+its destructor making it unnecessary to worry about forgetting to do it.
 
 \wxheading{Derived from}
 
@@ -82,7 +83,7 @@ fail.
 
 \func{}{wxFile}{\param{int}{ fd}}
 
-Opens a file with the given file descriptor, which has already been opened.
+Associates the file with the given file descriptor, which has already been opened.
 
 \wxheading{Parameters}
 
@@ -98,7 +99,7 @@ Opens a file with the given file descriptor, which has already been opened.
 
 Destructor will close the file.
 
-NB: it is not virtual so you should {\it not} derive from wxFile!
+NB: it is not virtual so you should use wxFile polymorphically.
 
 \membersection{wxFile::Access}\label{wxfileaccess}
 
@@ -159,7 +160,8 @@ will return TRUE here only if an attempt has been made to read
 
 \func{static bool}{Exists}{\param{const char*}{ filename}}
 
-Returns TRUE if the given name specifies an existing regular file.
+Returns TRUE if the given name specifies an existing regular file (not a
+directory or a link)
 
 \membersection{wxFile::Flush}\label{wxfileflush}
 
