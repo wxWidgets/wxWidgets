@@ -235,11 +235,21 @@ void *MyWorkerThread::Entry()
         if ( TestDestroy() )
             break;
         
+        wxString text;
+        text.Printf("[%u] Thread 0x%x here!!", m_count, GetId());
+
+        // create any type of command event here        
         wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
         event.SetInt( WORKER_EVENT );
+        event.SetString( text );
+        
+        // send in a thread-safe way
         wxPostEvent( m_frame, event );
+        
+        // same as:
+        // m_frame->AddPendingEvent( event );
 
-        // wxSleep() can't be called from non-GUI thread!
+        // wxSleep() can't be called from non-main thread!
         wxThread::Sleep(1000);
     }
 
@@ -495,7 +505,8 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageDialog dialog(this, "wxWindows multithreaded application sample\n"
                                  "(c) 1998 Julian Smart, Guilhem Lavaux\n"
-                                 "(c) 1999 Vadim Zeitlin",
+                                 "(c) 1999 Vadim Zeitlin\n"
+                                 "(c) 2000 Robert Roebling",
                            "About wxThread sample",
                            wxOK | wxICON_INFORMATION);
 
@@ -519,8 +530,10 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
     thread->Run();
 }
 
-void MyFrame::OnWorkerEvent(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnWorkerEvent(wxCommandEvent& event)
 {
-    WriteText( "Got message from worker thread\n" );
+    WriteText( "Got message from worker thread: " );
+    WriteText( event.GetString() );
+    WriteText( "\n" );
 }
 

@@ -327,7 +327,7 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
                          GTK_STATE_NORMAL,
                          GTK_SHADOW_OUT,
                          dx, dy,
-                         win->m_width-dw, win->m_height-dh );
+                         widget->allocation.width-dw, widget->allocation.height-dh );
         return;
     }
 
@@ -338,7 +338,7 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
                          GTK_STATE_NORMAL,
                          GTK_SHADOW_IN,
                          dx, dy,
-                         win->m_width-dw, win->m_height-dh );
+                         widget->allocation.width-dw, widget->allocation.height-dh );
         return;
     }
 
@@ -349,7 +349,7 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
         gdk_gc_set_foreground( gc, &widget->style->black );
         gdk_draw_rectangle( widget->window, gc, FALSE,
                          dx, dy,
-                         win->m_width-dw-1, win->m_height-dh-1 );
+                         widget->allocation.width-dw-1, widget->allocation.height-dh-1 );
         gdk_gc_unref( gc );
         return;
     }

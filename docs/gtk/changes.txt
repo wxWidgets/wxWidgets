@@ -6,6 +6,11 @@ and/or 16 bit colour mode? I need this for testing purposes, i.e. this
 person could help me by running a small testprogram and sending
 me the output.
 
+Added Calendar control.
+
+Added classes for recoding text (e.g. from Windows encoding to ISO encoding
+and for converting to and from Unicode).
+
 Updated the 64-bit long class (a class that substitutes a 64-bit int
 type on platforms which don't provide a native one).
 

@@ -101,11 +101,7 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
     gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
                               (int)(m_windowStyle & wxSP_WRAP) );
 
-    gtk_signal_connect( GTK_OBJECT (m_adjust),
-                        "value_changed",
-                        (GtkSignalFunc) gtk_spinctrl_callback,
-                        (gpointer) this );
-
+    GtkEnableEvents();
     m_parent->DoAddChild( this );
 
     PostCreation();
@@ -117,6 +113,22 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
     Show( TRUE );
 
     return TRUE;
+}
+
+void wxSpinCtrl::GtkDisableEvents()
+{
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_adjust),
+                        GTK_SIGNAL_FUNC(gtk_spinctrl_callback),
+                        (gpointer) this );
+
+}
+
+void wxSpinCtrl::GtkEnableEvents()
+{
+    gtk_signal_connect( GTK_OBJECT (m_adjust),
+                        "value_changed",
+                        GTK_SIGNAL_FUNC(gtk_spinctrl_callback),
+                        (gpointer) this );
 }
 
 int wxSpinCtrl::GetMin() const
@@ -153,7 +165,9 @@ void wxSpinCtrl::SetValue( const wxString& value )
     else
     {
         // invalid number - set text as is (wxMSW compatible)
+        GtkDisableEvents();
         gtk_entry_set_text( GTK_ENTRY(m_widget), value.mbc_str() );
+        GtkEnableEvents();
     }
 }
 
@@ -167,7 +181,9 @@ void wxSpinCtrl::SetValue( int value )
 
     m_adjust->value = fpos;
 
+    GtkDisableEvents();
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
+    GtkEnableEvents();
 }
 
 void wxSpinCtrl::SetRange(int minVal, int maxVal)

@@ -178,7 +178,7 @@ void wxapp_install_thread_wakeup()
 {
     if (wxTheApp->m_wakeUpTimerTag) return;
 
-    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 500, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 50, wxapp_wakeup_timerout_callback, (gpointer) NULL );
 }
 
 void wxapp_uninstall_thread_wakeup()
