@@ -868,8 +868,10 @@ void wxRadioBox::GetSize(
                       ,&vRect
                      );
 
-    *pnWidth  = vRect.xRight - vRect.xLeft;
-    *pnHeight = vRect.yBottom - vRect.yTop;
+    if (pnWidth)
+        *pnWidth  = vRect.xRight - vRect.xLeft;
+    if (pnHeight)
+        *pnHeight = vRect.yTop - vRect.yBottom;
 } // end of wxRadioBox::GetSize
 
 // Find string for position
