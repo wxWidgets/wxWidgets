@@ -2,10 +2,11 @@ Index: Source/Modules/python.cxx
 ===================================================================
 RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.28
-diff -u -r1.28 python.cxx
+diff -u -4 -r1.28 python.cxx
 --- Source/Modules/python.cxx	18 Nov 2003 20:19:15 -0000	1.28
-+++ Source/Modules/python.cxx	21 Nov 2003 16:56:31 -0000
-@@ -68,6 +68,17 @@
++++ Source/Modules/python.cxx	27 Nov 2003 00:52:28 -0000
+@@ -67,8 +67,19 @@
+      -new_repr       - Use more informative version of __repr__ in proxy classes\n\
       -noexcept       - No automatic exception handling\n\
       -noproxy        - Don't generate proxy classes \n\n";
  
@@ -23,13 +24,16 @@ diff -u -r1.28 python.cxx
  class PYTHON : public Language {
  public:
  
-@@ -415,15 +426,21 @@
+   /* ------------------------------------------------------------
+@@ -414,17 +425,23 @@
+    *    functions.
     * ------------------------------------------------------------ */
  
    void emitFunctionShadowHelper(Node *n, File *f_dest, String *name, int kw) {
 -    if ( ! have_addtofunc(n) ) {
+-      /* If there is no addtofunc directive then just assign from the extension module */
 +    if ( ! have_addtofunc(n) && ! have_docstring(n) ) {
-       /* If there is no addtofunc directive then just assign from the extension module */
++      /* If there is no addtofunc or docstring directive then just assign from the extension module */
        Printv(f_dest, "\n", name, " = ", module, ".", name, "\n", NIL);
      } else {
        /* Otherwise make a wrapper function to insert the code into */
@@ -38,7 +42,7 @@ diff -u -r1.28 python.cxx
 -      Printv(f_dest, tab4, addtofunc(n), "\n", NIL);
 -      Printv(f_dest, tab4, "return val\n", NIL);
 +      if ( have_docstring(n) )
-+        Printv(f_dest, tab4, docstring(n, AUTODOC_FUNC), "\n", NIL);
++        Printv(f_dest, tab4, docstring(n, AUTODOC_FUNC, tab4), "\n", NIL);
 +      if ( have_addtofunc(n) ) {
 +        Printv(f_dest, tab4, "val = ", funcCallHelper(name, kw), "\n", NIL);
 +        Printv(f_dest, tab4, addtofunc(n), "\n", NIL);
@@ -49,7 +53,9 @@ diff -u -r1.28 python.cxx
      }
    }
  
-@@ -439,6 +456,200 @@
+ 
+@@ -438,8 +455,246 @@
+   }
  
  
    /* ------------------------------------------------------------
@@ -67,17 +73,17 @@ diff -u -r1.28 python.cxx
 +  /* ------------------------------------------------------------
 +   * docstring()
 +   *    Get the docstring text, stripping off {} if neccessary,
-+   *    and enclose in triple-double quotes.  If autodoc is also
++   *    and enclose in triple double quotes.  If autodoc is also
 +   *    set then it will build a combined docstring.
 +   * ------------------------------------------------------------ */
 +
-+  String *docstring(Node *n, autodoc_t ad_type) {
++  String *docstring(Node *n, autodoc_t ad_type, const String* indent) {
 +    String* str = Getattr(n, "feature:docstring");
 +    bool have_ds = (str != NULL && Len(str) > 0);
 +    bool have_auto = (Getattr(n,"feature:autodoc") && !Getattr(n, "feature:noautodoc"));
 +    char* triple_double = "\"\"\"";
-+    String* autodoc;
-+    String* doc;
++    String* autodoc = NULL;
++    String* doc = NULL;
 +
 +    if ( have_ds ) {
 +      char* t = Char(str);
@@ -92,13 +98,57 @@ diff -u -r1.28 python.cxx
 +      have_auto = (autodoc != NULL && Len(autodoc) > 0);
 +    }
 +    
-+    if ( have_auto && have_ds )
-+      doc = NewStringf("%s%s\n\n%s%s", triple_double, autodoc, str, triple_double);
-+    else if ( !have_auto && have_ds )
-+      doc = NewStringf("%s%s%s", triple_double, str, triple_double);
-+    else
-+      doc = NewStringf("%s%s%s", triple_double, autodoc, triple_double);
++//     if ( have_auto && have_ds )
++//       doc = NewStringf("%s%s\n\n%s%s", triple_double, autodoc, str, triple_double);
++//     else if ( !have_auto && have_ds )
++//       doc = NewStringf("%s%s%s", triple_double, str, triple_double);
++//     else
++//       doc = NewStringf("%s%s%s", triple_double, autodoc, triple_double);
 +
++    
++    // If there is more than one line then make docstrings like this:
++    //
++    //      """
++    //      This is line1
++    //      And here is line2 followed by the rest of them
++    //      """
++    //
++    // otherwise, put it all on a single line
++    //
++    if ( have_auto && have_ds ) {       // Both autodoc and docstring are present
++      doc = NewString("");
++      Printv(doc, triple_double, "\n",
++                  pythoncode(autodoc, indent), "\n",
++                  pythoncode(str, indent), 
++                  indent, triple_double, NIL);
++    }
++    else if ( !have_auto && have_ds ) { // only docstring
++      if (Strchr(str, '\n') == NULL) {
++        doc = NewStringf("%s%s%s", triple_double, str, triple_double);
++      }
++      else {
++      doc = NewString("");
++      Printv(doc, triple_double, "\n",
++                  pythoncode(str, indent),
++                  indent, triple_double, NIL);
++      }
++    }
++    else if ( have_auto && !have_ds ) { // only autodoc
++      if (Strchr(autodoc, '\n') == NULL) {
++        doc = NewStringf("%s%s%s", triple_double, autodoc, triple_double);
++      }
++      else {
++      doc = NewString("");
++      Printv(doc, triple_double, "\n",
++                  pythoncode(autodoc, indent),
++                  indent, triple_double, NIL);
++      }
++    }
++    else
++      doc = NewString("");
++
++    // Save the generated strings in the parse tree in case they are used later
++    // by post processing tools
 +    Setattr(n, "python:docstring", doc);
 +    Setattr(n, "python:autodoc", autodoc);
 +    return doc;
@@ -211,7 +261,7 @@ diff -u -r1.28 python.cxx
 +
 +        // Do we need to wrap a long line?
 +        if ((Len(doc) - lines*maxwidth) > maxwidth) {
-+          Printf(doc, "\n    ");
++          Printf(doc, "\n%s", tab4);
 +          lines += 1;
 +        }
 +      }
@@ -250,18 +300,22 @@ diff -u -r1.28 python.cxx
     * have_addtofunc()
     *    Check if there is a %addtofunc directive and it has text
     * ------------------------------------------------------------ */
-@@ -1661,7 +1872,9 @@
+ 
+@@ -1660,9 +1915,11 @@
+ 	  Printf(f_shadow, modern ? "(object)" : "(_object)");
  	}
        }
        Printf(f_shadow,":\n");
 -
-+      if ( have_docstring(n) )
-+          Printv(f_shadow, tab4, docstring(n, AUTODOC_CLASS), "\n", NIL);
++      if ( Getattr(n, "feature:docstring") ) // don't use have_docstring in this case because autodoc doesn't apply
++          Printv(f_shadow, tab4, docstring(n, AUTODOC_CLASS, tab4), "\n", NIL);
 +      
        if (!modern) {
          Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
          if (Len(base_class)) {
-@@ -1796,14 +2009,20 @@
+           Printf(f_shadow,"%sfor _s in [%s]: __swig_setmethods__.update(_s.__swig_setmethods__)\n",tab4,base_class);
+@@ -1795,16 +2052,22 @@
+ 	  Delete(pyaction);
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
  
@@ -278,7 +332,7 @@ diff -u -r1.28 python.cxx
 -            Printv(f_shadow, "return ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
 +            Printv(f_shadow, "\n", NIL);
 +            if ( have_docstring(n) )
-+              Printv(f_shadow, tab8, docstring(n, AUTODOC_FUNC), "\n", NIL);
++              Printv(f_shadow, tab8, docstring(n, AUTODOC_FUNC, tab8), "\n", NIL);
 +            if ( have_addtofunc(n) ) {
 +              Printv(f_shadow, tab8, "val = ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
 +              Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
@@ -289,7 +343,9 @@ diff -u -r1.28 python.cxx
            }
          }
  
-@@ -1820,12 +2039,18 @@
+       }
+@@ -1819,14 +2082,20 @@
+   virtual int staticmemberfunctionHandler(Node *n) {
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
      if (shadow) {
@@ -301,7 +357,7 @@ diff -u -r1.28 python.cxx
 -        Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
 -        Printv(f_shadow, tab8, "return val\n", NIL);
 +        if ( have_docstring(n) )
-+          Printv(f_shadow, tab8, docstring(n, AUTODOC_STATICFUNC), "\n", NIL);
++          Printv(f_shadow, tab8, docstring(n, AUTODOC_STATICFUNC, tab8), "\n", NIL);
 +        if ( have_addtofunc(n) ) {
 +          Printv(f_shadow, tab8, "val = ", funcCallHelper(Swig_name_member(class_name, symname), kw), "\n", NIL);
 +          Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
@@ -312,16 +368,20 @@ diff -u -r1.28 python.cxx
          Printv(f_shadow, tab4, modern ? "" : "if _newclass:",  symname,
                 " = staticmethod(", symname, ")\n", NIL);
  
-@@ -1912,6 +2137,8 @@
+         if (!modern) {
+@@ -1911,8 +2180,10 @@
+  	    }
  
              Printv(f_shadow, tab4, "def __init__(self, *args",
                     (allow_kwargs ? ", **kwargs" : ""), "):\n", NIL);
 +            if ( have_docstring(n) )
-+              Printv(f_shadow, tab8, docstring(n, AUTODOC_CTOR), "\n", NIL);
++              Printv(f_shadow, tab8, docstring(n, AUTODOC_CTOR, tab8), "\n", NIL);
              Printv(f_shadow, pass_self, NIL);
              if (!modern) {
                Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
-@@ -1927,7 +2154,7 @@
+                      funcCallHelper(Swig_name_construct(symname), allow_kwargs), ")\n", NIL);
+@@ -1926,9 +2197,9 @@
+               Printv(f_shadow, tab8, "self.thisown = 1\n", NIL);
                Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
              }
              if ( have_addtofunc(n) )
@@ -330,27 +390,33 @@ diff -u -r1.28 python.cxx
    	    Delete(pass_self);
    	  }
  	  have_constructor = 1;
-@@ -1945,6 +2172,8 @@
+ 	} else {
+@@ -1944,8 +2215,10 @@
+ 	  } else {
  
              Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
                     (allow_kwargs ? ", **kwargs" : ""), "):\n", NIL);
 +            if ( have_docstring(n) )
-+              Printv(f_shadow_stubs, tab4, docstring(n, AUTODOC_CTOR), "\n", NIL);
++              Printv(f_shadow_stubs, tab4, docstring(n, AUTODOC_CTOR, tab4), "\n", NIL);
              Printv(f_shadow_stubs, tab4, "val = ",
                     funcCallHelper(Swig_name_construct(symname), allow_kwargs), "\n", NIL);
  	    Printv(f_shadow_stubs, tab4, "val.thisown = 1\n", NIL);
-@@ -1978,11 +2207,13 @@
+             if ( have_addtofunc(n) )
+@@ -1977,13 +2250,15 @@
+ 	Delete(pyaction);
  	Printv(f_shadow,pycode,"\n", NIL);
        } else {
  	Printv(f_shadow, tab4, "def __del__(self, destroy=", module, ".", Swig_name_destroy(symname), "):\n", NIL);
 +        if ( have_docstring(n) )
-+              Printv(f_shadow, tab8, docstring(n, AUTODOC_DTOR), "\n", NIL);
++              Printv(f_shadow, tab8, docstring(n, AUTODOC_DTOR, tab8), "\n", NIL);
  	if ( have_addtofunc(n) )
  	  Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
  	Printv(f_shadow, tab8, "try:\n", NIL);
- 	Printv(f_shadow, tab4, tab8, "if self.thisown: destroy(self)\n", NIL);
+-	Printv(f_shadow, tab4, tab8, "if self.thisown: destroy(self)\n", NIL);
 -	Printv(f_shadow, tab8, "except: pass\n", NIL);
++	Printv(f_shadow, tab8, tab4, "if self.thisown: destroy(self)\n", NIL);
 +	Printv(f_shadow, tab8, "except: pass\n\n", NIL);
        }
      }
      return SWIG_OK;
+   }
