@@ -40,7 +40,15 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     m_peer = new wxMacControl() ;
-    if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
+    if ( id == wxID_HELP )
+    {
+        ControlButtonContentInfo info ;
+        info.contentType = kControlContentIconRef ;
+        GetIconRef(kOnSystemDisk, kSystemIconsCreator, kHelpIcon, &info.u.iconRef);
+        verify_noerr ( CreateRoundButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , kControlRoundButtonNormalSize , 
+            &info , m_peer->GetControlRefAddr() ) );
+    }
+    else if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
     {
         verify_noerr ( CreatePushButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , m_peer->GetControlRefAddr() ) );
     }
@@ -77,6 +85,9 @@ void wxButton::SetDefault()
 
 wxSize wxButton::DoGetBestSize() const
 {
+    if ( GetId() == wxID_HELP )
+        return wxSize( 20 , 20 ) ;
+        
     wxSize sz = GetDefaultSize() ;
 
     int charspace = 8 ;
