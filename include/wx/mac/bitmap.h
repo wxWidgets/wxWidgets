@@ -193,16 +193,14 @@ public:
   inline bool operator != (const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
 
   static void InitStandardHandlers();
-protected:
-
-  // TODO: Implementation
 public:
-  void SetHBITMAP(WXHBITMAP bmp);
   WXHBITMAP GetHBITMAP() const;
-  void SetHICON(WXHICON ico);
   inline WXHICON GetHICON() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hIcon : 0); }
-  
-  WXHMETAFILE GetPict() const;
+  WXHMETAFILE GetPict(bool *created = NULL ) const;
+
+  void SetHBITMAP(WXHBITMAP bmp);
+  void SetHICON(WXHICON ico);
+  void SetPict( WXHMETAFILE pict ) ;
 
   bool FreeResource(bool force = FALSE);
 };
