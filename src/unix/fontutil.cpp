@@ -63,10 +63,10 @@ wxNativeFontInfo::Init(const wxNativeFontInfo& info)
     if (info.description)
         description = pango_font_description_copy(info.description);
     else
-        description = NULL;            
+        description = NULL;
 }
 
-wxNativeFontInfo::Free()
+void wxNativeFontInfo::Free()
 {
     if (description)
         pango_font_description_free(description);
@@ -725,7 +725,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             break;
 
         case wxFONTENCODING_GB2312:
-            info->xregistry = wxT("GB2312");   // or the otherway round? 
+            info->xregistry = wxT("GB2312");   // or the otherway round?
             info->xencoding = wxT("*");
             break;
 
