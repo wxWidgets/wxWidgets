@@ -27,6 +27,7 @@ class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxBitmapHandler;
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxCursor;
+class WXDLLEXPORT wxControl;
 
 // A mask is a mono bitmap used for drawing bitmaps
 // transparently.
@@ -129,9 +130,8 @@ public:
   // Initialize with raw data
   wxBitmap(const char bits[], int width, int height, int depth = 1);
 
-  class WXDLLEXPORT wxItem;
   // Initialize with XPM data
-  wxBitmap(char **data, wxItem *anItem = NULL);
+  wxBitmap(char **data, wxControl *anItem = NULL);
 
   // Load a file or resource
   wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);

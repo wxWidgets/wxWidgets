@@ -1092,6 +1092,13 @@ int wxString::Freq(char ch) const
     return count;
 }
 
+// convert to upper case, return the copy of the string
+wxString wxString::Upper() const
+{ wxString s(*this); return s.MakeUpper(); }
+
+// convert to lower case, return the copy of the string
+wxString wxString::Lower() const { wxString s(*this); return s.MakeLower(); }
+
 // ---------------------------------------------------------------------------
 // standard C++ library string functions
 // ---------------------------------------------------------------------------

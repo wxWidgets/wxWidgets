@@ -64,10 +64,10 @@ on-demand).
 \constfunc{virtual void}{WriteData}{\param{void}{*dest} }
 
 Write the data owned by this class to {\it dest}. By default, this
-calls \helpref{WriteString}{wxtextobjectwritestring} with the string
+calls \helpref{WriteString}{wxtextdataobjectwritestring} with the string
 set in the constructor or using \helpref{SetText}{wxtextdataobjectsettext}.
-This can be overridden to provide text data on-demand; in this case
-\helpref{WriteString}{wxtextobjectwritestring} must be called from
+This can be overridden to provide text data on-demand; in this case 
+\helpref{WriteString}{wxtextdataobjectwritestring} must be called from
 within the overriding WriteData() method.
 
 \membersection{wxTextDataObject::WriteString}\label{wxtextdataobjectwritestring}

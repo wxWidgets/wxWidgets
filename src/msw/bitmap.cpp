@@ -142,7 +142,7 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
 }
 
 // Create from XPM data
-wxBitmap::wxBitmap(char **data, wxItem *WXUNUSED(anItem))
+wxBitmap::wxBitmap(char **data, wxControl *WXUNUSED(anItem))
 {
   (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }

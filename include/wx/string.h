@@ -450,11 +450,12 @@ public:
       // convert to upper case in place, return the string itself
   wxString& MakeUpper();
       // convert to upper case, return the copy of the string
-  wxString Upper() const { wxString s(*this); return s.MakeUpper(); }
+      // Here's something to remember: BC++ doesn't like returns in inlines.
+  wxString Upper() const ;
       // convert to lower case in place, return the string itself
   wxString& MakeLower();
       // convert to lower case, return the copy of the string
-  wxString Lower() const { wxString s(*this); return s.MakeLower(); }
+  wxString Lower() const ;
 
   // trimming/padding whitespace (either side) and truncating
       // remove spaces from left or from right (default) side

@@ -23,7 +23,7 @@ and \helpref{WriteData}{wxbitmapdataobjectwritedata} will have to be overridden.
 
 \func{}{wxBitmapDataObject}{\void}
 
-Default constructor. Call \helpref{SetBitmap}{wxbitmapdataobjectsettext} later
+Default constructor. Call \helpref{SetBitmap}{wxbitmapdataobjectsetbitmap} later
 or override \helpref{WriteData}{wxbitmapdataobjectwritedata} and 
 \helpref{GetSize}{wxbitmapdataobjectgetsize} for providing data on-demand.
 
@@ -36,7 +36,7 @@ Constructor, passing a bitmap.
 \constfunc{virtual size\_t}{GetSize}{\void}
 
 Returns the data size. By default, returns the size of the bitmap data
-set in the constructor or using \helpref{SetBitmap}{wxbitmapdataobjectsettext}.
+set in the constructor or using \helpref{SetBitmap}{wxbitmapdataobjectsetbitmap}.
 This can be overridden to provide size data on-demand. Note that you'd
 have to call the inherited GetSize method as this is the only way
 to get to know the transfer size of the bitmap in a platform dependent
@@ -82,7 +82,7 @@ this method when offering data on-demand, but this is not required by
 wxWindows' internals. Use this method to get data in bitmap form from
 the \helpref{wxClipboard}{wxclipboard}.
 
-\membersection{wxBitmapDataObject::SetBitmap}\label{wxbitmapdataobjectsettext}
+\membersection{wxBitmapDataObject::SetBitmap}\label{wxbitmapdataobjectsetbitmap}
 
 \func{virtual void}{SetBitmap}{\param{const wxBitmap\& }{bitmap}}
 

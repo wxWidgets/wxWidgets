@@ -788,6 +788,21 @@ bool wxRegKey::GetNextKey(wxString& strKeyName, long& lIndex) const
   return TRUE;
 }
 
+// returns TRUE if the value contains a number (else it's some string)
+bool wxRegKey::IsNumericValue(const char *szValue) const
+  { 
+      ValueType type = GetValueType(szValue);
+      switch ( type ) {
+        case Type_Dword:
+        case Type_Dword_little_endian:
+        case Type_Dword_big_endian:
+            return TRUE;
+
+        default:
+            return FALSE;
+      }
+  }
+
 // ============================================================================
 // implementation of global private functions
 // ============================================================================

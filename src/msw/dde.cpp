@@ -34,15 +34,16 @@
 #include "wx/module.h"
 #include "wx/dde.h"
 
+#include "wx/msw/private.h"
+#include <windows.h>
+#include <ddeml.h>
+
 #ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
 #endif
 #endif
 
-#include "wx/msw/private.h"
-#include <windows.h>
-#include <ddeml.h>
 #include <string.h>
 
 #ifdef __WIN32__
