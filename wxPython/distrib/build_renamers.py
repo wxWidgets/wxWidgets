@@ -172,6 +172,8 @@ def checkOtherNames(pyFile, moduleName, filename):
             if line and not line.startswith('#'):
                 if line.endswith('*'):
                     prefixes.append(line[:-1])
+                elif line.find('=') != -1:
+                    pyFile.write("%s\n" % line)
                 else:
                     wxname = 'wx' + line
                     if line.startswith('wx') or line.startswith('WX') or line.startswith('EVT'):
