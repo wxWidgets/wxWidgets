@@ -6151,6 +6151,17 @@ if test "$wxUSE_SHARED" = "yes"; then
     sanitised_bakefile_mess=`echo "$SHARED_LD_CXX" | tr -d '()'`
     EXE_LINKER=`eval echo "$sanitised_bakefile_mess"`
 
+    dnl Need addtional flag on OS/2, so override bakefiles value
+    dnl (there currently is no suitable variable to which the
+    dnl  missing flags could be added, AFAICS. SN, 18.12.2004. )
+    case "${host}" in
+      *-pc-os2_emx | *-pc-os2-emx )
+        SHARED_LD_CC="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
+        SHARED_LD_CXX="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
+	cp -p ${srcdir}/src/os2/dllnames.sh .
+	cp -p ${srcdir}/src/os2/dllar.sh .
+      ;;
+    esac
 else
 
     dnl No bakefile support for static builds, but this should be ok for most.
