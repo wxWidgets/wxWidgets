@@ -517,7 +517,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     GtkPizza *pizza = GTK_PIZZA( widget );
     if (gdk_event->window != pizza->bin_window) return FALSE;
 
-#if 1
+#if 0
     if (win->GetName())
     {
         wxPrintf( wxT("OnExpose from ") );
@@ -1260,8 +1260,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
 #ifdef __WXGTK20__
 static void gtk_wxwindow_commit_cb (GtkIMContext *context,
-						   const gchar  *str,
-						   wxWindow     *window)
+                           const gchar  *str,
+                           wxWindow     *window)
 {
     bool ret = FALSE;
 
