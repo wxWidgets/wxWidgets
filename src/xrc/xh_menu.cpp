@@ -88,7 +88,7 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
             wxMenuItem *mitem = new wxMenuItem(p_menu, id, fullLabel,
                                                GetText(wxT("help")), kind);
 
-#if !defined(__WXMSW__) || wxUSE_OWNER_DRAWN
+#if (!defined(__WXMSW__) && !defined(__WXPM__)) || wxUSE_OWNER_DRAWN
             if (HasParam(wxT("bitmap")))
                 mitem->SetBitmap(GetBitmap(wxT("bitmap"), wxART_MENU));
 #endif
