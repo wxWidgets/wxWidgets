@@ -40,6 +40,35 @@ extern bool g_isIdle;
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
+//  "changed" - typing and list item matches get changed, select-child
+//              if it doesn't match an item then just get a single changed
+//-----------------------------------------------------------------------------
+
+static void
+gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
+{
+    if (g_isIdle) wxapp_install_idle_handler();
+
+    if (combo->m_ignoreNextUpdate)
+    { 
+        combo->m_ignoreNextUpdate = FALSE;
+        return;
+    }
+
+    if (!combo->m_hasVMT) return;
+
+    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
+    event.SetString( combo->GetValue() );
+    event.SetEventObject( combo );
+    combo->GetEventHandler()->ProcessEvent( event );
+}
+
+static void
+gtk_dummy_callback(GtkEntry *WXUNUSED(entry), GtkCombo *WXUNUSED(combo))
+{
+}
+
+//-----------------------------------------------------------------------------
 // "select-child" - click/cursor get select-child, changed, select-child
 //-----------------------------------------------------------------------------
 
@@ -61,35 +90,27 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     
     combo->m_prevSelection = curSelection;
 
+    // Quickly set the value of the combo box
+    // as GTK+ does that only AFTER the event
+    // is sent.
+    gtk_signal_disconnect_by_func( GTK_OBJECT(GTK_COMBO(combo->GetHandle())->entry),
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)combo );
+    combo->SetValue( combo->GetStringSelection() );
+    gtk_signal_connect( GTK_OBJECT(GTK_COMBO(combo->GetHandle())->entry), "changed",
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)combo );
+
     wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
     event.SetInt( curSelection );
     event.SetString( combo->GetStringSelection() );
     event.SetEventObject( combo );
     
     combo->GetEventHandler()->ProcessEvent( event );
-}
 
-//-----------------------------------------------------------------------------
-//  "changed" - typing and list item matches get changed, select-child
-//              if it doesn't match an item then just get a single changed
-//-----------------------------------------------------------------------------
-
-static void
-gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
-{
-    if (g_isIdle) wxapp_install_idle_handler();
-
-    if (!combo->m_hasVMT) return;
-
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
-    event.SetString( combo->GetValue() );
-    event.SetEventObject( combo );
-    combo->GetEventHandler()->ProcessEvent( event );
-}
-
-static void
-gtk_dummy_callback(GtkEntry *WXUNUSED(entry), GtkCombo *WXUNUSED(combo))
-{
+    // Now send the event ourselves    
+    wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
+    event2.SetString( combo->GetValue() );
+    event2.SetEventObject( combo );
+    combo->GetEventHandler()->ProcessEvent( event2 );
 }
 
 //-----------------------------------------------------------------------------
@@ -122,7 +143,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
                          long style, const wxValidator& validator,
                          const wxString& name )
 {
-    m_alreadySent = FALSE;
+    m_ignoreNextUpdate = FALSE;
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
     m_prevSelection = 0;

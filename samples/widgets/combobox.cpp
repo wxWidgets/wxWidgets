@@ -545,6 +545,8 @@ void ComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)
     m_textDelete->SetValue(wxString::Format(_T("%ld"), sel));
 
     wxLogMessage(_T("Combobox item %ld selected"), sel);
+    
+    wxLogMessage(_T("Combobox GetValue(): %s"), m_combobox->GetValue().c_str() );
 }
 
 void ComboboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))

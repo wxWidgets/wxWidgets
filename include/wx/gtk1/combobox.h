@@ -121,7 +121,7 @@ public:
     void OnSize( wxSizeEvent &event );
     void OnChar( wxKeyEvent &event );
 
-    bool     m_alreadySent;
+    bool     m_ignoreNextUpdate:1;
     wxList   m_clientDataList;
     wxList   m_clientObjectList;
     int      m_prevSelection;
