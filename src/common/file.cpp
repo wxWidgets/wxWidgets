@@ -220,10 +220,11 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
     // if bOverwrite we create a new file or truncate the existing one,
     // otherwise we only create the new file and fail if it already exists
 #ifdef __WXMAC__
-  int fd = open(wxUnix2MacFilename( szFileName ), O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
+    int fd = open(wxUnix2MacFilename( szFileName ), O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
 #else
     int fd = open(wxFNCONV(szFileName),
-                  O_WRONLY | O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL)
+                  O_BINARY | O_WRONLY | O_CREAT |
+                  (bOverwrite ? O_TRUNC : O_EXCL)
                   ACCESS(accessMode));
 #endif
     if ( fd == -1 ) {
@@ -260,7 +261,7 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
     }
 
 #ifdef __WXMAC__
-  int fd = open(wxUnix2MacFilename( szFileName ), flags, access);
+    int fd = open(wxUnix2MacFilename( szFileName ), flags, access);
 #else
     int fd = open(wxFNCONV(szFileName), flags ACCESS(accessMode));
 #endif
