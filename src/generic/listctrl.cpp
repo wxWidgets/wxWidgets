@@ -710,11 +710,11 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
 void wxListLineData::Hilight( bool on )
 {
     if (on == m_hilighted) return;
+    m_hilighted = on;
     if (on)
         m_owner->SelectLine( this );
     else
         m_owner->DeselectLine( this );
-    m_hilighted = on;
 }
 
 void wxListLineData::ReverseHilight( void )
@@ -1258,8 +1258,8 @@ void wxListMainWindow::SendNotify( wxListLineData *line, wxEventType command )
     le.SetEventObject( GetParent() );
     le.m_itemIndex = GetIndexOfLine( line );
     line->GetItem( 0, le.m_item );
-//    GetParent()->GetEventHandler()->ProcessEvent( le );
-    GetParent()->GetEventHandler()->AddPendingEvent( le );
+    GetParent()->GetEventHandler()->ProcessEvent( le );
+//    GetParent()->GetEventHandler()->AddPendingEvent( le );
 }
 
 void wxListMainWindow::FocusLine( wxListLineData *WXUNUSED(line) )
