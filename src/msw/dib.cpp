@@ -1,3 +1,190 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        src/msw/dib.cpp
+// Purpose:     implements wxDIB class
+// Author:      Vadim Zeitlin
+// Modified by:
+// Created:     03.03.03 (replaces the old file with the same name)
+// RCS-ID:      $Id$
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// License:     wxWindows license
+///////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+    #include "wx/log.h"
+#endif //WX_PRECOMP
+
+#include "wx/image.h"
+
+#include "wx/msw/dib.h"
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxDIB creation
+// ----------------------------------------------------------------------------
+
+bool wxDIB::Create(int width, int height, int depth)
+{
+    // we don't handle the palette yet
+    wxASSERT_MSG( depth == 24 || depth == 32,
+                    _T("unsupported image depth in wxDIB::Create()") );
+
+    static const int infosize = sizeof(BITMAPINFOHEADER);
+
+    BITMAPINFO *info = (BITMAPINFO *)malloc(infosize);
+    wxCHECK_MSG( info, NULL, _T("malloc(BITMAPINFO) failed") );
+
+    memset(info, 0, infosize);
+
+    info->bmiHeader.biSize = infosize;
+    info->bmiHeader.biWidth = width;
+    info->bmiHeader.biHeight = -height;
+    info->bmiHeader.biPlanes = 1;
+    info->bmiHeader.biBitCount = depth;
+    info->bmiHeader.biCompression = BI_RGB;
+    info->bmiHeader.biSizeImage = GetLineSize(width, depth)*height;
+
+    // No need to report an error here.  If it fails, we just won't use a
+    // file mapping and CreateDIBSection will just allocate memory for us.
+    m_handle = ::CreateDIBSection
+                 (
+                    0,              // hdc (unused with DIB_RGB_COLORS)
+                    info,           // bitmap description
+                    DIB_RGB_COLORS, // use RGB, not palette
+                    &m_data,        // [out] DIB bits
+                    NULL,           // don't use file mapping
+                    0               // file mapping offset (not used here)
+                 );
+
+    free(info);
+
+    if ( !m_handle )
+    {
+        wxLogLastError(wxT("CreateDIBSection"));
+
+        return false;
+    }
+
+    m_width = width;
+    m_height = height;
+    m_depth = depth;
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// wxDIB accessors
+// ----------------------------------------------------------------------------
+
+void wxDIB::DoGetObject() const
+{
+    // only do something if we have a valid DIB but we don't [yet] have valid
+    // data
+    if ( m_handle && !m_data )
+    {
+        // although all the info we need is in BITMAP and so we don't really
+        // need DIBSECTION we still ask for it as modifying the bit values only
+        // works for the real DIBs and not for the bitmaps and it's better to
+        // check for this now rather than trying to find out why it doesn't
+        // work later
+        DIBSECTION ds;
+        if ( !::GetObject(m_handle, sizeof(ds), &ds) )
+        {
+            wxLogLastError(_T("GetObject(hDIB)"));
+
+            return;
+        }
+
+        wxDIB *self = wxConstCast(this, wxDIB);
+
+        self->m_width = ds.dsBm.bmWidth;
+        self->m_height = ds.dsBm.bmHeight;
+        self->m_depth = ds.dsBm.bmBitsPixel;
+        self->m_data = ds.dsBm.bmBits;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// wxImage support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_IMAGE
+
+bool wxDIB::Create(const wxImage& image)
+{
+    wxCHECK_MSG( image.Ok(), false, _T("invalid wxImage in wxDIB ctor") );
+
+    const int h = image.GetHeight();
+    const int w = image.GetWidth();
+
+    // if we have alpha channel, we need to create a 32bpp RGBA DIB, otherwise
+    // a 24bpp RGB is sufficient
+    const bool hasAlpha = image.HasAlpha();
+    const int bpp = hasAlpha ? 32 : 24;
+
+    if ( !Create(w, h, bpp) )
+        return false;
+
+    // DIBs are stored in bottom to top order so we need to copy bits line by
+    // line and starting from the end
+    const int srcBytesPerLine = w * 3;
+    const int dstBytesPerLine = GetLineSize(w, bpp);
+    const unsigned char *src = image.GetData() + ((h - 1) * srcBytesPerLine);
+    const unsigned char *alpha = hasAlpha ? image.GetAlpha() + (h - 1)*w : NULL;
+    unsigned char *dstLineStart = (unsigned char *)m_data;
+    for ( int y = 0; y < h; y++ )
+    {
+        // copy one DIB line
+        unsigned char *dst = dstLineStart;
+        for ( int x = 0; x < w; x++ )
+        {
+            // also, the order of RGB is inversed for DIBs
+            *dst++ = src[2];
+            *dst++ = src[1];
+            *dst++ = src[0];
+
+            src += 3;
+
+            if ( alpha )
+                *dst++ = *alpha++;
+        }
+
+        // pass to the previous line in the image
+        src -= 2*srcBytesPerLine;
+        if ( alpha )
+            alpha -= 2*w;
+
+        // and to the next one in the DIB
+        dstLineStart += dstBytesPerLine;
+    }
+
+    return true;
+}
+
+#endif // wxUSE_IMAGE
+
+// ============================================================================
+// old DIB code, to be integrated in wxDIB class
+// ============================================================================
+
 /*******************************************************************************
  *                                                                               *
  * MODULE        : DIB.CC                                                        *
