@@ -1255,8 +1255,12 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         const wxBitmap& bmp = source->m_selectedBitmap;
         mask = bmp.GetMask();
 
-        wxCHECK_MSG( bmp.Ok() && mask && mask->GetMaskBitmap(), FALSE,
-                     _T("can't blit with mask without mask") );
+        if ( !(bmp.Ok() && mask && mask->GetMaskBitmap()) )
+        {
+            // don't give assert here because this would break existing
+            // programs - just silently ignore useMask parameter
+            useMask = FALSE;
+        }
     }
 
     COLORREF old_textground = ::GetTextColor(GetHdc());
