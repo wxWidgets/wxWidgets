@@ -32,6 +32,7 @@ LIB_CPP_SRC=\
  common/log.cpp \
  common/matrix.cpp \
  common/memory.cpp \
+ common/mimetype.cpp \
  common/module.cpp \
  common/object.cpp \
  common/postscrp.cpp \
