@@ -90,7 +90,7 @@ wxWindowsPrinter::wxWindowsPrinter(wxPrintDialogData *data)
 wxWindowsPrinter::~wxWindowsPrinter()
 {
     // avoids warning about statement with no effect (FreeProcInstance
-	// doesn't do anything under Win32)
+    // doesn't do anything under Win32)
 #if !defined(__WIN32__) && !defined(__NT__)
     FreeProcInstance((FARPROC) m_lpAbortProc);
 #endif
@@ -98,16 +98,16 @@ wxWindowsPrinter::~wxWindowsPrinter()
 
 bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
-    sm_abortIt = FALSE;
+    sm_abortIt = false;
     sm_abortWindow = NULL;
 
     if (!printout)
     {
         sm_lastError = wxPRINTER_ERROR;
-        return FALSE;
+        return false;
     }
 
-    printout->SetIsPreview(FALSE);
+    printout->SetIsPreview(false);
 
     if (m_printDialogData.GetMinPage() < 1)
         m_printDialogData.SetMinPage(1);
@@ -120,7 +120,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     {
         dc = PrintDialog(parent);
         if (!dc)
-            return FALSE;
+            return false;
     }
     else
     {
@@ -131,7 +131,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     if (!dc || !dc->Ok())
     {
         if (dc) delete dc;
-        return FALSE;
+        return false;
     }
 
     int logPPIScreenX = 0;
@@ -150,7 +150,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     {
         delete dc;
         sm_lastError = wxPRINTER_ERROR;
-        return FALSE;
+        return false;
     }
 
     printout->SetPPIScreen(logPPIScreenX, logPPIScreenY);
@@ -180,7 +180,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     {
         sm_lastError = wxPRINTER_ERROR;
         wxEndBusyCursor();
-        return FALSE;
+        return false;
     }
 
     // Only set min and max, because from and to have been
@@ -219,19 +219,32 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         delete dc;
     }
     sm_abortWindow = win;
-    sm_abortWindow->Show(TRUE);
+    sm_abortWindow->Show();
     wxSafeYield();
 
     printout->OnBeginPrinting();
 
     sm_lastError = wxPRINTER_NO_ERROR;
 
+    int minPageNum = minPage, maxPageNum = maxPage;
+
+    if ( !m_printDialogData.GetAllPages() )
+    {
+        minPageNum = minPage;
+        maxPageNum = maxPage;
+    }
+    else
+    {
+        minPageNum = m_printDialogData.GetFromPage();
+        maxPageNum = m_printDialogData.GetToPage();
+    }
+
     int copyCount;
     for ( copyCount = 1;
           copyCount <= m_printDialogData.GetNoCopies();
           copyCount++ )
     {
-        if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
+        if ( !printout->OnBeginDocument(minPageNum, maxPageNum) )
         {
             wxEndBusyCursor();
             wxLogError(_("Could not start printing."));
@@ -245,8 +258,9 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         }
 
         int pn;
-        for ( pn = m_printDialogData.GetFromPage();
-              pn <= m_printDialogData.GetToPage() && printout->HasPage(pn);
+
+        for ( pn = minPageNum;
+              pn <= maxPageNum && printout->HasPage(pn);
               pn++ )
         {
             if ( sm_abortIt )
@@ -273,7 +287,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     if (sm_abortWindow)
     {
-        sm_abortWindow->Show(FALSE);
+        sm_abortWindow->Show(false);
         delete sm_abortWindow;
         sm_abortWindow = NULL;
     }
@@ -310,7 +324,7 @@ wxDC* wxWindowsPrinter::PrintDialog(wxWindow *parent)
 bool wxWindowsPrinter::Setup(wxWindow *parent)
 {
     wxPrintDialog dialog(parent, & m_printDialogData);
-    dialog.GetPrintDialogData().SetSetupDialog(TRUE);
+    dialog.GetPrintDialogData().SetSetupDialog(true);
 
     int ret = dialog.ShowModal();
 
@@ -349,7 +363,7 @@ wxWindowsPrintPreview::~wxWindowsPrintPreview()
 bool wxWindowsPrintPreview::Print(bool interactive)
 {
     if (!m_printPrintout)
-        return FALSE;
+        return false;
     wxWindowsPrinter printer(&m_printDialogData);
     return printer.Print(m_previewFrame, m_printPrintout, interactive);
 }
@@ -388,10 +402,10 @@ void wxWindowsPrintPreview::DetermineScaling()
         m_previewPrintout->SetPageSizeMM(printerWidth, printerHeight);
 
         if (logPPIPrinterX == 0 || logPPIPrinterY == 0 || printerWidth == 0 || printerHeight == 0)
-            m_isOk = FALSE;
+            m_isOk = false;
     }
     else
-        m_isOk = FALSE;
+        m_isOk = false;
 
     m_pageWidth = printerXRes;
     m_pageHeight = printerYRes;
