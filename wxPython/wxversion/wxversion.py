@@ -124,43 +124,52 @@ def select(versions):
         
 #----------------------------------------------------------------------
 
-def selectNewest(minVersion):
+
+def ensureMinimal(minVersion):
     """
-    Selects a version of wxPython that has a version number greater
-    than or equal to the version given.  If a matching version is not
-    found then instead of raising an exception like select() does this
-    function will inform the user of that fact with a message dialog,
-    open the system's default web browser to the wxPython download
-    page, and then will exit the application.
+    Checks to see if the default version of wxPython is greater-than
+    or equal to `minVersion`.  If not then it will try to find an
+    installed version that is >= minVersion.  If none are available
+    then a message is displayed that will inform the user and will
+    offer to open their web browser to the wxPython downloads page,
+    and will then exit the application.
     """
     assert type(minVersion) == str
 
     # ensure that wxPython hasn't been imported yet.
     if sys.modules.has_key('wx') or sys.modules.has_key('wxPython'):
-        raise VersionError("wxversion.selectNewest() must be called before wxPython is imported")
-    
-    bestMatch = None
-    installed = _find_installed(True)
-    minv = _wxPackageInfo(minVersion)
+        raise VersionError("wxversion.ensureMinimal() must be called before wxPython is imported")
 
-    if installed:
-        # The list is in reverse sorted order, so if the first one is
-        # big enough then choose it
-        if installed[0] >= minv:
-            bestMatch = installed[0]
+    bestMatch = None
+    minv = _wxPackageInfo(minVersion)
+    defaultPath = _find_default()
+    if defaultPath:
+        defv = _wxPackageInfo(defaultPath, True)
+        if defv >= minv:
+            bestMatch = defv
+
+    if bestMatch is None:
+        installed = _find_installed()
+        if installed:
+            # The list is in reverse sorted order, so if the first one is
+            # big enough then choose it
+            if installed[0] >= minv:
+                bestMatch = installed[0]
 
     if bestMatch is None:
         import wx, webbrowser
         versions = "\n".join(["      "+ver for ver in getInstalled()])
         app = wx.PySimpleApp()
-        wx.MessageBox("This application requires a version of wxPython "
-                      "greater than or equal to %s but a matching version "
-                      "was not found.\n\n"
-                      "You currently have these version(s) installed:\n%s"
-                      % (minVersion, versions),
-                      "wxPython Upgrade Needed", style=wx.OK)
+        result = wx.MessageBox("This application requires a version of wxPython "
+                               "greater than or equal to %s, but a matching version "
+                               "was not found.\n\n"
+                               "You currently have these version(s) installed:\n%s\n\n"
+                               "Would you like to download a new version of wxPython?\n"
+                               % (minVersion, versions),
+                      "wxPython Upgrade Needed", style=wx.YES_NO)
+        if result == wx.YES:
+            webbrowser.open("http://sourceforge.net/project/showfiles.php?group_id=10718")
         app.MainLoop()
-        webbrowser.open("http://sourceforge.net/project/showfiles.php?group_id=10718")
         sys.exit()
 
     sys.path.insert(0, bestMatch.pathname)
@@ -254,6 +263,35 @@ def _find_installed(removeExisting=False):
     return installed
 
 
+# Scan the sys.path looking for either a directory matching _pattern,
+# or a wx.pth file
+def _find_default():
+    for pth in sys.path:
+        # empty means to look in the current dir
+        if not pth:
+            pth = '.'
+
+        # skip it if it's not a package dir
+        if not os.path.isdir(pth):
+            continue
+        
+        # does it match the pattern?
+        base = os.path.basename(pth)
+        if fnmatch.fnmatchcase(base, _pattern):
+            return pth
+
+    for pth in sys.path:
+        if not pth:
+            pth = '.'
+        if not os.path.isdir(pth):
+            continue
+        if os.path.exists(os.path.join(pth, 'wx.pth')):
+            base = open(os.path.join(pth, 'wx.pth')).read()
+            return os.path.join(pth, base)
+
+    return None
+
+
 class _wxPackageInfo(object):
     def __init__(self, pathname, stripFirst=False):
         self.pathname = pathname
@@ -305,9 +343,9 @@ class _wxPackageInfo(object):
 
 if __name__ == '__main__':
     import pprint
-    
-    #selectNewest('2.5')
-    #print sys.path[0]
+
+    #ensureMinimal('2.5')
+    #pprint.pprint(sys.path)
     #sys.exit()
     
     
@@ -318,8 +356,8 @@ if __name__ == '__main__':
         #test
         select(version)
         print "Asked for %s:\t got: %s" % (version, sys.path[0])
-        #pprint.pprint(sys.path)
-        #print
+        pprint.pprint(sys.path)
+        print
 
         # reset
         sys.path = savepath[:]
@@ -349,6 +387,10 @@ if __name__ == '__main__':
     print checkInstalled("2.4")
     print checkInstalled("2.5-unicode")
     print checkInstalled("2.99-bogus")
+    print "Current sys.path:"
+    pprint.pprint(sys.path)
+    print
+    
     test("2.4")
     test("2.5")
     test("2.5-gtk2")
