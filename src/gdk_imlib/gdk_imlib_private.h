@@ -5,7 +5,7 @@
 #endif
 
 #ifndef CONVERT_PATH
-#define CONVERT_PATH "/usr/local/bin"
+#define CONVERT_PATH "/usr/X11/bin"
 #endif
 
 #ifndef NETPBM_PATH
