@@ -684,7 +684,7 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
         GtkTextIter end;
         gtk_text_buffer_get_end_iter(text_buffer,&end );
         gchar *text = gtk_text_buffer_get_text(text_buffer,&line,&end,TRUE);
-        wxString result(text);
+        wxString result(wxGTK_CONV_BACK(text));
         g_free(text);
         return result.BeforeFirst(wxT('\n'));
 #endif
