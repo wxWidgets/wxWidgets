@@ -223,7 +223,7 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
     strKey << wxT("\\shell\\") << verb;
     wxRegKey key(wxRegKey::HKCR, strKey + _T("\\command"));
     wxString command;
-    if ( key.Open() ) {
+    if ( key.Open(wxRegKey::Read) ) {
         // it's the default value of the key
         if ( key.QueryValue(wxEmptyString, command) ) {
             bool foundFilename = CanonicalizeParams(command);
@@ -233,7 +233,7 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
             // (and not just launch it)
             strKey += _T("\\DDEExec");
             wxRegKey keyDDE(wxRegKey::HKCR, strKey);
-            if ( keyDDE.Open() ) {
+            if ( keyDDE.Open(wxRegKey::Read) ) {
                 wxString ddeCommand, ddeServer, ddeTopic;
                 keyDDE.QueryValue(wxEmptyString, ddeCommand);
                 ddeCommand.Replace(_T("%1"), _T("%s"));
@@ -323,7 +323,8 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
     wxLogNull nolog;
     wxRegKey key(wxRegKey::HKCR, m_ext);
 
-    return key.Open() && key.QueryValue(wxT("Content Type"), *mimeType);
+    return key.Open(wxRegKey::Read) &&
+                key.QueryValue(wxT("Content Type"), *mimeType);
 }
 
 bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
@@ -350,7 +351,7 @@ bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const
     wxLogNull nolog;
     wxRegKey key(wxRegKey::HKCR, strIconKey);
 
-    if ( key.Open() ) {
+    if ( key.Open(wxRegKey::Read) ) {
         wxString strIcon;
         // it's the default value of the key
         if ( key.QueryValue(wxEmptyString, strIcon) ) {
@@ -388,7 +389,7 @@ bool wxFileTypeImpl::GetDescription(wxString *desc) const
     wxLogNull nolog;
     wxRegKey key(wxRegKey::HKCR, m_strFileType);
 
-    if ( key.Open() ) {
+    if ( key.Open(wxRegKey::Read) ) {
         // it's the default value of the key
         if ( key.QueryValue(wxEmptyString, *desc) ) {
             return TRUE;
@@ -425,7 +426,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 
     wxString strFileType;
     wxRegKey key(wxRegKey::HKCR, str);
-    if ( key.Open() ) {
+    if ( key.Open(wxRegKey::Read) ) {
         // it's the default value of the key
         if ( key.QueryValue(wxEmptyString, strFileType) ) {
             // create the new wxFileType object
@@ -474,7 +475,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 
     wxString ext;
     wxRegKey key(wxRegKey::HKCR, strKey);
-    if ( key.Open() ) {
+    if ( key.Open(wxRegKey::Read) ) {
         if ( key.QueryValue(wxT("Extension"), ext) ) {
             return GetFileTypeFromExtension(ext);
         }
