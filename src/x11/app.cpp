@@ -368,6 +368,16 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             }
             return;
         }
+        case ConfigureNotify:
+        {
+            if (win)
+            {
+                wxSizeEvent sizeEvent( wxSize(event->xconfigure.width,event->xconfigure.height), win->GetId() );
+                sizeEvent.SetEventObject( win );
+                
+                win->GetEventHandler()->ProcessEvent( sizeEvent );
+            }
+        }
         case ResizeRequest:
         {
             /* Terry Gitnick <terryg@scientech.com> - 1/21/98
