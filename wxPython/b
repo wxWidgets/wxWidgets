@@ -57,18 +57,14 @@ elif [ "$1" = "s" ]; then
 # "r" --> rpm dist
 elif [ "$1" = "r" ]; then
     WXPYVER=`python$PYVER -c "import setup;print setup.VERSION"`
-    for VER in 15 20 21; do
+    for VER in 21 22; do
 	getpyver $VER
 
 	echo "*****************************************************************"
 	echo "*******      Building wxPython for Python $PYVER"
 	echo "*****************************************************************"
 
-	# NOTE:  This assumes that /usr/local/bin is BEFORE /usr/bin on the PATH
-	#        AND that you have write access to it.
-	rm -f /usr/local/bin/python
-	ln -s /usr/bin/python$PYVER /usr/local/bin/python
-	SETUP="/usr/local/bin/python -u setup.py"
+	SETUP="python$PYVER -u setup.py"
 
 	# save the original
 	cp setup.py setup.py.save
@@ -78,13 +74,15 @@ elif [ "$1" = "r" ]; then
 	sed "s/GL_ONLY = /GL_ONLY = 1 #/" < setup.py.temp > setup.py
 
 	# build wxPython-gl RPM
-	$SETUP $OTHERFLAGS bdist_rpm --binary-only --doc-files README.txt
+	$SETUP $OTHERFLAGS bdist_rpm --binary-only --doc-files README.txt --python=python$PYVER
+			### --requires=python$PYVER
 	rm dist/wxPython-gl*.tar.gz
 
 	# Build wxPython RPM
 	cp setup.py setup.py.temp
 	sed "s/GL_ONLY = /GL_ONLY = 0 #/" < setup.py.temp > setup.py
-	$SETUP $OTHERFLAGS bdist_rpm --binary-only
+	$SETUP $OTHERFLAGS bdist_rpm --binary-only --python=python$PYVER
+			### --requires=python$PYVER
 
 	# put the oringal setup.py back
 	cp setup.py.save setup.py
@@ -95,8 +93,8 @@ elif [ "$1" = "r" ]; then
 	mv dist/wxPython-gl-$WXPYVER-1.i386.rpm dist/wxPython-gl-$WXPYVER-1-Py$VER.i386.rpm
 
     done
+
     # rebuild the source dists without the munched up setup.py
-    $SETUP $OTHERFLAGS sdist
     $SETUP $OTHERFLAGS bdist_rpm --source-only
     exit 0
 

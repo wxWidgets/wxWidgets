@@ -9,7 +9,6 @@ class TestTree(wxRemotelyScrolledTreeCtrl):
     def __init__(self, parent, ID, pos=wxDefaultPosition, size=wxDefaultSize,
                  style=wxTR_HAS_BUTTONS):
         wxRemotelyScrolledTreeCtrl.__init__(self, parent, ID, pos, size, style)
-        ##self.SetBackgroundColour("LIGHT BLUE")
 
         # make an image list
         im1 = im2 = -1
@@ -51,7 +50,7 @@ class TestValueWindow(wxTreeCompanionWindow):
             pen = wxPen(wxSystemSettings_GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID)
             dc.SetPen(pen)
             dc.SetBrush(wxBrush(self.GetBackgroundColour(), wxSOLID))
-            dc.DrawRectangle(rect.x, rect.y, rect.width+1, rect.height)
+            dc.DrawRectangle(rect.x, rect.y, rect.width+1, rect.height+1)
             dc.SetTextForeground("BLACK")
             dc.SetBackgroundMode(wxTRANSPARENT)
             tw, th = dc.GetTextExtent(text)
@@ -70,17 +69,19 @@ class TestPanel(wxPanel):
                                       style=wxNO_BORDER | wxCLIP_CHILDREN | wxVSCROLL)
         splitter = wxThinSplitterWindow(scroller, -1, style=wxSP_3DBORDER | wxCLIP_CHILDREN)
         splitter.SetSashSize(2)
-        self.tree = TestTree(splitter, -1, style =
-                             wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxTR_ROW_LINES | wxNO_BORDER )
+        tree = TestTree(splitter, -1, style = wxTR_HAS_BUTTONS |
+                                              wxTR_NO_LINES |
+                                              wxTR_ROW_LINES |
+                                              wxNO_BORDER )
         valueWindow = TestValueWindow(splitter, -1, style=wxNO_BORDER)
 
-        splitter.SplitVertically(self.tree, valueWindow)
+        splitter.SplitVertically(tree, valueWindow)
         splitter.SetSashPosition(150)
-        scroller.SetTargetWindow(self.tree)
+        scroller.SetTargetWindow(tree)
         scroller.EnableScrolling(FALSE, FALSE)
 
-        valueWindow.SetTreeCtrl(self.tree)
-        self.tree.SetCompanionWindow(valueWindow)
+        valueWindow.SetTreeCtrl(tree)
+        tree.SetCompanionWindow(valueWindow)
 
 
 

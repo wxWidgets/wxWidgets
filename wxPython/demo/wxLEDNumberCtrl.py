@@ -12,11 +12,10 @@ class TestPanel(wxPanel):
         self.log = log
 
         led = wxLEDNumberCtrl(self, -1, (25,25), (280, 50))
-        led.SetValue("0123456789")
-        led.SetAlignment(wxLED_ALIGN_RIGHT)
+        led.SetValue("01234")
 
         led = wxLEDNumberCtrl(self, -1, (25,100), (280, 50))
-        led.SetValue("0123456789")
+        led.SetValue("56789")
         led.SetAlignment(wxLED_ALIGN_RIGHT)
         led.SetDrawFaded(false)
 

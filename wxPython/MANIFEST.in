@@ -33,6 +33,10 @@ include demo/data/*.py
 include demo/data/*.wav
 include demo/data/*.wdr
 include demo/data/*.xrc
+include demo/dllwidget/Makefile
+include demo/dllwidget/makefile.*
+include demo/dllwidget/*.cpp
+include demo/dllwidget/*.py
 
 include samples/doodle/*.txt
 include samples/doodle/*.py
@@ -166,6 +170,8 @@ include contrib/gizmos/*.c
 include contrib/gizmos/*.h
 include contrib/gizmos/contrib/include/wx/gizmos/*.h
 include contrib/gizmos/contrib/src/gizmos/*.cpp
+include contrib/gizmos/contrib/src/gizmos/*.xpm
+include contrib/gizmos/contrib/src/gizmos/*.txt
 
 include contrib/dllwidget/*.txt
 include contrib/dllwidget/*.i
