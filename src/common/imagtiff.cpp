@@ -31,7 +31,6 @@ extern "C"
 {
     #include "tiff.h"
     #include "tiffio.h"
-    #include "tiffiop.h"
 }
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
@@ -112,9 +111,6 @@ TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
         _tiffReadProc, _tiffWriteProc,
         _tiffSeekProc, _tiffCloseProc, _tiffSizeProc,
         _tiffMapProc, _tiffUnmapProc);
-
-    if (tif)
-        tif->tif_fd = (int) &stream;
 
     return tif;
 }
