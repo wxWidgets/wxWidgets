@@ -112,6 +112,8 @@ class wxTimeCtrl(wxTextCtrl):
                 testText = '00:00:00X'     # give it a little extra space
             else:
                 testText = '00:00:00 XXX'  # give it a little extra space
+            if wxPlatform == "__WXMAC__":
+                testText += 'X'
             w, h = self.GetTextExtent(testText)
             self.SetClientSize( (w+4, self.GetClientSize().height) )
 
