@@ -82,14 +82,15 @@ class wxToolBarTool : public wxToolBarToolBase
 public:
     wxToolBarTool(wxToolBar *tbar,
                   int id,
-                  const wxBitmap& bitmap1,
-                  const wxBitmap& bitmap2,
-                  bool toggle,
+                  const wxString& label,
+                  const wxBitmap& bmpNormal,
+                  const wxBitmap& bmpToggled,
+                  wxItemKind kind,
                   wxObject *clientData,
-                  const wxString& shortHelpString,
-                  const wxString& longHelpString)
-        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
-                            clientData, shortHelpString, longHelpString)
+                  const wxString& shortHelp,
+                  const wxString& longHelp)
+        : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpToggled, kind,
+                            clientData, shortHelp, longHelp)
     {
         Init();
     }
@@ -135,16 +136,18 @@ wxString wxToolBarTimer::helpString;
 // ----------------------------------------------------------------------------
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
-                                         const wxBitmap& bitmap1,
-                                         const wxBitmap& bitmap2,
-                                         bool toggle,
+                                         const wxString& label,
+                                         const wxBitmap& bmpNormal,
+                                         const wxBitmap& bmpToggled,
+                                         wxItemKind kind,
                                          wxObject *clientData,
-                                         const wxString& shortHelpString,
-                                         const wxString& longHelpString)
+                                         const wxString& shortHelp,
+                                         const wxString& longHelp)
 {
-    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
-                             clientData, shortHelpString, longHelpString);
+    return new wxToolBarTool(this, id, label, bmpNormal, bmpToggled, kind,
+                             clientData, shortHelp, longHelp);
 }
+
 
 wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 {
@@ -337,7 +340,7 @@ bool wxToolBar::Realize()
                 // a new wxBitmap that has the correct background colour
                 // for the button. Otherwise the background will just be
                 // e.g. black if a transparent XPM has been loaded.
-                bmp = tool->GetBitmap1();
+                bmp = tool->GetNormalBitmap();
                 if ( bmp.GetMask() )
                 {
                     int backgroundPixel;
@@ -349,7 +352,7 @@ bool wxToolBar::Realize()
 
                     bmp = wxCreateMaskedBitmap(bmp, col);
 
-                    tool->SetBitmap1(bmp);
+                    tool->SetNormalBitmap(bmp);
                 }
 
                 // Create a selected/toggled bitmap. If there isn't a 2nd
@@ -366,11 +369,14 @@ bool wxToolBar::Realize()
                 wxColour col;
                 col.SetPixel(backgroundPixel);
 
-                if (tool->GetBitmap2().Ok() && tool->GetBitmap2().GetMask())
+                // FIXME: we use disabled bitmap as the bitmap for the toggled
+                //        state, we probably need a GetToggledBitmap() instead
+                wxBitmap bmpToggled = tool->GetDisabledBitmap();
+                if ( bmpToggled.Ok() && bmpToggled.GetMask())
                 {
                     // Use what's there
-                    wxBitmap newBitmap = wxCreateMaskedBitmap(tool->GetBitmap2(), col);
-                    tool->SetBitmap2(newBitmap);
+                    wxBitmap newBitmap = wxCreateMaskedBitmap(bmpToggled, col);
+                    tool->SetDisabledBitmap(newBitmap);
                 }
                 else
                 {
@@ -378,12 +384,13 @@ bool wxToolBar::Realize()
                     if ( bmp.GetMask() )
                     {
                         wxBitmap newBitmap = wxCreateMaskedBitmap(bmp, col);
-                        tool->SetBitmap2(newBitmap);
+                        tool->SetDisabledBitmap(newBitmap);
                     }
                     else
-                        tool->SetBitmap2(bmp);
+                        tool->SetDisabledBitmap(bmp);
                 }
 
+                // FIXME: and here we should use GetDisabledBitmap()...
                 pixmap = (Pixmap) bmp.GetPixmap();
                 insensPixmap = (Pixmap) bmp.GetInsensPixmap();
 
@@ -395,11 +402,12 @@ bool wxToolBar::Realize()
 
                     // If there's a bitmap for the toggled state, use it,
                     // otherwise generate one.
-                    if (tool->GetBitmap2().Ok())
+                    //
+                    // FIXME: see above
+                    if ( bmpToggled.Ok() )
                     {
-                        wxBitmap bmp2 = tool->GetBitmap2();
-                        pixmap2 = (Pixmap) bmp2.GetPixmap();
-                        insensPixmap2 = (Pixmap) bmp2.GetInsensPixmap();
+                        pixmap2 = (Pixmap) bmpToggled.GetPixmap();
+                        insensPixmap2 = (Pixmap) bmpToggled.GetInsensPixmap();
                     }
                     else
                     {
@@ -424,9 +432,9 @@ bool wxToolBar::Realize()
 
                     // If there's a bitmap for the armed state, use it,
                     // otherwise generate one.
-                    if (tool->GetBitmap2().Ok())
+                    if ( bmpToggled.Ok() )
                     {
-                        pixmap2 = (Pixmap) tool->GetBitmap2().GetPixmap();
+                        pixmap2 = (Pixmap) bmpToggled.GetPixmap();
                     }
                     else
                     {

@@ -66,12 +66,13 @@ protected:
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
     
     virtual wxToolBarToolBase *CreateTool(int id,
-        const wxBitmap& bitmap1,
-        const wxBitmap& bitmap2,
-        bool toggle,
-        wxObject *clientData,
-        const wxString& shortHelpString,
-        const wxString& longHelpString);
+                                          const wxString& label,
+                                          const wxBitmap& bmpNormal,
+                                          const wxBitmap& bmpDisabled,
+                                          wxItemKind kind,
+                                          wxObject *clientData,
+                                          const wxString& shortHelp,
+                                          const wxString& longHelp);
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
     
 private:
