@@ -41,12 +41,17 @@ everything, i.e.:
 #include "wx/msw/private.h"
 (VZ)
 
-7. Use shortcuts to verify device you are building for:
-    #ifdef WIN32_PLATFORM_WFSP      ==   #ifdef __SMARTPHONE__
-    #ifdef WIN32_PLATFORM_PSPC      ==   #ifdef __POCKETPC__
-    #ifdef WCE_PLATFORM_STANDARDSDK ==   #ifdef __WINCE_STANDARDSDK__
-    #if (complex condition)         ==   #ifdef __HANDHELDPC__
+7. Use following replacements to verify device you are building for:
+#ifdef WIN32_PLATFORM_WFSP      == #if defined(__WXWINCE__) && defined(__SMARTPHONE__)
+#ifdef WIN32_PLATFORM_PSPC      == #if defined(__WXWINCE__) && defined(__PDA__)
+#ifdef WCE_PLATFORM_STANDARDSDK == #if defined(__WINCE_STANDARDSDK__)
+#if WinCE but non of above      == #if defined(__WXWINCE__) && defined(__HANDHELD__)
 
 
-  Marco Cavallini 
-www.koansoftware.com
+
+Collective work
+Julian Smart
+Vadim Zeitlin
+Robert Roebling
+Marco Cavallini
+ABX and many others
