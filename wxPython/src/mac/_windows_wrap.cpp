@@ -5020,7 +5020,7 @@ static PyObject *_wrap_Frame_CreateStatusBar(PyObject *, PyObject *args, PyObjec
     PyObject *resultobj;
     wxFrame *arg1 = (wxFrame *) 0 ;
     int arg2 = (int) 1 ;
-    long arg3 = (long) wxST_SIZEGRIP ;
+    long arg3 = (long) wxDEFAULT_STATUSBAR_STYLE ;
     int arg4 = (int) 0 ;
     wxString const &arg5_defvalue = wxPyStatusLineNameStr ;
     wxString *arg5 = (wxString *) &arg5_defvalue ;
@@ -6701,7 +6701,7 @@ static PyObject *_wrap_new_StatusBar(PyObject *, PyObject *args, PyObject *kwarg
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) -1 ;
-    long arg3 = (long) wxST_SIZEGRIP ;
+    long arg3 = (long) wxDEFAULT_STATUSBAR_STYLE ;
     wxString const &arg4_defvalue = wxPyStatusLineNameStr ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxStatusBar *result;

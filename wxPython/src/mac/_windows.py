@@ -524,8 +524,8 @@ class Frame(TopLevelWindow):
     Command = ProcessCommand 
     def CreateStatusBar(*args, **kwargs):
         """
-        CreateStatusBar(self, int number=1, long style=ST_SIZEGRIP, int winid=0, 
-            String name=StatusLineNameStr) -> StatusBar
+        CreateStatusBar(self, int number=1, long style=wxDEFAULT_STATUSBAR_STYLE, 
+            int winid=0, String name=StatusLineNameStr) -> StatusBar
         """
         return _windows_.Frame_CreateStatusBar(*args, **kwargs)
 
@@ -864,7 +864,10 @@ class StatusBar(_core.Window):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStatusBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, Window parent, int id=-1, long style=ST_SIZEGRIP, String name=StatusLineNameStr) -> StatusBar"""
+        """
+        __init__(self, Window parent, int id=-1, long style=wxDEFAULT_STATUSBAR_STYLE, 
+            String name=StatusLineNameStr) -> StatusBar
+        """
         newobj = _windows_.new_StatusBar(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1

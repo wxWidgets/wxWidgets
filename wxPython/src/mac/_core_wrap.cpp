@@ -47728,6 +47728,9 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"DEFAULT_CONTROL_BORDER", SWIG_From_int((int)(wxDEFAULT_CONTROL_BORDER))); 
     }
     {
+        PyDict_SetItemString(d,"DEFAULT_STATUSBAR_STYLE", SWIG_From_int((int)(wxDEFAULT_STATUSBAR_STYLE))); 
+    }
+    {
         PyDict_SetItemString(d,"TAB_TRAVERSAL", SWIG_From_int((int)(wxTAB_TRAVERSAL))); 
     }
     {
