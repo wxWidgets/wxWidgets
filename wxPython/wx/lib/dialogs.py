@@ -151,13 +151,14 @@ def returnedString(ret):
 ## this dialog is always modal, while wxFindReplaceDialog is
 ## modeless and so doesn't lend itself to a function wrapper
 def findDialog(parent=None, searchText='', wholeWordsOnly=0, caseSensitive=0):
-    dlg = wx.Dialog(parent, -1, "Find", wx.DefaultPosition, (370, 120))
+    dlg = wx.Dialog(parent, -1, "Find", wx.DefaultPosition, (380, 120))
 
     wx.StaticText(dlg, -1, 'Find what:', (7, 10))
-    wSearchText = wx.TextCtrl(dlg, -1, searchText, (70, 7), (195, -1))
+    wSearchText = wx.TextCtrl(dlg, -1, searchText, (80, 7), (195, -1))
     wSearchText.SetValue(searchText)
-    wx.Button(dlg, wx.ID_OK, "Find Next", (280, 5), wx.DefaultSize).SetDefault()
-    wx.Button(dlg, wx.ID_CANCEL, "Cancel", (280, 35), wx.DefaultSize)
+    wx.Button(dlg, wx.ID_OK, "Find Next", (285, 5), wx.DefaultSize).SetDefault()
+    wx.Button(dlg, wx.ID_CANCEL, "Cancel", (285, 35), wx.DefaultSize)
+
     wWholeWord = wx.CheckBox(dlg, -1, 'Match whole word only',
                             (7, 35), wx.DefaultSize, wx.NO_BORDER)
 
