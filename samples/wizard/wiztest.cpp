@@ -37,6 +37,10 @@
 
 #include "wx/wizard.h"
 
+#ifndef __WXMSW__
+    #include "wiztest.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -72,7 +76,7 @@ public:
         if ( m_checkbox->GetValue() )
         {
             wxMessageBox("Clear the checkbox first", "No way",
-                         wxICON_WARNING, this);
+                         wxICON_WARNING | wxOK, this);
 
             return FALSE;
         }
@@ -95,7 +99,11 @@ private:
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+#ifdef __WXMSW__
     wxBitmap bmpWizard("wiztest.bmp", wxBITMAP_TYPE_BMP);
+#else
+    wxBitmap bmpWizard(wizimage);
+#endif
 
     wxWizard *wizard = wxWizard::Create(NULL, -1,
                                         "Absolutely Useless Wizard",
@@ -115,7 +123,7 @@ bool MyApp::OnInit()
     if ( wizard->RunWizard() )
     {
         wxMessageBox("The wizard successfully completed", "That's all",
-                     wxICON_INFORMATION);
+                     wxICON_INFORMATION | wxOK);
     }
 
     wizard->Destroy();

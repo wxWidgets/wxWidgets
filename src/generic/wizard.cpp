@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/intl.h"
+    #include "wx/statbmp.h"
 #endif //WX_PRECOMP
 
 #include "wx/statline.h"

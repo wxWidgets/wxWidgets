@@ -7,7 +7,7 @@
 #
 # Format of this file: TAB separated columns. The first column contains the
 # filename, the second a letter corresonding a directory:
-#  G	/src/generic 
+#  G	/src/generic
 #  C	/src/common
 #  M	/src/msw
 #  X	/src/motif   X for Xt
@@ -16,15 +16,15 @@
 #  H	/src/html
 #  W	/include/wx
 #  K	/include/wx/gtk        K for gtK
-#  F    /include/wx/motif      F for motiF
-#  B    /include/wx/msw        B for Bill Gates
-#  N    /include/wx/generic    N for geNeric
-#  L    /include/wx/html       L for htmL
-#  P    /include/wx/protocol
-#  S    /include/wx/unix       S for poSix
+#  F	/include/wx/motif      F for motiF
+#  B	/include/wx/msw        B for Bill Gates
+#  N	/include/wx/generic    N for geNeric
+#  L	/include/wx/html       L for htmL
+#  P	/include/wx/protocol
+#  S	/include/wx/unix       S for poSix
 #
-# The third column may be empty or contain some additional info about this 
-# file (only compile it in 16bit mode, don't compile it with this or that 
+# The third column may be empty or contain some additional info about this
+# file (only compile it in 16bit mode, don't compile it with this or that
 # compiler, &c)
 #
 # Known flags:
@@ -84,6 +84,7 @@ numdlgg.cpp	G
 textdlgg.cpp	G
 tipdlg.cpp	G
 treectrl.cpp	G	16
+wizard.cpp	G
 
 choiccmn.cpp	C	R
 cmndata.cpp	C
