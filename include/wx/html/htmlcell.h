@@ -259,12 +259,6 @@ public:
     virtual bool IsLinebreakAllowed() const
         { return !IsFormattingCell(); }
 
-    // Returns y-coordinates that contraint the cell, i.e. left is highest
-    // and right lowest coordinate such that the cell lays between then.
-    // Note: this method does not return meaningful values if you haven't
-    //       called Layout() before!
-    virtual void GetHorizontalConstraints(int *left, int *right) const;
-
     // Returns true for simple == terminal cells, i.e. not composite ones.
     // This if for internal usage only and may disappear in future versions!
     virtual bool IsTerminalCell() const { return TRUE; }
@@ -410,7 +404,6 @@ public:
     virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
     virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
-    virtual void GetHorizontalConstraints(int *left, int *right) const;
 
     virtual wxHtmlCell* GetFirstChild() const { return m_Cells; }
 #if WXWIN_COMPATIBILITY_2_4

@@ -158,16 +158,6 @@ void wxHtmlCell::Layout(int WXUNUSED(w))
 
 
 
-void wxHtmlCell::GetHorizontalConstraints(int *left, int *right) const
-{
-    if (left)
-        *left = m_PosX;
-    if (right)
-        *right = m_PosX + m_Width;
-}
-
-
-
 const wxHtmlCell* wxHtmlCell::Find(int WXUNUSED(condition), const void* WXUNUSED(param)) const
 {
     return NULL;
@@ -1044,30 +1034,6 @@ void wxHtmlContainerCell::OnMouseClick(wxWindow *parent, int x, int y, const wxM
         cell->OnMouseClick(parent, x, y, event);
 }
 
-
-
-void wxHtmlContainerCell::GetHorizontalConstraints(int *left, int *right) const
-{
-    int cleft = m_PosX + m_Width, cright = m_PosX; // worst case
-    int l, r;
-
-    for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
-    {
-        cell->GetHorizontalConstraints(&l, &r);
-        if (l < cleft)
-            cleft = l;
-        if (r > cright)
-            cright = r;
-    }
-
-    cleft -= (m_IndentLeft < 0) ? (-m_IndentLeft * m_Width / 100) : m_IndentLeft;
-    cright += (m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight;
-
-    if (left)
-        *left = cleft;
-    if (right)
-        *right = cright;
-}
 
 
 wxHtmlCell *wxHtmlContainerCell::GetFirstTerminal() const
