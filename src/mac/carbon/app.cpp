@@ -790,6 +790,9 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
             theModule = NSModuleForSymbol(theSymbol);
             theLibPath = NSLibraryNameForModule(theModule);
 
+            wxLogDebug( wxT("wxMac library installation name is '%s'"),
+                        theLibPath );
+
             // allocate copy to replace .dylib.* extension with .rsrc
             theResPath = strdup(theLibPath);
             if (theResPath != NULL) {
@@ -803,7 +806,8 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
                 // overwrite extension with ".rsrc"
                 strcpy(theExt, ".rsrc");
 
-                wxLogDebug( theResPath );
+                wxLogDebug( wxT("wxMac resources file name is '%s'"),
+                            theResPath );
 
                 theErr = FSPathMakeRef((UInt8 *) theResPath, &theResRef, false);
                 if (theErr != noErr) {
@@ -811,14 +815,18 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
                     theErr = FSPathMakeRef((UInt8 *) theName, &theResRef, false);
                 }
 
-                // free duplicated resource file path
-                free(theResPath);
-
                 // open the resource file
                 if (theErr == noErr) {
                     theErr = FSOpenResourceFile( &theResRef, 0, NULL, fsRdPerm,
                                                  &gSharedLibraryResource);
                 }
+                if (theErr != noErr) {
+                    wxLogDebug( wxT("unable to open wxMac resource file '%s'"),
+                                theResPath );
+                }
+
+                // free duplicated resource file path
+                free(theResPath);
             }
         }
 #endif /* __DARWIN__ */

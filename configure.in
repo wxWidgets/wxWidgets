@@ -2781,9 +2781,10 @@ case "${host}" in
         dnl Under Mac OS X, we should build real frameworks instead of simple
         dnl dynamic shared libraries (in order to embed the resources)
         if test "$wxUSE_MAC" = 1; then
-            dnl the name of the resources file for wxMac
-            WX_RESOURCES_MACOSX_ASCII="lib${WX_LIBRARY}.r"
-            WX_RESOURCES_MACOSX_DATA="lib${WX_LIBRARY}.rsrc"
+            dnl base name of the resource file for wxMac must be the same
+            dnl as library installation base name (-install_name)
+            WX_RESOURCES_MACOSX_ASCII="lib${WX_LIBRARY}.${WX_CURRENT}.r"
+            WX_RESOURCES_MACOSX_DATA="lib${WX_LIBRARY}.${WX_CURRENT}.rsrc"
         fi
         ;;
 esac
@@ -2914,6 +2915,9 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
         SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace -o"
         PIC_FLAG="-dynamic -fPIC"
+        dnl library installation base name and wxMac resources file base name
+        dnl must be identical in order for the resource file to be found at
+        dnl run time in src/mac/app.cpp
         SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1}"
         SONAME_FLAGS_GL="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1_GL}"
       ;;
