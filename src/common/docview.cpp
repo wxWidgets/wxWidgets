@@ -2253,7 +2253,7 @@ bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = wxFopen (filename.fn_str(), wxT("rb"))) == NULL)
+    if ((fd1 = wxFopen (filename, wxT("rb"))) == NULL)
         return FALSE;
 
     while ((ch = getc (fd1)) != EOF)
@@ -2268,7 +2268,7 @@ bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
     FILE *fd1;
     char ch;
 
-    if ((fd1 = wxFopen (filename.fn_str(), wxT("wb"))) == NULL)
+    if ((fd1 = wxFopen (filename, wxT("wb"))) == NULL)
     {
         return FALSE;
     }
