@@ -36,7 +36,6 @@ Added wxBufferedDC.
 Upgraded wxSTC from Scintilla 1.40 to Scintilla 1.45
 
 UNICODE!
-
     wxWindows/wxPython can be compiled with unicode support enabled or
     disabled.  Previous to wxPython 2.3.3 non-unicode mode was always
     used.  Starting with 2.3.3 either mode is supported, but only if
@@ -121,6 +120,7 @@ supported are:
 
 Changed wxGenButton to derive from wxPyControl and overload
 DoGetBestSize and AcceptsFocus.
+
 
 
 

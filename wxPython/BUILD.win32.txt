@@ -41,7 +41,29 @@ the free mingw32 or Borland compilers, but I havn't tried them yet.
 If anybody wants to try it I'll take any required patches for the
 setup script and for these instructions.
 
+
+UNICODE
+-------
+
+To build the version of wxWindows/wxPython that uses the unicode
+version of the Win32 APIs, just follow the steps below with these
+changes:
+
+    a. You'll need the MSLU lib and dll, which is part of the new
+       Platform SDK from Microsoft.  See MSDN.microsoft.com for
+       details.
+
+    b. Add "UNICODE=1 MSLU=1" to the nmake command line when building
+       wxWindows.
+
+    c. Add "UNICODE=1" to the setup.py commandline when building
+       wxPython.
+
+    d. See the notes in CHANGES.txt about unicode.
+
+
 And now on to the fun stuff...
+
 
 
 

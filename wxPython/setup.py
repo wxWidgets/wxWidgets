@@ -341,8 +341,8 @@ else:
 # Check if the version file needs updated
 #----------------------------------------------------------------------
 
-if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
-    open('src/__version__.py', 'w').write("ver = '%s'\n" % VERSION)
+#if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
+open('src/__version__.py', 'w').write("ver = '%s'\n" % VERSION)
 
 
 
