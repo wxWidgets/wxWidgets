@@ -8,6 +8,7 @@ ALL_SOURCES = \
 		generic/colrdlgg.cpp \
 		generic/dcpsg.cpp \
 		generic/dirctrlg.cpp \
+		generic/fdrepdlg.cpp \
 		generic/grid.cpp \
 		generic/gridctrl.cpp \
 		generic/gridsel.cpp \
@@ -70,6 +71,7 @@ ALL_SOURCES = \
 		common/encconv.cpp \
 		common/event.cpp \
 		common/extended.c \
+		common/fddlgcmn.cpp \
 		common/ffile.cpp \
 		common/file.cpp \
 		common/fileconf.cpp \
@@ -234,6 +236,7 @@ ALL_HEADERS = \
 		encconv.h \
 		event.h \
 		expr.h \
+		fdrepdlg.h \
 		ffile.h \
 		file.h \
 		fileconf.h \
@@ -469,6 +472,7 @@ COMMONOBJS = \
 		encconv.o \
 		event.o \
 		extended.o \
+		fddlgcmn.o \
 		ffile.o \
 		file.o \
 		fileconf.o \
@@ -585,6 +589,7 @@ COMMONDEPS = \
 		encconv.d \
 		event.d \
 		extended.d \
+		fddlgcmn.d \
 		ffile.d \
 		file.d \
 		fileconf.d \
@@ -684,6 +689,7 @@ GENERICOBJS = \
 		dirctrlg.o \
 		dirdlgg.o \
 		dragimgg.o \
+		fdrepdlg.o \
 		filedlgg.o \
 		fontdlgg.o \
 		grid.o \
@@ -731,6 +737,7 @@ GENERICDEPS = \
 		dirctrlg.d \
 		dirdlgg.d \
 		dragimgg.d \
+		fdrepdlg.d \
 		filedlgg.d \
 		fontdlgg.d \
 		grid.d \
