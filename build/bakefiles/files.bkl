@@ -2196,6 +2196,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/taskbarx11.h
 </set>
 
+<set var="ADVANCED_GTK_SRC" hints="files">
+    src/gtk/taskbar.cpp
+    src/gtk/eggtrayicon.c
+</set>
+
 
 <!-- ====================================================================== -->
 <!--                               wxHTML                                   -->
@@ -2450,7 +2455,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC)</if>
-        <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
     </set>

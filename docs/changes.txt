@@ -94,6 +94,14 @@ versions, please update your code to not use them.
 OTHER CHANGES
 =============
 
+2.5.3
+-----
+
+Unix:
+
+- wxTaskBarIcon now supports freedesktop.org System Tray protocol
+
+
 2.5.2
 -----
 
@@ -162,10 +170,12 @@ wxHTML:
 - <div> handling fix (Xavier Nodet)
 
 Unix:
+
 - fixed priorities of mailcap entries (David Hart)
 - added "wx-config --libs=std,<extra>" syntax (i.e. support for "std")
 
 wxODBC:
+
 - Full Unicode support is now available
 - BLOB support is working
 

@@ -14,13 +14,9 @@
 #endif
 
 // NB: This implementation does *not* work with every X11 window manager.
-//     Currently only GNOME 1.2 and KDE 1,2,3 methods are implemented.
-//
-//     FIXME: implement:
-//               - GNOME 2 support (see www.freedesktop.org for specification;
-//                 KDE 3 uses this method as well, even though legacy KDE
-//                 method we implement works as well)
-//               - IceWM support (?)
+//     Currently only GNOME 1.2 and KDE 1,2,3 methods are implemented here.
+//     Freedesktop.org's System Tray specification is implemented in
+//     src/gtk/taskbar.cpp and used from here under wxGTK.
 //
 //     Thanks to Ian Campbell, author of XMMS Status Docklet, for publishing
 //     KDE and GNOME 1.2 methods.
@@ -35,6 +31,7 @@
 #include "wx/statbmp.h"
 #include "wx/sizer.h"
 #include "wx/dcclient.h"
+#include "wx/log.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint
@@ -44,6 +41,27 @@
 #ifdef __VMS
 #pragma message enable nosimpint
 #endif
+
+// ----------------------------------------------------------------------------
+// base class that implements toolkit-specific method:
+// ----------------------------------------------------------------------------
+
+#ifdef __WXGTK20__
+    #include "wx/gtk/taskbarpriv.h"
+#else
+    class WXDLLIMPEXP_ADV wxTaskBarIconAreaBase : public wxFrame
+    {
+    public:
+        wxTaskBarIconAreaBase()
+            : wxFrame(NULL, wxID_ANY, _T("systray icon"),
+                      wxDefaultPosition, wxDefaultSize,
+                      wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR |
+                      wxSIMPLE_BORDER | wxFRAME_SHAPED) {}
+
+        bool IsProtocolSupported() const { return false; }
+    };
+#endif
+
 
 // ----------------------------------------------------------------------------
 // toolkit dependent methods to set properties on helper window:
@@ -68,46 +86,85 @@
 // wxTaskBarIconArea is the real window that shows the icon:
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxTaskBarIconArea : public wxFrame
+class WXDLLIMPEXP_ADV wxTaskBarIconArea : public wxTaskBarIconAreaBase
 {
 public:
-    wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp)
-        : wxFrame(NULL, -1, wxT("taskbar icon"),
-                  wxDefaultPosition, wxDefaultSize,
-                  wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR |
-                  wxSIMPLE_BORDER | wxFRAME_SHAPED),
-          m_icon(icon), m_bmp(bmp)
-    {
-        SetWMProperties();
-        SetSize(wxSize(bmp.GetWidth(), bmp.GetHeight()));
-    }
-
+    wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp);
+    void SetTrayIcon(const wxBitmap& bmp);
     bool IsOk() { return true; }
     
 protected:
-    void SetWMProperties();
+    void SetLegacyWMProperties();
     
+    void OnSizeChange(wxSizeEvent& event);
     void OnPaint(wxPaintEvent& evt);
-    void OnWindowCreate(wxWindowCreateEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
     void OnMenuEvent(wxCommandEvent& event);
 
     wxTaskBarIcon *m_icon;
-    wxBitmap m_bmp;
+    wxPoint        m_pos;
+    wxBitmap       m_bmp;
     
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(wxTaskBarIconArea, wxFrame)
+BEGIN_EVENT_TABLE(wxTaskBarIconArea, wxTaskBarIconAreaBase)
+    EVT_SIZE(wxTaskBarIconArea::OnSizeChange)
     EVT_MOUSE_EVENTS(wxTaskBarIconArea::OnMouseEvent)
     EVT_MENU(-1, wxTaskBarIconArea::OnMenuEvent)
     EVT_PAINT(wxTaskBarIconArea::OnPaint)
-#ifdef __WXGTK__
-    EVT_WINDOW_CREATE(wxTaskBarIconArea::OnWindowCreate)
-#endif
 END_EVENT_TABLE()
+        
+wxTaskBarIconArea::wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp)
+    : wxTaskBarIconAreaBase(), m_icon(icon), m_pos(0,0)
+{
+    if (!IsProtocolSupported())
+    {
+        wxLogTrace(_T("systray"),
+                   _T("using legacy KDE1,2 and GNOME 1.2 methods"));
+        SetLegacyWMProperties();
+    }
+   
+    // Set initial size to bitmap size (tray manager may and often will
+    // change it):
+    SetSize(wxSize(bmp.GetWidth(), bmp.GetHeight()));
+    
+    SetTrayIcon(bmp);
+}
 
-void wxTaskBarIconArea::SetWMProperties()
+void wxTaskBarIconArea::SetTrayIcon(const wxBitmap& bmp)
+{
+    m_bmp = bmp;
+    
+    // determine suitable bitmap size:
+    wxSize winsize(GetSize());
+    wxSize bmpsize(m_bmp.GetWidth(), m_bmp.GetHeight());
+    wxSize iconsize(wxMin(winsize.x, bmpsize.x), wxMin(winsize.y, bmpsize.y));
+
+    // rescale the bitmap to fit into the tray icon window:
+    if (bmpsize != iconsize)
+    {
+        wxImage img = m_bmp.ConvertToImage();
+        img.Rescale(iconsize.x, iconsize.y);
+        m_bmp = wxBitmap(img);
+    }
+
+    wxRegion region(m_bmp);
+
+    // if the bitmap is smaller than the window, offset it:
+    if (winsize != iconsize)
+    {
+        m_pos.x = (winsize.x - iconsize.x) / 2;
+        m_pos.y = (winsize.y - iconsize.y) / 2;
+        region.Offset(m_pos.x, m_pos.y);
+    }
+
+    // set frame's shape to correct value and redraw:
+    SetShape(region);
+    Refresh();
+}
+
+void wxTaskBarIconArea::SetLegacyWMProperties()
 { 
 #ifdef __WXGTK__
     gtk_widget_realize(m_widget);
@@ -134,22 +191,26 @@ void wxTaskBarIconArea::SetWMProperties()
                     PropModeReplace, (unsigned char*)data, 1);
 }
     
-void wxTaskBarIconArea::OnWindowCreate(wxWindowCreateEvent& WXUNUSED(event))
+void wxTaskBarIconArea::OnSizeChange(wxSizeEvent& event)
 {
-    SetShape(wxRegion(m_bmp));
+    wxLogTrace(_T("systray"), _T("icon size changed to %i x %i"),
+               GetSize().x, GetSize().y);
+    // rescale or reposition the icon as needed:
+    wxBitmap bmp(m_bmp);
+    SetTrayIcon(bmp);
 }
 
 void wxTaskBarIconArea::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
-    dc.DrawBitmap(m_bmp, 0, 0, true);
+    dc.DrawBitmap(m_bmp, m_pos.x, m_pos.y, true);
 }
     
 void wxTaskBarIconArea::OnMouseEvent(wxMouseEvent& event)
 {
     wxEventType type = 0;
     wxEventType mtype = event.GetEventType();
-    
+
     if (mtype == wxEVT_LEFT_DOWN)
         type = wxEVT_TASKBAR_LEFT_DOWN;
     else if (mtype == wxEVT_LEFT_UP)
@@ -204,29 +265,35 @@ bool wxTaskBarIcon::IsIconInstalled() const
 
 bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
-    if (m_iconWnd)
-        RemoveIcon();
-
     wxBitmap bmp;
     bmp.CopyFromIcon(icon);
-    
-    m_iconWnd = new wxTaskBarIconArea(this, bmp);
 
-#if wxUSE_TOOLTIPS
-    if (!tooltip.empty())
-        m_iconWnd->SetToolTip(tooltip);
-#endif
-    if (m_iconWnd->IsOk())
+    if (!m_iconWnd)
     {
-        m_iconWnd->Show();
-        return true;
+        m_iconWnd = new wxTaskBarIconArea(this, bmp);
+        if (m_iconWnd->IsOk())
+        {
+            m_iconWnd->Show();
+        }
+        else
+        {
+            m_iconWnd->Destroy();
+            m_iconWnd = NULL;
+            return false;
+        }
     }
     else
     {
-        m_iconWnd->Destroy();
-        m_iconWnd = NULL;
-        return false;
-    }
+        m_iconWnd->SetTrayIcon(bmp);
+    }    
+    
+#if wxUSE_TOOLTIPS
+    if (!tooltip.empty())
+        m_iconWnd->SetToolTip(tooltip);
+    else
+        m_iconWnd->SetToolTip(NULL);
+#endif
+    return true;
 }
 
 bool wxTaskBarIcon::RemoveIcon()
