@@ -74,6 +74,16 @@ public:
 
     virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text);
 
+    // uncomment this if you want to always force Move to be the default
+    // action, even under wxGTK where it is normally Copy
+#if 0
+    wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
+    {
+        wxDragResult res = wxTextDropTarget::OnDragOver(x, y, def);
+        return res == wxDragNone ? wxDragNone : wxDragMove;
+    }
+#endif // 0
+
 private:
     wxListBox *m_pOwner;
 };
@@ -921,7 +931,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     file_menu->AppendSeparator();
     file_menu->Append(Menu_NewFrame, "&New frame\tCtrl-N");
     file_menu->AppendSeparator();
-    file_menu->Append(Menu_Quit, "E&xit");
+    file_menu->Append(Menu_Quit, "E&xit\tCtrl-Q");
 
     wxMenu *log_menu = new wxMenu;
     log_menu->Append(Menu_Clear, "Clear\tCtrl-L");
