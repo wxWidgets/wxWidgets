@@ -242,7 +242,7 @@ bool wxEventLoop::Dispatch()
         struct timeval tv;
         tv.tv_sec=0;
         tv.tv_usec=10000; // TODO make this configurable
-        int fd = ConnectionNumber(dsp);
+        int fd = ConnectionNumber((Display*) wxGetDisplay());
         fd_set readset;
         FD_ZERO(&readset);
         FD_SET(fd, &readset);
