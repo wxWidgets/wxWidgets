@@ -468,20 +468,22 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       }
     }
     else {                        // a key
-      size_t count = 0;
       const wxChar *pEnd = pStart;
-      while ( *pEnd != wxT('=') && !wxIsspace(*pEnd) ) {
+      while ( *pEnd && *pEnd != wxT('=') && !wxIsspace(*pEnd) ) {
         if ( *pEnd == wxT('\\') ) {
           // next character may be space or not - still take it because it's
-          // quoted
+          // quoted (unless there is nothing)
           pEnd++;
+          if ( !*pEnd ) {
+            // the error message will be given below anyhow
+            break;
+          }
         }
 
-        count++;
         pEnd++;
       }
 
-      wxString strKey(FilterInEntryName(wxString(pStart, count)));
+      wxString strKey(FilterInEntryName(wxString(pStart, pEnd)));
 
       // skip whitespace
       while ( isspace(*pEnd) )
