@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds minimal example (DOS).
+# Makefile : Builds grid test example (DOS).
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
@@ -15,32 +15,17 @@ WXDIR = $(WXWIN)
 
 !include $(WXDIR)\src\makemsc.env
 
-THISDIR = $(WXDIR)\samples\minimal
-WXLIB = $(WXDIR)\lib\wx.lib
-LIBS=$(WXLIB) oldnames libw llibcew commdlg shell ddeml
+THISDIR = $(WXDIR)\samples\test
 
 !ifndef FINAL
 FINAL=0
 !endif
 
-INC=/I$(WXDIR)\include\msw /I$(WXDIR)\include\base
-
-# Set this to nothing if using MS C++ 7
-ZOPTION=/Z7
-
-!if "$(FINAL)" == "0"
-CPPFLAGS=/AL /W3 /Zi $(ZOPTION) /G2sw /Od /YuWX_PREC.H /Dwx_msw /Fp$(WXDIR)\src\msw\wx.pch $(INC)
-LINKFLAGS=/NOD /CO /ONERROR:NOEXE /SEG:512
-!else
-CPPFLAGS=/AL /W3 /G2sw /Ox /YuWX_PREC.H /Dwx_msw /Fp$(WXDIR)\src\msw\wx.pch $(INC)
-LINKFLAGS=/NOD /ONERROR:NOEXE /SEG:512
-!endif
-
 HEADERS =
-SOURCES = minimal.$(SRCSUFF)
-OBJECTS = minimal.obj
+SOURCES = test.$(SRCSUFF)
+OBJECTS = test.obj
 
-all:    minimal.exe
+all:    test.exe
 
 wx:
         cd $(WXDIR)\src\msw
@@ -53,24 +38,24 @@ wxclean:
         cd $(THISDIR)
 
 
-minimal.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) minimal.obj minimal.def minimal.res
+test.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) test.obj test.def test.res
         link $(LINKFLAGS) @<<
-minimal.obj $(WXDIR)\src\msw\dummy.obj,
-minimal,
+test.obj $(WXDIR)\src\msw\dummy.obj,
+test,
 NUL,
 $(LIBS),
-minimal.def
+test.def
 ;
 <<
-        rc -30 -K minimal.res
+        rc -30 -K test.res
 
-minimal.obj:      minimal.$(SRCSUFF)
+test.obj:      test.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-minimal.res :      minimal.rc $(WXDIR)\include\msw\wx.rc
-    rc -r /dFAFA_LIB /i$(WXDIR)\contrib\fafa /i$(WXDIR)\include\msw minimal
+test.res :      test.rc $(WXDIR)\include\wx\msw\wx.rc
+    rc -r /dFAFA_LIB /i$(WXDIR)\include test
 
 clean:
         -erase *.obj

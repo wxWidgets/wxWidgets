@@ -17,6 +17,8 @@
  *
  */
 
+#define USE_CONFIG           1
+                                // Use wxConfig, with CreateConfig in wxApp
 #define __GOODCOMPILER__
                                 // gcc can have problems, but Windows compilers
                                 // are generally OK.

@@ -52,7 +52,7 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
 mdi.res :      mdi.rc $(WXDIR)\include\wx\msw\wx.rc
-    rc -r /i$(WXDIR)\include mdi
+	rc -r /i$(WXDIR)\include mdi
 
 clean:
         -erase *.obj

@@ -9,6 +9,14 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __WINDOWS__
+#ifdef __WIN95__
+#define wxToolBar wxToolBar95
+#else
+#define wxToolBar wxToolBarMSW
+#endif
+#endif
+
 // Define a new application
 class MyApp: public wxApp
 {
@@ -28,7 +36,7 @@ class MyCanvas: public wxScrolledWindow
 
 #ifdef __WINDOWS__
 
-class TestRibbon: public wxToolBar95
+class TestRibbon: public wxToolBar
 {
   public:
   TestRibbon(wxFrame *frame, int x = 0, int y = 0, int w = -1, int h = -1,

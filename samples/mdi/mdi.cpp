@@ -22,7 +22,11 @@
 #endif
 
 #ifdef __WINDOWS__
+#ifdef __WIN95__
 #include <wx/tbar95.h>
+#else
+#include <wx/tbarmsw.h>
+#endif
 #endif
 
 #include "mdi.h"
@@ -293,13 +297,13 @@ bool MyChild::OnClose(void)
 
 #ifdef __WINDOWS__
 
-BEGIN_EVENT_TABLE(TestRibbon, wxToolBar95)
+BEGIN_EVENT_TABLE(TestRibbon, wxToolBar)
     EVT_PAINT(TestRibbon::OnPaint)
 END_EVENT_TABLE()
 
 TestRibbon::TestRibbon(wxFrame *frame, int x, int y, int w, int h,
             long style, int direction, int RowsOrColumns):
-  wxToolBar95(frame, -1, wxPoint(x, y), wxSize(w, h), style, direction, RowsOrColumns)
+  wxToolBar(frame, -1, wxPoint(x, y), wxSize(w, h), style, direction, RowsOrColumns)
 {
     wxBitmap* bitmaps[8];
 
@@ -320,24 +324,24 @@ TestRibbon::TestRibbon(wxFrame *frame, int x, int y, int w, int h,
   int offX = 5;
   int currentX = 5;
 
-  AddTool(0, bitmaps[0], wxNullBitmap, FALSE, (float)currentX, -1, NULL, "New file");
+  AddTool(0, *bitmaps[0], wxNullBitmap, FALSE, currentX, -1, NULL, "New file");
   currentX += width + 5;
-  AddTool(1, bitmaps[1], wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Open file");
+  AddTool(1, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, NULL, "Open file");
   currentX += width + 5;
-  AddTool(2, bitmaps[2], wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Save file");
-  currentX += width + 5;
-  AddSeparator();
-  AddTool(3, bitmaps[3], wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Copy");
-  currentX += width + 5;
-  AddTool(4, bitmaps[4], wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Cut");
-  currentX += width + 5;
-  AddTool(5, bitmaps[5], wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Paste");
+  AddTool(2, *bitmaps[2], wxNullBitmap, FALSE, currentX, -1, NULL, "Save file");
   currentX += width + 5;
   AddSeparator();
-  AddTool(6, bitmaps[6], wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Print");
+  AddTool(3, *bitmaps[3], wxNullBitmap, FALSE, currentX, -1, NULL, "Copy");
+  currentX += width + 5;
+  AddTool(4, *bitmaps[4], wxNullBitmap, FALSE, currentX, -1, NULL, "Cut");
+  currentX += width + 5;
+  AddTool(5, *bitmaps[5], wxNullBitmap, FALSE, currentX, -1, NULL, "Paste");
   currentX += width + 5;
   AddSeparator();
-  AddTool(7, bitmaps[7], wxNullBitmap, TRUE, currentX, -1, NULL, "Help");
+  AddTool(6, *bitmaps[6], wxNullBitmap, FALSE, currentX, -1, NULL, "Print");
+  currentX += width + 5;
+  AddSeparator();
+  AddTool(7, *bitmaps[7], wxNullBitmap, TRUE, currentX, -1, NULL, "Help");
 
   CreateTools();
 
@@ -367,14 +371,14 @@ void TestRibbon::OnMouseEnter(int toolIndex)
 
 void TestRibbon::OnPaint(wxPaintEvent& event)
 {
-  wxToolBar95::OnPaint(event);
+  wxToolBar::OnPaint(event);
 
   wxPaintDC dc(this);
   
   int w, h;
   GetSize(&w, &h);
-  dc.SetPen(wxBLACK_PEN);
-  dc.SetBrush(wxTRANSPARENT_BRUSH);
+  dc.SetPen(*wxBLACK_PEN);
+  dc.SetBrush(*wxTRANSPARENT_BRUSH);
   dc.DrawLine(0, h-1, w, h-1);
 }
 

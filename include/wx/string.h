@@ -548,8 +548,12 @@ public:
         //@{
           /// find a substring
           size_t find(const wxString& str, size_t nStart = 0) const;
+
+          // VC++ 1.5 can't cope with this syntax.
+#if ! (defined(_MSC_VER) && !defined(__WIN32__))
           /// find first n characters of sz
           size_t find(const char* sz, size_t nStart = 0, size_t n = npos) const;
+#endif
           /// find the first occurence of character ch after nStart
           size_t find(char ch, size_t nStart = 0) const;
 
@@ -565,10 +569,13 @@ public:
         /// as find, but from the end
         size_t rfind(const wxString& str, size_t nStart = npos) const;
         /// as find, but from the end
+        // VC++ 1.5 can't cope with this syntax.
+#if ! (defined(_MSC_VER) && !defined(__WIN32__))
         size_t rfind(const char* sz, size_t nStart = npos, 
                      size_t n = npos) const;
         /// as find, but from the end
         size_t rfind(char ch, size_t nStart = npos) const;
+#endif
         //@}
         
         /**

@@ -42,6 +42,7 @@ bool WXDLLEXPORT wxYield(void);
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
+class wxConfig;
 class WXDLLEXPORT wxApp: public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxApp)
@@ -69,6 +70,10 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
 
   // No specific tasks to do here.
   virtual bool OnInitGui(void) { return TRUE; }
+
+  // override this function to create a global wxConfig object of different
+  // than default type (right now the default implementation returns NULL)
+  virtual wxConfig *CreateConfig(void) { return NULL; }
 
   // Called to set off the main loop
   virtual int OnRun(void) { return MainLoop(); };
