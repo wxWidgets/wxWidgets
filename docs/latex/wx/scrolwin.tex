@@ -4,6 +4,27 @@ The wxScrolledWindow class manages scrolling for its client area, transforming
 the coordinates according to the scrollbar positions, and setting the
 scroll positions, thumb sizes and ranges according to the area in view.
 
+Starting from version 2.4 of wxWindows, there are several ways to use a
+wxScrolledWindow. In particular, there are now three ways to set the
+size of the scrolling area: One way is to set the scrollbars directly
+using a call to
+\helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}.
+This is the way it used to be in any previous version of wxWindows
+and it will be kept for backwards compatibility.
+Additionally you can set the total size of the scrolling area by
+calling \helpref{wxWindow::SetVirtualSize}{wxwindowsetvirtualsize}
+and further fine-tune the desired scrolling behaviour by calling
+\helpref{wxWindow::SetVirtualSizeHints}{wxwindowsetvirtualsizehints}
+to limit how much the scrolling area can change its size. The last
+and newest way is to let sizers determine the scrolling area. This
+is actually the default now when you use sizers at all, i.e. if you
+set a sizer to a wxScrolledWindow with 
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer},
+then the scrolling area will be the size requested by the sizer. This
+fully automatic way can be partially overridden by calling 
+\helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}
+later.
+
 As with all windows, an application can draw onto a wxScrolledWindow using a \helpref{device context}{dcoverview}.
 
 You have the option of handling the OnPaint handler
