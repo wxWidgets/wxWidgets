@@ -23,12 +23,12 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <wx/wx.h>
+    #include "wx/wx.h"
 #endif
 
-#include <wx/toolbar.h>
-#include <wx/log.h>
-#include <wx/image.h>
+#include "wx/toolbar.h"
+#include "wx/log.h"
+#include "wx/image.h"
 
 // define this to 1 to use wxToolBarSimple instead of the native one
 #define USE_GENERIC_TBAR 0
@@ -38,7 +38,7 @@
         #error wxToolBarSimple is not compiled in, set wxUSE_TOOLBAR_SIMPLE \
                to 1 in setup.h and recompile the library.
     #else
-        #include <wx/tbarsmpl.h>
+        #include "wx/tbarsmpl.h"
     #endif
 #endif // USE_GENERIC_TBAR
 

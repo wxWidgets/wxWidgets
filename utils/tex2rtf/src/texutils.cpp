@@ -24,7 +24,7 @@
 #include "wx/wx.h"
 #endif
 
-#include <wx/hash.h>
+#include "wx/hash.h"
 
 #ifdef new
 #undef new

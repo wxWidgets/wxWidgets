@@ -12,7 +12,7 @@
 #ifndef _EDTREE_H_
 #define _EDTREE_H_
 
-#include <wx/treectrl.h>
+#include "wx/treectrl.h"
 
 class wxResourceEditorProjectTree: public wxTreeCtrl
 {

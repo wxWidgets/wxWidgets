@@ -28,15 +28,15 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include <wx/string.h>
-#include <wx/file.h>
-#include <wx/ffile.h>
-#include <wx/app.h>
-#include <wx/log.h>
-#include <wx/dir.h>
-#include <wx/textfile.h>
-#include <wx/datetime.h>
-#include <wx/cmdline.h>
+#include "wx/string.h"
+#include "wx/file.h"
+#include "wx/ffile.h"
+#include "wx/app.h"
+#include "wx/log.h"
+#include "wx/dir.h"
+#include "wx/textfile.h"
+#include "wx/datetime.h"
+#include "wx/cmdline.h"
 
 // ----------------------------------------------------------------------------
 // the application class

@@ -432,7 +432,7 @@ void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
                 firstDragY = y;
                 dragType = wxDRAG_TYPE_BOUNDING_BOX;
                 wxClientDC dc(handlerDialog);
-                OnDragBegin(x, y, keys, dc, NULL);
+                OnDragBegin(x, y, keys, dc, 0);
                 dragMode = wxDRAG_MODE_CONTINUE_LEFT;
                 oldDragX = x; oldDragY = y;
             }

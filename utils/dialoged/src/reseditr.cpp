@@ -175,7 +175,7 @@ bool wxResourceManager::Initialize()
 #ifdef __WXMSW__
         m_bitmapImage = new wxBitmap("WXWINBMP", wxBITMAP_TYPE_BMP_RESOURCE);
 #endif
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
         m_bitmapImage = new wxBitmap( wxwin_xpm );
 #endif
     }

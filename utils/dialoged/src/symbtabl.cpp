@@ -24,7 +24,7 @@
 #include "wx/wx.h"
 #endif
 
-#include <wx/file.h>
+#include "wx/file.h"
 
 #include <string.h>
 #include <stdlib.h>

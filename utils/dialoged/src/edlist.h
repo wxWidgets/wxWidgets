@@ -12,8 +12,8 @@
 #ifndef _EDLIST_H_
 #define _EDLIST_H_
 
-#include <wx/listctrl.h>
-#include <wx/imaglist.h>
+#include "wx/listctrl.h"
+#include "wx/imaglist.h"
 
 class wxResourceEditorControlList: public wxListCtrl
 {
