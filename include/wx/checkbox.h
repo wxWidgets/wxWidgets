@@ -99,19 +99,14 @@ public:
         DoSet3StateValue(state);
     }
 
-    bool Is3State() const
-    {
-        return (m_style & wxCHK_3STATE) != 0;
-    }
+    bool Is3State() const { return HasFlag(wxCHK_3STATE); }
 
     bool Is3rdStateAllowedForUser() const
     {
-        return (m_style & wxCHK_ALLOW_3RD_STATE_FOR_USER) != 0;
+        return HasFlag(wxCHK_ALLOW_3RD_STATE_FOR_USER);
     }
 
 protected:
-    int m_style;
-
     virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) { wxFAIL; }
 
     virtual wxCheckBoxState DoGet3StateValue() const

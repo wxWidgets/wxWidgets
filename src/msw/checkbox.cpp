@@ -143,8 +143,6 @@ bool wxCheckBox::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    m_style = style;
-
     long msStyle = WS_TABSTOP;
 
     if ( style & wxCHK_3STATE )

@@ -34,8 +34,6 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     if ( !wxCheckBoxBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    m_style = style;
-
     Rect bounds ;
     Str255 title ;
     
