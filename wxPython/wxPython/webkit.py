@@ -23,5 +23,22 @@ wxWebKitNameStr = wx.webkit.WebKitNameStr
 wxWebKitCtrl = wx.webkit.WebKitCtrl
 wxWebKitCtrlPtr = wx.webkit.WebKitCtrlPtr
 wxPreWebKitCtrl = wx.webkit.PreWebKitCtrl
+wxWEBKIT_STATE_START = wx.webkit.WEBKIT_STATE_START
+wxWEBKIT_STATE_NEGOTIATING = wx.webkit.WEBKIT_STATE_NEGOTIATING
+wxWEBKIT_STATE_REDIRECTING = wx.webkit.WEBKIT_STATE_REDIRECTING
+wxWEBKIT_STATE_TRANSFERRING = wx.webkit.WEBKIT_STATE_TRANSFERRING
+wxWEBKIT_STATE_STOP = wx.webkit.WEBKIT_STATE_STOP
+wxWEBKIT_STATE_FAILED = wx.webkit.WEBKIT_STATE_FAILED
+wxEVT_WEBKIT_STATE_CHANGED = wx.webkit.wxEVT_WEBKIT_STATE_CHANGED
+wxWebKitStateChangedEvent = wx.webkit.WebKitStateChangedEvent
+wxWebKitStateChangedEventPtr = wx.webkit.WebKitStateChangedEventPtr
+
+
+d = globals()
+for k, v in wx.webkit.__dict__.iteritems():
+    if k.startswith('EVT'):
+        d[k] = v
+del d, k, v
+
 
 
