@@ -233,19 +233,16 @@ bool wxSpinButton::MSWCommand(WXUINT cmd, WXWORD id)
   return FALSE;
 }
 
-bool wxSpinButton::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
+bool wxSpinButton::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM* result)
 {
 	NMHDR* hdr1 = (NMHDR*) lParam;
 	switch ( hdr1->code )
 	{
-/* We don't process this message, currently */
+        /* We don't process this message, currently */
 		case UDN_DELTAPOS:
-		{
-			return wxControl::MSWNotify(wParam, lParam);
-			break;
-		}
+
 		default :
-			return wxControl::MSWNotify(wParam, lParam);
+			return wxControl::MSWNotify(wParam, lParam, result);
 			break;
 	}
 /*

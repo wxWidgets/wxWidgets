@@ -376,12 +376,19 @@ LRESULT WINAPI ibDefWindowProc( HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lPa
                     cx = GetSystemMetrics( SM_CXFRAME ) ;
                     cy = GetSystemMetrics( SM_CYFRAME ) ;
                 }
+                else if (TestWinStyle(hWnd, WS_BORDER ))
+                {
+                    cx = GetSystemMetrics( SM_CXBORDER ) ;
+                    cy = GetSystemMetrics( SM_CYBORDER ) ;
+                }
                 else
-                    if (TestWinStyle(hWnd, WS_BORDER ))
-                    {
-                        cx = GetSystemMetrics( SM_CXBORDER ) ;
-                        cy = GetSystemMetrics( SM_CYBORDER ) ;
-                    }
+                {
+                    // VZ: I don't know what should be here, but the vars must
+                    //     be inited!
+                    wxFAIL_MSG("don't know how to initialize cx, cy");
+
+                    cx = cy = 0;
+                }
                                 
                 GetIconRect( hWnd, &rcMenu ) ;
                 GetMinButtonRect( hWnd, &rcMin ) ;
@@ -865,7 +872,8 @@ BOOL PASCAL DrawCaption( HDC hDC, HWND hWnd, LPRECT lprc,
         int            cy ;
         SIZE           Size ;
         
-        if ((lpsz = (char*)GlobalAllocPtr( GHND, ui + 2 )))
+        lpsz = (char*)GlobalAllocPtr( GHND, ui + 2 );
+        if (lpsz)
         {
             UINT    nBkMode ;
 
@@ -1074,7 +1082,8 @@ BOOL PASCAL DoMenu( HWND hWnd )
     if (!TestWinStyle(hWnd, WS_SYSMENU))
         return FALSE ;
     
-    if ((hDC = GetWindowDC( hWnd )))
+    hDC = GetWindowDC( hWnd );
+    if (hDC)
     {
         // Invert the icon
         //

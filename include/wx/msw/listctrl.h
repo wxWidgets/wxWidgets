@@ -418,8 +418,8 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   void Command(wxCommandEvent& event) { ProcessCommand(event); };
 
   // IMPLEMENTATION
-  bool MSWCommand(WXUINT param, WXWORD id);
-  bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+  virtual bool MSWCommand(WXUINT param, WXWORD id);
+  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
 
   // Recreate window - seems to be necessary when changing a style.
   void RecreateWindow(void);
@@ -442,11 +442,9 @@ protected:
 
 };
 
-class WXDLLEXPORT wxListEvent: public wxCommandEvent
+class WXDLLEXPORT wxListEvent : public wxNotifyEvent
 {
-  DECLARE_DYNAMIC_CLASS(wxListEvent)
-
- public:
+public:
   wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
   int           m_code;
@@ -457,6 +455,8 @@ class WXDLLEXPORT wxListEvent: public wxCommandEvent
   wxPoint       m_pointDrag;
 
   wxListItem    m_item;
+
+  DECLARE_DYNAMIC_CLASS(wxListEvent)
 };
 
 typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);

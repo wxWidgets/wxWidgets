@@ -81,8 +81,8 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
   bool Realize() { return CreateTools(); };
 
   // IMPLEMENTATION
-  bool MSWCommand(WXUINT param, WXWORD id);
-  bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+  virtual bool MSWCommand(WXUINT param, WXWORD id);
+  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
 
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);

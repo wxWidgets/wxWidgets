@@ -353,11 +353,13 @@ extern void WXDLLEXPORT wxSetCursor(const wxCursor& cursor);
 
 class WXDLLEXPORT wxResourceCache: public wxList
 {
-  DECLARE_DYNAMIC_CLASS(wxResourceCache)
- public:
-   wxResourceCache();
-   wxResourceCache(const unsigned int the_key_type);
-   ~wxResourceCache();
+public:
+    wxResourceCache() { }
+    wxResourceCache(const unsigned int keyType) : wxList(keyType) { }
+    ~wxResourceCache();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxResourceCache)
 };
 
 #endif

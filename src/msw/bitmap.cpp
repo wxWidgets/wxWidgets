@@ -739,35 +739,35 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
 bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette)
 {
 #if wxUSE_XPM_IN_MSW
-      HDC     dc = NULL;
-
-      Visual *visual = NULL;
-      XImage  ximage;
-
-      dc = CreateCompatibleDC(NULL);
-      if (dc)
-      {
+    HDC     dc = NULL;
+    
+    XImage  ximage;
+    
+    dc = CreateCompatibleDC(NULL);
+    if (dc)
+    {
         if (SelectObject(dc, (HBITMAP) M_BITMAPHANDLERDATA->m_hBitmap))
-        { /* for following SetPixel */
-          /* fill the XImage struct 'by hand' */
-    ximage.width = M_BITMAPHANDLERDATA->m_width; 
-     ximage.height = M_BITMAPHANDLERDATA->m_height;
-    ximage.depth = M_BITMAPHANDLERDATA->m_depth; 
-     ximage.bitmap = (void *)M_BITMAPHANDLERDATA->m_hBitmap;
-    int errorStatus = XpmWriteFileFromImage(&dc, WXSTRINGCAST name,
-              &ximage, (XImage *) NULL, (XpmAttributes *) NULL);
-
-          if (dc)
-      DeleteDC(dc);
-
-    if (errorStatus == XpmSuccess)
-      return TRUE;    /* no error */
-    else
-      return FALSE;
+        {
+            /* for following SetPixel */
+            /* fill the XImage struct 'by hand' */
+            ximage.width = M_BITMAPHANDLERDATA->m_width; 
+            ximage.height = M_BITMAPHANDLERDATA->m_height;
+            ximage.depth = M_BITMAPHANDLERDATA->m_depth; 
+            ximage.bitmap = (HBITMAP)M_BITMAPHANDLERDATA->m_hBitmap;
+            int errorStatus = XpmWriteFileFromImage(&dc, WXSTRINGCAST name,
+                &ximage, (XImage *) NULL, (XpmAttributes *) NULL);
+            
+            if (dc)
+                DeleteDC(dc);
+            
+            if (errorStatus == XpmSuccess)
+                return TRUE;    /* no error */
+            else
+                return FALSE;
         } else return FALSE;
-      } else return FALSE;
+    } else return FALSE;
 #else
-  return FALSE;
+    return FALSE;
 #endif
 }
 

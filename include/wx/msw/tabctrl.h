@@ -122,8 +122,9 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
     void OnKillFocus(wxFocusEvent& event) { Default() ; }
 
     void Command(wxCommandEvent& event);
-    bool MSWCommand(WXUINT param, WXWORD id);
-    bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
+    virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
 
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);

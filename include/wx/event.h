@@ -345,6 +345,26 @@ class WXDLLEXPORT wxCommandEvent: public wxEvent
   wxClientData*     m_clientObject;  // Arbitrary client object
 };
 
+// this class adds a possibility to react (from the user) code to a control
+// notification: allow or veto the operation being reported.
+class WXDLLEXPORT wxNotifyEvent : public wxCommandEvent
+{
+public:
+    wxNotifyEvent(wxEventType commandType = wxEVT_NULL, int id = 0)
+                : wxCommandEvent(commandType, id) { m_bAllow = TRUE; }
+
+    // veto the operation (by default it's allowed)
+    void Veto() { m_bAllow = FALSE; }
+
+    // for implementation code only: is the operation allowed?
+    bool IsAllowed() const { return m_bAllow; }
+
+private:
+    bool m_bAllow;
+
+    DECLARE_DYNAMIC_CLASS(wxCommandEvent)
+};
+
 // Scroll event class
 /*
  wxEVT_SCROLL_TOP

@@ -169,6 +169,10 @@ public:
  ~wxTempFile();
 
 private:
+  // no copy ctor/assignment operator
+  wxTempFile(const wxTempFile&);
+  wxTempFile& operator=(const wxTempFile&);
+
   wxString  m_strName,  // name of the file to replace in Commit()
             m_strTemp;  // temporary file name
   wxFile    m_file;     // the temporary file

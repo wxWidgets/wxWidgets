@@ -20,6 +20,12 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_WX_RESOURCES
+
+#ifdef _MSC_VER
+    #pragma warning(disable:4706)   // assignment within conditional expression
+#endif // VC++
+
 #ifndef WX_PRECOMP
 #include "wx/defs.h"
 #include "wx/setup.h"
@@ -58,8 +64,6 @@
 #include "wx/validate.h"
 
 #include "wx/log.h"
-
-#if wxUSE_WX_RESOURCES
 
 #include <ctype.h>
 #include <math.h>
@@ -2852,5 +2856,9 @@ wxControl *wxWindow::CreateItem(const wxItemResource *resource, const wxItemReso
     table = wxDefaultResourceTable;
   return table->CreateItem((wxWindow *)this, resource, parentResource);
 }
+
+#ifdef _MSC_VER
+    #pragma warning(default:4706)   // assignment within conditional expression
+#endif // VC++
 
 #endif // wxUSE_WX_RESOURCES

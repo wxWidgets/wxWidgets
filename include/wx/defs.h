@@ -41,9 +41,10 @@
 #endif
 #endif
 
-// Eliminate double/float warnings
+// suppress some Visual C++ warnings
 #ifdef _MSC_VER
-# pragma warning(disable:4244)
+#   pragma warning(disable:4244)    // cobversion from double to float
+#   pragma warning(disable:4100)    // unreferenced formal parameter
 #endif
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -490,10 +490,16 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     tvIns.item.mask = mask;
 
-    HTREEITEM id = (HTREEITEM) TreeView_InsertItem(wxhWnd, &tvIns);
+    HTREEITEM id = TreeView_InsertItem(wxhWnd, &tvIns);
     if ( id == 0 )
     {
         wxLogLastError("TreeView_InsertItem");
+    }
+
+    if ( data != NULL )
+    {
+        // associate the application tree item with Win32 tree item handle
+        data->SetId((WXHTREEITEM)id);
     }
 
     return wxTreeItemId((WXHTREEITEM)id);
@@ -763,7 +769,7 @@ bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 }
 
 // process WM_NOTIFY Windows message
-bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
+bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
 {
     wxTreeEvent event(wxEVT_NULL, m_windowId);
     wxEventType eventType = wxEVT_NULL;
@@ -889,36 +895,28 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
             }
 
         default:
-            return wxControl::MSWNotify(wParam, lParam);
+            return wxControl::MSWNotify(wParam, lParam, result);
     }
 
     event.SetEventObject(this);
     event.SetEventType(eventType);
 
-    bool rc = GetEventHandler()->ProcessEvent(event);
+    bool processed = GetEventHandler()->ProcessEvent(event);
 
     // post processing
-    switch ( hdr->code )
+    if ( hdr->code == TVN_DELETEITEM )
     {
         // NB: we might process this message using wxWindows event tables, but
         //     due to overhead of wxWin event system we prefer to do it here
         //     (otherwise deleting a tree with many items is just too slow)
-        case TVN_DELETEITEM:
-            {
-                NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
-                wxTreeItemData *data = (wxTreeItemData *)tv->itemOld.lParam;
-                delete data; // may be NULL, ok
-            }
-            break;
-
-        case TVN_ITEMEXPANDING:
-            // if user called Veto(), don't allow expansion/collapse by
-            // returning TRUE from here
-            rc = event.m_code != 0;
-            break;
+        NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
+        wxTreeItemData *data = (wxTreeItemData *)tv->itemOld.lParam;
+        delete data; // may be NULL, ok
     }
 
-    return rc;
+    *result = !event.IsAllowed();
+
+    return processed;
 }
 
 // ----------------------------------------------------------------------------
@@ -928,7 +926,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxCommandEvent)
 
 wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
-           : wxCommandEvent(commandType, id)
+           : wxNotifyEvent(commandType, id)
 {
     m_code = 0;
     m_itemOld = 0;

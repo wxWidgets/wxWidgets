@@ -44,12 +44,16 @@ WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
 // ----------------------------------------------------------------------------
 // notebook events
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxNotebookEvent : public wxCommandEvent
+class WXDLLEXPORT wxNotebookEvent : public wxNotifyEvent
 {
 public:
   wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                   int nSel = -1, int nOldSel = -1)
-    : wxCommandEvent(commandType, id) { m_nSel = nSel; m_nOldSel = nOldSel; }
+  : wxNotifyEvent(commandType, id)
+  {
+      m_nSel = nSel;
+      m_nOldSel = nOldSel;
+  }
 
   // accessors
     // the currently selected page (-1 if none)
@@ -173,7 +177,7 @@ public:
   // base class virtuals
   // -------------------
   virtual void Command(wxCommandEvent& event);
-  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
   virtual void SetConstraintSizes(bool recurse = TRUE);
   virtual bool DoPhase(int nPhase);
 

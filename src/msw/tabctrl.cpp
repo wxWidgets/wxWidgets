@@ -146,7 +146,7 @@ bool wxTabCtrl::MSWCommand(WXUINT cmd, WXWORD id)
   return FALSE;
 }
 
-bool wxTabCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
+bool wxTabCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
 {
 	wxTabEvent event(wxEVT_NULL, m_windowId);
 	wxEventType eventType = wxEVT_NULL;
@@ -154,37 +154,29 @@ bool wxTabCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 	switch ( hdr1->code )
 	{
 		case TCN_SELCHANGE:
-		{
 			eventType = wxEVT_COMMAND_TAB_SEL_CHANGED;
-			event.SetInt( (int) LOWORD(wParam) ) ;
 			break;
-		}
+
 		case TCN_SELCHANGING:
-		{
 			eventType = wxEVT_COMMAND_TAB_SEL_CHANGING;
-			event.SetInt( (int) LOWORD(wParam) ) ;
 			break;
-		}
+
         case TTN_NEEDTEXT:
         {
             // TODO
 //            if (tool->m_shortHelpString != "")
 //                ttText->lpszText = (char *) (const char *)tool->m_shortHelpString;
-			return wxControl::MSWNotify(wParam, lParam);
-            break;
         }
 
 		default :
-			return wxControl::MSWNotify(wParam, lParam);
-			break;
+			return wxControl::MSWNotify(wParam, lParam, result);
 	}
 
 	event.SetEventObject( this );
 	event.SetEventType(eventType);
+	event.SetInt( (int) LOWORD(wParam) ) ;
 
-	if ( !ProcessEvent(event) )
-		return FALSE;
-  	return TRUE;
+	return ProcessEvent(event);
 }
 
 // Responds to colour changes, and passes event on to children.

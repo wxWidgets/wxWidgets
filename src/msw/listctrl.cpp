@@ -1111,22 +1111,31 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
   else return FALSE;
 }
 
-bool wxListCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
+bool wxListCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
 {
   wxListEvent event(wxEVT_NULL, m_windowId);
   wxEventType eventType = wxEVT_NULL;
   NMHDR *hdr1 = (NMHDR *) lParam;
   switch ( hdr1->code )
   {
+    case LVN_BEGINRDRAG:
+        eventType = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
+        // fall through
+
     case LVN_BEGINDRAG:
-    {
-      eventType = wxEVT_COMMAND_LIST_BEGIN_DRAG;
-      NM_LISTVIEW *hdr = (NM_LISTVIEW *)lParam;
-      event.m_itemIndex = hdr->iItem;
-      event.m_pointDrag.x = hdr->ptAction.x;
-      event.m_pointDrag.y = hdr->ptAction.y;
-      break;
-    }
+        if ( eventType == wxEVT_NULL )
+        {
+            eventType = wxEVT_COMMAND_LIST_BEGIN_DRAG;
+        }
+
+        {
+          NM_LISTVIEW *hdr = (NM_LISTVIEW *)lParam;
+          event.m_itemIndex = hdr->iItem;
+          event.m_pointDrag.x = hdr->ptAction.x;
+          event.m_pointDrag.y = hdr->ptAction.y;
+        }
+        break;
+
     case LVN_BEGINLABELEDIT:
     {
       eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
@@ -1134,15 +1143,7 @@ bool wxListCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
       wxConvertFromMSWListItem(this, event.m_item, info->item, (HWND) GetHWND());
       break;
     }
-    case LVN_BEGINRDRAG:
-    {
-      eventType = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
-      NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
-      event.m_itemIndex = hdr->iItem;
-      event.m_pointDrag.x = hdr->ptAction.x;
-      event.m_pointDrag.y = hdr->ptAction.y;
-      break;
-    }
+
     case LVN_COLUMNCLICK:
     {
       eventType = wxEVT_COMMAND_LIST_COL_CLICK;
@@ -1228,8 +1229,7 @@ bool wxListCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
     }
 
     default :
-      return wxControl::MSWNotify(wParam, lParam);
-      break;
+      return wxControl::MSWNotify(wParam, lParam, result);
   }
 
   event.SetEventObject( this );
@@ -1252,7 +1252,9 @@ bool wxListCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 //    wxConvertToMSWListItem(this, event.m_item, info->item);
   }
 
-    return TRUE;
+  *result = !event.IsAllowed();
+
+  return TRUE;
 }
 
 char *wxListCtrl::AddPool(const wxString& str)
@@ -1430,8 +1432,8 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
 // List event
 IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxCommandEvent)
 
-wxListEvent::wxListEvent(wxEventType commandType, int id):
-  wxCommandEvent(commandType, id)
+wxListEvent::wxListEvent(wxEventType commandType, int id)
+           : wxNotifyEvent(commandType, id)
 {
   m_code = 0;
   m_itemIndex = 0;

@@ -358,6 +358,11 @@ wxDataObject::~wxDataObject()
 const char *wxDataObject::GetFormatName(wxDataFormat format)
 {
 #ifdef __WXDEBUG__
+  // case 'xxx' is not a valid value for switch of enum 'wxDataFormat'
+  #ifdef _MSC_VER
+    #pragma warning(disable:4063)
+  #endif // VC++
+
   static char s_szBuf[128];
   switch ( format ) {
     case CF_TEXT:         return "CF_TEXT";
@@ -380,9 +385,14 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
       sprintf(s_szBuf, "clipboard format %d (unknown)", format);
       return s_szBuf;
   }
- #else
+
+  #ifdef _MSC_VER
+    #pragma warning(default:4063)
+  #endif // VC++
+
+#else // !Debug
   return "";
-#endif
+#endif // Debug
 }
 
 // ----------------------------------------------------------------------------

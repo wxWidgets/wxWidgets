@@ -595,8 +595,6 @@ long wxMDIParentFrame::MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARA
 
 bool wxMDIParentFrame::MSWProcessMessage(WXMSG* msg)
 {
-  MSG *pMsg = (MSG *)msg;
-
   if ((m_currentChild != (wxWindow *)NULL) && (m_currentChild->GetHWND() != (WXHWND) NULL) && m_currentChild->MSWProcessMessage(msg))
      return TRUE;
 	

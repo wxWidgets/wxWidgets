@@ -240,6 +240,12 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
       control_width = longest + cx*5;
     }
   }
+  else
+  {
+    // If non-default width...
+    control_width = w1;
+  }
+
 
   // Choice drop-down list depends on number of items (limited to 10)
   if (h1 <= 0)
@@ -249,10 +255,6 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
     else
         h1 = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*(wxMin(10, m_noStrings) + 1);
   }
-
-  // If non-default width...
-  if (w1 >= 0)
-    control_width = w1;
 
   control_height = h1;
 

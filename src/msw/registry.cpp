@@ -144,7 +144,7 @@ wxRegKey::StdKey wxRegKey::ExtractKeyName(wxString& strKey)
 {
   wxString strRoot = strKey.Left(REG_SEPARATOR);
 
-  HKEY hRootKey;
+  HKEY hRootKey = 0;
   size_t ui;
   for ( ui = 0; ui < nStdKeys; ui++ ) {
     if ( strRoot.CmpNoCase(aStdKeys[ui].szName) == 0 || 

@@ -185,7 +185,8 @@ long wxControl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
   return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
 
-bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
+bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam,
+                          WXLPARAM* WXUNUSED(result))
 {
 #if defined(__WIN95__)
 	wxCommandEvent event(wxEVT_NULL, m_windowId);
@@ -235,18 +236,18 @@ bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 			break;
 		}
 */
-		default :
+		default:
 			return FALSE;
-			break;
 	}
+
     event.SetEventType(eventType);
 	event.SetEventObject(this);
 
 	if ( !GetEventHandler()->ProcessEvent(event) )
 		return FALSE;
 	return TRUE;
-#else
-  return FALSE;
+#else   // !Win95
+    return FALSE;
 #endif
 }
 

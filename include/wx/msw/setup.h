@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SETUP_H_
@@ -44,23 +44,23 @@
 #define wxUSE_HELP        1
                                 // 0 for no help facility
 #define wxUSE_RESOURCES   1
-                        	// 0 for no wxGetResource/wxWriteResource
+                                // 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1
                                 // 0 for no window layout constraint system
-                                
+
 #define wxUSE_TIMEDATE    1
                                 // 0 for no wxTime/wxDate classes
-                                
+
 #define wxUSE_CLIPBOARD   1
-                        	// 0 for no clipboard functions
+                                // 0 for no clipboard functions
 #define wxUSE_SPLINES     1
-                            	// 0 for no splines
+                                    // 0 for no splines
 #define wxUSE_XFIG_SPLINE_CODE  1
-                           	// 1 for XFIG spline code, 0 for AIAI spline code.
+                                   // 1 for XFIG spline code, 0 for AIAI spline code.
 // AIAI spline code is slower, but freer of copyright issues.
 
 #define wxUSE_DRAG_AND_DROP 1
-                        	// 0 for no drag and drop
+                                // 0 for no drag and drop
 
 #define wxUSE_TOOLBAR       1
                                     // Define 1 to use toolbar classes
@@ -79,7 +79,7 @@
 #define wxUSE_SCROLLBAR   1
                                     // Define 1 to compile contributed wxScrollBar class
 #define wxUSE_XPM_IN_X    1
-#define wxUSE_XPM_IN_MSW  0
+#define wxUSE_XPM_IN_MSW  1
                                     // Define 1 to support the XPM package in wxBitmap,
                                     // separated by platform. If 1, you must link in
                                     // the XPM library to your applications.
@@ -103,7 +103,7 @@
                                   // symbol if 1?
 
 #define HAVE_SOCKET             1
-                                  // Use WinSock if 1                                 
+                                  // Use WinSock if 1
 #define wxUSE_DOC_VIEW_ARCHITECTURE 1
                                   // Set to 0 to disable document/view architecture
 #define wxUSE_PRINTING_ARCHITECTURE  1
@@ -114,12 +114,12 @@
 #define wxUSE_DYNAMIC_CLASSES     1
                                   // If 1, enables provision of run-time type information.
                                   // NOW MANDATORY: don't change.
-#define wxUSE_MEMORY_TRACING      1
+#define wxUSE_MEMORY_TRACING      0
                                   // If 1, enables debugging versions of wxObject::new and
                                   // wxObject::delete *IF* __WXDEBUG__ is also defined.
                                   // WARNING: this code may not work with all architectures, especially
                                   // if alignment is an issue.
-#define wxUSE_DEBUG_CONTEXT       1
+#define wxUSE_DEBUG_CONTEXT       0
                                   // If 1, enables wxDebugContext, for
                                   // writing error messages to file, etc. 
                                   // If __WXDEBUG__ is not defined, will still use
@@ -128,7 +128,7 @@
                                   // since you may well need to output
                                   // an error log in a production
                                   // version (or non-debugging beta)
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 1
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
                                   // In debug mode, cause new and delete to be redefined globally.
                                   // If this causes problems (e.g. link errors), set this to 0.
 
@@ -162,10 +162,10 @@
  *
  */
 
-#define wxUSE_APPLE_IEEE	  1
-				// if enabled, the float codec written by Apple
-				// will be used to write, in a portable way,
-				// float on the disk
+#define wxUSE_APPLE_IEEE          1
+                                // if enabled, the float codec written by Apple
+                                // will be used to write, in a portable way,
+                                // float on the disk
 
 /*
  * MS Windows/Windows NT
@@ -218,9 +218,9 @@
 
 #define wxUSE_TYPEDEFS               0
                                     // Use typedefs not classes for wxPoint
-				    // and others, to reduce overhead and avoid
-				    // MS C7 memory bug. Bounds checker
-				    // complains about deallocating
+                                    // and others, to reduce overhead and avoid
+                                    // MS C7 memory bug. Bounds checker
+                                    // complains about deallocating
                                     // arrays of wxPoints if wxPoint is a class.
 
 #if (!defined(WIN32) && !defined(__WIN32__)) || defined(__GNUWIN32__) || defined(__BORLANDC__)

@@ -37,13 +37,27 @@ class wxNotebookEvent : public wxCommandEvent
 public:
   wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                   int nSel = -1, int nOldSel = -1)
-    : wxCommandEvent(commandType, id) { m_nSel = nSel; m_nOldSel = nOldSel; }
+  : wxCommandEvent(commandType, id)
+  {
+      m_bAllow = TRUE;
+      m_nSel = nSel;
+      m_nOldSel = nOldSel;
+  }
 
   // accessors
   int GetSelection() const { return m_nSel; }
   int GetOldSelection() const { return m_nOldSel; }
 
+  // for wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING event this method may be called
+  // to disallow the page change
+  void Veto() { m_bAllow = FALSE; }
+
+  // implementation: for wxNotebook usage only
+  bool Allowed() const { return m_bAllow; }
+
 private:
+  bool m_bAllow;
+
   int m_nSel,     // currently selected page
       m_nOldSel;  // previously selected page
 

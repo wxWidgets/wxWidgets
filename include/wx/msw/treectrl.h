@@ -410,8 +410,8 @@ public:
     // implementation
     // --------------
     void Command(wxCommandEvent& event) { ProcessCommand(event); };
-    bool MSWCommand(WXUINT param, WXWORD id);
-    bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
+    virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
 
 protected:
     // SetImageList helper
@@ -448,7 +448,7 @@ private:
 // NB: note that not all accessors make sense for all events, see the event
 //     descriptions below
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxTreeEvent : public wxCommandEvent
+class WXDLLEXPORT wxTreeEvent : public wxNotifyEvent
 {
 friend wxTreeCtrl;
 public:
@@ -469,10 +469,6 @@ public:
 
         // keyboard code (for wxEVT_COMMAND_TREE_KEY_DOWN only)
     int GetCode() const { return m_code; }
-
-    // set return code for wxEVT_COMMAND_TREE_ITEM_{EXPAND|COLLAPS}ING events
-        // call this to forbid the change in item status
-    void Veto() { m_code = TRUE; }
 
 private:
     // @@ we could save some space by using union here

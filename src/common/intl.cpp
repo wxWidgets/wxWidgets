@@ -275,10 +275,8 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   // examine header
   bool bValid = (size_t)nSize > sizeof(wxMsgCatalogHeader);
   
-  wxMsgCatalogHeader *pHeader;
+  wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)m_pData;
   if ( bValid ) {
-    pHeader = (wxMsgCatalogHeader *)m_pData;
-
     // we'll have to swap all the integers if it's true
     m_bSwapped = pHeader->magic == MSGCATALOG_MAGIC_SW;
 

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -242,7 +242,7 @@ void wxDC::SetPalette(const wxPalette& palette)
       m_oldPalette = 0;
     }
 
-	return;
+    return;
   }
     
   if (m_palette.Ok() && m_palette.GetHPALETTE())
@@ -474,28 +474,28 @@ void wxDC::DrawRectangle(long x, long y, long width, long height)
   do_pen = m_pen.Ok() && m_pen.GetStyle() != wxTRANSPARENT;
 
   if (do_brush) {
-	 HPEN orig_pen = NULL;
+     HPEN orig_pen = NULL;
 
-	 if (do_pen || !m_pen.Ok())
-		orig_pen = (HPEN) ::SelectObject((HDC) m_hDC, (HPEN) ::GetStockObject(NULL_PEN));
+     if (do_pen || !m_pen.Ok())
+        orig_pen = (HPEN) ::SelectObject((HDC) m_hDC, (HPEN) ::GetStockObject(NULL_PEN));
 
-	 (void)Rectangle((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y),
-		  XLOG2DEV(x2) + 1, YLOG2DEV(y2) + 1);
+     (void)Rectangle((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y),
+          XLOG2DEV(x2) + 1, YLOG2DEV(y2) + 1);
 
-	 if (do_pen || !m_pen.Ok())
-		::SelectObject((HDC) m_hDC , orig_pen);
+     if (do_pen || !m_pen.Ok())
+        ::SelectObject((HDC) m_hDC , orig_pen);
   }
   if (do_pen) {
-	 HBRUSH orig_brush = NULL;
+     HBRUSH orig_brush = NULL;
 
-	 if (do_brush || !m_brush.Ok())
-		orig_brush = (HBRUSH) ::SelectObject((HDC) m_hDC, (HBRUSH) ::GetStockObject(NULL_BRUSH));
+     if (do_brush || !m_brush.Ok())
+        orig_brush = (HBRUSH) ::SelectObject((HDC) m_hDC, (HBRUSH) ::GetStockObject(NULL_BRUSH));
 
-	 (void)Rectangle((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y),
-		  XLOG2DEV(x2), YLOG2DEV(y2));
+     (void)Rectangle((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y),
+          XLOG2DEV(x2), YLOG2DEV(y2));
 
-	 if (do_brush || !m_brush.Ok())
-		::SelectObject((HDC) m_hDC, orig_brush);
+     if (do_brush || !m_brush.Ok())
+        ::SelectObject((HDC) m_hDC, orig_brush);
   }
 #else
   (void)Rectangle((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
@@ -563,16 +563,16 @@ void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
   if (m_signY > 0)
   {
     (void)Pie((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2)+1, YLOG2DEV(y2)+1,
-	    rx1, ry1, rx2, ry2);
+        rx1, ry1, rx2, ry2);
   }
   else
   {
     (void)Pie((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y)-1, XLOG2DEV(x2)+1, YLOG2DEV(y2),
-	    rx1, ry1-1, rx2, ry2-1);
+        rx1, ry1-1, rx2, ry2-1);
   }
   ::SelectObject((HDC) m_hDC, orig_pen);
   (void)Arc((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2),
-	  rx1, ry1, rx2, ry2);
+      rx1, ry1, rx2, ry2);
 
   CalcBoundingBox(x, y);
   CalcBoundingBox(x2, y2);
@@ -692,7 +692,7 @@ void wxDC::DrawText(const wxString& text, long x, long y, bool use16bit)
   if (m_textForegroundColour.Ok())
     SetTextColor((HDC) m_hDC, m_textForegroundColour.GetPixel() ) ;
 
-  DWORD old_background;
+  DWORD old_background = 0;
   if (m_textBackgroundColour.Ok())
   {
     old_background = SetBkColor((HDC) m_hDC, m_textBackgroundColour.GetPixel() ) ;
@@ -1007,42 +1007,42 @@ void wxDC::SetDeviceOrigin(long x, long y)
 
 long wxDC::DeviceToLogicalX(long x) const
 {
-	return (long) (((x) - m_deviceOriginX)/(m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX) - m_logicalOriginX) ;
+    return (long) (((x) - m_deviceOriginX)/(m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX) - m_logicalOriginX) ;
 }
 
 long wxDC::DeviceToLogicalXRel(long x) const
 {
-	return (long) ((x)/(m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX)) ;
+    return (long) ((x)/(m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX)) ;
 }
 
 long wxDC::DeviceToLogicalY(long y) const
 {
-   	return (long) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY) - m_logicalOriginY) ;
+    return (long) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY) - m_logicalOriginY) ;
 }
 
 long wxDC::DeviceToLogicalYRel(long y) const
 {
-	return (long) ((y)/(m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY)) ;
+    return (long) ((y)/(m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY)) ;
 }
 
 long wxDC::LogicalToDeviceX(long x) const
 {
-	return (long) (floor((x) - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX + m_deviceOriginX) ;
+    return (long) (floor((x) - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX + m_deviceOriginX) ;
 }
 
 long wxDC::LogicalToDeviceXRel(long x) const
 {
-	return (long) (floor(x)*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX) ;
+    return (long) (floor(x)*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX) ;
 }
 
 long wxDC::LogicalToDeviceY(long y) const
 {
-	return (long) (floor((y) - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY + m_deviceOriginY);
+    return (long) (floor((y) - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY + m_deviceOriginY);
 }
 
 long wxDC::LogicalToDeviceYRel(long y) const
 {
-	return (long) (floor(y)*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY) ;
+    return (long) (floor(y)*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY) ;
 }
 
 // This group of functions may not do any conversion
@@ -1051,50 +1051,50 @@ long wxDC::LogicalToDeviceYRel(long y) const
 
 long wxDC::ImplDeviceToLogicalX(long x) const
 {
-//	return (m_scaleGDI ?  x :  DeviceToLogicalX(x));
-	return x;
+//  return (m_scaleGDI ?  x :  DeviceToLogicalX(x));
+    return x;
 }
 
 long wxDC::ImplDeviceToLogicalY(long y) const
 {
-//	return (m_scaleGDI ?  y :  DeviceToLogicalY(y));
-	return y;
+//  return (m_scaleGDI ?  y :  DeviceToLogicalY(y));
+    return y;
 }
 
 long wxDC::ImplDeviceToLogicalXRel(long x) const
 {
-//	return (m_scaleGDI ?  x :  DeviceToLogicalXRel(x));
-	return x;
+//  return (m_scaleGDI ?  x :  DeviceToLogicalXRel(x));
+    return x;
 }
 
 long wxDC::ImplDeviceToLogicalYRel(long y) const
 {
-//	return (m_scaleGDI ?  y :  DeviceToLogicalYRel(y));
-	return y;
+//  return (m_scaleGDI ?  y :  DeviceToLogicalYRel(y));
+    return y;
 }
 
 long wxDC::ImplLogicalToDeviceX(long x) const
 {
-//	return (m_scaleGDI ?  (floor(double(x))) :  LogicalToDeviceX(x));
-	return x;
+//  return (m_scaleGDI ?  (floor(double(x))) :  LogicalToDeviceX(x));
+    return x;
 }
 
 long wxDC::ImplLogicalToDeviceY(long y) const
 {
-//	return (m_scaleGDI ?  (floor(double(y))) :  LogicalToDeviceY(y));
-	return y;
+//  return (m_scaleGDI ?  (floor(double(y))) :  LogicalToDeviceY(y));
+    return y;
 }
 
 long wxDC::ImplLogicalToDeviceXRel(long x) const
 {
-//	return (m_scaleGDI ?  (floor(double(x))) :  LogicalToDeviceXRel(x));
-	return x;
+//  return (m_scaleGDI ?  (floor(double(x))) :  LogicalToDeviceXRel(x));
+    return x;
 }
 
 long wxDC::ImplLogicalToDeviceYRel(long y) const
 {
-//	return (m_scaleGDI ?  (floor(double(y))) :  LogicalToDeviceYRel(y));
-	return y;
+//  return (m_scaleGDI ?  (floor(double(y))) :  LogicalToDeviceYRel(y));
+    return y;
 }
 
 bool wxDC::Blit(long xdest, long ydest, long width, long height,
@@ -1111,11 +1111,11 @@ bool wxDC::Blit(long xdest, long ydest, long width, long height,
   COLORREF old_background = ::GetBkColor((HDC)m_hDC);
   if (m_textForegroundColour.Ok())
   {
-	::SetTextColor((HDC) m_hDC, m_textForegroundColour.GetPixel() ) ;
+    ::SetTextColor((HDC) m_hDC, m_textForegroundColour.GetPixel() ) ;
   }
   if (m_textBackgroundColour.Ok())
   {
-	::SetBkColor((HDC) m_hDC, m_textBackgroundColour.GetPixel() ) ;
+    ::SetBkColor((HDC) m_hDC, m_textBackgroundColour.GetPixel() ) ;
   }
 
   DWORD dwRop = rop == wxCOPY ? SRCCOPY :
@@ -1132,12 +1132,12 @@ bool wxDC::Blit(long xdest, long ydest, long width, long height,
                 rop == wxSRC_AND ? SRCAND :
                 SRCCOPY;
 
-  bool success;
+  bool success = TRUE;
   if (useMask && source->m_selectedBitmap.Ok() && source->m_selectedBitmap.GetMask())
   {
 
 #if 0 // __WIN32__
-	// Not implemented under Win95 (or maybe a specific device?)
+    // Not implemented under Win95 (or maybe a specific device?)
     if (MaskBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
             (HDC) source->m_hDC, xsrc1, ysrc1, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap(),
             0, 0, 0xAACC0020))
@@ -1149,116 +1149,116 @@ bool wxDC::Blit(long xdest, long ydest, long width, long height,
     {
         // Old code
 #if 0
-	    HDC dc_mask = CreateCompatibleDC((HDC) source->m_hDC);
-	    ::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
+        HDC dc_mask = CreateCompatibleDC((HDC) source->m_hDC);
+        ::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
         success = (BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
-					 dc_mask, xsrc1, ysrc1, 0x00220326 /* NOTSRCAND */) != 0);
+                     dc_mask, xsrc1, ysrc1, 0x00220326 /* NOTSRCAND */) != 0);
         success = (BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
-					 (HDC) source->m_hDC, xsrc1, ysrc1, SRCPAINT) != 0);
-	    ::SelectObject(dc_mask, 0);
-	    ::DeleteDC(dc_mask);
+                     (HDC) source->m_hDC, xsrc1, ysrc1, SRCPAINT) != 0);
+        ::SelectObject(dc_mask, 0);
+        ::DeleteDC(dc_mask);
 #endif
         // New code from Chris Breeze, 15/7/98
-		// Blit bitmap with mask
+        // Blit bitmap with mask
 
-		if (IsKindOf(CLASSINFO(wxPrinterDC)))
-		{
-			// If we are printing source colours are screen colours
-			// not printer colours and so we need copy the bitmap
-			// pixel by pixel.
-			RECT rect;
-			HDC dc_mask = ::CreateCompatibleDC((HDC) source->m_hDC);
-			HDC dc_src = (HDC) source->m_hDC;
+        if (IsKindOf(CLASSINFO(wxPrinterDC)))
+        {
+            // If we are printing source colours are screen colours
+            // not printer colours and so we need copy the bitmap
+            // pixel by pixel.
+            RECT rect;
+            HDC dc_mask = ::CreateCompatibleDC((HDC) source->m_hDC);
+            HDC dc_src = (HDC) source->m_hDC;
 
-			::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
-			for (int x = 0; x < width; x++)
-			{
-				for (int y = 0; y < height; y++)
-				{
-					COLORREF cref = ::GetPixel(dc_mask, x, y);
-					if (cref)
-					{
-						HBRUSH brush = ::CreateSolidBrush(::GetPixel(dc_src, x, y));
-						rect.left = xdest1 + x;	rect.right = rect.left + 1;
-						rect.top = ydest1 + y;	rect.bottom = rect.top + 1;
-						::FillRect((HDC) m_hDC, &rect, brush);
-						::DeleteObject(brush);
-					}
-				}
-			}
-			::SelectObject(dc_mask, 0);
-			::DeleteDC(dc_mask);
-		}
-		else
-		{
-			// create a temp buffer bitmap and DCs to access it and the mask
-			HDC dc_mask = ::CreateCompatibleDC((HDC) source->m_hDC);
-			HDC dc_buffer = ::CreateCompatibleDC((HDC) m_hDC);
-			HBITMAP buffer_bmap = ::CreateCompatibleBitmap((HDC) m_hDC, width, height);
-			::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
-			::SelectObject(dc_buffer, buffer_bmap);
+            ::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    COLORREF cref = ::GetPixel(dc_mask, x, y);
+                    if (cref)
+                    {
+                        HBRUSH brush = ::CreateSolidBrush(::GetPixel(dc_src, x, y));
+                        rect.left = xdest1 + x; rect.right = rect.left + 1;
+                        rect.top = ydest1 + y;  rect.bottom = rect.top + 1;
+                        ::FillRect((HDC) m_hDC, &rect, brush);
+                        ::DeleteObject(brush);
+                    }
+                }
+            }
+            ::SelectObject(dc_mask, 0);
+            ::DeleteDC(dc_mask);
+        }
+        else
+        {
+            // create a temp buffer bitmap and DCs to access it and the mask
+            HDC dc_mask = ::CreateCompatibleDC((HDC) source->m_hDC);
+            HDC dc_buffer = ::CreateCompatibleDC((HDC) m_hDC);
+            HBITMAP buffer_bmap = ::CreateCompatibleBitmap((HDC) m_hDC, width, height);
+            ::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
+            ::SelectObject(dc_buffer, buffer_bmap);
 
-			// copy dest to buffer
-			::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-				(HDC) m_hDC, xdest1, ydest1, SRCCOPY);
+            // copy dest to buffer
+            ::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
+                (HDC) m_hDC, xdest1, ydest1, SRCCOPY);
 
-			// copy src to buffer using selected raster op
-			::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-				(HDC) source->m_hDC, xsrc1, ysrc1, dwRop);
+            // copy src to buffer using selected raster op
+            ::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
+                (HDC) source->m_hDC, xsrc1, ysrc1, dwRop);
 
-			// set masked area in buffer to BLACK (pixel value 0)
-			COLORREF prevBkCol = ::SetBkColor((HDC) m_hDC, RGB(255, 255, 255));
-			COLORREF prevCol = ::SetTextColor((HDC) m_hDC, RGB(0, 0, 0));
-			::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-				dc_mask, xsrc1, ysrc1, SRCAND);
+            // set masked area in buffer to BLACK (pixel value 0)
+            COLORREF prevBkCol = ::SetBkColor((HDC) m_hDC, RGB(255, 255, 255));
+            COLORREF prevCol = ::SetTextColor((HDC) m_hDC, RGB(0, 0, 0));
+            ::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
+                dc_mask, xsrc1, ysrc1, SRCAND);
 
-			// set unmasked area in dest to BLACK
-			::SetBkColor((HDC) m_hDC, RGB(0, 0, 0));
-			::SetTextColor((HDC) m_hDC, RGB(255, 255, 255));
-			::BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
-				dc_mask, xsrc1, ysrc1, SRCAND);
-			::SetBkColor((HDC) m_hDC, prevBkCol);	// restore colours to original values
-			::SetTextColor((HDC) m_hDC, prevCol);
+            // set unmasked area in dest to BLACK
+            ::SetBkColor((HDC) m_hDC, RGB(0, 0, 0));
+            ::SetTextColor((HDC) m_hDC, RGB(255, 255, 255));
+            ::BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
+                dc_mask, xsrc1, ysrc1, SRCAND);
+            ::SetBkColor((HDC) m_hDC, prevBkCol);   // restore colours to original values
+            ::SetTextColor((HDC) m_hDC, prevCol);
 
-			// OR buffer to dest
-			success = (::BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
-				dc_buffer, 0, 0, SRCPAINT) != 0);
+            // OR buffer to dest
+            success = (::BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
+                dc_buffer, 0, 0, SRCPAINT) != 0);
 
-			// tidy up temporary DCs and bitmap
-			::SelectObject(dc_mask, 0);
-			::DeleteDC(dc_mask);
-			::SelectObject(dc_buffer, 0);
-			::DeleteDC(dc_buffer);
-			::DeleteObject(buffer_bmap);
-		}
-	}
+            // tidy up temporary DCs and bitmap
+            ::SelectObject(dc_mask, 0);
+            ::DeleteDC(dc_mask);
+            ::SelectObject(dc_buffer, 0);
+            ::DeleteDC(dc_buffer);
+            ::DeleteObject(buffer_bmap);
+        }
+    }
   }
   else
   {
-	if (IsKindOf(CLASSINFO(wxPrinterDC)))
-	{
+    if (IsKindOf(CLASSINFO(wxPrinterDC)))
+    {
       // If we are printing source colours are screen colours
       // not printer colours and so we need copy the bitmap
       // pixel by pixel.
       HDC dc_src = (HDC) source->m_hDC;
       RECT rect;
       for (int x = 0; x < width; x++)
-	  {
+      {
         for (int y = 0; y < height; y++)
-		{
+        {
           HBRUSH brush = ::CreateSolidBrush(::GetPixel(dc_src, x, y));
-          rect.left = xdest1 + x;	rect.right = rect.left + 1;
-          rect.top = ydest1 + y;	rect.bottom = rect.top + 1;
+          rect.left = xdest1 + x;   rect.right = rect.left + 1;
+          rect.top = ydest1 + y;    rect.bottom = rect.top + 1;
           ::FillRect((HDC) m_hDC, &rect, brush);
           ::DeleteObject(brush);
-		}
-	  }
+        }
+      }
     }
-	else
-	{
+    else
+    {
       success = (BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height, (HDC) source->m_hDC,
                             xsrc1, ysrc1, dwRop) != 0);
-	}
+    }
   }
   ::SetTextColor((HDC)m_hDC, old_textground);
   ::SetBkColor((HDC)m_hDC, old_background);
@@ -1356,8 +1356,8 @@ void wxDC::GetTextExtent(const wxString& string, float *x, float *y,
                      wxFont *theFont, bool use16bit) const
 {
     long x1, y1, descent1, externalLeading1;
-	GetTextExtent(string, & x1, & y1, & descent1, & externalLeading1, theFont, use16bit);
-	*x = x1; *y = y1;
+    GetTextExtent(string, & x1, & y1, & descent1, & externalLeading1, theFont, use16bit);
+    *x = x1; *y = y1;
     if (descent)
         *descent = descent1;
     if (externalLeading)
@@ -1473,10 +1473,10 @@ void wx_draw_open_spline(wxDC *dc, wxSpline *spline)
     while ((node = node->Next()) != NULL)
     {
         p = (wxPoint *)node->Data();
-	x1 = x2;
-	y1 = y2;
-	x2 = p->x;
-	y2 = p->y;
+    x1 = x2;
+    y1 = y2;
+    x2 = p->x;
+    y2 = p->y;
         cx4 = (double)(x1 + x2) / 2;
         cy4 = (double)(y1 + y2) / 2;
         cx3 = (double)(x1 + cx4) / 2;
@@ -1484,8 +1484,8 @@ void wx_draw_open_spline(wxDC *dc, wxSpline *spline)
 
         wx_quadratic_spline(cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4);
 
-	cx1 = cx4;
-	cy1 = cy4;
+    cx1 = cx4;
+    cy1 = cy4;
         cx2 = (double)(cx1 + x2) / 2;
         cy2 = (double)(cy1 + y2) / 2;
     }
@@ -1499,23 +1499,23 @@ void wx_draw_open_spline(wxDC *dc, wxSpline *spline)
 
 /********************* CURVES FOR SPLINES *****************************
 
-	The following spline drawing routine is from
+    The following spline drawing routine is from
 
-	"An Algorithm for High-Speed Curve Generation"
-	by George Merrill Chaikin,
-	Computer Graphics and Image Processing, 3, Academic Press,
-	1974, 346-349.
+    "An Algorithm for High-Speed Curve Generation"
+    by George Merrill Chaikin,
+    Computer Graphics and Image Processing, 3, Academic Press,
+    1974, 346-349.
 
-	and
+    and
 
-	"On Chaikin's Algorithm" by R. F. Riesenfeld,
-	Computer Graphics and Image Processing, 4, Academic Press,
-	1975, 304-310.
+    "On Chaikin's Algorithm" by R. F. Riesenfeld,
+    Computer Graphics and Image Processing, 4, Academic Press,
+    1975, 304-310.
 
 ***********************************************************************/
 
-#define		half(z1, z2)	((z1+z2)/2.0)
-#define		THRESHOLD	5
+#define     half(z1, z2)    ((z1+z2)/2.0)
+#define     THRESHOLD   5
 
 /* iterative version */
 
@@ -1531,16 +1531,16 @@ void wx_quadratic_spline(double a1, double b1, double a2, double b2, double a3, 
     while (wx_spline_pop(&x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4)) {
         xmid = (double)half(x2, x3);
         ymid = (double)half(y2, y3);
-	if (fabs(x1 - xmid) < THRESHOLD && fabs(y1 - ymid) < THRESHOLD &&
-	    fabs(xmid - x4) < THRESHOLD && fabs(ymid - y4) < THRESHOLD) {
+    if (fabs(x1 - xmid) < THRESHOLD && fabs(y1 - ymid) < THRESHOLD &&
+        fabs(xmid - x4) < THRESHOLD && fabs(ymid - y4) < THRESHOLD) {
             wx_spline_add_point((double)wx_round(x1), (double)wx_round(y1));
             wx_spline_add_point((double)wx_round(xmid), (double)wx_round(ymid));
-	} else {
+    } else {
             wx_spline_push(xmid, ymid, (double)half(xmid, x3), (double)half(ymid, y3),
                  (double)half(x3, x4), (double)half(y3, y4), x4, y4);
             wx_spline_push(x1, y1, (double)half(x1, x2), (double)half(y1, y2),
                  (double)half(x2, xmid), (double)half(y2, ymid), xmid, ymid);
-	}
+    }
     }
 }
 
@@ -1582,7 +1582,7 @@ int wx_spline_pop(double *x1, double *y1, double *x2, double *y2,
                   double *x3, double *y3, double *x4, double *y4)
 {
     if (wx_stack_count == 0)
-	return (0);
+    return (0);
     wx_stack_top--;
     wx_stack_count--;
     *x1 = wx_stack_top->x1;

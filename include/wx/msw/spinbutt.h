@@ -67,10 +67,10 @@ class WXDLLEXPORT wxSpinButton: public wxControl
   void Command(wxCommandEvent& event) { ProcessCommand(event); };
 
   // IMPLEMENTATION
-  bool MSWCommand(WXUINT param, WXWORD id);
-  bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
-  void MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control);
-  void MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control);
+  virtual bool MSWCommand(WXUINT param, WXWORD id);
+  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
+  virtual void MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control);
+  virtual void MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control);
 
 protected:
   int   m_min;

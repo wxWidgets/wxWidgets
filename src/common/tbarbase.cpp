@@ -195,7 +195,7 @@ void wxToolBarBase::AddSeparator ()
 {
   wxToolBarTool *tool = new wxToolBarTool;
   tool->m_toolStyle = wxTOOL_STYLE_SEPARATOR;
-  m_tools.Append(tool);
+  m_tools.Append(-1, tool);
 }
 
 void wxToolBarBase::ClearTools(void)

@@ -28,6 +28,11 @@
 #include "wx/utils.h"
 #include <wx/intl.h>
 
+// there are just too many of those...
+#ifdef _MSC_VER
+    #pragma warning(disable:4706)   // assignment within conditional expression
+#endif // VC++
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1545,5 +1550,9 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 	pattern++;
     return ((*str == '\0') && (*pattern == '\0'));
 };
+
 #endif
 
+#ifdef _MSC_VER
+    #pragma warning(default:4706)   // assignment within conditional expression
+#endif // VC++

@@ -6,7 +6,7 @@
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COLOUR_H_
@@ -77,7 +77,7 @@ public:
 */
 
 private:
-  bool 			    m_isInit;
+  bool          m_isInit;
   unsigned char m_red;
   unsigned char m_blue;
   unsigned char m_green;
@@ -92,4 +92,4 @@ private:
 };
 
 #endif
-	// _WX_COLOUR_H_
+  // _WX_COLOUR_H_

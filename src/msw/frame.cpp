@@ -626,9 +626,9 @@ bool wxFrame::MSWOnPaint(void)
     if (m_iconized)
     {
       HICON the_icon;
-    if (m_icon.Ok())
-      the_icon = (HICON) m_icon.GetHICON();
-      if (the_icon == 0)
+      if (m_icon.Ok())
+        the_icon = (HICON) m_icon.GetHICON();
+      else
         the_icon = (HICON) m_defaultIcon;
 
       PAINTSTRUCT ps;
@@ -1037,7 +1037,6 @@ void wxFrame::PositionToolBar(void)
 // propagate our state change to all child frames
 void wxFrame::IconizeChildFrames(bool bIconize)
 {
-  wxWindow *child = NULL;
   for ( wxNode *node = GetChildren()->First(); node; node = node->Next() ) {
     wxWindow *win = (wxWindow *)node->Data();
     if ( win->IsKindOf(CLASSINFO(wxFrame)) ) {

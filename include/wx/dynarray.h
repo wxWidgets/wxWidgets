@@ -368,8 +368,8 @@ private:                                                            \
 
    @memo declare list class 'name' containing elements of type 'T'
   */
-#define WX_DECLARE_LIST(T, name)  typedef T _L##name;                 \
-                                  _WX_DECLARE_LIST(_L##name, name)
+#define WX_DECLARE_OBJARRAY(T, name)  typedef T _L##name;                 \
+                                      _WX_DECLARE_LIST(_L##name, name)
   /**
     To use a list class you must
     <ll>
@@ -387,7 +387,7 @@ private:                                                            \
 
     @memo define (must include listimpl.cpp!) list class 'name'
    */
-#define WX_DEFINE_LIST(name)       "don't forget to include listimpl.cpp!"
+#define WX_DEFINE_OBJARRAY(name)       "don't forget to include listimpl.cpp!"
 //@}
 
 // ----------------------------------------------------------------------------

@@ -328,7 +328,7 @@ wxString wxColourDatabase::FindName (const wxColour& colour) const
       
       if (col->Red () == red && col->Green () == green && col->Blue () == blue)
 	{
-	  char *found = node->key.string;
+	  const char *found = node->GetKeyString();
 	  if (found)
 	    return wxString(found);
 	}
@@ -619,12 +619,6 @@ wxSize wxGetDisplaySize()
     int x, y;
     wxDisplaySize(& x, & y);
     return wxSize(x, y);
-}
-
-wxResourceCache::wxResourceCache () : wxList() {
-}
-
-wxResourceCache::wxResourceCache (const unsigned int the_key_type) : wxList(the_key_type) {
 }
 
 wxResourceCache::~wxResourceCache () {

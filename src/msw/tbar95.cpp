@@ -325,7 +325,9 @@ bool wxToolBar95::MSWCommand(WXUINT cmd, WXWORD id)
   return TRUE;
 }
 
-bool wxToolBar95::MSWNotify(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
+bool wxToolBar95::MSWNotify(WXWPARAM WXUNUSED(wParam),
+                            WXLPARAM lParam,
+                            WXLPARAM *result)
 {
 	// First check if this applies to us
     NMHDR *hdr = (NMHDR *)lParam;

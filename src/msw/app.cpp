@@ -50,10 +50,15 @@
   #include <commctrl.h>
 #endif
 
-// use debug CRT functions for memory leak detections in VC++
-/* Here we go again commenting it out. PLEASE don't
- * uncomment this again.
-#if defined(__WXDEBUG__) && defined(_MSC_VER)
+// use debug CRT functions for memory leak detections in VC++ if we're not
+// using wxWindows own methods
+#if defined(__WXDEBUG__) && defined(_MSC_VER) && !wxUSE_GLOBAL_MEMORY_OPERATORS
+    #define wxUSE_VC_CRTDBG
+#else
+    #undef wxUSE_VC_CRTDBG
+#endif
+
+#ifdef wxUSE_VC_CRTDBG
   // VC++ uses this macro as debug/release mode indicator
   #ifndef _DEBUG
     #define _DEBUG
@@ -61,7 +66,6 @@
 
   #include <crtdbg.h>
 #endif
-*/
 
 extern char *wxBuffer;
 extern char *wxOsVersion;
@@ -115,32 +119,12 @@ bool wxApp::Initialize()
 {
   wxBuffer = new char[1500];
 
-/* PLEASE don't uncomment this again. IT DOESN'T WORK when building
- * using the makefile.
-  #if defined(__WXDEBUG__) && defined(_MSC_VER)
+  #ifdef wxUSE_VC_CRTDBG
     // do check for memory leaks on program exit
     // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
     //  deallocated memory which may be used to simulate low-memory condition)
     _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
   #endif // debug build under MS VC++
-*/
-
-
-// 22/11/98: we're converting to wxLogDebug instead of wxTrace,
-// so these are now obsolete.
-
-#if 0
-  #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    #if defined(_WINDLL)
-      streambuf* sBuf = NULL;
-    #else  // EXE
-      streambuf* sBuf = new wxDebugStreamBuf;
-    #endif // DLL
-
-    ostream* oStr = new ostream(sBuf) ;
-    wxDebugContext::SetStream(oStr, sBuf);
-  #endif  // wxUSE_MEMORY_TRACING
-#endif
 
   wxClassInfo::InitializeClasses();
 

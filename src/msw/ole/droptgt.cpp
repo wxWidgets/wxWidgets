@@ -371,7 +371,7 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *pData)
   HDROP hdrop = (HDROP)pData;   // @@ it works, but I'm not sure about it
 
   // get number of files (magic value -1)
-  UINT nFiles = ::DragQueryFile(hdrop, -1, NULL, 0);
+  UINT nFiles = ::DragQueryFile(hdrop, (unsigned)-1, NULL, 0u);
   
   // for each file get the length, allocate memory and then get the name
   char **aszFiles = new char *[nFiles];

@@ -473,7 +473,8 @@ BOOL ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 	    goto ErrExit;
     }
 
-    if (!(nNumColors = (WORD)lpbi->biClrUsed))
+    nNumColors = (WORD)lpbi->biClrUsed;
+    if ( nNumColors == 0 )
     {
 	/* no color table for 24-bit, default size otherwise */
 	if (lpbi->biBitCount != 24)
@@ -594,7 +595,8 @@ BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
     lpInfo = (LPBITMAPINFOHEADER) GlobalLock(hDIB);
 #endif
 
-    if ((hPalette = MakeDIBPalette(lpInfo)))
+    hPalette = MakeDIBPalette(lpInfo);
+    if ( hPalette )
     {
 	// Need to realize palette for converting DIB to bitmap.
 	hOldPal = SelectPalette(hDC, hPalette, TRUE);

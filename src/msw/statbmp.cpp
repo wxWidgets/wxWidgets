@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -50,9 +50,9 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
   m_foregroundColour = parent->GetForegroundColour() ;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+    m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+    m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -60,9 +60,9 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
   int height = size.y;
 
   if ( width < 0 && bitmap.Ok() )
-	width = bitmap.GetWidth();
+    width = bitmap.GetWidth();
   if ( height < 0 && bitmap.Ok() )
-	height = bitmap.GetHeight();
+    height = bitmap.GetHeight();
 
   m_windowStyle = style;
 
@@ -135,7 +135,7 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
   rect.left = x; rect.top = y; rect.right = x + w; rect.bottom = y + h;
 
   if ( bitmap.Ok() )
-  	MoveWindow((HWND) GetHWND(), x, y, bitmap.GetWidth(), bitmap.GetHeight(),
+    MoveWindow((HWND) GetHWND(), x, y, bitmap.GetWidth(), bitmap.GetHeight(),
              FALSE);
   
   InvalidateRect((HWND) GetParent()->GetHWND(), &rect, TRUE);
@@ -143,45 +143,45 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 
 bool wxStaticBitmap::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
-	long style = GetWindowLong((HWND) GetHWND(), GWL_STYLE);
+    long style = GetWindowLong((HWND) GetHWND(), GWL_STYLE);
 #ifdef __WIN32__
-	if ((style & 0xFF) == SS_BITMAP)
-	{
-		// Should we call Default() here?
-//		Default();
+    if ((style & 0xFF) == SS_BITMAP)
+    {
+        // Should we call Default() here?
+//      Default();
 
-		// Let default procedure draw the bitmap, which is defined
-		// in the Windows resource.
-		return FALSE;
-	}
+        // Let default procedure draw the bitmap, which is defined
+        // in the Windows resource.
+        return FALSE;
+    }
 #endif
 
     LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT) item;
 
-	wxBitmap* bitmap = &m_messageBitmap;
-	if ( !bitmap->Ok() )
-		return FALSE;
+    wxBitmap* bitmap = &m_messageBitmap;
+    if ( !bitmap->Ok() )
+        return FALSE;
 
-	HDC hDC = lpDIS->hDC;
-	HDC memDC = ::CreateCompatibleDC(hDC);
+    HDC hDC = lpDIS->hDC;
+    HDC memDC = ::CreateCompatibleDC(hDC);
 
-	HBITMAP old = (HBITMAP) ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
+    HBITMAP old = (HBITMAP) ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
 
-	if (!old)
-		return FALSE;
+    if (!old)
+        return FALSE;
 
 	int x = lpDIS->rcItem.left;
 	int y = lpDIS->rcItem.top;
 	int width = lpDIS->rcItem.right - x;
 	int height = lpDIS->rcItem.bottom - y;
 
-	// Centre the bitmap in the control area
-	int x1 = (int) (x + ((width - bitmap->GetWidth()) / 2));
-	int y1 = (int) (y + ((height - bitmap->GetHeight()) / 2));
+    // Centre the bitmap in the control area
+    int x1 = (int) (x + ((width - bitmap->GetWidth()) / 2));
+    int y1 = (int) (y + ((height - bitmap->GetHeight()) / 2));
 
-	::BitBlt(hDC, x1, y1, bitmap->GetWidth(), bitmap->GetHeight(), memDC, 0, 0, SRCCOPY);
+    ::BitBlt(hDC, x1, y1, bitmap->GetWidth(), bitmap->GetHeight(), memDC, 0, 0, SRCCOPY);
 
-	::SelectObject(memDC, old);
+    ::SelectObject(memDC, old);
 
     ::DeleteDC(memDC);
 

@@ -271,7 +271,8 @@ int wxFileDialog::ShowModal(void)
                 extension = extension + strlen( extension ) +1;
             }
 
-            if (  (extension = strrchr( extension, '.' ))   // != "blabla" 
+            extension = strrchr( extension, '.' );
+            if (  extension                                 // != "blabla" 
                   && !strrchr( extension, '*' )             // != "blabla.*"
                   && !strrchr( extension, '?' )             // != "blabla.?"
                   && extension[1]                           // != "blabla."

@@ -54,7 +54,7 @@ public:
    // Window procedure
    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
    virtual void MSWOnMouseMove(int x, int y, WXUINT flags);
-   virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+   virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
 
    void OnEraseBackground(wxEraseEvent& event);
 

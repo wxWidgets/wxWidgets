@@ -231,10 +231,10 @@ void wxMenu::Append(int Id, const wxString& label,
 void wxMenu::Delete(int id)
 {
   wxNode *node;
-  wxMenuItem *item;
   int pos;
   HMENU menu;
 
+  wxMenuItem *item = NULL;
   for (pos = 0, node = m_menuItems.First(); node; node = node->Next(), pos++) {
 	 item = (wxMenuItem *)node->Data();
 	 if (item->GetId() == id)
@@ -310,9 +310,9 @@ void wxMenu::SetTitle(const wxString& label)
   {
     if ( !label.IsEmpty() )
     {
-      if ( !InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING,
-                       idMenuTitle, m_title) ||
-           !InsertMenu(hMenu, 1, MF_BYPOSITION, -1, NULL) )
+      if ( !InsertMenu(hMenu, 0u, MF_BYPOSITION | MF_STRING,
+                       (unsigned)idMenuTitle, m_title) ||
+           !InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, NULL) )
       {
         wxLogLastError("InsertMenu");
       }
@@ -332,9 +332,9 @@ void wxMenu::SetTitle(const wxString& label)
     else
     {
       // modify the title
-      if ( !ModifyMenu(hMenu, 0,
+      if ( !ModifyMenu(hMenu, 0u,
                        MF_BYPOSITION | MF_STRING,
-                       idMenuTitle, m_title) )
+                       (unsigned)idMenuTitle, m_title) )
       {
         wxLogLastError("ModifyMenu");
       }
@@ -667,7 +667,7 @@ bool wxMenuBar::Checked(int Id) const
   if (!item)
     return FALSE;
 
-  int Flag ;
+  int Flag = 0;
 
   if (itemMenu->m_hMenu)
     Flag=GetMenuState((HMENU)itemMenu->m_hMenu, Id, MF_BYCOMMAND) ;
@@ -892,8 +892,11 @@ wxMenuItem *wxMenuBar::FindItemForId (int Id, wxMenu ** itemMenu) const
   wxMenuItem *item = NULL;
   int i;
   for (i = 0; i < m_menuCount; i++)
-    if ((item = m_menus[i]->FindItemForId (Id, itemMenu)))
+  {
+    item = m_menus[i]->FindItemForId (Id, itemMenu);
+    if (item)
       return item;
+  }
   return NULL;
 }
 

@@ -25,6 +25,10 @@
 
 #if wxUSE_ODBC
 
+#ifdef _MSC_VER
+    #pragma warning(disable:4706)   // assignment within conditional expression
+#endif // VC++
+
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/dialog.h"
@@ -1826,5 +1830,9 @@ long wxQueryField::GetSize(void) {
 bool wxQueryField::IsDirty(void) {
   return dirty;
 }
+
+#ifdef _MSC_VER
+    #pragma warning(default:4706)   // assignment within conditional expression
+#endif // VC++
 
 #endif // wxUSE_ODBC

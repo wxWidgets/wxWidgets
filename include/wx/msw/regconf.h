@@ -91,6 +91,10 @@ public:
   virtual bool DeleteAll();
 
 private:
+  // no copy ctor/assignment operator
+  wxRegConfig(const wxRegConfig&);
+  wxRegConfig& operator=(const wxRegConfig&);
+
   // these keys are opened during all lifetime of wxRegConfig object
   wxRegKey  m_keyLocalRoot,  m_keyLocal,
             m_keyGlobalRoot, m_keyGlobal;
