@@ -951,9 +951,9 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
   FILE *fp2 = NULL;
   FILE *fp3 = NULL;
   // Open the inputs and outputs
-  if ((fp1 = wxFopen ( file1.fn_str(), wxT("rb"))) == NULL ||
-      (fp2 = wxFopen ( file2.fn_str(), wxT("rb"))) == NULL ||
-      (fp3 = wxFopen ( outfile.fn_str(), wxT("wb"))) == NULL)
+  if ((fp1 = wxFopen ( file1, wxT("rb"))) == NULL ||
+      (fp2 = wxFopen ( file2, wxT("rb"))) == NULL ||
+      (fp3 = wxFopen ( outfile, wxT("wb"))) == NULL)
     {
       if (fp1)
         fclose (fp1);
