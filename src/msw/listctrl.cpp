@@ -171,9 +171,10 @@ public:
 };
 
 // Get the internal data structure
-static wxListItemInternalData *GetInternalData(HWND hwnd, long itemId);
-static wxListItemInternalData *GetInternalData(wxListCtrl *ctl, long itemId);
-static wxListItemAttr *GetInternalDataAttr(wxListCtrl *ctl, long itemId);
+static wxListItemInternalData *wxGetInternalData(HWND hwnd, long itemId);
+static wxListItemInternalData *wxGetInternalData(wxListCtrl *ctl, long itemId);
+static wxListItemAttr *wxGetInternalDataAttr(wxListCtrl *ctl, long itemId);
+static void wxDeleteInternalData(wxListCtrl* ctl, long itemId);
 
 
 // ----------------------------------------------------------------------------
@@ -364,19 +365,8 @@ void wxListCtrl::FreeAllInternalData()
         int i = 0;
 
         for (i = 0; i < n; i++)
-        {
-            wxListItemInternalData *data = GetInternalData(this, i);
-            if (data)
-            {
-                delete data;
-                LV_ITEM item;
-                memset(&item, 0, sizeof(item));
-                item.iItem = i;
-                item.mask = LVIF_PARAM;
-                item.lParam = (LPARAM) 0;
-                BOOL result = ListView_SetItem(GetHwnd(), &item);
-            }
-        }
+            wxDeleteInternalData(this, i);
+
         m_AnyInternalData = FALSE;
     }
 }
@@ -732,7 +722,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
     {
         // get internal item data
         // perhaps a cache here ?
-        wxListItemInternalData *data = GetInternalData(this, info.m_itemId);
+        wxListItemInternalData *data = wxGetInternalData(this, info.m_itemId);
 
         if (! data)
         {
@@ -1205,7 +1195,6 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
-    FreeAllInternalData();
     return ListView_DeleteAllItems(GetHwnd()) != 0;
 }
 
@@ -1772,14 +1761,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case LVN_DELETEITEM:
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
                 event.m_itemIndex = nmLV->iItem;
-
                 // delete the assoicated internal data
-                {
-                    wxListItemInternalData *data =
-                        GetInternalData(this, nmLV->iItem);
-                    if (data)
-                        delete data;
-                };
+                wxDeleteInternalData(this, nmLV->iItem);
                 break;
 
             case LVN_SETDISPINFO:
@@ -2070,7 +2053,7 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 
                 wxListItemAttr *attr =
                     IsVirtual() ? OnGetItemAttr(item)
-                                : GetInternalDataAttr(this, item);
+                                : wxGetInternalDataAttr(this, item);
 
                 if ( !attr )
                 {
@@ -2267,7 +2250,7 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
     RefreshRect(rect);
 }
 
-static wxListItemInternalData *GetInternalData(HWND hwnd, long itemId)
+static wxListItemInternalData *wxGetInternalData(HWND hwnd, long itemId)
 {
     LV_ITEM it;
     it.mask = LVIF_PARAM;
@@ -2280,20 +2263,34 @@ static wxListItemInternalData *GetInternalData(HWND hwnd, long itemId)
         return NULL;
 };
 
-static wxListItemInternalData *GetInternalData(wxListCtrl *ctl, long itemId)
+static wxListItemInternalData *wxGetInternalData(wxListCtrl *ctl, long itemId)
 {
-    return GetInternalData((HWND) ctl->GetHWND(), itemId);
+    return wxGetInternalData((HWND) ctl->GetHWND(), itemId);
 };
 
-static wxListItemAttr *GetInternalDataAttr(wxListCtrl *ctl, long itemId)
+static wxListItemAttr *wxGetInternalDataAttr(wxListCtrl *ctl, long itemId)
 {
-    wxListItemInternalData *data = GetInternalData(ctl, itemId);
+    wxListItemInternalData *data = wxGetInternalData(ctl, itemId);
     if (data)
         return data->attr;
     else
         return NULL;
 };
 
+static void wxDeleteInternalData(wxListCtrl* ctl, long itemId)
+{
+    wxListItemInternalData *data = wxGetInternalData(ctl, itemId);
+    if (data)
+    {
+        delete data;
+        LV_ITEM item;
+        memset(&item, 0, sizeof(item));
+        item.iItem = itemId;
+        item.mask = LVIF_PARAM;
+        item.lParam = (LPARAM) 0;
+        ListView_SetItem((HWND)ctl->GetHWND(), &item);
+    }
+}
 
 static void wxConvertFromMSWListItem(HWND hwndListCtrl,
                                      wxListItem& info,
