@@ -608,6 +608,10 @@ void DateTimeTestCase::TestTimeTicks()
             continue;
 
         wxDateTime dt = d.DT();
+        //RN:  Translate according to test's time zone
+        //2nd param is to ignore DST - it's already factored
+        //into Vadim's tests
+        dt.MakeTimezone(wxDateTime::WEST, true);
         long ticks = (dt.GetValue() / 1000).ToLong();
         CPPUNIT_ASSERT( ticks == d.ticks );
 
@@ -641,6 +645,9 @@ void DateTimeTestCase::TestTimeParse()
             CPPUNIT_ASSERT( parseTestDates[n].good );
 
             wxDateTime dtReal = parseTestDates[n].date.DT();
+            //RN:  We need this because the tests are based on 
+            //a non-GMT time zone
+            dtReal.MakeTimezone(wxDateTime::WEST, true);
             CPPUNIT_ASSERT( dt == dtReal );
         }
         else // failed to parse
