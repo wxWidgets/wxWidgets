@@ -275,7 +275,13 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     subframe->Show(TRUE);
 }
 
-void MyFrame::OnSize(wxSizeEvent& event)
+void MyFrame::OnSize(wxSizeEvent& 
+                                  #ifdef __WXUNIVERSAL__
+                                  event
+                                  #else
+                                  WXUNUSED(event)
+                                  #endif
+                                  )
 {
     int w, h;
     GetClientSize(&w, &h);
