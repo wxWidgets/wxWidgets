@@ -6060,12 +6060,16 @@ else
         *-*-mingw32* )
             dnl MinGW GCC versions >= 3.2 have problems with
             dnl static member of classes derived from templates
-            dnl in combination with #pragme interface/implementation
+            dnl in combination with #pragma interface/implementation
             dnl (the test case uses 4 files)
-            if test "$wxUSE_STL" = "yes"; then
-               AC_MSG_CHECKING([If this MinGW version needs -DNO_GCC_PRAGMA])
+            dnl ... and with exceptions handling (undefined symbols needed
+            dnl to correctly calls dtors when unwinding) as well
+            if test "$wxUSE_STL" = "yes" -o \
+                    "$wxUSE_NO_EXCEPTIONS" != "yes" -o \
+                    "$wxUSE_NO_RTTI" != "yes"; then
+               AC_MSG_CHECKING([if this MinGW version needs -DNO_GCC_PRAGMA])
                AC_TRY_COMPILE([],
-                              [#if !(__GNUC__ == 3 && __GNUC_MINOR__ >= 2)
+                              [#if !(__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
                                #error "Not GCC 3.2 or greater"
                                #endif
                                ],

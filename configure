@@ -40364,11 +40364,7 @@ fi
 
 
 
-
-
-
 BAKEFILE_AUTOCONF_INC_M4_VERSION="0.1.4"
-
 
 
 
@@ -41722,9 +41718,11 @@ else
             CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
             ;;
         *-*-mingw32* )
-                                                            if test "$wxUSE_STL" = "yes"; then
-               echo "$as_me:$LINENO: checking If this MinGW version needs -DNO_GCC_PRAGMA" >&5
-echo $ECHO_N "checking If this MinGW version needs -DNO_GCC_PRAGMA... $ECHO_C" >&6
+                                                                                    if test "$wxUSE_STL" = "yes" -o \
+                    "$wxUSE_NO_EXCEPTIONS" != "yes" -o \
+                    "$wxUSE_NO_RTTI" != "yes"; then
+               echo "$as_me:$LINENO: checking if this MinGW version needs -DNO_GCC_PRAGMA" >&5
+echo $ECHO_N "checking if this MinGW version needs -DNO_GCC_PRAGMA... $ECHO_C" >&6
                cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -41735,7 +41733,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-#if !(__GNUC__ == 3 && __GNUC_MINOR__ >= 2)
+#if !(__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
                                #error "Not GCC 3.2 or greater"
                                #endif
 
