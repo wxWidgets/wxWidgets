@@ -43,7 +43,7 @@ protected:
 	int lexLanguage;
 	const LexerModule *lexCurrent;
 	PropSet props;
-	enum {numWordLists=6};
+	enum {numWordLists=9};
 	WordList *keyWordLists[numWordLists+1];
 	void SetLexer(uptr_t wParam);
 	void SetLexerLanguage(const char *languageName);
@@ -71,6 +71,8 @@ protected:
 	void AutoCompleteMoveToCurrentWord();
 	static void AutoCompleteDoubleClick(void* p);
 
+	void CallTipClick();
+	void CallTipShow(Point pt, const char *defn);
 	virtual void CreateCallTipWindow(PRectangle rc) = 0;
 
 	virtual void AddToPopUp(const char *label, int cmd=0, bool enabled=true) = 0;

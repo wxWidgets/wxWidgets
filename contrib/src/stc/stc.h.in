@@ -225,10 +225,10 @@ private:
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
 
-
-private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxStyledTextCtrl)
+
+protected:
 
     ScintillaWX*        m_swx;
     wxStopWatch         m_stopWatch;
@@ -348,6 +348,8 @@ private:
 #endif
 };
 
+
+
 #ifndef SWIG
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_CHANGE,                  1650)
@@ -373,6 +375,9 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DRAG_OVER,               1670)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DO_DROP,                 1671)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_ZOOM,                    1672)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_HOTSPOT_CLICK,           1673)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_HOTSPOT_DCLICK,          1674)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_CALLTIP_CLICK,           1675)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -399,6 +404,9 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_DRAG_OVER,
         wxEVT_STC_DO_DROP,
         wxEVT_STC_ZOOM,
+        wxEVT_STC_HOTSPOT_CLICK,
+        wxEVT_STC_HOTSPOT_DCLICK,
+        wxEVT_STC_CALLTIP_CLICK
     };
 #endif
 
@@ -430,6 +438,10 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_DRAG_OVER(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DRAG_OVER,             id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DO_DROP(id, fn)                 DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DO_DROP,               id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_ZOOM(id, fn)                    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ZOOM,                  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_HOTSPOT_CLICK(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_CLICK,         id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_HOTSPOT_DCLICK(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_DCLICK,        id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_CALLTIP_CLICK(id, fn))          DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK          id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+
 #endif
 
 //----------------------------------------------------------------------

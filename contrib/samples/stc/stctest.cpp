@@ -40,7 +40,26 @@ public:
 };
 
 //----------------------------------------------------------------------
+//  Make an editor class
 
+class MySTC : public wxStyledTextCtrl
+{
+public:
+    MySTC(wxWindow *parent, wxWindowID id,
+          const wxPoint& pos = wxDefaultPosition,
+          const wxSize& size = wxDefaultSize, long style = 0);
+
+    void OnKeyPressed(wxKeyEvent& evt);
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(MySTC, wxStyledTextCtrl)
+    EVT_KEY_DOWN(MySTC::OnKeyPressed)
+END_EVENT_TABLE()
+
+//----------------------------------------------------------------------
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
 {
@@ -51,7 +70,7 @@ public:
     void OnAbout(wxCommandEvent& event);
 
 private:
-    wxStyledTextCtrl* ed;
+    MySTC* ed;
 
     DECLARE_EVENT_TABLE()
 };
@@ -79,7 +98,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     MyFrame *frame = new MyFrame(_T("Testing wxStyledTextCtrl"),
-                                 wxPoint(5, 5), wxSize(400, 600));
+                                 wxPoint(5, 5), wxSize(600, 600));
 
     frame->Show(TRUE);
     return TRUE;
@@ -123,59 +142,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     //----------------------------------------
     // Setup the editor
-    ed = new wxStyledTextCtrl(this, ID_ED);
-
-    // Default font
-    wxFont font(10, wxMODERN, wxNORMAL, wxNORMAL);
-    ed->StyleSetFont(wxSTC_STYLE_DEFAULT, font);
-    ed->StyleClearAll();
-
-    ed->StyleSetForeground(0,  wxColour(0x80, 0x80, 0x80));
-    ed->StyleSetForeground(1,  wxColour(0x00, 0x7f, 0x00));
-    //ed->StyleSetForeground(2,  wxColour(0x00, 0x7f, 0x00));
-    ed->StyleSetForeground(3,  wxColour(0x7f, 0x7f, 0x7f));
-    ed->StyleSetForeground(4,  wxColour(0x00, 0x7f, 0x7f));
-    ed->StyleSetForeground(5,  wxColour(0x00, 0x00, 0x7f));
-    ed->StyleSetForeground(6,  wxColour(0x7f, 0x00, 0x7f));
-    ed->StyleSetForeground(7,  wxColour(0x7f, 0x00, 0x7f));
-    ed->StyleSetForeground(8,  wxColour(0x00, 0x7f, 0x7f));
-    ed->StyleSetForeground(9,  wxColour(0x7f, 0x7f, 0x7f));
-    ed->StyleSetForeground(10, wxColour(0x00, 0x00, 0x00));
-    ed->StyleSetForeground(11, wxColour(0x00, 0x00, 0x00));
-    ed->StyleSetBold(5,  TRUE);
-    ed->StyleSetBold(10, TRUE);
-
-#ifdef __WXMSW__
-    ed->StyleSetSpec(2, _T("fore:#007f00,bold,face:Arial,size:9"));
-#else
-    ed->StyleSetSpec(2, _T("fore:#007f00,bold,face:Helvetica,size:9"));
-#endif
-
-    // give it some text to play with
-    wxString st;
-    wxFileInputStream stream(wxT("stctest.cpp"));
-    size_t sz = stream.GetSize();
-    char* buf = new char[sz + 1];
-    stream.Read((void*) buf, stream.GetSize());
-    buf[sz] = 0;
-    st = wxString::FromAscii(buf);
-    delete[] buf;
-
-    ed->InsertText(0, st);
-    ed->EmptyUndoBuffer();
-
-    ed->SetLexer(wxSTC_LEX_CPP);
-    ed->SetKeyWords(0,
-_T("asm auto bool break case catch char class const \
-const_cast continue default delete do double \
-dynamic_cast else enum explicit export extern \
-false float for friend goto if inline int long \
-mutable namespace new operator private protected \
-public register reinterpret_cast return short signed \
-sizeof static static_cast struct switch template this \
-throw true try typedef typeid typename union unsigned \
-using virtual void volatile wchar_t while"));
-
+    ed = new MySTC(this, ID_ED);
 }
 
 
@@ -193,4 +160,95 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     msg.Printf( _T("Testing wxStyledTextCtrl...\n"));
 
     wxMessageBox(msg, _T("About This Test"), wxOK | wxICON_INFORMATION, this);
+}
+
+
+//----------------------------------------------------------------------
+
+wxChar* keywords =
+_T("asm auto bool break case catch char class const \
+const_cast continue default delete do double \
+dynamic_cast else enum explicit export extern \
+false float for friend goto if inline int long \
+mutable namespace new operator private protected \
+public register reinterpret_cast return short signed \
+sizeof static static_cast struct switch template this \
+throw true try typedef typeid typename union unsigned \
+using virtual void volatile wchar_t while");
+
+
+
+MySTC::MySTC(wxWindow *parent, wxWindowID id,
+             const wxPoint& pos, const wxSize& size,
+             long style)
+    : wxStyledTextCtrl(parent, id, pos, size, style)
+{
+    // Default font
+    wxFont font(10, wxMODERN, wxNORMAL, wxNORMAL);
+    StyleSetFont(wxSTC_STYLE_DEFAULT, font);
+    StyleClearAll();
+
+    StyleSetForeground(0,  wxColour(0x80, 0x80, 0x80));
+    StyleSetForeground(1,  wxColour(0x00, 0x7f, 0x00));
+    //StyleSetForeground(2,  wxColour(0x00, 0x7f, 0x00));
+    StyleSetForeground(3,  wxColour(0x7f, 0x7f, 0x7f));
+    StyleSetForeground(4,  wxColour(0x00, 0x7f, 0x7f));
+    StyleSetForeground(5,  wxColour(0x00, 0x00, 0x7f));
+    StyleSetForeground(6,  wxColour(0x7f, 0x00, 0x7f));
+    StyleSetForeground(7,  wxColour(0x7f, 0x00, 0x7f));
+    StyleSetForeground(8,  wxColour(0x00, 0x7f, 0x7f));
+    StyleSetForeground(9,  wxColour(0x7f, 0x7f, 0x7f));
+    StyleSetForeground(10, wxColour(0x00, 0x00, 0x00));
+    StyleSetForeground(11, wxColour(0x00, 0x00, 0x00));
+    StyleSetBold(5,  TRUE);
+    StyleSetBold(10, TRUE);
+
+#ifdef __WXMSW__
+    StyleSetSpec(2, _T("fore:#007f00,bold,face:Arial,size:9"));
+#else
+    StyleSetSpec(2, _T("fore:#007f00,bold,face:Helvetica,size:9"));
+#endif
+
+    // give it some text to play with
+    wxString st;
+    wxFileInputStream stream(wxT("stctest.cpp"));
+    size_t sz = stream.GetSize();
+    char* buf = new char[sz + 1];
+    stream.Read((void*) buf, stream.GetSize());
+    buf[sz] = 0;
+    st = wxString::FromAscii(buf);
+    delete[] buf;
+
+    InsertText(0, st);
+    EmptyUndoBuffer();
+
+    SetLexer(wxSTC_LEX_CPP);
+    SetKeyWords(0, keywords);
+}
+
+void MySTC::OnKeyPressed(wxKeyEvent& evt)
+{
+    if (CallTipActive())
+        CallTipCancel();
+
+    int key = evt.GetKeyCode();
+    if ( key == WXK_SPACE && evt.ControlDown()) {
+        int pos = GetCurrentPos();
+
+        if (evt.ShiftDown()) {
+            // show how to do CallTips
+            CallTipSetBackground(wxColour(_T("YELLOW")));
+            CallTipShow(pos, _T("lots of of text: blah, blah, blah\n\n"
+                                "show some suff, maybe parameters..\n\n"
+                                "fubar(param1, param2)"));
+        }
+        else {
+            // show how to do AutoComplete
+            AutoCompSetIgnoreCase(false);
+            AutoCompShow(0, keywords);   // reuse the keyword list here
+            // normally you would build a string of completion texts...
+        }
+    }
+    else
+        evt.Skip();
 }

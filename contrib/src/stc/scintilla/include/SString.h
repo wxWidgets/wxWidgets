@@ -238,7 +238,7 @@ public:
 		return append(sOther, static_cast<lenpos_t>(measure_length));
 	}
 	SString &operator+=(const SString &sOther) {
-		return append(sOther.s, sOther.sSize);
+		return append(sOther.s, sOther.sLen);
 	}
 	SString &operator+=(char ch) {
 		return append(&ch, 1);
@@ -369,11 +369,7 @@ public:
  */
 inline char *StringDup(
 	const char *s,			///< The string to duplicate
-        /* gcc 2.96 doesn't seem to like this syntax: gives
-           'non-local function uses anonymous type'
-           SString::lenpos_t len=SString::measure_length)	///< The length of memory to allocate. Optional.
-        */
-        SString::lenpos_t len=0xffffffffU)	///< The length of memory to allocate. Optional.
+	SString::lenpos_t len=SString::measure_length)	///< The length of memory to allocate. Optional.
 {
 	return SString::StringAllocate(s, len);
 }

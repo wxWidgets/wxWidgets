@@ -67,32 +67,41 @@ void  wxSTCDropTarget::OnLeave() {
 #define param2  wxBORDER_NONE  // popup's 2nd param is flags
 #else
 #define wxSTCCallTipBase wxWindow
-#define param2 -1 // wxWindows 2nd param is ID
+#define param2 -1 // wxWindow's 2nd param is ID
 #endif
 
 class wxSTCCallTip : public wxSTCCallTipBase {
 public:
-    wxSTCCallTip(wxWindow* parent, CallTip* ct)
-        : wxSTCCallTipBase(parent, param2)
+    wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx)
+        : wxSTCCallTipBase(parent, param2),
+          m_ct(ct), m_swx(swx)
         {
-            m_ct = ct;
         }
 
     ~wxSTCCallTip() {
-        if (HasCapture()) ReleaseMouse();
     }
+
+    bool AcceptsFocus() const { return FALSE; }
 
     void OnPaint(wxPaintEvent& evt) {
         wxPaintDC dc(this);
         Surface* surfaceWindow = Surface::Allocate();
-        surfaceWindow->Init(&dc);
+        surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
         m_ct->PaintCT(surfaceWindow);
+        surfaceWindow->Release();
         delete surfaceWindow;
     }
 
     void OnFocus(wxFocusEvent& event) {
         GetParent()->SetFocus();
         event.Skip();
+    }
+
+    void OnLeftDown(wxMouseEvent& event) {
+        wxPoint pt = event.GetPosition();
+        Point p(pt.x, pt.y);
+        m_ct->MouseClick(p);
+        m_swx->CallTipClick();
     }
 
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
@@ -105,32 +114,18 @@ public:
             GetParent()->ClientToScreen(NULL, &y);
         wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
     }
-
-    virtual bool Show( bool show = TRUE ) {
-        bool retval = wxSTCCallTipBase::Show(show);
-        if (show)
-            CaptureMouse();
-        else
-            if (HasCapture()) ReleaseMouse();
-        return retval;
-    }
-
-    void OnLeftDown(wxMouseEvent& ) {
-        Show(FALSE);
-    }
 #endif
 
 private:
-    CallTip*    m_ct;
+    CallTip*      m_ct;
+    ScintillaWX*  m_swx;
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
     EVT_PAINT(wxSTCCallTip::OnPaint)
     EVT_SET_FOCUS(wxSTCCallTip::OnFocus)
-#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
     EVT_LEFT_DOWN(wxSTCCallTip::OnLeftDown)
-#endif
 END_EVENT_TABLE()
 
 
@@ -139,6 +134,7 @@ END_EVENT_TABLE()
 
 
 ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
+    capturedMouse = false;
     wMain = win;
     stc   = win;
     wheelRotation = 0;
@@ -220,15 +216,16 @@ void ScintillaWX::SetTicking(bool on) {
 
 
 void ScintillaWX::SetMouseCapture(bool on) {
-    if (on && !stc->HasCapture())
+    if (on && !capturedMouse)
         stc->CaptureMouse();
-    else if (!on && stc->HasCapture())
+    else if (!on && capturedMouse && stc->HasCapture())
         stc->ReleaseMouse();
+    capturedMouse = on;
 }
 
 
 bool ScintillaWX::HaveMouseCapture() {
-    return stc->HasCapture();
+    return capturedMouse;
 }
 
 
@@ -387,8 +384,10 @@ bool ScintillaWX::CanPaste() {
 }
 
 void ScintillaWX::CreateCallTipWindow(PRectangle) {
-    ct.wCallTip = new wxSTCCallTip(stc, &ct);
-    ct.wDraw = ct.wCallTip;
+    if (! ct.wCallTip.Created() ) {
+        ct.wCallTip = new wxSTCCallTip(stc, &ct, this);
+        ct.wDraw = ct.wCallTip;
+    }
 }
 
 
@@ -436,37 +435,37 @@ long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lPar
       switch (iMessage) {
       case SCI_CALLTIPSHOW: {
           // NOTE: This is copied here from scintilla/src/ScintillaBase.cxx
-          // because of the little tweak that needs done below.  When updating
-          // new versions double check that this is still needed, and that any
-          // new code there is copied here too.
+          // because of the little tweak that needs done below for wxGTK.
+          // When updating new versions double check that this is still
+          // needed, and that any new code there is copied here too.
+          Point pt = LocationFromPosition(wParam);
+          char* defn = reinterpret_cast<char *>(lParam);
           AutoCompleteCancel();
-          if (!ct.wCallTip.Created()) {
-              Point pt = LocationFromPosition(wParam);
-              pt.y += vs.lineHeight;
-              PRectangle rc = ct.CallTipStart(currentPos, pt,
-                                              reinterpret_cast<char *>(lParam),
-                                              vs.styles[STYLE_DEFAULT].fontName,
-                                              vs.styles[STYLE_DEFAULT].sizeZoomed,
-                                              IsUnicodeMode());
-              // If the call-tip window would be out of the client
-              // space, adjust so it displays above the text.
-              PRectangle rcClient = GetClientRectangle();
-              if (rc.bottom > rcClient.bottom) {
+          pt.y += vs.lineHeight;
+          PRectangle rc = ct.CallTipStart(currentPos, pt,
+                                          defn,
+                                          vs.styles[STYLE_DEFAULT].fontName,
+                                          vs.styles[STYLE_DEFAULT].sizeZoomed,
+                                          IsUnicodeMode(),
+                                          wMain);
+          // If the call-tip window would be out of the client
+          // space, adjust so it displays above the text.
+          PRectangle rcClient = GetClientRectangle();
+          if (rc.bottom > rcClient.bottom) {
 #ifdef __WXGTK__
-                  int offset = int(vs.lineHeight * 1.25)  + rc.Height();
+              int offset = int(vs.lineHeight * 1.25)  + rc.Height();
 #else
-                  int offset = vs.lineHeight + rc.Height();
+              int offset = vs.lineHeight + rc.Height();
 #endif
-                  rc.top -= offset;
-                  rc.bottom -= offset;
-              }
-              // Now display the window.
-              CreateCallTipWindow(rc);
-              ct.wCallTip.SetPositionRelative(rc, wMain);
-              ct.wCallTip.Show();
+              rc.top -= offset;
+              rc.bottom -= offset;
           }
-      }
+          // Now display the window.
+          CreateCallTipWindow(rc);
+          ct.wCallTip.SetPositionRelative(rc, wMain);
+          ct.wCallTip.Show();
           break;
+      }
 
       default:
           return ScintillaBase::WndProc(iMessage, wParam, lParam);
@@ -483,22 +482,22 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
 
     paintState = painting;
     Surface* surfaceWindow = Surface::Allocate();
-    surfaceWindow->Init(dc);
-    PRectangle rcPaint = PRectangleFromwxRect(rect);
+    surfaceWindow->Init(dc, wMain.GetID());
+    rcPaint = PRectangleFromwxRect(rect);
+    PRectangle rcClient = GetClientRectangle();
+    paintingAllText = rcPaint.Contains(rcClient);
+
     dc->BeginDrawing();
+    ClipChildren(*dc, rcPaint);
     Paint(surfaceWindow, rcPaint);
     dc->EndDrawing();
+
     delete surfaceWindow;
     if (paintState == paintAbandoned) {
         // Painting area was insufficient to cover new styling or brace highlight positions
         FullPaint();
     }
     paintState = notPainting;
-#ifdef __WXGTK__
-    // On wxGTK the editor window paints can overwrite the listbox...
-    if (ac.Active())
-        ((wxWindow*)ac.lb.GetID())->Refresh(TRUE);
-#endif
 }
 
 
@@ -775,16 +774,18 @@ void ScintillaWX::DoDragLeave() {
 // Redraw all of text area. This paint will not be abandoned.
 void ScintillaWX::FullPaint() {
     paintState = painting;
-    rcPaint = GetTextRectangle();
+    rcPaint = GetClientRectangle();
     paintingAllText = true;
     wxClientDC dc(stc);
     Surface* surfaceWindow = Surface::Allocate();
-    surfaceWindow->Init(&dc);
+    surfaceWindow->Init(&dc, wMain.GetID());
+
+    dc.BeginDrawing();
+    ClipChildren(dc, rcPaint);
     Paint(surfaceWindow, rcPaint);
+    dc.EndDrawing();
+
     delete surfaceWindow;
-
-//     stc->Refresh(FALSE);
-
     paintState = notPainting;
 }
 
@@ -798,6 +799,21 @@ void ScintillaWX::DoScrollToColumn(int column) {
     HorizontalScrollTo(column * vs.spaceWidth);
 }
 
+void ScintillaWX::ClipChildren(wxDC& dc, PRectangle rect) {
+#ifdef __WXGTK__
+    wxRegion rgn(wxRectFromPRectangle(rect));
+    if (ac.Active()) {
+        wxRect childRect = ((wxWindow*)ac.lb->GetID())->GetRect();
+        rgn.Subtract(childRect);
+    }
+    if (ct.inCallTipMode) {
+        wxRect childRect = ((wxWindow*)ct.wCallTip.GetID())->GetRect();
+        rgn.Subtract(childRect);
+    }
+
+    dc.SetClippingRegion(rgn);
+#endif
+}
 
 
 //----------------------------------------------------------------------

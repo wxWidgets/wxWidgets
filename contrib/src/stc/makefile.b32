@@ -34,17 +34,21 @@ OBJECTS = \
         KeyWords.obj	        \
 	LexAVE.obj		\
 	LexAda.obj		\
+	LexAsm.obj		\
 	LexBaan.obj		\
 	LexBullant.obj		\
 	LexMatlab.obj		\
 	LexCPP.obj		\
 	LexConf.obj		\
 	LexCrontab.obj		\
+	LexCSS.obj		\
 	LexEiffel.obj		\
+	LexFortran.obj		\
 	LexHTML.obj		\
 	LexLisp.obj		\
 	LexLua.obj		\
 	LexOthers.obj		\
+	LexPOV.obj		\
 	LexPascal.obj		\
 	LexPerl.obj		\
 	LexPython.obj		\
@@ -60,17 +64,19 @@ OBJECTS = \
 	UniConversion.obj	\
         ViewStyle.obj		\
 	WindowAccessor.obj	\
+	XPM.obj  		\
                             	\
 	PlatWX.obj              \
 	ScintillaWX.obj         \
 	stc.obj                 \
+
 
 STCCFG = stc.cfg
 STCCPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) @$(STCCFG)
 
 default: $(STCCFG) $(LIBTARGET)
 
-cleancfg: 
+cleancfg:
 	del $(STCCFG)
 
 {$(S)}.cxx.obj:

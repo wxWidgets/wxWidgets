@@ -22,17 +22,21 @@ OBJECTS = \
         $(S)/KeyWords.$(OBJSUFF)	\
 	$(S)/LexAVE.$(OBJSUFF)		\
 	$(S)/LexAda.$(OBJSUFF)		\
+	$(S)/LexAsm.$(OBJSUFF)		\
 	$(S)/LexBaan.$(OBJSUFF)		\
 	$(S)/LexBullant.$(OBJSUFF)	\
 	$(S)/LexMatlab.$(OBJSUFF)	\
 	$(S)/LexCPP.$(OBJSUFF)		\
 	$(S)/LexConf.$(OBJSUFF)		\
 	$(S)/LexCrontab.$(OBJSUFF)	\
+	$(S)/LexCSS.$(OBJSUFF)		\
 	$(S)/LexEiffel.$(OBJSUFF)	\
+	$(S)/LexFortran.$(OBJSUFF)	\
 	$(S)/LexHTML.$(OBJSUFF)		\
 	$(S)/LexLisp.$(OBJSUFF)		\
 	$(S)/LexLua.$(OBJSUFF)		\
 	$(S)/LexOthers.$(OBJSUFF)	\
+	$(S)/LexPOV.$(OBJSUFF)		\
 	$(S)/LexPascal.$(OBJSUFF)	\
 	$(S)/LexPerl.$(OBJSUFF)		\
 	$(S)/LexPython.$(OBJSUFF)	\
@@ -48,10 +52,12 @@ OBJECTS = \
 	$(S)/UniConversion.$(OBJSUFF)	\
         $(S)/ViewStyle.$(OBJSUFF)	\
 	$(S)/WindowAccessor.$(OBJSUFF)	\
+	$(S)/XPM.$(OBJSUFF)		\
 	\
 	PlatWX.$(OBJSUFF) \
 	ScintillaWX.$(OBJSUFF) \
 	stc.$(OBJSUFF)
+
 
 LIBTARGET = $(WXDIR)/lib/libstc.a
 

@@ -739,6 +739,7 @@ void CellBuffer::InsertCharStyle(int position, char ch, char style) {
 }
 
 bool CellBuffer::SetStyleAt(int position, char style, char mask) {
+	style &= mask;
 	char curVal = ByteAt(position * 2 + 1);
 	if ((curVal & mask) != style) {
 		SetByteAt(position*2 + 1, static_cast<char>((curVal & ~mask) | style));

@@ -155,4 +155,9 @@ static void ColouriseSQLDoc(unsigned int startPos, int length,
 	styler.ColourTo(lengthDoc - 1, state);
 }
 
-LexerModule lmSQL(SCLEX_SQL, ColouriseSQLDoc, "sql");
+static const char * const sqlWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmSQL(SCLEX_SQL, ColouriseSQLDoc, "sql", 0, sqlWordListDesc);

@@ -282,6 +282,10 @@ SOURCE=.\scintilla\src\LexAda.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\LexAsm.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\LexAVE.cxx
 # End Source File
 # Begin Source File
@@ -306,7 +310,15 @@ SOURCE=.\scintilla\src\LexCrontab.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\LexCSS.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\LexEiffel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexFortran.cxx
 # End Source File
 # Begin Source File
 
@@ -327,6 +339,10 @@ SOURCE=.\scintilla\src\LexMatlab.cxx
 # Begin Source File
 
 SOURCE=.\scintilla\src\LexOthers.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexPOV.cxx
 # End Source File
 # Begin Source File
 
@@ -443,6 +459,10 @@ SOURCE=.\scintilla\src\ViewStyle.h
 # Begin Source File
 
 SOURCE=.\scintilla\src\WindowAccessor.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\XPM.cxx
 # End Source File
 # Begin Source File
 

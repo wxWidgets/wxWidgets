@@ -27,17 +27,21 @@ OBJECTS = \
         $(D)\KeyWords.obj	        \
 	$(D)\LexAVE.obj			\
 	$(D)\LexAda.obj			\
+	$(D)\LexAsm.obj			\
 	$(D)\LexBaan.obj		\
 	$(D)\LexBullant.obj		\
 	$(D)\LexMatlab.obj		\
 	$(D)\LexCPP.obj			\
 	$(D)\LexConf.obj		\
 	$(D)\LexCrontab.obj		\
+	$(D)\LexCSS.obj			\
 	$(D)\LexEiffel.obj		\
+	$(D)\LexFortran.obj		\
 	$(D)\LexHTML.obj		\
 	$(D)\LexLisp.obj		\
 	$(D)\LexLua.obj			\
 	$(D)\LexOthers.obj		\
+	$(D)\LexPOV.obj			\
 	$(D)\LexPascal.obj		\
 	$(D)\LexPerl.obj		\
 	$(D)\LexPython.obj		\
@@ -53,6 +57,7 @@ OBJECTS = \
 	$(D)\UniConversion.obj		\
         $(D)\ViewStyle.obj		\
 	$(D)\WindowAccessor.obj		\
+	$(D)\XPM.obj			\
 				\
 	$(D)\PlatWX.obj		\
 	$(D)\ScintillaWX.obj	\

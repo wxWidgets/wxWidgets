@@ -27,6 +27,7 @@
 #include "Platform.h"
 
 #include "Scintilla.h"
+#include "XPM.h"
 #ifdef SCI_LEXER
 #include "SciLexer.h"
 #include "PropSet.h"
@@ -149,8 +150,10 @@ public:
     bool GetHideSelection() { return hideSelection; }
     void DoScrollToLine(int line);
     void DoScrollToColumn(int column);
+    void ClipChildren(wxDC& dc, PRectangle rect);
 
 private:
+    bool                capturedMouse;
     wxStyledTextCtrl*   stc;
 
 #if wxUSE_DRAG_AND_DROP
@@ -158,6 +161,9 @@ private:
     wxDragResult        dragResult;
 #endif
     int                 wheelRotation;
+
+
+    friend class wxSTCCallTip;
 };
 
 //----------------------------------------------------------------------
