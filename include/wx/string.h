@@ -201,7 +201,7 @@ struct WXDLLEXPORT wxStringData
   // we must not inline deallocation since allocation is not inlined
   void  Free();
 #else
-  void  Unlock() { if ( !IsEmpty() && --nRefs == 0) free();  }
+  void  Unlock() { if ( !IsEmpty() && --nRefs == 0) free(this);  }
 #endif
 
   // if we had taken control over string memory (GetWriteBuf), it's
