@@ -410,7 +410,11 @@ position, False if something was already there.
 the item was successfully placed at its given cell position, False if
 something was already there.", "",
         AddItem);
-    
+
+    DocDeclStr(
+        wxSize , GetCellSize(int row, int col) const,
+        "Get the size of the specified cell, including hgap and
+vgap.  Only valid after a Layout.", "");
 
     DocDeclStr(
         wxSize , GetEmptyCellSize() const,
