@@ -432,10 +432,10 @@ wxCrashReportImpl::FormatSimpleValue(BasicType bt,
         {
             static const size_t NUM_CHARS = 32;
 
-            const wxChar * const pc = *(PSTR *)pAddress;
-            if ( !::IsBadStringPtr(pc, NUM_CHARS) )
+            const char * const pc = *(PSTR *)pAddress;
+            if ( !::IsBadStringPtrA(pc, NUM_CHARS) )
             {
-                s << _T('"') << wxString(pc, NUM_CHARS) << _T('"');
+                s << _T('"') << wxString(pc, wxConvLibc, NUM_CHARS) << _T('"');
 
                 handled = true;
             }
@@ -674,7 +674,9 @@ wxCrashReportImpl::FormatSymbol(PSYMBOL_INFO pSym, STACKFRAME *sf)
         pVariable = (DWORD_PTR)pSym->Address;
     }
 
-    s << pSym->Name << _T(" = ") << FormatAnyValue(pSym, (PVOID)pVariable);
+    s << wxString(pSym->Name, wxConvLibc)
+      << _T(" = ")
+      << FormatAnyValue(pSym, (PVOID)pVariable);
 
     return s;
 }
@@ -916,10 +918,10 @@ void wxCrashReportImpl::OutputGlobals(HANDLE hModule)
 bool wxCrashReportImpl::ResolveSymFunctions(const wxDynamicLibrary& dllDbgHelp)
 {
     #define LOAD_SYM_FUNCTION(name)                                           \
-        name = (name ## _t) dllDbgHelp.GetSymbol(#name);                      \
+        name = (name ## _t) dllDbgHelp.GetSymbol(_T(#name));                  \
         if ( !name )                                                          \
         {                                                                     \
-            Output(_T("\r\nFunction ") __XFILE__(#name)                       \
+            Output(_T("\r\nFunction ") _T(#name)                              \
                    _T("() not found.\r\n"));                                  \
             return false;                                                     \
         }
@@ -1044,8 +1046,8 @@ bool wxCrashReportImpl::Generate(int _WXUNUSED(flags))
         }
         else
         {
-            Output(_T("Please update your dbghelp.dll version, "
-                      "at least version 5.1 is needed!\r\n"));
+            Output(_T("Please update your dbghelp.dll version, ")
+                   _T("at least version 5.1 is needed!\r\n"));
         }
     }
     else
@@ -1054,8 +1056,8 @@ bool wxCrashReportImpl::Generate(int _WXUNUSED(flags))
                _T("from Microsoft to get more detailed crash information!"));
     }
 
-    Output(_T("\r\nLatest dbghelp.dll is available at "
-              "http://www.microsoft.com/whdc/ddk/debugging/\r\n"));
+    Output(_T("\r\nLatest dbghelp.dll is available at ")
+           _T("http://www.microsoft.com/whdc/ddk/debugging/\r\n"));
 
 #else // !wxUSE_DBGHELP
     Output(_T("Support for crash report generation was not included ")
