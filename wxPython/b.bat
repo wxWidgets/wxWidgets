@@ -28,13 +28,13 @@ rem "c" --> clean
 iff "%1" == "c" then
 	shift
 	set CMD=%SETUP% %FLAGS% clean %1 %2 %3 %4 %5 %6 %7 %8 %9
-	set OTHERCMD=del wxPython\*.pyd
+	set OTHERCMD=del wx\*.pyd
 
 rem just remove the *.pyd's
 elseiff "%1" == "d" then
 	shift
-	set CMD=del wxPython\*.pyd
-	set OTHERCMD=del wxPython\*.pdb
+	set CMD=del wx\*.pyd
+	set OTHERCMD=del wx\*.pdb
 
 rem touch all the *.i files so swig will regenerate
 elseiff "%1" == "t" then
