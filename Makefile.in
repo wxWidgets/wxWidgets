@@ -24935,10 +24935,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/xrc/*.cpp $(DISTDIR)/samples/xrc
 	cp $(SAMPDIR)/xrc/*.h $(DISTDIR)/samples/xrc
 	cp $(SAMPDIR)/xrc/*.rc $(DISTDIR)/samples/xrc
-	cp $(SAMPDIR)/xrc/rc/*.xpm $(DISTDIR)/samples/widgets/rc
-	cp $(SAMPDIR)/xrc/rc/*.xrc $(DISTDIR)/samples/widgets/rc
-	cp $(SAMPDIR)/xrc/rc/*.gif $(DISTDIR)/samples/widgets/rc
-	cp $(SAMPDIR)/xrc/rc/*.ico $(DISTDIR)/samples/widgets/rc
+	cp $(SAMPDIR)/xrc/rc/*.xpm $(DISTDIR)/samples/xrc/rc
+	cp $(SAMPDIR)/xrc/rc/*.xrc $(DISTDIR)/samples/xrc/rc
+	cp $(SAMPDIR)/xrc/rc/*.gif $(DISTDIR)/samples/xrc/rc
+	cp $(SAMPDIR)/xrc/rc/*.ico $(DISTDIR)/samples/xrc/rc
 
 UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils
