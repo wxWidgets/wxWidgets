@@ -163,13 +163,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                 buf[lenCur++] = ch
 
 #define APPEND_STR(s) \
-                for ( const char *p = s; *p; p++ ) \
-                { \
-                    APPEND_CH((wchar_t)(*p)); \
-                }
-
-#define APPEND_WSTR(s) \
-                for ( const wchar_t *p = s; *p; p++ ) \
+                for ( const wxChar *p = s; *p; p++ ) \
                 { \
                     APPEND_CH(*p); \
                 }
@@ -305,7 +299,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             ::sprintf(szScratch, s_szFlags, val);
                         }
 
-                        APPEND_STR(szScratch);
+                        APPEND_STR(wxConvLibc.cMB2WX(szScratch));
 
                         done = TRUE;
                         break;
@@ -326,7 +320,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             ::sprintf(szScratch, s_szFlags, val);
                         }
 
-                        APPEND_STR(szScratch);
+                        APPEND_STR(wxConvLibc.cMB2WX(szScratch));
 
                         done = TRUE;
                         break;
@@ -339,7 +333,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             s_szFlags[flagofs] = '\0';
                             ::sprintf(szScratch, s_szFlags, val);
 
-                            APPEND_STR(szScratch);
+                            APPEND_STR(wxConvLibc.cMB2WX(szScratch));
 
                             done = TRUE;
                         }
@@ -372,7 +366,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             if (s.Len() < min_width)
                                 s.Pad(min_width - s.Len(), wxT(' '), adj_left);
 
-                            APPEND_WSTR(s);
+                            APPEND_STR(s);
                         } else {
                             wxChar *val = va_arg(argptr, wxChar *);
                             size_t len = wxSTRING_MAXLEN;
@@ -383,7 +377,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             if (s.Len() < min_width)
                                 s.Pad(min_width - s.Len(), wxT(' '), adj_left);
 
-                            APPEND_WSTR(s);
+                            APPEND_STR(s);
                         }
                         done = TRUE;
                         break;
