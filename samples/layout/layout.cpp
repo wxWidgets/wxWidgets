@@ -26,6 +26,7 @@
 
 #include <ctype.h>
 #include "wx/sizer.h"
+#include "wx/statline.h"
 
 #include "layout.h"
 
@@ -367,11 +368,59 @@ void SizerFrame::OnSize(wxSizeEvent& event)
 NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
   wxFrame(frame, -1, title, wxPoint(x, y) )
 {
-  // no extra options means border all around  
-  topsizer = new wxBorderNewSizer();
+  // we want to get a dialog that is stretchable because it
+  // has a text ctrl in the middle. at the bottom, we have
+  // two buttons which are not supposed to get stretched
+  // and therefore we insert two spacers next to them
+
+  topsizer = new wxBoxNewSizer( wxVERTICAL );
+
   
-  // make border 20 pixels wide
-  topsizer->Add( new wxButton( this, -1, "Hello" ), 20 );
+  // 1) upper part: text ctrl
+  
+  // make border around textctrl in all directions
+  wxBorderNewSizer *text_border = new wxBorderNewSizer();
+  
+  // make border around text ctrl 20 pixels wide
+  // minimum size for the text ctrl is 60x30
+  text_border->Add( new wxTextCtrl( this, -1, "My text.", wxDefaultPosition, wxSize(170,30), wxTE_MULTILINE), 5 );
+  
+  // add text ctrl with border to top sizer
+  // a value of more than zero indicates that it's stretchable
+  topsizer->Add( text_border, 1 );
+
+  
+  // 2) middle part: static line
+  
+  // make border for beauty static line
+  wxBorderNewSizer *line_border = new wxBorderNewSizer();
+
+  // make border around static line 2 pixels wide
+  // minimum size for the static line is 3x3
+  line_border->Add( new wxStaticLine( this, -1, wxDefaultPosition, wxSize(170,3), wxHORIZONTAL), 5 );
+  
+  // add text ctrl with border to top sizer
+  topsizer->Add( line_border );
+  
+
+  // 3) bottom: buttons  
+  
+  // make border around button in all directions
+  wxBoxNewSizer *button_sizer = new wxBoxNewSizer( wxHORIZONTAL );
+  
+  // make border around buttons 5 pixels wide
+  // minimum size for the button is its default size
+  wxBorderNewSizer *button1_border = new wxBorderNewSizer();
+  button1_border->Add( new wxButton( this, -1, "Hello 1", wxDefaultPosition, wxSize(80,30) ), 5 );
+  button_sizer->Add( button1_border );
+  
+  wxBorderNewSizer *button2_border = new wxBorderNewSizer();
+  button2_border->Add( new wxButton( this, -1, "Hello 2", wxDefaultPosition, wxSize(80,30) ), 5 );
+  button_sizer->Add( button2_border );
+
+  // add buttons with border to top sizer
+  topsizer->Add( button_sizer );
+
   
   // set frame to minimum size
   topsizer->Fit( this );  

@@ -28,6 +28,7 @@
 
 class wxNewSizerItem;
 class wxNewSizer;
+class wxBorderNewSizer;
 class wxBoxNewSizer;
 
 //---------------------------------------------------------------------------
@@ -136,6 +137,29 @@ protected:
    int    m_sides;
 };
   
+//---------------------------------------------------------------------------
+// wxBoxNewSizer
+//---------------------------------------------------------------------------
 
+class WXDLLEXPORT wxBoxNewSizer: public wxNewSizer
+{
+public:
+   wxBoxNewSizer( int orient );
+   
+   void RecalcSizes();
+   wxSize CalcMin();
+   
+   int GetOrientation()
+     { return m_orient; }
+   
+protected:
+    int m_orient;
+    int m_stretchable;
+    int m_minWidth;
+    int m_minHeight;
+    int m_fixedWidth;
+    int m_fixedHeight;
+};
+  
 #endif
   // __WXSIZER_H__

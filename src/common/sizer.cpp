@@ -17,7 +17,7 @@
 #endif
 
 #include "wx/sizer.h"
-
+#include "wx/utils.h"
 
 //---------------------------------------------------------------------------
 // wxNewSizerItem
@@ -249,6 +249,136 @@ wxSize wxBorderNewSizer::CalcMin()
         size.y += borderSize;
 	
     return size;
+}
+
+//---------------------------------------------------------------------------
+// wxBoxNewSizer
+//---------------------------------------------------------------------------
+
+wxBoxNewSizer::wxBoxNewSizer( int orient )
+{
+    m_orient = orient;
+}
+
+void wxBoxNewSizer::RecalcSizes()
+{
+    if (m_children.GetCount() == 0)
+    {
+        SetDimension( m_position.x, m_position.y, 2, 2 );
+        return;
+    }
+    
+    int delta = 0;
+    int extra = 0;
+    if (m_stretchable)
+    {
+        if (m_orient == wxHORIZONTAL)
+        {
+            delta = (m_size.x - m_fixedWidth) / m_stretchable;
+            extra = (m_size.x - m_fixedWidth) % m_stretchable;
+	}
+	else
+	{
+            delta = (m_size.y - m_fixedHeight) / m_stretchable;
+            extra = (m_size.y - m_fixedHeight) % m_stretchable;
+	}
+    }
+    
+    wxPoint pt( m_position );
+    
+    wxNode *node = m_children.GetFirst();
+    while (node)
+    {
+        wxNewSizerItem *item = (wxNewSizerItem*) node->Data();
+
+	int weight = 1;
+	if (item->GetOption())
+	    weight = item->GetOption();
+	
+	wxSize size( item->CalcMin() );
+	
+	if (m_orient == wxVERTICAL)
+	{
+	    long height = size.y;
+	    if (item->GetOption())
+	    {
+	        height = (delta * weight) + extra;
+		extra = 0; // only the first item will get the remainder as extra size
+	    }
+	    item->SetDimension( pt, wxSize( size.x, height) );
+	    pt.y += height;
+	}
+	else
+	{
+	    long width = size.x;
+	    if (item->GetOption())
+	    {
+	        width = (delta * weight) + extra;
+		extra = 0; // only the first item will get the remainder as extra size
+	    }
+	    item->SetDimension( pt, wxSize(width, size.y) );
+	    pt.x += width;
+	}
+
+	node = node->Next();
+    }
+}
+
+wxSize wxBoxNewSizer::CalcMin()
+{
+    if (m_children.GetCount() == 0)
+        return wxSize(2,2);
+    
+    m_stretchable = 0;
+    m_minWidth = 0;
+    m_minHeight = 0;
+    m_fixedWidth = 0;
+    m_fixedHeight = 0;
+    
+    wxNode *node = m_children.GetFirst();
+    while (node)
+    {
+        wxNewSizerItem *item = (wxNewSizerItem*) node->Data();
+	
+	int weight = 1;
+	if (item->GetOption())
+	    weight = item->GetOption();
+	
+	wxSize size( item->CalcMin() );
+	
+	if (m_orient == wxHORIZONTAL)
+	{
+	    m_minWidth += (size.x * weight);
+	    m_minHeight = wxMax( m_minHeight, size.y );
+	}
+	else
+	{
+	    m_minHeight += (size.y * weight);
+	    m_minWidth = wxMax( m_minWidth, size.x );
+	}
+	
+	if (item->GetOption())
+	{
+	    m_stretchable += weight;
+	}
+	else
+	{
+	    if (m_orient == wxVERTICAL)
+	    {
+		m_fixedHeight += size.y;
+		m_fixedWidth = wxMax( m_fixedWidth, size.x );
+	    }
+	    else
+	    {
+		m_fixedWidth += size.x;
+		m_fixedHeight = wxMax( m_fixedHeight, size.y );
+	    }
+	}
+	
+	node = node->Next();
+    }
+	
+    return wxSize( m_minWidth, m_minHeight );
 }
 
 #endif
