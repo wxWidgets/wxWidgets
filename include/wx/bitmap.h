@@ -163,7 +163,7 @@ protected:
 };
 #endif
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
 #include "wx/palmos/bitmap.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/bitmap.h"

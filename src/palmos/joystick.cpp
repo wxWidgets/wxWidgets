@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,12 +21,6 @@
 #endif
 
 #include "wx/string.h"
-#include "wx/window.h"
-
-#if !defined(__WIN32__) && !defined(_MMRESULT_)
-typedef UINT MMRESULT;
-#endif
-
 #include "wx/window.h"
 #include "wx/palmos/joystick.h"
 

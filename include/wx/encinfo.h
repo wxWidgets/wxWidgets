@@ -35,7 +35,7 @@
 struct WXDLLEXPORT wxNativeEncodingInfo
 {
     wxString facename;          // may be empty meaning "any"
-#ifndef __PALMOS__
+#ifndef __WXPALMOS__
     wxFontEncoding encoding;    // so that we know what this struct represents
 
 #if defined(__WXMSW__) || \

@@ -791,7 +791,7 @@ private:
 // now include the declaration of wxDC class
 // ----------------------------------------------------------------------------
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
     #include "wx/palmos/dc.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/dc.h"

@@ -1,7 +1,7 @@
 #ifndef _WX_COLOUR_H_BASE_
 #define _WX_COLOUR_H_BASE_
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
 #include "wx/palmos/colour.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/colour.h"

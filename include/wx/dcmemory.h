@@ -1,7 +1,7 @@
 #ifndef _WX_DCMEMORY_H_BASE_
 #define _WX_DCMEMORY_H_BASE_
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
 #include "wx/palmos/dcmemory.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/dcmemory.h"

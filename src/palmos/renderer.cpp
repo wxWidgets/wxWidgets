@@ -17,15 +17,15 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// Palm OS doesn't really have a theme engine, so this is not needed.
-#ifndef __PALMOS__
-
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+// Palm OS doesn't really have a theme engine, so this is not needed.
+#ifndef __WXPALMOS__
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -154,7 +154,7 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
                    win, dc, size, position, orient, flags);
         return;
     }
-    
+
     // I don't know if it is correct to use the rebar background for the
     // splitter but it least this works ok in the default theme
     wxUxThemeHandle hTheme(win, L"REBAR");
@@ -164,7 +164,7 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
         if ( orient == wxVERTICAL )
         {
             rect.left = position;
-            rect.right = position + SASH_WIDTH; 
+            rect.right = position + SASH_WIDTH;
             rect.top = 0;
             rect.bottom = size.y;
         }
@@ -184,7 +184,7 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
                                     0 /* no state */ ,
                                     &rect,
                                     NULL
-                                );       
+                                );
     }
 }
 

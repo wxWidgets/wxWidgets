@@ -95,7 +95,7 @@
     #include <sys/stat.h>
 #endif
 
-#if defined(__WXMSW__) && !defined(__PALMOS__)
+#if defined(__WXMSW__) && !defined(__WXPALMOS__)
     #include "wx/msw/private.h"
 #endif
 
@@ -330,10 +330,10 @@ wxString wxGetEmailAddress()
     wxString email;
 
     wxString host = wxGetFullHostName();
-    if ( !host.IsEmpty() )
+    if ( !host.empty() )
     {
         wxString user = wxGetUserId();
-        if ( !user.IsEmpty() )
+        if ( !user.empty() )
         {
             email << user << wxT('@') << host;
         }

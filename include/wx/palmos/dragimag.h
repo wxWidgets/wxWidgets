@@ -5,7 +5,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -31,10 +31,6 @@
 
   void MyTreeCtrl::OnBeginDrag(wxTreeEvent& event)
   {
-#ifdef __WXMSW__
-    ::UpdateWindow((HWND) GetHWND()); // We need to implement this in wxWidgets
-#endif
-
     CaptureMouse();
 
     m_dragImage = new wxDragImage(* this, itemId);
@@ -61,11 +57,6 @@
 
     // Do some updating of the window, such as highlighting the drop target
     ...
-
-#ifdef __WXMSW__
-    if (updateWindow)
-        ::UpdateWindow((HWND) GetHWND());
-#endif
 
     // Move and show the image again
     m_dragImage->Move(event.GetPosition(), this);
@@ -216,7 +207,7 @@ public:
 
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image.
-    bool BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen = FALSE, wxRect* rect = (wxRect*) NULL);
+    bool BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen = false, wxRect* rect = (wxRect*) NULL);
 
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image. This is full screen only. fullScreenRect gives the

@@ -150,7 +150,7 @@ protected:
     #define wxStatusBarUniv wxStatusBar
 
     #include "wx/univ/statusbr.h"
-#elif defined(__PALMOS__)
+#elif defined(__WXPALMOS__)
     #define wxStatusBarPalm wxStatusBar
 
     #include "wx/palmos/statusbr.h"

@@ -245,7 +245,7 @@ protected:
 
 
 // include the real class declaration
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
     #include "wx/palmos/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowPalm
 #elif defined(__WXMSW__)

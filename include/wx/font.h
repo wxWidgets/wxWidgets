@@ -142,7 +142,7 @@ public:
         int family,                 // see wxFontFamily enum
         int style,                  // see wxFontStyle enum
         int weight,                 // see wxFontWeight enum
-        bool underlined = FALSE,    // not underlined by default
+        bool underlined = false,    // not underlined by default
         const wxString& face = wxEmptyString,              // facename
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT); // ISO8859-X, ...
 
@@ -231,7 +231,7 @@ private:
 };
 
 // include the real class declaration
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
     #include "wx/palmos/font.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/font.h"

@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ wxBEGIN_FLAGS( wxTextCtrlStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -146,7 +146,7 @@ wxEND_FLAGS( wxTextCtrlStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl,"wx/textctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxTextCtrl)
-    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
+    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent )
     wxEVENT_PROPERTY( TextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
 
     wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
@@ -321,15 +321,6 @@ void wxTextCtrl::Clear()
 {
 }
 
-#ifdef __WIN32__
-
-bool wxTextCtrl::EmulateKeyPress(const wxKeyEvent& event)
-{
-    return false;
-}
-
-#endif // __WIN32__
-
 // ----------------------------------------------------------------------------
 // Clipboard operations
 // ----------------------------------------------------------------------------
@@ -475,7 +466,7 @@ wxTextCtrl::HitTest(const wxPoint& pt, wxTextCoord *col, wxTextCoord *row) const
 }
 
 // ----------------------------------------------------------------------------
-// 
+//
 // ----------------------------------------------------------------------------
 
 void wxTextCtrl::ShowPosition(long pos)

@@ -36,7 +36,7 @@
 
 #include "wx/gdicmn.h"
 
-#if defined(__WXMSW__) && !defined(__PALMOS__)
+#if defined(__WXMSW__) && !defined(__WXPALMOS__)
   #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
   #include  "wx/msw/winundef.h"
 #endif

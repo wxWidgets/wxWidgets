@@ -47,7 +47,7 @@
 #include "wx/utils.h"
 #include "wx/ptr_scpd.h"
 
-#if defined(__WXMSW__) && !defined(__PALMOS__)
+#if defined(__WXMSW__) && !defined(__WXPALMOS__)
   #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
 #endif
 
@@ -139,7 +139,7 @@ void wxAppBase::CleanUp()
         // but we want to delete them now
         delete wxTopLevelWindows.GetFirst()->GetData();
     }
-    
+
     // undo everything we did in Initialize() above
     wxBitmap::CleanUpHandlers();
 

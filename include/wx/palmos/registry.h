@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ typedef unsigned long ulong;
 // ----------------------------------------------------------------------------
 // class wxRegKey encapsulates window HKEY handle
 // ----------------------------------------------------------------------------
-class WXDLLIMPEXP_BASE wxRegKey 
+class WXDLLIMPEXP_BASE wxRegKey
 {
 public:
   // NB: do _not_ change the values of elements in these enumerations!
@@ -42,38 +42,12 @@ public:
   {
     Type_None,                       // No value type
     Type_String,                     // Unicode nul terminated string
-#ifdef  __WIN32__
-    Type_Expand_String,              // Unicode nul terminated string
-                                     // (with environment variable references)
-    Type_Binary,                     // Free form binary
-    Type_Dword,                      // 32-bit number
-    Type_Dword_little_endian         // 32-bit number
-        = Type_Dword,                // (same as Type_DWORD)
-    Type_Dword_big_endian,           // 32-bit number
-    Type_Link,                       // Symbolic Link (unicode)
-    Type_Multi_String,               // Multiple Unicode strings
-    Type_Resource_list,              // Resource list in the resource map
-    Type_Full_resource_descriptor,   // Resource list in the hardware description
-    Type_Resource_requirements_list  // ???
-#endif  //WIN32
   };
 
   // predefined registry keys
   enum StdKey
   {
     HKCR        // classes root
-#ifdef  __WIN32__
-    ,
-    HKCU,       // current user
-    HKLM,       // local machine
-    HKUSR,      // users
-    HKPD        // performance data (WinNT/2K only)
-#if WINVER >= 0x0400
-    ,
-    HKCC,       // current config (starting from Win95/NT 4.0)
-    HKDD        // dynamic data (Win95/98 only)
-#endif  // Winver
-#endif  // Win32/16
   };
 
   // access mode for the key
@@ -121,7 +95,7 @@ public:
 
   // get infomation about the key
     // get the (full) key name. Abbreviate std root keys if bShortPrefix.
-  wxString GetName(bool bShortPrefix = TRUE) const;
+  wxString GetName(bool bShortPrefix = true) const;
     // return true if the key exists
   bool  Exists() const;
     // get the info about key (any number of these pointers may be NULL)
@@ -139,7 +113,7 @@ public:
     // which need the key to be opened if the key is not opened yet)
   bool  Open(AccessMode mode = Write);
     // create the key: will fail if the key already exists and !bOkIfExists
-  bool  Create(bool bOkIfExists = TRUE);
+  bool  Create(bool bOkIfExists = true);
     // rename a value from old name to new one
   bool  RenameValue(const wxChar *szValueOld, const wxChar *szValueNew);
     // rename the key
@@ -166,14 +140,12 @@ public:
   // access to values and subkeys
     // get value type
   ValueType GetValueType(const wxChar *szValue) const;
-    // returns TRUE if the value contains a number (else it's some string)
+    // returns true if the value contains a number (else it's some string)
   bool IsNumericValue(const wxChar *szValue) const;
 
     // assignment operators set the default value of the key
   wxRegKey& operator=(const wxString& strValue)
     { SetValue(NULL, strValue); return *this; }
-  wxRegKey& operator=(long lValue)
-    { SetValue(NULL, lValue); return *this; }
 
     // query the default value of the key: implicitly or explicitly
   wxString QueryDefaultValue() const;
@@ -185,19 +157,12 @@ public:
   bool  SetValue(const wxChar *szValue, const wxString& strValue);
     // retrieve the string value
   bool  QueryValue(const wxChar *szValue, wxString& strValue) const
-    { return QueryValue(szValue, strValue, FALSE); }
+    { return QueryValue(szValue, strValue, false); }
     // retrieve raw string value
   bool  QueryRawValue(const wxChar *szValue, wxString& strValue) const
-    { return QueryValue(szValue, strValue, TRUE); }
+    { return QueryValue(szValue, strValue, true); }
     // retrieve either raw or expanded string value
   bool  QueryValue(const wxChar *szValue, wxString& strValue, bool raw) const;
-
-#ifdef  __WIN32__
-    // set the numeric value
-  bool  SetValue(const wxChar *szValue, long lValue);
-    // return the numeric value
-  bool  QueryValue(const wxChar *szValue, long *plValue) const;
-#endif  //Win32
 
   // query existence of a key/value
     // return true if value exists

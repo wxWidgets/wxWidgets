@@ -26,7 +26,7 @@
 
 #include "wx/font.h"        // for wxFont and wxFontEncoding
 
-#if defined(__WXMSW__) && !defined(__PALMOS__)
+#if defined(__WXMSW__) && !defined(__WXPALMOS__)
     #include "wx/msw/wrapwin.h"
 #endif
 
@@ -109,7 +109,7 @@ public:
 
     // set the XFLD
     void SetXFontName(const wxString& xFontName);
-#elif defined(__WXMSW__) && !defined(__PALMOS__)
+#elif defined(__WXMSW__) && !defined(__WXPALMOS__)
     LOGFONT      lf;
 #elif defined(__WXPM__)
     // OS/2 native structures that define a font

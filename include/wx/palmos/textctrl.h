@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -83,10 +83,6 @@ public:
     // inserts it at the end
     virtual void WriteText(const wxString& text);
     virtual void AppendText(const wxString& text);
-
-#ifdef __WIN32__
-    virtual bool EmulateKeyPress(const wxKeyEvent& event);
-#endif // __WIN32__
 
 #if wxUSE_RICHEDIT
     // apply text attribute to the range of text (only works with richedit
@@ -216,10 +212,10 @@ protected:
 
     // replace the contents of the selection or of the entire control with the
     // given text
-    void DoWriteText(const wxString& text, bool selectionOnly = TRUE);
+    void DoWriteText(const wxString& text, bool selectionOnly = true);
 
     // set the selection possibly without scrolling the caret into view
-    void DoSetSelection(long from, long to, bool scrollCaret = TRUE);
+    void DoSetSelection(long from, long to, bool scrollCaret = true);
 
     // return true if there is a non empty selection in the control
     bool HasSelection() const;
@@ -228,7 +224,7 @@ protected:
     // position
     long GetLengthOfLineContainingPos(long pos) const;
 
-    // send TEXT_UPDATED event, return TRUE if it was handled, FALSE otherwise
+    // send TEXT_UPDATED event, return true if it was handled, false otherwise
     bool SendUpdateEvent();
 
     // override some base class virtuals
@@ -244,7 +240,7 @@ protected:
     int m_verRichEdit;
 #endif // wxUSE_RICHEDIT
 
-    // if TRUE, SendUpdateEvent() will eat the next event (see comments in the
+    // if true, SendUpdateEvent() will eat the next event (see comments in the
     // code as to why this is needed)
     bool m_suppressNextUpdate;
 

@@ -26,8 +26,11 @@
 /*  Make sure the environment is set correctly */
 #   if defined(__WXMSW__) && defined(__X__)
 #       error "Target can't be both X and Windows"
+#   elif defined(__WXMSW__) && defined(__PALMOS__)
+#       error "Target can't be both PalmOS and Windows"
 #   elif !defined(__WXMOTIF__) && \
          !defined(__WXMSW__)   && \
+         !defined(__WXPALMOS__)&& \
          !defined(__WXGTK__)   && \
          !defined(__WXPM__)    && \
          !defined(__WXMAC__)   && \
@@ -678,7 +681,17 @@ typedef wxUint16 wxWord;
  */
 
 /*  32bit */
-#ifdef __WINDOWS__
+#ifdef __PALMOS__
+    typedef int wxInt32;
+    typedef unsigned int wxUint32;
+    #define SIZEOF_INT 4
+    #define SIZEOF_LONG 4
+    #define SIZEOF_WCHAR_T 2
+    #define SIZEOF_SIZE_T 4
+    #define wxSIZE_T_IS_UINT
+    #define SIZEOF_VOID_P 4
+    #define SIZEOF_SIZE_T 4
+#elif defined(__WINDOWS__)
     /*  Win64 uses LLP64 model and so ints and longs have the same size as in */
     /*  Win32 */
     #if defined(__WIN32__)
@@ -2326,7 +2339,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSView);
 typedef WX_NSView WXWidget; /*  wxWidgets BASE definition */
 #endif /*  __WXCOCOA__ */
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPALMOS__)
 
 /*  the keywords needed for WinMain() declaration */
 #ifndef WXFAR

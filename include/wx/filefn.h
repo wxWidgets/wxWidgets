@@ -173,7 +173,7 @@ enum wxSeekMode
 
     // detect compilers which have support for huge files (currently only
     // Digital Mars doesn't)
-    #ifndef __PALMOS__
+    #ifndef __WXPALMOS__
     #include "wx/msw/private.h"
     #endif
 
@@ -299,7 +299,7 @@ enum wxSeekMode
     #endif
 
     // constants (unless already defined by the user code)
-    #if !defined(__BORLANDC__) && !defined(__WATCOMC__) && !defined(__PALMOS__)
+    #if !defined(__BORLANDC__) && !defined(__WATCOMC__) && !defined(__WXPALMOS__)
         #ifndef O_RDONLY
             #define   O_RDONLY    _O_RDONLY
             #define   O_WRONLY    _O_WRONLY

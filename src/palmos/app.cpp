@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/08/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -127,8 +127,8 @@ wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
     info.versionMajor = baseInfo.versionMajor;
     info.versionMinor = baseInfo.versionMinor;
     info.os = baseInfo.os;
-    info.shortName = _T("msw");
-    info.name = _T("wxMSW");
+    info.shortName = _T("palmos");
+    info.name = _T("wxPalmOS");
 #ifdef __WXUNIVERSAL__
     info.shortName << _T("univ");
     info.name << _T("/wxUniversal");
@@ -193,7 +193,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 //      to create a window of this class is made.
 bool wxApp::RegisterWindowClasses()
 {
-    return TRUE;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -202,7 +202,7 @@ bool wxApp::RegisterWindowClasses()
 
 bool wxApp::UnregisterWindowClasses()
 {
-    bool retval = TRUE;
+    bool retval = true;
     return retval;
 }
 
@@ -268,7 +268,7 @@ void wxApp::WakeUpIdle()
 void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 {
     if (GetTopWindow())
-        GetTopWindow()->Close(TRUE);
+        GetTopWindow()->Close(true);
 }
 
 // Default behaviour: close the application with prompts. The
@@ -278,7 +278,7 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
     if (GetTopWindow())
     {
         if (!GetTopWindow()->Close(!event.CanVeto()))
-            event.Veto(TRUE);
+            event.Veto(true);
     }
 }
 

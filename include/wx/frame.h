@@ -247,7 +247,7 @@ protected:
 #if defined(__WXUNIVERSAL__) // && !defined(__WXMICROWIN__)
     #include "wx/univ/frame.h"
 #else // !__WXUNIVERSAL__
-    #if defined(__PALMOS__)
+    #if defined(__WXPALMOS__)
         #include "wx/palmos/frame.h"
     #elif defined(__WXMSW__)
         #include "wx/msw/frame.h"

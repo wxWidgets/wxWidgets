@@ -9,7 +9,7 @@
     #include "wx/msw/wince/helpwce.h"
 
     #define wxHelpController wxWinceHelpController
-#elif defined(__PALMOS__)
+#elif defined(__WXPALMOS__)
     #include "wx/palmos/help.h"
 
     #define wxHelpController wxPalmHelpController

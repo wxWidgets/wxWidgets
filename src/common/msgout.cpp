@@ -52,7 +52,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#if defined(__WXMSW__) && !defined(__PALMOS__)
+#if defined(__WXMSW__) && !defined(__WXPALMOS__)
     #include "wx/msw/private.h"
 #endif
 #ifdef __WXMAC__
@@ -118,7 +118,7 @@ void wxMessageOutputDebug::Printf(const wxChar* format, ...)
     out.PrintfV(format, args);
     va_end(args);
 
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__) && !defined(__PALMOS__)
+#if defined(__WXMSW__) && !defined(__WXMICROWIN__) && !defined(__WXPALMOS__)
     out.Replace(wxT("\t"), wxT("        "));
     out.Replace(wxT("\n"), wxT("\r\n"));
     ::OutputDebugString(out);

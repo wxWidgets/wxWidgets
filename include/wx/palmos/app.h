@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/17/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,6 @@ protected:
 extern int WXDLLEXPORT
 wxEntry();
 
-#include <PalmOS.h>
 #define IMPLEMENT_WXWIN_MAIN                                              \
     uint32_t PilotMain(uint16_t cmd, MemPtr cmdPBP, uint16_t launchFlags) \
     {                                                                     \
@@ -112,6 +111,6 @@ wxEntry();
         }                                                                 \
         return errNone;                                                   \
     }
-    
+
 #endif // _WX_APP_H_
 

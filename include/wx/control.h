@@ -100,7 +100,7 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/control.h"
-#elif defined(__PALMOS__)
+#elif defined(__WXPALMOS__)
     #include "wx/palmos/control.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/control.h"

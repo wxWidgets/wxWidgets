@@ -43,7 +43,7 @@
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
 
-#if defined(__WXMSW__) && !defined(__PALMOS__)
+#if defined(__WXMSW__) && !defined(__WXPALMOS__)
   #include  "wx/msw/wrapwin.h"  // includes windows.h for MessageBox()
 #endif
 
@@ -140,7 +140,7 @@ bool wxAppConsole::Initialize(int& argc, wxChar **argv)
     this->argc = argc;
     this->argv = argv;
 
-#ifndef __PALMOS__
+#ifndef __WXPALMOS__
     if ( m_appName.empty() && argv )
     {
         // the application name is, by default, the name of its executable file

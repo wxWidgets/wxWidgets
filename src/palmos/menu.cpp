@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/12/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -45,10 +45,7 @@
 // other standard headers
 #include <string.h>
 
-#ifdef __PALMOS__
-    #include <PalmOS.h>
-    #include <Menu.h>
-#endif
+#include <Menu.h>
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -128,7 +125,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxMenuInfo)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_2( wxMenuInfo , wxMenu* , Menu , wxString , Title ) 
+wxCONSTRUCTOR_2( wxMenuInfo , wxMenu* , Menu , wxString , Title )
 
 wxCOLLECTION_TYPE_INFO( wxMenuInfo * , wxMenuInfoList ) ;
 
@@ -206,11 +203,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 {
     if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
-           // Regenerate the menu resource        
+        // Regenerate the menu resource
         GetMenuBar()->Refresh();
     }
-    
-    return TRUE;
+
+    return true;
 }
 
 void wxMenu::EndRadioGroup()
@@ -227,11 +224,11 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
     }
     else if(IsAttached() && GetMenuBar()->IsAttached())
     {
-           // Regenerate the menu resource        
+        // Regenerate the menu resource
         GetMenuBar()->Refresh();
     }
-    
-    return item;    
+
+    return item;
 }
 
 wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
@@ -239,7 +236,7 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
     if (wxMenuBase::DoInsert(pos, item) && DoInsertOrAppend(item, pos))
         return item;
     else
-        return NULL;    
+        return NULL;
 }
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
@@ -260,13 +257,13 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
     // remove the item from the menu
     wxMenuItem *ret=wxMenuBase::DoRemove(item);
-    
+
     if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
-           // Regenerate the menu resource        
+        // Regenerate the menu resource
         GetMenuBar()->Refresh();
     }
-    
+
     return ret;
 }
 
@@ -301,7 +298,7 @@ void wxMenu::SetTitle(const wxString& label)
 
     if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
-           // Regenerate the menu resource        
+        // Regenerate the menu resource
         GetMenuBar()->Refresh();
     }
 }
@@ -426,7 +423,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
-        return FALSE;
+        return false;
 
     m_titles.Insert(wxStripMenuCodes(title), pos);
 
@@ -436,13 +433,13 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         Refresh();
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 {
     if ( !wxMenuBarBase::Append(menu, title) )
-        return FALSE;
+        return false;
 
     m_titles.Add(wxStripMenuCodes(title));
 
@@ -452,7 +449,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
         Refresh();
     }
 
-    return TRUE;    
+    return true;
 }
 
 wxMenu *wxMenuBar::Remove(size_t pos)
@@ -484,17 +481,17 @@ int wxMenuBar::ProcessCommand(int ItemID)
 {
     if(!IsAttached())
         return -1;
-        
+
     int MenuNum=(ItemID/1000)-1;
     int ItemNum=(ItemID-(1000*(MenuNum+1)));
-    
+
     // Should never happen, but it doesn't hurt to check anyway.
     if(MenuNum>GetMenuCount())
         return -1;
 
     // Get the menu
     wxMenu *ActiveMenu=GetMenu(MenuNum);
-    
+
     // Make sure this is a valid item.
     if(ItemNum>ActiveMenu->GetMenuItemCount())
         return -1;
@@ -506,45 +503,45 @@ int wxMenuBar::ProcessCommand(int ItemID)
     return ActiveID;
 }
 
-/* Palm OS does not have good dynamic menu support.  About all you can do with 
- * the standard API calls is to add new items to an existing drop-down menu and 
- * hide/show items in a drop-down menu.  It is impossible to add, hide, or 
- * change the label on a drop-down menu. 
- * 
- * The easiest and simplest way around this limitation is to modify the Palm OS 
- * MenuBarType structure directly.  This gives limited ability to change the 
- * label on a drop-down menu.  I have not been able to find a safe way to add, 
+/* Palm OS does not have good dynamic menu support.  About all you can do with
+ * the standard API calls is to add new items to an existing drop-down menu and
+ * hide/show items in a drop-down menu.  It is impossible to add, hide, or
+ * change the label on a drop-down menu.
+ *
+ * The easiest and simplest way around this limitation is to modify the Palm OS
+ * MenuBarType structure directly.  This gives limited ability to change the
+ * label on a drop-down menu.  I have not been able to find a safe way to add,
  * delete, or resize drop-down menus in OS 6.
- * 
+ *
  * The following routine attempt to work around these limitations present in the
- * Palm OS API to provide limited dynamic menu support.  This solution is far 
+ * Palm OS API to provide limited dynamic menu support.  This solution is far
  * from perfect, but the only other option is to wait for PalmSource to add full
  * dynamic menu support, or to recreate the Palm OS menu system from scratch.
- * 
+ *
  * This system is limited in that no more than 4 drop-down menus are allowed per
  * menu bar, and the label for each drop-down menu is limited to 8 characters of
  * text.  However, this menu system should work for most applications.
- * 
- * Basically the menu routines select one of four menu bars, depending on 
- * whether or not the requested menu bar has one, two, three, or four drop-down 
+ *
+ * Basically the menu routines select one of four menu bars, depending on
+ * whether or not the requested menu bar has one, two, three, or four drop-down
  * menus.
- * 
- * These four "template" menu bars contain one, two, three, or four drop-down 
- * menus.  Each menu has a dummy menu item attached to it to allow the Palm OS 
+ *
+ * These four "template" menu bars contain one, two, three, or four drop-down
+ * menus.  Each menu has a dummy menu item attached to it to allow the Palm OS
  * MenuAddItem function to add the real items.
- * 
- * The labels on the drop-down menus are then replaced with the labels of the 
+ *
+ * The labels on the drop-down menus are then replaced with the labels of the
  * real menus.
- * 
- * The menu is then attached to the active window and the MenuAddItem API 
- * function is called to add the items to each drop-down menu.  Finally, 
+ *
+ * The menu is then attached to the active window and the MenuAddItem API
+ * function is called to add the items to each drop-down menu.  Finally,
  * MenuHideItem is called to remove the dummy items from each drop-down menu.
  */
 void wxMenuBar::LoadMenu()
 {
     int i=0;
     int j=0;
-    
+
     // Handle to the currently running application database
     DmOpenRef    AppDB;
 
@@ -555,16 +552,16 @@ void wxMenuBar::LoadMenu()
     int NumMenus=GetMenuCount();
 
     // Set up the pointers and handles
-    char *PalmOSMenuBarPtr;    
+    char *PalmOSMenuBarPtr;
     MemHandle PalmOSMenuBar;
-            
+
     // Load the menu template and set up the menu pointers
     if(NumMenus==1)
     {
         PalmOSMenuBar=DmGetResource(AppDB,'MBAR',1000);
         PalmOSMenuBarPtr=(char *)MemHandleLock(PalmOSMenuBar);
 
-        PalmOSMenuBarPtr+=74;    
+        PalmOSMenuBarPtr+=74;
     }
     else if(NumMenus==2)
     {
@@ -582,7 +579,7 @@ void wxMenuBar::LoadMenu()
     }
     else
     {
-        // We support a maximum of 4 menus, so make sure that do not create 
+        // We support a maximum of 4 menus, so make sure that do not create
         // more than we can handle.
         NumMenus=4;
 
@@ -591,14 +588,14 @@ void wxMenuBar::LoadMenu()
 
         PalmOSMenuBarPtr+=200;
     }
-    
+
     // Set the proper names for the drop-down triggers.
     for(i=0;i<NumMenus;i++)
     {
         // Clear out the old label
         char buffer[8]={' ',' ',' ',' ',' ',' ',' ',' '};
         MemMove(PalmOSMenuBarPtr,buffer,8);
-        
+
         wxString MenuTitle=m_titles.Item(i);
 
         // Make sure we don't copy more than 8 bytes for the label
@@ -611,28 +608,28 @@ void wxMenuBar::LoadMenu()
     }
 
     // We are done with the menu pointer.
-    MemHandleUnlock(PalmOSMenuBar);    
+    MemHandleUnlock(PalmOSMenuBar);
     DmReleaseResource(PalmOSMenuBar);
 
-    // We must make the menu active before we can add items to the drop-down 
+    // We must make the menu active before we can add items to the drop-down
     // triggers.
     FrmSetMenu(FrmGetActiveForm(),AppDB,NumMenus*1000);
 
-    /* Add the menu items to the drop-down triggers.  This must be done after 
-     * setting the triggers, because setting the names of drop-down triggers 
-     * that have a variable number of items requires carefull calculation of 
+    /* Add the menu items to the drop-down triggers.  This must be done after
+     * setting the triggers, because setting the names of drop-down triggers
+     * that have a variable number of items requires carefull calculation of
      * the offsets in the MenuBarType structure.  Setting the triggers first
      * avoids this.
      */
     for(i=0;i<NumMenus;i++)
     {
         wxMenu *CurrentMenu=GetMenu(i);
-        
+
         for(j=0;j<CurrentMenu->GetMenuItemCount();j++)
         {
             wxMenuItem *CurrentItem=CurrentMenu->FindItemByPosition(j);
             wxString ItemLabel=CurrentItem->GetLabel();
-            
+
             if(CurrentItem->IsSeparator()==true)
             {
                 char Separator=MenuSeparatorChar;
@@ -649,7 +646,7 @@ void wxMenuBar::LoadMenu()
                     MenuAddItem(((i*1000)+1000)+j-1,((i*1000)+1000)+j,0x00,ItemLabel);
             }
         }
-        
+
         // Hide the dummy menu item, since we don't need it anymore.
         MenuHideItem(9000+i);
     }
@@ -658,16 +655,9 @@ void wxMenuBar::LoadMenu()
 void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);
-    
+
     LoadMenu();
 }
-
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
-bool wxMenuBar::AddAdornments(long style)
-{
-    return false;
-}
-#endif
 
 void wxMenuBar::Detach()
 {

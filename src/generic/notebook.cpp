@@ -17,8 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifndef __PALMOS__
-
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "notebook.h"
 #endif
@@ -33,6 +31,8 @@
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
+
+#ifndef __WXPALMOS__
 
 #include  "wx/string.h"
 #include  "wx/log.h"
@@ -708,4 +708,4 @@ bool wxNotebookTabView::OnTabPreActivate(int activateId, int deactivateId)
   return retval;
 }
 
-#endif // __PALMOS__
+#endif // __WXPALMOS__

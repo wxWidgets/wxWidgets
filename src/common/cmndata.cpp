@@ -49,7 +49,7 @@
     #include "wx/paper.h"
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
-#if defined(__WXMSW__) && !defined(__PALMOS__)
+#if defined(__WXMSW__) && !defined(__WXPALMOS__)
     #include <windowsx.h>
     #include "wx/msw/private.h"
 
@@ -197,9 +197,9 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
 wxPrintData::~wxPrintData()
 {
     m_nativeData->m_ref--;
-    if (m_nativeData->m_ref == 0) 
+    if (m_nativeData->m_ref == 0)
         delete m_nativeData;
-        
+
 #ifdef __WXMAC__
     delete m_nativePrintData ;
 #endif
@@ -236,19 +236,19 @@ void wxPrintData::operator=(const wxPrintData& data)
     m_paperSize = data.m_paperSize;
     m_bin = data.m_bin;
     m_printMode = data.m_printMode;
-    m_filename = data.m_filename;   
+    m_filename = data.m_filename;
 
-    // UnRef old m_nativeData   
+    // UnRef old m_nativeData
     if (m_nativeData)
     {
         m_nativeData->m_ref--;
-        if (m_nativeData->m_ref == 0) 
+        if (m_nativeData->m_ref == 0)
             delete m_nativeData;
     }
     // Set Ref new one
     m_nativeData = data.GetNativeData();
     m_nativeData->m_ref++;
-    
+
 #ifdef __WXMAC__
     m_nativePrintData->CopyFrom( data.m_nativePrintData ) ;
 #endif
@@ -444,10 +444,10 @@ wxPrintDialogData::wxPrintDialogData()
     m_printSelection = false;
     m_printEnableSelection = false;
     m_printEnablePageNumbers = true;
-    
+
     wxPrintFactory* factory = wxPrintFactory::GetFactory();
     m_printEnablePrintToFile = ! factory->HasOwnPrintToFile();
-    
+
     m_printEnableHelp = false;
 #if WXWIN_COMPATIBILITY_2_4
     m_printSetupDialog = false;

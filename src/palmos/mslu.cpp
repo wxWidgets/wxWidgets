@@ -16,9 +16,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-// This may or may not apply to Palm OS in the future, but for right now Unicode 
+// This may or may not apply to Palm OS in the future, but for right now Unicode
 // is not supported.
-#ifndef __PALMOS__
+#ifndef __WXPALMOS__
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -153,59 +153,8 @@ WXDLLEXPORT int wxMSLU__tremove(const wxChar *name)
         return _tremove(name);
 }
 
-#if defined( __VISUALC__ ) \
-    || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
-    || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
-    || ( defined(__BORLANDC__) && (__BORLANDC__ > 0x460) )
-
-WXDLLEXPORT int wxMSLU__wopen(const wxChar *name, int flags, int mode)
-{
-    if ( wxUsingUnicowsDll() )
-#ifdef __BORLANDC__
-        return open(wxConvFile.cWX2MB(name), flags, mode);
-#else
-        return _open(wxConvFile.cWX2MB(name), flags, mode);
-#endif
-    else
-        return _wopen(name, flags, mode);
-}
-
-WXDLLEXPORT int wxMSLU__waccess(const wxChar *name, int mode)
-{
-    if ( wxUsingUnicowsDll() )
-        return _access(wxConvFile.cWX2MB(name), mode);
-    else
-        return _waccess(name, mode);
-}
-
-WXDLLEXPORT int wxMSLU__wmkdir(const wxChar *name)
-{
-    if ( wxUsingUnicowsDll() )
-        return _mkdir(wxConvFile.cWX2MB(name));
-    else
-        return _wmkdir(name);
-}
-
-WXDLLEXPORT int wxMSLU__wrmdir(const wxChar *name)
-{
-    if ( wxUsingUnicowsDll() )
-        return _rmdir(wxConvFile.cWX2MB(name));
-    else
-        return _wrmdir(name);
-}
-
-WXDLLEXPORT int wxMSLU__wstat(const wxChar *name, struct _stat *buffer)
-{
-    if ( wxUsingUnicowsDll() )
-        return _stat((const char*)wxConvFile.cWX2MB(name), buffer);
-    else
-        return _wstat(name, buffer);
-}
-
-#endif // compilers having wopen() &c
-
 #endif // wxUSE_BASE
 
 #endif // wxUSE_UNICODE_MSLU
 
-#endif // __PALMOS__
+#endif // __WXPALMOS__

@@ -1,7 +1,7 @@
 #ifndef _WX_PEN_H_BASE_
 #define _WX_PEN_H_BASE_
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
 #include "wx/palmos/pen.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/pen.h"

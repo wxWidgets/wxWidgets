@@ -12,11 +12,6 @@
 #ifndef _WX_WINDOW_H_
 #define _WX_WINDOW_H_
 
-#ifdef __PALMOS__
-    #include <PalmOS.h>
-#endif
-
-
 // ---------------------------------------------------------------------------
 // headers
 // ---------------------------------------------------------------------------
@@ -335,9 +330,6 @@ public:
     bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
 #if wxUSE_ACCEL
     bool HandleHotKey(WXWPARAM wParam, WXLPARAM lParam);
-#endif
-#ifdef __WIN32__
-    int HandleMenuChar(int chAccel, WXLPARAM lParam);
 #endif
 
     bool HandleQueryDragIcon(WXHICON *hIcon);

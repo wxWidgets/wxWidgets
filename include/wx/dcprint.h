@@ -1,7 +1,7 @@
 #ifndef _WX_DCPRINT_H_BASE_
 #define _WX_DCPRINT_H_BASE_
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
 #include "wx/palmos/dcprint.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/dcprint.h"

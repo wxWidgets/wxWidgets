@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -143,24 +143,6 @@ void wxMetafileDC::SetMapMode(int mode)
 // ----------------------------------------------------------------------------
 // wxMakeMetafilePlaceable
 // ----------------------------------------------------------------------------
-#ifdef __WIN32__
-struct RECT32
-{
-  short left;
-  short top;
-  short right;
-  short bottom;
-};
-
-struct mfPLACEABLEHEADER {
-    DWORD    key;
-    short    hmf;
-    RECT32    bbox;
-    WORD    inch;
-    DWORD    reserved;
-    WORD    checksum;
-};
-#else
 struct mfPLACEABLEHEADER {
     DWORD    key;
     HANDLE    hmf;
@@ -169,7 +151,6 @@ struct mfPLACEABLEHEADER {
     DWORD    reserved;
     WORD    checksum;
 };
-#endif
 
 /*
  * Pass filename of existing non-placeable metafile, and bounding box.

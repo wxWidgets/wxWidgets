@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ wxBEGIN_FLAGS( wxButtonStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -198,51 +198,6 @@ bool wxButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
     return false;
 }
-
-// ----------------------------------------------------------------------------
-// owner-drawn buttons support
-// ----------------------------------------------------------------------------
-
-#ifdef __WIN32__
-
-// drawing helpers
-
-static void DrawButtonText(HDC hdc,
-                           RECT *pRect,
-                           const wxString& text,
-                           COLORREF col)
-{
-}
-
-static void DrawRect(HDC hdc, const RECT& r)
-{
-}
-
-void wxButton::MakeOwnerDrawn()
-{
-}
-
-bool wxButton::SetBackgroundColour(const wxColour &colour)
-{
-    return false;
-}
-
-bool wxButton::SetForegroundColour(const wxColour &colour)
-{
-    return false;
-}
-
-static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
-                            bool selected, bool pushed)
-{
-}
-
-bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
-{
-    return true;
-}
-
-#endif // __WIN32__
 
 #endif // wxUSE_BUTTON
 

@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -14,10 +14,6 @@
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "toplevel.h"
-#endif
-
-#ifdef __PALMOS__
-    #include <PalmOS.h>
 #endif
 
 // ----------------------------------------------------------------------------
@@ -50,7 +46,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
-                
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -59,13 +55,13 @@ public:
                 long style,
                 const wxString& name,
                 wxFrame* PFrame);
-                
+
     virtual ~wxTopLevelWindowPalm();
 
     // implement base class pure virtuals
-    virtual void Maximize(bool maximize = TRUE);
+    virtual void Maximize(bool maximize = true);
     virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = TRUE);
+    virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
     virtual void SetIcon(const wxIcon& icon);
     virtual void SetIcons(const wxIconBundle& icons );
@@ -75,14 +71,14 @@ public:
     virtual bool SetShape(const wxRegion& region);
 #endif // __WXWINCE__
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
-    // wxPalm only: EnableCloseButton(FALSE) may be used to remove the "Close"
+    // wxPalm only: EnableCloseButton(false) may be used to remove the "Close"
     // button from the title bar
-    bool EnableCloseButton(bool enable = TRUE);
+    bool EnableCloseButton(bool enable = true);
 
     // implementation from now on
     // --------------------------
@@ -98,13 +94,13 @@ protected:
     // common part of all ctors
     void Init();
 
-    // create a new frame, return FALSE if it couldn't be created
+    // create a new frame, return false if it couldn't be created
     bool CreateFrame(const wxString& title,
                      const wxPoint& pos,
                      const wxSize& size);
 
     // create a new dialog using the given dialog template from resources,
-    // return FALSE if it couldn't be created
+    // return false if it couldn't be created
     bool CreateDialog(const void *dlgTemplate,
                       const wxString& title,
                       const wxPoint& pos,

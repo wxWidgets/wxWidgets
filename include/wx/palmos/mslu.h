@@ -17,7 +17,7 @@
 #include "wx/wxchar.h"
 
 #if !wxUSE_UNICODE_MSLU
-inline bool wxUsingUnicowsDll() { return FALSE; }
+inline bool wxUsingUnicowsDll() { return false; }
 #else
 
 // Returns true if we are running under Unicode emulation in Win9x environment.
@@ -33,9 +33,9 @@ inline bool wxUsingUnicowsDll()
 
 #if wxUSE_GUI
 
-WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc, 
-                                  WXLPARAM lData, WXWPARAM wData, 
-                                  int x, int y, int cx, int cy, 
+WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
+                                  WXLPARAM lData, WXWPARAM wData,
+                                  int x, int y, int cx, int cy,
                                   unsigned int flags);
 #define DrawStateW(dc, br, func, ld, wd, x, y, cx, cy, flags) \
     wxMSLU_DrawStateW((WXHDC)dc,(WXHBRUSH)br,(WXFARPROC)func, \
@@ -55,17 +55,6 @@ WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn);
 
 WXDLLEXPORT int wxMSLU__trename(const wxChar *oldname, const wxChar *newname);
 WXDLLEXPORT int wxMSLU__tremove(const wxChar *name);
-
-#if defined( __VISUALC__ ) \
-    || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
-    || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
-    || ( defined(__BORLANDC__) && (__BORLANDC__ > 0x460) )
-WXDLLEXPORT int wxMSLU__wopen(const wxChar *name, int flags, int mode);
-WXDLLEXPORT int wxMSLU__waccess(const wxChar *name, int mode);
-WXDLLEXPORT int wxMSLU__wmkdir(const wxChar *name);
-WXDLLEXPORT int wxMSLU__wrmdir(const wxChar *name);
-WXDLLEXPORT int wxMSLU__wstat(const wxChar *name, struct _stat *buffer);
-#endif
 
 #endif // wxUSE_UNICODE_MSLU
 

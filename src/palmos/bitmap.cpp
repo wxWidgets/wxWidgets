@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/08/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -166,7 +166,7 @@ wxBitmapRefData::wxBitmapRefData()
 #endif
 
     m_isDIB =
-    m_hasAlpha = FALSE;
+    m_hasAlpha = false;
 }
 
 void wxBitmapRefData::Free()
@@ -187,30 +187,21 @@ wxGDIImageRefData *wxBitmap::CreateData() const
     return NULL;
 }
 
-#ifdef __WIN32__
-
-bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
-{
-    return FALSE;
-}
-
-#endif // Win32
-
 bool wxBitmap::CopyFromCursor(const wxCursor& cursor)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    return FALSE;
+    return false;
 }
 
 #ifndef NEVER_USE_DIB
 
 bool wxBitmap::CopyFromDIB(const wxDIB& dib)
 {
-    return FALSE:
+    return false:
 }
 
 #endif // NEVER_USE_DIB
@@ -231,7 +222,7 @@ bool wxBitmap::CreateFromXpm(const char **data)
 bool wxBitmap::CreateFromXpm(const char **WXUNUSED(data))
 #endif
 {
-    return FALSE;
+    return false;
 }
 
 wxBitmap::wxBitmap(int w, int h, int d)
@@ -252,17 +243,17 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 
 bool wxBitmap::Create(int width, int height, int depth)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmap::Create(int width, int height, const wxDC& dc)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 {
-    return FALSE;
+    return false;
 }
 
 #if wxUSE_IMAGE
@@ -275,17 +266,17 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 
 bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmap::CreateFromImage(const wxImage& image, const wxDC& dc)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
 {
-    return FALSE;
+    return false;
 }
 
 wxImage wxBitmap::ConvertToImage() const
@@ -304,19 +295,19 @@ wxImage wxBitmap::ConvertToImage() const
 
 bool wxBitmap::LoadFile(const wxString& filename, long type)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmap::SaveFile(const wxString& filename,
                         int type,
                         const wxPalette *palette)
 {
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -369,7 +360,7 @@ void wxBitmap::UseAlpha()
 
 bool wxBitmap::HasAlpha() const
 {
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -453,21 +444,21 @@ wxMask::~wxMask()
 // Create a mask from a mono bitmap (copies the bitmap).
 bool wxMask::Create(const wxBitmap& bitmap)
 {
-    return FALSE;
+    return false;
 }
 
 // Create a mask from a bitmap and a palette index indicating
 // the transparent area
 bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 {
-    return FALSE;
+    return false;
 }
 
 // Create a mask from a bitmap and a colour indicating
 // the transparent area
 bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -479,7 +470,7 @@ bool wxBitmapHandler::Create(wxGDIImage *image,
                              long flags,
                              int width, int height, int depth)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmapHandler::Load(wxGDIImage *image,
@@ -487,14 +478,14 @@ bool wxBitmapHandler::Load(wxGDIImage *image,
                            long flags,
                            int width, int height)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmapHandler::Save(wxGDIImage *image,
                            const wxString& name,
                            int type)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap),
@@ -504,7 +495,7 @@ bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap),
                              int WXUNUSED(height),
                              int WXUNUSED(depth))
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap),
@@ -513,7 +504,7 @@ bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap),
                                int WXUNUSED(desiredWidth),
                                int WXUNUSED(desiredHeight))
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
@@ -521,5 +512,5 @@ bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
                                int WXUNUSED(type),
                                const wxPalette *WXUNUSED(palette))
 {
-    return FALSE;
+    return false;
 }

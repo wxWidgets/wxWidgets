@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/14/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -103,8 +103,8 @@ public:
     // constructors
     wxFontRefData()
     {
-        Init(-1, wxSize(0, 0), FALSE, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-             wxFONTWEIGHT_NORMAL, FALSE, wxEmptyString,
+        Init(-1, wxSize(0, 0), false, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+             wxFONTWEIGHT_NORMAL, false, wxEmptyString,
              wxFONTENCODING_DEFAULT);
     }
 
@@ -218,7 +218,7 @@ public:
         else
         {
             m_pointSize = pointSize;
-            m_sizeUsingPixels = FALSE;
+            m_sizeUsingPixels = false;
         }
     }
 
@@ -231,7 +231,7 @@ public:
         else
         {
             m_pixelSize = pixelSize;
-            m_sizeUsingPixels = TRUE;
+            m_sizeUsingPixels = true;
         }
     }
 
@@ -394,7 +394,7 @@ bool wxFont::DoCreate(int pointSize,
                       const wxString& faceName,
                       wxFontEncoding encoding)
 {
-	return false;
+    return false;
 }
 
 wxFont::~wxFont()
@@ -407,7 +407,7 @@ wxFont::~wxFont()
 
 bool wxFont::RealizeResource()
 {
-	return false;
+    return false;
 }
 
 bool wxFont::FreeResource(bool WXUNUSED(force))
@@ -418,11 +418,6 @@ bool wxFont::FreeResource(bool WXUNUSED(force))
 WXHANDLE wxFont::GetResourceHandle() const
 {
     return (WXHANDLE)0;
-}
-
-WXHFONT wxFont::GetHFONT() const
-{
-    return 0;
 }
 
 bool wxFont::IsFree() const

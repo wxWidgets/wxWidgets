@@ -15,7 +15,7 @@
    Compiler-specific checking.
  */
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
 #  include "wx/palmos/chkconf.h"
 #elif defined(__WXMSW__)
 #  include "wx/msw/chkconf.h"

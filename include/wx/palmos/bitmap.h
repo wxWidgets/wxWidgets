@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -198,11 +198,6 @@ protected:
 #endif // wxUSE_IMAGE
 
 private:
-#ifdef __WIN32__
-    // common part of CopyFromIcon/CopyFromCursor for Win32
-    bool CopyFromIconOrCursor(const wxGDIImage& icon);
-#endif // __WIN32__
-
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 

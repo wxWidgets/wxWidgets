@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/palmos/popupwin.h
-// Purpose:     wxPopupWindow class for wxMSW
+// Purpose:     wxPopupWindow class for PalmOS
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
 protected:
     // popups handle the position like wxTopLevelWindow, not wxWindow

@@ -79,7 +79,9 @@ public:
 
     // wxStandardPaths object is normally the same for wxBase and wxGUI
     // except in the case of wxMac and wxCocoa
+#ifndef __WXPALMOS__
     virtual wxStandardPathsBase& GetStandardPaths();
+#endif
 
     // functions abstracting differences between GUI and console modes
     // ------------------------------------------------------------------------
@@ -139,7 +141,7 @@ public:
 
 // NB: test for __UNIX__ before __WXMAC__ as under Darwin we want to use the
 //     Unix code (and otherwise __UNIX__ wouldn't be defined)
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
     #include "wx/palmos/apptbase.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/apptbase.h"
@@ -224,7 +226,7 @@ public:
 // include the platform-specific version of the classes above
 // ----------------------------------------------------------------------------
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
     #include "wx/palmos/apptrait.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/apptrait.h"

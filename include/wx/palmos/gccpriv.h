@@ -4,6 +4,9 @@
 #ifndef _WX_MSW_GCCPRIV_H_
 #define _WX_MSW_GCCPRIV_H_
 
+#include <PalmOS.h>
+#undef Abs
+
 #if defined(__MINGW32__) && !defined(__GNUWIN32__)
     #define __GNUWIN32__
 #endif
@@ -16,12 +19,12 @@
         #endif
     #endif
 #elif defined( __CYGWIN__ ) && !defined( HAVE_W32API_H )
-    #if ( __GNUC__ > 2 ) 
+    #if ( __GNUC__ > 2 )
         #define HAVE_W32API_H
     #endif
 #endif
 
-#if (defined(__WATCOMC__) && __WATCOMC__ >= 1200) 
+#if (defined(__WATCOMC__) && __WATCOMC__ >= 1200)
     #define HAVE_W32API_H
 #endif
 

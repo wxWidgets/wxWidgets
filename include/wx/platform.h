@@ -72,6 +72,27 @@
 #    endif
 #endif
 
+#if defined(__PALMOS__)
+#   ifndef __WXPALMOS__
+#       define __WXPALMOS__
+#   endif
+#   ifdef __WXMSW__
+#       undef __WXMSW__
+#   endif
+#   ifdef __WINDOWS__
+#       undef __WINDOWS__
+#   endif
+#   ifdef __WIN32__
+#       undef __WIN32__
+#   endif
+#   ifdef WIN32
+#       undef WIN32
+#   endif
+#   ifdef _WIN32
+#       undef _WIN32
+#   endif
+#endif
+
 #if defined(_WIN64)
 #    ifndef _WIN32
         /*
@@ -392,6 +413,17 @@
 #    endif
 #    define wxSIZE_T_IS_UINT
 
+#elif defined(__PALMOS__)
+#    ifdef __WIN32__
+#        error "__WIN32__ should not be defined for PalmOS"
+#    endif
+#    ifdef __WINDOWS__
+#        error "__WINDOWS__ should not be defined for PalmOS"
+#    endif
+#    ifdef __WXMSW__
+#        error "__WXMSW__ should not be defined for PalmOS"
+#    endif
+
 #else   /* Windows */
 #    ifndef __WINDOWS__
 #        define __WINDOWS__
@@ -465,7 +497,7 @@
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
  */
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
 #    include "wx/palmos/gccpriv.h"
 #elif ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     defined( __CYGWIN__ ) || \
@@ -524,7 +556,7 @@
 #endif
 
 /*
-    We need AvailabilityMacros.h for ifdefing out things that don't exist on 
+    We need AvailabilityMacros.h for ifdefing out things that don't exist on
     OSX 10.2 and lower
     FIXME:  We need a better way to detect for 10.3 then including a system header
 */

@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/14/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -126,14 +126,6 @@ public:
     virtual bool RealizeResource();
     virtual WXHANDLE GetResourceHandle() const;
     virtual bool FreeResource(bool force = false);
-
-    // for consistency with other wxMSW classes
-    WXHFONT GetHFONT() const;
-
-    /*
-       virtual bool UseResource();
-       virtual bool ReleaseResource();
-     */
 
 protected:
     // real font creation function, used in all cases

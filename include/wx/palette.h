@@ -18,7 +18,7 @@ public:
     virtual int GetColoursCount() const { wxFAIL_MSG( _T("not implemented") ); return 0; };
 };
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
     #include "wx/palmos/palette.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/palette.h"

@@ -17,7 +17,7 @@ public:
         { return (GetStyle()>=wxFIRST_HATCH) && (GetStyle()<=wxLAST_HATCH); }
 };
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
     #include "wx/palmos/brush.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/brush.h"

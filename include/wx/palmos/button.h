@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -59,20 +59,9 @@ public:
         // avoide switching into owner-drawn mode
         wxControl::SetBackgroundColour(bg);
     }
-    
-#ifdef __WIN32__
-    // coloured buttons support
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual bool SetForegroundColour(const wxColour &colour);
-
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-
-private:
-    void MakeOwnerDrawn();
-#endif // __WIN32__
 
 protected:
-    // send a notification event, return TRUE if processed
+    // send a notification event, return true if processed
     bool SendClickEvent();
 
     // default button handling

@@ -1317,7 +1317,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // include the declaration of the platform-specific class
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowPalm
     #else // !wxUniv

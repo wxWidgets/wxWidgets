@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,7 @@ wxBEGIN_FLAGS( wxWindowStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -1042,11 +1042,6 @@ bool wxWindowPalm::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
     return false;
 }
 
-int wxWindowPalm::HandleMenuChar(int chAccel, WXLPARAM lParam)
-{
-    return 0;
-}
-
 // ---------------------------------------------------------------------------
 // joystick
 // ---------------------------------------------------------------------------
@@ -1062,7 +1057,7 @@ bool wxWindowPalm::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
 
 bool wxWindowPalm::PalmOnScroll(int orientation, WXWORD wParam,
                               WXWORD pos, WXHWND control)
-{    
+{
     return false;
 }
 

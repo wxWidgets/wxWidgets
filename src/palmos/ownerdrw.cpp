@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,21 +44,6 @@ public:
     virtual bool OnInit()
     {
         ms_systemMenuFont = new wxFont;
-
-#if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
-        NONCLIENTMETRICS nm;
-        nm.cbSize = sizeof(NONCLIENTMETRICS);
-        SystemParametersInfo(SPI_GETNONCLIENTMETRICS,0,&nm,0);
-
-        ms_systemMenuButtonWidth = nm.iMenuHeight;
-        ms_systemMenuHeight = nm.iMenuHeight;
-
-        // create menu font
-        wxNativeFontInfo info;
-        memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
-        ms_systemMenuFont->Create(info);
-#endif
-
         return true;
     }
 

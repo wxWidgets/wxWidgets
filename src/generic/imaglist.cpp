@@ -20,7 +20,7 @@
 
 #include "wx/defs.h"
 
-#ifndef __PALMOS__
+#ifndef __WXPALMOS__
 
 #include "wx/generic/imaglist.h"
 
@@ -195,4 +195,4 @@ bool wxGenericImageList::Draw( int index, wxDC &dc, int x, int y,
     return true;
 }
 
-#endif // __PALMOS__
+#endif // __WXPALMOS__

@@ -4,7 +4,7 @@
  * Author:      William Osborne
  * Modified by:
  * Created:     10/13/04
- * RCS-ID:      $Id: 
+ * RCS-ID:      $Id:
  * Copyright:   (c) William Osborne
  * Licence:     wxWindows licence
  */
@@ -94,23 +94,6 @@
 #if !wxUSE_OWNER_DRAWN
 #undef wxUSE_CHECKLISTBOX
 #define wxUSE_CHECKLISTBOX 0
-#endif
-
-#if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
-/* BC++ 4.0 can't compile JPEG library */
-#undef wxUSE_LIBJPEG
-#define wxUSE_LIBJPEG 0
-#endif
-
-/* wxUSE_DEBUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode */
-#if defined(__BORLANDC__) && (defined(WXMAKINGDLL) || defined(WXUSINGDLL))
-#undef wxUSE_DEBUG_NEW_ALWAYS
-#define wxUSE_DEBUG_NEW_ALWAYS 0
-#endif
-
-#if defined(__WXMSW__) && (defined(__WATCOMC__) && __WATCOMC__ < 1200)
-#undef wxUSE_WCHAR_T
-#define wxUSE_WCHAR_T 0
 #endif
 
 #endif

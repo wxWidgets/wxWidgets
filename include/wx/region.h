@@ -3,7 +3,7 @@
 
 #include "wx/colour.h"
 
-#if defined(__PALMOS__)
+#if defined(__WXPALMOS__)
     #include "wx/palmos/region.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/region.h"
