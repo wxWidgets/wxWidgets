@@ -154,6 +154,7 @@ enum {
     wxNB_RIGHT,
     wxNB_BOTTOM,
     wxNB_MULTILINE,
+    wxNB_NOPAGETHEME,
 
     // hittest flags
     wxNB_HITTEST_NOWHERE = 1,   // not on tab
@@ -213,6 +214,10 @@ wx.NB_HITTEST flags.", "");
     // implement some base class functions
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
+    // On platforms that support it, get the theme page background colour,
+    // else invalid colour
+    wxColour GetThemeBackgroundColour() const;
+    
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
