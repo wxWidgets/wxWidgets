@@ -191,7 +191,7 @@ static void wxInitGCPool()
         // If we cannot malloc, then fail with error
         // when debug is enabled.  If debug is not enabled,
         // the problem will eventually get caught
-		// in wxGetPoolGC.
+        // in wxGetPoolGC.
         wxFAIL_MSG( wxT("Cannot allocate GC pool") );
         return;
     }
@@ -237,13 +237,13 @@ static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
     // We did not find an available GC.
     // We need to grow the GC pool.
     pptr = (wxGC *)realloc(wxGCPool,
-		(wxGCPoolSize + GC_POOL_ALLOC_SIZE)*sizeof(wxGC));
+        (wxGCPoolSize + GC_POOL_ALLOC_SIZE)*sizeof(wxGC));
     if (pptr != NULL)
     {
         // Initialize newly allocated pool.
         wxGCPool = pptr;
-    	memset(&wxGCPool[wxGCPoolSize], 0,
-			GC_POOL_ALLOC_SIZE*sizeof(wxGC));
+        memset(&wxGCPool[wxGCPoolSize], 0,
+            GC_POOL_ALLOC_SIZE*sizeof(wxGC));
     
         // Initialize entry we will return.    
         wxGCPool[wxGCPoolSize].m_gc = gdk_gc_new( window );
@@ -1270,11 +1270,14 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         wxCoord bm_width = memDC->m_selected.GetWidth();
         wxCoord bm_height = memDC->m_selected.GetHeight();
 
-        // get clip coords
-        wxRegion tmp( xx,yy,ww,hh );
-        tmp.Intersect( m_currentClippingRegion );
-        wxCoord cx,cy,cw,ch;
-        tmp.GetBox(cx,cy,cw,ch);
+        // Get clip coords for the bitmap. If we don't
+        // use wxBitmap::Rescale(), which can clip the
+        // bitmap, these are the same as the original
+        // coordinates
+        wxCoord cx = xx;
+        wxCoord cy = yy;
+        wxCoord cw = ww;
+        wxCoord ch = hh;
         
         // interpret userscale of src too
         double xsc,ysc;
@@ -1285,16 +1288,23 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         wxCoord bm_ww = XLOG2DEVREL( bm_width );
         wxCoord bm_hh = YLOG2DEVREL( bm_height );
 
-        // scale bitmap if required
+        // Scale bitmap if required
         wxBitmap use_bitmap;
-
         if ((bm_width != bm_ww) || (bm_height != bm_hh))
         {
-            use_bitmap = memDC->m_selected.Rescale(cx-xx,cy-yy,cw,ch,bm_ww,bm_hh);  
+            // This indicates that the blitting code below will get
+            // a clipped bitmap and therefore needs to move the origin
+            // accordingly
+            wxRegion tmp( xx,yy,ww,hh );
+            tmp.Intersect( m_currentClippingRegion );
+            tmp.GetBox(cx,cy,cw,ch);
+            
+            // Scale and clipped bitmap
+            use_bitmap = memDC->m_selected.Rescale(cx-xx,cy-yy,cw,ch,bm_ww,bm_hh);
         }
         else
         {
-            // FIXME: use cx,cy,cw,ch here, too?
+            // Don't scale bitmap
             use_bitmap = memDC->m_selected;
         }
 
@@ -1463,7 +1473,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     int w,h;
     
-    if (abs(m_scaleY - 1.0) < 0.00001)
+    if (fabs(m_scaleY - 1.0) < 0.00001)
     {
          // If there is a user or actually any scale applied to
          // the device context, scale the font.
