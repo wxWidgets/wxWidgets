@@ -197,12 +197,12 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
 wxComboBox::~wxComboBox()
 {
-    wxNode *node = m_clientObjectList.First();
+    wxNode *node = m_clientObjectList.GetFirst();
     while (node)
     {
-        wxClientData *cd = (wxClientData*)node->Data();
+        wxClientData *cd = (wxClientData*)node->GetData();
         if (cd) delete cd;
-        node = node->Next();
+        node = node->GetNext();
     }
     m_clientObjectList.Clear();
 
@@ -272,7 +272,7 @@ void wxComboBox::SetClientData( int n, void* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    wxNode *node = m_clientDataList.Nth( n );
+    wxNode *node = m_clientDataList.Item( n );
     if (!node) return;
 
     node->SetData( (wxObject*) clientData );
@@ -282,20 +282,20 @@ void* wxComboBox::GetClientData( int n )
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid combobox") );
 
-    wxNode *node = m_clientDataList.Nth( n );
+    wxNode *node = m_clientDataList.Item( n );
     if (!node) return NULL;
 
-    return node->Data();
+    return node->GetData();
 }
 
 void wxComboBox::SetClientObject( int n, wxClientData* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    wxNode *node = m_clientObjectList.Nth( n );
+    wxNode *node = m_clientObjectList.Item( n );
     if (!node) return;
 
-    wxClientData *cd = (wxClientData*) node->Data();
+    wxClientData *cd = (wxClientData*) node->GetData();
     if (cd) delete cd;
 
     node->SetData( (wxObject*) clientData );
@@ -305,10 +305,10 @@ wxClientData* wxComboBox::GetClientObject( int n )
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, wxT("invalid combobox") );
 
-    wxNode *node = m_clientObjectList.Nth( n );
+    wxNode *node = m_clientObjectList.Item( n );
     if (!node) return (wxClientData*) NULL;
 
-    return (wxClientData*) node->Data();
+    return (wxClientData*) node->GetData();
 }
 
 void wxComboBox::Clear()
@@ -318,12 +318,12 @@ void wxComboBox::Clear()
     GtkWidget *list = GTK_COMBO(m_widget)->list;
     gtk_list_clear_items( GTK_LIST(list), 0, Number() );
 
-    wxNode *node = m_clientObjectList.First();
+    wxNode *node = m_clientObjectList.GetFirst();
     while (node)
     {
-        wxClientData *cd = (wxClientData*)node->Data();
+        wxClientData *cd = (wxClientData*)node->GetData();
         if (cd) delete cd;
-        node = node->Next();
+        node = node->GetNext();
     }
     m_clientObjectList.Clear();
 
@@ -348,15 +348,15 @@ void wxComboBox::Delete( int n )
     gtk_list_remove_items( listbox, list );
     g_list_free( list );
 
-    wxNode *node = m_clientObjectList.Nth( n );
+    wxNode *node = m_clientObjectList.Item( n );
     if (node)
     {
-        wxClientData *cd = (wxClientData*)node->Data();
+        wxClientData *cd = (wxClientData*)node->GetData();
         if (cd) delete cd;
         m_clientObjectList.DeleteNode( node );
     }
 
-    node = m_clientDataList.Nth( n );
+    node = m_clientDataList.Item( n );
     if (node)
     {
         m_clientDataList.DeleteNode( node );

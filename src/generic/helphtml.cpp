@@ -86,12 +86,12 @@ wxHTMLHelpControllerBase::DeleteList()
 {
    if(m_MapList)
    {
-      wxNode *node = m_MapList->First();
+      wxNode *node = m_MapList->GetFirst();
       while (node)
       {
-         delete (wxExtHelpMapEntry *)node->Data();
+         delete (wxExtHelpMapEntry *)node->GetData();
          delete node;
-         node = m_MapList->First();
+         node = m_MapList->GetFirst();
       }
       delete m_MapList;
       m_MapList = (wxList*) NULL;
@@ -222,17 +222,17 @@ wxHTMLHelpControllerBase::DisplayContents()
       return FALSE;
 
    wxString contents;
-   wxNode *node = m_MapList->First();
+   wxNode *node = m_MapList->GetFirst();
    wxExtHelpMapEntry *entry;
    while(node)
    {
-      entry = (wxExtHelpMapEntry *)node->Data();
+      entry = (wxExtHelpMapEntry *)node->GetData();
       if(entry->id == CONTENTS_ID)
       {
          contents = entry->url;
          break;
       }
-      node = node->Next();
+      node = node->GetNext();
    }
 
    bool rc = FALSE;
@@ -254,14 +254,14 @@ wxHTMLHelpControllerBase::DisplaySection(int sectionNo)
       return FALSE;
 
    wxBusyCursor b; // display a busy cursor
-   wxNode *node = m_MapList->First();
+   wxNode *node = m_MapList->GetFirst();
    wxExtHelpMapEntry *entry;
    while(node)
    {
-      entry = (wxExtHelpMapEntry *)node->Data();
+      entry = (wxExtHelpMapEntry *)node->GetData();
       if(entry->id == sectionNo)
          return DisplayHelp(entry->url);
-      node = node->Next();
+      node = node->GetNext();
    }
    return FALSE;
 }
@@ -295,7 +295,7 @@ wxHTMLHelpControllerBase::KeywordSearch(const wxString& k)
    int          idx = 0, j;
    bool         rc;
    bool         showAll = k.IsEmpty();
-   wxNode       *node = m_MapList->First();
+   wxNode       *node = m_MapList->GetFirst();
    wxExtHelpMapEntry *entry;
 
    {
@@ -303,7 +303,7 @@ wxHTMLHelpControllerBase::KeywordSearch(const wxString& k)
       compA = k; compA.LowerCase(); // we compare case insensitive
       while(node)
       {
-         entry = (wxExtHelpMapEntry *)node->Data();
+         entry = (wxExtHelpMapEntry *)node->GetData();
          compB = entry->doc; compB.LowerCase();
          if((showAll || compB.Contains(k)) && ! compB.IsEmpty())
          {
@@ -318,7 +318,7 @@ wxHTMLHelpControllerBase::KeywordSearch(const wxString& k)
                choices[idx] << entry->doc.c_str()[j];
             idx++;
          }
-         node = node->Next();
+         node = node->GetNext();
       }
    }
 

@@ -91,7 +91,7 @@ public:
     wxList& GetCommands() const { return (wxList&) m_commands; }
     wxCommand *GetCurrentCommand() const
     {
-        return (wxCommand *)(m_currentCommand ? m_currentCommand->Data() : NULL);
+        return (wxCommand *)(m_currentCommand ? m_currentCommand->GetData() : NULL);
     }
     int GetMaxCommands() const { return m_maxNoCommands; }
     virtual void ClearCommands();

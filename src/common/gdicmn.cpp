@@ -193,11 +193,11 @@ wxColourDatabase::wxColourDatabase (int type) : wxList (type)
 wxColourDatabase::~wxColourDatabase ()
 {
   // Cleanup Colour allocated in Initialize()
-  wxNode *node = First ();
+  wxNode *node = GetFirst ();
   while (node)
     {
-      wxColour *col = (wxColour *) node->Data ();
-      wxNode *next = node->Next ();
+      wxColour *col = (wxColour *) node->GetData ();
+      wxNode *next = node->GetNext ();
       delete col;
       node = next;
     }
@@ -330,16 +330,16 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
     if ( !colName2.Replace(_T("GRAY"), _T("GREY")) )
         colName2.clear();
 
-    wxNode *node = First();
+    wxNode *node = GetFirst();
     while ( node )
     {
         const wxChar *key = node->GetKeyString();
         if ( colName == key || colName2 == key )
         {
-            return (wxColour *)node->Data();
+            return (wxColour *)node->GetData();
         }
 
-        node = node->Next();
+        node = node->GetNext();
     }
 
 #ifdef __WXMSW__
@@ -411,9 +411,9 @@ wxString wxColourDatabase::FindName (const wxColour& colour) const
     unsigned char green = colour.Green ();
     unsigned char blue = colour.Blue ();
 
-    for (wxNode * node = First (); node; node = node->Next ())
+    for (wxNode * node = GetFirst (); node; node = node->GetNext ())
     {
-        wxColour *col = (wxColour *) node->Data ();
+        wxColour *col = (wxColour *) node->GetData ();
 
         if (col->Red () == red && col->Green () == green && col->Blue () == blue)
         {
@@ -588,11 +588,11 @@ wxBitmapList::wxBitmapList()
 
 wxBitmapList::~wxBitmapList ()
 {
-  wxNode *node = First ();
+  wxNode *node = GetFirst ();
   while (node)
     {
-      wxBitmap *bitmap = (wxBitmap *) node->Data ();
-      wxNode *next = node->Next ();
+      wxBitmap *bitmap = (wxBitmap *) node->GetData ();
+      wxNode *next = node->GetNext ();
       if (bitmap->GetVisible())
         delete bitmap;
       node = next;
@@ -602,11 +602,11 @@ wxBitmapList::~wxBitmapList ()
 // Pen and Brush lists
 wxPenList::~wxPenList ()
 {
-  wxNode *node = First ();
+  wxNode *node = GetFirst ();
   while (node)
     {
-      wxPen *pen = (wxPen *) node->Data ();
-      wxNode *next = node->Next ();
+      wxPen *pen = (wxPen *) node->GetData ();
+      wxNode *next = node->GetNext ();
       if (pen->GetVisible())
         delete pen;
       node = next;
@@ -625,9 +625,9 @@ void wxPenList::RemovePen (wxPen * pen)
 
 wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 {
-    for (wxNode * node = First (); node; node = node->Next ())
+    for (wxNode * node = GetFirst (); node; node = node->GetNext ())
     {
-        wxPen *each_pen = (wxPen *) node->Data ();
+        wxPen *each_pen = (wxPen *) node->GetData ();
         if (each_pen &&
                 each_pen->GetVisible() &&
                 each_pen->GetWidth () == width &&
@@ -657,11 +657,11 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 
 wxBrushList::~wxBrushList ()
 {
-  wxNode *node = First ();
+  wxNode *node = GetFirst ();
   while (node)
     {
-      wxBrush *brush = (wxBrush *) node->Data ();
-      wxNode *next = node->Next ();
+      wxBrush *brush = (wxBrush *) node->GetData ();
+      wxNode *next = node->GetNext ();
       if (brush && brush->GetVisible())
         delete brush;
       node = next;
@@ -675,9 +675,9 @@ void wxBrushList::AddBrush (wxBrush * brush)
 
 wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
 {
-    for (wxNode * node = First (); node; node = node->Next ())
+    for (wxNode * node = GetFirst (); node; node = node->GetNext ())
     {
-        wxBrush *each_brush = (wxBrush *) node->Data ();
+        wxBrush *each_brush = (wxBrush *) node->GetData ();
         if (each_brush &&
                 each_brush->GetVisible() &&
                 each_brush->GetStyle () == style &&
@@ -712,15 +712,15 @@ void wxBrushList::RemoveBrush (wxBrush * brush)
 
 wxFontList::~wxFontList ()
 {
-    wxNode *node = First ();
+    wxNode *node = GetFirst ();
     while (node)
     {
         // Only delete objects that are 'visible', i.e.
         // that have been created using FindOrCreate...,
         // where the pointers are expected to be shared
         // (and therefore not deleted by any one part of an app).
-        wxFont *font = (wxFont *) node->Data ();
-        wxNode *next = node->Next ();
+        wxFont *font = (wxFont *) node->GetData ();
+        wxNode *next = node->GetNext ();
         if (font->GetVisible())
             delete font;
         node = next;
@@ -747,9 +747,9 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
 {
     wxFont *font = (wxFont *)NULL;
     wxNode *node;
-    for ( node = First(); node; node = node->Next() )
+    for ( node = GetFirst(); node; node = node->GetNext() )
     {
-        font = (wxFont *)node->Data();
+        font = (wxFont *)node->GetData();
         if ( font->GetVisible() &&
              font->Ok() &&
              font->GetPointSize () == pointSize &&
@@ -844,12 +844,12 @@ wxSize wxGetDisplaySizeMM()
 
 wxResourceCache::~wxResourceCache ()
 {
-    wxNode *node = First ();
+    wxNode *node = GetFirst ();
     while (node) {
-        wxObject *item = (wxObject *)node->Data();
+        wxObject *item = (wxObject *)node->GetData();
         delete item;
 
-        node = node->Next ();
+        node = node->GetNext ();
     }
 }
 

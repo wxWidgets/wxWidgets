@@ -48,17 +48,17 @@ wxSTD ostream& DrawingDocument::SaveObject(wxSTD ostream& stream)
 {
   wxDocument::SaveObject(stream);
   
-  wxInt32 n = doodleSegments.Number();
+  wxInt32 n = doodleSegments.GetCount();
   stream << n << _T('\n');
   
-  wxNode *node = doodleSegments.First();
+  wxNode *node = doodleSegments.GetFirst();
   while (node)
   {
-    DoodleSegment *segment = (DoodleSegment *)node->Data();
+    DoodleSegment *segment = (DoodleSegment *)node->GetData();
     segment->SaveObject(stream);
     stream << _T('\n');
     
-    node = node->Next();
+    node = node->GetNext();
   }
   
   return stream;
@@ -70,17 +70,17 @@ wxOutputStream& DrawingDocument::SaveObject(wxOutputStream& stream)
 
   wxTextOutputStream text_stream( stream );
 
-  wxInt32 n = doodleSegments.Number();
+  wxInt32 n = doodleSegments.GetCount();
   text_stream << n << _T('\n');
   
-  wxNode *node = doodleSegments.First();
+  wxNode *node = doodleSegments.GetFirst();
   while (node)
   {
-    DoodleSegment *segment = (DoodleSegment *)node->Data();
+    DoodleSegment *segment = (DoodleSegment *)node->GetData();
     segment->SaveObject(stream);
     text_stream << _T('\n');
     
-    node = node->Next();
+    node = node->GetNext();
   }
   
   return stream;
@@ -130,10 +130,10 @@ DoodleSegment::DoodleSegment(void)
 
 DoodleSegment::DoodleSegment(DoodleSegment& seg)
 {
-  wxNode *node = seg.lines.First();
+  wxNode *node = seg.lines.GetFirst();
   while (node)
   {
-    DoodleLine *line = (DoodleLine *)node->Data();
+    DoodleLine *line = (DoodleLine *)node->GetData();
     DoodleLine *newLine = new DoodleLine;
     newLine->x1 = line->x1;
     newLine->y1 = line->y1;
@@ -142,7 +142,7 @@ DoodleSegment::DoodleSegment(DoodleSegment& seg)
 
     lines.Append(newLine);
 
-    node = node->Next();
+    node = node->GetNext();
   }
 }
 
@@ -154,18 +154,18 @@ DoodleSegment::~DoodleSegment(void)
 #if wxUSE_STD_IOSTREAM
 wxSTD ostream& DoodleSegment::SaveObject(wxSTD ostream& stream)
 {
-  wxInt32 n = lines.Number();
+  wxInt32 n = lines.GetCount();
   stream << n << _T('\n');
   
-  wxNode *node = lines.First();
+  wxNode *node = lines.GetFirst();
   while (node)
   {
-    DoodleLine *line = (DoodleLine *)node->Data();
+    DoodleLine *line = (DoodleLine *)node->GetData();
     stream << line->x1 << _T(" ") << 
                    line->y1 << _T(" ") << 
            line->x2 << _T(" ") << 
            line->y2 << _T("\n");
-    node = node->Next();
+    node = node->GetNext();
   }
 
   return stream;
@@ -175,18 +175,18 @@ wxOutputStream &DoodleSegment::SaveObject(wxOutputStream& stream)
 {
   wxTextOutputStream text_stream( stream );
 
-  wxInt32 n = lines.Number();
+  wxInt32 n = lines.GetCount();
   text_stream << n << _T('\n');
   
-  wxNode *node = lines.First();
+  wxNode *node = lines.GetFirst();
   while (node)
   {
-    DoodleLine *line = (DoodleLine *)node->Data();
+    DoodleLine *line = (DoodleLine *)node->GetData();
     text_stream << line->x1 << _T(" ") << 
                    line->y1 << _T(" ") << 
            line->x2 << _T(" ") << 
            line->y2 << _T("\n");
-    node = node->Next();
+    node = node->GetNext();
   }
 
   return stream;
@@ -234,12 +234,12 @@ wxInputStream &DoodleSegment::LoadObject(wxInputStream& stream)
 #endif
 void DoodleSegment::Draw(wxDC *dc)
 {
-  wxNode *node = lines.First();
+  wxNode *node = lines.GetFirst();
   while (node)
   {
-    DoodleLine *line = (DoodleLine *)node->Data();
+    DoodleLine *line = (DoodleLine *)node->GetData();
     dc->DrawLine(line->x1, line->y1, line->x2, line->y2);
-    node = node->Next();
+    node = node->GetNext();
   }
 }
 
@@ -268,13 +268,13 @@ bool DrawingCommand::Do(void)
     case DOODLE_CUT:
     {
       // Cut the last segment
-      if (doc->GetDoodleSegments().Number() > 0)
+      if (doc->GetDoodleSegments().GetCount() > 0)
       {
-        wxNode *node = doc->GetDoodleSegments().Last();
+        wxNode *node = doc->GetDoodleSegments().GetLast();
         if (segment)
           delete segment;
           
-        segment = (DoodleSegment *)node->Data();
+        segment = (DoodleSegment *)node->GetData();
         delete node;
 
         doc->Modify(TRUE);
@@ -314,10 +314,10 @@ bool DrawingCommand::Undo(void)
     case DOODLE_ADD:
     {
       // Cut the last segment
-      if (doc->GetDoodleSegments().Number() > 0)
+      if (doc->GetDoodleSegments().GetCount() > 0)
       {
-        wxNode *node = doc->GetDoodleSegments().Last();
-        DoodleSegment *seg = (DoodleSegment *)node->Data();
+        wxNode *node = doc->GetDoodleSegments().GetLast();
+        DoodleSegment *seg = (DoodleSegment *)node->GetData();
         delete seg;
         delete node;
 

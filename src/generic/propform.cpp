@@ -87,10 +87,10 @@ bool wxPropertyFormView::Check(void)
     if (!m_propertySheet)
         return FALSE;
 
-    wxNode *node = m_propertySheet->GetProperties().First();
+    wxNode *node = m_propertySheet->GetProperties().GetFirst();
     while (node)
     {
-        wxProperty *prop = (wxProperty *)node->Data();
+        wxProperty *prop = (wxProperty *)node->GetData();
         wxPropertyValidator *validator = FindPropertyValidator(prop);
         if (validator && validator->IsKindOf(CLASSINFO(wxPropertyFormValidator)))
         {
@@ -98,7 +98,7 @@ bool wxPropertyFormView::Check(void)
             if (!formValidator->OnCheckValue(prop, this, m_propertyWindow))
                 return FALSE;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     return TRUE;
 }
@@ -108,17 +108,17 @@ bool wxPropertyFormView::TransferToPropertySheet(void)
     if (!m_propertySheet)
         return FALSE;
 
-    wxNode *node = m_propertySheet->GetProperties().First();
+    wxNode *node = m_propertySheet->GetProperties().GetFirst();
     while (node)
     {
-        wxProperty *prop = (wxProperty *)node->Data();
+        wxProperty *prop = (wxProperty *)node->GetData();
         wxPropertyValidator *validator = FindPropertyValidator(prop);
         if (validator && validator->IsKindOf(CLASSINFO(wxPropertyFormValidator)))
         {
             wxPropertyFormValidator *formValidator = (wxPropertyFormValidator *)validator;
             formValidator->OnRetrieveValue(prop, this, m_propertyWindow);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     return TRUE;
 }
@@ -128,17 +128,17 @@ bool wxPropertyFormView::TransferToDialog(void)
     if (!m_propertySheet)
         return FALSE;
 
-    wxNode *node = m_propertySheet->GetProperties().First();
+    wxNode *node = m_propertySheet->GetProperties().GetFirst();
     while (node)
     {
-        wxProperty *prop = (wxProperty *)node->Data();
+        wxProperty *prop = (wxProperty *)node->GetData();
         wxPropertyValidator *validator = FindPropertyValidator(prop);
         if (validator && validator->IsKindOf(CLASSINFO(wxPropertyFormValidator)))
         {
             wxPropertyFormValidator *formValidator = (wxPropertyFormValidator *)validator;
             formValidator->OnDisplayValue(prop, this, m_propertyWindow);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     return TRUE;
 }
@@ -148,17 +148,17 @@ bool wxPropertyFormView::AssociateNames(void)
     if (!m_propertySheet || !m_propertyWindow)
         return FALSE;
 
-    wxNode *node = m_propertyWindow->GetChildren().First();
+    wxWindowList::Node  *node = m_propertyWindow->GetChildren().GetFirst();
     while (node)
     {
-        wxWindow *win = (wxWindow *)node->Data();
-        if (win->GetName() != wxT(""))
+        wxWindow *win = node->GetData();
+        if ( win->GetName() != wxEmptyString )
         {
             wxProperty *prop = m_propertySheet->GetProperty(win->GetName());
             if (prop)
                 prop->SetWindow(win);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     return TRUE;
 }
@@ -229,10 +229,10 @@ void wxPropertyFormView::OnCommand(wxWindow& win, wxCommandEvent& event)
     else
     {
         // Find a validator to route the command to.
-        wxNode *node = m_propertySheet->GetProperties().First();
+        wxNode *node = m_propertySheet->GetProperties().GetFirst();
         while (node)
         {
-            wxProperty *prop = (wxProperty *)node->Data();
+            wxProperty *prop = (wxProperty *)node->GetData();
             if (prop->GetWindow() && (prop->GetWindow() == &win))
             {
                 wxPropertyValidator *validator = FindPropertyValidator(prop);
@@ -243,7 +243,7 @@ void wxPropertyFormView::OnCommand(wxWindow& win, wxCommandEvent& event)
                     return;
                 }
             }
-            node = node->Next();
+            node = node->GetNext();
         }
     }
 }
@@ -268,10 +268,10 @@ void wxPropertyFormView::OnDoubleClick(wxControl *item)
         return;
 
     // Find a validator to route the command to.
-    wxNode *node = m_propertySheet->GetProperties().First();
+    wxNode *node = m_propertySheet->GetProperties().GetFirst();
     while (node)
     {
-        wxProperty *prop = (wxProperty *)node->Data();
+        wxProperty *prop = (wxProperty *)node->GetData();
         if (prop->GetWindow() && ((wxControl *)prop->GetWindow() == item))
         {
             wxPropertyValidator *validator = FindPropertyValidator(prop);
@@ -282,7 +282,7 @@ void wxPropertyFormView::OnDoubleClick(wxControl *item)
                 return;
             }
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -716,12 +716,12 @@ bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormV
         if (lbox->GetCount() == 0 && m_strings)
         {
             // Try to initialize the listbox from 'strings'
-            wxNode *node = m_strings->First();
+            wxStringList::Node  *node = m_strings->GetFirst();
             while (node)
             {
-                wxChar *s = (wxChar *)node->Data();
+                wxChar *s = node->GetData();
                 lbox->Append(s);
-                node = node->Next();
+                node = node->GetNext();
             }
         }
         lbox->SetStringSelection(property->GetValue().StringValue());
@@ -740,12 +740,12 @@ bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormV
         {
             // Try to initialize the choice item from 'strings'
             // XView doesn't allow this kind of thing.
-            wxNode *node = m_strings->First();
+            wxStringList::Node  *node = m_strings->GetFirst();
             while (node)
             {
-                wxChar *s = (wxChar *)node->Data();
+                wxChar *s = node->GetData();
                 choice->Append(s);
-                node = node->Next();
+                node = node->GetNext();
             }
         }
         choice->SetStringSelection(property->GetValue().StringValue());

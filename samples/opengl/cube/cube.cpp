@@ -357,7 +357,7 @@ void TestGLCanvas::Action( long code, unsigned long lasttime,
 
 void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
 {
-    long evkey = event.KeyCode();
+    long evkey = event.GetKeyCode();
     if (evkey == 0) return;
 
     if (!m_TimeInitialized)

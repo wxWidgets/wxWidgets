@@ -379,7 +379,7 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
 
 void TestGLCanvas::OnChar(wxKeyEvent& event)
 {
-    switch(event.KeyCode()) {
+    switch(event.GetKeyCode()) {
     case WXK_ESCAPE:
     exit(0);
     case WXK_LEFT:

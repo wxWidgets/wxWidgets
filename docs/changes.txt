@@ -20,6 +20,30 @@ All:
 - support wxListCtrl columns alignment for all platforms and not just MSW
 - added wxDateSpan::operator==() and !=() (Lukasz Michalski)
 - use true/false throughout the library instead of TRUE/FALSE
+- Changed to type-safe wxSizerItemList for wxSizer child items.
+
+    Deprecated:
+
+        wxSizer::Remove( wxWindow* )
+            - it does not function as Remove would usually be expected to
+              and destroy the window, use Detach instead.
+
+        wxSizer::GetOption(),
+        wxSizer::SetOption()
+            - wxSizer 'option' parameter was renamed 'proportion' to better
+              reflect its action, use Get/SetProportion instead.
+
+        wxKeyEvent::KeyCode()
+            - use GetKeyCode instead.
+
+        wxList:: Number, First, Last, Nth
+            - use typesafe GetCount, GetFirst, GetLast, Item instead.
+
+        wxNode:: Next, Previous, Data
+            - use typesafe Get* instead.
+
+        wxListBase::operator wxList&()
+            - use typesafe lists instead.
 
 Unix:
 

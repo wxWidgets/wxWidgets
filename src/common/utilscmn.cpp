@@ -431,10 +431,10 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
       if (frame->GetToolBar())
         extraChildren.Append(frame->GetToolBar());
 
-      wxNode* node = extraChildren.First();
+      wxNode* node = extraChildren.GetFirst();
       while (node)
       {
-          wxWindow* child = (wxWindow*) node->Data();
+          wxWindow* child = (wxWindow*) node->GetData();
           wxWindow* foundWin = wxFindWindowAtPoint(child, pt);
           if (foundWin)
             return foundWin;
@@ -443,14 +443,14 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
     }
     */
 
-    wxNode* node = win->GetChildren().Last();
+    wxWindowList::Node  *node = win->GetChildren().GetLast();
     while (node)
     {
-        wxWindow* child = (wxWindow*) node->Data();
+        wxWindow* child = node->GetData();
         wxWindow* foundWin = wxFindWindowAtPoint(child, pt);
         if (foundWin)
           return foundWin;
-        node = node->Previous();
+        node = node->GetPrevious();
     }
 
     wxPoint pos = win->GetPosition();
@@ -472,14 +472,14 @@ wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt)
     // Go backwards through the list since windows
     // on top are likely to have been appended most
     // recently.
-    wxNode* node = wxTopLevelWindows.Last();
+    wxWindowList::Node  *node = wxTopLevelWindows.GetLast();
     while (node)
     {
-        wxWindow* win = (wxWindow*) node->Data();
+        wxWindow* win = node->GetData();
         wxWindow* found = wxFindWindowAtPoint(win, pt);
         if (found)
             return found;
-        node = node->Previous();
+        node = node->GetPrevious();
     }
     return NULL;
 }

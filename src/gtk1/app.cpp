@@ -237,7 +237,7 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
         // But repaint the assertion message if necessary
         if (wxTopLevelWindows.GetCount() > 0)
         {
-            wxWindow* win = (wxWindow*) wxTopLevelWindows.Last()->Data();
+            wxWindow* win = (wxWindow*) wxTopLevelWindows.GetLast()->GetData();
             if (win->IsKindOf(CLASSINFO(wxGenericMessageDialog)))
                 win->OnInternalIdle();
         }
@@ -607,13 +607,13 @@ bool wxApp::CallInternalIdle( wxWindow* win )
 {
     win->OnInternalIdle();
 
-    wxNode* node = win->GetChildren().First();
+    wxWindowList::Node  *node = win->GetChildren().GetFirst();
     while (node)
     {
-        wxWindow* win = (wxWindow*) node->Data();
-        CallInternalIdle( win );
+        wxWindow    *win = node->GetData();
 
-        node = node->Next();
+        CallInternalIdle( win );
+        node = node->GetNext();
     }
 
     return TRUE;
@@ -631,14 +631,14 @@ bool wxApp::SendIdleEvents( wxWindow* win )
     if (event.MoreRequested())
         needMore = TRUE;
 
-    wxNode* node = win->GetChildren().First();
+    wxWindowList::Node  *node = win->GetChildren().GetFirst();
     while (node)
     {
-        wxWindow* win = (wxWindow*) node->Data();
+        wxWindow    *win = node->GetData();
+
         if (SendIdleEvents(win))
             needMore = TRUE;
-
-        node = node->Next();
+        node = node->GetNext();
     }
 
     return needMore;
@@ -673,17 +673,17 @@ void wxApp::Dispatch()
 
 void wxApp::DeletePendingObjects()
 {
-    wxNode *node = wxPendingDelete.First();
+    wxNode *node = wxPendingDelete.GetFirst();
     while (node)
     {
-        wxObject *obj = (wxObject *)node->Data();
+        wxObject *obj = (wxObject *)node->GetData();
 
         delete obj;
 
         if (wxPendingDelete.Find(obj))
             delete node;
 
-        node = wxPendingDelete.First();
+        node = wxPendingDelete.GetFirst();
     }
 }
 

@@ -73,21 +73,21 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     m_validatorStyle = val.m_validatorStyle ;
     m_stringValue = val.m_stringValue ;
 
-    wxNode *node = val.m_includeList.First() ;
+    wxStringList::Node *node = val.m_includeList.GetFirst() ;
     while ( node )
     {
-        wxChar *s = (wxChar *)node->Data();
+        wxChar *s = node->GetData();
         m_includeList.Add(s);
-        node = node->Next();
+        node = node->GetNext();
     }
-    node = val.m_excludeList.First() ;
+    node = val.m_excludeList.GetFirst() ;
     while ( node )
     {
-        wxChar *s = (wxChar *)node->Data();
+        wxChar *s = node->GetData();
         m_excludeList.Add(s);
-        node = node->Next();
+        node = node->GetNext();
     }
-    return TRUE;
+    return true;
 }
 
 wxTextValidator::~wxTextValidator()
@@ -100,9 +100,9 @@ static bool wxIsAlpha(const wxString& val)
     for ( i = 0; i < (int)val.Length(); i++)
     {
         if (!wxIsalpha(val[i]))
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 
 static bool wxIsAlphaNumeric(const wxString& val)
@@ -111,9 +111,9 @@ static bool wxIsAlphaNumeric(const wxString& val)
     for ( i = 0; i < (int)val.Length(); i++)
     {
         if (!wxIsalnum(val[i]))
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 
 // Called when the value in the window must be validated.
@@ -121,17 +121,17 @@ static bool wxIsAlphaNumeric(const wxString& val)
 bool wxTextValidator::Validate(wxWindow *parent)
 {
     if( !CheckValidator() )
-        return FALSE;
+        return false;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
 
     // If window is disabled, simply return
     if ( !control->IsEnabled() )
-        return TRUE;
+        return true;
 
     wxString val(control->GetValue());
 
-    bool ok = TRUE;
+    bool ok = true;
 
     // NB: this format string should contian exactly one '%s'
     wxString errormsg;
@@ -149,25 +149,25 @@ bool wxTextValidator::Validate(wxWindow *parent)
     }
     else if ( (m_validatorStyle & wxFILTER_ASCII) && !val.IsAscii() )
     {
-        ok = FALSE;
+        ok = false;
 
         errormsg = _("'%s' should only contain ASCII characters.");
     }
     else if ( (m_validatorStyle & wxFILTER_ALPHA) && !wxIsAlpha(val) )
     {
-        ok = FALSE;
+        ok = false;
 
         errormsg = _("'%s' should only contain alphabetic characters.");
     }
     else if ( (m_validatorStyle & wxFILTER_ALPHANUMERIC) && !wxIsAlphaNumeric(val))
     {
-        ok = FALSE;
+        ok = false;
 
         errormsg = _("'%s' should only contain alphabetic or numeric characters.");
     }
     else if ( (m_validatorStyle & wxFILTER_NUMERIC) && !wxIsNumeric(val))
     {
-        ok = FALSE;
+        ok = false;
 
         errormsg = _("'%s' should be numeric.");
     }
@@ -175,13 +175,13 @@ bool wxTextValidator::Validate(wxWindow *parent)
     {
         //it's only ok to have the members of the list
         errormsg = _("'%s' is invalid");
-        ok = FALSE;    
+        ok = false;    
     }
     else if ( (m_validatorStyle & wxFILTER_EXCLUDE_CHAR_LIST) && !IsNotInCharExcludeList(val))
     {
         // it's only ok to have non-members of the list
         errormsg = _("'%s' is invalid");
-        ok = FALSE;    
+        ok = false;    
     }
 
     if ( !ok )
@@ -204,24 +204,24 @@ bool wxTextValidator::Validate(wxWindow *parent)
 bool wxTextValidator::TransferToWindow(void)
 {
     if( !CheckValidator() )
-        return FALSE;
+        return false;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
     control->SetValue(* m_stringValue) ;
 
-    return TRUE;
+    return true;
 }
 
 // Called to transfer data to the window
 bool wxTextValidator::TransferFromWindow(void)
 {
     if( !CheckValidator() )
-        return FALSE;
+        return false;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
     * m_stringValue = control->GetValue() ;
 
-    return TRUE;
+    return true;
 }
 
 void wxTextValidator::SetIncludeList(const wxStringList& list)
@@ -233,12 +233,12 @@ void wxTextValidator::SetIncludeList(const wxStringList& list)
 
     m_includeList.Clear();
     // TODO: replace with =
-    wxNode *node = list.First() ;
+    wxStringList::Node     *node = list.GetFirst();
     while ( node )
     {
-        wxChar *s = (wxChar *)node->Data();
+        wxChar *s = node->GetData();
         m_includeList.Add(s);
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -251,12 +251,12 @@ void wxTextValidator::SetExcludeList(const wxStringList& list)
 
     m_excludeList.Clear();
     // TODO: replace with =
-    wxNode *node = list.First() ;
+    wxStringList::Node  *node = list.GetFirst() ;
     while ( node )
     {
-        wxChar *s = (wxChar *)node->Data();
+        wxChar *s = node->GetData();
         m_excludeList.Add(s);
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -275,7 +275,7 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
         if (
              !(keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode > WXK_START) &&
              (
-			  ((m_validatorStyle & wxFILTER_INCLUDE_CHAR_LIST) && !IsInCharIncludeList(wxString((char) keyCode, 1))) ||
+              ((m_validatorStyle & wxFILTER_INCLUDE_CHAR_LIST) && !IsInCharIncludeList(wxString((char) keyCode, 1))) ||
               ((m_validatorStyle & wxFILTER_EXCLUDE_CHAR_LIST) && !IsNotInCharExcludeList(wxString((char) keyCode, 1))) ||
               ((m_validatorStyle & wxFILTER_ASCII) && !isascii(keyCode)) ||
               ((m_validatorStyle & wxFILTER_ALPHA) && !wxIsalpha(keyCode)) ||
@@ -305,9 +305,9 @@ static bool wxIsNumeric(const wxString& val)
         // use wxSystemSettings or other to do better localisation
         if ((!isdigit(val[i])) && (val[i] != '.') && (val[i] != ','))
           if(!((i == 0) && (val[i] == '-')))
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 
 bool wxTextValidator::IsInCharIncludeList(const wxString& val)
@@ -316,9 +316,9 @@ bool wxTextValidator::IsInCharIncludeList(const wxString& val)
     for ( i = 0; i < val.Length(); i++)
     {
         if (!m_includeList.Member((wxString) val[i]))
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 
 bool wxTextValidator::IsNotInCharExcludeList(const wxString& val)
@@ -327,9 +327,9 @@ bool wxTextValidator::IsNotInCharExcludeList(const wxString& val)
     for ( i = 0; i < val.Length(); i++)
     {
        if (m_excludeList.Member((wxString) val[i]))
-       return FALSE;
+       return false;
     }
-    return TRUE;
+    return true;
 }
 
 #endif

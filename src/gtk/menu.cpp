@@ -1323,13 +1323,13 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
 int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
 {
-    wxNode *node = m_items.First();
+    wxMenuItemList::Node    *node = m_items.GetFirst();
     while (node)
     {
-        wxMenuItem *item = (wxMenuItem*)node->Data();
+        wxMenuItem *item = node->GetData();
         if (item->GetMenuItem() == menuItem)
            return item->GetId();
-        node = node->Next();
+        node = node->GetNext();
     }
 
     return wxNOT_FOUND;

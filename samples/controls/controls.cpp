@@ -1690,7 +1690,7 @@ void MyComboBox::OnChar(wxKeyEvent& event)
 {
     wxLogMessage(_T("MyComboBox::OnChar"));
 
-    if ( event.KeyCode() == 'w' )
+    if ( event.GetKeyCode() == 'w' )
         wxLogMessage(_T("MyComboBox: 'w' will be ignored."));
     else
         event.Skip();
@@ -1700,7 +1700,7 @@ void MyComboBox::OnKeyDown(wxKeyEvent& event)
 {
     wxLogMessage(_T("MyComboBox::OnKeyDown"));
 
-    if ( event.KeyCode() == 'w' )
+    if ( event.GetKeyCode() == 'w' )
         wxLogMessage(_T("MyComboBox: 'w' will be ignored."));
     else
         event.Skip();

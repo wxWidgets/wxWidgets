@@ -90,12 +90,12 @@ void DrawingView::OnDraw(wxDC *dc)
     dc->SetFont(*wxNORMAL_FONT);
     dc->SetPen(*wxBLACK_PEN);
     
-    wxNode *node = ((DrawingDocument *)GetDocument())->GetDoodleSegments().First();
+    wxNode *node = ((DrawingDocument *)GetDocument())->GetDoodleSegments().GetFirst();
     while (node)
     {
-        DoodleSegment *seg = (DoodleSegment *)node->Data();
+        DoodleSegment *seg = (DoodleSegment *)node->GetData();
         seg->Draw(dc);
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -241,7 +241,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
     
     if (currentSegment && event.LeftUp())
     {
-        if (currentSegment->lines.Number() == 0)
+        if (currentSegment->lines.GetCount() == 0)
         {
             delete currentSegment;
             currentSegment = (DoodleSegment *) NULL;

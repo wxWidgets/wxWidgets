@@ -1549,13 +1549,13 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     double a, b, c, d, x1, y1, x2, y2, x3, y3;
     wxPoint *p, *q;
 
-    wxNode *node = points->First();
-    p = (wxPoint *)node->Data();
+    wxNode *node = points->GetFirst();
+    p = (wxPoint *)node->GetData();
     x1 = p->x;
     y1 = p->y;
 
-    node = node->Next();
-    p = (wxPoint *)node->Data();
+    node = node->GetNext();
+    p = (wxPoint *)node->GetData();
     c = p->x;
     d = p->y;
     x3 = a = (double)(x1 + c) / 2;
@@ -1571,9 +1571,9 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
     CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
 
-    while ((node = node->Next()) != NULL)
+    while ((node = node->GetNext()) != NULL)
     {
-        q = (wxPoint *)node->Data();
+        q = (wxPoint *)node->GetData();
 
         x1 = x3;
         y1 = y3;

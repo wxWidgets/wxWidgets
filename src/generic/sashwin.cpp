@@ -617,9 +617,9 @@ void wxSashWindow::SizeWindows()
     int cw, ch;
     GetClientSize(&cw, &ch);
 
-    if (GetChildren().Number() == 1)
+    if (GetChildren().GetCount() == 1)
     {
-        wxWindow* child = (wxWindow*) (GetChildren().First()->Data());
+        wxWindow* child = GetChildren().GetFirst()->GetData();
 
         int x = 0;
         int y = 0;
@@ -658,7 +658,7 @@ void wxSashWindow::SizeWindows()
 
         child->SetSize(x, y, width, height);
     }
-    else if (GetChildren().Number() > 1)
+    else if (GetChildren().GetCount() > 1)
     {
         // Perhaps multiple children are themselves sash windows.
         // TODO: this doesn't really work because the subwindows sizes/positions

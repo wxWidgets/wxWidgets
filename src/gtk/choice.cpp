@@ -143,7 +143,7 @@ void wxChoice::DoSetItemClientData( int n, void* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice control") );
 
-    wxNode *node = m_clientList.Nth( n );
+    wxNode *node = m_clientList.Item( n );
     wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetItemClientData") );
 
     node->SetData( (wxObject*) clientData );
@@ -153,17 +153,17 @@ void* wxChoice::DoGetItemClientData( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid choice control") );
 
-    wxNode *node = m_clientList.Nth( n );
+    wxNode *node = m_clientList.Item( n );
     wxCHECK_MSG( node, NULL, wxT("invalid index in wxChoice::DoGetItemClientData") );
 
-    return node->Data();
+    return node->GetData();
 }
 
 void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice control") );
 
-    wxNode *node = m_clientList.Nth( n );
+    wxNode *node = m_clientList.Item( n );
     wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetItemClientObject") );
 
     // wxItemContainer already deletes data for us
@@ -175,11 +175,11 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid choice control") );
 
-    wxNode *node = m_clientList.Nth( n );
+    wxNode *node = m_clientList.Item( n );
     wxCHECK_MSG( node, (wxClientData *)NULL,
                  wxT("invalid index in wxChoice::DoGetItemClientObject") );
 
-    return (wxClientData*) node->Data();
+    return (wxClientData*) node->GetData();
 }
 
 void wxChoice::Clear()
@@ -195,11 +195,11 @@ void wxChoice::Clear()
         // destroy the data (due to Robert's idea of using wxList<wxObject>
         // and not wxList<wxClientData> we can't just say
         // m_clientList.DeleteContents(TRUE) - this would crash!
-        wxNode *node = m_clientList.First();
+        wxNode *node = m_clientList.GetFirst();
         while ( node )
         {
-            delete (wxClientData *)node->Data();
-            node = node->Next();
+            delete (wxClientData *)node->GetData();
+            node = node->GetNext();
         }
     }
     m_clientList.Clear();

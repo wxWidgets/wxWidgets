@@ -1511,12 +1511,12 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
         yy += pizza->yoffset;
     }
 
-    wxNode *node = win->GetChildren().First();
+    wxWindowList::Node  *node = win->GetChildren().GetFirst();
     while (node)
     {
-        wxWindowGTK *child = (wxWindowGTK*)node->Data();
+        wxWindowGTK *child = node->GetData();
 
-        node = node->Next();
+        node = node->GetNext();
         if (!child->IsShown())
             continue;
 

@@ -834,11 +834,11 @@ void wxSocketBase::RestoreState()
   wxNode *node;
   wxSocketState *state;
 
-  node = m_states.Last();
+  node = m_states.GetLast();
   if (!node)
     return;
 
-  state = (wxSocketState *)node->Data();
+  state = (wxSocketState *)node->GetData();
 
   m_flags      = state->m_flags;
   m_notify     = state->m_notify;

@@ -140,7 +140,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
 {
     wxList children;
     GetChildren(nodeId, children);
-    int n = children.Number();
+    int n = children.GetCount();
 
     if (m_orientation == FALSE)
     {
@@ -158,11 +158,11 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
             SetNodeX(nodeId, (long)(GetNodeX(parentId) + m_xSpacing + x));
         }
 
-        wxNode *node = children.First();
+        wxNode *node = children.GetFirst();
         while (node)
         {
-            CalcLayout((long)node->Data(), level+1, dc);
-            node = node->Next();
+            CalcLayout((long)node->GetData(), level+1, dc);
+            node = node->GetNext();
         }
 
         // Y Calculations
@@ -172,11 +172,11 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
         if (n > 0)
         {
             averageY = 0;
-            node = children.First();
+            node = children.GetFirst();
             while (node)
             {
-                averageY += GetNodeY((long)node->Data());
-                node = node->Next();
+                averageY += GetNodeY((long)node->GetData());
+                node = node->GetNext();
             }
             averageY = averageY / n;
             SetNodeY(nodeId, averageY);
@@ -207,11 +207,11 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
             SetNodeY(nodeId, (long)(GetNodeY(parentId) + m_ySpacing + y));
         }
 
-        wxNode *node = children.First();
+        wxNode *node = children.GetFirst();
         while (node)
         {
-            CalcLayout((long)node->Data(), level+1, dc);
-            node = node->Next();
+            CalcLayout((long)node->GetData(), level+1, dc);
+            node = node->GetNext();
         }
 
         // X Calculations
@@ -221,11 +221,11 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
         if (n > 0)
         {
             averageX = 0;
-            node = children.First();
+            node = children.GetFirst();
             while (node)
             {
-                averageX += GetNodeX((long)node->Data());
-                node = node->Next();
+                averageX += GetNodeX((long)node->GetData());
+                node = node->GetNext();
             }
             averageX = averageX / n;
             SetNodeX(nodeId, averageX);

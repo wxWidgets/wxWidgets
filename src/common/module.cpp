@@ -58,7 +58,7 @@ void wxModule::RegisterModules()
     node = wxClassInfo::sm_classTable->Next();
     while (node)
     {
-        classInfo = (wxClassInfo *)node->Data();
+        classInfo = (wxClassInfo *)node->GetData();
         if ( classInfo->IsKindOf(CLASSINFO(wxModule)) &&
             (classInfo != (& (wxModule::sm_classwxModule))) )
         {

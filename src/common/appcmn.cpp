@@ -212,10 +212,10 @@ void wxAppBase::ProcessPendingEvents()
     }
 
     // iterate until the list becomes empty
-    wxNode *node = wxPendingEvents->First();
+    wxNode *node = wxPendingEvents->GetFirst();
     while (node)
     {
-        wxEvtHandler *handler = (wxEvtHandler *)node->Data();
+        wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
         delete node;
 
         // In ProcessPendingEvents(), new handlers might be add
@@ -224,7 +224,7 @@ void wxAppBase::ProcessPendingEvents()
         handler->ProcessPendingEvents();
         wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 
-        node = wxPendingEvents->First();
+        node = wxPendingEvents->GetFirst();
     }
 
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );

@@ -58,13 +58,13 @@ wxHTTP::~wxHTTP()
 void wxHTTP::ClearHeaders()
 {
   // wxString isn't a wxObject
-  wxNode *node = m_headers.First();
+  wxNode *node = m_headers.GetFirst();
   wxString *string;
 
   while (node) {
-    string = (wxString *)node->Data();
+    string = (wxString *)node->GetData();
     delete string;
-    node = node->Next();
+    node = node->GetNext();
   }
 
   m_headers.Clear();
@@ -92,7 +92,7 @@ void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
   if (!node)
     m_headers.Append(header, (wxObject *)(new wxString(h_data)));
   else {
-    wxString *str = (wxString *)node->Data();
+    wxString *str = (wxString *)node->GetData();
     (*str) = h_data;
   }
 }
@@ -108,16 +108,16 @@ wxString wxHTTP::GetHeader(const wxString& header)
   if (!node)
     return wxEmptyString;
 
-  return *((wxString *)node->Data());
+  return *((wxString *)node->GetData());
 }
 
 void wxHTTP::SendHeaders()
 {
-  wxNode *head = m_headers.First();
+  wxNode *head = m_headers.GetFirst();
 
   while (head)
   {
-    wxString *str = (wxString *)head->Data();
+    wxString *str = (wxString *)head->GetData();
 
     wxString buf;
     buf.Printf(wxT("%s: %s\r\n"), head->GetKeyString(), str->GetData());
@@ -125,7 +125,7 @@ void wxHTTP::SendHeaders()
     const wxWX2MBbuf cbuf = buf.mb_str();
     Write(cbuf, strlen(cbuf));
 
-    head = head->Next();
+    head = head->GetNext();
   }
 }
 
