@@ -764,11 +764,14 @@ bool wxLocale::Init(int language, int flags)
     wxMB2WXbuf retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #else
     return FALSE;
+    #define WX_NO_LOCALE_SUPPORT
 #endif
 
+#ifndef WX_NO_LOCALE_SUPPORT
     return Init(name, canonical, retloc,
                 (flags & wxLOCALE_LOAD_DEFAULT) != 0,
                 (flags & wxLOCALE_CONV_ENCODING) != 0);
+#endif
 }
 
 
