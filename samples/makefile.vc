@@ -34,7 +34,7 @@ PNGSETUP=
 # Please keep samples list up-to-date, in alphabetical order
 #
 all:
-        cd $(WXDIR)\samples\bombs
+        cd $(WXDIR)\samples\calendar
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\caret
         nmake -f makefile.vc FINAL=$(FINAL)
@@ -46,7 +46,7 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\db
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\dde
+        cd $(WXDIR)\samples\ipc
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\dialogs
         nmake -f makefile.vc FINAL=$(FINAL)
@@ -61,10 +61,6 @@ all:
         cd $(WXDIR)\samples\dynamic
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\font
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\forty
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\fractal
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\grid
         nmake -f makefile.vc FINAL=$(FINAL)
@@ -106,7 +102,7 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\nativdlg
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\nettest
+        cd $(WXDIR)\samples\dialup
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\notebook
         nmake -f makefile.vc FINAL=$(FINAL)
@@ -154,13 +150,11 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\wizard
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\wxpoem
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\wxsocket
+        cd $(WXDIR)\samples\sockets
         nmake -f makefile.vc FINAL=$(FINAL)
 
 clean:
-        cd $(WXDIR)\samples\bombs
+        cd $(WXDIR)\samples\calendar
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\caret
         nmake -f makefile.vc clean
@@ -172,7 +166,7 @@ clean:
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\db
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\dde
+        cd $(WXDIR)\samples\ipc
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\dialogs
         nmake -f makefile.vc clean
@@ -187,10 +181,6 @@ clean:
         cd $(WXDIR)\samples\dynamic
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\font
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\forty
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\fractal
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\grid
         nmake -f makefile.vc clean
@@ -226,7 +216,7 @@ clean:
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\nativdlg
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\nettest
+        cd $(WXDIR)\samples\dialup
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\notebook
         nmake -f makefile.vc clean
@@ -274,8 +264,6 @@ clean:
         cd $(WXDIR)\samples\wizard
         nmake -f makefile.vc clean
 !endif
-        cd $(WXDIR)\samples\wxpoem
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\wxsocket
+        cd $(WXDIR)\samples\sockets
         nmake -f makefile.vc clean
 

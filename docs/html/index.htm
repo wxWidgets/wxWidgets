@@ -35,6 +35,7 @@ downloaded from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<P
 [<a href="#manuals">Manuals</a>]
 [<a href="#thirdparty">3rd party tools</a>] 
 [<a href="#samples">Samples</a>]
+[<a href="#demos">Demos</a>]
 </FONT>
 </CENTER>
 
@@ -103,20 +104,6 @@ downloaded from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<P
 
 <tr>
 <td align=center>
-<a href="porting/port.htm">Porting Guide</a>
-</td>
-
-<td align=center>
-<a href="../winhelp/porting.hlp">Porting Guide</a>
-</td>
-
-<td align=center>
-<a href="../pdf/porting.pdf">Porting Guide</a>
-</td>
-</tr>
-
-<tr>
-<td align=center>
 <a href="dialoged/dlged.htm">Dialog Editor Manual</a>
 </td>
 
@@ -126,20 +113,6 @@ downloaded from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<P
 
 <td align=center>
 <a href="../pdf/dialoged.pdf">Dialog Editor Manual</a>
-</td>
-</tr>
-
-<tr>
-<td align=center>
-<a href="proplist/prop.htm">Property List Classes</a>
-</td>
-
-<td align=center>
-<a href="../winhelp/proplist.hlp">Property List Classes</a>
-</td>
-
-<td align=center>
-<a href="../pdf/proplist.pdf">Property List Classes</a>
 </td>
 </tr>
 
@@ -185,7 +158,7 @@ downloaded from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<P
 <h3 align=center><a name="samples"><hr>Samples<hr></a></h3>
 
 <ul>
-<li><a href="../../samples/bombs">bombs</a>: minesweeper-like game.
+<li><a href="../../samples/calendar">calendar</a>: a sample to test the wxCalendarCtrl class.
 <li><a href="../../samples/caret">caret</a>: a sample to test the wxCaret class.
 <li><a href="../../samples/checklst">checklst</a>: demonstrates wxCheckListBox on
 supported platforms (currently Windows and GTK only).
@@ -196,9 +169,9 @@ console-mode (no-GUI) compilation of wxWindows.
 <li><a href="../../samples/controls">controls</a>: sample showing a variety of controls, including
 wxNotebook.
 <li><a href="../../samples/db">db</a>: wxDB ODBC sample.
-<li><a href="../../samples/dde">dde</a>: shows the DDE protocol in action, both using real
-DDE on Windows, and TCP/IP on all platforms. Edit <a href="../../samples/dde/ddesetup.h">ddesetup.h</a>
-to switch between compilation modes. Currently the TCP/IP mode needs a bit of work.
+<li><a href="../../samples/ipc">ipc</a>: shows the DDE-like protocol in action, both using real
+DDE on Windows, and TCP/IP on all platforms. Edit <a href="../../samples/ipc/ddesetup.h">ddesetup.h</a>
+to switch between compilation modes.
 <li><a href="../../samples/dialogs">dialogs</a>: shows some of the common dialogs available -- wxFontDialog,
 wxColourDialog, wxFileDialog, wxDirDialog, wxMessageBox, wxTextEntryDialog, wxSingleChoiceDialog.
 For printing-related dialogs, see the printing sample.
@@ -210,10 +183,7 @@ using wxMDIParentFrame, wxMDIChildFrame.
 <li><a href="../../samples/drawing">drawing</a>: tests device context drawing.
 <li><a href="../../samples/dynamic">dynamic</a>: shows how to connect events to member functions
 dynamically.
-<li><a href="../../samples/forty">forty</a>: a great little card game by Chris Breeze. A
-fully-fledged application!
 <li><a href="../../samples/font">font</a>: tests fonts, font enumerator, font encodings.
-<li><a href="../../samples/fractal">fractal</a>: fractal mountains by Andrew Davison.
 <li><a href="../../samples/grid">grid</a>: demonstrates the wxGrid class.
 <li><a href="../../samples/help">help</a>: shows how to use wxHelpController.
 <li><a href="../../samples/html">html</a>: a number of demos for the wxHTML class library, used inside
@@ -247,7 +217,7 @@ platforms that don't support it, a normal-sized title bar is displayed.
 small a wxWindows application as you can get.
 <li><a href="../../samples/nativdlg">nativdlg</a>: shows how wxWindows can load a standard Windows
 dialog resource, translating the controls into wxWindows controls (Windows only).
-<li><a href="../../samples/nettest">nettest</a>: wxDialUpManager demo.
+<li><a href="../../samples/dialup">dialup</a>: wxDialUpManager demo.
 <li><a href="../../samples/newgrid">newgrid</a>: demonstrates the new wxGrid implementation, by Michael Bedward.
 <li><a href="../../samples/notebook">notebook</a>: shows the wxNotebook (tabbed window) control.
 <li><a href="../../samples/oleauto">oleauto</a>: a little OLE automation controller (Windows only; requires
@@ -265,6 +235,7 @@ the user to resize subwindows.
 <li><a href="../../samples/scroll">scroll</a>: demonstrates wxScrolledWindow.
 <li><a href="../../samples/scrollsub">scrollsub</a>: demonstrates the use of wxScrolledWindow to scroll
 an embedded window.
+<li><a href="../../samples/sockets">sockets</a>: demonstrates the TCP/IP family of classes.
 <li><a href="../../samples/splitter">splitter</a>: demonstrates the wxSplitterWindow class.
 <li><a href="../../samples/tab">tab</a>: demonstrates the generic tab window class. You should
 normally use wxNotebook instead, but the generic code is sometimes useful, for example for
@@ -282,8 +253,17 @@ programming.
 wxTime, wxDate and wxVariant.
 <li><a href="../../samples/validate">validate</a>: shows simple use of validation.
 <li><a href="../../samples/wizard">wizard</a>: demonstrates the wxWizard class.
-<li><a href="../../samples/wxpoem">wxpoem</a>: a little poetry display program.
-<li><a href="../../samples/wxsocket">wxsocket</a>: demonstrates the TCP/IP family of classes.
+</ul>
+
+<h3 align=center><a name="demos"><hr>Demos<hr></a></h3>
+
+<ul>
+<li><a href="../../demos/bombs">bombs</a>: minesweeper-like game.
+<li><a href="../../demos/forty">forty</a>: a great little card game by Chris Breeze. A
+fully-fledged application!
+<li><a href="../../demos/fractal">fractal</a>: fractal mountains by Andrew Davison.
+<li><a href="../../demos/life">life</a>: the game of Life by J. H. Conway, implemented in wxWindows by Guillermo Rodriguez Garcia.
+<li><a href="../../demos/poem">poem</a>: a little poetry display program.
 </ul>
 
 <hr>
