@@ -246,7 +246,7 @@ public:
 //    virtual void         MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;
 //    virtual void         MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
     const wxBrush&       MacGetBackgroundBrush() ;
-    const wxRegion&      MacGetVisibleRegion() ;
+    const wxRegion&      MacGetVisibleRegion( bool respectChildrenAndSiblings = true ) ;
     bool                 MacIsWindowScrollbar( const wxScrollBar* sb )
         { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
     static wxWindowMac*  s_lastMouseWindow ;
