@@ -18,6 +18,9 @@ package_wxbase_dev=libwxbase$(release)-dev
 package_gtk_lib=libwxgtk$(release)
 package_gtk_dev=libwxgtk$(release)-dev
 package_gtk_py=libwxgtk$(release)-python
+package_contrib=wxwin$(release)-contrib
+package_contrib_dev=wxwin$(release)-contrib-dev
+package_headers=wxwin$(release)-headers
 package_doc=wxwin$(release)-doc
 package_examples=wxwin$(release)-examples
 
@@ -34,6 +37,7 @@ objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_gtk_shared) \
 
 build_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
              build-gtk-shared-stamp build-gtk-static-stamp \
+             build-contrib-shared-stamp build-contrib-static-stamp \
              build-gtk-python-stamp build-examples-stamp build-doc-stamp
 
 wxconfig:=$(shell pwd)/$(objdir_gtk_shared)/wx-config \
@@ -55,7 +59,10 @@ build-wxbase-shared-stamp:
 	dh_testdir
 	mkdir $(objdir_wxbase_shared)
 	cd $(objdir_wxbase_shared) \
-		&& ../configure --prefix=/usr --disable-gui --enable-burnt_name \
+		&& ../configure --prefix=/usr \
+				--disable-gui \
+				--enable-burnt_name \
+				--with-zlib=sys \
 		&& $(MAKE)
 	touch $@
 
@@ -63,7 +70,10 @@ build-wxbase-static-stamp:
 	dh_testdir
 	mkdir $(objdir_wxbase_static)
 	cd $(objdir_wxbase_static) \
-		&& ../configure --prefix=/usr --disable-gui --disable-shared \
+		&& ../configure --prefix=/usr \
+				--disable-gui \
+				--disable-shared \
+				--with-zlib=sys \
 		&& $(MAKE)
 	touch $@
 
@@ -71,7 +81,15 @@ build-gtk-shared-stamp:
 	dh_testdir
 	mkdir $(objdir_gtk_shared)
 	cd $(objdir_gtk_shared) \
-		&& ../configure --prefix=/usr --with-gtk --enable-burnt_name --disable-newgrid \
+		&& ../configure --prefix=/usr \
+				--with-gtk \
+				--with-opengl \
+				--enable-burnt_name \
+				--disable-newgrid \
+				--with-zlib=sys \
+				--with-libjpeg=sys \
+				--with-libpng=sys \
+				--with-libtiff=sys \
 		&& $(MAKE)
 	touch $@
 
@@ -79,8 +97,26 @@ build-gtk-static-stamp:
 	dh_testdir
 	mkdir $(objdir_gtk_static)
 	cd $(objdir_gtk_static) \
-		&& ../configure --prefix=/usr --with-gtk --disable-shared \
+		&& ../configure --prefix=/usr \
+				--with-gtk \
+				--with-opengl \
+				--disable-shared \
+				--disable-newgrid \
+				--with-zlib=sys \
+				--with-libjpeg=sys \
+				--with-libpng=sys \
+				--with-libtiff=sys \
 		&& $(MAKE)
+	touch $@
+
+build-contrib-shared-stamp: build-gtk-shared-stamp
+	dh_testdir
+	cd $(objdir_gtk_shared)/contrib/src && $(MAKE)
+	touch $@
+
+build-contrib-static-stamp: build-gtk-static-stamp
+	dh_testdir
+	cd $(objdir_gtk_static)/contrib/src && $(MAKE)
 	touch $@
 
 build-gtk-python-stamp: build-gtk-shared-stamp
@@ -142,6 +178,9 @@ clean: debian/control
 	rm -f debian/$(package_gtk_lib).*
 	rm -f debian/$(package_gtk_dev).*
 	rm -f debian/$(package_gtk_py).*
+	rm -f debian/$(package_contrib).*
+	rm -f debian/$(package_contrib_dev).*
+	rm -f debian/$(package_headers).*
 	rm -f debian/$(package_doc).*
 	rm -f debian/$(package_examples).*
 
@@ -168,6 +207,18 @@ install: build
 		echo "generating control file $(package_gtk_py).$$f"; \
 		cp debian/libwxgtk-python.$$f debian/$(package_gtk_py).$$f; \
 	done;
+	@for f in dirs docs files postinst; do \
+		echo "generating control file $(package_contrib).$$f"; \
+		cp debian/wxwin-contrib.$$f debian/$(package_contrib).$$f; \
+	done;
+	@for f in dirs docs files; do \
+		echo "generating control file $(package_contrib_dev).$$f"; \
+		cp debian/wxwin-contrib-dev.$$f debian/$(package_contrib_dev).$$f; \
+	done;
+	@for f in dirs docs files; do \
+		echo "generating control file $(package_headers).$$f"; \
+		cp debian/wxwin-headers.$$f debian/$(package_headers).$$f; \
+	done;
 	@for f in dirs docs doc-base; do \
 		echo "generating control file $(package_doc).$$f"; \
 		cp debian/wxwin-doc.$$f debian/$(package_doc).$$f; \
@@ -181,6 +232,8 @@ install: build
 	cd $(objdir_gtk_shared) \
 		&& $(MAKE) install prefix=`pwd`/../debian/tmp/usr
 	rm -f debian/tmp/usr/bin/wx-config
+	cd $(objdir_gtk_shared)/contrib/src \
+		&& $(MAKE) install prefix=`pwd`/../../../debian/tmp/usr
 	cp $(objdir_gtk_static)/lib/*.a debian/tmp/usr/lib
 	cp -a $(objdir_wxbase_shared)/lib/* debian/tmp/usr/lib
 	cp $(objdir_wxbase_shared)/wxbase-config debian/tmp/usr/bin/
@@ -213,7 +266,7 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installdocs
-	dh_installmanpages -p$(package_gtk_dev) \
+	dh_installmanpages -p$(package_headers) \
 		ansi2knr.1 \
 		jpegtran.1 \
 		libpng.3 \

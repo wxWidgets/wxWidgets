@@ -1,0 +1,5 @@
+usr/lib/libmmedia.so.*
+usr/lib/libogl.so.*
+usr/lib/libstc.so.*
+usr/lib/libwx_gtk_gl*.so.*
+
