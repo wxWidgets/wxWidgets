@@ -332,7 +332,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
     if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style ,
-                            wxDefaultValidator, name) )
+                            validator, name) )
     {
         return false;
     }
