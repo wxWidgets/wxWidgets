@@ -90,6 +90,15 @@ enum {
     wxTEXT_ATTR_TABS
 };
 
+enum wxTextCtrlHitTestResult
+{
+    wxTE_HT_UNKNOWN = -2,   // this means HitTest() is simply not implemented
+    wxTE_HT_BEFORE,         // either to the left or upper
+    wxTE_HT_ON_TEXT,        // directly on
+    wxTE_HT_BELOW,          // below [the last line]
+    wxTE_HT_BEYOND          // after [the end of line]
+};
+
 //---------------------------------------------------------------------------
 
 // wxTextAttr: a structure containing the visual attributes of a text
@@ -243,6 +252,16 @@ public:
         "PositionToXY(long pos) -> (x, y)");
 
     virtual void ShowPosition(long pos);
+
+
+    DocDeclAStr(
+        virtual wxTextCtrlHitTestResult, HitTest(const wxPoint& pt,
+                                                 long* OUTPUT, long* OUTPUT) const,
+        "HitTest(Point pt) -> (result, row, col)",
+        "Find the character at position given in pixels.\n"
+        "NB: pt is in device coords (not adjusted for the client area\n"
+        "origin nor scrolling)");
+
 
     // Clipboard operations
     virtual void Copy();
