@@ -136,7 +136,7 @@ wxDatePickerCtrl::Create(wxWindow *parent,
         return false;
 
     // create the native control
-    if ( !MSWCreateControl(DATETIMEPICK_CLASS, _T(""), pos, size) )
+    if ( !MSWCreateControl(DATETIMEPICK_CLASS, wxEmptyString, pos, size) )
         return false;
 
     if ( dt.IsValid() )

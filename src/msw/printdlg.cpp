@@ -94,8 +94,8 @@ static wxString wxGetPrintDlgError()
 static HGLOBAL wxCreateDevNames(const wxString& driverName, const wxString& printerName, const wxString& portName)
 {
     HGLOBAL hDev = NULL;
-    // if (!driverName.IsEmpty() && !printerName.IsEmpty() && !portName.IsEmpty())
-    if (driverName.IsEmpty() && printerName.IsEmpty() && portName.IsEmpty())
+    // if (!driverName.empty() && !printerName.empty() && !portName.empty())
+    if (driverName.empty() && printerName.empty() && portName.empty())
     {
     }
     else
@@ -248,7 +248,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
             {
                 case DMDUP_HORIZONTAL:   data.SetDuplex( wxDUPLEX_HORIZONTAL ); break;
                 case DMDUP_VERTICAL:     data.SetDuplex( wxDUPLEX_VERTICAL ); break;
-                default:    
+                default:
                 case DMDUP_SIMPLEX:      data.SetDuplex( wxDUPLEX_SIMPLEX ); break;
             }
         }
@@ -299,13 +299,13 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
             // Not sure if we should check for this mismatch
 //            wxASSERT_MSG( (m_printerName == "" || (devName == m_printerName)), "Printer name obtained from DEVMODE and DEVNAMES were different!");
 
-            if (printerName != wxT(""))
+            if (!printerName.empty())
                 data.SetPrinterName( printerName );
 
             GlobalUnlock(hDevNames);
         }
     }
-    
+
     return true;
 }
 
@@ -391,7 +391,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 
         //// Printer name
         wxString name = data.GetPrinterName();
-        if (name != wxT(""))
+        if (!name.empty())
         {
             //int len = wxMin(31, m_printerName.Len());
             wxStrncpy((wxChar*)devMode->dmDeviceName,name.c_str(),31);
@@ -505,11 +505,11 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
     }
 
     // TODO: I hope it's OK to pass some empty strings to DEVNAMES.
-    m_devNames = (void*) (long) wxCreateDevNames(wxT(""), data.GetPrinterName(), wxT(""));
-    
+    m_devNames = (void*) (long) wxCreateDevNames(wxEmptyString, data.GetPrinterName(), wxEmptyString);
+
     return true;
 }
-    
+
 // ---------------------------------------------------------------------------
 // wxPrintDialog
 // ---------------------------------------------------------------------------
@@ -538,7 +538,7 @@ bool wxWindowsPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
 
     // MSW handle
     m_printDlg = NULL;
-    
+
     if ( data )
         m_printDialogData = *data;
 
@@ -562,7 +562,7 @@ int wxWindowsPrintDialog::ShowModal()
     ConvertToNative( m_printDialogData );
 
     PRINTDLG *pd = (PRINTDLG*) m_printDlg;
-    
+
     if (m_dialogParent)
         pd->hwndOwner = (HWND) m_dialogParent->GetHWND();
     else if (wxTheApp->GetTopWindow())
@@ -603,13 +603,13 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     wxWindowsPrintNativeData *native_data =
         (wxWindowsPrintNativeData *) data.GetPrintData().GetNativeData();
     data.GetPrintData().ConvertToNative();
-    
+
     PRINTDLG *pd = (PRINTDLG*) m_printDlg;
 
     // Shouldn't have been defined anywhere
     if (pd)
         return false;
-    
+
     pd = new PRINTDLG;
     memset( pd, 0, sizeof(PRINTDLG) );
     m_printDlg = (void*) pd;
@@ -626,7 +626,7 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
 
     pd->Flags          = PD_RETURNDEFAULT;
     pd->nCopies        = 1;
-    
+
     // Pass the devmode data to the PRINTDLG structure, since it'll
     // be needed when PrintDlg is called.
     if (pd->hDevMode)
@@ -695,7 +695,7 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     if ( data.GetSetupDialog() )
         pd->Flags |= PD_PRINTSETUP;
 #endif
-    
+
     return true;
 }
 
@@ -707,7 +707,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
 
     wxWindowsPrintNativeData *native_data =
         (wxWindowsPrintNativeData *) data.GetPrintData().GetNativeData();
-    
+
     // Pass the devmode data back to the wxPrintData structure where it really belongs.
     if (pd->hDevMode)
     {
@@ -752,7 +752,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     data.EnableHelp( ((pd->Flags & PD_SHOWHELP) == PD_SHOWHELP) );
 #if WXWIN_COMPATIBILITY_2_4
     data.SetSetupDialog( ((pd->Flags & PD_PRINTSETUP) == PD_PRINTSETUP) );
-#endif    
+#endif
     return true;
 }
 
@@ -798,7 +798,7 @@ wxWindowsPageSetupDialog::~wxWindowsPageSetupDialog()
 int wxWindowsPageSetupDialog::ShowModal()
 {
     ConvertToNative( m_pageSetupData );
-    
+
     PAGESETUPDLG *pd = (PAGESETUPDLG *) m_pageDlg;
     if (m_dialogParent)
         pd->hwndOwner = (HWND) m_dialogParent->GetHWND();
@@ -828,7 +828,7 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
     // Shouldn't have been defined anywhere
     if (pd)
         return false;
-        
+
     pd = new PAGESETUPDLG;
     pd->hDevMode = NULL;
     pd->hDevNames = NULL;
@@ -929,7 +929,7 @@ bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
 
     wxWindowsPrintNativeData *native_data =
         (wxWindowsPrintNativeData *) data.GetPrintData().GetNativeData();
-        
+
     // Pass the devmode data back to the wxPrintData structure where it really belongs.
     if (pd->hDevMode)
     {
@@ -941,7 +941,7 @@ bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
         native_data->SetDevMode( (void*) pd->hDevMode );
         pd->hDevMode = NULL;
     }
-    
+
     // Isn't this superfluous? It's called again below.
     // data.GetPrintData().ConvertFromNative();
 
@@ -977,7 +977,7 @@ bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
 
     data.SetMarginTopLeft( wxPoint(pd->rtMargin.left / 100, pd->rtMargin.top / 100) );
     data.SetMarginBottomRight( wxPoint(pd->rtMargin.right / 100, pd->rtMargin.bottom / 100) );
-    
+
     return true;
 }
 

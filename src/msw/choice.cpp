@@ -141,7 +141,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
         return false;
 
     // now create the real HWND
-    if ( !MSWCreateControl(wxT("COMBOBOX"), _T(""), pos, size) )
+    if ( !MSWCreateControl(wxT("COMBOBOX"), wxEmptyString, pos, size) )
         return false;
 
 
@@ -350,7 +350,7 @@ int wxChoice::FindString(const wxString& s) const
    {
      int pos = (int)SendMessage(GetHwnd(), CB_FINDSTRINGEXACT,
                                 (WPARAM)-1, (LPARAM)s.c_str());
- 
+
      return pos == LB_ERR ? wxNOT_FOUND : pos;
    }
 #endif // Watcom/!Watcom
@@ -507,10 +507,10 @@ void wxChoice::DoSetSize(int x, int y,
     else
     {
         // We cannot pass wxDefaultCoord as height to wxControl. wxControl uses
-        // wxGetWindowRect() to determine the current height of the combobox, 
-        // and then again sets the combobox's height to that value. Unfortunately, 
-        // wxGetWindowRect doesn't include the dropdown list's height (at least 
-        // on Win2K), so this would result in a combobox with dropdown height of 
+        // wxGetWindowRect() to determine the current height of the combobox,
+        // and then again sets the combobox's height to that value. Unfortunately,
+        // wxGetWindowRect doesn't include the dropdown list's height (at least
+        // on Win2K), so this would result in a combobox with dropdown height of
         // 1 pixel. We have to determine the default height ourselves and call
         // wxControl with that value instead.
         int w, h;
@@ -518,7 +518,7 @@ void wxChoice::DoSetSize(int x, int y,
         DoGetSize(&w, &h);
         if (::SendMessage(GetHwnd(), CB_GETDROPPEDCONTROLRECT, 0, (LPARAM) &r) != 0)
         {
-            height = h + r.bottom - r.top;       
+            height = h + r.bottom - r.top;
         }
     }
 

@@ -145,7 +145,7 @@ bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case TTN_NEEDTEXT:
         {
             // TODO
-//            if (tool->m_shortHelpString != "")
+//            if (!tool->m_shortHelpString.empty())
 //                ttText->lpszText = (char *) (const char *)tool->m_shortHelpString;
         }
 #endif

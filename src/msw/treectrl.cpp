@@ -926,7 +926,7 @@ bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
 
 wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG( item.IsOk(), wxT(""), wxT("invalid tree item") );
+    wxCHECK_MSG( item.IsOk(), wxEmptyString, wxT("invalid tree item") );
 
     wxChar buf[512];  // the size is arbitrary...
 

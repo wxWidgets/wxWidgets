@@ -128,7 +128,7 @@ wxStackFrame::GetParam(size_t n,
 
 void wxStackFrame::OnParam(PSYMBOL_INFO pSymInfo)
 {
-    m_paramTypes.Add(_T(""));
+    m_paramTypes.Add(wxEmptyString);
 
     m_paramNames.Add(wxString::FromAscii(pSymInfo->Name));
 
@@ -154,7 +154,7 @@ void wxStackFrame::OnParam(PSYMBOL_INFO pSymInfo)
     __except ( EXCEPTION_EXECUTE_HANDLER )
 #endif
     {
-        m_paramValues.Add(_T(""));
+        m_paramValues.Add(wxEmptyString);
     }
 }
 
