@@ -78,7 +78,7 @@ public:
   // accessors
   // ---------
     // get number of pages in the dialog
-  int GetPageCount() const;
+  virtual size_t GetPageCount() const;
 
     // set the currently selected page, return the index of the previously
     // selected one (or -1 on error)

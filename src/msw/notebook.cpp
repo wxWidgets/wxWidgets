@@ -73,7 +73,7 @@
 // ----------------------------------------------------------------------------
 
 // check that the page index is valid
-#define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
+#define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
 // hide the ugly cast
 #define m_hwnd    (HWND)GetHWND()
@@ -283,7 +283,7 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
 // wxNotebook accessors
 // ----------------------------------------------------------------------------
 
-int wxNotebook::GetPageCount() const
+size_t wxNotebook::GetPageCount() const
 {
   // consistency check
   wxASSERT( (int)m_pages.Count() == TabCtrl_GetItemCount(m_hwnd) );
@@ -296,7 +296,7 @@ int wxNotebook::GetRowCount() const
   return TabCtrl_GetRowCount(m_hwnd);
 }
 
-int wxNotebook::SetSelection(int nPage)
+int wxNotebook::SetSelection(size_t nPage)
 {
   wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
@@ -319,7 +319,7 @@ int wxNotebook::SetSelection(int nPage)
   return m_nSelection;
 }
 
-bool wxNotebook::SetPageText(int nPage, const wxString& strText)
+bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
   wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
 
@@ -330,7 +330,7 @@ bool wxNotebook::SetPageText(int nPage, const wxString& strText)
   return TabCtrl_SetItem(m_hwnd, nPage, &tcItem) != 0;
 }
 
-wxString wxNotebook::GetPageText(int nPage) const
+wxString wxNotebook::GetPageText(size_t nPage) const
 {
   wxCHECK_MSG( IS_VALID_PAGE(nPage), wxEmptyString, wxT("notebook page out of range") );
 
@@ -347,7 +347,7 @@ wxString wxNotebook::GetPageText(int nPage) const
   return str;
 }
 
-int wxNotebook::GetPageImage(int nPage) const
+int wxNotebook::GetPageImage(size_t nPage) const
 {
   wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
@@ -357,7 +357,7 @@ int wxNotebook::GetPageImage(int nPage) const
   return TabCtrl_GetItem(m_hwnd, nPage, &tcItem) ? tcItem.iImage : -1;
 }
 
-bool wxNotebook::SetPageImage(int nPage, int nImage)
+bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
   wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
 
@@ -456,7 +456,7 @@ void wxNotebook::AdjustPageSize(wxNotebookPage *page)
 // ----------------------------------------------------------------------------
 
 // remove one page from the notebook, without deleting
-wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
+wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 {
     wxNotebookPage *pageRemoved = wxNotebookBase::DoRemovePage(nPage);
     if ( !pageRemoved )
@@ -510,8 +510,8 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-  int nPageCount = GetPageCount();
-  int nPage;
+  size_t nPageCount = GetPageCount();
+  size_t nPage;
   for ( nPage = 0; nPage < nPageCount; nPage++ )
     delete m_pages[nPage];
 
@@ -525,7 +525,7 @@ bool wxNotebook::DeleteAllPages()
 }
 
 // same as AddPage() but does it at given position
-bool wxNotebook::InsertPage(int nPage,
+bool wxNotebook::InsertPage(size_t nPage,
                             wxNotebookPage *pPage,
                             const wxString& strText,
                             bool bSelect,
