@@ -623,10 +623,10 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
         logBuf << "Deselected ";
     logBuf << "cell at row " << ev.GetRow()
            << " col " << ev.GetCol()
-           << " ( ControlDown: "<<ev.ControlDown()
-           << ", ShiftDown: "<<ev.ShiftDown()
-           << ", AltDown: "<<ev.AltDown()
-           << ", MetaDown: "<<ev.MetaDown()<< " )";
+           << " ( ControlDown: "<< (ev.ControlDown() ? 'T':'F')
+           << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
+           << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
+           << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
     wxLogMessage( "%s", logBuf.c_str() );
 
     // you must call Skip() if you want the default processing
@@ -645,10 +645,10 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
            << " col " << ev.GetLeftCol()
            << " to row " << ev.GetBottomRow()
            << " col " << ev.GetRightCol()
-           << " ( ControlDown: "<<ev.ControlDown()
-           << ", ShiftDown: "<<ev.ShiftDown()
-           << ", AltDown: "<<ev.AltDown()
-           << ", MetaDown: "<<ev.MetaDown()<< " )";
+           << " ( ControlDown: "<< (ev.ControlDown() ? 'T':'F')
+           << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
+           << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
+           << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
     wxLogMessage( "%s", logBuf.c_str() );
 
     ev.Skip();
