@@ -107,18 +107,14 @@ extern "C" {
 #ifdef __REG_NOCHAR
 #undef __REG_NOCHAR
 #endif
-/* interface types */
-#define	__REG_WIDE_T	Tcl_UniChar
-#define	__REG_REGOFF_T	long	/* not really right, but good enough... */
-#define	__REG_VOID_T	VOID
-#define	__REG_CONST	CONST
-/* names and declarations */
-#define	__REG_WIDE_COMPILE	TclReComp
-#define	__REG_WIDE_EXEC		TclReExec
-#define	__REG_NOFRONT		/* don't want regcomp() and regexec() */
-#define	__REG_NOCHAR		/* or the char versions */
-#define	regfree		TclReFree
-#define	regerror	TclReError
+#if wxUSE_UNICODE
+#   define  __REG_WIDE_T        wxChar
+#   define  __REG_WIDE_COMPILE  re_comp
+#   define  __REG_WIDE_EXEC     re_exec
+#   define  __REG_NOCHAR        /* don't want the char versions */
+#endif
+#define __REG_NOFRONT           /* don't want regcomp() and regexec() */
+#define _ANSI_ARGS_(x)          x
 /* --- end --- */
 
 

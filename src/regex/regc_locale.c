@@ -10,111 +10,119 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
  * RCS: @(#) $Id$
+ *
+ * wxWindows:
+ *  The Scriptics license can be found in the file COPYRIGHT. Modifications
+ *  for wxWindows are under the wxWindows licence, see README for details.
  */
+
+#define CONST const
 
 /* ASCII character-name table */
 
 static struct cname {
-    char *name;
+    chr *name;
     char code;
 } cnames[] = {
-    {"NUL",		'\0'},
-    {"SOH",		'\001'},
-    {"STX",		'\002'},
-    {"ETX",		'\003'},
-    {"EOT",		'\004'},
-    {"ENQ",		'\005'},
-    {"ACK",		'\006'},
-    {"BEL",		'\007'},
-    {"alert",		'\007'},
-    {"BS",		'\010'},
-    {"backspace",	'\b'},
-    {"HT",		'\011'},
-    {"tab",		'\t'},
-    {"LF",		'\012'},
-    {"newline",		'\n'},
-    {"VT",		'\013'},
-    {"vertical-tab",	'\v'},
-    {"FF",		'\014'},
-    {"form-feed",	'\f'},
-    {"CR",		'\015'},
-    {"carriage-return",	'\r'},
-    {"SO",		'\016'},
-    {"SI",		'\017'},
-    {"DLE",		'\020'},
-    {"DC1",		'\021'},
-    {"DC2",		'\022'},
-    {"DC3",		'\023'},
-    {"DC4",		'\024'},
-    {"NAK",		'\025'},
-    {"SYN",		'\026'},
-    {"ETB",		'\027'},
-    {"CAN",		'\030'},
-    {"EM",		'\031'},
-    {"SUB",		'\032'},
-    {"ESC",		'\033'},
-    {"IS4",		'\034'},
-    {"FS",		'\034'},
-    {"IS3",		'\035'},
-    {"GS",		'\035'},
-    {"IS2",		'\036'},
-    {"RS",		'\036'},
-    {"IS1",		'\037'},
-    {"US",		'\037'},
-    {"space",		' '},
-    {"exclamation-mark",'!'},
-    {"quotation-mark",	'"'},
-    {"number-sign",	'#'},
-    {"dollar-sign",	'$'},
-    {"percent-sign",	'%'},
-    {"ampersand",	'&'},
-    {"apostrophe",	'\''},
-    {"left-parenthesis",'('},
-    {"right-parenthesis", ')'},
-    {"asterisk",	'*'},
-    {"plus-sign",	'+'},
-    {"comma",		','},
-    {"hyphen",		'-'},
-    {"hyphen-minus",	'-'},
-    {"period",		'.'},
-    {"full-stop",	'.'},
-    {"slash",		'/'},
-    {"solidus",		'/'},
-    {"zero",		'0'},
-    {"one",		'1'},
-    {"two",		'2'},
-    {"three",		'3'},
-    {"four",		'4'},
-    {"five",		'5'},
-    {"six",		'6'},
-    {"seven",		'7'},
-    {"eight",		'8'},
-    {"nine",		'9'},
-    {"colon",		':'},
-    {"semicolon",	';'},
-    {"less-than-sign",	'<'},
-    {"equals-sign",	'='},
-    {"greater-than-sign", '>'},
-    {"question-mark",	'?'},
-    {"commercial-at",	'@'},
-    {"left-square-bracket", '['},
-    {"backslash",	'\\'},
-    {"reverse-solidus",	'\\'},
-    {"right-square-bracket", ']'},
-    {"circumflex",	'^'},
-    {"circumflex-accent", '^'},
-    {"underscore",	'_'},
-    {"low-line",	'_'},
-    {"grave-accent",	'`'},
-    {"left-brace",	'{'},
-    {"left-curly-bracket", '{'},
-    {"vertical-line",	'|'},
-    {"right-brace",	'}'},
-    {"right-curly-bracket", '}'},
-    {"tilde",		'~'},
-    {"DEL",		'\177'},
-    {NULL,		0}
+    {_T("NUL"),                 '\0'},
+    {_T("SOH"),                 '\001'},
+    {_T("STX"),                 '\002'},
+    {_T("ETX"),                 '\003'},
+    {_T("EOT"),                 '\004'},
+    {_T("ENQ"),                 '\005'},
+    {_T("ACK"),                 '\006'},
+    {_T("BEL"),                 '\007'},
+    {_T("alert"),               '\007'},
+    {_T("BS"),                  '\010'},
+    {_T("backspace"),           '\b'},
+    {_T("HT"),                  '\011'},
+    {_T("tab"),                 '\t'},
+    {_T("LF"),                  '\012'},
+    {_T("newline"),             '\n'},
+    {_T("VT"),                  '\013'},
+    {_T("vertical-tab"),        '\v'},
+    {_T("FF"),                  '\014'},
+    {_T("form-feed"),           '\f'},
+    {_T("CR"),                  '\015'},
+    {_T("carriage-return"),     '\r'},
+    {_T("SO"),                  '\016'},
+    {_T("SI"),                  '\017'},
+    {_T("DLE"),                 '\020'},
+    {_T("DC1"),                 '\021'},
+    {_T("DC2"),                 '\022'},
+    {_T("DC3"),                 '\023'},
+    {_T("DC4"),                 '\024'},
+    {_T("NAK"),                 '\025'},
+    {_T("SYN"),                 '\026'},
+    {_T("ETB"),                 '\027'},
+    {_T("CAN"),                 '\030'},
+    {_T("EM"),                  '\031'},
+    {_T("SUB"),                 '\032'},
+    {_T("ESC"),                 '\033'},
+    {_T("IS4"),                 '\034'},
+    {_T("FS"),                  '\034'},
+    {_T("IS3"),                 '\035'},
+    {_T("GS"),                  '\035'},
+    {_T("IS2"),                 '\036'},
+    {_T("RS"),                  '\036'},
+    {_T("IS1"),                 '\037'},
+    {_T("US"),                  '\037'},
+    {_T("space"),               ' '},
+    {_T("exclamation-mark"),    '!'},
+    {_T("quotation-mark"),      '"'},
+    {_T("number-sign"),         '#'},
+    {_T("dollar-sign"),         '$'},
+    {_T("percent-sign"),        '%'},
+    {_T("ampersand"),           '&'},
+    {_T("apostrophe"),          '\''},
+    {_T("left-parenthesis"),    '('},
+    {_T("right-parenthesis"),   ')'},
+    {_T("asterisk"),            '*'},
+    {_T("plus-sign"),           '+'},
+    {_T("comma"),               ','},
+    {_T("hyphen"),              '-'},
+    {_T("hyphen-minus"),        '-'},
+    {_T("period"),              '.'},
+    {_T("full-stop"),           '.'},
+    {_T("slash"),               '/'},
+    {_T("solidus"),             '/'},
+    {_T("zero"),                '0'},
+    {_T("one"),                 '1'},
+    {_T("two"),                 '2'},
+    {_T("three"),               '3'},
+    {_T("four"),                '4'},
+    {_T("five"),                '5'},
+    {_T("six"),                 '6'},
+    {_T("seven"),               '7'},
+    {_T("eight"),               '8'},
+    {_T("nine"),                '9'},
+    {_T("colon"),               ':'},
+    {_T("semicolon"),           ';'},
+    {_T("less-than-sign"),      '<'},
+    {_T("equals-sign"),         '='},
+    {_T("greater-than-sign"),   '>'},
+    {_T("question-mark"),       '?'},
+    {_T("commercial-at"),       '@'},
+    {_T("left-square-bracket"), '['},
+    {_T("backslash"),           '\\'},
+    {_T("reverse-solidus"),     '\\'},
+    {_T("right-square-bracket"), ']'},
+    {_T("circumflex"),          '^'},
+    {_T("circumflex-accent"),   '^'},
+    {_T("underscore"),          '_'},
+    {_T("low-line"),            '_'},
+    {_T("grave-accent"),        '`'},
+    {_T("left-brace"),          '{'},
+    {_T("left-curly-bracket"),  '{'},
+    {_T("vertical-line"),       '|'},
+    {_T("right-brace"),         '}'},
+    {_T("right-curly-bracket"), '}'},
+    {_T("tilde"),               '~'},
+    {_T("DEL"),                 '\177'},
+    {NULL,                      0}
 };
+
+#if wxUSE_UNICODE
 
 /* Unicode character-class tables */
 
@@ -518,6 +526,120 @@ static chr graphCharTable[] = {
  *	End of auto-generated Unicode character ranges declarations.
  */
 
+/*
+ * Supply implementations for some tcl functions that this module depends on
+ * to make it self contained
+ */
+
+#include "tclUniData.c"
+#define Tcl_UniChar wxChar
+
+/*
+ * Compute the uppercase equivalent of the given Unicode character.
+ * Taken from tcl.
+ */
+
+Tcl_UniChar Tcl_UniCharToUpper(int ch)
+{
+    int info = GetUniCharInfo(ch);
+
+    if (GetCaseType(info) & 0x04) {
+	return (Tcl_UniChar) (ch - GetDelta(info));
+    } else {
+	return ch;
+    }
+}
+
+/*
+ * Compute the lowercase equivalent of the given Unicode character.
+ * Taken from tcl.
+ */
+
+Tcl_UniChar Tcl_UniCharToLower(int ch)
+{
+    int info = GetUniCharInfo(ch);
+
+    if (GetCaseType(info) & 0x02) {
+	return (Tcl_UniChar) (ch + GetDelta(info));
+    } else {
+	return ch;
+    }
+}
+
+/*
+ * Compute the titlecase equivalent of the given Unicode character.
+ * Taken from tcl.
+ */
+
+Tcl_UniChar Tcl_UniCharToTitle(int ch)
+{
+    int info = GetUniCharInfo(ch);
+    int mode = GetCaseType(info);
+
+    if (mode & 0x1) {
+	/*
+	 * Subtract or add one depending on the original case.
+	 */
+
+	return (Tcl_UniChar) (ch + ((mode & 0x4) ? -1 : 1));
+    } else if (mode == 0x4) {
+	return (Tcl_UniChar) (ch - GetDelta(info));
+    } else {
+	return ch;
+    }
+}
+
+#else   /* wxUSE_UNICODE */
+
+#include <locale.h>
+
+typedef int (*isfunc_t)(int);
+
+/* ASCII character-class table */
+static struct cclass {
+    char *name;
+    char *chars;
+    int hasch;
+    isfunc_t isfunc;
+} cclasses[] = {
+    {"alnum",   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\
+0123456789",                1,  isalnum},
+    {"alpha",   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+                    1,  isalpha},
+    {"blank",   " \t",      0,  NULL},
+    {"cntrl",   "\007\b\t\n\v\f\r\1\2\3\4\5\6\16\17\20\21\22\23\24\
+\25\26\27\30\31\32\33\34\35\36\37\177", 0, iscntrl},
+    {"digit",   "0123456789",   0,  isdigit},
+    {"graph",   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\
+0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
+                    1,  isgraph},
+    {"lower",   "abcdefghijklmnopqrstuvwxyz",
+                    1,  islower},
+    {"print",   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\
+0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ ",
+                    1,  isprint},
+    {"punct",   "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
+                    0,  ispunct},
+    {"space",   "\t\n\v\f\r ",  0,  isspace},
+    {"upper",   "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                    0,  isupper},
+    {"xdigit",  "0123456789ABCDEFabcdef",
+                    0,  isxdigit},
+    {NULL,      0,      0, NULL}
+};
+
+/*
+ * Supply implementations for some tcl functions that this module depends on
+ * to make it self contained
+ */
+
+#define Tcl_UniChar wxChar
+Tcl_UniChar Tcl_UniCharToUpper(int ch) { return wxToupper(ch); }
+Tcl_UniChar Tcl_UniCharToLower(int ch) { return wxTolower(ch); }
+Tcl_UniChar Tcl_UniCharToTitle(int ch) { return wxToupper(ch); }
+
+#endif  /* !wxUSE_UNICODE */
+
 #define	CH	NOCELT
 
 /*
@@ -569,8 +691,6 @@ element(v, startp, endp)
 {
     struct cname *cn;
     size_t len;
-    Tcl_DString ds;
-    CONST char *np;
 
     /* generic:  one-chr names stand for themselves */
     assert(startp < endp);
@@ -582,14 +702,11 @@ element(v, startp, endp)
     NOTE(REG_ULOCALE);
 
     /* search table */
-    Tcl_DStringInit(&ds);
-    np = Tcl_UniCharToUtfDString(startp, (int)len, &ds);
     for (cn=cnames; cn->name!=NULL; cn++) {
-	if (strlen(cn->name)==len && strncmp(cn->name, np, len)==0) {
+	if (wxStrlen_(cn->name)==len && wxStrncmp(cn->name, startp, len)==0) {
 	    break;			/* NOTE BREAK OUT */
 	}
     }
-    Tcl_DStringFree(&ds);
     if (cn->name != NULL) {
 	return CHR(cn->code);
     }
@@ -708,6 +825,8 @@ eclass(v, c, cases)
     return cv;
 }
 
+#if wxUSE_UNICODE
+
 /*
  - cclass - supply cvec for a character class
  * Must include case counterparts on request.
@@ -722,18 +841,17 @@ cclass(v, startp, endp, cases)
 {
     size_t len;
     struct cvec *cv = NULL;
-    Tcl_DString ds;
-    CONST char *np;
-    char **namePtr;
+    CONST chr *np;
+    chr **namePtr;
     int i, index;
 
     /*
      * The following arrays define the valid character class names.
      */
 
-    static char *classNames[] = {
-	"alnum", "alpha", "ascii", "blank", "cntrl", "digit", "graph",
-	"lower", "print", "punct", "space", "upper", "xdigit", NULL
+    static chr *classNames[] = {
+	_T("alnum"), _T("alpha"), _T("ascii"), _T("blank"), _T("cntrl"), _T("digit"), _T("graph"),
+	_T("lower"), _T("print"), _T("punct"), _T("space"), _T("upper"), _T("xdigit"), NULL
     };
 
     enum classes {
@@ -747,16 +865,15 @@ cclass(v, startp, endp, cases)
      */
 
     len = endp - startp;
-    Tcl_DStringInit(&ds);
-    np = Tcl_UniCharToUtfDString(startp, (int)len, &ds);
+    np = startp;
 
     /*
      * Remap lower and upper to alpha if the match is case insensitive.
      */
 
-    if (cases && len == 5 && (strncmp("lower", np, 5) == 0
-	    || strncmp("upper", np, 5) == 0)) {
-	np = "alpha";
+    if (cases && len == 5 && (wxStrncmp(_T("lower"), np, 5) == 0
+	    || wxStrncmp(_T("upper"), np, 5) == 0)) {
+	np = _T("alpha");
     }
 
     /*
@@ -765,12 +882,11 @@ cclass(v, startp, endp, cases)
 
     index = -1;
     for (namePtr=classNames,i=0 ; *namePtr!=NULL ; namePtr++,i++) {
-	if ((strlen(*namePtr) == len) && (strncmp(*namePtr, np, len) == 0)) {
+	if ((wxStrlen_(*namePtr) == len) && (wxStrncmp(*namePtr, np, len) == 0)) {
 	    index = i;
 	    break;
 	}
     }
-    Tcl_DStringInit(&ds);
     if (index == -1) {
 	ERR(REG_ECTYPE);
 	return NULL;
@@ -918,6 +1034,79 @@ cclass(v, startp, endp, cases)
     }
     return cv;
 }
+
+#else   /* wxUSE_UNICODE */
+
+static struct cvec *
+cclass(v, startp, endp, cases)
+struct vars *v;
+chr *startp;                    /* where the name starts */
+chr *endp;                      /* just past the end of the name */
+int cases;                      /* case-independent? */
+{
+    size_t len;
+    char *p;
+    struct cclass *cc;
+    struct cvec *cv;
+    chr *np;
+    int i;
+    int count;
+    char buf[256];
+    const char *loc;
+
+    /* find the name */
+    len = endp - startp;
+    np = startp;
+    if (cases && len == 5 && (wxStrncmp(_T("lower"), np, 5) == 0 ||
+                                    wxStrncmp(_T("upper"), np, 5) == 0))
+            np = _T("alpha");
+    for (cc = cclasses; cc->name != NULL; cc++)
+            if (wxStrlen_(cc->name) == len && wxStrncmp(cc->name, np, len) == 0)
+                    break;          /* NOTE BREAK OUT */
+    if (cc->name == NULL) {
+            ERR(REG_ECTYPE);
+            return NULL;
+    }
+
+    loc = setlocale(LC_CTYPE, NULL);
+
+    if (!cc->isfunc || loc == NULL || strcmp(loc, "C") == 0)
+    {
+        /* set up vector */
+        cv = getcvec(v, (int)strlen(cc->chars), 0, 0);
+        if (cv == NULL) {
+                ERR(REG_ESPACE);
+                return NULL;
+        }
+
+        /* fill it in */
+        for (p = cc->chars; *p != '\0'; p++)
+                addchr(cv, (chr)*p);
+    }
+    else
+    {
+        count = 0;
+        for (i = 0; i < 256; i++)
+            if (cc->isfunc(i))
+                buf[count++] = i;
+
+        /* set up vector */
+        cv = getcvec(v, count, 0, 0);
+        if (cv == NULL) {
+            ERR(REG_ESPACE);
+            return NULL;
+        }
+
+        /* fill it in */
+        for (i = 0; i < count; i++)
+            addchr(cv, buf[i]);
+    }
+
+    return cv;
+}
+
+#endif  /* !wxUSE_UNICODE */
+
 
 /*
  - allcases - supply cvec for all case counterparts of a chr (including itself)
