@@ -96,7 +96,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
                             win->m_width - 7,
                             font->ascent + font->descent+1 );
                             
-        gdk_gc_set_foreground( gc, &widget->style->white );
+        gdk_gc_set_foreground( gc, &widget->style->fg[GTK_STATE_SELECTED] );
         gdk_draw_string( pizza->bin_window, font, gc, 
                          6, 
                          3+font->ascent, 
@@ -140,7 +140,7 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
                             win->m_width - 7,
                             font->ascent + font->descent+1 );
                             
-        gdk_gc_set_foreground( gc, &widget->style->white );
+        gdk_gc_set_foreground( gc, &widget->style->fg[GTK_STATE_SELECTED] );
         gdk_draw_string( pizza->bin_window, font, gc, 
                          6, 
                          3+font->ascent, 
