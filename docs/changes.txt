@@ -47,6 +47,7 @@ All:
 
 All (GUI):
 
+- added wxMediaCtrl
 - added wxDatePickerCtrl
 - wxSplitterWindow now supports gravity parameter (Zbigniew Zagórski)
 - recursive wxSizer::GetItem returns item of given window, sizer or nth index
