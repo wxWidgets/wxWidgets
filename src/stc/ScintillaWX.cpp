@@ -134,6 +134,33 @@ END_EVENT_TABLE()
 
 
 //----------------------------------------------------------------------
+
+static wxTextFileType wxConvertEOLMode(int scintillaMode)
+{
+    wxTextFileType type;
+    
+    switch (scintillaMode) {
+        case wxSTC_EOL_CRLF:
+            type = wxTextFileType_Dos;
+            break;
+            
+        case wxSTC_EOL_CR:
+            type = wxTextFileType_Mac;
+            break;
+                
+        case wxSTC_EOL_LF:
+            type = wxTextFileType_Unix;
+            break;
+            
+        default:
+            type = wxTextBuffer::typeDefault;
+            break;
+    }
+    return type;
+}
+    
+
+//----------------------------------------------------------------------
 // Constructor/Destructor
 
 
@@ -396,7 +423,9 @@ void ScintillaWX::Paste() {
         wxTheClipboard->Close();
     }
     if (gotData) {
-        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(data.GetText());
+        wxString   text = wxTextBuffer::Translate(data.GetText(),
+                                                  wxConvertEOLMode(pdoc->eolMode));
+        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
         int        len = strlen(buf);
         pdoc->InsertString(currentPos, buf, len);
         SetEmptySelection(currentPos + len);
@@ -691,7 +720,9 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
         wxTheClipboard->Close();
     }
     if (gotData) {
-        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(data.GetText());
+        wxString   text = wxTextBuffer::Translate(data.GetText(),
+                                                  wxConvertEOLMode(pdoc->eolMode));
+        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
         int        len = strlen(buf);
         pdoc->InsertString(currentPos, buf, len);
         SetEmptySelection(currentPos + len);
@@ -817,6 +848,9 @@ void ScintillaWX::DoOnIdle(wxIdleEvent& evt) {
 bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
     SetDragPosition(invalidPosition);
 
+    wxString text = wxTextBuffer::Translate(data,
+                                            wxConvertEOLMode(pdoc->eolMode));
+    
     // Send an event to allow the drag details to be changed
     wxStyledTextEvent evt(wxEVT_STC_DO_DROP, stc->GetId());
     evt.SetEventObject(stc);
@@ -824,7 +858,7 @@ bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
     evt.SetX(x);
     evt.SetY(y);
     evt.SetPosition(PositionFromLocation(Point(x,y)));
-    evt.SetDragText(data);
+    evt.SetDragText(text);
     stc->GetEventHandler()->ProcessEvent(evt);
 
     dragResult = evt.GetDragResult();
