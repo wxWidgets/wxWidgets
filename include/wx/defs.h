@@ -62,7 +62,7 @@
 
 /*  suppress some Visual C++ warnings */
 #ifdef __VISUALC__
-    /*  the only "real" warning here is 4244 but there arej ust too many of them */
+    /*  the only "real" warning here is 4244 but there are just too many of them */
     /*  in our code... one day someone should go and fix them but until then... */
 #   pragma warning(disable:4201)    /*  nonstandard extension used: nameless struct/union */
 #   pragma warning(disable:4244)    /*  conversion from double to float */
@@ -1887,7 +1887,7 @@ enum wxKeyCode
     WXK_SPACE   =    32,
     WXK_DELETE  =    127,
 
-    /* There are by design not compatable with unicode characters.
+    /* These are, by design, not compatable with unicode characters.
        If you want to get a unicode character from a key event, use
        wxKeyEvent::GetUnicodeKey instead.                           */
     WXK_START   = 300, 
