@@ -540,6 +540,7 @@ bool wxApp::Initialize()
 
   wxMacCreateNotifierTable() ;
 
+
   UMAShowArrowCursor() ;
 
   return TRUE;
@@ -916,6 +917,136 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
     return retValue;
 }
 
+#if TARGET_CARBON
+
+bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
+{
+    bool converted = ConvertEventRefToEventRecord( event,rec) ;
+    OSStatus err = noErr ;
+    if ( !converted )
+    {
+        switch( GetEventClass( event ) )
+        {
+            case kEventClassKeyboard :
+            {
+                converted = true ;
+                switch( GetEventKind(event) ) 
+                {
+                    case kEventRawKeyDown :
+                        rec->what = keyDown ;
+                        break ;
+                    case kEventRawKeyRepeat :
+                        rec->what = autoKey ;
+                        break ;
+                    case kEventRawKeyUp :
+                        rec->what = keyUp ;
+                        break ;
+                    case kEventRawKeyModifiersChanged :
+                        rec->what = nullEvent ;
+                        break ;
+                    default :
+                        converted = false ;
+                        break ;
+                }
+                if ( converted )
+                {
+                    UInt32 keyCode ;
+                    unsigned char charCode ;
+                    UInt32 modifiers ;
+                    GetMouse( &rec->where) ;
+
+                    err = GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
+                    err = GetEventParameter(event, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);
+                    err = GetEventParameter(event, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode);
+                    rec->modifiers = modifiers ;
+                    rec->message = (keyCode << 8 ) + charCode ;
+                }
+            }
+            break ;
+            case kEventClassTextInput :
+            {
+                switch( GetEventKind( event ) )
+                {
+                    case kEventTextInputUnicodeForKeyEvent :
+                        {
+                            EventRef rawEvent ;
+                            err = GetEventParameter( event , kEventParamTextInputSendKeyboardEvent ,typeEventRef,NULL,sizeof(rawEvent),NULL,&rawEvent ) ;
+                            converted = true ;
+                            {
+                                UInt32 keyCode ;
+                                unsigned char charCode ;
+                                UInt32 modifiers ;
+                                GetMouse( &rec->where) ;
+                                rec->what = keyDown ;
+                                err = GetEventParameter(rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
+                                err = GetEventParameter(rawEvent, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);
+                                err = GetEventParameter(rawEvent, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode);
+                                rec->modifiers = modifiers ;
+                                rec->message = (keyCode << 8 ) + charCode ;
+                            }
+                       }
+                        break ;
+                    default :
+                        break ;
+                }
+            }
+            break ;
+        }
+    }
+    
+    return converted ;
+}
+
+pascal OSStatus wxMacApplicationEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    
+    EventRecord rec ;
+    switch ( GetEventClass( event ) )
+    {
+        case kEventClassKeyboard :
+            if ( wxMacConvertEventToRecord( event , &rec ) )
+            {
+                wxTheApp->MacHandleOneEvent( &rec ) ;
+                result = noErr ;
+            }
+            break ;
+        case kEventClassTextInput :
+            if ( wxMacConvertEventToRecord( event , &rec ) )
+            {
+                wxTheApp->MacHandleOneEvent( &rec ) ;
+                result = noErr ;
+            }
+            break ;
+        default :
+            break ;
+    }
+    return result ;
+}
+
+#endif
+
+bool wxApp::OnInit()
+{
+    if ( ! wxAppBase::OnInit() )
+        return FALSE ;
+    
+#if TARGET_CARBON
+	static const EventTypeSpec eventList[] = 
+	{
+	    { kEventClassKeyboard, kEventRawKeyDown } ,
+	    { kEventClassKeyboard, kEventRawKeyRepeat } ,
+	    { kEventClassKeyboard, kEventRawKeyUp } ,
+	    { kEventClassKeyboard, kEventRawKeyModifiersChanged } ,
+	    
+	    { kEventClassTextInput , kEventTextInputUnicodeForKeyEvent } ,
+	} ;
+	
+	InstallApplicationEventHandler(NewEventHandlerUPP(wxMacApplicationEventHandler)
+	    , WXSIZEOF(eventList), eventList, this, NULL);    
+#endif
+    return TRUE ;
+}
 // Static member initialization
 wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
