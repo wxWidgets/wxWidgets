@@ -58,7 +58,9 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
   SetName(name);
+#if wxUSE_VALIDATORS
   SetValidator(validator);
+#endif // wxUSE_VALIDATORS
 
   if (parent) parent->AddChild(this);
   SetBackgroundColour(parent->GetBackgroundColour()) ;

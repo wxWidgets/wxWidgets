@@ -80,7 +80,9 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   }
 
   SetName(name);
+#if wxUSE_VALIDATORS
   SetValidator(validator);
+#endif // wxUSE_VALIDATORS
 
   if (parent) parent->AddChild(this);
   m_rangeMax = range;

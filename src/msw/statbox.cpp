@@ -59,7 +59,7 @@ bool wxStaticBox::Create(wxWindow *parent,
                          long style,
                          const wxString& name)
 {
-    if ( !CreateControl(parent, id, pos, size, style, name) )
+    if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
     if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX, pos, size, label, 0) )

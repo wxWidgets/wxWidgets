@@ -39,7 +39,10 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 {
   m_buttonBitmap = bitmap;
   SetName(name);
+
+#if wxUSE_VALIDATORS
   SetValidator(validator);
+#endif // wxUSE_VALIDATORS
 
   parent->AddChild(this);
 

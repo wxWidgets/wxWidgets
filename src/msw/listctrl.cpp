@@ -126,7 +126,10 @@ bool wxListCtrl::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif // wxUSE_VALIDATORS
+
     SetName(name);
 
     int x = pos.x;

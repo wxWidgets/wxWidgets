@@ -138,7 +138,9 @@ bool wxListBox::Create(wxWindow *parent,
     m_selected = 0;
 
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif // wxUSE_VALIDATORS
 
     if (parent)
         parent->AddChild(this);

@@ -48,7 +48,9 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
         return FALSE;
     parent->AddChild(this);
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif // wxUSE_VALIDATORS
     
     SetBackgroundColour(parent->GetBackgroundColour()) ;
     SetForegroundColour(parent->GetForegroundColour()) ;

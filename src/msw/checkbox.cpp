@@ -39,8 +39,8 @@
 // macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
-    IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
+IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 
 // ============================================================================
 // implementation
@@ -60,14 +60,18 @@ bool wxCheckBox::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 }
 
 // Single check box item
-bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-           const wxValidator& validator,
-           const wxString& name)
+bool wxCheckBox::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxString& label,
+                        const wxPoint& pos,
+                        const wxSize& size, long style,
+                        const wxValidator& validator,
+                        const wxString& name)
 {
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif // wxUSE_VALIDATORS
     if (parent) parent->AddChild(this);
 
     SetBackgroundColour(parent->GetBackgroundColour()) ;
@@ -194,7 +198,9 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
            const wxString& name)
 {
   SetName(name);
+#if wxUSE_VALIDATORS
   SetValidator(validator);
+#endif // wxUSE_VALIDATORS
   if (parent) parent->AddChild(this);
 
   SetBackgroundColour(parent->GetBackgroundColour()) ;

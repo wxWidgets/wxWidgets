@@ -192,7 +192,7 @@ bool wxToolBar::Create(wxWindow *parent,
                        const wxString& name)
 {
     // common initialisation
-    if ( !CreateControl(parent, id, pos, size, style, name) )
+    if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
     // prepare flags
