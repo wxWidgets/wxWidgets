@@ -823,6 +823,10 @@ void wxFileCtrl::SortItems(wxFileData::fileListFieldType field, bool foward)
 
 wxFileCtrl::~wxFileCtrl()
 {
+    // Normally the data are freed via an EVT_LIST_DELETE_ALL_ITEMS event and
+    // wxFileCtrl::OnListDeleteAllItems. But if the event is generated after
+    // the destruction of the wxFileCtrl we need to free any data here:
+    FreeAllItemsData();
 }
 
 //-----------------------------------------------------------------------------
