@@ -41,14 +41,21 @@ class Panel(wxNotebook):
         sizer.Add(wxBoxSizer())         # dummy sizer
         self.page2.SetAutoLayout(True)
         self.page2.SetSizer(sizer)
+        # Cache for already used panels
+        self.pageCache = {}             # cached property panels
+        self.stylePageCache = {}        # cached style panels
 
     # Delete child windows and recreate page sizer
     def ResetPage(self, page):
         topSizer = page.GetSizer()
         sizer = topSizer.GetChildren()[0].GetSizer()
         for w in page.GetChildren():
-            w.Destroy()
-            
+            sizer.Detach(w)
+            if isinstance(w, ParamPage):
+                if w.IsShown():
+                    w.Hide()
+            else:
+                w.Destroy()
         topSizer.Remove(sizer)
         # Create new windows
         sizer = wxBoxSizer(wxVERTICAL)
@@ -81,13 +88,27 @@ class Panel(wxNotebook):
             g.currentXXX = xxx.treeObject()
             # Normal or SizerItem page
             isGBSizerItem = isinstance(xxx.parent, xxxGridBagSizer)
-            page = PropPage(self.page1, xxx.panelName(), xxx)
+            cacheID = (xxx.__class__, isGBSizerItem)            
+            try:
+                page = self.pageCache[cacheID]
+                page.box.SetLabel(xxx.panelName())
+                page.Show()
+            except KeyError:
+                page = PropPage(self.page1, xxx.panelName(), xxx)
+                self.pageCache[cacheID] = page
             page.SetValues(xxx)
             self.pages.append(page)
             sizer.Add(page, 1, wxEXPAND)
             if xxx.hasChild:
                 # Special label for child objects - they may have different GUI
-                page = PropPage(self.page1, xxx.child.panelName(), xxx.child)
+                cacheID = (xxx.child.__class__, xxx.__class__)
+                try:
+                    page = self.pageCache[cacheID]
+                    page.box.SetLabel(xxx.child.panelName())
+                    page.Show()
+                except KeyError:
+                    page = PropPage(self.page1, xxx.child.panelName(), xxx.child)
+                    self.pageCache[cacheID] = page
                 page.SetValues(xxx.child)
                 self.pages.append(page)
                 sizer.Add(page, 0, wxEXPAND | wxTOP, 5)
@@ -101,7 +122,12 @@ class Panel(wxNotebook):
             xxx = xxx.treeObject()
             # Simplest case: set data if class is the same
             sizer = self.ResetPage(self.page2)
-            page = StylePage(self.page2, xxx.className + ' style', xxx)
+            try:
+                page = self.stylePageCache[xxx.__class__]
+                page.Show()
+            except KeyError:
+                page = StylePage(self.page2, xxx.className + ' style', xxx)
+                self.stylePageCache[xxx.__class__] = page
             page.SetValues(xxx)
             self.pages.append(page)
             sizer.Add(page, 0, wxEXPAND)
@@ -118,17 +144,21 @@ class Panel(wxNotebook):
                 self.page1.Refresh()
                 self.RemovePage(1)
         self.modified = False
+        
     def Clear(self):
         self.SetData(None)
         self.modified = False
+        
     # If some parameter has changed
     def IsModified(self):
         return self.modified
+    
     def SetModified(self, value):
         # Register undo object when modifying first time
         if not self.modified and value:
            g.undoMan.RegisterUndo(UndoEdit())
         self.modified = value
+        
     def Apply(self):
         for p in self.pages: p.Apply()
 
