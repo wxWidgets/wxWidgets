@@ -766,7 +766,7 @@ void wxPrintData::ConvertFromNative()
 #ifdef __WXMAC__
 void wxPrintData::ConvertToNative()
 {
-#ifdef TARGET_CARBON
+#if TARGET_CARBON
 #else
     (**m_macPrintInfo).prJob.iCopies = m_printNoCopies;
 #endif
@@ -774,7 +774,7 @@ void wxPrintData::ConvertToNative()
 
 void wxPrintData::ConvertFromNative()
 {
-#ifdef TARGET_CARBON
+#if TARGET_CARBON
 #else
     m_printNoCopies = (**m_macPrintInfo).prJob.iCopies;
 #endif
@@ -784,7 +784,7 @@ void wxPrintData::ConvertFromNative()
 void wxPrintData::operator=(const wxPrintData& data)
 {
 #ifdef __WXMAC__
-#ifdef TARGET_CARBON
+#if TARGET_CARBON
 #else
     m_macPrintInfo = data.m_macPrintInfo;
     HandToHand( (Handle*) &m_macPrintInfo );
@@ -1086,7 +1086,7 @@ void wxPrintDialogData::SetOwnerWindow(wxWindow* win)
 #ifdef __WXMAC__
 void wxPrintDialogData::ConvertToNative()
 {
-#ifdef TARGET_CARBON
+#if TARGET_CARBON
 #else
     (**m_printData.m_macPrintInfo).prJob.iFstPage = m_printFromPage;
     (**m_printData.m_macPrintInfo).prJob.iLstPage = m_printToPage;
@@ -1096,7 +1096,7 @@ void wxPrintDialogData::ConvertToNative()
 
 void wxPrintDialogData::ConvertFromNative()
 {
-#ifdef TARGET_CARBON
+#if TARGET_CARBON
 #else
     m_printData.ConvertFromNative();
     m_printFromPage = (**m_printData.m_macPrintInfo).prJob.iFstPage;
@@ -1411,7 +1411,7 @@ void wxPageSetupDialogData::ConvertToNative()
 {
     m_printData.ConvertToNative();
     // on mac the paper rect has a negative top left corner, because the page rect (printable area) is at 0,0
-#ifdef TARGET_CARBON
+#if TARGET_CARBON
 #else
     (**m_printData.m_macPrintInfo).rPaper.left = int( ((double) m_minMarginTopLeft.x)*mm2pt );
     (**m_printData.m_macPrintInfo).rPaper.top = int( ((double) m_minMarginTopLeft.y)*mm2pt );
@@ -1430,7 +1430,7 @@ void wxPageSetupDialogData::ConvertFromNative()
 {
     m_printData.ConvertFromNative ();
 
-#ifdef TARGET_CARBON
+#if TARGET_CARBON
 #else
     m_paperSize.x = ((double) (**m_printData.m_macPrintInfo).rPaper.right - (**m_printData.m_macPrintInfo).rPaper.left ) * pt2mm;
     m_paperSize.y = ((double) (**m_printData.m_macPrintInfo).rPaper.bottom - (**m_printData.m_macPrintInfo).rPaper.top ) * pt2mm;
