@@ -71,7 +71,7 @@ Constructs the date span object for the given number of years, months, weeks
 and days. Note that the weeks and days add together if both are given.
 
 % wxDateSpan::Add
-\membersection{wxDateSpan::Add}{wxdatespanadd}
+\membersection{wxDateSpan::Add}\label{wxdatespanadd}
 
 \constfunc{wxDateSpan}{Add}{\param{const wxDateSpan\& }{other}}
 
@@ -83,7 +83,7 @@ Returns the sum of two date spans. The first version returns a new object, the
 second and third ones modify this object in place.
 
 % wxDateSpan::Day
-\membersection{wxDateSpan::Day}{wxdatespanday}
+\membersection{wxDateSpan::Day}\label{wxdatespanday}
 
 \func{static wxDateSpan}{Day}{\void}
 
@@ -94,7 +94,7 @@ Returns a date span object corresponding to one day.
 \helpref{Days}{wxdatespandays}
 
 % wxDateSpan::Days
-\membersection{wxDateSpan::Days}{wxdatespandays}
+\membersection{wxDateSpan::Days}\label{wxdatespandays}
 
 \func{static wxDateSpan}{Days}{\param{int }{days}}
 
@@ -105,7 +105,7 @@ Returns a date span object corresponding to the given number of days.
 \helpref{Day}{wxdatespanday}
 
 % wxDateSpan::GetDays
-\membersection{wxDateSpan::GetDays}{wxdatespangetdays}
+\membersection{wxDateSpan::GetDays}\label{wxdatespangetdays}
 
 \constfunc{int}{GetDays}{\void}
 
@@ -117,14 +117,14 @@ in this date span.
 \helpref{GetTotalDays}{wxdatespangettotaldays}
 
 % wxDateSpan::GetMonths
-\membersection{wxDateSpan::GetMonths}{wxdatespangetmonths}
+\membersection{wxDateSpan::GetMonths}\label{wxdatespangetmonths}
 
 \constfunc{int}{GetMonths}{\void}
 
 Returns the number of the months (not counting the years) in this date span.
 
 % wxDateSpan::GetTotalDays
-\membersection{wxDateSpan::GetTotalDays}{wxdatespangettotaldays}
+\membersection{wxDateSpan::GetTotalDays}\label{wxdatespangettotaldays}
 
 \constfunc{int}{GetTotalDays}{\void}
 
@@ -136,7 +136,7 @@ days. It still doesn't take neither months nor years into the account.
 \helpref{GetWeeks}{wxdatespangetweeks}, \helpref{GetDays}{wxdatespangetdays}
 
 % wxDateSpan::GetWeeks
-\membersection{wxDateSpan::GetWeeks}{wxdatespangetweeks}
+\membersection{wxDateSpan::GetWeeks}\label{wxdatespangetweeks}
 
 \constfunc{int}{GetWeeks}{\void}
 
@@ -147,14 +147,14 @@ Returns the number of weeks in this date span.
 \helpref{GetTotalDays}{wxdatespangettotaldays}
 
 % wxDateSpan::GetYears
-\membersection{wxDateSpan::GetYears}{wxdatespangetyears}
+\membersection{wxDateSpan::GetYears}\label{wxdatespangetyears}
 
 \constfunc{int}{GetYears}{\void}
 
 Returns the number of years in this date span.
 
 % wxDateSpan::Month
-\membersection{wxDateSpan::Month}{wxdatespanmonth}
+\membersection{wxDateSpan::Month}\label{wxdatespanmonth}
 
 \func{static wxDateSpan}{Month}{\void}
 
@@ -165,7 +165,7 @@ Returns a date span object corresponding to one month.
 \helpref{Months}{wxdatespanmonths}
 
 % wxDateSpan::Months
-\membersection{wxDateSpan::Months}{wxdatespanmonths}
+\membersection{wxDateSpan::Months}\label{wxdatespanmonths}
 
 \func{static wxDateSpan}{Months}{\param{int }{mon}}
 
@@ -176,7 +176,7 @@ Returns a date span object corresponding to the given number of months.
 \helpref{Month}{wxdatespanmonth}
 
 % wxDateSpan::Multiply
-\membersection{wxDateSpan::Multiply}{wxdatespanmultiply}
+\membersection{wxDateSpan::Multiply}\label{wxdatespanmultiply}
 
 \constfunc{wxDateSpan}{Multiply}{\param{int }{factor}}
 
@@ -191,7 +191,7 @@ The first version returns a new object, the second and third ones modify this
 object in place.
 
 % wxDateSpan::Negate
-\membersection{wxDateSpan::Negate}{wxdatespannegate}
+\membersection{wxDateSpan::Negate}\label{wxdatespannegate}
 
 \constfunc{wxDateSpan}{Negate}{\void}
 
@@ -202,7 +202,7 @@ Returns the date span with the opposite sign.
 \helpref{Neg}{wxdatespanneg}
 
 % wxDateSpan::Neg
-\membersection{wxDateSpan::Neg}{wxdatespanneg}
+\membersection{wxDateSpan::Neg}\label{wxdatespanneg}
 
 \func{wxDateSpan\&}{Neg}{\void}
 
@@ -215,7 +215,7 @@ Changes the sign of this date span.
 \helpref{Negate}{wxdatespannegate}
 
 % wxDateSpan::SetDays
-\membersection{wxDateSpan::SetDays}{wxdatespansetdays}
+\membersection{wxDateSpan::SetDays}\label{wxdatespansetdays}
 
 \func{wxDateSpan\&}{SetDays}{\param{int }{n}}
 
@@ -223,7 +223,7 @@ Sets the number of days (without modifying any other components) in this date
 span.
 
 % wxDateSpan::SetYears
-\membersection{wxDateSpan::SetYears}{wxdatespansetyears}
+\membersection{wxDateSpan::SetYears}\label{wxdatespansetyears}
 
 \func{wxDateSpan\&}{SetYears}{\param{int }{n}}
 
@@ -231,7 +231,7 @@ Sets the number of years (without modifying any other components) in this date
 span.
 
 % wxDateSpan::SetMonths
-\membersection{wxDateSpan::SetMonths}{wxdatespansetmonths}
+\membersection{wxDateSpan::SetMonths}\label{wxdatespansetmonths}
 
 \func{wxDateSpan\&}{SetMonths}{\param{int }{n}}
 
@@ -239,7 +239,7 @@ Sets the number of months (without modifying any other components) in this
 date span.
 
 % wxDateSpan::SetWeeks
-\membersection{wxDateSpan::SetWeeks}{wxdatespansetweeks}
+\membersection{wxDateSpan::SetWeeks}\label{wxdatespansetweeks}
 
 \func{wxDateSpan\&}{SetWeeks}{\param{int }{n}}
 
@@ -247,7 +247,7 @@ Sets the number of weeks (without modifying any other components) in this date
 span.
 
 % wxDateSpan::Subtract
-\membersection{wxDateSpan::Subtract}{wxdatespansubtract}
+\membersection{wxDateSpan::Subtract}\label{wxdatespansubtract}
 
 \constfunc{wxDateSpan}{Subtract}{\param{const wxDateSpan\& }{other}}
 
@@ -259,7 +259,7 @@ Returns the difference of two date spans. The first version returns a new
 object, the second and third ones modify this object in place.
 
 % wxDateSpan::Week
-\membersection{wxDateSpan::Week}{wxdatespanweek}
+\membersection{wxDateSpan::Week}\label{wxdatespanweek}
 
 \func{static wxDateSpan}{Week}{\void}
 
@@ -270,7 +270,7 @@ Returns a date span object corresponding to one week.
 \helpref{Weeks}{wxdatespanweeks}
 
 % wxDateSpan::Weeks
-\membersection{wxDateSpan::Weeks}{wxdatespanweeks}
+\membersection{wxDateSpan::Weeks}\label{wxdatespanweeks}
 
 \func{static wxDateSpan}{Weeks}{\param{int }{weeks}}
 
@@ -281,7 +281,7 @@ Returns a date span object corresponding to the given number of weeks.
 \helpref{Week}{wxdatespanweek}
 
 % wxDateSpan::Year
-\membersection{wxDateSpan::Year}{wxdatespanyear}
+\membersection{wxDateSpan::Year}\label{wxdatespanyear}
 
 \func{static wxDateSpan}{Year}{\void}
 
@@ -292,7 +292,7 @@ Returns a date span object corresponding to one year.
 \helpref{Years}{wxdatespanyears}
 
 % wxDateSpan::Years
-\membersection{wxDateSpan::Years}{wxdatespanyears}
+\membersection{wxDateSpan::Years}\label{wxdatespanyears}
 
 \func{static wxDateSpan}{Years}{\param{int }{years}}
 
@@ -303,7 +303,7 @@ Returns a date span object corresponding to the given number of years.
 \helpref{Year}{wxdatespanyear}
 
 % wxDateSpan::operator==
-\membersection{wxDateSpan::operator$==$}{wxdatespanoperatorequal}
+\membersection{wxDateSpan::operator$==$}\label{wxdatespanoperatorequal}
 
 \constfunc{bool}{operator$==$}{\param{wxDateSpan\&}{ other}}
 
@@ -312,7 +312,7 @@ are considered equal if and only if they have the same number of years and
 months and the same total number of days (counting both days and weeks).
 
 % wxDateSpan::operator!=
-\membersection{wxDateSpan::operator$!=$}{wxdatespanoperatornotequal}
+\membersection{wxDateSpan::operator$!=$}\label{wxdatespanoperatornotequal}
 
 \constfunc{bool}{operator$!=$}{\param{wxDateSpan\&}{ other}}
 
