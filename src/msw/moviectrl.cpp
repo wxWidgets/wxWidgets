@@ -30,6 +30,8 @@
 #include <dshow.h>
 
 IMPLEMENT_CLASS(wxMovieCtrl, wxControl);
+IMPLEMENT_DYNAMIC_CLASS(wxMovieEvent, wxEvent); 
+DEFINE_EVENT_TYPE(wxEVT_MOVIE_FINISHED); 
 
 #define SAFE_RELEASE(x) { if (x) x->Release(); x = NULL; }
 
@@ -40,11 +42,6 @@ IMPLEMENT_CLASS(wxMovieCtrl, wxControl);
 #else
 #define wxDSVERIFY(x) (x)
 #endif
-
-BEGIN_EVENT_TABLE(wxMovieCtrl, wxControl)
-    EVT_SIZE(wxMovieCtrl::OnSize)
-//    EVT_ACTIVATE(wxMovieCtrl::OnActivate)
-END_EVENT_TABLE()
 
 //it's there someplace :)
 extern "C" WXDLLIMPEXP_BASE HWND
@@ -84,23 +81,38 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
 
     //get the _actual_ size of the movie & remember it
     long nX, nY, nSX, nSY;
-    pVW->GetWindowPosition(&nX,&nY,&nSX,&nSY);
+    if (FAILED(pVW->GetWindowPosition(&nX,&nY,&nSX,&nSY)))
+        m_bVideo = false;
+    else 
+    {
+        m_bVideo = true;
+  
+        this->Connect( wxID_ANY,
+        wxEVT_SIZE,
+        (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) &wxMovieCtrl::OnSize );
+    }
 
     m_bestSize.x = nSX;
     m_bestSize.y = nSY;
+
 
     //do some window stuff - ORDER IS IMPORTANT
     //base create
     if ( !wxControl::Create(parent, id, pos, size, wxNO_BORDER | wxCLIP_CHILDREN, wxDefaultValidator, name) )
         return false;
 
+    //TODO:  Connect() here instead of message maps
+
     //Set our background color to black by default
     SetBackgroundColour(*wxBLACK);
 
-    wxDSVERIFY( pVW->put_Owner((OAHWND)this->GetHandle()) );
-    wxDSVERIFY( pVW->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS) );
-//    wxDSVERIFY( pME->SetNotifyWindow((OAHWND)this->GetHandle(), WM_GRAPHNOTIFY, 0) );
-    wxDSVERIFY( pVW->put_Visible(OATRUE) ); //OATRUE actually == -1 :)
+    if (m_bVideo)
+    {
+        wxDSVERIFY( pVW->put_Owner((OAHWND)this->GetHandle()) );
+        wxDSVERIFY( pVW->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS) );
+    //    wxDSVERIFY( pME->SetNotifyWindow((OAHWND)this->GetHandle(), WM_GRAPHNOTIFY, 0) );
+        wxDSVERIFY( pVW->put_Visible(OATRUE) ); //OATRUE actually == -1 :)
+    }
 
     //set the time format
     wxDSVERIFY( pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME) );
@@ -119,7 +131,7 @@ void wxMovieCtrl::SetLabel(const wxString& label)
     
     //wxBasicString will have a null string on an
     //empty wxString - gotta love those workarounds!!
-    if(!label.empty())
+    if(!label.empty() && m_bVideo)
     {
         wxBasicString theBasicString(label.mb_str());
         wxDSVERIFY( pVW->put_Caption(theBasicString.Get()) );
@@ -156,6 +168,22 @@ bool wxMovieCtrl::Seek(const wxTimeSpan& where)
                                     ) );
 }
 
+wxTimeSpan wxMovieCtrl::Tell()
+{
+    LONGLONG outCur, outStop;
+    wxDSVERIFY( ((IMediaSeeking*&)m_pMS)->GetPositions(&outCur, &outStop) );
+
+    return outCur;
+}
+
+wxTimeSpan wxMovieCtrl::Length()
+{
+    LONGLONG outDuration;
+    wxDSVERIFY( ((IMediaSeeking*&)m_pMS)->GetDuration(&outDuration) );
+
+    return outDuration;
+}
+
 #endif // wxUSE_DATETIME
 
 wxMovieCtrlState wxMovieCtrl::GetState()
@@ -174,22 +202,29 @@ wxMovieCtrlState wxMovieCtrl::GetState()
     return (wxMovieCtrlState) theState;
 }
 
-//WXLRESULT wxMovieCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-//{
-/*
+double wxMovieCtrl::GetPlaybackRate()
+{
+    double dRate;
+    wxDSVERIFY( ((IMediaSeeking*&)m_pMS)->GetRate(&dRate) );
+    return dRate;
+}
+
+bool wxMovieCtrl::SetPlaybackRate(double dRate)
+{
+    return SUCCEEDED( ((IMediaSeeking*&)m_pMS)->SetRate(dRate) );
+}
+
+WXLRESULT wxMovieCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
     //cast helpers
-    IMediaControl*& pMC = (IMediaControl*&) m_pMC;
+//    IMediaControl*& pMC = (IMediaControl*&) m_pMC;
     IMediaEventEx*& pME = (IMediaEventEx*&) m_pME;
-    IMediaSeeking*& pMS = (IMediaSeeking*&) m_pMS;
+//    IMediaSeeking*& pMS = (IMediaSeeking*&) m_pMS;
 
     if (nMsg == WM_GRAPHNOTIFY)
     {
         LONG evCode, evParam1, evParam2;
         HRESULT hr=S_OK;
-
-        //make sure we exist
-        if (!pME)
-            return S_OK;
 
         // Process all queued events
         while(SUCCEEDED(pME->GetEvent(&evCode, (LONG_PTR *) &evParam1,
@@ -200,9 +235,12 @@ wxMovieCtrlState wxMovieCtrl::GetState()
             // Free memory associated with callback, since we're not using it
             hr = pME->FreeEventParams(evCode, evParam1, evParam2);
 
-            // If this is the end of the clip, reset to beginning
+            // If this is the end of the clip, notify handler
             if(EC_COMPLETE == evCode)
             {
+                wxMovieEvent theEvent(wxEVT_MOVIE_FINISHED, this->GetId());
+                GetParent()->ProcessEvent(theEvent);
+/*
                 LONGLONG pos=0;
 
                 // Reset to first frame of movie
@@ -230,14 +268,14 @@ wxMovieCtrlState wxMovieCtrl::GetState()
                         break;
                     }
                 }
+*/
             }
         }    
         return wxControl::MSWDefWindowProc(nMsg, wParam, lParam);
     }
-*/
     //pass the event to our parent
-//    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
-//}
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
 
 wxMovieCtrl::~wxMovieCtrl()
 {
@@ -272,10 +310,6 @@ wxSize wxMovieCtrl::DoGetBestSize() const
     return m_bestSize;
 }
 
-//
-//EVENT OVERRIDES
-//
-
 void wxMovieCtrl::OnSize(wxSizeEvent& evt)
 {
     IVideoWindow*& pVW  = (IVideoWindow*&)  m_pVW;
@@ -283,15 +317,5 @@ void wxMovieCtrl::OnSize(wxSizeEvent& evt)
 
     evt.Skip();
 }
-/*
-void wxMovieCtrl::OnActivate(wxActivateEvent& evt)
-{
-    if (evt.GetActive())
-    {
-        //HACK: Make the window show :)
-        SetSize(GetSize());
-    }
-}
-*/
 
 #endif //wxUSE_MOVIECTRL

@@ -14,6 +14,7 @@
 #if wxUSE_MOVIECTRL
 
 #include "wx/datetime.h"
+#include "wx/control.h"
 
 enum wxMovieCtrlState
 {
@@ -45,11 +46,14 @@ public:
     
     wxMovieCtrlState GetState();
 
+    double GetPlaybackRate();
+    bool SetPlaybackRate(double dRate);
+
 #if wxUSE_DATETIME
     bool Seek(const wxTimeSpan& where);
+    wxTimeSpan Tell();
+    wxTimeSpan Length();
 #endif
-
-    virtual void SetLabel(const wxString& label);
 
 protected:
     void OnSize(wxSizeEvent& evt);
@@ -59,9 +63,32 @@ protected:
     struct MovieRecord* m_movie;
     wxSize m_bestSize;
     class _wxQTTimer* m_timer;
+
+    friend class _wxQTTimer;
     
     DECLARE_DYNAMIC_CLASS(wxMovieCtrl);
-    DECLARE_EVENT_TABLE()
 };
+
+//Event stuff
+class WXDLLEXPORT wxMovieEvent : public wxNotifyEvent 
+{ 
+public:
+    wxMovieEvent(wxEventType commandType = wxEVT_NULL, int id = 0) 
+        : wxNotifyEvent(commandType, id) 
+    {               }
+    
+    wxMovieEvent(const wxMovieEvent &clone) 
+            : wxNotifyEvent(clone.GetEventType(), clone.GetId()) 
+    {               }
+
+    wxEvent *Clone() { return new wxMovieEvent(*this); } 
+   
+    DECLARE_DYNAMIC_CLASS(wxMovieEvent) 
+}; 
+
+#define wxMOVIE_FINISHED_ID    13000 
+DECLARE_EVENT_TYPE(wxEVT_MOVIE_FINISHED, wxMOVIE_FINISHED_ID) 
+typedef void (wxEvtHandler::*wxMovieEventFunction)(wxMovieEvent&); 
+#define EVT_MOVIE_FINISHED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOVIE_FINISHED, winid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxMovieEventFunction) & fn, (wxObject *) NULL ), 
 
 #endif // wxUSE_MOVIECTRL

@@ -29,10 +29,8 @@
 #include "wx/timer.h"
 
 IMPLEMENT_CLASS(wxMovieCtrl, wxControl);
-
-BEGIN_EVENT_TABLE(wxMovieCtrl, wxControl)
-    EVT_SIZE(wxMovieCtrl::OnSize)
-END_EVENT_TABLE()
+IMPLEMENT_DYNAMIC_CLASS(wxMovieEvent, wxEvent); 
+DEFINE_EVENT_TYPE(wxEVT_MOVIE_FINISHED); 
 
 //MESSY headers
 #ifdef __WXMAC__
@@ -57,8 +55,8 @@ END_EVENT_TABLE()
 class _wxQTTimer : public wxTimer
 {
 public:
-    _wxQTTimer(Movie movie) :
-        m_movie(movie), m_bPaused(false)
+    _wxQTTimer(Movie movie, wxMovieCtrl* parent) :
+        m_movie(movie), m_bPaused(false), m_parent(parent)
     {
     }
 
@@ -76,13 +74,18 @@ public:
             if(!IsMovieDone(m_movie))
                 MoviesTask(m_movie, MOVIE_DELAY); //Give QT time to play movie
             else
+            {
                 Stop();
+                wxMovieEvent theEvent(wxEVT_MOVIE_FINISHED, m_parent->GetId());
+                m_parent->GetParent()->ProcessEvent(theEvent);
+            }
         }
     }
 
 protected:
     Movie m_movie;
     bool m_bPaused;
+    wxMovieCtrl* m_parent;
 };
 
 //Determines whether version 3 of QT is installed
@@ -166,7 +169,7 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
         return false;
     }
 
-    m_timer = new _wxQTTimer(m_movie);
+    m_timer = new _wxQTTimer(m_movie, (wxMovieCtrl*) this);
     wxASSERT(m_timer);
 
     //get the real size of the movie
@@ -176,7 +179,12 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
     m_bestSize.x = outRect.right - outRect.left;
     m_bestSize.y = outRect.bottom - outRect.top;
 
-    //do some window stuff
+    //soldier in OnSize
+    this->Connect( wxID_ANY,
+    wxEVT_SIZE,
+    (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) &wxMovieCtrl::OnSize );
+        
+     //do some window stuff
     if ( !wxControl::Create(parent, id, pos, size, wxNO_BORDER, wxDefaultValidator, name) )
         return false;
 
@@ -201,11 +209,6 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
     Play();
 
     return true;
-}
-
-void wxMovieCtrl::SetLabel(const wxString& label)
-{
-    wxControl::SetLabel(label);
 }
 
 bool wxMovieCtrl::Play()
@@ -235,6 +238,17 @@ bool wxMovieCtrl::Stop()
     return ::GetMoviesError() == noErr;
 }
 
+double wxMovieCtrl::GetPlaybackRate()
+{
+    return (double) (::GetMovieTimeScale(m_movie) / 0x10000f);
+}
+
+bool wxMovieCtrl::SetPlaybackRate(double dRate)
+{
+    ::SetMovieTimeScale(m_movie, (Fixed) (dRate * 0x10000));
+    return ::GetMoviesError() == noErr;
+}
+
 #if wxUSE_DATETIME
 
 bool wxMovieCtrl::Seek(const wxTimeSpan& where)
@@ -249,6 +263,16 @@ bool wxMovieCtrl::Seek(const wxTimeSpan& where)
         return false;
 
     return true;
+}
+
+wxTimeSpan wxMovieCtrl::Tell()
+{
+    return (wxTimeSpan) ::GetMovieTime(m_movie, NULL);
+}
+
+wxTimeSpan wxMovieCtrl::Length()
+{
+    return (wxTimeSpan) ::GetMovieDuration(m_movie);
 }
 
 #endif // wxUSE_DATETIME
@@ -301,4 +325,5 @@ void wxMovieCtrl::OnSize(wxSizeEvent& evt)
     wxASSERT(::GetMoviesError() == noErr);
     evt.Skip();
 }
+
 #endif //wxUSE_MOVIECTRL
