@@ -157,38 +157,27 @@ wxDC::~wxDC(void)
 // This will select current objects out of the DC,
 // which is what you have to do before deleting the
 // DC.
-void wxDC::SelectOldObjects(WXHDC dc)
+void wxDC::SelectOldObjects(
+  WXHDC                             hPS
+)
 {
-    if (dc)
+    if (hPS)
     {
         if (m_hOldBitmap)
         {
-//            ::SelectObject((HDC) dc, (HBITMAP) m_oldBitmap);
+            ::GpiSetBitmap(hPS, (HBITMAP) m_hOldBitmap);
             if (m_vSelectedBitmap.Ok())
             {
                 m_vSelectedBitmap.SetSelectedInto(NULL);
             }
         }
         m_hOldBitmap = 0;
-        if (m_hOldPen)
-        {
-//            ::SelectObject((HDC) dc, (HPEN) m_oldPen);
-        }
+        //
+        // OS/2 has no other native GDI objects to set in a PS/DC like windows
+        //
         m_hOldPen = 0;
-        if (m_hOldBrush)
-        {
-//            ::SelectObject((HDC) dc, (HBRUSH) m_oldBrush);
-        }
         m_hOldBrush = 0;
-        if (m_hOldFont)
-        {
-//            ::SelectObject((HDC) dc, (HFONT) m_oldFont);
-        }
         m_hOldFont = 0;
-        if (m_hOldPalette)
-        {
-//            ::SelectPalette((HDC) dc, (HPALETTE) m_oldPalette, TRUE);
-        }
         m_hOldPalette = 0;
     }
 
@@ -283,18 +272,27 @@ bool wxDC::CanDrawBitmap() const
 
 bool wxDC::CanGetTextExtent() const
 {
-    // What sort of display is it?
-    int technology = 0; // TODO:  ::GetDeviceCaps(GetHdc(), TECHNOLOGY);
+    LONG                            lTechnology = 0L;
 
-    // TODO: return (technology == DT_RASDISPLAY) || (technology == DT_RASPRINTER);
-    return FALSE;
-}
+    ::DevQueryCaps(GetHDC(), CAPS_TECHNOLOGY, 1L, &lTechnology);
+    return (lTechnology == CAPS_TECH_RASTER_DISPLAY) || (lTechnology == CAPS_TECH_RASTER_PRINTER);
+} // end of wxDC::CanGetTextExtent
 
 int wxDC::GetDepth() const
 {
-   // TODO:
-   return (1);
-}
+    LONG                            lArray[CAPS_COLOR_BITCOUNT];
+    int                             nBitsPerPixel;
+
+    if(::DevQueryCaps( GetHDC()
+                      ,CAPS_FAMILY
+                      ,CAPS_COLOR_BITCOUNT
+                      ,lArray
+                     ))
+    {
+        nBitsPerPixel = (int)lArray[CAPS_COLOR_BITCOUNT];
+    }
+    return nBitsPerPixel;
+} // end of wxDC::GetDepth
 
 // ---------------------------------------------------------------------------
 // drawing
@@ -346,10 +344,35 @@ bool wxDC::DoGetPixel(
         return(FALSE);
 }
 
-void wxDC::DoCrossHair(wxCoord x, wxCoord y)
+void wxDC::DoCrossHair(
+  wxCoord                           vX
+, wxCoord                           vY
+)
 {
-   // TODO
-}
+    wxCoord                         vX1 = vX - VIEWPORT_EXTENT;
+    wxCoord                         vY1 = vY - VIEWPORT_EXTENT;
+    wxCoord                         vX2 = vX + VIEWPORT_EXTENT;
+    wxCoord                         vY2 = vY + VIEWPORT_EXTENT;
+    POINTL                          vPoint[4];
+
+    vPoint[0].x = vX1;
+    vPoint[0].y = m_vRclPaint.yTop - vY;
+
+    vPoint[1].x = vX2;
+    vPoint[1].y = m_vRclPaint.yTop - vY;
+
+    ::GpiMove(m_hPS, &vPoint[0]);
+    ::GpiLine(m_hPS, &vPoint[1]);
+
+    vPoint[2].x = vX;
+    vPoint[2].y = m_vRclPaint.yTop - vY1;
+
+    vPoint[3].x = vX;
+    vPoint[3].y = m_vRclPaint.yTop - vY2;
+
+    ::GpiMove(m_hPS, &vPoint[2]);
+    ::GpiLine(m_hPS, &vPoint[3]);
+} // end of wxDC::DoCrossHair
 
 void wxDC::DoDrawLine(
   wxCoord                           vX1
@@ -366,7 +389,7 @@ void wxDC::DoDrawLine(
     vPoint[1].y = m_vRclPaint.yTop - vY2;
     ::GpiMove(m_hPS, &vPoint[0]);
     ::GpiLine(m_hPS, &vPoint[1]);
-}
+} // end of wxDC::DoDrawLine
 
 //////////////////////////////////////////////////////////////////////////////
 // Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
@@ -460,7 +483,7 @@ void wxDC::DoDrawArc(
     vPtlArc[1].x = vX2;
     vPtlArc[1].y = vY2;
     ::GpiPointArc(m_hPS, vPtlArc); // Draws the arc
-}
+} // end of wxDC::DoDrawArc
 
 void wxDC::DoDrawCheckMark(
   wxCoord                           vX1
@@ -497,7 +520,7 @@ void wxDC::DoDrawCheckMark(
         ::GpiMove(m_hPS, &vPoint[0]);
         ::GpiLine(m_hPS, &vPoint[1]);
     }
-}
+} // end of wxDC::DoDrawCheckMark
 
 void wxDC::DoDrawPoint(
   wxCoord                           vX
@@ -509,7 +532,7 @@ void wxDC::DoDrawPoint(
     vPoint.x = vX;
     vPoint.y = m_vRclPaint.yTop - vY;
     ::GpiSetPel(m_hPS, &vPoint);
-}
+} // end of wxDC::DoDrawPoint
 
 void wxDC::DoDrawPolygon(
   int                               n
@@ -581,7 +604,7 @@ void wxDC::DoDrawPolygon(
     ::GpiMove(m_hPS, &vPoint);
     lHits = ::GpiPolygons(m_hPS, ulCount, &vPlgn, flOptions, flModel);
     free(vPlgn.aPointl);
-}
+} // end of wxDC::DoDrawPolygon
 
 void wxDC::DoDrawLines(
   int                               n
@@ -606,7 +629,7 @@ void wxDC::DoDrawLines(
         vPoint.y = vPoints[0].y + vYoffset;
         ::GpiLine(m_hPS, &vPoint);
     }
-}
+} // end of wxDC::DoDrawLines
 
 void wxDC::DoDrawRectangle(
   wxCoord                           vX
@@ -672,7 +695,7 @@ void wxDC::DoDrawRectangle(
                  ,0L
                 );
     }
-}
+} // end of wxDC::DoDrawRectangle
 
 void wxDC::DoDrawRoundedRectangle(
   wxCoord                           vX
@@ -700,7 +723,7 @@ void wxDC::DoDrawRoundedRectangle(
              ,(LONG)dRadius // horizontal corner radius
              ,(LONG)dRadius // vertical corner radius
             );
-}
+} // end of wxDC::DoDrawRoundedRectangle
 
 // Draw Ellipse within box (x,y) - (x+width, y+height)
 void wxDC::DoDrawEllipse(
@@ -735,7 +758,7 @@ void wxDC::DoDrawEllipse(
                  ,DRO_OUTLINE
                  ,vFxMult
                 ); // Draws full arc with center at current position
-}
+} // end of wxDC::DoDrawEllipse
 
 void wxDC::DoDrawEllipticArc(
   wxCoord                           vX
@@ -788,20 +811,42 @@ void wxDC::DoDrawEllipticArc(
                     ,vFSa
                     ,vFSweepa
                    );
-}
+} // end of wxDC::DoDrawEllipticArc
 
-void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
+void wxDC::DoDrawIcon(
+  const wxIcon&                     rIcon
+, wxCoord                           vX
+, wxCoord                           vY
+)
 {
-    // TODO:
-}
+    wxCHECK_RET( rIcon.Ok(), wxT("invalid icon in DrawIcon") );
 
-void wxDC::DoDrawBitmap( const wxBitmap &bmp
-                        ,wxCoord x, wxCoord y
-                        ,bool useMask
-                       )
+    ::WinDrawPointer( GetHPS()
+                     ,vX
+                     ,vY
+                     ,(HPOINTER)GetHiconOf(rIcon)
+                     ,DP_NORMAL
+                    );
+} // end of wxDC::DoDrawIcon
+
+void wxDC::DoDrawBitmap(
+  const wxBitmap&                   rBmp
+, wxCoord                           vX
+, wxCoord                           vY
+, bool                              bUseMask
+)
 {
-   // TODO
-}
+    POINTL                          vPoint = {vX, vY};
+
+    ::WinDrawBitmap( GetHPS()
+                    ,(HBITMAP)GetHbitmapOf(rBmp)
+                    ,NULL
+                    ,&vPoint
+                    ,0L
+                    ,0L
+                    ,DBM_NORMAL
+                   );
+} // end of wxDC::DoDrawBitmap
 
 void wxDC::DoDrawText(
   const wxString&                   rsText
