@@ -16,6 +16,8 @@
     #pragma interface "statbmpbase.h"
 #endif
 
+#include "wx/defs.h"
+
 #if wxUSE_STATBMP
 
 #include "wx/control.h"

@@ -12,6 +12,8 @@
 #ifndef _WX_CHECKBOX_H_BASE_
 #define _WX_CHECKBOX_H_BASE_
 
+#include "wx/defs.h"
+
 #if wxUSE_CHECKBOX
 
 #include "wx/control.h"

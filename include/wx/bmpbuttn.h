@@ -12,6 +12,8 @@
 #ifndef _WX_BMPBUTTON_H_BASE_
 #define _WX_BMPBUTTON_H_BASE_
 
+#include "wx/defs.h"
+
 #if wxUSE_BMPBUTTON
 
 #include "wx/bitmap.h"

@@ -16,6 +16,8 @@
     #pragma interface "menubase.h"
 #endif
 
+#include "wx/defs.h"
+
 #if wxUSE_MENUS
 
 // ----------------------------------------------------------------------------

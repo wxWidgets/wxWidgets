@@ -12,6 +12,8 @@
 #ifndef _WX_WAVE_H_
 #define _WX_WAVE_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_WAVE
 
 #if defined(__GNUG__) && !defined(__APPLE__)
