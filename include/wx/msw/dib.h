@@ -15,6 +15,9 @@
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxPalette;
 
+// WARNING: these functions are private to wxWindows and shouldn't be used
+//          by the user code, they risk to disappear in the next versions!
+
 // ----------------------------------------------------------------------------
 // Functions for working with DIBs
 // ----------------------------------------------------------------------------
@@ -29,8 +32,8 @@ extern bool wxCreateDIB(long xSize, long ySize, long bitsPerPixel,
 extern void wxFreeDIB(LPBITMAPINFO lpDIBHeader);
 
 // defined in ole/dataobj.cpp
-extern size_t wxConvertBitmapToDIB(LPBITMAPINFO pbi, const wxBitmap& bitmap);
-extern wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbi);
+extern WXDLLEXPORT size_t wxConvertBitmapToDIB(LPBITMAPINFO pbi, const wxBitmap& bitmap);
+extern WXDLLEXPORT wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbi);
 
 // the rest is defined in dib.cpp
 
@@ -38,7 +41,7 @@ extern wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbi);
 bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *colourmap = NULL);
 
 // Load device independent bitmap into device dependent bitmap
-wxBitmap         *wxLoadBitmap(wxChar *filename, wxPalette **colourmap = NULL);
+wxBitmap *wxLoadBitmap(wxChar *filename, wxPalette **colourmap = NULL);
 
 // Load into existing bitmap;
 bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal = NULL);

@@ -921,7 +921,7 @@ WXDLLEXPORT extern wxWindow* wxFindWindowAtPointer(wxPoint& pt);
 WXDLLEXPORT extern wxPoint wxGetMousePosition();
 
 // deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
-inline WXDLLEXPORT int NewControlId() { return wxWindowBase::NewControlId(); }
+inline int NewControlId() { return wxWindowBase::NewControlId(); }
 
 #endif
     // _WX_WINDOW_H_BASE_

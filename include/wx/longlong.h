@@ -512,14 +512,14 @@ private:
 // binary operators
 // ----------------------------------------------------------------------------
 
-inline bool WXDLLEXPORT operator<(long l, const wxLongLong& ll) { return ll > l; }
-inline bool WXDLLEXPORT operator>(long l, const wxLongLong& ll) { return ll > l; }
-inline bool WXDLLEXPORT operator<=(long l, const wxLongLong& ll) { return ll > l; }
-inline bool WXDLLEXPORT operator>=(long l, const wxLongLong& ll) { return ll > l; }
-inline bool WXDLLEXPORT operator==(long l, const wxLongLong& ll) { return ll > l; }
-inline bool WXDLLEXPORT operator!=(long l, const wxLongLong& ll) { return ll > l; }
+inline bool operator<(long l, const wxLongLong& ll) { return ll > l; }
+inline bool operator>(long l, const wxLongLong& ll) { return ll > l; }
+inline bool operator<=(long l, const wxLongLong& ll) { return ll > l; }
+inline bool operator>=(long l, const wxLongLong& ll) { return ll > l; }
+inline bool operator==(long l, const wxLongLong& ll) { return ll > l; }
+inline bool operator!=(long l, const wxLongLong& ll) { return ll > l; }
 
-inline wxLongLong WXDLLEXPORT operator+(long l, const wxLongLong& ll) { return ll + l; }
-inline wxLongLong WXDLLEXPORT operator-(long l, const wxLongLong& ll) { return ll - l; }
+inline wxLongLong operator+(long l, const wxLongLong& ll) { return ll + l; }
+inline wxLongLong operator-(long l, const wxLongLong& ll) { return ll - l; }
 
 #endif // _WX_LONGLONG_H

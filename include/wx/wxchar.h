@@ -511,11 +511,11 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #endif
 
 // checks whether the passed in pointer is NULL and if the string is empty
-WXDLLEXPORT inline bool wxIsEmpty(const wxChar *p) { return !p || !*p; }
+inline bool wxIsEmpty(const wxChar *p) { return !p || !*p; }
 
 #ifndef wxNEED_WX_STRING_H
 // safe version of strlen() (returns 0 if passed NULL pointer)
-WXDLLEXPORT inline size_t wxStrlen(const wxChar *psz)
+inline size_t wxStrlen(const wxChar *psz)
    { return psz ? wxStrlen_(psz) : 0; }
 #endif
 

@@ -326,7 +326,7 @@ extern void WXDLLEXPORT wxWakeUpIdle();
 
 // Post a message to the given eventhandler which will be processed during the
 // next event loop iteration
-inline void WXDLLEXPORT wxPostEvent(wxEvtHandler *dest, wxEvent& event)
+inline void wxPostEvent(wxEvtHandler *dest, wxEvent& event)
 {
     wxCHECK_RET( dest, wxT("need an object to post event to in wxPostEvent") );
 

@@ -120,14 +120,14 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 // backwards compatibility only.
 
 // checks whether the passed in pointer is NULL and if the string is empty
-inline bool WXDLLEXPORT IsEmpty(const char *p) { return (!p || !*p); }
+inline bool IsEmpty(const char *p) { return (!p || !*p); }
 
 // safe version of strlen() (returns 0 if passed NULL pointer)
-inline size_t WXDLLEXPORT Strlen(const char *psz)
+inline size_t Strlen(const char *psz)
   { return psz ? strlen(psz) : 0; }
 
 // portable strcasecmp/_stricmp
-inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
+inline int Stricmp(const char *psz1, const char *psz2)
 {
 #if defined(__VISUALC__) || ( defined(__MWERKS__) && defined(__INTEL__) )
   return _stricmp(psz1, psz2);
@@ -1126,14 +1126,14 @@ wxString WXDLLEXPORT operator+(wxChar ch, const wxString& string);
 wxString WXDLLEXPORT operator+(const wxString& string, const wxChar *psz);
 wxString WXDLLEXPORT operator+(const wxChar *psz, const wxString& string);
 #if wxUSE_UNICODE
-inline wxString WXDLLEXPORT operator+(const wxString& string, const wxWCharBuffer& buf)
+inline wxString operator+(const wxString& string, const wxWCharBuffer& buf)
     { return string + (const wchar_t *)buf; }
-inline wxString WXDLLEXPORT operator+(const wxWCharBuffer& buf, const wxString& string)
+inline wxString operator+(const wxWCharBuffer& buf, const wxString& string)
     { return (const wchar_t *)buf + string; }
 #else // !wxUSE_UNICODE
-inline wxString WXDLLEXPORT operator+(const wxString& string, const wxCharBuffer& buf)
+inline wxString operator+(const wxString& string, const wxCharBuffer& buf)
     { return string + (const char *)buf; }
-inline wxString WXDLLEXPORT operator+(const wxCharBuffer& buf, const wxString& string)
+inline wxString operator+(const wxCharBuffer& buf, const wxString& string)
     { return (const char *)buf + string; }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
