@@ -185,7 +185,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-class WXDLLEXPORT wxGridWindow : public wxPanel
+class WXDLLEXPORT wxGridWindow : public wxWindow
 {
 public:
     wxGridWindow()
@@ -3486,9 +3486,9 @@ void wxGridCornerLabelWindow::OnKeyUp( wxKeyEvent& event )
 
 //////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC_CLASS( wxGridWindow, wxPanel )
+IMPLEMENT_DYNAMIC_CLASS( wxGridWindow, wxWindow )
 
-BEGIN_EVENT_TABLE( wxGridWindow, wxPanel )
+BEGIN_EVENT_TABLE( wxGridWindow, wxWindow )
     EVT_PAINT( wxGridWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridWindow::OnMouseWheel)
     EVT_MOUSE_EVENTS( wxGridWindow::OnMouseEvent )
@@ -3501,7 +3501,7 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
                             wxGridRowLabelWindow *rowLblWin,
                             wxGridColLabelWindow *colLblWin,
                             wxWindowID id, const wxPoint &pos, const wxSize &size )
-        : wxPanel( parent, id, pos, size, wxWANTS_CHARS, "grid window" )
+        : wxWindow( parent, id, pos, size, wxWANTS_CHARS, "grid window" )
 {
     m_owner = parent;
     m_rowLabelWin = rowLblWin;
@@ -3532,7 +3532,7 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void wxGridWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
-    wxPanel::ScrollWindow( dx, dy, rect );
+    wxWindow::ScrollWindow( dx, dy, rect );
     m_rowLabelWin->ScrollWindow( 0, dy, rect );
     m_colLabelWin->ScrollWindow( dx, 0, rect );
 }
