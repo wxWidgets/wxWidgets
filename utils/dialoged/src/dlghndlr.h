@@ -41,12 +41,12 @@ DECLARE_CLASS(wxResourceEditorDialogHandler)
   int firstDragY;
   int oldDragX;
   int oldDragY;
+  bool                      m_mouseCaptured;
+//  long                      m_treeItem;
 
   wxResourceEditorDialogHandler(wxPanel *dialog, wxItemResource *resource, wxEvtHandler *oldHandler,
      wxResourceManager *manager);
-  ~wxResourceEditorDialogHandler(void) {}
-
-  bool OnClose(void);
+  ~wxResourceEditorDialogHandler(void);
 
   void OnPaint(wxPaintEvent& event);
   void OnMouseEvent(wxMouseEvent& event);
@@ -64,6 +64,12 @@ DECLARE_CLASS(wxResourceEditorDialogHandler)
   void PaintSelectionHandles(wxDC& dc);
   void ProcessItemEvent(wxControl *item, wxMouseEvent& event, int selectionHandle);
 
+// Accessors
+/*
+  inline long GetTreeItem() const { return m_treeItem; }
+  inline void SetTreeItem(long item) { m_treeItem = item; }
+*/
+
 DECLARE_EVENT_TABLE()
 };
 
@@ -79,11 +85,12 @@ DECLARE_CLASS(wxResourceEditorControlHandler)
   bool isSelected;
   int handleSize;   // selection handle size
   int handleMargin; // Distance between item edge and handle edge
+  long                  m_treeItem;
   static int dragOffsetX;  // Distance between pointer at start of drag and
   static int dragOffsetY;  // top-left of item
 
   wxResourceEditorControlHandler(wxControl *control, wxEvtHandler *oldHandler);
-  ~wxResourceEditorControlHandler(void) {}
+  ~wxResourceEditorControlHandler(void);
 
   void OnMouseEvent(wxMouseEvent& event);
 
@@ -115,6 +122,12 @@ DECLARE_CLASS(wxResourceEditorControlHandler)
   virtual void OnLeftClick(int x, int y, int keys);
   virtual void OnRightClick(int x, int y, int keys);
   virtual void OnSelect(bool select);
+
+// Accessors
+/*
+  inline long GetTreeItem() const { return m_treeItem; }
+  inline void SetTreeItem(long item) { m_treeItem = item; }
+*/
 
 DECLARE_EVENT_TABLE()
 };

@@ -20,6 +20,21 @@
 
 class wxPropertyInfo;
 
+class wxDialogEditorPropertyListDialog: public wxPropertyListDialog
+{
+    friend class wxPropertyInfo;
+public:
+    wxDialogEditorPropertyListDialog(wxPropertyListView *v, wxWindow *parent, const wxString& title,
+        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+        long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = "dialogBox");
+    ~wxDialogEditorPropertyListDialog();
+
+private:
+    wxPropertySheet*            m_propSheet;
+    wxPropertyValidatorRegistry m_registry;
+    wxPropertyInfo*             m_propInfo;
+};
+
 // A kind of property list view that intercepts OnPropertyChanged
 // feedback.
 class wxResourcePropertyListView: public wxPropertyListView
@@ -42,6 +57,7 @@ class wxResourcePropertyListView: public wxPropertyListView
 // them with separate classes.
 class wxPropertyInfo: public wxObject
 {
+    friend class wxDialogEditorPropertyListDialog;
  protected:
   static wxWindow *sm_propertyWindow;
   wxPropertyInfo(void)
@@ -54,7 +70,7 @@ class wxPropertyInfo: public wxObject
   virtual wxProperty *GetProperty(wxString& propName) = 0;
   virtual bool SetProperty(wxString& propName, wxProperty *property) = 0;
   virtual void GetPropertyNames(wxStringList& names) = 0;
-  virtual bool Edit(wxWindow *parent, char *title);
+  virtual bool Edit(wxWindow *parent, const wxString& title);
 };
 
 // For all windows
@@ -102,33 +118,55 @@ class wxButtonPropertyInfo: public wxItemPropertyInfo
 {
  protected:
  public:
-  bool isBitmapButton;
-  wxButtonPropertyInfo(wxWindow *win, wxItemResource *res = NULL, bool bmButton = FALSE):
-    wxItemPropertyInfo(win, res) { isBitmapButton = bmButton; }
+  wxButtonPropertyInfo(wxWindow *win, wxItemResource *res = NULL):
+    wxItemPropertyInfo(win, res) { }
   ~wxButtonPropertyInfo(void) {}
   wxProperty *GetProperty(wxString& name);
   bool SetProperty(wxString& name, wxProperty *property);
   void GetPropertyNames(wxStringList& names);
   bool InstantiateResource(wxItemResource *resource);
-
-  inline bool IsBitmapButton(void) { return isBitmapButton; }
 };
 
-// For messages
+// For bitmap buttons
+class wxBitmapButtonPropertyInfo: public wxButtonPropertyInfo
+{
+ protected:
+ public:
+  wxBitmapButtonPropertyInfo(wxWindow *win, wxItemResource *res = NULL):
+    wxButtonPropertyInfo(win, res) { }
+  ~wxBitmapButtonPropertyInfo(void) {}
+  wxProperty *GetProperty(wxString& name);
+  bool SetProperty(wxString& name, wxProperty *property);
+  void GetPropertyNames(wxStringList& names);
+  bool InstantiateResource(wxItemResource *resource);
+};
+
+// For static text controls
 class wxStaticTextPropertyInfo: public wxItemPropertyInfo
 {
  protected:
  public:
-  bool isBitmapMessage;
-  wxStaticTextPropertyInfo(wxWindow *win, wxItemResource *res = NULL, bool bmMessage = FALSE):
-    wxItemPropertyInfo(win, res) { isBitmapMessage = bmMessage; }
+  wxStaticTextPropertyInfo(wxWindow *win, wxItemResource *res = NULL):
+    wxItemPropertyInfo(win, res) { }
   ~wxStaticTextPropertyInfo(void) {}
   wxProperty *GetProperty(wxString& name);
   bool SetProperty(wxString& name, wxProperty *property);
   void GetPropertyNames(wxStringList& names);
   bool InstantiateResource(wxItemResource *resource);
+};
 
-  inline bool IsBitmapMessage(void) { return isBitmapMessage; }
+// For static bitmap controls
+class wxStaticBitmapPropertyInfo: public wxItemPropertyInfo
+{
+ protected:
+ public:
+  wxStaticBitmapPropertyInfo(wxWindow *win, wxItemResource *res = NULL):
+    wxItemPropertyInfo(win, res) { }
+  ~wxStaticBitmapPropertyInfo(void) {}
+  wxProperty *GetProperty(wxString& name);
+  bool SetProperty(wxString& name, wxProperty *property);
+  void GetPropertyNames(wxStringList& names);
+  bool InstantiateResource(wxItemResource *resource);
 };
 
 // For text/multitext items
@@ -265,20 +303,6 @@ class wxPanelPropertyInfo: public wxWindowPropertyInfo
   wxPanelPropertyInfo(wxWindow *win, wxItemResource *res = NULL):
     wxWindowPropertyInfo(win, res) {}
   ~wxPanelPropertyInfo(void) {}
-  wxProperty *GetProperty(wxString& name);
-  bool SetProperty(wxString& name, wxProperty *property);
-  void GetPropertyNames(wxStringList& names);
-  bool InstantiateResource(wxItemResource *resource);
-};
-
-// For dialogs
-class wxDialogPropertyInfo: public wxPanelPropertyInfo
-{
- protected:
- public:
-  wxDialogPropertyInfo(wxWindow *win, wxItemResource *res = NULL):
-    wxPanelPropertyInfo(win, res) {}
-  ~wxDialogPropertyInfo(void) {}
   wxProperty *GetProperty(wxString& name);
   bool SetProperty(wxString& name, wxProperty *property);
   void GetPropertyNames(wxStringList& names);

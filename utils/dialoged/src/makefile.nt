@@ -25,7 +25,7 @@ LOCALDOCDIR=$(WXDIR)\utils\dialoged\docs
 
 PROGRAM=dialoged
  
-OBJECTS = dialoged.obj editrpal.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj
+OBJECTS = dialoged.obj editrpal.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj edtree.obj edlist.obj
 
 all:    wxprop dialoged.exe
 
@@ -68,6 +68,16 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
 reseditr.obj:      winprop.h reseditr.h editrpal.h reseditr.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+edtree.obj:      winprop.h reseditr.h editrpal.h edtree.h edtree.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+edlist.obj:      winprop.h reseditr.h edlist.h edlist.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<

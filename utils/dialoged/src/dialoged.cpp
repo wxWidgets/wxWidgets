@@ -36,18 +36,26 @@ MyApp::MyApp(void)
 {
 }
 
-wxResourceManager theResourceManager;
+wxResourceManager *theResourceManager = NULL;
 
 bool MyApp::OnInit(void)
 {
-  theResourceManager.Initialize();
-  theResourceManager.ShowResourceEditor(TRUE);
+    theResourceManager = new wxResourceManager;
+    theResourceManager->Initialize();
+
+    theResourceManager->ShowResourceEditor(TRUE);
   
-  if (argc > 1)
-    theResourceManager.Load(argv[1]);
+    if (argc > 1)
+        theResourceManager->Load(argv[1]);
 
-  SetTopWindow(theResourceManager.GetEditorFrame());
+    SetTopWindow(theResourceManager->GetEditorFrame());
 
-  return TRUE;
+    return TRUE;
 }
 
+int MyApp::OnExit(void)
+{
+    delete theResourceManager;
+    theResourceManager = NULL;
+    return 0;
+}

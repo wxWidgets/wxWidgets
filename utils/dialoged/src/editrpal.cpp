@@ -38,28 +38,6 @@
 #include "reseditr.h"
 #include "editrpal.h"
 
-// Bitmaps for palette
-wxBitmap *PaletteFrameBitmap = NULL;
-wxBitmap *PaletteDialogBoxBitmap = NULL;
-wxBitmap *PalettePanelBitmap = NULL;
-wxBitmap *PaletteCanvasBitmap = NULL;
-wxBitmap *PaletteTextWindowBitmap = NULL;
-wxBitmap *PaletteMessageBitmap = NULL;
-wxBitmap *PaletteButtonBitmap = NULL;
-wxBitmap *PaletteCheckBoxBitmap = NULL;
-wxBitmap *PaletteListBoxBitmap = NULL;
-wxBitmap *PaletteRadioBoxBitmap = NULL;
-wxBitmap *PaletteChoiceBitmap = NULL;
-wxBitmap *PaletteTextBitmap = NULL;
-wxBitmap *PaletteMultiTextBitmap = NULL;
-wxBitmap *PaletteSliderBitmap = NULL;
-wxBitmap *PaletteArrowBitmap = NULL;
-wxBitmap *PaletteGroupBitmap = NULL;
-wxBitmap *PaletteGaugeBitmap = NULL;
-wxBitmap *PalettePictureBitmap = NULL;
-wxBitmap *PaletteBitmapButtonBitmap = NULL;
-wxBitmap *PaletteScrollbarBitmap = NULL;
-
 #ifdef __X__
 #include "bitmaps/frame.xbm"
 #include "bitmaps/dialog.xbm"
@@ -142,23 +120,25 @@ void EditorToolPalette::OnMouseEnter(int toolIndex)
         case PALETTE_PANEL:
           managerFrame->SetStatusText("wxPanel");
           break;
+#if 0
         case PALETTE_CANVAS:
           managerFrame->SetStatusText("wxCanvas");
           break;
         case PALETTE_TEXT_WINDOW:
           managerFrame->SetStatusText("wxTextWindow");
           break;
+#endif
         case PALETTE_BUTTON:
           managerFrame->SetStatusText("wxButton");
           break;
         case PALETTE_MESSAGE:
-          managerFrame->SetStatusText("wxMessage");
+          managerFrame->SetStatusText("wxStaticText");
           break;
         case PALETTE_TEXT:
-          managerFrame->SetStatusText("wxText");
+          managerFrame->SetStatusText("wxTextCtrl (single-line)");
           break;
         case PALETTE_MULTITEXT:
-          managerFrame->SetStatusText("wxMultiText");
+          managerFrame->SetStatusText("wxTextCtrl (multi-line)");
           break;
         case PALETTE_CHOICE:
           managerFrame->SetStatusText("wxChoice");
@@ -176,16 +156,16 @@ void EditorToolPalette::OnMouseEnter(int toolIndex)
           managerFrame->SetStatusText("wxSlider");
           break;
         case PALETTE_GROUPBOX:
-          managerFrame->SetStatusText("wxGroupBox");
+          managerFrame->SetStatusText("wxStaticBox");
           break;
         case PALETTE_GAUGE:
           managerFrame->SetStatusText("wxGauge");
           break;
         case PALETTE_BITMAP_MESSAGE:
-          managerFrame->SetStatusText("Bitmap wxMessage");
+          managerFrame->SetStatusText("wxStaticBitmap");
           break;
         case PALETTE_BITMAP_BUTTON:
-          managerFrame->SetStatusText("Bitmap wxButton");
+          managerFrame->SetStatusText("wxBitmapButton");
           break;
         case PALETTE_SCROLLBAR:
           managerFrame->SetStatusText("wxScrollBar");
@@ -211,58 +191,44 @@ void EditorToolPalette::OnPaint(wxPaintEvent& event)
   dc.DrawLine(0, h-1, w, h-1);
 }
 
-bool wxResourceManager::InitializeTools(void)
+EditorToolPalette *wxResourceManager::OnCreatePalette(wxFrame *parent)
 {
   // Load palette bitmaps
 #ifdef __WINDOWS__
-  PaletteFrameBitmap = new wxBitmap("FRAMETOOL");
-  PaletteDialogBoxBitmap = new wxBitmap("DIALOGBOXTOOL");
-  PalettePanelBitmap = new wxBitmap("PANELTOOL");
-  PaletteCanvasBitmap = new wxBitmap("CANVASTOOL");
-  PaletteTextWindowBitmap = new wxBitmap("TEXTWINDOWTOOL");
-  PaletteMessageBitmap = new wxBitmap("MESSAGETOOL");
-  PaletteButtonBitmap = new wxBitmap("BUTTONTOOL");
-  PaletteCheckBoxBitmap = new wxBitmap("CHECKBOXTOOL");
-  PaletteListBoxBitmap = new wxBitmap("LISTBOXTOOL");
-  PaletteRadioBoxBitmap = new wxBitmap("RADIOBOXTOOL");
-  PaletteChoiceBitmap = new wxBitmap("CHOICETOOL");
-  PaletteTextBitmap = new wxBitmap("TEXTTOOL");
-  PaletteMultiTextBitmap = new wxBitmap("MULTITEXTTOOL");
-  PaletteSliderBitmap = new wxBitmap("SLIDERTOOL");
-  PaletteArrowBitmap = new wxBitmap("ARROWTOOL");
-  PaletteGroupBitmap = new wxBitmap("GROUPTOOL");
-  PaletteGaugeBitmap = new wxBitmap("GAUGETOOL");
-  PalettePictureBitmap = new wxBitmap("PICTURETOOL");
-  PaletteBitmapButtonBitmap = new wxBitmap("BMPBUTTONTOOL");
-  PaletteScrollbarBitmap = new wxBitmap("SCROLLBARTOOL");
+  wxBitmap PaletteMessageBitmap("MESSAGETOOL");
+  wxBitmap PaletteButtonBitmap("BUTTONTOOL");
+  wxBitmap PaletteCheckBoxBitmap("CHECKBOXTOOL");
+  wxBitmap PaletteListBoxBitmap("LISTBOXTOOL");
+  wxBitmap PaletteRadioBoxBitmap("RADIOBOXTOOL");
+  wxBitmap PaletteChoiceBitmap("CHOICETOOL");
+  wxBitmap PaletteTextBitmap("TEXTTOOL");
+  wxBitmap PaletteMultiTextBitmap("MULTITEXTTOOL");
+  wxBitmap PaletteSliderBitmap("SLIDERTOOL");
+  wxBitmap PaletteArrowBitmap("ARROWTOOL");
+  wxBitmap PaletteGroupBitmap("GROUPTOOL");
+  wxBitmap PaletteGaugeBitmap("GAUGETOOL");
+  wxBitmap PalettePictureBitmap("PICTURETOOL");
+  wxBitmap PaletteBitmapButtonBitmap("BMPBUTTONTOOL");
+  wxBitmap PaletteScrollbarBitmap("SCROLLBARTOOL");
 #endif
 #ifdef __X__
-  PaletteFrameBitmap = new wxBitmap(frame_bits, frame_width, frame_height);
-  PaletteDialogBoxBitmap = new wxBitmap(dialog_bits, dialog_width, dialog_height);
-  PalettePanelBitmap = new wxBitmap(panel_bits, panel_width, panel_height);
-  PaletteCanvasBitmap = new wxBitmap(canvas_bits, canvas_width, canvas_height);
-  PaletteTextWindowBitmap = new wxBitmap(textsw_bits, textsw_width, textsw_height);
-  PaletteMessageBitmap = new wxBitmap(message_bits, message_width, message_height);
-  PaletteButtonBitmap = new wxBitmap(button_bits, button_width, button_height);
-  PaletteCheckBoxBitmap = new wxBitmap(check_bits, check_width, check_height);
-  PaletteListBoxBitmap = new wxBitmap(listbox_bits, listbox_width, listbox_height);
-  PaletteRadioBoxBitmap = new wxBitmap(radio_bits, radio_width, radio_height);
-  PaletteChoiceBitmap = new wxBitmap(choice_bits, choice_width, choice_height);
-  PaletteTextBitmap = new wxBitmap(text_bits, text_width, text_height);
-  PaletteMultiTextBitmap = new wxBitmap(mtext_bits, mtext_width, mtext_height);
-  PaletteSliderBitmap = new wxBitmap(slider_bits, slider_width, slider_height);
-  PaletteArrowBitmap = new wxBitmap(arrow_bits, arrow_width, arrow_height);
-  PaletteGroupBitmap = new wxBitmap(group_bits, group_width, group_height);
-  PaletteGaugeBitmap = new wxBitmap(gauge_bits, gauge_width, gauge_height);
-  PalettePictureBitmap = new wxBitmap(picture_bits, picture_width, picture_height);
-  PaletteBitmapButtonBitmap = new wxBitmap(bmpbuttn_bits, bmpbuttn_width, bmpbuttn_height);
-  PaletteScrollbarBitmap = new wxBitmap(scroll_bits, scroll_width, scroll_height);
+  wxBitmap PaletteMessageBitmap(message_bits, message_width, message_height);
+  wxBitmap PaletteButtonBitmap(button_bits, button_width, button_height);
+  wxBitmap PaletteCheckBoxBitmap(check_bits, check_width, check_height);
+  wxBitmap PaletteListBoxBitmap(listbox_bits, listbox_width, listbox_height);
+  wxBitmap PaletteRadioBoxBitmap(radio_bits, radio_width, radio_height);
+  wxBitmap PaletteChoiceBitmap(choice_bits, choice_width, choice_height);
+  wxBitmap PaletteTextBitmap(text_bits, text_width, text_height);
+  wxBitmap PaletteMultiTextBitmap(mtext_bits, mtext_width, mtext_height);
+  wxBitmap PaletteSliderBitmap(slider_bits, slider_width, slider_height);
+  wxBitmap PaletteArrowBitmap(arrow_bits, arrow_width, arrow_height);
+  wxBitmap PaletteGroupBitmap(group_bits, group_width, group_height);
+  wxBitmap PaletteGaugeBitmap(gauge_bits, gauge_width, gauge_height);
+  wxBitmap PalettePictureBitmap(picture_bits, picture_width, picture_height);
+  wxBitmap PaletteBitmapButtonBitmap(bmpbuttn_bits, bmpbuttn_width, bmpbuttn_height);
+  wxBitmap PaletteScrollbarBitmap(scroll_bits, scroll_width, scroll_height);
 #endif
-  return TRUE;
-}
 
-EditorToolPalette *wxResourceManager::OnCreatePalette(wxFrame *parent)
-{
   EditorToolPalette *palette = new EditorToolPalette(this, parent, 0, 0, -1, -1, wxNO_BORDER, // wxTB_3DBUTTONS,
                                         wxVERTICAL, 1);
   
@@ -274,28 +240,19 @@ EditorToolPalette *wxResourceManager::OnCreatePalette(wxFrame *parent)
 #endif
 */
 
-//  palette->GetDC()->SetBackground(wxLIGHT_GREY_BRUSH);
   palette->AddTool(PALETTE_ARROW, PaletteArrowBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "Pointer");
-/*
-  palette->AddTool(PALETTE_FRAME, PaletteFrameBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxFrame");
-  palette->AddTool(PALETTE_DIALOG_BOX, PaletteDialogBoxBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxDialog");
-  palette->AddTool(PALETTE_PANEL, PalettePanelBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxPanel");
-  palette->AddTool(PALETTE_CANVAS, PaletteCanvasBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxCanvas");
-  palette->AddTool(PALETTE_TEXT_WINDOW, PaletteTextWindowBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxTextWindow");
-
-*/
-  palette->AddTool(PALETTE_MESSAGE, PaletteMessageBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxMessage");
-  palette->AddTool(PALETTE_BITMAP_MESSAGE, PalettePictureBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "Picture wxMessage");
+  palette->AddTool(PALETTE_MESSAGE, PaletteMessageBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxStaticText");
+  palette->AddTool(PALETTE_BITMAP_MESSAGE, PalettePictureBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxStaticBitmap");
   palette->AddTool(PALETTE_BUTTON, PaletteButtonBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "Button");
-  palette->AddTool(PALETTE_BITMAP_BUTTON, PaletteBitmapButtonBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "Picture wxButton");
+  palette->AddTool(PALETTE_BITMAP_BUTTON, PaletteBitmapButtonBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxBitmapButton");
   palette->AddTool(PALETTE_CHECKBOX, PaletteCheckBoxBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxCheckBox");
   palette->AddTool(PALETTE_RADIOBOX, PaletteRadioBoxBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxRadioBox");
   palette->AddTool(PALETTE_LISTBOX, PaletteListBoxBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxListBox");
   palette->AddTool(PALETTE_CHOICE, PaletteChoiceBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxChoice");
-  palette->AddTool(PALETTE_TEXT, PaletteTextBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxText");
-  palette->AddTool(PALETTE_MULTITEXT, PaletteMultiTextBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxMultiText");
+  palette->AddTool(PALETTE_TEXT, PaletteTextBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxTextCtrl (single-line)");
+  palette->AddTool(PALETTE_MULTITEXT, PaletteMultiTextBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxTextCtrl (multi-line)");
   palette->AddTool(PALETTE_SLIDER, PaletteSliderBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxSlider");
-  palette->AddTool(PALETTE_GROUPBOX, PaletteGroupBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxGroupBox");
+  palette->AddTool(PALETTE_GROUPBOX, PaletteGroupBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxStaticBox");
   palette->AddTool(PALETTE_GAUGE, PaletteGaugeBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxGauge");
   palette->AddTool(PALETTE_SCROLLBAR, PaletteScrollbarBitmap, (wxBitmap *)NULL, TRUE, 0, -1, NULL, "wxScrollBar");
 

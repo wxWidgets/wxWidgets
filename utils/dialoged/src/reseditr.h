@@ -22,24 +22,44 @@
 #include "wx/string.h"
 #include "wx/layout.h"
 #include "wx/resource.h"
-#include "wx/tbarsmpl.h"
+#include "wx/toolbar.h"
+#include "wx/imaglist.h"
 
 #include "proplist.h"
 
-#if defined(__WINDOWS__) && defined(__WIN95__)
-#include "wx/tbar95.h"
-#elif defined(__WINDOWS__)
-#include "wx/tbarmsw.h"
-#endif
-
 #define RESED_DELETE            1
-#define RESED_TOGGLE_TEST_MODE  2
 #define RESED_RECREATE          3
 #define RESED_CLEAR             4
 #define RESED_NEW_DIALOG        5
 #define RESED_NEW_PANEL         6
+#define RESED_TEST              10
 
 #define RESED_CONTENTS          20
+
+#define IDC_TREECTRL            100
+#define IDC_LISTCTRL            101
+
+// For control list ('palette')
+#define RESED_POINTER           0
+#define RESED_BUTTON            1
+#define RESED_BMPBUTTON         2
+#define RESED_STATICTEXT        3
+#define RESED_STATICBMP         4
+#define RESED_STATICBOX         5
+#define RESED_TEXTCTRL_SINGLE   6
+#define RESED_TEXTCTRL_MULTIPLE 7
+#define RESED_LISTBOX           8
+#define RESED_CHOICE            9
+#define RESED_COMBOBOX          10
+#define RESED_CHECKBOX          11
+#define RESED_SLIDER            12
+#define RESED_GAUGE             13
+#define RESED_RADIOBOX          14
+#define RESED_RADIOBUTTON       15
+#define RESED_SCROLLBAR         16
+#define RESED_TREECTRL          17
+#define RESED_LISTCTRL          18
+#define RESED_SPINBUTTON        19
 
 /*
  * Controls loading, saving, user interface of resource editor(s).
@@ -49,6 +69,8 @@ class wxResourceEditorFrame;
 class EditorToolPalette;
 class EditorToolBar;
 class wxWindowPropertyInfo;
+class wxResourceEditorProjectTree;
+class wxResourceEditorControlList;
 
 #ifdef __WINDOWS__
 #define wxHelpController wxWinHelpController
@@ -88,7 +110,7 @@ class wxHelpController;
 class wxResourceTableWithSaving: public wxResourceTable
 {
  public:
-  wxResourceTableWithSaving(void):wxResourceTable()
+  wxResourceTableWithSaving():wxResourceTable()
   {
   }
   virtual bool Save(const wxString& filename);
@@ -117,80 +139,73 @@ class wxResourceTableWithSaving: public wxResourceTable
   wxControl *CreateItem(wxPanel *panel, wxItemResource *childResource);
 };
  
+class wxResourceEditorScrolledWindow;
+
 class wxResourceManager: public wxObject
 {
- protected:
-   wxHelpController *helpInstance;
-   wxResourceTableWithSaving resourceTable;
-   wxFrame *editorFrame;
-   wxPanel *editorPanel;
-   wxMenu *popupMenu;
-   wxListBox *editorResourceList;
-   EditorToolPalette *editorPalette;
-   EditorToolBar *editorToolBar;
-   int nameCounter;
-   bool modified;
-   bool editMode;
-   wxHashTable resourceAssociations;
-   wxList selections;
-   wxString currentFilename;
-   
- public:
- 
-   // Options to be saved/restored
-   wxString optionsResourceFilename; // e.g. dialoged.ini, .dialogrc
-   wxRectangle propertyWindowSize;
-   wxRectangle resourceEditorWindowSize;
+   friend class wxResourceEditorFrame;
 
- public:
-   static wxResourceManager *currentResourceManager;
+public:
+   wxResourceManager();
+   ~wxResourceManager();
 
-   wxResourceManager(void);
-   ~wxResourceManager(void);
+// Operations
 
-   bool Initialize(void);
+   // Initializes the resource manager
+   bool Initialize();
 
-   bool LoadOptions(void);
-   bool SaveOptions(void);
+   // Load/save window size etc.
+   bool LoadOptions();
+   bool SaveOptions();
 
    // Show or hide the resource editor frame, which displays a list
    // of resources with ability to edit them.
    virtual bool ShowResourceEditor(bool show, wxWindow *parent = NULL, const char *title = "wxWindows Dialog Editor");
 
-   virtual bool Save(void);
-   virtual bool SaveAs(void);
+   virtual bool Save();
+   virtual bool SaveAs();
    virtual bool Save(const wxString& filename);
    virtual bool Load(const wxString& filename);
    virtual bool Clear(bool deleteWindows = TRUE, bool force = TRUE);
    virtual void SetFrameTitle(const wxString& filename);
-   virtual bool DisassociateWindows(bool deleteWindows = TRUE);
+   virtual void ClearCurrentDialog();
    virtual bool New(bool loadFromFile = TRUE, const wxString& filename = "");
-   virtual bool SaveIfModified(void);
+   virtual bool SaveIfModified();
    virtual void AlignItems(int flag);
-   virtual void CopySize(void);
+   virtual void CopySize();
    virtual void ToBackOrFront(bool toBack);
-   virtual wxWindow *FindParentOfSelection(void);
+   virtual wxWindow *FindParentOfSelection();
 
    virtual wxFrame *OnCreateEditorFrame(const char *title);
    virtual wxMenuBar *OnCreateEditorMenuBar(wxFrame *parent);
-   virtual wxPanel *OnCreateEditorPanel(wxFrame *parent);
+   virtual wxResourceEditorScrolledWindow *OnCreateEditorPanel(wxFrame *parent);
    virtual wxToolBarBase *OnCreateToolBar(wxFrame *parent);
    virtual EditorToolPalette *OnCreatePalette(wxFrame *parent);
-//   virtual bool DeletePalette(void);
-   virtual bool InitializeTools(void);
 
-   virtual void UpdateResourceList(void);
-   virtual void AddItemsRecursively(int level, wxItemResource *resource);
-   virtual bool EditSelectedResource(void);
+   // Create a window information object for the give window
+   wxWindowPropertyInfo* CreatePropertyInfoForWindow(wxWindow *win);
+   // Edit the given window
+   void EditWindow(wxWindow *win);
+
+   virtual void UpdateResourceList();
+   virtual void AddItemsRecursively(long parent, wxItemResource *resource);
+   virtual bool EditSelectedResource();
    virtual bool Edit(wxItemResource *res);
-   virtual bool CreateNewDialog(void);
-   virtual bool CreateNewPanel(void);
+   virtual bool CreateNewPanel();
    virtual bool CreatePanelItem(wxItemResource *panelResource, wxPanel *panel, char *itemType, int x = 10, int y = 10, bool isBitmap = FALSE);
 
-   virtual bool DeleteSelection(bool deleteWindow = TRUE);
+   virtual bool DeleteSelection();
 
+   // Saves the window info into the resource, and deletes the
+   // handler. Doesn't actually disassociate the window from
+   // the resources. Replaces OnClose.
+   virtual bool SaveInfoAndDeleteHandler(wxWindow* win);
+
+   // Destroys the window. If this is the 'current' panel, NULLs the
+   // variable.
+   virtual bool DeleteWindow(wxWindow* win);
    virtual bool DeleteResource(wxItemResource *res);
-   virtual bool DeleteResource(wxWindow *win, bool deleteWindow = TRUE);
+   virtual bool DeleteResource(wxWindow *win);
 
    // Add bitmap resource if there isn't already one with this filename.
    virtual char *AddBitmapResource(char *filename);
@@ -210,7 +225,7 @@ class wxResourceManager: public wxObject
    // fly, you'll need to delete the window and create it again.
    virtual wxWindow *RecreateWindowFromResource(wxWindow *win, wxWindowPropertyInfo *info = NULL);
 
-   virtual bool RecreateSelection(void);
+   virtual bool RecreateSelection();
 
    // Need to search through resource table removing this from
    // any resource which has this as a parent.
@@ -218,115 +233,128 @@ class wxResourceManager: public wxObject
 
    virtual bool EditDialog(wxDialog *dialog, wxWindow *parent);
 
-   inline void SetEditorFrame(wxFrame *fr) { editorFrame = fr; }
-   inline void SetEditorToolBar(EditorToolBar *tb) { editorToolBar = tb; }
-   inline void SetEditorPalette(EditorToolPalette *pal) { editorPalette = pal; }
-   inline wxFrame *GetEditorFrame(void) { return editorFrame; }
-   inline wxListBox *GetEditorResourceList(void) { return editorResourceList; }
-   inline EditorToolPalette *GetEditorPalette(void) { return editorPalette; }
-   inline wxList& GetSelections(void) { return selections; }
-   
    void AddSelection(wxWindow *win);
    void RemoveSelection(wxWindow *win);
-
-//   inline void SetCurrentResource(wxItemResource *item) { currentResource = item; }
-//   inline void SetCurrentResourceWindow(wxWindow *win) { currentResourceWindow = win; }
-//   inline wxItemResource *GetCurrentResource(void) { return currentResource; }
-//   inline wxWindow *GetCurrentResourceWindow(void) { return currentResourceWindow; }
-   inline wxMenu *GetPopupMenu(void) { return popupMenu; }
-   
-   inline wxHelpController *GetHelpInstance(void) { return helpInstance; }
 
    virtual void MakeUniqueName(char *prefix, char *buf);
 
    // (Dis)associate resource<->physical window
+   // Doesn't delete any windows.
    virtual void AssociateResource(wxItemResource *resource, wxWindow *win);
-   virtual bool DisassociateResource(wxItemResource *resource, bool deleteWindow = TRUE);
-   virtual bool DisassociateResource(wxWindow *win, bool deleteWindow = TRUE);
+   virtual bool DisassociateResource(wxItemResource *resource);
+   virtual bool DisassociateResource(wxWindow *win);
+   virtual bool DisassociateWindows();
    virtual wxItemResource *FindResourceForWindow(wxWindow *win);
    virtual wxWindow *FindWindowForResource(wxItemResource *resource);
    
-   virtual bool InstantiateAllResourcesFromWindows(void);
+   virtual bool InstantiateAllResourcesFromWindows();
    virtual bool InstantiateResourceFromWindow(wxItemResource *resource, wxWindow *window, bool recurse = FALSE);
 
-   virtual void Modify(bool mod = TRUE) { modified = mod; }
-   virtual bool Modified(void) { return modified; }
+// Accessors
+   inline void SetEditorFrame(wxFrame *fr) { m_editorFrame = fr; }
+   inline void SetEditorToolBar(EditorToolBar *tb) { m_editorToolBar = tb; }
+   inline void SetEditorPalette(EditorToolPalette *pal) { m_editorPalette = pal; }
+   inline wxFrame *GetEditorFrame() const { return m_editorFrame; }
+   inline wxResourceEditorProjectTree *GetEditorResourceTree() const { return m_editorResourceTree; }
+   inline wxResourceEditorControlList *GetEditorControlList() const { return m_editorControlList; }
+   inline EditorToolPalette *GetEditorPalette() const { return m_editorPalette; }
+   inline wxList& GetSelections() { return m_selections; }
+   inline wxMenu *GetPopupMenu() const { return m_popupMenu; }
+   inline wxHelpController *GetHelpController() const { return m_helpController; }
 
-   inline bool GetEditMode(void) { return editMode; }
-   void SetEditMode(bool flag, bool changeCurrentResource = TRUE);
+   inline void Modify(bool mod = TRUE) { m_modified = mod; }
+   inline bool Modified() const { return m_modified; }
 
-   inline wxResourceTable& GetResourceTable(void) { return resourceTable; }
-   inline wxHashTable& GetResourceAssociations(void) { return resourceAssociations; }
-   
-   inline wxString& GetCurrentFilename(void) { return currentFilename; }
+   inline wxResourceTable& GetResourceTable() { return m_resourceTable; }
+   inline wxHashTable& GetResourceAssociations() { return m_resourceAssociations; }
 
-//   void UsePosition(bool usePos, wxItemResource *resource = NULL, int x = 0, int y = 0);
+   inline wxString& GetCurrentFilename() { return m_currentFilename; }
+   static wxResourceManager* GetCurrentResourceManager() { return sm_currentResourceManager; }
+
+   inline wxRect& GetPropertyWindowSize() { return m_propertyWindowSize; }
+   inline wxRect& GetResourceEditorWindowSize() { return m_resourceEditorWindowSize; }
+
+// Member variables
+ protected:
+   wxHelpController*                m_helpController;
+   wxResourceTableWithSaving        m_resourceTable;
+   wxFrame*                         m_editorFrame;
+   wxResourceEditorScrolledWindow*  m_editorPanel;
+   wxMenu*                          m_popupMenu;
+   wxResourceEditorProjectTree*     m_editorResourceTree;
+   wxResourceEditorControlList*     m_editorControlList;
+   EditorToolPalette*               m_editorPalette;
+   EditorToolBar*                   m_editorToolBar;
+   int                              m_nameCounter;
+   bool                             m_modified;
+   wxHashTable                      m_resourceAssociations;
+   wxList                           m_selections;
+   wxString                         m_currentFilename;
+   wxBitmap*                        m_bitmapImage; // Default for static bitmaps/buttons
+
+   wxImageList                      m_imageList;
+   long                             m_rootDialogItem; // Root of dialog hierarchy in tree (unused)
+
+   // Options to be saved/restored
+   wxString                         m_optionsResourceFilename; // e.g. dialoged.ini, .dialogrc
+   wxRect                           m_propertyWindowSize;
+   wxRect                           m_resourceEditorWindowSize;
+   static wxResourceManager*        sm_currentResourceManager;
 };
+
 
 class wxResourceEditorFrame: public wxFrame
 {
  public:
+  DECLARE_CLASS(wxResourceEditorFrame)
+
   wxResourceManager *manager;
-  wxResourceEditorFrame(wxResourceManager *resMan, wxFrame *parent, char *title, int x = -1, int y = -1, int width = 600, int height = 400,
-    long style = 0, char *name = "frame");
-  ~wxResourceEditorFrame(void);
-  void OldOnMenuCommand(int cmd);
-  bool OnClose(void);
+  wxResourceEditorFrame(wxResourceManager *resMan, wxFrame *parent, const wxString& title,
+    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(600, 400),
+    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
+  ~wxResourceEditorFrame();
+
+  bool OnClose();
+
+  void OnNew(wxCommandEvent& event);
+  void OnOpen(wxCommandEvent& event);
+  void OnNewDialog(wxCommandEvent& event);
+  void OnClear(wxCommandEvent& event);
+  void OnSave(wxCommandEvent& event);
+  void OnSaveAs(wxCommandEvent& event);
+  void OnExit(wxCommandEvent& event);
+  void OnAbout(wxCommandEvent& event);
+  void OnContents(wxCommandEvent& event);
+  void OnDeleteSelection(wxCommandEvent& event);
+  void OnRecreateSelection(wxCommandEvent& event);
+  void OnTest(wxCommandEvent& event);
+
+  DECLARE_EVENT_TABLE()
 };
 
-class wxResourceEditorPanel: public wxPanel
+class wxResourceEditorScrolledWindow: public wxScrolledWindow
 {
  public:
-  wxResourceEditorPanel(wxWindow *parent, int x = -1, int y = -1, int width = 600, int height = 400,
-    long style = 0, char *name = "panel");
-  ~wxResourceEditorPanel(void);
-  void OnDefaultAction(wxControl *item);
-};
+  wxResourceEditorScrolledWindow(wxWindow *parent, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+      long style = 0);
+  ~wxResourceEditorScrolledWindow();
 
-class DialogEditorPanelFrame: public wxFrame
-{
+  void OnScroll(wxScrollEvent& event);
+  void OnPaint(wxPaintEvent& event);
+
+  void DrawTitle(wxDC& dc);
+
+// Accessors
+  inline int GetMarginX() { return m_marginX; }
+  inline int GetMarginY() { return m_marginY; }
+
  public:
-  DialogEditorPanelFrame(wxFrame *parent, char *title, int x, int y, int w, int h, long style, char *name):
-    wxFrame(parent, -1, title, wxPoint(x, y), wxSize(w, h), style, name)
-  {
-  }
-  bool OnClose(void);
+  wxWindow* m_childWindow;
+ private:
+  int m_marginX, m_marginY;
+
+ DECLARE_EVENT_TABLE()
 };
-
-// Edit menu
-#define OBJECT_EDITOR_NEW_FRAME       220
-#define OBJECT_EDITOR_NEW_DIALOG      221
-#define OBJECT_EDITOR_NEW_PANEL       222
-#define OBJECT_EDITOR_NEW_CANVAS      223
-#define OBJECT_EDITOR_NEW_TEXT_WINDOW 224
-#define OBJECT_EDITOR_NEW_BUTTON      225
-#define OBJECT_EDITOR_NEW_CHECKBOX    226
-#define OBJECT_EDITOR_NEW_MESSAGE     227
-#define OBJECT_EDITOR_NEW_CHOICE      228
-#define OBJECT_EDITOR_NEW_LISTBOX     229
-#define OBJECT_EDITOR_NEW_RADIOBOX    230
-#define OBJECT_EDITOR_NEW_SLIDER      231
-#define OBJECT_EDITOR_NEW_TEXT        232
-#define OBJECT_EDITOR_NEW_MULTITEXT   233
-#define OBJECT_EDITOR_NEW_GAUGE       234
-#define OBJECT_EDITOR_NEW_GROUPBOX    235
-
-#define OBJECT_EDITOR_NEW_ITEM        240
-#define OBJECT_EDITOR_NEW_SUBWINDOW   241
-
-#define OBJECT_EDITOR_EDIT_MENU       250
-#define OBJECT_EDITOR_EDIT_ATTRIBUTES 251
-#define OBJECT_EDITOR_CLOSE_OBJECT    252
-#define OBJECT_EDITOR_DELETE_OBJECT   253
-#define OBJECT_EDITOR_EDIT_TOOLBAR    254
-
-#define OBJECT_EDITOR_TOGGLE_TEST_MODE 255
-
-#define OBJECT_EDITOR_RC_CONVERT      260
-#define OBJECT_EDITOR_RC_CONVERT_MENU 261
-#define OBJECT_EDITOR_RC_CONVERT_DIALOG 262
-
-#define OBJECT_EDITOR_GRID            263
 
 #define OBJECT_MENU_EDIT      1
 #define OBJECT_MENU_DELETE    2
@@ -336,16 +364,10 @@ class DialogEditorPanelFrame: public wxFrame
  *
  */
  
-#if defined(__WINDOWS__) && defined(__WIN95__)
-class EditorToolBar: public wxToolBar95
-#elif defined(__WINDOWS__)
-class EditorToolBar: public wxToolBarMSW
-#else
-class EditorToolBar: public wxToolBarSimple
-#endif
+class EditorToolBar: public wxToolBar
 {
-  public:
-  EditorToolBar(wxFrame *frame, int x = 0, int y = 0, int w = -1, int h = -1,
+public:
+  EditorToolBar(wxFrame *frame, const wxPoint& pos = wxPoint(0, 0), const wxSize& size = wxSize(0, 0),
             long style = 0, int direction = wxVERTICAL, int RowsOrColumns = 2);
   bool OnLeftClick(int toolIndex, bool toggled);
   void OnMouseEnter(int toolIndex);
@@ -355,24 +377,23 @@ DECLARE_EVENT_TABLE()
 };
 
 // Toolbar ids
-#define TOOLBAR_LOAD_FILE       1
-#define TOOLBAR_SAVE_FILE       2
-#define TOOLBAR_NEW             3
-// #define TOOLBAR_GEN_CLIPS       4
-#define TOOLBAR_TREE            5
-#define TOOLBAR_HELP            6
+#define TOOLBAR_LOAD_FILE                   1
+#define TOOLBAR_SAVE_FILE                   2
+#define TOOLBAR_NEW                         3
+#define TOOLBAR_TREE                        5
+#define TOOLBAR_HELP                        6
 
 // Formatting tools
-#define TOOLBAR_FORMAT_HORIZ    10
-#define TOOLBAR_FORMAT_HORIZ_LEFT_ALIGN    11
+#define TOOLBAR_FORMAT_HORIZ                10
+#define TOOLBAR_FORMAT_HORIZ_LEFT_ALIGN     11
 #define TOOLBAR_FORMAT_HORIZ_RIGHT_ALIGN    12
-#define TOOLBAR_FORMAT_VERT     13
-#define TOOLBAR_FORMAT_VERT_TOP_ALIGN     14
-#define TOOLBAR_FORMAT_VERT_BOT_ALIGN     15
+#define TOOLBAR_FORMAT_VERT                 13
+#define TOOLBAR_FORMAT_VERT_TOP_ALIGN       14
+#define TOOLBAR_FORMAT_VERT_BOT_ALIGN       15
 
-#define TOOLBAR_TO_FRONT        16
-#define TOOLBAR_TO_BACK         17
-#define TOOLBAR_COPY_SIZE       18
+#define TOOLBAR_TO_FRONT                    16
+#define TOOLBAR_TO_BACK                     17
+#define TOOLBAR_COPY_SIZE                   18
 
 #endif
 

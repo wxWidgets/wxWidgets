@@ -39,8 +39,7 @@
 #include "winprop.h"
 #include "editrpal.h"
 #include "dlghndlr.h"
-
-extern void wxResourceEditWindow(wxWindow *win);
+#include "edlist.h"
 
 IMPLEMENT_CLASS(wxResourceEditorDialogHandler, wxEvtHandler)
 IMPLEMENT_CLASS(wxResourceEditorControlHandler, wxEvtHandler)
@@ -75,6 +74,12 @@ wxResourceEditorDialogHandler::wxResourceEditorDialogHandler(wxPanel *dialog, wx
   oldDragY = 0;
   dragTolerance = 3;
   checkTolerance = TRUE;
+  m_mouseCaptured = FALSE;
+//  m_treeItem = 0;
+}
+
+wxResourceEditorDialogHandler::~wxResourceEditorDialogHandler(void)
+{
 }
 
 void wxResourceEditorDialogHandler::OnItemSelect(wxControl *item, bool select)
@@ -83,34 +88,6 @@ void wxResourceEditorDialogHandler::OnItemSelect(wxControl *item, bool select)
     resourceManager->AddSelection(item);
   else
     resourceManager->RemoveSelection(item);
-}
-
-bool wxResourceEditorDialogHandler::OnClose(void)
-{
-  handlerDialog->PopEventHandler();
-
-  // Now reset all child event handlers
-  wxNode *node = handlerDialog->GetChildren()->First();
-  while ( node )
-  {
-	wxWindow *child = (wxWindow *)node->Data();
-	wxEvtHandler *childHandler = child->GetEventHandler();
-	if ( child->IsKindOf(CLASSINFO(wxControl)) && childHandler != child )
-	{
-		child->PopEventHandler();
-		delete childHandler;
-	}
-	node = node->Next();
-  }
-  
-  // Save the information before deleting the dialog.
-  resourceManager->InstantiateResourceFromWindow(handlerResource, handlerDialog, TRUE);
-  
-  resourceManager->DisassociateResource(handlerDialog, FALSE);
-
-  handlerDialog->Show(FALSE);
-  delete this;
-  return TRUE;
 }
 
 void wxResourceEditorDialogHandler::OnPaint(wxPaintEvent& event)
@@ -138,7 +115,99 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
 {
   if (keys & wxKEY_CTRL)
   {
-    wxResourceEditWindow(handlerDialog);
+    wxResourceManager::GetCurrentResourceManager()->EditWindow(handlerDialog);
+    return;
+  }
+
+  // Deselect all items if click on panel
+  if (wxResourceManager::GetCurrentResourceManager()->GetEditorControlList()->GetSelection() == RESED_POINTER)
+  {
+    int needsRefresh = 0;
+    wxNode *node = handlerDialog->GetChildren()->First();
+    while (node)
+    {
+      wxControl *item = (wxControl *)node->Data();
+	  wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
+      if (item->IsKindOf(CLASSINFO(wxControl)) && childHandler->IsSelected())
+      {
+        needsRefresh ++;
+        OnItemSelect(item, FALSE);
+        childHandler->SelectItem(FALSE);
+      }
+      node = node->Next();
+    }
+    if (needsRefresh > 0)
+    {
+	  wxClientDC dc(handlerDialog);
+      dc.Clear();
+      handlerDialog->Refresh();
+    }
+    return;
+  }
+
+  wxResourceManager* manager = resourceManager;
+
+  switch (wxResourceManager::GetCurrentResourceManager()->GetEditorControlList()->GetSelection())
+  {
+        case RESED_BUTTON:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxButton", x, y);
+          break;
+        case RESED_BMPBUTTON:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxBitmapButton", x, y, TRUE);
+          break;
+        case RESED_STATICTEXT:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxStaticText", x, y);
+          break;
+        case RESED_STATICBMP:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxStaticBitmap", x, y, TRUE);
+          break;
+        case RESED_TEXTCTRL_SINGLE:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxTextCtrl (single-line)", x, y);
+          break;
+        case RESED_TEXTCTRL_MULTIPLE:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxTextCtrl (multi-line)", x, y);
+          break;
+        case RESED_CHOICE:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxChoice", x, y);
+          break;
+        case RESED_CHECKBOX:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxCheckBox", x, y);
+          break;
+        case RESED_RADIOBOX:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxRadioBox", x, y);
+          break;
+        case RESED_LISTBOX:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxListBox", x, y);
+          break;
+        case RESED_SLIDER:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxSlider", x, y);
+          break;
+        case RESED_GAUGE:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxGauge", x, y);
+          break;
+        case RESED_STATICBOX:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxStaticBox", x, y);
+          break;
+        case RESED_SCROLLBAR:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxScrollBar", x, y);
+          break;
+        default:
+          break;
+  }
+
+  // Now switch pointer on.
+  if (wxResourceManager::GetCurrentResourceManager()->GetEditorControlList()->GetSelection() != RESED_POINTER)
+  {
+    wxResourceManager::GetCurrentResourceManager()->GetEditorControlList()->SetItemState(RESED_POINTER, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+  }
+}
+
+#if 0
+void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
+{
+  if (keys & wxKEY_CTRL)
+  {
+    wxResourceManager::GetCurrentResourceManager()->EditWindow(handlerDialog);
     return;
   }
 
@@ -168,6 +237,8 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
     return;
   }
 
+  wxResourceManager* manager = resourceManager;
+
   switch (resourceManager->GetEditorPalette()->currentlySelected)
   {
         case PALETTE_FRAME:
@@ -187,16 +258,16 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
           resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxButton", x, y, TRUE);
           break;
         case PALETTE_MESSAGE:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxMessage", x, y);
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxStaticText", x, y);
           break;
         case PALETTE_BITMAP_MESSAGE:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxMessage", x, y, TRUE);
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxStaticBitmap", x, y, TRUE);
           break;
         case PALETTE_TEXT:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxText", x, y);
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxTextCtrl (single-line)", x, y);
           break;
         case PALETTE_MULTITEXT:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxMultiText", x, y);
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxTextCtrl (multi-line)", x, y);
           break;
         case PALETTE_CHOICE:
           resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxChoice", x, y);
@@ -227,30 +298,27 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
   }
 
   // Now switch pointer on.
-  if (resourceManager->GetEditorPalette()->currentlySelected != PALETTE_ARROW)
+  if (manager->GetEditorPalette()->currentlySelected != PALETTE_ARROW)
   {
-    resourceManager->GetEditorPalette()->ToggleTool(resourceManager->GetEditorPalette()->currentlySelected, FALSE);
-    resourceManager->GetEditorPalette()->ToggleTool(PALETTE_ARROW, TRUE);
-    resourceManager->GetEditorPalette()->currentlySelected = PALETTE_ARROW;
+    manager->GetEditorPalette()->ToggleTool(manager->GetEditorPalette()->currentlySelected, FALSE);
+    manager->GetEditorPalette()->ToggleTool(PALETTE_ARROW, TRUE);
+    manager->GetEditorPalette()->currentlySelected = PALETTE_ARROW;
   }
 }
+#endif
 
 void wxResourceEditorDialogHandler::OnRightClick(int x, int y, int keys)
 {
   wxMenu *menu = resourceManager->GetPopupMenu();
   menu->SetClientData((char *)handlerDialog);
-#ifdef __MOTIF__
-  handlerDialog->FakePopupMenu(menu, x, y);
-#else
   handlerDialog->PopupMenu(menu, x, y);
-#endif
 }
 
 void wxResourceEditorDialogHandler::OnItemLeftClick(wxControl *item, int x, int y, int keys)
 {
   if (keys & wxKEY_CTRL)
   {
-    wxResourceEditWindow(item);
+    wxResourceManager::GetCurrentResourceManager()->EditWindow(item);
     return;
   }
   
@@ -321,11 +389,7 @@ void wxResourceEditorDialogHandler::OnItemRightClick(wxControl *item, int x, int
 
   wxMenu *menu = resourceManager->GetPopupMenu();
   menu->SetClientData((char *)item);
-#ifdef __MOTIF__
-  handlerDialog->FakePopupMenu(menu, x, y);
-#else
   handlerDialog->PopupMenu(menu, x, y);
-#endif
 }
 
 // An event outside any items: may be a drag event.
@@ -371,9 +435,25 @@ void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
     if (event.ControlDown()) keys = keys | wxKEY_CTRL;
 
     if (event.LeftUp())
-      OnLeftClick(x, y, keys);
+    {
+        if (m_mouseCaptured)
+        {
+            handlerDialog->ReleaseMouse();
+            m_mouseCaptured = FALSE;
+        }
+
+        OnLeftClick(x, y, keys);
+    }
     else if (event.RightUp())
-      OnRightClick(x, y, keys);
+    {
+        if (m_mouseCaptured)
+        {
+            handlerDialog->ReleaseMouse();
+            m_mouseCaptured = FALSE;
+        }
+
+        OnRightClick(x, y, keys);
+    }
   }
   else
 	event.Skip();
@@ -420,12 +500,27 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
         checkTolerance = FALSE;
       }
   }
-  if (dragging && dragItem && dragMode == wxDRAG_MODE_START_LEFT)
+  if (event.LeftDClick())
+  {
+      if (m_mouseCaptured)
+      {
+        handlerDialog->ReleaseMouse();
+        m_mouseCaptured = FALSE;
+      }
+
+      wxResourceManager::GetCurrentResourceManager()->EditWindow(item);
+  }
+  else if (dragging && dragItem && dragMode == wxDRAG_MODE_START_LEFT)
   {
     dragMode = wxDRAG_MODE_CONTINUE_LEFT;
 	wxClientDC dc(handlerDialog);
     childHandler->OnDragBegin(x, y, keys, dc, selectionHandle);
     oldDragX = x; oldDragY = y;
+    if (!m_mouseCaptured)
+    {
+        handlerDialog->CaptureMouse();
+        m_mouseCaptured = TRUE;
+    }
   }
   else if (dragging && dragItem && dragMode == wxDRAG_MODE_CONTINUE_LEFT)
   { 
@@ -439,10 +534,18 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
 	wxClientDC dc(handlerDialog);
     dragMode = wxDRAG_MODE_NONE;
     checkTolerance = TRUE;
+
     childHandler->OnDragContinue(FALSE, oldDragX, oldDragY, keys, dc, selectionHandle);
     childHandler->OnDragEnd(x, y, keys, dc, selectionHandle);
+
     dragItem = NULL;
     dragType = wxDRAG_TYPE_NONE;
+
+    if (m_mouseCaptured)
+    {
+        handlerDialog->ReleaseMouse();
+        m_mouseCaptured = FALSE;
+    }
   }
   else if (dragging && dragItem && dragMode == wxDRAG_MODE_START_RIGHT)
   {
@@ -450,6 +553,12 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
     dragMode = wxDRAG_MODE_CONTINUE_RIGHT;
     childHandler->OnDragBegin(x, y, keys, dc, selectionHandle);
     oldDragX = x; oldDragY = y;
+
+    if (!m_mouseCaptured)
+    {
+        handlerDialog->CaptureMouse();
+        m_mouseCaptured = TRUE;
+    }
   }
   else if (dragging && dragItem && dragMode == wxDRAG_MODE_CONTINUE_RIGHT)
   { 
@@ -461,6 +570,12 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
     checkTolerance = TRUE;
     dragItem = NULL;
     dragType = wxDRAG_TYPE_NONE;
+
+    if (m_mouseCaptured)
+    {
+        handlerDialog->ReleaseMouse();
+        m_mouseCaptured = FALSE;
+    }
   }
   else if (event.IsButton())
   {
@@ -473,6 +588,12 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
       firstDragX = x;
       firstDragY = y;
       dragType = selectionHandle;
+
+      if (!m_mouseCaptured)
+      {
+        handlerDialog->CaptureMouse();
+        m_mouseCaptured = TRUE;
+      }
     }
     else if (event.RightDown())
     {
@@ -481,6 +602,12 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
       firstDragX = x;
       firstDragY = y;
       dragType = selectionHandle;
+
+      if (!m_mouseCaptured)
+      {
+        handlerDialog->CaptureMouse();
+        m_mouseCaptured = TRUE;
+      }
     }
     else if (event.LeftUp())
     {
@@ -490,6 +617,12 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
         OnLeftClick(x, y, keys);
 
       dragItem = NULL; dragMode = wxDRAG_MODE_NONE; dragType = wxDRAG_TYPE_NONE;
+
+      if (m_mouseCaptured)
+      {
+        handlerDialog->ReleaseMouse();
+        m_mouseCaptured = FALSE;
+      }
     }
     else if (event.RightUp())
     {
@@ -499,6 +632,12 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
         OnRightClick(x, y, keys);
 
       dragItem = NULL; dragMode = wxDRAG_MODE_NONE; dragType = wxDRAG_TYPE_NONE;
+
+      if (m_mouseCaptured)
+      {
+        handlerDialog->ReleaseMouse();
+        m_mouseCaptured = FALSE;
+      }
     }
   }
 }
@@ -549,6 +688,11 @@ wxResourceEditorControlHandler::wxResourceEditorControlHandler(wxControl *contro
   isSelected = FALSE;
   dragOffsetX = 0;
   dragOffsetY = 0;
+//  m_treeItem = 0;
+}
+
+wxResourceEditorControlHandler::~wxResourceEditorControlHandler(void)
+{
 }
 
 /*
@@ -679,7 +823,8 @@ void wxResourceEditorControlHandler::OnDragBegin(int x, int y, int WXUNUSED(keys
 
   dc.SetLogicalFunction(wxXOR);
 
-  dc.SetPen(wxBLACK_DASHED_PEN);
+  wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
+  dc.SetPen(pen);
   dc.SetBrush(wxTRANSPARENT_BRUSH);
 
   dc.SetOptimization(TRUE);
@@ -797,7 +942,8 @@ void wxResourceEditorControlHandler::OnDragContinue(bool paintIt, int x, int y, 
     dc.BeginDrawing();
 
     dc.SetLogicalFunction(wxXOR);
-    dc.SetPen(wxBLACK_DASHED_PEN);
+    wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
+    dc.SetPen(pen);
     dc.SetBrush(wxTRANSPARENT_BRUSH);
 
     DrawBoundingBox(dc, x1, y1, width1, height1);
@@ -807,9 +953,9 @@ void wxResourceEditorControlHandler::OnDragContinue(bool paintIt, int x, int y, 
   else
   {
       dc.BeginDrawing();
-
       dc.SetLogicalFunction(wxXOR);
-      dc.SetPen(wxBLACK_DASHED_PEN);
+      wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
+      dc.SetPen(pen);
       dc.SetBrush(wxTRANSPARENT_BRUSH);
 
       DrawBoundingBox(dc, (int)(x - dragOffsetX), (int)(y - dragOffsetY), width, height);
@@ -835,7 +981,6 @@ void wxResourceEditorControlHandler::OnDragContinue(bool paintIt, int x, int y, 
         }
         node = node->Next();
       }
-
       dc.EndDrawing();
   }
 }
@@ -936,7 +1081,6 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
       node = node->Next();
     }
   }
-
   dc.SetOptimization(FALSE);
 
   dc.SetLogicalFunction(wxCOPY);
@@ -960,9 +1104,11 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
 // by default.
 void wxResourceEditorControlHandler::OnMouseEvent(wxMouseEvent& event)
 {
+/*
   if ((event.m_eventType == wxEVENT_TYPE_LEFT_DCLICK) ||
       (event.m_eventType == wxEVENT_TYPE_RIGHT_DCLICK))
     return;
+*/
   wxWindow *panel = handlerControl->GetParent();
   if ( !panel->GetEventHandler()->IsKindOf(CLASSINFO(wxResourceEditorDialogHandler)) )
 	return;

@@ -61,29 +61,52 @@ bool wxResourcePropertyListView::OnClose(void)
   GetManagedWindow()->GetSize(& w, & h);
   GetManagedWindow()->GetPosition(& x, & y);
 
-  wxResourceManager::currentResourceManager->propertyWindowSize.width = w;
-  wxResourceManager::currentResourceManager->propertyWindowSize.height = h;
-  wxResourceManager::currentResourceManager->propertyWindowSize.x = x;
-  wxResourceManager::currentResourceManager->propertyWindowSize.y = y;
+  wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().width = w;
+  wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().height = h;
+  wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().x = x;
+  wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().y = y;
 
   return wxPropertyListView::OnClose();
+}
+
+wxWindow *wxPropertyInfo::sm_propertyWindow;
+
+/*
+ * wxDialogEditorPropertyListDialog
+ */
+
+wxDialogEditorPropertyListDialog::wxDialogEditorPropertyListDialog(wxPropertyListView *v, wxWindow *parent, const wxString& title,
+        const wxPoint& pos, const wxSize& size,
+        long style, const wxString& name):
+            wxPropertyListDialog(v, parent, title, pos, size, style, name)
+{
+        m_propSheet = NULL;
+        m_propInfo = NULL;
+}
+
+wxDialogEditorPropertyListDialog::~wxDialogEditorPropertyListDialog()
+{
+    delete m_propSheet;
+    delete m_propInfo;
+    wxPropertyInfo::sm_propertyWindow = NULL;
 }
 
 /*
  * wxPropertyInfo
  */
 
-wxWindow *wxPropertyInfo::sm_propertyWindow;
-
 // Edit the information represented by this object, whatever that
 // might be.
-bool wxPropertyInfo::Edit(wxWindow *parent, char *title)
+bool wxPropertyInfo::Edit(wxWindow *parent, const wxString& title)
 {
-  int width = wxResourceManager::currentResourceManager->propertyWindowSize.width;
-  int height = wxResourceManager::currentResourceManager->propertyWindowSize.height;
-  int x = wxResourceManager::currentResourceManager->propertyWindowSize.x;
-  int y = wxResourceManager::currentResourceManager->propertyWindowSize.y;
-  
+    if (sm_propertyWindow)
+        return FALSE;
+
+  int width = wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().width;
+  int height = wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().height;
+  int x = wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().x;
+  int y = wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().y;
+
   wxPropertySheet *propSheet = new wxPropertySheet;
 
   wxStringList propNames;
@@ -104,37 +127,33 @@ bool wxPropertyInfo::Edit(wxWindow *parent, char *title)
   // Reset 'modified' flags for all property values
   propSheet->SetAllModified(FALSE);
 
-  if (!title)
-    title = "Properties";
   wxResourcePropertyListView *view = new wxResourcePropertyListView(this, NULL,
 #ifdef __XVIEW__
      wxPROP_BUTTON_OK | wxPROP_BUTTON_CANCEL |
 #endif
      wxPROP_BUTTON_CHECK_CROSS|wxPROP_DYNAMIC_VALUE_FIELD|wxPROP_PULLDOWN|wxPROP_SHOWVALUES);
 
-  wxPropertyListDialog *propDialog = new wxPropertyListDialog(view, NULL, title, wxPoint(x, y), wxSize(width, height), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE);
+  wxDialogEditorPropertyListDialog *propDialog = new wxDialogEditorPropertyListDialog(view,
+    wxResourceManager::GetCurrentResourceManager()->GetEditorFrame(), title, wxPoint(x, y),
+    wxSize(width, height), wxDEFAULT_DIALOG_STYLE);
   sm_propertyWindow = propDialog;
-  
-  wxPropertyValidatorRegistry theValidatorRegistry;
-  theValidatorRegistry.RegisterValidator((wxString)"real", new wxRealListValidator);
-  theValidatorRegistry.RegisterValidator((wxString)"string", new wxStringListValidator);
-  theValidatorRegistry.RegisterValidator((wxString)"integer", new wxIntegerListValidator);
-  theValidatorRegistry.RegisterValidator((wxString)"bool", new wxBoolListValidator);
-  theValidatorRegistry.RegisterValidator((wxString)"filename", new wxFilenameListValidator);
-  theValidatorRegistry.RegisterValidator((wxString)"stringlist", new wxListOfStringsListValidator);
+
+  propDialog->m_registry.RegisterValidator((wxString)"real", new wxRealListValidator);
+  propDialog->m_registry.RegisterValidator((wxString)"string", new wxStringListValidator);
+  propDialog->m_registry.RegisterValidator((wxString)"integer", new wxIntegerListValidator);
+  propDialog->m_registry.RegisterValidator((wxString)"bool", new wxBoolListValidator);
+  propDialog->m_registry.RegisterValidator((wxString)"filename", new wxFilenameListValidator);
+  propDialog->m_registry.RegisterValidator((wxString)"stringlist", new wxListOfStringsListValidator);
+
+  propDialog->m_propInfo = this;
+  propDialog->m_propSheet = propSheet;
 
 //  view->propertyWindow = propDialog;
-  view->AddRegistry(&theValidatorRegistry);
+  view->AddRegistry(&(propDialog->m_registry));
   view->ShowView(propSheet, propDialog);
 
-  int ret = propDialog->ShowModal();
-  sm_propertyWindow = NULL;
-  delete propSheet;
-
-  if ( ret == wxID_CANCEL )
-    return FALSE;
-  else
-	return TRUE;
+  propDialog->Show(TRUE);
+  return TRUE;
 }
 
 /*
@@ -288,13 +307,13 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   else if (name == "name")
   {
     // Remove old name from resource table, if it's there.
-    wxItemResource *oldResource = (wxItemResource *)wxResourceManager::currentResourceManager->GetResourceTable().Delete(propertyWindow->GetName());
+    wxItemResource *oldResource = (wxItemResource *)wxResourceManager::GetCurrentResourceManager()->GetResourceTable().Delete(propertyWindow->GetName());
     if (oldResource)
     {
       // It's a top-level resource
       propertyWindow->SetName(property->GetValue().StringValue());
       oldResource->SetName(property->GetValue().StringValue());
-      wxResourceManager::currentResourceManager->GetResourceTable().Put(propertyWindow->GetName(), oldResource);
+      wxResourceManager::GetCurrentResourceManager()->GetResourceTable().Put(propertyWindow->GetName(), oldResource);
     }
     else
     {
@@ -303,7 +322,7 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
       propertyResource->SetName(property->GetValue().StringValue());
     }
     // Refresh the resource manager list, because the name changed.
-    wxResourceManager::currentResourceManager->UpdateResourceList();
+    wxResourceManager::GetCurrentResourceManager()->UpdateResourceList();
     return TRUE;
   }
   else if (name == "title")
@@ -337,10 +356,12 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     if (width != newWidth)
     {
       propertyWindow->SetSize(newWidth, height);
+/*
       if (propertyWindow->IsKindOf(CLASSINFO(wxPanel)) && !propertyWindow->IsKindOf(CLASSINFO(wxDialog)))
       {
         propertyWindow->GetParent()->SetClientSize(newWidth, height);
       }
+*/
     }
     return TRUE;
   }
@@ -352,10 +373,12 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     if (height != newHeight)
     {
       propertyWindow->SetSize(width, newHeight);
+/*
       if (propertyWindow->IsKindOf(CLASSINFO(wxPanel)) && !propertyWindow->IsKindOf(CLASSINFO(wxDialog)))
       {
         propertyWindow->GetParent()->SetClientSize(width, newHeight);
       }
+*/
     }
     return TRUE;
   }
@@ -398,7 +421,7 @@ bool wxWindowPropertyInfo::InstantiateResource(wxItemResource *resource)
 
 
 /*
- * Panel items
+ * Controls
  */
 
 wxProperty *wxItemPropertyInfo::GetProperty(wxString& name)
@@ -454,7 +477,7 @@ bool wxItemPropertyInfo::InstantiateResource(wxItemResource *resource)
   wxControl *item = (wxControl *)propertyWindow;
   wxString str(item->GetLabel());
   resource->SetTitle(WXSTRINGCAST str);
-  if (item->GetFont())
+  if (item->GetFont() && item->GetFont()->Ok())
     resource->SetFont(wxTheFontList->FindOrCreateFont(item->GetFont()->GetPointSize(),
 		item->GetFont()->GetFamily(), item->GetFont()->GetStyle(), item->GetFont()->GetWeight(),
 		item->GetFont()->GetUnderlined(), item->GetFont()->GetFaceName()));
@@ -468,65 +491,13 @@ bool wxItemPropertyInfo::InstantiateResource(wxItemResource *resource)
 wxProperty *wxButtonPropertyInfo::GetProperty(wxString& name)
 {
   wxButton *button = (wxButton *)propertyWindow;
-/*
-  if (name == "label" && isBitmapButton)
-  {
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(button);
-    wxString str("none.bmp");
-   
-    if (resource)
-    {
-      char *filename = wxResourceManager::currentResourceManager->FindBitmapFilenameForResource(resource);
-      if (filename)
-        str = filename;
-    }
-    return new wxProperty("label", str.GetData(), "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp"));
-  }
-  else
-*/
-    return wxItemPropertyInfo::GetProperty(name);
+  return wxItemPropertyInfo::GetProperty(name);
 }
 
 bool wxButtonPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
   wxButton *button = (wxButton *)propertyWindow;
-/*
-  if (name == "label" && isBitmapButton)
-  {
-    char *s = property->GetValue().StringValue();
-    if (s && wxFileExists(s))
-    {
-      s = copystring(s);
-      wxBitmap *bitmap = new wxBitmap(s, wxBITMAP_TYPE_BMP);
-      if (!bitmap->Ok())
-      {
-        delete bitmap;
-        delete[] s;
-        return FALSE;
-      }
-      else
-      {
-        wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(button);
-        if (resource)
-        {
-          wxString oldResource(resource->GetValue4());
-          char *resName = wxResourceManager::currentResourceManager->AddBitmapResource(s);
-          resource->SetValue4(resName);
-          
-          if (!oldResource.IsNull())
-            wxResourceManager::currentResourceManager->PossiblyDeleteBitmapResource(WXSTRINGCAST oldResource);
-        }
-
-        button->SetLabel(bitmap);
-        delete[] s;
-        return TRUE;
-      }
-    }
-    return FALSE;
-  }
-  else
-*/
-    return wxItemPropertyInfo::SetProperty(name, property);
+  return wxItemPropertyInfo::SetProperty(name, property);
 }
 
 void wxButtonPropertyInfo::GetPropertyNames(wxStringList& names)
@@ -541,36 +512,135 @@ bool wxButtonPropertyInfo::InstantiateResource(wxItemResource *resource)
 }
 
 /*
- * Message
+ * wxBitmapButton
  */
 
-wxProperty *wxStaticTextPropertyInfo::GetProperty(wxString& name)
+wxProperty *wxBitmapButtonPropertyInfo::GetProperty(wxString& name)
 {
-  wxStaticText *message = (wxStaticText *)propertyWindow;
-/*
-  if (name == "label" && isBitmapMessage)
+  wxBitmapButton *button = (wxBitmapButton *)propertyWindow;
+  if (name == "label")
   {
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(message);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(button);
     wxString str("none.bmp");
    
     if (resource)
     {
-      char *filename = wxResourceManager::currentResourceManager->FindBitmapFilenameForResource(resource);
+      char *filename = wxResourceManager::GetCurrentResourceManager()->FindBitmapFilenameForResource(resource);
       if (filename)
         str = filename;
     }
     return new wxProperty("label", str.GetData(), "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp"));
   }
   else
-*/
-    return wxItemPropertyInfo::GetProperty(name);
+    return wxButtonPropertyInfo::GetProperty(name);
+}
+
+bool wxBitmapButtonPropertyInfo::SetProperty(wxString& name, wxProperty *property)
+{
+  wxBitmapButton *button = (wxBitmapButton *)propertyWindow;
+  if (name == "label")
+  {
+    char *s = property->GetValue().StringValue();
+    if (s && wxFileExists(s))
+    {
+      s = copystring(s);
+      wxBitmap *bitmap = new wxBitmap(s, wxBITMAP_TYPE_BMP);
+      if (!bitmap->Ok())
+      {
+        delete bitmap;
+        delete[] s;
+        return FALSE;
+      }
+      else
+      {
+        wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(button);
+        if (resource)
+        {
+          wxString oldResource(resource->GetValue4());
+          char *resName = wxResourceManager::GetCurrentResourceManager()->AddBitmapResource(s);
+          resource->SetValue4(resName);
+          
+          if (!oldResource.IsNull())
+            wxResourceManager::GetCurrentResourceManager()->PossiblyDeleteBitmapResource(WXSTRINGCAST oldResource);
+        }
+
+        button->SetLabel(bitmap);
+        delete[] s;
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+  else
+    return wxButtonPropertyInfo::SetProperty(name, property);
+}
+
+void wxBitmapButtonPropertyInfo::GetPropertyNames(wxStringList& names)
+{
+//  names.Add("label");
+  wxButtonPropertyInfo::GetPropertyNames(names);
+}
+
+bool wxBitmapButtonPropertyInfo::InstantiateResource(wxItemResource *resource)
+{
+  return wxItemPropertyInfo::InstantiateResource(resource);
+}
+
+/*
+ * wxStaticText
+ */
+
+wxProperty *wxStaticTextPropertyInfo::GetProperty(wxString& name)
+{
+  wxStaticText *message = (wxStaticText *)propertyWindow;
+  return wxItemPropertyInfo::GetProperty(name);
 }
 
 bool wxStaticTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
   wxStaticText *message = (wxStaticText *)propertyWindow;
+  return wxItemPropertyInfo::SetProperty(name, property);
+}
+
+void wxStaticTextPropertyInfo::GetPropertyNames(wxStringList& names)
+{
+  names.Add("label");
+  wxItemPropertyInfo::GetPropertyNames(names);
+}
+
+bool wxStaticTextPropertyInfo::InstantiateResource(wxItemResource *resource)
+{
+  return wxItemPropertyInfo::InstantiateResource(resource);
+}
+
 /*
-  if (name == "label" && isBitmapMessage)
+ * wxStaticBitmap
+ */
+
+wxProperty *wxStaticBitmapPropertyInfo::GetProperty(wxString& name)
+{
+  wxStaticBitmap *message = (wxStaticBitmap *)propertyWindow;
+  if (name == "label")
+  {
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(message);
+    wxString str("none.bmp");
+   
+    if (resource)
+    {
+      char *filename = wxResourceManager::GetCurrentResourceManager()->FindBitmapFilenameForResource(resource);
+      if (filename)
+        str = filename;
+    }
+    return new wxProperty("label", str.GetData(), "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp"));
+  }
+  else
+    return wxItemPropertyInfo::GetProperty(name);
+}
+
+bool wxStaticBitmapPropertyInfo::SetProperty(wxString& name, wxProperty *property)
+{
+  wxStaticBitmap *message = (wxStaticBitmap *)propertyWindow;
+  if (name == "label")
   {
     char *s = property->GetValue().StringValue();
     if (s && wxFileExists(s))
@@ -586,18 +656,18 @@ bool wxStaticTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
       }
       else
       {
-        wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(message);
+        wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(message);
         if (resource)
         {
           wxString oldResource(resource->GetValue4());
-          char *resName = wxResourceManager::currentResourceManager->AddBitmapResource(s);
+          char *resName = wxResourceManager::GetCurrentResourceManager()->AddBitmapResource(s);
           resource->SetValue4(resName);
           
           if (!oldResource.IsNull())
-            wxResourceManager::currentResourceManager->PossiblyDeleteBitmapResource(WXSTRINGCAST oldResource);
+            wxResourceManager::GetCurrentResourceManager()->PossiblyDeleteBitmapResource(WXSTRINGCAST oldResource);
         }
 
-        message->SetLabel(bitmap);
+        message->SetBitmap(bitmap);
         delete[] s;
         return TRUE;
       }
@@ -605,17 +675,16 @@ bool wxStaticTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     return FALSE;
   }
   else
-*/
     return wxItemPropertyInfo::SetProperty(name, property);
 }
 
-void wxStaticTextPropertyInfo::GetPropertyNames(wxStringList& names)
+void wxStaticBitmapPropertyInfo::GetPropertyNames(wxStringList& names)
 {
   names.Add("label");
   wxItemPropertyInfo::GetPropertyNames(names);
 }
 
-bool wxStaticTextPropertyInfo::InstantiateResource(wxItemResource *resource)
+bool wxStaticBitmapPropertyInfo::InstantiateResource(wxItemResource *resource)
 {
   return wxItemPropertyInfo::InstantiateResource(resource);
 }
@@ -664,10 +733,10 @@ bool wxTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
       if ((flag & wxTE_PASSWORD) == wxTE_PASSWORD)
         flag -= wxTE_PASSWORD;
     }
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(text);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(text);
     resource->SetStyle(flag);
 
-    wxResourceManager::currentResourceManager->RecreateWindowFromResource(text, this);
+    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(text, this);
     return TRUE;
   }
   else if (name == "readonly")
@@ -683,10 +752,10 @@ bool wxTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
       if ((flag & wxTE_READONLY) == wxTE_READONLY)
         flag -= wxTE_READONLY;
     }
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(text);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(text);
     resource->SetStyle(flag);
 
-    wxResourceManager::currentResourceManager->RecreateWindowFromResource(text, this);
+    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(text, this);
     return TRUE;
   }
   else
@@ -729,7 +798,7 @@ wxProperty *wxListBoxPropertyInfo::GetProperty(wxString& name)
   else if (name == "multiple")
   {
     char *pos = NULL;
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(listBox);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(listBox);
     if (!resource)
       return NULL;
       
@@ -782,10 +851,10 @@ bool wxListBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
       mult = wxLB_EXTENDED;
     else
       mult = wxLB_SINGLE;
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(listBox);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(listBox);
     if (resource)
       resource->SetValue1(mult);
-    wxResourceManager::currentResourceManager->RecreateWindowFromResource(listBox, this);
+    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(listBox, this);
     return TRUE;
   }
   else
@@ -926,7 +995,7 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   if (name == "numberRowsOrCols")
   {
     radioBox->SetNumberOfRowsOrCols((int)property->GetValue().IntegerValue());
-    wxResourceManager::currentResourceManager->RecreateWindowFromResource(radioBox, this);
+    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
     return TRUE;
   }
   else if (name == "orientation")
@@ -947,7 +1016,7 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     }
     radioBox->SetWindowStyleFlag(windowStyle);
     
-    wxResourceManager::currentResourceManager->RecreateWindowFromResource(radioBox, this);
+    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
     return TRUE;
   }
   else if (name == "values")
@@ -955,7 +1024,7 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     // Set property into *resource*, not wxRadioBox, and then recreate
     // the wxRadioBox. This is because we can't dynamically set the strings
     // of a wxRadioBox.
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(propertyWindow);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(propertyWindow);
     if (!resource)
       return FALSE;
       
@@ -975,7 +1044,7 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         stringList->Add(s);
       expr = expr->GetNext();
     }
-    wxResourceManager::currentResourceManager->RecreateWindowFromResource(radioBox, this);
+    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
     return TRUE;
   }
   return wxItemPropertyInfo::SetProperty(name, property);
@@ -1142,7 +1211,7 @@ bool wxSliderPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     int w, h;
     slider->GetSize(&w, &h);
     
-    slider = (wxSlider *)wxResourceManager::currentResourceManager->RecreateWindowFromResource(slider, this);
+    slider = (wxSlider *)wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(slider, this);
     slider->SetSize(-1, -1, h, w);
     
     return TRUE;
@@ -1307,7 +1376,7 @@ bool wxScrollBarPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     int w, h;
     scrollBar->GetSize(&w, &h);
     
-    scrollBar = (wxScrollBar *)wxResourceManager::currentResourceManager->RecreateWindowFromResource(scrollBar, this);
+    scrollBar = (wxScrollBar *)wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(scrollBar, this);
     scrollBar->SetSize(-1, -1, h, w);
     
     return TRUE;
@@ -1380,10 +1449,10 @@ wxProperty *wxPanelPropertyInfo::GetProperty(wxString& name)
   else if (name == "buttonFontPoints" || name == "buttonFontFamily" || name == "buttonFontStyle" || name == "buttonFontWeight" ||
       name == "buttonFontUnderlined")
     return GetFontProperty(name, buttonFont);
-  else if (name == "userColours")
+  else if (name == "no3D")
   {
     bool userColours;
-    if (panelWindow->GetWindowStyleFlag() & wxUSER_COLOURS)
+    if (panelWindow->GetWindowStyleFlag() & wxNO_3D)
       userColours = TRUE;
     else
       userColours = FALSE;
@@ -1399,6 +1468,14 @@ wxProperty *wxPanelPropertyInfo::GetProperty(wxString& name)
     wxDecToHex(col.Blue(), buf+4);
 
     return new wxProperty(name, buf, "string", new wxColourListValidator);
+  }
+  else if (name == "title")
+  {
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(panelWindow);
+    if (resource)
+        return new wxProperty(name, resource->GetTitle(), "string");
+    else
+        return new wxProperty(name, "Could not get title", "string");
   }
   else
     return wxWindowPropertyInfo::GetProperty(name);
@@ -1424,31 +1501,25 @@ bool wxPanelPropertyInfo::SetProperty(wxString& name, wxProperty *property)
       panelWindow->SetButtonFont(newFont);
     return TRUE;
   }
-  else if (name == "userColours")
+  else if (name == "no3D")
   {
     bool userColours = property->GetValue().BoolValue();
     long flag = panelWindow->GetWindowStyleFlag();
     
     if (userColours)
     {
-      if ((panelWindow->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS)
-        panelWindow->SetWindowStyleFlag(panelWindow->GetWindowStyleFlag() | wxUSER_COLOURS);
+      if ((panelWindow->GetWindowStyleFlag() & wxNO_3D) != wxNO_3D)
+        panelWindow->SetWindowStyleFlag(panelWindow->GetWindowStyleFlag() | wxNO_3D);
     }
     else
     {
-      if ((panelWindow->GetWindowStyleFlag() & wxUSER_COLOURS) == wxUSER_COLOURS)
-        panelWindow->SetWindowStyleFlag(panelWindow->GetWindowStyleFlag() - wxUSER_COLOURS);
+      if ((panelWindow->GetWindowStyleFlag() & wxNO_3D) == wxNO_3D)
+        panelWindow->SetWindowStyleFlag(panelWindow->GetWindowStyleFlag() - wxNO_3D);
     }
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(panelWindow);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(panelWindow);
     resource->SetStyle(panelWindow->GetWindowStyleFlag());
 
-    panelWindow = (wxPanel *)wxResourceManager::currentResourceManager->RecreateWindowFromResource(panelWindow, this);
-//    panelWindow->SetUserEditMode(wxResourceManager::currentResourceManager->GetEditMode());
-#ifdef __WINDOWS__
-    // This window should not be enabled by being recreated: we're in a modal dialog (property editor)
-    ::EnableWindow((HWND) panelWindow->GetHWND(), FALSE);
-    ::BringWindowToTop((HWND) sm_propertyWindow->GetHWND());
-#endif
+    panelWindow = (wxPanel *)wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(panelWindow, this);
     return TRUE;
   }
   else if (name == "backgroundColour")
@@ -1460,14 +1531,19 @@ bool wxPanelPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     
     wxColour col(r,g,b);
     panelWindow->SetBackgroundColour(col);
-    panelWindow = (wxPanel *)wxResourceManager::currentResourceManager->RecreateWindowFromResource(panelWindow, this);
-//    panelWindow->SetUserEditMode(wxResourceManager::currentResourceManager->GetEditMode());
-#ifdef __WINDOWS__
-    // This window should not be enabled by being recreated: we're in a modal dialog (property editor)
-    ::EnableWindow((HWND) panelWindow->GetHWND(), FALSE);
-    ::BringWindowToTop((HWND) sm_propertyWindow->GetHWND());
-#endif
+    panelWindow = (wxPanel *)wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(panelWindow, this);
    return TRUE;
+  }
+  else if (name == "title")
+  {
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(panelWindow);
+    if (resource)
+    {
+        resource->SetTitle(property->GetValue().StringValue());
+        return TRUE;
+    }
+    else
+        return FALSE;
   }
   else
     return wxWindowPropertyInfo::SetProperty(name, property);
@@ -1477,8 +1553,8 @@ void wxPanelPropertyInfo::GetPropertyNames(wxStringList& names)
 {
   wxWindowPropertyInfo::GetPropertyNames(names);
   
-//  names.Add("orientation");
-  names.Add("userColours");
+  names.Add("title");
+  names.Add("no3D");
   names.Add("backgroundColour");
 }
 
@@ -1495,6 +1571,7 @@ bool wxPanelPropertyInfo::InstantiateResource(wxItemResource *resource)
   return wxWindowPropertyInfo::InstantiateResource(resource);
 }
 
+#if 0
 /*
  * Dialog boxes
  */
@@ -1504,7 +1581,7 @@ wxProperty *wxDialogPropertyInfo::GetProperty(wxString& name)
   wxDialog *dialogWindow = (wxDialog *)propertyWindow; 
   if (name == "modal")
   {
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(dialogWindow);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(dialogWindow);
     if (!resource)
       return NULL;
 
@@ -1521,7 +1598,7 @@ bool wxDialogPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
   if (name == "modal")
   {
-    wxItemResource *resource = wxResourceManager::currentResourceManager->FindResourceForWindow(dialogWindow);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(dialogWindow);
     if (!resource)
       return FALSE;
 
@@ -1548,6 +1625,7 @@ bool wxDialogPropertyInfo::InstantiateResource(wxItemResource *resource)
     
   return wxPanelPropertyInfo::InstantiateResource(resource);
 }
+#endif
 
 /*
  * Utilities

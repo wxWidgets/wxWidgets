@@ -57,28 +57,11 @@
 #include "winprop.h"
 #include "editrpal.h"
 #include "dlghndlr.h"
+#include "edtree.h"
+#include "edlist.h"
 
 static void ObjectMenuProc(wxMenu& menu, wxCommandEvent& event);
-void wxResourceEditWindow(wxWindow *win);
-wxWindowPropertyInfo *wxCreatePropertyInfoForWindow(wxWindow *win);
-wxResourceManager *wxResourceManager::currentResourceManager = NULL;
-
-// Bitmaps for toolbar
-wxBitmap *ToolbarLoadBitmap = NULL;
-wxBitmap *ToolbarSaveBitmap = NULL;
-wxBitmap *ToolbarNewBitmap = NULL;
-wxBitmap *ToolbarVertBitmap = NULL;
-wxBitmap *ToolbarAlignTBitmap = NULL;
-wxBitmap *ToolbarAlignBBitmap = NULL;
-wxBitmap *ToolbarHorizBitmap = NULL;
-wxBitmap *ToolbarAlignLBitmap = NULL;
-wxBitmap *ToolbarAlignRBitmap = NULL;
-wxBitmap *ToolbarCopySizeBitmap = NULL;
-wxBitmap *ToolbarToFrontBitmap = NULL;
-wxBitmap *ToolbarToBackBitmap = NULL;
-wxBitmap *ToolbarHelpBitmap = NULL;
-
-wxBitmap *wxWinBitmap = NULL;
+wxResourceManager *wxResourceManager::sm_currentResourceManager = NULL;
 
 #ifdef __X__
 #include "bitmaps/load.xbm"
@@ -101,45 +84,53 @@ wxBitmap *wxWinBitmap = NULL;
  * Resource manager
  */
 
-
-wxResourceManager::wxResourceManager(void)
+wxResourceManager::wxResourceManager():
+  m_imageList(16, 16, TRUE)
 {
-  currentResourceManager = this;
-  editorFrame = NULL;
-  editorPanel = NULL;
-  popupMenu = NULL;
-  editorResourceList = NULL;
-  editorPalette = NULL;
-  nameCounter = 1;
-  modified = FALSE;
-  currentFilename = "";
-  editMode = TRUE;
-  editorToolBar = NULL;
-  
+  sm_currentResourceManager = this;
+  m_editorFrame = NULL;
+  m_editorPanel = NULL;
+  m_popupMenu = NULL;
+  m_editorResourceTree = NULL;
+  m_editorControlList = NULL;
+  m_editorPalette = NULL;
+  m_nameCounter = 1;
+  m_modified = FALSE;
+  m_currentFilename = "";
+  m_editorToolBar = NULL;
+
   // Default window positions
-  resourceEditorWindowSize.width = 470;
-  resourceEditorWindowSize.height = 300;
+  m_resourceEditorWindowSize.width = 470;
+  m_resourceEditorWindowSize.height = 300;
 
-  resourceEditorWindowSize.x = 0;
-  resourceEditorWindowSize.y = 0;
-  
-  propertyWindowSize.width = 300;
-  propertyWindowSize.height = 300;
+  m_resourceEditorWindowSize.x = 0;
+  m_resourceEditorWindowSize.y = 0;
 
-  helpInstance = NULL;
+  m_propertyWindowSize.width = 300;
+  m_propertyWindowSize.height = 300;
+
+  m_helpController = NULL;
+
+  m_bitmapImage = NULL;
+  m_rootDialogItem = 0;
 }
 
-wxResourceManager::~wxResourceManager(void)
+wxResourceManager::~wxResourceManager()
 {
-  currentResourceManager = NULL;
+  sm_currentResourceManager = NULL;
   SaveOptions();
 
-  helpInstance->Quit();
-  delete helpInstance;
-  helpInstance = NULL;
+  if (m_helpController)
+  {
+    m_helpController->Quit();
+    delete m_helpController;
+    m_helpController = NULL;
+  }
+  delete m_bitmapImage;
+  delete m_popupMenu;
 }
 
-bool wxResourceManager::Initialize(void)
+bool wxResourceManager::Initialize()
 {
   // Set up the resource filename for each platform.
 #ifdef __WINDOWS__
@@ -147,63 +138,75 @@ bool wxResourceManager::Initialize(void)
   char buf[256];
   GetWindowsDirectory(buf, 256);
   strcat(buf, "\\dialoged.ini");
-  optionsResourceFilename = buf;
+  m_optionsResourceFilename = buf;
 #elif defined(__X__)
   char buf[500];
-  (void)wxGetHomeDir(buf);
-  strcat(buf, "/.hardyrc");
-  optionsResourceFilename = buf;
+  ()wxGetHomeDir(buf);
+  strcat(buf, "/.dialogedrc");
+  m_optionsResourceFilename = buf;
 #else
 #error "Unsupported platform."
 #endif
 
   LoadOptions();
 
-  helpInstance = new wxHelpController;
-  helpInstance->Initialize("dialoged");
+  m_helpController = new wxHelpController;
+  m_helpController->Initialize("dialoged");
 
-  InitializeTools();
-  popupMenu = new wxMenu("", (wxFunction)ObjectMenuProc);
-  popupMenu->Append(OBJECT_MENU_EDIT, "Edit properties");
-  popupMenu->Append(OBJECT_MENU_DELETE, "Delete object");
-  
-  if (!wxWinBitmap)
+  m_popupMenu = new wxMenu("", (wxFunction)ObjectMenuProc);
+  m_popupMenu->Append(OBJECT_MENU_EDIT, "Edit properties");
+  m_popupMenu->Append(OBJECT_MENU_DELETE, "Delete object");
+
+  if (!m_bitmapImage)
   {
 #ifdef __WINDOWS__
-    wxWinBitmap = new wxBitmap("WXWINBMP", wxBITMAP_TYPE_BMP_RESOURCE);
+    m_bitmapImage = new wxBitmap("WXWINBMP", wxBITMAP_TYPE_BMP_RESOURCE);
 #endif
 #ifdef __X__
-    wxWinBitmap = new wxBitmap(wxwin_bits, wxwin_width, wxwin_height);
+    m_bitmapImage = new wxBitmap(wxwin_bits, wxwin_width, wxwin_height);
 #endif
   }
+
+  // Initialize the image list icons
+#ifdef __WINDOWS__
+  wxIcon icon1("DIALOG_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
+  wxIcon icon2("FOLDER1_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
+  wxIcon icon3("FOLDER2_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
+  wxIcon icon4("BUTTONSM_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
+  m_imageList.Add(icon1);
+  m_imageList.Add(icon2);
+  m_imageList.Add(icon3);
+  m_imageList.Add(icon4);
+#endif
+
   return TRUE;
 }
 
-bool wxResourceManager::LoadOptions(void)
+bool wxResourceManager::LoadOptions()
 {
-  wxGetResource("DialogEd", "editorWindowX", &resourceEditorWindowSize.x, optionsResourceFilename.GetData());
-  wxGetResource("DialogEd", "editorWindowY", &resourceEditorWindowSize.y, optionsResourceFilename.GetData());
-  wxGetResource("DialogEd", "editorWindowWidth", &resourceEditorWindowSize.width, optionsResourceFilename.GetData());
-  wxGetResource("DialogEd", "editorWindowHeight", &resourceEditorWindowSize.height, optionsResourceFilename.GetData());
-  wxGetResource("DialogEd", "propertyWindowX", &propertyWindowSize.x, optionsResourceFilename.GetData());
-  wxGetResource("DialogEd", "propertyWindowY", &propertyWindowSize.y, optionsResourceFilename.GetData());
-  wxGetResource("DialogEd", "propertyWindowWidth", &propertyWindowSize.width, optionsResourceFilename.GetData());
-  wxGetResource("DialogEd", "propertyWindowHeight", &propertyWindowSize.height, optionsResourceFilename.GetData());
+  wxGetResource("DialogEd", "editorWindowX", &m_resourceEditorWindowSize.x, m_optionsResourceFilename.GetData());
+  wxGetResource("DialogEd", "editorWindowY", &m_resourceEditorWindowSize.y, m_optionsResourceFilename.GetData());
+  wxGetResource("DialogEd", "editorWindowWidth", &m_resourceEditorWindowSize.width, m_optionsResourceFilename.GetData());
+  wxGetResource("DialogEd", "editorWindowHeight", &m_resourceEditorWindowSize.height, m_optionsResourceFilename.GetData());
+  wxGetResource("DialogEd", "propertyWindowX", &m_propertyWindowSize.x, m_optionsResourceFilename.GetData());
+  wxGetResource("DialogEd", "propertyWindowY", &m_propertyWindowSize.y, m_optionsResourceFilename.GetData());
+  wxGetResource("DialogEd", "propertyWindowWidth", &m_propertyWindowSize.width, m_optionsResourceFilename.GetData());
+  wxGetResource("DialogEd", "propertyWindowHeight", &m_propertyWindowSize.height, m_optionsResourceFilename.GetData());
   return TRUE;
 }
 
-bool wxResourceManager::SaveOptions(void)
+bool wxResourceManager::SaveOptions()
 {
-  wxWriteResource("DialogEd", "editorWindowX", resourceEditorWindowSize.x, optionsResourceFilename.GetData());
-  wxWriteResource("DialogEd", "editorWindowY", resourceEditorWindowSize.y, optionsResourceFilename.GetData());
-  wxWriteResource("DialogEd", "editorWindowWidth", resourceEditorWindowSize.width, optionsResourceFilename.GetData());
-  wxWriteResource("DialogEd", "editorWindowHeight", resourceEditorWindowSize.height, optionsResourceFilename.GetData());
+  wxWriteResource("DialogEd", "editorWindowX", m_resourceEditorWindowSize.x, m_optionsResourceFilename.GetData());
+  wxWriteResource("DialogEd", "editorWindowY", m_resourceEditorWindowSize.y, m_optionsResourceFilename.GetData());
+  wxWriteResource("DialogEd", "editorWindowWidth", m_resourceEditorWindowSize.width, m_optionsResourceFilename.GetData());
+  wxWriteResource("DialogEd", "editorWindowHeight", m_resourceEditorWindowSize.height, m_optionsResourceFilename.GetData());
 
-  wxWriteResource("DialogEd", "propertyWindowX", propertyWindowSize.x, optionsResourceFilename.GetData());
-  wxWriteResource("DialogEd", "propertyWindowY", propertyWindowSize.y, optionsResourceFilename.GetData());
-  wxWriteResource("DialogEd", "propertyWindowWidth", propertyWindowSize.width, optionsResourceFilename.GetData());
-  wxWriteResource("DialogEd", "propertyWindowHeight", propertyWindowSize.height, optionsResourceFilename.GetData());
-  
+  wxWriteResource("DialogEd", "propertyWindowX", m_propertyWindowSize.x, m_optionsResourceFilename.GetData());
+  wxWriteResource("DialogEd", "propertyWindowY", m_propertyWindowSize.y, m_optionsResourceFilename.GetData());
+  wxWriteResource("DialogEd", "propertyWindowWidth", m_propertyWindowSize.width, m_optionsResourceFilename.GetData());
+  wxWriteResource("DialogEd", "propertyWindowHeight", m_propertyWindowSize.height, m_optionsResourceFilename.GetData());
+
   return TRUE;
 }
 
@@ -213,65 +216,91 @@ bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *parent, const ch
 {
   if (show)
   {
-    if (editorFrame)
+    if (m_editorFrame)
     {
-      editorFrame->Iconize(FALSE);
-      editorFrame->Show(TRUE);
+      m_editorFrame->Iconize(FALSE);
+      m_editorFrame->Show(TRUE);
       return TRUE;
     }
-    editorFrame = OnCreateEditorFrame(title);
+    m_editorFrame = OnCreateEditorFrame(title);
     SetFrameTitle("");
-    wxMenuBar *menuBar = OnCreateEditorMenuBar(editorFrame);
-    editorFrame->SetMenuBar(menuBar);
-    editorPanel = OnCreateEditorPanel(editorFrame);
-    editorToolBar = (EditorToolBar *)OnCreateToolBar(editorFrame);
-    editorPalette = OnCreatePalette(editorFrame);
+    wxMenuBar *menuBar = OnCreateEditorMenuBar(m_editorFrame);
+    m_editorFrame->SetMenuBar(menuBar);
+
+    m_editorToolBar = (EditorToolBar *)OnCreateToolBar(m_editorFrame);
+//    m_editorPalette = OnCreatePalette(m_editorFrame);
+    m_editorControlList = new wxResourceEditorControlList(m_editorFrame, IDC_LISTCTRL, wxPoint(0, 0), wxSize(-1, -1));
+    m_editorResourceTree = new wxResourceEditorProjectTree(m_editorFrame, IDC_TREECTRL, wxPoint(0, 0), wxSize(-1, -1),
+      wxTR_HAS_BUTTONS);
+    m_editorPanel = OnCreateEditorPanel(m_editorFrame);
+
+    m_editorResourceTree->SetImageList(& m_imageList);
 
     // Constraints for toolbar
     wxLayoutConstraints *c = new wxLayoutConstraints;
-    c->left.SameAs       (editorFrame, wxLeft, 0);
-    c->top.SameAs        (editorFrame, wxTop, 0);
-    c->right.SameAs      (editorFrame, wxRight, 0);
-    c->bottom.Unconstrained();    
+    c->left.SameAs       (m_editorFrame, wxLeft, 0);
+    c->top.SameAs        (m_editorFrame, wxTop, 0);
+    c->right.SameAs      (m_editorFrame, wxRight, 0);
+    c->bottom.Unconstrained();
     c->width.Unconstrained();
     c->height.Absolute(28);
-    editorToolBar->SetConstraints(c);
-
+    m_editorToolBar->SetConstraints(c);
+/*
     // Constraints for palette
     c = new wxLayoutConstraints;
-    c->left.SameAs       (editorFrame, wxLeft, 0);
-    c->top.SameAs        (editorToolBar, wxBottom, 0);
-    c->right.SameAs      (editorFrame, wxRight, 0);
-    c->bottom.Unconstrained();    
+    c->left.SameAs       (m_editorFrame, wxLeft, 0);
+    c->top.SameAs        (m_editorToolBar, wxBottom, 0);
+    c->right.SameAs      (m_editorFrame, wxRight, 0);
+    c->bottom.Unconstrained();
     c->width.Unconstrained();
     c->height.Absolute(34);
-    editorPalette->SetConstraints(c);
+    m_editorPalette->SetConstraints(c);
+*/
+    // Constraints for listbox
+    c = new wxLayoutConstraints;
+    c->left.SameAs       (m_editorFrame, wxLeft, 0);
+    c->top.SameAs        (m_editorToolBar, wxBottom, 0);
+    c->right.Absolute    (150);
+    c->bottom.SameAs     (m_editorControlList, wxTop, 0);
+    c->width.Unconstrained();
+    c->height.Unconstrained();
+    m_editorResourceTree->SetConstraints(c);
 
     // Constraints for panel
     c = new wxLayoutConstraints;
-    c->left.SameAs       (editorFrame, wxLeft, 0);
-    c->top.SameAs        (editorPalette, wxBottom, 0);
-    c->right.SameAs      (editorFrame, wxRight, 0);
-    c->bottom.SameAs     (editorFrame, wxBottom, 0);    
+    c->left.SameAs       (m_editorResourceTree, wxRight, 0);
+    c->top.SameAs        (m_editorToolBar, wxBottom, 0);
+    c->right.SameAs      (m_editorFrame, wxRight, 0);
+    c->bottom.SameAs     (m_editorControlList, wxTop, 0);
     c->width.Unconstrained();
     c->height.Unconstrained();
-    editorPanel->SetConstraints(c);
+    m_editorPanel->SetConstraints(c);
 
-    editorFrame->SetAutoLayout(TRUE);
+    // Constraints for control list (bottom window)
+    c = new wxLayoutConstraints;
+    c->left.SameAs       (m_editorFrame, wxLeft, 0);
+    c->right.SameAs      (m_editorFrame, wxRight, 0);
+    c->bottom.SameAs     (m_editorFrame, wxBottom, 0);
+    c->width.Unconstrained();
+    c->height.Absolute(60);
+    m_editorControlList->SetConstraints(c);
+
+    m_editorFrame->SetAutoLayout(TRUE);
 
     UpdateResourceList();
-    editorFrame->Show(TRUE);
+
+    m_editorFrame->Show(TRUE);
     return TRUE;
   }
   else
   {
-    wxFrame *fr = editorFrame;
-    if (editorFrame->OnClose())
+    wxFrame *fr = m_editorFrame;
+    if (m_editorFrame->OnClose())
     {
       fr->Show(FALSE);
       delete fr;
-      editorFrame = NULL;
-      editorPanel = NULL;
+      m_editorFrame = NULL;
+      m_editorPanel = NULL;
     }
   }
   return TRUE;
@@ -279,35 +308,35 @@ bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *parent, const ch
 
 void wxResourceManager::SetFrameTitle(const wxString& filename)
 {
-  if (editorFrame)
+  if (m_editorFrame)
   {
     if (filename == wxString(""))
-      editorFrame->SetTitle("wxWindows Dialog Editor - untitled");
+      m_editorFrame->SetTitle("wxWindows Dialog Editor - untitled");
     else
     {
       wxString str("wxWindows Dialog Editor - ");
       wxString str2(wxFileNameFromPath(WXSTRINGCAST filename));
       str += str2;
-      editorFrame->SetTitle(str);
+      m_editorFrame->SetTitle(str);
     }
   }
 }
 
-bool wxResourceManager::Save(void)
+bool wxResourceManager::Save()
 {
-  if (currentFilename == wxString(""))
+  if (m_currentFilename == wxString(""))
     return SaveAs();
   else
-    return Save(currentFilename);
+    return Save(m_currentFilename);
 }
 
 bool wxResourceManager::Save(const wxString& filename)
 {
   // Ensure all visible windows are saved to their resources
-  currentFilename = filename;
-  SetFrameTitle(currentFilename);
+  m_currentFilename = filename;
+  SetFrameTitle(m_currentFilename);
   InstantiateAllResourcesFromWindows();
-  if (resourceTable.Save(filename))
+  if (m_resourceTable.Save(filename))
   {
     Modify(FALSE);
     return TRUE;
@@ -316,20 +345,20 @@ bool wxResourceManager::Save(const wxString& filename)
     return FALSE;
 }
 
-bool wxResourceManager::SaveAs(void)
+bool wxResourceManager::SaveAs()
 {
-  wxString s(wxFileSelector("Save resource file", wxPathOnly(WXSTRINGCAST currentFilename), wxFileNameFromPath(WXSTRINGCAST currentFilename),
+  wxString s(wxFileSelector("Save resource file", wxPathOnly(WXSTRINGCAST m_currentFilename), wxFileNameFromPath(WXSTRINGCAST m_currentFilename),
     "wxr", "*.wxr", wxSAVE | wxOVERWRITE_PROMPT));
     
   if (s.IsNull() || s == "")
     return FALSE;
     
-  currentFilename = s;
-  Save(currentFilename);
+  m_currentFilename = s;
+  Save(m_currentFilename);
   return TRUE;
 }
 
-bool wxResourceManager::SaveIfModified(void)
+bool wxResourceManager::SaveIfModified()
 {
   if (Modified())
     return Save();
@@ -358,21 +387,21 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
         return FALSE;
     }
     
-    if (!resourceTable.ParseResourceFile(WXSTRINGCAST str))
+    if (!m_resourceTable.ParseResourceFile(WXSTRINGCAST str))
     {
       wxMessageBox("Could not read file.", "Resource file load error", wxOK | wxICON_EXCLAMATION);
       return FALSE;
     }
-    currentFilename = str;
-    
-    SetFrameTitle(currentFilename);
-    
+    m_currentFilename = str;
+
+    SetFrameTitle(m_currentFilename);
+
     UpdateResourceList();
   }
   else
   {
     SetFrameTitle("");
-    currentFilename = "";
+    m_currentFilename = "";
   }
   Modify(FALSE);
   
@@ -393,22 +422,23 @@ bool wxResourceManager::Clear(bool deleteWindows, bool force)
         Modify(FALSE);
   }
   
-  DisassociateWindows(deleteWindows);
+  ClearCurrentDialog();
+  DisassociateWindows();
 
-  resourceTable.ClearTable();
+  m_resourceTable.ClearTable();
   UpdateResourceList();
 
   return TRUE;
 }
 
-bool wxResourceManager::DisassociateWindows(bool deleteWindows)
+bool wxResourceManager::DisassociateWindows()
 {
-  resourceTable.BeginFind();
+  m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = resourceTable.Next())
+  while (node = m_resourceTable.Next())
   {
     wxItemResource *res = (wxItemResource *)node->Data();
-    DisassociateResource(res, deleteWindows);
+    DisassociateResource(res);
   }
   
   return TRUE;
@@ -416,14 +446,14 @@ bool wxResourceManager::DisassociateWindows(bool deleteWindows)
 
 void wxResourceManager::AssociateResource(wxItemResource *resource, wxWindow *win)
 {
-  if (!resourceAssociations.Get((long)resource))
-    resourceAssociations.Put((long)resource, win);
-    
+  if (!m_resourceAssociations.Get((long)resource))
+    m_resourceAssociations.Put((long)resource, win);
+
   wxNode *node = resource->GetChildren().First();
   while (node)
   {
     wxItemResource *child = (wxItemResource *)node->Data();
-    wxWindow *childWindow = (wxWindow *)resourceAssociations.Get((long)child);
+    wxWindow *childWindow = (wxWindow *)m_resourceAssociations.Get((long)child);
     if (!childWindow)
       childWindow = win->FindWindow(child->GetName());
     if (childWindow)
@@ -439,14 +469,13 @@ void wxResourceManager::AssociateResource(wxItemResource *resource, wxWindow *wi
   }
 }
 
-bool wxResourceManager::DisassociateResource(wxItemResource *resource, bool deleteWindow)
+bool wxResourceManager::DisassociateResource(wxItemResource *resource)
 {
   wxWindow *win = FindWindowForResource(resource);
   if (!win)
     return FALSE;
 
-  // Disassociate children of window without deleting windows
-  // since they'll be deleted by parent.
+  // Disassociate children of window
   if (win->GetChildren())
   {
     wxNode *node = win->GetChildren()->First();
@@ -454,47 +483,80 @@ bool wxResourceManager::DisassociateResource(wxItemResource *resource, bool dele
     {
       wxWindow *child = (wxWindow *)node->Data();
       if (child->IsKindOf(CLASSINFO(wxControl)))
-      	DisassociateResource(child, FALSE);
+      	DisassociateResource(child);
       node = node->Next();
     }
   }
   
-  if (deleteWindow)
-  {
-    if (win->IsKindOf(CLASSINFO(wxPanel)) && !win->IsKindOf(CLASSINFO(wxDialog)))
-      delete win->GetParent(); // Delete frame
-    else if ( win->IsKindOf(CLASSINFO(wxControl)) )
-	{
-	  wxEvtHandler *childHandler = win->GetEventHandler();
-	  if ( childHandler != win )
-	  {
-		win->PopEventHandler();
-		delete childHandler;
-	  }
-      delete win;
-	}
-	else
-	  // Is this enough? What about event handler? TODO
-	  delete win;
-  }
   RemoveSelection(win);
-  resourceAssociations.Delete((long)resource);
+  m_resourceAssociations.Delete((long)resource);
   return TRUE;
 }
 
-bool wxResourceManager::DisassociateResource(wxWindow *win, bool deleteWindow)
+bool wxResourceManager::DisassociateResource(wxWindow *win)
 {
   wxItemResource *res = FindResourceForWindow(win);
   if (res)
-    return DisassociateResource(res, deleteWindow);
-  return FALSE;
+    return DisassociateResource(res);
+  else
+    return FALSE;
+}
+
+// Saves the window info into the resource, and deletes the
+// handler. Doesn't actually disassociate the window from
+// the resources. Replaces OnClose.
+bool wxResourceManager::SaveInfoAndDeleteHandler(wxWindow* win)
+{
+    wxItemResource *res = FindResourceForWindow(win);
+
+    if (win->IsKindOf(CLASSINFO(wxPanel)))
+    {
+        wxResourceEditorDialogHandler* handler = (wxResourceEditorDialogHandler*) win->GetEventHandler();
+        win->PopEventHandler();
+
+        // Now reset all child event handlers
+        wxNode *node = win->GetChildren()->First();
+        while ( node )
+        {
+	        wxWindow *child = (wxWindow *)node->Data();
+	        wxEvtHandler *childHandler = child->GetEventHandler();
+	        if ( child->IsKindOf(CLASSINFO(wxControl)) && childHandler != child )
+	        {
+		        child->PopEventHandler(TRUE);
+	        }
+	        node = node->Next();
+        }
+        delete handler;
+    }
+    else
+    {
+        win->PopEventHandler(TRUE);
+    }
+  
+    // Save the information
+    InstantiateResourceFromWindow(res, win, TRUE);
+  
+//  DisassociateResource(win);
+
+    return TRUE;
+}
+
+// Destroys the window. If this is the 'current' panel, NULLs the
+// variable.
+bool wxResourceManager::DeleteWindow(wxWindow* win)
+{
+    if (m_editorPanel->m_childWindow == win)
+        m_editorPanel->m_childWindow = NULL;
+
+    win->Destroy();
+    return TRUE;
 }
 
 wxItemResource *wxResourceManager::FindResourceForWindow(wxWindow *win)
 {
-  resourceAssociations.BeginFind();
+  m_resourceAssociations.BeginFind();
   wxNode *node;
-  while (node = resourceAssociations.Next())
+  while (node = m_resourceAssociations.Next())
   {
     wxWindow *w = (wxWindow *)node->Data();
     if (w == win)
@@ -507,7 +569,7 @@ wxItemResource *wxResourceManager::FindResourceForWindow(wxWindow *win)
 
 wxWindow *wxResourceManager::FindWindowForResource(wxItemResource *resource)
 {
-  return (wxWindow *)resourceAssociations.Get((long)resource);
+  return (wxWindow *)m_resourceAssociations.Get((long)resource);
 }
 
 
@@ -515,10 +577,10 @@ void wxResourceManager::MakeUniqueName(char *prefix, char *buf)
 {
   while (TRUE)
   {
-    sprintf(buf, "%s%d", prefix, nameCounter);
-    nameCounter ++;
-    
-    if (!resourceTable.FindResource(buf))
+    sprintf(buf, "%s%d", prefix, m_nameCounter);
+    m_nameCounter ++;
+
+    if (!m_resourceTable.FindResource(buf))
       return;
   }
 }
@@ -528,20 +590,13 @@ wxFrame *wxResourceManager::OnCreateEditorFrame(const char *title)
   int frameWidth = 420;
   int frameHeight = 300;
   
-  wxResourceEditorFrame *frame = new wxResourceEditorFrame(this, NULL, (char *)title,
+  wxResourceEditorFrame *frame = new wxResourceEditorFrame(this, NULL, title,
+    wxPoint(m_resourceEditorWindowSize.x, m_resourceEditorWindowSize.y),
+    wxSize(m_resourceEditorWindowSize.width, m_resourceEditorWindowSize.height),
+    wxDEFAULT_FRAME_STYLE);
 
-    resourceEditorWindowSize.x, resourceEditorWindowSize.y,
-    resourceEditorWindowSize.width, resourceEditorWindowSize.height,
+  frame->CreateStatusBar(1);
 
-    wxDEFAULT_FRAME);
-
-  wxFrame::UseNativeStatusBar(FALSE);
-
-  frame->CreateStatusBar(2);
-
-  wxFrame::UseNativeStatusBar(TRUE);
-
-  frame->SetStatusText(editMode ? "Edit mode" : "Test mode", 1);
   frame->SetAutoLayout(TRUE);
 #ifdef __WINDOWS__
   wxIcon *icon = new wxIcon("DIALOGEDICON");
@@ -556,7 +611,6 @@ wxMenuBar *wxResourceManager::OnCreateEditorMenuBar(wxFrame *parent)
 
   wxMenu *fileMenu = new wxMenu;
   fileMenu->Append(RESED_NEW_DIALOG, "New &dialog", "Create a new dialog");
-  fileMenu->Append(RESED_NEW_PANEL, "New &panel", "Create a new panel");
   fileMenu->AppendSeparator();
   fileMenu->Append(wxID_NEW, "&New project",           "Clear the current project");
   fileMenu->Append(wxID_OPEN, "&Open...",         "Load a resource file");
@@ -567,10 +621,9 @@ wxMenuBar *wxResourceManager::OnCreateEditorMenuBar(wxFrame *parent)
   fileMenu->Append(wxID_EXIT, "E&xit",            "Exit resource editor");
 
   wxMenu *editMenu = new wxMenu;
+  editMenu->Append(RESED_TEST, "&Test Dialog",  "Test dialog");
   editMenu->Append(RESED_RECREATE, "&Recreate",  "Recreate the selected resource(s)");
   editMenu->Append(RESED_DELETE, "&Delete",  "Delete the selected resource(s)");
-  editMenu->AppendSeparator();
-  editMenu->Append(RESED_TOGGLE_TEST_MODE, "&Toggle edit/test mode",  "Toggle edit/test mode");
 
   wxMenu *helpMenu = new wxMenu;
   helpMenu->Append(RESED_CONTENTS, "&Help topics",          "Invokes the on-line help");
@@ -584,20 +637,13 @@ wxMenuBar *wxResourceManager::OnCreateEditorMenuBar(wxFrame *parent)
   return menuBar;
 }
 
-wxPanel *wxResourceManager::OnCreateEditorPanel(wxFrame *parent)
+wxResourceEditorScrolledWindow *wxResourceManager::OnCreateEditorPanel(wxFrame *parent)
 {
-  wxResourceEditorPanel *panel = new wxResourceEditorPanel(parent);
+  wxResourceEditorScrolledWindow *panel = new wxResourceEditorScrolledWindow(parent, wxDefaultPosition, wxDefaultSize,
+//    wxSUNKEN_BORDER|wxCLIP_CHILDREN);
+    wxSUNKEN_BORDER);
 
-  editorResourceList = new wxListBox(panel, -1, wxPoint(0, 0), wxSize(-1, -1));
-
-  wxLayoutConstraints *c = new wxLayoutConstraints;
-  c->left.SameAs       (panel, wxLeft, 5);
-  c->top.SameAs        (panel, wxTop, 5);
-  c->right.SameAs      (panel, wxRight, 5);
-  c->bottom.SameAs     (panel, wxBottom, 5);
-  c->width.Unconstrained();
-  c->height.Unconstrained();
-  editorResourceList->SetConstraints(c);
+  panel->SetScrollbars(10, 10, 100, 100);
 
   return panel;
 }
@@ -606,40 +652,38 @@ wxToolBarBase *wxResourceManager::OnCreateToolBar(wxFrame *parent)
 {
   // Load palette bitmaps
 #ifdef __WINDOWS__
-  ToolbarLoadBitmap = new wxBitmap("LOADTOOL");
-  ToolbarSaveBitmap = new wxBitmap("SAVETOOL");
-  ToolbarNewBitmap = new wxBitmap("NEWTOOL");
-  ToolbarVertBitmap = new wxBitmap("VERTTOOL");
-  ToolbarAlignTBitmap = new wxBitmap("ALIGNTTOOL");
-  ToolbarAlignBBitmap = new wxBitmap("ALIGNBTOOL");
-  ToolbarHorizBitmap = new wxBitmap("HORIZTOOL");
-  ToolbarAlignLBitmap = new wxBitmap("ALIGNLTOOL");
-  ToolbarAlignRBitmap = new wxBitmap("ALIGNRTOOL");
-  ToolbarCopySizeBitmap = new wxBitmap("COPYSIZETOOL");
-  ToolbarToBackBitmap = new wxBitmap("TOBACKTOOL");
-  ToolbarToFrontBitmap = new wxBitmap("TOFRONTTOOL");
-  ToolbarHelpBitmap = new wxBitmap("HELPTOOL");
+  wxBitmap ToolbarLoadBitmap("LOADTOOL");
+  wxBitmap ToolbarSaveBitmap("SAVETOOL");
+  wxBitmap ToolbarNewBitmap("NEWTOOL");
+  wxBitmap ToolbarVertBitmap("VERTTOOL");
+  wxBitmap ToolbarAlignTBitmap("ALIGNTTOOL");
+  wxBitmap ToolbarAlignBBitmap("ALIGNBTOOL");
+  wxBitmap ToolbarHorizBitmap("HORIZTOOL");
+  wxBitmap ToolbarAlignLBitmap("ALIGNLTOOL");
+  wxBitmap ToolbarAlignRBitmap("ALIGNRTOOL");
+  wxBitmap ToolbarCopySizeBitmap("COPYSIZETOOL");
+  wxBitmap ToolbarToBackBitmap("TOBACKTOOL");
+  wxBitmap ToolbarToFrontBitmap("TOFRONTTOOL");
+  wxBitmap ToolbarHelpBitmap("HELPTOOL");
 #endif
 #ifdef __X__
-  ToolbarLoadBitmap = new wxBitmap(load_bits, load_width, load_height);
-  ToolbarSaveBitmap = new wxBitmap(save_bits, save_width, save_height);
-  ToolbarNewBitmap = new wxBitmap(new_bits, save_width, save_height);
-  ToolbarVertBitmap = new wxBitmap(vert_bits, vert_width, vert_height);
-  ToolbarAlignTBitmap = new wxBitmap(alignt_bits, alignt_width, alignt_height);
-  ToolbarAlignBBitmap = new wxBitmap(alignb_bits, alignb_width, alignb_height);
-  ToolbarHorizBitmap = new wxBitmap(horiz_bits, horiz_width, horiz_height);
-  ToolbarAlignLBitmap = new wxBitmap(alignl_bits, alignl_width, alignl_height);
-  ToolbarAlignRBitmap = new wxBitmap(alignr_bits, alignr_width, alignr_height);
-  ToolbarCopySizeBitmap = new wxBitmap(copysize_bits, copysize_width, copysize_height);
-  ToolbarToBackBitmap = new wxBitmap(toback_bits, toback_width, toback_height);
-  ToolbarToFrontBitmap = new wxBitmap(tofront_bits, tofront_width, tofront_height);
-//  ToolbarCPPBitmap = new wxBitmap(cpp_bits, cpp_width, cpp_height);
-//  ToolbarTreeBitmap = new wxBitmap(tree_bits, tree_width, tree_height);
-  ToolbarHelpBitmap = new wxBitmap(help_bits, help_width, help_height);
+  wxBitmap ToolbarLoadBitmap(load_bits, load_width, load_height);
+  wxBitmap ToolbarSaveBitmap(save_bits, save_width, save_height);
+  wxBitmap ToolbarNewBitmap(new_bits, save_width, save_height);
+  wxBitmap ToolbarVertBitmap(vert_bits, vert_width, vert_height);
+  wxBitmap ToolbarAlignTBitmap(alignt_bits, alignt_width, alignt_height);
+  wxBitmap ToolbarAlignBBitmap(alignb_bits, alignb_width, alignb_height);
+  wxBitmap ToolbarHorizBitmap(horiz_bits, horiz_width, horiz_height);
+  wxBitmap ToolbarAlignLBitmap(alignl_bits, alignl_width, alignl_height);
+  wxBitmap ToolbarAlignRBitmap(alignr_bits, alignr_width, alignr_height);
+  wxBitmap ToolbarCopySizeBitmap(copysize_bits, copysize_width, copysize_height);
+  wxBitmap ToolbarToBackBitmap(toback_bits, toback_width, toback_height);
+  wxBitmap ToolbarToFrontBitmap(tofront_bits, tofront_width, tofront_height);
+  wxBitmap ToolbarHelpBitmap(help_bits, help_width, help_height);
 #endif
 
   // Create the toolbar
-  EditorToolBar *toolbar = new EditorToolBar(parent, 0, 0, -1, -1, wxNO_BORDER,
+  EditorToolBar *toolbar = new EditorToolBar(parent, wxPoint(0, 0), wxSize(-1, -1), wxNO_BORDER,
                                         wxVERTICAL, 1);
   toolbar->SetMargins(2, 2);
 //  toolbar->GetDC()->SetBackground(wxLIGHT_GREY_BRUSH);
@@ -693,15 +737,7 @@ wxToolBarBase *wxResourceManager::OnCreateToolBar(wxFrame *parent)
   toolbar->AddTool(TOOLBAR_TO_BACK, ToolbarToBackBitmap, (wxBitmap *)NULL,
                    FALSE, (float)currentX, -1, NULL, "To back");
   currentX += width + dx + gap;
-/*
-  toolbar->AddTool(TOOLBAR_GEN_CPP, ToolbarCPPBitmap, (wxBitmap *)NULL,
-                   FALSE, (float)currentX, -1, NULL);
-  currentX += width + dx;
 
-  toolbar->AddTool(TOOLBAR_TREE, ToolbarTreeBitmap, (wxBitmap *)NULL,
-                   FALSE, (float)currentX, -1, NULL);
-  currentX += width + dx;
-*/
   toolbar->AddSeparator();
   toolbar->AddTool(TOOLBAR_HELP, ToolbarHelpBitmap, (wxBitmap *)NULL,
                    FALSE, (float)currentX, -1, NULL, "Help");
@@ -714,32 +750,54 @@ wxToolBarBase *wxResourceManager::OnCreateToolBar(wxFrame *parent)
 //  parent->OnSize(-1, -1);
 }
 
-void wxResourceManager::UpdateResourceList(void)
+void wxResourceManager::UpdateResourceList()
 {
-  editorResourceList->Clear();
-  resourceTable.BeginFind();
+  if (!m_editorResourceTree)
+      return;
+
+  m_editorResourceTree->SetInvalid(TRUE);
+  m_editorResourceTree->DeleteAllItems();
+
+  long id = m_editorResourceTree->InsertItem(0, "Dialogs"
+#ifdef __WINDOWS__
+     , 1, 2
+#endif
+   );
+
+  m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = resourceTable.Next())
+  while (node = m_resourceTable.Next())
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxString resType(res->GetType());
-//    if (res->GetType() == wxTYPE_DIALOG_BOX || res->GetType() == wxTYPE_FRAME || res->GetType() == wxTYPE_BITMAP)
     if (resType == "wxDialog" || resType == "wxDialogBox" || resType == "wxPanel" || resType == "wxBitmap")
     {
-      AddItemsRecursively(0, res);
+      AddItemsRecursively(id, res);
     }
   }
+  m_editorResourceTree->ExpandItem(id, wxTREE_EXPAND_EXPAND);
+  m_editorResourceTree->SetInvalid(FALSE);
 }
 
-void wxResourceManager::AddItemsRecursively(int level, wxItemResource *resource)
+void wxResourceManager::AddItemsRecursively(long parent, wxItemResource *resource)
 {
-  int padWidth = level*4;
-  
   wxString theString("");
-  theString.Append(' ', padWidth);
-  theString += resource->GetName();
+  theString = resource->GetName();
+
+  int imageId = 0;
+  wxString resType(resource->GetType());
+  if (resType == "wxDialog" || resType == "wxDialogBox" || resType == "wxPanel")
+    imageId = 0;
+  else
+    imageId = 3;
   
-  editorResourceList->Append(theString.GetData(), (char *)resource);
+  long id = m_editorResourceTree->InsertItem(parent, theString
+#ifdef __WINDOWS__
+     , imageId
+#endif
+   );
+
+  m_editorResourceTree->SetItemData(id, (long) resource);
 
   if (strcmp(resource->GetType(), "wxBitmap") != 0)
   {
@@ -747,18 +805,19 @@ void wxResourceManager::AddItemsRecursively(int level, wxItemResource *resource)
     while (node)
     {
       wxItemResource *res = (wxItemResource *)node->Data();
-      AddItemsRecursively(level+1, res);
+      AddItemsRecursively(id, res);
       node = node->Next();
     }
   }
+  m_editorResourceTree->ExpandItem(id, wxTREE_EXPAND_EXPAND);
 }
 
-bool wxResourceManager::EditSelectedResource(void)
+bool wxResourceManager::EditSelectedResource()
 {
-  int sel = editorResourceList->GetSelection();
+  int sel = m_editorResourceTree->GetSelection();
   if (sel > -1)
   {
-    wxItemResource *res = (wxItemResource *)editorResourceList->wxListBox::GetClientData(sel);
+    wxItemResource *res = (wxItemResource *)m_editorResourceTree->GetItemData(sel);
     return Edit(res);
   }
   return FALSE;
@@ -766,106 +825,47 @@ bool wxResourceManager::EditSelectedResource(void)
 
 bool wxResourceManager::Edit(wxItemResource *res)
 {
-  wxString resType(res->GetType());
-  if (resType == "wxDialog" || resType == "wxDialogBox")
-    {
-      wxDialog *dialog = (wxDialog *)FindWindowForResource(res);
-      if (dialog)
-        dialog->Show(TRUE);
-      else
-      {
-        dialog = new wxDialog;
-        wxResourceEditorDialogHandler *handler = new wxResourceEditorDialogHandler(dialog, res, dialog->GetEventHandler(),
-           this);
-        dialog->PushEventHandler(handler);
+  ClearCurrentDialog();
 
-//        dialog->SetUserEditMode(TRUE);
-          
-        dialog->LoadFromResource(GetEditorFrame(), res->GetName(), &resourceTable);
-		handler->AddChildHandlers(); // Add event handlers for all controls
-        dialog->SetModal(FALSE);
-        AssociateResource(res, dialog);
-        dialog->Show(TRUE);
-      }
-    }
-  else if (resType == "wxPanel")
-    {
-      wxPanel *panel = (wxPanel *)FindWindowForResource(res);
-      if (panel)
-        panel->GetParent()->Show(TRUE);
-      else
-      {
-        DialogEditorPanelFrame *frame = new DialogEditorPanelFrame(GetEditorFrame(), res->GetName(), 10, 10, 400, 300, wxDEFAULT_FRAME_STYLE, res->GetName());
+  wxString resType(res->GetType());
+  wxPanel *panel = (wxPanel *)FindWindowForResource(res);
+
+  if (panel)
+  {
+    wxMessageBox("Should not find panel in wxResourceManager::Edit");
+    return FALSE;
+  }
+  else
+  {
+        long style = res->GetStyle();
+        res->SetStyle(style|wxRAISED_BORDER);
         panel = new wxPanel;
         wxResourceEditorDialogHandler *handler = new wxResourceEditorDialogHandler(panel, res, panel->GetEventHandler(),
            this);
+
+        panel->LoadFromResource(m_editorPanel, res->GetName(), &m_resourceTable);
+
         panel->PushEventHandler(handler);
-//        panel->SetUserEditMode(TRUE);
-          
-        panel->LoadFromResource(frame, res->GetName(), &resourceTable);
+
+        res->SetStyle(style);
 		handler->AddChildHandlers(); // Add event handlers for all controls
         AssociateResource(res, panel);
-        frame->SetClientSize(res->GetWidth(), res->GetHeight());
-        frame->Show(TRUE);
-      }
-    }
+
+        m_editorPanel->m_childWindow = panel;
+        panel->Move(m_editorPanel->GetMarginX(), m_editorPanel->GetMarginY());
+        panel->Show(TRUE);
+        panel->Refresh();
+
+        wxClientDC dc(m_editorPanel);
+        m_editorPanel->DrawTitle(dc);
+  }
   return FALSE;
 }
 
-bool wxResourceManager::CreateNewDialog(void)
+bool wxResourceManager::CreateNewPanel()
 {
-  char buf[256];
-  MakeUniqueName("dialog", buf);
-  
-  wxItemResource *resource = new wxItemResource;
-//  resource->SetType(wxTYPE_DIALOG_BOX);
-  resource->SetType("wxDialog");
-  resource->SetName(buf);
-  resource->SetTitle(buf);
-  resourceTable.AddResource(resource);
+  ClearCurrentDialog();
 
-#ifdef __MOTIF__
-  wxDialog *dialog = new wxDialog(GetEditorFrame(), -1, buf, wxPoint(10, 10), wxSize(400, 300), wxDEFAULT_DIALOG_STYLE, buf);
-/*
-  dialog->SetBackgroundColour(*wxLIGHT_GREY);
-  dialog->GetDC()->SetBackground(wxLIGHT_GREY_BRUSH);
-  dialog->SetButtonColour(*wxBLACK);
-  dialog->SetLabelColour(*wxBLACK);
-*/
-#else
-  wxDialog *dialog = new wxDialog(GetEditorFrame(), -1, buf, wxPoint(10, 10), wxSize(400, 300), wxDEFAULT_DIALOG_STYLE, buf);
-#endif
-  
-  resource->SetValue1(FALSE); // Modeless to start with
-  resource->SetStyle(dialog->GetWindowStyleFlag());
-
-  // For editing in situ we will need to use the hash table to ensure
-  // we don't dereference invalid pointers.
-//  resourceWindowTable.Put((long)resource, dialog);
-
-  wxResourceEditorDialogHandler *handler = new wxResourceEditorDialogHandler(dialog, resource, dialog->GetEventHandler(),
-   this);
-
-  dialog->PushEventHandler(handler);
-  
-  dialog->Centre(wxBOTH);
-//  dialog->SetUserEditMode(TRUE);
-  dialog->Show(TRUE);
-
-  SetEditMode(TRUE, FALSE);
-
-  AssociateResource(resource, dialog);
-//  SetCurrentResource(resource);
-//  SetCurrentResourceWindow(dialog);
-  UpdateResourceList();
-  
-  Modify(TRUE);
-  
-  return TRUE;
-}
-
-bool wxResourceManager::CreateNewPanel(void)
-{
   char buf[256];
   MakeUniqueName("panel", buf);
   
@@ -874,24 +874,15 @@ bool wxResourceManager::CreateNewPanel(void)
   resource->SetType("wxPanel");
   resource->SetName(buf);
   resource->SetTitle(buf);
-  resourceTable.AddResource(resource);
-  
-  DialogEditorPanelFrame *frame = new DialogEditorPanelFrame(GetEditorFrame(), buf, 10, 10, 400, 300, wxDEFAULT_FRAME_STYLE, buf);
+  m_resourceTable.AddResource(resource);
 
-#ifdef __MOTIF__
-  wxPanel *panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(400, 300), 0, buf);
-/*
-  panel->SetBackgroundColour(*wxLIGHT_GREY);
-  panel->GetDC()->SetBackground(wxLIGHT_GREY_BRUSH);
-  panel->SetButtonColour(*wxBLACK);
-  panel->SetLabelColour(*wxBLACK);
-*/
+  wxPanel *panel = new wxPanel(m_editorPanel, -1,
+     wxPoint(m_editorPanel->GetMarginX(), m_editorPanel->GetMarginY()),
+     wxSize(400, 300), wxRAISED_BORDER, buf);
+  m_editorPanel->m_childWindow = panel;
 
-#else
-  wxPanel *panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(400, 300), 0, buf);
-#endif
-  
-  resource->SetStyle(panel->GetWindowStyleFlag());
+  resource->SetStyle(0); // panel->GetWindowStyleFlag());
+  resource->SetSize(10, 10, 400, 300);
 
   // For editing in situ we will need to use the hash table to ensure
   // we don't dereference invalid pointers.
@@ -901,19 +892,17 @@ bool wxResourceManager::CreateNewPanel(void)
    this);
   panel->PushEventHandler(handler);
   
-  panel->Centre(wxBOTH);
-//  panel->SetUserEditMode(TRUE);
-  frame->Show(TRUE);
-
-  SetEditMode(TRUE, FALSE);
-
   AssociateResource(resource, panel);
-//  SetCurrentResource(resource);
-//  SetCurrentResourceWindow(panel);
   UpdateResourceList();
   
   Modify(TRUE);
-  
+  m_editorPanel->m_childWindow->Refresh();
+
+//  panel->Refresh();
+
+  wxClientDC dc(m_editorPanel);
+  m_editorPanel->DrawTitle(dc);
+
   return TRUE;
 }
 
@@ -937,7 +926,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       MakeUniqueName("button", buf);
       res->SetName(buf);
       if (isBitmap)
-        newItem = new wxBitmapButton(panel, -1, wxWinBitmap, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
+        newItem = new wxBitmapButton(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
       else
         newItem = new wxButton(panel, -1, "Button", wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
     }
@@ -945,14 +934,14 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     {
       MakeUniqueName("button", buf);
       res->SetName(buf);
-      newItem = new wxBitmapButton(panel, -1, wxWinBitmap, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
+      newItem = new wxBitmapButton(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
     }
   else if (itemType == "wxMessage" || itemType == "wxStaticText")
     {
       MakeUniqueName("message", buf);
       res->SetName(buf);
       if (isBitmap)
-        newItem = new wxStaticBitmap(panel, -1, wxWinBitmap, wxPoint(x, y), wxSize(0, 0), 0, buf);
+        newItem = new wxStaticBitmap(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(0, 0), 0, buf);
       else
         newItem = new wxStaticText(panel, -1, "Message", wxPoint(x, y), wxSize(-1, -1), 0, buf);
     }
@@ -960,7 +949,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     {
       MakeUniqueName("message", buf);
       res->SetName(buf);
-      newItem = new wxStaticBitmap(panel, -1, wxWinBitmap, wxPoint(x, y), wxSize(-1, -1), 0, buf);
+      newItem = new wxStaticBitmap(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, buf);
     }
   else if (itemType == "wxCheckBox")
     {
@@ -1007,20 +996,20 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       res->SetName(buf);
       newItem = new wxSlider(panel, -1, 1, 1, 10, wxPoint(x, y), wxSize(120, -1), wxHORIZONTAL, wxDefaultValidator, buf);
     }
-  else if (itemType == "wxText" || itemType == "wxTextCtrl")
+  else if (itemType == "wxText" || itemType == "wxTextCtrl (single-line)")
     {
-      MakeUniqueName("text", buf);
+      MakeUniqueName("textctrl", buf);
       res->SetName(buf);
+      res->SetType("wxTextCtrl");
       newItem = new wxTextCtrl(panel, -1, "", wxPoint(x, y), wxSize(120, -1), 0, wxDefaultValidator, buf);
     }
-/*
-  else if (itemType == "wxMultiText")
+  else if (itemType == "wxMultiText" || itemType == "wxTextCtrl (multi-line)")
     {
-      MakeUniqueName("multitext", buf);
+      MakeUniqueName("textctrl", buf);
       res->SetName(buf);
-      newItem = new wxMultiText(panel, (wxFunction)NULL, "Multitext", "", x, y, -1, -1, 0, wxDefaultValidator, buf);
+      res->SetType("wxTextCtrl");
+      newItem = new wxTextCtrl(panel, -1, "", wxPoint(x, y), wxSize(120, 100), wxTE_MULTILINE, wxDefaultValidator, buf);
     }
-*/
   else if (itemType == "wxScrollBar")
     {
       MakeUniqueName("scrollbar", buf);
@@ -1041,13 +1030,25 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
   return TRUE;
 }
 
+void wxResourceManager::ClearCurrentDialog()
+{
+  if (m_editorPanel->m_childWindow)
+  {
+    SaveInfoAndDeleteHandler(m_editorPanel->m_childWindow);
+    DisassociateResource(m_editorPanel->m_childWindow);
+    DeleteWindow(m_editorPanel->m_childWindow);
+    m_editorPanel->m_childWindow = NULL;
+    m_editorPanel->Clear();
+  }
+}
+
 // Find the first dialog or panel for which
 // there is a selected panel item.
-wxWindow *wxResourceManager::FindParentOfSelection(void)
+wxWindow *wxResourceManager::FindParentOfSelection()
 {
-  resourceTable.BeginFind();
+  m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = resourceTable.Next())
+  while (node = m_resourceTable.Next())
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxWindow *win = FindWindowForResource(res);
@@ -1150,7 +1151,7 @@ void wxResourceManager::AlignItems(int flag)
 }
 
 // Copy the first image's size to subsequent images
-void wxResourceManager::CopySize(void)
+void wxResourceManager::CopySize()
 {
   wxWindow *win = FindParentOfSelection();
   if (!win)
@@ -1217,22 +1218,22 @@ void wxResourceManager::ToBackOrFront(bool toBack)
 
 void wxResourceManager::AddSelection(wxWindow *win)
 {
-  if (!selections.Member(win))
-    selections.Append(win);
+  if (!m_selections.Member(win))
+    m_selections.Append(win);
 }
 
 void wxResourceManager::RemoveSelection(wxWindow *win)
 {
-  selections.DeleteObject(win);
+  m_selections.DeleteObject(win);
 }
 
 // Need to search through resource table removing this from
 // any resource which has this as a parent.
 bool wxResourceManager::RemoveResourceFromParent(wxItemResource *res)
 {
-  resourceTable.BeginFind();
+  m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = resourceTable.Next())
+  while (node = m_resourceTable.Next())
   {
     wxItemResource *thisRes = (wxItemResource *)node->Data();
     if (thisRes->GetChildren().Member(res))
@@ -1264,18 +1265,18 @@ bool wxResourceManager::DeleteResource(wxItemResource *res)
   // associate bitmap resource if not being used.
   wxString resType(res->GetType());
   
-  if ((resType == "wxMessage" || resType == "wxButton") && res->GetValue4())
+  if ((resType == "wxMessage" || resType == "wxStaticBitmap" || resType == "wxButton" || resType == "wxBitmapButton") && res->GetValue4())
   {
     PossiblyDeleteBitmapResource(res->GetValue4());
   }
 
-  resourceTable.Delete(res->GetName());
+  m_resourceTable.Delete(res->GetName());
   delete res;
   Modify(TRUE);
   return TRUE;
 }
 
-bool wxResourceManager::DeleteResource(wxWindow *win, bool deleteWindow)
+bool wxResourceManager::DeleteResource(wxWindow *win)
 {
   if (win->IsKindOf(CLASSINFO(wxControl)))
   {
@@ -1293,13 +1294,10 @@ bool wxResourceManager::DeleteResource(wxWindow *win, bool deleteWindow)
   
   wxItemResource *res = FindResourceForWindow(win);
   
-  DisassociateResource(res, deleteWindow);
+  DisassociateResource(res);
   DeleteResource(res);
   UpdateResourceList();
 
-  // What about associated event handler? Must clean up! BUGBUG
-//  if (win && deleteWindow)
-//    delete win;
   return TRUE;
 }
 
@@ -1327,7 +1325,7 @@ char *wxResourceManager::AddBitmapResource(char *filename)
     child->SetSize(0,0,0,0);
     resource->GetChildren().Append(child);
 
-    resourceTable.AddResource(resource);
+    m_resourceTable.AddResource(resource);
 
     UpdateResourceList();
   }
@@ -1342,7 +1340,7 @@ void wxResourceManager::PossiblyDeleteBitmapResource(char *resourceName)
 {
   if (!IsBitmapResourceUsed(resourceName))
   {
-    wxItemResource *res = resourceTable.FindResource(resourceName);
+    wxItemResource *res = m_resourceTable.FindResource(resourceName);
     DeleteResource(res);
     UpdateResourceList();
   }
@@ -1350,9 +1348,9 @@ void wxResourceManager::PossiblyDeleteBitmapResource(char *resourceName)
 
 bool wxResourceManager::IsBitmapResourceUsed(char *resourceName)
 {
-  resourceTable.BeginFind();
+  m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = resourceTable.Next())
+  while (node = m_resourceTable.Next())
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxString resType(res->GetType());
@@ -1380,7 +1378,7 @@ char *wxResourceManager::FindBitmapFilenameForResource(wxItemResource *resource)
 {
   if (!resource || !resource->GetValue4())
     return NULL;
-  wxItemResource *bitmapResource = resourceTable.FindResource(resource->GetValue4());
+  wxItemResource *bitmapResource = m_resourceTable.FindResource(resource->GetValue4());
   if (!bitmapResource)
     return NULL;
 
@@ -1400,9 +1398,9 @@ char *wxResourceManager::FindBitmapFilenameForResource(wxItemResource *resource)
 
 wxItemResource *wxResourceManager::FindBitmapResourceByFilename(char *filename)
 {
-  resourceTable.BeginFind();
+  m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = resourceTable.Next())
+  while (node = m_resourceTable.Next())
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxString resType(res->GetType());
@@ -1433,7 +1431,7 @@ wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowP
   wxWindowPropertyInfo *newInfo = NULL;
   if (!info)
   {
-    newInfo = wxCreatePropertyInfoForWindow(win);
+    newInfo = CreatePropertyInfoForWindow(win);
     info = newInfo;
   }
 
@@ -1444,25 +1442,14 @@ wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowP
   
   if (win->IsKindOf(CLASSINFO(wxPanel)))
   {
-    bool isDialog = win->IsKindOf(CLASSINFO(wxDialog));
-    wxWindow *parent = win->GetParent();
-    
-    win->GetEventHandler()->OnClose();
-    
-    if (!isDialog && parent)
-    {
-      // Delete frame parent of panel if this is not a dialog box
-      parent->Close(TRUE);
-    }
-
     Edit(resource);
     newWin = FindWindowForResource(resource);
   }
   else
   {
-    DisassociateResource(resource, FALSE);
-    delete win;
-    newWin = resourceTable.CreateItem((wxPanel *)parent, resource);
+    DisassociateResource(resource);
+    DeleteWindow(win);
+    newWin = m_resourceTable.CreateItem((wxPanel *)parent, resource);
     AssociateResource(resource, newWin);
     UpdateResourceList();
   }
@@ -1477,39 +1464,28 @@ wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowP
 }
 
 // Delete resource highlighted in the listbox
-bool wxResourceManager::DeleteSelection(bool deleteWindow)
+bool wxResourceManager::DeleteSelection()
 {
-  int sel = editorResourceList->GetSelection();
+  int sel = m_editorResourceTree->GetSelection();
   if (sel > -1)
   {
-    wxItemResource *res = (wxItemResource *)editorResourceList->wxListBox::GetClientData(sel);
+    wxItemResource *res = (wxItemResource *)m_editorResourceTree->GetItemData(sel);
     wxWindow *win = FindWindowForResource(res);
-/*
-    if (res == currentResource)
+    if (win)
     {
-      currentResource = NULL;
-      currentResourceWindow = NULL;
+        DeleteResource(win);
+        DeleteWindow(win);
+        UpdateResourceList();
+        Modify(TRUE);
     }
-*/
-
-    DisassociateResource(res, deleteWindow);
-    DeleteResource(res);
-    UpdateResourceList();
-
-/*
-    // What about associated event handler? Must clean up! BUGBUG
-    if (win && deleteWindow)
-      delete win;
-*/
-
-    Modify(TRUE);
+    return TRUE;
   }
 
   return FALSE;
 }
 
 // Delete resource highlighted in the listbox
-bool wxResourceManager::RecreateSelection(void)
+bool wxResourceManager::RecreateSelection()
 {
   wxNode *node = GetSelections().First();
   while (node)
@@ -1533,74 +1509,13 @@ bool wxResourceManager::EditDialog(wxDialog *dialog, wxWindow *parent)
   return FALSE;
 }
 
-void wxResourceManager::SetEditMode(bool flag, bool changeCurrentResource)
-{
-  editMode = flag;
-  if (editorFrame)
-    editorFrame->SetStatusText(editMode ? "Edit mode" : "Test mode", 1);
-
-  // Switch mode for each dialog in the resource list
-  resourceTable.BeginFind();
-  wxNode *node = resourceTable.Next();
-  while (node)
-  {
-    wxItemResource *resource = (wxItemResource *)node->Data();
-    wxWindow *currentResourceWindow = FindWindowForResource(resource);
-  
-    if (changeCurrentResource && currentResourceWindow && (currentResourceWindow->IsKindOf(CLASSINFO(wxPanel))))
-    {
-      wxPanel *panel = (wxPanel *)currentResourceWindow;
-      if (editMode)
-      {
-        // If we have already installed our own handler, don't bother editing.
-        // This test will need to be changed eventually because for in-situ editing,
-        // the user might have installed a different one anyway.
-        wxEvtHandler *handler = panel->GetEventHandler();
-  	    handler->SetEvtHandlerEnabled(TRUE);
-        // Enable all children
-        wxNode *node = panel->GetChildren()->First();
-        while (node)
-        {
-          wxControl *item = (wxControl *)node->Data();
-		  if ( item->IsKindOf(CLASSINFO(wxControl)) )
-		  {
-          	wxEvtHandler *childHandler = item->GetEventHandler();
-		  	childHandler->SetEvtHandlerEnabled(TRUE);
-		  }
-          node = node->Next();
-        }
-      }
-      else
-      {
-        wxEvtHandler *handler = panel->GetEventHandler();
-		handler->SetEvtHandlerEnabled(FALSE);
-        // Deselect all items on the dialog and refresh.
-        wxNode *node = panel->GetChildren()->First();
-        while (node)
-        {
-          wxControl *item = (wxControl *)node->Data();
-          if (item->IsKindOf(CLASSINFO(wxControl)))
-	      {
-		     wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
-		     childHandler->SetEvtHandlerEnabled(FALSE);
-             childHandler->SelectItem(FALSE);
- 		  }
-          node = node->Next();
-        }
-        panel->Refresh();
-      }
-    }
-    node = resourceTable.Next();
-  }
-}
-
 // Ensures that all currently shown windows are saved to resources,
 // e.g. just before writing to a .wxr file.
-bool wxResourceManager::InstantiateAllResourcesFromWindows(void)
+bool wxResourceManager::InstantiateAllResourcesFromWindows()
 {
-  resourceTable.BeginFind();
+  m_resourceTable.BeginFind();
   wxNode *node;
-  while (node = resourceTable.Next())
+  while (node = m_resourceTable.Next())
   {
     wxItemResource *res = (wxItemResource *)node->Data();
     wxString resType(res->GetType());
@@ -1623,7 +1538,7 @@ bool wxResourceManager::InstantiateAllResourcesFromWindows(void)
 
 bool wxResourceManager::InstantiateResourceFromWindow(wxItemResource *resource, wxWindow *window, bool recurse)
 {
-  wxWindowPropertyInfo *info = wxCreatePropertyInfoForWindow(window);
+  wxWindowPropertyInfo *info = CreatePropertyInfoForWindow(window);
   info->SetResource(resource);
   info->InstantiateResource(resource);
   delete info;
@@ -1651,188 +1566,8 @@ bool wxResourceManager::InstantiateResourceFromWindow(wxItemResource *resource, 
   return TRUE;
 }
 
-
-/*
- * Resource editor frame
- */
- 
-wxResourceEditorFrame::wxResourceEditorFrame(wxResourceManager *resMan, wxFrame *parent, char *title,
-    int x, int y, int width, int height, long style, char *name):
-  wxFrame(parent, -1, title, wxPoint(x, y), wxSize(width, height), style, name)
-{
-  manager = resMan;
-}
-
-wxResourceEditorFrame::~wxResourceEditorFrame(void)
-{
-}
-
-void wxResourceEditorFrame::OldOnMenuCommand(int cmd)
-{
-  switch (cmd)
-  {
-    case wxID_NEW:
-    {
-      manager->New(FALSE);
-      break;
-    }
-    case RESED_NEW_DIALOG:
-    {
-      manager->CreateNewDialog();
-      break;
-    }
-    case RESED_NEW_PANEL:
-    {
-      manager->CreateNewPanel();
-      break;
-    }
-    case wxID_OPEN:
-    {
-      manager->New(TRUE);
-      break;
-    }
-    case RESED_CLEAR:
-    {
-      manager->Clear(TRUE, FALSE);
-      break;
-    }
-    case wxID_SAVE:
-    {
-      manager->Save();
-      break;
-    }
-    case wxID_SAVEAS:
-    {
-      manager->SaveAs();
-      break;
-    }
-    case wxID_EXIT:
-    {
-	  manager->Clear(TRUE, FALSE) ;
-      this->Close();
-      break;
-    }
-    case wxID_ABOUT:
-    {
-      char buf[300];
-      sprintf(buf, "wxWindows Dialog Editor %.1f\nAuthor: Julian Smart J.Smart@ed.ac.uk\nJulian Smart (c) 1996", wxDIALOG_EDITOR_VERSION);
-      (void)wxMessageBox(buf, "About Dialog Editor", wxOK|wxCENTRE);
-      break;
-    }
-    case RESED_CONTENTS:
-    {
-      wxBeginBusyCursor();
-      manager->GetHelpInstance()->LoadFile();
-      manager->GetHelpInstance()->DisplayContents();
-      wxEndBusyCursor();
-      break;
-    }
-    case RESED_DELETE:
-    {
-      manager->DeleteSelection();
-      break;
-    }
-    case RESED_RECREATE:
-    {
-      manager->RecreateSelection();
-      break;
-    }
-    case RESED_TOGGLE_TEST_MODE:
-    {
-      manager->SetEditMode(!manager->GetEditMode());
-      break;
-    }
-    default:
-      break;
-  }
-}
-
-bool wxResourceEditorFrame::OnClose(void)
-{
-  if (manager->Modified())
-  {
-/*
-    int ans = wxMessageBox("Save modified resource file?", "Dialog Editor", wxYES_NO | wxCANCEL);
-    if (ans == wxCANCEL)
-      return FALSE;
-    if (ans == wxYES)
-      if (!manager->SaveIfModified())
-        return FALSE;
-*/
-  if (!manager->Clear(TRUE, FALSE))
-     return FALSE;
-  }
-    
-  if (!Iconized())
-  {
-    int w, h;
-    GetSize(&w, &h);
-    manager->resourceEditorWindowSize.width = w;
-    manager->resourceEditorWindowSize.height = h;
-
-    int x, y;
-    GetPosition(&x, &y);
-
-    manager->resourceEditorWindowSize.x = x;
-    manager->resourceEditorWindowSize.y = y;
-  }
-  manager->SetEditorFrame(NULL);
-  manager->SetEditorToolBar(NULL);
-  manager->SetEditorPalette(NULL);
-
-  return TRUE;
-}
-
-/*
- * Resource editor panel
- */
- 
-wxResourceEditorPanel::wxResourceEditorPanel(wxWindow *parent, int x, int y, int width, int height,
-    long style, char *name):
-  wxPanel(parent, -1, wxPoint(x, y), wxSize(width, height), style, name)
-{
-}
-
-wxResourceEditorPanel::~wxResourceEditorPanel(void)
-{
-}
-
-void wxResourceEditorPanel::OnDefaultAction(wxControl *item)
-{
-  wxResourceEditorFrame *frame = (wxResourceEditorFrame *)GetParent();
-  wxResourceManager *manager = frame->manager;
-
-  if (item == manager->GetEditorResourceList())
-  {
-    manager->EditSelectedResource();
-  }
-}
-
-// Popup menu callback
-void ObjectMenuProc(wxMenu& menu, wxCommandEvent& event)
-{
-  wxWindow *data = (wxWindow *)menu.GetClientData();
-  if (!data)
-    return;
-
-  switch (event.GetInt())
-  {
-    case OBJECT_MENU_EDIT:
-    {
-      wxResourceEditWindow(data);
-      break;
-    }
-    case OBJECT_MENU_DELETE:
-    {
-      wxResourceManager::currentResourceManager->DeleteResource(data);
-      break;
-    }
-    default:
-      break;
-  }
-}
-
-wxWindowPropertyInfo *wxCreatePropertyInfoForWindow(wxWindow *win)
+// Create a window information object for the give window
+wxWindowPropertyInfo *wxResourceManager::CreatePropertyInfoForWindow(wxWindow *win)
 {
   wxWindowPropertyInfo *info = NULL;
   if (win->IsKindOf(CLASSINFO(wxScrollBar)))
@@ -1870,26 +1605,22 @@ wxWindowPropertyInfo *wxCreatePropertyInfoForWindow(wxWindow *win)
   else if (win->IsKindOf(CLASSINFO(wxButton)))
         {
           info = new wxButtonPropertyInfo(win);
-/*
-          if (((wxButton *)win)->IsBitmap())
-            ((wxButtonPropertyInfo *)info)->isBitmapButton = TRUE;
-*/
+        }
+  else if (win->IsKindOf(CLASSINFO(wxBitmapButton)))
+        {
+          info = new wxBitmapButtonPropertyInfo(win);
         }
   else if (win->IsKindOf(CLASSINFO(wxStaticText)))
         {
           info = new wxStaticTextPropertyInfo(win);
-/*
-          if (((wxMessage *)win)->IsBitmap())
-            ((wxMessagePropertyInfo *)info)->isBitmapMessage = TRUE;
-*/
+        }
+  else if (win->IsKindOf(CLASSINFO(wxStaticBitmap)))
+        {
+          info = new wxStaticBitmapPropertyInfo(win);
         }
   else if (win->IsKindOf(CLASSINFO(wxTextCtrl)))
         {
           info = new wxTextPropertyInfo(win);
-        }
-  else if (win->IsKindOf(CLASSINFO(wxDialog)))
-        {
-          info = new wxDialogPropertyInfo(win);
         }
   else if (win->IsKindOf(CLASSINFO(wxPanel)))
         {
@@ -1902,13 +1633,13 @@ wxWindowPropertyInfo *wxCreatePropertyInfoForWindow(wxWindow *win)
   return info;
 }
 
-// Popup menu callback
-void wxResourceEditWindow(wxWindow *win)
+// Edit the given window
+void wxResourceManager::EditWindow(wxWindow *win)
 {
-  wxWindowPropertyInfo *info = wxCreatePropertyInfoForWindow(win);
+  wxWindowPropertyInfo *info = CreatePropertyInfoForWindow(win);
   if (info)
   {
-    info->SetResource(wxResourceManager::currentResourceManager->FindResourceForWindow(win));
+    info->SetResource(FindResourceForWindow(win));
     wxString str("Editing ");
     str += win->GetClassInfo()->GetClassName();
     str += ": ";
@@ -1916,8 +1647,224 @@ void wxResourceEditWindow(wxWindow *win)
         str += win->GetName();
     else
         str += "properties";
-    info->Edit(NULL, WXSTRINGCAST str);
-    delete info;
+    info->Edit(NULL, str);
+  }
+}
+
+
+/*
+ * Resource editor frame
+ */
+
+IMPLEMENT_CLASS(wxResourceEditorFrame, wxFrame)
+
+BEGIN_EVENT_TABLE(wxResourceEditorFrame, wxFrame)
+    EVT_MENU(wxID_NEW, wxResourceEditorFrame::OnNew)
+    EVT_MENU(RESED_NEW_DIALOG, wxResourceEditorFrame::OnNewDialog)
+    EVT_MENU(wxID_OPEN, wxResourceEditorFrame::OnOpen)
+    EVT_MENU(RESED_CLEAR, wxResourceEditorFrame::OnClear)
+    EVT_MENU(wxID_SAVE, wxResourceEditorFrame::OnSave)
+    EVT_MENU(wxID_SAVEAS, wxResourceEditorFrame::OnSaveAs)
+    EVT_MENU(wxID_EXIT, wxResourceEditorFrame::OnExit)
+    EVT_MENU(wxID_ABOUT, wxResourceEditorFrame::OnAbout)
+    EVT_MENU(RESED_CONTENTS, wxResourceEditorFrame::OnContents)
+    EVT_MENU(RESED_DELETE, wxResourceEditorFrame::OnDeleteSelection)
+    EVT_MENU(RESED_RECREATE, wxResourceEditorFrame::OnRecreateSelection)
+    EVT_MENU(RESED_TEST, wxResourceEditorFrame::OnTest)
+END_EVENT_TABLE()
+
+wxResourceEditorFrame::wxResourceEditorFrame(wxResourceManager *resMan, wxFrame *parent, const wxString& title,
+    const wxPoint& pos, const wxSize& size, long style, const wxString& name):
+  wxFrame(parent, -1, title, pos, size, style, name)
+{
+  manager = resMan;
+}
+
+wxResourceEditorFrame::~wxResourceEditorFrame()
+{
+}
+
+void wxResourceEditorFrame::OnNew(wxCommandEvent& event)
+{
+      manager->New(FALSE);
+}
+
+void wxResourceEditorFrame::OnNewDialog(wxCommandEvent& event)
+{
+      manager->CreateNewPanel();
+}
+
+void wxResourceEditorFrame::OnOpen(wxCommandEvent& event)
+{
+      manager->New(TRUE);
+}
+
+void wxResourceEditorFrame::OnClear(wxCommandEvent& event)
+{
+      manager->Clear(TRUE, FALSE);
+}
+
+void wxResourceEditorFrame::OnSave(wxCommandEvent& event)
+{
+      manager->Save();
+}
+
+void wxResourceEditorFrame::OnSaveAs(wxCommandEvent& event)
+{
+      manager->SaveAs();
+}
+
+void wxResourceEditorFrame::OnExit(wxCommandEvent& event)
+{
+	  manager->Clear(TRUE, FALSE) ;
+      this->Close();
+}
+
+void wxResourceEditorFrame::OnAbout(wxCommandEvent& event)
+{
+      char buf[300];
+      sprintf(buf, "wxWindows Dialog Editor %.1f\nAuthor: Julian Smart J.Smart@ed.ac.uk\nJulian Smart (c) 1996", wxDIALOG_EDITOR_VERSION);
+      wxMessageBox(buf, "About Dialog Editor", wxOK|wxCENTRE);
+}
+
+void wxResourceEditorFrame::OnTest(wxCommandEvent& event)
+{
+    // TODO should show the current dialog
+}
+
+void wxResourceEditorFrame::OnContents(wxCommandEvent& event)
+{
+      wxBeginBusyCursor();
+      manager->GetHelpController()->LoadFile();
+      manager->GetHelpController()->DisplayContents();
+      wxEndBusyCursor();
+}
+
+void wxResourceEditorFrame::OnDeleteSelection(wxCommandEvent& event)
+{
+      manager->DeleteSelection();
+}
+
+void wxResourceEditorFrame::OnRecreateSelection(wxCommandEvent& event)
+{
+      manager->RecreateSelection();
+}
+
+bool wxResourceEditorFrame::OnClose()
+{
+  if (manager->Modified())
+  {
+  if (!manager->Clear(TRUE, FALSE))
+     return FALSE;
+  }
+    
+  if (!Iconized())
+  {
+    int w, h;
+    GetSize(&w, &h);
+    manager->m_resourceEditorWindowSize.width = w;
+    manager->m_resourceEditorWindowSize.height = h;
+
+    int x, y;
+    GetPosition(&x, &y);
+
+    manager->m_resourceEditorWindowSize.x = x;
+    manager->m_resourceEditorWindowSize.y = y;
+  }
+  manager->SetEditorFrame(NULL);
+  manager->SetEditorToolBar(NULL);
+  manager->SetEditorPalette(NULL);
+
+  return TRUE;
+}
+
+/*
+ * Resource editor window that contains the dialog/panel being edited
+ */
+
+BEGIN_EVENT_TABLE(wxResourceEditorScrolledWindow, wxScrolledWindow)
+    EVT_SCROLL(wxResourceEditorScrolledWindow::OnScroll)
+    EVT_PAINT(wxResourceEditorScrolledWindow::OnPaint)
+END_EVENT_TABLE()
+
+wxResourceEditorScrolledWindow::wxResourceEditorScrolledWindow(wxWindow *parent, const wxPoint& pos, const wxSize& size,
+    long style):
+  wxScrolledWindow(parent, -1, pos, size, style)
+{
+    m_marginX = 10;
+    m_marginY = 40;
+    m_childWindow = NULL;
+}
+
+wxResourceEditorScrolledWindow::~wxResourceEditorScrolledWindow()
+{
+}
+
+void wxResourceEditorScrolledWindow::OnScroll(wxScrollEvent& event)
+{
+    wxScrolledWindow::OnScroll(event);
+
+    int x, y;
+    ViewStart(& x, & y);
+
+    if (m_childWindow)
+        m_childWindow->Move(m_marginX + (- x * 10), m_marginY + (- y * 10));
+}
+
+void wxResourceEditorScrolledWindow::OnPaint(wxPaintEvent& event)
+{
+    wxPaintDC dc(this);
+
+    DrawTitle(dc);
+}
+
+void wxResourceEditorScrolledWindow::DrawTitle(wxDC& dc)
+{
+    if (m_childWindow)
+    {
+        wxItemResource* res = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_childWindow);
+        if (res)
+        {
+            wxString str(res->GetTitle());
+            int x, y;
+            ViewStart(& x, & y);
+
+            wxFont font(10, wxSWISS, wxNORMAL, wxBOLD);
+            dc.SetFont(font);
+            dc.SetBackgroundMode(wxTRANSPARENT);
+            dc.SetTextForeground(wxColour(0, 0, 0));
+
+            long w, h;
+            dc.GetTextExtent(str, & w, & h);
+
+            dc.DrawText(str, m_marginX + (- x * 10), m_marginY + (- y * 10) - h - 5);
+        }
+    }
+}
+
+// Popup menu callback
+void ObjectMenuProc(wxMenu& menu, wxCommandEvent& event)
+{
+  wxWindow *data = (wxWindow *)menu.GetClientData();
+  if (!data)
+    return;
+
+  switch (event.GetInt())
+  {
+    case OBJECT_MENU_EDIT:
+    {
+      wxResourceManager::GetCurrentResourceManager()->EditWindow(data);
+      break;
+    }
+    case OBJECT_MENU_DELETE:
+    {
+      wxResourceManager::GetCurrentResourceManager()->SaveInfoAndDeleteHandler(data);
+      wxResourceManager::GetCurrentResourceManager()->DeleteResource(data);
+      wxResourceManager::GetCurrentResourceManager()->DeleteWindow(data);
+      break;
+    }
+    default:
+      break;
   }
 }
 
@@ -1926,32 +1873,20 @@ void wxResourceEditWindow(wxWindow *win)
  *
  */
 
-#if defined(__WINDOWS__) && defined(__WIN95__)
-BEGIN_EVENT_TABLE(EditorToolBar, wxToolBar95)
-#elif defined(__WINDOWS__)
-BEGIN_EVENT_TABLE(EditorToolBar, wxToolBarMSW)
-#else
-BEGIN_EVENT_TABLE(EditorToolBar, wxToolBarSimple)
-#endif
+BEGIN_EVENT_TABLE(EditorToolBar, wxToolBar)
 	EVT_PAINT(EditorToolBar::OnPaint)
 END_EVENT_TABLE()
 
-EditorToolBar::EditorToolBar(wxFrame *frame, int x, int y, int w, int h,
+EditorToolBar::EditorToolBar(wxFrame *frame, const wxPoint& pos, const wxSize& size,
             long style, int direction, int RowsOrColumns):
-#if defined(__WINDOWS__) && defined(__WIN95__)
-  wxToolBar95(frame, -1, wxPoint(x, y), wxSize(w, h), style, direction, RowsOrColumns)
-#elif defined(__WINDOWS__)
-  wxToolBarMSW(frame, -1, wxPoint(x, y), wxSize(w, h), style, direction, RowsOrColumns)
-#else
-  wxToolBarSimple(frame, -1, wxPoint(x, y), wxSize(w, h), style, direction, RowsOrColumns)
-#endif
+  wxToolBar(frame, -1, pos, size, style, direction, RowsOrColumns)
 {
 }
 
 bool EditorToolBar::OnLeftClick(int toolIndex, bool toggled)
 {
-  wxResourceManager *manager = wxResourceManager::currentResourceManager;
-  
+  wxResourceManager *manager = wxResourceManager::GetCurrentResourceManager();
+
   switch (toolIndex)
   {
     case TOOLBAR_LOAD_FILE:
@@ -1961,7 +1896,7 @@ bool EditorToolBar::OnLeftClick(int toolIndex, bool toggled)
     }
     case TOOLBAR_NEW:
     {
-      manager->New(FALSE);
+      manager->CreateNewPanel();
       break;
     }
     case TOOLBAR_SAVE_FILE:
@@ -1972,8 +1907,8 @@ bool EditorToolBar::OnLeftClick(int toolIndex, bool toggled)
     case TOOLBAR_HELP:
     {
       wxBeginBusyCursor();
-      manager->GetHelpInstance()->LoadFile();
-      manager->GetHelpInstance()->DisplayContents();
+      manager->GetHelpController()->LoadFile();
+      manager->GetHelpController()->DisplayContents();
       wxEndBusyCursor();
       break;
     }
@@ -2086,13 +2021,7 @@ void EditorToolBar::OnMouseEnter(int toolIndex)
 
 void EditorToolBar::OnPaint(wxPaintEvent& event)
 {
-#if defined(__WINDOWS__) && defined(__WIN95__)
-  wxToolBar95::OnPaint(event);
-#elif defined(__WINDOWS__)
-  wxToolBarMSW::OnPaint(event);
-#else
-  wxToolBarSimple::OnPaint(event);
-#endif
+  wxToolBar::OnPaint(event);
 
   wxPaintDC dc(this);
   int w, h;
@@ -2102,13 +2031,4 @@ void EditorToolBar::OnPaint(wxPaintEvent& event)
   dc.DrawLine(0, h-1, w, h-1);
 }
 
-/*
- * Frame for editing a panel in
- */
- 
-bool DialogEditorPanelFrame::OnClose(void)
-{
-  wxWindow *child = (wxWindow *)GetChildren()->First()->Data();
-  wxEvtHandler *handler = child->GetEventHandler();
-  return handler->OnClose();
-}
+

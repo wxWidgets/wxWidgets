@@ -27,6 +27,7 @@ class MyApp: public wxApp
   public:
     MyApp(void);
     bool OnInit(void);
+    int OnExit(void);
 };
 
 DECLARE_APP(MyApp)
