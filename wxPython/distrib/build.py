@@ -121,7 +121,7 @@ import sys, os, string, getopt
 # Makefiles for use with the distribution related targets.
 
 major_version = '2.2'
-build_version = '1'
+build_version = '2'
 
 __version__ = major_version + '.' + build_version
 

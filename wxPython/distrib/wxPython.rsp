@@ -10,6 +10,7 @@ demo/README.txt
 demo/*.xml
 demo/data/*.png
 demo/data/*.htm
+demo/data/*.html
 demo/data/*.bmp
 demo/data/*.txt
 demo/data/*.i
@@ -91,7 +92,10 @@ contrib/stc/*.py
 contrib/stc/contrib/include/wx/stc/*.h
 contrib/stc/contrib/src/stc/*.h
 contrib/stc/contrib/src/stc/*.cpp
+contrib/stc/contrib/src/stc/*.txt
+contrib/stc/contrib/src/stc/*.py
 contrib/stc/contrib/src/stc/scintilla/include/*.h
+contrib/stc/contrib/src/stc/scintilla/include/*.iface
 contrib/stc/contrib/src/stc/scintilla/src/*.h
 contrib/stc/contrib/src/stc/scintilla/src/*.cxx
 
