@@ -264,7 +264,7 @@ wxString wxFileData::GetHint() const
     }
     else
     {
-        s += LongToString( m_size );
+        s += wxString::Format( "%ld", m_size );
         s += wxT(" bytes ");
     }
 
