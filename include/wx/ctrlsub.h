@@ -44,6 +44,10 @@ public:
     int Append(const wxString& item, wxClientData *clientData)
         { int n = DoAppend(item); SetClientObject(n, clientData); return n; }
 
+    // only for rtti needs (separate name)
+    void AppendString( const wxString& item)
+    { Append( item ) ; }
+
     // append several items at once to the control
     void Append(const wxArrayString& strings);
 
@@ -65,6 +69,7 @@ public:
     bool IsEmpty() const { return GetCount() == 0; }
 
     virtual wxString GetString(int n) const = 0;
+    wxArrayString GetStrings() const;
     virtual void SetString(int n, const wxString& s) = 0;
     virtual int FindString(const wxString& s) const = 0;
 

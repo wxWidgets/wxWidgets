@@ -229,6 +229,13 @@ public:
         return wxSize(w, h);
     }
 
+// the following are just helper functions to help some compiler with the extended rtti inf
+    void SetWindowPosition( const wxPoint &pt) { SetPosition( pt ) ; }
+    wxPoint GetWindowPosition() const { return GetPosition() ; }
+
+    void SetWindowSize( const wxSize &sz ) { SetSize( sz ) ; }
+    wxSize GetWindowSize() const { return GetSize() ; }
+
     wxRect GetRect() const
     {
         int x, y, w, h;
@@ -434,6 +441,9 @@ public:
     const wxWindowList& GetChildren() const { return m_children; }
     wxWindowList& GetChildren() { return m_children; }
 
+    // needed just for extended runtime
+    const wxWindowList& GetWindowChildren() const { return GetChildren() ; }
+
         // get the parent or the parent of the parent
     wxWindow *GetParent() const { return m_parent; }
     inline wxWindow *GetGrandParent() const;
@@ -636,6 +646,9 @@ public:
     const wxFont& GetFont() const { return m_font; }
     wxFont& GetFont() { return m_font; }
 
+    // for resolving RTTI conflicts
+    wxFont GetWindowFont() const { return GetFont() ; }
+
 #if wxUSE_CARET
         // associate a caret with the window
     void SetCaret(wxCaret *caret);
@@ -775,6 +788,7 @@ public:
     void SetToolTip( wxToolTip *tip ) { DoSetToolTip(tip); }
         // get the associated tooltip or NULL if none
     wxToolTip* GetToolTip() const { return m_tooltip; }
+	wxString GetToolTipText() const ;
 #endif // wxUSE_TOOLTIPS
 
     // drag and drop
