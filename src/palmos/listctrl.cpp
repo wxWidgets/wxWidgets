@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/palmos/listctrl.cpp
 // Purpose:     wxListCtrl
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/13/04
 // RCS-ID:      $Id$

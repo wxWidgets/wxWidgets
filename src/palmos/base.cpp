@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        palmos/basemsw.cpp
+// Name:        src/palmos/basemsw.cpp
 // Purpose:     misc stuff only used in applications under PalmOS
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10.13.2004
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2004 William Osborne
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

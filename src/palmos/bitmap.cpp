@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.cpp
+// Name:        src/palmos/bitmap.cpp
 // Purpose:     wxBitmap
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/08/04
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

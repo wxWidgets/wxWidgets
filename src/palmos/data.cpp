@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        data.cpp
+// Name:        src/palmos/data.cpp
 // Purpose:     Various data
 // Author:      Julian Smart
 // Modified by:

@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/palmos/dib.cpp
 // Purpose:     implements wxDIB class
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10.13.04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        palmos/main.cpp
+// Name:        src/palmos/main.cpp
 // Purpose:     wxEnter for Palm OS
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/07/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@
 
 int wxEntry()
 {
-    /* There is no command line in PalmOS.  For now generate a fake arument 
+    /* There is no command line in PalmOS.  For now generate a fake arument
      * list.  Later this may be changed to reflect the application launch code
      */
     wxArrayString args;
@@ -59,7 +59,7 @@ int wxEntry()
 
     // argv[] must be NULL-terminated
     argv[argc] = NULL;
-    
+
     return wxEntry(argc, argv);
 }
 

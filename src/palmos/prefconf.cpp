@@ -52,7 +52,7 @@ Meaning of styles:
                              (backed up during a HotSync operation)
 
 
-Each Preference is an array of chars. First unsigned char describes 
+Each Preference is an array of chars. First unsigned char describes
 number N of chars used for Preference size. Next N chars (string) contains
 length of rest of Preference. Preference consists in serie of entries which
 should be read in loop until in reaches end of Preference.

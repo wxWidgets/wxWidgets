@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        menuitem.cpp
+// Name:        src/palmos/menuitem.cpp
 // Purpose:     wxMenuItem implementation
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,10 +82,10 @@ bool wxMenuItemStreamingCallback( const wxObject *object, wxWriter * , wxPersist
 }
 
 wxBEGIN_ENUM( wxItemKind )
-    wxENUM_MEMBER( wxITEM_SEPARATOR ) 
-    wxENUM_MEMBER( wxITEM_NORMAL ) 
-    wxENUM_MEMBER( wxITEM_CHECK ) 
-    wxENUM_MEMBER( wxITEM_RADIO ) 
+    wxENUM_MEMBER( wxITEM_SEPARATOR )
+    wxENUM_MEMBER( wxITEM_NORMAL )
+    wxENUM_MEMBER( wxITEM_CHECK )
+    wxENUM_MEMBER( wxITEM_RADIO )
 wxEND_ENUM( wxItemKind )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject,"wx/menuitem.h",wxMenuItemStreamingCallback)

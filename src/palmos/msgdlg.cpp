@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msgdlg.cpp
+// Name:        src/palmos/msgdlg.cpp
 // Purpose:     wxMessageDialog
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
     m_caption = caption;
     m_message = message;
     m_dialogStyle = style;
-    m_parent = parent;    
+    m_parent = parent;
 }
 
 int wxMessageDialog::ShowModal()
@@ -56,7 +56,7 @@ int wxMessageDialog::ShowModal()
     int AlertID=1000;
     int Result=0;
     int wxResult=wxID_OK;
-    
+
     // Handle to the currently running application database
     DmOpenRef    AppDB;
     SysGetModuleDatabase(SysGetRefNum(), NULL, &AppDB);
@@ -99,7 +99,7 @@ int wxMessageDialog::ShowModal()
     AlertPtr+=8;
 
     // Clear out any old title.  This must be done with a static array of chars
-    // because using MemSet is not supported on resources and could result in 
+    // because using MemSet is not supported on resources and could result in
     // crashes or unpredictable behaviour.
     char ClearTitle[25]={' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '};
     MemMove(AlertPtr,&ClearTitle,25);
@@ -108,14 +108,14 @@ int wxMessageDialog::ShowModal()
     int TitleLength=m_caption.length();
     if(TitleLength>25)
         TitleLength=25;
-    
+
     // Center the title in the window
     int BufferLength=(25-TitleLength)/2;
     AlertPtr+=BufferLength;
 
     // Copy the title
     MemMove(AlertPtr,m_caption.c_str(),TitleLength);
-    
+
     // Release the resource
     MemHandleUnlock(AlertHandle);
     DmReleaseResource(AlertHandle);
@@ -156,6 +156,6 @@ int wxMessageDialog::ShowModal()
             wxResult=wxID_CANCEL;
     }
 
-    return wxResult;    
+    return wxResult;
 }
 

@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        palmos/evtloop.cpp
+// Name:        src/palmos/evtloop.cpp
 // Purpose:     implements wxEventLoop for Palm OS
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10.14.04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ void wxEventLoop::ProcessMessage(WXMSG *msg)
 
 bool wxEventLoop::PreProcessMessage(WXMSG *msg)
 {
-	return false;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -123,19 +123,19 @@ int wxEventLoop::Run()
 
     do {
         wxTheApp && wxTheApp->ProcessIdle();
-        
+
         EvtGetEvent(&event, evtWaitForever);
 
         if (SysHandleEvent(&event))
             continue;
-            
+
         if (MenuHandleEvent(0, &event, &error))
             continue;
-            
+
         FrmDispatchEvent(&event);
 
-    } while (event.eType != appStopEvent);    
-    
+    } while (event.eType != appStopEvent);
+
     return 0;
 }
 
@@ -154,7 +154,7 @@ void wxEventLoop::Exit(int rc)
 
 bool wxEventLoop::Pending() const
 {
-	return false;
+    return false;
 }
 
 bool wxEventLoop::Dispatch()

@@ -87,12 +87,12 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 
 bool wxTaskBarIcon::RemoveIcon()
 {
-	return false;
+    return false;
 }
 
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 {
-	return false;
+    return false;
 }
 
 void wxTaskBarIcon::RegisterWindowMessages()
