@@ -609,7 +609,11 @@ bool wxTextCtrl::Create( wxWindow *parent,
         {
             // GTK_WRAP_WORD_CHAR seems to be new in GTK+ 2.4
 #ifdef __WXGTK24__
-            wrap = GTK_WRAP_WORD_CHAR;
+            if ( !gtk_check_version(2,4,0) )
+            {
+                wrap = GTK_WRAP_WORD_CHAR;
+            }
+            else
 #else
             wrap = GTK_WRAP_WORD;
 #endif
