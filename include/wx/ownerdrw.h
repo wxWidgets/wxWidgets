@@ -131,7 +131,8 @@ public:
     wxODDisabled  = 0x0004,         // item is to be drawn as disabled
     wxODChecked   = 0x0008,         // item is to be checked
     wxODHasFocus  = 0x0010,         // item has the keyboard focus
-    wxODDefault   = 0x0020          // item is the default item
+    wxODDefault   = 0x0020,         // item is the default item
+    wxODHidePrefix= 0x0100          // hide keyboard cues (w2k and xp only)
   };
 
   // virtual functions to implement drawing (return true if processed)

@@ -162,13 +162,13 @@ void wxMenuItem::Init()
     m_isRadioGroupStart = false;
 
 #if  wxUSE_OWNER_DRAWN
-    // set default menu colors
-    #define SYS_COLOR(c) (wxSystemSettings::GetColour(wxSYS_COLOUR_##c))
 
-    SetTextColour(SYS_COLOR(MENUTEXT));
-    SetBackgroundColour(SYS_COLOR(MENU));
-
-    #undef  SYS_COLOR
+    // when the color is not valid, wxOwnerDraw takes the default ones.
+    // If we set the colors here and they are changed by the user during
+    // the execution, then the colors are not updated until the application
+    // is restarted and our menus look bad
+    SetTextColour(wxNullColour);
+    SetBackgroundColour(wxNullColour);
 
     // setting default colors switched ownerdraw on: switch it off again
     ResetOwnerDrawn();

@@ -59,6 +59,9 @@ public:
         wxNativeFontInfo info;
         memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
         ms_systemMenuFont->Create(info);
+
+        if (SystemParametersInfo(SPI_GETKEYBOARDCUES, 0, &ms_showCues, 0) == 0)
+            ms_showCues = true;
 #endif
 
         return true;
@@ -73,6 +76,7 @@ public:
     static wxFont* ms_systemMenuFont;
     static int ms_systemMenuButtonWidth;   // windows clean install default
     static int ms_systemMenuHeight;        // windows clean install default
+    static bool ms_showCues;
 private:
     DECLARE_DYNAMIC_CLASS(wxMSWSystemMenuFontModule)
 };
@@ -84,6 +88,7 @@ private:
 wxFont* wxMSWSystemMenuFontModule::ms_systemMenuFont = NULL;
 int wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth = 18;   // windows clean install default
 int wxMSWSystemMenuFontModule::ms_systemMenuHeight = 18;        // windows clean install default
+bool wxMSWSystemMenuFontModule::ms_showCues = true;
 
 IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
 
@@ -163,10 +168,6 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
   dc.GetTextExtent(str, (long *)pwidth, (long *)pheight);
 
-  // add space at the end of the menu for the submenu expansion arrow
-  // this will also allow offsetting the accel string from the right edge
-  *pwidth += GetDefaultMarginWidth() + 16;
-
   // increase size to accommodate bigger bitmaps if necessary
   if (m_bmpChecked.Ok())
   {
@@ -183,6 +184,13 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
       if ((size_t)GetMarginWidth() < adjustedWidth)
           SetMarginWidth(adjustedWidth);
   }
+
+  // add space at the end of the menu for the submenu expansion arrow
+  // this will also allow offsetting the accel string from the right edge
+  *pwidth += GetMarginWidth() + 16;
+
+  // add a 4-pixel separator, otherwise menus look cluttered
+  *pwidth += 4;
 
   // make sure that this item is at least as
   // tall as the user's system settings specify
@@ -234,9 +242,9 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   else {
     // fall back to default colors if none explicitly specified
     colBack = m_colBack.Ok() ? wxColourToPalRGB(m_colBack)
-                             : GetSysColor(COLOR_WINDOW);
+                             : GetSysColor(COLOR_MENU);
     colText = m_colText.Ok() ? wxColourToPalRGB(m_colText)
-                             : GetSysColor(COLOR_WINDOWTEXT);
+                             : GetSysColor(COLOR_MENUTEXT);
   }
 
 
@@ -245,8 +253,6 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   if (    ( GetRValue( menu_bg_color ) >= 0xf0 &&
             GetGValue( menu_bg_color ) >= 0xf0 &&
             GetBValue( menu_bg_color ) >= 0xf0 )
-       // ... or if the menu item is disabled
-       || ( st & wxODDisabled )
     )
   {
       draw_bitmap_edge = false;
@@ -257,14 +263,16 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   COLORREF colOldText = ::SetTextColor(hdc, colText),
            colOldBack = ::SetBkColor(hdc, colBack);
 
-  int margin = GetMarginWidth() + wxSystemSettings::GetMetric(wxSYS_EDGE_X);
+  // *2, as in wxSYS_EDGE_Y
+  int margin = GetMarginWidth() + 2 * wxSystemSettings::GetMetric(wxSYS_EDGE_X);
 
   // select the font and draw the text
   // ---------------------------------
 
 
   // determine where to draw and leave space for a check-mark.
-  int xText = rc.x + margin;
+  // + 1 pixel to separate the edge from the highlight rectangle
+  int xText = rc.x + margin + 1;
 
 
   // using native API because it reckognizes '&'
@@ -275,7 +283,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   RECT rectFill = { rc.GetLeft(), rc.GetTop(),
                       rc.GetRight() + 1, rc.GetBottom() + 1 };
 
-  if ( (st & wxODSelected) && m_bmpChecked.Ok() ) {
+  if ( (st & wxODSelected) && m_bmpChecked.Ok() && draw_bitmap_edge ) {
       // only draw the highlight under the text, not under
       // the bitmap or checkmark
       rectFill.left = xText;
@@ -297,14 +305,17 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
   wxString strMenuText = m_strName.BeforeFirst('\t');
 
+  xText += 3; // separate text from the highlight rectangle
+
   SIZE sizeRect;
   GetTextExtentPoint32(hdc,strMenuText.c_str(), strMenuText.Length(),&sizeRect);
   ::DrawState(hdc, NULL, NULL,
               (LPARAM)strMenuText.c_str(), strMenuText.length(),
-              xText, rc.y+( (int) ((rc.GetHeight()-sizeRect.cy)/2.0) )-1, // centre text vertically
+              xText, rc.y + (int) ((rc.GetHeight()-sizeRect.cy)/2.0), // centre text vertically
               rc.GetWidth()-margin, sizeRect.cy,
               DST_PREFIXTEXT |
-              (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
+              (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0) |
+              (((st & wxODHidePrefix) && !wxMSWSystemMenuFontModule::ms_showCues) ? 512 : 0)); // 512 == DSS_HIDEPREFIX
 
   // ::SetTextAlign(hdc, TA_RIGHT) doesn't work with DSS_DISABLED or DSS_MONO
   // as last parameter in DrawState() (at least with Windows98). So we have
@@ -317,8 +328,8 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
       // margin width )
       ::DrawState(hdc, NULL, NULL,
               (LPARAM)m_strAccel.c_str(), m_strAccel.length(),
-              rc.GetWidth()-margin-accel_width, rc.y+(int) ((rc.GetHeight()-sizeRect.cy)/2.0),
-              rc.GetWidth()-margin-accel_width, sizeRect.cy,
+              rc.GetWidth()-16-accel_width, rc.y+(int) ((rc.GetHeight()-sizeRect.cy)/2.0),
+              0, 0,
               DST_TEXT |
               (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
   }
@@ -388,13 +399,13 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
               nBmpWidth, nBmpHeight,
               &dcMem, 0, 0, wxCOPY, true /* use mask */);
 
-      if ( st & wxODSelected && draw_bitmap_edge ) {
+      if ( ( st & wxODSelected ) && !( st & wxODDisabled ) && draw_bitmap_edge ) {
           RECT rectBmp = { rc.GetLeft(), rc.GetTop(),
                            rc.GetLeft() + margin,
                            rc.GetTop() + m_nHeight };
           SetBkColor(hdc, colBack);
 
-          DrawEdge(hdc, &rectBmp, BDR_RAISEDOUTER, BF_SOFT | BF_RECT);
+          DrawEdge(hdc, &rectBmp, BDR_RAISEDINNER, BF_RECT);
       }
     }
   }
