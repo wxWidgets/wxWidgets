@@ -2521,7 +2521,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         case wxLOCALE_DECIMAL_POINT:
             count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, buffer, 256);
             if (!count)
-                str << ".";
+                str << wxT(".");
             else
                 str << buffer;
             break;
@@ -2529,20 +2529,20 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         case wxSYS_LIST_SEPARATOR:
             count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, buffer, 256);
             if (!count)
-                str << ",";
+                str << wxT(",");
             else
                 str << buffer;
             break;
         case wxSYS_LEADING_ZERO: // 0 means no leading zero, 1 means leading zero
             count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ILZERO, buffer, 256);
             if (!count)
-                str << "0";
+                str << wxT("0");
             else
                 str << buffer;
             break;
 #endif
         default:
-            wxFAIL_MSG("Unknown System String !");
+            wxFAIL_MSG(wxT("Unknown System String !"));
     }
     return str;
 }
