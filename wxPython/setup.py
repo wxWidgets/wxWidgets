@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.2b6"
+VERSION          = "2.3.2b7"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -64,7 +64,7 @@ HYBRID = 0         # If set and not debug or FINAL, then build a
                    # wxWindows must have been built with /MD, not /MDd
                    # (using FINAL=hybrid will do it.)
 
-WXDLLVER = '23_2'  # Version part of DLL name
+WXDLLVER = '232'  # Version part of DLL name
 
 
 #----------------------------------------------------------------------
@@ -76,6 +76,15 @@ def msg(text):
 def opj(*args):
     path = apply(os.path.join, args)
     return os.path.normpath(path)
+
+def libFlag():
+    if FINAL:
+        return ''
+    elif HYBRID:
+        return 'h'
+    else:
+        return 'd'
+
 
 #----------------------------------------------------------------------
 # Some other globals
@@ -148,6 +157,7 @@ if os.name == 'nt':
         FINAL = 0
 
     includes = ['src',
+                opj(WXDIR, 'lib', 'mswdll' + libFlag()),
                 opj(WXDIR, 'include'),
                 ]
 
@@ -188,16 +198,9 @@ if os.name == 'nt':
         defines.append( ('__WXDEBUG__', None) )
 
     libdirs = [opj(WXDIR, 'lib'), 'build\\ilib']
-
-    if FINAL:
-        wxdll = 'wx' + WXDLLVER
-    elif HYBRID:
-        wxdll = 'wx' + WXDLLVER + 'h'
-    else:
-        wxdll = 'wx' + WXDLLVER + 'd'
-
-
+    wxdll = 'wxmsw' + WXDLLVER + libFlag()
     libs = [wxdll]
+
     if bcpp_compiling:
         libs = ['wx'+WXBCPPLIBVER]
 
