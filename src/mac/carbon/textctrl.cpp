@@ -317,6 +317,7 @@ public :
                              const wxSize& size, long style ) ;
     ~wxMacMLTEClassicControl() ;
     virtual void VisibilityChanged(bool shown) ;
+    virtual void SuperChangedPosition() ;
     virtual bool NeedsFocusRect() const;
 
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) ;
@@ -348,6 +349,11 @@ private :
     bool                    m_txnIsActive ;
     bool                    m_txnIsVisible ;
     bool                    m_controlIsActive ;
+    
+#ifdef __WXMAC_OSX__
+    ControlRef              m_sbHorizontal ;
+    ControlRef              m_sbVertical ;
+#endif
 } ;
 
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
@@ -441,6 +447,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     }
 
     return true;
+}
+
+void wxTextCtrl::MacSuperChangedPosition() 
+{
+    wxWindow::MacSuperChangedPosition() ;
+    GetPeer()->SuperChangedPosition() ;
 }
 
 void wxTextCtrl::MacVisibilityChanged()
@@ -2056,17 +2068,16 @@ void wxMacMLTEClassicControl::MacFocusPaneText(Boolean setFocus) {
 
 void wxMacMLTEClassicControl::MacSetObjectVisibility(Boolean vis)
 {
-#ifdef __WXMAC_OSX__
+#if 0 
     OSStatus err = noErr ;
  
     wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
     if ( textctrl )
     {
-        UMAGetControlBoundsInWindowCoords( m_controlRef, &m_txnControlBounds);
         TXNControlTag iControlTags[1] = { kTXNVisibilityTag };
         TXNControlData iControlData[1] = { { vis } };
-    
-        TXNSetTXNObjectControls( m_txn , 1 , true , iControlTags , iControlData ) ;
+
+        TXNSetTXNObjectControls( m_txn , 1 , false , iControlTags , iControlData ) ;
     }
 #endif
 }
@@ -2089,6 +2100,42 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
         wxMacWindowClipper cl(textctrl) ;
         TXNSetFrameBounds( m_txn, m_txnControlBounds.top, m_txnControlBounds.left,
             m_txnControlBounds.bottom, m_txnControlBounds.right, m_txnFrameID);
+#ifdef __WXMAC_OSX__
+        if ( m_sbHorizontal || m_sbVertical )
+        {
+            Rect boundsInWindow ;
+            UMAGetControlBoundsInWindowCoords( m_controlRef , &boundsInWindow ) ;
+            Rect viewRect ;
+            TXNLongRect destinationRect ;
+            TXNGetRectBounds( m_txn , &viewRect , &destinationRect , NULL ) ;
+
+            if ( m_sbHorizontal )
+            {
+                Rect sbBounds ;
+                GetControlBounds( m_sbHorizontal , &sbBounds ) ;
+                sbBounds.right -= sbBounds.left ;
+                sbBounds.bottom -= sbBounds.top ;
+                sbBounds.left = -1 ;
+                sbBounds.top = bounds.bottom - bounds.top - 15 ;
+                sbBounds.right += sbBounds.left ;
+                sbBounds.bottom += sbBounds.top ;
+                SetControlBounds( m_sbHorizontal , &sbBounds ) ;
+            }
+            if ( m_sbVertical )
+            {
+                Rect sbBounds ;
+                GetControlBounds( m_sbVertical , &sbBounds ) ;
+                sbBounds.right -= sbBounds.left ;
+                sbBounds.bottom -= sbBounds.top ;
+                sbBounds.left = bounds.right - bounds.left - 15 ;
+                sbBounds.top = -1 ;
+                sbBounds.right += sbBounds.left ;
+                sbBounds.bottom += sbBounds.top ;
+                
+                SetControlBounds( m_sbVertical , &sbBounds ) ;
+            }
+        }
+#endif
     }
 }
 
@@ -2390,10 +2437,11 @@ wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxTextCtrl *wxPeer,
 
     DoCreate();
 
+/*
     if ( wxPeer->MacIsReallyShown() )
         MacSetObjectVisibility( true ) ;
-
-    AdjustCreationAttributes( *wxWHITE , true ) ;
+*/
+    AdjustCreationAttributes( *wxWHITE , true) ;
 
     {
         wxMacWindowClipper clipper( m_peer ) ;
@@ -2412,6 +2460,13 @@ wxMacMLTEClassicControl::~wxMacMLTEClassicControl()
 void wxMacMLTEClassicControl::VisibilityChanged(bool shown)
 {
     MacSetObjectVisibility( shown ) ;
+    wxMacControl::VisibilityChanged( shown ) ;
+}
+
+void wxMacMLTEClassicControl::SuperChangedPosition()
+{
+    MacUpdatePosition() ;
+    wxMacControl::SuperChangedPosition() ;
 }
 
 bool wxMacMLTEClassicControl::NeedsFocusRect() const
@@ -2545,12 +2600,58 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
 
     TXNFrameOptions frameOptions = FrameOptionsFromWXStyle( m_windowStyle ) ;
 
+#ifdef __WXMAC_OSX__
+
+    // the scrollbars are not correctly embedded but are inserted at the root
+    // this gives us problems as we have erratic redraws even over the structure
+    // area
+
+    ControlRef rootControl = 0 ;
+    GetRootControl( owningWindow , &rootControl ) ;
+    UInt16 countBefore ;
+    CountSubControls( rootControl , &countBefore ) ;
+
+    // so that we can determine where which scrollbar is
+
+    ::SetRect( &bounds , 0 , 0 , 100 , 100 ) ;
+
+#endif
+
     verify_noerr(TXNNewObject(NULL, owningWindow , &bounds,
                               frameOptions ,
                               kTXNTextEditStyleFrameType,
                               kTXNTextensionFile,
                               kTXNSystemDefaultEncoding,
                               &m_txn, &m_txnFrameID, NULL ) );
+
+#ifdef __WXMAC_OSX__
+
+    m_sbHorizontal = 0 ;
+    m_sbVertical = 0 ;
+
+    UInt16 countAfter ;
+    CountSubControls( rootControl , &countAfter ) ;
+    
+    // as we are removing controls this loop must count downwards
+    for ( int i = countAfter ; i > countBefore ; --i )
+    {
+        ControlRef scrollbar ;
+        Rect scrollbarBounds ;
+        GetIndexedSubControl( rootControl , i , &scrollbar ) ;
+        HIViewRemoveFromSuperview( scrollbar ) ;
+        HIViewAddSubview( m_controlRef , scrollbar ) ;
+        GetControlBounds( scrollbar , &scrollbarBounds ) ;
+        if ( scrollbarBounds.left <= 0 )
+        {
+            m_sbHorizontal = scrollbar ;
+        }
+        if ( scrollbarBounds.top <= 0 )
+        {
+            m_sbVertical = scrollbar ;
+        }
+    }
+
+#endif
 
     /* perform final activations and setup for our text field.  Here,
     we assume that the window is going to be the 'active' window. */
