@@ -172,6 +172,13 @@ wxThread and related classes:
 OTHER CHANGES
 =============
 
+2.4.2
+-----
+
+All:
+
+- wxRegEx::Compile() now calculates the number of groups correctly
+
 2.4.1
 -----
 
