@@ -34,7 +34,21 @@ public:
     m_client = (wxWindow *) NULL;
     m_parent = (GtkNotebook *) NULL;
     m_box = (GtkWidget *) NULL;
+    m_added = FALSE;
   }
+
+  // mark page as "added' to the notebook, return FALSE if the page was
+  // already added
+  bool Add()
+  {
+    if ( WasAdded() )
+      return FALSE;
+
+    m_added = TRUE;
+    return TRUE;
+  }
+
+  bool WasAdded() const { return m_added; }
 
   int                m_id;
   wxString           m_text;
@@ -44,6 +58,9 @@ public:
   wxWindow          *m_client;
   GtkNotebook       *m_parent;
   GtkWidget         *m_box;     // in which the label and image are packed
+
+private:
+  bool m_added;
 };
 
 //-----------------------------------------------------------------------------
@@ -60,7 +77,7 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
   int old = notebook->GetSelection();
 
   // TODO: emulate PAGE_CHANGING event
-  
+
   wxNotebookEvent event( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
                          notebook->GetId(),  nPage, old );
   event.SetEventObject( notebook );
@@ -80,7 +97,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
   {
     return;
   }
-  
+
   win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
 }
 
@@ -98,7 +115,7 @@ static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
   gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
 
   GtkNotebook *notebook = GTK_NOTEBOOK(parent->m_widget);
-  
+
   page->m_client = child;
   gtk_notebook_append_page( notebook, child->m_widget, page->m_box );
 
@@ -174,7 +191,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
   m_parent->AddChild( this );
 
   (m_parent->m_insertCallback)( m_parent, this );
-  
+
   PostCreation();
 
   Show( TRUE );
@@ -185,7 +202,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 int wxNotebook::GetSelection() const
 {
   wxCHECK_MSG( m_widget != NULL, -1, "invalid notebook" );
-  
+
   if (m_pages.Number() == 0) return -1;
 
   GtkNotebookPage *g_page = GTK_NOTEBOOK(m_widget)->cur_page;
@@ -197,13 +214,13 @@ int wxNotebook::GetSelection() const
   while (node)
   {
     page = (wxNotebookPage*)node->Data();
-    
-    if ((page->m_page == g_page) || (page->m_page == (GtkNotebookPage*)NULL))  
+
+    if ((page->m_page == g_page) || (page->m_page == (GtkNotebookPage*)NULL))
     {
         // page->m_page is NULL directly after gtk_notebook_append. gtk emits
-	// "switch_page" then and we ask for GetSelection() in the handler for
-	// "switch_page". otherwise m_page should never be NULL. all this
-	// might also be wrong.
+        // "switch_page" then and we ask for GetSelection() in the handler for
+        // "switch_page". otherwise m_page should never be NULL. all this
+        // might also be wrong.
         break;
     }
     node = node->Next();
@@ -216,7 +233,18 @@ int wxNotebook::GetSelection() const
 
 int wxNotebook::GetPageCount() const
 {
-  return m_pages.Number();
+  // count only the pages which were already added to the notebook for MSW
+  // compatibility (and, in fact, this behaviour makes more sense anyhow
+  // because only the added pages are shown)
+  int n = 0;
+  for ( wxNode *node = m_pages.First(); node; node = node->Next() )
+  {
+    wxNotebookPage *page = (wxNotebookPage*)node->Data();
+    if ( page->WasAdded() )
+        n++;
+  }
+
+  return n;
 }
 
 int wxNotebook::GetRowCount() const
@@ -227,7 +255,7 @@ int wxNotebook::GetRowCount() const
 wxString wxNotebook::GetPageText( int page ) const
 {
   wxCHECK_MSG( m_widget != NULL, "", "invalid notebook" );
-  
+
   wxNotebookPage* nb_page = GetNotebookPage(page);
   if (nb_page)
     return nb_page->m_text;
@@ -272,7 +300,7 @@ int wxNotebook::SetSelection( int page )
 
   int selOld = GetSelection();
   wxNotebookPage* nb_page = GetNotebookPage(page);
-  
+
   if (!nb_page) return -1;
 
   int page_num = 0;
@@ -298,7 +326,7 @@ void wxNotebook::AdvanceSelection( bool bForward )
   int sel = GetSelection();
   int max = GetPageCount();
 
-  if (bForward) 
+  if (bForward)
     SetSelection( sel == max ? 0 : sel + 1 );
   else
     SetSelection( sel == 0 ? max : sel - 1 );
@@ -314,7 +342,7 @@ bool wxNotebook::SetPageText( int page, const wxString &text )
   wxCHECK_MSG( m_widget != NULL, FALSE, "invalid notebook" );
 
   wxNotebookPage* nb_page = GetNotebookPage(page);
-  
+
   if (!nb_page) return FALSE;
 
   nb_page->m_text = text;
@@ -325,7 +353,7 @@ bool wxNotebook::SetPageText( int page, const wxString &text )
 bool wxNotebook::SetPageImage( int page, int image )
 {
   wxNotebookPage* nb_page = GetNotebookPage(page);
-  
+
   if (!nb_page) return FALSE;
 
   nb_page->m_image = image;
@@ -424,9 +452,13 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
     node = node->Next();
   }
 
-  wxCHECK_MSG( page != NULL, FALSE, "Can't add a page whose parent is not the notebook!" );
+  wxCHECK_MSG( page != NULL, FALSE,
+               "Can't add a page whose parent is not the notebook!" );
 
-  if (imageId != -1) 
+  wxCHECK_MSG( page->Add(), FALSE,
+               "Can't add the same page twice to a notebook." );
+
+  if (imageId != -1)
   {
     wxASSERT( m_imageList != NULL );
 

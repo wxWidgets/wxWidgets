@@ -68,6 +68,8 @@ public:
 
   void SetHasPlus(bool has = TRUE) { m_hasPlus = has; }
 
+  void SetBold(bool bold) { m_isBold = bold; }
+
   int GetX() const { return m_x; }
   int GetY() const { return m_y; }
 
@@ -105,6 +107,7 @@ public:
   bool HasHilight()  const { return m_hasHilight; }
   bool IsExpanded()  const { return !m_isCollapsed; }
   bool HasPlus()     const { return m_hasPlus || HasChildren(); }
+  bool IsBold()      const { return m_isBold; }
 
 private:
   wxString            m_text;
@@ -114,11 +117,12 @@ private:
 
   wxTreeItemData     *m_data;
 
-  // @@ probably should use bitfields to save size
-  bool                m_isCollapsed,
-                      m_hasHilight,   // same as focused
-                      m_hasPlus;      // used for item which doesn't have
-                                      // children but still has a [+] button
+  // use bitfields to save size
+  int                 m_isCollapsed :1;
+  int                 m_hasHilight  :1; // same as focused
+  int                 m_hasPlus     :1; // used for item which doesn't have
+                                        // children but still has a [+] button
+  int                 m_isBold      :1; // render the label in bold font
 
   int                 m_x, m_y;
   long                m_height, m_width;
@@ -167,6 +171,7 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
   m_isCollapsed = TRUE;
   m_hasHilight = FALSE;
   m_hasPlus = FALSE;
+  m_isBold = FALSE;
 
   m_parent = parent;
 
@@ -432,6 +437,19 @@ void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
   item.m_pItem->SetHasPlus(has);
 }
 
+void wxTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
+{
+  wxCHECK_RET( item.IsOk(), "invalid tree item" );
+
+  // avoid redrawing the tree if no real change
+  wxGenericTreeItem *pItem = item.m_pItem;
+  if ( pItem->IsBold() != bold )
+  {
+    pItem->SetBold(bold);
+    RefreshLine(pItem);
+  }
+}
+
 // -----------------------------------------------------------------------------
 // item status inquiries
 // -----------------------------------------------------------------------------
@@ -462,6 +480,13 @@ bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
   wxCHECK_MSG( item.IsOk(), FALSE, "invalid tree item" );
 
   return item.m_pItem->HasHilight();
+}
+
+bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const
+{
+  wxCHECK_MSG( item.IsOk(), FALSE, "invalid tree item" );
+
+  return item.m_pItem->IsBold();
 }
 
 // -----------------------------------------------------------------------------
@@ -592,7 +617,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parentId,
   }
 
   parent->Insert( item, previous );
-  
+
   m_dirty = TRUE;
 
   return item;
@@ -800,14 +825,14 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId)
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
   wxGenericTreeItem *gitem = item.m_pItem;
-  
+
   int item_y = gitem->GetY();
-  
+
   int start_x = 0;
   int start_y = 0;
   ViewStart( &start_x, &start_y );
   start_y *= 10;
-  
+
   if (item_y < start_y+3)
   {
     int x = 0;
@@ -818,11 +843,11 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
     SetScrollbars( 10, 10, x/10, y/10, x_pos, item_y/10 );
     return;
   }
-  
+
   int w = 0;
   int h = 0;
   GetClientSize( &w, &h );
-  
+
   if (item_y > start_y+h-26)
   {
     int x = 0;
@@ -832,7 +857,7 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
     int x_pos = GetScrollPos( wxHORIZONTAL );
     SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-h+30)/10 );
      return;
-  }  
+  }
 }
 
 void wxTreeCtrl::ScrollTo(const wxTreeItemId& WXUNUSED(item))
@@ -907,6 +932,63 @@ void wxTreeCtrl::AdjustMyScrollbars()
   }
 }
 
+void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
+{
+  // render bold items in bold
+  wxFont *fontOld = (wxFont *)NULL,
+         *fontNew = (wxFont *)NULL;
+  if ( item->IsBold() )
+  {
+      fontOld = dc.GetFont();
+      if ( fontOld )
+      {
+        // @@ is there any better way to make a bold variant of old font?
+        fontNew = new wxFont(fontOld->GetPointSize(),
+                             fontOld->GetFamily(),
+                             fontOld->GetStyle(),
+                             wxBOLD,
+                             fontOld->GetUnderlined());
+        dc.SetFont(fontNew);
+      }
+      else
+      {
+        wxFAIL_MSG("wxDC::GetFont() failed!");
+      }
+  }
+
+  long text_w = 0;
+  long text_h = 0;
+  dc.GetTextExtent( item->GetText(), &text_w, &text_h );
+
+  int image_h = 0;
+  int image_w = 0;
+  if (item->GetImage() != -1)
+  {
+    m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
+    image_w += 4;
+  }
+
+  dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, text_h+4 );
+
+  if (item->GetImage() != -1)
+  {
+    dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
+    m_imageListNormal->Draw( item->GetImage(), dc,
+                             item->GetX(), item->GetY()-1,
+                             wxIMAGELIST_DRAW_TRANSPARENT );
+    dc.DestroyClippingRegion();
+  }
+
+  dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY() );
+
+  // restore normal font for bold items
+  if ( fontOld )
+  {
+      dc.SetFont(fontOld);
+      delete fontNew;
+  }
+}
+
 void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y )
 {
   int horizX = level*m_indent;
@@ -949,32 +1031,12 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
 
       dc.SetBrush( *m_hilightBrush );
 
-      long text_w = 0;
-      long text_h = 0;
-      dc.GetTextExtent( item->GetText(), &text_w, &text_h );
-
-      int image_h = 0;
-      int image_w = 0;
-      if (item->GetImage() != -1)
-      {
-        m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
-        image_w += 4;
-      }
-
       if (m_hasFocus)
         dc.SetPen( *wxBLACK_PEN );
       else
         dc.SetPen( *wxTRANSPARENT_PEN );
 
-      dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, text_h+4 );
-
-      if (item->GetImage() != -1)
-      {
-        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
-	m_imageListNormal->Draw( item->GetImage(), dc, item->GetX(), item->GetY()-1, wxIMAGELIST_DRAW_TRANSPARENT );
-        dc.DestroyClippingRegion();
-      }
-      dc.DrawText( item->GetText(), image_w+item->GetX(), item->GetY() );
+      PaintItem(item, dc);
 
       dc.SetPen( *wxBLACK_PEN );
       dc.SetTextForeground( *wxBLACK );
@@ -985,28 +1047,8 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
       dc.SetBrush( *wxWHITE_BRUSH );
       dc.SetPen( *wxTRANSPARENT_PEN );
 
-      long text_w = 0;
-      long text_h = 0;
-      dc.GetTextExtent( item->GetText(), &text_w, &text_h );
+      PaintItem(item, dc);
 
-      int image_h = 0;
-      int image_w = 0;
-      if (item->GetImage() != -1)
-      {
-        m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
-        image_w += 4;
-      }
-
-      dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, text_h+4 );
-
-      if (item->GetImage() != -1)
-      {
-        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
-	m_imageListNormal->Draw( item->GetImage(), dc, item->GetX(), item->GetY()-1, wxIMAGELIST_DRAW_TRANSPARENT );
-        dc.DestroyClippingRegion();
-      }
-
-      dc.DrawText( item->GetText(), image_w+item->GetX(), item->GetY() );
       dc.SetPen( *wxBLACK_PEN );
     }
   }
@@ -1067,91 +1109,105 @@ void wxTreeCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 void wxTreeCtrl::OnChar( wxKeyEvent &event )
 {
   if (m_current == 0)
-  { 
+  {
      event.Skip();
      return;
   }
-  
+
   switch (event.KeyCode())
   {
     case '+':
     case WXK_ADD:
-    {
       if (HasChildren(m_current) && !IsExpanded(m_current))
       {
         Expand(m_current);
       }
-      return;
-    }
+      break;
+
     case '-':
     case WXK_SUBTRACT:
-    {
       if (IsExpanded(m_current))
       {
         Collapse(m_current);
       }
-      return;
-    }
+      break;
+
+    case '*':
+    case WXK_MULTIPLY:
+      Toggle(m_current);
+      break;
+
     case ' ':
     case WXK_RETURN:
-    {
-      wxTreeEvent event( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
-      event.m_item = m_current;
-      event.m_code = 0;
-      event.SetEventObject( this );
-      GetEventHandler()->ProcessEvent( event );
-      return;
-    }
+      {
+        wxTreeEvent event( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
+        event.m_item = m_current;
+        event.m_code = 0;
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
+      }
+      break;
+
+    case WXK_LEFT:
     case WXK_UP:
-    {
-       wxTreeItemId prev = GetPrevSibling( m_current );
-       if (prev != 0)
-       { 
-	  SelectItem( prev );
-	   EnsureVisible( prev );
-       }
-       else
-       {
-         prev = GetParent( m_current );
-	 if (prev)
-	 {
-	   EnsureVisible( prev );
-	   SelectItem( prev );
-	 }
-       }
-      return;
-    }
+      {
+        wxTreeItemId prev = GetPrevSibling( m_current );
+        if (prev != 0)
+        {
+          SelectItem( prev );
+          EnsureVisible( prev );
+        }
+        else
+        {
+          prev = GetParent( m_current );
+          if (prev)
+          {
+            EnsureVisible( prev );
+            SelectItem( prev );
+          }
+        }
+      }
+      break;
+
+    case WXK_RIGHT:
+      // this works the same as the down arrow except that we also expand the
+      // item if it wasn't expanded yet
+      Expand(m_current);
+      // fall through
+
     case WXK_DOWN:
-    {
-      if (IsExpanded(m_current))
       {
-        long cookie = 0;
-	wxTreeItemId child = GetFirstChild( m_current, cookie );
-	SelectItem( child );
-	EnsureVisible( child );
+        if (IsExpanded(m_current))
+        {
+          long cookie = 0;
+          wxTreeItemId child = GetFirstChild( m_current, cookie );
+          SelectItem( child );
+          EnsureVisible( child );
+        }
+        else
+        {
+          wxTreeItemId next = GetNextSibling( m_current );
+          if (next == 0)
+          {
+            wxTreeItemId current = m_current;
+            while (current && !next)
+            {
+              current = GetParent( current );
+              if (current) next = GetNextSibling( current );
+            }
+          }
+          if (next != 0)
+          {
+            SelectItem( next );
+            EnsureVisible( next );
+          }
+        }
       }
-      else
-      {
-	wxTreeItemId next = GetNextSibling( m_current );
-	if (next == 0)
-	{
-	  wxTreeItemId current = m_current;
-	  while (current && !next)
-	  {
-	    current = GetParent( current );
-	    if (current) next = GetNextSibling( current );
-	  }
-	}
-	if (next != 0)
-	{
-	   SelectItem( next );
-	   EnsureVisible( next );
-	}
-      }
-      return;
-    }
+      break;
+
+    default:
+      event.Skip();
   }
-  event.Skip();
 }
 
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )
@@ -1192,9 +1248,9 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 void wxTreeCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 {
   if (!m_dirty) return;
-  
+
   m_dirty = FALSE;
-  
+
   CalculatePositions();
 
   AdjustMyScrollbars();

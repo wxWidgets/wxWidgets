@@ -180,7 +180,7 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::DoSetBold(bool bold)
 {
-//  m_treeCtrl->SetItemBold(m_treeCtrl->GetSelection(), bold);
+  m_treeCtrl->SetItemBold(m_treeCtrl->GetSelection(), bold);
 }
 
 void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))

@@ -59,7 +59,7 @@ public:
 //protected: // not for gcc
     // for wxTreeCtrl usage only
     wxTreeItemId(wxGenericTreeItem *pItem) { m_pItem = pItem; }
-    
+
     wxGenericTreeItem *m_pItem;
 };
 
@@ -148,7 +148,7 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 #define EVT_TREE_GET_INFO(id, fn) { wxEVT_COMMAND_TREE_GET_INFO, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 #define EVT_TREE_SET_INFO(id, fn) { wxEVT_COMMAND_TREE_SET_INFO, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 
-// GetItem() is the item being expanded/collapsed, the "ING" versions can use 
+// GetItem() is the item being expanded/collapsed, the "ING" versions can use
 #define EVT_TREE_ITEM_EXPANDED(id, fn) { wxEVT_COMMAND_TREE_ITEM_EXPANDED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 #define EVT_TREE_ITEM_EXPANDING(id, fn) { wxEVT_COMMAND_TREE_ITEM_EXPANDING, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 #define EVT_TREE_ITEM_COLLAPSED(id, fn) { wxEVT_COMMAND_TREE_ITEM_COLLAPSED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
@@ -256,6 +256,9 @@ public:
         // usage and loading time.
     void SetItemHasChildren(const wxTreeItemId& item, bool has = TRUE);
 
+        // the item will be shown in bold
+    void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
+
     // item status inquiries
     // ---------------------
 
@@ -269,6 +272,8 @@ public:
     bool IsExpanded(const wxTreeItemId& item) const;
         // is this item currently selected (the same as has focus)?
     bool IsSelected(const wxTreeItemId& item) const;
+        // is item text in bold font?
+    bool IsBold(const wxTreeItemId& item) const;
 
     // number of children
     // ------------------
@@ -419,7 +424,8 @@ protected:
                               wxTreeItemData *data);
 
     void AdjustMyScrollbars();
-    void PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y );
+    void PaintLevel( wxGenericTreeItem *item, wxDC& dc, int level, int &y );
+    void PaintItem( wxGenericTreeItem *item, wxDC& dc);
 
     void CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y );
     void CalculatePositions();
