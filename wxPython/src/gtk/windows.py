@@ -430,6 +430,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetEventHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetEventHandler,(self,) + _args, _kwargs)
         return val
+    def SetExtraStyle(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetExtraStyle,(self,) + _args, _kwargs)
+        return val
     def SetTitle(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetTitle,(self,) + _args, _kwargs)
         return val

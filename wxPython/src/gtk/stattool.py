@@ -256,6 +256,10 @@ class wxToolBarBasePtr(wxControlPtr):
         val = apply(stattoolc.wxToolBarBase_GetToolMargins,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
+    def GetMargins(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarBase_GetMargins,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
     def GetToolPacking(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_GetToolPacking,(self,) + _args, _kwargs)
         return val
