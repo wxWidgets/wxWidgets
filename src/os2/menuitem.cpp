@@ -13,6 +13,10 @@
 // headers & declarations
 // ============================================================================
 
+#ifdef __GNUG__
+    #pragma implementation "menuitem.h"
+#endif
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -76,9 +80,9 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        const wxString& text,
                        const wxString& strHelp,
                        bool bCheckable,
-                       wxMenu *pSubMenu) :
+                       wxMenu *pSubMenu)
 #if wxUSE_OWNER_DRAWN
-                        wxOwnerDrawn(text, bCheckable)
+                      :  wxOwnerDrawn(text, bCheckable)
 #endif // owner drawn
 {
     wxASSERT_MSG( pParentMenu != NULL, wxT("a menu item should have a parent") );
