@@ -36,6 +36,7 @@
 #endif
 #include "wx/rawbmp.h"
 
+#define wxHAVE_RAW_BITMAP
 
 // derived classes
 
@@ -284,7 +285,8 @@ public:
                 p.Red() = r;
                 p.Green() = g;
                 p.Blue() = b;
-                p.Alpha() = (x*255.)/REAL_SIZE;
+                p.Alpha() =
+                    (wxAlphaPixelFormat::ChannelType)((x*255.)/REAL_SIZE);
 
                 ++p; // same as p.OffsetX(1)
             }
