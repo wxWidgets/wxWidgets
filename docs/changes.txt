@@ -214,14 +214,18 @@ Unix:
 
 - wxPuts() now correctly outputs trailing new line in Unicode build
 
-Mac:
+wxGTK:
+
+- fixed wxFileDialog::SetWildcard()
+
+wxMac:
 
 - wxDynamicLibrary::GetDllExt() now returns ".bundle", not ".dylib"
 - wxDynamicLibrary::GetSymbol() now prepends underscore to the symbol name
 
-wxGTK:
+wxMSW:
 
-- fixed wxFileDialog::SetWildcard()
+- fixed enhanced metafiles loading from files (Andreas Goebel)
 
 
 2.5.3
