@@ -756,6 +756,11 @@ void wxTextCtrl::SetValue(const wxString& value)
 
     Replace(0, GetLastPosition(), value);
 
+    if ( IsSingleLine() )
+    {
+        SetInsertionPoint(0);
+    }
+
     // TODO: should we generate the event or not, finally?
 }
 
@@ -1451,6 +1456,9 @@ void wxTextCtrl::SetSelection(wxTextPos from, wxTextPos to)
             m_targetWindow->Update();
         }
         //else: nothing to do
+
+        // the insertion point is put at the end of selection
+        DoSetInsertionPoint(to);
     }
 }
 
@@ -4496,7 +4504,6 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     else if ( action == wxACTION_TEXT_SEL_WORD )
     {
         SetSelection(GetWordStart(), GetWordEnd());
-        DoSetInsertionPoint(m_selEnd);
     }
     else if ( action == wxACTION_TEXT_ANCHOR_SEL )
     {
@@ -4505,7 +4512,6 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     else if ( action == wxACTION_TEXT_EXTEND_SEL )
     {
         SetSelection(m_selAnchor, numArg);
-        DoSetInsertionPoint(numArg);
     }
     else if ( action == wxACTION_TEXT_COPY )
     {

@@ -108,15 +108,18 @@ void wxPopupWindowBase::Position()
     wxCoord heightParent = m_winParent->GetSize().y,
             heightSelf = GetSize().y;
 
-    // is there enough space to put the popup below the window?
+    // is there enough space to put the popup below the window (where we put it
+    // by default)?
     wxCoord y = ptOrigin.y + heightParent;
     if ( y + heightSelf > sizeScreen.y )
     {
-        // FIXME: don't assume that there is enough space above - but what else
-        //        can we do?
-
-        // position the control above the window
-        y -= heightParent + heightSelf;
+        // check if there is enough space above
+        if ( ptOrigin.y > heightSelf )
+        {
+            // do position the control above the window
+            y -= heightParent + heightSelf;
+        }
+        //else: not enough space below nor above, leave below
     }
 
 #ifdef __WXUNIVERSAL__

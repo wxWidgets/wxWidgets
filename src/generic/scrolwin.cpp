@@ -863,6 +863,9 @@ void wxScrollHelper::HandleOnMouseEnter(wxMouseEvent& event)
 
 void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
 {
+    // don't prevent the usual processing of the event from taking place
+    event.Skip();
+
     // when a captured mouse leave a scrolled window we start generate
     // scrolling events to allow, for example, extending selection beyond the
     // visible area in some controls
@@ -894,9 +897,12 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
                 orient = wxVERTICAL;
                 pos = m_yScrollLines;
             }
-            else
+            else // this should be impossible
             {
-                wxFAIL_MSG( _T("can't understand where has mouse gone") );
+                // but seems to happen sometimes under wxMSW - maybe it's a bug
+                // there but for now just ignore it
+
+                //wxFAIL_MSG( _T("can't understand where has mouse gone") );
 
                 return;
             }
@@ -918,9 +924,6 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
                                 );
         m_timerAutoScroll->Start(50); // FIXME: make configurable
     }
-
-    // don't prevent the usual processing of the event from taking place
-    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

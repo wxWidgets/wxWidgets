@@ -110,7 +110,7 @@ class wxComboListBox : public wxListBox, public wxComboPopup
 {
 public:
     // ctor and dtor
-    wxComboListBox(wxComboControl *combo);
+    wxComboListBox(wxComboControl *combo, int style = 0);
     virtual ~wxComboListBox();
 
     // implement wxComboPopup methods
@@ -119,6 +119,9 @@ public:
     virtual void OnShow();
 
 protected:
+    // we shouldn't return height too big from here
+    virtual wxSize DoGetBestClientSize() const;
+
     // filter mouse move events happening outside the list box
     void OnMouseMove(wxMouseEvent& event);
 
@@ -254,6 +257,13 @@ bool wxComboControl::Create(wxWindow *parent,
 
 wxComboControl::~wxComboControl()
 {
+    // as the button and the text control are the parent's children and not
+    // ours, we have to delete them manually - they are not deleted
+    // automatically by wxWindows when we're deleted
+    delete m_btn;
+    delete m_text;
+
+    delete m_winPopup;
 }
 
 // ----------------------------------------------------------------------------
@@ -375,6 +385,7 @@ void wxComboControl::HidePopup()
 void wxComboControl::OnSelect(const wxString& value)
 {
     m_text->SetValue(value);
+    m_text->SelectAll();
 
     OnDismiss();
 }
@@ -449,11 +460,11 @@ void wxComboTextCtrl::OnKey(wxKeyEvent& event)
 // wxComboListBox
 // ----------------------------------------------------------------------------
 
-wxComboListBox::wxComboListBox(wxComboControl *combo)
+wxComboListBox::wxComboListBox(wxComboControl *combo, int style)
               : wxListBox(combo->GetPopupWindow(), -1,
                           wxDefaultPosition, wxDefaultSize,
                           0, NULL,
-                          wxBORDER_SIMPLE | wxLB_INT_HEIGHT),
+                          wxBORDER_SIMPLE | wxLB_INT_HEIGHT | style),
                 wxComboPopup(combo)
 {
     // we don't react to the mouse events outside the window at all
@@ -537,6 +548,23 @@ void wxComboListBox::OnMouseMove(wxMouseEvent& event)
     }
 }
 
+wxSize wxComboListBox::DoGetBestClientSize() const
+{
+    // don't return size too big or we risk to not fit on the screen
+    wxSize size = wxListBox::DoGetBestClientSize();
+    wxCoord hChar = GetCharHeight();
+
+    int nLines = size.y / hChar;
+
+    // 10 is the same limit as used by wxMSW
+    if ( nLines > 10 )
+    {
+        size.y = 10*hChar;
+    }
+
+    return size;
+}
+
 // ----------------------------------------------------------------------------
 // wxComboBox
 // ----------------------------------------------------------------------------
@@ -563,7 +591,8 @@ bool wxComboBox::Create(wxWindow *parent,
         return FALSE;
     }
 
-    wxComboListBox *combolbox = new wxComboListBox(this);
+    wxComboListBox *combolbox =
+        new wxComboListBox(this, style & wxCB_SORT ? wxLB_SORT : 0);
     m_lbox = combolbox;
     m_lbox->Set(n, choices);
 
@@ -679,10 +708,8 @@ void wxComboBox::Select(int n)
 
 int wxComboBox::GetSelection() const
 {
-    // the listbox probably doesn't remember its selection when popped down?
-    wxFAIL_MSG(_T("TODO"));
-
-    return GetLBox()->GetSelection();
+    // if the current value isn't one of the listbox strings, return -1
+    return FindString(GetText()->GetValue());
 }
 
 int wxComboBox::DoAppend(const wxString& item)

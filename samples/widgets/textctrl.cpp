@@ -46,6 +46,7 @@ enum
 {
     TextPage_Reset = 100,
 
+    TextPage_Set,
     TextPage_Add,
     TextPage_Insert,
     TextPage_Clear,
@@ -104,8 +105,9 @@ protected:
     void OnButtonReset(wxCommandEvent& event);
     void OnButtonClearLog(wxCommandEvent& event);
 
-    void OnButtonInsert(wxCommandEvent& event);
+    void OnButtonSet(wxCommandEvent& event);
     void OnButtonAdd(wxCommandEvent& event);
+    void OnButtonInsert(wxCommandEvent& event);
     void OnButtonClear(wxCommandEvent& event);
     void OnButtonLoad(wxCommandEvent& event);
 
@@ -184,6 +186,7 @@ BEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
     EVT_BUTTON(TextPage_Reset, TextWidgetsPage::OnButtonReset)
 
     EVT_BUTTON(TextPage_Clear, TextWidgetsPage::OnButtonClear)
+    EVT_BUTTON(TextPage_Set, TextWidgetsPage::OnButtonSet)
     EVT_BUTTON(TextPage_Add, TextWidgetsPage::OnButtonAdd)
     EVT_BUTTON(TextPage_Insert, TextWidgetsPage::OnButtonInsert)
     EVT_BUTTON(TextPage_Load, TextWidgetsPage::OnButtonLoad)
@@ -270,6 +273,9 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change contents:"));
     wxSizer *sizerMiddleUp = new wxStaticBoxSizer(box2, wxVERTICAL);
+
+    btn = new wxButton(this, TextPage_Set, _T("&Set text value"));
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, TextPage_Add, _T("&Append text"));
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
@@ -536,6 +542,12 @@ void TextWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
     Reset();
 
     CreateText();
+}
+
+void TextWidgetsPage::OnButtonSet(wxCommandEvent& WXUNUSED(event))
+{
+    m_text->SetValue(_T("Yellow submarine"));
+    m_text->SetFocus();
 }
 
 void TextWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))

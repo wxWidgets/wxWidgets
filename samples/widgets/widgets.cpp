@@ -195,7 +195,21 @@ END_EVENT_TABLE()
 
 bool WidgetsApp::OnInit()
 {
-    wxFrame *frame = new WidgetsFrame(_T("wxWindows widgets demo"));
+    // the reason for having these ifdef's is that I often run two copies of
+    // this sample side by side and it is useful to see which one is which
+    wxString title =
+#if defined(__WXUNIVERSAL__)
+    _T("wxUniv")
+#elif defined(__WXMSW__)
+    _T("wxMSW")
+#elif defined(__WXGTK__)
+    _T("wxGTK")
+#else
+    _T("wxWindows")
+#endif
+    ;
+
+    wxFrame *frame = new WidgetsFrame(title + _T(" widgets demo"));
     frame->Show();
 
     //wxLog::AddTraceMask(_T("listbox"));

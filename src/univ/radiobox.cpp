@@ -120,6 +120,9 @@ bool wxRadioBox::Create(wxWindow *parent,
         SetClientSize(DoGetBestClientSize());
     }
 
+    // radiobox should already have selection so select at least one item
+    SetSelection(0);
+
     return TRUE;
 }
 

@@ -248,6 +248,8 @@ void wxListBox::DoClear()
 
     m_itemsClientData.Clear();
     m_selections.Clear();
+
+    m_current = -1;
 }
 
 void wxListBox::Clear()
@@ -847,21 +849,34 @@ void wxListBox::SetCurrentItem(int n)
 
 bool wxListBox::FindItem(const wxString& prefix, bool strictlyAfter)
 {
-    size_t len = prefix.length();
     int count = GetCount();
+    if ( !count )
+    {
+        // empty listbox, we can't find anything in it
+        return FALSE;
+    }
 
     // start either from the current item or from the next one if strictlyAfter
-    int first, last;
+    // is true
+    int first;
     if ( strictlyAfter )
     {
+        // the following line will set first correctly to 0 if there is no
+        // selection (m_current == -1)
         first = m_current == count - 1 ? 0 : m_current + 1;
-        last = m_current == -1 ? count : m_current;
     }
     else // start with the current
     {
         first = m_current == -1 ? 0 : m_current;
-        last = first == 0 ? count : first - 1;
     }
+
+    int last = first == 0 ? count - 1 : first - 1;
+
+    // if this is not true we'd never exit from the loop below!
+    wxASSERT_MSG( first < count && last < count, _T("logic error") );
+
+    // precompute it outside the loop
+    size_t len = prefix.length();
 
     // loop over all items in the listbox
     for ( int item = first; item != last; item < count - 1 ? item++ : item = 0 )

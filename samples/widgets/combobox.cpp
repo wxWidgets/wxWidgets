@@ -45,6 +45,7 @@
 enum
 {
     ComboPage_Reset = 100,
+    ComboPage_CurText,
     ComboPage_Add,
     ComboPage_AddText,
     ComboPage_AddSeveral,
@@ -89,6 +90,8 @@ protected:
     void OnComboBox(wxCommandEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
+
+    void OnUpdateUICurText(wxUpdateUIEvent& event);
 
     void OnUpdateUIAddSeveral(wxUpdateUIEvent& event);
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
@@ -142,6 +145,8 @@ BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
 
     EVT_TEXT_ENTER(ComboPage_AddText, ComboboxWidgetsPage::OnButtonAdd)
     EVT_TEXT_ENTER(ComboPage_DeleteText, ComboboxWidgetsPage::OnButtonDelete)
+
+    EVT_UPDATE_UI(ComboPage_CurText, ComboboxWidgetsPage::OnUpdateUICurText)
 
     EVT_UPDATE_UI(ComboPage_Reset, ComboboxWidgetsPage::OnUpdateUIResetButton)
     EVT_UPDATE_UI(ComboPage_AddSeveral, ComboboxWidgetsPage::OnUpdateUIAddSeveral)
@@ -218,11 +223,20 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
     wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change combobox contents"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
-    wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(this, ComboPage_Add, _T("&Add this string"));
-    m_textAdd = new wxTextCtrl(this, ComboPage_AddText, _T("test item 0"));
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textAdd, 1, wxLEFT, 5);
+    wxSizer *sizerRow;
+
+    wxTextCtrl *text;
+    sizerRow = CreateSizerWithTextAndLabel(_T("Current selection"),
+                                           ComboPage_CurText,
+                                           &text);
+    text->SetEditable(FALSE);
+
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
+    sizerRow = CreateSizerWithTextAndButton(ComboPage_Add,
+                                            _T("&Add this string"),
+                                            ComboPage_AddText,
+                                            &m_textAdd);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, ComboPage_AddSeveral, _T("&Insert a few strings"));
@@ -231,18 +245,16 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
     btn = new wxButton(this, ComboPage_AddMany, _T("Add &many strings"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(this, ComboPage_Change, _T("C&hange current"));
-    m_textChange = new wxTextCtrl(this, ComboPage_ChangeText, _T(""));
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textChange, 1, wxLEFT, 5);
+    sizerRow = CreateSizerWithTextAndButton(ComboPage_Change,
+                                            _T("C&hange current"),
+                                            ComboPage_ChangeText,
+                                            &m_textChange);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
-    sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(this, ComboPage_Delete, _T("&Delete this item"));
-    m_textDelete = new wxTextCtrl(this, ComboPage_DeleteText, _T(""));
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textDelete, 1, wxLEFT, 5);
+    sizerRow = CreateSizerWithTextAndButton(ComboPage_Delete,
+                                            _T("&Delete this item"),
+                                            ComboPage_DeleteText,
+                                            &m_textDelete);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, ComboPage_DeleteSel, _T("Delete &selection"));
@@ -414,6 +426,11 @@ void ComboboxWidgetsPage::OnButtonAddSeveral(wxCommandEvent& event)
     m_combobox->Append(_T("First"));
     m_combobox->Append(_T("another one"));
     m_combobox->Append(_T("and the last (very very very very very very very very very very long) one"));
+}
+
+void ComboboxWidgetsPage::OnUpdateUICurText(wxUpdateUIEvent& event)
+{
+    event.SetText( wxString::Format(_T("%d"), m_combobox->GetSelection()) );
 }
 
 void ComboboxWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
