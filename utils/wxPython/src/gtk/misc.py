@@ -504,6 +504,23 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
 
 
 
+class wxBusyInfoPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,miscc=miscc):
+        if self.thisown == 1 :
+            miscc.delete_wxBusyInfo(self)
+    def __repr__(self):
+        return "<C wxBusyInfo instance at %s>" % (self.this,)
+class wxBusyInfo(wxBusyInfoPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(miscc.new_wxBusyInfo,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------

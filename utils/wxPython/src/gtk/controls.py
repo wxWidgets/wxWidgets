@@ -7,6 +7,8 @@ from windows import *
 
 from gdi import *
 
+from clip_dnd import *
+
 from events import *
 import wx
 class wxControlPtr(wxWindowPtr):
@@ -519,6 +521,15 @@ class wxTextCtrlPtr(wxControlPtr):
         return val
     def IsEditable(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_IsEditable,(self,) + _args, _kwargs)
+        return val
+    def Undo(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Undo,(self,) + _args, _kwargs)
+        return val
+    def Redo(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Redo,(self,) + _args, _kwargs)
+        return val
+    def write(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_write,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxTextCtrl instance at %s>" % (self.this,)

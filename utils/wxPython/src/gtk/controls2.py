@@ -7,6 +7,8 @@ from windows import *
 
 from gdi import *
 
+from clip_dnd import *
+
 from events import *
 
 from controls import *
@@ -398,6 +400,12 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def SetStateImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetStateImageList,(self,) + _args, _kwargs)
+        return val
+    def GetSpacing(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetSpacing,(self,) + _args, _kwargs)
+        return val
+    def SetSpacing(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_SetSpacing,(self,) + _args, _kwargs)
         return val
     def GetItemText(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetItemText,(self,) + _args, _kwargs)

@@ -9,6 +9,8 @@ from windows import *
 
 from gdi import *
 
+from clip_dnd import *
+
 from events import *
 
 from mdi import *
@@ -108,23 +110,6 @@ class wxPyApp(wxPyAppPtr):
 
 
 
-class __wxPyCleanupPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self,wxc=wxc):
-        if self.thisown == 1 :
-            wxc.delete___wxPyCleanup(self)
-    def __repr__(self):
-        return "<C __wxPyCleanup instance at %s>" % (self.this,)
-class __wxPyCleanup(__wxPyCleanupPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(wxc.new___wxPyCleanup,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -146,6 +131,8 @@ ptrmap = wxc.ptrmap
 _wxStart = wxc._wxStart
 
 _wxSetDictionary = wxc._wxSetDictionary
+
+wxApp_CleanUp = wxc.wxApp_CleanUp
 
 
 
@@ -258,6 +245,7 @@ wxSL_SELRANGE = wxc.wxSL_SELRANGE
 wxSB_HORIZONTAL = wxc.wxSB_HORIZONTAL
 wxSB_VERTICAL = wxc.wxSB_VERTICAL
 wxST_SIZEGRIP = wxc.wxST_SIZEGRIP
+wxST_NO_AUTORESIZE = wxc.wxST_NO_AUTORESIZE
 wxBU_AUTODRAW = wxc.wxBU_AUTODRAW
 wxBU_NOAUTODRAW = wxc.wxBU_NOAUTODRAW
 wxTR_HAS_BUTTONS = wxc.wxTR_HAS_BUTTONS
@@ -396,6 +384,7 @@ wxOPEN = wxc.wxOPEN
 wxSAVE = wxc.wxSAVE
 wxHIDE_READONLY = wxc.wxHIDE_READONLY
 wxOVERWRITE_PROMPT = wxc.wxOVERWRITE_PROMPT
+wxFILE_MUST_EXIST = wxc.wxFILE_MUST_EXIST
 wxACCEL_ALT = wxc.wxACCEL_ALT
 wxACCEL_CTRL = wxc.wxACCEL_CTRL
 wxACCEL_SHIFT = wxc.wxACCEL_SHIFT
@@ -782,6 +771,9 @@ wxEVT_COMMAND_TREE_ITEM_COLLAPSING = wxc.wxEVT_COMMAND_TREE_ITEM_COLLAPSING
 wxEVT_COMMAND_TREE_SEL_CHANGED = wxc.wxEVT_COMMAND_TREE_SEL_CHANGED
 wxEVT_COMMAND_TREE_SEL_CHANGING = wxc.wxEVT_COMMAND_TREE_SEL_CHANGING
 wxEVT_COMMAND_TREE_KEY_DOWN = wxc.wxEVT_COMMAND_TREE_KEY_DOWN
+wxEVT_COMMAND_TREE_ITEM_ACTIVATED = wxc.wxEVT_COMMAND_TREE_ITEM_ACTIVATED
+wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK = wxc.wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK
+wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK = wxc.wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK
 wxEVT_COMMAND_LIST_BEGIN_DRAG = wxc.wxEVT_COMMAND_LIST_BEGIN_DRAG
 wxEVT_COMMAND_LIST_BEGIN_RDRAG = wxc.wxEVT_COMMAND_LIST_BEGIN_RDRAG
 wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT = wxc.wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT
@@ -1289,6 +1281,15 @@ def EVT_TREE_KEY_DOWN(win, id, func):
 def EVT_TREE_DELETE_ITEM(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_DELETE_ITEM, func)
 
+def EVT_TREE_ITEM_ACTIVATED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_ACTIVATED, func)
+
+def EVT_TREE_ITEM_RIGHT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, func)
+
+def EVT_TREE_ITEM_MIDDLE_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, func)
+
 
 # wxSpinButton
 def EVT_SPIN_UP(win, id, func):
@@ -1589,7 +1590,16 @@ class wxApp(wxPyApp):
 
 #----------------------------------------------------------------------------
 # DO NOT hold any other references to this object.  This is how we know when
-# to cleanup system resources that wxWin is holding...
+# to cleanup system resources that wxWin is holding.  When this module is
+# unloaded, the refcount on __cleanMeUp goes to zero and it calls the
+# wxApp_CleanUp function.
+
+class __wxPyCleanup:
+    def __init__(self):
+        self.cleanup = wxc.wxApp_CleanUp
+    def __del__(self):
+        self.cleanup()
+
 __cleanMeUp = __wxPyCleanup()
 #----------------------------------------------------------------------------
 

@@ -400,12 +400,17 @@ bool wxIsDragResultOk(wxDragResult res);
 %{
 class wxPyDropSource : public wxDropSource {
 public:
+#ifdef __WXMSW__
     wxPyDropSource(wxWindow *win = NULL,
                    const wxCursor &cursorCopy = wxNullCursor,
                    const wxCursor &cursorMove = wxNullCursor,
                    const wxCursor &cursorStop = wxNullCursor)
         : wxDropSource(win, cursorCopy, cursorMove, cursorStop) {}
-
+#else
+    wxPyDropSource(wxWindow *win = NULL,
+                   const wxIcon &go = wxNullIcon)
+        : wxDropSource(win, go) {}
+#endif
     DEC_PYCALLBACK_BOOL_DR(GiveFeedback);
     PYPRIVATE;
 };
@@ -417,10 +422,16 @@ IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 
 %name(wxDropSource) class wxPyDropSource {
 public:
+#ifdef __WXMSW__
     wxPyDropSource(wxWindow *win = NULL,
                  const wxCursor &cursorCopy = wxNullCursor,
                  const wxCursor &cursorMove = wxNullCursor,
                  const wxCursor &cursorStop = wxNullCursor);
+#else
+    wxPyDropSource(wxWindow *win = NULL,
+                   const wxIcon &go = wxNullIcon);
+#endif
+
     void _setSelf(PyObject* self);
     %pragma(python) addtomethod = "__init__:self._setSelf(self)"
     ~wxPyDropSource();

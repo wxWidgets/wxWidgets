@@ -149,9 +149,12 @@ class TestPanel(wxPanel):
         self.SetAutoLayout(true)
         outsideSizer = wxBoxSizer(wxVERTICAL)
 
+        msg = "Clipboard / Drag-And-Drop"
         text = wxStaticText(self, -1, "", style=wxALIGN_CENTRE)
         text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, false))
-        text.SetLabel("Clipboard / Drag-And-Drop")
+        text.SetLabel(msg)
+        w,h = text.GetTextExtent(msg)
+        text.SetSize(wxSize(w,h+1))
         text.SetForegroundColour(wxBLUE)
         outsideSizer.Add(text, 0, wxEXPAND|wxALL, 5)
         outsideSizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)

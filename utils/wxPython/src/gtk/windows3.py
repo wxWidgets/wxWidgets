@@ -7,6 +7,8 @@ from gdi import *
 
 from windows import *
 
+from clip_dnd import *
+
 from windows2 import *
 
 from controls import *

@@ -197,9 +197,12 @@ class TestPanel(wxPanel):
         self.SetAutoLayout(true)
         sizer = wxBoxSizer(wxVERTICAL)
 
+        msg = "Custom Drag-And-Drop"
         text = wxStaticText(self, -1, "", style=wxALIGN_CENTRE)
         text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, false))
-        text.SetLabel("Custom Drag-And-Drop")
+        text.SetLabel(msg)
+        w,h = text.GetTextExtent(msg)
+        text.SetSize(wxSize(w,h+1))
         text.SetForegroundColour(wxBLUE)
         sizer.Add(text, 0, wxEXPAND|wxALL, 5)
         sizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)

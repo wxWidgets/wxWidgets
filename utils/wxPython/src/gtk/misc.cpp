@@ -56,6 +56,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/resource.h>
 #include <wx/tooltip.h>
+#include <wx/busyinfo.h>
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -3790,7 +3791,74 @@ static PyObject *_wrap_delete_wxAcceleratorTable(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define new_wxBusyInfo(_swigarg0) (new wxBusyInfo(_swigarg0))
+static PyObject *_wrap_new_wxBusyInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBusyInfo * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "message", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxBusyInfo",_kwnames,&_obj0)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxBusyInfo *)new_wxBusyInfo(*_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBusyInfo_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
+#define delete_wxBusyInfo(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxBusyInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBusyInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxBusyInfo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBusyInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxBusyInfo. Expected _wxBusyInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxBusyInfo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef misccMethods[] = {
+	 { "delete_wxBusyInfo", (PyCFunction) _wrap_delete_wxBusyInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxBusyInfo", (PyCFunction) _wrap_new_wxBusyInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxAcceleratorTable", (PyCFunction) _wrap_delete_wxAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxAcceleratorTable", (PyCFunction) _wrap_new_wxAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxAcceleratorEntry_GetCommand", (PyCFunction) _wrap_wxAcceleratorEntry_GetCommand, METH_VARARGS | METH_KEYWORDS },
@@ -3937,6 +4005,7 @@ static PyMethodDef misccMethods[] = {
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxAcceleratorTable","_class_wxAcceleratorTable",0},
     { "_signed_long","_long",0},
+    { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
     { "_wxPrintQuality","_unsigned_int",0},
@@ -3950,12 +4019,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
+    { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_unsigned_int",0},
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
     { "_class_wxRealPoint","_wxRealPoint",0},
+    { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_size_t",0},
     { "_uint","_unsigned_int",0},
@@ -3965,6 +4036,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPoint","_class_wxPoint",0},
     { "_wxPyTimer","_class_wxPyTimer",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
+    { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
@@ -3974,6 +4046,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRect","_wxRect",0},
     { "_class_wxPyTimer","_wxPyTimer",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
+    { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
@@ -3984,12 +4057,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
     { "_unsigned_char","_byte",0},
+    { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
     { "_unsigned_int","_size_t",0},
     { "_unsigned_int","_uint",0},
@@ -3998,6 +4073,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
+    { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_size_t",0},
     { "_wxWindowID","_EBool",0},
@@ -4005,6 +4081,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_size_t",0},
     { "_int","_EBool",0},
@@ -4015,7 +4092,16 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
     { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
+    { "_wxCoord","_int",0},
+    { "_wxCoord","_signed_int",0},
+    { "_wxCoord","_unsigned_int",0},
+    { "_wxCoord","_wxWindowID",0},
+    { "_wxCoord","_uint",0},
+    { "_wxCoord","_EBool",0},
+    { "_wxCoord","_size_t",0},
+    { "_wxCoord","_wxPrintQuality",0},
     { "_wxRegion","_class_wxRegion",0},
+    { "_class_wxBusyInfo","_wxBusyInfo",0},
     { "_class_wxSize","_wxSize",0},
 {0,0,0}};
 

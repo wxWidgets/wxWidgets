@@ -267,12 +267,12 @@ class wxMouseEventPtr(wxEventPtr):
     def Leaving(self, *_args, **_kwargs):
         val = apply(eventsc.wxMouseEvent_Leaving,(self,) + _args, _kwargs)
         return val
-    def Position(self, *_args, **_kwargs):
-        val = apply(eventsc.wxMouseEvent_Position,(self,) + _args, _kwargs)
-        return val
     def GetPosition(self, *_args, **_kwargs):
         val = apply(eventsc.wxMouseEvent_GetPosition,(self,) + _args, _kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def GetPositionTuple(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_GetPositionTuple,(self,) + _args, _kwargs)
         return val
     def GetLogicalPosition(self, *_args, **_kwargs):
         val = apply(eventsc.wxMouseEvent_GetLogicalPosition,(self,) + _args, _kwargs)
@@ -794,11 +794,11 @@ class wxPyEventPtr(wxEventPtr):
     def __del__(self,eventsc=eventsc):
         if self.thisown == 1 :
             eventsc.delete_wxPyEvent(self)
-    def SetPyData(self, *_args, **_kwargs):
-        val = apply(eventsc.wxPyEvent_SetPyData,(self,) + _args, _kwargs)
+    def SetSelf(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyEvent_SetSelf,(self,) + _args, _kwargs)
         return val
-    def GetPyData(self, *_args, **_kwargs):
-        val = apply(eventsc.wxPyEvent_GetPyData,(self,) + _args, _kwargs)
+    def GetSelf(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyEvent_GetSelf,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxPyEvent instance at %s>" % (self.this,)
@@ -806,6 +806,7 @@ class wxPyEvent(wxPyEventPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(eventsc.new_wxPyEvent,_args,_kwargs)
         self.thisown = 1
+        self.SetSelf(self)
 
 
 
@@ -817,11 +818,11 @@ class wxPyCommandEventPtr(wxCommandEventPtr):
     def __del__(self,eventsc=eventsc):
         if self.thisown == 1 :
             eventsc.delete_wxPyCommandEvent(self)
-    def SetPyData(self, *_args, **_kwargs):
-        val = apply(eventsc.wxPyCommandEvent_SetPyData,(self,) + _args, _kwargs)
+    def SetSelf(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyCommandEvent_SetSelf,(self,) + _args, _kwargs)
         return val
-    def GetPyData(self, *_args, **_kwargs):
-        val = apply(eventsc.wxPyCommandEvent_GetPyData,(self,) + _args, _kwargs)
+    def GetSelf(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyCommandEvent_GetSelf,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxPyCommandEvent instance at %s>" % (self.this,)
@@ -829,6 +830,7 @@ class wxPyCommandEvent(wxPyCommandEventPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(eventsc.new_wxPyCommandEvent,_args,_kwargs)
         self.thisown = 1
+        self.SetSelf(self)
 
 
 
