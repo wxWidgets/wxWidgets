@@ -117,19 +117,19 @@ wxSpinButton::~wxSpinButton()
 
 int wxSpinButton::GetValue() const
 {
-    return (int) ::SendMessage((HWND) GetHWND(), UDM_GETPOS, 0, 0);
+    return LOWORD(::SendMessage(GetHwnd(), UDM_GETPOS, 0, 0));
 }
 
 void wxSpinButton::SetValue(int val)
 {
-    ::SendMessage((HWND) GetHWND(), UDM_SETPOS, 0, (LPARAM) MAKELONG((short) val, 0));
+    ::SendMessage(GetHwnd(), UDM_SETPOS, 0, (LPARAM) MAKELONG((short) val, 0));
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     m_min = minVal;
     m_max = maxVal;
-    ::SendMessage((HWND) GetHWND(), UDM_SETRANGE, 0,
+    ::SendMessage(GetHwnd(), UDM_SETRANGE, 0,
                    (LPARAM) MAKELONG((short)maxVal, (short)minVal));
 }
 
