@@ -1437,7 +1437,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 if ( lItem != -1 )
                 {
-                    // fill the client data field too
+                    // fill the other fields too
+                    event.m_item.m_text = GetItemText(lItem);
                     event.m_item.m_data = GetItemData(lItem);
                 }
             }
@@ -1461,6 +1462,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
             event.m_itemIndex = nmLV->iItem;
+            event.m_item.m_text = GetItemText(nmLV->iItem);
             event.m_item.m_data = GetItemData(nmLV->iItem);
             break;
 
