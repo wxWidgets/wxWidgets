@@ -961,7 +961,6 @@ public:
  wxEVT_MENU_INIT,
  wxEVT_MENU_HIGHLIGHT,
  wxEVT_POPUP_MENU_INIT,
- wxEVT_CONTEXT_MENU,
 */
 
 class WXDLLEXPORT wxMenuEvent : public wxEvent
@@ -1425,6 +1424,37 @@ private:
     DECLARE_DYNAMIC_CLASS(wxHelpEvent)
 };
 
+// A Context event is sent when the user right clicks on a window or
+// presses Shift-F10
+// NOTE : Under windows this is a repackaged WM_CONTETXMENU message
+//        Under other systems it may have to be generated from a right click event
+/*
+ wxEVT_CONTEXT_MENU
+*/
+
+class WXDLLEXPORT wxContextMenuEvent : public wxCommandEvent
+{
+public:
+    wxContextMenuEvent(wxEventType type = wxEVT_NULL,
+                wxWindowID id = 0,
+                const wxPoint& pt = wxDefaultPosition)
+    {
+        m_eventType = type;
+        m_id = id;
+        m_pos = pt;
+    }
+
+    // Position of event (in screen coordinates)
+    const wxPoint& GetPosition() const { return m_pos; }
+    void SetPosition(const wxPoint& pos) { m_pos = pos; }
+
+protected:
+    wxPoint   m_pos;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxContextMenuEvent)
+};
+
 #endif // wxUSE_GUI
 
 // Idle event
@@ -1705,6 +1735,7 @@ typedef void (wxEvtHandler::*wxWindowDestroyEventFunction)(wxWindowDestroyEvent&
 typedef void (wxEvtHandler::*wxSetCursorEventFunction)(wxSetCursorEvent&);
 typedef void (wxEvtHandler::*wxNotifyEventFunction)(wxNotifyEvent&);
 typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
+typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 #endif // wxUSE_GUI
 
 // N.B. In GNU-WIN32, you *have* to take the address of a member function
@@ -1934,6 +1965,10 @@ typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
 
 #define EVT_DETAILED_HELP_RANGE(id1, id2, func) \
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_DETAILED_HELP, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL ),
+
+// Context Menu Events
+#define EVT_CONTEXT_MENU(func) \
+ DECLARE_EVENT_TABLE_ENTRY(wxEVT_CONTEXT_MENU, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxContextMenuEventFunction) & func, (wxObject *) NULL ),
 
 // ----------------------------------------------------------------------------
 // Global data

@@ -2226,8 +2226,27 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 wxHelpEvent helpEvent(wxEVT_HELP, info->iCtrlId) ;
                 helpEvent.SetEventObject(this);
                 processed = GetEventHandler()->ProcessEvent(helpEvent);
+
             }
             else processed = FALSE;
+            break;
+        }
+        case WM_CONTEXTMENU:
+        {
+            HWND hWnd = (HWND) wParam;
+            
+            // we don't convert from screen to client coordinates as
+            // the event may be handled by a parent window
+            wxPoint p(LOWORD(lParam), HIWORD(lParam));
+            
+            wxContextMenuEvent contextEvent(wxEVT_CONTEXT_MENU, GetId(), p);
+            GetEventHandler()->ProcessEvent(contextEvent);
+            
+            // set processed to true even if the event is not handled because if we don't
+            // windows will propogate the WM_CONTEXTMENU up the parent window chain, which
+            // we have already done ourselves.
+            processed = true;
+            
             break;
         }
 #endif
