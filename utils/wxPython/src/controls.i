@@ -344,6 +344,14 @@ public:
     void WriteText(const wxString& text);
     void AppendText(const wxString& text);
     long XYToPosition(long x, long y);
+
+    bool CanCopy();
+    bool CanCut();
+    bool CanPaste();
+    bool CanRedo();
+    bool CanUndo();
+    void GetSelection(long* OUTPUT, long* OUTPUT);
+    bool IsEditable();
 };
 
 //----------------------------------------------------------------------
@@ -498,7 +506,12 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.13  1999/04/30 21:13:43  RD
+// wxPython 2.0b9, first phase (win32)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
 // Revision 1.12  1999/04/30 03:29:18  RD
+//
 // wxPython 2.0b9, first phase (win32)
 // Added gobs of stuff, see wxPython/README.txt for details
 //

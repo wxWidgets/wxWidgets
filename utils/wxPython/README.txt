@@ -87,6 +87,8 @@ Added a couple missing items from the docs.
 Added wxImage, wxImageHandler, wxPNGHandler, wxJPEGHandler,
 wxGIFHandler and wxBMPHandler.
 
+Added new methods to wxTextCtrl.
+
 
 
 What's new in 2.0b8
