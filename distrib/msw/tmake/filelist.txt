@@ -328,6 +328,7 @@ tglbtn.cpp	MSW
 thread.cpp	MSW	Win32Only,Base
 timer.cpp	MSW
 tooltip.cpp	MSW	Win32Only
+toplevel.cpp	MSW	LowLevel
 treectrl.cpp	MSW	Win32Only
 utils.cpp	MSW	Base
 utilsexc.cpp	MSW	Base
