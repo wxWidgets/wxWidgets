@@ -988,9 +988,11 @@ void wxWindowMac::SetFocus()
 {
     if ( AcceptsFocus() )
     {
-#if !TARGET_API_MAC_OSX
+
         wxWindow* former = FindFocus() ;
-#endif
+        if ( former == this )
+            return ;
+
         OSStatus err = m_peer->SetFocus( kControlFocusNextPart ) ;
         // as we cannot rely on the control features to find out whether we are in full keyboard mode, we can only
         // leave in case of an error
