@@ -144,8 +144,8 @@ static void TestMimeEnum()
         wxFileType *filetype = mimeTM.GetFileTypeFromMimeType(mimetypes[n]);
         if ( !filetype )
         {
-            printf("nothing known about the filetype '%s'!\n", 
-                   mimetypes[n].c_str()); 
+            printf("nothing known about the filetype '%s'!\n",
+                   mimetypes[n].c_str());
             continue;
         }
 
@@ -251,6 +251,8 @@ static void TestDivision()
 // ----------------------------------------------------------------------------
 
 #ifdef TEST_TIME
+
+#include <wx/date.h>
 
 #include <wx/datetime.h>
 
@@ -585,10 +587,10 @@ for n in range(20):
         weekNum = weekNum + countFromEnd
 
     data = { 'day': rjust(`day`, 2), 'month': monthNames[month - 1], 'year': year, 'weekNum': rjust(`weekNum`, 2), 'wday': wdayNames[wday] }
-    
+
     print "{ { %(day)s, wxDateTime::%(month)s, %(year)d }, %(weekNum)d, "\
           "wxDateTime::%(wday)s, wxDateTime::%(month)s, %(year)d }," % data
-    */    
+    */
 
     static const WeekDateTestData weekDatesTestData[] =
     {
@@ -669,7 +671,7 @@ for n in range(20):
     weekNum = dt.iso_week[1]
 
     data = { 'day': rjust(`day`, 2), 'month': monthNames[month - 1], 'year': year, 'weekNum': rjust(`weekNum`, 2), 'dayNum': rjust(`dayNum`, 3) }
-    
+
     print "{ { %(day)s, wxDateTime::%(month)s, %(year)d }, %(weekNum)s, "\
           "%(dayNum)s }," % data
     */
@@ -789,7 +791,7 @@ static void TestTimeDST()
         size_t n = year - 1990;
         const Date& dBegin = datesDST[0][n];
         const Date& dEnd = datesDST[1][n];
-                    
+
         if ( dBegin.SameDay(dtBegin.GetTm()) && dEnd.SameDay(dtEnd.GetTm()) )
         {
             puts(" (ok)");
@@ -810,6 +812,87 @@ static void TestTimeDST()
                year,
                wxDateTime::GetBeginDST(year, wxDateTime::Country_EEC).Format().c_str(),
                wxDateTime::GetEndDST(year, wxDateTime::Country_EEC).Format().c_str());
+    }
+}
+
+// test text -> wxDateTime conversion
+static void TestTimeParse()
+{
+    puts("\n*** wxDateTime parse test ***");
+
+    struct ParseTestData
+    {
+        const char *format;
+        Date date;
+        bool good;
+    };
+
+    static const ParseTestData parseTestDates[] =
+    {
+        "Sat, 18 Dec 1999 00:46:40 +0100", { 18, wxDateTime::Dec, 1999, 00, 46, 40 }, TRUE,
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
+    {
+        const char *format = parseTestDates[n].format;
+
+        printf("%s => ", format);
+
+        wxDateTime dt;
+        if ( dt.ParseRfc822Date(format) )
+        {
+            printf("%s ", dt.Format().c_str());
+
+            if ( parseTestDates[n].good )
+            {
+                wxDateTime dtReal = parseTestDates[n].date.DT();
+                if ( dt == dtReal )
+                {
+                    puts("(ok)");
+                }
+                else
+                {
+                    printf("(ERROR: should be %s)\n", dtReal.Format().c_str());
+                }
+            }
+            else
+            {
+                puts("(ERROR: bad format)");
+            }
+        }
+        else
+        {
+            printf("bad format (%s)\n",
+                   parseTestDates[n].good ? "ERROR" : "ok");
+        }
+    }
+}
+
+// test compatibility with the old wxDate/wxTime classes
+static void TestTimeCompatibility()
+{
+    puts("\n*** wxDateTime compatibility test ***");
+
+    printf("wxDate for JDN 0: %s\n", wxDate(0l).FormatDate().c_str());
+    printf("wxDate for MJD 0: %s\n", wxDate(2400000).FormatDate().c_str());
+
+    double jdnNow = wxDateTime::Now().GetJDN();
+    long jdnMidnight = (long)(jdnNow - 0.5);
+    printf("wxDate for today: %s\n", wxDate(jdnMidnight).FormatDate().c_str());
+
+    jdnMidnight = wxDate().Set().GetJulianDate();
+    printf("wxDateTime for today: %s\n",
+            wxDateTime((double)(jdnMidnight + 0.5)).Format("%c", wxDateTime::GMT0).c_str());
+
+    int flags = wxEUROPEAN;//wxFULL;
+    wxDate date;
+    date.Set();
+    printf("Today is %s\n", date.FormatDate(flags).c_str());
+    for ( int n = 0; n < 7; n++ )
+    {
+        printf("Previous %s is %s\n",
+               wxDateTime::GetWeekDayName((wxDateTime::WeekDay)n),
+               date.Previous(n + 1).FormatDate(flags).c_str());
     }
 }
 
@@ -1262,8 +1345,10 @@ int main(int argc, char **argv)
     TestTimeJDN();
     TestTimeDST();
     TestTimeWDays();
-    }
     TestTimeWNumber();
+    TestTimeParse();
+    }
+    TestTimeCompatibility();
 #endif // TEST_TIME
 
     wxUninitialize();
