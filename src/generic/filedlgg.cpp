@@ -23,7 +23,7 @@
 #if wxUSE_FILEDLG
 
 // NOTE : it probably also supports MAC, untested
-#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__)
+#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__) && !defined(__OS2__)
 #error wxGenericFileDialog currently only supports Unix, win32 and DOS
 #endif
 
@@ -134,11 +134,11 @@ int wxCALLBACK wxFileDataTimeCompare( long data1, long data2, long data)
      return fd1->GetDateTime().IsLaterThan(fd2->GetDateTime()) ? int(data) : -int(data);
 }
 
-#ifdef __UNIX__
+#if defined(__UNIX__) && !defined(__OS2__)
 #define IsTopMostDir(dir)   (dir == wxT("/"))
 #endif
 
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined (__OS2__)
 #define IsTopMostDir(dir)   (dir.IsEmpty())
 #endif
 
@@ -183,7 +183,7 @@ void wxFileData::ReadData()
         return;
     }
 
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
     // c:\.. is a drive don't stat it
     if ((m_fileName == wxT("..")) && (m_filePath.length() <= 5))
     {
@@ -195,7 +195,7 @@ void wxFileData::ReadData()
 
     wxStructStat buff;
 
-#if defined(__UNIX__) && (!defined( __EMX__ ) && !defined(__VMS))
+#if defined(__UNIX__) && (!defined( __OS2__ ) && !defined(__VMS))
     lstat( m_filePath.fn_str(), &buff );
     m_type |= S_ISLNK( buff.st_mode ) != 0 ? is_link : 0;
 #else // no lstat()
@@ -495,7 +495,7 @@ void wxFileCtrl::UpdateFiles()
     item.m_itemId = 0;
     item.m_col = 0;
 
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXMAC__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXMAC__) || defined(__OS2__)
     if ( IsTopMostDir(m_dirName) )
         {
         wxArrayString names, paths;
@@ -516,7 +516,7 @@ void wxFileCtrl::UpdateFiles()
         if ( !IsTopMostDir(m_dirName) )
         {
             wxString p(wxPathOnly(m_dirName));
-#ifdef __UNIX__
+#if defined(__UNIX__) && !defined(__OS2__)
             if (p.IsEmpty()) p = wxT("/");
 #endif // __UNIX__
             wxFileData *fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
@@ -525,10 +525,10 @@ void wxFileCtrl::UpdateFiles()
         }
 
         wxString dirname(m_dirName);
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
         if (dirname.length() == 2 && dirname[1u] == wxT(':'))
             dirname << wxT('\\');
-#endif // defined(__DOS__) || defined(__WINDOWS__)
+#endif // defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
         wxDir dir(dirname);
 
         if ( dir.IsOpened() )
@@ -637,7 +637,7 @@ void wxFileCtrl::GoToParentDir()
             m_dirName.Remove( len-1, 1 );
         wxString fname( wxFileNameFromPath(m_dirName) );
         m_dirName = wxPathOnly( m_dirName );
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
         if (!m_dirName.IsEmpty())
         {
             if (m_dirName.Last() == wxT('.'))
@@ -1355,9 +1355,9 @@ void wxGenericFileDialog::UpdateControls()
     bool enable = !IsTopMostDir(dir);
     m_upDirButton->Enable(enable);
 
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
     m_newDirButton->Enable(enable);
-#endif // defined(__DOS__) || defined(__WINDOWS__)
+#endif // defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
 }
 
 #ifdef USE_GENERIC_FILEDIALOG
