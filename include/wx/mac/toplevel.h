@@ -17,7 +17,7 @@
 #endif
 
 #if wxUSE_SYSTEM_OPTIONS
-    #define wxMAC_WINDOW_PLAIN_TRANSITION _T("MAC_WINDOW_PLAIN_TRANSITION")
+    #define wxMAC_WINDOW_PLAIN_TRANSITION _T("mac.window-plain-transition")
 #endif
 
 // ----------------------------------------------------------------------------
