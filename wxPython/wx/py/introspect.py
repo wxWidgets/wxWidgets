@@ -49,18 +49,22 @@ def getAttributeNames(object, includeMagic=1, includeSingle=1,
         try: attributes += object._getAttributeNames()
         except: pass
     # Get all attribute names.
-    attrdict = getAllAttributeNames(object)
-    # Store the object's dir.
-    object_dir = dir(object)
-    for (str_obj, technique, count), attrlist in attrdict.items():
-        # This complexity is necessary to avoid accessing all the
-        # attributes of the object.  This is very handy for objects
-        # whose attributes are lazily evaluated.
-        if str(object) == str_obj and technique == 'dir':
-            attributes += attrlist
-        else:
-            attributes += [attr for attr in attrlist \
-                           if attr not in object_dir and hasattr(object, attr)]
+    str_type = str(type(object))
+    if str_type == "<type 'array'>":
+        attributes += dir(object)
+    else:
+        attrdict = getAllAttributeNames(object)
+        # Store the object's dir.
+        object_dir = dir(object)
+        for (str_obj, technique, count), attrlist in attrdict.items():
+            # This complexity is necessary to avoid accessing all the
+            # attributes of the object.  This is very handy for objects
+            # whose attributes are lazily evaluated.
+            if str(object) == str_obj and technique == 'dir':
+                attributes += attrlist
+            else:
+                attributes += [attr for attr in attrlist \
+                               if attr not in object_dir and hasattr(object, attr)]
             
     # Remove duplicates from the attribute list.
     for item in attributes:
