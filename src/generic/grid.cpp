@@ -4202,8 +4202,8 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg )
     wxRegionIterator iter( reg );
     wxRect r;
 
-    wxArrayInt  rowlabels;           
-        
+    wxArrayInt  rowlabels;
+
     int top, bottom;
     while ( iter )
     {
@@ -5818,7 +5818,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
-            
+
             DrawGridCellArea(dc,cells);
             DrawAllGridLines( dc, r );
         }
@@ -6911,6 +6911,7 @@ bool wxGrid::IsVisible( int row, int col, bool wholeCellVisible )
 //
 void wxGrid::MakeCellVisible( int row, int col )
 {
+
     int i;
     int xpos = -1, ypos = -1;
 
@@ -6951,7 +6952,10 @@ void wxGrid::MakeCellVisible( int row, int col )
             // we divide it later by GRID_SCROLL_LINE, make sure that we don't
             // have rounding errors (this is important, because if we do, we
             // might not scroll at all and some cells won't be redrawn)
-            ypos += GRID_SCROLL_LINE / 2;
+            //
+            // Sometimes GRID_SCROLL_LINE/2 is not enough, so just add a full
+            // scroll unit...
+            ypos += GRID_SCROLL_LINE;
         }
 
         if ( left < 0 )
@@ -6973,7 +6977,7 @@ void wxGrid::MakeCellVisible( int row, int col )
             }
 
             // see comment for ypos above
-            xpos += GRID_SCROLL_LINE / 2;
+            xpos += GRID_SCROLL_LINE;
         }
 
         if ( xpos != -1  ||  ypos != -1 )
