@@ -959,10 +959,6 @@ SOURCE=.\generic\statusbr.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\tbarsmpl.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\textdlgg.cpp
 # End Source File
 # Begin Source File
@@ -2519,10 +2515,6 @@ SOURCE=..\include\wx\taskbar.h
 # Begin Source File
 
 SOURCE=..\include\wx\tbarbase.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\tbarsmpl.h
 # End Source File
 # Begin Source File
 

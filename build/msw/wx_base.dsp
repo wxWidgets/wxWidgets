@@ -955,6 +955,10 @@ SOURCE=..\..\include\wx\msw\wrapwin.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\include\wx\afterstd.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\app.h
 # End Source File
 # Begin Source File

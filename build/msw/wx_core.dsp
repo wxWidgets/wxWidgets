@@ -7816,10 +7816,6 @@ SOURCE=..\..\include\wx\access.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\afterstd.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\artprov.h
 # End Source File
 # Begin Source File
@@ -7908,19 +7904,7 @@ SOURCE=..\..\include\wx\dataobj.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\db.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\dbgrid.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\dbkeyg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\dbtable.h
 # End Source File
 # Begin Source File
 

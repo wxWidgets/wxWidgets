@@ -24,12 +24,12 @@ DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
 	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -DWXUSINGDLL \
-	-DWXMAKINGDLL_DEPRECATED $(CFLAGS)
+	-DWXMAKINGDLL_DEPRECATED -I..\..\src\deprecated $(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
 	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -DWXUSINGDLL \
-	-DWXMAKINGDLL_DEPRECATED $(CXXFLAGS) -Hu \
+	-DWXMAKINGDLL_DEPRECATED -I..\..\src\deprecated $(CXXFLAGS) -Hu \
 	-H=$(OBJS)\wxprec_deprecateddll.csm
 DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_dummy.obj \
@@ -44,12 +44,13 @@ DEPRECATEDDLL_OBJECTS =  \
 DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
-	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include $(CFLAGS)
+	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -I..\..\src\deprecated \
+	$(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
-	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include $(CXXFLAGS) -Hu \
-	-H=$(OBJS)\wxprec_deprecatedlib.csm
+	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -I..\..\src\deprecated \
+	$(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_deprecatedlib.csm
 DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_dummy.obj \
 	$(OBJS)\deprecatedlib_prop.obj \

@@ -19,7 +19,7 @@ DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\deprecated\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_DEPRECATED \
-	$(CFLAGS)
+	/I..\..\src\deprecated $(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated_vc$(VENDORTAG).pdb \
@@ -27,7 +27,8 @@ DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\deprecated\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_DEPRECATED \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_deprecateddll.pch"
+	/I..\..\src\deprecated $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_deprecateddll.pch"
 DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_dummy.obj \
 	$(OBJS)\deprecateddll_prop.obj \
@@ -44,15 +45,15 @@ DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
-	/I..\..\src\deprecated\..\..\include $(CFLAGS)
+	/I..\..\src\deprecated\..\..\include /I..\..\src\deprecated $(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) \
 	/DWIN32 $(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated.pdb \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
-	/I..\..\src\deprecated\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_deprecatedlib.pch"
+	/I..\..\src\deprecated\..\..\include /I..\..\src\deprecated $(CXXFLAGS) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_deprecatedlib.pch"
 DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_dummy.obj \
 	$(OBJS)\deprecatedlib_prop.obj \
