@@ -267,7 +267,7 @@ public:
     /** Returns the currently used caption style for the wxFoldPanel. It is returned as a wxCaptionBarStyle class.
         after modifying it, it can be set again */
     wxCaptionBarStyle GetCaptionStyle(wxFoldPanel &fp) const {
-        wxCHECK2(fp.IsOk(), wxEmptyCaptionBarStyle);
+        wxCHECK2(fp.IsOk(), return wxEmptyCaptionBarStyle);
         return fp.GetItem()->GetCaptionStyle();
     };
 
