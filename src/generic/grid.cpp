@@ -5421,32 +5421,32 @@ void wxGrid::DrawGridCellArea( wxDC& dc )
 
 void wxGrid::DrawGridSpace( wxDC& dc )
 {
-    if ( m_numRows  &&  m_numCols )
-    {
-        int cw, ch;
-        m_gridWin->GetClientSize( &cw, &ch );
+  int cw, ch;
+  m_gridWin->GetClientSize( &cw, &ch );
 
-        int right, bottom;
-        CalcUnscrolledPosition( cw, ch, &right, &bottom );
+  int right, bottom;
+  CalcUnscrolledPosition( cw, ch, &right, &bottom );
 
-        if ( right > GetColRight(m_numCols-1)  ||
-             bottom > GetRowBottom(m_numRows-1) )
-        {
-            int left, top;
-            CalcUnscrolledPosition( 0, 0, &left, &top );
+  if ( right > (m_numCols>0) ? GetColRight(m_numCols-1) : 0  ||
+       bottom > (m_numRows>0) ? GetRowBottom(m_numRows-1) : 0 )
+  {
+      int left, top;
+      CalcUnscrolledPosition( 0, 0, &left, &top );
 
-            dc.SetBrush( wxBrush(GetDefaultCellBackgroundColour(), wxSOLID) );
-            dc.SetPen( *wxTRANSPARENT_PEN );
+      dc.SetBrush( wxBrush(GetDefaultCellBackgroundColour(), wxSOLID) );
+      dc.SetPen( *wxTRANSPARENT_PEN );
 
-            if ( right > GetColRight(m_numCols-1) )
-                dc.DrawRectangle( GetColRight(m_numCols-1), top,
-                                  right - GetColRight(m_numCols-1), ch );
+      if ( right > (m_numCols>0) ? GetColRight(m_numCols-1) : 0 )
+          dc.DrawRectangle( (m_numCols>0) ? GetColRight(m_numCols-1) : 0,
+                            top, right - (m_numCols>0) ?
+                            GetColRight(m_numCols-1) : 0, ch );
 
-            if ( bottom > GetRowBottom(m_numRows-1) )
-                dc.DrawRectangle( left, GetRowBottom(m_numRows-1),
-                                  cw, bottom - GetRowBottom(m_numRows-1) );
+      if ( bottom > (m_numRows>0) ? GetRowBottom(m_numRows-1) : 0 )
+          dc.DrawRectangle( left,
+                            (m_numRows>0) ? GetRowBottom(m_numRows-1) : 0,
+                            cw,
+                            bottom - ((m_numRows>0) ? GetRowBottom(m_numRows-1) : 0 ));
         }
-    }
 }
 
 
@@ -7681,7 +7681,7 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
 {
     if ( m_table )
     {
-        m_table->SetValue( row, col, s.c_str() );
+        m_table->SetValue( row, col, s );
         if ( !GetBatchCount() )
         {
             wxClientDC dc( m_gridWin );
