@@ -17,9 +17,9 @@
 #endif
 
 #ifndef   _REGISTRY_H
-  #include <wx/msw/registry.h>
+  #include "wx/msw/registry.h"
 #endif
-#include <wx/object.h>
+#include "wx/object.h"
 
 // ----------------------------------------------------------------------------
 // wxRegConfig
