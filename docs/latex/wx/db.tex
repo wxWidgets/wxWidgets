@@ -355,7 +355,7 @@ cached connections created by calls to wxDbGetConnection().
 \func{const wxChar *}{wxDbLogExtendedErrorMsg}{\param{const wxChar *}{userText}, \param{wxDb *}{pDb}, \param{wxChar *}{ErrFile}, \param{int }{ErrLine}}
 
 Writes a message to the wxLog window (stdout usually) when an internal
-error situation occurs.  This function only works in DEBUG builds
+error situation occurs.
 
 \func{bool}{wxDbSqlLog}{\param{wxDbSqlLogState }{state}, \param{const wxString \&}{filename = SQL\_LOG\_FILENAME}}
 
@@ -1185,7 +1185,13 @@ used for behavioral descriptions.
 \membersection{wxDb::Open}\label{wxdbopen}
 
 \func{bool}{Open}{\param{const wxString \&}{Dsn}, \param{const wxString \&}{Uid},
-\param{const wxString \&}{AuthStr}}
+\param{const wxString \&}{AuthStr}, \param{bool }{failOnDataTypeUnsupported}}
+
+\func{bool}{Open}{\param{const wxString \&}{inConnectStr}, 
+\param{bool }{failOnDataTypeUnsupported}}
+
+\func{bool}{Open}{\param{wxDbConnectInf *}{dbConnectInf}, 
+\param{bool }{failOnDataTypeUnsupported}}
 
 \func{bool}{Open}{\param{wxDb *}{copyDb}}
 
@@ -1222,9 +1228,25 @@ Privileges include being able to create new objects, update objects, delete
 objects and so on.  Users and privileges are normally administered by the
 database administrator.}
 \docparam{AuthStr}{The password associated with the Uid.}
-\docparam{copyDb}{Already completely configured and opened datasource connection
-from which all Dsn, Uid, AuthStr, and data typing information is to be copied
-from for use by this datasource connection.}
+\docparam{failOnDataTypeUnsupporte}{As part of connecting to a database, the 
+wxDb::Open() function will query the database to find out the native types 
+that it supports.  With some databases, some data types may not be supported,
+or not sufficiently supported, for use with the wxODBC classes.  Normally
+a program should fail in this case, so as not to try to use a data type
+that is not supported.  This parameter allows the programmer to override the
+failure if they wish and continue on using the connection.}
+\docparam{dbConnectInf}{Contains a DSN, Uid, Password, or a connection string 
+to be used in opening a new connection to the database.  If a connection
+string is present, then the connection string will be used.  If there is no 
+connection string present, then the DSN, Uid, and Password are used.}
+\docparam{inConnectStr}{A valid ODBC connection string used to connect to a 
+database}
+\docparam{copyDb}{Already completely configured and opened datasource 
+connection from which all Dsn, Uid, AuthStr, connection string, and data 
+typing information is to be copied from for use by this datasource 
+connection.  If 'copyDb' used a connection string to create its connection 
+originally, then the connection being made by this call to wxDb::Open() will 
+use that same connection string.}
 
 \wxheading{Remarks}
 
