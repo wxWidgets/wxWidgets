@@ -4971,8 +4971,10 @@ int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
         case VK_NUMLOCK:    id = WXK_NUMLOCK; break;
         case VK_SCROLL:     id = WXK_SCROLL; break;
 
+        // the mapping for these keys may be incorrect on non-US keyboards so
+        // maybe we shouldn't map them to ASCII values at all
         case VK_OEM_1:      id = ';'; break;
-        case VK_OEM_PLUS:   id = '='; break;
+        case VK_OEM_PLUS:   id = '+'; break;
         case VK_OEM_COMMA:  id = ','; break;
         case VK_OEM_MINUS:  id = '-'; break;
         case VK_OEM_PERIOD: id = '.'; break;
