@@ -340,7 +340,7 @@ bool wxBitmap::LoadFile(
 , long                              lType
 )
 {
-    HPS                             hPs;
+    HPS                             hPs = NULLHANDLE;
 
     UnRef();
 
