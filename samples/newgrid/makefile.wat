@@ -6,7 +6,7 @@
 # 
 # 
 # 
-PROGRAM = newgrid 
+PROGRAM = griddemo  
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
 # 
 !include $(%WXWIN)\src\makeprog.wat 

@@ -6,7 +6,7 @@
 # 
 # 
 # 
-PROGRAM = config 
+PROGRAM = conftest 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
 # 
 !include $(%WXWIN)\src\makeprog.wat 

@@ -6,7 +6,7 @@
 # 
 # 
 # 
-PROGRAM = docvwmdi 
-OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+PROGRAM = docview 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj $(OUTPUTDIR)\doc.obj $(OUTPUTDIR)\view.obj 
 # 
 !include $(%WXWIN)\src\makeprog.wat 

@@ -7,6 +7,6 @@
 # 
 # 
 PROGRAM = docview 
-OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj $(OUTPUTDIR)\listdb.obj 
 # 
 !include $(%WXWIN)\src\makeprog.wat 
