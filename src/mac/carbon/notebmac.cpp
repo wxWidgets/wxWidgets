@@ -24,6 +24,7 @@
 #include "wx/string.h"
 #include "wx/log.h"
 #include "wx/imaglist.h"
+#include "wx/image.h"
 #include "wx/notebook.h"
 #include "wx/mac/uma.h"
 // ----------------------------------------------------------------------------
@@ -341,11 +342,9 @@ wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-    // TODO: delete native widget pages
-
     WX_CLEAR_ARRAY(m_pages) ;
     MacSetupTabs();
-
+    m_nSelection = -1 ;
     return TRUE;
 }
 
@@ -423,22 +422,32 @@ void wxNotebook::MacSetupTabs()
             // afterwards Unregister it (IconRef is ref counted, so it will stay on the tab even if we
             // unregister it) in case this will ever lead to having the same icon everywhere add some kind
             // of static counter
-            ControlButtonContentInfo info ;
-            wxMacCreateBitmapButton( &info , *GetImageList()->GetBitmap( GetPageImage(ii ) ) , kControlContentPictHandle) ;
-            IconFamilyHandle iconFamily = (IconFamilyHandle) NewHandle(0) ;
-            OSErr err = SetIconFamilyData( iconFamily, 'PICT' , (Handle) info.u.picture ) ;
-            wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
-            IconRef iconRef ;
-            err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) 1 , iconFamily, &iconRef ) ;
-            wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
-            info.contentType = kControlContentIconRef ;
-            info.u.iconRef = iconRef ;
-            SetControlData( (ControlHandle) m_macControl, ii+1,kControlTabImageContentTag,
-                sizeof( info ), (Ptr)&info );
-            wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
-               UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
-            ReleaseIconRef( iconRef ) ;
-            DisposeHandle( (Handle) iconFamily ) ;
+            wxBitmap* bmap = GetImageList()->GetBitmap( GetPageImage(ii ) ) ;
+            if ( bmap )
+            {
+                wxBitmap scaledBitmap ;
+                if ( bmap->GetWidth() != 16 || bmap->GetHeight() != 16 )
+                {
+                    scaledBitmap = wxBitmap( bmap->ConvertToImage().Scale(16,16) ) ;
+                    bmap = &scaledBitmap ;
+                }
+                ControlButtonContentInfo info ;
+                wxMacCreateBitmapButton( &info , *bmap , kControlContentPictHandle) ;
+                IconFamilyHandle iconFamily = (IconFamilyHandle) NewHandle(0) ;
+                OSErr err = SetIconFamilyData( iconFamily, 'PICT' , (Handle) info.u.picture ) ;
+                wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
+                IconRef iconRef ;
+                err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) 1 , iconFamily, &iconRef ) ;
+                wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
+                info.contentType = kControlContentIconRef ;
+                info.u.iconRef = iconRef ;
+                SetControlData( (ControlHandle) m_macControl, ii+1,kControlTabImageContentTag,
+                    sizeof( info ), (Ptr)&info );
+                wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
+                   UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
+                ReleaseIconRef( iconRef ) ;
+                DisposeHandle( (Handle) iconFamily ) ;
+            }
         }
 #endif
     }
