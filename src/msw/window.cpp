@@ -292,9 +292,9 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
     // Always constructor Properties first
 
     wxREADONLY_PROPERTY( Parent,wxWindow*, GetParent, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Id,wxWindowID, SetId, GetId, -1, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // pos
-    wxPROPERTY( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // size
+    wxPROPERTY( Id,wxWindowID, SetId, GetId, wxID_ANY, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Position,wxPoint, SetPosition , GetPosition, wxDefaultPosition , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // pos
+    wxPROPERTY( Size,wxSize, SetSize, GetSize, wxDefaultSize , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // size
     wxPROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 
     // Then all relations of the object graph
@@ -1530,15 +1530,15 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         return;
     }
 
-    if ( x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+    if ( x == wxDefaultPosition.x && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
         x = currentX;
-    if ( y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+    if ( y == wxDefaultPosition.y && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
         y = currentY;
 
     AdjustForParentClientOrigin(x, y, sizeFlags);
 
-    wxSize size(-1, -1);
-    if ( width == -1 )
+    wxSize size = wxDefaultSize;
+    if ( width == wxDefaultSize.x )
     {
         if ( sizeFlags & wxSIZE_AUTO_WIDTH )
         {
@@ -1552,11 +1552,11 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         }
     }
 
-    if ( height == -1 )
+    if ( height == wxDefaultSize.y )
     {
         if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
         {
-            if ( size.x == -1 )
+            if ( size.x == wxDefaultSize.x )
             {
                 size = DoGetBestSize();
             }
@@ -1594,8 +1594,8 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         ::GetClientRect(GetHwnd(), &rectClient);
 
         // if the size is already ok, stop here (rectClient.left = top = 0)
-        if ( (rectClient.right == width || width == -1) &&
-             (rectClient.bottom == height || height == -1) )
+        if ( (rectClient.right == width || width == wxDefaultSize.x) &&
+             (rectClient.bottom == height || height == wxDefaultSize.y) )
         {
             break;
         }
@@ -3005,7 +3005,7 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
 
     bool nonDefault = false;
 
-    if ( pos.x == -1 )
+    if ( pos.x == wxDefaultPosition.x )
     {
         // if x is set to CW_USEDEFAULT, y parameter is ignored anyhow so we
         // can just as well set it to CW_USEDEFAULT as well
@@ -3018,7 +3018,7 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
         // neither because it is not handled as a special value by Windows then
         // and so we have to choose some default value for it
         x = pos.x;
-        y = pos.y == -1 ? DEFAULT_Y : pos.y;
+        y = pos.y == wxDefaultPosition.y ? DEFAULT_Y : pos.y;
 
         nonDefault = true;
     }
@@ -3062,16 +3062,16 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
     // However, on PocketPC devices, we must use the default
     // size if possible.
 #ifdef _WIN32_WCE
-    if (size.x == -1)
+    if (size.x == wxDefaultSize.x)
         w = CW_USEDEFAULT;
     else
         w = size.x;
-    if (size.y == -1)
+    if (size.y == wxDefaultSize.y)
         h = CW_USEDEFAULT;
     else
         h = size.y;
 #else
-    if ( size.x == -1 || size.y == -1)
+    if ( size.x == wxDefaultSize.x || size.y == wxDefaultSize.y)
     {
         nonDefault = true;
     }
@@ -3321,7 +3321,7 @@ bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
 bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 {
 #ifndef __WXWINCE__
-    wxCloseEvent event(wxEVT_QUERY_END_SESSION, -1);
+    wxCloseEvent event(wxEVT_QUERY_END_SESSION, wxID_ANY);
     event.SetEventObject(wxTheApp);
     event.SetCanVeto(true);
     event.SetLoggingOff(logOff == (long)ENDSESSION_LOGOFF);
@@ -3352,7 +3352,7 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
     if ( (this != wxTheApp->GetTopWindow()) )
         return false;
 
-    wxCloseEvent event(wxEVT_END_SESSION, -1);
+    wxCloseEvent event(wxEVT_END_SESSION, wxID_ANY);
     event.SetEventObject(wxTheApp);
     event.SetCanVeto(false);
     event.SetLoggingOff( (logOff == (long)ENDSESSION_LOGOFF) );
@@ -4189,25 +4189,25 @@ bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)
         maxWidth = GetMaxWidth(),
         maxHeight = GetMaxHeight();
 
-    if ( minWidth != -1 )
+    if ( minWidth != wxDefaultSize.x )
     {
         info->ptMinTrackSize.x = minWidth;
         rc = true;
     }
 
-    if ( minHeight != -1 )
+    if ( minHeight != wxDefaultSize.y )
     {
         info->ptMinTrackSize.y = minHeight;
         rc = true;
     }
 
-    if ( maxWidth != -1 )
+    if ( maxWidth != wxDefaultSize.x )
     {
         info->ptMaxTrackSize.x = maxWidth;
         rc = true;
     }
 
-    if ( maxHeight != -1 )
+    if ( maxHeight != wxDefaultSize.y )
     {
         info->ptMaxTrackSize.y = maxHeight;
         rc = true;
@@ -5228,7 +5228,7 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
             else
             {
                 handler = wxTheApp;
-                event.SetId(-1);
+                event.SetId(wxID_ANY);
             }
 
             if ( handler && handler->ProcessEvent(event) )
