@@ -47,7 +47,6 @@
 #include "wx/mimetype.h"
 #include "wx/image.h"
 #include "wx/choice.h"
-#include "wx/filedlg.h"  // for wxFileDialogBase::ParseWildcard
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -1132,7 +1131,7 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
 bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxString& filter, wxString& description)
 {
     wxArrayString filters, descriptions;
-    int count = ParseFilter(filterStr, filters, descriptions);
+    int count = wxParseWildcard(filterStr, filters, descriptions);
     if (count > 0 && n < count)
     {
         filter = filters[n];
@@ -1143,14 +1142,15 @@ bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxStrin
     return FALSE;
 }
 
+#if WXWIN_COMPATIBILITY_2_4
 // Parses the global filter, returning the number of filters.
 // Returns 0 if none or if there's a problem.
 // filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpg"
-
 int wxGenericDirCtrl::ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions)
 {
-    return wxFileDialogBase::ParseWildcard(filterStr, descriptions, filters );
+    return wxParseWildcard(filterStr, descriptions, filters );
 }
+#endif // WXWIN_COMPATIBILITY_2_4
 
 void wxGenericDirCtrl::DoResize()
 {
@@ -1252,7 +1252,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 {
     Clear();
     wxArrayString descriptions, filters;
-    size_t n = (size_t) m_dirCtrl->ParseFilter(filter, filters, descriptions);
+    size_t n = (size_t) wxParseWildcard(filter, filters, descriptions);
 
     if (n > 0 && defaultFilter < (int) n)
     {

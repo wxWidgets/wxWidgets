@@ -1836,6 +1836,60 @@ time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 }
 
 
+// Parses the filterStr, returning the number of filters.
+// Returns 0 if none or if there's a problem.
+// filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpg"
+
+int WXDLLEXPORT wxParseWildcard(const wxString& filterStr, wxArrayString& descriptions, wxArrayString& filters)
+{
+    descriptions.Clear();
+    filters.Clear();
+
+    wxString str(filterStr);
+
+    wxString description, filter;
+    int pos = 0;
+    while( pos != wxNOT_FOUND )
+    {
+        pos = str.Find(wxT('|'));
+        if ( pos == wxNOT_FOUND )
+        {
+            // if there are no '|'s at all in the string just take the entire
+            // string as filter
+            if ( filters.IsEmpty() )
+            {
+                descriptions.Add(filterStr);
+                filters.Add(filterStr);
+            }
+            else
+            {
+                wxFAIL_MSG( _T("missing '|' in the wildcard string!") );
+            }
+
+            break;
+        }
+
+        description = str.Left(pos);
+        str = str.Mid(pos + 1);
+        pos = str.Find(wxT('|'));
+        if ( pos == wxNOT_FOUND )
+        {
+            filter = str;
+        }
+        else
+        {
+            filter = str.Left(pos);
+            str = str.Mid(pos + 1);
+        }
+
+        descriptions.Add(description);
+        filters.Add(filter);
+    }
+
+    return filters.GetCount();
+}
+
+
 //------------------------------------------------------------------------
 // wild character routines
 //------------------------------------------------------------------------

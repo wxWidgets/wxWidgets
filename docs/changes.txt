@@ -55,6 +55,8 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   simply switch to using const methods.
 - EVT_XXX macros are now type-safe; code that uses wrong type for event
   handler's argument will no longer compile.
+- Identical functionality of wxFileDialog::ParseWildcard and 
+  wxGenericDirCtrl::ParseFilter is now accessible in ::wxParseWildcard
 
 
 

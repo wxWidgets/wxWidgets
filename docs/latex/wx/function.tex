@@ -181,6 +181,7 @@ the corresponding topic.
 \helpref{wxNow}{wxnow}\\
 \helpref{wxOnAssert}{wxonassert}\\
 \helpref{wxOpenClipboard}{wxopenclipboard}\\
+\helpref{wxParseWildcard}{wxparsewildcard}\\
 \helpref{wxPathOnly}{wxpathonly}\\
 \helpref{wxPostDelete}{wxpostdelete}\\
 \helpref{wxPostEvent}{wxpostevent}\\
@@ -1092,6 +1093,18 @@ Makes the directory {\it dir}, returning true if successful.
 {\it perm} is the access mask for the directory for the systems on which it is
 supported (Unix) and doesn't have effect for the other ones.
 
+
+\membersection{::wxParseWildcard}\label{wxparsewildcard}
+
+\func{int}{wxParseWildcard}{\param{const wxString\& }{wildCard}, \param{wxArrayString\& }{descriptions}, \param{wxArrayString\& }{filters}}
+
+Parses the wildCard, returning the number of filters.
+Returns 0 if none or if there's a problem,
+The arrays will contain an equal number of items found before the error.
+{\it wildCard} is in the form:
+\begin{verbatim}
+ "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
+\end{verbatim}
 
 \membersection{::wxRemoveFile}\label{wxremovefile}
 

@@ -78,6 +78,7 @@ public:
 
     // Utility functions
 
+#if WXWIN_COMPATIBILITY_2_4
     // Parses the wildCard, returning the number of filters.
     // Returns 0 if none or if there's a problem,
     // The arrays will contain an equal number of items found before the error.
@@ -86,6 +87,7 @@ public:
     static int ParseWildcard(const wxString& wildCard,
                              wxArrayString& descriptions,
                              wxArrayString& filters);
+#endif // WXWIN_COMPATIBILITY_2_4
 
     // Append first extension to filePath from a ';' separated extensionList
     // if filePath = "path/foo.bar" just return it as is
