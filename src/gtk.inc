@@ -74,6 +74,7 @@ LIB_CPP_SRC=\
  common/resource.cpp \
  common/wxexpr.cpp \
  common/process.cpp \
+ common/wxchar.cpp \
 \
  gtk/accel.cpp \
  gtk/app.cpp \

@@ -71,6 +71,7 @@ LIB_CPP_SRC=\
  common/http.cpp \
  common/url.cpp \
  common/tokenzr.cpp \
+ common/wxchar.cpp \
 \
  motif/accel.cpp \
  motif/app.cpp \
