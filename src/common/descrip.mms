@@ -37,7 +37,7 @@ OBJECTS = \
 		config.obj,\
 		ctrlcmn.obj,\
 		ctrlsub.obj,\
-		date.obj,\
+		datetime.obj,\
 		datstrm.obj,\
 		db.obj,\
 		dbtable.obj,\
@@ -82,6 +82,7 @@ OBJECTS1=framecmn.obj,\
 		lboxcmn.obj,\
 		list.obj,\
 		log.obj,\
+		longlong.obj,\
 		memory.obj,\
 		menucmn.obj,\
 		mimetype.obj,\
@@ -105,10 +106,8 @@ OBJECTS1=framecmn.obj,\
 		stream.obj,\
 		string.obj,\
 		tbarbase.obj,\
-		tbarsmpl.obj,\
 		textcmn.obj,\
 		textfile.obj,\
-		time.obj,\
 		timercmn.obj,\
 		tokenzr.obj,\
 		txtstrm.obj,\
@@ -135,7 +134,7 @@ SOURCES = \
 		config.cpp,\
 		ctrlcmn.cpp,\
 		ctrlsub.cpp,\
-		date.cpp,\
+		datetime.cpp,\
 		datstrm.cpp,\
 		db.cpp,\
 		dbtable.cpp,\
@@ -179,6 +178,7 @@ SOURCES = \
 		lboxcmn.cpp,\
 		list.cpp,\
 		log.cpp,\
+		longlong.cpp,\
 		memory.cpp,\
 		menucmn.cpp,\
 		mimetype.cpp,\
@@ -202,10 +202,8 @@ SOURCES = \
 		stream.cpp,\
 		string.cpp,\
 		tbarbase.cpp,\
-		tbarsmpl.cpp,\
 		textcmn.cpp,\
 		textfile.cpp,\
-		time.cpp,\
 		timercmn.cpp,\
 		tokenzr.cpp,\
 		txtstrm.cpp,\
@@ -257,7 +255,7 @@ cmndata.obj : cmndata.cpp
 config.obj : config.cpp
 ctrlcmn.obj : ctrlcmn.cpp
 ctrlsub.obj : ctrlsub.cpp
-date.obj : date.cpp
+datetime.obj : datetime.cpp
 datstrm.obj : datstrm.cpp
 db.obj : db.cpp
 dbtable.obj : dbtable.cpp
@@ -301,6 +299,7 @@ layout.obj : layout.cpp
 lboxcmn.obj : lboxcmn.cpp
 list.obj : list.cpp
 log.obj : log.cpp
+longlong.obj : longlong.cpp
 memory.obj : memory.cpp
 menucmn.obj : menucmn.cpp
 mimetype.obj : mimetype.cpp
@@ -324,10 +323,8 @@ strconv.obj : strconv.cpp
 stream.obj : stream.cpp
 string.obj : string.cpp
 tbarbase.obj : tbarbase.cpp
-tbarsmpl.obj : tbarsmpl.cpp
 textcmn.obj : textcmn.cpp
 textfile.obj : textfile.cpp
-time.obj : time.cpp
 timercmn.obj : timercmn.cpp
 tokenzr.obj : tokenzr.cpp
 txtstrm.obj : txtstrm.cpp

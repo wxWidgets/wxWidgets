@@ -185,7 +185,7 @@ public:
   static void InitStandardHandlers();
 
   // GRG: Dic/99
-  unsigned long CountColours( unsigned long stopafter = -1 );
+  unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 );
   unsigned long ComputeHistogram( wxHashTable &h );
 
 

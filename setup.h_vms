@@ -137,7 +137,7 @@
 /*
  * Use Threads
  */
-#define wxUSE_THREADS 0
+#define wxUSE_THREADS 1
 /*
  * Have glibc2
  */
@@ -311,6 +311,16 @@
  * Use this control
  */
 #define wxUSE_TOOLBAR 1
+
+/* If 1, use the native toolbar, otherwise use the generic version
+ * (wxToolBarSimple) which may also be use together with the native one.
+ */
+#define wxUSE_TOOLBAR_NATIVE 1
+
+/*
+ * Use generic wxToolBar instead of/together with the native one?
+ */
+#define wxUSE_TOOLBAR_SIMPLE 1
 
 #if defined(__WXWINE__) || defined(__GNUWIN32__)
 #define wxUSE_OWNER_DRAWN 1 
@@ -600,8 +610,11 @@
  */
 #define CONST_COMPATIBILITY 0
 
+/* define with the name of timezone variable */
+#undef WX_TIMEZONE
+ 
 /* The type of 3rd argument to getsockname() - usually size_t or int */
-#define SOCKLEN_T int
+#define SOCKLEN_T size_t
 
 /* gettimeofday() usually takes 2 arguments, but some really old systems might
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */
@@ -630,16 +643,19 @@
 #undef HAVE_SCHED_YIELD
 
 /* Define if you have pthread_cancel */
-#undef HAVE_PTHREAD_CANCEL
+#define HAVE_PTHREAD_CANCEL 1
 
 /* Define if you have shl_load() */
 #undef HAVE_SHL_LOAD
 
+/* Define if you have strptime() */
+#define HAVE_STRPTIME 1
+ 
 /* Define if you have all functions to set thread priority */
-#undef HAVE_THREAD_PRIORITY_FUNCTIONS
+#define HAVE_THREAD_PRIORITY_FUNCTIONS 1
 
 /* Define if you can specify exit functions to a thread */
-#undef HAVE_THREAD_CLEANUP_FUNCTIONS
+#define HAVE_THREAD_CLEANUP_FUNCTIONS 1
 
 /* Define if you have timegm() function */
 #undef HAVE_TIMEGM

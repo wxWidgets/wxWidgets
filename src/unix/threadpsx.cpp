@@ -933,8 +933,18 @@ wxThreadError wxThread::Create()
         wxLogError(_("Cannot retrieve thread scheduling policy."));
     }
 
-    int min_prio = sched_get_priority_min(policy),
-        max_prio = sched_get_priority_max(policy),
+#ifdef __VMS__
+   /* the pthread.h contains too many spaces. This is a work-around */
+# undef sched_get_priority_max
+#undef sched_get_priority_min
+#define sched_get_priority_max(_pol_) \
+     (_pol_ == SCHED_OTHER ? PRI_FG_MAX_NP : PRI_FIFO_MAX)
+#define sched_get_priority_min(_pol_) \
+     (_pol_ == SCHED_OTHER ? PRI_FG_MIN_NP : PRI_FIFO_MIN)
+#endif
+   
+    int max_prio = sched_get_priority_max(policy),
+        min_prio = sched_get_priority_min(policy),
         prio = m_internal->GetPriority();
 
     if ( min_prio == -1 || max_prio == -1 )

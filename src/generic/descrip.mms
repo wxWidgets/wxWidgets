@@ -51,6 +51,7 @@ OBJECTS = \
 		splitter.obj,\
 		statline.obj,\
 		statusbr.obj,\
+		tbarsmpl.obj,\
 		tabg.obj,\
 		textdlgg.obj,\
 		tipdlg.obj,\
@@ -89,6 +90,7 @@ SOURCES = \
 		splitter.cpp,\
 		statline.cpp,\
 		statusbr.cpp,\
+		tbarsmpl.cpp,\
 		tabg.cpp,\
 		textdlgg.cpp,\
 		tipdlg.cpp,\
@@ -133,6 +135,7 @@ scrolwin.obj : scrolwin.cpp
 splitter.obj : splitter.cpp
 statline.obj : statline.cpp
 statusbr.obj : statusbr.cpp
+tbarsmpl.obj : tbarsmpl.cpp
 tabg.obj : tabg.cpp
 textdlgg.obj : textdlgg.cpp
 tipdlg.obj : tipdlg.cpp
