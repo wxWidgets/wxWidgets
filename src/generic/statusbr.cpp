@@ -109,6 +109,24 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
   return TRUE;
 }
 
+
+wxSize wxStatusBarGeneric::DoGetBestSize() const
+{
+    int width, height;
+
+    // best width is the width of the parent
+    GetParent()->GetClientSize(&width, NULL);
+
+    // best height is as calculated above in Create
+    wxClientDC dc((wxWindow*)this);
+    dc.SetFont(GetFont());
+    wxCoord y;
+    dc.GetTextExtent(_T("X"), NULL, &y );
+    height = (int)( (11*y)/10 + 2*GetBorderY());
+
+    return wxSize(width, height);
+}    
+
 void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 {
     wxASSERT_MSG( number >= 0, _T("negative number of fields in wxStatusBar?") );

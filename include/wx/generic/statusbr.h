@@ -119,6 +119,8 @@ protected:
   wxPen             m_mediumShadowPen;
   wxPen             m_hilightPen;
 
+  virtual wxSize DoGetBestSize() const;
+
 private:
   DECLARE_EVENT_TABLE()
   DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBarGeneric)
