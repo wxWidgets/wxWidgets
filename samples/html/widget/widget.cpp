@@ -19,11 +19,11 @@
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWindows headers
 #ifndef WX_PRECOMP
-    #include <wx/wx.h>
+    #include "wx/wx.h"
 #endif
 
 
-#include <wx/html/htmlwin.h>
+#include "wx/html/htmlwin.h"
 
 
 
@@ -36,7 +36,7 @@ TAG HANDER FOR 'MYBIND' TAG
 
 */
 
-#include <wx/html/m_templ.h>
+#include "wx/html/m_templ.h"
 
 
 TAG_HANDLER_BEGIN(MYBIND, "MYBIND")
