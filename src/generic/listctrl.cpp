@@ -4034,7 +4034,7 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 
             // this may happen if SetScrollbars() hadn't been called yet
             if ( m_lineFrom >= count )
-                m_lineFrom = count;
+                m_lineFrom = count - 1;
 
             // we redraw one extra line but this is needed to make the redrawing
             // logic work when there is a fractional number of lines on screen
