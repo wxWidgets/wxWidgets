@@ -1228,8 +1228,10 @@ wxToolkitInfo& wxAppTraits::GetToolkitInfo()
                 case VER_PLATFORM_WIN32_NT:
                     s_ver = wxWINDOWS_NT;
                     break;
+#ifdef __WXWINCE__
                 case VER_PLATFORM_WIN32_CE:
                     s_ver = wxWINDOWS_CE;
+#endif                    
             }
 #endif            
         }
