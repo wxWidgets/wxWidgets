@@ -36,7 +36,7 @@ class TestLB(wx.Listbook):
 
         # make an image list using the BlomXX images
         il = wx.ImageList(32, 32)
-        for x in range(1, 15):
+        for x in range(1, 16):
             f = getattr(images, 'getBlom%02dBitmap' % x)
             bmp = f()
             il.Add(bmp)
