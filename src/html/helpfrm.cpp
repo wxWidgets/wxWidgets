@@ -611,7 +611,7 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
 
 
 
-void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& event)
+void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& WXUNUSED(event))
 {
     wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexBox -> GetClientData(m_IndexBox -> GetSelection());
     if (it) m_HtmlWin -> LoadPage(it -> m_Book -> GetBasePath() + it -> m_Page);
@@ -619,13 +619,13 @@ void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& event)
 
 
 
-void wxHtmlHelpFrame::OnSearchSel(wxCommandEvent& event)
+void wxHtmlHelpFrame::OnSearchSel(wxCommandEvent& WXUNUSED(event))
 {
     wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_SearchList -> GetClientData(m_SearchList -> GetSelection());
     if (it) m_HtmlWin -> LoadPage(it -> m_Book -> GetBasePath() + it -> m_Page);
 }
 
-void wxHtmlHelpFrame::OnSearch(wxCommandEvent& event)
+void wxHtmlHelpFrame::OnSearch(wxCommandEvent& WXUNUSED(event))
 {
     wxString sr = m_SearchText -> GetLineText(0);
 

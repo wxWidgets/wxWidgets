@@ -147,7 +147,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     wxEndBusyCursor();
 }
 
-void wxNumberEntryDialog::OnOK(wxCommandEvent& event)
+void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
     if ( (wxSscanf(m_spinctrl->GetValue(), _T("%lu"), &m_value) != 1) ||
          (m_value < m_min) || (m_value > m_max) )
@@ -159,7 +159,7 @@ void wxNumberEntryDialog::OnOK(wxCommandEvent& event)
     EndModal(wxID_OK);
 }
 
-void wxNumberEntryDialog::OnCancel(wxCommandEvent& event)
+void wxNumberEntryDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
     m_value = -1;
 

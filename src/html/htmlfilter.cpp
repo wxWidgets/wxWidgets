@@ -42,7 +42,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxHtmlFilter, wxObject)
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterPlainText, wxHtmlFilter)
 
-bool wxHtmlFilterPlainText::CanRead(const wxFSFile& file) const
+bool wxHtmlFilterPlainText::CanRead(const wxFSFile& WXUNUSED(file)) const
 {
     return TRUE;
 }
