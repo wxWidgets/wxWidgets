@@ -473,6 +473,9 @@ private:
 #define GetHpalette()           ((HPALETTE)GetHPALETTE())
 #define GetHpaletteOf(pal)      ((HPALETTE)(pal).GetHPALETTE())
 
+#define GetHpen()               ((HPEN)GetResourceHandle())
+#define GetHpenOf(pen)          ((HPEN)(pen).GetResourceHandle())
+
 #define GetHrgn()               ((HRGN)GetHRGN())
 #define GetHrgnOf(rgn)          ((HRGN)(rgn).GetHRGN())
 
