@@ -180,6 +180,17 @@ LockResult wxSingleInstanceCheckerImpl::CreateLockFile()
 
             fsync(m_fdLock);
 
+            // change file's permission so that only this user can access it:
+            if ( chmod(m_nameLock.fn_str(), S_IRUSR | S_IWUSR) != 0 )
+            {
+                wxLogSysError(_("Failed to set permissions on lock file '%s'"),
+                              m_nameLock.c_str());
+
+                Unlock();
+                
+                return LOCK_ERROR;
+            }
+
             return LOCK_CREATED;
         }
         else // failure: see what exactly happened
@@ -224,6 +235,26 @@ bool wxSingleInstanceCheckerImpl::Create(const wxString& name)
         case LOCK_ERROR:
             // oops...
             return FALSE;
+    }
+
+    // Check if the file is owned by current user and has 0600 permissions.
+    // If it doesn't, it's a fake file, possibly meant as a DoS attack, and
+    // so we refuse to touch it:
+    wxStructStat stat;
+    if ( wxStat(name, &stat) != 0 )
+    {
+        wxLogSysError(_("Failed to inspect the lock file '%s'"), name.c_str());
+        return false;
+    }
+    if ( stat.st_uid != getuid() )
+    {
+        wxLogError(_("Lock file '%s' has incorrect owner."), name.c_str());
+        return false;
+    }
+    if ( stat.st_mode != (S_IFREG | S_IRUSR | S_IWUSR) )
+    {
+        wxLogError(_("Lock file '%s' has incorrect permissions."), name.c_str());
+        return false;
     }
 
     // try to open the file for reading and get the PID of the process

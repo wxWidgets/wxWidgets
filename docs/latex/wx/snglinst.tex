@@ -104,6 +104,15 @@ instance is running - use
 \helpref{IsAnotherRunning()}{wxsingleinstancecheckerisanotherrunning} to check
 for it.
 
+\wxheading{Note}
+
+One of possible reasons while Create may fail on Unix is that the lock file
+used for checking already exists but was not created by the user.
+Therefore applications shouldn't treat failure of this function as fatal
+condition, because doing so would open them to the possibility of a Denial of
+Service attack. Instead, they should alert the user about the problem and
+offer to continue execution without checking if another instance is running.
+
 \membersection{wxSingleInstanceChecker::IsAnotherRunning}\label{wxsingleinstancecheckerisanotherrunning}
 
 \constfunc{bool}{IsAnotherRunning}{\void}
