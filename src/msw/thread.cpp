@@ -484,9 +484,9 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
 
     // first of all, check whether we hadn't been cancelled already and don't
     // start the user code at all then
-    bool isExited = (thread->m_internal->GetState() == STATE_EXITED);
+    const bool hasExited = thread->m_internal->GetState() == STATE_EXITED;
 
-    if ( isExited )
+    if ( hasExited )
     {
         rc = (THREAD_RETVAL)-1;
     }
@@ -509,7 +509,7 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
     // threads after state is changed to STATE_EXITED.
     bool isDetached = thread->IsDetached();
 
-    if (!isExited)
+    if ( !hasExited )
     {
         // enter m_critsect before changing the thread state
         wxCriticalSectionLocker lock(thread->m_critsect);
@@ -517,7 +517,8 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
     }
 
     // the thread may delete itself now if it wants, we don't need it any more
-    if (isDetached) thread->m_internal->LetDie();
+    if ( isDetached )
+        thread->m_internal->LetDie();
 
     return rc;
 }
@@ -633,14 +634,11 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
 
     wxThread::ExitCode rc = 0;
 
-    // Delete() is always safe to call, so consider all possible states
+    // we might need to resume the thread if it's currently stopped
+    bool shouldResume = false;
 
-    // we might need to resume the thread, but we might also not need to cancel
-    // it if it doesn't run yet
-    bool shouldResume = false,
-         isRunning = false;
-
-    // check if the thread already started to run
+    // as Delete() (which calls us) is always safe to call we need to consider
+    // all possible states
     {
         wxCriticalSectionLocker lock(cs);
 
@@ -653,20 +651,17 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
                 // to let it run
                 m_state = STATE_EXITED;
 
-                Resume();   // it knows about STATE_EXITED special case
-
+                // we must call Resume() as the thread hasn't been initially
+                // resumed yet (and as Resume() it knows about STATE_EXITED
+                // special case, it won't touch it and WinThreadStart() will
+                // just exit immediately)
+                shouldResume = true;
                 shouldDelete = false;
             }
-
-            isRunning = true;
-
-            // shouldResume is correctly set to false here
+            //else: shouldResume is correctly set to false here, wait until
+            //      someone else runs the thread and it finishes
         }
-        else if ( m_state == STATE_EXITED )
-        {
-            return wxTHREAD_NOT_RUNNING;
-        }
-        else // running (but maybe paused or cancelled)
+        else // running, paused, cancelled or even exited
         {
             shouldResume = m_state == STATE_PAUSED;
         }
@@ -676,103 +671,102 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
     if ( shouldResume )
         Resume();
 
-    // is it still running?
-    if ( isRunning || m_state == STATE_RUNNING )
+    // ask the thread to terminate
+    if ( shouldDelete )
+    {
+        wxCriticalSectionLocker lock(cs);
+
+        Cancel();
+    }
+
+
+    // now wait for thread to finish
+    if ( wxThread::IsMain() )
+    {
+        // set flag for wxIsWaitingForThread()
+        gs_waitingForThread = true;
+    }
+
+    // we can't just wait for the thread to terminate because it might be
+    // calling some GUI functions and so it will never terminate before we
+    // process the Windows messages that result from these functions
+    // (note that even in console applications we might have to process
+    // messages if we use wxExecute() or timers or ...)
+    DWORD result wxDUMMY_INITIALIZE(0);
+    do
     {
         if ( wxThread::IsMain() )
         {
-            // set flag for wxIsWaitingForThread()
-            gs_waitingForThread = true;
-        }
-
-        // ask the thread to terminate
-        if ( shouldDelete )
-        {
-            wxCriticalSectionLocker lock(cs);
-
-            Cancel();
-        }
-
-        // we can't just wait for the thread to terminate because it might be
-        // calling some GUI functions and so it will never terminate before we
-        // process the Windows messages that result from these functions
-        // (note that even in console applications we might have to process
-        // messages if we use wxExecute() or timers or ...)
-        DWORD result wxDUMMY_INITIALIZE(0);
-        do
-        {
-            if ( wxThread::IsMain() )
+            // give the thread we're waiting for chance to do the GUI call
+            // it might be in
+            if ( (gs_nWaitingForGui > 0) && wxGuiOwnedByMainThread() )
             {
-                // give the thread we're waiting for chance to do the GUI call
-                // it might be in
-                if ( (gs_nWaitingForGui > 0) && wxGuiOwnedByMainThread() )
+                wxMutexGuiLeave();
+            }
+        }
+
+        result = ::MsgWaitForMultipleObjects
+                 (
+                   1,              // number of objects to wait for
+                   &m_hThread,     // the objects
+                   false,          // don't wait for all objects
+                   INFINITE,       // no timeout
+                   QS_ALLINPUT |   // return as soon as there are any events
+                   QS_ALLPOSTMESSAGE
+                 );
+
+        switch ( result )
+        {
+            case 0xFFFFFFFF:
+                // error
+                wxLogSysError(_("Can not wait for thread termination"));
+                Kill();
+                return wxTHREAD_KILLED;
+
+            case WAIT_OBJECT_0:
+                // thread we're waiting for terminated
+                break;
+
+            case WAIT_OBJECT_0 + 1:
+                // new message arrived, process it -- but only if we're the
+                // main thread as we don't support processing messages in
+                // the other ones
+                //
+                // NB: we still must include QS_ALLINPUT even when waiting
+                //     in a secondary thread because if it had created some
+                //     window somehow (possible not even using wxWidgets)
+                //     the system might dead lock then
+                if ( wxThread::IsMain() )
                 {
-                    wxMutexGuiLeave();
-                }
-            }
+                    // it looks that sometimes WAIT_OBJECT_0 + 1 is
+                    // returned but there are no messages in the thread
+                    // queue -- prevent DoMessageFromThreadWait() from
+                    // blocking inside ::GetMessage() forever in this case
+                    ::PostMessage(NULL, WM_NULL, 0, 0);
 
-            result = ::MsgWaitForMultipleObjects
-                     (
-                       1,              // number of objects to wait for
-                       &m_hThread,     // the objects
-                       false,          // don't wait for all objects
-                       INFINITE,       // no timeout
-                       QS_ALLINPUT |   // return as soon as there are any events
-                       QS_ALLPOSTMESSAGE
-                     );
+                    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits()
+                                                   : NULL;
 
-            switch ( result )
-            {
-                case 0xFFFFFFFF:
-                    // error
-                    wxLogSysError(_("Can not wait for thread termination"));
-                    Kill();
-                    return wxTHREAD_KILLED;
-
-                case WAIT_OBJECT_0:
-                    // thread we're waiting for terminated
-                    break;
-
-                case WAIT_OBJECT_0 + 1:
-                    // new message arrived, process it -- but only if we're the
-                    // main thread as we don't support processing messages in
-                    // the other ones
-                    //
-                    // NB: we still must include QS_ALLINPUT even when waiting
-                    //     in a secondary thread because if it had created some
-                    //     window somehow (possible not even using wxWidgets)
-                    //     the system might dead lock then
-                    if ( wxThread::IsMain() )
+                    if ( traits && !traits->DoMessageFromThreadWait() )
                     {
-                        // it looks that sometimes WAIT_OBJECT_0 + 1 is
-                        // returned but there are no messages in the thread
-                        // queue -- prevent DoMessageFromThreadWait() from
-                        // blocking inside ::GetMessage() forever in this case
-                        ::PostMessage(NULL, WM_NULL, 0, 0);
+                        // WM_QUIT received: kill the thread
+                        Kill();
 
-                        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits()
-                                                       : NULL;
-
-                        if ( traits && !traits->DoMessageFromThreadWait() )
-                        {
-                            // WM_QUIT received: kill the thread
-                            Kill();
-
-                            return wxTHREAD_KILLED;
-                        }
+                        return wxTHREAD_KILLED;
                     }
-                    break;
+                }
+                break;
 
-                default:
-                    wxFAIL_MSG(wxT("unexpected result of MsgWaitForMultipleObject"));
-            }
-        } while ( result != WAIT_OBJECT_0 );
-
-        if ( wxThread::IsMain() )
-        {
-            gs_waitingForThread = false;
+            default:
+                wxFAIL_MSG(wxT("unexpected result of MsgWaitForMultipleObject"));
         }
+    } while ( result != WAIT_OBJECT_0 );
+
+    if ( wxThread::IsMain() )
+    {
+        gs_waitingForThread = false;
     }
+
 
     // although the thread might be already in the EXITED state it might not
     // have terminated yet and so we are not sure that it has actually
@@ -834,7 +828,7 @@ bool wxThreadInternal::Resume()
 
     // don't change the state from STATE_EXITED because it's special and means
     // we are going to terminate without running any user code - if we did it,
-    // the codei n Delete() wouldn't work
+    // the code in WaitForTerminate() wouldn't work
     if ( m_state != STATE_EXITED )
     {
         m_state = STATE_RUNNING;
