@@ -260,6 +260,10 @@ SOURCE=.\common\clipcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\clntdata.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\cmdline.cpp
 # End Source File
 # Begin Source File
@@ -1526,7 +1530,15 @@ SOURCE=..\include\wx\clipbrd.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\clntdata.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\cmdline.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\cmdproc.h
 # End Source File
 # Begin Source File
 
@@ -2837,6 +2849,10 @@ SOURCE=..\include\wx\generic\sashwin.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\scrolwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\spinctlg.h
 # End Source File
 # Begin Source File
 
