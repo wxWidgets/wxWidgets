@@ -642,7 +642,18 @@ caseSensitive is TRUE by default (case matters).
 
 Returns TRUE if strings are equal, FALSE otherwise.
 
-See also \helpref{Cmp}{wxstringcmp}, \helpref{CmpNoCase}{wxstringcmpnocase}.
+See also \helpref{Cmp}{wxstringcmp}, \helpref{CmpNoCase}{wxstringcmpnocase}, \helpref{IsSameAs}{wxstringissameas2}
+
+\membersection{wxString::IsSameAs}\label{wxstringissameas2}
+
+\constfunc{bool}{IsSameAs}{\param{char}{ c}, \param{bool}{ caseSensitive = TRUE}}
+
+Test whether the string is equal to the single character {\it c}. The test is
+case-sensitive if {\it caseSensitive} is TRUE (default) or not if it is FALSE.
+
+Returns TRUE if the string is equal to the character, FALSE otherwise.
+
+See also \helpref{Cmp}{wxstringcmp}, \helpref{CmpNoCase}{wxstringcmpnocase}, \helpref{IsSameAs}{wxstringissameas}
 
 \membersection{wxString::IsWord}\label{wxstringisword}
 

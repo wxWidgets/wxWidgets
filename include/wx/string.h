@@ -572,13 +572,19 @@ public:
 
   // string comparison
     // case-sensitive comparison (returns a value < 0, = 0 or > 0)
-  int  Cmp(const wxChar *psz) const { return wxStrcmp(c_str(), psz); }
+  int Cmp(const wxChar *psz) const { return wxStrcmp(c_str(), psz); }
     // same as Cmp() but not case-sensitive
-  int  CmpNoCase(const wxChar *psz) const { return wxStricmp(c_str(), psz); }
+  int CmpNoCase(const wxChar *psz) const { return wxStricmp(c_str(), psz); }
     // test for the string equality, either considering case or not
     // (if compareWithCase then the case matters)
   bool IsSameAs(const wxChar *psz, bool compareWithCase = TRUE) const
     { return (compareWithCase ? Cmp(psz) : CmpNoCase(psz)) == 0; }
+    // comparison with a signle character: returns TRUE if equal
+  bool IsSameAs(wxChar c, bool compareWithCase = TRUE) const
+    {
+      return (Len() == 1) && (compareWithCase ? GetChar(0u) == c
+                              : wxToupper(GetChar(0u)) == wxToupper(c));
+    }
 
   // simple sub-string extraction
       // return substring starting at nFirst of length nCount (or till the end
@@ -993,6 +999,7 @@ private:
 // ---------------------------------------------------------------------------
 // wxString comparison functions: operator versions are always case sensitive
 // ---------------------------------------------------------------------------
+
 //
 inline bool operator==(const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) == 0); }
 //
@@ -1030,16 +1037,22 @@ inline bool operator>=(const wxString& s1, const wxChar  * s2) { return (s1.Cmp(
 //
 inline bool operator>=(const wxChar  * s1, const wxString& s2) { return (s2.Cmp(s1) <= 0); }
 
+// comparison with char
+inline bool operator==(wxChar c, const wxString& s) { return s.IsSameAs(c); }
+inline bool operator==(const wxString& s, wxChar c) { return s.IsSameAs(c); }
+inline bool operator!=(wxChar c, const wxString& s) { return !s.IsSameAs(c); }
+inline bool operator!=(const wxString& s, wxChar c) { return !s.IsSameAs(c); }
+
 #if wxUSE_UNICODE
 inline bool operator==(const wxString& s1, const wxWCharBuffer& s2)
-{ return (s1.Cmp((const wchar_t *)s2) == 0); }
+    { return (s1.Cmp((const wchar_t *)s2) == 0); }
 inline bool operator==(const wxWCharBuffer& s1, const wxString& s2)
-{ return (s2.Cmp((const wchar_t *)s1) == 0); }
+    { return (s2.Cmp((const wchar_t *)s1) == 0); }
 #else
 inline bool operator==(const wxString& s1, const wxCharBuffer& s2)
-{ return (s1.Cmp((const char *)s2) == 0); }
+    { return (s1.Cmp((const char *)s2) == 0); }
 inline bool operator==(const wxCharBuffer& s1, const wxString& s2)
-{ return (s2.Cmp((const char *)s1) == 0); }
+    { return (s2.Cmp((const char *)s1) == 0); }
 #endif
 
 wxString WXDLLEXPORT operator+(const wxString& string1,  const wxString& string2);
