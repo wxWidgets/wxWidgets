@@ -620,8 +620,9 @@ public:
                               const wxString& text,
                               const wxRect& rect,
                               int selStart = -1,
-                              int selEnd = -1)
-        { m_renderer->DrawTextLine(dc, text, rect, selStart, selEnd); }
+                              int selEnd = -1,
+                              int flags = 0)
+        { m_renderer->DrawTextLine(dc, text, rect, selStart, selEnd, flags); }
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect)
         { m_renderer->DrawLineWrapMark(dc, rect); }
 
@@ -719,7 +720,7 @@ public:
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
-                                 wxBitmap *bmpDisabled) const
+                                 wxBitmap *bmpDisabled)
         { m_renderer->GetComboBitmaps(bmpNormal, bmpFocus,
                                       bmpPressed, bmpDisabled); }
 
@@ -778,7 +779,7 @@ public:
         { return m_renderer->GetSliderTickLen(); }
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
                                       wxOrientation orient) const
-        { return GetSliderShaftRect(rect, orient); }
+        { return m_renderer->GetSliderShaftRect(rect, orient); }
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const
         { return m_renderer->GetSliderThumbSize(rect, orient); }
