@@ -73,6 +73,25 @@
 // start and end of document/page
 //-----------------------------------------------------------------------------
 
+static const char *wxPostScriptHeaderConicTo = "\
+/conicto {\n\
+    /to_y exch def\n\
+    /to_x exch def\n\
+    /conic_cntrl_y exch def\n\
+    /conic_cntrl_x exch def\n\
+    currentpoint\n\
+    /p0_y exch def\n\
+    /p0_x exch def\n\
+    /p1_x p0_x conic_cntrl_x p0_x sub 2 3 div mul add def\n\
+    /p1_y p0_y conic_cntrl_y p0_y sub 2 3 div mul add def\n\
+    /p2_x p1_x to_x p0_x sub 1 3 div mul add def\n\
+    /p2_y p1_y to_y p0_y sub 1 3 div mul add def\n\
+    p1_x p1_y p2_x p2_y to_x to_y curveto\n\
+}  bind def\n\
+/start_ol { gsave 1.0 72 div dup scale } bind def\n\
+/end_ol { closepath fill grestore } bind def\n\
+";
+      
 static const char *wxPostScriptHeaderEllipse = "\
 /ellipsedict 8 dict def\n\
 ellipsedict /mtrx matrix put\n\
@@ -187,6 +206,7 @@ static const char *wxPostScriptHeaderColourImage = "\
   } ifelse          %% end of 'false' case\n\
 ";
 
+#ifndef __WXGTK20__
 static char wxPostScriptHeaderReencodeISO1[] =
     "\n/reencodeISO {\n"
 "dup dup findfont dup length dict begin\n"
@@ -227,6 +247,7 @@ static char wxPostScriptHeaderReencodeISO2[] =
 "/otilde/odieresis/divide/oslash/ugrave/uacute/ucircumflex/udieresis\n"
 "/yacute/thorn/ydieresis\n"
         "] def\n\n";
+#endif
 
 //-------------------------------------------------------------------------------
 // wxPostScriptDC
@@ -939,6 +960,7 @@ void wxPostScriptDC::SetFont( const wxFont& font )
 
     m_font = font;
 
+#ifndef __WXGTK20__
     int Style = m_font.GetStyle();
     int Weight = m_font.GetWeight();
 
@@ -1023,6 +1045,7 @@ void wxPostScriptDC::SetFont( const wxFont& font )
     for (int i = 0; i < 100; i++)
         if (buffer[i] == ',') buffer[i] = '.';
     fprintf( m_pstream, buffer );
+#endif
 }
 
 void wxPostScriptDC::SetPen( const wxPen& pen )
@@ -1174,6 +1197,110 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 #include "wx/fontutil.h"
 #include "gtk/gtk.h"
 #include <pango/pangoft2.h>
+#include <freetype/ftglyph.h>
+
+#ifndef FT_Outline_Decompose
+  FT_EXPORT( FT_Error )  FT_Outline_Decompose(
+                           FT_Outline*              outline,
+                           const FT_Outline_Funcs*  interface,
+                           void*                    user );
+#endif
+
+typedef struct _OutlineInfo OutlineInfo;
+struct _OutlineInfo {
+  FILE *OUT;
+  FT_Vector glyph_origin;
+  int dpi;
+};
+
+static int paps_move_to( FT_Vector* to,
+			 void *user_data)
+{
+  OutlineInfo *outline_info = (OutlineInfo*)user_data;
+  fprintf(outline_info->OUT, "%d %d moveto\n",
+	  (int)to->x ,
+	  (int)to->y );
+  return 0;
+}
+
+static int paps_line_to( FT_Vector*  to,
+			 void *user_data)
+{
+  OutlineInfo *outline_info = (OutlineInfo*)user_data;
+  fprintf(outline_info->OUT, "%d %d lineto\n",
+	  (int)to->x ,
+	  (int)to->y );
+  return 0;
+}
+
+static int paps_conic_to( FT_Vector*  control,
+			  FT_Vector*  to,
+			  void *user_data)
+{
+  OutlineInfo *outline_info = (OutlineInfo*)user_data;
+  fprintf(outline_info->OUT, "%d %d %d %d conicto\n",
+	  (int)control->x  ,
+	  (int)control->y  ,
+	  (int)to->x   ,
+	  (int)to->y  );
+  return 0;
+}
+
+static int paps_cubic_to( FT_Vector*  control1,
+			  FT_Vector*  control2,
+			  FT_Vector*  to,
+			  void *user_data)
+{
+  OutlineInfo *outline_info = (OutlineInfo*)user_data;
+  fprintf(outline_info->OUT,
+	  "%d %d %d %d %d %d curveto\n",
+	  (int)control1->x , 
+	  (int)control1->y ,
+	  (int)control2->x ,
+	  (int)control2->y ,
+	  (int)to->x ,
+	  (int)to->y );
+  return 0;
+}
+
+static void draw_bezier_outline(FILE *OUT,
+			 int dpi,
+			 FT_Face face,
+			 FT_UInt glyph_index,
+			 wxCoord pos_x,
+			 wxCoord pos_y
+			 )
+{
+  FT_Int load_flags = FT_LOAD_DEFAULT;
+  FT_Glyph glyph;
+
+  /* Output outline */
+  FT_Outline_Funcs outlinefunc = 
+  {
+    paps_move_to,
+    paps_line_to,
+    paps_conic_to,
+    paps_cubic_to
+  };
+  OutlineInfo outline_info;
+
+  outline_info.glyph_origin.x = (FT_Pos) pos_x;
+  outline_info.glyph_origin.y = (FT_Pos) pos_y;
+  outline_info.dpi = dpi;
+  outline_info.OUT = OUT;
+
+  fprintf(OUT, "gsave %d %d translate 0 0 0 setrgbcolor\n", pos_x, pos_y);
+  fprintf(OUT, "start_ol\n");
+
+  FT_Load_Glyph(face, glyph_index, load_flags);
+  FT_Get_Glyph (face->glyph, &glyph);
+  FT_Outline_Decompose (&(((FT_OutlineGlyph)glyph)->outline),
+                        &outlinefunc, &outline_info);
+  fprintf(OUT, "end_ol grestore \n");
+  
+  FT_Done_Glyph (glyph);
+}
+
 
 #endif
 
@@ -1182,8 +1309,9 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
 
 #ifdef __WXGTK20__
+    int dpi = GetResolution() * 2;
 
-    PangoContext *context = pango_ft2_get_context (300, 300);
+    PangoContext *context = pango_ft2_get_context ( dpi, dpi );
 
     // What are these for?
     pango_context_set_language (context, pango_language_from_string ("en_US"));
@@ -1200,7 +1328,44 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     wxCharBuffer buffer = wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) );
 #endif
 	pango_layout_set_text( layout, (const char*) buffer, strlen(buffer) );
-    
+
+#if 1
+    double xx = LogicalToDeviceX(x);
+    double yy = LogicalToDeviceY(y /*+ bitmap.GetHeight()*/ );
+
+    // Loop over lines in layout
+    int num_lines = pango_layout_get_line_count( layout );
+    for (int i = 0; i < num_lines; i++)
+    {
+        PangoLayoutLine *line = pango_layout_get_line( layout, i );
+        
+        // Loop over runs in line
+        GSList *runs_list = line->runs;
+        while (runs_list)
+        {
+            PangoLayoutRun *run = (PangoLayoutRun*) runs_list->data;
+            PangoItem *item = run->item;
+            PangoGlyphString *glyphs = run->glyphs;
+            PangoAnalysis *analysis = &item->analysis;
+            PangoFont *font = analysis->font;
+            FT_Face ft_face = pango_ft2_font_get_face(font);
+            
+            int num_glyphs = glyphs->num_glyphs;
+            for (int glyph_idx = 0; glyph_idx < num_glyphs; glyph_idx++)
+            {
+                PangoGlyphGeometry geometry = glyphs->glyphs[glyph_idx].geometry;
+                double pos_x = xx + 1.0 * geometry.x_offset / PANGO_SCALE;   
+                double pos_y = yy - 1.0 * geometry.y_offset / PANGO_SCALE;
+                xx += 1.0 * geometry.width / PANGO_SCALE;
+
+                draw_bezier_outline( m_pstream, dpi, ft_face,
+			      (FT_UInt)(glyphs->glyphs[glyph_idx].glyph),
+			      (wxCoord)pos_x, (wxCoord)pos_y );
+            }
+            runs_list = runs_list->next;
+        }
+	}
+#else    
     // Find out extent for the bitmap
     int height = 0;
     int width = 0;
@@ -1266,16 +1431,14 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 	  guchar this_bit = bitmap.buffer[b_idx * 8+bit_idx]<128;
 	  packed_b = (packed_b << 1) + this_bit;
 	}
-    
-
       fprintf(m_pstream, "%02x", packed_b);
     }
   
     fprintf(m_pstream, "\ngrestore\n" );
     
-    
     // Free memory
     g_free( buf );
+#endif
 
 #else
     wxCoord text_w, text_h, text_descent;
@@ -1698,11 +1861,14 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     m_ok = TRUE;
 
     fprintf( m_pstream, "%%%%BeginProlog\n" );
+    fprintf( m_pstream, wxPostScriptHeaderConicTo );
     fprintf( m_pstream, wxPostScriptHeaderEllipse );
     fprintf( m_pstream, wxPostScriptHeaderEllipticArc );
     fprintf( m_pstream, wxPostScriptHeaderColourImage );
+#ifndef __WXGTK20__
     fprintf( m_pstream, wxPostScriptHeaderReencodeISO1 );
     fprintf( m_pstream, wxPostScriptHeaderReencodeISO2 );
+#endif
     if (wxPostScriptHeaderSpline)
         fprintf( m_pstream, wxPostScriptHeaderSpline );
     fprintf( m_pstream, "%%%%EndProlog\n" );
