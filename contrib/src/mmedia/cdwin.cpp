@@ -46,7 +46,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxCDAudioWin, wxCDAudio)
     
 wxCDAudioWin::wxCDAudioWin(void)
-  : wxCDAudio(), m_trksize(NULL), m_trkpos(NULL), m_toc(NULL), m_ok(TRUE)
+  : wxCDAudio(), m_trksize(NULL), m_trkpos(NULL), m_toc(NULL), m_ok(true)
 {
   MCI_OPEN_PARMS open_struct;
   MCI_SET_PARMS set_struct;
@@ -56,7 +56,7 @@ wxCDAudioWin::wxCDAudioWin(void)
   DWORD ret = mciSendCommand((MCIDEVICEID)NULL, MCI_OPEN, MCI_OPEN_TYPE,
                        (DWORD)&open_struct);
   if (ret) {
-    m_ok = FALSE;
+    m_ok = false;
     return;
   }
   m_internal->dev_id = open_struct.wDeviceID;
@@ -150,7 +150,7 @@ bool wxCDAudioWin::Play(const wxCDtime& beg_time, const wxCDtime& end_time)
   MCI_PLAY_PARMS play_struct;
 
   if (!m_ok)
-    return FALSE;
+    return false;
 
   tmsf = MCI_MAKE_TMSF(beg_time.track, beg_time.min,
                        beg_time.sec, 0);
@@ -160,13 +160,13 @@ bool wxCDAudioWin::Play(const wxCDtime& beg_time, const wxCDtime& end_time)
   play_struct.dwTo = tmsf;
 
   mciSendCommand(m_internal->dev_id, MCI_PLAY, 0, (DWORD)&play_struct);
-  return TRUE;
+  return true;
 }
 
 bool wxCDAudioWin::Pause(void)
 {
   if (!m_ok)
-    return FALSE;
+    return false;
 
   return (mciSendCommand(m_internal->dev_id, MCI_PAUSE, 0, 0) == 0);
 }
@@ -174,7 +174,7 @@ bool wxCDAudioWin::Pause(void)
 bool wxCDAudioWin::Resume(void)
 {
   if (!m_ok)
-    return FALSE;
+    return false;
 
   return (mciSendCommand(m_internal->dev_id, MCI_RESUME, 0, 0) == 0);
 }

@@ -125,7 +125,7 @@ class WXDLLIMPEXP_MMEDIA wxSoundStream {
   // Returns the best size for IO calls
   virtual wxUint32 GetBestSize() const { return 1024; }
 
-  // SetSoundFormat returns TRUE when the format can be handled.
+  // SetSoundFormat returns true when the format can be handled.
   virtual bool SetSoundFormat(const wxSoundFormatBase& format);
 
   // GetSoundFormat returns the current sound format.
@@ -146,7 +146,7 @@ class WXDLLIMPEXP_MMEDIA wxSoundStream {
   wxUint32 GetLastAccess() const { return m_lastcount; }
 
   // This is only useful for device (I think).
-  virtual bool QueueFilled() const { return TRUE; }
+  virtual bool QueueFilled() const { return true; }
 
  protected:
   // Current sound format

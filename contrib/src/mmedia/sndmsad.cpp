@@ -130,7 +130,7 @@ bool wxSoundFormatMSAdpcm::operator !=(const wxSoundFormatBase& frmt2) const
     const wxSoundFormatMSAdpcm *adpcm = (const wxSoundFormatMSAdpcm *)&frmt2;
     
     if (frmt2.GetType() != wxSOUND_MSADPCM)
-        return TRUE;
+        return true;
     
     return (adpcm->m_srate != m_srate) && (adpcm->m_nchannels != m_nchannels);
 }
@@ -143,8 +143,8 @@ wxSoundStreamMSAdpcm::wxSoundStreamMSAdpcm(wxSoundStream& sndio)
 {
     // PCM converter
     m_router     = new wxSoundRouterStream(sndio);
-    m_got_header = FALSE;
-    m_stereo = FALSE;
+    m_got_header = false;
+    m_stereo = false;
 }
 
 wxSoundStreamMSAdpcm::~wxSoundStreamMSAdpcm()
@@ -354,7 +354,7 @@ bool wxSoundStreamMSAdpcm::SetSoundFormat(const wxSoundFormatBase& format)
 {
     if (format.GetType() != wxSOUND_MSADPCM) {
         m_snderror = wxSOUND_INVFRMT;
-        return FALSE;
+        return false;
     }
     
     wxSoundFormatPcm pcm;
@@ -369,13 +369,13 @@ bool wxSoundStreamMSAdpcm::SetSoundFormat(const wxSoundFormatBase& format)
 
     if (!ncoefs) {
         wxLogError(wxT("Number of ADPCM coefficients must be non null"));
-        return FALSE;
+        return false;
     }
     
     pcm.SetSampleRate(adpcm->GetSampleRate());
     pcm.SetBPS(16);
     pcm.SetChannels(adpcm->GetChannels());
-    pcm.Signed(TRUE);
+    pcm.Signed(true);
     pcm.SetOrder(wxBYTE_ORDER);
 
     m_stereo = (adpcm->GetChannels() == 2);
@@ -384,6 +384,6 @@ bool wxSoundStreamMSAdpcm::SetSoundFormat(const wxSoundFormatBase& format)
     
     m_router->SetSoundFormat(pcm);
     
-    return TRUE;
+    return true;
 }
 

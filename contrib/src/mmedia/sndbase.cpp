@@ -72,7 +72,7 @@ wxSoundStream::~wxSoundStream()
 // important function of the wxSoundStream class. It prepares the stream to
 // receive or send the data in a strict format. Normally, the sound stream
 // should be ready to accept any format it is asked to manage but in certain
-// cases, it really cannot: in that case it returns FALSE. To have more
+// cases, it really cannot: in that case it returns false. To have more
 // details in the functionnalities of SetSoundFormat see
 // wxSoundRouterStream::SetSoundFormat()
 // --------------------------------------------------------------------------
@@ -84,7 +84,7 @@ bool wxSoundStream::SetSoundFormat(const wxSoundFormatBase& format)
     
     // create a new one by cloning the format passed in parameter
     m_sndformat = format.Clone();
-    return TRUE;
+    return true;
 }
 
 

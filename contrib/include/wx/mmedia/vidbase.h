@@ -5,7 +5,7 @@
 // Created:    1997
 // Updated:    1998
 // Copyright:  (C) 1997, 1998, Guilhem Lavaux
-// CVS:	       $Id$
+// CVS:        $Id$
 // License:    wxWindows license
 // /////////////////////////////////////////////////////////////////////////////
 /* Real -*- C++ -*- */
@@ -68,7 +68,7 @@ public:
     // Dtor
     virtual ~wxVideoBaseDriver();
     
-    // Usual functions ... They all return FALSE in case of errors.
+    // Usual functions ... They all return false in case of errors.
     virtual bool Play() = 0;
     virtual bool Stop() = 0;
     virtual bool Pause() = 0;
@@ -79,7 +79,7 @@ public:
     virtual bool GetSize(wxSize& size) const = 0;
     
     // Test the capability of the driver to handle the specified type
-    virtual bool IsCapable(wxVideoType WXUNUSED(v_type)) const { return FALSE; }
+    virtual bool IsCapable(wxVideoType WXUNUSED(v_type)) const { return false; }
 
     // Return the video codec name
     virtual wxString GetMovieCodec() const = 0;

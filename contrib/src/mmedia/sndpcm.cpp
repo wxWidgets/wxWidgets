@@ -88,7 +88,7 @@ bool wxSoundFormatPcm::operator!=(const wxSoundFormatBase& format) const
   wxSoundFormatPcm *format2 = (wxSoundFormatPcm *)&format;
 
   if (format.GetType() != wxSOUND_PCM)
-    return TRUE;
+    return true;
 
   return ( (m_srate != format2->m_srate) ||
            (m_bps != format2->m_bps) ||

@@ -104,7 +104,7 @@ bool wxSoundFormatG72X::operator !=(const wxSoundFormatBase& frmt2) const
     wxSoundFormatG72X *g72x = (wxSoundFormatG72X *)&frmt2;
     
     if (frmt2.GetType() != wxSOUND_G72X)
-        return TRUE;
+        return true;
     
     return (g72x->m_srate != m_srate || g72x->m_g72x_type != m_g72x_type);
 }
@@ -196,7 +196,7 @@ bool wxSoundStreamG72X::SetSoundFormat(const wxSoundFormatBase& format)
 {
     if (format.GetType() != wxSOUND_G72X) {
         m_snderror = wxSOUND_INVFRMT;
-        return FALSE;
+        return false;
     }
     
     wxSoundFormatPcm pcm;
@@ -210,7 +210,7 @@ bool wxSoundStreamG72X::SetSoundFormat(const wxSoundFormatBase& format)
     pcm.SetSampleRate(g72x->GetSampleRate());
     pcm.SetBPS(16);
     pcm.SetChannels(1); // Only mono supported
-    pcm.Signed(TRUE);
+    pcm.Signed(true);
     pcm.SetOrder(wxBYTE_ORDER);
 
     // Look for the correct codec to use and set its bit width
@@ -235,7 +235,7 @@ bool wxSoundStreamG72X::SetSoundFormat(const wxSoundFormatBase& format)
     // Let the router finish the work
     m_router->SetSoundFormat(pcm);
     
-    return TRUE;
+    return true;
 }
 
 #define BYTE_SIZE 8

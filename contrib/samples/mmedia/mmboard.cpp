@@ -284,7 +284,7 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
 
     // Initialize main slider
     m_positionSlider = new wxSlider( m_panel, MMBoard_PositionSlider, 0, 0, 60,
-                     wxDefaultPosition, wxSize(300, -1),
+                     wxDefaultPosition, wxSize(300, wxDefaultSize.y),
                      wxSL_HORIZONTAL | wxSL_AUTOTICKS);
     m_positionSlider->SetPageSize(60);  // 60 secs
     m_positionSlider->Disable();

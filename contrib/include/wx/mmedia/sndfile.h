@@ -98,7 +98,7 @@ public:
     
     // You should use this function to test whether this file codec can read
     // the stream you passed to it.
-    virtual bool CanRead() { return FALSE; }
+    virtual bool CanRead() { return false; }
     
 protected:
     wxSoundRouterStream m_codec; 

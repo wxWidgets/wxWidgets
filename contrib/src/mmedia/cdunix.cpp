@@ -80,7 +80,7 @@ void wxCDAudioLinux::OpenDevice(const wxString& dev_name)
   struct cdrom_tocentry entry, old_entry;
   struct cdrom_tochdr diskinf;
   struct cdrom_msf0 *msf = &entry.cdte_addr.msf,
-  		    *old_msf = &old_entry.cdte_addr.msf;
+              *old_msf = &old_entry.cdte_addr.msf;
   wxCDtime *the_track;
   wxCDtime tot_tm;
   wxUint8 nb_tracks, i;

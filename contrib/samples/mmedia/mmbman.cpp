@@ -245,7 +245,7 @@ void MMBoardSoundFile::SetPosition(MMBoardTime btime)
 
 bool MMBoardSoundFile::NeedWindow()
 {
-    return FALSE;
+    return false;
 }
 
 void MMBoardSoundFile::SetWindow(wxWindow *WXUNUSED(window))
@@ -310,17 +310,17 @@ wxString MMBoardSoundFile::GetStringInformation()
     case wxSOUND_PCM: {
         wxSoundFormatPcm *pcm_format = (wxSoundFormatPcm *)format;
       
-	info += wxString::Format(wxT("PCM %s %s\n"),
+    info += wxString::Format(wxT("PCM %s %s\n"),
                                  pcm_format->Signed() ? wxT("signed") : wxT("unsigned"),
                                  pcm_format->GetOrder() == wxLITTLE_ENDIAN ? wxT("little endian") : wxT("big endian"));
-	info += wxString::Format(wxT("Sampling rate: %d\n")
-				 wxT("Bits per sample: %d\n")
-				 wxT("Number of channels: %d\n"),
-				 pcm_format->GetSampleRate(),
-				 pcm_format->GetBPS(),
-				 pcm_format->GetChannels());
-	
-	break;
+    info += wxString::Format(wxT("Sampling rate: %d\n")
+                 wxT("Bits per sample: %d\n")
+                 wxT("Number of channels: %d\n"),
+                 pcm_format->GetSampleRate(),
+                 pcm_format->GetBPS(),
+                 pcm_format->GetChannels());
+
+    break;
     }
     case wxSOUND_MSADPCM: {
         wxSoundFormatMSAdpcm *adpcm_format = (wxSoundFormatMSAdpcm *)format;
@@ -334,13 +334,13 @@ wxString MMBoardSoundFile::GetStringInformation()
     }
     case wxSOUND_ULAW: {
         wxSoundFormatUlaw *ulaw_format = (wxSoundFormatUlaw *)format;
-	info += wxT("ULAW\n");
-	info += wxString::Format(wxT("Sampling rate: %d\n"), ulaw_format->GetSampleRate());
-	break;
+        info += wxT("ULAW\n");
+        info += wxString::Format(wxT("Sampling rate: %d\n"), ulaw_format->GetSampleRate());
+        break;
     }
     default:
         info += wxT("Unknown");
-	break;
+        break;
     }
     return info;
 }
@@ -375,7 +375,7 @@ MMBoardVideoFile::~MMBoardVideoFile()
 
 bool MMBoardVideoFile::NeedWindow()
 {
-    return TRUE;
+    return true;
 }
 
 void MMBoardVideoFile::SetWindow(wxWindow *window)

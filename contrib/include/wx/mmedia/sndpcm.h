@@ -23,7 +23,7 @@
 class wxSoundFormatPcm : public wxSoundFormatBase {
 public:
   wxSoundFormatPcm(wxUint32 srate = 22500, wxUint8 bps = 8,
-                   wxUint16 channels = 2, bool sign = TRUE,
+                   wxUint16 channels = 2, bool sign = true,
                    int order = wxLITTLE_ENDIAN); 
   ~wxSoundFormatPcm();
 

@@ -82,7 +82,7 @@ bool wxSoundFormatUlaw::operator !=(const wxSoundFormatBase& frmt2) const
     wxSoundFormatUlaw *ulaw = (wxSoundFormatUlaw *)&frmt2;
     
     if (frmt2.GetType() != wxSOUND_ULAW)
-        return TRUE;
+        return true;
     
     return (ulaw->m_srate != m_srate);
 }
@@ -160,7 +160,7 @@ bool wxSoundStreamUlaw::SetSoundFormat(const wxSoundFormatBase& format)
 {
     if (format.GetType() != wxSOUND_ULAW) {
         m_snderror = wxSOUND_INVFRMT;
-        return FALSE;
+        return false;
     }
     
     // As the codec only support 16 bits, Mono we must use a wxSoundRouter
@@ -177,10 +177,10 @@ bool wxSoundStreamUlaw::SetSoundFormat(const wxSoundFormatBase& format)
     pcm.SetSampleRate(ulaw->GetSampleRate());
     pcm.SetBPS(16);
     pcm.SetChannels(ulaw->GetChannels());
-    pcm.Signed(TRUE);
+    pcm.Signed(true);
     pcm.SetOrder(wxBYTE_ORDER);
     
     m_router->SetSoundFormat(pcm);
     
-    return TRUE;
+    return true;
 }

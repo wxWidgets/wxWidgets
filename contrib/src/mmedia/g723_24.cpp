@@ -44,17 +44,17 @@
  * Maps G.723_24 code word to reconstructed scale factor normalized log
  * magnitude values.
  */
-static short	_dqlntab[8] = {-2048, 135, 273, 373, 373, 273, 135, -2048};
+static short _dqlntab[8] = {-2048, 135, 273, 373, 373, 273, 135, -2048};
 
 /* Maps G.723_24 code word to log of scale factor multiplier. */
-static short	_witab[8] = {-128, 960, 4384, 18624, 18624, 4384, 960, -128};
+static short _witab[8] = {-128, 960, 4384, 18624, 18624, 4384, 960, -128};
 
 /*
  * Maps G.723_24 code words to a set of values whose long and short
  * term averages are computed and then compared to give an indication
  * how stationary (steady state) the signal is.
  */
-static short	_fitab[8] = {0, 0x200, 0x400, 0xE00, 0xE00, 0x400, 0x200, 0};
+static short _fitab[8] = {0, 0x200, 0x400, 0xE00, 0xE00, 0x400, 0x200, 0};
 
 static short qtab_723_24[3] = {8, 218, 331};
 
@@ -66,50 +66,50 @@ static short qtab_723_24[3] = {8, 218, 331};
  */
 int
 g723_24_encoder(
-	int		sl,
-	int		in_coding,
-	struct g72x_state *state_ptr)
+    int                sl,
+    int                in_coding,
+    struct g72x_state *state_ptr)
 {
-	short		sei, sezi, se, sez;	/* ACCUM */
-	short		d;			/* SUBTA */
-	short		y;			/* MIX */
-	short		sr;			/* ADDB */
-	short		dqsez;			/* ADDC */
-	short		dq, i;
+    short        sei, sezi, se, sez;    /* ACCUM */
+    short        d;                     /* SUBTA */
+    short        y;                     /* MIX */
+    short        sr;                    /* ADDB */
+    short        dqsez;                 /* ADDC */
+    short        dq, i;
 
-	switch (in_coding) {	/* linearize input sample to 14-bit PCM */
-	case AUDIO_ENCODING_ALAW:
-		sl = alaw2linear(sl) >> 2;
-		break;
-	case AUDIO_ENCODING_ULAW:
-		sl = ulaw2linear(sl) >> 2;
-		break;
-	case AUDIO_ENCODING_LINEAR:
-		sl = ((short)sl) >> 2;		/* sl of 14-bit dynamic range */
-		break;
-	default:
-		return (-1);
-	}
+    switch (in_coding) {    /* linearize input sample to 14-bit PCM */
+    case AUDIO_ENCODING_ALAW:
+        sl = alaw2linear(sl) >> 2;
+        break;
+    case AUDIO_ENCODING_ULAW:
+        sl = ulaw2linear(sl) >> 2;
+        break;
+    case AUDIO_ENCODING_LINEAR:
+        sl = ((short)sl) >> 2;        /* sl of 14-bit dynamic range */
+        break;
+    default:
+        return (-1);
+    }
 
-	sezi = predictor_zero(state_ptr);
-	sez = sezi >> 1;
-	sei = sezi + predictor_pole(state_ptr);
-	se = sei >> 1;			/* se = estimated signal */
+    sezi = predictor_zero(state_ptr);
+    sez = sezi >> 1;
+    sei = sezi + predictor_pole(state_ptr);
+    se = sei >> 1;            /* se = estimated signal */
 
-	d = sl - se;			/* d = estimation diff. */
+    d = sl - se;            /* d = estimation diff. */
 
-	/* quantize prediction difference d */
-	y = step_size(state_ptr);	/* quantizer step size */
-	i = quantize(d, y, qtab_723_24, 3);	/* i = ADPCM code */
-	dq = reconstruct(i & 4, _dqlntab[i], y); /* quantized diff. */
+    /* quantize prediction difference d */
+    y = step_size(state_ptr);    /* quantizer step size */
+    i = quantize(d, y, qtab_723_24, 3);    /* i = ADPCM code */
+    dq = reconstruct(i & 4, _dqlntab[i], y); /* quantized diff. */
 
-	sr = (dq < 0) ? se - (dq & 0x3FFF) : se + dq; /* reconstructed signal */
+    sr = (dq < 0) ? se - (dq & 0x3FFF) : se + dq; /* reconstructed signal */
 
-	dqsez = sr + sez - se;		/* pole prediction diff. */
+    dqsez = sr + sez - se;        /* pole prediction diff. */
 
-	update(3, y, _witab[i], _fitab[i], dq, sr, dqsez, state_ptr);
+    update(3, y, _witab[i], _fitab[i], dq, sr, dqsez, state_ptr);
 
-	return (i);
+    return (i);
 }
 
 /*
@@ -121,39 +121,39 @@ g723_24_encoder(
  */
 int
 g723_24_decoder(
-	int		i,
-	int		out_coding,
-	struct g72x_state *state_ptr)
+    int                i,
+    int                out_coding,
+    struct g72x_state *state_ptr)
 {
-	short		sezi, sei, sez, se;	/* ACCUM */
-	short		y;			/* MIX */
-	short		sr;			/* ADDB */
-	short		dq;
-	short		dqsez;
+    short        sezi, sei, sez, se;    /* ACCUM */
+    short        y;                     /* MIX */
+    short        sr;                    /* ADDB */
+    short        dq;
+    short        dqsez;
 
-	i &= 0x07;			/* mask to get proper bits */
-	sezi = predictor_zero(state_ptr);
-	sez = sezi >> 1;
-	sei = sezi + predictor_pole(state_ptr);
-	se = sei >> 1;			/* se = estimated signal */
+    i &= 0x07;            /* mask to get proper bits */
+    sezi = predictor_zero(state_ptr);
+    sez = sezi >> 1;
+    sei = sezi + predictor_pole(state_ptr);
+    se = sei >> 1;            /* se = estimated signal */
 
-	y = step_size(state_ptr);	/* adaptive quantizer step size */
-	dq = reconstruct(i & 0x04, _dqlntab[i], y); /* unquantize pred diff */
+    y = step_size(state_ptr);    /* adaptive quantizer step size */
+    dq = reconstruct(i & 0x04, _dqlntab[i], y); /* unquantize pred diff */
 
-	sr = (dq < 0) ? (se - (dq & 0x3FFF)) : (se + dq); /* reconst. signal */
+    sr = (dq < 0) ? (se - (dq & 0x3FFF)) : (se + dq); /* reconst. signal */
 
-	dqsez = sr - se + sez;			/* pole prediction diff. */
+    dqsez = sr - se + sez;            /* pole prediction diff. */
 
-	update(3, y, _witab[i], _fitab[i], dq, sr, dqsez, state_ptr);
+    update(3, y, _witab[i], _fitab[i], dq, sr, dqsez, state_ptr);
 
-	switch (out_coding) {
-	case AUDIO_ENCODING_ALAW:
-		return (tandem_adjust_alaw(sr, se, y, i, 4, qtab_723_24));
-	case AUDIO_ENCODING_ULAW:
-		return (tandem_adjust_ulaw(sr, se, y, i, 4, qtab_723_24));
-	case AUDIO_ENCODING_LINEAR:
-		return (sr << 2);	/* sr was of 14-bit dynamic range */
-	default:
-		return (-1);
-	}
+    switch (out_coding) {
+    case AUDIO_ENCODING_ALAW:
+        return (tandem_adjust_alaw(sr, se, y, i, 4, qtab_723_24));
+    case AUDIO_ENCODING_ULAW:
+        return (tandem_adjust_ulaw(sr, se, y, i, 4, qtab_723_24));
+    case AUDIO_ENCODING_LINEAR:
+        return (sr << 2);    /* sr was of 14-bit dynamic range */
+    default:
+        return (-1);
+    }
 }

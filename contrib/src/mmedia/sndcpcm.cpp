@@ -279,11 +279,11 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
     if (m_sndio->SetSoundFormat(format)) {
         m_function_out = NULL;
         m_function_in = NULL;
-        return TRUE;
+        return true;
     }
     if (format.GetType() != wxSOUND_PCM) {
         m_snderror = wxSOUND_INVFRMT;
-        return FALSE;
+        return false;
     }
     if (m_sndformat)
         delete m_sndformat;
@@ -300,11 +300,11 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
 
         src_rate = pcm_format->GetSampleRate();
         dst_rate = pcm_format2->GetSampleRate();
-        m_needResampling = TRUE;
+        m_needResampling = true;
         if (src_rate < dst_rate)
-            m_expandSamples = TRUE;
+            m_expandSamples = true;
         else
-            m_expandSamples = FALSE;
+            m_expandSamples = false;
         m_pitch = (src_rate << FLOATBITS) / dst_rate;
     }
 #endif
@@ -327,7 +327,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
             break;
         default:
             // TODO: Add something here: error, log, ...
-            return FALSE;
+            return false;
     }
     switch (pcm_format2->GetBPS()) {
         case 8:
@@ -338,7 +338,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
             break;
         default:
             // TODO: Add something here: error, log, ...
-            return FALSE;
+            return false;
     }
     
     if (pcm_format2->Signed() != pcm_format->Signed())
@@ -399,7 +399,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
     wxUnusedVar( SetSoundFormatReturn );
     
     m_sndformat = new_format;
-    return TRUE;
+    return true;
 }
 
 wxUint32 wxSoundStreamPcm::GetWriteSize(wxUint32 len) const

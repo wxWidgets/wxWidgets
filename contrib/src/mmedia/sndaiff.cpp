@@ -63,25 +63,25 @@ bool wxSoundAiff::CanRead()
     wxUint32 signature1, signature2, len;
     
     if (m_input->Read(&signature1, 4).LastRead() != 4)
-        return FALSE;
+        return false;
     
     if (wxUINT32_SWAP_ON_BE(signature1) != FORM_SIGNATURE) {
         m_input->Ungetch(&signature1, 4);
-        return FALSE;
+        return false;
     }
     
     m_input->Read(&len, 4);
     if (m_input->LastRead() != 4) {
         m_input->Ungetch(&len, m_input->LastRead());
         m_input->Ungetch(&signature1, 4);
-        return FALSE;
+        return false;
     }
     
     if (m_input->Read(&signature2, 4).LastRead() != 4) {
         m_input->Ungetch(&signature2, m_input->LastRead());
         m_input->Ungetch(&len, 4);
         m_input->Ungetch(&signature1, 4);
-        return FALSE;
+        return false;
     }
     
     m_input->Ungetch(&signature2, 4);
@@ -91,12 +91,12 @@ bool wxSoundAiff::CanRead()
     if (
         wxUINT32_SWAP_ON_BE(signature2) != AIFF_SIGNATURE &&
         wxUINT32_SWAP_ON_BE(signature2) != AIFC_SIGNATURE)
-        return FALSE;
+        return false;
     
-    return TRUE;
+    return true;
 }
 
-#define FAIL_WITH(condition, err) if (condition) { m_snderror = err; return FALSE; }
+#define FAIL_WITH(condition, err) if (condition) { m_snderror = err; return false; }
 
 bool wxSoundAiff::PrepareToPlay()
 {
@@ -106,11 +106,11 @@ bool wxSoundAiff::PrepareToPlay()
     
     if (!m_input) {
         m_snderror = wxSOUND_INVSTRM;
-        return FALSE;
+        return false;
     }
     m_snderror = wxSOUND_NOERROR;
     
-    data.BigEndianOrdered(TRUE);
+    data.BigEndianOrdered(true);
     
     FAIL_WITH(m_input->Read(&signature, 4).LastRead() != 4, wxSOUND_INVSTRM);
     FAIL_WITH(wxUINT32_SWAP_ON_BE(signature) != FORM_SIGNATURE, wxSOUND_INVSTRM);
@@ -127,7 +127,7 @@ bool wxSoundAiff::PrepareToPlay()
         wxUINT32_SWAP_ON_BE(signature) != AIFC_SIGNATURE, wxSOUND_INVSTRM);
     // "AIFF" / "AIFC"
     
-    end_headers = FALSE;
+    end_headers = false;
     while (!end_headers) {
         FAIL_WITH(m_input->Read(&signature, 4).LastRead() != 4, wxSOUND_INVSTRM);
         
@@ -148,11 +148,11 @@ bool wxSoundAiff::PrepareToPlay()
                 sndformat.SetSampleRate((wxUint32) srate);
                 sndformat.SetBPS(bps);
                 sndformat.SetChannels(channels);
-                sndformat.Signed(FALSE);
+                sndformat.Signed(false);
                 sndformat.SetOrder(wxBIG_ENDIAN);
                 
                 if (!SetSoundFormat(sndformat))
-                    return FALSE;
+                    return false;
                 // We pass all data left
                 m_input->SeekI(len-18, wxFromCurrent);
                 break;
@@ -165,7 +165,7 @@ bool wxSoundAiff::PrepareToPlay()
                 m_base_offset = m_input->TellI();
                 // len-8 bytes of samples
                 FinishPreparation(len - 8);
-                end_headers = TRUE;
+                end_headers = true;
                 break;
             }
             default:
@@ -173,28 +173,28 @@ bool wxSoundAiff::PrepareToPlay()
                 break;
         }
     }
-    return TRUE;
+    return true;
 }
 
 bool wxSoundAiff::PrepareToRecord(wxUint32 WXUNUSED(time))
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxSoundAiff::FinishRecording()
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxSoundAiff::RepositionStream(wxUint32 WXUNUSED(position))
 {
     // If the stream is not seekable "TellI() returns wxInvalidOffset" we cannot reposition stream
     if (m_base_offset == wxInvalidOffset)
-        return FALSE;
+        return false;
     m_input->SeekI(m_base_offset, wxFromStart);
-    return TRUE;
+    return true;
 }
 
 wxUint32 wxSoundAiff::GetData(void *buffer, wxUint32 len)

@@ -77,14 +77,14 @@ wxVideoXANIMProcess::wxVideoXANIMProcess(wxVideoXANIM *xanim)
 
 void wxVideoXANIMProcess::OnTerminate(int WXUNUSED(pid), int WXUNUSED(status))
 {
-    m_vid_xanim->m_xanim_started = FALSE;
+    m_vid_xanim->m_xanim_started = false;
     m_vid_xanim->OnFinished();
 }
 
 wxVideoXANIMOutput::wxVideoXANIMOutput()
-        : wxProcess(NULL, -1)
+        : wxProcess(NULL, wxID_ANY)
 {
-    m_terminated = FALSE;
+    m_terminated = false;
     Redirect();
 }
 
@@ -95,7 +95,7 @@ bool wxVideoXANIMOutput::IsTerminated() const
 
 void wxVideoXANIMOutput::OnTerminate(int pid, int status)
 {
-    m_terminated = TRUE;
+    m_terminated = true;
 }
 
 // -------------------------------------------------------------------------
@@ -106,10 +106,10 @@ wxVideoXANIM::wxVideoXANIM()
 {
     m_internal       = new wxXANIMinternal;
     m_xanim_detector = new wxVideoXANIMProcess(this);
-    m_xanim_started  = FALSE;
-    m_paused         = FALSE;
+    m_xanim_started  = false;
+    m_paused         = false;
     m_filename       = wxEmptyString;
-    m_remove_file    = FALSE;
+    m_remove_file    = false;
 }
 
 wxVideoXANIM::wxVideoXANIM(wxInputStream& str)
@@ -117,13 +117,13 @@ wxVideoXANIM::wxVideoXANIM(wxInputStream& str)
 {
     m_internal       = new wxXANIMinternal;
     m_xanim_detector = new wxVideoXANIMProcess(this);
-    m_xanim_started  = FALSE;
-    m_paused         = FALSE;
+    m_xanim_started  = false;
+    m_paused         = false;
     m_size[0]        = 0;
     m_size[1]        = 0;
     
     m_filename       = wxGetTempFileName(_T("vidxa"));
-    m_remove_file    = TRUE;
+    m_remove_file    = true;
     wxFileOutputStream fout(m_filename);
     
     fout << str;
@@ -135,11 +135,11 @@ wxVideoXANIM::wxVideoXANIM(const wxString& filename)
 {
     m_internal       = new wxXANIMinternal;
     m_xanim_detector = new wxVideoXANIMProcess(this);
-    m_xanim_started  = FALSE;
-    m_paused         = FALSE;
+    m_xanim_started  = false;
+    m_paused         = false;
 
     m_filename       = filename;
-    m_remove_file    = FALSE;
+    m_remove_file    = false;
     m_size[0]        = 0;
     m_size[1]        = 0;
     
@@ -163,42 +163,42 @@ wxVideoXANIM::~wxVideoXANIM()
 bool wxVideoXANIM::Play()
 {
     if (!m_paused && m_xanim_started)
-        return TRUE; 
+        return true; 
     if (!m_video_output) {
         wxVideoCreateFrame(this);
-	return TRUE;
+        return true;
     }
 
     // The movie starts with xanim
     if (RestartXANIM()) {
-        m_paused = FALSE;
-	return TRUE;
+        m_paused = false;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool wxVideoXANIM::Pause()
 {
     if (!m_paused && SendCommand(" ")) {
-        m_paused = TRUE;
-	return TRUE;
+        m_paused = true;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool wxVideoXANIM::Resume()
 {
     if (m_paused && SendCommand(" ")) {
-        m_paused = FALSE;
-	return TRUE;
+        m_paused = false;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool wxVideoXANIM::Stop()
 {
     if (!m_xanim_started)
-        return FALSE;
+        return false;
 
     SendCommand("q");
 
@@ -207,9 +207,9 @@ bool wxVideoXANIM::Stop()
       wxYield();
     }
 
-    m_paused = FALSE;
+    m_paused = false;
     
-    return TRUE;
+    return true;
 }
 
 // -------------------------------------------------------------------------
@@ -218,18 +218,18 @@ bool wxVideoXANIM::Stop()
 bool wxVideoXANIM::SetSize(wxSize size)
 {
     if (!m_video_output)
-      return FALSE;
+      return false;
 
     m_video_output->SetSize(size.GetWidth(), size.GetHeight());
-    return FALSE;
+    return false;
 }
 
 bool wxVideoXANIM::GetSize(wxSize& size) const
 {
     if (m_size[0] == 0)
-        return FALSE;
+        return false;
     size.Set(m_size[0], m_size[1]);
-    return TRUE;
+    return true;
 }
 
 // -------------------------------------------------------------------------
@@ -238,11 +238,11 @@ bool wxVideoXANIM::GetSize(wxSize& size) const
 bool wxVideoXANIM::IsCapable(wxVideoType v_type) const
 {
     if (v_type == wxVIDEO_MSAVI || v_type == wxVIDEO_MPEG ||
-	v_type == wxVIDEO_QT || v_type == wxVIDEO_GIF || v_type == wxVIDEO_JMOV ||
-	v_type == wxVIDEO_FLI || v_type == wxVIDEO_IFF || v_type == wxVIDEO_SGI)
-        return TRUE;
+        v_type == wxVIDEO_QT || v_type == wxVIDEO_GIF || v_type == wxVIDEO_JMOV ||
+        v_type == wxVIDEO_FLI || v_type == wxVIDEO_IFF || v_type == wxVIDEO_SGI)
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 // -------------------------------------------------------------------------
@@ -314,16 +314,16 @@ bool wxVideoXANIM::IsStopped() const
 bool wxVideoXANIM::AttachOutput(wxWindow& out)
 {
     if (!wxVideoBaseDriver::AttachOutput(out))
-        return FALSE;
+        return false;
     
-    return TRUE;
+    return true;
 }
 
 void wxVideoXANIM::DetachOutput()
 {
     SendCommand("q");
-    m_xanim_started = FALSE;
-    m_paused = FALSE;
+    m_xanim_started = false;
+    m_paused = false;
 
     wxVideoBaseDriver::DetachOutput();
 }
@@ -332,29 +332,29 @@ void wxVideoXANIM::DetachOutput()
 // Lowlevel XAnim controller
 
 bool wxVideoXANIM::SendCommand(const char *command, char **ret,
-			       wxUint32 *size)
+                   wxUint32 *size)
 {
     if (!m_xanim_started)
         if (!RestartXANIM())
-	    return FALSE;
+        return false;
 
     // Send a command to XAnim through X11 Property
     XChangeProperty(m_internal->xanim_dpy, m_internal->xanim_window,
-		    m_internal->xanim_atom,
-		    XA_STRING, 8, PropModeReplace, (unsigned char *)command,
-		    strlen(command));
+            m_internal->xanim_atom,
+            XA_STRING, 8, PropModeReplace, (unsigned char *)command,
+            strlen(command));
     XFlush(m_internal->xanim_dpy);
     if (ret) {
         int prop_format;
-	Atom prop_type;
-	unsigned long extra;
-	
-	XGetWindowProperty(m_internal->xanim_dpy, m_internal->xanim_window,
-			   m_internal->xanim_ret, 0, 16, True, AnyPropertyType,
-			   &prop_type, &prop_format, (unsigned long *)size,
-			   &extra, (unsigned char **)ret);
+    Atom prop_type;
+    unsigned long extra;
+
+    XGetWindowProperty(m_internal->xanim_dpy, m_internal->xanim_window,
+               m_internal->xanim_ret, 0, 16, True, AnyPropertyType,
+               &prop_type, &prop_format, (unsigned long *)size,
+               &extra, (unsigned char **)ret);
     }
-    return TRUE;
+    return true;
 }
 
 bool wxVideoXANIM::CollectInfo()
@@ -366,8 +366,8 @@ bool wxVideoXANIM::CollectInfo()
     xanimProcess = new wxVideoXANIMOutput;
     xanim_command = wxT("xanim +v +Zv -Ae ");
     xanim_command += m_filename;
-    if (!wxExecute(xanim_command, FALSE, xanimProcess))
-        return FALSE;
+    if (!wxExecute(xanim_command, false, xanimProcess))
+        return false;
 
     wxInputStream *infoStream = xanimProcess->GetInputStream();
     wxString totalOutput;
@@ -443,7 +443,7 @@ i = my_long;
 
     delete xanimProcess;
 
-    return TRUE;
+    return true;
 }
 
 bool wxVideoXANIM::RestartXANIM()
@@ -458,10 +458,10 @@ bool wxVideoXANIM::RestartXANIM()
     bool xanim_chg_size;
     
     if (!m_video_output || m_xanim_started)
-        return FALSE;
+        return false;
     
     // Check if we can change the size of the window dynamicly
-    xanim_chg_size = TRUE;
+    xanim_chg_size = true;
     // Get current display
 #ifdef __WXGTK__
     m_internal->xanim_dpy = gdk_display;
@@ -472,27 +472,27 @@ bool wxVideoXANIM::RestartXANIM()
 #endif
     // Get the XANIM atom
     m_internal->xanim_atom = XInternAtom(m_internal->xanim_dpy,
-					 "XANIM_PROPERTY", False);
+                     "XANIM_PROPERTY", False);
     
     // Build the command
     xanim_command.Printf(wxT("xanim -Zr +Ze +Sr +f +W%d +f +q "
-			     "+Av70 %s %s"), m_internal->xanim_window,
-			 (xanim_chg_size) ? _T("") : _T(""),
-			 WXSTRINGCAST m_filename);
+                 "+Av70 %s %s"), m_internal->xanim_window,
+             (xanim_chg_size) ? _T("") : _T(""),
+             WXSTRINGCAST m_filename);
     
         // Execute it
-    if (!wxExecute(xanim_command, FALSE, m_xanim_detector))
-        return FALSE;
+    if (!wxExecute(xanim_command, false, m_xanim_detector))
+        return false;
     
     // Wait for XAnim to be ready
     nitems = 0;
-    m_xanim_started = TRUE;
+    m_xanim_started = true;
     while (nitems == 0 && m_xanim_started) {
       ret = XGetWindowProperty(m_internal->xanim_dpy, m_internal->xanim_window,
-			       m_internal->xanim_atom,
-			       0, 4, False, AnyPropertyType, &prop_type,
-			       &prop_format, &nitems, &extra,
-			       (unsigned char **)&prop);
+                   m_internal->xanim_atom,
+                   0, 4, False, AnyPropertyType, &prop_type,
+                   &prop_format, &nitems, &extra,
+                   (unsigned char **)&prop);
       wxYield();
     }
 
@@ -507,7 +507,7 @@ bool wxVideoXANIM::RestartXANIM()
     // Very useful ! Actually it "should" sends a SETSIZE event to XAnim
     // FIXME: This event is not sent !!
     
-    m_paused = FALSE;
+    m_paused = false;
     
-    return TRUE;
+    return true;
 }
