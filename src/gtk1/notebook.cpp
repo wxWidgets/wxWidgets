@@ -69,26 +69,6 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
   notebook->ProcessEvent(event);
 }
 
-static void gtk_notebook_client_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, 
-                                               wxNotebookPage *page )
-{
-  if (!page->m_client->HasVMT()) return;
-
-/*
-  printf( "OnResize from " );
-  if (page->m_client->GetClassInfo() && page->m_client->GetClassInfo()->GetClassName())
-    printf( page->m_client->GetClassInfo()->GetClassName() );
-  printf( ".\n" );
-
-  printf( "  New: X: %d  Y: %d ", alloc->x, alloc->y );
-  printf( "  W: %d  H: %d ", alloc->width, alloc->height );
-  printf( " .\n" );
-*/
-  
-  page->m_client->SetSize( alloc->x, alloc->y+26,
-                           alloc->width, alloc->height );
-};
-
 //-----------------------------------------------------------------------------
 // wxNotebook
 //-----------------------------------------------------------------------------
@@ -387,10 +367,10 @@ void wxNotebook::AddChild( wxWindow *win )
   // case is special there (Robert?)
   // Robert: Don't you think the code below looks different from the one
   // in wxWindow::AddChild :-)
-  
+
   m_children.Append(win);
 
-  
+
   wxNotebookPage *page = new wxNotebookPage();
 
   page->m_id = GetPageCount();
@@ -400,14 +380,11 @@ void wxNotebook::AddChild( wxWindow *win )
                             (GtkWidget *)page->m_label);
   gtk_misc_set_alignment(GTK_MISC(page->m_label), 0.0, 0.5);
 
-  page->m_page = 
+  page->m_page =
     (GtkNotebookPage*) (g_list_last(GTK_NOTEBOOK(m_widget)->children)->data);
-    
+
   page->m_parent = GTK_NOTEBOOK(m_widget);
 
-  gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
-    GTK_SIGNAL_FUNC(gtk_notebook_client_size_callback), (gpointer)page );
-    
   if (!page->m_page)
   {
      wxLogFatalError( "Notebook page creation error" );
@@ -416,6 +393,38 @@ void wxNotebook::AddChild( wxWindow *win )
 
   m_pages.Append( page );
 };
+
+void wxNotebook::OnSize(wxSizeEvent& event)
+{
+  // forward this event to all pages
+  wxNode *node = m_pages.First();
+  while (node)
+  {
+    wxWindow *page = ((wxNotebookPage*)node->Data())->m_client;
+    // @@@@ the numbers I substract here are completely arbitrary, instead we
+    // should somehow calculate the size of the page from the size of the
+    // notebook
+    page->SetSize(event.GetSize().GetX() - 5,
+                                 event.GetSize().GetY() - 30);
+
+    if ( page->GetAutoLayout() )
+      page->Layout();
+
+    node = node->Next();
+  };
+}
+
+// override these 2 functions to do nothing: everything is done in OnSize
+void wxNotebook::SetConstraintSizes(bool /* recurse */)
+{
+  // don't set the sizes of the pages - their correct size is not yet known
+  wxControl::SetConstraintSizes(FALSE);
+}
+
+bool wxNotebook::DoPhase(int /* nPhase */)
+{
+  return TRUE;
+}
 
 //-----------------------------------------------------------------------------
 // wxNotebookEvent

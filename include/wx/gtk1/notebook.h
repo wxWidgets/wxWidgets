@@ -137,8 +137,15 @@ public:
     // get the panel which represents the given page
   wxWindow *GetPage(int nPage) const;
 
-  // base class virtuals
+  // implementation
+  // --------------
+    // callbacks
+  void OnSize(wxSizeEvent&);
+
+    // base class virtuals
   virtual void AddChild(wxWindow *child);
+  virtual void SetConstraintSizes(bool recurse);
+  virtual bool DoPhase(int phase);
 
 private:
   // common part of all ctors
