@@ -438,6 +438,10 @@ while test $# -gt 0; do
     --help|-h)
       usage 1 1>&2
       ;;
+    -*)
+      # unrecognized flag is error
+      usage 1 1>&2
+      ;;
   esac
   shift
 done
