@@ -795,29 +795,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
 */
 #endif
 
-/*
-    Damn, I forgot why this didn't work, but it didn't work.
-
-    // win is a panel: up can be propagated to the panel
-    if ((!ret) && (win->m_wxwindow) && (win->m_parent) && (win->m_parent->AcceptsFocus()) &&
-        (gdk_event->keyval == GDK_Up))
-    {
-        win->m_parent->SetFocus();
-        ret = TRUE;
-    }
-
-    // win is a panel: left/right can be propagated to the panel
-    if ((!ret) && (win->m_wxwindow) &&
-        ((gdk_event->keyval == GDK_Right) || (gdk_event->keyval == GDK_Left) ||
-         (gdk_event->keyval == GDK_Up) || (gdk_event->keyval == GDK_Down)))
-    {
-        wxNavigationKeyEvent new_event;
-        new_event.SetDirection( (gdk_event->keyval == GDK_Right) || (gdk_event->keyval == GDK_Down) );
-        new_event.SetCurrentFocus( win );
-        ret = win->GetEventHandler()->ProcessEvent( new_event );
-    }
-*/
-
     if (ret)
     {
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );

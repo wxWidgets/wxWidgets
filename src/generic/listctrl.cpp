@@ -2225,10 +2225,10 @@ void wxListMainWindow::CalculatePositions()
                 line->GetSize( lineWidth, lineHeight );
                 if (lineWidth > maxWidth) maxWidth = lineWidth;
                 y += lineSpacing;
+	        if (m_currentVisibleLines > m_visibleLines)
+		    m_visibleLines = m_currentVisibleLines;
                 if (y+lineSpacing-6 >= clientHeight) // -6 for earlier "line breaking"
                 {
-	            if (m_currentVisibleLines > m_visibleLines)
-		        m_visibleLines = m_currentVisibleLines;
 	            m_currentVisibleLines = 0;
                     y = 5;
                     x += maxWidth+6;
@@ -2247,7 +2247,6 @@ void wxListMainWindow::CalculatePositions()
                 if (!node) tries = 1;  // everything fits, no second try required
             }
         }
-//        m_visibleLines = (5+clientHeight+6) / (lineSpacing); // +6 for earlier "line breaking"
 	
         int scroll_pos = GetScrollPos( wxHORIZONTAL );
         SetScrollbars( m_xScroll, m_yScroll, (entireWidth+15) / m_xScroll, 0, scroll_pos, 0, TRUE );

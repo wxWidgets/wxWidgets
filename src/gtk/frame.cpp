@@ -64,6 +64,20 @@ extern void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar 
 #endif
 
 //-----------------------------------------------------------------------------
+// "focus" from m_window
+//-----------------------------------------------------------------------------
+
+static gint gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    // This disables GTK's tab traversal
+    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus" );
+    return TRUE;
+}
+
+//-----------------------------------------------------------------------------
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
@@ -464,6 +478,10 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     /* the only way to get the window size is to connect to this event */
     gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
         GTK_SIGNAL_FUNC(gtk_frame_configure_callback), (gpointer)this );
+
+    /* disable native tab traversal */
+    gtk_signal_connect( GTK_OBJECT(m_widget), "focus",
+        GTK_SIGNAL_FUNC(gtk_frame_focus_callback), (gpointer)this );
 
     return TRUE;
 }

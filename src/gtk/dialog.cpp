@@ -14,16 +14,12 @@
 #include "wx/dialog.h"
 #include "wx/frame.h"
 #include "wx/app.h"
+#include "wx/cursor.h"
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
+#include "gdk/gdkkeysyms.h"
 #include "wx/gtk/win_gtk.h"
-#include "wx/cursor.h"
-
-/*
-#include "gdk/gdkprivate.h"
-#include "gdk/gdkx.h"
-*/
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -38,6 +34,20 @@ extern int g_openDialogs;
 //-----------------------------------------------------------------------------
 
 extern wxList wxPendingDelete;
+
+//-----------------------------------------------------------------------------
+// "focus" from m_window
+//-----------------------------------------------------------------------------
+
+static gint gtk_dialog_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    // This disables GTK's tab traversal
+    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus" );
+    return TRUE;
+}
 
 //-----------------------------------------------------------------------------
 // "delete_event"
@@ -268,6 +278,9 @@ bool wxDialog::Create( wxWindow *parent,
         return FALSE;
     }
 
+    // All dialogs should really have this style
+    m_windowStyle |= wxTAB_TRAVERSAL;
+
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInDialog;
 
     m_widget = gtk_window_new( GTK_WINDOW_DIALOG );
@@ -306,6 +319,10 @@ bool wxDialog::Create( wxWindow *parent,
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
         GTK_SIGNAL_FUNC(gtk_dialog_configure_callback), (gpointer)this );
+
+    /* disable native tab traversal */
+    gtk_signal_connect( GTK_OBJECT(m_widget), "focus",
+        GTK_SIGNAL_FUNC(gtk_dialog_focus_callback), (gpointer)this );
 
     return TRUE;
 }

@@ -190,7 +190,7 @@ void wxPanel::OnSize(wxSizeEvent& WXUNUSED(event))
 void wxPanel::SetFocus()
 {
     // If the panel gets the focus *by way of getting it set directly*
-    // we move it to the first window that can get it.
+    // we move the focus to the first window that can get it.
 
     wxNode *node = GetChildren().First();
     while (node)
@@ -213,13 +213,15 @@ void wxPanel::SetFocus()
 void wxPanel::OnFocus(wxFocusEvent& event)
 {
     // If the panel gets the focus *by way of getting clicked on*
-    // we move it to either the last window that had the focus or
-    // the first one that can get it.
+    // we move the focus to either the last window that had the 
+    // focus or the first one that can get it.
 
     if (m_winLastFocused)
     {
-        // it might happen that the window got reparented...
-        if ( m_winLastFocused->GetParent() == this )
+        // It might happen that the window got reparented or no longer 
+	// accepts the focus.
+        if ((m_winLastFocused->GetParent() == this) &&
+	    (m_winLastFocused->AcceptsFocus()))
         {
             m_winLastFocused->SetFocus();
             return;

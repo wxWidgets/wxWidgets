@@ -34,7 +34,7 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool   g_blockEventsOnDrag;
+extern bool       g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
 // "clicked"
@@ -334,7 +334,6 @@ void wxRadioBox::SetFocus()
         if (button->active)
         {
             gtk_widget_grab_focus( GTK_WIDGET(button) );
-
             return;
         }
         node = node->Next();

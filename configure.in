@@ -1718,7 +1718,7 @@ if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
       *-hp-hpux* )
         if test "$GCC" = yes ; then
-            SHARED_LD="${CC} -shared -o"
+            SHARED_LD="${CC} -shared -fPIC -o"
             PIC_FLAG="-fPIC"
         else
             SHARED_LD="${CXX} -b -o"

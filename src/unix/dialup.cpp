@@ -524,7 +524,7 @@ wxDialUpManagerImpl::CheckIfconfig(void)
                   || strstr(output,"sl") // slip
                   || strstr(output,"pl") // plip
 #else
-                  wxASSERT(0); // unreachable code
+                  FALSE
 #endif
                   )
                   rc = 1;
