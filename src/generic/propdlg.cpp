@@ -43,6 +43,9 @@ bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxStri
                                        const wxPoint& pos, const wxSize& sz, long style,
                                        const wxString& name)
 {
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    style = wxNO_BORDER;
+#endif    
     if (!wxDialog::Create(parent, id, title, pos, sz, style, name))
         return false;
     
@@ -53,7 +56,7 @@ bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxStri
     m_innerSizer = new wxBoxSizer( wxVERTICAL );
 
     int extraSpace = 5;
-#ifdef __WXWINCE__
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     extraSpace=0;
 #endif
     topSizer->Add(m_innerSizer, 1, wxGROW|wxALL, extraSpace);
@@ -73,7 +76,7 @@ void wxPropertySheetDialog::Init()
 // Layout the dialog, to be called after pages have been created
 void wxPropertySheetDialog::LayoutDialog()
 {
-#ifndef __WXWINCE__
+#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     GetSizer()->Fit(this);
     Centre(wxBOTH);
 #endif
@@ -83,12 +86,13 @@ void wxPropertySheetDialog::LayoutDialog()
 void wxPropertySheetDialog::CreateButtons(int flags)
 {
 #if defined(__SMARTPHONE__)
-    // TODO: if flags turns more buttons then make right menu from ID
-    // to real menu with all the other IDs available. Perhaps that could be
-    // embedded in CreateButtonSizer() directly.
+    // TODO: create a right-click menu with all the other IDs available.
+    // Perhaps that could be embedded in CreateButtonSizer() directly.
     SetRightMenu(wxID_CANCEL);
     SetLeftMenu(wxID_OK);
-#elif !defined(__WXWINCE__)
+#elif defined(__POCKETPC__)
+    // Do nothing
+#else
     wxSizer* sizer = CreateButtonSizer(flags);
     m_innerSizer->Add( sizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
 #endif
@@ -112,7 +116,8 @@ void wxPropertySheetDialog::AddBookCtrl(wxSizer* sizer)
 #if defined(__POCKETPC__) && wxUSE_NOTEBOOK
     // The book control has to be sized larger than the dialog because of a border bug
     // in WinCE
-    sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxRIGHT, -3 );
+    int borderSize = -2;
+    sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxRIGHT, borderSize );
 #else
     sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 #endif
