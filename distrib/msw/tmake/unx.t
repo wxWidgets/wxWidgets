@@ -39,7 +39,7 @@
     }
 
     foreach $file (sort keys %wxGeneric) {
-        next if $wxCommon{$file} =~ /\bX\b/;
+        next if $wxGeneric{$file} =~ /\bX\b/;
 
         $file2 = $file;
         $file =~ s/cp?p?$/\o/;
