@@ -273,25 +273,25 @@ public:
     }
 
     void OnExit() {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         Py_DECREF(m_tagHandlerClass);
         m_tagHandlerClass = NULL;
         for (size_t x=0; x < m_objArray.GetCount(); x++) {
             PyObject* obj = (PyObject*)m_objArray.Item(x);
             Py_DECREF(obj);
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     };
 
     void FillHandlersTable(wxHtmlWinParser *parser) {
         // Wave our magic wand...  (if it works it's a miracle!  ;-)
 
         // First, make a new instance of the tag handler
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         PyObject* arg = Py_BuildValue("()");
         PyObject* obj = PyInstance_New(m_tagHandlerClass, arg, NULL);
         Py_DECREF(arg);
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
 
         // now figure out where it's C++ object is...
         wxPyHtmlWinTagHandler* thPtr;
@@ -438,13 +438,13 @@ IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     bool found;
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked"))) {
         PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo", 0);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
         Py_DECREF(obj);
     }
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
     if (! found)
         wxHtmlWindow::OnLinkClicked(link);
 }

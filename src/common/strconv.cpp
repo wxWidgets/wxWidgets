@@ -409,11 +409,9 @@ WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
 
-#if wxUSE_GUI
-
 // VZ: the new version of wxCharsetToCodepage() is more politically correct
 //     and should work on other Windows versions as well but the old version is
-//     still needed for !wxUSE_FONTMAP || !wxUSE_GUI case
+//     still needed for !wxUSE_FONTMAP case
 
 extern long wxEncodingToCodepage(wxFontEncoding encoding)
 {
@@ -436,7 +434,7 @@ extern long wxEncodingToCodepage(wxFontEncoding encoding)
     return csetInfo.ciACP;
 }
 
-#if wxUSE_FONTMAP
+#if wxUSE_FONTMAP && wxUSE_GUI
 
 extern long wxCharsetToCodepage(const wxChar *name)
 {
@@ -452,12 +450,7 @@ extern long wxCharsetToCodepage(const wxChar *name)
     return wxEncodingToCodepage(enc);
 }
 
-#endif // wxUSE_FONTMAP
-
-#endif // wxUSE_GUI
-
-// include old wxCharsetToCodepage() by OK if needed
-#if !wxUSE_GUI || !wxUSE_FONTMAP
+#else // old wxCharsetToCodepage() by OK
 
 #include "wx/msw/registry.h"
 
@@ -493,7 +486,7 @@ extern long wxCharsetToCodepage(const wxChar *name)
     return CP;
 }
 
-#endif // !wxUSE_GUI || !wxUSE_FONTMAP
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
 
 #endif // Win32
 

@@ -238,7 +238,7 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
     bool hadErr = FALSE;
     bool found;
 
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     if ((found = m_myInst.findCallback("GetPageInfo"))) {
         PyObject* result = m_myInst.callCallbackObj(Py_BuildValue("()"));
         if (result && PyTuple_Check(result) && PyTuple_Size(result) == 4) {
@@ -269,7 +269,7 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
         }
         Py_DECREF(result);
     }
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
     if (! found)
         wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
 }

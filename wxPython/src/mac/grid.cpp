@@ -96,7 +96,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     wxGridCellAttr* CBNAME(int a, int b, wxGridCellAttr::wxAttrKind c) {        \
         wxGridCellAttr* rval = NULL;                                            \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* ro;                                                       \
             wxGridCellAttr* ptr;                                                \
@@ -107,7 +107,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
                 Py_DECREF(ro);                                                  \
             }                                                                   \
         }                                                                       \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a, b, c);                                     \
         return rval;                                                            \
@@ -120,14 +120,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK__GCAINTINT(PCLASS, CBNAME)                                   \
     void CBNAME(wxGridCellAttr *attr, int a, int b) {                           \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         bool found;                                                             \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* obj = wxPyConstructObject((void*)attr, "wxGridCellAttr", 0);\
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oii)", obj, a, b));   \
             Py_DECREF(obj);                                                     \
         }                                                                       \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             PCLASS::CBNAME(attr, a, b);                                         \
     }                                                                           \
@@ -139,14 +139,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK__GCAINT(PCLASS, CBNAME)                                      \
     void CBNAME(wxGridCellAttr *attr, int val) {                                \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         bool found;                                                             \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* obj = wxPyConstructObject((void*)attr, "wxGridCellAttr", 0);\
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", obj, val));    \
             Py_DECREF(obj);                                                     \
         }                                                                       \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             PCLASS::CBNAME(attr, val);                                          \
     }                                                                           \
@@ -158,11 +158,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK_INT__pure(CBNAME)                                            \
     int  CBNAME() {                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         int rval = 0;                                                           \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME))                            \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));         \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         return rval;                                                            \
     }
 
@@ -170,11 +170,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK_BOOL_INTINT_pure(CBNAME)                                     \
     bool CBNAME(int a, int b) {                                                 \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         bool rval = 0;                                                          \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME))                            \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)",a,b));   \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         return rval;                                                            \
     }
 
@@ -182,7 +182,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK_STRING_INTINT_pure(CBNAME)                                   \
     wxString CBNAME(int a, int b) {                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         wxString rval;                                                          \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
             PyObject* ro;                                                       \
@@ -193,7 +193,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
                 Py_DECREF(ro);  Py_DECREF(str);                                 \
             }                                                                   \
         }                                                                       \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         return rval;                                                            \
     }
 
@@ -201,17 +201,17 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK__INTINTSTRING_pure(CBNAME)                                   \
     void CBNAME(int a, int b, const wxString& c) {                              \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME))                            \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)",a,b,c.c_str()));\
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
     }
 
 
 #define PYCALLBACK_STRING_INTINT(PCLASS, CBNAME)                                \
     wxString CBNAME(int a, int b) {                                             \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         wxString rval;                                                          \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* ro;                                                       \
@@ -222,7 +222,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
                 Py_DECREF(ro);  Py_DECREF(str);                                 \
             }                                                                   \
         }                                                                       \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a, b);                                        \
         return rval;                                                            \
@@ -237,10 +237,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     bool CBNAME(int a, int b, const wxString& c)  {                             \
         bool rval = 0;                                                          \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)", a,b,c.c_str()));\
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a,b,c);                                       \
         return rval;                                                            \
@@ -256,10 +256,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     long CBNAME(int a, int b)  {                                                \
         long rval;                                                              \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)", a,b));  \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a,b);                                         \
         return rval;                                                            \
@@ -274,10 +274,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     bool CBNAME(int a, int b)  {                                                \
         bool rval = 0;                                                          \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)", a,b));  \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a,b);                                         \
         return rval;                                                            \
@@ -291,7 +291,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK_DOUBLE_INTINT(PCLASS, CBNAME)                                \
     double CBNAME(int a, int b) {                                               \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         double rval;                                                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* ro;                                                       \
@@ -302,7 +302,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
                 Py_DECREF(ro);   Py_DECREF(str);                                \
             }                                                                   \
         }                                                                       \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a, b);                                        \
         return rval;                                                            \
@@ -316,10 +316,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__(PCLASS, CBNAME)                                            \
     void CBNAME()  {                                                            \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));                \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             PCLASS::CBNAME();                                                   \
     }                                                                           \
@@ -334,10 +334,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     bool CBNAME(size_t a, size_t b)  {                                          \
         bool rval = 0;                                                          \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)", a,b));  \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a,b);                                         \
         return rval;                                                            \
@@ -352,10 +352,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     bool CBNAME(size_t a)  {                                                    \
         bool rval = 0;                                                          \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(i)", a));     \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a);                                           \
         return rval;                                                            \
@@ -369,7 +369,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK_STRING_INT(PCLASS, CBNAME)                                   \
     wxString CBNAME(int a) {                                                    \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         wxString rval;                                                          \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* ro;                                                       \
@@ -380,7 +380,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
                 Py_DECREF(ro);   Py_DECREF(str);                                \
             }                                                                   \
         }                                                                       \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a);                                           \
         return rval;                                                            \
@@ -394,10 +394,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__INTSTRING(PCLASS, CBNAME)                                   \
     void CBNAME(int a, const wxString& c)  {                                    \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(is)", a,c.c_str())); \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             PCLASS::CBNAME(a,c);                                                \
     }                                                                           \
@@ -412,10 +412,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     bool CBNAME()  {                                                            \
         bool rval = 0;                                                          \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));         \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             rval = PCLASS::CBNAME();                                            \
         return rval;                                                            \
@@ -429,10 +429,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__SIZETINT(PCLASS, CBNAME)                                    \
     void CBNAME(size_t a, int b)  {                                             \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)", a,b));         \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             PCLASS::CBNAME(a,b);                                                \
     }                                                                           \
@@ -446,10 +446,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__INTINTLONG(PCLASS, CBNAME)                                  \
     void CBNAME(int a, int b, long c)  {                                        \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", a,b,c));      \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             PCLASS::CBNAME(a,b,c);                                              \
     }                                                                           \
@@ -463,10 +463,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__INTINTDOUBLE(PCLASS, CBNAME)                                \
     void CBNAME(int a, int b, double c)  {                                      \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iif)", a,b,c));      \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             PCLASS::CBNAME(a,b,c);                                              \
     }                                                                           \
@@ -479,10 +479,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__INTINTBOOL(PCLASS, CBNAME)                                  \
     void CBNAME(int a, int b, bool c)  {                                        \
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", a,b,c));      \
-        wxPyEndBlockThreads(state);                                             \
+        wxPyEndBlockThreads();                                             \
         if (! found)                                                            \
             PCLASS::CBNAME(a,b,c);                                              \
     }                                                                           \
@@ -503,7 +503,7 @@ public:
     void Draw(wxGrid& grid, wxGridCellAttr& attr,
               wxDC& dc, const wxRect& rect,
               int row, int col, bool isSelected) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "Draw")) {
             wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(OOOOiii)",
@@ -513,13 +513,13 @@ public:
                               wxPyConstructObject((void*)&rect, "wxRect", 0),
                               row, col, isSelected));
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
 
     wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                        int row, int col) {
         wxSize rval;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "GetBestSize")) {
             PyObject* ro;
             wxSize*   ptr;
@@ -535,14 +535,14 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return rval;
     }
 
 
     wxGridCellRenderer *Clone() const {
         wxGridCellRenderer* rval = NULL;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "Clone")) {
             PyObject* ro;
             wxGridCellRenderer* ptr;
@@ -553,7 +553,7 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return rval;
     }
 
@@ -571,7 +571,7 @@ public:
     wxPyGridCellEditor() : wxGridCellEditor() {}
 
     void Create(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "Create")) {
             wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(OiO)",
@@ -579,37 +579,37 @@ public:
                               id,
                               wxPyConstructObject((void*)evtHandler, "wxEvtHandler", 0)));
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
 
 
     void BeginEdit(int row, int col, wxGrid* grid) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "BeginEdit")) {
             wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(iiO)", row, col,
                               wxPyConstructObject((void*)grid, "wxGrid", 0)));
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
 
 
     bool EndEdit(int row, int col, wxGrid* grid) {
         bool rv = FALSE;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "EndEdit")) {
             rv = wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(iiO)", row, col,
                               wxPyConstructObject((void*)grid, "wxGrid", 0)));
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return rv;
     }
 
 
     wxGridCellEditor*Clone() const {
         wxGridCellEditor* rval = NULL;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "Clone")) {
             PyObject* ro;
             wxGridCellEditor* ptr;
@@ -620,19 +620,19 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return rval;
     }
 
 
     void Show(bool show, wxGridCellAttr *attr) {
         bool found;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "Show")))
             wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(iO)", show,
                               wxPyConstructObject((void*)attr, "wxGridCellAttr", 0)));
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         if (! found)
             wxGridCellEditor::Show(show, attr);
     }
@@ -643,13 +643,13 @@ public:
 
     void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr) {
         bool found;                                                             \
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "PaintBackground)")))
             wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(OO)",
                               wxPyConstructObject((void*)&rectCell, "wxRect", 0),
                               wxPyConstructObject((void*)attr, "wxGridCellAttr", 0)));
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         if (! found)
             wxGridCellEditor::PaintBackground(rectCell, attr);
     }
@@ -724,7 +724,7 @@ public:
 
 
     wxString GetValue(int row, int col) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         wxString rval;
         if (wxPyCBH_findCallback(m_myInst, "GetValue")) {
             PyObject* ro;
@@ -736,15 +736,15 @@ public:
                 Py_DECREF(str);
             }
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return rval;
     }
 
     void SetValue(int row, int col, const wxString& val) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "SetValue"))
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)",row,col,val.c_str()));
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
 
 
@@ -752,7 +752,7 @@ public:
     // the GetValue and SetValue python methods.
     long GetValueAsLong( int row, int col ) {
         long rval = 0;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "GetValue")) {
             PyObject* ro;
             PyObject* num;
@@ -766,13 +766,13 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return rval;
     }
 
     double GetValueAsDouble( int row, int col ) {
         double rval = 0.0;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "GetValue")) {
             PyObject* ro;
             PyObject* num;
@@ -786,7 +786,7 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return rval;
     }
 
@@ -795,19 +795,19 @@ public:
     }
 
     void SetValueAsLong( int row, int col, long value ) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "SetValue")) {
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", row, col, value));
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
 
     void SetValueAsDouble( int row, int col, double value ) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "SetValue")) {
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iid)", row, col, value));
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
 
     void SetValueAsBool( int row, int col, bool value ) {
@@ -913,10 +913,10 @@ static PyObject *_wrap_wxGridCellRenderer_SetParameters(PyObject *self, PyObject
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellRenderer_SetParameters(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -945,10 +945,10 @@ static PyObject *_wrap_wxGridCellRenderer_IncRef(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellRenderer_IncRef(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -973,10 +973,10 @@ static PyObject *_wrap_wxGridCellRenderer_DecRef(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellRenderer_DecRef(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1041,10 +1041,10 @@ static PyObject *_wrap_wxGridCellRenderer_Draw(PyObject *self, PyObject *args, P
 }
     _arg7 = (bool ) tempbool7;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellRenderer_Draw(_arg0,*_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1100,10 +1100,10 @@ static PyObject *_wrap_wxGridCellRenderer_GetBestSize(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxSize (wxGridCellRenderer_GetBestSize(_arg0,*_arg1,*_arg2,*_arg3,_arg4,_arg5));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -1130,10 +1130,10 @@ static PyObject *_wrap_wxGridCellRenderer_Clone(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellRenderer *)wxGridCellRenderer_Clone(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellRenderer_p");
@@ -1164,10 +1164,10 @@ static PyObject *_wrap_new_wxPyGridCellRenderer(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPyGridCellRenderer",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxPyGridCellRenderer *)new_wxPyGridCellRenderer();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyGridCellRenderer_p");
@@ -1207,10 +1207,10 @@ static PyObject *_wrap_wxPyGridCellRenderer__setCallbackInfo(PyObject *self, PyO
   _arg2 = _obj2;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellRenderer__setCallbackInfo(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1255,10 +1255,10 @@ static PyObject *_wrap_wxPyGridCellRenderer_base_SetParameters(PyObject *self, P
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellRenderer_base_SetParameters(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1288,10 +1288,10 @@ static PyObject *_wrap_new_wxGridCellStringRenderer(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellStringRenderer",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellStringRenderer *)new_wxGridCellStringRenderer();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellStringRenderer_p");
@@ -1330,10 +1330,10 @@ static PyObject *_wrap_new_wxGridCellNumberRenderer(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellNumberRenderer",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellNumberRenderer *)new_wxGridCellNumberRenderer();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellNumberRenderer_p");
@@ -1374,10 +1374,10 @@ static PyObject *_wrap_new_wxGridCellFloatRenderer(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxGridCellFloatRenderer",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellFloatRenderer *)new_wxGridCellFloatRenderer(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellFloatRenderer_p");
@@ -1408,10 +1408,10 @@ static PyObject *_wrap_wxGridCellFloatRenderer_GetWidth(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridCellFloatRenderer_GetWidth(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -1436,10 +1436,10 @@ static PyObject *_wrap_wxGridCellFloatRenderer_SetWidth(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellFloatRenderer_SetWidth(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1465,10 +1465,10 @@ static PyObject *_wrap_wxGridCellFloatRenderer_GetPrecision(PyObject *self, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridCellFloatRenderer_GetPrecision(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -1493,10 +1493,10 @@ static PyObject *_wrap_wxGridCellFloatRenderer_SetPrecision(PyObject *self, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellFloatRenderer_SetPrecision(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1522,10 +1522,10 @@ static PyObject *_wrap_new_wxGridCellBoolRenderer(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellBoolRenderer",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellBoolRenderer *)new_wxGridCellBoolRenderer();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellBoolRenderer_p");
@@ -1606,10 +1606,10 @@ static PyObject *_wrap_new_wxGridCellDateTimeRenderer(PyObject *self, PyObject *
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellDateTimeRenderer *)new_wxGridCellDateTimeRenderer(*_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellDateTimeRenderer_p");
@@ -1665,10 +1665,10 @@ static PyObject *_wrap_new_wxGridCellEnumRenderer(PyObject *self, PyObject *args
     }
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellEnumRenderer *)new_wxGridCellEnumRenderer(*_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellEnumRenderer_p");
@@ -1710,10 +1710,10 @@ static PyObject *_wrap_new_wxGridCellAutoWrapStringRenderer(PyObject *self, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellAutoWrapStringRenderer",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAutoWrapStringRenderer *)new_wxGridCellAutoWrapStringRenderer();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAutoWrapStringRenderer_p");
@@ -1744,10 +1744,10 @@ static PyObject *_wrap_wxGridCellEditor_IsCreated(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellEditor_IsCreated(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -1772,10 +1772,10 @@ static PyObject *_wrap_wxGridCellEditor_GetControl(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxControl *)wxGridCellEditor_GetControl(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
@@ -1808,10 +1808,10 @@ static PyObject *_wrap_wxGridCellEditor_SetControl(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_SetControl(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1856,10 +1856,10 @@ static PyObject *_wrap_wxGridCellEditor_SetParameters(PyObject *self, PyObject *
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_SetParameters(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1888,10 +1888,10 @@ static PyObject *_wrap_wxGridCellEditor_IncRef(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_IncRef(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1916,10 +1916,10 @@ static PyObject *_wrap_wxGridCellEditor_DecRef(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_DecRef(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -1963,10 +1963,10 @@ static PyObject *_wrap_wxGridCellEditor_Create(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_Create(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2002,10 +2002,10 @@ static PyObject *_wrap_wxGridCellEditor_BeginEdit(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_BeginEdit(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2042,10 +2042,10 @@ static PyObject *_wrap_wxGridCellEditor_EndEdit(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellEditor_EndEdit(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -2069,10 +2069,10 @@ static PyObject *_wrap_wxGridCellEditor_Reset(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_Reset(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2099,10 +2099,10 @@ static PyObject *_wrap_wxGridCellEditor_Clone(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellEditor *)wxGridCellEditor_Clone(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellEditor_p");
@@ -2140,10 +2140,10 @@ static PyObject *_wrap_wxGridCellEditor_SetSize(PyObject *self, PyObject *args, 
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_SetSize(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2180,10 +2180,10 @@ static PyObject *_wrap_wxGridCellEditor_Show(PyObject *self, PyObject *args, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_Show(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2225,10 +2225,10 @@ static PyObject *_wrap_wxGridCellEditor_PaintBackground(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_PaintBackground(_arg0,*_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2263,10 +2263,10 @@ static PyObject *_wrap_wxGridCellEditor_IsAcceptedKey(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellEditor_IsAcceptedKey(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -2299,10 +2299,10 @@ static PyObject *_wrap_wxGridCellEditor_StartingKey(PyObject *self, PyObject *ar
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_StartingKey(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2327,10 +2327,10 @@ static PyObject *_wrap_wxGridCellEditor_StartingClick(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_StartingClick(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2364,10 +2364,10 @@ static PyObject *_wrap_wxGridCellEditor_HandleReturn(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_HandleReturn(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2392,10 +2392,10 @@ static PyObject *_wrap_wxGridCellEditor_Destroy(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellEditor_Destroy(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2421,10 +2421,10 @@ static PyObject *_wrap_new_wxPyGridCellEditor(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPyGridCellEditor",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxPyGridCellEditor *)new_wxPyGridCellEditor();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyGridCellEditor_p");
@@ -2464,10 +2464,10 @@ static PyObject *_wrap_wxPyGridCellEditor__setCallbackInfo(PyObject *self, PyObj
   _arg2 = _obj2;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor__setCallbackInfo(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2500,10 +2500,10 @@ static PyObject *_wrap_wxPyGridCellEditor_base_SetSize(PyObject *self, PyObject 
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor_base_SetSize(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2540,10 +2540,10 @@ static PyObject *_wrap_wxPyGridCellEditor_base_Show(PyObject *self, PyObject *ar
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor_base_Show(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2585,10 +2585,10 @@ static PyObject *_wrap_wxPyGridCellEditor_base_PaintBackground(PyObject *self, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor_base_PaintBackground(_arg0,*_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2622,10 +2622,10 @@ static PyObject *_wrap_wxPyGridCellEditor_base_IsAcceptedKey(PyObject *self, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor_base_IsAcceptedKey(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2659,10 +2659,10 @@ static PyObject *_wrap_wxPyGridCellEditor_base_StartingKey(PyObject *self, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor_base_StartingKey(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2687,10 +2687,10 @@ static PyObject *_wrap_wxPyGridCellEditor_base_StartingClick(PyObject *self, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor_base_StartingClick(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2724,10 +2724,10 @@ static PyObject *_wrap_wxPyGridCellEditor_base_HandleReturn(PyObject *self, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor_base_HandleReturn(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2752,10 +2752,10 @@ static PyObject *_wrap_wxPyGridCellEditor_base_Destroy(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor_base_Destroy(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2800,10 +2800,10 @@ static PyObject *_wrap_wxPyGridCellEditor_base_SetParameters(PyObject *self, PyO
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellEditor_base_SetParameters(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -2833,10 +2833,10 @@ static PyObject *_wrap_new_wxGridCellTextEditor(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellTextEditor",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellTextEditor *)new_wxGridCellTextEditor();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellTextEditor_p");
@@ -2877,10 +2877,10 @@ static PyObject *_wrap_new_wxGridCellNumberEditor(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxGridCellNumberEditor",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellNumberEditor *)new_wxGridCellNumberEditor(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellNumberEditor_p");
@@ -2919,10 +2919,10 @@ static PyObject *_wrap_new_wxGridCellFloatEditor(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellFloatEditor",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellFloatEditor *)new_wxGridCellFloatEditor();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellFloatEditor_p");
@@ -2953,10 +2953,10 @@ static PyObject *_wrap_new_wxGridCellBoolEditor(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellBoolEditor",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellBoolEditor *)new_wxGridCellBoolEditor();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellBoolEditor_p");
@@ -3008,10 +3008,10 @@ static PyObject *_wrap_new_wxGridCellChoiceEditor(PyObject *self, PyObject *args
     }
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellChoiceEditor *)new_wxGridCellChoiceEditor(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellChoiceEditor_p");
@@ -3062,10 +3062,10 @@ static PyObject *_wrap_new_wxGridCellEnumEditor(PyObject *self, PyObject *args, 
     }
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellEnumEditor *)new_wxGridCellEnumEditor(*_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellEnumEditor_p");
@@ -3107,10 +3107,10 @@ static PyObject *_wrap_new_wxGridCellAutoWrapStringEditor(PyObject *self, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellAutoWrapStringEditor",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAutoWrapStringEditor *)new_wxGridCellAutoWrapStringEditor();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAutoWrapStringEditor_p");
@@ -3133,10 +3133,10 @@ static PyObject *_wrap_new_wxGridCellAttr(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellAttr",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAttr *)new_wxGridCellAttr();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAttr_p");
@@ -3168,10 +3168,10 @@ static PyObject *_wrap_wxGridCellAttr_Clone(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAttr *)wxGridCellAttr_Clone(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAttr_p");
@@ -3210,10 +3210,10 @@ static PyObject *_wrap_wxGridCellAttr_MergeWith(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_MergeWith(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3238,10 +3238,10 @@ static PyObject *_wrap_wxGridCellAttr_IncRef(PyObject *self, PyObject *args, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_IncRef(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3266,10 +3266,10 @@ static PyObject *_wrap_wxGridCellAttr_DecRef(PyObject *self, PyObject *args, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_DecRef(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3302,10 +3302,10 @@ static PyObject *_wrap_wxGridCellAttr_SetTextColour(PyObject *self, PyObject *ar
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_SetTextColour(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3338,10 +3338,10 @@ static PyObject *_wrap_wxGridCellAttr_SetBackgroundColour(PyObject *self, PyObje
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_SetBackgroundColour(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3375,10 +3375,10 @@ static PyObject *_wrap_wxGridCellAttr_SetFont(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_SetFont(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3405,10 +3405,10 @@ static PyObject *_wrap_wxGridCellAttr_SetAlignment(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_SetAlignment(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3436,10 +3436,10 @@ static PyObject *_wrap_wxGridCellAttr_SetReadOnly(PyObject *self, PyObject *args
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_SetReadOnly(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3473,10 +3473,10 @@ static PyObject *_wrap_wxGridCellAttr_SetRenderer(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_SetRenderer(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3510,10 +3510,10 @@ static PyObject *_wrap_wxGridCellAttr_SetEditor(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_SetEditor(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3539,10 +3539,10 @@ static PyObject *_wrap_wxGridCellAttr_SetKind(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_SetKind(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3568,10 +3568,10 @@ static PyObject *_wrap_wxGridCellAttr_HasTextColour(PyObject *self, PyObject *ar
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellAttr_HasTextColour(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -3596,10 +3596,10 @@ static PyObject *_wrap_wxGridCellAttr_HasBackgroundColour(PyObject *self, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellAttr_HasBackgroundColour(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -3624,10 +3624,10 @@ static PyObject *_wrap_wxGridCellAttr_HasFont(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellAttr_HasFont(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -3652,10 +3652,10 @@ static PyObject *_wrap_wxGridCellAttr_HasAlignment(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellAttr_HasAlignment(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -3680,10 +3680,10 @@ static PyObject *_wrap_wxGridCellAttr_HasRenderer(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellAttr_HasRenderer(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -3708,10 +3708,10 @@ static PyObject *_wrap_wxGridCellAttr_HasEditor(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellAttr_HasEditor(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -3736,10 +3736,10 @@ static PyObject *_wrap_wxGridCellAttr_HasReadWriteMode(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellAttr_HasReadWriteMode(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -3765,10 +3765,10 @@ static PyObject *_wrap_wxGridCellAttr_GetTextColour(PyObject *self, PyObject *ar
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGridCellAttr_GetTextColour(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -3795,10 +3795,10 @@ static PyObject *_wrap_wxGridCellAttr_GetBackgroundColour(PyObject *self, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGridCellAttr_GetBackgroundColour(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -3825,10 +3825,10 @@ static PyObject *_wrap_wxGridCellAttr_GetFont(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxFont (wxGridCellAttr_GetFont(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -3863,10 +3863,10 @@ static PyObject *_wrap_wxGridCellAttr_GetAlignment(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_GetAlignment(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -3914,10 +3914,10 @@ static PyObject *_wrap_wxGridCellAttr_GetRenderer(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellRenderer *)wxGridCellAttr_GetRenderer(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellRenderer_p");
@@ -3960,10 +3960,10 @@ static PyObject *_wrap_wxGridCellAttr_GetEditor(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellEditor *)wxGridCellAttr_GetEditor(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellEditor_p");
@@ -3994,10 +3994,10 @@ static PyObject *_wrap_wxGridCellAttr_IsReadOnly(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridCellAttr_IsReadOnly(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -4030,10 +4030,10 @@ static PyObject *_wrap_wxGridCellAttr_SetDefAttr(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttr_SetDefAttr(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4051,10 +4051,10 @@ static PyObject *_wrap_new_wxGridCellAttrProvider(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellAttrProvider",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAttrProvider *)new_wxGridCellAttrProvider();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAttrProvider_p");
@@ -4089,10 +4089,10 @@ static PyObject *_wrap_wxGridCellAttrProvider_GetAttr(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAttr *)wxGridCellAttrProvider_GetAttr(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAttr_p");
@@ -4133,10 +4133,10 @@ static PyObject *_wrap_wxGridCellAttrProvider_SetAttr(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttrProvider_SetAttr(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4171,10 +4171,10 @@ static PyObject *_wrap_wxGridCellAttrProvider_SetRowAttr(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttrProvider_SetRowAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4209,10 +4209,10 @@ static PyObject *_wrap_wxGridCellAttrProvider_SetColAttr(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttrProvider_SetColAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4239,10 +4239,10 @@ static PyObject *_wrap_wxGridCellAttrProvider_UpdateAttrRows(PyObject *self, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttrProvider_UpdateAttrRows(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4269,10 +4269,10 @@ static PyObject *_wrap_wxGridCellAttrProvider_UpdateAttrCols(PyObject *self, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellAttrProvider_UpdateAttrCols(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4298,10 +4298,10 @@ static PyObject *_wrap_new_wxPyGridCellAttrProvider(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPyGridCellAttrProvider",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxPyGridCellAttrProvider *)new_wxPyGridCellAttrProvider();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyGridCellAttrProvider_p");
@@ -4341,10 +4341,10 @@ static PyObject *_wrap_wxPyGridCellAttrProvider__setCallbackInfo(PyObject *self,
   _arg2 = _obj2;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellAttrProvider__setCallbackInfo(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4374,10 +4374,10 @@ static PyObject *_wrap_wxPyGridCellAttrProvider_base_GetAttr(PyObject *self, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAttr *)wxPyGridCellAttrProvider_base_GetAttr(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAttr_p");
@@ -4418,10 +4418,10 @@ static PyObject *_wrap_wxPyGridCellAttrProvider_base_SetAttr(PyObject *self, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellAttrProvider_base_SetAttr(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4456,10 +4456,10 @@ static PyObject *_wrap_wxPyGridCellAttrProvider_base_SetRowAttr(PyObject *self, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellAttrProvider_base_SetRowAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4494,10 +4494,10 @@ static PyObject *_wrap_wxPyGridCellAttrProvider_base_SetColAttr(PyObject *self, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridCellAttrProvider_base_SetColAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4539,10 +4539,10 @@ static PyObject *_wrap_wxGridTableBase_SetAttrProvider(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetAttrProvider(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4569,10 +4569,10 @@ static PyObject *_wrap_wxGridTableBase_GetAttrProvider(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAttrProvider *)wxGridTableBase_GetAttrProvider(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAttrProvider_p");
@@ -4611,10 +4611,10 @@ static PyObject *_wrap_wxGridTableBase_SetView(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetView(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4640,10 +4640,10 @@ static PyObject *_wrap_wxGridTableBase_GetView(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGrid *)wxGridTableBase_GetView(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
@@ -4668,10 +4668,10 @@ static PyObject *_wrap_wxGridTableBase_GetNumberRows(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridTableBase_GetNumberRows(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -4696,10 +4696,10 @@ static PyObject *_wrap_wxGridTableBase_GetNumberCols(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridTableBase_GetNumberCols(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -4726,10 +4726,10 @@ static PyObject *_wrap_wxGridTableBase_IsEmptyCell(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_IsEmptyCell(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -4756,10 +4756,10 @@ static PyObject *_wrap_wxGridTableBase_GetValue(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxGridTableBase_GetValue(_arg0,_arg1,_arg2));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -4810,10 +4810,10 @@ static PyObject *_wrap_wxGridTableBase_SetValue(PyObject *self, PyObject *args, 
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetValue(_arg0,_arg1,_arg2,*_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -4845,10 +4845,10 @@ static PyObject *_wrap_wxGridTableBase_GetTypeName(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxGridTableBase_GetTypeName(_arg0,_arg1,_arg2));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -4900,10 +4900,10 @@ static PyObject *_wrap_wxGridTableBase_CanGetValueAs(PyObject *self, PyObject *a
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_CanGetValueAs(_arg0,_arg1,_arg2,*_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
 {
@@ -4954,10 +4954,10 @@ static PyObject *_wrap_wxGridTableBase_CanSetValueAs(PyObject *self, PyObject *a
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_CanSetValueAs(_arg0,_arg1,_arg2,*_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
 {
@@ -4988,10 +4988,10 @@ static PyObject *_wrap_wxGridTableBase_GetValueAsLong(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (long )wxGridTableBase_GetValueAsLong(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
@@ -5018,10 +5018,10 @@ static PyObject *_wrap_wxGridTableBase_GetValueAsDouble(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (double )wxGridTableBase_GetValueAsDouble(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("d",_result);
     return _resultobj;
@@ -5048,10 +5048,10 @@ static PyObject *_wrap_wxGridTableBase_GetValueAsBool(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_GetValueAsBool(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -5078,10 +5078,10 @@ static PyObject *_wrap_wxGridTableBase_SetValueAsLong(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetValueAsLong(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5109,10 +5109,10 @@ static PyObject *_wrap_wxGridTableBase_SetValueAsDouble(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetValueAsDouble(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5142,10 +5142,10 @@ static PyObject *_wrap_wxGridTableBase_SetValueAsBool(PyObject *self, PyObject *
     }
     _arg3 = (bool ) tempbool3;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetValueAsBool(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5170,10 +5170,10 @@ static PyObject *_wrap_wxGridTableBase_Clear(PyObject *self, PyObject *args, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_Clear(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5201,10 +5201,10 @@ static PyObject *_wrap_wxGridTableBase_InsertRows(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_InsertRows(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -5230,10 +5230,10 @@ static PyObject *_wrap_wxGridTableBase_AppendRows(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_AppendRows(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -5260,10 +5260,10 @@ static PyObject *_wrap_wxGridTableBase_DeleteRows(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_DeleteRows(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -5290,10 +5290,10 @@ static PyObject *_wrap_wxGridTableBase_InsertCols(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_InsertCols(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -5319,10 +5319,10 @@ static PyObject *_wrap_wxGridTableBase_AppendCols(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_AppendCols(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -5349,10 +5349,10 @@ static PyObject *_wrap_wxGridTableBase_DeleteCols(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_DeleteCols(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -5378,10 +5378,10 @@ static PyObject *_wrap_wxGridTableBase_GetRowLabelValue(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxGridTableBase_GetRowLabelValue(_arg0,_arg1));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -5412,10 +5412,10 @@ static PyObject *_wrap_wxGridTableBase_GetColLabelValue(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxGridTableBase_GetColLabelValue(_arg0,_arg1));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -5465,10 +5465,10 @@ static PyObject *_wrap_wxGridTableBase_SetRowLabelValue(PyObject *self, PyObject
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetRowLabelValue(_arg0,_arg1,*_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5518,10 +5518,10 @@ static PyObject *_wrap_wxGridTableBase_SetColLabelValue(PyObject *self, PyObject
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetColLabelValue(_arg0,_arg1,*_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5551,10 +5551,10 @@ static PyObject *_wrap_wxGridTableBase_CanHaveAttributes(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridTableBase_CanHaveAttributes(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -5583,10 +5583,10 @@ static PyObject *_wrap_wxGridTableBase_GetAttr(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAttr *)wxGridTableBase_GetAttr(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAttr_p");
@@ -5627,10 +5627,10 @@ static PyObject *_wrap_wxGridTableBase_SetAttr(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetAttr(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5665,10 +5665,10 @@ static PyObject *_wrap_wxGridTableBase_SetRowAttr(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetRowAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5703,10 +5703,10 @@ static PyObject *_wrap_wxGridTableBase_SetColAttr(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableBase_SetColAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5740,10 +5740,10 @@ static PyObject *_wrap_new_wxPyGridTableBase(PyObject *self, PyObject *args, PyO
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPyGridTableBase",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxPyGridTableBase *)new_wxPyGridTableBase();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyGridTableBase_p");
@@ -5783,10 +5783,10 @@ static PyObject *_wrap_wxPyGridTableBase__setCallbackInfo(PyObject *self, PyObje
   _arg2 = _obj2;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridTableBase__setCallbackInfo(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5811,10 +5811,10 @@ static PyObject *_wrap_wxPyGridTableBase_Destroy(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridTableBase_Destroy(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -5842,10 +5842,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetTypeName(PyObject *self, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxPyGridTableBase_base_GetTypeName(_arg0,_arg1,_arg2));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -5897,10 +5897,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_CanGetValueAs(PyObject *self, PyOb
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxPyGridTableBase_base_CanGetValueAs(_arg0,_arg1,_arg2,*_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
 {
@@ -5951,10 +5951,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_CanSetValueAs(PyObject *self, PyOb
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxPyGridTableBase_base_CanSetValueAs(_arg0,_arg1,_arg2,*_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
 {
@@ -5982,10 +5982,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_Clear(PyObject *self, PyObject *ar
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridTableBase_base_Clear(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6013,10 +6013,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_InsertRows(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxPyGridTableBase_base_InsertRows(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6042,10 +6042,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_AppendRows(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxPyGridTableBase_base_AppendRows(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6072,10 +6072,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_DeleteRows(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxPyGridTableBase_base_DeleteRows(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6102,10 +6102,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_InsertCols(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxPyGridTableBase_base_InsertCols(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6131,10 +6131,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_AppendCols(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxPyGridTableBase_base_AppendCols(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6161,10 +6161,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_DeleteCols(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxPyGridTableBase_base_DeleteCols(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6190,10 +6190,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetRowLabelValue(PyObject *self, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxPyGridTableBase_base_GetRowLabelValue(_arg0,_arg1));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -6224,10 +6224,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetColLabelValue(PyObject *self, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxPyGridTableBase_base_GetColLabelValue(_arg0,_arg1));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -6277,10 +6277,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_SetRowLabelValue(PyObject *self, P
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridTableBase_base_SetRowLabelValue(_arg0,_arg1,*_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6330,10 +6330,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_SetColLabelValue(PyObject *self, P
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridTableBase_base_SetColLabelValue(_arg0,_arg1,*_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6363,10 +6363,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_CanHaveAttributes(PyObject *self, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxPyGridTableBase_base_CanHaveAttributes(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6395,10 +6395,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetAttr(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellAttr *)wxPyGridTableBase_base_GetAttr(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellAttr_p");
@@ -6439,10 +6439,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_SetAttr(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridTableBase_base_SetAttr(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6477,10 +6477,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_SetRowAttr(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridTableBase_base_SetRowAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6515,10 +6515,10 @@ static PyObject *_wrap_wxPyGridTableBase_base_SetColAttr(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPyGridTableBase_base_SetColAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6554,10 +6554,10 @@ static PyObject *_wrap_new_wxGridStringTable(PyObject *self, PyObject *args, PyO
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxGridStringTable",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridStringTable *)new_wxGridStringTable(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridStringTable_p");
@@ -6592,10 +6592,10 @@ static PyObject *_wrap_new_wxGridTableMessage(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridTableMessage *)new_wxGridTableMessage(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridTableMessage_p");
@@ -6625,10 +6625,10 @@ static PyObject *_wrap_delete_wxGridTableMessage(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         delete_wxGridTableMessage(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6662,10 +6662,10 @@ static PyObject *_wrap_wxGridTableMessage_SetTableObject(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableMessage_SetTableObject(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6691,10 +6691,10 @@ static PyObject *_wrap_wxGridTableMessage_GetTableObject(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridTableBase *)wxGridTableMessage_GetTableObject(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
@@ -6719,10 +6719,10 @@ static PyObject *_wrap_wxGridTableMessage_SetId(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableMessage_SetId(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6748,10 +6748,10 @@ static PyObject *_wrap_wxGridTableMessage_GetId(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridTableMessage_GetId(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6776,10 +6776,10 @@ static PyObject *_wrap_wxGridTableMessage_SetCommandInt(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableMessage_SetCommandInt(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6805,10 +6805,10 @@ static PyObject *_wrap_wxGridTableMessage_GetCommandInt(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridTableMessage_GetCommandInt(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6833,10 +6833,10 @@ static PyObject *_wrap_wxGridTableMessage_SetCommandInt2(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridTableMessage_SetCommandInt2(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6862,10 +6862,10 @@ static PyObject *_wrap_wxGridTableMessage_GetCommandInt2(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridTableMessage_GetCommandInt2(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6884,10 +6884,10 @@ static PyObject *_wrap_new_wxGridCellCoords(PyObject *self, PyObject *args, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxGridCellCoords",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellCoords *)new_wxGridCellCoords(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellCoords_p");
@@ -6917,10 +6917,10 @@ static PyObject *_wrap_delete_wxGridCellCoords(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         delete_wxGridCellCoords(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -6946,10 +6946,10 @@ static PyObject *_wrap_wxGridCellCoords_GetRow(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridCellCoords_GetRow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -6974,10 +6974,10 @@ static PyObject *_wrap_wxGridCellCoords_SetRow(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellCoords_SetRow(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7003,10 +7003,10 @@ static PyObject *_wrap_wxGridCellCoords_GetCol(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridCellCoords_GetCol(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7031,10 +7031,10 @@ static PyObject *_wrap_wxGridCellCoords_SetCol(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellCoords_SetCol(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7061,10 +7061,10 @@ static PyObject *_wrap_wxGridCellCoords_Set(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridCellCoords_Set(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7095,10 +7095,10 @@ static PyObject *_wrap_wxGridCellCoords_asTuple(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (PyObject *)wxGridCellCoords_asTuple(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
   _resultobj = _result;
@@ -7136,10 +7136,10 @@ static PyObject *_wrap_wxGridCellCoords___cmp__(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridCellCoords___cmp__(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7226,10 +7226,10 @@ static PyObject *_wrap_new_wxGrid(PyObject *self, PyObject *args, PyObject *kwar
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGrid *)new_wxGrid(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGrid_p");
@@ -7263,10 +7263,10 @@ static PyObject *_wrap_wxGrid_CreateGrid(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_CreateGrid(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7291,10 +7291,10 @@ static PyObject *_wrap_wxGrid_SetSelectionMode(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetSelectionMode(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7320,10 +7320,10 @@ static PyObject *_wrap_wxGrid_GetNumberRows(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetNumberRows(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7348,10 +7348,10 @@ static PyObject *_wrap_wxGrid_GetNumberCols(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetNumberCols(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7385,10 +7385,10 @@ static PyObject *_wrap_wxGrid_ProcessTableMessage(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_ProcessTableMessage(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7413,10 +7413,10 @@ static PyObject *_wrap_wxGrid_GetTable(PyObject *self, PyObject *args, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridTableBase *)wxGrid_GetTable(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
@@ -7454,10 +7454,10 @@ static PyObject *_wrap_wxGrid_SetTable(PyObject *self, PyObject *args, PyObject 
     }
     _arg2 = (bool ) tempbool2;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_SetTable(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7481,10 +7481,10 @@ static PyObject *_wrap_wxGrid_ClearGrid(PyObject *self, PyObject *args, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_ClearGrid(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7515,10 +7515,10 @@ static PyObject *_wrap_wxGrid_InsertRows(PyObject *self, PyObject *args, PyObjec
     }
     _arg3 = (bool ) tempbool3;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_InsertRows(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7547,10 +7547,10 @@ static PyObject *_wrap_wxGrid_AppendRows(PyObject *self, PyObject *args, PyObjec
     }
     _arg2 = (bool ) tempbool2;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_AppendRows(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7580,10 +7580,10 @@ static PyObject *_wrap_wxGrid_DeleteRows(PyObject *self, PyObject *args, PyObjec
     }
     _arg3 = (bool ) tempbool3;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_DeleteRows(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7613,10 +7613,10 @@ static PyObject *_wrap_wxGrid_InsertCols(PyObject *self, PyObject *args, PyObjec
     }
     _arg3 = (bool ) tempbool3;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_InsertCols(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7645,10 +7645,10 @@ static PyObject *_wrap_wxGrid_AppendCols(PyObject *self, PyObject *args, PyObjec
     }
     _arg2 = (bool ) tempbool2;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_AppendCols(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7678,10 +7678,10 @@ static PyObject *_wrap_wxGrid_DeleteCols(PyObject *self, PyObject *args, PyObjec
     }
     _arg3 = (bool ) tempbool3;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_DeleteCols(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7723,10 +7723,10 @@ static PyObject *_wrap_wxGrid_DrawCellHighlight(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_DrawCellHighlight(_arg0,*_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7790,10 +7790,10 @@ static PyObject *_wrap_wxGrid_DrawTextRectangle(PyObject *self, PyObject *args, 
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_DrawTextRectangle(_arg0,*_arg1,*_arg2,*_arg3,_arg4,_arg5);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7858,10 +7858,10 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
     }
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_GetTextBoxSize(_arg0,*_arg1,*_arg2,_arg3,_arg4);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7900,10 +7900,10 @@ static PyObject *_wrap_wxGrid_BeginBatch(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_BeginBatch(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7928,10 +7928,10 @@ static PyObject *_wrap_wxGrid_EndBatch(PyObject *self, PyObject *args, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_EndBatch(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -7957,10 +7957,10 @@ static PyObject *_wrap_wxGrid_GetBatchCount(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetBatchCount(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -7984,10 +7984,10 @@ static PyObject *_wrap_wxGrid_ForceRefresh(PyObject *self, PyObject *args, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_ForceRefresh(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -8013,10 +8013,10 @@ static PyObject *_wrap_wxGrid_IsEditable(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_IsEditable(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8043,10 +8043,10 @@ static PyObject *_wrap_wxGrid_EnableEditing(PyObject *self, PyObject *args, PyOb
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_EnableEditing(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -8074,10 +8074,10 @@ static PyObject *_wrap_wxGrid_EnableCellEditControl(PyObject *self, PyObject *ar
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_EnableCellEditControl(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -8102,10 +8102,10 @@ static PyObject *_wrap_wxGrid_DisableCellEditControl(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_DisableCellEditControl(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -8131,10 +8131,10 @@ static PyObject *_wrap_wxGrid_CanEnableCellControl(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_CanEnableCellControl(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8159,10 +8159,10 @@ static PyObject *_wrap_wxGrid_IsCellEditControlEnabled(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_IsCellEditControlEnabled(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8187,10 +8187,10 @@ static PyObject *_wrap_wxGrid_IsCellEditControlShown(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_IsCellEditControlShown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8215,10 +8215,10 @@ static PyObject *_wrap_wxGrid_IsCurrentCellReadOnly(PyObject *self, PyObject *ar
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_IsCurrentCellReadOnly(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8242,10 +8242,10 @@ static PyObject *_wrap_wxGrid_ShowCellEditControl(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_ShowCellEditControl(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -8270,10 +8270,10 @@ static PyObject *_wrap_wxGrid_HideCellEditControl(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_HideCellEditControl(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -8298,10 +8298,10 @@ static PyObject *_wrap_wxGrid_SaveEditControlValue(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SaveEditControlValue(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -8334,10 +8334,10 @@ static PyObject *_wrap_wxGrid_XYToCell(PyObject *self, PyObject *args, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellCoords *)wxGrid_XYToCell(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellCoords_p");
@@ -8369,10 +8369,10 @@ static PyObject *_wrap_wxGrid_YToRow(PyObject *self, PyObject *args, PyObject *k
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_YToRow(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8398,10 +8398,10 @@ static PyObject *_wrap_wxGrid_XToCol(PyObject *self, PyObject *args, PyObject *k
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_XToCol(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8427,10 +8427,10 @@ static PyObject *_wrap_wxGrid_YToEdgeOfRow(PyObject *self, PyObject *args, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_YToEdgeOfRow(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8456,10 +8456,10 @@ static PyObject *_wrap_wxGrid_XToEdgeOfCol(PyObject *self, PyObject *args, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_XToEdgeOfCol(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8487,10 +8487,10 @@ static PyObject *_wrap_wxGrid_CellToRect(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxRect (wxGrid_CellToRect(_arg0,_arg1,_arg2));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -8516,10 +8516,10 @@ static PyObject *_wrap_wxGrid_GetGridCursorRow(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetGridCursorRow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8544,10 +8544,10 @@ static PyObject *_wrap_wxGrid_GetGridCursorCol(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetGridCursorCol(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8577,10 +8577,10 @@ static PyObject *_wrap_wxGrid_IsVisible(PyObject *self, PyObject *args, PyObject
     }
     _arg3 = (bool ) tempbool3;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_IsVisible(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8606,10 +8606,10 @@ static PyObject *_wrap_wxGrid_MakeCellVisible(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_MakeCellVisible(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -8636,10 +8636,10 @@ static PyObject *_wrap_wxGrid_SetGridCursor(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetGridCursor(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -8668,10 +8668,10 @@ static PyObject *_wrap_wxGrid_MoveCursorUp(PyObject *self, PyObject *args, PyObj
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MoveCursorUp(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8699,10 +8699,10 @@ static PyObject *_wrap_wxGrid_MoveCursorDown(PyObject *self, PyObject *args, PyO
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MoveCursorDown(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8730,10 +8730,10 @@ static PyObject *_wrap_wxGrid_MoveCursorLeft(PyObject *self, PyObject *args, PyO
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MoveCursorLeft(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8761,10 +8761,10 @@ static PyObject *_wrap_wxGrid_MoveCursorRight(PyObject *self, PyObject *args, Py
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MoveCursorRight(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8789,10 +8789,10 @@ static PyObject *_wrap_wxGrid_MovePageDown(PyObject *self, PyObject *args, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MovePageDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8817,10 +8817,10 @@ static PyObject *_wrap_wxGrid_MovePageUp(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MovePageUp(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8848,10 +8848,10 @@ static PyObject *_wrap_wxGrid_MoveCursorUpBlock(PyObject *self, PyObject *args, 
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MoveCursorUpBlock(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8879,10 +8879,10 @@ static PyObject *_wrap_wxGrid_MoveCursorDownBlock(PyObject *self, PyObject *args
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MoveCursorDownBlock(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8910,10 +8910,10 @@ static PyObject *_wrap_wxGrid_MoveCursorLeftBlock(PyObject *self, PyObject *args
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MoveCursorLeftBlock(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8941,10 +8941,10 @@ static PyObject *_wrap_wxGrid_MoveCursorRightBlock(PyObject *self, PyObject *arg
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_MoveCursorRightBlock(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8969,10 +8969,10 @@ static PyObject *_wrap_wxGrid_GetDefaultRowLabelSize(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetDefaultRowLabelSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -8997,10 +8997,10 @@ static PyObject *_wrap_wxGrid_GetRowLabelSize(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetRowLabelSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -9025,10 +9025,10 @@ static PyObject *_wrap_wxGrid_GetDefaultColLabelSize(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetDefaultColLabelSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -9053,10 +9053,10 @@ static PyObject *_wrap_wxGrid_GetColLabelSize(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetColLabelSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -9082,10 +9082,10 @@ static PyObject *_wrap_wxGrid_GetLabelBackgroundColour(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetLabelBackgroundColour(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -9112,10 +9112,10 @@ static PyObject *_wrap_wxGrid_GetLabelTextColour(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetLabelTextColour(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -9142,10 +9142,10 @@ static PyObject *_wrap_wxGrid_GetLabelFont(PyObject *self, PyObject *args, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxFont (wxGrid_GetLabelFont(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -9180,10 +9180,10 @@ static PyObject *_wrap_wxGrid_GetRowLabelAlignment(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_GetRowLabelAlignment(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9228,10 +9228,10 @@ static PyObject *_wrap_wxGrid_GetColLabelAlignment(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_GetColLabelAlignment(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9268,10 +9268,10 @@ static PyObject *_wrap_wxGrid_GetRowLabelValue(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxGrid_GetRowLabelValue(_arg0,_arg1));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -9302,10 +9302,10 @@ static PyObject *_wrap_wxGrid_GetColLabelValue(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxGrid_GetColLabelValue(_arg0,_arg1));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -9336,10 +9336,10 @@ static PyObject *_wrap_wxGrid_GetGridLineColour(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetGridLineColour(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -9366,10 +9366,10 @@ static PyObject *_wrap_wxGrid_GetCellHighlightColour(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetCellHighlightColour(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -9395,10 +9395,10 @@ static PyObject *_wrap_wxGrid_GetCellHighlightPenWidth(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetCellHighlightPenWidth(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -9423,10 +9423,10 @@ static PyObject *_wrap_wxGrid_GetCellHighlightROPenWidth(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetCellHighlightROPenWidth(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -9451,10 +9451,10 @@ static PyObject *_wrap_wxGrid_SetRowLabelSize(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetRowLabelSize(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9480,10 +9480,10 @@ static PyObject *_wrap_wxGrid_SetColLabelSize(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColLabelSize(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9516,10 +9516,10 @@ static PyObject *_wrap_wxGrid_SetLabelBackgroundColour(PyObject *self, PyObject 
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetLabelBackgroundColour(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9552,10 +9552,10 @@ static PyObject *_wrap_wxGrid_SetLabelTextColour(PyObject *self, PyObject *args,
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetLabelTextColour(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9589,10 +9589,10 @@ static PyObject *_wrap_wxGrid_SetLabelFont(PyObject *self, PyObject *args, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetLabelFont(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9619,10 +9619,10 @@ static PyObject *_wrap_wxGrid_SetRowLabelAlignment(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetRowLabelAlignment(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9649,10 +9649,10 @@ static PyObject *_wrap_wxGrid_SetColLabelAlignment(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColLabelAlignment(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9698,10 +9698,10 @@ static PyObject *_wrap_wxGrid_SetRowLabelValue(PyObject *self, PyObject *args, P
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetRowLabelValue(_arg0,_arg1,*_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9751,10 +9751,10 @@ static PyObject *_wrap_wxGrid_SetColLabelValue(PyObject *self, PyObject *args, P
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColLabelValue(_arg0,_arg1,*_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9791,10 +9791,10 @@ static PyObject *_wrap_wxGrid_SetGridLineColour(PyObject *self, PyObject *args, 
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetGridLineColour(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9827,10 +9827,10 @@ static PyObject *_wrap_wxGrid_SetCellHighlightColour(PyObject *self, PyObject *a
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellHighlightColour(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9856,10 +9856,10 @@ static PyObject *_wrap_wxGrid_SetCellHighlightPenWidth(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellHighlightPenWidth(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9885,10 +9885,10 @@ static PyObject *_wrap_wxGrid_SetCellHighlightROPenWidth(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellHighlightROPenWidth(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9916,10 +9916,10 @@ static PyObject *_wrap_wxGrid_EnableDragRowSize(PyObject *self, PyObject *args, 
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_EnableDragRowSize(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9944,10 +9944,10 @@ static PyObject *_wrap_wxGrid_DisableDragRowSize(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_DisableDragRowSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -9973,10 +9973,10 @@ static PyObject *_wrap_wxGrid_CanDragRowSize(PyObject *self, PyObject *args, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_CanDragRowSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -10003,10 +10003,10 @@ static PyObject *_wrap_wxGrid_EnableDragColSize(PyObject *self, PyObject *args, 
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_EnableDragColSize(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10031,10 +10031,10 @@ static PyObject *_wrap_wxGrid_DisableDragColSize(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_DisableDragColSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10060,10 +10060,10 @@ static PyObject *_wrap_wxGrid_CanDragColSize(PyObject *self, PyObject *args, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_CanDragColSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -10090,10 +10090,10 @@ static PyObject *_wrap_wxGrid_EnableDragGridSize(PyObject *self, PyObject *args,
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_EnableDragGridSize(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10118,10 +10118,10 @@ static PyObject *_wrap_wxGrid_DisableDragGridSize(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_DisableDragGridSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10147,10 +10147,10 @@ static PyObject *_wrap_wxGrid_CanDragGridSize(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_CanDragGridSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -10184,10 +10184,10 @@ static PyObject *_wrap_wxGrid_SetRowAttr(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetRowAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10222,10 +10222,10 @@ static PyObject *_wrap_wxGrid_SetColAttr(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColAttr(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10251,10 +10251,10 @@ static PyObject *_wrap_wxGrid_SetColFormatBool(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColFormatBool(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10280,10 +10280,10 @@ static PyObject *_wrap_wxGrid_SetColFormatNumber(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColFormatNumber(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10311,10 +10311,10 @@ static PyObject *_wrap_wxGrid_SetColFormatFloat(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColFormatFloat(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10360,10 +10360,10 @@ static PyObject *_wrap_wxGrid_SetColFormatCustom(PyObject *self, PyObject *args,
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColFormatCustom(_arg0,_arg1,*_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10395,10 +10395,10 @@ static PyObject *_wrap_wxGrid_EnableGridLines(PyObject *self, PyObject *args, Py
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_EnableGridLines(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10424,10 +10424,10 @@ static PyObject *_wrap_wxGrid_GridLinesEnabled(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_GridLinesEnabled(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -10452,10 +10452,10 @@ static PyObject *_wrap_wxGrid_GetDefaultRowSize(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetDefaultRowSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -10481,10 +10481,10 @@ static PyObject *_wrap_wxGrid_GetRowSize(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetRowSize(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -10509,10 +10509,10 @@ static PyObject *_wrap_wxGrid_GetDefaultColSize(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetDefaultColSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -10538,10 +10538,10 @@ static PyObject *_wrap_wxGrid_GetColSize(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGrid_GetColSize(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -10567,10 +10567,10 @@ static PyObject *_wrap_wxGrid_GetDefaultCellBackgroundColour(PyObject *self, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetDefaultCellBackgroundColour(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -10599,10 +10599,10 @@ static PyObject *_wrap_wxGrid_GetCellBackgroundColour(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetCellBackgroundColour(_arg0,_arg1,_arg2));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -10629,10 +10629,10 @@ static PyObject *_wrap_wxGrid_GetDefaultCellTextColour(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetDefaultCellTextColour(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -10661,10 +10661,10 @@ static PyObject *_wrap_wxGrid_GetCellTextColour(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetCellTextColour(_arg0,_arg1,_arg2));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -10691,10 +10691,10 @@ static PyObject *_wrap_wxGrid_GetDefaultCellFont(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxFont (wxGrid_GetDefaultCellFont(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -10723,10 +10723,10 @@ static PyObject *_wrap_wxGrid_GetCellFont(PyObject *self, PyObject *args, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxFont (wxGrid_GetCellFont(_arg0,_arg1,_arg2));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -10769,10 +10769,10 @@ static PyObject *_wrap_wxGrid_GetDefaultCellAlignment(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_GetDefaultCellAlignment(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10817,10 +10817,10 @@ static PyObject *_wrap_wxGrid_GetCellAlignment(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_GetCellAlignment(_arg0,_arg1,_arg2,_arg3,_arg4);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10849,10 +10849,10 @@ static PyObject *_wrap_wxGrid_SetDefaultRowSize(PyObject *self, PyObject *args, 
     }
     _arg2 = (bool ) tempbool2;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetDefaultRowSize(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10879,10 +10879,10 @@ static PyObject *_wrap_wxGrid_SetRowSize(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetRowSize(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10911,10 +10911,10 @@ static PyObject *_wrap_wxGrid_SetDefaultColSize(PyObject *self, PyObject *args, 
     }
     _arg2 = (bool ) tempbool2;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetDefaultColSize(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10941,10 +10941,10 @@ static PyObject *_wrap_wxGrid_SetColSize(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColSize(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -10973,10 +10973,10 @@ static PyObject *_wrap_wxGrid_AutoSizeColumn(PyObject *self, PyObject *args, PyO
     }
     _arg2 = (bool ) tempbool2;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_AutoSizeColumn(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11005,10 +11005,10 @@ static PyObject *_wrap_wxGrid_AutoSizeRow(PyObject *self, PyObject *args, PyObje
     }
     _arg2 = (bool ) tempbool2;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_AutoSizeRow(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11036,10 +11036,10 @@ static PyObject *_wrap_wxGrid_AutoSizeColumns(PyObject *self, PyObject *args, Py
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_AutoSizeColumns(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11067,10 +11067,10 @@ static PyObject *_wrap_wxGrid_AutoSizeRows(PyObject *self, PyObject *args, PyObj
     }
     _arg1 = (bool ) tempbool1;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_AutoSizeRows(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11095,10 +11095,10 @@ static PyObject *_wrap_wxGrid_AutoSize(PyObject *self, PyObject *args, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_AutoSize(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11125,10 +11125,10 @@ static PyObject *_wrap_wxGrid_SetColMinimalWidth(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetColMinimalWidth(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11155,10 +11155,10 @@ static PyObject *_wrap_wxGrid_SetRowMinimalHeight(PyObject *self, PyObject *args
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetRowMinimalHeight(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11191,10 +11191,10 @@ static PyObject *_wrap_wxGrid_SetDefaultCellBackgroundColour(PyObject *self, PyO
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetDefaultCellBackgroundColour(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11229,10 +11229,10 @@ static PyObject *_wrap_wxGrid_SetCellBackgroundColour(PyObject *self, PyObject *
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellBackgroundColour(_arg0,_arg1,_arg2,*_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11265,10 +11265,10 @@ static PyObject *_wrap_wxGrid_SetDefaultCellTextColour(PyObject *self, PyObject 
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetDefaultCellTextColour(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11303,10 +11303,10 @@ static PyObject *_wrap_wxGrid_SetCellTextColour(PyObject *self, PyObject *args, 
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellTextColour(_arg0,_arg1,_arg2,*_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11340,10 +11340,10 @@ static PyObject *_wrap_wxGrid_SetDefaultCellFont(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetDefaultCellFont(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11379,10 +11379,10 @@ static PyObject *_wrap_wxGrid_SetCellFont(PyObject *self, PyObject *args, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellFont(_arg0,_arg1,_arg2,*_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11409,10 +11409,10 @@ static PyObject *_wrap_wxGrid_SetDefaultCellAlignment(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetDefaultCellAlignment(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11441,10 +11441,10 @@ static PyObject *_wrap_wxGrid_SetCellAlignment(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellAlignment(_arg0,_arg1,_arg2,_arg3,_arg4);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11478,10 +11478,10 @@ static PyObject *_wrap_wxGrid_SetDefaultRenderer(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetDefaultRenderer(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11517,10 +11517,10 @@ static PyObject *_wrap_wxGrid_SetCellRenderer(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellRenderer(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11547,10 +11547,10 @@ static PyObject *_wrap_wxGrid_GetDefaultRenderer(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellRenderer *)wxGrid_GetDefaultRenderer(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellRenderer_p");
@@ -11584,10 +11584,10 @@ static PyObject *_wrap_wxGrid_GetCellRenderer(PyObject *self, PyObject *args, Py
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellRenderer *)wxGrid_GetCellRenderer(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellRenderer_p");
@@ -11626,10 +11626,10 @@ static PyObject *_wrap_wxGrid_SetDefaultEditor(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetDefaultEditor(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11665,10 +11665,10 @@ static PyObject *_wrap_wxGrid_SetCellEditor(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellEditor(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11695,10 +11695,10 @@ static PyObject *_wrap_wxGrid_GetDefaultEditor(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellEditor *)wxGrid_GetDefaultEditor(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellEditor_p");
@@ -11732,10 +11732,10 @@ static PyObject *_wrap_wxGrid_GetCellEditor(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellEditor *)wxGrid_GetCellEditor(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellEditor_p");
@@ -11768,10 +11768,10 @@ static PyObject *_wrap_wxGrid_GetCellValue(PyObject *self, PyObject *args, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxString (wxGrid_GetCellValue(_arg0,_arg1,_arg2));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
@@ -11822,10 +11822,10 @@ static PyObject *_wrap_wxGrid_SetCellValue(PyObject *self, PyObject *args, PyObj
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetCellValue(_arg0,_arg1,_arg2,*_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11857,10 +11857,10 @@ static PyObject *_wrap_wxGrid_IsReadOnly(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_IsReadOnly(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -11889,10 +11889,10 @@ static PyObject *_wrap_wxGrid_SetReadOnly(PyObject *self, PyObject *args, PyObje
     }
     _arg3 = (bool ) tempbool3;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetReadOnly(_arg0,_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11921,10 +11921,10 @@ static PyObject *_wrap_wxGrid_SelectRow(PyObject *self, PyObject *args, PyObject
     }
     _arg2 = (bool ) tempbool2;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SelectRow(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11953,10 +11953,10 @@ static PyObject *_wrap_wxGrid_SelectCol(PyObject *self, PyObject *args, PyObject
     }
     _arg2 = (bool ) tempbool2;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SelectCol(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -11988,10 +11988,10 @@ static PyObject *_wrap_wxGrid_SelectBlock(PyObject *self, PyObject *args, PyObje
     }
     _arg5 = (bool ) tempbool5;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SelectBlock(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -12016,10 +12016,10 @@ static PyObject *_wrap_wxGrid_SelectAll(PyObject *self, PyObject *args, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SelectAll(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -12045,10 +12045,10 @@ static PyObject *_wrap_wxGrid_IsSelection(PyObject *self, PyObject *args, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_IsSelection(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -12072,10 +12072,10 @@ static PyObject *_wrap_wxGrid_ClearSelection(PyObject *self, PyObject *args, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_ClearSelection(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -12103,10 +12103,10 @@ static PyObject *_wrap_wxGrid_IsInSelection(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGrid_IsInSelection(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -12148,10 +12148,10 @@ static PyObject *_wrap_wxGrid_BlockToDeviceRect(PyObject *self, PyObject *args, 
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxRect (wxGrid_BlockToDeviceRect(_arg0,*_arg1,*_arg2));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -12178,10 +12178,10 @@ static PyObject *_wrap_wxGrid_GetSelectionBackground(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetSelectionBackground(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -12208,10 +12208,10 @@ static PyObject *_wrap_wxGrid_GetSelectionForeground(PyObject *self, PyObject *a
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxColour (wxGrid_GetSelectionForeground(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -12244,10 +12244,10 @@ static PyObject *_wrap_wxGrid_SetSelectionBackground(PyObject *self, PyObject *a
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetSelectionBackground(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -12280,10 +12280,10 @@ static PyObject *_wrap_wxGrid_SetSelectionForeground(PyObject *self, PyObject *a
         return NULL;
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetSelectionForeground(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -12346,10 +12346,10 @@ static PyObject *_wrap_wxGrid_RegisterDataType(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_RegisterDataType(_arg0,*_arg1,_arg2,_arg3);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -12382,10 +12382,10 @@ static PyObject *_wrap_wxGrid_GetDefaultEditorForCell(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellEditor *)wxGrid_GetDefaultEditorForCell(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellEditor_p");
@@ -12419,10 +12419,10 @@ static PyObject *_wrap_wxGrid_GetDefaultRendererForCell(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellRenderer *)wxGrid_GetDefaultRendererForCell(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellRenderer_p");
@@ -12474,10 +12474,10 @@ static PyObject *_wrap_wxGrid_GetDefaultEditorForType(PyObject *self, PyObject *
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellEditor *)wxGrid_GetDefaultEditorForType(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellEditor_p");
@@ -12533,10 +12533,10 @@ static PyObject *_wrap_wxGrid_GetDefaultRendererForType(PyObject *self, PyObject
 #endif
 }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridCellRenderer *)wxGrid_GetDefaultRendererForType(_arg0,*_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCellRenderer_p");
@@ -12572,10 +12572,10 @@ static PyObject *_wrap_wxGrid_SetMargins(PyObject *self, PyObject *args, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGrid_SetMargins(_arg0,_arg1,_arg2);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -12601,10 +12601,10 @@ static PyObject *_wrap_wxGrid_GetGridWindow(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxWindow *)wxGrid_GetGridWindow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
@@ -12629,10 +12629,10 @@ static PyObject *_wrap_wxGrid_GetGridRowLabelWindow(PyObject *self, PyObject *ar
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxWindow *)wxGrid_GetGridRowLabelWindow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
@@ -12657,10 +12657,10 @@ static PyObject *_wrap_wxGrid_GetGridColLabelWindow(PyObject *self, PyObject *ar
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxWindow *)wxGrid_GetGridColLabelWindow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
@@ -12685,10 +12685,10 @@ static PyObject *_wrap_wxGrid_GetGridCornerLabelWindow(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxWindow *)wxGrid_GetGridCornerLabelWindow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
@@ -12767,10 +12767,10 @@ static PyObject *_wrap_new_wxGridEvent(PyObject *self, PyObject *args, PyObject 
     _arg10 = (bool ) tempbool10;
     _arg11 = (bool ) tempbool11;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridEvent *)new_wxGridEvent(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9,_arg10,_arg11);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridEvent_p");
@@ -12801,10 +12801,10 @@ static PyObject *_wrap_wxGridEvent_GetRow(PyObject *self, PyObject *args, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridEvent_GetRow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -12829,10 +12829,10 @@ static PyObject *_wrap_wxGridEvent_GetCol(PyObject *self, PyObject *args, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridEvent_GetCol(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -12858,10 +12858,10 @@ static PyObject *_wrap_wxGridEvent_GetPosition(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxPoint (wxGridEvent_GetPosition(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -12887,10 +12887,10 @@ static PyObject *_wrap_wxGridEvent_Selecting(PyObject *self, PyObject *args, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridEvent_Selecting(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -12915,10 +12915,10 @@ static PyObject *_wrap_wxGridEvent_ControlDown(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridEvent_ControlDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -12943,10 +12943,10 @@ static PyObject *_wrap_wxGridEvent_MetaDown(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridEvent_MetaDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -12971,10 +12971,10 @@ static PyObject *_wrap_wxGridEvent_ShiftDown(PyObject *self, PyObject *args, PyO
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridEvent_ShiftDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -12999,10 +12999,10 @@ static PyObject *_wrap_wxGridEvent_AltDown(PyObject *self, PyObject *args, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridEvent_AltDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13077,10 +13077,10 @@ static PyObject *_wrap_new_wxGridSizeEvent(PyObject *self, PyObject *args, PyObj
     _arg8 = (bool ) tempbool8;
     _arg9 = (bool ) tempbool9;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridSizeEvent *)new_wxGridSizeEvent(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridSizeEvent_p");
@@ -13111,10 +13111,10 @@ static PyObject *_wrap_wxGridSizeEvent_GetRowOrCol(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridSizeEvent_GetRowOrCol(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13140,10 +13140,10 @@ static PyObject *_wrap_wxGridSizeEvent_GetPosition(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxPoint (wxGridSizeEvent_GetPosition(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -13169,10 +13169,10 @@ static PyObject *_wrap_wxGridSizeEvent_ControlDown(PyObject *self, PyObject *arg
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridSizeEvent_ControlDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13197,10 +13197,10 @@ static PyObject *_wrap_wxGridSizeEvent_MetaDown(PyObject *self, PyObject *args, 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridSizeEvent_MetaDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13225,10 +13225,10 @@ static PyObject *_wrap_wxGridSizeEvent_ShiftDown(PyObject *self, PyObject *args,
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridSizeEvent_ShiftDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13253,10 +13253,10 @@ static PyObject *_wrap_wxGridSizeEvent_AltDown(PyObject *self, PyObject *args, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridSizeEvent_AltDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13347,10 +13347,10 @@ static PyObject *_wrap_new_wxGridRangeSelectEvent(PyObject *self, PyObject *args
     _arg8 = (bool ) tempbool8;
     _arg9 = (bool ) tempbool9;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridRangeSelectEvent *)new_wxGridRangeSelectEvent(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,_arg8,_arg9);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridRangeSelectEvent_p");
@@ -13382,10 +13382,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_GetTopLeftCoords(PyObject *self, P
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxGridCellCoords (wxGridRangeSelectEvent_GetTopLeftCoords(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxGridCellCoords_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -13412,10 +13412,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_GetBottomRightCoords(PyObject *sel
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = new wxGridCellCoords (wxGridRangeSelectEvent_GetBottomRightCoords(_arg0));
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxGridCellCoords_p");
     _resultobj = Py_BuildValue("s",_ptemp);
@@ -13441,10 +13441,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_GetTopRow(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridRangeSelectEvent_GetTopRow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13469,10 +13469,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_GetBottomRow(PyObject *self, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridRangeSelectEvent_GetBottomRow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13497,10 +13497,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_GetLeftCol(PyObject *self, PyObjec
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridRangeSelectEvent_GetLeftCol(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13525,10 +13525,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_GetRightCol(PyObject *self, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridRangeSelectEvent_GetRightCol(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13553,10 +13553,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_Selecting(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridRangeSelectEvent_Selecting(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13581,10 +13581,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_ControlDown(PyObject *self, PyObje
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridRangeSelectEvent_ControlDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13609,10 +13609,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_MetaDown(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridRangeSelectEvent_MetaDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13637,10 +13637,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_ShiftDown(PyObject *self, PyObject
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridRangeSelectEvent_ShiftDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13665,10 +13665,10 @@ static PyObject *_wrap_wxGridRangeSelectEvent_AltDown(PyObject *self, PyObject *
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxGridRangeSelectEvent_AltDown(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13731,10 +13731,10 @@ static PyObject *_wrap_new_wxGridEditorCreatedEvent(PyObject *self, PyObject *ar
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxGridEditorCreatedEvent *)new_wxGridEditorCreatedEvent(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridEditorCreatedEvent_p");
@@ -13765,10 +13765,10 @@ static PyObject *_wrap_wxGridEditorCreatedEvent_GetRow(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridEditorCreatedEvent_GetRow(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13793,10 +13793,10 @@ static PyObject *_wrap_wxGridEditorCreatedEvent_GetCol(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (int )wxGridEditorCreatedEvent_GetCol(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
@@ -13821,10 +13821,10 @@ static PyObject *_wrap_wxGridEditorCreatedEvent_GetControl(PyObject *self, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxControl *)wxGridEditorCreatedEvent_GetControl(_arg0);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
@@ -13849,10 +13849,10 @@ static PyObject *_wrap_wxGridEditorCreatedEvent_SetRow(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridEditorCreatedEvent_SetRow(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -13878,10 +13878,10 @@ static PyObject *_wrap_wxGridEditorCreatedEvent_SetCol(PyObject *self, PyObject 
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridEditorCreatedEvent_SetCol(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
@@ -13915,10 +13915,10 @@ static PyObject *_wrap_wxGridEditorCreatedEvent_SetControl(PyObject *self, PyObj
         }
     }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxGridEditorCreatedEvent_SetControl(_arg0,_arg1);
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;

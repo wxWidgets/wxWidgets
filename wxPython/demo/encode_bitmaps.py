@@ -44,7 +44,7 @@ command_lines = [
     "-a -n Tog1  -m #C0C0C0 bmp_source/tog1.bmp images.py",
     "-a -n Tog2  -m #C0C0C0 bmp_source/tog2.bmp images.py",
 
-    "-a -n Smiles -m #FFFFFF bmp_source/smiles.bmp images.py",
+    "-a -n Smiles -m #FFFFFF bmp_source/smiles2.bmp images.py",
 
     "-a -n GridBG bmp_source/GridBG.gif images.py",
 

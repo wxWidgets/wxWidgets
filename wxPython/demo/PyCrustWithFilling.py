@@ -1,5 +1,5 @@
 
-from wxPython.wx import *
+from wxPython.wx import wxSplitterWindow
 from wxPython.lib.PyCrust import shell, version, filling
 
 
@@ -11,7 +11,8 @@ def runTest(frame, nb, log):
     win = wxSplitterWindow(nb, -1, size=(640, 480))
     shellWin = shell.Shell(win, -1, introText=intro)
     fillingWin = filling.Filling(win, -1, size=(640, 480),
-                                 rootObject=shellWin.interp.locals
+                                 rootObject=shellWin.interp.locals,
+                                 rootIsNamespace=1
                                  )
     win.SplitHorizontally(shellWin, fillingWin)
     return win
@@ -19,3 +20,4 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 overview = filling.__doc__
+

@@ -39,6 +39,7 @@ class MyFrame(wxFrame):
 
 
     def OnButton(self, evt):
+        print "OnButton"
         self.Close()
 
 app = wxPySimpleApp()

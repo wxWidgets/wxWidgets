@@ -38,6 +38,19 @@ def ForceBetween(min, val, max):
         return min
     return val
 
+
+def LineTrimmer(lineOfText):
+    if len(lineOfText) == 0:
+        return ""
+    elif lineOfText[-1] == '\r':
+        return lineOfText[:-1]
+    else:
+        return lineOfText
+
+def LineSplitter(text):
+    return map (LineTrimmer, text.split('\n'))
+
+
 #----------------------------
 
 class Scroller:
@@ -685,7 +698,7 @@ class wxEditor(wxScrolledWindow):
         success = wxTheClipboard.GetData(do)
         wxTheClipboard.Close()
         if success:
-            pastedLines = string.split(do.GetText(), '\n')
+            pastedLines = LineSplitter(do.GetText())
         else:
             wxBell()
             return

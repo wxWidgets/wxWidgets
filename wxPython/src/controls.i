@@ -55,8 +55,15 @@ wxValidator wxDefaultValidator;
 
 //----------------------------------------------------------------------
 
+
+//  This is the base class for a control or 'widget'.
+//
+//  A control is generally a small window which processes user input and/or
+//  displays one or more item of data.
 class wxControl : public wxWindow {
 public:
+
+    //
     wxControl(wxWindow *parent,
                        wxWindowID id,
                        const wxPoint& pos=wxDefaultPosition,
@@ -64,8 +71,11 @@ public:
                        long style=0,
                        const wxValidator& validator=wxDefaultValidator,
                        const char* name="control");
+
+    //
     %name(wxPreControl)wxControl();
 
+    //
     bool Create(wxWindow *parent,
                        wxWindowID id,
                        const wxPoint& pos=wxDefaultPosition,
@@ -77,8 +87,14 @@ public:
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreControl:val._setOORInfo(val)"
 
+    // Simulates the effect of the user issuing a command to the item. See
+    // wxCommandEvent.
     void Command(wxCommandEvent& event);
+
+    // Return a control's text.
     wxString GetLabel();
+
+    // Sets the item's text.
     void SetLabel(const wxString& label);
 };
 
@@ -90,24 +106,42 @@ class wxControlWithItems : public wxControl {
 public:
 
     // void Clear();  ambiguous, redefine below...
+
+    // Deletes an item from the control
     void Delete(int n);
 
+    // Returns the number of items in the control.
     int GetCount();
     %pragma(python) addtoclass = "Number = GetCount"
+
+    // Returns the string at the given position.
     wxString GetString(int n);
+
+    // Sets the string value of an item.
     void SetString(int n, const wxString& s);
+
+    // Finds an item matching the given string.  Returns the zero-based
+    // position of the item, or -1 if the string was not found.
     int FindString(const wxString& s);
 
+    // Select the item at postion n.
     void Select(int n);
+
+    // Gets the position of the selected item.
     int GetSelection();
 
+    // Gets the current selection as a string.
     wxString GetStringSelection() const;
 
     //   void Append(const wxString& item);
     //   void Append(const wxString& item, char* clientData);
     //   char* GetClientData(const int n);
     //   void SetClientData(const int n, char* data);
+
+
     %addmethods {
+        // Adds the item to the control, associating the given data with the
+        // item if not None.
         void Append(const wxString& item, PyObject* clientData=NULL) {
             if (clientData) {
                 wxPyClientData* data = new wxPyClientData(clientData);
@@ -116,6 +150,7 @@ public:
                 self->Append(item);
         }
 
+        // Returns the client data associated with the given item, (if any.)
         PyObject* GetClientData(int n) {
             wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
             if (data) {
@@ -127,6 +162,7 @@ public:
             }
         }
 
+        // Associate the given client data with the item at position n.
         void SetClientData(int n, PyObject* clientData) {
             wxPyClientData* data = new wxPyClientData(clientData);
             self->SetClientObject(n, data);
@@ -134,18 +170,49 @@ public:
     }
 
 };
+
 //----------------------------------------------------------------------
 
+// A button is a control that contains a text string, and is one of the most
+// common elements of a GUI.  It may be placed on a dialog box or panel, or
+// indeed almost any other window.
+//
+// Styles
+//    wxBU_LEFT:  Left-justifies the label. WIN32 only.
+//    wxBU_TOP:  Aligns the label to the top of the button. WIN32 only.
+//    wxBU_RIGHT:  Right-justifies the bitmap label. WIN32 only.
+//    wxBU_BOTTOM:  Aligns the label to the bottom of the button. WIN32 only.
+//    wxBU_EXACTFIT: Creates the button as small as possible instead of making
+//                   it of the standard size (which is the default behaviour.)
+//
+// Events
+//     EVT_BUTTON(win,id,func):
+//         Sent when the button is clicked.
+//
 class wxButton : public wxControl {
 public:
+    // Constructor, creating and showing a button.
+    //
+    // parent:  Parent window.  Must not be None.
+    // id:      Button identifier.  A value of -1 indicates a default value.
+    // label:   The text to be displayed on the button.
+    // pos:     The button position on it's parent.
+    // size:    Button size.  If the default size (-1, -1) is specified then the
+    //          button is sized appropriately for the text.
+    // style:   Window style.  See wxButton.
+    // validator: Window validator.
+    // name:    Window name.
     wxButton(wxWindow* parent, wxWindowID id, const wxString& label,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              char* name = "button");
+
+    // Default constructor
     %name(wxPreButton)wxButton();
 
+    // Button creation function for two-step creation.
     bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
@@ -156,13 +223,29 @@ public:
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreButton:val._setOORInfo(val)"
 
+    // This sets the button to be the default item for the panel or dialog box.
+    //
+    // Under Windows, only dialog box buttons respond to this function. As
+    // normal under Windows and Motif, pressing return causes the default
+    // button to be depressed when the return key is pressed. See also
+    // wxWindow.SetFocus which sets the keyboard focus for windows and text
+    // panel items, and wxPanel.SetDefaultItem.
     void SetDefault();
+
+    //
     void SetBackgroundColour(const wxColour& colour);
+    //
     void SetForegroundColour(const wxColour& colour);
+
 #ifdef __WXMSW__
+    // show the image in the button in addition to the label
     void SetImageLabel(const wxBitmap& bitmap);
+
+    // set the margins around the image
     void SetImageMargins(wxCoord x, wxCoord y);
 #endif
+
+    // returns the default button size for this platform
     static wxSize GetDefaultSize();
 };
 

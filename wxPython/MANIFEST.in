@@ -76,6 +76,7 @@ include src/*.c
 include src/*.h
 include src/*.ico
 include src/*.rc
+include src/wxc.pyd.manifest
 
 include src/msw/*.cpp
 include src/msw/*.h

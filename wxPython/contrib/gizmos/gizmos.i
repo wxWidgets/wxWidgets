@@ -247,7 +247,7 @@ public:
 
     virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect) {
         bool found;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawItem"))) {
             PyObject* dcobj = wxPyMake_wxObject(&dc);
             PyObject* idobj = wxPyConstructObject((void*)&id, "wxTreeItemId", FALSE);
@@ -257,7 +257,7 @@ public:
             Py_DECREF(idobj);
             Py_DECREF(recobj);
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         if (! found)
             wxTreeCompanionWindow::DrawItem(dc, id, rect);
     }

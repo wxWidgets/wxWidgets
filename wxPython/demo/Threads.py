@@ -7,7 +7,7 @@ from   whrandom import random
 
 #----------------------------------------------------------------------
 
-wxEVT_UPDATE_BARGRAPH = 25015
+wxEVT_UPDATE_BARGRAPH = wxNewEventType()
 
 def EVT_UPDATE_BARGRAPH(win, func):
     win.Connect(-1, -1, wxEVT_UPDATE_BARGRAPH, func)
@@ -43,11 +43,10 @@ class CalcBarThread:
         while self.keepGoing:
             evt = UpdateBarEvent(self.barNum, int(self.val))
             wxPostEvent(self.win, evt)
-            del evt
+            #del evt
 
             sleeptime = (random() * 2) + 0.5
-            #print self.barNum, 'sleeping for', sleeptime
-            time.sleep(sleeptime)
+            time.sleep(sleeptime/4)
 
             sleeptime = sleeptime * 5
             if int(random() * 2):
@@ -160,7 +159,8 @@ class TestFrame(wxFrame):
         panel.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD))
         wxStaticText(panel, -1,
                      "This demo shows multiple threads interacting with this\n"
-                     "window by sending events to it.", wxPoint(5,5))
+                     "window by sending events to it, one thread for each bar.",
+                     wxPoint(5,5))
         panel.Fit()
 
         self.graph = GraphWindow(self, ['Zero', 'One', 'Two', 'Three', 'Four',

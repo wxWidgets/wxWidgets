@@ -671,20 +671,20 @@ public:
 
     virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t) {
         bool found;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLog")))
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(isi)", level, szString, t));
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLog(level, szString, t);
     }
 
     virtual void DoLogString(const wxChar *szString, time_t t) {
         bool found;
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString")))
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(si)", szString, t));
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLogString(szString, t);
     }
@@ -777,9 +777,9 @@ long wxExecute(const wxString& command,
 class wxJoystick : public wxObject {
 public:
     wxJoystick(int joystick = wxJOYSTICK1) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError, "wxJoystick is not available on this platform.");
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
     wxPoint GetPosition() { return wxPoint(-1,-1); }
     int GetZPosition() { return -1; }
@@ -892,14 +892,14 @@ class wxWave : public wxObject
 {
 public:
     wxWave(const wxString& fileName, bool isResource = FALSE) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
     wxWave(int size, const wxByte* data) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
 
     ~wxWave() {}
@@ -1087,13 +1087,13 @@ public:
             wxString iconFile;
             int iconIndex;
             if (self->GetIcon(&icon, &iconFile, &iconIndex)) {
-                wxPyTState* state = wxPyBeginBlockThreads();
+                wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(icon),
                                                               "wxIcon", TRUE));
                 PyTuple_SetItem(tuple, 1, PyString_FromString(iconFile.c_str()));
                 PyTuple_SetItem(tuple, 2, PyInt_FromLong(iconIndex));
-                wxPyEndBlockThreads(state);
+                wxPyEndBlockThreads();
                 return tuple;
             }
             else
@@ -1147,11 +1147,11 @@ public:
             wxArrayString commands;
             if (self->GetAllCommands(&verbs, &commands,
                                      wxFileType::MessageParameters(filename, mimetype))) {
-                wxPyTState* state = wxPyBeginBlockThreads();
+                wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(2);
                 PyTuple_SetItem(tuple, 0, wxArrayString2PyList_helper(verbs));
                 PyTuple_SetItem(tuple, 1, wxArrayString2PyList_helper(commands));
-                wxPyEndBlockThreads(state);
+                wxPyEndBlockThreads();
                 return tuple;
             }
             else

@@ -107,8 +107,6 @@ public:
     void SetVendorName(const wxString& name);
     void SetUseBestVisual(bool flag);
     wxIcon GetStdIcon(int which);
-
-
 };
 
 %inline %{
@@ -168,6 +166,8 @@ static wxPyCoreAPI API = {
     SWIG_addvarlink,
     SWIG_newvarlink,
 
+    wxPyBeginAllowThreads,
+    wxPyEndAllowThreads,
     wxPyBeginBlockThreads,
     wxPyEndBlockThreads,
 

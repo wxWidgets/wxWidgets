@@ -61,10 +61,10 @@ C. Once you get the sources be sure to put them in a path without a
    space in it (i.e., NOT c:\Program Files\wx) and set an environment
    variable named WXWIN to this directory.  For example:
 
-	 mkdir \wx2
-	 cd \wx2
-	 unzip wxMSW-2.2.2.zip
-	 set WXWIN=c:\wx2
+         mkdir \wx2
+         cd \wx2
+         unzip wxMSW-2.2.2.zip
+         set WXWIN=c:\wx2
 
    You'll probably want to add that last line to your autoexec.bat or
    System Properties depending on the type of system you are on.
@@ -72,26 +72,17 @@ C. Once you get the sources be sure to put them in a path without a
 D. Change to the wx2\include\wx\msw directory and copy setup0.h to
    setup.h and then edit setup.h.  This is how you control which parts
    of wxWindows are compiled into or left out of the build, simply by
-   turning options on or off.  At a minimum you should set the
-   following:
+   turning options on or off.  I have the following differences from
+   the default setup0.h in my setup.h, but you can experiment with
+   other settings if you like:
 
-	 wxUSE_NEW_GRID			    1
-	 wxUSE_GLOBAL_MEMORY_OPERATORS	    0
-	 wxUSE_LIBTIFF			    1
-	 wxDIALOG_UNIT_COMPATIBILITY	    0
-
-    I also turn off the following as they are not currently used in
-    wxPython.  There are probably others that can be turned off to
-    help save space, but I havn't investigated all the potential
-    configurations yet.  Please note that wxPython doesn't (yet) check
-    these flags for its own build, so if you turn off something that
-    wxPython expects then you'll get link errors later on.
-
-	 wxUSE_DIALUP_MANAGER		    0
-	 wxUSE_DYNLIB_CLASS		    0
-	 wxUSE_DOC_VIEW_ARCHITECTURE	    0
-	 wxUSE_PLOT			    0
-	 wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
+         wxDIALOG_UNIT_COMPATIBILITY   0
+         wxUSE_GLOBAL_MEMORY_OPERATORS 0
+         wxUSE_DEBUG_NEW_ALWAYS        0
+         wxUSE_CMDLINE_PARSER          0
+         wxUSE_DIALUP_MANAGER          0
+         wxUSE_TREELAYOUT              0
+         wxUSE_POSTSCRIPT              1
 
 
     ** NEW **
@@ -118,18 +109,18 @@ B. There are three different types of wxWindows DLLs that can be
    sources to get the HYBRID capability.)  Here are some more details:
 
       DEBUG Specified with "FINAL=0" and produces a DLL named
-	    wx[version]d.dll.  This DLL is compiled with full
-	    debugging information and with the __WXDEBUG__ set which
-	    enables some debugging-only code in wxWindows such as
-	    assertions and failure log messages.  The /MDd flag is
-	    used which means that it is linked with the debugging
-	    version of the C runtime library and also that you must
-	    use the debugging version of Python, (python_d.exe and
-	    pythonXX_d.dll) which also means that all extensions
-	    loaded by Python should also have the _d in the name.
-	    With this option you can use the MSVC debugger to trace
-	    though the Python interpreter, as well as the code for the
-	    wxPython extension and the wxWindows DLL.
+            wx[version]d.dll.  This DLL is compiled with full
+            debugging information and with the __WXDEBUG__ set which
+            enables some debugging-only code in wxWindows such as
+            assertions and failure log messages.  The /MDd flag is
+            used which means that it is linked with the debugging
+            version of the C runtime library and also that you must
+            use the debugging version of Python, (python_d.exe and
+            pythonXX_d.dll) which also means that all extensions
+            loaded by Python should also have the _d in the name.
+            With this option you can use the MSVC debugger to trace
+            though the Python interpreter, as well as the code for the
+            wxPython extension and the wxWindows DLL.
 
       FINAL Specified with "FINAL=1" and produces a DLL named
             wx[version].dll.  This DLL is compiled with optimizations
@@ -158,7 +149,7 @@ B. There are three different types of wxWindows DLLs that can be
 C. Change to the wx2\src\msw directory and type the following command,
    using the value for FINAL that you want:
 
-	 nmake -f makefile.vc dll pch FINAL=hybrid
+         nmake -f makefile.vc dll pch FINAL=hybrid
 
    Your machine will then crunch away for possibly a long time,
    depending on your hardware, and when it's done you should have a
@@ -170,7 +161,7 @@ D. You'll either need to add \wx2\lib to the PATH or copy the DLL file
 E. You can test your build by changing to one of the directories under
    \wx2\samples or \wx2\demos and typing (using the right FINAL flag):
 
-	nmake -f makefile.vc FINAL=hybrid WXUSINGDLL=1
+        nmake -f makefile.vc FINAL=hybrid WXUSINGDLL=1
 
    and then executing the resulting .exe file.
 
@@ -206,33 +197,33 @@ B. Change to the root wxPython directory and look at the setup.py
    either change these flags directly in setup.py or supply them on
    the command-line.
 
-	BUILD_GLCANVAS Set to zero if you don't want to build the
-		       Open GL canvas extension module.
+        BUILD_GLCANVAS Set to zero if you don't want to build the
+                       Open GL canvas extension module.
 
-	     BUILD_OGL Set to zero if you don't want to build the
-		       Object Graphics Library extension module.
+             BUILD_OGL Set to zero if you don't want to build the
+                       Object Graphics Library extension module.
 
-  	     BUILD_STC Set to zero if you don't want to build the
-		       wxStyledTextCtrl (the Scintilla wrapper)
-		       extension module.
+             BUILD_STC Set to zero if you don't want to build the
+                       wxStyledTextCtrl (the Scintilla wrapper)
+                       extension module.
 
-  	      USE_SWIG If you have edited any of the *.i files you
-		       will need to set this flag to non-zero so SWIG
-		       will be executed to regenerate the wrapper C++
-		       and shadow python files.
+              USE_SWIG If you have edited any of the *.i files you
+                       will need to set this flag to non-zero so SWIG
+                       will be executed to regenerate the wrapper C++
+                       and shadow python files.
 
-	   IN_CVS_TREE If you are using the CVS version of the
-		       wxWindows and wxPython sources then you will
-		       need to set this flag to non-zero.  This is
-		       needed because some source files from the
-		       wxWindows tree are copied to be under the
-		       wxPython tree in order to keep Distutils happy.
-		       With this flag set then setup.py will
-		       automatically keep these copied sources up to
-		       date if the original version is ever updated.
-		       If you are using the tar.gz version of the
-		       Python sources then these copied sources are
-		       already present in your source tree.
+           IN_CVS_TREE If you are using the CVS version of the
+                       wxWindows and wxPython sources then you will
+                       need to set this flag to non-zero.  This is
+                       needed because some source files from the
+                       wxWindows tree are copied to be under the
+                       wxPython tree in order to keep Distutils happy.
+                       With this flag set then setup.py will
+                       automatically keep these copied sources up to
+                       date if the original version is ever updated.
+                       If you are using the tar.gz version of the
+                       Python sources then these copied sources are
+                       already present in your source tree.
 
 
 C. To build and install wxPython you simply need to execute the
@@ -244,27 +235,27 @@ C. To build and install wxPython you simply need to execute the
    different command-line parameters you'll want to pass to setup (in
    addition to possibly one or more of the above):
 
-	 FINAL:	    python setup.py install
+         FINAL:     python setup.py install
 
-	 DEBUG:	    python setup.py build --debug install
+         DEBUG:     python setup.py build --debug install
 
-	 HYBRID:    python setup.py HYBRID=1 install
+         HYBRID:    python setup.py HYBRID=1 install
 
 
 D. At this point you should be able to change into the wxPython\demo
    directory and run the demo:
 
-	 python demo.py
+         python demo.py
 
 E. If you would like to make a test build that doesn't overwrite the
    installed version of wxPython you can do so with one of these
    commands instead of the install command above:
 
-	 FINAL:	    python setup.py build_ext --inplace
+         FINAL:     python setup.py build_ext --inplace
 
-	 DEBUG:	    python setup.py build_ext --debug --inplace
+         DEBUG:     python setup.py build_ext --debug --inplace
 
-	 HYBRID:    python setup.py HYBRID=1 build_ext --inplace
+         HYBRID:    python setup.py HYBRID=1 build_ext --inplace
 
    This will build the wxPython package in the local wxPython
    directory instead of installing it under your Python installation.
@@ -272,8 +263,8 @@ E. If you would like to make a test build that doesn't overwrite the
    directory to the PYTHONPATH:
 
          set PYTHONPATH=c:\wx2\wxPython
-	 cd c:\wx2\wxPython\demo
-	 python demo.py
+         cd c:\wx2\wxPython\demo
+         python demo.py
 
 
 That's all folks!
