@@ -29,16 +29,16 @@
 
 // what to test?
 
-#define TEST_ARRAYS
-#define TEST_CMDLINE
-#define TEST_DIR
-#define TEST_EXECUTE
-#define TEST_LOG
-#define TEST_LONGLONG
-#define TEST_MIME
+//#define TEST_ARRAYS
+//#define TEST_CMDLINE
+//#define TEST_DIR
+//#define TEST_EXECUTE
+//#define TEST_LOG
+//#define TEST_LONGLONG
+//#define TEST_MIME
 #define TEST_STRINGS
-#define TEST_THREADS
-#define TEST_TIME
+//#define TEST_THREADS
+//#define TEST_TIME
 
 // ============================================================================
 // implementation
@@ -1699,6 +1699,7 @@ void PrintArray(const char* name, const wxArrayString& array)
 #ifdef TEST_STRINGS
 
 #include "wx/timer.h"
+#include "wx/tokenzr.h"
 
 static void TestString()
 {
@@ -1826,6 +1827,77 @@ static void TestStringFind()
     puts("");
 }
 
+// replace TABs with \t and CRs with \n
+static wxString MakePrintable(const wxChar *s)
+{
+    wxString str(s);
+    (void)str.Replace(_T("\t"), _T("\\t"));
+    (void)str.Replace(_T("\n"), _T("\\n"));
+    (void)str.Replace(_T("\r"), _T("\\r"));
+
+    return str;
+}
+
+static void TestStringTokenizer()
+{
+    puts("*** Testing wxStringTokenizer ***");
+
+    static const struct StringTokenizerTest
+    {
+        const wxChar *str;      // string to tokenize
+        const wxChar *delims;   // delimiters to use
+        size_t        count;    // count of token
+        bool          with;     // return tokens with delimiters?
+    } tokenizerTestData[] = 
+    {
+        { _T(""), _T(" "), 0, FALSE },
+        { _T("Hello, world"), _T(" "), 2, FALSE },
+        { _T("Hello, world"), _T(","), 2, FALSE },
+        { _T("Hello, world!"), _T(",!"), 3, TRUE },
+        { _T("username:password:uid:gid:gecos:home:shell"), _T(":"), 7, FALSE },
+        { _T("1 \t3\t4  6   "), wxDEFAULT_DELIMITERS, 9, TRUE },
+        { _T("01/02/99"), _T("/-"), 3, FALSE },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(tokenizerTestData); n++ )
+    {
+        const StringTokenizerTest& tt = tokenizerTestData[n];
+        wxStringTokenizer tkz(tt.str, tt.delims, tt.with);
+
+        size_t count = tkz.CountTokens();
+        printf(_T("String '%s' has %u tokens delimited by '%s' "),
+               tt.str,
+               count,
+               MakePrintable(tt.delims).c_str());
+        if ( count == tt.count )
+        {
+            puts(_T("(ok)"));
+        }
+        else
+        {
+            printf(_T("(ERROR: should be %u)\n"), tt.count);
+
+            continue;
+        }
+
+        // now show the tokens themselves
+        size_t count2 = 0;
+        while ( tkz.HasMoreTokens() )
+        {
+            printf(_T("\ttoken %u: '%s'\n"),
+                   ++count2,
+                   MakePrintable(tkz.GetNextToken()).c_str());
+        }
+
+        if ( count2 != count )
+        {
+            puts(_T("ERROR: token count mismatch"));
+        }
+    }
+
+    puts("");
+}
+
 #endif // TEST_STRINGS
 
 // ----------------------------------------------------------------------------
@@ -1889,8 +1961,9 @@ int main(int argc, char **argv)
     {
         TestStringSub();
         TestStringFormat();
+        TestStringFind();
     }
-    TestStringFind();
+    TestStringTokenizer();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS

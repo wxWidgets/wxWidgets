@@ -2,7 +2,7 @@
 // Name:        tokenzr.h
 // Purpose:     String tokenizer
 // Author:      Guilhem Lavaux
-// Modified by: Gregory Pietsch
+// Modified by: Vadim Zeitlin
 // Created:     04/22/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
@@ -18,47 +18,49 @@
 
 #include "wx/object.h"
 #include "wx/string.h"
-#include "wx/filefn.h"
+
+// default: delimiters are usual white space characters
+#define wxDEFAULT_DELIMITERS (_T(" \t\r\n"))
 
 class WXDLLEXPORT wxStringTokenizer : public wxObject
 {
 public:
-    wxStringTokenizer(const wxString& to_tokenize,
-                      const wxString& delims = " \t\r\n",
-                      bool ret_delim = FALSE);
+    // ctors and such
     wxStringTokenizer() { m_retdelims = FALSE; m_pos = 0; }
+    wxStringTokenizer(const wxString& to_tokenize,
+                      const wxString& delims = wxDEFAULT_DELIMITERS,
+                      bool ret_delim = FALSE);
+    void SetString(const wxString& to_tokenize,
+                   const wxString& delims = wxDEFAULT_DELIMITERS,
+                   bool ret_delim = FALSE);
     virtual ~wxStringTokenizer();
 
-    int CountTokens() const;
-    bool HasMoreTokens();
+    // count tokens/get next token
+    size_t CountTokens() const;
+    bool HasMoreTokens() { return m_hasMore; }
+    wxString GetNextToken();
 
-    wxString NextToken();
-    wxString GetNextToken() { return NextToken(); };
-
-    wxString GetString() const { return m_string; }
     // One note about GetString -- it returns the string
     // remaining after the previous tokens have been removed,
     // not the original string
+    wxString GetString() const { return m_string; }
 
-    void SetString(const wxString& to_tokenize,
-                   const wxString& delims = " \t\r\n",
-                   bool ret_delim = FALSE)
-    {
-        m_string = to_tokenize;
-        m_delims = delims;
-        m_retdelims = ret_delim;
-        m_pos = 0;
-    }
+    // returns the current position (i.e. one index after the last returned
+    // token or 0 if GetNextToken() has never been called) in the original
+    // string
+    size_t GetPosition() const { return m_pos; }
 
-    // Here's the desired function.  It returns the position
-    // of the next token in the original string by keeping track
-    // of everything that's been deleted by GetNextToken.
-    wxUint32 GetPosition() { return m_pos; }
+    // for compatibility only, use GetNextToken() instead
+    wxString NextToken() { return GetNextToken(); }
 
 protected:
-    wxString m_string, m_delims;
-    bool m_retdelims;
-    wxUint32 m_pos;     // the position
+    wxString m_string,              // the (rest of) string to tokenize
+             m_delims;              // all delimiters
+
+    size_t   m_pos;                 // the position in the original string
+
+    bool     m_retdelims;           // if TRUE, return delims with tokens
+    bool     m_hasMore;             // do we have more tokens?
 };
 
 #endif // _WX_TOKENZRH

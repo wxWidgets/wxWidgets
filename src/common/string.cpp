@@ -1596,7 +1596,7 @@ size_t wxString::find_first_of(const wxChar* sz, size_t nStart) const
     const wxChar *start = c_str() + nStart;
     const wxChar *firstOf = wxStrpbrk(start, sz);
     if ( firstOf )
-        return firstOf - start;
+        return firstOf - c_str();
     else
         return npos;
 }

@@ -2,6 +2,36 @@
 
 wxStringTokenizer helps you to break a string up into a number of tokens.
 
+To use this class, you should create a wxStringTokenizer object, give it the
+string to tokenize and also the delimiters which separate tokens in the string
+(by default, white space characters will be used).
+
+Then \helpref{GetNextToken}{wxstringtokenizergetnexttoken} may be called
+repeatedly until it \helpref{HasMoreTokens}{wxstringtokenizerhasmoretokens} 
+returns FALSE.
+
+For example:
+
+\begin{verbatim}
+
+wxStringTokenizer tkz("first:second:third::fivth", ":");
+while ( tkz.HasMoreTokens() )
+{
+    wxString token = tkz.GetNextToken();
+
+    // process token here
+}
+\end{verbatim}
+
+Another feature of this class is that it may return the delimiter which
+was found after the token with it. In a simple case like above, you are not
+interested in this because the delimiter is always {\tt ':'}, but if the
+delimiters string has several characters, you might need to know which of them
+follows the current token. In this case, pass {\tt TRUE} to wxStringTokenizer
+constructor or \helpref{SetString}{wxstringtokenizersetstring} method and
+the delimiter will be appended to each returned token (except for the last
+one).
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
@@ -21,7 +51,7 @@ Default constructor.
 \func{}{wxStringTokenizer}{\param{const wxString\& }{to\_tokenize}, \param{const wxString\& }{delims = " $\backslash$t$\backslash$r$\backslash$n"}, \param{bool }{ret\_delim = FALSE}}
 
 Constructor. Pass the string to tokenize, a string containing delimiters,
-a flag specifying whether delimiters are retained.
+a flag specifying whether to return delimiters with tokens.
 
 \membersection{wxStringTokenizer::\destruct{wxStringTokenizer}}\label{wxstringtokenizerdtor}
 
@@ -45,13 +75,21 @@ Returns TRUE if the tokenizer has further tokens.
 
 \constfunc{wxString}{GetNextToken}{\void}
 
-Returns the next token.
+Returns the next token or empty string if the end of string was reached.
+
+\membersection{wxStringTokenizer::GetPosition}\label{wxstringtokenizergetposition}
+
+\constfunc{size\_t}{GetPosition}{\void}
+
+Returns the current position (i.e. one index after the last returned
+token or 0 if GetNextToken() has never been called) in the original
+string.
 
 \membersection{wxStringTokenizer::GetString}\label{wxstringtokenizergetstring}
 
 \constfunc{wxString}{GetString}{\void}
 
-Returns the input string.
+Returns the part of the starting string without all token already extracted.
 
 \membersection{wxStringTokenizer::SetString}\label{wxstringtokenizersetstring}
 
@@ -60,5 +98,5 @@ Returns the input string.
 Initializes the tokenizer.
 
 Pass the string to tokenize, a string containing delimiters,
-a flag specifying whether delimiters are retained.
+a flag specifying whether to return delimiters with tokens.
 

@@ -2,12 +2,20 @@
 // Name:        tokenzr.cpp
 // Purpose:     String tokenizer
 // Author:      Guilhem Lavaux
-// Modified by: Gregory Pietsch
+// Modified by: Vadim Zeitlin
 // Created:     04/22/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
     #pragma implementation "tokenzr.h"
@@ -22,86 +30,101 @@
 
 #include "wx/tokenzr.h"
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxStringTokenizer construction
+// ----------------------------------------------------------------------------
+
 wxStringTokenizer::wxStringTokenizer(const wxString& to_tokenize,
                                      const wxString& delims,
                                      bool ret_delims)
 {
+    SetString(to_tokenize, delims, ret_delims);
+}
+
+void wxStringTokenizer::SetString(const wxString& to_tokenize,
+                                  const wxString& delims,
+                                  bool ret_delim)
+{
     m_string = to_tokenize;
     m_delims = delims;
-    m_retdelims = ret_delims;
+    m_retdelims = ret_delim;
     m_pos = 0;
+
+    // empty string doesn't have any tokens
+    m_hasMore = !m_string.empty();
 }
 
 wxStringTokenizer::~wxStringTokenizer()
 {
 }
 
-int wxStringTokenizer::CountTokens() const
+// ----------------------------------------------------------------------------
+// count the number of tokens in the string
+// ----------------------------------------------------------------------------
+
+size_t wxStringTokenizer::CountTokens() const
 {
     size_t pos = 0;
-    int count = 0;
-    bool at_delim;
+    size_t count = 0;
+    for ( ;; )
+    {
+        pos = m_string.find_first_of(m_delims, pos);
+        if ( pos == wxString::npos )
+            break;
 
-    while (pos < m_string.length()) {
-        // while we're still counting ...
-        at_delim = (m_delims.find(m_string.at(pos)) < m_delims.length());
-        // are we at a delimiter? if so, move to the next nondelimiter;
-        // if not, move to the next delimiter.  If the find_first_of
-        // and find_first_not_of methods fail, pos will be assigned
-        // npos (0xFFFFFFFF) which will terminate the loop on the next
-        // go-round unless we have a really long string, which is unlikely
-        pos = at_delim ? m_string.find_first_not_of(m_delims, pos)
-                       : m_string.find_first_of(m_delims, pos);
-        if (m_retdelims)
-        {
-            // if we're retaining delimiters, increment count
-            count++;
-        }
-        else
-        {
-            // if we're not retaining delimiters and at a token, inc count
-            count += (!at_delim);
-        }
+        count++;    // one more token found
+
+        pos++;      // skip delimiter
     }
+
+    // normally, we didn't count the last token in the loop above - so add it
+    // unless the string was empty from the very beginning, in which case it
+    // still has 0 (and not 1) tokens
+    if ( !m_string.empty() )
+    {
+        count++;
+    }
+
     return count;
 }
 
-bool wxStringTokenizer::HasMoreTokens()
-{
-    return (m_retdelims
-            ? !m_string.IsEmpty()
-            : m_string.find_first_not_of(m_delims) < m_string.length());
-}
+// ----------------------------------------------------------------------------
+// token extraction
+// ----------------------------------------------------------------------------
 
-wxString wxStringTokenizer::NextToken()
+wxString wxStringTokenizer::GetNextToken()
 {
-    size_t pos;
-    wxString r_string;
+    wxString token;
+    if ( HasMoreTokens() )
+    {
+        size_t pos = m_string.find_first_of(m_delims); // end of token
+        size_t pos2;                                   // start of the next one
+        if ( pos != wxString::npos )
+        {
+            // return the delimiter too
+            pos2 = pos + 1;
+        }
+        else
+        {
+            pos2 = m_string.length();
 
-    if ( m_string.IsEmpty() )
-        return m_string;
-        pos = m_string.find_first_not_of(m_delims);
-    if ( m_retdelims ) {
-        // we're retaining delimiters (unusual behavior, IMHO)
-        if (pos == 0)
-            // first char is a non-delimiter
-            pos = m_string.find_first_of(m_delims);
-    } else {
-        // we're not retaining delimiters
-        m_string.erase(0, pos);
-        m_pos += pos;
-        if (m_string.IsEmpty())
-            return m_string;
-        pos = m_string.find_first_of(m_delims);
+            // no more tokens in this string
+            m_hasMore = FALSE;
+        }
+
+        token = wxString(m_string, m_retdelims ? pos2 : pos);
+
+        // remove token with the following it delimiter from string
+        m_string.erase(0, pos2);
+
+        // keep track of the position in the original string too
+        m_pos += pos2;
     }
-    if (pos <= m_string.length()) {
-        r_string = m_string.substr(0, pos);
-        m_string.erase(0, pos);
-        m_pos += pos;
-    } else {
-        r_string = m_string;
-        m_pos += m_string.length();
-        m_string.Empty();
-    }
-    return r_string;
+    //else: no more tokens, return empty token
+
+    return token;
 }
