@@ -17,7 +17,6 @@ describes locales concept.
 Whereever in the following text {\it iso8859-2} and {\it windows-1250} are
 used, any encodings are meant and any encodings may be substituted there.
 
-
 \wxheading{Locales}
 
 The best way how to ensure correctly displayed texts in GUI across platforms
@@ -96,8 +95,6 @@ You must set {\it bConvertEncoding} to TRUE in
 \helpref{wxLocale constructor}{wxlocaledefctor} in order to enable
 runtime encoding conversion!
 
-
-
 \wxheading{Font mapping}
 
 You can use \helpref{wxEncodingConverter}{wxencodingconverter} and
@@ -122,15 +119,11 @@ if (!wxTheFontMapper->IsEncodingAvailable(enc, facename))
 ...display text...
 \end{verbatim}
 
-
 \wxheading{Converting data}
 
 You may want to store all program data (created documents etc.) in
 same encoding, let's say windows1250. Obviously, the best way would
 be to use \helpref{wxEncodingConverter}{wxencodingconverter}.
-
-
-
 
 \wxheading{Help files}
 
@@ -151,3 +144,4 @@ Charset=iso8859-2
 
 This additional entry tells HTML help controller what encoding is used
 in contents and index tables.
+

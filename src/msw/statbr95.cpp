@@ -65,7 +65,8 @@ END_EVENT_TABLE()
 //
 // ----------------------------------------------------------------------------
 
-static WNDPROC gs_wndprocStatBar = NULL;
+// static WNDPROC gs_wndprocStatBar = NULL;
+static WXFARPROC gs_wndprocStatBar = (WXFARPROC) NULL;
 
 LRESULT APIENTRY wxStatusBarProc(HWND hwnd,
                                  UINT message,
@@ -130,7 +131,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
     //  SubclassWin(m_hWnd);
 
     // but we want to process the messages from it still, so must subclass it
-    gs_wndprocStatBar = (WNDPROC)GetWindowLong(GetHwnd(), GWL_WNDPROC);
+    gs_wndprocStatBar = (WXFARPROC)GetWindowLong(GetHwnd(), GWL_WNDPROC);
     SetWindowLong(GetHwnd(), GWL_WNDPROC, (LONG)wxStatusBarProc);
     SetWindowLong(GetHwnd(), GWL_USERDATA, (LONG)this);
 

@@ -2749,7 +2749,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
             // First, find rectangle that covers the rotated image;  to do that,
             // rotate the four corners
 
-    const wxRotationPoint & p0 = centre_of_rotation;
+    const wxRotationPoint p0 = centre_of_rotation;
 
     wxRotationPoint p1 = rotated_point (0, 0, cos_angle, sin_angle, p0);
     wxRotationPoint p2 = rotated_point (0, img.GetHeight(), cos_angle, sin_angle, p0);
@@ -2859,8 +2859,8 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
             }
             else
             {
-                const int & xs = wxCint (src.x);      // wxCint performs rounding to the
-                const int & ys = wxCint (src.y);      // closest integer
+                const int xs = wxCint (src.x);      // wxCint performs rounding to the
+                const int ys = wxCint (src.y);      // closest integer
 
                 if (0 <= xs && xs < img.GetWidth() &&
                     0 <= ys && ys < img.GetHeight())

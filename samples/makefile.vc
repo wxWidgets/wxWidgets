@@ -124,6 +124,8 @@ all:
         cd $(WXDIR)\samples\richedit
         nmake -f makefile.vc FINAL=$(FINAL)
 !endif
+        cd $(WXDIR)\samples\rotate
+        nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\sashtest
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\scroll
@@ -235,6 +237,8 @@ clean:
         cd $(WXDIR)\samples\resource
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\richedit
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\rotate
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\sashtest
         nmake -f makefile.vc clean

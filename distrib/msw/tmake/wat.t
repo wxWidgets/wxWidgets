@@ -355,7 +355,7 @@ clean_zlib:   .SYMBOLIC
     cd $(WXDIR)\src\msw
 
 MFTYPE=wat
-makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
-	cd $(WXWIN)\distrib\msw\tmake
+self : .SYMBOLIC $(WXDIR)\distrib\msw\tmake\filelist.txt $(WXDIR)\distrib\msw\tmake\$(MFTYPE).t
+	cd $(WXDIR)\distrib\msw\tmake
 	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
-	copy makefile.$(MFTYPE) $(WXWIN)\src\msw
+	copy makefile.$(MFTYPE) $(WXDIR)\src\msw

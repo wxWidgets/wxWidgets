@@ -44,6 +44,11 @@
 
 #include "xpm.h"
 
+// Added by JACS for Watcom C++/wxWindows compilation (no popen/pclose functions)
+#ifdef __WATCOMC__
+#define NO_ZPIPE
+#endif
+
 /*
  * lets try to solve include files
  */

@@ -286,6 +286,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("DrawingVC", "drawing", dir + wxString("/samples/drawing"), wxStringList("drawing.cpp", 0));
     GenerateSample("ScrollVC", "scroll", dir + wxString("/samples/scroll"), wxStringList("scroll.cpp", 0));
     GenerateSample("WizardVC", "wizard", dir + wxString("/samples/wizard"), wxStringList("wiztest.cpp", 0));
+    GenerateSample("RotateVC", "rotate", dir + wxString("/samples/rotate"), wxStringList("rotate.cpp", 0));
 
     //// Demos
 

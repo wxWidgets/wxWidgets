@@ -828,7 +828,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxVariantDataString, wxVariantData)
  * wxVariantDataTime
  */
 
-#if wxUSE_TIMEDATE
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
 
 class wxVariantDataTime: public wxVariantData
 {
@@ -1135,7 +1136,8 @@ wxVariant::wxVariant(const wxList& val, const wxString& name) // List of variant
     m_name = name;
 }
 
-#if wxUSE_TIMEDATE
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
 wxVariant::wxVariant(const wxTime& val, const wxString& name) // Time
 {
     m_data = new wxVariantDataTime(val);
@@ -1439,7 +1441,8 @@ void wxVariant::operator= (const wxList& value)
     }
 }
 
-#if wxUSE_TIMEDATE
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
 bool wxVariant::operator== (const wxTime& value) const
 {
     wxTime thisValue;
@@ -1672,7 +1675,8 @@ wxString wxVariant::GetString() const
     }
 }
 
-#if wxUSE_TIMEDATE
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
 wxTime wxVariant::GetTime() const
 {
     wxTime value;
@@ -1872,7 +1876,8 @@ bool wxVariant::Convert(wxString* value) const
     return TRUE;
 }
 
-#if wxUSE_TIMEDATE
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
 bool wxVariant::Convert(wxTime* value) const
 {
     wxString type(GetType());
@@ -1898,3 +1903,4 @@ bool wxVariant::Convert(wxDate* value) const
 }
 #endif
  // wxUSE_TIMEDATE
+

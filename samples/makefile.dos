@@ -74,8 +74,6 @@ all:
         cd $(WXDIR)\samples\html
         nmake -f makefile.dos FINAL=$(FINAL)
 !endif
-        cd $(WXDIR)\samples\image
-        nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\internat
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\joytest
@@ -205,8 +203,6 @@ clean:
         cd $(WXDIR)\samples\html
         nmake -f makefile.dos clean
 !endif
-        cd $(WXDIR)\samples\image
-        nmake -f makefile.dos clean
         cd $(WXDIR)\samples\internat
         nmake -f makefile.dos clean
         cd $(WXDIR)\samples\joytest

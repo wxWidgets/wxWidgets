@@ -62,6 +62,7 @@ all clean:
 	-$(MAKE) -C regtest -f $(MAKEFILE) $@
 	-$(MAKE) -C resource -f $(MAKEFILE) $@
 	-$(MAKE) -C richedit -f $(MAKEFILE) $@
+	-$(MAKE) -C rotate -f $(MAKEFILE) $@
 	-$(MAKE) -C sashtest -f $(MAKEFILE) $@
 	-$(MAKE) -C scroll -f $(MAKEFILE) $@
 	-$(MAKE) -C scrollsub -f $(MAKEFILE) $@

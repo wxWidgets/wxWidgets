@@ -91,7 +91,8 @@ public:
     wxVariant(const wxChar* val, const wxString& name = wxEmptyString); // Necessary or VC++ assumes bool!
     wxVariant(const wxStringList& val, const wxString& name = wxEmptyString);
     wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
-#if wxUSE_TIMEDATE
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
     wxVariant(const wxTime& val, const wxString& name = wxEmptyString); // Time
     wxVariant(const wxDate& val, const wxString& name = wxEmptyString); // Date
 #endif
@@ -135,7 +136,8 @@ public:
     bool operator== (const wxList& value) const;
     bool operator!= (const wxList& value) const;
     void operator= (const wxList& value) ;
-#if wxUSE_TIMEDATE
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
     bool operator== (const wxTime& value) const;
     bool operator!= (const wxTime& value) const;
     void operator= (const wxTime& value) ;
@@ -160,7 +162,8 @@ public:
     inline operator char () const {  return GetChar(); }
     inline operator long () const {  return GetLong(); }
     inline operator bool () const {  return GetBool(); }
-#if wxUSE_TIMEDATE
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
     inline operator wxTime () const {  return GetTime(); }
     inline operator wxDate () const {  return GetDate(); }
 #endif
@@ -196,7 +199,9 @@ public:
     wxString GetString() const ;
     wxList& GetList() const ;
     wxStringList& GetStringList() const ;
-#if wxUSE_TIMEDATE
+
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
     wxTime GetTime() const ;
     wxDate GetDate() const ;
 #endif
@@ -232,7 +237,8 @@ protected:
     bool Convert(double* value) const;
     bool Convert(wxString* value) const;
     bool Convert(char* value) const;
-#if wxUSE_TIMEDATE
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
     bool Convert(wxTime* value) const;
     bool Convert(wxDate* value) const;
 #endif

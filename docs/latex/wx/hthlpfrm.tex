@@ -3,22 +3,18 @@
 % helpfrm.h at 24/Oct/99 18:03:10
 %
 
-
 \section{\class{wxHtmlHelpFrame}}\label{wxhtmlhelpframe}
 
 This class is used by \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}
 to display help.
-It is internal class and should not be used directly - except for the case
-you're writing your own HTML help controller.
-
+It is an internal class and should not be used directly - except for the case
+when you're writing your own HTML help controller.
 
 \wxheading{Derived from}
 
 \helpref{wxFrame}{wxframe}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
-
-
 
 \membersection{wxHtmlHelpFrame::wxHtmlHelpFrame}\label{wxhtmlhelpframewxhtmlhelpframe}
 
@@ -30,7 +26,7 @@ Constructor.
 
 {\it style} is combination of these flags:
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxHF\_TOOLBAR}}{Help frame has toolbar.}
 \twocolitem{\windowstyle{wxHF\_CONTENTS}}{Help frame has contents panel.}
 \twocolitem{\windowstyle{wxHF\_INDEX}}{Help frame has index panel.}
@@ -40,7 +36,6 @@ Constructor.
 \twocolitem{\windowstyle{wxHF\_PRINT}}{Toolbar contains "print" button.}
 \end{twocollist}
 
-
 \membersection{wxHtmlHelpFrame::Create}\label{wxhtmlhelpframecreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{title = wxEmptyString}, \param{int }{style = wxHF\_DEFAULTSTYLE}}
@@ -49,14 +44,12 @@ Creates the frame.
 
 {\it style} is combination of these flags:
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxHF\_TOOLBAR}}{Help frame has toolbar.}
 \twocolitem{\windowstyle{wxHF\_CONTENTS}}{Help frame has contents panel.}
 \twocolitem{\windowstyle{wxHF\_INDEX}}{Help frame has index panel.}
 \twocolitem{\windowstyle{wxHF\_SEARCH}}{Help frame has search panel.}
 \end{twocollist}
-
-
 
 \membersection{wxHtmlHelpFrame::CreateContents}\label{wxhtmlhelpframecreatecontents}
 
@@ -64,13 +57,11 @@ Creates the frame.
 
 Creates contents panel. (May take some time.)
 
-
 \membersection{wxHtmlHelpFrame::CreateIndex}\label{wxhtmlhelpframecreateindex}
 
 \func{void}{CreateIndex}{\param{bool }{show\_progress = FALSE}}
 
 Creates index panel. (May take some time.)
-
 
 \membersection{wxHtmlHelpFrame::CreateSearch}\label{wxhtmlhelpframecreatesearch}
 
@@ -78,20 +69,22 @@ Creates index panel. (May take some time.)
 
 Creates search panel.
 
-
 \membersection{wxHtmlHelpFrame::Display}\label{wxhtmlhelpframedisplay}
 
 \func{bool}{Display}{\param{const wxString\& }{x}}
 
 \func{bool}{Display}{\param{const int }{id}}
 
-Displays page x. If not found it will offect the user a choice of
+Displays page x. If not found it will give the user the choice of
 searching books.
 Looking for the page runs in these steps:
-1. try to locate file named x (if x is for example "doc/howto.htm")
-2. try to open starting page of book x
-3. try to find x in contents (if x is for example "How To ...")
-4. try to find x in index (if x is for example "How To ...")
+
+\begin{enumerate}\itemsep=0pt
+\item try to locate file named x (if x is for example "doc/howto.htm")
+\item try to open starting page of book x
+\item try to find x in contents (if x is for example "How To ...")
+\item try to find x in index (if x is for example "How To ...")
+\end{enumerate}
 
 The second form takes numeric ID as the parameter.
 (uses extension to MS format, <param name="ID" value=id>)
@@ -111,7 +104,6 @@ Displays contents panel.
 
 Displays index panel.
 
-
 \membersection{wxHtmlHelpFrame::GetData}\label{wxhtmlhelpframegetdata}
 
 \func{wxHtmlHelpData*}{GetData}{\void}
@@ -124,7 +116,6 @@ Return wxHtmlHelpData object.
 
 Search for given keyword.
 
-
 \membersection{wxHtmlHelpFrame::ReadCustomization}\label{wxhtmlhelpframereadcustomization}
 
 \func{void}{ReadCustomization}{\param{wxConfigBase* }{cfg}, \param{const wxString\& }{path = wxEmptyString}}
@@ -135,7 +126,7 @@ Reads user's settings for this frame (see \helpref{wxHtmlHelpController::ReadCus
 
 \func{void}{RefreshLists}{\param{bool }{show\_progress = FALSE}}
 
-Refresh all panels. This is neccessary if new book was added.
+Refresh all panels. This is necessary if new book was added.
 
 \membersection{wxHtmlHelpFrame::SetTitleFormat}\label{wxhtmlhelpframesettitleformat}
 
@@ -148,24 +139,23 @@ Sets frame's title format. {\it format} must contain exactly one "\%s"
 
 \func{void}{UseConfig}{\param{wxConfigBase* }{config}, \param{const wxString\& }{rootpath = wxEmptyString}}
 
-Add books to search choice panel
-
+Add books to search choice panel.
 
 \membersection{wxHtmlHelpFrame::WriteCustomization}\label{wxhtmlhelpframewritecustomization}
 
 \func{void}{WriteCustomization}{\param{wxConfigBase* }{cfg}, \param{const wxString\& }{path = wxEmptyString}}
 
-Saves user's settings for this frame (see \helpref{wxHtmlHelpController::WriteCustomization}{wxhtmlhelpcontrollerwritecustomization})
-
+Saves user's settings for this frame (see \helpref{wxHtmlHelpController::WriteCustomization}{wxhtmlhelpcontrollerwritecustomization}).
 
 \membersection{wxHtmlHelpFrame::AddToolbarButtons}\label{wxhtmlhelpframeaddtoolbarbuttons}
 
 \func{virtual void}{AddToolbarButtons}{\param{wxToolBar *}{toolBar}, \param{int }{style}} 
 
 You may override this virtual method to add more buttons into help frame's
-toolbar. {\it toolBar} is pointer to the toolbar and {\it style} is style
+toolbar. {\it toolBar} is a pointer to the toolbar and {\it style} is the style
 flag as passed to Create method.
 
 wxToolBar::Realize is called immediately after returning from this function.
 
 See {\it samples/html/helpview} for an example.
+

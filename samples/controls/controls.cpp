@@ -105,7 +105,7 @@ public:
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
-    void OnSpinCtrl(wxCommandEvent& event);
+    void OnSpinCtrl(wxSpinEvent& event);
 #endif // wxUSE_SPINCTRL
 
     void OnEnableAll(wxCommandEvent& event);
@@ -1066,7 +1066,7 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 
 #if wxUSE_SPINCTRL
 
-void MyPanel::OnSpinCtrl(wxCommandEvent& event)
+void MyPanel::OnSpinCtrl(wxSpinEvent& event)
 {
     wxString s;
     s.Printf(_T("Spin ctrl changed: now %d (from event: %d)\n"),

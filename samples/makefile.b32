@@ -83,6 +83,8 @@ all:
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\image
         make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\rotate
+        make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\dde
         make -f makefile.b32 FINAL=$(FINAL)
 #        cd $(WXDIR)\samples\regtest
@@ -152,6 +154,8 @@ clean:
         cd $(WXDIR)\samples\proplist
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\image
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\rotate
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\dde
         make -f makefile.b32 clean

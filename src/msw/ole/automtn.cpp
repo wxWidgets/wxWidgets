@@ -25,6 +25,9 @@
 #include <math.h>
 #include <time.h>
 
+// Watcom C++ gives a linker error if this is compiled in.
+#ifndef __WATCOMC__
+
 #include "wx/msw/ole/automtn.h"
 
 #include "wx/msw/private.h"
@@ -551,6 +554,8 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
         oleVariant.vt = VT_BSTR;
         oleVariant.bstrVal = ConvertStringToOle(str);
     }
+// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
+#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
     else if (type == wxT("date"))
     {
         wxDate date( variant.GetDate() );
@@ -569,6 +574,7 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 			time.GetHour(), time.GetMinute(), time.GetSecond(), oleVariant.date))
 			return FALSE;
     }
+#endif
     else if (type == wxT("void*"))
     {
         oleVariant.vt = VT_DISPATCH;
@@ -1158,4 +1164,6 @@ void ShowException(LPOLESTR szMember, HRESULT hr, EXCEPINFO *pexcep, unsigned in
 }
 
 #endif
+
+#endif // __WATCOMC__
 

@@ -85,7 +85,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hWnd,
 // ---------------------------------------------------------------------------
 
 // the pointer to standard radio button wnd proc
-static WNDPROC s_wndprocRadioBtn = (WNDPROC)NULL;
+static WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
 
 #endif // __WIN32__
 
@@ -688,7 +688,7 @@ void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
     HWND hwndBtn = (HWND)hWndBtn;
 
     if ( !s_wndprocRadioBtn )
-        s_wndprocRadioBtn = (WNDPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
+        s_wndprocRadioBtn = (WXFARPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
 
     ::SetWindowLong(hwndBtn, GWL_WNDPROC, (long)wxRadioBtnWndProc);
     ::SetWindowLong(hwndBtn, GWL_USERDATA, (long)this);
