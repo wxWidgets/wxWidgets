@@ -55,9 +55,9 @@ wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
                         for (m = 0; m < 7; m++)
                             m_FontsTable[i][j][k][l][m] = NULL;
 #ifdef __WXMSW__
-        int default_sizes[7] = {7, 8, 10, 12, 16, 22, 30};
+        static int default_sizes[7] = {7, 8, 10, 12, 16, 22, 30};
 #else
-        int default_sizes[7] = {10, 12, 14, 16, 19, 24, 32};
+        static int default_sizes[7] = {10, 12, 14, 16, 19, 24, 32};
 #endif
         SetFonts("", wxSLANT, "", wxSLANT, default_sizes);
     }
