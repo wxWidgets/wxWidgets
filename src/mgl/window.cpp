@@ -591,6 +591,7 @@ bool wxWindowMGL::Create(wxWindow *parent,
         x = 0; // FIXME_MGL, something better, see GTK+
     if ( y == -1 )
         y = 0; // FIXME_MGL, something better, see GTK+
+    AdjustForParentClientOrigin(x, y, 0);
     w = WidthDefault(size.x);
     h = HeightDefault(size.y);
     
@@ -1126,10 +1127,17 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
         return;
     }
     
-#if 0 // FIXME_MGL -- debugging stuff!
-    dc->setColorRGB(255,0,255);
-    dc->fillRect(-1000,-1000,2000,2000);
-    wxUsleep(50);
+#ifdef __WXDEBUG__ 
+    // FIXME_MGL -- debugging stuff, to be removed!
+    static int debugPaintEvents = -1;
+    if ( debugPaintEvents == -1 )
+        debugPaintEvents = wxGetEnv(wxT("WXMGL_DEBUG_PAINT_EVENTS"), NULL);
+    if ( debugPaintEvents )
+    {
+        dc->setColorRGB(255,0,255);
+        dc->fillRect(-1000,-1000,2000,2000);
+        wxUsleep(50);
+    }
 #endif
 
     MGLRegion clip;
