@@ -41,7 +41,12 @@
     <set var="WXCOMPILER">
         <if cond="PLATFORM_WIN32=='1'">_$(COMPILERORGCC)</if>
     </set>
-    
+
+    <set var="VENDORTAG">
+        <if cond="OFFICIAL_BUILD=='1'"></if>
+        <if cond="OFFICIAL_BUILD=='0'">_$(VENDOR)</if>
+    </set>
+
     <set var="WXDEBUGFLAG">
         <if cond="BUILD=='debug'">d</if>
     </set>
@@ -69,6 +74,20 @@
         <set var="WXNAMEPREFIXGUI">wx$(PORTNAME)$(WXUNIVNAME)$(WXVER_MAJOR)$(WXVER_MINOR)</set>
         <set var="WXVERSIONTAG"></set>
     </if>
+    <set var="WXDLLNAMEPREFIX">
+        <if cond="PLATFORM_WIN32=='1'">wx$(WXVER_MAJOR)$(WXVER_MINOR)</if>
+        <if cond="PLATFORM_WIN32=='0'">$(WXNAMEPREFIX)</if>
+    </set>
+    <set var="WXDLLNAMEPREFIXGUI">
+        <if cond="PLATFORM_WIN32=='1'">
+            wx$(PORTNAME)$(WXUNIVNAME)$(WXVER_MAJOR)$(WXVER_MINOR)
+        </if>
+        <if cond="PLATFORM_WIN32=='0'">$(WXNAMEPREFIXGUI)</if>
+    </set>
+    <set var="WXDLLVERSIONTAG">
+        <if cond="PLATFORM_WIN32=='1'"></if>
+        <if cond="PLATFORM_WIN32=='0'">$(WXVERSIONTAG)</if>
+    </set>
 
     <set var="TOOLCHAIN_NAME">
         $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-$(WXVER_MAJOR).$(WXVER_MINOR)

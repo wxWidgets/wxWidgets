@@ -36,10 +36,10 @@ def mkDllName(wxid):
        suffixes, prefixes, version tags etc. This must be kept in sync
        with variables defined in common.bkl!"""
     if wxid == 'mono':
-        return '$(WXNAMEPREFIXGUI)$(WXNAMESUFFIX)$(WXCOMPILER)$(WXVERSIONTAG)'
+        return '$(WXDLLNAMEPREFIXGUI)$(WXNAMESUFFIX)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)'
     if wxid in LIBS_BASE:
-        return '$(WXNAMEPREFIX)$(WXNAMESUFFIX)_%s$(WXCOMPILER)$(WXVERSIONTAG)' % wxid
-    return '$(WXNAMEPREFIXGUI)$(WXNAMESUFFIX)_%s$(WXCOMPILER)$(WXVERSIONTAG)' % wxid
+        return '$(WXDLLNAMEPREFIX)$(WXNAMESUFFIX)_%s$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)' % wxid
+    return '$(WXDLLNAMEPREFIXGUI)$(WXNAMESUFFIX)_%s$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)' % wxid
 
 
 def libToLink(wxlibname):

@@ -47,6 +47,22 @@
     </option>
 
 
+    <option name="OFFICIAL_BUILD">
+        <values>0 1</values>
+        <default-value>0</default-value>
+        <description>
+            Is this official build by wxWindows developers?
+        </description>
+    </option>
+    <option name="VENDOR">
+        <default-value>custom</default-value>
+        <description>
+            Use this to name your customized DLLs differently
+        </description>
+    </option>
+        
+
+
     <!-- ================================================================== -->
     <!--                             Autoconf                               -->
     <!-- ================================================================== -->
