@@ -183,6 +183,7 @@ public:
     MyPanel *GetPanel() const { return m_panel; }
 
 private:
+#if wxUSE_STATUSBAR
     void UpdateStatusBar(const wxPoint& pos, const wxSize& size)
     {
         if ( m_frameStatusBar )
@@ -198,6 +199,7 @@ private:
             SetStatusText(msg, 1);
         }
     }
+#endif // wxUSE_STATUSBAR
 
     MyPanel *m_panel;
 
@@ -1560,7 +1562,9 @@ MyFrame::MyFrame(const wxChar *title, int x, int y)
 
     SetMenuBar(menu_bar);
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     m_panel = new MyPanel( this, 10, 10, 300, 100 );
 
@@ -1629,14 +1633,18 @@ void MyFrame::OnEnableAll(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnMove( wxMoveEvent& event )
 {
+#if wxUSE_STATUSBAR
     UpdateStatusBar(event.GetPosition(), GetSize());
+#endif // wxUSE_STATUSBAR
 
     event.Skip();
 }
 
 void MyFrame::OnSize( wxSizeEvent& event )
 {
+#if wxUSE_STATUSBAR
     UpdateStatusBar(GetPosition(), event.GetSize());
+#endif // wxUSE_STATUSBAR
 
     event.Skip();
 }
@@ -1663,7 +1671,9 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 #endif
                   );
 
+#if wxUSE_STATUSBAR
         SetStatusText(msg);
+#endif // wxUSE_STATUSBAR
     }
 }
 

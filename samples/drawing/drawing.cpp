@@ -119,7 +119,9 @@ public:
     void OnShow(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
 
+#if wxUSE_COLOURDLG
     wxColour SelectColour();
+#endif // wxUSE_COLOURDLG
     void PrepareDC(wxDC& dc);
 
     int         m_backgroundMode;
@@ -228,9 +230,11 @@ enum
     LogicalOrigin_Set,
     LogicalOrigin_Restore,
 
+#if wxUSE_COLOURDLG
     Colour_TextForeground,
     Colour_TextBackground,
     Colour_Background,
+#endif // wxUSE_COLOURDLG
     Colour_BackgroundMode,
     Colour_TextureBackgound,
 
@@ -1009,6 +1013,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
 void MyCanvas::OnMouseMove(wxMouseEvent &event)
 {
+#if wxUSE_STATUSBAR
     wxClientDC dc(this);
     PrepareDC(dc);
     m_owner->PrepareDC(dc);
@@ -1019,6 +1024,9 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
     wxString str;
     str.Printf( wxT("Current mouse position: %d,%d"), (int)x, (int)y );
     m_owner->SetStatusText( str );
+#else
+    wxUnusedVar(event);
+#endif // wxUSE_STATUSBAR
 }
 
 // ----------------------------------------------------------------------------
@@ -1092,9 +1100,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuLogical->Append( LogicalOrigin_Restore, _T("&Restore to normal\tShift-Ctrl-0") );
 
     wxMenu *menuColour = new wxMenu;
+#if wxUSE_COLOURDLG
     menuColour->Append( Colour_TextForeground, _T("Text &foreground...") );
     menuColour->Append( Colour_TextBackground, _T("Text &background...") );
     menuColour->Append( Colour_Background, _T("Background &colour...") );
+#endif // wxUSE_COLOURDLG
     menuColour->AppendCheckItem( Colour_BackgroundMode, _T("&Opaque/transparent\tCtrl-B") );
     menuColour->AppendCheckItem( Colour_TextureBackgound, _T("Draw textured back&ground\tCtrl-T") );
 
@@ -1110,8 +1120,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWidgets!"));
+#endif // wxUSE_STATUSBAR
 
     m_mapMode = wxMM_TEXT;
     m_xUserScale = 1.0;
@@ -1224,6 +1236,7 @@ void MyFrame::OnOption(wxCommandEvent& event)
             m_xAxisReversed = !m_xAxisReversed;
             break;
 
+#if wxUSE_COLOURDLG
         case Colour_TextForeground:
             m_colourForeground = SelectColour();
             break;
@@ -1239,6 +1252,8 @@ void MyFrame::OnOption(wxCommandEvent& event)
                 }
             }
             break;
+#endif // wxUSE_COLOURDLG
+
         case Colour_BackgroundMode:
             m_backgroundMode = m_backgroundMode == wxSOLID ? wxTRANSPARENT
                                                            : wxSOLID;
@@ -1264,6 +1279,7 @@ void MyFrame::PrepareDC(wxDC& dc)
     dc.SetMapMode( m_mapMode );
 }
 
+#if wxUSE_COLOURDLG
 wxColour MyFrame::SelectColour()
 {
     wxColour col;
@@ -1277,4 +1293,5 @@ wxColour MyFrame::SelectColour()
 
     return col;
 }
+#endif // wxUSE_COLOURDLG
 

@@ -331,7 +331,9 @@ MyFrame::MyFrame(const wxString& title)
     SetMenuBar(menuBar);
 
     // also create status bar which we use in OnWizardCancel
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
