@@ -16,7 +16,7 @@
 
 \membersection{wxFTP::SendCommand}
 
-\func{bool}{SendCommand}{\param{const wxString\&}{command}, \param{char }{ret}}
+\func{bool}{SendCommand}{\param{const wxString\&}{ command}, \param{char }{ret}}
 
 Send the specified \it{command} to the FTP server. \it{ret} specifies
 the expected result.
@@ -37,21 +37,21 @@ Returns the last command result.
 
 \membersection{wxFTP::ChDir}
 
-\func{bool}{ChDir}{\param{const wxString\&}{dir}}
+\func{bool}{ChDir}{\param{const wxString\&}{ dir}}
 
 Change the current FTP working directory.
 Returns TRUE, if successful.
 
 \membersection{wxFTP::MkDir}
 
-\func{bool}{MkDir}{\param{const wxString\&}{dir}}
+\func{bool}{MkDir}{\param{const wxString\&}{ dir}}
 
 Create the specified directory in the current FTP working directory.
 Returns TRUE, if successful.
 
 \membersection{wxFTP::RmDir}
 
-\func{bool}{RmDir}{\param{const wxString\&}{dir}}
+\func{bool}{RmDir}{\param{const wxString\&}{ dir}}
 
 Remove the specified directory from the current FTP working directory.
 Returns TRUE, if successful.
@@ -66,7 +66,7 @@ Returns the current FTP working directory.
 
 \membersection{wxFTP::Rename}
 
-\func{bool}{Rename}{\param{const wxString\&}{src}, \param{const wxString\&}{dst}}
+\func{bool}{Rename}{\param{const wxString\&}{ src}, \param{const wxString\&}{ dst}}
 
 Rename the specified \it{src} element into \it{dst}
 Returns TRUE, if successful.
@@ -75,7 +75,7 @@ Returns TRUE, if successful.
 
 \membersection{wxFTP::RmFile}
 
-\func{bool}{RmFile}{\param{const wxString\&}{path}}
+\func{bool}{RmFile}{\param{const wxString\&}{ path}}
 
 Delete the file specified by \it{path}.
 Returns TRUE, if successful.
@@ -84,12 +84,13 @@ Returns TRUE, if successful.
 
 \membersection{wxFTP::GetOutputStream}
 
-\func{wxOutputStream *}{GetOutputStream}{\param{const wxString\&}{file}}
+\func{wxOutputStream *}{GetOutputStream}{\param{const wxString\&}{ file}}
 
 Initializes an output stream to the specified \it{file}. The returned
-stream has all but seek functionality of wxStreams. When the user finishes
+stream has all but the seek functionality of wxStreams. When the user finishes
 writing data, he has to delete the stream to close it.
 
 \wxheading{Return value}
 
 An initialized write-only stream.
+

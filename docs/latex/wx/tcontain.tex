@@ -34,8 +34,8 @@ own the object pointers to which they store.
 For the same portability reasons, container classes implementation in wxWindows
 does not use templates, but is rather based on C preprocessor i.e. is done with
 the macros: {\it WX\_DECLARE\_LIST} and {\it WX\_DEFINE\_LIST} for the linked
-lists and {\it WX\_DECLARE\_ARRAY}, {\it WX\_DECLARE\_OBJARRAY} and {\it
-WX\_DEFINE\_OBJARRAY} for the dynamic arrays. The "DECLARE" macro declares a
+lists and {\it WX\_DECLARE\_ARRAY}, {\it WX\_DECLARE\_OBJARRAY} and {\it WX\_DEFINE\_OBJARRAY} for
+the dynamic arrays. The "DECLARE" macro declares a
 new container class containing the elements of given type and is needed for all
 three types of container classes: lists, arrays and objarrays. The "DEFINE"
 classes must be inserted in your program in a place where the {\bf full

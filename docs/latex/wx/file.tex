@@ -12,6 +12,7 @@ None.
 \wxheading{Constants}
 
 wx/file.h defines the following constants:
+
 {\small
 \begin{verbatim}
 #define wxS_IRUSR 00400
@@ -35,12 +36,11 @@ These constants define the file access rights and are used with
 \helpref{wxFile::Create}{wxfilecreate} and \helpref{wxFile::Open}{wxfileopen}.
 
 The {\it OpenMode} enumeration defines the different modes for opening a file,
-it's defined inside wxFile class so its members should be specified with {\it
-wxFile::} scope resolution prefix. It is also used with 
-\helpref{wxFile::Access}{wxfileaccess} function.
+it's defined inside wxFile class so its members should be specified with {\it wxFile::} scope
+resolution prefix. It is also used with \helpref{wxFile::Access}{wxfileaccess} function.
 
-\twocolwidtha{7cm}%
-\begin{twocollist}\itemsep=0pt
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt%
 \twocolitem{{\bf wxFile::read}}{Open file for reading or test if it can be opened for reading with Access()}
 \twocolitem{{\bf wxFile::write}}{Open file for writing deleting the contents of the file if it already exists
 or test if it can be opened for writing with Access()}
@@ -55,7 +55,7 @@ invalid value of type {\it off\_t} and is returned by functions returning {\it o
 mode constants used with \helpref{Seek()}{wxfileseek}:
 
 \twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
+\begin{twocollist}\itemsep=0pt%
 \twocolitem{{\bf wxFromStart}}{Count offset from the start of the file}
 \twocolitem{{\bf wxFromCurrent}}{Count offset from the current position of the file pointer}
 \twocolitem{{\bf wxFromEnd}}{Count offset from the end of the file (backwards)}
@@ -97,12 +97,14 @@ Destructor will close the file.
 NB: it is not virtual so you should {\it not} derive from wxFile!
 
 \membersection{wxFile::Access}\label{wxfileaccess}
-\func{static bool}{Access}{\param{const char *}{ name}, \param{OpenMode}{ mode}
+
+\func{static bool}{Access}{\param{const char *}{ name}, \param{OpenMode}{ mode}}
 
 This function verifies if we may access the given file in specified mode. Only
 values of wxFile::read or wxFile::write really make sense here.
 
 \membersection{wxFile::Attach}\label{wxfileattach}
+
 \func{void}{Attach}{\param{int}{ fd}}
 
 Attaches an existing file descriptor to the wxFile object. Example of predefined
@@ -126,12 +128,14 @@ Creates a file for writing. If the file already exists, setting {\bf overwrite} 
 will ensure it is overwritten.
 
 \membersection{wxFile::Detach}\label{wxfiledetach}
+
 \func{void}{Detach}{\void}
 
 Get back a file descriptor from wxFile object - the caller is responsible for closing the file if this
 descriptor is opened. \helpref{IsOpened()}{wxfileisopened} will return FALSE after call to Detach().
 
 \membersection{wxFile::fd}\label{wxfilefd}
+
 \constfunc{int}{fd}{\void}
 
 Returns the file descriptor associated with the file.
@@ -252,6 +256,8 @@ Writes the specified number of bytes from a buffer.
 TRUE if the operation was successful.
 
 \membersection{wxFile::Write}\label{wxfilewrites}
+
 \func{bool}{Write}{\param{const wxString& }{s}}
 
-Writes the contents of the string to the file, returns TRUE on success
+Writes the contents of the string to the file, returns TRUE on success.
+

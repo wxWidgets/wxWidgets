@@ -178,10 +178,10 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
   if ( g_TestBitmap && g_TestBitmap->Ok() )
   {
     wxMemoryDC memDC;
-    if ( g_TestBitmap->GetColourMap() )
+    if ( g_TestBitmap->GetPalette() )
     {
-        memDC.SetPalette(* g_TestBitmap->GetColourMap());
-        dc.SetPalette(* g_TestBitmap->GetColourMap());
+        memDC.SetPalette(* g_TestBitmap->GetPalette());
+        dc.SetPalette(* g_TestBitmap->GetPalette());
     }
     memDC.SelectObject(* g_TestBitmap);
 

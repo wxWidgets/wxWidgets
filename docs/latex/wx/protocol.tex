@@ -42,9 +42,10 @@ Returns the initialized stream. You will have to delete it yourself.
 
 \membersection{wxProtocol::Abort}\label{wxprotoabort}
 
-\func{bool }{Abort}{\void}
+\func{bool}{Abort}{\void}
 
 Abort the current stream.
+
 \it{WARNING: It is advised to destroy the input stream instead of aborting the stream this way.}
 
 \wxheading{Return value}
@@ -55,7 +56,7 @@ Returns TRUE, if successful, else FALSE.
 
 \membersection{wxProtocol::GetError}
 
-\func{wxProtocolError }{GetError}{\void}
+\func{wxProtocolError}{GetError}{\void}
 
 Returns the last occured error.
 
@@ -63,7 +64,7 @@ Returns the last occured error.
 
 \membersection{wxProtocol::GetContentType}
 
-\func{wxString }{GetContentType}{\void}
+\func{wxString}{GetContentType}{\void}
 
 Returns the type of the content of the last opened stream. It is a mime-type.
 
@@ -77,6 +78,7 @@ Sets the authentication user. It is mainly useful when FTP is used.
 
 \membersection{wxProtocol::SetPassword}
 
-\func{void }{SetPassword}{\param{const wxString\&}{ user}}
+\func{void}{SetPassword}{\param{const wxString\&}{ user}}
 
 Sets the authentication password. It is mainly useful when FTP is used.
+

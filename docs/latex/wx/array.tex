@@ -263,10 +263,12 @@ wxArrayOfMyClass another(CompareMyClassObjects);
 
 This macro declares a new object array class named {\it name} and containing
 the elements of type {\it T}. Example:
+
 \begin{verbatim}
 class MyClass;
 WX_DEFINE_OBJARRAY(MyClass, wxArrayOfMyClass); // note: not "MyClass *"!
 \end{verbatim}
+
 You must use \helpref{WX\_DEFINE\_OBJARRAY()}{wxdefineobjarray} macro to define
 the array class - otherwise you would get link errors.
 
@@ -309,7 +311,7 @@ This macro may be used to delete all elements of the array before emptying it.
 It can not be used with wxObjArrays - but they will delete their elements anyhow
 when you call Empty().
 
-\membersection{Default constructors}\label{wxarrayctor}
+\membersection{Default constructors}\label{wxarrayctordef}
 
 \func{}{wxArray}{}
 
@@ -325,7 +327,7 @@ two arguments of type {\it T} where {\it T} is the array element type and which
 should return a negative, zero or positive value according to whether the first
 element passed to it is less than, equal to or greater than the second one.
 
-\membersection{wxArray copy constructor and assignemnt operator}\label{wxarrayctorcopy}
+\membersection{wxArray copy constructor and assignment operator}\label{wxarrayctorcopy}
 
 \func{}{wxArray}{\param{const wxArray\& }{array}}
 
