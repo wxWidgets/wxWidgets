@@ -400,6 +400,10 @@ afminstall: preinstall
 	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)/gs_afm
 	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/afm
 	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/gs_afm
+        
+m4datainstall: preinstall
+	$(INSTALL) -d $(datadir)/aclocal
+	$(INSTALL_DATA) $(top_srcdir)/wxwin.m4 $(datadir)/aclocal
 
 # this is the real install target: copies the library, wx-config and the
 # headers to the installation directory
@@ -461,7 +465,7 @@ preinstall_gl: $(build_libdir)/@WX_TARGET_LIBRARY_GL@
 	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
 	@INSTALL_LIBRARY@ $(build_libdir)/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
 
-install: @AFMINSTALL@ @WX_ALL_INSTALLED@
+install: @AFMINSTALL@ @WX_ALL_INSTALLED@ m4datainstall
 	@echo " "
 	@echo " The installation of wxWindows is finished.  On certain"
 	@echo " platforms (e.g. Linux) you'll now have to run ldconfig"
@@ -526,6 +530,7 @@ uninstall:
 ALL_DIST: distclean
 	mkdir _dist_dir
 	mkdir $(DISTDIR)
+	cp $(WXDIR)/wxwin.m4 $(DISTDIR)
 	cp $(WXDIR)/aclocal.m4 $(DISTDIR)
 	cp $(WXDIR)/configure.in $(DISTDIR)
 	cp $(WXDIR)/configure $(DISTDIR)
@@ -1454,7 +1459,7 @@ cleanall: clean
 
 RPMTOP=_dist_dir/_rpm_top
 
-rpm: dist
+rpm: bzip-dist
 	@echo "*** Building RPMs ***"
 	-mkdir $(RPMTOP)
 	-mkdir $(RPMTOP)/SOURCES
@@ -1462,7 +1467,7 @@ rpm: dist
 	-mkdir $(RPMTOP)/BUILD
 	-mkdir $(RPMTOP)/RPMS
 	-mkdir $(RPMTOP)/SRPMS
-	cp -f $(WXARCHIVE) $(RPMTOP)/SOURCES
+	cp -f $(WXARCHIVE_BZIP) $(RPMTOP)/SOURCES
 	rpm -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
 	mv -f `find $(RPMTOP) -name "wx$(TARGET)*.rpm"` .
 

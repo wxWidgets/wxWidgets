@@ -108,6 +108,7 @@ fi
 %dir %{_libdir}/wx
 %{_libdir}/wx/*
 %{_bindir}/wxbase-%{ver2}-config
+%{_datadir}/aclocal/*.m4
 
 %files static
 %defattr (-,root,root)

@@ -130,6 +130,7 @@ fi
 %dir %{_libdir}/wx
 %{_libdir}/wx/*
 %{_bindir}/wxmotif-%{ver2}-config
+%{_datadir}/aclocal/*.m4
 
 %files gl
 %defattr(-,root,root)
