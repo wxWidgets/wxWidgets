@@ -173,6 +173,21 @@ static wxWindowMGL* wxGetTopLevelParent(wxWindowMGL *win)
     return p;
 }
 
+#ifdef __WXDEBUG__
+// Add an easy way to capture screenshots:
+static void CaptureScreenshot()
+{
+    wxBusyCursor bcur;
+    
+    static int screenshot_num = 0;
+    char screenshot[128];
+    sprintf(screenshot, "screenshot-%03i.png", screenshot_num++);
+    g_displayDC->savePNGFromDC(screenshot, 0, 0, 
+                               g_displayDC->sizex(), 
+                               g_displayDC->sizey());
+}
+#endif
+
 // ---------------------------------------------------------------------------
 // MGL_WM hooks:
 // ---------------------------------------------------------------------------
@@ -466,6 +481,14 @@ static ibool wxWindowKeybHandler(window_t *wnd, event_t *e)
         event2 = event;
     
         ret = win->GetEventHandler()->ProcessEvent(event);
+
+
+#ifdef __WXDEBUG__
+        // Add an easy way to capture screenshots:
+        if ( event.m_keyCode == WXK_F1 && 
+             event.m_shiftDown && event.m_controlDown )
+            CaptureScreenshot();
+#endif
 
 #if wxUSE_ACCEL
         if ( !ret )
