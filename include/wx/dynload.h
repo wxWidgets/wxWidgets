@@ -137,14 +137,33 @@ public:
     wxDLManifestEntry( const wxString &libname );
     ~wxDLManifestEntry();
 
-    wxDLManifestEntry  *Ref() { ++m_count; return this; }
-    bool                Unref() { return (m_count-- < 2) ? (delete this, TRUE) : FALSE; }
+    wxDLManifestEntry  *RefLib() { ++m_linkcount; return this; }
+    bool                UnrefLib();
 
-    bool                IsLoaded() const { return m_count > 0; }
+        // These two are called by the PluginSentinel on (PLUGGABLE) object
+        // creation/destruction.  There is usually no reason for the user to
+        // call them directly.  We have to separate this from the link count,
+        // since the two are not interchangeable.
 
-    wxDllType           GetLinkHandle() const { return m_handle; }
-    wxDllType           GetProgramHandle() const { return wxDllLoader::GetProgramHandle(); }
-    void               *GetSymbol(const wxString &symbol, bool *success = 0)
+        // FIXME: for even better debugging PluginSentinel should register
+        //        the name of the class created too, then we can state
+        //        exactly which object was not destroyed which may be
+        //        difficult to find otherwise.  Also this code should
+        //        probably only be active in DEBUG mode, but let's just
+        //        get it right first.
+
+    void        RefObj() { ++m_objcount; }
+    void        UnrefObj()
+    {
+        wxASSERT_MSG( m_objcount > 0, _T("Too many objects deleted??") );
+        --m_objcount;
+    }
+
+    bool        IsLoaded() const { return m_linkcount > 0; }
+
+    wxDllType   GetLinkHandle() const { return m_handle; }
+    wxDllType   GetProgramHandle() const { return wxDllLoader::GetProgramHandle(); }
+    void       *GetSymbol(const wxString &symbol, bool *success = 0)
     {
         return wxDllLoader::GetSymbol( m_handle, symbol, success );
     }
@@ -153,17 +172,18 @@ private:
 
         // Order of these three *is* important, do not change it
 
-    wxClassInfo          *m_before;    // sm_first before loading this lib
-    wxDllType             m_handle;    // Handle from dlopen.
-    wxClassInfo          *m_after;     // ..and after.
+    wxClassInfo    *m_before;       // sm_first before loading this lib
+    wxDllType       m_handle;       // Handle from dlopen.
+    wxClassInfo    *m_after;        // ..and after.
 
-    size_t                m_count;     // Ref count of Link and Create calls.
-    wxModuleList          m_wxmodules; // any wxModules that we initialised.
+    size_t          m_linkcount;    // Ref count of library link calls
+    size_t          m_objcount;     // ..and (pluggable) object instantiations.
+    wxModuleList    m_wxmodules;    // any wxModules that we initialised.
 
-    void    UpdateClassInfo();       // Update the wxClassInfo table
-    void    RestoreClassInfo();      // Restore the original wxClassInfo state.
-    void    RegisterModules();       // Init any wxModules in the lib.
-    void    UnregisterModules();     // Cleanup any wxModules we installed.
+    void    UpdateClassInfo();      // Update the wxClassInfo table
+    void    RestoreClassInfo();     // Restore the original wxClassInfo state.
+    void    RegisterModules();      // Init any wxModules in the lib.
+    void    UnregisterModules();    // Cleanup any wxModules we installed.
 
 DECLARE_NO_COPY_CLASS(wxDLManifestEntry)
 };

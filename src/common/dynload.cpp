@@ -267,7 +267,8 @@ wxDLManifestEntry::wxDLManifestEntry( const wxString &libname )
         : m_before(wxClassInfo::sm_first)
         , m_handle(wxDllLoader::LoadLibrary( libname ))
         , m_after(wxClassInfo::sm_first)
-        , m_count(1)
+        , m_linkcount(1)
+        , m_objcount(0)
 {
     if( m_handle != 0 )
     {
@@ -275,7 +276,7 @@ wxDLManifestEntry::wxDLManifestEntry( const wxString &libname )
         RegisterModules();
     }
     else
-        --m_count;      // Flag us for deletion
+        --m_linkcount;      // Flag us for deletion
 }
 
 wxDLManifestEntry::~wxDLManifestEntry()
@@ -286,6 +287,16 @@ wxDLManifestEntry::~wxDLManifestEntry()
     wxDllLoader::UnloadLibrary(m_handle);
 }
 
+bool wxDLManifestEntry::UnrefLib()
+{
+    wxASSERT_MSG( m_objcount == 0, _T("Library unloaded before all objects were destroyed") );
+    if( m_linkcount == 0 || --m_linkcount == 0 )
+    {
+        delete this;
+        return TRUE;
+    }
+    return FALSE;
+}
 
 // ------------------------
 // Private methods
@@ -362,7 +373,7 @@ void wxDLManifestEntry::RegisterModules()
     // the library is.  We do have to keep a copy of the module's pointer
     // though, as there is currently no way to Unregister it without it.
 
-    wxASSERT_MSG( m_count == 1,
+    wxASSERT_MSG( m_linkcount == 1,
                   _T("RegisterModules should only be called for the first load") );
 
     for(wxClassInfo *info = m_after; info != m_before; info = info->m_next)
@@ -401,7 +412,7 @@ void wxDLManifestEntry::RegisterModules()
                 oldNode = node;
             } while( node );
 
-            --m_count;     // Flag us for deletion
+            --m_linkcount;     // Flag us for deletion
             break;
         }
     }
@@ -437,7 +448,7 @@ wxDLManifestEntry *wxDynamicLibrary::Link(const wxString &libname)
 
     if( entry )
     {
-        entry->Ref();
+        entry->RefLib();
     }
     else
     {
@@ -449,7 +460,7 @@ wxDLManifestEntry *wxDynamicLibrary::Link(const wxString &libname)
         }
         else
         {
-            wxCHECK_MSG( !entry->Unref(), 0,
+            wxCHECK_MSG( !entry->UnrefLib(), 0,
                          _T("Currently linked library is, ..not loaded??") );
             entry = 0;
         }
@@ -462,7 +473,7 @@ bool wxDynamicLibrary::Unlink(const wxString &libname)
     wxDLManifestEntry *entry = (wxDLManifestEntry*) ms_manifest.Get(libname);
 
     if( entry )
-        return entry->Unref();
+        return entry->UnrefLib();
 
     wxLogDebug(_T("Attempt to Unlink library '%s' (which is not linked)."), libname.c_str());
     return 0;
@@ -478,7 +489,7 @@ wxDynamicLibrary::wxDynamicLibrary(const wxString &libname)
 
     if( m_entry != 0 )
     {
-        m_entry->Ref();
+        m_entry->RefLib();
     }
     else
     {
@@ -500,7 +511,7 @@ wxDynamicLibrary::~wxDynamicLibrary()
         if( (wxDLManifestEntry*)node->GetData() == m_entry )
             break;
 
-    if( m_entry && m_entry->Unref() )
+    if( m_entry && m_entry->UnrefLib() )
         delete node;
 }
 

@@ -216,11 +216,11 @@ name##PluginSentinel  m_pluginsentinel;
  const wxString name::name##PluginSentinel::sm_className(#name);    \
  name::name##PluginSentinel::name##PluginSentinel() {               \
     wxDLManifestEntry *e = (wxDLManifestEntry*) wxDLManifestEntry::ms_classes.Get(#name);   \
-    if( e != 0 ) { e->Ref(); }                                      \
+    if( e != 0 ) { e->RefObj(); }                                      \
  }                                                                  \
  name::name##PluginSentinel::~##name##PluginSentinel() {            \
     wxDLManifestEntry *e = (wxDLManifestEntry*) wxDLManifestEntry::ms_classes.Get(#name);   \
-    if( e != 0 ) { wxCHECK_RET( !e->Unref(), _T("premature library unlinking") ); }         \
+    if( e != 0 ) { e->UnrefObj(); }                                 \
  }
 #else
 
