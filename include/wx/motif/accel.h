@@ -22,6 +22,7 @@
 
 class WXDLLEXPORT wxAcceleratorTable;
 
+#if 0
 // Hold Ctrl key down
 #define wxACCEL_ALT     0x01
 
@@ -66,6 +67,7 @@ public:
     int          m_keyCode; // ASCII or virtual keycode
     int          m_command; // Command id to generate
 };
+#endif
 
 class WXDLLEXPORT wxAcceleratorTable: public wxObject
 {

@@ -25,6 +25,8 @@
 #endif
 
 #include "wx/generic/helpxlp.h"
+#include "wx/intl.h"
+#include "wx/msgdlg.h"
 
 #if wxUSE_HELP
 #include <time.h>

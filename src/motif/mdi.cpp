@@ -663,10 +663,10 @@ void wxMDIClientWindow::DoGetPosition(int *x, int *y) const
     wxWindow::DoGetPosition(x, y);
 }
 
-// Explicitly call default scroll behaviour
-void wxMDIClientWindow::OnScroll(wxScrollEvent& WXUNUSED(event))
+void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
 {
-    Default(); // Default processing
+    //    Default(); // Default processing: OBSOLETE FUNCTION
+    event.Skip();
 }
 
 void wxMDIClientWindow::OnPageChanged(wxNotebookEvent& event)

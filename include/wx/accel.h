@@ -20,6 +20,7 @@
 
 class WXDLLEXPORT wxAcceleratorTable;
 class WXDLLEXPORT wxMenuItem;
+class WXDLLEXPORT wxKeyEvent;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -74,6 +75,11 @@ public:
     bool operator!=(const wxAcceleratorEntry& entry) const
         { return !(*this == entry); }
 
+#ifdef __WXMOTIF__
+    // Implementation use only
+    bool MatchesEvent(const wxKeyEvent& event) const ;
+#endif
+    
 private:
     int m_flags;    // combination of wxACCEL_XXX constants
     int m_keyCode;  // ASCII or virtual keycode

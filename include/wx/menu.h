@@ -256,7 +256,7 @@ public:
     wxList& GetItems() const { return (wxList &)m_items; }
 #endif // WXWIN_COMPATIBILITY
 
-#if wxUSE_MENU_CALLBACK
+#if wxUSE_MENU_CALLBACK || defined(__WXMOTIF__)
     // wxWin 1.6x compatible menu event handling
     wxFunction GetCallback() const { return m_callback; }
     void Callback(const wxFunction func) { m_callback = func; }
