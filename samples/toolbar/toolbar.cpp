@@ -274,7 +274,7 @@ void MyFrame::RecreateToolbar()
         for ( size_t n = 0; n < WXSIZEOF(toolBarBitmaps); n++ )
         {
             toolBarBitmaps[n] =
-                wxImage(toolBarBitmaps[n]).Scale(w, h).ConvertToBitmap();
+                wxBitmap(toolBarBitmaps[n].ConvertToImage().Scale(w, h));
         }
 
         toolBar->SetToolBitmapSize(wxSize(w, h));

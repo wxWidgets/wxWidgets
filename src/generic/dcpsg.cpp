@@ -881,7 +881,7 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
 
     if (!bitmap.Ok()) return;
 
-    wxImage image( bitmap );
+    wxImage image = bitmap.ConvertToImage();
 
     if (!image.Ok()) return;
 

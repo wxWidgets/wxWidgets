@@ -669,8 +669,7 @@ void MyTreeCtrl::CreateImageList(int size)
         }
         else
         {
-            images->Add(wxImage(icons[i]).Rescale(size, size).
-                                    ConvertToBitmap());
+            images->Add(wxBitmap(icons[i].ConvertToImage().Rescale(size, size)));
         }
     }
 #endif // MSW/!MSW
@@ -714,8 +713,7 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
         }
         else
         {
-            images->Add(wxImage(icons[i]).Rescale(size, size).
-                                    ConvertToBitmap());
+            images->Add(wxBitmap(icons[i].ConvertToImage().Rescale(size, size)));
         }
     }
 #endif // MSW/!MSW

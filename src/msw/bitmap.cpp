@@ -948,7 +948,7 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
         wxImage image;
         if ( image.LoadFile( filename, type ) && image.Ok() )
         {
-            *this = image.ConvertToBitmap();
+            *this = wxBitmap(image);
 
             return TRUE;
         }
@@ -990,7 +990,7 @@ bool wxBitmap::SaveFile(const wxString& filename,
     else
     {
         // FIXME what about palette? shouldn't we use it?
-        wxImage image( *this );
+        wxImage image = ConvertToImage();
         if ( image.Ok() )
         {
             return image.SaveFile(filename, type);

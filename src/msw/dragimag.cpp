@@ -222,11 +222,9 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor)
     dc2.SelectObject(wxNullBitmap);
 
     // Make the bitmap masked
-    wxImage image(bitmap);
+    wxImage image = bitmap.ConvertToImage();
     image.SetMaskColour(255, 255, 255);
-    bitmap = image.ConvertToBitmap();
-
-    return Create(bitmap, cursor);
+    return Create(wxBitmap(image), cursor);
 }
 
 // Create a drag image for the given tree control item

@@ -138,7 +138,7 @@ public:
 
     void OnSave(wxCommandEvent& WXUNUSED(event))
     {
-        wxImage image(m_bitmap);
+        wxImage image = m_bitmap.ConvertToImage();
 
         int bppselection = wxGetSingleChoiceIndex("Set BMP BPP",
                                                   "Set BMP BPP",
@@ -512,7 +512,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( i.ConvertToBitmap(), 150, 2010, TRUE );
+        dc.DrawBitmap( wxBitmap(i), 150, 2010, TRUE );
         dc.SetTextForeground( wxT("BLACK") );
     }
 
@@ -549,7 +549,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( i.ConvertToBitmap(), 150, 2130, TRUE );
+        dc.DrawBitmap( wxBitmap(i), 150, 2130, TRUE );
         dc.SetTextForeground( wxT("BLACK") );
     }
 
@@ -633,7 +633,7 @@ void MyCanvas::CreateAntiAliasedBitmap()
        blue = blue/4;
        anti.SetRGB( x, y, red, green, blue );
     }
-  my_anti = new wxBitmap( anti.ConvertToBitmap() );
+  my_anti = new wxBitmap(anti);
 }
 
 // MyFrame
@@ -702,7 +702,7 @@ void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
         return;
     }
 
-    (new MyImageFrame(this, image.ConvertToBitmap()))->Show();
+    (new MyImageFrame(this, wxBitmap(image)))->Show();
 }
 
 //-----------------------------------------------------------------------------

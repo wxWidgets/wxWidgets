@@ -358,7 +358,7 @@ void wxBitmapDataObject::DoConvertToPng()
     wxCHECK_RET( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != NULL,
                  wxT("You must call wxImage::AddHandler(new wxPNGHandler); to be able to use clipboard with bitmaps!") );
 
-    wxImage image(m_bitmap);
+    wxImage image = m_bitmap.ConvertToImage();
 
     wxCountingOutputStream count;
     image.SaveFile(count, wxBITMAP_TYPE_PNG);

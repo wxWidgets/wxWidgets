@@ -263,7 +263,7 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
         p1 += 32 * 3, p2 += 32 * 3;
     }
 
-    return small.ConvertToBitmap();
+    return wxBitmap(small);
 }
 
 // finds empty borders and return non-empty area of image:
@@ -332,12 +332,12 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         m_HashTable.Put(extension, new wxFileIconEntry(newid));
         return newid;
     }
-    wxImage img(ic);
+    wxImage img = ic.ConvertToImage();
     delete ft;
 
     int id = m_ImageList.GetImageCount();
     if (img.GetWidth() == 16 && img.GetHeight() == 16)
-        m_ImageList.Add(img.ConvertToBitmap());
+        m_ImageList.Add(wxBitmap(img));
     else
     {
         if (img.GetWidth() != 32 || img.GetHeight() != 32)

@@ -174,7 +174,7 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
 
 /*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, const wxBitmap& bitmap, long type)
 {
-    wxImage img(bitmap);
+    wxImage img = bitmap.ConvertToImage();
     AddFile(filename, img, type);
 }
 

@@ -382,7 +382,7 @@ bool MyApp::OnInit()
     wxImage image;
     if (image.LoadFile("backgrnd.png", wxBITMAP_TYPE_PNG))
     {
-        m_background = image.ConvertToBitmap();
+        m_background = wxBitmap(image);
     }
 
     MyFrame *frame = new MyFrame();
@@ -399,7 +399,7 @@ bool MyApp::OnInit()
        the first file over the second file. */
         if (image.LoadFile(filename, wxBITMAP_TYPE_PNG))
         {
-            DragShape* newShape = new DragShape(image.ConvertToBitmap());
+            DragShape* newShape = new DragShape(wxBitmap(image));
             newShape->SetPosition(wxPoint(i*50, i*50));
 
             if (i == 2)

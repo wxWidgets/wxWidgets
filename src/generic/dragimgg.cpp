@@ -164,9 +164,9 @@ bool wxGenericDragImage::Create(const wxString& str, const wxCursor& cursor)
 
 #if wxUSE_IMAGE_IN_DRAGIMAGE
     // Make the bitmap masked
-    wxImage image(bitmap);
+    wxImage image = bitmap.ConvertToImage();
     image.SetMaskColour(255, 255, 255);
-    bitmap = image.ConvertToBitmap();
+    bitmap = wxBitmap(image);
 #endif
 
     return Create(bitmap, cursor);

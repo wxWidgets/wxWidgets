@@ -99,7 +99,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
         m_bitmap = (GdkBitmap*) NULL;
     }
 
-    wxImage image( bitmap );
+    wxImage image = bitmap.ConvertToImage();
     if (!image.Ok()) return FALSE;
 
     m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, image.GetWidth(), image.GetHeight(), 1 );
@@ -954,7 +954,7 @@ bool wxBitmap::SaveFile( const wxString &name, int type, wxPalette *WXUNUSED(pal
 
     // Try to save the bitmap via wxImage handlers:
     {
-        wxImage image( *this );
+        wxImage image = ConvertToImage();
         if (image.Ok()) return image.SaveFile( name, type );
     }
 
@@ -991,7 +991,8 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
     {
         wxImage image;
         if (!image.LoadFile( name, type )) return FALSE;
-        if (image.Ok()) *this = image.ConvertToBitmap();
+        if (image.Ok())
+            *this = wxBitmap(image);
         else return FALSE;
     }
 

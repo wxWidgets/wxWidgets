@@ -1217,7 +1217,7 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
     wxLogStatus( _T("Decoding image file...") );
     wxYield();
 
-    wxBitmap bitmap( image.ConvertToBitmap() );
+    wxBitmap bitmap( image );
 
     if ( !wxTheClipboard->Open() )
     {

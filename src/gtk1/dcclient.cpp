@@ -416,7 +416,7 @@ bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     memdc.Blit(0, 0, 1, 1, (wxDC*) this, x1, y1);
     memdc.SelectObject(wxNullBitmap);
 
-    wxImage image(bitmap);
+    wxImage image = bitmap.ConvertToImage();
     col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
     return TRUE;
 }
@@ -999,12 +999,12 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     wxBitmap use_bitmap;
     if ((w != ww) || (h != hh))
     {
-        wxImage image( bitmap );
+        wxImage image = bitmap.ConvertToImage();
         image.Rescale( ww, hh );
         if (is_mono)
-            use_bitmap = image.ConvertToMonoBitmap(255,255,255);
+            use_bitmap = wxBitmap(image.ConvertToMono(255,255,255), 1);
         else
-            use_bitmap = image.ConvertToBitmap();
+            use_bitmap = wxBitmap(image);
     }
     else
     {
@@ -1199,13 +1199,13 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
         if ((bm_width != bm_ww) || (bm_height != bm_hh))
         {
-            wxImage image( memDC->m_selected );
+            wxImage image = memDC->m_selected.ConvertToImage();
             image = image.Scale( bm_ww, bm_hh );
 
             if (is_mono)
-                use_bitmap = image.ConvertToMonoBitmap(255,255,255);
+                use_bitmap = wxBitmap(image.ConvertToMono(255,255,255), 1);
             else
-                use_bitmap = image.ConvertToBitmap();
+                use_bitmap = wxBitmap(image);
         }
         else
         {
@@ -1313,11 +1313,11 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
 
             /* scale image */
-            wxImage image( bitmap );
+            wxImage image = bitmap.ConvertToImage();
             image = image.Scale( ww, hh );
 
             /* convert to bitmap */
-            bitmap = image.ConvertToBitmap();
+            bitmap = wxBitmap(image);
 
             /* draw scaled bitmap */
             gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
@@ -1456,7 +1456,7 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
             minY = (wxCoord)(dmin(y2, dmin(y3, y4)) - 0.5);
 
     // prepare to blit-with-rotate the bitmap to the DC
-    wxImage image(src);
+    wxImage image = src.ConvertToImage();
 
     GdkColor *colText = m_textForegroundColour.GetColor(),
              *colBack = m_textBackgroundColour.GetColor();

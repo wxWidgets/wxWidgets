@@ -75,9 +75,9 @@ int wxImageList::Add( const wxBitmap& bitmap, const wxBitmap& mask )
 
 int wxImageList::Add( const wxBitmap& bitmap, const wxColour& maskColour )
 {
-    wxImage img(bitmap);
+    wxImage img = bitmap.ConvertToImage();
     img.SetMaskColour(maskColour.Red(), maskColour.Green(), maskColour.Blue());
-    return Add(img.ConvertToBitmap());
+    return Add(wxBitmap(img));
 }
 
 const wxBitmap *wxImageList::GetBitmap( int index ) const
