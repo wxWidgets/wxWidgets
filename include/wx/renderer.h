@@ -176,7 +176,7 @@ public:
                                     wxDC& dc,
                                     const wxRect& rect,
                                     int flags = 0)
-        { m_rendererNative.DrawSplitterBorder(win, dc, rect); }
+        { m_rendererNative.DrawSplitterBorder(win, dc, rect, flags); }
 
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
@@ -184,7 +184,8 @@ public:
                                   wxCoord position,
                                   wxOrientation orient,
                                   int flags = 0)
-        { m_rendererNative.DrawSplitterSash(win, dc, size, position, orient); }
+        { m_rendererNative.DrawSplitterSash(win, dc, size,
+                                            position, orient, flags); }
 
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
