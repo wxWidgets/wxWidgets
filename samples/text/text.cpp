@@ -200,6 +200,27 @@ public:
         if ( !m_panel->m_textrich->PageUp() )
             wxLogMessage(_T("Already at the top"));
     }
+    
+    void OnGetLine(wxCommandEvent& WXUNUSED(event))
+    {
+        long nLine = wxGetNumberFromUser(wxT("Which line would you like to get?"),
+                                         wxT("Enter which line you would like to get"),
+                                         wxT("Get a line from the tabbed multiline text control") );
+                                         
+        wxMessageBox(m_panel->m_tab->GetLineText(nLine));
+    }
+
+    void OnGetLineLength(wxCommandEvent& WXUNUSED(event))
+    {
+        long nLine = wxGetNumberFromUser(wxT("Which line would you like to get?"),
+                                         wxT("Enter which line you would like to get"),
+                                         wxT("Get length of a line from the tabbed multiline text control") );
+                                         
+        wxMessageBox(wxString::Format(wxT("Length of line %i is:%i"), 
+                                      (int) nLine,
+                                      m_panel->m_tab->GetLineLength(nLine))
+                    );
+    }
 
 #if wxUSE_LOG
     void OnLogClear(wxCommandEvent& event);
@@ -336,6 +357,10 @@ enum
     TEXT_LINE_UP,
     TEXT_PAGE_DOWN,
     TEXT_PAGE_UP,
+    
+    TEXT_GET_LINE,
+    TEXT_GET_LINELENGTH,
+    
     TEXT_REMOVE,
     TEXT_REPLACE,
     TEXT_SELECT,
@@ -411,6 +436,9 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_LINE_UP, _T("Scroll text one line up"));
     menuText->Append(TEXT_PAGE_DOWN, _T("Scroll text one page down"));
     menuText->Append(TEXT_PAGE_UP, _T("Scroll text one page up"));
+    menuText->AppendSeparator();
+    menuText->Append(TEXT_GET_LINE, _T("Get the text of a line of the tabbed multiline"));
+    menuText->Append(TEXT_GET_LINELENGTH, _T("Get the length of a line of the tabbed multiline"));
     menu_bar->Append(menuText, _T("Te&xt"));
 
 #if wxUSE_LOG
@@ -1211,6 +1239,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_LINE_UP,            MyFrame::OnScrollLineUp)
     EVT_MENU(TEXT_PAGE_DOWN,          MyFrame::OnScrollPageDown)
     EVT_MENU(TEXT_PAGE_UP,            MyFrame::OnScrollPageUp)
+
+    EVT_MENU(TEXT_GET_LINE,            MyFrame::OnGetLine)
+    EVT_MENU(TEXT_GET_LINELENGTH,            MyFrame::OnGetLineLength)
 
     EVT_MENU(TEXT_SET,                MyFrame::OnSetText)
 

@@ -1804,41 +1804,37 @@ void wxMacMLTEControl::SetTXNData( const wxString& st , TXNOffset start , TXNOff
 wxString wxMacMLTEControl::GetLineText(long lineNo) const
 {
     wxString line ;
-    Point curpt ;
-    wxString content = GetStringValue() ;
 
     if ( lineNo < GetNumberOfLines() )
     {
-        // TODO find a better implementation : while we can get the 
-        // line metrics of a certain line, we don't get its starting
-        // position, so it would probably be rather a binary search
-        // for the start position
-        long xpos = 0 ; 
         long ypos = 0 ;
-        int lastHeight = 0 ;
-        long lastpos = GetLastPosition() ;
-
-        ItemCount n ;
-        for ( n = 0 ; n <= (ItemCount)lastpos ; ++n )
+        
+        Fixed 	lineWidth,
+                lineHeight,
+                currentHeight = 0;
+        
+        // get the first possible position in the control
+        Point firstPoint;
+        TXNOffsetToPoint(m_txn, 0, &firstPoint);
+        
+        // Iterate through the lines until we reach the one we want,
+        // adding to our current y pixel point position
+        while (ypos < lineNo)
         {
-            TXNOffsetToPoint( m_txn,  n , &curpt);
-
-            if ( curpt.v > lastHeight )
-            {
-                if ( ypos == lineNo )
-                    return line ;
+            TXNGetLineMetrics(m_txn, ypos++, &lineWidth, &lineHeight);
+            currentHeight += lineHeight;
+        }
+        
+        Point thePoint = { firstPoint.v + Fix2Long(currentHeight), firstPoint.h + Fix2Long(0) };
+        TXNOffset theOffset;
+        TXNPointToOffset(m_txn, thePoint, &theOffset);
                     
-                xpos = 0 ;
-                if ( n > 0 )
-                    ++ypos ;
-                lastHeight = curpt.v ;
-            }
-            else
-            {
-                if ( ypos == lineNo )
-                    line += content[n] ;
-                ++xpos ;
-            }
+        wxString content = GetStringValue() ;
+        Point currentPoint = thePoint;
+        while(thePoint.v == currentPoint.v && theOffset < content.length())
+        {
+            line += content[theOffset];
+            TXNOffsetToPoint(m_txn, ++theOffset, &currentPoint);
         }
     }
     return line ;
@@ -1846,38 +1842,41 @@ wxString wxMacMLTEControl::GetLineText(long lineNo) const
 
 int  wxMacMLTEControl::GetLineLength(long lineNo) const
 {
-    Point curpt ;
+    int theLength = 0;
+
     if ( lineNo < GetNumberOfLines() )
     {
-        // TODO find a better implementation : while we can get the 
-        // line metrics of a certain line, we don't get its starting
-        // position, so it would probably be rather a binary search
-        // for the start position
-        long xpos = 0 ; 
         long ypos = 0 ;
-        int lastHeight = 0 ;
-        long lastpos = GetLastPosition() ;
-
-        ItemCount n ;
-        for ( n = 0 ; n <= (ItemCount) lastpos ; ++n )
+        
+        Fixed 	lineWidth,
+                lineHeight,
+                currentHeight = 0;
+        
+        // get the first possible position in the control
+        Point firstPoint;
+        TXNOffsetToPoint(m_txn, 0, &firstPoint);
+        
+        // Iterate through the lines until we reach the one we want,
+        // adding to our current y pixel point position
+        while (ypos < lineNo)
         {
-            TXNOffsetToPoint( m_txn ,  n , &curpt);
-
-            if ( curpt.v > lastHeight )
-            {
-                if ( ypos == lineNo )
-                    return xpos ;
+            TXNGetLineMetrics(m_txn, ypos++, &lineWidth, &lineHeight);
+            currentHeight += lineHeight;
+        }
+        
+        Point thePoint = { firstPoint.v + Fix2Long(currentHeight), firstPoint.h + Fix2Long(0) };
+        TXNOffset theOffset;
+        TXNPointToOffset(m_txn, thePoint, &theOffset);
                     
-                xpos = 0 ;
-                if ( n > 0 )
-                    ++ypos ;
-                lastHeight = curpt.v ;
-            }
-            else
-                ++xpos ;
+        wxString content = GetStringValue() ;
+        Point currentPoint = thePoint;
+        while(thePoint.v == currentPoint.v && theOffset < content.length())
+        {
+            ++theLength;
+            TXNOffsetToPoint(m_txn, ++theOffset, &currentPoint);
         }
     }
-    return 0 ;
+    return theLength ;
 }
 
 
