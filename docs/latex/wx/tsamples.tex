@@ -61,3 +61,35 @@ bitmaps which allows them to be pasted/dropped in many other applications.
 Take a look at DnDShapeDataObject class to see how you may use 
 \helpref{wxDataObject}{wxdataobject} to achieve this.
 
+
+\subsection{HTML samples}\label{samplehtml}
+
+Eight HTML samples (you can find them in directory {\tt samples/html})
+cover all features of HTML sub-library.
+
+{\bf Test} demonstrates how to create \helpref{wxHtmlWindow}{wxhtmlwindow}
+and also shows most of supported HTML tags.
+
+{\bf Widget} shows how you can embed ordinary controls or windows within
+HTML page. It also nicely explains how to write new tag handlers and extend
+the library to work with unsupported tags.
+
+{\bf About} may give you an idea how to write good-looking about boxes.
+
+{\bf Zip} demonstrates use of virtual file systems in wxHTML. The zip archives
+handler (ships with wxWindows) allows you to access HTML pages stored 
+in compressed archive as if they were ordinary files.
+
+{\bf Virtual} is yet another VFS demo. This one generates pages at run-time.
+You may find it useful if you need to display some reports in your application.
+
+{\bf Printing} explains use of \helpref{wxHtmlEasyPrinting}{wxhtmleasyprinting}
+class which serves as as-simple-as-possible interface for printing HTML 
+documents without much work. In fact, only few function calls are sufficient.
+
+{\bf Help} and {\bf Helpview} are variations on displaying HTML help 
+(compatible with MS HTML Help Workshop). {\it Help} shows how to embed
+\helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} in your application
+while {\it Helpview} is simple tool that only pops up help window and
+displays help books given at command line.
+
