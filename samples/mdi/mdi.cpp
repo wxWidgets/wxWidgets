@@ -31,7 +31,7 @@
 
 #include "wx/toolbar.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#if !defined(__WXMSW__)
     #include "mondrian.xpm"
 #endif
 
