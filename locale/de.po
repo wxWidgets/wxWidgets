@@ -101,14 +101,14 @@ msgstr "%s gibt keine Quelle für eine Bitmap-Graphik an."
 #: ../contrib/src/deprecated/resource.cpp:2544
 #, c-format
 msgid "%s not an icon resource specification."
-msgstr ""
+msgstr "%s gibt keine Quelle für eine Icon-Graphik an."
 
 #: ../contrib/src/deprecated/resource.cpp:1901
 #: ../contrib/src/deprecated/resource.cpp:2030
 #: ../contrib/src/deprecated/resource.cpp:3123
 #, c-format
 msgid "%s: ill-formed resource file syntax."
-msgstr ""
+msgstr "%s: inkorrekter Syntax der Resource-Datei."
 
 #: ../src/html/helpfrm.cpp:341
 #: ../src/html/helpfrm.cpp:343
@@ -211,9 +211,8 @@ msgid "&Home"
 msgstr "&Start"
 
 #: ../src/common/stockitem.cpp:122
-#, fuzzy
 msgid "&Index"
-msgstr "Hilfe-Index"
+msgstr "&Index"
 
 #: ../src/common/stockitem.cpp:123
 msgid "&Italic"
@@ -339,7 +338,7 @@ msgstr "&Stop"
 
 #: ../src/generic/fontdlgg.cpp:282
 msgid "&Style:"
-msgstr ""
+msgstr "&Stil:"
 
 #: ../src/common/stockitem.cpp:146
 #: ../src/generic/fontdlgg.cpp:326
@@ -1080,15 +1079,13 @@ msgstr "Kann 'Thread' nicht starten : Fehler beim 'TLS' schreiben"
 
 #: ../src/mac/carbon/thread.cpp:1174
 #: ../src/mac/carbon/mpthread.cpp:977
-#, fuzzy
 msgid "Cannot wait on thread to exit."
-msgstr "Kann nicht auf Threadende warten"
+msgstr "Kann nicht auf Threadende warten."
 
 #: ../src/mac/carbon/thread.cpp:1082
 #: ../src/mac/carbon/mpthread.cpp:893
-#, fuzzy
 msgid "Cant create the thread event queue"
-msgstr "Kann Thread nicht erzeugen"
+msgstr "Kann Ereigns-Queue des Threads nicht erzeugen"
 
 #: ../src/html/helpfrm.cpp:511
 msgid "Case sensitive"
@@ -1264,9 +1261,8 @@ msgstr "Kann Daten nicht ins Fenster übertragen."
 #: ../src/mac/carbon/thread.cpp:495
 #: ../src/mac/carbon/mpthread.cpp:227
 #: ../src/mac/carbon/mpthread.cpp:306
-#, fuzzy
 msgid "Could not unlock mutex"
-msgstr "Konnte einen Mutex nicht freigeben."
+msgstr "Konnte Mutex nicht freigeben"
 
 #: ../src/os2/thread.cpp:154
 msgid "Couldn't acquire a mutex lock"
@@ -1546,9 +1542,8 @@ msgid "Error reading config options."
 msgstr "Fehler beim Parsen der Optionen."
 
 #: ../src/common/fileconf.cpp:1015
-#, fuzzy
 msgid "Error saving user configuration data."
-msgstr "Fehler beim Parsen der Optionen."
+msgstr "Fehler beim Speichern der Benutzer-Optionen."
 
 #: ../src/mac/carbon/thread.cpp:672
 #: ../src/mac/carbon/mpthread.cpp:482
@@ -1650,12 +1645,12 @@ msgstr "Verbindungs-Versuch gescheitert : kein anwählbares ISP."
 #: ../src/msw/registry.cpp:624
 #, c-format
 msgid "Failed to copy registry value '%s'"
-msgstr "Kopieren von Registrierungs-Wert '%s' gescheitert"
+msgstr "Kopieren des Registry-Werts '%s' gescheitert"
 
 #: ../src/msw/registry.cpp:633
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
-msgstr "Kopieren des Inhalts des Registrierungs-Schlüssels '%s' nach '%s' gescheitert"
+msgstr "Kopieren des Inhalts des Registry-Schlüssels '%s' nach '%s' gescheitert"
 
 #: ../src/common/filefn.cpp:989
 #, c-format
@@ -1663,9 +1658,8 @@ msgid "Failed to copy the file '%s' to '%s'"
 msgstr "Konnte die Datei '%s' nicht nach '%s' kopieren"
 
 #: ../src/msw/registry.cpp:611
-#, fuzzy, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
-msgstr "Umbenennen des Registrieungsschlüssels von '%s' in '%s' gescheitert"
+msgstr "Kopieren des Registry-Schlüssels von '%s' in '%s' gescheitert"
 
 #: ../src/msw/dde.cpp:988
 msgid "Failed to create DDE string"
@@ -1783,9 +1777,8 @@ msgstr "Konnte ISP Namen '%s' nicht ermitteln"
 
 #: ../src/mac/carbon/clipbrd.cpp:134
 #: ../src/mac/classic/clipbrd.cpp:134
-#, fuzzy
 msgid "Failed to get clipboard data."
-msgstr "Konnte Dateien nicht in die Zwischenablage kopieren."
+msgstr "Konnte Daten nicht von der Zwischenablage holen."
 
 #: ../src/msw/clipbrd.cpp:716
 msgid "Failed to get data from the clipboard"
@@ -1812,9 +1805,8 @@ msgid "Failed to initialize OpenGL"
 msgstr "Konnte OpenGL nicht initialisieren"
 
 #: ../src/unix/snglinst.cpp:246
-#, fuzzy, c-format
 msgid "Failed to inspect the lock file '%s'"
-msgstr "Konnte die Sperr-Datei '%s' nicht sperren"
+msgstr "Konnte die Sperr-Datei '%s' nicht lesen"
 
 #: ../src/unix/threadpsx.cpp:896
 msgid "Failed to join a thread, potential memory leak detected - please restart the program"
@@ -1899,9 +1891,8 @@ msgid "Failed to register DDE server '%s'"
 msgstr "Versuch, DDE-Server '%s' zu registrieren, gescheitert"
 
 #: ../src/msw/glcanvas.cpp:362
-#, fuzzy
 msgid "Failed to register OpenGL window class."
-msgstr "Konnte OpenGL nicht initialisieren"
+msgstr "Konnte OpenGL Fensterklasse nicht registrieren."
 
 #: ../src/common/fontmap.cpp:232
 #, c-format
@@ -1964,7 +1955,6 @@ msgid "Failed to set clipboard data."
 msgstr "Konnte Dateien nicht in die Zwischenablage kopieren."
 
 #: ../src/unix/snglinst.cpp:186
-#, fuzzy, c-format
 msgid "Failed to set permissions on lock file '%s'"
 msgstr "Konnte die Zugriffsrechte für Datei '%s' nicht setzen"
 
@@ -2233,9 +2223,8 @@ msgid "Help Printing"
 msgstr "Hilfe drucken"
 
 #: ../src/html/helpfrm.cpp:791
-#, fuzzy
 msgid "Help Topics"
-msgstr "Kapitel der Hilfe"
+msgstr "Hilfe-Themen"
 
 #: ../src/html/helpfrm.cpp:1559
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
@@ -2328,9 +2317,8 @@ msgid "Illegal file specification."
 msgstr "Ungültige Dateiangabe"
 
 #: ../src/common/image.cpp:900
-#, fuzzy
 msgid "Image and mask have different sizes."
-msgstr "Bild und Bildmaske haben verschiedene Größen"
+msgstr "Bild und Bildmaske haben verschiedene Größen."
 
 #: ../src/common/image.cpp:1220
 #, c-format
@@ -2493,14 +2481,12 @@ msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr "Das Laden von \"S/W Ascii PNM'-Bilddateien wird noch nicht unterstützt."
 
 #: ../src/unix/snglinst.cpp:251
-#, fuzzy, c-format
 msgid "Lock file '%s' has incorrect owner."
-msgstr "Klang Datei '%s' besitzt ein nicht unterstütztes Format."
+msgstr "Sperr-Datei '%s' hat falschen Besitzer."
 
 #: ../src/unix/snglinst.cpp:256
-#, c-format
 msgid "Lock file '%s' has incorrect permissions."
-msgstr ""
+msgstr "Sperr-Datei '%s' hat falsche Zugriffsrechte."
 
 #: ../src/generic/logg.cpp:569
 #, c-format
@@ -2518,7 +2504,7 @@ msgstr "MDI child"
 
 #: ../src/mac/carbon/thread.cpp:1635
 msgid "MP Thread Support is not available on this System"
-msgstr ""
+msgstr "System hat keine Unterstützung für MP Threads"
 
 #: ../src/msw/helpchm.cpp:60
 msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
@@ -2874,9 +2860,8 @@ msgid "Please choose an existing file."
 msgstr "Bitte wählen Sie eine bestehende Datei."
 
 #: ../src/html/helpfrm.cpp:790
-#, fuzzy
 msgid "Please choose the page to display:"
-msgstr "Bitte wählen Sie eine bestehende Datei."
+msgstr "Bitte wählen Sie die darzustellende Seite:"
 
 #: ../src/msw/dialup.cpp:750
 msgid "Please choose which ISP do you want to connect to"
@@ -2913,7 +2898,7 @@ msgstr "Vorschau:"
 
 #: ../src/html/helpfrm.cpp:639
 msgid "Previous page"
-msgstr "Vorherige HTLM-Seite zeigen"
+msgstr "Vorherige Seite"
 
 #: ../src/generic/prntdlgg.cpp:107
 #: ../src/generic/prntdlgg.cpp:120
@@ -3520,9 +3505,8 @@ msgid "Unable to play sound asynchronously."
 msgstr "Der Klang kann nicht asynchron abgespielt werden."
 
 #: ../src/common/stockitem.cpp:145
-#, fuzzy
 msgid "Undelete"
-msgstr "Unterstrichen"
+msgstr "Löschen rückgängig machen"
 
 #: ../contrib/src/deprecated/resource.cpp:1848
 #: ../contrib/src/deprecated/resource.cpp:1862
@@ -3699,7 +3683,7 @@ msgstr "Westeuropäisch mit Euro (ISO-8859-15)"
 #: ../src/generic/fontdlgg.cpp:328
 #: ../src/generic/fontdlgg.cpp:330
 msgid "Whether the font is underlined."
-msgstr ""
+msgstr "Ob der Schrifttyp unterstrichen ist."
 
 #: ../src/generic/fdrepdlg.cpp:143
 msgid "Whole word"
