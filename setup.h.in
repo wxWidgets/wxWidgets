@@ -661,6 +661,10 @@
  */
 #define wxUSE_MEDIACTRL 0
 /*
+ * Use DirectShow
+ */
+#define wxUSE_DIRECTSHOW 0
+/*
  * Use config system
  */
 #define wxUSE_CONFIG 0
