@@ -9,156 +9,212 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ===========================================================================
+// declarations
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// headers
+// ---------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "statbmp.h"
+    #pragma implementation "statbmp.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/statbmp.h"
+    #include "wx/statbmp.h"
 #endif
 
 #include <stdio.h>
 #include "wx/msw/private.h"
 
+// ---------------------------------------------------------------------------
+// macors
+// ---------------------------------------------------------------------------
+
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
+    IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 #endif
 
-/*
- * wxStaticBitmap
- */
+// ===========================================================================
+// implementation
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// wxStaticBitmap
+// ---------------------------------------------------------------------------
 
 bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
-           const wxBitmap& bitmap,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+                            const wxBitmap& bitmap,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            long style,
+                            const wxString& name)
 {
-  m_messageBitmap = bitmap;
-  SetName(name);
-  if (parent) parent->AddChild(this);
+    Init();
 
-  m_backgroundColour = parent->GetBackgroundColour() ;
-  m_foregroundColour = parent->GetForegroundColour() ;
+    SetName(name);
+    if (parent)
+        parent->AddChild(this);
 
-  if ( id == -1 )
-    m_windowId = (int)NewControlId();
-  else
-    m_windowId = id;
+    m_backgroundColour = parent->GetBackgroundColour() ;
+    m_foregroundColour = parent->GetForegroundColour() ;
 
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
+    if ( id == -1 )
+        m_windowId = (int)NewControlId();
+    else
+        m_windowId = id;
 
-  if ( width < 0 && bitmap.Ok() )
-    width = bitmap.GetWidth();
-  if ( height < 0 && bitmap.Ok() )
-    height = bitmap.GetHeight();
+    int x = pos.x;
+    int y = pos.y;
+    int width = size.x;
+    int height = size.y;
 
-  m_windowStyle = style;
+    m_windowStyle = style;
 
-  // Use an ownerdraw button to produce a static bitmap, since there's
-  // no ownerdraw static.
-  // TODO: perhaps this should be a static item, with style SS_BITMAP.
-  m_hWnd = (WXHWND)CreateWindow
-           (
-            "BUTTON",
-            "",
-            BS_OWNERDRAW | WS_TABSTOP | WS_CHILD | WS_VISIBLE,
-            0, 0, 0, 0,
-            (HWND)parent->GetHWND(),
-            (HMENU)m_windowId,
-            wxGetInstance(),
-            NULL
-           );
+    m_isIcon = bitmap.IsKindOf(CLASSINFO(wxIcon));
 
-  // Subclass again for purposes of dialog editing mode
-  SubclassWin(m_hWnd);
+#ifdef __WIN32__
+    // create a static control with either SS_BITMAP or SS_ICON style depending
+    // on what we have here
+    const char *classname = "STATIC";
+    int winstyle = m_isIcon ? SS_ICON : SS_BITMAP;
+#else // Win16
+    const char *classname = "BUTTON";
+    int winstyle = BS_OWNERDRAWN;
+#endif // Win32
 
-  SetFont(GetParent()->GetFont());
+    m_hWnd = (WXHWND)::CreateWindow
+                       (
+                        classname,
+                        "",
+                        winstyle | WS_CHILD | WS_VISIBLE,
+                        0, 0, 0, 0,
+                        (HWND)parent->GetHWND(),
+                        (HMENU)m_windowId,
+                        wxGetInstance(),
+                        NULL
+                       );
 
-  SetSize(x, y, width, height);
-  return TRUE;
+    wxCHECK_MSG( m_hWnd, FALSE, "Failed to create static bitmap" );
+
+    SetBitmap(bitmap);
+
+    // Subclass again for purposes of dialog editing mode
+    SubclassWin(m_hWnd);
+
+    SetFont(GetParent()->GetFont());
+
+    SetSize(x, y, width, height);
+
+    return TRUE;
+}
+
+bool wxStaticBitmap::ImageIsOk() const
+{
+    if ( m_isIcon && m_image.icon )
+        return m_image.icon->Ok();
+    else if ( m_image.bitmap )
+        return m_image.bitmap->Ok();
+    else
+        return FALSE;
+}
+
+void wxStaticBitmap::Free()
+{
+    if ( m_isIcon )
+        delete m_image.icon;
+    else
+        delete m_image.bitmap;
+
+    m_image.icon = NULL;
 }
 
 void wxStaticBitmap::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
-  int x1 = x;
-  int y1 = y;
+    int currentX, currentY;
+    GetPosition(&currentX, &currentY);
+    int x1 = x;
+    int y1 = y;
 
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    y1 = currentY;
+    if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        x1 = currentX;
+    if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        y1 = currentY;
 
-  AdjustForParentClientOrigin(x1, y1, sizeFlags);
+    AdjustForParentClientOrigin(x1, y1, sizeFlags);
 
-  int actualWidth = width;
-  int actualHeight = height;
+    int actualWidth = width;
+    int actualHeight = height;
 
-  int ww, hh;
-  GetSize(&ww, &hh);
+    int ww, hh;
+    GetSize(&ww, &hh);
 
-  // If we're prepared to use the existing width, then...
-  if (width == -1 && ((sizeFlags & wxSIZE_AUTO_WIDTH) != wxSIZE_AUTO_WIDTH))
-    actualWidth = ww;
-  else actualWidth = width;
+    // If we're prepared to use the existing width, then...
+    if (width == -1 && ((sizeFlags & wxSIZE_AUTO_WIDTH) != wxSIZE_AUTO_WIDTH))
+        actualWidth = ww;
+    else
+        actualWidth = width;
 
-  // If we're prepared to use the existing height, then...
-  if (height == -1 && ((sizeFlags & wxSIZE_AUTO_HEIGHT) != wxSIZE_AUTO_HEIGHT))
-    actualHeight = hh;
-  else actualHeight = height;
+    // If we're prepared to use the existing height, then...
+    if (height == -1 && ((sizeFlags & wxSIZE_AUTO_HEIGHT) != wxSIZE_AUTO_HEIGHT))
+        actualHeight = hh;
+    else
+        actualHeight = height;
 
-  MoveWindow((HWND) GetHWND(), x1, y1, actualWidth, actualHeight, TRUE);
+    MoveWindow((HWND) GetHWND(), x1, y1, actualWidth, actualHeight, TRUE);
 }
 
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
-  m_messageBitmap = bitmap;
+    Free();
 
-  int x, y;
-  int w, h;
-  GetPosition(&x, &y);
-  GetSize(&w, &h);
-  RECT rect;
-  rect.left = x; rect.top = y; rect.right = x + w; rect.bottom = y + h;
+    m_isIcon = bitmap.IsKindOf(CLASSINFO(wxIcon));
+    if ( m_isIcon )
+        m_image.icon = new wxIcon((const wxIcon&)bitmap);
+    else
+        m_image.bitmap = new wxBitmap(bitmap);
 
-  if ( bitmap.Ok() )
-    MoveWindow((HWND) GetHWND(), x, y, bitmap.GetWidth(), bitmap.GetHeight(),
-             FALSE);
-  
-  InvalidateRect((HWND) GetParent()->GetHWND(), &rect, TRUE);
+    int x, y;
+    int w, h;
+    GetPosition(&x, &y);
+    GetSize(&w, &h);
+    RECT rect = { x, y, x + w, y + h };
+
+#ifdef __WIN32__
+    HANDLE handle = m_isIcon ? (HANDLE)m_image.icon->GetHICON()
+                             : (HANDLE)m_image.bitmap->GetHBITMAP();
+    ::SendMessage((HWND)m_hWnd, STM_SETIMAGE,
+                  m_isIcon ? IMAGE_ICON : IMAGE_BITMAP, (LPARAM)handle);
+#endif // Win32
+
+    if ( ImageIsOk() )
+    {
+        int width = bitmap.GetWidth(),
+            height = bitmap.GetHeight();
+        if ( width && height )
+        {
+            ::MoveWindow((HWND)GetHWND(), x, y, width, height, FALSE);
+        }
+    }
+
+    InvalidateRect((HWND)GetParent()->GetHWND(), &rect, TRUE);
 }
 
+// under Win32 we use the standard static control style for this
+#ifdef __WIN16__
 bool wxStaticBitmap::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
-    long style = GetWindowLong((HWND) GetHWND(), GWL_STYLE);
-#if defined(__WIN32__) && defined(SS_BITMAP)
-    if ((style & 0xFF) == SS_BITMAP)
-    {
-        // Should we call Default() here?
-//      Default();
-
-        // Let default procedure draw the bitmap, which is defined
-        // in the Windows resource.
-        return FALSE;
-    }
-#endif
-
     LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT) item;
 
-    wxBitmap* bitmap = &m_messageBitmap;
+    wxBitmap* bitmap = m_image.bitmap;
     if ( !bitmap->Ok() )
         return FALSE;
 
@@ -170,10 +226,10 @@ bool wxStaticBitmap::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     if (!old)
         return FALSE;
 
-	int x = lpDIS->rcItem.left;
-	int y = lpDIS->rcItem.top;
-	int width = lpDIS->rcItem.right - x;
-	int height = lpDIS->rcItem.bottom - y;
+    int x = lpDIS->rcItem.left;
+    int y = lpDIS->rcItem.top;
+    int width = lpDIS->rcItem.right - x;
+    int height = lpDIS->rcItem.bottom - y;
 
     // Centre the bitmap in the control area
     int x1 = (int) (x + ((width - bitmap->GetWidth()) / 2));
@@ -188,13 +244,15 @@ bool wxStaticBitmap::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     return TRUE;
 }
 
-long wxStaticBitmap::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+long wxStaticBitmap::MSWWindowProc(WXUINT nMsg,
+                                   WXWPARAM wParam,
+                                   WXLPARAM lParam)
 {
-  // Ensure that static items get messages. Some controls don't like this
-  // message to be intercepted (e.g. RichEdit), hence the tests.
-  if (nMsg == WM_NCHITTEST)
-    return (long)HTCLIENT;
+    // Ensure that static items get messages. Some controls don't like this
+    // message to be intercepted (e.g. RichEdit), hence the tests.
+    if ( nMsg == WM_NCHITTEST )
+        return (long)HTCLIENT;
 
-  return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
+    return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
-
+#endif // Win16
