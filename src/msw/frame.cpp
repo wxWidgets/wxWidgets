@@ -139,15 +139,6 @@ bool wxFrameMSW::Create(wxWindow *parent,
 {
   SetName(name);
   m_windowStyle = style;
-#if wxUSE_MENUS
-  m_frameMenuBar = NULL;
-#endif // wxUSE_MENUS
-#if wxUSE_TOOLBAR
-  m_frameToolBar = NULL;
-#endif // wxUSE_TOOLBAR
-#if wxUSE_STATUSBAR
-  m_frameStatusBar = NULL;
-#endif // wxUSE_STATUSBAR
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
 
@@ -490,6 +481,8 @@ void wxFrameMSW::PositionStatusBar()
 
 void wxFrameMSW::AttachMenuBar(wxMenuBar *menubar)
 {
+    m_frameMenuBar = menubar;
+
     if ( !menubar )
     {
         // actually remove the menu from the frame
