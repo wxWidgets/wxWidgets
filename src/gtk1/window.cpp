@@ -1900,7 +1900,9 @@ static void gtk_window_vscroll_callback( GtkAdjustment *adjust,
 
     win->m_oldVerticalPos = adjust->value;
 
+#ifndef __WXGTK20__
     GtkScrolledWindow   *sw = GTK_SCROLLED_WINDOW(win->m_widget);
+#endif
     wxEventType         command = GtkScrollWinTypeToWx(GET_SCROLL_TYPE(sw->vscrollbar));
 
     int value = (int)(adjust->value+0.5);
@@ -1929,7 +1931,9 @@ static void gtk_window_hscroll_callback( GtkAdjustment *adjust,
     float diff = adjust->value - win->m_oldHorizontalPos;
     if (fabs(diff) < 0.2) return;
 
+#ifndef __WXGTK20__
     GtkScrolledWindow   *sw = GTK_SCROLLED_WINDOW(win->m_widget);
+#endif
     wxEventType         command = GtkScrollWinTypeToWx(GET_SCROLL_TYPE(sw->hscrollbar));
 
     win->m_oldHorizontalPos = adjust->value;
