@@ -2499,6 +2499,7 @@ void wxListMainWindow::SetItemState( long item, long state, long stateMask )
             UnfocusLine( m_current );
             m_current = line;
             FocusLine( m_current );
+            if ((m_mode & wxLC_SINGLE_SEL) && oldCurrent) oldCurrent->Hilight( FALSE );
             RefreshLine( m_current );
             if (oldCurrent) RefreshLine( oldCurrent );
         }
