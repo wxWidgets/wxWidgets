@@ -151,7 +151,7 @@ void wxStyledTextCtrl::Create(wxWindow *parent,
                                    const wxString& name)
 {
     wxControl::Create(parent, id, pos, size,
-              style | wxVSCROLL | wxHSCROLL | wxWANTS_CHARS | wxCLIP_CHILDREN,
+              style | wxWANTS_CHARS | wxCLIP_CHILDREN,
               wxDefaultValidator, name);
 
 #ifdef LINK_LEXERS
