@@ -524,7 +524,13 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     Init();
 
-    long treeStyle = wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT;
+    long treeStyle = wxTR_HAS_BUTTONS;
+
+    // On Windows CE, if you hide the root, you get a crash when
+    // attempting to access data for children of the root item.
+#ifndef __WXWINCE__
+    treeStyle |= wxTR_HIDE_ROOT;
+#endif
 
 #ifdef __WXGTK20__
     treeStyle |= wxTR_NO_LINES;
@@ -771,7 +777,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
+#if (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__DOS__) || defined(__OS2__)
     // Check if this is a root directory and if so,
     // whether the drive is avaiable.
     if (!wxIsDriveAvailable(dirName))
