@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.5.2.1
+2.5.2.2
 -------
 
 wx.ADJUST_MINSIZE is now the default behaviour for window items in
@@ -28,7 +28,6 @@ to either set the size when calling the window's constructor, or to
 reset the min size by calling SetSizeHints.  You can call SetSizeHints
 at anytime to change the minsize of a window, just call the sizer's
 Layout method to redistribute the controls as needed.
-
 
 Added new MaskedEditControl code from Will Sadkin.  The modules are
 now locaed in their own sub-package, wx.lib.masked.  Demos updated.
