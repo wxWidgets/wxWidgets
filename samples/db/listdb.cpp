@@ -224,7 +224,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     pLookUpSelectList->SetSelection(0);
 
     // Make the OK activate by pressing Enter
-    if (pLookUpSelectList->Number())
+    if (pLookUpSelectList->GetCount())
         pLookUpOkBtn->SetDefault();
     else
     {
@@ -384,7 +384,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     pLookUpSelectList->SetSelection(0);
 
     // Make the OK activate by pressing Enter
-    if (pLookUpSelectList->Number())
+    if (pLookUpSelectList->GetCount())
         pLookUpOkBtn->SetDefault();
     else
     {
