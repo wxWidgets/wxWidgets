@@ -10,6 +10,7 @@ class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         wx.Panel.__init__(self, parent, -1)
         self.log = log
+        ##self.SetBackgroundColour("sky blue")
 
         sizer = wx.FlexGridSizer(1, 3, 20, 20)
 
@@ -43,6 +44,7 @@ class TestPanel(wx.Panel):
         b.SetFont(wx.Font(20, wx.SWISS, wx.NORMAL, wx.BOLD, False))
         b.SetBezelWidth(5)
         ###b.SetBestSize()
+        b.SetSizeHints(wx.DefaultSize)
         b.SetBackgroundColour("Navy")
         b.SetForegroundColour(wx.WHITE)
         b.SetToolTipString("This is a BIG button...")

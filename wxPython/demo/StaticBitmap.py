@@ -2,25 +2,36 @@
 import  wx
 import  images
 
+
+USE_GENERIC = 0
+
+if USE_GENERIC:
+    from wx.lib.stattext import GenStaticText as StaticText
+    from wx.lib.statbmp  import GenStaticBitmap as StaticBitmap
+else:
+    StaticText = wx.StaticText
+    StaticBitmap = wx.StaticBitmap
+
+
 #----------------------------------------------------------------------
 
 class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         wx.Panel.__init__(self, parent, -1)
         self.log = log
-        self.count = 0
+        ##self.SetBackgroundColour("sky blue")
 
-        wx.StaticText(self, -1, "This is a wx.StaticBitmap.", (45, 15))
+        StaticText(self, -1, "This is a wx.StaticBitmap.", (45, 15))
 
         bmp = images.getTest2Bitmap()
         mask = wx.Mask(bmp, wx.BLUE)
         bmp.SetMask(mask)
-        wx.StaticBitmap(self, -1, bmp, (80, 50), (bmp.GetWidth(), bmp.GetHeight()))
+        StaticBitmap(self, -1, bmp, (80, 50), (bmp.GetWidth(), bmp.GetHeight()))
 
         bmp = images.getRobinBitmap()
-        wx.StaticBitmap(self, -1, bmp, (80, 150))
+        StaticBitmap(self, -1, bmp, (80, 150))
 
-        wx.StaticText(self, -1, "Hey, if Ousterhout can do it, so can I.", (200, 175))
+        StaticText(self, -1, "Hey, if Ousterhout can do it, so can I.", (200, 175))
 
 
 #----------------------------------------------------------------------

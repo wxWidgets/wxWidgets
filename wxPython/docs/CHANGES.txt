@@ -34,6 +34,13 @@ Deprecated the wx.iewin module.
 Deprecated the wx.Sizer.AddWindow, AddSizer, AddSpacer methods as well
 as their Insert* and Prepend* counterparts.
 
+Added a generic StaticBitmap class in wx.lib.statbmp for the same
+reasons that stattext was created, so it could be mouse sensitive on
+all platforms like normal windows.  Also updated stattext.py and
+buttons.py to handle attribute (font & colour) defaults and
+inheritance the new way.  If you have custom controls of your own you
+should review stattxt.py or one of the others to see how it is to be
+done.
 
 
 

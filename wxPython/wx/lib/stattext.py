@@ -32,27 +32,9 @@ class GenStaticText(wx.PyControl):
                              wx.DefaultValidator, name)
 
         wx.PyControl.SetLabel(self, label) # don't check wx.ST_NO_AUTORESIZE yet
-        self.SetPosition(pos)
-        font = parent.GetFont()
-        if not font.Ok():
-            font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
-        wx.PyControl.SetFont(self, font) # same here
-
-        self.defBackClr = parent.GetBackgroundColour()
-        if not self.defBackClr.Ok():
-            self.defBackClr = wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE)
-        self.SetBackgroundColour(self.defBackClr)
-
-        clr = parent.GetForegroundColour()
-        if not clr.Ok():
-            clr = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
-        self.SetForegroundColour(clr)
-
-        rw, rh = size
-        bw, bh = self.GetBestSize()
-        if rw == -1: rw = bw
-        if rh == -1: rh = bh
-        self.SetSize(wx.Size(rw, rh))
+        self.defBackClr = self.GetBackgroundColour()
+        self.InheritAttributes()
+        self.SetBestSize(size)
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_PAINT,            self.OnPaint)
@@ -66,7 +48,9 @@ class GenStaticText(wx.PyControl):
         wx.PyControl.SetLabel(self, label)
         style = self.GetWindowStyleFlag()
         if not style & wx.ST_NO_AUTORESIZE:
-            self.SetSize(self.GetBestSize())
+            best = self.GetBestSize()
+            self.SetSize(best)
+            self.SetSizeHints(best)
         self.Refresh()
 
 
@@ -78,13 +62,17 @@ class GenStaticText(wx.PyControl):
         wx.PyControl.SetFont(self, font)
         style = self.GetWindowStyleFlag()
         if not style & wx.ST_NO_AUTORESIZE:
-            self.SetSize(self.GetBestSize())
+            best = self.GetBestSize()
+            self.SetSize(best)
+            self.SetSizeHints(best)
         self.Refresh()
 
 
     def DoGetBestSize(self):
-        """Overridden base class virtual.  Determines the best size of the
-        button based on the label size."""
+        """
+        Overridden base class virtual.  Determines the best size of
+        the button based on the label size.
+        """
         label = self.GetLabel()
         maxWidth = totalHeight = 0
         for line in label.split('\n'):
@@ -101,6 +89,22 @@ class GenStaticText(wx.PyControl):
         """Overridden base class virtual."""
         return False
 
+
+    def GetDefaultAttributes(self):
+        """
+        Overridden base class virtual.  By default we should use
+        the same font/colour attributes as the native StaticText.
+        """
+        return wx.StaticText.GetClassDefaultAttributes()
+
+
+    def ShouldInheritColours(self):
+        """
+        Overridden base class virtual.  If the parent has non-default
+        colours then we want this control to inherit them.
+        """
+        return True
+    
 
     def OnPaint(self, event):
         dc = wx.BufferedPaintDC(self)

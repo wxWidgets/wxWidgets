@@ -76,11 +76,7 @@ class GenButton(wx.PyControl):
         self.useFocusInd = True
 
         self.SetLabel(label)
-        self.SetPosition(pos)
-        font = parent.GetFont()
-        if not font.Ok():
-            font = wx.SystemSettings.GetSystemFont(wx.SYS_DEFAULT_GUI_FONT)
-        self.SetFont(font)
+        self.InheritAttributes()
         self.SetBestSize(size)
         self.InitColours()
 
@@ -103,23 +99,15 @@ class GenButton(wx.PyControl):
         and set a good size.
         """
         if size is None:
-            size = wx.Size(-1,-1)
-        if type(size) == type(()):
-            size = wx.Size(size[0], size[1])
-        size = wx.Size(size.width, size.height)  # make a copy
-
-        best = self.GetBestSize()
-        if size.width == -1:
-            size.width = best.width
-        if size.height == -1:
-            size.height = best.height
-
-        self.SetSize(size)
+            size = wx.DefaultSize            
+        wx.PyControl.SetBestSize(self, size)
 
 
     def DoGetBestSize(self):
-        """Overridden base class virtual.  Determines the best size of the
-        button based on the label and bezel size."""
+        """
+        Overridden base class virtual.  Determines the best size of the
+        button based on the label and bezel size.
+        """
         w, h, useMin = self._GetLabelSize()
         defSize = wx.Button.GetDefaultSize()
         width = 12 + w
@@ -137,6 +125,22 @@ class GenButton(wx.PyControl):
         """Overridden base class virtual."""
         return self.IsShown() and self.IsEnabled()
 
+
+    def GetDefaultAttributes(self):
+        """
+        Overridden base class virtual.  By default we should use
+        the same font/colour attributes as the native Button.
+        """
+        return wx.Button.GetClassDefaultAttributes()
+
+
+    def ShouldInheritColours(self):
+        """
+        Overridden base class virtual.  Buttons usually don't inherit
+        the parent's colours.
+        """
+        return False
+    
 
     def Enable(self, enable=True):
         wx.PyControl.Enable(self, enable)
@@ -161,32 +165,12 @@ class GenButton(wx.PyControl):
 
 
     def InitColours(self):
-        faceClr      = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)
-        textClr      = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
-        self.faceDnClr = faceClr
-        self.SetBackgroundColour(faceClr)
-        self.SetForegroundColour(textClr)
-
-        shadowClr    = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)
-        highlightClr = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNHIGHLIGHT)
-        self.shadowPen    = wx.Pen(shadowClr, 1, wx.SOLID)
-        self.highlightPen = wx.Pen(highlightClr, 1, wx.SOLID)
-        if wx.Platform == "__WXMAC__":
-            self.focusIndPen = wx.Pen(textClr, 1, wx.SOLID)
-        else:
-            self.focusIndPen  = wx.Pen(textClr, 1, wx.USER_DASH)
-            self.focusIndPen.SetDashes([1,1])
-            self.focusIndPen.SetCap(wx.CAP_BUTT)
-        self.focusClr = highlightClr
-
-
-    def SetBackgroundColour(self, colour):
-        wx.PyControl.SetBackgroundColour(self, colour)
-        colour = self.GetBackgroundColour()
-
-        # Calculate a new set of highlight and shadow colours based on
-        # the new background colour.  Works okay if the colour is dark...
-        r, g, b = colour.Get()
+        """
+        Calculate a new set of highlight and shadow colours based on
+        the background colour.  Works okay if the colour is dark...
+        """
+        faceClr = self.GetBackgroundColour()
+        r, g, b = faceClr.Get()
         fr, fg, fb = min(255,r+32), min(255,g+32), min(255,b+32)
         self.faceDnClr = wx.Colour(fr, fg, fb)
         sr, sg, sb = max(0,r-32), max(0,g-32), max(0,b-32)
@@ -194,6 +178,24 @@ class GenButton(wx.PyControl):
         hr, hg, hb = min(255,r+64), min(255,g+64), min(255,b+64)
         self.highlightPen = wx.Pen(wx.Colour(hr,hg,hb), 1, wx.SOLID)
         self.focusClr = wx.Colour(hr, hg, hb)
+
+        textClr = self.GetForegroundColour()
+        if wx.Platform == "__WXMAC__":
+            self.focusIndPen = wx.Pen(textClr, 1, wx.SOLID)
+        else:
+            self.focusIndPen  = wx.Pen(textClr, 1, wx.USER_DASH)
+            self.focusIndPen.SetDashes([1,1])
+            self.focusIndPen.SetCap(wx.CAP_BUTT)
+        
+        
+    def SetBackgroundColour(self, colour):
+        wx.PyControl.SetBackgroundColour(self, colour)
+        self.InitColours()
+
+
+    def SetForegroundColour(self, colour):
+        wx.PyControl.SetForegroundColour(self, colour)
+        self.InitColours()
 
 
     def _GetLabelSize(self):
@@ -245,11 +247,6 @@ class GenButton(wx.PyControl):
 
     def DrawFocusIndicator(self, dc, w, h):
         bw = self.bezelWidth
-##         if self.hasFocus:
-##             self.focusIndPen.SetColour(self.GetForegroundColour())
-##         else:
-##             #self.focusIndPen.SetColour(self.GetBackgroundColour())
-##             self.focusIndPen.SetColour(self.GetForegroundColour())
         self.focusIndPen.SetColour(self.focusClr)
         dc.SetLogicalFunction(wx.INVERT)
         dc.SetPen(self.focusIndPen)
