@@ -149,12 +149,18 @@ Returns the file descriptor associated with the file.
 
 \constfunc{bool}{Eof}{\void}
 
-Returns TRUE if the end of the file has been reached (the last byte has been read).
+Returns TRUE if the end of the file has been reached.
 
-Note that the behaviour of the file pointer based class
-\helpref{wxFFile}{wxffile} is different as \helpref{wxFFile::Eof}{wxffileeof}
-will return TRUE here only if an attempt has been made to read
-{\it past} the last byte of the file.
+Note that the behaviour of the file pointer based class 
+\helpref{wxFFile}{wxffile} is different as \helpref{wxFFile::Eof}{wxffileeof} 
+will return TRUE here only if an attempt has been made to read 
+{\it past} the last byte of the file, while wxFile::Eof() will return TRUE
+even before such attempt is made if the file pointer is at the last position
+in the file.
+
+Note also that this function doesn't work on unseekable file descriptors
+(examples include pipes, terminals and sockets under Unix) and an attempt to
+use it will result in an error message in such case.
 
 \membersection{wxFile::Exists}\label{wxfileexists}
 
