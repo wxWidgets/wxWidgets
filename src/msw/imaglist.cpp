@@ -35,6 +35,7 @@
     #include "wx/icon.h"
     #include "wx/dc.h"
     #include "wx/string.h"
+    #include "wx/dcmemory.h"
 
     #include <stdio.h>
 #endif
