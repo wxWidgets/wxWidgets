@@ -907,5 +907,6 @@ statusbr.h	N
 tabg.h	N
 textdlgg.h	N
 treectrl.h	N
+wizard.h	N
 
 # vi: set noet ts=16 nolist:
