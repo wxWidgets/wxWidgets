@@ -81,6 +81,9 @@ private:
 
 class WXDLLEXPORT wxPrivateDataObject : public wxDataObject
 {
+#ifdef __WXGTK__
+    DECLARE_DYNAMIC_CLASS( wxPrivateDataObject )
+#endif
 
 public:
     wxPrivateDataObject();
@@ -117,11 +120,8 @@ public:
     virtual void GetDataHere(void *dest) const
         { WriteData(dest); }
 
-protected:
     // the function which really copies the data - called by WriteData() above
     // and uses GetSize() to get the size of the data
-    //
-    // VZ: I really wonder why do we need it
     void WriteData( const void *data, void *dest ) const;
 
 private:

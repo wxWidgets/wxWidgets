@@ -970,7 +970,9 @@ void wxTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeItem *it
   
   if (TagAllChildrenUntilLast(first,last,select)) return;
 
+/*
   cout << first->GetText() << " " << last->GetText() << " " << (int) select << endl;
+*/
   TagNextChildren(first,last,select);  
 }
 
@@ -998,14 +1000,18 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     event.SetEventObject( this );
     // Here we don't send any selection mode yet ! TO SEE 
     
+/*
     if (m_current)
       cout << m_current->GetText() << " " << (int)m_current->HasHilight() << endl;
+*/
 
     if ( GetEventHandler()->ProcessEvent( event ) && event.WasVetoed() )
       return;
 
+/*
     if (m_current)
-    cout << m_current->GetText() << " " << (int)m_current->HasHilight() << endl;
+      cout << m_current->GetText() << " " << (int)m_current->HasHilight() << endl;
+*/
 
     // ctrl press
     if (unselect_others)

@@ -695,9 +695,9 @@ void wxTextCtrl::SetSelection( long from, long to )
     gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
 
-void wxTextCtrl::ShowPosition( long pos )
+void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
 {
-    SetInsertionPoint( pos );
+//    SetInsertionPoint( pos );
 }
 
 long wxTextCtrl::GetInsertionPoint() const
