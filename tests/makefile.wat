@@ -232,7 +232,8 @@ TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	$(CXXFLAGS)
 TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_dummy.obj &
-	$(OBJS)\test_gui_test.obj
+	$(OBJS)\test_gui_test.obj &
+	$(OBJS)\test_gui_rect.obj
 
 
 all : $(OBJS)
@@ -268,7 +269,7 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	@%append $(OBJS)\test_gui.lbc option quiet
 	@%append $(OBJS)\test_gui.lbc name $^@
 	@%append $(OBJS)\test_gui.lbc option caseexact
-	@%append $(OBJS)\test_gui.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(CPPUNIT_LIBS)
+	@%append $(OBJS)\test_gui.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_'
 	@for %i in ($(TEST_GUI_OBJECTS)) do @%append $(OBJS)\test_gui.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\test_gui.lbc library %i
 	@%append $(OBJS)\test_gui.lbc option resource=$(OBJS)\test_gui_sample.res
@@ -373,4 +374,7 @@ $(OBJS)\test_gui_dummy.obj :  .AUTODEPEND .\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_test.obj :  .AUTODEPEND .\test.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_rect.obj :  .AUTODEPEND .\geometry\rect.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<

@@ -13,11 +13,9 @@ INSTALL = @INSTALL@
 EXEEXT = @EXEEXT@
 RESCOMP = @RESCOMP@
 SETFILE = @SETFILE@
-NM = @NM@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 top_builddir = @top_builddir@
-LDFLAGS_GUI = @LDFLAGS_GUI@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 CPPFLAGS = @CPPFLAGS@
@@ -79,7 +77,8 @@ TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
 TEST_GUI_OBJECTS =  \
 	$(__test_gui___win32rc) \
 	$(__test_gui_os2_lib_res) \
-	test_gui_test.o
+	test_gui_test.o \
+	test_gui_rect.o
 TEST_GUI_ODEP =  $(___pch_testprec_test_gui_testprec_h_gch___depname)
 
 ### Conditionally set variables: ###
@@ -113,9 +112,6 @@ COND_MONOLITHIC_0___WXLIB_NET_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_5 = --define __WXUNIVERSAL__
 @COND_SHARED_1@__DLLFLAG_p_4 = -d WXUSINGDLL
 @COND_SHARED_1@__DLLFLAG_p_5 = --define WXUSINGDLL
-COND_PLATFORM_OS2_1___test_gui___os2_emxbindcmd = $(NM) test_gui$(EXEEXT) | if \
-	grep -q pmwin.763 ; then emxbind -ep test_gui$(EXEEXT) ; fi
-@COND_PLATFORM_OS2_1@__test_gui___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___test_gui___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__test_gui___win32rc = test_gui_sample_rc.o
 @COND_PLATFORM_OS2_1@__test_gui_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
@@ -185,18 +181,15 @@ distclean: clean
 test$(EXEEXT): $(TEST_OBJECTS)
 	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
-	$(__test___mac_setfilecmd)
-	$(SAMPLES_RPATH_POSTLINK)
+	$(__test___mac_setfilecmd) $(SAMPLES_RPATH_POSTLINK)
 
 @COND_GCC_PCH_1@.pch/testprec_test/testprec.h.gch: 
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/testprec_test/testprec.h.gch testprec.h $(CXX) $(TEST_CXXFLAGS)
 
 @COND_USE_GUI_1@test_gui$(EXEEXT): $(TEST_GUI_OBJECTS) $(__test_gui___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)   $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI)
 @COND_USE_GUI_1@	$(__test_gui___mac_rezcmd)
-@COND_USE_GUI_1@	$(__test_gui___mac_setfilecmd)
-@COND_USE_GUI_1@	$(__test_gui___os2_emxbindcmd)
-@COND_USE_GUI_1@	$(SAMPLES_RPATH_POSTLINK)
+@COND_USE_GUI_1@	$(__test_gui___mac_setfilecmd) $(SAMPLES_RPATH_POSTLINK)
 
 test_gui.app/Contents/PkgInfo: $(__test_gui___depname) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p test_gui.app/Contents
@@ -320,6 +313,9 @@ test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
 	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples --include-dir $(top_srcdir)/include
 
 test_gui_test.o: $(srcdir)/test.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $<
+
+test_gui_rect.o: $(srcdir)/geometry/rect.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $<
 
 

@@ -60,6 +60,10 @@
     <exe id="test_gui" template="wx_sample,wx_test"
                        template_append="wx_append"
          cond="USE_GUI=='1'">
+
+        <!-- link against GUI libraries, but be a console app: -->
+        <app-type>console</app-type>
+        
         <sources>
             test.cpp
             geometry/rect.cpp
