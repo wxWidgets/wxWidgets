@@ -849,6 +849,15 @@ tree->GetItemData(item)->SetData(data).}
 \end{twocollist}}
 }%
 
+\membersection{wxTreeCtrl::SetItemDropHighlight}\label{wxtreectrlsetitemfont}
+
+\func{void}{SetItemDropHighlight}{\param{const wxTreeItemId\&}{ item}, \param{bool}{highlight = {\tt true}}}
+
+Gives the item the visual feedback for Drag'n'Drop actions, which is
+useful if something is dragged from the outside onto the tree control
+(as opposed to a DnD operation within the tree control, which already
+is implemented internally).
+
 \membersection{wxTreeCtrl::SetItemFont}\label{wxtreectrlsetitemfont}
 
 \func{void}{SetItemFont}{\param{const wxTreeItemId\&}{ item}, \param{const wxFont\& }{font}}
