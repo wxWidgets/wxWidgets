@@ -46,8 +46,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        wxMenu *pSubMenu) 
           : wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
 {
-    // TO DISCUSS on dev : whether we can veto id 0
-    // wxASSERT_MSG( id != 0 || pSubMenu != NULL , wxT("A MenuItem ID of Zero does not work under Mac") ) ;
+    wxASSERT_MSG( id != 0 || pSubMenu != NULL , wxT("A MenuItem ID of Zero does not work under Mac") ) ;
     
     // In other languages there is no difference in naming the Exit/Quit menu item between MacOS and Windows guidelines
     // therefore these item must not be translated
