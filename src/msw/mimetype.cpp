@@ -510,7 +510,7 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 // create a new association
 // ----------------------------------------------------------------------------
 
-wxFileType *wxMimeTypesManager::Associate(const wxFileTypeInfo& ftInfo)
+wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 {
     wxCHECK_MSG( !ftInfo.GetExtensions().IsEmpty(), NULL,
                  _T("Associate() needs extension") );
