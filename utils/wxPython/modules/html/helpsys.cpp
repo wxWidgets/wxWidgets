@@ -43,15 +43,15 @@ static int IndexCompareFunc(const void *a, const void *b)
     return strcmp(((HtmlContentsItem*)a) -> m_Name, ((HtmlContentsItem*)b) -> m_Name);
 }
 
-bool wxHtmlHelpSystem::AddBookParam(const wxString& title, const wxString& contfile, 
-				    const wxString& indexfile, const wxString& deftopic, 
+bool wxHtmlHelpSystem::AddBookParam(const wxString& title, const wxString& contfile,
+				    const wxString& indexfile, const wxString& deftopic,
 				    const wxString& path, bool show_wait_msg)
 {
     wxFileSystem fsys;
     wxFSFile *fi;
     HtmlBookRecord *bookr;
     wxString safetitle;
-    
+
     if (! path.IsEmpty())
 	    // workaround for bug in ChangePathTo(name, TRUE)
 	    fsys.ChangePathTo(path+"/gaga");
@@ -89,7 +89,7 @@ bool wxHtmlHelpSystem::AddBookParam(const wxString& title, const wxString& contf
     m_BookRecords.Add(bookr);
     if (m_IndexCnt > 0)
         qsort(m_Index, m_IndexCnt, sizeof(HtmlContentsItem), IndexCompareFunc);
-    
+
     return TRUE;
 }
 
@@ -131,8 +131,8 @@ wxToolBar* wxHtmlHelpSystem::CreateToolBar(wxFrame* frame)
 
 wxTreeCtrl* wxHtmlHelpSystem::CreateContentsTree(wxWindow* parent)
 {
-	wxTreeCtrl* tree; 
-	tree = new wxTreeCtrl(parent, wxID_HTML_TREECTRL, wxDefaultPosition, 
+	wxTreeCtrl* tree;
+	tree = new wxTreeCtrl(parent, wxID_HTML_TREECTRL, wxDefaultPosition,
 			      wxDefaultSize, wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
 	tree -> SetImageList(m_ContentsImageList);
 	return tree;
@@ -143,7 +143,7 @@ wxListBox* wxHtmlHelpSystem::CreateIndexList(wxWindow* parent)
 	return new wxListBox(parent, wxID_HTML_INDEXLIST, wxDefaultPosition, wxDefaultSize, 0);
 }
 
-void wxHtmlHelpSystem::SetControls(wxFrame* frame, wxHtmlWindow* htmlwin, 
+void wxHtmlHelpSystem::SetControls(wxFrame* frame, wxHtmlWindow* htmlwin,
 				       wxTreeCtrl* contents, wxListBox* index,
 				       wxListBox* searchlist)
 {

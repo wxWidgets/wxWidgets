@@ -10,14 +10,14 @@
 #ifndef __HELPSYS_H__
 #define __HELPSYS_H__
 
-#include <wx/defs.h>
+#include <wx/wx.h>
 
 #if ! wxUSE_HTML
 #error "wxHtml needed"
 #endif
 
 #include <wx/toolbar.h>
-#include "wx/listbox.h"
+#include <wx/listbox.h>
 #include <wx/html/htmlhelp.h>
 
 class wxHtmlHelpSystem : public wxHtmlHelpController
@@ -27,9 +27,9 @@ class wxHtmlHelpSystem : public wxHtmlHelpController
  public:
    wxHtmlHelpSystem() {};
    ~wxHtmlHelpSystem() {};
-   
-   bool AddBookParam(const wxString& title, const wxString& contfile, 
-		     const wxString& indexfile=wxEmptyString, const wxString& deftopic=wxEmptyString, 
+
+   bool AddBookParam(const wxString& title, const wxString& contfile,
+		     const wxString& indexfile=wxEmptyString, const wxString& deftopic=wxEmptyString,
 		     const wxString& path=wxEmptyString, bool show_wait_msg=FALSE);
    // Alternative to AddBook(wxString& hhpfile)
    wxToolBar* CreateToolBar(wxFrame* frame);
@@ -41,7 +41,7 @@ class wxHtmlHelpSystem : public wxHtmlHelpController
    virtual void CreateHelpWindow();
    // Slightly different version than in wxHtmlHelpController; uses helpers above
    // Do nothing if the window already exists
-   void SetControls(wxFrame* frame, wxHtmlWindow* htmlwin, 
+   void SetControls(wxFrame* frame, wxHtmlWindow* htmlwin,
 		    wxTreeCtrl* contents=NULL, wxListBox* index=NULL,
 		    wxListBox* searchlist=NULL);
    // alternative for CreateHelpWindow(), sets frame, htmlwindow, contents tree, index
@@ -73,3 +73,4 @@ class wxHtmlHelpSystem : public wxHtmlHelpController
 };
 
 #endif
+

@@ -1,6 +1,6 @@
 #
-# htmlhelper.py 
-# 
+# htmlhelper.py
+#
 # A few helper functions for putting wxPython widgets in html pages
 #
 # Harm van der Heijden, 11 aug 1999.
