@@ -50,7 +50,13 @@ C++ portability guide</A> by David Williams.
     <LI><A HREF="#no_stl">Don't use STL</A></LI>
     <LI><A HREF="#no_fordecl">Don't declare variables inside <TT>for()</TT></A></LI>
     <LI><A HREF="#no_nestedclasses">Don't use nested classes</A></LI>
+  </OL>
+  <BR>
+  <LI>Other compiler limitations</LI>
+  <OL>
     <LI><A HREF="#no_ternarywithobjects">Use ternary operator ?: carefully</A></LI>
+    <LI><A HREF="#no_autoaggregate">Don't use initializers with automatic arrays</A></LI>
+    <LI><A HREF="#no_dtorswithoutctor">Always have at least one constructor in a class with destructor</A></LI>
   </OL>
   <BR>
   <LI>General recommendations</LI>
@@ -332,7 +338,17 @@ you can try the following:
 <P>A nice side effect is that you don't need to recompile all the files
 including the header if you change the PrivateLibClass declaration (it's
 an example of a more general interface/implementation separation idea).
+</OL>
 
+  <BR>
+  <LI>Other compiler limitations</B></LI><P>
+This section lists the less obvious limitations of the current C++ compilers
+which are less restrictive than the ones mentioned in the previous section but
+are may be even more dangerous as a program which compiles perfectly well on
+some platform and seems to use only standard C++ featurs may still fail to
+compile on another platform and/or with another compiler.
+
+<OL>
   <P><LI><A NAME="no_ternarywithobjects"></A><B>Use ternary operator ?: carefully</B></LI><P>
   The ternary operator <TT>?:</TT> shouldn't be used with objects (i.e. if any
 of its operands are objects) because some compilers (notable Borland C++) fail
@@ -351,6 +367,24 @@ to compile such code.
     else
         s = s2;
 </PRE>
+
+   <P><LI><A NAME="no_autoaggregate"></A><B>Don't use initializers with automatic arrays</B></LI><P>
+The initializers for automatic array variables are not supported by some older
+compilers. For example, the following line
+<PRE>
+    int daysInMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+</PRE>
+will fail to compile with HP-UX C++ compiler.
+<P><U>Workaround</U>: either make the array static or initialize each item
+separately: in the (stupid) example above, the array should be definitely
+declared as <TT>static const</TT> (assuming that the leap years are dealt with
+elsewhere somehow...) which is ok. When an array is really not const, you
+should initialize each element separately.
+
+   <P><LI><A NAME="no_dtorswithoutctor"></A><B>Always have at least one constructor in a class with destructor</B></LI><P>
+It is a good rule to follow in general, but some compilers (HP-UX) enforce it.
+So even if you are sure that the default constructor for your class is ok but
+it has a destructor, remember to add an empty default constructor to it.
 </OL>
 
   <BR>
