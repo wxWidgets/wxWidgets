@@ -113,6 +113,7 @@ private:
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
+    void OnKeyUp( wxKeyEvent& );
 
     DECLARE_DYNAMIC_CLASS(wxGridRowLabelWindow)
     DECLARE_EVENT_TABLE()
@@ -132,6 +133,7 @@ private:
     void OnPaint( wxPaintEvent &event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
+    void OnKeyUp( wxKeyEvent& );
 
     DECLARE_DYNAMIC_CLASS(wxGridColLabelWindow)
     DECLARE_EVENT_TABLE()
@@ -150,6 +152,7 @@ private:
 
     void OnMouseEvent( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
+    void OnKeyUp( wxKeyEvent& );
     void OnPaint( wxPaintEvent& event );
 
     DECLARE_DYNAMIC_CLASS(wxGridCornerLabelWindow)
@@ -2817,6 +2820,7 @@ BEGIN_EVENT_TABLE( wxGridRowLabelWindow, wxWindow )
     EVT_PAINT( wxGridRowLabelWindow::OnPaint )
     EVT_MOUSE_EVENTS( wxGridRowLabelWindow::OnMouseEvent )
     EVT_KEY_DOWN( wxGridRowLabelWindow::OnKeyDown )
+    EVT_KEY_UP( wxGridRowLabelWindow::OnKeyUp )
 END_EVENT_TABLE()
 
 wxGridRowLabelWindow::wxGridRowLabelWindow( wxGrid *parent,
@@ -2860,6 +2864,11 @@ void wxGridRowLabelWindow::OnKeyDown( wxKeyEvent& event )
     if ( !m_owner->ProcessEvent( event ) ) event.Skip();
 }
 
+void wxGridRowLabelWindow::OnKeyUp( wxKeyEvent& event )
+{
+    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+}
+
 
 
 //////////////////////////////////////////////////////////////////////
@@ -2870,6 +2879,7 @@ BEGIN_EVENT_TABLE( wxGridColLabelWindow, wxWindow )
     EVT_PAINT( wxGridColLabelWindow::OnPaint )
     EVT_MOUSE_EVENTS( wxGridColLabelWindow::OnMouseEvent )
     EVT_KEY_DOWN( wxGridColLabelWindow::OnKeyDown )
+    EVT_KEY_UP( wxGridColLabelWindow::OnKeyUp )
 END_EVENT_TABLE()
 
 wxGridColLabelWindow::wxGridColLabelWindow( wxGrid *parent,
@@ -2913,6 +2923,11 @@ void wxGridColLabelWindow::OnKeyDown( wxKeyEvent& event )
     if ( !m_owner->ProcessEvent( event ) ) event.Skip();
 }
 
+void wxGridColLabelWindow::OnKeyUp( wxKeyEvent& event )
+{
+    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+}
+
 
 
 //////////////////////////////////////////////////////////////////////
@@ -2923,6 +2938,7 @@ BEGIN_EVENT_TABLE( wxGridCornerLabelWindow, wxWindow )
     EVT_MOUSE_EVENTS( wxGridCornerLabelWindow::OnMouseEvent )
     EVT_PAINT( wxGridCornerLabelWindow::OnPaint)
     EVT_KEY_DOWN( wxGridCornerLabelWindow::OnKeyDown )
+    EVT_KEY_UP( wxGridCornerLabelWindow::OnKeyUp )
 END_EVENT_TABLE()
 
 wxGridCornerLabelWindow::wxGridCornerLabelWindow( wxGrid *parent,
@@ -2961,6 +2977,11 @@ void wxGridCornerLabelWindow::OnMouseEvent( wxMouseEvent& event )
 // cursor must be in the cell edit control to get key events
 //
 void wxGridCornerLabelWindow::OnKeyDown( wxKeyEvent& event )
+{
+    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+}
+
+void wxGridCornerLabelWindow::OnKeyUp( wxKeyEvent& event )
 {
     if ( !m_owner->ProcessEvent( event ) ) event.Skip();
 }
@@ -3038,7 +3059,6 @@ void wxGridWindow::OnKeyUp( wxKeyEvent& event )
 {
     if ( !m_owner->ProcessEvent( event ) ) event.Skip();
 }
-
 
 void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 {
@@ -5329,7 +5349,7 @@ void wxGrid::OnKeyUp( wxKeyEvent& event )
                                       m_selectingBottomRight.GetRow(),
                                       m_selectingBottomRight.GetCol(),
                                       event.ControlDown(),
-                                      event.ShiftDown(),
+                                      TRUE,
                                       event.AltDown(),
                                       event.MetaDown() );
         m_selectingTopLeft = wxGridNoCellCoords;
@@ -6320,7 +6340,7 @@ void wxGrid::MakeCellVisible( int row, int col )
 bool wxGrid::MoveCursorUp( bool expandSelection )
 {
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
-         m_currentCellCoords.GetRow() > 0 )
+         m_currentCellCoords.GetRow() >= 0 )
     {
         if ( expandSelection)
         {
@@ -6334,7 +6354,7 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
                 SelectBlock( m_currentCellCoords, m_selectingKeyboard );
             }
         }
-        else
+        else if ( m_currentCellCoords.GetRow() > 0 )
         {
             ClearSelection();
             MakeCellVisible( m_currentCellCoords.GetRow() - 1,
@@ -6342,6 +6362,8 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
             SetCurrentCell( m_currentCellCoords.GetRow() - 1,
                             m_currentCellCoords.GetCol() );
         }
+        else
+            return FALSE;
         return TRUE;
     }
 
@@ -6352,7 +6374,7 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
 bool wxGrid::MoveCursorDown( bool expandSelection )
 {
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
-         m_currentCellCoords.GetRow() < m_numRows-1 )
+         m_currentCellCoords.GetRow() < m_numRows )
     {
         if ( expandSelection )
         {
@@ -6366,7 +6388,7 @@ bool wxGrid::MoveCursorDown( bool expandSelection )
                 SelectBlock( m_currentCellCoords, m_selectingKeyboard );
             }
         }
-        else
+        else if ( m_currentCellCoords.GetRow() < m_numRows - 1 )
         {
             ClearSelection();
             MakeCellVisible( m_currentCellCoords.GetRow() + 1,
@@ -6374,6 +6396,8 @@ bool wxGrid::MoveCursorDown( bool expandSelection )
             SetCurrentCell( m_currentCellCoords.GetRow() + 1,
                             m_currentCellCoords.GetCol() );
         }
+        else
+            return FALSE;
         return TRUE;
     }
 
@@ -6384,7 +6408,7 @@ bool wxGrid::MoveCursorDown( bool expandSelection )
 bool wxGrid::MoveCursorLeft( bool expandSelection )
 {
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
-         m_currentCellCoords.GetCol() > 0 )
+         m_currentCellCoords.GetCol() >= 0 )
     {
         if ( expandSelection )
         {
@@ -6398,7 +6422,7 @@ bool wxGrid::MoveCursorLeft( bool expandSelection )
                 SelectBlock( m_currentCellCoords, m_selectingKeyboard );
             }
         }
-        else
+        else if ( m_currentCellCoords.GetCol() > 0 )
         {
             ClearSelection();
             MakeCellVisible( m_currentCellCoords.GetRow(),
@@ -6406,6 +6430,8 @@ bool wxGrid::MoveCursorLeft( bool expandSelection )
             SetCurrentCell( m_currentCellCoords.GetRow(),
                             m_currentCellCoords.GetCol() - 1 );
         }
+        else
+            return FALSE;
         return TRUE;
     }
 
@@ -6416,7 +6442,7 @@ bool wxGrid::MoveCursorLeft( bool expandSelection )
 bool wxGrid::MoveCursorRight( bool expandSelection )
 {
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
-         m_currentCellCoords.GetCol() < m_numCols - 1 )
+         m_currentCellCoords.GetCol() < m_numCols )
     {
         if ( expandSelection )
         {
@@ -6430,7 +6456,7 @@ bool wxGrid::MoveCursorRight( bool expandSelection )
                 SelectBlock( m_currentCellCoords, m_selectingKeyboard );
             }
         }
-        else
+        else if ( m_currentCellCoords.GetCol() < m_numCols - 1 )
         {
             ClearSelection();
             MakeCellVisible( m_currentCellCoords.GetRow(),
@@ -6438,6 +6464,8 @@ bool wxGrid::MoveCursorRight( bool expandSelection )
             SetCurrentCell( m_currentCellCoords.GetRow(),
                             m_currentCellCoords.GetCol() + 1 );
         }
+        else
+            return FALSE;
         return TRUE;
     }
 
