@@ -659,9 +659,64 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 	styler.ColourTo(lengthDoc - 1, state);
 }
 
+static void FoldPerlDoc(unsigned int startPos, int length, int, WordList *[],
+                            Accessor &styler) {
+	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
+	unsigned int endPos = startPos + length;
+	int visibleChars = 0;
+	int lineCurrent = styler.GetLine(startPos);
+	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
+	int levelCurrent = levelPrev;
+	char chNext = styler[startPos];
+	int styleNext = styler.StyleAt(startPos);
+	for (unsigned int i = startPos; i < endPos; i++) {
+		char ch = chNext;
+		chNext = styler.SafeGetCharAt(i + 1);
+		int style = styleNext;
+		styleNext = styler.StyleAt(i + 1);
+		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
+		if (foldComment && (style == SCE_PL_COMMENTLINE)) {
+			if ((ch == '/') && (chNext == '/')) {
+				char chNext2 = styler.SafeGetCharAt(i + 2);
+				if (chNext2 == '{') {
+					levelCurrent++;
+				} else if (chNext2 == '}') {
+					levelCurrent--;
+				}
+			}
+		}
+		if (style == SCE_C_OPERATOR) {
+			if (ch == '{') {
+				levelCurrent++;
+			} else if (ch == '}') {
+				levelCurrent--;
+			}
+		}
+		if (atEOL) {
+			int lev = levelPrev;
+			if (visibleChars == 0 && foldCompact)
+				lev |= SC_FOLDLEVELWHITEFLAG;
+			if ((levelCurrent > levelPrev) && (visibleChars > 0))
+				lev |= SC_FOLDLEVELHEADERFLAG;
+			if (lev != styler.LevelAt(lineCurrent)) {
+				styler.SetLevel(lineCurrent, lev);
+			}
+			lineCurrent++;
+			levelPrev = levelCurrent;
+			visibleChars = 0;
+		}
+		if (!isspacechar(ch))
+			visibleChars++;
+	}
+	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
+	int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
+	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
+}
+
 static const char * const perlWordListDesc[] = {
 	"Perl keywords",
 	0
 };
 
-LexerModule lmPerl(SCLEX_PERL, ColourisePerlDoc, "perl", 0, perlWordListDesc);
+LexerModule lmPerl(SCLEX_PERL, ColourisePerlDoc, "perl", FoldPerlDoc, perlWordListDesc);
