@@ -55,7 +55,7 @@
         ((major) != wxMAJOR_VERSION || \
             (minor) != wxMINOR_VERSION || \
                 (release) != wxRELEASE_NUMBER || \
-                    (subrel) >= wxSUBRELEASE_NUMBER)
+                    (subrel) <= wxSUBRELEASE_NUMBER)
 
 #endif /*  _WX_VERSION_H_ */
 
