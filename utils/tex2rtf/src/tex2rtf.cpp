@@ -330,7 +330,7 @@ bool MyApp::OnInit()
 
     if (InputFile)
     {
-      sprintf(buf, "Tex2RTF [%s]", FileNameFromPath(InputFile));
+      sprintf(buf, "Tex2RTF [%s]", wxFileNameFromPath(InputFile));
       frame->SetTitle(buf);
     }
 
