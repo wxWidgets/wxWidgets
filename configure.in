@@ -4294,8 +4294,8 @@ AC_OUTPUT([
           [
             dnl don't move the file on itself - this happens when we run
             dnl config.status which, as configure, executes these commands
-            dnl but, unlike it, doesn't create wx-config
-            if test ! -L wx-config; then
+            dnl but, unlike it, doesn't create wx-config (which already
+            if test ! -f wx${TOOLKIT_NAME}-config; then
                 chmod +x wx-config
                 mv wx-config wx${TOOLKIT_NAME}-config
                 ${LN_S} wx${TOOLKIT_NAME}-config wx-config
