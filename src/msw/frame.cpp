@@ -284,7 +284,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number,
                                         wxWindowID id,
                                         const wxString& name)
 {
-    wxStatusBar *statusBar = NULL;
+    wxStatusBar *statusBar wxDUMMY_INITIALIZE(NULL);
 
 #if wxUSE_NATIVE_STATUSBAR
     if ( !UsesNativeStatusBar() )
@@ -616,8 +616,8 @@ void wxFrame::PositionToolBar()
 
         // Optimise such that we don't have to always resize the toolbar
         // when the frame changes, otherwise we'll get a lot of flicker.        
-        bool heightChanging = TRUE;
-        bool widthChanging = TRUE;
+        bool heightChanging wxDUMMY_INITIALIZE(true);
+        bool widthChanging wxDUMMY_INITIALIZE(true);
         
         if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
         {

@@ -250,7 +250,7 @@ bool wxControl::MSWOnNotify(int idCtrl,
                             WXLPARAM lParam,
                             WXLPARAM* result)
 {
-    wxEventType eventType = wxEVT_NULL;
+    wxEventType eventType wxDUMMY_INITIALIZE(wxEVT_NULL);
 
     NMHDR *hdr = (NMHDR*) lParam;
     switch ( hdr->code )

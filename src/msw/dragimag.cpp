@@ -120,10 +120,10 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor)
         ImageList_Destroy(GetHimageList());
     m_hImageList = 0;
 
-    UINT flags = 0 ;
 #ifdef __WXWINCE__
-    flags = ILC_COLOR;
+    UNIT flags = ILC_COLOR;
 #else
+    UINT flags wxDUMMY_INITIALIZE(0) ;
     if (image.GetDepth() <= 4)
         flags = ILC_COLOR4;
     else if (image.GetDepth() <= 8)
@@ -177,10 +177,10 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor)
         ImageList_Destroy(GetHimageList());
     m_hImageList = 0;
 
-    UINT flags = 0 ;
 #ifdef __WXWINCE__
-    flags = ILC_COLOR;
+    UINT flags = ILC_COLOR;
 #else
+    UINT flags wxDUMMY_INITIALIZE(0) ;
     if (image.GetDepth() <= 4)
         flags = ILC_COLOR4;
     else if (image.GetDepth() <= 8)

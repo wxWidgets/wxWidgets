@@ -129,7 +129,7 @@ wxTabCtrl::~wxTabCtrl()
 bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     wxTabEvent event(wxEVT_NULL, m_windowId);
-    wxEventType eventType = wxEVT_NULL;
+    wxEventType eventType wxDUMMY_INITIALIZE(wxEVT_NULL);
     NMHDR* hdr1 = (NMHDR*) lParam;
     switch ( hdr1->code )
     {

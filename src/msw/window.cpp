@@ -1746,9 +1746,10 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     point.y = y;
     ::ClientToScreen(hWnd, &point);
     wxCurrentPopupMenu = menu;
+#if defined(__WXWINCE__)
     UINT flags = 0;
-#if !defined(__WXWINCE__)
-    flags = TPM_RIGHTBUTTON;
+#else
+    UINT flags = TPM_RIGHTBUTTON;
 #endif
     ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
 

@@ -173,6 +173,8 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     int position,
         maxPos, trackPos = pos;
 
+    wxUnusedVar(trackPos);
+
     // when we're dragging the scrollbar we can't use pos parameter because it
     // is limited to 16 bits
     // JACS: now always using GetScrollInfo, since there's no reason

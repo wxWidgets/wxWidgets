@@ -1008,7 +1008,6 @@ bool wxICOHandler::SaveFile(wxImage *image,
                             bool verbose)
 
 {
-    bool bResult = FALSE;
     //sanity check; icon must be less than 127 pixels high and 255 wide
     if ( image->GetHeight () > 127 )
     {
@@ -1100,7 +1099,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
 
         //calculate size and offset of image and mask
         wxCountingOutputStream cStream;
-        bResult = SaveDib(image, cStream, verbose, IsBmp, IsMask);
+        bool bResult = SaveDib(image, cStream, verbose, IsBmp, IsMask);
         if ( !bResult )
         {
             if ( verbose )
@@ -1206,8 +1205,8 @@ bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
 bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
                             bool WXUNUSED(verbose), int index)
 {
-    bool bResult = FALSE;
-    bool IsBmp = FALSE;
+    bool bResult wxDUMMY_INITIALIZE(false);
+    bool IsBmp = false;
 
     ICONDIR IconDir;
 
@@ -1253,7 +1252,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     if ( iSel == wxNOT_FOUND || iSel < 0 || iSel >= nIcons )
     {
         wxLogError(_("ICO: Invalid icon index."));
-        bResult = FALSE;
+        bResult = false;
     }
     else
     {

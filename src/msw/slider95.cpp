@@ -168,7 +168,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
         minLabel.Printf(wxT("%d"), minValue);
         wstyle = STATIC_FLAGS;
         if ( m_windowStyle & wxCLIP_SIBLINGS )
-            msStyle |= WS_CLIPSIBLINGS;
+            wstyle |= WS_CLIPSIBLINGS;
         m_staticMin = (WXHWND) CreateWindowEx
             (
                 0, wxT("STATIC"), minLabel,
@@ -237,7 +237,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
         wstyle = STATIC_FLAGS;
 
         if ( m_windowStyle & wxCLIP_SIBLINGS )
-            msStyle |= WS_CLIPSIBLINGS;
+            wstyle |= WS_CLIPSIBLINGS;
 
         m_staticMax = (WXHWND) CreateWindowEx
             (

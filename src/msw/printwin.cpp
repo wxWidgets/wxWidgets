@@ -115,7 +115,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
-    wxDC *dc = NULL;
+    wxDC *dc wxDUMMY_INITIALIZE(NULL);
     if (prompt)
     {
         dc = PrintDialog(parent);
@@ -134,18 +134,13 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         return false;
     }
 
-    int logPPIScreenX = 0;
-    int logPPIScreenY = 0;
-    int logPPIPrinterX = 0;
-    int logPPIPrinterY = 0;
-
     HDC hdc = ::GetDC(NULL);
-    logPPIScreenX = ::GetDeviceCaps(hdc, LOGPIXELSX);
-    logPPIScreenY = ::GetDeviceCaps(hdc, LOGPIXELSY);
+    int logPPIScreenX = ::GetDeviceCaps(hdc, LOGPIXELSX);
+    int logPPIScreenY = ::GetDeviceCaps(hdc, LOGPIXELSY);
     ::ReleaseDC(NULL, hdc);
 
-    logPPIPrinterX = ::GetDeviceCaps((HDC) dc->GetHDC(), LOGPIXELSX);
-    logPPIPrinterY = ::GetDeviceCaps((HDC) dc->GetHDC(), LOGPIXELSY);
+    int logPPIPrinterX = ::GetDeviceCaps((HDC) dc->GetHDC(), LOGPIXELSX);
+    int logPPIPrinterY = ::GetDeviceCaps((HDC) dc->GetHDC(), LOGPIXELSY);
     if (logPPIPrinterX == 0 || logPPIPrinterY == 0)
     {
         delete dc;
@@ -373,7 +368,7 @@ void wxWindowsPrintPreview::DetermineScaling()
     wxPrinterDC printerDC(m_printDialogData.GetPrintData());
 
     int printerWidth = 150;
-    int printerHeight = 250;
+    int printerHeight wxDUMMY_INITIALIZE(250);
     int printerXRes = 1500;
     int printerYRes = 2500;
 

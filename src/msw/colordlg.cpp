@@ -152,10 +152,9 @@ int wxColourDialog::ShowModal()
     bool success = ::ChooseColor(&(chooseColorStruct)) != 0;
 
     // Try to highlight the correct window (the parent)
-    HWND hWndParent = 0;
     if (GetParent())
     {
-      hWndParent = (HWND) GetParent()->GetHWND();
+      HWND hWndParent = (HWND) GetParent()->GetHWND();
       if (hWndParent)
         ::BringWindowToTop(hWndParent);
     }

@@ -463,10 +463,9 @@ void wxListCtrl::FreeAllInternalData()
     if (m_AnyInternalData)
     {
         int n = GetItemCount();
-        int i = 0;
 
         m_ignoreChangeMessages = TRUE;
-        for (i = 0; i < n; i++)
+        for (int i = 0; i < n; i++)
             wxDeleteInternalData(this, i);
         m_ignoreChangeMessages = FALSE;
 
@@ -2313,7 +2312,6 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
     wxSize clientSize = GetClientSize();
     wxRect itemRect;
-    int cy=0;
 
     int itemCount = GetItemCount();
     int i;
@@ -2324,7 +2322,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
         {
             if (GetItemRect(i, itemRect))
             {
-                cy = itemRect.GetTop();
+                int cy = itemRect.GetTop();
                 if (i != 0) // Don't draw the first one
                 {
                     dc.DrawLine(0, cy, clientSize.x, cy);

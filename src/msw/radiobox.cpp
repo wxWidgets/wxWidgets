@@ -1035,7 +1035,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
                 wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
 
-                bool processed = TRUE;
+                bool processed wxDUMMY_INITIALIZE(true);
 
                 // HELPINFO doesn't seem to be supported on WinCE.
 #ifndef __WXWINCE__
@@ -1071,7 +1071,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                     processed = radiobox->GetEventHandler()->ProcessEvent(helpEvent);
                 }
                 else
-                    processed = FALSE;
+                    processed = false;
 #endif
                 if (processed)
                     return 0;
