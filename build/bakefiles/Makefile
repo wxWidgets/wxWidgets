@@ -946,6 +946,8 @@ clean:
 	rm -f ../makefile.wat
 
 
+library: ../../Makefile.in ../makefile.bcc ../makefile.vc ../makefile.wat ../makefile.gcc
+
 ../../autoconf_inc.m4: ../../Makefile.in
 ../../configure: ../../autoconf_inc.m4
 	(cd ../.. ; aclocal && autoconf)

@@ -166,6 +166,8 @@ clean:
 \trm -f ../../autoconf_inc.m4
 %s
 
+library: ../../Makefile.in ../makefile.bcc ../makefile.vc ../makefile.wat ../makefile.gcc
+
 ../../autoconf_inc.m4: ../../Makefile.in
 ../../configure: ../../autoconf_inc.m4
 \t(cd ../.. ; aclocal && autoconf)
