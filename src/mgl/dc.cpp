@@ -1097,7 +1097,8 @@ void wxDC::SetPalette(const wxPalette& palette)
     
     if ( palette == wxNullPalette )
     {
-        SetPalette(m_oldPalette);
+        if ( m_oldPalette.Ok() )
+            SetPalette(m_oldPalette);
         return;
     }
 
