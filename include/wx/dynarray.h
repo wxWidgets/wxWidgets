@@ -178,7 +178,7 @@ public:                                                             \
   void Shrink();                                                    \
                                                                     \
   size_t GetCount() const { return m_nCount; }                      \
-  void SetCount(size_t n, T defval = T(0));                         \
+  void SetCount(size_t n, T defval = T());                          \
   bool IsEmpty() const { return m_nCount == 0; }                    \
   size_t Count() const { return m_nCount; }                         \
                                                                     \
