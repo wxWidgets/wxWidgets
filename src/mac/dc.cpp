@@ -45,8 +45,8 @@ long wxDC::m_macCurrentPortId = 1 ;
 wxDC::wxDC()
 {
   m_ok = FALSE;
-  m_optimize = FALSE;
-  m_autoSetting = FALSE;
+//  m_optimize = FALSE;
+//  m_autoSetting = FALSE;
   m_colour = TRUE;
   m_clipping = FALSE;
   
@@ -539,7 +539,7 @@ void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
 		MacInstallPen() ;
-		int offset = (m_pen.GetWidth()	- 1) / 2 ;	
+		int offset = ( (m_pen.GetWidth() == 0 ? 1 : m_pen.GetWidth() ) * m_scaleX - 1) / 2 ;	
   	long xx1 = XLOG2DEV(x1); 
   	long yy1 = YLOG2DEV(y1);
   	long xx2 = XLOG2DEV(x2); 
@@ -1367,7 +1367,11 @@ void wxDC::MacInstallPen() const
 	::RGBBackColor( &backcolor );
 	
 	::PenNormal() ;
-	int penWidth = m_pen.GetWidth();
+	int penWidth = m_pen.GetWidth() * m_scaleX ;
+
+	// null means only one pixel, at whatever resolution
+	if ( penWidth == 0 )
+		penWidth = 1 ; 
 	::PenSize(penWidth, penWidth);
 
 	int penStyle = m_pen.GetStyle();

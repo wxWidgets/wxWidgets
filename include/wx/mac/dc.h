@@ -424,34 +424,9 @@ protected:
 //
 
   public:
-    
-    bool         m_ok;
-    bool         m_colour;
-    
-    // not sure, what these mean
-    bool         m_clipping;      // Is clipping on right now ?
-    bool         m_isInteractive; // Is GetPixel possible ?
-    bool         m_autoSetting;   // wxMSW only ?
-    bool         m_dontDelete;    // wxMSW only ?
-    bool         m_optimize;      // wxMSW only ?
-    wxString     m_filename;      // Not sure where this belongs.
-    
-    wxPen        m_pen;
-    wxBrush      m_brush;
-    wxBrush      m_backgroundBrush;
-    wxColour     m_textForegroundColour;
-    wxColour     m_textBackgroundColour;
-    wxFont       m_font;
-    
-    int          m_logicalFunction;
-    int          m_backgroundMode;
-    int          m_textAlignment;    // gone in wxWin 2.0 ?
-    
-    int          m_mappingMode;
-    
-    // not sure what for, but what is a mm on a screen you don't know the size of?
+//begin wxmac
     double       m_mm_to_pix_x,m_mm_to_pix_y; 
-    
+    bool         m_needComputeScaleX,m_needComputeScaleY;         // not yet used
     long         m_internalDeviceOriginX,m_internalDeviceOriginY;   // If un-scrolled is non-zero or
 								    // d.o. changes with scrolling.
 								    // Set using SetInternalDeviceOrigin().
@@ -459,24 +434,6 @@ protected:
     long         m_externalDeviceOriginX,m_externalDeviceOriginY;   // To be set by external classes
                                                                     // such as wxScrolledWindow
 								    // using SetDeviceOrigin()
-								    
-    long         m_deviceOriginX,m_deviceOriginY;                   // Sum of the two above.
-    
-    long         m_logicalOriginX,m_logicalOriginY;                 // User defined.
-
-    double       m_scaleX,m_scaleY;
-    double       m_logicalScaleX,m_logicalScaleY;
-    double       m_userScaleX,m_userScaleY;
-    long         m_signX,m_signY;
-    
-    bool         m_needComputeScaleX,m_needComputeScaleY;         // not yet used
-    
-    float        m_scaleFactor;  // wxPSDC wants to have this. Will disappear.
-    
-    long         m_clipX1,m_clipY1,m_clipX2,m_clipY2;
-    long         m_minX,m_maxX,m_minY,m_maxY;
-
-//begin wxmac
 	GrafPtr				m_macPort ;
 	GWorldPtr			m_macMask ;
 
