@@ -19,7 +19,7 @@ For example:
   {
     // This data objects are held by the clipboard, 
     // so do not delete them in the app.
-    wxTheClipboard->AddData( new wxTextDataObject("Some text") );
+    wxTheClipboard->SetData( new wxTextDataObject("Some text") );
     wxTheClipboard->Close();
   }
 

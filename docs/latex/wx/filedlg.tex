@@ -26,17 +26,12 @@ If path is ``", the current directory will be used. If filename is ``",
 no default filename will be supplied. The wildcard determines what files
 are displayed in the file selector, and file extension supplies a type
 extension for the required filename. Flags may be a combination of wxOPEN,
-wxSAVE, wxOVERWRITE\_PROMPT, wxHIDE\_READONLY, or 0. They are only significant
-at present in Windows.
+wxSAVE, wxOVERWRITE\_PROMPT, wxHIDE\_READONLY, or 0.
 
 Both the X and Windows versions implement a wildcard filter. Typing a
 filename containing wildcards (*, ?) in the filename text item, and
 clicking on Ok, will result in only those files matching the pattern being
-displayed. In the X version, supplying no default name will result in the
-wildcard filter being inserted in the filename text item; the filter is
-ignored if a default name is supplied.
-
-Under Windows (only), the wildcard may be a specification for multiple
+displayed. The wildcard may be a specification for multiple
 types of file with a description for each, such as:
 
 \begin{verbatim}
@@ -69,10 +64,10 @@ Constructor. Use \helpref{wxFileDialog::ShowModal}{wxfiledialogshowmodal} to sho
 
 \twocolwidtha{5cm}
 \begin{twocollist}
-\twocolitem{{\bf wxOPEN}}{This is an open dialog (Windows only).}
-\twocolitem{{\bf wxSAVE}}{This is a save dialog (Windows only).}
-\twocolitem{{\bf wxHIDE\_READONLY}}{Hide read-only files (Windows only).}
-\twocolitem{{\bf wxOVERWRITE\_PROMPT}}{Prompt for a conformation if a file will be overridden (Windows only).}
+\twocolitem{{\bf wxOPEN}}{This is an open dialog.}
+\twocolitem{{\bf wxSAVE}}{This is a save dialog.}
+\twocolitem{{\bf wxHIDE\_READONLY}}{Hide read-only files.}
+\twocolitem{{\bf wxOVERWRITE\_PROMPT}}{Prompt for a conformation if a file will be overridden.}
 \end{twocollist}%
 }
 
