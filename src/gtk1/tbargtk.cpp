@@ -17,6 +17,12 @@
 #include <wx/intl.h>
 
 //-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
+//-----------------------------------------------------------------------------
 // wxToolBarTool
 //-----------------------------------------------------------------------------
 
@@ -53,11 +59,22 @@ wxToolBarTool::~wxToolBarTool()
 
 static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *tool )
 {
+  if (g_blockEventsOnDrag) return;
   if (!tool->m_enabled) return;
 
   if (tool->m_isToggle) tool->m_toggleState = !tool->m_toggleState;
 
   tool->m_owner->OnLeftClick( tool->m_index, tool->m_toggleState );
+}
+
+static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget), 
+  GdkEventCrossing *WXUNUSED(gdk_event), wxToolBarTool *tool )
+{
+  if (g_blockEventsOnDrag) return TRUE;
+  
+  tool->m_owner->OnMouseEnter( tool->m_index );
+  
+  return TRUE;
 }
 
 //-----------------------------------------------------------------------------
@@ -130,10 +147,10 @@ void wxToolBar::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSED(y
 
 void wxToolBar::OnMouseEnter( int toolIndex )
 {
-  wxCommandEvent event( wxEVT_COMMAND_TOOL_ENTER, toolIndex );
+  wxCommandEvent event( wxEVT_COMMAND_TOOL_ENTER, GetId() );
   event.SetEventObject(this);
   event.SetInt( toolIndex );
-
+  
   GetEventHandler()->ProcessEvent(event);
 }
 
@@ -170,6 +187,9 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
 
   tool->m_item = gtk_toolbar_append_element( m_toolbar, ctype, NULL, NULL, helpString1, "", tool_pixmap, 
                                              (GtkSignalFunc)gtk_toolbar_callback, (gpointer)tool );
+
+  gtk_signal_connect( GTK_OBJECT(tool->m_item), "enter_notify_event", 
+      GTK_SIGNAL_FUNC(gtk_toolbar_enter_callback), (gpointer)tool );
 
   m_tools.Append( tool );
 
