@@ -309,41 +309,80 @@ bool wxWindow::Create(
 
 void wxWindow::SetFocus()
 {
-    // TODO:
+    HWND                            hWnd = GetHwnd();
+
+    if (hWnd)
+        ::WinSetFocus(HWND_DESKTOP, hWnd);
 }
 
 wxWindow* wxWindowBase::FindFocus()
 {
-    wxWindow*                       window = NULL;
-    // TODO:
-    return(window);
+    HWND                            hWnd = ::WinQueryFocus(HWND_DESKTOP);
+
+    if (hWnd)
+    {
+        return wxFindWinFromHandle((WXHWND)hWnd);
+    }
+    return NULL;
 }
 
-bool wxWindow::Enable(bool enable) // check if base implementation is OK
+bool wxWindow::Enable(
+  bool                              bEnable
+)
 {
-    // TODO:
+    if (!wxWindowBase::Enable(bEnable))
+        return(FALSE);
+
+    HWND                            hWnd = GetHwnd();
+
+    if ( hWnd )
+        ::WinEnableWindow(hWnd, (BOOL)bEnable);
+
+    wxWindowList::Node*             pNode = GetChildren().GetFirst();
+
+    while (pNode)
+    {
+        wxWindow*                   pChild = pNode->GetData();
+
+        pChild->Enable(bEnable);
+        pNode = pNode->GetNext();
+    }
     return(TRUE);
 }
 
-bool wxWindow::Show(bool show) // check if base implementation is OK
+bool wxWindow::Show(
+  bool                              bShow
+)
 {
-    // TODO:
+    if (!wxWindowBase::Show(bShow))
+        return(FALSE);
+
+    HWND                            hWnd = GetHwnd();
+
+    ::WinShowWindow(hWnd, bShow);
+
+    if (bShow)
+    {
+        ::WinSetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_ACTIVATE);
+    }
     return(TRUE);
 }
 
 void wxWindow::Raise()
 {
-    // TODO:
+    ::WinSetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_ACTIVATE);
 }
 
 void wxWindow::Lower()
 {
-    // TODO:
+    ::WinSetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_DEACTIVATE);
 }
 
-void wxWindow::SetTitle( const wxString& title)
+void wxWindow::SetTitle(
+  const wxString&                   rTitle
+)
 {
-// TODO:    SetWindowText(GetHwnd(), title.c_str());
+    ::WinSetWindowText(GetHwnd(), title.c_str());
 }
 
 wxString wxWindow::GetTitle() const
