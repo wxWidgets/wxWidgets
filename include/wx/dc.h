@@ -31,6 +31,65 @@
 
 #include "wx/list.h"            // we use wxList in inline functions
 
+class WXDLLEXPORT wxDCBase;
+
+class WXDLLEXPORT wxDrawObject
+{
+public:
+
+    wxDrawObject()
+    {
+        ResetBoundingBox();
+    }
+
+    virtual ~wxDrawObject() { }
+
+    void Draw(const wxDCBase& dc) const { }
+
+    virtual void CalcBoundingBox(wxCoord x, wxCoord y)
+    {
+      if ( m_isBBoxValid )
+      {
+         if ( x < m_minX ) m_minX = x;
+         if ( y < m_minY ) m_minY = y;
+         if ( x > m_maxX ) m_maxX = x;
+         if ( y > m_maxY ) m_maxY = y;
+      }
+      else
+      {
+         m_isBBoxValid = TRUE;
+
+         m_minX = x;
+         m_minY = y;
+         m_maxX = x;
+         m_maxY = y;
+      }
+    }
+
+    void ResetBoundingBox()
+    {
+        m_isBBoxValid = FALSE;
+
+        m_minX = m_maxX = m_minY = m_maxY = 0;
+    }
+
+    // Get the final bounding box of the PostScript or Metafile picture.
+
+    wxCoord MinX() const { return m_minX; }
+    wxCoord MaxX() const { return m_maxX; }
+    wxCoord MinY() const { return m_minY; }
+    wxCoord MaxY() const { return m_maxY; }
+
+    //to define the type of object for derived objects
+    virtual int GetType()=0;
+
+protected:
+    //for boundingbox calculation
+    bool m_isBBoxValid:1;
+    //for boundingbox calculation
+    wxCoord m_minX, m_minY, m_maxX, m_maxY;
+};
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -81,6 +140,13 @@ public:
 
     // graphic primitives
     // ------------------
+
+    virtual void DrawObject(wxDrawObject* drawobject)
+    {
+        drawobject->Draw(*this);
+        CalcBoundingBox(drawobject->MinX(),drawobject->MinY());
+        CalcBoundingBox(drawobject->MaxX(),drawobject->MaxY());
+    }
 
     void FloodFill(wxCoord x, wxCoord y, const wxColour& col,
                    int style = wxFLOOD_SURFACE)
