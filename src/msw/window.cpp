@@ -4151,7 +4151,10 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_leftDown = (flags & MK_LBUTTON) != 0;
     event.m_middleDown = (flags & MK_MBUTTON) != 0;
     event.m_rightDown = (flags & MK_RBUTTON) != 0;
-    event.m_altDown = (::GetKeyState(VK_MENU) & 0x80000000) != 0;
+//    event.m_altDown = (::GetKeyState(VK_MENU) & 0x80000000) != 0;
+    // Returns different negative values on WinME and WinNT,
+    // so simply test for negative value.
+    event.m_altDown = ::GetKeyState(VK_MENU) < 0;
 
     event.SetTimestamp(s_currentMsg.time);
     event.m_eventObject = this;

@@ -280,12 +280,18 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 // get the current state of SHIFT/CTRL keys
 inline bool wxIsShiftDown()
 {
-    return (::GetKeyState(VK_SHIFT) & 0x100) != 0;
+//    return (::GetKeyState(VK_SHIFT) & 0x100) != 0;
+    // Returns different negative values on WinME and WinNT,
+    // so simply test for negative value.
+    return ::GetKeyState(VK_SHIFT) < 0;
 }
 
 inline bool wxIsCtrlDown()
 {
-    return (::GetKeyState(VK_CONTROL) & 0x100) != 0;
+//    return (::GetKeyState(VK_CONTROL) & 0x100) != 0;
+    // Returns different negative values on WinME and WinNT,
+    // so simply test for negative value.
+    return ::GetKeyState(VK_CONTROL) < 0;
 }
 
 // wrapper around GetWindowRect() and GetClientRect() APIs doing error checking
