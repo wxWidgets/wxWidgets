@@ -29177,6 +29177,34 @@ static PyObject *_wrap_Window_GetBackgroundStyle(PyObject *, PyObject *args, PyO
 }
 
 
+static PyObject *_wrap_Window_HasTransparentBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_HasTransparentBackground",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->HasTransparentBackground();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Window_SetCursor(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -40109,6 +40137,93 @@ static PyObject *_wrap_StdDialogButtonSizer_Finalise(PyObject *, PyObject *args,
 }
 
 
+static PyObject *_wrap_StdDialogButtonSizer_SetAffirmativeButton(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStdDialogButtonSizer *arg1 = (wxStdDialogButtonSizer *) 0 ;
+    wxButton *arg2 = (wxButton *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "button", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StdDialogButtonSizer_SetAffirmativeButton",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStdDialogButtonSizer, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxButton, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetAffirmativeButton(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StdDialogButtonSizer_SetNegativeButton(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStdDialogButtonSizer *arg1 = (wxStdDialogButtonSizer *) 0 ;
+    wxButton *arg2 = (wxButton *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "button", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StdDialogButtonSizer_SetNegativeButton",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStdDialogButtonSizer, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxButton, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetNegativeButton(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StdDialogButtonSizer_SetCancelButton(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStdDialogButtonSizer *arg1 = (wxStdDialogButtonSizer *) 0 ;
+    wxButton *arg2 = (wxButton *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "button", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StdDialogButtonSizer_SetCancelButton",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStdDialogButtonSizer, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxButton, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetCancelButton(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_StdDialogButtonSizer_GetAffirmativeButton(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStdDialogButtonSizer *arg1 = (wxStdDialogButtonSizer *) 0 ;
@@ -44662,6 +44777,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetForegroundColour", (PyCFunction) _wrap_Window_GetForegroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetBackgroundStyle", (PyCFunction) _wrap_Window_SetBackgroundStyle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetBackgroundStyle", (PyCFunction) _wrap_Window_GetBackgroundStyle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Window_HasTransparentBackground", (PyCFunction) _wrap_Window_HasTransparentBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetCursor", (PyCFunction) _wrap_Window_SetCursor, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetCursor", (PyCFunction) _wrap_Window_GetCursor, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetFont", (PyCFunction) _wrap_Window_SetFont, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -44977,6 +45093,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_StdDialogButtonSizer", (PyCFunction) _wrap_new_StdDialogButtonSizer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StdDialogButtonSizer_AddButton", (PyCFunction) _wrap_StdDialogButtonSizer_AddButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StdDialogButtonSizer_Finalise", (PyCFunction) _wrap_StdDialogButtonSizer_Finalise, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StdDialogButtonSizer_SetAffirmativeButton", (PyCFunction) _wrap_StdDialogButtonSizer_SetAffirmativeButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StdDialogButtonSizer_SetNegativeButton", (PyCFunction) _wrap_StdDialogButtonSizer_SetNegativeButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StdDialogButtonSizer_SetCancelButton", (PyCFunction) _wrap_StdDialogButtonSizer_SetCancelButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StdDialogButtonSizer_GetAffirmativeButton", (PyCFunction) _wrap_StdDialogButtonSizer_GetAffirmativeButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StdDialogButtonSizer_GetApplyButton", (PyCFunction) _wrap_StdDialogButtonSizer_GetApplyButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StdDialogButtonSizer_GetNegativeButton", (PyCFunction) _wrap_StdDialogButtonSizer_GetNegativeButton, METH_VARARGS | METH_KEYWORDS, NULL},

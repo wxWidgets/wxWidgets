@@ -1052,7 +1052,7 @@ class SplitterWindow(_core.Window):
 
         Initializes the splitter window to have one pane.  This should be
         called if you wish to initially view only a single pane in the
-        splitter window.
+        splitter window.  The child window is shown if it is currently hidden.
         """
         return _windows_.SplitterWindow_Initialize(*args, **kwargs)
 
@@ -1060,7 +1060,8 @@ class SplitterWindow(_core.Window):
         """
         SplitVertically(self, Window window1, Window window2, int sashPosition=0) -> bool
 
-        Initializes the left and right panes of the splitter window.
+        Initializes the left and right panes of the splitter window.  The
+        child windows are shown if they are currently hidden.
         """
         return _windows_.SplitterWindow_SplitVertically(*args, **kwargs)
 
@@ -1068,7 +1069,8 @@ class SplitterWindow(_core.Window):
         """
         SplitHorizontally(self, Window window1, Window window2, int sashPosition=0) -> bool
 
-        Initializes the top and bottom panes of the splitter window.
+        Initializes the top and bottom panes of the splitter window.  The
+        child windows are shown if they are currently hidden.
         """
         return _windows_.SplitterWindow_SplitHorizontally(*args, **kwargs)
 
@@ -1319,7 +1321,7 @@ class SplitterEvent(_core.NotifyEvent):
         """
         SetSashPosition(self, int pos)
 
-        This funciton is only meaningful during EVT_SPLITTER_SASH_POS_CHANGING
+        This function is only meaningful during EVT_SPLITTER_SASH_POS_CHANGING
         and EVT_SPLITTER_SASH_POS_CHANGED events.  In the case of _CHANGED
         events, sets the the new sash position. In the case of _CHANGING
         events, sets the new tracking bar position so visual feedback during

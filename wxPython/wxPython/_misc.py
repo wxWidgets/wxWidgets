@@ -216,7 +216,6 @@ wxFileHistoryPtr = wx._misc.FileHistoryPtr
 wxSingleInstanceChecker = wx._misc.SingleInstanceChecker
 wxSingleInstanceCheckerPtr = wx._misc.SingleInstanceCheckerPtr
 wxPreSingleInstanceChecker = wx._misc.PreSingleInstanceChecker
-wxDrawWindowOnDC = wx._misc.DrawWindowOnDC
 wxTipProvider = wx._misc.TipProvider
 wxTipProviderPtr = wx._misc.TipProviderPtr
 wxPyTipProvider = wx._misc.PyTipProvider

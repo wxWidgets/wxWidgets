@@ -1772,7 +1772,7 @@ public:
 };
 #endif
 
- static const wxString wxPyNOTEBOOK_NAME(wxNOTEBOOK_NAME); 
+ static const wxString wxPyNotebookNameStr(wxNotebookNameStr); 
 
 SWIGINTERNSHORT PyObject* 
   SWIG_From_unsigned_SS_long(unsigned long value)
@@ -2193,6 +2193,8 @@ public:
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
+    DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
+
     PYPRIVATE;
 };
 
@@ -2226,6 +2228,8 @@ IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, ShouldInheritColours);
 IMP_PYCALLBACK__COLOUR(wxPyControl, wxControl, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyControl, wxControl, GetDefaultAttributes);
 
+IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, HasTransparentBackground);
+ 
 
 
 static void wxHelpProvider_Destroy(wxHelpProvider *self){ delete self; }
@@ -16153,20 +16157,20 @@ static PyObject * ToggleButton_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static int _wrap_NOTEBOOK_NAME_set(PyObject *) {
-    PyErr_SetString(PyExc_TypeError,"Variable NOTEBOOK_NAME is read-only.");
+static int _wrap_NotebookNameStr_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable NotebookNameStr is read-only.");
     return 1;
 }
 
 
-static PyObject *_wrap_NOTEBOOK_NAME_get(void) {
+static PyObject *_wrap_NotebookNameStr_get(void) {
     PyObject *pyobj;
     
     {
 #if wxUSE_UNICODE
-        pyobj = PyUnicode_FromWideChar((&wxPyNOTEBOOK_NAME)->c_str(), (&wxPyNOTEBOOK_NAME)->Len());
+        pyobj = PyUnicode_FromWideChar((&wxPyNotebookNameStr)->c_str(), (&wxPyNotebookNameStr)->Len());
 #else
-        pyobj = PyString_FromStringAndSize((&wxPyNOTEBOOK_NAME)->c_str(), (&wxPyNOTEBOOK_NAME)->Len());
+        pyobj = PyString_FromStringAndSize((&wxPyNotebookNameStr)->c_str(), (&wxPyNotebookNameStr)->Len());
 #endif
     }
     return pyobj;
@@ -17135,7 +17139,7 @@ static PyObject *_wrap_new_Notebook(PyObject *, PyObject *args, PyObject *kwargs
     wxSize const &arg4_defvalue = wxDefaultSize ;
     wxSize *arg4 = (wxSize *) &arg4_defvalue ;
     long arg5 = (long) 0 ;
-    wxString const &arg6_defvalue = wxPyNOTEBOOK_NAME ;
+    wxString const &arg6_defvalue = wxPyNotebookNameStr ;
     wxString *arg6 = (wxString *) &arg6_defvalue ;
     wxNotebook *result;
     wxPoint temp3 ;
@@ -17241,7 +17245,7 @@ static PyObject *_wrap_Notebook_Create(PyObject *, PyObject *args, PyObject *kwa
     wxSize const &arg5_defvalue = wxDefaultSize ;
     wxSize *arg5 = (wxSize *) &arg5_defvalue ;
     long arg6 = (long) 0 ;
-    wxString const &arg7_defvalue = wxPyNOTEBOOK_NAME ;
+    wxString const &arg7_defvalue = wxPyNotebookNameStr ;
     wxString *arg7 = (wxString *) &arg7_defvalue ;
     bool result;
     wxPoint temp4 ;
@@ -37038,7 +37042,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"SliderNameStr",_wrap_SliderNameStr_get, _wrap_SliderNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ToggleButtonNameStr",_wrap_ToggleButtonNameStr_get, _wrap_ToggleButtonNameStr_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_TOGGLEBUTTON_CLICKED", PyInt_FromLong(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED));
-    SWIG_addvarlink(SWIG_globals,(char*)"NOTEBOOK_NAME",_wrap_NOTEBOOK_NAME_get, _wrap_NOTEBOOK_NAME_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"NotebookNameStr",_wrap_NotebookNameStr_get, _wrap_NotebookNameStr_set);
     {
         PyDict_SetItemString(d,"NB_FIXEDWIDTH", SWIG_From_int((int)(wxNB_FIXEDWIDTH))); 
     }

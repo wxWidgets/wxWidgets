@@ -3276,7 +3276,18 @@ class Event(Object):
         return _core_.Event_IsCommandEvent(*args, **kwargs)
 
     def Skip(*args, **kwargs):
-        """Skip(self, bool skip=True)"""
+        """
+        Skip(self, bool skip=True)
+
+        Called by an event handler, it controls whether additional event
+        handlers bound to this event will be called after the current event
+        handler returns.  Skip(false) (the default setting) will prevent
+        additional event handlers from being called and control will be
+        returned to the sender of the event immediately after the current
+        handler has finished.  Skip(True) will cause the event processing
+        system to continue searching for a handler function for this event.
+
+        """
         return _core_.Event_Skip(*args, **kwargs)
 
     def GetSkipped(*args, **kwargs):
@@ -7341,6 +7352,21 @@ class Window(EvtHandler):
         """
         return _core_.Window_GetBackgroundStyle(*args, **kwargs)
 
+    def HasTransparentBackground(*args, **kwargs):
+        """
+        HasTransparentBackground(self) -> bool
+
+        Returns True if this window's background is transparent (as, for
+        example, for `wx.StaticText`) and should show the parent window's
+        background.
+
+        This method is mostly used internally by the library itself and you
+        normally shouldn't have to call it. You may, however, have to override
+        it in your custom control classes to ensure that background is painted
+        correctly.
+        """
+        return _core_.Window_HasTransparentBackground(*args, **kwargs)
+
     def SetCursor(*args, **kwargs):
         """
         SetCursor(self, Cursor cursor) -> bool
@@ -9618,7 +9644,7 @@ class Sizer(Object):
 
     def GetChildren(*args, **kwargs):
         """
-        GetChildren(sefl) -> list
+        GetChildren(self) -> list
 
         Returns a list of all the `wx.SizerItem` objects managed by the sizer.
         """
@@ -10148,6 +10174,18 @@ class StdDialogButtonSizer(BoxSizer):
         specifc manner.
         """
         return _core_.StdDialogButtonSizer_Finalise(*args, **kwargs)
+
+    def SetAffirmativeButton(*args, **kwargs):
+        """SetAffirmativeButton(self, wxButton button)"""
+        return _core_.StdDialogButtonSizer_SetAffirmativeButton(*args, **kwargs)
+
+    def SetNegativeButton(*args, **kwargs):
+        """SetNegativeButton(self, wxButton button)"""
+        return _core_.StdDialogButtonSizer_SetNegativeButton(*args, **kwargs)
+
+    def SetCancelButton(*args, **kwargs):
+        """SetCancelButton(self, wxButton button)"""
+        return _core_.StdDialogButtonSizer_SetCancelButton(*args, **kwargs)
 
     def GetAffirmativeButton(*args, **kwargs):
         """GetAffirmativeButton(self) -> wxButton"""

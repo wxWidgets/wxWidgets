@@ -1888,7 +1888,7 @@ class TextCtrl(_core.Control):
 
     def HitTest(*args, **kwargs):
         """
-        HitTest(Point pt) -> (result, row, col)
+        HitTest(Point pt) -> (result, col, row)
 
         Find the row, col coresponding to the character at the point given in
         pixels. NB: pt is in device coords but is not adjusted for the client
@@ -3030,7 +3030,7 @@ class BookCtrlBasePtr(BookCtrlBase):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = BookCtrlBase
 _controls_.BookCtrlBase_swigregister(BookCtrlBasePtr)
-NOTEBOOK_NAME = cvar.NOTEBOOK_NAME
+NotebookNameStr = cvar.NotebookNameStr
 
 def BookCtrlBase_GetClassDefaultAttributes(*args, **kwargs):
     """
@@ -3105,7 +3105,7 @@ class Notebook(BookCtrlBase):
     def __init__(self, *args, **kwargs):
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=NOTEBOOK_NAME) -> Notebook
+            Size size=DefaultSize, long style=0, String name=NotebookNameStr) -> Notebook
         """
         newobj = _controls_.new_Notebook(*args, **kwargs)
         self.this = newobj.this
@@ -3116,7 +3116,7 @@ class Notebook(BookCtrlBase):
     def Create(*args, **kwargs):
         """
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=NOTEBOOK_NAME) -> bool
+            Size size=DefaultSize, long style=0, String name=NotebookNameStr) -> bool
         """
         return _controls_.Notebook_Create(*args, **kwargs)
 

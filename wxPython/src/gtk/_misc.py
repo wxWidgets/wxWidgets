@@ -946,10 +946,6 @@ def PreSingleInstanceChecker(*args, **kwargs):
     val.thisown = 1
     return val
 
-
-def DrawWindowOnDC(*args, **kwargs):
-    """DrawWindowOnDC(Window window, DC dc, int method)"""
-    return _misc_.DrawWindowOnDC(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 class TipProvider(object):

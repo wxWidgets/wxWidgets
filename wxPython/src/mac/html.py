@@ -356,6 +356,9 @@ class HtmlWinParser(HtmlParser):
         """SetActualColor(self, Colour clr)"""
         return _html.HtmlWinParser_SetActualColor(*args, **kwargs)
 
+    GetActualColour = GetActualColor
+    SetActualColour = SetActualColor
+
     def SetLink(*args, **kwargs):
         """SetLink(self, String link)"""
         return _html.HtmlWinParser_SetLink(*args, **kwargs)

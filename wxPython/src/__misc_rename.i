@@ -171,7 +171,6 @@
 %rename(StopWatch)                          wxStopWatch;
 %rename(FileHistory)                        wxFileHistory;
 %rename(SingleInstanceChecker)              wxSingleInstanceChecker;
-%rename(DrawWindowOnDC)                     wxDrawWindowOnDC;
 %rename(TipProvider)                        wxTipProvider;
 %rename(PyTipProvider)                      wxPyTipProvider;
 %rename(ShowTip)                            wxShowTip;
