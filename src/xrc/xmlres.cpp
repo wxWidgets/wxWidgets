@@ -271,7 +271,7 @@ static void ProcessPlatformProperty(wxXmlNode *node)
             isok = TRUE;
         else
         {
-            wxStringTokenizer tkn(s, " |");
+            wxStringTokenizer tkn(s, wxT(" |"));
 
             while (tkn.HasMoreTokens())
             {
@@ -497,7 +497,7 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
         for (dnode = dest.GetChildren(); dnode; dnode = dnode->GetNext() )
         {
             if ( dnode->GetName() == node->GetName() &&
-                 dnode->GetPropVal("name", wxEmptyString) == name &&
+                 dnode->GetPropVal(wxT("name"), wxEmptyString) == name &&
                  dnode->GetType() == node->GetType() )
             {
                 MergeNodes(*dnode, *node);
