@@ -8,7 +8,7 @@ import  wx.grid as gridlib
 class MyCellEditor(gridlib.PyGridCellEditor):
     """
     This is a sample GridCellEditor that shows you how to make your own custom
-    grid editors.  All the methods that can be overridden are show here.  The
+    grid editors.  All the methods that can be overridden are shown here.  The
     ones that must be overridden are marked with "*Must Override*" in the
     docstring.
 
