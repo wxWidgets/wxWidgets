@@ -1192,6 +1192,14 @@ Gets the window style that was passed to the constructor or {\bf Create}
 method. {\bf GetWindowStyle()} is another name for the same function.
 
 
+\membersection{wxWindow::GetWindowVariant}\label{wxwindowgetwindowvariant}
+
+\constructor{wxWindowVariant}{GetWindowVariant}{\void}
+
+Returns the value previous passed to 
+\helpref{wxWindow::SetWindowVariant}{wxwindowsetwindowvariant}.
+
+
 \membersection{wxWindow::HasCapture}\label{wxwindowhascapture}
 
 \constfunc{virtual bool}{HasCapture}{\void}
@@ -2959,6 +2967,27 @@ See \helpref{Window styles}{windowstyles} for more information about flags.
 
 \helpref{GetWindowStyleFlag}{wxwindowgetwindowstyleflag}
 
+
+\membersection{wxWindow::SetWindowVariant}\label{wxwindowsetwindowvariant}
+
+\func{void}{SetWindowVariant}{\param{wxWindowVariant}{variant}}
+
+This function can be called under all platforms but only does anything under
+Mac OS X 10.3+ currently. Under this system, each of the standard control can
+exist in several sizes which correpond to the elements of wxWindowVariant
+enum:
+\begin{verbatim}
+enum wxWindowVariant
+{
+    wxWINDOW_VARIANT_NORMAL,        // Normal size
+    wxWINDOW_VARIANT_SMALL,         // Smaller size (about 25 % smaller than normal )
+    wxWINDOW_VARIANT_MINI,          // Mini size (about 33 % smaller than normal )
+    wxWINDOW_VARIANT_LARGE,         // Large size (about 25 % larger than normal )
+};
+\end{verbatim}
+
+By default the controls use the normal size, of course, but this function can
+be used to change this.
 
 
 \membersection{wxWindow::Show}\label{wxwindowshow}
