@@ -54,6 +54,8 @@ public:
     wxMenu(const wxString& title, const wxFunction func)
         : wxMenuBase(title)
     {
+        Init();
+
         Callback(func);
     }
 #endif // wxUSE_MENU_CALLBACK
