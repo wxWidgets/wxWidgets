@@ -9295,8 +9295,34 @@ else
 fi
 
 
+echo $ac_n "checking if make is GNU make""... $ac_c" 1>&6
+echo "configure:9300: checking if make is GNU make" >&5
+if eval "test \"`echo '$''{'wx_cv_prog_makeisgnu'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  
+    if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
+            egrep -s GNU); then
+        wx_cv_prog_makeisgnu="yes"
+    else
+        wx_cv_prog_makeisgnu="no"
+    fi
+
+fi
+
+echo "$ac_t""$wx_cv_prog_makeisgnu" 1>&6
+
+if test "x$wx_cv_prog_makeisgnu" = "xyes"; then
+    IF_GNU_MAKE=""
+else
+    IF_GNU_MAKE="#"
+fi
+
+
+
+if test "x$wx_cv_prog_makeisgnu" != "xyes"; then
 echo $ac_n "checking if make supports VPATH""... $ac_c" 1>&6
-echo "configure:9300: checking if make supports VPATH" >&5
+echo "configure:9326: checking if make supports VPATH" >&5
 if eval "test \"`echo '$''{'wx_cv_prog_makevpath'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -9337,33 +9363,7 @@ setenv MAKE gmake; ./configure  for csh-type shells
 Also please do remember to use gmake in this case every time
 you are trying to compile.
 " 1>&2; exit 1; }
-fi
-
-echo $ac_n "checking if make is GNU make""... $ac_c" 1>&6
-echo "configure:9344: checking if make is GNU make" >&5
-if eval "test \"`echo '$''{'wx_cv_prog_makeisgnu'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  
-    if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
-            grep GNU 2>&1 > /dev/null); then
-        wx_cv_prog_makeisgnu="yes"
-    else
-        wx_cv_prog_makeisgnu="no"
-    fi
-
-fi
-
-echo "$ac_t""$wx_cv_prog_makeisgnu" 1>&6
-
-if test "x$wx_cv_prog_makeisgnu" = "xyes"; then
-    IF_GNU_MAKE=""
-else
-    IF_GNU_MAKE="#"
-fi
-
-
-
+fi fi 
 for ac_prog in 'bison -y' byacc
 do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
