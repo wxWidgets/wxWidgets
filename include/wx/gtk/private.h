@@ -131,5 +131,10 @@ inline wxEventType GtkScrollWinTypeToWx(guint scrollType)
             wxEVT_SCROLLWIN_TOP - wxEVT_SCROLL_TOP;
 }
 
+#ifdef __WXGTK20__
+// Escapes string so that it is valid Pango markup XML string:
+wxString wxEscapeStringForPangoMarkup(const wxString& str);
+#endif
+
 #endif // _WX_GTK_PRIVATE_H_
 

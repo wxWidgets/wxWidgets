@@ -81,6 +81,43 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 }
 #endif
 
+#ifdef __WXGTK20__
+// Escapes string so that it is valid Pango markup XML string:
+wxString wxEscapeStringForPangoMarkup(const wxString& str)
+{
+    size_t len = str.length();
+    wxString out;
+    out.Alloc(len);
+    for (size_t i = 0; i < len; i++)
+    {
+        wxChar c = str[i];
+        switch (c)
+        {
+            case _T('&'):
+                out << _T("&amp;");
+                break;
+            case _T('<'):
+                out << _T("&lt;");
+                break;
+            case _T('>'):
+                out << _T("&gt;");
+                break;
+            case _T('\''):
+                out << _T("&apos;");
+                break;
+            case _T('"'):
+                out << _T("&quot;");
+                break;
+            default:
+                out << c;
+                break;
+        }
+    }
+    return out;
+}
+#endif
+
+
 // ----------------------------------------------------------------------------
 // display characterstics
 // ----------------------------------------------------------------------------
