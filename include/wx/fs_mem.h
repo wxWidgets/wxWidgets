@@ -20,11 +20,7 @@
 #pragma interface "fs_mem.h"
 #endif
 
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
+#include "wx/defs.h"
 
 #if wxUSE_FILESYSTEM
 

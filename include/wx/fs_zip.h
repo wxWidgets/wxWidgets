@@ -14,11 +14,7 @@
 #pragma interface "fs_zip.h"
 #endif
 
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
+#include "wx/defs.h"
 
 #if wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_STREAMS
 

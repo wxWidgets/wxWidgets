@@ -24,13 +24,7 @@
 // wxSocket headers
 // ---------------------------------------------------------------------------
 
-#ifdef WXPREC
-  #include "wx/wxprec.h"
-#else
-  #include "wx/event.h"
-  #include "wx/string.h"
-#endif
-
+#include "wx/event.h"
 #include "wx/sckaddr.h"
 #include "wx/gsocket.h"
 #include "wx/list.h"
