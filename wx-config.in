@@ -15,7 +15,6 @@ cross_compiling="@cross_compiling@"
 target="@host_alias@"
 static_flag="@STATIC_FLAG@"
 inplace_flag="no"
-nogui_flag="no"
 
 # Misc configuration variables:
 
@@ -166,10 +165,9 @@ usage()
 {
     cat <<EOF
 Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--release]
-                 [--basename] [--static] [--libs[=LIBS]] [--gl-libs]
+                 [--basename] [--static] [--libs] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
-                 [--cc] [--cxx] [--ld]
-                 [--inplace]
+                 [--cc] [--cxx] [--ld] [--inplace] [LIBRARIES]
 
 wx-config returns configuration information about the installed
 version of wxWidgets. It may be used to query its version and
@@ -196,7 +194,7 @@ wxWidgets libraries to link against. This list can include both core
 and contrib libraries. Special value "std" stands for all libraries linked
 in by default.
 
---gl-libs option is deprecated, used --libs=gl instead.
+--gl-libs option is deprecated, use "--libs gl" instead.
 
 The --inplace flag allows wx-config to be used from the wxWindows
 build directory and output flags to use the uninstalled version of
@@ -251,8 +249,8 @@ cppflags()
         flags="$flags ${TOOLCHAIN_DLL_DEFS}"
     fi
 
-    if [ $nogui_flag = "yes" ]; then
-        flags="$flags-DwxUSE_GUI=0"
+    if test $nogui_flag = "yes" ; then
+        flags="$flags -DwxUSE_GUI=0"
     fi
 
     echo "$flags${WXCONFIG_INCLUDE} ${WX_LARGEFILE_FLAGS} ${GCC_PRAGMA_FLAGS}"
@@ -261,6 +259,46 @@ cppflags()
 if test $# -eq 0; then
     usage 1 1>&2
 fi
+
+
+# handle libraries list:
+
+libs_list=""
+
+for arg in $*; do
+  case "$arg" in
+    -*)
+      ;;
+    *)
+      libs_list="$libs_list `echo "$arg" | tr ',' ' '`"
+      ;;
+  esac
+done
+      
+if test "x$libs_list" = "x" ; then
+  if test "$is_monolithic" = "0" ; then
+    # link against all libs if none given explicitly:
+    libs_list="$CORE_GUI_LIBS $CORE_BASE_LIBS"
+  fi
+else
+  # always add wxBase, any wxApp needs it:
+  libs_list="$libs_list base"
+fi
+
+# determine if at least one gui lib was used:
+nogui_flag="yes"
+for i in $libs_list; do
+  case $i in
+      base|net)
+        ;;
+      *)
+        nogui_flag="no"
+        ;;
+  esac
+done
+
+
+# handle options:
 
 while test $# -gt 0; do
   case "$1" in
@@ -322,19 +360,7 @@ while test $# -gt 0; do
       echo `eval echo ${MACRESWXCONFIG}`
       ;;
 
-    --libs*)
-      # find if the argument was --libs=list,of,libs or --libs:
-      if test "x$optarg" = "x" ; then
-          if test "$is_monolithic" = "0" ; then
-              # link against all libs if none given explicitly:
-              libs_list="$CORE_GUI_LIBS $CORE_BASE_LIBS"
-          fi
-      else
-          libs_list=`echo "$optarg" | tr ',' ' '`
-          # always add wxBase, any wxApp needs it:
-          libs_list="$libs_list base"
-      fi
-
+    --libs)
       # include install directory only if it is not default:
       if test "${libdir}" != "/usr/lib" \
               -a \( "${cross_compiling}" != "yes" \
@@ -369,11 +395,9 @@ while test $# -gt 0; do
           # we may need to replace "std" alias with its expansion
           newlist=
           hadstd=0
-          hadgui=0
           for i in $libs_list; do
               case $i in
                   std)
-                    hadgui=1
                     hadstd=1
                     ;;
 
@@ -385,12 +409,7 @@ while test $# -gt 0; do
                     fi
                     ;;
 
-                  net)
-                    newlist="$newlist $i"
-                    ;;
-
                   *)
-                    hadgui=1
                     newlist="$newlist $i"
                     ;;
               esac
@@ -398,10 +417,6 @@ while test $# -gt 0; do
           libs_list="$newlist"
           if [ $hadstd = 1 ]; then
               libs_list="$libs_list $CORE_GUI_LIBS $CORE_BASE_LIBS"
-          fi
-
-          if [ $hadgui = 0 ]; then
-              nogui_flag="yes"
           fi
 
           # in multilib mode, link against all sublibraries:
@@ -423,7 +438,7 @@ while test $# -gt 0; do
     --ld)
       echo $LD
       ;;
-    *)
+    --help|-h)
       usage 1 1>&2
       ;;
   esac
