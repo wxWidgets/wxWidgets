@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        thread.cpp
-// Purpose:     wxThread Implementation. For Unix ports, see e.g. src/gtk
+// Purpose:     wxThread Implementation for Posix threads
 // Author:      Original from Wolfram Gloger/Guilhem Lavaux
-// Modified by:
+// Modified by: Robert Roebling
 // Created:     04/22/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Wolfram Gloger (1996, 1997); Guilhem Lavaux (1998)
@@ -13,56 +13,127 @@
 #pragma implementation "thread.h"
 #endif
 
+#include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <errno.h>
 #include "wx/module.h"
 #include "wx/thread.h"
 #include "wx/utils.h"
+#include "wx/log.h"
 
-enum thread_state {
+#include <stdio.h>
+#include <unistd.h>
+
+// for select()
+#include <sys/time.h>
+#include <sys/types.h>
+#ifdef __sgi
+#include <bstring.h>
+#endif
+
+//--------------------------------------------------------------------
+// constants
+//--------------------------------------------------------------------
+
+enum thread_state 
+{
   STATE_IDLE = 0,
   STATE_RUNNING,
+  STATE_PAUSING,
+  STATE_PAUSED,
   STATE_CANCELED,
   STATE_EXITED
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Static variables
-/////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------
+// global data
+//--------------------------------------------------------------------
 
-wxMutex *wxMainMutex; // controls access to all GUI functions
+static pthread_t p_mainid;
 
-/////////////////////////////////////////////////////////////////////////////
-// Windows implementation
-/////////////////////////////////////////////////////////////////////////////
+wxMutex *wxMainMutex = (wxMutex*) NULL; /* controls access to all GUI functions */
 
-class wxMutexInternal {
+/* TODO for Xt */
+
+static int p_thrd_pipe[2] = { -1, -1 };
+
+//-------------------------------------------------------------------------
+// global functions
+//-------------------------------------------------------------------------
+
+static void wxThreadGuiInit()
+{
+/* TODO for Xt */
+}
+
+static void wxThreadGuiExit()
+{
+/* TODO for Xt */
+}
+
+void wxMutexGuiEnter()
+{
+  if (wxMainMutex)
+    wxMainMutex->Lock();
+}
+
+void wxMutexGuiLeave()
+{
+  if (wxMainMutex)
+    wxMainMutex->Unlock();
+}
+
+//--------------------------------------------------------------------
+// wxMutex (Posix implementation)
+//--------------------------------------------------------------------
+
+class wxMutexInternal 
+{
 public:
-  // TODO: internal mutex handle
+  pthread_mutex_t p_mutex;
 };
 
 wxMutex::wxMutex()
 {
     p_internal = new wxMutexInternal;
-    // TODO: create internal mutext handle
+    pthread_mutex_init(&(p_internal->p_mutex), NULL);
     m_locked = 0;
 }
 
 wxMutex::~wxMutex()
 {
     if (m_locked > 0)
-        wxDebugMsg("wxMutex warning: freeing a locked mutex (%d locks)\n", m_locked);
-    // TODO: free internal mutext handle
+        wxLogDebug( "wxMutex warning: freeing a locked mutex (%d locks)\n", m_locked );
+
+    pthread_mutex_destroy(&(p_internal->p_mutex));
+    delete p_internal;
 }
 
 wxMutexError wxMutex::Lock()
 {
-    // TODO
+    int err;
+
+    err = pthread_mutex_lock(&(p_internal->p_mutex));
+    if (err == EDEADLK)
+        return wxMUTEX_DEAD_LOCK;
+	
     m_locked++;
     return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::TryLock()
 {
-    // TODO
+    int err;
+
+    if (m_locked)
+        return wxMUTEX_BUSY;
+	
+    err = pthread_mutex_trylock(&(p_internal->p_mutex));
+    switch (err) 
+    {
+        case EBUSY: return wxMUTEX_BUSY;
+    }
     m_locked++;
     return wxMUTEX_NO_ERROR;
 }
@@ -71,159 +142,254 @@ wxMutexError wxMutex::Unlock()
 {
     if (m_locked > 0)
         m_locked--;
-
-    // TODO
+    else
+        return wxMUTEX_UNLOCKED;
+	
+    pthread_mutex_unlock(&(p_internal->p_mutex));
     return wxMUTEX_NO_ERROR;
 }
 
-class wxConditionInternal {
+//--------------------------------------------------------------------
+// wxCondition (Posix implementation)
+//--------------------------------------------------------------------
+
+class wxConditionInternal 
+{
 public:
-  // TODO: internal handle
-  int waiters;
+  pthread_cond_t p_condition;
 };
 
 wxCondition::wxCondition()
 {
     p_internal = new wxConditionInternal;
-    // TODO: create internal handle
-    p_internal->waiters = 0;
+    pthread_cond_init(&(p_internal->p_condition), NULL);
 }
 
 wxCondition::~wxCondition()
 {
-    // TODO: destroy internal handle
+    pthread_cond_destroy(&(p_internal->p_condition));
+    delete p_internal;
 }
 
 void wxCondition::Wait(wxMutex& mutex)
 {
-    mutex.Unlock();
-    p_internal->waiters++;
-    // TODO wait here
-    p_internal->waiters--;
-    mutex.Lock();
+    pthread_cond_wait(&(p_internal->p_condition), &(mutex.p_internal->p_mutex));
 }
 
-bool wxCondition::Wait(wxMutex& mutex, unsigned long sec,
-                       unsigned long nsec)
+bool wxCondition::Wait(wxMutex& mutex, unsigned long sec, unsigned long nsec)
 {
-    mutex.Unlock();
-    p_internal->waiters++;
+    struct timespec tspec;
 
-    // TODO wait here
-    p_internal->waiters--;
-    mutex.Lock();
-
-    return FALSE;
+    tspec.tv_sec = time(NULL)+sec;
+    tspec.tv_nsec = nsec;
+    return (pthread_cond_timedwait(&(p_internal->p_condition), &(mutex.p_internal->p_mutex), &tspec) != ETIMEDOUT);
 }
 
 void wxCondition::Signal()
 {
-    // TODO
+    pthread_cond_signal(&(p_internal->p_condition));
 }
 
 void wxCondition::Broadcast()
 {
-    // TODO
+    pthread_cond_broadcast(&(p_internal->p_condition));
 }
 
-class wxThreadInternal {
+//--------------------------------------------------------------------
+// wxThread (Posix implementation)
+//--------------------------------------------------------------------
+
+class wxThreadInternal 
+{
 public:
-    // TODO
+  wxThreadInternal() { state = STATE_IDLE; }
+  ~wxThreadInternal() {}
+  static void *PthreadStart(void *ptr);
+  pthread_t thread_id;
+  int state;
+  int prio;
+  int defer_destroy;
 };
+
+void *wxThreadInternal::PthreadStart(void *ptr)
+{
+    wxThread *thread = (wxThread *)ptr;
+
+    // Call the main entry
+    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+    void* status = thread->Entry();
+
+    thread->Exit(status);
+
+    return NULL;
+}
 
 wxThreadError wxThread::Create()
 {
-    // TODO
+    pthread_attr_t a;
+    int min_prio, max_prio, p;
+    struct sched_param sp;
+
+    if (p_internal->state != STATE_IDLE)
+        return wxTHREAD_RUNNING;
+
+    // Change thread priority
+    pthread_attr_init(&a);
+    pthread_attr_getschedpolicy(&a, &p);
+
+    min_prio = sched_get_priority_min(p);
+    max_prio = sched_get_priority_max(p);
+
+    pthread_attr_getschedparam(&a, &sp);
+    sp.sched_priority = min_prio +
+               (p_internal->prio*(max_prio-min_prio))/100;
+    pthread_attr_setschedparam(&a, &sp);
+
+    // this is the point of no return
+    p_internal->state = STATE_RUNNING;
+    if (pthread_create(&p_internal->thread_id, &a,
+                     wxThreadInternal::PthreadStart, (void *)this) != 0) 
+    {
+        p_internal->state = STATE_IDLE;
+        pthread_attr_destroy(&a);
+        return wxTHREAD_NO_RESOURCE;
+    }
+    pthread_attr_destroy(&a);
+
     return wxTHREAD_NO_ERROR;
+}
+
+void wxThread::SetPriority(int prio)
+{
+    if (p_internal->state == STATE_RUNNING)
+        return;
+
+    if (prio > 100) prio = 100;
+	
+    if (prio < 0) prio = 0;
+    
+    p_internal->prio = prio;
+}
+
+int wxThread::GetPriority() const
+{
+    return p_internal->prio;
+}
+
+void wxThread::DeferDestroy(bool on)
+{
+    if (on)
+        pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
+    else
+        pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 }
 
 wxThreadError wxThread::Destroy()
 {
-    // TODO
+    int res = 0;
+
+    if (p_internal->state == STATE_RUNNING) 
+    {
+        res = pthread_cancel(p_internal->thread_id);
+        if (res == 0)
+	    p_internal->state = STATE_CANCELED;
+    }
+
     return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Pause()
 {
-    // TODO
+    if (p_internal->state != STATE_RUNNING)
+        return wxTHREAD_NOT_RUNNING;
+
+    if (!p_internal->defer_destroy)
+        return wxTHREAD_MISC_ERROR;
+
+    p_internal->state = STATE_PAUSING;
     return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Resume()
 {
-    // TODO
+    if (p_internal->state == STATE_PAUSING || p_internal->state == STATE_PAUSED)
+      p_internal->state = STATE_RUNNING;
+
     return wxTHREAD_NO_ERROR;
-}
-
-void wxThread::Exit(void *status)
-{
-    // TODO
-}
-
-void wxThread::SetPriority(int prio)
-{
-    // TODO
-}
-
-int wxThread::GetPriority() const
-{
-    // TODO
-    return 0;
-}
-
-void wxThread::DeferDestroy(bool on)
-{
-    // TODO
-}
-
-void wxThread::TestDestroy()
-{
-    // TODO
 }
 
 void *wxThread::Join()
 {
-    // TODO
-    return (void*) NULL;
+    void* status = 0;
+
+    if (p_internal->state != STATE_IDLE) 
+    {
+        bool do_unlock = wxThread::IsMain();
+
+        while (p_internal->state == STATE_RUNNING)
+            wxYield();
+
+        if (do_unlock) wxMainMutex->Unlock();
+      
+        pthread_join(p_internal->thread_id, &status);
+      
+        if (do_unlock) wxMainMutex->Lock();
+
+        p_internal->state = STATE_IDLE;
+    }
+    
+    return status;
 }
 
 unsigned long wxThread::GetID() const
 {
-    // TODO
-    return 0;
+    return p_internal->thread_id;
 }
 
-/*
-wxThread *wxThread::GetThreadFromID(unsigned long id)
+void wxThread::Exit(void *status)
 {
-    // TODO
-    return NULL;
-}
-*/
+    wxThread* ptr = this;
 
-bool wxThread::IsAlive() const
-{
-    // TODO
-    return FALSE;
+/*    THREAD_SEND_EXIT_MSG(ptr);  TODO for Xt */
+    
+    p_internal->state = STATE_EXITED;
+    pthread_exit(status);
 }
 
-bool wxThread::IsRunning() const
+void wxThread::TestDestroy()
 {
-    // TODO
-    return FALSE;
+    if (p_internal->state == STATE_PAUSING) 
+    {
+        p_internal->state = STATE_PAUSED;
+        while (p_internal->state == STATE_PAUSED) 
+	{
+            pthread_testcancel();
+            usleep(1);
+        }
+    }
+    pthread_testcancel();
 }
 
 bool wxThread::IsMain()
 {
-    // TODO
-    return FALSE;
+    return (bool)pthread_equal(pthread_self(), p_mainid);
+}
+
+bool wxThread::IsRunning() const
+{
+    return (p_internal->state == STATE_RUNNING);
+}
+
+bool wxThread::IsAlive() const
+{
+    return (p_internal->state == STATE_RUNNING) ||
+           (p_internal->state == STATE_PAUSING) ||
+           (p_internal->state == STATE_PAUSED);
 }
 
 wxThread::wxThread()
 {
     p_internal = new wxThreadInternal();
-
-    // TODO
 }
 
 wxThread::~wxThread()
@@ -239,23 +405,33 @@ void wxThread::OnExit()
     Join();
 }
 
-// Automatic initialization
-class wxThreadModule : public wxModule {
-  DECLARE_DYNAMIC_CLASS(wxThreadModule)
-public:
-  virtual bool OnInit() {
-    /* TODO p_mainid = GetCurrentThread(); */
-    wxMainMutex = new wxMutex();
-    wxMainMutex->Lock();
-    return TRUE;
-  }
+//--------------------------------------------------------------------
+// wxThreadModule 
+//--------------------------------------------------------------------
 
-  // Global cleanup
-  virtual void OnExit() {
-    wxMainMutex->Unlock();
-    delete wxMainMutex;
+class wxThreadModule : public wxModule 
+{
+  DECLARE_DYNAMIC_CLASS(wxThreadModule)
+  
+public:
+  virtual bool OnInit() 
+    {
+        wxMainMutex = new wxMutex();
+        wxThreadGuiInit();
+        p_mainid = pthread_self();
+	wxMainMutex->Lock();
+
+       return TRUE;
+    }
+
+  virtual void OnExit() 
+  {
+      wxMainMutex->Unlock();
+      wxThreadGuiExit();
+      delete wxMainMutex;
   }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
+
 

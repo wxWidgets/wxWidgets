@@ -105,7 +105,6 @@ LIB_CPP_SRC=\
  motif/metafile.cpp \
  motif/minifram.cpp \
  motif/msgdlg.cpp \
- motif/notebook.cpp \
  motif/palette.cpp \
  motif/pen.cpp \
  motif/print.cpp \
@@ -138,6 +137,7 @@ LIB_CPP_SRC=\
  generic/listctrl.cpp \
  generic/laywin.cpp \
  generic/msgdlgg.cpp \
+ generic/notebook.cpp \
  generic/panelg.cpp \
  generic/printps.cpp \
  generic/prntdlgg.cpp \

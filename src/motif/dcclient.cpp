@@ -57,8 +57,10 @@ static Pixmap bdiag, cdiag, fdiag, cross, horiz, verti;
 //-----------------------------------------------------------------------------
 
 #define RAD2DEG 57.2957795131
+
 // Fudge factor. Obsolete?
-#define WX_GC_CF 0
+  // No. Robert Roebling
+#define WX_GC_CF 1
 
 //-----------------------------------------------------------------------------
 // wxWindowDC
@@ -1515,7 +1517,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
           break;
         case wxCAP_ROUND:
         default:
-          cap = CapRound;
+          cap = (scaled_width <= 1) ? CapNotLast : CapRound;
           break;
       }
 

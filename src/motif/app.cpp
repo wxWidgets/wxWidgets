@@ -28,6 +28,7 @@
 #include "wx/log.h"
 #include "wx/module.h"
 #include "wx/memory.h"
+#include "wx/thread.h"
 
 #if wxUSE_WX_RESOURCES
 #include "wx/resource.h"
@@ -93,7 +94,7 @@ bool wxApp::Initialize()
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
 
     wxModule::RegisterModules();
-    wxASSERT( wxModule::InitializeModules() == TRUE );
+    if (!wxModule::InitializeModules()) return FALSE;
 
     return TRUE;
 }
@@ -293,7 +294,17 @@ int wxApp::MainLoop()
       XtAppNextEvent( (XtAppContext) wxTheApp->GetAppContext(), &event);
 
       ProcessXEvent((WXEvent*) & event);
-      ProcessIdle();
+      
+      if (XtAppPending( (XtAppContext) wxTheApp->GetAppContext() ) == 0)
+      {
+        if (!ProcessIdle())
+        { 
+          wxMutexGuiLeave();
+          usleep(20);  
+          wxMutexGuiEnter();
+	}
+      }
+      
     }
 
     return 0;
