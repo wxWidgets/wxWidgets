@@ -38,12 +38,14 @@
 
     if ( Config("dll") ) {
 	$DLL="Dll";
+	$DLL_SUFFIX="d";
 	$DLL_OR_LIB=(Config("wxbase") ? "wxbase" : "wxmsw") . "221";
 	$DLL_FLAGS="/D WXUSINGDLL ";
 	$EXTRA_LIBS="";
     }
     else {
 	$DLL="";
+	$DLL_SUFFIX="";
 	$DLL_OR_LIB="wxWindows";
 	$DLL_FLAGS=" ";
 	#! actually this depends on the contents of setup.h
@@ -69,7 +71,7 @@
 	    $vc_base_libs .= "comctl32.lib rpcrt4.lib wsock32.lib ";
 
 	    $vc_link_release = "$WXDIR\\Release$DLL\\$DLL_OR_LIB.lib ";
-	    $vc_link_debug = "$WXDIR\\Debug$DLL\\$DLL_OR_LIB" . "d.lib ";
+	    $vc_link_debug = "$WXDIR\\Debug$DLL\\$DLL_OR_LIB$DLL_SUFFIX.lib ";
 	    foreach ( split(/ /, $EXTRA_LIBS) ) {
 		$vc_link_release .= "$WXDIR\\src\\$_\\Release\\$_.lib ";
 		$vc_link_debug .= "$WXDIR\\src\\$_\\Debug\\$_.lib ";
@@ -77,6 +79,11 @@
 	}
 	$vc_link_release .= '/nologo /subsystem:windows /machine:I386';
 	$vc_link_debug   .= '/nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept';
+
+	foreach ( split(/ /, Project('LIBPATH')) ) {
+	    $vc_link_release .= " /libpath:$_\\Release";
+	    $vc_link_debug .= " /libpath:$_\\Debug";
+	}
 
 	$vc_cpp_def_common = '/D "WIN32" /D "_WINDOWS" ' . $DLL_FLAGS;
 	$vc_cpp_def_release = '/D "NDEBUG" ' . $vc_cpp_def_common;
@@ -213,13 +220,13 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "ReleaseDLL"
-# PROP BASE Intermediate_Dir "ReleaseDLL"
+# PROP BASE Output_Dir "Release#$ $text = "$DLL" . '"'
+# PROP BASE Intermediate_Dir "Release#$ $text = "$DLL" . '"'
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseDLL"
-# PROP Intermediate_Dir "ReleaseDLL"
+# PROP Output_Dir "Release#$ $text = "$DLL" . '"'
+# PROP Intermediate_Dir "Release#$ $text = "$DLL" . '"'
 #$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
 # PROP Target_Dir ""
 # ADD BASE CPP #$ Expand("VC_BASE_CPP_RELEASE");
@@ -241,13 +248,13 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "DebugDLL"
-# PROP BASE Intermediate_Dir "DebugDLL"
+# PROP BASE Output_Dir "Debug#$ $text = "$DLL" . '"'
+# PROP BASE Intermediate_Dir "Debug#$ $text = "$DLL" . '"'
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "DebugDLL"
-# PROP Intermediate_Dir "DebugDLL"
+# PROP Output_Dir "Debug#$ $text = "$DLL" . '"'
+# PROP Intermediate_Dir "Debug#$ $text = "$DLL" . '"'
 #$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
 # PROP Target_Dir ""
 # ADD BASE CPP #$ Expand("VC_BASE_CPP_DEBUG");
