@@ -213,10 +213,10 @@ static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
 // this function is a wrapper around strftime(3)
 static wxString CallStrftime(const wxChar *format, const tm* tm)
 {
-    wxChar buf[1024];
+    wxChar buf[4096];
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, tm) )
     {
-        // is ti really possible that 1024 is too short?
+        // buffer is too small?
         wxFAIL_MSG(_T("strftime() failed"));
     }
 
@@ -574,13 +574,18 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month, bool abbr)
 {
     wxCHECK_MSG( month != Inv_Month, _T(""), _T("invalid month") );
 
+    // notice that we must set all the fields to avoid confusing libc (GNU one
+    // gets confused to a crash if we don't do this)
     tm tm;
     tm.tm_hour =
     tm.tm_min =
-    tm.tm_sec = 0;
+    tm.tm_sec =
+    tm.tm_wday =
+    tm.tm_yday = 0;
     tm.tm_mday = 1;
     tm.tm_mon = month;
     tm.tm_year = 76;  // any year will do
+    tm.tm_isdst = -1;
 
     return CallStrftime(abbr ? _T("%b") : _T("%B"), &tm);
 }
@@ -1407,6 +1412,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
 
 wxDateTime::wxDateTime_t wxDateTime::GetWeekOfYear(const TimeZone& tz) const
 {
+#if 0
     // the first week of the year is the one which contains Jan, 4 (according
     // to ISO standard rule), so the year day N0 = 4 + 7*W always lies in the
     // week W+1. As any day N = 7*W + 4 + (N - 4)%7, it lies in the same week
@@ -1428,6 +1434,25 @@ wxDateTime::wxDateTime_t wxDateTime::GetWeekOfYear(const TimeZone& tz) const
     }
 
     return week;
+#else // this seems to be a bit simpler and I believe is also correct
+    return (WeekDay)((GetDayOfYear() - (GetWeekDay() - 1 + 7) % 7 + 7) / 7);
+#endif // 0/1
+}
+
+wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(const TimeZone& tz) const
+{
+    size_t nWeek = 0;
+
+    wxDateTime dt(*this);
+    do
+    {
+        nWeek++;
+
+        dt -= wxTimeSpan::Week();
+    }
+    while ( dt.GetMonth(tz) == GetMonth(tz) );
+
+    return nWeek;
 }
 
 // ----------------------------------------------------------------------------
@@ -1546,83 +1571,280 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
         //else: use generic code below
     }
 
-    // use a hack and still use strftime(): first find the YEAR which is a year
-    // in the strftime() range (1970 - 2038) whose Jan 1 falls on the same week
-    // day as the Jan 1 of the real year. Then make a copy of the format and
-    // replace all occurences of YEAR in it with some unique string not
-    // appearing anywhere else in it, then use strftime() to format the date in
-    // year YEAR and then replace YEAR back by the real year and the unique
-    // replacement string back with YEAR. Notice that "all occurences of YEAR"
-    // means all occurences of 4 digit as well as 2 digit form!
+    // we only parse ANSI C format specifications here, no POSIX 2
+    // complications, no GNU extensions
+    Tm tm = GetTm(tz);
 
-    // NB: may be it would be simpler to "honestly" reimplement strftime()?
+    // used for calls to strftime() when we only deal with time
+    struct tm tmTimeOnly;
+    tmTimeOnly.tm_hour = tm.hour;
+    tmTimeOnly.tm_min = tm.min;
+    tmTimeOnly.tm_sec = tm.sec;
+    tmTimeOnly.tm_wday = 0;
+    tmTimeOnly.tm_yday = 0;
+    tmTimeOnly.tm_mday = 1;         // any date will do
+    tmTimeOnly.tm_mon = 0;
+    tmTimeOnly.tm_year = 76;
+    tmTimeOnly.tm_isdst = 0;        // no DST, we adjust for tz ourselves
 
-    // find the YEAR: normally, for any year X, Jan 1 or the year X + 28 is the
-    // same weekday as Jan 1 of X (because the weekday advances by 1 for each
-    // normal X and by 2 for each leap X, hence by 5 every 4 years or by 35
-    // which is 0 mod 7 every 28 years) but this rule breaks down if there are
-    // years between X and Y which are divisible by 4 but not leap (i.e.
-    // divisible by 100 but not 400), hence the correction.
-
-    int yearReal = GetYear(tz);
-    int year = 1970 + yearReal % 28;
-
-    int nCenturiesInBetween = (year / 100) - (yearReal / 100);
-    int nLostWeekDays = nCenturiesInBetween - (nCenturiesInBetween / 400);
-
-    // we have to gain back the "lost" weekdays...
-    while ( (nLostWeekDays % 7) != 0 )
+    wxString tmp, res;
+    for ( const wxChar *p = format; *p; p++ )
     {
-        nLostWeekDays += year++ % 4 ? 1 : 2;
+        if ( *p != _T('%') )
+        {
+            // copy as is
+            res += *p;
+
+            continue;
+        }
+
+        // start of the format specification
+        switch ( *++p )
+        {
+            case _T('a'):       // a weekday name
+            case _T('A'):
+                // second parameter should be TRUE for abbreviated names
+                res += GetWeekDayName(tm.GetWeekDay(), *p == _T('a'));
+                break;
+
+            case _T('b'):       // a month name
+            case _T('B'):
+                // second parameter should be TRUE for abbreviated names
+                res += GetMonthName(tm.mon, *p == _T('b'));
+                break;
+
+            case _T('c'):       // locale default date and time  representation
+            case _T('x'):       // locale default date representation
+                //
+                // the problem: there is no way to know what do these format
+                // specifications correspond to for the current locale.
+                //
+                // the solution: use a hack and still use strftime(): first
+                // find the YEAR which is a year in the strftime() range (1970
+                // - 2038) whose Jan 1 falls on the same week day as the Jan 1
+                // of the real year. Then make a copy of the format and
+                // replace all occurences of YEAR in it with some unique
+                // string not appearing anywhere else in it, then use
+                // strftime() to format the date in year YEAR and then replace
+                // YEAR back by the real year and the unique replacement
+                // string back with YEAR. Notice that "all occurences of YEAR"
+                // means all occurences of 4 digit as well as 2 digit form!
+                //
+                // the bugs: we assume that neither of %c nor %x contains any
+                // fields which may change between the YEAR and real year. For
+                // example, the week number (%U, %W) and the day number (%j)
+                // will change if one of these years is leap and the other one
+                // is not!
+                {
+                    // find the YEAR: normally, for any year X, Jan 1 or the
+                    // year X + 28 is the same weekday as Jan 1 of X (because
+                    // the weekday advances by 1 for each normal X and by 2
+                    // for each leap X, hence by 5 every 4 years or by 35
+                    // which is 0 mod 7 every 28 years) but this rule breaks
+                    // down if there are years between X and Y which are
+                    // divisible by 4 but not leap (i.e. divisible by 100 but
+                    // not 400), hence the correction.
+
+                    int yearReal = GetYear(tz);
+                    int mod28 = yearReal % 28;
+
+                    // be careful to not go too far - we risk to leave the
+                    // supported range
+                    int year;
+                    if ( mod28 < 10 )
+                    {
+                        year = 1988 + mod28;      // 1988 == 0 (mod 28)
+                    }
+                    else
+                    {
+                        year = 1970 + mod28 - 10; // 1970 == 10 (mod 28)
+                    }
+
+                    int nCentury = year / 100,
+                        nCenturyReal = yearReal / 100;
+
+                    // need to adjust for the years divisble by 400 which are
+                    // not leap but are counted like leap ones if we just take
+                    // the number of centuries in between for nLostWeekDays
+                    int nLostWeekDays = (nCentury - nCenturyReal) -
+                                        (nCentury / 4 - nCenturyReal / 4);
+
+                    // we have to gain back the "lost" weekdays: note that the
+                    // effect of this loop is to not do anything to
+                    // nLostWeekDays (which we won't use any more), but to
+                    // (indirectly) set the year correctly
+                    while ( (nLostWeekDays % 7) != 0 )
+                    {
+                        nLostWeekDays += year++ % 4 ? 1 : 2;
+                    }
+
+                    // at any rate, we couldn't go further than 1988 + 9 + 28!
+                    wxASSERT_MSG( year < 2030,
+                                  _T("logic error in wxDateTime::Format") );
+
+                    wxString strYear, strYear2;
+                    strYear.Printf(_T("%d"), year);
+                    strYear2.Printf(_T("%d"), year % 100);
+
+                    // find two strings not occuring in format (this is surely
+                    // not optimal way of doing it... improvements welcome!)
+                    wxString fmt = format;
+                    wxString replacement = (wxChar)-1;
+                    while ( fmt.Find(replacement) != wxNOT_FOUND )
+                    {
+                        replacement << (wxChar)-1;
+                    }
+
+                    wxString replacement2 = (wxChar)-2;
+                    while ( fmt.Find(replacement) != wxNOT_FOUND )
+                    {
+                        replacement << (wxChar)-2;
+                    }
+
+                    // replace all occurences of year with it
+                    bool wasReplaced = fmt.Replace(strYear, replacement) > 0;
+                    if ( !wasReplaced )
+                        wasReplaced = fmt.Replace(strYear2, replacement2) > 0;
+
+                    // use strftime() to format the same date but in supported
+                    // year
+                    //
+                    // NB: we assume that strftime() doesn't check for the
+                    //     date validity and will happily format the date
+                    //     corresponding to Feb 29 of a non leap year (which
+                    //     may happen if yearReal was leap and year is not)
+                    struct tm tmAdjusted;
+                    tmAdjusted.tm_hour = tm.hour;
+                    tmAdjusted.tm_min = tm.min;
+                    tmAdjusted.tm_sec = tm.sec;
+                    tmAdjusted.tm_wday = tm.GetWeekDay();
+                    tmAdjusted.tm_yday = GetDayOfYear();
+                    tmAdjusted.tm_mday = tm.mday;
+                    tmAdjusted.tm_mon = tm.mon;
+                    tmAdjusted.tm_year = year - 1900;
+                    tmAdjusted.tm_isdst = 0; // no DST, already adjusted
+                    wxString str = CallStrftime(*p == _T('c') ? _T("%c")
+                                                              : _T("%x"),
+                                                &tmAdjusted);
+
+                    // now replace the occurence of 1999 with the real year
+                    wxString strYearReal, strYearReal2;
+                    strYearReal.Printf(_T("%04d"), yearReal);
+                    strYearReal2.Printf(_T("%02d"), yearReal % 100);
+                    str.Replace(strYear, strYearReal);
+                    str.Replace(strYear2, strYearReal2);
+
+                    // and replace back all occurences of replacement string
+                    if ( wasReplaced )
+                    {
+                        str.Replace(replacement2, strYear2);
+                        str.Replace(replacement, strYear);
+                    }
+
+                    res += str;
+                }
+                break;
+
+            case _T('d'):       // day of a month (01-31)
+                tmp.Printf(_T("%02d"), tm.mday);
+                res += tmp;
+                break;
+
+            case _T('H'):       // hour in 24h format (00-23)
+                tmp.Printf(_T("%02d"), tm.hour);
+                res += tmp;
+                break;
+
+            case _T('I'):       // hour in 12h format (01-12)
+                {
+                    // 24h -> 12h, 0h -> 12h too
+                    int hour12 = tm.hour > 12 ? tm.hour - 12
+                                              : tm.hour ? tm.hour : 12;
+                    tmp.Printf(_T("%02d"), hour12);
+                    res += tmp;
+                }
+                break;
+
+            case _T('j'):       // day of the year
+                tmp.Printf(_T("%03d"), GetDayOfYear(tz));
+                res += tmp;
+                break;
+
+            case _T('m'):       // month as a number (01-12)
+                tmp.Printf(_T("%02d"), tm.mon + 1);
+                res += tmp;
+                break;
+
+            case _T('M'):       // minute as a decimal number (00-59)
+                tmp.Printf(_T("%02d"), tm.min);
+                res += tmp;
+                break;
+
+            case _T('p'):       // AM or PM string
+                res += CallStrftime(_T("%p"), &tmTimeOnly);
+                break;
+
+            case _T('S'):       // second as a decimal number (00-61)
+                tmp.Printf(_T("%02d"), tm.sec);
+                res += tmp;
+                break;
+
+            case _T('U'):       // week number in the year (Sunday 1st week day)
+                tmp.Printf(_T("%02d"),
+                           (GetDayOfYear(tz) - tm.GetWeekDay() + 7) / 7);
+                res += tmp;
+                break;
+
+            case _T('W'):       // week number in the year (Monday 1st week day)
+                tmp.Printf(_T("%02d"), GetWeekOfYear(tz));
+                res += tmp;
+                break;
+
+            case _T('w'):       // weekday as a number (0-6), Sunday = 0
+                tmp.Printf(_T("%d"), tm.GetWeekDay());
+                res += tmp;
+                break;
+
+            // case _T('x'): -- handled with "%c"
+
+            case _T('X'):       // locale default time representation
+                // just use strftime() to format the time for us
+                res += CallStrftime(_T("%X"), &tmTimeOnly);
+                break;
+
+            case _T('y'):       // year without century (00-99)
+                tmp.Printf(_T("%02d"), tm.year % 100);
+                res += tmp;
+                break;
+
+            case _T('Y'):       // year with century
+                tmp.Printf(_T("%04d"), tm.year);
+                res += tmp;
+                break;
+
+            case _T('Z'):       // timezone name
+                res += CallStrftime(_T("%Z"), &tmTimeOnly);
+                break;
+
+            default:
+                wxFAIL_MSG(_T("unknown format specificator"));
+
+                // fall through and just copy it nevertheless
+
+            case _T('%'):       // a percent sign
+                res += *p;
+                break;
+
+            case 0:
+                wxFAIL_MSG(_T("missing format at the end of string"));
+
+                // just put the '%' which was the last char in format
+                res += _T('%');
+                break;
+        }
     }
 
-    // at any rate, we can't go further than 1997 + 28!
-    wxASSERT_MSG( year < 2030, _T("logic error in wxDateTime::Format") );
-
-    wxString strYear, strYear2;
-    strYear.Printf(_T("%d"), year);
-    strYear2.Printf(_T("%d"), year % 100);
-
-    // find two strings not occuring in format (this is surely not optimal way
-    // of doing it... improvements welcome!)
-    wxString fmt = format;
-    wxString replacement = (wxChar)-1;
-    while ( fmt.Find(replacement) != wxNOT_FOUND )
-    {
-        replacement << (wxChar)-1;
-    }
-
-    wxString replacement2 = (wxChar)-2;
-    while ( fmt.Find(replacement) != wxNOT_FOUND )
-    {
-        replacement << (wxChar)-2;
-    }
-
-    // replace all occurences of year with it
-    bool wasReplaced = fmt.Replace(strYear, replacement) > 0;
-    if ( !wasReplaced )
-        wasReplaced = fmt.Replace(strYear2, replacement2) > 0;
-
-    // use strftime() to format the same date but in supported year
-    wxDateTime dt(*this);
-    dt.SetYear(year);
-    wxString str = dt.Format(format, tz);
-
-    // now replace the occurence of 1999 with the real year
-    wxString strYearReal, strYearReal2;
-    strYearReal.Printf(_T("%04d"), yearReal);
-    strYearReal2.Printf(_T("%02d"), yearReal % 100);
-    str.Replace(strYear, strYearReal);
-    str.Replace(strYear2, strYearReal2);
-
-    // and replace back all occurences of replacement string
-    if ( wasReplaced )
-    {
-        str.Replace(replacement2, strYear2);
-        str.Replace(replacement, strYear);
-    }
-
-    return str;
+    return res;
 }
 
 // this function parses a string in (strict) RFC 822 format: see the section 5

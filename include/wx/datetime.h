@@ -798,7 +798,7 @@ public:
     inline wxDateTime& operator+=(const wxDateSpan& diff);
 
         // return the difference of the date with a date span
-    inline wxDateTime& Substract(const wxDateSpan& diff) const;
+    inline wxDateTime Substract(const wxDateSpan& diff) const;
         // substract a date span (positive or negative)
     inline wxDateTime& Substract(const wxDateSpan& diff);
         // substract a date span (positive or negative)
@@ -896,18 +896,23 @@ public:
 
         // return the timespan for the given number of seconds
     static wxTimeSpan Seconds(int sec) { return wxTimeSpan(0, 0, sec); }
+    static wxTimeSpan Second() { return Seconds(1); }
 
         // return the timespan for the given number of minutes
     static wxTimeSpan Minutes(int min) { return wxTimeSpan(0, min, 0 ); }
+    static wxTimeSpan Minute() { return Minutes(1); }
 
         // return the timespan for the given number of hours
     static wxTimeSpan Hours(int hours) { return wxTimeSpan(hours, 0, 0); }
+    static wxTimeSpan Hour() { return Hours(1); }
 
         // return the timespan for the given number of days
     static wxTimeSpan Days(int days) { return Hours(24 * days); }
+    static wxTimeSpan Day() { return Days(1); }
 
         // return the timespan for the given number of weeks
     static wxTimeSpan Weeks(int days) { return Days(7 * days); }
+    static wxTimeSpan Week() { return Weeks(1); }
 
         // default ctor constructs the 0 time span
     wxTimeSpan() { }
@@ -1073,15 +1078,19 @@ public:
 
         // get an object for the given number of days
     static wxDateSpan Days(int days) { return wxDateSpan(0, 0, 0, days); }
+    static wxDateSpan Day() { return Days(1); }
 
         // get an object for the given number of weeks
     static wxDateSpan Weeks(int weeks) { return wxDateSpan(0, 0, weeks, 0); }
+    static wxDateSpan Week() { return Weeks(1); }
 
         // get an object for the given number of months
     static wxDateSpan Months(int mon) { return wxDateSpan(0, mon, 0, 0); }
+    static wxDateSpan Month() { return Months(1); }
 
         // get an object for the given number of years
     static wxDateSpan Years(int years) { return wxDateSpan(years, 0, 0, 0); }
+    static wxDateSpan Year() { return Years(1); }
 
         // default copy ctor is ok
 

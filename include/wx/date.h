@@ -123,7 +123,7 @@ public:
     wxDate &Set(long lJulian)
         { m_date.Set((double)(lJulian + 0.5)); return (wxDate&)*this; }
     wxDate &Set(int nMonth, int nDay, int nYear)
-        { m_date.Set(nDay, (wxDateTime::Month)nMonth, nYear); return (wxDate&)*this; }
+        { m_date.Set(nDay, (wxDateTime::Month)nMonth, nYear); return *this; }
 
     // May also pass neg# to decrement
     wxDate &AddWeeks(int nCount = 1)

@@ -815,6 +815,45 @@ static void TestTimeDST()
     }
 }
 
+// test wxDateTime -> text conversion
+static void TestTimeFormat()
+{
+    puts("\n*** wxDateTime formatting test ***");
+
+    static const char *formatTestFormats[] =
+    {
+        "%c",
+        "Date is %A, %d of %B, in year %Y",
+        "Date is %x, time is %X",
+        "Time is %H:%M:%S or %I:%M:%S %p",
+        "The day of year: %j, the week of year: %W",
+    };
+
+    static const Date formatTestDates[] =
+    {
+        {                                       },    // unused
+        { 29, wxDateTime::May, 1976, 18, 30, 00 },
+        { 31, wxDateTime::Dec, 1999, 23, 30, 00 },
+        { 29, wxDateTime::May, 2076, 18, 30, 00 },
+        { 29, wxDateTime::Feb, 2400, 02, 15, 25 },
+        { 01, wxDateTime::Jan,  -52, 03, 16, 47 },
+    };
+
+    // an extra test (as it doesn't depend on date, don't do it in the loop)
+    printf("%s\n", wxDateTime::Now().Format("Our timezone is %Z").c_str());
+
+    for ( size_t d = 0; d < WXSIZEOF(formatTestDates); d++ )
+    {
+        puts("");
+
+        wxDateTime dt = d == 0 ? wxDateTime::Now() : formatTestDates[d].DT();
+        for ( size_t n = 0; n < WXSIZEOF(formatTestFormats); n++ )
+        {
+            printf("%s\n", dt.Format(formatTestFormats[n]).c_str());
+        }
+    }
+}
+
 // test text -> wxDateTime conversion
 static void TestTimeParse()
 {
@@ -829,7 +868,8 @@ static void TestTimeParse()
 
     static const ParseTestData parseTestDates[] =
     {
-        "Sat, 18 Dec 1999 00:46:40 +0100", { 18, wxDateTime::Dec, 1999, 00, 46, 40 }, TRUE,
+        { "Sat, 18 Dec 1999 00:46:40 +0100", { 18, wxDateTime::Dec, 1999, 00, 46, 40 }, TRUE },
+        { "Wed, 1 Dec 1999 05:17:20 +0300",  {  1, wxDateTime::Dec, 1999, 03, 17, 20 }, TRUE },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
@@ -868,6 +908,8 @@ static void TestTimeParse()
     }
 }
 
+#if 0
+
 // test compatibility with the old wxDate/wxTime classes
 static void TestTimeCompatibility()
 {
@@ -895,6 +937,8 @@ static void TestTimeCompatibility()
                date.Previous(n + 1).FormatDate(flags).c_str());
     }
 }
+
+#endif // 0
 
 #endif // TEST_TIME
 
@@ -1348,7 +1392,8 @@ int main(int argc, char **argv)
     TestTimeWNumber();
     TestTimeParse();
     }
-    TestTimeCompatibility();
+
+    TestTimeFormat();
 #endif // TEST_TIME
 
     wxUninitialize();

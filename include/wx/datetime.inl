@@ -222,9 +222,19 @@ wxTimeSpan wxDateTime::Substract(const wxDateTime& datetime) const
     return wxTimeSpan(datetime.GetValue() - GetValue());
 }
 
+wxDateTime wxDateTime::Add(const wxDateSpan& diff) const
+{
+    return wxDateTime(*this).Add(diff);
+}
+
 wxDateTime& wxDateTime::Substract(const wxDateSpan& diff)
 {
     return Add(diff.Negate());
+}
+
+wxDateTime wxDateTime::Substract(const wxDateSpan& diff) const
+{
+    return wxDateTime(*this).Substract(diff);
 }
 
 wxDateTime& wxDateTime::operator-=(const wxDateSpan& diff)

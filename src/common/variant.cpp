@@ -11,6 +11,8 @@
 
 #ifdef __GNUG__
 #pragma implementation "variant.h"
+#pragma implementation "time.h"
+#pragma implementation "date.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
