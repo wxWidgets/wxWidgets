@@ -90,6 +90,8 @@ public:
     wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString);
     wxString GetHref();
     wxString GetTarget();
+    wxMouseEvent* GetEvent();
+    wxHtmlCell* GetHtmlCell();
 };
 
 //---------------------------------------------------------------------------
@@ -410,8 +412,8 @@ public:
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
 
 
-    void OnLinkClicked(wxHtmlLinkInfo* link);
-    void base_OnLinkClicked(wxHtmlLinkInfo* link);
+    void OnLinkClicked(const wxHtmlLinkInfo& link);
+    void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
     DEC_PYCALLBACK__STRING(OnSetTitle);
     PYPRIVATE;
@@ -420,17 +422,17 @@ public:
 
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
-void wxPyHtmlWindow::OnLinkClicked(wxHtmlLinkInfo* link) {
+void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     bool doSave = wxPyRestoreThread();
     if (m_myInst.findCallback("OnLinkClicked")) {
-        PyObject* obj = wxPyConstructObject(link, "wxHtmlLinkInfo");
+        PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo");
         m_myInst.callCallback(Py_BuildValue("(O)", obj));
     }
     else
         wxHtmlWindow::OnLinkClicked(link);
     wxPySaveThread(doSave);
 }
-void wxPyHtmlWindow::base_OnLinkClicked(wxHtmlLinkInfo* link) {
+void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
     wxHtmlWindow::OnLinkClicked(link);
 }
 %}
@@ -469,7 +471,7 @@ public:
     wxHtmlWinParser* GetParser();
 
 
-    void base_OnLinkClicked(wxHtmlLinkInfo* link);
+    void base_OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnSetTitle(const char* title);
 };
 

@@ -9,6 +9,8 @@ from windows import *
 
 from gdi import *
 
+from clip_dnd import *
+
 from events import *
 
 from mdi import *
@@ -261,18 +263,6 @@ class wxHtmlHelpFramePtr(wxFramePtr):
     def KeywordSearch(self, *_args, **_kwargs):
         val = apply(htmlhelpc.wxHtmlHelpFrame_KeywordSearch,(self,) + _args, _kwargs)
         return val
-    def RefreshLists(self, *_args, **_kwargs):
-        val = apply(htmlhelpc.wxHtmlHelpFrame_RefreshLists,(self,) + _args, _kwargs)
-        return val
-    def CreateContents(self, *_args, **_kwargs):
-        val = apply(htmlhelpc.wxHtmlHelpFrame_CreateContents,(self,) + _args, _kwargs)
-        return val
-    def CreateIndex(self, *_args, **_kwargs):
-        val = apply(htmlhelpc.wxHtmlHelpFrame_CreateIndex,(self,) + _args, _kwargs)
-        return val
-    def CreateSearch(self, *_args, **_kwargs):
-        val = apply(htmlhelpc.wxHtmlHelpFrame_CreateSearch,(self,) + _args, _kwargs)
-        return val
     def UseConfig(self, *_args, **_kwargs):
         val = apply(htmlhelpc.wxHtmlHelpFrame_UseConfig,(self,) + _args, _kwargs)
         return val
@@ -335,9 +325,6 @@ class wxHtmlHelpControllerPtr(wxEvtHandlerPtr):
     def GetFrame(self, *_args, **_kwargs):
         val = apply(htmlhelpc.wxHtmlHelpController_GetFrame,(self,) + _args, _kwargs)
         if val: val = wxHtmlHelpFramePtr(val) 
-        return val
-    def CreateHelpWindow(self, *_args, **_kwargs):
-        val = apply(htmlhelpc.wxHtmlHelpController_CreateHelpWindow,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxHtmlHelpController instance at %s>" % (self.this,)

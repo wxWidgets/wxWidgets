@@ -155,10 +155,6 @@ public:
     void DisplayContents();
     void DisplayIndex();
     bool KeywordSearch(const wxString& keyword);
-    void RefreshLists(int show_progress = FALSE);
-    void CreateContents(int show_progress = FALSE);
-    void CreateIndex(int show_progress = FALSE);
-    void CreateSearch();
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
     void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
     void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
@@ -184,7 +180,6 @@ public:
     void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
     void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
     wxHtmlHelpFrame* GetFrame();
-    void CreateHelpWindow(int show_progress = FALSE);
 };
 
 //---------------------------------------------------------------------------
