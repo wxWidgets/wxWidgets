@@ -107,6 +107,9 @@ void wxStatusBarMac::SetStatusText(const wxString& text, int number)
     wxCHECK_RET( (number >= 0) && (number < m_nFields),
         _T("invalid status bar field index") );
     
+    if ( m_statusStrings[number] == text )
+        return ;
+    
     m_statusStrings[number] = text;
     wxRect rect;
     GetFieldRect(number, rect);
