@@ -655,6 +655,11 @@ void wxLogWindow::Show(bool bShow)
   m_pLogFrame->Show(bShow);
 }
 
+wxFrame *wxLogWindow::GetFrame() const
+{
+  return m_pLogFrame;
+}
+
 void wxLogWindow::DoLog(wxLogLevel level, const char *szString)
 {
   // first let the previous logger show it

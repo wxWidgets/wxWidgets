@@ -16,6 +16,8 @@
 #pragma interface "log.h"
 #endif
 
+#include "wx/intl.h"
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -68,7 +70,7 @@ public:
     // (FILE and iostream logs don't need it, but wxGuiLog does to avoid
     //  showing 17 modal dialogs one after another)
   virtual void Flush();
-    // call to Flush() may be optimized: call it only if this function 
+    // call to Flush() may be optimized: call it only if this function
     // returns true (although Flush() also returns immediately if there
     // is no messages, this functions is more efficient because inline)
   bool HasPendingMessages() const { return m_bHasMessages; }
@@ -119,7 +121,7 @@ protected:
     // default DoLogString does nothing but is not pure virtual because if
     // you override DoLog() you might not need it at all
   virtual void DoLogString(const char *szString);
-  
+
 private:
   // static variables
   // ----------------
@@ -197,14 +199,18 @@ protected:
 // close it, clear the log contents or save it to the file.
 // ----------------------------------------------------------------------------
 class wxLogFrame;
+class wxFrame;
 class WXDLLEXPORT wxLogWindow : public wxLog
 {
 public:
   wxLogWindow(const char *szTitle, bool bShow = TRUE);
   ~wxLogWindow();
-  
-  // show/hide the log window
+
+  // window operations
+    // show/hide the log window
   void Show(bool bShow = TRUE);
+    // get the frame pointer (you shouldn't close it!)
+  wxFrame *GetFrame() const;
 
   // accessors
   wxLog *GetOldLog() const { return m_pOldLog; }
@@ -212,7 +218,7 @@ public:
 protected:
   virtual void DoLog(wxLogLevel level, const char *szString);
   virtual void DoLogString(const char *szString);
-  
+
 private:
   wxLog      *m_pOldLog;    // previous log target
   wxLogFrame *m_pLogFrame;  // the log frame
