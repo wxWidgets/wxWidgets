@@ -65,8 +65,11 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    m_maximum = maximum;
 
    m_elapsed = m_estimated = m_remaining = NULL;
-   if ((style & (wxPD_ELAPSED_TIME | wxPD_ESTIMATED_TIME | wxPD_REMAINING_TIME)) != 0) m_time = new wxTime;
-   else m_time = NULL;
+   if ((style & (wxPD_ELAPSED_TIME | wxPD_ESTIMATED_TIME |
+                 wxPD_REMAINING_TIME)) != 0)
+      m_time = new wxTime;
+   else
+      m_time = NULL;
 
    wxFrame::Create(m_parent, -1, title, wxDefaultPosition,
                    wxDefaultSize, wxDEFAULT_DIALOG_STYLE);

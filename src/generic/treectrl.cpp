@@ -161,6 +161,7 @@ private:
 // -----------------------------------------------------------------------------
 // wxTreeEvent
 // -----------------------------------------------------------------------------
+IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
 
 wxTreeEvent::wxTreeEvent( wxEventType commandType, int id )
            : wxNotifyEvent( commandType, id )

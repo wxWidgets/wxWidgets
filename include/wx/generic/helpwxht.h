@@ -51,9 +51,9 @@ DECLARE_CLASS(wxHelpControllerHtml)
                                    const wxPoint &pos = wxDefaultPosition,
                                    bool newFrameEachTime = FALSE);
    /// Obtains the latest settings used by the help frame.
-   virtual void GetFrameParameters(wxSize *size = NULL,
-                                   wxPoint *pos = NULL,
-                                   bool *newFrameEachTime = NULL);
+   virtual wxFrame * GetFrameParameters(wxSize *size = NULL,
+                                        wxPoint *pos = NULL,
+                                        bool *newFrameEachTime = NULL);
    
    
 private:

@@ -126,12 +126,13 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
       {
          // does nothing by default
       }
-   /// Obtains the latest settings used by the help frame.
-   virtual void GetFrameParameters(wxSize *size = NULL,
+   /// Obtains the latest settings used by the help frame and the help 
+   /// frame.
+   virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
                                    wxPoint *pos = NULL,
                                    bool *newFrameEachTime = NULL)
       {
-         // does nothing by default
+         return NULL;// does nothing by default
       }
 
  protected:

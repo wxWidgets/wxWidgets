@@ -59,9 +59,9 @@ public:
          wxString doc;
 
          if (s == NULL) return wxEmptyString;
-         src = new char[s -> StreamSize()+1];
-         src[s -> StreamSize()] = 0;
-         s -> Read(src, s -> StreamSize());
+         src = new char[s -> GetSize()+1];
+         src[s -> GetSize()] = 0;
+         s -> Read(src, s -> GetSize());
          doc = src;
          delete [] src;
          return doc;
@@ -293,7 +293,7 @@ wxHelpControllerHtml::SetFrameParameters(const wxString &title,
    m_NewFrameEachTime = newFrame;
 }
 
-void
+wxFrame *
 wxHelpControllerHtml::GetFrameParameters(wxSize *size = NULL,
                                          wxPoint *pos = NULL,
                                          bool *newframe = NULL)
@@ -301,6 +301,7 @@ wxHelpControllerHtml::GetFrameParameters(wxSize *size = NULL,
    if(size) *size = m_FrameSize;
    if(pos) *pos = m_FramePosition;
    if(newframe) *newframe = m_NewFrameEachTime;
+   return m_Frame;
 }
 
 #endif // wxUSE_HTML
