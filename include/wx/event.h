@@ -608,7 +608,7 @@ class WXDLLEXPORT wxMouseEvent : public wxEvent
 {
 private:
     wxMouseEvent& operator=(const wxMouseEvent& event);
-	
+
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
     wxMouseEvent(const wxMouseEvent& event)	: wxEvent(event)
@@ -742,7 +742,7 @@ public:
     int GetLinesPerAction() const { return m_linesPerAction; }
 
     // Is the system set to do page scrolling?
-    bool IsPageScroll() const { return m_linesPerAction == UINT_MAX; }
+    bool IsPageScroll() const { return ((unsigned int)m_linesPerAction == UINT_MAX); }
 
     virtual wxEvent *Clone() const { return new wxMouseEvent(*this); }
 
@@ -822,9 +822,9 @@ public:
     {
         m_x = evt.m_x;
         m_y = evt.m_y;
-		
+
         m_keyCode = evt.m_keyCode;
-		
+
         m_controlDown = evt.m_controlDown;
         m_shiftDown = evt.m_shiftDown;
         m_altDown = evt.m_altDown;
@@ -833,7 +833,7 @@ public:
         m_rawCode = evt.m_rawCode;
         m_rawFlags = evt.m_rawFlags;
     }
-	
+
 
     // Find state of shift/control keys
     bool ControlDown() const { return m_controlDown; }
@@ -942,7 +942,7 @@ public:
 		: wxEvent(event),
 		  m_size(event.m_size)
 		{ }
-	
+
     wxSize GetSize() const { return m_size; }
 
     virtual wxEvent *Clone() const { return new wxSizeEvent(*this); }
@@ -974,7 +974,7 @@ public:
         : wxEvent(event),
 		  m_pos(event.m_pos)
 	{ }
-	
+
     wxPoint GetPosition() const { return m_pos; }
 
     virtual wxEvent *Clone() const { return new wxMoveEvent(*this); }
@@ -1131,7 +1131,7 @@ public:
     wxActivateEvent(const wxActivateEvent& event)
         : wxEvent(event)
 	{ m_active = event.m_active; }
-	
+
     bool GetActive() const { return m_active; }
 
     virtual wxEvent *Clone() const { return new wxActivateEvent(*this); }
@@ -1177,7 +1177,7 @@ public:
     wxMenuEvent(const wxMenuEvent & event)
         : wxEvent(event)
 	{ m_menuId = event.m_menuId; }
-	
+
     // only for wxEVT_MENU_HIGHLIGHT
     int GetMenuId() const { return m_menuId; }
 
@@ -1222,7 +1222,7 @@ public:
         m_force = event.m_force;
 #endif // WXWIN_COMPATIBILITY
 	}
-	
+
     void SetLoggingOff(bool logOff) { m_loggingOff = logOff; }
     bool GetLoggingOff() const { return m_loggingOff; }
 
@@ -1275,7 +1275,7 @@ public:
     wxShowEvent(const wxShowEvent & event)
         : wxEvent(event)
 	{ m_show = event.m_show; }
-	
+
     void SetShow(bool show) { m_show = show; }
     bool GetShow() const { return m_show; }
 
@@ -1301,7 +1301,7 @@ public:
     wxIconizeEvent(const wxIconizeEvent & event)
         : wxEvent(event)
 	{ m_iconized = event.m_iconized; }
-	
+
     // return true if the frame was iconized, false if restored
     bool Iconized() const { return m_iconized; }
 
@@ -1384,7 +1384,7 @@ public:
 		  m_buttonState(event.m_buttonState),
 		  m_joyStick(event.m_joyStick)
     { }
-	
+
     wxPoint GetPosition() const { return m_pos; }
     int GetZPosition() const { return m_zPosition; }
     int GetButtonState() const { return m_buttonState; }
@@ -1507,7 +1507,7 @@ public:
 		  m_setChecked(event.m_setChecked),
 		  m_text(event.m_text)
 	{ }
-	
+
     bool GetChecked() const { return m_checked; }
     bool GetEnabled() const { return m_enabled; }
     wxString GetText() const { return m_text; }
@@ -1646,7 +1646,7 @@ public:
         : wxEvent(event),
 		m_paletteRealized(event.m_paletteRealized)
 	{ }
-	
+
     // App sets this if it changes the palette.
     void SetPaletteRealized(bool realized) { m_paletteRealized = realized; }
     bool GetPaletteRealized() const { return m_paletteRealized; }
@@ -1783,7 +1783,7 @@ public:
 		  m_target(event.m_target),
 		  m_link(event.m_link)
     { }
-	
+
     // Position of event (in screen coordinates)
     const wxPoint& GetPosition() const { return m_pos; }
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
@@ -1828,7 +1828,7 @@ public:
         : wxCommandEvent(event),
 		m_pos(event.m_pos)
     { }
-	
+
     // Position of event (in screen coordinates)
     const wxPoint& GetPosition() const { return m_pos; }
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
@@ -1858,7 +1858,7 @@ public:
         : wxEvent(event),
 		m_requestMore(event.m_requestMore)
 	{ }
-	
+
     void RequestMore(bool needMore = TRUE) { m_requestMore = needMore; }
     bool MoreRequested() const { return m_requestMore; }
 
