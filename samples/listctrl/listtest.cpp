@@ -68,46 +68,53 @@ bool MyApp::OnInit(void)
   // Give it an icon
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
-#endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("aiai.xbm"));
+#else
+#include "mondrian.xpm"
+  frame->SetIcon(wxIcon(mondrian_xpm));
 #endif
 
   // Make an image list containing large icons
   m_imageListNormal = new wxImageList(32, 32, TRUE);
   m_imageListSmall = new wxImageList(16, 16, TRUE);
 
-  wxIcon *icon = new wxIcon("icon1", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
-  icon = new wxIcon("icon2", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
-  icon = new wxIcon("icon3", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
-  icon = new wxIcon("icon4", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
-  icon = new wxIcon("icon5", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
-  icon = new wxIcon("icon6", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
-  icon = new wxIcon("icon7", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
-  icon = new wxIcon("icon8", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
-  icon = new wxIcon("icon9", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
+#ifdef __WXMSW__
+  m_imageListNormal->Add( wxIcon("icon1", wxBITMAP_TYPE_ICO_RESOURCE) );
+  m_imageListNormal->Add( wxIcon("icon2", wxBITMAP_TYPE_ICO_RESOURCE) );
+  m_imageListNormal->Add( wxIcon("icon3", wxBITMAP_TYPE_ICO_RESOURCE) );
+  m_imageListNormal->Add( wxIcon("icon4", wxBITMAP_TYPE_ICO_RESOURCE) );
+  m_imageListNormal->Add( wxIcon("icon5", wxBITMAP_TYPE_ICO_RESOURCE) );
+  m_imageListNormal->Add( wxIcon("icon6", wxBITMAP_TYPE_ICO_RESOURCE) );
+  m_imageListNormal->Add( wxIcon("icon7", wxBITMAP_TYPE_ICO_RESOURCE) );
+  m_imageListNormal->Add( wxIcon("icon8", wxBITMAP_TYPE_ICO_RESOURCE) );
+  m_imageListNormal->Add( wxIcon("icon9", wxBITMAP_TYPE_ICO_RESOURCE) );
+  
+  m_imageListSmall->Add( wxIcon("iconsmall", wxBITMAP_TYPE_ICO_RESOURCE) );
+  
+#else
 
-  icon = new wxIcon("iconsmall", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListSmall->Add(*icon);
-  delete icon;
+  #include "bitmaps/toolbrai.xpm"
+  m_imageListNormal->Add( wxIcon( toolbrai_xpm ) );
+  #include "bitmaps/toolchar.xpm"
+  m_imageListNormal->Add( wxIcon( toolchar_xpm ) );
+  #include "bitmaps/tooldata.xpm"
+  m_imageListNormal->Add( wxIcon( tooldata_xpm ) );
+  #include "bitmaps/toolnote.xpm"
+  m_imageListNormal->Add( wxIcon( toolnote_xpm ) );
+  #include "bitmaps/tooltodo.xpm"
+  m_imageListNormal->Add( wxIcon( tooltodo_xpm ) );
+  #include "bitmaps/toolchec.xpm"
+  m_imageListNormal->Add( wxIcon( toolchec_xpm ) );
+  #include "bitmaps/toolgame.xpm"
+  m_imageListNormal->Add( wxIcon( toolgame_xpm ) );
+  #include "bitmaps/tooltime.xpm"
+  m_imageListNormal->Add( wxIcon( tooltime_xpm ) );
+  #include "bitmaps/toolword.xpm"
+  m_imageListNormal->Add( wxIcon( toolword_xpm ) );
+  
+  #include "bitmaps/small1.xpm"
+  m_imageListSmall->Add( wxIcon( small1_xpm) );
+  
+#endif
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -178,12 +185,12 @@ MyFrame::~MyFrame(void)
 	delete wxGetApp().m_imageListSmall;
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
   Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
   wxMessageDialog dialog(this, "List test sample\nJulian Smart (c) 1997",
   	"About list test", wxOK|wxCANCEL);
@@ -191,7 +198,7 @@ void MyFrame::OnAbout(wxCommandEvent& event)
   dialog.ShowModal();
 }
 
-void MyFrame::OnListView(wxCommandEvent& event)
+void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
 {
 	m_logWindow->Clear();
 	m_listCtrl->DeleteAllItems();
@@ -207,7 +214,7 @@ void MyFrame::OnListView(wxCommandEvent& event)
 	}
 }
 
-void MyFrame::OnReportView(wxCommandEvent& event)
+void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
 {
 	m_logWindow->Clear();
 	m_listCtrl->DeleteAllItems();
@@ -229,7 +236,7 @@ void MyFrame::OnReportView(wxCommandEvent& event)
 	}
 }
 
-void MyFrame::OnIconView(wxCommandEvent& event)
+void MyFrame::OnIconView(wxCommandEvent& WXUNUSED(event))
 {
 	m_logWindow->Clear();
 	m_listCtrl->DeleteAllItems();
@@ -243,7 +250,7 @@ void MyFrame::OnIconView(wxCommandEvent& event)
 	}
 }
 
-void MyFrame::OnIconTextView(wxCommandEvent& event)
+void MyFrame::OnIconTextView(wxCommandEvent& WXUNUSED(event))
 {
 	m_logWindow->Clear();
 	m_listCtrl->DeleteAllItems();
@@ -259,7 +266,7 @@ void MyFrame::OnIconTextView(wxCommandEvent& event)
 	}
 }
 
-void MyFrame::OnSmallIconView(wxCommandEvent& event)
+void MyFrame::OnSmallIconView(wxCommandEvent& WXUNUSED(event))
 {
 	m_logWindow->Clear();
 	m_listCtrl->DeleteAllItems();
@@ -273,7 +280,7 @@ void MyFrame::OnSmallIconView(wxCommandEvent& event)
 	}
 }
 
-void MyFrame::OnSmallIconTextView(wxCommandEvent& event)
+void MyFrame::OnSmallIconTextView(wxCommandEvent& WXUNUSED(event))
 {
 	m_logWindow->Clear();
 	m_listCtrl->DeleteAllItems();
