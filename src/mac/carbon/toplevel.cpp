@@ -159,8 +159,9 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
 static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
-
-    wxWindow* focus = wxWindow::FindFocus() ;
+    // call DoFindFocus instead of FindFocus, because for Composite Windows(like WxGenericListCtrl)
+    // FindFocus does not return the actual focus window,but the enclosing window
+    wxWindow* focus = wxWindow::DoFindFocus();
     if ( focus == NULL )
         return result ;
         
@@ -212,7 +213,6 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 event.m_x = point.h;
                 event.m_y = point.v;
                 event.SetTimestamp(when);
-                wxWindow* focus = wxWindow::FindFocus() ;
                 event.SetEventObject(focus);
 
                 if ( focus && (modifiers ^ wxTheApp->s_lastModifiers ) & controlKey )
