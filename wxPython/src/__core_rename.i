@@ -16,6 +16,7 @@
 %rename(TRANSPARENT_WINDOW)                 wxTRANSPARENT_WINDOW;
 %rename(NO_BORDER)                          wxNO_BORDER;
 %rename(DEFAULT_CONTROL_BORDER)             wxDEFAULT_CONTROL_BORDER;
+%rename(DEFAULT_STATUSBAR_STYLE)            wxDEFAULT_STATUSBAR_STYLE;
 %rename(TAB_TRAVERSAL)                      wxTAB_TRAVERSAL;
 %rename(WANTS_CHARS)                        wxWANTS_CHARS;
 %rename(POPUP_WINDOW)                       wxPOPUP_WINDOW;

@@ -259,21 +259,6 @@ typedef unsigned long   wxUIntPtr;
     %enddef
 #endif
 
-#ifdef _DO_FULL_DOCS
-    %define RenameDocCtorStr(newname, docstr, details, decl)
-        %feature("docstring") decl docstr details;
-        %rename(newname) decl;
-        decl
-    %enddef
-#else
-    %define RenameDocCtorStr(newname, docstr, details, decl)
-        %feature("docstring") decl docstr;
-        %rename(newname) decl;
-        decl
-    %enddef
-#endif
-        
-
         
 // Set the autodoc string for a constructor decl and then define the decl too.
 // Must use the full declaration of the item.
@@ -426,7 +411,8 @@ enum {
     wxTRANSPARENT_WINDOW,
     wxNO_BORDER,
     wxDEFAULT_CONTROL_BORDER,
-
+    wxDEFAULT_STATUSBAR_STYLE,
+    
     wxTAB_TRAVERSAL,
     wxWANTS_CHARS,
     wxPOPUP_WINDOW,

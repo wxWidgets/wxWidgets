@@ -90,6 +90,13 @@ typedef wxPoint2DDouble wxPoint2D;
 #define SWIG_TYPE_TABLE wxPython_type_table
 #endif
 
+#ifdef __WXGTK__
+#define wxDEFAULT_STATUSBAR_STYLE wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE
+#else
+#define wxDEFAULT_STATUSBAR_STYLE wxST_SIZEGRIP
+#endif
+
+
 #ifndef wxPyUSE_EXPORTED_API
 
 void      __wxPyPreStart(PyObject*);
