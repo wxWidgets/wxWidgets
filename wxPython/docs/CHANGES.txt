@@ -54,6 +54,10 @@ in the source tree if you need to use SWIG when building your own copy
 of wxPython, or other extension modules that need to integrate with
 the wxPython modules.
 
+Added wx.Frame.RequestUserAttention which, if the platform suports it,
+will do something (such as flash the task bar item) to suggest to the
+user that they should look at that window.
+
 
 
 
