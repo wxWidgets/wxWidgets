@@ -132,12 +132,14 @@ class BoldProcessor : public wxHtmlProcessor
    bool MyApp::OnInit()
    {
      wxLog::AddTraceMask(wxT("strconv"));
+#if wxUSE_SYSTEM_OPTIONS
      wxSystemOptions::SetOption(wxT("no-maskblt"), 1);
+#endif
 
      wxInitAllImageHandlers();
-     #if wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
+#if wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
      wxFileSystem::AddHandler(new wxInternetFSHandler);
-     #endif
+#endif
 
       SetVendorName("wxWindows");
       SetAppName("wxHtmlTest"); 
