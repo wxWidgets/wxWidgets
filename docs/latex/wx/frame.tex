@@ -612,9 +612,10 @@ Sets the frame title.
 
 \func{bool}{ShowFullScreen}{\param{bool}{ show}, \param{long}{ style = wxFULLSCREEN\_ALL}}
 
-Passing true to {\it shows} shows the frame full-screen, and passing false restores the frame
-again. {\it style} is a bit list containing some or all of the following values, which
-indicate what elements of the frame to hide in full-screen mode:
+Depending on the value of {\it show} parameter the frame is either shown full
+screen or restored to its normal state. {\it style} is a bit list containing
+some or all of the following values, which indicate what elements of the frame
+to hide in full-screen mode:
 
 \begin{itemize}\itemsep=0pt
 \item wxFULLSCREEN\_NOMENUBAR
@@ -626,6 +627,9 @@ indicate what elements of the frame to hide in full-screen mode:
 \end{itemize}
 
 This function has not been tested with MDI frames.
+
+Note that showing a frame full screen also actually 
+\helpref{Show()s}{wxwindowshow} if it hadn't been shown yet.
 
 \wxheading{See also}
 

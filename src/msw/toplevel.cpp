@@ -42,7 +42,7 @@
 
 #include "wx/msw/private.h"
 
-#include "wx/popupwin.h"
+#include "wx/display.h"
 
 #ifndef ICON_BIG
     #define ICON_BIG 1
@@ -600,18 +600,22 @@ void wxTopLevelWindowMSW::Restore()
 
 bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
 {
-    if (show)
+    if ( show == IsFullScreen() )
     {
-        if (IsFullScreen())
-            return FALSE;
+        // nothing to do
+        return TRUE;
+    }
 
-        m_fsIsShowing = TRUE;
+    m_fsIsShowing = show;
+
+    if ( show )
+    {
         m_fsStyle = style;
 
         // zap the frame borders
 
         // save the 'normal' window style
-        m_fsOldWindowStyle = GetWindowLong((HWND)GetHWND(), GWL_STYLE);
+        m_fsOldWindowStyle = GetWindowLong(GetHwnd(), GWL_STYLE);
 
         // save the old position, width & height, maximize state
         m_fsOldSize = GetRect();
@@ -624,44 +628,64 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
         if (style & wxFULLSCREEN_NOBORDER)
             offFlags |= WS_BORDER | WS_THICKFRAME;
         if (style & wxFULLSCREEN_NOCAPTION)
-            offFlags |= (WS_CAPTION | WS_SYSMENU);
+            offFlags |= WS_CAPTION | WS_SYSMENU;
 
-        newStyle &= (~offFlags);
+        newStyle &= ~offFlags;
 
         // change our window style to be compatible with full-screen mode
-        ::SetWindowLong((HWND)GetHWND(), GWL_STYLE, newStyle);
+        ::SetWindowLong(GetHwnd(), GWL_STYLE, newStyle);
 
-        // resize to the size of the desktop
-        int width, height;
+        wxRect rect;
+#if wxUSE_DISPLAY
+        // resize to the size of the display containing us
+        int dpy = wxDisplay::GetFromWindow(this);
+        if ( dpy != wxNOT_FOUND )
+        {
+            rect = wxDisplay(dpy).GetGeometry();
+        }
+        else // fall back to the main desktop
+#else // wxUSE_DISPLAY
+        {
+            // resize to the size of the desktop
+            wxCopyRECTToRect(wxGetWindowRect(::GetDesktopWindow()), rect);
+        }
+#endif // wxUSE_DISPLAY
 
-        RECT rect = wxGetWindowRect(::GetDesktopWindow());
-        width = rect.right - rect.left;
-        height = rect.bottom - rect.top;
-
-        SetSize(width, height);
+        SetSize(rect);
 
         // now flush the window style cache and actually go full-screen
-        SetWindowPos((HWND)GetHWND(), HWND_TOP, 0, 0, width, height, SWP_FRAMECHANGED);
+        long flags = SWP_FRAMECHANGED;
 
-        wxSizeEvent event(wxSize(width, height), GetId());
+        // showing the frame full screen should also show it if it's still
+        // hidden
+        if ( !IsShown() )
+        {
+            // don't call wxWindow version to avoid flicker from calling
+            // ::ShowWindow() -- we're going to show the window at the correct
+            // location directly below -- but do call the wxWindowBase version
+            // to sync the internal m_isShown flag
+            wxWindowBase::Show();
+
+            flags |= SWP_SHOWWINDOW;
+        }
+
+        SetWindowPos(GetHwnd(), HWND_TOP,
+                     rect.x, rect.y, rect.width, rect.height,
+                     flags);
+
+        // finally send an event allowing the window to relayout itself &c
+        wxSizeEvent event(rect.GetSize(), GetId());
         GetEventHandler()->ProcessEvent(event);
-
-        return TRUE;
     }
-    else
+    else // stop showing full screen
     {
-        if (!IsFullScreen())
-            return FALSE;
-
-        m_fsIsShowing = FALSE;
-
         Maximize(m_fsIsMaximized);
-        SetWindowLong((HWND)GetHWND(),GWL_STYLE, m_fsOldWindowStyle);
-        SetWindowPos((HWND)GetHWND(),HWND_TOP,m_fsOldSize.x, m_fsOldSize.y,
+        SetWindowLong(GetHwnd(),GWL_STYLE, m_fsOldWindowStyle);
+        SetWindowPos(GetHwnd(),HWND_TOP,m_fsOldSize.x, m_fsOldSize.y,
             m_fsOldSize.width, m_fsOldSize.height, SWP_FRAMECHANGED);
-
-        return TRUE;
     }
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
