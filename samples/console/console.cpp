@@ -723,19 +723,22 @@ static void TestSocketServer()
 {
     puts("*** Testing wxSocketServer ***\n");
 
-    // we want to launch a server
+    static const int PORT = 3000;
+
     wxIPV4address addr;
-    addr.Service(3000);
+    addr.Service(PORT);
 
     wxSocketServer *server = new wxSocketServer(addr);
     if ( !server->Ok() )
     {
         puts("ERROR: failed to bind");
+
+        return;
     }
 
     for ( ;; )
     {
-        puts("Server: waiting for connection...");
+        printf("Server: waiting for connection on port %d...\n", PORT);
 
         wxSocketBase *socket = server->Accept();
         if ( !socket )
@@ -746,47 +749,59 @@ static void TestSocketServer()
 
         puts("Server: got a client.");
 
-        wxString s;
-        char ch = '\0';
-        for ( ;; )
+        server->SetTimeout(60); // 1 min
+
+        while ( socket->IsConnected() )
         {
-            if ( socket->Read(&ch, sizeof(ch)).Error() )
+            wxString s;
+            char ch = '\0';
+            for ( ;; )
             {
-                puts("ERROR: in wxSocket::Read.");
+                if ( socket->Read(&ch, sizeof(ch)).Error() )
+                {
+                    // don't log error if the client just close the connection
+                    if ( socket->IsConnected() )
+                    {
+                        puts("ERROR: in wxSocket::Read.");
+                    }
+
+                    break;
+                }
+
+                if ( ch == '\r' )
+                    continue;
+
+                if ( ch == '\n' )
+                    break;
+
+                s += ch;
+            }
+
+            if ( ch != '\n' )
+            {
+                break;
+            }
+
+            printf("Server: got '%s'.\n", s.c_str());
+            if ( s == _T("bye") )
+            {
+                delete socket;
 
                 break;
             }
 
-            if ( ch == '\r' )
-                continue;
-
-            if ( ch == '\n' )
-                break;
-
-            s += ch;
+            socket->Write(s.MakeUpper().c_str(), s.length());
+            socket->Write("\r\n", 2);
+            printf("Server: wrote '%s'.\n", s.c_str());
         }
 
-        if ( ch != '\n' )
-        {
-            break;
-        }
+        puts("Server: lost a client.");
 
-        printf("Server: got '%s'.\n", s.c_str());
-        if ( s == _T("bye") )
-        {
-            delete socket;
-
-            break;
-        }
-
-        socket->Write(s.MakeUpper().c_str(), s.length());
-        socket->Write("\r\n", 2);
-        printf("Server: wrote '%s'.\n", s.c_str());
-
-        delete socket;
+        socket->Destroy();
     }
 
-    delete server;
+    // same as "delete server" but is consistent with GUI programs
+    server->Destroy();
 }
 
 static void TestSocketClient()
@@ -2608,9 +2623,9 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_SOCKETS
-    if ( 0 )
-        TestSocketServer();
     if ( 1 )
+        TestSocketServer();
+    if ( 0 )
     {
         TestSocketClient();
         TestProtocolFtp();
