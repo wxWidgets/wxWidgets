@@ -70,7 +70,10 @@ int wxMessageDialog::ShowModal()
     else if (m_dialogStyle & wxICON_QUESTION)
         type = GTK_MESSAGE_QUESTION;
     else
-        wxFAIL_MSG( _T("Unknown wxMessageDialog type") );
+    {
+        // GTK+ doesn't have a "typeless" msg box, so try to auto detect...
+        type = m_dialogStyle & wxYES ? GTK_MESSAGE_QUESTION : GTK_MESSAGE_INFO;
+    }
 
     dlg = gtk_message_dialog_new(m_parent ?
                                     GTK_WINDOW(m_parent->m_widget) : NULL,
