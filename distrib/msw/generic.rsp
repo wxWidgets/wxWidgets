@@ -703,12 +703,20 @@ samples/internat/*.ico
 samples/internat/*.bmp
 samples/internat/*.mo
 samples/internat/*.pro
+samples/internat/bg/*.mo
+samples/internat/bg/*.po
+samples/internat/cs/*.mo
+samples/internat/cs/*.po
 samples/internat/fr/*.mo
 samples/internat/fr/*.po
 samples/internat/de/*.mo
 samples/internat/de/*.po
 samples/internat/ru/*.mo
 samples/internat/ru/*.po
+samples/internat/ja/*.mo
+samples/internat/ja/*.po
+samples/internat/ka/*.mo
+samples/internat/ka/*.po
 samples/internat/*.bkl
 
 samples/ipc/*.cpp

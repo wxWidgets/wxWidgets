@@ -206,6 +206,7 @@ dospinmsw()
 
     # Create wxWidgets-$VERSION-win.zip which is used to create wxMSW
     echo Zipping individual components
+    rm -f $DESTDIR/wxWidgets-$VERSION-win.zip
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/generic.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/makefile.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/msw.rsp
@@ -222,6 +223,7 @@ dospinmsw()
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utilmake.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/univ.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/wince.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/dmc.rsp
 
 #    rearchive wxWidgets-$VERSION-win.zip wxWidgets-$VERSION $DESTDIR
 
@@ -256,6 +258,7 @@ dospinwxall()
 
     # Create wxWidgets-$VERSION-win.zip which is used to create wxMSW
     echo Zipping individual components
+    rm -f $DESTDIR/wxWidgets-$VERSION-win.zip
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/generic.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/makefile.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/msw.rsp
@@ -272,6 +275,7 @@ dospinwxall()
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utilmake.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/univ.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/wince.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/dmc.rsp
 
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/x11.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/motif.rsp
@@ -298,7 +302,7 @@ dospinwxall()
 
     cd $DESTDIR
 
-    rm -f wxWidgets-$VERSION-win.zip
+    rm -f $DESTDIR/wxWidgets-$VERSION-win.zip
     zip $ZIPFLAGS -r wxWidgets-$VERSION-win.zip wxWidgets-$VERSION/*
 }
 
@@ -366,6 +370,11 @@ dospinmisc()
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-eVC.zip < $APPDIR/distrib/msw/wince.rsp
     # rearchive wxWidgets-$VERSION-eVC.zip wxWidgets-$VERSION $DESTDIR
 
+    # DMC project files
+    echo Creating $DESTDIR/wxWidgets-$VERSION-DMC.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-DMC.zip < $APPDIR/distrib/msw/dmc.rsp
+    # rearchive wxWidgets-$VERSION-DMC.zip wxWidgets-$VERSION $DESTDIR
+
     # BC++ project files
     echo Creating $DESTDIR/wxWidgets-$VERSION-BC.zip
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-BC.zip < $APPDIR/distrib/msw/bc.rsp
@@ -384,7 +393,7 @@ dospinsetup()
     # Put all archives for transit to Linux in a zip file
     echo Creating $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
     rm -f $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
-    zip $ZIPFLAGS $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip wxWidgets-$VERSION-LinuxDocs.zip wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION-eVC.zip wxWidgets-$VERSION-CW-Mac.zip
+    zip $ZIPFLAGS $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip wxWidgets-$VERSION-LinuxDocs.zip wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION-DMC.zip wxWidgets-$VERSION-eVC.zip wxWidgets-$VERSION-CW-Mac.zip
 
     echo Unzipping the Windows files into wxWidgets-$VERSION
 

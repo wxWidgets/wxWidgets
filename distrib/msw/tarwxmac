@@ -76,7 +76,7 @@ $TAR cf $2/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
 
 cat $1/distrib/msw/cw_mac.rsp > /tmp/wxmac_in.txt
 expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
-$TAR cf $2/wxWidgets-CW-Mac-${WXVER}.tar -T /tmp/wxmac.txt
+$TAR cf $2/wxWidgets-${WXVER}-CW-Mac.tar -T /tmp/wxmac.txt
 
 rm -f $1/include/wx/setup.h
 
@@ -99,10 +99,10 @@ echo Re-tarring CW project files...
 cd $2
 mkdir wxWidgets-${WXVER}
 cd wxWidgets-${WXVER}
-$TAR xf $2/wxWidgets-CW-Mac-${WXVER}.tar
+$TAR xf $2/wxWidgets-${WXVER}-CW-Mac.tar
 cd ..
-rm -f wxWidgets-CW-Mac-${WXVER}.tar
-$TAR zcf wxWidgets-CW-Mac-${WXVER}.tar.gz wxWidgets-${WXVER}/*
+rm -f wxWidgets-${WXVER}-CW-Mac.tar
+$TAR zcf wxWidgets-${WXVER}-CW-Mac.tar.gz wxWidgets-${WXVER}/*
 
 # Copy readme and other files
 cp $1/docs/readme.txt $2/readme-${WXVER}.txt
