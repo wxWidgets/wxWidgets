@@ -180,6 +180,8 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
+    SetBestSize(size);
+
     SetBackgroundColour( parent->GetBackgroundColour() );
 
     Show( TRUE );
@@ -332,6 +334,11 @@ void wxScrollBar::ApplyWidgetStyle()
 {
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
+}
+
+wxSize wxScrollBar::DoGetBestSize() const
+{
+    return wxControl::DoGetBestSize();
 }
 
 #endif
