@@ -39,7 +39,8 @@ TEST_OBJECTS =  \
 	test_test.o \
 	test_main.o \
 	test_formatconverter.o \
-	test_regex.o
+	test_regex.o \
+	test_filesys.o
 
 ### Conditionally set variables: ###
 
@@ -112,6 +113,9 @@ test_formatconverter.o: $(srcdir)/formatconverter/formatconverter.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_regex.o: $(srcdir)/regex/regex.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_filesys.o: $(srcdir)/filesys/filesys.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 
