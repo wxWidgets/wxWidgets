@@ -104,7 +104,7 @@ BEGIN_DECLARE_EVENT_TYPES()
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
     // it is important to still have these as constants to avoid
     // initialization order related problems
-    const wxEventType wxEVT_NULL = 0;
+	DECLARE_EVENT_TYPE(wxEVT_NULL,0);
     const wxEventType wxEVT_FIRST = 10000;
     const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES

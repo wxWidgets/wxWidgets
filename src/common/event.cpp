@@ -111,6 +111,7 @@ wxList *wxPendingEvents = (wxList *)NULL;
 // common event types are defined here, other event types are defined by the
 // components which use them
 
+DEFINE_EVENT_TYPE(wxEVT_NULL)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_BUTTON_CLICKED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_CHECKBOX_CLICKED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_CHOICE_SELECTED)
