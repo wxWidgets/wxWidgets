@@ -239,6 +239,9 @@ public:
         // label (for EVT_TREE_{BEGIN|END}_LABEL_EDIT only)
     const wxString& GetLabel() const { return m_label; }
 
+        // edit cancel flag (for EVT_TREE_{BEGIN|END}_LABEL_EDIT only)
+    bool IsEditCancelled() const { return m_editCancelled; }
+
 #if WXWIN_COMPATIBILITY_2_2
     // for compatibility only, don't use
     int GetCode() const { return m_evtKey.GetKeyCode(); }
@@ -251,6 +254,7 @@ private:
                   m_itemOld;
     wxPoint       m_pointDrag;
     wxString      m_label;
+    bool          m_editCancelled;
 
     friend class WXDLLEXPORT wxTreeCtrl;
     friend class WXDLLEXPORT wxGenericTreeCtrl;

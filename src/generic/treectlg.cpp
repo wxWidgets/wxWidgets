@@ -449,6 +449,7 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
 
         case WXK_ESCAPE:
             Finish();
+            m_owner->OnRenameCancelled(m_itemEdited);
             break;
 
         default:
@@ -2792,9 +2793,25 @@ bool wxGenericTreeCtrl::OnRenameAccept(wxGenericTreeItem *item,
     le.m_item = (long) item;
     le.SetEventObject( this );
     le.m_label = value;
+    le.m_editCancelled = FALSE;
 
     return !GetEventHandler()->ProcessEvent( le ) || le.IsAllowed();
 }
+
+void wxGenericTreeCtrl::OnRenameCancelled(wxGenericTreeItem *item)
+{
+    // let owner know that the edit was cancelled
+    wxTreeEvent le( wxEVT_COMMAND_TREE_END_LABEL_EDIT, GetId() );
+    le.m_item = (long) item;
+    le.SetEventObject( this );
+    le.m_label = wxEmptyString;
+    le.m_editCancelled = FALSE;
+
+    GetEventHandler()->ProcessEvent( le );
+}
+
+
+
 
 void wxGenericTreeCtrl::OnRenameTimer()
 {

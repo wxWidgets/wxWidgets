@@ -429,6 +429,7 @@ protected:
 
     void OnRenameTimer();
     bool OnRenameAccept(wxGenericTreeItem *item, const wxString& value);
+    void OnRenameCancelled(wxGenericTreeItem *item);
 
     void FillArray(wxGenericTreeItem*, wxArrayTreeItemIds&) const;
     void SelectItemRange( wxGenericTreeItem *item1, wxGenericTreeItem *item2 );

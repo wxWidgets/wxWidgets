@@ -240,6 +240,8 @@ All (GUI):
 - generic wxListCtrl renamed to wxGenericListCtrl, wxImageList
   renamed to wxGenericImageList, so they can be used on wxMSW
   (Rene Rivera).
+- Added wxTreeEvent::IsEditCancelled so the application can tell
+  whether a label edit was cancelled.
 
 wxMSW:
 

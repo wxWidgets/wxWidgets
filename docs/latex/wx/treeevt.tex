@@ -91,3 +91,10 @@ Returns the old item index (valid for EVT\_TREE\_ITEM\_CHANGING and CHANGED even
 
 Returns the position of the mouse pointer if the event is a drag event.
 
+\membersection{wxTreeEvent::IsEditCancelled()}
+
+\constfunc{bool}{IsEditCancelled}{}
+
+Returns TRUE if the label edit was cancelled. This should be
+called from within an EVT\_TREE\_END\_LABEL\_EDIT handler.
+
