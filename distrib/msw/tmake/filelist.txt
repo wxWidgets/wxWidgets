@@ -555,6 +555,7 @@ cursor.h	W
 dataobj.h	W
 date.h	W	B
 datetime.h	W	B
+datetime.inl	W	B
 datstrm.h	W
 db.h	W
 dbtable.h	W
