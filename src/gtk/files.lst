@@ -142,6 +142,7 @@ ALL_SOURCES = \
 		common/radiocmn.cpp \
 		common/regex.cpp \
 		common/resource.cpp \
+		common/rgncmn.cpp \
 		common/sckaddr.cpp \
 		common/sckfile.cpp \
 		common/sckipc.cpp \
@@ -730,6 +731,7 @@ COMMONOBJS = \
 		radiocmn.o \
 		regex.o \
 		resource.o \
+		rgncmn.o \
 		sckaddr.o \
 		sckfile.o \
 		sckipc.o \

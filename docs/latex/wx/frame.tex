@@ -51,7 +51,7 @@ caption. When pressed, Windows will go into a context-sensitive help mode and wx
 a wxEVT\_HELP event if the user clicked on an application window. {\it Note} that this is an extended
 style and must be set by calling \helpref{SetExtraStyle}{wxwindowsetextrastyle} before Create is called (two-step construction).
 You cannot use this style together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX, so
-you should use 
+you should use
 {\tt wxDEFAULT\_FRAME\_STYLE \& (wxMINIMIZE\_BOX | wxMAXIMIZE\_BOX)} for the
 frames having this style (the dialogs don't have minimize nor maximize box by
 default)}
@@ -476,7 +476,7 @@ Sets the icons for this frame.
 
 See also \helpref{wxIconBundle}{wxiconbundle}.
 
-% VZ: we don't have all this any more (18.08.00) 
+% VZ: we don't have all this any more (18.08.00)
 %
 %Under Windows, instead of using {\bf SetIcon}, you can add the
 %following lines to your MS Windows resource file:
@@ -528,6 +528,17 @@ Note that it is not possible to call this function twice for the same frame obje
 \wxheading{See also}
 
 \helpref{wxFrame::GetMenuBar}{wxframegetmenubar}, \helpref{wxMenuBar}{wxmenubar}, \helpref{wxMenu}{wxmenu}.
+
+\membersection{wxFrame::SetShape}\label{wxframesetshape}
+
+\func{bool}{SetShape}{\param{const wxRegion&}{ region}}
+
+If the platform supports it, sets the shape of the window to that
+depicted by \it{region}.  The system will not display or
+respond to any mouse event for the pixels that lie outside of the
+region.  To reset the window to the normal rectangular shape simply
+call \it{SetShape} again with an empty region.  Returns TRUE if the
+operation is successful.
 
 \membersection{wxFrame::SetStatusBar}\label{wxframesetstatusbar}
 

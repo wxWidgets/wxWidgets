@@ -517,10 +517,10 @@ def EVT_SASH_DRAGGED_RANGE(win, id1, id2, func):
     win.Connect(id1, id2, wxEVT_SASH_DRAGGED, func)
 
 def EVT_QUERY_LAYOUT_INFO(win, func):
-    win.Connect(-1, -1, wxEVT_EVT_QUERY_LAYOUT_INFO, func)
+    win.Connect(-1, -1, wxEVT_QUERY_LAYOUT_INFO, func)
 
 def EVT_CALCULATE_LAYOUT(win, func):
-    win.Connect(-1, -1, wxEVT_EVT_CALCULATE_LAYOUT, func)
+    win.Connect(-1, -1, wxEVT_CALCULATE_LAYOUT, func)
 
 
 #wxSplitterWindow
@@ -730,7 +730,7 @@ def wxCallAfter(callable, *args, **kw):
 
     global _wxCallAfterId
     if _wxCallAfterId is None:
-        _wxCallAfterId = wxNewId()
+        _wxCallAfterId = wxNewEventType()
         app.Connect(-1, -1, _wxCallAfterId,
               lambda event: apply(event.callable, event.args, event.kw) )
     evt = wxPyEvent()

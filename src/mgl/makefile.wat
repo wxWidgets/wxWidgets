@@ -186,6 +186,7 @@ COMMONOBJS = &
 	radiocmn.obj &
 	regex.obj &
 	resource.obj &
+	rgncmn.obj &
 	sckaddr.obj &
 	sckfile.obj &
 	sckipc.obj &
@@ -820,6 +821,9 @@ regex.obj:     $(COMMDIR)\regex.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 resource.obj:     $(COMMDIR)\resource.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+rgncmn.obj:     $(COMMDIR)\rgncmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 sckaddr.obj:     $(COMMDIR)\sckaddr.cpp

@@ -13,7 +13,7 @@ from distutils.command.install_data import install_data
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.4.0.7"
+VERSION          = "2.4.0.8p1"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"

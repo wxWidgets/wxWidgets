@@ -42,7 +42,6 @@
 #endif
 
 #include "wx/dcclient.h"
-#include "wx/image.h"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -155,7 +154,7 @@ ShapedFrame::ShapedFrame()
     m_bmp = wxBitmap("star.png", wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
     SetToolTip(wxT("Right-click to exit"));
-#ifdef __WXMSW__
+#ifdef __wxMSW__
     // On wxGTK we can't do this yet because the window hasn't been created
     // yet so we wait until the EVT_WINDOW_CREATE event happens.  On wxMSW it
     // has been created so we set the shape now.

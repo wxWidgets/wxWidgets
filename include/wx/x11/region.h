@@ -73,6 +73,14 @@ public:
     }
 
     wxRegion( size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
+
+    wxRegion( const wxBitmap& bmp,
+              const wxColour& transColour = wxNullColour,
+              int   tolerance = 0)
+    {
+        Union(bmp, transColour, tolerance);
+    }
+
     ~wxRegion();
 
     wxRegion( const wxRegion& region ) { Ref(region); }
@@ -114,6 +122,19 @@ public:
     wxRegionContain Contains(const wxPoint& pt) const;
     wxRegionContain Contains(const wxRect& rect) const;
 
+    // Convert the region to a B&W bitmap with the black pixels being inside
+    // the region.
+    wxBitmap ConvertToBitmap() const;
+
+    // Use the non-transparent pixels of a wxBitmap for the region to combine
+    // with this region.  If the bitmap has a mask then it will be used,
+    // otherwise the colour to be treated as transparent may be specified,
+    // along with an optional tolerance value.
+    bool Union(const wxBitmap& bmp,
+               const wxColour& transColour = wxNullColour,
+               int   tolerance = 0);
+
+
 public:
     WXRegion *GetX11Region() const;
 
@@ -121,7 +142,7 @@ protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
-    
+
     // common part of ctors for a rectangle region
     void InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 

@@ -693,15 +693,21 @@ trap 'rm -fr `echo "
             mobile/Makefile
             mobile/wxedit/Makefile
             mobile/styles/Makefile
+            multimon/Makefile
+            nativedlg/Makefile
             newgrid/Makefile
             notebook/Makefile
+            oleauto/Makefile
+            ownerdrw/Makefile
             png/Makefile
             printing/Makefile
             proplist/Makefile
             propsize/Makefile
+            regtest/Makefile
             resource/Makefile
             rotate/Makefile
             sashtest/Makefile
+	    shaped/Makefile
             scroll/Makefile
             scrollsub/Makefile
             sockets/Makefile
@@ -847,15 +853,21 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             mobile/Makefile
             mobile/wxedit/Makefile
             mobile/styles/Makefile
+            multimon/Makefile
+            nativedlg/Makefile
             newgrid/Makefile
             notebook/Makefile
+            oleauto/Makefile
+            ownerdrw/Makefile
             png/Makefile
             printing/Makefile
             proplist/Makefile
             propsize/Makefile
+            regtest/Makefile
             resource/Makefile
             rotate/Makefile
             sashtest/Makefile
+	    shaped/Makefile
             scroll/Makefile
             scrollsub/Makefile
             sockets/Makefile

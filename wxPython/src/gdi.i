@@ -1043,7 +1043,11 @@ public:
 #ifndef __WXMAC__
     %name(wxRegionFromPoints)wxRegion(int PCOUNT, wxPoint* points, int fillStyle = wxWINDING_RULE);
 #endif
+    %name(wxRegionFromBitmap)wxRegion(const wxBitmap& bmp,
+                                      const wxColour& transColour = wxNullColour,
+                                      int   tolerance = 0);
     ~wxRegion();
+
 
     void Clear();
 #ifndef __WXMAC__
@@ -1074,6 +1078,18 @@ public:
     bool Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(XorRect)bool Xor(const wxRect& rect);
     %name(XorRegion)bool Xor(const wxRegion& region);
+
+    // Convert the region to a B&W bitmap with the black pixels being inside
+    // the region.
+    wxBitmap ConvertToBitmap();
+
+    // Use the non-transparent pixels of a wxBitmap for the region to combine
+    // with this region.  If the bitmap has a mask then it will be used,
+    // otherwise the colour to be treated as transparent may be specified,
+    // along with an optional tolerance value.
+    %name(UnionBitmap)bool Union(const wxBitmap& bmp,
+                                 const wxColour& transColour = wxNullColour,
+                                 int   tolerance = 0);
 };
 
 
@@ -1102,6 +1118,7 @@ public:
 
 
 //---------------------------------------------------------------------------
+
 
 %readonly
 %{

@@ -77,6 +77,7 @@ AC_OUTPUT([
             resource/Makefile
             rotate/Makefile
             sashtest/Makefile
+	    shaped/Makefile
             scroll/Makefile
             scrollsub/Makefile
             sockets/Makefile

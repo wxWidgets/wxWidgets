@@ -48,49 +48,55 @@ public:
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
     wxRegion();
+    wxRegion( const wxBitmap& bmp,
+              const wxColour& transColour = wxNullColour,
+              int   tolerance = 0)
+    {
+        Union(bmp, transColour, tolerance);
+    }
     ~wxRegion();
-    
+
     //# Copying
     inline wxRegion(const wxRegion& r)
     { Ref(r); }
     inline wxRegion& operator = (const wxRegion& r)
     { Ref(r); return (*this); }
-    
+
     //# Modify region
     // Clear current region
     void Clear();
-    
+
     // Union rectangle or region with this.
     inline bool Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_OR); }
     inline bool Union(const wxRect& rect) { return Combine(rect, wxRGN_OR); }
     inline bool Union(const wxRegion& region) { return Combine(region, wxRGN_OR); }
-    
+
     // Intersect rectangle or region with this.
     inline bool Intersect(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_AND); }
     inline bool Intersect(const wxRect& rect)  { return Combine(rect, wxRGN_AND); }
     inline bool Intersect(const wxRegion& region)  { return Combine(region, wxRGN_AND); }
-    
+
     // Subtract rectangle or region from this:
     // Combines the parts of 'this' that are not part of the second region.
     inline bool Subtract(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_DIFF); }
     inline bool Subtract(const wxRect& rect)  { return Combine(rect, wxRGN_DIFF); }
     inline bool Subtract(const wxRegion& region)  { return Combine(region, wxRGN_DIFF); }
-    
+
     // XOR: the union of two combined regions except for any overlapping areas.
     inline bool Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_XOR); }
     inline bool Xor(const wxRect& rect)  { return Combine(rect, wxRGN_XOR); }
     inline bool Xor(const wxRegion& region)  { return Combine(region, wxRGN_XOR); }
-    
+
     //# Information on region
     // Outer bounds of region
     void GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const;
     wxRect GetBox() const ;
-    
+
     // Is region empty?
     bool Empty() const;
     inline bool IsEmpty() const { return Empty(); }
     bool Ok() const { return (m_refData != NULL) ; }
-    
+
     //# Tests
     // Does the region contain the point (x,y)?
     wxRegionContain Contains(wxCoord x, wxCoord y) const;
@@ -100,15 +106,27 @@ public:
     wxRegionContain Contains(wxCoord x, wxCoord y, wxCoord w, wxCoord h) const;
     // Does the region contain the rectangle rect?
     wxRegionContain Contains(const wxRect& rect) const;
-    
+
+    // Convert the region to a B&W bitmap with the black pixels being inside
+    // the region.
+    wxBitmap ConvertToBitmap() const;
+
+    // Use the non-transparent pixels of a wxBitmap for the region to combine
+    // with this region.  If the bitmap has a mask then it will be used,
+    // otherwise the colour to be treated as transparent may be specified,
+    // along with an optional tolerance value.
+    bool Union(const wxBitmap& bmp,
+               const wxColour& transColour = wxNullColour,
+               int   tolerance = 0);
+
     // Internal
     bool Combine(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxRegionOp op);
     bool Combine(const wxRegion& region, wxRegionOp op);
     bool Combine(const wxRect& rect, wxRegionOp op);
-    
+
     // Get the internal Region handle
     WXRegion GetXRegion() const;
-    
+
     // 'Naughty' functions that allow wxWindows to use a list of rects
     // instead of the region, in certain circumstances (e.g. when
     // making a region out of the update rectangles).
@@ -126,16 +144,16 @@ public:
     wxRegionIterator();
     wxRegionIterator(const wxRegion& region);
     ~wxRegionIterator();
-    
+
     void Reset() { m_current = 0; }
     void Reset(const wxRegion& region);
-    
+
     operator bool () const { return m_current < m_numRects; }
     bool HaveRects() const { return m_current < m_numRects; }
-    
+
     void operator ++ ();
     void operator ++ (int);
-    
+
     wxCoord GetX() const;
     wxCoord GetY() const;
     wxCoord GetW() const;
@@ -143,7 +161,7 @@ public:
     wxCoord GetH() const;
     wxCoord GetHeight() const { return GetH(); }
     wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
-    
+
 private:
     size_t	 m_current;
     size_t	 m_numRects;

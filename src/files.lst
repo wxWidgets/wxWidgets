@@ -102,6 +102,7 @@ ALL_HEADERS = \
 		datetime.inl \
 		datstrm.h \
 		db.h \
+		dbkeyg.h \
 		dbtable.h \
 		dde.h \
 		debug.h \

@@ -24,14 +24,14 @@ class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxPoint;
 class MGLRegion;
 
-enum wxRegionContain 
+enum wxRegionContain
 {
-    wxOutRegion = 0, 
-    wxPartRegion = 1, 
+    wxOutRegion = 0,
+    wxPartRegion = 1,
     wxInRegion = 2
 };
 
-class WXDLLEXPORT wxRegion : public wxGDIObject 
+class WXDLLEXPORT wxRegion : public wxGDIObject
 {
     DECLARE_DYNAMIC_CLASS(wxRegion);
     friend class WXDLLEXPORT wxRegionIterator;
@@ -41,6 +41,12 @@ public:
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
     wxRegion(const MGLRegion& region);
+    wxRegion( const wxBitmap& bmp,
+              const wxColour& transColour = wxNullColour,
+              int   tolerance = 0)
+    {
+        Union(bmp, transColour, tolerance);
+    }
 
     wxRegion();
     ~wxRegion();
@@ -96,7 +102,20 @@ public:
     wxRegionContain Contains(wxCoord x, wxCoord y, wxCoord w, wxCoord h) const;
     // Does the region contain the rectangle rect?
     wxRegionContain Contains(const wxRect& rect) const;
-    
+
+    // Convert the region to a B&W bitmap with the black pixels being inside
+    // the region.
+    wxBitmap ConvertToBitmap() const;
+
+    // Use the non-transparent pixels of a wxBitmap for the region to combine
+    // with this region.  If the bitmap has a mask then it will be used,
+    // otherwise the colour to be treated as transparent may be specified,
+    // along with an optional tolerance value.
+    bool Union(const wxBitmap& bmp,
+               const wxColour& transColour = wxNullColour,
+               int   tolerance = 0);
+
+
     // implementation from now on:
     const MGLRegion& GetMGLRegion() const;
 
@@ -109,7 +128,7 @@ protected:
 
 WX_DECLARE_EXPORTED_LIST(wxRect, wxRegionRectList);
 
-class WXDLLEXPORT wxRegionIterator : public wxObject 
+class WXDLLEXPORT wxRegionIterator : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxRegionIterator);
 public:

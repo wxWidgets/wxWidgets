@@ -114,13 +114,13 @@ void wxTopLevelWindowMac::Init()
 class wxMacDeferredWindowDeleter : public wxObject
 {
 public :
-    wxMacDeferredWindowDeleter( WindowRef windowRef ) 
-    { 
-        m_macWindow = windowRef ; 
+    wxMacDeferredWindowDeleter( WindowRef windowRef )
+    {
+        m_macWindow = windowRef ;
     }
-    virtual ~wxMacDeferredWindowDeleter() 
-    { 
-        UMADisposeWindow( (WindowRef) m_macWindow ) ; 
+    virtual ~wxMacDeferredWindowDeleter()
+    {
+        UMADisposeWindow( (WindowRef) m_macWindow ) ;
     }
  protected :
     WindowRef m_macWindow ;
@@ -186,7 +186,7 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
 
 bool wxTopLevelWindowMac::IsMaximized() const
 {
-    return false ; 
+    return false ;
 }
 
 void wxTopLevelWindowMac::Iconize(bool iconize)
@@ -353,7 +353,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 #endif
         }
     }
-    
+
     if ( HasFlag( wxMINIMIZE_BOX ) || HasFlag( wxMAXIMIZE_BOX ) )
     {
         attr |= kWindowFullZoomAttribute ;
@@ -399,7 +399,7 @@ void wxTopLevelWindowMac::Clear()
   wxWindow::Clear() ;
 }
 
-WXWidget wxTopLevelWindowMac::MacGetContainerForEmbedding() 
+WXWidget wxTopLevelWindowMac::MacGetContainerForEmbedding()
 {
     return m_macRootControl ;
 }
@@ -412,7 +412,7 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
 
     BeginUpdate( (WindowRef)m_macWindow ) ;
 
-    RgnHandle       updateRgn = NewRgn();    
+    RgnHandle       updateRgn = NewRgn();
     RgnHandle       diffRgn = NewRgn() ;
     if ( updateRgn && diffRgn )
     {
@@ -615,7 +615,7 @@ bool wxTopLevelWindowMac::Show(bool show)
         return FALSE;
 
     if (show)
-    { 
+    {
       ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
       ::SelectWindow( (WindowRef)m_macWindow ) ;
       // no need to generate events here, they will get them triggered by macos
@@ -635,7 +635,7 @@ bool wxTopLevelWindowMac::Show(bool show)
     }
     else
     {
-        Refresh() ; 
+        Refresh() ;
     }
 
     return TRUE;
@@ -683,17 +683,17 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
 
         if ( doMove )
             ::MoveWindow((WindowRef)m_macWindow, m_x, m_y  , false); // don't make frontmost
-        
+
         if ( doResize )
-            ::SizeWindow((WindowRef)m_macWindow, m_width, m_height  , true); 
-            
+            ::SizeWindow((WindowRef)m_macWindow, m_width, m_height  , true);
+
         // the OS takes care of invalidating and erasing the new area so we only have to
         // take care of refreshing for full repaints
 
         if ( doResize && !HasFlag(wxNO_FULL_REPAINT_ON_RESIZE) )
             Refresh() ;
-        
-        
+
+
         if ( IsKindOf( CLASSINFO( wxFrame ) ) )
         {
             wxFrame* frame = (wxFrame*) this ;
@@ -720,7 +720,7 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
              GetEventHandler()->ProcessEvent(event);
         }
     }
-    
+
 }
 
 /*
@@ -787,3 +787,7 @@ void wxTopLevelWindowMac::MacInvalidate( const WXRECTPTR rect, bool eraseBackgro
   SetPort( formerPort ) ;
 }
 
+bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
+{
+    return FALSE;
+}

@@ -58,6 +58,8 @@ public:
     virtual void SetIcons(const wxIconBundle& icons) { SetIcon( icons.GetIcon( -1 ) ); }
     virtual void Restore();
 
+    virtual bool SetShape(const wxRegion& region);
+
     virtual bool ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style) = wxFULLSCREEN_ALL)
     { return FALSE; }
     virtual bool IsFullScreen() const { return FALSE; }

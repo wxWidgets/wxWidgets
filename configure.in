@@ -228,7 +228,7 @@ case "${host}" in
     dnl
     dnl     Both archive libraries and shared libraries on AIX have an .a
     dnl     extension. This will explain why you can't link with an .so and
-    dnl     why it works with the name changed to .a. 
+    dnl     why it works with the name changed to .a.
     SO_SUFFIX=a
     AC_DEFINE(__AIX__)
     AC_DEFINE(__SYSV__)
@@ -2211,7 +2211,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             AC_MSG_ERROR([Cannot find MGL libraries, make sure they are compiled.])
         fi
         AC_MSG_RESULT("$MGL_ROOT/lib/$mgl_lib_type/$mgl_os")
- 
+
         wxUSE_UNIVERSAL="yes"
 
         TOOLKIT_INCLUDE="-I$MGL_ROOT/include"
@@ -2797,7 +2797,7 @@ case "${host}" in
     *-*-darwin* )
         dnl Under Mac OS X, the naming conventions for shared libraries
         dnl are different: the number precedes the suffix.
-        
+
         WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
         WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
 
@@ -5301,7 +5301,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl      ipc, mfc, nativdlg, oleauto, ownerdrw
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs \
                      drawing dynamic erase event exec font image \
-                     minimal propsize rotate widgets"
+                     minimal propsize rotate shaped widgets"
 
     dnl this is needed to be able to find AFM files
     CPPFLAGS="$CPPFLAGS \$(EXTRADEFS) \$(APPEXTRADEFS)"

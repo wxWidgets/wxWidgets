@@ -139,6 +139,7 @@ ALL_SOURCES = \
 		common/quantize.cpp \
 		common/regex.cpp \
 		common/resource.cpp \
+		common/rgncmn.cpp \
 		common/sckaddr.cpp \
 		common/sckfile.cpp \
 		common/sckipc.cpp \
@@ -759,6 +760,7 @@ COMMONOBJS = \
 		quantize.o \
 		regex.o \
 		resource.o \
+		rgncmn.o \
 		sckaddr.o \
 		sckfile.o \
 		sckipc.o \

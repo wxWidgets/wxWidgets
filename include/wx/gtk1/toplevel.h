@@ -60,6 +60,8 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; };
 
+    virtual bool SetShape(const wxRegion& region);
+
     virtual bool Show(bool show = TRUE);
 
     virtual void SetTitle( const wxString &title );

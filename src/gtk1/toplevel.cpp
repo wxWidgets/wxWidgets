@@ -987,4 +987,43 @@ void wxTopLevelWindowGTK::RemoveGrab()
     }
 }
 
+
+// helper
+static bool do_shape_combine_region(GdkWindow* window, const wxRegion& region)
+{
+    if (window)
+    {
+        if (region.IsEmpty())
+        {
+            gdk_window_shape_combine_mask(window, NULL, 0, 0);
+        }
+        else
+        {
+#ifdef __WXGTK20__
+        gdk_window_shape_combine_region(window, region.GetRegion(), 0, 0);
+#else
+        wxBitmap bmp = region.ConvertToBitmap();
+        bmp.SetMask(new wxMask(bmp, *wxWHITE));
+        GdkBitmap* mask = bmp.GetMask()->GetBitmap();
+        gdk_window_shape_combine_mask(window, mask, 0, 0);
+#endif
+        return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
+bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
+{
+    GdkWindow *window = NULL;
+    if (m_wxwindow)
+    {
+        window = GTK_PIZZA(m_wxwindow)->bin_window;
+        do_shape_combine_region(window, region);
+    }
+    window = m_widget->window;
+    return do_shape_combine_region(window, region);
+}
+
 // vi:sts=4:sw=4:et
