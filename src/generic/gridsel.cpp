@@ -762,7 +762,6 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
 
 void wxGridSelection::ClearSelection()
 {
-    // Should this send deselection events?
     size_t n;
 
     // deselect all invidiual cells and update the screen
@@ -825,6 +824,19 @@ void wxGridSelection::ClearSelection()
                 ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );   
         }
     }
+
+    // One deselection event, indicating deselection of _all_ cells.
+    // (No finer grained events for each of the smaller regions
+    //  deselected above!)
+    wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
+                                    wxEVT_GRID_RANGE_SELECT,
+                                    m_grid,
+                                    wxGridCellCoords( 0, 0 ),
+                                    wxGridCellCoords( m_grid->GetNumberRows() - 1,
+						      m_grid->GetNumberCols() - 1 ),
+                                    FALSE );
+
+    m_grid->GetEventHandler()->ProcessEvent(gridEvt);
 }
 
 
