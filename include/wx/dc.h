@@ -486,26 +486,17 @@ public:
 
     virtual bool Ok() const { return m_ok; }
 
-    // accessors
-    // ---------
+    // accessors and setters
+    // ---------------------
 
-        // const...
     int GetBackgroundMode() const { return m_backgroundMode; }
     const wxBrush&  GetBackground() const { return m_backgroundBrush; }
     const wxBrush&  GetBrush() const { return m_brush; }
     const wxFont&   GetFont() const { return m_font; }
     const wxPen&    GetPen() const { return m_pen; }
-    const wxColour& GetTextBackground() const { return m_textBackgroundColour; }
+
     const wxColour& GetTextForeground() const { return m_textForegroundColour; }
-
-        // ... and non const
-    wxBrush&  GetBackground() { return m_backgroundBrush; }
-    wxBrush&  GetBrush() { return m_brush; }
-    wxFont&   GetFont() { return m_font; }
-    wxPen&    GetPen() { return m_pen; }
-    wxColour& GetTextBackground() { return m_textBackgroundColour; }
-    wxColour& GetTextForeground() { return m_textForegroundColour; }
-
+    const wxColour& GetTextBackground() const { return m_textBackgroundColour; }
     virtual void SetTextForeground(const wxColour& colour)
         { m_textForegroundColour = colour; }
     virtual void SetTextBackground(const wxColour& colour)
