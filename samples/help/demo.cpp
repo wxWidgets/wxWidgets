@@ -32,6 +32,7 @@
 
 #   include "wx/image.h"
 #   include "wx/help.h"
+#   include "wx/cshelp.h"
 
 #if wxUSE_TOOLTIPS
 #   include "wx/tooltip.h"

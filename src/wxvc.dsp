@@ -109,6 +109,10 @@ SOURCE=.\common\config.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\cshelp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\ctrlcmn.cpp
 # End Source File
 # Begin Source File

@@ -293,6 +293,7 @@ enum
 
     /* Help events */
     wxEVT_HELP = wxEVT_FIRST + 1050,
+    wxEVT_DETAILED_HELP,
 
     wxEVT_USER_FIRST = wxEVT_FIRST + 2000
 };
@@ -1404,7 +1405,7 @@ public:
 };
 
 /*
- wxEVT_HELP
+ wxEVT_HELP, wxEVT_DETAILED_HELP
  Sent when the user clicks on a window in context-help mode.
  The cursor position is in screen coordinates.
  */
@@ -1417,10 +1418,21 @@ public:
   wxHelpEvent(wxEventType type = wxEVT_NULL, wxWindowID id = 0, const wxPoint& pt = wxPoint(0, 0))
       { m_eventType = type; m_id = id; m_pos = pt; }
 
+  // Position of event
   const wxPoint& GetPosition() const { return m_pos; }
   void SetPosition(const wxPoint& pos) { m_pos = pos; }
 
+  // Optional link to further help
+  const wxString& GetLink() const { return m_link; }
+  void SetLink(const wxString& link) { m_link = link; }
+
+  // Optional target to display help in. E.g. a window specification
+  const wxString& GetTarget() const { return m_target; }
+  void SetTarget(const wxString& target) { m_target = target; }
+
   wxPoint   m_pos;
+  wxString  m_target;
+  wxString  m_link;
 };
 
 #endif // wxUSE_GUI
@@ -1848,6 +1860,12 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
 #define EVT_HELP_RANGE(id1, id2, func) \
  { wxEVT_HELP, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL },
+
+#define EVT_DETAILED_HELP(id, func) \
+ { wxEVT_DETAILED_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL },
+
+#define EVT_DETAILED_HELP_RANGE(id1, id2, func) \
+ { wxEVT_DETAILED_HELP, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL },
 
 // ----------------------------------------------------------------------------
 // Global data
