@@ -114,8 +114,8 @@ public:
 class wxCheckListBox : public wxListBox
 {
 public:
-    %addtofunc wxListBox         "self._setOORInfo(self)"
-    %addtofunc wxListBox()       ""
+    %addtofunc wxCheckListBox         "self._setOORInfo(self)"
+    %addtofunc wxCheckListBox()       ""
 
     wxCheckListBox(wxWindow *parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition,
