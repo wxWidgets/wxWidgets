@@ -57,24 +57,22 @@
 // wide-character functions
 // ----------------------------------------------------------------------------
 
-#ifdef __WIN32__
-    // VC++ and BC++ starting with 5.2 have TCHAR support
-    #ifdef __VISUALC__
-        #define wxHAVE_TCHAR_FUNCTIONS
-    #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
-        #define wxHAVE_TCHAR_FUNCTIONS
-    #elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 )
-        #define wxHAVE_TCHAR_FUNCTIONS
-        #include <stddef.h>
-        #include <string.h>
-        #include <ctype.h>
-    #elif defined(__CYGWIN__)
-        #ifndef HAVE_WCSLEN
-            #define HAVE_WCSLEN
-        #endif // !HAVE_WCSLEN
-        #include <stddef.h>
-        #include <wchar.h>
-    #endif
+// VC++ and BC++ starting with 5.2 have TCHAR support
+#ifdef __VISUALC__
+    #define wxHAVE_TCHAR_FUNCTIONS
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
+    #define wxHAVE_TCHAR_FUNCTIONS
+#elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 )
+    #define wxHAVE_TCHAR_FUNCTIONS
+    #include <stddef.h>
+    #include <string.h>
+    #include <ctype.h>
+#elif defined(__CYGWIN__)
+    #ifndef HAVE_WCSLEN
+        #define HAVE_WCSLEN
+    #endif // !HAVE_WCSLEN
+    #include <stddef.h>
+    #include <wchar.h>
 #elif defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
     // VisualAge 4.0+ supports TCHAR
     #define wxHAVE_TCHAR_FUNCTIONS
