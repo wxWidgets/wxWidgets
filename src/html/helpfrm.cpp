@@ -501,6 +501,9 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
         WX_CLEAR_HASH_TABLE(*m_PagesHash);
         delete m_PagesHash;
     }
+#if wxUSE_PRINTING_ARCHITECTURE
+    if (m_Printer) delete m_Printer;
+#endif
 }
 
 
