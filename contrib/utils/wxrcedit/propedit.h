@@ -15,12 +15,12 @@
 #define _PROPEDIT_H_
 
 #include "wx/panel.h"
-#include "wx/generic/treectlg.h"
+#include "wx/treectrl.h"
 #include "nodesdb.h"
 #include "propframe.h"
 
 class WXDLLEXPORT wxXmlNode;
-class WXDLLEXPORT wxGenericTreeCtrl;
+class WXDLLEXPORT wxTreeCtrl;
 class WXDLLEXPORT wxTextCtrl;
 
 
@@ -61,7 +61,7 @@ class PropEditCtrl : public wxPanel
     
         PropertiesFrame *m_PropFrame;
         bool m_Created;
-        wxGenericTreeCtrl *m_TreeCtrl;
+        wxTreeCtrl *m_TreeCtrl;
         wxTreeItemId m_TreeItem;
         wxWindow *m_TheCtrl;
         PropertyInfo *m_PropInfo;
