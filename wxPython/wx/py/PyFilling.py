@@ -9,3 +9,6 @@ from wxPython.py import PyFilling
 _rename(globals(), PyFilling.__dict__, modulename='py.PyFilling')
 del PyFilling
 del _rename
+
+if __name__ == '__main__':
+    main()

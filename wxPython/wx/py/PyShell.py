@@ -9,3 +9,6 @@ from wxPython.py import PyShell
 _rename(globals(), PyShell.__dict__, modulename='py.PyShell')
 del PyShell
 del _rename
+
+if __name__ == '__main__':
+    main()
