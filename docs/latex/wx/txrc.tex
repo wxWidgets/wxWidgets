@@ -9,8 +9,8 @@ try to use it, you will get link errors.
 The XML-based resource system, known as XRC, allows user interface elements such as
 dialogs, menu bars and toolbars, to be stored in text files and loaded into
 the application at run-time. XRC files can also be compiled into binary XRS files or C++
-code, so an XML parser does not need to be linked with the application and load times
-are faster.
+code (the former makes it possible to store all resources in since file and the latter
+is useful when you want to embed the resources into the executable).
 
 There are several advantages to using XRC resources.
 
@@ -69,6 +69,8 @@ These are the typical steps for using XRC files in your application.
 
 \begin{itemize}\itemsep=0pt
 \item Include the appropriate headers: normally "wx/xrc/xmlres.h" will suffice;
+\item If you are going to use \helpref{XRS files}{binaryresourcefiles}, install
+wxFileSystem ZIP handler first with {\tt wxFileSystem::AddHandler(new wxZipFSHandler);}
 \item call {\tt wxXmlResource::Get()->InitAllHandlers()} from your wxApp::OnInit function,
 and then call {\tt wxXmlResource::Get()->Load("myfile.xrc")} to load the resource file;
 \item to create a dialog from a resource, create it using the default constructor, and then
@@ -94,20 +96,19 @@ It is highly recommended that you use a tool such as wxDesigner, since it's fidd
 XRC files by hand.
 
 You can use \helpref{wxXmlResource::Load}{wxxmlresourceload} in a number of ways.
-You can pass an XRC file (XML-based text resource file), an XMB file (compiled binary file)
-or a zip-compressed file (extension ZIP or RSC) containing other XRC or XMB files.
+You can pass an XRC file (XML-based text resource file)
+or a \helpref{zip-compressed file}{binaryresourcefiles} (extension ZIP or XRS) containing other XRC.
 
-TODO: is the compiled binary format XMB or XRS? How do you handle a C++ resource file?
+You can also use \helpref{embedded C++ resources}{embeddedresource}
 
 \subsection{Using binary resource files}\label{binaryresourcefiles}
 
-To compile binary resource files, use the command-line wxrc utility. It takes a single file parameter (the
-input XRC file) and the following switches and options.
-
+To compile binary resource files, use the command-line wxrc utility. It takes one or more file parameters
+(the input XRC files) and the following switches and options:
 \begin{itemize}\itemsep=0pt
 \item -h (--help): show a help message
 \item -v (--verbose): show verbose logging information
-\item -c (--cpp-code): write C++ source rather than a RSC file
+\item -c (--cpp-code): write C++ source rather than a XRS file
 \item -u (--uncompressed): do not compress XML files (C++ only)
 \item -g (--gettext): output .po catalog (to stdout, or a file if -o is used)
 \item -n (--function) <name>: specify C++ function name (use with -c)
@@ -116,11 +117,40 @@ input XRC file) and the following switches and options.
 \end{itemize}
 
 For example:
-
 \begin{verbatim}
   % wxrc resource.wrc
   % wxrc resource.wrc -o resource.wrs
   % wxrc resource.wrc -v -c -o resource.cpp
+\end{verbatim}
+
+\wxheading{Note}
+
+XRS file is esentially a renamed ZIP archive which means that you can manipulate
+it with standard ZIP tools. Note that if you are using XRS files, you have
+to initialize \helpref{wxFileSystem}{wxfilesystem} ZIP handler first! It is a simple
+thing to do:
+\begin{verbatim}
+  #include <wx/filesys.h>
+  #include <wx/fs_zip.h>
+  ...
+  wxFileSystem::AddHandler(new wxZipFSHandler);
+\end{verbatim}
+
+\subsection{Using embedded resources}\label{embeddedresource}
+
+It is sometimes useful to embed resources in the executable itself instead
+of loading external file (e.g. when your app is small and consists only of one
+exe file). XRC provides means to convert resources into regular C++ file that
+can be compiled and included in the executable. 
+
+Use the {\tt -c} switch to
+{\tt wxrc} utility to produce C++ file with embedded resources. This file will
+contain a function called {\it InitXmlResource} (unless you override this with
+a command line switch). Use it to load the resource:
+\begin{verbatim}
+  wxXmlResource::Get()->InitAllHandlers();
+  InitXmlResource();
+  ...
 \end{verbatim}
 
 \subsection{XRC C++ sample}\label{xrccppsample}
