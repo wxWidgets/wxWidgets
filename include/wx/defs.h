@@ -843,7 +843,7 @@ typedef wxUint32 wxDword;
     #define wxLongLongSuffix l
     #define wxLongLongFmtSpec _T("l")
     #define wxLongLongIsLong
-#elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ ) || defined (__WATCOM__)
+#elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ ) 
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec _T("I64")
@@ -851,6 +851,10 @@ typedef wxUint32 wxDword;
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec _T("Ld")
+#elif (defined(__WATCOMC__) && defined(__WIN32__))
+      #define wxLongLong_t __int64
+      #define wxLongLongSuffix i64
+      #define wxLongLongFmtSpec _T("Ld")
 #elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
         defined(__MINGW32__) || \
         defined(__GNUC__) || \
