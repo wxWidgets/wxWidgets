@@ -356,6 +356,14 @@
 #   endif
 #endif /* !defined(wxUSE_ICO_CUR) */
 
+#ifndef wxUSE_IFF
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_IFF must be defined."
+#   else
+#       define wxUSE_IFF 0
+#   endif
+#endif /* !defined(wxUSE_IFF) */
+
 #ifndef wxUSE_IMAGLIST
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_IMAGLIST must be defined."
