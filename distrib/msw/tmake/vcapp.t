@@ -52,6 +52,14 @@
 	$EXTRA_LIBS=Config("wxbase") ? "" : "xpm zlib png jpeg tiff";
     }
 
+    if ( Config("unicode") ) {
+	if ( Config("dll") ) { $DLL_SUFFIX = "ud"; }
+	$UNICODE_FLAGS="/D _UNICODE /D UNICODE";
+    }
+    else {
+	$UNICODE_FLAGS="";
+    }
+
     #! let's be smarter: first of all, if no extension is given, add .lib
     #! (this allows for LIBS=libname in project files which map either on
     #! -l libname.lib under Windows or on -llibname under Unix).
