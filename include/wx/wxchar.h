@@ -458,6 +458,7 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 #define wxWX2WC wxMB2WC
 #endif
 #endif
+bool WXDLLEXPORT wxOKlibc(); // for internal use
 
 // if libc versions are not available, use replacements defined in wxchar.cpp
 #ifndef wxStrdup

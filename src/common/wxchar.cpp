@@ -40,7 +40,7 @@
 #endif
 
 #if wxUSE_WCHAR_T
-size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
+size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
   if (buf) {
     if (!n || !*psz) {
@@ -62,7 +62,7 @@ size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 #endif // GNU
 }
 
-size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
+size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 {
   if (buf) {
     if (!n || !*pwz) {
@@ -85,6 +85,26 @@ size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 #endif // GNU
 }
 #endif
+
+bool WXDLLEXPORT wxOKlibc()
+{
+#if wxUSE_WCHAR_T && defined(__UNIX__) && defined(__GLIBC__)
+  // GNU libc uses UTF-8 even when it shouldn't
+  wchar_t res;
+  if ((MB_CUR_MAX == 2) &&
+      (wxMB2WC(&res, "\xdd\xa5", 1)>0) &&
+      (res==0x765)) {
+    // this is UTF-8 allright, check whether that's what we want
+    char *cur_locale = setlocale(LC_ALL, NULL);
+    if ((strlen(cur_locale) < 4) ||
+	(strcasecmp(cur_locale + strlen(cur_locale) - 4, "utf8"))) {
+      // nope, don't use libc conversion
+      return FALSE;
+    }
+  }
+#endif
+  return TRUE;
+}
 
 #ifndef wxStrdup
 wxChar * WXDLLEXPORT wxStrdup(const wxChar *psz)
