@@ -15,7 +15,6 @@ debug = 1
 
 
 demoText = """\
-
 This editor is provided by a class named wx.StyledTextCtrl.  As
 the name suggests, you can define styles that can be applied to
 sections of text.  This will typically be used for things like
@@ -268,9 +267,7 @@ def runTest(frame, nb, log):
         print "FindText(0, max, 'indicators'): ",
         print ed.FindText(0, ed.GetTextLength(), "indicators")
 
-        ed.GotoPos(0)
-
-
+    wx.CallAfter(ed.GotoPos, 0)
     return p
 
 
