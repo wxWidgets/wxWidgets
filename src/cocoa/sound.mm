@@ -1,39 +1,33 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sound.cpp
 // Purpose:     wxSound class implementation: optional
-// Author:      Ryan Norton
+// Authors:     David Elliott, Ryan Norton
 // Modified by: 
 // Created:     2004-10-02
 // RCS-ID:      $Id$
-// Copyright:   (c) Ryan Norton
+// Copyright:   (c) 2004 David Elliott, Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "sound.h"
-#endif
-
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/sound.h"
-
+#include "wx/wxprec.h"
 #if wxUSE_SOUND
 
-#include "wx/app.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/log.h"
+#endif //ndef WX_PRECOMP
+#include "wx/sound.h"
+#include "wx/evtloop.h"
+
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/log.h"
 
-#import <AppKit/AppKit.h>
+#import <AppKit/NSSound.h>
+#import <Foundation/NSData.h>
 
-//
-// NB:  Vaclav's new wxSound API is really tricky -
-// Basically, we need to make sure that if the wxSound
-// object is still in scope we don't release it's NSSound
-//
-
-WX_NSSound lastSound=NULL;
-bool isLastSoundLooping = false;
-bool isLastSoundInScope = false;
+static WX_NSSound s_currentSound = nil;
+static bool s_loopCurrentSound = false;
 
 // ========================================================================
 // wxNSSoundDelegate
@@ -43,18 +37,31 @@ bool isLastSoundInScope = false;
 }
 
 // Delegate methods
-- (void)sound:(NSSound *)theSound didFinishPlaying:(BOOL)bOK;
+- (void)sound:(NSSound *)theSound didFinishPlaying:(BOOL)finishedPlaying;
 @end // interface wxNSSoundDelegate : NSObject
 
 @implementation wxNSSoundDelegate : NSObject
 
-- (void)sound:(NSSound *)theSound didFinishPlaying:(BOOL)bOK
+- (void)sound:(NSSound *)theSound didFinishPlaying:(BOOL)finishedPlaying
 {
-    if (bOK && isLastSoundLooping)
-        [lastSound play];
-    else if (!isLastSoundInScope)
+    // If s_currentSound is not us then some other sound has played.
+    // We can safely ignore this as s_currentSound will have been released
+    // before being set to a different value.
+    if(s_currentSound!=theSound)
+        return;
+    // If playing finished successfully and we are looping, play again.
+    if (finishedPlaying && s_loopCurrentSound)
+        [s_currentSound play];
+    // Otherwise we are done, there is no more current sound playing.
+    else
     {
-        [lastSound release];
+        if(s_currentSound) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("[wxNSSoundDelegate -sound:didFinishPlaying:] [s_currentSound=%p retainCount]=%d (about to release)"),s_currentSound,[s_currentSound retainCount]);
+        [s_currentSound release];
+        s_currentSound = nil;
+        // Make sure we get out of any modal event loops immediately.
+        // NOTE: When the sound finishes playing Cocoa normally does have
+        // an event so this is probably not necessary.
+        wxTheApp->WakeUpIdle();
     }
 }
 
@@ -66,109 +73,114 @@ const wxObjcAutoRefFromAlloc<struct objc_object*> wxSound::sm_cocoaDelegate = [[
 //          wxSound
 // ------------------------------------------------------------------
 
-wxSound::wxSound()
-:   m_cocoaNSSound(nil)
-,   m_waveLength(0)
+wxSound::wxSound(const wxSound& sound)
+:   m_cocoaNSSound(sound.m_cocoaNSSound)
 {
-}
-
-wxSound::wxSound(const wxString& sFileName, bool isResource)
-:   m_cocoaNSSound(nil)
-,   m_waveLength(0)
-{
-    Create(sFileName, isResource);
-}
-
-wxSound::wxSound(int size, const wxByte* data)
-:   m_cocoaNSSound(nil)
-,   m_waveLength(size)
-{
-    NSData* theData = [[NSData alloc] dataWithBytesNoCopy:(void*)data length:size];
-    m_cocoaNSSound = [[NSSound alloc] initWithData:theData];
-
+    [m_cocoaNSSound retain];
 }
 
 wxSound::~wxSound()
 {
-    if (m_cocoaNSSound != lastSound)
-    {
-        [m_cocoaNSSound release];
-    }
-    else
-        isLastSoundInScope = false;
+    SetNSSound(nil);
 }
 
 bool wxSound::Create(const wxString& fileName, bool isResource)
 {
     wxAutoNSAutoreleasePool thePool;
 
-    Stop();
-
     if (isResource)
-    {
-        //oftype could be @"snd" @"wav" or @"aiff"; nil or @"" autodetects (?)
-        m_cocoaNSSound = [[NSSound alloc]
-            initWithContentsOfFile:[[NSBundle mainBundle]
-                    pathForResource:wxNSStringWithWxString(fileName)
-                    ofType:nil]
-            byReference:YES];
-    }
+        SetNSSound([NSSound soundNamed:wxNSStringWithWxString(fileName)]);
     else
-            m_cocoaNSSound = [[NSSound alloc] initWithContentsOfFile:wxNSStringWithWxString(fileName) byReference:YES];
+    {
+        SetNSSound([[NSSound alloc] initWithContentsOfFile:wxNSStringWithWxString(fileName) byReference:YES]);
+        [m_cocoaNSSound release];
+    }
 
-    m_sndname = fileName;
     return m_cocoaNSSound;
+}
+
+bool wxSound::LoadWAV(const wxUint8 *data, size_t length, bool copyData)
+{
+    NSData* theData;
+    if(copyData)
+        theData = [[NSData alloc] initWithBytes:const_cast<wxUint8*>(data) length:length];
+    else
+        theData = [[NSData alloc] initWithBytesNoCopy:const_cast<wxUint8*>(data) length:length];
+    SetNSSound([[NSSound alloc] initWithData:theData]);
+    [m_cocoaNSSound release];
+    [theData release];
+    return m_cocoaNSSound;
+}
+
+void wxSound::SetNSSound(WX_NSSound cocoaNSSound)
+{
+    bool need_debug = cocoaNSSound || m_cocoaNSSound;
+    if(need_debug) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxSound=%p::SetNSSound [m_cocoaNSSound=%p retainCount]=%d (about to release)"),this,m_cocoaNSSound,[m_cocoaNSSound retainCount]);
+    [cocoaNSSound retain];
+    [m_cocoaNSSound release];
+    m_cocoaNSSound = cocoaNSSound;
+    [m_cocoaNSSound setDelegate:sm_cocoaDelegate];
+    if(need_debug) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxSound=%p::SetNSSound [cocoaNSSound=%p retainCount]=%d (just retained)"),this,cocoaNSSound,[cocoaNSSound retainCount]);
 }
 
 bool wxSound::DoPlay(unsigned flags) const
 {
-    wxASSERT_MSG(!( (flags & wxSOUND_SYNC) && (flags & wxSOUND_LOOP)),
-                wxT("Invalid flag combination passed to wxSound::Play"));
+    Stop(); // this releases and nils s_currentSound
 
-    Stop();
+    // NOTE: We set s_currentSound to the current sound in all cases so that
+    // functions like Stop and IsPlaying can work.  It is NOT necessary for
+    // the NSSound to be retained by us for it to continue playing.  Cocoa
+    // retains the NSSound when it is played and relases it when finished.
+
+    wxASSERT(!s_currentSound);
+    s_currentSound = [m_cocoaNSSound retain];
+    wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxSound=%p::DoPlay [s_currentSound=%p retainCount]=%d (just retained)"),this,s_currentSound,[s_currentSound retainCount]);
+    s_loopCurrentSound = (flags & wxSOUND_LOOP) == wxSOUND_LOOP;
 
     if (flags & wxSOUND_ASYNC)
-    {
-        lastSound = m_cocoaNSSound;
-        isLastSoundLooping = (flags & wxSOUND_LOOP) == wxSOUND_LOOP;
-        isLastSoundInScope = true;
-        [m_cocoaNSSound setDelegate:sm_cocoaDelegate];
         return [m_cocoaNSSound play];
-    }
     else
     {
-        [m_cocoaNSSound setDelegate:nil];
+        wxASSERT_MSG(!s_loopCurrentSound,wxT("It is silly to block waiting for a looping sound to finish.  Disabling looping"));
+        // actually, it'd probably work although it's kind of stupid to
+        // block here waiting for a sound that's never going to end.
+        // Granted Stop() could be called somehow, but again, silly.
+        s_loopCurrentSound = false;
 
-        //play until done
-        bool bOK = [m_cocoaNSSound play];
+        if(![m_cocoaNSSound play])
+            return false;
 
-        while ([m_cocoaNSSound isPlaying])
-        {
-            wxTheApp->Yield(false);
-        }
-        return bOK;
+        // Process events until the delegate sets s_currentSound to nil
+        // and/or a different sound plays.
+        while (s_currentSound==m_cocoaNSSound)
+            wxEventLoop::GetActive()->Dispatch();
+        return true;
     }
 }
 
 bool wxSound::IsPlaying()
 {
-    return [lastSound isPlaying];
+    // Normally you can send a message to a nil object and it will return
+    // nil.  That behavior would probably be okay here but in general it's
+    // not recommended to send a message to a nil object if the return
+    // value is not an object.  Better safe than sorry.
+    if(s_currentSound)
+        return [s_currentSound isPlaying];
+    else
+        return false;
 }
 
 void wxSound::Stop()
 {
-    if (isLastSoundInScope)
-    {
-        isLastSoundInScope = false;
-
-        //remember that even though we're
-        //programatically stopping it, the
-        //delegate will still be called -
-        //so it will free the memory here
-        [((NSSound*&)lastSound) stop];
-    }
-
-    lastSound = nil;
+    // Clear the looping flag so that if the sound finishes playing before
+    // stop is called the sound will already be released and niled.
+    s_loopCurrentSound = false;
+    [s_currentSound stop];
+    /* It's possible that sound:didFinishPlaying: was called and released
+       s_currentSound but it doesn't matter since it will have set it to nil */
+    if(s_currentSound) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxSound::Stop [s_currentSound=%p retainCount]=%d (about to release)"),s_currentSound,[s_currentSound retainCount]);
+    [s_currentSound release];
+    s_currentSound = nil;
 }
 
 #endif //wxUSE_SOUND

@@ -2,22 +2,16 @@
 // Name:        sound.h
 // Purpose:     wxSound class (loads and plays short Windows .wav files).
 //              Optional on non-Windows platforms.
-// Author:      Ryan Norton
-// Modified by:
+// Authors:     David Elliott, Ryan Norton
+// Modified by: 
 // Created:     2004-10-02
 // RCS-ID:      $Id$
-// Copyright:   (c) Ryan Norton
+// Copyright:   (c) 2004 David Elliott, Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_SOUND_H_
 #define _WX_COCOA_SOUND_H_
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "sound.h"
-#endif
-
-#if wxUSE_SOUND
 
 #include "wx/object.h"
 #include "wx/cocoa/ObjcRef.h"
@@ -25,9 +19,16 @@
 class WXDLLEXPORT wxSound : public wxSoundBase
 {
 public:
-    wxSound();
-    wxSound(const wxString& fileName, bool isResource = false);
-    wxSound(int size, const wxByte* data);
+    wxSound()
+    :   m_cocoaNSSound(NULL)
+    {}
+    wxSound(const wxString& fileName, bool isResource = false)
+    :   m_cocoaNSSound(NULL)
+    {   Create(fileName, isResource); }
+    wxSound(int size, const wxByte* data)
+    :   m_cocoaNSSound(NULL)
+    {   LoadWAV(data,size,true); }
+    wxSound(const wxSound& sound); // why not?
     ~wxSound();
 
 public:
@@ -37,18 +38,15 @@ public:
     static void Stop();
     static bool IsPlaying();
 
+    void SetNSSound(WX_NSSound cocoaNSSound);
     inline WX_NSSound GetNSSound()
     {   return m_cocoaNSSound; }
 protected:  
     bool DoPlay(unsigned flags) const;
-
+    bool LoadWAV(const wxUint8 *data, size_t length, bool copyData);
 private:
-    WX_NSSound m_cocoaNSSound; //NSSound handle
-    wxString m_sndname; //file path
-    int m_waveLength; //size of file in memory mode    
+    WX_NSSound m_cocoaNSSound;
     static const wxObjcAutoRefFromAlloc<struct objc_object *> sm_cocoaDelegate;
 };
 
-#endif
-#endif
-    // _WX_COCOA_SOUND_H_
+#endif //ndef _WX_COCOA_SOUND_H_
