@@ -13,9 +13,9 @@
 #else // !MSW
 
 #if wxUSE_WXHTML_HELP
-    #include "wx/generic/helpwxht.h"
-    #define wxHelpController wxHelpControllerHtml
-    #define sm_classwxHelpController sm_classwxHelpControllerHtml
+    #include "wx/html/helpctrl.h"
+    #define wxHelpController wxHtmlHelpController
+    #define sm_classwxHelpController sm_classwxHtmlHelpController
 #else
     #include "wx/generic/helpext.h"
     #define wxHelpController wxExtHelpController
