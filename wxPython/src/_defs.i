@@ -298,6 +298,7 @@ enum {
     wxRA_SPECIFY_ROWS,
     wxRA_SPECIFY_COLS,
     wxRB_GROUP,
+    wxRB_SINGLE,
     wxGA_PROGRESSBAR,
     wxGA_HORIZONTAL,
     wxGA_VERTICAL,

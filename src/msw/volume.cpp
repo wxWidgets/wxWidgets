@@ -422,7 +422,7 @@ wxArrayString wxFSVolume::GetVolumes(int flagsSet, int flagsUnset)
     {
 #ifdef UNICODE
         s_pWNetOpenEnum = (WNetOpenEnumPtr)s_mprLib.GetSymbol(_T("WNetOpenEnumW"));
-        s_pWNetEnumResource = (WNetEnumResourcePtr)s_mprLib.GetSymbol("WNetEnumResourceW");
+        s_pWNetEnumResource = (WNetEnumResourcePtr)s_mprLib.GetSymbol(_T("WNetEnumResourceW"));
 #else
         s_pWNetOpenEnum = (WNetOpenEnumPtr)s_mprLib.GetSymbol(_T("WNetOpenEnumA"));
         s_pWNetEnumResource = (WNetEnumResourcePtr)s_mprLib.GetSymbol(_T("WNetEnumResourceA"));

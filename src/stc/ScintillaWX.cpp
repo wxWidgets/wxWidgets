@@ -338,7 +338,7 @@ void ScintillaWX::Copy() {
         SelectionText st;
         CopySelectionRange(&st);
         if (wxTheClipboard->Open()) {
-            wxTheClipboard->UsePrimarySelection();
+            wxTheClipboard->UsePrimarySelection(FALSE);
             wxString text = stc2wx(st.s, st.len);
             wxTheClipboard->SetData(new wxTextDataObject(text));
             wxTheClipboard->Close();
@@ -355,7 +355,7 @@ void ScintillaWX::Paste() {
     bool gotData = FALSE;
 
     if (wxTheClipboard->Open()) {
-        wxTheClipboard->UsePrimarySelection();
+        wxTheClipboard->UsePrimarySelection(FALSE);
         gotData = wxTheClipboard->GetData(data);
         wxTheClipboard->Close();
     }
@@ -380,7 +380,7 @@ bool ScintillaWX::CanPaste() {
         wxTheClipboard->Open();
 
     if (wxTheClipboard->IsOpened()) {
-        wxTheClipboard->UsePrimarySelection();
+        wxTheClipboard->UsePrimarySelection(FALSE);
         canPaste = wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT);
         if (didOpen)
             wxTheClipboard->Close();
@@ -405,8 +405,22 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
 }
 
 
+// This is called by the Editor base class whenever something is selected
 void ScintillaWX::ClaimSelection() {
-
+#ifdef __WXGTK__
+    // Put the selected text in the PRIMARY selection
+    if (currentPos != anchor) {
+        SelectionText st;
+        CopySelectionRange(&st);
+        if (wxTheClipboard->Open()) {
+            wxTheClipboard->UsePrimarySelection(TRUE);
+            wxString text = stc2wx(st.s, st.len);
+            wxTheClipboard->SetData(new wxTextDataObject(text));
+            wxTheClipboard->UsePrimarySelection(FALSE);
+            wxTheClipboard->Close();
+        }
+    }
+#endif
 }
 
 
@@ -547,22 +561,63 @@ void ScintillaWX::DoSysColourChange() {
     InvalidateStyleData();
 }
 
-void ScintillaWX::DoButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
+void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
     ButtonDown(pt, curTime, shift, ctrl, alt);
 }
 
-void ScintillaWX::DoButtonUp(Point pt, unsigned int curTime, bool ctrl) {
+void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
     ButtonUp(pt, curTime, ctrl);
 }
 
-void ScintillaWX::DoButtonMove(Point pt) {
+void ScintillaWX::DoLeftButtonMove(Point pt) {
     ButtonMove(pt);
+}
+
+void ScintillaWX::DoMiddleButtonUp(Point pt) {
+#ifdef __WXGTK__
+    // Set the current position to the mouse click point and
+    // then paste in the PRIMARY selection, if any.  wxGTK only.
+    int newPos = PositionFromLocation(pt);
+    MovePositionTo(newPos, 0, 1);
+
+    pdoc->BeginUndoAction();
+    wxTextDataObject data;
+    bool gotData = FALSE;
+    if (wxTheClipboard->Open()) {
+        wxTheClipboard->UsePrimarySelection(TRUE);
+        gotData = wxTheClipboard->GetData(data);
+        wxTheClipboard->UsePrimarySelection(FALSE);
+        wxTheClipboard->Close();
+    }
+    if (gotData) {
+        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(data.GetText());
+        int        len = strlen(buf);
+        pdoc->InsertString(currentPos, buf, len);
+        SetEmptySelection(currentPos + len);
+    }
+    pdoc->EndUndoAction();
+    NotifyChange();
+    Redraw();
+
+    ShowCaretAtCurrentPosition();
+    EnsureCaretVisible();
+#endif
 }
 
 
 void ScintillaWX::DoAddChar(int key) {
+#if wxUSE_UNICODE
+    char ansiChars[3];
+    ansiChars[0] = key;
+    ansiChars[1] = 0;
+    wxString uniChar(ansiChars, wxConvLocal);
+    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(uniChar);
+    AddCharUTF((char*)buf.data(), strlen(buf));
+#else
     AddChar(key);
+#endif
 }
+
 
 int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed) {
 #if defined(__WXGTK__) || defined(__WXMAC__)

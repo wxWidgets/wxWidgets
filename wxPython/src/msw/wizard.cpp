@@ -359,8 +359,7 @@ static PyObject *_wrap_wxWizardPage_Create(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxWizardPage_Create. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -636,8 +635,7 @@ static PyObject *_wrap_wxPyWizardPage_Create(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPyWizardPage_Create. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1382,8 +1380,7 @@ static PyObject *_wrap_new_wxWizardPageSimple(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxWizardPageSimple. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1479,8 +1476,7 @@ static PyObject *_wrap_wxWizardPageSimple_Create(PyObject *self, PyObject *args,
         }
     }
     if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxWizardPageSimple_Create. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1679,8 +1675,7 @@ static PyObject *_wrap_new_wxWizard(PyObject *self, PyObject *args, PyObject *kw
         return NULL;
 }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxWizard. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1779,8 +1774,7 @@ static PyObject *_wrap_wxWizard_Create(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
     if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxWizard_Create. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -2069,7 +2063,83 @@ static PyObject *_wrap_wxWizard_ShowPage(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+#define wxWizard_HasNextPage(_swigobj,_swigarg0)  (_swigobj->HasNextPage(_swigarg0))
+static PyObject *_wrap_wxWizard_HasNextPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWizard * _arg0;
+    wxWizardPage * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","page", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWizard_HasNextPage",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWizard_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWizard_HasNextPage. Expected _wxWizard_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWizardPage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWizard_HasNextPage. Expected _wxWizardPage_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxWizard_HasNextPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxWizard_HasPrevPage(_swigobj,_swigarg0)  (_swigobj->HasPrevPage(_swigarg0))
+static PyObject *_wrap_wxWizard_HasPrevPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWizard * _arg0;
+    wxWizardPage * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","page", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWizard_HasPrevPage",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWizard_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWizard_HasPrevPage. Expected _wxWizard_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWizardPage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWizard_HasPrevPage. Expected _wxWizardPage_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxWizard_HasPrevPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyMethodDef wizardcMethods[] = {
+	 { "wxWizard_HasPrevPage", (PyCFunction) _wrap_wxWizard_HasPrevPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWizard_HasNextPage", (PyCFunction) _wrap_wxWizard_HasNextPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_ShowPage", (PyCFunction) _wrap_wxWizard_ShowPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_IsRunning", (PyCFunction) _wrap_wxWizard_IsRunning, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_FitToPage", (PyCFunction) _wrap_wxWizard_FitToPage, METH_VARARGS | METH_KEYWORDS },

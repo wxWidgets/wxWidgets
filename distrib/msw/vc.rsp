@@ -285,6 +285,8 @@ utils/helpgen/src/HelpGenVC.dsw
 
 utils/helpview/src/helpview.dsp
 utils/helpview/src/helpview.dsw
+utils/helpview/src/client.dsp
+utils/helpview/src/client.dsw
 
 contrib/src/ogl/OglVC.dsp
 contrib/src/ogl/OglVC.dsw

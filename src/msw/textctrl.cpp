@@ -38,6 +38,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/menu.h"
 #endif
 
 #include "wx/module.h"
@@ -149,17 +150,25 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
 
+#if wxUSE_RICHEDIT
+    EVT_RIGHT_UP(wxTextCtrl::OnRightClick)
+#endif
+
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
     EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
     EVT_MENU(wxID_PASTE, wxTextCtrl::OnPaste)
     EVT_MENU(wxID_UNDO, wxTextCtrl::OnUndo)
     EVT_MENU(wxID_REDO, wxTextCtrl::OnRedo)
+    EVT_MENU(wxID_CLEAR, wxTextCtrl::OnDelete)
+    EVT_MENU(wxID_SELECTALL, wxTextCtrl::OnSelectAll)
 
     EVT_UPDATE_UI(wxID_CUT, wxTextCtrl::OnUpdateCut)
     EVT_UPDATE_UI(wxID_COPY, wxTextCtrl::OnUpdateCopy)
     EVT_UPDATE_UI(wxID_PASTE, wxTextCtrl::OnUpdatePaste)
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
+    EVT_UPDATE_UI(wxID_CLEAR, wxTextCtrl::OnUpdateDelete)
+    EVT_UPDATE_UI(wxID_SELECTALL, wxTextCtrl::OnUpdateSelectAll)
 #ifdef __WIN16__
     EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 #endif
@@ -177,9 +186,19 @@ void wxTextCtrl::Init()
 {
 #if wxUSE_RICHEDIT
     m_verRichEdit = 0;
-
-    m_suppressNextUpdate = FALSE;
 #endif // wxUSE_RICHEDIT
+
+    m_privateContextMenu = NULL;
+    m_suppressNextUpdate = FALSE;
+}
+
+wxTextCtrl::~wxTextCtrl()
+{
+    if (m_privateContextMenu)
+    {
+        delete m_privateContextMenu;
+        m_privateContextMenu = NULL;
+    }
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -570,7 +589,7 @@ bool wxTextCtrl::StreamIn(const wxString& value,
 {
     return FALSE;
 }
-#else
+#else // !__WXWINE__
 
 #if wxUSE_UNICODE_MSLU
 bool wxTextCtrl::StreamIn(const wxString& value,
@@ -584,7 +603,7 @@ bool wxTextCtrl::StreamIn(const wxString& value,
                           bool selectionOnly)
 {
     // we have to use EM_STREAMIN to force richedit control 2.0+ to show any
-    // text in the non default charset - otherwise it thinks it knows better
+    // text in the non default charset -- otherwise it thinks it knows better
     // than we do and always shows it in the default one
 
     // first get the Windows code page for this encoding
@@ -620,6 +639,14 @@ bool wxTextCtrl::StreamIn(const wxString& value,
     // the cast below is needed for broken (very) old mingw32 headers
     eds.pfnCallback = (EDITSTREAMCALLBACK)wxRichEditStreamIn;
 
+    // we're going to receive 2 EN_CHANGE notifications if we got any selection
+    // (same problem as in DoWriteText())
+    if ( selectionOnly && HasSelection() )
+    {
+        // so suppress one of them
+        m_suppressNextUpdate = TRUE;
+    }
+
     if ( !::SendMessage(GetHwnd(), EM_STREAMIN,
                         SF_TEXT |
                         SF_UNICODE |
@@ -636,8 +663,7 @@ bool wxTextCtrl::StreamIn(const wxString& value,
     return TRUE;
 }
 
-#endif
-    // __WXWINE__
+#endif // __WXWINE__/!__WXWINE__
  
 #endif // wxUSE_RICHEDIT
 
@@ -700,18 +726,35 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
     if ( !done )
 #endif // wxUSE_RICHEDIT
     {
+        // in some cases we get 2 EN_CHANGE notifications after the SendMessage
+        // call below which is confusing for the client code and so should be
+        // avoided
+        //
+        // these cases are: (a) plain EDIT controls if EM_REPLACESEL is used
+        // and there is a non empty selection currently and (b) rich text
+        // controls in any case
+        if (
 #if wxUSE_RICHEDIT
-        // rich edit text control sends us 2 EN_CHANGE events when we send
-        // WM_SETTEXT to it, we have to suppress one of them to make wxTextCtrl
-        // behaviour consistent
-        if ( IsRich() )
+            IsRich() ||
+#endif // wxUSE_RICHEDIT
+            (selectionOnly && HasSelection()) )
         {
             m_suppressNextUpdate = TRUE;
         }
-#endif // wxUSE_RICHEDIT
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
                       0, (LPARAM)valueDos.c_str());
+
+        // OTOH, non rich text controls don't generate any events at all when
+        // we use WM_SETTEXT -- have to emulate them here
+        if ( !selectionOnly
+#if wxUSE_RICHEDIT
+                && !IsRich()
+#endif // wxUSE_RICHEDIT
+           )
+        {
+            SendUpdateEvent();
+        }
     }
 
     AdjustSpaceLimit();
@@ -722,6 +765,15 @@ void wxTextCtrl::AppendText(const wxString& text)
     SetInsertionPointEnd();
 
     WriteText(text);
+
+#if wxUSE_RICHEDIT
+    if ( IsMultiLine() && GetRichVersion() > 1 )
+    {
+        // setting the caret to the end and showing it simply doesn't work for
+        // RichEdit 2.0 -- force it to still do what we want
+        ::SendMessage(GetHwnd(), EM_LINESCROLL, 0, GetNumberOfLines());
+    }
+#endif // wxUSE_RICHEDIT
 }
 
 void wxTextCtrl::Clear()
@@ -786,12 +838,17 @@ void wxTextCtrl::Paste()
     }
 }
 
-bool wxTextCtrl::CanCopy() const
+bool wxTextCtrl::HasSelection() const
 {
-    // Can copy if there's a selection
     long from, to;
     GetSelection(&from, &to);
     return from != to;
+}
+
+bool wxTextCtrl::CanCopy() const
+{
+    // Can copy if there's a selection
+    return HasSelection();
 }
 
 bool wxTextCtrl::CanCut() const
@@ -1286,11 +1343,13 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
     if ( nMsg == WM_GETDLGCODE )
     {
+        // we always want the chars and the arrows: the arrows for navigation
+        // and the chars because we want Ctrl-C to work even in a read only
+        // control
+        long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
+
         if ( IsEditable() )
         {
-            // we always want the chars and the arrows
-            long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
-
             // we may have several different cases:
             // 1. normal case: both TAB and ENTER are used for dlg navigation
             // 2. ctrl which wants TAB for itself: ENTER is used to pass to the
@@ -1311,15 +1370,11 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         }
         else // !editable
         {
-            // when the control can't be edited by user, it doesn't need any
-            // extra keys changing its contents at all -- but it still needs
-            // the arrows to allow navigating in it
-            //
             // NB: use "=", not "|=" as the base class version returns the
             //     same flags is this state as usual (i.e. including
             //     DLGC_WANTMESSAGE). This is strange (how does it work in the
             //     native Win32 apps?) but for now live with it.
-            lRc = DLGC_WANTARROWS;
+            lRc = lDlgCode;
         }
     }
 
@@ -1559,6 +1614,19 @@ void wxTextCtrl::OnRedo(wxCommandEvent& WXUNUSED(event))
     Redo();
 }
 
+void wxTextCtrl::OnDelete(wxCommandEvent& event)
+{
+    long from, to;
+    GetSelection(& from, & to);
+    if (from != -1 && to != -1)
+        Remove(from, to);
+}
+
+void wxTextCtrl::OnSelectAll(wxCommandEvent& event)
+{
+    SetSelection(-1, -1);
+}
+
 void wxTextCtrl::OnUpdateCut(wxUpdateUIEvent& event)
 {
     event.Enable( CanCut() );
@@ -1582,6 +1650,44 @@ void wxTextCtrl::OnUpdateUndo(wxUpdateUIEvent& event)
 void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     event.Enable( CanRedo() );
+}
+
+void wxTextCtrl::OnUpdateDelete(wxUpdateUIEvent& event)
+{
+    long from, to;
+    GetSelection(& from, & to);
+    event.Enable(from != -1 && to != -1 && from != to && IsEditable()) ;
+}
+
+void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
+{
+    event.Enable(GetLastPosition() > 0);
+}
+
+void wxTextCtrl::OnRightClick(wxMouseEvent& event)
+{
+#if wxUSE_RICHEDIT
+    if (IsRich())
+    {
+        if (!m_privateContextMenu)
+        {
+            m_privateContextMenu = new wxMenu;
+            m_privateContextMenu->Append(wxID_UNDO, _("&Undo"));
+            m_privateContextMenu->Append(wxID_REDO, _("&Redo"));
+            m_privateContextMenu->AppendSeparator();
+            m_privateContextMenu->Append(wxID_CUT, _("Cu&t"));
+            m_privateContextMenu->Append(wxID_COPY, _("&Copy"));
+            m_privateContextMenu->Append(wxID_PASTE, _("&Paste"));
+            m_privateContextMenu->Append(wxID_CLEAR, _("&Delete"));
+            m_privateContextMenu->AppendSeparator();
+            m_privateContextMenu->Append(wxID_SELECTALL, _("Select &All"));
+        }
+        PopupMenu(m_privateContextMenu, event.GetPosition());
+        return;
+    }
+    else
+#endif
+    event.Skip();
 }
 
 // the rest of the file only deals with the rich edit controls

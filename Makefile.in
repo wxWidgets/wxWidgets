@@ -536,6 +536,7 @@ ALL_DIST: distclean
 	cp $(WXDIR)/install-sh $(DISTDIR)
 	cp $(WXDIR)/mkinstalldirs $(DISTDIR)
 	cp $(WXDIR)/wx-config.in $(DISTDIR)
+	cp $(WXDIR)/version-script.in $(DISTDIR)
 	cp $(WXDIR)/setup.h.in $(DISTDIR)
 	cp $(WXDIR)/setup.h_vms $(DISTDIR)
 	cp $(WXDIR)/descrip.mms $(DISTDIR)
@@ -777,6 +778,8 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	cp $(SRCDIR)/*.??? $(DISTDIR)/src
 	cp $(SRCDIR)/*.?? $(DISTDIR)/src
 	cp $(MSWDIR)/?ake*.* $(DISTDIR)/src/msw
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 UNIV_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/univ
@@ -1499,6 +1502,7 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 
 debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
+	cp $(SRCDIR)/files.lst $(DISTDIR)/src
 
 debian-msw-dirs:
 	mkdir $(DISTDIR)/include/wx/msw

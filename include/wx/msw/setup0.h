@@ -44,12 +44,12 @@
 // Recommended setting: 0 (please update your code instead!)
 #define WXWIN_COMPATIBILITY_2 0
 
-// This setting determines the compatibility with 2.0 API: set it to 1 to
-// enable it
+// This setting determines the compatibility with 2.2 API: set it to 0 to
+// flag all cases of using deprecated functions.
 //
-// Default is 1.
+// Default is 1 but please try building your code with 0.
 //
-// Recommended setting: 0 (please update your code instead!)
+// Recommended setting: 0 (please update your code)
 #define WXWIN_COMPATIBILITY_2_2 1
 
 // in wxMSW version 2.1.11 and earlier, wxIcon always derives from wxBitmap,
@@ -768,7 +768,15 @@
 // smaller library.
 #define wxUSE_HTML          1
 
-// OpenGL canvas
+// Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
+// headers and libraries to be able to compile the library with wxUSE_GLCANVAS
+// set to 1. Note that for some compilers (notably Microsoft Visual C++) you
+// will need to manually add opengl32.lib and glu32.lib to the list of
+// libraries linked with your program if you use OpenGL.
+//
+// Default is 0.
+//
+// Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
 #define wxUSE_GLCANVAS       0
 
 // wxTreeLayout class
@@ -846,8 +854,12 @@
 #define wxUSE_RESOURCE_LOADING_IN_MSW     1
                                 // Use dynamic icon/cursor loading/saving code
                                 // under MSW.
-#define wxUSE_WX_RESOURCES        1
-                                // Use .wxr resource mechanism (requires PrologIO library)
+
+// use wxExpr (a.k.a. PrologIO)
+#define wxUSE_PROLOGIO          0
+
+// Use .wxr resource mechanism (requires PrologIO library)
+#define wxUSE_WX_RESOURCES      0
 
 #define wxUSE_MOUSEWHEEL        1
                                 // Include mouse wheel support

@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/list.h"
+#include "wx/fl/fldefs.h"
 
 struct GCItem
 {
@@ -33,7 +34,7 @@ inline void* gc_node_to_obj( wxNode* pGCNode )
 This class implements an extremely slow but simple garbage collection algorithm.
 */
 
-class GarbageCollector
+class WXFL_DECLSPEC GarbageCollector
 {
 protected:
     wxList mAllNodes;

@@ -9161,8 +9161,7 @@ static PyObject *_wrap_wxStyledTextCtrl_StyleSetFont(PyObject *self, PyObject *a
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxStyledTextCtrl_StyleSetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -12030,7 +12029,6 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxSTC_SCRIPTOL_COMMENTDOCKEYWORD", PyInt_FromLong((long) 17));
 	 PyDict_SetItemString(d,"wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR", PyInt_FromLong((long) 18));
 	 PyDict_SetItemString(d,"wxSTC_SCRIPTOL_COMMENTBASIC", PyInt_FromLong((long) 19));
-	 PyDict_SetItemString(d,"wxSTCNameStr", PyString_FromString("wxSTCNameStr"));
 	 PyDict_SetItemString(d,"STC_USE_DND", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxEVT_STC_CHANGE", PyInt_FromLong((long) wxEVT_STC_CHANGE));
 	 PyDict_SetItemString(d,"wxEVT_STC_STYLENEEDED", PyInt_FromLong((long) wxEVT_STC_STYLENEEDED));

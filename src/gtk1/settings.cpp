@@ -16,6 +16,7 @@
 #include "wx/debug.h"
 #include "wx/module.h"
 #include "wx/cmndata.h"
+#include "wx/fontutil.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
@@ -326,8 +327,25 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         {
             if (!g_systemFont)
             {
+#ifdef __WXGTK20__
+                GtkWidget *widget = gtk_button_new();
+                GtkStyle *def = gtk_rc_get_style( widget );
+                if (!def)
+                    def = gtk_widget_get_default_style();
+                if (def)
+                {
+                    wxNativeFontInfo info;
+                    info.description = def->font_desc;
+                    g_systemFont = new wxFont(info);
+                }
+                else
+                {
+                   g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
+                }
+                gtk_widget_destroy( widget );
+#else
                 g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
-
+#endif
             }
             return *g_systemFont;
         }

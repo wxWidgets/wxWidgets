@@ -306,7 +306,7 @@ wxString wxJoystick::GetProductName() const
 {
     JOYCAPS joyCaps;
     if (joyGetDevCaps(m_joystick, & joyCaps, sizeof(JOYCAPS)) != JOYERR_NOERROR)
-        return wxString("");
+        return wxEmptyString;
     else
         return wxString(joyCaps.szPname);
 }

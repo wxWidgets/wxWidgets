@@ -208,7 +208,7 @@ bool wxGDIImage::FreeResource(bool WXUNUSED(force))
     return TRUE;
 }
 
-WXHANDLE wxGDIImage::GetResourceHandle()
+WXHANDLE wxGDIImage::GetResourceHandle() const
 {
     return GetHandle();
 }
@@ -424,6 +424,27 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
         nameReal = name.BeforeLast(wxT(';'));
     }
 
+#if 0
+    // If we don't know what size icon we're looking for,
+    // try to find out what's there.
+    // Unfortunately this doesn't work, because ExtractIconEx
+    // will scale the icon to the 'desired' size, even if that
+    // size of icon isn't explicitly stored. So we would have
+    // to parse the icon file outselves.
+    if ( desiredWidth == -1 &&
+         desiredHeight == -1)
+    {
+        // Try loading a large icon first
+        if ( ::ExtractIconEx(nameReal, iconIndex, &hicon, NULL, 1) == 1)
+        {
+        }
+        // Then try loading a small icon
+        else if ( ::ExtractIconEx(nameReal, iconIndex, NULL, &hicon, 1) == 1)
+        {
+        }
+    }
+    else
+#endif
     // were we asked for a large icon?
     if ( desiredWidth == ::GetSystemMetrics(SM_CXICON) &&
          desiredHeight == ::GetSystemMetrics(SM_CYICON) )

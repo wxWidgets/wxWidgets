@@ -25,18 +25,8 @@ import images
 _treeList = [
     # new stuff
     ('New since last release', [
-        'RowColSizer',
-        'Unicode',
-        'wxFileHistory',
-        'wxGenericDirCtrl',
-        'wxImageFromStream',
-        'wxArtProvider',
-        'ScrolledPanel',
-        'wxMenu',
-        'wxIEHtmlWin',
-        'wxKeyEvents',
-        'wxWizard',
-        'wxXmlResourceHandler',
+        'wxRadioButton',
+
         ]),
 
     # managed windows == things with a caption you can close
@@ -88,6 +78,7 @@ _treeList = [
         'wxNotebook',
         'wxPopupWindow',
         'wxRadioBox',
+        'wxRadioButton',
         'wxSashWindow',
         'wxSlider',
         'wxScrolledWindow',
@@ -129,6 +120,7 @@ _treeList = [
         'wxRightTextCtrl',
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',
+        'wxTimeCtrl',
         ]),
 
     # How to lay out the controls in a frame/dialog
@@ -358,7 +350,7 @@ class wxPythonDemo(wxFrame):
 
         # Set up a TextCtrl on the Demo Code Notebook page
         self.txt = wxTextCtrl(self.nb, -1,
-                              style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
+                              style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL|wxTE_RICH2)
         self.nb.AddPage(self.txt, "Demo Code")
 
 

@@ -2186,6 +2186,21 @@ static void TestLongLongPrint()
     wxPrintf(_T("-0x1234567887654321 = %s\n"), ll.ToString().c_str());
 }
 
+static void TestLongLongPrintf()
+{
+    wxPuts(_T("*** Testing wxLongLong printing ***\n"));
+
+#ifdef wxLongLongFmtSpec
+    wxLongLong ll = wxLL(0x1234567890abcdef);
+    wxString s = wxString::Format(_T("%") wxLongLongFmtSpec _T("x"),
+                                  ll.GetValue());
+    wxPrintf(_T("0x1234567890abcdef -> %s (%s)\n"),
+             s.c_str(), s == _T("1234567890abcdef") ? _T("ok") : _T("ERROR"));
+#else // !wxLongLongFmtSpec
+    #error "wxLongLongFmtSpec not defined for this compiler/platform"
+#endif
+}
+
 #undef MAKE_LL
 #undef RAND_LL
 
@@ -3156,7 +3171,7 @@ static void TestFtpWuFtpd()
         }
         else
         {
-            size_t size = in->StreamSize();
+            size_t size = in->GetSize();
             wxPrintf(_T("Reading file %s (%u bytes)..."), filename, size);
 
             wxChar *data = new wxChar[size];
@@ -3239,7 +3254,7 @@ static void TestFtpDownload()
     }
     else
     {
-        size_t size = in->StreamSize();
+        size_t size = in->GetSize();
         wxPrintf(_T("Reading file %s (%u bytes)..."), filename, size);
         fflush(stdout);
 

@@ -40,20 +40,22 @@ public:
     // no need to check for NULL, free() does it
     ~wxCharBuffer() { free(m_str); }
 
-    wxCharBuffer(const wxCharBuffer& src)
+    wxCharBuffer(/* non const! */ wxCharBuffer& src)
         : m_str(src.m_str)
     {
         // no reference count yet...
-        ((wxCharBuffer*)&src)->m_str = (char *)NULL;
+        src.m_str = (char *)NULL;
     }
-    wxCharBuffer& operator=(const wxCharBuffer& src)
+    wxCharBuffer& operator=(/* non const! */ wxCharBuffer& src)
     {
         m_str = src.m_str;
+
         // no reference count yet...
-        ((wxCharBuffer*)&src)->m_str = (char *)NULL;
+        src.m_str = (char *)NULL;
         return *this;
     }
 
+    char *data() { return m_str; }
     const char *data() const { return m_str; }
     operator const char *() const { return m_str; }
     char operator[](size_t n) const { return m_str[n]; }
@@ -85,20 +87,21 @@ public:
     // no need to check for NULL, free() does it
     ~wxWCharBuffer() { free(m_wcs); }
 
-    wxWCharBuffer(const wxWCharBuffer& src)
+    wxWCharBuffer(/* non const! */ wxWCharBuffer& src)
         : m_wcs(src.m_wcs)
     {
        // no reference count yet...
-       ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
+       src.m_wcs = (wchar_t *)NULL;
     }
-    wxWCharBuffer& operator=(const wxWCharBuffer& src)
+    wxWCharBuffer& operator=(/* non const! */ wxWCharBuffer& src)
     {
         m_wcs = src.m_wcs;
         // no reference count yet...
-        ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
+        src.m_wcs = (wchar_t *)NULL;
         return *this;
     }
 
+    wchar_t *data() { return m_wcs; }
     const wchar_t *data() const { return m_wcs; }
     operator const wchar_t *() const { return m_wcs; }
     wchar_t operator[](size_t n) const { return m_wcs[n]; }
@@ -125,101 +128,146 @@ private:
 // A class for holding growable data buffers (not necessarily strings)
 // ----------------------------------------------------------------------------
 
+// This class manages the actual data buffer pointer and is ref-counted.
+class wxMemoryBufferData
+{
+public:
+    // the initial size and also the size added by ResizeIfNeeded()
+    enum { BLOCK_SIZE = 1024 };
+
+    friend class wxMemoryBuffer;
+
+    // everyting is private as it can only be used by wxMemoryBuffer
+private:
+    wxMemoryBufferData(size_t size = wxMemoryBufferData::BLOCK_SIZE)
+        : m_data(size ? malloc(size) : NULL), m_size(size), m_len(0), m_ref(0)
+    {
+    }
+    ~wxMemoryBufferData() { free(m_data); }
+
+
+    void ResizeIfNeeded(size_t newSize)
+    {
+        if (newSize > m_size)
+        {
+            void *dataOld = m_data;
+            m_data = realloc(m_data, newSize + wxMemoryBufferData::BLOCK_SIZE);
+            if ( !m_data )
+            {
+                free(dataOld);
+            }
+
+            m_size = newSize + wxMemoryBufferData::BLOCK_SIZE;
+        }
+    }
+
+    void IncRef() { m_ref += 1; }
+    void DecRef()
+    {
+        m_ref -= 1;
+        if (m_ref == 0)  // are there no more references?
+            delete this;
+    }
+
+
+    // the buffer containing the data
+    void  *m_data;
+
+    // the size of the buffer
+    size_t m_size;
+
+    // the amount of data currently in the buffer
+    size_t m_len;
+
+    // the reference count
+    size_t m_ref;
+};
+
+
 class wxMemoryBuffer
 {
 public:
-    enum { BLOCK_SIZE = 1024 };
-    wxMemoryBuffer(size_t size = wxMemoryBuffer::BLOCK_SIZE)
-        : m_data(malloc(size)), m_size(size), m_len(0)
+    // ctor and dtor
+    wxMemoryBuffer(size_t size = wxMemoryBufferData::BLOCK_SIZE)
     {
+        m_bufdata = new wxMemoryBufferData(size);
+        m_bufdata->IncRef();
     }
 
-    ~wxMemoryBuffer() { free(m_data); }
+    ~wxMemoryBuffer() { m_bufdata->DecRef(); }
+
+
+    // copy and assignment
+    wxMemoryBuffer(const wxMemoryBuffer& src)
+        : m_bufdata(src.m_bufdata)
+    {
+        m_bufdata->IncRef();
+    }
+
+    wxMemoryBuffer& operator=(const wxMemoryBuffer& src)
+    {
+        m_bufdata->DecRef();
+        m_bufdata = src.m_bufdata;
+        m_bufdata->IncRef();
+        return *this;
+    }
+
 
     // Accessors
-    void*  GetData() const    { return m_data; }
-    size_t GetBufSize() const { return m_size; }
-    size_t GetDataLen() const { return m_len; }
+    void  *GetData() const    { return m_bufdata->m_data; }
+    size_t GetBufSize() const { return m_bufdata->m_size; }
+    size_t GetDataLen() const { return m_bufdata->m_len; }
 
-    void   SetBufSize(size_t size) { ResizeIfNeeded(size); }
+    void   SetBufSize(size_t size) { m_bufdata->ResizeIfNeeded(size); }
     void   SetDataLen(size_t len)
     {
-        wxASSERT(len <= m_size);
-        m_len = len;
+        wxASSERT(len <= m_bufdata->m_size);
+        m_bufdata->m_len = len;
     }
 
     // Ensure the buffer is big enough and return a pointer to it
-    void* GetWriteBuf(size_t sizeNeeded)
+    void *GetWriteBuf(size_t sizeNeeded)
     {
-        ResizeIfNeeded(sizeNeeded);
-        return m_data;
+        m_bufdata->ResizeIfNeeded(sizeNeeded);
+        return m_bufdata->m_data;
     }
+
     // Update the length after the write
     void  UngetWriteBuf(size_t sizeUsed) { SetDataLen(sizeUsed); }
 
     // Like the above, but appends to the buffer
-    void* GetAppendBuf(size_t sizeNeeded)
+    void *GetAppendBuf(size_t sizeNeeded)
     {
-        ResizeIfNeeded(m_len + sizeNeeded);
-        return (char*)m_data + m_len;
+        m_bufdata->ResizeIfNeeded(m_bufdata->m_len + sizeNeeded);
+        return (char*)m_bufdata->m_data + m_bufdata->m_len;
     }
-    void  UngetAppendBuf(size_t sizeUsed) { SetDataLen(m_len + sizeUsed); }
+
+    // Update the length after the append
+    void  UngetAppendBuf(size_t sizeUsed)
+    {
+        SetDataLen(m_bufdata->m_len + sizeUsed);
+    }
 
     // Other ways to append to the buffer
-    void  AppendByte(char data) {
-        ResizeIfNeeded(m_len + 1);
-        *(((char*)m_data)+m_len) = data;
-        m_len += 1;
+    void  AppendByte(char data)
+    {
+        wxCHECK_RET( m_bufdata->m_data, _T("invalid wxMemoryBuffer") );
+
+        m_bufdata->ResizeIfNeeded(m_bufdata->m_len + 1);
+        *(((char*)m_bufdata->m_data) + m_bufdata->m_len) = data;
+        m_bufdata->m_len += 1;
     }
+
     void  AppendData(void* data, size_t len)
     {
         memcpy(GetAppendBuf(len), data, len);
         UngetAppendBuf(len);
     }
 
-    operator const char *() const { return (const char*)m_data; }
-
-
-    // Copy and assignment
-    wxMemoryBuffer(const wxMemoryBuffer& src)
-        : m_data(src.m_data), m_size(src.m_size), m_len(src.m_len)
-    {
-        // no reference count yet...
-        ((wxMemoryBuffer*)&src)->m_data = NULL;
-        ((wxMemoryBuffer*)&src)->m_size = 0;
-        ((wxMemoryBuffer*)&src)->m_len  = 0;
-    }
-
-    wxMemoryBuffer& operator=(const wxMemoryBuffer& src)
-    {
-        m_data = src.m_data;
-        m_size = src.m_size;
-        m_len  = src.m_len;
-
-        // no reference count yet...
-        ((wxMemoryBuffer*)&src)->m_data = NULL;
-        ((wxMemoryBuffer*)&src)->m_size = 0;
-        ((wxMemoryBuffer*)&src)->m_len  = 0;
-
-        return *this;
-   }
-
-
-protected:
-    void ResizeIfNeeded(size_t newSize)
-    {
-        if (newSize > m_size)
-        {
-            m_data = realloc(m_data, newSize + wxMemoryBuffer::BLOCK_SIZE);
-            wxASSERT(m_data != NULL);
-            m_size = newSize + wxMemoryBuffer::BLOCK_SIZE;
-        }
-    }
+    operator const char *() const { return (const char*)GetData(); }
 
 private:
-    void*       m_data;
-    size_t      m_size;
-    size_t      m_len;
+    wxMemoryBufferData*  m_bufdata;
 };
 
 // ----------------------------------------------------------------------------

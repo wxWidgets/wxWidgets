@@ -26,7 +26,7 @@
 class WXDLLEXPORT wxCommand : public wxObject
 {
 public:
-    wxCommand(bool canUndoIt = FALSE, const wxString& name = "");
+    wxCommand(bool canUndoIt = FALSE, const wxString& name = wxT(""));
     ~wxCommand();
 
     // Override this to perform a command

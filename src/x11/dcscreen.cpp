@@ -17,6 +17,8 @@
 #include "wx/frame.h"
 #include "wx/dcscreen.h"
 #include "wx/utils.h"
+#include "wx/app.h"
+#include "wx/fontutil.h"
 
 #include "wx/x11/private.h"
 
@@ -46,6 +48,11 @@ wxScreenDC::wxScreenDC()
     m_window = (WXWindow) RootWindow( (Display*) m_display, screen );
 
     m_isScreenDC = TRUE;
+
+#if wxUSE_UNICODE
+    m_context = wxTheApp->GetPangoContext();
+    m_fontdesc = wxNORMAL_FONT->GetNativeFontInfo()->description;
+#endif
 
     SetUpDC();
 

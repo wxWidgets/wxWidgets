@@ -449,6 +449,10 @@ public:
         // return the wxDateTime object for the current time
     static inline wxDateTime Now();
 
+        // return the wxDateTime object for the current time with millisecond
+        // precision (if available on this platform)
+    static wxDateTime UNow();
+
         // return the wxDateTime object for today midnight: i.e. as Now() but
         // with time set to 0
     static inline wxDateTime Today();
@@ -528,8 +532,8 @@ public:
     // calendar calculations
 
         // set to the given week day in the same week as this one
-    wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday);
-    wxDateTime GetWeekDayInSameWeek(WeekDay weekday);
+    wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday, WeekFlags flags = Monday_First);
+    wxDateTime GetWeekDayInSameWeek(WeekDay weekday, WeekFlags flags = Monday_First);
 
         // set to the next week day following this one
     wxDateTime& SetToNextWeekDay(WeekDay weekday);
@@ -563,8 +567,8 @@ public:
         // sets the date to the given day of the given week in the year,
         // returns TRUE on success and FALSE if given date doesn't exist (e.g.
         // numWeek is > 53)
-    bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon);
-    wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon);
+    bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
+    wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
 
         // sets the date to the last day of the given (or current) month or the
         // given (or current) year

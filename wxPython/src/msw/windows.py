@@ -174,6 +174,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Fit(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Fit,(self,) + _args, _kwargs)
         return val
+    def FitInside(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_FitInside,(self,) + _args, _kwargs)
+        return val
     def GetBackgroundColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetBackgroundColour,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
@@ -326,9 +329,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Layout(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Layout,(self,) + _args, _kwargs)
         return val
-    def LoadFromResource(self, *_args, **_kwargs):
-        val = apply(windowsc.wxWindow_LoadFromResource,(self,) + _args, _kwargs)
-        return val
     def Lower(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Lower,(self,) + _args, _kwargs)
         return val
@@ -457,6 +457,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetVirtualSizeTuple(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetVirtualSizeTuple,(self,) + _args, _kwargs)
         return val
+    def GetBestVirtualSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetBestVirtualSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
     def SetClientSizeWH(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetClientSizeWH,(self,) + _args, _kwargs)
         return val
@@ -562,6 +566,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def GetMaxSize(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetMaxSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def GetAdjustedBestSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetAdjustedBestSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def SetCaret(self, *_args, **_kwargs):
@@ -982,6 +990,9 @@ class wxMenuBarPtr(wxWindowPtr):
         return val
     def EnableTop(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_EnableTop,(self,) + _args, _kwargs)
+        return val
+    def IsEnabledTop(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_IsEnabledTop,(self,) + _args, _kwargs)
         return val
     def SetLabelTop(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_SetLabelTop,(self,) + _args, _kwargs)

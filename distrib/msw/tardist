@@ -67,6 +67,7 @@ rm -f $2/wx*-${WXVER}*.tar.gz
 # Copy setup files
 cp $1/include/wx/os2/SETUP0.H $1/include/wx/os2/setup.h
 cp $1/include/wx/msw/setup0.h $1/include/wx/msw/setup.h
+cp $1/include/wx/univ/setup0.h $1/include/wx/univ/setup.h
 
 echo Tarring...
 
@@ -85,13 +86,13 @@ $TAR cf $2/wxGTK-${WXVER}.tar -T /tmp/wxgtk.txt
 
 echo Re-tarring wxGTK in a subdirectory...
 cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
+mkdir wxGTK-${WXVER}
+cd wxGTK-${WXVER}
 $TAR xf ../wxGTK-${WXVER}.tar
 cd ..
 rm -f wxGTK-${WXVER}.tar
-$TAR cf $2/wxGTK-${WXVER}.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
+$TAR cf $2/wxGTK-${WXVER}.tar wxGTK-${WXVER}/*
+rm -f -r wxGTK-${WXVER}
 gzip $2/wxGTK-${WXVER}.tar
 
 ### wxMotif
@@ -102,13 +103,13 @@ $TAR cf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 
 echo Re-tarring wxMotif in a subdirectory...
 cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
+mkdir wxMotif-${WXVER}
+cd wxMotif-${WXVER}
 $TAR xf ../wxMotif-${WXVER}.tar
 cd ..
 rm -f wxMotif-${WXVER}.tar
-$TAR cf $2/wxMotif-${WXVER}.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
+$TAR cf $2/wxMotif-${WXVER}.tar wxMotif-${WXVER}/*
+rm -f -r wxMotif-${WXVER}
 gzip $2/wxMotif-${WXVER}.tar
 
 ### wxX11: combined wxMotif and wxX11 distributions
@@ -119,13 +120,13 @@ $TAR cf $2/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
 
 echo Re-tarring wxX11 in a subdirectory...
 cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
+mkdir wxX11-${WXVER}
+cd wxX11-${WXVER}
 $TAR xf ../wxX11-${WXVER}.tar
 cd ..
 rm -f wxX11-${WXVER}.tar
-$TAR cf $2/wxX11-${WXVER}.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
+$TAR cf $2/wxX11-${WXVER}.tar wxX11-${WXVER}/*
+rm -f -r wxX11-${WXVER}
 gzip $2/wxX11-${WXVER}.tar
 
 ### wxMSW
@@ -146,32 +147,32 @@ rm -f $1/include/wx/setup.h
 
 echo Re-tarring wxMac in a subdirectory...
 cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
+mkdir wxMac-${WXVER}
+cd wxMac-${WXVER}
 $TAR xf ../wxMac-${WXVER}.tar
 rm -f -r contrib/src/mmedia contrib/samples/mmedia
 cd ..
 rm -f wxMac-${WXVER}.tar
-$TAR cf $2/wxMac-${WXVER}.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
+$TAR cf $2/wxMac-${WXVER}.tar wxMac-${WXVER}/*
+rm -f -r wxMac-${WXVER}
 gzip $2/wxMac-${WXVER}.tar
 
 ### wxUniv: universal-specific files
-cd $1
-cat $1/distrib/msw/univ.rsp > /tmp/wxuniv_in.txt
-expandlines /tmp/wxuniv_in.txt /tmp/wxuniv.txt
-$TAR cf $2/wxWindows-${WXVER}-Univ.tar -T /tmp/wxuniv.txt
-
-echo Re-tarring wxUniversal in a subdirectory...
-cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-Univ.tar
-cd ..
-rm -f wxWindows-${WXVER}-Univ.tar
-$TAR cf $2/wxWindows-${WXVER}-Univ.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
-gzip $2/wxWindows-${WXVER}-Univ.tar
+#cd $1
+#cat $1/distrib/msw/univ.rsp > /tmp/wxuniv_in.txt
+#expandlines /tmp/wxuniv_in.txt /tmp/wxuniv.txt
+#$TAR cf $2/wxWindows-${WXVER}-Univ.tar -T /tmp/wxuniv.txt
+#
+#echo Re-tarring wxUniversal in a subdirectory...
+#cd $2
+#mkdir wxWindows-${WXVER}
+#cd wxWindows-${WXVER}
+#$TAR xf ../wxWindows-${WXVER}-Univ.tar
+#cd ..
+#rm -f wxWindows-${WXVER}-Univ.tar
+#$TAR cf $2/wxWindows-${WXVER}-Univ.tar wxWindows-${WXVER}/*
+#rm -f -r wxWindows-${WXVER}
+#gzip $2/wxWindows-${WXVER}-Univ.tar
 
 ### wxAll: all distributions in one giant archive
 cd $1

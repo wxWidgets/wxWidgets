@@ -1785,7 +1785,6 @@ wxSTC_SCRIPTOL_WORD2 = stc_c.wxSTC_SCRIPTOL_WORD2
 wxSTC_SCRIPTOL_COMMENTDOCKEYWORD = stc_c.wxSTC_SCRIPTOL_COMMENTDOCKEYWORD
 wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR = stc_c.wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR
 wxSTC_SCRIPTOL_COMMENTBASIC = stc_c.wxSTC_SCRIPTOL_COMMENTBASIC
-wxSTCNameStr = stc_c.wxSTCNameStr
 STC_USE_DND = stc_c.STC_USE_DND
 wxEVT_STC_CHANGE = stc_c.wxEVT_STC_CHANGE
 wxEVT_STC_STYLENEEDED = stc_c.wxEVT_STC_STYLENEEDED
@@ -1819,5 +1818,5 @@ wxEVT_STC_ZOOM = stc_c.wxEVT_STC_ZOOM
 wx.wxStyledTextEventPtr       = wxStyledTextEventPtr
 wx.wxStyledTextCtrlPtr        = wxStyledTextCtrlPtr
 
-
-wxSTC_CARET_CENTER = wxSTC_CARET_STRICT
+# This constant no longer exists in Scintilla, but I'll put it here for a while to avoid disrupting user code...
+wxSTC_CARET_CENTER = 0

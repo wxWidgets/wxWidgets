@@ -84,6 +84,9 @@ public:
             if (*self == *sz) return 0;
             return -1;
         }
+
+        bool __eq__(const wxSize& o) { return *self == o; }
+        bool __ne__(const wxSize& o) { return *self != o; }
     }
 
     %pragma(python) addtoclass = "
@@ -95,6 +98,7 @@ public:
         if index == 0: self.width = val
         elif index == 1: self.height = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0,0)
 "
 
 };
@@ -137,6 +141,9 @@ public:
             if (*self == *p) return 0;
             return -1;
         }
+
+        bool __eq__(const wxRealPoint& o) { return *self == o; }
+        bool __ne__(const wxRealPoint& o) { return *self != o; }
     }
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
@@ -147,6 +154,7 @@ public:
         if index == 0: self.width = val
         elif index == 1: self.height = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0.0, 0.0)
 "
 };
 
@@ -187,6 +195,9 @@ public:
             if (*self == *p) return 0;
             return -1;
         }
+
+        bool __eq__(const wxPoint& o) { return *self == o; }
+        bool __ne__(const wxPoint& o) { return *self != o; }
     }
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
@@ -197,6 +208,7 @@ public:
         if index == 0: self.x = val
         elif index == 1: self.y = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0,0)
 "
 };
 
@@ -260,6 +272,9 @@ public:
             if (*self == *rect) return 0;
             return -1;
         }
+
+        bool __eq__(const wxRect& o) { return *self == o; }
+        bool __ne__(const wxRect& o) { return *self != o; }
     }
 
     %pragma(python) addtoclass = "
@@ -273,6 +288,7 @@ public:
         elif index == 2: self.width = val
         elif index == 3: self.height = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0,0,0,0)
 
     # override the __getattr__ made by SWIG
     def __getattr__(self, name):
@@ -381,14 +397,16 @@ bool wxYield();
 bool wxYieldIfNeeded();
 void wxEnableTopLevelWindows(bool enable);
 
-%inline %{
+#ifdef wxUSE_RESOURCES
+inline %{
     wxString wxGetResource(const wxString& section, const wxString& entry,
                            const wxString& file = wxPyEmptyString) {
-        wxChar * retval;
+        wxChar* retval;
         wxGetResource(section, entry, &retval, file);
         return retval;
     }
 %}
+#endif
 
 wxString wxStripMenuCodes(const wxString& in);
 

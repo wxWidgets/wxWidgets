@@ -201,6 +201,15 @@ public:
                             const wxPoint& pos = wxDefaultPosition,
                             const wxSize& size = wxDefaultSize);
 #endif // WXWIN_COMPATIBILITY_2_2
+
+    // the methods below may be overridden by the derived classes to provide
+    // custom logic for determining the pages order
+
+    virtual bool HasNextPage(wxWizardPage *page)
+        { return page->GetNext() != NULL; }
+
+    virtual bool HasPrevPage(wxWizardPage *page)
+        { return page->GetPrev() != NULL; }
 };
 
 // include the real class declaration

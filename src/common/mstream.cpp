@@ -80,7 +80,7 @@ size_t wxMemoryInputStream::OnSysRead(void *buffer, size_t nbytes)
     }
 
     m_i_streambuf->Read(buffer, nbytes);
-    m_lasterror = wxSTREAM_NOERROR;
+    m_lasterror = wxSTREAM_NO_ERROR;
 
     return m_i_streambuf->GetIntPosition() - pos;
 }

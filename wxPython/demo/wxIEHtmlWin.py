@@ -9,7 +9,7 @@ if wxPlatform == '__WXMSW__':
 class TestPanel(wxWindow):
     def __init__(self, parent, log, frame=None):
         wxWindow.__init__(self, parent, -1,
-                          style=wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
+                          style=wxTAB_TRAVERSAL|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
         self.log = log
         self.current = "http://wxWindows.org/"
         self.frame = frame

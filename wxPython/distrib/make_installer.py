@@ -37,10 +37,10 @@ DirExistsWarning = no
 DisableReadyMemo = true
 DisableReadyPage = true
 ;;DisableDirPage = true
-DisableProgramGroupPage = true
+DisableProgramGroupPage = no
 DisableAppendDir = true
 UsePreviousAppDir = no
-UsePreviousGroup = no
+UsePreviousGroup = yes
 
 UninstallFilesDir = {app}\wxPython
 AppPublisherURL = http://wxPython.org/

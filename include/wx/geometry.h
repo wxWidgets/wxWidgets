@@ -59,11 +59,11 @@ public :
     inline wxPoint2DInt( const wxPoint &pt );
 
     // noops for this class, just return the coords
-    inline void GetFloor( wxInt32 *x , wxInt32 *y );
-    inline void GetRounded( wxInt32 *x , wxInt32 *y );
+    inline void GetFloor( wxInt32 *x , wxInt32 *y ) const;
+    inline void GetRounded( wxInt32 *x , wxInt32 *y ) const;
 
-    inline wxDouble GetVectorLength();
-           wxDouble GetVectorAngle();
+    inline wxDouble GetVectorLength() const;
+           wxDouble GetVectorAngle() const;
     inline void SetVectorLength( wxDouble length );
            void SetVectorAngle( wxDouble degrees );
            void SetPolarCoordinates( wxInt32 angle , wxInt32 length );
@@ -133,7 +133,7 @@ inline wxPoint2DInt::wxPoint2DInt( const wxPoint &pt )
     m_y = pt.y;
 }
 
-inline void wxPoint2DInt::GetFloor( wxInt32 *x , wxInt32 *y )
+inline void wxPoint2DInt::GetFloor( wxInt32 *x , wxInt32 *y ) const
 {
     if ( x )
         *x = m_x;
@@ -141,12 +141,12 @@ inline void wxPoint2DInt::GetFloor( wxInt32 *x , wxInt32 *y )
         *y = m_y;
 }
 
-inline void wxPoint2DInt::GetRounded( wxInt32 *x , wxInt32 *y )
+inline void wxPoint2DInt::GetRounded( wxInt32 *x , wxInt32 *y ) const
 {
     GetFloor(x, y);
 }
 
-inline wxDouble wxPoint2DInt::GetVectorLength()
+inline wxDouble wxPoint2DInt::GetVectorLength() const
 {
     // cast needed MIPSpro compiler under SGI
     return sqrt( (double)(m_x)*(m_x) + (m_y)*(m_y) );
@@ -304,8 +304,8 @@ public :
 		{ 	m_x = (wxDouble) pt.x ; m_y = (wxDouble) pt.y ; }
 
     // two different conversions to integers, floor and rounding
-    inline void GetFloor( wxInt32 *x , wxInt32 *y );
-    inline void GetRounded( wxInt32 *x , wxInt32 *y );
+    inline void GetFloor( wxInt32 *x , wxInt32 *y ) const;
+    inline void GetRounded( wxInt32 *x , wxInt32 *y ) const;
 
     inline wxDouble GetVectorLength() const;
      wxDouble GetVectorAngle() const ;
@@ -315,10 +315,10 @@ public :
     // set the vector length to 1.0, preserving the angle
     void Normalize();
 
-    inline wxDouble GetDistance( const wxPoint2DDouble &pt );
-    inline wxDouble GetDistanceSquare( const wxPoint2DDouble &pt );
-    inline wxDouble GetDotProduct( const wxPoint2DDouble &vec );
-    inline wxDouble GetCrossProduct( const wxPoint2DDouble &vec );
+    inline wxDouble GetDistance( const wxPoint2DDouble &pt ) const;
+    inline wxDouble GetDistanceSquare( const wxPoint2DDouble &pt ) const;
+    inline wxDouble GetDotProduct( const wxPoint2DDouble &vec ) const;
+    inline wxDouble GetCrossProduct( const wxPoint2DDouble &vec ) const;
 
     // the reflection of this point
     inline wxPoint2DDouble operator-();
@@ -369,13 +369,13 @@ inline wxPoint2DDouble::wxPoint2DDouble( const wxPoint2DDouble &pt )
     m_y = pt.m_y;
 }
 
-inline void wxPoint2DDouble::GetFloor( wxInt32 *x , wxInt32 *y )
+inline void wxPoint2DDouble::GetFloor( wxInt32 *x , wxInt32 *y ) const
 {
     *x = (wxInt32) floor( m_x );
     *y = (wxInt32) floor( m_y );
 }
 
-inline void wxPoint2DDouble::GetRounded( wxInt32 *x , wxInt32 *y )
+inline void wxPoint2DDouble::GetRounded( wxInt32 *x , wxInt32 *y ) const
 {
     *x = (wxInt32) floor( m_x + 0.5 );
     *y = (wxInt32) floor( m_y + 0.5);
@@ -393,22 +393,22 @@ inline void wxPoint2DDouble::SetVectorLength( wxDouble length )
     m_y = (m_y * length / before) ;
 }
 
-inline wxDouble wxPoint2DDouble::GetDistance( const wxPoint2DDouble &pt )
+inline wxDouble wxPoint2DDouble::GetDistance( const wxPoint2DDouble &pt ) const
 {
     return sqrt( GetDistanceSquare( pt ) );
 }
 
-inline wxDouble wxPoint2DDouble::GetDistanceSquare( const wxPoint2DDouble &pt )
+inline wxDouble wxPoint2DDouble::GetDistanceSquare( const wxPoint2DDouble &pt ) const
 {
     return ( (pt.m_x-m_x)*(pt.m_x-m_x) + (pt.m_y-m_y)*(pt.m_y-m_y) );
 }
 
-inline wxDouble wxPoint2DDouble::GetDotProduct( const wxPoint2DDouble &vec )
+inline wxDouble wxPoint2DDouble::GetDotProduct( const wxPoint2DDouble &vec ) const
 {
     return ( m_x * vec.m_x + m_y * vec.m_y );
 }
 
-inline wxDouble wxPoint2DDouble::GetCrossProduct( const wxPoint2DDouble &vec )
+inline wxDouble wxPoint2DDouble::GetCrossProduct( const wxPoint2DDouble &vec ) const
 {
     return ( m_x * vec.m_y - vec.m_x * m_y );
 }

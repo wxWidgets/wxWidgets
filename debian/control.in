@@ -116,7 +116,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ development)
 Package: libwxgtk=V-python
 Architecture: any
 Section: interpreters
-Depends: python (>=2.1), python (<<2.2), ${shlibs:Depends}
+Depends: python (>=2.2), python (<<2.3), ${shlibs:Depends}
 Suggests: wxwin=V-doc, wxwin=V-examples
 Conflicts: libwxgtk=V-python-contrib, python-wxwin
 Replaces: libwxgtk=V-python-contrib, python-wxwin

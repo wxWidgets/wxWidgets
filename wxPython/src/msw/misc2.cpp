@@ -1322,8 +1322,7 @@ static PyObject *_wrap_wxSetCursor(PyObject *self, PyObject *args, PyObject *kwa
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSetCursor",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSetCursor. Expected _wxCursor_p.");
         return NULL;
         }
@@ -1508,208 +1507,6 @@ static PyObject *_wrap_wxGetTopLevelParent(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-static PyObject *_wrap_wxResourceAddIdentifier(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    char * _arg0;
-    int  _arg1;
-    char *_kwnames[] = { "name","value", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"si:wxResourceAddIdentifier",_kwnames,&_arg0,&_arg1)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxResourceAddIdentifier(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxResourceClear(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    char *_kwnames[] = {  NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxResourceClear",_kwnames)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxResourceClear();
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxResourceCreateBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxBitmap * _result;
-    char * _arg0;
-    char *_kwnames[] = { "resource", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxResourceCreateBitmap",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxBitmap (wxResourceCreateBitmap(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxResourceCreateIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxIcon * _result;
-    char * _arg0;
-    char *_kwnames[] = { "resource", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxResourceCreateIcon",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxIcon (wxResourceCreateIcon(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxIcon_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxResourceCreateMenuBar(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMenuBar * _result;
-    char * _arg0;
-    char *_kwnames[] = { "resource", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxResourceCreateMenuBar",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxMenuBar *)wxResourceCreateMenuBar(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxResourceGetIdentifier(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    char * _arg0;
-    char *_kwnames[] = { "name", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxResourceGetIdentifier",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxResourceGetIdentifier(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxResourceParseData(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    char * _arg0;
-    wxResourceTable * _arg1 = (wxResourceTable *) NULL;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "resource","table", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s|O:wxResourceParseData",_kwnames,&_arg0,&_argo1)) 
-        return NULL;
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxResourceTable_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxResourceParseData. Expected _wxResourceTable_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxResourceParseData(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxResourceParseFile(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    char * _arg0;
-    wxResourceTable * _arg1 = (wxResourceTable *) NULL;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "filename","table", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s|O:wxResourceParseFile",_kwnames,&_arg0,&_argo1)) 
-        return NULL;
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxResourceTable_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxResourceParseFile. Expected _wxResourceTable_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxResourceParseFile(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxResourceParseString(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    char * _arg0;
-    wxResourceTable * _arg1 = (wxResourceTable *) NULL;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "resource","table", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s|O:wxResourceParseString",_kwnames,&_arg0,&_argo1)) 
-        return NULL;
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxResourceTable_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxResourceParseString. Expected _wxResourceTable_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxResourceParseString(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxCaret_GetBlinkTime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
@@ -1793,8 +1590,7 @@ static PyObject *_wrap_wxPostEvent(PyObject *self, PyObject *args, PyObject *kwa
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPostEvent. Expected _wxEvent_p.");
         return NULL;
         }
@@ -3744,15 +3540,13 @@ static PyObject *_wrap_new_wxDragImage(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxDragImage",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragImage. Expected _wxBitmap_p.");
         return NULL;
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragImage. Expected _wxCursor_p.");
         return NULL;
         }
@@ -3788,15 +3582,13 @@ static PyObject *_wrap_new_wxDragIcon(PyObject *self, PyObject *args, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxDragIcon",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragIcon. Expected _wxIcon_p.");
         return NULL;
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragIcon. Expected _wxCursor_p.");
         return NULL;
         }
@@ -3837,8 +3629,7 @@ static PyObject *_wrap_new_wxDragString(PyObject *self, PyObject *args, PyObject
         return NULL;
 }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragString. Expected _wxCursor_p.");
         return NULL;
         }
@@ -3878,15 +3669,13 @@ static PyObject *_wrap_new_wxDragTreeItem(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:new_wxDragTreeItem",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragTreeItem. Expected _wxTreeCtrl_p.");
         return NULL;
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragTreeItem. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -3921,8 +3710,7 @@ static PyObject *_wrap_new_wxDragListItem(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:new_wxDragListItem",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragListItem. Expected _wxListCtrl_p.");
         return NULL;
         }
@@ -8131,19 +7919,43 @@ static PyObject *_wrap_wxWave_Play(PyObject *self, PyObject *args, PyObject *kwa
 static PyObject *_wrap_new_wxFileTypeInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFileTypeInfo * _result;
-    char * _arg0;
-    char * _arg1;
-    char * _arg2;
-    char * _arg3;
+    wxString * _arg0;
+    wxString * _arg1;
+    wxString * _arg2;
+    wxString * _arg3;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "mimeType","openCmd","printCmd","desc", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ssss:new_wxFileTypeInfo",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:new_wxFileTypeInfo",_kwnames,&_obj0,&_obj1,&_obj2,&_obj3)) 
         return NULL;
 {
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+{
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxFileTypeInfo *)new_wxFileTypeInfo(_arg0,_arg1,_arg2,_arg3);
+    _result = (wxFileTypeInfo *)new_wxFileTypeInfo(*_arg0,*_arg1,*_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -8154,6 +7966,22 @@ static PyObject *_wrap_new_wxFileTypeInfo(PyObject *self, PyObject *args, PyObje
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    if (_obj3)
+        delete _arg3;
+}
     return _resultobj;
 }
 
@@ -8654,8 +8482,7 @@ static PyObject *_wrap_new_wxFileType(PyObject *self, PyObject *args, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxFileType",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxFileType. Expected _wxFileTypeInfo_p.");
         return NULL;
         }
@@ -9253,8 +9080,7 @@ static PyObject *_wrap_wxFileType_ExpandCommand(PyObject *self, PyObject *args, 
         return NULL;
 }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileType::MessageParameters_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileType::MessageParameters_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileType_ExpandCommand. Expected _wxFileType::MessageParameters_p.");
         return NULL;
         }
@@ -9672,8 +9498,7 @@ static PyObject *_wrap_wxMimeTypesManager_AddFallback(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMimeTypesManager_AddFallback. Expected _wxFileTypeInfo_p.");
         return NULL;
         }
@@ -9711,8 +9536,7 @@ static PyObject *_wrap_wxMimeTypesManager_Associate(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMimeTypesManager_Associate. Expected _wxFileTypeInfo_p.");
         return NULL;
         }
@@ -10046,24 +9870,6 @@ static PyObject *_wrap_wxArtProvider_GetIcon(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-static PyObject *_wrap_wxArtProvider_CleanUpProviders(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    char *_kwnames[] = {  NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxArtProvider_CleanUpProviders",_kwnames)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPyArtProvider::CleanUpProviders();
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static void *SwigwxFileHistoryTowxObject(void *ptr) {
     wxFileHistory *src;
     wxObject *dest;
@@ -10317,8 +10123,7 @@ static PyObject *_wrap_wxFileHistory_Load(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_Load. Expected _wxConfigBase_p.");
         return NULL;
         }
@@ -10354,8 +10159,7 @@ static PyObject *_wrap_wxFileHistory_Save(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_Save. Expected _wxConfigBase_p.");
         return NULL;
         }
@@ -10986,8 +10790,7 @@ static PyObject *_wrap_wxEffects_DrawSunkenEdge(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxEffects_DrawSunkenEdge. Expected _wxDC_p.");
         return NULL;
         }
@@ -11039,15 +10842,13 @@ static PyObject *_wrap_wxEffects_TileBitmap(PyObject *self, PyObject *args, PyOb
         return NULL;
 }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxEffects_TileBitmap. Expected _wxDC_p.");
         return NULL;
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxEffects_TileBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -11278,7 +11079,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFileHistory_AddFileToHistory", (PyCFunction) _wrap_wxFileHistory_AddFileToHistory, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxFileHistory", (PyCFunction) _wrap_delete_wxFileHistory, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFileHistory", (PyCFunction) _wrap_new_wxFileHistory, METH_VARARGS | METH_KEYWORDS },
-	 { "wxArtProvider_CleanUpProviders", (PyCFunction) _wrap_wxArtProvider_CleanUpProviders, METH_VARARGS | METH_KEYWORDS },
 	 { "wxArtProvider_GetIcon", (PyCFunction) _wrap_wxArtProvider_GetIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxArtProvider_GetBitmap", (PyCFunction) _wrap_wxArtProvider_GetBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxArtProvider_RemoveProvider", (PyCFunction) _wrap_wxArtProvider_RemoveProvider, METH_VARARGS | METH_KEYWORDS },
@@ -11540,15 +11340,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxSafeYield", (PyCFunction) _wrap_wxSafeYield, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_SetBlinkTime", (PyCFunction) _wrap_wxCaret_SetBlinkTime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_GetBlinkTime", (PyCFunction) _wrap_wxCaret_GetBlinkTime, METH_VARARGS | METH_KEYWORDS },
-	 { "wxResourceParseString", (PyCFunction) _wrap_wxResourceParseString, METH_VARARGS | METH_KEYWORDS },
-	 { "wxResourceParseFile", (PyCFunction) _wrap_wxResourceParseFile, METH_VARARGS | METH_KEYWORDS },
-	 { "wxResourceParseData", (PyCFunction) _wrap_wxResourceParseData, METH_VARARGS | METH_KEYWORDS },
-	 { "wxResourceGetIdentifier", (PyCFunction) _wrap_wxResourceGetIdentifier, METH_VARARGS | METH_KEYWORDS },
-	 { "wxResourceCreateMenuBar", (PyCFunction) _wrap_wxResourceCreateMenuBar, METH_VARARGS | METH_KEYWORDS },
-	 { "wxResourceCreateIcon", (PyCFunction) _wrap_wxResourceCreateIcon, METH_VARARGS | METH_KEYWORDS },
-	 { "wxResourceCreateBitmap", (PyCFunction) _wrap_wxResourceCreateBitmap, METH_VARARGS | METH_KEYWORDS },
-	 { "wxResourceClear", (PyCFunction) _wrap_wxResourceClear, METH_VARARGS | METH_KEYWORDS },
-	 { "wxResourceAddIdentifier", (PyCFunction) _wrap_wxResourceAddIdentifier, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetTopLevelParent", (PyCFunction) _wrap_wxGetTopLevelParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFlushEvents", (PyCFunction) _wrap_wxFlushEvents, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckForInterrupt", (PyCFunction) _wrap_wxCheckForInterrupt, METH_VARARGS | METH_KEYWORDS },

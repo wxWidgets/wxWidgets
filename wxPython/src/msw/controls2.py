@@ -670,6 +670,14 @@ class wxListCtrlPtr(wxControlPtr):
         '''get the currently focused item or -1 if none'''
         return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
 
+    def GetFirstSelected(self, item):
+        '''return first selected item, or -1 when none'''
+        return self.GetNextSelected(-1)
+
+    def GetNextSelected(self, item):
+        '''return subsequent selected items, or -1 when no more'''
+        return self.GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)
+
     def IsSelected(self, idx):
         '''return TRUE if the item is selected'''
         return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0
@@ -687,10 +695,14 @@ class wxListCtrlPtr(wxControlPtr):
         '''Append an item to the list control.  The entry parameter should be a
            sequence with an item for each column'''
         if len(entry):
+            if wx.wxUSE_UNICODE:
+                cvtfunc = unicode
+            else:
+                cvtfunc = str
             pos = self.GetItemCount()
-            self.InsertStringItem(pos, str(entry[0]))
+            self.InsertStringItem(pos, cvtfunc(entry[0]))
             for i in range(1, len(entry)):
-                self.SetStringItem(pos, i, str(entry[i]))
+                self.SetStringItem(pos, i, cvtfunc(entry[i]))
             return pos
     
 class wxListCtrl(wxListCtrlPtr):

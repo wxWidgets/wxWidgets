@@ -287,16 +287,38 @@ void wxMacToolTip::Draw()
   		    m_rect.right += kTipBorder ;
 #endif
   		m_rect.bottom = m_rect.top + height + 2 * kTipBorder;
+  		Rect r ;
+  		GetPortBounds( GetWindowPort( m_window ) , &r ) ;
+  		if ( m_rect.top < 0 )
+  		{
+  		    m_rect.bottom += -m_rect.top ;
+  		    m_rect.top = 0 ;
+  		}
+  		if ( m_rect.left < 0 )
+  		{
+  		    m_rect.right += -m_rect.left ;
+  		    m_rect.left = 0 ;
+  		}
+  		if ( m_rect.right > r.right )
+  		{
+  		    m_rect.left -= (m_rect.right - r.right ) ;
+  		    m_rect.right = r.right ;
+  		}
+  		if ( m_rect.bottom > r.bottom )
+  		{
+  		    m_rect.top -= (m_rect.bottom - r.bottom) ;
+  		    m_rect.bottom = r.bottom ;
+  		}
   		ClipRect( &m_rect ) ;
   		BackColor( whiteColor ) ;
   		ForeColor(blackColor ) ;
-                GWorldPtr port ;	        
-                NewGWorld( &port , wxDisplayDepth() , &m_rect , NULL , NULL , 0 ) ;
-                CGrafPtr    origPort ;
-                GDHandle    origDevice ;
-    
-                GetGWorld( &origPort , &origDevice ) ;
-                SetGWorld( port , NULL ) ;
+        GWorldPtr port ;	        
+        NewGWorld( &port , wxDisplayDepth() , &m_rect , NULL , NULL , 0 ) ;
+        CGrafPtr    origPort ;
+        GDHandle    origDevice ;
+
+        GetGWorld( &origPort , &origDevice ) ;
+        SetGWorld( port , NULL ) ;
 	    
   		m_backpict = OpenPicture(&m_rect);
 

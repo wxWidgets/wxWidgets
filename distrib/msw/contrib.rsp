@@ -65,8 +65,8 @@ contrib/samples/gizmos/multicell/*.txt
 contrib/samples/gizmos/multicell/*.ico
 contrib/samples/gizmos/multicell/*.bmp
 contrib/samples/gizmos/multicell/*.rc
-contrib/samples/gizmos/multicell/MulticellVC.dsp
-contrib/samples/gizmos/multicell/MulticellVC.dsw
+contrib/samples/gizmos/multicell/multicell.dsp
+contrib/samples/gizmos/multicell/multicell.dsw
 
 contrib/samples/gizmos/splittree/*.cpp
 contrib/samples/gizmos/splittree/*.h
@@ -91,8 +91,8 @@ contrib/samples/gizmos/editlbox/*.txt
 contrib/samples/gizmos/editlbox/*.ico
 contrib/samples/gizmos/editlbox/*.bmp
 contrib/samples/gizmos/editlbox/*.rc
-contrib/samples/gizmos/editlbox/EditlboxVC.dsp
-contrib/samples/gizmos/editlbox/EditlboxVC.dsw
+contrib/samples/gizmos/editlbox/editlbox.dsp
+contrib/samples/gizmos/editlbox/editlbox.dsw
 
 contrib/samples/gizmos/dynsash/*.cpp
 contrib/samples/gizmos/dynsash/*.h
@@ -104,8 +104,8 @@ contrib/samples/gizmos/dynsash/*.txt
 contrib/samples/gizmos/dynsash/*.ico
 contrib/samples/gizmos/dynsash/*.bmp
 contrib/samples/gizmos/dynsash/*.rc
-contrib/samples/gizmos/dynsash/DynsashVC.dsp
-contrib/samples/gizmos/dynsash/SynsashVC.dsw
+contrib/samples/gizmos/dynsash/dynsash.dsp
+contrib/samples/gizmos/dynsash/dynsash.dsw
 
 contrib/samples/gizmos/dynsash_switch/*.cpp
 contrib/samples/gizmos/dynsash_switch/*.h
@@ -117,8 +117,8 @@ contrib/samples/gizmos/dynsash_switch/*.txt
 contrib/samples/gizmos/dynsash_switch/*.ico
 contrib/samples/gizmos/dynsash_switch/*.bmp
 contrib/samples/gizmos/dynsash_switch/*.rc
-contrib/samples/gizmos/dynsash_switch/DynsashSwitchVC.dsp
-contrib/samples/gizmos/dynsash_switch/DynsashSwitchVC.dsw
+contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsp
+contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsw
 
 contrib/samples/animate/*.cpp
 contrib/samples/animate/*.h
@@ -130,8 +130,8 @@ contrib/samples/animate/*.txt
 contrib/samples/animate/*.ico
 contrib/samples/animate/*.bmp
 contrib/samples/animate/*.rc
-contrib/samples/animate/AnimVC.dsp
-contrib/samples/animate/AnimVC.dsw
+contrib/samples/animate/AniTestVC.dsp
+contrib/samples/animate/AniTestVC.dsw
 
 contrib/samples/fl/makefile*
 contrib/samples/fl/bitmaps/*.bmp

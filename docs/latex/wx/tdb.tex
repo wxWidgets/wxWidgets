@@ -404,8 +404,8 @@ member.
 
 \begin{verbatim}
     wxDbConnectInf DbConnectInf;
-    DbConnectInf.SetDsn,"MyDSN");
-    DbConnectInf.SetUserID,"MyUserName");
+    DbConnectInf.SetDsn("MyDSN");
+    DbConnectInf.SetUserID("MyUserName");
     DbConnectInf.SetPassword("MyPassword");
     DbConnectInf.SetDefaultDir("");
 \end{verbatim}
@@ -832,7 +832,7 @@ this example it was stored in "DbConnectInf.Henv") have been closed, then
 it is safe to release the environment handle:
 
 \begin{verbatim}
-    DbConnectInf->FreeHenv());
+    DbConnectInf->FreeHenv();
 \end{verbatim}
 
 Or, if the long form of the constructor was used and the constructor was allowed 

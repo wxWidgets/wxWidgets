@@ -35,6 +35,8 @@
 #include <wx/ogl/drawnp.h>
 #include <wx/ogl/misc.h>
 
+#include <math.h>
+
 static void IntToHex(unsigned int dec, char *buf);
 static unsigned long HexToInt(char *buf);
 extern char *oglBuffer;
@@ -234,7 +236,7 @@ bool wxDrawnShape::GetPerimeterPoint(double x1, double y1,
     return wxRectangleShape::GetPerimeterPoint(x1, y1, x2, y2, x3, y3);
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxDrawnShape::WriteAttributes(wxExpr *clause)
 {
   wxRectangleShape::WriteAttributes(clause);
@@ -520,6 +522,7 @@ wxDrawOp *wxOpSetGDI::Copy(wxPseudoMetaFile *newImage)
   return newOp;
 }
 
+#if wxUSE_PROLOGIO
 wxExpr *wxOpSetGDI::WriteExpr(wxPseudoMetaFile *image)
 {
   wxExpr *expr = new wxExpr(wxExprList);
@@ -580,6 +583,7 @@ void wxOpSetGDI::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
       break;
   }
 }
+#endif
 
 /*
  * Set/destroy clipping
@@ -634,6 +638,7 @@ void wxOpSetClipping::Translate(double x, double y)
   m_y1 += y;
 }
 
+#if wxUSE_PROLOGIO
 wxExpr *wxOpSetClipping::WriteExpr(wxPseudoMetaFile *image)
 {
   wxExpr *expr = new wxExpr(wxExprList);
@@ -670,6 +675,7 @@ void wxOpSetClipping::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
       break;
   }
 }
+#endif
 
 /*
  * Draw line, rectangle, rounded rectangle, ellipse, point, arc, text
@@ -878,6 +884,7 @@ void wxOpDraw::Rotate(double x, double y, double theta, double sinTheta, double 
   }
 }
 
+#if wxUSE_PROLOGIO
 wxExpr *wxOpDraw::WriteExpr(wxPseudoMetaFile *image)
 {
   wxExpr *expr = new wxExpr(wxExprList);
@@ -989,6 +996,7 @@ void wxOpDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
     }
   }
 }
+#endif
 
 /*
  * Draw polygon, polyline, spline
@@ -1102,6 +1110,7 @@ void wxOpPolyDraw::Rotate(double x, double y, double theta, double sinTheta, dou
   }
 }
 
+#if wxUSE_PROLOGIO
 wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
 {
   wxExpr *expr = new wxExpr(wxExprList);
@@ -1190,6 +1199,7 @@ void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
     i ++;
   }
 }
+#endif
 
 // Draw an outline using the current operation.
 bool wxOpPolyDraw::OnDrawOutline(wxDC& dc, double x, double y, double w, double h, double oldW, double oldH)
@@ -1446,7 +1456,7 @@ void wxPseudoMetaFile::Rotate(double x, double y, double theta)
   m_currentRotation = theta;
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
 {
   wxString widthStr;
@@ -1817,7 +1827,7 @@ void wxPseudoMetaFile::Copy(wxPseudoMetaFile& copy)
 
 bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, double *rwidth, double *rheight)
 {
-  if (!FileExists(filename))
+  if (!wxFileExists(filename))
     return NULL;
 
   wxXMetaFile *metaFile = new wxXMetaFile;

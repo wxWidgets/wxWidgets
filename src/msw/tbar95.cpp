@@ -472,6 +472,15 @@ bool wxToolBar::Realize()
 
     const bool isVertical = HasFlag(wxTB_VERTICAL);
 
+    // delete all old buttons, if any
+    for ( size_t pos = 0; pos < m_nButtons; pos++ )
+    {
+        if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, 0, 0) )
+        {
+            wxLogDebug(wxT("TB_DELETEBUTTON failed"));
+        }
+    }
+
     // First, add the bitmap: we use one bitmap for all toolbar buttons
     // ----------------------------------------------------------------
 
@@ -611,15 +620,6 @@ bool wxToolBar::Realize()
                 addBitmap = TRUE;
 
                 bitmapId = m_nButtons;
-            }
-
-            // Now delete all the buttons
-            for ( size_t pos = 0; pos < m_nButtons; pos++ )
-            {
-                if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, 0, 0) )
-                {
-                    wxLogDebug(wxT("TB_DELETEBUTTON failed"));
-                }
             }
         }
 

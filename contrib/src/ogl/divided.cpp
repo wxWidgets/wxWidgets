@@ -415,7 +415,7 @@ void wxDividedShape::ResetMandatoryControlPoints()
   }
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxDividedShape::WriteAttributes(wxExpr *clause)
 {
   wxRectangleShape::WriteAttributes(clause);

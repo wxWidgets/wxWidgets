@@ -155,6 +155,19 @@ wxYearSpinCtrl::wxYearSpinCtrl(wxCalendarCtrl *cal)
 // wxCalendarCtrl
 // ----------------------------------------------------------------------------
 
+wxCalendarCtrl::wxCalendarCtrl(wxWindow *parent,
+                   wxWindowID id,
+                   const wxDateTime& date,
+                   const wxPoint& pos,
+                   const wxSize& size,
+                   long style,
+                   const wxString& name)
+{
+    Init();
+    
+    (void)Create(parent, id, date, pos, size, style, name);
+}
+
 void wxCalendarCtrl::Init()
 {
     m_comboMonth = NULL;

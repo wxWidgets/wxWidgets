@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 img2py.py  --  Convert an image to PNG format and embed it in a Python
                module with appropriate code so it can be loaded into

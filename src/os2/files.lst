@@ -20,6 +20,7 @@ ALL_SOURCES = \
 		generic/laywin.cpp \
 		generic/listctrl.cpp \
 		generic/logg.cpp \
+		generic/mdig.cpp \
 		generic/msgdlgg.cpp \
 		generic/numdlgg.cpp \
 		generic/panelg.cpp \
@@ -212,12 +213,10 @@ ALL_SOURCES = \
 		os2/joystick.cpp \
 		os2/listbox.cpp \
 		os2/main.cpp \
-		os2/mdi.cpp \
 		os2/menu.cpp \
 		os2/menuitem.cpp \
 		os2/metafile.cpp \
 		os2/mimetype.cpp \
-		os2/minifram.cpp \
 		os2/msgdlg.cpp \
 		os2/nativdlg.cpp \
 		os2/notebook.cpp \
@@ -265,7 +264,6 @@ ALL_SOURCES = \
 		html/m_layout.cpp \
 		html/m_links.cpp \
 		html/m_list.cpp \
-		html/m_meta.cpp \
 		html/m_pre.cpp \
 		html/m_style.cpp \
 		html/m_tables.cpp \
@@ -336,6 +334,7 @@ ALL_HEADERS = \
 		dynarray.h \
 		dynlib.h \
 		dynload.h \
+		effects.h \
 		encconv.h \
 		event.h \
 		expr.h \
@@ -548,7 +547,6 @@ ALL_HEADERS = \
 		os2/iniconf.h \
 		os2/joystick.h \
 		os2/listbox.h \
-		os2/mdi.h \
 		os2/menu.h \
 		os2/menuitem.h \
 		os2/metafile.h \
@@ -603,7 +601,7 @@ ALL_HEADERS = \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
-		generic/mdig.cpp \
+		generic/mdig.h \
 		generic/msgdlgg.h \
 		generic/notebook.h \
 		generic/paletteg.h \
@@ -793,6 +791,7 @@ GENERICOBJS = \
 		laywin.o \
 		listctrl.o \
 		logg.o \
+		mdig.o \
 		msgdlgg.o \
 		numdlgg.o \
 		panelg.o \
@@ -858,12 +857,10 @@ GUIOBJS = \
 		joystick.o \
 		listbox.o \
 		main.o \
-		mdi.o \
 		menu.o \
 		menuitem.o \
 		metafile.o \
 		mimetype.o \
-		minifram.o \
 		msgdlg.o \
 		nativdlg.o \
 		notebook.o \
@@ -915,7 +912,6 @@ HTMLOBJS = \
 		m_layout.o \
 		m_links.o \
 		m_list.o \
-		m_meta.o \
 		m_pre.o \
 		m_style.o \
 		m_tables.o \

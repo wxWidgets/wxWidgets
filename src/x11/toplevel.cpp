@@ -410,10 +410,18 @@ void wxTopLevelWindowX11::SetTitle(const wxString& title)
     
     if (GetMainWindow())
     {
+#if wxUSE_UNICODE
+        //  I wonder of e.g. Metacity takes UTF-8 here
+        XStoreName(wxGlobalDisplay(), (Window) GetMainWindow(),
+            (const char*) title.ToAscii() );
+        XSetIconName(wxGlobalDisplay(), (Window) GetMainWindow(),
+            (const char*) title.ToAscii() );
+#else
         XStoreName(wxGlobalDisplay(), (Window) GetMainWindow(),
             (const char*) title);
         XSetIconName(wxGlobalDisplay(), (Window) GetMainWindow(),
             (const char*) title);
+#endif
     }
 }
 

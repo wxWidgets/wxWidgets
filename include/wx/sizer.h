@@ -80,6 +80,8 @@ public:
         { m_flag = flag; }
     void SetBorder( int border )
         { m_border = border; }
+    void Show ( bool show )
+        { m_show = show; }
 
     wxWindow *GetWindow() const
         { return m_window; }
@@ -95,6 +97,8 @@ public:
         { return m_flag; }
     int GetBorder() const
         { return m_border; }
+    bool IsShown() const
+        { return m_show; }
     wxObject* GetUserData()
         { return m_userData; }
     wxPoint GetPosition()
@@ -109,10 +113,15 @@ protected:
     int          m_option;
     int          m_border;
     int          m_flag;
+
+    // If TRUE, then this item is considered in the layout
+    // calculation.  Otherwise, it is skipped over. 
+    bool         m_show;
     // als: aspect ratio can always be calculated from m_size,
     //      but this would cause precision loss when the window
     //      is shrinked.  it is safer to preserve initial value.
     float        m_ratio;
+
     wxObject    *m_userData;
 
 private:
@@ -193,6 +202,21 @@ public:
         { return m_children; }
 
     void SetDimension( int x, int y, int width, int height );
+
+    // Manage whether individual windows or sub-sizers are considered
+    // in the layout calculations or not.
+    void Show( wxWindow *window, bool show = TRUE );
+    void Hide( wxWindow *window )
+        { Show (window, FALSE); }
+    void Show( wxSizer *sizer, bool show = TRUE );
+    void Hide( wxSizer *sizer )
+        { Show (sizer, FALSE); }
+
+    bool IsShown( wxWindow *window );
+    bool IsShown( wxSizer *sizer );
+    
+    // Recursively call wxWindow::Show () on all sizer items.
+    void ShowItems (bool show);
 
 protected:
     wxSize  m_size;

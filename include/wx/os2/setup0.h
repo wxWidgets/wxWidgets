@@ -398,5 +398,6 @@
 #define wxUSE_PROTOCOL_FTP      1
 #define wxUSE_PROTOCOL_FILE     1
 
+#define wxUSE_GENERIC_MDI_AS_NATIVE 1
 #endif
     // _WX_SETUP_H_

@@ -77,7 +77,7 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
     
     // printf( "font %s\n", fontname );
 
-    dialog->SetChosenFont(fontname);
+    dialog->SetChosenFont( fontname);
 
     g_free( fontname );
 
@@ -181,7 +181,7 @@ wxFontDialog::~wxFontDialog()
 
 void wxFontDialog::SetChosenFont(const char *fontname)
 {
-    m_fontData.SetChosenFont(wxFont(fontname));
+    m_fontData.SetChosenFont(wxFont( wxString::FromAscii(fontname) ));
 }
 
 #endif // wxUSE_FONTDLG

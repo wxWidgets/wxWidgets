@@ -1,8 +1,8 @@
 
-Installing wxWindows 2.3.3
+Installing wxWindows 2.3.4
 --------------------------
 
-This is wxWindows 2.3.3 for Microsoft Windows 9x/ME, Windows NT,
+This is wxWindows 2.3.4 for Microsoft Windows 9x/ME, Windows NT,
 Windows 2000 and Windows XP. This is an unstable development release.
 
 Please note that the library naming conventions for VC++
@@ -25,11 +25,15 @@ Please report bugs using the SourceForge bug tracker:
 Unarchiving
 -----------
 
-A setup program is provided (setup.exe) to automatically copy files to a
-directory on your hard disk. Do not install into a path that contains spaces.
-The installation program should set the WXWIN environment variable, which
-will be activated when your machine is rebooted. The setup
-program contains the following:
+A setup program is provided (setup.exe) to automatically copy
+files to a directory on your hard disk. Do not install into a
+path that contains spaces. To avoid confusion with other
+wxWindows installations that might be on your machine, the
+installation program does not se the WXWIN environment variable;
+please set this by hand via the System applet if you wish to
+make it permanent.
+
+The setup program contains the following:
 
 - All common, generic and MSW-specific wxWindows source;
 - samples;
@@ -58,9 +62,9 @@ Other add-on packages are available from the wxWindows Web site, such as:
 General installation notes
 --------------------------
 
-Alter your WXWIN environment variable to point to this directory.
-For Cygwin or Mingw32 compilation, make sure WXWIN contains only
-forward slashes.
+Alter your WXWIN environment variable to point to the root directory of the
+wxWindows installation. For Cygwin or Mingw32 compilation, make sure WXWIN
+contains only forward slashes.
 
 If installing from the CVS server, copy include/wx/msw/setup0.h to
 include/wx/msw/setup.h and edit the resulting file to choose
@@ -225,12 +229,13 @@ executables.
 Borland C++ 4.5/5.0/5.5 compilation
 -------------------------------
 
-Compiling using the makefiles (updated 24 Seot 02):
+Compiling using the makefiles (updated 24 Sept 02):
 
 1. Make sure your WXWIN variable is set [e.g add
    set WXWIN=c:\wxwindows
-   to your autoexec.bat file], and that it uses the FAT (short
-   name) form with no spaces.
+   to your autoexec.bat file], The WXWIN variable should contain neither spaces nor -
+   You may like to use the short form as shown by a dos directory listing ; 
+   eg instead of c:\wxwindows-2.3.4 use c:\wxwind~1.4
    Reboot if needed for the changes to autoexec.bat to take effect.   
 2. Change directory to src\msw. Type 'make -f makefile.b32' to
    make the wxWindows core library. Ignore the compiler warnings.
@@ -261,7 +266,20 @@ Compiling using the makefiles (updated 24 Seot 02):
    and then for each sample,
    'make -f makefile.b32 WXUSINGDLL=1 FINAL=1'
 
-6. To make console mode applications with wxWindows functions go
+6. You can use the WXUNIVERSAL widgets instead of the native MSW
+   ones (eg if you want to build an application with the same
+   look and feel on all platforms)
+   Use the command
+   'make -f makefile.b32 WXUSINGUNIV=1'
+   Then run
+   'make -f makefile.b32 WXUSINGUNIV=1' in the sample directory  which you wish
+   to build using the wxUniversal widgets. Use 'SET WXTHEME=GTK' [or  WIN32 or METAL]
+   to test the existing themes
+   The makefile is written with the intention that you can build DLLs
+   and  do final releases by combinations of commandline parameters.
+   At the time of writing, (Oct 02) not all the wxDialogs are working
+
+7. To make console mode applications with wxWindows functions go
    to the src\msw directory
    'make -f makebase.b32 clean'
    'make -f makebase.b32'
@@ -390,7 +408,7 @@ Metrowerks CodeWarrior compilation
 ----------------------------------
 
 1. CodeWarrior Pro7 project files in XML format are already 
-   included in wxMSW-2.3.3.zip and the setup version.
+   included in wxMSW-2.3.4.zip and the setup version.
 2. Review the file include\wx\msw\setup.h (or include\wx\msw\setup0.h if 
    you are working from the CVS version) to make sure the settings reflect 
    what you want.  If you aren't sure, leave it alone and go with the 
@@ -471,7 +489,7 @@ provide Unix-like tools that you'll need to build wxWindows.
 The solution prior to MSYS was to download extra utilities from
 ports/mingw32 on the wxWindows ftp site or CD-ROM:
 
-  ftp://biolp22.york.ac.uk/pub/ports/mingw32/extra.zip
+  ftp://biolpc22.york.ac.uk/pub/ports/mingw32/extra.zip
   
 These should be extracted to a directory in your path. If you have 
 already downloaded rm, cp, mv from elsewhere, or are using
