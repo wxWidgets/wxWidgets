@@ -902,8 +902,8 @@ WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
                                   const wxChar *fmt, const struct tm *tm);
 #endif // wxNEED_WX_TIME_H
 
-// missing functions in WinCE
-#ifdef __WXWINCE__
+// missing functions in early WinCE versions
+#if defined(_WIN32_WCE) && (_WIN32_WCE < 300)
 WXDLLIMPEXP_BASE char* strdup(const char* s);
 WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 
