@@ -483,7 +483,7 @@ private:
 };
 
 wxSemaphoreInternal::wxSemaphoreInternal( int initialcount, int maxcount )
-                   : m_cond(m_mutex)
+                   : m_cond(&m_mutex)
 {
 
     if ( (initialcount < 0) || ((maxcount > 0) && (initialcount > maxcount)) )
@@ -497,11 +497,11 @@ wxSemaphoreInternal::wxSemaphoreInternal( int initialcount, int maxcount )
 
 void wxSemaphoreInternal::Wait()
 {
-    wxMutexLocker locker(*m_mutex);
+    wxMutexLocker locker(m_mutex);
 
     while ( count <= 0 )
     {
-        m_cond->Wait();
+        m_cond.Wait();
     }
 
     count--;
@@ -509,7 +509,7 @@ void wxSemaphoreInternal::Wait()
 
 bool wxSemaphoreInternal::TryWait()
 {
-    wxMutexLocker locker(*m_mutex);
+    wxMutexLocker locker(m_mutex);
 
     if ( count <= 0 )
         return FALSE;
@@ -521,7 +521,7 @@ bool wxSemaphoreInternal::TryWait()
 
 bool wxSemaphoreInternal::Wait( unsigned long timeout_millis )
 {
-    wxMutexLocker locker( *m_mutex );
+    wxMutexLocker locker(m_mutex);
 
     wxLongLong startTime = wxGetLocalTimeMillis();
 
@@ -532,7 +532,7 @@ bool wxSemaphoreInternal::Wait( unsigned long timeout_millis )
         if ( remainingTime <= 0 )
             return FALSE;
 
-        bool result = m_cond->Wait( remainingTime );
+        bool result = m_cond.Wait( remainingTime );
         if ( !result )
             return FALSE;
     }
@@ -544,16 +544,16 @@ bool wxSemaphoreInternal::Wait( unsigned long timeout_millis )
 
 void wxSemaphoreInternal::Post()
 {
-    wxMutexLocker locker(*m_mutex);
+    wxMutexLocker locker(m_mutex);
 
-    if ( (maxcount > 0) && (count == maxcount) )
+    if ( maxcount > 0 && count == maxcount )
     {
         wxFAIL_MSG( _T("wxSemaphore::Post() overflow") );
     }
 
     count++;
 
-    m_cond->Signal();
+    m_cond.Signal();
 }
 
 // --------------------------------------------------------------------------
