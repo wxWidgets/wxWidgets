@@ -411,7 +411,7 @@ bool wxDbTable::bindParams(bool forUpdate)
         return(FALSE);
 
     SWORD   fSqlType    = 0;
-    UDWORD  precision   = 0;
+    SDWORD  precision   = 0;
     SWORD   scale       = 0;
 
     // Bind each column of the table that should be bound
@@ -477,12 +477,17 @@ bool wxDbTable::bindParams(bool forUpdate)
                 break;
             case DB_DATA_TYPE_BLOB:
                 fSqlType = pDb->GetTypeInfBlob().FsqlType;
-                precision = 50000;
+                precision = -1;
                 scale = 0;
                 if (colDefs[i].Null)
                     colDefs[i].CbValue = SQL_NULL_DATA;
                 else
-                    colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[i].SzDataObj);
+                    if (colDefs[i].SqlCtype == SQL_C_BINARY)
+                        colDefs[i].CbValue = 0;
+                    else if (colDefs[i].SqlCtype == SQL_C_CHAR)
+                        colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(0);
+                    else
+                        colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[i].SzDataObj);
                 break;
         }
         if (forUpdate)
@@ -637,6 +642,37 @@ bool wxDbTable::execUpdate(const wxString &pSqlStmt)
     {
         // Record updated successfully
         return(TRUE);
+    }
+    else if (retcode == SQL_NEED_DATA)
+    {
+        PTR pParmID;
+        retcode = SQLParamData(hstmtUpdate, &pParmID);
+        while (retcode == SQL_NEED_DATA)
+        {
+            // Find the parameter
+            int i;
+            for (i=0; i < noCols; i++)
+            {
+                if (colDefs[i].PtrDataObj == pParmID)
+                {
+                    // We found it.  Store the parameter.
+                    retcode = SQLPutData(hstmtUpdate, pParmID, colDefs[i].SzDataObj);
+                    if (retcode != SQL_SUCCESS)
+                    {
+                        pDb->DispNextError();
+                        return pDb->DispAllErrors(henv, hdbc, hstmtUpdate);
+                    }
+                    break;
+                }
+            }
+        }
+        if (retcode == SQL_SUCCESS ||
+            retcode == SQL_NO_DATA_FOUND ||
+            retcode == SQL_SUCCESS_WITH_INFO)
+        {
+            // Record updated successfully
+            return(TRUE);
+        }
     }
 
     // Problem updating record
@@ -1004,17 +1040,17 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
 
     // Add the column list
     int i;
+    wxString tStr;
     for (i = 0; i < noCols; i++)
     {
+        tStr = colDefs[i].ColName;
         // If joining tables, the base table column names must be qualified to avoid ambiguity
-        if (appendFromClause || pDb->Dbms() == dbmsACCESS)
+        if ((appendFromClause || pDb->Dbms() == dbmsACCESS) && !tStr.Find(wxT('.')))
         {
             pSqlStmt += pDb->SQLTableName(queryTableName.c_str());
-//            pSqlStmt += queryTableName;
             pSqlStmt += wxT(".");
         }
         pSqlStmt += pDb->SQLColumnName(colDefs[i].ColName);
-//        pSqlStmt += colDefs[i].ColName;
         if (i + 1 < noCols)
             pSqlStmt += wxT(",");
     }
@@ -1203,56 +1239,59 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
     wxString colValue;
 
     // Loop through the columns building a where clause as you go
-    int i;
-    for (i = 0; i < noCols; i++)
+    int colNo;
+    for (colNo = 0; colNo < noCols; colNo++)
     {
         // Determine if this column should be included in the WHERE clause
-        if ((typeOfWhere == DB_WHERE_KEYFIELDS && colDefs[i].KeyField) ||
-             (typeOfWhere == DB_WHERE_MATCHING  && (!IsColNull(i))))
+        if ((typeOfWhere == DB_WHERE_KEYFIELDS && colDefs[colNo].KeyField) ||
+             (typeOfWhere == DB_WHERE_MATCHING  && (!IsColNull(colNo))))
         {
             // Skip over timestamp columns
-            if (colDefs[i].SqlCtype == SQL_C_TIMESTAMP)
+            if (colDefs[colNo].SqlCtype == SQL_C_TIMESTAMP)
                 continue;
             // If there is more than 1 column, join them with the keyword "AND"
             if (moreThanOneColumn)
                 pWhereClause += wxT(" AND ");
             else
                 moreThanOneColumn = TRUE;
+
             // Concatenate where phrase for the column
-            if (qualTableName.Length())
+            wxString tStr = colDefs[colNo].ColName;
+
+            if (qualTableName.Length() && !tStr.Find(wxT('.')))
             {
                 pWhereClause += pDb->SQLTableName(qualTableName);
-//                pWhereClause += qualTableName;
                 pWhereClause += wxT(".");
             }
-            pWhereClause += pDb->SQLColumnName(colDefs[i].ColName);
-//            pWhereClause += colDefs[i].ColName;
-            if (useLikeComparison && (colDefs[i].SqlCtype == SQL_C_CHAR))
+            pWhereClause += pDb->SQLColumnName(colDefs[colNo].ColName);
+
+            if (useLikeComparison && (colDefs[colNo].SqlCtype == SQL_C_CHAR))
                 pWhereClause += wxT(" LIKE ");
             else
                 pWhereClause += wxT(" = ");
-            switch(colDefs[i].SqlCtype)
+
+            switch(colDefs[colNo].SqlCtype)
             {
                 case SQL_C_CHAR:
-                    colValue.Printf(wxT("'%s'"), (UCHAR FAR *) colDefs[i].PtrDataObj);
+                    colValue.Printf(wxT("'%s'"), (UCHAR FAR *) colDefs[colNo].PtrDataObj);
                     break;
                 case SQL_C_SSHORT:
-                    colValue.Printf(wxT("%hi"), *((SWORD *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%hi"), *((SWORD *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_USHORT:
-                    colValue.Printf(wxT("%hu"), *((UWORD *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%hu"), *((UWORD *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_SLONG:
-                    colValue.Printf(wxT("%li"), *((SDWORD *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%li"), *((SDWORD *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_ULONG:
-                    colValue.Printf(wxT("%lu"), *((UDWORD *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%lu"), *((UDWORD *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_FLOAT:
-                    colValue.Printf(wxT("%.6f"), *((SFLOAT *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%.6f"), *((SFLOAT *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_DOUBLE:
-                    colValue.Printf(wxT("%.6f"), *((SDOUBLE *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%.6f"), *((SDOUBLE *) colDefs[colNo].PtrDataObj));
                     break;
             }
             pWhereClause += colValue;
@@ -1831,7 +1870,8 @@ int wxDbTable::Insert(void)
     // Insert the record by executing the already prepared insert statement
     RETCODE retcode;
     retcode=SQLExecute(hstmtInsert);
-    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO &&
+        retcode != SQL_NEED_DATA)
     {
         // Check to see if integrity constraint was violated
         pDb->GetNextError(henv, hdbc, hstmtInsert);
@@ -1842,6 +1882,31 @@ int wxDbTable::Insert(void)
             pDb->DispNextError();
             pDb->DispAllErrors(henv, hdbc, hstmtInsert);
             return(DB_FAILURE);
+        }
+    }
+    if (retcode == SQL_NEED_DATA)
+    {
+        PTR pParmID;
+        retcode = SQLParamData(hstmtInsert, &pParmID);
+        while (retcode == SQL_NEED_DATA)
+        {
+            // Find the parameter
+            int i;
+            for (i=0; i < noCols; i++)
+            {
+                if (colDefs[i].PtrDataObj == pParmID)
+                {
+                    // We found it.  Store the parameter.
+                    retcode = SQLPutData(hstmtInsert, pParmID, colDefs[i].SzDataObj);
+                    if (retcode != SQL_SUCCESS)
+                    {
+                        pDb->DispNextError();
+                        pDb->DispAllErrors(henv, hdbc, hstmtInsert);
+                        return(DB_FAILURE);
+                    }
+                    break;
+                }
+            }
         }
     }
 
@@ -2429,7 +2494,10 @@ bool wxDbTable::SetColNull(UWORD colNo, bool set)
     {
         colDefs[colNo].Null = set;
         if (set)  // Blank out the values in the member variable
-            ClearMemberVar(colNo,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        {
+           colDefs[colNo].CbValue = SQL_NULL_DATA; // SF PATCH#766404
+           ClearMemberVar(colNo,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        }
         return(TRUE);
     }
     else
@@ -2441,18 +2509,21 @@ bool wxDbTable::SetColNull(UWORD colNo, bool set)
 /********** wxDbTable::SetColNull() **********/
 bool wxDbTable::SetColNull(const wxString &colName, bool set)
 {
-    int i;
-    for (i = 0; i < noCols; i++)
+    int colNo;
+    for (colNo = 0; colNo < noCols; colNo++)
     {
-        if (!wxStricmp(colName, colDefs[i].ColName))
+        if (!wxStricmp(colName, colDefs[colNo].ColName))
             break;
     }
 
-    if (i < noCols)
+    if (colNo < noCols)
     {
-        colDefs[i].Null = set;
+        colDefs[colNo].Null = set;
         if (set)  // Blank out the values in the member variable
-            ClearMemberVar(i,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        {
+           colDefs[colNo].CbValue = SQL_NULL_DATA;  // SF PATCH#766404
+           ClearMemberVar(colNo,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        }
         return(TRUE);
     }
     else
@@ -2548,7 +2619,7 @@ void wxDbTable::SetRowMode(const rowmode_t rowmode)
             SetCursor(hstmtDefault);
             break;
         default:
-            assert(0);
+           wxASSERT(0);
     }
 }  // wxDbTable::SetRowMode()
 
