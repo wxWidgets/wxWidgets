@@ -44,9 +44,13 @@
    tests individually in the "#else" branch below.
  */
 
-// what to test (in alphabetic order)? uncomment the line below to do all tests
-//#define TEST_ALL
-#ifdef TEST_ALL
+// what to test (in alphabetic order)? Define TEST_ALL to 0 to do a single
+// test, define it to 1 to do all tests.
+#define TEST_ALL 0
+
+
+#if TEST_ALL
+
     #define TEST_ARRAYS
     #define TEST_CHARSET
     #define TEST_CMDLINE
@@ -91,21 +95,19 @@
     #define TEST_ZLIB
     #define TEST_GZIP
 
-    #undef TEST_ALL
-    static const bool TEST_ALL = true;
-#else
+#else // #if TEST_ALL
+
     #define TEST_FILENAME
 
-    static const bool TEST_ALL = false;
 #endif
 
 // some tests are interactive, define this to run them
 #ifdef TEST_INTERACTIVE
     #undef TEST_INTERACTIVE
 
-    static const bool TEST_INTERACTIVE = true;
+    #define TEST_INTERACTIVE 1
 #else
-    static const bool TEST_INTERACTIVE = false;
+    #define TEST_INTERACTIVE 0
 #endif
 
 // ----------------------------------------------------------------------------
@@ -303,7 +305,7 @@ static void TestDirEnumHelper(wxDir& dir,
         cont = dir.GetNext(&filename);
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestDirEnum()
@@ -364,7 +366,7 @@ static void TestDirEnum()
 class DirPrintTraverser : public wxDirTraverser
 {
 public:
-    virtual wxDirTraverseResult OnFile(const wxString& filename)
+    virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename))
     {
         return wxDIR_CONTINUE;
     }
@@ -408,7 +410,7 @@ static void TestDirTraverse()
     wxPuts(_T("Now enumerating directories:"));
     wxDir dir(TESTDIR);
     DirPrintTraverser traverser;
-    dir.Traverse(traverser, _T(""), wxDIR_DIRS | wxDIR_HIDDEN);
+    dir.Traverse(traverser, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN);
 }
 
 static void TestDirExists()
@@ -648,7 +650,7 @@ static void TestFileRead()
         wxPrintf(_T("ERROR: can't open test file.\n"));
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestTextFileRead()
@@ -684,7 +686,7 @@ static void TestTextFileRead()
         wxPrintf(_T("ERROR: can't open '%s'\n"), file.GetName());
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestFileCopy()
@@ -733,7 +735,7 @@ static void TestFileCopy()
         wxPuts(_T("ERROR: failed to remove the file"));
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 #endif // TEST_FILE
@@ -815,6 +817,7 @@ static void TestFileConfRead()
 
 #include "wx/filename.h"
 
+#if 0
 static void DumpFileName(const wxChar *desc, const wxFileName& fn)
 {
     wxPuts(desc);
@@ -847,6 +850,7 @@ static void DumpFileName(const wxChar *desc, const wxFileName& fn)
         wxPrintf(_T("\t%u: %s\n"), n, dirs[n].c_str());
     }
 }
+#endif
 
 static struct FileNameInfo
 {
@@ -917,7 +921,7 @@ static void TestFileNameConstruction()
                isAbsolute ? "absolute" : "relative",
                isAbsolute == fni.isAbsolute ? "ok" : "ERROR");
 
-        if ( !fn.Normalize(wxPATH_NORM_ALL, _T(""), fni.format) )
+        if ( !fn.Normalize(wxPATH_NORM_ALL, wxEmptyString, fni.format) )
         {
             wxPuts(_T("ERROR (couldn't be normalized)"));
         }
@@ -927,7 +931,7 @@ static void TestFileNameConstruction()
         }
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestFileNameSplit()
@@ -954,7 +958,7 @@ static void TestFileNameSplit()
         if ( ext != fni.ext )
             wxPrintf(_T(" (ERROR: ext = '%s')"), fni.ext);
 
-        wxPuts(_T(""));
+        wxPuts(wxEmptyString);
     }
 }
 
@@ -1057,7 +1061,7 @@ static void TestFileNameMakeAbsolute()
         wxPrintf(_T("'%s'\n"), fn.GetFullPath(fni.format).c_str());
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestFileNameDirManip()
@@ -1111,6 +1115,7 @@ static void TestFileGetTimes()
     }
 }
 
+#if 0
 static void TestFileSetTimes()
 {
     wxFileName fn(_T("testdata.fc"));
@@ -1120,6 +1125,7 @@ static void TestFileSetTimes()
         wxPrintf(_T("ERROR: Touch() failed.\n"));
     }
 }
+#endif
 
 #endif // TEST_FILETIME
 
@@ -1696,7 +1702,7 @@ static void TestList()
             if ( *it != i + &i )
                 wxPuts(_T("Error in erase()\n"));
     }
-    
+
     wxPuts(_T("*** Testing std::list operations finished ***\n"));
 }
 
@@ -2074,7 +2080,7 @@ static void TestMimeEnum()
                mimetypes[n].c_str(), desc.c_str(), extsAll.c_str());
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestMimeOverride()
@@ -2100,7 +2106,7 @@ static void TestMimeOverride()
         wxPrintf(_T("WARN: mime.types file '%s' doesn't exist, not loaded.\n"),
                  mimetypes);
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestMimeFilename()
@@ -2132,7 +2138,7 @@ static void TestMimeFilename()
 
             wxString cmd;
             if ( !ft->GetOpenCommand(&cmd,
-                                     wxFileType::MessageParameters(fname, _T(""))) )
+                                     wxFileType::MessageParameters(fname, wxEmptyString)) )
                 cmd = _T("<no command available>");
             else
                 cmd = wxString(_T('"')) + cmd + _T('"');
@@ -2144,7 +2150,7 @@ static void TestMimeFilename()
         }
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestMimeAssociate()
@@ -2172,7 +2178,7 @@ static void TestMimeAssociate()
         delete ft;
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 #endif // TEST_MIME
@@ -2228,7 +2234,7 @@ static void TestOsInfo()
     wxPrintf(_T("Host name is %s (%s).\n"),
            wxGetHostName().c_str(), wxGetFullHostName().c_str());
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestUserInfo()
@@ -2240,7 +2246,7 @@ static void TestUserInfo()
     wxPrintf(_T("Home dir is:\t%s\n"), wxGetHomeDir().c_str());
     wxPrintf(_T("Email address:\t%s\n"), wxGetEmailAddress().c_str());
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 #endif // TEST_INFO_FUNCTIONS
@@ -2278,6 +2284,7 @@ inline bool operator==(const wxLongLongNative& a, const wxLongLongWx& b)
     { return a.GetHi() == b.GetHi() && a.GetLo() == b.GetLo(); }
 #endif // wxUSE_LONGLONG_WX
 
+#if 0
 static void TestSpeed()
 {
     static const long max = 100000000;
@@ -2291,6 +2298,7 @@ static void TestSpeed()
         {
             l += n;
         }
+        wxUnusedVar(l);
 
         wxPrintf(_T("Summing longs took %ld milliseconds.\n"), sw.Time());
     }
@@ -2304,6 +2312,7 @@ static void TestSpeed()
         {
             l += n;
         }
+        wxUnusedVar(l);
 
         wxPrintf(_T("Summing wxLongLong_t took %ld milliseconds.\n"), sw.Time());
     }
@@ -2321,21 +2330,22 @@ static void TestSpeed()
         wxPrintf(_T("Summing wxLongLongs took %ld milliseconds.\n"), sw.Time());
     }
 }
+#endif
 
 static void TestLongLongConversion()
 {
     wxPuts(_T("*** Testing wxLongLong conversions ***\n"));
 
-    wxLongLong a;
     size_t nTested = 0;
     for ( size_t n = 0; n < 100000; n++ )
     {
-        a = RAND_LL();
-
 #if wxUSE_LONGLONG_NATIVE
+        wxLongLong a = RAND_LL();
+
         wxLongLongNative b(a.GetHi(), a.GetLo());
 
-        wxASSERT_MSG( a == b, _T("conversions failure") );
+        if( a != b)
+            wxPuts( _T("conversions failure") );
 #else
         wxPuts(_T("Can't do it without native long long type, test skipped."));
 
@@ -2344,7 +2354,7 @@ static void TestLongLongConversion()
 
         if ( !(nTested % 1000) )
         {
-            putchar('.');
+            wxPutchar('.');
             fflush(stdout);
         }
 
@@ -2358,18 +2368,18 @@ static void TestMultiplication()
 {
     wxPuts(_T("*** Testing wxLongLong multiplication ***\n"));
 
-    wxLongLong a, b;
     size_t nTested = 0;
     for ( size_t n = 0; n < 100000; n++ )
     {
-        a = RAND_LL();
-        b = RAND_LL();
-
 #if wxUSE_LONGLONG_NATIVE
+        wxLongLong a = RAND_LL();
+        wxLongLong b = RAND_LL();
+
         wxLongLongNative aa(a.GetHi(), a.GetLo());
         wxLongLongNative bb(b.GetHi(), b.GetLo());
 
-        wxASSERT_MSG( a*b == aa*bb, _T("multiplication failure") );
+        if( a*b != aa*bb )
+            wxPuts( _T("multiplication failure") );
 #else // !wxUSE_LONGLONG_NATIVE
         wxPuts(_T("Can't do it without native long long type, test skipped."));
 
@@ -2378,7 +2388,7 @@ static void TestMultiplication()
 
         if ( !(nTested % 1000) )
         {
-            putchar('.');
+            wxPutchar('.');
             fflush(stdout);
         }
 
@@ -2416,7 +2426,9 @@ static void TestDivision()
         wxLongLongNative m(ll.GetHi(), ll.GetLo());
 
         wxLongLongNative p = m / l, s = m % l;
-        wxASSERT_MSG( q == p && r == s, _T("division failure") );
+
+        if(q != p || r != s)
+            wxPuts( _T("division failure") );
 #else // !wxUSE_LONGLONG_NATIVE
         // verify the result
         wxASSERT_MSG( ll == q*l + r, "division failure" );
@@ -2424,7 +2436,7 @@ static void TestDivision()
 
         if ( !(nTested % 1000) )
         {
-            putchar('.');
+            wxPutchar('.');
             fflush(stdout);
         }
 
@@ -2456,7 +2468,7 @@ static void TestAddition()
 
         if ( !(nTested % 1000) )
         {
-            putchar('.');
+            wxPutchar('.');
             fflush(stdout);
         }
 
@@ -2488,7 +2500,7 @@ static void TestBitOperations()
 
         if ( !(nTested % 1000) )
         {
-            putchar('.');
+            wxPutchar('.');
             fflush(stdout);
         }
 
@@ -2560,8 +2572,12 @@ static void TestLongLongPrintf()
     wxPuts(_T("*** Testing wxLongLong printing ***\n"));
 
 #ifdef wxLongLongFmtSpec
+#ifndef __MINGW32__
     wxLongLong ll = wxLL(0x1234567890abcdef);
     wxString s = wxString::Format(_T("%") wxLongLongFmtSpec _T("x"), ll);
+#else
+    wxString s = _T("MinGW compiler does not allow wxLongLong in '...'");
+#endif
     wxPrintf(_T("0x1234567890abcdef -> %s (%s)\n"),
              s.c_str(), s == _T("1234567890abcdef") ? _T("ok") : _T("ERROR"));
 #else // !wxLongLongFmtSpec
@@ -2653,7 +2669,7 @@ static void TestRegExCompile()
 
         wxPrintf(_T("'%s' is %sa valid RE (%s)\n"),
                  data.pattern,
-                 ok ? _T("") : _T("not "),
+                 ok ? wxEmptyString : _T("not "),
                  ok == data.correct ? _T("ok") : _T("ERROR"));
     }
 }
@@ -2756,7 +2772,7 @@ static void TestRegExReplacement()
 
         wxPrintf(_T("%s =~ s/RE/%s/g: %u match%s, result = '%s' ("),
                  data.text, data.repl,
-                 nRepl, nRepl == 1 ? _T("") : _T("es"),
+                 nRepl, nRepl == 1 ? wxEmptyString : _T("es"),
                  text.c_str());
         if ( text == data.result && nRepl == data.count )
         {
@@ -2924,6 +2940,8 @@ fmtst2chk (const wxChar *fmt)
  * This exercises the output formatting code.
  */
 
+wxChar *PointerNull = NULL;
+
 static void
 fp_test (void)
 {
@@ -2965,8 +2983,8 @@ fp_test (void)
       }
     }
   }
-  wxPrintf(_T("%10s\n"), (wxChar *) NULL);
-  wxPrintf(_T("%-10s\n"), (wxChar *) NULL);
+  wxPrintf(_T("%10s\n"), PointerNull);
+  wxPrintf(_T("%-10s\n"), PointerNull);
 }
 
 static void TestPrintf()
@@ -2975,6 +2993,7 @@ static void TestPrintf()
   static wxChar longstr[] = _T("Good morning, Doctor Chandra.  This is Hal.  \
 I am ready for my first lesson today.");
   int result = 0;
+  wxString test_format;
 
   fmtchk(_T("%.4x"));
   fmtchk(_T("%04x"));
@@ -2988,7 +3007,8 @@ I am ready for my first lesson today.");
   fmtst2chk(_T("%*.*x"));
   fmtst2chk(_T("%0*.*x"));
 
-  wxPrintf(_T("bad format:\t\"%b\"\n"));
+  wxString bad_format = _T("bad format:\t\"%b\"\n");
+  wxPrintf(bad_format.c_str());
   wxPrintf(_T("nil pointer (padded):\t\"%10p\"\n"), (void *) NULL);
 
   wxPrintf(_T("decimal negative:\t\"%d\"\n"), -2345);
@@ -2998,15 +3018,18 @@ I am ready for my first lesson today.");
   wxPrintf(_T("long octal negative:\t\"%lo\"\n"), -2345L);
   wxPrintf(_T("long unsigned decimal number:\t\"%lu\"\n"), -123456L);
   wxPrintf(_T("zero-padded LDN:\t\"%010ld\"\n"), -123456L);
-  wxPrintf(_T("left-adjusted ZLDN:\t\"%-010ld\"\n"), -123456);
+  test_format = _T("left-adjusted ZLDN:\t\"%-010ld\"\n");
+  wxPrintf(test_format.c_str(), -123456);
   wxPrintf(_T("space-padded LDN:\t\"%10ld\"\n"), -123456L);
   wxPrintf(_T("left-adjusted SLDN:\t\"%-10ld\"\n"), -123456L);
 
-  wxPrintf(_T("zero-padded string:\t\"%010s\"\n"), shortstr);
-  wxPrintf(_T("left-adjusted Z string:\t\"%-010s\"\n"), shortstr);
+  test_format = _T("zero-padded string:\t\"%010s\"\n");
+  wxPrintf(test_format.c_str(), shortstr);
+  test_format = _T("left-adjusted Z string:\t\"%-010s\"\n");
+  wxPrintf(test_format.c_str(), shortstr);
   wxPrintf(_T("space-padded string:\t\"%10s\"\n"), shortstr);
   wxPrintf(_T("left-adjusted S string:\t\"%-10s\"\n"), shortstr);
-  wxPrintf(_T("null string:\t\"%s\"\n"), (wxChar *)NULL);
+  wxPrintf(_T("null string:\t\"%s\"\n"), PointerNull);
   wxPrintf(_T("limited string:\t\"%.22s\"\n"), longstr);
 
   wxPrintf(_T("e-style >= 1:\t\"%e\"\n"), 12.34);
@@ -3039,7 +3062,11 @@ I am ready for my first lesson today.");
     fflush (stdout);
   }
 
+#ifndef __WATCOMC__
+  // Open Watcom cause compiler error here
+  // Error! E173: col(24) floating-point constant too small to represent
   wxPrintf (_T("%15.5e\n"), 4.9406564584124654e-324);
+#endif
 
 #define FORMAT _T("|%12.4f|%12.4e|%12.4g|\n")
   wxPrintf (FORMAT, 0.0, 0.0, 0.0);
@@ -3107,7 +3134,8 @@ I am ready for my first lesson today.");
           result = 1;
           wxPuts (_T("\tFAILED"));
       }
-      wxPuts (_T(""));
+      wxUnusedVar(result);
+      wxPuts (wxEmptyString);
   }
 #endif // wxLongLong_t
 
@@ -3170,6 +3198,7 @@ rfg2 (void)
 {
   int prec;
   wxChar buf[100];
+  wxString test_format;
 
   prec = 0;
   wxSprintf (buf, _T("%.*g"), prec, 3.3);
@@ -3184,19 +3213,23 @@ rfg2 (void)
   if (wxStrcmp (buf, _T("      3")) != 0)
     wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("      3"));
   prec = 3;
-  wxSprintf (buf, _T("%04.*o"), prec, 33);
+  test_format = _T("%04.*o");
+  wxSprintf (buf, test_format.c_str(), prec, 33);
   if (wxStrcmp (buf, _T(" 041")) != 0)
     wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T(" 041"));
   prec = 7;
-  wxSprintf (buf, _T("%09.*u"), prec, 33);
+  test_format = _T("%09.*u");
+  wxSprintf (buf, test_format.c_str(), prec, 33);
   if (wxStrcmp (buf, _T("  0000033")) != 0)
     wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("  0000033"));
   prec = 3;
-  wxSprintf (buf, _T("%04.*x"), prec, 33);
+  test_format = _T("%04.*x");
+  wxSprintf (buf, test_format.c_str(), prec, 33);
   if (wxStrcmp (buf, _T(" 021")) != 0)
     wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T(" 021"));
   prec = 3;
-  wxSprintf (buf, _T("%04.*X"), prec, 33);
+  test_format = _T("%04.*X");
+  wxSprintf (buf, test_format.c_str(), prec, 33);
   if (wxStrcmp (buf, _T(" 021")) != 0)
     wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T(" 021"));
 }
@@ -3218,27 +3251,29 @@ rfg2 (void)
 #include "wx/confbase.h"
 #include "wx/msw/regconf.h"
 
+#if 0
 static void TestRegConfWrite()
 {
-    wxConfig *config = new wxConfig("myapp");
-    config->SetPath("/group1");
-    config->Write("entry1", "foo");
-    config->SetPath("/group2");
-    config->Write("entry1", "bar");
+    wxConfig *config = new wxConfig(_T("myapp"));
+    config->SetPath(_T("/group1"));
+    config->Write(_T("entry1"), _T("foo"));
+    config->SetPath(_T("/group2"));
+    config->Write(_T("entry1"), _T("bar"));
 }
+#endif
 
 static void TestRegConfRead()
 {
-    wxConfig *config = new wxConfig("myapp");
+    wxConfig *config = new wxConfig(_T("myapp"));
 
     wxString str;
     long dummy;
-    config->SetPath("/");
-    puts("Enumerating / subgroups:");
+    config->SetPath(_T("/"));
+    wxPuts(_T("Enumerating / subgroups:"));
     bool bCont = config->GetFirstGroup(str, dummy);
     while(bCont)
     {
-        puts(str);
+        wxPuts(str);
         bCont = config->GetNextGroup(str, dummy);
     }
 }
@@ -3309,7 +3344,7 @@ static void TestRegistryRead()
             wxPrintf(_T(" (raw value '%s')"), val.c_str());
         }
 
-        putchar('\n');
+        wxPutchar('\n');
 
         cont = key.GetNextValue(value, dummy);
     }
@@ -3869,7 +3904,7 @@ static void TestFileStream()
 {
     wxPuts(_T("*** Testing wxFileInputStream ***"));
 
-    static const wxChar *filename = _T("testdata.fs");
+    static const wxString filename = _T("testdata.fs");
     {
         wxFileOutputStream fsOut(filename);
         fsOut.Write("foo", 3);
@@ -3879,12 +3914,12 @@ static void TestFileStream()
     wxPrintf(_T("File stream size: %u\n"), fsIn.GetSize());
     while ( !fsIn.Eof() )
     {
-        putchar(fsIn.GetC());
+        wxPutchar(fsIn.GetC());
     }
 
     if ( !wxRemoveFile(filename) )
     {
-        wxPrintf(_T("ERROR: failed to remove the file '%s'.\n"), filename);
+        wxPrintf(_T("ERROR: failed to remove the file '%s'.\n"), filename.c_str());
     }
 
     wxPuts(_T("\n*** wxFileInputStream test done ***"));
@@ -3915,7 +3950,7 @@ static void TestMemoryStream()
     wxPrintf(_T("Memory stream size: %u\n"), memInpStream.GetSize());
     while ( !memInpStream.Eof() )
     {
-        putchar(memInpStream.GetC());
+        wxPutchar(memInpStream.GetC());
     }
 
     wxPuts(_T("\n*** wxMemoryInputStream test done ***"));
@@ -3975,7 +4010,7 @@ static void TestStopWatch()
             }
         }
 
-        putchar('.');
+        wxPutchar('.');
         fflush(stdout);
     }
 
@@ -4043,7 +4078,7 @@ static void DumpVObject(size_t level, const wxVCardObject& vcard)
 
         if ( !!value )
             wxPrintf(_T(" = %s"), value.c_str());
-        putchar('\n');
+        wxPutchar('\n');
 
         DumpVObject(level + 1, *vcObj);
 
@@ -4312,16 +4347,16 @@ static void TestUnicodeTextFileRead()
 
     wxTextFile file;
     if ( file.Open(_T("testdata.fc"), wxConvLocal) )
-	{
+    {
         const size_t count = file.GetLineCount();
-		for ( size_t n = 0; n < count; n++ )
-		{
+        for ( size_t n = 0; n < count; n++ )
+        {
             const wxString& s = file[n];
 
             wxPrintf(_T("Line %u: \"%s\" (len %u, last char = '%c')\n"),
                      (unsigned)n, s.c_str(), (unsigned)s.length(), s.Last());
-		}
-	}
+        }
+    }
 }
 
 #endif // TEST_UNICODE
@@ -4410,7 +4445,7 @@ static void TestUtf8()
 
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestEncodingConverter()
@@ -4433,7 +4468,7 @@ static void TestEncodingConverter()
         wxPrintf(_T("The same KOI8-R string using wxEC: %s\n"), buf);
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 #endif // TEST_WCHAR
@@ -4454,14 +4489,14 @@ static void TestZipStreamRead()
 {
     wxPuts(_T("*** Testing ZIP reading ***\n"));
 
-    static const wxChar *filename = _T("foo");
+    static const wxString filename = _T("foo");
     wxZipInputStream istr(TESTFILE_ZIP, filename);
     wxPrintf(_T("Archive size: %u\n"), istr.GetSize());
 
-    wxPrintf(_T("Dumping the file '%s':\n"), filename);
+    wxPrintf(_T("Dumping the file '%s':\n"), filename.c_str());
     while ( !istr.Eof() )
     {
-        putchar(istr.GetC());
+        wxPutchar(istr.GetC());
         fflush(stdout);
     }
 
@@ -4532,7 +4567,7 @@ static void TestZipFileSystem()
 #include "wx/zstream.h"
 #include "wx/wfstream.h"
 
-static const wxChar *FILENAME_GZ = _T("test.gz");
+static const wxString FILENAME_GZ = _T("test.gz");
 static const wxChar *TEST_DATA = _T("hello and hello and hello and hello and hello");
 
 static void TestZlibStreamWrite()
@@ -4566,7 +4601,7 @@ static void TestZlibStreamRead()
     wxPuts(_T("Dumping the file:"));
     while ( !istr.Eof() )
     {
-        putchar(istr.GetC());
+        wxPutchar(istr.GetC());
         fflush(stdout);
     }
 
@@ -4599,8 +4634,9 @@ void GzipVerify(wxInputStream &in1, wxInputStream &in2)
     wxCharBuffer buf1(BUFSIZE);
     wxCharBuffer buf2(BUFSIZE);
     bool none = true;
-    
-    for (;;) {
+
+    for (;;)
+    {
         int n1 = in1.Read(buf1.data(), BUFSIZE).LastRead();
         int n2 = in2.Read(buf2.data(), BUFSIZE).LastRead();
 
@@ -4938,7 +4974,7 @@ static void TestTimeTicks()
         }
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 // test conversions to JDN &c
@@ -4992,7 +5028,7 @@ static void TestTimeWDays()
         }
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 
     // test SetToWeekDay()
     struct WeekDateTestData
@@ -5269,7 +5305,7 @@ static void TestTimeDST()
     wxPuts(_T("\n*** wxDateTime DST test ***"));
 
     wxPrintf(_T("DST is%s in effect now.\n\n"),
-             wxDateTime::Now().IsDST() ? _T("") : _T(" not"));
+             wxDateTime::Now().IsDST() ? wxEmptyString : _T(" not"));
 
     // taken from http://www.energy.ca.gov/daylightsaving.html
     static const Date datesDST[2][2004 - 1900 + 1] =
@@ -5335,7 +5371,7 @@ static void TestTimeDST()
         }
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 
     for ( year = 1990; year < 2005; year++ )
     {
@@ -5393,7 +5429,7 @@ static void TestTimeFormat()
 
     for ( size_t d = 0; d < WXSIZEOF(formatTestDates) + 1; d++ )
     {
-        wxPuts(_T(""));
+        wxPuts(wxEmptyString);
 
         wxDateTime dt = d == 0 ? wxDateTime::Now() : formatTestDates[d - 1].DT();
         for ( size_t n = 0; n < WXSIZEOF(formatTestFormats); n++ )
@@ -5564,7 +5600,7 @@ static void TestTimeMS()
         }
 
         if ( !(i % 100) )
-            putchar('.');
+            wxPutchar('.');
     }
     wxPuts(_T(", done"));
 
@@ -5640,7 +5676,7 @@ static void TestTimeArithmetics()
             wxPrintf(_T(" (ERROR: should be %s)\n"), dt2.FormatISODate().c_str());
         }
 
-        wxPuts(_T(""));
+        wxPuts(wxEmptyString);
     }
 }
 
@@ -5666,7 +5702,7 @@ static void TestTimeHolidays()
         wxPrintf(_T("\t%s\n"), hol[n].Format(format).c_str());
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestTimeZoneBug()
@@ -5683,7 +5719,7 @@ static void TestTimeZoneBug()
         date += wxDateSpan::Day();
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestTimeSpanFormat()
@@ -5710,7 +5746,7 @@ static void TestTimeSpanFormat()
                ts2.Format(formats[n]).c_str());
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 #endif // TEST_DATETIME
@@ -5728,7 +5764,8 @@ static void TestTextInputStream()
 {
     wxPuts(_T("\n*** wxTextInputStream test ***"));
 
-    wxFileInputStream fsIn(_T("testdata.fc"));
+    wxString filename = _T("testdata.fc");
+    wxFileInputStream fsIn(filename);
     if ( !fsIn.Ok() )
     {
         wxPuts(_T("ERROR: couldn't open file."));
@@ -5837,7 +5874,7 @@ wxThread::ExitCode MyDetachedThread::Entry()
             break;
         }
 
-        putchar(m_ch);
+        wxPutchar(m_ch);
         fflush(stdout);
 
         wxThread::Sleep(100);
@@ -5878,7 +5915,7 @@ static void TestDetachedThreads()
     // wait until all threads terminate
     gs_cond.Wait();
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestJoinableThreads()
@@ -5929,7 +5966,7 @@ static void TestThreadSuspend()
     // wait until the thread terminates
     gs_cond.Wait();
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestThreadDelete()
@@ -5985,7 +6022,7 @@ static void TestThreadDelete()
 
     wxPuts(_T("\nDeleted a joinable thread which already terminated."));
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 class MyWaitingThread : public wxThread
@@ -6158,7 +6195,7 @@ private:
     int m_i;
 };
 
-WX_DEFINE_ARRAY(wxThread *, ArrayThreads);
+WX_DEFINE_ARRAY_PTR(wxThread *, ArrayThreads);
 
 static void TestSemaphore()
 {
@@ -6193,17 +6230,6 @@ static void TestSemaphore()
 #include "wx/dynarray.h"
 
 typedef unsigned short ushort;
-
-static int MyStringCompare(wxString* s1, wxString* s2)
-{
-    return wxStrcmp(s1->c_str(), s2->c_str());
-}
-
-static int MyStringReverseCompare(wxString* s1, wxString* s2)
-{
-    return -wxStrcmp(s1->c_str(), s2->c_str());
-}
-
 
 #define DefineCompare(name, T)                                                \
                                                                               \
@@ -6364,7 +6390,7 @@ static void TestStlArray()
             if ( *it != i )
                 wxPuts(_T("Error in erase()\n"));
     }
-    
+
     wxPuts(_T("*** Testing std::vector operations finished ***\n"));
 }
 
@@ -6440,7 +6466,7 @@ static void TestStringConstruction()
     const wxChar *end = wxStrchr(s, _T('!'));
     TEST_CTOR((start, end), _T("really"));
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestString()
@@ -6527,11 +6553,11 @@ static void TestStringSub()
         }
         else
         {
-            putchar('\n');
+            wxPutchar('\n');
         }
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestStringFormat()
@@ -6544,7 +6570,7 @@ static void TestStringFormat()
     wxPrintf(_T("Number 18: %s\n"), wxString::Format(_T("%03d"), 18).c_str());
     wxPrintf(_T("Number 18: %s\n"), s.c_str());
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 // returns "not found" for npos, value for all others
@@ -6592,7 +6618,7 @@ static void TestStringFind()
         }
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestStringTokenizer()
@@ -6694,7 +6720,7 @@ static void TestStringTokenizer()
             else
             {
                 // nothing to compare with
-                wxPuts(_T(""));
+                wxPuts(wxEmptyString);
             }
         }
 
@@ -6706,7 +6732,7 @@ static void TestStringTokenizer()
         delete [] buf;
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
 static void TestStringReplace()
@@ -6749,9 +6775,10 @@ static void TestStringReplace()
         }
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
 
+#if !TEST_ALL
 static void TestStringMatch()
 {
     wxPuts(_T("*** Testing wxString::Matches() ***"));
@@ -6787,8 +6814,9 @@ static void TestStringMatch()
                  matches == data.matches ? _T("ok") : _T("ERROR"));
     }
 
-    wxPuts(_T(""));
+    wxPuts(wxEmptyString);
 }
+#endif
 
 // Sigh, I want Test::Simple, Test::More and Test::Harness...
 void ok(int line, bool ok, const wxString& msg = wxEmptyString)
@@ -6843,8 +6871,8 @@ void is(int line, size_t got, size_t expected,
     ok(line, isOk, msg);
     if( !isOk )
     {
-        wxPuts(wxString::Format(_T("Got: %ld"), got));
-        wxPuts(wxString::Format(_T("Expected: %ld"), expected));
+        wxPuts(wxString::Format(_T("Got: %d"), got));
+        wxPuts(wxString::Format(_T("Expected: %d"), expected));
     }
 }
 
@@ -7232,8 +7260,7 @@ int main(int argc, char **argv)
 #endif // TEST_CMDLINE
 
 #ifdef TEST_STRINGS
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestPChar();
         TestString();
         TestStringSub();
@@ -7242,18 +7269,15 @@ int main(int argc, char **argv)
         TestStringFind();
         TestStringTokenizer();
         TestStringReplace();
-    }
-    else
-    {
+    #else
         TestStringMatch();
-    }
+    #endif
 
     TestStdString();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
-    if ( 1 || TEST_ALL )
-    {
+    #if TEST_ALL
         wxArrayString a1;
         a1.Add(_T("tiger"));
         a1.Add(_T("cat"));
@@ -7269,14 +7293,14 @@ int main(int argc, char **argv)
         wxArrayString a2(a1);
         PrintArray(_T("a2"), a2);
 
-#if !wxUSE_STL
+        #if !wxUSE_STL
         wxSortedArrayString a3(a1);
-#else
+        #else
         wxSortedArrayString a3;
         for (wxArrayString::iterator it = a1.begin(), en = a1.end();
              it != en; ++it)
             a3.Add(*it);
-#endif
+        #endif
         PrintArray(_T("a3"), a3);
 
         wxPuts(_T("*** After deleting three strings from a1"));
@@ -7286,12 +7310,12 @@ int main(int argc, char **argv)
         PrintArray(_T("a2"), a2);
         PrintArray(_T("a3"), a3);
 
-#if !wxUSE_STL
+        #if !wxUSE_STL
         wxPuts(_T("*** After reassigning a1 to a2 and a3"));
         a3 = a2 = a1;
         PrintArray(_T("a2"), a2);
         PrintArray(_T("a3"), a3);
-#endif
+        #endif
 
         wxPuts(_T("*** After sorting a1"));
         a1.Sort(false);
@@ -7301,26 +7325,25 @@ int main(int argc, char **argv)
         a1.Sort(true);
         PrintArray(_T("a1"), a1);
 
-#if !wxUSE_STL
+        #if !wxUSE_STL
         wxPuts(_T("*** After sorting a1 by the string length"));
         a1.Sort(&StringLenCompare);
         PrintArray(_T("a1"), a1);
-#endif
+        #endif
 
         TestArrayOfObjects();
         TestArrayOfUShorts();
-    }
+    #endif
 
     TestArrayOfInts();
     TestStlArray();
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestDirExists();
         TestDirEnum();
-    }
+    #endif
     TestDirTraverse();
 #endif // TEST_DIR
 
@@ -7374,68 +7397,62 @@ int main(int argc, char **argv)
 #endif // TEST_LOG
 
 #ifdef TEST_FILE
-    if ( TEST_ALL )
-    {
-        TestFileRead();
-        TestTextFileRead();
-        TestFileCopy();
-    }
+    TestFileRead();
+    TestTextFileRead();
+    TestFileCopy();
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    if ( TEST_ALL )
-    {
-        TestFileNameConstruction();
-        TestFileNameMakeRelative();
-        TestFileNameMakeAbsolute();
-        TestFileNameSplit();
-        TestFileNameTemp();
-        TestFileNameCwd();
-        TestFileNameDirManip();
-        TestFileNameComparison();
-        TestFileNameOperations();
-    }
+    TestFileNameConstruction();
+    TestFileNameMakeRelative();
+    TestFileNameMakeAbsolute();
+    TestFileNameSplit();
+    TestFileNameTemp();
+    TestFileNameCwd();
+    TestFileNameDirManip();
+    TestFileNameComparison();
+    TestFileNameOperations();
 #endif // TEST_FILENAME
 
 #ifdef TEST_FILETIME
     TestFileGetTimes();
-    if ( 0 )
+    #if 0
     TestFileSetTimes();
+    #endif
 #endif // TEST_FILETIME
 
 #ifdef TEST_FTP
     wxLog::AddTraceMask(FTP_TRACE_MASK);
     if ( TestFtpConnect() )
     {
-        if ( TEST_ALL )
-        {
+        #if TEST_ALL
             TestFtpList();
             TestFtpDownload();
             TestFtpMisc();
             TestFtpFileSize();
             TestFtpUpload();
-        }
+        #endif
 
-        if ( TEST_INTERACTIVE )
+        #if TEST_INTERACTIVE
             TestFtpInteractive();
+        #endif
     }
     //else: connecting to the FTP server failed
 
-    if ( 0 )
+    #if 0
         TestFtpWuFtpd();
+    #endif
 #endif // TEST_FTP
 
 #ifdef TEST_LONGLONG
     // seed pseudo random generator
     srand((unsigned)time(NULL));
 
-    if ( 0 )
-    {
+    #if 0
         TestSpeed();
-    }
+    #endif
 
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestMultiplication();
         TestDivision();
         TestAddition();
@@ -7444,7 +7461,7 @@ int main(int argc, char **argv)
         TestLongLongComparison();
         TestLongLongToString();
         TestLongLongPrintf();
-    }
+    #endif
 #endif // TEST_LONGLONG
 
 #ifdef TEST_HASH
@@ -7461,24 +7478,23 @@ int main(int argc, char **argv)
 
 #ifdef TEST_MIME
     wxLog::AddTraceMask(_T("mime"));
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestMimeEnum();
         TestMimeOverride();
         TestMimeAssociate();
-    }
+    #endif
     TestMimeFilename();
 #endif // TEST_MIME
 
 #ifdef TEST_INFO_FUNCTIONS
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestOsInfo();
         TestUserInfo();
 
-        if ( TEST_INTERACTIVE )
+        #if TEST_INTERACTIVE
             TestDiskInfo();
-    }
+        #endif
+    #endif
 #endif // TEST_INFO_FUNCTIONS
 
 #ifdef TEST_PATHLIST
@@ -7494,22 +7510,24 @@ int main(int argc, char **argv)
 #endif // TEST_PRINTF
 
 #ifdef TEST_REGCONF
-    //TestRegConfWrite();
+    #if 0
+    TestRegConfWrite();
+    #endif
     TestRegConfRead();
 #endif // TEST_REGCONF
 
 #ifdef TEST_REGEX
     // TODO: write a real test using src/regex/tests file
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestRegExCompile();
         TestRegExMatch();
         TestRegExSubmatch();
         TestRegExReplacement();
 
-        if ( TEST_INTERACTIVE )
+        #if TEST_INTERACTIVE
             TestRegExInteractive();
-    }
+        #endif
+    #endif
 #endif // TEST_REGEX
 
 #ifdef TEST_REGISTRY
@@ -7523,10 +7541,9 @@ int main(int argc, char **argv)
 #endif // TEST_SOCKETS
 
 #ifdef TEST_STREAMS
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestFileStream();
-    }
+    #endif
         TestMemoryStream();
 #endif // TEST_STREAMS
 
@@ -7542,8 +7559,7 @@ int main(int argc, char **argv)
 
         TestJoinableThreads();
 
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestJoinableThreads();
         TestDetachedThreads();
         TestThreadSuspend();
@@ -7551,7 +7567,7 @@ int main(int argc, char **argv)
         TestThreadConditions();
         TestThreadExec();
         TestSemaphore();
-    }
+    #endif
 #endif // TEST_THREADS
 
 #ifdef TEST_TIMER
@@ -7559,8 +7575,7 @@ int main(int argc, char **argv)
 #endif // TEST_TIMER
 
 #ifdef TEST_DATETIME
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestTimeSet();
         TestTimeStatic();
         TestTimeRange();
@@ -7578,10 +7593,11 @@ int main(int argc, char **argv)
         TestTimeMS();
 
         TestTimeZoneBug();
-    }
+    #endif
 
-    if ( TEST_INTERACTIVE )
+    #if TEST_INTERACTIVE
         TestDateTimeInteractive();
+    #endif
 #endif // TEST_DATETIME
 
 #ifdef TEST_SCOPEGUARD
@@ -7604,10 +7620,9 @@ int main(int argc, char **argv)
 
 #ifdef TEST_UNICODE
     TestUnicodeTextFileRead();
-    if ( TEST_ALL )
-    {
+    #if TEST_ALL
         TestUnicodeToFromAscii();
-    }
+    #endif
 #endif // TEST_UNICODE
 
 #ifdef TEST_WCHAR
@@ -7629,6 +7644,8 @@ int main(int argc, char **argv)
     TestGzip();
 #endif
 
+    wxUnusedVar(argc);
+    wxUnusedVar(argv);
     return 0;
 }
 
