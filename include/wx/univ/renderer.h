@@ -78,10 +78,12 @@ public:
     // and optionally emphasize the character with the given index
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
+                           const wxBitmap& image,
                            const wxRect& rect,
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
-                           int indexAccel = -1) = 0;
+                           int indexAccel = -1,
+                           wxRect *rectBounds = NULL) = 0;
 
     // draw the border and optionally return the rectangle containing the
     // region inside the border
@@ -188,11 +190,14 @@ public:
         { m_renderer->DrawBackground(dc, rect, flags); }
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
+                           const wxBitmap& image,
                            const wxRect& rect,
                            int flags = 0,
                            int align = wxALIGN_LEFT | wxALIGN_TOP,
-                           int indexAccel = -1)
-        { m_renderer->DrawLabel(dc, label, rect, flags, align, indexAccel); }
+                           int indexAccel = -1,
+                           wxRect *rectBounds = NULL)
+        { m_renderer->DrawLabel(dc, label, image, rect,
+                                flags, align, indexAccel, rectBounds); }
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,

@@ -41,7 +41,7 @@
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
 BEGIN_EVENT_TABLE(wxBitmapButton, wxButton)
     EVT_SET_FOCUS(wxBitmapButton::OnSetFocus)
@@ -126,7 +126,7 @@ void wxBitmapButton::Press()
 
 void wxBitmapButton::Release()
 {
-    ChangeBitmap(m_bmpNormal);
+    ChangeBitmap(IsFocused() ? m_bmpFocus : m_bmpNormal);
 
     wxButton::Release();
 }

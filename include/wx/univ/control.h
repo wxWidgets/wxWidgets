@@ -70,8 +70,7 @@ public:
 // the list of actions which apply to all controls (other actions are defined
 // in the controls headers)
 
-#define wxACTION_NONE   _T("")           // no action to perform
-#define wxACTION_FOCUS  _T("focus")      // make control focused
+#define wxACTION_NONE    _T("")           // no action to perform
 
 // ----------------------------------------------------------------------------
 // wxControl: the base class for all GUI controls

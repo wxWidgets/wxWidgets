@@ -278,8 +278,8 @@ void wxControl::DoDraw(wxControlRenderer *renderer)
 
 void wxControl::OnFocus(wxFocusEvent& event)
 {
-    // do nothing here for now...
-    event.Skip();
+    if ( m_handler->OnFocus(this, event) )
+        Refresh();
 }
 
 // ----------------------------------------------------------------------------
@@ -338,13 +338,6 @@ void wxControl::PerformActions(const wxControlActions& actions,
 bool wxControl::PerformAction(const wxControlAction& action,
                               const wxEvent& event)
 {
-    if ( (action == wxACTION_FOCUS) && AcceptsFocus() )
-    {
-        SetFocus();
-
-        return TRUE;
-    }
-
     return FALSE;
 }
 

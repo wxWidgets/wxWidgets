@@ -78,7 +78,8 @@ wxCoord wxRenderer::StandardScrollbarToPixel(const wxScrollBar *scrollbar,
     }
 
     return ( scrollbar->GetThumbPosition() *
-                StandardScrollBarSize(scrollbar, sizeArrow) ) / range;
+                StandardScrollBarSize(scrollbar, sizeArrow) ) / range
+             + (scrollbar->IsVertical() ? sizeArrow.y : sizeArrow.x);
 }
 
 /* static */
@@ -86,8 +87,9 @@ int wxRenderer::StandardPixelToScrollbar(const wxScrollBar *scrollbar,
                                          wxCoord coord,
                                          const wxSize& sizeArrow)
 {
-    return ( coord * scrollbar->GetRange() )
-                / StandardScrollBarSize(scrollbar, sizeArrow);
+    return ( (coord - (scrollbar->IsVertical() ? sizeArrow.y : sizeArrow.x)) *
+               scrollbar->GetRange() ) /
+               StandardScrollBarSize(scrollbar, sizeArrow);
 }
 
 /* static */
@@ -95,24 +97,36 @@ wxHitTest wxRenderer::StandardHitTestScrollbar(const wxScrollBar *scrollbar,
                                                const wxPoint& pt,
                                                const wxSize& sizeArrowSB)
 {
-    // we only need to work with tiehr x or y coord depending on the
-    // orientation, choose one
+    // we only need to work with either x or y coord depending on the
+    // orientation, choose one (but still check the other one to verify if the
+    // mouse is in the window at all)
     wxCoord coord, sizeArrow, sizeTotal;
+    wxSize size = scrollbar->GetSize();
     if ( scrollbar->GetWindowStyle() & wxVERTICAL )
     {
+        if ( pt.x < 0 || pt.x > size.x )
+            return wxHT_NOWHERE;
+
         coord = pt.y;
         sizeArrow = sizeArrowSB.y;
-        sizeTotal = scrollbar->GetSize().y;
+        sizeTotal = size.y;
     }
     else // horizontal
     {
+        if ( pt.y < 0 || pt.y > size.y )
+            return wxHT_NOWHERE;
+
         coord = pt.x;
         sizeArrow = sizeArrowSB.x;
-        sizeTotal = scrollbar->GetSize().x;
+        sizeTotal = size.x;
     }
 
     // test for the arrows first as it's faster
-    if ( coord < sizeArrow )
+    if ( coord < 0 || coord > sizeTotal )
+    {
+        return wxHT_NOWHERE;
+    }
+    else if ( coord < sizeArrow )
     {
         return wxHT_SCROLLBAR_ARROW_LINE_1;
     }
@@ -192,28 +206,18 @@ void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
     m_dc.SetFont(m_ctrl->GetFont());
     m_dc.SetTextForeground(m_ctrl->GetForegroundColour());
 
-    wxRect rectLabel = m_rect;
-    if ( bitmap.Ok() )
-    {
-        wxRect rectBmp;
-        int width = bitmap.GetWidth();
-        rectBmp.x = m_rect.x + marginX;
-        rectBmp.y = m_rect.y + marginY;
-        rectBmp.width = width;
-        rectBmp.height = m_rect.height - marginY;
-
-        DrawBitmap(bitmap, rectBmp, wxALIGN_CENTRE | wxALIGN_CENTRE_VERTICAL);
-
-        width += 2*marginX;
-        rectLabel.x += width;
-        rectLabel.width -= width;
-    }
-
     wxString label = m_ctrl->GetLabel();
-    if ( !label.empty() )
+    if ( !label.empty() || bitmap.Ok() )
     {
+        wxRect rectLabel = m_rect;
+        if ( bitmap.Ok() )
+        {
+            rectLabel.Inflate(-marginX, -marginY);
+        }
+
         m_renderer->DrawLabel(m_dc,
                               label,
+                              bitmap,
                               rectLabel,
                               m_ctrl->GetStateFlags(),
                               m_ctrl->GetAlignment(),

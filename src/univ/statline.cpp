@@ -31,9 +31,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
-    #include "wx/statline.h"
     #include "wx/validate.h"
 #endif
+
+#include "wx/statline.h"
 
 #include "wx/univ/renderer.h"
 

@@ -49,6 +49,13 @@ public:
     // return TRUE to refresh the control, FALSE otherwise
     virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
 
+    // do something with focus set/kill event: this is different from
+    // OnMouseMove() as the mouse maybe over the control without it having
+    // focus
+    //
+    // return TRUE to refresh the control, FALSE otherwise
+    virtual bool OnFocus(wxControl *control, const wxFocusEvent& event);
+
     // virtual dtor for any base class
     virtual ~wxInputHandler();
 };
@@ -78,6 +85,8 @@ public:
         { return m_handler->Map(control, event); }
     virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event)
         { return m_handler->OnMouseMove(control, event); }
+    virtual bool OnFocus(wxControl *control, const wxFocusEvent& event)
+        { return m_handler->OnFocus(control, event); }
 
 private:
     wxInputHandler *m_handler;
@@ -99,6 +108,7 @@ public:
     virtual wxControlActions Map(wxControl *control,
                                  const wxMouseEvent& event);
     virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
+    virtual bool OnFocus(wxControl *control, const wxFocusEvent& event);
 
 private:
     // the window (button) which has capture or NULL and the flag telling if
@@ -129,12 +139,15 @@ public:
 
     virtual ~wxStdScrollBarInputHandler();
 
+    // this method is called by wxScrollBarTimer only and may be overridden
+    //
+    // return TRUE to continue scrolling, FALSE to stop the timer
+    virtual bool OnScrollTimer(wxScrollBar *scrollbar,
+                               const wxControlAction& action,
+                               const wxMouseEvent& event);
+
 protected:
     // the methods which must be overridden in the derived class
-
-    // return TRUE to stop scrolling when the mouse leaves the scrollbar (Win32
-    // behaviour) or FALSE to continue (GTK+)
-    virtual bool OnMouseLeave() = 0;
 
     // return TRUE if the mouse button can be used to activate scrollbar, FALSE
     // if not (only left mouse button can do it under Windows, any button under
@@ -153,11 +166,17 @@ protected:
     void Press(wxScrollBar *scrollbar, bool doIt)
         { SetElementState(scrollbar, wxCONTROL_PRESSED, doIt); }
 
+    // stop scrolling because we reached the end point
+    void StopScrolling(wxScrollBar *scrollbar);
+
     // the window (scrollbar) which has capture or NULL and the flag telling if
     // the mouse is inside the element which captured it or not
     wxWindow *m_winCapture;
     bool      m_winHasMouse;
     int       m_btnCapture;  // the mouse button which has captured mouse
+
+    // the position where we started scrolling by page
+    wxPoint m_ptStartScrolling;
 
     // one of wxHT_SCROLLBAR_XXX value: where has the mouse been last time?
     wxHitTest m_htLast;
@@ -167,7 +186,7 @@ protected:
 
     // the timer for generating scroll events when the mouse stays pressed on
     // a scrollbar
-    class wxScrollBarTimer *m_timerScroll;
+    class wxTimer *m_timerScroll;
 };
 
 #endif // _WX_UNIV_INPHAND_H_

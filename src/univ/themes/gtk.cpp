@@ -57,10 +57,12 @@ public:
                                 int flags = 0);
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
+                           const wxBitmap& image,
                            const wxRect& rect,
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
-                           int indexAccel = -1);
+                           int indexAccel = -1,
+                           wxRect *rectBounds = NULL);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -175,7 +177,6 @@ public:
         : wxStdScrollBarInputHandler(renderer, handler) { }
 
 protected:
-    virtual bool OnMouseLeave() { return FALSE; }
     virtual bool IsAllowedButton(int WXUNUSED(button)) { return TRUE; }
 };
 
@@ -247,8 +248,6 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
     if ( n == wxNOT_FOUND )
     {
         // create a new handler
-        n = m_handlerNames.Add(control);
-
         if ( control.Matches(_T("wx*Button")) )
             handler = new wxStdButtonInputHandler(GetInputHandler(_T("wxControl")));
         else if ( control == _T("wxScrollBar") )
@@ -257,6 +256,7 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         else
             handler = new wxGTKInputHandler(m_renderer);
 
+        n = m_handlerNames.Add(control);
         m_handlers.Insert(handler, n);
     }
     else // we already have it
@@ -553,7 +553,8 @@ void wxGTKRenderer::DrawFrame(wxDC& dc,
         rectText.height = height;
 
         dc.SetBackgroundMode(wxSOLID);
-        DrawLabel(dc, label, rectText, flags, alignment, indexAccel);
+        DrawLabel(dc, label, wxNullBitmap, rectText,
+                  flags, alignment, indexAccel);
         dc.SetBackgroundMode(wxTRANSPARENT);
 
         // GTK+ does this - don't know if this is intentional or not
@@ -568,11 +569,13 @@ void wxGTKRenderer::DrawFrame(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 void wxGTKRenderer::DrawLabel(wxDC& dc,
-                                const wxString& label,
-                                const wxRect& rect,
-                                int flags,
-                                int alignment,
-                                int indexAccel)
+                              const wxString& label,
+                              const wxBitmap& image,
+                              const wxRect& rect,
+                              int flags,
+                              int alignment,
+                              int indexAccel,
+                              wxRect *rectBounds)
 {
     if ( flags & wxCONTROL_DISABLED )
     {
@@ -585,7 +588,7 @@ void wxGTKRenderer::DrawLabel(wxDC& dc,
         dc.SetTextForeground(0x7f7f7f);
     }
 
-    dc.DrawLabel(label, rect, alignment, indexAccel);
+    dc.DrawLabel(label, image, rect, alignment, indexAccel, rectBounds);
 }
 
 // ----------------------------------------------------------------------------
@@ -971,7 +974,7 @@ wxControlActions wxGTKInputHandler::Map(wxControl *control,
     // clicking on the control gives it focus
     if ( event.ButtonDown() )
     {
-        return wxACTION_FOCUS;
+        control->SetFocus();
     }
 
     return wxACTION_NONE;

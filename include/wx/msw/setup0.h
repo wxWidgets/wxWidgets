@@ -377,7 +377,10 @@
 #define wxUSE_SLIDER       1
 #define wxUSE_SPINBTN      1
 #define wxUSE_SPINCTRL     1
+#define wxUSE_STATBMP      1
+#define wxUSE_STATBOX      1
 #define wxUSE_STATLINE     1
+#define wxUSE_STATTEXT     1
 #define wxUSE_STATUSBAR    1
 #define wxUSE_TOOLTIPS     1        // wxToolTip and wxWindow::SetToolTip()
 

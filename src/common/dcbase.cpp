@@ -227,14 +227,26 @@ void wxDCBase::GetMultiLineTextExtent(const wxString& text,
 }
 
 void wxDCBase::DrawLabel(const wxString& text,
+                         const wxBitmap& bitmap,
                          const wxRect& rect,
                          int alignment,
                          int indexAccel,
                          wxRect *rectBounding)
 {
     // find the text position
-    wxCoord width, height, heightLine;
-    GetMultiLineTextExtent(text, &width, &height, &heightLine);
+    wxCoord width, heightText, heightLine;
+    GetMultiLineTextExtent(text, &width, &heightText, &heightLine);
+
+    wxCoord height;
+    if ( bitmap.Ok() )
+    {
+        width += bitmap.GetWidth();
+        height = bitmap.GetHeight();
+    }
+    else
+    {
+        height = heightText;
+    }
 
     wxCoord x, y;
     if ( alignment & wxALIGN_RIGHT )
@@ -243,7 +255,7 @@ void wxDCBase::DrawLabel(const wxString& text,
     }
     else if ( alignment & wxALIGN_CENTRE_HORIZONTAL )
     {
-        x = (rect.GetLeft() + rect.GetRight() - width) / 2;
+        x = (rect.GetLeft() + rect.GetRight() + 1 - width) / 2;
     }
     else // alignment & wxALIGN_LEFT
     {
@@ -256,14 +268,22 @@ void wxDCBase::DrawLabel(const wxString& text,
     }
     else if ( alignment & wxALIGN_CENTRE_VERTICAL )
     {
-        y = (rect.GetTop() + rect.GetBottom() - height) / 2;
+        y = (rect.GetTop() + rect.GetBottom() + 1 - height) / 2;
     }
     else // alignment & wxALIGN_TOP
     {
         y = rect.GetTop();
     }
 
-    // we will darw the underscore under the accel char later
+    // draw the bitmap first
+    if ( bitmap.Ok() )
+    {
+        DrawBitmap(bitmap, x, y, TRUE /* use mask */);
+        x += bitmap.GetWidth() + 4;
+        y += (height - heightText) / 2;
+    }
+
+    // we will draw the underscore under the accel char later
     wxCoord startUnderscore = 0,
             endUnderscore = 0,
             yUnderscore = 0;

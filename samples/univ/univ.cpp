@@ -37,17 +37,20 @@
     #include "wx/bmpbuttn.h"
     #include "wx/button.h"
     #include "wx/scrolbar.h"
-    #include "wx/statbmp.h"
     #include "wx/statbox.h"
-    #include "wx/statline.h"
     #include "wx/stattext.h"
 #endif
+
+#include "wx/statbmp.h"
+#include "wx/statline.h"
+
+#include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
 
-#include "wx/generic/tip.xpm"
+#include "tip.xpm"
 #include "open.xpm"
 
 // ----------------------------------------------------------------------------
@@ -72,10 +75,20 @@ public:
     // override base class virtuals
     // ----------------------------
 
+    // this method is called when wxWindows is initializing and should be used
+    // for the earliest initialization possible
+    virtual bool OnInitGui();
+
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
+
+    // get the standard bg colour
+    const wxColour& GetBgColour() const { return m_colourBg; }
+
+protected:
+    wxColour m_colourBg;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -115,6 +128,28 @@ END_EVENT_TABLE()
 // app class
 // ----------------------------------------------------------------------------
 
+bool MyUnivApp::OnInitGui()
+{
+    m_colourBg = *wxLIGHT_GREY;
+
+    if ( argc > 1 )
+    {
+        wxString themeName = argv[1];
+        wxTheme *theme = wxTheme::Create(themeName);
+        if ( theme )
+        {
+            // HACK: this will be done by wxTheme itself later, but for now
+            //       manually use the right colours
+            if ( themeName == _T("gtk") )
+                m_colourBg = wxColour(0xd6d6d6);
+
+            wxTheme::Set(theme);
+        }
+    }
+
+    return wxApp::OnInitGui();
+}
+
 bool MyUnivApp::OnInit()
 {
     wxFrame *frame = new MyUnivFrame(_T("wxUniversal demo"));
@@ -130,11 +165,7 @@ bool MyUnivApp::OnInit()
 MyUnivFrame::MyUnivFrame(const wxString& title)
            : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(600, 600))
 {
-#ifdef __WXMSW__
-    SetBackgroundColour(*wxLIGHT_GREY);
-#else
-    SetBackgroundColour(0xd6d6d6);
-#endif
+    SetBackgroundColour(wxGetApp().GetBgColour());
 
     wxStaticText *text;
 
@@ -173,7 +204,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                                        wxPoint(10, 150),
                                        wxSize(500, 120));
     box->SetForegroundColour(*wxRED);
-    box->SetBackground(wxBitmap("bricks.bmp", wxBITMAP_TYPE_BMP), 0, wxTILE);
+    box->SetBackground(wxBITMAP(bricks), 0, wxTILE);
 
     x = 15;
     #define CREATE_STATIC_ALIGN_DEMO(align) \
@@ -194,8 +225,8 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxButton(this, Univ_Button1, _T("&Press me"), wxPoint(10, 300));
     new wxButton(this, Univ_Button2, _T("&And me"), wxPoint(100, 300));
 
-    new wxStaticBitmap(this, wxBitmap(tipIcon), wxPoint(10, 350));
-    new wxStaticBitmap(this, -1, wxBitmap(tipIcon), wxPoint(50, 350),
+    new wxStaticBitmap(this, wxBITMAP(tip), wxPoint(10, 350));
+    new wxStaticBitmap(this, -1, wxBITMAP(tip), wxPoint(50, 350),
                        wxDefaultSize, wxSUNKEN_BORDER);
 
     wxScrollBar *sb;
@@ -204,7 +235,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     sb = new wxScrollBar(this, -1, wxPoint(200, 330), wxSize(-1, 150), wxSB_VERTICAL);
     sb->SetScrollbar(50, 50, 100, 10);
 
-    new wxButton(this, -1, wxBitmap(open_xpm), _T("&Open..."), wxPoint(10, 420));
+    new wxButton(this, -1, wxBITMAP(open), _T("&Open..."), wxPoint(10, 420));
 
     wxBitmap bmp1(wxTheApp->GetStdIcon(wxICON_INFORMATION)),
              bmp2(wxTheApp->GetStdIcon(wxICON_WARNING)),

@@ -256,13 +256,21 @@ public:
     void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle)
         { DoDrawRotatedText(text, pt.x, pt.y, angle); }
 
-    // this verson puts text into the given rectangle and aligns is as
-    // specified by alignment parameter; it also will emphasize the character
-    // with the given index if it is != -1 and return the boundign rectangle
-    virtual void DrawLabel(const wxString& text, const wxRect& rect,
+    // this verson puts both optional bitmap and the text into the given
+    // rectangle and aligns is as specified by alignment parameter; it also
+    // will emphasize the character with the given index if it is != -1 and
+    // return the bounding rectangle if required
+    virtual void DrawLabel(const wxString& text,
+                           const wxBitmap& image,
+                           const wxRect& rect,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
                            wxRect *rectBounding = NULL);
+
+    void DrawLabel(const wxString& text, const wxRect& rect,
+                   int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                   int indexAccel = -1)
+        { DrawLabel(text, wxNullBitmap, rect, alignment, indexAccel); }
 
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,

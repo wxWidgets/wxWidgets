@@ -44,8 +44,8 @@
 // ----------------------------------------------------------------------------
 
 // default margins around the image
-static const wxCoord DEFAULT_BTN_MARGIN_X = 6;
-static const wxCoord DEFAULT_BTN_MARGIN_Y = 3;
+static const wxCoord DEFAULT_BTN_MARGIN_X = 0;
+static const wxCoord DEFAULT_BTN_MARGIN_Y = 0;
 
 // ============================================================================
 // implementation
@@ -76,18 +76,7 @@ bool wxButton::Create(wxWindow *parent,
     // center label by default
     if ( !(style & wxALIGN_MASK) )
     {
-        style |= wxALIGN_CENTRE_VERTICAL;
-
-        // normally, buttons are centered, but it looks better to put them
-        // near the image for the buttons which have one
-        if ( bitmap.Ok() )
-        {
-            style |= wxALIGN_LEFT;
-        }
-        else
-        {
-            style |= wxALIGN_CENTRE_HORIZONTAL;
-        }
+        style |= wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL;
     }
 
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )

@@ -74,10 +74,12 @@ public:
                                 int flags = 0);
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
+                           const wxBitmap& image,
                            const wxRect& rect,
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
-                           int indexAccel = -1);
+                           int indexAccel = -1,
+                           wxRect *rectBounds = NULL);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -193,22 +195,27 @@ class wxWin32ScrollBarInputHandler : public wxStdScrollBarInputHandler
 {
 public:
     wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer,
-                                 wxInputHandler *handler)
-        : wxStdScrollBarInputHandler(renderer, handler) { }
+                                 wxInputHandler *handler);
 
-    // we don't highlight scrollbar elements, so there is no need to process
-    // mouse move events
-    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event)
-    {
-        if ( event.Moving() )
-            return FALSE;
+    virtual wxControlActions Map(wxControl *control, const wxMouseEvent& event);
+    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
 
-        return wxStdScrollBarInputHandler::OnMouseMove(control, event);
-    }
+    virtual bool OnScrollTimer(wxScrollBar *scrollbar,
+                               const wxControlAction& action,
+                               const wxMouseEvent& event);
 
 protected:
-    virtual bool OnMouseLeave() { return TRUE; }
     virtual bool IsAllowedButton(int button) { return button == 1; }
+
+    // the first and last event which caused the thumb to move
+    wxMouseEvent m_eventStartDrag,
+                 m_eventLastDrag;
+
+    // have we paused the scrolling because the mouse moved?
+    bool m_scrollPaused;
+
+    // we remember the interval of the timer to be able to restart it
+    int m_interval;
 };
 
 // ----------------------------------------------------------------------------
@@ -281,8 +288,6 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
     if ( n == wxNOT_FOUND )
     {
         // create a new handler
-        n = m_handlerNames.Add(control);
-
         if ( control.Matches(_T("wx*Button")) )
             handler = new wxStdButtonInputHandler(GetInputHandler(_T("wxControl")));
         else if ( control == _T("wxScrollBar") )
@@ -291,6 +296,7 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         else
             handler = new wxWin32InputHandler(m_renderer);
 
+        n = m_handlerNames.Add(control);
         m_handlers.Insert(handler, n);
     }
     else // we already have it
@@ -770,15 +776,12 @@ void wxWin32Renderer::DrawFrame(wxDC& dc,
         dc.GetTextExtent(label, NULL, &height);
         rectFrame.y += height / 2;
         rectFrame.height -= height / 2;
-    }
 
-    // draw the frame
-    DrawShadedRect(dc, &rectFrame, m_penDarkGrey, m_penHighlight);
-    DrawShadedRect(dc, &rectFrame, m_penHighlight, m_penDarkGrey);
+        // we have to draw each part of the frame individually as we can't
+        // erase the background beyond the label as it might contain some
+        // pixmap already, so drawing everything and then overwriting part of
+        // the frame with label doesn't work
 
-    // and overwrite it with label (if any)
-    if ( !label.empty() )
-    {
         // TODO: the +5 and space insertion should be customizable
 
         wxRect rectText;
@@ -795,9 +798,29 @@ void wxWin32Renderer::DrawFrame(wxDC& dc,
             indexAccel++;
         }
 
-        dc.SetBackgroundMode(wxSOLID);
-        DrawLabel(dc, label2, rectText, flags, alignment, indexAccel);
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        wxRect rectLabel;
+        DrawLabel(dc, label2, wxNullBitmap,
+                  rectText, flags, alignment, indexAccel, &rectLabel);
+
+        // draw left, bottom and right lines entirely
+        DrawVerticalLine(dc, rectFrame.GetLeft(),
+                         rectFrame.GetTop(), rectFrame.GetBottom() - 2);
+        DrawHorizontalLine(dc, rectFrame.GetBottom() - 1,
+                           rectFrame.GetLeft(), rectFrame.GetRight());
+        DrawVerticalLine(dc, rectFrame.GetRight() - 1,
+                         rectFrame.GetTop(), rectFrame.GetBottom() - 1);
+
+        // and 2 parts of the top line
+        DrawHorizontalLine(dc, rectFrame.GetTop(),
+                           rectFrame.GetLeft() + 1, rectLabel.GetLeft());
+        DrawHorizontalLine(dc, rectFrame.GetTop(),
+                           rectLabel.GetRight(), rectFrame.GetRight() - 2);
+    }
+    else
+    {
+        // just draw the complete frame
+        DrawShadedRect(dc, &rectFrame, m_penDarkGrey, m_penHighlight);
+        DrawShadedRect(dc, &rectFrame, m_penHighlight, m_penDarkGrey);
     }
 }
 
@@ -807,10 +830,12 @@ void wxWin32Renderer::DrawFrame(wxDC& dc,
 
 void wxWin32Renderer::DrawLabel(wxDC& dc,
                                 const wxString& label,
+                                const wxBitmap& image,
                                 const wxRect& rect,
                                 int flags,
                                 int alignment,
-                                int indexAccel)
+                                int indexAccel,
+                                wxRect *rectBounds)
 {
     // shift the label if a button is pressed
     wxRect rectLabel = rect;
@@ -822,7 +847,7 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
 
     if ( flags & wxCONTROL_DISABLED )
     {
-        // make the text grey and draw a shade for it
+        // make the text grey and draw a shadow of it
         dc.SetTextForeground(m_colHighlight);
         wxRect rectShadow = rectLabel;
         rectShadow.x++;
@@ -831,13 +856,14 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
         dc.SetTextForeground(m_colDarkGrey);
     }
 
+    // leave enough space for the focus rectangle
     wxRect rectText = rectLabel;
     if ( flags & wxCONTROL_FOCUSED )
     {
         rectText.Inflate(-2);
     }
 
-    dc.DrawLabel(label, rectText, alignment, indexAccel);
+    dc.DrawLabel(label, image, rectText, alignment, indexAccel, rectBounds);
 
     if ( flags & wxCONTROL_FOCUSED )
     {
@@ -1111,7 +1137,11 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
     {
         // TODO
         size->x += 3*window->GetCharWidth();
-        size->y = (11*(window->GetCharHeight() + 8))/10;
+        wxCoord heightBtn = (11*(window->GetCharHeight() + 8))/10;
+        if ( size->y < heightBtn - 8 )
+            size->y = heightBtn;
+        else
+            size->y += 9;
     }
     else
     {
@@ -1171,4 +1201,174 @@ wxControlActions wxWin32InputHandler::Map(wxControl *control,
                                           const wxMouseEvent& event)
 {
     return wxACTION_NONE;
+}
+
+// ----------------------------------------------------------------------------
+// wxWin32ScrollBarInputHandler
+// ----------------------------------------------------------------------------
+
+wxWin32ScrollBarInputHandler::
+wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer,
+                             wxInputHandler *handler)
+        : wxStdScrollBarInputHandler(renderer, handler)
+{
+    m_scrollPaused = FALSE;
+    m_interval = 0;
+}
+
+bool wxWin32ScrollBarInputHandler::OnScrollTimer(wxScrollBar *scrollbar,
+                                                 const wxControlAction& action,
+                                                 const wxMouseEvent& event)
+{
+    // stop if went beyond the position of the original click (this can only
+    // happen when we scroll by pages)
+    bool stop = FALSE;
+    if ( action == wxACTION_SCROLL_PAGE_DOWN )
+    {
+        stop = m_renderer->HitTestScrollbar(scrollbar, m_ptStartScrolling)
+                != wxHT_SCROLLBAR_BAR_2;
+    }
+    else if ( action == wxACTION_SCROLL_PAGE_UP )
+    {
+        stop = m_renderer->HitTestScrollbar(scrollbar, m_ptStartScrolling)
+                != wxHT_SCROLLBAR_BAR_1;
+    }
+
+    if ( stop )
+    {
+        StopScrolling(scrollbar);
+
+        scrollbar->Refresh();
+
+        return FALSE;
+    }
+
+    return wxStdScrollBarInputHandler::OnScrollTimer(scrollbar,
+                                                     action,
+                                                     event);
+}
+
+wxControlActions wxWin32ScrollBarInputHandler::Map(wxControl *control,
+                                                   const wxMouseEvent& event)
+{
+    // remember the current state
+    bool wasDraggingThumb = m_htLast == wxHT_SCROLLBAR_THUMB;
+
+    // do process the message
+    wxControlActions actions = wxStdScrollBarInputHandler::Map(control, event);
+
+    // analyse the changes
+    if ( !wasDraggingThumb && (m_htLast == wxHT_SCROLLBAR_THUMB) )
+    {
+        // we just started dragging the thumb, remember its initial position to
+        // be able to restore it if the drag is cancelled later
+        m_eventStartDrag = event;
+    }
+
+    return actions;
+}
+
+bool wxWin32ScrollBarInputHandler::OnMouseMove(wxControl *control,
+                                               const wxMouseEvent& event)
+{
+    // we don't highlight scrollbar elements, so there is no need to process
+    // mouse move events normally - only do it while mouse is captured (i.e.
+    // when we're dragging the thumb or pressing on something)
+    if ( !m_winCapture )
+        return FALSE;
+
+    if ( event.Entering() )
+    {
+        // we're not interested in this at all
+        return FALSE;
+    }
+
+    wxScrollBar *scrollbar = wxStaticCast(control, wxScrollBar);
+    wxHitTest ht;
+    if ( m_scrollPaused )
+    {
+        // check if the mouse returned to its original location
+
+        if ( event.Leaving() )
+        {
+            // it surely didn't
+            return FALSE;
+        }
+
+        ht = m_renderer->HitTestScrollbar(scrollbar, event.GetPosition());
+        if ( ht == m_htLast )
+        {
+            // yes it did, resume scrolling
+            m_scrollPaused = FALSE;
+            if ( m_timerScroll )
+            {
+                // we were scrolling by line/page, restart timer
+                m_timerScroll->Start(m_interval);
+
+                Press(scrollbar, TRUE);
+            }
+            else // we were dragging the thumb
+            {
+                // restore its last location
+                scrollbar->PerformAction(wxACTION_SCROLL_THUMB_MOVE,
+                                         m_eventLastDrag);
+            }
+
+            return TRUE;
+        }
+    }
+    else // normal case, scrolling hasn't been paused
+    {
+        // if we're scrolling the scrollbar because the arrow or the shaft was
+        // pressed, check that the mouse stays on the same scrollbar element
+
+        if ( event.Moving() )
+        {
+            ht = m_renderer->HitTestScrollbar(scrollbar, event.GetPosition());
+        }
+        else // event.Leaving()
+        {
+            ht = wxHT_NOWHERE;
+        }
+
+        // if we're dragging the thumb and the mouse stays in the scrollbar, it
+        // is still ok - we only want to catch the case when the mouse leaves
+        // the scrollbar here
+        if ( m_htLast == wxHT_SCROLLBAR_THUMB && ht != wxHT_NOWHERE )
+        {
+            ht = wxHT_SCROLLBAR_THUMB;
+        }
+
+        if ( ht != m_htLast )
+        {
+            // what were we doing? 2 possibilities: either an arrow/shaft was
+            // pressed in which case we have a timer and so we just stop it or
+            // we were dragging the thumb
+            if ( m_timerScroll )
+            {
+                // pause scrolling
+                m_interval = m_timerScroll->GetInterval();
+                m_timerScroll->Stop();
+                m_scrollPaused = TRUE;
+
+                // unpress the arrow
+                Press(scrollbar, FALSE);
+            }
+            else // we were dragging the thumb
+            {
+                // remember the current thumb position to be able to restore it
+                // if the mouse returns to it later
+                m_eventLastDrag = event;
+
+                // and restore the original position (before dragging) of the
+                // thumb for now
+                scrollbar->PerformAction(wxACTION_SCROLL_THUMB_MOVE,
+                                         m_eventStartDrag);
+            }
+
+            return TRUE;
+        }
+    }
+
+    return wxStdScrollBarInputHandler::OnMouseMove(control, event);
 }

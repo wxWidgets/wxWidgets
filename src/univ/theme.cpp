@@ -41,21 +41,21 @@
 // implementation
 // ============================================================================
 
-wxTheme::wxThemeInfo *wxTheme::ms_allThemes = (wxTheme::wxThemeInfo *)NULL;
+wxThemeInfo *wxTheme::ms_allThemes = (wxThemeInfo *)NULL;
 wxTheme *wxTheme::ms_theme = (wxTheme *)NULL;
 
 // ----------------------------------------------------------------------------
 // "dynamic" theme creation
 // ----------------------------------------------------------------------------
 
-wxTheme::wxThemeInfo::wxThemeInfo(wxTheme::Constructor c,
-                                  const wxChar *n,
-                                  const wxChar *d)
-       : name(n), desc(d), ctor(c)
+wxThemeInfo::wxThemeInfo(wxThemeInfo::Constructor c,
+                         const wxChar *n,
+                         const wxChar *d)
+           : name(n), desc(d), ctor(c)
 {
     // insert us (in the head of) the linked list
-    next = ms_allThemes;
-    ms_allThemes = this;
+    next = wxTheme::ms_allThemes;
+    wxTheme::ms_allThemes = this;
 }
 
 /* static */ wxTheme *wxTheme::Create(const wxString& name)
@@ -81,7 +81,11 @@ wxTheme::wxThemeInfo::wxThemeInfo(wxTheme::Constructor c,
 
 /* static */ bool wxTheme::CreateDefault()
 {
-    wxCHECK_MSG( !ms_theme, TRUE, _T("we already have a theme") );
+    if ( ms_theme )
+    {
+        // we already have a theme
+        return TRUE;
+    }
 
 #if defined(__WXMSW__)
     ms_theme = Create(_T("win32"));

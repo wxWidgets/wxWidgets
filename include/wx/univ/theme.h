@@ -25,6 +25,7 @@
 class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxColourScheme;
+struct WXDLLEXPORT wxThemeInfo;
 
 class WXDLLEXPORT wxTheme
 {
@@ -62,24 +63,6 @@ public:
 
     virtual ~wxTheme();
 
-    // dynamic creation helpers
-    typedef wxTheme *(*Constructor)();
-
-    struct wxThemeInfo
-    {
-        // theme name and (user readable) description
-        wxString name, desc;
-
-        // the function to create a theme object
-        Constructor ctor;
-
-        // next node in the linked list or NULL
-        wxThemeInfo *next;
-
-        // constructor for the struct itself
-        wxThemeInfo(Constructor ctor, const wxChar *name, const wxChar *desc);
-    };
-
 private:
     // the list of descriptions of all known themes
     static wxThemeInfo *ms_allThemes;
@@ -91,8 +74,25 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// macros
+// dynamic theme creation helpers
 // ----------------------------------------------------------------------------
+
+struct WXDLLEXPORT wxThemeInfo
+{
+    typedef wxTheme *(*Constructor)();
+
+    // theme name and (user readable) description
+    wxString name, desc;
+
+    // the function to create a theme object
+    Constructor ctor;
+
+    // next node in the linked list or NULL
+    wxThemeInfo *next;
+
+    // constructor for the struct itself
+    wxThemeInfo(Constructor ctor, const wxChar *name, const wxChar *desc);
+};
 
 // to declare a new theme, this macro must be used in the class declaration
 #define WX_DECLARE_THEME() static wxThemeInfo ms_info
@@ -100,8 +100,8 @@ private:
 // and this one must be inserted in the source file
 #define WX_IMPLEMENT_THEME(classname, themename, themedesc)                 \
     wxTheme *wxCtorFor##themename() { return new classname; }               \
-    wxTheme::wxThemeInfo classname::ms_info(wxCtorFor##themename,           \
-                                            #themename, themedesc)
+    wxThemeInfo classname::ms_info(wxCtorFor##themename,                    \
+                                   #themename, themedesc)
 
 #endif // _WX_UNIV_THEME_H_
 
