@@ -241,12 +241,15 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
                int noUnitsX, int noUnitsY,
                int xPos, int yPos, bool noRefresh )
 {
+    int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
+    int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
+    
     m_xScrollPixelsPerLine = pixelsPerUnitX;
     m_yScrollPixelsPerLine = pixelsPerUnitY;
-    m_xScrollPosition = xPos;
-    m_yScrollPosition = yPos;
     m_xScrollLines = noUnitsX;
     m_yScrollLines = noUnitsY;
+    m_xScrollPosition = xPos;
+    m_yScrollPosition = yPos;
 
     m_hAdjust->lower = 0.0;
     m_hAdjust->upper = noUnitsX;
@@ -259,8 +262,16 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     m_vAdjust->value = yPos;
     m_vAdjust->step_increment = 1.0;
     m_vAdjust->page_increment = 2.0;
-
+    
     AdjustScrollbars();
+    
+    if (!noRefresh)
+    {
+        int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
+        int new_y = m_yScrollPixelsPerLine * m_yScrollPosition;
+        
+        m_targetWindow->ScrollWindow( old_x-new_x, old_y-new_y );
+    }
 }
 
 void wxScrolledWindow::AdjustScrollbars()
