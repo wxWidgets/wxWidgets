@@ -11613,7 +11613,7 @@ if test "$wxUSE_LIBPNG" = "yes" -o "$wxUSE_LIBPNG" = "sys" ; then
 #define wxUSE_LIBPNG 1
 EOF
 
-      if test "$wxUSE_ZLIB" != "sys" ; then
+      if test "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
     echo "configure: warning: --with-libpng=sys doesn't work without --with-zlib=sys, will compile the built-in libpng instead" 1>&2
     wxUSE_LIBPNG=yes
   fi
