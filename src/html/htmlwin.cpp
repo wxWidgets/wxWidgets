@@ -130,7 +130,7 @@ void wxHtmlWindow::SetFonts(wxString normal_face, wxString fixed_face, const int
 
     m_Parser->SetFonts(normal_face, fixed_face, sizes);
     // fonts changed => contents invalid, so reload the page:
-    SetPage(wxT("<html><body></body></html>")); 
+    SetPage(wxT("<html><body></body></html>"));
     if (!op.IsEmpty()) LoadPage(op);
 }
 
@@ -182,7 +182,7 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     m_Cell->SetIndent(m_Borders, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
     m_Cell->SetAlignHor(wxHTML_ALIGN_CENTER);
     CreateLayout();
-    if (m_tmpCanDrawLocks == 0) 
+    if (m_tmpCanDrawLocks == 0)
         Refresh();
     return TRUE;
 }
@@ -409,7 +409,7 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
     m_Borders = cfg->Read(wxT("wxHtmlWindow/Borders"), m_Borders);
     p_fff = cfg->Read(wxT("wxHtmlWindow/FontFaceFixed"), m_Parser->m_FontFaceFixed);
     p_ffn = cfg->Read(wxT("wxHtmlWindow/FontFaceNormal"), m_Parser->m_FontFaceNormal);
-    for (int i = 0; i < 7; i++) 
+    for (int i = 0; i < 7; i++)
     {
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         p_fontsizes[i] = cfg->Read(tmp, m_Parser->m_FontsSizes[i]);
@@ -436,7 +436,7 @@ void wxHtmlWindow::WriteCustomization(wxConfigBase *cfg, wxString path)
     cfg->Write(wxT("wxHtmlWindow/Borders"), (long) m_Borders);
     cfg->Write(wxT("wxHtmlWindow/FontFaceFixed"), m_Parser->m_FontFaceFixed);
     cfg->Write(wxT("wxHtmlWindow/FontFaceNormal"), m_Parser->m_FontFaceNormal);
-    for (int i = 0; i < 7; i++) 
+    for (int i = 0; i < 7; i++)
     {
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         cfg->Write(tmp, (long) m_Parser->m_FontsSizes[i]);
@@ -529,10 +529,10 @@ void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
         m_Processors->DeleteContents(TRUE);
     }
     wxHtmlProcessorList::Node *node;
-    
+
     for (node = m_Processors->GetFirst(); node; node = node->GetNext())
     {
-        if (processor->GetPriority() > node->GetData()->GetPriority()) 
+        if (processor->GetPriority() > node->GetData()->GetPriority())
         {
             m_Processors->Insert(node, processor);
             break;
@@ -548,10 +548,10 @@ void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
         m_SharedProcessors->DeleteContents(TRUE);
     }
     wxHtmlProcessorList::Node *node;
-    
+
     for (node = m_SharedProcessors->GetFirst(); node; node = node->GetNext())
     {
-        if (processor->GetPriority() > node->GetData()->GetPriority()) 
+        if (processor->GetPriority() > node->GetData()->GetPriority())
         {
             m_SharedProcessors->Insert(node, processor);
             break;
@@ -573,10 +573,10 @@ void wxHtmlWindow::CleanUpStatics()
     m_DefaultFilter = NULL;
     m_Filters.DeleteContents(TRUE);
     m_Filters.Clear();
-    
+
     delete m_SharedProcessors;
     m_SharedProcessors = NULL;
-    
+
     delete s_cur_hand;
     delete s_cur_arrow;
 }
@@ -696,7 +696,7 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 }
 
 
-
+IMPLEMENT_ABSTRACT_CLASS(wxHtmlProcessor,wxObject)
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindow,wxScrolledWindow)
 

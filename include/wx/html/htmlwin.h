@@ -27,8 +27,7 @@
 #include "wx/filesys.h"
 #include "wx/html/htmlfilt.h"
 
-class WXDLLEXPORT wxHtmlProcessor;
-
+class wxHtmlProcessor;
 class wxHtmlWinModule;
 class wxHtmlHistoryArray;
 class wxHtmlProcessorList;
@@ -52,7 +51,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 public:
     wxHtmlWindow() : wxScrolledWindow() {};
     wxHtmlWindow(wxWindow *parent, wxWindowID id = -1,
-                 const wxPoint& pos = wxDefaultPosition, 
+                 const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxHW_SCROLLBAR_AUTO,
                  const wxString& name = "htmlWindow");
@@ -130,7 +129,7 @@ public:
 
     // Returns a pointer to the parser.
     wxHtmlWinParser *GetParser() const { return m_Parser; }
-    
+
     // Adds HTML processor to this instance of wxHtmlWindow:
     void AddProcessor(wxHtmlProcessor *processor);
     // Adds HTML processor to wxHtmlWindow class as whole:
@@ -143,7 +142,7 @@ protected:
     // Return value : TRUE if anchor exists, FALSE otherwise
     bool ScrollToAnchor(const wxString& anchor);
 
-    // Prepares layout (= fill m_PosX, m_PosY for fragments) based on 
+    // Prepares layout (= fill m_PosX, m_PosY for fragments) based on
     // actual size of window. This method also setup scrollbars
     void CreateLayout();
 
@@ -210,10 +209,10 @@ private:
     int m_HistoryPos;
     // if this FLAG is false, items are not added to history
     bool m_HistoryOn;
-    
+
     // html processors array:
     wxHtmlProcessorList *m_Processors;
-    static wxHtmlProcessorList *m_SharedProcessors;    
+    static wxHtmlProcessorList *m_SharedProcessors;
 
     DECLARE_EVENT_TABLE()
 };
