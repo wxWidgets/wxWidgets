@@ -884,8 +884,6 @@ depends = [ #'include/wx/wxPython/wxPython.h',
 ####################################
 
 import pprint
-import xml.sax            
-
 try:
     import libxml2
     FOUND_LIBXML2 = True
