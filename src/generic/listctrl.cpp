@@ -54,12 +54,8 @@
 
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
     #include "wx/generic/listctrl.h"
-
-    #define wxImageListType wxGenericImageList
 #else
     #include "wx/listctrl.h"
-    
-    #define wxImageListType wxImageList
 #endif
 
 #if defined(__WXGTK__)
@@ -658,7 +654,7 @@ public:
     void GetImageSize( int index, int &width, int &height ) const;
     int GetTextLength( const wxString &s ) const;
 
-    void SetImageList( wxGenericImageList *imageList, int which );
+    void SetImageList( wxImageListType *imageList, int which );
     void SetItemSpacing( int spacing, bool isSmall = FALSE );
     int GetItemSpacing( bool isSmall = FALSE );
 
@@ -787,8 +783,8 @@ public:
     wxColour            *m_highlightColour;
     int                  m_xScroll,
                          m_yScroll;
-    wxGenericImageList         *m_small_image_list;
-    wxGenericImageList         *m_normal_image_list;
+    wxImageListType         *m_small_image_list;
+    wxImageListType         *m_normal_image_list;
     int                  m_small_spacing;
     int                  m_normal_spacing;
     bool                 m_hasFocus;
@@ -1934,7 +1930,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int image = item.m_image;
         if ( image != -1 )
         {
-            wxGenericImageList *imageList = m_owner->m_small_image_list;
+            wxImageListType *imageList = m_owner->m_small_image_list;
             if ( imageList )
             {
                 int ix, iy;
@@ -2292,8 +2288,8 @@ void wxListMainWindow::Init()
     m_headerWidth =
     m_lineHeight = 0;
 
-    m_small_image_list = (wxGenericImageList *) NULL;
-    m_normal_image_list = (wxGenericImageList *) NULL;
+    m_small_image_list = (wxImageListType *) NULL;
+    m_normal_image_list = (wxImageListType *) NULL;
 
     m_small_spacing = 30;
     m_normal_spacing = 40;
@@ -3543,7 +3539,7 @@ int wxListMainWindow::GetTextLength( const wxString &s ) const
     return lw + AUTOSIZE_COL_MARGIN;
 }
 
-void wxListMainWindow::SetImageList( wxGenericImageList *imageList, int which )
+void wxListMainWindow::SetImageList( wxImageListType *imageList, int which )
 {
     m_dirty = TRUE;
 
@@ -4546,9 +4542,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
 
 wxGenericListCtrl::wxGenericListCtrl()
 {
-    m_imageListNormal = (wxGenericImageList *) NULL;
-    m_imageListSmall = (wxGenericImageList *) NULL;
-    m_imageListState = (wxGenericImageList *) NULL;
+    m_imageListNormal = (wxImageListType *) NULL;
+    m_imageListSmall = (wxImageListType *) NULL;
+    m_imageListState = (wxImageListType *) NULL;
 
     m_ownsImageListNormal =
     m_ownsImageListSmall =
@@ -4589,7 +4585,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 {
     m_imageListNormal =
     m_imageListSmall =
-    m_imageListState = (wxGenericImageList *) NULL;
+    m_imageListState = (wxImageListType *) NULL;
     m_ownsImageListNormal =
     m_ownsImageListSmall =
     m_ownsImageListState = FALSE;
@@ -4893,7 +4889,7 @@ long wxGenericListCtrl::GetNextItem( long item, int geom, int state ) const
     return m_mainWin->GetNextItem( item, geom, state );
 }
 
-wxGenericImageList *wxGenericListCtrl::GetImageList(int which) const
+wxImageListType *wxGenericListCtrl::GetImageList(int which) const
 {
     if (which == wxIMAGE_LIST_NORMAL)
     {
@@ -4907,10 +4903,10 @@ wxGenericImageList *wxGenericListCtrl::GetImageList(int which) const
     {
         return m_imageListState;
     }
-    return (wxGenericImageList *) NULL;
+    return (wxImageListType *) NULL;
 }
 
-void wxGenericListCtrl::SetImageList( wxGenericImageList *imageList, int which )
+void wxGenericListCtrl::SetImageList( wxImageListType *imageList, int which )
 {
     if ( which == wxIMAGE_LIST_NORMAL )
     {
@@ -4934,7 +4930,7 @@ void wxGenericListCtrl::SetImageList( wxGenericImageList *imageList, int which )
     m_mainWin->SetImageList( imageList, which );
 }
 
-void wxGenericListCtrl::AssignImageList(wxGenericImageList *imageList, int which)
+void wxGenericListCtrl::AssignImageList(wxImageListType *imageList, int which)
 {
     SetImageList(imageList, which);
     if ( which == wxIMAGE_LIST_NORMAL )
