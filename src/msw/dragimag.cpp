@@ -121,7 +121,7 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor)
     m_hImageList = 0;
 
 #ifdef __WXWINCE__
-    UNIT flags = ILC_COLOR;
+    UINT flags = ILC_COLOR;
 #else
     UINT flags wxDUMMY_INITIALIZE(0) ;
     if (image.GetDepth() <= 4)
