@@ -19,7 +19,7 @@
 // compatible (even if incorrect) behaviour by default: derive wxCursor from
 // wxBitmap
 #ifndef wxICON_IS_BITMAP
-    #define wxICON_IS_BITMAP 1
+    #define wxICON_IS_BITMAP 0
 #endif
 
 #if wxICON_IS_BITMAP
