@@ -384,15 +384,15 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
 }
 
 // ----------------------------------------------------------------------------
-// target window handling
+// [target] window handling
 // ----------------------------------------------------------------------------
 
 void wxScrollHelper::DeleteEvtHandler()
 {
     // FIXME: we should search for m_handler in the handler list
-    if ( m_targetWindow )
+    if ( m_win )
     {
-        m_targetWindow->PopEventHandler(TRUE /* Delete old event handler*/);
+        m_win->PopEventHandler(TRUE /* Delete old event handler*/);
     }
 }
 
@@ -402,33 +402,32 @@ void wxScrollHelper::SetWindow(wxWindow *win)
 
     m_win = win;
 
-    DoSetTargetWindow(win, TRUE);
+    // by default, the associated window is also the target window
+    DoSetTargetWindow(win);
 }
 
-void wxScrollHelper::DoSetTargetWindow(wxWindow *target, bool pushEventHandler)
+void wxScrollHelper::DoSetTargetWindow(wxWindow *target)
 {
     m_targetWindow = target;
 
     // install the event handler which will intercept the events we're
-    // interested in
-    if (pushEventHandler)
+    // interested in (but only do it for our real window, not the target window
+    // which we scroll - we don't need to hijack its events)
+    if ( m_targetWindow == m_win )
     {
         m_handler = new wxScrollHelperEvtHandler(this);
         m_targetWindow->PushEventHandler(m_handler);
     }
 }
 
-void wxScrollHelper::SetTargetWindow( wxWindow *target, bool pushEventHandler )
+void wxScrollHelper::SetTargetWindow(wxWindow *target)
 {
     wxCHECK_RET( target, wxT("target window must not be NULL") );
 
     if ( target == m_targetWindow )
         return;
 
-    if (pushEventHandler)
-        DeleteEvtHandler();
-
-    DoSetTargetWindow(target, pushEventHandler);
+    DoSetTargetWindow(target);
 }
 
 wxWindow *wxScrollHelper::GetTargetWindow() const
@@ -839,7 +838,8 @@ void wxScrollHelper::HandleOnSize(wxSizeEvent& WXUNUSED(event))
 // scroll position
 void wxScrollHelper::HandleOnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxPaintDC dc(m_targetWindow);
+    // don't use m_targetWindow here, this is always called for ourselves
+    wxPaintDC dc(m_win);
     DoPrepareDC(dc);
 
     OnDraw(dc);
