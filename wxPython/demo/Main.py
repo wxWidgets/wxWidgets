@@ -30,6 +30,7 @@ _treeList = [
         'wxPyColourChooser',
         'wxScrolledPanel',
         'ShapedWindow',
+        'PopupMenu',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -66,6 +67,7 @@ _treeList = [
 
     # core controls
     ('Core Windows/Controls', [
+        'PopupMenu',
         'wxButton',
         'wxCheckBox',
         'wxCheckListBox',
