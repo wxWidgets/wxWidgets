@@ -47,6 +47,10 @@ MyCanvas *myCanvas = (MyCanvas *) NULL;
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit(void)
 {
+#if defined(__WXGTK__) && defined(wxUSE_UNICODE)
+  wxConvCurrent = &wxConvLocal;
+#endif
+
   m_canvasTextColour = wxColour("BLACK");
   m_canvasFont = *wxNORMAL_FONT;
 

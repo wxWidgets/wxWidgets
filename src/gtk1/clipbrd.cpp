@@ -224,6 +224,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
     }
     else
     {
+        wxTheClipboard->m_waiting = FALSE;
         return FALSE;
     }
     
@@ -239,6 +240,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
 	}
     }
   
+    wxTheClipboard->m_waiting = FALSE;
     return TRUE;
 }
 
@@ -388,12 +390,20 @@ void wxClipboard::Clear()
      
         if (gdk_selection_owner_get( g_clipboardAtom ) == m_clipboardWidget->window)
         {
+            m_waiting = TRUE;
+	    
             gtk_selection_owner_set( (GtkWidget*) NULL, g_clipboardAtom, GDK_CURRENT_TIME );
+	    
+            while (m_waiting) gtk_main_iteration();
         }
     
         if (gdk_selection_owner_get( GDK_SELECTION_PRIMARY ) == m_clipboardWidget->window)
         {
+            m_waiting = TRUE;
+	    
             gtk_selection_owner_set( (GtkWidget*) NULL, GDK_SELECTION_PRIMARY, GDK_CURRENT_TIME );
+	    
+            while (m_waiting) gtk_main_iteration();
         }
     
         if (m_dataBroker)

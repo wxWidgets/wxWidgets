@@ -1111,6 +1111,8 @@ WX_LINK=
 
 MAKEINCLUDE=
 
+WXGTK12=
+
 if test "$wxUSE_GTK" = 1; then
   AM_PATH_GTK(1.0.0, [
        GUI_TK_INCLUDE="$GTK_CFLAGS"
@@ -1120,6 +1122,9 @@ if test "$wxUSE_GTK" = 1; then
   TOOLKIT_DEF=__WXGTK__
   WX_LINK=-lwx_gtk2
   MAKEINCLUDE=../gtk.inc
+  AM_PATH_GTK(1.2.0, [
+       WXGTK12=1
+  ], AC_MSG_RESULT(no))
 fi
 
 if test "$wxUSE_QT" = 1; then
@@ -1223,6 +1228,10 @@ AC_SUBST(MAKEINCLUDE)
 dnl ----------------------------------------------------------------
 dnl Register compile options for makefiles and setup.h
 dnl ----------------------------------------------------------------
+
+if test "$WXGTK12" = 1 ; then
+  AC_DEFINE_UNQUOTED(__WXGTK12__,$WXGTK12)
+fi
 
 EXTRA_LINK=
 
@@ -1488,7 +1497,12 @@ if test "$wxUSE_TOOLTIPS" = 1 ; then
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_DRAG_AND_DROP,$wxUSE_DRAG_AND_DROP)
+    if test "$WXGTK12" = 1 ; then
+        AC_DEFINE_UNQUOTED(wxUSE_DRAG_AND_DROP,$wxUSE_DRAG_AND_DROP)
+    else
+        AC_MSG_WARN(drag and drop is only supported under GTK 1.2, sorry)
+	wxUSE_DRAG_AND_DROP=0
+    fi
 fi
 
 dnl ----------------------------------------------------------------

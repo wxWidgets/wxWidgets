@@ -7,6 +7,7 @@ __X__           any X, but not GTK
 __WXMOTIF__     Motif
 __WXXT__        Xt; mutually exclusive with WX_MOTIF (?)
 __WXGTK__       GTK
+__WXGTK12__     GTK 1.2 or higher
 __WXMSW__       Any Windows
 __WXMAC__       MacOS
 __UNIX__        any Unix

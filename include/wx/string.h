@@ -221,7 +221,7 @@ WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvFile)) wxConvFile;
 WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvUTF7)) wxConvUTF7;
 WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvUTF8)) wxConvUTF8;
 #define wxConv_UTF8 wxConvUTF8
-#if defined(__WXGTK__) && (GTK_MINOR_VERSION > 0)
+#if defined(__WXGTK12__)
     WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvGdk)) wxConvGdk;
     #define wxConv_gdk wxConvGdk
 #endif // GTK > 1.0

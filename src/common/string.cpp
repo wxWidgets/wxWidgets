@@ -1841,7 +1841,7 @@ size_t wxMBConvFile::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // standard gdk conversion
 // ----------------------------------------------------------------------------
 
-#if defined(__WXGTK__) && (GTK_MINOR_VERSION > 0)
+#ifdef __WXGTK12__
 WXDLLEXPORT_DATA(wxMBConvGdk) wxConvGdk;
 
 #include <gdk/gdk.h>
