@@ -207,7 +207,7 @@ public:
     wxWindow * GetGrandParent();
     %addmethods {
         long GetHandle() {
-            return (long)self->GetHandle();
+            return wxPyGetWinHandle(self); //(long)self->GetHandle();
         }
     }
     int GetId();

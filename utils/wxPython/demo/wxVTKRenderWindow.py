@@ -10,7 +10,8 @@ except ImportError:
 
 def runTest(frame, nb, log):
     if haveVTK:
-        win = vtk.wxVTKRenderWindow(nb, -1)
+        f = wxFrame(frame, -1, "wxVTKRenderWindow", size=(450, 300))
+        win = vtk.wxVTKRenderWindow(f, -1)
 
         # Get the render window
         renWin = win.GetRenderWindow()
@@ -38,7 +39,9 @@ def runTest(frame, nb, log):
         scalarBar.SetHeight(0.17)
         ren.AddActor2D(scalarBar)
 
-        return win
+        f.Show(true)
+        frame.otherWin = f
+        return None
 
 
     else:

@@ -18,9 +18,8 @@ class TestPanel(wxPanel):
         EVT_BUTTON(self, 20, self.OnClick)
 
         bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
-        if wxPlatform == '__WXMSW__':
-            mask = wxMaskColour(bmp, wxBLUE)
-            bmp.SetMask(mask)
+        mask = wxMaskColour(bmp, wxBLUE)
+        bmp.SetMask(mask)
         wxBitmapButton(self, 30, bmp, wxPoint(140, 20),
                        wxSize(bmp.GetWidth()+10, bmp.GetHeight()+10))
         EVT_BUTTON(self, 30, self.OnClick)

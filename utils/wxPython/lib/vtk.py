@@ -28,15 +28,14 @@ import math
 
 #----------------------------------------------------------------------
 
-class wxVTKRenderWindow(wxWindow):
+class wxVTKRenderWindow(wxScrolledWindow):
     def __init__(self, parent, id, position=wxDefaultPosition,
                  size=wxDefaultSize, style=0):
-        wxWindow.__init__(self, parent, id, position, size, style)
+        wxScrolledWindow.__init__(self, parent, id, position, size, style)
 
         self.renderWindow = vtkRenderWindow()
 
-        hdl = self.GetHandle()
-        self.renderWindow.SetWindowInfo(str(hdl))
+        EVT_WINDOW_CREATE(self, self.OnCreateWindow)
 
         EVT_LEFT_DOWN  (self, self.SaveClick)
         EVT_MIDDLE_DOWN(self, self.SaveClick)
@@ -44,7 +43,7 @@ class wxVTKRenderWindow(wxWindow):
         EVT_LEFT_UP    (self, self.Release)
         EVT_MIDDLE_UP  (self, self.Release)
         EVT_RIGHT_UP   (self, self.Release)
-        EVT_MOTION(self, self.MouseMotion)
+        EVT_MOTION     (self, self.MouseMotion)
 
 
     def GetRenderer(self):
@@ -59,6 +58,14 @@ class wxVTKRenderWindow(wxWindow):
     def OnPaint(self, event):
         dc = wxPaintDC(self)
         self.renderWindow.Render()
+
+    def OnCreateWindow(self, event):
+        hdl = self.GetHandle()
+        self.renderWindow.SetWindowInfo(str(hdl))
+
+    def OnEraseBackground(self, event):
+        pass
+
 
 
     def SaveClick(self, event):
@@ -108,51 +115,4 @@ class wxVTKRenderWindow(wxWindow):
         self.prev_y = event.y
 
 
-
-## testcode is now in the demo ##
-
-## if __name__ == '__main__':
-##     class TestFrame(wxFrame):
-##         def __init__(self, parent):
-##             wxFrame.__init__(self, parent, -1, "VTK Test", size=(450,450))
-
-##             rw = wxVTKRenderWindow(self, -1)
-
-##             # Get the render window
-##             renWin = rw.GetRenderWindow()
-
-##             # Next, do the VTK stuff
-##             ren = vtkRenderer()
-##             renWin.AddRenderer(ren)
-##             cone = vtkConeSource()
-##             cone.SetResolution(80)
-##             coneMapper = vtkPolyDataMapper()
-##             coneMapper.SetInput(cone.GetOutput())
-##             coneActor = vtkActor()
-##             coneActor.SetMapper(coneMapper)
-##             ren.AddActor(coneActor)
-##             coneMapper.GetLookupTable().Build()
-
-##             # Create a scalar bar
-##             scalarBar = vtkScalarBarActor()
-##             scalarBar.SetLookupTable(coneMapper.GetLookupTable())
-##             scalarBar.SetTitle("Temperature")
-##             scalarBar.GetPositionCoordinate().SetCoordinateSystemToNormalizedViewport()
-##             scalarBar.GetPositionCoordinate().SetValue(0.1, 0.01)
-##             scalarBar.SetOrientationToHorizontal()
-##             scalarBar.SetWidth(0.8)
-##             scalarBar.SetHeight(0.17)
-##             ren.AddActor2D(scalarBar)
-
-
-
-##     class TestApp(wxApp):
-##         def OnInit(self):
-##             f = TestFrame(None)
-##             self.SetTopWindow(f)
-##             f.Show(true)
-##             return true
-
-##     app = TestApp(0)
-##     app.MainLoop()
 

@@ -1610,7 +1610,7 @@ static PyObject *_wrap_wxWindow_GetGrandParent(PyObject *self, PyObject *args, P
 }
 
 static long  wxWindow_GetHandle(wxWindow *self) {
-            return (long)self->GetHandle();
+            return wxPyGetWinHandle(self); //(long)self->GetHandle();
         }
 static PyObject *_wrap_wxWindow_GetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

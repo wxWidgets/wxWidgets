@@ -27,6 +27,11 @@
 
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
+#include <gdk/gdkprivate.h>
+#include <wx/gtk/win_gtk.h>
+//#include <gdk/gdk.h>
+//#include <gdk/gdkx.h>
+//#include <gtk/gtkwindow.h>
 #endif
 
 
@@ -573,6 +578,25 @@ PyObject* wxPy_ConvertList(wxListBase* list, const char* className) {
     }
     wxPySaveThread(doSave);
     return pyList;
+}
+
+//----------------------------------------------------------------------
+
+long wxPyGetWinHandle(wxWindow* win) {
+#ifdef __WXMSW__
+    return (long)win->GetHandle();
+#endif
+
+    // Find and return the actual X-Window.
+#ifdef __WXGTK__
+    if (win->m_wxwindow) {
+        GdkWindowPrivate* bwin = (GdkWindowPrivate*)GTK_PIZZA(win->m_wxwindow)->bin_window;
+        if (bwin) {
+            return (long)bwin->xwindow;
+        }
+    }
+#endif
+    return 0;
 }
 
 //----------------------------------------------------------------------

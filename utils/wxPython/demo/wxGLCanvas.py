@@ -2,11 +2,18 @@
 from wxPython.wx       import *
 try:
     from wxPython.glcanvas import *
-    from OpenGL.GL import *
-    from OpenGL.GLUT import *
     haveGLCanvas = true
 except ImportError:
     haveGLCanvas = false
+
+try:
+    # The Python OpenGL package can be found at
+    # http://starship.python.net:9673/crew/da/Code/PyOpenGL/
+    from OpenGL.GL import *
+    from OpenGL.GLUT import *
+    haveOpenGL = true
+except ImportError:
+    haveOpenGL = false
 
 #----------------------------------------------------------------------
 
@@ -17,9 +24,17 @@ if not haveGLCanvas:
         dlg.ShowModal()
         dlg.Destroy()
 
+elif not haveOpenGL:
+    def runTest(frame, nb, log):
+        dlg = wxMessageDialog(frame,
+                              'The OpenGL package was not found.  You can get it at\n'
+                              'http://starship.python.net:9673/crew/da/Code/PyOpenGL/',
+                          'Sorry', wxOK | wxICON_INFORMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
+
+
 else:
-
-
     def runTest(frame, nb, log):
         win = wxFrame(frame, -1, "GL Demos", wxDefaultPosition, wxSize(300,300))
         CubeCanvas(win)
@@ -51,6 +66,7 @@ else:
 
         def OnSize(self, event):
             size = self.GetClientSize()
+            print size
             if self.GetContext():
                 self.SetCurrent()
                 glViewport(0, 0, size.width, size.height)
@@ -60,6 +76,7 @@ else:
             dc = wxPaintDC(self)
 
             self.SetCurrent()
+            print self.init
 
             if not self.init:
                 self.InitGL()

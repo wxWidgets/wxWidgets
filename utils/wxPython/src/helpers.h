@@ -70,7 +70,7 @@ HELPEREXPORT PyObject* wxPyConstructObject(void* ptr, const char* className);
 HELPEREXPORT bool wxPyRestoreThread();
 HELPEREXPORT void wxPySaveThread(bool doSave);
 HELPEREXPORT PyObject* wxPy_ConvertList(wxListBase* list, const char* className);
-
+HELPEREXPORT long wxPyGetWinHandle(wxWindow* win);
 
 //----------------------------------------------------------------------
 

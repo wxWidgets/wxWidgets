@@ -2540,6 +2540,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LISTBOX_SELECTED", PyInt_FromLong((long) wxEVT_COMMAND_LISTBOX_SELECTED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LISTBOX_DOUBLECLICKED", PyInt_FromLong((long) wxEVT_COMMAND_LISTBOX_DOUBLECLICKED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_CHECKLISTBOX_TOGGLED", PyInt_FromLong((long) wxEVT_COMMAND_CHECKLISTBOX_TOGGLED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPINCTRL_UPDATED", PyInt_FromLong((long) wxEVT_COMMAND_SPINCTRL_UPDATED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_UPDATED", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_UPDATED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_ENTER", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_ENTER));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_MENU_SELECTED", PyInt_FromLong((long) wxEVT_COMMAND_MENU_SELECTED));
