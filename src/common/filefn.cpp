@@ -950,9 +950,9 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
   FILE *fp2 = (FILE *) NULL;
   FILE *fp3 = (FILE *) NULL;
   // Open the inputs and outputs
-  if ((fp1 = fopen (OS_FILENAME( file1 ), "rb")) == NULL ||
-      (fp2 = fopen (OS_FILENAME( file2 ), "rb")) == NULL ||
-      (fp3 = fopen (OS_FILENAME( outfile ), "wb")) == NULL)
+  if ((fp1 = wxFopen (OS_FILENAME( file1 ), wxT("rb"))) == NULL ||
+      (fp2 = wxFopen (OS_FILENAME( file2 ), wxT("rb"))) == NULL ||
+      (fp3 = wxFopen (OS_FILENAME( outfile ), wxT("wb"))) == NULL)
     {
       if (fp1)
         fclose (fp1);

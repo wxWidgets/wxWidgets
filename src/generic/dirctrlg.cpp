@@ -308,18 +308,18 @@ static const int ID_NEW = 1004;
 #if defined(__WXMSW__) || defined(__WXPM__)
 int setdrive(int drive)
 {
-	char  newdrive[3];
+	wxChar  newdrive[3];
 
 	if (drive < 1 || drive > 31)
 		return -1;
-	newdrive[0] = (char)('A' + (char)drive - (char)1);
-	newdrive[1] = ':';
-	newdrive[2] = '\0';
+	newdrive[0] = (wxChar)(wxT('A') + drive - 1);
+	newdrive[1] = wxT(':');
+	newdrive[2] = wxT('\0');
 #if defined(__WXMSW__)
 #ifdef __WIN16__
     if (wxSetWorkingDirectory(newdrive))
 #else
-	if (SetCurrentDirectory((LPSTR)newdrive))
+	if (::SetCurrentDirectory(newdrive))
 #endif
 #else
     // VA doesn't know what LPSTR is and has its own set
