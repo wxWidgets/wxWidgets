@@ -366,8 +366,16 @@ void wxPyApp::_BootstrapApp()
     
     // Call the Python wxApp's OnInit function
     if (wxPyCBH_findCallback(m_myInst, "OnInit")) {                
-        retval = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
-        pyint = PyNumber_Int(retval);
+
+        PyObject* method = m_myInst.GetLastFound();
+        PyObject* argTuple = PyTuple_New(0);
+        retval = PyEval_CallObject(method, argTuple);
+        Py_DECREF(argTuple);
+        Py_DECREF(method);
+        if (retval == NULL)
+            goto error;
+        
+        pyint = PyNumber_Int(retval);        
         if (! pyint) {
             PyErr_SetString(PyExc_TypeError, "OnInit should return a boolean value");
             goto error;
@@ -1447,7 +1455,7 @@ int wxPyCallbackHelper::callCallback(PyObject* argTuple) const {
 }
 
 // Invoke the Python callable object, returning the raw PyObject return
-// value.  Caller should DECREF the return value and also call PyEval_SaveThread.
+// value.  Caller should DECREF the return value and also manage the GIL.
 PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
     PyObject* result;
 

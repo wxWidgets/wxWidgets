@@ -512,7 +512,8 @@ public:
     bool        findCallback(const char* name) const;
     int         callCallback(PyObject* argTuple) const;
     PyObject*   callCallbackObj(PyObject* argTuple) const;
-
+    PyObject*   GetLastFound() const { return m_lastFound; }
+    
 private:
     PyObject*   m_self;
     PyObject*   m_class;
