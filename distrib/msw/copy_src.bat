@@ -584,6 +584,19 @@ copy *.ico \wxmsw_dist\wxMSW\samples\scroll
 copy *.h \wxmsw_dist\wxMSW\samples\scroll
 cd ..
 
+echo Splash sample..
+
+cd splash
+md \wxmsw_dist\wxMSW\samples\splash
+copy Makefile.* \wxmsw_dist\wxMSW\samples\splash
+copy *.cpp \wxmsw_dist\wxMSW\samples\splash
+copy *.h \wxmsw_dist\wxMSW\samples\splash
+copy *.def \wxmsw_dist\wxMSW\samples\splash
+copy *.rc \wxmsw_dist\wxMSW\samples\splash
+copy *.ico \wxmsw_dist\wxMSW\samples\splash
+copy *.png \wxmsw_dist\wxMSW\samples\splash
+cd ..
+
 echo Splitter sample..
 
 cd splitter

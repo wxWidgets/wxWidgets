@@ -200,6 +200,9 @@ samples/sockets/server.vcp
 samples/sockets/client.vcw
 samples/sockets/server.vcw
 
+samples/splash/splash.vcp
+samples/splash/splash.vcw
+
 samples/splitter/splitter.vcp
 samples/splitter/splitter.vcw
 

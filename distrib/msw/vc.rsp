@@ -227,6 +227,9 @@ samples/sockets/server.dsw
 samples/sound/sound.dsp
 samples/sound/sound.dsw
 
+samples/splash/splash.dsp
+samples/splash/splash.dsw
+
 samples/splitter/splitter.dsp
 samples/splitter/splitter.dsw
 

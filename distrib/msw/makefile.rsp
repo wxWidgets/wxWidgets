@@ -64,6 +64,7 @@ samples/scrollsub/Makefile.in
 samples/shaped/Makefile.in
 samples/sound/Makefile.in
 samples/sockets/Makefile.in
+samples/splash/Makefile.in
 samples/splitter/Makefile.in
 samples/statbar/Makefile.in
 samples/taskbar/Makefile.in

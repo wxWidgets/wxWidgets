@@ -116,6 +116,7 @@ samples/scrollsub/makefile.dmc
 samples/shaped/makefile.dmc
 samples/sockets/makefile.dmc
 samples/sound/makefile.dmc
+samples/splash/makefile.dmc
 samples/splitter/makefile.dmc
 samples/statbar/makefile.dmc
 samples/tab/makefile.dmc

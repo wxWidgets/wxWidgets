@@ -1104,6 +1104,20 @@ samples/shaped/*.txt
 samples/shaped/*.pro
 samples/shaped/*.bkl
 
+samples/splash/*.h
+samples/splash/*.cpp
+samples/splash/*.def
+samples/splash/*.rc
+samples/splash/makefile*
+samples/splash/*.xbm
+samples/splash/*.xpm
+samples/splash/*.txt
+samples/splash/*.ico
+samples/splash/*.bmp
+samples/splash/*.png
+samples/splash/*.pro
+samples/splash/*.bkl
+
 samples/splitter/*.cpp
 samples/splitter/*.h
 samples/splitter/*.def
