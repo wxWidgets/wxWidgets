@@ -854,6 +854,7 @@ dirdlgg.h	N
 fontdlgg.h	N
 filedlgg.h	N
 grid.h	N
+gridg.h	N
 helpext.h	N
 helpwxht.h	N
 helphtml.h	N
