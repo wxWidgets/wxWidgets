@@ -188,12 +188,20 @@ void wxChoice::SetString(
 , const wxString&                   rsStr
 )
 {
-    wxFAIL_MSG(wxT("not implemented"));
+    SHORT                           nIndexType = 0;
 
-#if 0 // should do this, but no Insert() so far
-    Delete(n);
-    Insert(n + 1, s);
-#endif
+    ::WinSendMsg(WinUtil_GetHwnd(), LM_DELETEITEM, (MPARAM)n, 0);
+
+
+    if (m_lWindowStyle & winLB_SORT)
+        nIndexType = LIT_SORTASCENDING;
+    else
+        nIndexType = LIT_END;
+    lIndex = (YInt32)::WinSendMsg( WinUtil_GetHwnd()
+                                  ,LM_INSERTITEM
+                                  ,(MPARAM)nIndexType
+                                  ,(MPARAM)rsStr.Data()
+                                 );
 } // end of wxChoice::SetString
 
 wxString wxChoice::GetString(

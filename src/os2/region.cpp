@@ -220,9 +220,43 @@ wxRegion::~wxRegion()
 {
 } // end of wxRegion::~wxRegion
 
+wxObjectRefData *wxRegion::CreateData() const
+{
+    return new wxRegionRefData;
+}
+
+wxObjectRefData *wxRegion::CloneData(wxObjectRefData *data) const
+{
+    return new wxRegionRefData(*(wxRegionRefData *)data);
+}
+
 //-----------------------------------------------------------------------------
 //# Modify region
 //-----------------------------------------------------------------------------
+
+bool wxRegion::Offset(
+  wxCoord                           x
+, wxCoord                           y
+)
+{
+    if ( !x && !y )
+    {
+        // nothing to do
+        return TRUE;
+    }
+
+    AllocExclusive();
+
+#if 0
+    if ( ::OffsetRgn(GetHrgn(), x, y) == ERROR )
+    {
+        wxLogLastError(_T("OffsetRgn"));
+
+        return FALSE;
+    }
+#endif
+    return TRUE;
+}
 
 //
 // Clear current region
@@ -243,20 +277,7 @@ bool wxRegion::Combine(
 , wxRegionOp                        eOp
 )
 {
-    //
-    // Don't change shared data
-    //
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-    }
-    else if (m_refData->GetRefCount() > 1)
-    {
-        wxRegionRefData*            pRef = (wxRegionRefData*)m_refData;
-
-        UnRef();
-        m_refData = new wxRegionRefData(*pRef);
-    }
+    AllocExclusive();
 
     //
     // If ref count is 1, that means it's 'ours' anyway so no action.
@@ -321,20 +342,7 @@ bool wxRegion::Combine(
     if (rRegion.Empty())
         return FALSE;
 
-    //
-    // Don't change shared data
-    //
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-    }
-    else  if (m_refData->GetRefCount() > 1)
-    {
-        wxRegionRefData*            pRef = (wxRegionRefData*)m_refData;
-
-        UnRef();
-        m_refData = new wxRegionRefData(*pRef);
-    }
+    AllocExclusive();
 
     LONG                            lMode = 0;
 
