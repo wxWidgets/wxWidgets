@@ -182,7 +182,11 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
         }
     }
 
-    RECT rect = { x, y, x + w, y + h };
+    RECT rect ;
+    rect.left   = x ;
+    rect.top    = y ;
+    rect.right  = x + w ;
+    rect.bottom = y + h ;
     InvalidateRect((HWND)GetParent()->GetHWND(), &rect, TRUE);
 }
 

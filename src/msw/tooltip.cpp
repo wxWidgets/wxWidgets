@@ -41,6 +41,7 @@
 // ----------------------------------------------------------------------------
 
 // a simple wrapper around TOOLINFO Win32 structure
+#pragma warning( disable : 4097 )
 class wxToolInfo : public TOOLINFO
 {
 public:
@@ -58,6 +59,7 @@ public:
         uId = (UINT)win->GetHWND();
     }
 };
+#pragma warning( default : 4097 )
 
 // ----------------------------------------------------------------------------
 // private functions

@@ -162,7 +162,7 @@ END_EVENT_TABLE()
 // ---------------------------------------------------------------------------
 
 // Find an item given the MS Windows id
-wxWindow *wxWindow::FindItem(int id) const
+wxWindow *wxWindow::FindItem(long id) const
 {
     wxWindowList::Node *current = GetChildren().GetFirst();
     while (current)

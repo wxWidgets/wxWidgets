@@ -253,7 +253,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
                         (WPARAM)font.GetResourceHandle(), 0L);
         }
 
-        m_subControls.Append((wxObject *)(WXWORD)newId);
+        m_subControls.Append((wxObject *)(WXDWORD)(WXWORD)newId);
     }
 
     // Create a dummy radio control to end the group.

@@ -754,7 +754,8 @@ BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance)
     /*  Get a DC to determine whether device is mono or not, and set
      *  default foreground/background colors as appropriate.
      */
-    if ((hdc = CreateIC(_T("DISPLAY"), NULL, NULL, 0L)))
+    hdc = CreateIC(_T("DISPLAY"), NULL, NULL, 0L) ;
+    if (hdc)
     {
         /* check for mono-display */
         if ((GetDeviceCaps(hdc, BITSPIXEL) == 1) &&
@@ -1127,7 +1128,8 @@ zyzgForceRepaint3D:
 
         case WM_SETFONT:
             /* if NULL hFont, use system font */
-            if (!(hFont = (HFONT)wParam))
+            hFont = (HFONT)wParam ;
+            if (!hFont)
                 hFont = (HFONT) GetStockObject(SYSTEM_FONT);
 
             pgauge->hFont = hFont;

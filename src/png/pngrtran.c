@@ -16,6 +16,15 @@
 #define PNG_INTERNAL
 #include "png.h"
 
+#if defined(_MSC_VER) && !defined(__MWERKS__)
+#define __VISUALC__ _MSC_VER
+#endif
+#ifdef __VISUALC__
+#ifndef WIN32
+#pragma warning(disable:4135)
+#endif
+#endif
+
 /* Set the action on getting a CRC error for an ancillary or critical chunk. */
 void
 png_set_crc_action(png_structp png_ptr, int crit_action, int ancil_action)

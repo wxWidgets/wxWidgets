@@ -2495,7 +2495,7 @@ bool wxResourceAddIdentifier(const wxString& name, int value, wxResourceTable *t
   if (!table)
     table = wxDefaultResourceTable;
 
-  table->identifiers.Put(name, (wxObject *)value);
+  table->identifiers.Put(name, (wxObject *)(long)value);
   return TRUE;
 }
 

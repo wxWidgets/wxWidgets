@@ -561,7 +561,7 @@ DWORD /* lData2 */)
           connection->m_hConv = 0;
           connection->m_topicName = topic_buf;
           DDECurrentlyConnecting = connection;
-          return (DDERETURN)TRUE;
+          return (DDERETURN)(DWORD)TRUE;
         }
       }
       else return (DDERETURN)0;
@@ -574,7 +574,7 @@ DWORD /* lData2 */)
       {
         DDECurrentlyConnecting->m_hConv = (WXHCONV) hConv;
         DDECurrentlyConnecting = NULL;
-        return (DDERETURN)TRUE;
+        return (DDERETURN)(DWORD)TRUE;
       }
       else return 0;
       break;
@@ -586,7 +586,7 @@ DWORD /* lData2 */)
       if (connection && connection->OnDisconnect())
       {
         DDEDeleteConnection(hConv);  // Delete mapping: hConv => connection
-        return (DDERETURN)TRUE;
+        return (DDERETURN)(DWORD)TRUE;
       }
       else return (DDERETURN)0;
       break;
@@ -601,7 +601,7 @@ DWORD /* lData2 */)
         DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
         if (connection->OnExecute(connection->m_topicName, connection->m_bufPtr, (int)len, (wxIPCFormat) wFmt))
-          return (DDERETURN)DDE_FACK;
+          return (DDERETURN)(DWORD)DDE_FACK;
         else
           return (DDERETURN)DDE_FNOTPROCESSED;
       } else return (DDERETURN)DDE_FNOTPROCESSED;
@@ -644,7 +644,7 @@ DWORD /* lData2 */)
         DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
         connection->OnPoke(connection->m_topicName, wxString(item_name), connection->m_bufPtr, (int)len, (wxIPCFormat) wFmt);
-        return (DDERETURN)DDE_FACK;
+        return (DDERETURN)(DWORD)DDE_FACK;
       } else return (DDERETURN)DDE_FNOTPROCESSED;
       break;
     }
@@ -659,7 +659,7 @@ DWORD /* lData2 */)
         DdeQueryString(DDEIdInst, hsz2, (LPTSTR)item_name, WXSIZEOF(item_name),
                      CP_WINANSI);
 
-        return (DDERETURN)connection->OnStartAdvise(connection->m_topicName, wxString(item_name));
+        return (DDERETURN)(DWORD)connection->OnStartAdvise(connection->m_topicName, wxString(item_name));
       } else return (DDERETURN)0;
       break;
     }
@@ -673,7 +673,7 @@ DWORD /* lData2 */)
         wxChar item_name[200];
         DdeQueryString(DDEIdInst, hsz2, (LPTSTR)item_name, WXSIZEOF(item_name),
                      CP_WINANSI);
-        return (DDERETURN)connection->OnStopAdvise(connection->m_topicName, wxString(item_name));
+        return (DDERETURN)(DWORD)connection->OnStopAdvise(connection->m_topicName, wxString(item_name));
       } else return (DDERETURN)0;
       break;
     }
@@ -706,7 +706,7 @@ DWORD /* lData2 */)
         DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
         if (connection->OnAdvise(connection->m_topicName, wxString(item_name), connection->m_bufPtr, (int)len, (wxIPCFormat) wFmt))
-          return (DDERETURN)DDE_FACK;
+          return (DDERETURN)(DWORD)DDE_FACK;
         else
           return (DDERETURN)DDE_FNOTPROCESSED;
       } else return (DDERETURN)DDE_FNOTPROCESSED;

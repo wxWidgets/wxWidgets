@@ -1,3 +1,4 @@
+#   pragma warning(disable:4001)    /* non standard extension used: single line comment */
 #include "wx/setup.h"
 #include <math.h>
 
@@ -82,9 +83,10 @@ void ConvertToIeeeExtended(double num, unsigned char *bytes)
 		}
 	}
 
-    /* disable the warning about 'possible loss of data' */
+    /* disable the warning about 'possible loss of data' & 'conversion between diff types' */
     #ifdef _MSC_VER
         #pragma warning(disable: 4244)
+        #pragma warning(disable: 4135)
     #endif /* Visual C++ */
 
 	bytes[0] = (expon >> 8) & 0xff;
@@ -100,6 +102,7 @@ void ConvertToIeeeExtended(double num, unsigned char *bytes)
 
     #ifdef _MSC_VER
         #pragma warning(default: 4244)
+        #pragma warning(default: 4135)
     #endif /* Visual C++ */
 }
 

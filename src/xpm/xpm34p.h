@@ -288,7 +288,7 @@ FUNC(xpmHashSlot, xpmHashAtom *, (xpmHashTable *table, char *s));
 FUNC(xpmHashIntern, int, (xpmHashTable *table, char *tag, void *data));
 
 #define HashAtomData(i) ((void *)i)
-#define HashColorIndex(slot) ((unsigned int)((*slot)->data))
+#define HashColorIndex(slot) ((unsigned int)(unsigned long)((*slot)->data))
 #define USE_HASHTABLE (cpp > 2 && ncolors > 4)
 
 #ifdef NEED_STRDUP

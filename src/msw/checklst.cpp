@@ -146,7 +146,11 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
       HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcMem, hbmpCheck);
 
       // then draw a check mark into it
-      RECT rect = { 0, 0, nCheckWidth, nCheckHeight };
+      RECT rect ;
+      rect.left   = 0 ;
+      rect.top    = 0 ;
+      rect.right  = nCheckWidth ;
+      rect.bottom = nCheckHeight ;
 
 #ifdef __WIN32__
 #ifndef __SC__
@@ -240,7 +244,11 @@ void wxCheckListBoxItem::Check(bool check)
         // FIXME this doesn't work if the listbox is scrolled!
         size_t nHeight = m_pParent->GetItemHeight();
         size_t y = m_nIndex * nHeight;
-        RECT rcUpdate = { 0, y, GetDefaultMarginWidth(), y + nHeight};
+        RECT rcUpdate ;
+        rcUpdate.left   = 0 ;
+        rcUpdate.top    = y ;
+        rcUpdate.right  = GetDefaultMarginWidth() ;
+        rcUpdate.bottom = y + nHeight ;
     #endif  // Win32/16
 
     InvalidateRect(hwndListbox, &rcUpdate, FALSE);

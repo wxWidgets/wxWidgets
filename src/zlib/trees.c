@@ -588,7 +588,7 @@ local void gen_codes (tree, max_code, bl_count)
     /* Check that the bit counts in bl_count are consistent. The last code
      * must be all ones.
      */
-    Assert (code + bl_count[MAX_BITS]-1 == (1<<MAX_BITS)-1,
+    Assert (code + bl_count[MAX_BITS]-1 == (ush)(1<<MAX_BITS)-(ush)1,
             "inconsistent bit counts");
     Tracev((stderr,"\ngen_codes: max_code %d ", max_code));
 
@@ -1109,7 +1109,7 @@ local void compress_block(s, ltree, dtree)
         } /* literal or match pair ? */
 
         /* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
-        Assert(s->pending < s->lit_bufsize + 2*lx, "pendingBuf overflow");
+        Assert((unsigned)s->pending < s->lit_bufsize + 2*lx, "pendingBuf overflow");
 
     } while (lx < s->last_lit);
 

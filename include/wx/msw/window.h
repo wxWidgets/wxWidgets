@@ -197,7 +197,7 @@ public:
     WXFARPROC MSWGetOldWndProc() const { return m_oldWndProc; }
     void MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
 
-    wxWindow *FindItem(int id) const;
+    wxWindow *FindItem(long id) const;
     wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
 
     // Make a Windows extended style from the given wxWindows window style

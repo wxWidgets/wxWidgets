@@ -4,6 +4,7 @@
    Read unzip.h for more info
 */
 
+#   pragma warning(disable:4001)    /* non standard extension used: single line comment */
 #include "wx/setup.h"
 
 #if wxUSE_ZLIB && wxUSE_ZIPSTREAM

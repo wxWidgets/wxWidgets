@@ -66,6 +66,7 @@
 // ----------------------------------------------------------------------------
 
 // a convenient wrapper around TV_ITEM struct which adds a ctor
+#pragma warning( disable : 4097 )
 struct wxTreeViewItem : public TV_ITEM
 {
     wxTreeViewItem(const wxTreeItemId& item,    // the item handle
@@ -78,6 +79,7 @@ struct wxTreeViewItem : public TV_ITEM
         hItem = (HTREEITEM) (WXHTREEITEM) item;
     }
 };
+#pragma warning( default : 4097 )
 
 // a class which encapsulates the tree traversal logic: it vists all (unless
 // OnVisit() returns FALSE) items under the given one
