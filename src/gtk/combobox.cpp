@@ -668,7 +668,27 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
 wxSize wxComboBox::DoGetBestSize() const
 {
     wxSize ret( wxControl::DoGetBestSize() );
-    if (ret.x < 100) ret.x = 100;
+
+    // we know better our horizontal extent: it depends on the longest string
+    // in the combobox
+    ret.x = 0;
+    if ( m_widget )
+    {
+        GdkFont *font = m_font.GetInternalFont();
+
+        wxCoord width;
+        size_t count = Number();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            width = (wxCoord)gdk_string_width(font, GetString(n).mbc_str());
+            if ( width > ret.x )
+                ret.x = width;
+        }
+    }
+
+    // empty combobox should have some reasonable default size too
+    if ( ret.x < 100 )
+        ret.x = 100;
     return ret;
 }
 
