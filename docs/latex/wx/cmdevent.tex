@@ -137,6 +137,13 @@ Deprecated, use \helpref{IsChecked}{wxcommandeventischecked} instead.
 Returns client data pointer for a listbox or choice selection event
 (not valid for a deselection).
 
+\membersection{wxCommandEvent::GetClientObject}
+
+\func{wxClientData *}{GetClientObject}{\void}
+
+Returns client object pointer for a listbox or choice selection event
+(not valid for a deselection).
+
 \membersection{wxCommandEvent::GetExtraLong}
 
 \func{long}{GetExtraLong}{\void}
@@ -185,6 +192,15 @@ is a deselection.
 \func{void}{SetClientData}{\param{void*}{ clientData}}
 
 Sets the client data for this event.
+
+\membersection{wxCommandEvent::SetClientObject}
+
+\func{void}{SetClientObject}{\param{wxClientData*}{ clientObject}}
+
+Sets the client object for this event. The client object is \emph{not} owned by the event
+object and the event object will not delete the client object in its destructor.
+The client object must be owned and deleted by another object (e.g. a control)
+that has longer life time than the event object.
 
 \membersection{wxCommandEvent::SetExtraLong}
 

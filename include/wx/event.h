@@ -502,7 +502,7 @@ public:
 
     // Set/Get client object from controls
     void SetClientObject(wxClientData* clientObject) { m_clientObject = clientObject; }
-    void *GetClientObject() const { return m_clientObject; }
+    wxClientData *GetClientObject() const { return m_clientObject; }
 
     // Get listbox selection if single-choice
     int GetSelection() const { return m_commandInt; }
