@@ -163,25 +163,29 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-  m_defaultIcon = (WXHICON) (wxSTD_MDIPARENTFRAME_ICON ? wxSTD_MDIPARENTFRAME_ICON : wxDEFAULT_MDIPARENTFRAME_ICON);
+  m_defaultIcon = (WXHICON) (wxSTD_MDIPARENTFRAME_ICON
+                                ? wxSTD_MDIPARENTFRAME_ICON
+                                : wxDEFAULT_MDIPARENTFRAME_ICON);
 
   m_clientWindow = NULL;
   m_currentChild = NULL;
 
-  if (style & wxFRAME_NO_WINDOW_MENU)
-      m_windowMenu = (wxMenu*) NULL;
-  else
+  // this style can be used to prevent a window from having the standard MDI
+  // "Window" menu
+  if ( style & wxFRAME_NO_WINDOW_MENU )
   {
-  // m_windowMenu = (WXHMENU) ::LoadMenu(wxGetInstance(), wxT("wxWindowMenu"));
+      m_windowMenu = (wxMenu *)NULL;
+  }
+  else // normal case: we have the window menu, so construct it
+  {
       m_windowMenu = new wxMenu;
 
-
-      m_windowMenu->Append(4002, wxT("&Cascade"));
-      m_windowMenu->Append(4001, wxT("Tile &Horizontally"));
-      m_windowMenu->Append(4005, wxT("Tile &Vertically"));
+      m_windowMenu->Append(IDM_WINDOWCASCADE, wxT("&Cascade"));
+      m_windowMenu->Append(IDM_WINDOWTILEHOR, wxT("Tile &Horizontally"));
+      m_windowMenu->Append(IDM_WINDOWTILEVERT, wxT("Tile &Vertically"));
       m_windowMenu->AppendSeparator();
-      m_windowMenu->Append(4003, wxT("&Arrange Icons"));
-      m_windowMenu->Append(4004, wxT("&Next"));
+      m_windowMenu->Append(IDM_WINDOWICONS, wxT("&Arrange Icons"));
+      m_windowMenu->Append(IDM_WINDOWNEXT, wxT("&Next"));
   }
 
   m_parentFrameActive = TRUE;

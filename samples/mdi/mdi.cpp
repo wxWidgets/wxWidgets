@@ -86,6 +86,13 @@ BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
     EVT_MENU(MDI_REFRESH, MyChild::OnRefresh)
     EVT_MENU(MDI_CHANGE_TITLE, MyChild::OnChangeTitle)
+    EVT_MENU(MDI_CHANGE_POSITION, MyChild::OnChangePosition)
+    EVT_MENU(MDI_CHANGE_SIZE, MyChild::OnChangeSize)
+
+    EVT_UPDATE_UI(MDI_REFRESH, MyChild::OnUpdateRefresh)
+
+    EVT_SIZE(MyChild::OnSize)
+    EVT_MOVE(MyChild::OnMove)
 
     EVT_CLOSE(MyChild::OnClose)
 END_EVENT_TABLE()
@@ -419,6 +426,11 @@ MyChild::~MyChild()
 void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
+}
+
+void MyChild::OnUpdateRefresh(wxUpdateUIEvent& event)
+{
+    event.Enable( canvas && canvas->IsDirty() );
 }
 
 void MyChild::OnRefresh(wxCommandEvent& WXUNUSED(event))

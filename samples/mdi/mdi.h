@@ -68,6 +68,8 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
 
+    void OnUpdateRefresh(wxUpdateUIEvent& event);
+
     DECLARE_EVENT_TABLE()
 };
 
