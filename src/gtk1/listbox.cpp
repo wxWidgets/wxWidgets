@@ -233,6 +233,17 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CHECKLISTBOX
 
+    if ((gdk_event->state == 0) &&
+         (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
+          ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
+    {
+        if (listbox->IsSelected(sel))
+        {
+            gtk_list_unselect_item( GTK_LIST(listbox->m_list), sel );
+            return true;
+        }
+    }
+
     /* emit wxEVT_COMMAND_LISTBOX_DOUBLECLICKED later */
     g_hasDoubleClicked = (gdk_event->type == GDK_2BUTTON_PRESS);
 
@@ -492,7 +503,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     {
         // if style was 0 set single mode
         m_windowStyle |= wxLB_SINGLE;
-        mode = GTK_SELECTION_MULTIPLE;
+        mode = GTK_SELECTION_SINGLE;
     }
 
     gtk_list_set_selection_mode( GTK_LIST(m_list), mode );
