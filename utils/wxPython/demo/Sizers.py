@@ -152,7 +152,16 @@ def makeBoxInBorder(win):
 
 def makeBorderInBox(win):
     insideBox = wxBoxSizer(wxHORIZONTAL)
-    insideBox.Add(makeSimpleBox3(win), 1)
+
+    box2 = wxBoxSizer(wxHORIZONTAL)
+    box2.AddMany([ (wxButton(win, 1010, "one"), 0),
+                   (wxButton(win, 1010, "two"), 0),
+                   (wxButton(win, 1010, "three"), 0),
+                   (wxButton(win, 1010, "four"), 0),
+                   (wxButton(win, 1010, "five"), 0),
+                 ])
+
+    insideBox.Add(box2, 0)
 
     bdr = wxBorderSizer(wxALL)
     bdr.Add(wxButton(win, 1010, "border"), 20)
@@ -163,7 +172,7 @@ def makeBorderInBox(win):
                    (wxButton(win, 1010, "seven"), 2),
                    (wxButton(win, 1010, "eight"), 1),
                    (wxButton(win, 1010, "nine"),  1),
-                   ])
+                 ])
     insideBox.Add(box3, 1)
 
     outsideBox = wxBoxSizer(wxVERTICAL)
@@ -238,7 +247,7 @@ theTests = [
      ),
 
     ("Border in a Box", makeBorderInBox,
-     ""
+     "Another nesting example.  This one has Boxes and a Border inside another Box."
      ),
 
     ]
