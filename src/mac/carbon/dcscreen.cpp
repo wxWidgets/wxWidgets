@@ -37,7 +37,6 @@ wxScreenDC::wxScreenDC()
 #if wxMAC_USE_CORE_GRAPHICS
     m_macLocalOriginInPort = m_macLocalOrigin ;
 #endif
-    
     BitMap screenBits;
     GetQDGlobalsScreenBits( &screenBits );
     m_minX = screenBits.bounds.left ;
