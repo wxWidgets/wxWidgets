@@ -163,6 +163,25 @@ wxMenuItem::~wxMenuItem()
 // misc
 // ----------------------------------------------------------------------------
 
+void wxMenuItem::SetBitmaps(const wxBitmap& bmpChecked,
+        const wxBitmap& bmpUnchecked)
+{
+    wxCHECK_RET(m_kind != wxITEM_SEPARATOR, wxT("Separator items do not have bitmaps."));
+    wxAutoNSAutoreleasePool pool;
+    m_bmpChecked = bmpChecked;
+    m_bmpUnchecked = bmpUnchecked;
+    if(IsCheckable())
+    {
+        [m_cocoaNSMenuItem setOnStateImage: bmpChecked.GetNSImage(true)];
+        [m_cocoaNSMenuItem setOffStateImage: bmpUnchecked.GetNSImage(true)];
+    }
+    else
+    {
+        wxASSERT_MSG(!bmpUnchecked.Ok(),wxT("Normal menu items should only have one bitmap"));
+        [m_cocoaNSMenuItem setImage: bmpChecked.GetNSImage(true)];
+    }
+}
+
 // change item state
 // -----------------
 
