@@ -214,12 +214,11 @@ bool wxHtmlWindow::AppendToPage(const wxString& source)
 
 bool wxHtmlWindow::LoadPage(const wxString& location)
 {
+    wxBusyCursor busyCursor;
+    
     wxFSFile *f;
     bool rt_val;
     bool needs_refresh = FALSE;
-
-    SetCursor(*wxHOURGLASS_CURSOR);
-    wxYield(); Refresh(FALSE);
 
     m_tmpCanDrawLocks++;
     if (m_HistoryOn && (m_HistoryPos != -1))
@@ -270,8 +269,6 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         {
             wxLogError(_("Unable to open requested HTML document: %s"), location.c_str());
             m_tmpCanDrawLocks--;
-
-            SetCursor(*wxSTANDARD_CURSOR);
             return FALSE;
         }
 
@@ -336,7 +333,6 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
     if (m_OpenedPageTitle == wxEmptyString)
         OnSetTitle(wxFileNameFromPath(m_OpenedPage));
-    SetCursor(*wxSTANDARD_CURSOR);
 
     if (needs_refresh)
     {
