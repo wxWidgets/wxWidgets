@@ -422,10 +422,6 @@ protected:
     // the old window proc (we subclass all windows)
     WXFARPROC             m_oldWndProc;
 
-    // the current multi-window move structure handle, NULL if window resize is
-    // not in process
-    WXHANDLE              m_hDWP;
-
     // additional (MSW specific) flags
     bool                  m_mouseInWindow:1;
     bool                  m_lastKeydownProcessed:1;
