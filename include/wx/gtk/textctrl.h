@@ -32,6 +32,8 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString &name = wxTextCtrlNameStr);
 
+    ~wxTextCtrl();
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString &value = wxEmptyString,
@@ -224,6 +226,11 @@ private:
 
     // number of calls to Freeze() minus number of calls to Thaw()
     unsigned int m_frozenness;
+
+    // For wxTE_AUTO_URL
+    void OnUrlMouseEvent(wxMouseEvent&);
+    GdkCursor *m_gdkHandCursor;
+    GdkCursor *m_gdkXTermCursor;
 #endif
 
     DECLARE_EVENT_TABLE()

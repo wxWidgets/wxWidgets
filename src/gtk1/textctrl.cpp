@@ -180,6 +180,197 @@ gtk_insert_text_callback(GtkEditable *editable,
     }
 }
 
+#ifdef __WXGTK20__
+// Implementation of wxTE_AUTO_URL for wxGTK2 by Mart Raudsepp,
+
+static void
+au_apply_tag_callback(GtkTextBuffer *buffer,
+                      GtkTextTag *tag,
+                      GtkTextIter *start,
+                      GtkTextIter *end,
+                      gpointer textctrl)
+{
+    if(tag == gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(buffer), "wxUrl"))
+        g_signal_stop_emission_by_name(buffer, "apply_tag");
+}
+
+//-----------------------------------------------------------------------------
+//  GtkTextCharPredicates for gtk_text_iter_*_find_char
+//-----------------------------------------------------------------------------
+
+static gboolean
+pred_whitespace (gunichar ch, gpointer user_data)
+{
+    return g_unichar_isspace(ch);
+}
+
+static gboolean
+pred_non_whitespace (gunichar ch, gpointer user_data)
+{
+    return !g_unichar_isspace(ch);
+}
+
+static gboolean
+pred_nonpunct (gunichar ch, gpointer user_data)
+{
+    return !g_unichar_ispunct(ch);
+}
+
+static gboolean
+pred_nonpunct_or_slash (gunichar ch, gpointer user_data)
+{
+    return !g_unichar_ispunct(ch) || ch == '/';
+}
+
+//-----------------------------------------------------------------------------
+//  Check for links between s and e and correct tags as necessary
+//-----------------------------------------------------------------------------
+
+// This function should be made match better while being efficient at one point.
+// Most probably with a row of regular expressions.
+static void
+au_check_word( GtkTextIter *s, GtkTextIter *e )
+{
+    static const char *URIPrefixes[] =
+    {
+        "http://",
+        "ftp://",
+        "www.",
+        "ftp.",
+        "mailto://",
+        "https://",
+        "file://",
+        "nntp://",
+        "news://",
+        "telnet://",
+        "mms://",
+        "gopher://",
+        "prospero://",
+        "wais://",
+    };
+
+    GtkTextIter start = *s, end = *e;
+    GtkTextBuffer *buffer = gtk_text_iter_get_buffer(s);
+    
+    // Get our special link tag
+    GtkTextTag *tag = gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(buffer), "wxUrl");
+
+    // Get rid of punctuation from beginning and end.
+    // Might want to move this to au_check_range if an improved link checking doesn't
+    // use some intelligent punctuation checking itself (beware of undesired iter modifications).
+    if(g_unichar_ispunct( gtk_text_iter_get_char( &start ) ) )
+        gtk_text_iter_forward_find_char( &start, pred_nonpunct, NULL, e );
+
+    gtk_text_iter_backward_find_char( &end, pred_nonpunct_or_slash, NULL, &start );
+    gtk_text_iter_forward_char(&end);
+
+    gchar* text = gtk_text_iter_get_text( &start, &end );
+    size_t len = strlen(text), prefix_len;
+    size_t n;
+
+    for( n = 0; n < WXSIZEOF(URIPrefixes); ++n )
+    {
+        prefix_len = strlen(URIPrefixes[n]);
+        if((len > prefix_len) && !strncasecmp(text, URIPrefixes[n], prefix_len))
+            break;
+    }
+
+    if(n < WXSIZEOF(URIPrefixes))
+    {
+        gulong signal_id = g_signal_handler_find(buffer,
+                                                 (GSignalMatchType) (G_SIGNAL_MATCH_FUNC),
+                                                 0, 0, NULL,
+                                                 (gpointer)au_apply_tag_callback, NULL);
+
+        g_signal_handler_block(buffer, signal_id);
+        gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
+        g_signal_handler_unblock(buffer, signal_id);
+    }
+}
+
+static void
+au_check_range(GtkTextIter *s,
+               GtkTextIter *range_end)
+{
+    GtkTextIter range_start = *s;
+    GtkTextIter word_end;
+    GtkTextBuffer *buffer = gtk_text_iter_get_buffer(s);
+    GtkTextTag *tag = gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(buffer), "wxUrl");
+
+    gtk_text_buffer_remove_tag(buffer, tag, s, range_end);
+
+    if(g_unichar_isspace(gtk_text_iter_get_char(&range_start)))
+        gtk_text_iter_forward_find_char(&range_start, pred_non_whitespace, NULL, range_end);
+
+    while(!gtk_text_iter_equal(&range_start, range_end))
+    {
+        word_end = range_start;
+        gtk_text_iter_forward_find_char(&word_end, pred_whitespace, NULL, range_end);
+
+        // Now we should have a word delimited by range_start and word_end, correct link tags
+        au_check_word(&range_start, &word_end);
+
+        range_start = word_end;
+        gtk_text_iter_forward_find_char(&range_start, pred_non_whitespace, NULL, range_end);
+    }
+}
+
+//-----------------------------------------------------------------------------
+//  "insert-text" for GtkTextBuffer
+//-----------------------------------------------------------------------------
+
+static void
+au_insert_text_callback(GtkTextBuffer *buffer,
+                        GtkTextIter *end,
+                        gchar *text,
+                        gint len,
+                        wxTextCtrl *win)
+{
+    if (!len || !(win->GetWindowStyleFlag() & wxTE_AUTO_URL) )
+        return;
+
+    GtkTextIter start = *end;
+    gtk_text_iter_backward_chars(&start, g_utf8_strlen(text, len));
+
+    GtkTextIter line_start = start;
+    GtkTextIter line_end = *end;
+    GtkTextIter words_start = start;
+    GtkTextIter words_end = *end;
+
+    gtk_text_iter_set_line(&line_start, gtk_text_iter_get_line(&start));
+    gtk_text_iter_forward_to_line_end(&line_end);
+    gtk_text_iter_backward_find_char(&words_start, pred_whitespace, NULL, &line_start);
+    gtk_text_iter_forward_find_char(&words_end, pred_whitespace, NULL, &line_end);
+
+    au_check_range(&words_start, &words_end);
+}
+
+//-----------------------------------------------------------------------------
+//  "delete-range" for GtkTextBuffer
+//-----------------------------------------------------------------------------
+
+static void
+au_delete_range_callback(GtkTextBuffer *buffer,
+                         GtkTextIter *start,
+                         GtkTextIter *end,
+                         wxTextCtrl *win)
+{
+    if( !(win->GetWindowStyleFlag() & wxTE_AUTO_URL) )
+        return;
+
+    GtkTextIter line_start = *start, line_end = *end;
+
+    gtk_text_iter_set_line(&line_start, gtk_text_iter_get_line(start));
+    gtk_text_iter_forward_to_line_end(&line_end);
+    gtk_text_iter_backward_find_char(start, pred_whitespace, NULL, &line_start);
+    gtk_text_iter_forward_find_char(end, pred_whitespace, NULL, &line_end);
+
+    au_check_range(start, end);
+}
+
+
+#endif
+
 //-----------------------------------------------------------------------------
 //  "changed"
 //-----------------------------------------------------------------------------
@@ -287,6 +478,18 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_PASTE, wxTextCtrl::OnUpdatePaste)
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
+
+#ifdef __WXGTK20__
+    // wxTE_AUTO_URL wxTextUrl support. Currently only creates
+    // wxTextUrlEvent in the same cases as wxMSW, more can be added here.
+    EVT_MOTION      (wxTextCtrl::OnUrlMouseEvent)
+    EVT_LEFT_DOWN   (wxTextCtrl::OnUrlMouseEvent)
+    EVT_LEFT_UP     (wxTextCtrl::OnUrlMouseEvent)
+    EVT_LEFT_DCLICK (wxTextCtrl::OnUrlMouseEvent)
+    EVT_RIGHT_DOWN  (wxTextCtrl::OnUrlMouseEvent)
+    EVT_RIGHT_UP    (wxTextCtrl::OnUrlMouseEvent)
+    EVT_RIGHT_DCLICK(wxTextCtrl::OnUrlMouseEvent)
+#endif
 END_EVENT_TABLE()
 
 void wxTextCtrl::Init()
@@ -298,6 +501,18 @@ void wxTextCtrl::Init()
     m_vScrollbar = (GtkWidget *)NULL;
 #ifdef __WXGTK20__
     m_frozenness = 0;
+    m_gdkHandCursor = NULL;
+    m_gdkXTermCursor = NULL;
+#endif
+}
+
+wxTextCtrl::~wxTextCtrl()
+{
+#ifdef __WXGTK20__
+    if(m_gdkHandCursor)
+        gdk_cursor_unref(m_gdkHandCursor);
+    if(m_gdkXTermCursor)
+        gdk_cursor_unref(m_gdkXTermCursor);
 #endif
 }
 
@@ -512,6 +727,42 @@ bool wxTextCtrl::Create( wxWindow *parent,
     {
         g_signal_connect( G_OBJECT(m_buffer), "changed",
             GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
+
+        // .. and handle URLs on multi-line controls with wxTE_AUTO_URL style
+        if (style & wxTE_AUTO_URL)
+        {
+            GtkTextIter start, end;
+            m_gdkHandCursor = gdk_cursor_new(GDK_HAND2);
+            m_gdkXTermCursor = gdk_cursor_new(GDK_XTERM);
+
+            // We create our wxUrl tag here for slight efficiency gain - we
+            // don't have to check for the tag existance in callbacks,
+            // hereby it's guaranteed to exist.
+            gtk_text_buffer_create_tag(m_buffer, "wxUrl",
+                                       "foreground", "blue",
+                                       "underline", PANGO_UNDERLINE_SINGLE,
+                                       NULL);
+
+            // Check for URLs after each text change
+            g_signal_connect_after( G_OBJECT(m_buffer), "insert_text",
+                GTK_SIGNAL_FUNC(au_insert_text_callback), (gpointer)this);
+            g_signal_connect_after( G_OBJECT(m_buffer), "delete_range",
+                GTK_SIGNAL_FUNC(au_delete_range_callback), (gpointer)this);
+
+            // Block all wxUrl tag applying unless we do it ourselves, in which case we
+            // block this callback temporarily. This takes care of gtk+ internal
+            // gtk_text_buffer_insert_range* calls that would copy our URL tag otherwise,
+            // which is undesired because only a part of the URL might be copied.
+            // The insert-text signal emitted inside it will take care of newly formed
+            // or wholly copied URLs.
+            g_signal_connect( G_OBJECT(m_buffer), "apply_tag",
+                GTK_SIGNAL_FUNC(au_apply_tag_callback), NULL);
+
+            // Check for URLs in the initial string passed to Create
+            gtk_text_buffer_get_start_iter(m_buffer, &start);
+            gtk_text_buffer_get_end_iter(m_buffer, &end);
+            au_check_range(&start, &end);
+        }
     }
     else
 #endif
@@ -1776,6 +2027,62 @@ void wxTextCtrl::Thaw()
 #endif
     }
 }
+
+// ----------------------------------------------------------------------------
+// wxTextUrlEvent passing if style & wxTE_AUTO_URL
+// ----------------------------------------------------------------------------
+
+#ifdef __WXGTK20__
+
+// FIXME: when dragging on a link the sample gets an "Unknown event".
+// This might be an excessive event from us or a buggy wxMouseEvent::Moving() or
+// a buggy sample, or something else
+void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
+{
+    event.Skip();
+    if(!(m_windowStyle & wxTE_AUTO_URL))
+        return;
+
+    gint x, y;
+    GtkTextIter start, end;
+    GtkTextTag *tag = gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(m_buffer),
+                                                "wxUrl");
+
+    gtk_text_view_window_to_buffer_coords(GTK_TEXT_VIEW(m_text), GTK_TEXT_WINDOW_WIDGET,
+                                          event.GetX(), event.GetY(), &x, &y);
+
+    gtk_text_view_get_iter_at_location(GTK_TEXT_VIEW(m_text), &end, x, y);
+    if (!gtk_text_iter_has_tag(&end, tag))
+    {
+        gdk_window_set_cursor(gtk_text_view_get_window(GTK_TEXT_VIEW(m_text),
+                              GTK_TEXT_WINDOW_TEXT), m_gdkXTermCursor);
+        return;
+    }
+
+    gdk_window_set_cursor(gtk_text_view_get_window(GTK_TEXT_VIEW(m_text),
+                          GTK_TEXT_WINDOW_TEXT), m_gdkHandCursor);
+
+    start = end;
+    if(!gtk_text_iter_begins_tag(&start, tag))
+        gtk_text_iter_backward_to_tag_toggle(&start, tag);
+    if(!gtk_text_iter_ends_tag(&end, tag))
+        gtk_text_iter_forward_to_tag_toggle(&end, tag);
+
+    // Native context menu is probably not desired on an URL.
+    // Consider making this dependant on ProcessEvent(wxTextUrlEvent) return value
+    if(event.GetEventType() == wxEVT_RIGHT_DOWN)
+        event.Skip(false);
+
+    wxTextUrlEvent url_event(m_windowId, event,
+                             gtk_text_iter_get_offset(&start),
+                             gtk_text_iter_get_offset(&end));
+
+    InitCommandEvent(url_event);
+    // Is that a good idea? Seems not (pleasure with gtk_text_view_start_selection_drag)
+    //event.Skip(!GetEventHandler()->ProcessEvent(url_event));
+    GetEventHandler()->ProcessEvent(url_event);
+}
+#endif // gtk2
 
 // ----------------------------------------------------------------------------
 // scrolling

@@ -106,7 +106,7 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // automatically detect the URLs and generate the events when mouse is
 // moved/clicked over an URL
 //
-// this is for Win32 richedit controls only so far
+// this is for Win32 richedit and wxGTK2 multiline controls only so far
 #define wxTE_AUTO_URL       0x1000
 
 // by default, the Windows text control doesn't show the selection when it
