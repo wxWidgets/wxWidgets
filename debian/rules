@@ -17,6 +17,7 @@ release=2.1
 # These are the packages we will build
 package_gtk_lib=libwxgtk$(release)
 package_gtk_dev=libwxgtk$(release)-dev
+package_doc=libwx$(release)-doc
 
 # Dirs to put the various builds object files in
 objdir_gtk_shared=objs_gtk_sh
@@ -24,7 +25,7 @@ objdir_gtk_static=objs_gtk_st
 
 objdirs=$(objdir_gtk_shared) $(objdir_gtk_static)
 
-build_stamps=build-gtk-shared-stamp build-gtk-static-stamp
+build_stamps=build-gtk-shared-stamp build-gtk-static-stamp build-doc-stamp
 
 
 debian/control: debian/control.in
@@ -48,13 +49,28 @@ build-gtk-static-stamp:
 		&& $(MAKE)
 	touch $@
 
+build-doc-stamp: build-gtk-shared-stamp
+	dh_testdir
+	cd $(objdir_gtk_shared)/utils/tex2rtf/src \
+		&& $(MAKE) \
+		&& mkdir HTML \
+		&& ./tex2rtf ../../../../docs/latex/wx/manual.tex HTML/wxwin -twice -html \
+		&& cp ../../../../docs/latex/wx/*.gif HTML \
+		&& rm -f *.con \
+		&& rm -f HTML/wxwin.con HTML/wxwin.hh* HTML/wxwin.htx HTML/wxwin.ref
+	rm -rf docs/wxWindows-manual.html
+	mv $(objdir_gtk_shared)/utils/tex2rtf/src/HTML docs/wxWindows-manual.html
+	touch $@
+
 clean: debian/control
 	dh_testdir
 	dh_testroot
-	-rm -rf $(build_stamps) $(objdirs)
+	rm -rf $(build_stamps) $(objdirs)
+	rm -rf docs/wxWindows-manual.html
 	dh_clean
-	-rm -f debian/$(package_gtk_lib).*
-	-rm -f debian/$(package_gtk_dev).*
+	rm -f debian/$(package_gtk_lib).*
+	rm -f debian/$(package_gtk_dev).*
+	rm -f debian/$(package_doc).*
 
 install: build
 	@for f in dirs docs files postinst; do \
@@ -64,6 +80,10 @@ install: build
 	@for f in dirs docs files; do \
 		echo "generating control file $(package_gtk_dev).$$f"; \
 		cp debian/libwxgtk-dev.$$f debian/$(package_gtk_dev).$$f; \
+	done;
+	@for f in dirs docs doc-base; do \
+		echo "generating control file $(package_doc).$$f"; \
+		cp debian/libwx-doc.$$f debian/$(package_doc).$$f; \
 	done;
 	dh_testdir
 	dh_testroot

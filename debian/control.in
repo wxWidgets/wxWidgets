@@ -33,3 +33,14 @@ Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ development)
  This package provides files needed to compile wxWindows programs.  It
  includes header files and static libraries.
 
+Package: libwx=V-doc
+Architecture: all
+Section: doc
+Suggests: doc-base, www-browser
+Description: wxWindows Cross-platform C++ GUI toolkit (documentation)
+ wxWindows is a class library for C++ providing GUI (Graphical User
+ Interface) and other facilities on more than one platform.  Version 2.1
+ currently supports subsets of GTK+, Motif, and MS Windows.
+ .
+ This package provides a HTML version of the wxWindows reference manual.
+

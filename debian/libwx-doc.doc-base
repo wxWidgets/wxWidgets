@@ -1,0 +1,10 @@
+Document: wxwindows-manual
+Title: wxWindows Progamming Manual
+Author: The wxWindows Cabal
+Abstract: This manual describes the wxWindows cross-platform GUI toolkit.
+Section: Apps/Programming
+
+Format: HTML
+Index: /usr/share/doc/libwx2.1-doc/wxWindows-manual.html/wxwin.htm
+Files: /usr/share/doc/libwx2.1-doc/wxWindows-manual.html/*
+
