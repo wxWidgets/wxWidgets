@@ -21,6 +21,13 @@
     #pragma implementation "appbase.h"
 #endif
 
+#include "wx/wxprec.h"
+
+#ifdef    __BORLANDC__
+  #pragma hdrstop
+#endif  //__BORLANDC__
+
+
 #include "wx/app.h"
 #include "wx/debug.h"
 
