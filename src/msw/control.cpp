@@ -9,6 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma implementation "control.h"
 #endif
@@ -27,6 +35,7 @@
     #include "wx/app.h"
     #include "wx/dcclient.h"
     #include "wx/log.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/control.h"
@@ -37,22 +46,32 @@
     #include <commctrl.h>
 #endif
 
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxWindow)
     EVT_ERASE_BACKGROUND(wxControl::OnEraseBackground)
 END_EVENT_TABLE()
 
-// Item members
-wxControl::wxControl()
-{
-}
+// ============================================================================
+// wxControl implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxControl ctor/dtor
+// ----------------------------------------------------------------------------
 
 wxControl::~wxControl()
 {
     m_isBeingDeleted = TRUE;
 }
 
+// ----------------------------------------------------------------------------
+// control window creation
+// ----------------------------------------------------------------------------
 
 bool wxControl::Create(wxWindow *parent,
                        wxWindowID id,
@@ -147,8 +166,9 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // install wxWindows window proc for this window
     SubclassWin(m_hWnd);
 
-    // controls use the same font and colours as their parent dialog by default
+    // set up fonts and colours
     InheritAttributes();
+    SetFont(GetDefaultAttributes().font);
 
     // set the size now if no initial size specified
     if ( w <= 0 || h <= 0 )
@@ -159,6 +179,10 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     return TRUE;
 }
 
+// ----------------------------------------------------------------------------
+// various accessors
+// ----------------------------------------------------------------------------
+
 wxBorder wxControl::GetDefaultBorder() const
 {
     // we want to automatically give controls a sunken style (confusingly,
@@ -167,10 +191,56 @@ wxBorder wxControl::GetDefaultBorder() const
     return wxBORDER_SUNKEN;
 }
 
+WXDWORD wxControl::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    long msStyle = wxWindow::MSWGetStyle(style, exstyle);
+
+    if ( AcceptsFocus() )
+    {
+        msStyle |= WS_TABSTOP;
+    }
+
+    return msStyle;
+}
+
 wxSize wxControl::DoGetBestSize() const
 {
     return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);
 }
+
+/* static */ wxVisualAttributes
+wxControl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    wxVisualAttributes attrs;
+
+    // old school (i.e. not "common") controls use the standard dialog font
+    // by default
+    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+
+    // most, or at least many, of the controls use the same colours as the
+    // buttons -- others will have to override this (and possibly simply call
+    // GetCompositeControlsDefaultAttributes() from their versions)
+    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+
+    return attrs;
+}
+
+// another version for the "composite", i.e. non simple controls
+/* static */ wxVisualAttributes
+wxControl::GetCompositeControlsDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attrs;
+    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+
+    return attrs;
+}
+
+// ----------------------------------------------------------------------------
+// message handling
+// ----------------------------------------------------------------------------
 
 bool wxControl::ProcessCommand(wxCommandEvent& event)
 {
@@ -283,22 +353,13 @@ WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED
     return (WXHBRUSH)brush->GetResourceHandle();
 }
 
-WXDWORD wxControl::MSWGetStyle(long style, WXDWORD *exstyle) const
-{
-    long msStyle = wxWindow::MSWGetStyle(style, exstyle);
-
-    if ( AcceptsFocus() )
-    {
-        msStyle |= WS_TABSTOP;
-    }
-
-    return msStyle;
-}
-
 // ---------------------------------------------------------------------------
 // global functions
 // ---------------------------------------------------------------------------
 
+// this is used in radiobox.cpp and slider95.cpp and should be removed as soon
+// as it is not needed there any more!
+//
 // Call this repeatedly for several wnds to find the overall size
 // of the widget.
 // Call it initially with -1 for all values in rect.

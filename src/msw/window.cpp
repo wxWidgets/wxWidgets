@@ -3137,8 +3137,6 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
 
     SubclassWin(m_hWnd);
 
-    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-
     return true;
 }
 

@@ -22,7 +22,8 @@
 class WXDLLEXPORT wxControl : public wxControlBase
 {
 public:
-    wxControl();
+    wxControl() { }
+
     wxControl(wxWindow *parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize, long style = 0,
@@ -43,8 +44,17 @@ public:
     // Simulates an event
     virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }
 
+
     // implementation from now on
     // --------------------------
+
+    virtual wxVisualAttributes GetDefaultAttributes() const
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // Calls the callback and appropriate event handlers
     bool ProcessCommand(wxCommandEvent& event);
@@ -104,6 +114,14 @@ protected:
 
     // default style for the control include WS_TABSTOP if it AcceptsFocus()
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
+    // this is a helper for the derived class GetClassDefaultAttributes()
+    // implementation: it returns the right colours for the classes which
+    // contain something else (e.g. wxListBox, wxTextCtrl, ...) instead of
+    // being simple controls (such as wxButton, wxCheckBox, ...)
+    static wxVisualAttributes
+        GetCompositeControlsDefaultAttributes(wxWindowVariant variant);
+
 
     // for controls like radiobuttons which are really composite this array
     // holds the ids (not HWNDs!) of the sub controls
