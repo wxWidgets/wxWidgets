@@ -56,7 +56,7 @@ bool wxDir::HasFiles(const wxString& spec)
 }
 
 // we have a (much) faster version for Unix
-#ifndef __UNIX_LIKE__
+#if !defined(__UNIX_LIKE__) || defined(__WXMAC__)
 
 bool wxDir::HasSubDirs(const wxString& spec)
 {
