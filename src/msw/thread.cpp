@@ -1267,7 +1267,7 @@ void wxThreadModule::OnExit()
 // not a mutex, so the names are a bit confusing
 // ----------------------------------------------------------------------------
 
-void WXDLLEXPORT wxMutexGuiEnter()
+void WXDLLIMPEXP_BASE wxMutexGuiEnter()
 {
     // this would dead lock everything...
     wxASSERT_MSG( !wxThread::IsMain(),
@@ -1289,7 +1289,7 @@ void WXDLLEXPORT wxMutexGuiEnter()
     gs_critsectGui->Enter();
 }
 
-void WXDLLEXPORT wxMutexGuiLeave()
+void WXDLLIMPEXP_BASE wxMutexGuiLeave()
 {
     wxCriticalSectionLocker enter(*gs_critsectWaitingForGui);
 
@@ -1311,7 +1311,7 @@ void WXDLLEXPORT wxMutexGuiLeave()
     gs_critsectGui->Leave();
 }
 
-void WXDLLEXPORT wxMutexGuiLeaveOrEnter()
+void WXDLLIMPEXP_BASE wxMutexGuiLeaveOrEnter()
 {
     wxASSERT_MSG( wxThread::IsMain(),
                   wxT("only main thread may call wxMutexGuiLeaveOrEnter()!") );
@@ -1341,13 +1341,13 @@ void WXDLLEXPORT wxMutexGuiLeaveOrEnter()
     }
 }
 
-bool WXDLLEXPORT wxGuiOwnedByMainThread()
+bool WXDLLIMPEXP_BASE wxGuiOwnedByMainThread()
 {
     return gs_bGuiOwnedByMainThread;
 }
 
 // wake up the main thread if it's in ::GetMessage()
-void WXDLLEXPORT wxWakeUpMainThread()
+void WXDLLIMPEXP_BASE wxWakeUpMainThread()
 {
     // sending any message would do - hopefully WM_NULL is harmless enough
     if ( !::PostThreadMessage(gs_idMainThread, WM_NULL, 0, 0) )
@@ -1357,7 +1357,7 @@ void WXDLLEXPORT wxWakeUpMainThread()
     }
 }
 
-bool WXDLLEXPORT wxIsWaitingForThread()
+bool WXDLLIMPEXP_BASE wxIsWaitingForThread()
 {
     return gs_waitingForThread;
 }
