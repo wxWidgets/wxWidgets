@@ -595,10 +595,12 @@ public:
     void OnSysColourChanged( wxSysColourChangedEvent& event );
     void OnInitDialog( wxInitDialogEvent &event );
 
+/*
+   What is this doing in the platform independent part?
+
         // accessors
     WXWidget GetHandle() const { return m_widget; }
 
-protected:
     // the window handle (for the underlying windowing system) and the window
     // id - a number which uniquely identifies a window among its siblings
     // unless it is -1
@@ -609,6 +611,7 @@ protected:
         WXWidget m_widget;
         WXWidget m_hWnd;
     };
+*/
 
     wxWindowID           m_windowId;
 

@@ -60,7 +60,7 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
 
 /*
     printf( "OnDialogResize from " );
@@ -69,7 +69,7 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
     printf( ".\n" );
 */
 
-   if ((win->GetWidth() != alloc->width) || (win->GetHeight() != alloc->height))
+   if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
    {
        win->InternalSetSize( alloc->width, alloc->height );
    }
@@ -83,11 +83,11 @@ static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEvent
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return FALSE;
+    if (!win->m_hasVMT) return FALSE;
 
     win->InternalSetPosition(event->x, event->y);
 
-    wxMoveEvent mevent( wxPoint(win->GetX(),win->GetY()), win->GetId() );
+    wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
     mevent.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( mevent );
 
@@ -126,7 +126,7 @@ gtk_dialog_map_callback( GtkWidget *widget, wxDialog *win )
 {
     /* I haven''t been able to set the position of
        the dialog before it is shown, so I do it here */
-    gtk_widget_set_uposition( widget, win->GetX(), win->GetY() );
+    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
     
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
@@ -155,14 +155,14 @@ gtk_dialog_map_callback( GtkWidget *widget, wxDialog *win )
        func |= GDK_FUNC_RESIZE;
        decor |= GDK_DECOR_RESIZEH;
     }
-    gdk_window_set_decorations( win->GetHandle()->window, (GdkWMDecoration)decor);
-    gdk_window_set_functions( win->GetHandle()->window, (GdkWMFunction)func);
+    gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
+    gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
       
     /* GTK's shrinking/growing policy */
     if ((win->GetWindowStyle() & wxRESIZE_BORDER) == 0)
-        gtk_window_set_policy(GTK_WINDOW(win->GetHandle()), 0, 0, 1);
+        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
     else
-        gtk_window_set_policy(GTK_WINDOW(win->GetHandle()), 1, 1, 1);
+        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
     
     return FALSE;
 }

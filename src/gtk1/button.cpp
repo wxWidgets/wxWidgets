@@ -43,7 +43,7 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!button->HasVMT()) return;
+    if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
   
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());

@@ -90,12 +90,12 @@ void wxMDIParentFrame::GtkOnSize( int x, int y, int width, int height )
 
     wxMenuBar *menu_bar = child_frame->m_menuBar;
     if (!menu_bar) return;
-    if (!menu_bar->GetHandle()) return;
+    if (!menu_bar->m_widget) return;
 
     menu_bar->InternalSetPosition(0, 0);
     menu_bar->InternalSetSize(m_width, wxMENU_HEIGHT);
     gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
-                          menu_bar->GetHandle(), 
+                          menu_bar->m_widget, 
                           0, 0, m_width, wxMENU_HEIGHT );
 }
 
@@ -108,7 +108,7 @@ void wxMDIParentFrame::OnInternalIdle()
 
     if (m_justInserted)
     {
-        GtkNotebook *notebook = GTK_NOTEBOOK(m_clientWindow->GetHandle());
+        GtkNotebook *notebook = GTK_NOTEBOOK(m_clientWindow->m_widget);
         gtk_notebook_set_page( notebook, g_list_length( notebook->children ) - 1 );
 
         m_justInserted = FALSE;
@@ -128,11 +128,11 @@ void wxMDIParentFrame::OnInternalIdle()
         {
             if (child_frame == active_child_frame)
             {
-               gtk_widget_show( child_frame->m_menuBar->GetHandle() );
+               gtk_widget_show( child_frame->m_menuBar->m_widget );
                visible_child_menu = TRUE;
             }
             else
-               gtk_widget_hide( child_frame->m_menuBar->GetHandle() );
+               gtk_widget_hide( child_frame->m_menuBar->m_widget );
         }
         node = node->Next();
     }
@@ -150,7 +150,7 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 {
     if (!m_clientWindow) return (wxMDIChildFrame*) NULL;
 
-    GtkNotebook *notebook = GTK_NOTEBOOK(m_clientWindow->GetHandle());
+    GtkNotebook *notebook = GTK_NOTEBOOK(m_clientWindow->m_widget);
     if (!notebook) return (wxMDIChildFrame*) NULL;
 
 #if (GTK_MINOR_VERSION > 0)
@@ -189,13 +189,13 @@ wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
 void wxMDIParentFrame::ActivateNext()
 {
     if (m_clientWindow)
-      gtk_notebook_next_page( GTK_NOTEBOOK(m_clientWindow->GetHandle()) );
+      gtk_notebook_next_page( GTK_NOTEBOOK(m_clientWindow->m_widget) );
 }
 
 void wxMDIParentFrame::ActivatePrevious()
 {
     if (m_clientWindow)
-      gtk_notebook_prev_page( GTK_NOTEBOOK(m_clientWindow->GetHandle()) );
+      gtk_notebook_prev_page( GTK_NOTEBOOK(m_clientWindow->m_widget) );
 }
 
 void wxMDIParentFrame::OnActivate( wxActivateEvent& WXUNUSED(event) )
@@ -293,12 +293,12 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
         }
 
         /* the menu bar of the child window is shown in idle time as needed */
-        gtk_widget_hide( m_menuBar->GetHandle() );
+        gtk_widget_hide( m_menuBar->m_widget );
 
         /* insert the invisible menu bar into the _parent_ mdi frame */
         gtk_myfixed_put( GTK_MYFIXED(mdi_frame->m_mainWidget), 
-                         m_menuBar->GetHandle(), 
-                         0, 0,  mdi_frame->GetWidth(), wxMENU_HEIGHT );
+                         m_menuBar->m_widget, 
+                         0, 0,  mdi_frame->m_width, wxMENU_HEIGHT );
     }
 }
 
@@ -323,11 +323,11 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if ((win->GetX() == alloc->x) &&
-        (win->GetY() == alloc->y) &&
-        (win->GetWidth() == alloc->width) &&
-        (win->GetHeight() == alloc->height) &&
-        (win->IsSizeSet()))
+    if ((win->m_x == alloc->x) &&
+        (win->m_y == alloc->y) &&
+        (win->m_width == alloc->width) &&
+        (win->m_height == alloc->height) &&
+        (win->m_sizeSet))
     {
         return;
     }
@@ -347,12 +347,12 @@ static void wxInsertChildInMDI( wxMDIClientWindow* parent, wxMDIChildFrame* chil
     GtkWidget *label_widget = gtk_label_new( s.mbc_str() );
     gtk_misc_set_alignment( GTK_MISC(label_widget), 0.0, 0.5 );
 
-    gtk_signal_connect( GTK_OBJECT(child->GetHandle()), "size_allocate",
+    gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",
       GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)child );
 
-    GtkNotebook *notebook = GTK_NOTEBOOK(parent->GetHandle());
+    GtkNotebook *notebook = GTK_NOTEBOOK(parent->m_widget);
 
-    gtk_notebook_append_page( notebook, child->GetHandle(), label_widget );
+    gtk_notebook_append_page( notebook, child->m_widget, label_widget );
 
     child->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
 

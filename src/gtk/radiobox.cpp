@@ -40,7 +40,7 @@ static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRad
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!rb->HasVMT()) return;
+    if (!rb->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
     if (rb->m_alreadySent)
@@ -108,7 +108,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         gtk_signal_connect( GTK_OBJECT(m_radio), "clicked",
            GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
 
-        gtk_myfixed_put( GTK_MYFIXED(m_parent->GetWxWindow()), 
+        gtk_myfixed_put( GTK_MYFIXED(m_parent->m_wxwindow), 
                          GTK_WIDGET(m_radio), 
                          m_x+10, m_y+10+(i*24), 10, 10 );
     }
@@ -179,7 +179,7 @@ wxSize wxRadioBox::LayoutItems()
                 int len = 22+gdk_string_measure( font, label->label );
                 if (len > max_len) max_len = len;
 
-                gtk_myfixed_move( GTK_MYFIXED(m_parent->GetWxWindow()), button, m_x+x, m_y+y );
+                gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, m_x+x, m_y+y );
                 y += 20;
 
                 node = node->Next();
@@ -193,7 +193,7 @@ wxSize wxRadioBox::LayoutItems()
             {
                 GtkWidget *button = GTK_WIDGET( node->Data() );
 
-                gtk_myfixed_resize( GTK_MYFIXED(m_parent->GetWxWindow()), button, max_len, 20 );
+                gtk_myfixed_resize( GTK_MYFIXED(m_parent->m_wxwindow), button, max_len, 20 );
 
                 node = node->Next();
                 if (!node) break;
@@ -229,7 +229,7 @@ wxSize wxRadioBox::LayoutItems()
         {
             GtkWidget *button = GTK_WIDGET( node->Data() );
 
-            gtk_myfixed_set_size( GTK_MYFIXED(m_parent->GetWxWindow()), button, m_x+x, m_y+y, max, 20 );
+            gtk_myfixed_set_size( GTK_MYFIXED(m_parent->m_wxwindow), button, m_x+x, m_y+y, max, 20 );
             x += max;
 
             node = node->Next();

@@ -39,7 +39,7 @@ static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
 { 
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
     
     float diff = win->m_adjust->value - win->m_oldPos;

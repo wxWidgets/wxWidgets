@@ -41,7 +41,7 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
 { 
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
     
     float diff = win->m_adjust->value - win->m_oldPos;

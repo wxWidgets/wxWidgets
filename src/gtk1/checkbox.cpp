@@ -38,7 +38,7 @@ static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckB
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!cb->HasVMT()) return;
+    if (!cb->m_hasVMT) return;
 
     if (cb->m_blockFirstEvent)
     {

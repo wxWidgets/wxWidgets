@@ -702,8 +702,8 @@ wxDropSource::wxDropSource( wxWindow *win, const wxIcon &go, const wxIcon &stop 
     m_waiting = TRUE;
 
     m_window = win;
-    m_widget = win->GetWidget();
-    if (win->GetWxWindow()) m_widget = win->GetWxWindow();
+    m_widget = win->m_widget;
+    if (win->m_wxwindow) m_widget = win->m_wxwindow;
 
     m_data = (wxDataBroker*) NULL;
     m_retValue = wxDragCancel;
@@ -722,8 +722,8 @@ wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go,
     m_waiting = TRUE;
 
     m_window = win;
-    m_widget = win->GetWidget();
-    if (win->GetWxWindow()) m_widget = win->GetWxWindow();
+    m_widget = win->m_widget;
+    if (win->m_wxwindow) m_widget = win->m_wxwindow;
     m_retValue = wxDragCancel;
 
     if (data)
@@ -748,8 +748,8 @@ wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go,
 wxDropSource::wxDropSource( wxDataBroker *data, wxWindow *win )
 {
     m_window = win;
-    m_widget = win->GetWidget();
-    if (win->GetWxWindow()) m_widget = win->GetWxWindow();
+    m_widget = win->m_widget;
+    if (win->m_wxwindow) m_widget = win->m_wxwindow;
     m_retValue = wxDragCancel;
 
     m_data = data;

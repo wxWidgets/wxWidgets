@@ -76,7 +76,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
     if (g_blockEventsOnDrag) return FALSE;
     if (g_blockEventsOnScroll) return FALSE;
 
-    if (!listbox->HasVMT()) return FALSE;
+    if (!listbox->m_hasVMT) return FALSE;
 
     int sel = listbox->GetIndex( widget );
 
@@ -130,7 +130,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 
     if (g_blockEventsOnDrag) return FALSE;
 
-    if (!listbox->HasVMT()) return FALSE;
+    if (!listbox->m_hasVMT) return FALSE;
 
     if (gdk_event->keyval != ' ') return FALSE;
 
@@ -156,7 +156,7 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!listbox->HasVMT()) return;
+    if (!listbox->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );

@@ -110,34 +110,11 @@ public:
     // wxWindows callbacks
     void OnKeyDown( wxKeyEvent &event );
 
-    // simple accessors
-    bool HasVMT() const { return m_hasVMT; }
-
-    int GetX() const { return m_x; }
-    int GetY() const { return m_y; }
-    int GetWidth() const { return m_width; }
-    int GetHeight() const { return m_height; }
-
-    GtkWidget *GetWxWindow() const { return m_wxwindow; }
-    GtkWidget *GetWidget() const { return GetHandle(); }
-
-    GtkAdjustment *GetHAdjust() const { return m_hAdjust; }
-    GtkAdjustment *GetVAdjust() const { return m_vAdjust; }
-
-    float GetOldHorizontalPos() const { return m_oldHorizontalPos; }
-    float GetOldVerticalPos() const { return m_oldVerticalPos; }
-
-    void SetOldHorizontalPos(float fpos) { m_oldHorizontalPos = fpos; }
-    void SetOldVerticalPos(float fpos) { m_oldVerticalPos = fpos; }
-
-    bool IsSizeSet() const { return m_sizeSet; }
-
     // also sets the global flag
     void SetScrolling(bool scroll);
 
     bool HasScrolling() const { return m_hasScrolling; }
     bool IsScrolling() const { return m_isScrolling; }
-    bool IsStaticBox() const { return m_isStaticBox; }
 
     /* I don't want users to override what's done in idle so everything that
        has to be done in idle time in order for wxGTK to work is done in
@@ -180,12 +157,12 @@ public:
     void InternalSetSize(int w, int h)
         { m_width = w; m_height = h; UpdateSize(); }
 
-protected:
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
 
     // see the docs in src/gtk/window.cpp
+    GtkWidget           *m_widget;
     GtkWidget           *m_wxwindow;
 
     // scrolling stuff

@@ -125,10 +125,10 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 {
     if (g_isIdle) wxapp_install_idle_handler();
     
-    if ((win->GetX() == alloc->x) &&
-        (win->GetY() == alloc->y) &&
-        (win->GetWidth() == alloc->width) &&
-        (win->GetHeight() == alloc->height))
+    if ((win->m_x == alloc->x) &&
+        (win->m_y == alloc->y) &&
+        (win->m_width == alloc->width) &&
+        (win->m_height == alloc->height))
     {
         return;
     }
@@ -149,7 +149,7 @@ gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNo
 
     if (g_blockEventsOnDrag) return FALSE;
 
-    if (!notebook->HasVMT()) return FALSE;
+    if (!notebook->m_hasVMT) return FALSE;
 
     /* this code makes jumping down from the handles of the notebooks
        to the actual items in the visible notebook page possible with
@@ -188,16 +188,16 @@ static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
     page->m_box = gtk_hbox_new (FALSE, 0);
     gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
 
-    GtkNotebook *notebook = GTK_NOTEBOOK(parent->GetWidget());
+    GtkNotebook *notebook = GTK_NOTEBOOK(parent->m_widget);
 
     page->m_client = child;
-    gtk_notebook_append_page( notebook, child->GetWidget(), page->m_box );
+    gtk_notebook_append_page( notebook, child->m_widget, page->m_box );
 
     page->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
 
     page->m_parent = notebook;
 
-    gtk_signal_connect( GTK_OBJECT(child->GetWidget()), "size_allocate",
+    gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",
       GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)child );
 
     wxASSERT_MSG( page->m_page, _T("Notebook page creation error") );

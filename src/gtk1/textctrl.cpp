@@ -46,7 +46,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
 
     win->SetModified();
 
@@ -67,7 +67,7 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 
     win->CalculateScrollbar();
     
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
 }
 
 //-----------------------------------------------------------------------------

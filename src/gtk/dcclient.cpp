@@ -110,7 +110,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
   
     if (!window) return;
     
-    GtkWidget *widget = window->GetWxWindow();
+    GtkWidget *widget = window->m_wxwindow;
     if (!widget)
         return;
     
@@ -127,10 +127,10 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     /* still not realized ? */
     if (!m_window) return;
     
-    if (window->GetWxWindow())
-        m_cmap = gtk_widget_get_colormap( window->GetWxWindow() );
+    if (window->m_wxwindow)
+        m_cmap = gtk_widget_get_colormap( window->m_wxwindow );
     else
-        m_cmap = gtk_widget_get_colormap( window->GetHandle() );
+        m_cmap = gtk_widget_get_colormap( window->m_widget );
     
     m_isMemDC = FALSE;
         

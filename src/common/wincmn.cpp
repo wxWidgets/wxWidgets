@@ -78,7 +78,7 @@ END_EVENT_TABLE()
 void wxWindowBase::InitBase()
 {
     // no window yet, no parent nor children
-    m_widget = (WXWidget)0;
+//    m_widget = (WXWidget)0;
     m_parent = (wxWindow *)NULL;
     m_windowId = -1;
     m_children.DeleteContents( FALSE ); // don't auto delete node data

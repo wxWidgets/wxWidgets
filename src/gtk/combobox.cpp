@@ -41,7 +41,7 @@ gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!combo->HasVMT()) return;
+    if (!combo->m_hasVMT) return;
 
     if (g_blockEventsOnDrag) return;
 
@@ -70,6 +70,8 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
     if (g_isIdle) wxapp_install_idle_handler();
     
+    if (!combo->m_hasVMT) return;
+
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event.SetString( combo->GetValue() );
     event.SetEventObject( combo );

@@ -43,7 +43,7 @@ static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitma
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!button->HasVMT()) return;
+    if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
   
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
@@ -57,7 +57,7 @@ static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitma
 
 static void gtk_bmpbutton_enter_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
-    if (!button->HasVMT()) return;
+    if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
     button->HasFocus(); 
@@ -69,7 +69,7 @@ static void gtk_bmpbutton_enter_callback( GtkWidget *WXUNUSED(widget), wxBitmapB
 
 static void gtk_bmpbutton_leave_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
-    if (!button->HasVMT()) return;
+    if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
     button->NotFocus(); 
@@ -81,7 +81,7 @@ static void gtk_bmpbutton_leave_callback( GtkWidget *WXUNUSED(widget), wxBitmapB
 
 static void gtk_bmpbutton_press_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
-    if (!button->HasVMT()) return;
+    if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
     button->StartSelect(); 
@@ -93,7 +93,7 @@ static void gtk_bmpbutton_press_callback( GtkWidget *WXUNUSED(widget), wxBitmapB
 
 static void gtk_bmpbutton_release_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
-    if (!button->HasVMT()) return;
+    if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
     button->EndSelect(); 

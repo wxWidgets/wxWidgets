@@ -65,7 +65,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
     if (gdk_event->count > 0) return;
     
     gtk_draw_shadow( widget->style, 
@@ -73,7 +73,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
                      GTK_STATE_NORMAL,
                      GTK_SHADOW_OUT,
                      0, 0,
-                     win->GetWidth(), win->GetHeight() );
+                     win->m_width, win->m_height );
 
     if (!win->m_title.IsEmpty() &&
         ((win->GetWindowStyle() & wxCAPTION) || 
@@ -89,7 +89,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
         gdk_draw_rectangle( widget->window, gc, TRUE, 
                             x, 
                             3, 
-                            win->GetWidth() - 4 - x,
+                            win->m_width - 4 - x,
                             font->ascent + font->descent+1 );
                             
         gdk_gc_set_foreground( gc, &widget->style->white );
@@ -110,14 +110,14 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
     
     gtk_draw_shadow( widget->style, 
                      widget->window,
                      GTK_STATE_NORMAL,
                      GTK_SHADOW_OUT,
                      0, 0,
-                     win->GetWidth(), win->GetHeight() );
+                     win->m_width, win->m_height );
                      
     if (!win->m_title.IsEmpty() &&
         ((win->GetWindowStyle() & wxCAPTION) || 
@@ -133,7 +133,7 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
         gdk_draw_rectangle( widget->window, gc, TRUE, 
                             x, 
                             3, 
-                            win->GetWidth() - 4 - x,
+                            win->m_width - 4 - x,
                             font->ascent + font->descent+1 );
                             
         gdk_gc_set_foreground( gc, &widget->style->white );
@@ -154,7 +154,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return FALSE;
+    if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
 
@@ -174,7 +174,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
                      
     win->m_diffX = (int)gdk_event->x;
     win->m_diffY = (int)gdk_event->y;
-    DrawFrame( widget, 0, 0, win->GetWidth(), win->GetHeight() );
+    DrawFrame( widget, 0, 0, win->m_width, win->m_height );
     win->m_oldX = 0;
     win->m_oldY = 0;
     
@@ -191,7 +191,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return FALSE;
+    if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
 
@@ -202,7 +202,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     int x = (int)gdk_event->x;
     int y = (int)gdk_event->y;
     
-    DrawFrame( widget, win->m_oldX, win->m_oldY, win->GetWidth(), win->GetHeight() );
+    DrawFrame( widget, win->m_oldX, win->m_oldY, win->m_width, win->m_height );
     gdk_pointer_ungrab ( GDK_CURRENT_TIME );
     int org_x = 0;    
     int org_y = 0;
@@ -210,7 +210,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     x += org_x - win->m_diffX;
     y += org_y - win->m_diffY;
     win->InternalSetPosition(x, y);
-    gtk_widget_set_uposition( win->GetWidget(), x, y );
+    gtk_widget_set_uposition( win->m_widget, x, y );
 
     return TRUE;
 }
@@ -223,7 +223,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->HasVMT()) return FALSE;
+    if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
 
@@ -240,10 +240,10 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
        gdk_event->state = state;
     }
 
-    DrawFrame( widget, win->m_oldX, win->m_oldY, win->GetWidth(), win->GetHeight() );
+    DrawFrame( widget, win->m_oldX, win->m_oldY, win->m_width, win->m_height );
     win->m_oldX = (int)gdk_event->x - win->m_diffX;
     win->m_oldY = (int)gdk_event->y - win->m_diffY;
-    DrawFrame( widget, win->m_oldX, win->m_oldY, win->GetWidth(), win->GetHeight() );
+    DrawFrame( widget, win->m_oldX, win->m_oldY, win->m_width, win->m_height );
     
     return TRUE;
 }

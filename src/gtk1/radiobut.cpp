@@ -38,7 +38,7 @@ void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioButto
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!rb->HasVMT()) return;
+    if (!rb->m_hasVMT) return;
   
     if (rb->m_blockFirstEvent)
     {
