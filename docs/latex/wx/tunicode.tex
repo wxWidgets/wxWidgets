@@ -147,12 +147,12 @@ ANSI strings (a notable exception is the entire Win32 API which accepts either
 Unicode or ANSI strings and which thus makes it unnecessary to ever perform
 any convertions in the program).
 
-To get a ANSI string from a wxString, you may use 
-\helpref{mb\_str()}{wxstringmbstr} function which always returns an ANSI
+To get a ANSI string from a wxString, you may use the 
+mb\_str() function which always returns an ANSI
 string (independently of the mode - while the usual 
 \helpref{c\_str()}{wxstringcstr} returns a pointer to the internal
 representation which is either ASCII or Unicode). More rarely used, but still
-useful, is \helpref{wc\_str()}{wxstringwcstr} function which always returns
+useful, is wc\_str() function which always returns
 the Unicode string.
 
 % TODO describe fn_str(), wx_str(), wxCharBuf classes, ...

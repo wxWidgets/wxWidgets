@@ -30,7 +30,7 @@ XPM icon file to be available at run-time.
 #endif
 \end{verbatim}
 
-A macro, \helpref{wxICON}{wxicon}, is available which creates an icon using an XPM
+A macro, \helpref{wxICON}{wxiconmacro}, is available which creates an icon using an XPM
 on the appropriate platform, or an icon resource on Windows.
 
 \begin{verbatim}
@@ -47,8 +47,8 @@ wxIcon icon("mondrian");
 #endif
 \end{verbatim}
 
-There is also a corresponding \helpref{wxBITMAP}{wxbitmap} macro which allows
-to create the bitmaps in much the same way as \helpref{wxICON}{wxicon} creates
+There is also a corresponding \helpref{wxBITMAP}{wxbitmapmacro} macro which allows
+to create the bitmaps in much the same way as \helpref{wxICON}{wxiconmacro} creates
 icons. It assumes that bitmaps live in resources under Windows or OS2 and XPM
 files under all other platforms (for XPMs, the corresponding file must be
 included before this macro is used, of course, and the name of the bitmap

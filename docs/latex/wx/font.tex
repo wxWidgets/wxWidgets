@@ -77,7 +77,7 @@ a default typeface will chosen based on the family.}
 \twocolitem{{\bf wxFONTENCODING\_SYSTEM}}{Default system encoding.}
 \twocolitem{{\bf wxFONTENCODING\_DEFAULT}}{Default application encoding: this
 is the encoding set by calls to 
-\helpref{SetDefaultEncoding}{wxfontsetdefaultencoding} and which may beset to,
+\helpref{SetDefaultEncoding}{wxfontsetdefaultencoding} and which may be set to,
 say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
 default application encoding is the same as default system encoding.}
 \twocolitem{{\bf wxFONTENCODING\_ISO8859\_1...15}}{ISO8859 encodings.}
@@ -183,6 +183,12 @@ weight identifiers.
 \wxheading{See also}
 
 \helpref{wxFont::SetWeight}{wxfontsetweight}
+
+\membersection{wxFont::SetDefaultEncoding}\label{wxfontsetdefaultencoding}
+
+\func{static void}{SetDefaultEncoding}{\param{wxFontEncoding }{encoding}}
+
+Sets the default font encoding.
 
 \membersection{wxFont::SetFaceName}\label{wxfontsetfacename}
 

@@ -39,10 +39,8 @@ public:
     // return TRUE if we support this format in "Get" direction
     bool IsSupportedFormat(const wxDataFormat& format) const;
 
-#ifdef __WXDEBUG__
     // function to return symbolic name of clipboard format (for debug messages)
     static const char *GetFormatName(wxDataFormat format);
-#endif // Debug
 
 private:
     IDataObject *m_pIDataObject; // pointer to the COM interface

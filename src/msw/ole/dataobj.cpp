@@ -668,7 +668,6 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format) const
     }
 }
 
-#ifdef __WXDEBUG__
 const char *wxDataObject::GetFormatName(wxDataFormat format)
 {
   // case 'xxx' is not a valid value for switch of enum 'wxDataFormat'
@@ -703,7 +702,6 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
     #pragma warning(default:4063)
   #endif // VC++
 }
-#endif // Debug
 
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject supports CF_DIB format
