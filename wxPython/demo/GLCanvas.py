@@ -53,7 +53,7 @@ class ButtonPanel(wx.Panel):
         if not haveGLCanvas:
             dlg = wx.MessageDialog(self,
                                    'The GLCanvas class has not been included with this build of wxPython!',
-                                   'Sorry', wx.OK | wx.ICON_INFORMATION)
+                                   'Sorry', wx.OK | wx.ICON_WARNING)
             dlg.ShowModal()
             dlg.Destroy()
 
@@ -61,7 +61,7 @@ class ButtonPanel(wx.Panel):
             dlg = wx.MessageDialog(self,
                                    'The OpenGL package was not found.  You can get it at\n'
                                    'http://PyOpenGL.sourceforge.net/',
-                                   'Sorry', wx.OK | wx.ICON_INFORMATION)
+                                   'Sorry', wx.OK | wx.ICON_WARNING)
             dlg.ShowModal()
             dlg.Destroy()
 

@@ -195,7 +195,7 @@ class wxpTagHandler(wx.html.HtmlWinTagHandler):
 
 
         # check for something that should be evaluated
-        elif value[0] in '[{(' or value[:2] == 'wx':
+        elif value and value[0] in '[{(' or value[:2] == 'wx':
             saveVal = value
             try:
                 value = eval(value, self.ctx.classMod.__dict__)
@@ -203,7 +203,7 @@ class wxpTagHandler(wx.html.HtmlWinTagHandler):
                 value = saveVal
 
         # convert to wx.Colour
-        elif value[0] == '#':
+        elif value and value[0] == '#':
             try:
                 red   = int('0x'+value[1:3], 16)
                 green = int('0x'+value[3:5], 16)
@@ -212,7 +212,8 @@ class wxpTagHandler(wx.html.HtmlWinTagHandler):
             except:
                 pass
 
-        self.ctx.kwargs[str(name)] = value
+        if self.ctx:
+          self.ctx.kwargs[str(name)] = value
         return False
 
 

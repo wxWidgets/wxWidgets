@@ -84,7 +84,7 @@ struct WXDLLIMPEXP_HTML wxHtmlHelpDataItem
 {
     wxHtmlHelpDataItem() : level(0), parent(NULL), id(wxID_ANY), book(NULL) {}
 
-    int level;
+    short int level;
     wxHtmlHelpDataItem *parent;
     int id;
     wxString name;
@@ -110,7 +110,7 @@ struct wxHtmlContentsItem
     wxHtmlContentsItem& operator=(const wxHtmlContentsItem& d);
     ~wxHtmlContentsItem();
 
-    int m_Level;
+    short int m_Level;
     int m_ID;
     wxChar *m_Name;
     wxChar *m_Page;

@@ -172,8 +172,7 @@ wxRect wxListbook::GetPageRect() const
 {
     const wxSize sizeList = m_list->GetSize();
 
-    wxPoint pt(0, 0);
-    wxRect rectPage(pt, GetClientSize());
+    wxRect rectPage(wxPoint(0, 0), GetClientSize());
     switch ( GetWindowStyle() & wxLB_ALIGN_MASK )
     {
         default:
@@ -402,7 +401,7 @@ wxListbook::InsertPage(size_t n,
     // index of the selected page
     if ( int(n) <= m_selection )
     {
-        // one extra page added
+        // one extra page added 
         m_selection++;
         m_list->Select(m_selection);
         m_list->Focus(m_selection);

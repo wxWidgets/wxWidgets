@@ -299,7 +299,9 @@ void wxRemotelyScrolledTreeCtrl::OnPaint(wxPaintEvent& event)
     wxSize clientSize = GetClientSize();
     wxRect itemRect;
     wxTreeItemId h, lastH;
-    for(h=GetFirstVisibleItem();h;h=GetNextVisible(h))
+    for (h=GetFirstVisibleItem();
+         h.IsOk();
+         h=GetNextVisible(h))
     {
         if (GetBoundingRect(h, itemRect))
         {
@@ -307,6 +309,8 @@ void wxRemotelyScrolledTreeCtrl::OnPaint(wxPaintEvent& event)
             dc.DrawLine(0, cy, clientSize.x, cy);
             lastH = h;
         }
+        if (! IsVisible(h))
+            break;
     }
     if (lastH.IsOk() && GetBoundingRect(lastH, itemRect))
     {
@@ -508,7 +512,9 @@ void wxTreeCompanionWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxSize clientSize = GetClientSize();
     wxRect itemRect;
     wxTreeItemId h, lastH;
-    for(h=m_treeCtrl->GetFirstVisibleItem();h;h=m_treeCtrl->GetNextVisible(h))
+    for (h=m_treeCtrl->GetFirstVisibleItem();
+         h.IsOk();
+         h=m_treeCtrl->GetNextVisible(h))
     {
         if (m_treeCtrl->GetBoundingRect(h, itemRect))
         {
@@ -521,6 +527,8 @@ void wxTreeCompanionWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
             DrawItem(dc, h, drawItemRect);
             dc.DrawLine(0, cy, clientSize.x, cy);
         }
+        if (! m_treeCtrl->IsVisible(h))
+            break;
     }
     if (lastH.IsOk() && m_treeCtrl->GetBoundingRect(lastH, itemRect))
     {

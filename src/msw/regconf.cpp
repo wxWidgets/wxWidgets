@@ -151,6 +151,11 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
   }
 }
 
+wxRegConfig::~wxRegConfig()
+{
+  // nothing to do - key will be closed in their dtors
+}
+
 // ----------------------------------------------------------------------------
 // path management
 // ----------------------------------------------------------------------------

@@ -155,7 +155,7 @@ Source: "scripts\pywxrc";                   DestDir: "{code:GetPythonDir}\Script
 Source: "scripts\xrced";                    DestDir: "{code:GetPythonDir}\Scripts"; Flags: sharedfile;  Components: core
 
 
-Source: "docs\README.txt";                  DestDir: "{app}\%(PKGDIR)s\docs";  Flags: isreadme; Components: core
+Source: "distrib\README.win32.txt";         DestDir: "{app}\%(PKGDIR)s\docs";  Flags: isreadme; Components: core
 Source: "licence\*.txt";                    DestDir: "{app}\%(PKGDIR)s\docs\licence"; Components: core
 
 
@@ -285,7 +285,7 @@ begin
                              'Should I do it?',
                              mbConfirmation, MB_YESNO);
         if ResultCode = IDYES then begin
-            InstExec(FileName, '/SILENT', WizardDirValue()+'\wxPython', True, False, SW_SHOWNORMAL, ResultCode);
+            InstExec(FileName, '/SILENT', WizardDirValue(), True, False, SW_SHOWNORMAL, ResultCode);
 
         end;
     end;
@@ -315,11 +315,11 @@ end.
 ISS_DocDemo_Template = r'''
 
 [Setup]
-AppName = wxPython%(SHORTVER)s-DocsDemo
+AppName = wxPython%(SHORTVER)s-docs-demos
 AppVerName = wxPython Docs and Demos %(VERSION)s
-OutputBaseFilename = wxPython%(SHORTVER)s-DocsDemo-%(VERSION)s
+OutputBaseFilename = wxPython%(SHORTVER)s-win32-docs-demos-%(VERSION)s
 AppCopyright = Copyright © 2004 Total Control Software
-DefaultDirName = {pf}\wxPython%(SHORTVER)s Docs Demos and Tools
+DefaultDirName = {pf}\wxPython%(SHORTVER)s Docs and Demos
 DefaultGroupName = wxPython%(SHORTVER)s Docs Demos and Tools
 AlwaysCreateUninstallIcon = yes
 AdminPrivilegesRequired = no

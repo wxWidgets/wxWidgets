@@ -40,7 +40,8 @@ class AnchorsDemoFrame(wx.Frame):
         self.mainPanel = wx.Panel(
                             size=(320, 160), parent=self, 
                             id=ID_ANCHORSDEMOFRAMEMAINPANEL, name='panel1', 
-                            style=wx.TAB_TRAVERSAL | wx.CLIP_CHILDREN, 
+                            style=wx.TAB_TRAVERSAL | wx.CLIP_CHILDREN
+                            | wx.FULL_REPAINT_ON_RESIZE, 
                             pos=(0, 0)
                             )
 

@@ -513,9 +513,7 @@ wxString wxListBox::GetString(int N) const
 
     // +1 for terminating NUL
     wxString result;
-    wxChar* buffer = result.GetWriteBuf(len + 1);
-    ListBox_GetText(GetHwnd(), N, buffer);
-    result.UngetWriteBuf();
+    ListBox_GetText(GetHwnd(), N, wxStringBuffer(result, len + 1));
 
     return result;
 }
@@ -807,9 +805,8 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     wxListBoxItem *pItem = (wxListBoxItem *)data;
 
     wxDCTemp dc((WXHDC)pStruct->hDC);
-    wxPoint pt1(pStruct->rcItem.left, pStruct->rcItem.top);
-    wxPoint pt2(pStruct->rcItem.right, pStruct->rcItem.bottom);
-    wxRect rect(pt1, pt2);
+    wxRect rect(wxPoint(pStruct->rcItem.left, pStruct->rcItem.top),
+                wxPoint(pStruct->rcItem.right, pStruct->rcItem.bottom));
 
     return pItem->OnDrawItem(dc, rect,
                              (wxOwnerDrawn::wxODAction)pStruct->itemAction,

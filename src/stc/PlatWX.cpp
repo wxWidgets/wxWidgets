@@ -1249,25 +1249,47 @@ double ElapsedTime::Duration(bool reset) {
 //----------------------------------------------------------------------
 
 #if wxUSE_UNICODE
+
+#include "UniConversion.h"
+
+// Convert using Scintilla's functions instead of wx's, Scintilla's are more
+// forgiving and won't assert...
+    
 wxString stc2wx(const char* str, size_t len)
 {
-    // note: we assume that str is of length len not including the terminating null.
-
     if (!len)
         return wxEmptyString;
-    else if (str[len-1] == 0)
-        // It's already terminated correctly.
-        return wxString(str, wxConvUTF8, len);
 
-    char *buffer=new char[len+1];
-    strncpy(buffer, str, len);
-    buffer[len]=0;
+    size_t wclen = UCS2Length(str, len);
+    wxWCharBuffer buffer(wclen+1);
 
-    wxString cstr(buffer, wxConvUTF8, len);
-
-    delete[] buffer;
-    return cstr;
+    size_t actualLen = UCS2FromUTF8(str, len, buffer.data(), wclen+1);
+    return wxString(buffer.data(), actualLen);
 }
+
+
+
+wxString stc2wx(const char* str)
+{
+    return stc2wx(str, strlen(str));
+}
+
+
+const wxWX2MBbuf wx2stc(const wxString& str)
+{
+    const wchar_t* wcstr = str.c_str();
+    size_t wclen         = str.length();
+    size_t len           = UTF8Length(wcstr, wclen);
+
+    wxCharBuffer buffer(len+1);
+    UTF8FromUCS2(wcstr, wclen, buffer.data(), len);
+
+    // TODO check NULL termination!!
+
+    
+    return buffer;
+}
+
 #endif
 
 

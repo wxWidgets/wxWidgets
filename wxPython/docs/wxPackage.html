@@ -169,8 +169,8 @@ wxPython, so there are lots of examples to look at and to play with.
 Here is one of them, it is the <tt class="literal"><span class="pre">simple</span></tt> sample.</p>
 <pre class="literal-block">
 #----------------------------------------------------------------------
-# A very simple wxPython example.  Just a wxFrame, wxPanel,
-# wxStaticText, wxButton, and a wxBoxSizer, but it shows the basic
+# A very simple wxPython example.  Just a wx.Frame, wx.Panel,
+# wx.StaticText, wx.Button, and a wx.BoxSizer, but it shows the basic
 # structure of any wxPython application.
 #----------------------------------------------------------------------
 
@@ -244,11 +244,14 @@ class MyFrame(wx.Frame):
 class MyApp(wx.App):
     def OnInit(self):
         frame = MyFrame(None, &quot;Simple wxPython App&quot;)
-        frame.Show(True)
         self.SetTopWindow(frame)
+
+        print &quot;Print statements go to this stdout window by default.&quot;
+
+        frame.Show(True)
         return True
         
-app = MyApp(True)
+app = MyApp(redirect=True)
 app.MainLoop()
 
 

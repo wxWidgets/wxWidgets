@@ -483,10 +483,8 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
     wxPen darkShadowPen(m_darkShadowColour, 1, wxSOLID);
     wxPen lightShadowPen(m_lightShadowColour, 1, wxSOLID);
     wxPen hilightPen(m_hilightColour, 1, wxSOLID);
-    wxColour blackClr(0, 0, 0);
-    wxColour whiteClr(255, 255, 255);
-    wxPen blackPen(blackClr, 1, wxSOLID);
-    wxPen whitePen(whiteClr, 1, wxSOLID);
+    wxPen blackPen(wxColour(0, 0, 0), 1, wxSOLID);
+    wxPen whitePen(wxColour(255, 255, 255), 1, wxSOLID);
 
     if ( edge == wxSASH_LEFT || edge == wxSASH_RIGHT )
     {

@@ -82,7 +82,7 @@ wxHtmlHelpIndexCompareFunc(wxHtmlHelpDataItem **a, wxHtmlHelpDataItem **b)
         return -1;
     if (ib == NULL)
         return 1;
-
+    
     if (ia->parent == ib->parent)
     {
         return ia->name.CmpNoCase(ib->name);
@@ -686,7 +686,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         lineptr = ReadLine(lineptr, linebuf, 300);
 
         for (wxChar *ch = linebuf; *ch != wxT('\0') && *ch != wxT('='); ch++)
-           *ch = (wxChar)wxTolower(*ch);
+           *ch = tolower(*ch);
 
         if (wxStrstr(linebuf, _T("title=")) == linebuf)
             title = linebuf + wxStrlen(_T("title="));

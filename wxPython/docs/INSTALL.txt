@@ -112,9 +112,9 @@ instructions above, except for a few small, but important details:
    you do yourself will end up in /Library/Frameworks even on
    Panther...
 
-3. You need to use pythonw at the command line or PythonLauncher app
-   to run wxPython apps, otherwise the app will not be able to fully
-   use the GUI display.
+3. You need to use pythonw at the command line or the PythonLauncher
+   app to run wxPython apps, otherwise the app will not be able to
+   fully use the GUI display.
 
 
 

@@ -316,6 +316,10 @@ void wxDCBase::DoDrawSpline( wxList *points )
     double           x1, y1, x2, y2;
 
     wxList::compatibility_iterator node = points->GetFirst();
+    if (node == NULL)
+        // empty list
+        return;
+    
     p = (wxPoint *)node->GetData();
 
     x1 = p->x;

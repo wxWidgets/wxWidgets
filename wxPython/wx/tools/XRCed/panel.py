@@ -136,7 +136,8 @@ class Panel(wxNotebook):
             if not self.GetPageCount() == 2:
                 self.AddPage(self.page2, 'Style')
             self.page2.Layout()
-            self.page2.Show(True)
+            if 'wxGTK' in wx.PlatformInfo:
+                self.page2.Show(True)
             size = self.page2.GetSizer().GetMinSize()
             self.page2.SetScrollbars(1, 1, size.width, size.height, 0, 0, True)
         else:

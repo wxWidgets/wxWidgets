@@ -1654,7 +1654,7 @@ test -n "$target_alias" &&
 wx_major_version_number=2
 wx_minor_version_number=5
 wx_release_number=3
-wx_subrelease_number=0
+wx_subrelease_number=1
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
 WX_VERSION=$WX_RELEASE.$wx_release_number
@@ -37472,7 +37472,7 @@ if test "$wxUSE_MAC" = 1 ; then
     LDFLAGS="$LDFLAGS -framework Carbon -framework Cocoa -framework System"
 fi
 if test "$wxUSE_COCOA" = 1 ; then
-    LDFLAGS="$LDFLAGS -framework Cocoa"
+    LDFLAGS="$LDFLAGS -framework Cocoa -framework System"
 fi
 
 

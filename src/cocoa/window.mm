@@ -695,11 +695,6 @@ WXWidget wxWindow::GetHandle() const
     return m_cocoaNSView;
 }
 
-wxWindow* wxWindow::GetWxWindow() const
-{
-    return (wxWindow*) this;
-}
-
 void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
     [m_cocoaNSView setNeedsDisplay:YES];
@@ -707,14 +702,7 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 
 void wxWindow::SetFocus()
 {
-#ifdef __WXDEBUG__
-    bool bOK = 
-#endif
-        [GetNSView() lockFocusIfCanDraw];
-        
-    //Note that the normal lockFocus works on hidden and minimized windows
-    //and has no return value - which probably isn't what we want
-    wxASSERT(bOK);
+    // TODO
 }
 
 void wxWindow::DoCaptureMouse()
@@ -895,12 +883,8 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 // Get the window with the focus
 wxWindow *wxWindowBase::DoFindFocus()
 {
-    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa([NSView focusView]);
-    
-    if (!win)
-        return NULL;
-        
-    return win->GetWxWindow();
+    // TODO
+    return NULL;
 }
 
 /* static */ wxWindow *wxWindowBase::GetCapture()

@@ -22,6 +22,7 @@ command_lines = [
     "-a -u -n TestMask bmp_source/testmask.bmp images.py",
 
     "-a -u -n Test2 bmp_source/test2.bmp images.py",
+    "-a -u -n Test2m -m #0000FF  bmp_source/test2.bmp images.py",
     "-a -u -n Robin bmp_source/robin.jpg images.py",
 
     "-a -u -n Bulb1 bmp_source/lb1.bmp images.py",
@@ -78,9 +79,16 @@ command_lines = [
     "-a -u -n Blom13 bmp_source/toblom13.png images.py",
     "-a -u -n Blom14 bmp_source/toblom14.png images.py",
     "-a -u -n Blom15 bmp_source/toblom15.png images.py",
-    "-a -u -n Blom10Masked -m #FFFFFF bmp_source/toblom10.png images.py",
+
+    "-a -u -n Blom08m -m #FFFFFF bmp_source/toblom08.png images.py",
+    "-a -u -n Blom10m -m #FFFFFF bmp_source/toblom10.png images.py",
+    "-a -u -n Blom15m -m #FFFFFF bmp_source/toblom15.png images.py",
 
     "-a -u -n FloatCanvas bmp_source/floatcanvas.png images.py",
+    
+    "-a -u -i -n WXP bmp_source/wxp.ico images.py",
+    "-a -u -i -n WXPdemo bmp_source/wxpdemo.ico images.py",
+
 
     "   -u -c bmp_source/001.png throbImages.py",
     "-a -u -c bmp_source/002.png throbImages.py",

@@ -72,9 +72,10 @@ class ShellFrame(frame.Frame):
                'the other half is still in the oven.\n\n' + \
                'Shell Revision: %s\n' % self.shell.revision + \
                'Interpreter Revision: %s\n\n' % self.shell.interp.revision + \
+               'Platform: %s\n' % sys.platform + \
                'Python Version: %s\n' % sys.version.split()[0] + \
                'wxPython Version: %s\n' % wx.VERSION_STRING + \
-               'Platform: %s\n' % sys.platform
+               ('\t(%s)\n' % ", ".join(wx.PlatformInfo[1:])) 
         dialog = wx.MessageDialog(self, text, title,
                                   wx.OK | wx.ICON_INFORMATION)
         dialog.ShowModal()

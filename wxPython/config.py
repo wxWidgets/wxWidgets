@@ -39,8 +39,8 @@ import distutils.command.clean
 VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 5
 VER_RELEASE      = 3
-VER_SUBREL       = 0      # wxPython release num for x.y.z release of wxWidgets
-VER_FLAGS        = "p"     # release flags, such as prerelease num, unicode, etc.
+VER_SUBREL       = 1      # wxPython release num for x.y.z release of wxWidgets
+VER_FLAGS        = ""     # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -135,9 +135,10 @@ INSTALL_MULTIVERSION = 1 # Install the packages such that multiple versions
 FLAVOUR = ""       # Optional flavour string to be appended to VERSION
                    # in MULTIVERSION installs
 
-EP_ADD_OPTS = 0    # When doing MULTIVERSION installs the wx port and
+EP_ADD_OPTS = 1    # When doing MULTIVERSION installs the wx port and
                    # ansi/unicode settings can optionally be added to the
-                   # subdir path used in site-packages 
+                   # subdir path used in site-packages
+                   
                    
 WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
                    # it to pass an alternate version of wx-config or alternate
@@ -567,8 +568,8 @@ def getExtraPath(shortVer=True, addOpts=False):
         ep = "wx-%d.%d" % (VER_MAJOR, VER_MINOR)
         
         # plus release if minor is odd
-        #if VER_MINOR % 2 == 1:
-        #    ep += ".%d" % VER_RELEASE
+        if VER_MINOR % 2 == 1:
+            ep += ".%d" % VER_RELEASE
             
     else:
         # long version, full version 
@@ -605,7 +606,7 @@ if debug:
 if FINAL:
     HYBRID = 0
 
-if UNICODE and WXPORT not in ['msw', 'gtk2']:
+if UNICODE and WXPORT not in ['msw', 'gtk2', 'mac']:
     raise SystemExit, "UNICODE mode not currently supported on this WXPORT: "+WXPORT
 
 

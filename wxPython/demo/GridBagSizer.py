@@ -12,7 +12,10 @@ static text is positioned at (0,0) and it spans 7 columns.
 class TestFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, None, -1, "wx.GridBagSizer")
-        p = wx.Panel(self, -1)
+        p = wx.Panel(self, -1, style = wx.TAB_TRAVERSAL
+                     | wx.CLIP_CHILDREN
+                     | wx.FULL_REPAINT_ON_RESIZE
+                     )
         p.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         
         gbs = self.gbs = wx.GridBagSizer(5, 5)

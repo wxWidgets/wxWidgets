@@ -144,8 +144,7 @@ wxRect wxChoicebook::GetPageRect() const
 {
     const wxSize sizeChoice = m_choice->GetSize();
 
-    wxPoint pt(0, 0);
-    wxRect rectPage(pt, GetClientSize());
+    wxRect rectPage(wxPoint(0, 0), GetClientSize());
     switch ( GetWindowStyle() & wxCHB_ALIGN_MASK )
     {
         default:

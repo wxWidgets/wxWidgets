@@ -31,7 +31,7 @@ Sonar tracking software	Miscellaneous	See Web site	http://www.desertstar.com	Dem
 Name	Research software	Platform	Location	Availability	Description
 DisCo	Research software	N/A	http://www.cs.tut.fi/laitos/DisCo/tool.fm.html	N/A	A tool for specification of reactive systems.
 CAFE	Research software	N/A	cafe.htm	N/A	Cellular Analysis of Fire and Extinction
-CODA	Research software	See Web site	http://www.ozemail.com.au/~mbedward/coda/coda.html	See Web site	CODA assists in the design of networks of nature reserves or protected areas. It has been used for major reserve planning studies, as a teaching resource and for research into conservation planning methods. 
+CODA	Research software	See Web site	http://www.ozemail.com.au/~mbedward/coda/coda.html	See Web site	CODA assists in the design of networks of nature reserves or protected areas. It has been used for major reserve planning studies, as a teaching resource and for research into conservation planning methods.
 EGRESS	Research software	N/A	http://www.aiai.ed.ac.uk/~jimd/Egress2/projInfo_contents.html	N/A	An evacuation decision model.
 ACT	Research software	N/A	none.htm	N/A	A general process and tracker and automator being built at NASA.
 Rectangular nesting program	Research software	N/A	http://www.elec-eng.leeds.ac.uk/een5mpd/research.html	N/A	Optimized layout of rectangles on a page.

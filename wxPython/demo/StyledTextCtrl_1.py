@@ -185,6 +185,7 @@ def runTest(frame, nb, log):
 
         ed.GotoPos(ed.GetLength())
         ed.AddText("\n\nwx.StyledTextCtrl can also do Unicode:\n")
+        uniline = ed.GetCurrentLine()
         unitext, l = decode('\xd0\x9f\xd0\xb8\xd1\x82\xd0\xbe\xd0\xbd - '
                             '\xd0\xbb\xd1\x83\xd1\x87\xd1\x88\xd0\xb8\xd0\xb9 '
                             '\xd1\x8f\xd0\xb7\xd1\x8b\xd0\xba \xd0\xbf\xd1\x80\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xbc\xd0\xb8\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb0\xd0\xbd\xd0\xb8\xd1\x8f!\n\n')
@@ -268,6 +269,12 @@ def runTest(frame, nb, log):
         print "GetTextRange(25, 35): ", repr(ed.GetTextRange(25, 35))
         print "FindText(0, max, 'indicators'): ",
         print ed.FindText(0, ed.GetTextLength(), "indicators")
+        if wx.USE_UNICODE:
+            end = ed.GetLength()
+            start = ed.PositionFromLine(uniline)
+            print "GetTextRange(%d, %d): " % (start, end),
+            print repr(ed.GetTextRange(start, end))
+
 
     wx.CallAfter(ed.GotoPos, 0)
     return p

@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.5.3.0
+2.5.3.1
 -------
 
 wxMac focus and border refreshes corrected.
@@ -152,8 +152,17 @@ FloatCanvas updates from Chris Barker
 PyPlot updates from Gordon Williams:
    - Added bar graph demo
    - Modified line end shape from round to square.
-   - Removed FloatDCWrapper for conversion to ints and ints in arguments
-
+   - Removed FloatDCWrapper for conversion to ints and ints in
+     arguments
+   - Imported modules given leading underscore to name.
+   - Added Cursor Line Tracking and User Point Labels. 
+   - Demo for Cursor Line Tracking and Point Labels.
+   - Size of plot preview frame adjusted to show page better.
+   - Added helper functions PositionUserToScreen and
+     PositionScreenToUser in PlotCanvas.
+   - Added functions GetClosestPoints (all curves) and GetClosestPoint
+     (only closest curve) can be in either user coords or screen
+     coords.
 
 MaskedEdit updates from Will Sadkin:
     - Added '*' mask char that means "all ansii chars" (ords 32-255)
@@ -164,6 +173,24 @@ MaskedEdit updates from Will Sadkin:
       epydoc support
     - lots of doc string improvements and function hiding to better
       reflect package's public contents.
+
+Restructured the installer packages slightly to help facilitate having
+multiple versions of wxPython installed at the same time.  See the
+Migrarion Guide for more information.
+
+Applied patch from Pim Van Heuven that modifies 4 files:
+    - wxPython/demo/ListCtrl_edit.py (new demo)
+    - wxPython/demo/Main.py (include new demo in demo app)
+    - wxPython/wx/lib/mixins/listctrl.py (several improvements to 
+      TextEditMixin)
+    - wxPython/wx/lib/wxpTag.py (some small fixes)
+
+Added (thanks to Kevin Ollivier!) wrappers for wx.WebKitCtrl for the
+OSX build.  Other platforms will raise an exception if you try to use
+it. 
+
+wxPython on OSX can now be built in Unicode mode, can support multiple
+version installs, and comes with an uninstaller script.
 
 
 
@@ -1558,7 +1585,7 @@ Added new HTML printing classes.
 
 Added wxWindow.GetHandle
 
-Apparently wxMouseEvent.Position has been depreciated in wxWindows as
+Apparently wxMouseEvent.Position has been deprecated in wxWindows as
 it is no longer available by default.  You can use GetPositionTuple
 (returning a tuple with x,y) instead, or GetPosition (returning a
 wxPoint.)
@@ -1640,7 +1667,7 @@ wxGTK.  Added them back in since the methods exist now.
 Wrapped the wxHtmlHelpController and related classes.
 
 Wrapped the C++ versions of wxSizer and friends.  The Python-only
-versions are still in the library, but depreciated.  (You will get a
+versions are still in the library, but deprecated.  (You will get a
 warning message if you try to use them, but the warning can be
 disabled.) The usage of the C++ versions is slightly different, and
 the functionality of wxBorderSizer is now part of wxBoxSizer.  I have
@@ -1800,7 +1827,7 @@ Added wxGrid.GetCells
 Added wxSystemSettings static methods as functions with names like
 wxSystemSettings_GetSystemColour.
 
-Removed wxPyMenu since using menu callbacks have been depreciated in
+Removed wxPyMenu since using menu callbacks have been deprecated in
 wxWindows.  Use wxMenu and events instead.
 
 Added alternate wxBitmap constructor (for MSW only) as

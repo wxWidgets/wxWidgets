@@ -14,7 +14,7 @@ class SimpleGrid(gridlib.Grid): ##, mixins.GridAutoEditMixin):
 
         self.Bind(wx.EVT_IDLE, self.OnIdle)
 
-        self.CreateGrid(25, 25) #, wxGrid.wxGridSelectRows)
+        self.CreateGrid(25, 25)#, gridlib.Grid.SelectRows)
         ##self.EnableEditing(False)
 
         # simple cell formatting

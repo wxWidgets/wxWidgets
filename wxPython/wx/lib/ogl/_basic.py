@@ -1797,15 +1797,15 @@ class Shape(ShapeEvtHandler):
             dc.SetBrush(wx.BLACK_BRUSH)
 
         # Draw neck
-        dc.DrawLine(root, neck)
+        dc.DrawLine(root[0], root[1], neck[0], neck[1])
 
         if count > 1:
             # Draw shoulder-to-shoulder line
-            dc.DrawLine(shoulder1, shoulder2)
+            dc.DrawLine(shoulder1[0], shoulder1[1], shoulder2[0], shoulder2[1])
         # Draw all the little branches
         for i in range(count):
             pt, stemPt = self.GetBranchingAttachmentPoint(attachment, i)
-            dc.DrawLine(stemPt, pt)
+            dc.DrawLine(stemPt[0], stemPt[1], pt[0], pt[1])
 
             if self.GetBranchStyle() & BRANCHING_ATTACHMENT_BLOB and count > 1:
                 blobSize = 6.0

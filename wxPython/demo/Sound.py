@@ -41,6 +41,7 @@ class TestPanel(wx.Panel):
                 
             self.log.write("before Play...\n")
             sound.Play(wx.SOUND_ASYNC)
+            self.sound = sound  # save a reference (This shoudln't be needed, but there seems to be a bug...)
             wx.YieldIfNeeded()
             self.log.write("...after Play\n")
         except NotImplementedError, v:
@@ -54,11 +55,11 @@ class TestPanel(wx.Panel):
                             style=wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             try:
-                #sound = wx.Sound(dlg.GetPath())
+                #sound = wx.Sound(dlg.GetPath(), wx.SOUND_SYNC)
                 #sound.Play()
 
                 # another way to do it.
-                wx.Sound.PlaySound(dlg.GetPath())
+                wx.Sound.PlaySound(dlg.GetPath(), wx.SOUND_SYNC)
                 
             except NotImplementedError, v:
                 wx.MessageBox(str(v), "Exception Message")

@@ -16,7 +16,6 @@
 #include "wx/cocoa/ObjcAssociate.h"
 
 typedef struct _NSRect NSRect;
-class wxWindow;
 
 WX_DECLARE_OBJC_HASHMAP(NSView);
 class wxCocoaNSView
@@ -29,8 +28,6 @@ public:
 protected:
     static void *sm_cocoaObserver;
 public:
-    virtual wxWindow* GetWxWindow() const
-    {	return NULL;	}
     virtual void Cocoa_FrameChanged(void) = 0;
     virtual bool Cocoa_drawRect(const NSRect &rect)
     {   return false; }

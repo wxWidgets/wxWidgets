@@ -93,7 +93,7 @@ class TestPanel(wx.Panel):
         if wx.Platform == "__WXMAC__":
             dlg = wx.MessageDialog(
                     self, 'FloatBar does not work well on this platform.',
-                    'Sorry', wx.OK | wx.ICON_INFORMATION
+                    'Sorry', wx.OK | wx.ICON_WARNING
                     )
             dlg.ShowModal()
             dlg.Destroy()

@@ -1472,16 +1472,6 @@ void wxWindowOS2::DoMoveWindow(
     RECTL                           vRect;
     wxWindow*                       pParent = GetParent();
 
-    /* Due to OS/2's inverted coordinate system, changing the height
-       of a window requires repositioning all it's children, e.g. if
-       you want a child of height 100 to be at the top left corner of
-       the parent you need to position the lower left corner of the
-       child at (0, (height of parent - 100)), so, obviously, if the
-       height of the parent changes, the child needs to be repositioned. */
-    int                         nHeightDelta;
-    GetSize(0, &nHeightDelta);
-    nHeightDelta = nHeight - nHeightDelta;
-
     if (pParent && !IsKindOf(CLASSINFO(wxDialog)))
     {
         int                         nOS2Height = GetOS2ParentHeight(pParent);
@@ -1630,7 +1620,6 @@ void wxWindowOS2::DoMoveWindow(
         MoveChildren(nYDiff);
         ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
     }
-    MoveChildren(nHeightDelta);
 } // end of wxWindowOS2::DoMoveWindow
 
 //

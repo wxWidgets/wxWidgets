@@ -2,7 +2,7 @@
 
 
 # We need to be able to import from the wx package, but there is also
-# a wxPyton.wx module and that would normally be chosen first by
+# a wxPython.wx module and that would normally be chosen first by
 # import statements.  So instead we'll have a wxPython._wx module and
 # then stuff it into sys.modules with a wxPython.wx alias so old
 # programs will still work.

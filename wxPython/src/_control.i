@@ -124,7 +124,7 @@ optionally, client data associated with them.
 class wxItemContainer
 {
 public:
-    // wxItemContainer() { m_clientDataItemsType = wxClientData_None; }  ** It's an ABC
+    // wxItemContainer()  ** It's an ABC
     
 
     %extend {

@@ -146,6 +146,10 @@ wxTextBuffer::wxTextBuffer(const wxString& strBufferName)
     m_isOpened = false;
 }
 
+wxTextBuffer::~wxTextBuffer()
+{
+}
+
 // ----------------------------------------------------------------------------
 // buffer operations
 // ----------------------------------------------------------------------------

@@ -482,8 +482,7 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
     // We must build conversion table for expat. The easiest way to do so
     // is to let wxCSConv convert as string containing all characters to
     // wide character representation:
-    wxString str(name, wxConvLibc);
-    wxCSConv conv(str);
+    wxCSConv conv(wxString(name, wxConvLibc));
     char mbBuf[2];
     wchar_t wcBuf[10];
     size_t i;
@@ -500,7 +499,7 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
         }
         info->map[i+1] = (int)wcBuf[0];
     }
-
+    
     info->data = NULL;
     info->convert = NULL;
     info->release = NULL;

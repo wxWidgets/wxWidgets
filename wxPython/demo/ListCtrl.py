@@ -114,7 +114,7 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
         self.PopulateList()
 
         # Now that the list exists we can init the other base class,
-        # see wxPython/lib/mixins/listctrl.py
+        # see wx/lib/mixins/listctrl.py
         self.itemDataMap = musicdata
         listmix.ColumnSorterMixin.__init__(self, 3)
         #self.SortListItems(0, True)
@@ -190,11 +190,11 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
         self.currentItem = 0
 
 
-    # Used by the ColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
+    # Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py
     def GetListCtrl(self):
         return self.list
 
-    # Used by the ColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
+    # Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py
     def GetSortImages(self):
         return (self.sm_dn, self.sm_up)
 
