@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\Dev\Wx2\WxWindows\LIB\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1955,7 +1955,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -4337,10 +4337,13 @@ EXPORTS
       Get__15wxMessageOutputFv
       ;wxMessageOutput::ms_msgOut
       ms_msgOut__15wxMessageOutput
+      ;wxMessageOutputLog::Printf(const char*,...)
+      Printf__18wxMessageOutputLogFPCce
       ;wxMessageOutput::Set(wxMessageOutput*)
       Set__15wxMessageOutputFP15wxMessageOutput
       __vft25wxMessageOutputMessageBox15wxMessageOutput
       __vft21wxMessageOutputStderr15wxMessageOutput
+      __vft18wxMessageOutputLog15wxMessageOutput
       ;wxMessageOutputStderr::Printf(const char*,...)
       Printf__21wxMessageOutputStderrFPCce
   ;From object file:  ..\common\mstream.cpp
@@ -6175,7 +6178,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -9135,6 +9138,8 @@ EXPORTS
       SetItem__17wxGenericListCtrlFR10wxListItem
       ;wxListLineData::SetItem(int,const wxListItem&)
       SetItem__14wxListLineDataFiRC10wxListItem
+      ;wxGenericListCtrl::SetImageList(wxGenericImageList*,int)
+      SetImageList__17wxGenericListCtrlFP18wxGenericImageListi
       ;wxGenericListCtrl::SetColumnWidth(int,int)
       SetColumnWidth__17wxGenericListCtrlFiT1
       ;wxGenericListCtrl::ScrollList(int,int)
@@ -9227,8 +9232,8 @@ EXPORTS
       SetItem__16wxListHeaderDataFRC10wxListItem
       ;wxListMainWindow::SetItemState(long,long,long)
       SetItemState__16wxListMainWindowFlN21
-      ;wxListMainWindow::SetImageList(wxImageList*,int)
-      SetImageList__16wxListMainWindowFP11wxImageListi
+      ;wxListMainWindow::SetImageList(wxGenericImageList*,int)
+      SetImageList__16wxListMainWindowFP18wxGenericImageListi
       ;wxGenericListCtrl::SetColumn(int,wxListItem&)
       SetColumn__17wxGenericListCtrlFiR10wxListItem
       ;wxListMainWindow::SetColumnWidth(int,int)
@@ -9257,8 +9262,6 @@ EXPORTS
       DeleteColumn__17wxGenericListCtrlFi
       ;wxListMainWindow::CacheLineData(unsigned int)
       CacheLineData__16wxListMainWindowFUi
-      ;wxGenericListCtrl::AssignImageList(wxImageList*,int)
-      AssignImageList__17wxGenericListCtrlFP11wxImageListi
       ;wxGenericListCtrl::GetNextItem(long,int,int) const
       GetNextItem__17wxGenericListCtrlCFliT2
       ;wxConstructorForwxListCtrl()
@@ -9380,6 +9383,8 @@ EXPORTS
       DrawImage__16wxListMainWindowFiP4wxDCN21
       ;wxListMainWindow::ChangeCurrent(unsigned int)
       ChangeCurrent__16wxListMainWindowFUi
+      ;wxGenericListCtrl::AssignImageList(wxGenericImageList*,int)
+      AssignImageList__17wxGenericListCtrlFP18wxGenericImageListi
       ;wxGenericListCtrl::~wxGenericListCtrl()
       __dt__17wxGenericListCtrlFv
       wxEVT_COMMAND_LIST_KEY_DOWN
@@ -9594,8 +9599,6 @@ EXPORTS
       SetItem__16wxListMainWindowFR10wxListItem
       ;wxListItemData::SetItem(const wxListItem&)
       SetItem__14wxListItemDataFRC10wxListItem
-      ;wxGenericListCtrl::SetImageList(wxImageList*,int)
-      SetImageList__17wxGenericListCtrlFP11wxImageListi
       ;wxListMainWindow::SetColumn(int,wxListItem&)
       SetColumn__16wxListMainWindowFiR10wxListItem
       ;wxListLineDataArray::RemoveAt(unsigned int,unsigned int)

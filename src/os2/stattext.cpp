@@ -101,18 +101,14 @@ bool wxStaticText::Create(
                      );
 
     SubclassWin(m_hWnd);
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    wxControl::SetFont(*pTextFont);
+    SetFont(*wxSMALL_FONT);
+    SetXComp(0);
+    SetYComp(0);
     SetSize( nX
             ,nY
             ,nWidth
             ,nHeight
            );
-    delete pTextFont;
     return TRUE;
 } // end of wxStaticText::Create
 
@@ -223,9 +219,18 @@ void wxStaticText::SetLabel(
     //
     if (!(GetWindowStyle() & wxST_NO_AUTORESIZE))
     {
-        DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+        wxCoord                     vX;
+        wxCoord                     vY;
+        wxCoord                     vWidth;
+        wxCoord                     vHeight;
+
+        GetPosition(&vX, &vY);
+        GetSize(&vWidth, &vHeight);
+        if (!(vX == -1 && vY == -1 && vWidth == -1 && vHeight == -1))
+            DoSetSize(vX, vY, vWidth, vHeight, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+        else
+            DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
     }
-    DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
 } // end of wxStaticText::SetLabel
 
 MRESULT wxStaticText::OS2WindowProc(

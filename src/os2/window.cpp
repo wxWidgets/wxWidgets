@@ -1753,19 +1753,6 @@ void wxWindowOS2::DoSetSize(
     int                             nY2 = nY;
     wxWindow*                       pParent = (wxWindow*)GetParent();
 
-    if (pParent && !IsKindOf(CLASSINFO(wxDialog)))
-    {
-        int                         nOS2Height = GetOS2ParentHeight(pParent);
-
-        nY2 = nOS2Height - (nY2 + nHeight);
-    }
-    else
-    {
-        RECTL                       vRect;
-
-        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
-        nY2 = vRect.yTop - (nY2 + nHeight);
-    }
     if (nX == nCurrentX && nY2 == nCurrentY &&
         nWidth == nCurrentWidth && nHeight == nCurrentHeight)
     {
@@ -1824,34 +1811,61 @@ void wxWindowOS2::DoSetClientSize(
 , int                               nHeight
 )
 {
-    wxWindow*                       pParent = GetParent();
-    HWND                            hWnd = GetHwnd();
-    HWND                            hParentWnd = (HWND)0;
     POINTL                          vPoint;
-    RECTL                           vRect;
-    RECTL                           vRect2;
-    RECTL                           vRect3;
-    HWND                            hClientWnd = (HWND)0;
+    int                             nActualWidth;
+    int                             nActualHeight;
+    wxWindow*                       pParent = (wxWindow*)GetParent();
+    HWND                            hParentWnd = (HWND)0;
 
-    hClientWnd = ::WinWindowFromID(hWnd, FID_CLIENT);
-    ::WinQueryWindowRect(hClientWnd, &vRect2);
-    ::WinQueryWindowRect(hWnd, &vRect);
-    ::WinQueryWindowRect(hParentWnd, &vRect3);
-
-    int                             nActualWidth = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
-    int                             nActualHeight = vRect2.yTop - vRect2.yBottom - vRect.yTop + nHeight;
-
-    vPoint.x = vRect2.xLeft;
-    vPoint.y = vRect2.yBottom;
     if (pParent)
+        hParentWnd = (HWND)pParent->GetHWND();
+
+    if (IsKindOf(CLASSINFO(wxFrame)))
     {
-        vPoint.x -= vRect3.xLeft;
-        vPoint.y -= vRect3.yBottom;
+        wxFrame*                    pFrame = wxDynamicCast(this, wxFrame);
+        HWND                        hFrame = pFrame->GetFrame();
+        RECTL                       vRect;
+        RECTL                       vRect2;
+        RECTL                       vRect3;
+
+        ::WinQueryWindowRect(GetHwnd(), &vRect2);
+        ::WinQueryWindowRect(hFrame, &vRect);
+        ::WinQueryWindowRect(hParentWnd, &vRect3);
+        nActualWidth = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
+        nActualHeight = vRect2.yTop - vRect2.yBottom - vRect.yTop + nHeight;
+
+        vPoint.x = vRect2.xLeft;
+        vPoint.y = vRect2.yBottom;
+        if (pParent)
+        {
+            vPoint.x -= vRect3.xLeft;
+            vPoint.y -= vRect3.yBottom;
+        }
     }
+    else
+    {
+        int                         nX;
+        int                         nY;
 
-    DoMoveWindow(vPoint.x, vPoint.y, nActualWidth, nActualHeight);
+        GetPosition(&nX, &nY);
+        nActualWidth  = nWidth;
+        nActualHeight = nHeight;
 
-    wxSizeEvent                     vEvent(wxSize(nWidth, nHeight), m_windowId);
+        vPoint.x = nX;
+        vPoint.y = nY;
+    }
+    DoMoveWindow( vPoint.x
+                 ,vPoint.y
+                 ,nActualWidth
+                 ,nActualHeight
+                );
+
+    wxSizeEvent                     vEvent( wxSize( nWidth
+                                                   ,nHeight
+                                                  )
+                                           ,m_windowId
+                                          );
+
     vEvent.SetEventObject(this);
     GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::DoSetClientSize
@@ -5148,50 +5162,99 @@ wxWindowOS2* FindWindowForMouseEvent(
 , short*                            pnY
 )
 {
-    wxCHECK_MSG( pnX && pnY, pWin, _T("NULL pointer in FindWindowForMouseEvent") );
-    POINTL                          vPoint = { *pnX, *pnY };
     HWND                            hWnd = GetHwndOf(pWin);
     HWND                            hWndUnderMouse;
+    POINTL                          vPoint;
+    BOOL                            rcEnabled = FALSE;
+    BOOL                            rcVisible = FALSE;
+    HWND                            hWndDesktop = HWND_DESKTOP;
 
-    //
-    // First try to find a non transparent child: this allows us to send events
-    // to a static text which is inside a static box, for example
-    //
-
-    hWndUnderMouse = ::WinWindowFromPoint( hWnd
-                                          ,&vPoint
-                                          ,TRUE
-                                         );
-    if (!hWndUnderMouse || hWndUnderMouse == hWnd)
+    ::WinQueryPointerPos(HWND_DESKTOP, &vPoint);
+    hWndUnderMouse = ::WinWindowFromPoint(HWND_DESKTOP, &vPoint, TRUE);
+    if (hWndUnderMouse != HWND_DESKTOP)
     {
-        //
-        // Now try any child window at all
-        //
-        hWndUnderMouse = ::WinWindowFromPoint( HWND_DESKTOP
-                                              ,&vPoint
-                                              ,TRUE
-                                             );
+        wxWindow*                   pWinUnderMouse = wxFindWinFromHandle((WXHWND)hWndUnderMouse);
 
+        if (pWinUnderMouse)
+        {
+            wxWindowList::Node*     pCurrent = pWinUnderMouse->GetChildren().GetFirst();
+            wxWindow*               pChild = NULL;
+            wxWindow*               pGrandChild = NULL;
+            RECTL                   vRect;
+            POINTL                  vPoint2;
+
+            ::WinMapWindowPoints(HWND_DESKTOP, hWndUnderMouse, &vPoint, 1);
+            //
+            // Find a child window mouse might be under
+            //
+            while (pCurrent)
+            {
+                wxWindow*                   pChild = pCurrent->GetData();
+
+                vPoint2.x = vPoint.x;
+                vPoint2.y = vPoint.y;
+                ::WinMapWindowPoints(hWndUnderMouse, pChild->GetHWND(), &vPoint2, 1);
+                ::WinQueryWindowRect(pChild->GetHWND(), &vRect);
+                if (::WinPtInRect(vHabmain, &vRect, &vPoint2))
+                {
+                    if (pChild->IsTopLevel())
+                    {
+                        POINTL                  vPoint3;
+                        wxWindowList::Node*     pCurrent2 =pChild->GetChildren().GetFirst();
+
+                        while (pCurrent2)
+                        {
+                            wxWindow*           pGrandChild = pCurrent2->GetData();
+
+                            vPoint3.x = vPoint2.x;
+                            vPoint3.y = vPoint2.y;
+                            ::WinMapWindowPoints( pChild->GetHWND()
+                                                 ,pGrandChild->GetHWND()
+                                                 ,&vPoint3
+                                                 ,1
+                                                );
+                            ::WinQueryWindowRect(pGrandChild->GetHWND(), &vRect);
+                            if (::WinPtInRect(vHabmain, &vRect, &vPoint3))
+                            {
+                                hWndUnderMouse = GetHwndOf(pGrandChild);
+                                pWinUnderMouse = pGrandChild;
+                                break;
+                            }
+                            pCurrent2 = pCurrent2->GetNext();
+                        }
+                        if (pGrandChild)
+                            break;
+                    }
+                    hWndUnderMouse = GetHwndOf(pChild);
+                    pWinUnderMouse = pChild;
+                    rcVisible = ::WinIsWindowVisible(hWndUnderMouse);
+                    rcEnabled = ::WinIsWindowEnabled(hWndUnderMouse);
+                    if (rcVisible && rcEnabled)
+                        break;
+                }
+                pCurrent = pCurrent->GetNext();
+            }
+        }
     }
+    rcVisible = ::WinIsWindowVisible(hWndUnderMouse);
+    rcEnabled = ::WinIsWindowEnabled(hWndUnderMouse);
+
 
     //
     // Check that we have a child window which is susceptible to receive mouse
     // events: for this it must be shown and enabled
+    //
     if ( hWndUnderMouse &&
          hWndUnderMouse != hWnd &&
-         ::WinIsWindowVisible(hWndUnderMouse) &&
-         ::WinIsWindowEnabled(hWndUnderMouse))
+         rcVisible && rcEnabled)
     {
-        wxWindow*                   pWinUnderMouse = wxFindWinFromHandle((WXHWND)hWndUnderMouse);
+        wxWindow*                       pWinUnderMouse = wxFindWinFromHandle((WXHWND)hWndUnderMouse);
+
         if (pWinUnderMouse)
         {
-            // translate the mouse coords to the other window coords
-            pWin->ClientToScreen( (int*)pnX
-                                 ,(int*)pnY
-                                );
-            pWinUnderMouse->ScreenToClient( (int*)pnX
-                                           ,(int*)pnY
-                                          );
+            //
+            // Translate the mouse coords to the other window coords
+            //
             pWin = pWinUnderMouse;
         }
     }

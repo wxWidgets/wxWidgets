@@ -43,6 +43,7 @@ MRESULT EXPENTRY wxGaugeWndProc(
     HPS                             hPS;
     RECTL                           vRect;
     RECTL                           vRect2;
+    RECTL                           vRect3;
     double                          dPixelToRange = 0.0;
     double                          dRange = 0.0;
 
@@ -70,28 +71,55 @@ MRESULT EXPENTRY wxGaugeWndProc(
                                          ,0L
                                          ,NULL
                                         );
+                //
+                // Draw the guage box
+                //
+                LONG                lColor = 0x00FFFFFF; // White
+                POINTL              vPoint = {vRect.xLeft + 1, vRect.yBottom + 1};
+
+                ::GpiSetColor(hPS, lColor);
+                ::GpiMove(hPS, &vPoint);
+                vPoint.x = vRect.xRight - 1;
+                ::GpiLine(hPS, &vPoint);
+                vPoint.y = vRect.yTop - 1;
+                ::GpiLine(hPS, &vPoint);
+                lColor = 0x000C0C0C; // Darkish Grey to give depth feel
+                ::GpiSetColor(hPS, lColor);
+                vPoint.x = vRect.xLeft + 1;
+                ::GpiLine(hPS, &vPoint);
+                vPoint.y = vRect.yBottom + 1;
+                ::GpiLine(hPS, &vPoint);
+                vRect3.xLeft   = vRect.xLeft + 2;
+                vRect3.xRight  = vRect.xRight - 2;
+                vRect3.yTop    = vRect.yTop - 2;
+                vRect3.yBottom = vRect.yBottom + 2;
+
                 if (pGauge->GetWindowStyleFlag() & wxGA_VERTICAL)
                 {
-                    dRange = (double)(vRect.yTop - vRect.yBottom);
+                    dRange = (double)(vRect3.yTop - vRect3.yBottom);
                     dPixelToRange  = dRange/(double)pGauge->GetRange();
                     vRect2.yTop    = (int)(pGauge->GetValue() * dPixelToRange);
-                    vRect2.yBottom = vRect.yBottom;
-                    vRect2.xLeft   = vRect.xLeft;
-                    vRect2.xRight  = vRect.xRight;
-                    vRect.yBottom  = vRect2.yTop;
-                    ::WinFillRect(hPS, &vRect,  pGauge->GetBackgroundColour().GetPixel());
+                    vRect2.yBottom = vRect3.yBottom;
+                    vRect2.xLeft   = vRect3.xLeft;
+                    vRect2.xRight  = vRect3.xRight;
+                    vRect3.yBottom  = vRect2.yTop;
+                    if (vRect3.yBottom <= 1)
+                         vRect3.yBottom = 2;
+                    ::WinFillRect(hPS, &vRect3,  pGauge->GetBackgroundColour().GetPixel());
                     ::WinFillRect(hPS, &vRect2, pGauge->GetForegroundColour().GetPixel());
                 }
                 else
                 {
-                    dRange = (double)(vRect.xRight - vRect.xLeft);
+                    dRange = (double)(vRect3.xRight - vRect3.xLeft);
                     dPixelToRange  = dRange/(double)pGauge->GetRange();
-                    vRect2.yTop    = vRect.yTop;
-                    vRect2.yBottom = vRect.yBottom;
-                    vRect2.xLeft   = vRect.xLeft;
+                    vRect2.yTop    = vRect3.yTop;
+                    vRect2.yBottom = vRect3.yBottom;
+                    vRect2.xLeft   = vRect3.xLeft;
                     vRect2.xRight  = (int)(pGauge->GetValue() * dPixelToRange);
-                    vRect.xLeft = vRect2.xRight;
-                    ::WinFillRect(hPS, &vRect,  pGauge->GetBackgroundColour().GetPixel());
+                    vRect3.xLeft = vRect2.xRight;
+                    if (vRect3.xLeft <= 1)
+                        vRect3.xLeft = 2;
+                    ::WinFillRect(hPS, &vRect3,  pGauge->GetBackgroundColour().GetPixel());
                     ::WinFillRect(hPS, &vRect2, pGauge->GetForegroundColour().GetPixel());
                 }
                 ::WinEndPaint(hPS);
@@ -131,8 +159,8 @@ bool wxGauge::Create(
 #endif
     if (pParent)
         pParent->AddChild(this);
-    SetBackgroundColour(pParent->GetBackgroundColour()) ;
-    SetForegroundColour(pParent->GetForegroundColour()) ;
+    m_backgroundColour.Set(wxString("LIGHT GREY"));
+    m_foregroundColour.Set(wxString("NAVY"));
 
     m_nRangeMax   = nRange;
     m_nGaugePos   = 0;

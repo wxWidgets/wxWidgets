@@ -84,18 +84,12 @@ bool wxStaticBox::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    SetFont(*pTextFont);
+    SetFont(*wxSMALL_FONT);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x
             ,rSize.y
            );
-    delete pTextFont;
     return TRUE;
 } // end of wxStaticBox::Create
 
