@@ -4,11 +4,11 @@
 #              handlers for wxWindows events using the Publish/Subscribe
 #              pattern.
 #
-# Author:      Rob Schecter and Robin Dunn
+# Author:      Robb Shecter and Robin Dunn
 #
 # Created:     12-December-2002
 # RCS-ID:      $Id$
-# Copyright:   (c) 2002 by Rob Schecter
+# Copyright:   (c) 2002 by Robb Shecter
 # Licence:     wxWindows license
 #---------------------------------------------------------------------------
 
