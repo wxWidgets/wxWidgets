@@ -59,6 +59,7 @@ class wxImageList: public wxObject
     bool Create();
     int GetImageCount() const;
     int Add( const wxBitmap &bitmap );
+    wxBitmap *GetBitmap(int index);
     bool Replace( int index, const wxBitmap &bitmap );
     bool Remove( int index );
     bool RemoveAll();
