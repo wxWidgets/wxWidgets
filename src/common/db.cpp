@@ -61,6 +61,7 @@
         #include "wx/list.h"
         #include "wx/utils.h"
         #include "wx/msgdlg.h"
+        #include "wx/log.h"
     #endif
     #include "wx/filefn.h"
     #include "wx/wxchar.h"
@@ -897,7 +898,7 @@ void wxDB::Close(void)
         {
             s.sprintf("(%-20s)     tableID:[%6lu]     pDb:[%p]", tiu->tableName,tiu->tableID,tiu->pDb);
             s2.sprintf("Orphaned found using pDb:[%p]",this);
-            wxLogDebug (s,s2);
+            wxLogDebug (s.c_str(),s2.c_str());
         }
         pNode = pNode->Next();
     }

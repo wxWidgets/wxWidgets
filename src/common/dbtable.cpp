@@ -55,6 +55,7 @@
         #include "wx/list.h"
         #include "wx/utils.h"
         #include "wx/msgdlg.h"
+        #include "wx/log.h"
     #endif
     #include "wx/filefn.h"
 #endif
@@ -266,7 +267,7 @@ wxTable::~wxTable()
             {
                 found = TRUE;
                 if (!TablesInUse.DeleteNode(pNode))
-                    wxLogDebug (s.GetData(),"Unable to delete node!");
+                    wxLogDebug (s.c_str(),"Unable to delete node!");
             }
             else
                 pNode = pNode->Next();
