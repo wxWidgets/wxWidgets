@@ -309,7 +309,7 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
     wxTextDataObject textData(m_strText);
     wxDropSource dragSource( textData, this );
 #else
-    wxDropSource dragSource( new wxTextDataObject (m_strText), this );
+    wxDropSource dragSource( new wxTextDataObject (m_strText), this, wxIcon(mondrian_xpm) );
 #endif
     const char *pc;
 

@@ -23,6 +23,8 @@
 #include "wx/string.h"
 #include "wx/dataobj.h"
 #include "wx/cursor.h"
+#include "wx/icon.h"
+#include "wx/gdicmn.h"
 
 //-------------------------------------------------------------------------
 // conditional compilation
@@ -159,10 +161,10 @@ class wxDropSource: public wxObject
   public:
 
     /* constructor. set data later with SetData() */
-    wxDropSource( wxWindow *win );
+    wxDropSource( wxWindow *win, const wxIcon &go = wxNullIcon, const wxIcon &stop = wxNullIcon );
     
     /* constructor for setting one data object */
-    wxDropSource( wxDataObject *data, wxWindow *win );
+    wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go = wxNullIcon, const wxIcon &stop = wxNullIcon );
     
     /* constructor for setting several data objects via wxDataBroker */
     wxDropSource( wxDataBroker *data, wxWindow *win );
@@ -193,6 +195,9 @@ class wxDropSource: public wxObject
     
     wxCursor      m_defaultCursor;
     wxCursor      m_goaheadCursor;
+    
+    wxIcon        m_goIcon;
+    wxIcon        m_stopIcon;
 };
 
 #endif

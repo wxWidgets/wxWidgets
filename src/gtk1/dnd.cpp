@@ -379,7 +379,7 @@ void wxDropSource::UnregisterWindow(void)
 
 #else  // NEW_CODE
 
-GtkWidget *shape_create_icon (char     **data,
+GtkWidget *shape_create_icon ( const wxIcon &shape,
 			      gint      x,
 			      gint      y,
 			      gint      px,
@@ -792,7 +792,7 @@ void gtk_drag_callback( GtkWidget *widget, GdkEventDragRequest *event, wxDropSou
    }
 }
 
-wxDropSource::wxDropSource( wxWindow *win )
+wxDropSource::wxDropSource( wxWindow *win, const wxIcon &go, const wxIcon &stop )
 {
     g_blockEventsOnDrag = TRUE;
   
@@ -805,9 +805,14 @@ wxDropSource::wxDropSource( wxWindow *win )
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
     m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+    
+    m_goIcon = go;
+    if (wxNullIcon == go) m_goIcon = wxIcon( page_xpm );
+    m_stopIcon = stop;
+    if (wxNullIcon == stop) m_stopIcon = wxIcon( gv_xpm );
 }
 
-wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win )
+wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go, const wxIcon &stop )
 {
     g_blockEventsOnDrag = TRUE;
   
@@ -828,6 +833,11 @@ wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win )
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
     m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+    
+    m_goIcon = go;
+    if (wxNullIcon == go) m_goIcon = wxIcon( page_xpm );
+    m_stopIcon = stop;
+    if (wxNullIcon == stop) m_stopIcon = wxIcon( gv_xpm );
 }
 
 wxDropSource::wxDropSource( wxDataBroker *data, wxWindow *win )
@@ -890,7 +900,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
       
     if (!drag_icon)
     {
-	  drag_icon = shape_create_icon ( gv_xpm,
+	  drag_icon = shape_create_icon ( m_stopIcon,
 					 440, 140, 0,0, GTK_WINDOW_POPUP);
 	  
 	  gtk_signal_connect (GTK_OBJECT (drag_icon), "destroy",
@@ -904,7 +914,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 	
     if (!drop_icon)
     {
-	  drop_icon = shape_create_icon ( page_xpm,
+	  drop_icon = shape_create_icon ( m_goIcon,
 					 440, 140, 0,0, GTK_WINDOW_POPUP);
 	  
 	  gtk_signal_connect (GTK_OBJECT (drop_icon), "destroy",
@@ -1093,31 +1103,19 @@ shape_motion (GtkWidget      *widget,
 }
 
 GtkWidget *
-shape_create_icon (char     **data,
+shape_create_icon (const wxIcon &shape,
 		   gint      x,
 		   gint      y,
 		   gint      px,
 		   gint      py,
 		   gint      window_type)
 {
-  GtkWidget *window;
-  GtkWidget *pixmap;
-  GtkWidget *fixed;
-  CursorOffset* icon_pos;
-  GdkGC* gc;
-  GdkBitmap *gdk_pixmap_mask;
-  GdkPixmap *gdk_pixmap;
-  GtkStyle *style;
-
-  style = gtk_widget_get_default_style ();
-  gc = style->black_gc;	
-
   /*
    * GDK_WINDOW_TOPLEVEL works also, giving you a title border
    */
-  window = gtk_window_new ((GtkWindowType)window_type);
+  GtkWidget *window = gtk_window_new ((GtkWindowType)window_type);
   
-  fixed = gtk_fixed_new ();
+  GtkWidget *fixed = gtk_fixed_new ();
   gtk_widget_set_usize (fixed, 100,100);
   gtk_container_add (GTK_CONTAINER (window), fixed);
   gtk_widget_show (fixed);
@@ -1130,15 +1128,14 @@ shape_create_icon (char     **data,
 
   gtk_widget_realize (window);
   
-  gdk_pixmap = gdk_pixmap_create_from_xpm_d (window->window, &gdk_pixmap_mask, 
-					   &style->bg[GTK_STATE_NORMAL],
-					   (gchar**) data );
+  GdkBitmap *mask = (GdkBitmap*) NULL;
+  if (shape.GetMask()) mask = shape.GetMask()->GetBitmap();
 
-  pixmap = gtk_pixmap_new (gdk_pixmap, gdk_pixmap_mask);
+  GtkWidget *pixmap = gtk_pixmap_new (shape.GetPixmap(), mask);
   gtk_fixed_put (GTK_FIXED (fixed), pixmap, px,py);
   gtk_widget_show (pixmap);
   
-  gtk_widget_shape_combine_mask (window, gdk_pixmap_mask, px,py);
+  gtk_widget_shape_combine_mask (window, mask, px,py);
 
 
   gtk_signal_connect (GTK_OBJECT (window), "button_press_event",
@@ -1148,7 +1145,7 @@ shape_create_icon (char     **data,
   gtk_signal_connect (GTK_OBJECT (window), "motion_notify_event",
 		      GTK_SIGNAL_FUNC (shape_motion),NULL);
 
-  icon_pos = g_new (CursorOffset, 1);
+  CursorOffset*icon_pos = g_new (CursorOffset, 1);
   gtk_object_set_user_data(GTK_OBJECT(window), icon_pos);
 
   gtk_widget_set_uposition (window, x, y);
