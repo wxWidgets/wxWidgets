@@ -36,6 +36,8 @@
     #include "wx/tooltip.h"
 #endif
 
+    #include "wx/progdlg.h"
+
 // We test for wxUSE_DRAG_AND_DROP also, because data objects may not be
 // implemented for compilers that can't cope with the OLE parts in
 // wxUSE_DRAG_AND_DROP.
@@ -224,8 +226,14 @@ private:
         if ( freeze )
             text->Freeze();
 
+        text->Clear();
+
+        wxProgressDialog dlg(_T("Wait..."), _T("Updating"), 100, this);
         for ( int i = 0; i < 100; i++ )
+        {
+            dlg.Update(i);
             text->AppendText(wxString::Format(wxT("Line %i\n"), i));
+        }
 
         text->SetInsertionPoint(0);
 
