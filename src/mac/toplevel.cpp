@@ -1129,8 +1129,12 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
         if ( IsKindOf( CLASSINFO( wxFrame ) ) )
         {
             wxFrame* frame = (wxFrame*) this ;
+#if wxUSE_STATUSBAR
             frame->PositionStatusBar();
+#endif            
+#if wxUSE_TOOLBAR
             frame->PositionToolBar();
+#endif            
         }
         if ( doMove )
             wxWindowMac::MacTopLevelWindowChangedPosition() ; // like this only children will be notified
