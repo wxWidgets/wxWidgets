@@ -1,0 +1,68 @@
+\membersection{Quick Start}\label{quickstart}
+
+\wxheading{Displaying HMTL}
+
+First of all, you must include <wx/wxhtml.h>.
+
+Class \helpref{wxHtmlWindow}{wxhtmlwindow} (derived from wxScrolledWindow)
+is used to display HTML documents.
+It has 2 important methods : \helpref{LoadPage}{wxhtmlwindowloadpage}
+and \helpref{SetPage}{wxhtmlwindowsetpage}.
+LoadPage loads and displays HTML file while SetPage displays directly the
+passed {\bf string}. See the example:
+
+\begin{verbatim}
+    mywin -> LoadPage("test.htm");
+    mywin -> SetPage("<html><body>"
+                     "<h1>Error</h1>"
+		     "Some error occured :-H)"
+		     "</body></hmtl>");
+\end{verbatim}
+
+I think the difference is quite clear...
+
+\wxheading{Displaying Help}
+
+See \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}.
+
+\wxheading{Setting up wxHtmlWindow}
+
+Because wxHtmlWindow is derived from wxScrolledWindow and not from
+wxFrame, it doesn't have visible frame. But the user usually want to see
+the title of HTML page displayed somewhere and frame's titlebar is 
+ideal place for it... 
+
+wxHtmlWindow provides 2 methods in order to handle this : 
+\helpref{SetRelatedFrame}{wxhtmlwindowsetrelatedframe} and 
+\helpref{SetRelatedStatusBar}{wxhtmlwindowsetrelatedstatusbar}. 
+See the example:
+
+\begin{verbatim}
+    html = new wxHtmlWindow(this);
+    html -> SetRelatedFrame(this, "HTML : %%s");
+    html -> SetRelatedStatusBar(0);
+\end{verbatim}
+
+The first command associates html object with it's parent frame
+(this points to wxFrame object there) and sets format of title.
+Page title "Hello, world!" will be displayed as "HTML : Hello, world!"
+in this example.
+
+The second command sets which frame's status bar should be used to display
+browser's messages (such as "Loading..." or "Done" or hypertext links).
+
+\wxheading{Customizing wxHtmlWindow}
+
+You can customize wxHtmlWindow by setting font size, font face and
+borders (space between border of window and displayed HTML). Related functions:
+
+\begin{itemize}
+\item \helpref{SetFonts}{wxhtmlwindowsetfonts}
+\item \helpref{SetBorders}{wxhtmlwindowsetborders}
+\item \helpref{ReadCustomization}{wxhtmlwindowreadcustomization}
+\item \helpref{WriteCustomization}{wxhtmlwindowwritecustomization}
+\end{itemize}
+
+The last two functions are used to store user customization info wxConfig stuff
+(for example registry under Windows or dotfile under Unix)
+

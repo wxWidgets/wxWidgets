@@ -1,0 +1,31 @@
+\section{wxHTML Sub-library Overview}\label{wxhtmloverview}
+
+This library provides classes for parsing and displaying HTML.
+
+It never intented to be hi-end HTML browser. If you're looking for
+something like that try \urlref{http://www.mozilla.org}{http://www.mozilla.org} - there's a 
+chance you'll be able to make their widget wxWindows-compatible. I'm sure
+everyone will enjoy your work in that case...
+
+But back to wxHTML. 
+
+It can be used as generic rich text viewer - for example to display 
+nice About Box (like these of GNOME apps) or to display result of
+database searching. There is \helpref{wxFileSystem}{wxfilesystem} 
+class which allows you to use your own virtual file systems...
+
+wxHtmlWindow supports tag handlers. This means that you can easily
+extend wxHtml library  with new, unsupported tags. Not only that,
+you can even use your own application specific tags!
+See lib/mod_*.cpp files for details.
+
+There is generic (non-wxHtmlWindow) wxHtmlParser class.
+
+
+
+\input htmlstrt.tex 
+\input htmlprn.tex
+\input htmlhlpf.tex
+\input htmlfilt.tex
+\input htmlcell.tex
+\input htmlhand.tex
