@@ -37,14 +37,8 @@ Destructor.
 \constfunc{wxStreamError}{LastError}{\void}
 
 This function returns the last error.
-It is of the form:
-\twocolwidtha{7cm}%
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxStream_NOERROR}}{No error occured.}
-\twocolitem{{\bf wxStream_EOF}}{An End Of File exception occured.}
-\twocolitem{{\bf wxStream_WRITE_ERR}{Error during the last write call.}
-\twocolitem{{\bf wxStream_READ_ERR}{Error during the last read call.}
-\end{twocollist}%
+% It is of the form:
+% TODO
 
 \membersection{wxStreamBase::StreamSize}
 \constfunc{size_t}{StreamSize}{\void}
@@ -79,67 +73,3 @@ current position in the stream. See \helpref{wxStreamBuffer::Seek}{wxstreambuffe
 Internal function. Is is called when the stream buffer needs to know the
 current position in the stream.
 
-% -----------------------------------------------------------------------------
-% wxInputStream
-% -----------------------------------------------------------------------------
-\section{\class{wxInputStream}}\label{wxinputstream}
-
-\wxheading{Derived from}
-
-\helpref{wxStreamBase}{wxstreambase}
-
-\wxheading{See also}
-
-\helpref{wxStreamBuffer}{wxstreambuffer}
-
-% -----------------------------------------------------------------------------
-% Members
-% -----------------------------------------------------------------------------
-\latexignore{\rtfignore{\wxheading{Members}}} 
-
-% -----------
-% ctor & dtor
-% -----------
-
-\membersection{wxInputStream::wxInputStream}
-\func{}{wxInputStream}{\void}
-
-Initializes a dummy input stream.
-
-\func{}{wxInputStream}{\param{wxStreamBuffer *}{sbuf}}
-
-Initializes an input stream linked to the specified stream buffer.
-
-\membersection{wxInputStream::\destruct{wxInputStream}}
-\func{}{\destruct{wxInputStream}{\void}
-
-Destructor.
-
-% -------
-% IO call
-% -------
-
-\membersection{wxInputStream::Peek}
-\func{char}{Peek}{\void}
-
-\membersection{wxInputStream::GetC}
-\func{char}{GetC}{\void}
-
-\membersection{wxInputStream::Read}
-\func{wxInputStream&}{Read}{\param{void *}{buffer}, \param{size_t}{ size}}
-\func{wxInputStream&}{Read}{\param{wxOutputStream&}{ stream_out}}
-
-\membersection{wxInputStream::SeekI}
-\func{off_t}{SeekI}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
-
-\membersection{wxInputStream::TellI}
-\constfunc{off_t}{TellI}{\void}
-
-% -----
-% State
-% -----
-\membersection{wxInputStream::InputStreamBuffer}
-\func{wxStreamBuffer *}{InputStreamBuffer}{\void}
-
-\membersection{wxInputStream::LastRead}
-\func{size_t}{LastRead}{\void}
