@@ -13,6 +13,50 @@ from events import *
 
 from controls import *
 import wx
+class wxListItemAttrPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItemAttr_SetTextColour,(self,) + _args, _kwargs)
+        return val
+    def SetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItemAttr_SetBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def SetFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItemAttr_SetFont,(self,) + _args, _kwargs)
+        return val
+    def HasTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItemAttr_HasTextColour,(self,) + _args, _kwargs)
+        return val
+    def HasBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItemAttr_HasBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def HasFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItemAttr_HasFont,(self,) + _args, _kwargs)
+        return val
+    def GetTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItemAttr_GetTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
+        return val
+    def GetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItemAttr_GetBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
+        return val
+    def GetFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItemAttr_GetFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxListItemAttr instance at %s>" % (self.this,)
+class wxListItemAttr(wxListItemAttrPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controls2c.new_wxListItemAttr,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxListItemPtr :
     def __init__(self,this):
         self.this = this
@@ -20,6 +64,97 @@ class wxListItemPtr :
     def __del__(self,controls2c=controls2c):
         if self.thisown == 1 :
             controls2c.delete_wxListItem(self)
+    def Clear(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_Clear,(self,) + _args, _kwargs)
+        return val
+    def ClearAttributes(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_ClearAttributes,(self,) + _args, _kwargs)
+        return val
+    def SetMask(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetMask,(self,) + _args, _kwargs)
+        return val
+    def SetId(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetId,(self,) + _args, _kwargs)
+        return val
+    def SetColumn(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetColumn,(self,) + _args, _kwargs)
+        return val
+    def SetState(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetState,(self,) + _args, _kwargs)
+        return val
+    def SetStateMask(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetStateMask,(self,) + _args, _kwargs)
+        return val
+    def SetText(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetText,(self,) + _args, _kwargs)
+        return val
+    def SetImage(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetImage,(self,) + _args, _kwargs)
+        return val
+    def SetData(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetData,(self,) + _args, _kwargs)
+        return val
+    def SetWidth(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetWidth,(self,) + _args, _kwargs)
+        return val
+    def SetAlign(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetAlign,(self,) + _args, _kwargs)
+        return val
+    def SetTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetTextColour,(self,) + _args, _kwargs)
+        return val
+    def SetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def SetFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_SetFont,(self,) + _args, _kwargs)
+        return val
+    def GetMask(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetMask,(self,) + _args, _kwargs)
+        return val
+    def GetId(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetId,(self,) + _args, _kwargs)
+        return val
+    def GetColumn(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetColumn,(self,) + _args, _kwargs)
+        return val
+    def GetState(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetState,(self,) + _args, _kwargs)
+        return val
+    def GetText(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetText,(self,) + _args, _kwargs)
+        return val
+    def GetImage(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetImage,(self,) + _args, _kwargs)
+        return val
+    def GetData(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetData,(self,) + _args, _kwargs)
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetAlign(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetAlign,(self,) + _args, _kwargs)
+        return val
+    def GetAttributes(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetAttributes,(self,) + _args, _kwargs)
+        if val: val = wxListItemAttrPtr(val) 
+        return val
+    def HasAttributes(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_HasAttributes,(self,) + _args, _kwargs)
+        return val
+    def GetTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListItem_GetFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) ; val.thisown = 1
+        return val
     def __setattr__(self,name,value):
         if name == "m_mask" :
             controls2c.wxListItem_m_mask_set(self,value)
@@ -88,6 +223,47 @@ class wxListEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetCode(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetCode,(self,) + _args, _kwargs)
+        return val
+    def GetIndex(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetIndex,(self,) + _args, _kwargs)
+        return val
+    def GetOldIndex(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetOldIndex,(self,) + _args, _kwargs)
+        return val
+    def GetOldItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetOldItem,(self,) + _args, _kwargs)
+        return val
+    def GetColumn(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetColumn,(self,) + _args, _kwargs)
+        return val
+    def Cancelled(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_Cancelled,(self,) + _args, _kwargs)
+        return val
+    def GetPoint(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetPoint,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def GetLabel(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetLabel,(self,) + _args, _kwargs)
+        return val
+    def GetText(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetText,(self,) + _args, _kwargs)
+        return val
+    def GetImage(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetImage,(self,) + _args, _kwargs)
+        return val
+    def GetData(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetData,(self,) + _args, _kwargs)
+        return val
+    def GetMask(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetMask,(self,) + _args, _kwargs)
+        return val
+    def GetItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetItem,(self,) + _args, _kwargs)
+        if val: val = wxListItemPtr(val) 
+        return val
     def __setattr__(self,name,value):
         if name == "m_code" :
             controls2c.wxListEvent_m_code_set(self,value)
@@ -671,10 +847,6 @@ wxLIST_ALIGN_DEFAULT = controls2c.wxLIST_ALIGN_DEFAULT
 wxLIST_ALIGN_LEFT = controls2c.wxLIST_ALIGN_LEFT
 wxLIST_ALIGN_TOP = controls2c.wxLIST_ALIGN_TOP
 wxLIST_ALIGN_SNAP_TO_GRID = controls2c.wxLIST_ALIGN_SNAP_TO_GRID
-wxLIST_FORMAT_LEFT = controls2c.wxLIST_FORMAT_LEFT
-wxLIST_FORMAT_RIGHT = controls2c.wxLIST_FORMAT_RIGHT
-wxLIST_FORMAT_CENTRE = controls2c.wxLIST_FORMAT_CENTRE
-wxLIST_FORMAT_CENTER = controls2c.wxLIST_FORMAT_CENTER
 wxLIST_AUTOSIZE = controls2c.wxLIST_AUTOSIZE
 wxLIST_AUTOSIZE_USEHEADER = controls2c.wxLIST_AUTOSIZE_USEHEADER
 wxLIST_RECT_BOUNDS = controls2c.wxLIST_RECT_BOUNDS
@@ -684,6 +856,10 @@ wxLIST_FIND_UP = controls2c.wxLIST_FIND_UP
 wxLIST_FIND_DOWN = controls2c.wxLIST_FIND_DOWN
 wxLIST_FIND_LEFT = controls2c.wxLIST_FIND_LEFT
 wxLIST_FIND_RIGHT = controls2c.wxLIST_FIND_RIGHT
+wxLIST_FORMAT_LEFT = controls2c.wxLIST_FORMAT_LEFT
+wxLIST_FORMAT_RIGHT = controls2c.wxLIST_FORMAT_RIGHT
+wxLIST_FORMAT_CENTRE = controls2c.wxLIST_FORMAT_CENTRE
+wxLIST_FORMAT_CENTER = controls2c.wxLIST_FORMAT_CENTER
 wxTreeItemIcon_Normal = controls2c.wxTreeItemIcon_Normal
 wxTreeItemIcon_Selected = controls2c.wxTreeItemIcon_Selected
 wxTreeItemIcon_Expanded = controls2c.wxTreeItemIcon_Expanded

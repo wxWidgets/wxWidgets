@@ -44,6 +44,10 @@ public:
     wxSize GetSize();
     wxSize CalcMin();
     void SetDimension( wxPoint pos, wxSize size );
+    %name(SetRatioWH) void SetRatio( int width, int height );
+    %name(SetRatioSize) void SetRatio( wxSize size );
+    void SetRatio( float ratio );
+    float GetRatio();
 
     bool IsWindow();
     bool IsSizer();
@@ -229,6 +233,8 @@ class  wxBoxSizer : public wxSizer {
 public:
     wxBoxSizer(int orient = wxHORIZONTAL);
     int GetOrientation();
+    void RecalcSizes();
+    wxSize CalcMin();
 };
 
 //---------------------------------------------------------------------------
@@ -237,6 +243,23 @@ class  wxStaticBoxSizer : public wxBoxSizer {
 public:
     wxStaticBoxSizer(wxStaticBox *box, int orient = wxHORIZONTAL);
     wxStaticBox *GetStaticBox();
+    void RecalcSizes();
+    wxSize CalcMin();
 };
 
 //---------------------------------------------------------------------------
+
+class wxNotebookSizer: public wxSizer {
+public:
+    wxNotebookSizer( wxNotebook *nb );
+
+    void RecalcSizes();
+    wxSize CalcMin();
+
+    wxNotebook *GetNotebook();
+};
+
+
+
+//---------------------------------------------------------------------------
+

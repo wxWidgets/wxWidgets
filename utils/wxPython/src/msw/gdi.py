@@ -59,6 +59,22 @@ class wxBitmapPtr :
     def SetSize(self, *_args, **_kwargs):
         val = apply(gdic.wxBitmap_SetSize,(self,) + _args, _kwargs)
         return val
+    def GetSubBitmap(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetSubBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
+        return val
+    def CopyFromIcon(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_CopyFromIcon,(self,) + _args, _kwargs)
+        return val
+    def CopyFromCursor(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_CopyFromCursor,(self,) + _args, _kwargs)
+        return val
+    def GetQuality(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetQuality,(self,) + _args, _kwargs)
+        return val
+    def SetQuality(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_SetQuality,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxBitmap instance at %s>" % (self.this,)
 class wxBitmap(wxBitmapPtr):

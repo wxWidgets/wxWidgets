@@ -79,6 +79,7 @@ public:
     int GetPrintMode();
     wxWindow * GetTopWindow();
     wxString GetVendorName();
+    bool GetUseBestVisual();
 
     void Dispatch();
     void ExitMainLoop();
@@ -96,7 +97,7 @@ public:
     void SetPrintMode(int mode);
     void SetTopWindow(wxWindow* window);
     void SetVendorName(const wxString& name);
-
+    void SetUseBestVisual(bool flag);
     wxIcon GetStdIcon(int which);
 
 

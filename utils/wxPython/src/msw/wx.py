@@ -63,6 +63,9 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def GetVendorName(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_GetVendorName,(self,) + _args, _kwargs)
         return val
+    def GetUseBestVisual(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetUseBestVisual,(self,) + _args, _kwargs)
+        return val
     def Dispatch(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_Dispatch,(self,) + _args, _kwargs)
         return val
@@ -101,6 +104,9 @@ class wxPyAppPtr(wxEvtHandlerPtr):
         return val
     def SetVendorName(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_SetVendorName,(self,) + _args, _kwargs)
+        return val
+    def SetUseBestVisual(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_SetUseBestVisual,(self,) + _args, _kwargs)
         return val
     def GetStdIcon(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_GetStdIcon,(self,) + _args, _kwargs)
@@ -225,6 +231,7 @@ wxLB_HSCROLL = wxc.wxLB_HSCROLL
 wxPROCESS_ENTER = wxc.wxPROCESS_ENTER
 wxPASSWORD = wxc.wxPASSWORD
 wxTE_PROCESS_ENTER = wxc.wxTE_PROCESS_ENTER
+wxTE_PROCESS_TAB = wxc.wxTE_PROCESS_TAB
 wxTE_PASSWORD = wxc.wxTE_PASSWORD
 wxTE_READONLY = wxc.wxTE_READONLY
 wxTE_RICH = wxc.wxTE_RICH

@@ -1638,6 +1638,170 @@ static PyObject *_wrap_wxBitmap_SetSize(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+#define wxBitmap_GetSubBitmap(_swigobj,_swigarg0)  (_swigobj->GetSubBitmap(_swigarg0))
+static PyObject *_wrap_wxBitmap_GetSubBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxBitmap * _arg0;
+    wxRect * _arg1;
+    PyObject * _argo0 = 0;
+    wxRect  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","rect", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxBitmap_GetSubBitmap",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_GetSubBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxBitmap (wxBitmap_GetSubBitmap(_arg0,*_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxBitmap_CopyFromIcon(_swigobj,_swigarg0)  (_swigobj->CopyFromIcon(_swigarg0))
+static PyObject *_wrap_wxBitmap_CopyFromIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxBitmap * _arg0;
+    wxIcon * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","icon", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxBitmap_CopyFromIcon",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_CopyFromIcon. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmap_CopyFromIcon. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxBitmap_CopyFromIcon(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxBitmap_CopyFromCursor(_swigobj,_swigarg0)  (_swigobj->CopyFromCursor(_swigarg0))
+static PyObject *_wrap_wxBitmap_CopyFromCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxBitmap * _arg0;
+    wxCursor * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","cursor", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxBitmap_CopyFromCursor",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_CopyFromCursor. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmap_CopyFromCursor. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxBitmap_CopyFromCursor(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxBitmap_GetQuality(_swigobj)  (_swigobj->GetQuality())
+static PyObject *_wrap_wxBitmap_GetQuality(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxBitmap * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetQuality",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_GetQuality. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxBitmap_GetQuality(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxBitmap_SetQuality(_swigobj,_swigarg0)  (_swigobj->SetQuality(_swigarg0))
+static PyObject *_wrap_wxBitmap_SetQuality(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","q", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBitmap_SetQuality",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_SetQuality. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap_SetQuality(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define new_wxMask(_swigarg0) (new wxMask(_swigarg0))
 static PyObject *_wrap_new_wxMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3647,7 +3811,7 @@ static PyObject *_wrap_wxPen_SetDashes(PyObject *self, PyObject *args, PyObject 
     }
     if (_obj2)
 {
-    _arg2 = (unsigned long*)long_LIST_helper(_obj2);
+    _arg2 = (wxDash*)byte_LIST_helper(_obj2);
     if (_arg2 == NULL) {
         return NULL;
     }
@@ -8113,6 +8277,11 @@ static PyMethodDef gdicMethods[] = {
 	 { "delete_wxIcon", (PyCFunction) _wrap_delete_wxIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxIcon", (PyCFunction) _wrap_new_wxIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMask", (PyCFunction) _wrap_new_wxMask, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetQuality", (PyCFunction) _wrap_wxBitmap_SetQuality, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetQuality", (PyCFunction) _wrap_wxBitmap_GetQuality, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_CopyFromCursor", (PyCFunction) _wrap_wxBitmap_CopyFromCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_CopyFromIcon", (PyCFunction) _wrap_wxBitmap_CopyFromIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetSubBitmap", (PyCFunction) _wrap_wxBitmap_GetSubBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetSize", (PyCFunction) _wrap_wxBitmap_SetSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetDepth", (PyCFunction) _wrap_wxBitmap_SetDepth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetHeight", (PyCFunction) _wrap_wxBitmap_SetHeight, METH_VARARGS | METH_KEYWORDS },
@@ -8164,7 +8333,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxMask","_class_wxMask",0},
     { "_wxPen","_class_wxPen",0},
     { "_byte","_unsigned_char",0},
-    { "_long","_wxDash",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxImageList","_class_wxImageList",0},
@@ -8214,7 +8382,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_wxWindowID",0},
     { "_class_wxRegion","_wxRegion",0},
     { "_wxFont","_class_wxFont",0},
-    { "_unsigned_long","_wxDash",0},
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_class_wxMetaFileDC",SwigwxMetaFileDCTowxDC},
@@ -8313,8 +8480,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxSize","_wxSize",0},
     { "_class_wxBitmap","_wxBitmap",0},
     { "_class_wxMemoryDC","_wxMemoryDC",0},
-    { "_wxDash","_unsigned_long",0},
-    { "_wxDash","_long",0},
     { "_class_wxPalette","_wxPalette",0},
 {0,0,0}};
 

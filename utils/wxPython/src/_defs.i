@@ -255,6 +255,7 @@ enum {
     wxPROCESS_ENTER,
     wxPASSWORD,
     wxTE_PROCESS_ENTER,
+    wxTE_PROCESS_TAB,
     wxTE_PASSWORD,
     wxTE_READONLY,
     wxTE_RICH,

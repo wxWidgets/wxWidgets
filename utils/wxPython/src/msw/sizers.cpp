@@ -223,6 +223,125 @@ static PyObject *_wrap_wxSizerItem_SetDimension(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxSizerItem_SetRatioWH(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetRatio(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxSizerItem_SetRatioWH(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxSizerItem_SetRatioWH",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetRatioWH. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSizerItem_SetRatioWH(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizerItem_SetRatioSize(_swigobj,_swigarg0)  (_swigobj->SetRatio(_swigarg0))
+static PyObject *_wrap_wxSizerItem_SetRatioSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    wxSize * _arg1;
+    PyObject * _argo0 = 0;
+    wxSize  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizerItem_SetRatioSize",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetRatioSize. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSizerItem_SetRatioSize(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizerItem_SetRatio(_swigobj,_swigarg0)  (_swigobj->SetRatio(_swigarg0))
+static PyObject *_wrap_wxSizerItem_SetRatio(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    float  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","ratio", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Of:wxSizerItem_SetRatio",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetRatio. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSizerItem_SetRatio(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizerItem_GetRatio(_swigobj)  (_swigobj->GetRatio())
+static PyObject *_wrap_wxSizerItem_GetRatio(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    float  _result;
+    wxSizerItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetRatio",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetRatio. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (float )wxSizerItem_GetRatio(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("f",_result);
+    return _resultobj;
+}
+
 #define wxSizerItem_IsWindow(_swigobj)  (_swigobj->IsWindow())
 static PyObject *_wrap_wxSizerItem_IsWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1386,6 +1505,62 @@ static PyObject *_wrap_wxBoxSizer_GetOrientation(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxBoxSizer_RecalcSizes(_swigobj)  (_swigobj->RecalcSizes())
+static PyObject *_wrap_wxBoxSizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBoxSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBoxSizer_RecalcSizes",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBoxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBoxSizer_RecalcSizes. Expected _wxBoxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBoxSizer_RecalcSizes(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBoxSizer_CalcMin(_swigobj)  (_swigobj->CalcMin())
+static PyObject *_wrap_wxBoxSizer_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxBoxSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBoxSizer_CalcMin",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBoxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBoxSizer_CalcMin. Expected _wxBoxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxBoxSizer_CalcMin(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static void *SwigwxStaticBoxSizerTowxBoxSizer(void *ptr) {
     wxStaticBoxSizer *src;
     wxBoxSizer *dest;
@@ -1471,9 +1646,205 @@ static PyObject *_wrap_wxStaticBoxSizer_GetStaticBox(PyObject *self, PyObject *a
     return _resultobj;
 }
 
+#define wxStaticBoxSizer_RecalcSizes(_swigobj)  (_swigobj->RecalcSizes())
+static PyObject *_wrap_wxStaticBoxSizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStaticBoxSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStaticBoxSizer_RecalcSizes",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStaticBoxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStaticBoxSizer_RecalcSizes. Expected _wxStaticBoxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStaticBoxSizer_RecalcSizes(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStaticBoxSizer_CalcMin(_swigobj)  (_swigobj->CalcMin())
+static PyObject *_wrap_wxStaticBoxSizer_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxStaticBoxSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStaticBoxSizer_CalcMin",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStaticBoxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStaticBoxSizer_CalcMin. Expected _wxStaticBoxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxStaticBoxSizer_CalcMin(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static void *SwigwxNotebookSizerTowxSizer(void *ptr) {
+    wxNotebookSizer *src;
+    wxSizer *dest;
+    src = (wxNotebookSizer *) ptr;
+    dest = (wxSizer *) src;
+    return (void *) dest;
+}
+
+#define new_wxNotebookSizer(_swigarg0) (new wxNotebookSizer(_swigarg0))
+static PyObject *_wrap_new_wxNotebookSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxNotebookSizer * _result;
+    wxNotebook * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "nb", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxNotebookSizer",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNotebook_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxNotebookSizer. Expected _wxNotebook_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxNotebookSizer *)new_wxNotebookSizer(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxNotebookSizer_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxNotebookSizer_RecalcSizes(_swigobj)  (_swigobj->RecalcSizes())
+static PyObject *_wrap_wxNotebookSizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxNotebookSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxNotebookSizer_RecalcSizes",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNotebookSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNotebookSizer_RecalcSizes. Expected _wxNotebookSizer_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxNotebookSizer_RecalcSizes(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxNotebookSizer_CalcMin(_swigobj)  (_swigobj->CalcMin())
+static PyObject *_wrap_wxNotebookSizer_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxNotebookSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxNotebookSizer_CalcMin",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNotebookSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNotebookSizer_CalcMin. Expected _wxNotebookSizer_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxNotebookSizer_CalcMin(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxNotebookSizer_GetNotebook(_swigobj)  (_swigobj->GetNotebook())
+static PyObject *_wrap_wxNotebookSizer_GetNotebook(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxNotebook * _result;
+    wxNotebookSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxNotebookSizer_GetNotebook",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNotebookSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNotebookSizer_GetNotebook. Expected _wxNotebookSizer_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxNotebook *)wxNotebookSizer_GetNotebook(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxNotebook_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static PyMethodDef sizerscMethods[] = {
+	 { "wxNotebookSizer_GetNotebook", (PyCFunction) _wrap_wxNotebookSizer_GetNotebook, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNotebookSizer_CalcMin", (PyCFunction) _wrap_wxNotebookSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNotebookSizer_RecalcSizes", (PyCFunction) _wrap_wxNotebookSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxNotebookSizer", (PyCFunction) _wrap_new_wxNotebookSizer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStaticBoxSizer_CalcMin", (PyCFunction) _wrap_wxStaticBoxSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStaticBoxSizer_RecalcSizes", (PyCFunction) _wrap_wxStaticBoxSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStaticBoxSizer_GetStaticBox", (PyCFunction) _wrap_wxStaticBoxSizer_GetStaticBox, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxStaticBoxSizer", (PyCFunction) _wrap_new_wxStaticBoxSizer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBoxSizer_CalcMin", (PyCFunction) _wrap_wxBoxSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBoxSizer_RecalcSizes", (PyCFunction) _wrap_wxBoxSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBoxSizer_GetOrientation", (PyCFunction) _wrap_wxBoxSizer_GetOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBoxSizer", (PyCFunction) _wrap_new_wxBoxSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPySizer__setSelf", (PyCFunction) _wrap_wxPySizer__setSelf, METH_VARARGS | METH_KEYWORDS },
@@ -1509,6 +1880,10 @@ static PyMethodDef sizerscMethods[] = {
 	 { "wxSizerItem_IsSpacer", (PyCFunction) _wrap_wxSizerItem_IsSpacer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_IsSizer", (PyCFunction) _wrap_wxSizerItem_IsSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_IsWindow", (PyCFunction) _wrap_wxSizerItem_IsWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_GetRatio", (PyCFunction) _wrap_wxSizerItem_GetRatio, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_SetRatio", (PyCFunction) _wrap_wxSizerItem_SetRatio, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_SetRatioSize", (PyCFunction) _wrap_wxSizerItem_SetRatioSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_SetRatioWH", (PyCFunction) _wrap_wxSizerItem_SetRatioWH, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_SetDimension", (PyCFunction) _wrap_wxSizerItem_SetDimension, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_CalcMin", (PyCFunction) _wrap_wxSizerItem_CalcMin, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_GetSize", (PyCFunction) _wrap_wxSizerItem_GetSize, METH_VARARGS | METH_KEYWORDS },
@@ -1551,6 +1926,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxMask","_class_wxMask",0},
     { "_wxPen","_class_wxPen",0},
     { "_wxUpdateUIEvent","_class_wxUpdateUIEvent",0},
+    { "_class_wxNotebookSizer","_wxNotebookSizer",0},
     { "_byte","_unsigned_char",0},
     { "_wxDataObject","_class_wxDataObject",0},
     { "_wxStaticBox","_class_wxStaticBox",0},
@@ -1558,13 +1934,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPyDropSource","_class_wxPyDropSource",0},
     { "_wxChoice","_class_wxChoice",0},
     { "_wxSlider","_class_wxSlider",0},
-    { "_long","_wxDash",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxImageList","_class_wxImageList",0},
     { "_wxDataObjectSimple","_class_wxDataObjectSimple",0},
     { "_wxDropFilesEvent","_class_wxDropFilesEvent",0},
     { "_wxBitmapButton","_class_wxBitmapButton",0},
+    { "_class_wxSizer","_class_wxNotebookSizer",SwigwxNotebookSizerTowxSizer},
+    { "_class_wxSizer","_wxNotebookSizer",SwigwxNotebookSizerTowxSizer},
     { "_class_wxSizer","_class_wxStaticBoxSizer",SwigwxStaticBoxSizerTowxSizer},
     { "_class_wxSizer","_wxStaticBoxSizer",SwigwxStaticBoxSizerTowxSizer},
     { "_class_wxSizer","_class_wxBoxSizer",SwigwxBoxSizerTowxSizer},
@@ -1657,7 +2034,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_wxPyDropTarget",0},
     { "_wxCloseEvent","_class_wxCloseEvent",0},
-    { "_unsigned_long","_wxDash",0},
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
@@ -1807,6 +2183,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
     { "_class_wxJoystickEvent","_wxJoystickEvent",0},
     { "_wxRegion","_class_wxRegion",0},
+    { "_wxSizer","_class_wxNotebookSizer",SwigwxNotebookSizerTowxSizer},
+    { "_wxSizer","_wxNotebookSizer",SwigwxNotebookSizerTowxSizer},
     { "_wxSizer","_class_wxStaticBoxSizer",SwigwxStaticBoxSizerTowxSizer},
     { "_wxSizer","_wxStaticBoxSizer",SwigwxStaticBoxSizerTowxSizer},
     { "_wxSizer","_class_wxBoxSizer",SwigwxBoxSizerTowxSizer},
@@ -1832,13 +2210,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvtHandler","_class_wxEvtHandler",0},
     { "_wxMenuItem","_class_wxMenuItem",0},
     { "_class_wxScrollBar","_wxScrollBar",0},
-    { "_wxDash","_unsigned_long",0},
-    { "_wxDash","_long",0},
     { "_class_wxScrolledWindow","_wxScrolledWindow",0},
     { "_wxKeyEvent","_class_wxKeyEvent",0},
     { "_wxMoveEvent","_class_wxMoveEvent",0},
     { "_class_wxPalette","_wxPalette",0},
     { "_wxFileDataObject","_class_wxFileDataObject",0},
+    { "_wxNotebookSizer","_class_wxNotebookSizer",0},
     { "_class_wxEraseEvent","_wxEraseEvent",0},
     { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},
     { "_wxWindow","_class_wxWindow",0},

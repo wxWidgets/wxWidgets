@@ -147,7 +147,7 @@ else:
                     useStyle = wxDEFAULT_FRAME_STYLE
                 else:
                     useStyle = wxTHICK_FRAME
-                self.floatframe = wxFrame(self.parentframe, -1, self.title,
+                self.floatframe = wxMiniFrame(self.parentframe, -1, self.title,
                                               style = useStyle)
 
                 self.Reparent(self.floatframe)

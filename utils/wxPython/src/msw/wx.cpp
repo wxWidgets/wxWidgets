@@ -1153,6 +1153,33 @@ static PyObject *_wrap_wxPyApp_GetVendorName(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxPyApp_GetUseBestVisual(_swigobj)  (_swigobj->GetUseBestVisual())
+static PyObject *_wrap_wxPyApp_GetUseBestVisual(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyApp * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyApp_GetUseBestVisual",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_GetUseBestVisual. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxPyApp_GetUseBestVisual(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxPyApp_Dispatch(_swigobj)  (_swigobj->Dispatch())
 static PyObject *_wrap_wxPyApp_Dispatch(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1559,6 +1586,36 @@ static PyObject *_wrap_wxPyApp_SetVendorName(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxPyApp_SetUseBestVisual(_swigobj,_swigarg0)  (_swigobj->SetUseBestVisual(_swigarg0))
+static PyObject *_wrap_wxPyApp_SetUseBestVisual(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyApp * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPyApp_SetUseBestVisual",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_SetUseBestVisual. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPyApp_SetUseBestVisual(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxPyApp_GetStdIcon(_swigobj,_swigarg0)  (_swigobj->GetStdIcon(_swigarg0))
 static PyObject *_wrap_wxPyApp_GetStdIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1591,6 +1648,7 @@ static PyObject *_wrap_wxPyApp_GetStdIcon(PyObject *self, PyObject *args, PyObje
 
 static PyMethodDef wxcMethods[] = {
 	 { "wxPyApp_GetStdIcon", (PyCFunction) _wrap_wxPyApp_GetStdIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetUseBestVisual", (PyCFunction) _wrap_wxPyApp_SetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetVendorName", (PyCFunction) _wrap_wxPyApp_SetVendorName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetTopWindow", (PyCFunction) _wrap_wxPyApp_SetTopWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetPrintMode", (PyCFunction) _wrap_wxPyApp_SetPrintMode, METH_VARARGS | METH_KEYWORDS },
@@ -1604,6 +1662,7 @@ static PyMethodDef wxcMethods[] = {
 	 { "wxPyApp_Initialized", (PyCFunction) _wrap_wxPyApp_Initialized, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_ExitMainLoop", (PyCFunction) _wrap_wxPyApp_ExitMainLoop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_Dispatch", (PyCFunction) _wrap_wxPyApp_Dispatch, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetUseBestVisual", (PyCFunction) _wrap_wxPyApp_GetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetVendorName", (PyCFunction) _wrap_wxPyApp_GetVendorName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetTopWindow", (PyCFunction) _wrap_wxPyApp_GetTopWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetPrintMode", (PyCFunction) _wrap_wxPyApp_GetPrintMode, METH_VARARGS | METH_KEYWORDS },
@@ -1672,12 +1731,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxTreeCtrl","_wxTreeCtrl",0},
     { "_wxMask","_class_wxMask",0},
     { "_wxToolTip","_class_wxToolTip",0},
+    { "_wxGrid","_class_wxGrid",0},
     { "_wxPNGHandler","_class_wxPNGHandler",0},
     { "_class_wxColourData","_wxColourData",0},
     { "_class_wxPageSetupDialogData","_wxPageSetupDialogData",0},
     { "_wxPrinter","_class_wxPrinter",0},
     { "_wxPen","_class_wxPen",0},
     { "_wxUpdateUIEvent","_class_wxUpdateUIEvent",0},
+    { "_class_wxNotebookSizer","_wxNotebookSizer",0},
     { "_byte","_unsigned_char",0},
     { "_wxDataObject","_class_wxDataObject",0},
     { "_class_wxPyFontEnumerator","_wxPyFontEnumerator",0},
@@ -1688,7 +1749,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxSlider","_class_wxSlider",0},
     { "_wxNotebookEvent","_class_wxNotebookEvent",0},
     { "_wxPyPrintout","_class_wxPyPrintout",0},
-    { "_long","_wxDash",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxImageList","_class_wxImageList",0},
@@ -1739,6 +1799,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxTextDataObject","_class_wxTextDataObject",0},
     { "_class_wxKeyEvent","_wxKeyEvent",0},
     { "_class_wxToolTip","_wxToolTip",0},
+    { "_class_wxGrid","_wxGrid",0},
     { "_class_wxPNGHandler","_wxPNGHandler",0},
     { "_wxColour","_class_wxColour",0},
     { "_class_wxDialog","_wxDialog",0},
@@ -1771,6 +1832,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxEvent","_wxEvent",0},
     { "_wxCheckListBox","_class_wxCheckListBox",0},
     { "_wxSplitterEvent","_class_wxSplitterEvent",0},
+    { "_wxGridEvent","_class_wxGridEvent",0},
     { "_wxRect","_class_wxRect",0},
     { "_wxCommandEvent","_class_wxCommandEvent",0},
     { "_wxSizeEvent","_class_wxSizeEvent",0},
@@ -1825,7 +1887,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCloseEvent","_class_wxCloseEvent",0},
     { "_class_wxSplitterEvent","_wxSplitterEvent",0},
     { "_wxNotebook","_class_wxNotebook",0},
-    { "_unsigned_long","_wxDash",0},
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
@@ -1853,6 +1914,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
     { "_class_wxTextCtrl","_wxTextCtrl",0},
+    { "_class_wxListItemAttr","_wxListItemAttr",0},
     { "_wxLayoutConstraints","_class_wxLayoutConstraints",0},
     { "_wxMetaFileDC","_class_wxMetaFileDC",0},
     { "_class_wxTextDataObject","_wxTextDataObject",0},
@@ -1892,6 +1954,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
+    { "_wxGridCell","_class_wxGridCell",0},
     { "_class_wxBoxSizer","_wxBoxSizer",0},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -2025,11 +2088,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
+    { "_class_wxGridEvent","_wxGridEvent",0},
     { "_class_wxCommandEvent","_wxCommandEvent",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSizeEvent","_wxSizeEvent",0},
     { "_class_wxListCtrl","_wxListCtrl",0},
     { "_wxCustomDataObject","_class_wxCustomDataObject",0},
+    { "_class_wxGridCell","_wxGridCell",0},
     { "_class_wxSize","_wxSize",0},
     { "_class_wxBitmap","_wxBitmap",0},
     { "_class_wxMemoryDC","_wxMemoryDC",0},
@@ -2044,9 +2109,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxScrollBar","_wxScrollBar",0},
     { "_class_wxColourDialog","_wxColourDialog",0},
     { "_class_wxPrintData","_wxPrintData",0},
-    { "_wxDash","_unsigned_long",0},
-    { "_wxDash","_long",0},
     { "_class_wxScrolledWindow","_wxScrolledWindow",0},
+    { "_wxListItemAttr","_class_wxListItemAttr",0},
     { "_class_wxTextEntryDialog","_wxTextEntryDialog",0},
     { "_wxKeyEvent","_class_wxKeyEvent",0},
     { "_wxMoveEvent","_class_wxMoveEvent",0},
@@ -2055,6 +2119,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPalette","_wxPalette",0},
     { "_wxFileDataObject","_class_wxFileDataObject",0},
     { "_class_wxQueryLayoutInfoEvent","_wxQueryLayoutInfoEvent",0},
+    { "_wxNotebookSizer","_class_wxNotebookSizer",0},
     { "_class_wxEraseEvent","_wxEraseEvent",0},
     { "_wxPyFontEnumerator","_class_wxPyFontEnumerator",0},
     { "_wxMDIClientWindow","_class_wxMDIClientWindow",0},
@@ -2156,6 +2221,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxPROCESS_ENTER", PyInt_FromLong((long) wxPROCESS_ENTER));
 	 PyDict_SetItemString(d,"wxPASSWORD", PyInt_FromLong((long) wxPASSWORD));
 	 PyDict_SetItemString(d,"wxTE_PROCESS_ENTER", PyInt_FromLong((long) wxTE_PROCESS_ENTER));
+	 PyDict_SetItemString(d,"wxTE_PROCESS_TAB", PyInt_FromLong((long) wxTE_PROCESS_TAB));
 	 PyDict_SetItemString(d,"wxTE_PASSWORD", PyInt_FromLong((long) wxTE_PASSWORD));
 	 PyDict_SetItemString(d,"wxTE_READONLY", PyInt_FromLong((long) wxTE_READONLY));
 	 PyDict_SetItemString(d,"wxTE_RICH", PyInt_FromLong((long) wxTE_RICH));

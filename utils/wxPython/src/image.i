@@ -99,7 +99,7 @@ public:
     void Create( int width, int height );
     void Destroy();
     wxImage Scale( int width, int height );
-    void Rescale(int width, int height);
+    wxImage& Rescale(int width, int height);
 
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
     unsigned char GetRed( int x, int y );
@@ -149,6 +149,14 @@ public:
     unsigned char GetMaskBlue();
     void SetMask( bool mask = TRUE );
     bool HasMask();
+
+    wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
+                   bool interpolating = TRUE, wxPoint * offset_after_rotation = NULL) const ;
+    void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
+                  unsigned char r2, unsigned char g2, unsigned char b2 );
+
+    unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 );
+    // TODO: unsigned long ComputeHistogram( wxHashTable &h );
 
 };
 

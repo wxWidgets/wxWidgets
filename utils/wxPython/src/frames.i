@@ -45,9 +45,6 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
 
     void Centre(int direction = wxBOTH);
-#ifdef __WXMSW__
-    void Command(int id);
-#endif
     wxStatusBar* CreateStatusBar(int number = 1,
                                  long style = wxST_SIZEGRIP,
                                  wxWindowID id = -1,
@@ -56,6 +53,7 @@ public:
                              wxWindowID id = -1,
                              char* name = "toolBar");
 
+    const wxIcon& GetIcon();
     wxMenuBar* GetMenuBar();
     wxStatusBar* GetStatusBar();
     wxString GetTitle();
@@ -63,6 +61,8 @@ public:
     void Iconize(bool iconize);
     bool IsIconized();
     void Maximize(bool maximize);
+    bool IsMaximized();
+    void Restore();
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
     void SetIcon(const wxIcon& icon);
     void SetMenuBar(wxMenuBar* menuBar);
@@ -71,7 +71,10 @@ public:
     void SetStatusWidths(int LCOUNT, int* choices); // uses typemap
     void SetTitle(const wxString& title);
     void SetToolBar(wxToolBar* toolbar);
-
+    void MakeModal(bool modal = TRUE);
+    wxPoint GetClientAreaOrigin() const;
+    bool Command(int id);
+    bool ProcessCommand(int id);
 };
 
 //---------------------------------------------------------------------------

@@ -51,7 +51,7 @@ class TestMaskWindow(wxScrolledWindow):
         mask = wxMaskColour(self.bmp_withcolourmask, wxWHITE)
         self.bmp_withcolourmask.SetMask(mask)
 
-        self.SetScrollbars(20, 20, 600/20, 460/20)
+        self.SetScrollbars(20, 20, 700/20, 460/20)
 
 
 

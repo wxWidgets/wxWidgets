@@ -16,7 +16,7 @@ import sys, os
 sys.path.insert(0, '../distrib')
 import build
 
-MODULELIST = ['html', 'glcanvas', 'utils', 'ogl', ] #'lseditor']
+MODULELIST = ['html', 'glcanvas', 'utils', 'ogl', 'stc', ] #'lseditor']
 
 
 

@@ -57,30 +57,27 @@ def main():
     logTruncate()
 
     try:
-        logSeparator("Cleanup")
-        os.chdir(WXDIR + '/src/msw')
-        do('make cleandll FINAL=1')
-        os.chdir(WXDIR + '/utils/ogl/src')
-        do('wxm clean FINAL=1')
-        os.chdir(WXDIR + '/utils/glcanvas/win')
-        do('wxm clean FINAL=1')
+##         logSeparator("Cleanup")
+##         os.chdir(WXDIR + '/src/msw')
+##         do('make cleandll FINAL=1')
+##         os.chdir(WXDIR + '/utils/ogl/src')
+##         do('wxm clean FINAL=1')
+##         os.chdir(WXDIR + '/utils/glcanvas/win')
+##         do('wxm clean FINAL=1')
 
-        logSeparator("Building Documentation...")
-        os.chdir(WXDIR + '/src/msw')
-        do('make touchmanual htmlhelp')
-        validateFile(WXDIR + '/docs/html/wx/wx.chm')
+##         logSeparator("Building Documentation...")
+##         os.chdir(WXDIR + '/src/msw')
+##         do('make touchmanual htmlhelp')
+##         validateFile(WXDIR + '/docs/html/wx/wx.chm')
 
-        logSeparator("Building wxWindows and libraries...")
-        os.chdir(WXDIR + '/src/msw')
-        do('make dll pch FINAL=1')
-        validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
+##         logSeparator("Building wxWindows and libraries...")
+##         os.chdir(WXDIR + '/src/msw')
+##         do('make dll pch FINAL=1')
+##         validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
 
-        os.chdir(WXDIR + '/utils/ogl/src')
+        os.chdir(WXDIR + '/contrib/src/ogl')
         do('wxm FINAL=1')
-        os.chdir(WXDIR + '/utils/glcanvas/win')
-        do('wxm FINAL=1')
-        validateFile(WXDIR + '/lib/ogl.lib')
-        validateFile(WXDIR + '/lib/glcanvas.lib')
+        validateFile(WXDIR + '/contrib/lib/ogl.lib')
 
         logSeparator("Cleaning wxPython build directory...")
         os.chdir(WXDIR + '/utils/wxPython')
@@ -156,7 +153,7 @@ FINAL=1
 
 
         # #*#*#*#*#*  Comment this out to allow upload...
-        return
+        #return
 
         logSeparator("Uploading to website...")
         do('python d:\util32\sendwxp.py %s' % destName)

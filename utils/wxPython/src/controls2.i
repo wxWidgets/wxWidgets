@@ -75,10 +75,6 @@ enum {
     wxLIST_ALIGN_LEFT,
     wxLIST_ALIGN_TOP,
     wxLIST_ALIGN_SNAP_TO_GRID,
-    wxLIST_FORMAT_LEFT,
-    wxLIST_FORMAT_RIGHT,
-    wxLIST_FORMAT_CENTRE,
-    wxLIST_FORMAT_CENTER,
     wxLIST_AUTOSIZE,
     wxLIST_AUTOSIZE_USEHEADER,
     wxLIST_RECT_BOUNDS,
@@ -91,25 +87,102 @@ enum {
 };
 
 
+enum wxListColumnFormat
+{
+    wxLIST_FORMAT_LEFT,
+    wxLIST_FORMAT_RIGHT,
+    wxLIST_FORMAT_CENTRE,
+    wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
+};
+
+
+class wxListItemAttr
+{
+public:
+    // ctors
+    wxListItemAttr();
+    //wxListItemAttr(const wxColour& colText,
+    //               const wxColour& colBack,
+    //               const wxFont& font)
+    //    : m_colText(colText), m_colBack(colBack), m_font(font) { }
+
+    // setters
+    void SetTextColour(const wxColour& colText);
+    void SetBackgroundColour(const wxColour& colBack);
+    void SetFont(const wxFont& font);
+
+    // accessors
+    bool HasTextColour();
+    bool HasBackgroundColour();
+    bool HasFont();
+
+    const wxColour& GetTextColour();
+    const wxColour& GetBackgroundColour();
+    const wxFont& GetFont();
+};
+
+
 class wxListItem {
 public:
+    wxListItem();
+    ~wxListItem();
+
+    // resetting
+    void Clear();
+    void ClearAttributes();
+
+    // setters
+    void SetMask(long mask);
+    void SetId(long id);
+    void SetColumn(int col);
+    void SetState(long state);
+    void SetStateMask(long stateMask);
+    void SetText(const wxString& text);
+    void SetImage(int image);
+    void SetData(long data);
+
+    void SetWidth(int width);
+    void SetAlign(wxListColumnFormat align);
+
+    void SetTextColour(const wxColour& colText);
+    void SetBackgroundColour(const wxColour& colBack);
+    void SetFont(const wxFont& font);
+
+    // accessors
+    long GetMask();
+    long GetId();
+    int GetColumn();
+    long GetState();
+    const wxString& GetText();
+    int GetImage();
+    long GetData();
+
+    int GetWidth();
+    wxListColumnFormat GetAlign();
+
+    wxListItemAttr *GetAttributes();
+    bool HasAttributes();
+
+    wxColour GetTextColour() const;
+    wxColour GetBackgroundColour() const;
+    wxFont GetFont() const;
+
+    // these members are public for compatibility
     long            m_mask;     // Indicates what fields are valid
     long            m_itemId;   // The zero-based item position
     int             m_col;      // Zero-based column, if in report mode
     long            m_state;    // The state of the item
-    long            m_stateMask; // Which flags of m_state are valid (uses same flags)
+    long            m_stateMask;// Which flags of m_state are valid (uses same flags)
     wxString        m_text;     // The label/header text
     int             m_image;    // The zero-based index into an image list
     long            m_data;     // App-defined data
-//    wxColour       *m_colour;   // only wxGLC, not supported by Windows ;->
 
     // For columns only
     int             m_format;   // left, right, centre
     int             m_width;    // width of column
 
-    wxListItem();
-    ~wxListItem();
 };
+
 
 class wxListEvent: public wxCommandEvent {
 public:
@@ -120,8 +193,21 @@ public:
     bool          m_cancelled;
     wxPoint       m_pointDrag;
     wxListItem    m_item;
-};
 
+    int GetCode();
+    long GetIndex();
+    long GetOldIndex();
+    long GetOldItem();
+    int GetColumn();
+    bool Cancelled();
+    wxPoint GetPoint();
+    const wxString& GetLabel();
+    const wxString& GetText();
+    int GetImage();
+    long GetData();
+    long GetMask();
+    const wxListItem& GetItem();
+};
 
 
 
@@ -230,13 +316,13 @@ public:
             if (!PyCallable_Check(func))
                 return FALSE;
 
-            return self->SortItems(wxPyTreeCtrl_SortItems, (long)func);
+            return self->SortItems(wxPyListCtrl_SortItems, (long)func);
         }
     }
 };
 
 %{
-    int wxCALLBACK wxPyTreeCtrl_SortItems(long item1, long item2, long funcPtr) {
+    int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
         int retval = 0;
         PyObject* func = (PyObject*)funcPtr;
         bool doSave = wxPyRestoreThread();

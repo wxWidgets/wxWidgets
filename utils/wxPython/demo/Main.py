@@ -76,9 +76,9 @@ class wxPythonDemo(wxFrame):
         self.CreateStatusBar(1, wxST_SIZEGRIP)
 
         if _useSplitter:
-            splitter = wxSplitterWindow(self, -1)
+            splitter = wxSplitterWindow(self, -1, style=wxNO_3D|wxSP_3D)
             if _useNestedSplitter:
-                splitter2 = wxSplitterWindow(splitter, -1)
+                splitter2 = wxSplitterWindow(splitter, -1, style=wxNO_3D|wxSP_3D)
                 logParent = nbParent = splitter2
             else:
                 nbParent = splitter
@@ -134,7 +134,11 @@ class wxPythonDemo(wxFrame):
         if _useSplitter:
             tID = wxNewId()
             self.treeMap = {}
-            self.tree = wxTreeCtrl(splitter, tID)
+            self.tree = wxTreeCtrl(splitter, tID,
+                                   style=wxTR_HAS_BUTTONS |
+                                   wxTR_EDIT_LABELS |
+                                   wxTR_HAS_VARIABLE_ROW_HEIGHT |
+                                   wxSUNKEN_BORDER)
             #self.tree.SetBackgroundColour(wxNamedColour("Pink"))
             root = self.tree.AddRoot("Overview")
             firstChild = None

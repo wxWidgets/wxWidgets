@@ -80,6 +80,12 @@ public:
 #ifdef __WXMSW__
     void SetSize(const wxSize& size);
 #endif
+
+    wxBitmap GetSubBitmap( const wxRect& rect );
+    bool CopyFromIcon(const wxIcon& icon);
+    bool CopyFromCursor(const wxCursor& cursor);
+    int GetQuality();
+    void SetQuality(int q);
 };
 
 
