@@ -721,7 +721,7 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
             if ( !::GetClipboardFormatName(format, s_szBuf, WXSIZEOF(s_szBuf)) )
             {
                 // it must be a new predefined format we don't know the name of
-                sprintf(s_szBuf, "unknown CF (0x%04x)", format.GetFormatId());
+                wxSprintf(s_szBuf, wxT("unknown CF (0x%04x)"), format.GetFormatId());
             }
 
             return s_szBuf;
