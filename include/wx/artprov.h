@@ -30,54 +30,57 @@ class WXDLLEXPORT wxArtProviderCache;
 typedef wxString wxArtClient;
 typedef wxString wxArtID;
 
+#define wxART_MAKE_CLIENT_ID(id)       _T(#id)_T("_C")
+#define wxART_MAKE_ART_ID(id)          _T(#id)
+
 // ----------------------------------------------------------------------------
 // Art clients
 // ----------------------------------------------------------------------------
 
-#define wxART_TOOLBAR                  _T("toolbar_C")
-#define wxART_MENU                     _T("menu_C")
-#define wxART_FRAME_ICON               _T("frame_icon_C")
+#define wxART_TOOLBAR              wxART_MAKE_CLIENT_ID(wxART_TOOLBAR)         
+#define wxART_MENU                 wxART_MAKE_CLIENT_ID(wxART_MENU)            
+#define wxART_FRAME_ICON           wxART_MAKE_CLIENT_ID(wxART_FRAME_ICON)      
 
-#define wxART_CMN_DIALOG               _T("cmn_dialog_C")
-#define wxART_HELP_BROWSER             _T("help_browser_C")
-#define wxART_MESSAGE_BOX              _T("message_box_C")
+#define wxART_CMN_DIALOG           wxART_MAKE_CLIENT_ID(wxART_CMN_DIALOG)      
+#define wxART_HELP_BROWSER         wxART_MAKE_CLIENT_ID(wxART_HELP_BROWSER)    
+#define wxART_MESSAGE_BOX          wxART_MAKE_CLIENT_ID(wxART_MESSAGE_BOX)     
 
-#define wxART_OTHER                    _T("other_C")
+#define wxART_OTHER                wxART_MAKE_CLIENT_ID(wxART_OTHER)           
 
 // ----------------------------------------------------------------------------
 // Art IDs
 // ----------------------------------------------------------------------------
 
-#define wxART_ADD_BOOKMARK             _T("add_bookmark")
-#define wxART_DEL_BOOKMARK             _T("del_bookmark")
-#define wxART_HELP_SIDE_PANEL          _T("help_side_panel")
-#define wxART_HELP_SETTINGS            _T("help_settings")
-#define wxART_HELP_BOOK                _T("help_book")
-#define wxART_HELP_FOLDER              _T("help_folder")
-#define wxART_HELP_PAGE                _T("help_page")
-#define wxART_GO_BACK                  _T("go_back")
-#define wxART_GO_FORWARD               _T("go_forward")
-#define wxART_GO_UP                    _T("go_up")
-#define wxART_GO_DOWN                  _T("go_down")
-#define wxART_GO_TO_PARENT             _T("go_to_parent")
-#define wxART_GO_HOME                  _T("go_home")
-#define wxART_FILE_OPEN                _T("file_open")
-#define wxART_PRINT                    _T("print")
-#define wxART_HELP                     _T("help")
-#define wxART_TIP                      _T("tip")
-#define wxART_REPORT_VIEW              _T("report_view")
-#define wxART_LIST_VIEW                _T("list_view")
-#define wxART_NEW_DIR                  _T("new_dir")
-#define wxART_FOLDER                   _T("folder")
-#define wxART_GO_DIR_UP                _T("go_dir_up")
-#define wxART_EXECUTABLE_FILE          _T("executable_file")
-#define wxART_NORMAL_FILE              _T("normal_file")
-#define wxART_TICK_MARK                _T("tick")
-#define wxART_CROSS_MARK               _T("cross")
-#define wxART_ERROR                    _T("error")
-#define wxART_QUESTION                 _T("question")
-#define wxART_WARNING                  _T("warning")
-#define wxART_INFORMATION              _T("information")
+#define wxART_ADD_BOOKMARK         wxART_MAKE_ART_ID(wxART_ADD_BOOKMARK)       
+#define wxART_DEL_BOOKMARK         wxART_MAKE_ART_ID(wxART_DEL_BOOKMARK)       
+#define wxART_HELP_SIDE_PANEL      wxART_MAKE_ART_ID(wxART_HELP_SIDE_PANEL)    
+#define wxART_HELP_SETTINGS        wxART_MAKE_ART_ID(wxART_HELP_SETTINGS)      
+#define wxART_HELP_BOOK            wxART_MAKE_ART_ID(wxART_HELP_BOOK)          
+#define wxART_HELP_FOLDER          wxART_MAKE_ART_ID(wxART_HELP_FOLDER)        
+#define wxART_HELP_PAGE            wxART_MAKE_ART_ID(wxART_HELP_PAGE)          
+#define wxART_GO_BACK              wxART_MAKE_ART_ID(wxART_GO_BACK)            
+#define wxART_GO_FORWARD           wxART_MAKE_ART_ID(wxART_GO_FORWARD)         
+#define wxART_GO_UP                wxART_MAKE_ART_ID(wxART_GO_UP)              
+#define wxART_GO_DOWN              wxART_MAKE_ART_ID(wxART_GO_DOWN)            
+#define wxART_GO_TO_PARENT         wxART_MAKE_ART_ID(wxART_GO_TO_PARENT)       
+#define wxART_GO_HOME              wxART_MAKE_ART_ID(wxART_GO_HOME)            
+#define wxART_FILE_OPEN            wxART_MAKE_ART_ID(wxART_FILE_OPEN)          
+#define wxART_PRINT                wxART_MAKE_ART_ID(wxART_PRINT)              
+#define wxART_HELP                 wxART_MAKE_ART_ID(wxART_HELP)               
+#define wxART_TIP                  wxART_MAKE_ART_ID(wxART_TIP)                
+#define wxART_REPORT_VIEW          wxART_MAKE_ART_ID(wxART_REPORT_VIEW)        
+#define wxART_LIST_VIEW            wxART_MAKE_ART_ID(wxART_LIST_VIEW)          
+#define wxART_NEW_DIR              wxART_MAKE_ART_ID(wxART_NEW_DIR)            
+#define wxART_FOLDER               wxART_MAKE_ART_ID(wxART_FOLDER)             
+#define wxART_GO_DIR_UP            wxART_MAKE_ART_ID(wxART_GO_DIR_UP)          
+#define wxART_EXECUTABLE_FILE      wxART_MAKE_ART_ID(wxART_EXECUTABLE_FILE)    
+#define wxART_NORMAL_FILE          wxART_MAKE_ART_ID(wxART_NORMAL_FILE)        
+#define wxART_TICK_MARK            wxART_MAKE_ART_ID(wxART_TICK_MARK)          
+#define wxART_CROSS_MARK           wxART_MAKE_ART_ID(wxART_CROSS_MARK)         
+#define wxART_ERROR                wxART_MAKE_ART_ID(wxART_ERROR)              
+#define wxART_QUESTION             wxART_MAKE_ART_ID(wxART_QUESTION)           
+#define wxART_WARNING              wxART_MAKE_ART_ID(wxART_WARNING)            
+#define wxART_INFORMATION          wxART_MAKE_ART_ID(wxART_INFORMATION)        
 
 // ----------------------------------------------------------------------------
 // wxArtProvider class
