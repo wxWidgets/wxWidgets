@@ -1548,6 +1548,9 @@ void wxMenuBar::Attach(wxFrame *frame)
         SetCursor(wxCURSOR_ARROW);
 
         SetFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
+
+        // calculate and set our height (it won't be changed any more)
+        SetSize(-1, GetBestSize().y);
     }
 
     // remember the last frame which had us to avoid unnecessarily reparenting
