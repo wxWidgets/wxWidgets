@@ -126,7 +126,7 @@ gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *e
    so we do this directly after realization */
 
 static gint
-gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
+gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxDialog *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -292,7 +292,7 @@ bool wxDialog::Create( wxWindow *parent,
     if ((m_x != -1) || (m_y != -1))
         gtk_widget_set_uposition( m_widget, m_x, m_y );
     gtk_widget_set_usize( m_widget, m_width, m_height );
-        
+
     /*  we cannot set MWM hints  before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
@@ -456,7 +456,7 @@ void wxDialog::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width
 {
     wxFAIL_MSG( wxT("DoMoveWindow called for wxDialog") );
 }
-    
+
 void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid dialog") );
@@ -551,7 +551,7 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
     geom.min_height = m_minHeight;
     geom.max_width = m_maxWidth;
     geom.max_height = m_maxHeight;
-    gtk_window_set_geometry_hints( GTK_WINDOW(m_widget), 
+    gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
                                    (GtkWidget*) NULL,
                                    &geom,
                                    (GdkWindowHints) flag );
