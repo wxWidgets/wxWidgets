@@ -20,7 +20,7 @@
 #define WXWIN_COMPATIBILITY  0
 #define wxICON_IS_BITMAP    0
 #define wxFONT_SIZE_COMPATIBILITY    0
-#define wxDIALOG_UNIT_COMPATIBILITY   1
+#define wxDIALOG_UNIT_COMPATIBILITY   0
 #define wxUSE_DEBUG_CONTEXT 0
 #define wxUSE_MEMORY_TRACING 0
 #define wxUSE_GLOBAL_MEMORY_OPERATORS 0
@@ -68,7 +68,7 @@
 #define wxUSE_CONTROLS     1
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
-#define wxUSE_CARET        0
+#define wxUSE_CARET        1
 #define wxUSE_CHECKBOX     1
 #define wxUSE_CHECKLISTBOX 1
 #define wxUSE_CHOICE       0
@@ -88,6 +88,7 @@
 #define wxUSE_STATTEXT     1
 #define wxUSE_STATBMP      1
 #define wxUSE_STATUSBAR    0
+#define wxUSE_TEXTCTRL     1
 #define wxUSE_TOOLTIPS     0
 #define wxUSE_TREECTRL     0
 

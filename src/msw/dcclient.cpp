@@ -62,9 +62,9 @@ WX_DEFINE_OBJARRAY(wxArrayDCInfo);
 // macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
-    IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
-    IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -90,33 +90,33 @@ static PAINTSTRUCT g_paintStruct;
 
 wxWindowDC::wxWindowDC()
 {
-  m_canvas = NULL;
+    m_canvas = NULL;
 }
 
-wxWindowDC::wxWindowDC(wxWindow *the_canvas)
+wxWindowDC::wxWindowDC(wxWindow *canvas)
 {
-  m_canvas = the_canvas;
-  m_hDC = (WXHDC) ::GetWindowDC(GetWinHwnd(the_canvas) );
-  m_hDCCount++;
+    m_canvas = canvas;
+    m_hDC = (WXHDC) ::GetWindowDC(GetWinHwnd(canvas) );
+    m_hDCCount++;
 
-  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+    SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxWindowDC::~wxWindowDC()
 {
-  if (m_canvas && m_hDC)
-  {
-    SelectOldObjects(m_hDC);
-
-    if ( !::ReleaseDC(GetWinHwnd(m_canvas), GetHdc()) )
+    if (m_canvas && m_hDC)
     {
-        wxLogLastError(wxT("ReleaseDC"));
+        SelectOldObjects(m_hDC);
+
+        if ( !::ReleaseDC(GetWinHwnd(m_canvas), GetHdc()) )
+        {
+            wxLogLastError(wxT("ReleaseDC"));
+        }
+
+        m_hDC = 0;
     }
 
-    m_hDC = 0;
-  }
-
-  m_hDCCount--;
+    m_hDCCount--;
 }
 
 // ----------------------------------------------------------------------------
@@ -125,31 +125,45 @@ wxWindowDC::~wxWindowDC()
 
 wxClientDC::wxClientDC()
 {
-  m_canvas = NULL;
+    m_canvas = NULL;
 }
 
-wxClientDC::wxClientDC(wxWindow *the_canvas)
+wxClientDC::wxClientDC(wxWindow *canvas)
 {
-  m_canvas = the_canvas;
-  m_hDC = (WXHDC) ::GetDC(GetWinHwnd(the_canvas));
+    // init the DC
+    m_canvas = canvas;
+    m_hDC = (WXHDC) ::GetDC(GetWinHwnd(canvas));
 
-  // the background mode is only used for text background
-  // and is set in DrawText() to OPAQUE as required, other-
-  // wise always TRANSPARENT, RR
-  ::SetBkMode( GetHdc(), TRANSPARENT );
+    // (re)set the DC parameters
+    InitDC();
+}
 
-  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+void wxClientDC::InitDC()
+{
+    // the background mode is only used for text background and is set in
+    // DrawText() to OPAQUE as required, otherwise always TRANSPARENT (RR)
+    ::SetBkMode(GetHdc(), TRANSPARENT);
+
+    SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+
+    // clip the DC to avoid overwriting the non client area
+#ifdef __WXUNIVERSAL__
+    wxPoint ptOrigin = m_canvas->GetClientAreaOrigin();
+    SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
+    wxSize size = m_canvas->GetClientSize();
+    SetClippingRegion(wxPoint(0, 0), size);
+#endif // __WXUNIVERSAL__
 }
 
 wxClientDC::~wxClientDC()
 {
-  if ( m_canvas && GetHdc() )
-  {
-    SelectOldObjects(m_hDC);
+    if ( m_canvas && GetHdc() )
+    {
+        SelectOldObjects(m_hDC);
 
-    ::ReleaseDC(GetWinHwnd(m_canvas), GetHdc());
-    m_hDC = 0;
-  }
+        ::ReleaseDC(GetWinHwnd(m_canvas), GetHdc());
+        m_hDC = 0;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -208,12 +222,8 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
         ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
     }
 
-    // the background mode is only used for text background
-    // and is set in DrawText() to OPAQUE as required, other-
-    // wise always TRANSPARENT, RR
-    ::SetBkMode( GetHdc(), TRANSPARENT );
-
-    SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+    // (re)set the DC parameters
+    InitDC();
 }
 
 wxPaintDC::~wxPaintDC()

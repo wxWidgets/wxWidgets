@@ -1375,7 +1375,7 @@ int wxWindowMSW::GetCharWidth() const
     // +1 is needed because Windows apparently adds it when calculating the
     // dialog units size in pixels
 #if wxDIALOG_UNIT_COMPATIBILITY
-    return wxGetTextMetrics(this).tmAveCharWidth ;
+    return wxGetTextMetrics(this).tmAveCharWidth;
 #else
     return wxGetTextMetrics(this).tmAveCharWidth + 1;
 #endif
@@ -2992,19 +2992,28 @@ bool wxWindowMSW::HandlePaint()
         wxLogLastError(wxT("GetUpdateRgn"));
 
     m_updateRegion = wxRegion((WXHRGN) hRegion);
-#else
+#else // Win16
     RECT updateRect;
-    ::GetUpdateRect(GetHwnd(), & updateRect, FALSE);
+    ::GetUpdateRect(GetHwnd(), &updateRect, FALSE);
 
     m_updateRegion = wxRegion(updateRect.left, updateRect.top,
                               updateRect.right - updateRect.left,
                               updateRect.bottom - updateRect.top);
-#endif
+#endif // Win32/16
 
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
 
-    return GetEventHandler()->ProcessEvent(event);
+    bool processed = GetEventHandler()->ProcessEvent(event);
+
+    // note that we must generate NC event after the normal one as otherwise
+    // BeginPaint() will happily overwrite our decorations with the background
+    // colour
+    wxNcPaintEvent eventNc(m_windowId);
+    eventNc.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(eventNc);
+
+    return processed;
 }
 
 // Can be called from an application's OnPaint handler

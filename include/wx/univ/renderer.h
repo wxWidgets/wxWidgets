@@ -97,6 +97,12 @@ public:
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL) = 0;
 
+    // draw a line of the text ctrl
+    virtual void DrawTextLine(wxDC& dc,
+                              const wxString& text,
+                              const wxRect &rect,
+                              int flags = 0) = 0;
+
     // draw the border and optionally return the rectangle containing the
     // region inside the border
     virtual void DrawBorder(wxDC& dc,
@@ -291,6 +297,11 @@ public:
                                  wxRect *rectBounds = NULL)
         { m_renderer->DrawButtonLabel(dc, label, image, rect,
                                       flags, align, indexAccel, rectBounds); }
+    virtual void DrawTextLine(wxDC& dc,
+                              const wxString& text,
+                              const wxRect &rect,
+                              int flags = 0)
+        { m_renderer->DrawTextLine(dc, text, rect, flags); }
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -412,6 +423,7 @@ public:
     // operations
     void DrawLabel(const wxBitmap& bitmap = wxNullBitmap,
                    wxCoord marginX = 0, wxCoord marginY = 0);
+    void DrawTextLine(const wxString& text);
     void DrawItems(const wxListBox *listbox,
                    size_t itemFirst, size_t itemLast);
     void DrawCheckItems(const wxCheckListBox *listbox,

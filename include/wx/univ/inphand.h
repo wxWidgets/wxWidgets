@@ -265,7 +265,7 @@ public:
 };
 
 // ----------------------------------------------------------------------------
-// wxStdCheckListBoxHandler
+// wxStdCheckListBoxInputHandler
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxStdCheckListboxInputHandler : public wxStdListboxInputHandler
@@ -278,6 +278,25 @@ public:
                            bool pressed);
     virtual bool HandleMouse(wxControl *control,
                              const wxMouseEvent& event);
+};
+
+// ----------------------------------------------------------------------------
+// wxStdTextCtrlInputHandler: this control handles only the mouse/kbd actions
+// common to Win32 and GTK, platform-specific things are implemented elsewhere
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdTextCtrlInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdTextCtrlInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control,
+                                 const wxMouseEvent& event);
 };
 
 #endif // _WX_UNIV_INPHAND_H_

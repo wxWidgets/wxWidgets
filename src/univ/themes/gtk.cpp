@@ -72,6 +72,10 @@ public:
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL);
+    virtual void DrawTextLine(wxDC& dc,
+                              const wxString& text,
+                              const wxRect &rect,
+                              int flags = 0);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -440,6 +444,8 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
             handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
         else if ( control == wxINP_HANDLER_CHECKLISTBOX )
             handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_TEXTCTRL )
+            handler = new wxStdTextCtrlInputHandler(GetDefaultInputHandler());
         else
             handler = GetDefaultInputHandler();
 
@@ -903,6 +909,14 @@ void wxGTKRenderer::DrawButtonLabel(wxDC& dc,
     }
 
     dc.DrawLabel(label, image, rect, alignment, indexAccel, rectBounds);
+}
+
+void wxGTKRenderer::DrawTextLine(wxDC& dc,
+                                 const wxString& text,
+                                 const wxRect &rect,
+                                 int flags)
+{
+    dc.DrawText(text, rect.x, rect.y);
 }
 
 void wxGTKRenderer::DrawItem(wxDC& dc,

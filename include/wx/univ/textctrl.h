@@ -22,6 +22,32 @@ class WXDLLEXPORT wxCaret;
 // wxTextCtrl actions
 // ----------------------------------------------------------------------------
 
+// cursor movement and also selection and delete operations
+#define wxACTION_TEXT_HOME          _T("home")
+#define wxACTION_TEXT_END           _T("end")
+#define wxACTION_TEXT_LEFT          _T("left")
+#define wxACTION_TEXT_RIGHT         _T("right")
+#define wxACTION_TEXT_UP            _T("up")
+#define wxACTION_TEXT_DOWN          _T("down")
+#define wxACTION_TEXT_WORD_LEFT     _T("wordleft")
+#define wxACTION_TEXT_WORD_RIGHT    _T("wordright")
+#define wxACTION_TEXT_PAGE_UP       _T("pageup")
+#define wxACTION_TEXT_PAGE_DOWN     _T("pagedown")
+
+// clipboard operations
+#define wxACTION_TEXT_COPY          _T("copy")
+#define wxACTION_TEXT_CUT           _T("cut")
+#define wxACTION_TEXT_PASTE         _T("paste")
+
+// insert text at the cursor position: the text is in strArg of PerformAction
+#define wxACTION_TEXT_INSERT        _T("insert")
+
+// if the action starts with either of these prefixes and the rest of the
+// string is one of the movement commands, it means to select/delete text from
+// the current cursor position to the new one
+#define wxACTION_TEXT_PREFIX_SEL    _T("sel")
+#define wxACTION_TEXT_PREFIX_DEL    _T("del")
+
 // ----------------------------------------------------------------------------
 // wxTextCtrl
 // ----------------------------------------------------------------------------
@@ -125,6 +151,10 @@ public:
     virtual void ShowCaret(bool show = TRUE);
     void HideCaret() { ShowCaret(FALSE); }
 
+    // helpers for cursor movement
+    long GetWordStart() const;
+    long GetWordEnd() const;
+
     // implementation only from now on
     // -------------------------------
 
@@ -150,6 +180,9 @@ protected:
 
     // is this a single-line control?
     bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
+
+    // event handlers
+    void OnChar(wxKeyEvent& event);
 
 private:
     // the value (may be only part of it for the multiline controls)

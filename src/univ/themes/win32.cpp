@@ -89,6 +89,10 @@ public:
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL);
+    virtual void DrawTextLine(wxDC& dc,
+                              const wxString& text,
+                              const wxRect &rect,
+                              int flags = 0);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -160,7 +164,7 @@ public:
                                      int thumbPos = -1);
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
-        { return fontHeight; }
+        { return fontHeight + 2; }
     virtual wxSize GetCheckBitmapSize() const
         { return wxSize(13, 13); }
     virtual wxSize GetRadioBitmapSize() const
@@ -650,6 +654,8 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
             handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
         else if ( control == wxINP_HANDLER_CHECKLISTBOX )
             handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_TEXTCTRL )
+            handler = new wxStdTextCtrlInputHandler(GetDefaultInputHandler());
         else
             handler = GetDefaultInputHandler();
 
@@ -1385,6 +1391,14 @@ void wxWin32Renderer::DrawButtonLabel(wxDC& dc,
     }
 }
 
+void wxWin32Renderer::DrawTextLine(wxDC& dc,
+                                   const wxString& text,
+                                   const wxRect &rect,
+                                   int flags)
+{
+    dc.DrawText(text, rect.x + 2, rect.y + 1);
+}
+
 // ----------------------------------------------------------------------------
 // (check)listbox items
 // ----------------------------------------------------------------------------
@@ -1439,7 +1453,7 @@ void wxWin32Renderer::DrawCheckItem(wxDC& dc,
                                                  : unchecked_item_xpm);
     }
 
-    dc.DrawBitmap(bmp, rect.x, rect.y + (rect.height - bmp.GetHeight()) / 2,
+    dc.DrawBitmap(bmp, rect.x, rect.y + (rect.height - bmp.GetHeight()) / 2 - 1,
                   TRUE /* use mask */);
 
     wxRect rectLabel = rect;

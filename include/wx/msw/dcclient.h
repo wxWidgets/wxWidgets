@@ -51,8 +51,6 @@ public:
 
 class WXDLLEXPORT wxClientDC : public wxWindowDC
 {
-    DECLARE_DYNAMIC_CLASS(wxClientDC)
-
 public:
     wxClientDC();
 
@@ -60,12 +58,16 @@ public:
     wxClientDC(wxWindow *win);
 
     virtual ~wxClientDC();
+
+protected:
+    void InitDC();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxClientDC)
 };
 
-class WXDLLEXPORT wxPaintDC : public wxWindowDC
+class WXDLLEXPORT wxPaintDC : public wxClientDC
 {
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
-
 public:
     wxPaintDC();
 
@@ -82,6 +84,9 @@ protected:
 
     // find the entry for this DC in the cache (keyed by the window)
     wxPaintDCInfo *FindInCache(size_t *index = NULL) const;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
 };
 
 #endif

@@ -115,6 +115,7 @@ protected:
     void OnCheckBox(wxCommandEvent& event);
     void OnRadioBox(wxCommandEvent& event);
     void OnListBox(wxCommandEvent& event);
+    void OnTextChange(wxCommandEvent& event);
     void OnLeftUp(wxMouseEvent& event);
 
 private:
@@ -157,6 +158,7 @@ BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
     EVT_CHECKBOX(-1, MyUnivFrame::OnCheckBox)
     EVT_RADIOBUTTON(-1, MyUnivFrame::OnRadioBox)
     EVT_LISTBOX(-1, MyUnivFrame::OnListBox)
+    EVT_TEXT(-1, MyUnivFrame::OnTextChange)
 
     EVT_LEFT_UP(MyUnivFrame::OnLeftUp)
 END_EVENT_TABLE()
@@ -225,18 +227,18 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 {
     SetBackgroundColour(wxGetApp().GetBgColour());
 
-    wxStaticText *text;
-
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
-    new wxStaticText(this, -1,
+#if 0
+    new wxStaticText(this,
                      _T("&Multi line\n(and very very very very long)\nstatic text"),
-                     wxPoint(210, 10), wxDefaultSize, wxBORDER_SUNKEN);
+                     wxPoint(210, 10));
 
     (new wxStaticText(this, _T("&Disabled text"), wxPoint(10, 30)))->Disable();
 
     new wxStaticLine(this, wxPoint(190, 10), 50, wxLI_VERTICAL);
 
-    text = new wxStaticText(this, _T("Demo of &border styles:"), wxPoint(10, 60));
+    wxStaticText *text = new wxStaticText(this, _T("Demo of &border styles:"),
+                                          wxPoint(10, 60));
     text->SetFont(*wxITALIC_FONT);
     text->SetBackgroundColour(*wxWHITE);
     text->SetForegroundColour(*wxBLUE);
@@ -368,6 +370,10 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                    wxPoint(550, 150), wxDefaultSize);
+#else // 1
+    new wxTextCtrl(this, -1, _T("Hello, Universe!"),
+                   wxPoint(10, 50), wxSize(200, -1));
+#endif // 0/1
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)
@@ -397,6 +403,11 @@ void MyUnivFrame::OnRadioBox(wxCommandEvent& event)
 void MyUnivFrame::OnListBox(wxCommandEvent& event)
 {
     wxLogDebug(_T("Listbox item %d selected."), event.GetInt());
+}
+
+void MyUnivFrame::OnTextChange(wxCommandEvent& event)
+{
+    wxLogDebug(_T("Text control value changed: now '%s'"), event.GetString());
 }
 
 void MyUnivFrame::OnLeftUp(wxMouseEvent& event)

@@ -132,9 +132,8 @@ int wxListBox::DoAppend(const wxString& item)
     if ( HasHorzScrollbar() )
     {
         // has the max width increased?
-        wxClientDC dc(this);
         wxCoord width;
-        dc.GetTextExtent(item, &width, NULL);
+        GetTextExtent(item, &width, NULL);
         if ( width > m_maxWidth )
         {
             m_maxWidth = width;
@@ -523,12 +522,12 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
     // adjust the DC to account for scrolling
     wxDC& dc = renderer->GetDC();
     PrepareDC(dc);
+    dc.SetFont(GetFont());
 
     // get the items which must be redrawn
     wxCoord lineHeight = GetLineHeight();
     wxRegion rgnUpdate = GetUpdateRegion();
     rgnUpdate.Intersect(GetClientRect());
-    //dc.SetClippingRegion(rgnUpdate);
     wxRect rectUpdate = rgnUpdate.GetBox();
 
     int yTop, yBottom;
@@ -575,8 +574,7 @@ bool wxListBox::SetFont(const wxFont& font)
 
 void wxListBox::CalcItemsPerPage()
 {
-    m_lineHeight = GetRenderer()->
-                    GetListboxItemHeight(wxClientDC(this).GetCharHeight());
+    m_lineHeight = GetRenderer()->GetListboxItemHeight(GetCharHeight());
     m_itemsPerPage = GetClientSize().y / m_lineHeight;
 }
 
@@ -634,8 +632,6 @@ void wxListBox::DoSetFirstItem(int n)
 
 wxSize wxListBox::DoGetBestClientSize() const
 {
-    wxClientDC dc(wxConstCast(this, wxListBox));
-
     wxCoord width = 0,
             height = 0;
 
@@ -643,7 +639,7 @@ wxSize wxListBox::DoGetBestClientSize() const
     for ( size_t n = 0; n < count; n++ )
     {
         wxCoord w,h;
-        dc.GetTextExtent(m_strings[n], &w, &h);
+        GetTextExtent(m_strings[n], &w, &h);
 
         if ( w > width )
             width = w;
@@ -656,10 +652,10 @@ wxSize wxListBox::DoGetBestClientSize() const
     if ( !width )
         width = 100;
     else
-        width += 3*dc.GetCharWidth();
+        width += 3*GetCharWidth();
 
     if ( !height )
-        height = dc.GetCharHeight();
+        height = GetCharHeight();
 
     // we need the height of the entire listbox, not just of one line
     height *= wxMax(count, 7);

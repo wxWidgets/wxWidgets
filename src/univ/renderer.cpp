@@ -575,7 +575,10 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
     // note that SetClippingRegion() needs the physical (unscrolled)
     // coordinates while we use the logical (scrolled) ones for the drawing
     // itself
-    wxRect rect = lbox->GetClientRect();
+    wxRect rect;
+    wxSize size = lbox->GetClientSize();
+    rect.width = size.x;
+    rect.height = size.y;
 
     // keep the text inside the client rect or we will overwrite the vertical
     // scrollbar for the long strings
@@ -625,4 +628,12 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
 
         rect.y += lineHeight;
     }
+}
+
+void wxControlRenderer::DrawTextLine(const wxString& text)
+{
+    m_dc.SetFont(m_window->GetFont());
+    m_dc.SetTextForeground(m_window->GetForegroundColour());
+
+    m_renderer->DrawTextLine(m_dc, text, m_rect, m_window->GetStateFlags());
 }

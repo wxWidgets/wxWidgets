@@ -2223,7 +2223,7 @@ wxPaintDC::wxPaintDC( wxWindow *win )
 #if USE_PAINT_REGION
     if (!win->m_clipPaintRegion)
         return;
-        
+
     m_paintClippingRegion = win->GetUpdateRegion();
     GdkRegion *region = m_paintClippingRegion.GetRegion();
     if ( region )
