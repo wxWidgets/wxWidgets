@@ -94,7 +94,7 @@ static wxFontEncoding gs_encodings[] =
 // the descriptions for them
 static const wxChar* gs_encodingDescs[] =
 {
-    wxTRANSLATE( "West European (ISO-8859-1/Latin 1)" ),
+    wxTRANSLATE( "Western European (ISO-8859-1/Latin 1)" ),
     wxTRANSLATE( "Central European (ISO-8859-2/Latin 2)" ),
     wxTRANSLATE( "Esperanto (ISO-8859-3)" ),
     wxTRANSLATE( "Baltic (old) (ISO-8859-4)" ),
@@ -105,14 +105,14 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Turkish (ISO-8859-9)" ),
     wxTRANSLATE( "Nordic (ISO-8859-10)" ),
     wxTRANSLATE( "Thai (ISO-8859-11)" ),
-    wxTRANSLATE( "ISO-8859-12" ),
+    wxTRANSLATE( "Indian (ISO-8859-12)" ),
     wxTRANSLATE( "Baltic (ISO-8859-13)" ),
-    wxTRANSLATE( "ISO-8859-14" ),
-    wxTRANSLATE( "West European new (ISO-8859-15/Latin 0)" ),
+    wxTRANSLATE( "Celtic (ISO-8859-14)" ),
+    wxTRANSLATE( "Western European with Euro (ISO-8859-15/Latin 0)" ),
     wxTRANSLATE( "KOI8-R" ),
-    wxTRANSLATE( "Windows Latin 2 (CP 1250)" ),
+    wxTRANSLATE( "Windows Central European (CP 1250)" ),
     wxTRANSLATE( "Windows Cyrillic (CP 1251)" ),
-    wxTRANSLATE( "Windows Latin 1 (CP 1252)" ),
+    wxTRANSLATE( "Windows Western European (CP 1252)" ),
     wxTRANSLATE( "Windows Greek (CP 1253)" ),
     wxTRANSLATE( "Windows Turkish (CP 1254)" ),
     wxTRANSLATE( "Windows Hebrew (CP 1255)" ),
