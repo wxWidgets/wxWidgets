@@ -296,6 +296,14 @@ bool wxDialog::Show(bool show)
 
     if ( show )
     {
+        // dialogs don't get WM_SIZE message after creation unlike most (all?)
+        // other windows and so could start their life non laid out correctly
+        // if we didn't call Layout() from here
+        //
+        // NB: normally we should call it just the first time but doing it
+        //     every time is simpler than keeping a flag
+        Layout();
+
         // usually will result in TransferDataToWindow() being called
         InitDialog();
     }
