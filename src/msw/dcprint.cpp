@@ -408,7 +408,7 @@ void wxPrinterDC::DoDrawBitmap(const wxBitmap& bmp,
 bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
                          wxCoord width, wxCoord height,
                          wxDC *source,
-                         wxCoord xsrc, wxCoord ysrc,
+                         wxCoord WXUNUSED(xsrc), wxCoord WXUNUSED(ysrc),
                          int WXUNUSED(rop), bool useMask,
                          wxCoord WXUNUSED(xsrcMask), wxCoord WXUNUSED(ysrcMask))
 {

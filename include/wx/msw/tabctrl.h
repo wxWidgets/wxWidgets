@@ -150,7 +150,7 @@ private:
     int m_nSel,     // currently selected page
         m_nOldSel;  // previously selected page
 
-    DECLARE_DYNAMIC_CLASS(wxTabEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTabEvent)
 };
 
 typedef void (wxEvtHandler::*wxTabEventFunction)(wxTabEvent&);

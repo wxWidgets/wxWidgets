@@ -136,7 +136,7 @@ protected:
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
+IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
 // ============================================================================
 // implementation

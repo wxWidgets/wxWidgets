@@ -859,9 +859,14 @@ wxFSFile *wxHtmlParser::OpenURL(wxHtmlURLType WXUNUSED(type),
 class wxMetaTagParser : public wxHtmlParser
 {
 public:
+    wxMetaTagParser() { }
+
     wxObject* GetProduct() { return NULL; }
+
 protected:
     virtual void AddText(const wxChar* WXUNUSED(txt)) {}
+
+    DECLARE_NO_COPY_CLASS(wxMetaTagParser)
 };
 
 class wxMetaTagHandler : public wxHtmlTagHandler
@@ -873,6 +878,8 @@ public:
 
 private:
     wxString *m_retval;
+
+    DECLARE_NO_COPY_CLASS(wxMetaTagHandler)
 };
 
 bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)

@@ -36,6 +36,11 @@
 
 class WXDLLEXPORT wxRendererMSW : public wxDelegateRendererNative
 {
+public:
+    wxRendererMSW() { }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxRendererMSW)
 };
 
 // ============================================================================

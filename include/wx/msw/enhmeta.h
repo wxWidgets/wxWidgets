@@ -91,7 +91,7 @@ public:
     wxEnhMetaFile *Close();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxEnhMetaFileDC)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxEnhMetaFileDC)
 };
 
 #if wxUSE_DRAG_AND_DROP
@@ -128,6 +128,8 @@ public:
 
 protected:
     wxEnhMetaFile m_metafile;
+
+    DECLARE_NO_COPY_CLASS(wxEnhMetaFileDataObject)
 };
 
 
@@ -160,6 +162,8 @@ public:
 
 protected:
     wxEnhMetaFile m_metafile;
+
+    DECLARE_NO_COPY_CLASS(wxEnhMetaFileSimpleDataObject)
 };
 
 #endif // wxUSE_DRAG_AND_DROP

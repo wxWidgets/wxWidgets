@@ -182,6 +182,9 @@ public:
 
     // implement the base class pure virtual
     virtual wxEvent *Clone() const { return new wxDialUpEvent(*this); }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxDialUpEvent)
 };
 
 // the type of dialup event handler function

@@ -123,7 +123,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
+IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
@@ -178,6 +178,8 @@ public:
 
 private:
     size_t m_nSepCount;
+
+    DECLARE_NO_COPY_CLASS(wxToolBarTool)
 };
 
 
@@ -1175,7 +1177,7 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
     }
 }
 
-bool wxToolBar::HandleSize(WXWPARAM wParam, WXLPARAM lParam)
+bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
     // calculate our minor dimension ourselves - we're confusing the standard
     // logic (TB_AUTOSIZE) with our horizontal toolbars and other hacks
@@ -1317,7 +1319,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
     return TRUE;
 }
 
-void wxToolBar::HandleMouseMove(WXWPARAM wParam, WXLPARAM lParam)
+void wxToolBar::HandleMouseMove(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
     wxCoord x = GET_X_LPARAM(lParam),
             y = GET_Y_LPARAM(lParam);

@@ -90,7 +90,8 @@ public:
 protected:
     wxBitmap    m_bitmap;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxSplashScreenWindow)
 };
 
 

@@ -1664,7 +1664,7 @@ void wxTextCtrl::OnRedo(wxCommandEvent& WXUNUSED(event))
     Redo();
 }
 
-void wxTextCtrl::OnDelete(wxCommandEvent& event)
+void wxTextCtrl::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
     long from, to;
     GetSelection(& from, & to);
@@ -1672,7 +1672,7 @@ void wxTextCtrl::OnDelete(wxCommandEvent& event)
         Remove(from, to);
 }
 
-void wxTextCtrl::OnSelectAll(wxCommandEvent& event)
+void wxTextCtrl::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 {
     SetSelection(-1, -1);
 }
@@ -1740,7 +1740,7 @@ void wxTextCtrl::OnRightClick(wxMouseEvent& event)
     event.Skip();
 }
 
-void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
+void wxTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
 {
     // be sure the caret remains invisible if the user had hidden it
     if ( !m_isNativeCaretShown )

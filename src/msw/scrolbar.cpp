@@ -121,7 +121,7 @@ wxScrollBar::~wxScrollBar(void)
 }
 
 bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
-                              WXWORD pos, WXHWND control)
+                              WXWORD pos, WXHWND WXUNUSED(control))
 {
     // current and max positions
     int position,

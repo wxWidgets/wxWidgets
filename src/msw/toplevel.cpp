@@ -906,7 +906,10 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 
 // the DialogProc for all wxWindows dialogs
 LONG APIENTRY _EXPORT
-wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+wxDlgProc(HWND WXUNUSED(hDlg),
+          UINT message,
+          WPARAM WXUNUSED(wParam),
+          LPARAM WXUNUSED(lParam))
 {
     switch ( message )
     {

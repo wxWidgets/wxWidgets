@@ -232,7 +232,7 @@ private:
     wxSashDragStatus    m_dragStatus;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSashEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSashEvent)
 };
 
 typedef void (wxEvtHandler::*wxSashEventFunction)(wxSashEvent&);

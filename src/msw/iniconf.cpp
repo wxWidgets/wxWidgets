@@ -200,28 +200,28 @@ wxString wxIniConfig::GetKeyName(const wxString& szKey) const
 // ----------------------------------------------------------------------------
 
 // not implemented
-bool wxIniConfig::GetFirstGroup(wxString& str, long& lIndex) const
+bool wxIniConfig::GetFirstGroup(wxString& WXUNUSED(str), long& WXUNUSED(lIndex)) const
 {
   wxFAIL_MSG("not implemented");
 
   return FALSE;
 }
 
-bool wxIniConfig::GetNextGroup (wxString& str, long& lIndex) const
+bool wxIniConfig::GetNextGroup (wxString& WXUNUSED(str), long& WXUNUSED(lIndex)) const
 {
   wxFAIL_MSG("not implemented");
 
   return FALSE;
 }
 
-bool wxIniConfig::GetFirstEntry(wxString& str, long& lIndex) const
+bool wxIniConfig::GetFirstEntry(wxString& WXUNUSED(str), long& WXUNUSED(lIndex)) const
 {
   wxFAIL_MSG("not implemented");
 
   return FALSE;
 }
 
-bool wxIniConfig::GetNextEntry (wxString& str, long& lIndex) const
+bool wxIniConfig::GetNextEntry (wxString& WXUNUSED(str), long& WXUNUSED(lIndex)) const
 {
   wxFAIL_MSG("not implemented");
 
@@ -233,28 +233,28 @@ bool wxIniConfig::GetNextEntry (wxString& str, long& lIndex) const
 // ----------------------------------------------------------------------------
 
 // not implemented
-size_t wxIniConfig::GetNumberOfEntries(bool bRecursive) const
+size_t wxIniConfig::GetNumberOfEntries(bool WXUNUSED(bRecursive)) const
 {
   wxFAIL_MSG("not implemented");
 
   return (size_t)-1;
 }
 
-size_t wxIniConfig::GetNumberOfGroups(bool bRecursive) const
+size_t wxIniConfig::GetNumberOfGroups(bool WXUNUSED(bRecursive)) const
 {
   wxFAIL_MSG("not implemented");
 
   return (size_t)-1;
 }
 
-bool wxIniConfig::HasGroup(const wxString& strName) const
+bool wxIniConfig::HasGroup(const wxString& WXUNUSED(strName)) const
 {
   wxFAIL_MSG("not implemented");
 
   return FALSE;
 }
 
-bool wxIniConfig::HasEntry(const wxString& strName) const
+bool wxIniConfig::HasEntry(const wxString& WXUNUSED(strName)) const
 {
   wxFAIL_MSG("not implemented");
 
@@ -449,13 +449,15 @@ bool wxIniConfig::DeleteAll()
   return TRUE;
 }
 
-bool wxIniConfig::RenameEntry(const wxString& oldName, const wxString& newName)
+bool wxIniConfig::RenameEntry(const wxString& WXUNUSED(oldName),
+                              const wxString& WXUNUSED(newName))
 {
     // Not implemented
     return FALSE;
 }
 
-bool wxIniConfig::RenameGroup(const wxString& oldName, const wxString& newName)
+bool wxIniConfig::RenameGroup(const wxString& WXUNUSED(oldName),
+                              const wxString& WXUNUSED(newName))
 {
     // Not implemented
     return FALSE;

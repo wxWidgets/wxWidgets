@@ -52,7 +52,7 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxToggleButton)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton)
 };
 
 #endif // _WX_TOGGLEBUTTON_H_

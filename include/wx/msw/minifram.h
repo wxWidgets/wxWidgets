@@ -49,7 +49,7 @@ public:
   }
 
 protected:
-  DECLARE_DYNAMIC_CLASS(wxMiniFrame)
+  DECLARE_DYNAMIC_CLASS_NO_COPY(wxMiniFrame)
 };
 
 #endif

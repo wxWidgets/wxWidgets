@@ -79,13 +79,15 @@ public:
     wxCoord m_y;
     wxCoord m_width;
     wxCoord m_height;
+
+    DECLARE_NO_COPY_CLASS(wxToolBarToolSimple)
 };
 
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxToolBarBase)
+IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxControl)
 
 #if !wxUSE_TOOLBAR_NATIVE && !defined(__WXUNIVERSAL__)
     IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarSimple)

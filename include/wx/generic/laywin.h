@@ -99,7 +99,7 @@ protected:
     wxLayoutAlignment       m_alignment;
     
 private:
-    DECLARE_DYNAMIC_CLASS(wxQueryLayoutInfoEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxQueryLayoutInfoEvent)
 };
 
 typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEvent&);
@@ -136,7 +136,7 @@ protected:
     wxRect                  m_rect;
     
 private:
-    DECLARE_DYNAMIC_CLASS(wxCalculateLayoutEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCalculateLayoutEvent)
 };
 
 typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEvent&);
@@ -192,7 +192,7 @@ private:
     wxSize                      m_defaultSize;
 
 private:
-    DECLARE_CLASS(wxSashLayoutWindow)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSashLayoutWindow)
     DECLARE_EVENT_TABLE()
 };
 

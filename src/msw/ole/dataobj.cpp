@@ -1134,6 +1134,8 @@ protected:
         return TRUE;
     }
 #endif
+
+    DECLARE_NO_COPY_CLASS(CFSTR_SHELLURLDataObject)
 };
 
 

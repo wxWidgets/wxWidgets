@@ -166,10 +166,10 @@ static wxDisplayInfoArray *gs_displays = NULL;
 // ----------------------------------------------------------------------------
 
 static BOOL CALLBACK wxmswMonitorEnumProc (
-  HMONITOR hMonitor,  // handle to display monitor
-  HDC hdcMonitor,     // handle to monitor-appropriate device context (NULL)
-  LPRECT lprcMonitor, // pointer to monitor intersection rectangle
-  LPARAM dwData       // data passed from EnumDisplayMonitors (unused)
+  HMONITOR hMonitor,        // handle to display monitor
+  HDC WXUNUSED(hdcMonitor), // handle to monitor-appropriate device context
+  LPRECT lprcMonitor,       // pointer to monitor intersection rectangle
+  LPARAM WXUNUSED(dwData)   // data passed from EnumDisplayMonitors (unused)
 )
 {
     wxDisplayInfo *info = new wxDisplayInfo();
@@ -193,9 +193,9 @@ static BOOL CALLBACK wxmswMonitorEnumProc (
 
 BOOL PASCAL
 wxDDEnumExCallback(GUID *pGuid,
-                   LPTSTR driverDescription,
+                   LPTSTR WXUNUSED(driverDescription),
                    LPTSTR driverName,
-                   LPVOID lpContext,
+                   LPVOID WXUNUSED(lpContext),
                    HMONITOR hmon)
 {
     if ( pGuid )
@@ -539,7 +539,7 @@ wxString wxDisplay::GetNameForEnumSettings() const
 // ----------------------------------------------------------------------------
 
 wxArrayVideoModes
-wxDisplay::DoGetModesDirectX(const wxVideoMode& modeMatch) const
+wxDisplay::DoGetModesDirectX(const wxVideoMode& WXUNUSED(modeMatch)) const
 {
     wxArrayVideoModes modes;
 

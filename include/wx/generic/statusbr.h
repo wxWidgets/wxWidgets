@@ -121,10 +121,8 @@ protected:
 
 private:
   DECLARE_EVENT_TABLE()
-  DECLARE_DYNAMIC_CLASS(wxStatusBarGeneric)
+  DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBarGeneric)
 };
 
 #endif
     // _WX_GENERIC_STATUSBR_H_
-
-// vi:sts=4:sw=4:et

@@ -158,6 +158,8 @@ private:
     COLORREF m_colFgOld, m_colBgOld;
 
     bool m_changed;
+
+    DECLARE_NO_COPY_CLASS(wxColourChanger)
 };
 
 // this class saves the old stretch blit mode during its life time
@@ -186,6 +188,8 @@ private:
     const HDC m_hdc;
 
     int m_modeOld;
+
+    DECLARE_NO_COPY_CLASS(StretchBltModeChanger)
 };
 
 // ===========================================================================

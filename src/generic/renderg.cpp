@@ -146,10 +146,10 @@ wxRendererGeneric::DrawShadedRect(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 void
-wxRendererGeneric::DrawHeaderButton(wxWindow *win,
+wxRendererGeneric::DrawHeaderButton(wxWindow * WXUNUSED(win),
                                     wxDC& dc,
                                     const wxRect& rect,
-                                    int flags)
+                                    int WXUNUSED(flags))
 {
     const int CORNER = 1;
 
@@ -177,7 +177,7 @@ wxRendererGeneric::DrawHeaderButton(wxWindow *win,
 
 // draw the plus or minus sign
 void
-wxRendererGeneric::DrawTreeItemButton(wxWindow *win,
+wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
                                       wxDC& dc,
                                       const wxRect& rect,
                                       int flags)

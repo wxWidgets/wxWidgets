@@ -215,6 +215,8 @@ private:
 
     private:
         wxDialUpManagerMSW *m_dialUpManager;
+
+        DECLARE_NO_COPY_CLASS(RasTimer)
     } m_timerStatusPolling;
 
     // thread handle for the thread sitting on connection change event
@@ -264,6 +266,8 @@ private:
 
     // this flag tells us whether a call to RasDial() is in progress
     static wxDialUpManagerMSW *ms_dialer;
+
+    DECLARE_NO_COPY_CLASS(wxDialUpManagerMSW)
 };
 
 // ----------------------------------------------------------------------------
@@ -1236,7 +1240,7 @@ static LRESULT APIENTRY wxRasStatusWindowProc(HWND hWnd, UINT message,
     return 0;
 }
 
-static void WINAPI wxRasDialFunc(UINT unMsg,
+static void WINAPI wxRasDialFunc(UINT WXUNUSED(unMsg),
                                  RASCONNSTATE rasconnstate,
                                  DWORD dwError)
 {
