@@ -3961,6 +3961,14 @@ class PrintData(_core.Object):
         return _windows_.PrintData_SetFilename(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    def GetPrivData(*args, **kwargs):
+        """GetPrivData(self) -> PyObject"""
+        return _windows_.PrintData_GetPrivData(*args, **kwargs)
+
+    def SetPrivData(*args, **kwargs):
+        """SetPrivData(self, PyObject data)"""
+        return _windows_.PrintData_SetPrivData(*args, **kwargs)
+
     def GetPrinterCommand(*args, **kwargs):
         """GetPrinterCommand(self) -> String"""
         return _windows_.PrintData_GetPrinterCommand(*args, **kwargs)

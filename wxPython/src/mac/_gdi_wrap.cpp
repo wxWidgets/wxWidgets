@@ -18479,6 +18479,78 @@ static PyObject *_wrap_ImageList_AddIcon(PyObject *, PyObject *args, PyObject *k
 }
 
 
+static PyObject *_wrap_ImageList_GetBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImageList *arg1 = (wxImageList *) 0 ;
+    int arg2 ;
+    SwigValueWrapper<wxBitmap > result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "index", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ImageList_GetBitmap",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImageList, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxImageList const *)arg1)->GetBitmap(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxBitmap * resultptr;
+        resultptr = new wxBitmap((wxBitmap &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxBitmap, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ImageList_GetIcon(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImageList *arg1 = (wxImageList *) 0 ;
+    int arg2 ;
+    wxIcon result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "index", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ImageList_GetIcon",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImageList, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxImageList const *)arg1)->GetIcon(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxIcon * resultptr;
+        resultptr = new wxIcon((wxIcon &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxIcon, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_ImageList_Replace(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageList *arg1 = (wxImageList *) 0 ;
@@ -21067,6 +21139,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ImageList_Add", (PyCFunction) _wrap_ImageList_Add, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageList_AddWithColourMask", (PyCFunction) _wrap_ImageList_AddWithColourMask, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageList_AddIcon", (PyCFunction) _wrap_ImageList_AddIcon, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ImageList_GetBitmap", (PyCFunction) _wrap_ImageList_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ImageList_GetIcon", (PyCFunction) _wrap_ImageList_GetIcon, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageList_Replace", (PyCFunction) _wrap_ImageList_Replace, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageList_Draw", (PyCFunction) _wrap_ImageList_Draw, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageList_GetImageCount", (PyCFunction) _wrap_ImageList_GetImageCount, METH_VARARGS | METH_KEYWORDS, NULL},
