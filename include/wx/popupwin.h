@@ -86,6 +86,10 @@ public:
 
     // hide the window
     virtual void Dismiss();
+    
+
+    virtual bool CanDismiss()
+        { return TRUE; }
 
     // called when a mouse is pressed while the popup is shown: return TRUE
     // from here to prevent its normal processing by the popup (which consists

@@ -123,6 +123,8 @@ class wxPopupMenuWindow : public wxPopupTransientWindow
 {
 public:
     wxPopupMenuWindow(wxWindow *parent, wxMenu *menu);
+    
+    ~wxPopupMenuWindow();
 
     // override the base class version to select the first item initially
     virtual void Popup(wxWindow *focus = NULL);
@@ -306,6 +308,10 @@ wxPopupMenuWindow::wxPopupMenuWindow(wxWindow *parent, wxMenu *menu)
     (void)Create(parent, wxBORDER_RAISED);
 
     SetCursor(wxCURSOR_ARROW);
+}
+
+wxPopupMenuWindow::~wxPopupMenuWindow()
+{
 }
 
 // ----------------------------------------------------------------------------
@@ -1154,6 +1160,10 @@ wxWindow *wxMenu::GetRootWindow() const
     wxMenu *menu = GetParent();
     while ( menu )
     {
+        // We are a submenu of a menu of a menubar
+        if (menu->GetMenuBar())
+           return menu->GetMenuBar();
+    
         win = menu->GetInvokingWindow();
         if ( win )
             break;
@@ -1164,7 +1174,7 @@ wxWindow *wxMenu::GetRootWindow() const
     // we're probably going to crash in the caller anyhow, but try to detect
     // this error as soon as possible
     wxASSERT_MSG( win, _T("menu without any associated window?") );
-
+    
     // also remember it in this menu so that we don't have to search for it the
     // next time
     wxConstCast(this, wxMenu)->m_invokingWindow = win;
@@ -2379,6 +2389,9 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 void wxWindow::DismissPopupMenu()
 {
     wxCHECK_RET( ms_evtLoopPopup, _T("no popup menu shown") );
+    
+    char *crash = NULL;
+    (*crash) = 0;
 
     ms_evtLoopPopup->Exit();
 }

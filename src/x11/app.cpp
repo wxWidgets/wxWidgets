@@ -647,23 +647,32 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 tlw = tlw->GetParent();
             if (tlw && !tlw->IsEnabled())
                 return;
-            
+                
             if (event->type == ButtonPress)
             {
                 if ((win != wxWindow::FindFocus()) && win->AcceptsFocus())
                 {
                     // This might actually be done in wxWindow::SetFocus()
-                    // and not here.
+                    // and not here. TODO.
                     g_prevFocus = wxWindow::FindFocus();
                     g_nextFocus = win;
                     
                     win->SetFocus();
                 }
             }
-
+            
+#if !wxUSE_NANOX
+            if (event->type == LeaveNotify || event->type == EnterNotify)
+            {
+                // Throw out NotifyGrab and NotifyUngrab
+                if (event->xcrossing.mode != NotifyNormal)
+                    return;
+            }
+#endif
             wxMouseEvent wxevent;
             wxTranslateMouseEvent(wxevent, win, window, event);
             win->GetEventHandler()->ProcessEvent( wxevent );
+                
             return;
         }
         case FocusIn:

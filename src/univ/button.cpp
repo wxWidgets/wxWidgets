@@ -45,7 +45,7 @@
 // ----------------------------------------------------------------------------
 
 // default margins around the image
-static const wxCoord DEFAULT_BTN_MARGIN_X = 0;
+static const wxCoord DEFAULT_BTN_MARGIN_X = 0;  // We should give space for the border, at least.
 static const wxCoord DEFAULT_BTN_MARGIN_Y = 0;
 
 // ============================================================================

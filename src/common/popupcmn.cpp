@@ -427,8 +427,6 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
         win = win->GetParent();
     }
     
-    printf( "Dismiss now.\n" );
-    
     m_popup->DismissAndNotify();
 }
 
