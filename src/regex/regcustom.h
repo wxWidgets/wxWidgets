@@ -26,9 +26,6 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* headers if any */
-#include "wx/wxchar.h"
-
 /* overrides for regguts.h definitions, if any */
 /* regguts only includes standard headers if NULL is not defined, so do it
  * ourselves here */
@@ -37,6 +34,9 @@
 #include <ctype.h>
 #include <limits.h>
 #include <string.h>
+
+/* must include this after ctype.h inclusion for CodeWarrior/Mac */
+#include "wx/wxchar.h"
 
 /*
  * Do not insert extras between the "begin" and "end" lines -- this
