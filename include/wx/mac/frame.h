@@ -87,11 +87,6 @@ public:
                                            const wxString& name = wxStatusLineNameStr);
 
     virtual void PositionStatusBar();
-
-  // Hint to tell framework which status bar to use
-  // TODO: should this go into a wxFrameworkSettings class perhaps?
-  static void UseNativeStatusBar(bool useNative) { m_useNativeStatusBar = useNative; };
-  static bool UsesNativeStatusBar() { return m_useNativeStatusBar; };
 #endif // wxUSE_STATUSBAR
 
     // tooltip management
@@ -117,9 +112,6 @@ protected:
     virtual void AttachMenuBar(wxMenuBar *menubar);
 
 protected:
-#if wxUSE_STATUSBAR
-    static bool           m_useNativeStatusBar;
-#endif // wxUSE_STATUSBAR
     // the last focused child: we restore focus to it on activation
     wxWindow             *m_winLastFocused;
 

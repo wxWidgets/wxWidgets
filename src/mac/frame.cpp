@@ -40,12 +40,6 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 #endif
 
-#if wxUSE_NATIVE_STATUSBAR
-bool wxFrame::m_useNativeStatusBar = TRUE;
-#else
-bool wxFrame::m_useNativeStatusBar = FALSE;
-#endif
-
 #define WX_MAC_STATUSBAR_HEIGHT 15 
 // ----------------------------------------------------------------------------
 // creation/destruction
