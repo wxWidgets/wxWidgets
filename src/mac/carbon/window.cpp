@@ -1359,13 +1359,25 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
     if ( doMove || doResize )
     {
         Rect r = wxMacGetBoundsForControl(this , wxPoint( actualX,actualY), wxSize( actualWidth, actualHeight ) ) ;
+        bool vis = IsControlVisible( (ControlRef) m_macControl ) ;
 #if TARGET_API_MAC_OSX
-        SetControlBounds( (ControlRef) m_macControl , &r ) ;
+        // the HIViewSetFrame call itself should invalidate the areas, but when testing with the UnicodeTextCtrl it does not !
+        if ( vis )
+            SetControlVisibility(  (ControlRef)m_macControl , false , true ) ;
+        HIRect hir = { r.left , r.top , r.right - r.left , r.bottom - r.top } ;
+        HIViewSetFrame ( (ControlRef) m_macControl , &hir ) ;
+        if ( vis )
+            SetControlVisibility(  (ControlRef)m_macControl , true , true ) ;
 #else
+// TODO TEST        SetControlBounds( (ControlRef) m_macControl , &r ) ;
+        if ( vis )
+            SetControlVisibility(  (ControlRef)m_macControl , false , true ) ;
         if ( doMove )
             MoveControl( (ControlRef) m_macControl , r.left , r.top ) ;
         if ( doSize )
             SizeControl( (ControlRef) m_macControl , r.right-r.left , r.bottom-r.top ) ;
+        if ( vis )
+            SetControlVisibility(  (ControlRef)m_macControl , true , true ) ;
 #endif
         MacRepositionScrollBars() ;
         if ( doMove )
