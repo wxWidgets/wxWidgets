@@ -23,7 +23,7 @@
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxSlider
+// "value_changed"
 //-----------------------------------------------------------------------------
 
 static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
@@ -58,6 +58,10 @@ static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
   cevent.SetEventObject( win );
   win->ProcessEvent( cevent );
 }
+
+//-----------------------------------------------------------------------------
+// wxSlider
+//-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxSlider,wxControl)
 

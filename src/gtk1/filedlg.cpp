@@ -64,7 +64,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
   m_dialogStyle = style;
   m_filterIndex = 1;
 
-  m_widget = gtk_file_selection_new(_("File selection"));
+  m_widget = gtk_file_selection_new( m_message );
   
   int x = (gdk_screen_width () - 400) / 2;
   int y = (gdk_screen_height () - 400) / 2;

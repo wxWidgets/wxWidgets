@@ -405,3 +405,9 @@ void wxComboBox::SetFont( const wxFont &font )
   }
 }
       
+GtkWidget* wxComboBox::GetConnectWidget(void)
+{
+  return GTK_COMBO(m_widget)->entry;
+}
+
+

@@ -317,7 +317,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
   }
     
   if (!win->HasVMT()) return TRUE;
-    
+
 /*
   printf( "OnButtonPress from " );
   if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -396,7 +396,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 }
 
 //-----------------------------------------------------------------------------
-// "button_release"
+// "button_release_event"
 //-----------------------------------------------------------------------------
 
 static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )

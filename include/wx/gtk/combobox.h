@@ -103,6 +103,7 @@ class wxComboBox: public wxControl
   
     wxList   m_clientData;
   
+    GtkWidget* GetConnectWidget(void);
 };
 
 #endif // __GTKCOMBOBOXH__

@@ -21,18 +21,22 @@ Consistent keyboard interface and focus behaviour
 
 ================================ GTK  ==========================================
 
-Set fonts in GTK widgets
-Set colour/baclgroundcolour in GTK widgets
+Add support Set colour/baclgroundcolour in GTK widgets
 Correct tab navigation (seems to be a GTK feature)
-DnD (postponed as GTK 1.2 will have new DnD)
-Clipboard
+Finish DnD (postponed as GTK 1.2 will have new DnD)
+Add Clipboard
 Help system (not sure about this one)
 Show accelerator in menus
 More controls with bitmaps
 Speed up bitmap saving
-wxBitmapHandler
+Add wxBitmapHandler
 Fix printing of bitmaps
-wxRadioBox layout and setsize
+Implement wxRadioBox layout
+Finish wxTextCtrl
+Finish native wxTreeCtrl
+Implement wxPalette
+Implement wxDirDialog
+Implement CopyOnWrite (unshare) for GDI objects
+Support cooperation between Qt and wxWindows
 TrueType support (just kidding)
 
-wxTreeCtrl not yet finshed
