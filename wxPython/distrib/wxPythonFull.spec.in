@@ -22,7 +22,9 @@
 # Should --enable-debug_flag be used in release builds?  Using it
 # defines __WXDEBUG__ and gives us runtime diagnostics that are turned
 # into Python exceptions starting with 2.3.4.  (So turning it on is a
-# very helpful thing IMO and is recommended.)
+# very helpful thing IMO and is recommended.)  The code is still
+# compiled with optimization flags and such when this option is used,
+# it simply turns on some extra code.
 %define debug_flag 1
 
 
@@ -172,11 +174,6 @@ cd $WXDIR/wxPython
 
 
 cd $WXDIR/wxPython
-
-# install the wxPython headers
-cp -R include $RPM_BUILD_ROOT%{wxpref}
-mkdir -p $RPM_BUILD_ROOT%{wxpref}/include/wx/wxPython/i_files
-cp src/*.i $RPM_BUILD_ROOT%{wxpref}/include/wx/wxPython/i_files
 
 
 # Since I want this RPM to be as generic as possible I won't let

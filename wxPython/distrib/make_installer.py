@@ -98,6 +98,7 @@ Source: "wx\_xrc.pyd";                         DestDir: "{app}\wx"; Components: 
 
 
 Source: "wx\*.py";                             DestDir: "{app}\wx"; Components: core
+Source: "wx\build\*.py";                       DestDir: "{app}\wx\build"; Components: core
 Source: "wx\lib\*.py";                         DestDir: "{app}\wx\lib"; Components: core
 Source: "wx\lib\*.wdr";                        DestDir: "{app}\wx\lib"; Components: core
 Source: "wx\lib\colourchooser\*.py";           DestDir: "{app}\wx\lib\colourchooser"; Components: core
@@ -269,6 +270,8 @@ Name: "{group}\Other wxPython Docs";   Filename: "{app}\wx\docs\wxPythonDocs.htm
 Type: files; Name: "{app}\wx\*.pyc";
 Type: files; Name: "{app}\wx\*.pyo";
 Type: files; Name: "{app}\wx\*.pyd";
+Type: files; Name: "{app}\wx\build\*.pyc";
+Type: files; Name: "{app}\wx\build\*.pyo";
 Type: files; Name: "{app}\wx\lib\*.pyc";
 Type: files; Name: "{app}\wx\lib\*.pyo";
 Type: files; Name: "{app}\wx\lib\colourchooser\*.pyc";
