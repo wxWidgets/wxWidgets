@@ -41,7 +41,7 @@
 //
 
 #ifdef __WXMAC__
-#include "wx/mac/private.h"
+#include "wx/mac/uma.h"
 #include <Movies.h>
 #include <Gestalt.h>
 #endif
@@ -375,42 +375,57 @@ bool wxSound::DoPlay(unsigned flags) const
             if (!wxInitQT())
                 return false;
 
-            short movieResFile;
-            FSSpec sfFile;
-
-#ifdef __WXMAC__
-            wxMacFilename2FSSpec( m_sndname , &sfFile ) ;
-#else
-            int nError;
-            if ((nError = NativePathNameToFSSpec ((char*) m_sndname.c_str(), &sfFile, 0)) != noErr)
+            OSErr err = noErr ;
+#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2 )
+            if ( UMAGetSystemVersion() >= 0x1030 )
             {
-                wxLogSysError(wxString::Format(wxT("File:%s does not exist\nError:%i"),
-                                m_sndname.c_str(), nError));
-                return false;
+                Handle dataRef = NULL;
+                OSType dataRefType;            
+                
+                err = QTNewDataReferenceFromFullPathCFString(wxMacCFStringHolder(m_sndname,wxLocale::GetSystemEncoding()),
+                    kQTNativeDefaultPathStyle, 0, &dataRef, &dataRefType);
+
+                if (NULL != dataRef) 
+                {
+                    err = NewMovieFromDataRef( &movie, newMovieDontAskUnresolvedDataRefs , NULL, dataRef, dataRefType );
+                    DisposeHandle(dataRef);
+                }
             }
+            else
 #endif
-
-            if (OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)
             {
-                wxLogSysError(wxT("Quicktime couldn't open the file"));
-                return false;
+                short movieResFile;
+                FSSpec sfFile;
+#ifdef __WXMAC__
+                wxMacFilename2FSSpec( m_sndname , &sfFile ) ;
+#else
+                int nError;
+                if ((nError = NativePathNameToFSSpec ((char*) m_sndname.c_str(), &sfFile, 0)) != noErr)
+                {
+                    wxLogSysError(wxString::Format(wxT("File:%s does not exist\nError:%i"),
+                                    m_sndname.c_str(), nError));
+                    return false;
+                }
+#endif
+                if (OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)
+                {
+                    wxLogSysError(wxT("Quicktime couldn't open the file"));
+                    return false;
+                }
+                short movieResID = 0;
+                Str255 movieName;
+
+                err = NewMovieFromFile (
+                &movie,
+                movieResFile,
+                &movieResID,
+                movieName,
+                newMovieActive,
+                NULL); //wasChanged
+
+                CloseMovieFile (movieResFile);
             }
-
-
-            short movieResID = 0;
-            Str255 movieName;
-            OSErr err;
-
-            err = NewMovieFromFile (
-            &movie,
-            movieResFile,
-            &movieResID,
-            movieName,
-            newMovieActive,
-            NULL); //wasChanged
-
-            CloseMovieFile (movieResFile);
-
+            
             if (err != noErr)
             {
                 wxLogSysError(

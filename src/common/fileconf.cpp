@@ -997,19 +997,23 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   bool ret = file.Commit();
 
 #if defined(__WXMAC__)
-  if ( ret )
-  {
-  	FSSpec spec ;
-
-  	wxMacFilename2FSSpec( m_strLocalFile , &spec ) ;
-  	FInfo finfo ;
-  	if ( FSpGetFInfo( &spec , &finfo ) == noErr )
-  	{
-  		finfo.fdType = 'TEXT' ;
-  		finfo.fdCreator = 'ttxt' ;
-  		FSpSetFInfo( &spec , &finfo ) ;
-  	}
-  }
+    if ( ret )
+    {
+        FSRef fsRef ;
+        FSCatalogInfo catInfo;
+  	    FileInfo *finfo ;
+	
+	    if ( wxMacPathToFSRef( m_strLocalFile , &fsRef ) == noErr )
+	    {
+    	    if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
+    	    {
+    	        finfo = (FileInfo*)&catInfo.finderInfo;
+      		    finfo->fileType = 'TEXT' ;
+      		    finfo->fileCreator = 'ttxt' ;
+      		    FSSetCatalogInfo( &fsRef, kFSCatInfoFinderInfo, &catInfo ) ;
+      	    }
+  	    }
+    }
 #endif // __WXMAC__
 
 #ifdef __UNIX__

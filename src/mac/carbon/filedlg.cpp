@@ -36,12 +36,7 @@ IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 
 #include <Navigation.h>
 
-#ifdef __DARWIN__
-#  include "MoreFilesX.h"
-#else
-#  include "MoreFiles.h"
-#  include "MoreFilesExtras.h"
-#endif
+#include "MoreFilesX.h"
 
 extern bool gUseNavServices ;
 
@@ -58,11 +53,7 @@ struct OpenUserDataRec {
   wxArrayString      extensions ;
   wxArrayLong        filtermactypes ;
   wxString           defaultLocation;
-#if TARGET_CARBON
   CFArrayRef         menuitems ;
-#else
-  NavMenuItemSpecArrayHandle menuitems ;
-#endif
 };
 
 typedef struct OpenUserDataRec
@@ -73,11 +64,7 @@ static pascal void    NavEventProc(
                                 NavCBRecPtr                    ioParams,
                                 NavCallBackUserData            ioUserData);
 
-#if TARGET_CARBON
-        static NavEventUPP    sStandardNavEventFilter = NewNavEventUPP(NavEventProc);
-#else
-        static NavEventUPP    sStandardNavEventFilter = NewNavEventProc(NavEventProc);
-#endif
+static NavEventUPP    sStandardNavEventFilter = NewNavEventUPP(NavEventProc);
 
 static pascal void
 NavEventProc(
@@ -87,14 +74,9 @@ NavEventProc(
 {
     OpenUserDataRec * data = ( OpenUserDataRec *) ioUserData ;
     if (inSelector == kNavCBEvent) {
-#if TARGET_CARBON
-#else
-        wxTheApp->MacHandleOneEvent(ioParams->eventData.eventDataParms.event);
-#endif
     }
     else if ( inSelector == kNavCBStart )
     {
-#if TARGET_CARBON
         if (data && !(data->defaultLocation).IsEmpty())
         {
             // Set default location for the modern Navigation APIs
@@ -112,22 +94,13 @@ NavEventProc(
         menuItem.menuType = data->currentfilter;
         wxMacStringToPascal( data->name[data->currentfilter] , (StringPtr)(menuItem.menuItemName) ) ;
         ::NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &menuItem);
-
-#else
-        if ( data->menuitems )
-            NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &(*data->menuitems)[data->currentfilter]);
-#endif
     }
     else if ( inSelector == kNavCBPopupMenuSelect )
     {
         NavMenuItemSpec * menu = (NavMenuItemSpec *) ioParams->eventData.eventDataParms.param ;
-#if TARGET_CARBON
         const size_t numFilters = data->extensions.GetCount();
 
         if ( menu->menuType < numFilters )
-#else
-        if ( menu->menuCreator == 'WXNG' )
-#endif
         {
             data->currentfilter = menu->menuType ;
             if ( data->saveMode )
@@ -137,27 +110,15 @@ NavEventProc(
                 extension.MakeLower() ;
                 wxString sfilename ;
 
-#if TARGET_CARBON
                 wxMacCFStringHolder cfString( NavDialogGetSaveFileName( ioParams->context ) , false  );
                 sfilename = cfString.AsString() ;
-#else
-                Str255 filename ;
-                // get the current filename
-                NavCustomControl(ioParams->context, kNavCtlGetEditFileName, &filename);
-                sfilename = wxMacMakeStringFromPascal( filename ) ;
-#endif
 
                 int pos = sfilename.Find('.', true) ;
                 if ( pos != wxNOT_FOUND )
                 {
                     sfilename = sfilename.Left(pos+1)+extension ;
-#if TARGET_CARBON
                     cfString.Assign( sfilename , wxFONTENCODING_DEFAULT ) ;
                     NavDialogSetSaveFileName( ioParams->context , cfString ) ;
-#else
-                    wxMacStringToPascal( sfilename , filename ) ;
-                    NavCustomControl(ioParams->context, kNavCtlSetEditFileName, &filename);
-#endif
                 }
             }
         }
@@ -268,7 +229,7 @@ static Boolean CheckFile( const wxString &filename , OSType type , OpenUserDataR
     return true ;
 }
 
-#ifndef __DARWIN__
+#if !TARGET_API_MAC_OSX
 static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dataPtr)
 {
     OpenUserDataRecPtr data = (OpenUserDataRecPtr) dataPtr ;
@@ -328,28 +289,13 @@ pascal Boolean CrossPlatformFilterCallback (
                 wxString file = wxMacMakeStringFromPascal( spec.name ) ;
                 display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
             }
- #if TARGET_CARBON
             else if ( theItem->descriptorType == typeFSRef )
             {
                 FSRef fsref ;
                 memcpy( &fsref , *theItem->dataHandle , sizeof(FSRef) ) ;
-
-
-
-            	CFURLRef fullURLRef;
-                fullURLRef = ::CFURLCreateFromFSRef(NULL, &fsref);
-#ifdef __UNIX__
-            	CFURLPathStyle pathstyle = kCFURLPOSIXPathStyle;
-#else
-            	CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
-#endif
-            	CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
-            	::CFRelease( fullURLRef ) ;
-            	wxString file = wxMacCFStringHolder(cfString).AsString(wxFont::GetDefaultEncoding());
-
+                wxString file = wxMacFSRefToPath( &fsref ) ;
                 display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
             }
-#endif
         }
     }
 
@@ -358,7 +304,6 @@ pascal Boolean CrossPlatformFilterCallback (
 
 int wxFileDialog::ShowModal()
 {
-#if TARGET_CARBON
     OSErr err;
     NavDialogCreationOptions dialogCreateOptions;
     // set default options
@@ -474,30 +419,10 @@ int wxFileDialog::ShowModal()
 
             CFURLRef fullURLRef = 0 ;
             if (m_dialogStyle & wxSAVE)
-            {
-                CFURLRef parentURLRef = ::CFURLCreateFromFSRef(NULL, &theFSRef);
-
-                if (parentURLRef)
-                {
-                    fullURLRef =
-                        ::CFURLCreateCopyAppendingPathComponent(NULL,
-                                                                parentURLRef,
-                                                                navReply.saveFileName,
-                                                                false);
-                    ::CFRelease(parentURLRef);
-                }
-            }
+                thePath = wxMacFSRefToPath( &theFSRef , navReply.saveFileName ) ;
             else
-            {
-                fullURLRef = ::CFURLCreateFromFSRef(NULL, &theFSRef);
-            }
-#ifdef __UNIX__
-            CFURLPathStyle pathstyle = kCFURLPOSIXPathStyle;
-#else
-            CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
-#endif
-            CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
-            thePath = wxMacCFStringHolder(cfString).AsString(m_font.GetEncoding());
+                thePath = wxMacFSRefToPath( &theFSRef ) ;
+                
             if (!thePath)
             {
                 ::NavDisposeReply(&navReply);
@@ -516,163 +441,5 @@ int wxFileDialog::ShowModal()
     ::NavDisposeReply(&navReply);
 
     return (err == noErr) ? wxID_OK : wxID_CANCEL;
-#else // TARGET_CARBON
-
-    NavDialogOptions           mNavOptions;
-    NavObjectFilterUPP           mNavFilterUPP = NULL;
-    NavPreviewUPP           mNavPreviewUPP = NULL ;
-    NavReplyRecord           mNavReply;
-    AEDesc               mDefaultLocation ;
-    bool               mSelectDefault = false ;
-    OSStatus            err = noErr ;
-    // setup dialog
-
-    mNavFilterUPP    = nil;
-    mNavPreviewUPP    = nil;
-    mSelectDefault    = false;
-    mDefaultLocation.descriptorType = typeNull;
-    mDefaultLocation.dataHandle     = nil;
-
-    NavGetDefaultDialogOptions(&mNavOptions);
-    wxMacStringToPascal( m_message , (StringPtr)mNavOptions.message ) ;
-    wxMacStringToPascal( m_fileName , (StringPtr)mNavOptions.savedFileName ) ;
-
-    // Set default location, the location
-    //   that's displayed when the dialog
-    //   first appears
-
-    FSSpec location ;
-    wxMacFilename2FSSpec( m_dir , &location ) ;
-
-    err = ::AECreateDesc(typeFSS, &location, sizeof(FSSpec), &mDefaultLocation );
-
-    if ( mDefaultLocation.dataHandle )
-    {
-        if (mSelectDefault)
-        {
-            mNavOptions.dialogOptionFlags |= kNavSelectDefaultLocation;
-        } else {
-            mNavOptions.dialogOptionFlags &= ~kNavSelectDefaultLocation;
-        }
-    }
-
-    memset( &mNavReply , 0 , sizeof( mNavReply ) ) ;
-    mNavReply.validRecord = false;
-    mNavReply.replacing = false;
-    mNavReply.isStationery = false;
-    mNavReply.translationNeeded = false;
-    mNavReply.selection.descriptorType = typeNull;
-    mNavReply.selection.dataHandle = nil;
-    mNavReply.keyScript = smSystemScript;
-    mNavReply.fileTranslation = nil;
-    mNavReply.version = kNavReplyRecordVersion ;
-
-    // zero all data
-
-    m_path = wxEmptyString ;
-    m_fileName = wxEmptyString ;
-    m_paths.Empty();
-    m_fileNames.Empty();
-
-    OpenUserDataRec            myData;
-    MakeUserDataRec( &myData , m_wildCard ) ;
-    myData.currentfilter = m_filterIndex ;
-    if ( myData.extensions.GetCount() > 0 )
-    {
-        mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.extensions.GetCount() ) ;
-        myData.menuitems = mNavOptions.popupExtension ;
-        for ( size_t i = 0 ; i < myData.extensions.GetCount() ; ++i )
-        {
-            (*mNavOptions.popupExtension)[i].version     = kNavMenuItemSpecVersion ;
-            (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
-            // TODO : according to the new docs  -1 to 10 are reserved for the OS
-            (*mNavOptions.popupExtension)[i].menuType    = i ;
-            wxMacStringToPascal( myData.name[i] , (StringPtr)(*mNavOptions.popupExtension)[i].menuItemName ) ;
-        }
-    }
-    if ( m_dialogStyle & wxSAVE )
-    {
-        myData.saveMode = true ;
-
-        mNavOptions.dialogOptionFlags |= kNavDontAutoTranslate ;
-        mNavOptions.dialogOptionFlags |= kNavDontAddTranslateItems ;
-
-        err = ::NavPutFile(
-                           &mDefaultLocation,
-                           &mNavReply,
-                           &mNavOptions,
-                           sStandardNavEventFilter ,
-                           NULL,
-                           kNavGenericSignature,
-                           &myData);                    // User Data
-        m_filterIndex = myData.currentfilter ;
-    }
-    else
-    {
-        myData.saveMode = false ;
-
-        mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
-        if ( m_dialogStyle & wxMULTIPLE )
-            mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
-        else
-            mNavOptions.dialogOptionFlags &= ~kNavAllowMultipleFiles ;
-
-        err = ::NavGetFile(
-                           &mDefaultLocation,
-                           &mNavReply,
-                           &mNavOptions,
-                           sStandardNavEventFilter ,
-                           mNavPreviewUPP,
-                           mNavFilterUPP,
-                           NULL ,
-                           &myData);
-        m_filterIndex = myData.currentfilter ;
-    }
-
-    DisposeNavObjectFilterUPP(mNavFilterUPP);
-    if ( mDefaultLocation.dataHandle != nil )
-    {
-        ::AEDisposeDesc(&mDefaultLocation);
-    }
-
-    if ( (err != noErr) && (err != userCanceledErr) ) {
-        return wxID_CANCEL ;
-    }
-
-    if (mNavReply.validRecord)
-    {
-        FSSpec  outFileSpec ;
-        AEDesc specDesc ;
-        AEKeyword keyWord ;
-
-        long count ;
-        ::AECountItems( &mNavReply.selection , &count ) ;
-        for ( long i = 1 ; i <= count ; ++i )
-        {
-            OSErr err = ::AEGetNthDesc( &mNavReply.selection , i , typeFSS, &keyWord , &specDesc);
-            if ( err != noErr )
-            {
-                m_path = wxT("") ;
-                return wxID_CANCEL ;
-            }
-            outFileSpec = **(FSSpec**) specDesc.dataHandle;
-            if (specDesc.dataHandle != nil) {
-                ::AEDisposeDesc(&specDesc);
-            }
-            m_path = wxMacFSSpec2MacFilename( &outFileSpec ) ;
-
-            m_paths.Add( m_path ) ;
-            m_fileName = wxFileNameFromPath(m_path);
-            m_fileNames.Add(m_fileName);
-        }
-        // set these to the first hit
-        m_path = m_paths[ 0 ] ;
-        m_fileName = wxFileNameFromPath(m_path);
-        m_dir = wxPathOnly(m_path);
-        NavDisposeReply( &mNavReply ) ;
-        return wxID_OK ;
-    }
-    return wxID_CANCEL;
-#endif // TARGET_CARBON
 }
 

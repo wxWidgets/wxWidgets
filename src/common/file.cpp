@@ -228,7 +228,7 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
     // otherwise we only create the new file and fail if it already exists
 #if defined(__WXMAC__) && !defined(__UNIX__) && !wxUSE_UNICODE
     // Dominic Mazzoni [dmazzoni+@cs.cmu.edu] reports that open is still broken on the mac, so we replace
-    // int fd = open(wxUnix2MacFilename( szFileName ), O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
+    // int fd = open( szFileName , O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
     int fd = creat( szFileName , accessMode);
 #else
 #ifdef __WXWINCE__

@@ -33,12 +33,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#ifdef __DARWIN__
-#  include "MoreFilesX.h"
-#else
-#  include "MoreFiles.h"
-#  include "MoreFilesExtras.h"
-#endif
+#include "MoreFilesX.h"
 
 #ifndef __DARWIN__
 #include <Threads.h>
@@ -524,18 +519,12 @@ wxString wxMacFindFolder( short        vol,
               OSType       folderType,
               Boolean      createFolder)
 {
-    short    vRefNum  ;
-    long     dirID ;
+    FSRef fsRef ;    
     wxString strDir ;
 
-    if ( FindFolder( vol, folderType, createFolder, &vRefNum, &dirID) == noErr)
-    {
-        FSSpec file ;
-        if ( FSMakeFSSpec( vRefNum , dirID , "\p" , &file ) == noErr )
-        {
-            strDir = wxMacFSSpec2MacFilename( &file ) + wxFILE_SEP_PATH ;
-        }
-    }
+    if ( FSFindFolder( vol, folderType, createFolder, &fsRef) == noErr)
+        strDir = wxMacFSRefToPath( &fsRef ) ;
+
     return strDir ;
 }
 
@@ -667,20 +656,28 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 
     p = p + wxT(":") ;
 
-    Str255 volumeName ;
-    XVolumeParam pb ;
-
-    wxMacStringToPascal( p  , volumeName ) ;
-    OSErr err = XGetVolumeInfoNoName( volumeName , 0 , &pb ) ;
-    if ( err == noErr ) {
-      if ( pTotal ) {
-        (*pTotal) = wxLongLong( pb.ioVTotalBytes ) ;
-      }
-      if ( pFree ) {
-        (*pFree) = wxLongLong( pb.ioVFreeBytes ) ;
-      }
+    OSErr err = noErr ;
+    
+    FSRef fsRef ;
+    err = wxMacPathToFSRef( p , &fsRef ) ;
+    if ( noErr == err )
+    {
+        FSVolumeRefNum vRefNum ;
+        err = FSGetVRefNum( &fsRef , &vRefNum ) ;
+        if ( noErr == err )
+        {
+            UInt64 freeBytes , totalBytes ;
+            err = FSGetVInfo( vRefNum , NULL , &freeBytes , &totalBytes ) ;
+            if ( noErr == err )
+            {
+                if ( pTotal ) 
+                    *pTotal = wxLongLong( totalBytes ) ;
+                if ( pFree )
+                    *pFree = wxLongLong( freeBytes ) ;
+            }
+        }
     }
-
+    
     return err == noErr ;
 }
 #endif // !__DARWIN__

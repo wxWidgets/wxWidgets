@@ -164,14 +164,7 @@
 #endif
 
 #ifdef __WXMAC__
-#  ifdef __DARWIN__
 #    include "MoreFilesX.h"
-#  else
-#    include "MoreFiles.h"
-#    include "MoreFilesExtras.h"
-#    include "FullPath.h"
-#    include "FSpCompat.h"
-#  endif
 #endif
 
 // ----------------------------------------------------------------------------
@@ -915,219 +908,71 @@ wxString wxPathOnly (const wxString& path)
 // Also, convert to lower case, since case is significant in UNIX.
 
 #if defined(__WXMAC__)
-wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
+
+#if TARGET_API_MAC_OSX
+#define kDefaultPathStyle kCFURLPOSIXPathStyle
+#else
+#define kDefaultPathStyle kCFURLHFSPathStyle
+#endif
+
+wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent ) 
 {
-#ifdef __DARWIN__
-    int         i;
-    int         j;
-    OSErr       theErr;
-    OSStatus    theStatus = noErr;
-    Boolean     isDirectory = FALSE;
-    Str255    theParentPath = "\p";
-    FSSpec      theParentSpec;
-    FSRef       theParentRef;
-    FSRef       theRef ;
-    char        theFileName[FILENAME_MAX];
-    char        thePath[FILENAME_MAX];
-
-    // we loose the long filename by merely copying the spec->name
-    // so try the built-ins, which only work if the file exists, but still...
-    
-    theErr = FSpMakeFSRef(spec, &theRef);
-    if ( theErr == noErr )
+	CFURLRef fullURLRef;
+    fullURLRef = CFURLCreateFromFSRef(NULL, fsRef);
+    if ( additionalPathComponent )
     {
-    	CFURLRef fullURLRef;
-        fullURLRef = ::CFURLCreateFromFSRef(NULL, &theRef);
-#ifdef __UNIX__
-    	CFURLPathStyle pathstyle = kCFURLPOSIXPathStyle;
-#else
-    	CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
-#endif
-    	CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
-    	::CFRelease( fullURLRef ) ;
-    	return wxMacCFStringHolder(cfString).AsString(wxLocale::GetSystemEncoding());
+        CFURLRef parentURLRef = fullURLRef ;
+        fullURLRef = CFURLCreateCopyAppendingPathComponent(NULL, parentURLRef,
+            additionalPathComponent,false);
+        CFRelease( parentURLRef ) ;
     }
-
-    strcpy(thePath, "");
-
-    // GD: Separate file name from path and make a FSRef to the parent
-    //     directory. This is necessary since FSRefs cannot reference files
-    //     that have not yet been created.
-    //     Based on example code from Apple Technical Note TN2022
-    //       http://developer.apple.com/technotes/tn/tn2022.html
-
-    // check whether we are converting a directory
-    isDirectory = ((spec->name)[spec->name[0]] == ':');
-    // count length of file name
-    for (i = spec->name[0] - (isDirectory ? 1 : 0); ((spec->name[i] != ':') && (i > 0)); i--);
-    // copy file name
-    //   prepend path separator since it will later be appended to the path
-    theFileName[0] = wxFILE_SEP_PATH;
-    for (j = i + 1; j <= spec->name[0] - (isDirectory ? 1 : 0); j++) {
-        theFileName[j - i] = spec->name[j];
-    }
-    theFileName[j - i] = '\0';
-    // copy path if any
-    for (j = 1; j <= i; j++) {
-        theParentPath[++theParentPath[0]] = spec->name[j];
-    }
-    theErr = FSMakeFSSpec(spec->vRefNum, spec->parID, theParentPath, &theParentSpec);
-    if (theErr == noErr) {
-        // convert the FSSpec to an FSRef
-        theErr = FSpMakeFSRef(&theParentSpec, &theParentRef);
-    }
-    if (theErr == noErr) {
-        // get the POSIX path associated with the FSRef
-        theStatus = FSRefMakePath(&theParentRef,
-                                  (UInt8 *)thePath, sizeof(thePath));
-    }
-    if (theStatus == noErr) {
-        // append file name to path
-        //   includes previously prepended path separator
-        strcat(thePath, theFileName);
-    }
-
-    // create path string for return value
-    wxString result( thePath , wxConvLocal) ;
-#else
-    Handle    myPath ;
-    short     length ;
-
-    // get length of path and allocate handle
-    FSpGetFullPath( spec , &length , &myPath ) ;
-    ::SetHandleSize( myPath , length + 1 ) ;
-    ::HLock( myPath ) ;
-    (*myPath)[length] = 0 ;
-    if ((length > 0) && ((*myPath)[length-1] == ':'))
-        (*myPath)[length-1] = 0 ;
-
-    // create path string for return value
-    wxString result( *myPath , wxConvLocal) ;
-
-    // free allocated handle
-    ::HUnlock( myPath ) ;
-    ::DisposeHandle( myPath ) ;
-#endif
-
-    return result ;
+	CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, kDefaultPathStyle);
+	CFRelease( fullURLRef ) ;
+	return wxMacCFStringHolder(cfString).AsString(wxLocale::GetSystemEncoding());
 }
-#ifndef __DARWIN__
-// Mac file names are POSIX (Unix style) under Darwin
-// therefore the conversion functions below are not needed
 
-static wxChar sMacFileNameConversion[ 1000 ] ;
-static char scMacFileNameConversion[ 1000 ] ;
-
-#endif
-void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
+OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef ) 
 {
     OSStatus err = noErr ;
-#ifdef __DARWIN__
-    FSRef theRef;
-
-    // get the FSRef associated with the POSIX path
-    err = FSPathMakeRef((const UInt8 *) path, &theRef, NULL);
-    // convert the FSRef to an FSSpec
-    err = FSGetCatalogInfo(&theRef, kFSCatInfoNone, NULL, NULL, spec, NULL);
-#else
-    if ( strchr( path , ':' ) == NULL )
-    {
-        // try whether it is a volume / or a mounted volume
-        strncpy( scMacFileNameConversion , path , 1000 ) ;
-        scMacFileNameConversion[998] = 0 ;
-        strcat( scMacFileNameConversion , ":" ) ;
-        err = FSpLocationFromFullPath( strlen(scMacFileNameConversion) , scMacFileNameConversion , spec ) ;
+	CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, wxMacCFStringHolder(path ,wxLocale::GetSystemEncoding() ) , kDefaultPathStyle, false);
+	if ( NULL != url )
+	{
+	    if ( CFURLGetFSRef(url, fsRef) == false )
+	        err = fnfErr ;
+        CFRelease( url ) ;
     }
     else
     {
-        err = FSpLocationFromFullPath( strlen(path) , path , spec ) ;
+        err = fnfErr ;
     }
-#endif
+    return err ;
 }
 
-#if wxUSE_UNICODE
-WXDLLEXPORT void wxMacFilename2FSSpec( const wxChar *path , FSSpec *spec ) 
+wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname ) 
 {
-    return wxMacFilename2FSSpec( wxConvFile.cWC2MB(path) , spec ) ;
+    CFStringRef cfname = CFStringCreateWithCharacters( kCFAllocatorDefault,
+                                                      uniname->unicode,
+                                                      uniname->length );
+    return wxMacCFStringHolder(cfname).AsString() ;
 }
-#endif
 
-#ifndef __DARWIN__
-
-wxString wxMac2UnixFilename (const wxChar *str)
+wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 {
-    wxChar *s = sMacFileNameConversion ;
-    wxStrcpy( s , str ) ;
-    if (s)
+    FSRef fsRef ;
+    if ( FSpMakeFSRef( spec , &fsRef) == noErr )
     {
-        memmove( s+1 , s ,wxStrlen( s ) + 1 * sizeof(wxChar)) ;
-        if ( *s == ':' )
-            *s = '.' ;
-        else
-            *s = '/' ;
-
-        while (*s)
-        {
-            if (*s == ':')
-                *s = '/';
-            else
-                *s = wxTolower(*s);        // Case INDEPENDENT
-            s++;
-        }
+        return wxMacFSRefToPath( &fsRef ) ;
     }
-    return wxString(sMacFileNameConversion) ;
+    return wxEmptyString ;
 }
 
-wxString wxUnix2MacFilename (const wxChar *str)
+void wxMacFilename2FSSpec( const wxString& path , FSSpec *spec )
 {
-    wxChar *s = sMacFileNameConversion ;
-    wxStrcpy( s , str ) ;
-    if (s)
-    {
-        if ( *s == '.' )
-        {
-            // relative path , since it goes on with slash which is translated to a :
-            memmove( s , s+1 ,wxStrlen( s ) * sizeof(wxChar)) ;
-        }
-        else if ( *s == '/' )
-        {
-            // absolute path -> on mac just start with the drive name
-            memmove( s , s+1 ,wxStrlen( s ) * sizeof(wxChar) ) ;
-        }
-        else
-        {
-            wxASSERT_MSG( 1 , wxT("unkown path beginning") ) ;
-        }
-        while (*s)
-        {
-            if (*s == '/' || *s == '\\')
-            {
-                // convert any back-directory situations
-                if ( *(s+1) == '.' && *(s+2) == '.' && ( (*(s+3) == '/' || *(s+3) == '\\') ) )
-                {
-                    *s = ':';
-                    memmove( s+1 , s+3 ,(wxStrlen( s+3 ) + 1)*sizeof(wxChar) ) ;
-                }
-                else
-                    *s = ':';
-            }
-            s++ ;
-        }
-    }
-    return wxString(sMacFileNameConversion) ;
+    OSStatus err = noErr ;
+    FSRef fsRef ;
+    wxMacPathToFSRef( path , &fsRef ) ;
+    err = FSRefMakeFSSpec( &fsRef , spec ) ;
 }
-
-wxString wxMacFSSpec2UnixFilename( const FSSpec *spec )
-{
-    return wxMac2UnixFilename( wxMacFSSpec2MacFilename( spec) ) ;
-}
-
-void wxUnixFilename2FSSpec( const wxChar *path , FSSpec *spec )
-{
-    wxString var = wxUnix2MacFilename( path ) ;
-    wxMacFilename2FSSpec( var , spec ) ;
-}
-#endif // ! __DARWIN__
 
 #endif // __WXMAC__
 
@@ -1577,28 +1422,15 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     #if defined(_MSC_VER) || defined(__MINGW32__)
         ok = _getcwd(cbuf, sz) != NULL;
     #elif defined(__WXMAC__) && !defined(__DARWIN__)
-        FSSpec cwdSpec ;
-        FCBPBRec pb;
-        OSErr error;
-        Str255  fileName ;
-        pb.ioNamePtr = (StringPtr) &fileName;
-        pb.ioVRefNum = 0;
-        pb.ioRefNum = LMGetCurApRefNum();
-        pb.ioFCBIndx = 0;
-        error = PBGetFCBInfoSync(&pb);
-        if ( error == noErr )
+        char lbuf[1024] ;
+        if ( getcwd( lbuf , sizeof( lbuf ) ) )
         {
-            cwdSpec.vRefNum = pb.ioFCBVRefNum;
-            cwdSpec.parID = pb.ioFCBParID;
-            cwdSpec.name[0] = 0 ;
-            wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
-			wxStrcpy( buf , res ) ;			
+            wxString res( lbuf , *wxConvCurrent ) ;
+		    wxStrcpy( buf , res ) ;			
             ok = true;
         }
         else
-        {
-            ok = false;
-        }
+            ok = false ;
     #elif defined(__OS2__)
         APIRET rc;
         ULONG ulDriveNum = 0;

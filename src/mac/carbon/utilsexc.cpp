@@ -30,106 +30,27 @@ extern "C" {
 #include <string.h>
 
 #ifndef __DARWIN__
-#define wxEXECUTE_WIN_MESSAGE 10000
 
 #include "wx/mac/private.h"
-
-/*
-Below FinderLaunch function comes from:
-http://developer.apple.com/technotes/tn/tn1002.html#fndrask
-*/
-    /* FinderLaunch converts a list of nTargets FSSpec records
-    pointed to by the targetList parameter and converts the
-    list to an Apple Event.  It then sends that event to the
-    Finder.  The array of FSSpec records pointed to by the
-    targetList parameter may contain references to files,
-    folders, or applications.  The net effect of this command
-    is equivalent to the user selecting an icon in one of the
-    Finder's windows and then choosing the open command from
-    the Finder's file menu. */
-static OSErr FinderLaunch(long nTargets, FSSpec *targetList) {
-    OSErr err;
-    AppleEvent theAEvent, theReply;
-    AEAddressDesc fndrAddress;
-    AEDescList targetListDesc;
-    OSType fndrCreator;
-    Boolean wasChanged;
-    AliasHandle targetAlias;
-    long index;
-
-        /* set up locals  */
-    AECreateDesc(typeNull, NULL, 0, &theAEvent);
-    AECreateDesc(typeNull, NULL, 0, &fndrAddress);
-    AECreateDesc(typeNull, NULL, 0, &theReply);
-    AECreateDesc(typeNull, NULL, 0, &targetListDesc);
-    targetAlias = NULL;
-    fndrCreator = 'MACS';
-
-        /* verify parameters */
-    if ((nTargets == 0) || (targetList == NULL)) {
-        err = paramErr;
-        goto bail;
-    }
-
-        /* create an open documents event targeting the
-        finder */
-    err = AECreateDesc(typeApplSignature, (Ptr) &fndrCreator,
-        sizeof(fndrCreator), &fndrAddress);
-    if (err != noErr) goto bail;
-    err = AECreateAppleEvent(kCoreEventClass, kAEOpenDocuments,
-        &fndrAddress, kAutoGenerateReturnID,
-        kAnyTransactionID, &theAEvent);
-    if (err != noErr) goto bail;
-
-        /* create the list of files to open */
-    err = AECreateList(NULL, 0, false, &targetListDesc);
-    if (err != noErr) goto bail;
-    for ( index=0; index < nTargets; index++) {
-        if (targetAlias == NULL)
-            err = NewAlias(NULL, (targetList + index),
-                  &targetAlias);
-        else err = UpdateAlias(NULL, (targetList + index),
-                   targetAlias, &wasChanged);
-        if (err != noErr) goto bail;
-        HLock((Handle) targetAlias);
-        err = AEPutPtr(&targetListDesc, (index + 1),
-              typeAlias, *targetAlias,
-              GetHandleSize((Handle) targetAlias));
-        HUnlock((Handle) targetAlias);
-        if (err != noErr) goto bail;
-    }
-
-        /* add the file list to the Apple Event */
-    err = AEPutParamDesc(&theAEvent, keyDirectObject,
-          &targetListDesc);
-    if (err != noErr) goto bail;
-
-        /* send the event to the Finder */
-    err = AESend(&theAEvent, &theReply, kAENoReply,
-        kAENormalPriority, kAEDefaultTimeout, NULL, NULL);
-
-        /* clean up and leave */
-bail:
-    if (targetAlias != NULL) DisposeHandle((Handle) targetAlias);
-    AEDisposeDesc(&targetListDesc);
-    AEDisposeDesc(&theAEvent);
-    AEDisposeDesc(&fndrAddress);
-    AEDisposeDesc(&theReply);
-    return err;
-}
+#include "LaunchServices.h"
 
 long wxExecute(const wxString& command, int flags, wxProcess *WXUNUSED(handler))
 {
     wxASSERT_MSG( flags == wxEXEC_ASYNC,
         wxT("wxExecute: Only wxEXEC_ASYNC is supported") );
 
-    FSSpec fsSpec;
-    wxMacFilename2FSSpec(command, &fsSpec);
+    FSRef fsRef ;
+    OSErr err = noErr ;
+    err = wxMacPathToFSRef( command , &fsRef ) ;
+    if ( noErr == err )
+    {
+        err = LSOpenFSRef( &fsRef , NULL ) ;
+    }
 
     // 0 means execution failed. Returning non-zero is a PID, but not
     // on Mac where PIDs are 64 bits and won't fit in a long, so we
     // return a dummy value for now.
-    return ( FinderLaunch(1 /*one file*/, &fsSpec) == noErr ) ? -1 : 0;
+    return ( err == noErr ) ? -1 : 0;
 }
 
 #endif

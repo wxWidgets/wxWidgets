@@ -98,47 +98,20 @@ int wxDirDialog::ShowModal()
 
     if (mNavReply.validRecord) {        // User chose a folder
     
-        FSSpec    folderInfo;
-        FSSpec  outFileSpec ;
+        FSRef folderInfo;
         AEDesc specDesc ;
         
-        OSErr err = ::AECoerceDesc( &mNavReply.selection , typeFSS, &specDesc);
+        OSErr err = ::AECoerceDesc( &mNavReply.selection , typeFSRef, &specDesc);
         if ( err != noErr ) {
             m_path = wxT("") ;
             return wxID_CANCEL ;
         }            
-        folderInfo = **(FSSpec**) specDesc.dataHandle;
+        folderInfo = **(FSRef**) specDesc.dataHandle;
         if (specDesc.dataHandle != nil) {
             ::AEDisposeDesc(&specDesc);
         }
 
-//            mNavReply.GetFileSpec(folderInfo);
-        
-            // The FSSpec from NavChooseFolder is NOT the file spec
-            // for the folder. The parID field is actually the DirID
-            // of the folder itself, not the folder's parent, and
-            // the name field is empty. We must call PBGetCatInfo
-            // to get the parent DirID and folder name
-        
-        Str255        name;
-        CInfoPBRec    thePB;            // Directory Info Parameter Block
-        thePB.dirInfo.ioCompletion    = nil;
-        thePB.dirInfo.ioVRefNum        = folderInfo.vRefNum;    // Volume is right
-        thePB.dirInfo.ioDrDirID        = folderInfo.parID;        // Folder's DirID
-        thePB.dirInfo.ioNamePtr        = name;
-        thePB.dirInfo.ioFDirIndex    = -1;    // Lookup using Volume and DirID
-        
-        err = ::PBGetCatInfoSync(&thePB);
-        if ( err != noErr ) {
-            m_path = wxT("")  ;
-            return wxID_CANCEL ;
-        }            
-                                            // Create cannonical FSSpec
-        ::FSMakeFSSpec(thePB.dirInfo.ioVRefNum, thePB.dirInfo.ioDrParID,
-                       name, &outFileSpec);
-                        
-        // outFolderDirID = thePB.dirInfo.ioDrDirID;
-        m_path = wxMacFSSpec2MacFilename( &outFileSpec ) ;
+        m_path = wxMacFSRefToPath( &folderInfo ) ;
         return wxID_OK ;
     }
     return wxID_CANCEL;

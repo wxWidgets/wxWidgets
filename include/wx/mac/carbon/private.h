@@ -155,15 +155,7 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec) ;
 
 // filefn.h
 WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
-WXDLLEXPORT void wxMacFilename2FSSpec( const char *path , FSSpec *spec ) ;
-WXDLLEXPORT void wxMacFilename2FSSpec( const wxChar *path , FSSpec *spec ) ;
-#  ifndef __DARWIN__
-// Mac file names are POSIX (Unix style) under Darwin, so these are not needed
-WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
-WXDLLEXPORT void wxUnixFilename2FSSpec( const char *path , FSSpec *spec ) ;
-WXDLLEXPORT wxString wxMac2UnixFilename( const char *s) ;
-WXDLLEXPORT wxString wxUnix2MacFilename( const char *s);
-#  endif
+WXDLLEXPORT void wxMacFilename2FSSpec( const wxString &path , FSSpec *spec ) ;
 
 // utils.h
 WXDLLEXPORT wxString wxMacFindFolder(short vRefNum,
@@ -564,11 +556,11 @@ void wxMacWakeUp() ;
 
 ControlRef wxMacFindControlUnderMouse( Point location , WindowRef window , ControlPartCode *outPart ) ;
 
-#ifdef TARGET_API_MAC_OSX
-#define kDefaultPathStyle kCFURLPOSIXPathStyle
-#else
-#define kDefaultPathStyle kCFURLHFSPathStyle
-#endif
+// filefn.cpp
+
+wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL ) ;
+OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef ) ;
+wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname ) ;
 
 #endif
     // _WX_PRIVATE_H_

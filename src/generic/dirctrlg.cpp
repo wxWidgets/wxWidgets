@@ -85,11 +85,7 @@
 #endif // __OS2__
 
 #if defined(__WXMAC__)
-#  ifdef __DARWIN__
-#    include "MoreFilesX.h"
-#  else
-#    include "MoreFilesExtras.h"
-#  endif
+# include "MoreFilesX.h"
 #endif
 
 #ifdef __BORLANDC__
@@ -202,87 +198,36 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 #endif // __WIN32__/!__WIN32__
 
 #elif defined(__WXMAC__)
-#ifdef __DARWIN__
-    FSRef     **theVolRefs;
-    ItemCount   theVolCount;
-    char        thePath[FILENAME_MAX];
 
-    if (FSGetMountedVolumes(&theVolRefs, &theVolCount) == noErr) {
-        ItemCount index;
-        ::HLock( (Handle)theVolRefs ) ;
-        for (index = 0; index < theVolCount; ++index) {
-            // get the POSIX path associated with the FSRef
-            if ( FSRefMakePath(&((*theVolRefs)[index]),
-                                 (UInt8 *)thePath, sizeof(thePath)) != noErr ) {
-                continue;
-            }
-            // add path separator at end if necessary
-            wxString path( thePath , wxConvLocal) ;
-            if (path.Last() != wxFILE_SEP_PATH) {
-                path += wxFILE_SEP_PATH;
-            }
-            // get Mac volume name for display
-            FSVolumeRefNum vRefNum ;
-            HFSUniStr255 volumeName ;
-
-            if ( FSGetVRefNum(&((*theVolRefs)[index]), &vRefNum) != noErr ) {
-                continue;
-            }
-            if ( FSGetVInfo(vRefNum, &volumeName, NULL, NULL) != noErr ) {
-                continue;
-            }
-            // get C string from Unicode HFS name
-            //   see: http://developer.apple.com/carbon/tipsandtricks.html
-            CFStringRef cfstr = CFStringCreateWithCharacters( kCFAllocatorDefault,
-                                                              volumeName.unicode,
-                                                              volumeName.length );
-            // Do something with str
-            char *cstr = NewPtr(CFStringGetLength(cfstr) + 1);
-            if (( cstr == NULL ) ||
-                !CFStringGetCString(cfstr, cstr, CFStringGetLength(cfstr) + 1,
-                                    kCFStringEncodingMacRoman))
+    ItemCount volumeIndex = 1;
+    OSErr err = noErr ;
+    
+    while( noErr == err )
+    {
+        HFSUniStr255 volumeName ;
+        FSRef fsRef ;
+        FSVolumeInfo volumeInfo ;
+		err = FSGetVolumeInfo(0, volumeIndex, NULL, kFSVolInfoFlags , &volumeInfo , &volumeName, &fsRef);
+		if( noErr == err )
+		{
+		    wxString path = wxMacFSRefToPath( &fsRef ) ;
+            wxString name = wxMacHFSUniStrToString( &volumeName ) ;
+            
+            if ( (volumeInfo.flags & kFSVolFlagSoftwareLockedMask) || (volumeInfo.flags & kFSVolFlagHardwareLockedMask) )
             {
-                CFRelease( cfstr );
-                continue;
+                icon_ids.Add(wxFileIconsTable::cdrom);
             }
-            wxString name( cstr , wxConvLocal );
-            DisposePtr( cstr );
-            CFRelease( cfstr );
-
-            GetVolParmsInfoBuffer volParmsInfo;
-            UInt32 actualSize;
-            if ( FSGetVolParms(vRefNum, sizeof(volParmsInfo), &volParmsInfo, &actualSize) != noErr ) {
-                continue;
+            else
+            {
+                icon_ids.Add(wxFileIconsTable::drive);
             }
-
+            // todo other removable
+            
             paths.Add(path);
             names.Add(name);
-
-            if ( VolIsEjectable(&volParmsInfo) )
-                icon_ids.Add(wxFileIconsTable::cdrom);
-            else
-                icon_ids.Add(wxFileIconsTable::drive);
-        }
-        ::HUnlock( (Handle)theVolRefs );
-        ::DisposeHandle( (Handle)theVolRefs );
+            volumeIndex++ ;
+		}
     }
-#else // !__DARWIN__
-    FSSpec volume;
-    short index = 1;
-    while(1)
-    {
-        short actualCount = 0 ;
-        if (OnLine(&volume, 1, &actualCount, &index ) != noErr || actualCount==0)
-        {
-            break;
-        }
-
-        wxString name = wxMacFSSpec2MacFilename( &volume );
-        paths.Add(name + wxFILE_SEP_PATH);
-        names.Add(name);
-        icon_ids.Add(wxFileIconsTable::drive);
-    }
-#endif // __DARWIN__
 
 #elif defined(__UNIX__)
     paths.Add(wxT("/"));

@@ -2031,31 +2031,44 @@ static void MacEnsureDefaultExtensionsLoaded()
         gMacDefaultExtensionsInited = true ;
     }
 }
+
 bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator )
 {
-  FInfo fndrInfo ;
-  FSSpec spec ;
-  wxMacFilename2FSSpec(GetFullPath(),&spec) ;
-  OSErr err = FSpGetFInfo( &spec , &fndrInfo ) ;
-  wxCHECK( err == noErr , false ) ;
+    FSRef fsRef ;
+    FSCatalogInfo catInfo;
+    FileInfo *finfo ;
 
-  fndrInfo.fdType = type ;
-  fndrInfo.fdCreator = creator ;
-  FSpSetFInfo( &spec , &fndrInfo ) ;
-  return true ;
+    if ( wxMacPathToFSRef( GetFullPath() , &fsRef ) == noErr )
+    {
+	    if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
+	    {
+	        finfo = (FileInfo*)&catInfo.finderInfo;
+  		    finfo->fileType = type ;
+  		    finfo->fileCreator = creator ;
+  		    FSSetCatalogInfo( &fsRef, kFSCatInfoFinderInfo, &catInfo ) ;
+            return true ;
+  	    }
+    }
+    return false ;
 }
 
 bool wxFileName::MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator )
 {
-  FInfo fndrInfo ;
-  FSSpec spec ;
-  wxMacFilename2FSSpec(GetFullPath(),&spec) ;
-  OSErr err = FSpGetFInfo( &spec , &fndrInfo ) ;
-  wxCHECK( err == noErr , false ) ;
+    FSRef fsRef ;
+    FSCatalogInfo catInfo;
+    FileInfo *finfo ;
 
-  *type = fndrInfo.fdType ;
-  *creator = fndrInfo.fdCreator ;
-  return true ;
+    if ( wxMacPathToFSRef( GetFullPath() , &fsRef ) == noErr )
+    {
+	    if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
+	    {
+	        finfo = (FileInfo*)&catInfo.finderInfo;
+  		    *type = finfo->fileType ;
+  		    *creator = finfo->fileCreator ;
+            return true ;
+  	    }
+    }
+    return false ;
 }
 
 bool wxFileName::MacSetDefaultTypeAndCreator()

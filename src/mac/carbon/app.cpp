@@ -165,7 +165,6 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
     DescType returnedType;
     Size actualSize;
     long itemsInList;
-    FSSpec theSpec;
     OSErr err;
     short i;
     err = AEGetParamDesc((AppleEvent *)event, keyDirectObject, typeAEList,&docList);
@@ -181,10 +180,15 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
     PSN.lowLongOfPSN = kCurrentProcess ;
     SetFrontProcess( &PSN ) ;
 
-    for (i = 1; i <= itemsInList; i++) {
-        AEGetNthPtr(&docList, i, typeFSS, &keywd, &returnedType,
-        (Ptr) & theSpec, sizeof(theSpec), &actualSize);
-        wxString fName = wxMacFSSpec2MacFilename(&theSpec);
+    for (i = 1; i <= itemsInList; i++) 
+    {
+        wxString fName ;
+
+        FSRef theRef ;
+        AEGetNthPtr(&docList, i, typeFSRef, &keywd, &returnedType,
+        (Ptr) & theRef, sizeof(theRef), &actualSize);
+        fName = wxMacFSRefToPath( &theRef ) ;
+
         MacOpenFile(fName);
     }
     return noErr;
@@ -199,7 +203,6 @@ short wxApp::MacHandleAEPDoc(const WXEVENTREF event , WXEVENTREF WXUNUSED(reply)
     DescType returnedType;
     Size actualSize;
     long itemsInList;
-    FSSpec theSpec;
     OSErr err;
     short i;
     err = AEGetParamDesc((AppleEvent *)event, keyDirectObject, typeAEList,&docList);
@@ -216,9 +219,13 @@ short wxApp::MacHandleAEPDoc(const WXEVENTREF event , WXEVENTREF WXUNUSED(reply)
     SetFrontProcess( &PSN ) ;
 
     for (i = 1; i <= itemsInList; i++) {
-        AEGetNthPtr(&docList, i, typeFSS, &keywd, &returnedType,
-        (Ptr) & theSpec, sizeof(theSpec), &actualSize);
-        wxString fName = wxMacFSSpec2MacFilename(&theSpec);
+        wxString fName ;
+
+        FSRef theRef ;
+        AEGetNthPtr(&docList, i, typeFSRef, &keywd, &returnedType,
+        (Ptr) & theRef, sizeof(theRef), &actualSize);
+        fName = wxMacFSRefToPath( &theRef ) ;
+
         MacPrintFile(fName);
     }
     return noErr;

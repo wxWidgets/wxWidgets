@@ -40,14 +40,10 @@
   #include <windows.h>
 #endif
 
+#include "wx/filename.h"
 #include "wx/mac/private.h"
 
-#ifdef __DARWIN__
-#  include "MoreFilesX.h"
-#else
-#  include "MoreFiles.h"
-#  include "MoreFilesExtras.h"
-#endif
+#include "MoreFilesX.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -73,7 +69,8 @@ class wxDirData
 public:
     wxDirData(const wxString& dirname);
     ~wxDirData();
-
+    
+    void Close() ;
     void SetFileSpec(const wxString& filespec) { m_filespec = filespec; }
     void SetFlags(int flags) { m_flags = flags; }
 
@@ -83,11 +80,7 @@ public:
     const wxString& GetName() const { return m_dirname; }
 
 private:
-    CInfoPBRec            m_CPB ;
-    wxInt16                m_index ;
-    long                m_dirId ;
-    Str255                m_name ;
-    Boolean                m_isDir ;
+    FSIterator              m_iterator ;
 
     wxString m_dirname;
     wxString m_filespec;
@@ -106,8 +99,6 @@ private:
 wxDirData::wxDirData(const wxString& dirname)
          : m_dirname(dirname)
 {
-    OSErr err;
-    
     // throw away the trailing slashes
     size_t n = m_dirname.length();
     wxCHECK_RET( n, _T("empty dir name in wxDir") );
@@ -116,96 +107,88 @@ wxDirData::wxDirData(const wxString& dirname)
         ;
 
     m_dirname.Truncate(n + 1);
-    
-#ifdef __DARWIN__
-    FSRef theRef;
-
-    // get the FSRef associated with the POSIX path
-    err = FSPathMakeRef((const UInt8 *) m_dirname.c_str(), &theRef, NULL);
-    FSGetVRefNum(&theRef, &(m_CPB.hFileInfo.ioVRefNum));
-    
-    err = FSGetNodeID( &theRef , &m_dirId , &m_isDir ) ;
-#else
-    FSSpec fsspec ;
-
-    wxMacFilename2FSSpec( m_dirname , &fsspec ) ;
-    m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
-
-    err = FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
-#endif
-    wxASSERT_MSG( (err == noErr) || (err == nsvErr) , wxT("Error accessing directory " + m_dirname)) ;
-
-    m_CPB.hFileInfo.ioNamePtr = m_name ;
-    m_index = 0 ;
+    m_iterator = NULL ;
 }
 
 wxDirData::~wxDirData()
 {
+    Close() ;
+}
+
+void wxDirData::Close()
+{ 
+    if ( m_iterator )
+    {
+        FSCloseIterator( m_iterator ) ;
+        m_iterator = NULL ;
+    }
 }
 
 void wxDirData::Rewind() 
 {
-    m_index = 0 ;
+    Close() ;
 }
 
 bool wxDirData::Read(wxString *filename)
-{
-    if ( !m_isDir )
-        return FALSE ;
-        
+{        
     wxString result;
-
-    short err = noErr ;
-    
-    while ( err == noErr )
+    OSStatus err = noErr ;
+    if ( NULL == m_iterator )
     {
-        m_index++ ;
-        m_CPB.dirInfo.ioFDirIndex = m_index;
-        m_CPB.dirInfo.ioDrDirID = m_dirId;    /* we need to do this every time */
-        err = PBGetCatInfoSync((CInfoPBPtr)&m_CPB);
-        if ( err != noErr )
-            break ;
+        FSRef dirRef;
+        err = wxMacPathToFSRef( m_dirname , &dirRef ) ;
+        if ( err == noErr )
+        {
+    	    err = FSOpenIterator(&dirRef, kFSIterateFlat, &m_iterator);
+    	}
+    	if ( err )
+    	{
+    	    Close() ;
+    	    return FALSE ;
+    	}
+    }
+    
+    wxString name ;
+    
+    while( noErr == err )
+    {
+        HFSUniStr255 uniname ;
+        FSRef fileRef;
+        FSCatalogInfo catalogInfo;
+        UInt32 fetched = 0;
+
+        err = FSGetCatalogInfoBulk( m_iterator, 1, &fetched, NULL, kFSCatInfoNodeFlags | kFSCatInfoFinderInfo , &catalogInfo , &fileRef, NULL, &uniname );
+        if ( errFSNoMoreItems == err )
+            return false ;
+            
+        wxASSERT( noErr == err ) ;
         
-        // its hidden but we don't want it
-        if ( ( m_CPB.hFileInfo.ioFlFndrInfo.fdFlags & kIsInvisible ) && !(m_flags & wxDIR_HIDDEN) )
-            continue ;
-#ifdef __DARWIN__
-        // under X, names that start with '.' are hidden
-        if ( ( m_name[1] == '.' ) && !(m_flags & wxDIR_HIDDEN) )
+        if ( noErr != err )
+            break ;
+                
+        name = wxMacHFSUniStrToString( &uniname ) ;
+
+        if ( ( name == wxT(".") || name == wxT("..") ) && !(m_flags & wxDIR_DOTDOT) )
             continue;
-#endif
-#if TARGET_CARBON
-        // under X thats the way the mounting points look like
-        if ( ( m_CPB.dirInfo.ioDrDirID == 0 ) && ( m_flags & wxDIR_DIRS) )
-            break ;
-#endif
-        //  we have a directory
-        if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (m_flags & wxDIR_DIRS) )
-            break ;
-        
-        // its a file but we don't want it
-        if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(m_flags & wxDIR_FILES ) )
+
+        if ( ( name[0U] == '.' ) && !(m_flags & wxDIR_HIDDEN ) )
+            continue ;
+
+        if ( (((FileInfo*)&catalogInfo.finderInfo)->finderFlags & kIsInvisible ) && !(m_flags & wxDIR_HIDDEN ) )
             continue ;
         
-        wxString file = wxMacMakeStringFromPascal( m_name ) ;
+        // its a dir and we want it
+        if ( (catalogInfo.nodeFlags & kFSNodeIsDirectoryMask)  && (m_flags & wxDIR_DIRS) )
+            break ;
+
+        // its a file but we don't want it
+        if ( (catalogInfo.nodeFlags & kFSNodeIsDirectoryMask) == 0  && !(m_flags & wxDIR_FILES ) )
+            continue ;
+                    
         if ( m_filespec.IsEmpty() || m_filespec == wxT("*.*") || m_filespec == wxT("*") )
         {
         }
-        else if ( m_filespec.Length() > 1 && m_filespec.Left(1) == wxT("*") )
-        {
-            if ( file.Right( m_filespec.Length() - 1 ).Upper() != m_filespec.Mid(1).Upper() )
-            {
-                continue ;
-            }
-        }
-        else if ( m_filespec.Length() > 1 && m_filespec.Right(1) == wxT("*") )
-        {
-            if ( file.Left( m_filespec.Length() - 1 ).Upper() != m_filespec.Left( m_filespec.Length() - 1 ).Upper() )
-            {
-                continue ;
-            }
-        }
-        else if ( file.Upper() != m_filespec.Upper() )
+        else if ( !wxMatchWild(m_filespec, name , FALSE) )
         {
             continue ;
         }
@@ -217,8 +200,7 @@ bool wxDirData::Read(wxString *filename)
         return FALSE ;
     }
     
-    *filename = wxMacMakeStringFromPascal( m_name )  ;
-
+    *filename = name ;
     return TRUE;
 }
 

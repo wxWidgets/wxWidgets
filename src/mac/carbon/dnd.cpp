@@ -329,7 +329,7 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
             OSErr err = noErr;
             CInfoPBRec cat;
             
-            wxMacFilename2FSSpec( dataPtr , &theFlavor.fileSpec ) ;
+            wxMacFilename2FSSpec( wxString( dataPtr , *wxConvCurrent ) , &theFlavor.fileSpec ) ;
             
             cat.hFileInfo.ioNamePtr = theFlavor.fileSpec.name;
             cat.hFileInfo.ioVRefNum = theFlavor.fileSpec.vRefNum;
