@@ -900,7 +900,21 @@ void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
     if ( !HasRange() )
     {
         int keycode = (int) event.KeyCode();
-        if ( isdigit(keycode) || keycode == '+' || keycode == '-' )
+        if ( isdigit(keycode) || keycode == '+' || keycode == '-'
+            || keycode ==  WXK_NUMPAD0
+            || keycode ==  WXK_NUMPAD1
+            || keycode ==  WXK_NUMPAD2
+            || keycode ==  WXK_NUMPAD3
+            || keycode ==  WXK_NUMPAD4
+            || keycode ==  WXK_NUMPAD5
+            || keycode ==  WXK_NUMPAD6
+            || keycode ==  WXK_NUMPAD7
+            || keycode ==  WXK_NUMPAD8
+            || keycode ==  WXK_NUMPAD9
+            || keycode ==  WXK_ADD
+            || keycode ==  WXK_NUMPAD_ADD
+            || keycode ==  WXK_SUBTRACT
+            || keycode ==  WXK_NUMPAD_SUBTRACT)
         {
             wxGridCellTextEditor::StartingKey(event);
 
@@ -1012,8 +1026,21 @@ void wxGridCellFloatEditor::Reset()
 void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 {
     int keycode = (int)event.KeyCode();
-    if ( isdigit(keycode) ||
-         keycode == '+' || keycode == '-' || keycode == '.' )
+        if ( isdigit(keycode) || keycode == '+' || keycode == '-' || keycode == '.'
+            || keycode ==  WXK_NUMPAD0
+            || keycode ==  WXK_NUMPAD1
+            || keycode ==  WXK_NUMPAD2
+            || keycode ==  WXK_NUMPAD3
+            || keycode ==  WXK_NUMPAD4
+            || keycode ==  WXK_NUMPAD5
+            || keycode ==  WXK_NUMPAD6
+            || keycode ==  WXK_NUMPAD7
+            || keycode ==  WXK_NUMPAD8
+            || keycode ==  WXK_NUMPAD9
+            || keycode ==  WXK_ADD
+            || keycode ==  WXK_NUMPAD_ADD
+            || keycode ==  WXK_SUBTRACT
+            || keycode ==  WXK_NUMPAD_SUBTRACT)
     {
         wxGridCellTextEditor::StartingKey(event);
 
