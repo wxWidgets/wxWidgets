@@ -32,6 +32,7 @@
 #include "wx/html/htmlwin.h"
 #include "wx/html/htmlproc.h"
 #include "wx/list.h"
+#include "wx/clipbrd.h"
 
 #include "wx/arrimpl.cpp"
 #include "wx/listimpl.cpp"
@@ -634,6 +635,50 @@ bool wxHtmlWindow::IsSelectionEnabled() const
     return false;
 #endif
 }
+    
+
+wxString wxHtmlWindow::SelectionToText()
+{
+    if ( !m_selection )
+        return wxEmptyString;
+
+    const wxHtmlCell *end = m_selection->GetToCell();
+    wxString text;
+    wxHtmlTerminalCellsInterator i(m_selection->GetFromCell(), end);
+    if ( i )
+    {
+        text << i->ConvertToText(m_selection);
+        ++i;
+    }
+    const wxHtmlCell *prev = *i;
+    while ( i )
+    {
+        if ( prev->GetParent() != i->GetParent() )
+            text << _T('\n');
+        text << i->ConvertToText(*i == end ? m_selection : NULL);
+        prev = *i;
+        ++i;
+    }
+    return text;
+}
+
+void wxHtmlWindow::CopySelection(ClipboardType t)
+{
+#if wxUSE_CLIPBOARD
+    if ( m_selection )
+    {
+        wxTheClipboard->UsePrimarySelection(t == Primary);
+        wxString txt(SelectionToText());
+        if ( wxTheClipboard->Open() )
+        {
+            wxTheClipboard->SetData(new wxTextDataObject(txt));
+            wxTheClipboard->Close();
+            wxLogTrace(_T("wxhtmlselection"),
+                       _("Copied to clipboard:\"%s\""), txt.c_str());
+        }
+    }
+#endif
+}
 
 
 void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
@@ -770,16 +815,14 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                 if (goingDown)
                 {
                     m_tmpSelFromCell = m_Cell->FindCellByPos(x, y,
-                                                 wxHTML_FIND_NEAREST_BEFORE);
-#if 0 // FIXME -- needed or not?
+                                                 wxHTML_FIND_NEAREST_AFTER);
                     if (!m_tmpSelFromCell)
                         m_tmpSelFromCell = m_Cell->GetFirstTerminal();
-#endif
                 }
                 else
                 {
                     m_tmpSelFromCell = m_Cell->FindCellByPos(x, y,
-                                                 wxHTML_FIND_NEAREST_AFTER);
+                                                 wxHTML_FIND_NEAREST_BEFORE);
                     if (!m_tmpSelFromCell)
                         m_tmpSelFromCell = m_Cell->GetLastTerminal();
                 }
@@ -822,7 +865,7 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                 }
                 if ( m_selection )
                 {
-                    if (goingDown)
+                    if ( m_tmpSelFromCell->IsBefore(selcell) )
                     {
                         m_selection->Set(m_tmpSelFromPos, m_tmpSelFromCell,
                                          wxPoint(x,y), selcell);
@@ -833,6 +876,9 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                                          m_tmpSelFromPos, m_tmpSelFromCell);
                     }
                     Refresh(); // FIXME - optimize!
+#ifdef __UNIX__
+                    CopySelection(Primary);
+#endif
                 }
             }
         }
@@ -871,6 +917,26 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
     }
 }
 
+#if wxUSE_CLIPBOARD
+void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
+{
+    if ( event.GetKeyCode() == 'C' && event.ControlDown() )
+    {
+        if ( m_selection )
+            CopySelection();
+    }
+    else
+        event.Skip();
+}
+
+void wxHtmlWindow::OnCopy(wxCommandEvent& event)
+{
+    if ( m_selection )
+        CopySelection();
+}
+#endif
+
+
 
 IMPLEMENT_ABSTRACT_CLASS(wxHtmlProcessor,wxObject)
 
@@ -883,6 +949,10 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_RIGHT_UP(wxHtmlWindow::OnMouseUp)
     EVT_MOTION(wxHtmlWindow::OnMouseMove)
     EVT_IDLE(wxHtmlWindow::OnIdle)
+#if wxUSE_CLIPBOARD
+    EVT_KEY_UP(wxHtmlWindow::OnKeyUp)
+    EVT_MENU(wxID_COPY, wxHtmlWindow::OnCopy)
+#endif
 END_EVENT_TABLE()
 
 

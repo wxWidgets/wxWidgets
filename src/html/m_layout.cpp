@@ -136,7 +136,7 @@ TAG_HANDLER_BEGIN(P, "P")
 
     TAG_HANDLER_PROC(tag)
     {
-        if (m_WParser->GetContainer()->GetFirstCell() != NULL)
+        if (m_WParser->GetContainer()->GetFirstChild() != NULL)
         {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
@@ -177,7 +177,7 @@ TAG_HANDLER_BEGIN(CENTER, "CENTER")
         wxHtmlContainerCell *c = m_WParser->GetContainer();
 
         m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
-        if (c->GetFirstCell() != NULL)
+        if (c->GetFirstChild() != NULL)
         {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
@@ -190,7 +190,7 @@ TAG_HANDLER_BEGIN(CENTER, "CENTER")
             ParseInner(tag);
 
             m_WParser->SetAlign(old);
-            if (c->GetFirstCell() != NULL)
+            if (c->GetFirstChild() != NULL)
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
@@ -231,7 +231,7 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
         {
             int old = m_WParser->GetAlign();
             wxHtmlContainerCell *c = m_WParser->GetContainer();
-            if (c->GetFirstCell() != NULL)
+            if (c->GetFirstChild() != NULL)
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
@@ -248,7 +248,7 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
             ParseInner(tag);
 
             m_WParser->SetAlign(old);
-            if (c->GetFirstCell() != NULL)
+            if (c->GetFirstChild() != NULL)
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();

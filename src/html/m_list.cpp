@@ -133,7 +133,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
             else m_Numbering = 1;
 
             c = m_WParser->GetContainer();
-            if (c->GetFirstCell() != NULL)
+            if (c->GetFirstChild() != NULL)
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();

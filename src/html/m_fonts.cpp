@@ -246,7 +246,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
         }
 
         c = m_WParser->GetContainer();
-        if (c->GetFirstCell())
+        if (c->GetFirstChild())
         {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();

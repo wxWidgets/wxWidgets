@@ -32,6 +32,30 @@
 #include "wx/settings.h"
 #include <stdlib.h>
 
+//-----------------------------------------------------------------------------
+// Helper classes
+//-----------------------------------------------------------------------------
+
+void wxHtmlSelection::Set(const wxPoint& fromPos, wxHtmlCell *fromCell,
+                          const wxPoint& toPos, wxHtmlCell *toCell)
+{
+    m_fromCell = fromCell;
+    m_toCell = toCell;
+    m_fromPos = fromPos;
+    m_toPos = toPos;
+}
+
+void wxHtmlSelection::Set(wxHtmlCell *fromCell, wxHtmlCell *toCell)
+{
+    wxPoint p1 = fromCell ? fromCell->GetAbsPos() : wxDefaultPosition;
+    wxPoint p2 = toCell ? toCell->GetAbsPos() : wxDefaultPosition;
+    if ( toCell )
+    {
+        p2.x += toCell->GetWidth()-1;
+        p2.y += toCell->GetHeight()-1;
+    }
+    Set(p1, fromCell, p2, toCell);
+}
 
 //-----------------------------------------------------------------------------
 // wxHtmlCell
@@ -147,6 +171,54 @@ wxPoint wxHtmlCell::GetAbsPos() const
     }
     return p;
 }
+    
+unsigned wxHtmlCell::GetDepth() const
+{
+    unsigned d = 0;
+    for (wxHtmlCell *p = m_Parent; p; p = p->m_Parent)
+        d++;
+    return d;
+}
+    
+bool wxHtmlCell::IsBefore(wxHtmlCell *cell) const
+{
+    const wxHtmlCell *c1 = this;
+    const wxHtmlCell *c2 = cell;
+    unsigned d1 = GetDepth();
+    unsigned d2 = cell->GetDepth();
+
+    if ( d1 > d2 )
+        for (; d1 != d2; d1-- )
+            c1 = c1->m_Parent;
+    else if ( d1 < d2 )
+        for (; d1 != d2; d2-- )
+            c2 = c2->m_Parent;
+
+    if ( cell == this )
+        return true;
+
+    while ( c1 && c2 )
+    {
+        if ( c1->m_Parent == c2->m_Parent )
+        {
+            while ( c1 )
+            {
+                if ( c1 == c2 )
+                    return true;
+                c1 = c1->GetNext();
+            }            
+            return false;
+        }
+        else
+        {
+            c1 = c1->m_Parent;
+            c2 = c2->m_Parent;
+        }
+    }
+
+    wxFAIL_MSG(_T("Cells are in different trees"));
+    return false;
+}
 
 
 //-----------------------------------------------------------------------------
@@ -183,7 +255,15 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         dc.SetTextBackground(state.GetBgColour());
     }
 
+    // FIXME - use selection
     dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
+}
+    
+
+wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *sel) const
+{
+    // FIXME - use selection
+    return m_Word;
 }
 
 
@@ -266,7 +346,7 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak, int* known_pagebreaks,
 
     else
     {
-        wxHtmlCell *c = GetFirstCell();
+        wxHtmlCell *c = GetFirstChild();
         bool rt = FALSE;
         int pbrk = *pagebreak - m_PosY;
 
@@ -718,19 +798,31 @@ void wxHtmlContainerCell::GetHorizontalConstraints(int *left, int *right) const
     
 wxHtmlCell *wxHtmlContainerCell::GetFirstTerminal() const
 {
-    if (m_Cells)
-        return m_Cells->GetFirstTerminal();
-    else
-        return NULL;
+    if ( m_Cells )
+    {
+        wxHtmlCell *c2;
+        for (wxHtmlCell *c = m_Cells; c; c = c->GetNext())
+        {
+            c2 = c->GetFirstTerminal();
+            if ( c2 )
+                return c2;
+        }
+    }
+    return NULL;
 }
 
 wxHtmlCell *wxHtmlContainerCell::GetLastTerminal() const
 {
-    if (m_Cells)
+    if ( m_Cells )
     {
-        wxHtmlCell *c;
-        for (c = m_Cells; c->GetNext(); c = c->GetNext()) {}
-        return c;
+        wxHtmlCell *c, *c2 = NULL;
+        // most common case first:
+        c = m_LastCell->GetLastTerminal();
+        if ( c )
+            return c;
+        for (wxHtmlCell *c = m_Cells; c; c = c->GetNext())
+            c2 = c->GetLastTerminal();
+        return c2;
     }
     else
         return NULL;
@@ -862,6 +954,46 @@ void wxHtmlWidgetCell::Layout(int w)
     }
 
     wxHtmlCell::Layout(w);
+}
+
+
+
+// ----------------------------------------------------------------------------
+// wxHtmlTerminalCellsInterator
+// ----------------------------------------------------------------------------
+
+const wxHtmlCell* wxHtmlTerminalCellsInterator::operator++()
+{
+    if ( !m_pos )
+        return NULL;
+
+    do
+    {
+        if ( m_pos == m_to )
+        {
+            m_pos = NULL;
+            return NULL;
+        }
+
+        if ( m_pos->GetNext() )
+            m_pos = m_pos->GetNext();
+        else
+        {
+            // we must go up the hierarchy until we reach container where this
+            // is not the last child, and then go down to first terminal cell:
+            while ( m_pos->GetNext() == NULL )
+            {
+                m_pos = m_pos->GetParent();
+                if ( !m_pos )
+                    return NULL;
+            }
+            m_pos = m_pos->GetNext();
+        }
+        while ( m_pos->GetFirstChild() != NULL )
+            m_pos = m_pos->GetFirstChild();
+    } while ( !m_pos->IsTerminalCell() );
+    
+    return m_pos;
 }
 
 #endif
