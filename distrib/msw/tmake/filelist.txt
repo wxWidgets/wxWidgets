@@ -67,7 +67,7 @@
 accel.cpp	Generic	NotMSW,NotX,NotOS2,NotMac
 busyinfo.cpp	Generic
 calctrl.cpp	Generic
-caret.cpp	Generic	NotMSW
+caret.cpp	Generic	NotMSW,NotMicro
 choicdgg.cpp	Generic
 colrdlgg.cpp	Generic	Generic
 dcpsg.cpp	Generic
@@ -355,7 +355,7 @@ dir.cpp	Unix	Base,NotMac,NotMGL
 fontenum.cpp	Unix	NotMac,NotMGL,NotMicro
 fontutil.cpp	Unix	NotMac,NotMGL,NotMicro
 gsocket.c	Unix	Base,NotMac
-mimetype.cpp	Unix	Base,NotMac
+mimetype.cpp	Unix	Base,NotMac,NotMicro
 snglinst.cpp	Unix	Base
 threadpsx.cpp	Unix	Base,NotMac
 utilsunx.cpp	Unix	Base
