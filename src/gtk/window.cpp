@@ -3904,7 +3904,7 @@ void wxWindowGTK::GtkSendPaintEvents()
                 g_eraseGC = gdk_gc_new( pizza->bin_window );
                 gdk_gc_set_fill( g_eraseGC, GDK_SOLID );
             }
-            gdk_gc_set_foreground( g_eraseGC, m_backgroundColour.GetColor() );
+            gdk_gc_set_foreground( g_eraseGC, GetBackgroundColour().GetColor() );
 
             wxRegionIterator upd( m_clearRegion );
             while (upd)
