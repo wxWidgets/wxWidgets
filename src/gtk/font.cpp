@@ -232,8 +232,15 @@ void wxFontRefData::InitFromNative()
 
     // init fields
     m_faceName = wxGTK_CONV_BACK( pango_font_description_get_family( desc ) );
+    
+    // Pango sometimes needs to have a size
+    int pango_size = pango_font_description_get_size( desc );
+    if (pango_size == 0)
+        pango_font_description_set_size( desc, 12 * PANGO_SCALE);
 
     m_pointSize = pango_font_description_get_size( desc ) / PANGO_SCALE;
+    
+    // wxPrintf( wxT("face %s m_pointSize %d\n"), m_faceName.c_str(), m_pointSize );
 
     switch (pango_font_description_get_style( desc ))
     {

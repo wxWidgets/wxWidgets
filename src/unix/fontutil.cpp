@@ -139,7 +139,7 @@ bool wxNativeFontInfo::FromString( const wxString& str )
 
     description = pango_font_description_from_string( wxGTK_CONV( str ) );
     
-    // wxPrintf( L"FromString result: %s\n", ToString().c_str() );
+    // wxPrintf( L"FromString before: %s result: %s\n", str.c_str(), ToString().c_str() );
 
     return TRUE;
 }
