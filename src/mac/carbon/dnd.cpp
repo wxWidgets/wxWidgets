@@ -13,12 +13,15 @@
 #pragma implementation "dnd.h"
 #endif
 
-#include "wx/dnd.h"
-#include "wx/window.h"
-#include "wx/app.h"
-#include "wx/gdicmn.h"
+#include "wx/defs.h"
 
 #if wxUSE_DRAG_AND_DROP
+
+#include "wx/dnd.h"
+#include "wx/window.h"
+#include "wx/toplevel.h"
+#include "wx/app.h"
+#include "wx/gdicmn.h"
 
 // ----------------------------------------------------------------------------
 // global
