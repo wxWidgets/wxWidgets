@@ -4317,6 +4317,7 @@ void wxListEvent::CopyObject(wxObject& object_dest) const
 // -------------------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
 
 BEGIN_EVENT_TABLE(wxListCtrl,wxControl)
   EVT_SIZE(wxListCtrl::OnSize)

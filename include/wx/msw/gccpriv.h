@@ -3,11 +3,11 @@
 #ifndef _WX_MSW_GCCPRIV_H_
 #define _WX_MSW_GCCPRIV_H_
 
-#if defined( __MINGW32__ )
-    //#include <_mingw.h>
-    #if __MINGW32_MAJOR_VERSION >= 1
-        #ifndef HAVE_W32API_H
-        #define HAVE_W32API_H
+#if defined( __MINGW32__ ) && !defined( HAVE_W32API_H )
+    #if ( __GNUC__ > 2 ) || ( ( __GNUC__ == 2 ) && ( __GNUC_MINOR__ >= 95 ) )
+        #include <_mingw.h>
+        #if __MINGW32_MAJOR_VERSION >= 1
+            #define HAVE_W32API_H
         #endif
     #endif
 #endif

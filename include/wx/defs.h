@@ -37,6 +37,12 @@
     #endif
 #endif // Win32
 
+#if defined(__WXMSW__) || defined(__WIN32__)
+    #if !defined(__WINDOWS__)
+        #define __WINDOWS__
+    #endif
+#endif
+
 #ifdef __WXWINE__
     #ifndef __WIN32__
         #define __WIN32__

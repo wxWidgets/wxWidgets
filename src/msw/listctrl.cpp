@@ -123,6 +123,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_ACTIVATED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_CACHE_HINT)
 
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 
 BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
@@ -480,20 +481,19 @@ long wxListCtrl::ConvertToMSWStyle(long& oldStyle, long style) const
         wstyle |= LVS_SORTDESCENDING;
     }
 
+#if !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
     if ( style & wxLC_VIRTUAL )
     {
         int ver = wxTheApp->GetComCtl32Version();
         if ( ver < 470 )
         {
-            wxLogWarning(_("Please install a newer version of comctl32.dll\n"
-                           "(at least version 4.70 is required but you have "
-                           "%d.%02d)\n"
-                           "or this program won't operate correctly."),
+            wxLogWarning(_("Please install a newer version of comctl32.dll\n(at least version 4.70 is required but you have %d.%02d)\nor this program won't operate correctly."),
                         ver / 100, ver % 100);
         }
 
         wstyle |= LVS_OWNERDATA;
     }
+#endif
 
     return wstyle;
 }
@@ -1625,7 +1625,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 #endif // 0
 
-#if defined(_WIN32_IE) && _WIN32_IE >= 0x300
+#if defined(_WIN32_IE) && _WIN32_IE >= 0x300 \
+    && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
         case NM_CUSTOMDRAW:
             *result = OnCustomDraw(lParam);
 

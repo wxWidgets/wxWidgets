@@ -331,6 +331,8 @@ public:
     // return TRUE if the item is selected
     bool IsSelected(long index)
         { return GetItemState(index, wxLIST_STATE_SELECTED) != 0; }
+private:
+    DECLARE_DYNAMIC_CLASS(wxListView)
 };
 
 // ----------------------------------------------------------------------------

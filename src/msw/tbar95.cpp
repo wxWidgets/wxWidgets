@@ -1058,7 +1058,7 @@ void wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
     //  ColorMap[4].from = sm_stdColours[4]; ColorMap[4].to = COLOR_HIGHLIGHT;  // blue         (0, 0, 255)
     ColorMap[4].from = sm_stdColours[5]; ColorMap[4].to = COLOR_WINDOW;       // magenta      (255, 0, 255)
 
-    for ( int n = 0; n < WXSIZEOF(ColorMap); n++)
+    for ( size_t n = 0; n < WXSIZEOF(ColorMap); n++)
     {
         ColorMap[n].to = ::GetSysColor(ColorMap[n].to);
     }
@@ -1076,7 +1076,7 @@ void wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
             {
                 COLORREF pixel = ::GetPixel(hdcMem, i, j);
 
-                for ( int k = 0; k < WXSIZEOF(ColorMap); k++ )
+                for ( size_t k = 0; k < WXSIZEOF(ColorMap); k++ )
                 {
                     int distance = abs( GetRValue( pixel ) - GetRValue( ColorMap[k].from )) ;
                     distance = max( distance , abs(GetGValue(pixel ) - GetGValue( ColorMap[k].from ))) ;
