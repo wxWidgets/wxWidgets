@@ -207,6 +207,11 @@
 #define wxUSE_POPUPWIN 0
 
 /*
+   Use wxTipWindow
+ */
+#define wxUSE_TIPWINDOW 0
+
+/*
  * Use accelerators
  */
 #define wxUSE_ACCEL 0
