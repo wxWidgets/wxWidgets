@@ -144,8 +144,6 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
     return;
   }
 
-  wxResourceManager* manager = resourceManager;
-
   switch (wxResourceManager::GetCurrentResourceManager()->GetEditorControlList()->GetSelection())
   {
         case RESED_BUTTON:
@@ -214,7 +212,7 @@ void wxResourceEditorDialogHandler::OnRightClick(int x, int y, int WXUNUSED(keys
   handlerDialog->PopupMenu(menu, x, y);
 }
 
-void wxResourceEditorDialogHandler::OnItemLeftClick(wxControl *item, int x, int y, int keys)
+void wxResourceEditorDialogHandler::OnItemLeftClick(wxControl *item, int WXUNUSED(x), int WXUNUSED(y), int keys)
 {
   if (keys & wxKEY_CTRL)
   {
@@ -346,7 +344,7 @@ void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
 
         OnLeftClick(x, y, keys);
     }
-    else if (event.RightUp())
+    else if (event.RightDown())
     {
         if (m_mouseCaptured)
         {
@@ -466,6 +464,7 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
   { 
     oldDragX = x; oldDragY = y;
   }
+  // Obsolete; no longer try to right-drag
   else if (event.RightUp() && dragItem && dragMode == wxDRAG_MODE_CONTINUE_RIGHT)
   {
     dragMode = wxDRAG_MODE_NONE;
@@ -499,6 +498,20 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
     }
     else if (event.RightDown())
     {
+      if (m_mouseCaptured)
+      {
+        handlerDialog->ReleaseMouse();
+        m_mouseCaptured = FALSE;
+      }
+
+      if (item)
+        childHandler->OnRightClick(x, y, keys);
+      else
+        OnRightClick(x, y, keys);
+
+      dragItem = NULL; dragMode = wxDRAG_MODE_NONE; dragType = wxDRAG_TYPE_NONE;
+
+      /*
       dragItem = item;
       dragMode = wxDRAG_MODE_START_RIGHT;
       firstDragX = x;
@@ -510,6 +523,7 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
         handlerDialog->CaptureMouse();
         m_mouseCaptured = TRUE;
       }
+      */
     }
     else if (event.LeftUp())
     {
@@ -528,6 +542,7 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
     }
     else if (event.RightUp())
     {
+      /*
       if (dragItem)
         childHandler->OnRightClick(x, y, keys);
       else
@@ -540,6 +555,7 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
         handlerDialog->ReleaseMouse();
         m_mouseCaptured = FALSE;
       }
+      */
     }
   }
 }
@@ -716,7 +732,6 @@ void wxResourceEditorControlHandler::OnDragBegin(int x, int y, int WXUNUSED(keys
 //  dc.DestroyClippingRegion();
 
   wxPanel *panel = (wxPanel *)handlerControl->GetParent();
-  wxResourceEditorDialogHandler *panelHandler = (wxResourceEditorDialogHandler *)panel->GetEventHandler();
 
   // Erase selection handles
 //  DrawSelectionHandles(dc, TRUE);
@@ -769,11 +784,9 @@ void wxResourceEditorControlHandler::OnDragBegin(int x, int y, int WXUNUSED(keys
   dc.EndDrawing();
 }
 
-void wxResourceEditorControlHandler::OnDragContinue(bool paintIt, int x, int y, int WXUNUSED(keys), wxDC& dc, int selectionHandle)
+void wxResourceEditorControlHandler::OnDragContinue(bool WXUNUSED(paintIt), int x, int y, int WXUNUSED(keys), wxDC& dc, int selectionHandle)
 {
   wxPanel *panel = (wxPanel *)handlerControl->GetParent();
-  wxResourceEditorDialogHandler *panelHandler = (wxResourceEditorDialogHandler *)panel->GetEventHandler();
-
   int xpos, ypos, width, height;
   handlerControl->GetPosition(&xpos, &ypos);
   handlerControl->GetSize(&width, &height);
@@ -890,7 +903,6 @@ void wxResourceEditorControlHandler::OnDragContinue(bool paintIt, int x, int y, 
 void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys), wxDC& dc, int selectionHandle)
 {
   wxPanel *panel = (wxPanel *)handlerControl->GetParent();
-  wxResourceEditorDialogHandler *panelHandler = (wxResourceEditorDialogHandler *)panel->GetEventHandler();
 
   dc.BeginDrawing();
 

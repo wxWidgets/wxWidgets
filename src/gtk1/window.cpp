@@ -1927,7 +1927,19 @@ bool wxWindow::IsOwnGtkWindow( GdkWindow *window )
 void wxWindow::SetFont( const wxFont &font )
 {
   m_font = font;
-  GtkStyle *style = (GtkStyle*) NULL;
+
+  // Unfortunately this results in a crash in GTK on deletion
+  // of windows, e.g. the wxStatusBar in Dialog Editor.
+#if 0
+
+  // ADDED BY JACS: not sure if this is the right thing to do,
+  // but will avoid a segv when SetFont(wxNullFont) is called.
+  if (((wxFont*) &font)->Ok())
+    m_font = font;
+  else
+    m_font = *wxSWISS_FONT;
+
+  GtkStyle *style = (GtkStyle`*) NULL;
   if (!m_hasOwnStyle)
   {
     m_hasOwnStyle = TRUE;
@@ -1942,6 +1954,7 @@ void wxWindow::SetFont( const wxFont &font )
   style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
   
   gtk_widget_set_style( m_widget, style );
+#endif
 }
 
 wxFont *wxWindow::GetFont(void)

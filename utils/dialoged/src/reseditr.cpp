@@ -37,6 +37,7 @@
 #endif
 
 #include "wx/scrolbar.h"
+#include "wx/config.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -104,8 +105,8 @@ wxResourceManager::wxResourceManager():
   m_editorToolBar = NULL;
 
   // Default window positions
-  m_resourceEditorWindowSize.width = 470;
-  m_resourceEditorWindowSize.height = 300;
+  m_resourceEditorWindowSize.width = 500;
+  m_resourceEditorWindowSize.height = 450;
 
   m_resourceEditorWindowSize.x = 0;
   m_resourceEditorWindowSize.y = 0;
@@ -197,6 +198,18 @@ bool wxResourceManager::Initialize()
 
 bool wxResourceManager::LoadOptions()
 {
+  wxConfig config("DialogEd", "wxWindows");
+
+  config.Read("editorWindowX", &m_resourceEditorWindowSize.x);
+  config.Read("editorWindowY", &m_resourceEditorWindowSize.y);
+  config.Read("editorWindowWidth", &m_resourceEditorWindowSize.width);
+  config.Read("editorWindowHeight", &m_resourceEditorWindowSize.height);
+  config.Read("propertyWindowX", &m_propertyWindowSize.x);
+  config.Read("propertyWindowY", &m_propertyWindowSize.y);
+  config.Read("propertyWindowWidth", &m_propertyWindowSize.width);
+  config.Read("propertyWindowHeight", &m_propertyWindowSize.height);
+
+  /*
   wxGetResource("DialogEd", "editorWindowX", &m_resourceEditorWindowSize.x, m_optionsResourceFilename.GetData());
   wxGetResource("DialogEd", "editorWindowY", &m_resourceEditorWindowSize.y, m_optionsResourceFilename.GetData());
   wxGetResource("DialogEd", "editorWindowWidth", &m_resourceEditorWindowSize.width, m_optionsResourceFilename.GetData());
@@ -205,11 +218,23 @@ bool wxResourceManager::LoadOptions()
   wxGetResource("DialogEd", "propertyWindowY", &m_propertyWindowSize.y, m_optionsResourceFilename.GetData());
   wxGetResource("DialogEd", "propertyWindowWidth", &m_propertyWindowSize.width, m_optionsResourceFilename.GetData());
   wxGetResource("DialogEd", "propertyWindowHeight", &m_propertyWindowSize.height, m_optionsResourceFilename.GetData());
+  */
   return TRUE;
 }
 
 bool wxResourceManager::SaveOptions()
 {
+  wxConfig config("DialogEd", "wxWindows");
+
+  config.Write("editorWindowX", m_resourceEditorWindowSize.x);
+  config.Write("editorWindowY", m_resourceEditorWindowSize.y);
+  config.Write("editorWindowWidth", m_resourceEditorWindowSize.width);
+  config.Write("editorWindowHeight", m_resourceEditorWindowSize.height);
+  config.Write("propertyWindowX", m_propertyWindowSize.x);
+  config.Write("propertyWindowY", m_propertyWindowSize.y);
+  config.Write("propertyWindowWidth", m_propertyWindowSize.width);
+  config.Write("propertyWindowHeight", m_propertyWindowSize.height);
+  /*
   wxWriteResource("DialogEd", "editorWindowX", m_resourceEditorWindowSize.x, m_optionsResourceFilename.GetData());
   wxWriteResource("DialogEd", "editorWindowY", m_resourceEditorWindowSize.y, m_optionsResourceFilename.GetData());
   wxWriteResource("DialogEd", "editorWindowWidth", m_resourceEditorWindowSize.width, m_optionsResourceFilename.GetData());
@@ -219,6 +244,7 @@ bool wxResourceManager::SaveOptions()
   wxWriteResource("DialogEd", "propertyWindowY", m_propertyWindowSize.y, m_optionsResourceFilename.GetData());
   wxWriteResource("DialogEd", "propertyWindowWidth", m_propertyWindowSize.width, m_optionsResourceFilename.GetData());
   wxWriteResource("DialogEd", "propertyWindowHeight", m_propertyWindowSize.height, m_optionsResourceFilename.GetData());
+  */
 
   return TRUE;
 }
@@ -285,7 +311,7 @@ bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *WXUNUSED(parent)
     c->bottom.SameAs     (m_editorFrame, wxBottom, 0);
     c->width.Unconstrained();
 #ifdef __WXGTK__
-    c->height.Absolute(70);
+    c->height.Absolute(140);
 #else
     c->height.Absolute(60);
 #endif
