@@ -707,13 +707,6 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
                 // ok, process ready to accept DDE requests
                 ok = wxExecuteDDE(ddeServer, ddeTopic, ddeCommand);
         }
-
-        if ( !ok )
-        {
-            // FIXME just as above we don't check Execute() return code
-            wxLogNull nolog;
-            (void)conn->Execute(ddeCommand);
-        }
     }
 #endif // wxUSE_IPC
 
