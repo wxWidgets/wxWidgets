@@ -543,7 +543,7 @@ void wxPlotXAxisArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
     
     dc.SetBrush( *wxWHITE_BRUSH );
-    dc.SetPen( *_TRANSPARENT_PEN );
+    dc.SetPen( *wxTRANSPARENT_PEN );
     dc.DrawRectangle( 4, 5, client_width-14, 10 );
     dc.DrawRectangle( 0, 20, client_width, 20 );
     dc.SetPen( *wxBLACK_PEN );
