@@ -179,6 +179,7 @@ protected:
     void Init();
 
     virtual wxGDIImageRefData *CreateData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
     // creates the bitmap from XPM data, supposed to be called from ctor
     bool CreateFromXpm(const char **bits);

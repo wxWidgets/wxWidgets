@@ -67,6 +67,7 @@ class WXDLLEXPORT wxBitmapRefData : public wxGDIImageRefData
 {
 public:
     wxBitmapRefData();
+    wxBitmapRefData(const wxBitmapRefData& data);
     virtual ~wxBitmapRefData() { Free(); }
 
     virtual void Free();
@@ -120,7 +121,9 @@ private:
     // optional mask for transparent drawing
     wxMask       *m_bitmapMask;
 
-    DECLARE_NO_COPY_CLASS(wxBitmapRefData)
+
+    // not implemented
+    wxBitmapRefData& operator=(const wxBitmapRefData&);
 };
 
 // ----------------------------------------------------------------------------
@@ -200,6 +203,23 @@ wxBitmapRefData::wxBitmapRefData()
     m_hasAlpha = FALSE;
 }
 
+wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
+               : wxGDIImageRefData(data)
+{
+#ifdef __WXDEBUG__
+    m_selectedInto = NULL;
+#endif
+
+    // can't copy the mask as the other bitmap destroys it
+    m_bitmapMask = NULL;
+
+    wxASSERT_MSG( !data.m_isDIB,
+                    _T("can't copy bitmap locked for raw access!") );
+    m_isDIB = FALSE;
+
+    m_hasAlpha = data.m_hasAlpha;
+}
+
 void wxBitmapRefData::Free()
 {
     wxASSERT_MSG( !m_selectedInto,
@@ -234,6 +254,28 @@ void wxBitmap::Init()
 wxGDIImageRefData *wxBitmap::CreateData() const
 {
     return new wxBitmapRefData;
+}
+
+wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *dataOrig) const
+{
+    const wxBitmapRefData *
+        data = wx_static_cast(const wxBitmapRefData *, dataOrig);
+    if ( !data )
+        return NULL;
+
+    wxBitmap *self = wx_const_cast(wxBitmap *, this);
+    self->m_refData = new wxBitmapRefData(*data);
+
+#if wxUSE_WXDIB
+    // copy the other bitmap
+    if ( data->m_hBitmap )
+    {
+        wxDIB dib((HBITMAP)(data->m_hBitmap));
+        self->CopyFromDIB(dib);
+    }
+#endif // wxUSE_WXDIB
+
+    return m_refData;
 }
 
 #ifdef __WIN32__
@@ -1094,7 +1136,7 @@ void wxBitmap::SetSelectedInto(wxDC *dc)
 
 void wxBitmap::SetPalette(const wxPalette& palette)
 {
-    EnsureHasData();
+    AllocExclusive();
 
     GetBitmapData()->m_bitmapPalette = palette;
 }
@@ -1103,7 +1145,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 
 void wxBitmap::SetMask(wxMask *mask)
 {
-    EnsureHasData();
+    AllocExclusive();
 
     GetBitmapData()->SetMask(mask);
 }
