@@ -82,6 +82,16 @@ methodOverrideMap = {
     'GetViewWS' : ( 'GetViewWhiteSpace', 0, 0, 0),
     'SetViewWS' : ( 'SetViewWhiteSpace', 0, 0, 0),
 
+    'GetCharAt' : ( 0, 0,
+                    '''int %s(int pos) {
+                       return (unsigned char)SendMsg(%s, pos, 0);''',
+                    0),
+
+    'GetStyleAt' : ( 0, 0,
+                    '''int %s(int pos) {
+                       return (unsigned char)SendMsg(%s, pos, 0);''',
+                    0),
+
     'GetStyledText' : (0,
                        'wxMemoryBuffer %s(int startPos, int endPos);',
 
@@ -236,17 +246,12 @@ methodOverrideMap = {
     'GetUsePalette' : (None, 0, 0, 0),
 
     'FindText' : (0,
-                  '''int %s(int minPos, int maxPos,
-                               const wxString& text,
-                               bool caseSensitive, bool wholeWord);''',
-                  '''int %s(int minPos, int maxPos,
-                               const wxString& text,
-                               bool caseSensitive, bool wholeWord) {
-                     TextToFind  ft;
-                     int         flags = 0;
+                  '''int %s(int minPos, int maxPos, const wxString& text, int flags=0);''',
 
-                     flags |= caseSensitive ? SCFIND_MATCHCASE : 0;
-                     flags |= wholeWord     ? SCFIND_WHOLEWORD : 0;
+                  '''int %s(int minPos, int maxPos,
+                            const wxString& text,
+                            int flags) {
+                     TextToFind  ft;
                      ft.chrg.cpMin = minPos;
                      ft.chrg.cpMax = maxPos;
                      ft.lpstrText = (char*)(const char*)wx2stc(text);
@@ -642,14 +647,18 @@ def checkMethodOverride(name, number, docs):
     if methodOverrideMap.has_key(name):
         item = methodOverrideMap[name]
 
-        if item[0] != 0:
-            name = item[0]
-        if item[1] != 0:
-            theDef = '    ' + (item[1] % name)
-        if item[2] != 0:
-            theImp = item[2] % ('wxStyledTextCtrl::'+name, number) + '\n}'
-        if item[3] != 0:
-            docs = item[3]
+        try:
+            if item[0] != 0:
+                name = item[0]
+            if item[1] != 0:
+                theDef = '    ' + (item[1] % name)
+            if item[2] != 0:
+                theImp = item[2] % ('wxStyledTextCtrl::'+name, number) + '\n}'
+            if item[3] != 0:
+                docs = item[3]
+        except:
+            print "*************", name
+            raise
 
     return name, theDef, theImp, docs
 

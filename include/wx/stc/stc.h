@@ -1303,9 +1303,7 @@ public:
     int GetPrintColourMode();
 
     // Find some text in the document.
-    int FindText(int minPos, int maxPos,
-                               const wxString& text,
-                               bool caseSensitive, bool wholeWord);
+    int FindText(int minPos, int maxPos, const wxString& text, int flags=0);
 
     // On Windows will draw the document into a display context such as a printer.
     int FormatRange(bool   doDraw,

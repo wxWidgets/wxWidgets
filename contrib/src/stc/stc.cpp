@@ -197,7 +197,7 @@ int wxStyledTextCtrl::GetLength() {
 
 // Returns the character byte at the position
 int wxStyledTextCtrl::GetCharAt(int pos) {
-    return SendMsg(2007, pos, 0);
+                       return (unsigned char)SendMsg(2007, pos, 0);
 }
 
 // Returns the position of the caret
@@ -212,7 +212,7 @@ int wxStyledTextCtrl::GetAnchor() {
 
 // Returns the style byte at the position
 int wxStyledTextCtrl::GetStyleAt(int pos) {
-    return SendMsg(2010, pos, 0);
+                       return (unsigned char)SendMsg(2010, pos, 0);
 }
 
 // Redoes the next action on the undo history
@@ -946,13 +946,9 @@ int wxStyledTextCtrl::GetPrintColourMode() {
 
 // Find some text in the document.
 int wxStyledTextCtrl::FindText(int minPos, int maxPos,
-                               const wxString& text,
-                               bool caseSensitive, bool wholeWord) {
+                            const wxString& text,
+                            int flags) {
                      TextToFind  ft;
-                     int         flags = 0;
-
-                     flags |= caseSensitive ? SCFIND_MATCHCASE : 0;
-                     flags |= wholeWord     ? SCFIND_WHOLEWORD : 0;
                      ft.chrg.cpMin = minPos;
                      ft.chrg.cpMax = maxPos;
                      ft.lpstrText = (char*)(const char*)wx2stc(text);

@@ -4562,7 +4562,7 @@ static PyObject *_wrap_wxStyledTextCtrl_GetPrintColourMode(PyObject *self, PyObj
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_FindText(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->FindText(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+#define wxStyledTextCtrl_FindText(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->FindText(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_wxStyledTextCtrl_FindText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
@@ -4570,16 +4570,13 @@ static PyObject *_wrap_wxStyledTextCtrl_FindText(PyObject *self, PyObject *args,
     int  _arg1;
     int  _arg2;
     wxString * _arg3;
-    bool  _arg4;
-    bool  _arg5;
+    int  _arg4 = (int ) 0;
     PyObject * _argo0 = 0;
     PyObject * _obj3 = 0;
-    int tempbool4;
-    int tempbool5;
-    char *_kwnames[] = { "self","minPos","maxPos","text","caseSensitive","wholeWord", NULL };
+    char *_kwnames[] = { "self","minPos","maxPos","text","flags", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOii:wxStyledTextCtrl_FindText",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&tempbool4,&tempbool5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiO|i:wxStyledTextCtrl_FindText",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4593,11 +4590,9 @@ static PyObject *_wrap_wxStyledTextCtrl_FindText(PyObject *self, PyObject *args,
     if (_arg3 == NULL)
         return NULL;
 }
-    _arg4 = (bool ) tempbool4;
-    _arg5 = (bool ) tempbool5;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxStyledTextCtrl_FindText(_arg0,_arg1,_arg2,*_arg3,_arg4,_arg5);
+    _result = (int )wxStyledTextCtrl_FindText(_arg0,_arg1,_arg2,*_arg3,_arg4);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
