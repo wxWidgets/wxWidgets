@@ -1625,7 +1625,6 @@ public:
     void     EndBatch();
     int      GetBatchCount();
     void     ForceRefresh();
-    void     Refresh(bool eraseb=True, const wxRect* rect= NULL);
 
 
     // ------ edit control functions
