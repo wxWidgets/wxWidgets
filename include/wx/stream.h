@@ -81,7 +81,7 @@ public:
     // reset the stream state
     void Reset() { m_lasterror = wxSTREAM_NO_ERROR; }
 
-    // deprecated (doesn't make sense!), don't use
+    // this doesn't make sense for all streams, always test its return value
     virtual size_t GetSize() const { return 0; }
 
 #if WXWIN_COMPATIBILITY_2_2

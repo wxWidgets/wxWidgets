@@ -100,9 +100,5 @@ the file.
 \wxheading{Warning}
 
 There are streams which do not have size by definition, such as socket streams.
-In that cases, GetSize returns an invalid size represented by
-
-\begin{verbatim}
-~(size_t)0
-\end{verbatim}
+In that cases, GetSize returns $0$ so you should always test its return value.
 
