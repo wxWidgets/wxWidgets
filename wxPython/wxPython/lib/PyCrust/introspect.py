@@ -1,5 +1,5 @@
-"""Provides a variety of introspective-type support functions for things
-like call tips and command auto completion."""
+"""Provides a variety of introspective-type support functions for
+things like call tips and command auto completion."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
@@ -9,9 +9,14 @@ from __future__ import nested_scopes
 
 import cStringIO
 import inspect
-import string
 import tokenize
 import types
+
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
 
 def getAutoCompleteList(command='', locals=None, includeMagic=1, 
                         includeSingle=1, includeDouble=1):
@@ -33,13 +38,14 @@ def getAutoCompleteList(command='', locals=None, includeMagic=1,
                                        includeSingle, includeDouble)
     return attributes
     
-def getAttributeNames(object, includeMagic=1, includeSingle=1, includeDouble=1):
-    """Return list of unique attributes, including inherited, for an object."""
+def getAttributeNames(object, includeMagic=1, includeSingle=1,
+                      includeDouble=1):
+    """Return list of unique attributes, including inherited, for object."""
     attributes = []
     dict = {}
     if not hasattrAlwaysReturnsTrue(object):
-        # Add some attributes that don't always get picked up.
-        # If they don't apply, they'll get filtered out at the end.
+        # Add some attributes that don't always get picked up.  If
+        # they don't apply, they'll get filtered out at the end.
         attributes += ['__bases__', '__class__', '__dict__', '__name__', 
                        'func_closure', 'func_code', 'func_defaults', 
                        'func_dict', 'func_doc', 'func_globals', 'func_name']
@@ -69,19 +75,20 @@ def hasattrAlwaysReturnsTrue(object):
     return hasattr(object, 'bogu5_123_aTTri8ute')
 
 def getAllAttributeNames(object):
-    """Return mapping of all attributes, including inherited, for an object.
+    """Return dict of all attributes, including inherited, for an object.
     
     Recursively walk through a class and all base classes.
     """
     attrdict = {}  # (object, technique, count): [list of attributes]
     # !!!
-    # !!! Do Not use hasattr() as a test anywhere in this function,
-    # !!! because it is unreliable with remote objects - xmlrpc, soap, etc.
-    # !!! They always return true for hasattr().
+    # Do Not use hasattr() as a test anywhere in this function,
+    # because it is unreliable with remote objects: xmlrpc, soap, etc.
+    # They always return true for hasattr().
     # !!!
     try:
-        # Yes, this can fail if object is an instance of a class with 
-        # __str__ (or __repr__) having a bug or raising an exception. :-(
+        # Yes, this can fail if object is an instance of a class with
+        # __str__ (or __repr__) having a bug or raising an
+        # exception. :-(
         key = str(object)
     except:
         key = 'anonymous'
@@ -106,7 +113,8 @@ def getAllAttributeNames(object):
         pass
     else:
         if klass is object:
-            # Break a circular reference. This happens with extension classes.
+            # Break a circular reference. This happens with extension
+            # classes.
             pass
         else:
             attrdict.update(getAllAttributeNames(klass))
@@ -156,7 +164,7 @@ def getCallTip(command='', locals=None):
         if dropSelf:
             # The first parameter to a method is a reference to an
             # instance, usually coded as "self", and is usually passed
-            # automatically by Python and therefore we want to drop it.
+            # automatically by Python; therefore we want to drop it.
             temp = argspec.split(',')
             if len(temp) == 1:  # No other arguments.
                 argspec = '()'
@@ -171,10 +179,15 @@ def getCallTip(command='', locals=None):
         # "Return call tip text for a command."
         # tip3 is the rest of the docstring, like:
         # "The call tip information will be based on ... <snip>
+        firstline = doc.split('\n')[0].lstrip()
+        if tip1 == firstline:
+            tip1 = ''
+        else:
+            tip1 += '\n\n'
         docpieces = doc.split('\n\n')
         tip2 = docpieces[0]
         tip3 = '\n\n'.join(docpieces[1:])
-        tip = '%s\n\n%s\n\n%s' % (tip1, tip2, tip3)
+        tip = '%s%s\n\n%s' % (tip1, tip2, tip3)
     else:
         tip = tip1
     calltip = (name, argspec[1:-1], tip.strip())
@@ -183,10 +196,24 @@ def getCallTip(command='', locals=None):
 def getRoot(command, terminator=None):
     """Return the rightmost root portion of an arbitrary Python command.
     
-    Return only the root portion that can be eval()'d without side effects.
-    The command would normally terminate with a "(" or ".". The terminator
-    and anything after the terminator will be dropped."""
+    Return only the root portion that can be eval()'d without side
+    effects.  The command would normally terminate with a '(' or
+    '.'. The terminator and anything after the terminator will be
+    dropped."""
     command = rtrimTerminus(command, terminator)
+    tokens = getTokens(command)
+    if not tokens:
+        return ''
+    if tokens[-1][0] is tokenize.ENDMARKER:
+        # Remove the end marker.
+        del tokens[-1]
+    if terminator == '.' and \
+           (tokens[-1][1] <> '.' or tokens[-1][0] is not tokenize.OP):
+        # Trap decimals in numbers, versus the dot operator.
+        return ''
+    else:
+        # Strip off the terminator.
+        command = command[:-1]
     command = command.rstrip()
     tokens = getTokens(command)
     tokens.reverse()
@@ -221,8 +248,9 @@ def getRoot(command, terminator=None):
             # Remember, we're working backwords.
             # So prefix += tokenstring would be wrong.
             if prefix in emptyTypes and tokenstring in ('[({'):
-                # We've already got an empty type identified so now we are in
-                # a nested situation and we can break out with what we've got.
+                # We've already got an empty type identified so now we
+                # are in a nested situation and we can break out with
+                # what we've got.
                 break
             else:
                 prefix = tokenstring + prefix
@@ -240,7 +268,7 @@ def getRoot(command, terminator=None):
 
 def getTokens(command):
     """Return list of token tuples for command."""
-    command = str(command)  # In case the command is unicode, which won't work.
+    command = str(command)  # In case the command is unicode, which fails.
     f = cStringIO.StringIO(command)
     # tokens is a list of token tuples, each looking like: 
     # (type, string, (srow, scol), (erow, ecol), line)
@@ -259,17 +287,17 @@ def getTokens(command):
             tokens.append(args)
         tokenize.tokenize_loop(f.readline, eater)
     except tokenize.TokenError:
-        # This is due to a premature EOF, which we expect since 
-        # we are feeding in fragments of Python code.
+        # This is due to a premature EOF, which we expect since we are
+        # feeding in fragments of Python code.
         pass
     return tokens    
 
 def rtrimTerminus(command, terminator=None):
-    """Return command minus the final terminator and anything that follows."""
+    """Return command minus anything that fillows the final terminator."""
     if terminator:
         pieces = command.split(terminator)
         if len(pieces) > 1:
-            command = terminator.join(pieces[:-1])
+            command = terminator.join(pieces[:-1]) + terminator
     return command
 
 def getBaseObject(object):
@@ -278,12 +306,14 @@ def getBaseObject(object):
         # Builtin functions don't have an argspec that we can get.
         dropSelf = 0
     elif inspect.ismethod(object):
-        # Get the function from the object otherwise inspect.getargspec()
-        # complains that the object isn't a Python function.
+        # Get the function from the object otherwise
+        # inspect.getargspec() complains that the object isn't a
+        # Python function.
         try:
             if object.im_self is None:
-                # This is an unbound method so we do not drop self from the
-                # argspec, since an instance must be passed as the first arg.
+                # This is an unbound method so we do not drop self
+                # from the argspec, since an instance must be passed
+                # as the first arg.
                 dropSelf = 0
             else:
                 dropSelf = 1
@@ -319,6 +349,3 @@ def getConstructor(object):
             if constructor is not None:
                 return constructor
     return None
-
-     
- 

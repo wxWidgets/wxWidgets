@@ -7,7 +7,14 @@ __revision__ = "$Revision$"[11:-2]
 import os
 import sys
 from code import InteractiveInterpreter
+import dispatcher
 import introspect
+
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
 
 
 class Interpreter(InteractiveInterpreter):
@@ -26,8 +33,8 @@ class Interpreter(InteractiveInterpreter):
             import __builtin__
             __builtin__.raw_input = rawin
             del __builtin__
-        copyright = \
-            'Type "help", "copyright", "credits" or "license" for more information.'
+        copyright = 'Type "help", "copyright", "credits" or "license"'
+        copyright += ' for more information.'
         self.introText = 'Python %s on %s%s%s' % \
                          (sys.version, sys.platform, os.linesep, copyright)
         try:
@@ -47,10 +54,11 @@ class Interpreter(InteractiveInterpreter):
         """Send command to the interpreter to be executed.
         
         Because this may be called recursively, we append a new list
-        onto the commandBuffer list and then append commands into that. 
-        If the passed in command is part of a multi-line command we keep 
-        appending the pieces to the last list in commandBuffer until we 
-        have a complete command. If not, we delete that last list."""
+        onto the commandBuffer list and then append commands into
+        that.  If the passed in command is part of a multi-line
+        command we keep appending the pieces to the last list in
+        commandBuffer until we have a complete command. If not, we
+        delete that last list."""
         command = str(command)  # In case the command is unicode.
         if not self.more:
             try: del self.commandBuffer[-1]
@@ -58,17 +66,20 @@ class Interpreter(InteractiveInterpreter):
         if not self.more: self.commandBuffer.append([])
         self.commandBuffer[-1].append(command)
         source = '\n'.join(self.commandBuffer[-1])
-        self.more = self.runsource(source)
-        return self.more
+        more = self.more = self.runsource(source)
+        dispatcher.send(signal='Interpreter.push', sender=self,
+                        command=command, more=more, source=source)
+        return more
         
     def runsource(self, source):
         """Compile and run source code in the interpreter."""
         stdin, stdout, stderr = sys.stdin, sys.stdout, sys.stderr
-        sys.stdin, sys.stdout, sys.stderr = self.stdin, self.stdout, self.stderr
+        sys.stdin, sys.stdout, sys.stderr = \
+                   self.stdin, self.stdout, self.stderr
         more = InteractiveInterpreter.runsource(self, source)
         # If sys.std* is still what we set it to, then restore it.
-        # But, if the executed source changed sys.std*, assume it
-        # was meant to be changed and leave it. Power to the people.
+        # But, if the executed source changed sys.std*, assume it was
+        # meant to be changed and leave it. Power to the people.
         if sys.stdin == self.stdin:
             sys.stdin = stdin
         if sys.stdout == self.stdout:
@@ -86,14 +97,17 @@ class Interpreter(InteractiveInterpreter):
         
         The list of options will be based on the locals namespace."""
         stdin, stdout, stderr = sys.stdin, sys.stdout, sys.stderr
-        sys.stdin, sys.stdout, sys.stderr = self.stdin, self.stdout, self.stderr
-        return introspect.getAutoCompleteList(command, self.locals, *args, **kwds)
+        sys.stdin, sys.stdout, sys.stderr = \
+                   self.stdin, self.stdout, self.stderr
+        l = introspect.getAutoCompleteList(command, self.locals,
+                                           *args, **kwds)
         sys.stdin, sys.stdout, sys.stderr = stdin, stdout, stderr
+        return l
 
     def getCallTip(self, command='', *args, **kwds):
         """Return call tip text for a command.
         
-        The call tip information will be based on the locals namespace."""
+        Call tip information will be based on the locals namespace."""
         return introspect.getCallTip(command, self.locals, *args, **kwds)
 
 
