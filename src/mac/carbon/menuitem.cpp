@@ -41,7 +41,7 @@ void wxMacCtoPString(const char* theCString, Str255 thePString);
 
 // remove inappropriate characters, if useShortcuts is false, the ampersand will not auto-generate a mac menu-shortcut
 
-wxMenuItem::MacBuildMenuString(StringPtr outMacItemText, SInt16 *outMacShortcutChar , UInt8 *outMacModifiers , const char *inItemText , bool useShortcuts )
+int wxMenuItem::MacBuildMenuString(StringPtr outMacItemText, SInt16 *outMacShortcutChar , UInt8 *outMacModifiers , const char *inItemText , bool useShortcuts )
 {
 	char *p = (char *) &outMacItemText[1] ;
 	short macModifiers = 0 ;
