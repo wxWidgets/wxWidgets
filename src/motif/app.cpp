@@ -29,12 +29,10 @@
 #include "wx/module.h"
 #include "wx/memory.h"
 
-#if wxUSE_THREADS
 #include "wx/thread.h"
-#endif
 
 #if wxUSE_WX_RESOURCES
-#include "wx/resource.h"
+    #include "wx/resource.h"
 #endif
 
 #include <Xm/Xm.h>
@@ -56,8 +54,9 @@ wxHashTable *wxWidgetHashTable = NULL;
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
+
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-EVT_IDLE(wxApp::OnIdle)
+    EVT_IDLE(wxApp::OnIdle)
 END_EVENT_TABLE()
 #endif
 
@@ -65,11 +64,7 @@ long wxApp::sm_lastMessageTime = 0;
 
 bool wxApp::Initialize()
 {
-#ifdef __WXMSW__
-    wxBuffer = new char[1500];
-#else
     wxBuffer = new char[BUFSIZ + 512];
-#endif
 
     wxClassInfo::InitializeClasses();
 
@@ -505,14 +500,17 @@ bool wxApp::OnInitGui()
     XtToolkitInitialize() ;
     wxTheApp->m_appContext = (WXAppContext) XtCreateApplicationContext() ;
     Display *dpy = XtOpenDisplay((XtAppContext) wxTheApp->m_appContext,(String)NULL,NULL,
-        (const char*) wxTheApp->GetClassName(), NULL,
+        (const char*) wxTheApp->GetClassName(), NULL, 0,
 # if XtSpecificationRelease < 5
-        0,(Cardinal*) &argc,argv) ;
+        (Cardinal*) &argc,
 # else
-    0,&argc,argv) ;
+        &argc,
 # endif
+        argv);
+
     if (!dpy) {
-        cerr << "wxWindows could not open display for " << wxTheApp->GetClassName() << ": exiting.\n";
+        wxLogError(_("wxWindows could not open display for '%s': exiting."),
+                   wxTheApp->GetClassName());
         exit(-1);
     }
     m_initialDisplay = (WXDisplay*) dpy;
