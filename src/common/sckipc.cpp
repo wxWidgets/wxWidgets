@@ -191,7 +191,7 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
 
 wxConnectionBase *wxTCPClient::OnMakeConnection()
 {
-  return new wxTCPConnection;
+  return new wxTCPConnection();
 }
 
 // --------------------------------------------------------------------------
@@ -251,7 +251,11 @@ wxTCPConnection::~wxTCPConnection ()
   wxDELETE(m_codeco);
   wxDELETE(m_sockstrm);
 
-  if (m_sock) m_sock->Destroy();
+  if (m_sock)
+  {
+    m_sock->SetClientData(NULL);
+    m_sock->Destroy();
+  }
 }
 
 void wxTCPConnection::Compress(bool WXUNUSED(on))
@@ -407,6 +411,10 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
   wxSocketNotify evt = event.GetSocketEvent();
   wxTCPConnection *connection = (wxTCPConnection *)(event.GetClientData());
 
+  // This socket is being deleted; skip this event
+  if (!connection)
+    return;
+
   int msg = 0;
   wxDataInputStream *codeci;
   wxDataOutputStream *codeco; 
@@ -414,7 +422,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
   wxString topic_name = connection->m_topic;
   wxString item;
 
-  // The socket handler signals us that we lost the connection: destroy all.
+  // We lost the connection: destroy everything
   if (evt == wxSOCKET_LOST)
   {
     sock->Notify(FALSE);
@@ -548,6 +556,10 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 {
   wxSocketServer *server = (wxSocketServer *) event.GetSocket();
   wxTCPServer *ipcserv = (wxTCPServer *) event.GetClientData();
+
+  // This socket is being deleted; skip this event
+  if (!ipcserv)
+    return;
 
   if (event.GetSocketEvent() != wxSOCKET_CONNECTION)
     return;
