@@ -565,12 +565,22 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     unsigned char *dstPlanes[5] = {NULL,NULL,NULL,NULL,NULL};
     [maskRep getBitmapDataPlanes:dstPlanes];
     unsigned char *dstData = dstPlanes[1];
+    // The wxImage format (which we use whenever we imported from wxImage)
     if([srcBitmapRep bitsPerPixel]==24 && [srcBitmapRep bitsPerSample]==8 && [srcBitmapRep samplesPerPixel]==3 && [srcBitmapRep hasAlpha]==NO)
     {
         wxPixelData<wxBitmap,wxNativePixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
         wxCHECK_MSG(wxMask_CreateFromBitmapData(pixelData, colour, dstData),
             false, "Unable to access raw data");
     }
+    // 32-bpp RGBx (x=throw away, no alpha)
+    else if([srcBitmapRep bitsPerPixel]==32 && [srcBitmapRep bitsPerSample]==8 && [srcBitmapRep samplesPerPixel]==3 && [srcBitmapRep hasAlpha]==NO)
+    {
+        typedef wxPixelFormat<unsigned char,32,0,1,2> PixelFormat;
+        wxPixelData<wxBitmap,PixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
+        wxCHECK_MSG(wxMask_CreateFromBitmapData(pixelData, colour, dstData),
+            false, "Unable to access raw data");
+    }
+    // 32-bpp RGBA
     else if([srcBitmapRep bitsPerPixel]==32 && [srcBitmapRep bitsPerSample]==8 && [srcBitmapRep samplesPerPixel]==4 && [srcBitmapRep hasAlpha]==YES)
     {
         wxPixelData<wxBitmap,wxAlphaPixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
