@@ -28,6 +28,7 @@
 #include "wx/string.h"
 #include "wx/file.h"
 #include "wx/app.h"
+#include "wx/log.h"
 
 // without this pragma, the stupid compiler precompiles #defines below so that
 // changing them doesn't "take place" later!
@@ -206,7 +207,6 @@ static void TestCharset()
 
 #include "wx/cmdline.h"
 #include "wx/datetime.h"
-#include "wx/log.h"
 
 #if wxUSE_CMDLINE_PARSER
 
