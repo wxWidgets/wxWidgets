@@ -83,7 +83,8 @@ typedef int wxEventType;
 
 #define BEGIN_DECLARE_EVENT_TYPES()
 #define END_DECLARE_EVENT_TYPES()
-#define DECLARE_EVENT_TYPE(name, value) extern const wxEventType name;
+#define DECLARE_EVENT_TYPE(name, value) \
+    extern const wxEventType WXDLLEXPORT name;
 #define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
 
 // generate a new unique event type
