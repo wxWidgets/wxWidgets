@@ -2446,28 +2446,36 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                         break;
                 }
 
-                if (!processed)
+                if ( processed )
+                    break;
+
 #endif // __WXMICROWIN__
+                // VZ: if you find a situation when this is needed, tell
+                //     me about it, do *not* uncomment this code as it
+                //     causes other strange problems
+#if 0
+                if ( message == WM_LBUTTONDOWN && AcceptsFocus() )
+                    SetFocus();
+#endif // 0
+
+                int x = GET_X_LPARAM(lParam),
+                    y = GET_Y_LPARAM(lParam);
+
+                // redirect the event to a static control if necessary by
+                // finding one under mouse
+                wxWindowMSW *win;
+                if ( GetCapture() == this )
                 {
-                    // VZ: why do we need it here? DefWindowProc() is supposed
-                    //     to do this for us anyhow
-                    if ( message == WM_LBUTTONDOWN && AcceptsFocus() )
-                        SetFocus();
-
-                    int x = GET_X_LPARAM(lParam),
-                        y = GET_Y_LPARAM(lParam);
-
-                    // redirect the event to a static control if necessary
-                    if (this == GetCapture())
-                    {
-                        processed = HandleMouseEvent(message, x, y, wParam);
-                    }
-                    else
-                    {
-                        wxWindowMSW *win = FindWindowForMouseEvent(this, &x, &y); //TW:REQ:Univ
-                        processed = win->HandleMouseEvent(message, x, y, wParam);
-                    }
+                    // but don't do it if the mouse is captured by this window
+                    // because then it should really get this event itself
+                    win = this;
                 }
+                else
+                {
+                    win = FindWindowForMouseEvent(this, &x, &y);
+                }
+
+                processed = win->HandleMouseEvent(message, x, y, wParam);
             }
             break;
 
