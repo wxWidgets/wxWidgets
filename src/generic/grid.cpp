@@ -226,6 +226,8 @@ private:
 class WXDLLEXPORT wxGridRowOrColAttrData
 {
 public:
+    // empty ctor to suppress warnings
+    wxGridRowOrColAttrData() { }
     ~wxGridRowOrColAttrData();
 
     void SetAttr(wxGridCellAttr *attr, int rowOrCol);
@@ -5987,7 +5989,12 @@ void wxGrid::SelectRow( int row, bool addToSelected )
     if ( IsSelection() && addToSelected )
     {
         wxRect  rect[4];
-        bool    need_refresh[4] = { FALSE, FALSE, FALSE, FALSE };
+        bool    need_refresh[4];
+        need_refresh[0] =
+        need_refresh[1] =
+        need_refresh[2] =
+        need_refresh[3] = FALSE;
+
         int     i;
 
         wxCoord oldLeft   = m_selectedTopLeft.GetCol();
@@ -6064,7 +6071,11 @@ void wxGrid::SelectCol( int col, bool addToSelected )
     if ( IsSelection() && addToSelected )
     {
         wxRect  rect[4];
-        bool    need_refresh[4] = { FALSE, FALSE, FALSE, FALSE };
+        bool    need_refresh[4];
+        need_refresh[0] =
+        need_refresh[1] =
+        need_refresh[2] =
+        need_refresh[3] = FALSE;
         int     i;
 
         wxCoord oldLeft   = m_selectedTopLeft.GetCol();
@@ -6166,7 +6177,11 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
         // Either one rectangle is a real subset of the
         // other, or they are (almost) disjoint!
         wxRect  rect[4];
-        bool    need_refresh[4] = { FALSE, FALSE, FALSE, FALSE };
+        bool    need_refresh[4];
+        need_refresh[0] =
+        need_refresh[1] =
+        need_refresh[2] =
+        need_refresh[3] = FALSE;
         int     i;
 
         // Store intermediate values
