@@ -2874,14 +2874,12 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
         return;
 
-#if wxUSE_MOUSEWHEEL
     if (event.GetEventType() == wxEVT_MOUSEWHEEL)
     {
         // let the base handle mouse wheel events.
         event.Skip();
         return;
     }
-#endif
 
     if ( !HasCurrent() || IsEmpty() )
         return;
