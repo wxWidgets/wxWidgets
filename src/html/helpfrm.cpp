@@ -252,6 +252,25 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
     SetIcon(wxArtProvider::GetIcon(wxART_HELP, wxART_HELP_BROWSER));
 
+    // On the Mac, each modeless frame must have a menubar.
+    // TODO: add more menu items, and perhaps add a style to show
+    // the menubar: compulsory on the Mac, optional elsewhere.
+#ifdef __WXMAC__
+    wxMenuBar* menuBar = new wxMenuBar;
+
+    wxMenu* fileMenu = new wxMenu;
+    fileMenu->Append(wxID_HTML_OPENFILE, _("&Open..."));
+    fileMenu->Append(wxID_ABOUT, _("&About..."));
+    fileMenu->AppendSeparator();
+    fileMenu->Append(wxID_CLOSE, _("&Close"));
+
+//    wxMenu* helpMenu = new wxMenu;
+//    helpMenu->Append(wxID_ABOUT, _("&About..."));
+
+    menuBar->Append(fileMenu);
+    SetMenuBar(menuBar);
+#endif
+
     int notebook_page = 0;
 
     CreateStatusBar();
@@ -1497,6 +1516,19 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
     evt.Skip();
 }
 
+#ifdef __WXMAC__
+void wxHtmlHelpFrame::OnQuit(wxCommandEvent& event)
+{
+    Close(TRUE);
+}
+
+void wxHtmlHelpFrame::OnAbout(wxCommandEvent& event)
+{
+    wxMessageBox(wxT("wxWindows HTML Help Viewer (c) 1998-2003, Vaclav Slavik et al"), wxT("HelpView"),
+        wxICON_INFORMATION|wxOK, this);
+}
+#endif
+
 BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
     EVT_ACTIVATE(wxHtmlHelpFrame::OnActivate)
     EVT_TOOL_RANGE(wxID_HTML_PANEL, wxID_HTML_OPTIONS, wxHtmlHelpFrame::OnToolbar)
@@ -1512,6 +1544,11 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
     EVT_BUTTON(wxID_HTML_INDEXBUTTONALL, wxHtmlHelpFrame::OnIndexAll)
     EVT_COMBOBOX(wxID_HTML_BOOKMARKSLIST, wxHtmlHelpFrame::OnBookmarksSel)
     EVT_CLOSE(wxHtmlHelpFrame::OnCloseWindow)
+#ifdef __WXMAC__
+    EVT_MENU(wxID_CLOSE, wxHtmlHelpFrame::OnQuit)
+    EVT_MENU(wxID_ABOUT, wxHtmlHelpFrame::OnAbout)
+#endif
+
 END_EVENT_TABLE()
 
 #endif // wxUSE_WXHTML_HELP

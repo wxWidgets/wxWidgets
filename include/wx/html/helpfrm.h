@@ -168,6 +168,11 @@ protected:
     void OnCloseWindow(wxCloseEvent& event);
     void OnActivate(wxActivateEvent& event);
 
+#ifdef __WXMAC__
+    void OnQuit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+#endif
+
     // Images:
     enum {
         IMG_Book = 0,
