@@ -634,11 +634,11 @@ public:
         { m_x *= ((wxDouble)num)/((wxDouble)denum); m_y *= ((wxDouble)num)/((wxDouble)denum);
                 m_width *= ((wxDouble)num)/((wxDouble)denum); m_height *= ((wxDouble)num)/((wxDouble)denum);}
 
-/*
     wxRect2DDouble& operator = (const wxRect2DDouble& rect);
-    bool operator == (const wxRect2DDouble& rect);
-    bool operator != (const wxRect2DDouble& rect);
-*/
+    inline bool operator == (const wxRect2DDouble& rect)
+        { return (m_x==rect.m_x && m_y==rect.m_y && m_width==rect.m_width && m_height==rect.m_height); }
+    inline bool operator != (const wxRect2DDouble& rect)
+        { return !(*this == rect); }
 
     wxDouble  m_x;
     wxDouble  m_y;
