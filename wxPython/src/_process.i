@@ -39,6 +39,13 @@ enum wxKillError
     wxKILL_ERROR            // another, unspecified error
 };
 
+enum wxKillFlags
+{
+    wxKILL_NOCHILDREN = 0,  // don't kill children
+    wxKILL_CHILDREN = 1     // kill children
+};
+
+
 enum wxSignal
 {
     wxSIGNONE = 0,  // verify if the process exists under Unix
@@ -74,7 +81,9 @@ IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
 %name(Process)class wxPyProcess : public wxEvtHandler {
 public:
     // kill the process with the given PID
-    static wxKillError Kill(int pid, wxSignal sig = wxSIGTERM);
+    static wxKillError Kill(int pid,
+                            wxSignal sig = wxSIGTERM,
+                            int flags = wxKILL_NOCHILDREN);
 
     // test if the given process exists
     static bool Exists(int pid);
@@ -164,6 +173,18 @@ MustHaveApp(wxExecute);
 long wxExecute(const wxString& command,
                int flags = wxEXEC_ASYNC,
                wxPyProcess *process = NULL);
+
+
+
+%typemap(in,numinputs=0) wxKillError* rc ( wxKillError temp ) { $1 = &temp; }
+%typemap(argout) wxKillError* rc 
+{
+    PyObject* o;
+    o = PyInt_FromLong((long) (*$1));
+    $result = t_output_helper($result, o);
+}
+
+int wxKill(long pid, wxSignal sig = wxSIGTERM, wxKillError* rc, int flags = wxKILL_NOCHILDREN);
 
 
 //---------------------------------------------------------------------------

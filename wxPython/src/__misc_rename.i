@@ -219,6 +219,8 @@
 %rename(KILL_ACCESS_DENIED)                 wxKILL_ACCESS_DENIED;
 %rename(KILL_NO_PROCESS)                    wxKILL_NO_PROCESS;
 %rename(KILL_ERROR)                         wxKILL_ERROR;
+%rename(KILL_NOCHILDREN)                    wxKILL_NOCHILDREN;
+%rename(KILL_CHILDREN)                      wxKILL_CHILDREN;
 %rename(SIGNONE)                            wxSIGNONE;
 %rename(SIGHUP)                             wxSIGHUP;
 %rename(SIGINT)                             wxSIGINT;
@@ -242,6 +244,7 @@
 %rename(EXEC_NOHIDE)                        wxEXEC_NOHIDE;
 %rename(EXEC_MAKE_GROUP_LEADER)             wxEXEC_MAKE_GROUP_LEADER;
 %rename(Execute)                            wxExecute;
+%rename(Kill)                               wxKill;
 %rename(JOYSTICK1)                          wxJOYSTICK1;
 %rename(JOYSTICK2)                          wxJOYSTICK2;
 %rename(JOY_BUTTON_ANY)                     wxJOY_BUTTON_ANY;
