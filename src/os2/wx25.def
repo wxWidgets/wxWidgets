@@ -12888,6 +12888,8 @@ EXPORTS
       SetItemText__10wxListCtrlFlRC8wxString
       ;wxListCtrl::InsertItem(long,const wxString&)
       InsertItem__10wxListCtrlFlRC8wxString
+      ;ConvertToOS2ListItem(const wxListCtrl*,const wxListItem&,_MYRECORD*,_FIELDINFO*)
+      ConvertToOS2ListItem__FPC10wxListCtrlRC10wxListItemP9_MYRECORDP10_FIELDINFO
       ;ConvertToOS2ListCol(long,const wxListItem&,_FIELDINFO*)
       ConvertToOS2ListCol__FlRC10wxListItemP10_FIELDINFO
       ;BumpRecordIds(unsigned long,_MYRECORD*)
@@ -12908,8 +12910,6 @@ EXPORTS
       ConvertViewToOS2Style__10wxListCtrlFl
       ;wxListCtrl::ConvertToOS2Style(long&,long) const
       ConvertToOS2Style__10wxListCtrlCFRll
-      ;ConvertToOS2ListItem(const wxListCtrl*,const wxListItem&,_MYRECORD*)
-      ConvertToOS2ListItem__FPC10wxListCtrlRC10wxListItemP9_MYRECORD
       ;wxListCtrl::GetItemState(long,long) const
       GetItemState__10wxListCtrlCFlT1
       wxEVT_COMMAND_LIST_DELETE_ITEM

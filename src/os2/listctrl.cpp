@@ -59,16 +59,50 @@
 /////////////////////////////////////////////////////////////////////////////
 // STRUCT SMYRECORD
 //   Under OS/2 we have to use our own RECORDCORE based struct if we have
-//   user data to store in a PM Container Control (and CListCtrl is a PM
-//   Container in ICON, NAME, TEXT or DETAILview). m_ulUserData is a four
+//   user data to store in a PM Container Control (and wxListCtrl is a PM
+//   Container in ICON, NAME, TEXT or DETAIL view). m_ulUserData is a four
 //   byte value containing a pointer to our CListIntemInternalData class
 //   instance.
+//
+//   And now for the big time OS/2 Kludge.  In traditional OS/2 PM
+//   applications using containers, programmers determine BEFORE creation
+//   how many records the view will have, initially, and how many columns
+//   the detail view of the container will have, as the container represents
+//   a known data block.  Thus the OS/2 PM CV_DETAIL view, i.e.
+//   the wxWindows wxLC_REPORT view, relies on STATIC structure for its
+//   columnar data.  It gets the data to display by telling it the specific
+//   offset of the field in the struct containing the displayable data.  That
+//   data has be of OS/2 Types, PSZ (char string), CDATE or CTIME format.
+//   wxWindows is dynamic in nature, however.  We insert columns, one at a
+//   time and do not know how many until the app is done inserting them. So
+//   for OS/2 I have to set a max allowable since they are fixed.  We return
+//   an error to the app if they include more than we can handle.
+//
+//   For example to display the data "Col 4 of Item 6" in a report view, I'd
+//   have to do:
+//   pRecord->m_pzColumn4 = "Col 4 of Item 6";
+//   pField->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn4);
+//   and then call the PM API to set it.
+//
+//   This really stinks but I can't use a pointer to another struct as the
+//   FIELDOFFSET call could only tell OS/2 the four byte value offset of
+//   pointer field and it would display giberish in the column.
 /////////////////////////////////////////////////////////////////////////////
 typedef struct _MYRECORD
 {
     RECORDCORE                      m_vRecord;
     unsigned long                   m_ulItemId;
-    unsigned long                   m_ulUserData;
+    unsigned long                   m_ulUserData; //actually a pointer value to real data (a CListItemInternalData class instance)
+    PSZ                             m_pzColumn1;
+    PSZ                             m_pzColumn2;
+    PSZ                             m_pzColumn3;
+    PSZ                             m_pzColumn4;
+    PSZ                             m_pzColumn5;
+    PSZ                             m_pzColumn6;
+    PSZ                             m_pzColumn7;
+    PSZ                             m_pzColumn8;
+    PSZ                             m_pzColumn9;
+    PSZ                             m_pzColumn10;
 } MYRECORD, *PMYRECORD;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -581,9 +615,10 @@ void ConvertToOS2Flags (
 //  they are added to the container.
 //
 // PARAMETERS
-//  pCtrl   -- the control to use
-//  rInfo   -- the item to convert
-//  pRecord -- the OS list control to use, should be zeroed out
+//  pCtrl      -- the control to use
+//  rInfo      -- the item to convert
+//  pRecord    -- the OS list control to use, should be zeroed out
+//  pFieldinfo -- a field struct that may contain columnar data for detail view
 //
 // RETURN VALUE
 //  none
@@ -593,9 +628,11 @@ void ConvertToOS2ListItem (
   const wxListCtrl*                 pCtrl
 , const wxListItem&                 rInfo
 , PMYRECORD                         pRecord
+, PFIELDINFO                        pFieldInfo
 )
 {
     pRecord->m_ulItemId    = (ULONG)rInfo.GetId();
+    pRecord->m_vRecord.cb = sizeof(RECORDCORE);
     if (rInfo.GetMask() & wxLIST_MASK_STATE)
     {
         ConvertToOS2Flags( rInfo.m_state
@@ -610,6 +647,72 @@ void ConvertToOS2ListItem (
     if (pCtrl->GetWindowStyleFlag() & wxLC_LIST) // PM TEXT view
     {
         pRecord->m_vRecord.pszText = (char*)rInfo.GetText().c_str();
+    }
+    //
+    // In the case of a report view the text will be the data in the lead column
+    // ???? Don't know why, but that is how it works in other ports.
+    //
+    if (pCtrl->GetWindowStyleFlag() & wxLC_REPORT)
+    {
+        if (pFieldInfo)
+        {
+            switch(rInfo.GetColumn())
+            {
+                case 0:
+                    pRecord->m_pzColumn1 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn1);
+                    break;
+
+                case 1:
+                    pRecord->m_pzColumn2 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn2);
+                    break;
+
+                case 2:
+                    pRecord->m_pzColumn3 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn3);
+                    break;
+
+                case 3:
+                    pRecord->m_pzColumn4 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn4);
+                    break;
+
+                case 4:
+                    pRecord->m_pzColumn5 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn5);
+                    break;
+
+                case 5:
+                    pRecord->m_pzColumn6 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn6);
+                    break;
+
+                case 6:
+                    pRecord->m_pzColumn7 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn7);
+                    break;
+
+                case 7:
+                    pRecord->m_pzColumn8 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn8);
+                    break;
+
+                case 8:
+                    pRecord->m_pzColumn9 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn9);
+                    break;
+
+                case 9:
+                    pRecord->m_pzColumn10 = (char*)rInfo.GetText().c_str();
+                    pFieldInfo->offStruct = FIELDOFFSET(MYRECORD, m_pzColumn10);
+                    break;
+
+                default:
+                    wxFAIL_MSG( _T("wxOS2 does not support more than 10 columns in REPORT view") );
+                    break;
+            }
+        }
     }
     if (rInfo.GetMask() & wxLIST_MASK_IMAGE)
     {
@@ -641,10 +744,17 @@ void ConvertToOS2ListCol (
 {
     memset(pField, '\0', sizeof(FIELDINFO));
     pField->cb = sizeof(FIELDINFO);
+
+    //
+    // Default some settings
+    //
+    pField->flData  = CFA_HORZSEPARATOR | CFA_SEPARATOR;
+    pField->flTitle = CFA_CENTER;
+
     if (rItem.GetMask() & wxLIST_MASK_TEXT)
     {
         pField->flData |= CFA_STRING;
-        pField->pUserData = (void *)rItem.GetText().c_str();
+        pField->pTitleData = (PVOID)rItem.GetText().c_str(); // text is column title not data
     }
     if (rItem.GetMask() & wxLIST_MASK_FORMAT)
     {
@@ -655,6 +765,8 @@ void ConvertToOS2ListCol (
         else if (rItem.m_format == wxLIST_FORMAT_CENTRE)
             pField->flData |= CFA_CENTER;
     }
+    else
+        pField->flData |= CFA_CENTER;  // Just ensure the default is centered
     if (rItem.GetMask() & wxLIST_MASK_WIDTH)
     {
         if (!(rItem.GetWidth() == wxLIST_AUTOSIZE ||
@@ -662,6 +774,11 @@ void ConvertToOS2ListCol (
             pField->cxWidth = rItem.GetWidth();
         // else: OS/2 automatically sets the width if created with the approppriate style
     }
+
+    //
+    // Still need to set the actual data
+    //
+    pField->offStruct = 0;
 } // end of ConvertToOS2ListCol
 
 // ----------------------------------------------------------------------------
@@ -813,23 +930,26 @@ bool wxListCtrl::DoCreateControl (
                       ,MPFROMP(&vCnrInfo)
                       ,(MPARAM)(USHORT)sizeof(CNRINFO)
                      ))
+        return FALSE;
     lWstyle = ConvertViewToOS2Style(GetWindowStyleFlag());
-    vCnrInfo.flWindowAttr != lWstyle;
-    ::WinSendMsg( GetHWND()
-                 ,CM_SETCNRINFO
-                 ,MPFROMP(&vCnrInfo)
-                 ,(MPARAM)CMA_FLWINDOWATTR
-                );
+    vCnrInfo.flWindowAttr |= lWstyle;
+    if (!::WinSendMsg( GetHWND()
+                      ,CM_SETCNRINFO
+                      ,MPFROMP(&vCnrInfo)
+                      ,(MPARAM)CMA_FLWINDOWATTR
+                     ))
+        return FALSE;
 
     //
     // And now set needed arrangement flags
     //
     lWstyle = ConvertArrangeToOS2Style(GetWindowStyleFlag());
-    ::WinSendMsg( GetHWND()
-                 ,CM_ARRANGE
-                 ,(MPARAM)CMA_ARRANGEGRID
-                 ,(MPARAM)lWstyle
-                );
+    if (!::WinSendMsg( GetHWND()
+                      ,CM_ARRANGE
+                      ,(MPARAM)CMA_ARRANGEGRID
+                      ,(MPARAM)lWstyle
+                     ))
+        return FALSE;
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(GetParent()->GetForegroundColour());
     SubclassWin(m_hWnd);
@@ -1236,6 +1356,9 @@ bool wxListCtrl::SetItem (
   wxListItem&                       rInfo
 )
 {
+    PFIELDINFO                      pFieldInfo = FindOS2ListFieldByColNum ( GetHWND()
+                                                                           ,rInfo.GetColumn()
+                                                                          );
     PMYRECORD                       pRecord = FindOS2ListRecordByID( GetHWND()
                                                                     ,rInfo.GetId()
                                                                    );
@@ -1243,6 +1366,7 @@ bool wxListCtrl::SetItem (
     ConvertToOS2ListItem( this
                          ,rInfo
                          ,pRecord
+                         ,pFieldInfo
                         );
 
     //
@@ -1282,6 +1406,7 @@ bool wxListCtrl::SetItem (
             else
                 pData->m_pAttr = new wxListItemAttr(*rInfo.GetAttributes());
         }
+        pData->m_pMyRecord = pRecord;  // they point to each other
     }
 
     //
@@ -1301,12 +1426,20 @@ bool wxListCtrl::SetItem (
         //
         bUpdateNow = TRUE;
     }
+    if (::WinIsWindowVisible(GetHWND()))
+    {
+        ::WinSendMsg( GetHWND()
+                     ,CM_INVALIDATERECORD
+                     ,MPFROMP(pRecord)
+                     ,MPFROM2SHORT(1, CMA_ERASE | CMA_REPOSITION | CMA_TEXTCHANGED)
+                    );
+        RefreshItem(pRecord->m_ulItemId);
+    }
     ::WinSendMsg( GetHWND()
-                 ,CM_INVALIDATERECORD
-                 ,MPFROMP(pRecord)
-                 ,MPFROM2SHORT(1, CMA_ERASE | CMA_REPOSITION | CMA_TEXTCHANGED)
+                 ,CM_INVALIDATEDETAILFIELDINFO
+                 ,NULL
+                 ,NULL
                 );
-    RefreshItem(pRecord->m_ulItemId);
     return TRUE;
 } // end of wxListCtrl::SetItem
 
@@ -2211,27 +2344,38 @@ long wxListCtrl::InsertItem (
 {
     wxASSERT_MSG( !IsVirtual(), _T("can't be used with virtual controls") );
 
-    PMYRECORD                       pRecordAfter = FindOS2ListRecordByID ( GetHWND()
-                                                                          ,rInfo.GetId() - 1
-                                                                         );
+    PFIELDINFO                      pFieldInfo = FindOS2ListFieldByColNum ( GetHWND()
+                                                                           ,rInfo.GetColumn()
+                                                                          );
+    PMYRECORD                       pRecordAfter = NULL;
     PMYRECORD                       pRecord = (PMYRECORD)::WinSendMsg( GetHWND()
                                                                       ,CM_ALLOCRECORD
                                                                       ,MPFROMLONG(sizeof(MYRECORD) - sizeof(RECORDCORE))
-                                                                      ,MPFROMLONG(1)
+                                                                      ,MPFROMSHORT(1)
                                                                      );
-    RECORDINSERT                    vInsert;
-
-    vInsert.cb                = sizeof(RECORDINSERT);
-    vInsert.pRecordOrder      = (PRECORDCORE)pRecordAfter;
-    vInsert.pRecordParent     = NULL;
-    vInsert.fInvalidateRecord = TRUE;
-    vInsert.zOrder            = CMA_TOP;
-    vInsert.cRecordsInsert    = 1;
 
     ConvertToOS2ListItem( this
                          ,rInfo
                          ,pRecord
+                         ,pFieldInfo
                         );
+
+    if (rInfo.GetId() > 0)
+        pRecordAfter = FindOS2ListRecordByID( GetHWND()
+                                             ,rInfo.GetId() - 1
+                                            );
+
+    RECORDINSERT                    vInsert;
+
+    vInsert.cb                = sizeof(RECORDINSERT);
+    vInsert.pRecordParent     = NULL;
+    if (!pRecordAfter)
+        vInsert.pRecordOrder  = (PRECORDCORE)CMA_FIRST;
+    else
+        vInsert.pRecordOrder  = (PRECORDCORE)pRecordAfter;
+    vInsert.zOrder            = CMA_TOP;
+    vInsert.cRecordsInsert    = 1;
+    vInsert.fInvalidateRecord = TRUE;
 
     //
     // Check wether we need to allocate our internal data
@@ -2263,17 +2407,23 @@ long wxListCtrl::InsertItem (
             pData->m_pAttr = new wxListItemAttr(*rInfo.GetAttributes());
         }
     }
-    ::WinSendMsg( GetHWND()
-                 ,CM_INSERTRECORD
-                 ,MPFROMP(pRecord)
-                 ,MPFROMP(&vInsert)
-                );
+    if (!::WinSendMsg( GetHWND()
+                      ,CM_INSERTRECORD
+                      ,MPFROMP(pRecord)
+                      ,MPFROMP(&vInsert)
+                     ))
+        return -1;
     //
     // OS/2 must mannually bump the index's of following records
     //
     BumpRecordIds( GetHWND()
                   ,pRecord
                  );
+    ::WinSendMsg( GetHWND()
+                 ,CM_INVALIDATEDETAILFIELDINFO
+                 ,NULL
+                 ,NULL
+                );
     return pRecord->m_ulItemId;
 } // end of wxListCtrl::InsertItem
 
@@ -2284,6 +2434,7 @@ long wxListCtrl::InsertItem (
 {
     wxListItem                      vInfo;
 
+    memset(&vInfo, '\0', sizeof(wxListItem));
     vInfo.m_text   = rsLabel;
     vInfo.m_mask   = wxLIST_MASK_TEXT;
     vInfo.m_itemId = lIndex;
@@ -2337,15 +2488,16 @@ long wxListCtrl::InsertColumn (
                                                                            );
     FIELDINFOINSERT                 vInsert;
 
+    ConvertToOS2ListCol ( lCol
+                         ,rItem
+                         ,pField
+                        );
+
     vInsert.cb                   = sizeof(FIELDINFOINSERT);
     vInsert.pFieldInfoOrder      = pFieldAfter;
     vInsert.fInvalidateFieldInfo = TRUE;
     vInsert.cFieldInfoInsert     = 1;
 
-    ConvertToOS2ListCol ( lCol
-                         ,rItem
-                         ,pField
-                        );
     bSuccess = ::WinSendMsg( GetHWND()
                             ,CM_INSERTDETAILFIELDINFO
                             ,MPFROMP(pField)
