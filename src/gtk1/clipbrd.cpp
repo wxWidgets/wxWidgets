@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        clipbrd.cpp
+// Name:        gtk/clipbrd.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:           wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -39,6 +39,11 @@ extern void wxapp_uninstall_thread_wakeup();
 GdkAtom  g_clipboardAtom   = 0;
 GdkAtom  g_targetsAtom     = 0;
 
+// the trace mask we use with wxLogTrace() - call
+// wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
+// (there will be a *lot* of them!)
+static const char *TRACE_CLIPBOARD = _T("clipboard");
+
 //-----------------------------------------------------------------------------
 // reminder
 //-----------------------------------------------------------------------------
@@ -57,9 +62,9 @@ struct _GtkSelectionData
   GdkAtom selection;
   GdkAtom target;
   GdkAtom type;
-  gint          format;
+  gint    format;
   guchar *data;
-  gint          length;
+  gint    length;
 };
 
 */
@@ -82,14 +87,22 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
         GdkAtom type = selection_data->type;
         if ( type != GDK_SELECTION_TYPE_ATOM )
         {
-            clipboard->m_waiting = FALSE;
-            return;
+            if ( strcmp(gdk_atom_name(type), "TARGETS") )
+            {
+                wxLogTrace( TRACE_CLIPBOARD,
+                            _T("got unsupported clipboard target") );
+
+                clipboard->m_waiting = FALSE;
+                return;
+            }
         }
 
-/*
+#ifdef __WXDEBUG__
         wxDataFormat clip( selection_data->selection );
-        wxLogDebug( wxT("selection received for targets, clipboard %s"), clip.GetId().c_str() );
-*/
+        wxLogTrace( TRACE_CLIPBOARD,
+                    wxT("selection received for targets, clipboard %s"),
+                    clip.GetId().c_str() );
+#endif // __WXDEBUG__
 
         // the atoms we received, holding a list of targets (= formats)
         GdkAtom *atoms = (GdkAtom *)selection_data->data;
@@ -98,9 +111,9 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
         {
             wxDataFormat format( atoms[i] );
 
-/*
-            wxLogDebug( wxT("selection received for targets, format %s"), format.GetId().c_str() );
-*/
+            wxLogTrace( TRACE_CLIPBOARD,
+                        wxT("selection received for targets, format %s"),
+                        format.GetId().c_str() );
 
             if (format == clipboard->m_targetRequested)
             {
@@ -417,7 +430,9 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     for (size_t i = 0; i < m_data->GetFormatCount(); i++)
     {
-        wxLogDebug( wxT("wxClipboard now supports atom %s"), array[i].GetId().c_str() );
+        wxLogTrace( TRACE_CLIPBOARD,
+                    wxT("wxClipboard now supports atom %s"),
+                    array[i].GetId().c_str() );
 
         gtk_selection_add_target( GTK_WIDGET(m_clipboardWidget),
                                   clipboard,
@@ -475,9 +490,9 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
     /* store requested format to be asked for by callbacks */
     m_targetRequested = format;
 
-/*
-    wxLogDebug( wxT("wxClipboard:IsSupported: requested format: %s"), format.GetId().c_str() );
-*/
+    wxLogTrace( TRACE_CLIPBOARD,
+                wxT("wxClipboard:IsSupported: requested format: %s"),
+                format.GetId().c_str() );
 
     wxCHECK_MSG( m_targetRequested, FALSE, wxT("invalid clipboard format") );
 
@@ -518,7 +533,9 @@ bool wxClipboard::GetData( wxDataObject& data )
     {
         wxDataFormat format( array[i] );
 
-        wxLogDebug( wxT("wxClipboard::GetData: requested format: %s"), format.GetId().c_str() );
+        wxLogTrace( TRACE_CLIPBOARD,
+                    wxT("wxClipboard::GetData: requested format: %s"),
+                    format.GetId().c_str() );
 
         /* is data supported by clipboard ? */
 

@@ -657,6 +657,13 @@ bool DnDApp::OnInit()
 
     wxDefaultResourceTable->ParseResourceFile(path);
 
+    // switch on trace messages
+#if defined(__WXGTK__)
+    wxLog::AddTraceMask(_T("clipboard"));
+#elif defined(__WXMSW__)
+    wxLog::AddTraceMask(wxTRACE_OleCalls);
+#endif
+
 #if wxUSE_LIBPNG
     wxImage::AddHandler( new wxPNGHandler );
 #endif
@@ -736,11 +743,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
                                  wxTE_MULTILINE | wxTE_READONLY |
                                  wxSUNKEN_BORDER );
 
-#ifdef __WXMSW__
-    // redirect log messages to the text window and switch on OLE messages
-    // logging
-    wxLog::AddTraceMask(wxTRACE_OleCalls);
-#endif
+    // redirect log messages to the text window
     m_pLog = new wxLogTextCtrl(m_ctrlLog);
     m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 
@@ -803,12 +806,23 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void DnDFrame::OnUpdateUIPasteText(wxUpdateUIEvent& event)
 {
+#ifdef __WXDEBUG__
+    // too many trace messages if we don't do it - this function is called
+    // very often
+    wxLogNull nolog;
+#endif
+
     event.Enable( wxTheClipboard->IsSupported(wxDF_TEXT) );
-//    event.Enable( TRUE );
 }
 
 void DnDFrame::OnUpdateUIPasteBitmap(wxUpdateUIEvent& event)
 {
+#ifdef __WXDEBUG__
+    // too many trace messages if we don't do it - this function is called
+    // very often
+    wxLogNull nolog;
+#endif
+
     event.Enable( wxTheClipboard->IsSupported(wxDF_BITMAP) );
 }
 
