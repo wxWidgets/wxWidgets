@@ -162,9 +162,6 @@ enum {
     wxALIGN_CENTER,
     wxALIGN_CENTRE,
     wxALIGN_RIGHT,
-    wxSB_MASK,
-    wxNEEDED_SB,
-    wxALWAYS_SB,
     wxLB_NEEDED_SB,
     wxLB_ALWAYS_SB,
     wxLB_SORT,
@@ -179,8 +176,6 @@ enum {
     wxTE_PASSWORD,
     wxTE_READONLY,
     wxTE_MULTILINE,
-    wxREADONLY,
-    wxEDITABLE,
     wxCB_SIMPLE,
     wxCB_DROPDOWN,
     wxCB_SORT,
@@ -698,6 +693,9 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/08/14 03:16:35  RD
+// removed some definitions that got removed from defs.h
+//
 // Revision 1.1  1998/08/09 08:25:49  RD
 // Initial version
 //

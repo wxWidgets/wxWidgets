@@ -155,9 +155,6 @@ wxALIGN_LEFT = wxpc.wxALIGN_LEFT
 wxALIGN_CENTER = wxpc.wxALIGN_CENTER
 wxALIGN_CENTRE = wxpc.wxALIGN_CENTRE
 wxALIGN_RIGHT = wxpc.wxALIGN_RIGHT
-wxSB_MASK = wxpc.wxSB_MASK
-wxNEEDED_SB = wxpc.wxNEEDED_SB
-wxALWAYS_SB = wxpc.wxALWAYS_SB
 wxLB_NEEDED_SB = wxpc.wxLB_NEEDED_SB
 wxLB_ALWAYS_SB = wxpc.wxLB_ALWAYS_SB
 wxLB_SORT = wxpc.wxLB_SORT
@@ -172,8 +169,6 @@ wxTE_PROCESS_ENTER = wxpc.wxTE_PROCESS_ENTER
 wxTE_PASSWORD = wxpc.wxTE_PASSWORD
 wxTE_READONLY = wxpc.wxTE_READONLY
 wxTE_MULTILINE = wxpc.wxTE_MULTILINE
-wxREADONLY = wxpc.wxREADONLY
-wxEDITABLE = wxpc.wxEDITABLE
 wxCB_SIMPLE = wxpc.wxCB_SIMPLE
 wxCB_DROPDOWN = wxpc.wxCB_DROPDOWN
 wxCB_SORT = wxpc.wxCB_SORT
@@ -1385,7 +1380,10 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.1  1998/08/09 08:25:53  RD
+# Revision 1.2  1998/08/14 03:16:39  RD
+# removed some definitions that got removed from defs.h
+#
+# Revision 1.1  1998/08/09 08:25:49  RD
 # Initial version
 #
 #

@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.1  1998/08/09 08:25:53  RD
- * Initial version
+ * Revision 1.2  1998/08/14 03:16:36  RD
+ * removed some definitions that got removed from defs.h
  *
  ************************************************************************/
 
@@ -1295,9 +1295,6 @@ SWIGEXPORT(void,initwxpc)() {
 	 PyDict_SetItemString(d,"wxALIGN_CENTER", PyInt_FromLong((long) wxALIGN_CENTER));
 	 PyDict_SetItemString(d,"wxALIGN_CENTRE", PyInt_FromLong((long) wxALIGN_CENTRE));
 	 PyDict_SetItemString(d,"wxALIGN_RIGHT", PyInt_FromLong((long) wxALIGN_RIGHT));
-	 PyDict_SetItemString(d,"wxSB_MASK", PyInt_FromLong((long) wxSB_MASK));
-	 PyDict_SetItemString(d,"wxNEEDED_SB", PyInt_FromLong((long) wxNEEDED_SB));
-	 PyDict_SetItemString(d,"wxALWAYS_SB", PyInt_FromLong((long) wxALWAYS_SB));
 	 PyDict_SetItemString(d,"wxLB_NEEDED_SB", PyInt_FromLong((long) wxLB_NEEDED_SB));
 	 PyDict_SetItemString(d,"wxLB_ALWAYS_SB", PyInt_FromLong((long) wxLB_ALWAYS_SB));
 	 PyDict_SetItemString(d,"wxLB_SORT", PyInt_FromLong((long) wxLB_SORT));
@@ -1312,8 +1309,6 @@ SWIGEXPORT(void,initwxpc)() {
 	 PyDict_SetItemString(d,"wxTE_PASSWORD", PyInt_FromLong((long) wxTE_PASSWORD));
 	 PyDict_SetItemString(d,"wxTE_READONLY", PyInt_FromLong((long) wxTE_READONLY));
 	 PyDict_SetItemString(d,"wxTE_MULTILINE", PyInt_FromLong((long) wxTE_MULTILINE));
-	 PyDict_SetItemString(d,"wxREADONLY", PyInt_FromLong((long) wxREADONLY));
-	 PyDict_SetItemString(d,"wxEDITABLE", PyInt_FromLong((long) wxEDITABLE));
 	 PyDict_SetItemString(d,"wxCB_SIMPLE", PyInt_FromLong((long) wxCB_SIMPLE));
 	 PyDict_SetItemString(d,"wxCB_DROPDOWN", PyInt_FromLong((long) wxCB_DROPDOWN));
 	 PyDict_SetItemString(d,"wxCB_SORT", PyInt_FromLong((long) wxCB_SORT));
