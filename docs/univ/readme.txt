@@ -71,7 +71,23 @@ change for wxUniversal is that you must add "--enable-universal" switch to
 the configure command line and for wxX11 even this is unnecessary, i.e. it
 is enabled by default.
 
-4. Documentation and support
+4. Running wxUniv programs
+--------------------------
+
+wxUniv programs all honour the standard option "--theme" which allows to
+specify the theme to be used by name. Currently there are the following
+themes:
+
+a) win32 -- Windows 95 look and feel
+b) metal -- based on win32 but with gradient backgrounds
+c) gtk   -- GTK+ 1.x standard look and feel
+
+Thus, to launch a program using gtk theme you may do "./program --theme=gtk".
+
+It is also possible to change the default theme for all wxUniv applications
+at once by setting the environment variable WXTHEME to the theme name.
+
+5. Documentation and support
 ----------------------------
 
  Please note that wxUniversal is not as mature as the other wxWindows ports
@@ -98,5 +114,5 @@ itself, namely:
 
 
 This file is accurate for the version 2.3.3 of wxUniversal. It was last
-modified on Apr 11, 2002.
+modified on Apr 15, 2002.
 
