@@ -120,16 +120,16 @@ manner to refer to the application.
 
 \helpref{wxApp::SetClassName}{wxappsetclassname}
 
-\membersection{wxApp::GetExitOnDelete}\label{wxappgetexitondelete}
+\membersection{wxApp::GetExitOnFrameDelete}\label{wxappgetexitonframedelete}
 
-\constfunc{bool}{GetExitOnDelete}{\void}
+\constfunc{bool}{GetExitFrameOnDelete}{\void}
 
 Returns TRUE if the application will exit when the top-level window is deleted, FALSE
 otherwise.
 
 \wxheading{See also}
 
-\helpref{wxApp::SetExitOnDelete}{wxappsetexitondelete}
+\helpref{wxApp::SetExitOnFrameDelete}{wxappsetexitonframedelete}
 
 \membersection{wxApp::GetTopWindow}\label{wxappgettopwindow}
 
@@ -338,8 +338,7 @@ BOOL CTheApp::PreTranslateMessage(MSG *msg)
 
 \func{bool}{Pending}{\void}
 
-Returns TRUE if unprocessed events are in the window system event queue
-(MS Windows and Motif).
+Returns TRUE if unprocessed events are in the window system event queue.
 
 \wxheading{See also}
 
@@ -406,9 +405,9 @@ manner to refer to the application.
 
 \helpref{wxApp::GetClassName}{wxappgetclassname}
 
-\membersection{wxApp::SetExitOnDelete}\label{wxappsetexitondelete}
+\membersection{wxApp::SetExitOnFrameDelete}\label{wxappsetexitonframedelete}
 
-\func{void}{SetExitOnDelete}{\param{bool}{ flag}}
+\func{void}{SetExitOnFrameDelete}{\param{bool}{ flag}}
 
 Allows the programmer to specify whether the application will exit when the
 top-level frame is deleted.
@@ -417,10 +416,6 @@ top-level frame is deleted.
 
 \docparam{flag}{If TRUE (the default), the application will exit when the top-level frame is
 deleted. If FALSE, the application will continue to run.}
-
-\wxheading{Remarks}
-
-Currently, setting this to FALSE only has an effect under Windows.
 
 \membersection{wxApp::SetTopWindow}\label{wxappsettopwindow}
 

@@ -6,7 +6,7 @@ This class represents a source for a drag and drop operation.
 
 \wxheading{Derived from}
 
-\helpref{wxObject}{wxobject}
+None
 
 \wxheading{Include files}
 
@@ -18,14 +18,14 @@ This class represents a source for a drag and drop operation.
 
 {\small\begin{verbatim}
 enum wxDragResult
-  {
+{
     wxDragError,    // error prevented the d&d operation from completing
     wxDragNone,     // drag target didn't accept the data
     wxDragCopy,     // the data was successfully copied
     wxDragMove,     // the data was successfully moved
     wxDragCancel    // the operation was cancelled by user (not an error)
-  };
-\end{verbatim}%
+};
+\end{verbatim}
 }
 
 \wxheading{See also}
@@ -40,9 +40,9 @@ enum wxDragResult
 \func{}{wxDropSource}{\param{wxWindow*}{ win = NULL}}
 
 Default/wxGTK-specific constructor. If you use the default constructor you must
-call \helpref{wxDropSource::SetData}{wxdropsourcesetdata} later.
+call \helpref{SetData}{wxdropsourcesetdata} later.
 
-{\it win} is required by wxGTK and therefore should always be set.
+Note that {\it win} is required by the GTK port and therefore should always be set.
 
 \membersection{wxDropSource::\destruct{wxDropSource}}\label{wxdropsourcedtor}
 
@@ -52,7 +52,8 @@ call \helpref{wxDropSource::SetData}{wxdropsourcesetdata} later.
 
 \func{void}{SetData}{\param{wxDataObject\&}{ data}}
 
-Sets the data \helpref{data object}{wxdataobject} associated with the drop source.
+Sets the data \helpref{wxDataObject}{wxdataobject} associated with the 
+drop source. This will not delete any previously associated data.
 
 \membersection{wxDropSource::DoDragDrop}\label{wxdropsourcedodragdrop}
 

@@ -2,60 +2,81 @@
 
 \overview{Overview}{wxdndoverview}
 
-This class represents a target for a drag and drop operation.
+This class represents a target for a drag and drop operation. A \helpref{wxDataObject}{wxdataobject}
+can be associated with it and by default, this object will be filled with the data from the
+drag source, if the data formats supported by the data object match the drag source data 
+format.
+
+There are various virtual handler functions defined in this class which may be overridden
+to give visual feedback or react in a more fine-tuned way, e.g. by not accepting data on
+the whole window area, but only a small portion of it. The normal sequence of calls is
+\helpref{OnEnter}{wxdroptargetonenter}, possibly many times \helpref{OnDragOver}{wxdroptargetondragover},
+\helpref{OnDrop}{wxdroptargetondrop} and finally \helpref{OnData}{wxdroptargetondata}.
 
 \wxheading{Derived from}
 
-\helpref{wxObject}{wxobject}
+None
 
 \wxheading{Include files}
 
 <wx/dnd.h>
 
+\wxheading{Types}
+
+\index{wxDragResult}wxDragResult is defined as follows:
+
+{\small\begin{verbatim}
+enum wxDragResult
+{
+    wxDragError,    // error prevented the d&d operation from completing
+    wxDragNone,     // drag target didn't accept the data
+    wxDragCopy,     // the data was successfully copied
+    wxDragMove,     // the data was successfully moved
+    wxDragCancel    // the operation was cancelled by user (not an error)
+};
+\end{verbatim}
+}
+
 \wxheading{See also}
 
 \helpref{Drag and drop overview}{wxdndoverview}, \helpref{wxDropSource}{wxdropsource}, 
-\helpref{wxTextDropTarget}{wxtextdroptarget}, \helpref{wxFileDropTarget}{wxfiledroptarget}
+\helpref{wxTextDropTarget}{wxtextdroptarget}, \helpref{wxFileDropTarget}{wxfiledroptarget},
+\helpref{wxDataFormat}{wxdataformat}, \helpref{wxDataObject}{wxdataobject}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxDropTarget::wxDropTarget}\label{wxdroptargetwxdroptarget}
 
-\func{}{wxDropTarget}{\void}
+\func{}{wxDropTarget}{\param{wxDataObject*}{ data = NULL}}
 
-Constructor.
+Constructor. {\it data} is the data to be associated with the drop target.
 
 \membersection{wxDropTarget::\destruct{wxDropTarget}}\label{wxdroptargetdtor}
 
 \func{}{\destruct{wxDropTarget}}{\void}
 
-Destructor.
+Destructor. Deletes the associated data object, if any.
 
-\membersection{wxDropTarget::GetFormatCount}\label{wxdroptargetgetformatcount}
+\membersection{wxDropTarget::GetData}\label{wxdroptargetgetdata}
 
-\constfunc{virtual size\_t}{GetFormatCount}{\void}
+\func{virtual void}{GetData}{\void}
 
-Override this to indicate how many formats you support.
-
-\membersection{wxDropTarget::GetFormat}\label{wxdroptargetgetformat}
-
-\constfunc{virtual wxDataFormat}{GetFormat}{\param{size\_t }{n}}
-
-Override this to indicate what kind of data you support.
+This method may only be called from within \helpref{OnData}{wxdroptargetondata}.
+By default, this method copies the data from the drop source to the 
+\helpref{wxDataObject}{wxdataobject} associated with this drop target,
+calling its \helpref{wxDataObject::SetData}{wxdataobjectsetdata} method.
 
 \membersection{wxDropTarget::OnData}\label{wxdroptargetondata}
 
 \func{virtual wxDragResult}{OnData}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxDragResult}{ def}}
 
-Called after OnDrop() returns TRUE: you will usually just call
-GetData() from here and, probably, also refresh something to update the
-new data and, finally, return the code indicating how did the operation
-complete (returning default value in case of success and wxDragError on
-failure is usually ok).
+Called after \helpref{OnDrop}{wxdroptargetondrop} returns TRUE. By default this
+will usually \helpref{GetData}{wxdroptargetgetdata} and will return the suggested
+default value {\it def}.
 
 \membersection{wxDropTarget::OnDrop}\label{wxdroptargetondrop}
 
-\func{virtual bool}{OnDrop}{\param{long }{x}, \param{long }{y}, \param{const void* }{data}, \param{size\_t }{size}}
+\func{virtual bool}{OnDrop}{\param{wxCoord }{x}, \param{wxCoord }{y}}
 
 Called when the user drops a data object on the target. Return FALSE to veto the operation.
 
@@ -65,19 +86,48 @@ Called when the user drops a data object on the target. Return FALSE to veto the
 
 \docparam{y}{The y coordinate of the mouse.}
 
-\docparam{data}{The data being dropped.}
-
-\docparam{size}{The size of the data being dropped.}
-
 \wxheading{Return value}
 
 Return TRUE to accept the data, FALSE to veto the operation.
 
 \membersection{wxDropTarget::OnEnter}\label{wxdroptargetonenter}
 
-\func{virtual void}{OnEnter}{\void}
+\func{virtual wxDragResult}{OnEnter}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxDragResult}{ def}}
 
-Called when the mouse enters the drop target.
+Called when the mouse enters the drop target. By default, this calls \helpref{OnDragOver}{wxdroptargetondragover}.
+
+\wxheading{Parameters}
+
+\docparam{x}{The x coordinate of the mouse.}
+
+\docparam{y}{The y coordinate of the mouse.}
+
+\docparam{def}{Suggested default for return value. Determined by SHIFT or CONTROL key states.}
+
+\wxheading{Return value}
+
+Returns the desired operation or {\tt wxDragNone}. This is used for optical feedback
+from the side of the drop source, typically in form of changing the icon.
+
+\membersection{wxDropTarget::OnDragOver}\label{wxdroptargetondragover}
+
+\func{virtual wxDragResult}{OnDragOver}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxDragResult}{ def}}
+
+Called when the mouse is being dragged over the drop target. By default, 
+this calls functions return the suggested return value {\it def}.
+
+\wxheading{Parameters}
+
+\docparam{x}{The x coordinate of the mouse.}
+
+\docparam{y}{The y coordinate of the mouse.}
+
+\docparam{def}{Suggested value for return value. Determined by SHIFT or CONTROL key states.}
+
+\wxheading{Return value}
+
+Returns the desired operation or {\tt wxDragNone}. This is used for optical feedback
+from the side of the drop source, typically in form of changing the icon.
 
 \membersection{wxDropTarget::OnLeave}\label{wxdroptargetonleave}
 
@@ -85,3 +135,9 @@ Called when the mouse enters the drop target.
 
 Called when the mouse leaves the drop target.
 
+\membersection{wxDropTarget::SetDataObject}\label{wxdroptargetsetdataobject}
+
+\func{void}{SetDataObject}{\param{wxDataObject*}{ data}}
+
+Sets the data \helpref{wxDataObject}{wxdataobject} associated with the 
+drop target and deletes any previously associated data object.

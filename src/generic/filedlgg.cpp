@@ -579,7 +579,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
         m_dialogStyle |= wxOPEN;
     
     m_dir = defaultDir;
-    if (m_dir.IsEmpty())
+    if ((m_dir.IsEmpty()) || (m_dir == wxT(".")))
     {
         char buf[200];
         m_dir = getcwd( buf, sizeof(buf) );

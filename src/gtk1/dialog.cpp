@@ -339,7 +339,8 @@ wxDialog::~wxDialog()
         wxTheApp->SetTopWindow( (wxWindow*) NULL );
     }
 
-    if (wxTopLevelWindows.Number() == 0)
+    if ((wxTopLevelWindows.Number() == 0) &&
+        (wxTheApp->GetExitOnFrameDelete()))
     {
         wxTheApp->ExitMainLoop();
     }

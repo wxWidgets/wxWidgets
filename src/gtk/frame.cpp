@@ -504,8 +504,11 @@ wxFrame::~wxFrame()
     if (wxTheApp->GetTopWindow() == this)
         wxTheApp->SetTopWindow( (wxWindow*) NULL );
 
-    if (wxTopLevelWindows.Number() == 0)
+    if ((wxTopLevelWindows.Number() == 0) &&
+        (wxTheApp->GetExitOnFrameDelete()))
+    {
         wxTheApp->ExitMainLoop();
+    }
 }
 
 // ----------------------------------------------------------------------------
