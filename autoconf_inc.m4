@@ -376,3 +376,51 @@ dnl ### begin block COND_SHARED_0 ###
         COND_SHARED_0=""
     fi
     AC_SUBST(COND_SHARED_0)
+dnl ### begin block COND_BUILD_DEBUG ###
+    COND_BUILD_DEBUG="#"
+    if test "x$BUILD" = "xdebug" ; then
+        COND_BUILD_DEBUG=""
+    fi
+    AC_SUBST(COND_BUILD_DEBUG)
+dnl ### begin block COND_BUILD_RELEASE ###
+    COND_BUILD_RELEASE="#"
+    if test "x$BUILD" = "xrelease" ; then
+        COND_BUILD_RELEASE=""
+    fi
+    AC_SUBST(COND_BUILD_RELEASE)
+dnl ### begin block COND_WXUSE_LIBJPEG_BUILTIN ###
+    COND_WXUSE_LIBJPEG_BUILTIN="#"
+    if test "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
+        COND_WXUSE_LIBJPEG_BUILTIN=""
+    fi
+    AC_SUBST(COND_WXUSE_LIBJPEG_BUILTIN)
+dnl ### begin block COND_WXUSE_LIBPNG_BUILTIN ###
+    COND_WXUSE_LIBPNG_BUILTIN="#"
+    if test "x$wxUSE_LIBPNG" = "xbuiltin" ; then
+        COND_WXUSE_LIBPNG_BUILTIN=""
+    fi
+    AC_SUBST(COND_WXUSE_LIBPNG_BUILTIN)
+dnl ### begin block COND_WXUSE_LIBTIFF_BUILTIN ###
+    COND_WXUSE_LIBTIFF_BUILTIN="#"
+    if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
+        COND_WXUSE_LIBTIFF_BUILTIN=""
+    fi
+    AC_SUBST(COND_WXUSE_LIBTIFF_BUILTIN)
+dnl ### begin block COND_WXUSE_ODBC_BUILTIN ###
+    COND_WXUSE_ODBC_BUILTIN="#"
+    if test "x$wxUSE_ODBC" = "xbuiltin" ; then
+        COND_WXUSE_ODBC_BUILTIN=""
+    fi
+    AC_SUBST(COND_WXUSE_ODBC_BUILTIN)
+dnl ### begin block COND_WXUSE_REGEX_BUILTIN ###
+    COND_WXUSE_REGEX_BUILTIN="#"
+    if test "x$wxUSE_REGEX" = "xbuiltin" ; then
+        COND_WXUSE_REGEX_BUILTIN=""
+    fi
+    AC_SUBST(COND_WXUSE_REGEX_BUILTIN)
+dnl ### begin block COND_WXUSE_ZLIB_BUILTIN ###
+    COND_WXUSE_ZLIB_BUILTIN="#"
+    if test "x$wxUSE_ZLIB" = "xbuiltin" ; then
+        COND_WXUSE_ZLIB_BUILTIN=""
+    fi
+    AC_SUBST(COND_WXUSE_ZLIB_BUILTIN)
