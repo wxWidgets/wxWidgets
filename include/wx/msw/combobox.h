@@ -81,6 +81,8 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     bool MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
 
+    WXHWND GetEditHWND() const;
+
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;

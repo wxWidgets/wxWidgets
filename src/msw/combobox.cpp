@@ -38,6 +38,13 @@
 #include "wx/clipbrd.h"
 #include "wx/msw/private.h"
 
+#if wxUSE_TOOLTIPS
+    #ifndef __GNUWIN32_OLD__
+        #include <commctrl.h>
+    #endif
+    #include "wx/tooltip.h"
+#endif // wxUSE_TOOLTIPS
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -73,15 +80,45 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
                                             WPARAM wParam,
                                             LPARAM lParam)
 {
-    if ( message == WM_CHAR )
+    if (
+          message == WM_CHAR
+#if wxUSE_TOOLTIPS
+          || message == WM_NOTIFY
+#endif // wxUSE_TOOLTIPS
+       )
     {
         HWND hwndCombo = ::GetParent(hWnd);
         wxWindow *win = wxFindWinFromHandle((WXHWND)hwndCombo);
         wxComboBox *combo = wxDynamicCast(win, wxComboBox);
         wxCHECK_MSG( combo, 0, _T("should have combo as parent") );
 
-        if ( combo->MSWProcessEditMsg(message, wParam, lParam) )
-            return 0;
+        switch ( message )
+        {
+            case WM_CHAR:
+                if ( combo->MSWProcessEditMsg(message, wParam, lParam) )
+                    return 0;
+                break;
+
+#if wxUSE_TOOLTIPS
+            case WM_NOTIFY:
+                {
+                    NMHDR* hdr = (NMHDR *)lParam;
+                    if ( (int)hdr->code == TTN_NEEDTEXT )
+                    {
+                        wxToolTip *tooltip = combo->GetToolTip();
+                        if ( tooltip )
+                        {
+                            TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
+                            ttt->lpszText = (wxChar *)tooltip->GetTip().c_str();
+                        }
+
+                        // processed
+                        return 0;
+                    }
+                }
+                break;
+#endif // wxUSE_TOOLTIPS
+        }
     }
 
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
@@ -129,6 +166,22 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     // there is no return value for the CBN_ notifications, so always return
     // FALSE from here to pass the message to DefWindowProc()
     return FALSE;
+}
+
+WXHWND wxComboBox::GetEditHWND() const
+{
+    if ( GetWindowStyle() & wxCB_READONLY )
+        return NULL;
+
+    POINT pt;
+    pt.x = pt.y = 4;
+    HWND hwndEdit = ::ChildWindowFromPoint(GetHwnd(), pt);
+    if ( !hwndEdit || hwndEdit == GetHwnd() )
+    {
+        wxFAIL_MSG(_T("not read only combobox without edit control?"));
+    }
+
+    return (WXHWND)hwndEdit;
 }
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
@@ -182,23 +235,12 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     // edit control, we must subclass it as well
     if ( !(style & wxCB_READONLY) )
     {
-        // first find the child edit
-        POINT pt;
-        pt.x = pt.y = 4;
-        HWND hwndEdit = ::ChildWindowFromPoint(GetHwnd(), pt);
-        if ( !hwndEdit || hwndEdit == GetHwnd() )
-        {
-            wxFAIL_MSG(_T("not read only combobox without edit control?"));
-        }
-        else
-        {
-            gs_wndprocEdit = (WXFARPROC)::SetWindowLong
-                                          (
-                                            hwndEdit,
-                                            GWL_WNDPROC,
-                                            (LPARAM)wxComboEditWndProc
-                                          );
-        }
+        gs_wndprocEdit = (WXFARPROC)::SetWindowLong
+                                      (
+                                        (HWND)GetEditHWND(),
+                                        GWL_WNDPROC,
+                                        (LPARAM)wxComboEditWndProc
+                                      );
     }
 
     return TRUE;

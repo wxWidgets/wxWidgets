@@ -374,6 +374,21 @@ void wxToolTip::SetWindow(wxWindow *win)
             Add((WXHWND)hwnd);
         }
     }
+
+    // VZ: it's ugly to do it here, but I don't want any major changes right
+    //     now, later we will probably want to have wxWindow::OnGotToolTip() or
+    //     something like this where the derived class can do such things
+    //     itself instead of wxToolTip "knowing" about them all
+    wxComboBox *combo = wxDynamicCast(control, wxComboBox);
+    if ( combo )
+    {
+        WXHWND hwndComboEdit = combo->GetEditHWND();
+        if ( hwndComboEdit )
+        {
+            Add(hwndComboEdit);
+        }
+        //else: it's ok for a combo to be read only, of course
+    }
 }
 
 void wxToolTip::SetTip(const wxString& tip)

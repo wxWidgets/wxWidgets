@@ -71,6 +71,8 @@ LRESULT APIENTRY wxStatusBarProc(HWND hwnd,
 {
     switch (message) {
         case WM_COMMAND:
+        case WM_DRAWITEM:
+        case WM_MEASUREITEM:
         case WM_SIZE:
         case WM_MOVE:
         case WM_MOUSEMOVE:

@@ -582,17 +582,20 @@ bool wxMDIParentFrame::MSWTranslateMessage(WXMSG* msg)
 {
     MSG *pMsg = (MSG *)msg;
 
+    // first let the current child get it
     if ( m_currentChild && m_currentChild->GetHWND() &&
          m_currentChild->MSWTranslateMessage(msg) )
     {
         return TRUE;
     }
 
-    if ( m_acceleratorTable.Translate(this, msg) )
+    // then try out accel table (will also check the menu accels)
+    if ( wxFrame::MSWTranslateMessage(msg) )
     {
         return TRUE;
     }
 
+    // finally, check for MDI specific built in accel keys
     if ( pMsg->message == WM_KEYDOWN || pMsg->message == WM_SYSKEYDOWN )
     {
         if ( ::TranslateMDISysAccel(GetWinHwnd(GetClientWindow()), pMsg))
