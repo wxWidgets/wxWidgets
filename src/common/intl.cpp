@@ -768,15 +768,18 @@ bool wxLocale::Init(int language, int flags)
     wxMB2WXbuf retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #else
     return FALSE;
+    #define WX_NO_LOCALE_SUPPORT
 #endif
 
-    wxChar *szLocale = retloc ? wxStrdup(retloc) : NULL;
+#ifndef WX_NO_LOCALE_SUPPORT
+     wxChar *szLocale = retloc ? wxStrdup(retloc) : NULL;
     bool ret = Init(name, canonical, retloc,
                     (flags & wxLOCALE_LOAD_DEFAULT) != 0,
                     (flags & wxLOCALE_CONV_ENCODING) != 0);
     if (szLocale)
         free(szLocale);
     return ret;
+#endif
 }
 
 
