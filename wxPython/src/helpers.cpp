@@ -643,8 +643,9 @@ void wxPyBeginBlockThreads() {
 
 void wxPyEndBlockThreads() {
 #ifdef WXP_WITH_THREAD
-    PyThreadState* tstate = PyEval_SaveThread();
     // Is there any need to save it again?
+    // PyThreadState* tstate =
+    PyEval_SaveThread();
 #endif
 }
 
