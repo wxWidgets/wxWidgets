@@ -355,6 +355,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
 
     in_stream->m_ftpsize = wxAtoi(WXSTRINGCAST str_size);
   }
+  sock->SetFlags(WAITALL);
 
   return in_stream;
 }
@@ -400,13 +401,6 @@ wxList *wxFTP::GetList(const wxString& wildcard)
     delete file_list;
     return NULL;
   }
-
-  // Ininterresting ?!
-  /*
-  sock->SetEventHandler(*GetNextHandler(), m_id);
-  sock->Notify(m_notifyme);
-  sock->SetNotify(m_neededreq);
-  */
 
   return file_list;
 }

@@ -95,6 +95,8 @@ public:
   wxSocketBase& Read(char* buffer, size_t nbytes);
   wxSocketBase& Write(const char *buffer, size_t nbytes);
   wxSocketBase& Unread(const char *buffer, size_t nbytes);
+  wxSocketBase& ReadMsg(char *buffer, size_t nbytes);
+  wxSocketBase& WriteMsg(const char *buffer, size_t nbytes);
   void Discard();
 
   // Try not to use this two methods (they sould be protected)

@@ -340,7 +340,7 @@ size_t wxStreamBuffer::Read(wxStreamBuffer *s_buf)
   if (m_mode == write)
     return 0;
 
-  while (bytes_read == BUF_TEMP_SIZE) {
+  while (bytes_read != 0) {
     bytes_read = Read(buf, bytes_read);
     bytes_read = s_buf->Write(buf, bytes_read);
     s += bytes_read;

@@ -3,7 +3,7 @@
  * Purpose:	wxSocket: server demo
  * Author:	LAVAUX Guilhem
  * Created:	June 1997
- * Updated:	
+ * CVS Id:	$Id$
  * Copyright: (C) 1997, LAVAUX Guilhem
  */
 
@@ -102,6 +102,9 @@ void MyFrame::OnSockRequest(wxSocketEvent& evt)
      waiting socket thread, i.e. here we are
      not in the main GUI thread and thus we
      must not call any GUI function here. */
+  /* Wrong ! This routine is called by the main GUI thread
+     because the main GUI thread received a signal from the other
+     thread using wxEvent::ProcessThreadEvent */
 
   wxSocketBase *sock = evt.Socket();
 
@@ -119,6 +122,7 @@ void MyFrame::OnSockRequest(wxSocketEvent& evt)
   case wxSocketBase::EVT_LOST:
     printf("Destroying socket\n");
     wxPendingDelete.Append(sock);
+    UpdateStatus(-1);
     return;
     break;
   }
@@ -132,17 +136,21 @@ void MyFrame::OnSockRequestServer(wxSocketEvent& evt)
      waiting socket thread, i.e. here we are
      not in the main GUI thread and thus we
      must not call any GUI function here. */
+  /* Wrong ! This routine is called by the main GUI thread
+     because the main GUI thread received a signal from the other
+     thread using wxEvent::ProcessThreadEvent */
 
   wxSocketBase *sock2;
   wxSocketServer *server = (wxSocketServer *) evt.Socket();
 
   printf("OnSockRequestServer OK\n");
-  printf("OnSockRequest (event = %d)\n",evt.SocketEvent());
+  printf("OnSockRequest (Main = %d) (event = %d)\n",wxThread::IsMain(), evt.SocketEvent());
 
   sock2 = server->Accept();
   if (sock2 == NULL)
     return;
 
+  UpdateStatus(1);
   sock2->SetFlags(wxSocketBase::SPEED);
   sock2->Notify(TRUE);
   sock2->SetEventHandler(*this, SKDEMO_SOCKET);

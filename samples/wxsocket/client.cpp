@@ -3,7 +3,7 @@
  * Purpose:	wxSocket: client demo
  * Author:	LAVAUX Guilhem
  * Created:	June 1997
- * Updated:	
+ * CVS ID:	$Id$
  * Copyright:	(c) 1997, LAVAUX Guilhem
  */
 
@@ -163,11 +163,8 @@ void MyFrame::OnExecOpenConnection(wxCommandEvent& WXUNUSED(evt))
   if (sock->IsConnected())
     sock->Close();
 
-/*
   wxString hname = wxGetTextFromUser("Enter the address of the wxSocket Sample Server", 
                                   "Connect ...", "localhost");
-*/
-  wxString hname = "localhost";
   addr.Hostname(hname);
   addr.Service(3000);
   sock->SetNotify(0);
@@ -282,13 +279,15 @@ void MyFrame::OnExecUrlTest(wxCommandEvent& WXUNUSED(evt))
   wxURL url(urlname);
   wxInputStream *datas = url.GetInputStream();
 
-  if (!datas)
-    wxMessageBox("Error in getting data from the URL.", "Alert !");
-  else {
+  if (!datas) {
+    wxString error;
+    error.Printf(_T("Error in getting data from the URL. (error = %d)"), url.GetError());
+    wxMessageBox(error, "Alert !");
+  } else {
     wxFileOutputStream *str_out = new wxFileOutputStream("test.url");
     str_out->Write(*datas);
 
-    wxMessageBox("Success !! Click on OK to see the text.", "OK");
+    wxMessageBox(_T("Success !! Click on OK to see the text."), "OK");
     delete datas;
     delete str_out;
   }

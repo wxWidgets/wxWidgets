@@ -271,6 +271,8 @@ private:
     //     state
     //  2. The Delete() function blocks until the condition is signaled when the
     //     thread exits.
+    // GL: On Linux, this may fail because we can have a deadlock in either
+    //     SignalExit() or Wait(): so we add m_end_mutex for the finalization.
     wxMutex     m_mutex, m_end_mutex;
     wxCondition m_cond;
 
@@ -299,7 +301,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
     }
 #if HAVE_THREAD_CLEANUP_FUNCTIONS
     // Install the cleanup handler.
-//    pthread_cleanup_push(wxThreadInternal::PthreadCleanup, ptr);
+    pthread_cleanup_push(wxThreadInternal::PthreadCleanup, ptr);
 #endif
 
     // wait for the condition to be signaled from Run()
@@ -311,7 +313,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
     status = thread->Entry();
 
 #if HAVE_THREAD_CLEANUP_FUNCTIONS
-//    pthread_cleanup_pop(FALSE);
+    pthread_cleanup_pop(FALSE);
 #endif
 
     // terminate the thread
@@ -371,8 +373,16 @@ wxThreadInternal::~wxThreadInternal()
     // note that m_mutex will be unlocked by the thread which waits for our
     // termination
 
-    // m_end_mutex can be unlocked here.
-    m_end_mutex.Unlock();
+    // In the case, we didn't start the thread, all these mutex are locked:
+    // we must unlock them.
+    if (m_mutex.IsLocked())
+      m_mutex.Unlock();
+
+    if (m_end_mutex.IsLocked())
+      m_end_mutex.Unlock();
+
+    if (m_mutexSuspend.IsLocked())
+      m_mutexSuspend.Unlock();
 }
 
 wxThreadError wxThreadInternal::Run()
@@ -748,6 +758,14 @@ bool wxThread::TestDestroy()
 
 wxThread::~wxThread()
 {
+    m_critsect.Enter();
+    if (p_internal->GetState() != STATE_EXITED &&
+        p_internal->GetState() != STATE_NEW)
+      wxLogDebug(_T("The thread is being destroyed althought it is still running ! The application may crash."));
+
+    m_critsect.Leave();
+
+    delete p_internal;
     // remove this thread from the global array
     gs_allThreads.Remove(this);
 }

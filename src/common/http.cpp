@@ -195,8 +195,8 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   }
 
   SaveState();
+  SetFlags(NONE);
   Notify(FALSE);
-  SetFlags(WAITALL);
 
   sprintf(buf, "%s %s HTTP/1.0\n\r", tmp_buf, (const char*)pathbuf);
   Write(buf, strlen(buf));
@@ -275,6 +275,7 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
   if (!GetHeader(_T("Content-Length")).IsEmpty())
     inp_stream->m_httpsize = wxAtoi(WXSTRINGCAST GetHeader(_T("Content-Length")));
 
+  SetFlags(WAITALL);
   return inp_stream;
 }
 

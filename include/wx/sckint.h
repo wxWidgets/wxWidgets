@@ -82,7 +82,11 @@ class SocketWaiter: public wxThread {
   int m_fd;
 };
 
-class SocketRequester: public wxThread {
+class SocketRequester
+#if wxUSE_THREADS
+  : public wxThread 
+#endif
+         {
  public:
   SocketRequester(wxSocketBase *socket, wxSocketInternal *internal);
   ~SocketRequester();
@@ -136,8 +140,8 @@ class wxSocketInternal {
   wxMutex m_socket_locker, m_fd_locker, m_request_locker, m_end_requester;
   wxCondition m_socket_cond;
   SocketWaiter *m_thread_waiter;
-  SocketRequester *m_thread_requester;
 #endif
+  SocketRequester *m_thread_requester;
   wxList m_requests;
   int m_fd;
   bool m_invalid_requester;

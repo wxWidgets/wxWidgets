@@ -260,6 +260,65 @@ wxSocketBase& wxSocketBase::Read(char* buffer, size_t nbytes)
   return *this;
 }
 
+wxSocketBase& wxSocketBase::ReadMsg(char* buffer, size_t nbytes)
+{
+  unsigned long len, len2, sig;
+  struct {
+    char sig[4];
+    char len[4];
+  } msg;
+
+  // sig should be an explicit 32-bit unsigned integer; I've seen
+  // compilers in which size_t was actually a 16-bit unsigned integer
+
+  Read((char *)&msg, sizeof(msg));
+  if (m_lcount != sizeof(msg))
+    return *this;
+
+  sig = msg.sig[0] & 0xff;
+  sig |= (size_t)(msg.sig[1] & 0xff) << 8;
+  sig |= (size_t)(msg.sig[2] & 0xff) << 16;
+  sig |= (size_t)(msg.sig[3] & 0xff) << 24;
+
+  if (sig != 0xfeeddead)
+    return *this;
+  len = msg.len[0] & 0xff;
+  len |= (size_t)(msg.len[1] & 0xff) << 8;
+  len |= (size_t)(msg.len[2] & 0xff) << 16;
+  len |= (size_t)(msg.len[3] & 0xff) << 24;
+
+  // len2 is incorrectly computed in the original; this sequence is
+  // the fix
+  if (len > nbytes) {
+    len2 = len - nbytes;
+    len = nbytes;
+  }
+  else
+    len2 = 0;
+
+  // the "len &&" in the following statement is necessary so that
+  // we don't attempt to read (and possibly hang the system)
+  // if the message was zero bytes long
+  if (len && Read(buffer, len).LastCount() != len)
+    return *this;
+  if (len2 && (Read(NULL, len2).LastCount() != len2))
+    return *this;
+  if (Read((char *)&msg, sizeof(msg)).LastCount() != sizeof(msg))
+    return *this;
+
+  sig = msg.sig[0] & 0xff;
+  sig |= (size_t)(msg.sig[1] & 0xff) << 8;
+  sig |= (size_t)(msg.sig[2] & 0xff) << 16;
+  sig |= (size_t)(msg.sig[3] & 0xff) << 24;
+// ERROR
+// we return *this either way, so a smart optimizer will
+// optimize the following sequence out; I'm leaving it in anyway
+  if (sig != 0xdeadfeed)
+    return *this;
+
+  return *this;
+}
+
 wxSocketBase& wxSocketBase::Peek(char* buffer, size_t nbytes)
 {
   m_lcount = GetPushback(buffer, nbytes, TRUE);
@@ -282,9 +341,54 @@ wxSocketBase& wxSocketBase::Write(const char *buffer, size_t nbytes)
   return *this;
 }
 
+wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
+{
+  struct {
+    char sig[4];
+    char len[4];
+  } msg;
+
+  // warning about 'cast truncates constant value'
+#ifdef __VISUALC__
+    #pragma warning(disable: 4310)
+#endif // __VISUALC__
+
+  msg.sig[0] = (char) 0xad;
+  msg.sig[1] = (char) 0xde;
+  msg.sig[2] = (char) 0xed;
+  msg.sig[3] = (char) 0xfe;
+
+    msg.len[0] = (char) nbytes & 0xff;
+  msg.len[1] = (char) (nbytes >> 8) & 0xff;
+  msg.len[2] = (char) (nbytes >> 16) & 0xff;
+  msg.len[3] = (char) (nbytes >> 24) & 0xff;
+
+  if (Write((char *)&msg, sizeof(msg)).LastCount() < sizeof(msg))
+    return *this;
+  if (Write(buffer, nbytes).LastCount() < nbytes)
+    return *this;
+
+  msg.sig[0] = (char) 0xed;
+  msg.sig[1] = (char) 0xfe;
+  msg.sig[2] = (char) 0xad;
+  msg.sig[3] = (char) 0xde;
+  msg.len[0] = msg.len[1] = msg.len[2] = msg.len[3] = (char) 0;
+  Write((char *)&msg, sizeof(msg));
+
+  return *this;
+
+#ifdef __VISUALC__
+    #pragma warning(default: 4310)
+#endif // __VISUALC__
+}
+
 wxSocketBase& wxSocketBase::Unread(const char *buffer, size_t nbytes)
 {
-  CreatePushbackAfter(buffer, nbytes);
+  m_lcount = 0;
+  if (nbytes != 0) {
+    CreatePushbackAfter(buffer, nbytes);
+    m_lcount = nbytes;
+  }
   return *this;
 }
 
@@ -304,7 +408,7 @@ bool wxSocketBase::IsData() const
   tv.tv_usec = 0;
   FD_ZERO(&sock_set);
   FD_SET(m_fd, &sock_set);
-  select(FD_SETSIZE, &sock_set, NULL, NULL, &tv);
+  select(m_fd+1, &sock_set, NULL, NULL, &tv);
 
   m_internal->ReleaseFD();
 
@@ -424,7 +528,9 @@ void wxSocketBase::RestoreState()
   state = (SocketState *)node->Data();
 
   SetFlags(state->socket_flags);
+  m_internal->AcquireData();
   m_neededreq = state->evt_notify_state;
+  m_internal->ReleaseData();
   m_cbk       = state->c_callback;
   m_cdata     = state->c_callback_data;
   Notify(state->notify_state);
@@ -682,7 +788,6 @@ void wxSocketBase::WantBuffer(char *buffer, size_t nbytes,
   SockRequest *buf = new SockRequest;
 
   SaveState();
-  m_internal->StopWaiter(); 
   buf->buffer = buffer;
   buf->size = nbytes;
   buf->done = FALSE;
