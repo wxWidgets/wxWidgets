@@ -861,8 +861,8 @@ In addition to installing wxPython into a "versioned" subdirectory of
 site-packages, a file named `wx.pth` is optionally installed that will
 contain the name of the versioned subdirectory.  This will cause that
 subdirectory to be automatically added to the sys.path and so doing an
-"import wx" will find the package in the subdirectory like like it
-would have if it was still located directly in site-packages.  I say
+"import wx" will find the package in the subdirectory like it would
+have if it was still located directly in site-packages.  I say
 "optionally" above because that is how you can control which install
 of wxPython is the default one.  Which ever version installs the
 wx.pth file will be the one that is imported with a plain "import wx"
