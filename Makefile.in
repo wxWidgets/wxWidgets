@@ -691,7 +691,7 @@ MOTIF_DIST: ALL_GUI_DIST
 	cp $(MOTIFDIR)/xmcombo/*.h $(DISTDIR)/src/motif/xmcombo
 	cp $(MOTIFDIR)/xmcombo/copying.txt $(DISTDIR)/src/motif/xmcombo
 
-MAC_DIST: ALL_GUI_DIST
+MACX_DIST: ALL_GUI_DIST
 	echo "Apple Mac OS X specific distribution not complete"
 
 MSW_DIST: ALL_GUI_DIST

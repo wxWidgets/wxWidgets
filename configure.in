@@ -1906,7 +1906,8 @@ if test "$wxUSE_MAC" = 1; then
     TOOLKIT=MAC
     UNIXOBJS="\$(UNIX_OBJS)"
     UNIXDEPS="\$(UNIX_DEPS)"
-    GUIDIST=MAC_DIST
+    dnl we can't call this MAC_DIST or autoconf thinks its a macro
+    GUIDIST=MACX_DIST
 fi
 
 if test "$wxUSE_PM" = 1; then
@@ -2377,6 +2378,9 @@ dnl understand why it works, remember that AC_TRY_COMPILE() just prepends
 dnl "int main() {" in the beginning of the code and "; return 0; }" at the
 dnl end...
 
+dnl if we fail to find vsnprintf, also try for _vsnprintf as that is what
+dnl we'll find under MSW if it exists.
+
 dnl check for vsnprintf() - a safe version of vsprintf()
 AC_CACHE_CHECK([for vsnprintf], wx_cv_func_vsnprintf,
 [
@@ -2402,8 +2406,31 @@ AC_CACHE_CHECK([for vsnprintf], wx_cv_func_vsnprintf,
                     AC_DEFINE(HAVE_VSNPRINTF)
                     wx_cv_func_vsnprintf=yes
                  ], [
-                    AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
-                    wx_cv_func_vsnprintf=no
+                    AC_TRY_COMPILE([
+                                      #include <stdio.h>
+                                      #include <stdarg.h>
+                                   ], [
+                                      int wx_test_vsnprintf(const char *, ...);
+
+                                      wx_test_vsnprintf("%s");
+                                      return 0;
+                                   }
+
+                                   int wx_test_vsnprintf(const char *fmt, ...)
+                                   {
+                                      char *s;
+
+                                      va_list argp;
+                                      va_start(argp, fmt);
+                                      _vsnprintf(s, 42, fmt, argp);
+                                      va_end(argp);
+                                   ], [
+                                      AC_DEFINE(HAVE_VSNPRINTF)
+                                      wx_cv_func_vsnprintf=yes
+                                   ], [
+                                      AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
+                                      wx_cv_func_vsnprintf=no
+                                   ])
                  ])
 ])
 
@@ -3226,8 +3253,9 @@ if test "$wxUSE_SOCKETS" = "yes"; then
     )
 fi
 
-fi
-dnl if !MSW
+dnl this test may be appropriate if building under cygwin
+dnl right now I'm assuming it also uses the winsock stuff
+dnl like mingw does..  -- RL
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
     dnl determine the type of third argument for getsockname
@@ -3282,6 +3310,9 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         AC_DEFINE_UNQUOTED(SOCKLEN_T, $wx_cv_type_getsockname3)
     fi
 fi
+
+fi
+dnl if !MSW
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
     AC_DEFINE(wxUSE_SOCKETS)
@@ -3528,8 +3559,17 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
     if test "$USE_WIN32" = 1; then
         dnl check for ole headers and disable DnD if not present (earlier
         dnl versions of mingw32 don't have them)
+
         AC_CHECK_HEADERS(ole2.h)
-        if test "x$HAVE_OLE2_H" = x ; then
+
+	dnl for some reason this test always fails here??
+        dnl if test "x$HAVE_OLE2_H" != x ; then
+	dnl this one does the right thing though
+        if test "$ac_cv_header_ole2_h" = "yes" ; then
+            if test "$GCC" = yes ; then
+                CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
+            fi
+        else
             AC_MSG_WARN(Drag and drop disabled because OLE headers not found)
             wxUSE_DRAG_AND_DROP=no
         fi
