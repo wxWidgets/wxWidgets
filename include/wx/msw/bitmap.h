@@ -63,6 +63,10 @@ public:
 
     // optional mask for transparent drawing
     wxMask       *m_bitmapMask;
+
+#if wxUSE_DIB_FOR_BITMAP
+    WXHANDLE     m_hFileMap;	// file mapping handle for large DIB's
+#endif
 };
 
 // ----------------------------------------------------------------------------
@@ -177,6 +181,11 @@ public:
     void SetHBITMAP(WXHBITMAP bmp) { SetHandle((WXHANDLE)bmp); }
     WXHBITMAP GetHBITMAP() const { return (WXHBITMAP)GetHandle(); }
 
+#if wxUSE_DIB_FOR_BITMAP
+    void SetHFileMap(WXHANDLE hFileMap) { GetBitmapData()->m_hFileMap = hFileMap; }
+    WXHANDLE GetHFileMap() const { return GetBitmapData()->m_hFileMap; }
+#endif // wxUSE_DIB_FOR_BITMAP
+
     void SetSelectedInto(wxDC *dc) { if (GetBitmapData()) GetBitmapData()->m_selectedInto = dc; }
     wxDC *GetSelectedInto() const { return (GetBitmapData() ? GetBitmapData()->m_selectedInto : (wxDC*) NULL); }
 
@@ -208,6 +217,11 @@ protected:
     // creates the bitmap from wxImage, supposed to be called from ctor
     bool CreateFromImage(const wxImage& image, int depth);
 #endif // wxUSE_IMAGE
+
+#if wxUSE_DIB_FOR_BITMAP
+    void *CreateDIB(int width, int height, int depth);
+    void CopyDIBLine(void* src, void* dest, int count) const;
+#endif
 
 private:
 #ifdef __WIN32__
