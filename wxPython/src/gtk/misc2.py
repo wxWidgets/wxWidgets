@@ -1006,14 +1006,6 @@ def wxGetClientDisplayRect(*_args, **_kwargs):
 
 wxSetCursor = misc2c.wxSetCursor
 
-def wxFindWindowByLabel(*_args, **_kwargs):
-    val = apply(misc2c.wxFindWindowByLabel,_args,_kwargs)
-    return val
-
-def wxFindWindowByName(*_args, **_kwargs):
-    val = apply(misc2c.wxFindWindowByName,_args,_kwargs)
-    return val
-
 wxBeginBusyCursor = misc2c.wxBeginBusyCursor
 
 def wxGetActiveWindow(*_args, **_kwargs):
@@ -1126,9 +1118,9 @@ wxSystemSettings_GetMetric = misc2c.wxSystemSettings_GetMetric
 
 wxSystemSettings_HasFeature = misc2c.wxSystemSettings_HasFeature
 
-wxSystemSettings_GetScreen = misc2c.wxSystemSettings_GetScreen
+wxSystemSettings_GetScreenType = misc2c.wxSystemSettings_GetScreenType
 
-wxSystemSettings_SetScreen = misc2c.wxSystemSettings_SetScreen
+wxSystemSettings_SetScreenType = misc2c.wxSystemSettings_SetScreenType
 
 wxToolTip_Enable = misc2c.wxToolTip_Enable
 
@@ -1270,10 +1262,10 @@ wxSYS_SWAP_BUTTONS = misc2c.wxSYS_SWAP_BUTTONS
 wxSYS_CAN_DRAW_FRAME_DECORATIONS = misc2c.wxSYS_CAN_DRAW_FRAME_DECORATIONS
 wxSYS_CAN_ICONIZE_FRAME = misc2c.wxSYS_CAN_ICONIZE_FRAME
 wxSYS_SCREEN_NONE = misc2c.wxSYS_SCREEN_NONE
-wxSYS_SCREEN_DESKTOP = misc2c.wxSYS_SCREEN_DESKTOP
-wxSYS_SCREEN_SMALL = misc2c.wxSYS_SCREEN_SMALL
-wxSYS_SCREEN_PDA = misc2c.wxSYS_SCREEN_PDA
 wxSYS_SCREEN_TINY = misc2c.wxSYS_SCREEN_TINY
+wxSYS_SCREEN_PDA = misc2c.wxSYS_SCREEN_PDA
+wxSYS_SCREEN_SMALL = misc2c.wxSYS_SCREEN_SMALL
+wxSYS_SCREEN_DESKTOP = misc2c.wxSYS_SCREEN_DESKTOP
 wxLOG_FatalError = misc2c.wxLOG_FatalError
 wxLOG_Error = misc2c.wxLOG_Error
 wxLOG_Warning = misc2c.wxLOG_Warning

@@ -406,6 +406,36 @@ class wxMouseCaptureChangedEvent(wxMouseCaptureChangedEventPtr):
 
 
 
+class wxSetCursorEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetX(self, *_args, **_kwargs):
+        val = apply(eventsc.wxSetCursorEvent_GetX,(self,) + _args, _kwargs)
+        return val
+    def GetY(self, *_args, **_kwargs):
+        val = apply(eventsc.wxSetCursorEvent_GetY,(self,) + _args, _kwargs)
+        return val
+    def SetCursor(self, *_args, **_kwargs):
+        val = apply(eventsc.wxSetCursorEvent_SetCursor,(self,) + _args, _kwargs)
+        return val
+    def GetCursor(self, *_args, **_kwargs):
+        val = apply(eventsc.wxSetCursorEvent_GetCursor,(self,) + _args, _kwargs)
+        if val: val = wxCursorPtr(val) 
+        return val
+    def HasCursor(self, *_args, **_kwargs):
+        val = apply(eventsc.wxSetCursorEvent_HasCursor,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxSetCursorEvent instance at %s>" % (self.this,)
+class wxSetCursorEvent(wxSetCursorEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxSetCursorEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxKeyEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this

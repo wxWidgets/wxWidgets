@@ -282,8 +282,13 @@ wxSB_HORIZONTAL = wxc.wxSB_HORIZONTAL
 wxSB_VERTICAL = wxc.wxSB_VERTICAL
 wxST_SIZEGRIP = wxc.wxST_SIZEGRIP
 wxST_NO_AUTORESIZE = wxc.wxST_NO_AUTORESIZE
-wxBU_AUTODRAW = wxc.wxBU_AUTODRAW
 wxBU_NOAUTODRAW = wxc.wxBU_NOAUTODRAW
+wxBU_AUTODRAW = wxc.wxBU_AUTODRAW
+wxBU_LEFT = wxc.wxBU_LEFT
+wxBU_TOP = wxc.wxBU_TOP
+wxBU_RIGHT = wxc.wxBU_RIGHT
+wxBU_BOTTOM = wxc.wxBU_BOTTOM
+wxBU_EXACTFIT = wxc.wxBU_EXACTFIT
 wxSP_VERTICAL = wxc.wxSP_VERTICAL
 wxSP_HORIZONTAL = wxc.wxSP_HORIZONTAL
 wxSP_ARROW_KEYS = wxc.wxSP_ARROW_KEYS
@@ -827,6 +832,7 @@ wxEVT_NC_LEAVE_WINDOW = wxc.wxEVT_NC_LEAVE_WINDOW
 wxEVT_NC_LEFT_DCLICK = wxc.wxEVT_NC_LEFT_DCLICK
 wxEVT_NC_MIDDLE_DCLICK = wxc.wxEVT_NC_MIDDLE_DCLICK
 wxEVT_NC_RIGHT_DCLICK = wxc.wxEVT_NC_RIGHT_DCLICK
+wxEVT_SET_CURSOR = wxc.wxEVT_SET_CURSOR
 wxEVT_CHAR = wxc.wxEVT_CHAR
 wxEVT_KEY_DOWN = wxc.wxEVT_KEY_DOWN
 wxEVT_KEY_UP = wxc.wxEVT_KEY_UP
@@ -1033,6 +1039,9 @@ def EVT_WINDOW_CREATE(win, func):
 
 def EVT_WINDOW_DESTROY(win, func):
     win.Connect(-1, -1, wxEVT_DESTROY, func)
+
+def EVT_SET_CURSOR(win, func):
+    win.Connect(-1, -1, wxEVT_SET_CURSOR, func)
 
 
 
@@ -1623,7 +1632,7 @@ class wxPyOnDemandOutputWindow:
             self.frame.Close()
 
 
-_defRedirect = (wxPlatform == '__WXMSW__')
+_defRedirect = (wxPlatform == '__WXMSW__' or wxPlatform == '__WXMAC__')
 
 #----------------------------------------------------------------------
 # The main application class.  Derive from this and implement an OnInit

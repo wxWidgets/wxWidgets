@@ -2789,7 +2789,7 @@ static PyObject *_wrap_new_wxFontDialog(PyObject *self, PyObject *args, PyObject
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxFontDialog *)new_wxFontDialog(_arg0,_arg1);
+    _result = (wxFontDialog *)new_wxFontDialog(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;

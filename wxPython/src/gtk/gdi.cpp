@@ -3613,6 +3613,45 @@ static PyObject *_wrap_wxPen_SetDashes(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+static PyObject * wxPen_GetDashes(wxPen *self) {
+            wxDash* dashes;
+            int count = self->GetDashes(&dashes);
+            wxPyBeginBlockThreads();
+            PyObject* retval = PyList_New(0);
+            for (int x=0; x<count; x++)
+                PyList_Append(retval, PyInt_FromLong(dashes[x]));
+            wxPyEndBlockThreads();
+            return retval;
+        }
+static PyObject *_wrap_wxPen_GetDashes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxPen * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPen_GetDashes",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_GetDashes. Expected _wxPen_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (PyObject *)wxPen_GetDashes(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static void *SwigwxPyPenTowxPen(void *ptr) {
     wxPyPen *src;
     wxPen *dest;
@@ -10226,6 +10265,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxPyPen_SetDashes", (PyCFunction) _wrap_wxPyPen_SetDashes, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPyPen", (PyCFunction) _wrap_delete_wxPyPen, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyPen", (PyCFunction) _wrap_new_wxPyPen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_GetDashes", (PyCFunction) _wrap_wxPen_GetDashes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPen_SetDashes", (PyCFunction) _wrap_wxPen_SetDashes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPen_SetWidth", (PyCFunction) _wrap_wxPen_SetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPen_SetStyle", (PyCFunction) _wrap_wxPen_SetStyle, METH_VARARGS | METH_KEYWORDS },
