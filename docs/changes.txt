@@ -191,6 +191,8 @@ All (GUI):
 
 - bug in wxWindow::RemoveEventHandler() fixed (Yingjun Zhang)
 - bug in wxColourDatabase::FindColour() which could led to crashes fixed
+- Added ..._CMD_... variants for wxGrid event table entry macros
+  taking window identifiers
 
 Generic:
 
