@@ -22,6 +22,8 @@
 
 #include "wx/dc.h"
 
+#include <math.h>
+
 void wxDCBase::DoDrawCheckMark(wxCoord x1, wxCoord y1,
                                wxCoord width, wxCoord height)
 {
