@@ -52,9 +52,9 @@ class CrustFrame(wxFrame, ShellMenu):
         """Create a PyCrust CrustFrame instance."""
         wxFrame.__init__(self, parent, id, title, pos, size, style)
         intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
-        intro += '\nSponsored by Orbtech.com – Your Source For Python Development Services'
+        intro += '\nSponsored by Orbtech.com - Your Source For Python Development Services'
         self.CreateStatusBar()
-        self.SetStatusText(intro)
+        self.SetStatusText(intro.replace('\n', ', '))
         if wxPlatform == '__WXMSW__':
             import os
             filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')

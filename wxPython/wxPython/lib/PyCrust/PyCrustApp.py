@@ -6,15 +6,15 @@ __cvsid__ = "$Id$"
 __version__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
-from PyCrust.crust import CrustFrame
+from crust import CrustFrame
 
 
 class App(wxApp):
     """PyCrust standalone application."""
-    
+
     def OnInit(self):
         locals = {'__app__': 'PyCrust Standalone Application'}
-        self.crustFrame = CrustFrame(locals=locals)
+        self.crustFrame = CrustFrame(locals=locals, size=(800,600))
         self.crustFrame.Show(true)
         self.SetTopWindow(self.crustFrame)
         # Add the application object to the sys module's namespace.
@@ -33,4 +33,4 @@ def main():
 if __name__ == '__main__':
     main()
 
- 
+

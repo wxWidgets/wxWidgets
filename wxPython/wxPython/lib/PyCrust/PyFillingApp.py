@@ -8,14 +8,14 @@ __version__ = "$Revision$"[11:-2]
 # We use this object to get more introspection when run standalone.
 application = None
 
-from PyCrust import filling
+import filling
 
 # These are imported just to have something interesting to inspect.
-from PyCrust import crust
-from PyCrust import interpreter
-from PyCrust import introspect
-from PyCrust import pseudo
-from PyCrust import shell
+import crust
+import interpreter
+import introspect
+import pseudo
+import shell
 import sys
 from wxPython import wx
 
@@ -32,4 +32,4 @@ def main():
 if __name__ == '__main__':
     main()
 
- 
+

@@ -1,7 +1,8 @@
 """The PyCrust Shell is an interactive text control in which a user types in
 commands to be sent to the interpreter. This particular shell is based on
 wxPython's wxStyledTextCtrl. The latest files are always available at the
-SourceForge project page at http://sourceforge.net/projects/pycrust/."""
+SourceForge project page at http://sourceforge.net/projects/pycrust/.
+Sponsored by Orbtech.com - Your Source For Python Development Services"""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
@@ -782,6 +783,7 @@ class Shell(wxStyledTextCtrl):
                     data = wxTextDataObject()
                     if wxTheClipboard.GetData(data):
                         command = data.GetText()
+                        command = command.rstrip()
                         command = self.fixLineEndings(command)
                         command = self.lstripPrompt(text=command)
                         command = command.replace(os.linesep + sys.ps2, '\n')
@@ -984,9 +986,9 @@ class ShellFrame(wxFrame, ShellMenu):
         """Create a PyCrust ShellFrame instance."""
         wxFrame.__init__(self, parent, id, title, pos, size, style)
         intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
-        intro += '\nSponsored by Orbtech.com – Your Source For Python Development Services'
+        intro += '\nSponsored by Orbtech.com - Your Source For Python Development Services'
         self.CreateStatusBar()
-        self.SetStatusText(intro)
+        self.SetStatusText(intro.replace('\n', ', '))
         if wxPlatform == '__WXMSW__':
             import os
             filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')

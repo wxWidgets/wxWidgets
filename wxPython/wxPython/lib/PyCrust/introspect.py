@@ -87,16 +87,10 @@ def getCallTip(command='', locals=None):
             dropSelf = 1
         elif inspect.isclass(object):
             # Get the __init__ method function for the class.
-            try:
-                object = object.__init__.im_func
+            constructor = getConstructor(object)
+            if constructor is not None:
+                object = constructor
                 dropSelf = 1
-            except AttributeError:
-                for base in object.__bases__:
-                    constructor = _find_constructor(base)
-                    if constructor is not None:
-                        object = constructor
-                        dropSelf = 1
-                        break
         name = object.__name__
         tip1 = ''
         if inspect.isbuiltin(object):
@@ -130,6 +124,17 @@ def getCallTip(command='', locals=None):
         return tip.strip()
     else:
         return ''
+
+def getConstructor(object):
+    """Return constructor for class object, or None if there isn't one."""
+    try:
+        return object.__init__.im_func
+    except AttributeError:
+        for base in object.__bases__:
+            constructor = getConstructor(base)
+            if constructor is not None:
+                return constructor
+    return None
 
 def getRoot(command, terminator=None):
     """Return the rightmost root portion of an arbitrary Python command.
