@@ -336,9 +336,7 @@ public:
                 int checkable = FALSE);
     %name(AppendMenu)void Append(int id, const wxString& item, wxMenu *subMenu,
                 const wxString& helpString = wxPyEmptyStr);
-#ifndef __WXGTK__
     %name(AppendItem)void Append(const wxMenuItem* item);
-#endif
 
     void AppendSeparator();
     void Break();
@@ -389,15 +387,13 @@ public:
     bool Enabled(int id);
     int FindMenuItem(const wxString& menuString, const wxString& itemString);
     wxMenuItem * FindItemForId(int id);
-#ifdef __WXMSW__
+    void SetLabel(int id, const wxString& label);
     void EnableTop(int pos, bool enable);
     wxString GetHelpString(int id);
     wxString GetLabel(int id);
     void SetHelpString(int id, const wxString& helpString);
-    void SetLabel(int id, const wxString& label);
     wxString GetLabelTop(int pos);
     void SetLabelTop(int pos, const wxString& label);
-#endif
     int GetMenuCount();
     wxMenu* GetMenu(int i);
 };
