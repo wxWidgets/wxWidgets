@@ -167,6 +167,9 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // no need to delete the new image
     SetImageNoCopy(image);
 
+    // GetBestSize will work properly now, so set the best size if needed
+    SetBestSize(size);
+    
     return TRUE;
 }
 
@@ -199,6 +202,15 @@ void wxStaticBitmap::Free()
     delete m_image;
 
     m_image = NULL;
+}
+
+wxSize wxStaticBitmap::DoGetBestSize() const
+{
+    if ( ImageIsOk() )
+        return wxSize(m_image->GetWidth(), m_image->GetHeight());
+
+    // this is completely arbitrary
+    return wxSize(16, 16);
 }
 
 void wxStaticBitmap::SetImage( const wxGDIImage* image )
