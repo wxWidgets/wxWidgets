@@ -157,6 +157,11 @@ typedef short INT16;
 
 /* INT32 must hold at least signed 32-bit values. */
 
+#ifdef INT32
+#   undef INT32_DEFINED
+#   define INT32_DEFINED
+#endif /* INT32 defined */
+
 /* you may define INT32_DEFINED if it is already defined somewhere */
 #ifndef INT32_DEFINED
 #ifdef XMD_H
