@@ -123,6 +123,7 @@ wxMSW:
   even try to do it by default -- now it does
 - wxTaskBarIcon must be explicitly destroyed now, otherwise the application
   won't exit even though there are no top level windows
+- wxFileName::GetModificationTime() works with opened files too now
 
 wxMotif:
 

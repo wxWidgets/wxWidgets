@@ -163,7 +163,8 @@ public:
                      filename,                      // name
                      mode == Read ? GENERIC_READ    // access mask
                                   : GENERIC_WRITE,
-                     0,                             // no sharing
+                     FILE_SHARE_READ |              // sharing mode
+                     FILE_SHARE_WRITE,              // (allow everything)
                      NULL,                          // no secutity attr
                      OPEN_EXISTING,                 // creation disposition
                      0,                             // no flags
