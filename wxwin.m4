@@ -167,8 +167,10 @@ AC_DEFUN([AM_PATH_WXCONFIG],
       dnl what the user actually wants, making this redundant at best.
       dnl For now keep it in case anyone actually used it in the past.
       AC_MSG_CHECKING([for wxWindows static library])
-      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs 2>&1 > /dev/null`
-      if test -n "$WX_LIBS_STATIC"; then
+      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs 2>/dev/null`
+      if test "x$WX_LIBS_STATIC" = "x"; then
+        AC_MSG_RESULT(no)
+      else
         AC_MSG_RESULT(yes)
       fi
 
