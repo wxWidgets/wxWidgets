@@ -171,7 +171,7 @@ public:
         // return the "main" top level window (if it hadn't been set previously
         // with SetTopWindow(), will return just some top level window and, if
         // there are none, will return NULL)
-    wxWindow *GetTopWindow() const
+    virtual wxWindow *GetTopWindow() const
     {
         if (m_topWindow)
             return m_topWindow;
