@@ -228,7 +228,10 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.log.WriteText("OnColClick: %d\n" % event.GetColumn())
 
     def OnColRightClick(self, event):
-        self.log.WriteText("OnColRightClick: %d\n" % event.GetColumn())
+        item = self.list.GetColumn(event.GetColumn())
+        self.log.WriteText("OnColRightClick: %d %s\n" %
+                           (event.GetColumn(), (item.GetText(), item.GetAlign(),
+                                                item.GetWidth(), item.GetImage())))
 
     def OnColBeginDrag(self, event):
         self.log.WriteText("OnColBeginDrag\n")
@@ -311,19 +314,17 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 overview = """\
 A list control presents lists in a number of formats: list view, report view, icon view and small icon view. Elements are numbered from zero.
 
 """
+
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

@@ -10,8 +10,7 @@ class ScrolledPanel(wxScrolledWindow):
     def __init__(self, parent, log):
         self.log = log
         wxScrolledWindow.__init__(self, parent, -1,
-                                  style = wxTAB_TRAVERSAL|wxHSCROLL|wxVSCROLL)
-
+                                  style = wxTAB_TRAVERSAL)
 
         box = wxBoxSizer(wxVERTICAL)
         box.Add(wxStaticText(self, -1,
@@ -73,10 +72,6 @@ class ScrolledPanel(wxScrolledWindow):
 
 #----------------------------------------------------------------------
 
-## class ScrollToHandler(wxEvtHandler):
-##     """This class helps to scroll the panel
-
-#----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
     win = ScrolledPanel(nb, log)

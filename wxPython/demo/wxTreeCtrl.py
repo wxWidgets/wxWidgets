@@ -80,13 +80,13 @@ class TestTreeCtrlPanel(wxPanel):
         EVT_RIGHT_UP(self.tree, self.OnRightUp)
 
 
+
     def OnRightClick(self, event):
         pt = event.GetPosition();
         item, flags = self.tree.HitTest(pt)
         self.log.WriteText("OnRightClick: %s, %s, %s\n" %
                            (self.tree.GetItemText(item), type(item), item.__class__))
         self.tree.SelectItem(item)
-
 
 
     def OnRightUp(self, event):
@@ -165,15 +165,15 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-
 overview = """\
 A tree control presents information as a hierarchy, with items that may be expanded to show further items. Items in a tree control are referenced by wxTreeItemId handles.
 
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

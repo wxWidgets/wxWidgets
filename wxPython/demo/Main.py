@@ -32,6 +32,7 @@ _treeList = [
         'wxImageFromStream',
         'wxArtProvider',
         'ScrolledPanel',
+        'wxMenu',
         ]),
 
     # managed windows == things with a caption you can close
@@ -78,6 +79,7 @@ _treeList = [
         'wxListBox',
         'wxListCtrl',
         'wxListCtrl_virtual',
+        'wxMenu',
         'wxNotebook',
         'wxPopupWindow',
         'wxRadioBox',
