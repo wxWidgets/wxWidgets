@@ -219,6 +219,14 @@ static void DoCleanUp()
 
     wxClassInfo::CleanUpClasses();
 
+    // TODO: this should really be done in ~wxApp
+#if wxUSE_UNICODE
+    for ( int mb_argc = 0; mb_argc < wxTheApp->argc; mb_argc++ )
+    {
+        free(wxTheApp->argv[mb_argc]);
+    }
+#endif // wxUSE_UNICODE
+
     // delete the application object
     delete wxTheApp;
     wxTheApp = (wxApp *)NULL;
