@@ -6,6 +6,8 @@ The functions and macros defined in wxWindows are described here: you can
 either look up a function using the alphabetical listing of them or find it in
 the corresponding topic.
 
+
+
 \section{Alphabetical functions and macros list}
 
 \helpref{CLASSINFO}{classinfo}\\
@@ -226,6 +228,7 @@ the corresponding topic.
 \helpref{wxTransferFileToStream}{wxtransferfiletostream}\\
 \helpref{wxTransferStreamToFile}{wxtransferstreamtofile}\\
 \helpref{wxTrap}{wxtrap}\\
+\helpref{wxULL}{wxull}\\
 \helpref{wxUninitialize}{wxuninitialize}\\
 \helpref{wxUnix2DosFilename}{wxunix2dosfilename}\\
 \helpref{wxUnsetEnv}{wxunsetenv}\\
@@ -236,6 +239,8 @@ the corresponding topic.
 \helpref{wxYield}{wxyield}\\
 \helpref{\_}{underscore}\\
 \helpref{\_T}{underscoret}
+
+
 
 \section{Version macros}\label{versionfunctions}
 
@@ -259,6 +264,7 @@ wxWindows 2.2.
 
 <wx/version.h> or <wx/defs.h>
 
+
 \membersection{wxCHECK\_VERSION}\label{wxcheckversion}
 
 \func{bool}{wxCHECK\_VERSION}{\param{}{major, minor, release}}
@@ -281,6 +287,7 @@ the following can be done:
     }
 \end{verbatim}
 
+
 \membersection{wxCHECK\_GCC\_VERSION}\label{wxcheckgccversion}
 
 \func{bool}{wxCHECK\_GCC\_VERSION}{\param{}{major, minor, release}}
@@ -288,6 +295,7 @@ the following can be done:
 Returns $1$ if the compiler being used to compile the code is GNU C++
 compiler (g++) version major.minor.release or greater. Otherwise, and also if
 the compiler is not GNU C++ at all, returns $0$.
+
 
 \membersection{wxCHECK\_W32API\_VERSION}\label{wxcheckw32apiversion}
 
@@ -297,10 +305,13 @@ Returns $1$ if the version of w32api headers used is major.minor.release or
 greater. Otherwise, and also if we are not compiling with mingw32/cygwin under
 Win32 at all, returns $0$.
 
+
+
 \section{Application initialization and termination}\label{appinifunctions}
 
 The functions in this section are used on application startup/shutdown and also
 to control the behaviour of the main event loop of the GUI programs.
+
 
 \membersection{::wxEntry}\label{wxentry}
 
@@ -346,6 +357,7 @@ int CTheApp::ExitInstance()
 <wx/app.h>
 
 
+
 \membersection{::wxGetApp}\label{wxgetapp}
 
 \func{wxAppDerivedClass\&}{wxGetApp}{\void}
@@ -360,6 +372,7 @@ wxTheApp pointer is that the latter is of type {\tt wxApp *} and so wouldn't
 allow you to access the functions specific to your application class but not
 present in wxApp while wxGetApp() returns the object of the right type.
 
+
 \membersection{::wxHandleFatalExceptions}\label{wxhandlefatalexceptions}
 
 \func{bool}{wxHandleFatalExceptions}{\param{bool}{ doIt = true}}
@@ -371,6 +384,7 @@ By default, i.e. before this function is called, they will be handled in the
 normal way which usually just means that the application will be terminated.
 Calling wxHandleFatalExceptions() with {\it doIt} equal to false will restore
 this default behaviour.
+
 
 \membersection{::wxInitAllImageHandlers}\label{wxinitallimagehandlers}
 
@@ -386,6 +400,7 @@ see \helpref{wxImage}{wximage}.
 \wxheading{Include files}
 
 <wx/image.h>
+
 
 \membersection{::wxInitialize}\label{wxinitialize}
 
@@ -407,6 +422,7 @@ call to this function.
 
 <wx/app.h>
 
+
 \membersection{::wxSafeYield}\label{wxsafeyield}
 
 \func{bool}{wxSafeYield}{\param{wxWindow*}{ win = NULL}, \param{bool}{
@@ -423,6 +439,7 @@ Returns the result of the call to \helpref{::wxYield}{wxyield}.
 
 <wx/utils.h>
 
+
 \membersection{::wxUninitialize}\label{wxuninitialize}
 
 \func{void}{wxUninitialize}{\void}
@@ -433,6 +450,7 @@ once for each previous successful call to \helpref{wxInitialize}{wxinitialize}.
 \wxheading{Include files}
 
 <wx/app.h>
+
 
 \membersection{::wxYield}\label{wxyield}
 
@@ -446,6 +464,7 @@ the \helpref{wxApp::Yield}{wxappyield} method instead in any new code.
 \wxheading{Include files}
 
 <wx/app.h> or <wx/utils.h>
+
 
 \membersection{::wxWakeUpIdle}\label{wxwakeupidle}
 
@@ -462,10 +481,13 @@ the corresponding functions \helpref{::wxPostEvent}{wxpostevent} and
 
 <wx/event.h>
 
+
+
 \section{Process control functions}\label{processfunctions}
 
 The functions in this section are used to launch or terminate the other
 processes.
+
 
 \membersection{::wxExecute}\label{wxexecute}
 
@@ -568,6 +590,7 @@ terminated with a NULL pointer.}
 
 <wx/utils.h>
 
+
 \membersection{::wxExit}\label{wxexit}
 
 \func{void}{wxExit}{\void}
@@ -580,6 +603,7 @@ application. See \helpref{wxCloseEvent}{wxcloseevent} and \helpref{wxApp}{wxapp}
 \wxheading{Include files}
 
 <wx/app.h>
+
 
 \membersection{::wxKill}\label{wxkill}
 
@@ -638,6 +662,7 @@ enum wxKillError
 
 <wx/utils.h>
 
+
 \membersection{::wxGetProcessId}\label{wxgetprocessid}
 
 \func{unsigned long}{wxGetProcessId}{\void}
@@ -649,6 +674,7 @@ If an error occurs, $0$ is returned.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxShell}\label{wxshell}
 
@@ -662,6 +688,7 @@ See also \helpref{wxExecute}{wxexecute}, \helpref{Exec sample}{sampleexec}.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxShutdown}\label{wxshutdown}
 
@@ -684,6 +711,8 @@ and that this function is only implemented under Unix and Win32.
 
 <wx/utils.h>
 
+
+
 \section{Thread functions}\label{threadfunctions}
 
 The functions and macros here mainly exist to make it writing the code which
@@ -705,12 +734,14 @@ to create and use the critical section only when needed.
 \helpref{wxThread}{wxthread}, \helpref{wxMutex}{wxmutex}, \helpref{Multithreading overview}{wxthreadoverview}
 
 
+
 \membersection{wxCRIT\_SECT\_DECLARE}\label{wxcritsectdeclare}
 
 \func{}{wxCRIT\_SECT\_DECLARE}{\param{}{cs}}
 
 This macro declares a (static) critical section object named {\it cs} if 
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
+
 
 
 \membersection{wxCRIT\_SECT\_DECLARE\_MEMBER}\label{wxcritsectdeclaremember}
@@ -724,6 +755,7 @@ include the {\tt static} keyword (unlike
 a class or struct member which explains its name.
 
 
+
 \membersection{wxCRIT\_SECT\_LOCKER}\label{wxcritsectlocker}
 
 \func{}{wxCRIT\_SECT\_LOCKER}{\param{}{name}, \param{}{cs}}
@@ -731,6 +763,7 @@ a class or struct member which explains its name.
 This macro creates a \helpref{critical section lock}{wxcriticalsectionlocker} 
 object named {\it name} and associated with the critical section {\it cs} if 
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
+
 
 
 \membersection{wxCRITICAL\_SECTION}\label{wxcriticalsectionmacro}
@@ -759,12 +792,14 @@ other threads start calling it, if this is not the case this approach can
 {\bf not} be used and the critical section must be made a global instead).
 
 
+
 \membersection{wxENTER\_CRIT\_SECT}\label{wxentercritsect}
 
 \func{}{wxENTER\_CRIT\_SECT}{\param{wxCriticalSection\& }{cs}}
 
 This macro is equivalent to \helpref{cs.Enter()}{wxcriticalsectionenter} if
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
+
 
 
 \membersection{::wxIsMainThread}\label{wxismainthread}
@@ -775,12 +810,14 @@ Returns {\tt true} if this thread is the main one. Always returns {\tt true} if
 {\tt wxUSE\_THREADS} is $0$.
 
 
+
 \membersection{wxLEAVE\_CRIT\_SECT}\label{wxleavecritsect}
 
 \func{}{wxLEAVE\_CRIT\_SECT}{\param{wxCriticalSection\& }{cs}}
 
 This macro is equivalent to \helpref{cs.Leave()}{wxcriticalsectionleave} if
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
+
 
 
 \membersection{::wxMutexGuiEnter}\label{wxmutexguienter}
@@ -816,6 +853,7 @@ thread but the main one.
 This function is only defined on platforms which support preemptive
 threads.
 
+
 \membersection{::wxMutexGuiLeave}\label{wxmutexguileave}
 
 \func{void}{wxMutexGuiLeave}{\void}
@@ -824,6 +862,8 @@ See \helpref{::wxMutexGuiEnter()}{wxmutexguienter}.
 
 This function is only defined on platforms which support preemptive
 threads.
+
+
 
 \section{File functions}\label{filefunctions}
 
@@ -838,11 +878,13 @@ threads.
 \helpref{wxFile}{wxfile}\\
 \helpref{wxFileName}{wxfilename}
 
+
 \membersection{::wxDirExists}\label{functionwxdirexists}
 
 \func{bool}{wxDirExists}{\param{const wxString\& }{dirname}}
 
 Returns true if the directory exists.
+
 
 \membersection{::wxDos2UnixFilename}\label{wxdos2unixfilename}
 
@@ -851,6 +893,7 @@ Returns true if the directory exists.
 Converts a DOS to a Unix filename by replacing backslashes with forward
 slashes.
 
+
 \membersection{::wxFileExists}\label{functionwxfileexists}
 
 \func{bool}{wxFileExists}{\param{const wxString\& }{filename}}
@@ -858,11 +901,13 @@ slashes.
 Returns true if the file exists. It also returns true if the file is
 a directory.
 
+
 \membersection{::wxFileModificationTime}\label{wxfilemodificationtime}
 
 \func{time\_t}{wxFileModificationTime}{\param{const wxString\& }{filename}}
 
 Returns time of last modification of given file.
+
 
 \membersection{::wxFileNameFromPath}\label{wxfilenamefrompath}
 
@@ -875,6 +920,7 @@ Returns time of last modification of given file.
 
 Returns the filename for a full path. The second form returns a pointer to
 temporary storage that should not be deallocated.
+
 
 \membersection{::wxFindFirstFile}\label{wxfindfirstfile}
 
@@ -900,6 +946,7 @@ For example:
   }
 \end{verbatim}
 
+
 \membersection{::wxFindNextFile}\label{wxfindnextfile}
 
 \func{wxString}{wxFindNextFile}{\void}
@@ -907,6 +954,7 @@ For example:
 Returns the next file that matches the path passed to \helpref{wxFindFirstFile}{wxfindfirstfile}.
 
 See \helpref{wxFindFirstFile}{wxfindfirstfile} for an example.
+
 
 \membersection{::wxGetDiskSpace}\label{wxgetdiskspace}
 
@@ -929,11 +977,13 @@ Mac OS and generic Unix provided the system has {\tt statfs()} function.
 
 This function first appeared in wxWindows 2.3.2.
 
+
 \membersection{::wxGetOSDirectory}\label{wxgetosdirectory}
 
 \func{wxString}{wxGetOSDirectory}{\void}
 
 Returns the Windows directory under Windows; on other platforms returns the empty string.
+
 
 \membersection{::wxIsAbsolutePath}\label{wxisabsolutepath}
 
@@ -942,11 +992,13 @@ Returns the Windows directory under Windows; on other platforms returns the empt
 Returns true if the argument is an absolute filename, i.e. with a slash
 or drive name at the beginning.
 
+
 \membersection{::wxPathOnly}\label{wxpathonly}
 
 \func{wxString}{wxPathOnly}{\param{const wxString\& }{path}}
 
 Returns the directory part of the filename.
+
 
 \membersection{::wxUnix2DosFilename}\label{wxunix2dosfilename}
 
@@ -955,6 +1007,7 @@ Returns the directory part of the filename.
 Converts a Unix to a DOS filename by replacing forward
 slashes with backslashes.
 
+
 \membersection{::wxConcatFiles}\label{wxconcatfiles}
 
 \func{bool}{wxConcatFiles}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2},
@@ -962,6 +1015,7 @@ slashes with backslashes.
 
 Concatenates {\it file1} and {\it file2} to {\it file3}, returning
 true if successful.
+
 
 \membersection{::wxCopyFile}\label{wxcopyfile}
 
@@ -972,11 +1026,13 @@ Copies {\it file1} to {\it file2}, returning true if successful. If
 if it exists, but if {\it overwrite} is false, the functions fails in this
 case.
 
+
 \membersection{::wxGetCwd}\label{wxgetcwd}
 
 \func{wxString}{wxGetCwd}{\void}
 
 Returns a string containing the current (or working) directory.
+
 
 \membersection{::wxGetWorkingDirectory}\label{wxgetworkingdirectory}
 
@@ -989,6 +1045,7 @@ copies the working directory into new storage (which you {\emph must} delete
 yourself) if the buffer is NULL.
 
 {\it sz} is the size of the buffer if supplied.
+
 
 \membersection{::wxGetTempFileName}\label{wxgettempfilename}
 
@@ -1010,11 +1067,13 @@ yourself) if the buffer is NULL.
 \helpref{wxFileName::CreateTempFileName}{wxfilenamecreatetempfilename}\rtfsp
 instead.
 
+
 \membersection{::wxIsWild}\label{wxiswild}
 
 \func{bool}{wxIsWild}{\param{const wxString\& }{pattern}}
 
 Returns true if the pattern contains wildcards. See \helpref{wxMatchWild}{wxmatchwild}.
+
 
 \membersection{::wxMatchWild}\label{wxmatchwild}
 
@@ -1023,6 +1082,7 @@ Returns true if the pattern contains wildcards. See \helpref{wxMatchWild}{wxmatc
 Returns true if the {\it pattern}\/ matches the {\it text}\/; if {\it
 dot\_special}\/ is true, filenames beginning with a dot are not matched
 with wildcard characters. See \helpref{wxIsWild}{wxiswild}.
+
 
 \membersection{::wxMkdir}\label{wxmkdir}
 
@@ -1033,17 +1093,20 @@ Makes the directory {\it dir}, returning true if successful.
 {\it perm} is the access mask for the directory for the systems on which it is
 supported (Unix) and doesn't have effect for the other ones.
 
+
 \membersection{::wxRemoveFile}\label{wxremovefile}
 
 \func{bool}{wxRemoveFile}{\param{const wxString\& }{file}}
 
 Removes {\it file}, returning true if successful.
 
+
 \membersection{::wxRenameFile}\label{wxrenamefile}
 
 \func{bool}{wxRenameFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}}
 
 Renames {\it file1} to {\it file2}, returning true if successful.
+
 
 \membersection{::wxRmdir}\label{wxrmdir}
 
@@ -1053,12 +1116,14 @@ Removes the directory {\it dir}, returning true if successful. Does not work und
 
 The {\it flags} parameter is reserved for future use.
 
+
 \membersection{::wxSetWorkingDirectory}\label{wxsetworkingdirectory}
 
 \func{bool}{wxSetWorkingDirectory}{\param{const wxString\& }{dir}}
 
 Sets the current working directory, returning true if the operation succeeded.
 Under MS Windows, the current drive is also changed if {\it dir} contains a drive specification.
+
 
 \membersection{::wxSplitPath}\label{wxsplitfunction}
 
@@ -1084,6 +1149,7 @@ three of them may be empty if the corresponding component is. The old contents o
 strings pointed to by these parameters will be overwritten in any case (if the pointers
 are not NULL).
 
+
 \membersection{::wxTransferFileToStream}\label{wxtransferfiletostream}
 
 \func{bool}{wxTransferFileToStream}{\param{const wxString\& }{filename}, \param{ostream\& }{stream}}
@@ -1094,6 +1160,7 @@ use streams (within the document/view framework, for example).
 \wxheading{Include files}
 
 <wx/docview.h>
+
 
 \membersection{::wxTransferStreamToFile}\label{wxtransferstreamtofile}
 
@@ -1106,10 +1173,13 @@ use streams (within the document/view framework, for example).
 
 <wx/docview.h>
 
+
+
 \section{Network, user and OS functions}\label{networkfunctions}
 
 The functions in this section are used to retrieve information about the
 current computer and/or user characteristics.
+
 
 \membersection{::wxGetFreeMemory}\label{wxgetfreememory}
 
@@ -1122,6 +1192,7 @@ under Windows, Linux and Solaris.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxGetFullHostName}\label{wxgetfullhostname}
 
@@ -1138,6 +1209,7 @@ error.
 
 <wx/utils.h>
 
+
 \membersection{::wxGetEmailAddress}\label{wxgetemailaddress}
 
 \func{bool}{wxGetEmailAddress}{\param{const wxString\& }{buf}, \param{int }{sz}}
@@ -1152,6 +1224,7 @@ Returns true if successful, false otherwise.
 
 <wx/utils.h>
 
+
 \membersection{::wxGetHomeDir}\label{wxgethomedir}
 
 \func{wxString}{wxGetHomeDir}{\void}
@@ -1165,6 +1238,7 @@ Return the (current) user's home directory.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxGetHostName}\label{wxgethostname}
 
@@ -1192,6 +1266,7 @@ if successful, false otherwise.
 
 <wx/utils.h>
 
+
 \membersection{::wxGetUserId}\label{wxgetuserid}
 
 \func{wxString}{wxGetUserId}{\void}
@@ -1217,6 +1292,7 @@ if successful, false otherwise.
 
 <wx/utils.h>
 
+
 \membersection{::wxGetOsDescription}\label{wxgetosdescription}
 
 \func{wxString}{wxGetOsDescription}{\void}
@@ -1232,6 +1308,7 @@ user-readable form. For example, this function may return strings like
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxGetOsVersion}\label{wxgetosversion}
 
@@ -1263,6 +1340,7 @@ Both {\it major} and {\it minor} have to be looked at as hexadecimal numbers. So
 
 <wx/utils.h>
 
+
 \membersection{::wxGetUserHome}\label{wxgetuserhome}
 
 \func{const wxChar *}{wxGetUserHome}{\param{const wxString\& }{user = ""}}
@@ -1274,6 +1352,7 @@ Returns the home directory for the given user. If the username is empty
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxGetUserName}\label{wxgetusername}
 
@@ -1300,7 +1379,10 @@ if successful, {\tt false} otherwise.
 
 <wx/utils.h>
 
+
+
 \section{String functions}
+
 
 \membersection{::copystring}\label{copystring}
 
@@ -1310,6 +1392,7 @@ Makes a copy of the string {\it s} using the C++ new operator, so it can be
 deleted with the {\it delete} operator.
 
 This function is deprecated, use \helpref{wxString}{wxstring} class instead.
+
 
 \membersection{::wxGetTranslation}\label{wxgettranslation}
 
@@ -1324,12 +1407,14 @@ is used very often, an alternative (and also common in Unix world) syntax is
 provided: the \helpref{\_()}{underscore} macro is defined to do the same thing
 as wxGetTranslation.
 
+
 \membersection{::wxIsEmpty}\label{wxisempty}
 
 \func{bool}{wxIsEmpty}{\param{const char *}{ p}}
 
 Returns {\tt true} if the pointer is either {\tt NULL} or points to an empty
 string, {\tt false} otherwise.
+
 
 \membersection{::wxStrcmp}\label{wxstrcmp}
 
@@ -1341,6 +1426,7 @@ to or greater than {\it p2}. The comparison is case-sensitive.
 This function complements the standard C function {\it stricmp()} which performs
 case-insensitive comparison.
 
+
 \membersection{::wxStricmp}\label{wxstricmp}
 
 \func{int}{wxStricmp}{\param{const char *}{p1}, \param{const char *}{p2}}
@@ -1350,6 +1436,7 @@ to or greater than {\it p2}. The comparison is case-insensitive.
 
 This function complements the standard C function {\it strcmp()} which performs
 case-sensitive comparison.
+
 
 \membersection{::wxStringMatch}\label{wxstringmatch}
 
@@ -1361,6 +1448,7 @@ case-sensitive comparison.
 Returns {\tt true} if the substring {\it s1} is found within {\it s2},
 ignoring case if {\it exact} is false. If {\it subString} is {\tt false},
 no substring matching is done.
+
 
 \membersection{::wxStringEq}\label{wxstringeq}
 
@@ -1374,6 +1462,7 @@ A macro defined as:
 #define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
 \end{verbatim}
 
+
 \membersection{::wxStrlen}\label{wxstrlen}
 
 \func{size\_t}{wxStrlen}{\param{const char *}{ p}}
@@ -1381,6 +1470,7 @@ A macro defined as:
 This is a safe version of standard function {\it strlen()}: it does exactly the
 same thing (i.e. returns the length of the string) except that it returns 0 if
 {\it p} is the {\tt NULL} pointer.
+
 
 \membersection{::wxSnprintf}\label{wxsnprintf}
 
@@ -1397,6 +1487,7 @@ enough space.
 \wxheading{See also}
 
 \helpref{wxVsnprintf}{wxvsnprintf}, \helpref{wxString::Printf}{wxstringprintf}
+
 
 \membersection{wxT}\label{wxt}
 
@@ -1418,6 +1509,7 @@ build. In fact, its definition is:
 #define wxT(x) x
 #endif
 \end{verbatim}
+
 
 \membersection{wxTRANSLATE}\label{wxtranslate}
 
@@ -1461,6 +1553,7 @@ no translations for the weekday names in the program message catalog and
 wxGetTranslation wouldn't find them.
 
 
+
 \membersection{::wxToLower}\label{wxtolower}
 
 \func{char}{wxToLower}{\param{char }{ch}}
@@ -1471,6 +1564,7 @@ Converts the character to lower case. This is implemented as a macro for efficie
 
 <wx/utils.h>
 
+
 \membersection{::wxToUpper}\label{wxtoupper}
 
 \func{char}{wxToUpper}{\param{char }{ch}}
@@ -1480,6 +1574,7 @@ Converts the character to upper case. This is implemented as a macro for efficie
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxVsnprintf}\label{wxvsnprintf}
 
@@ -1493,6 +1588,7 @@ argument instead of arbitrary number of parameters.
 \helpref{wxSnprintf}{wxsnprintf}, \helpref{wxString::PrintfV}{wxstringprintfv}
 
 
+
 \membersection{\_}\label{underscore}
 
 \func{const wxChar *}{\_}{\param{const char *}{s}}
@@ -1503,6 +1599,7 @@ function, so it marks the message for the extraction by {\tt xgettext} just as
 the string for the current locale during execution.
 
 Don't confuse this macro with \helpref{\_T()}{underscoret}!
+
 
 
 \membersection{\_T}\label{underscoret}
@@ -1518,6 +1615,8 @@ same macro which is {\tt \_TEXT()}).
 
 Don't confuse this macro with \helpref{\_()}{underscore}!
 
+
+
 \section{Dialog functions}\label{dialogfunctions}
 
 Below are a number of convenience functions for getting input from the
@@ -1525,6 +1624,7 @@ user or displaying messages. Note that in these functions the last three
 parameters are optional. However, it is recommended to pass a parent frame
 parameter, or (in MS Windows or Motif) the wrong window frame may be brought to
 the front when the dialog box is popped up.
+
 
 \membersection{::wxBeginBusyCursor}\label{wxbeginbusycursor}
 
@@ -1541,6 +1641,7 @@ See also \helpref{wxIsBusy}{wxisbusy}, \helpref{wxBusyCursor}{wxbusycursor}.
 
 <wx/utils.h>
 
+
 \membersection{::wxBell}\label{wxbell}
 
 \func{void}{wxBell}{\void}
@@ -1550,6 +1651,7 @@ Ring the system bell.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxCreateFileTipProvider}\label{wxcreatefiletipprovider}
 
@@ -1570,6 +1672,7 @@ is remembered between the 2 program runs.}
 \wxheading{Include files}
 
 <wx/tipdlg.h>
+
 
 \membersection{::wxDirSelector}\label{wxdirselector}
 
@@ -1596,6 +1699,7 @@ if ( !dir.empty() )
 \wxheading{Include files}
 
 <wx/dirdlg.h>
+
 
 \membersection{::wxFileSelector}\label{wxfileselector}
 
@@ -1642,6 +1746,7 @@ if ( !filename.empty() )
 
 <wx/filedlg.h>
 
+
 \membersection{::wxEndBusyCursor}\label{wxendbusycursor}
 
 \func{void}{wxEndBusyCursor}{\void}
@@ -1654,6 +1759,7 @@ See also \helpref{wxIsBusy}{wxisbusy}, \helpref{wxBusyCursor}{wxbusycursor}.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxGetColourFromUser}\label{wxgetcolourfromuser}
 
@@ -1673,6 +1779,7 @@ is valid) if the dialog was cancelled.
 
 <wx/colordlg.h>
 
+
 \membersection{::wxGetFontFromUser}\label{wxgetfontfromuser}
 
 \func{wxFont}{wxGetFontFromUser}{\param{wxWindow *}{parent}, \param{const wxFont\& }{fontInit}}
@@ -1690,6 +1797,7 @@ is valid) if the dialog was cancelled.
 \wxheading{Include files}
 
 <wx/fontdlg.h>
+
 
 
 \membersection{::wxGetMultipleChoices}\label{wxgetmultiplechoices}
@@ -1735,6 +1843,7 @@ characters) is centred; if false, the message is left-justified.
 and {\tt choices}, and no {\tt selections} parameter; the function
 returns an array containing the user selections.}
 
+
 \membersection{::wxGetNumberFromUser}\label{wxgetnumberfromuser}
 
 \func{long}{wxGetNumberFromUser}{
@@ -1762,6 +1871,7 @@ Dialog is centered on its {\it parent} unless an explicit position is given in
 
 <wx/textdlg.h>
 
+
 \membersection{::wxGetPasswordFromUser}\label{wxgetpasswordfromuser}
 
 \func{wxString}{wxGetTextFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input text"},\\
@@ -1774,6 +1884,7 @@ to be used for entering passwords as the function name implies.
 \wxheading{Include files}
 
 <wx/textdlg.h>
+
 
 \membersection{::wxGetTextFromUser}\label{wxgettextfromuser}
 
@@ -1791,6 +1902,7 @@ is centred; if false, the message is left-justified.
 \wxheading{Include files}
 
 <wx/textdlg.h>
+
 
 \membersection{::wxGetMultipleChoice}\label{wxgetmultiplechoice}
 
@@ -1817,6 +1929,7 @@ is centred; if false, the message is left-justified.
 \wxheading{Include files}
 
 <wx/choicdlg.h>
+
 
 \membersection{::wxGetSingleChoice}\label{wxgetsinglechoice}
 
@@ -1856,6 +1969,7 @@ characters) is centred; if false, the message is left-justified.
 \perlnote{In wxPerl there is just an array reference in place of {\tt n}
 and {\tt choices}.}
 
+
 \membersection{::wxGetSingleChoiceIndex}\label{wxgetsinglechoiceindex}
 
 \func{int}{wxGetSingleChoiceIndex}{\param{const wxString\& }{message},\\
@@ -1879,6 +1993,7 @@ string. If the user pressed cancel, -1 is returned.
 
 \perlnote{In wxPerl there is just an array reference in place of {\tt n}
 and {\tt choices}.}
+
 
 \membersection{::wxGetSingleChoiceData}\label{wxgetsinglechoicedata}
 
@@ -1911,6 +2026,7 @@ elements as {\it choices} or {\it aChoices}!
 and {\tt choices}, and the client data array must have the
 same length as the choices array.}
 
+
 \membersection{::wxIsBusy}\label{wxisbusy}
 
 \func{bool}{wxIsBusy}{\void}
@@ -1923,6 +2039,7 @@ See also \helpref{wxBusyCursor}{wxbusycursor}.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxMessageBox}\label{wxmessagebox}
 
@@ -1965,6 +2082,7 @@ message will be split into separate lines, to cater for large messages.
 
 <wx/msgdlg.h>
 
+
 \membersection{::wxShowTip}\label{wxshowtip}
 
 \func{bool}{wxShowTip}{\param{wxWindow *}{parent},
@@ -1992,11 +2110,14 @@ checkbox which is shown in the tips dialog.}
 <wx/tipdlg.h>
 
 
+
+
 \section{Math functions}
 
 \wxheading{Include files}
 
 <wx/math.h>
+
 
 \membersection{wxFinite}\label{wxfinite}
 
@@ -2004,6 +2125,7 @@ checkbox which is shown in the tips dialog.}
 
 Returns a non-zero value if {\it x} is neither infinite or NaN (not a number), 
 returns 0 otherwise.
+
 
 \membersection{wxIsNaN}\label{wxisnan}
 
@@ -2013,6 +2135,8 @@ Returns a non-zero value if {\it x} is NaN (not a number), returns 0
 otherwise.
 
 
+
+
 \section{GDI functions}\label{gdifunctions}
 
 The following are relevant to the GDI (Graphics Device Interface).
@@ -2020,6 +2144,7 @@ The following are relevant to the GDI (Graphics Device Interface).
 \wxheading{Include files}
 
 <wx/gdicmn.h>
+
 
 \membersection{wxBITMAP}\label{wxbitmapmacro}
 
@@ -2038,6 +2163,7 @@ avoid using {\tt \#ifdef}s when creating bitmaps.
 
 <wx/gdicmn.h>
 
+
 \membersection{::wxClientDisplayRect}\label{wxclientdisplayrect}
 
 \func{void}{wxClientDisplayRect}{\param{int *}{x}, \param{int *}{y},
@@ -2050,17 +2176,20 @@ this means the area not covered by the taskbar, etc.  Other platforms
 are currently defaulting to the whole display until a way is found to
 provide this info for all window managers, etc.
 
+
 \membersection{::wxColourDisplay}\label{wxcolourdisplay}
 
 \func{bool}{wxColourDisplay}{\void}
 
 Returns true if the display is colour, false otherwise.
 
+
 \membersection{::wxDisplayDepth}\label{wxdisplaydepth}
 
 \func{int}{wxDisplayDepth}{\void}
 
 Returns the depth of the display (a value of 1 denotes a monochrome display).
+
 
 \membersection{::wxDisplaySize}\label{wxdisplaysize}
 
@@ -2070,6 +2199,7 @@ Returns the depth of the display (a value of 1 denotes a monochrome display).
 
 Returns the display size in pixels.
 
+
 \membersection{::wxDisplaySizeMM}\label{wxdisplaysizemm}
 
 \func{void}{wxDisplaySizeMM}{\param{int *}{width}, \param{int *}{height}}
@@ -2077,6 +2207,7 @@ Returns the display size in pixels.
 \func{wxSize}{wxGetDisplaySizeMM}{\void}
 
 Returns the display size in millimeters.
+
 
 \membersection{::wxDROP\_ICON}\label{wxdropicon}
 
@@ -2092,6 +2223,7 @@ This macro should be used with
 \wxheading{Include files}
 
 <wx/dnd.h>
+
 
 \membersection{wxICON}\label{wxiconmacro}
 
@@ -2109,6 +2241,7 @@ avoid using {\tt \#ifdef}s when creating icons.
 \wxheading{Include files}
 
 <wx/gdicmn.h>
+
 
 \membersection{::wxMakeMetafilePlaceable}\label{wxmakemetafileplaceable}
 
@@ -2138,12 +2271,15 @@ used in RTF (Rich Text Format) files.
 
 This function is only available under Windows.
 
+
 \membersection{::wxSetCursor}\label{wxsetcursor}
 
 \func{void}{wxSetCursor}{\param{wxCursor *}{cursor}}
 
 Globally sets the cursor; only has an effect in Windows and GTK.
 See also \helpref{wxCursor}{wxcursor}, \helpref{wxWindow::SetCursor}{wxwindowsetcursor}.
+
+
 
 \section{Printer settings}\label{printersettings}
 
@@ -2156,17 +2292,20 @@ Windows, PostScript output can only be sent to a file.
 
 <wx/dcps.h>
 
+
 \membersection{::wxGetPrinterCommand}\label{wxgetprintercommand}
 
 \func{wxString}{wxGetPrinterCommand}{\void}
 
 Gets the printer command used to print a file. The default is {\tt lpr}.
 
+
 \membersection{::wxGetPrinterFile}\label{wxgetprinterfile}
 
 \func{wxString}{wxGetPrinterFile}{\void}
 
 Gets the PostScript output filename.
+
 
 \membersection{::wxGetPrinterMode}\label{wxgetprintermode}
 
@@ -2175,11 +2314,13 @@ Gets the PostScript output filename.
 Gets the printing mode controlling where output is sent (PS\_PREVIEW, PS\_FILE or PS\_PRINTER).
 The default is PS\_PREVIEW.
 
+
 \membersection{::wxGetPrinterOptions}\label{wxgetprinteroptions}
 
 \func{wxString}{wxGetPrinterOptions}{\void}
 
 Gets the additional options for the print command (e.g. specific printer). The default is nothing.
+
 
 \membersection{::wxGetPrinterOrientation}\label{wxgetprinterorientation}
 
@@ -2187,11 +2328,13 @@ Gets the additional options for the print command (e.g. specific printer). The d
 
 Gets the orientation (PS\_PORTRAIT or PS\_LANDSCAPE). The default is PS\_PORTRAIT.
 
+
 \membersection{::wxGetPrinterPreviewCommand}\label{wxgetprinterpreviewcommand}
 
 \func{wxString}{wxGetPrinterPreviewCommand}{\void}
 
 Gets the command used to view a PostScript file. The default depends on the platform.
+
 
 \membersection{::wxGetPrinterScaling}\label{wxgetprinterscaling}
 
@@ -2199,11 +2342,13 @@ Gets the command used to view a PostScript file. The default depends on the plat
 
 Gets the scaling factor for PostScript output. The default is 1.0, 1.0.
 
+
 \membersection{::wxGetPrinterTranslation}\label{wxgetprintertranslation}
 
 \func{void}{wxGetPrinterTranslation}{\param{float *}{x}, \param{float *}{y}}
 
 Gets the translation (from the top left corner) for PostScript output. The default is 0.0, 0.0.
+
 
 \membersection{::wxSetPrinterCommand}\label{wxsetprintercommand}
 
@@ -2211,11 +2356,13 @@ Gets the translation (from the top left corner) for PostScript output. The defau
 
 Sets the printer command used to print a file. The default is {\tt lpr}.
 
+
 \membersection{::wxSetPrinterFile}\label{wxsetprinterfile}
 
 \func{void}{wxSetPrinterFile}{\param{const wxString\& }{filename}}
 
 Sets the PostScript output filename.
+
 
 \membersection{::wxSetPrinterMode}\label{wxsetprintermode}
 
@@ -2224,11 +2371,13 @@ Sets the PostScript output filename.
 Sets the printing mode controlling where output is sent (PS\_PREVIEW, PS\_FILE or PS\_PRINTER).
 The default is PS\_PREVIEW.
 
+
 \membersection{::wxSetPrinterOptions}\label{wxsetprinteroptions}
 
 \func{void}{wxSetPrinterOptions}{\param{const wxString\& }{options}}
 
 Sets the additional options for the print command (e.g. specific printer). The default is nothing.
+
 
 \membersection{::wxSetPrinterOrientation}\label{wxsetprinterorientation}
 
@@ -2236,11 +2385,13 @@ Sets the additional options for the print command (e.g. specific printer). The d
 
 Sets the orientation (PS\_PORTRAIT or PS\_LANDSCAPE). The default is PS\_PORTRAIT.
 
+
 \membersection{::wxSetPrinterPreviewCommand}\label{wxsetprinterpreviewcommand}
 
 \func{void}{wxSetPrinterPreviewCommand}{\param{const wxString\& }{command}}
 
 Sets the command used to view a PostScript file. The default depends on the platform.
+
 
 \membersection{::wxSetPrinterScaling}\label{wxsetprinterscaling}
 
@@ -2248,11 +2399,14 @@ Sets the command used to view a PostScript file. The default depends on the plat
 
 Sets the scaling factor for PostScript output. The default is 1.0, 1.0.
 
+
 \membersection{::wxSetPrinterTranslation}\label{wxsetprintertranslation}
 
 \func{void}{wxSetPrinterTranslation}{\param{float }{x}, \param{float }{y}}
 
 Sets the translation (from the top left corner) for PostScript output. The default is 0.0, 0.0.
+
+
 
 \section{Clipboard functions}\label{clipsboard}
 
@@ -2264,11 +2418,13 @@ class instead.
 
 <wx/clipbrd.h>
 
+
 \membersection{::wxClipboardOpen}\label{functionwxclipboardopen}
 
 \func{bool}{wxClipboardOpen}{\void}
 
 Returns true if this application has already opened the clipboard.
+
 
 \membersection{::wxCloseClipboard}\label{wxcloseclipboard}
 
@@ -2276,11 +2432,13 @@ Returns true if this application has already opened the clipboard.
 
 Closes the clipboard to allow other applications to use it.
 
+
 \membersection{::wxEmptyClipboard}\label{wxemptyclipboard}
 
 \func{bool}{wxEmptyClipboard}{\void}
 
 Empties the clipboard.
+
 
 \membersection{::wxEnumClipboardFormats}\label{wxenumclipboardformats}
 
@@ -2302,6 +2460,7 @@ is not open.
 Before it enumerates the formats function, an application must open the clipboard by using the
 wxOpenClipboard function.
 
+
 \membersection{::wxGetClipboardData}\label{wxgetclipboarddata}
 
 \func{wxObject *}{wxGetClipboardData}{\param{int}{dataFormat}}
@@ -2317,6 +2476,7 @@ Gets data from the clipboard.
 
 The clipboard must have previously been opened for this call to succeed.
 
+
 \membersection{::wxGetClipboardFormatName}\label{wxgetclipboardformatname}
 
 \func{bool}{wxGetClipboardFormatName}{\param{int}{dataFormat}, \param{const wxString\& }{formatName}, \param{int}{maxCount}}
@@ -2324,11 +2484,13 @@ The clipboard must have previously been opened for this call to succeed.
 Gets the name of a registered clipboard format, and puts it into the buffer {\it formatName} which is of maximum
 length {\it maxCount}. {\it dataFormat} must not specify a predefined clipboard format.
 
+
 \membersection{::wxIsClipboardFormatAvailable}\label{wxisclipboardformatavailable}
 
 \func{bool}{wxIsClipboardFormatAvailable}{\param{int}{dataFormat}}
 
 Returns true if the given data format is available on the clipboard.
+
 
 \membersection{::wxOpenClipboard}\label{wxopenclipboard}
 
@@ -2336,11 +2498,13 @@ Returns true if the given data format is available on the clipboard.
 
 Opens the clipboard for passing data to it or getting data from it.
 
+
 \membersection{::wxRegisterClipboardFormat}\label{wxregisterclipboardformat}
 
 \func{int}{wxRegisterClipboardFormat}{\param{const wxString\& }{formatName}}
 
 Registers the clipboard data format name and returns an identifier.
+
 
 \membersection{::wxSetClipboardData}\label{wxsetclipboarddata}
 
@@ -2360,7 +2524,10 @@ Passes data to the clipboard.
 The clipboard must have previously been opened for this call to succeed.
 
 
+
+
 \section{Miscellaneous functions}\label{miscellany}
+
 
 \membersection{wxDYNLIB\_FUNCTION}\label{wxdynlibfunction}
 
@@ -2387,12 +2554,14 @@ it is quoted automatically by the macro)}
 \docparam{dynlib}{the library to load the function from}
 
 
+
 \membersection{wxEXPLICIT}\label{wxexplicit}
 
 {\tt wxEXPLICIT} is a macro which expands to the C++ {\tt explicit} keyword if
 the compiler supports it or nothing otherwise. Thus, it can be used even in the
 code which might have to be compiled with an old compiler without support for
 this language feature but still take advantage of it when it is available.
+
 
 \membersection{wxLL}\label{wxll}
 
@@ -2410,6 +2579,11 @@ allows to define 64 bit compile time constants:
 \wxheading{Include files}
 
 <wx/longlong.h>
+
+\wxheading{See also}
+
+\helpref{wxULL}{wxull}, \helpref{wxLongLong}{wxlonglong}
+
 
 \membersection{wxLongLongFmtSpec}\label{wxlonglongfmtspec}
 
@@ -2432,6 +2606,7 @@ printed. Example of using it:
 
 <wx/longlong.h>
 
+
 \membersection{::wxNewId}\label{wxnewid}
 
 \func{long}{wxNewId}{\void}
@@ -2441,6 +2616,7 @@ Generates an integer identifier unique to this run of the program.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxRegisterId}\label{wxregisterid}
 
@@ -2452,6 +2628,7 @@ the given {\bf id}.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxDDECleanUp}\label{wxddecleanup}
 
@@ -2465,6 +2642,7 @@ See also \helpref{wxDDEInitialize}{wxddeinitialize}.
 \wxheading{Include files}
 
 <wx/dde.h>
+
 
 \membersection{::wxDDEInitialize}\label{wxddeinitialize}
 
@@ -2482,6 +2660,7 @@ See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient},
 
 <wx/dde.h>
 
+
 \membersection{::wxEnableTopLevelWindows}\label{wxenabletoplevelwindows}
 
 \func{void}{wxEnableTopLevelWindow}{\param{bool}{ enable = true}}
@@ -2493,6 +2672,7 @@ This function enables or disables all top level windows. It is used by
 
 <wx/utils.h>
 
+
 \membersection{::wxFindMenuItemId}\label{wxfindmenuitemid}
 
 \func{int}{wxFindMenuItemId}{\param{wxFrame *}{frame}, \param{const wxString\& }{menuString}, \param{const wxString\& }{itemString}}
@@ -2502,6 +2682,7 @@ Find a menu item identifier associated with the given frame's menu bar.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxFindWindowByLabel}\label{wxfindwindowbylabel}
 
@@ -2518,6 +2699,7 @@ The search is recursive in both cases.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxFindWindowByName}\label{wxfindwindowbyname}
 
@@ -2537,6 +2719,7 @@ If no such named window is found, {\bf wxFindWindowByLabel} is called.
 
 <wx/utils.h>
 
+
 \membersection{::wxFindWindowAtPoint}\label{wxfindwindowatpoint}
 
 \func{wxWindow *}{wxFindWindowAtPoint}{\param{const wxPoint\& }{pt}}
@@ -2544,12 +2727,14 @@ If no such named window is found, {\bf wxFindWindowByLabel} is called.
 Find the deepest window at the given mouse position in screen coordinates,
 returning the window if found, or NULL if not.
 
+
 \membersection{::wxFindWindowAtPointer}\label{wxfindwindowatpointer}
 
 \func{wxWindow *}{wxFindWindowAtPointer}{\param{wxPoint\& }{pt}}
 
 Find the deepest window at the mouse pointer position, returning the window
 and current pointer position in screen coordinates.
+
 
 \membersection{::wxGetActiveWindow}\label{wxgetactivewindow}
 
@@ -2561,6 +2746,7 @@ Gets the currently active window (Windows only).
 
 <wx/windows.h>
 
+
 \membersection{::wxGetDisplayName}\label{wxgetdisplayname}
 
 \func{wxString}{wxGetDisplayName}{\void}
@@ -2571,6 +2757,7 @@ Under X only, returns the current display name. See also \helpref{wxSetDisplayNa
 
 <wx/utils.h>
 
+
 \membersection{::wxGetMousePosition}\label{wxgetmouseposition}
 
 \func{wxPoint}{wxGetMousePosition}{\void}
@@ -2580,6 +2767,7 @@ Returns the mouse position in screen coordinates.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxGetResource}\label{wxgetresource}
 
@@ -2615,6 +2803,7 @@ See also \helpref{wxWriteResource}{wxwriteresource}, \helpref{wxConfigBase}{wxco
 
 <wx/utils.h>
 
+
 \membersection{::wxGetTopLevelParent}\label{wxgettoplevelparent}
 
 \func{wxWindow *}{wxGetTopLevelParent}{\param{wxWindow }{*win}}
@@ -2625,6 +2814,7 @@ frame or dialog containing it, or {\tt NULL}.
 \wxheading{Include files}
 
 <wx/window.h>
+
 
 \membersection{::wxLoadUserResource}\label{wxloaduserresource}
 
@@ -2647,6 +2837,7 @@ This function is available under Windows only.
 
 <wx/utils.h>
 
+
 \membersection{::wxPostDelete}\label{wxpostdelete}
 
 \func{void}{wxPostDelete}{\param{wxObject *}{object}}
@@ -2662,6 +2853,7 @@ Now obsolete: use \helpref{wxWindow::Close}{wxwindowclose} instead.
 
 <wx/utils.h>
 
+
 \membersection{::wxPostEvent}\label{wxpostevent}
 
 \func{void}{wxPostEvent}{\param{wxEvtHandler *}{dest}, \param{wxEvent\& }{event}}
@@ -2675,6 +2867,7 @@ See the respective documentation for details (and caveats).
 \wxheading{Include files}
 
 <wx/app.h>
+
 
 \membersection{::wxSetDisplayName}\label{wxsetdisplayname}
 
@@ -2690,6 +2883,7 @@ See also \helpref{wxGetDisplayName}{wxgetdisplayname}.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxStripMenuCodes}\label{wxstripmenucodes}
 
@@ -2709,6 +2903,29 @@ as a keyboard shortkey in Windows and Motif) and $\backslash$t (tab in Windows).
 \wxheading{Include files}
 
 <wx/utils.h>
+
+
+\membersection{wxULL}\label{wxull}
+
+\func{wxLongLong\_t}{wxULL}{\param{}{number}}
+
+This macro is defined for the platforms with a native 64 bit integer type and
+allows to define unsigned 64 bit compile time constants:
+
+\begin{verbatim}
+    #ifdef wxLongLong_t
+        unsigned wxLongLong_t ll = wxULL(0x1234567890abcdef);
+    #endif
+\end{verbatim}
+
+\wxheading{Include files}
+
+<wx/longlong.h>
+
+\wxheading{See also}
+
+\helpref{wxLL}{wxll}, \helpref{wxLongLong}{wxlonglong}
+
 
 \membersection{::wxWriteResource}\label{wxwriteresource}
 
@@ -2741,6 +2958,8 @@ See also \helpref{wxGetResource}{wxgetresource}, \helpref{wxConfigBase}{wxconfig
 
 <wx/utils.h>
 
+
+
 \section{Byte order macros}\label{byteordermacros}
 
 The endian-ness issues (that is the difference between big-endian and
@@ -2748,6 +2967,7 @@ little-endian architectures) are important for the portable programs working
 with the external binary data (for example, data files or data coming from
 network) which is usually in some fixed, platform-independent format. The
 macros are helpful for transforming the data to the correct format.
+
 
 \membersection{wxINTXX\_SWAP\_ALWAYS}\label{intswapalways}
 
@@ -2762,6 +2982,7 @@ macros are helpful for transforming the data to the correct format.
 These macros will swap the bytes of the {\it value} variable from little
 endian to big endian or vice versa unconditionally, i.e. independently of the
 current platform.
+
 
 \membersection{wxINTXX\_SWAP\_ON\_BE}\label{intswaponbe}
 
@@ -2781,6 +3002,7 @@ been compiled on a little-endian architecture, the value will be unchanged.
 Use these macros to read data from and write data to a file that stores
 data in little-endian (for example Intel i386) format.
 
+
 \membersection{wxINTXX\_SWAP\_ON\_LE}\label{intswaponle}
 
 \func{wxInt32}{wxINT32\_SWAP\_ON\_LE}{\param{wxInt32 }{value}}
@@ -2799,6 +3021,8 @@ been compiled on a big-endian architecture, the value will be unchanged.
 Use these macros to read data from and write data to a file that stores
 data in big-endian format.
 
+
+
 \section{RTTI functions}\label{rttimacros}
 
 wxWindows uses its own RTTI ("run-time type identification") system which
@@ -2815,6 +3039,7 @@ unless you are thinking of modifying or adding any wxWindows classes.
 
 \helpref{RTTI overview}{runtimeclassoverview}
 
+
 \membersection{CLASSINFO}\label{classinfo}
 
 \func{wxClassInfo *}{CLASSINFO}{className}
@@ -2824,6 +3049,7 @@ Returns a pointer to the wxClassInfo object associated with this class.
 \wxheading{Include files}
 
 <wx/object.h>
+
 
 \membersection{DECLARE\_ABSTRACT\_CLASS}\label{declareabstractclass}
 
@@ -2851,6 +3077,7 @@ class wxCommand: public wxObject
 
 <wx/object.h>
 
+
 \membersection{DECLARE\_APP}\label{declareapp}
 
 \func{}{DECLARE\_APP}{className}
@@ -2870,6 +3097,7 @@ Example:
 
 <wx/app.h>
 
+
 \membersection{DECLARE\_CLASS}\label{declareclass}
 
 \func{}{DECLARE\_CLASS}{className}
@@ -2881,6 +3109,7 @@ dynamically. The same as DECLARE\_ABSTRACT\_CLASS.
 \wxheading{Include files}
 
 <wx/object.h>
+
 
 \membersection{DECLARE\_DYNAMIC\_CLASS}\label{declaredynamicclass}
 
@@ -2907,6 +3136,7 @@ class wxFrame: public wxWindow
 
 <wx/object.h>
 
+
 \membersection{IMPLEMENT\_ABSTRACT\_CLASS}\label{implementabstractclass}
 
 \func{}{IMPLEMENT\_ABSTRACT\_CLASS}{className, baseClassName}
@@ -2929,6 +3159,7 @@ wxCommand::wxCommand(void)
 
 <wx/object.h>
 
+
 \membersection{IMPLEMENT\_ABSTRACT\_CLASS2}\label{implementabstractclass2}
 
 \func{}{IMPLEMENT\_ABSTRACT\_CLASS2}{className, baseClassName1, baseClassName2}
@@ -2939,6 +3170,7 @@ a class that has run-time type information and two base classes. The same as IMP
 \wxheading{Include files}
 
 <wx/object.h>
+
 
 \membersection{IMPLEMENT\_APP}\label{implementapp}
 
@@ -2965,6 +3197,7 @@ See also \helpref{DECLARE\_APP}{declareapp}.
 
 <wx/app.h>
 
+
 \membersection{IMPLEMENT\_CLASS}\label{implementclass}
 
 \func{}{IMPLEMENT\_CLASS}{className, baseClassName}
@@ -2975,6 +3208,7 @@ a class that has run-time type information. The same as IMPLEMENT\_ABSTRACT\_CLA
 \wxheading{Include files}
 
 <wx/object.h>
+
 
 \membersection{IMPLEMENT\_CLASS2}\label{implementclass2}
 
@@ -2987,6 +3221,7 @@ same as IMPLEMENT\_ABSTRACT\_CLASS2.
 \wxheading{Include files}
 
 <wx/object.h>
+
 
 \membersection{IMPLEMENT\_DYNAMIC\_CLASS}\label{implementdynamicclass}
 
@@ -3011,6 +3246,7 @@ wxFrame::wxFrame(void)
 
 <wx/object.h>
 
+
 \membersection{IMPLEMENT\_DYNAMIC\_CLASS2}\label{implementdynamicclass2}
 
 \func{}{IMPLEMENT\_DYNAMIC\_CLASS2}{className, baseClassName1, baseClassName2}
@@ -3024,6 +3260,7 @@ base classes.
 
 <wx/object.h>
 
+
 \membersection{wxConstCast}\label{wxconstcast}
 
 \func{classname *}{wxConstCast}{ptr, classname}
@@ -3036,12 +3273,14 @@ supports {\it const\_cast} or into an old, C-style cast, otherwise.
 \helpref{wxDynamicCast}{wxdynamiccast}\\
 \helpref{wxStaticCast}{wxstaticcast}
 
+
 \membersection{::wxCreateDynamicObject}\label{wxcreatedynamicobject}
 
 \func{wxObject *}{wxCreateDynamicObject}{\param{const wxString\& }{className}}
 
 Creates and returns an object of the given class, if the class has been
 registered with the dynamic class system using DECLARE... and IMPLEMENT... macros.
+
 
 \membersection{WXDEBUG\_NEW}\label{debugnew}
 
@@ -3059,6 +3298,7 @@ In non-debug mode, this is defined as the normal new operator.
 \wxheading{Include files}
 
 <wx/object.h>
+
 
 \membersection{wxDynamicCast}\label{wxdynamiccast}
 
@@ -3094,6 +3334,7 @@ Example:
 \helpref{wxConstCast}{wxconstcast}\\
 \helpref{wxStatiicCast}{wxstaticcast}
 
+
 \membersection{wxDynamicCastThis}\label{wxdynamiccastthis}
 
 \func{classname *}{wxDynamicCastThis}{classname}
@@ -3107,6 +3348,7 @@ this macro should be used to avoid them.
 
 \helpref{wxDynamicCast}{wxdynamiccast}
 
+
 \membersection{wxStaticCast}\label{wxstaticcast}
 
 \func{classname *}{wxStaticCast}{ptr, classname}
@@ -3118,6 +3360,8 @@ result of executing an equivalent of {\tt static\_cast<classname *>(ptr)}.
 \helpref{wxDynamicCast}{wxdynamiccast}\\
 \helpref{wxConstCast}{wxconstcast}
 
+
+
 \section{Log functions}\label{logfunctions}
 
 These functions provide a variety of logging functions: see \helpref{Log classes overview}{wxlogoverview} for
@@ -3128,6 +3372,7 @@ standard one (installed by wxWindows in the beginning of the program).
 \wxheading{Include files}
 
 <wx/log.h>
+
 
 \membersection{::wxDebugMsg}\label{wxdebugmsg}
 
@@ -3153,6 +3398,7 @@ instead.
 
 <wx/utils.h>
 
+
 \membersection{::wxError}\label{wxerror}
 
 \func{void}{wxError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Internal Error"}}
@@ -3167,6 +3413,7 @@ wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxFatalError}\label{wxfatalerror}
 
@@ -3183,6 +3430,7 @@ wxWindows errors. See also \helpref{wxError}{wxerror}.
 
 <wx/utils.h>
 
+
 \membersection{::wxLogError}\label{wxlogerror}
 
 \func{void}{wxLogError}{\param{const char *}{formatString}, \param{...}{}}
@@ -3192,6 +3440,7 @@ wxWindows errors. See also \helpref{wxError}{wxerror}.
 The functions to use for error messages, i.e. the messages that must be shown
 to the user. The default processing is to pop up a message box to inform the
 user about it.
+
 
 \membersection{::wxLogFatalError}\label{wxlogfatalerror}
 
@@ -3203,6 +3452,7 @@ Like \helpref{wxLogError}{wxlogerror}, but also
 terminates the program with the exit code 3. Using {\it abort()} standard
 function also terminates the program with this exit code.
 
+
 \membersection{::wxLogWarning}\label{wxlogwarning}
 
 \func{void}{wxLogWarning}{\param{const char *}{formatString}, \param{...}{}}
@@ -3211,6 +3461,7 @@ function also terminates the program with this exit code.
 
 For warnings - they are also normally shown to the user, but don't interrupt
 the program work.
+
 
 \membersection{::wxLogMessage}\label{wxlogmessage}
 
@@ -3224,6 +3475,7 @@ show informational messages if there are any errors later - the logic being
 that the later error messages make the informational messages preceding them
 meaningless.
 
+
 \membersection{::wxLogVerbose}\label{wxlogverbose}
 
 \func{void}{wxLogVerbose}{\param{const char *}{formatString}, \param{...}{}}
@@ -3233,6 +3485,7 @@ meaningless.
 For verbose output. Normally, it is suppressed, but
 might be activated if the user wishes to know more details about the program
 progress (another, but possibly confusing name for the same function is {\bf wxLogInfo}).
+
 
 \membersection{::wxLogStatus}\label{wxlogstatus}
 
@@ -3249,6 +3502,7 @@ frame} or of the top level application window by default (i.e. when using
 the second version of the functions).
 
 If the target frame doesn't have a statusbar, the message will be lost.
+
 
 \membersection{::wxLogSysError}\label{wxlogsyserror}
 
@@ -3267,6 +3521,7 @@ of this function takes the error code explicitly as the first argument.
 \helpref{wxSysErrorCode}{wxsyserrorcode},
 \helpref{wxSysErrorMsg}{wxsyserrormsg}
 
+
 \membersection{::wxLogDebug}\label{wxlogdebug}
 
 \func{void}{wxLogDebug}{\param{const char *}{formatString}, \param{...}{}}
@@ -3276,6 +3531,7 @@ of this function takes the error code explicitly as the first argument.
 The right functions for debug output. They only do something in debug
 mode (when the preprocessor symbol \_\_WXDEBUG\_\_ is defined) and expand to
 nothing in release mode (otherwise).
+
 
 \membersection{::wxLogTrace}\label{wxlogtrace}
 
@@ -3330,6 +3586,7 @@ trace masks.
 \item wxTraceOleCalls: trace OLE method calls (Win32 only)
 \end{itemize}
 
+
 \membersection{::wxSafeShowMessage}\label{wxsafeshowmessage}
 
 \func{void}{wxSafeShowMessage}{\param{const wxString\& }{title}, \param{const wxString\& }{text}}
@@ -3356,6 +3613,7 @@ of the message string}
 
 <wx/log.h>
 
+
 \membersection{::wxSysErrorCode}\label{wxsyserrorcode}
 
 \func{unsigned long}{wxSysErrorCode}{\void}
@@ -3367,6 +3625,7 @@ Returns the error code from the last system call. This function uses
 
 \helpref{wxSysErrorMsg}{wxsyserrormsg},
 \helpref{wxLogSysError}{wxlogsyserror}
+
 
 \membersection{::wxSysErrorMsg}\label{wxsyserrormsg}
 
@@ -3380,6 +3639,7 @@ Returns the error message corresponding to the given system error code. If
 
 \helpref{wxSysErrorCode}{wxsyserrorcode},
 \helpref{wxLogSysError}{wxlogsyserror}
+
 
 \membersection{WXTRACE}\label{trace}
 
@@ -3398,6 +3658,7 @@ is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugco
 
 <wx/memory.h>
 
+
 \membersection{WXTRACELEVEL}\label{tracelevel}
 
 \func{}{WXTRACELEVEL}{level, formatString, ...}
@@ -3414,6 +3675,7 @@ this value.
 
 <wx/memory.h>
 
+
 \membersection{::wxTrace}\label{wxtrace}
 
 \func{void}{wxTrace}{\param{const wxString\& }{fmt}, \param{...}{}}
@@ -3426,6 +3688,7 @@ is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugco
 \wxheading{Include files}
 
 <wx/memory.h>
+
 
 \membersection{::wxTraceLevel}\label{wxtracelevel}
 
@@ -3443,6 +3706,8 @@ this value.
 
 <wx/memory.h>
 
+
+
 \section{Time functions}\label{timefunctions}
 
 The functions in this section deal with getting the current time and
@@ -3452,6 +3717,7 @@ deprecated because they work with one global timer only and
 should be used instead. For retrieving the current time, you may also use
 \helpref{wxDateTime::Now}{wxdatetimenow} or
 \helpref{wxDateTime::UNow}{wxdatetimeunow} methods.
+
 
 \membersection{::wxGetElapsedTime}\label{wxgetelapsedtime}
 
@@ -3468,6 +3734,7 @@ See also \helpref{wxTimer}{wxtimer}.
 
 <wx/timer.h>
 
+
 \membersection{::wxGetLocalTime}\label{wxgetlocaltime}
 
 \func{long}{wxGetLocalTime}{\void}
@@ -3481,6 +3748,7 @@ Returns the number of seconds since local time 00:00:00 Jan 1st 1970.
 \wxheading{Include files}
 
 <wx/timer.h>
+
 
 \membersection{::wxGetLocalTimeMillis}\label{wxgetlocaltimemillis}
 
@@ -3497,6 +3765,7 @@ Returns the number of milliseconds since local time 00:00:00 Jan 1st 1970.
 
 <wx/timer.h>
 
+
 \membersection{::wxGetUTCTime}\label{wxgetutctime}
 
 \func{long}{wxGetUTCTime}{\void}
@@ -3511,6 +3780,7 @@ Returns the number of seconds since GMT 00:00:00 Jan 1st 1970.
 
 <wx/timer.h>
 
+
 \membersection{::wxNow}\label{wxnow}
 
 \func{wxString}{wxNow}{\void}
@@ -3521,6 +3791,7 @@ Returns a string representing the current date and time.
 
 <wx/utils.h>
 
+
 \membersection{::wxSleep}\label{wxsleep}
 
 \func{void}{wxSleep}{\param{int}{ secs}}
@@ -3530,6 +3801,7 @@ Sleeps for the specified number of seconds.
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxStartTimer}\label{wxstarttimer}
 
@@ -3543,6 +3815,7 @@ See also \helpref{wxTimer}{wxtimer}.
 
 <wx/timer.h>
 
+
 \membersection{::wxUsleep}\label{wxusleep}
 
 \func{void}{wxUsleep}{\param{unsigned long}{ milliseconds}}
@@ -3554,6 +3827,8 @@ standard usleep() function is not MT safe.
 \wxheading{Include files}
 
 <wx/utils.h>
+
+
 
 \section{Debugging macros and functions}\label{debugmacros}
 
@@ -3570,6 +3845,7 @@ compilation error messages if the condition they check fail.
 
 <wx/debug.h>
 
+
 \membersection{::wxOnAssert}\label{wxonassert}
 
 \func{void}{wxOnAssert}{\param{const char *}{fileName}, \param{int}{ lineNumber}, \param{const char *}{cond}, \param{const char *}{msg = NULL}}
@@ -3583,6 +3859,7 @@ a dialog asking whether he wants to abort the program, continue or continue
 ignoring any subsequent assert failures, you may override
 \helpref{wxApp::OnAssert}{wxapponassert} which is called by this function if
 the global application object exists.
+
 
 \membersection{wxASSERT}\label{wxassert}
 
@@ -3598,6 +3875,7 @@ because it will not be executed in release mode at all.
 
 \helpref{wxASSERT\_MSG}{wxassertmsg},\\
 \helpref{wxCOMPILE\_TIME\_ASSERT}{wxcompiletimeassert}
+
 
 \membersection{wxASSERT\_MIN\_BITSIZE}\label{wxassertminbitsize}
 
@@ -3617,6 +3895,7 @@ You may use it like this, for example:
     wxASSERT_MIN_BITSIZE(wchar_t, 16);
 \end{verbatim}
 
+
 \membersection{wxASSERT\_MSG}\label{wxassertmsg}
 
 \func{}{wxASSERT\_MSG}{\param{}{condition}, \param{}{msg}}
@@ -3627,6 +3906,7 @@ Assert macro with message. An error message will be generated if the condition i
 
 \helpref{wxASSERT}{wxassert},\\
 \helpref{wxCOMPILE\_TIME\_ASSERT}{wxcompiletimeassert}
+
 
 \membersection{wxCOMPILE\_TIME\_ASSERT}\label{wxcompiletimeassert}
 
@@ -3652,6 +3932,7 @@ either change the line in which either of them appears on or use the
 \helpref{wxASSERT\_MSG}{wxassertmsg},\\
 \helpref{wxASSERT\_MIN\_BITSIZE}{wxassertminbitsize}
 
+
 \membersection{wxCOMPILE\_TIME\_ASSERT2}\label{wxcompiletimeassert2}
 
 \func{}{wxCOMPILE\_TIME\_ASSERT}{\param{}{condition}, \param{}{msg}, \param{}{name}}
@@ -3661,6 +3942,7 @@ except that it allows you to specify a unique {\it name} for the struct
 internally defined by this macro to avoid getting the compilation errors
 described \helpref{above}{wxcompiletimeassert}.
 
+
 \membersection{wxFAIL}\label{wxfail}
 
 \func{}{wxFAIL}{\void}
@@ -3668,6 +3950,7 @@ described \helpref{above}{wxcompiletimeassert}.
 Will always generate an assert error if this code is reached (in debug mode).
 
 See also: \helpref{wxFAIL\_MSG}{wxfailmsg}
+
 
 \membersection{wxFAIL\_MSG}\label{wxfailmsg}
 
@@ -3683,12 +3966,14 @@ cases are processed above.
 
 \helpref{wxFAIL}{wxfail}
 
+
 \membersection{wxCHECK}\label{wxcheck}
 
 \func{}{wxCHECK}{\param{}{condition}, \param{}{retValue}}
 
 Checks that the condition is true, returns with the given return value if not (FAILs in debug mode).
 This check is done even in release mode.
+
 
 \membersection{wxCHECK\_MSG}\label{wxcheckmsg}
 
@@ -3700,6 +3985,7 @@ This check is done even in release mode.
 This macro may be only used in non void functions, see also
 \helpref{wxCHECK\_RET}{wxcheckret}.
 
+
 \membersection{wxCHECK\_RET}\label{wxcheckret}
 
 \func{}{wxCHECK\_RET}{\param{}{condition}, \param{}{msg}}
@@ -3709,6 +3995,7 @@ message in debug mode). This check is done even in release mode.
 
 This macro should be used in void functions instead of
 \helpref{wxCHECK\_MSG}{wxcheckmsg}.
+
 
 \membersection{wxCHECK2}\label{wxcheck2}
 
@@ -3721,6 +4008,7 @@ returning from the function must be done when the {\it condition} is false.
 
 This check is done even in release mode.
 
+
 \membersection{wxCHECK2\_MSG}\label{wxcheck2msg}
 
 \func{}{wxCHECK2}{\param{}{condition}, \param{}{operation}, \param{}{msg}}
@@ -3728,6 +4016,7 @@ This check is done even in release mode.
 This is the same as \helpref{wxCHECK2}{wxcheck2}, but
 \helpref{wxFAIL\_MSG}{wxfailmsg} with the specified {\it msg} is called
 instead of wxFAIL() if the {\it condition} is false.
+
 
 \membersection{::wxTrap}\label{wxtrap}
 
@@ -3744,6 +4033,7 @@ In release mode this function does nothing.
 <wx/debug.h>
 
 
+
 \membersection{::wxIsDebuggerRunning}\label{wxisdebuggerrunning}
 
 \func{bool}{wxIsDebuggerRunning}{\void}
@@ -3753,6 +4043,8 @@ otherwise.
 
 Please note that this function is currently only implemented for Mac builds
 using CodeWarrior and always returns {\tt false} elsewhere.
+
+
 
 
 \section{Environment access functions}\label{environfunctions}
@@ -3767,6 +4059,7 @@ Win32 and POSIX-like systems (Unix).
 
 <wx/utils.h>
 
+
 \membersection{wxGetenv}\label{wxgetenvmacro}
 
 \func{wxChar *}{wxGetEnv}{\param{const wxString\&}{ var}}
@@ -3778,6 +4071,7 @@ Note that under Win32 it may not return correct value for the variables set
 with \helpref{wxSetEnv}{wxsetenv}, use \helpref{wxGetEnv}{wxgetenv} function
 instead.
 
+
 \membersection{wxGetEnv}\label{wxgetenv}
 
 \func{bool}{wxGetEnv}{\param{const wxString\&}{ var}, \param{wxString *}{value}}
@@ -3788,6 +4082,7 @@ and are not interested in its value.
 
 Returns {\tt true} if the variable exists, {\tt false} otherwise.
 
+
 \membersection{wxSetEnv}\label{wxsetenv}
 
 \func{bool}{wxSetEnv}{\param{const wxString\&}{ var}, \param{const wxChar *}{value}}
@@ -3796,6 +4091,7 @@ Sets the value of the environment variable {\it var} (adding it if necessary)
 to {\it value}.
 
 Returns {\tt true} on success.
+
 
 \membersection{wxUnsetEnv}\label{wxunsetenv}
 
