@@ -438,17 +438,35 @@ wxString rc2xml::GetQuoteField()
     wxString phrase;
     //ASCII code 34 "
     int ch=0;
+    int ch1=0;
+
     ReadChar(ch);
+
+    // !! Changed by MS, 15th/11/04. Can now read strings such as
+    // """Catapult"" - blah blah", ...
 
     while (ch!=34)
         ReadChar(ch);
-    ReadChar(ch);
 
-    while (ch!=34)
+    // found first '"'
+    while (true)
     {
-    phrase+=(char)ch;
-    ReadChar(ch);
+        ReadChar(ch);
+        if (ch == 34)
+        {
+            // another quote?
+            ReadChar(ch1);
+            if (ch1 != 34)
+            {
+                // real end of string..
+                break;
+            }
+
+            // add a single quote - fall through
+        }
+        phrase+=(char)ch;
     }
+
     return phrase;
 }
 
@@ -777,6 +795,9 @@ name=LookUpId(name);
 void rc2xml::WriteLabel(wxString label)
 {
     label.Replace(_T("&"),_T("$"));
+    // changes by MS, handle '<' '>' characters within a label.
+    label.Replace("<","&lt;");
+    label.Replace(">","&gt;");
     m_xmlfile.Write(_T("\t\t\t<label>")+label+_T("</label>\n"));
 }
 
