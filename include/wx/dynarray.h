@@ -168,12 +168,12 @@ public:                                                               \
     { return (T&)(base::Item(Count() - 1)); }                         \
                                                                       \
   int Index(T Item, bool bFromEnd = FALSE) const                      \
-    { return base::Index(Item, bFromEnd); }                           \
+    { return base::Index((base_type)Item, bFromEnd); }                \
                                                                       \
   void Add(T Item, size_t nInsert = 1)                                \
-    { base::Add(Item, nInsert); }                                     \
+    { base::Add((base_type)Item, nInsert); }                          \
   void Insert(T Item, size_t uiIndex, size_t nInsert = 1)             \
-    { base::Insert(Item, uiIndex, nInsert) ; }                        \
+    { base::Insert((base_type)Item, uiIndex, nInsert) ; }             \
                                                                       \
   void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
     { base::RemoveAt(uiIndex, nRemove); }                             \
