@@ -1,3 +1,5 @@
+bcc_lib
+vc_lib
 Linux
 linux-gnu
 linux
@@ -17,7 +19,6 @@ mswu
 mswud
 mswdllu
 mswdllud
-vc_lib
 univ
 univd
 univdll
@@ -37,6 +38,9 @@ expat*.lib
 jpeg*.lib
 png*.lib
 regex*.lib
+shell32_sc.lib
+winmm32_sc.lib
+wsock32_sc.lib
 tiff*.lib
 zlib*.lib
 .DS_Store
