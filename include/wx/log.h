@@ -69,7 +69,13 @@ public:
 
   // sink function
   static void OnLog(wxLogLevel level, const char *szString)
-    { if ( ms_pLogger != 0 ) ms_pLogger->DoLog(level, szString); }
+  {
+    wxLog *pLogger = GetActiveTarget();
+    if ( pLogger )
+    {
+      pLogger->DoLog(level, szString);
+    }
+  }
 
   // message buffering
     // flush shows all messages if they're not logged immediately
