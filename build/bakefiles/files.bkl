@@ -101,10 +101,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_MAC_SRC" hints="files">
     src/mac/dirmac.cpp
     src/mac/mimetmac.cpp
-    src/mac/utils.cpp
-    src/mac/utilsexc.cpp
     src/unix/baseunix.cpp
 </set>
+
+<set var="BASE_AND_GUI_MAC_SRC" hints="files">
+    src/mac/utils.cpp
+    src/mac/utilsexc.cpp
+</set>
+
 <set var="BASE_MAC_HDR" hints="files">
 </set>
 
@@ -1540,8 +1544,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/tooltip.cpp
     src/mac/toplevel.cpp
     src/mac/uma.cpp
-    src/mac/utils.cpp
-    src/mac/utilsexc.cpp
     src/mac/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
@@ -2115,6 +2117,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_SRC)</if>
     </set>
+    <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(BASE_AND_GUI_MAC_SRC)</if>
+    </set>
     <set var="BASE_AND_GUI_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_AND_GUI_WIN32_SRC)</if>
@@ -2131,7 +2136,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(BASE_CMN_SRC) $(BASE_PLATFORM_SRC)
     </set>
     <set var="BASE_AND_GUI_SRC" hints="files">
-        $(BASE_AND_GUI_CMN_SRC) $(BASE_AND_GUI_PLATFORM_SRC)
+        $(BASE_AND_GUI_CMN_SRC)
+        $(BASE_AND_GUI_PLATFORM_SRC) $(BASE_AND_GUI_TOOLKIT_SRC)
     </set>
     
     
