@@ -108,7 +108,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     m_state = hasAbortButton ? Continue : Uncancelable;
     m_maximum = maximum;
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     // we can't have values > 65,536 in the progress control under Windows, so
     // scale everything down
     m_factor = m_maximum / 65536 + 1;
@@ -212,7 +212,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         c = new wxLayoutConstraints;
 
         // Windows dialogs usually have buttons in the lower right corner
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
         c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
 #else // !MSW
         c->centreX.SameAs(this, wxCentreX);
@@ -285,7 +285,7 @@ wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
 
     // VZ: I like the labels be centered - if the others don't mind, you may
     //     remove "#ifdef __WXMSW__" and use it for all ports
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     c->left.SameAs(this, wxCentreX, LAYOUT_X_MARGIN);
 #else // !MSW
     c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
