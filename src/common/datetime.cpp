@@ -2844,7 +2844,11 @@ void GetLocaleDateFormat(wxString *fmt)
         // done using wxLocale, in which case thread's current locale is also
         // set to correct LCID value and we can use GetLocaleInfo to determine
         // the correct formatting string:
+#ifdef __WXWINCE__
+        LCID lcid = LOCALE_USER_DEFAULT;
+#else
         LCID lcid = GetThreadLocale();
+#endif
         wxChar delim[5]; // fields deliminer, 4 chars max
         if ( GetLocaleInfo(lcid, LOCALE_SDATE, delim, 5) )
         {
