@@ -253,6 +253,13 @@
  * Use this control
  */
 #define wxUSE_TOOLBAR 0
+
+#ifdef __WXWINE__
+  #if wxUSE_TOOLBAR
+    #define wxUSE_BUTTONBAR
+  #endif
+#endif
+
 /*
  * Use this control
  */

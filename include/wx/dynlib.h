@@ -82,7 +82,7 @@ class wxDllLoader
    static void * GetSymbol(wxDllType dllHandle, const wxString &name);
  private:
    /// forbid construction of objects
-   wxDllLoader() 
+   wxDllLoader();
 };
 
 // ----------------------------------------------------------------------------
