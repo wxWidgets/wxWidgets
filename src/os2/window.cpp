@@ -1981,22 +1981,22 @@ bool wxWindowOS2::DoPopupMenu(
                    ,nX
                    ,nY
                    ,0L
-                   ,PU_HCONSTRAIN | PU_VCONSTRAIN | PU_MOUSEBUTTON2DOWN | PU_MOUSEBUTTON2
+                   ,PU_HCONSTRAIN | PU_VCONSTRAIN | PU_MOUSEBUTTON1 | PU_KEYBOARD
                   );
+
     while(bIsWaiting)
     {
-        QMSG                        vMsg;
+        QMSG                            vMsg;
+        BOOL                            bRc = ::WinGetMsg(vHabmain, &vMsg, HWND(NULL), 0, 0);
 
-        while (::WinPeekMsg(vHabmain, &vMsg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE)
-               && vMsg.msg != WM_QUIT)
+        if (vMsg.msg == WM_MENUEND || vMsg.msg == WM_COMMAND)
         {
-            wxTheApp->DoMessage((WXMSG*)&vMsg);
+            bIsWaiting = FALSE;
         }
-        if (vMsg.msg == WM_DESTROY || vMsg.msg == WM_QUIT)
-            break;
+        ::WinDispatchMsg(vHabmain, (PQMSG)&vMsg);
+
     }
     wxCurrentPopupMenu = NULL;
-
     pMenu->SetInvokingWindow(NULL);
     return TRUE;
 } // end of wxWindowOS2::DoPopupMenu
@@ -2498,8 +2498,8 @@ MRESULT wxWindowOS2::OS2WindowProc(
         case WM_BUTTON3MOTIONEND:
         case WM_BUTTON3MOTIONSTART:
             {
-                short x = LOWORD(lParam);
-                short y = HIWORD(lParam);
+                short x = LOWORD(wParam);
+                short y = HIWORD(wParam);
 
                 bProcessed = HandleMouseEvent(uMsg, x, y, (WXUINT)wParam);
             }

@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1772,7 +1772,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2242,8 +2242,6 @@ EXPORTS
       __ne__10wxFontBaseCFRC6wxFont
       ;wxFontBase::GetFamilyString() const
       GetFamilyString__10wxFontBaseCFv
-      ;wxFontBase::SetDefaultEncoding(wxFontEncoding)
-      SetDefaultEncoding__10wxFontBaseF14wxFontEncoding
       ;wxFontBase::IsFixedWidth() const
       IsFixedWidth__10wxFontBaseCFv
       ;wxFontBase::New(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
@@ -3140,8 +3138,6 @@ EXPORTS
       __vft12wxPNGHandler8wxObject
       ;wxConstructorForwxPNGHandler()
       wxConstructorForwxPNGHandler__Fv
-      wx_png_error
-      wx_png_warning
       _PNG_stream_reader
       ;wxPNGHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
       SaveFile__12wxPNGHandlerFP7wxImageR14wxOutputStreamUl
@@ -3152,6 +3148,8 @@ EXPORTS
       _PNG_stream_writer
       ;wxPNGHandler::sm_classwxPNGHandler
       sm_classwxPNGHandler__12wxPNGHandler
+      png_silent_error
+      png_silent_warning
   ;From object file:  ..\common\imagpnm.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPNMHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
@@ -5773,7 +5771,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -6574,8 +6572,6 @@ EXPORTS
       SetForegroundColour__12wxWindowBaseFRC8wxColour
       ;wxWindowBase::SetBackgroundColour(const wxColour&)
       SetBackgroundColour__12wxWindowBaseFRC8wxColour
-      ;wxWindowBase::RemoveEventHandler(wxEvtHandler*)
-      RemoveEventHandler__12wxWindowBaseFP12wxEvtHandler
       ;wxWindowBase::Destroy()
       Destroy__12wxWindowBaseFv
       ;wxWindowBase::SetConstraints(wxLayoutConstraints*)
