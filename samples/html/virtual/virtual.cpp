@@ -54,7 +54,7 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
 {
     wxFSFile *f;
     wxInputStream *str;
-    char *buf = (char*)malloc(1024);
+    static char buf[1024];
 
     sprintf(buf, "<html><body><h2><i>You're in Node <u>%s</u></i></h2><p>"
                  "Where do you want to go?<br><blockquote>"
@@ -64,10 +64,14 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
                  "</blockquote></body></html>",
                  location.GetData(), location.GetData(), location.GetData(), location.GetData());
 
-    // WARNING: wxMemoryInputStream will not free buf.
-    // There is a memory leak here.
+    // NB: There's a terrible hack involved: we fill 'buf' with new data every
+    //     time this method is called and return new wxMemoryInputStream pointing to it.
+    //     This won't work as soon as there are 2+ myVFS files opened. Fortunately,
+    //     this won't happen because wxHTML keeps only one "page" file opened at the
+    //     time.
     str = new wxMemoryInputStream(buf, strlen(buf));
     f = new wxFSFile(str, location, "text/html", wxEmptyString, wxDateTime::Today());
+    
     return f;
 }
 
