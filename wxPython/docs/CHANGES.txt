@@ -1,6 +1,33 @@
 Recent Changes for wxPython
 =====================================================================
 
+
+2.5.3.2
+-------
+
+OGL patch from Shane Holloway:
+
+    Two simple problems found in the new python ogl code.  First is
+    the patch for _canvas.py.  Essentially:
+
+        dx = abs(dc.LogicalToDeviceX(x - self._firstDragX))
+        dy = abs(dc.LogicalToDeviceY(y - self._firstDragY))
+
+    was incorrect because (x,y) and (self._firstDragX,
+    self._firstDragY) are both already in Logical coordinates.
+    Therefore the difference between the two is also in logical
+    coordinates, and the conversion call is an error.  This bug
+    surfaces when you have OGL on a scrollwin, and you are far from
+    the origin of the canvas.
+
+    The second change in _composit.py basically removes the assumption
+    that the child is in both self._children and self._divisions.
+    Causes many problems when it's not.  ;)
+
+
+
+
+
 2.5.3.1
 -------
 

@@ -552,8 +552,10 @@ class CompositeShape(RectangleShape):
         """Removes the child from the composite and any constraint
         relationships, but does not delete the child.
         """
-        self._children.remove(child)
-        self._divisions.remove(child)
+        if child in self._children:
+            self._children.remove(child)
+        if child in self._divisions:
+            self._divisions.remove(child)
         self.RemoveChildFromConstraints(child)
         child.SetParent(None)
 

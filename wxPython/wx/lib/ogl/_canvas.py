@@ -93,10 +93,13 @@ class ShapeCanvas(wx.ScrolledWindow):
         # If we're very close to the position we started dragging
         # from, this may not be an intentional drag at all.
         if dragging:
-            dx = abs(dc.LogicalToDeviceX(x - self._firstDragX))
-            dy = abs(dc.LogicalToDeviceY(y - self._firstDragY))
-            if self._checkTolerance and (dx <= self.GetDiagram().GetMouseTolerance()) and (dy <= self.GetDiagram().GetMouseTolerance()):
-                return
+            if self._checkTolerance:
+                # the difference between two logical coordinates is a logical coordinate
+                dx = abs(x - self._firstDragX) 
+                dy = abs(y - self._firstDragY)
+                toler = self.GetDiagram().GetMouseTolerance()
+                if (dx <= toler) and (dy <= toler):
+                    return
             # If we've ignored the tolerance once, then ALWAYS ignore
             # tolerance in this drag, even if we come back within
             # the tolerance range.
