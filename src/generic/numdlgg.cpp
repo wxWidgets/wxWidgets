@@ -129,7 +129,9 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     wxString valStr;
     valStr.Printf(wxT("%lu"), m_value);
     m_spinctrl = new wxSpinCtrl(this, -1, valStr, wxDefaultPosition, wxSize( 140, -1 ) );
+#ifndef __WIN16__
     m_spinctrl->SetRange((int)m_min, (int)m_max);
+#endif
     inputsizer->Add( m_spinctrl, 1, wxCENTER | wxLEFT | wxRIGHT, 10 );
     // add both
     topsizer->Add( inputsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );

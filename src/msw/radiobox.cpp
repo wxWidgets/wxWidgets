@@ -713,6 +713,7 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     switch ( nMsg )
     {
+#ifndef __WIN16__
         case WM_CTLCOLORSTATIC:
             // set the colour of the radio buttons to be the same as ours
             {
@@ -726,6 +727,7 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
                 return (WXHBRUSH)brush->GetResourceHandle();
             }
+#endif
 
         // This is required for the radiobox to be sensitive to mouse input,
         // e.g. for Dialog Editor.

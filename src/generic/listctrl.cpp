@@ -314,8 +314,13 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
                 m_bound_all.height = lh;
                 if (item->HasImage())
                 {
+#ifdef __WIN16__
+                    int w = 0;
+                    int h = 0;
+#else
                     wxCoord w = 0;
                     wxCoord h = 0;
+#endif
                     m_owner->GetImageSize( item->GetImage(), w, h );
                     m_bound_all.width += 4 + w;
                     if (h > m_bound_all.height) m_bound_all.height = h;

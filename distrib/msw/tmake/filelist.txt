@@ -153,7 +153,7 @@ layout.cpp	C
 lboxcmn.cpp	C
 list.cpp	C	B
 log.cpp	C	B
-longlong.cpp	C	32,B
+longlong.cpp	C	B
 memory.cpp	C
 menucmn.cpp	C
 mimetype.cpp	C	32,B
