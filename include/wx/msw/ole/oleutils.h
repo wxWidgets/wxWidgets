@@ -134,7 +134,7 @@ private:
   {                                                                           \
     wxLogRelease(_T(#classname), m_cRef);                                     \
                                                                               \
-    if ( --m_cRef == 0 ) {                                                    \
+    if ( --m_cRef == wxAutoULong(0) ) {                                                    \
       delete this;                                                            \
       return 0;                                                               \
     }                                                                         \
