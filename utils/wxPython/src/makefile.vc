@@ -10,7 +10,7 @@
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
-VERSION=2.1b2
+VERSION=2.1b3
 
 # Set WXDIR to the root wxWindows directory for your system
 WXDIR = $(WXWIN)
@@ -81,7 +81,7 @@ GENCODEDIR=msw
 
 TARGET = wxc
 
-OBJECTS = helpers.obj    libptr.obj     libpy.obj      \
+OBJECTS = helpers.obj    libpy.obj      \
           wx.obj         windows.obj    events.obj     \
 	  misc.obj       gdi.obj        mdi.obj        controls.obj   \
 	  controls2.obj  windows2.obj   cmndlgs.obj    stattool.obj   \

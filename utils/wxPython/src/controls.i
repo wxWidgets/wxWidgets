@@ -182,7 +182,7 @@ public:
     // TODO:    void SetClientData(const int n, char* data);
     void SetInsertionPoint(long pos);
     void SetInsertionPointEnd();
-    //void SetSelection(int n, int select = TRUE);  **** Just use the one in wxChoice
+    void SetSelection(int n);
     %name(SetMark)void SetSelection(long from, long to);
     void SetValue(const wxString& text);
 };
@@ -524,7 +524,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.17  1999/08/18 07:41:28  RD
+// Using a new version of SWIG
+//
+// A few minor fixes
+//
 // Revision 1.16  1999/07/31 07:54:35  RD
+//
 // wxPython 2.1b1:
 //
 // 	Added the missing wxWindow.GetUpdateRegion() method.

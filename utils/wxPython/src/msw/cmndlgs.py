@@ -19,35 +19,34 @@ class wxColourDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, cmndlgsc=cmndlgsc):
+    def __del__(self,cmndlgsc=cmndlgsc):
         if self.thisown == 1 :
-            cmndlgsc.delete_wxColourData(self.this)
-    def GetChooseFull(self):
-        val = cmndlgsc.wxColourData_GetChooseFull(self.this)
+            cmndlgsc.delete_wxColourData(self)
+    def GetChooseFull(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxColourData_GetChooseFull,(self,) + _args, _kwargs)
         return val
-    def GetColour(self):
-        val = cmndlgsc.wxColourData_GetColour(self.this)
-        val = wxColourPtr(val)
+    def GetColour(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxColourData_GetColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def GetCustomColour(self,arg0):
-        val = cmndlgsc.wxColourData_GetCustomColour(self.this,arg0)
-        val = wxColourPtr(val)
-        val.thisown = 1
+    def GetCustomColour(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxColourData_GetCustomColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
-    def SetChooseFull(self,arg0):
-        val = cmndlgsc.wxColourData_SetChooseFull(self.this,arg0)
+    def SetChooseFull(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxColourData_SetChooseFull,(self,) + _args, _kwargs)
         return val
-    def SetColour(self,arg0):
-        val = cmndlgsc.wxColourData_SetColour(self.this,arg0.this)
+    def SetColour(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxColourData_SetColour,(self,) + _args, _kwargs)
         return val
-    def SetCustomColour(self,arg0,arg1):
-        val = cmndlgsc.wxColourData_SetCustomColour(self.this,arg0,arg1.this)
+    def SetCustomColour(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxColourData_SetCustomColour,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxColourData instance>"
+        return "<C wxColourData instance at %s>" % (self.this,)
 class wxColourData(wxColourDataPtr):
-    def __init__(self) :
-        self.this = cmndlgsc.new_wxColourData()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxColourData,_args,_kwargs)
         self.thisown = 1
 
 
@@ -57,22 +56,18 @@ class wxColourDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetColourData(self):
-        val = cmndlgsc.wxColourDialog_GetColourData(self.this)
-        val = wxColourDataPtr(val)
+    def GetColourData(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxColourDialog_GetColourData,(self,) + _args, _kwargs)
+        if val: val = wxColourDataPtr(val) 
         return val
-    def ShowModal(self):
-        val = cmndlgsc.wxColourDialog_ShowModal(self.this)
+    def ShowModal(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxColourDialog_ShowModal,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxColourDialog instance>"
+        return "<C wxColourDialog instance at %s>" % (self.this,)
 class wxColourDialog(wxColourDialogPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(cmndlgsc.new_wxColourDialog,(arg0.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxColourDialog,_args,_kwargs)
         self.thisown = 1
         wx._StdDialogCallbacks(self)
 
@@ -83,33 +78,29 @@ class wxDirDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetPath(self):
-        val = cmndlgsc.wxDirDialog_GetPath(self.this)
+    def GetPath(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxDirDialog_GetPath,(self,) + _args, _kwargs)
         return val
-    def GetMessage(self):
-        val = cmndlgsc.wxDirDialog_GetMessage(self.this)
+    def GetMessage(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxDirDialog_GetMessage,(self,) + _args, _kwargs)
         return val
-    def GetStyle(self):
-        val = cmndlgsc.wxDirDialog_GetStyle(self.this)
+    def GetStyle(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxDirDialog_GetStyle,(self,) + _args, _kwargs)
         return val
-    def SetMessage(self,arg0):
-        val = cmndlgsc.wxDirDialog_SetMessage(self.this,arg0)
+    def SetMessage(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxDirDialog_SetMessage,(self,) + _args, _kwargs)
         return val
-    def SetPath(self,arg0):
-        val = cmndlgsc.wxDirDialog_SetPath(self.this,arg0)
+    def SetPath(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxDirDialog_SetPath,(self,) + _args, _kwargs)
         return val
-    def ShowModal(self):
-        val = cmndlgsc.wxDirDialog_ShowModal(self.this)
+    def ShowModal(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxDirDialog_ShowModal,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxDirDialog instance>"
+        return "<C wxDirDialog instance at %s>" % (self.this,)
 class wxDirDialog(wxDirDialogPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[3] = argl[3].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(cmndlgsc.new_wxDirDialog,(arg0.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxDirDialog,_args,_kwargs)
         self.thisown = 1
         wx._StdDialogCallbacks(self)
 
@@ -120,60 +111,56 @@ class wxFileDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetDirectory(self):
-        val = cmndlgsc.wxFileDialog_GetDirectory(self.this)
+    def GetDirectory(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetDirectory,(self,) + _args, _kwargs)
         return val
-    def GetFilename(self):
-        val = cmndlgsc.wxFileDialog_GetFilename(self.this)
+    def GetFilename(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetFilename,(self,) + _args, _kwargs)
         return val
-    def GetFilterIndex(self):
-        val = cmndlgsc.wxFileDialog_GetFilterIndex(self.this)
+    def GetFilterIndex(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetFilterIndex,(self,) + _args, _kwargs)
         return val
-    def GetMessage(self):
-        val = cmndlgsc.wxFileDialog_GetMessage(self.this)
+    def GetMessage(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetMessage,(self,) + _args, _kwargs)
         return val
-    def GetPath(self):
-        val = cmndlgsc.wxFileDialog_GetPath(self.this)
+    def GetPath(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetPath,(self,) + _args, _kwargs)
         return val
-    def GetStyle(self):
-        val = cmndlgsc.wxFileDialog_GetStyle(self.this)
+    def GetStyle(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetStyle,(self,) + _args, _kwargs)
         return val
-    def GetWildcard(self):
-        val = cmndlgsc.wxFileDialog_GetWildcard(self.this)
+    def GetWildcard(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetWildcard,(self,) + _args, _kwargs)
         return val
-    def SetDirectory(self,arg0):
-        val = cmndlgsc.wxFileDialog_SetDirectory(self.this,arg0)
+    def SetDirectory(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_SetDirectory,(self,) + _args, _kwargs)
         return val
-    def SetFilename(self,arg0):
-        val = cmndlgsc.wxFileDialog_SetFilename(self.this,arg0)
+    def SetFilename(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_SetFilename,(self,) + _args, _kwargs)
         return val
-    def SetFilterIndex(self,arg0):
-        val = cmndlgsc.wxFileDialog_SetFilterIndex(self.this,arg0)
+    def SetFilterIndex(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_SetFilterIndex,(self,) + _args, _kwargs)
         return val
-    def SetMessage(self,arg0):
-        val = cmndlgsc.wxFileDialog_SetMessage(self.this,arg0)
+    def SetMessage(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_SetMessage,(self,) + _args, _kwargs)
         return val
-    def SetPath(self,arg0):
-        val = cmndlgsc.wxFileDialog_SetPath(self.this,arg0)
+    def SetPath(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_SetPath,(self,) + _args, _kwargs)
         return val
-    def SetStyle(self,arg0):
-        val = cmndlgsc.wxFileDialog_SetStyle(self.this,arg0)
+    def SetStyle(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_SetStyle,(self,) + _args, _kwargs)
         return val
-    def SetWildcard(self,arg0):
-        val = cmndlgsc.wxFileDialog_SetWildcard(self.this,arg0)
+    def SetWildcard(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_SetWildcard,(self,) + _args, _kwargs)
         return val
-    def ShowModal(self):
-        val = cmndlgsc.wxFileDialog_ShowModal(self.this)
+    def ShowModal(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_ShowModal,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxFileDialog instance>"
+        return "<C wxFileDialog instance at %s>" % (self.this,)
 class wxFileDialog(wxFileDialogPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[5] = argl[5].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(cmndlgsc.new_wxFileDialog,(arg0.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxFileDialog,_args,_kwargs)
         self.thisown = 1
         wx._StdDialogCallbacks(self)
 
@@ -184,27 +171,23 @@ class wxSingleChoiceDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetSelection(self):
-        val = cmndlgsc.wxSingleChoiceDialog_GetSelection(self.this)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxSingleChoiceDialog_GetSelection,(self,) + _args, _kwargs)
         return val
-    def GetStringSelection(self):
-        val = cmndlgsc.wxSingleChoiceDialog_GetStringSelection(self.this)
+    def GetStringSelection(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxSingleChoiceDialog_GetStringSelection,(self,) + _args, _kwargs)
         return val
-    def SetSelection(self,arg0):
-        val = cmndlgsc.wxSingleChoiceDialog_SetSelection(self.this,arg0)
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxSingleChoiceDialog_SetSelection,(self,) + _args, _kwargs)
         return val
-    def ShowModal(self):
-        val = cmndlgsc.wxSingleChoiceDialog_ShowModal(self.this)
+    def ShowModal(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxSingleChoiceDialog_ShowModal,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxSingleChoiceDialog instance>"
+        return "<C wxSingleChoiceDialog instance at %s>" % (self.this,)
 class wxSingleChoiceDialog(wxSingleChoiceDialogPtr):
-    def __init__(self,arg0,arg1,arg2,arg3,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(cmndlgsc.new_wxSingleChoiceDialog,(arg0.this,arg1,arg2,arg3,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxSingleChoiceDialog,_args,_kwargs)
         self.thisown = 1
         wx._StdDialogCallbacks(self)
 
@@ -215,24 +198,20 @@ class wxTextEntryDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetValue(self):
-        val = cmndlgsc.wxTextEntryDialog_GetValue(self.this)
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxTextEntryDialog_GetValue,(self,) + _args, _kwargs)
         return val
-    def SetValue(self,arg0):
-        val = cmndlgsc.wxTextEntryDialog_SetValue(self.this,arg0)
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxTextEntryDialog_SetValue,(self,) + _args, _kwargs)
         return val
-    def ShowModal(self):
-        val = cmndlgsc.wxTextEntryDialog_ShowModal(self.this)
+    def ShowModal(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxTextEntryDialog_ShowModal,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxTextEntryDialog instance>"
+        return "<C wxTextEntryDialog instance at %s>" % (self.this,)
 class wxTextEntryDialog(wxTextEntryDialogPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[3] = argl[3].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(cmndlgsc.new_wxTextEntryDialog,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxTextEntryDialog,_args,_kwargs)
         self.thisown = 1
         wx._StdDialogCallbacks(self)
 
@@ -243,58 +222,56 @@ class wxFontDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, cmndlgsc=cmndlgsc):
+    def __del__(self,cmndlgsc=cmndlgsc):
         if self.thisown == 1 :
-            cmndlgsc.delete_wxFontData(self.this)
-    def EnableEffects(self,arg0):
-        val = cmndlgsc.wxFontData_EnableEffects(self.this,arg0)
+            cmndlgsc.delete_wxFontData(self)
+    def EnableEffects(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_EnableEffects,(self,) + _args, _kwargs)
         return val
-    def GetAllowSymbols(self):
-        val = cmndlgsc.wxFontData_GetAllowSymbols(self.this)
+    def GetAllowSymbols(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_GetAllowSymbols,(self,) + _args, _kwargs)
         return val
-    def GetColour(self):
-        val = cmndlgsc.wxFontData_GetColour(self.this)
-        val = wxColourPtr(val)
+    def GetColour(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_GetColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def GetChosenFont(self):
-        val = cmndlgsc.wxFontData_GetChosenFont(self.this)
-        val = wxFontPtr(val)
-        val.thisown = 1
+    def GetChosenFont(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_GetChosenFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
-    def GetEnableEffects(self):
-        val = cmndlgsc.wxFontData_GetEnableEffects(self.this)
+    def GetEnableEffects(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_GetEnableEffects,(self,) + _args, _kwargs)
         return val
-    def GetInitialFont(self):
-        val = cmndlgsc.wxFontData_GetInitialFont(self.this)
-        val = wxFontPtr(val)
-        val.thisown = 1
+    def GetInitialFont(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_GetInitialFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
-    def GetShowHelp(self):
-        val = cmndlgsc.wxFontData_GetShowHelp(self.this)
+    def GetShowHelp(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_GetShowHelp,(self,) + _args, _kwargs)
         return val
-    def SetAllowSymbols(self,arg0):
-        val = cmndlgsc.wxFontData_SetAllowSymbols(self.this,arg0)
+    def SetAllowSymbols(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_SetAllowSymbols,(self,) + _args, _kwargs)
         return val
-    def SetChosenFont(self,arg0):
-        val = cmndlgsc.wxFontData_SetChosenFont(self.this,arg0.this)
+    def SetChosenFont(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_SetChosenFont,(self,) + _args, _kwargs)
         return val
-    def SetColour(self,arg0):
-        val = cmndlgsc.wxFontData_SetColour(self.this,arg0.this)
+    def SetColour(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_SetColour,(self,) + _args, _kwargs)
         return val
-    def SetInitialFont(self,arg0):
-        val = cmndlgsc.wxFontData_SetInitialFont(self.this,arg0.this)
+    def SetInitialFont(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_SetInitialFont,(self,) + _args, _kwargs)
         return val
-    def SetRange(self,arg0,arg1):
-        val = cmndlgsc.wxFontData_SetRange(self.this,arg0,arg1)
+    def SetRange(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_SetRange,(self,) + _args, _kwargs)
         return val
-    def SetShowHelp(self,arg0):
-        val = cmndlgsc.wxFontData_SetShowHelp(self.this,arg0)
+    def SetShowHelp(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontData_SetShowHelp,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxFontData instance>"
+        return "<C wxFontData instance at %s>" % (self.this,)
 class wxFontData(wxFontDataPtr):
-    def __init__(self) :
-        self.this = cmndlgsc.new_wxFontData()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxFontData,_args,_kwargs)
         self.thisown = 1
 
 
@@ -304,22 +281,18 @@ class wxFontDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetFontData(self):
-        val = cmndlgsc.wxFontDialog_GetFontData(self.this)
-        val = wxFontDataPtr(val)
+    def GetFontData(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontDialog_GetFontData,(self,) + _args, _kwargs)
+        if val: val = wxFontDataPtr(val) 
         return val
-    def ShowModal(self):
-        val = cmndlgsc.wxFontDialog_ShowModal(self.this)
+    def ShowModal(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFontDialog_ShowModal,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxFontDialog instance>"
+        return "<C wxFontDialog instance at %s>" % (self.this,)
 class wxFontDialog(wxFontDialogPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(cmndlgsc.new_wxFontDialog,(arg0.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxFontDialog,_args,_kwargs)
         self.thisown = 1
         wx._StdDialogCallbacks(self)
 
@@ -330,18 +303,14 @@ class wxMessageDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def ShowModal(self):
-        val = cmndlgsc.wxMessageDialog_ShowModal(self.this)
+    def ShowModal(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxMessageDialog_ShowModal,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxMessageDialog instance>"
+        return "<C wxMessageDialog instance at %s>" % (self.this,)
 class wxMessageDialog(wxMessageDialogPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[2] = argl[2].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(cmndlgsc.new_wxMessageDialog,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxMessageDialog,_args,_kwargs)
         self.thisown = 1
         wx._StdDialogCallbacks(self)
 
@@ -352,21 +321,17 @@ class wxProgressDialogPtr(wxFramePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Update(self,*args):
-        val = apply(cmndlgsc.wxProgressDialog_Update,(self.this,)+args)
+    def Update(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxProgressDialog_Update,(self,) + _args, _kwargs)
         return val
-    def Resume(self):
-        val = cmndlgsc.wxProgressDialog_Resume(self.this)
+    def Resume(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxProgressDialog_Resume,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxProgressDialog instance>"
+        return "<C wxProgressDialog instance at %s>" % (self.this,)
 class wxProgressDialog(wxProgressDialogPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(cmndlgsc.new_wxProgressDialog,(arg0,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxProgressDialog,_args,_kwargs)
         self.thisown = 1
 
 

@@ -49,7 +49,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "2.1b2"
+#define __version__ "2.1b3"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -129,25 +129,25 @@ public:
 //----------------------------------------------------------------------
 
 %{
-extern "C" SWIGEXPORT(void,initwindowsc)();
-extern "C" SWIGEXPORT(void,initwindows2c)();
-extern "C" SWIGEXPORT(void,initeventsc)();
-extern "C" SWIGEXPORT(void,initmiscc)();
-extern "C" SWIGEXPORT(void,initmisc2c)();
-extern "C" SWIGEXPORT(void,initgdic)();
-extern "C" SWIGEXPORT(void,initmdic)();
-extern "C" SWIGEXPORT(void,initcontrolsc)();
-extern "C" SWIGEXPORT(void,initcontrols2c)();
-extern "C" SWIGEXPORT(void,initcmndlgsc)();
-extern "C" SWIGEXPORT(void,initstattoolc)();
-extern "C" SWIGEXPORT(void,initframesc)();
-extern "C" SWIGEXPORT(void,initwindows3c)();
-extern "C" SWIGEXPORT(void,initimagec)();
-extern "C" SWIGEXPORT(void,initprintfwc)();
+extern "C" SWIGEXPORT(void) initwindowsc();
+extern "C" SWIGEXPORT(void) initwindows2c();
+extern "C" SWIGEXPORT(void) initeventsc();
+extern "C" SWIGEXPORT(void) initmiscc();
+extern "C" SWIGEXPORT(void) initmisc2c();
+extern "C" SWIGEXPORT(void) initgdic();
+extern "C" SWIGEXPORT(void) initmdic();
+extern "C" SWIGEXPORT(void) initcontrolsc();
+extern "C" SWIGEXPORT(void) initcontrols2c();
+extern "C" SWIGEXPORT(void) initcmndlgsc();
+extern "C" SWIGEXPORT(void) initstattoolc();
+extern "C" SWIGEXPORT(void) initframesc();
+extern "C" SWIGEXPORT(void) initwindows3c();
+extern "C" SWIGEXPORT(void) initimagec();
+extern "C" SWIGEXPORT(void) initprintfwc();
 #ifndef SEPARATE
-extern "C" SWIGEXPORT(void,initutilsc)();
-//extern "C" SWIGEXPORT(void,initoglc)();
-extern "C" SWIGEXPORT(void,initglcanvasc)();
+extern "C" SWIGEXPORT(void) initutilsc();
+//extern "C" SWIGEXPORT(void) initoglc();
+extern "C" SWIGEXPORT(void) initglcanvasc();
 #endif
 %}
 

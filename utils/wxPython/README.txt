@@ -45,6 +45,16 @@ Or you can send mail directly to the list using this address:
 
 ----------------------------------------------------------------------
 
+What's new in 2.1b3
+--------------------
+
+Switched to using SWIG from CVS (see http://swig.cs.uchicago.edu/cvs.html)
+for some of the new features and such.  Also they have encorporated my
+patches so there is really no reason to stick with the current (very
+old) release...
+
+
+
 What's new in 2.1b2
 --------------------
 
