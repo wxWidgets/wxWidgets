@@ -1192,15 +1192,22 @@ fi
 
 dnl we suppose that expr exists...
 NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0}`
+
+dnl Allow wxUSE_PM only for OS/2 with EMX.
+dnl Path separator; ':' for unix.
+dnl Stem for flex output; lexyy for OS/2, lex.yy otherwise
+dnl Extension for programs; '.exe' for OS/2 and msw builds (set later).
 case "${host}" in
   *-pc-os2_emx )
     NUM_TOOLKITS=`expr ${NUM_TOOLKITS} + ${wxUSE_PM:-0}`
     # PATH_IFS is autodetected by OS/2's configure (usually ';')
     LEX_STEM="lexyy"
+    PROGRAM_EXT=".exe"
   ;;
   *)
     PATH_IFS=':'
     LEX_STEM="lex.yy"
+    PROGRAM_EXT=
   ;;
 esac
 
@@ -1409,6 +1416,7 @@ SEARCH_INCLUDE="\
     /usr/x386/include         \
     /usr/XFree86/include/X11  \
                               \
+    X:/XFree86/include        \
     X:/XFree86/include/X11    \
                               \
     /usr/include/gtk          \
@@ -1465,9 +1473,6 @@ WXGTK12=
 WXGTK13=
 
 WXWINE=
-
-dnl Extension for programs; '.exe' for msw builds
-PROGRAM_EXT=
 
 if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     if test "$cross_compiling" = "yes" ; then
