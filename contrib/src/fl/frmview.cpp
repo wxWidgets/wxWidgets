@@ -311,7 +311,7 @@ void wxFrameManager::AddView( wxFrameView* pFrmView )
 void wxFrameManager::RemoveView( wxFrameView* pFrmView )
 {
     // TBD::
-    wxFAIL_MSG("wxFrameManager::RemoveView() has not been implemented yet.");
+    wxFAIL_MSG( _T("wxFrameManager::RemoveView() has not been implemented yet.") );
 }
 
 int wxFrameManager::GetActiveViewNo()

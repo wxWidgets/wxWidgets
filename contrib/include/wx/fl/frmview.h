@@ -114,7 +114,8 @@ public:
 
     // if file name is empty, views are are not saved/loaded
 
-    virtual void Init( wxWindow* pMainFrame, const wxString& settingsFile = "" );
+    virtual void Init( wxWindow* pMainFrame,
+                       const wxString& settingsFile = wxEmptyString );
 
     // synonyms
     wxFrame* GetParentFrame();
