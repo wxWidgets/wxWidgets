@@ -201,6 +201,11 @@ wxSize wxCheckBox::DoGetBestSize() const
     return wxSize(wCheckbox, hCheckbox);
 }
 
+WXHBRUSH wxCheckBox::MSWGetDefaultBgBrush()
+{
+    return ::GetStockObject(NULL_BRUSH);
+}
+
 void wxCheckBox::SetValue(bool val)
 {
     if (val)
