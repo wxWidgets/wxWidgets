@@ -744,25 +744,42 @@ void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 
     SelectMGLFont();
 
-    m_MGLDC->setColor(m_MGLDC->packColorFast(m_textForegroundColour.Red(),
-            m_textForegroundColour.Green(), m_textForegroundColour.Blue()));
-    m_MGLDC->setBackColor(m_MGLDC->packColorFast(m_textBackgroundColour.Red(),
-            m_textBackgroundColour.Green(), m_textBackgroundColour.Blue()));
-
     // Render the text:
     wxCoord xx = XLOG2DEV(x);
     wxCoord yy = YLOG2DEV(y);
-
+    
     m_MGLDC->setLineStyle(MGL_LINE_STIPPLE);
     m_MGLDC->setLineStipple(0xFFFF);
     m_MGLDC->setPenSize(1, 1);
     m_MGLDC->setPenStyle(MGL_BITMAP_SOLID);
-    
+
 #if wxUSE_UNICODE
     const wchar_t *c_text = text.c_str();
 #else
     const char *c_text = text.c_str();
 #endif
+
+#if 1 
+    // FIXME_MGL - this is a temporary hack in absence of proper 
+    //             implementation of solid text background in MGL. Once 
+    //             the bug in MGL is fixed, this code should be nuked
+    //             immediately. Note that the code is not 100% correct;
+    //             it only works with wxCOPY logical function
+    if ( m_backgroundMode == wxSOLID )
+    {
+        int w = m_MGLDC->textWidth(c_text);
+        int h = m_MGLDC->textHeight();
+        m_MGLDC->setColor(m_MGLDC->packColorFast(m_textBackgroundColour.Red(),
+                m_textBackgroundColour.Green(), m_textBackgroundColour.Blue()));
+        m_MGLDC->fillRect(xx, yy, xx+w, yy+h);
+    }
+#endif
+
+    m_MGLDC->setColor(m_MGLDC->packColorFast(m_textForegroundColour.Red(),
+            m_textForegroundColour.Green(), m_textForegroundColour.Blue()));
+    m_MGLDC->setBackColor(m_MGLDC->packColorFast(m_textBackgroundColour.Red(),
+            m_textBackgroundColour.Green(), m_textBackgroundColour.Blue()));
+    
     m_MGLDC->drawStr(xx, yy, c_text);
     
     // Render underline:
