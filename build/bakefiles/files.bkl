@@ -42,7 +42,6 @@
     src/unix/utilsunx.cpp
 </set>
 <set var="BASE_UNIX_HDR">
-    wx/unix/dialup.h
     wx/unix/gsockunx.h    
     wx/unix/mimetype.h
 </set>
