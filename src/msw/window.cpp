@@ -4020,6 +4020,7 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
             // automatically apply the tab control theme background to any
             // child panels to have the same look as the native property sheet
             // dialogs
+            if ( !IsOfStandardClass() )
             {
                 for ( wxWindow *win = this; win; win = win->GetParent() )
                 {
