@@ -26,6 +26,7 @@
 #include <wx/gizmos/editlbox.h>
 #include <wx/gizmos/splittree.h>
 #include <wx/gizmos/ledctrl.h>
+#include <wx/gizmos/statpict.h>
 
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
@@ -47,7 +48,8 @@
 MAKE_CONST_WXSTRING2(DynamicSashNameStr,     wxT("dynamicSashWindow"));
 MAKE_CONST_WXSTRING2(EditableListBoxNameStr, wxT("editableListBox"));
 MAKE_CONST_WXSTRING2(TreeListCtrlNameStr,    wxT("treelistctrl"));
-
+MAKE_CONST_WXSTRING(StaticPictureNameStr);
+    
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
 
@@ -957,7 +959,55 @@ public:
 
 };
 
+//----------------------------------------------------------------------
 
+enum
+{
+    wxSCALE_HORIZONTAL,
+    wxSCALE_VERTICAL,
+    wxSCALE_UNIFORM,
+    wxSCALE_CUSTOM    
+};
+
+MustHaveApp(wxStaticPicture);
+
+class wxStaticPicture : public wxControl
+{
+public:
+    %pythonAppend wxStaticPicture         "self._setOORInfo(self)"
+    %pythonAppend wxStaticPicture()       ""
+
+    wxStaticPicture( wxWindow* parent, wxWindowID id,
+                     const wxBitmap& label,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = 0,
+                     const wxString& name = wxPyStaticPictureNameStr );
+
+    %RenameCtor(PreStaticPicture, wxStaticPicture());
+
+    bool Create( wxWindow* parent, wxWindowID id,
+                 const wxBitmap& label,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxString& name = wxPyStaticPictureNameStr );
+
+    void SetBitmap( const wxBitmap& bmp );
+    wxBitmap GetBitmap() const;
+    void SetIcon( const wxIcon& icon );
+    wxIcon GetIcon() const;
+
+    void SetAlignment( int align );
+    int GetAlignment() const;
+
+    void SetScale( int scale );
+    int GetScale() const; 
+
+    void SetCustomScale( float sx, float sy );
+    void GetCustomScale( float* OUTPUT, float* OUTPUT ) const;
+
+};
 
 
 //----------------------------------------------------------------------

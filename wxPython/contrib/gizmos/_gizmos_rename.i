@@ -32,5 +32,10 @@
 %rename(TL_SEARCH_NOCASE)                   wxTL_SEARCH_NOCASE;
 %rename(TR_DONT_ADJUST_MAC)                 wxTR_DONT_ADJUST_MAC;
 %rename(TreeListColumnInfo)                 wxTreeListColumnInfo;
+%rename(SCALE_HORIZONTAL)                   wxSCALE_HORIZONTAL;
+%rename(SCALE_VERTICAL)                     wxSCALE_VERTICAL;
+%rename(SCALE_UNIFORM)                      wxSCALE_UNIFORM;
+%rename(SCALE_CUSTOM)                       wxSCALE_CUSTOM;
+%rename(StaticPicture)                      wxStaticPicture;
 
 #endif
