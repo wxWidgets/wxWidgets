@@ -62,11 +62,10 @@
 
 #if wxUSE_GUI
 
-WXDLLIMPEXP_BASE int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br,
-                                        WXFARPROC outputFunc,
-                                        WXLPARAM lData, WXWPARAM wData,
-                                        int x, int y, int cx, int cy,
-                                        unsigned int flags)
+WXDLLEXPORT int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
+                                   WXLPARAM lData, WXWPARAM wData,
+                                   int x, int y, int cx, int cy,
+                                   unsigned int flags)
 {
     // VS: There's yet another bug in MSLU: DrawStateW behaves like if it was
     //     expecting char*, not wchar_t* input. We have to use DrawStateA
@@ -110,7 +109,7 @@ static void wxFixOPENFILENAME(LPOPENFILENAME ofn)
 #endif
 }
 
-WXDLLIMPEXP_BASE int wxMSLU_GetOpenFileNameW(void *ofn)
+WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn)
 {
     int ret = GetOpenFileName((LPOPENFILENAME)ofn);
     if ( wxUsingUnicowsDll() && ret != 0 )
@@ -118,7 +117,7 @@ WXDLLIMPEXP_BASE int wxMSLU_GetOpenFileNameW(void *ofn)
     return ret;
 }
 
-WXDLLIMPEXP_BASE int wxMSLU_GetSaveFileNameW(void *ofn)
+WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn)
 {
     int ret = GetSaveFileName((LPOPENFILENAME)ofn);
     if ( wxUsingUnicowsDll() && ret != 0 )
