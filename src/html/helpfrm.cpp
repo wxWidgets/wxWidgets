@@ -51,6 +51,7 @@
 #include "wx/stream.h"
 #include "wx/filedlg.h"
 #include "wx/artprov.h"
+#include "wx/spinctrl.h"
 
 // what is considered "small index"?
 #define INDEX_IS_SMALL 100
@@ -202,7 +203,11 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 
     m_NormalFonts = m_FixedFonts = NULL;
     m_NormalFace = m_FixedFace = wxEmptyString;
-    m_FontSize = 1;
+#ifdef __WXMSW__
+    m_FontSize = 10;
+#else
+    m_FontSize = 14;
+#endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
     m_Printer = NULL;
@@ -822,7 +827,7 @@ void wxHtmlHelpFrame::ReadCustomization(wxConfigBase *cfg, const wxString& path)
 
     m_FixedFace = cfg->Read(wxT("hcFixedFace"), m_FixedFace);
     m_NormalFace = cfg->Read(wxT("hcNormalFace"), m_NormalFace);
-    m_FontSize = cfg->Read(wxT("hcFontSize"), m_FontSize);
+    m_FontSize = cfg->Read(wxT("hcBaseFontSize"), m_FontSize);
 
     {
         int i;
@@ -879,7 +884,7 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
     cfg->Write(wxT("hcH"), (long)m_Cfg.h);
     cfg->Write(wxT("hcFixedFace"), m_FixedFace);
     cfg->Write(wxT("hcNormalFace"), m_NormalFace);
-    cfg->Write(wxT("hcFontSize"), (long)m_FontSize);
+    cfg->Write(wxT("hcBaseFontSize"), (long)m_FontSize);
 
     if (m_Bookmarks)
     {
@@ -910,86 +915,79 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
 
 static void SetFontsToHtmlWin(wxHtmlWindow *win, wxString scalf, wxString fixf, int size)
 {
-    static int f_sizes[5][7] =
-        {
-            { 6,  7,  9, 12, 14, 16, 19},
-            { 8,  9, 12, 14, 16, 19, 22},
-            {10, 12, 14, 16, 19, 24, 32},
-            {14, 16, 18, 24, 32, 38, 45},
-            {16, 20, 24, 32, 38, 45, 50}
-        };
+    int f_sizes[7];
+    f_sizes[0] = int(size * 0.6);
+    f_sizes[1] = int(size * 0.8);
+    f_sizes[2] = size;
+    f_sizes[3] = int(size * 1.2);
+    f_sizes[4] = int(size * 1.4);
+    f_sizes[5] = int(size * 1.6);
+    f_sizes[6] = int(size * 1.8);
 
-    win->SetFonts(scalf, fixf, f_sizes[size]);
+    win->SetFonts(scalf, fixf, f_sizes);
 }
 
 
 class wxHtmlHelpFrameOptionsDialog : public wxDialog
 {
-    public:
-        wxComboBox *NormalFont, *FixedFont;
-        wxRadioBox *RadioBox;
-        wxHtmlWindow *TestWin;
+public:
+    wxComboBox *NormalFont, *FixedFont;
+    wxSpinCtrl *FontSize;
+    wxHtmlWindow *TestWin;
 
-        wxHtmlHelpFrameOptionsDialog(wxWindow *parent) : wxDialog(parent, -1, wxString(_("Help Browser Options")))
-            {
-                wxString choices[5] = {_("very small"), _("small"), _("medium"), _("large"), _("very large")};
-                wxBoxSizer *topsizer, *sizer, *sizer2;
+    wxHtmlHelpFrameOptionsDialog(wxWindow *parent) 
+        : wxDialog(parent, -1, wxString(_("Help Browser Options")))
+    {
+        wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
+        wxFlexGridSizer *sizer = new wxFlexGridSizer(2, 3, 2, 5);
 
-                topsizer = new wxBoxSizer(wxVERTICAL);
+        sizer->Add(new wxStaticText(this, -1, _("Normal font:")));
+        sizer->Add(new wxStaticText(this, -1, _("Fixed font:")));
+        sizer->Add(new wxStaticText(this, -1, _("Font size:")));
 
-                sizer = new wxBoxSizer(wxHORIZONTAL);
+        sizer->Add(NormalFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition,
+                      wxSize(200, 200),
+                      0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
 
-                sizer2 = new wxStaticBoxSizer( new wxStaticBox(this, -1, _("Normal font:")), wxVERTICAL);
-                sizer2->Add(NormalFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition,
-                              wxSize(200, 200),
-                              0, NULL, wxCB_DROPDOWN | wxCB_READONLY),
-                              1, wxEXPAND | wxLEFT | wxRIGHT, 10);
+        sizer->Add(FixedFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition,
+                      wxSize(200, 200),
+                      0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
 
-                sizer->Add(sizer2, 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10);
+        sizer->Add(FontSize = new wxSpinCtrl(this, -1));
+        FontSize->SetRange(2, 100);
 
-                sizer2 = new wxStaticBoxSizer( new wxStaticBox(this, -1, _("Fixed font:")), wxVERTICAL);
-                sizer2->Add(FixedFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition,
-                              wxSize(200, 200),
-                              0, NULL, wxCB_DROPDOWN | wxCB_READONLY),
-                              1, wxEXPAND | wxLEFT | wxRIGHT, 10);
+        topsizer->Add(sizer, 0, wxLEFT|wxRIGHT|wxTOP, 10);
 
-                sizer->Add(sizer2, 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10);
+        topsizer->Add(new wxStaticText(this, -1, _("Preview:")),
+                        0, wxLEFT | wxTOP, 10);
+        topsizer->Add(TestWin = new wxHtmlWindow(this, -1, wxDefaultPosition, wxSize(20, 150),
+                                                 wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER),
+                        1, wxEXPAND | wxLEFT|wxTOP|wxRIGHT, 10);
 
-                topsizer->Add(sizer);
+        wxBoxSizer *sizer2 = new wxBoxSizer(wxHORIZONTAL);
+        wxButton *ok;
+        sizer2->Add(ok = new wxButton(this, wxID_OK, _("OK")), 0, wxALL, 10);
+        ok->SetDefault();
+        sizer2->Add(new wxButton(this, wxID_CANCEL, _("Cancel")), 0, wxALL, 10);
+        topsizer->Add(sizer2, 0, wxALIGN_RIGHT);
 
-                topsizer->Add(RadioBox = new wxRadioBox(this, -1, _("Font size:"),
-                                                          wxDefaultPosition, wxDefaultSize, 5, choices, 5),
-                                0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10);
-
-                topsizer->Add(new wxStaticText(this, -1, _("Preview:")),
-                                0, wxLEFT | wxTOP, 10);
-                topsizer->Add(TestWin = new wxHtmlWindow(this, -1, wxDefaultPosition, wxSize(20, 150),
-                                                         wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER),
-                                1, wxEXPAND | wxLEFT|wxTOP|wxRIGHT, 10);
-
-                sizer = new wxBoxSizer(wxHORIZONTAL);
-                wxButton *ok;
-                sizer->Add(ok = new wxButton(this, wxID_OK, _("OK")), 0, wxALL, 10);
-                ok->SetDefault();
-                sizer->Add(new wxButton(this, wxID_CANCEL, _("Cancel")), 0, wxALL, 10);
-                topsizer->Add(sizer, 0, wxALIGN_RIGHT);
-
-                SetAutoLayout(TRUE);
-                SetSizer(topsizer);
-                topsizer->Fit(this);
-                Centre(wxBOTH);
-            }
+        SetAutoLayout(TRUE);
+        SetSizer(topsizer);
+        topsizer->Fit(this);
+        Centre(wxBOTH);
+    }
 
 
-        void UpdateTestWin()
-            {
-                wxBusyCursor bcur;
-                SetFontsToHtmlWin(TestWin,
-                                  NormalFont->GetStringSelection(),
-                                  FixedFont->GetStringSelection(),
-                                  RadioBox->GetSelection());
-                TestWin->SetPage(_(
+    void UpdateTestWin()
+    {
+        wxBusyCursor bcur;
+        SetFontsToHtmlWin(TestWin,
+                          NormalFont->GetStringSelection(),
+                          FixedFont->GetStringSelection(),
+                          FontSize->GetValue());
+        TestWin->SetPage(_(
 "<html><body>\
+<table><tr><td>\
 Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> \
 <b>Bold face.</b> <b><i>Bold italic face.</i></b><br>\
 <font size=-2>font size -2</font><br>\
@@ -999,7 +997,7 @@ Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> \
 <font size=+2>font size +2</font><br>\
 <font size=+3>font size +3</font><br>\
 <font size=+4>font size +4</font><br>\
-\
+<td>\
 <p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> \
 <b><i>bold italic <u>underlined</u></i></b><br>\
 <font size=-2>font size -2</font><br>\
@@ -1009,21 +1007,21 @@ Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> \
 <font size=+2>font size +2</font><br>\
 <font size=+3>font size +3</font><br>\
 <font size=+4>font size +4</font></tt>\
-</body></html>"
-                                  ));
-            }
+</table></body></html>"
+                          ));
+    }
 
-        void OnUpdate(wxCommandEvent& WXUNUSED(event))
-            {
-                UpdateTestWin();
-            }
+    void OnUpdate(wxCommandEvent& WXUNUSED(event))
+    {
+        UpdateTestWin();
+    }
 
-        DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxHtmlHelpFrameOptionsDialog, wxDialog)
     EVT_COMBOBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
-    EVT_RADIOBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
+    EVT_SPINCTRL(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
 END_EVENT_TABLE()
 
 
@@ -1048,23 +1046,42 @@ void wxHtmlHelpFrame::OptionsDialog()
         *m_FixedFonts = *enu.GetFacenames();
         m_FixedFonts->Sort();
     }
+    
+    // VS: We want to show the font that is actually used by wxHtmlWindow.
+    //     If customization dialog wasn't used yet, facenames are empty and
+    //     wxHtmlWindow uses default fonts -- let's find out what they
+    //     are so that we can pass them to the dialog:
+    if (m_NormalFace.empty())
+    {
+        wxFont fnt(m_FontSize, wxSWISS, wxNORMAL, wxNORMAL, FALSE);
+        m_NormalFace = fnt.GetFaceName();
+    }
+    if (m_FixedFace.empty())
+    {
+        wxFont fnt(m_FontSize, wxMODERN, wxNORMAL, wxNORMAL, FALSE);
+        m_FixedFace = fnt.GetFaceName();
+    }
 
     for (i = 0; i < m_NormalFonts->GetCount(); i++)
         dlg.NormalFont->Append((*m_NormalFonts)[i]);
     for (i = 0; i < m_FixedFonts->GetCount(); i++)
         dlg.FixedFont->Append((*m_FixedFonts)[i]);
-    if (!m_NormalFace.IsEmpty()) dlg.NormalFont->SetStringSelection(m_NormalFace);
-    else dlg.NormalFont->SetSelection(0);
-    if (!m_FixedFace.IsEmpty()) dlg.FixedFont->SetStringSelection(m_FixedFace);
-    else dlg.FixedFont->SetSelection(0);
-    dlg.RadioBox->SetSelection(m_FontSize);
+    if (!m_NormalFace.empty())
+        dlg.NormalFont->SetStringSelection(m_NormalFace);
+    else
+        dlg.FixedFont->SetSelection(0);
+    if (!m_FixedFace.empty())
+        dlg.FixedFont->SetStringSelection(m_FixedFace);
+    else
+        dlg.FixedFont->SetSelection(0);
+    dlg.FontSize->SetValue(m_FontSize);
     dlg.UpdateTestWin();
 
     if (dlg.ShowModal() == wxID_OK)
     {
         m_NormalFace = dlg.NormalFont->GetStringSelection();
         m_FixedFace = dlg.FixedFont->GetStringSelection();
-        m_FontSize = dlg.RadioBox->GetSelection();
+        m_FontSize = dlg.FontSize->GetValue();
         SetFontsToHtmlWin(m_HtmlWin, m_NormalFace, m_FixedFace, m_FontSize);
     }
 }
