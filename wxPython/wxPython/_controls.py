@@ -493,6 +493,15 @@ wxDragIcon = wx._controls.DragIcon
 wxDragString = wx._controls.DragString
 wxDragTreeItem = wx._controls.DragTreeItem
 wxDragListItem = wx._controls.DragListItem
+wxDatePickerCtrlNameStr = wx._controls.DatePickerCtrlNameStr
+wxDP_DEFAULT = wx._controls.DP_DEFAULT
+wxDP_SPIN = wx._controls.DP_SPIN
+wxDP_DROPDOWN = wx._controls.DP_DROPDOWN
+wxDP_SHOWCENTURY = wx._controls.DP_SHOWCENTURY
+wxDP_ALLOWNONE = wx._controls.DP_ALLOWNONE
+wxDatePickerCtrl = wx._controls.DatePickerCtrl
+wxDatePickerCtrlPtr = wx._controls.DatePickerCtrlPtr
+wxPreDatePickerCtrl = wx._controls.PreDatePickerCtrl
 
 
 d = globals()

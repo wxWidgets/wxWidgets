@@ -581,6 +581,7 @@
 %rename(IdleEvent)                          wxIdleEvent;
 %rename(PyEvent)                            wxPyEvent;
 %rename(PyCommandEvent)                     wxPyCommandEvent;
+%rename(DateEvent)                          wxDateEvent;
 %rename(PYAPP_ASSERT_SUPPRESS)              wxPYAPP_ASSERT_SUPPRESS;
 %rename(PYAPP_ASSERT_EXCEPTION)             wxPYAPP_ASSERT_EXCEPTION;
 %rename(PYAPP_ASSERT_DIALOG)                wxPYAPP_ASSERT_DIALOG;

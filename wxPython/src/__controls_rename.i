@@ -275,5 +275,11 @@
 %rename(ContextHelpButton)                  wxContextHelpButton;
 %rename(HelpProvider)                       wxHelpProvider;
 %rename(SimpleHelpProvider)                 wxSimpleHelpProvider;
+%rename(DP_DEFAULT)                         wxDP_DEFAULT;
+%rename(DP_SPIN)                            wxDP_SPIN;
+%rename(DP_DROPDOWN)                        wxDP_DROPDOWN;
+%rename(DP_SHOWCENTURY)                     wxDP_SHOWCENTURY;
+%rename(DP_ALLOWNONE)                       wxDP_ALLOWNONE;
+%rename(DatePickerCtrl)                     wxDatePickerCtrl;
 
 #endif

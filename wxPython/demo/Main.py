@@ -49,6 +49,7 @@ _treeList = [
     ('Recent Additions/Updates', [
         'StandardPaths',
         'MediaCtrl',
+        'DatePickerCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -145,6 +146,7 @@ _treeList = [
         'Calendar',
         'CalendarCtrl',
         'ContextHelp',
+        'DatePickerCtrl',
         'DynamicSashWindow',
         'EditableListBox',
         'FancyText',

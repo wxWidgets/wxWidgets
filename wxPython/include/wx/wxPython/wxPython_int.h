@@ -67,6 +67,9 @@
 #include <wx/tooltip.h>
 #include <wx/vlbox.h>
 #include <wx/vscroll.h>
+#include <wx/dateevt.h>
+#include <wx/datectrl.h>
+
 
 
 #ifdef _MSC_VER
