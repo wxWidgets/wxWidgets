@@ -1779,7 +1779,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 {
     wxCHECK_MSG( m_ok, FALSE, wxT("invalid postscript dc") );
 
-    if ( m_printData.GetPrintMode() == wxPRINT_MODE_FILE )
+    if ( m_printData.GetPrintMode() != wxPRINT_MODE_STREAM )
     {
         if (m_printData.GetFilename() == wxT(""))
         {
