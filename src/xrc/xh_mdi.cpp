@@ -105,10 +105,11 @@ wxObject *wxMdiXmlHandler::DoCreateResource()
         frame->SetClientSize(GetSize());
     if (HasParam(wxT("pos")))
         frame->Move(GetPosition());
-    if (HasParam(wxT("icon")) && frame->IsKindOf(CLASSINFO(wxFrame)))
+    if (HasParam(wxT("icon")))
     {
         wxFrame* f = wxDynamicCast(f, wxFrame);
-        f->SetIcon(GetIcon(wxT("icon"), wxART_FRAME_ICON));
+        if (f)
+            f->SetIcon(GetIcon(wxT("icon"), wxART_FRAME_ICON));
     }
 
     SetupWindow(frame);
