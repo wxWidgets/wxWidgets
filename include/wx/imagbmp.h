@@ -31,12 +31,9 @@ public:
       m_mime = _T("image/bmp");
   };
 
-  // saving bitmaps is Windows-only
-#ifdef __WIN32__
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-#endif // __WIN32__
-
 #if wxUSE_STREAMS
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
   virtual bool DoCanRead( wxInputStream& stream );
 #endif // wxUSE_STREAMS
