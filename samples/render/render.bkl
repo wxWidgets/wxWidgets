@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="render" template="wx_sample" template_append="wx_append">
+        <sources>render.cpp</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>../sample.rc</win32-res>
+        <mac-res>../sample.r</mac-res>
+    </exe>
+
+</makefile>
