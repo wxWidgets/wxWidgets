@@ -93,6 +93,12 @@ void wxTopLevelWindowMSW::Init()
 
     // unlike (almost?) all other windows, frames are created hidden
     m_isShown = FALSE;
+
+    // Data to save/restore when calling ShowFullScreen
+    m_fsStyle = 0;
+    m_fsOldWindowStyle = 0;
+    m_fsIsMaximized = FALSE;
+    m_fsIsShowing = FALSE;
 }
 
 long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
@@ -475,6 +481,76 @@ bool wxTopLevelWindowMSW::IsIconized() const
 void wxTopLevelWindowMSW::Restore()
 {
     DoShowWindow(SW_RESTORE);
+}
+
+// ----------------------------------------------------------------------------
+// wxTopLevelWindowMSW fullscreen
+// ----------------------------------------------------------------------------
+
+bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
+{
+    if (show)
+    {
+        if (IsFullScreen())
+            return FALSE;
+
+        m_fsIsShowing = TRUE;
+        m_fsStyle = style;
+
+        // zap the frame borders
+
+        // save the 'normal' window style
+        m_fsOldWindowStyle = GetWindowLong((HWND)GetHWND(), GWL_STYLE);
+
+        // save the old position, width & height, maximize state
+        m_fsOldSize = GetRect();
+        m_fsIsMaximized = IsMaximized();
+
+        // decide which window style flags to turn off
+        LONG newStyle = m_fsOldWindowStyle;
+        LONG offFlags = 0;
+
+        if (style & wxFULLSCREEN_NOBORDER)
+            offFlags |= WS_BORDER | WS_THICKFRAME;
+        if (style & wxFULLSCREEN_NOCAPTION)
+            offFlags |= (WS_CAPTION | WS_SYSMENU);
+
+        newStyle &= (~offFlags);
+
+        // change our window style to be compatible with full-screen mode
+        ::SetWindowLong((HWND)GetHWND(), GWL_STYLE, newStyle);
+
+        // resize to the size of the desktop
+        int width, height;
+
+        RECT rect = wxGetWindowRect(::GetDesktopWindow());
+        width = rect.right - rect.left;
+        height = rect.bottom - rect.top;
+
+        SetSize(width, height);
+
+        // now flush the window style cache and actually go full-screen
+        SetWindowPos((HWND)GetHWND(), HWND_TOP, 0, 0, width, height, SWP_FRAMECHANGED);
+
+        wxSizeEvent event(wxSize(width, height), GetId());
+        GetEventHandler()->ProcessEvent(event);
+
+        return TRUE;
+    }
+    else
+    {
+        if (!IsFullScreen())
+            return FALSE;
+
+        m_fsIsShowing = FALSE;
+
+        Maximize(m_fsIsMaximized);
+        SetWindowLong((HWND)GetHWND(),GWL_STYLE, m_fsOldWindowStyle);
+        SetWindowPos((HWND)GetHWND(),HWND_TOP,m_fsOldSize.x, m_fsOldSize.y,
+            m_fsOldSize.width, m_fsOldSize.height, SWP_FRAMECHANGED);
+
+        return TRUE;
+    }
 }
 
 // ----------------------------------------------------------------------------
