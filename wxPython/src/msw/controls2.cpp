@@ -3012,6 +3012,7 @@ static PyObject *_wrap_wxListCtrl_SetBackgroundColour(PyObject *self, PyObject *
 
 static wxListItem * wxPyListCtrl_GetColumn(wxPyListCtrl *self,int  col) {
             wxListItem item;
+            item.SetMask(0xFFFF);
             if (self->GetColumn(col, item))
                 return new wxListItem(item);
             else

@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.3pre4"
+VERSION          = "2.3.3pre5"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -39,7 +39,6 @@ BUILD_DLLWIDGET = 1# Build a module that enables unknown wx widgets
 BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
 
 CORE_ONLY = 0      # if true, don't build any of the above
-
 
 GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
                    # for the ugly details

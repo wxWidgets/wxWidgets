@@ -1119,6 +1119,12 @@ wxLogStatusFrame = misc2c.wxLogStatusFrame
 
 wxLogSysError = misc2c.wxLogSysError
 
+wxLogTrace = misc2c.wxLogTrace
+
+wxLogTraceMask = misc2c.wxLogTraceMask
+
+wxLogGeneric = misc2c.wxLogGeneric
+
 wxSafeShowMessage = misc2c.wxSafeShowMessage
 
 wxExecute = misc2c.wxExecute

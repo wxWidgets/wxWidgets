@@ -617,7 +617,7 @@ public:
 
     bool GetVerbose() const;
 
-    static wxTraceMask GetTraceMask();
+    static unsigned long GetTraceMask();
     static bool IsAllowedTraceMask(const wxString& mask);
 
     // static void TimeStamp(wxString *str);
@@ -681,15 +681,20 @@ public:
 
 unsigned long wxSysErrorCode();
 const wxString wxSysErrorMsg(unsigned long nErrCode = 0);
-void wxLogFatalError(const wxString& szFormat);
-void wxLogError(const wxString& szFormat);
-void wxLogWarning(const wxString& szFormat);
-void wxLogMessage(const wxString& szFormat);
-void wxLogInfo(const wxString& szFormat);
-void wxLogVerbose(const wxString& szFormat);
-void wxLogStatus(const wxString& szFormat);
-%name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const wxString& szFormat);
-void wxLogSysError(const wxString& szFormat);
+void wxLogFatalError(const wxString& msg);
+void wxLogError(const wxString& msg);
+void wxLogWarning(const wxString& msg);
+void wxLogMessage(const wxString& msg);
+void wxLogInfo(const wxString& msg);
+void wxLogVerbose(const wxString& msg);
+void wxLogStatus(const wxString& msg);
+%name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const wxString& msg);
+void wxLogSysError(const wxString& msg);
+
+void wxLogTrace(const wxString& msg);
+%name(wxLogTraceMask)void wxLogTrace(const wxString& mask, const wxString& msg);
+
+void wxLogGeneric(unsigned long level, const wxString& msg);
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
 // i.e. without using wxMessageBox() for example because it could crash

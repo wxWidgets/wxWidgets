@@ -444,6 +444,7 @@ public:
     %addmethods {
         %new wxListItem* GetColumn(int col) {
             wxListItem item;
+            item.SetMask(0xFFFF);
             if (self->GetColumn(col, item))
                 return new wxListItem(item);
             else
