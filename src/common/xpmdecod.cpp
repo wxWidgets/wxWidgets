@@ -136,7 +136,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
     char *p, *q;
     size_t i;
 
-    if ( stream.Read(xpm_buffer, length).LastError() != wxSTREAM_NO_ERROR )
+    if ( stream.Read(xpm_buffer, length).LastError() == wxSTREAM_READ_ERROR )
         return FALSE;
 
     /*
