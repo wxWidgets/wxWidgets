@@ -124,8 +124,8 @@ function.  If you used to have something like this::
 
 Change it like so::
 
-    myCustomEventType = wxNewEventType()
-    EVT_MY_CUSTOM_EVENT = wxPyEventBinder(myCustomEventType, 1)
+    myCustomEventType = wx.NewEventType()
+    EVT_MY_CUSTOM_EVENT = wx.PyEventBinder(myCustomEventType, 1)
 
 The second parameter is an integer in [0, 1, 2] that specifies the
 number of IDs that are needed to be passed to Connect.

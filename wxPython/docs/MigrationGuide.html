@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="iso-8859-1" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
 <title>wxPython 2.5 Migration Guide</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
@@ -30,9 +30,9 @@ now be the GUI thread instead of the one that imports wxPython.  Some
 potential problems are that the C++ side of the &quot;stock-objects&quot;
 (wx.BLUE_PEN, wx.TheColourDatabase, etc.) are not initialized until
 the wx.App object is created, so you should not use them until after
-you have created your wx.App object.  (In fact, until I find a better
-solution trying to use one of the stock objects before the app is
-created will probably result in a crash.)</p>
+you have created your wx.App object.  If you do then an exception will
+be raised telling you that the C++ object has not bene initialized
+yet.</p>
 <p>Also, you will probably not be able to do any kind of GUI or bitmap
 operation unless you first have created an app object, (even on
 Windows where most anything was possible before.)</p>
@@ -115,8 +115,8 @@ def EVT_MY_CUSTOM_EVENT(win, id, func):
 </pre>
 <p>Change it like so:</p>
 <pre class="literal-block">
-myCustomEventType = wxNewEventType()
-EVT_MY_CUSTOM_EVENT = wxPyEventBinder(myCustomEventType, 1)
+myCustomEventType = wx.NewEventType()
+EVT_MY_CUSTOM_EVENT = wx.PyEventBinder(myCustomEventType, 1)
 </pre>
 <p>The second parameter is an integer in [0, 1, 2] that specifies the
 number of IDs that are needed to be passed to Connect.</p>
@@ -136,8 +136,8 @@ wxWindow = wx.core.Window
 </pre>
 <p>Don't let the &quot;core&quot; in the name bother you.  That and some other
 modules are implementation details, and everything that was in the
-wxPython.wx before will still be in the wx package namespace after
-this change.  So from your code you would use it as wx.Window.</p>
+wxPython.wx module before will still be in the wx package namespace
+after this change.  So from your code you would use it as wx.Window.</p>
 <p>A few notes about how all of this was accomplished might be
 interesting...  SWIG is now run twice for each module that it is
 generating code for.  The first time it outputs an XML representaion
@@ -151,6 +151,35 @@ uses the %rename directives that were generated in the first step.</p>
 <p>Not every name is handled correctly (but the bulk of them are) and so
 some work has to be done by hand, especially for the reverse-renamers.
 So expect a few flaws here and there until everything gets sorted out.</p>
+<p>In summary, the wx package and names without the &quot;wx&quot; prefix are now
+the official form of the wxPython classes.  For example:</p>
+<pre class="literal-block">
+import wx
+
+class MyFrame(wx.Frame):
+    def __init__(self, parent, title):
+        wx.Frame.__init__(self, parent, -1, title)
+        p = wx.Panel(self, -1)
+        b = wx.Button(p, -1, &quot;Do It&quot;, (10,10))
+        self.Bind(wx.EVT_BUTTON, self.JustDoIt, b)
+
+    def JustDoIt(self, evt):
+        print &quot;It's done!&quot;
+
+app = wx.PySimpleApp()
+f = MyFrame(None, &quot;What's up?&quot;)
+f.Show()
+app.MainLoop()
+</pre>
+<p>You shouldn't need to migrate all your modules over to use the new
+package and names right away as there are modules in place that try to
+provide as much backwards compatibility of the names as possible.  If
+you rewrote the above sample using &quot;from wxPython.wx import <a href="#id1" name="id2"><span class="problematic" id="id2">*</span></a>&quot;, the
+old wxNames, and the old style of event binding it will still work
+just fine.</p>
+<div class="system-message" id="id1">
+<p class="system-message-title">System Message: <a name="id1">WARNING/2</a> (<tt>MigrationGuide.txt</tt>, line 189); <em><a href="#id2">backlink</a></em></p>
+Inline emphasis start-string without end-string.</div>
 </div>
 <div class="section" id="new-wx-dc-methods">
 <h1><a name="new-wx-dc-methods">New wx.DC Methods</a></h1>
@@ -166,9 +195,9 @@ SetSize(size)               # Type A
 SetSizeWH(width, height)    # Type B
 </pre>
 <p>For various reasons the new <em>Type A</em> methods in wx.DC were never added
-and the existing <em>Type B</em> methods renamed.  Now that lots of other
-things are also changing in wxPython that it has been decided that it
-is a good time to also do the method renaming in wx.DC too, in order
+and the existing <em>Type B</em> methods were never renamed.  Now that lots
+of other things are also changing in wxPython it has been decided that
+it is a good time to also do the method renaming in wx.DC too in order
 to be consistent with the rest of the library.  The methods in wx.DC
 that are affected are listed here:</p>
 <pre class="literal-block">
@@ -228,18 +257,25 @@ BlitXY(xdest, ydest, width, height, sourceDC, xsrc, ysrc,
        rop = wxCOPY, useMask = FALSE, xsrcMask = -1, ysrcMask = -1)
 Blit(destPt, size, sourceDC, srcPt,
      rop = wxCOPY, useMask = FALSE, srcPtMask = wx.DefaultPosition)
+
+SetClippingRegionXY SetClippingRegion(x, y, width, height)
+SetClippingRegion(point, size)
+SetClippingRect(rect)
+SetClippingRegionAsRegion(region);
 </pre>
 <p>If you have code that draws on a DC you <strong>will</strong> get errors because of
 these changes, but it should be easy to fix the code.  You can either
-change the name of the <em>Type B</em> method called as shown above, or just
-add parentheses around the parameters as needed to turn them into
-tuples and let the SWIG typemaps turn them into the wx.Point or
-wx.Size object that is expected.  For example, if you had this code
-before:</p>
+change the name of the <em>Type B</em> method called to the names shown
+above, or just add parentheses around the parameters as needed to turn
+them into tuples and let the SWIG typemaps turn them into the wx.Point
+or wx.Size object that is expected.  Then you will be calling the new
+<em>Type A</em> method.  For example, if you had this code before:</p>
 <pre class="literal-block">
 dc.DrawRectangle(x, y, width, height)
 </pre>
-<p>You could just change it like this:</p>
+<p>You could either continue to use the <em>Type B</em> method bu changing the
+name to DrawRectabgleXY, or just change it to the new <em>Type A</em> by
+adding some parentheses like this:</p>
 <pre class="literal-block">
 dc.DrawRectangle((x, y), (width, height))
 </pre>
@@ -247,7 +283,7 @@ dc.DrawRectangle((x, y), (width, height))
 <pre class="literal-block">
 dc.DrawRectangle(p.x, p.y, s.width, s.height)
 </pre>
-<p>Then you can just change it like this:</p>
+<p>Then you can just simplify it like this:</p>
 <pre class="literal-block">
 dc.DrawRectangle(p, s)
 </pre>
@@ -269,6 +305,37 @@ these headers on Linux...]]</p>
 wxClassInfo::InitializeClasses() in your extensions or when embedding
 wxPython.</p>
 </div>
+<div class="section" id="two-or-three-phase-create">
+<h1><a name="two-or-three-phase-create">Two (or Three!) Phase Create</a></h1>
+<p>If you use the Precreate/Create method of instantiating a window, (for
+example, to set an extended style flag, or for XRC handlers) then
+there is now a new method named PostCreate to help with transplanting
+the brain of the prewindow instance into the derived window instance.
+For example:</p>
+<pre class="literal-block">
+class MyDialog(wx.Dialog):
+    def __init__(self, parent, ID, title, pos, size, style):
+        pre = wx.PreDialog()
+        pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
+        pre.Create(parent, ID, title, pos, size, style)
+        self.PostCreate(pre)
+</pre>
+</div>
+<div class="section" id="sizers">
+<h1><a name="sizers">Sizers</a></h1>
+<p>The hack allowing the old &quot;option&quot; keyword parameter has been
+removed.  If you use keyworkd args with wxSizer Add, Insert, or
+Prepend then you will need to use the &quot;proportion&quot; name instead of
+&quot;option&quot;.</p>
+<p>When adding a spacer to a sizer you now need to use a wxSize or a
+2-integer sequence instead of separate width and height parameters.</p>
+<p>The wxGridBagSizer class (very similar to the RowColSizer in the
+library) has been added to C++ and wrapped for wxPython.  It can also
+be used from XRC.</p>
+<p>You should not use AddWindow, AddSizer, AddSpacer (and similar for
+Insert, Prepend, and etc.) methods any longer.  Just use Add and the
+wrappers will figure out what to do.</p>
+</div>
 <div class="section" id="other-stuff">
 <h1><a name="other-stuff">Other Stuff</a></h1>
 <p>Instead of over a dozen separate extension modules linked together
@@ -278,7 +345,30 @@ later into the main namespace via Python code.</p>
 <p>Because of the above, the &quot;internal&quot; module names have changed, but
 you shouldn't have been using them anyway so it shouldn't bother
 you. ;-)</p>
+<p>The wxPython.help module no longer exists and the classes therein are
+now part of the core module imported with wxPython.wx or the wx
+package.</p>
+<p>wxPyDefaultPosition and wxPyDefaultSize are gone.  Use the
+wxDefaultPosition and wxDefaultSize objects instead.</p>
+<p>Similarly, the wxSystemSettings backwards compatibiility aliases for
+GetSystemColour, GetSystemFont and GetSystemMetric have also gone into
+the bit-bucket.  Use GetColour, GetFont and GetMetric instead.</p>
+<p>The wx.NO_FULL_REPAINT_ON_RESIZE style is now the default style for
+all windows.  The name still exists for compatibility, but it is set
+to zero.  If you want to disable the setting (so it matches the old
+default) then you need to use the new wx.FULL_REPAINT_ON_RESIZE style
+flag otherwise only the freshly exposed areas of the window will be
+refreshed.</p>
+<p>wxPyTypeCast has been removed.  Since we've had the OOR (Original
+Object Return) for a couple years now there should be no need to use
+wxPyTypeCast at all.</p>
 </div>
+</div>
+<hr class="footer" />
+<div class="footer">
+<a class="reference" href="MigrationGuide.txt">View document source</a>.
+Generated on: 2003-12-18 18:35 UTC.
+Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>
