@@ -43,6 +43,8 @@
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
 
+#include "ToolUtils.h"
+
 #define wxMAC_DEBUG_REDRAW 0
 #ifndef wxMAC_DEBUG_REDRAW
 #define wxMAC_DEBUG_REDRAW 0
@@ -58,6 +60,7 @@ wxWindowList       wxModelessWindows;
 // double click testing
 static   Point     gs_lastWhere;
 static   long      gs_lastWhen = 0;
+
 
 
 #if TARGET_CARBON
@@ -442,13 +445,28 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
 
     wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) m_macWindow) ) ;
 
+
+    RgnHandle       visRgn = NewRgn() ;
+    GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), visRgn );
     BeginUpdate( (WindowRef)m_macWindow ) ;
 
     RgnHandle       updateRgn = NewRgn();
     RgnHandle       diffRgn = NewRgn() ;
     if ( updateRgn && diffRgn )
     {
-        GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), updateRgn );
+        // macos internal control redraws clean up areas we'd like to redraw ourselves
+        // therefore we pick the boundary rect and make sure we can redraw it
+        // this has to be intersected by the visRgn in order to avoid drawing over its own
+        // boundaries
+        RgnHandle trueUpdateRgn = NewRgn() ;
+        Rect trueUpdateRgnBoundary ;
+        GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), trueUpdateRgn );
+        GetRegionBounds( trueUpdateRgn , &trueUpdateRgnBoundary ) ;
+        RectRgn( updateRgn , &trueUpdateRgnBoundary ) ;
+        SectRgn( updateRgn , visRgn , updateRgn ) ;
+        if ( trueUpdateRgn )
+            DisposeRgn( trueUpdateRgn ) ;
+        SetPortVisibleRegion(  GetWindowPort( (WindowRef)m_macWindow ), updateRgn ) ;
         DiffRgn( updateRgn , (RgnHandle) m_macNoEraseUpdateRgn , diffRgn ) ;
         if ( !EmptyRgn( updateRgn ) )
         {
@@ -459,6 +477,9 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
         DisposeRgn( updateRgn );
     if ( diffRgn )
         DisposeRgn( diffRgn );
+    if ( visRgn )
+        DisposeRgn( visRgn ) ;
+        
     EndUpdate( (WindowRef)m_macWindow ) ;
     SetEmptyRgn( (RgnHandle) m_macNoEraseUpdateRgn ) ;
     m_macNeedsErasing = false ;
@@ -865,6 +886,7 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
 // Support functions for shaped windows, based on Apple's CustomWindow sample at
 // http://developer.apple.com/samplecode/Sample_Code/Human_Interface_Toolbox/Mac_OS_High_Level_Toolbox/CustomWindow.htm
 // ---------------------------------------------------------------------------
+
 
 #if TARGET_CARBON
 static void wxShapedMacWindowGetPos(WindowRef window, Rect* inRect)
