@@ -89,6 +89,7 @@ class WXDLLEXPORT wxImage: public wxObject
 public:
     wxImage();
     wxImage( int width, int height );
+    wxImage( int width, int height, unsigned char* data, bool static_data = FALSE );
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY );
     wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
     wxImage( const wxString& name, const wxString& mimetype );
@@ -106,6 +107,7 @@ public:
 #endif
 
     void Create( int width, int height );
+    void Create( int width, int height, unsigned char* data, bool static_data = FALSE );
     void Destroy();
 
     // return the new image with size width*height
@@ -156,7 +158,8 @@ public:
 
     char unsigned *GetData() const;
     void SetData( char unsigned *data );
-
+    void SetData( char unsigned *data, int new_width, int new_height );
+    
     void SetMaskColour( unsigned char r, unsigned char g, unsigned char b );
     unsigned char GetMaskRed() const;
     unsigned char GetMaskGreen() const;

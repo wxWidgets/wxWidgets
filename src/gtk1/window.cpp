@@ -2579,9 +2579,15 @@ void wxWindow::OnInternalIdle()
         
         bool child_already_resized = FALSE;
         if (IsTopLevel() && !m_isFrame)
-            child_already_resized = gtk_pizza_child_resized( GTK_PIZZA(m_wxwindow->parent), m_wxwindow );
+        {
+            child_already_resized = ((m_wxwindow->parent) &&
+                                     (gtk_pizza_child_resized( GTK_PIZZA(m_wxwindow->parent), m_wxwindow )));
+        }
         else
-            child_already_resized = gtk_pizza_child_resized( GTK_PIZZA(m_widget->parent), m_widget );
+        {
+            child_already_resized = ((m_widget->parent) &&
+                                     (gtk_pizza_child_resized( GTK_PIZZA(m_widget->parent), m_widget )));
+        }
         
         if (child_already_resized)
         {

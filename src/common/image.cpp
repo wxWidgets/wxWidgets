@@ -56,6 +56,7 @@ public:
     bool            m_hasMask;
     unsigned char   m_maskRed,m_maskGreen,m_maskBlue;
     bool            m_ok;
+    bool            m_static;
 };
 
 wxImageRefData::wxImageRefData()
@@ -68,11 +69,12 @@ wxImageRefData::wxImageRefData()
     m_maskGreen = 0;
     m_maskBlue = 0;
     m_hasMask = FALSE;
+    m_static = FALSE;
 }
 
 wxImageRefData::~wxImageRefData()
 {
-    if (m_data)
+    if (m_data && !m_static)
         free( m_data );
 }
 
@@ -91,6 +93,11 @@ wxImage::wxImage()
 wxImage::wxImage( int width, int height )
 {
     Create( width, height );
+}
+
+wxImage::wxImage( int width, int height, unsigned char* data, bool static_data )
+{
+    Create( width, height, data, static_data );
 }
 
 wxImage::wxImage( const wxString& name, long type )
@@ -139,6 +146,26 @@ void wxImage::Create( int width, int height )
         M_IMGDATA->m_width = width;
         M_IMGDATA->m_height = height;
         M_IMGDATA->m_ok = TRUE;
+    }
+    else
+    {
+        UnRef();
+    }
+}
+
+void wxImage::Create( int width, int height, unsigned char* data, bool static_data )
+{
+    UnRef();
+
+    m_refData = new wxImageRefData();
+
+    M_IMGDATA->m_data = data;
+    if (M_IMGDATA->m_data)
+    {
+        M_IMGDATA->m_width = width;
+        M_IMGDATA->m_height = height;
+        M_IMGDATA->m_ok = TRUE;
+        M_IMGDATA->m_static = static_data;
     }
     else
     {
@@ -334,6 +361,34 @@ void wxImage::SetData( char unsigned *data )
     newRefData->m_maskGreen = M_IMGDATA->m_maskGreen;
     newRefData->m_maskBlue = M_IMGDATA->m_maskBlue;
     newRefData->m_hasMask = M_IMGDATA->m_hasMask;
+
+    UnRef();
+
+    m_refData = newRefData;
+}
+
+void wxImage::SetData( char unsigned *data, int new_width, int new_height )
+{
+    wxImageRefData *newRefData = new wxImageRefData();
+
+    if (m_refData)
+    {
+        newRefData->m_width = new_width;
+        newRefData->m_height = new_height;
+        newRefData->m_data = data;
+        newRefData->m_ok = TRUE;
+        newRefData->m_maskRed = M_IMGDATA->m_maskRed;
+        newRefData->m_maskGreen = M_IMGDATA->m_maskGreen;
+        newRefData->m_maskBlue = M_IMGDATA->m_maskBlue;
+        newRefData->m_hasMask = M_IMGDATA->m_hasMask;
+    }
+    else
+    {
+        newRefData->m_width = new_width;
+        newRefData->m_height = new_height;
+        newRefData->m_data = data;
+        newRefData->m_ok = TRUE;
+    }
 
     UnRef();
 
