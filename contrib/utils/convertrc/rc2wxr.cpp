@@ -979,7 +979,8 @@ void rc2wxr::ParseSlider(wxString WXUNUSED(label), wxString varname)
 
 wxString tok;
 
-while (ReadOrs(tok));
+while (ReadOrs(tok))
+    ;
 
 wxFprintf(m_wxr,_T("  control = [%i,wxSlider,'','wxSL_HORIZONTAL','%s',"),m_controlid,varname.c_str());
 
@@ -1009,7 +1010,8 @@ void rc2wxr::ParseProgressBar(wxString WXUNUSED(label), wxString varname)
 
 wxString tok;
 
-while (ReadOrs(tok));
+while (ReadOrs(tok))
+    ;
 
 wxFprintf(m_wxr,_T("  control = [%i,wxGauge,'','wxGA_HORIZONTAL','%s',"),m_controlid,varname.c_str());
 
@@ -1071,7 +1073,8 @@ if (tok==_T("BS_AUTOCHECKBOX"))
 
     wxFprintf(m_wxr,_T("  control = [%i,wxCheckBox,'%s','0','%s',"),m_controlid,label.c_str(),varname.c_str());
 
-    while (ReadOrs(tok));
+    while (ReadOrs(tok))
+        ;
 
     ReadRect(x,y,width,height);
 
@@ -1089,7 +1092,8 @@ if (tok==_T("BS_AUTORADIOBUTTON"))
 
     wxFprintf(m_wxr,_T("  control = [%i,wxRadioButton,'%s','0','%s',"),m_controlid,label.c_str(),varname.c_str());
 
-    while(ReadOrs(tok));
+    while(ReadOrs(tok))
+        ;
 
     ReadRect(x,y,width,height);
 

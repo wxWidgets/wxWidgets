@@ -4038,7 +4038,8 @@ doProlog(XML_Parser parser,
         name = el->name;
         dtd->scaffold[myindex].name = name;
         nameLen = 0;
-        for (; name[nameLen++]; );
+        for (; name[nameLen++]; )
+            ;
         dtd->contentStringLen +=  nameLen;
         if (elementDeclHandler)
           handleDefault = XML_FALSE;

@@ -1077,9 +1077,11 @@ void rc2xml::ParseMenuItem()
         ptoken.MakeUpper();
         if (token==_T("CHECKED"))
             m_xmlfile.Write(_T("\t\t\t<checkable>1</checkable>\n"));
-        else if (token==_T("MENUBREAK"));
+        else if (token==_T("MENUBREAK"))
+            ;
 //m_xmlfile.Write("\t\t\t</break>\n");
-        else if (token==_T("GRAYED"));
+        else if (token==_T("GRAYED"))
+            ;
         else
             wxLogError(_T("Unknown Menu Item token:")+token);
 

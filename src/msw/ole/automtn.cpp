@@ -1049,7 +1049,8 @@ BOOL TmFromOleDate(DATE dtSrc, struct tm& tmDest)
 
 	// Month number always >= n/32, so save some loop time */
 	for (tmDest.tm_mon = (n4Day >> 5) + 1;
-		n4Day > rgMonthDays[tmDest.tm_mon]; tmDest.tm_mon++);
+		n4Day > rgMonthDays[tmDest.tm_mon]; tmDest.tm_mon++)
+	        ;
 
 	tmDest.tm_mday = (int)(n4Day - rgMonthDays[tmDest.tm_mon-1]);
 
