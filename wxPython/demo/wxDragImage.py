@@ -64,18 +64,19 @@ class DragCanvas(wxScrolledWindow):
 
         # Make a shape from some text
         text = "Some Text"
+        bg_colour = wxColour(57, 115, 57)  # matches the bg image
         font = wxFont(15, wxROMAN, wxNORMAL, wxBOLD)
         textExtent = self.GetFullTextExtent(text, font)
         bmp = wxEmptyBitmap(textExtent[0], textExtent[1])
         dc = wxMemoryDC()
         dc.SelectObject(bmp)
+        dc.SetBackground(wxBrush(bg_colour, wxSOLID))
         dc.Clear()
         dc.SetTextForeground(wxRED)
         dc.SetFont(font)
         dc.DrawText(text, 0, 0)
         dc.SelectObject(wxNullBitmap)
-        del dc
-        mask = wxMaskColour(bmp, wxWHITE)
+        mask = wxMaskColour(bmp, bg_colour)
         bmp.SetMask(mask)
         shape = DragShape(bmp)
         shape.pos = wxPoint(5, 100)

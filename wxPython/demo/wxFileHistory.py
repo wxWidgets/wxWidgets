@@ -59,10 +59,10 @@ class TestPanel(wxPanel):
         EVT_RIGHT_UP(self, self.OnRightClick)
         EVT_MENU(self, wxID_OPEN, self.OnFileOpenDialog)
         EVT_MENU_RANGE(self, wxID_FILE1, wxID_FILE9, self.OnFileHistory)
+        EVT_WINDOW_DESTROY(self, self.Cleanup)
 
 
-
-    def __del__(self):
+    def Cleanup(self, *args):
         del self.filehistory
         self.menu.Destroy()
 
