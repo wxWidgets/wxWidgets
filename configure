@@ -23039,7 +23039,7 @@ echo "$ac_t""$bakefile_cv_prog_icc" 1>&6
         CXXFLAGS="$CXXFLAGS -fno-common"
         
                                         
-        cat <<EOF
+        cat <<EOF >shared-ld-sh
 #!/bin/sh
 #-----------------------------------------------------------------------------
 #-- Name:        distrib/mac/shared-ld-sh
@@ -23121,16 +23121,16 @@ fi
 #
 # Remove intermediate module
 #
-rm -f master.$$.o
+rm -f master.\$\$.o
 
 exit 0
-EOF >shared-ld-sh
+EOF
         chmod +x shared-ld-sh
 
         SHARED_LD_CC="`pwd`/shared-ld-sh -undefined suppress -flat_namespace -o"
         SHARED_LD_CXX="$SHARED_LD_CC"
         PIC_FLAG="-dynamic -fPIC"
-                              ;;
+                                      ;;
 
       *-*-aix* )
                 if test "x$GCC" != "xyes"; then
@@ -23164,8 +23164,8 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
-                        SHARED_LD_CC="$(AIX_CC_LD) -p 0 -o"
-            SHARED_LD_CXX="$(AIX_CXX_LD) -p 0 -o"
+                        SHARED_LD_CC="$AIX_CC_LD -p 0 -o"
+            SHARED_LD_CXX="$AIX_CXX_LD -p 0 -o"
         fi
       ;;
 
@@ -23415,6 +23415,18 @@ fi
         COND_USE_SOVERSOLARIS_1=
     fi
     
+    COND_SHARED_0_MONOLITHIC_0=#
+    if test "x$SHARED" = "x0" -a \
+            "x$MONOLITHIC" = "x0" ; then
+        COND_SHARED_0_MONOLITHIC_0=
+    fi
+    
+    COND_SHARED_1_MONOLITHIC_0=#
+    if test "x$SHARED" = "x1" -a \
+            "x$MONOLITHIC" = "x0" ; then
+        COND_SHARED_1_MONOLITHIC_0=
+    fi
+    
 
 
 
@@ -23533,7 +23545,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:23537: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:23549: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -23849,6 +23861,8 @@ s%@COND_USE_GUI_1_WXUNIV_1@%$COND_USE_GUI_1_WXUNIV_1%g
 s%@COND_USE_GUI_1@%$COND_USE_GUI_1%g
 s%@COND_USE_SOVERLINUX_1@%$COND_USE_SOVERLINUX_1%g
 s%@COND_USE_SOVERSOLARIS_1@%$COND_USE_SOVERSOLARIS_1%g
+s%@COND_SHARED_0_MONOLITHIC_0@%$COND_SHARED_0_MONOLITHIC_0%g
+s%@COND_SHARED_1_MONOLITHIC_0@%$COND_SHARED_1_MONOLITHIC_0%g
 s%@LEX_STEM@%$LEX_STEM%g
 s%@PATH_IFS@%$PATH_IFS%g
 s%@WX_MAJOR_VERSION_NUMBER@%$WX_MAJOR_VERSION_NUMBER%g
