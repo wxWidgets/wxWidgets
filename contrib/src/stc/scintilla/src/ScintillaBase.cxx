@@ -251,8 +251,8 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	// Make an allowance for large strings in list
 	rcList.left = pt.x - 5;
 	rcList.right = rcList.left + widthLB;
-	if (pt.y + vs.lineHeight >= rcClient.bottom - heightAlloced &&  // Wont fit below.
-	        pt.y >= (rcClient.bottom + rcClient.top) / 2) { // and there is more room above.
+        if (((pt.y + vs.lineHeight) >= (rcClient.bottom - heightAlloced)) &&  // Wont fit below.
+            ((pt.y + vs.lineHeight / 2) >= (rcClient.bottom + rcClient.top) / 2)) { // and there is more room above.
 		rcList.top = pt.y - heightAlloced;
 	} else {
 		rcList.top = pt.y + vs.lineHeight;
