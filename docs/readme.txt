@@ -33,7 +33,7 @@ Platforms supported
 
 wxWindows 2 currently supports the following platforms:
 
-- Windows 95/98/ME, Windows NT, Windows 2000, Windows XP
+- Windows 95/98/ME, Windows NT, Windows 2000, Windows XP (see msw/winxp.txt)
 - Most Unix variants with Motif/Lesstif
 - Most Unix variants with GTK+
 - MacOS
