@@ -575,7 +575,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, const wxString& name )
 	}
     }
     
-    for (unsigned int i = 0; i < height; i++) free( lines[i] );
+    for (unsigned int j = 0; j < height; j++) free( lines[j] );
     free( lines );
     
     if (transp)
