@@ -1737,6 +1737,17 @@ enum wxKeyCode
     WXK_WINDOWS_MENU
 };
 
+#if wxUSE_HOTKEY
+enum wxHotkeyModifier
+{
+    wxMOD_NONE = 0,
+    wxMOD_ALT = 1,
+    wxMOD_CONTROL = 2,
+    wxMOD_SHIFT = 4,
+    wxMOD_WIN = 8
+};
+#endif
+
 // Mapping modes (same values as used by Windows, don't change)
 enum
 {

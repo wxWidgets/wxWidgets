@@ -569,6 +569,9 @@
 // wxAcceleratorTable/Entry classes and support for them in wxMenu(Bar)
 #define wxUSE_ACCEL 1
 
+// Hotkey support (currently Windows only)
+#define wxUSE_HOTKEY 1
+
 // Use wxCaret: a class implementing a "cursor" in a text control (called caret
 // under Windows).
 //

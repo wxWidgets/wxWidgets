@@ -177,6 +177,12 @@ public:
     wxWindow* GetWindowChild(wxWindowID id);
 #endif // __WXUNIVERSAL__
 
+#if wxUSE_ACCEL
+    // install and deinstall a system wide hotkey
+    virtual bool RegisterHotKey(int hotkeyId, int modifiers, int virtualKeyCode);
+    virtual bool UnregisterHotKey(int hotkeyId);
+#endif
+
     // implementation from now on
     // --------------------------
 
@@ -362,6 +368,9 @@ public:
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII = FALSE);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
+#if wxUSE_ACCEL
+    bool HandleHotKey(WXWPARAM wParam, WXLPARAM lParam);
+#endif
 #ifdef __WIN32__
     int HandleMenuChar(int chAccel, WXLPARAM lParam);
 #endif

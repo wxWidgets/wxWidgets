@@ -1879,6 +1879,39 @@ repainted.
 
 This is the same as \helpref{Refresh}{wxwindowrefresh} but has a nicer syntax.
 
+\membersection{wxWindow::RegisterHotKey}\label{wxwindowregisterhotkey}
+
+\func{bool}{RegisterHotKey}{\param{int}{ hotkeyId}, \param{int}{ modifiers}, \param{int}{ virtualKeyCode}}
+
+Registers a system wide hotkey. Every time the user presses the hotkey registered here, this window
+will receive a hotkey event. It will receive the event even if the application is in the background
+and does not have the input focus because the user is working with some other application.
+
+\wxheading{Parameters}
+
+\docparam{hotkeyId}{Numeric identifier of the hotkey. For applications this must be between 0 and 0xBFFF. If
+this function is called from a shared DLL, it must be a system wide unique identifier between 0xC000 and 0xFFFF.
+This is a MSW specific detail.}
+
+\docparam{modifiers}{A bitwise combination of {\tt wxMOD\_SHIFT}, {\tt wxMOD\_CONTROL}, {\tt wxMOD\_ALT}
+or {\tt wxMOD\_WIN} specifying the modifier keys that have to be pressed along with the key.}
+
+\docparam{virtualKeyCode}{The virtual key code of the hotkey.}
+
+\wxheading{Return value}
+
+{\tt true} if the hotkey was registered successfully. {\tt false} if some other application already registered a
+hotkey with this modifier/virtualKeyCode combination.
+
+\wxheading{Remarks}
+
+Use EVT\_HOTKEY(hotkeyId, fnc) in the event table to capture the event.
+This function is currently only implemented under MSW.
+
+\wxheading{See also}
+
+\helpref{wxWindow::UnregisterHotKey}{wxwindowunregisterhotkey}
+
 \membersection{wxWindow::ReleaseMouse}\label{wxwindowreleasemouse}
 
 \func{virtual void}{ReleaseMouse}{\void}
@@ -2801,6 +2834,28 @@ Returns {\tt false} if a transfer failed.
 
 \helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow},\rtfsp
 \helpref{wxValidator}{wxvalidator}, \helpref{wxWindow::Validate}{wxwindowvalidate}
+
+\membersection{wxWindow::UnregisterHotKey}\label{wxwindowunregisterhotkey}
+
+\func{bool}{UnregisterHotKey}{\param{int}{ hotkeyId}}
+
+Unregisters a system wide hotkey.
+
+\wxheading{Parameters}
+
+\docparam{hotkeyId}{Numeric identifier of the hotkey. Must be the same id that was passed to RegisterHotKey.}
+
+\wxheading{Return value}
+
+{\tt true} if the hotkey was unregistered successfully, {\tt false} if the id was invalid.
+
+\wxheading{Remarks}
+
+This function is currently only implemented under MSW.
+
+\wxheading{See also}
+
+\helpref{wxWindow::RegisterHotKey}{wxwindowregisterhotkey}
 
 \membersection{wxWindow::Update}\label{wxwindowupdate}
 

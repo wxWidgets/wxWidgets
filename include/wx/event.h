@@ -186,7 +186,9 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_NAVIGATION_KEY, 214)
     DECLARE_EVENT_TYPE(wxEVT_KEY_DOWN, 215)
     DECLARE_EVENT_TYPE(wxEVT_KEY_UP, 216)
-
+#if wxUSE_HOTKEY
+    DECLARE_EVENT_TYPE(wxEVT_HOTKEY, 217)
+#endif
         // Set cursor event
     DECLARE_EVENT_TYPE(wxEVT_SET_CURSOR, 230)
 
@@ -819,6 +821,7 @@ private:
  wxEVT_CHAR_HOOK
  wxEVT_KEY_DOWN
  wxEVT_KEY_UP
+ wxEVT_HOTKEY
  */
 
 class WXDLLIMPEXP_CORE wxKeyEvent : public wxEvent
@@ -2332,6 +2335,9 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 #define EVT_CHAR(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CHAR, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
 #define EVT_KEY_DOWN(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KEY_DOWN, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
 #define EVT_KEY_UP(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KEY_UP, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
+#if wxUSE_HOTKEY
+#define EVT_HOTKEY(id, func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_HOTKEY, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
+#endif
 #define EVT_CHAR_HOOK(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CHAR_HOOK, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, NULL ),
 #define EVT_MENU_OPEN(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MENU_OPEN, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
 #define EVT_MENU_CLOSE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MENU_CLOSE, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),

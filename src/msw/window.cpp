@@ -2549,6 +2549,12 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 
+#if wxUSE_HOTKEY
+        case WM_HOTKEY:
+            processed = HandleHotKey((WORD)wParam, lParam);
+            break;
+#endif
+
         case WM_HSCROLL:
         case WM_VSCROLL:
             {
@@ -5093,6 +5099,9 @@ const char *wxGetMessageName(int message)
         case 0x030F: return "WM_QUERYNEWPALETTE";
         case 0x0310: return "WM_PALETTEISCHANGING";
         case 0x0311: return "WM_PALETTECHANGED";
+#if wxUSE_HOTKEY
+        case 0x0312: return "WM_HOTKEY";
+#endif
 
         // common controls messages - although they're not strictly speaking
         // standard, it's nice to decode them nevertheless
@@ -5410,4 +5419,51 @@ wxPoint wxGetMousePosition()
 
     return wxPoint(pt.x, pt.y);
 }
+
+#if wxUSE_HOTKEY
+bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int virtualKeyCode)
+{
+    UINT win_modifiers=0;
+    if (modifiers & wxMOD_ALT)
+        win_modifiers|=MOD_ALT;
+    if (modifiers & wxMOD_SHIFT)
+        win_modifiers|=MOD_SHIFT;
+    if (modifiers & wxMOD_CONTROL)
+        win_modifiers|=MOD_CONTROL;
+    if (modifiers & wxMOD_WIN)
+        win_modifiers|=MOD_WIN;
+
+    return ::RegisterHotKey(GetHwnd(), hotkeyId, win_modifiers, virtualKeyCode)!=FALSE;
+}
+
+bool wxWindowMSW::UnregisterHotKey(int hotkeyId)
+{
+    return ::UnregisterHotKey(GetHwnd(), hotkeyId)!=FALSE;
+}
+
+bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
+{
+    int hotkeyId=wParam;
+     int virtualKey=HIWORD(lParam);
+    int win_modifiers=LOWORD(lParam);
+    /*
+    wxHotkeyModifier modifiers=wxMOD_NONE;
+    if (win_modifiers & MOD_ALT)
+        modifiers|=wxMOD_ALT;
+    if (win_modifiers & MOD_SHIFT)
+        modifiers|=wxMOD_SHIFT;
+    if (win_modifiers & MOD_CONTROL)
+        modifiers|=wxMOD_CONTROL;
+    if (win_modifiers & MOD_WIN)
+        modifiers|=wxMOD_WIN;
+*/
+    wxKeyEvent event(CreateKeyEvent(wxEVT_HOTKEY, virtualKey, wParam, lParam));
+    event.SetId(hotkeyId);
+    event.m_shiftDown = (win_modifiers & MOD_SHIFT) != 0;
+    event.m_controlDown = (win_modifiers & MOD_CONTROL) != 0;
+    event.m_altDown = (win_modifiers & MOD_ALT) != 0;
+    event.m_metaDown = (win_modifiers & MOD_WIN) != 0;
+    return GetEventHandler()->ProcessEvent(event);    
+}
+#endif
 

@@ -2106,6 +2106,19 @@ void wxWindowBase::ReleaseMouse()
                GetCapture());
 }
 
+#if wxUSE_HOTKEY
+bool wxWindowBase::RegisterHotKey(int hotkeyId, int modifiers, int virtualKeyCode)
+{
+    // not implemented
+    return false;
+}
+
+bool wxWindowBase::UnregisterHotKey(int hotkeyId)
+{
+    // not implemented
+    return false;
+}
+#endif
 
 void wxWindowBase::SendDestroyEvent()
 {

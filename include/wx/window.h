@@ -516,6 +516,11 @@ public:
         { m_acceleratorTable = accel; }
     wxAcceleratorTable *GetAcceleratorTable()
         { return &m_acceleratorTable; }
+
+    // install and deinstall a system wide hotkey
+    virtual bool RegisterHotKey(int hotkeyId, int modifiers, int virtualKeyCode);
+    virtual bool UnregisterHotKey(int hotkeyId);
+
 #endif // wxUSE_ACCEL
 
     // dialog units translations

@@ -16,3 +16,5 @@ Please see also:
 - In doc/view file selector, document type is selected by
   extension, not the type selected in the (Windows) file selector.
 
+- Add wxUSE_HOTKEY and any other missing options to configure.
+
