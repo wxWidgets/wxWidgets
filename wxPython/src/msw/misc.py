@@ -103,32 +103,32 @@ class SystemSettings(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSystemSettings instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetColour(*args, **kwargs):
-        """SystemSettings.GetColour(int index) -> Colour"""
+        """GetColour(int index) -> Colour"""
         return _misc.SystemSettings_GetColour(*args, **kwargs)
 
     GetColour = staticmethod(GetColour)
     def GetFont(*args, **kwargs):
-        """SystemSettings.GetFont(int index) -> Font"""
+        """GetFont(int index) -> Font"""
         return _misc.SystemSettings_GetFont(*args, **kwargs)
 
     GetFont = staticmethod(GetFont)
     def GetMetric(*args, **kwargs):
-        """SystemSettings.GetMetric(int index) -> int"""
+        """GetMetric(int index) -> int"""
         return _misc.SystemSettings_GetMetric(*args, **kwargs)
 
     GetMetric = staticmethod(GetMetric)
     def HasFeature(*args, **kwargs):
-        """SystemSettings.HasFeature(int index) -> bool"""
+        """HasFeature(int index) -> bool"""
         return _misc.SystemSettings_HasFeature(*args, **kwargs)
 
     HasFeature = staticmethod(HasFeature)
     def GetScreenType(*args, **kwargs):
-        """SystemSettings.GetScreenType() -> int"""
+        """GetScreenType() -> int"""
         return _misc.SystemSettings_GetScreenType(*args, **kwargs)
 
     GetScreenType = staticmethod(GetScreenType)
     def SetScreenType(*args, **kwargs):
-        """SystemSettings.SetScreenType(int screen)"""
+        """SetScreenType(int screen)"""
         return _misc.SystemSettings_SetScreenType(*args, **kwargs)
 
     SetScreenType = staticmethod(SetScreenType)
@@ -174,27 +174,27 @@ class SystemOptions(core.Object):
         self.thisown = 1
         del newobj.thisown
     def SetOption(*args, **kwargs):
-        """SystemOptions.SetOption(String name, String value)"""
+        """SetOption(String name, String value)"""
         return _misc.SystemOptions_SetOption(*args, **kwargs)
 
     SetOption = staticmethod(SetOption)
     def SetOptionInt(*args, **kwargs):
-        """SystemOptions.SetOptionInt(String name, int value)"""
+        """SetOptionInt(String name, int value)"""
         return _misc.SystemOptions_SetOptionInt(*args, **kwargs)
 
     SetOptionInt = staticmethod(SetOptionInt)
     def GetOption(*args, **kwargs):
-        """SystemOptions.GetOption(String name) -> String"""
+        """GetOption(String name) -> String"""
         return _misc.SystemOptions_GetOption(*args, **kwargs)
 
     GetOption = staticmethod(GetOption)
     def GetOptionInt(*args, **kwargs):
-        """SystemOptions.GetOptionInt(String name) -> int"""
+        """GetOptionInt(String name) -> int"""
         return _misc.SystemOptions_GetOptionInt(*args, **kwargs)
 
     GetOptionInt = staticmethod(GetOptionInt)
     def HasOption(*args, **kwargs):
-        """SystemOptions.HasOption(String name) -> bool"""
+        """HasOption(String name) -> bool"""
         return _misc.SystemOptions_HasOption(*args, **kwargs)
 
     HasOption = staticmethod(HasOption)
@@ -553,12 +553,12 @@ class ToolTip(core.Object):
         return _misc.ToolTip_GetWindow(*args, **kwargs)
 
     def Enable(*args, **kwargs):
-        """ToolTip.Enable(bool flag)"""
+        """Enable(bool flag)"""
         return _misc.ToolTip_Enable(*args, **kwargs)
 
     Enable = staticmethod(Enable)
     def SetDelay(*args, **kwargs):
-        """ToolTip.SetDelay(long milliseconds)"""
+        """SetDelay(long milliseconds)"""
         return _misc.ToolTip_SetDelay(*args, **kwargs)
 
     SetDelay = staticmethod(SetDelay)
@@ -823,6 +823,7 @@ class FileHistory(core.Object):
         """GetCount() -> int"""
         return _misc.FileHistory_GetCount(*args, **kwargs)
 
+    GetNoHistoryFiles = GetCount 
 
 class FileHistoryPtr(FileHistory):
     def __init__(self, this):
@@ -1093,17 +1094,17 @@ class Log(object):
         self.thisown = 1
         del newobj.thisown
     def IsEnabled(*args, **kwargs):
-        """Log.IsEnabled() -> bool"""
+        """IsEnabled() -> bool"""
         return _misc.Log_IsEnabled(*args, **kwargs)
 
     IsEnabled = staticmethod(IsEnabled)
     def EnableLogging(*args, **kwargs):
-        """Log.EnableLogging(bool doIt=True) -> bool"""
+        """EnableLogging(bool doIt=True) -> bool"""
         return _misc.Log_EnableLogging(*args, **kwargs)
 
     EnableLogging = staticmethod(EnableLogging)
     def OnLog(*args, **kwargs):
-        """Log.OnLog(wxLogLevel level, wxChar szString, time_t t)"""
+        """OnLog(wxLogLevel level, wxChar szString, time_t t)"""
         return _misc.Log_OnLog(*args, **kwargs)
 
     OnLog = staticmethod(OnLog)
@@ -1112,102 +1113,102 @@ class Log(object):
         return _misc.Log_Flush(*args, **kwargs)
 
     def FlushActive(*args, **kwargs):
-        """Log.FlushActive()"""
+        """FlushActive()"""
         return _misc.Log_FlushActive(*args, **kwargs)
 
     FlushActive = staticmethod(FlushActive)
     def GetActiveTarget(*args, **kwargs):
-        """Log.GetActiveTarget() -> Log"""
+        """GetActiveTarget() -> Log"""
         return _misc.Log_GetActiveTarget(*args, **kwargs)
 
     GetActiveTarget = staticmethod(GetActiveTarget)
     def SetActiveTarget(*args, **kwargs):
-        """Log.SetActiveTarget(Log pLogger) -> Log"""
+        """SetActiveTarget(Log pLogger) -> Log"""
         return _misc.Log_SetActiveTarget(*args, **kwargs)
 
     SetActiveTarget = staticmethod(SetActiveTarget)
     def Suspend(*args, **kwargs):
-        """Log.Suspend()"""
+        """Suspend()"""
         return _misc.Log_Suspend(*args, **kwargs)
 
     Suspend = staticmethod(Suspend)
     def Resume(*args, **kwargs):
-        """Log.Resume()"""
+        """Resume()"""
         return _misc.Log_Resume(*args, **kwargs)
 
     Resume = staticmethod(Resume)
     def SetVerbose(*args, **kwargs):
-        """Log.SetVerbose(bool bVerbose=True)"""
+        """SetVerbose(bool bVerbose=True)"""
         return _misc.Log_SetVerbose(*args, **kwargs)
 
     SetVerbose = staticmethod(SetVerbose)
     def SetLogLevel(*args, **kwargs):
-        """Log.SetLogLevel(wxLogLevel logLevel)"""
+        """SetLogLevel(wxLogLevel logLevel)"""
         return _misc.Log_SetLogLevel(*args, **kwargs)
 
     SetLogLevel = staticmethod(SetLogLevel)
     def DontCreateOnDemand(*args, **kwargs):
-        """Log.DontCreateOnDemand()"""
+        """DontCreateOnDemand()"""
         return _misc.Log_DontCreateOnDemand(*args, **kwargs)
 
     DontCreateOnDemand = staticmethod(DontCreateOnDemand)
     def SetTraceMask(*args, **kwargs):
-        """Log.SetTraceMask(wxTraceMask ulMask)"""
+        """SetTraceMask(wxTraceMask ulMask)"""
         return _misc.Log_SetTraceMask(*args, **kwargs)
 
     SetTraceMask = staticmethod(SetTraceMask)
     def AddTraceMask(*args, **kwargs):
-        """Log.AddTraceMask(String str)"""
+        """AddTraceMask(String str)"""
         return _misc.Log_AddTraceMask(*args, **kwargs)
 
     AddTraceMask = staticmethod(AddTraceMask)
     def RemoveTraceMask(*args, **kwargs):
-        """Log.RemoveTraceMask(String str)"""
+        """RemoveTraceMask(String str)"""
         return _misc.Log_RemoveTraceMask(*args, **kwargs)
 
     RemoveTraceMask = staticmethod(RemoveTraceMask)
     def ClearTraceMasks(*args, **kwargs):
-        """Log.ClearTraceMasks()"""
+        """ClearTraceMasks()"""
         return _misc.Log_ClearTraceMasks(*args, **kwargs)
 
     ClearTraceMasks = staticmethod(ClearTraceMasks)
     def GetTraceMasks(*args, **kwargs):
-        """Log.GetTraceMasks() -> wxArrayString"""
+        """GetTraceMasks() -> wxArrayString"""
         return _misc.Log_GetTraceMasks(*args, **kwargs)
 
     GetTraceMasks = staticmethod(GetTraceMasks)
     def SetTimestamp(*args, **kwargs):
-        """Log.SetTimestamp(wxChar ts)"""
+        """SetTimestamp(wxChar ts)"""
         return _misc.Log_SetTimestamp(*args, **kwargs)
 
     SetTimestamp = staticmethod(SetTimestamp)
     def GetVerbose(*args, **kwargs):
-        """Log.GetVerbose() -> bool"""
+        """GetVerbose() -> bool"""
         return _misc.Log_GetVerbose(*args, **kwargs)
 
     GetVerbose = staticmethod(GetVerbose)
     def GetTraceMask(*args, **kwargs):
-        """Log.GetTraceMask() -> wxTraceMask"""
+        """GetTraceMask() -> wxTraceMask"""
         return _misc.Log_GetTraceMask(*args, **kwargs)
 
     GetTraceMask = staticmethod(GetTraceMask)
     def IsAllowedTraceMask(*args, **kwargs):
-        """Log.IsAllowedTraceMask(wxChar mask) -> bool"""
+        """IsAllowedTraceMask(wxChar mask) -> bool"""
         return _misc.Log_IsAllowedTraceMask(*args, **kwargs)
 
     IsAllowedTraceMask = staticmethod(IsAllowedTraceMask)
     def GetLogLevel(*args, **kwargs):
-        """Log.GetLogLevel() -> wxLogLevel"""
+        """GetLogLevel() -> wxLogLevel"""
         return _misc.Log_GetLogLevel(*args, **kwargs)
 
     GetLogLevel = staticmethod(GetLogLevel)
     def GetTimestamp(*args, **kwargs):
-        """Log.GetTimestamp() -> wxChar"""
+        """GetTimestamp() -> wxChar"""
         return _misc.Log_GetTimestamp(*args, **kwargs)
 
     GetTimestamp = staticmethod(GetTimestamp)
     def TimeStamp(*args, **kwargs):
-        """Log.TimeStamp() -> String"""
+        """TimeStamp() -> String"""
         return _misc.Log_TimeStamp(*args, **kwargs)
 
     TimeStamp = staticmethod(TimeStamp)
@@ -1575,17 +1576,17 @@ class Process(core.EvtHandler):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyProcess instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Kill(*args, **kwargs):
-        """Process.Kill(int pid, int sig=SIGTERM) -> int"""
+        """Kill(int pid, int sig=SIGTERM) -> int"""
         return _misc.Process_Kill(*args, **kwargs)
 
     Kill = staticmethod(Kill)
     def Exists(*args, **kwargs):
-        """Process.Exists(int pid) -> bool"""
+        """Exists(int pid) -> bool"""
         return _misc.Process_Exists(*args, **kwargs)
 
     Exists = staticmethod(Exists)
     def Open(*args, **kwargs):
-        """Process.Open(String cmd, int flags=EXEC_ASYNC) -> Process"""
+        """Open(String cmd, int flags=EXEC_ASYNC) -> Process"""
         return _misc.Process_Open(*args, **kwargs)
 
     Open = staticmethod(Open)
@@ -2197,7 +2198,7 @@ class FileType(object):
         return _misc.FileType_Unassociate(*args, **kwargs)
 
     def ExpandCommand(*args, **kwargs):
-        """FileType.ExpandCommand(String command, String filename, String mimetype=EmptyString) -> String"""
+        """ExpandCommand(String command, String filename, String mimetype=EmptyString) -> String"""
         return _misc.FileType_ExpandCommand(*args, **kwargs)
 
     ExpandCommand = staticmethod(ExpandCommand)
@@ -2217,7 +2218,7 @@ class MimeTypesManager(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMimeTypesManager instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def IsOfType(*args, **kwargs):
-        """MimeTypesManager.IsOfType(String mimeType, String wildcard) -> bool"""
+        """IsOfType(String mimeType, String wildcard) -> bool"""
         return _misc.MimeTypesManager_IsOfType(*args, **kwargs)
 
     IsOfType = staticmethod(IsOfType)
@@ -2305,7 +2306,7 @@ class ArtProvider(object):
 
     def PushProvider(*args, **kwargs):
         """
-        ArtProvider.PushProvider(ArtProvider provider)
+        PushProvider(ArtProvider provider)
 
         Add new provider to the top of providers stack.
         """
@@ -2314,7 +2315,7 @@ class ArtProvider(object):
     PushProvider = staticmethod(PushProvider)
     def PopProvider(*args, **kwargs):
         """
-        ArtProvider.PopProvider() -> bool
+        PopProvider() -> bool
 
         Remove latest added provider and delete it.
         """
@@ -2323,7 +2324,7 @@ class ArtProvider(object):
     PopProvider = staticmethod(PopProvider)
     def RemoveProvider(*args, **kwargs):
         """
-        ArtProvider.RemoveProvider(ArtProvider provider) -> bool
+        RemoveProvider(ArtProvider provider) -> bool
 
         Remove provider. The provider must have been added previously!
         The provider is _not_ deleted.
@@ -2333,7 +2334,7 @@ class ArtProvider(object):
     RemoveProvider = staticmethod(RemoveProvider)
     def GetBitmap(*args, **kwargs):
         """
-        ArtProvider.GetBitmap(String id, String client=ART_OTHER, Size size=DefaultSize) -> Bitmap
+        GetBitmap(String id, String client=ART_OTHER, Size size=DefaultSize) -> Bitmap
 
         Query the providers for bitmap with given ID and return it. Return
         wx.NullBitmap if no provider provides it.
@@ -2343,7 +2344,7 @@ class ArtProvider(object):
     GetBitmap = staticmethod(GetBitmap)
     def GetIcon(*args, **kwargs):
         """
-        ArtProvider.GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> Icon
+        GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> Icon
 
         Query the providers for icon with given ID and return it. Return
         wx.NullIcon if no provider provides it.
@@ -2466,22 +2467,22 @@ class ConfigBase(object):
     Type_Integer = _misc.ConfigBase_Type_Integer
     Type_Float = _misc.ConfigBase_Type_Float
     def Set(*args, **kwargs):
-        """ConfigBase.Set(ConfigBase pConfig) -> ConfigBase"""
+        """Set(ConfigBase pConfig) -> ConfigBase"""
         return _misc.ConfigBase_Set(*args, **kwargs)
 
     Set = staticmethod(Set)
     def Get(*args, **kwargs):
-        """ConfigBase.Get(bool createOnDemand=True) -> ConfigBase"""
+        """Get(bool createOnDemand=True) -> ConfigBase"""
         return _misc.ConfigBase_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
     def Create(*args, **kwargs):
-        """ConfigBase.Create() -> ConfigBase"""
+        """Create() -> ConfigBase"""
         return _misc.ConfigBase_Create(*args, **kwargs)
 
     Create = staticmethod(Create)
     def DontCreateOnDemand(*args, **kwargs):
-        """ConfigBase.DontCreateOnDemand()"""
+        """DontCreateOnDemand()"""
         return _misc.ConfigBase_DontCreateOnDemand(*args, **kwargs)
 
     DontCreateOnDemand = staticmethod(DontCreateOnDemand)
@@ -2903,62 +2904,62 @@ class DateTime(object):
     Monday_First = _misc.DateTime_Monday_First
     Sunday_First = _misc.DateTime_Sunday_First
     def SetCountry(*args, **kwargs):
-        """DateTime.SetCountry(int country)"""
+        """SetCountry(int country)"""
         return _misc.DateTime_SetCountry(*args, **kwargs)
 
     SetCountry = staticmethod(SetCountry)
     def GetCountry(*args, **kwargs):
-        """DateTime.GetCountry() -> int"""
+        """GetCountry() -> int"""
         return _misc.DateTime_GetCountry(*args, **kwargs)
 
     GetCountry = staticmethod(GetCountry)
     def IsWestEuropeanCountry(*args, **kwargs):
-        """DateTime.IsWestEuropeanCountry(int country=Country_Default) -> bool"""
+        """IsWestEuropeanCountry(int country=Country_Default) -> bool"""
         return _misc.DateTime_IsWestEuropeanCountry(*args, **kwargs)
 
     IsWestEuropeanCountry = staticmethod(IsWestEuropeanCountry)
     def GetCurrentYear(*args, **kwargs):
-        """DateTime.GetCurrentYear(int cal=Gregorian) -> int"""
+        """GetCurrentYear(int cal=Gregorian) -> int"""
         return _misc.DateTime_GetCurrentYear(*args, **kwargs)
 
     GetCurrentYear = staticmethod(GetCurrentYear)
     def ConvertYearToBC(*args, **kwargs):
-        """DateTime.ConvertYearToBC(int year) -> int"""
+        """ConvertYearToBC(int year) -> int"""
         return _misc.DateTime_ConvertYearToBC(*args, **kwargs)
 
     ConvertYearToBC = staticmethod(ConvertYearToBC)
     def GetCurrentMonth(*args, **kwargs):
-        """DateTime.GetCurrentMonth(int cal=Gregorian) -> int"""
+        """GetCurrentMonth(int cal=Gregorian) -> int"""
         return _misc.DateTime_GetCurrentMonth(*args, **kwargs)
 
     GetCurrentMonth = staticmethod(GetCurrentMonth)
     def IsLeapYear(*args, **kwargs):
-        """DateTime.IsLeapYear(int year=Inv_Year, int cal=Gregorian) -> bool"""
+        """IsLeapYear(int year=Inv_Year, int cal=Gregorian) -> bool"""
         return _misc.DateTime_IsLeapYear(*args, **kwargs)
 
     IsLeapYear = staticmethod(IsLeapYear)
     def GetCentury(*args, **kwargs):
-        """DateTime.GetCentury(int year=Inv_Year) -> int"""
+        """GetCentury(int year=Inv_Year) -> int"""
         return _misc.DateTime_GetCentury(*args, **kwargs)
 
     GetCentury = staticmethod(GetCentury)
     def GetNumberOfDaysinYear(*args, **kwargs):
-        """DateTime.GetNumberOfDaysinYear(int year, int cal=Gregorian) -> int"""
+        """GetNumberOfDaysinYear(int year, int cal=Gregorian) -> int"""
         return _misc.DateTime_GetNumberOfDaysinYear(*args, **kwargs)
 
     GetNumberOfDaysinYear = staticmethod(GetNumberOfDaysinYear)
     def GetNumberOfDaysInMonth(*args, **kwargs):
-        """DateTime.GetNumberOfDaysInMonth(int month, int year=Inv_Year, int cal=Gregorian) -> int"""
+        """GetNumberOfDaysInMonth(int month, int year=Inv_Year, int cal=Gregorian) -> int"""
         return _misc.DateTime_GetNumberOfDaysInMonth(*args, **kwargs)
 
     GetNumberOfDaysInMonth = staticmethod(GetNumberOfDaysInMonth)
     def GetMonthName(*args, **kwargs):
-        """DateTime.GetMonthName(int month, int flags=Name_Full) -> String"""
+        """GetMonthName(int month, int flags=Name_Full) -> String"""
         return _misc.DateTime_GetMonthName(*args, **kwargs)
 
     GetMonthName = staticmethod(GetMonthName)
     def GetWeekDayName(*args, **kwargs):
-        """DateTime.GetWeekDayName(int weekday, int flags=Name_Full) -> String"""
+        """GetWeekDayName(int weekday, int flags=Name_Full) -> String"""
         return _misc.DateTime_GetWeekDayName(*args, **kwargs)
 
     GetWeekDayName = staticmethod(GetWeekDayName)
@@ -2972,32 +2973,32 @@ class DateTime(object):
 
     GetAmPmStrings = staticmethod(GetAmPmStrings)
     def IsDSTApplicable(*args, **kwargs):
-        """DateTime.IsDSTApplicable(int year=Inv_Year, int country=Country_Default) -> bool"""
+        """IsDSTApplicable(int year=Inv_Year, int country=Country_Default) -> bool"""
         return _misc.DateTime_IsDSTApplicable(*args, **kwargs)
 
     IsDSTApplicable = staticmethod(IsDSTApplicable)
     def GetBeginDST(*args, **kwargs):
-        """DateTime.GetBeginDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
+        """GetBeginDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
         return _misc.DateTime_GetBeginDST(*args, **kwargs)
 
     GetBeginDST = staticmethod(GetBeginDST)
     def GetEndDST(*args, **kwargs):
-        """DateTime.GetEndDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
+        """GetEndDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
         return _misc.DateTime_GetEndDST(*args, **kwargs)
 
     GetEndDST = staticmethod(GetEndDST)
     def Now(*args, **kwargs):
-        """DateTime.Now() -> DateTime"""
+        """Now() -> DateTime"""
         return _misc.DateTime_Now(*args, **kwargs)
 
     Now = staticmethod(Now)
     def UNow(*args, **kwargs):
-        """DateTime.UNow() -> DateTime"""
+        """UNow() -> DateTime"""
         return _misc.DateTime_UNow(*args, **kwargs)
 
     UNow = staticmethod(UNow)
     def Today(*args, **kwargs):
-        """DateTime.Today() -> DateTime"""
+        """Today() -> DateTime"""
         return _misc.DateTime_Today(*args, **kwargs)
 
     Today = staticmethod(Today)
@@ -3495,52 +3496,52 @@ class TimeSpan(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTimeSpan instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Seconds(*args, **kwargs):
-        """TimeSpan.Seconds(long sec) -> TimeSpan"""
+        """Seconds(long sec) -> TimeSpan"""
         return _misc.TimeSpan_Seconds(*args, **kwargs)
 
     Seconds = staticmethod(Seconds)
     def Second(*args, **kwargs):
-        """TimeSpan.Second() -> TimeSpan"""
+        """Second() -> TimeSpan"""
         return _misc.TimeSpan_Second(*args, **kwargs)
 
     Second = staticmethod(Second)
     def Minutes(*args, **kwargs):
-        """TimeSpan.Minutes(long min) -> TimeSpan"""
+        """Minutes(long min) -> TimeSpan"""
         return _misc.TimeSpan_Minutes(*args, **kwargs)
 
     Minutes = staticmethod(Minutes)
     def Minute(*args, **kwargs):
-        """TimeSpan.Minute() -> TimeSpan"""
+        """Minute() -> TimeSpan"""
         return _misc.TimeSpan_Minute(*args, **kwargs)
 
     Minute = staticmethod(Minute)
     def Hours(*args, **kwargs):
-        """TimeSpan.Hours(long hours) -> TimeSpan"""
+        """Hours(long hours) -> TimeSpan"""
         return _misc.TimeSpan_Hours(*args, **kwargs)
 
     Hours = staticmethod(Hours)
     def Hour(*args, **kwargs):
-        """TimeSpan.Hour() -> TimeSpan"""
+        """Hour() -> TimeSpan"""
         return _misc.TimeSpan_Hour(*args, **kwargs)
 
     Hour = staticmethod(Hour)
     def Days(*args, **kwargs):
-        """TimeSpan.Days(long days) -> TimeSpan"""
+        """Days(long days) -> TimeSpan"""
         return _misc.TimeSpan_Days(*args, **kwargs)
 
     Days = staticmethod(Days)
     def Day(*args, **kwargs):
-        """TimeSpan.Day() -> TimeSpan"""
+        """Day() -> TimeSpan"""
         return _misc.TimeSpan_Day(*args, **kwargs)
 
     Day = staticmethod(Day)
     def Weeks(*args, **kwargs):
-        """TimeSpan.Weeks(long days) -> TimeSpan"""
+        """Weeks(long days) -> TimeSpan"""
         return _misc.TimeSpan_Weeks(*args, **kwargs)
 
     Weeks = staticmethod(Weeks)
     def Week(*args, **kwargs):
-        """TimeSpan.Week() -> TimeSpan"""
+        """Week() -> TimeSpan"""
         return _misc.TimeSpan_Week(*args, **kwargs)
 
     Week = staticmethod(Week)
@@ -3753,42 +3754,42 @@ class DateSpan(object):
         except: pass
 
     def Days(*args, **kwargs):
-        """DateSpan.Days(int days) -> DateSpan"""
+        """Days(int days) -> DateSpan"""
         return _misc.DateSpan_Days(*args, **kwargs)
 
     Days = staticmethod(Days)
     def Day(*args, **kwargs):
-        """DateSpan.Day() -> DateSpan"""
+        """Day() -> DateSpan"""
         return _misc.DateSpan_Day(*args, **kwargs)
 
     Day = staticmethod(Day)
     def Weeks(*args, **kwargs):
-        """DateSpan.Weeks(int weeks) -> DateSpan"""
+        """Weeks(int weeks) -> DateSpan"""
         return _misc.DateSpan_Weeks(*args, **kwargs)
 
     Weeks = staticmethod(Weeks)
     def Week(*args, **kwargs):
-        """DateSpan.Week() -> DateSpan"""
+        """Week() -> DateSpan"""
         return _misc.DateSpan_Week(*args, **kwargs)
 
     Week = staticmethod(Week)
     def Months(*args, **kwargs):
-        """DateSpan.Months(int mon) -> DateSpan"""
+        """Months(int mon) -> DateSpan"""
         return _misc.DateSpan_Months(*args, **kwargs)
 
     Months = staticmethod(Months)
     def Month(*args, **kwargs):
-        """DateSpan.Month() -> DateSpan"""
+        """Month() -> DateSpan"""
         return _misc.DateSpan_Month(*args, **kwargs)
 
     Month = staticmethod(Month)
     def Years(*args, **kwargs):
-        """DateSpan.Years(int years) -> DateSpan"""
+        """Years(int years) -> DateSpan"""
         return _misc.DateSpan_Years(*args, **kwargs)
 
     Years = staticmethod(Years)
     def Year(*args, **kwargs):
-        """DateSpan.Year() -> DateSpan"""
+        """Year() -> DateSpan"""
         return _misc.DateSpan_Year(*args, **kwargs)
 
     Year = staticmethod(Year)
@@ -4334,6 +4335,14 @@ class MetafileDataObject(DataObjectSimple):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def SetMetafile(*args, **kwargs):
+        """SetMetafile(wxMetafile metafile)"""
+        return _misc.MetafileDataObject_SetMetafile(*args, **kwargs)
+
+    def GetMetafile(*args, **kwargs):
+        """GetMetafile() -> wxMetafile"""
+        return _misc.MetafileDataObject_GetMetafile(*args, **kwargs)
+
 
 class MetafileDataObjectPtr(MetafileDataObject):
     def __init__(self, this):

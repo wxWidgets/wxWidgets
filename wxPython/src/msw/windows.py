@@ -3243,7 +3243,7 @@ class Printer(core.Object):
         return _windows.Printer_GetAbort(*args, **kwargs)
 
     def GetLastError(*args, **kwargs):
-        """Printer.GetLastError() -> int"""
+        """GetLastError() -> int"""
         return _windows.Printer_GetLastError(*args, **kwargs)
 
     GetLastError = staticmethod(GetLastError)

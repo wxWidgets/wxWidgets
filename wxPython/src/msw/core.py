@@ -1711,17 +1711,17 @@ class FileSystem(Object):
         return _core.FileSystem_FindNext(*args, **kwargs)
 
     def AddHandler(*args, **kwargs):
-        """FileSystem.AddHandler(CPPFileSystemHandler handler)"""
+        """AddHandler(CPPFileSystemHandler handler)"""
         return _core.FileSystem_AddHandler(*args, **kwargs)
 
     AddHandler = staticmethod(AddHandler)
     def CleanUpHandlers(*args, **kwargs):
-        """FileSystem.CleanUpHandlers()"""
+        """CleanUpHandlers()"""
         return _core.FileSystem_CleanUpHandlers(*args, **kwargs)
 
     CleanUpHandlers = staticmethod(CleanUpHandlers)
     def FileNameToURL(*args, **kwargs):
-        """FileSystem.FileNameToURL(String filename) -> String"""
+        """FileNameToURL(String filename) -> String"""
         return _core.FileSystem_FileNameToURL(*args, **kwargs)
 
     FileNameToURL = staticmethod(FileNameToURL)
@@ -1838,7 +1838,7 @@ class MemoryFSHandler(CPPFileSystemHandler):
         self.thisown = 1
         del newobj.thisown
     def RemoveFile(*args, **kwargs):
-        """MemoryFSHandler.RemoveFile(String filename)"""
+        """RemoveFile(String filename)"""
         return _core.MemoryFSHandler_RemoveFile(*args, **kwargs)
 
     RemoveFile = staticmethod(RemoveFile)
@@ -1932,7 +1932,7 @@ class ImageHistogram(object):
         del newobj.thisown
     def MakeKey(*args, **kwargs):
         """
-        ImageHistogram.MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
+        MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
 
         Get the key in the histogram for the given RGB values
         """
@@ -2047,12 +2047,12 @@ class Image(Object):
         return _core.Image_SetMaskFromImage(*args, **kwargs)
 
     def CanRead(*args, **kwargs):
-        """Image.CanRead(String name) -> bool"""
+        """CanRead(String name) -> bool"""
         return _core.Image_CanRead(*args, **kwargs)
 
     CanRead = staticmethod(CanRead)
     def GetImageCount(*args, **kwargs):
-        """Image.GetImageCount(String name, long type=BITMAP_TYPE_ANY) -> int"""
+        """GetImageCount(String name, long type=BITMAP_TYPE_ANY) -> int"""
         return _core.Image_GetImageCount(*args, **kwargs)
 
     GetImageCount = staticmethod(GetImageCount)
@@ -2073,7 +2073,7 @@ class Image(Object):
         return _core.Image_SaveMimeFile(*args, **kwargs)
 
     def CanReadStream(*args, **kwargs):
-        """Image.CanReadStream(InputStream stream) -> bool"""
+        """CanReadStream(InputStream stream) -> bool"""
         return _core.Image_CanReadStream(*args, **kwargs)
 
     CanReadStream = staticmethod(CanReadStream)
@@ -2220,22 +2220,22 @@ class Image(Object):
         return _core.Image_ComputeHistogram(*args, **kwargs)
 
     def AddHandler(*args, **kwargs):
-        """Image.AddHandler(ImageHandler handler)"""
+        """AddHandler(ImageHandler handler)"""
         return _core.Image_AddHandler(*args, **kwargs)
 
     AddHandler = staticmethod(AddHandler)
     def InsertHandler(*args, **kwargs):
-        """Image.InsertHandler(ImageHandler handler)"""
+        """InsertHandler(ImageHandler handler)"""
         return _core.Image_InsertHandler(*args, **kwargs)
 
     InsertHandler = staticmethod(InsertHandler)
     def RemoveHandler(*args, **kwargs):
-        """Image.RemoveHandler(String name) -> bool"""
+        """RemoveHandler(String name) -> bool"""
         return _core.Image_RemoveHandler(*args, **kwargs)
 
     RemoveHandler = staticmethod(RemoveHandler)
     def GetImageExtWildcard(*args, **kwargs):
-        """Image.GetImageExtWildcard() -> String"""
+        """GetImageExtWildcard() -> String"""
         return _core.Image_GetImageExtWildcard(*args, **kwargs)
 
     GetImageExtWildcard = staticmethod(GetImageExtWildcard)
@@ -4031,32 +4031,32 @@ class UpdateUIEvent(CommandEvent):
         return _core.UpdateUIEvent_SetText(*args, **kwargs)
 
     def SetUpdateInterval(*args, **kwargs):
-        """UpdateUIEvent.SetUpdateInterval(long updateInterval)"""
+        """SetUpdateInterval(long updateInterval)"""
         return _core.UpdateUIEvent_SetUpdateInterval(*args, **kwargs)
 
     SetUpdateInterval = staticmethod(SetUpdateInterval)
     def GetUpdateInterval(*args, **kwargs):
-        """UpdateUIEvent.GetUpdateInterval() -> long"""
+        """GetUpdateInterval() -> long"""
         return _core.UpdateUIEvent_GetUpdateInterval(*args, **kwargs)
 
     GetUpdateInterval = staticmethod(GetUpdateInterval)
     def CanUpdate(*args, **kwargs):
-        """UpdateUIEvent.CanUpdate(Window win) -> bool"""
+        """CanUpdate(Window win) -> bool"""
         return _core.UpdateUIEvent_CanUpdate(*args, **kwargs)
 
     CanUpdate = staticmethod(CanUpdate)
     def ResetUpdateTime(*args, **kwargs):
-        """UpdateUIEvent.ResetUpdateTime()"""
+        """ResetUpdateTime()"""
         return _core.UpdateUIEvent_ResetUpdateTime(*args, **kwargs)
 
     ResetUpdateTime = staticmethod(ResetUpdateTime)
     def SetMode(*args, **kwargs):
-        """UpdateUIEvent.SetMode(int mode)"""
+        """SetMode(int mode)"""
         return _core.UpdateUIEvent_SetMode(*args, **kwargs)
 
     SetMode = staticmethod(SetMode)
     def GetMode(*args, **kwargs):
-        """UpdateUIEvent.GetMode() -> int"""
+        """GetMode() -> int"""
         return _core.UpdateUIEvent_GetMode(*args, **kwargs)
 
     GetMode = staticmethod(GetMode)
@@ -4343,17 +4343,17 @@ class IdleEvent(Event):
         return _core.IdleEvent_MoreRequested(*args, **kwargs)
 
     def SetMode(*args, **kwargs):
-        """IdleEvent.SetMode(int mode)"""
+        """SetMode(int mode)"""
         return _core.IdleEvent_SetMode(*args, **kwargs)
 
     SetMode = staticmethod(SetMode)
     def GetMode(*args, **kwargs):
-        """IdleEvent.GetMode() -> int"""
+        """GetMode() -> int"""
         return _core.IdleEvent_GetMode(*args, **kwargs)
 
     GetMode = staticmethod(GetMode)
     def CanSend(*args, **kwargs):
-        """IdleEvent.CanSend(Window win) -> bool"""
+        """CanSend(Window win) -> bool"""
         return _core.IdleEvent_CanSend(*args, **kwargs)
 
     CanSend = staticmethod(CanSend)
@@ -4729,52 +4729,52 @@ class PyApp(EvtHandler):
         return _core.PyApp_GetAssertMode(*args, **kwargs)
 
     def GetMacSupportPCMenuShortcuts(*args, **kwargs):
-        """PyApp.GetMacSupportPCMenuShortcuts() -> bool"""
+        """GetMacSupportPCMenuShortcuts() -> bool"""
         return _core.PyApp_GetMacSupportPCMenuShortcuts(*args, **kwargs)
 
     GetMacSupportPCMenuShortcuts = staticmethod(GetMacSupportPCMenuShortcuts)
     def GetMacAboutMenuItemId(*args, **kwargs):
-        """PyApp.GetMacAboutMenuItemId() -> long"""
+        """GetMacAboutMenuItemId() -> long"""
         return _core.PyApp_GetMacAboutMenuItemId(*args, **kwargs)
 
     GetMacAboutMenuItemId = staticmethod(GetMacAboutMenuItemId)
     def GetMacPreferencesMenuItemId(*args, **kwargs):
-        """PyApp.GetMacPreferencesMenuItemId() -> long"""
+        """GetMacPreferencesMenuItemId() -> long"""
         return _core.PyApp_GetMacPreferencesMenuItemId(*args, **kwargs)
 
     GetMacPreferencesMenuItemId = staticmethod(GetMacPreferencesMenuItemId)
     def GetMacExitMenuItemId(*args, **kwargs):
-        """PyApp.GetMacExitMenuItemId() -> long"""
+        """GetMacExitMenuItemId() -> long"""
         return _core.PyApp_GetMacExitMenuItemId(*args, **kwargs)
 
     GetMacExitMenuItemId = staticmethod(GetMacExitMenuItemId)
     def GetMacHelpMenuTitleName(*args, **kwargs):
-        """PyApp.GetMacHelpMenuTitleName() -> String"""
+        """GetMacHelpMenuTitleName() -> String"""
         return _core.PyApp_GetMacHelpMenuTitleName(*args, **kwargs)
 
     GetMacHelpMenuTitleName = staticmethod(GetMacHelpMenuTitleName)
     def SetMacSupportPCMenuShortcuts(*args, **kwargs):
-        """PyApp.SetMacSupportPCMenuShortcuts(bool val)"""
+        """SetMacSupportPCMenuShortcuts(bool val)"""
         return _core.PyApp_SetMacSupportPCMenuShortcuts(*args, **kwargs)
 
     SetMacSupportPCMenuShortcuts = staticmethod(SetMacSupportPCMenuShortcuts)
     def SetMacAboutMenuItemId(*args, **kwargs):
-        """PyApp.SetMacAboutMenuItemId(long val)"""
+        """SetMacAboutMenuItemId(long val)"""
         return _core.PyApp_SetMacAboutMenuItemId(*args, **kwargs)
 
     SetMacAboutMenuItemId = staticmethod(SetMacAboutMenuItemId)
     def SetMacPreferencesMenuItemId(*args, **kwargs):
-        """PyApp.SetMacPreferencesMenuItemId(long val)"""
+        """SetMacPreferencesMenuItemId(long val)"""
         return _core.PyApp_SetMacPreferencesMenuItemId(*args, **kwargs)
 
     SetMacPreferencesMenuItemId = staticmethod(SetMacPreferencesMenuItemId)
     def SetMacExitMenuItemId(*args, **kwargs):
-        """PyApp.SetMacExitMenuItemId(long val)"""
+        """SetMacExitMenuItemId(long val)"""
         return _core.PyApp_SetMacExitMenuItemId(*args, **kwargs)
 
     SetMacExitMenuItemId = staticmethod(SetMacExitMenuItemId)
     def SetMacHelpMenuTitleName(*args, **kwargs):
-        """PyApp.SetMacHelpMenuTitleName(String val)"""
+        """SetMacHelpMenuTitleName(String val)"""
         return _core.PyApp_SetMacHelpMenuTitleName(*args, **kwargs)
 
     SetMacHelpMenuTitleName = staticmethod(SetMacHelpMenuTitleName)
@@ -4788,7 +4788,7 @@ class PyApp(EvtHandler):
 
     def GetComCtl32Version(*args, **kwargs):
         """
-        PyApp.GetComCtl32Version() -> int
+        GetComCtl32Version() -> int
 
         Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
         wasn't found at all.  Raises an exception on non-Windows platforms.
@@ -5299,17 +5299,17 @@ class Window(EvtHandler):
         return _core.Window_GetId(*args, **kwargs)
 
     def NewControlId(*args, **kwargs):
-        """Window.NewControlId() -> int"""
+        """NewControlId() -> int"""
         return _core.Window_NewControlId(*args, **kwargs)
 
     NewControlId = staticmethod(NewControlId)
     def NextControlId(*args, **kwargs):
-        """Window.NextControlId(int winid) -> int"""
+        """NextControlId(int winid) -> int"""
         return _core.Window_NextControlId(*args, **kwargs)
 
     NextControlId = staticmethod(NextControlId)
     def PrevControlId(*args, **kwargs):
-        """Window.PrevControlId(int winid) -> int"""
+        """PrevControlId(int winid) -> int"""
         return _core.Window_PrevControlId(*args, **kwargs)
 
     PrevControlId = staticmethod(PrevControlId)
@@ -5619,7 +5619,7 @@ class Window(EvtHandler):
         return _core.Window_SetFocusFromKbd(*args, **kwargs)
 
     def FindFocus(*args, **kwargs):
-        """Window.FindFocus() -> Window"""
+        """FindFocus() -> Window"""
         return _core.Window_FindFocus(*args, **kwargs)
 
     FindFocus = staticmethod(FindFocus)
@@ -5760,7 +5760,7 @@ class Window(EvtHandler):
         return _core.Window_ReleaseMouse(*args, **kwargs)
 
     def GetCapture(*args, **kwargs):
-        """Window.GetCapture() -> Window"""
+        """GetCapture() -> Window"""
         return _core.Window_GetCapture(*args, **kwargs)
 
     GetCapture = staticmethod(GetCapture)
@@ -6176,12 +6176,12 @@ class Validator(EvtHandler):
         return _core.Validator_SetWindow(*args, **kwargs)
 
     def IsSilent(*args, **kwargs):
-        """Validator.IsSilent() -> bool"""
+        """IsSilent() -> bool"""
         return _core.Validator_IsSilent(*args, **kwargs)
 
     IsSilent = staticmethod(IsSilent)
     def SetBellOnError(*args, **kwargs):
-        """Validator.SetBellOnError(int doIt=True)"""
+        """SetBellOnError(int doIt=True)"""
         return _core.Validator_SetBellOnError(*args, **kwargs)
 
     SetBellOnError = staticmethod(SetBellOnError)
@@ -6240,27 +6240,27 @@ class Menu(EvtHandler):
         self._setOORInfo(self)
 
     def Append(*args, **kwargs):
-        """Append(int id, String text, String help=EmptyString, int kind=ITEM_NORMAL)"""
+        """Append(int id, String text, String help=EmptyString, int kind=ITEM_NORMAL) -> MenuItem"""
         return _core.Menu_Append(*args, **kwargs)
 
     def AppendSeparator(*args, **kwargs):
-        """AppendSeparator()"""
+        """AppendSeparator() -> MenuItem"""
         return _core.Menu_AppendSeparator(*args, **kwargs)
 
     def AppendCheckItem(*args, **kwargs):
-        """AppendCheckItem(int id, String text, String help=EmptyString)"""
+        """AppendCheckItem(int id, String text, String help=EmptyString) -> MenuItem"""
         return _core.Menu_AppendCheckItem(*args, **kwargs)
 
     def AppendRadioItem(*args, **kwargs):
-        """AppendRadioItem(int id, String text, String help=EmptyString)"""
+        """AppendRadioItem(int id, String text, String help=EmptyString) -> MenuItem"""
         return _core.Menu_AppendRadioItem(*args, **kwargs)
 
     def AppendMenu(*args, **kwargs):
-        """AppendMenu(int id, String text, Menu submenu, String help=EmptyString)"""
+        """AppendMenu(int id, String text, Menu submenu, String help=EmptyString) -> MenuItem"""
         return _core.Menu_AppendMenu(*args, **kwargs)
 
     def AppendItem(*args, **kwargs):
-        """AppendItem(MenuItem item)"""
+        """AppendItem(MenuItem item) -> MenuItem"""
         return _core.Menu_AppendItem(*args, **kwargs)
 
     def Break(*args, **kwargs):
@@ -6268,54 +6268,54 @@ class Menu(EvtHandler):
         return _core.Menu_Break(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
-        """InsertItem(size_t pos, MenuItem item) -> bool"""
+        """InsertItem(size_t pos, MenuItem item) -> MenuItem"""
         return _core.Menu_InsertItem(*args, **kwargs)
 
     def Insert(*args, **kwargs):
         """
         Insert(size_t pos, int id, String text, String help=EmptyString, 
-            int kind=ITEM_NORMAL)
+            int kind=ITEM_NORMAL) -> MenuItem
         """
         return _core.Menu_Insert(*args, **kwargs)
 
     def InsertSeparator(*args, **kwargs):
-        """InsertSeparator(size_t pos)"""
+        """InsertSeparator(size_t pos) -> MenuItem"""
         return _core.Menu_InsertSeparator(*args, **kwargs)
 
     def InsertCheckItem(*args, **kwargs):
-        """InsertCheckItem(size_t pos, int id, String text, String help=EmptyString)"""
+        """InsertCheckItem(size_t pos, int id, String text, String help=EmptyString) -> MenuItem"""
         return _core.Menu_InsertCheckItem(*args, **kwargs)
 
     def InsertRadioItem(*args, **kwargs):
-        """InsertRadioItem(size_t pos, int id, String text, String help=EmptyString)"""
+        """InsertRadioItem(size_t pos, int id, String text, String help=EmptyString) -> MenuItem"""
         return _core.Menu_InsertRadioItem(*args, **kwargs)
 
     def InsertMenu(*args, **kwargs):
-        """InsertMenu(size_t pos, int id, String text, Menu submenu, String help=EmptyString)"""
+        """InsertMenu(size_t pos, int id, String text, Menu submenu, String help=EmptyString) -> MenuItem"""
         return _core.Menu_InsertMenu(*args, **kwargs)
 
     def PrependItem(*args, **kwargs):
-        """PrependItem(MenuItem item)"""
+        """PrependItem(MenuItem item) -> MenuItem"""
         return _core.Menu_PrependItem(*args, **kwargs)
 
     def Prepend(*args, **kwargs):
-        """Prepend(int id, String text, String help=EmptyString, int kind=ITEM_NORMAL)"""
+        """Prepend(int id, String text, String help=EmptyString, int kind=ITEM_NORMAL) -> MenuItem"""
         return _core.Menu_Prepend(*args, **kwargs)
 
     def PrependSeparator(*args, **kwargs):
-        """PrependSeparator()"""
+        """PrependSeparator() -> MenuItem"""
         return _core.Menu_PrependSeparator(*args, **kwargs)
 
     def PrependCheckItem(*args, **kwargs):
-        """PrependCheckItem(int id, String text, String help=EmptyString)"""
+        """PrependCheckItem(int id, String text, String help=EmptyString) -> MenuItem"""
         return _core.Menu_PrependCheckItem(*args, **kwargs)
 
     def PrependRadioItem(*args, **kwargs):
-        """PrependRadioItem(int id, String text, String help=EmptyString)"""
+        """PrependRadioItem(int id, String text, String help=EmptyString) -> MenuItem"""
         return _core.Menu_PrependRadioItem(*args, **kwargs)
 
     def PrependMenu(*args, **kwargs):
-        """PrependMenu(int id, String text, Menu submenu, String help=EmptyString)"""
+        """PrependMenu(int id, String text, Menu submenu, String help=EmptyString) -> MenuItem"""
         return _core.Menu_PrependMenu(*args, **kwargs)
 
     def Remove(*args, **kwargs):
@@ -6644,7 +6644,7 @@ class MenuItem(Object):
         return _core.MenuItem_GetText(*args, **kwargs)
 
     def GetLabelFromText(*args, **kwargs):
-        """MenuItem.GetLabelFromText(String text) -> String"""
+        """GetLabelFromText(String text) -> String"""
         return _core.MenuItem_GetLabelFromText(*args, **kwargs)
 
     GetLabelFromText = staticmethod(GetLabelFromText)
@@ -6753,7 +6753,7 @@ class MenuItem(Object):
         return _core.MenuItem_GetMarginWidth(*args, **kwargs)
 
     def GetDefaultMarginWidth(*args, **kwargs):
-        """MenuItem.GetDefaultMarginWidth() -> int"""
+        """GetDefaultMarginWidth() -> int"""
         return _core.MenuItem_GetDefaultMarginWidth(*args, **kwargs)
 
     GetDefaultMarginWidth = staticmethod(GetDefaultMarginWidth)
