@@ -274,6 +274,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
                             // check the boundary condition below
 
                             // this is more efficient than strrchr()
+                            dst--;
                             while ( *dst != wxCONFIG_PATH_SEPARATOR )
                             {
                                 dst--;
@@ -288,9 +289,12 @@ void wxRegConfig::SetPath(const wxString& strPath)
                             posLastSlash = -1;
                         }
 
-                        // this shouldn't happen
+                        // we must have found a slash one way or another!
                         wxASSERT_MSG( *dst == wxCONFIG_PATH_SEPARATOR,
                                       _T("error in wxRegConfig::SetPath") );
+
+                        // stay at the same position
+                        dst--;
 
                         // we killed one
                         totalSlashes--;
