@@ -37,11 +37,17 @@
 #  endif
 #endif // HAVE_STATFS
 
+// not only the statfs syscall is called differently depending on platform, but
+// we also can't use "struct statvfs" under Solaris because it breaks down if
+// HAVE_LARGEFILE_SUPPORT == 1 and we must use statvfs_t instead
 #ifdef HAVE_STATVFS
     #include <sys/statvfs.h>
 
     #define statfs statvfs
-#endif // HAVE_STATVFS
+    #define wxStatFs statvfs_t
+#elif HAVE_STATFS
+    #define wxStatFs struct statfs
+#endif // HAVE_STAT[V]FS
 
 #if wxUSE_GUI
     #include "wx/unix/execute.h"
@@ -1056,7 +1062,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // the case to "char *" is needed for AIX 4.3
-    struct statfs fs;
+    wxStatFs fs;
     if ( statfs((char *)path.fn_str(), &fs) != 0 )
     {
         wxLogSysError("Failed to get file system statistics");
@@ -1064,23 +1070,28 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
         return FALSE;
     }
 
-    // under Solaris we might have to use fs.f_frsize instead as I think it
-    // may be a multiple of the block size in general (TODO)
+    // under Solaris we also have to use f_frsize field instead of f_bsize
+    // which is in general a multiple of f_frsize
+#ifdef HAVE_STATVFS
+    wxLongLong blockSize = fs.f_frsize;
+#else // HAVE_STATFS
+    wxLongLong blockSize = fs.f_bsize;
+#endif // HAVE_STATVFS/HAVE_STATFS
 
     if ( pTotal )
     {
-        *pTotal = wxLongLong(fs.f_blocks) * fs.f_bsize;
+        *pTotal = wxLongLong(fs.f_blocks) * blockSize;
     }
 
     if ( pFree )
     {
-        *pFree = wxLongLong(fs.f_bavail) * fs.f_bsize;
+        *pFree = wxLongLong(fs.f_bavail) * blockSize;
     }
 
     return TRUE;
-#endif // HAVE_STATFS
-
+#else // !HAVE_STATFS && !HAVE_STATVFS
     return FALSE;
+#endif // HAVE_STATFS
 }
 
 // ----------------------------------------------------------------------------
