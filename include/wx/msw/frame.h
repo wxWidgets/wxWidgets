@@ -92,6 +92,7 @@ public:
   virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
     const wxString& name = "statusBar");
   inline wxStatusBar *GetStatusBar() const { return m_frameStatusBar; }
+  inline void SetStatusBar(wxStatusBar *statusBar) { m_frameStatusBar = statusBar; }
   virtual void PositionStatusBar(void);
   virtual wxStatusBar *OnCreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name);
