@@ -2,6 +2,7 @@
 // Name:        dbtable.cpp
 // Purpose:     Implementation of the wxTable class.
 // Author:      Doug Card
+// Modified by: George Tasker
 // Mods:			 April 1999
 //						-Dynamic cursor support - Only one predefined cursor, as many others as
 //							you need may be created on demand
@@ -75,6 +76,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+
 #if   wxMAJOR_VERSION == 1
 	#include "table.h"
 #elif wxMAJOR_VERSION == 2
@@ -105,9 +107,9 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 					const char *qryTblName, bool qryOnly, const char *tblPath)
 {
 	pDb					= pwxDB;					// Pointer to the wxDB object
-	henv					= 0;
-	hdbc					= 0;
-	hstmt					= 0;
+	henv				= 0;
+	hdbc				= 0;
+	hstmt				= 0;
 	hstmtDefault		= 0;						// Initialized below
 	hstmtCount			= 0;						// Initialized first time it is needed
 	hstmtInsert			= 0;
@@ -117,24 +119,23 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 	colDefs				= 0;
 	tableID				= 0;
 	noCols				= nCols;					// No. of cols in the table
-	where					= 0;						// Where clause
+	where				= 0;						// Where clause
 	orderBy				= 0;						// Order By clause
-	from					= 0;						// From clause
-	selectForUpdate	= FALSE;					// SELECT ... FOR UPDATE; Indicates whether to include the FOR UPDATE phrase
+	from				= 0;						// From clause
+	selectForUpdate	    = FALSE;					// SELECT ... FOR UPDATE; Indicates whether to include the FOR UPDATE phrase
 	queryOnly			= qryOnly;
 
 	assert (tblName);
 
 	wxStrcpy(tableName, tblName);				// Table Name
 	if (tblPath)
-		wxStrcpy(tablePath, tblPath);				// Table Path - used for dBase files
+		wxStrcpy(tablePath, tblPath);			// Table Path - used for dBase files
 
 	if (qryTblName)								// Name of the table/view to query
 		wxStrcpy(queryTableName, qryTblName);
 	else
 		wxStrcpy(queryTableName, tblName);
 
-//	assert(pDb);  // Assert is placed after table name is assigned for error reporting reasons
 	if (!pDb)
 		return;
 
@@ -161,7 +162,7 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 
 	// Allocate space for column definitions
 	if (noCols)
-		colDefs = new CcolDef[noCols];  // Points to the first column defintion
+		colDefs = new wxColDef[noCols];  // Points to the first column defintion
 
 	// Allocate statement handles for the table
 	if (!queryOnly)
@@ -240,6 +241,7 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 
 }  // wxTable::wxTable()
 
+
 /********** wxTable::~wxTable() **********/
 wxTable::~wxTable()
 {
@@ -309,7 +311,11 @@ wxTable::~wxTable()
 
 }  // wxTable::~wxTable()
 
+
+
 /***************************** PRIVATE FUNCTIONS *****************************/
+
+
 
 /********** wxTable::bindInsertParams() **********/
 bool wxTable::bindInsertParams(void)
@@ -377,6 +383,7 @@ bool wxTable::bindInsertParams(void)
 
 }  // wxTable::bindInsertParams()
 
+
 /********** wxTable::bindUpdateParams() **********/
 bool wxTable::bindUpdateParams(void)
 {
@@ -437,6 +444,7 @@ bool wxTable::bindUpdateParams(void)
 
 }  // wxTable::bindUpdateParams()
 
+
 /********** wxTable::bindCols() **********/
 bool wxTable::bindCols(HSTMT cursor)
 {
@@ -455,6 +463,7 @@ bool wxTable::bindCols(HSTMT cursor)
 	return(TRUE);
 
 }  // wxTable::bindCols()
+
 
 /********** wxTable::getRec() **********/
 bool wxTable::getRec(UWORD fetchType)
@@ -492,6 +501,7 @@ bool wxTable::getRec(UWORD fetchType)
 
 }  // wxTable::getRec()
 
+
 /********** wxTable::execDelete() **********/
 bool wxTable::execDelete(const char *pSqlStmt)
 {
@@ -504,6 +514,7 @@ bool wxTable::execDelete(const char *pSqlStmt)
 
 }  // wxTable::execDelete()
 
+
 /********** wxTable::execUpdate() **********/
 bool wxTable::execUpdate(const char *pSqlStmt)
 {
@@ -515,6 +526,7 @@ bool wxTable::execUpdate(const char *pSqlStmt)
 	return(TRUE);
 
 }  // wxTable::execUpdate()
+
 
 /********** wxTable::query() **********/
 bool wxTable::query(int queryType, bool forUpdate, bool distinct, char *pSqlStmt)
@@ -552,6 +564,8 @@ bool wxTable::query(int queryType, bool forUpdate, bool distinct, char *pSqlStmt
 }  // wxTable::query()
 
 
+/***************************** PUBLIC FUNCTIONS *****************************/
+
 
 /********** wxTable::Open() **********/
 bool wxTable::Open(void)
@@ -563,10 +577,17 @@ bool wxTable::Open(void)
 	char sqlStmt[DB_MAX_STATEMENT_LEN];
 
 	// Verify that the table exists in the database
-	if (!pDb->TableExists(tableName,NULL,tablePath))
+	if (!pDb->TableExists(tableName,pDb->GetUsername(),tablePath))
 	{
-		char s[128];
-		sprintf(s, "Error opening '%s', table/view does not exist in the database.", tableName);
+		char s[250];
+		if (wxStrcmp(tablePath,""))
+			sprintf(s, "Error opening '%s/%s'.\n",tablePath,tableName);
+		else
+			sprintf(s, "Error opening '%s'.\n", tableName);
+		if (!pDb->TableExists(tableName,NULL,tablePath))
+			wxStrcat(s,"Table/view does not exist in the database.\n");
+		else
+			wxStrcat(s,"Current logged in user does not have sufficient privileges to access this table.\n");
 		pDb->LogError(s);
 		return(FALSE);
 	}
@@ -627,6 +648,7 @@ bool wxTable::Open(void)
 
 }  // wxTable::Open()
 
+
 /********** wxTable::Query() **********/
 bool wxTable::Query(bool forUpdate, bool distinct)
 {
@@ -634,6 +656,7 @@ bool wxTable::Query(bool forUpdate, bool distinct)
 	return(query(DB_SELECT_WHERE, forUpdate, distinct));
 
 }  // wxTable::Query()
+
 
 /********** wxTable::QueryBySqlStmt() **********/
 bool wxTable::QueryBySqlStmt(char *pSqlStmt)
@@ -644,6 +667,7 @@ bool wxTable::QueryBySqlStmt(char *pSqlStmt)
 
 }  // wxTable::QueryBySqlStmt()
 
+
 /********** wxTable::QueryMatching() **********/
 bool wxTable::QueryMatching(bool forUpdate, bool distinct)
 {
@@ -652,6 +676,7 @@ bool wxTable::QueryMatching(bool forUpdate, bool distinct)
 
 }  // wxTable::QueryMatching()
 
+
 /********** wxTable::QueryOnKeyFields() **********/
 bool wxTable::QueryOnKeyFields(bool forUpdate, bool distinct)
 {
@@ -659,6 +684,7 @@ bool wxTable::QueryOnKeyFields(bool forUpdate, bool distinct)
 	return(query(DB_SELECT_KEYFIELDS, forUpdate, distinct));
 
 }  // wxTable::QueryOnKeyFields()
+
 
 /********** wxTable::GetPrev() **********/
 bool wxTable::GetPrev(void)
@@ -672,6 +698,7 @@ bool wxTable::GetPrev(void)
 		return(getRec(SQL_FETCH_PRIOR));
 }  // wxTable::GetPrev()
 
+
 /********** wxTable::operator-- **********/
 bool wxTable::operator--(int)
 {
@@ -683,6 +710,7 @@ bool wxTable::operator--(int)
 	else
 		return(getRec(SQL_FETCH_PRIOR));
 }  // wxTable::operator--
+
 
 /********** wxTable::GetFirst() **********/
 bool wxTable::GetFirst(void)
@@ -696,6 +724,7 @@ bool wxTable::GetFirst(void)
 		return(getRec(SQL_FETCH_FIRST));
 }  // wxTable::GetFirst()
 
+
 /********** wxTable::GetLast() **********/
 bool wxTable::GetLast(void)
 {
@@ -707,6 +736,7 @@ bool wxTable::GetLast(void)
 	else 
 		return(getRec(SQL_FETCH_LAST));
 }  // wxTable::GetLast()
+
 
 /********** wxTable::GetSelectStmt() **********/
 void wxTable::GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
@@ -817,6 +847,7 @@ void wxTable::GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
 
 }  // wxTable::GetSelectStmt()
 
+
 /********** wxTable::GetRowNum() **********/
 UWORD wxTable::GetRowNum(void)
 {
@@ -833,6 +864,7 @@ UWORD wxTable::GetRowNum(void)
 
 }  // wxTable::GetRowNum()
 
+
 /********** wxTable::CloseCursor() **********/
 bool wxTable::CloseCursor(HSTMT cursor)
 {
@@ -843,6 +875,7 @@ bool wxTable::CloseCursor(HSTMT cursor)
 	return(TRUE);
 
 }  // wxTable::CloseCursor()
+
 
 /********** wxTable::CreateTable() **********/
 bool wxTable::CreateTable(bool attemptDrop)
@@ -980,7 +1013,8 @@ bool wxTable::CreateTable(bool attemptDrop)
 #endif
 
 	// Execute the CREATE TABLE statement
-	if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS) != SQL_SUCCESS)
+   RETCODE retcode = SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS);
+	if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
 	{
 		pDb->DispAllErrors(henv, hdbc, hstmt);
 		pDb->RollbackTrans();
@@ -998,6 +1032,7 @@ bool wxTable::CreateTable(bool attemptDrop)
 	return(TRUE);
 
 } // wxTable::CreateTable()
+
 
 /********** wxTable::DropTable() **********/
 bool wxTable::DropTable()
@@ -1045,6 +1080,7 @@ bool wxTable::DropTable()
 
 	return(TRUE);
 }  // wxTable::DropTable()
+
 
 /********** wxTable::CreateIndex() **********/
 bool wxTable::CreateIndex(const char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs, bool attemptDrop)
@@ -1113,6 +1149,7 @@ bool wxTable::CreateIndex(const char * idxName, bool unique, int noIdxCols, Cidx
 
 }  // wxTable::CreateIndex()
 
+
 /********** wxTable::DropIndex() **********/
 bool wxTable::DropIndex(const char * idxName)
 {
@@ -1166,6 +1203,7 @@ bool wxTable::DropIndex(const char * idxName)
 	return(TRUE);
 }  // wxTable::DropIndex()
 
+
 /********** wxTable::Insert() **********/
 int wxTable::Insert(void)
 {
@@ -1197,6 +1235,7 @@ int wxTable::Insert(void)
 
 }  // wxTable::Insert()
 
+
 /********** wxTable::Update() **********/
 bool wxTable::Update(void)
 {
@@ -1220,6 +1259,7 @@ bool wxTable::Update(void)
 
 }  // wxTable::Update()
 
+
 /********** wxTable::Update(pSqlStmt) **********/
 bool wxTable::Update(const char *pSqlStmt)
 {
@@ -1232,6 +1272,7 @@ bool wxTable::Update(const char *pSqlStmt)
 	return(execUpdate(pSqlStmt));
 
 }  // wxTable::Update(pSqlStmt)
+
 
 /********** wxTable::UpdateWhere() **********/
 bool wxTable::UpdateWhere(const char *pWhereClause)
@@ -1256,6 +1297,7 @@ bool wxTable::UpdateWhere(const char *pWhereClause)
 
 }  // wxTable::UpdateWhere()
 
+
 /********** wxTable::Delete() **********/
 bool wxTable::Delete(void)
 {
@@ -1274,6 +1316,7 @@ bool wxTable::Delete(void)
 	return(execDelete(sqlStmt));
 
 }  // wxTable::Delete()
+
 
 /********** wxTable::DeleteWhere() **********/
 bool wxTable::DeleteWhere(const char *pWhereClause)
@@ -1294,6 +1337,7 @@ bool wxTable::DeleteWhere(const char *pWhereClause)
 
 }  // wxTable::DeleteWhere()
 
+
 /********** wxTable::DeleteMatching() **********/
 bool wxTable::DeleteMatching(void)
 {
@@ -1312,6 +1356,7 @@ bool wxTable::DeleteMatching(void)
 	return(execDelete(sqlStmt));
 
 }  // wxTable::DeleteMatching()
+
 
 /********** wxTable::GetUpdateStmt() **********/
 void wxTable::GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause)
@@ -1377,6 +1422,7 @@ void wxTable::GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereCla
 	}
 }  // GetUpdateStmt()
 
+
 /********** wxTable::GetDeleteStmt() **********/
 void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause)
 {
@@ -1437,13 +1483,13 @@ void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereCla
 
 }  // GetDeleteStmt()
 
+
 /********** wxTable::GetWhereClause() **********/
+void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName)
 /*
  * Note: GetWhereClause() currently ignores timestamp columns.
  *       They are not included as part of the where clause.
  */
-
-void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName)
 {
 	bool moreThanOneColumn = FALSE;
 	char colValue[255];
@@ -1499,8 +1545,8 @@ void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qu
 			wxStrcat(pWhereClause, colValue);
 		}
 	}
-
 }  // wxTable::GetWhereClause()
+
 
 /********** wxTable::IsColNull() **********/
 bool wxTable::IsColNull(int colNo)
@@ -1531,8 +1577,8 @@ bool wxTable::IsColNull(int colNo)
 	default:
 		return(TRUE);
 	}
-
 }  // wxTable::IsColNull()
+
 
 /********** wxTable::CanSelectForUpdate() **********/
 bool wxTable::CanSelectForUpdate(void)
@@ -1547,12 +1593,14 @@ bool wxTable::CanSelectForUpdate(void)
 
 }  // wxTable::CanSelectForUpdate()
 
+
 /********** wxTable::CanUpdByROWID() **********/
 bool wxTable::CanUpdByROWID(void)
 {
-
-//NOTE: Returning FALSE for now until this can be debugged,
-//	     as the ROWID is not getting updated correctly
+/*
+ * NOTE: Returning FALSE for now until this can be debugged,
+ *	      as the ROWID is not getting updated correctly
+ */
 	return FALSE;
 
 	if (pDb->Dbms() == dbmsORACLE)
@@ -1561,6 +1609,7 @@ bool wxTable::CanUpdByROWID(void)
 		return(FALSE);
 
 }  // wxTable::CanUpdByROWID()
+
 
 /********** wxTable::IsCursorClosedOnCommit() **********/
 bool wxTable::IsCursorClosedOnCommit(void)
@@ -1571,6 +1620,7 @@ bool wxTable::IsCursorClosedOnCommit(void)
 		return(TRUE);
 
 }  // wxTable::IsCursorClosedOnCommit()
+
 
 /********** wxTable::ClearMemberVars() **********/
 void wxTable::ClearMemberVars(void)
@@ -1618,6 +1668,7 @@ void wxTable::ClearMemberVars(void)
 
 }  // wxTable::ClearMemberVars()
 
+
 /********** wxTable::SetQueryTimeout() **********/
 bool wxTable::SetQueryTimeout(UDWORD nSeconds)
 {
@@ -1634,6 +1685,7 @@ bool wxTable::SetQueryTimeout(UDWORD nSeconds)
 	return(TRUE);
 
 }  // wxTable::SetQueryTimeout()
+
 
 /********** wxTable::SetColDefs() **********/
 void wxTable::SetColDefs (int index, const char *fieldName, int dataType, void *pData,
@@ -1673,6 +1725,109 @@ void wxTable::SetColDefs (int index, const char *fieldName, int dataType, void *
 	
 }  // wxTable::SetColDefs()
 
+
+/********** wxTable::SetColDef() **********/
+bool wxTable::SetColDefs(wxColInf *pColInfs, ULONG numCols, wxColDataPtr *pColDataPtrs)
+{
+	assert(pColInfs);
+
+	if (pColInfs)
+	{
+		ULONG index;
+
+        // BJO 991210: This doesn't seem to work. I solved this
+        // by allocating memory in the tables ctor:
+        //
+        // MyTable::MyTable(wxDB *pDB, char *Name, int NbCols, wxColInf *ColInfo):
+        //          wxTable(pDB, Name, NbCols)
+        // {
+        //   m_FreeDbConn = !pDB;
+        //   m_DataPtrs = new wxColDataPtr[NbCols];
+        //   SetColDefs(ColInfo, NbCols, m_DataPtrs);
+        // }
+		pColDataPtrs = new wxColDataPtr[numCols+1];
+
+        for (index = 0; index < numCols; index++)
+		{
+/*
+			wxString title,msg;
+			title.sprintf("Catalog: %s, Schema: %s, Table name: %s",pColInfs[index].catalog,pColInfs[index].schema,pColInfs[index].tableName);
+			msg.sprintf("Column name: %s\nData type: %04d\nType name: %s\nColumn size: %d\nBuffer len: %d\nDecimals:%d\nRadix: %d\nNullable: %d\nRemarks: %s",
+				pColInfs[index].colName,pColInfs[index].sqlDataType,pColInfs[index].typeName,pColInfs[index].columnSize,pColInfs[index].bufferLength,pColInfs[index].decimalDigits,pColInfs[index].numPrecRadix,pColInfs[index].nullable,pColInfs[index].remarks);
+			msg += "                                     \nDB_DATA_TYPE: ";
+			switch(pColInfs[index].dbDataType)
+			{
+				case DB_DATA_TYPE_VARCHAR:
+					msg += pDb->typeInfVarchar.TypeName; break;
+				case DB_DATA_TYPE_INTEGER:
+					msg += pDb->typeInfInteger.TypeName; break;
+				case DB_DATA_TYPE_FLOAT:
+					msg += pDb->typeInfFloat.TypeName; break;
+				case DB_DATA_TYPE_DATE:
+					msg += pDb->typeInfDate.TypeName; break;
+			}
+			wxMessageBox(msg.GetData(),title.GetData());
+*/
+			// Process the fields
+			switch (pColInfs[index].dbDataType)
+			{
+				case DB_DATA_TYPE_VARCHAR:
+				{
+					pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].bufferLength+1];
+					pColDataPtrs[index].SzDataObj  = pColInfs[index].bufferLength;
+					pColDataPtrs[index].SqlCtype   = SQL_C_CHAR;
+					break;
+				}
+				case DB_DATA_TYPE_INTEGER:
+				{
+                    // Can be long or short
+					if (pColInfs[index].bufferLength == sizeof(long))
+					{
+					  pColDataPtrs[index].PtrDataObj = new long;
+					  pColDataPtrs[index].SzDataObj  = sizeof(long);
+					  pColDataPtrs[index].SqlCtype   = SQL_C_SLONG;
+					}
+					else
+					{
+						pColDataPtrs[index].PtrDataObj = new short;
+						pColDataPtrs[index].SzDataObj  = sizeof(short);
+						pColDataPtrs[index].SqlCtype   = SQL_C_SSHORT;
+					}
+					break;
+				}
+				case DB_DATA_TYPE_FLOAT:
+				{
+					// Can be float or double
+					if (pColInfs[index].bufferLength == sizeof(float))
+					{
+						pColDataPtrs[index].PtrDataObj = new float;
+						pColDataPtrs[index].SzDataObj  = sizeof(float);
+						pColDataPtrs[index].SqlCtype   = SQL_C_FLOAT;
+					}
+					else
+					{
+						pColDataPtrs[index].PtrDataObj = new double;
+						pColDataPtrs[index].SzDataObj  = sizeof(double);
+						pColDataPtrs[index].SqlCtype   = SQL_C_DOUBLE;
+					}  
+					break;
+				}
+				case DB_DATA_TYPE_DATE:
+				{
+					pColDataPtrs[index].PtrDataObj = new TIMESTAMP_STRUCT;
+					pColDataPtrs[index].SzDataObj  = sizeof(TIMESTAMP_STRUCT);
+					pColDataPtrs[index].SqlCtype   = SQL_C_TIMESTAMP;
+					break;
+				}
+			}
+
+         SetColDefs (index,pColInfs[index].colName,pColInfs[index].dbDataType, pColDataPtrs[index].PtrDataObj, pColDataPtrs[index].SqlCtype, pColDataPtrs[index].SzDataObj);
+		}
+	}
+	return (TRUE);
+} // wxTable::SetColDef()
+
+
 /********** wxTable::SetCursor() **********/
 void wxTable::SetCursor(HSTMT *hstmtActivate)
 {
@@ -1682,6 +1837,7 @@ void wxTable::SetCursor(HSTMT *hstmtActivate)
 		hstmt = *hstmtActivate;
 
 }  // wxTable::SetCursor()
+
 
 /********** wxTable::Count(const char *) **********/
 ULONG wxTable::Count(const char *args)
@@ -1747,6 +1903,7 @@ ULONG wxTable::Count(const char *args)
 
 }  // wxTable::Count()
 
+
 /********** wxTable::Refresh() **********/
 bool wxTable::Refresh(void)
 {
@@ -1809,7 +1966,8 @@ bool wxTable::Refresh(void)
 
 }  // wxTable::Refresh()
 
-/********** wxTable::SetNull(UINT colNo) **********/
+
+/********** wxTable::SetNull(int colNo) **********/
 bool wxTable::SetNull(int colNo)
 {
 	if (colNo < noCols)
@@ -1817,7 +1975,8 @@ bool wxTable::SetNull(int colNo)
 	else
 		return(FALSE);
 
-}  // wxTable::SetNull(UINT colNo)
+}  // wxTable::SetNull(int colNo)
+
 
 /********** wxTable::SetNull(char *colName) **********/
 bool wxTable::SetNull(const char *colName)
@@ -1835,6 +1994,7 @@ bool wxTable::SetNull(const char *colName)
 		return(FALSE);
 
 }  // wxTable::SetNull(char *colName)
+
 
 /********** wxTable::NewCursor() **********/
 HSTMT *wxTable::NewCursor(bool setCursor, bool bindColumns)
@@ -1872,7 +2032,8 @@ HSTMT *wxTable::NewCursor(bool setCursor, bool bindColumns)
 
 	return(newHSTMT);
 
-}   // wxTable::NewCursor()
+}	// wxTable::NewCursor()
+
 
 /********** wxTable::DeleteCursor() **********/
 bool wxTable::DeleteCursor(HSTMT *hstmtDel)
