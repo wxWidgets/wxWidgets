@@ -273,7 +273,7 @@ bool wxStringBase::CopyBeforeWrite()
       // allocation failures are handled by the caller
       return false;
     }
-    memcpy(m_pchData, pData->data(), nLen*sizeof(wxChar));
+    wxMemcpy(m_pchData, pData->data(), nLen);
   }
 
   wxASSERT( !GetStringData()->IsShared() );  // we must be the only owner
@@ -1187,8 +1187,8 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
     // anything to do?
     if ( (nLen != 0) && (nLen != (size_t)-1) )
     {
-        //*2 is the worst case - probably for UTF8
-        wxStringBufferLength internalBuffer(*this, (nLen << 1) + 1);
+        //*4 is the worst case - for UTF8
+        wxStringBufferLength internalBuffer(*this, (nLen << 2) + 1);
 
         //Do the actual conversion & Set the length of the buffer
         internalBuffer.SetLength(
