@@ -3110,8 +3110,31 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 // window creation/destruction
 // ---------------------------------------------------------------------------
 
-bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT WXUNUSED(cs), bool *mayCreate)
+bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
 {
+    // if we have WS_EX_CONTROLPARENT flag we absolutely *must* set it for our
+    // parent as well as otherwise several Win32 functions using
+    // GetNextDlgTabItem() to iterate over all controls such as
+    // IsDialogMessage() or DefDlgProc() would enter an infinite loop: indeed,
+    // all of them iterate over all the controls starting from the focus and
+    // stop iterating when they get back to the focus but unless all parents
+    // have WS_EX_CONTROLPARENT bit set, they would never get back to focus
+    if ( ((CREATESTRUCT *)cs)->dwExStyle & WS_EX_CONTROLPARENT )
+    {
+        // there is no need to do anything for the top level windows
+        const wxWindow *parent = GetParent();
+        if ( parent && !parent->IsTopLevel() )
+        {
+            LONG exStyle = ::GetWindowLong(GetHwndOf(parent), GWL_EXSTYLE);
+            if ( !(exStyle & WS_EX_CONTROLPARENT) )
+            {
+                // force the parent to have this style
+                ::SetWindowLong(GetHwndOf(parent), GWL_EXSTYLE,
+                                exStyle | WS_EX_CONTROLPARENT);
+            }
+        }
+    }
+
     // TODO: should generate this event from WM_NCCREATE
     wxWindowCreateEvent event((wxWindow *)this);
     (void)GetEventHandler()->ProcessEvent(event);

@@ -60,6 +60,10 @@ static inline bool IsZoomed(HWND WXUNUSED(hwnd)) { return FALSE; }
 
 #endif // __WXMICROWIN__
 
+// this is defined in dialog.cpp
+LONG APIENTRY _EXPORT
+wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -80,28 +84,6 @@ wxWindow *wxTopLevelWindowMSW::ms_hiddenParent = NULL;
 BEGIN_EVENT_TABLE(wxTopLevelWindowMSW, wxTopLevelWindowBase)
     EVT_ACTIVATE(wxTopLevelWindowMSW::OnActivate)
 END_EVENT_TABLE()
-
-// ----------------------------------------------------------------------------
-// wxDialog helpers
-// ----------------------------------------------------------------------------
-
-// Dialog window proc
-LONG APIENTRY _EXPORT
-wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch ( message )
-    {
-        case WM_INITDIALOG:
-            // for this message, returning TRUE tells system to set focus to
-            // the first control in the dialog box, but as we set the focus
-            // ourselves, we return FALSE from here as well, so fall through
-
-        default:
-            // for all the other ones, FALSE means that we didn't process the
-            // message
-            return FALSE;
-    }
-}
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW creation
