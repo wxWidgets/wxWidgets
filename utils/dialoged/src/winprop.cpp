@@ -810,7 +810,7 @@ bool wxButtonPropertyInfo::InstantiateResource(wxItemResource *resource)
 wxProperty *wxBitmapButtonPropertyInfo::GetProperty(wxString& name)
 {
   wxBitmapButton *button = (wxBitmapButton *)m_propertyWindow;
-  if (name == "label")
+  if (name == "bitmapFilename")
   {
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(button);
     wxString str("none.bmp");
@@ -819,7 +819,7 @@ wxProperty *wxBitmapButtonPropertyInfo::GetProperty(wxString& name)
     {
       str = wxResourceManager::GetCurrentResourceManager()->FindBitmapFilenameForResource(resource);
     }
-    return new wxProperty("label", str.GetData(), "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp"));
+    return new wxProperty("bitmapFilename", str.GetData(), "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp"));
   }
   else
     return wxButtonPropertyInfo::GetProperty(name);
@@ -828,7 +828,7 @@ wxProperty *wxBitmapButtonPropertyInfo::GetProperty(wxString& name)
 bool wxBitmapButtonPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
   wxBitmapButton *button = (wxBitmapButton *)m_propertyWindow;
-  if (name == "label")
+  if (name == "bitmapFilename")
   {
     char *s = property->GetValue().StringValue();
     if (s && wxFileExists(s))
@@ -867,8 +867,9 @@ bool wxBitmapButtonPropertyInfo::SetProperty(wxString& name, wxProperty *propert
 
 void wxBitmapButtonPropertyInfo::GetPropertyNames(wxStringList& names)
 {
-//  names.Add("label");
   wxButtonPropertyInfo::GetPropertyNames(names);
+  names.Delete("label");
+  names.Add("bitmapFilename");
 }
 
 bool wxBitmapButtonPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -908,7 +909,7 @@ bool wxStaticTextPropertyInfo::InstantiateResource(wxItemResource *resource)
 wxProperty *wxStaticBitmapPropertyInfo::GetProperty(wxString& name)
 {
   wxStaticBitmap *message = (wxStaticBitmap *)m_propertyWindow;
-  if (name == "label")
+  if (name == "bitmapFilename")
   {
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(message);
     wxString str("none.bmp");
@@ -917,7 +918,7 @@ wxProperty *wxStaticBitmapPropertyInfo::GetProperty(wxString& name)
     {
       str = wxResourceManager::GetCurrentResourceManager()->FindBitmapFilenameForResource(resource);
     }
-    return new wxProperty("label", str.GetData(), "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp"));
+    return new wxProperty("bitmapFilename", str.GetData(), "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp"));
   }
   else
     return wxItemPropertyInfo::GetProperty(name);
@@ -926,7 +927,7 @@ wxProperty *wxStaticBitmapPropertyInfo::GetProperty(wxString& name)
 bool wxStaticBitmapPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
   wxStaticBitmap *message = (wxStaticBitmap *)m_propertyWindow;
-  if (name == "label")
+  if (name == "bitmapFilename")
   {
     char *s = property->GetValue().StringValue();
     if (s && wxFileExists(s))
@@ -967,7 +968,7 @@ bool wxStaticBitmapPropertyInfo::SetProperty(wxString& name, wxProperty *propert
 void wxStaticBitmapPropertyInfo::GetPropertyNames(wxStringList& names)
 {
   wxItemPropertyInfo::GetPropertyNames(names);
-  names.Add("label");
+  names.Add("bitmapFilename");
 }
 
 bool wxStaticBitmapPropertyInfo::InstantiateResource(wxItemResource *resource)

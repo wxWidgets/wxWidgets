@@ -160,7 +160,10 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 
 #endif
 
-#define IS_KIND_OF(obj, className) obj->IsKindOf(&className::sm_class##className)
+#define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::sm_class##className)
+
+// Just seems a bit nicer-looking (pretend it's not a macro)
+#define wxIsKindOf(obj, className) obj->IsKindOf(&className::sm_class##className)
 
 // Unfortunately Borland seems to need this include.
 #ifdef __BORLANDC__

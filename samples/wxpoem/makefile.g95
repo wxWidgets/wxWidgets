@@ -1,0 +1,37 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for wxpoem example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/wxpoem.$(OBJSUFF) $(OBJDIR)/wxpoem_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) wxpoem$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+wxpoem$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o wxpoem$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/wxpoem.$(OBJSUFF):	wxpoem.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ wxpoem.$(SRCSUFF)
+
+$(OBJDIR)/wxpoem_resources.o:  wxpoem.rc
+	$(RESCOMP) -i wxpoem.rc -o $(OBJDIR)/wxpoem_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) wxpoem$(GUISUFFIX).exe core *.rsc *.res

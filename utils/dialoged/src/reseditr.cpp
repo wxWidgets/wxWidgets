@@ -1318,7 +1318,22 @@ void wxResourceManager::AlignItems(int flag)
           break;
       }
 
+      wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item);
+      wxItemResource* parentResource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item->GetParent());
+
       item->SetSize(newX, newY, w, h);
+
+	  // Also update the associated resource
+	  // We need to convert to dialog units if this is not a dialog or panel, but
+	  // the parent resource specifies dialog units.
+	  if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
+      {
+        wxPoint pt = item->GetParent()->ConvertPixelsToDialog(wxPoint(newX, newY));
+        newX = pt.x; newY = pt.y;
+        wxSize sz = item->GetParent()->ConvertPixelsToDialog(wxSize(w, h));
+        w = sz.x; h = sz.y;
+      }
+      resource->SetSize(newX, newY, w, h);
     }
   }
   win->Refresh();
@@ -1348,7 +1363,23 @@ void wxResourceManager::CopySize()
   {
     wxControl *item = (wxControl *)node->Data();
     if (item->GetParent() == win)
+	{
       item->SetSize(-1, -1, firstW, firstH);
+
+      wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item);
+      wxItemResource* parentResource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item->GetParent());
+
+	  // Also update the associated resource
+	  // We need to convert to dialog units if this is not a dialog or panel, but
+	  // the parent resource specifies dialog units.
+	  if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
+      {
+        wxSize sz = item->GetParent()->ConvertPixelsToDialog(wxSize(firstW, firstH));
+        firstW = sz.x; firstH = sz.y;
+      }
+      resource->SetSize(resource->GetX(), resource->GetY(), firstW, firstH);
+
+	}
   }
   win->Refresh();
 }
@@ -1931,29 +1962,29 @@ wxWindowPropertyInfo *wxResourceManager::CreatePropertyInfoForWindow(wxWindow *w
         {
           info = new wxRadioButtonPropertyInfo(win);
         }
-  else if (win->IsKindOf(CLASSINFO(wxChoice)))
-        {
-          info = new wxChoicePropertyInfo(win);
-        }
   else if (win->IsKindOf(CLASSINFO(wxComboBox)))
         {
           info = new wxComboBoxPropertyInfo(win);
         }
-  else if (win->IsKindOf(CLASSINFO(wxButton)))
+  else if (win->IsKindOf(CLASSINFO(wxChoice)))
         {
-          info = new wxButtonPropertyInfo(win);
+          info = new wxChoicePropertyInfo(win);
         }
   else if (win->IsKindOf(CLASSINFO(wxBitmapButton)))
         {
           info = new wxBitmapButtonPropertyInfo(win);
         }
-  else if (win->IsKindOf(CLASSINFO(wxStaticText)))
+  else if (win->IsKindOf(CLASSINFO(wxButton)))
         {
-          info = new wxStaticTextPropertyInfo(win);
+          info = new wxButtonPropertyInfo(win);
         }
   else if (win->IsKindOf(CLASSINFO(wxStaticBitmap)))
         {
           info = new wxStaticBitmapPropertyInfo(win);
+        }
+  else if (win->IsKindOf(CLASSINFO(wxStaticText)))
+        {
+          info = new wxStaticTextPropertyInfo(win);
         }
   else if (win->IsKindOf(CLASSINFO(wxTextCtrl)))
         {

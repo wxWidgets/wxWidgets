@@ -38,12 +38,15 @@
 #endif
 
 // Sun CC compatibility (interference with xview/pkg.h, apparently...)
-#if defined(SUN_CC) && defined(__XVIEW__)
+// But XView is no longer supported.
+/*
+#if defined (SUN_CC) || defined(__SUNCC__) && defined(__XVIEW__)
     #undef va_start
     #undef va_end
     #undef va_arg
     #undef va_list
 #endif
+*/
 
 // =============================================================================
 // implementation

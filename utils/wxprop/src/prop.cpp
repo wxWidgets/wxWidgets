@@ -208,7 +208,7 @@ wxPropertyValue::~wxPropertyValue(void)
     }
    case wxPropertyValueString:
    {
-     delete m_value.string;
+     delete[] m_value.string;
      break;
    }
    case wxPropertyValueList:

@@ -798,6 +798,19 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
 
   if (controlType == "wxButton")
   {
+    // Check for bitmap resource name (in case loading old-style resource file)
+    if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
+    {
+        wxString str(expr->Nth(count)->StringValue());
+        controlItem->SetValue4(str);
+        count ++;
+        controlItem->SetType("wxBitmapButton");
+    }
+    if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
+      controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+  }
+  else if (controlType == "wxBitmapButton")
+  {
     // Check for bitmap resource name
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
     {
@@ -853,15 +866,28 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
   }
   else if (controlType == "wxMessage" || controlType == "wxStaticText")
   {
+    // Check for bitmap resource name (in case it's an old-style .wxr file)
+    if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
+    {
+      wxString str(expr->Nth(count)->StringValue());
+      controlItem->SetValue4(str);
+      count ++;
+      controlItem->SetType("wxStaticText");
+    }
+    if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
+      controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+  }
+  else if (controlType == "wxStaticBitmap")
+  {
     // Check for bitmap resource name
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
     {
       wxString str(expr->Nth(count)->StringValue());
       controlItem->SetValue4(str);
       count ++;
-      if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-        controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
     }
+    if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
+      controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
   }
   else if (controlType == "wxGroupBox" || controlType == "wxStaticBox")
   {
