@@ -2,7 +2,7 @@ wxPythonDocs
 ------------
 
 The wxWindows docs can now be viewed on non-Win32 platforms with a
-nice viewer modeled after the MS HTMLViewer.  Simply execute the
+nice viewer modeled after the MS HTMLHelp viewer.  Simply execute the
 viewdocs.py script located in this directory and you're all set.
 (You'll need to first have wxPython installed and accessible via the
 PYTHONPATH.)
