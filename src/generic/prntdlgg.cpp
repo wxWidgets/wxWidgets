@@ -513,6 +513,8 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
         item2.SetMask( wxLIST_MASK_IMAGE );
         item2.SetImage( 0 );
         m_printerListCtrl->SetItem( item2 );
+        // also select item
+        m_printerListCtrl->SetItemState( item.GetId(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
     }
 
     item.SetId( 1+ item.GetId() );
@@ -549,6 +551,8 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
                 item2.SetMask( wxLIST_MASK_IMAGE );
                 item2.SetImage( 0 );
                 m_printerListCtrl->SetItem( item2 );
+                // also select item
+                m_printerListCtrl->SetItemState( item.GetId(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
             }
 
             wxString command = wxT("lpstat -p ");
