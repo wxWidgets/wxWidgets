@@ -31,16 +31,16 @@
 */
 #ifdef __WXMAC__
 #    if defined(__MACH__)
-#        define __WXMAC_OSX__ 1
-#        define __WXMAC_CARBON__ 1
+#        define __WXMAC_OSX__
+#        define __WXMAC_CARBON__
 #        ifdef __WXMAC_XCODE__
 #            include "wx/mac/carbon/config_xcode.h"
 #        endif
 #    else
 #        if TARGET_CARBON
-#            define __WXMAC_CARBON__ 1
+#            define __WXMAC_CARBON__
 #        else
-#            define __WXMAC_CLASSIC__ 1
+#            define __WXMAC_CLASSIC__
 #        endif
 #    endif
 #endif
