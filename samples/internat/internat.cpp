@@ -84,7 +84,7 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
-  const wxChar * const langs[] =
+  const wxString langs[] =
   {
       _T("(System default)"),
       _T("French"),
@@ -96,7 +96,7 @@ bool MyApp::OnInit()
 
   SetExitOnFrameDelete(FALSE);
   int lng = wxGetSingleChoiceIndex(_T("Please choose language:"), _T("Language"), 
-                                   WXSIZEOF(langs), (char **)langs);
+                                   WXSIZEOF(langs), langs);
   SetExitOnFrameDelete(TRUE);
 
   switch (lng)
