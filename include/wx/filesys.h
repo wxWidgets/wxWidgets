@@ -29,6 +29,7 @@
 #include "wx/stream.h"
 #include "wx/url.h"
 #include "wx/datetime.h"
+#include "wx/filename.h"
 
 class wxFSFile;
 class wxFileSystemHandler;
@@ -181,10 +182,10 @@ public:
     static void CleanUpHandlers();
 
     // Returns the native path for a file URL
-    static wxString URLToNativePath( const wxString& url );
+    static wxFileName URLToFileName(const wxString& url);
 
     // Returns the file URL for a native path
-    static wxString NativePathToURL( const wxString& path );
+    static wxString FileNameToURL(const wxFileName& filename);
 
 
 protected:

@@ -173,8 +173,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 {
     // location has Unix path separators
     wxString right = ms_root + GetRightLocation(location);
-    wxString nativePath = wxFileSystem::URLToNativePath(right);
-    wxFileName fn(nativePath, wxPATH_UNIX);
+    wxFileName fn = wxFileSystem::URLToFileName(right);
 
     if (!wxFileExists(fn.GetFullPath()))
         return (wxFSFile*) NULL;
@@ -190,7 +189,8 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)
 {
     wxString right = ms_root + GetRightLocation(spec);
-    return wxFindFirstFile(right, flags);
+    return wxFindFirstFile(wxFileSystem::URLToFileName(right).GetFullPath(),
+                           flags);
 }
 
 wxString wxLocalFSHandler::FindNext()
@@ -422,13 +422,13 @@ const static wxString g_unixPathString(wxT("/"));
 const static wxString g_nativePathString(wxFILE_SEP_PATH);
 
 // Returns the native path for a file URL
-wxString wxFileSystem::URLToNativePath( const wxString& url ) 
+wxFileName wxFileSystem::URLToFileName(const wxString& url)
 {
-	wxString path = url ;
+	wxString path = url;
 
 	if ( path.Find(wxT("file://")) == 0 )
 	{
-		path = path.Mid(7) ;
+		path = path.Mid(7);
 	}
 
 #ifndef __UNIX__
@@ -437,41 +437,43 @@ wxString wxFileSystem::URLToNativePath( const wxString& url )
     // which only exists on msw and corresponds to a unc
 	if ( path[0u] == wxT('/') && path [1u] != wxT('/'))
 	{
-		path = path.Mid(1) ;
+		path = path.Mid(1);
 	}
 	else if ( (url.Find(wxT("file://")) == 0) &&
               (path.Find(wxT('/')) != wxNOT_FOUND) &&
               (path.Length() > 1) && (path[1u] != wxT(':')) )
 	{
-		path = wxT("//") + path ;
+		path = wxT("//") + path;
 	}
 #endif
 
-	path.Replace(g_unixPathString, g_nativePathString) ;
+	path.Replace(g_unixPathString, g_nativePathString);
 
-	return path ;
+	return wxFileName(path, wxPATH_NATIVE);
 }
 
 // Returns the file URL for a native path
-wxString wxFileSystem::NativePathToURL( const wxString& path ) 
+wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 {
-	wxString url = path ;
+    wxFileName fn = filename;
+    fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE);
+    wxString url = fn.GetFullPath(wxPATH_NATIVE);
 
 #ifdef __WXMSW__
-	// unc notation
-	if ( url.Find(wxT("\\\\")) == 0 ) 
-	{
-		url = url.Mid(2) ;
-	}
-	else
+    // unc notation
+    if ( url.Find(wxT("\\\\")) == 0 ) 
+    {
+        url = url.Mid(2);
+    }
+    else
+    {
+        url = wxT("/") + url;
+    }
 #endif
-	{
-		url = wxT("/") + url ;
-	}
 
-	url.Replace(g_nativePathString, g_unixPathString) ;
-	url = wxT("file://") + url ;
-	return url ;
+    url.Replace(g_nativePathString, g_unixPathString);
+    url = wxT("file://") + url;
+    return url;
 }
 
 
