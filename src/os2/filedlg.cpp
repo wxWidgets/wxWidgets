@@ -126,7 +126,12 @@ int wxFileDialog::ShowModal()
     else
         lFlags = FDS_OPEN_DIALOG;
 
-    if ((m_dialogStyle & wxHIDE_READONLY) || (m_dialogStyle & wxSAVE))
+#if WXWIN_COMPATIBILITY_2_4
+    if (m_dialogStyle & wxHIDE_READONLY)
+        lFlags |= FDS_SAVEAS_DIALOG;
+#endif
+
+    if (m_dialogStyle & wxSAVE)
         lFlags |= FDS_SAVEAS_DIALOG;
     if (m_dialogStyle & wxMULTIPLE )
         lFlags |= FDS_OPEN_DIALOG | FDS_MULTIPLESEL;
