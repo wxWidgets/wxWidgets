@@ -351,7 +351,7 @@ if no label is being edited.
 
 \membersection{wxTreeCtrl::GetFirstChild}\label{wxtreectrlgetfirstchild}
 
-\constfunc{wxTreeItemId}{GetFirstChild}{\param{const wxTreeItemId\&}{ item}, \param{long\& }{cookie}}
+\constfunc{wxTreeItemId}{GetFirstChild}{\param{const wxTreeItemId\&}{ item}, \param{wxTreeItemIdValue \& }{cookie}}
 
 Returns the first child; call \helpref{wxTreeCtrl::GetNextChild}{wxtreectrlgetnextchild} for the next child.
 
@@ -475,7 +475,7 @@ Returns the last child of the item (or an invalid tree item if this item has no 
 
 \membersection{wxTreeCtrl::GetNextChild}\label{wxtreectrlgetnextchild}
 
-\constfunc{wxTreeItemId}{GetNextChild}{\param{const wxTreeItemId\&}{ item}, \param{long\& }{cookie}}
+\constfunc{wxTreeItemId}{GetNextChild}{\param{const wxTreeItemId\&}{ item}, \param{wxTreeItemIdValue \& }{cookie}}
 
 Returns the next child; call \helpref{wxTreeCtrl::GetFirstChild}{wxtreectrlgetfirstchild} for the first child.
 
