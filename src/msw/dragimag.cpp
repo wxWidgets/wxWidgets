@@ -102,7 +102,7 @@ void wxDragImage::Init()
 ////////////////////////////////////////////////////////////////////////////
 
 // Create a drag image from a bitmap and optional cursor
-bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
+bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor)
 {
     if ( m_hImageList )
         ImageList_Destroy(GetHimageList());
@@ -146,13 +146,12 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wx
         wxLogError(_("Couldn't add an image to the image list."));
     }
     m_cursor = cursor; // Can only combine with drag image after calling BeginDrag.
-    m_cursorHotspot = cursorHotspot;
 
     return (index != -1) ;
 }
 
 // Create a drag image from an icon and optional cursor
-bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
+bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor)
 {
     if ( m_hImageList )
         ImageList_Destroy(GetHimageList());
@@ -184,13 +183,12 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPo
     }
 
     m_cursor = cursor; // Can only combine with drag image after calling BeginDrag.
-    m_cursorHotspot = cursorHotspot;
 
     return (index != -1) ;
 }
 
 // Create a drag image from a string and optional cursor
-bool wxDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPoint& cursorHotspot)
+bool wxDragImage::Create(const wxString& str, const wxCursor& cursor)
 {
     wxFont font(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
@@ -226,7 +224,7 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPo
     image.SetMaskColour(255, 255, 255);
     bitmap = image.ConvertToBitmap();
 
-    return Create(bitmap, cursor, cursorHotspot);
+    return Create(bitmap, cursor);
 }
 
 // Create a drag image for the given tree control item
@@ -260,6 +258,7 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
         m_boundingRect = * rect;
 
     bool ret = (ImageList_BeginDrag(GetHimageList(), 0, hotspot.x, hotspot.y) != 0);
+    //bool ret = (ImageList_BeginDrag(GetHimageList(), 0, 0, 0) != 0);
 
     if (!ret)
     {
@@ -282,6 +281,21 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
             m_hCursorImageList = (WXHIMAGELIST) ImageList_Create(cxCursor, cyCursor, ILC_MASK, 1, 1);
         }
 
+        // See if we can find the cursor hotspot
+        wxPoint curHotSpot(hotspot);
+
+#if 0
+        ICONINFO iconInfo;
+        if (::GetIconInfo((HICON) (HCURSOR) m_cursor.GetHCURSOR(), & iconInfo) != 0)
+        {
+            curHotSpot.x -= iconInfo.xHotspot;
+            curHotSpot.y -= iconInfo.yHotspot;
+        }
+#endif
+        wxString msg;
+        msg.Printf("Hotspot = %d, %d", curHotSpot.x, curHotSpot.y);
+        wxLogDebug(msg);
+
         // First add the cursor to the image list
         HCURSOR hCursor = (HCURSOR) m_cursor.GetHCURSOR();
         int cursorIndex = ImageList_AddIcon((HIMAGELIST) m_hCursorImageList, (HICON) hCursor);
@@ -290,17 +304,17 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
 
         if (cursorIndex != -1)
         {
-            ImageList_SetDragCursorImage((HIMAGELIST) m_hCursorImageList, cursorIndex, m_cursorHotspot.x, m_cursorHotspot.y);
+            ImageList_SetDragCursorImage((HIMAGELIST) m_hCursorImageList, cursorIndex, curHotSpot.x, curHotSpot.y);
         }
 #endif
     }
-
-    m_window = window;
 
 #if !wxUSE_SIMPLER_DRAGIMAGE
     if (m_cursor.Ok())
         ::ShowCursor(FALSE);
 #endif
+
+    m_window = window;
 
     ::SetCapture(GetHwndOf(window));
 
@@ -375,6 +389,10 @@ bool wxDragImage::Move(const wxPoint& pt)
 #endif
         // Subtract the (negative) values, i.e. add a small increment
         pt2.x -= rect.left; pt2.y -= rect.top;
+    }
+    else if (m_window && m_fullScreen)
+    {
+        pt2 = m_window->ClientToScreen(pt2);
     }
 
     bool ret = (ImageList_DragMove( pt2.x, pt2.y ) != 0);

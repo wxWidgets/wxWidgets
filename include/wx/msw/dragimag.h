@@ -23,9 +23,8 @@
 #include "wx/treectrl.h"
 #include "wx/listctrl.h"
 
-// If 1, use a simple wxCursor instead of ImageList_SetDragCursorImage,
-// and some other simplifications
-#define wxUSE_SIMPLER_DRAGIMAGE 1
+// If 1, use a simple wxCursor instead of ImageList_SetDragCursorImage
+#define wxUSE_SIMPLER_DRAGIMAGE 0
 
 /*
   To use this class, create a wxDragImage when you start dragging, for example:
@@ -110,36 +109,65 @@ public:
     ////////////////////////////////////////////////////////////////////////////
 
     wxDragImage();
-    wxDragImage(const wxBitmap& image, const wxCursor& cursor = wxNullCursor, const wxPoint& cursorHotspot = wxPoint(0, 0))
+    wxDragImage(const wxBitmap& image, const wxCursor& cursor = wxNullCursor)
+    {
+        Init();
+
+        Create(image, cursor);
+    }
+
+    // Deprecated form of the above
+    wxDragImage(const wxBitmap& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
     {
         Init();
 
         Create(image, cursor, cursorHotspot);
     }
-    wxDragImage(const wxIcon& image, const wxCursor& cursor = wxNullCursor, const wxPoint& cursorHotspot = wxPoint(0, 0))
+
+    wxDragImage(const wxIcon& image, const wxCursor& cursor = wxNullCursor)
+    {
+        Init();
+
+        Create(image, cursor);
+    }
+
+    // Deprecated form of the above
+    wxDragImage(const wxIcon& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
     {
         Init();
 
         Create(image, cursor, cursorHotspot);
     }
-    wxDragImage(const wxString& str, const wxCursor& cursor = wxNullCursor, const wxPoint& cursorHotspot = wxPoint(0, 0))
+
+    wxDragImage(const wxString& str, const wxCursor& cursor = wxNullCursor)
+    {
+        Init();
+
+        Create(str, cursor);
+    }
+
+    // Deprecated form of the above
+    wxDragImage(const wxString& str, const wxCursor& cursor, const wxPoint& cursorHotspot)
     {
         Init();
 
         Create(str, cursor, cursorHotspot);
     }
+
     wxDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
     {
         Init();
 
         Create(treeCtrl, id);
     }
+
     wxDragImage(const wxListCtrl& listCtrl, long id)
     {
         Init();
 
         Create(listCtrl, id);
     }
+
     ~wxDragImage();
 
     // Attributes
@@ -149,13 +177,28 @@ public:
     ////////////////////////////////////////////////////////////////////////////
 
     // Create a drag image from a bitmap and optional cursor
-    bool Create(const wxBitmap& image, const wxCursor& cursor = wxNullCursor, const wxPoint& cursorHotspot = wxPoint(0, 0));
+    bool Create(const wxBitmap& image, const wxCursor& cursor = wxNullCursor);
+    bool Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
+    {
+        wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
+        return Create(image, cursor);
+    }
 
     // Create a drag image from an icon and optional cursor
-    bool Create(const wxIcon& image, const wxCursor& cursor = wxNullCursor, const wxPoint& cursorHotspot = wxPoint(0, 0));
+    bool Create(const wxIcon& image, const wxCursor& cursor = wxNullCursor);
+    bool Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
+    {
+        wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
+        return Create(image, cursor);
+    }
 
     // Create a drag image from a string and optional cursor
-    bool Create(const wxString& str, const wxCursor& cursor = wxNullCursor, const wxPoint& cursorHotspot = wxPoint(0, 0));
+    bool Create(const wxString& str, const wxCursor& cursor = wxNullCursor);
+    bool Create(const wxString& str, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
+    {
+        wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
+        return Create(str, cursor);
+    }
 
     // Create a drag image for the given tree control item
     bool Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
@@ -209,7 +252,7 @@ protected:
 #endif
 
     wxCursor        m_cursor;
-    wxPoint         m_cursorHotspot;
+//    wxPoint         m_cursorHotspot; // Obsolete
     wxPoint         m_position;
     wxWindow*       m_window;
     wxRect          m_boundingRect;

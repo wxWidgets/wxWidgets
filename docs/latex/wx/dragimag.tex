@@ -92,7 +92,7 @@ have a mask.}
 
 \docparam{cursor}{Optional cursor to combine with the image.}
 
-\docparam{hotspot}{Optional position of the hotspot in the given cursor. This parameter is deprecated.}
+\docparam{hotspot}{This parameter is deprecated.}
 
 \docparam{treeCtrl}{Tree control for constructing a tree drag image.}
 
@@ -183,8 +183,7 @@ Call this to move the image to a new position. The image will only be shown if
 \helpref{wxDragImage::Show}{wxdragimageshow} has been called previously (for example
 at the start of the drag).
 
-{\it pt} is the position in window coordinates (or screen coordinates if no
-window was specified to BeginDrag.
+{\it pt} is the position in client coordinates (relative to the window specified in BeginDrag).
 
 You can move the image either when the image is hidden or shown, but in general dragging
 will be smoother if you move the image when it is shown.
