@@ -103,6 +103,16 @@ wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
 {
     m_file = new wxFile(fileName, wxFile::write);
     m_file_destroy = TRUE;
+    
+    if (!m_file->IsOpened())
+    {
+        m_lasterror = wxSTREAM_WRITE_ERROR;
+    }
+    else
+    {
+        if (m_file->Error())
+            m_lasterror = wxSTREAM_WRITE_ERROR;
+    }
 }
 
 wxFileOutputStream::wxFileOutputStream(wxFile& file)
