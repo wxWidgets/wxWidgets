@@ -205,7 +205,7 @@ public:
         }
     }
 
-    wxListCtrl* GetListCtrl();
+    wxPyListCtrl* GetListCtrl();
     wxBitmapButton* GetDelButton();
     wxBitmapButton* GetNewButton();
     wxBitmapButton* GetUpButton();
