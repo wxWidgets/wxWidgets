@@ -120,6 +120,7 @@ helpbase.cpp	C
 http.cpp	C	S
 imagbmp.cpp	C
 image.cpp	C
+imagall.cpp	C
 imaggif.cpp	C
 imagjpeg.cpp	C	32
 imagpcx.cpp	C	32
