@@ -157,6 +157,9 @@ typedef short INT16;
 
 #if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ )
 #include <wx/msw/gccpriv.h>
+#else
+#undef wxCHECK_W32API_VERSION
+#define wxCHECK_W32API_VERSION(maj, min) (0)
 #endif
 
 /* INT32 must hold at least signed 32-bit values. */
