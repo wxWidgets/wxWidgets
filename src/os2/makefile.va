@@ -573,7 +573,7 @@ HTMLLIBOBJS = \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(NONESSENTIALOBJS) $(OS2OBJS)
 
 # Normal, static library
-all:  $(OBJECTS) $(PERIPH_TARGET) png zlib $(LIBTARGET)
+all:  $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg xpm $(LIBTARGET)
 
 dirs: $(OS2DIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(HTMLDIR)\$D
 
@@ -1029,18 +1029,20 @@ clean_xpm:
 
 clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm
         del      $(LIBTARGET)
-        erase /N ..\..\lib\wx200.dll
+!if "$(WXMAKINGDLL)" == "1"
         erase /N ..\..\lib\wx200.lib
+!endif
         erase /N $(GENDIR)\$D\*.obj
         erase /N $(COMMDIR)\$D\*.obj
-        erase /N $(COMMDIR)\\y_tab.c
-        erase /N $(COMMDIR)\lex_yy.c
+        erase /N $(HTMLDIR)\$D\*.obj
         erase /N $(OS2DIR)\$D\*.obj
+        erase /N $(COMMDIR)\y_tab.c
+        erase /N $(COMMDIR)\lex_yy.c
         rd       $(D)
-        rd      ..\generic\$(D)
-        rd      ..\common\$(D)
-        rd      ..\html\$(D)
-        rd      ..\os2\$(D)
+        rd      ..\generic\$D
+        rd      ..\common\$D
+        rd      ..\html\$D
+        rd      ..\os2\$D
 
 cleanall: clean
 
