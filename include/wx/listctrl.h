@@ -41,7 +41,7 @@ class WXDLLEXPORT wxListView : public wxListCtrl
 public:
     wxListView() { }
     wxListView( wxWindow *parent,
-                wxWindowID winid = -1,
+                wxWindowID winid = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_REPORT,
@@ -55,7 +55,7 @@ public:
     // ---------------------
 
     // [de]select an item
-    void Select(long n, bool on = TRUE)
+    void Select(long n, bool on = true)
     {
         SetItemState(n, on ? wxLIST_STATE_SELECTED : 0, wxLIST_STATE_SELECTED);
     }
@@ -79,7 +79,7 @@ public:
     long GetFirstSelected() const
         { return GetNextSelected(-1); }
 
-    // return TRUE if the item is selected
+    // return true if the item is selected
     bool IsSelected(long index)
         { return GetItemState(index, wxLIST_STATE_SELECTED) != 0; }
 

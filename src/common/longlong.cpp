@@ -508,41 +508,41 @@ wxULongLongWx& wxULongLongWx::operator--()
 bool wxLongLongWx::operator<(const wxLongLongWx& ll) const
 {
     if ( m_hi < ll.m_hi )
-        return TRUE;
+        return true;
     else if ( m_hi == ll.m_hi )
         return m_lo < ll.m_lo;
     else
-        return FALSE;
+        return false;
 }
 
 bool wxULongLongWx::operator<(const wxULongLongWx& ll) const
 {
     if ( m_hi < ll.m_hi )
-        return TRUE;
+        return true;
     else if ( m_hi == ll.m_hi )
         return m_lo < ll.m_lo;
     else
-        return FALSE;
+        return false;
 }
 
 bool wxLongLongWx::operator>(const wxLongLongWx& ll) const
 {
     if ( m_hi > ll.m_hi )
-        return TRUE;
+        return true;
     else if ( m_hi == ll.m_hi )
         return m_lo > ll.m_lo;
     else
-        return FALSE;
+        return false;
 }
 
 bool wxULongLongWx::operator>(const wxULongLongWx& ll) const
 {
     if ( m_hi > ll.m_hi )
-        return TRUE;
+        return true;
     else if ( m_hi == ll.m_hi )
         return m_lo > ll.m_lo;
     else
-        return FALSE;
+        return false;
 }
 
 // bitwise operators
@@ -796,7 +796,7 @@ void wxLongLongWx::Divide(const wxLongLongWx& divisorIn,
     //
     // with 0 <= abs(remainder) < abs(divisor)
     bool negRemainder = dividend.m_hi < 0;
-    bool negQuotient = FALSE;   // assume positive
+    bool negQuotient = false;   // assume positive
     if ( dividend.m_hi < 0 )
     {
         negQuotient = !negQuotient;
@@ -1078,11 +1078,11 @@ wxLongLongWx::ToString() const
     if ( ll < 0 )
     {
         ll.Negate();
-        neg = TRUE;
+        neg = true;
     }
     else
     {
-        neg = FALSE;
+        neg = false;
     }
 
     while ( ll != 0 )

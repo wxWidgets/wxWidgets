@@ -147,7 +147,7 @@ void wxListBase::Init(wxKeyType keyType)
   m_nodeFirst =
   m_nodeLast = (wxNodeBase *) NULL;
   m_count = 0;
-  m_destroy = FALSE;
+  m_destroy = false;
   m_keyType = keyType;
 }
 
@@ -408,11 +408,11 @@ wxNodeBase *wxListBase::DetachNode(wxNodeBase *node)
 bool wxListBase::DeleteNode(wxNodeBase *node)
 {
     if ( !DetachNode(node) )
-        return FALSE;
+        return false;
 
     DoDeleteNode(node);
 
-    return TRUE;
+    return true;
 }
 
 bool wxListBase::DeleteObject(void *object)
@@ -422,12 +422,12 @@ bool wxListBase::DeleteObject(void *object)
         if ( current->GetData() == object )
         {
             DeleteNode(current);
-            return TRUE;
+            return true;
         }
     }
 
     // not found
-    return FALSE;
+    return false;
 }
 
 void wxListBase::Clear()
@@ -624,12 +624,12 @@ bool wxStringList::Delete(const wxChar *s)
         if ( wxStrcmp(current->GetData(), s) == 0 )
         {
             DeleteNode(current);
-            return TRUE;
+            return true;
         }
     }
 
     // not found
-    return FALSE;
+    return false;
 }
 
 void wxStringList::DoCopy(const wxStringList& other)
@@ -645,14 +645,14 @@ void wxStringList::DoCopy(const wxStringList& other)
 
 wxStringList::wxStringList()
 {
-    DeleteContents(TRUE);
+    DeleteContents(true);
 }
 
 // Variable argument list, terminated by a zero
 // Makes new storage for the strings
 wxStringList::wxStringList (const wxChar *first, ...)
 {
-  DeleteContents(TRUE);
+  DeleteContents(true);
   if ( !first )
     return;
 
@@ -677,7 +677,7 @@ wxStringList::wxStringList (const wxChar *first, ...)
   va_end(ap);
 }
 
-// Only makes new strings if arg is TRUE
+// Only makes new strings if arg is true
 wxChar **wxStringList::ListToArray(bool new_copies) const
 {
     wxChar **string_array = new wxChar *[GetCount()];
@@ -702,10 +702,10 @@ bool wxStringList::Member(const wxChar *s) const
     {
         const wxChar *s1 = node->GetData();
         if (s == s1 || wxStrcmp (s, s1) == 0)
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 #ifdef __WXWINCE__
@@ -748,7 +748,7 @@ wxNode *wxStringList::Add(const wxChar *s)
 {
     return (wxNode *)wxStringListBase::Append(MYcopystring(s));
 }
-        
+
 wxNode *wxStringList::Prepend(const wxChar *s)
 {
     return (wxNode *)wxStringListBase::Insert(MYcopystring(s));

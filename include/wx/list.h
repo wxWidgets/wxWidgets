@@ -390,7 +390,7 @@ public:
         // count of items in the list
     size_t GetCount() const { return m_count; }
 
-        // return TRUE if this list is empty
+        // return true if this list is empty
     bool IsEmpty() const { return m_count == 0; }
 
     // operations
@@ -486,10 +486,10 @@ protected:
         // removes node from the list but doesn't delete it (returns pointer
         // to the node or NULL if it wasn't found in the list)
     wxNodeBase *DetachNode(wxNodeBase *node);
-        // delete element from list, returns FALSE if node not found
+        // delete element from list, returns false if node not found
     bool DeleteNode(wxNodeBase *node);
         // finds object pointer and deletes node (and object if DeleteContents
-        // is on), returns FALSE if object not found
+        // is on), returns false if object not found
     bool DeleteObject(void *object);
 
     // search (all return NULL if item not found)
@@ -967,7 +967,7 @@ private:
 #define WX_DECLARE_LIST_WITH_DECL(elementtype, listname, decl) \
     typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
     WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node, decl)
-    
+
 #define WX_DECLARE_EXPORTED_LIST(elementtype, listname)                     \
     WX_DECLARE_LIST_WITH_DECL(elementtype, listname, class WXDLLEXPORT)
 
@@ -1089,20 +1089,20 @@ public:
 
         // copying the string list: the strings are copied, too (extremely
         // inefficient!)
-    wxStringList(const wxStringList& other) : wxStringListBase() { DeleteContents(TRUE); DoCopy(other); }
+    wxStringList(const wxStringList& other) : wxStringListBase() { DeleteContents(true); DoCopy(other); }
     wxStringList& operator=(const wxStringList& other)
         { Clear(); DoCopy(other); return *this; }
 
     // operations
         // makes a copy of the string
     wxNode *Add(const wxChar *s);
-        
+
         // Append to beginning of list
     wxNode *Prepend(const wxChar *s);
 
     bool Delete(const wxChar *s);
 
-    wxChar **ListToArray(bool new_copies = FALSE) const;
+    wxChar **ListToArray(bool new_copies = false) const;
     bool Member(const wxChar *s) const;
 
     // alphabetic sort

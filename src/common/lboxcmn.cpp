@@ -79,12 +79,12 @@ void wxListBoxBase::Set(int nItems, const wxString* items, void **clientData)
 bool wxListBoxBase::SetStringSelection(const wxString& s, bool select)
 {
     int sel = FindString(s);
-    wxCHECK_MSG( sel != -1, FALSE,
+    wxCHECK_MSG( sel != wxNOT_FOUND, false,
                  wxT("invalid string in SetStringSelection") );
 
     SetSelection(sel, select);
 
-    return TRUE;
+    return true;
 }
 
 void wxListBoxBase::DeselectAll(int itemToLeaveSelected)
@@ -105,7 +105,7 @@ void wxListBoxBase::DeselectAll(int itemToLeaveSelected)
     else // single selection
     {
         int sel = GetSelection();
-        if ( sel != -1 && sel != itemToLeaveSelected )
+        if ( sel != wxNOT_FOUND && sel != itemToLeaveSelected )
         {
             Deselect(sel);
         }
@@ -130,7 +130,7 @@ void wxListBoxBase::SetFirstItem(const wxString& s)
 {
     int n = FindString(s);
 
-    wxCHECK_RET( n != -1, wxT("invalid string in wxListBox::SetFirstItem") );
+    wxCHECK_RET( n != wxNOT_FOUND, wxT("invalid string in wxListBox::SetFirstItem") );
 
     DoSetFirstItem(n);
 }

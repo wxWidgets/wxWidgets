@@ -394,9 +394,9 @@ wxLog *wxLog::GetActiveTarget()
     if ( ms_bAutoCreate && ms_pLogger == NULL ) {
         // prevent infinite recursion if someone calls wxLogXXX() from
         // wxApp::CreateLogTarget()
-        static bool s_bInGetActiveTarget = FALSE;
+        static bool s_bInGetActiveTarget = false;
         if ( !s_bInGetActiveTarget ) {
-            s_bInGetActiveTarget = TRUE;
+            s_bInGetActiveTarget = true;
 
             // ask the application to create a log target for us
             if ( wxTheApp != NULL )
@@ -404,7 +404,7 @@ wxLog *wxLog::GetActiveTarget()
             else
                 ms_pLogger = new wxLogStderr;
 
-            s_bInGetActiveTarget = FALSE;
+            s_bInGetActiveTarget = false;
 
             // do nothing if it fails - what can we do?
         }
@@ -429,7 +429,7 @@ wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
 
 void wxLog::DontCreateOnDemand()
 {
-    ms_bAutoCreate = FALSE;
+    ms_bAutoCreate = false;
 
     // this is usually called at the end of the program and we assume that it
     // is *always* called at the end - so we free memory here to avoid false
@@ -591,7 +591,7 @@ void wxLogStream::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
 wxLogChain::wxLogChain(wxLog *logger)
 {
-    m_bPassMessages = TRUE;
+    m_bPassMessages = true;
 
     m_logNew = logger;
     m_logOld = wxLog::SetActiveTarget(this);
@@ -666,9 +666,9 @@ wxLogPassThrough::wxLogPassThrough()
 // ----------------------------------------------------------------------------
 
 wxLog          *wxLog::ms_pLogger      = (wxLog *)NULL;
-bool            wxLog::ms_doLog        = TRUE;
-bool            wxLog::ms_bAutoCreate  = TRUE;
-bool            wxLog::ms_bVerbose     = FALSE;
+bool            wxLog::ms_doLog        = true;
+bool            wxLog::ms_bAutoCreate  = true;
+bool            wxLog::ms_bVerbose     = false;
 
 wxLogLevel      wxLog::ms_logLevel     = wxLOG_Max;  // log everything by default
 

@@ -65,12 +65,12 @@ public:
 
     // multiple selection logic
     virtual bool IsSelected(int n) const = 0;
-    virtual void SetSelection(int n, bool select = TRUE) = 0;
-    virtual void Select(int n) { SetSelection(n, TRUE); }
-    void Deselect(int n) { SetSelection(n, FALSE); }
+    virtual void SetSelection(int n, bool select = true) = 0;
+    virtual void Select(int n) { SetSelection(n, true); }
+    void Deselect(int n) { SetSelection(n, false); }
     void DeselectAll(int itemToLeaveSelected = -1);
 
-    virtual bool SetStringSelection(const wxString& s, bool select = TRUE);
+    virtual bool SetStringSelection(const wxString& s, bool select = true);
 
     // works for single as well as multiple selection listboxes (unlike
     // GetSelection which only works for listboxes with single selection)
@@ -89,14 +89,14 @@ public:
     // listbox and ensures that it is visible i.e. not scrolled out of view
     void AppendAndEnsureVisible(const wxString& s);
 
-    // return TRUE if the listbox allows multiple selection
+    // return true if the listbox allows multiple selection
     bool HasMultipleSelection() const
     {
         return (m_windowStyle & wxLB_MULTIPLE) ||
                (m_windowStyle & wxLB_EXTENDED);
     }
 
-    // return TRUE if this listbox is sorted
+    // return true if this listbox is sorted
     bool IsSorted() const { return (m_windowStyle & wxLB_SORT) != 0; }
 
     // emulate selecting or deselecting the item event.GetInt() (depending on

@@ -56,7 +56,7 @@ wxIndividualLayoutConstraint::wxIndividualLayoutConstraint()
     value = 0;
     percent = 0;
     otherEdge = wxTop;
-    done = FALSE;
+    done = false;
     otherWin = (wxWindowBase *) NULL;
 }
 
@@ -145,10 +145,10 @@ bool wxIndividualLayoutConstraint::ResetIfWin(wxWindowBase *otherW)
         percent = 0;
         otherEdge = wxTop;
         otherWin = (wxWindowBase *) NULL;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 // Try to satisfy constraint
@@ -156,8 +156,8 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
 {
     if (relationship == wxAbsolute)
     {
-        done = TRUE;
-        return TRUE;
+        done = true;
+        return true;
     }
 
     switch (myEdge)
@@ -175,11 +175,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos - margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxRightOf:
                 {
@@ -187,11 +187,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos + margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxPercentOf:
                 {
@@ -199,11 +199,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = (int)(edgePos*(((float)percent)*0.01) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxUnconstrained:
                 {
@@ -213,24 +213,24 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (constraints->right.GetDone() && constraints->width.GetDone())
                     {
                         value = (constraints->right.GetValue() - constraints->width.GetValue() + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->centreX.GetDone() && constraints->width.GetDone())
                     {
                         value = (int)(constraints->centreX.GetValue() - (constraints->width.GetValue()/2) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxAsIs:
                 {
                     int y;
                     win->GetPosition(&value, &y);
-                    done = TRUE;
-                    return TRUE;
+                    done = true;
+                    return true;
                 }
                 default:
                     break;
@@ -250,11 +250,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos - margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxRightOf:
                 {
@@ -262,11 +262,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos + margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxPercentOf:
                 {
@@ -274,11 +274,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = (int)(edgePos*(((float)percent)*0.01) - margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxUnconstrained:
                 {
@@ -288,17 +288,17 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (constraints->left.GetDone() && constraints->width.GetDone())
                     {
                         value = (constraints->left.GetValue() + constraints->width.GetValue() - margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->centreX.GetDone() && constraints->width.GetDone())
                     {
                         value = (int)(constraints->centreX.GetValue() + (constraints->width.GetValue()/2) - margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxAsIs:
                 {
@@ -307,8 +307,8 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     win->GetSize(&w, &h);
                     win->GetPosition(&x, &y);
                     value = x + w;
-                    done = TRUE;
-                    return TRUE;
+                    done = true;
+                    return true;
                 }
                 default:
                     break;
@@ -328,11 +328,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos - margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxBelow:
                 {
@@ -340,11 +340,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos + margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxPercentOf:
                 {
@@ -352,11 +352,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = (int)(edgePos*(((float)percent)*0.01) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxUnconstrained:
                 {
@@ -366,24 +366,24 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (constraints->bottom.GetDone() && constraints->height.GetDone())
                     {
                         value = (constraints->bottom.GetValue() - constraints->height.GetValue() + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->centreY.GetDone() && constraints->height.GetDone())
                     {
                         value = (constraints->centreY.GetValue() - (constraints->height.GetValue()/2) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxAsIs:
                 {
                     int x;
                     win->GetPosition(&x, &value);
-                    done = TRUE;
-                    return TRUE;
+                    done = true;
+                    return true;
                 }
                 default:
                     break;
@@ -403,11 +403,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos + margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxBelow:
                 {
@@ -415,11 +415,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos - margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxPercentOf:
                 {
@@ -427,11 +427,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = (int)(edgePos*(((float)percent)*0.01) - margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxUnconstrained:
                 {
@@ -441,17 +441,17 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (constraints->top.GetDone() && constraints->height.GetDone())
                     {
                         value = (constraints->top.GetValue() + constraints->height.GetValue() - margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->centreY.GetDone() && constraints->height.GetDone())
                     {
                         value = (constraints->centreY.GetValue() + (constraints->height.GetValue()/2) - margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxAsIs:
                 {
@@ -460,8 +460,8 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     win->GetSize(&w, &h);
                     win->GetPosition(&x, &y);
                     value = h + y;
-                    done = TRUE;
-                    return TRUE;
+                    done = true;
+                    return true;
                 }
                 default:
                     break;
@@ -481,11 +481,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos - margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxRightOf:
                 {
@@ -493,11 +493,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos + margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxPercentOf:
                 {
@@ -505,11 +505,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = (int)(edgePos*(((float)percent)*0.01) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxUnconstrained:
                 {
@@ -519,17 +519,17 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (constraints->left.GetDone() && constraints->width.GetDone())
                     {
                         value = (int)(constraints->left.GetValue() + (constraints->width.GetValue()/2) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->right.GetDone() && constraints->width.GetDone())
                     {
                         value = (int)(constraints->left.GetValue() - (constraints->width.GetValue()/2) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 default:
                     break;
@@ -549,11 +549,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos - margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxBelow:
                 {
@@ -561,11 +561,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = edgePos + margin;
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxPercentOf:
                 {
@@ -573,11 +573,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = (int)(edgePos*(((float)percent)*0.01) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxUnconstrained:
                 {
@@ -587,17 +587,17 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (constraints->bottom.GetDone() && constraints->height.GetDone())
                     {
                         value = (int)(constraints->bottom.GetValue() - (constraints->height.GetValue()/2) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->top.GetDone() && constraints->height.GetDone())
                     {
                         value = (int)(constraints->top.GetValue() + (constraints->height.GetValue()/2) + margin);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 default:
                     break;
@@ -614,11 +614,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = (int)(edgePos*(((float)percent)*0.01));
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxAsIs:
                 {
@@ -626,10 +626,10 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     {
                         int h;
                         win->GetSize(&value, &h);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
-                    else return FALSE;
+                    else return false;
                 }
                 case wxUnconstrained:
                 {
@@ -639,23 +639,23 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (constraints->left.GetDone() && constraints->right.GetDone())
                     {
                         value = constraints->right.GetValue() - constraints->left.GetValue();
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->centreX.GetDone() && constraints->left.GetDone())
                     {
                         value = (int)(2*(constraints->centreX.GetValue() - constraints->left.GetValue()));
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->centreX.GetDone() && constraints->right.GetDone())
                     {
                         value = (int)(2*(constraints->right.GetValue() - constraints->centreX.GetValue()));
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 default:
                     break;
@@ -672,11 +672,11 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (edgePos != -1)
                     {
                         value = (int)(edgePos*(((float)percent)*0.01));
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 case wxAsIs:
                 {
@@ -684,10 +684,10 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     {
                         int w;
                         win->GetSize(&w, &value);
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
-                    else return FALSE;
+                    else return false;
                 }
                 case wxUnconstrained:
                 {
@@ -697,23 +697,23 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (constraints->top.GetDone() && constraints->bottom.GetDone())
                     {
                         value = constraints->bottom.GetValue() - constraints->top.GetValue();
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->top.GetDone() && constraints->centreY.GetDone())
                     {
                         value = (int)(2*(constraints->centreY.GetValue() - constraints->top.GetValue()));
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else if (constraints->bottom.GetDone() && constraints->centreY.GetDone())
                     {
                         value = (int)(2*(constraints->bottom.GetValue() - constraints->centreY.GetValue()));
-                        done = TRUE;
-                        return TRUE;
+                        done = true;
+                        return true;
                     }
                     else
-                        return FALSE;
+                        return false;
                 }
                 default:
                     break;
@@ -723,7 +723,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
         default:
             break;
     }
-    return FALSE;
+    return false;
 }
 
 // Get the value of this edge or dimension, or if this is not determinable, -1.
@@ -969,42 +969,42 @@ bool wxLayoutConstraints::SatisfyConstraints(wxWindowBase *win, int *nChanges)
     int noChanges = 0;
 
     bool done = width.GetDone();
-    bool newDone = (done ? TRUE : width.SatisfyConstraint(this, win));
+    bool newDone = (done ? true : width.SatisfyConstraint(this, win));
     if (newDone != done)
         noChanges ++;
 
     done = height.GetDone();
-    newDone = (done ? TRUE : height.SatisfyConstraint(this, win));
+    newDone = (done ? true : height.SatisfyConstraint(this, win));
     if (newDone != done)
         noChanges ++;
 
     done = left.GetDone();
-    newDone = (done ? TRUE : left.SatisfyConstraint(this, win));
+    newDone = (done ? true : left.SatisfyConstraint(this, win));
     if (newDone != done)
         noChanges ++;
 
     done = top.GetDone();
-    newDone = (done ? TRUE : top.SatisfyConstraint(this, win));
+    newDone = (done ? true : top.SatisfyConstraint(this, win));
     if (newDone != done)
         noChanges ++;
 
     done = right.GetDone();
-    newDone = (done ? TRUE : right.SatisfyConstraint(this, win));
+    newDone = (done ? true : right.SatisfyConstraint(this, win));
     if (newDone != done)
         noChanges ++;
 
     done = bottom.GetDone();
-    newDone = (done ? TRUE : bottom.SatisfyConstraint(this, win));
+    newDone = (done ? true : bottom.SatisfyConstraint(this, win));
     if (newDone != done)
         noChanges ++;
 
     done = centreX.GetDone();
-    newDone = (done ? TRUE : centreX.SatisfyConstraint(this, win));
+    newDone = (done ? true : centreX.SatisfyConstraint(this, win));
     if (newDone != done)
         noChanges ++;
 
     done = centreY.GetDone();
-    newDone = (done ? TRUE : centreY.SatisfyConstraint(this, win));
+    newDone = (done ? true : centreY.SatisfyConstraint(this, win));
     if (newDone != done)
         noChanges ++;
 
