@@ -93,13 +93,14 @@ MSWOBJS = #$ ExpandList("WXMSWOBJS");
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) 
 
-all: MAKEARCHDIR MAKELIBS $(LIBTARGET) zlib png jpeg tiff regex
+all: MAKEARCHDIR MAKELIBS PCH $(LIBTARGET) zlib png jpeg tiff regex
 
 MAKEARCHDIR:
     @if not exist $(MSWINCDIR)\setup.h copy $(MSWINCDIR)\setup0.h $(MSWINCDIR)\setup.h
     @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)
     @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)\wx
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
+    @if not exist $(WXOUTDIR)\nul mkdir $(WXOUTDIR)
 
 #build our own copies of missing libraries
 MAKELIBS:
@@ -110,7 +111,7 @@ $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
 	*lib /PAGESIZE:512 $(LIBTARGET) y $(OBJECTS), nul;
 
-clean: clean_msw clean_zlib clean_png clean_jpeg clean_tiff clean_regex
+clean: clean_msw clean_zlib clean_png clean_jpeg clean_tiff clean_regex clean_pch
 
 clean_msw:
 	-del $(COMMDIR)\*.obj
@@ -121,6 +122,14 @@ clean_msw:
         -del *.sym
         -del ole\*.obj
         -del $(LIBTARGET)
+
+PCH: $(INCDIR)\wx\wxprec.h
+        dmc $(CPPFLAGS) $(CFLAGS) $(INCLUDE) -HF$(WXOUTDIR)\wxprec.SYM -o$(WXOUTDIR)\wxprec.PCO $(INCDIR)\wx\wxprec.h
+
+clean_pch:
+        del $(WXOUTDIR)\*.sym
+        del $(WXOUTDIR)\*.PCO
+
 
 png:   
         make -f $(WXDIR)\src\png\makefile.sc FINAL=$(FINAL)
@@ -153,7 +162,6 @@ clean_tiff:
         make -f $(WXDIR)\src\tiff\makefile.sc clean
 
 MFTYPE=sc
-makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
-	cd $(WXWIN)\distrib\msw\tmake
-	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
-	copy makefile.$(MFTYPE) $(WXWIN)\src\msw
+self : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+	perl -x$(WXWIN)\distrib\msw\tmake -S tmake -t$(MFTYPE) wxwin.pro -o $(WXWIN)\distrib\msw\tmake\makefile.sc
+	copy $(WXWIN)\distrib\msw\tmake\makefile.$(MFTYPE) $(WXWIN)\src\msw

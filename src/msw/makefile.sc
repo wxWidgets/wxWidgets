@@ -364,6 +364,7 @@ clean_pch:
         del $(WXOUTDIR)\*.sym
         del $(WXOUTDIR)\*.PCO
 
+
 png:   
         make -f $(WXDIR)\src\png\makefile.sc FINAL=$(FINAL)
 
@@ -395,7 +396,6 @@ clean_tiff:
         make -f $(WXDIR)\src\tiff\makefile.sc clean
 
 MFTYPE=sc
-makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
-	cd $(WXWIN)\distrib\msw\tmake
-	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
-	copy makefile.$(MFTYPE) $(WXWIN)\src\msw
+self : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+	perl -x$(WXWIN)\distrib\msw\tmake -S tmake -t$(MFTYPE) wxwin.pro -o $(WXWIN)\distrib\msw\tmake\makefile.sc
+	copy $(WXWIN)\distrib\msw\tmake\makefile.$(MFTYPE) $(WXWIN)\src\msw
