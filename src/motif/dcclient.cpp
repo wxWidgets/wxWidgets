@@ -127,6 +127,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     wxASSERT_MSG( (window != (wxWindow*) NULL), "You must pass a valid wxWindow to wxWindowDC/wxClientDC/wxPaintDC constructor." );
 
     m_window = window;
+    m_font = window->GetFont();
     m_gc = (WXGC) 0;
     m_gcBacking = (WXGC) 0;
     m_backgroundPixel = -1;
