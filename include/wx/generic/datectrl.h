@@ -12,10 +12,12 @@
 #ifndef _WX_GENERIC_DATECTRL_H_
 #define _WX_GENERIC_DATECTRL_H_
 
+class WXDLLIMPEXP_CORE wxButton;
 class WXDLLIMPEXP_ADV wxCalendarDateAttr;
 class WXDLLIMPEXP_ADV wxCalendarCtrl;
 class WXDLLIMPEXP_ADV wxCalendarEvent;
-class WXDLLIMPEXP_ADV wxPopupWindow;
+class WXDLLIMPEXP_CORE wxPopupWindow;
+class WXDLLIMPEXP_CORE wxTextCtrl;
 
 class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric : public wxDatePickerCtrlBase
 {
@@ -72,16 +74,8 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
 private:
-    wxPopupWindow *m_popup;
-    wxTextCtrl *m_txt;
-    wxCalendarCtrl *m_cal;
-    wxButton *m_btn;
-    wxString m_format;
-
-    bool m_dropped, m_ignoreDrop;
-
     void Init();
-    void DropDown(bool down=true);
+    void DropDown(bool down = true);
 
     void OnText(wxCommandEvent &ev);
     void OnEditKey(wxKeyEvent & event);
@@ -91,6 +85,17 @@ private:
     void OnSetFocus(wxFocusEvent &ev);
     void OnKillFocus(wxFocusEvent &ev);
     void OnChildSetFocus(wxChildFocusEvent &ev);
+
+
+    wxPopupWindow *m_popup;
+    wxTextCtrl *m_txt;
+    wxCalendarCtrl *m_cal;
+    wxButton *m_btn;
+    wxString m_format;
+
+    bool m_dropped,
+         m_ignoreDrop;
+
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxDatePickerCtrlGeneric)
