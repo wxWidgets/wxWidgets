@@ -13,8 +13,9 @@
 #define _OGL_DIVIDED_H_
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "basic.h"
+#pragma interface "divided.h"
 #endif
+
 
 /*
  * Definition of a region
@@ -27,7 +28,7 @@
  */
 
 extern wxFont *g_oglNormalFont;
-class wxDividedShape: public wxRectangleShape
+class WXDLLIMPEXP_OGL wxDividedShape: public wxRectangleShape
 {
  DECLARE_DYNAMIC_CLASS(wxDividedShape)
 

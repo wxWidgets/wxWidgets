@@ -16,6 +16,7 @@
 #pragma interface "basic.h"
 #endif
 
+
 #define OGL_VERSION     2.0
 
 #ifndef DEFAULT_MOUSE_TOLERANCE
@@ -119,7 +120,7 @@ class WXDLLEXPORT wxExprDatabase;
 
 
 
-class wxShapeEvtHandler: public wxObject, public wxClientDataContainer
+class WXDLLIMPEXP_OGL wxShapeEvtHandler: public wxObject, public wxClientDataContainer
 {
  DECLARE_DYNAMIC_CLASS(wxShapeEvtHandler)
 
@@ -184,7 +185,7 @@ class wxShapeEvtHandler: public wxObject, public wxClientDataContainer
   wxShape*              m_handlerShape;
 };
 
-class wxShape: public wxShapeEvtHandler
+class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
 {
  DECLARE_ABSTRACT_CLASS(wxShape)
 
@@ -561,7 +562,7 @@ class wxShape: public wxShapeEvtHandler
   long                  m_branchStyle;
 };
 
-class wxPolygonShape: public wxShape
+class WXDLLIMPEXP_OGL wxPolygonShape: public wxShape
 {
  DECLARE_DYNAMIC_CLASS(wxPolygonShape)
  public:
@@ -634,7 +635,7 @@ class wxPolygonShape: public wxShape
   double        m_originalHeight;
 };
 
-class wxRectangleShape: public wxShape
+class WXDLLIMPEXP_OGL wxRectangleShape: public wxShape
 {
  DECLARE_DYNAMIC_CLASS(wxRectangleShape)
  public:
@@ -669,7 +670,7 @@ protected:
   double m_cornerRadius;
 };
 
-class wxTextShape: public wxRectangleShape
+class WXDLLIMPEXP_OGL wxTextShape: public wxRectangleShape
 {
  DECLARE_DYNAMIC_CLASS(wxTextShape)
  public:
@@ -685,7 +686,7 @@ class wxTextShape: public wxRectangleShape
   void Copy(wxShape& copy);
 };
 
-class wxEllipseShape: public wxShape
+class WXDLLIMPEXP_OGL wxEllipseShape: public wxShape
 {
  DECLARE_DYNAMIC_CLASS(wxEllipseShape)
  public:
@@ -722,7 +723,7 @@ protected:
   double m_height;
 };
 
-class wxCircleShape: public wxEllipseShape
+class WXDLLIMPEXP_OGL wxCircleShape: public wxEllipseShape
 {
  DECLARE_DYNAMIC_CLASS(wxCircleShape)
  public:

@@ -16,6 +16,7 @@
 #pragma interface "canvas.h"
 #endif
 
+
 // Drag states
 #define NoDragging             0
 #define StartDraggingLeft      1
@@ -23,13 +24,13 @@
 #define StartDraggingRight     3
 #define ContinueDraggingRight  4
 
-extern const wxChar* wxShapeCanvasNameStr;
+WXDLLIMPEXP_OGL extern const wxChar* wxShapeCanvasNameStr;
 
 // When drag_count reaches 0, process drag message
 
-class wxDiagram;
+class WXDLLIMPEXP_OGL wxDiagram;
 
-class wxShapeCanvas: public wxScrolledWindow
+class WXDLLIMPEXP_OGL wxShapeCanvas: public wxScrolledWindow
 {
  DECLARE_DYNAMIC_CLASS(wxShapeCanvas)
  public:

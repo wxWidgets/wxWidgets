@@ -16,7 +16,6 @@
 #pragma interface "drawnp.h"
 #endif
 
-#include <wx/ogl/drawn.h>
 
 /*
  * Drawing operations
@@ -55,7 +54,7 @@
  *
  */
 
-class wxDrawOp: public wxObject
+class WXDLLIMPEXP_OGL wxDrawOp: public wxObject
 {
 public:
   inline wxDrawOp(int theOp) { m_op = theOp; }
@@ -93,7 +92,7 @@ protected:
  *
  */
 
-class wxOpSetGDI: public wxDrawOp
+class WXDLLIMPEXP_OGL wxOpSetGDI: public wxDrawOp
 {
  public:
   wxOpSetGDI(int theOp, wxPseudoMetaFile *theImage, int theGdiIndex, int theMode = 0);
@@ -118,7 +117,7 @@ public:
  *
  */
 
-class wxOpSetClipping: public wxDrawOp
+class WXDLLIMPEXP_OGL wxOpSetClipping: public wxDrawOp
 {
 public:
   wxOpSetClipping(int theOp, double theX1, double theY1, double theX2, double theY2);
@@ -143,7 +142,7 @@ public:
  *
  */
 
-class wxOpDraw: public wxDrawOp
+class WXDLLIMPEXP_OGL wxOpDraw: public wxDrawOp
 {
  public:
   wxOpDraw(int theOp, double theX1, double theY1, double theX2, double theY2,
@@ -176,7 +175,7 @@ public:
  *
  */
 
-class wxOpPolyDraw: public wxDrawOp
+class WXDLLIMPEXP_OGL wxOpPolyDraw: public wxDrawOp
 {
 public:
   wxOpPolyDraw(int theOp, int n, wxRealPoint *thePoints);

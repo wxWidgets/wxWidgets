@@ -16,9 +16,10 @@
 #pragma interface "lines.h"
 #endif
 
-class wxLabelShape;
-class wxPseudoMetaFile;
-class wxLineControlPoint;
+
+class WXDLLIMPEXP_OGL wxLabelShape;
+class WXDLLIMPEXP_OGL wxPseudoMetaFile;
+class WXDLLIMPEXP_OGL wxLineControlPoint;
 /*
  * Arcs with multiple arrowheads
  *
@@ -46,7 +47,7 @@ class wxLineControlPoint;
 #define LINE_ALIGNMENT_TO_NEXT_HANDLE     2
 #define LINE_ALIGNMENT_NONE               0
 
-class wxArrowHead: public wxObject
+class WXDLLIMPEXP_OGL wxArrowHead: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxArrowHead)
 
@@ -88,8 +89,8 @@ class wxArrowHead: public wxObject
 };
 
 // Line object
-class wxLabelShape;
-class wxLineShape: public wxShape
+class WXDLLIMPEXP_OGL wxLabelShape;
+class WXDLLIMPEXP_OGL wxLineShape: public wxShape
 {
  DECLARE_DYNAMIC_CLASS(wxLineShape)
 

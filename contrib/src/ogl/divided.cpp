@@ -24,16 +24,12 @@
 #include <wx/wx.h>
 #endif
 
-#if wxUSE_DEPRECATED
+#if wxUSE_PROLOGIO
 #include <wx/deprecated/wxexpr.h>
 #endif
 
-#include <wx/ogl/basic.h>
-#include <wx/ogl/basicp.h>
-#include <wx/ogl/canvas.h>
-#include <wx/ogl/divided.h>
-#include <wx/ogl/lines.h>
-#include <wx/ogl/misc.h>
+#include "wx/ogl/ogl.h"
+
 
 class wxDividedShapeControlPoint: public wxControlPoint
 {

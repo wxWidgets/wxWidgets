@@ -17,6 +17,7 @@
 #pragma interface "mfutils.h"
 #endif
 
+
 #include <wx/metafile.h>
 
 #ifndef GetRValue
@@ -157,7 +158,7 @@
 
 #endif // metafile functions
 
-class wxMetaRecord: public wxObject
+class WXDLLIMPEXP_OGL wxMetaRecord: public wxObject
 {
   public:
   int metaFunction;
@@ -180,7 +181,7 @@ class wxMetaRecord: public wxObject
   ~wxMetaRecord(void);
 };
 
-class wxXMetaFile: public wxObject
+class WXDLLIMPEXP_OGL wxXMetaFile: public wxObject
 {
  public:
   double lastX;

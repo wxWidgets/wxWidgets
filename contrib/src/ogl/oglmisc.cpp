@@ -24,7 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#if wxUSE_DEPRECATED
+#if wxUSE_PROLOGIO
 #include <wx/deprecated/wxexpr.h>
 #endif
 
@@ -38,11 +38,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include <wx/ogl/basic.h>
-#include <wx/ogl/basicp.h>
-#include <wx/ogl/misc.h>
-#include <wx/ogl/constrnt.h>
-#include <wx/ogl/composit.h>
+#include "wx/ogl/ogl.h"
+
 
 wxFont*         g_oglNormalFont;
 wxPen*          g_oglBlackPen;

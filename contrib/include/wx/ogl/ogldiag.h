@@ -16,17 +16,13 @@
 #pragma interface "ogldiag.h"
 #endif
 
-#if wxUSE_DEPRECATED
-#include <wx/deprecated/wxexpr.h>
-#endif
 
 #if wxUSE_PROLOGIO
 #include <wx/deprecated/wxexpr.h>
 #endif
 
-#include <wx/ogl/basic.h>
 
-class wxDiagram: public wxObject
+class WXDLLIMPEXP_OGL wxDiagram: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxDiagram)
 
@@ -101,7 +97,7 @@ protected:
   wxList*               m_shapeList;
 };
 
-class wxLineCrossing: public wxObject
+class WXDLLIMPEXP_OGL wxLineCrossing: public wxObject
 {
 public:
     wxLineCrossing() { m_lineShape1 = NULL; m_lineShape2 = NULL; }
@@ -114,7 +110,7 @@ public:
     wxLineShape*    m_lineShape2;
 };
 
-class wxLineCrossings: public wxObject
+class WXDLLIMPEXP_OGL wxLineCrossings: public wxObject
 {
 public:
     wxLineCrossings();

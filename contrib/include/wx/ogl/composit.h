@@ -16,15 +16,16 @@
 #pragma interface "composit.h"
 #endif
 
-class wxDivisionShape;
-class wxOGLConstraint;
+
+class WXDLLIMPEXP_OGL wxDivisionShape;
+class WXDLLIMPEXP_OGL wxOGLConstraint;
 
 /*
  * A composite object is an invisible rectangle surrounding all children
  *
  */
 
-class wxCompositeShape: public wxRectangleShape
+class WXDLLIMPEXP_OGL wxCompositeShape: public wxRectangleShape
 {
  DECLARE_DYNAMIC_CLASS(wxCompositeShape)
 public:
@@ -122,7 +123,7 @@ protected:
 #define DIVISION_SIDE_RIGHT     3
 #define DIVISION_SIDE_BOTTOM    4
 
-class wxDivisionShape: public wxCompositeShape
+class WXDLLIMPEXP_OGL wxDivisionShape: public wxCompositeShape
 {
  DECLARE_DYNAMIC_CLASS(wxDivisionShape)
  public:

@@ -25,7 +25,7 @@
 #include <wx/wx.h>
 #endif
 
-#if wxUSE_DEPRECATED
+#if wxUSE_PROLOGIO
 #include <wx/deprecated/wxexpr.h>
 #endif
 
@@ -36,13 +36,8 @@
 #include <ctype.h>
 #include <math.h>
 
-#include <wx/ogl/basic.h>
-#include <wx/ogl/basicp.h>
-#include <wx/ogl/lines.h>
-#include <wx/ogl/linesp.h>
-#include <wx/ogl/drawn.h>
-#include <wx/ogl/misc.h>
-#include <wx/ogl/canvas.h>
+#include "wx/ogl/ogl.h"
+
 
 // Line shape
 IMPLEMENT_DYNAMIC_CLASS(wxLineShape, wxShape)
@@ -519,7 +514,7 @@ bool wxLineShape::HitTest(double x, double y, int *attachment, double *distance)
       seg_len*((x-point1->x)*dy-(y-point1->y)*dx)/(dy*dy+dx*dx);
     double distance_from_prev =
       seg_len*((y-point1->y)*dy+(x-point1->x)*dx)/(dy*dy+dx*dx);
-    
+
     if ((fabs(distance_from_seg) < extra &&
          distance_from_prev >= 0 && distance_from_prev <= seg_len)
         || inLabelRegion)

@@ -27,7 +27,8 @@
 #include <wx/metafile.h>
 #include <wx/utils.h>
 
-#include <wx/ogl/mfutils.h>
+#include "wx/ogl/ogl.h"
+
 #include <stdio.h>
 
 static char _buf[1024]; // a temp buffer to use inplace of wxBuffer, which is deprecated.

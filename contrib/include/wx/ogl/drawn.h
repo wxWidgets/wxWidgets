@@ -16,13 +16,12 @@
 #pragma interface "drawn.h"
 #endif
 
-#include <wx/ogl/basic.h>
 
 #define oglMETAFLAGS_OUTLINE         1
 #define oglMETAFLAGS_ATTACHMENTS     2
 
-class wxDrawnShape;
-class wxPseudoMetaFile: public wxObject
+class WXDLLIMPEXP_OGL wxDrawnShape;
+class WXDLLIMPEXP_OGL wxPseudoMetaFile: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxPseudoMetaFile)
  public:
@@ -130,7 +129,7 @@ public:
 #define oglDRAWN_ANGLE_180      2
 #define oglDRAWN_ANGLE_270      3
 
-class wxDrawnShape: public wxRectangleShape
+class WXDLLIMPEXP_OGL wxDrawnShape: public wxRectangleShape
 {
  DECLARE_DYNAMIC_CLASS(wxDrawnShape)
  public:
