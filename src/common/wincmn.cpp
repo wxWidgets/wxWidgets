@@ -2163,10 +2163,9 @@ bool wxWindowBase::TryValidator(wxEvent& event)
 
 bool wxWindowBase::TryParent(wxEvent& event)
 {
-    // Carry on up the parent-child hierarchy, but only if event is a command
-    // event: it wouldn't make sense for a parent to receive a child's size
-    // event, for example
-    if ( event.IsCommandEvent() )
+    // carry on up the parent-child hierarchy if the propgation count hasn't
+    // reached zero yet
+    if ( event.ShouldPropagate() )
     {
         // honour the requests to stop propagation at this window: this is
         // used by the dialogs, for example, to prevent processing the events
@@ -2176,7 +2175,11 @@ bool wxWindowBase::TryParent(wxEvent& event)
         {
             wxWindow *parent = GetParent();
             if ( parent && !parent->IsBeingDeleted() )
+            {
+                wxPropagateOnce propagateOnce(event);
+
                 return parent->GetEventHandler()->ProcessEvent(event);
+            }
         }
     }
 
