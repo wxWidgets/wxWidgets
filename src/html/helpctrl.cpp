@@ -184,7 +184,7 @@ bool wxHtmlHelpController::Initialize(const wxString& file)
     wxString dir, filename, ext;
     wxSplitPath(file, & dir, & filename, & ext);
 
-    if (!dir.IsEmpty())
+    if (!dir.empty())
         dir = dir + wxFILE_SEP_PATH;
 
     // Try to find a suitable file
@@ -239,6 +239,8 @@ bool wxHtmlHelpController::DisplayTextPopup(const wxString& text, const wxPoint&
 
         return true;
     }
+#else
+    wxUnusedVar(text);
 #endif // wxUSE_TIPWINDOW
 
     return false;

@@ -384,6 +384,8 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
 
         return true;
     }
+#else
+    wxUnusedVar(window);
 #endif // wxUSE_TIPWINDOW
 
     return false;
