@@ -1690,7 +1690,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/main.cpp
     src/cocoa/menu.mm
     src/cocoa/menuitem.mm
-    src/cocoa/pen.cpp
+    src/cocoa/pen.mm
     src/cocoa/radiobox.mm
     src/cocoa/radiobut.mm
     src/cocoa/region.cpp
