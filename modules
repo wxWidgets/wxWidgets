@@ -36,9 +36,9 @@ wxGTK -a wxWindows \
     !wxWindows/src/msw !wxWindows/src/motif !wxWindows/src/qt \
 	!wxWindows/src/stubs !wxWindows/src/os2 !wxWindows/src/mac \
     \
-    !wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils \
+    wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils \
     !wxWindows/install !wxWindows/distrib !wxWindows/setup !wxWindows/testconf \
-
+  
 wxMotif -a wxWindows \
     !wxWindows/docs/latex !wxWindows/docs/msw !wxWindows/docs/gtk \
     \
