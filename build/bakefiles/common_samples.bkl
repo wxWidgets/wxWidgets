@@ -2,7 +2,7 @@
 <makefile>
     
     <using module="filecopy"/>
-
+    
     <set var="BUILDING_LIB">0</set>
 
     <include file="common.bkl"/>

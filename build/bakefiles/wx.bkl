@@ -6,6 +6,8 @@
 
 <makefile>
 
+    <using module="datafiles"/>
+
     <set var="BUILDING_LIB">1</set>
 
     <!-- common rules, names etc. for wx: -->
@@ -22,5 +24,15 @@
     <subproject id="samples">
         <dir>samples</dir>
     </subproject>
+
+    <!-- <fragment format="autoconf" file="fragment_autoconf"/> -->
+
+    <!-- "make install": -->
+    <if cond="FORMAT=='autoconf'">
+        <data-files>
+            <files>wxwin.m4</files>
+            <install-to>$(DATADIR)/aclocal</install-to>
+        </data-files>
+    </if>
 
 </makefile>

@@ -33,13 +33,13 @@ AC_DEFUN(AC_BAKEFILE_GNUMAKE,
     [
         if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
                 egrep -s GNU > /dev/null); then
-            wx_cv_prog_makeisgnu="yes"
+            bakefile_cv_prog_makeisgnu="yes"
         else
-            wx_cv_prog_makeisgnu="no"
+            bakefile_cv_prog_makeisgnu="no"
         fi
     ])
 
-    if test "x$wx_cv_prog_makeisgnu" = "xyes"; then
+    if test "x$bakefile_cv_prog_makeisgnu" = "xyes"; then
         IF_GNU_MAKE=""
     else
         IF_GNU_MAKE="#"
@@ -197,12 +197,107 @@ AC_DEFUN(AC_BAKEFILE_SHARED_LD,
         dnl http://fink.sourceforge.net/doc/porting/porting.html
         CFLAGS="$CFLAGS -fno-common"
         CXXFLAGS="$CXXFLAGS -fno-common"
-        dnl wxWindows must be fully binded (lazy binding breaks RTTI classinfo)
-        dnl this can be done either with the exe linker flag -Wl,-bind_at_load
+        
+        dnl Most apps benefit from being fully binded (its faster and static
+        dnl variables initialized at startup work).
+        dnl This can be done either with the exe linker flag -Wl,-bind_at_load
         dnl or with a double stage link in order to create a single module
         dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
-        SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace -o"
+
+        cat <<EOF
+#!/bin/sh
+#-----------------------------------------------------------------------------
+#-- Name:        distrib/mac/shared-ld-sh
+#-- Purpose:     Link a mach-o dynamic shared library for Darwin / Mac OS X
+#-- Author:      Gilles Depeyrot
+#-- Copyright:   (c) 2002 Gilles Depeyrot
+#-- Licence:     any use permitted
+#-----------------------------------------------------------------------------
+
+verbose=0
+args=""
+objects=""
+
+while test \$# -gt 0; do
+    case \$1 in
+
+       -v)
+        verbose=1
+        ;;
+
+       -o|-compatibility_version|-current_version|-framework|-undefined|-install_name)
+        # collect these options and values
+        args="\$args \$1 \$2"
+        shift
+        ;;
+
+       -l*|-L*|-flat_namespace)
+        # collect these options
+        args="\$args \$1"
+        ;;
+
+       -dynamiclib)
+        # skip these options
+        ;;
+
+       -*)
+        echo "shared-ld: unhandled option '\$1'"
+        exit 1
+        ;;
+
+        *.o)
+        # collect object files
+        objects="\$objects \$1"
+        ;;
+
+        *)
+        echo "shared-ld: unhandled argument '\$1'"
+        exit 1
+        ;;
+
+    esac
+    shift
+done
+
+#
+# Link one module containing all the others
+#
+if test \$verbose = 1; then
+    echo "c++ -r -keep_private_externs -nostdlib \$objects -o master.\$\$.o"
+fi
+c++ -r -keep_private_externs -nostdlib \$objects -o master.\$\$.o
+status=\$?
+if test \$status != 0; then
+    exit \$status
+fi
+
+#
+# Link the shared library from the single module created
+#
+if test \$verbose = 1; then
+    echo "cc -dynamiclib master.\$\$.o \$args"
+fi
+c++ -dynamiclib master.\$\$.o \$args
+status=\$?
+if test \$status != 0; then
+    exit \$status
+fi
+
+#
+# Remove intermediate module
+#
+rm -f master.$$.o
+
+exit 0
+EOF >shared-ld-sh
+        chmod +x shared-ld-sh
+
+        SHARED_LD_CC="`pwd`/shared-ld-sh -undefined suppress -flat_namespace -o"
+        SHARED_LD_CXX="$SHARED_LD_CC"
         PIC_FLAG="-dynamic -fPIC"
+        dnl FIXME - what about C libs?
+        dnl FIXME - newer devel tools have linker flag to do this, the script
+        dnl         is not necessary - detect!
       ;;
 
       *-*-aix* )
@@ -285,12 +380,8 @@ AC_DEFUN(AC_BAKEFILE_SHARED_VERSIONS,
       ;;
 
       *-*-darwin* )
-        dnl library installation base name and wxMac resources file base name
-        dnl must be identical in order for the resource file to be found at
-        dnl run time in src/mac/app.cpp
-        SONAME_FLAG="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1}"
-        dnl FIXME -- broken
         USE_MACVERSION=1
+        USE_SOVERSION=1
       ;;      
     esac
 

@@ -1357,16 +1357,16 @@ else
   
         if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
                 egrep -s GNU > /dev/null); then
-            wx_cv_prog_makeisgnu="yes"
+            bakefile_cv_prog_makeisgnu="yes"
         else
-            wx_cv_prog_makeisgnu="no"
+            bakefile_cv_prog_makeisgnu="no"
         fi
     
 fi
 
 echo "$ac_t""$wx_cv_prog_makeisgnu" 1>&6
 
-    if test "x$wx_cv_prog_makeisgnu" = "xyes"; then
+    if test "x$bakefile_cv_prog_makeisgnu" = "xyes"; then
         IF_GNU_MAKE=""
     else
         IF_GNU_MAKE="#"
@@ -1503,16 +1503,107 @@ echo "$ac_t""$bakefile_cv_prog_icc" 1>&6
       *-*-darwin* )
                         CFLAGS="$CFLAGS -fno-common"
         CXXFLAGS="$CXXFLAGS -fno-common"
-                                        SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace -o"
+        
+                                        
+        cat <<EOF
+#!/bin/sh
+#-----------------------------------------------------------------------------
+#-- Name:        distrib/mac/shared-ld-sh
+#-- Purpose:     Link a mach-o dynamic shared library for Darwin / Mac OS X
+#-- Author:      Gilles Depeyrot
+#-- Copyright:   (c) 2002 Gilles Depeyrot
+#-- Licence:     any use permitted
+#-----------------------------------------------------------------------------
+
+verbose=0
+args=""
+objects=""
+
+while test \0 -gt 0; do
+    case \ in
+
+       -v)
+        verbose=1
+        ;;
+
+       -o|-compatibility_version|-current_version|-framework|-undefined|-install_name)
+        # collect these options and values
+        args="\$args \ \"
+        shift
+        ;;
+
+       -l*|-L*|-flat_namespace)
+        # collect these options
+        args="\$args \"
+        ;;
+
+       -dynamiclib)
+        # skip these options
+        ;;
+
+       -*)
+        echo "shared-ld: unhandled option '\'"
+        exit 1
+        ;;
+
+        *.o)
+        # collect object files
+        objects="\$objects \"
+        ;;
+
+        *)
+        echo "shared-ld: unhandled argument '\'"
+        exit 1
+        ;;
+
+    esac
+    shift
+done
+
+#
+# Link one module containing all the others
+#
+if test \$verbose = 1; then
+    echo "c++ -r -keep_private_externs -nostdlib \$objects -o master.\$\$.o"
+fi
+c++ -r -keep_private_externs -nostdlib \$objects -o master.\$\$.o
+status=\$?
+if test \$status != 0; then
+    exit \$status
+fi
+
+#
+# Link the shared library from the single module created
+#
+if test \$verbose = 1; then
+    echo "cc -dynamiclib master.\$\$.o \$args"
+fi
+c++ -dynamiclib master.\$\$.o \$args
+status=\$?
+if test \$status != 0; then
+    exit \$status
+fi
+
+#
+# Remove intermediate module
+#
+rm -f master.$$.o
+
+exit 0
+EOF >shared-ld-sh
+        chmod +x shared-ld-sh
+
+        SHARED_LD_CC="`pwd`/shared-ld-sh -undefined suppress -flat_namespace -o"
+        SHARED_LD_CXX="$SHARED_LD_CC"
         PIC_FLAG="-dynamic -fPIC"
-      ;;
+                              ;;
 
       *-*-aix* )
                 if test "x$GCC" != "xyes"; then
                                     # Extract the first word of "makeC++SharedLib", so it can be a program name with args.
 set dummy makeC++SharedLib; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1516: checking for $ac_word" >&5
+echo "configure:1607: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AIX_CXX_LD'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1598,8 +1689,8 @@ fi
       ;;
 
       *-*-darwin* )
-                                SONAME_FLAG="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1}"
-                USE_MACVERSION=1
+        USE_MACVERSION=1
+        USE_SOVERSION=1
       ;;      
     esac
 
@@ -1622,82 +1713,82 @@ fi
     
     
     COND_PLATFORM_WIN32_1=#
-    if test "x$PLATFORM_WIN32" == "x1" ; then
+    if test "x$PLATFORM_WIN32" = "x1" ; then
         COND_PLATFORM_WIN32_1=
     fi
     
     COND_PLATFORM_WIN32_0=#
-    if test "x$PLATFORM_WIN32" == "x0" ; then
+    if test "x$PLATFORM_WIN32" = "x0" ; then
         COND_PLATFORM_WIN32_0=
     fi
     
     COND_DEPS_TYPE_GCC=#
-    if test "x$DEPS_TYPE" == "xgcc" ; then
+    if test "x$DEPS_TYPE" = "xgcc" ; then
         COND_DEPS_TYPE_GCC=
     fi
     
     COND_WXUSE_ZLIB_BUILTIN=#
-    if test "x$wxUSE_ZLIB" == "xbuiltin" ; then
+    if test "x$wxUSE_ZLIB" = "xbuiltin" ; then
         COND_WXUSE_ZLIB_BUILTIN=
     fi
     
     COND_UNICODE_1=#
-    if test "x$UNICODE" == "x1" ; then
+    if test "x$UNICODE" = "x1" ; then
         COND_UNICODE_1=
     fi
     
     COND_BUILD_DEBUG=#
-    if test "x$BUILD" == "xdebug" ; then
+    if test "x$BUILD" = "xdebug" ; then
         COND_BUILD_DEBUG=
     fi
     
     COND_WXUSE_LIBJPEG_BUILTIN=#
-    if test "x$wxUSE_LIBJPEG" == "xbuiltin" ; then
+    if test "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
         COND_WXUSE_LIBJPEG_BUILTIN=
     fi
     
     COND_WXUSE_LIBPNG_BUILTIN=#
-    if test "x$wxUSE_LIBPNG" == "xbuiltin" ; then
+    if test "x$wxUSE_LIBPNG" = "xbuiltin" ; then
         COND_WXUSE_LIBPNG_BUILTIN=
     fi
     
     COND_WXUSE_ODBC_BUILTIN=#
-    if test "x$wxUSE_ODBC" == "xbuiltin" ; then
+    if test "x$wxUSE_ODBC" = "xbuiltin" ; then
         COND_WXUSE_ODBC_BUILTIN=
     fi
     
     COND_MONOLITHIC_0=#
-    if test "x$MONOLITHIC" == "x0" ; then
+    if test "x$MONOLITHIC" = "x0" ; then
         COND_MONOLITHIC_0=
     fi
     
     COND_WXUNIV_1=#
-    if test "x$WXUNIV" == "x1" ; then
+    if test "x$WXUNIV" = "x1" ; then
         COND_WXUNIV_1=
     fi
     
     COND_WXUSE_REGEX_BUILTIN=#
-    if test "x$wxUSE_REGEX" == "xbuiltin" ; then
+    if test "x$wxUSE_REGEX" = "xbuiltin" ; then
         COND_WXUSE_REGEX_BUILTIN=
     fi
     
     COND_MONOLITHIC_1=#
-    if test "x$MONOLITHIC" == "x1" ; then
+    if test "x$MONOLITHIC" = "x1" ; then
         COND_MONOLITHIC_1=
     fi
     
     COND_WXUSE_LIBTIFF_BUILTIN=#
-    if test "x$wxUSE_LIBTIFF" == "xbuiltin" ; then
+    if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
         COND_WXUSE_LIBTIFF_BUILTIN=
     fi
     
     COND_USE_GUI_0=#
-    if test "x$USE_GUI" == "x0" ; then
+    if test "x$USE_GUI" = "x0" ; then
         COND_USE_GUI_0=
     fi
     
     COND_USE_GUI_1=#
-    if test "x$USE_GUI" == "x1" ; then
+    if test "x$USE_GUI" = "x1" ; then
         COND_USE_GUI_1=
     fi
     

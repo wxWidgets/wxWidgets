@@ -156,6 +156,12 @@ dnl ### begin block COND_MONOLITHIC_0 ###
         COND_MONOLITHIC_0=
     fi
     AC_SUBST(COND_MONOLITHIC_0)
+dnl ### begin block COND_PLATFORM_MACOSX_1 ###
+    COND_PLATFORM_MACOSX_1=#
+    if test "x$PLATFORM_MACOSX" = "x1" ; then
+        COND_PLATFORM_MACOSX_1=
+    fi
+    AC_SUBST(COND_PLATFORM_MACOSX_1)
 dnl ### begin block COND_DEPS_TYPE_GCC ###
     COND_DEPS_TYPE_GCC=#
     if test "x$DEPS_TYPE" = "xgcc" ; then

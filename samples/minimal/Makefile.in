@@ -117,6 +117,7 @@ minimal$(EXEEXT): minimal.o $(__minimal___win32rc)
 
 uninstall: 
 
+
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include *.d
 

@@ -120,6 +120,7 @@ arttest_rc.o: $(srcdir)/arttest.rc
 
 uninstall: 
 
+
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include *.d
 
