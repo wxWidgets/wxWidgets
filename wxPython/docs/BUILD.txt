@@ -362,6 +362,9 @@ accordingly if you are using the bash shell.
 	%WXDIR%\contrib\build\stc
 	%WXDIR%\contrib\build\ogl
 
+    Note, that the ogl lib build will need an additional flag::
+
+	CPPFLAGS="-DwxUSE_DEPRECATED=0"
 
 7.  When that is all done it will have built the main wxWidgets DLLs
     and also some of the contribs DLLs.  There should be a ton of DLLs

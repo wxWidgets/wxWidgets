@@ -340,10 +340,14 @@ selection of command-line flags as described above.  Repeat this
 same command from the following directories in order to build the
 contrib libraries:</p>
 <pre class="literal-block">
-%WXDIR%\contrib\build\gizmos
-%WXDIR%\contrib\build\xrc
-%WXDIR%\contrib\build\stc
-%WXDIR%\contrib\build\ogl
+    %WXDIR%\contrib\build\gizmos
+    %WXDIR%\contrib\build\xrc
+    %WXDIR%\contrib\build\stc
+    %WXDIR%\contrib\build\ogl
+
+Note, that the ogl lib build will need an additional flag::
+
+    CPPFLAGS=&quot;-DwxUSE_DEPRECATED=0&quot;
 </pre>
 </li>
 <li><p class="first">When that is all done it will have built the main wxWidgets DLLs
