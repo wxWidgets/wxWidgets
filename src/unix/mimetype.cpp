@@ -2503,7 +2503,8 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
 
         if ( data.needsterminal )
         {
-            data.cmdOpen.Printf(_T("xterm -e sh -c '%s'"), data.cmdOpen.c_str());
+            data.cmdOpen = wxString::Format(_T("xterm -e sh -c '%s'"),
+                                            data.cmdOpen.c_str());
         }
 
         if ( !data.cmdOpen.empty() )
