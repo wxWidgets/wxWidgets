@@ -4838,7 +4838,7 @@ static PyObject *_wrap_IntersectRect(PyObject *self, PyObject *args, PyObject *k
         result = (PyObject *)wxIntersectRect(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = result;
     return resultobj;
@@ -8924,7 +8924,7 @@ static PyObject *_wrap_new_ImageFromBitmap(PyObject *self, PyObject *args, PyObj
         result = (wxImage *)new_wxImage((wxBitmap const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 1);
     return resultobj;
@@ -11270,7 +11270,7 @@ static PyObject *_wrap_Image_ConvertToBitmap(PyObject *self, PyObject *args, PyO
         result = wxImage_ConvertToBitmap(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         wxBitmap * resultptr;
@@ -11313,7 +11313,7 @@ static PyObject *_wrap_Image_ConvertToMonoBitmap(PyObject *self, PyObject *args,
         result = wxImage_ConvertToMonoBitmap(arg1,arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         wxBitmap * resultptr;
@@ -21460,7 +21460,7 @@ static PyObject *_wrap_new_Window(PyObject *self, PyObject *args, PyObject *kwar
         result = (wxWindow *)new wxWindow(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -21493,7 +21493,7 @@ static PyObject *_wrap_new_PreWindow(PyObject *self, PyObject *args, PyObject *k
         result = (wxWindow *)new wxWindow();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -24361,7 +24361,7 @@ static PyObject *_wrap_Window_FindFocus(PyObject *self, PyObject *args, PyObject
         result = (wxWindow *)wxWindow::FindFocus();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -25601,7 +25601,7 @@ static PyObject *_wrap_Window_GetCapture(PyObject *self, PyObject *args, PyObjec
         result = (wxWindow *)wxWindow::GetCapture();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -26070,7 +26070,7 @@ static PyObject *_wrap_Window_GetClassDefaultAttributes(PyObject *self, PyObject
         result = wxWindow::GetClassDefaultAttributes((wxWindowVariant )arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         wxVisualAttributes * resultptr;
@@ -28294,7 +28294,7 @@ static PyObject *_wrap_FindWindowById(PyObject *self, PyObject *args, PyObject *
         result = (wxWindow *)wxFindWindowById(arg1,(wxWindow const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -28333,7 +28333,7 @@ static PyObject *_wrap_FindWindowByName(PyObject *self, PyObject *args, PyObject
         result = (wxWindow *)wxFindWindowByName((wxString const &)*arg1,(wxWindow const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -28380,7 +28380,7 @@ static PyObject *_wrap_FindWindowByLabel(PyObject *self, PyObject *args, PyObjec
         result = (wxWindow *)wxFindWindowByLabel((wxString const &)*arg1,(wxWindow const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -28797,7 +28797,7 @@ static PyObject *_wrap_new_Menu(PyObject *self, PyObject *args, PyObject *kwargs
         result = (wxMenu *)new wxMenu((wxString const &)*arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -30984,7 +30984,7 @@ static PyObject *_wrap_new_MenuBar(PyObject *self, PyObject *args, PyObject *kwa
         result = (wxMenuBar *)new wxMenuBar(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -33400,7 +33400,7 @@ static PyObject *_wrap_new_Control(PyObject *self, PyObject *args, PyObject *kwa
         result = (wxControl *)new wxControl(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxValidator const &)*arg6,(wxString const &)*arg7);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -33433,7 +33433,7 @@ static PyObject *_wrap_new_PreControl(PyObject *self, PyObject *args, PyObject *
         result = (wxControl *)new wxControl();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -33666,7 +33666,7 @@ static PyObject *_wrap_Control_GetClassDefaultAttributes(PyObject *self, PyObjec
         result = wxControl::GetClassDefaultAttributes((wxWindowVariant )arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         wxVisualAttributes * resultptr;

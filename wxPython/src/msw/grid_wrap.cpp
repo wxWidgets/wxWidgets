@@ -8106,7 +8106,7 @@ static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs
         result = (wxGrid *)new wxGrid(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -8139,7 +8139,7 @@ static PyObject *_wrap_new_PreGrid(PyObject *self, PyObject *args, PyObject *kwa
         result = (wxGrid *)new wxGrid();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -14424,7 +14424,7 @@ static PyObject *_wrap_Grid_GetClassDefaultAttributes(PyObject *self, PyObject *
         result = wxGrid::GetClassDefaultAttributes((wxWindowVariant )arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         wxVisualAttributes * resultptr;

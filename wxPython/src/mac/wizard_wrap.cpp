@@ -810,7 +810,7 @@ static PyObject *_wrap_new_PyWizardPage(PyObject *self, PyObject *args, PyObject
         result = (wxPyWizardPage *)new_wxPyWizardPage(arg1,(wxBitmap const *)arg2,(wxString const *)arg3);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyWizardPage, 1);
     {
@@ -841,7 +841,7 @@ static PyObject *_wrap_new_PrePyWizardPage(PyObject *self, PyObject *args, PyObj
         result = (wxPyWizardPage *)new wxPyWizardPage();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyWizardPage, 1);
     return resultobj;
@@ -1583,7 +1583,7 @@ static PyObject *_wrap_new_WizardPageSimple(PyObject *self, PyObject *args, PyOb
         result = (wxWizardPageSimple *)new wxWizardPageSimple(arg1,arg2,arg3,(wxBitmap const &)*arg4,(wxChar const *)arg5);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxWizardPageSimple, 1);
     return resultobj;
@@ -1606,7 +1606,7 @@ static PyObject *_wrap_new_PreWizardPageSimple(PyObject *self, PyObject *args, P
         result = (wxWizardPageSimple *)new wxWizardPageSimple();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxWizardPageSimple, 1);
     return resultobj;
@@ -1836,7 +1836,7 @@ static PyObject *_wrap_new_Wizard(PyObject *self, PyObject *args, PyObject *kwar
         result = (wxWizard *)new wxWizard(arg1,arg2,(wxString const &)*arg3,(wxBitmap const &)*arg4,(wxPoint const &)*arg5,arg6);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxWizard, 1);
     {
@@ -1867,7 +1867,7 @@ static PyObject *_wrap_new_PreWizard(PyObject *self, PyObject *args, PyObject *k
         result = (wxWizard *)new wxWizard();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxWizard, 1);
     return resultobj;

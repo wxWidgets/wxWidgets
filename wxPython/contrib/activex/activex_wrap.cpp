@@ -2201,7 +2201,7 @@ static PyObject *_wrap_new_ActiveXWindow(PyObject *self, PyObject *args, PyObjec
         result = (wxActiveXWindow *)new wxActiveXWindow(arg1,(CLSID const &)*arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxActiveXWindow, 1);
     {
@@ -3033,7 +3033,7 @@ static PyObject *_wrap_new_IEHtmlWindowBase(PyObject *self, PyObject *args, PyOb
         result = (wxIEHtmlWindowBase *)new wxIEHtmlWindowBase(arg1,(CLSID const &)*arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxIEHtmlWindowBase, 1);
     {

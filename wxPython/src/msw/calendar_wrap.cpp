@@ -1253,7 +1253,7 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject
         result = (wxCalendarCtrl *)new wxCalendarCtrl(arg1,arg2,(wxDateTime const &)*arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCalendarCtrl, 1);
     {
@@ -1284,7 +1284,7 @@ static PyObject *_wrap_new_PreCalendarCtrl(PyObject *self, PyObject *args, PyObj
         result = (wxCalendarCtrl *)new wxCalendarCtrl();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCalendarCtrl, 1);
     return resultobj;
@@ -2259,7 +2259,7 @@ static PyObject *_wrap_CalendarCtrl_GetClassDefaultAttributes(PyObject *self, Py
         result = wxCalendarCtrl::GetClassDefaultAttributes((wxWindowVariant )arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         wxVisualAttributes * resultptr;

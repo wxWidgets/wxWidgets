@@ -5285,6 +5285,14 @@ class TreeCtrl(_core.Control):
         """GetBoundingRect(self, TreeItemId item, bool textOnly=False) -> PyObject"""
         return _controls_.TreeCtrl_GetBoundingRect(*args, **kwargs)
 
+    def SetState(*args, **kwargs):
+        """SetState(self, TreeItemId node, int state)"""
+        return _controls_.TreeCtrl_SetState(*args, **kwargs)
+
+    def GetState(*args, **kwargs):
+        """GetState(self, TreeItemId node) -> int"""
+        return _controls_.TreeCtrl_GetState(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes

@@ -569,7 +569,7 @@ static PyObject *_wrap_new_IEHtmlWin(PyObject *self, PyObject *args, PyObject *k
         result = (wxIEHtmlWin *)new wxIEHtmlWin(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxIEHtmlWin, 1);
     {

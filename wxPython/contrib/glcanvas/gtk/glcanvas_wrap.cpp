@@ -441,7 +441,7 @@ static PyObject *_wrap_new_GLContext(PyObject *self, PyObject *args, PyObject *k
         result = (wxGLContext *)new wxGLContext(arg1,arg2,(wxPalette const &)*arg3,(wxGLContext const *)arg4);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxGLContext, 1);
     return resultobj;
@@ -806,7 +806,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kw
         result = (wxGLCanvas *)new wxGLCanvas(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6,arg7,(wxPalette const &)*arg8);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxGLCanvas, 1);
     {
@@ -925,7 +925,7 @@ static PyObject *_wrap_new_GLCanvasWithContext(PyObject *self, PyObject *args, P
         result = (wxGLCanvas *)new wxGLCanvas(arg1,(wxGLContext const *)arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7,arg8,(wxPalette const &)*arg9);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxGLCanvas, 1);
     {

@@ -449,7 +449,20 @@ class CalendarCtrl(_core.Control):
         return _calendar.CalendarCtrl_GetYearControl(*args, **kwargs)
 
     def GetClassDefaultAttributes(*args, **kwargs):
-        """GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes"""
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
+        """
         return _calendar.CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
@@ -474,7 +487,20 @@ def PreCalendarCtrl(*args, **kwargs):
     return val
 
 def CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs):
-    """CalendarCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes"""
+    """
+    CalendarCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
+    """
     return _calendar.CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
 

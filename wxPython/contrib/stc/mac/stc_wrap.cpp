@@ -535,7 +535,7 @@ static PyObject *_wrap_new_StyledTextCtrl(PyObject *self, PyObject *args, PyObje
         result = (wxStyledTextCtrl *)new wxStyledTextCtrl(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxStyledTextCtrl, 1);
     {
@@ -566,7 +566,7 @@ static PyObject *_wrap_new_PreStyledTextCtrl(PyObject *self, PyObject *args, PyO
         result = (wxStyledTextCtrl *)new wxStyledTextCtrl();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxStyledTextCtrl, 1);
     return resultobj;

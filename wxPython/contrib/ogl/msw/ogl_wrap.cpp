@@ -31789,7 +31789,7 @@ static PyObject *_wrap_new_PyShapeCanvas(PyObject *self, PyObject *args, PyObjec
         result = (wxPyShapeCanvas *)new wxPyShapeCanvas(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -32542,7 +32542,7 @@ static PyObject *_wrap_OGLInitialize(PyObject *self, PyObject *args, PyObject *k
         wxOGLInitialize();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
@@ -32564,7 +32564,7 @@ static PyObject *_wrap_OGLCleanUp(PyObject *self, PyObject *args, PyObject *kwar
         wxOGLCleanUp();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
+        if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
