@@ -78,7 +78,7 @@
 #include <ctype.h>
 
 #include "wx/datetime.h"
-#include "wx/timer.h"           // for wxGetLocalTimeMillis()
+#include "wx/stopwatch.h"           // for wxGetLocalTimeMillis()
 
 const long wxDateTime::TIME_T_FACTOR = 1000l;
 
