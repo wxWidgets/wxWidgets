@@ -465,7 +465,8 @@ enum
   wxMGL_UNIX,               // MGL with direct hardware access
   wxMGL_X,                  // MGL on X
   wxMGL_WIN32,              // MGL on Win32
-  wxMGL_OS2                 // MGL on OS/2
+  wxMGL_OS2,                // MGL on OS/2
+  wxWINDOWS_OS2             // Native OS/2 PM
 };
 
 // ----------------------------------------------------------------------------
@@ -1469,8 +1470,13 @@ typedef unsigned long   WXHDC;
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
+#ifdef __WXMSW__
 typedef unsigned int    WXWPARAM;
 typedef long            WXLPARAM;
+#else
+#  define WXWPARAM      MPARAM
+#  define WXLPARAM      MPARAM
+#endif
 typedef unsigned long   WXCOLORREF;
 typedef void *          WXRGNDATA;
 typedef void *          WXMSG;

@@ -1,16 +1,25 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        control.cpp
 // Purpose:     wxControl class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     09/17/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) Julian Smart and Markus Holzem
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
 #pragma implementation "control.h"
+#endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+#include "wx/event.h"
+#include "wx/app.h"
+#include "wx/dcclient.h"
 #endif
 
 #include "wx/control.h"
@@ -19,77 +28,194 @@
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxWindow)
+    EVT_ERASE_BACKGROUND(wxControl::OnEraseBackground)
 END_EVENT_TABLE()
 #endif
 
 // Item members
 wxControl::wxControl()
 {
-    m_backgroundColour = *wxWHITE;
-    m_foregroundColour = *wxBLACK;
-    m_callback = 0;
+  m_backgroundColour = *wxWHITE;
+  m_foregroundColour = *wxBLACK;
+
+#if WXWIN_COMPATIBILITY
+  m_callback = 0;
+#endif // WXWIN_COMPATIBILITY
 }
 
 wxControl::~wxControl()
 {
-    // If we delete an item, we should initialize the parent panel,
-    // because it could now be invalid.
-    wxWindow *parent = (wxWindow *)GetParent();
-    if (parent)
+    m_isBeingDeleted = TRUE;
+}
+
+bool wxControl::OS2CreateControl(const wxChar *classname, WXDWORD style)
+{
+    m_hWnd = (WXHWND)::CreateWindowEx
+                       (
+                        GetExStyle(style),  // extended style
+                        classname,          // the kind of control to create
+                        NULL,               // the window name
+                        style,              // the window style
+                        0, 0, 0, 0,         // the window position and size
+                        GetHwndOf(GetParent()),  // parent
+                        (HMENU)GetId(),     // child id
+                        wxGetInstance(),    // app instance
+                        NULL                // creation parameters
+                       );
+
+    if ( !m_hWnd )
     {
-        if (parent->GetDefaultItem() == (wxButton*) this)
-            parent->SetDefaultItem(NULL);
+#ifdef __WXDEBUG__
+        wxLogError(_T("Failed to create a control of class '%s'"), classname);
+#endif // DEBUG
+
+        return FALSE;
     }
+
+    // subclass again for purposes of dialog editing mode
+    SubclassWin(m_hWnd);
+
+    // controls use the same font and colours as their parent dialog by default
+    InheritAttributes();
+
+    return TRUE;
 }
 
-void wxControl::SetLabel(const wxString& label)
+wxSize wxControl::DoGetBestSize()
 {
-    // TODO
+    return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);
 }
 
-wxString wxControl::GetLabel() const
+bool wxControl::ProcessCommand(wxCommandEvent& event)
 {
-    // TODO
-    return wxString("");
-}
-
-void wxControl::ProcessCommand (wxCommandEvent & event)
-{
-  // Tries:
-  // 1) A callback function (to become obsolete)
-  // 2) OnCommand, starting at this window and working up parent hierarchy
-  // 3) OnCommand then calls ProcessEvent to search the event tables.
-  if (m_callback)
+#if WXWIN_COMPATIBILITY
+    if ( m_callback )
     {
-      (void) (*(m_callback)) (*this, event);
+        (void)(*m_callback)(this, event);
+
+        return TRUE;
     }
     else
-    {
-      GetEventHandler()->OnCommand(*this, event);
-    }
+#endif // WXWIN_COMPATIBILITY
+
+    return GetEventHandler()->ProcessEvent(event);
 }
 
-void wxControl::Centre (int direction)
+bool wxControl::OS2OnNotify(int idCtrl,
+                            WXLPARAM lParam,
+                            WXLPARAM* result)
 {
-  int x, y, width, height, panel_width, panel_height, new_x, new_y;
+    wxCommandEvent event(wxEVT_NULL, m_windowId);
+    wxEventType eventType = wxEVT_NULL;
+    NMHDR *hdr1 = (NMHDR*) lParam;
+    switch ( hdr1->code )
+    {
+        case NM_CLICK:
+            eventType = wxEVT_COMMAND_LEFT_CLICK;
+            break;
 
-  wxWindow *parent = (wxWindow *) GetParent ();
-  if (!parent)
-    return;
+        case NM_DBLCLK:
+            eventType = wxEVT_COMMAND_LEFT_DCLICK;
+            break;
 
-  parent->GetClientSize (&panel_width, &panel_height);
-  GetSize (&width, &height);
-  GetPosition (&x, &y);
+        case NM_RCLICK:
+            eventType = wxEVT_COMMAND_RIGHT_CLICK;
+            break;
 
-  new_x = x;
-  new_y = y;
+        case NM_RDBLCLK:
+            eventType = wxEVT_COMMAND_RIGHT_DCLICK;
+            break;
 
-  if (direction & wxHORIZONTAL)
-    new_x = (int) ((panel_width - width) / 2);
+        case NM_SETFOCUS:
+            eventType = wxEVT_COMMAND_SET_FOCUS;
+            break;
 
-  if (direction & wxVERTICAL)
-    new_y = (int) ((panel_height - height) / 2);
+        case NM_KILLFOCUS:
+            eventType = wxEVT_COMMAND_KILL_FOCUS;
+            break;
 
-  SetSize (new_x, new_y, width, height);
+        case NM_RETURN:
+            eventType = wxEVT_COMMAND_ENTER;
+            break;
+
+        default:
+            return wxWindow::OS2OnNotify(idCtrl, lParam, result);
+    }
+
+    event.SetEventType(eventType);
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+void wxControl::OnEraseBackground(wxEraseEvent& event)
+{
+    // In general, you don't want to erase the background of a control,
+    // or you'll get a flicker.
+    // TODO: move this 'null' function into each control that
+    // might flicker.
+
+    RECT rect;
+/*
+* below is msw code.
+* TODO: convert to PM Code
+*   ::GetClientRect((HWND) GetHWND(), &rect);
+*
+*   HBRUSH hBrush = ::CreateSolidBrush(PALETTERGB(GetBackgroundColour().Red(),
+*                                                 GetBackgroundColour().Green(),
+*                                                 GetBackgroundColour().Blue()));
+*   int mode = ::SetMapMode((HDC) event.GetDC()->GetHDC(), MM_TEXT);
+*
+*   ::FillRect ((HDC) event.GetDC()->GetHDC(), &rect, hBrush);
+*   ::DeleteObject(hBrush);
+*   ::SetMapMode((HDC) event.GetDC()->GetHDC(), mode);
+*/
+}
+
+WXDWORD wxControl::GetExStyle(WXDWORD& style) const
+{
+    bool want3D;
+    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+
+    // Even with extended styles, need to combine with WS_BORDER
+    // for them to look right.
+    if ( want3D || wxStyleHasBorder(m_windowStyle) )
+        style |= WS_BORDER;
+
+    return exStyle;
+}
+
+// ---------------------------------------------------------------------------
+// global functions
+// ---------------------------------------------------------------------------
+
+// Call this repeatedly for several wnds to find the overall size
+// of the widget.
+// Call it initially with -1 for all values in rect.
+// Keep calling for other widgets, and rect will be modified
+// to calculate largest bounding rectangle.
+void wxFindMaxSize(WXHWND wnd, RECT *rect)
+{
+    int left = rect->left;
+    int right = rect->right;
+    int top = rect->top;
+    int bottom = rect->bottom;
+
+    GetWindowRect((HWND) wnd, rect);
+
+    if (left < 0)
+        return;
+
+    if (left < rect->left)
+        rect->left = left;
+
+    if (right > rect->right)
+        rect->right = right;
+
+    if (top < rect->top)
+        rect->top = top;
+
+    if (bottom > rect->bottom)
+        rect->bottom = bottom;
 }
 
