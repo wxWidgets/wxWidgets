@@ -13,9 +13,9 @@ LIBVERSION_AGE=0
 HEADER_PATH=$(top_srcdir)/contrib/include/wx
 HEADER_SUBDIR=canvas
 
-HEADERS=canvas.h
+HEADERS=canvas.h bbox.h liner.h polygon.h
 
-OBJECTS=canvas.o
+OBJECTS=canvas.o bbox.o liner.o polygon.o
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
