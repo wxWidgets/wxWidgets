@@ -758,6 +758,12 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
             if ( entry == end )
             {
                 wxLogError(_("XPM: Malformed pixel data!"));
+
+                // better return right now as otherwise we risk to flood the
+                // user with error messages as something seems to be seriously
+                // wrong with the file and so we could give this message for
+                // each remaining pixel if we don't bail out
+                return wxNullImage;
             }
             else
             {
