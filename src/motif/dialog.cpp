@@ -66,12 +66,13 @@ extern wxList wxPendingDelete;
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
 
 BEGIN_EVENT_TABLE(wxDialog, wxPanel)
-EVT_BUTTON(wxID_OK, wxDialog::OnOK)
-EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
-EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-EVT_CHAR_HOOK(wxDialog::OnCharHook)
-EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
-EVT_CLOSE(wxDialog::OnCloseWindow)
+  EVT_SIZE(wxDialog::OnSize)
+  EVT_BUTTON(wxID_OK, wxDialog::OnOK)
+  EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
+  EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
+  EVT_CHAR_HOOK(wxDialog::OnCharHook)
+  EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
+  EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 #endif
@@ -325,6 +326,45 @@ void wxDialog::Iconize(bool WXUNUSED(iconize))
     // TODO: try using the parent of m_mainShell.
     //  XtVaSetValues((Widget) m_mainWidget, XmNiconic, iconize, NULL);
 }
+
+// Default resizing behaviour - if only ONE subwindow,
+// resize to client rectangle size
+void wxDialog::OnSize(wxSizeEvent& event)
+{
+    // if we're using constraints - do use them
+#if wxUSE_CONSTRAINTS
+    if ( GetAutoLayout() ) {
+        Layout();
+        return;
+    }
+#endif
+
+    // do we have _exactly_ one child?
+    wxWindow *child = NULL;
+    for ( wxNode *node = GetChildren().First(); node; node = node->Next() )
+    {
+        wxWindow *win = (wxWindow *)node->Data();
+        if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
+            !win->IsKindOf(CLASSINFO(wxDialog))  )
+        {
+            if ( child )
+                return;     // it's our second subwindow - nothing to do
+            child = win;
+        }
+    }
+
+    if ( child ) {
+        // we have exactly one child - set it's size to fill the whole frame
+        int clientW, clientH;
+        GetClientSize(&clientW, &clientH);
+
+        int x = 0;
+        int y = 0;
+
+        child->SetSize(x, y, clientW, clientH);
+    }
+}
+
 
 bool wxDialog::IsIconized() const
 {

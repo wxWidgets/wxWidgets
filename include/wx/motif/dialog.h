@@ -98,6 +98,9 @@ public:
     void OnCharHook(wxKeyEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
 
+    // Responds to size changes
+    void OnSize(wxSizeEvent& event);
+    
 public:
     //// Motif-specific
     bool          m_modalShowing;

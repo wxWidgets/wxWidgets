@@ -117,9 +117,9 @@ static int str16len(const char *s)
 // ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxEvtHandler)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 
-    BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
+    BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
         EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
         EVT_IDLE(wxWindow::OnIdle)
     END_EVENT_TABLE()
@@ -1384,12 +1384,12 @@ void wxWindow::GetTextExtent(const wxString& string,
         fontToUse = (wxFont *) & m_font;
 
     wxCHECK_RET( fontToUse->Ok(), "valid window font needed" );
-
+    
     WXFontStructPtr pFontStruct = theFont->GetFontStruct(1.0, GetXDisplay());
 
     int direction, ascent, descent2;
     XCharStruct overall;
-    int slen;
+    int slen = string.Len();
 
 #if 0
     if (use16)
@@ -1408,6 +1408,7 @@ void wxWindow::GetTextExtent(const wxString& string,
         *descent = descent2;
     if (externalLeading)
         *externalLeading = 0;
+
 }
 
 // ----------------------------------------------------------------------------

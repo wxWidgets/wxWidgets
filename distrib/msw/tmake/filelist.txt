@@ -29,6 +29,7 @@
 #  O	OLE file (needs Win32 and a decent compiler)
 #  S	Socket file (currently doesn't compile under Win16 nor with GNU)
 #  R	Not required for the GTK port
+#  X	Not required for the Motif port
 #  WX	Base header
 #  GTK  GTK header
 #  MSW	MSW header
@@ -276,7 +277,7 @@ data.cpp	R
 dataobj.cpp	R
 dc.cpp	R
 dcclient.cpp	R
-dcmemory.cpp 	R
+dcmemory.cpp	R
 dcscreen.cpp	R
 dialog.cpp	R
 dnd.cpp	R
@@ -334,7 +335,7 @@ data.cpp	X
 dataobj.cpp	X
 dc.cpp	X
 dcclient.cpp	X
-dcmemory.cpp 	X
+dcmemory.cpp	X
 dcscreen.cpp	X
 dialog.cpp	X
 filedlg.cpp	X
@@ -364,7 +365,6 @@ stattext.cpp	X
 toolbar.cpp	X
 textctrl.cpp	X
 timer.cpp	X
-tooltip.cpp	X
 utils.cpp	X
 window.cpp	X
 

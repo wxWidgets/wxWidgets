@@ -80,7 +80,17 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         (XtPointer) this);
 
     SetCanAddEventHandler(TRUE);
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+    
+    int x = 0;  int y = 0;
+    wxFont new_font( parent->GetFont() );
+    GetTextExtent( label1, &x, &y, (int*)NULL, (int*)NULL, &new_font );
+
+    wxSize newSize = size;
+    if (newSize.x == -1) newSize.x = 30+x;
+    if (newSize.y == -1) newSize.y = 27+y;
+    SetSize( newSize.x, newSize.y );
+    
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, newSize.x, newSize.y);
 
     ChangeBackgroundColour();
 

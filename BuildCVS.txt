@@ -45,17 +45,26 @@ and its make.exe).
 -> type: cd c:\wxWin\src\msw
 -> type: make -f makefile.g95
 
-II) GTK port on Unix using plain makefiles.
-------------------------------------------
+II) Unix ports using plain makefiles.
+--------------------------------------
+
+Building wxGTK or wxMotif completely without configure
+won't ever work, but there is now a new makefile system
+that works without libtool and automake, using only
+configure to create what is needed. So far, no shared
+libraries can be build with this system.
 
 Set WXWIN environment variable to the base directory such
-as ~/wxWindows
+as ~/wxWindows (this is actually not really needed).
 
 -> type: export WXWIN=~/wxWindows
--> edit ~/wxWindows/src/gtk.env as you wish.
--> type: cd ~/wxWindows/src/gtk
--> type: cp ./setup0.h setup.h
--> type: make
+-> type: md mybuild
+-> type: cd mybuild
+-> type: ../configure --with-motif
+or type: ../configure --with-gtk
+-> type: cd src/gtk
+or type: cd src/motif
+-> type: make -f makefile.unx
 
 
 III) Windows using configure

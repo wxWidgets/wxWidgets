@@ -891,6 +891,10 @@ dnl disable static libs by default, this takes too much time...
 dnl libtool doesn't work on anything but Linux and maybe
 dnl ***BSD
 
+SHLIB_LINKER=
+SHLIB_LINKER_FLAG=
+SHLIB_CFLAG=
+
 case "${host}" in
   *-hp-hpux* )
     AM_DISABLE_SHARED
@@ -1191,6 +1195,9 @@ TOOLKIT_DEF=-D__WX${TOOLKIT}__
 
 dnl the name of the (libtool) library
 WX_LIBRARY_NAME="libwx_${TOOLKIT_DIR}.la"
+
+dnl the name of the static library
+WX_LIBRARY_NAME_STATIC="libwx_${TOOLKIT_DIR}.a"
 
 dnl the name of the library to be linked reported by wx-config
 WX_LIBRARY="wx_${TOOLKIT_DIR}"
@@ -2166,6 +2173,10 @@ dnl all the libraries needed to link wxWindows programs (when the library is not
 dnl yet installed)
 LIBS="\${top_builddir}/src/${TOOLKIT_DIR}/${WX_LIBRARY_NAME} $EXTRA_LIBS"
 
+dnl all the libraries needed to link wxWindows programs when using the
+dnl makefile system without libtool
+LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
+
 dnl all -I options we must pass to the compiler
 INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TOOLKIT_INCLUDE"
 
@@ -2245,6 +2256,7 @@ AC_SUBST(USER_SUBDIRS)
 dnl additional libraries
 AC_SUBST(EXTRA_LIBS)
 AC_SUBST(LIBS)
+AC_SUBST(LD_LIBS)
 
 dnl create the configuration header file from the template
 dnl
@@ -2263,7 +2275,13 @@ dnl (the original file name may be overriden by appending another name after a
 dnl colon)
 AC_OUTPUT([
             wx-config
-	    makefile.unx
+
+	    src/make.env
+	    src/makeprog.env
+	    src/makelib.env
+	    src/gtk/makefile.unx
+	    src/motif/makefile.unx
+	    
             Makefile
             src/Makefile
 
