@@ -1,0 +1,199 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998
+#
+#
+# Makefile for wxMotif library, Unix
+
+EXTRACFLAGS=-DLEX_SCANNER
+
+include ../make.env
+
+LIB_CPP_SRC=\
+\
+ ../common/cmndata.cpp \
+ ../common/config.cpp \
+ ../common/date.cpp \
+ ../common/docmdi.cpp \
+ ../common/docview.cpp \
+ ../common/dynarray.cpp \
+ ../common/dynlib.cpp \
+ ../common/event.cpp \
+ ../common/file.cpp \
+ ../common/fileconf.cpp \
+ ../common/filefn.cpp \
+ ../common/gdicmn.cpp \
+ ../common/hash.cpp \
+ ../common/helpbase.cpp \
+ ../common/intl.cpp \
+ ../common/ipcbase.cpp \
+ ../common/layout.cpp \
+ ../common/list.cpp \
+ ../common/log.cpp \
+ ../common/matrix.cpp \
+ ../common/memory.cpp \
+ ../common/module.cpp \
+ ../common/object.cpp \
+ ../common/odbc.cpp \
+ ../common/postscrp.cpp \
+ ../common/prntbase.cpp \
+ ../common/resource.cpp \
+ ../common/serbase.cpp \
+ ../common/string.cpp \
+ ../common/textfile.cpp \
+ ../common/tbarbase.cpp \
+ ../common/tbarsmpl.cpp \
+ ../common/timercmn.cpp \
+ ../common/utilscmn.cpp \
+ ../common/wincmn.cpp \
+ ../common/framecmn.cpp \
+ ../common/stream.cpp \
+ ../common/datstrm.cpp \
+ ../common/fstream.cpp \
+ ../common/mstream.cpp \
+ ../common/zstream.cpp \
+ ../common/objstrm.cpp \
+ ../common/sckstrm.cpp \
+ ../common/validate.cpp \
+ ../common/valtext.cpp \
+ ../common/variant.cpp \
+ ../common/wxexpr.cpp \
+ ../common/socket.cpp \
+ ../common/sckaddr.cpp \
+ ../common/sckipc.cpp \
+ ../common/protocol.cpp \
+ ../common/ftp.cpp \
+ ../common/http.cpp \
+ ../common/url.cpp \
+ ../common/tokenzr.cpp \
+\
+ accel.cpp \
+ app.cpp \
+ bitmap.cpp \
+ bmpbuttn.cpp \
+ brush.cpp \
+ button.cpp \
+ checkbox.cpp \
+ choice.cpp \
+ clipbrd.cpp \
+ colour.cpp \
+ colordlg.cpp \
+ control.cpp \
+ combobox.cpp \
+ cursor.cpp \
+ data.cpp \
+ dc.cpp \
+ dcclient.cpp \
+ dcmemory.cpp \
+ dcscreen.cpp \
+ dialog.cpp \
+ dirdlg.cpp \
+ dnd.cpp \
+ filedlg.cpp \
+ font.cpp \
+ fontdlg.cpp \
+ frame.cpp \
+ gauge.cpp \
+ gdiobj.cpp \
+ helpxxxx.cpp \
+ icon.cpp \
+ listbox.cpp \
+ joystick.cpp \
+ main.cpp \
+ mdi.cpp \
+ menu.cpp \
+ menuitem.cpp \
+ metafile.cpp \
+ minifram.cpp \
+ msgdlg.cpp \
+ notebook.cpp \
+ palette.cpp \
+ pen.cpp \
+ print.cpp \
+ radiobox.cpp \
+ radiobut.cpp \
+ region.cpp \
+ scrolbar.cpp \
+ settings.cpp \
+ slider.cpp \
+ spinbutt.cpp \
+ statbox.cpp \
+ statbmp.cpp \
+ stattext.cpp \
+ taskbar.cpp \
+ textctrl.cpp \
+ thread.cpp \
+ timer.cpp \
+ utils.cpp \
+ utilsexc.cpp \
+ wave.cpp \
+ window.cpp \
+\
+ ../generic/choicdgg.cpp \
+ ../generic/colrdlgg.cpp \
+ ../generic/fontdlgg.cpp \
+ ../generic/gridg.cpp \
+ ../generic/imaglist.cpp \
+ ../generic/listctrl.cpp \
+ ../generic/laywin.cpp \
+ ../generic/msgdlgg.cpp \
+ ../generic/panelg.cpp \
+ ../generic/printps.cpp \
+ ../generic/prntdlgg.cpp \
+ ../generic/sashwin.cpp \
+ ../generic/scrolwin.cpp \
+ ../generic/splitter.cpp \
+ ../generic/statusbr.cpp \
+ ../generic/tabg.cpp \
+ ../generic/textdlgg.cpp \
+ ../generic/treectrl.cpp
+
+# If you're not using the generic ones, you
+# may wish to define platform-specific ones
+# treectrl.cpp \
+# listctrl.cpp \
+# imaglist.cpp \
+# statusbr.cpp \
+# toolbar.cpp \
+ 
+LIB_C_SRC=\
+\
+ ../common/y_tab.c \
+ ../common/extended.c
+
+all:    $(WXLIB)
+
+# Define library objects
+OBJECTS=\
+ $(LIB_CPP_SRC:.cpp=.o) $(LIB_C_SRC:.c=.o)
+
+$(WXLIB) : $(OBJECTS)
+	ar $(AROPTIONS) $@ $(OBJECTS)
+	$(RANLIB) $@
+
+../common/y_tab.$(OBJSUFF):	../common/y_tab.c ../common/lex_yy.c
+	$(CCLEX) -c $(CFLAGS) -o $@ ../common/y_tab.c
+
+# Replace lex with flex if you run into compilation
+# problems with lex_yy.c. See also note about LEX_SCANNER
+# above.
+../common/lex_yy.c:	../common/lexer.l
+	$(LEX) -o../common/lex.yy.c ../common/lexer.l 
+	sed -e "s/BUFSIZ/5000/g" < ../common/lex.yy.c | \
+	sed -e "s/yyoutput(c)/void yyoutput(c)/g" | \
+        sed -e "s/YYLMAX 200/YYLMAX 5000/g" > ../common/lex_yy.c
+	/bin/rm -f ../common/lex.yy.c
+
+# Replace yacc with bison if you run into compilation
+# problems with y_tab.c.
+../common/y_tab.c:	../common/parser.y
+	$(YACC) ../common/parser.y
+	mv y.tab.c ../common/y_tab.c
+
+
+clean:
+	rm -f $(OBJECTS) $(WXLIB)
+
