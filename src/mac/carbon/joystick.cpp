@@ -17,6 +17,8 @@
 
 #if wxUSE_JOYSTICK
 
+#if !defined (__WXMAC_OSX__)
+
 #include "wx/joystick.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
@@ -281,6 +283,8 @@ bool wxJoystick::ReleaseCapture()
     return FALSE;
 }
 
+#endif 
+    // !OSX
 #endif
     // wxUSE_JOYSTICK
 

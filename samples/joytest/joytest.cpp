@@ -85,6 +85,7 @@ bool MyApp::OnInit()
 
 #if wxUSE_STATUSBAR
     frame->CreateStatusBar();
+    frame->SetStatusText(wxT("Ready..."));
 #endif // wxUSE_STATUSBAR
 
     frame->CenterOnScreen();

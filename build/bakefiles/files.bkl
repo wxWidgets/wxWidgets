@@ -129,10 +129,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Used on Mac OS CarbonLib, Mac OS X wxMac base, and Mac OS X darwin base -->
 <set var="BASE_COREFOUNDATION_SRC" hints="files">
     src/mac/corefoundation/cfstring.cpp
+    src/mac/corefoundation/hid.cpp
     src/mac/corefoundation/stdpaths_cf.cpp
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/mac/corefoundation/cfstring.h
+    wx/mac/corefoundation/hid.h
     wx/mac/corefoundation/stdpaths.h
 </set>
 
@@ -1678,10 +1680,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/corefoundation/utilsexc_cf.cpp
 </set>
 
+<set var="MAC_OSX_LOWLEVEL_HDR" hints="files">
+</set>
+
 <set var="MAC_LOWLEVEL_SRC" hints="files">
     <if cond="PLATFORM_MACOSX=='1'">$(MAC_OSX_LOWLEVEL_SRC)</if>
 </set>
 <set var="MAC_LOWLEVEL_HDR" hints="files">
+    <if cond="PLATFORM_MACOSX=='1'">$(MAC_OSX_LOWLEVEL_HDR)</if>
 </set>
 
 <set var="MAC_OSX_SRC" hints="files">
@@ -1733,7 +1739,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/frame.cpp
     src/mac/carbon/gauge.cpp
     src/mac/carbon/gdiobj.cpp
-    src/mac/carbon/hid.cpp
     src/mac/carbon/icon.cpp
     src/mac/carbon/listbox.cpp
     src/mac/carbon/mdi.cpp
@@ -2336,23 +2341,25 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_MAC_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/mac/carbon/drawer.cpp
-    src/mac/carbon/joystick.cpp
     src/mac/carbon/sound.cpp
     src/mac/carbon/taskbar.cpp
+    src/mac/corefoundation/hidjoystick.cpp
 </set>
 <set var="ADVANCED_MAC_HDR" hints="files">
     wx/mac/carbon/drawer.h
-    wx/mac/carbon/joystick.h
     wx/mac/carbon/sound.h
     wx/mac/carbon/taskbarosx.h
+    wx/mac/corefoundation/joystick.h
 </set>
 
 <set var="ADVANCED_COCOA_SRC" hints="files">
     src/cocoa/taskbar.mm
     src/common/taskbarcmn.cpp
+    src/mac/corefoundation/hidjoystick.cpp
 </set>
 <set var="ADVANCED_COCOA_HDR" hints="files">
     wx/cocoa/taskbar.h
+    wx/mac/corefoundation/joystick.h
 </set>
 
 <set var="ADVANCED_OS2_SRC" hints="files">

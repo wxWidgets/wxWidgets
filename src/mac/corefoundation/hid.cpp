@@ -31,7 +31,7 @@
 //DARWIN _ONLY_
 #ifdef __DARWIN__
 
-#include "wx/mac/carbon/private/hid.h"
+#include "wx/mac/corefoundation/hid.h"
 #include "wx/string.h"
 #include "wx/log.h"
 
@@ -83,7 +83,7 @@ void CFShowTypeIDDescription(CFTypeRef pData)
 // wxHIDDevice
 // ---------------------------------------------------------------------------
 
-bool wxHIDDevice::Create (const int& nClass, const int& nType)
+bool wxHIDDevice::Create (int nClass, int nType, int nDev)
 {
 	//Create the mach port
 	wxIOCHECK(IOMasterPort(bootstrap_port, &m_pPort), "Could not create mach port");
@@ -124,6 +124,9 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 	io_object_t pObject;
 	while ( (pObject = IOIteratorNext(pIterator)) != 0)
 	{
+        if(--nDev != 0)
+            continue;
+            
 		wxVERIFY(IORegistryEntryCreateCFProperties(pObject, &pDictionary,
 											kCFAllocatorDefault, kNilOptions) == KERN_SUCCESS);
 
@@ -135,14 +138,6 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 						(CFStringRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey)), 
 						CFStringGetSystemEncoding()
 										);
-
-		//
-		//Now the hard part - in order to scan things we need "cookies" -
-		//
-		wxCFArray CookieArray = CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDElementKey));
-		BuildCookies(CookieArray);
-		if (m_ppQueue != NULL)
-			wxVERIFY((*m_ppQueue)->start(m_ppQueue) == S_OK);
 
 		//Create the interface (good grief - long function names!)
 		SInt32 nScore;
@@ -164,6 +159,14 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 		//open the HID interface...
 		wxVERIFY((*m_ppDevice)->open(m_ppDevice, 0) == S_OK);
 		
+		//
+		//Now the hard part - in order to scan things we need "cookies" -
+		//
+		wxCFArray CookieArray = CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDElementKey));
+		BuildCookies(CookieArray);
+		if (m_ppQueue != NULL)
+			wxVERIFY((*m_ppQueue)->start(m_ppQueue) == S_OK);
+
 		//cleanup
 		CFRelease(pDictionary);
 		IOObjectRelease(pObject);
@@ -175,7 +178,60 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 	return true;
 }//end Create()
 	
-void wxHIDDevice::AddCookie(CFTypeRef Data, const int& i)
+int wxHIDDevice::GetCount (int nClass, int nType)
+{
+	mach_port_t 			m_pPort;
+
+	//Create the mach port
+	wxIOCHECK(IOMasterPort(bootstrap_port, &m_pPort), "Could not create mach port");
+
+	//Dictionary that will hold first
+	//the matching dictionary for determining which kind of devices we want,
+	//then later some registry properties from an iterator (see below)
+	CFMutableDictionaryRef pDictionary;
+
+	//Create a dictionary
+	//The call to IOServiceMatching filters down the
+	//the services we want to hid services (and also eats the
+	//dictionary up for us (consumes one reference))
+	wxVERIFY((pDictionary = IOServiceMatching(kIOHIDDeviceKey)) != NULL );
+
+	//Here we'll filter down the services to what we want
+	if (nType != -1)
+	{
+		CFNumberRef pType = CFNumberCreate(kCFAllocatorDefault,
+									kCFNumberIntType, &nType);
+		CFDictionarySetValue(pDictionary, CFSTR(kIOHIDPrimaryUsageKey), pType);
+		CFRelease(pType);
+	}
+	if (nClass != -1)
+	{
+		CFNumberRef pClass = CFNumberCreate(kCFAllocatorDefault,
+									kCFNumberIntType, &nClass);
+		CFDictionarySetValue(pDictionary, CFSTR(kIOHIDPrimaryUsagePageKey), pClass);
+		CFRelease(pClass);
+	}
+
+	//Now get the maching services
+	io_iterator_t pIterator;
+	wxIOCHECK(IOServiceGetMatchingServices(m_pPort, pDictionary, &pIterator), "No Matching HID Services");
+	wxASSERT(pIterator != 0);
+
+	//Now we iterate through them
+	io_object_t pObject;
+    
+    int nCount = 0;
+    
+	while ( (pObject = IOIteratorNext(pIterator)) != 0)
+        ++nCount;
+	
+    //iterator cleanup
+	IOObjectRelease(pIterator);
+		
+	return nCount;
+}//end Create()
+
+void wxHIDDevice::AddCookie(CFTypeRef Data, int i)
 {
 	CFNumberGetValue(
 				(CFNumberRef) CFDictionaryGetValue	( (CFDictionaryRef) Data
@@ -186,24 +242,24 @@ void wxHIDDevice::AddCookie(CFTypeRef Data, const int& i)
 				);
 }
 
-void wxHIDDevice::AddCookieInQueue(CFTypeRef Data, const int& i)
+void wxHIDDevice::AddCookieInQueue(CFTypeRef Data, int i)
 {
 	AddCookie(Data, i);
 	wxVERIFY((*m_ppQueue)->addElement(m_ppQueue, m_pCookies[i], 0) == S_OK);//3rd Param flags (none yet)
 }
 	
-void wxHIDDevice::InitCookies(const size_t& dwSize, bool bQueue)
+void wxHIDDevice::InitCookies(size_t dwSize, bool bQueue)
 {
 	m_pCookies = new IOHIDElementCookie[dwSize];
 	if (bQueue)
 	{
-		wxASSERT( m_ppQueue != NULL);
+		wxASSERT( m_ppQueue == NULL);
 		wxVERIFY(  (m_ppQueue = (*m_ppDevice)->allocQueue(m_ppDevice)) != NULL);
 		wxVERIFY(  (*m_ppQueue)->create(m_ppQueue, 0, 512) == S_OK); //Param 2, flags, none yet
 	}		
 }
 
-bool wxHIDDevice::IsActive(const int& nIndex)
+bool wxHIDDevice::IsActive(int nIndex)
 {
 	wxASSERT(m_pCookies[nIndex] != NULL);
 	IOHIDEventStruct Event;
@@ -211,11 +267,21 @@ bool wxHIDDevice::IsActive(const int& nIndex)
 	return !!Event.value;
 }
 	
+bool wxHIDDevice::HasElement(int nIndex)
+{
+    return m_pCookies[nIndex] != NULL;
+}
 
 wxHIDDevice::~wxHIDDevice()
 {
 	if (m_ppDevice != NULL)
 	{
+		if (m_ppQueue != NULL)
+		{
+			(*m_ppQueue)->stop(m_ppQueue);
+			(*m_ppQueue)->dispose(m_ppQueue);
+			(*m_ppQueue)->Release(m_ppQueue);
+		}
 		(*m_ppDevice)->close(m_ppDevice);
 		(*m_ppDevice)->Release(m_ppDevice);
 		mach_port_deallocate(mach_task_self(), m_pPort);
@@ -224,12 +290,6 @@ wxHIDDevice::~wxHIDDevice()
 	if (m_pCookies != NULL)
 	{
 		delete [] m_pCookies;
-		if (m_ppQueue != NULL)
-		{
-			(*m_ppQueue)->stop(m_ppQueue);
-			(*m_ppQueue)->dispose(m_ppQueue);
-			(*m_ppQueue)->Release(m_ppQueue);
-		}
 	}
 }
 
@@ -365,5 +425,53 @@ void wxHIDKeyboard::BuildCookies(wxCFArray& Array)
 		}
 	}
 }//end buildcookies
+
+//
+// wxGetKeyState
+//
+
+#include "wx/utils.h"
+#include "wx/module.h"
+
+class wxHIDModule : public wxModule
+{
+    DECLARE_DYNAMIC_CLASS(wxHIDModule)
+    
+    public:
+        static wxHIDKeyboard* sm_keyboard;
+        
+        virtual bool OnInit()
+        {
+            sm_keyboard = NULL;
+            return true;
+        }
+        virtual void OnExit()
+        {
+            if (sm_keyboard)
+                delete sm_keyboard;
+        }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxHIDModule, wxModule)
+
+wxHIDKeyboard* wxHIDModule::sm_keyboard;
+
+bool wxGetKeyState (wxKeyCode key)
+{
+    if (!wxHIDModule::sm_keyboard)
+    {
+        wxHIDModule::sm_keyboard = new wxHIDKeyboard();
+        bool bOK = wxHIDModule::sm_keyboard->Create();
+        wxASSERT(bOK);
+        if(!bOK)
+        {
+            delete wxHIDModule::sm_keyboard;
+            wxHIDModule::sm_keyboard = NULL;
+            return false;
+        }
+    }
+    
+    return wxHIDModule::sm_keyboard->IsActive(key);
+}
 
 #endif //__DARWIN__

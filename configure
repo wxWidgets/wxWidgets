@@ -1024,7 +1024,7 @@ Optional Features:
   --enable-splines        use spline drawing code
   --enable-validators     use wxValidator and derived classes
   --enable-busyinfo       use wxBusyInfo
-  --enable-joystick       use wxJoystick (Linux only)
+  --enable-joystick       use wxJoystick
   --enable-metafiles      use wxMetaFile (Windows only)
   --enable-dragimage      use wxDragImage
   --enable-accessibility  enable accessibility support
@@ -36938,15 +36938,9 @@ fi
 
 
 if test "$wxUSE_GUI" = "yes"; then
+          if test "$wxUSE_JOYSTICK" = "yes"; then
 
-    if test "$TOOLKIT" = "MAC" -o "$TOOLKIT" = "COCOA"; then
-        { echo "$as_me:$LINENO: WARNING: Joystick not yet supported under Mac OS X... disabled" >&5
-echo "$as_me: WARNING: Joystick not yet supported under Mac OS X... disabled" >&2;}
-        wxUSE_JOYSTICK=no
-     fi
-
-         if test "$TOOLKIT" != "MSW"; then
-        if test "$wxUSE_JOYSTICK" = "yes"; then
+                if test "$TOOLKIT" != "MAC" -a "$TOOLKIT" != "COCOA" -a "$TOOLKIT" != "MSW"; then
 
 for ac_header in linux/joystick.h
 do
@@ -37102,15 +37096,22 @@ done
                 { echo "$as_me:$LINENO: WARNING: Joystick not supported by this system... disabled" >&5
 echo "$as_me: WARNING: Joystick not supported by this system... disabled" >&2;}
             fi
+        else
+                      if test "$USE_DARWIN" != 1 -a "$TOOLKIT" != "MSW"; then
+                wxUSE_JOYSTICK=no
+                { echo "$as_me:$LINENO: WARNING: Joystick not supported by this system... disabled" >&5
+echo "$as_me: WARNING: Joystick not supported by this system... disabled" >&2;}
+           fi
         fi
-    fi
 
-    if test "$wxUSE_JOYSTICK" = "yes"; then
-        cat >>confdefs.h <<\_ACEOF
+
+        if test "$wxUSE_JOYSTICK" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
 #define wxUSE_JOYSTICK 1
 _ACEOF
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
+        fi
     fi
 fi
 
@@ -38874,7 +38875,7 @@ if test "$wxUSE_MAC" = 1 ; then
     fi
 fi
 if test "$wxUSE_COCOA" = 1 ; then
-    LDFLAGS="$LDFLAGS -framework Cocoa"
+    LDFLAGS="$LDFLAGS -framework IOKit -framework Cocoa"
     if test "$wxUSE_MEDIACTRL" = "yes"; then
         LDFLAGS="$LDFLAGS -framework QuickTime"
     fi
@@ -41272,10 +41273,10 @@ fi
 
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.1.7"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.1.6"
 
 
-BAKEFILE_AUTOCONF_INC_M4_VERSION="0.1.7"
+BAKEFILE_AUTOCONF_INC_M4_VERSION="0.1.6"
 
 
 

@@ -1142,7 +1142,7 @@ WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUS
 WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
 WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
-WX_ARG_ENABLE(joystick,    [  --enable-joystick       use wxJoystick (Linux only)], wxUSE_JOYSTICK)
+WX_ARG_ENABLE(joystick,    [  --enable-joystick       use wxJoystick], wxUSE_JOYSTICK)
 WX_ARG_ENABLE(metafile,    [  --enable-metafiles      use wxMetaFile (Windows only)], wxUSE_METAFILE)
 WX_ARG_ENABLE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 WX_ARG_ENABLE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
@@ -5237,27 +5237,29 @@ dnl Joystick support
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_GUI" = "yes"; then
-
-    if test "$TOOLKIT" = "MAC" -o "$TOOLKIT" = "COCOA"; then
-        AC_MSG_WARN([Joystick not yet supported under Mac OS X... disabled])
-        wxUSE_JOYSTICK=no
-     fi
-    
      dnl under MSW we always have joystick support
-    if test "$TOOLKIT" != "MSW"; then
-        if test "$wxUSE_JOYSTICK" = "yes"; then
-            dnl joystick support is only for Linux 2.1.x or greater
+     if test "$wxUSE_JOYSTICK" = "yes"; then
+         
+        dnl joystick support is only for Linux 2.1.x or greater
+        if test "$TOOLKIT" != "MAC" -a "$TOOLKIT" != "COCOA" -a "$TOOLKIT" != "MSW"; then
             AC_CHECK_HEADERS(linux/joystick.h)
             if test "$ac_cv_header_linux_joystick_h" != "yes"; then
                 wxUSE_JOYSTICK=no
                 AC_MSG_WARN(Joystick not supported by this system... disabled)
             fi
+        else
+           dnl mac only available on darwin
+           if test "$USE_DARWIN" != 1 -a "$TOOLKIT" != "MSW"; then
+                wxUSE_JOYSTICK=no
+                AC_MSG_WARN(Joystick not supported by this system... disabled)           
+           fi            
         fi
-    fi
 
-    if test "$wxUSE_JOYSTICK" = "yes"; then
-        AC_DEFINE(wxUSE_JOYSTICK)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
+
+        if test "$wxUSE_JOYSTICK" = "yes"; then
+            AC_DEFINE(wxUSE_JOYSTICK)
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
+        fi
     fi
 fi
 
@@ -6172,7 +6174,7 @@ if test "$wxUSE_MAC" = 1 ; then
     fi
 fi
 if test "$wxUSE_COCOA" = 1 ; then
-    LDFLAGS="$LDFLAGS -framework Cocoa"
+    LDFLAGS="$LDFLAGS -framework IOKit -framework Cocoa"
     if test "$wxUSE_MEDIACTRL" = "yes"; then
         LDFLAGS="$LDFLAGS -framework QuickTime"
     fi

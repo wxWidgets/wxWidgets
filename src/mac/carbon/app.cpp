@@ -59,8 +59,6 @@
 #  if defined(WXMAKINGDLL_CORE)
 #    include <mach-o/dyld.h>
 #  endif
-// include hid keyboard
-#  include "wx/mac/carbon/private/hid.h"
 #else
 #  include <Sound.h>
 #  include <Threads.h>
@@ -120,10 +118,6 @@ long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 long      wxApp::s_macPreferencesMenuItemId = wxID_PREFERENCES ;
 long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
 wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
-
-#ifdef __DARWIN__
-    wxHIDKeyboard* wxApp::s_macHIDKeyboard = NULL;
-#endif
 
 // Normally we're not a plugin
 bool      wxApp::sm_isEmbedded = false;
@@ -725,12 +719,6 @@ void wxApp::CleanUp()
 #  endif
 #endif
 
-#ifdef __DARWIN__
-    // clean up HID Keyboard
-    if (s_macHIDKeyboard)
-        delete s_macHIDKeyboard;
-#endif
-
     UMACleanupToolbox() ;
     if (s_macCursorRgn) {
         ::DisposeRgn((RgnHandle)s_macCursorRgn);
@@ -1179,18 +1167,9 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
     }
 }
 
+#ifndef __DARWIN__
 bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 {
-#ifdef __DARWIN__
-    // Startup HID keyboard for getting key codes on DARWIN
-    if (!wxApp::s_macHIDKeyboard)
-    {
-        wxApp::s_macHIDKeyboard = new wxHIDKeyboard();
-        wxApp::s_macHIDKeyboard->Create();
-    }
-
-	return wxApp::s_macHIDKeyboard->IsActive(key);
-#else
 //if OS X > 10.2 (i.e. 10.2.x)
 //a known apple bug prevents the system from determining led
 //states with GetKeys... can only determine caps lock led
@@ -1199,8 +1178,8 @@ bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 //  KeyMapByteArray keymap; 
 //  GetKeys((BigEndianLong*)keymap);
 //  return !!(BitTst(keymap, (sizeof(KeyMapByteArray)*8) - iKey));
-#endif
 }
+#endif
 
 
 bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey )

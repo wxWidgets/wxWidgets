@@ -58,7 +58,6 @@ EXTRALIBS_ODBC = @EXTRALIBS_ODBC@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
 EXTRALIBS_SDL = @EXTRALIBS_SDL@
-EXTRALIBS_GNOMEPRINT = @EXTRALIBS_GNOMEPRINT@
 HOST_SUFFIX = @HOST_SUFFIX@
 
 ### Variables: ###
@@ -429,6 +428,7 @@ ALL_BASE_SOURCES =  \
 	src/mac/carbon/macnotfy.cpp \
 	src/mac/carbon/morefilex/MoreFilesX.c \
 	src/mac/corefoundation/cfstring.cpp \
+	src/mac/corefoundation/hid.cpp \
 	src/mac/corefoundation/stdpaths_cf.cpp \
 	src/os2/dir.cpp \
 	src/os2/mimetype.cpp \
@@ -1109,8 +1109,7 @@ LOCALE_LINGUAS = ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk zh zh_
 @COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
-@COND_USE_PLUGINS_0@PLUGIN_ADV_EXTRALIBS = \
-@COND_USE_PLUGINS_0@	$(EXTRALIBS_SDL) $(EXTRALIBS_GNOMEPRINT)
+@COND_USE_PLUGINS_0@PLUGIN_ADV_EXTRALIBS = $(EXTRALIBS_SDL)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -1228,6 +1227,7 @@ COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR =  \
 @COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = $(COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR)
 COND_TOOLKIT_MAC_BASE_PLATFORM_HDR =  \
 	wx/mac/corefoundation/cfstring.h \
+	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
 	wx/unix/stdpaths.h
 @COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = $(COND_TOOLKIT_MAC_BASE_PLATFORM_HDR)
@@ -1450,6 +1450,7 @@ COND_TOOLKIT_GTK_GUI_HDR =  \
 	wx/gtk/fontdlg.h \
 	wx/gtk/frame.h \
 	wx/gtk/gauge.h \
+	wx/gtk/gnome/gprint.h \
 	wx/gtk/listbox.h \
 	wx/gtk/mdi.h \
 	wx/gtk/menu.h \
@@ -2050,14 +2051,15 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/wince/textctrlce.h \
 	wx/msw/wince/resources.h
 @COND_TOOLKIT_WINCE@GUI_HDR = $(COND_TOOLKIT_WINCE_GUI_HDR)
-@COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = wx/cocoa/taskbar.h
+@COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = \
+@COND_TOOLKIT_COCOA@	wx/cocoa/taskbar.h wx/mac/corefoundation/joystick.h
 @COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_GTK@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 	wx/mac/carbon/drawer.h \
-	wx/mac/carbon/joystick.h \
 	wx/mac/carbon/sound.h \
-	wx/mac/carbon/taskbarosx.h
+	wx/mac/carbon/taskbarosx.h \
+	wx/mac/corefoundation/joystick.h
 @COND_TOOLKIT_MAC@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR)
 @COND_TOOLKIT_MOTIF@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_MOTIF@	wx/unix/joystick.h wx/unix/sound.h \
@@ -2467,6 +2469,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_macnotfy.o \
 	monodll_MoreFilesX.o \
 	monodll_cfstring.o \
+	monodll_hid.o \
 	monodll_stdpaths_cf.o \
 	monodll_DirectoryCopy.o \
 	monodll_FSpCompat.o \
@@ -2525,6 +2528,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
+	monodll_hid.o \
 	monodll_stdpaths_cf.o
 @COND_TOOLKIT_@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS =  \
@@ -2537,6 +2541,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
+	monodll_hid.o \
 	monodll_stdpaths_cf.o
 @COND_TOOLKIT_COCOA@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS =  \
@@ -2549,6 +2554,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
+	monodll_hid.o \
 	monodll_stdpaths_cf.o
 @COND_TOOLKIT_GTK@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
@@ -2559,6 +2565,7 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_macnotfy.o \
 	monodll_MoreFilesX.o \
 	monodll_cfstring.o \
+	monodll_hid.o \
 	monodll_stdpaths_cf.o \
 	monodll_baseunix.o \
 	monodll_dlunix.o \
@@ -2574,6 +2581,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
+	monodll_hid.o \
 	monodll_stdpaths_cf.o
 @COND_TOOLKIT_MOTIF@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
@@ -2586,6 +2594,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
+	monodll_hid.o \
 	monodll_stdpaths_cf.o
 @COND_TOOLKIT_X11@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS)
 @COND_PLATFORM_MACOSX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
@@ -3260,6 +3269,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
 	monodll_fontdlg.o \
 	monodll_frame.o \
 	monodll_gauge.o \
+	monodll_gprint.o \
 	monodll_listbox.o \
 	monodll_mdi.o \
 	monodll_menu.o \
@@ -3318,7 +3328,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_frame.o \
 	monodll_gauge.o \
 	monodll_gdiobj.o \
-	monodll_hid.o \
 	monodll_icon.o \
 	monodll_listbox.o \
 	monodll_mdi.o \
@@ -3892,7 +3901,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = monodll_helpbest.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS \
-@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monodll_sound_sdl.o monodll_gprint.o
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monodll_sound_sdl.o
 COND_MONOLITHIC_1_SHARED_0___monolib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_1_SHARED_0@__monolib___depname = $(COND_MONOLITHIC_1_SHARED_0___monolib___depname)
@@ -3910,6 +3919,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_macnotfy.o \
 	monolib_MoreFilesX.o \
 	monolib_cfstring.o \
+	monolib_hid.o \
 	monolib_stdpaths_cf.o \
 	monolib_DirectoryCopy.o \
 	monolib_FSpCompat.o \
@@ -3968,6 +3978,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
+	monolib_hid.o \
 	monolib_stdpaths_cf.o
 @COND_TOOLKIT_@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
@@ -3980,6 +3991,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
+	monolib_hid.o \
 	monolib_stdpaths_cf.o
 @COND_TOOLKIT_COCOA@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1 =  \
@@ -3992,6 +4004,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
+	monolib_hid.o \
 	monolib_stdpaths_cf.o
 @COND_TOOLKIT_GTK@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
@@ -4002,6 +4015,7 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_macnotfy.o \
 	monolib_MoreFilesX.o \
 	monolib_cfstring.o \
+	monolib_hid.o \
 	monolib_stdpaths_cf.o \
 	monolib_baseunix.o \
 	monolib_dlunix.o \
@@ -4017,6 +4031,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
+	monolib_hid.o \
 	monolib_stdpaths_cf.o
 @COND_TOOLKIT_MOTIF@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
@@ -4029,6 +4044,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
+	monolib_hid.o \
 	monolib_stdpaths_cf.o
 @COND_TOOLKIT_X11@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1)
 @COND_PLATFORM_MACOSX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
@@ -4704,6 +4720,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
 	monolib_fontdlg.o \
 	monolib_frame.o \
 	monolib_gauge.o \
+	monolib_gprint.o \
 	monolib_listbox.o \
 	monolib_mdi.o \
 	monolib_menu.o \
@@ -4762,7 +4779,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_frame.o \
 	monolib_gauge.o \
 	monolib_gdiobj.o \
-	monolib_hid.o \
 	monolib_icon.o \
 	monolib_listbox.o \
 	monolib_mdi.o \
@@ -5337,7 +5353,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_helpbest.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_1 \
-@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monolib_sound_sdl.o monolib_gprint.o
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monolib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1___basedll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_0_SHARED_1@__basedll___depname = $(COND_MONOLITHIC_0_SHARED_1___basedll___depname)
@@ -5390,6 +5406,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_macnotfy.o \
 	basedll_MoreFilesX.o \
 	basedll_cfstring.o \
+	basedll_hid.o \
 	basedll_stdpaths_cf.o \
 	basedll_DirectoryCopy.o \
 	basedll_FSpCompat.o \
@@ -5448,6 +5465,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
+	basedll_hid.o \
 	basedll_stdpaths_cf.o
 @COND_TOOLKIT_@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
@@ -5460,6 +5478,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
+	basedll_hid.o \
 	basedll_stdpaths_cf.o
 @COND_TOOLKIT_COCOA@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2 =  \
@@ -5472,6 +5491,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
+	basedll_hid.o \
 	basedll_stdpaths_cf.o
 @COND_TOOLKIT_GTK@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
@@ -5482,6 +5502,7 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_macnotfy.o \
 	basedll_MoreFilesX.o \
 	basedll_cfstring.o \
+	basedll_hid.o \
 	basedll_stdpaths_cf.o \
 	basedll_baseunix.o \
 	basedll_dlunix.o \
@@ -5497,6 +5518,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
+	basedll_hid.o \
 	basedll_stdpaths_cf.o
 @COND_TOOLKIT_MOTIF@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_2 =  \
@@ -5509,6 +5531,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
+	basedll_hid.o \
 	basedll_stdpaths_cf.o
 @COND_TOOLKIT_X11@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_2)
 @COND_PLATFORM_MACOSX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
@@ -5536,6 +5559,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_macnotfy.o \
 	baselib_MoreFilesX.o \
 	baselib_cfstring.o \
+	baselib_hid.o \
 	baselib_stdpaths_cf.o \
 	baselib_DirectoryCopy.o \
 	baselib_FSpCompat.o \
@@ -5594,6 +5618,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
+	baselib_hid.o \
 	baselib_stdpaths_cf.o
 @COND_TOOLKIT_@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
@@ -5606,6 +5631,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
+	baselib_hid.o \
 	baselib_stdpaths_cf.o
 @COND_TOOLKIT_COCOA@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
@@ -5618,6 +5644,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
+	baselib_hid.o \
 	baselib_stdpaths_cf.o
 @COND_TOOLKIT_GTK@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
@@ -5628,6 +5655,7 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_macnotfy.o \
 	baselib_MoreFilesX.o \
 	baselib_cfstring.o \
+	baselib_hid.o \
 	baselib_stdpaths_cf.o \
 	baselib_baseunix.o \
 	baselib_dlunix.o \
@@ -5643,6 +5671,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
+	baselib_hid.o \
 	baselib_stdpaths_cf.o
 @COND_TOOLKIT_MOTIF@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_3 =  \
@@ -5655,6 +5684,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
+	baselib_hid.o \
 	baselib_stdpaths_cf.o
 @COND_TOOLKIT_X11@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_3)
 @COND_PLATFORM_MACOSX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
@@ -6337,6 +6367,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
 	coredll_fontdlg.o \
 	coredll_frame.o \
 	coredll_gauge.o \
+	coredll_gprint.o \
 	coredll_listbox.o \
 	coredll_mdi.o \
 	coredll_menu.o \
@@ -6395,7 +6426,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_frame.o \
 	coredll_gauge.o \
 	coredll_gdiobj.o \
-	coredll_hid.o \
 	coredll_icon.o \
 	coredll_listbox.o \
 	coredll_mdi.o \
@@ -7529,6 +7559,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
 	corelib_fontdlg.o \
 	corelib_frame.o \
 	corelib_gauge.o \
+	corelib_gprint.o \
 	corelib_listbox.o \
 	corelib_mdi.o \
 	corelib_menu.o \
@@ -7587,7 +7618,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_frame.o \
 	corelib_gauge.o \
 	corelib_gdiobj.o \
-	corelib_hid.o \
 	corelib_icon.o \
 	corelib_listbox.o \
 	corelib_mdi.o \
@@ -8179,7 +8209,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
 @COND_TOOLKIT_MSW@	= advdll_datectrl.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_2 \
-@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advdll_sound_sdl.o advdll_gprint.o
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advdll_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__advlib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname)
@@ -8220,7 +8250,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
 @COND_TOOLKIT_MSW@	= advlib_datectrl.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_3 \
-@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advlib_sound_sdl.o advlib_gprint.o
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advlib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___mediadll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@__mediadll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___mediadll___depname)
@@ -8549,7 +8579,8 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= monodll_gsockosx.o monodll_utilsexc_cf.o
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS = \
-@COND_TOOLKIT_COCOA@	monodll_taskbar.o monodll_taskbarcmn.o
+@COND_TOOLKIT_COCOA@	monodll_taskbar.o monodll_taskbarcmn.o \
+@COND_TOOLKIT_COCOA@	monodll_hidjoystick.o
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
@@ -8561,9 +8592,9 @@ COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_drawer.o \
-	monodll_joystick.o \
 	monodll_sound.o \
-	monodll_taskbar.o
+	monodll_taskbar.o \
+	monodll_hidjoystick.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
@@ -8587,7 +8618,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS_0 \
 @COND_PLATFORM_MACOSX_1@	= monolib_gsockosx.o monolib_utilsexc_cf.o
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = \
-@COND_TOOLKIT_COCOA@	monolib_taskbar.o monolib_taskbarcmn.o
+@COND_TOOLKIT_COCOA@	monolib_taskbar.o monolib_taskbarcmn.o \
+@COND_TOOLKIT_COCOA@	monolib_hidjoystick.o
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
@@ -8599,9 +8631,9 @@ COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_drawer.o \
-	monolib_joystick.o \
 	monolib_sound.o \
-	monolib_taskbar.o
+	monolib_taskbar.o \
+	monolib_hidjoystick.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_0)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
@@ -8630,7 +8662,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS_9 \
 @COND_PLATFORM_MACOSX_1@	= corelib_gsockosx.o corelib_utilsexc_cf.o
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = \
-@COND_TOOLKIT_COCOA@	advdll_taskbar.o advdll_taskbarcmn.o
+@COND_TOOLKIT_COCOA@	advdll_taskbar.o advdll_taskbarcmn.o \
+@COND_TOOLKIT_COCOA@	advdll_hidjoystick.o
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_joystick.o \
@@ -8642,9 +8675,9 @@ COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_drawer.o \
-	advdll_joystick.o \
 	advdll_sound.o \
-	advdll_taskbar.o
+	advdll_taskbar.o \
+	advdll_hidjoystick.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_8)
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = \
 @COND_TOOLKIT_MOTIF@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
@@ -8660,7 +8693,8 @@ COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 @COND_TOOLKIT_X11@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
 @COND_TOOLKIT_X11@	advdll_taskbarx11.o
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = \
-@COND_TOOLKIT_COCOA@	advlib_taskbar.o advlib_taskbarcmn.o
+@COND_TOOLKIT_COCOA@	advlib_taskbar.o advlib_taskbarcmn.o \
+@COND_TOOLKIT_COCOA@	advlib_hidjoystick.o
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_joystick.o \
@@ -8672,9 +8706,9 @@ COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_drawer.o \
-	advlib_joystick.o \
 	advlib_sound.o \
-	advlib_taskbar.o
+	advlib_taskbar.o \
+	advlib_hidjoystick.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_9)
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = \
 @COND_TOOLKIT_MOTIF@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
@@ -9946,6 +9980,9 @@ monodll_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONODLL_ODEP)
 monodll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
+monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
+
 monodll_scrolwin.o: $(srcdir)/src/gtk/scrolwin.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/scrolwin.cpp
 
@@ -9996,9 +10033,6 @@ monodll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONODLL_ODEP)
 
 monodll_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
-
-monodll_hid.o: $(srcdir)/src/mac/carbon/hid.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/hid.cpp
 
 monodll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
@@ -10324,9 +10358,6 @@ monodll_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONODLL_ODEP)
 monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
-monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
-
 @COND_PLATFORM_UNIX_1@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
 
@@ -10599,6 +10630,27 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOS_1@monodll_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/cfstring.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monodll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monodll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monodll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monodll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOS_1@monodll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monodll_stdpaths_cf.o: $(srcdir)/src/mac/corefoundation/stdpaths_cf.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/stdpaths_cf.cpp
@@ -13015,9 +13067,6 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/mac/carbon/joystick.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/joystick.cpp
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
@@ -13029,6 +13078,12 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/os2/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/joystick.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1@monodll_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1@monodll_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
@@ -13345,6 +13400,9 @@ monolib_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONOLIB_ODEP)
 monolib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
+monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
+
 monolib_scrolwin.o: $(srcdir)/src/gtk/scrolwin.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/scrolwin.cpp
 
@@ -13395,9 +13453,6 @@ monolib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONOLIB_ODEP)
 
 monolib_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
-
-monolib_hid.o: $(srcdir)/src/mac/carbon/hid.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/hid.cpp
 
 monolib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
@@ -13723,9 +13778,6 @@ monolib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONOLIB_ODEP)
 monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
-monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
-
 @COND_PLATFORM_UNIX_1@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
 
@@ -13998,6 +14050,27 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOS_1@monolib_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/cfstring.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monolib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monolib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monolib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monolib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOS_1@monolib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monolib_stdpaths_cf.o: $(srcdir)/src/mac/corefoundation/stdpaths_cf.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/stdpaths_cf.cpp
@@ -16414,9 +16487,6 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/mac/carbon/joystick.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/joystick.cpp
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
@@ -16428,6 +16498,12 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/os2/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/joystick.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1@monolib_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1@monolib_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
@@ -16963,6 +17039,27 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOS_1@basedll_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/cfstring.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@basedll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@basedll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@basedll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@basedll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOS_1@basedll_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@basedll_stdpaths_cf.o: $(srcdir)/src/mac/corefoundation/stdpaths_cf.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/stdpaths_cf.cpp
 
@@ -17485,6 +17582,27 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOS_1@baselib_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/cfstring.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@baselib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@baselib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@baselib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@baselib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
+@COND_PLATFORM_MACOS_1@baselib_hid.o: $(srcdir)/src/mac/corefoundation/hid.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hid.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@baselib_stdpaths_cf.o: $(srcdir)/src/mac/corefoundation/stdpaths_cf.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/stdpaths_cf.cpp
 
@@ -17638,6 +17756,9 @@ coredll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(COREDLL_ODEP)
 coredll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
+coredll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
+
 coredll_scrolwin.o: $(srcdir)/src/gtk/scrolwin.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/scrolwin.cpp
 
@@ -17688,9 +17809,6 @@ coredll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(COREDLL_ODEP)
 
 coredll_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
-
-coredll_hid.o: $(srcdir)/src/mac/carbon/hid.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/hid.cpp
 
 coredll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
@@ -20134,6 +20252,9 @@ corelib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(CORELIB_ODEP)
 corelib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
+corelib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
+
 corelib_scrolwin.o: $(srcdir)/src/gtk/scrolwin.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/scrolwin.cpp
 
@@ -20184,9 +20305,6 @@ corelib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(CORELIB_ODEP)
 
 corelib_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
-
-corelib_hid.o: $(srcdir)/src/mac/carbon/hid.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/hid.cpp
 
 corelib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
@@ -22612,9 +22730,6 @@ advdll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVDLL_ODEP)
 advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
-advdll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
-
 advdll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
@@ -22708,9 +22823,6 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@advdll_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
-@COND_TOOLKIT_MAC@advdll_joystick.o: $(srcdir)/src/mac/carbon/joystick.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/joystick.cpp
-
 @COND_TOOLKIT_MOTIF@advdll_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
@@ -22725,6 +22837,12 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_MAC@advdll_drawer.o: $(srcdir)/src/mac/carbon/drawer.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/drawer.cpp
+
+@COND_TOOLKIT_MAC@advdll_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
+
+@COND_TOOLKIT_COCOA@advdll_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
 
 @COND_TOOLKIT_MOTIF@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
@@ -22743,9 +22861,6 @@ advlib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVLIB_ODEP)
 
 advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
-
-advlib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
 advlib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
@@ -22840,9 +22955,6 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@advlib_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
-@COND_TOOLKIT_MAC@advlib_joystick.o: $(srcdir)/src/mac/carbon/joystick.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/joystick.cpp
-
 @COND_TOOLKIT_MOTIF@advlib_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
@@ -22857,6 +22969,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_MAC@advlib_drawer.o: $(srcdir)/src/mac/carbon/drawer.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/drawer.cpp
+
+@COND_TOOLKIT_MAC@advlib_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
+
+@COND_TOOLKIT_COCOA@advlib_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
 
 @COND_TOOLKIT_MOTIF@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp

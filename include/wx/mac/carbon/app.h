@@ -124,10 +124,6 @@ public:
     static bool           s_macHasDialogManager ;
     static long           s_macDialogManagerVersion ;
     
-    #ifdef __DARWIN__
-    static class wxHIDKeyboard* s_macHIDKeyboard;
-    #endif
-
     WXHRGN                m_macCursorRgn ;
     WXHRGN                m_macSleepRgn ;
     WXHRGN                m_macHelpRgn ;
