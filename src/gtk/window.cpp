@@ -4304,10 +4304,10 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     bool is_waiting = true;
 
-    gtk_signal_connect( GTK_OBJECT(menu->m_menu),
-                        "hide",
-                        GTK_SIGNAL_FUNC(gtk_pop_hide_callback),
-                        (gpointer)&is_waiting );
+    gulong handler = gtk_signal_connect( GTK_OBJECT(menu->m_menu),
+                                         "hide",
+                                         GTK_SIGNAL_FUNC(gtk_pop_hide_callback),
+                                         (gpointer)&is_waiting );
 
     wxPoint pos;
     gpointer userdata;
@@ -4343,6 +4343,8 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     {
         gtk_main_iteration();
     }
+
+    gtk_signal_disconnect(GTK_OBJECT(menu->m_menu), handler);
 
     return true;
 }
