@@ -67,7 +67,7 @@ wxDynamicToolBar::wxDynamicToolBar(wxWindow *parent, const wxWindowID id,
 {
 	Create(parent, id, pos, size, style, orientation, RowsOrColumns, name);
 
-	SetBackgroundColour( wxColour(192,192,192) );
+	SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_3DFACE) );
 }
 
 bool wxDynamicToolBar::Create(wxWindow *parent, const wxWindowID id, 
@@ -82,7 +82,7 @@ bool wxDynamicToolBar::Create(wxWindow *parent, const wxWindowID id,
 	if ( ! wxWindow::Create(parent, id, pos, size, style, name) )
 		return FALSE;
 
-	SetBackgroundColour( wxColour( 192,192,192 ) );
+	SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_3DFACE ));
 
 	return TRUE;
 }

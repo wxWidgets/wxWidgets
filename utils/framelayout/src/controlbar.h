@@ -148,11 +148,11 @@ public: /* protected really, acessed only by plugins and serializers */
 
 	// pens for decoration and shades
 
-	wxPen        mDarkPen;	 // default wxColour(128,128,128)
-	wxPen        mLightPen;  // default white
-	wxPen        mGrayPen;	 // default wxColour(192,192,192)
+	wxPen        mDarkPen;	 // default wxSYS_COLOUR_3DSHADOW
+	wxPen        mLightPen;  // default wxSYS_COLOUR_3DHILIGHT
+	wxPen        mGrayPen;	 // default wxSYS_COLOUR_3DFACE
 	wxPen        mBlackPen;  // default wxColour(  0,  0,  0)
-	wxPen        mBorderPen; // default wxColour(128,192,192)
+	wxPen        mBorderPen; // default wxSYS_COLOUR_3DFACE
 
 	wxPen        mNullPen;   // transparent pen
 

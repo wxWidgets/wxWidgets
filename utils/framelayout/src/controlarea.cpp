@@ -122,8 +122,9 @@ wxTabbedWindow::wxTabbedWindow()
 	  mBorderOnlyWidth( 8 ),
 
 	  mWhitePen( wxColour(255,255,255), 1, wxSOLID ),
-	  mGrayPen ( wxColour(192,192,192), 1, wxSOLID ),
-	  mDarkPen ( wxColour(128,128,128), 1, wxSOLID ),
+	  mLightPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHIGHLIGHT), 1, wxSOLID),
+	  mGrayPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
+	  mDarkPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
 	  mBlackPen( wxColour(  0,  0,  0), 1, wxSOLID ),
 
 	  // state variables
@@ -321,7 +322,7 @@ void wxTabbedWindow::DrawDecorations( wxDC& dc )
 
 	// layer 1 (upper white)
 	DrawShadedRect( curX+0, curY+0, xSize-0, ySize-0, 
-					mWhitePen, mBlackPen, dc  );
+					mLightPen, mBlackPen, dc  );
 
 	// layer 2 (upper gray)
 	DrawShadedRect( curX+1, curY+1, xSize-2-1, ySize-2-1, 
@@ -329,7 +330,7 @@ void wxTabbedWindow::DrawDecorations( wxDC& dc )
 
 	// layer 3 (upper darkGray)
 	DrawShadedRect( curX+2, curY+2, xSize-3-2, ySize-3-2, 
-					mDarkPen, mWhitePen, dc  );
+					mDarkPen, mLightPen, dc  );
 
 	// layer 4 (upper black)
 	DrawShadedRect( curX+3, curY+3, xSize-4-3, ySize-4-3, 
@@ -365,7 +366,7 @@ void wxTabbedWindow::DrawDecorations( wxDC& dc )
 			dc.DrawLine( curX+1, curY-1, curX+xSize-2, curY-1 );
 		}
 
-		dc.SetPen( mWhitePen );
+		dc.SetPen( mLightPen );
 
 		if ( tabNo == mActiveTab )
 			dc.DrawLine( curX, curY-2, curX, curY+ySize-2 );
@@ -401,7 +402,7 @@ void wxTabbedWindow::DrawDecorations( wxDC& dc )
 				     curY + ( ySize - tab.ImgHeight() ) / 2,
 					 tab.ImgWidth(),
 					 tab.ImgHeight(),
-					 &tmpDc, 0, 0, wxCOPY
+					 &tmpDc, 0, 0, wxCOPY,true
 				   );
 		}
 
@@ -487,15 +488,16 @@ void wxTabbedWindow::HideInactiveTabs( bool andRepaint )
 
 wxFont wxTabbedWindow::GetLabelingFont()
 {
+#if 0
 	wxFont font;
 #ifdef __WINDOWS__
 	font.SetFaceName("MS Sans Serif");
 #else
-	font.SetFamily( wxSWISS );
+	font.SetFamily( wxDEFAULT );
 #endif
 
-	font.SetStyle(40);
-	font.SetWeight(40);
+	font.SetStyle(wxNORMAL);
+	font.SetWeight(wxNORMAL);
 	font.SetPointSize( 8 );
 
 #ifdef __WINDOWS__
@@ -503,6 +505,8 @@ wxFont wxTabbedWindow::GetLabelingFont()
 #endif
 
 	return font;
+#endif
+	return wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT);
 }
 
 void wxTabbedWindow::RecalcLayout(bool andRepaint)
@@ -637,7 +641,7 @@ void wxTabbedWindow::OnPaint( wxPaintEvent& event )
 
 void wxTabbedWindow::OnSize ( wxSizeEvent& event )
 {
-	SetBackgroundColour( wxColour( 192,192,192 ) );
+	SetBackgroundColour( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) );
 	RecalcLayout(TRUE);
 }
 
@@ -685,7 +689,7 @@ wxPaggedWindow::wxPaggedWindow()
 	  mTabTrianGap(4),
 	  
 	  mWhiteBrush( wxColour(255,255,255), wxSOLID ),
-	  mGrayBrush ( wxColour(192,192,192), wxSOLID ),
+	  mGrayBrush ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), wxSOLID ),
 
 	  mCurentRowOfs( 0 ),
 	  mAdjustableTitleRowLen( 300 ),
@@ -707,16 +711,17 @@ wxPaggedWindow::~wxPaggedWindow()
 
 wxFont wxPaggedWindow::GetLabelingFont()
 {
+#if 0
 	wxFont font;
 
 #ifdef __WINDOWS__
 	font.SetFaceName("Arial");
 #else
-	font.SetFamily( wxSWISS );
+	font.SetFamily( wxDEFAULT );
 #endif
 
-	font.SetStyle(40);
-	font.SetWeight(40);
+	font.SetStyle(wxNORMAL);
+	font.SetWeight(wxNORMAL);
 	font.SetPointSize( 8 );
 
 #ifdef __WINDOWS__
@@ -724,6 +729,8 @@ wxFont wxPaggedWindow::GetLabelingFont()
 #endif
 
 	return font;
+#endif
+	return wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT);
 }
 
 void wxPaggedWindow::OnTabAdded( twTabInfo* pInfo )
@@ -803,7 +810,7 @@ void wxPaggedWindow::DrawPaperBar( twTabInfo& tab, int x, int y,
 				     y + ( tab.mDims.y - tab.ImgHeight() ) / 2,
 					 tab.ImgWidth(),
 					 tab.ImgHeight(),
-					 &tmpDc, 0, 0, wxCOPY
+					 &tmpDc, 0, 0, wxCOPY,true
 				   );
 	}
 
@@ -830,7 +837,7 @@ void wxPaggedWindow::DrawDecorations( wxDC& dc )
 	int ySize = height - mVertGap*2;
 
 	DrawShadedRect( curX, curY, xSize, ySize,
-		            mDarkPen, mWhitePen, dc );
+		            mDarkPen, mLightPen, dc );
 
 	DrawShadedRect( curX+1, curY+1, xSize-2, ySize-2,
 		            mBlackPen, mGrayPen, dc );
@@ -891,7 +898,7 @@ void wxPaggedWindow::DrawDecorations( wxDC& dc )
 		{
 			DrawPaperBar( tab, curX, curY, mWhiteBrush, mBlackPen, tmpDc );
 
-			tmpDc.SetPen( mWhitePen );
+			tmpDc.SetPen( mLightPen );
 
 			tmpDc.DrawLine( curX - mTabTrianGap+1, curY, 
 				            curX + tab.mDims.x + mTabTrianGap, curY );
@@ -912,7 +919,7 @@ void wxPaggedWindow::DrawDecorations( wxDC& dc )
 	curX = mTitleRowLen - 6;
 
 	DrawShadedRect( curX+0, 0+0, 6,   mTitleHeight,   mGrayPen,  mBlackPen, tmpDc );
-	DrawShadedRect( curX+1, 0+1, 6-2, mTitleHeight-2, mWhitePen, mDarkPen,  tmpDc );
+	DrawShadedRect( curX+1, 0+1, 6-2, mTitleHeight-2, mLightPen, mDarkPen,  tmpDc );
 	DrawShadedRect( curX+2, 0+2, 6-4, mTitleHeight-4, mGrayPen,  mGrayPen,  tmpDc );
 
 

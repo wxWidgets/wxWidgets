@@ -232,11 +232,11 @@ wxFrameLayout::wxFrameLayout(void)
 	: mpFrame      ( NULL ),
 	  mpFrameClient( NULL ),
 
-	  mDarkPen  ( wxColour(128,128,128), 1, wxSOLID ),
-	  mLightPen ( wxColour(255,255,255), 1, wxSOLID ),
-	  mGrayPen  ( wxColour(192,192,192), 1, wxSOLID ),
+	  mDarkPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
+	  mLightPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT), 1, wxSOLID ),
+	  mGrayPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
 	  mBlackPen ( wxColour(  0,  0,  0), 1, wxSOLID ),
-	  mBorderPen( wxColour(192,192,192), 1, wxSOLID ),
+	  mBorderPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
 
 	  mpPaneInFocus( NULL ),
 	  mpLRUPane    ( NULL ),
@@ -245,9 +245,9 @@ wxFrameLayout::wxFrameLayout(void)
 
 	  mpTopPlugin   ( NULL ),
 	  mpCaputesInput( NULL ),
-	  mRecalcPending( TRUE ),
 
 	  mCheckFocusWhenIdle( FALSE ),
+	  mRecalcPending( TRUE ),
 	  mClientWndRefreshPending( FALSE )
 {
 	CreateCursors();
@@ -264,11 +264,11 @@ wxFrameLayout::wxFrameLayout( wxWindow* pParentFrame, wxWindow* pFrameClient, bo
 	: mpFrame( pParentFrame ),
 	  mpFrameClient(pFrameClient),
 
-	  mDarkPen  ( wxColour(128,128,128), 1, wxSOLID ),
-	  mLightPen ( wxColour(255,255,255), 1, wxSOLID ),
-	  mGrayPen  ( wxColour(192,192,192), 1, wxSOLID ),
+	  mDarkPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
+	  mLightPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT), 1, wxSOLID ),
+	  mGrayPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
 	  mBlackPen ( wxColour(  0,  0,  0), 1, wxSOLID ),
-	  mBorderPen( wxColour(192,192,192), 1, wxSOLID ),
+	  mBorderPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
 
 	  mpPaneInFocus( NULL ),
 	  mpLRUPane    ( NULL ),
@@ -301,7 +301,7 @@ wxFrameLayout::wxFrameLayout( wxWindow* pParentFrame, wxWindow* pFrameClient, bo
 		// DBG:: set RED color of frame's background for the
 		//       prurpose of tracking engine bugs "visually"
 
-		GetParentFrame().SetBackgroundColour( wxColour(192,192,192) );
+		GetParentFrame().SetBackgroundColour( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) );
 	}
 
 	mFloatingOn = CanReparent();

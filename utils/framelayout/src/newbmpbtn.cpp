@@ -152,8 +152,8 @@ void greay_out_image_on_dc( wxDC& dc, int width, int height )
 	wxColour bgCol;
 	dc.GetPixel( 0, 0, &bgCol );
 
-	wxPen darkPen ( wxColour(128,128,128),1, wxSOLID );
-	wxPen lightPen( wxColour(255,255,255),1, wxSOLID );
+	wxPen darkPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW),1, wxSOLID );
+	wxPen lightPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHIGHLIGHT),1, wxSOLID );
 	wxPen bgPen   ( bgCol,                1, wxSOLID );
 
 	int* src  = create_array( width, height, MASK_BG );
@@ -249,10 +249,9 @@ wxNewBitmapButton::wxNewBitmapButton( const wxBitmap& labelBitmap,
 		mTextToLabelGap  ( textToLabelGap ),
 
 		mBlackPen( wxColour(  0,  0,  0), 1, wxSOLID ),
-		mDarkPen ( wxColour(128,128,128), 1, wxSOLID ),
-		mGrayPen ( wxColour(192,192,192),
-		           1, wxSOLID ),
-		mLightPen( wxColour(255,255,255), 1, wxSOLID ),
+		mDarkPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
+		mGrayPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
+		mLightPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHIGHLIGHT), 1, wxSOLID ),
 
 		mFiredEventType( firedEventType ),
 		mIsSticky( isSticky ),
@@ -295,10 +294,9 @@ wxNewBitmapButton::wxNewBitmapButton( const wxString& bitmapFileName,
 		mTextToLabelGap  ( 2 ),
 
 		mBlackPen( wxColour(  0,  0,  0), 1, wxSOLID ),
-		mDarkPen ( wxColour(128,128,128), 1, wxSOLID ),
-		mGrayPen ( wxColour(192,192,192),
-		           1, wxSOLID ),
-		mLightPen( wxColour(255,255,255), 1, wxSOLID ),
+		mDarkPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
+		mGrayPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
+		mLightPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHIGHLIGHT), 1, wxSOLID ),
 
 		mFiredEventType( wxEVT_COMMAND_MENU_SELECTED ),
 		mIsSticky( FALSE ),
@@ -390,7 +388,6 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 
 	wxMemoryDC srcDc;
 	srcDc.SelectObject( *srcBmp );
-	wxFont fnt( 9, wxDECORATIVE , wxNORMAL, wxNORMAL );
 
 	bool hasText = ( mTextAlignment != NB_NO_TEXT ) &&
 		           ( mLabelText.length() != 0 );
@@ -405,7 +402,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 	{
 		long txtWidth, txtHeight;
 
-		srcDc.SetFont( fnt );
+		srcDc.SetFont( wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT) );
 		srcDc.GetTextExtent( mLabelText, &txtWidth, &txtHeight );
 
 		if ( mTextAlignment == NB_ALIGN_TEXT_RIGHT )
@@ -448,8 +445,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 	wxMemoryDC destDc;
 	destDc.SelectObject( *destBmp );
 
-	// FOR NOW:: hard-coded label background
-	wxBrush grayBrush( wxColour(192,192,192), wxSOLID );
+	wxBrush grayBrush( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_3DFACE), wxSOLID );
 	wxPen   nullPen( wxColour(0,0,0), 1, wxTRANSPARENT );
 
 	destDc.SetBrush( grayBrush );
@@ -468,7 +464,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 		destDc.Blit( imgPos.x, imgPos.y, 
 					 srcBmp->GetWidth()+1,
 					 srcBmp->GetHeight()+1,
-					 &srcDc, 0,0, wxCOPY );
+					 &srcDc, 0,0, wxCOPY,TRUE );
 	}
 
 	if ( hasText )
@@ -484,11 +480,11 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 			pTopWnd = pParent;
 		} while(1);
 
-		destDc.SetFont( fnt );
+		destDc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT) );
 
-		// FOR NOW:: hard-coded text colors
-		destDc.SetTextForeground( wxColour(  0,  0,  0) );
-		destDc.SetTextBackground( wxColour(192,192,192) );
+		// Should be wxSYS_COLOUR_BTNTEXT, but gtk gives white?
+		destDc.SetTextForeground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNTEXT) );
+		destDc.SetTextBackground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE) );
 
 		destDc.DrawText( mLabelText, txtPos.x, txtPos.y );
 	}

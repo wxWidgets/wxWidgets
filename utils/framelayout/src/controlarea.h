@@ -67,8 +67,9 @@ public:
 	// public properties (invoke ReclaclLayout(TRUE) to apply changes)
 
 	wxPen  mWhitePen;        // default: RGB(255,255,255)
-	wxPen  mGrayPen;         // default: RGB(192,192,192)
-	wxPen  mDarkPen;         // default: RGB(128,128,128)
+	wxPen  mLightPen;		 // wxSYS_COLOUR_3DHIGHLIGHT
+	wxPen  mGrayPen;         // wxSYS_COLOUR_3DFACE
+	wxPen  mDarkPen;         // wxSYS_COLOUR_3DSHADOW
 	wxPen  mBlackPen;        // default: RGB(  0,  0,  0)
 
 	int    mVertGap;         // default: 3
