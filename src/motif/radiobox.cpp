@@ -115,8 +115,10 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     XtSetArg (args[0], XmNorientation, ((style & wxHORIZONTAL) == wxHORIZONTAL ?
                                           XmHORIZONTAL : XmVERTICAL));
     XtSetArg (args[1], XmNnumColumns, m_majorDim);
+    XtSetArg (args[2], XmNadjustLast, False);
 
-    Widget radioBoxWidget = XmCreateRadioBox ((Widget)m_mainWidget, "radioBoxWidget", args, 2);
+    Widget radioBoxWidget =
+        XmCreateRadioBox ((Widget)m_mainWidget, "radioBoxWidget", args, 3);
 
     m_radioButtons.reserve(n);
     m_radioButtonLabels.reserve(n);
