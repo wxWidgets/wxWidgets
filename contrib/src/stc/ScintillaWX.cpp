@@ -405,6 +405,11 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
 
 // This is called by the Editor base class whenever something is selected
 void ScintillaWX::ClaimSelection() {
+#if 0
+    // Until wxGTK is able to support using both the primary selection and the
+    // clipboard at the same time I think it causes more problems than it is
+    // worth to implement this method.  Selecting text should not clear the
+    // clipboard.  --Robin
 #ifdef __WXGTK__
     // Put the selected text in the PRIMARY selection
     if (currentPos != anchor) {
@@ -418,6 +423,7 @@ void ScintillaWX::ClaimSelection() {
             wxTheClipboard->Close();
         }
     }
+#endif
 #endif
 }
 
