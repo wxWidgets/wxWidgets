@@ -722,8 +722,8 @@
 //
 // Default is 1.
 //
-// Recommended setting: 0 for Mac OS as drag and drop is not yet implemented
-#define wxUSE_DRAG_AND_DROP 0
+// Recommended setting: 1
+#define wxUSE_DRAG_AND_DROP 1
 
 // ----------------------------------------------------------------------------
 // miscellaneous settings
@@ -929,11 +929,11 @@
 #endif
 
 // Set this to 1 to enable support for the owner-drawn menu and listboxes. This
-// is required by wxUSE_CHECKLISTBOX.
+// is not required on mac by wxUSE_CHECKLISTBOX.
 //
 // Default is 1.
 //
-// Recommended setting: 1, set to 0 for a small library size reduction
+// Recommended setting: O as not implemented on mac
 #define wxUSE_OWNER_DRAWN 0
 
 // ----------------------------------------------------------------------------
@@ -1001,13 +1001,6 @@
 #define wxUSE_ODBC 0
 #endif
 
-#if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
-// Can't use OLE drag and drop in Windows 3.1 because we don't know how
-// to implement UUIDs
-// GnuWin32 doesn't have appropriate headers for e.g. IUnknown.
-#undef wxUSE_DRAG_AND_DROP
-#define wxUSE_DRAG_AND_DROP 0
-#endif
 
 // Only WIN32 supports wxStatusBar95
 #if !defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
@@ -1015,10 +1008,12 @@
 #define wxUSE_NATIVE_STATUSBAR 0
 #endif
 
+/* NOT TRUE ON MAC 
 #if !wxUSE_OWNER_DRAWN
 #undef wxUSE_CHECKLISTBOX
 #define wxUSE_CHECKLISTBOX 0
 #endif
+*/
 
 // Salford C++ doesn't like some of the memory operator definitions
 #ifdef __SALFORDC__
