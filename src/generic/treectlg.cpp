@@ -2993,7 +2993,7 @@ void wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
     wxSize client = GetClientSize();
 
     wxRect rect;
-    CalcScrolledPosition(0, item->GetY(), &rect.x, &rect.y);
+    CalcScrolledPosition(0, item->GetY(), NULL, &rect.y);
     rect.width = client.x;
     rect.height = client.y;
 
@@ -3007,7 +3007,7 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
     if (m_dirty) return;
 
     wxRect rect;
-    CalcScrolledPosition(0, item->GetY(), &rect.x, &rect.y);
+    CalcScrolledPosition(0, item->GetY(), NULL, &rect.y);
     rect.width = GetClientSize().x;
     rect.height = GetLineHeight(item); //dc.GetCharHeight() + 6;
 
