@@ -344,6 +344,9 @@ void EditorFrame::NewFile()
     m_Resource->SetRoot(new wxXmlNode(wxXML_ELEMENT_NODE, _("resource")));
 	
 	m_Resource->SetFileEncoding("utf-8");
+#if !wxUSE_UNICODE
+    m_Resource->SetEncoding(wxLocale::GetSystemEncodingName());
+#endif
     
 	m_Resource->GetRoot()->AddProperty(_T("version"),
                                        WX_XMLRES_CURRENT_VERSION_STRING);
