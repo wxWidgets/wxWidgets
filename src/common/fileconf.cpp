@@ -663,7 +663,7 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
     }
     else {                        // a key
       const wxChar *pEnd = pStart;
-      while ( *pEnd && *pEnd != wxT('=') && !wxIsspace(*pEnd) ) {
+      while ( *pEnd && *pEnd != wxT('=') /* && !wxIsspace(*pEnd)*/ ) {
         if ( *pEnd == wxT('\\') ) {
           // next character may be space or not - still take it because it's
           // quoted (unless there is nothing)
