@@ -1244,6 +1244,24 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     return wxTextCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
+void wxTextCtrl::SetFocus()
+{
+    wxTextCtrlBase::SetFocus();
+
+    // to be consistent with the standard Windows behaviour we select all text
+    // in the single line edit controls when the user TABs to them and also, to
+    // be consistent with this behaviour in turn, do it whenever SetFocus() is
+    // called as well
+    if ( !HasFlag(wxTE_MULTILINE) )
+    {
+        SetSelection(-1, -1);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// text control event processing
+// ----------------------------------------------------------------------------
+
 bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
     switch (param)
