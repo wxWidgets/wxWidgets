@@ -102,14 +102,20 @@
         #define WX_TIMEZONE _timezone
     #elif defined(__MWERKS__)
         long wxmw_timezone = 28800;
-        #define WX_TIMEZONE wxmw_timezone;
+        #define WX_TIMEZONE wxmw_timezone
     #elif defined(__DJGPP__)
         #include <sys/timeb.h>
+        #include <values.h>
         static long wxGetTimeZone()
         {
-            struct timeb tb;
-            ftime(&tb);
-            return tb.timezone;
+            static long timezone = MAXLONG; // invalid timezone
+            if (timezone == MAXLONG)
+            {
+                struct timeb tb;
+                ftime(&tb);
+                timezone = tb.timezone;
+            }
+            return timezone;
         }
         #define WX_TIMEZONE wxGetTimeZone()
     #else // unknown platform - try timezone
