@@ -213,7 +213,7 @@ The wxWindows Web site is located at:
 
 The main wxWindows ftp site is at:
 
-  ftp://www.remstar.com/pub/wxwin
+  ftp://biolpc22.york.ac.uk/pub
 
 A wxWindows CD-ROM with the latest distribution plus an HTML
 front-end and hundreds of MB of compilers, utilities and other

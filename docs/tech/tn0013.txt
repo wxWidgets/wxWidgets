@@ -100,7 +100,7 @@ All 11 files should be uploaded (via FTP) to several locations.
 a) incoming.sourceforge.net, go to project admin page on sf.net and choose
    add/edit releases for more details
 
-b) ftp.remstar.com (Julian has the password)
+b) ftp://biolpc22.york.ac.uk/pub (Julian has the password)
 
 5. Announcing the release
 -------------------------
