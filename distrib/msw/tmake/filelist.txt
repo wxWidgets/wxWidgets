@@ -61,7 +61,7 @@ dcpsg.cpp	G	U
 dirdlgg.cpp	G	16
 fontdlgg.cpp	G	G,R
 filedlgg.cpp	G	U,X
-gridg.cpp	G
+grid.cpp	G
 helphtml.cpp	G	G
 helpwxht.cpp	G	G
 helpxlp.cpp	G	G,R
@@ -849,7 +849,7 @@ dcpsg.h	N
 dirdlgg.h	N
 fontdlgg.h	N
 filedlgg.h	N
-gridg.h	N
+grid.h	N
 helpext.h	N
 helpwxht.h	N
 helphtml.h	N

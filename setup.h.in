@@ -212,6 +212,11 @@
 /*
  * Use this control
  */
+#define wxUSE_NEW_GRID 0
+/*
+ * Use the new prototype wxGrid classes
+ * (wxUSE_GRID must also be defined)
+ */
 #define wxUSE_IMAGLIST 0
 /*
  * Use this control

@@ -484,7 +484,7 @@ DEPFILES = $(@GUIDEPS@) $(@COMMONDEPS@) $(@GENERICDEPS@) $(UNIXDEPS) $(HTMLDEPS)
 HEADERS = $(@GUIHEADERS@) $(HTML_HEADERS) $(UNIX_HEADERS) $(PROTOCOL_HEADERS) \
 	  $(GENERIC_HEADERS) $(WX_HEADERS)
 
-all: @WX_CREATE_LINKS@
+all: $(OBJECTS) @WX_TARGET_LIBRARY@ @WX_CREATE_LINKS@
 
 @WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
 	@$(INSTALL) -d ./lib
@@ -495,7 +495,7 @@ all: @WX_CREATE_LINKS@
 	@$(INSTALL) -d ./lib
 	$(SHARED_LD) ./lib/$@ $(OBJECTS) $(EXTRALIBS)
 	
-CREATE_LINKS: @WX_TARGET_LIBRARY@
+CREATE_LINKS@: @WX_TARGET_LIBRARY@
 	@$(RM) ./lib/@WX_LIBRARY_LINK1@
 	@$(RM) ./lib/@WX_LIBRARY_LINK2@
 	@$(RM) ./lib/@WX_LIBRARY_LINK3@
@@ -852,6 +852,10 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/minimal/Makefile.in $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/*.cpp $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/*.xpm $(DISTDIR)/samples/minimal
+	mkdir $(DISTDIR)/samples/newgrid
+	cp $(SAMPDIR)/newgrid/Makefile.in $(DISTDIR)/samples/newgrid
+	cp $(SAMPDIR)/newgrid/*.cpp $(DISTDIR)/samples/newgrid
+	cp $(SAMPDIR)/newgrid/*.h $(DISTDIR)/samples/newgrid
 	mkdir $(DISTDIR)/samples/notebook
 	cp $(SAMPDIR)/notebook/Makefile.in $(DISTDIR)/samples/notebook
 	cp $(SAMPDIR)/notebook/*.cpp $(DISTDIR)/samples/notebook

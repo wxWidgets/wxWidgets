@@ -723,6 +723,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
+  DEFAULT_wxUSE_NEW_GRID=no
   DEFAULT_wxUSE_IMAGLIST=no
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
@@ -834,6 +835,7 @@ else
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
+  DEFAULT_wxUSE_NEW_GRID=yes
   DEFAULT_wxUSE_IMAGLIST=yes
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
@@ -936,6 +938,7 @@ if test "$wxUSE_GUI" = "no"; then
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
+  DEFAULT_wxUSE_NEW_GRID=no
   DEFAULT_wxUSE_IMAGLIST=no
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
@@ -1099,6 +1102,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
+  DEFAULT_wxUSE_NEW_GRID=yes
   DEFAULT_wxUSE_IMAGLIST=yes
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
@@ -1128,6 +1132,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
+  DEFAULT_wxUSE_NEW_GRID=no
   DEFAULT_wxUSE_IMAGLIST=no
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
@@ -1158,6 +1163,7 @@ WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE
 WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox classes], wxUSE_COMBOBOX)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_ENABLE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
+WX_ARG_ENABLE(newgrid,     [  --enable-newgrid        use new wxGrid class], wxUSE_NEW_GRID)
 WX_ARG_ENABLE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
 WX_ARG_ENABLE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
 WX_ARG_ENABLE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
@@ -2592,6 +2598,11 @@ if test "$wxUSE_GRID" = "yes"; then
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS grid"
 fi
 
+if test "$wxUSE_NEW_GRID" = "yes"; then
+  AC_DEFINE(wxUSE_NEW_GRID)
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS newgrid"
+fi
+
 if test "$wxUSE_IMAGLIST" = "yes"; then
     AC_DEFINE(wxUSE_IMAGLIST)
 fi
@@ -2924,6 +2935,7 @@ AC_OUTPUT([
             samples/mdi/Makefile
             samples/minifram/Makefile
             samples/minimal/Makefile
+            samples/newgrid/Makefile
             samples/notebook/Makefile
             samples/printing/Makefile
             samples/proplist/Makefile

@@ -103,6 +103,11 @@
 
 #define wxUSE_CARET        1
                                 // Define 1 to use wxCaret class
+
+#define wxUSE_NEW_GRID     1
+                                // Define 1 to use the new wxGrid class
+                                // (still under development, define 0 to
+                                //  use existing wxGrid class)
 #define wxUSE_XPM_IN_MSW   1
                                 // Define 1 to support the XPM package in wxBitmap.
 #define wxUSE_IMAGE_LOADING_IN_MSW        1
