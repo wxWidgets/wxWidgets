@@ -415,7 +415,7 @@ MyFrame::MyFrame(const wxString& title)
     //
     //  The fourth is an optional userdata param -
     //  this is of historical relevance only and is
-    //  there only for backwards compatability.
+    //  there only for backwards compatibility.
     //
     //  The fifth is the context in which to call the
     //  handler - by default (this param is optional)

@@ -577,7 +577,7 @@ wxImageList* wxTreeCtrl::GetStateImageList () const
 // The SETS of imagelists really do nothing under OS2 as a RECORDCORE
 // struct has the icon imbedded in it that it uses for the icon being
 // displayed via the TREEITEMDESC member.  Provided for interface
-// compatability only
+// compatibility only
 //
 void wxTreeCtrl::SetAnyImageList (
   wxImageList*                      WXUNUSED(pImageList)
