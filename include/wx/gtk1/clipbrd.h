@@ -57,11 +57,17 @@ public:
   /* close the clipboard after SetData() and GetData() */
   virtual void Close();
   
-  /* set the clipboard data. the clipboard will delete the broker later */
-  virtual bool SetData( wxDataBroker *data );
+  /* set the clipboard data. all other formats will be deleted. */
+  virtual bool SetData( wxDataObject *data );
 
+  /* add to the clipboard data. */
+  virtual bool AddData( wxDataObject *data );
+  
+  /* ask if data in correct format is available */
+  virtual bool IsSupported( wxDataObject &data );
+  
   /* fill data with data on the clipboard (if available) */
-  virtual bool GetData( wxDataObject *data );
+  virtual bool GetData( wxDataObject &data );
   
   /* clears wxTheClipboard and the system's clipboard if possible */
   virtual void Clear();

@@ -124,7 +124,6 @@ wxBrush    wxNullBrush;
 wxFont     wxNullFont;
 wxColour   wxNullColour;
 wxPalette  wxNullPalette; 
-wxRegion   wxNullRegion; 
 
 /* Default window names */
 const char *wxButtonNameStr = "button";

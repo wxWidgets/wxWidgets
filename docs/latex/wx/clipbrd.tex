@@ -6,7 +6,7 @@ clipboard class from wxWindows 1.xx, which has the same name but a different imp
 To use the clipboard, you call member functions of the global {\bf wxTheClipboard} object.
 
 Call \helpref{wxClipboard::Open}{wxclipboardopen} to get ownership of the clipboard. If this operation returns TRUE, you
-now own the clipboard. Call \helpref{wxClipboard::SetData}{wxclipboardsetdata} to put data
+now own the clipboard. Call \helpref{wxClipboard::AddData}{wxclipboardadddata} to put data
 on the clipboard (one or more times), or \helpref{wxClipboard::GetData}{wxclipboardgetdata} to
 retrieve data from the clipboard. Call \helpref{wxClipboard::Close}{wxclipboardclose} to close
 the clipboard and relinquish ownership. You should keep the clipboard open only momentarily.
@@ -17,20 +17,22 @@ For example:
   // Write some text to the clipboard
   if (wxTheClipboard->Open())
   {
-    // This object is held by the clipboard, so do not delete it in the app.
-    wxTextDataObject* object = new wxTextDataObject("Some text");
-    wxTheClipboard->SetData(& object);
+    // This data objects are held by the clipboard, 
+    // so do not delete them in the app.
+    wxTheClipboard->AddData( new wxTextDataObject("Some text") );
     wxTheClipboard->Close();
   }
 
   // Read some text
-  if (wxTheClipboard->Open() && wxTheClipboard->IsSupportedFormat(wxDF_TEXT))
+  if (wxTheClipboard->Open())
   {
-    wxTextDataObject object;
-    wxTheClipboard->GetData(& object);
+    wxTextDataObject data;
+    if (wxTheClipboard->IsSupported(data))
+    {
+      wxTheClipboard->GetData(data);
+      wxMessageBox(data.GetText());
+    }  
     wxTheClipboard->Close();
-
-    wxMessageBox(object.GetText());
   }
 \end{verbatim}
 
@@ -56,6 +58,13 @@ Constructor.
 
 Destructor.
 
+\membersection{wxClipboard::AddData}\label{wxclipboardadddata}
+
+\func{bool}{AddData}{\param{wxDataObject*}{ data}}
+
+Call this function to add a data object to the clipboard. This function can be called several times
+to put different formats on the clipboard.
+
 \membersection{wxClipboard::Clear}\label{wxclipboardclear}
 
 \func{void}{Clear}{\void}
@@ -66,26 +75,20 @@ Clears the global clipboard object and the system's clipboard if possible.
 
 \func{bool}{Close}{\void}
 
-Call this function to close the clipboard, having opened it with \helpref{wxClipboard::Close}{wxclipboardclose}.
+Call this function to close the clipboard, having opened it with \helpref{wxClipboard::Open}{wxclipboardopen}.
 
 \membersection{wxClipboard::GetData}\label{wxclipboardgetdata}
 
-\func{bool}{GetData}{\param{wxDataObject*}{ data}}
+\func{bool}{GetData}{\param{wxDataObject&}{ data}}
 
 Call this function to fill {\it data} with data on the clipboard, if available in the required
-format.
+format. Returns TRUE on success.
 
-\membersection{wxClipboard::IsSupportedFormat}\label{wxclipboardissupportedformat}
+\membersection{wxClipboard::IsSupported}\label{wxclipboardissupported}
 
-\func{bool}{IsSupportedFormat}{\param{wxDataFormat}{ format}, \param{const wxString\&}{ id = ""}}
+\func{bool}{IsSupported}{\param{wxDataObject&}{ data}}
 
-Returns TRUE if the given format is available on the clipboard.
-
-\wxheading{Parameters}
-
-\docparam{format}{The format. See \helpref{wxDataObject}{wxdataobject} for a list of formats.}
-
-\docparam{id}{ If {\it format} is wxDF\_PRIVATE, {\it id} is the identifier of the private data format.}
+Returns TRUE if the format of the given data object is available on the clipboard.
 
 \membersection{wxClipboard::Open}\label{wxclipboardopen}
 
@@ -97,10 +100,13 @@ and \helpref{wxClipboard::GetData}{wxclipboardgetdata}.
 Call \helpref{wxClipboard::Close}{wxclipboardclose} when you have finished with the clipboard. You
 should keep the clipboard open for only a very short time.
 
-\membersection{wxClipboard::SetData}\label{wxclipboardsetdata}
+Returns TRUE on success. This should be tested (as in the sample shown above).
+
+\membersection{wxClipboard::SetData}\label{wxclipboardadddata}
 
 \func{bool}{SetData}{\param{wxDataObject*}{ data}}
 
-Call this function to set a data object to the clipboard. This function can be called several times
-to put different formats on the clipboard.
+Call this function to set the data object to the clipboard. This function will
+clear all previous contents in the clipboard, so calling it several times
+does not make any sense.
 

@@ -482,7 +482,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 //  panel->SetForegroundColour("blue");
   m_radio = new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), 2, choices2, 1, wxRA_SPECIFY_ROWS );
 //  m_radio->SetBackgroundColour("wheat");
-  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices, 1, wxRA_SPECIFY_COLS );
+  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices, 2, wxRA_SPECIFY_COLS );
 //  m_radio->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(180,80), wxSize(140,30) );
@@ -547,23 +547,30 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
      *m_text << "Successfully opened the clipboard." << "\n";
   }
 
-  wxTextDataObject *data = new wxTextDataObject();
+  wxTextDataObject data;
 
-  if (wxTheClipboard->GetData( data ))
+  if (wxTheClipboard->IsSupported( data ))
   {
-     *m_text << "Successfully retrieved data from the clipboard." << "\n";
-     *m_multitext << data->GetText() << "\n";
+     *m_text << "Clipboard supports requested format." << "\n";
+     
+     if (wxTheClipboard->GetData( data ))
+     {
+         *m_text << "Successfully retrieved data from the clipboard." << "\n";
+         *m_multitext << data.GetText() << "\n";
+     }
+     else
+     {
+        *m_text << "Error getting data from the clipboard." << "\n";
+     }
   }
   else
   {
-     *m_text << "Error getting data from the clipboard." << "\n";
+     *m_text << "Clipboard doesn't support requested format." << "\n";
   }
 
   wxTheClipboard->Close();
 
   *m_text << "Closed the clipboard." << "\n";
-
-  delete data;
 
 #endif
 }
@@ -588,10 +595,8 @@ void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
   }
 
   wxTextDataObject *data = new wxTextDataObject( text );
-  wxDataBroker *broker = new wxDataBroker();
-  broker->Add( data );
 
-  if (!wxTheClipboard->SetData( broker ))
+  if (!wxTheClipboard->SetData( data ))
   {
      *m_text << "Error while copying to the clipboard." << "\n";
   }
