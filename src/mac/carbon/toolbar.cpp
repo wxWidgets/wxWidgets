@@ -35,17 +35,19 @@ END_EVENT_TABLE()
 #include "wx/geometry.h"
 
 #ifdef __WXMAC_OSX__
-const short kwxMacToolBarToolDefaultWidth = 32 ;
-const short kwxMacToolBarToolDefaultHeight = 32 ;
+const short kwxMacToolBarToolDefaultWidth = 24 ;
+const short kwxMacToolBarToolDefaultHeight = 24 ;
 const short kwxMacToolBarTopMargin = 4 ;
 const short kwxMacToolBarLeftMargin = 4 ;
 const short kwxMacToolBorder = 0 ;
+const short kwxMacToolSpacing = 6 ;
 #else
 const short kwxMacToolBarToolDefaultWidth = 24 ;
 const short kwxMacToolBarToolDefaultHeight = 22 ;
 const short kwxMacToolBarTopMargin = 2 ;
 const short kwxMacToolBarLeftMargin = 2 ;
 const short kwxMacToolBorder = 4 ;
+const short kwxMacToolSpacing = 0 ;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -95,6 +97,7 @@ public:
         }
         else
         {
+            // separator size
             wxSize sz = GetToolBar()->GetToolSize() ;
             sz.x /= 4 ;
             sz.y /= 4 ;
@@ -220,9 +223,9 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
 #ifdef __WXMAC_OSX__
         wxSize toolSize = m_tbar->GetToolSize() ;    
         int iconsize = 16 ;
-        if ( toolSize.x >= 32 && toolSize.y >= 32)
+        if ( toolSize.x >= 24 && toolSize.y >= 24)
         {
-            iconsize = 32 ;
+            iconsize = 24 ;
         }
         mac_x += ( toolSize.x - iconsize ) / 2 ;
         mac_y += ( toolSize.y - iconsize ) / 2  ;
@@ -247,6 +250,26 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
     {
         GetControl()->Move( position ) ;
     }
+    else
+    {
+        // separator 
+#ifdef __WXMAC_OSX__
+        int x , y ;
+        x = y = 0 ;
+        int mac_x = position.x ;
+        int mac_y = position.y ;
+
+        Rect contrlRect ;       
+        GetControlBounds( m_controlHandle , &contrlRect ) ; 
+        int former_mac_x = contrlRect.left ;
+        int former_mac_y = contrlRect.top ;
+        
+        if ( mac_x != former_mac_x || mac_y != former_mac_y )
+        {
+            UMAMoveControl( m_controlHandle , mac_x , mac_y ) ;
+        }
+#endif
+    }
 }
 
 wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
@@ -263,54 +286,76 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
 {
     Init();
     
-    if (id == wxID_SEPARATOR) return;
-    
     WindowRef window = (WindowRef) tbar->MacGetTopLevelWindowRef() ;    
     wxSize toolSize = tbar->GetToolSize() ;    
     Rect toolrect = { 0, 0 , toolSize.y , toolSize.x } ;
-    
-    ControlButtonContentInfo info ;
-    wxMacCreateBitmapButton( &info , GetNormalBitmap() ) ;
-    
-    SInt16 behaviour = kControlBehaviorOffsetContents ;
-    if ( CanBeToggled() )
-        behaviour += kControlBehaviorToggles ;
-
-#ifdef __WXMAC_OSX__
-    int iconsize = 16 ;
-    if ( toolSize.x >= 32 && toolSize.y >= 32)
+ 
+    if ( id == wxID_SEPARATOR )
     {
-        iconsize = 32 ;
-    }
-    toolrect.left += ( toolSize.x - iconsize ) / 2 ;
-    toolrect.right = toolrect.left + iconsize ;
-    toolrect.top += ( toolSize.y - iconsize ) / 2  ;
-    toolrect.bottom = toolrect.top + iconsize ;
-    CreateIconControl( window , &toolrect , &info , false , &m_controlHandle ) ;
-#else        
-    CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
-        0 , 0 , 0 , &m_controlHandle ) ;
+        toolSize.x /= 4 ;
+        toolSize.y /= 4 ;
+        if ( GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL )
+        {
+            toolrect.bottom = toolSize.y ;
+        }
+        else
+        {
+            toolrect.right = toolSize.x ;
+        }
+#ifdef __WXMAC_OSX__
+        // in flat style we need a visual separator
+        CreateSeparatorControl( window , &toolrect , &m_controlHandle ) ;
 #endif
-        
-    wxMacReleaseBitmapButton( &info ) ;
-    /*
-    SetBevelButtonTextPlacement( m_controlHandle , kControlBevelButtonPlaceBelowGraphic ) ;
-    UMASetControlTitle(  m_controlHandle , label , wxFont::GetDefaultEncoding() ) ;
-    */
-    
-    InstallControlEventHandler( (ControlRef) m_controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
-        GetEventTypeCount(eventList), eventList, this,NULL);
-        
-    UMAShowControl( m_controlHandle ) ;
-
-    if ( CanBeToggled() && IsToggled() )
-        ::SetControl32BitValue( m_controlHandle , 1 ) ;
+    }
     else
-        ::SetControl32BitValue( m_controlHandle , 0 ) ;
-    
+    {
+        ControlButtonContentInfo info ;
+        wxMacCreateBitmapButton( &info , GetNormalBitmap() ) ;
+        
+#ifdef __WXMAC_OSX__
+        int iconsize = 16 ;
+        if ( toolSize.x >= 24 && toolSize.y >= 24)
+        {
+            iconsize = 24 ;
+        }
+        toolrect.left += ( toolSize.x - iconsize ) / 2 ;
+        toolrect.right = toolrect.left + iconsize ;
+        toolrect.top += ( toolSize.y - iconsize ) / 2  ;
+        toolrect.bottom = toolrect.top + iconsize ;
+        CreateIconControl( window , &toolrect , &info , false , &m_controlHandle ) ;
+#else        
+        SInt16 behaviour = kControlBehaviorOffsetContents ;
+        if ( CanBeToggled() )
+            behaviour += kControlBehaviorToggles ;
+        CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
+            0 , 0 , 0 , &m_controlHandle ) ;
+#endif
+            
+        wxMacReleaseBitmapButton( &info ) ;
+        /*
+        SetBevelButtonTextPlacement( m_controlHandle , kControlBevelButtonPlaceBelowGraphic ) ;
+        UMASetControlTitle(  m_controlHandle , label , wxFont::GetDefaultEncoding() ) ;
+        */
+        
+        InstallControlEventHandler( (ControlRef) m_controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
+            GetEventTypeCount(eventList), eventList, this,NULL);          
+
+        if ( CanBeToggled() && IsToggled() )
+        {
+#ifdef __WXMAC_OSX__
+            // overlay with rounded white rect and set selected to 1
+#else
+            ::SetControl32BitValue( m_controlHandle , 1 ) ;
+#endif
+        }
+    }
     ControlRef container = (ControlRef) tbar->GetHandle() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
-    ::EmbedControl( m_controlHandle , container ) ;
+    if ( m_controlHandle )
+    {
+        UMAShowControl( m_controlHandle ) ;
+        ::EmbedControl( m_controlHandle , container ) ;
+    }
 }
 
 
@@ -425,10 +470,12 @@ bool wxToolBar::Realize()
         if ( GetWindowStyleFlag() & wxTB_VERTICAL )
         {
             y += cursize.y ;
+            y += kwxMacToolSpacing ;
         }
         else
         {
             x += cursize.x ;
+            x += kwxMacToolSpacing ;
         }
 
         node = node->GetNext();
