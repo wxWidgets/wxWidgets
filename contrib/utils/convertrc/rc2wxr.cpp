@@ -124,7 +124,7 @@ tok=PeekToken();
 if (!tok.IsNumber())
     return;
 //Generate Dialog text
-fprintf(m_wxr,"static char *dialog%i = \"dialog(name = '%s',\\\n",dlgid,dlgname.mb_str());
+fprintf(m_wxr,"static char *dialog%i = \"dialog(name = '%s',\\\n",dlgid,dlgname);
 //be lazy about style for now. add it later
 fprintf(m_wxr,"style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\\\n");
 
@@ -146,7 +146,7 @@ while ((tok!="BEGIN")&(tok!="{"))
 if (tok=="CAPTION")
 {
 title=GetQuoteField();
-fprintf(m_wxr,"title = '%s',\\\n",title.mb_str());
+fprintf(m_wxr,"title = '%s',\\\n",title);
 }
 tok=GetToken();
 }
@@ -205,7 +205,7 @@ varname=GetToken();
 m_controlid++;
 int x,y,width,height;
 ReadRect(x,y,width,height);
-fprintf(m_wxr,"  control = [%i,wxStaticText,'%s','0','%s',",m_controlid,phrase.mb_str(),varname.mb_str());
+fprintf(m_wxr,"  control = [%i,wxStaticText,'%s','0','%s',",m_controlid,phrase,varname);
 fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
 fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
 }
@@ -218,7 +218,7 @@ varname=GetToken();
 m_controlid++;
 int x,y,width,height;
 ReadRect(x,y,width,height);
-fprintf(m_wxr,"  control = [%i,wxTextCtrl,'','0','%s',",m_controlid,varname.mb_str());
+fprintf(m_wxr,"  control = [%i,wxTextCtrl,'','0','%s',",m_controlid,varname);
 fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
 fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
 
@@ -244,7 +244,7 @@ c=wxID_APPLY;
 
 int x,y,width,height;
 ReadRect(x,y,width,height);
-fprintf(m_wxr,"  control = [%i,wxButton,'%s','0','%s',",c,phrase.mb_str(),varname.mb_str());
+fprintf(m_wxr,"  control = [%i,wxButton,'%s','0','%s',",c,phrase,varname);
 fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
 fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
 
@@ -274,7 +274,7 @@ varname=GetToken();
 m_controlid++;
 int x,y,width,height;
 ReadRect(x,y,width,height);
-fprintf(m_wxr,"  control = [%i,wxStaticBox,'%s','0','%s',",m_controlid,phrase.mb_str(),varname.mb_str());
+fprintf(m_wxr,"  control = [%i,wxStaticBox,'%s','0','%s',",m_controlid,phrase,varname);
 fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
 fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
 
@@ -384,7 +384,7 @@ m_controlid++;
 int x,y,width,height;
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"  control = [%i,wxChoice,'','0','%s',",m_controlid,varname.mb_str());
+fprintf(m_wxr,"  control = [%i,wxChoice,'','0','%s',",m_controlid,varname);
 fprintf(m_wxr,"%i,%i,%i,%i,[],\\\n",x,y,width,height);
 fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
 
@@ -396,7 +396,7 @@ void rc2wxr::ParseMenu(wxString name)
 wxString tok="";
 static int menuid=0;
 menuid++;
-fprintf(m_wxr,"static char *MenuBar%i = \"menu(name = '%s',\\\n",menuid,name.mb_str());  
+fprintf(m_wxr,"static char *MenuBar%i = \"menu(name = '%s',\\\n",menuid,name);  
 fprintf(m_wxr,"menu = \\\n");
 fprintf(m_wxr,"[\\\n");
 
@@ -427,7 +427,7 @@ int spot;
 //Remove /t because it causes problems
 spot=tok.First("\\t");
 tok=tok.Left(spot);
-fprintf(m_wxr,"  ['%s',%i,'',\\\n",tok.mb_str(),menuitem);
+fprintf(m_wxr,"  ['%s',%i,'',\\\n",tok,menuitem);
 while ((tok!="BEGIN")&(tok!="{"))
    tok=GetToken();
 
@@ -445,7 +445,7 @@ tok=GetQuoteField();
 spot=tok.First("\\t");
 tok=tok.Left(spot);
 menuitem++;
-fprintf(m_wxr,"      ['%s',%i,''],\\\n",tok.mb_str(),menuitem);
+fprintf(m_wxr,"      ['%s',%i,''],\\\n",tok,menuitem);
 }
 }
 
@@ -489,7 +489,7 @@ void rc2wxr::ParseSlider(wxString label, wxString varname)
 {
 wxString tok;
 while (ReadOrs(tok));
-fprintf(m_wxr,"  control = [%i,wxSlider,'','wxSL_HORIZONTAL','%s',",m_controlid,varname.mb_str());  
+fprintf(m_wxr,"  control = [%i,wxSlider,'','wxSL_HORIZONTAL','%s',",m_controlid,varname);  
 int x,y,width,height;
 ReadRect(x,y,width,height);
 fprintf(m_wxr,"%i,%i,%i,%i,",x,y,width,height);
@@ -504,7 +504,7 @@ void rc2wxr::ParseProgressBar(wxString label, wxString varname)
 {
 wxString tok;
 while (ReadOrs(tok));
-fprintf(m_wxr,"  control = [%i,wxGauge,'','wxGA_HORIZONTAL','%s',",m_controlid,varname.mb_str());  
+fprintf(m_wxr,"  control = [%i,wxGauge,'','wxGA_HORIZONTAL','%s',",m_controlid,varname);  
 int x,y,width,height;
 ReadRect(x,y,width,height);
 fprintf(m_wxr,"%i,%i,%i,%i,",x,y,width,height);
@@ -533,7 +533,7 @@ int x,y,width,height;
 
 if (tok=="BS_AUTOCHECKBOX")
 {
-    fprintf(m_wxr,"  control = [%i,wxCheckBox,'%s','0','%s',",m_controlid,label.mb_str(),varname.mb_str());    
+    fprintf(m_wxr,"  control = [%i,wxCheckBox,'%s','0','%s',",m_controlid,label,varname);    
     while (ReadOrs(tok));	
     ReadRect(x,y,width,height);
     fprintf(m_wxr,"%i,%i,%i,%i,0,\\\n",x,y,width,height);
@@ -542,7 +542,7 @@ if (tok=="BS_AUTOCHECKBOX")
 
 if (tok=="BS_AUTORADIOBUTTON")
 {
-    fprintf(m_wxr,"  control = [%i,wxRadioButton,'%s','0','%s',",m_controlid,label.mb_str(),varname.mb_str());    
+    fprintf(m_wxr,"  control = [%i,wxRadioButton,'%s','0','%s',",m_controlid,label,varname);    
     while(ReadOrs(tok));	
     ReadRect(x,y,width,height);
     fprintf(m_wxr,"%i,%i,%i,%i,0,\\\n",x,y,width,height);

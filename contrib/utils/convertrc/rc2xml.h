@@ -13,6 +13,8 @@
 class rc2xml : public wxObject  
 {
 public:
+    wxString m_workingpath;
+    wxString m_targetpath;
     void WriteIcon(wxString iconname);
     void ParseNormalMSControl();
     bool Convert(wxString rcfile, wxString xmlfile);
