@@ -465,6 +465,15 @@ void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y)
 }
 
 
+wxColour wxHtmlContainerCell::GetBackgroundColour()
+{
+    if (m_UseBkColour)
+        return m_BkColour;
+    else
+        return wxNullColour;
+}
+
+
 
 wxHtmlLinkInfo *wxHtmlContainerCell::GetLink(int x, int y) const
 {
