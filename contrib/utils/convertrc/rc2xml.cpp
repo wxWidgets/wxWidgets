@@ -796,8 +796,8 @@ void rc2xml::WriteLabel(wxString label)
 {
     label.Replace(_T("&"),_T("$"));
     // changes by MS, handle '<' '>' characters within a label.
-    label.Replace("<","&lt;");
-    label.Replace(">","&gt;");
+    label.Replace(_T("<"),_T("&lt;"));
+    label.Replace(_T(">"),_T("&gt;"));
     m_xmlfile.Write(_T("\t\t\t<label>")+label+_T("</label>\n"));
 }
 
