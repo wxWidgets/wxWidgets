@@ -39,6 +39,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
    {
       source type(cpp) "COMMON\\APPCMN.CPP"
       source type(cpp) "COMMON\\CHOICCMN.CPP"
+      source type(cpp) "COMMON\\CSHELP.CPP"
       source type(cpp) "COMMON\\CLIPCMN.CPP"
       source type(cpp) "COMMON\\CMDLINE.CPP"
       source type(cpp) "COMMON\\CMNDATA.CPP"
@@ -65,6 +66,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "COMMON\\FILE.CPP"
       source type(cpp) "COMMON\\FILECONF.CPP"
       source type(cpp) "COMMON\\FILEFN.CPP"
+      source type(cpp) "COMMON\\FILENAME.CPP"
       source type(cpp) "COMMON\\FILESYS.CPP"
       source type(cpp) "COMMON\\FONTCMN.CPP"
       source type(cpp) "COMMON\\FONTMAP.CPP"
@@ -149,7 +151,6 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "GENERIC\\CARET.CPP"
       source type(cpp) "GENERIC\\CHOICDGG.CPP"
       source type(cpp) "GENERIC\\COLRDLGG.CPP"
-      source type(cpp) "GENERIC\\CSHELP.CPP"
       source type(cpp) "GENERIC\\DCPSG.CPP"
       source type(cpp) "GENERIC\\DRAGIMGG.CPP"
       source type(cpp) "GENERIC\\FONTDLGG.CPP"

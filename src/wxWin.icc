@@ -51,6 +51,7 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "COMMON\\file.cpp"
       source "COMMON\\fileconf.cpp"
       source "COMMON\\filefn.cpp"
+      source "COMMON\\filename.cpp"
       source "COMMON\\filesys.cpp"
       source "COMMON\\fontcmn.cpp"
       source "COMMON\\fontmap.cpp"
