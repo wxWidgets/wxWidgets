@@ -1697,41 +1697,53 @@ if test "$wxUSE_ZLIB" != "no" ; then
     AC_DEFINE(wxUSE_ZLIB)
 
     if test "$wxUSE_ZLIB" = "sys" -o "$wxUSE_ZLIB" = "yes" ; then
-        dnl we have troubles with ancient zlib versions (e.g. 1.0.4 is known
-        dnl to not work) and although I don't know which is the minimal
-        dnl required version it's safer to test for 1.1.4 as it fixes a
-        dnl security problem in 1.1.3 -- and hopefully nobody has anything
-        dnl more ancient (1.1.3 was released in July 1998) anyow
-        AC_CACHE_CHECK([for zlib.h >= 1.1.4], ac_cv_header_zlib_h,
-            AC_TRY_RUN(
-                [
-                    dnl zlib.h defines ZLIB_VERSION="x.y.z"
-                    #include <zlib.h>
-                    #include <stdio.h>
+        dnl don't test for zlib under Mac -- its verson there is 1.1.3 but we
+        dnl should still use it because hopefully (can someone confirm this?)
+        dnl Apple did fix the security problem in it and not using the system
+        dnl library results in a whole bunch of warnings when linking with
+        dnl Carbon framework
+        if test "$USE_DARWIN" = 1; then
+            system_zlib_h_ok="yes"
+        else
+            dnl we have troubles with ancient zlib versions (e.g. 1.0.4 is
+            dnl known to not work) and although I don't know which is
+            dnl the minimal required version it's safer to test for 1.1.4 as
+            dnl it fixes a security problem in 1.1.3 -- and hopefully nobody
+            dnl has anything more ancient (1.1.3 was released in July 1998)
+            dnl anyhow
+            AC_CACHE_CHECK([for zlib.h >= 1.1.4], ac_cv_header_zlib_h,
+                AC_TRY_RUN(
+                    [
+                        dnl zlib.h defines ZLIB_VERSION="x.y.z"
+                        #include <zlib.h>
+                        #include <stdio.h>
 
-                    dnl don't use the brackets as quotes, we need them
-                    changequote(,)
-                    int main()
-                    {
-                        FILE *f=fopen("conftestval", "w");
-                        if (!f) exit(1);
-                        fprintf(f, "%s",
-                                ZLIB_VERSION[0] == '1' &&
-                                (ZLIB_VERSION[2] > '1' ||
-                                (ZLIB_VERSION[2] == '1' &&
-                                 ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
-                        exit(0);
-                    }
-                    changequote([,])
-                ],
-                ac_cv_header_zlib_h=`cat conftestval`,
-                ac_cv_header_zlib_h=no,
-                dnl cross-compiling: test if we have any zlib.h
-                AC_CHECK_HEADER(zlib.h)
+                        dnl don't use the brackets as quotes, we need them
+                        changequote(,)
+                        int main()
+                        {
+                            FILE *f=fopen("conftestval", "w");
+                            if (!f) exit(1);
+                            fprintf(f, "%s",
+                                    ZLIB_VERSION[0] == '1' &&
+                                    (ZLIB_VERSION[2] > '1' ||
+                                    (ZLIB_VERSION[2] == '1' &&
+                                     ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
+                            exit(0);
+                        }
+                        changequote([,])
+                    ],
+                    ac_cv_header_zlib_h=`cat conftestval`,
+                    ac_cv_header_zlib_h=no,
+                    dnl cross-compiling: test if we have any zlib.h
+                    AC_CHECK_HEADER(zlib.h)
+                )
             )
-        )
 
-        if test "$ac_cv_header_zlib_h" = "yes"; then
+            system_zlib_h_ok=$ac_cv_header_zlib_h
+        fi
+
+        if test "$system_zlib_h_ok" = "yes"; then
             AC_CHECK_LIB(z, deflate, ZLIB_LINK=" -lz")
         fi
 
