@@ -35,6 +35,7 @@
     #include "wx/settings.h"
     #include "wx/stattext.h"
     #include "wx/sizer.h"
+    #include "wx/button.h"
 #endif
 
 //--------------------------------------------------------------------------
