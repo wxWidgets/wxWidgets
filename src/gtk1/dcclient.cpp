@@ -1732,14 +1732,17 @@ void wxWindowDC::SetFont( const wxFont &font )
 
     m_font = font;
 #ifdef __WXGTK20__
-    m_fontdesc = m_font.GetNativeFontInfo()->description;
-   
-    if (m_owner)
+    if (m_font.Ok())
     {
-        if (m_font.GetNoAntiAliasing())
-            m_context = m_owner->GtkGetPangoX11Context();
-        else
-            m_context = m_owner->GtkGetPangoDefaultContext();
+        m_fontdesc = m_font.GetNativeFontInfo()->description;
+   
+        if (m_owner)
+        {
+            if (m_font.GetNoAntiAliasing())
+                m_context = m_owner->GtkGetPangoX11Context();
+            else
+                m_context = m_owner->GtkGetPangoDefaultContext();
+        }
     }
 #endif
 }
