@@ -767,6 +767,14 @@ inline wxRect2DInt::wxRect2DInt( const wxPoint2DInt &a , const wxPoint2DInt &b)
     m_height = abs( a.m_y - b.m_y );
 }
 
+inline wxRect2DInt::wxRect2DInt( const wxPoint2DInt& pos, const wxSize& size)
+{
+    m_x = pos.m_x;
+    m_y = pos.m_y;
+    m_width = size.x;
+    m_height = size.y;
+}
+
 inline bool wxRect2DInt::operator == (const wxRect2DInt& rect) const
 { 
     return (m_x==rect.m_x && m_y==rect.m_y && 
