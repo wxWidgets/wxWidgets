@@ -101,7 +101,7 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
         return 0;
     }
 
-    return -1
+    return -1;
   }
 }
 
@@ -147,5 +147,23 @@ wxString wxDisplay::GetName() const
   return wxEmptyString;
 }
 
+ wxArrayVideoModes
+    wxDisplay::GetModes(const wxVideoMode& mode) const
+{
+    // Not implemented
+    return wxArrayVideoModes();
+}
+
+wxVideoMode wxDisplay::GetCurrentMode() const
+{
+    // Not implemented
+    return wxVideoMode();
+}
+
+bool wxDisplay::ChangeMode(const wxVideoMode& mode)
+{
+    // Not implemented
+    return false;
+}
 #endif /* wxUSE_DISPLAY */
 

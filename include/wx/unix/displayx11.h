@@ -31,6 +31,12 @@ class WXDLLEXPORT wxDisplay : public wxDisplayBase
     virtual wxRect GetGeometry() const;
     virtual int GetDepth() const;
     virtual wxString GetName() const;
+    virtual wxArrayVideoModes
+        GetModes(const wxVideoMode& mode = wxDefaultVideoMode) const;
+
+    virtual wxVideoMode GetCurrentMode() const;
+
+    virtual bool ChangeMode(const wxVideoMode& mode = wxDefaultVideoMode);
 
     ~wxDisplay();
 
