@@ -1031,7 +1031,9 @@ bool wxExprDatabase::Write(const wxString& fileName)
   if (!stream)
     return FALSE;
     
-  return Write(stream);
+  bool success = Write(stream);
+  fclose(stream);
+  return success;
 }
 
 bool wxExprDatabase::Write(FILE *stream)
