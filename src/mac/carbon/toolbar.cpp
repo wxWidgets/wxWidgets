@@ -211,7 +211,7 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
         GetControlBounds( m_controlHandle , &contrlRect ) ; 
         int former_mac_x = contrlRect.left ;
         int former_mac_y = contrlRect.top ;
-        wxSize sz = GetToolBar()->GetToolSize() ;
+        GetToolBar()->GetToolSize() ;
         
         if ( mac_x != former_mac_x || mac_y != former_mac_y )
         {
