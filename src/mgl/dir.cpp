@@ -116,10 +116,11 @@ bool wxDirData::Read(wxString *filename)
     PM_findData data;
     bool matches = FALSE;
 
-    // speed up string concatenation in the loop a bit
+    data.dwSize = sizeof(data);
+    
     wxString path = m_dirname;
     path += wxFILE_SEP_PATH;
-    path.reserve(path.length() + 255);
+    path.reserve(path.length() + 255); // speed up string concatenation
 
     while ( !matches )
     {
@@ -196,17 +197,6 @@ bool wxDir::Open(const wxString& dirname)
 {
     delete M_DIR;
     m_data = new wxDirData(dirname);
-
-    if ( !M_DIR->IsOk() )
-    {
-        wxLogSysError(_("Can not enumerate files in directory '%s'"),
-                      dirname.c_str());
-
-        delete M_DIR;
-        m_data = NULL;
-
-        return FALSE;
-    }
 
     return TRUE;
 }
