@@ -43,11 +43,11 @@ enum {
 
 
 %pythoncode {
-def EVT_WIZARD_PAGE_CHANGED = wx.PyEventBinder( wxEVT_WIZARD_PAGE_CHANGED, 1)
-def EVT_WIZARD_PAGE_CHANGING = wx.PyEventBinder( wxEVT_WIZARD_PAGE_CHANGING, 1)
-def EVT_WIZARD_CANCEL = wx.PyEventBinder( wxEVT_WIZARD_CANCEL, 1)
-def EVT_WIZARD_HELP = wx.PyEventBinder( wxEVT_WIZARD_HELP, 1)
-def EVT_WIZARD_FINISHED = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
+EVT_WIZARD_PAGE_CHANGED  = wx.PyEventBinder( wxEVT_WIZARD_PAGE_CHANGED, 1)
+EVT_WIZARD_PAGE_CHANGING = wx.PyEventBinder( wxEVT_WIZARD_PAGE_CHANGING, 1)
+EVT_WIZARD_CANCEL        = wx.PyEventBinder( wxEVT_WIZARD_CANCEL, 1)
+EVT_WIZARD_HELP          = wx.PyEventBinder( wxEVT_WIZARD_HELP, 1)
+EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
 }
 
 //----------------------------------------------------------------------
