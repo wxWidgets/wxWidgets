@@ -14,10 +14,11 @@ samples:
 
 wxTextCtrl
 
-*   adjust refresh/scroll for WrapLines() case
+*!  call to RefreshLineRange() from Replace() is broken
 *!  display corrupted when typing text in quickly (caret problem?)
 *   caret leaves traces under wxGTK
 ?   text ctrl display pb when text is truncated
+*   remember selection when losing/gaining activation
 *   too much is refreshed when double clicking (word select)
 
 All
@@ -27,15 +28,13 @@ All
 
 *   wxCheckListBox: redraw only the bitmap when toggled
 
-*   problem with lbox horz scrolling: the focus rect isn't drawn entirely...
-*   write sample testing all listbox styles/events
-*   text ctrl wxTE_XXX styles support
-*   listbox inc kbd search
+?   problem with lbox horz scrolling: the focus rect isn't drawn entirely...
 
 *   popup menu for text ctrls
 
 MSW
 
+*   checkboxes don't look correctly in checked+disabled state (radio too?)
 *   text control scrollbar has text cursor
     scrollbar behaves strangely in log lbox with many strings
 
@@ -49,6 +48,7 @@ DONE
 
 All
 
++   adjust refresh/scroll for WrapLines() case
 +   text ctrl horz scrolling
 +   DoDraw should iterate over update region instead of using bounding box
 +   listbox: horz scrollbar doesn't appear

@@ -79,12 +79,15 @@ typedef long wxTextCoord;
 // wxTextCtrl::HitTest return values
 // ----------------------------------------------------------------------------
 
+// the point asked is ...
 enum wxTextCtrlHitTestResult
 {
-    wxTE_HT_BEFORE = -1,
-    wxTE_HT_ON_TEXT,
-    wxTE_HT_AFTER
+    wxTE_HT_BEFORE = -1,    // either to the left or upper
+    wxTE_HT_ON_TEXT,        // directly on
+    wxTE_HT_BELOW,          // below [the last line]
+    wxTE_HT_BEYOND          // after [the end of line]
 };
+// ... the character returned
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl
@@ -163,8 +166,10 @@ public:
                               wxTextCoord *x, wxTextCoord *y) const;
 
     // wxUniv-specific: find a screen position (in client coordinates) of the
-    // given text position
-    bool PositionToPixelXY(wxTextPos pos, wxCoord *x, wxCoord *y) const;
+    // given text position or of the caret
+    bool PositionToLogicalXY(wxTextPos pos, wxCoord *x, wxCoord *y) const;
+    bool PositionToDeviceXY(wxTextPos pos, wxCoord *x, wxCoord *y) const;
+    wxPoint GetCaretPosition() const;
 
     virtual void ShowPosition(wxTextPos pos);
 
@@ -301,7 +306,7 @@ protected:
     wxRect GetRealTextArea() const;
 
     // refresh the text in the given (in logical coords) rect
-    void RefreshTextRect(wxRect& rect);
+    void RefreshTextRect(const wxRect& rect);
 
     // refresh the text in the given range (in logical coords) of this line, if
     // width is 0, refresh to the end of line
@@ -321,8 +326,10 @@ protected:
     // starts for wxTE_PASSWORD control
     wxString GetTextToShow(const wxString& text) const;
 
-    // find the number of characters of a line before it wraps at given width
-    size_t GetPartOfWrappedLine(const wxChar* text, wxCoord width) const;
+    // find the number of characters of a line before it wraps
+    // (and optionally also the real width of the line)
+    size_t GetPartOfWrappedLine(const wxChar* text,
+                                wxCoord *widthReal = NULL) const;
 
     // get the start and end of the selection for this line: if the line is
     // outside the selection, both will be -1 and FALSE will be returned
@@ -359,19 +366,23 @@ protected:
     // HitTest2() is more efficient than 2 consecutive HitTest()s with the same
     // line (i.e. y) and it also returns the offset of the starting position in
     // pixels
+    //
+    // as the last hack, this function accepts either logical or device (by
+    // default) coords depending on devCoords flag
     wxTextCtrlHitTestResult HitTest2(wxCoord y,
                                      wxCoord x1,
                                      wxCoord x2,
                                      wxTextCoord *row,
                                      wxTextCoord *colStart,
                                      wxTextCoord *colEnd,
-                                     wxTextCoord *colRowStart) const;
+                                     wxTextCoord *colRowStart,
+                                     bool devCoords = TRUE) const;
 
-    // HitTest() version for use in wxTextCtrl: it takes the text coordinates
-    // (i.e. coords relative to the text rect)
-    wxTextCtrlHitTestResult HitTestClient(wxCoord x, wxCoord y,
-                                          wxTextCoord *col,
-                                          wxTextCoord *row) const;
+    // HitTest() version which takes the logical text coordinates and not the
+    // device ones
+    wxTextCtrlHitTestResult HitTestLogical(const wxPoint& pos,
+                                           wxTextCoord *col,
+                                           wxTextCoord *row) const;
 
     // event handlers
     void OnIdle(wxIdleEvent& event);

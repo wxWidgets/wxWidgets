@@ -1484,6 +1484,12 @@ void wxWin32Renderer::DrawCheckItem(wxDC& dc,
 
 wxBitmap wxWin32Renderer::GetCheckBitmap(int flags)
 {
+    if ( flags & wxCONTROL_DISABLED )
+    {
+        // the disabled indicators look the same as pressed ones in Windows
+        flags |= wxCONTROL_PRESSED;
+    }
+
     char **xpm;
     if ( flags & wxCONTROL_CHECKED )
     {
@@ -1501,6 +1507,12 @@ wxBitmap wxWin32Renderer::GetCheckBitmap(int flags)
 
 wxBitmap wxWin32Renderer::GetRadioBitmap(int flags)
 {
+    if ( flags & wxCONTROL_DISABLED )
+    {
+        // the disabled indicators look the same as pressed ones in Windows
+        flags |= wxCONTROL_PRESSED;
+    }
+
     char **xpm;
     if ( flags & wxCONTROL_CHECKED )
     {

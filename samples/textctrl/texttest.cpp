@@ -363,19 +363,19 @@ TextTestFrame::TextTestFrame(const wxString& title)
                     _T("Current pos:"),
                     m_textPosCur
                   ),
-                  0, wxRIGHT | wxGROW, 5);
+                  0, wxGROW | wxRIGHT, 5);
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     _T("Col:"),
                     m_textColCur
                   ),
-                  0, wxRIGHT | wxLEFT | wxGROW, 5);
+                  0, wxGROW | wxLEFT | wxRIGHT, 5);
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     _T("Row:"),
                     m_textRowCur
                   ),
-                  0, wxLEFT | wxGROW, 5);
+                  0, wxGROW | wxLEFT, 5);
     sizerMiddleDown->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     m_textLineLast = CreateInfoText();
@@ -566,7 +566,7 @@ void TextTestFrame::CreateText()
                             flags);
     m_sizerText->Add(m_text, 1, wxALL |
                      (flags & wxTE_MULTILINE ? wxGROW
-                                             : wxALIGN_CENTRE_VERTICAL), 5);
+                                             : wxALIGN_TOP), 5);
     m_sizerText->Layout();
 }
 

@@ -304,6 +304,7 @@ public:
                              const wxMouseEvent& event);
     virtual bool HandleMouseMove(wxControl *control,
                                  const wxMouseEvent& event);
+    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
 
 protected:
     // get the position of the mouse click

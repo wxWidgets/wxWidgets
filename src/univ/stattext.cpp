@@ -74,7 +74,9 @@ void wxStaticText::SetLabel(const wxString& label)
 
 wxSize wxStaticText::DoGetBestClientSize() const
 {
-    wxClientDC dc(wxConstCast(this, wxStaticText));
+    wxStaticText *self = wxConstCast(this, wxStaticText);
+    wxClientDC dc(self);
+    dc.SetFont(GetFont());
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 
