@@ -380,7 +380,9 @@ bool wxStringBase::Alloc(size_t nLen)
         // allocation failure handled by caller
         return false;
       }
-      memcpy(m_pchData, pData->data(), nOldLen*sizeof(wxChar));
+      // +1 to copy the terminator, too
+      memcpy(m_pchData, pData->data(), (nOldLen+1)*sizeof(wxChar));
+      GetStringData()->nDataLength = nOldLen;
     }
     else {
       nLen += EXTRA_ALLOC;
