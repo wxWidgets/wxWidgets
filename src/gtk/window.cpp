@@ -3453,7 +3453,7 @@ void wxWindowGTK::GtkSendPaintEvents()
 {
     m_clipPaintRegion = TRUE;
 
-    wxWindowDC dc( this );
+    wxWindowDC dc( (wxWindow*)this );
     dc.SetClippingRegion( m_updateRegion );
     wxEraseEvent erase_event( GetId(), &dc );
     erase_event.SetEventObject( this );
