@@ -2726,9 +2726,9 @@ PNG_EXTERN png_int_32 png_get_int_32 PNGARG((png_bytep buf));
 PNG_EXTERN png_uint_32 png_get_uint_32 PNGARG((png_bytep buf));
 PNG_EXTERN png_uint_16 png_get_uint_16 PNGARG((png_bytep buf));
 #endif /* !PNG_READ_BIG_ENDIAN_SUPPORTED */
+#define png_get_uint_31 wxpng_get_uint_31
 PNG_EXTERN png_uint_32 png_get_uint_31 PNGARG((png_structp png_ptr,
   png_bytep buf));
-
 /* Initialize png_ptr struct for reading, and allocate any other memory.
  * (old interface - DEPRECATED - use png_create_read_struct instead).
  */
