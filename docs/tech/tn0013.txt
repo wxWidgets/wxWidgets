@@ -13,17 +13,17 @@ the other Unix-based ports including wxMotif, wxX11 and wxBase.
 
 a) Do a fresh checkout using the command
 
-        cvs -d :pserver:anoncvs@cvs.wxwindows.org:/packs/cvsroots/wxwindows co wxGTK
+        cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/packs/cvsroots/wxwindows co wxGTK
 
    NB: if you realize later that some needed files were not checked out
        by this command, please modify CVSROOT/modules to include the missing
        files so that it works for the next release!
 
    You also need the samples, demos and contrib directories, so change to
-   wxWindows directory created by the first cvs command and do "cvs up -d"
+   wxWidgets directory created by the first cvs command and do "cvs up -d"
    for each of them.
 
-b) Create a build directory under wxWindows, e.g. I use "gtk-release",
+b) Create a build directory under wxWidgets, e.g. I use "gtk-release",
    "cd" to it and run configure: the options don't really matter, you can use
    something like
 
@@ -129,15 +129,15 @@ a) FreshMeat:
    - hit "new release" at the top
    - follow the step by step
 
-b) wx-announce mailing list: mailto:wx-announce@lists.wxwindows.org
+b) wx-announce mailing list: mailto:wx-announce@lists.wxwidgets.org
 
    [where is the announcement text? TODO]
 
-c) update www.wxwindows.org
+c) update www.wxwidgets.org
 
 d) GNOME (very effective, stays on front page for days):
     - http://www.gnome.org/applist
-    - Search for wxWindows
+    - Search for wxWidgets
     - Update the version number
     - Ignore the error message
 

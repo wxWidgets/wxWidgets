@@ -48,7 +48,7 @@ for explicit destruction.}
 \func{}{wxProcess}{\param{int }{flags}}
 
 Constructs a process object. {\it id} is only used in the case you want to
-use wxWindows events. It identifies this object, or another window that will
+use wxWidgets events. It identifies this object, or another window that will
 receive the event.
 
 If the {\it parent} parameter is different from NULL, it will receive
@@ -138,7 +138,7 @@ error stream.
 
 Returns {\tt TRUE} if there is data to be read on the child process standard
 output stream. This allows to write simple (and extremely inefficient)
-polling-based code waiting for a better mechanism in future wxWindows versions.
+polling-based code waiting for a better mechanism in future wxWidgets versions.
 
 See the \helpref{exec sample}{sampleexec} for an example of using this
 function.
@@ -220,7 +220,7 @@ Returns {\tt TRUE} if the given process exists in the system.
 \constfunc{void}{OnTerminate}{\param{int}{ pid}, \param{int}{ status}}
 
 It is called when the process with the pid {\it pid} finishes.
-It raises a wxWindows event when it isn't overridden.
+It raises a wxWidgets event when it isn't overridden.
 
 \docparam{pid}{The pid of the process which has just terminated.}
 

@@ -254,7 +254,7 @@ ODBC errors.}
 \wxheading{Remarks}
 
 Default cursor scrolling is defined by wxODBC\_FWD\_ONLY\_CURSORS in setup.h
-when the wxWindows library is built.  This behavior can be overridden when
+when the wxWidgets library is built.  This behavior can be overridden when
 an instance of a wxDb is created (see \helpref{wxDb constructor}{wxdbconstr}).
 Default setting of this value TRUE, as not all databases/drivers support
 both types of cursors.
@@ -596,7 +596,7 @@ Possible values returned by this function can be viewed in the
 \helpref{Enumerated types}{wxdbenumeratedtypes} section of wxDb.
 
 There are known issues with conformance to the ODBC standards with several
-datasources supported by the wxWindows ODBC classes.  Please see the overview
+datasources supported by the wxWidgets ODBC classes.  Please see the overview
 for specific details on which datasource have which issues.
 
 \wxheading{Return value}
@@ -731,7 +731,7 @@ of processing.
 
 \func{bool}{IsFwdOnlyCursors}{\void}
 
-Older form (pre-2.3/2.4 of wxWindows) of the
+Older form (pre-2.3/2.4 of wxWidgets) of the
 \helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors}.  This method is
 provided for backward compatibility only.  The method
 \helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors} should be
@@ -1093,12 +1093,12 @@ use backward scrolling cursors and their associated functions (see note above).
 
 \wxheading{Remarks}
 
-Added as of wxWindows v2.4 release, this function is a renamed version of
-wxDb::FwdOnlyCursors() to match the normal wxWindows naming conventions for
+Added as of wxWidgets v2.4 release, this function is a renamed version of
+wxDb::FwdOnlyCursors() to match the normal wxWidgets naming conventions for
 class member functions.
 
 This function is not available in versions prior to v2.4.  You should
-use \helpref{wxDb::FwdOnlyCursors}{wxdbfwdonlycursors} for wxWindows
+use \helpref{wxDb::FwdOnlyCursors}{wxdbfwdonlycursors} for wxWidgets
 versions prior to 2.4.
 
 \wxheading{See also}
@@ -1962,7 +1962,7 @@ class so a program can create a wxDbTableInf array instance to maintain all
 information about all tables in the datasource to have all the datasource's
 information in one memory structure.
 
-Primarily, this class is used internally by the wxWindows ODBC classes.
+Primarily, this class is used internally by the wxWidgets ODBC classes.
 
 \begin{verbatim}
     wxChar        catalog[128+1];
@@ -3053,7 +3053,7 @@ calls which defined the columns accessible to this wxDbTable instance.}
 
 \wxheading{Remarks}
 
-NULL column support is currently not fully implemented as of wxWindows 2.4.
+NULL column support is currently not fully implemented as of wxWidgets 2.4.
 
 \membersection{wxDbTable::IsCursorClosedOnCommit}\label{wxdbtableiscursorclosedoncommit}
 

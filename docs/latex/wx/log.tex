@@ -6,12 +6,12 @@
 %% Created:     some time ago
 %% RCS-ID:      $Id$
 %% Copyright:   (c) 1997-2001 Vadim Zeitlin
-%% License:     wxWindows license
+%% License:     wxWidgets license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\class{wxLog}}\label{wxlog}
 
-wxLog class defines the interface for the {\it log targets} used by wxWindows
+wxLog class defines the interface for the {\it log targets} used by wxWidgets
 logging functions as explained in the \helpref{wxLog overview}{wxlogoverview}.
 The only situations when you need to directly use this class is when you want
 to derive your own log target because the existing ones don't satisfy your
@@ -23,7 +23,7 @@ completely) the timestamp on the messages.
 Otherwise, it is completely hidden behind the {\it wxLogXXX()} functions and
 you may not even know about its existence.
 
-See \helpref{log overview}{wxlogoverview} for the descriptions of wxWindows
+See \helpref{log overview}{wxlogoverview} for the descriptions of wxWidgets
 logging facilities.
 
 \wxheading{Derived from}
@@ -463,9 +463,9 @@ object was created.
 
 \section{\class{wxLogGui}}\label{wxloggui}
 
-This is the default log target for the GUI wxWindows applications. It is passed
+This is the default log target for the GUI wxWidgets applications. It is passed
 to \helpref{wxLog::SetActiveTarget}{wxlogsetactivetarget} at the program
-startup and is deleted by wxWindows during the program shut down.
+startup and is deleted by wxWidgets during the program shut down.
 
 \wxheading{Derived from}
 
@@ -490,7 +490,7 @@ Default constructor.
 This class allows to temporarily suspend logging. All calls to the log
 functions during the life time of an object of this class are just ignored.
 
-In particular, it can be used to suppress the log messages given by wxWindows
+In particular, it can be used to suppress the log messages given by wxWidgets
 itself but it should be noted that it is rarely the best way to cope with this
 problem as {\bf all} log messages are suppressed, even if they indicate a
 completely different error than the one the programmer wanted to suppress.
@@ -585,7 +585,7 @@ Default ctor installs this object as the current active log target.
 
 This class can be used to redirect the log messages to a C file stream (not to
 be confused with C++ streams). It is the default log target for the non-GUI
-wxWindows applications which send all the output to {\tt stderr}.
+wxWidgets applications which send all the output to {\tt stderr}.
 
 \wxheading{Derived from}
 
@@ -614,7 +614,7 @@ Constructs a log target which sends all the log messages to the given
 
 This class can be used to redirect the log messages to a C++ stream.
 
-Please note that this class is only available if wxWindows was compiled with
+Please note that this class is only available if wxWidgets was compiled with
 the standard iostream library support ({\tt wxUSE\_STD\_IOSTREAM} must be on).
 
 \wxheading{Derived from}

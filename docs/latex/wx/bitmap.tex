@@ -117,8 +117,8 @@ Its meaning is determined by the {\it type} parameter.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_RESOURCE}}{Load a Windows resource name.}
 \end{twocollist}
 
-The validity of these flags depends on the platform and wxWindows configuration.
-If all possible wxWindows settings are used, the Windows platform supports BMP file, BMP resource,
+The validity of these flags depends on the platform and wxWidgets configuration.
+If all possible wxWidgets settings are used, the Windows platform supports BMP file, BMP resource,
 XPM data, and XPM. Under wxGTK, the available formats are BMP file, XPM data, XPM file, and PNG file.
 Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.
 
@@ -145,7 +145,7 @@ X and Windows.
 
 The sixth form constructs a new bitmap.
 
-The seventh form constructs a bitmap from pixmap (XPM) data, if wxWindows has been configured
+The seventh form constructs a bitmap from pixmap (XPM) data, if wxWidgets has been configured
 to incorporate this feature.
 
 To use this constructor, you must first include an XPM file. For
@@ -205,7 +205,7 @@ destroyed at this point - only when the reference count is zero will the
 data be deleted.
 
 If the application omits to delete the bitmap explicitly, the bitmap will be
-destroyed automatically by wxWindows when the application exits.
+destroyed automatically by wxWidgets when the application exits.
 
 Do not delete a bitmap that is selected into a memory device context.
 
@@ -228,7 +228,7 @@ of a given handler class in an application session.}
 
 Deletes all bitmap handlers.
 
-This function is called by wxWindows on exit.
+This function is called by wxWidgets on exit.
 
 \membersection{wxBitmap::ConvertToImage}\label{wxbitmapconverttoimage}
 
@@ -375,10 +375,10 @@ the bitmap. This function preserves bit depth and mask information.
 
 \func{static void}{InitStandardHandlers}{\void}
 
-Adds the standard bitmap format handlers, which, depending on wxWindows
+Adds the standard bitmap format handlers, which, depending on wxWidgets
 configuration, can be handlers for Windows bitmap, Windows bitmap resource, and XPM.
 
-This function is called by wxWindows on startup.
+This function is called by wxWidgets on startup.
 
 \wxheading{See also}
 
@@ -419,7 +419,7 @@ The meaning of {\it name} is determined by the {\it type} parameter.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Load an XPM bitmap file.}
 \end{twocollist}
 
-The validity of these flags depends on the platform and wxWindows configuration.
+The validity of these flags depends on the platform and wxWidgets configuration.
 
 In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can
 (wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_PNG, wxBITMAP\_TYPE\_GIF, wxBITMAP\_TYPE\_PCX, wxBITMAP\_TYPE\_PNM).
@@ -482,7 +482,7 @@ Saves a bitmap in the named file.
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Save an XPM bitmap file.}
 \end{twocollist}
 
-The validity of these flags depends on the platform and wxWindows configuration.
+The validity of these flags depends on the platform and wxWidgets configuration.
 
 In addition, wxBitmap can save all formats that \helpref{wxImage}{wximage} can
 (wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_PNG).
@@ -498,7 +498,7 @@ TRUE if the operation succeeded, FALSE otherwise.
 
 \wxheading{Remarks}
 
-Depending on how wxWindows has been configured, not all formats may be available.
+Depending on how wxWidgets has been configured, not all formats may be available.
 
 \wxheading{See also}
 

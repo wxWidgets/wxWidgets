@@ -4,13 +4,13 @@ The wxScrolledWindow class manages scrolling for its client area, transforming
 the coordinates according to the scrollbar positions, and setting the
 scroll positions, thumb sizes and ranges according to the area in view.
 
-Starting from version 2.4 of wxWindows, there are several ways to use a
+Starting from version 2.4 of wxWidgets, there are several ways to use a
 wxScrolledWindow. In particular, there are now three ways to set the
 size of the scrolling area:
 
 One way is to set the scrollbars directly using a call to
 \helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}.
-This is the way it used to be in any previous version of wxWindows
+This is the way it used to be in any previous version of wxWidgets
 and it will be kept for backwards compatibility.
 
 An additional method of manual control, which requires a little less
@@ -34,7 +34,7 @@ increment.  You can influence the minimum size of the scrolled area
 controlled by a sizer by calling
 \helpref{wxWindow::SetVirtualSizeHints}{wxwindowsetvirtualsizehints}.
 (calling \helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}
- has analogous effects in wxWindows 2.4 -- in later versions it may not continue
+ has analogous effects in wxWidgets 2.4 -- in later versions it may not continue
  to override the sizer)
 
 Note:  if Maximum size hints are still supported by SetVirtualSizeHints, use

@@ -1,13 +1,13 @@
 \section{\class{wxModule}}\label{wxmodule}
 
-The module system is a very simple mechanism to allow applications (and parts of wxWindows itself) to
-define initialization and cleanup functions that are automatically called on wxWindows
+The module system is a very simple mechanism to allow applications (and parts of wxWidgets itself) to
+define initialization and cleanup functions that are automatically called on wxWidgets
 startup and exit.
 
 To define a new kind of module, derive a class from wxModule, override the OnInit and OnExit functions,
 and add the DECLARE\_DYNAMIC\_CLASS and IMPLEMENT\_DYNAMIC\_CLASS to header and implementation files
-(which can be the same file). On initialization, wxWindows will find all classes derived from wxModule,
-create an instance of each, and call each OnInit function. On exit, wxWindows will call the OnExit
+(which can be the same file). On initialization, wxWidgets will find all classes derived from wxModule,
+create an instance of each, and call each OnInit function. On exit, wxWidgets will call the OnExit
 function for each module instance.
 
 Note that your module class does not have to be in a header file.
@@ -57,28 +57,28 @@ Destructor.
 
 \func{static void}{CleanupModules}{\void}
 
-Calls Exit for each module instance. Called by wxWindows on exit, so there is no
+Calls Exit for each module instance. Called by wxWidgets on exit, so there is no
 need for an application to call it.
 
 \membersection{wxModule::Exit}\label{wxmoduleexit}
 
 \func{void}{Exit}{\void}
 
-Calls OnExit. This function is called by wxWindows and should not need to be called
+Calls OnExit. This function is called by wxWidgets and should not need to be called
 by an application.
 
 \membersection{wxModule::Init}\label{wxmoduleinit}
 
 \func{bool}{Init}{\void}
 
-Calls OnInit. This function is called by wxWindows and should not need to be called
+Calls OnInit. This function is called by wxWidgets and should not need to be called
 by an application.
 
 \membersection{wxModule::InitializeModules}\label{wxmoduleinitializemodules}
 
 \func{static bool}{InitializeModules}{\void}
 
-Calls Init for each module instance. Called by wxWindows on startup, so there is no
+Calls Init for each module instance. Called by wxWidgets on startup, so there is no
 need for an application to call it.
 
 \membersection{wxModule::OnExit}\label{wxmoduleonexit}
@@ -92,19 +92,19 @@ Provide this function with appropriate cleanup for your module.
 \func{virtual bool}{OnInit}{\void}
 
 Provide this function with appropriate initialization for your module. If the function
-returns FALSE, wxWindows will exit immediately.
+returns FALSE, wxWidgets will exit immediately.
 
 \membersection{wxModule::RegisterModule}\label{wxmoduleregistermodule}
 
 \func{static void}{RegisterModule}{\param{wxModule*}{ module}}
 
-Registers this module with wxWindows. Called by wxWindows on startup, so there is no
+Registers this module with wxWidgets. Called by wxWidgets on startup, so there is no
 need for an application to call it.
 
 \membersection{wxModule::RegisterModules}\label{wxmoduleregistermodules}
 
 \func{static bool}{RegisterModules}{\void}
 
-Creates instances of and registers all modules. Called by wxWindows on startup, so there is no
+Creates instances of and registers all modules. Called by wxWidgets on startup, so there is no
 need for an application to call it.
 

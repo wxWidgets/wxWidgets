@@ -9,7 +9,7 @@ The compilation was tested with
     -GTK1.2.8 (for wxGTK)
     
 To get everything compiled you'll need to have installed prior to compiling
-wxWindows:
+wxWidgets:
     -Bison
       get it from http://www.openvms.digital.com/freeware/
       You' have to fix the following bug:
@@ -102,7 +102,7 @@ $  ass $disk2:[joukj.public.gtk.gtk.glib],-
       versions of VMS. If you get lib$get_current_invo_context undefined
       while linking you'll have to add
          "lib$get_current_invo_context"="LIB$GET_CURR_INVO_CONTEXT"
-      in [.src.unix]descrip.mms to CXX_DEFINE. and recompile wxWindows.
+      in [.src.unix]descrip.mms to CXX_DEFINE. and recompile wxWidgets.
 
     -Some versions of the CC compiler give warnings like
        %CC-W-CXXKEYWORD, "bool" is a keyword in C++ .... when compiling
@@ -120,7 +120,7 @@ $  ass $disk2:[joukj.public.gtk.gtk.glib],-
   -I think in general wxGTK is better maintained, so that version is my
     first choice.
   
-  -Note that only a few people have used wxWindows on VMS so many problems are
+  -Note that only a few people have used wxWidgets on VMS so many problems are
    to be expected.
 
 

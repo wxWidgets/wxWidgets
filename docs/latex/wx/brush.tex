@@ -34,7 +34,7 @@ wxRED\_BRUSH}
 
 \wxheading{Remarks}
 
-On a monochrome display, wxWindows shows
+On a monochrome display, wxWidgets shows
 all brushes as white unless the colour is really black.
 
 Do not initialize objects on the stack before the program commences,
@@ -130,7 +130,7 @@ system, since wxBrush uses a reference counting system for efficiency.
 
 Although all remaining brushes are deleted when the application exits,
 the application should try to clean up all brushes itself. This is because
-wxWindows cannot know if a pointer to the brush object is stored in an
+wxWidgets cannot know if a pointer to the brush object is stored in an
 application data structure, and there is a risk of double deletion.
 
 \membersection{wxBrush::GetColour}\label{wxbrushgetcolour}
@@ -304,7 +304,7 @@ be deleted and their resources freed, eliminating the possibility of
 `memory leaks'. However, it is best not to rely on this automatic
 cleanup because it can lead to double deletion in some circumstances.
 
-There are two mechanisms in recent versions of wxWindows which make the
+There are two mechanisms in recent versions of wxWidgets which make the
 brush list less useful than it once was. Under Windows, scarce resources
 are cleaned up internally if they are not being used. Also, a referencing
 counting mechanism applied to all GDI objects means that some sharing
@@ -318,9 +318,9 @@ and copy brushes as you see fit. If your Windows resource meter suggests
 your application is using too many resources, you can resort to using
 GDI lists to share objects explicitly.
 
-The only compelling use for the brush list is for wxWindows to keep
+The only compelling use for the brush list is for wxWidgets to keep
 track of brushes in order to clean them up on exit. It is also kept for
-backward compatibility with earlier versions of wxWindows.
+backward compatibility with earlier versions of wxWidgets.
 
 \wxheading{See also}
 
@@ -339,7 +339,7 @@ use the object pointer {\bf wxTheBrushList}.
 
 \func{void}{AddBrush}{\param{wxBrush *}{brush}}
 
-Used internally by wxWindows to add a brush to the list.
+Used internally by wxWidgets to add a brush to the list.
 
 \membersection{wxBrushList::FindOrCreateBrush}\label{wxbrushlistfindorcreatebrush}
 
@@ -367,6 +367,6 @@ Finds a brush of the given specification, or creates one and adds it to the list
 
 \func{void}{RemoveBrush}{\param{wxBrush *}{brush}}
 
-Used by wxWindows to remove a brush from the list.
+Used by wxWidgets to remove a brush from the list.
 
 

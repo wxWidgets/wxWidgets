@@ -1,23 +1,23 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Name:        tunicode.tex
-%% Purpose:     Overview of the Unicode support in wxWindows
+%% Purpose:     Overview of the Unicode support in wxWidgets
 %% Author:      Vadim Zeitlin
 %% Modified by:
 %% Created:     22.09.99
 %% RCS-ID:      $Id$
 %% Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-%% Licence:     wxWindows license
+%% Licence:     wxWidgets license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Unicode support in wxWindows}\label{unicode}
+\section{Unicode support in wxWidgets}\label{unicode}
 
-This section briefly describes the state of the Unicode support in wxWindows.
+This section briefly describes the state of the Unicode support in wxWidgets.
 Read it if you want to know more about how to write programs able to work with
 characters from languages other than English.
 
 \subsection{What is Unicode?}
 
-Starting with release 2.1 wxWindows has support for compiling in Unicode mode
+Starting with release 2.1 wxWidgets has support for compiling in Unicode mode
 on the platforms which support it. Unicode is a standard for character
 encoding which addresses the shortcomings of the previous, 8 bit standards, by
 using at least 16 (and possibly 32) bits for encoding each character. This
@@ -42,12 +42,12 @@ each time a system call is made.
 
 \subsection{Unicode and ANSI modes}
 
-As not all platforms supported by wxWindows support Unicode (fully) yet, in
+As not all platforms supported by wxWidgets support Unicode (fully) yet, in
 many cases it is unwise to write a program which can only work in Unicode
 environment. A better solution is to write programs in such way that they may
 be compiled either in ANSI (traditional) mode or in the Unicode one.
 
-This can be achieved quite simply by using the means provided by wxWindows.
+This can be achieved quite simply by using the means provided by wxWidgets.
 Basically, there are only a few things to watch out for:
 
 \begin{itemize}
@@ -81,7 +81,7 @@ string").
 
 And finally, the standard preprocessor tokens enumerated above expand to ANSI
 strings but it is more likely that Unicode strings are wanted in the Unicode
-build. wxWindows provides the macros {\tt \_\_TFILE\_\_}, {\tt \_\_TDATE\_\_} 
+build. wxWidgets provides the macros {\tt \_\_TFILE\_\_}, {\tt \_\_TDATE\_\_} 
 and {\tt \_\_TTIME\_\_} which behave exactly as the standard ones except that
 they produce ANSI strings in ANSI build and Unicode ones in the Unicode build.
 
@@ -109,9 +109,9 @@ be done this way (try to imagine the number of {\tt \#ifdef UNICODE} an average
 program would have had!). Luckily, there is another way - see the next
 section.
 
-\subsection{Unicode support in wxWindows}
+\subsection{Unicode support in wxWidgets}
 
-In wxWindows, the code fragment from above should be written instead:
+In wxWidgets, the code fragment from above should be written instead:
 
 \begin{verbatim}
     wxChar ch = wxT('*');
@@ -146,7 +146,7 @@ Just let us state once again the rules:
 \item Always use {\tt wxChar} instead of {\tt char}
 \item Always enclose literal string constants in {\tt wxT()} macro unless
 they're already converted to the right representation (another standard
-wxWindows macro {\tt \_()} does it, so there is no need for {\tt wxT()} in this
+wxWidgets macro {\tt \_()} does it, so there is no need for {\tt wxT()} in this
 case) or you intend to pass the constant directly to an external function
 which doesn't accept wide-character strings.
 \item Use {\tt wxString} instead of C style strings.
@@ -154,7 +154,7 @@ which doesn't accept wide-character strings.
 
 \subsection{Unicode and the outside world}
 
-We have seen that it was easy to write Unicode programs using wxWindows types
+We have seen that it was easy to write Unicode programs using wxWidgets types
 and macros, but it has been also mentioned that it isn't quite enough.
 Although everything works fine inside the program, things can get nasty when
 it tries to communicate with the outside world which, sadly, often expects
@@ -177,7 +177,7 @@ the Unicode string.
 You should define {\tt wxUSE\_UNICODE} to $1$ to compile your program in
 Unicode mode. Note that it currently only works in Win32 and GTK 2.0 and
 that some parts of
-wxWindows are not Unicode-compliant yet (ODBC classes, for example). If you
+wxWidgets are not Unicode-compliant yet (ODBC classes, for example). If you
 compile your program in ANSI mode you can still define {\tt wxUSE\_WCHAR\_T} 
 to get some limited support for {\tt wchar\_t} type.
 

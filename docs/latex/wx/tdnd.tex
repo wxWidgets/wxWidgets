@@ -8,7 +8,7 @@ Classes: \helpref{wxDataObject}{wxdataobject},
 \helpref{wxFileDropTarget}{wxfiledroptarget}
 
 Note that wxUSE\_DRAG\_AND\_DROP must be defined in setup.h in order
-to use drag and drop in wxWindows.
+to use drag and drop in wxWidgets.
 
 See also: \helpref{wxDataObject overview}{wxdataobjectoverview} and \helpref{DnD sample}{samplednd}
 
@@ -69,7 +69,7 @@ wxDropTarget and override its pure virtual methods. Alternatively, you may
 derive from \helpref{wxTextDropTarget}{wxtextdroptarget} or
 \helpref{wxFileDropTarget}{wxfiledroptarget} and override their OnDropText()
 or OnDropFiles() method.
-\item {\bf Drop:} When the user releases the mouse over a window, wxWindows
+\item {\bf Drop:} When the user releases the mouse over a window, wxWidgets
 asks the associated wxDropTarget object if it accepts the data. For this,
 a \helpref{wxDataObject}{wxdataobject} must be associated with the drop target
 and this data object will be responsible for the format negotiation between

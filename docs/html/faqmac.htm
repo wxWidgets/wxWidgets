@@ -2,7 +2,7 @@
 <HTML>
 
 <HEAD>
-<TITLE>wxWindows 2 for Mac FAQ</TITLE>
+<TITLE>wxWidgets 2 for Mac FAQ</TITLE>
 </HEAD>
 
 <BODY BGCOLOR=#FFFFFF TEXT=#000000 VLINK="#00376A" LINK="#00529C" ALINK="#313063">
@@ -13,7 +13,7 @@
 <tr>
 <td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
 <font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
-<b>wxWindows 2 for Mac FAQ</b>
+<b>wxWidgets 2 for Mac FAQ</b>
 </font>
 </td>
 </tr>
@@ -38,7 +38,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#smarterrors">What are the smart preprocessing errors with the Apple Developer Tools?</a></li>
 <li><a href="#aboutmenu">How does wxMac support the standard Apple About menu item and Help menu?</a></li>
 <li><a href="#findericon">How do I add an icon to my application?</a></li>
-<li><a href="#switching">How can I easily switch between different versions of wxWindows in CodeWarrior?</a></li>
+<li><a href="#switching">How can I easily switch between different versions of wxWidgets in CodeWarrior?</a></li>
 </ul>
 <hr>
 
@@ -54,15 +54,15 @@ The author of this port is <a href="mailto:csomor@advancedconcepts.ch">Stefan Cs
 
 <h3><a name="macplat">Which Mac platforms are supported?</a></h3>
 
-wxWindows 2 can be used to develop and deliver applications on Classic Mac OS (e.g. Mac OS 8.x/9.x) both as Carbon and non-Carbon applications.
+wxWidgets 2 can be used to develop and deliver applications on Classic Mac OS (e.g. Mac OS 8.x/9.x) both as Carbon and non-Carbon applications.
 <P>
-A Mac OS X port is in progress in order to be able to build wxWindows applications using the Apple Developer Tools that are delivered with every copy of Mac OS X.
+A Mac OS X port is in progress in order to be able to build wxWidgets applications using the Apple Developer Tools that are delivered with every copy of Mac OS X.
 The Mac OS X port is based on and, for the most part, merged with the Carbon code for Classic Mac OS.
 <P>
 
 <h3><a name="macosx">How is the Mac OS X port different from the Classic Mac OS port?</a></h3>
 
-wxMac for Mac OS X shares code both with wxMac for Mac OS and common Unix code in wxWindows. The aim is to use the same Mac OS Carbon code both for Classic Mac OS and for Mac OS X while leveraging the fact that Mac OS X is a BSD Unix.
+wxMac for Mac OS X shares code both with wxMac for Mac OS and common Unix code in wxWidgets. The aim is to use the same Mac OS Carbon code both for Classic Mac OS and for Mac OS X while leveraging the fact that Mac OS X is a BSD Unix.
 <P>
 This hybrid approach was suggested by Apple to the <a href="http://www.mozilla.org/ports/fizzilla/">Fizzilla</a> team working on <a href="http://www.mozilla.org/">Mozilla</a> for Mac OS X.
 <P>
@@ -87,7 +87,7 @@ Under Mac OS X, the Developer Tools are sufficient to build wxMac. CodeWarrior P
 
 <h3><a name="filetypes">How does CVS handle file types/creators under Mac OS 8.x/9.x?</a></h3>
 
-Before checking out the wxWindows code using a CVS client under Mac OS 8.x/9.x, be sure your computer is set up to treat <code>xpm</code> and <code>xbm</code> images correctly:
+Before checking out the wxWidgets code using a CVS client under Mac OS 8.x/9.x, be sure your computer is set up to treat <code>xpm</code> and <code>xbm</code> images correctly:
 <ul>
 <li>bring up the Internet control panel, select the <i>Advanced Options</i> tab, click on the <i>File Mapping</i> icon from the list at the left and see if there are is an entry for ".xpm" files and another for ".xbm".
 <li>if an entry exists, click <i>Change...</i> and make sure <i>File Type</i> is <code>TEXT</code> (just those four capital letters); correct it if necessary. If there is no entry, make one with type set to <code>TEXT</code> and creator set to anything you like; reasonable choices include <code>GKON</code> (Graphic Converter) or <code>CWIE</code> (CodeWarrior).
@@ -101,8 +101,8 @@ The Mac OS X CVS client does not handle file types and creators at all (just lik
 <P>
 All files checked out under Mac OS X will be untyped and CodeWarrior will not recognize them correctly. To correct this, use the autotyper provided in the CVS sources:
 <ul>
-<li>decode and decompress the file <code>wxWindows/docs/mac/TypeAsMetrowerksText.sea.hqx</code>
-<li>drag the wxWindows CVS sandbox directory onto the autotyper and most of the files will be typed according to the file extension
+<li>decode and decompress the file <code>wxWidgets/docs/mac/TypeAsMetrowerksText.sea.hqx</code>
+<li>drag the wxWidgets CVS sandbox directory onto the autotyper and most of the files will be typed according to the file extension
 </ul>
 <P>
 
@@ -125,11 +125,11 @@ This is also necessary even if you don&#39;want to build the Carbon targets.
 <P>
 Build the projects (<code>makemac6.mcp</code> for CodeWarrior Pro 6; <code>makemac.mpc</code> for CodeWarrior Pro 5) in the following five directories:
 <ul>
-<li>wxWindows:src:
-<li>wxWindows:src:jpeg:
-<li>wxWindows:src:png:
-<li>wxWindows:src:tiff:
-<li>wxWindows:src:zlib:
+<li>wxWidgets:src:
+<li>wxWidgets:src:jpeg:
+<li>wxWidgets:src:png:
+<li>wxWidgets:src:tiff:
+<li>wxWidgets:src:zlib:
 </ul>
 <P>
 
@@ -139,8 +139,8 @@ You need to have the Apple Developer Tools installed. The Developer Tools CD is 
 <P>
 Building wxMac completely without configure is not supported.
 <P>
-Building wxWindows directly in the CVS sandbox is not recommended. Instead, wxWindows should be built in a directory configured relatively to the CVS sandbox.
-For instance, to build wxMac with configure, start in the base wxWindows directory and type:
+Building wxWidgets directly in the CVS sandbox is not recommended. Instead, wxWidgets should be built in a directory configured relatively to the CVS sandbox.
+For instance, to build wxMac with configure, start in the base wxWidgets directory and type:
 <ul>
 <li><code>mkdir macbuild</code>
 <li><code>cd macbuild</code>
@@ -197,12 +197,12 @@ This error can sometimes be corrected or avoided by modifying the source code. H
 
 <h3><a name="aboutmenu">How does wxMac support the standard Apple About menu item and Help menu?</a></h3>
 
-Because wxWindows does not have a specific API for the <i>About</i> menu item or the <i>Help</i> menu, the Mac OS port uses some static variables to help the engine make the right decisions:
+Because wxWidgets does not have a specific API for the <i>About</i> menu item or the <i>Help</i> menu, the Mac OS port uses some static variables to help the engine make the right decisions:
 <ul>
 <li>It assumes that the <i>About</i> menu item is part of a <i>Help</i> menu.
 <li>The title of the <i>Help</i> menu is stored in <code>wxApp::s_macHelpMenuTitleName</code>, it defaults to "&Help", but you can change it in your constructor to your specific menu title.
 <li>The item Id of the <i>About</i> menu is stored in <code>wxApp::s_macAboutMenuItemID</code>, it defaults to <code>wxID_ABOUT</code>, but can be changed as well to suit your needs.
-<li>The other items of the wxWindows help menu are appended to the Mac OS <i>Help</i> menu and the translation of Ids is handled transparently for your application.
+<li>The other items of the wxWidgets help menu are appended to the Mac OS <i>Help</i> menu and the translation of Ids is handled transparently for your application.
 </ul>
 <P>
 
@@ -215,10 +215,10 @@ your project and in the CodeWarrior Settings add a check mark under Linker:Outpu
 Flags/Finder Flags/Has Custom Icon.
 <P>
 
-<h3><a name="switching">How can I easily switch between different versions of wxWindows in CodeWarrior?</a></h3>
+<h3><a name="switching">How can I easily switch between different versions of wxWidgets in CodeWarrior?</a></h3>
 
 Sometimes you want to test your application against different versions
-of wxWindows, for example a stable version of wxWindows versus a development version.
+of wxWidgets, for example a stable version of wxWidgets versus a development version.
 The easiest way to do this is to create a symbolic path.<P>
 
 Under Edit-Preferences in General:Source Trees, type a name (for example WXWIN)

@@ -1,6 +1,6 @@
 \section{\class{wxUpdateUIEvent}}\label{wxupdateuievent}
 
-This class is used for pseudo-events which are called by wxWindows
+This class is used for pseudo-events which are called by wxWidgets
 to give an application the chance to update various user interface elements.
 
 \wxheading{Derived from}
@@ -32,14 +32,14 @@ The code for doing this has to be mixed up with the code that is invoked when
 an action is invoked for a menu item or button.
 
 With update UI events, you define an event handler to look at the state of
-the application and change UI elements accordingly. wxWindows will call your
+the application and change UI elements accordingly. wxWidgets will call your
 member functions in idle time, so you don't have to worry where to call this code.
 In addition to being a clearer and more declarative method, it also means you
 don't have to worry whether you're updating a toolbar or menubar identifier.
 The same handler can update a menu item and toolbar button, if the identifier is the same.
 
 Instead of directly manipulating the menu or button, you call functions in the event
-object, such as \helpref{wxUpdateUIEvent::Check}{wxupdateuieventcheck}. wxWindows
+object, such as \helpref{wxUpdateUIEvent::Check}{wxupdateuieventcheck}. wxWidgets
 will determine whether such a call has been made, and which UI element to update.
 
 These events will work for popup menus as well as menubars. Just before a menu is popped
@@ -123,19 +123,19 @@ Returns TRUE if the UI element should be enabled.
 
 \constfunc{bool}{GetSetChecked}{\void}
 
-Returns TRUE if the application has called {\bf SetChecked}. For wxWindows internal use only.
+Returns TRUE if the application has called {\bf SetChecked}. For wxWidgets internal use only.
 
 \membersection{wxUpdateUIEvent::GetSetEnabled}\label{wxupdateuieventgetsetenabled}
 
 \constfunc{bool}{GetSetEnabled}{\void}
 
-Returns TRUE if the application has called {\bf SetEnabled}. For wxWindows internal use only.
+Returns TRUE if the application has called {\bf SetEnabled}. For wxWidgets internal use only.
 
 \membersection{wxUpdateUIEvent::GetSetText}\label{wxupdateuieventgetsettext}
 
 \constfunc{bool}{GetSetText}{\void}
 
-Returns TRUE if the application has called {\bf SetText}. For wxWindows internal use only.
+Returns TRUE if the application has called {\bf SetText}. For wxWidgets internal use only.
 
 \membersection{wxUpdateUIEvent::GetText}\label{wxupdateuieventgettext}
 

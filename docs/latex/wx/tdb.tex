@@ -1,23 +1,23 @@
 \section{Database classes overview}\label{odbcoverview}
 
 \normalboxd{The more sophisticated wxODBC classes (wxDb/wxDbTable) are the 
-recommended classes for doing database/ODBC work with wxWindows. These new 
-classes replace the wxWindows v1.6x classes wxDatabase. Documentation for the 
+recommended classes for doing database/ODBC work with wxWidgets. These new 
+classes replace the wxWidgets v1.6x classes wxDatabase. Documentation for the 
 old wxDatabase class and its associated classes is still 
 included in the class documentation and in this overview section, but support 
 for these old classes has been phased out, and all future development work 
 is being done solely on the new wxDb/wxDbTable classes.}
 
-\subsection{Different ODBC Class Libraries in wxWindows}
+\subsection{Different ODBC Class Libraries in wxWidgets}
 
-Following is a detailed overview of how to use the wxWindows ODBC classes - \helpref{wxDb}{wxdb} 
+Following is a detailed overview of how to use the wxWidgets ODBC classes - \helpref{wxDb}{wxdb} 
 and \helpref{wxDbTable}{wxdbtable} and their associated functions. These are 
 the ODBC classes donated by Remstar International, and are collectively 
 referred to herein as the wxODBC classes. Since their initial inclusion with 
-wxWindows v2.x, they have become the recommended wxWindows classes for database 
+wxWidgets v2.x, they have become the recommended wxWidgets classes for database 
 access.
 
-An older version of some classes ported over from wxWindows v1.68 still exist 
+An older version of some classes ported over from wxWidgets v1.68 still exist 
 (see \helpref{wxDatabase}{wxdatabase} in odbc.cpp), but are now deprecated in favor of the more 
 robust and comprehensive wxDb/wxDbTable classes. All current and future 
 feature development, as well as active debugging, are only being done on 
@@ -172,7 +172,7 @@ returned.
 For each result set, a cursor is maintained (typically by the database) 
 which keeps track of where in the result set the user currently is. 
 Depending on the database, ODBC driver, and how you configured the 
-wxWindows ODBC settings in setup.h (see \helpref{wxODBC - Compiling}{wxodbccompiling}), cursors can be 
+wxWidgets ODBC settings in setup.h (see \helpref{wxODBC - Compiling}{wxodbccompiling}), cursors can be 
 either forward or backward scrolling. At a minimum, cursors must scroll 
 forward. For example, if a query resulted in a result set with 100 rows, 
 as the data is read by the client application, it will read row 1, then 2, 
@@ -258,7 +258,7 @@ the datasource will only be available to the user who configured the DSN.
 
 Under Unix, iODBC is used for implementation of the ODBC API. To compile the 
 wxODBC classes, you must first obtain iODBC from \urlref{http://www.iodbc.org}{www.iodbc.org} and install it. 
-(Note: wxWindows currently includes a version of iODBC.) Then you must create the file "~/.odbc.ini" (or optionally create 
+(Note: wxWidgets currently includes a version of iODBC.) Then you must create the file "~/.odbc.ini" (or optionally create 
 "/etc/odbc.ini" for access for all users on the system). This file contains 
 the settings for your system/datasource. Below is an example section of a 
 odbc.ini file for use with the "samples/db" sample program using MySQL:
@@ -277,7 +277,7 @@ odbc.ini file for use with the "samples/db" sample program using MySQL:
 
 \subsection{wxODBC - Compiling}\label{wxodbccompiling}
 
-The wxWindows setup.h file has several settings in it pertaining to compiling 
+The wxWidgets setup.h file has several settings in it pertaining to compiling 
 the wxODBC classes.
 
 \begin{twocollist}\itemsep=0pt
@@ -293,7 +293,7 @@ either the \helpref{wxDbGetConnection}{wxdbfunctions} or
 \helpref{wxDb constructor}{wxdbconstr}. The default is 1.}
 \twocolitem{wxODBC\_BACKWARD\_COMPATABILITY}{Between v2.0 and 2.2, massive 
 renaming efforts were done to the ODBC classes to get naming conventions 
-similar to those used throughout wxWindows, as well as to preface all wxODBC 
+similar to those used throughout wxWidgets, as well as to preface all wxODBC 
 classes names and functions with a wxDb preface. Because this renaming would 
 affect applications written using the v2.0 names, this compile-time directive 
 was added to allow those programs written for v2.0 to still compile using the 
@@ -308,7 +308,7 @@ is 0.}
 
 You are required to include the "odbc32.lib" provided by your compiler vendor 
 in the list of external libraries to be linked in. If using the makefiles 
-supplied with wxWindows, this library should already be included for use with 
+supplied with wxWidgets, this library should already be included for use with 
 makefile.b32, makefile.vc, and makefile.g95. 
 
 You cannot compile the wxODBC classes under Win16 - sorry.
@@ -351,7 +351,7 @@ Authorization string (password). A fourth piece of information, a default
 directory indicating where the data file is stored, is required for Text and 
 dBase drivers for ODBC.
 
-The wxWindows data class wxDbConnectInf exists for holding all of these 
+The wxWidgets data class wxDbConnectInf exists for holding all of these 
 values, plus some others that may be desired.
 
 The 'Henv' member is the environment handle used to access memory for use by the 
@@ -518,7 +518,7 @@ One final note on creating a connection. When a connection is created, it
 will default to only allowing cursor scrolling to be either forward only, 
 or both backward and forward scrolling. The default behavior is 
 determined by the setting {\tt wxODBC\_FWD\_ONLY\_CURSORS} in setup.h when you 
-compile the wxWindows library. The library default is to only support 
+compile the wxWidgets library. The library default is to only support 
 forward scrolling cursors only, though this can be overridden by parameters 
 for wxDb() constructor or the \helpref{wxDbGetConnection}{wxdbfunctions} 
 function. All datasources and ODBC drivers must support forward scrolling 
@@ -848,7 +848,7 @@ connections still using the handle.}
 
 \subsection{wxODBC - Known Issues}\label{wxodbcknownissues}
 
-As with creating wxWindows, writing the wxODBC classes was not the simple 
+As with creating wxWidgets, writing the wxODBC classes was not the simple 
 task of writing an application to run on a single type of computer system. 
 The classes need to be cross-platform for different operating systems, and 
 they also needed to take in to account different database manufacturers and 
@@ -917,7 +917,7 @@ functionality as the driver can emulate.
 \begin{itemize}\itemsep=0pt
 \item If a column is part of the Primary Key, the column cannot be NULL.
 \item Cannot support selecting for update [\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate}]. Always returns FALSE.
-\item Columns that are part of primary or secondary keys must be defined as being NOT NULL when they are created. Some code is added in \helpref{wxDbTable::CreateIndex}{wxdbtablecreateindex} to try to adjust the column definition if it is not defined correctly, but it is experimental (as of wxWindows v2.2.1)
+\item Columns that are part of primary or secondary keys must be defined as being NOT NULL when they are created. Some code is added in \helpref{wxDbTable::CreateIndex}{wxdbtablecreateindex} to try to adjust the column definition if it is not defined correctly, but it is experimental (as of wxWidgets v2.2.1)
 \item Does not support sub-queries in SQL statements
 \end{itemize}
 
@@ -1064,24 +1064,24 @@ Classes: \helpref{wxDatabase}{wxdatabase}, \helpref{wxRecordSet}{wxrecordset}, \
 \rtfsp\helpref{wxQueryField}{wxqueryfield}
 
 \normalboxd{The more sophisticated wxODBC classes (wxDb/wxDbTable) are the 
-recommended classes for doing database/ODBC work with wxWindows. These new 
-classes replace the wxWindows v1.6x classes wxDatabase.
+recommended classes for doing database/ODBC work with wxWidgets. These new 
+classes replace the wxWidgets v1.6x classes wxDatabase.
 
 Documentation for the old wxDatabase class and its associated classes is still 
 included in the class documentation and in this overview section, but support 
 for these old classes has been phased out, and all future development work 
 is being done solely on the new wxDb/wxDbTable classes.}
 
-wxWindows provides a set of classes for accessing a subset of Microsoft's ODBC (Open Database Connectivity)
+wxWidgets provides a set of classes for accessing a subset of Microsoft's ODBC (Open Database Connectivity)
 product. Currently, this wrapper is available under MS Windows only, although
 ODBC may appear on other platforms, and a generic or product-specific SQL emulator for the ODBC
-classes may be provided in wxWindows at a later date.
+classes may be provided in wxWidgets at a later date.
 
 ODBC presents a unified API (Application Programmer's Interface) to a
 wide variety of databases, by interfacing indirectly to each database or
 file via an ODBC driver. The language for most of the database
 operations is SQL, so you need to learn a small amount of SQL as well as
-the wxWindows ODBC wrapper API. Even though the databases may not be
+the wxWidgets ODBC wrapper API. Even though the databases may not be
 SQL-based, the ODBC drivers translate SQL into appropriate operations
 for the database or file: even text files have rudimentary ODBC support,
 along with dBASE, Access, Excel and other file formats.
@@ -1101,7 +1101,7 @@ ODBC drivers must be installed on the user's machine. If you do not use the data
 classes, odbc.dll will be loaded but not called (so ODBC does not need to be
 setup fully if no ODBC calls will be made).
 
-A sample is distributed with wxWindows in {\tt samples/odbc}. You will need to install
+A sample is distributed with wxWidgets in {\tt samples/odbc}. You will need to install
 the sample dbf file as a data source using the ODBC setup utility, available from
 the control panel if ODBC has been fully installed.
 
@@ -1211,7 +1211,7 @@ your queries in sequential order using the same wxRecordSet.
 \subsection{ODBC SQL data types [DEPRECATED]}\label{sqltypes}
 
 These are the data types supported in ODBC SQL. Note that there are other, extended level conformance
-types, not currently supported in wxWindows.
+types, not currently supported in wxWidgets.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{CHAR(n)}{A character string of fixed length {\it n}.}

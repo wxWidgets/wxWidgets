@@ -105,7 +105,7 @@ This sequence of operations ensures that the source's transparent area need not 
 and logical functions are supported.
 
 {\bf Note:} on Windows, blitting with masks can be speeded up considerably by compiling
-wxWindows with the wxUSE\_DC\_CACHE option enabled. You can also influence whether MaskBlt
+wxWidgets with the wxUSE\_DC\_CACHE option enabled. You can also influence whether MaskBlt
 or the explicit mask blitting code above is used, by using \helpref{wxSystemOptions}{wxsystemoptions} and
 setting the {\bf no-maskblt} option to 1.
 
@@ -357,7 +357,7 @@ The current pen is used for drawing the outline, and the current brush
 for filling the shape.  Using a transparent brush suppresses filling.
 The programmer is responsible for deleting the list of points.
 
-Note that wxWindows automatically closes the first and last points.
+Note that wxWidgets automatically closes the first and last points.
 
 \pythonnote{The wxPython version of this method accepts a Python list
 of wxPoint objects.}
@@ -951,9 +951,9 @@ The mapping mode can be one of the following:
 If {\it optimize} is TRUE (the default), this function sets optimization mode on.
 This currently means that under X, the device context will not try to set a pen or brush
 property if it is known to be set already. This approach can fall down
-if non-wxWindows code is using the same device context or window, for example
+if non-wxWidgets code is using the same device context or window, for example
 when the window is a panel on which the windowing system draws panel items.
-The wxWindows device context 'memory' will now be out of step with reality.
+The wxWidgets device context 'memory' will now be out of step with reality.
 
 Setting optimization off, drawing, then setting it back on again, is a trick
 that must occasionally be employed.

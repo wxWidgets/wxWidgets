@@ -26,7 +26,7 @@ None
 \func{}{wxDataOutputStream}{\param{wxOutputStream\&}{ stream}, \param{wxMBConv\&}{ conv = wxMBConvUTF8}}
 
 Constructs a datastream object from an output stream. Only write methods will
-be available. The second form is only available in Unicode build of wxWindows.
+be available. The second form is only available in Unicode build of wxWidgets.
 
 \wxheading{Parameters}
 
@@ -91,7 +91,7 @@ Writes the double {\it f} to the stream using the IEEE format.
 Writes {\it string} to the stream. Actually, this method writes the size of
 the string before writing {\it string} itself.
 
-In ANSI build of wxWindows, the string is written to the stream in exactly
+In ANSI build of wxWidgets, the string is written to the stream in exactly
 same way it is represented in memory. In Unicode build, however, the string
 is first converted to multibyte representation with {\it conv} object passed
 to stream's constructor (consequently, ANSI application can read data 

@@ -2,7 +2,7 @@
 
 Classes: \helpref{wxXmlResource}{wxxmlresource}, \helpref{wxXmlResourceHandler}{wxxmlresourcehandler}
 
-{\bf IMPORTANT NOTE:} XRC is not yet a part of the core wxWindows library, so
+{\bf IMPORTANT NOTE:} XRC is not yet a part of the core wxWidgets library, so
 please see the next section for how to compile and link it. Otherwise if you
 try to use it, you will get link errors.
 
@@ -23,7 +23,7 @@ is a more elegant solution.
 \item You can choose between different alternative resource files at run time, if necessary.
 \item The XRC format uses sizers for flexibility, allowing dialogs to be resizable
 and highly portable.
-\item The XRC format is a wxWindows standard,
+\item The XRC format is a wxWidgets standard,
 and can be generated or postprocessed by any program that understands it. As it is based
 on the XML standard, existing XML editors can be used for simple editing purposes.
 \end{itemize}
@@ -49,10 +49,10 @@ To compile XRC:
 and compile. Also compile contrib/utils/wxrc using wxBase if you wish to compile
 resource files.
 \item Under Unix, XRC should be configured when you configured
-wxWindows. Make XRC by changing directory to contrib/src/xrc and
+wxWidgets. Make XRC by changing directory to contrib/src/xrc and
 type 'make'.  Similarly compile contrib/utils/wxrc using wxBase if you wish to compile
 resource files. {\bf Note:} there is currently a
-problem with the wxWindows build system that means that
+problem with the wxWidgets build system that means that
 only the static version of library can be built at present.
 \end{itemize}
 
@@ -86,14 +86,14 @@ To create an XRC file, use one of the following methods.
 \item use \urlref{wxDesigner}{http://www.roebling.de}, a commercial dialog designer/RAD tool;
 \item use \urlref{DialogBlocks}{http://www.anthemion.co.uk/dialogblocks}, a commercial dialog editor;
 \item use \urlref{XRCed}{http://xrced.sf.net}, a wxPython-based
-dialog editor that you can find in the {\tt wxPython/tools} subdirectory of the wxWindows
+dialog editor that you can find in the {\tt wxPython/tools} subdirectory of the wxWidgets
 CVS archive;
 \item use \urlref{Glade}{http://wxglade.sf.net}, a GUI designer written in wxPython. At the moment it can generate Python, C++ and XRC;
 \item use wxrcedit ({\tt utils/contrib/wxrcedit}) (under development);
 \item convert WIN32 RC files to XRC with the tool in {\tt contrib/utils/convertrc}.
 \end{itemize}
 
-A complete list of third-party tools that write to XRC can be found at \urlref{www.wxwindows.org/lnk_tool.htm}{http://www.wxwindows.org/lnk_tool.in}.
+A complete list of third-party tools that write to XRC can be found at \urlref{www.wxwidgets.org/lnk_tool.htm}{http://www.wxwidgets.org/lnk_tool.in}.
 
 It is highly recommended that you use a resource editing tool, since it's fiddly writing
 XRC files by hand.
@@ -203,12 +203,12 @@ public:
     void OnDlg2(wxCommandEvent& event);
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -445,7 +445,7 @@ This is the XML file (resource.xrc) for the XRC sample.
 
 \subsection{XRC file format}\label{xrcfileformat}
 
-Please see Technical Note 14 (docs/tech/tn0014.txt) in your wxWindows
+Please see Technical Note 14 (docs/tech/tn0014.txt) in your wxWidgets
 distribution.
 
 \subsection{Adding new resource handlers}\label{newresourcehandlers}

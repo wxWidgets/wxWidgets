@@ -34,7 +34,7 @@ wxLIGHT\_GREY\_PEN}
 
 \wxheading{Remarks}
 
-On a monochrome display, wxWindows shows all non-white pens as black.
+On a monochrome display, wxWidgets shows all non-white pens as black.
 
 Do not initialize objects on the stack before the program commences,
 since other required structures may not have been set up yet. Instead,
@@ -151,7 +151,7 @@ system, since wxBrush uses a reference counting system for efficiency.
 
 Although all remaining pens are deleted when the application exits,
 the application should try to clean up all pens itself. This is because
-wxWindows cannot know if a pointer to the pen object is stored in an
+wxWidgets cannot know if a pointer to the pen object is stored in an
 application data structure, and there is a risk of double deletion.
 
 \membersection{wxPen::GetCap}\label{wxpengetcap}
@@ -348,7 +348,7 @@ be deleted and their resources freed, eliminating the possibility of
 `memory leaks'. However, it is best not to rely on this automatic
 cleanup because it can lead to double deletion in some circumstances.
 
-There are two mechanisms in recent versions of wxWindows which make the
+There are two mechanisms in recent versions of wxWidgets which make the
 pen list less useful than it once was. Under Windows, scarce resources
 are cleaned up internally if they are not being used. Also, a referencing
 counting mechanism applied to all GDI objects means that some sharing
@@ -362,9 +362,9 @@ and copy pens as you see fit. If your Windows resource meter suggests
 your application is using too many resources, you can resort to using
 GDI lists to share objects explicitly.
 
-The only compelling use for the pen list is for wxWindows to keep
+The only compelling use for the pen list is for wxWidgets to keep
 track of pens in order to clean them up on exit. It is also kept for
-backward compatibility with earlier versions of wxWindows.
+backward compatibility with earlier versions of wxWidgets.
 
 \wxheading{See also}
 
@@ -383,7 +383,7 @@ use the object pointer {\bf wxThePenList}.
 
 \func{void}{AddPen}{\param{wxPen*}{ pen}}
 
-Used internally by wxWindows to add a pen to the list.
+Used internally by wxWidgets to add a pen to the list.
 
 \membersection{wxPenList::FindOrCreatePen}\label{wxpenlistfindorcreatepen}
 
@@ -411,6 +411,6 @@ to the pen list, and returns it.
 
 \func{void}{RemovePen}{\param{wxPen*}{ pen}}
 
-Used by wxWindows to remove a pen from the list.
+Used by wxWidgets to remove a pen from the list.
 
 

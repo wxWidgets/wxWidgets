@@ -4,13 +4,13 @@ Classes: \helpref{wxEvtHandler}{wxevthandler}, \helpref{wxWindow}{wxwindow}, \he
 
 \subsection{Introduction}
 
-Before version 2.0 of wxWindows, events were handled by the application
+Before version 2.0 of wxWidgets, events were handled by the application
 either by supplying callback functions, or by overriding virtual member
 functions such as {\bf OnSize}.
 
-From wxWindows 2.0, {\it event tables} are used instead, with a few exceptions.
+From wxWidgets 2.0, {\it event tables} are used instead, with a few exceptions.
 
-An event table is placed in an implementation file to tell wxWindows how to map
+An event table is placed in an implementation file to tell wxWidgets how to map
 events to member functions. These member functions are not virtual functions, but
 they are all similar in form: they take a single wxEvent-derived argument, and have a void return
 type.
@@ -70,11 +70,11 @@ protected:
 
 \subsection{How events are processed}\label{eventprocessing}
 
-When an event is received from the windowing system, wxWindows calls 
+When an event is received from the windowing system, wxWidgets calls 
 \helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent} on the first
 event handler object belonging to the window generating the event.
 
-It may be noted that wxWindows' event processing system implements something
+It may be noted that wxWidgets' event processing system implements something
 very close to virtual methods in normal C++, i.e. it is possible to alter
 the behaviour of a class by overriding its event handling functions. In
 many cases this works even for changing the behaviour of native controls.
@@ -99,7 +99,7 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
     if ( isalpha( event.KeyCode() ) )
     {
        // key code is within legal range. we call event.Skip() so the
-       // event can be processed either in the base wxWindows class
+       // event can be processed either in the base wxWidgets class
        // or the native control.
 
        event.Skip();
@@ -134,7 +134,7 @@ recursively applied to the parent window's event handler. If this returns TRUE, 
 \end{enumerate}
 
 {\bf Pay close attention to Step 5.}  People often overlook or get
-confused by this powerful feature of the wxWindows event processing
+confused by this powerful feature of the wxWidgets event processing
 system.  To put it a different way, events derived either directly or
 indirectly from wxCommandEvent will travel up the containment
 hierarchy from child to parent until an event handler is found that
@@ -142,7 +142,7 @@ doesn't call event.Skip().  Events not derived from wxCommandEvent are
 sent only to the window they occurred in and then stop.
 
 Finally, there is another additional complication (which, in fact, simplifies
-life of wxWindows programmers significantly): when propagating the command
+life of wxWidgets programmers significantly): when propagating the command
 events upwards to the parent window, the event propagation stops when it
 reaches the parent dialog, if any. This means that you don't risk to get
 unexpected events from the dialog controls (which might be left unprocessed by
@@ -152,7 +152,7 @@ for this choice is that there are only a few frames in a typical application
 and their parent-child relation are well understood by the programmer while it
 may be very difficult, if not impossible, to track down all the dialogs which
 may be popped up in a complex program (remember that some are created
-automatically by wxWindows). If you need to specify a different behaviour for
+automatically by wxWidgets). If you need to specify a different behaviour for
 some reason, you can use 
 \helpref{SetExtraStyle(wxWS\_EX\_BLOCK\_EVENTS)}{wxwindowsetextrastyle} 
 explicitly to prevent the events from being propagated beyond the given window

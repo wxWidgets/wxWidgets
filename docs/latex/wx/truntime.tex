@@ -9,15 +9,15 @@ just by knowing the name of a class, which makes facilities such as persistent
 storage hard to implement.
 
 Most C++ GUI frameworks overcome these limitations by means of a set of
-macros and functions and wxWindows is no exception. As it originated before the
+macros and functions and wxWidgets is no exception. As it originated before the
 addition of RTTI to the standard C++ and as support for it still missing from
-some (albeit old) compilers, wxWindows doesn't (yet) use it, but provides its
+some (albeit old) compilers, wxWidgets doesn't (yet) use it, but provides its
 own macro-based RTTI system.
 
 In the future, the standard C++ RTTI will be used though and you're encouraged
 to use whenever possible \helpref{wxDynamicCast()}{wxdynamiccast} macro which,
 for the implementations that support it, is defined just as dynamic\_cast<> and
-uses wxWindows RTTI for all the others. This macro is limited to wxWindows
+uses wxWidgets RTTI for all the others. This macro is limited to wxWidgets
 classes only and only works with pointers (unlike the real dynamic\_cast<> which
 also accepts references).
 

@@ -910,8 +910,8 @@ is called once for every print job (regardless of how many copies are being prin
 Called once by the framework to allow the application to perform general
 preparation tasks.
 
-In wxWindows 2.4, this function is called {\it after} GetPageInfo is called,
-which is not ideal. In wxWindows 2.5, the function is correctly called
+In wxWidgets 2.4, this function is called {\it after} GetPageInfo is called,
+which is not ideal. In wxWidgets 2.5, the function is correctly called
 before GetPageInfo is called. Please see Patch 781346 on SourceForge
 for a backport of this fix. Unfortunately we cannot apply it to 2.4,
 for binary compatibility reasons.

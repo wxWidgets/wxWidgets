@@ -1,12 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Name:        tmbconv.tex
-%% Purpose:     Overview of the wxMBConv classes in wxWindows
+%% Purpose:     Overview of the wxMBConv classes in wxWidgets
 %% Author:      Ove Kaaven
 %% Modified by:
 %% Created:     25.03.00
 %% RCS-ID:      $Id$
 %% Copyright:   (c) 2000 Ove Kaaven
-%% Licence:     wxWindows license
+%% Licence:     wxWidgets license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{wxMBConv classes overview}\label{mbconvclasses}
@@ -15,7 +15,7 @@ Classes: \helpref{wxMBConv}{wxmbconv}, \helpref{wxMBConvFile}{wxmbconvfile},
 \helpref{wxMBConvUTF7}{wxmbconvutf7}, \helpref{wxMBConvUTF8}{wxmbconvutf8}, 
 \helpref{wxCSConv}{wxcsconv}
 
-The wxMBConv classes in wxWindows enables an Unicode-aware application to
+The wxMBConv classes in wxWidgets enables an Unicode-aware application to
 easily convert between Unicode and the variety of 8-bit encoding systems still
 in use.
 
@@ -41,7 +41,7 @@ pass unhindered through any traditional transport channels.
 
 \subsection{Background: The wxString class}
 
-If you have compiled wxWindows in Unicode mode, the wxChar type will become
+If you have compiled wxWidgets in Unicode mode, the wxChar type will become
 identical to wchar\_t rather than char, and a wxString stores wxChars. Hence,
 all wxString manipulation in your application will then operate on Unicode
 strings, and almost as easily as working with ordinary char strings (you
@@ -65,7 +65,7 @@ override the MB2WC and WC2MB methods.
 \subsection{wxMBConv objects}
 
 In C++, for a class to be useful and possible to pass around, it needs to be
-instantiated. All of the wxWindows-provided wxMBConv classes have predefined
+instantiated. All of the wxWidgets-provided wxMBConv classes have predefined
 instances (wxConvLibc, wxConvFile, wxConvUTF7, wxConvUTF8, wxConvLocal).
 You can use these predefined objects directly, or you can instantiate your own
 objects.
@@ -90,7 +90,7 @@ it is better to go through wxConvCurrent.
 
 Once you have chosen which object you want to use to convert your text,
 here is how you would use them with wxString. These examples all assume
-that you are using a Unicode build of wxWindows, although they will still
+that you are using a Unicode build of wxWidgets, although they will still
 compile in a non-Unicode build (they just won't convert anything).
 
 Example 1: Constructing a wxString from input in current encoding.
@@ -134,7 +134,7 @@ it in a vararg context (like with printf).
 If you have specialized needs, or just don't want to use wxString, you
 can also use the conversion methods of the conversion objects directly.
 This can even be useful if you need to do conversion in a non-Unicode
-build of wxWindows; converting a string from UTF-8 to the current
+build of wxWidgets; converting a string from UTF-8 to the current
 encoding should be possible by doing this:
 
 \begin{verbatim}
@@ -144,7 +144,7 @@ wxString str(wxConvUTF8.cMB2WC(input_data), *wxConvCurrent);
 Here, cMB2WC of the UTF8 object returns a wxWCharBuffer containing a Unicode
 string. The wxString constructor then converts it back to an 8-bit character
 set using the passed conversion object, *wxConvCurrent. (In a Unicode build
-of wxWindows, the constructor ignores the passed conversion object and
+of wxWidgets, the constructor ignores the passed conversion object and
 retains the Unicode data.)
 
 This could also be done by first making a wxString of the original data:

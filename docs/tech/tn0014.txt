@@ -36,7 +36,7 @@ In the example bellow, <pos>, <label> and <style> are attributes, while neither
 <resource> nor either of <object>s is:
 
     <?xml version="1.0" encoding="utf-8">
-    <resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+    <resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.3.0.1">
         <object class="wxPanel">
             <style>wxSUNKEN_BORDER</style>             <!-- attr -->
             <object class="wxStaticText">
@@ -57,7 +57,7 @@ can think of it as attribute value syntax definition).
 =========================
 
 XRC resource file is a well-formed XML 1.0 document. All elements of XRC file are
-from the http://www.wxwindows.org/wxxrc namespace. 
+from the http://www.wxwidgets.org/wxxrc namespace. 
 
 The root node of XRC document must be <resource>. The <resource> node has 
 optional "version" property. Default version  (in absence of the version 
@@ -65,9 +65,9 @@ property) is "0.0.0.0". The version consists of four integers separated by
 periods. Version of XRC format changes only if there was an incompatible 
 change introduced (i.e. either the library cannot understand old resource 
 files or older versions of the library wouldn't understand the new format).
-The first three integers are major, minor and release number of the wxWindows 
+The first three integers are major, minor and release number of the wxWidgets 
 release when the change was introduced, the last one is revision number and 
-is 0 for the first incompatible change in given wxWindows release, 1 for 
+is 0 for the first incompatible change in given wxWidgets release, 1 for 
 the second etc.
 
 Differences between versions are described within this document in paragraphs
@@ -75,14 +75,14 @@ entitled "Version Note".
 
 The <resource> node contains namespace declaration, too:
 
-    <resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+    <resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.3.0.1">
 
 The <resource> node is only allowed to have <object> and <object_ref>
 subnodes, all of which must have the "name" property.
 
 The <object> node represents a single object (GUI element) and it usually maps
-directly to a wxWindows class instance. It three properties: "name", "class"
-and "subclass". "class" must always be present, it tells XRC what wxWindows
+directly to a wxWidgets class instance. It three properties: "name", "class"
+and "subclass". "class" must always be present, it tells XRC what wxWidgets
 object should be created in this place. The other two are optional. 
 "name" is ID used to identify the object. It is the value passed to the XRCID() macro
 and is also used to construct wxWindow's id and name attributes and must be unique
@@ -91,7 +91,7 @@ wxNotebook) upside from the object in XML nodes hiearchy (two distinct container
 may contain objects with same "name", though). "subclass" is
 optional name of class whose constructor will be called instead of the constructor
 for "class". Subclass must be available in the program that loads the resource,
-must be derived from "class" and must be registered within wxWindows' RTTI system.
+must be derived from "class" and must be registered within wxWidgets' RTTI system.
 
 Example:
 
@@ -145,7 +145,7 @@ String
 ------
 Any text. Some characters have special interpretation and are translated
 by XRC parser according to this table:
-    "_"    -> "&"  ('&' is used to underline e.g. menu items in wxWindows)
+    "_"    -> "&"  ('&' is used to underline e.g. menu items in wxWidgets)
     "__"   -> "_"
     "\n"   -> line break (C character '\n')
     "\r"   -> carriage return (C character '\r')
@@ -190,9 +190,9 @@ Style[wxSomeClass]
 List of style flags that can be passed to wxSomeClass' constructor. Flags are
 written in same way as in C++ code (e.g. "wxSUNKEN_BORDER", "wxHW_SCROLLBAR_NEVER")
 and are delimined with any combination of whitespaces and '|'. Possible flags
-are class-dependent and are not described in this technote. Please refer to wxWindows
+are class-dependent and are not described in this technote. Please refer to wxWidgets
 manual for all styles that given class can accept; if XRC does not accept a flag
-listed in wxWindows documentation, it is a bug.
+listed in wxWidgets documentation, it is a bug.
 
 
 Bitmap

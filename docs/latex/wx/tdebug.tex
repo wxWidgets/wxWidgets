@@ -3,9 +3,9 @@
 Classes, functions and macros: \helpref{wxDebugContext}{wxdebugcontext}, \helpref{wxObject}{wxobject}, \helpref{wxLog}{wxlog},
 \rtfsp\helpref{Log functions}{logfunctions}, \helpref{Debug macros}{debugmacros}
 
-Various classes, functions and macros are provided in wxWindows to help you debug
-your application. Most of these are only available if you compile both wxWindows,
-your application and {\it all} libraries that use wxWindows with the \_\_WXDEBUG\_\_ symbol
+Various classes, functions and macros are provided in wxWidgets to help you debug
+your application. Most of these are only available if you compile both wxWidgets,
+your application and {\it all} libraries that use wxWidgets with the \_\_WXDEBUG\_\_ symbol
 defined. You can also test the \_\_WXDEBUG\_\_ symbol in your own applications to execute
 code that should be active only in debug mode.
 
@@ -16,13 +16,13 @@ various static functions and variables. It allows you to dump all objects to tha
 check memory for errors.
 
 It is good practice to define a \helpref{wxObject::Dump}{wxobjectdump} member function for each class you derive
-from a wxWindows class, so that \helpref{wxDebugContext::Dump}{wxdebugcontextdump} can call it and
+from a wxWidgets class, so that \helpref{wxDebugContext::Dump}{wxdebugcontextdump} can call it and
 give valuable information about the state of the application.
 
 If you have difficulty tracking down a memory leak, recompile
 in debugging mode and call \helpref{wxDebugContext::Dump}{wxdebugcontextdump} and \helpref{wxDebugContext::PrintStatistics}{wxdebugcontextprintstatistics} at
 appropriate places. They will tell you what objects have not yet been
-deleted, and what kinds of object they are. In fact, in debug mode wxWindows will automatically
+deleted, and what kinds of object they are. In fact, in debug mode wxWidgets will automatically
 detect memory leaks when your application is about to exit, and if there are any leaks,
 will give you information about the problem. (How much information depends on the operating system
 and compiler -- some systems don't allow all memory logging to be enabled). See the
@@ -45,7 +45,7 @@ wxUSE\_DEBUG\_NEW\_ALWAYS are set to 1 in setup.h, 'new' is defined to be:
 \end{verbatim}
 }%
 
-All occurrences of 'new' in wxWindows and your own application will use
+All occurrences of 'new' in wxWidgets and your own application will use
 the overridden form of the operator with two extra arguments. This means that the debugging
 output (and error messages reporting memory problems) will tell you what
 file and on what line you allocated the object. Unfortunately not all
@@ -114,7 +114,7 @@ allocations done after the checkpoint will be dumped.
 
 You can use wxDebugContext if \_\_WXDEBUG\_\_ is defined, or you can use it
 at any other time (if wxUSE\_DEBUG\_CONTEXT is set to 1 in setup.h). It is not disabled
-in non-debug mode because you may not wish to recompile wxWindows and your entire application
+in non-debug mode because you may not wish to recompile wxWidgets and your entire application
 just to make use of the error logging facility.
 
 Note: wxDebugContext::SetFile has a problem at present, so use the default stream instead.

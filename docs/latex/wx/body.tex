@@ -3,21 +3,21 @@
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
-\section{What is wxWindows?}
+\section{What is wxWidgets?}
 
-wxWindows is a C++ framework providing GUI (Graphical User
+wxWidgets is a C++ framework providing GUI (Graphical User
 Interface) and other facilities on more than one platform.  Version 2 currently
 supports all desktop versions of MS Windows, Unix with GTK+, Unix with Motif,
 and MacOS. An OS/2 port is in progress.
 
-wxWindows was originally developed at the Artificial Intelligence
+wxWidgets was originally developed at the Artificial Intelligence
 Applications Institute, University of Edinburgh, for internal use,
 and was first made publicly available in 1992.
 Version 2 is a vastly improved version written and maintained by
 Julian Smart, Robert Roebling, Vadim Zeitlin, Vaclav Slavik and many others.
 
 This manual contains a class reference and topic overviews.
-For a selection of wxWindows tutorials, please see the documentation page on the \urlref{wxWindows web site}{http://www.wxwindows.org}.
+For a selection of wxWidgets tutorials, please see the documentation page on the \urlref{wxWidgets web site}{http://www.wxwidgets.org}.
 
 Please note that in the following, ``MS Windows" often refers to all
 platforms related to Microsoft Windows, including 16-bit and 32-bit
@@ -25,7 +25,7 @@ variants, unless otherwise stated. All trademarks are acknowledged.
 
 \section{Why another cross-platform development tool?}
 
-wxWindows was developed to provide a cheap and flexible way to maximize
+wxWidgets was developed to provide a cheap and flexible way to maximize
 investment in GUI application development.  While a number of commercial
 class libraries already existed for cross-platform development,
 none met all of the following criteria:
@@ -37,14 +37,14 @@ none met all of the following criteria:
 \item support for a wide range of compilers.
 \end{enumerate}
 
-Since wxWindows was started, several other free or almost-free
+Since wxWidgets was started, several other free or almost-free
 GUI frameworks have emerged. However, none has the range of
 features, flexibility, documentation and the well-established
-development team that wxWindows has.
+development team that wxWidgets has.
 
-As open source software, wxWindows has benefited from comments,
+As open source software, wxWidgets has benefited from comments,
 ideas, bug fixes, enhancements and the sheer enthusiasm of
-users. This gives wxWindows a certain advantage over its
+users. This gives wxWidgets a certain advantage over its
 commercial competitors (and over free libraries without an
 independent development team), plus a robustness against the
 transience of one individual or company. This openness and
@@ -61,19 +61,19 @@ The importance of using a platform-independent class library
 cannot be overstated, since GUI application development is very
 time-consuming, and sustained popularity of particular GUIs
 cannot be guaranteed. Code can very quickly become obsolete if
-it addresses the wrong platform or audience.  wxWindows helps to
+it addresses the wrong platform or audience.  wxWidgets helps to
 insulate the programmer from these winds of change. Although
-wxWindows may not be suitable for every application (such as an
+wxWidgets may not be suitable for every application (such as an
 OLE-intensive program), it provides access to most of the
 functionality a GUI program normally requires, plus many extras
 such as network programming, PostScript output, and HTML
 rendering; and it can of course be extended as needs dictate.
 As a bonus, it provides a far cleaner and easier programming
 interface than the native APIs. Programmers may find it
-worthwhile to use wxWindows even if they are developing on only
+worthwhile to use wxWidgets even if they are developing on only
 one platform.
 
-It is impossible to sum up the functionality of wxWindows in a few paragraphs, but
+It is impossible to sum up the functionality of wxWidgets in a few paragraphs, but
 here are some of the benefits:
 
 \begin{itemize}\itemsep=0pt
@@ -135,9 +135,9 @@ Additions and changes:
 \end{itemize}
 \end{comment}
 
-\section{wxWindows requirements}\label{requirements}
+\section{wxWidgets requirements}\label{requirements}
 
-To make use of wxWindows, you currently need one of the following setups.
+To make use of wxWidgets, you currently need one of the following setups.
 
 (a) MS-Windows:
 
@@ -166,22 +166,22 @@ Metrowerks CodeWarrior.
 \item At least 60 MB of disk space.
 \end{enumerate}
 
-\section{Availability and location of wxWindows}
+\section{Availability and location of wxWidgets}
 
-\winhelponly{wxWindows is available by anonymous FTP and World Wide Web
-from ftp://biolpc22.york.ac.uk/pub and/or http://www.wxwindows.org.}
-\winhelpignore{wxWindows is available by anonymous FTP and World Wide Web
+\winhelponly{wxWidgets is available by anonymous FTP and World Wide Web
+from ftp://biolpc22.york.ac.uk/pub and/or http://www.wxwidgets.org.}
+\winhelpignore{wxWidgets is available by anonymous FTP and World Wide Web
 from \urlref{ftp://biolpc22.york.ac.uk/pub}{ftp://biolpc22.york.ac.uk/pub} 
-and/or \urlref{http://www.wxwindows.org}{http://www.wxwindows.org}.}
+and/or \urlref{http://www.wxwidgets.org}{http://www.wxwidgets.org}.}
 
 You can also buy a CD-ROM using the form on the Web site.
 
 \section{Acknowledgements}
 
 Thanks are due to AIAI for being willing to release the original version of
-wxWindows into the public domain, and to our patient partners.
+wxWidgets into the public domain, and to our patient partners.
 
-We would particularly like to thank the following for their contributions to wxWindows, and the many others who have been involved in
+We would particularly like to thank the following for their contributions to wxWidgets, and the many others who have been involved in
 the project over the years. Apologies for any unintentional omissions from this list. 
  
 Yiorgos Adamopoulos, Jamshid Afshar, Alejandro Aguilar-Sierra, AIAI, Patrick Albert, Karsten Ballueder, Michael Bedward, Kai Bendorf, Yura Bidus, Keith 
@@ -212,18 +212,18 @@ written prior permission.  M.I.T. makes no representations about the
 suitability of this software for any purpose.  It is provided ``as is''
 without express or implied warranty.}
 
-\chapter{Multi-platform development with wxWindows}\label{multiplat}
+\chapter{Multi-platform development with wxWidgets}\label{multiplat}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
-This chapter describes the practical details of using wxWindows. Please
+This chapter describes the practical details of using wxWidgets. Please
 see the file install.txt for up-to-date installation instructions, and
 changes.txt for differences between versions.
 
 \section{Include files}
 
 The main include file is {\tt "wx/wx.h"}; this includes the most commonly
-used modules of wxWindows.
+used modules of wxWidgets.
 
 To save on compilation time, include only those header files relevant to the
 source file. If you are using precompiled headers, you should include
@@ -254,7 +254,7 @@ Borland precompilation is largely automatic. Visual C++ requires specification o
 the file to use for precompilation. Watcom C++ is automatic apart from the specification of
 the .pch file. Watcom C++ is strange in requiring the precompiled header to be used only for
 object files compiled in the same directory as that in which the precompiled header was created.
-Therefore, the wxWindows Watcom C++ makefiles go through hoops deleting and recreating
+Therefore, the wxWidgets Watcom C++ makefiles go through hoops deleting and recreating
 a single precompiled header file for each module, thus preventing an accumulation of many
 multi-megabyte .pch files.
 
@@ -264,7 +264,7 @@ The GTK and Motif ports of wxWindow can create either a static library or a shar
 library on most Unix or Unix-like systems. The static library is called libwx\_gtk.a
 and libwx\_motif.a whereas the name of the shared library is dependent on the
 system it is created on and the version you are using. The library name for the
-GTK version of wxWindows 2.2 on Linux and Solaris will be libwx\_gtk-2.2.so.0.0.0,
+GTK version of wxWidgets 2.2 on Linux and Solaris will be libwx\_gtk-2.2.so.0.0.0,
 on HP-UX, it will be libwx\_gtk-2.2.sl, on AIX just libwx\_gtk.a etc.
 
 Under Windows, use the library wx.lib (release) or wxd.lib (debug) for stand-alone Windows
@@ -279,8 +279,8 @@ others can be set to minimize the size of the library. Please see the setup.h fi
 and {\tt install.txt} files for details on configuration.
 
 Under Unix (GTK and Motif) the corresponding setup.h files are generated automatically
-when configuring the wxWindows using the "configure" script. When using the RPM packages
-for installing wxWindows on Linux, a correct setup.h is shipped in the package and
+when configuring the wxWidgets using the "configure" script. When using the RPM packages
+for installing wxWidgets on Linux, a correct setup.h is shipped in the package and
 this must not be changed.
 
 \section{Makefiles}
@@ -298,7 +298,7 @@ Sample makefiles for Unix (suffix .unx), MS C++ (suffix .DOS and .NT), Borland
 C++ (.BCC and .B32) and Symantec C++ (.SC) are included for the library, demos
 and utilities.
 
-The controlling makefile for wxWindows is in the MS-Windows
+The controlling makefile for wxWidgets is in the MS-Windows
 directory {\tt src/msw} for the different Windows compiler and
 in the build directory when using the Unix ports. The build
 directory can be chosen by the user. It is the directory in
@@ -311,7 +311,7 @@ Please see the platform-specific {\tt install.txt} file for further details.
 
 \section{Windows-specific files}
 
-wxWindows application compilation under MS Windows requires at least two
+wxWidgets application compilation under MS Windows requires at least two
 extra files, resource and module definition files.
 
 \subsection{Resource file}\label{resources}
@@ -323,7 +323,7 @@ is the following statement:
 rcinclude "wx/msw/wx.rc"
 \end{verbatim}
 
-which includes essential internal wxWindows definitions.  The resource script
+which includes essential internal wxWidgets definitions.  The resource script
 may also contain references to icons, cursors, etc., for example:
 
 \begin{verbatim}
@@ -356,7 +356,7 @@ STACKSIZE    8192
 The only lines which will usually have to be changed per application are
 NAME and DESCRIPTION.
 
-\section{Allocating and deleting wxWindows objects}
+\section{Allocating and deleting wxWidgets objects}
 
 In general, classes derived from wxWindow must dynamically allocated
 with {\it new} and deleted with {\it delete}. If you delete a window,
@@ -364,7 +364,7 @@ all of its children and descendants will be automatically deleted,
 so you don't need to delete these descendants explicitly.
 
 When deleting a frame or dialog, use {\bf Destroy} rather than {\bf delete} so
-that the wxWindows delayed deletion can take effect. This waits until idle time
+that the wxWidgets delayed deletion can take effect. This waits until idle time
 (when all messages have been processed) to actually delete the window, to avoid
 problems associated with the GUI sending events to deleted windows.
 
@@ -372,8 +372,8 @@ Don't create a window on the stack, because this will interfere
 with delayed deletion.
 
 If you decide to allocate a C++ array of objects (such as wxBitmap) that may
-be cleaned up by wxWindows, make sure you delete the array explicitly
-before wxWindows has a chance to do so on exit, since calling {\it delete} on
+be cleaned up by wxWidgets, make sure you delete the array explicitly
+before wxWidgets has a chance to do so on exit, since calling {\it delete} on
 array members will cause memory problems.
 
 wxColour can be created statically: it is not automatically cleaned
@@ -392,7 +392,7 @@ A problem which sometimes arises from writing multi-platform programs is that
 the basic C types are not defined the same on all platforms. This holds true
 for both the length in bits of the standard types (such as int and long) as 
 well as their byte order, which might be little endian (typically
-on Intel computers) or big endian (typically on some Unix workstations). wxWindows
+on Intel computers) or big endian (typically on some Unix workstations). wxWidgets
 defines types and macros that make it easy to write architecture independent
 code. The types are:
 
@@ -408,7 +408,7 @@ are described in the \helpref{Byte order macros}{byteordermacros} section.
 
 \section{Conditional compilation}
 
-One of the purposes of wxWindows is to reduce the need for conditional
+One of the purposes of wxWidgets is to reduce the need for conditional
 compilation in source code, which can be messy and confusing to follow.
 However, sometimes it is necessary to incorporate platform-specific
 features (such as metafile use under MS Windows). The symbols
@@ -421,11 +421,11 @@ The following documents some miscellaneous C++ issues.
 
 \subsection{Templates}
 
-wxWindows does not use templates since it is a notoriously unportable feature.
+wxWidgets does not use templates since it is a notoriously unportable feature.
 
 \subsection{RTTI}
 
-wxWindows does not use run-time type information since wxWindows provides
+wxWidgets does not use run-time type information since wxWidgets provides
 its own run-time type information system, implemented using macros.
 
 \subsection{Type of NULL}
@@ -441,7 +441,7 @@ as
 \end{verbatim}
 }
 
-It is recommended to adhere to this in all code using wxWindows as
+It is recommended to adhere to this in all code using wxWidgets as
 this make the code (a bit) more portable.
 
 \subsection{Precompiled headers}
@@ -449,8 +449,8 @@ this make the code (a bit) more portable.
 Some compilers, such as Borland C++ and Microsoft C++, support
 precompiled headers. This can save a great deal of compiling time. The
 recommended approach is to precompile {\tt "wx.h"}, using this
-precompiled header for compiling both wxWindows itself and any
-wxWindows applications. For Windows compilers, two dummy source files
+precompiled header for compiling both wxWidgets itself and any
+wxWidgets applications. For Windows compilers, two dummy source files
 are provided (one for normal applications and one for creating DLLs)
 to allow initial creation of the precompiled header.
 
@@ -458,7 +458,7 @@ However, there are several downsides to using precompiled headers. One
 is that to take advantage of the facility, you often need to include
 more header files than would normally be the case. This means that
 changing a header file will cause more recompilations (in the case of
-wxWindows, everything needs to be recompiled since everything includes {\tt "wx.h"}!)
+wxWidgets, everything needs to be recompiled since everything includes {\tt "wx.h"}!)
 
 A related problem is that for compilers that don't have precompiled
 headers, including a lot of header files slows down compilation
@@ -500,34 +500,34 @@ dos2unix).
 See also the File Functions section of the reference manual for
 descriptions of miscellaneous file handling functions.
 
-\chapter{Utilities and libraries supplied with wxWindows}\label{utilities}
+\chapter{Utilities and libraries supplied with wxWidgets}\label{utilities}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
-In addition to the core wxWindows library, a number of further
+In addition to the core wxWidgets library, a number of further
 libraries and utilities are supplied with each distribution.
 
 Some are under the 'contrib' hierarchy which mirrors the
-structure of the main wxWindows hierarchy. See also the 'utils'
+structure of the main wxWidgets hierarchy. See also the 'utils'
 hierarchy. The first place to look for documentation about
-these tools and libraries is under the wxWindows 'docs' hierarchy,
+these tools and libraries is under the wxWidgets 'docs' hierarchy,
 for example {\tt docs/htmlhelp/fl.chm}.
 
 For other user-contributed packages, please see the Contributions page
-on the \urlref{wxWindows Web site}{http://www.wxwindows.org}.
+on the \urlref{wxWidgets Web site}{http://www.wxwidgets.org}.
 
 \begin{description}\itemsep=0pt
 \item[{\bf Helpview}]
-Helpview is a program for displaying wxWindows HTML
-Help files. In many cases, you may wish to use the wxWindows HTML
+Helpview is a program for displaying wxWidgets HTML
+Help files. In many cases, you may wish to use the wxWidgets HTML
 Help classes from within your application, but this provides a
 handy stand-alone viewer. See \helpref{wxHTML Notes}{wxhtml} for more details.
 You can find it in {\tt samples/html/helpview}.
 
 \item[{\bf Tex2RTF}]
-Supplied with wxWindows is a utility called Tex2RTF for converting\rtfsp
+Supplied with wxWidgets is a utility called Tex2RTF for converting\rtfsp
 \LaTeX\ manuals HTML, MS HTML Help, wxHTML Help, RTF, and Windows
-Help RTF formats. Tex2RTF is used for the wxWindows manuals and can be used independently
+Help RTF formats. Tex2RTF is used for the wxWidgets manuals and can be used independently
 by authors wishing to create on-line and printed manuals from the same\rtfsp
 \LaTeX\ source. Please see the separate documentation for Tex2RTF.
 You can find it under {\tt utils/tex2rtf}.
@@ -602,17 +602,17 @@ You can find this in {\tt contrib/src/plot}, {\tt contrib/include/wx/plot}, and 
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
 This chapter is intended to list strategies that may be useful when
-writing and debugging wxWindows programs. If you have any good tips,
+writing and debugging wxWidgets programs. If you have any good tips,
 please submit them for inclusion here.
 
 \section{Strategies for reducing programming errors}
 
 \subsection{Use ASSERT}
 
-Although I haven't done this myself within wxWindows, it is good
+Although I haven't done this myself within wxWidgets, it is good
 practice to use ASSERT statements liberally, that check for conditions that
 should or should not hold, and print out appropriate error messages.
-These can be compiled out of a non-debugging version of wxWindows
+These can be compiled out of a non-debugging version of wxWidgets
 and your application. Using ASSERT is an example of `defensive programming':
 it can alert you to problems later on.
 
@@ -636,13 +636,13 @@ Don't use absolute panel item positioning if you can avoid it. Different GUIs ha
 very differently sized panel items. Consider using the constraint system, although this
 can be complex to program.
 
-Alternatively, you could use alternative .wrc (wxWindows resource files) on different
+Alternatively, you could use alternative .wrc (wxWidgets resource files) on different
 platforms, with slightly different dimensions in each. Or space your panel items out
 to avoid problems.
 
-\subsection{Use wxWindows resource files}
+\subsection{Use wxWidgets resource files}
 
-Use .wrc (wxWindows resource files) where possible, because they can be easily changed
+Use .wrc (wxWidgets resource files) where possible, because they can be easily changed
 independently of source code. Bitmap resources can be set up to load different
 kinds of bitmap depending on platform (see the section on resource files).
 
@@ -691,11 +691,11 @@ Using tracing statements may be more convenient than using the debugger
 in some circumstances (such as when your debugger doesn't support a lot
 of debugging code, or you wish to print a bunch of variables).
 
-\subsection{Use the wxWindows debugging facilities}
+\subsection{Use the wxWidgets debugging facilities}
 
 You can use wxDebugContext to check for
-memory leaks and corrupt memory: in fact in debugging mode, wxWindows will
-automatically check for memory leaks at the end of the program if wxWindows is suitably
+memory leaks and corrupt memory: in fact in debugging mode, wxWidgets will
+automatically check for memory leaks at the end of the program if wxWidgets is suitably
 configured. Depending on the operating system and compiler, more or less
 specific information about the problem will be logged.
 
@@ -714,7 +714,7 @@ possible it will show invalid handles being used. You may have fun seeing
 what commercial programs cause these normally hidden errors! Microsoft
 recommend using the debugging version of Windows, which shows up even
 more problems. However, I doubt it is worth the hassle for most
-applications. wxWindows is designed to minimize the possibility of such
+applications. wxWidgets is designed to minimize the possibility of such
 errors, but they can still happen occasionally, slipping through unnoticed
 because they are not severe enough to cause a crash.
 

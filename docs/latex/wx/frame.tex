@@ -47,7 +47,7 @@ Has no effect under other platforms.}
 on top of its parent (unlike wxSTAY\_ON\_TOP). A frame created with this style
 must have a non-NULL parent.}
 \twocolitem{\windowstyle{wxFRAME\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
-caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
+caption. When pressed, Windows will go into a context-sensitive help mode and wxWidgets will send
 a wxEVT\_HELP event if the user clicked on an application window. {\it Note} that this is an extended
 style and must be set by calling \helpref{SetExtraStyle}{wxwindowsetextrastyle} before Create is called (two-step construction).
 You cannot use this style together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX, so
@@ -101,10 +101,10 @@ always be displayed on top of the parent window on Windows.}
 \docparam{title}{The caption to be displayed on the frame's title bar.}
 
 \docparam{pos}{The window position. A value of (-1, -1) indicates a default position, chosen by
-either the windowing system or wxWindows, depending on platform.}
+either the windowing system or wxWidgets, depending on platform.}
 
 \docparam{size}{The window size. A value of (-1, -1) indicates a default size, chosen by
-either the windowing system or wxWindows, depending on platform.}
+either the windowing system or wxWidgets, depending on platform.}
 
 \docparam{style}{The window style. See \helpref{wxFrame}{wxframe}.}
 
@@ -174,7 +174,7 @@ value greater than 1 to create a multi-field status bar.}
 of valid styles.}
 
 \docparam{id}{The status bar window identifier. If -1, an identifier will be chosen by
-wxWindows.}
+wxWidgets.}
 
 \docparam{name}{The status bar window name.}
 
@@ -211,7 +211,7 @@ Creates a toolbar at the top or left of the frame.
 of valid styles.}
 
 \docparam{id}{The toolbar window identifier. If -1, an identifier will be chosen by
-wxWindows.}
+wxWidgets.}
 
 \docparam{name}{The toolbar window name.}
 
@@ -368,7 +368,7 @@ Virtual function called when a status bar is requested by \helpref{wxFrame::Crea
 of valid styles.}
 
 \docparam{id}{The window identifier. If -1, an identifier will be chosen by
-wxWindows.}
+wxWidgets.}
 
 \docparam{name}{The window name.}
 
@@ -398,7 +398,7 @@ Virtual function called when a toolbar is requested by \helpref{wxFrame::CreateT
 of valid styles.}
 
 \docparam{id}{The toolbar window identifier. If -1, an identifier will be chosen by
-wxWindows.}
+wxWidgets.}
 
 \docparam{name}{The toolbar window name.}
 
@@ -503,7 +503,7 @@ See also \helpref{wxIconBundle}{wxiconbundle}.
 %\end{verbatim}
 %
 %You can replace std.ico, mdi.ico and child.ico with your own defaults
-%for all your wxWindows application. Currently they show the same icon.
+%for all your wxWidgets application. Currently they show the same icon.
 
 \membersection{wxFrame::SetMenuBar}\label{wxframesetmenubar}
 

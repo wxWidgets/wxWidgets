@@ -7,7 +7,7 @@
 
 This class is capable of converting strings between two
 8-bit encodings/charsets. It can also convert from/to Unicode (but only
-if you compiled wxWindows with wxUSE\_WCHAR\_T set to 1). Only limited subset
+if you compiled wxWidgets with wxUSE\_WCHAR\_T set to 1). Only limited subset
 of encodings in supported by wxEncodingConverter:
 {\tt wxFONTENCODING\_ISO8859\_1..15}, {\tt wxFONTENCODING\_CP1250..1257} and 
 {\tt wxFONTENCODING\_KOI8}.
@@ -74,7 +74,7 @@ as input string.
 
 FALSE if given conversion is impossible, TRUE otherwise
 (conversion may be impossible either if you try to convert
-to Unicode with non-Unicode build of wxWindows or if input
+to Unicode with non-Unicode build of wxWidgets or if input
 or output encoding is not supported.)
 
 \membersection{wxEncodingConverter::Convert}\label{wxencodingconverterconvert}
@@ -106,7 +106,7 @@ Convert wxString and return new wxString object.
 
 You must call \helpref{Init}{wxencodingconverterinit} before using this method!
 
-{\tt wchar\_t} versions of the method are not available if wxWindows was compiled
+{\tt wchar\_t} versions of the method are not available if wxWidgets was compiled
 with {\tt wxUSE\_WCHAR\_T} set to 0.
 
 \membersection{wxEncodingConverter::GetPlatformEquivalents}\label{wxencodingconvertergetplatformequivalents}
