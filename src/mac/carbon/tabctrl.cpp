@@ -19,12 +19,15 @@
 #include "wx/tabctrl.h"
 #include "wx/mac/uma.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxNotifyEvent)
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGING)
+
 
 BEGIN_EVENT_TABLE(wxTabCtrl, wxControl)
 END_EVENT_TABLE()
-#endif
 
 wxTabCtrl::wxTabCtrl()
 {
@@ -207,13 +210,5 @@ void wxTabCtrl::SetItemSize(const wxSize& size)
 void wxTabCtrl::SetPadding(const wxSize& padding)
 {
     // TODO
-}
-
-// Tab event
-IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxCommandEvent)
-
-wxTabEvent::wxTabEvent(wxEventType commandType, int id):
-  wxCommandEvent(commandType, id)
-{
 }
 
