@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <sched.h>
 #include <pthread.h>
+#include <errno.h>
 #include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/utils.h"

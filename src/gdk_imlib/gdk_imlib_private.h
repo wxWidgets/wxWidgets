@@ -47,7 +47,7 @@
 #include <jpeglib.h>
 #endif
 #ifdef HAVE_LIBPNG
-#include <png.h>
+#include <../png/png.h>
 #endif
 #ifdef HAVE_LIBTIFF
 #include <tiffio.h>
