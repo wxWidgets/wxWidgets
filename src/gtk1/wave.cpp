@@ -169,7 +169,6 @@ typedef  struct
 
 int wxWave::OpenDSP(void)
 {
-  wxString str;
   WAVEFORMAT  waveformat;
   int dev=-1;
   unsigned long ul;
@@ -179,14 +178,14 @@ int wxWave::OpenDSP(void)
 
   memcpy(&waveformat,&m_waveData[FMT_INDEX+4],sizeof(WAVEFORMAT));
 
-  str= wxString(m_waveData,4);
-  if (str != "RIFF")    return -1;
-  str= wxString(&m_waveData[WAVE_INDEX],4);
-  if (str != "WAVE")    return -1;
-  str= wxString(&m_waveData[FMT_INDEX],4);
-  if (str != "fmt ")    return -1;
-  str= wxString(&m_waveData[FMT_INDEX+waveformat.uiSize+8],4);
-  if(str != "data")     return -1;
+  if (memcmp(m_waveData, "RIFF", 4) != 0)
+    return -1;
+  if (memcmp(&m_waveData[WAVE_INDEX], "WAVE", 4) != 0)
+    return -1;
+  if (memcmp(&m_waveData[FMT_INDEX], "fmt ", 4) != 0)
+    return -1;
+  if (memcmp(&m_waveData[FMT_INDEX+waveformat.uiSize+8], "data", 4) != 0)
+    return -1;
   memcpy(&ul,&m_waveData[FMT_INDEX+waveformat.uiSize+12],4);
   m_sizeData=ul;
   if ((int)(m_sizeData+FMT_INDEX+waveformat.uiSize+16) != m_waveLength)
