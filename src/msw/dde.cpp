@@ -734,7 +734,7 @@ _DDECallback(WORD wType,
                                            0);
                     DdeFreeDataHandle(hData);
                     if ( connection->OnExecute(connection->m_topicName,
-                                               (wxChar *) connection->m_bufPtr,
+                                               connection->m_bufPtr,
                                                (int)len,
                                                (wxIPCFormat) wFmt) )
                     {
@@ -874,7 +874,7 @@ _DDECallback(WORD wType,
                     DdeFreeDataHandle(hData);
                     if ( connection->OnAdvise(connection->m_topicName,
                                               item_name,
-                                              (wxChar *) connection->m_bufPtr,
+                                              connection->m_bufPtr,
                                               (int)len,
                                               (wxIPCFormat) wFmt) )
                     {
