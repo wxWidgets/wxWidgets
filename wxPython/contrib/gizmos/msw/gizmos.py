@@ -1,6 +1,11 @@
 # This file was created automatically by SWIG.
 # Don't modify this file, modify the SWIG interface instead.
 
+"""
+Various *gizmo* classes: `DynamicSashWindow`, `EditableListBox`,
+`LEDNumberCtrl`, `TreeListCtrl`, etc.
+"""
+
 import _gizmos
 
 import _windows

@@ -945,6 +945,7 @@ public:
                 const wxString& name = wxPyControlNameStr)
         : wxControl(parent, id, pos, size, style, validator, name) {}
 
+    void SetBestSize(const wxSize& size) { wxControl::SetBestSize(size); }
 
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
@@ -970,8 +971,9 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
-    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
+    DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     PYPRIVATE;
 };
@@ -1002,8 +1004,9 @@ IMP_PYCALLBACK_SIZE_const(wxPyControl, wxControl, GetMaxSize);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
-IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, ShouldInheritColours);
+IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, ShouldInheritColours);
 IMP_PYCALLBACK__COLOUR(wxPyControl, wxControl, ApplyParentThemeBackground);
+IMP_PYCALLBACK_VIZATTR_(wxPyControl, wxControl, GetDefaultAttributes);
 
 
 
@@ -29076,6 +29079,38 @@ static PyObject *_wrap_PyControl__setCallbackInfo(PyObject *self, PyObject *args
 }
 
 
+static PyObject *_wrap_PyControl_SetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyControl *arg1 = (wxPyControl *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxSize temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "size", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyControl_SetBestSize",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyControl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetBestSize((wxSize const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PyControl_base_DoMoveWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyControl *arg1 = (wxPyControl *) 0 ;
@@ -29674,7 +29709,7 @@ static PyObject *_wrap_PyControl_base_ShouldInheritColours(PyObject *self, PyObj
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_ShouldInheritColours();
+        result = (bool)((wxPyControl const *)arg1)->base_ShouldInheritColours();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -29714,6 +29749,36 @@ static PyObject *_wrap_PyControl_base_ApplyParentThemeBackground(PyObject *self,
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PyControl_base_GetDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyControl *arg1 = (wxPyControl *) 0 ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyControl_base_GetDefaultAttributes",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyControl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->base_GetDefaultAttributes();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -31935,6 +32000,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PyControl", (PyCFunction) _wrap_new_PyControl, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PrePyControl", (PyCFunction) _wrap_new_PrePyControl, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyControl__setCallbackInfo", (PyCFunction) _wrap_PyControl__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyControl_SetBestSize", (PyCFunction) _wrap_PyControl_SetBestSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyControl_base_DoMoveWindow", (PyCFunction) _wrap_PyControl_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyControl_base_DoSetSize", (PyCFunction) _wrap_PyControl_base_DoSetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyControl_base_DoSetClientSize", (PyCFunction) _wrap_PyControl_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS },
@@ -31955,6 +32021,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyControl_base_RemoveChild", (PyCFunction) _wrap_PyControl_base_RemoveChild, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyControl_base_ShouldInheritColours", (PyCFunction) _wrap_PyControl_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyControl_base_ApplyParentThemeBackground", (PyCFunction) _wrap_PyControl_base_ApplyParentThemeBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyControl_base_GetDefaultAttributes", (PyCFunction) _wrap_PyControl_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyControl_swigregister", PyControl_swigregister, METH_VARARGS },
 	 { (char *)"new_HelpEvent", (PyCFunction) _wrap_new_HelpEvent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HelpEvent_GetPosition", (PyCFunction) _wrap_HelpEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },

@@ -1,6 +1,11 @@
 # This file was created automatically by SWIG.
 # Don't modify this file, modify the SWIG interface instead.
 
+"""
+`Wizard` is a dialog class that guides the user through a sequence of steps,
+or pages.
+"""
+
 import _wizard
 
 import _windows

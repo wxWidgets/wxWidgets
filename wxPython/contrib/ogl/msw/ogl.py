@@ -1,6 +1,11 @@
 # This file was created automatically by SWIG.
 # Don't modify this file, modify the SWIG interface instead.
 
+"""
+The Object Graphics Library provides for simple drawing and manipulation
+of 2D objects.
+"""
+
 import _ogl
 
 import _windows
