@@ -155,7 +155,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc)
     int err = kill((pid_t)pid, (int)sig);
     if ( rc )
     {
-        switch ( err )
+        switch ( errno )
         {
             case 0:
                 *rc = wxKILL_OK;

@@ -123,7 +123,7 @@ wxKillError wxProcess::Kill(int pid, wxSignal sig)
 /* static */
 bool wxProcess::Exists(int pid)
 {
-    switch ( wxProcess::Kill(pid, wxSIGNONE) )
+    switch ( Kill(pid, wxSIGNONE) )
     {
         case wxKILL_OK:
         case wxKILL_ACCESS_DENIED:
