@@ -43,9 +43,9 @@ usage()
  wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--release] [--version-full]
            [--list] [--host=HOST] [--toolkit=TOOLKIT] [--universal[=yes|no]]
            [--unicode[=yes|no]] [--debug[=yes|no]] [--static[=yes|no]]
-           [--version[=VERSION]] [--basename] [--cppflags] [--cflags]
-           [--cxxflags] [--rezflags] [--libs] [--cc] [--cxx] [--ld] [LIB ...]
-           [--utility=UTIL]
+           [--version[=VERSION]] [--basename] [--cc] [--cppflags] [--cflags]
+           [--cxxflags] [--rezflags] [--libs] [--cxx] [--ld] [--linkdeps]
+           [--utility=UTIL] [LIB ...] 
 
    wx-config returns  information about  the wxWidgets libraries available
    on your system.  It may be used to retrieve the information you require
@@ -58,6 +58,7 @@ usage()
   debug, and universal options  take an  optional yes or no  argument, while
   host and version  accept posix extended regex.   The --utility option will
   return the correct version of UTIL to use with the selected library build.
+  --linkdeps returns only static libraries for your makefile link rule deps.
 
     Optional LIB arguments (comma or space separated) may be used to specify
   the wxWidgets libraries that  you wish  to use.  The magic "std" label may
@@ -109,6 +110,7 @@ wxconfig_output_options="prefix exec_prefix                     \
                          cppflags cflags cxxflags               \
                          rezflags                               \
                          libs                                   \
+                         linkdeps                               \
                          cc cxx ld                              \
                          gl_libs"
 
@@ -872,7 +874,6 @@ ldlibs_xml="@EXTRALIBS_XML@"
 ldlibs_odbc="@EXTRALIBS_ODBC@"
 ldlibs_adv="@EXTRALIBS_SDL@"
 
-
 # lib_flags_for _liblist
 # This function returns a list of flags suitable to return with the
 # output of --libs for all of the libraries in _liblist.  You can
@@ -938,6 +939,32 @@ lib_flags_for()
     echo $_all_ldflags $_wxlibs $_all_libs
 }
 
+# this is the strict subset of the above function which returns only the
+# (static) libraries themselves: this is used for linkdeps output which should
+# output the list of libraries the main program should depend on
+#
+# of course, this duplication is bad but I'll leave to somebody else the care
+# of refactoring this as I don't see any way to do it
+link_deps_for()
+{
+    _wxlibs=''
+
+    ! is_cross || _target="-${target}"
+
+    for lib; do
+        if match_field "$lib" @CORE_BASE_LIBS@ ; then
+            _libname="@WX_LIBRARY_BASENAME_NOGUI@"
+        else
+            _libname="@WX_LIBRARY_BASENAME_GUI@"
+        fi
+        [ $lib = base ] || _libname="${_libname}_$lib"
+        _libname="${_libname}-@WX_RELEASE@$_target"
+
+        _wxlibs="$_wxlibs ${libdir}/lib${_libname}.a"
+    done
+
+    echo $_wxlibs
+}
 
 # Sanity check the list of libs the user provided us, if any.
 # --------------------------------------------------------------
@@ -957,7 +984,8 @@ if is_monolithic; then
 
     # We still need the core lib deps for a static build though
     if [ "x$this_linkage" = "x-static" ]; then
-        wx_libs="$wx_libs ${libdir}/libwx_@TOOLCHAIN_NAME@.a $ldlibs_core @LIBS@"
+        link_deps="${libdir}/libwx_@TOOLCHAIN_NAME@.a" 
+        wx_libs="$wx_libs $link_deps $ldlibs_core @LIBS@"
     else
         wx_libs="$wx_libs -lwx_@TOOLCHAIN_NAME@"
     fi
@@ -990,6 +1018,9 @@ else    # MONOLITHIC = 0
         match_field "$i" @CORE_BASE_LIBS@ || using_gui=yes
     done
 
+    if [ "x$this_linkage" = "x-static" ]; then
+        link_deps=$(link_deps_for $wx_libs)
+    fi
     wx_libs="$_guildflags @WXCONFIG_RPATH@ $(lib_flags_for $wx_libs)"
 fi
 
@@ -1021,6 +1052,7 @@ _cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflag
 [ -z "$output_option_cflags"   ] || echo $_cppflags "@CODE_GEN_FLAGS@"
 [ -z "$output_option_cxxflags" ] || echo $_cppflags "@CODE_GEN_FLAGS@" "@CODE_GEN_FLAGS_CXX@"
 [ -z "$output_option_gl_libs"  ] || echo $(lib_flags_for gl)
+[ -z "$output_option_linkdeps" ] || echo $link_deps
 
 if [ -n "$output_option_libs" ]; then
 
