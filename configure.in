@@ -2081,8 +2081,6 @@ if test "$wxUSE_REGEX" != "no"; then
             AC_DEFINE(WX_NO_REGEX_ADVANCED)
         fi
     fi
-else
-    AC_DEFINE(wxUSE_REGEX, 0)
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2156,8 +2154,6 @@ if test "$wxUSE_ZLIB" != "no" ; then
             wxUSE_ZLIB=sys
         fi
     fi
-else
-    AC_DEFINE(wxUSE_ZLIB, 0)
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2229,8 +2225,6 @@ if test "$wxUSE_LIBPNG" != "no" ; then
     fi
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
-else
-    AC_DEFINE(wxUSE_LIBPNG, 0)
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2285,8 +2279,6 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
             fi
         fi
     fi
-else
-    AC_DEFINE(wxUSE_LIBJPEG, 0)
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2328,8 +2320,6 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             wxUSE_LIBTIFF=sys
         fi
     fi
-else
-    AC_DEFINE(wxUSE_LIBTIFF, 0)
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2377,9 +2367,6 @@ if test "$wxUSE_EXPAT" != "no"; then
         dnl Expat needs this:
         AC_CONFIG_SUBDIRS([src/expat])
     fi
-else
-    AC_DEFINE(wxUSE_EXPAT, 0)
-    AC_DEFINE(wxUSE_XML, 0)
 fi
 
 
@@ -2400,8 +2387,6 @@ fi
 
 if test "$wxUSE_LIBMSPACK" != "no"; then
     AC_DEFINE(wxUSE_LIBMSPACK)
-else
-    AC_DEFINE(wxUSE_LIBMSPACK, 0)
 fi
 
 
@@ -4525,8 +4510,6 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl    need the dcs, pens, brushes, ...), this just can't be done now
     dnl 4. menu stuff: wxMenu, wxMenuBar, wxMenuItem
     dnl 5. misc stuff: timers, settings, message box
-else
-    AC_DEFINE(wxUSE_GUI, 0)
 fi
 
 dnl ---------------------------------------------------------------------------

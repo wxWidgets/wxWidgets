@@ -20819,11 +20819,6 @@ _ACEOF
 
         fi
     fi
-else
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_REGEX 0
-_ACEOF
-
 fi
 
 
@@ -21122,11 +21117,6 @@ echo "$as_me: WARNING: zlib library not found or too old, will use built-in inst
                         wxUSE_ZLIB=sys
         fi
     fi
-else
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_ZLIB 0
-_ACEOF
-
 fi
 
 
@@ -21432,11 +21422,6 @@ echo "$as_me: WARNING: system png library not found or too old, will use built-i
     fi
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
-else
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_LIBPNG 0
-_ACEOF
-
 fi
 
 
@@ -21601,11 +21586,6 @@ echo "$as_me: WARNING: system jpeg library not found, will use built-in instead"
             fi
         fi
     fi
-else
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_LIBJPEG 0
-_ACEOF
-
 fi
 
 
@@ -21849,11 +21829,6 @@ echo "$as_me: WARNING: system tiff library not found, will use built-in instead"
                         wxUSE_LIBTIFF=sys
         fi
     fi
-else
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_LIBTIFF 0
-_ACEOF
-
 fi
 
 
@@ -22171,15 +22146,6 @@ echo "$as_me: WARNING: system expat library not found, will use built-in instead
 subdirs="$subdirs src/expat"
 
     fi
-else
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_EXPAT 0
-_ACEOF
-
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_XML 0
-_ACEOF
-
 fi
 
 
@@ -22403,11 +22369,6 @@ fi
 if test "$wxUSE_LIBMSPACK" != "no"; then
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_LIBMSPACK 1
-_ACEOF
-
-else
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_LIBMSPACK 0
 _ACEOF
 
 fi
@@ -33588,12 +33549,7 @@ if test "$wxUSE_GUI" = "yes"; then
 _ACEOF
 
 
-                                            else
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_GUI 0
-_ACEOF
-
-fi
+                                            fi
 
 
 if test "$wxUSE_UNIX" = "yes"; then
