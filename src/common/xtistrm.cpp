@@ -117,6 +117,45 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
                 {
                     const wxObject* sink = NULL ;
                     const wxHandlerInfo *handler = NULL ;
+                    
+                    const wxWindow * evSource = dynamic_cast<const wxWindow *>(obj) ;
+                    wxASSERT_MSG( evSource , wxT("Illegal Object Class (Non-Window) as Event Source") ) ;
+
+                    wxList *dynamicEvents = evSource->GetDynamicEventTable() ;
+
+                    if ( dynamicEvents )
+                    {
+                        wxList::compatibility_iterator node = dynamicEvents->GetFirst();
+                        while (node)
+                        {
+                            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+
+                            // find the match
+                            if ( entry->m_fn && (dti->GetEventType() == entry->m_eventType) &&
+                                (entry->m_id == -1 ||
+                                (entry->m_lastId == -1 && evSource->GetId() == entry->m_id) ||
+                                (entry->m_lastId != -1 &&
+                                (evSource->GetId()  >= entry->m_id && evSource->GetId() <= entry->m_lastId) ) ) &&
+                                entry->m_eventSink
+                                )
+                            {
+                                sink = entry->m_eventSink ;
+                                const wxClassInfo* sinkClassInfo = sink->GetClassInfo() ;
+                                const wxHandlerInfo* sinkHandler = sinkClassInfo->GetFirstHandler() ;
+                                while ( sinkHandler )
+                                {
+                                    if ( sinkHandler->GetEventFunction() == entry->m_fn )
+                                    {
+                                        handler = sinkHandler ;
+                                        break ;
+                                    }
+                                    sinkHandler = sinkHandler->GetNext() ;
+                                }
+                                break ;
+                            }
+                            node = node->GetNext();
+                        }
+                        }
                     if ( persister->BeforeWriteDelegate( obj , ci , pi , sink , handler ) )
                     {
                         if ( sink != NULL && handler != NULL )
