@@ -190,9 +190,15 @@ Expands the given item.
 
 \membersection{wxTreeCtrl::GetBoundingRect}\label{wxtreectrlgetitemrect}
 
-\constfunc{void}{GetBoundingRect}{\param{const wxTreeItemId\&}{ item}, \param{wxRect\& }{rect}, \param{bool }{textOnly = FALSE}}
+\constfunc{bool}{GetBoundingRect}{\param{const wxTreeItemId\&}{ item}, \param{wxRect\& }{rect}, \param{bool }{textOnly = FALSE}}
 
-Returns the position and size of the rectangle bounding the item.
+Retrieves the rectangle bounding the {\it item}. If {\it textOnly} is TRUE,
+only the rectangle around the items label will be returned, otherwise the
+items image is also taken into account.
+
+The return value is TRUE if the rectangle was successfully retrieved or FALSE
+if it was not (in this case {\it rect} is not changed) - for example, if the
+item is currently invisible.
 
 \membersection{wxTreeCtrl::GetChildrenCount}\label{wxtreectrlgetchildrencount}
 
