@@ -167,7 +167,7 @@ will be sent which can be vetoed as well.
 
 \wxheading{See also}
 
-\helpref{wxTreeCtrl::EndEditLabel}{wxtreectrlendeditlabel},
+\helpref{wxTreeCtrl::EndEditLabel}{wxtreectrlendeditlabel}, 
 \helpref{wxTreeEvent}{wxtreeevent}
 
 \membersection{wxTreeCtrl::EndEditLabel}\label{wxtreectrlendeditlabel}
@@ -278,8 +278,9 @@ Returns the tree item data associated with the item.
 
 \helpref{wxTreeItemData}{wxtreeitemdata}
 
-\pythonnote{wxPython provides the following shortcut method:\par
-\indented{2cm}{\begin{twocollist}
+\pythonnote{wxPython provides the following shortcut method:
+
+\indented{2cm}{\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf GetPyData(item)}}{Returns the Python Object
 associated with the wxTreeItemData for the given item Id.}
 \end{twocollist}}
@@ -288,9 +289,10 @@ associated with the wxTreeItemData for the given item Id.}
 \membersection{wxTreeCtrl::GetItemImage}\label{wxtreectrlgetitemimage}
 
 \constfunc{int}{GetItemImage}{\param{const wxTreeItemId\& }{item},
-\param{wxTreeItemIcon }{which = wxTreeItemIcon\_Normal}}
+ \param{wxTreeItemIcon }{which = wxTreeItemIcon\_Normal}}
 
 Gets the specified item image. The value of {\it which} may be:
+
 \begin{itemize}\itemsep=0pt
 \item{wxTreeItemIcon\_Normal} to get the normal item image
 \item{wxTreeItemIcon\_Selected} to get the selected item image (i.e. the image
@@ -316,7 +318,7 @@ Returns the last child of the item (or an invalid tree item if this item has no 
 
 \wxheading{See also}
 
-\helpref{GetFirstChild}{wxtreectrlgetfirstchild},
+\helpref{GetFirstChild}{wxtreectrlgetfirstchild}, 
 \helpref{GetLastChild}{wxtreectrlgetlastchild}
 
 \membersection{wxTreeCtrl::GetNextChild}\label{wxtreectrlgetnextchild}
@@ -395,7 +397,7 @@ Returns the root item for the tree control.
 
 \constfunc{int}{GetItemSelectedImage}{\param{const wxTreeItemId\& }{item}}
 
-Gets the selected item image (this function is obsolete, use
+Gets the selected item image (this function is obsolete, use 
 {\tt GetItemImage(item, wxTreeItemIcon\_Selected} instead).
 
 \membersection{wxTreeCtrl::GetSelection}\label{wxtreectrlgetselection}
@@ -417,7 +419,7 @@ function can be called only if the control has the wxTR\_MULTIPLE style.
 Returns the number of selected items.
 
 \pythonnote{The wxPython version of this method accepts no parameters
-and returns a Python list of {\tt wxTreeItemId}'s.}
+and returns a Python list of {\tt wxTreeItemId}s.}
 
 \membersection{wxTreeCtrl::GetStateImageList}\label{wxtreectrlgetstateimagelist}
 
@@ -561,7 +563,7 @@ See also: \helpref{IsBold}{wxtreectrlisbold}
 Sets the item client data.
 
 \pythonnote{wxPython provides the following shortcut method:\par
-\indented{2cm}{\begin{twocollist}
+\indented{2cm}{\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf SetPyData(item, obj)}}{Associate the given Python
 Object with the wxTreeItemData for the given item Id.}
 \end{twocollist}}
@@ -591,8 +593,7 @@ usage and loading time.
 \membersection{wxTreeCtrl::SetItemImage}\label{wxtreectrlsetitemimage}
 
 \func{void}{SetItemImage}{\param{const wxTreeItemId\&}{ item},
-\param{int }{image},
-\param{wxTreeItemIcon }{which = wxTreeItemIcon\_Normal}}
+ \param{int }{image}, \param{wxTreeItemIcon }{which = wxTreeItemIcon\_Normal}}
 
 Sets the specified item image. See \helpref{GetItemImage}{wxtreectrlgetitemimage}
 for the description of {\it which} parameter.
@@ -601,8 +602,7 @@ for the description of {\it which} parameter.
 
 \func{void}{SetItemSelectedImage}{\param{const wxTreeItemId\&}{ item}, \param{int }{selImage}}
 
-Sets the selected item image (this function is obsolete, use
-{\tt SetItemImage(item, wxTreeItemIcon\_Selected} instead).
+Sets the selected item image (this function is obsolete, use {\tt SetItemImage(item, wxTreeItemIcon\_Selected} instead).
 
 \membersection{wxTreeCtrl::SetItemText}\label{wxtreectrlsetitemtext}
 
@@ -695,8 +695,9 @@ associated with the tree item using the wxTreeItemData as a
 container.
 
 In addition, the following methods are added in wxPython for accessing
-the object:\par
-\indented{2cm}{\begin{twocollist}
+the object:
+
+\indented{2cm}{\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf GetData()}}{Returns a reference to the Python Object}
 \twocolitem{{\bf SetData(obj)}}{Associates a new Python Object with the
 wxTreeItemData}

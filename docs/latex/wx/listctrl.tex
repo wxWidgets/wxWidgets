@@ -465,7 +465,7 @@ Insert an image/string item.
 
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
-\indented{2cm}{\begin{twocollist}
+\indented{2cm}{\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf InsertItem(item)}}{Inserts an item using a wxListItem.}
 \twocolitem{{\bf InsertStringItem(index, label)}}{Inserts a string item.}
 \twocolitem{{\bf InsertImageItem(index, imageIndex)}}{Inserts an image item.}
@@ -582,7 +582,6 @@ string or image at a given location.}
 \end{twocollist}}
 }
 
-
 \membersection{wxListCtrl::SetItemData}\label{wxlistctrlsetitemdata}
 
 \func{bool}{SetItemData}{\param{long }{item}, \param{long }{data}}
@@ -653,8 +652,8 @@ second one and positive value if the first one is greater than the second one
 
 \wxheading{Parameters}
 
-\docparam{item1}{client data associated with the first item ({\bf NOT} the index).
-\docparam{item2}{client data associated with the second item ({\bf NOT} the index).
+\docparam{item1}{client data associated with the first item ({\bf NOT} the index).}
+\docparam{item2}{client data associated with the second item ({\bf NOT} the index).}
 \docparam{data}{the value passed to SortItems() itself.}
 
 Notice that the control may only be sorted on client data associated with the
@@ -663,3 +662,4 @@ you want to be able to sort the items in the control.
 
 Please see the \helpref{listctrl sample}{samplelistctrl} for an example of
 using this function.
+

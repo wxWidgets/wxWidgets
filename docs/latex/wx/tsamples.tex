@@ -8,7 +8,6 @@
 %% Copyright:   (c) wxWindows team
 %% Licence:     wxWindows licence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % NB: please keep the subsections in alphabetic order!
 
 \section{wxWindows samples}\label{samples}
@@ -29,7 +28,7 @@ most commented sample of all - looking at its source code is recommended.
 
 The next most useful sample is probably the \helpref{controls}{samplecontrols} 
 one which shows many of wxWindows standard controls, such as buttons,
-listboxes, checkboxes, comboboxes e.t.c.
+listboxes, checkboxes, comboboxes etc.
 
 Other, more complicated controls, have their own samples. In this category you
 may find the following samples showing the corresponding controls:
@@ -90,6 +89,7 @@ notebook pages, advanving pages programmatically and vetoing a page change
 by intercepting the \helpref{wxNotebookEvent}{wxnotebookevent}.
 
 The various controls tested are listed here:
+
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxButton}{wxbutton}}{Push button control, displaying text}
 \twocolitem{\helpref{wxBitmapButton}{wxbitmapbutton}}{Push button control, displaying a bitmap}
@@ -318,16 +318,11 @@ immediately notified if the other end closes the connection.
 
 The sockets sample is work in progress. Coming soon:
 
-\begin{itemize}
-
+\begin{itemize}\itemsep=0pt
 \item More tests for basic socket functionality.
-
 \item Tests for the recently added datagram socket classes.
-
 \item Tests for protocol classes (wxProtocol and its descendants).
-
 \item New samples which actually do something useful (suggestions accepted).
-
 \end{itemize}
 
 \subsection{Statbar sample}\label{samplestatbar}
@@ -387,20 +382,16 @@ The toolbar sample shows the \helpref{wxToolBar}{wxtoolbar} class in action.
 
 The following things are demonstrated:
 
-\begin{itemize}
-
-\item Creating the toolbar using \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}
+\begin{itemize}\itemsep=0pt
+\item Creating the toolbar using \helpref{wxToolBar::AddTool}{wxtoolbaraddtool} 
 and \helpref{wxToolBar::AddControl}{wxtoolbaraddcontrol}: see
 MyApp::InitToolbar in the sample.
-
 \item Using {\tt EVT\_UPDATE\_UI} handler for automatically enabling/disabling
 toolbar buttons without having to explicitly call EnableTool. This is is done
 in MyFrame::OnUpdateCopyAndCut.
-
 \item Using \helpref{wxToolBar::DeleteTool}{wxtoolbardeletetool} and 
 \helpref{wxToolBar::InsertTool}{wxtoolbarinserttool} to dynamically update the
 toolbar.
-
 \end{itemize}
 
 \subsection{Treectrl sample}\label{sampletreectrl}
@@ -413,3 +404,4 @@ the bottom part of the frame).
 Adding, inserting and deleting items and branches from the tree as well as
 sorting (in default alphabetical order as well as in custom one) is
 demonstrated here as well - try the corresponding menu entries.
+
