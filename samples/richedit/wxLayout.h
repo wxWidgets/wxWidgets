@@ -7,7 +7,7 @@
 #pragma interface
 #endif
 
-#include <wx/wx.h>
+#include "wx/wx.h"
 
 #include "wxllist.h"
 #include "wxlwindow.h"
@@ -26,14 +26,13 @@ class MyApp;
 
 class MyFrame: public wxFrame
 {
-  DECLARE_DYNAMIC_CLASS(MyFrame)
 
-  public:
-  
-   MyFrame(void);
-   void AddSampleText(wxLayoutList *llist);
-   void Clear(void);
-   void OnCommand( wxCommandEvent &event );
+public:
+
+    MyFrame();
+    void AddSampleText(wxLayoutList *llist);
+    void Clear();
+    void OnCommand( wxCommandEvent &event );
 
     void OnPrint(wxCommandEvent& event);
     void OnPrintPreview(wxCommandEvent& event);
@@ -44,11 +43,14 @@ class MyFrame: public wxFrame
     void OnPrintSetupPS(wxCommandEvent& event);
     void OnPageSetupPS(wxCommandEvent& event);
 
-   DECLARE_EVENT_TABLE()
 
 private:
-   wxLayoutWindow  *m_lwin;
-   wxPrintData m_PrintData;
+    wxLayoutWindow  *m_lwin;
+    wxPrintData m_PrintData;
+
+    DECLARE_DYNAMIC_CLASS(MyFrame)
+
+    DECLARE_EVENT_TABLE()
 };
 
 //-----------------------------------------------------------------------------
@@ -57,10 +59,13 @@ private:
 
 class MyApp: public wxApp
 {
-  public:
-  
-    MyApp(void);
-    virtual bool OnInit(void);
+public:
+
+    MyApp();
+
+    virtual bool OnInit();
+
 };
 
 #endif // __WXCONVERTH__
+

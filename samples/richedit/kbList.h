@@ -136,7 +136,7 @@ public:
        deleted by list. See the constructor for more details.
        @param ownsflag if true, list will own entries
    */
-   void ownsObjects(bool ownsflag = true)
+   void ownsObjects(bool ownsflag)
       { ownsEntries = ownsflag; }
 
    /** Query whether list owns entries.
@@ -236,7 +236,10 @@ protected:
        param iterator i
    */
    inline void deleteContent(iterator i)
-      { if(ownsEntries) delete *i; }
+   {
+      iterator *i_ptr = &i;
+      if(ownsEntries) delete i_ptr;
+   }
 
 
 private:

@@ -45,6 +45,7 @@ void wxLayoutImportText(wxLayoutList *list, wxString const &str)
    // VZ: I still don't like it... the string data may be shared...
    wxChar * cptr = (wxChar *)str.c_str(); // const_cast
    const wxChar * begin = cptr;
+   wxUnusedVar(begin);
    wxChar  backup;
 
    for(;;)
@@ -165,7 +166,7 @@ wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list)
    m_si = list->GetDefaultStyleInfo();
    m_line = list->GetFirstLine();
    m_iterator = m_line->GetFirstObject();
-   m_FirstTime = TRUE;
+   m_FirstTime = true;
 }
 
 
@@ -215,6 +216,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
       else
          type = WXLO_TYPE_TEXT;
    }
+   wxUnusedVar(type);
 
    wxString *str = new wxString();
    // text must be concatenated
@@ -250,7 +252,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
             *str += wxLayoutExportCmdAsHTML(
                *(wxLayoutObjectCmd const *)*status->m_iterator,
                & status->m_si, status->m_FirstTime);
-         status->m_FirstTime = FALSE;
+         status->m_FirstTime = false;
          break;
       default:  // ignore icons
          ;
