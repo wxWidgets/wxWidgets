@@ -61,11 +61,9 @@ public:
     int GetRealId() const;
 
     // mark item as belonging to the given radio group
-    void SetRadioGroup(int start, int end)
-    {
-        m_startRadioGroup = start;
-        m_endRadioGroup = end;
-    }
+    void SetAsRadioGroupStart();
+    void SetRadioGroupStart(int start);
+    void SetRadioGroupEnd(int end);
 
     // compatibility only, don't use in new code
     wxMenuItem(wxMenu *parentMenu,
@@ -80,9 +78,17 @@ private:
     void Init();
 
     // the positions of the first and last items of the radio group this item
-    // belongs to or -1
-    int m_startRadioGroup,
-        m_endRadioGroup;
+    // belongs to or -1: start is the radio group start and is valid for all
+    // but first radio group items (m_isRadioGroupStart == FALSE), end is valid
+    // only for the first one
+    union
+    {
+        int start;
+        int end;
+    } m_radioGroup;
+
+    // does this item start a radio group?
+    bool m_isRadioGroupStart;
 
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };

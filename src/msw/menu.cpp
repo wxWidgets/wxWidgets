@@ -299,28 +299,6 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
 void wxMenu::EndRadioGroup()
 {
-    if ( m_startRadioGroup == -1 )
-    {
-        // nothing to do
-        return;
-    }
-
-    wxMenuItemList::Node *nodeStart = GetMenuItems().Item(m_startRadioGroup);
-    wxCHECK_RET( nodeStart, _T("where is the radio group start item?") );
-
-    int endRadioGroup = GetMenuItemCount();
-
-    wxMenuItemList::Node *node = nodeStart;
-    for ( int n = m_startRadioGroup; n < endRadioGroup && node; n++ )
-    {
-        wxMenuItem *item = (wxMenuItem *)node->GetData();
-        item->SetRadioGroup(m_startRadioGroup, endRadioGroup - 1);
-
-        node = node->GetNext();
-    }
-
-    nodeStart->GetData()->Check(TRUE);
-
     // we're not inside a radio group any longer
     m_startRadioGroup = -1;
 }
@@ -329,12 +307,38 @@ bool wxMenu::DoAppend(wxMenuItem *item)
 {
     wxCHECK_MSG( item, FALSE, _T("NULL item in wxMenu::DoAppend") );
 
+    bool check = FALSE;
+
     if ( item->GetKind() == wxITEM_RADIO )
     {
+        int count = GetMenuItemCount();
+
         if ( m_startRadioGroup == -1 )
         {
             // start a new radio group
-            m_startRadioGroup = GetMenuItemCount();
+            m_startRadioGroup = count;
+
+            // for now it has just one element
+            item->SetAsRadioGroupStart();
+            item->SetRadioGroupEnd(m_startRadioGroup);
+
+            // ensure that we have a checked item in the radio group
+            check = TRUE;
+        }
+        else // extend the current radio group
+        {
+            // we need to update its end item
+            item->SetRadioGroupStart(m_startRadioGroup);
+            wxMenuItemList::Node *node = GetMenuItems().Item(m_startRadioGroup);
+
+            if ( node )
+            {
+                node->GetData()->SetRadioGroupEnd(count);
+            }
+            else
+            {
+                wxFAIL_MSG( _T("where is the radio group start item?") );
+            }
         }
     }
     else // not a radio item
@@ -342,7 +346,18 @@ bool wxMenu::DoAppend(wxMenuItem *item)
         EndRadioGroup();
     }
 
-    return wxMenuBase::DoAppend(item) && DoInsertOrAppend(item);
+    if ( !wxMenuBase::DoAppend(item) || !DoInsertOrAppend(item) )
+    {
+        return FALSE;
+    }
+
+    if ( check )
+    {
+        // check the item initially
+        item->Check(TRUE);
+    }
+
+    return TRUE;
 }
 
 bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
