@@ -193,11 +193,13 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
   event.SetEventObject( menu );
   event.SetInt(id );
   
+/* wxMSW doesn't call callback here either
   if (menu->m_callback)
   {
      (void) (*(menu->m_callback)) (*menu, event);
      return;
   }
+*/
 
   if (menu->GetEventHandler()->ProcessEvent(event)) return;
 
