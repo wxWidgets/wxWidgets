@@ -501,14 +501,14 @@ wxSemaError wxSemaphoreInternal::Wait()
     while ( m_count == 0 )
     {
         wxLogTrace(TRACE_SEMA,
-                   "Thread %ld waiting for semaphore to become signalled",
+                   _T("Thread %ld waiting for semaphore to become signalled"),
                    wxThread::GetCurrentId());
 
         if ( m_cond.Wait() != wxCOND_NO_ERROR )
             return wxSEMA_MISC_ERROR;
 
         wxLogTrace(TRACE_SEMA,
-                   "Thread %ld finished waiting for semaphore, count = %lu",
+                   _T("Thread %ld finished waiting for semaphore, count = %lu"),
                    wxThread::GetCurrentId(), (unsigned long)m_count);
     }
 
@@ -575,7 +575,7 @@ wxSemaError wxSemaphoreInternal::Post()
     m_count++;
 
     wxLogTrace(TRACE_SEMA,
-               "Thread %ld about to signal semaphore, count = %lu",
+               _T("Thread %ld about to signal semaphore, count = %lu"),
                wxThread::GetCurrentId(), (unsigned long)m_count);
 
     return m_cond.Signal() == wxCOND_NO_ERROR ? wxSEMA_NO_ERROR
