@@ -115,6 +115,26 @@ void wxTimerBase::Notify()
     (void)m_owner->ProcessEvent(event);
 }
 
+bool wxTimerBase::Start(int milliseconds, bool oneShot)
+{
+    if ( IsRunning() )
+    {
+        // not stopping the already running timer might work for some
+        // platforms (no problems under MSW) but leads to mysterious crashes
+        // on the others (GTK), so to be on the safe side do it here
+        Stop();
+    }
+
+    if ( milliseconds != -1 )
+    {
+        m_milli = milliseconds;
+    }
+
+    m_oneShot = oneShot;
+
+    return TRUE;
+}
+
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------

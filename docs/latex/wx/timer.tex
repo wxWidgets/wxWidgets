@@ -101,6 +101,9 @@ If {\it oneShot} is FALSE (the default), the \helpref{Notify}{wxtimernotify}
 function will be called repeatedly until the timer is stopped. If TRUE,
 it will be called only once and the timer will stop automatically.
 
+If the timer was already running, it will be stopped by this method before
+restarting it.
+
 \membersection{wxTimer::Stop}\label{wxtimerstop}
 
 \func{void}{Stop}{\void}
