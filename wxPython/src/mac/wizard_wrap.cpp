@@ -511,7 +511,7 @@ SWIG_CheckLong(PyObject* obj)
 #ifdef __cplusplus
 extern "C" {
 #endif
-static PyObject *_wrap_new_WizardEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_WizardEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) -1 ;
@@ -557,7 +557,7 @@ static PyObject *_wrap_new_WizardEvent(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_WizardEvent_GetDirection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardEvent_GetDirection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardEvent *arg1 = (wxWizardEvent *) 0 ;
     bool result;
@@ -585,7 +585,7 @@ static PyObject *_wrap_WizardEvent_GetDirection(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_WizardEvent_GetPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardEvent_GetPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardEvent *arg1 = (wxWizardEvent *) 0 ;
     wxWizardPage *result;
@@ -613,14 +613,14 @@ static PyObject *_wrap_WizardEvent_GetPage(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject * WizardEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * WizardEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxWizardEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_WizardPage_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardPage_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardPage *arg1 = (wxWizardPage *) 0 ;
     wxWizard *arg2 = (wxWizard *) 0 ;
@@ -683,7 +683,7 @@ static PyObject *_wrap_WizardPage_Create(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_WizardPage_GetPrev(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardPage_GetPrev(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardPage *arg1 = (wxWizardPage *) 0 ;
     wxWizardPage *result;
@@ -711,7 +711,7 @@ static PyObject *_wrap_WizardPage_GetPrev(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_WizardPage_GetNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardPage_GetNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardPage *arg1 = (wxWizardPage *) 0 ;
     wxWizardPage *result;
@@ -739,7 +739,7 @@ static PyObject *_wrap_WizardPage_GetNext(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_WizardPage_GetBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardPage_GetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardPage *arg1 = (wxWizardPage *) 0 ;
     wxBitmap result;
@@ -769,14 +769,14 @@ static PyObject *_wrap_WizardPage_GetBitmap(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject * WizardPage_swigregister(PyObject *, PyObject *args) {
+static PyObject * WizardPage_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxWizardPage, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PyWizardPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyWizardPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxBitmap *arg2 = (wxBitmap *) &wxNullBitmap ;
@@ -826,7 +826,7 @@ static PyObject *_wrap_new_PyWizardPage(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_new_PrePyWizardPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PrePyWizardPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *result;
     char *kwnames[] = {
@@ -848,7 +848,7 @@ static PyObject *_wrap_new_PrePyWizardPage(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_PyWizardPage_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     wxWizard *arg2 = (wxWizard *) 0 ;
@@ -911,7 +911,7 @@ static PyObject *_wrap_PyWizardPage_Create(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_PyWizardPage__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -942,7 +942,7 @@ static PyObject *_wrap_PyWizardPage__setCallbackInfo(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_DoMoveWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     int arg2 ;
@@ -983,7 +983,7 @@ static PyObject *_wrap_PyWizardPage_base_DoMoveWindow(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_DoSetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_DoSetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     int arg2 ;
@@ -1030,7 +1030,7 @@ static PyObject *_wrap_PyWizardPage_base_DoSetSize(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_DoSetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_DoSetClientSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     int arg2 ;
@@ -1063,7 +1063,7 @@ static PyObject *_wrap_PyWizardPage_base_DoSetClientSize(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_DoSetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_DoSetVirtualSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     int arg2 ;
@@ -1096,7 +1096,7 @@ static PyObject *_wrap_PyWizardPage_base_DoSetVirtualSize(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_DoGetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_DoGetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -1135,7 +1135,7 @@ static PyObject *_wrap_PyWizardPage_base_DoGetSize(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_DoGetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_DoGetClientSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -1174,7 +1174,7 @@ static PyObject *_wrap_PyWizardPage_base_DoGetClientSize(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_DoGetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_DoGetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -1213,7 +1213,7 @@ static PyObject *_wrap_PyWizardPage_base_DoGetPosition(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_DoGetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_DoGetVirtualSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     wxSize result;
@@ -1243,7 +1243,7 @@ static PyObject *_wrap_PyWizardPage_base_DoGetVirtualSize(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_DoGetBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_DoGetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     wxSize result;
@@ -1273,7 +1273,7 @@ static PyObject *_wrap_PyWizardPage_base_DoGetBestSize(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_InitDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_InitDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1298,7 +1298,7 @@ static PyObject *_wrap_PyWizardPage_base_InitDialog(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_TransferDataToWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_TransferDataToWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     bool result;
@@ -1326,7 +1326,7 @@ static PyObject *_wrap_PyWizardPage_base_TransferDataToWindow(PyObject *, PyObje
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_TransferDataFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_TransferDataFromWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     bool result;
@@ -1354,7 +1354,7 @@ static PyObject *_wrap_PyWizardPage_base_TransferDataFromWindow(PyObject *, PyOb
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_Validate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_Validate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     bool result;
@@ -1382,7 +1382,7 @@ static PyObject *_wrap_PyWizardPage_base_Validate(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_AcceptsFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_AcceptsFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     bool result;
@@ -1410,7 +1410,7 @@ static PyObject *_wrap_PyWizardPage_base_AcceptsFocus(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_AcceptsFocusFromKeyboard(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_AcceptsFocusFromKeyboard(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     bool result;
@@ -1438,7 +1438,7 @@ static PyObject *_wrap_PyWizardPage_base_AcceptsFocusFromKeyboard(PyObject *, Py
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_GetMaxSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_GetMaxSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     wxSize result;
@@ -1468,7 +1468,7 @@ static PyObject *_wrap_PyWizardPage_base_GetMaxSize(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_AddChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_AddChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1497,7 +1497,7 @@ static PyObject *_wrap_PyWizardPage_base_AddChild(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyWizardPage_base_RemoveChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWizardPage_base_RemoveChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWizardPage *arg1 = (wxPyWizardPage *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1526,14 +1526,14 @@ static PyObject *_wrap_PyWizardPage_base_RemoveChild(PyObject *, PyObject *args,
 }
 
 
-static PyObject * PyWizardPage_swigregister(PyObject *, PyObject *args) {
+static PyObject * PyWizardPage_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyWizardPage, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_WizardPageSimple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_WizardPageSimple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) NULL ;
@@ -1589,7 +1589,7 @@ static PyObject *_wrap_new_WizardPageSimple(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_new_PreWizardPageSimple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PreWizardPageSimple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardPageSimple *result;
     char *kwnames[] = {
@@ -1611,7 +1611,7 @@ static PyObject *_wrap_new_PreWizardPageSimple(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_WizardPageSimple_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardPageSimple_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardPageSimple *arg1 = (wxWizardPageSimple *) 0 ;
     wxWizard *arg2 = (wxWizard *) NULL ;
@@ -1675,7 +1675,7 @@ static PyObject *_wrap_WizardPageSimple_Create(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_WizardPageSimple_SetPrev(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardPageSimple_SetPrev(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardPageSimple *arg1 = (wxWizardPageSimple *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) 0 ;
@@ -1704,7 +1704,7 @@ static PyObject *_wrap_WizardPageSimple_SetPrev(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_WizardPageSimple_SetNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardPageSimple_SetNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardPageSimple *arg1 = (wxWizardPageSimple *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) 0 ;
@@ -1733,7 +1733,7 @@ static PyObject *_wrap_WizardPageSimple_SetNext(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_WizardPageSimple_Chain(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WizardPageSimple_Chain(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizardPageSimple *arg1 = (wxWizardPageSimple *) 0 ;
     wxWizardPageSimple *arg2 = (wxWizardPageSimple *) 0 ;
@@ -1762,14 +1762,14 @@ static PyObject *_wrap_WizardPageSimple_Chain(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject * WizardPageSimple_swigregister(PyObject *, PyObject *args) {
+static PyObject * WizardPageSimple_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxWizardPageSimple, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_Wizard(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Wizard(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) -1 ;
@@ -1848,7 +1848,7 @@ static PyObject *_wrap_new_Wizard(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_new_PreWizard(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PreWizard(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *result;
     char *kwnames[] = {
@@ -1870,7 +1870,7 @@ static PyObject *_wrap_new_PreWizard(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Wizard_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1949,7 +1949,7 @@ static PyObject *_wrap_Wizard_Create(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Wizard_Init(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_Init(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1974,7 +1974,7 @@ static PyObject *_wrap_Wizard_Init(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Wizard_RunWizard(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_RunWizard(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) 0 ;
@@ -2006,7 +2006,7 @@ static PyObject *_wrap_Wizard_RunWizard(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Wizard_GetCurrentPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_GetCurrentPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWizardPage *result;
@@ -2034,7 +2034,7 @@ static PyObject *_wrap_Wizard_GetCurrentPage(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Wizard_SetPageSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_SetPageSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxSize *arg2 = 0 ;
@@ -2066,7 +2066,7 @@ static PyObject *_wrap_Wizard_SetPageSize(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Wizard_GetPageSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_GetPageSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxSize result;
@@ -2096,7 +2096,7 @@ static PyObject *_wrap_Wizard_GetPageSize(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Wizard_FitToPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_FitToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) 0 ;
@@ -2125,7 +2125,7 @@ static PyObject *_wrap_Wizard_FitToPage(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Wizard_GetPageAreaSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_GetPageAreaSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxSizer *result;
@@ -2153,7 +2153,7 @@ static PyObject *_wrap_Wizard_GetPageAreaSizer(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Wizard_SetBorder(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_SetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     int arg2 ;
@@ -2182,7 +2182,7 @@ static PyObject *_wrap_Wizard_SetBorder(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Wizard_IsRunning(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_IsRunning(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     bool result;
@@ -2210,7 +2210,7 @@ static PyObject *_wrap_Wizard_IsRunning(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Wizard_ShowPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_ShowPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) 0 ;
@@ -2248,7 +2248,7 @@ static PyObject *_wrap_Wizard_ShowPage(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Wizard_HasNextPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_HasNextPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) 0 ;
@@ -2280,7 +2280,7 @@ static PyObject *_wrap_Wizard_HasNextPage(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Wizard_HasPrevPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Wizard_HasPrevPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) 0 ;
@@ -2312,7 +2312,7 @@ static PyObject *_wrap_Wizard_HasPrevPage(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject * Wizard_swigregister(PyObject *, PyObject *args) {
+static PyObject * Wizard_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxWizard, obj);
@@ -2320,62 +2320,62 @@ static PyObject * Wizard_swigregister(PyObject *, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"new_WizardEvent", (PyCFunction) _wrap_new_WizardEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardEvent_GetDirection", (PyCFunction) _wrap_WizardEvent_GetDirection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardEvent_GetPage", (PyCFunction) _wrap_WizardEvent_GetPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardEvent_swigregister", WizardEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"WizardPage_Create", (PyCFunction) _wrap_WizardPage_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardPage_GetPrev", (PyCFunction) _wrap_WizardPage_GetPrev, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardPage_GetNext", (PyCFunction) _wrap_WizardPage_GetNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardPage_GetBitmap", (PyCFunction) _wrap_WizardPage_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardPage_swigregister", WizardPage_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PyWizardPage", (PyCFunction) _wrap_new_PyWizardPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_PrePyWizardPage", (PyCFunction) _wrap_new_PrePyWizardPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_Create", (PyCFunction) _wrap_PyWizardPage_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage__setCallbackInfo", (PyCFunction) _wrap_PyWizardPage__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_DoMoveWindow", (PyCFunction) _wrap_PyWizardPage_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_DoSetSize", (PyCFunction) _wrap_PyWizardPage_base_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_DoSetClientSize", (PyCFunction) _wrap_PyWizardPage_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_DoSetVirtualSize", (PyCFunction) _wrap_PyWizardPage_base_DoSetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_DoGetSize", (PyCFunction) _wrap_PyWizardPage_base_DoGetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_DoGetClientSize", (PyCFunction) _wrap_PyWizardPage_base_DoGetClientSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_DoGetPosition", (PyCFunction) _wrap_PyWizardPage_base_DoGetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_DoGetVirtualSize", (PyCFunction) _wrap_PyWizardPage_base_DoGetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_DoGetBestSize", (PyCFunction) _wrap_PyWizardPage_base_DoGetBestSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_InitDialog", (PyCFunction) _wrap_PyWizardPage_base_InitDialog, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_TransferDataToWindow", (PyCFunction) _wrap_PyWizardPage_base_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_TransferDataFromWindow", (PyCFunction) _wrap_PyWizardPage_base_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_Validate", (PyCFunction) _wrap_PyWizardPage_base_Validate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_AcceptsFocus", (PyCFunction) _wrap_PyWizardPage_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_PyWizardPage_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_GetMaxSize", (PyCFunction) _wrap_PyWizardPage_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_AddChild", (PyCFunction) _wrap_PyWizardPage_base_AddChild, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_base_RemoveChild", (PyCFunction) _wrap_PyWizardPage_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyWizardPage_swigregister", PyWizardPage_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_WizardPageSimple", (PyCFunction) _wrap_new_WizardPageSimple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_PreWizardPageSimple", (PyCFunction) _wrap_new_PreWizardPageSimple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardPageSimple_Create", (PyCFunction) _wrap_WizardPageSimple_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardPageSimple_SetPrev", (PyCFunction) _wrap_WizardPageSimple_SetPrev, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardPageSimple_SetNext", (PyCFunction) _wrap_WizardPageSimple_SetNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardPageSimple_Chain", (PyCFunction) _wrap_WizardPageSimple_Chain, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WizardPageSimple_swigregister", WizardPageSimple_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_Wizard", (PyCFunction) _wrap_new_Wizard, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_PreWizard", (PyCFunction) _wrap_new_PreWizard, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_Create", (PyCFunction) _wrap_Wizard_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_Init", (PyCFunction) _wrap_Wizard_Init, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_RunWizard", (PyCFunction) _wrap_Wizard_RunWizard, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_GetCurrentPage", (PyCFunction) _wrap_Wizard_GetCurrentPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_SetPageSize", (PyCFunction) _wrap_Wizard_SetPageSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_GetPageSize", (PyCFunction) _wrap_Wizard_GetPageSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_FitToPage", (PyCFunction) _wrap_Wizard_FitToPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_GetPageAreaSizer", (PyCFunction) _wrap_Wizard_GetPageAreaSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_SetBorder", (PyCFunction) _wrap_Wizard_SetBorder, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_IsRunning", (PyCFunction) _wrap_Wizard_IsRunning, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_ShowPage", (PyCFunction) _wrap_Wizard_ShowPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_HasNextPage", (PyCFunction) _wrap_Wizard_HasNextPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_HasPrevPage", (PyCFunction) _wrap_Wizard_HasPrevPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Wizard_swigregister", Wizard_swigregister, METH_VARARGS, NULL },
-	 { NULL, NULL, 0, NULL }
+	 { (char *)"new_WizardEvent", (PyCFunction) _wrap_new_WizardEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardEvent_GetDirection", (PyCFunction) _wrap_WizardEvent_GetDirection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardEvent_GetPage", (PyCFunction) _wrap_WizardEvent_GetPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardEvent_swigregister", WizardEvent_swigregister, METH_VARARGS },
+	 { (char *)"WizardPage_Create", (PyCFunction) _wrap_WizardPage_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardPage_GetPrev", (PyCFunction) _wrap_WizardPage_GetPrev, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardPage_GetNext", (PyCFunction) _wrap_WizardPage_GetNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardPage_GetBitmap", (PyCFunction) _wrap_WizardPage_GetBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardPage_swigregister", WizardPage_swigregister, METH_VARARGS },
+	 { (char *)"new_PyWizardPage", (PyCFunction) _wrap_new_PyWizardPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PrePyWizardPage", (PyCFunction) _wrap_new_PrePyWizardPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_Create", (PyCFunction) _wrap_PyWizardPage_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage__setCallbackInfo", (PyCFunction) _wrap_PyWizardPage__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_DoMoveWindow", (PyCFunction) _wrap_PyWizardPage_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_DoSetSize", (PyCFunction) _wrap_PyWizardPage_base_DoSetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_DoSetClientSize", (PyCFunction) _wrap_PyWizardPage_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_DoSetVirtualSize", (PyCFunction) _wrap_PyWizardPage_base_DoSetVirtualSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_DoGetSize", (PyCFunction) _wrap_PyWizardPage_base_DoGetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_DoGetClientSize", (PyCFunction) _wrap_PyWizardPage_base_DoGetClientSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_DoGetPosition", (PyCFunction) _wrap_PyWizardPage_base_DoGetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_DoGetVirtualSize", (PyCFunction) _wrap_PyWizardPage_base_DoGetVirtualSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_DoGetBestSize", (PyCFunction) _wrap_PyWizardPage_base_DoGetBestSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_InitDialog", (PyCFunction) _wrap_PyWizardPage_base_InitDialog, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_TransferDataToWindow", (PyCFunction) _wrap_PyWizardPage_base_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_TransferDataFromWindow", (PyCFunction) _wrap_PyWizardPage_base_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_Validate", (PyCFunction) _wrap_PyWizardPage_base_Validate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_AcceptsFocus", (PyCFunction) _wrap_PyWizardPage_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_PyWizardPage_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_GetMaxSize", (PyCFunction) _wrap_PyWizardPage_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_AddChild", (PyCFunction) _wrap_PyWizardPage_base_AddChild, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_base_RemoveChild", (PyCFunction) _wrap_PyWizardPage_base_RemoveChild, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyWizardPage_swigregister", PyWizardPage_swigregister, METH_VARARGS },
+	 { (char *)"new_WizardPageSimple", (PyCFunction) _wrap_new_WizardPageSimple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PreWizardPageSimple", (PyCFunction) _wrap_new_PreWizardPageSimple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardPageSimple_Create", (PyCFunction) _wrap_WizardPageSimple_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardPageSimple_SetPrev", (PyCFunction) _wrap_WizardPageSimple_SetPrev, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardPageSimple_SetNext", (PyCFunction) _wrap_WizardPageSimple_SetNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardPageSimple_Chain", (PyCFunction) _wrap_WizardPageSimple_Chain, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WizardPageSimple_swigregister", WizardPageSimple_swigregister, METH_VARARGS },
+	 { (char *)"new_Wizard", (PyCFunction) _wrap_new_Wizard, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PreWizard", (PyCFunction) _wrap_new_PreWizard, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_Create", (PyCFunction) _wrap_Wizard_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_Init", (PyCFunction) _wrap_Wizard_Init, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_RunWizard", (PyCFunction) _wrap_Wizard_RunWizard, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_GetCurrentPage", (PyCFunction) _wrap_Wizard_GetCurrentPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_SetPageSize", (PyCFunction) _wrap_Wizard_SetPageSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_GetPageSize", (PyCFunction) _wrap_Wizard_GetPageSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_FitToPage", (PyCFunction) _wrap_Wizard_FitToPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_GetPageAreaSizer", (PyCFunction) _wrap_Wizard_GetPageAreaSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_SetBorder", (PyCFunction) _wrap_Wizard_SetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_IsRunning", (PyCFunction) _wrap_Wizard_IsRunning, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_ShowPage", (PyCFunction) _wrap_Wizard_ShowPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_HasNextPage", (PyCFunction) _wrap_Wizard_HasNextPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_HasPrevPage", (PyCFunction) _wrap_Wizard_HasPrevPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Wizard_swigregister", Wizard_swigregister, METH_VARARGS },
+	 { NULL, NULL }
 };
 
 
@@ -3459,7 +3459,7 @@ _swigt__p_int,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0, 0, 0, 0.0, 0, 0}};
+{0}};
 
 #ifdef __cplusplus
 }

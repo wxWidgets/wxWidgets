@@ -2385,7 +2385,7 @@ static PyObject *_wrap_ChoiceNameStr_get() {
 static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -2414,11 +2414,13 @@ static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwar
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "choices",(char *) "style",(char *) "validator",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOO:new_Choice",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOOO:new_Choice",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = &temp3;
@@ -2528,7 +2530,7 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxChoice *arg1 = (wxChoice *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -2558,13 +2560,15 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
         (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "choices",(char *) "style",(char *) "validator",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOOOO:Choice_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOOO:Choice_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxChoice,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
             arg4 = &temp4;
@@ -2795,7 +2799,7 @@ static PyObject *_wrap_ComboBoxNameStr_get() {
 static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) -1 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
@@ -2828,11 +2832,13 @@ static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kw
         (char *) "parent",(char *) "id",(char *) "value",(char *) "pos",(char *) "size",(char *) "choices",(char *) "style",(char *) "validator",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOOO:new_ComboBox",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOOOO:new_ComboBox",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
@@ -2957,7 +2963,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxComboBox *arg1 = (wxComboBox *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) -1 ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
@@ -2991,13 +2997,15 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
         (char *) "self",(char *) "parent",(char *) "id",(char *) "value",(char *) "pos",(char *) "size",(char *) "choices",(char *) "style",(char *) "validator",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOOOOO:ComboBox_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOOOO:ComboBox_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
             arg4 = wxString_in_helper(obj3);

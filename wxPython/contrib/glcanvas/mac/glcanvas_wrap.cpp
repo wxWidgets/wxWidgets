@@ -385,7 +385,7 @@ SWIG_CheckLong(PyObject* obj)
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_GLCanvasNameStr_set(PyObject *) {
+static int _wrap_GLCanvasNameStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable GLCanvasNameStr is read-only.");
     return 1;
 }
@@ -405,7 +405,7 @@ static PyObject *_wrap_GLCanvasNameStr_get() {
 }
 
 
-static PyObject *_wrap_new_GLContext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     bool arg1 ;
     wxGLCanvas *arg2 = (wxGLCanvas *) 0 ;
@@ -453,7 +453,7 @@ static PyObject *_wrap_new_GLContext(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_delete_GLContext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_GLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     PyObject * obj0 = 0 ;
@@ -478,7 +478,7 @@ static PyObject *_wrap_delete_GLContext(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_GLContext_SetCurrent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_SetCurrent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     PyObject * obj0 = 0 ;
@@ -503,7 +503,7 @@ static PyObject *_wrap_GLContext_SetCurrent(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GLContext_SetColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     wxString *arg2 = 0 ;
@@ -544,7 +544,7 @@ static PyObject *_wrap_GLContext_SetColour(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GLContext_SwapBuffers(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_SwapBuffers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     PyObject * obj0 = 0 ;
@@ -569,7 +569,7 @@ static PyObject *_wrap_GLContext_SwapBuffers(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GLContext_GetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     wxWindow *result;
@@ -597,14 +597,14 @@ static PyObject *_wrap_GLContext_GetWindow(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject * GLContext_swigregister(PyObject *, PyObject *args) {
+static PyObject * GLContext_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGLContext, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GLCanvas(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) -1 ;
@@ -716,7 +716,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_new_GLCanvasWithContext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GLCanvasWithContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxGLContext *arg2 = (wxGLContext *) NULL ;
@@ -834,7 +834,7 @@ static PyObject *_wrap_new_GLCanvasWithContext(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_GLCanvas_SetCurrent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLCanvas_SetCurrent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     PyObject * obj0 = 0 ;
@@ -859,7 +859,7 @@ static PyObject *_wrap_GLCanvas_SetCurrent(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GLCanvas_SetColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLCanvas_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     wxString *arg2 = 0 ;
@@ -900,7 +900,7 @@ static PyObject *_wrap_GLCanvas_SetColour(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_GLCanvas_SwapBuffers(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLCanvas_SwapBuffers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     PyObject * obj0 = 0 ;
@@ -925,7 +925,7 @@ static PyObject *_wrap_GLCanvas_SwapBuffers(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GLCanvas_GetContext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLCanvas_GetContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     wxGLContext *result;
@@ -951,7 +951,7 @@ static PyObject *_wrap_GLCanvas_GetContext(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject * GLCanvas_swigregister(PyObject *, PyObject *args) {
+static PyObject * GLCanvas_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGLCanvas, obj);
@@ -959,21 +959,21 @@ static PyObject * GLCanvas_swigregister(PyObject *, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"new_GLContext", (PyCFunction) _wrap_new_GLContext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_GLContext", (PyCFunction) _wrap_delete_GLContext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLContext_SetCurrent", (PyCFunction) _wrap_GLContext_SetCurrent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLContext_SetColour", (PyCFunction) _wrap_GLContext_SetColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLContext_SwapBuffers", (PyCFunction) _wrap_GLContext_SwapBuffers, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLContext_GetWindow", (PyCFunction) _wrap_GLContext_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLContext_swigregister", GLContext_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GLCanvas", (PyCFunction) _wrap_new_GLCanvas, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_GLCanvasWithContext", (PyCFunction) _wrap_new_GLCanvasWithContext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLCanvas_SetCurrent", (PyCFunction) _wrap_GLCanvas_SetCurrent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLCanvas_SetColour", (PyCFunction) _wrap_GLCanvas_SetColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLCanvas_SwapBuffers", (PyCFunction) _wrap_GLCanvas_SwapBuffers, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLCanvas_GetContext", (PyCFunction) _wrap_GLCanvas_GetContext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GLCanvas_swigregister", GLCanvas_swigregister, METH_VARARGS, NULL },
-	 { NULL, NULL, 0, NULL }
+	 { (char *)"new_GLContext", (PyCFunction) _wrap_new_GLContext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_GLContext", (PyCFunction) _wrap_delete_GLContext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLContext_SetCurrent", (PyCFunction) _wrap_GLContext_SetCurrent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLContext_SetColour", (PyCFunction) _wrap_GLContext_SetColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLContext_SwapBuffers", (PyCFunction) _wrap_GLContext_SwapBuffers, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLContext_GetWindow", (PyCFunction) _wrap_GLContext_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLContext_swigregister", GLContext_swigregister, METH_VARARGS },
+	 { (char *)"new_GLCanvas", (PyCFunction) _wrap_new_GLCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_GLCanvasWithContext", (PyCFunction) _wrap_new_GLCanvasWithContext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLCanvas_SetCurrent", (PyCFunction) _wrap_GLCanvas_SetCurrent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLCanvas_SetColour", (PyCFunction) _wrap_GLCanvas_SetColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLCanvas_SwapBuffers", (PyCFunction) _wrap_GLCanvas_SwapBuffers, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLCanvas_GetContext", (PyCFunction) _wrap_GLCanvas_GetContext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GLCanvas_swigregister", GLCanvas_swigregister, METH_VARARGS },
+	 { NULL, NULL }
 };
 
 
@@ -1268,7 +1268,7 @@ _swigt__p_int,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0, 0, 0, 0.0, 0, 0}};
+{0}};
 
 #ifdef __cplusplus
 }

@@ -6,6 +6,7 @@ import _grid
 import windows
 import core
 wx = core 
+__docfilter__ = wx.__docfilter__ 
 GRID_VALUE_STRING = _grid.GRID_VALUE_STRING
 GRID_VALUE_BOOL = _grid.GRID_VALUE_BOOL
 GRID_VALUE_NUMBER = _grid.GRID_VALUE_NUMBER
@@ -20,34 +21,34 @@ class GridCellRenderer(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def _setOORInfo(*args, **kwargs):
-        """_setOORInfo(PyObject _self)"""
+        """_setOORInfo(self, PyObject _self)"""
         return _grid.GridCellRenderer__setOORInfo(*args, **kwargs)
 
     def SetParameters(*args, **kwargs):
-        """SetParameters(String params)"""
+        """SetParameters(self, String params)"""
         return _grid.GridCellRenderer_SetParameters(*args, **kwargs)
 
     def IncRef(*args, **kwargs):
-        """IncRef()"""
+        """IncRef(self)"""
         return _grid.GridCellRenderer_IncRef(*args, **kwargs)
 
     def DecRef(*args, **kwargs):
-        """DecRef()"""
+        """DecRef(self)"""
         return _grid.GridCellRenderer_DecRef(*args, **kwargs)
 
     def Draw(*args, **kwargs):
         """
-        Draw(Grid grid, GridCellAttr attr, DC dc, Rect rect, int row, 
+        Draw(self, Grid grid, GridCellAttr attr, DC dc, Rect rect, int row, 
             int col, bool isSelected)
         """
         return _grid.GridCellRenderer_Draw(*args, **kwargs)
 
     def GetBestSize(*args, **kwargs):
-        """GetBestSize(Grid grid, GridCellAttr attr, DC dc, int row, int col) -> Size"""
+        """GetBestSize(self, Grid grid, GridCellAttr attr, DC dc, int row, int col) -> Size"""
         return _grid.GridCellRenderer_GetBestSize(*args, **kwargs)
 
     def Clone(*args, **kwargs):
-        """Clone() -> GridCellRenderer"""
+        """Clone(self) -> GridCellRenderer"""
         return _grid.GridCellRenderer_Clone(*args, **kwargs)
 
 
@@ -66,7 +67,7 @@ class PyGridCellRenderer(GridCellRenderer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyGridCellRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> PyGridCellRenderer"""
+        """__init__(self) -> PyGridCellRenderer"""
         newobj = _grid.new_PyGridCellRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -74,11 +75,11 @@ class PyGridCellRenderer(GridCellRenderer):
         self._setCallbackInfo(self, PyGridCellRenderer);self._setOORInfo(self)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _grid.PyGridCellRenderer__setCallbackInfo(*args, **kwargs)
 
     def base_SetParameters(*args, **kwargs):
-        """base_SetParameters(String params)"""
+        """base_SetParameters(self, String params)"""
         return _grid.PyGridCellRenderer_base_SetParameters(*args, **kwargs)
 
 
@@ -93,7 +94,7 @@ class GridCellStringRenderer(GridCellRenderer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellStringRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GridCellStringRenderer"""
+        """__init__(self) -> GridCellStringRenderer"""
         newobj = _grid.new_GridCellStringRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -112,7 +113,7 @@ class GridCellNumberRenderer(GridCellStringRenderer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellNumberRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GridCellNumberRenderer"""
+        """__init__(self) -> GridCellNumberRenderer"""
         newobj = _grid.new_GridCellNumberRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -131,7 +132,7 @@ class GridCellFloatRenderer(GridCellStringRenderer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellFloatRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int width=-1, int precision=-1) -> GridCellFloatRenderer"""
+        """__init__(self, int width=-1, int precision=-1) -> GridCellFloatRenderer"""
         newobj = _grid.new_GridCellFloatRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -139,19 +140,19 @@ class GridCellFloatRenderer(GridCellStringRenderer):
         self._setOORInfo(self)
 
     def GetWidth(*args, **kwargs):
-        """GetWidth() -> int"""
+        """GetWidth(self) -> int"""
         return _grid.GridCellFloatRenderer_GetWidth(*args, **kwargs)
 
     def SetWidth(*args, **kwargs):
-        """SetWidth(int width)"""
+        """SetWidth(self, int width)"""
         return _grid.GridCellFloatRenderer_SetWidth(*args, **kwargs)
 
     def GetPrecision(*args, **kwargs):
-        """GetPrecision() -> int"""
+        """GetPrecision(self) -> int"""
         return _grid.GridCellFloatRenderer_GetPrecision(*args, **kwargs)
 
     def SetPrecision(*args, **kwargs):
-        """SetPrecision(int precision)"""
+        """SetPrecision(self, int precision)"""
         return _grid.GridCellFloatRenderer_SetPrecision(*args, **kwargs)
 
 
@@ -166,7 +167,7 @@ class GridCellBoolRenderer(GridCellRenderer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellBoolRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GridCellBoolRenderer"""
+        """__init__(self) -> GridCellBoolRenderer"""
         newobj = _grid.new_GridCellBoolRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -185,7 +186,7 @@ class GridCellDateTimeRenderer(GridCellStringRenderer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellDateTimeRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String outformat=DateTimeFormatStr, String informat=DateTimeFormatStr) -> GridCellDateTimeRenderer"""
+        """__init__(self, String outformat=DateTimeFormatStr, String informat=DateTimeFormatStr) -> GridCellDateTimeRenderer"""
         newobj = _grid.new_GridCellDateTimeRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -204,7 +205,7 @@ class GridCellEnumRenderer(GridCellStringRenderer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellEnumRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String choices=EmptyString) -> GridCellEnumRenderer"""
+        """__init__(self, String choices=EmptyString) -> GridCellEnumRenderer"""
         newobj = _grid.new_GridCellEnumRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -223,7 +224,7 @@ class GridCellAutoWrapStringRenderer(GridCellStringRenderer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellAutoWrapStringRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GridCellAutoWrapStringRenderer"""
+        """__init__(self) -> GridCellAutoWrapStringRenderer"""
         newobj = _grid.new_GridCellAutoWrapStringRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -243,91 +244,91 @@ class GridCellEditor(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def _setOORInfo(*args, **kwargs):
-        """_setOORInfo(PyObject _self)"""
+        """_setOORInfo(self, PyObject _self)"""
         return _grid.GridCellEditor__setOORInfo(*args, **kwargs)
 
     def IsCreated(*args, **kwargs):
-        """IsCreated() -> bool"""
+        """IsCreated(self) -> bool"""
         return _grid.GridCellEditor_IsCreated(*args, **kwargs)
 
     def GetControl(*args, **kwargs):
-        """GetControl() -> Control"""
+        """GetControl(self) -> Control"""
         return _grid.GridCellEditor_GetControl(*args, **kwargs)
 
     def SetControl(*args, **kwargs):
-        """SetControl(Control control)"""
+        """SetControl(self, Control control)"""
         return _grid.GridCellEditor_SetControl(*args, **kwargs)
 
     def GetCellAttr(*args, **kwargs):
-        """GetCellAttr() -> GridCellAttr"""
+        """GetCellAttr(self) -> GridCellAttr"""
         return _grid.GridCellEditor_GetCellAttr(*args, **kwargs)
 
     def SetCellAttr(*args, **kwargs):
-        """SetCellAttr(GridCellAttr attr)"""
+        """SetCellAttr(self, GridCellAttr attr)"""
         return _grid.GridCellEditor_SetCellAttr(*args, **kwargs)
 
     def SetParameters(*args, **kwargs):
-        """SetParameters(String params)"""
+        """SetParameters(self, String params)"""
         return _grid.GridCellEditor_SetParameters(*args, **kwargs)
 
     def IncRef(*args, **kwargs):
-        """IncRef()"""
+        """IncRef(self)"""
         return _grid.GridCellEditor_IncRef(*args, **kwargs)
 
     def DecRef(*args, **kwargs):
-        """DecRef()"""
+        """DecRef(self)"""
         return _grid.GridCellEditor_DecRef(*args, **kwargs)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, EvtHandler evtHandler)"""
+        """Create(self, Window parent, int id, EvtHandler evtHandler)"""
         return _grid.GridCellEditor_Create(*args, **kwargs)
 
     def BeginEdit(*args, **kwargs):
-        """BeginEdit(int row, int col, Grid grid)"""
+        """BeginEdit(self, int row, int col, Grid grid)"""
         return _grid.GridCellEditor_BeginEdit(*args, **kwargs)
 
     def EndEdit(*args, **kwargs):
-        """EndEdit(int row, int col, Grid grid) -> bool"""
+        """EndEdit(self, int row, int col, Grid grid) -> bool"""
         return _grid.GridCellEditor_EndEdit(*args, **kwargs)
 
     def Reset(*args, **kwargs):
-        """Reset()"""
+        """Reset(self)"""
         return _grid.GridCellEditor_Reset(*args, **kwargs)
 
     def Clone(*args, **kwargs):
-        """Clone() -> GridCellEditor"""
+        """Clone(self) -> GridCellEditor"""
         return _grid.GridCellEditor_Clone(*args, **kwargs)
 
     def SetSize(*args, **kwargs):
-        """SetSize(Rect rect)"""
+        """SetSize(self, Rect rect)"""
         return _grid.GridCellEditor_SetSize(*args, **kwargs)
 
     def Show(*args, **kwargs):
-        """Show(bool show, GridCellAttr attr=None)"""
+        """Show(self, bool show, GridCellAttr attr=None)"""
         return _grid.GridCellEditor_Show(*args, **kwargs)
 
     def PaintBackground(*args, **kwargs):
-        """PaintBackground(Rect rectCell, GridCellAttr attr)"""
+        """PaintBackground(self, Rect rectCell, GridCellAttr attr)"""
         return _grid.GridCellEditor_PaintBackground(*args, **kwargs)
 
     def IsAcceptedKey(*args, **kwargs):
-        """IsAcceptedKey(KeyEvent event) -> bool"""
+        """IsAcceptedKey(self, KeyEvent event) -> bool"""
         return _grid.GridCellEditor_IsAcceptedKey(*args, **kwargs)
 
     def StartingKey(*args, **kwargs):
-        """StartingKey(KeyEvent event)"""
+        """StartingKey(self, KeyEvent event)"""
         return _grid.GridCellEditor_StartingKey(*args, **kwargs)
 
     def StartingClick(*args, **kwargs):
-        """StartingClick()"""
+        """StartingClick(self)"""
         return _grid.GridCellEditor_StartingClick(*args, **kwargs)
 
     def HandleReturn(*args, **kwargs):
-        """HandleReturn(KeyEvent event)"""
+        """HandleReturn(self, KeyEvent event)"""
         return _grid.GridCellEditor_HandleReturn(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
-        """Destroy()"""
+        """Destroy(self)"""
         return _grid.GridCellEditor_Destroy(*args, **kwargs)
 
 
@@ -342,7 +343,7 @@ class PyGridCellEditor(GridCellEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyGridCellEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> PyGridCellEditor"""
+        """__init__(self) -> PyGridCellEditor"""
         newobj = _grid.new_PyGridCellEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -350,43 +351,43 @@ class PyGridCellEditor(GridCellEditor):
         self._setCallbackInfo(self, PyGridCellEditor);self._setOORInfo(self)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _grid.PyGridCellEditor__setCallbackInfo(*args, **kwargs)
 
     def base_SetSize(*args, **kwargs):
-        """base_SetSize(Rect rect)"""
+        """base_SetSize(self, Rect rect)"""
         return _grid.PyGridCellEditor_base_SetSize(*args, **kwargs)
 
     def base_Show(*args, **kwargs):
-        """base_Show(bool show, GridCellAttr attr=None)"""
+        """base_Show(self, bool show, GridCellAttr attr=None)"""
         return _grid.PyGridCellEditor_base_Show(*args, **kwargs)
 
     def base_PaintBackground(*args, **kwargs):
-        """base_PaintBackground(Rect rectCell, GridCellAttr attr)"""
+        """base_PaintBackground(self, Rect rectCell, GridCellAttr attr)"""
         return _grid.PyGridCellEditor_base_PaintBackground(*args, **kwargs)
 
     def base_IsAcceptedKey(*args, **kwargs):
-        """base_IsAcceptedKey(KeyEvent event) -> bool"""
+        """base_IsAcceptedKey(self, KeyEvent event) -> bool"""
         return _grid.PyGridCellEditor_base_IsAcceptedKey(*args, **kwargs)
 
     def base_StartingKey(*args, **kwargs):
-        """base_StartingKey(KeyEvent event)"""
+        """base_StartingKey(self, KeyEvent event)"""
         return _grid.PyGridCellEditor_base_StartingKey(*args, **kwargs)
 
     def base_StartingClick(*args, **kwargs):
-        """base_StartingClick()"""
+        """base_StartingClick(self)"""
         return _grid.PyGridCellEditor_base_StartingClick(*args, **kwargs)
 
     def base_HandleReturn(*args, **kwargs):
-        """base_HandleReturn(KeyEvent event)"""
+        """base_HandleReturn(self, KeyEvent event)"""
         return _grid.PyGridCellEditor_base_HandleReturn(*args, **kwargs)
 
     def base_Destroy(*args, **kwargs):
-        """base_Destroy()"""
+        """base_Destroy(self)"""
         return _grid.PyGridCellEditor_base_Destroy(*args, **kwargs)
 
     def base_SetParameters(*args, **kwargs):
-        """base_SetParameters(String params)"""
+        """base_SetParameters(self, String params)"""
         return _grid.PyGridCellEditor_base_SetParameters(*args, **kwargs)
 
 
@@ -401,7 +402,7 @@ class GridCellTextEditor(GridCellEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellTextEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GridCellTextEditor"""
+        """__init__(self) -> GridCellTextEditor"""
         newobj = _grid.new_GridCellTextEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -409,7 +410,7 @@ class GridCellTextEditor(GridCellEditor):
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> String"""
+        """GetValue(self) -> String"""
         return _grid.GridCellTextEditor_GetValue(*args, **kwargs)
 
 
@@ -424,7 +425,7 @@ class GridCellNumberEditor(GridCellTextEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellNumberEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int min=-1, int max=-1) -> GridCellNumberEditor"""
+        """__init__(self, int min=-1, int max=-1) -> GridCellNumberEditor"""
         newobj = _grid.new_GridCellNumberEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -432,7 +433,7 @@ class GridCellNumberEditor(GridCellTextEditor):
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> String"""
+        """GetValue(self) -> String"""
         return _grid.GridCellNumberEditor_GetValue(*args, **kwargs)
 
 
@@ -447,7 +448,7 @@ class GridCellFloatEditor(GridCellTextEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellFloatEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int width=-1, int precision=-1) -> GridCellFloatEditor"""
+        """__init__(self, int width=-1, int precision=-1) -> GridCellFloatEditor"""
         newobj = _grid.new_GridCellFloatEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -455,7 +456,7 @@ class GridCellFloatEditor(GridCellTextEditor):
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> String"""
+        """GetValue(self) -> String"""
         return _grid.GridCellFloatEditor_GetValue(*args, **kwargs)
 
 
@@ -470,7 +471,7 @@ class GridCellBoolEditor(GridCellEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellBoolEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GridCellBoolEditor"""
+        """__init__(self) -> GridCellBoolEditor"""
         newobj = _grid.new_GridCellBoolEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -478,7 +479,7 @@ class GridCellBoolEditor(GridCellEditor):
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> String"""
+        """GetValue(self) -> String"""
         return _grid.GridCellBoolEditor_GetValue(*args, **kwargs)
 
 
@@ -493,7 +494,7 @@ class GridCellChoiceEditor(GridCellEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellChoiceEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int choices=0, String choices_array=None, bool allowOthers=False) -> GridCellChoiceEditor"""
+        """__init__(self, int choices=0, String choices_array=None, bool allowOthers=False) -> GridCellChoiceEditor"""
         newobj = _grid.new_GridCellChoiceEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -501,7 +502,7 @@ class GridCellChoiceEditor(GridCellEditor):
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> String"""
+        """GetValue(self) -> String"""
         return _grid.GridCellChoiceEditor_GetValue(*args, **kwargs)
 
 
@@ -516,7 +517,7 @@ class GridCellEnumEditor(GridCellChoiceEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellEnumEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String choices=EmptyString) -> GridCellEnumEditor"""
+        """__init__(self, String choices=EmptyString) -> GridCellEnumEditor"""
         newobj = _grid.new_GridCellEnumEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -524,7 +525,7 @@ class GridCellEnumEditor(GridCellChoiceEditor):
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> String"""
+        """GetValue(self) -> String"""
         return _grid.GridCellEnumEditor_GetValue(*args, **kwargs)
 
 
@@ -539,7 +540,7 @@ class GridCellAutoWrapStringEditor(GridCellTextEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellAutoWrapStringEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GridCellAutoWrapStringEditor"""
+        """__init__(self) -> GridCellAutoWrapStringEditor"""
         newobj = _grid.new_GridCellAutoWrapStringEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -547,7 +548,7 @@ class GridCellAutoWrapStringEditor(GridCellTextEditor):
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> String"""
+        """GetValue(self) -> String"""
         return _grid.GridCellAutoWrapStringEditor_GetValue(*args, **kwargs)
 
 
@@ -568,11 +569,11 @@ class GridCellAttr(object):
     Col = _grid.GridCellAttr_Col
     Merged = _grid.GridCellAttr_Merged
     def _setOORInfo(*args, **kwargs):
-        """_setOORInfo(PyObject _self)"""
+        """_setOORInfo(self, PyObject _self)"""
         return _grid.GridCellAttr__setOORInfo(*args, **kwargs)
 
     def __init__(self, *args, **kwargs):
-        """__init__(GridCellAttr attrDefault=None) -> GridCellAttr"""
+        """__init__(self, GridCellAttr attrDefault=None) -> GridCellAttr"""
         newobj = _grid.new_GridCellAttr(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -580,103 +581,103 @@ class GridCellAttr(object):
         self._setOORInfo(self)
 
     def Clone(*args, **kwargs):
-        """Clone() -> GridCellAttr"""
+        """Clone(self) -> GridCellAttr"""
         return _grid.GridCellAttr_Clone(*args, **kwargs)
 
     def MergeWith(*args, **kwargs):
-        """MergeWith(GridCellAttr mergefrom)"""
+        """MergeWith(self, GridCellAttr mergefrom)"""
         return _grid.GridCellAttr_MergeWith(*args, **kwargs)
 
     def IncRef(*args, **kwargs):
-        """IncRef()"""
+        """IncRef(self)"""
         return _grid.GridCellAttr_IncRef(*args, **kwargs)
 
     def DecRef(*args, **kwargs):
-        """DecRef()"""
+        """DecRef(self)"""
         return _grid.GridCellAttr_DecRef(*args, **kwargs)
 
     def SetTextColour(*args, **kwargs):
-        """SetTextColour(Colour colText)"""
+        """SetTextColour(self, Colour colText)"""
         return _grid.GridCellAttr_SetTextColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(Colour colBack)"""
+        """SetBackgroundColour(self, Colour colBack)"""
         return _grid.GridCellAttr_SetBackgroundColour(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(Font font)"""
+        """SetFont(self, Font font)"""
         return _grid.GridCellAttr_SetFont(*args, **kwargs)
 
     def SetAlignment(*args, **kwargs):
-        """SetAlignment(int hAlign, int vAlign)"""
+        """SetAlignment(self, int hAlign, int vAlign)"""
         return _grid.GridCellAttr_SetAlignment(*args, **kwargs)
 
     def SetSize(*args, **kwargs):
-        """SetSize(int num_rows, int num_cols)"""
+        """SetSize(self, int num_rows, int num_cols)"""
         return _grid.GridCellAttr_SetSize(*args, **kwargs)
 
     def SetOverflow(*args, **kwargs):
-        """SetOverflow(bool allow=True)"""
+        """SetOverflow(self, bool allow=True)"""
         return _grid.GridCellAttr_SetOverflow(*args, **kwargs)
 
     def SetReadOnly(*args, **kwargs):
-        """SetReadOnly(bool isReadOnly=True)"""
+        """SetReadOnly(self, bool isReadOnly=True)"""
         return _grid.GridCellAttr_SetReadOnly(*args, **kwargs)
 
     def SetRenderer(*args, **kwargs):
-        """SetRenderer(GridCellRenderer renderer)"""
+        """SetRenderer(self, GridCellRenderer renderer)"""
         return _grid.GridCellAttr_SetRenderer(*args, **kwargs)
 
     def SetEditor(*args, **kwargs):
-        """SetEditor(GridCellEditor editor)"""
+        """SetEditor(self, GridCellEditor editor)"""
         return _grid.GridCellAttr_SetEditor(*args, **kwargs)
 
     def SetKind(*args, **kwargs):
-        """SetKind(int kind)"""
+        """SetKind(self, int kind)"""
         return _grid.GridCellAttr_SetKind(*args, **kwargs)
 
     def HasTextColour(*args, **kwargs):
-        """HasTextColour() -> bool"""
+        """HasTextColour(self) -> bool"""
         return _grid.GridCellAttr_HasTextColour(*args, **kwargs)
 
     def HasBackgroundColour(*args, **kwargs):
-        """HasBackgroundColour() -> bool"""
+        """HasBackgroundColour(self) -> bool"""
         return _grid.GridCellAttr_HasBackgroundColour(*args, **kwargs)
 
     def HasFont(*args, **kwargs):
-        """HasFont() -> bool"""
+        """HasFont(self) -> bool"""
         return _grid.GridCellAttr_HasFont(*args, **kwargs)
 
     def HasAlignment(*args, **kwargs):
-        """HasAlignment() -> bool"""
+        """HasAlignment(self) -> bool"""
         return _grid.GridCellAttr_HasAlignment(*args, **kwargs)
 
     def HasRenderer(*args, **kwargs):
-        """HasRenderer() -> bool"""
+        """HasRenderer(self) -> bool"""
         return _grid.GridCellAttr_HasRenderer(*args, **kwargs)
 
     def HasEditor(*args, **kwargs):
-        """HasEditor() -> bool"""
+        """HasEditor(self) -> bool"""
         return _grid.GridCellAttr_HasEditor(*args, **kwargs)
 
     def HasReadWriteMode(*args, **kwargs):
-        """HasReadWriteMode() -> bool"""
+        """HasReadWriteMode(self) -> bool"""
         return _grid.GridCellAttr_HasReadWriteMode(*args, **kwargs)
 
     def HasOverflowMode(*args, **kwargs):
-        """HasOverflowMode() -> bool"""
+        """HasOverflowMode(self) -> bool"""
         return _grid.GridCellAttr_HasOverflowMode(*args, **kwargs)
 
     def GetTextColour(*args, **kwargs):
-        """GetTextColour() -> Colour"""
+        """GetTextColour(self) -> Colour"""
         return _grid.GridCellAttr_GetTextColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour() -> Colour"""
+        """GetBackgroundColour(self) -> Colour"""
         return _grid.GridCellAttr_GetBackgroundColour(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont() -> Font"""
+        """GetFont(self) -> Font"""
         return _grid.GridCellAttr_GetFont(*args, **kwargs)
 
     def GetAlignment(*args, **kwargs):
@@ -688,23 +689,23 @@ class GridCellAttr(object):
         return _grid.GridCellAttr_GetSize(*args, **kwargs)
 
     def GetOverflow(*args, **kwargs):
-        """GetOverflow() -> bool"""
+        """GetOverflow(self) -> bool"""
         return _grid.GridCellAttr_GetOverflow(*args, **kwargs)
 
     def GetRenderer(*args, **kwargs):
-        """GetRenderer(Grid grid, int row, int col) -> GridCellRenderer"""
+        """GetRenderer(self, Grid grid, int row, int col) -> GridCellRenderer"""
         return _grid.GridCellAttr_GetRenderer(*args, **kwargs)
 
     def GetEditor(*args, **kwargs):
-        """GetEditor(Grid grid, int row, int col) -> GridCellEditor"""
+        """GetEditor(self, Grid grid, int row, int col) -> GridCellEditor"""
         return _grid.GridCellAttr_GetEditor(*args, **kwargs)
 
     def IsReadOnly(*args, **kwargs):
-        """IsReadOnly() -> bool"""
+        """IsReadOnly(self) -> bool"""
         return _grid.GridCellAttr_IsReadOnly(*args, **kwargs)
 
     def SetDefAttr(*args, **kwargs):
-        """SetDefAttr(GridCellAttr defAttr)"""
+        """SetDefAttr(self, GridCellAttr defAttr)"""
         return _grid.GridCellAttr_SetDefAttr(*args, **kwargs)
 
 
@@ -719,7 +720,7 @@ class GridCellAttrProvider(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellAttrProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GridCellAttrProvider"""
+        """__init__(self) -> GridCellAttrProvider"""
         newobj = _grid.new_GridCellAttrProvider(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -727,31 +728,31 @@ class GridCellAttrProvider(object):
         self._setOORInfo(self)
 
     def _setOORInfo(*args, **kwargs):
-        """_setOORInfo(PyObject _self)"""
+        """_setOORInfo(self, PyObject _self)"""
         return _grid.GridCellAttrProvider__setOORInfo(*args, **kwargs)
 
     def GetAttr(*args, **kwargs):
-        """GetAttr(int row, int col, int kind) -> GridCellAttr"""
+        """GetAttr(self, int row, int col, int kind) -> GridCellAttr"""
         return _grid.GridCellAttrProvider_GetAttr(*args, **kwargs)
 
     def SetAttr(*args, **kwargs):
-        """SetAttr(GridCellAttr attr, int row, int col)"""
+        """SetAttr(self, GridCellAttr attr, int row, int col)"""
         return _grid.GridCellAttrProvider_SetAttr(*args, **kwargs)
 
     def SetRowAttr(*args, **kwargs):
-        """SetRowAttr(GridCellAttr attr, int row)"""
+        """SetRowAttr(self, GridCellAttr attr, int row)"""
         return _grid.GridCellAttrProvider_SetRowAttr(*args, **kwargs)
 
     def SetColAttr(*args, **kwargs):
-        """SetColAttr(GridCellAttr attr, int col)"""
+        """SetColAttr(self, GridCellAttr attr, int col)"""
         return _grid.GridCellAttrProvider_SetColAttr(*args, **kwargs)
 
     def UpdateAttrRows(*args, **kwargs):
-        """UpdateAttrRows(size_t pos, int numRows)"""
+        """UpdateAttrRows(self, size_t pos, int numRows)"""
         return _grid.GridCellAttrProvider_UpdateAttrRows(*args, **kwargs)
 
     def UpdateAttrCols(*args, **kwargs):
-        """UpdateAttrCols(size_t pos, int numCols)"""
+        """UpdateAttrCols(self, size_t pos, int numCols)"""
         return _grid.GridCellAttrProvider_UpdateAttrCols(*args, **kwargs)
 
 
@@ -766,7 +767,7 @@ class PyGridCellAttrProvider(GridCellAttrProvider):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyGridCellAttrProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> PyGridCellAttrProvider"""
+        """__init__(self) -> PyGridCellAttrProvider"""
         newobj = _grid.new_PyGridCellAttrProvider(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -774,23 +775,23 @@ class PyGridCellAttrProvider(GridCellAttrProvider):
         self._setCallbackInfo(self, PyGridCellAttrProvider)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _grid.PyGridCellAttrProvider__setCallbackInfo(*args, **kwargs)
 
     def base_GetAttr(*args, **kwargs):
-        """base_GetAttr(int row, int col, int kind) -> GridCellAttr"""
+        """base_GetAttr(self, int row, int col, int kind) -> GridCellAttr"""
         return _grid.PyGridCellAttrProvider_base_GetAttr(*args, **kwargs)
 
     def base_SetAttr(*args, **kwargs):
-        """base_SetAttr(GridCellAttr attr, int row, int col)"""
+        """base_SetAttr(self, GridCellAttr attr, int row, int col)"""
         return _grid.PyGridCellAttrProvider_base_SetAttr(*args, **kwargs)
 
     def base_SetRowAttr(*args, **kwargs):
-        """base_SetRowAttr(GridCellAttr attr, int row)"""
+        """base_SetRowAttr(self, GridCellAttr attr, int row)"""
         return _grid.PyGridCellAttrProvider_base_SetRowAttr(*args, **kwargs)
 
     def base_SetColAttr(*args, **kwargs):
-        """base_SetColAttr(GridCellAttr attr, int col)"""
+        """base_SetColAttr(self, GridCellAttr attr, int col)"""
         return _grid.PyGridCellAttrProvider_base_SetColAttr(*args, **kwargs)
 
 
@@ -806,143 +807,143 @@ class GridTableBase(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridTableBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def _setOORInfo(*args, **kwargs):
-        """_setOORInfo(PyObject _self)"""
+        """_setOORInfo(self, PyObject _self)"""
         return _grid.GridTableBase__setOORInfo(*args, **kwargs)
 
     def SetAttrProvider(*args, **kwargs):
-        """SetAttrProvider(GridCellAttrProvider attrProvider)"""
+        """SetAttrProvider(self, GridCellAttrProvider attrProvider)"""
         return _grid.GridTableBase_SetAttrProvider(*args, **kwargs)
 
     def GetAttrProvider(*args, **kwargs):
-        """GetAttrProvider() -> GridCellAttrProvider"""
+        """GetAttrProvider(self) -> GridCellAttrProvider"""
         return _grid.GridTableBase_GetAttrProvider(*args, **kwargs)
 
     def SetView(*args, **kwargs):
-        """SetView(Grid grid)"""
+        """SetView(self, Grid grid)"""
         return _grid.GridTableBase_SetView(*args, **kwargs)
 
     def GetView(*args, **kwargs):
-        """GetView() -> Grid"""
+        """GetView(self) -> Grid"""
         return _grid.GridTableBase_GetView(*args, **kwargs)
 
     def GetNumberRows(*args, **kwargs):
-        """GetNumberRows() -> int"""
+        """GetNumberRows(self) -> int"""
         return _grid.GridTableBase_GetNumberRows(*args, **kwargs)
 
     def GetNumberCols(*args, **kwargs):
-        """GetNumberCols() -> int"""
+        """GetNumberCols(self) -> int"""
         return _grid.GridTableBase_GetNumberCols(*args, **kwargs)
 
     def IsEmptyCell(*args, **kwargs):
-        """IsEmptyCell(int row, int col) -> bool"""
+        """IsEmptyCell(self, int row, int col) -> bool"""
         return _grid.GridTableBase_IsEmptyCell(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
-        """GetValue(int row, int col) -> String"""
+        """GetValue(self, int row, int col) -> String"""
         return _grid.GridTableBase_GetValue(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
-        """SetValue(int row, int col, String value)"""
+        """SetValue(self, int row, int col, String value)"""
         return _grid.GridTableBase_SetValue(*args, **kwargs)
 
     def GetTypeName(*args, **kwargs):
-        """GetTypeName(int row, int col) -> String"""
+        """GetTypeName(self, int row, int col) -> String"""
         return _grid.GridTableBase_GetTypeName(*args, **kwargs)
 
     def CanGetValueAs(*args, **kwargs):
-        """CanGetValueAs(int row, int col, String typeName) -> bool"""
+        """CanGetValueAs(self, int row, int col, String typeName) -> bool"""
         return _grid.GridTableBase_CanGetValueAs(*args, **kwargs)
 
     def CanSetValueAs(*args, **kwargs):
-        """CanSetValueAs(int row, int col, String typeName) -> bool"""
+        """CanSetValueAs(self, int row, int col, String typeName) -> bool"""
         return _grid.GridTableBase_CanSetValueAs(*args, **kwargs)
 
     def GetValueAsLong(*args, **kwargs):
-        """GetValueAsLong(int row, int col) -> long"""
+        """GetValueAsLong(self, int row, int col) -> long"""
         return _grid.GridTableBase_GetValueAsLong(*args, **kwargs)
 
     def GetValueAsDouble(*args, **kwargs):
-        """GetValueAsDouble(int row, int col) -> double"""
+        """GetValueAsDouble(self, int row, int col) -> double"""
         return _grid.GridTableBase_GetValueAsDouble(*args, **kwargs)
 
     def GetValueAsBool(*args, **kwargs):
-        """GetValueAsBool(int row, int col) -> bool"""
+        """GetValueAsBool(self, int row, int col) -> bool"""
         return _grid.GridTableBase_GetValueAsBool(*args, **kwargs)
 
     def SetValueAsLong(*args, **kwargs):
-        """SetValueAsLong(int row, int col, long value)"""
+        """SetValueAsLong(self, int row, int col, long value)"""
         return _grid.GridTableBase_SetValueAsLong(*args, **kwargs)
 
     def SetValueAsDouble(*args, **kwargs):
-        """SetValueAsDouble(int row, int col, double value)"""
+        """SetValueAsDouble(self, int row, int col, double value)"""
         return _grid.GridTableBase_SetValueAsDouble(*args, **kwargs)
 
     def SetValueAsBool(*args, **kwargs):
-        """SetValueAsBool(int row, int col, bool value)"""
+        """SetValueAsBool(self, int row, int col, bool value)"""
         return _grid.GridTableBase_SetValueAsBool(*args, **kwargs)
 
     def Clear(*args, **kwargs):
-        """Clear()"""
+        """Clear(self)"""
         return _grid.GridTableBase_Clear(*args, **kwargs)
 
     def InsertRows(*args, **kwargs):
-        """InsertRows(size_t pos=0, size_t numRows=1) -> bool"""
+        """InsertRows(self, size_t pos=0, size_t numRows=1) -> bool"""
         return _grid.GridTableBase_InsertRows(*args, **kwargs)
 
     def AppendRows(*args, **kwargs):
-        """AppendRows(size_t numRows=1) -> bool"""
+        """AppendRows(self, size_t numRows=1) -> bool"""
         return _grid.GridTableBase_AppendRows(*args, **kwargs)
 
     def DeleteRows(*args, **kwargs):
-        """DeleteRows(size_t pos=0, size_t numRows=1) -> bool"""
+        """DeleteRows(self, size_t pos=0, size_t numRows=1) -> bool"""
         return _grid.GridTableBase_DeleteRows(*args, **kwargs)
 
     def InsertCols(*args, **kwargs):
-        """InsertCols(size_t pos=0, size_t numCols=1) -> bool"""
+        """InsertCols(self, size_t pos=0, size_t numCols=1) -> bool"""
         return _grid.GridTableBase_InsertCols(*args, **kwargs)
 
     def AppendCols(*args, **kwargs):
-        """AppendCols(size_t numCols=1) -> bool"""
+        """AppendCols(self, size_t numCols=1) -> bool"""
         return _grid.GridTableBase_AppendCols(*args, **kwargs)
 
     def DeleteCols(*args, **kwargs):
-        """DeleteCols(size_t pos=0, size_t numCols=1) -> bool"""
+        """DeleteCols(self, size_t pos=0, size_t numCols=1) -> bool"""
         return _grid.GridTableBase_DeleteCols(*args, **kwargs)
 
     def GetRowLabelValue(*args, **kwargs):
-        """GetRowLabelValue(int row) -> String"""
+        """GetRowLabelValue(self, int row) -> String"""
         return _grid.GridTableBase_GetRowLabelValue(*args, **kwargs)
 
     def GetColLabelValue(*args, **kwargs):
-        """GetColLabelValue(int col) -> String"""
+        """GetColLabelValue(self, int col) -> String"""
         return _grid.GridTableBase_GetColLabelValue(*args, **kwargs)
 
     def SetRowLabelValue(*args, **kwargs):
-        """SetRowLabelValue(int row, String value)"""
+        """SetRowLabelValue(self, int row, String value)"""
         return _grid.GridTableBase_SetRowLabelValue(*args, **kwargs)
 
     def SetColLabelValue(*args, **kwargs):
-        """SetColLabelValue(int col, String value)"""
+        """SetColLabelValue(self, int col, String value)"""
         return _grid.GridTableBase_SetColLabelValue(*args, **kwargs)
 
     def CanHaveAttributes(*args, **kwargs):
-        """CanHaveAttributes() -> bool"""
+        """CanHaveAttributes(self) -> bool"""
         return _grid.GridTableBase_CanHaveAttributes(*args, **kwargs)
 
     def GetAttr(*args, **kwargs):
-        """GetAttr(int row, int col, int kind) -> GridCellAttr"""
+        """GetAttr(self, int row, int col, int kind) -> GridCellAttr"""
         return _grid.GridTableBase_GetAttr(*args, **kwargs)
 
     def SetAttr(*args, **kwargs):
-        """SetAttr(GridCellAttr attr, int row, int col)"""
+        """SetAttr(self, GridCellAttr attr, int row, int col)"""
         return _grid.GridTableBase_SetAttr(*args, **kwargs)
 
     def SetRowAttr(*args, **kwargs):
-        """SetRowAttr(GridCellAttr attr, int row)"""
+        """SetRowAttr(self, GridCellAttr attr, int row)"""
         return _grid.GridTableBase_SetRowAttr(*args, **kwargs)
 
     def SetColAttr(*args, **kwargs):
-        """SetColAttr(GridCellAttr attr, int col)"""
+        """SetColAttr(self, GridCellAttr attr, int col)"""
         return _grid.GridTableBase_SetColAttr(*args, **kwargs)
 
 
@@ -957,7 +958,7 @@ class PyGridTableBase(GridTableBase):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyGridTableBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> PyGridTableBase"""
+        """__init__(self) -> PyGridTableBase"""
         newobj = _grid.new_PyGridTableBase(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -965,91 +966,91 @@ class PyGridTableBase(GridTableBase):
         self._setCallbackInfo(self, PyGridTableBase);self._setOORInfo(self)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _grid.PyGridTableBase__setCallbackInfo(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
         """
-        Destroy()
+        Destroy(self)
 
         Deletes the C++ object this Python object is a proxy for.
         """
         return _grid.PyGridTableBase_Destroy(*args, **kwargs)
 
     def base_GetTypeName(*args, **kwargs):
-        """base_GetTypeName(int row, int col) -> String"""
+        """base_GetTypeName(self, int row, int col) -> String"""
         return _grid.PyGridTableBase_base_GetTypeName(*args, **kwargs)
 
     def base_CanGetValueAs(*args, **kwargs):
-        """base_CanGetValueAs(int row, int col, String typeName) -> bool"""
+        """base_CanGetValueAs(self, int row, int col, String typeName) -> bool"""
         return _grid.PyGridTableBase_base_CanGetValueAs(*args, **kwargs)
 
     def base_CanSetValueAs(*args, **kwargs):
-        """base_CanSetValueAs(int row, int col, String typeName) -> bool"""
+        """base_CanSetValueAs(self, int row, int col, String typeName) -> bool"""
         return _grid.PyGridTableBase_base_CanSetValueAs(*args, **kwargs)
 
     def base_Clear(*args, **kwargs):
-        """base_Clear()"""
+        """base_Clear(self)"""
         return _grid.PyGridTableBase_base_Clear(*args, **kwargs)
 
     def base_InsertRows(*args, **kwargs):
-        """base_InsertRows(size_t pos=0, size_t numRows=1) -> bool"""
+        """base_InsertRows(self, size_t pos=0, size_t numRows=1) -> bool"""
         return _grid.PyGridTableBase_base_InsertRows(*args, **kwargs)
 
     def base_AppendRows(*args, **kwargs):
-        """base_AppendRows(size_t numRows=1) -> bool"""
+        """base_AppendRows(self, size_t numRows=1) -> bool"""
         return _grid.PyGridTableBase_base_AppendRows(*args, **kwargs)
 
     def base_DeleteRows(*args, **kwargs):
-        """base_DeleteRows(size_t pos=0, size_t numRows=1) -> bool"""
+        """base_DeleteRows(self, size_t pos=0, size_t numRows=1) -> bool"""
         return _grid.PyGridTableBase_base_DeleteRows(*args, **kwargs)
 
     def base_InsertCols(*args, **kwargs):
-        """base_InsertCols(size_t pos=0, size_t numCols=1) -> bool"""
+        """base_InsertCols(self, size_t pos=0, size_t numCols=1) -> bool"""
         return _grid.PyGridTableBase_base_InsertCols(*args, **kwargs)
 
     def base_AppendCols(*args, **kwargs):
-        """base_AppendCols(size_t numCols=1) -> bool"""
+        """base_AppendCols(self, size_t numCols=1) -> bool"""
         return _grid.PyGridTableBase_base_AppendCols(*args, **kwargs)
 
     def base_DeleteCols(*args, **kwargs):
-        """base_DeleteCols(size_t pos=0, size_t numCols=1) -> bool"""
+        """base_DeleteCols(self, size_t pos=0, size_t numCols=1) -> bool"""
         return _grid.PyGridTableBase_base_DeleteCols(*args, **kwargs)
 
     def base_GetRowLabelValue(*args, **kwargs):
-        """base_GetRowLabelValue(int row) -> String"""
+        """base_GetRowLabelValue(self, int row) -> String"""
         return _grid.PyGridTableBase_base_GetRowLabelValue(*args, **kwargs)
 
     def base_GetColLabelValue(*args, **kwargs):
-        """base_GetColLabelValue(int col) -> String"""
+        """base_GetColLabelValue(self, int col) -> String"""
         return _grid.PyGridTableBase_base_GetColLabelValue(*args, **kwargs)
 
     def base_SetRowLabelValue(*args, **kwargs):
-        """base_SetRowLabelValue(int row, String value)"""
+        """base_SetRowLabelValue(self, int row, String value)"""
         return _grid.PyGridTableBase_base_SetRowLabelValue(*args, **kwargs)
 
     def base_SetColLabelValue(*args, **kwargs):
-        """base_SetColLabelValue(int col, String value)"""
+        """base_SetColLabelValue(self, int col, String value)"""
         return _grid.PyGridTableBase_base_SetColLabelValue(*args, **kwargs)
 
     def base_CanHaveAttributes(*args, **kwargs):
-        """base_CanHaveAttributes() -> bool"""
+        """base_CanHaveAttributes(self) -> bool"""
         return _grid.PyGridTableBase_base_CanHaveAttributes(*args, **kwargs)
 
     def base_GetAttr(*args, **kwargs):
-        """base_GetAttr(int row, int col, int kind) -> GridCellAttr"""
+        """base_GetAttr(self, int row, int col, int kind) -> GridCellAttr"""
         return _grid.PyGridTableBase_base_GetAttr(*args, **kwargs)
 
     def base_SetAttr(*args, **kwargs):
-        """base_SetAttr(GridCellAttr attr, int row, int col)"""
+        """base_SetAttr(self, GridCellAttr attr, int row, int col)"""
         return _grid.PyGridTableBase_base_SetAttr(*args, **kwargs)
 
     def base_SetRowAttr(*args, **kwargs):
-        """base_SetRowAttr(GridCellAttr attr, int row)"""
+        """base_SetRowAttr(self, GridCellAttr attr, int row)"""
         return _grid.PyGridTableBase_base_SetRowAttr(*args, **kwargs)
 
     def base_SetColAttr(*args, **kwargs):
-        """base_SetColAttr(GridCellAttr attr, int col)"""
+        """base_SetColAttr(self, GridCellAttr attr, int col)"""
         return _grid.PyGridTableBase_base_SetColAttr(*args, **kwargs)
 
 
@@ -1064,7 +1065,7 @@ class GridStringTable(GridTableBase):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridStringTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int numRows=0, int numCols=0) -> GridStringTable"""
+        """__init__(self, int numRows=0, int numCols=0) -> GridStringTable"""
         newobj = _grid.new_GridStringTable(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1091,47 +1092,47 @@ class GridTableMessage(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridTableMessage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(GridTableBase table, int id, int comInt1=-1, int comInt2=-1) -> GridTableMessage"""
+        """__init__(self, GridTableBase table, int id, int comInt1=-1, int comInt2=-1) -> GridTableMessage"""
         newobj = _grid.new_GridTableMessage(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_grid.delete_GridTableMessage):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def SetTableObject(*args, **kwargs):
-        """SetTableObject(GridTableBase table)"""
+        """SetTableObject(self, GridTableBase table)"""
         return _grid.GridTableMessage_SetTableObject(*args, **kwargs)
 
     def GetTableObject(*args, **kwargs):
-        """GetTableObject() -> GridTableBase"""
+        """GetTableObject(self) -> GridTableBase"""
         return _grid.GridTableMessage_GetTableObject(*args, **kwargs)
 
     def SetId(*args, **kwargs):
-        """SetId(int id)"""
+        """SetId(self, int id)"""
         return _grid.GridTableMessage_SetId(*args, **kwargs)
 
     def GetId(*args, **kwargs):
-        """GetId() -> int"""
+        """GetId(self) -> int"""
         return _grid.GridTableMessage_GetId(*args, **kwargs)
 
     def SetCommandInt(*args, **kwargs):
-        """SetCommandInt(int comInt1)"""
+        """SetCommandInt(self, int comInt1)"""
         return _grid.GridTableMessage_SetCommandInt(*args, **kwargs)
 
     def GetCommandInt(*args, **kwargs):
-        """GetCommandInt() -> int"""
+        """GetCommandInt(self) -> int"""
         return _grid.GridTableMessage_GetCommandInt(*args, **kwargs)
 
     def SetCommandInt2(*args, **kwargs):
-        """SetCommandInt2(int comInt2)"""
+        """SetCommandInt2(self, int comInt2)"""
         return _grid.GridTableMessage_SetCommandInt2(*args, **kwargs)
 
     def GetCommandInt2(*args, **kwargs):
-        """GetCommandInt2() -> int"""
+        """GetCommandInt2(self) -> int"""
         return _grid.GridTableMessage_GetCommandInt2(*args, **kwargs)
 
 
@@ -1146,47 +1147,47 @@ class GridCellCoords(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellCoords instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int r=-1, int c=-1) -> GridCellCoords"""
+        """__init__(self, int r=-1, int c=-1) -> GridCellCoords"""
         newobj = _grid.new_GridCellCoords(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_grid.delete_GridCellCoords):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def GetRow(*args, **kwargs):
-        """GetRow() -> int"""
+        """GetRow(self) -> int"""
         return _grid.GridCellCoords_GetRow(*args, **kwargs)
 
     def SetRow(*args, **kwargs):
-        """SetRow(int n)"""
+        """SetRow(self, int n)"""
         return _grid.GridCellCoords_SetRow(*args, **kwargs)
 
     def GetCol(*args, **kwargs):
-        """GetCol() -> int"""
+        """GetCol(self) -> int"""
         return _grid.GridCellCoords_GetCol(*args, **kwargs)
 
     def SetCol(*args, **kwargs):
-        """SetCol(int n)"""
+        """SetCol(self, int n)"""
         return _grid.GridCellCoords_SetCol(*args, **kwargs)
 
     def Set(*args, **kwargs):
-        """Set(int row, int col)"""
+        """Set(self, int row, int col)"""
         return _grid.GridCellCoords_Set(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(GridCellCoords other) -> bool"""
+        """__eq__(self, GridCellCoords other) -> bool"""
         return _grid.GridCellCoords___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(GridCellCoords other) -> bool"""
+        """__ne__(self, GridCellCoords other) -> bool"""
         return _grid.GridCellCoords___ne__(*args, **kwargs)
 
     def asTuple(*args, **kwargs):
-        """asTuple() -> PyObject"""
+        """asTuple(self) -> PyObject"""
         return _grid.GridCellCoords_asTuple(*args, **kwargs)
 
     def __str__(self):                   return str(self.asTuple())
@@ -1211,7 +1212,7 @@ class Grid(windows.ScrolledWindow):
         return "<%s.%s; proxy of C++ wxGrid instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=WANTS_CHARS, 
             String name=PanelNameStr) -> Grid
         """
@@ -1229,72 +1230,72 @@ class Grid(windows.ScrolledWindow):
     SelectColumns = wxGridSelectColumns
 
     def CreateGrid(*args, **kwargs):
-        """CreateGrid(int numRows, int numCols, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
+        """CreateGrid(self, int numRows, int numCols, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
         return _grid.Grid_CreateGrid(*args, **kwargs)
 
     def SetSelectionMode(*args, **kwargs):
-        """SetSelectionMode(WXGRIDSELECTIONMODES selmode)"""
+        """SetSelectionMode(self, WXGRIDSELECTIONMODES selmode)"""
         return _grid.Grid_SetSelectionMode(*args, **kwargs)
 
     def GetSelectionMode(*args, **kwargs):
-        """GetSelectionMode() -> WXGRIDSELECTIONMODES"""
+        """GetSelectionMode(self) -> WXGRIDSELECTIONMODES"""
         return _grid.Grid_GetSelectionMode(*args, **kwargs)
 
     def GetNumberRows(*args, **kwargs):
-        """GetNumberRows() -> int"""
+        """GetNumberRows(self) -> int"""
         return _grid.Grid_GetNumberRows(*args, **kwargs)
 
     def GetNumberCols(*args, **kwargs):
-        """GetNumberCols() -> int"""
+        """GetNumberCols(self) -> int"""
         return _grid.Grid_GetNumberCols(*args, **kwargs)
 
     def ProcessTableMessage(*args, **kwargs):
-        """ProcessTableMessage(GridTableMessage ??) -> bool"""
+        """ProcessTableMessage(self, GridTableMessage ??) -> bool"""
         return _grid.Grid_ProcessTableMessage(*args, **kwargs)
 
     def GetTable(*args, **kwargs):
-        """GetTable() -> GridTableBase"""
+        """GetTable(self) -> GridTableBase"""
         return _grid.Grid_GetTable(*args, **kwargs)
 
     def SetTable(*args, **kwargs):
-        """SetTable(GridTableBase table, bool takeOwnership=False, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
+        """SetTable(self, GridTableBase table, bool takeOwnership=False, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
         return _grid.Grid_SetTable(*args, **kwargs)
 
     def ClearGrid(*args, **kwargs):
-        """ClearGrid()"""
+        """ClearGrid(self)"""
         return _grid.Grid_ClearGrid(*args, **kwargs)
 
     def InsertRows(*args, **kwargs):
-        """InsertRows(int pos=0, int numRows=1, bool updateLabels=True) -> bool"""
+        """InsertRows(self, int pos=0, int numRows=1, bool updateLabels=True) -> bool"""
         return _grid.Grid_InsertRows(*args, **kwargs)
 
     def AppendRows(*args, **kwargs):
-        """AppendRows(int numRows=1, bool updateLabels=True) -> bool"""
+        """AppendRows(self, int numRows=1, bool updateLabels=True) -> bool"""
         return _grid.Grid_AppendRows(*args, **kwargs)
 
     def DeleteRows(*args, **kwargs):
-        """DeleteRows(int pos=0, int numRows=1, bool updateLabels=True) -> bool"""
+        """DeleteRows(self, int pos=0, int numRows=1, bool updateLabels=True) -> bool"""
         return _grid.Grid_DeleteRows(*args, **kwargs)
 
     def InsertCols(*args, **kwargs):
-        """InsertCols(int pos=0, int numCols=1, bool updateLabels=True) -> bool"""
+        """InsertCols(self, int pos=0, int numCols=1, bool updateLabels=True) -> bool"""
         return _grid.Grid_InsertCols(*args, **kwargs)
 
     def AppendCols(*args, **kwargs):
-        """AppendCols(int numCols=1, bool updateLabels=True) -> bool"""
+        """AppendCols(self, int numCols=1, bool updateLabels=True) -> bool"""
         return _grid.Grid_AppendCols(*args, **kwargs)
 
     def DeleteCols(*args, **kwargs):
-        """DeleteCols(int pos=0, int numCols=1, bool updateLabels=True) -> bool"""
+        """DeleteCols(self, int pos=0, int numCols=1, bool updateLabels=True) -> bool"""
         return _grid.Grid_DeleteCols(*args, **kwargs)
 
     def DrawCellHighlight(*args, **kwargs):
-        """DrawCellHighlight(DC dc, GridCellAttr attr)"""
+        """DrawCellHighlight(self, DC dc, GridCellAttr attr)"""
         return _grid.Grid_DrawCellHighlight(*args, **kwargs)
 
     def DrawTextRectangle(*args, **kwargs):
         """
-        DrawTextRectangle(DC dc, String ??, Rect ??, int horizontalAlignment=LEFT, 
+        DrawTextRectangle(self, DC dc, String ??, Rect ??, int horizontalAlignment=LEFT, 
             int verticalAlignment=TOP, int textOrientation=HORIZONTAL)
         """
         return _grid.Grid_DrawTextRectangle(*args, **kwargs)
@@ -1304,175 +1305,175 @@ class Grid(windows.ScrolledWindow):
         return _grid.Grid_GetTextBoxSize(*args, **kwargs)
 
     def BeginBatch(*args, **kwargs):
-        """BeginBatch()"""
+        """BeginBatch(self)"""
         return _grid.Grid_BeginBatch(*args, **kwargs)
 
     def EndBatch(*args, **kwargs):
-        """EndBatch()"""
+        """EndBatch(self)"""
         return _grid.Grid_EndBatch(*args, **kwargs)
 
     def GetBatchCount(*args, **kwargs):
-        """GetBatchCount() -> int"""
+        """GetBatchCount(self) -> int"""
         return _grid.Grid_GetBatchCount(*args, **kwargs)
 
     def ForceRefresh(*args, **kwargs):
-        """ForceRefresh()"""
+        """ForceRefresh(self)"""
         return _grid.Grid_ForceRefresh(*args, **kwargs)
 
     def IsEditable(*args, **kwargs):
-        """IsEditable() -> bool"""
+        """IsEditable(self) -> bool"""
         return _grid.Grid_IsEditable(*args, **kwargs)
 
     def EnableEditing(*args, **kwargs):
-        """EnableEditing(bool edit)"""
+        """EnableEditing(self, bool edit)"""
         return _grid.Grid_EnableEditing(*args, **kwargs)
 
     def EnableCellEditControl(*args, **kwargs):
-        """EnableCellEditControl(bool enable=True)"""
+        """EnableCellEditControl(self, bool enable=True)"""
         return _grid.Grid_EnableCellEditControl(*args, **kwargs)
 
     def DisableCellEditControl(*args, **kwargs):
-        """DisableCellEditControl()"""
+        """DisableCellEditControl(self)"""
         return _grid.Grid_DisableCellEditControl(*args, **kwargs)
 
     def CanEnableCellControl(*args, **kwargs):
-        """CanEnableCellControl() -> bool"""
+        """CanEnableCellControl(self) -> bool"""
         return _grid.Grid_CanEnableCellControl(*args, **kwargs)
 
     def IsCellEditControlEnabled(*args, **kwargs):
-        """IsCellEditControlEnabled() -> bool"""
+        """IsCellEditControlEnabled(self) -> bool"""
         return _grid.Grid_IsCellEditControlEnabled(*args, **kwargs)
 
     def IsCellEditControlShown(*args, **kwargs):
-        """IsCellEditControlShown() -> bool"""
+        """IsCellEditControlShown(self) -> bool"""
         return _grid.Grid_IsCellEditControlShown(*args, **kwargs)
 
     def IsCurrentCellReadOnly(*args, **kwargs):
-        """IsCurrentCellReadOnly() -> bool"""
+        """IsCurrentCellReadOnly(self) -> bool"""
         return _grid.Grid_IsCurrentCellReadOnly(*args, **kwargs)
 
     def ShowCellEditControl(*args, **kwargs):
-        """ShowCellEditControl()"""
+        """ShowCellEditControl(self)"""
         return _grid.Grid_ShowCellEditControl(*args, **kwargs)
 
     def HideCellEditControl(*args, **kwargs):
-        """HideCellEditControl()"""
+        """HideCellEditControl(self)"""
         return _grid.Grid_HideCellEditControl(*args, **kwargs)
 
     def SaveEditControlValue(*args, **kwargs):
-        """SaveEditControlValue()"""
+        """SaveEditControlValue(self)"""
         return _grid.Grid_SaveEditControlValue(*args, **kwargs)
 
     def XYToCell(*args, **kwargs):
-        """XYToCell(int x, int y) -> GridCellCoords"""
+        """XYToCell(self, int x, int y) -> GridCellCoords"""
         return _grid.Grid_XYToCell(*args, **kwargs)
 
     def YToRow(*args, **kwargs):
-        """YToRow(int y) -> int"""
+        """YToRow(self, int y) -> int"""
         return _grid.Grid_YToRow(*args, **kwargs)
 
     def XToCol(*args, **kwargs):
-        """XToCol(int x) -> int"""
+        """XToCol(self, int x) -> int"""
         return _grid.Grid_XToCol(*args, **kwargs)
 
     def YToEdgeOfRow(*args, **kwargs):
-        """YToEdgeOfRow(int y) -> int"""
+        """YToEdgeOfRow(self, int y) -> int"""
         return _grid.Grid_YToEdgeOfRow(*args, **kwargs)
 
     def XToEdgeOfCol(*args, **kwargs):
-        """XToEdgeOfCol(int x) -> int"""
+        """XToEdgeOfCol(self, int x) -> int"""
         return _grid.Grid_XToEdgeOfCol(*args, **kwargs)
 
     def CellToRect(*args, **kwargs):
-        """CellToRect(int row, int col) -> Rect"""
+        """CellToRect(self, int row, int col) -> Rect"""
         return _grid.Grid_CellToRect(*args, **kwargs)
 
     def GetGridCursorRow(*args, **kwargs):
-        """GetGridCursorRow() -> int"""
+        """GetGridCursorRow(self) -> int"""
         return _grid.Grid_GetGridCursorRow(*args, **kwargs)
 
     def GetGridCursorCol(*args, **kwargs):
-        """GetGridCursorCol() -> int"""
+        """GetGridCursorCol(self) -> int"""
         return _grid.Grid_GetGridCursorCol(*args, **kwargs)
 
     def IsVisible(*args, **kwargs):
-        """IsVisible(int row, int col, bool wholeCellVisible=True) -> bool"""
+        """IsVisible(self, int row, int col, bool wholeCellVisible=True) -> bool"""
         return _grid.Grid_IsVisible(*args, **kwargs)
 
     def MakeCellVisible(*args, **kwargs):
-        """MakeCellVisible(int row, int col)"""
+        """MakeCellVisible(self, int row, int col)"""
         return _grid.Grid_MakeCellVisible(*args, **kwargs)
 
     def SetGridCursor(*args, **kwargs):
-        """SetGridCursor(int row, int col)"""
+        """SetGridCursor(self, int row, int col)"""
         return _grid.Grid_SetGridCursor(*args, **kwargs)
 
     def MoveCursorUp(*args, **kwargs):
-        """MoveCursorUp(bool expandSelection) -> bool"""
+        """MoveCursorUp(self, bool expandSelection) -> bool"""
         return _grid.Grid_MoveCursorUp(*args, **kwargs)
 
     def MoveCursorDown(*args, **kwargs):
-        """MoveCursorDown(bool expandSelection) -> bool"""
+        """MoveCursorDown(self, bool expandSelection) -> bool"""
         return _grid.Grid_MoveCursorDown(*args, **kwargs)
 
     def MoveCursorLeft(*args, **kwargs):
-        """MoveCursorLeft(bool expandSelection) -> bool"""
+        """MoveCursorLeft(self, bool expandSelection) -> bool"""
         return _grid.Grid_MoveCursorLeft(*args, **kwargs)
 
     def MoveCursorRight(*args, **kwargs):
-        """MoveCursorRight(bool expandSelection) -> bool"""
+        """MoveCursorRight(self, bool expandSelection) -> bool"""
         return _grid.Grid_MoveCursorRight(*args, **kwargs)
 
     def MovePageDown(*args, **kwargs):
-        """MovePageDown() -> bool"""
+        """MovePageDown(self) -> bool"""
         return _grid.Grid_MovePageDown(*args, **kwargs)
 
     def MovePageUp(*args, **kwargs):
-        """MovePageUp() -> bool"""
+        """MovePageUp(self) -> bool"""
         return _grid.Grid_MovePageUp(*args, **kwargs)
 
     def MoveCursorUpBlock(*args, **kwargs):
-        """MoveCursorUpBlock(bool expandSelection) -> bool"""
+        """MoveCursorUpBlock(self, bool expandSelection) -> bool"""
         return _grid.Grid_MoveCursorUpBlock(*args, **kwargs)
 
     def MoveCursorDownBlock(*args, **kwargs):
-        """MoveCursorDownBlock(bool expandSelection) -> bool"""
+        """MoveCursorDownBlock(self, bool expandSelection) -> bool"""
         return _grid.Grid_MoveCursorDownBlock(*args, **kwargs)
 
     def MoveCursorLeftBlock(*args, **kwargs):
-        """MoveCursorLeftBlock(bool expandSelection) -> bool"""
+        """MoveCursorLeftBlock(self, bool expandSelection) -> bool"""
         return _grid.Grid_MoveCursorLeftBlock(*args, **kwargs)
 
     def MoveCursorRightBlock(*args, **kwargs):
-        """MoveCursorRightBlock(bool expandSelection) -> bool"""
+        """MoveCursorRightBlock(self, bool expandSelection) -> bool"""
         return _grid.Grid_MoveCursorRightBlock(*args, **kwargs)
 
     def GetDefaultRowLabelSize(*args, **kwargs):
-        """GetDefaultRowLabelSize() -> int"""
+        """GetDefaultRowLabelSize(self) -> int"""
         return _grid.Grid_GetDefaultRowLabelSize(*args, **kwargs)
 
     def GetRowLabelSize(*args, **kwargs):
-        """GetRowLabelSize() -> int"""
+        """GetRowLabelSize(self) -> int"""
         return _grid.Grid_GetRowLabelSize(*args, **kwargs)
 
     def GetDefaultColLabelSize(*args, **kwargs):
-        """GetDefaultColLabelSize() -> int"""
+        """GetDefaultColLabelSize(self) -> int"""
         return _grid.Grid_GetDefaultColLabelSize(*args, **kwargs)
 
     def GetColLabelSize(*args, **kwargs):
-        """GetColLabelSize() -> int"""
+        """GetColLabelSize(self) -> int"""
         return _grid.Grid_GetColLabelSize(*args, **kwargs)
 
     def GetLabelBackgroundColour(*args, **kwargs):
-        """GetLabelBackgroundColour() -> Colour"""
+        """GetLabelBackgroundColour(self) -> Colour"""
         return _grid.Grid_GetLabelBackgroundColour(*args, **kwargs)
 
     def GetLabelTextColour(*args, **kwargs):
-        """GetLabelTextColour() -> Colour"""
+        """GetLabelTextColour(self) -> Colour"""
         return _grid.Grid_GetLabelTextColour(*args, **kwargs)
 
     def GetLabelFont(*args, **kwargs):
-        """GetLabelFont() -> Font"""
+        """GetLabelFont(self) -> Font"""
         return _grid.Grid_GetLabelFont(*args, **kwargs)
 
     def GetRowLabelAlignment(*args, **kwargs):
@@ -1484,199 +1485,199 @@ class Grid(windows.ScrolledWindow):
         return _grid.Grid_GetColLabelAlignment(*args, **kwargs)
 
     def GetColLabelTextOrientation(*args, **kwargs):
-        """GetColLabelTextOrientation() -> int"""
+        """GetColLabelTextOrientation(self) -> int"""
         return _grid.Grid_GetColLabelTextOrientation(*args, **kwargs)
 
     def GetRowLabelValue(*args, **kwargs):
-        """GetRowLabelValue(int row) -> String"""
+        """GetRowLabelValue(self, int row) -> String"""
         return _grid.Grid_GetRowLabelValue(*args, **kwargs)
 
     def GetColLabelValue(*args, **kwargs):
-        """GetColLabelValue(int col) -> String"""
+        """GetColLabelValue(self, int col) -> String"""
         return _grid.Grid_GetColLabelValue(*args, **kwargs)
 
     def GetGridLineColour(*args, **kwargs):
-        """GetGridLineColour() -> Colour"""
+        """GetGridLineColour(self) -> Colour"""
         return _grid.Grid_GetGridLineColour(*args, **kwargs)
 
     def GetCellHighlightColour(*args, **kwargs):
-        """GetCellHighlightColour() -> Colour"""
+        """GetCellHighlightColour(self) -> Colour"""
         return _grid.Grid_GetCellHighlightColour(*args, **kwargs)
 
     def GetCellHighlightPenWidth(*args, **kwargs):
-        """GetCellHighlightPenWidth() -> int"""
+        """GetCellHighlightPenWidth(self) -> int"""
         return _grid.Grid_GetCellHighlightPenWidth(*args, **kwargs)
 
     def GetCellHighlightROPenWidth(*args, **kwargs):
-        """GetCellHighlightROPenWidth() -> int"""
+        """GetCellHighlightROPenWidth(self) -> int"""
         return _grid.Grid_GetCellHighlightROPenWidth(*args, **kwargs)
 
     def SetRowLabelSize(*args, **kwargs):
-        """SetRowLabelSize(int width)"""
+        """SetRowLabelSize(self, int width)"""
         return _grid.Grid_SetRowLabelSize(*args, **kwargs)
 
     def SetColLabelSize(*args, **kwargs):
-        """SetColLabelSize(int height)"""
+        """SetColLabelSize(self, int height)"""
         return _grid.Grid_SetColLabelSize(*args, **kwargs)
 
     def SetLabelBackgroundColour(*args, **kwargs):
-        """SetLabelBackgroundColour(Colour ??)"""
+        """SetLabelBackgroundColour(self, Colour ??)"""
         return _grid.Grid_SetLabelBackgroundColour(*args, **kwargs)
 
     def SetLabelTextColour(*args, **kwargs):
-        """SetLabelTextColour(Colour ??)"""
+        """SetLabelTextColour(self, Colour ??)"""
         return _grid.Grid_SetLabelTextColour(*args, **kwargs)
 
     def SetLabelFont(*args, **kwargs):
-        """SetLabelFont(Font ??)"""
+        """SetLabelFont(self, Font ??)"""
         return _grid.Grid_SetLabelFont(*args, **kwargs)
 
     def SetRowLabelAlignment(*args, **kwargs):
-        """SetRowLabelAlignment(int horiz, int vert)"""
+        """SetRowLabelAlignment(self, int horiz, int vert)"""
         return _grid.Grid_SetRowLabelAlignment(*args, **kwargs)
 
     def SetColLabelAlignment(*args, **kwargs):
-        """SetColLabelAlignment(int horiz, int vert)"""
+        """SetColLabelAlignment(self, int horiz, int vert)"""
         return _grid.Grid_SetColLabelAlignment(*args, **kwargs)
 
     def SetColLabelTextOrientation(*args, **kwargs):
-        """SetColLabelTextOrientation(int textOrientation)"""
+        """SetColLabelTextOrientation(self, int textOrientation)"""
         return _grid.Grid_SetColLabelTextOrientation(*args, **kwargs)
 
     def SetRowLabelValue(*args, **kwargs):
-        """SetRowLabelValue(int row, String ??)"""
+        """SetRowLabelValue(self, int row, String ??)"""
         return _grid.Grid_SetRowLabelValue(*args, **kwargs)
 
     def SetColLabelValue(*args, **kwargs):
-        """SetColLabelValue(int col, String ??)"""
+        """SetColLabelValue(self, int col, String ??)"""
         return _grid.Grid_SetColLabelValue(*args, **kwargs)
 
     def SetGridLineColour(*args, **kwargs):
-        """SetGridLineColour(Colour ??)"""
+        """SetGridLineColour(self, Colour ??)"""
         return _grid.Grid_SetGridLineColour(*args, **kwargs)
 
     def SetCellHighlightColour(*args, **kwargs):
-        """SetCellHighlightColour(Colour ??)"""
+        """SetCellHighlightColour(self, Colour ??)"""
         return _grid.Grid_SetCellHighlightColour(*args, **kwargs)
 
     def SetCellHighlightPenWidth(*args, **kwargs):
-        """SetCellHighlightPenWidth(int width)"""
+        """SetCellHighlightPenWidth(self, int width)"""
         return _grid.Grid_SetCellHighlightPenWidth(*args, **kwargs)
 
     def SetCellHighlightROPenWidth(*args, **kwargs):
-        """SetCellHighlightROPenWidth(int width)"""
+        """SetCellHighlightROPenWidth(self, int width)"""
         return _grid.Grid_SetCellHighlightROPenWidth(*args, **kwargs)
 
     def EnableDragRowSize(*args, **kwargs):
-        """EnableDragRowSize(bool enable=True)"""
+        """EnableDragRowSize(self, bool enable=True)"""
         return _grid.Grid_EnableDragRowSize(*args, **kwargs)
 
     def DisableDragRowSize(*args, **kwargs):
-        """DisableDragRowSize()"""
+        """DisableDragRowSize(self)"""
         return _grid.Grid_DisableDragRowSize(*args, **kwargs)
 
     def CanDragRowSize(*args, **kwargs):
-        """CanDragRowSize() -> bool"""
+        """CanDragRowSize(self) -> bool"""
         return _grid.Grid_CanDragRowSize(*args, **kwargs)
 
     def EnableDragColSize(*args, **kwargs):
-        """EnableDragColSize(bool enable=True)"""
+        """EnableDragColSize(self, bool enable=True)"""
         return _grid.Grid_EnableDragColSize(*args, **kwargs)
 
     def DisableDragColSize(*args, **kwargs):
-        """DisableDragColSize()"""
+        """DisableDragColSize(self)"""
         return _grid.Grid_DisableDragColSize(*args, **kwargs)
 
     def CanDragColSize(*args, **kwargs):
-        """CanDragColSize() -> bool"""
+        """CanDragColSize(self) -> bool"""
         return _grid.Grid_CanDragColSize(*args, **kwargs)
 
     def EnableDragGridSize(*args, **kwargs):
-        """EnableDragGridSize(bool enable=True)"""
+        """EnableDragGridSize(self, bool enable=True)"""
         return _grid.Grid_EnableDragGridSize(*args, **kwargs)
 
     def DisableDragGridSize(*args, **kwargs):
-        """DisableDragGridSize()"""
+        """DisableDragGridSize(self)"""
         return _grid.Grid_DisableDragGridSize(*args, **kwargs)
 
     def CanDragGridSize(*args, **kwargs):
-        """CanDragGridSize() -> bool"""
+        """CanDragGridSize(self) -> bool"""
         return _grid.Grid_CanDragGridSize(*args, **kwargs)
 
     def SetAttr(*args, **kwargs):
-        """SetAttr(int row, int col, GridCellAttr attr)"""
+        """SetAttr(self, int row, int col, GridCellAttr attr)"""
         return _grid.Grid_SetAttr(*args, **kwargs)
 
     def SetRowAttr(*args, **kwargs):
-        """SetRowAttr(int row, GridCellAttr attr)"""
+        """SetRowAttr(self, int row, GridCellAttr attr)"""
         return _grid.Grid_SetRowAttr(*args, **kwargs)
 
     def SetColAttr(*args, **kwargs):
-        """SetColAttr(int col, GridCellAttr attr)"""
+        """SetColAttr(self, int col, GridCellAttr attr)"""
         return _grid.Grid_SetColAttr(*args, **kwargs)
 
     def SetColFormatBool(*args, **kwargs):
-        """SetColFormatBool(int col)"""
+        """SetColFormatBool(self, int col)"""
         return _grid.Grid_SetColFormatBool(*args, **kwargs)
 
     def SetColFormatNumber(*args, **kwargs):
-        """SetColFormatNumber(int col)"""
+        """SetColFormatNumber(self, int col)"""
         return _grid.Grid_SetColFormatNumber(*args, **kwargs)
 
     def SetColFormatFloat(*args, **kwargs):
-        """SetColFormatFloat(int col, int width=-1, int precision=-1)"""
+        """SetColFormatFloat(self, int col, int width=-1, int precision=-1)"""
         return _grid.Grid_SetColFormatFloat(*args, **kwargs)
 
     def SetColFormatCustom(*args, **kwargs):
-        """SetColFormatCustom(int col, String typeName)"""
+        """SetColFormatCustom(self, int col, String typeName)"""
         return _grid.Grid_SetColFormatCustom(*args, **kwargs)
 
     def EnableGridLines(*args, **kwargs):
-        """EnableGridLines(bool enable=True)"""
+        """EnableGridLines(self, bool enable=True)"""
         return _grid.Grid_EnableGridLines(*args, **kwargs)
 
     def GridLinesEnabled(*args, **kwargs):
-        """GridLinesEnabled() -> bool"""
+        """GridLinesEnabled(self) -> bool"""
         return _grid.Grid_GridLinesEnabled(*args, **kwargs)
 
     def GetDefaultRowSize(*args, **kwargs):
-        """GetDefaultRowSize() -> int"""
+        """GetDefaultRowSize(self) -> int"""
         return _grid.Grid_GetDefaultRowSize(*args, **kwargs)
 
     def GetRowSize(*args, **kwargs):
-        """GetRowSize(int row) -> int"""
+        """GetRowSize(self, int row) -> int"""
         return _grid.Grid_GetRowSize(*args, **kwargs)
 
     def GetDefaultColSize(*args, **kwargs):
-        """GetDefaultColSize() -> int"""
+        """GetDefaultColSize(self) -> int"""
         return _grid.Grid_GetDefaultColSize(*args, **kwargs)
 
     def GetColSize(*args, **kwargs):
-        """GetColSize(int col) -> int"""
+        """GetColSize(self, int col) -> int"""
         return _grid.Grid_GetColSize(*args, **kwargs)
 
     def GetDefaultCellBackgroundColour(*args, **kwargs):
-        """GetDefaultCellBackgroundColour() -> Colour"""
+        """GetDefaultCellBackgroundColour(self) -> Colour"""
         return _grid.Grid_GetDefaultCellBackgroundColour(*args, **kwargs)
 
     def GetCellBackgroundColour(*args, **kwargs):
-        """GetCellBackgroundColour(int row, int col) -> Colour"""
+        """GetCellBackgroundColour(self, int row, int col) -> Colour"""
         return _grid.Grid_GetCellBackgroundColour(*args, **kwargs)
 
     def GetDefaultCellTextColour(*args, **kwargs):
-        """GetDefaultCellTextColour() -> Colour"""
+        """GetDefaultCellTextColour(self) -> Colour"""
         return _grid.Grid_GetDefaultCellTextColour(*args, **kwargs)
 
     def GetCellTextColour(*args, **kwargs):
-        """GetCellTextColour(int row, int col) -> Colour"""
+        """GetCellTextColour(self, int row, int col) -> Colour"""
         return _grid.Grid_GetCellTextColour(*args, **kwargs)
 
     def GetDefaultCellFont(*args, **kwargs):
-        """GetDefaultCellFont() -> Font"""
+        """GetDefaultCellFont(self) -> Font"""
         return _grid.Grid_GetDefaultCellFont(*args, **kwargs)
 
     def GetCellFont(*args, **kwargs):
-        """GetCellFont(int row, int col) -> Font"""
+        """GetCellFont(self, int row, int col) -> Font"""
         return _grid.Grid_GetCellFont(*args, **kwargs)
 
     def GetDefaultCellAlignment(*args, **kwargs):
@@ -1688,11 +1689,11 @@ class Grid(windows.ScrolledWindow):
         return _grid.Grid_GetCellAlignment(*args, **kwargs)
 
     def GetDefaultCellOverflow(*args, **kwargs):
-        """GetDefaultCellOverflow() -> bool"""
+        """GetDefaultCellOverflow(self) -> bool"""
         return _grid.Grid_GetDefaultCellOverflow(*args, **kwargs)
 
     def GetCellOverflow(*args, **kwargs):
-        """GetCellOverflow(int row, int col) -> bool"""
+        """GetCellOverflow(self, int row, int col) -> bool"""
         return _grid.Grid_GetCellOverflow(*args, **kwargs)
 
     def GetCellSize(*args, **kwargs):
@@ -1700,286 +1701,286 @@ class Grid(windows.ScrolledWindow):
         return _grid.Grid_GetCellSize(*args, **kwargs)
 
     def SetDefaultRowSize(*args, **kwargs):
-        """SetDefaultRowSize(int height, bool resizeExistingRows=False)"""
+        """SetDefaultRowSize(self, int height, bool resizeExistingRows=False)"""
         return _grid.Grid_SetDefaultRowSize(*args, **kwargs)
 
     def SetRowSize(*args, **kwargs):
-        """SetRowSize(int row, int height)"""
+        """SetRowSize(self, int row, int height)"""
         return _grid.Grid_SetRowSize(*args, **kwargs)
 
     def SetDefaultColSize(*args, **kwargs):
-        """SetDefaultColSize(int width, bool resizeExistingCols=False)"""
+        """SetDefaultColSize(self, int width, bool resizeExistingCols=False)"""
         return _grid.Grid_SetDefaultColSize(*args, **kwargs)
 
     def SetColSize(*args, **kwargs):
-        """SetColSize(int col, int width)"""
+        """SetColSize(self, int col, int width)"""
         return _grid.Grid_SetColSize(*args, **kwargs)
 
     def AutoSizeColumn(*args, **kwargs):
-        """AutoSizeColumn(int col, bool setAsMin=True)"""
+        """AutoSizeColumn(self, int col, bool setAsMin=True)"""
         return _grid.Grid_AutoSizeColumn(*args, **kwargs)
 
     def AutoSizeRow(*args, **kwargs):
-        """AutoSizeRow(int row, bool setAsMin=True)"""
+        """AutoSizeRow(self, int row, bool setAsMin=True)"""
         return _grid.Grid_AutoSizeRow(*args, **kwargs)
 
     def AutoSizeColumns(*args, **kwargs):
-        """AutoSizeColumns(bool setAsMin=True)"""
+        """AutoSizeColumns(self, bool setAsMin=True)"""
         return _grid.Grid_AutoSizeColumns(*args, **kwargs)
 
     def AutoSizeRows(*args, **kwargs):
-        """AutoSizeRows(bool setAsMin=True)"""
+        """AutoSizeRows(self, bool setAsMin=True)"""
         return _grid.Grid_AutoSizeRows(*args, **kwargs)
 
     def AutoSize(*args, **kwargs):
-        """AutoSize()"""
+        """AutoSize(self)"""
         return _grid.Grid_AutoSize(*args, **kwargs)
 
     def AutoSizeRowLabelSize(*args, **kwargs):
-        """AutoSizeRowLabelSize(int row)"""
+        """AutoSizeRowLabelSize(self, int row)"""
         return _grid.Grid_AutoSizeRowLabelSize(*args, **kwargs)
 
     def AutoSizeColLabelSize(*args, **kwargs):
-        """AutoSizeColLabelSize(int col)"""
+        """AutoSizeColLabelSize(self, int col)"""
         return _grid.Grid_AutoSizeColLabelSize(*args, **kwargs)
 
     def SetColMinimalWidth(*args, **kwargs):
-        """SetColMinimalWidth(int col, int width)"""
+        """SetColMinimalWidth(self, int col, int width)"""
         return _grid.Grid_SetColMinimalWidth(*args, **kwargs)
 
     def SetRowMinimalHeight(*args, **kwargs):
-        """SetRowMinimalHeight(int row, int width)"""
+        """SetRowMinimalHeight(self, int row, int width)"""
         return _grid.Grid_SetRowMinimalHeight(*args, **kwargs)
 
     def SetColMinimalAcceptableWidth(*args, **kwargs):
-        """SetColMinimalAcceptableWidth(int width)"""
+        """SetColMinimalAcceptableWidth(self, int width)"""
         return _grid.Grid_SetColMinimalAcceptableWidth(*args, **kwargs)
 
     def SetRowMinimalAcceptableHeight(*args, **kwargs):
-        """SetRowMinimalAcceptableHeight(int width)"""
+        """SetRowMinimalAcceptableHeight(self, int width)"""
         return _grid.Grid_SetRowMinimalAcceptableHeight(*args, **kwargs)
 
     def GetColMinimalAcceptableWidth(*args, **kwargs):
-        """GetColMinimalAcceptableWidth() -> int"""
+        """GetColMinimalAcceptableWidth(self) -> int"""
         return _grid.Grid_GetColMinimalAcceptableWidth(*args, **kwargs)
 
     def GetRowMinimalAcceptableHeight(*args, **kwargs):
-        """GetRowMinimalAcceptableHeight() -> int"""
+        """GetRowMinimalAcceptableHeight(self) -> int"""
         return _grid.Grid_GetRowMinimalAcceptableHeight(*args, **kwargs)
 
     def SetDefaultCellBackgroundColour(*args, **kwargs):
-        """SetDefaultCellBackgroundColour(Colour ??)"""
+        """SetDefaultCellBackgroundColour(self, Colour ??)"""
         return _grid.Grid_SetDefaultCellBackgroundColour(*args, **kwargs)
 
     def SetCellBackgroundColour(*args, **kwargs):
-        """SetCellBackgroundColour(int row, int col, Colour ??)"""
+        """SetCellBackgroundColour(self, int row, int col, Colour ??)"""
         return _grid.Grid_SetCellBackgroundColour(*args, **kwargs)
 
     def SetDefaultCellTextColour(*args, **kwargs):
-        """SetDefaultCellTextColour(Colour ??)"""
+        """SetDefaultCellTextColour(self, Colour ??)"""
         return _grid.Grid_SetDefaultCellTextColour(*args, **kwargs)
 
     def SetCellTextColour(*args, **kwargs):
-        """SetCellTextColour(int row, int col, Colour ??)"""
+        """SetCellTextColour(self, int row, int col, Colour ??)"""
         return _grid.Grid_SetCellTextColour(*args, **kwargs)
 
     def SetDefaultCellFont(*args, **kwargs):
-        """SetDefaultCellFont(Font ??)"""
+        """SetDefaultCellFont(self, Font ??)"""
         return _grid.Grid_SetDefaultCellFont(*args, **kwargs)
 
     def SetCellFont(*args, **kwargs):
-        """SetCellFont(int row, int col, Font ??)"""
+        """SetCellFont(self, int row, int col, Font ??)"""
         return _grid.Grid_SetCellFont(*args, **kwargs)
 
     def SetDefaultCellAlignment(*args, **kwargs):
-        """SetDefaultCellAlignment(int horiz, int vert)"""
+        """SetDefaultCellAlignment(self, int horiz, int vert)"""
         return _grid.Grid_SetDefaultCellAlignment(*args, **kwargs)
 
     def SetCellAlignment(*args, **kwargs):
-        """SetCellAlignment(int row, int col, int horiz, int vert)"""
+        """SetCellAlignment(self, int row, int col, int horiz, int vert)"""
         return _grid.Grid_SetCellAlignment(*args, **kwargs)
 
     def SetDefaultCellOverflow(*args, **kwargs):
-        """SetDefaultCellOverflow(bool allow)"""
+        """SetDefaultCellOverflow(self, bool allow)"""
         return _grid.Grid_SetDefaultCellOverflow(*args, **kwargs)
 
     def SetCellOverflow(*args, **kwargs):
-        """SetCellOverflow(int row, int col, bool allow)"""
+        """SetCellOverflow(self, int row, int col, bool allow)"""
         return _grid.Grid_SetCellOverflow(*args, **kwargs)
 
     def SetCellSize(*args, **kwargs):
-        """SetCellSize(int row, int col, int num_rows, int num_cols)"""
+        """SetCellSize(self, int row, int col, int num_rows, int num_cols)"""
         return _grid.Grid_SetCellSize(*args, **kwargs)
 
     def SetDefaultRenderer(*args, **kwargs):
-        """SetDefaultRenderer(GridCellRenderer renderer)"""
+        """SetDefaultRenderer(self, GridCellRenderer renderer)"""
         return _grid.Grid_SetDefaultRenderer(*args, **kwargs)
 
     def SetCellRenderer(*args, **kwargs):
-        """SetCellRenderer(int row, int col, GridCellRenderer renderer)"""
+        """SetCellRenderer(self, int row, int col, GridCellRenderer renderer)"""
         return _grid.Grid_SetCellRenderer(*args, **kwargs)
 
     def GetDefaultRenderer(*args, **kwargs):
-        """GetDefaultRenderer() -> GridCellRenderer"""
+        """GetDefaultRenderer(self) -> GridCellRenderer"""
         return _grid.Grid_GetDefaultRenderer(*args, **kwargs)
 
     def GetCellRenderer(*args, **kwargs):
-        """GetCellRenderer(int row, int col) -> GridCellRenderer"""
+        """GetCellRenderer(self, int row, int col) -> GridCellRenderer"""
         return _grid.Grid_GetCellRenderer(*args, **kwargs)
 
     def SetDefaultEditor(*args, **kwargs):
-        """SetDefaultEditor(GridCellEditor editor)"""
+        """SetDefaultEditor(self, GridCellEditor editor)"""
         return _grid.Grid_SetDefaultEditor(*args, **kwargs)
 
     def SetCellEditor(*args, **kwargs):
-        """SetCellEditor(int row, int col, GridCellEditor editor)"""
+        """SetCellEditor(self, int row, int col, GridCellEditor editor)"""
         return _grid.Grid_SetCellEditor(*args, **kwargs)
 
     def GetDefaultEditor(*args, **kwargs):
-        """GetDefaultEditor() -> GridCellEditor"""
+        """GetDefaultEditor(self) -> GridCellEditor"""
         return _grid.Grid_GetDefaultEditor(*args, **kwargs)
 
     def GetCellEditor(*args, **kwargs):
-        """GetCellEditor(int row, int col) -> GridCellEditor"""
+        """GetCellEditor(self, int row, int col) -> GridCellEditor"""
         return _grid.Grid_GetCellEditor(*args, **kwargs)
 
     def GetCellValue(*args, **kwargs):
-        """GetCellValue(int row, int col) -> String"""
+        """GetCellValue(self, int row, int col) -> String"""
         return _grid.Grid_GetCellValue(*args, **kwargs)
 
     def SetCellValue(*args, **kwargs):
-        """SetCellValue(int row, int col, String s)"""
+        """SetCellValue(self, int row, int col, String s)"""
         return _grid.Grid_SetCellValue(*args, **kwargs)
 
     def IsReadOnly(*args, **kwargs):
-        """IsReadOnly(int row, int col) -> bool"""
+        """IsReadOnly(self, int row, int col) -> bool"""
         return _grid.Grid_IsReadOnly(*args, **kwargs)
 
     def SetReadOnly(*args, **kwargs):
-        """SetReadOnly(int row, int col, bool isReadOnly=True)"""
+        """SetReadOnly(self, int row, int col, bool isReadOnly=True)"""
         return _grid.Grid_SetReadOnly(*args, **kwargs)
 
     def SelectRow(*args, **kwargs):
-        """SelectRow(int row, bool addToSelected=False)"""
+        """SelectRow(self, int row, bool addToSelected=False)"""
         return _grid.Grid_SelectRow(*args, **kwargs)
 
     def SelectCol(*args, **kwargs):
-        """SelectCol(int col, bool addToSelected=False)"""
+        """SelectCol(self, int col, bool addToSelected=False)"""
         return _grid.Grid_SelectCol(*args, **kwargs)
 
     def SelectBlock(*args, **kwargs):
         """
-        SelectBlock(int topRow, int leftCol, int bottomRow, int rightCol, 
+        SelectBlock(self, int topRow, int leftCol, int bottomRow, int rightCol, 
             bool addToSelected=False)
         """
         return _grid.Grid_SelectBlock(*args, **kwargs)
 
     def SelectAll(*args, **kwargs):
-        """SelectAll()"""
+        """SelectAll(self)"""
         return _grid.Grid_SelectAll(*args, **kwargs)
 
     def IsSelection(*args, **kwargs):
-        """IsSelection() -> bool"""
+        """IsSelection(self) -> bool"""
         return _grid.Grid_IsSelection(*args, **kwargs)
 
     def ClearSelection(*args, **kwargs):
-        """ClearSelection()"""
+        """ClearSelection(self)"""
         return _grid.Grid_ClearSelection(*args, **kwargs)
 
     def IsInSelection(*args, **kwargs):
-        """IsInSelection(int row, int col) -> bool"""
+        """IsInSelection(self, int row, int col) -> bool"""
         return _grid.Grid_IsInSelection(*args, **kwargs)
 
     def GetSelectedCells(*args, **kwargs):
-        """GetSelectedCells() -> wxGridCellCoordsArray"""
+        """GetSelectedCells(self) -> wxGridCellCoordsArray"""
         return _grid.Grid_GetSelectedCells(*args, **kwargs)
 
     def GetSelectionBlockTopLeft(*args, **kwargs):
-        """GetSelectionBlockTopLeft() -> wxGridCellCoordsArray"""
+        """GetSelectionBlockTopLeft(self) -> wxGridCellCoordsArray"""
         return _grid.Grid_GetSelectionBlockTopLeft(*args, **kwargs)
 
     def GetSelectionBlockBottomRight(*args, **kwargs):
-        """GetSelectionBlockBottomRight() -> wxGridCellCoordsArray"""
+        """GetSelectionBlockBottomRight(self) -> wxGridCellCoordsArray"""
         return _grid.Grid_GetSelectionBlockBottomRight(*args, **kwargs)
 
     def GetSelectedRows(*args, **kwargs):
-        """GetSelectedRows() -> wxArrayInt"""
+        """GetSelectedRows(self) -> wxArrayInt"""
         return _grid.Grid_GetSelectedRows(*args, **kwargs)
 
     def GetSelectedCols(*args, **kwargs):
-        """GetSelectedCols() -> wxArrayInt"""
+        """GetSelectedCols(self) -> wxArrayInt"""
         return _grid.Grid_GetSelectedCols(*args, **kwargs)
 
     def DeselectRow(*args, **kwargs):
-        """DeselectRow(int row)"""
+        """DeselectRow(self, int row)"""
         return _grid.Grid_DeselectRow(*args, **kwargs)
 
     def DeselectCol(*args, **kwargs):
-        """DeselectCol(int col)"""
+        """DeselectCol(self, int col)"""
         return _grid.Grid_DeselectCol(*args, **kwargs)
 
     def DeselectCell(*args, **kwargs):
-        """DeselectCell(int row, int col)"""
+        """DeselectCell(self, int row, int col)"""
         return _grid.Grid_DeselectCell(*args, **kwargs)
 
     def BlockToDeviceRect(*args, **kwargs):
-        """BlockToDeviceRect(GridCellCoords topLeft, GridCellCoords bottomRight) -> Rect"""
+        """BlockToDeviceRect(self, GridCellCoords topLeft, GridCellCoords bottomRight) -> Rect"""
         return _grid.Grid_BlockToDeviceRect(*args, **kwargs)
 
     def GetSelectionBackground(*args, **kwargs):
-        """GetSelectionBackground() -> Colour"""
+        """GetSelectionBackground(self) -> Colour"""
         return _grid.Grid_GetSelectionBackground(*args, **kwargs)
 
     def GetSelectionForeground(*args, **kwargs):
-        """GetSelectionForeground() -> Colour"""
+        """GetSelectionForeground(self) -> Colour"""
         return _grid.Grid_GetSelectionForeground(*args, **kwargs)
 
     def SetSelectionBackground(*args, **kwargs):
-        """SetSelectionBackground(Colour c)"""
+        """SetSelectionBackground(self, Colour c)"""
         return _grid.Grid_SetSelectionBackground(*args, **kwargs)
 
     def SetSelectionForeground(*args, **kwargs):
-        """SetSelectionForeground(Colour c)"""
+        """SetSelectionForeground(self, Colour c)"""
         return _grid.Grid_SetSelectionForeground(*args, **kwargs)
 
     def RegisterDataType(*args, **kwargs):
-        """RegisterDataType(String typeName, GridCellRenderer renderer, GridCellEditor editor)"""
+        """RegisterDataType(self, String typeName, GridCellRenderer renderer, GridCellEditor editor)"""
         return _grid.Grid_RegisterDataType(*args, **kwargs)
 
     def GetDefaultEditorForCell(*args, **kwargs):
-        """GetDefaultEditorForCell(int row, int col) -> GridCellEditor"""
+        """GetDefaultEditorForCell(self, int row, int col) -> GridCellEditor"""
         return _grid.Grid_GetDefaultEditorForCell(*args, **kwargs)
 
     def GetDefaultRendererForCell(*args, **kwargs):
-        """GetDefaultRendererForCell(int row, int col) -> GridCellRenderer"""
+        """GetDefaultRendererForCell(self, int row, int col) -> GridCellRenderer"""
         return _grid.Grid_GetDefaultRendererForCell(*args, **kwargs)
 
     def GetDefaultEditorForType(*args, **kwargs):
-        """GetDefaultEditorForType(String typeName) -> GridCellEditor"""
+        """GetDefaultEditorForType(self, String typeName) -> GridCellEditor"""
         return _grid.Grid_GetDefaultEditorForType(*args, **kwargs)
 
     def GetDefaultRendererForType(*args, **kwargs):
-        """GetDefaultRendererForType(String typeName) -> GridCellRenderer"""
+        """GetDefaultRendererForType(self, String typeName) -> GridCellRenderer"""
         return _grid.Grid_GetDefaultRendererForType(*args, **kwargs)
 
     def SetMargins(*args, **kwargs):
-        """SetMargins(int extraWidth, int extraHeight)"""
+        """SetMargins(self, int extraWidth, int extraHeight)"""
         return _grid.Grid_SetMargins(*args, **kwargs)
 
     def GetGridWindow(*args, **kwargs):
-        """GetGridWindow() -> Window"""
+        """GetGridWindow(self) -> Window"""
         return _grid.Grid_GetGridWindow(*args, **kwargs)
 
     def GetGridRowLabelWindow(*args, **kwargs):
-        """GetGridRowLabelWindow() -> Window"""
+        """GetGridRowLabelWindow(self) -> Window"""
         return _grid.Grid_GetGridRowLabelWindow(*args, **kwargs)
 
     def GetGridColLabelWindow(*args, **kwargs):
-        """GetGridColLabelWindow() -> Window"""
+        """GetGridColLabelWindow(self) -> Window"""
         return _grid.Grid_GetGridColLabelWindow(*args, **kwargs)
 
     def GetGridCornerLabelWindow(*args, **kwargs):
-        """GetGridCornerLabelWindow() -> Window"""
+        """GetGridCornerLabelWindow(self) -> Window"""
         return _grid.Grid_GetGridCornerLabelWindow(*args, **kwargs)
 
 
@@ -1995,7 +1996,7 @@ class GridEvent(core.NotifyEvent):
         return "<%s.%s; proxy of C++ wxGridEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(int id, wxEventType type, Grid obj, int row=-1, int col=-1, 
+        __init__(self, int id, wxEventType type, Grid obj, int row=-1, int col=-1, 
             int x=-1, int y=-1, bool sel=True, bool control=False, 
             bool shift=False, bool alt=False, 
             bool meta=False) -> GridEvent
@@ -2005,35 +2006,35 @@ class GridEvent(core.NotifyEvent):
         self.thisown = 1
         del newobj.thisown
     def GetRow(*args, **kwargs):
-        """GetRow() -> int"""
+        """GetRow(self) -> int"""
         return _grid.GridEvent_GetRow(*args, **kwargs)
 
     def GetCol(*args, **kwargs):
-        """GetCol() -> int"""
+        """GetCol(self) -> int"""
         return _grid.GridEvent_GetCol(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition() -> Point"""
+        """GetPosition(self) -> Point"""
         return _grid.GridEvent_GetPosition(*args, **kwargs)
 
     def Selecting(*args, **kwargs):
-        """Selecting() -> bool"""
+        """Selecting(self) -> bool"""
         return _grid.GridEvent_Selecting(*args, **kwargs)
 
     def ControlDown(*args, **kwargs):
-        """ControlDown() -> bool"""
+        """ControlDown(self) -> bool"""
         return _grid.GridEvent_ControlDown(*args, **kwargs)
 
     def MetaDown(*args, **kwargs):
-        """MetaDown() -> bool"""
+        """MetaDown(self) -> bool"""
         return _grid.GridEvent_MetaDown(*args, **kwargs)
 
     def ShiftDown(*args, **kwargs):
-        """ShiftDown() -> bool"""
+        """ShiftDown(self) -> bool"""
         return _grid.GridEvent_ShiftDown(*args, **kwargs)
 
     def AltDown(*args, **kwargs):
-        """AltDown() -> bool"""
+        """AltDown(self) -> bool"""
         return _grid.GridEvent_AltDown(*args, **kwargs)
 
 
@@ -2049,7 +2050,7 @@ class GridSizeEvent(core.NotifyEvent):
         return "<%s.%s; proxy of C++ wxGridSizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(int id, wxEventType type, Grid obj, int rowOrCol=-1, 
+        __init__(self, int id, wxEventType type, Grid obj, int rowOrCol=-1, 
             int x=-1, int y=-1, bool control=False, bool shift=False, 
             bool alt=False, bool meta=False) -> GridSizeEvent
         """
@@ -2058,27 +2059,27 @@ class GridSizeEvent(core.NotifyEvent):
         self.thisown = 1
         del newobj.thisown
     def GetRowOrCol(*args, **kwargs):
-        """GetRowOrCol() -> int"""
+        """GetRowOrCol(self) -> int"""
         return _grid.GridSizeEvent_GetRowOrCol(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition() -> Point"""
+        """GetPosition(self) -> Point"""
         return _grid.GridSizeEvent_GetPosition(*args, **kwargs)
 
     def ControlDown(*args, **kwargs):
-        """ControlDown() -> bool"""
+        """ControlDown(self) -> bool"""
         return _grid.GridSizeEvent_ControlDown(*args, **kwargs)
 
     def MetaDown(*args, **kwargs):
-        """MetaDown() -> bool"""
+        """MetaDown(self) -> bool"""
         return _grid.GridSizeEvent_MetaDown(*args, **kwargs)
 
     def ShiftDown(*args, **kwargs):
-        """ShiftDown() -> bool"""
+        """ShiftDown(self) -> bool"""
         return _grid.GridSizeEvent_ShiftDown(*args, **kwargs)
 
     def AltDown(*args, **kwargs):
-        """AltDown() -> bool"""
+        """AltDown(self) -> bool"""
         return _grid.GridSizeEvent_AltDown(*args, **kwargs)
 
 
@@ -2094,7 +2095,7 @@ class GridRangeSelectEvent(core.NotifyEvent):
         return "<%s.%s; proxy of C++ wxGridRangeSelectEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(int id, wxEventType type, Grid obj, GridCellCoords topLeft, 
+        __init__(self, int id, wxEventType type, Grid obj, GridCellCoords topLeft, 
             GridCellCoords bottomRight, bool sel=True, 
             bool control=False, bool shift=False, 
             bool alt=False, bool meta=False) -> GridRangeSelectEvent
@@ -2104,47 +2105,47 @@ class GridRangeSelectEvent(core.NotifyEvent):
         self.thisown = 1
         del newobj.thisown
     def GetTopLeftCoords(*args, **kwargs):
-        """GetTopLeftCoords() -> GridCellCoords"""
+        """GetTopLeftCoords(self) -> GridCellCoords"""
         return _grid.GridRangeSelectEvent_GetTopLeftCoords(*args, **kwargs)
 
     def GetBottomRightCoords(*args, **kwargs):
-        """GetBottomRightCoords() -> GridCellCoords"""
+        """GetBottomRightCoords(self) -> GridCellCoords"""
         return _grid.GridRangeSelectEvent_GetBottomRightCoords(*args, **kwargs)
 
     def GetTopRow(*args, **kwargs):
-        """GetTopRow() -> int"""
+        """GetTopRow(self) -> int"""
         return _grid.GridRangeSelectEvent_GetTopRow(*args, **kwargs)
 
     def GetBottomRow(*args, **kwargs):
-        """GetBottomRow() -> int"""
+        """GetBottomRow(self) -> int"""
         return _grid.GridRangeSelectEvent_GetBottomRow(*args, **kwargs)
 
     def GetLeftCol(*args, **kwargs):
-        """GetLeftCol() -> int"""
+        """GetLeftCol(self) -> int"""
         return _grid.GridRangeSelectEvent_GetLeftCol(*args, **kwargs)
 
     def GetRightCol(*args, **kwargs):
-        """GetRightCol() -> int"""
+        """GetRightCol(self) -> int"""
         return _grid.GridRangeSelectEvent_GetRightCol(*args, **kwargs)
 
     def Selecting(*args, **kwargs):
-        """Selecting() -> bool"""
+        """Selecting(self) -> bool"""
         return _grid.GridRangeSelectEvent_Selecting(*args, **kwargs)
 
     def ControlDown(*args, **kwargs):
-        """ControlDown() -> bool"""
+        """ControlDown(self) -> bool"""
         return _grid.GridRangeSelectEvent_ControlDown(*args, **kwargs)
 
     def MetaDown(*args, **kwargs):
-        """MetaDown() -> bool"""
+        """MetaDown(self) -> bool"""
         return _grid.GridRangeSelectEvent_MetaDown(*args, **kwargs)
 
     def ShiftDown(*args, **kwargs):
-        """ShiftDown() -> bool"""
+        """ShiftDown(self) -> bool"""
         return _grid.GridRangeSelectEvent_ShiftDown(*args, **kwargs)
 
     def AltDown(*args, **kwargs):
-        """AltDown() -> bool"""
+        """AltDown(self) -> bool"""
         return _grid.GridRangeSelectEvent_AltDown(*args, **kwargs)
 
 
@@ -2160,7 +2161,7 @@ class GridEditorCreatedEvent(core.CommandEvent):
         return "<%s.%s; proxy of C++ wxGridEditorCreatedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(int id, wxEventType type, Object obj, int row, int col, 
+        __init__(self, int id, wxEventType type, Object obj, int row, int col, 
             Control ctrl) -> GridEditorCreatedEvent
         """
         newobj = _grid.new_GridEditorCreatedEvent(*args, **kwargs)
@@ -2168,27 +2169,27 @@ class GridEditorCreatedEvent(core.CommandEvent):
         self.thisown = 1
         del newobj.thisown
     def GetRow(*args, **kwargs):
-        """GetRow() -> int"""
+        """GetRow(self) -> int"""
         return _grid.GridEditorCreatedEvent_GetRow(*args, **kwargs)
 
     def GetCol(*args, **kwargs):
-        """GetCol() -> int"""
+        """GetCol(self) -> int"""
         return _grid.GridEditorCreatedEvent_GetCol(*args, **kwargs)
 
     def GetControl(*args, **kwargs):
-        """GetControl() -> Control"""
+        """GetControl(self) -> Control"""
         return _grid.GridEditorCreatedEvent_GetControl(*args, **kwargs)
 
     def SetRow(*args, **kwargs):
-        """SetRow(int row)"""
+        """SetRow(self, int row)"""
         return _grid.GridEditorCreatedEvent_SetRow(*args, **kwargs)
 
     def SetCol(*args, **kwargs):
-        """SetCol(int col)"""
+        """SetCol(self, int col)"""
         return _grid.GridEditorCreatedEvent_SetCol(*args, **kwargs)
 
     def SetControl(*args, **kwargs):
-        """SetControl(Control ctrl)"""
+        """SetControl(self, Control ctrl)"""
         return _grid.GridEditorCreatedEvent_SetControl(*args, **kwargs)
 
 

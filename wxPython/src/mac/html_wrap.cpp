@@ -858,7 +858,7 @@ wxHtmlBookRecord *wxHtmlContentsItem_GetBook(wxHtmlContentsItem *self){ return s
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_HtmlWindowNameStr_set(PyObject *) {
+static int _wrap_HtmlWindowNameStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable HtmlWindowNameStr is read-only.");
     return 1;
 }
@@ -878,7 +878,7 @@ static PyObject *_wrap_HtmlWindowNameStr_get() {
 }
 
 
-static int _wrap_HtmlPrintoutTitleStr_set(PyObject *) {
+static int _wrap_HtmlPrintoutTitleStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable HtmlPrintoutTitleStr is read-only.");
     return 1;
 }
@@ -898,7 +898,7 @@ static PyObject *_wrap_HtmlPrintoutTitleStr_get() {
 }
 
 
-static int _wrap_HtmlPrintingTitleStr_set(PyObject *) {
+static int _wrap_HtmlPrintingTitleStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable HtmlPrintingTitleStr is read-only.");
     return 1;
 }
@@ -918,7 +918,7 @@ static PyObject *_wrap_HtmlPrintingTitleStr_get() {
 }
 
 
-static PyObject *_wrap_new_HtmlLinkInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlLinkInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxString const &arg2_defvalue = wxPyEmptyString ;
@@ -975,7 +975,7 @@ static PyObject *_wrap_new_HtmlLinkInfo(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlLinkInfo_GetHref(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlLinkInfo_GetHref(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlLinkInfo *arg1 = (wxHtmlLinkInfo *) 0 ;
     wxString result;
@@ -1007,7 +1007,7 @@ static PyObject *_wrap_HtmlLinkInfo_GetHref(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlLinkInfo_GetTarget(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlLinkInfo_GetTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlLinkInfo *arg1 = (wxHtmlLinkInfo *) 0 ;
     wxString result;
@@ -1039,7 +1039,7 @@ static PyObject *_wrap_HtmlLinkInfo_GetTarget(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlLinkInfo_GetEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlLinkInfo_GetEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlLinkInfo *arg1 = (wxHtmlLinkInfo *) 0 ;
     wxMouseEvent *result;
@@ -1067,7 +1067,7 @@ static PyObject *_wrap_HtmlLinkInfo_GetEvent(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlLinkInfo_GetHtmlCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlLinkInfo_GetHtmlCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlLinkInfo *arg1 = (wxHtmlLinkInfo *) 0 ;
     wxHtmlCell *result;
@@ -1093,7 +1093,7 @@ static PyObject *_wrap_HtmlLinkInfo_GetHtmlCell(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlLinkInfo_SetEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlLinkInfo_SetEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlLinkInfo *arg1 = (wxHtmlLinkInfo *) 0 ;
     wxMouseEvent *arg2 = (wxMouseEvent *) 0 ;
@@ -1122,7 +1122,7 @@ static PyObject *_wrap_HtmlLinkInfo_SetEvent(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlLinkInfo_SetHtmlCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlLinkInfo_SetHtmlCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlLinkInfo *arg1 = (wxHtmlLinkInfo *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
@@ -1151,14 +1151,14 @@ static PyObject *_wrap_HtmlLinkInfo_SetHtmlCell(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * HtmlLinkInfo_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlLinkInfo_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlLinkInfo, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_HtmlTag_GetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTag_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     wxString result;
@@ -1190,7 +1190,7 @@ static PyObject *_wrap_HtmlTag_GetName(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_HtmlTag_HasParam(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTag_HasParam(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     wxString *arg2 = 0 ;
@@ -1234,7 +1234,7 @@ static PyObject *_wrap_HtmlTag_HasParam(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlTag_GetParam(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTag_GetParam(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     wxString *arg2 = 0 ;
@@ -1288,7 +1288,7 @@ static PyObject *_wrap_HtmlTag_GetParam(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlTag_GetAllParams(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTag_GetAllParams(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     wxString result;
@@ -1320,7 +1320,7 @@ static PyObject *_wrap_HtmlTag_GetAllParams(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlTag_HasEnding(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTag_HasEnding(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     bool result;
@@ -1348,7 +1348,7 @@ static PyObject *_wrap_HtmlTag_HasEnding(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlTag_GetBeginPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTag_GetBeginPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     int result;
@@ -1374,7 +1374,7 @@ static PyObject *_wrap_HtmlTag_GetBeginPos(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_HtmlTag_GetEndPos1(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTag_GetEndPos1(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     int result;
@@ -1400,7 +1400,7 @@ static PyObject *_wrap_HtmlTag_GetEndPos1(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlTag_GetEndPos2(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTag_GetEndPos2(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlTag *arg1 = (wxHtmlTag *) 0 ;
     int result;
@@ -1426,14 +1426,14 @@ static PyObject *_wrap_HtmlTag_GetEndPos2(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject * HtmlTag_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlTag_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlTag, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_HtmlParser_SetFS(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_SetFS(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxFileSystem *arg2 = (wxFileSystem *) 0 ;
@@ -1462,7 +1462,7 @@ static PyObject *_wrap_HtmlParser_SetFS(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlParser_GetFS(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_GetFS(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxFileSystem *result;
@@ -1490,7 +1490,7 @@ static PyObject *_wrap_HtmlParser_GetFS(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlParser_Parse(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_Parse(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxString *arg2 = 0 ;
@@ -1534,7 +1534,7 @@ static PyObject *_wrap_HtmlParser_Parse(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlParser_InitParser(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_InitParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxString *arg2 = 0 ;
@@ -1575,7 +1575,7 @@ static PyObject *_wrap_HtmlParser_InitParser(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlParser_DoneParser(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_DoneParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1600,7 +1600,7 @@ static PyObject *_wrap_HtmlParser_DoneParser(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlParser_DoParsing(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_DoParsing(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     int arg2 ;
@@ -1633,7 +1633,7 @@ static PyObject *_wrap_HtmlParser_DoParsing(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlParser_StopParsing(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_StopParsing(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1658,7 +1658,7 @@ static PyObject *_wrap_HtmlParser_StopParsing(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlParser_AddTagHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_AddTagHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxHtmlTagHandler *arg2 = (wxHtmlTagHandler *) 0 ;
@@ -1687,7 +1687,7 @@ static PyObject *_wrap_HtmlParser_AddTagHandler(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlParser_GetSource(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_GetSource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxString *result;
@@ -1719,7 +1719,7 @@ static PyObject *_wrap_HtmlParser_GetSource(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlParser_PushTagHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_PushTagHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     wxHtmlTagHandler *arg2 = (wxHtmlTagHandler *) 0 ;
@@ -1756,7 +1756,7 @@ static PyObject *_wrap_HtmlParser_PushTagHandler(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlParser_PopTagHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlParser_PopTagHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlParser *arg1 = (wxHtmlParser *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1781,14 +1781,14 @@ static PyObject *_wrap_HtmlParser_PopTagHandler(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * HtmlParser_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlParser_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlParser, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlWinParser(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlWinParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) NULL ;
     wxHtmlWinParser *result;
@@ -1816,7 +1816,7 @@ static PyObject *_wrap_new_HtmlWinParser(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetDC(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxDC *arg2 = (wxDC *) 0 ;
@@ -1845,7 +1845,7 @@ static PyObject *_wrap_HtmlWinParser_SetDC(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetDC(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxDC *result;
@@ -1873,7 +1873,7 @@ static PyObject *_wrap_HtmlWinParser_GetDC(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetCharHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetCharHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int result;
@@ -1899,7 +1899,7 @@ static PyObject *_wrap_HtmlWinParser_GetCharHeight(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetCharWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetCharWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int result;
@@ -1925,7 +1925,7 @@ static PyObject *_wrap_HtmlWinParser_GetCharWidth(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxPyHtmlWindow *result;
@@ -1953,7 +1953,7 @@ static PyObject *_wrap_HtmlWinParser_GetWindow(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetFonts(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetFonts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxString arg2 ;
@@ -1999,7 +1999,7 @@ static PyObject *_wrap_HtmlWinParser_SetFonts(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetContainer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetContainer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxHtmlContainerCell *result;
@@ -2025,7 +2025,7 @@ static PyObject *_wrap_HtmlWinParser_GetContainer(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWinParser_OpenContainer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_OpenContainer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxHtmlContainerCell *result;
@@ -2051,7 +2051,7 @@ static PyObject *_wrap_HtmlWinParser_OpenContainer(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetContainer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetContainer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxHtmlContainerCell *arg2 = (wxHtmlContainerCell *) 0 ;
@@ -2081,7 +2081,7 @@ static PyObject *_wrap_HtmlWinParser_SetContainer(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWinParser_CloseContainer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_CloseContainer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxHtmlContainerCell *result;
@@ -2107,7 +2107,7 @@ static PyObject *_wrap_HtmlWinParser_CloseContainer(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetFontSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetFontSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int result;
@@ -2133,7 +2133,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontSize(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetFontSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetFontSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
@@ -2162,7 +2162,7 @@ static PyObject *_wrap_HtmlWinParser_SetFontSize(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetFontBold(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetFontBold(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int result;
@@ -2188,7 +2188,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontBold(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetFontBold(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetFontBold(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
@@ -2217,7 +2217,7 @@ static PyObject *_wrap_HtmlWinParser_SetFontBold(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetFontItalic(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetFontItalic(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int result;
@@ -2243,7 +2243,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontItalic(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetFontItalic(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetFontItalic(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
@@ -2272,7 +2272,7 @@ static PyObject *_wrap_HtmlWinParser_SetFontItalic(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetFontUnderlined(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetFontUnderlined(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int result;
@@ -2298,7 +2298,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontUnderlined(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetFontUnderlined(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetFontUnderlined(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
@@ -2327,7 +2327,7 @@ static PyObject *_wrap_HtmlWinParser_SetFontUnderlined(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetFontFixed(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetFontFixed(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int result;
@@ -2353,7 +2353,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontFixed(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetFontFixed(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetFontFixed(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
@@ -2382,7 +2382,7 @@ static PyObject *_wrap_HtmlWinParser_SetFontFixed(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetAlign(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetAlign(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int result;
@@ -2408,7 +2408,7 @@ static PyObject *_wrap_HtmlWinParser_GetAlign(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetAlign(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetAlign(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
@@ -2437,7 +2437,7 @@ static PyObject *_wrap_HtmlWinParser_SetAlign(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetLinkColor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetLinkColor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxColour result;
@@ -2467,7 +2467,7 @@ static PyObject *_wrap_HtmlWinParser_GetLinkColor(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetLinkColor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetLinkColor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxColour *arg2 = 0 ;
@@ -2499,7 +2499,7 @@ static PyObject *_wrap_HtmlWinParser_SetLinkColor(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetActualColor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetActualColor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxColour result;
@@ -2529,7 +2529,7 @@ static PyObject *_wrap_HtmlWinParser_GetActualColor(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetActualColor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetActualColor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxColour *arg2 = 0 ;
@@ -2561,7 +2561,7 @@ static PyObject *_wrap_HtmlWinParser_SetActualColor(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlWinParser_SetLink(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_SetLink(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxString *arg2 = 0 ;
@@ -2602,7 +2602,7 @@ static PyObject *_wrap_HtmlWinParser_SetLink(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlWinParser_CreateCurrentFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_CreateCurrentFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     wxFont *result;
@@ -2628,7 +2628,7 @@ static PyObject *_wrap_HtmlWinParser_CreateCurrentFont(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_HtmlWinParser_GetLink(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_GetLink(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     SwigValueWrapper< wxHtmlLinkInfo > result;
@@ -2658,14 +2658,14 @@ static PyObject *_wrap_HtmlWinParser_GetLink(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject * HtmlWinParser_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlWinParser_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlWinParser, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlTagHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlTagHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlTagHandler *result;
     char *kwnames[] = {
@@ -2687,7 +2687,7 @@ static PyObject *_wrap_new_HtmlTagHandler(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlTagHandler__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTagHandler__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlTagHandler *arg1 = (wxPyHtmlTagHandler *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -2718,7 +2718,7 @@ static PyObject *_wrap_HtmlTagHandler__setCallbackInfo(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_HtmlTagHandler_SetParser(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTagHandler_SetParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlTagHandler *arg1 = (wxPyHtmlTagHandler *) 0 ;
     wxHtmlParser *arg2 = (wxHtmlParser *) 0 ;
@@ -2747,7 +2747,7 @@ static PyObject *_wrap_HtmlTagHandler_SetParser(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlTagHandler_GetParser(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTagHandler_GetParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlTagHandler *arg1 = (wxPyHtmlTagHandler *) 0 ;
     wxHtmlParser *result;
@@ -2773,7 +2773,7 @@ static PyObject *_wrap_HtmlTagHandler_GetParser(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlTagHandler_ParseInner(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlTagHandler_ParseInner(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlTagHandler *arg1 = (wxPyHtmlTagHandler *) 0 ;
     wxHtmlTag *arg2 = 0 ;
@@ -2807,14 +2807,14 @@ static PyObject *_wrap_HtmlTagHandler_ParseInner(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject * HtmlTagHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlTagHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyHtmlTagHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlWinTagHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlWinTagHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWinTagHandler *result;
     char *kwnames[] = {
@@ -2836,7 +2836,7 @@ static PyObject *_wrap_new_HtmlWinTagHandler(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlWinTagHandler__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinTagHandler__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWinTagHandler *arg1 = (wxPyHtmlWinTagHandler *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -2867,7 +2867,7 @@ static PyObject *_wrap_HtmlWinTagHandler__setCallbackInfo(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlWinTagHandler_SetParser(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinTagHandler_SetParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWinTagHandler *arg1 = (wxPyHtmlWinTagHandler *) 0 ;
     wxHtmlParser *arg2 = (wxHtmlParser *) 0 ;
@@ -2896,7 +2896,7 @@ static PyObject *_wrap_HtmlWinTagHandler_SetParser(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlWinTagHandler_GetParser(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinTagHandler_GetParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWinTagHandler *arg1 = (wxPyHtmlWinTagHandler *) 0 ;
     wxHtmlWinParser *result;
@@ -2922,7 +2922,7 @@ static PyObject *_wrap_HtmlWinTagHandler_GetParser(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlWinTagHandler_ParseInner(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinTagHandler_ParseInner(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWinTagHandler *arg1 = (wxPyHtmlWinTagHandler *) 0 ;
     wxHtmlTag *arg2 = 0 ;
@@ -2956,14 +2956,14 @@ static PyObject *_wrap_HtmlWinTagHandler_ParseInner(PyObject *, PyObject *args, 
 }
 
 
-static PyObject * HtmlWinTagHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlWinTagHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyHtmlWinTagHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_HtmlWinParser_AddTagHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWinParser_AddTagHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     PyObject *arg1 = (PyObject *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2987,7 +2987,7 @@ static PyObject *_wrap_HtmlWinParser_AddTagHandler(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_new_HtmlSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *result;
     char *kwnames[] = {
@@ -3009,7 +3009,7 @@ static PyObject *_wrap_new_HtmlSelection(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_delete_HtmlSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_HtmlSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3034,7 +3034,7 @@ static PyObject *_wrap_delete_HtmlSelection(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlSelection_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3081,7 +3081,7 @@ static PyObject *_wrap_HtmlSelection_Set(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlSelection_SetCells(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_SetCells(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
@@ -3114,7 +3114,7 @@ static PyObject *_wrap_HtmlSelection_SetCells(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlSelection_GetFromCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_GetFromCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxHtmlCell *result;
@@ -3140,7 +3140,7 @@ static PyObject *_wrap_HtmlSelection_GetFromCell(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlSelection_GetToCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_GetToCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxHtmlCell *result;
@@ -3166,7 +3166,7 @@ static PyObject *_wrap_HtmlSelection_GetToCell(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlSelection_GetFromPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_GetFromPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxPoint *result;
@@ -3195,7 +3195,7 @@ static PyObject *_wrap_HtmlSelection_GetFromPos(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlSelection_GetToPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_GetToPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxPoint *result;
@@ -3224,7 +3224,7 @@ static PyObject *_wrap_HtmlSelection_GetToPos(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlSelection_GetFromPrivPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_GetFromPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxPoint *result;
@@ -3253,7 +3253,7 @@ static PyObject *_wrap_HtmlSelection_GetFromPrivPos(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlSelection_GetToPrivPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_GetToPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxPoint *result;
@@ -3282,7 +3282,7 @@ static PyObject *_wrap_HtmlSelection_GetToPrivPos(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlSelection_SetFromPrivPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_SetFromPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3314,7 +3314,7 @@ static PyObject *_wrap_HtmlSelection_SetFromPrivPos(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlSelection_SetToPrivPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_SetToPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3346,7 +3346,7 @@ static PyObject *_wrap_HtmlSelection_SetToPrivPos(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlSelection_ClearPrivPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_ClearPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3371,7 +3371,7 @@ static PyObject *_wrap_HtmlSelection_ClearPrivPos(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlSelection_IsEmpty(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSelection_IsEmpty(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSelection *arg1 = (wxHtmlSelection *) 0 ;
     bool result;
@@ -3399,14 +3399,14 @@ static PyObject *_wrap_HtmlSelection_IsEmpty(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject * HtmlSelection_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlSelection_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlSelection, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlRenderingState(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlRenderingState(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingState *result;
     char *kwnames[] = {
@@ -3428,7 +3428,7 @@ static PyObject *_wrap_new_HtmlRenderingState(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_delete_HtmlRenderingState(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_HtmlRenderingState(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingState *arg1 = (wxHtmlRenderingState *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3453,7 +3453,7 @@ static PyObject *_wrap_delete_HtmlRenderingState(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlRenderingState_SetSelectionState(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingState_SetSelectionState(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingState *arg1 = (wxHtmlRenderingState *) 0 ;
     int arg2 ;
@@ -3482,7 +3482,7 @@ static PyObject *_wrap_HtmlRenderingState_SetSelectionState(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_HtmlRenderingState_GetSelectionState(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingState_GetSelectionState(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingState *arg1 = (wxHtmlRenderingState *) 0 ;
     int result;
@@ -3508,7 +3508,7 @@ static PyObject *_wrap_HtmlRenderingState_GetSelectionState(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_HtmlRenderingState_SetFgColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingState_SetFgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingState *arg1 = (wxHtmlRenderingState *) 0 ;
     wxColour *arg2 = 0 ;
@@ -3540,7 +3540,7 @@ static PyObject *_wrap_HtmlRenderingState_SetFgColour(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_HtmlRenderingState_GetFgColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingState_GetFgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingState *arg1 = (wxHtmlRenderingState *) 0 ;
     wxColour *result;
@@ -3569,7 +3569,7 @@ static PyObject *_wrap_HtmlRenderingState_GetFgColour(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_HtmlRenderingState_SetBgColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingState_SetBgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingState *arg1 = (wxHtmlRenderingState *) 0 ;
     wxColour *arg2 = 0 ;
@@ -3601,7 +3601,7 @@ static PyObject *_wrap_HtmlRenderingState_SetBgColour(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_HtmlRenderingState_GetBgColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingState_GetBgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingState *arg1 = (wxHtmlRenderingState *) 0 ;
     wxColour *result;
@@ -3630,14 +3630,14 @@ static PyObject *_wrap_HtmlRenderingState_GetBgColour(PyObject *, PyObject *args
 }
 
 
-static PyObject * HtmlRenderingState_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlRenderingState_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlRenderingState, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_HtmlRenderingStyle_GetSelectedTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingStyle_GetSelectedTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingStyle *arg1 = (wxHtmlRenderingStyle *) 0 ;
     wxColour *arg2 = 0 ;
@@ -3674,7 +3674,7 @@ static PyObject *_wrap_HtmlRenderingStyle_GetSelectedTextColour(PyObject *, PyOb
 }
 
 
-static PyObject *_wrap_HtmlRenderingStyle_GetSelectedTextBgColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingStyle_GetSelectedTextBgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingStyle *arg1 = (wxHtmlRenderingStyle *) 0 ;
     wxColour *arg2 = 0 ;
@@ -3711,14 +3711,14 @@ static PyObject *_wrap_HtmlRenderingStyle_GetSelectedTextBgColour(PyObject *, Py
 }
 
 
-static PyObject * HtmlRenderingStyle_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlRenderingStyle_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlRenderingStyle, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_DefaultHtmlRenderingStyle_GetSelectedTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DefaultHtmlRenderingStyle_GetSelectedTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDefaultHtmlRenderingStyle *arg1 = (wxDefaultHtmlRenderingStyle *) 0 ;
     wxColour *arg2 = 0 ;
@@ -3755,7 +3755,7 @@ static PyObject *_wrap_DefaultHtmlRenderingStyle_GetSelectedTextColour(PyObject 
 }
 
 
-static PyObject *_wrap_DefaultHtmlRenderingStyle_GetSelectedTextBgColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DefaultHtmlRenderingStyle_GetSelectedTextBgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDefaultHtmlRenderingStyle *arg1 = (wxDefaultHtmlRenderingStyle *) 0 ;
     wxColour *arg2 = 0 ;
@@ -3792,14 +3792,14 @@ static PyObject *_wrap_DefaultHtmlRenderingStyle_GetSelectedTextBgColour(PyObjec
 }
 
 
-static PyObject * DefaultHtmlRenderingStyle_swigregister(PyObject *, PyObject *args) {
+static PyObject * DefaultHtmlRenderingStyle_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxDefaultHtmlRenderingStyle, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlRenderingInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlRenderingInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingInfo *result;
     char *kwnames[] = {
@@ -3821,7 +3821,7 @@ static PyObject *_wrap_new_HtmlRenderingInfo(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_delete_HtmlRenderingInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_HtmlRenderingInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingInfo *arg1 = (wxHtmlRenderingInfo *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3846,7 +3846,7 @@ static PyObject *_wrap_delete_HtmlRenderingInfo(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlRenderingInfo_SetSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingInfo_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingInfo *arg1 = (wxHtmlRenderingInfo *) 0 ;
     wxHtmlSelection *arg2 = (wxHtmlSelection *) 0 ;
@@ -3875,7 +3875,7 @@ static PyObject *_wrap_HtmlRenderingInfo_SetSelection(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_HtmlRenderingInfo_GetSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingInfo_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingInfo *arg1 = (wxHtmlRenderingInfo *) 0 ;
     wxHtmlSelection *result;
@@ -3901,7 +3901,7 @@ static PyObject *_wrap_HtmlRenderingInfo_GetSelection(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_HtmlRenderingInfo_SetStyle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingInfo_SetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingInfo *arg1 = (wxHtmlRenderingInfo *) 0 ;
     wxHtmlRenderingStyle *arg2 = (wxHtmlRenderingStyle *) 0 ;
@@ -3930,7 +3930,7 @@ static PyObject *_wrap_HtmlRenderingInfo_SetStyle(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlRenderingInfo_GetStyle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingInfo_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingInfo *arg1 = (wxHtmlRenderingInfo *) 0 ;
     wxHtmlRenderingStyle *result;
@@ -3959,7 +3959,7 @@ static PyObject *_wrap_HtmlRenderingInfo_GetStyle(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlRenderingInfo_GetState(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlRenderingInfo_GetState(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlRenderingInfo *arg1 = (wxHtmlRenderingInfo *) 0 ;
     wxHtmlRenderingState *result;
@@ -3988,14 +3988,14 @@ static PyObject *_wrap_HtmlRenderingInfo_GetState(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * HtmlRenderingInfo_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlRenderingInfo_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlRenderingInfo, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *result;
     char *kwnames[] = {
@@ -4017,7 +4017,7 @@ static PyObject *_wrap_new_HtmlCell(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_HtmlCell_GetPosX(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetPosX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int result;
@@ -4043,7 +4043,7 @@ static PyObject *_wrap_HtmlCell_GetPosX(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlCell_GetPosY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetPosY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int result;
@@ -4069,7 +4069,7 @@ static PyObject *_wrap_HtmlCell_GetPosY(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlCell_GetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int result;
@@ -4095,7 +4095,7 @@ static PyObject *_wrap_HtmlCell_GetWidth(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlCell_GetHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int result;
@@ -4121,7 +4121,7 @@ static PyObject *_wrap_HtmlCell_GetHeight(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlCell_GetDescent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetDescent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int result;
@@ -4147,7 +4147,7 @@ static PyObject *_wrap_HtmlCell_GetDescent(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_HtmlCell_GetMaxTotalWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetMaxTotalWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int result;
@@ -4173,7 +4173,7 @@ static PyObject *_wrap_HtmlCell_GetMaxTotalWidth(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlCell_GetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxString *result;
@@ -4208,7 +4208,7 @@ static PyObject *_wrap_HtmlCell_GetId(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_HtmlCell_SetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxString *arg2 = 0 ;
@@ -4249,7 +4249,7 @@ static PyObject *_wrap_HtmlCell_SetId(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_HtmlCell_GetLink(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetLink(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int arg2 = (int) 0 ;
@@ -4287,7 +4287,7 @@ static PyObject *_wrap_HtmlCell_GetLink(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlCell_GetNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlCell *result;
@@ -4313,7 +4313,7 @@ static PyObject *_wrap_HtmlCell_GetNext(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlCell_GetParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlContainerCell *result;
@@ -4339,7 +4339,7 @@ static PyObject *_wrap_HtmlCell_GetParent(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlCell_GetFirstChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetFirstChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlCell *result;
@@ -4365,7 +4365,7 @@ static PyObject *_wrap_HtmlCell_GetFirstChild(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlCell_GetCursor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxCursor result;
@@ -4395,7 +4395,7 @@ static PyObject *_wrap_HtmlCell_GetCursor(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlCell_IsFormattingCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_IsFormattingCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     bool result;
@@ -4423,7 +4423,7 @@ static PyObject *_wrap_HtmlCell_IsFormattingCell(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlCell_SetLink(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_SetLink(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlLinkInfo *arg2 = 0 ;
@@ -4457,7 +4457,7 @@ static PyObject *_wrap_HtmlCell_SetLink(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlCell_SetNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_SetNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
@@ -4486,7 +4486,7 @@ static PyObject *_wrap_HtmlCell_SetNext(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlCell_SetParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_SetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlContainerCell *arg2 = (wxHtmlContainerCell *) 0 ;
@@ -4515,7 +4515,7 @@ static PyObject *_wrap_HtmlCell_SetParent(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlCell_SetPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_SetPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int arg2 ;
@@ -4548,7 +4548,7 @@ static PyObject *_wrap_HtmlCell_SetPos(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_HtmlCell_Layout(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_Layout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int arg2 ;
@@ -4577,7 +4577,7 @@ static PyObject *_wrap_HtmlCell_Layout(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_HtmlCell_Draw(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_Draw(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxDC *arg2 = 0 ;
@@ -4636,7 +4636,7 @@ static PyObject *_wrap_HtmlCell_Draw(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_HtmlCell_DrawInvisible(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_DrawInvisible(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxDC *arg2 = 0 ;
@@ -4687,7 +4687,7 @@ static PyObject *_wrap_HtmlCell_DrawInvisible(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlCell_Find(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_Find(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int arg2 ;
@@ -4720,7 +4720,7 @@ static PyObject *_wrap_HtmlCell_Find(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_HtmlCell_AdjustPagebreak(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_AdjustPagebreak(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -4760,7 +4760,7 @@ static PyObject *_wrap_HtmlCell_AdjustPagebreak(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlCell_SetCanLiveOnPagebreak(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_SetCanLiveOnPagebreak(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     bool arg2 ;
@@ -4789,7 +4789,7 @@ static PyObject *_wrap_HtmlCell_SetCanLiveOnPagebreak(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_HtmlCell_IsLinebreakAllowed(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_IsLinebreakAllowed(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     bool result;
@@ -4817,7 +4817,7 @@ static PyObject *_wrap_HtmlCell_IsLinebreakAllowed(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlCell_IsTerminalCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_IsTerminalCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     bool result;
@@ -4845,7 +4845,7 @@ static PyObject *_wrap_HtmlCell_IsTerminalCell(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlCell_FindCellByPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_FindCellByPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int arg2 ;
@@ -4885,7 +4885,7 @@ static PyObject *_wrap_HtmlCell_FindCellByPos(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlCell_GetAbsPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetAbsPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxPoint result;
@@ -4915,7 +4915,7 @@ static PyObject *_wrap_HtmlCell_GetAbsPos(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlCell_GetFirstTerminal(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetFirstTerminal(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlCell *result;
@@ -4941,7 +4941,7 @@ static PyObject *_wrap_HtmlCell_GetFirstTerminal(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlCell_GetLastTerminal(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetLastTerminal(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlCell *result;
@@ -4967,7 +4967,7 @@ static PyObject *_wrap_HtmlCell_GetLastTerminal(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlCell_GetDepth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_GetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     unsigned int result;
@@ -4993,7 +4993,7 @@ static PyObject *_wrap_HtmlCell_GetDepth(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlCell_IsBefore(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_IsBefore(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
@@ -5025,7 +5025,7 @@ static PyObject *_wrap_HtmlCell_IsBefore(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlCell_ConvertToText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlCell_ConvertToText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     wxHtmlSelection *arg2 = (wxHtmlSelection *) 0 ;
@@ -5061,14 +5061,14 @@ static PyObject *_wrap_HtmlCell_ConvertToText(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject * HtmlCell_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlCell_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlCell, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlWordCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlWordCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxDC *arg2 = 0 ;
@@ -5115,14 +5115,14 @@ static PyObject *_wrap_new_HtmlWordCell(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject * HtmlWordCell_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlWordCell_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlWordCell, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlContainerCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlContainerCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     wxHtmlContainerCell *result;
@@ -5148,7 +5148,7 @@ static PyObject *_wrap_new_HtmlContainerCell(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_InsertCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_InsertCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
@@ -5177,7 +5177,7 @@ static PyObject *_wrap_HtmlContainerCell_InsertCell(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_SetAlignHor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_SetAlignHor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int arg2 ;
@@ -5206,7 +5206,7 @@ static PyObject *_wrap_HtmlContainerCell_SetAlignHor(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_GetAlignHor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_GetAlignHor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int result;
@@ -5232,7 +5232,7 @@ static PyObject *_wrap_HtmlContainerCell_GetAlignHor(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_SetAlignVer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_SetAlignVer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int arg2 ;
@@ -5261,7 +5261,7 @@ static PyObject *_wrap_HtmlContainerCell_SetAlignVer(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_GetAlignVer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_GetAlignVer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int result;
@@ -5287,7 +5287,7 @@ static PyObject *_wrap_HtmlContainerCell_GetAlignVer(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_SetIndent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_SetIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int arg2 ;
@@ -5326,7 +5326,7 @@ static PyObject *_wrap_HtmlContainerCell_SetIndent(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_GetIndent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_GetIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int arg2 ;
@@ -5356,7 +5356,7 @@ static PyObject *_wrap_HtmlContainerCell_GetIndent(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_GetIndentUnits(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_GetIndentUnits(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int arg2 ;
@@ -5386,7 +5386,7 @@ static PyObject *_wrap_HtmlContainerCell_GetIndentUnits(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_SetAlign(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_SetAlign(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     wxHtmlTag *arg2 = 0 ;
@@ -5420,7 +5420,7 @@ static PyObject *_wrap_HtmlContainerCell_SetAlign(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_SetWidthFloat(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_SetWidthFloat(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int arg2 ;
@@ -5453,7 +5453,7 @@ static PyObject *_wrap_HtmlContainerCell_SetWidthFloat(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_SetWidthFloatFromTag(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_SetWidthFloatFromTag(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     wxHtmlTag *arg2 = 0 ;
@@ -5487,7 +5487,7 @@ static PyObject *_wrap_HtmlContainerCell_SetWidthFloatFromTag(PyObject *, PyObje
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_SetMinHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_SetMinHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int arg2 ;
@@ -5522,7 +5522,7 @@ static PyObject *_wrap_HtmlContainerCell_SetMinHeight(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_SetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_SetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     wxColour *arg2 = 0 ;
@@ -5554,7 +5554,7 @@ static PyObject *_wrap_HtmlContainerCell_SetBackgroundColour(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_GetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_GetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     wxColour result;
@@ -5584,7 +5584,7 @@ static PyObject *_wrap_HtmlContainerCell_GetBackgroundColour(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_SetBorder(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_SetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     wxColour *arg2 = 0 ;
@@ -5623,7 +5623,7 @@ static PyObject *_wrap_HtmlContainerCell_SetBorder(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlContainerCell_GetFirstChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContainerCell_GetFirstChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     wxHtmlCell *result;
@@ -5649,14 +5649,14 @@ static PyObject *_wrap_HtmlContainerCell_GetFirstChild(PyObject *, PyObject *arg
 }
 
 
-static PyObject * HtmlContainerCell_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlContainerCell_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlContainerCell, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlColourCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlColourCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour arg1 ;
     int arg2 = (int) wxHTML_CLR_FOREGROUND ;
@@ -5690,14 +5690,14 @@ static PyObject *_wrap_new_HtmlColourCell(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject * HtmlColourCell_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlColourCell_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlColourCell, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlFontCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlFontCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFont *arg1 = (wxFont *) 0 ;
     wxHtmlFontCell *result;
@@ -5723,14 +5723,14 @@ static PyObject *_wrap_new_HtmlFontCell(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject * HtmlFontCell_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlFontCell_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlFontCell, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlWidgetCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlWidgetCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) 0 ;
@@ -5762,14 +5762,14 @@ static PyObject *_wrap_new_HtmlWidgetCell(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject * HtmlWidgetCell_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlWidgetCell_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlWidgetCell, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlFilter(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlFilter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlFilter *result;
     char *kwnames[] = {
@@ -5791,7 +5791,7 @@ static PyObject *_wrap_new_HtmlFilter(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_HtmlFilter__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlFilter__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlFilter *arg1 = (wxPyHtmlFilter *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -5822,14 +5822,14 @@ static PyObject *_wrap_HtmlFilter__setCallbackInfo(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * HtmlFilter_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlFilter_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyHtmlFilter, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) -1 ;
@@ -5908,7 +5908,7 @@ static PyObject *_wrap_new_HtmlWindow(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_new_PreHtmlWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PreHtmlWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *result;
     char *kwnames[] = {
@@ -5932,7 +5932,7 @@ static PyObject *_wrap_new_PreHtmlWindow(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlWindow_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -6015,7 +6015,7 @@ static PyObject *_wrap_HtmlWindow_Create(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlWindow__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -6046,7 +6046,7 @@ static PyObject *_wrap_HtmlWindow__setCallbackInfo(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlWindow_SetPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_SetPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -6090,7 +6090,7 @@ static PyObject *_wrap_HtmlWindow_SetPage(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlWindow_LoadPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_LoadPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -6134,7 +6134,7 @@ static PyObject *_wrap_HtmlWindow_LoadPage(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_HtmlWindow_LoadFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -6178,7 +6178,7 @@ static PyObject *_wrap_HtmlWindow_LoadFile(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_HtmlWindow_AppendToPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_AppendToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -6222,7 +6222,7 @@ static PyObject *_wrap_HtmlWindow_AppendToPage(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlWindow_GetOpenedPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_GetOpenedPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString result;
@@ -6254,7 +6254,7 @@ static PyObject *_wrap_HtmlWindow_GetOpenedPage(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlWindow_GetOpenedAnchor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_GetOpenedAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString result;
@@ -6286,7 +6286,7 @@ static PyObject *_wrap_HtmlWindow_GetOpenedAnchor(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWindow_GetOpenedPageTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_GetOpenedPageTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString result;
@@ -6318,7 +6318,7 @@ static PyObject *_wrap_HtmlWindow_GetOpenedPageTitle(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlWindow_SetRelatedFrame(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_SetRelatedFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxFrame *arg2 = (wxFrame *) 0 ;
@@ -6363,7 +6363,7 @@ static PyObject *_wrap_HtmlWindow_SetRelatedFrame(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWindow_GetRelatedFrame(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_GetRelatedFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxFrame *result;
@@ -6391,7 +6391,7 @@ static PyObject *_wrap_HtmlWindow_GetRelatedFrame(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWindow_SetRelatedStatusBar(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_SetRelatedStatusBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     int arg2 ;
@@ -6420,7 +6420,7 @@ static PyObject *_wrap_HtmlWindow_SetRelatedStatusBar(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_HtmlWindow_SetFonts(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_SetFonts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString arg2 ;
@@ -6466,7 +6466,7 @@ static PyObject *_wrap_HtmlWindow_SetFonts(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_HtmlWindow_SetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_SetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -6507,7 +6507,7 @@ static PyObject *_wrap_HtmlWindow_SetTitle(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_HtmlWindow_SetBorders(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_SetBorders(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     int arg2 ;
@@ -6536,7 +6536,7 @@ static PyObject *_wrap_HtmlWindow_SetBorders(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlWindow_ReadCustomization(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_ReadCustomization(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
@@ -6575,7 +6575,7 @@ static PyObject *_wrap_HtmlWindow_ReadCustomization(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlWindow_WriteCustomization(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_WriteCustomization(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
@@ -6614,7 +6614,7 @@ static PyObject *_wrap_HtmlWindow_WriteCustomization(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlWindow_HistoryBack(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_HistoryBack(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     bool result;
@@ -6642,7 +6642,7 @@ static PyObject *_wrap_HtmlWindow_HistoryBack(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlWindow_HistoryForward(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_HistoryForward(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     bool result;
@@ -6670,7 +6670,7 @@ static PyObject *_wrap_HtmlWindow_HistoryForward(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlWindow_HistoryCanBack(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_HistoryCanBack(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     bool result;
@@ -6698,7 +6698,7 @@ static PyObject *_wrap_HtmlWindow_HistoryCanBack(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlWindow_HistoryCanForward(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_HistoryCanForward(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     bool result;
@@ -6726,7 +6726,7 @@ static PyObject *_wrap_HtmlWindow_HistoryCanForward(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlWindow_HistoryClear(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_HistoryClear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6751,7 +6751,7 @@ static PyObject *_wrap_HtmlWindow_HistoryClear(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlWindow_GetInternalRepresentation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_GetInternalRepresentation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlContainerCell *result;
@@ -6777,7 +6777,7 @@ static PyObject *_wrap_HtmlWindow_GetInternalRepresentation(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_HtmlWindow_GetParser(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_GetParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlWinParser *result;
@@ -6803,7 +6803,7 @@ static PyObject *_wrap_HtmlWindow_GetParser(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlWindow_ScrollToAnchor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_ScrollToAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -6847,7 +6847,7 @@ static PyObject *_wrap_HtmlWindow_ScrollToAnchor(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlWindow_HasAnchor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_HasAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -6891,7 +6891,7 @@ static PyObject *_wrap_HtmlWindow_HasAnchor(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlWindow_AddFilter(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_AddFilter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlFilter *arg1 = (wxPyHtmlFilter *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6916,7 +6916,7 @@ static PyObject *_wrap_HtmlWindow_AddFilter(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlWindow_SelectWord(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_SelectWord(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -6948,7 +6948,7 @@ static PyObject *_wrap_HtmlWindow_SelectWord(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlWindow_SelectLine(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_SelectLine(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -6980,7 +6980,7 @@ static PyObject *_wrap_HtmlWindow_SelectLine(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlWindow_SelectAll(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_SelectAll(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -7005,7 +7005,7 @@ static PyObject *_wrap_HtmlWindow_SelectAll(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlWindow_base_OnLinkClicked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_base_OnLinkClicked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlLinkInfo *arg2 = 0 ;
@@ -7039,7 +7039,7 @@ static PyObject *_wrap_HtmlWindow_base_OnLinkClicked(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlWindow_base_OnSetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_base_OnSetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -7080,7 +7080,7 @@ static PyObject *_wrap_HtmlWindow_base_OnSetTitle(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWindow_base_OnCellMouseHover(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_base_OnCellMouseHover(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
@@ -7117,7 +7117,7 @@ static PyObject *_wrap_HtmlWindow_base_OnCellMouseHover(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_HtmlWindow_base_OnCellClicked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_base_OnCellClicked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
@@ -7163,14 +7163,14 @@ static PyObject *_wrap_HtmlWindow_base_OnCellClicked(PyObject *, PyObject *args,
 }
 
 
-static PyObject * HtmlWindow_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlWindow_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyHtmlWindow, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlDCRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlDCRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlDCRenderer *result;
     char *kwnames[] = {
@@ -7192,7 +7192,7 @@ static PyObject *_wrap_new_HtmlDCRenderer(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_delete_HtmlDCRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_HtmlDCRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlDCRenderer *arg1 = (wxHtmlDCRenderer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -7217,7 +7217,7 @@ static PyObject *_wrap_delete_HtmlDCRenderer(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlDCRenderer_SetDC(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlDCRenderer_SetDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlDCRenderer *arg1 = (wxHtmlDCRenderer *) 0 ;
     wxDC *arg2 = (wxDC *) 0 ;
@@ -7250,7 +7250,7 @@ static PyObject *_wrap_HtmlDCRenderer_SetDC(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlDCRenderer_SetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlDCRenderer_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlDCRenderer *arg1 = (wxHtmlDCRenderer *) 0 ;
     int arg2 ;
@@ -7283,7 +7283,7 @@ static PyObject *_wrap_HtmlDCRenderer_SetSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlDCRenderer_SetHtmlText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlDCRenderer_SetHtmlText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlDCRenderer *arg1 = (wxHtmlDCRenderer *) 0 ;
     wxString *arg2 = 0 ;
@@ -7349,7 +7349,7 @@ static PyObject *_wrap_HtmlDCRenderer_SetHtmlText(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlDCRenderer_SetFonts(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlDCRenderer_SetFonts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlDCRenderer *arg1 = (wxHtmlDCRenderer *) 0 ;
     wxString arg2 ;
@@ -7395,7 +7395,7 @@ static PyObject *_wrap_HtmlDCRenderer_SetFonts(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlDCRenderer_Render(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlDCRenderer_Render(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlDCRenderer *arg1 = (wxHtmlDCRenderer *) 0 ;
     int arg2 ;
@@ -7459,7 +7459,7 @@ static PyObject *_wrap_HtmlDCRenderer_Render(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlDCRenderer_GetTotalHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlDCRenderer_GetTotalHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlDCRenderer *arg1 = (wxHtmlDCRenderer *) 0 ;
     int result;
@@ -7485,14 +7485,14 @@ static PyObject *_wrap_HtmlDCRenderer_GetTotalHeight(PyObject *, PyObject *args,
 }
 
 
-static PyObject * HtmlDCRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlDCRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlDCRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlPrintout(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlPrintout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString const &arg1_defvalue = wxPyHtmlPrintoutTitleStr ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
@@ -7533,7 +7533,7 @@ static PyObject *_wrap_new_HtmlPrintout(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_HtmlPrintout_SetHtmlText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlPrintout_SetHtmlText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlPrintout *arg1 = (wxHtmlPrintout *) 0 ;
     wxString *arg2 = 0 ;
@@ -7599,7 +7599,7 @@ static PyObject *_wrap_HtmlPrintout_SetHtmlText(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlPrintout_SetHtmlFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlPrintout_SetHtmlFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlPrintout *arg1 = (wxHtmlPrintout *) 0 ;
     wxString *arg2 = 0 ;
@@ -7640,7 +7640,7 @@ static PyObject *_wrap_HtmlPrintout_SetHtmlFile(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlPrintout_SetHeader(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlPrintout_SetHeader(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlPrintout *arg1 = (wxHtmlPrintout *) 0 ;
     wxString *arg2 = 0 ;
@@ -7687,7 +7687,7 @@ static PyObject *_wrap_HtmlPrintout_SetHeader(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlPrintout_SetFooter(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlPrintout_SetFooter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlPrintout *arg1 = (wxHtmlPrintout *) 0 ;
     wxString *arg2 = 0 ;
@@ -7734,7 +7734,7 @@ static PyObject *_wrap_HtmlPrintout_SetFooter(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlPrintout_SetFonts(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlPrintout_SetFonts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlPrintout *arg1 = (wxHtmlPrintout *) 0 ;
     wxString arg2 ;
@@ -7780,7 +7780,7 @@ static PyObject *_wrap_HtmlPrintout_SetFonts(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlPrintout_SetMargins(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlPrintout_SetMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlPrintout *arg1 = (wxHtmlPrintout *) 0 ;
     float arg2 = (float) 25.2 ;
@@ -7835,7 +7835,7 @@ static PyObject *_wrap_HtmlPrintout_SetMargins(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlPrintout_AddFilter(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlPrintout_AddFilter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlFilter *arg1 = (wxHtmlFilter *) 0 ;
     PyObject * obj0 = 0 ;
@@ -7860,7 +7860,7 @@ static PyObject *_wrap_HtmlPrintout_AddFilter(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlPrintout_CleanUpStatics(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlPrintout_CleanUpStatics(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     char *kwnames[] = {
         NULL 
@@ -7881,14 +7881,14 @@ static PyObject *_wrap_HtmlPrintout_CleanUpStatics(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * HtmlPrintout_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlPrintout_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlPrintout, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlEasyPrinting(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlEasyPrinting(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString const &arg1_defvalue = wxPyHtmlPrintingTitleStr ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
@@ -7935,7 +7935,7 @@ static PyObject *_wrap_new_HtmlEasyPrinting(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_delete_HtmlEasyPrinting(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_HtmlEasyPrinting(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     PyObject * obj0 = 0 ;
@@ -7960,7 +7960,7 @@ static PyObject *_wrap_delete_HtmlEasyPrinting(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_PreviewFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_PreviewFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
@@ -8001,7 +8001,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PreviewFile(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_PreviewText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_PreviewText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
@@ -8061,7 +8061,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PreviewText(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_PrintFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_PrintFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
@@ -8102,7 +8102,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PrintFile(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_PrintText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_PrintText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
@@ -8162,7 +8162,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PrintText(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_PrinterSetup(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_PrinterSetup(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8187,7 +8187,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PrinterSetup(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_PageSetup(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_PageSetup(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8212,7 +8212,7 @@ static PyObject *_wrap_HtmlEasyPrinting_PageSetup(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_SetHeader(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_SetHeader(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
@@ -8259,7 +8259,7 @@ static PyObject *_wrap_HtmlEasyPrinting_SetHeader(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_SetFooter(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_SetFooter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString *arg2 = 0 ;
@@ -8306,7 +8306,7 @@ static PyObject *_wrap_HtmlEasyPrinting_SetFooter(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_SetFonts(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_SetFonts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxString arg2 ;
@@ -8352,7 +8352,7 @@ static PyObject *_wrap_HtmlEasyPrinting_SetFonts(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_GetPrintData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_GetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxPrintData *result;
@@ -8378,7 +8378,7 @@ static PyObject *_wrap_HtmlEasyPrinting_GetPrintData(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlEasyPrinting_GetPageSetupData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlEasyPrinting_GetPageSetupData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlEasyPrinting *arg1 = (wxHtmlEasyPrinting *) 0 ;
     wxPageSetupDialogData *result;
@@ -8404,14 +8404,14 @@ static PyObject *_wrap_HtmlEasyPrinting_GetPageSetupData(PyObject *, PyObject *a
 }
 
 
-static PyObject * HtmlEasyPrinting_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlEasyPrinting_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlEasyPrinting, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlBookRecord(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlBookRecord(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxString *arg2 = 0 ;
@@ -8497,7 +8497,7 @@ static PyObject *_wrap_new_HtmlBookRecord(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_GetBookFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_GetBookFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString result;
@@ -8529,7 +8529,7 @@ static PyObject *_wrap_HtmlBookRecord_GetBookFile(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_GetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_GetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString result;
@@ -8561,7 +8561,7 @@ static PyObject *_wrap_HtmlBookRecord_GetTitle(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_GetStart(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_GetStart(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString result;
@@ -8593,7 +8593,7 @@ static PyObject *_wrap_HtmlBookRecord_GetStart(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_GetBasePath(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_GetBasePath(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString result;
@@ -8625,7 +8625,7 @@ static PyObject *_wrap_HtmlBookRecord_GetBasePath(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_SetContentsRange(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_SetContentsRange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     int arg2 ;
@@ -8658,7 +8658,7 @@ static PyObject *_wrap_HtmlBookRecord_SetContentsRange(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_GetContentsStart(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_GetContentsStart(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     int result;
@@ -8684,7 +8684,7 @@ static PyObject *_wrap_HtmlBookRecord_GetContentsStart(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_GetContentsEnd(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_GetContentsEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     int result;
@@ -8710,7 +8710,7 @@ static PyObject *_wrap_HtmlBookRecord_GetContentsEnd(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_SetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_SetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString *arg2 = 0 ;
@@ -8751,7 +8751,7 @@ static PyObject *_wrap_HtmlBookRecord_SetTitle(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_SetBasePath(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_SetBasePath(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString *arg2 = 0 ;
@@ -8792,7 +8792,7 @@ static PyObject *_wrap_HtmlBookRecord_SetBasePath(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_SetStart(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_SetStart(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString *arg2 = 0 ;
@@ -8833,7 +8833,7 @@ static PyObject *_wrap_HtmlBookRecord_SetStart(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlBookRecord_GetFullPath(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlBookRecord_GetFullPath(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlBookRecord *arg1 = (wxHtmlBookRecord *) 0 ;
     wxString *arg2 = 0 ;
@@ -8881,14 +8881,14 @@ static PyObject *_wrap_HtmlBookRecord_GetFullPath(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * HtmlBookRecord_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlBookRecord_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlBookRecord, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_HtmlContentsItem_GetLevel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContentsItem_GetLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContentsItem *arg1 = (wxHtmlContentsItem *) 0 ;
     int result;
@@ -8914,7 +8914,7 @@ static PyObject *_wrap_HtmlContentsItem_GetLevel(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlContentsItem_GetID(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContentsItem_GetID(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContentsItem *arg1 = (wxHtmlContentsItem *) 0 ;
     int result;
@@ -8940,7 +8940,7 @@ static PyObject *_wrap_HtmlContentsItem_GetID(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_HtmlContentsItem_GetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContentsItem_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContentsItem *arg1 = (wxHtmlContentsItem *) 0 ;
     wxString result;
@@ -8972,7 +8972,7 @@ static PyObject *_wrap_HtmlContentsItem_GetName(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlContentsItem_GetPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContentsItem_GetPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContentsItem *arg1 = (wxHtmlContentsItem *) 0 ;
     wxString result;
@@ -9004,7 +9004,7 @@ static PyObject *_wrap_HtmlContentsItem_GetPage(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlContentsItem_GetBook(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlContentsItem_GetBook(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlContentsItem *arg1 = (wxHtmlContentsItem *) 0 ;
     wxHtmlBookRecord *result;
@@ -9030,14 +9030,14 @@ static PyObject *_wrap_HtmlContentsItem_GetBook(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * HtmlContentsItem_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlContentsItem_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlContentsItem, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_HtmlSearchStatus_Search(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSearchStatus_Search(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSearchStatus *arg1 = (wxHtmlSearchStatus *) 0 ;
     bool result;
@@ -9065,7 +9065,7 @@ static PyObject *_wrap_HtmlSearchStatus_Search(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlSearchStatus_IsActive(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSearchStatus_IsActive(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSearchStatus *arg1 = (wxHtmlSearchStatus *) 0 ;
     bool result;
@@ -9093,7 +9093,7 @@ static PyObject *_wrap_HtmlSearchStatus_IsActive(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlSearchStatus_GetCurIndex(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSearchStatus_GetCurIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSearchStatus *arg1 = (wxHtmlSearchStatus *) 0 ;
     int result;
@@ -9119,7 +9119,7 @@ static PyObject *_wrap_HtmlSearchStatus_GetCurIndex(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlSearchStatus_GetMaxIndex(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSearchStatus_GetMaxIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSearchStatus *arg1 = (wxHtmlSearchStatus *) 0 ;
     int result;
@@ -9145,7 +9145,7 @@ static PyObject *_wrap_HtmlSearchStatus_GetMaxIndex(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlSearchStatus_GetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSearchStatus_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSearchStatus *arg1 = (wxHtmlSearchStatus *) 0 ;
     wxString *result;
@@ -9180,7 +9180,7 @@ static PyObject *_wrap_HtmlSearchStatus_GetName(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlSearchStatus_GetContentsItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlSearchStatus_GetContentsItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlSearchStatus *arg1 = (wxHtmlSearchStatus *) 0 ;
     wxHtmlContentsItem *result;
@@ -9206,14 +9206,14 @@ static PyObject *_wrap_HtmlSearchStatus_GetContentsItem(PyObject *, PyObject *ar
 }
 
 
-static PyObject * HtmlSearchStatus_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlSearchStatus_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlSearchStatus, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlHelpData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlHelpData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *result;
     char *kwnames[] = {
@@ -9235,7 +9235,7 @@ static PyObject *_wrap_new_HtmlHelpData(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_delete_HtmlHelpData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_HtmlHelpData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9260,7 +9260,7 @@ static PyObject *_wrap_delete_HtmlHelpData(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_HtmlHelpData_SetTempDir(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpData_SetTempDir(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     wxString *arg2 = 0 ;
@@ -9301,7 +9301,7 @@ static PyObject *_wrap_HtmlHelpData_SetTempDir(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlHelpData_AddBook(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpData_AddBook(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     wxString *arg2 = 0 ;
@@ -9345,7 +9345,7 @@ static PyObject *_wrap_HtmlHelpData_AddBook(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_HtmlHelpData_FindPageByName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpData_FindPageByName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     wxString *arg2 = 0 ;
@@ -9393,7 +9393,7 @@ static PyObject *_wrap_HtmlHelpData_FindPageByName(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlHelpData_FindPageById(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpData_FindPageById(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     int arg2 ;
@@ -9429,7 +9429,7 @@ static PyObject *_wrap_HtmlHelpData_FindPageById(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlHelpData_GetBookRecArray(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpData_GetBookRecArray(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     wxHtmlBookRecArray *result;
@@ -9458,7 +9458,7 @@ static PyObject *_wrap_HtmlHelpData_GetBookRecArray(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlHelpData_GetContents(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpData_GetContents(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     wxHtmlContentsItem *result;
@@ -9484,7 +9484,7 @@ static PyObject *_wrap_HtmlHelpData_GetContents(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_HtmlHelpData_GetContentsCnt(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpData_GetContentsCnt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     int result;
@@ -9510,7 +9510,7 @@ static PyObject *_wrap_HtmlHelpData_GetContentsCnt(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlHelpData_GetIndex(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpData_GetIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     wxHtmlContentsItem *result;
@@ -9536,7 +9536,7 @@ static PyObject *_wrap_HtmlHelpData_GetIndex(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlHelpData_GetIndexCnt(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpData_GetIndexCnt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpData *arg1 = (wxHtmlHelpData *) 0 ;
     int result;
@@ -9562,14 +9562,14 @@ static PyObject *_wrap_HtmlHelpData_GetIndexCnt(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * HtmlHelpData_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlHelpData_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlHelpData, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlHelpFrame(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlHelpFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -9630,7 +9630,7 @@ static PyObject *_wrap_new_HtmlHelpFrame(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_GetData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_GetData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxHtmlHelpData *result;
@@ -9656,7 +9656,7 @@ static PyObject *_wrap_HtmlHelpFrame_GetData(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_SetTitleFormat(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_SetTitleFormat(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxString *arg2 = 0 ;
@@ -9697,7 +9697,7 @@ static PyObject *_wrap_HtmlHelpFrame_SetTitleFormat(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_Display(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_Display(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxString *arg2 = 0 ;
@@ -9738,7 +9738,7 @@ static PyObject *_wrap_HtmlHelpFrame_Display(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_DisplayID(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_DisplayID(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     int arg2 ;
@@ -9767,7 +9767,7 @@ static PyObject *_wrap_HtmlHelpFrame_DisplayID(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_DisplayContents(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_DisplayContents(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9792,7 +9792,7 @@ static PyObject *_wrap_HtmlHelpFrame_DisplayContents(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_DisplayIndex(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_DisplayIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9817,7 +9817,7 @@ static PyObject *_wrap_HtmlHelpFrame_DisplayIndex(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_KeywordSearch(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_KeywordSearch(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxString *arg2 = 0 ;
@@ -9861,7 +9861,7 @@ static PyObject *_wrap_HtmlHelpFrame_KeywordSearch(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_UseConfig(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_UseConfig(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
@@ -9909,7 +9909,7 @@ static PyObject *_wrap_HtmlHelpFrame_UseConfig(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_ReadCustomization(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_ReadCustomization(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
@@ -9948,7 +9948,7 @@ static PyObject *_wrap_HtmlHelpFrame_ReadCustomization(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_HtmlHelpFrame_WriteCustomization(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpFrame_WriteCustomization(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
@@ -9987,14 +9987,14 @@ static PyObject *_wrap_HtmlHelpFrame_WriteCustomization(PyObject *, PyObject *ar
 }
 
 
-static PyObject * HtmlHelpFrame_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlHelpFrame_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlHelpFrame, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_HtmlHelpController(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_HtmlHelpController(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) wxHF_DEFAULTSTYLE ;
     wxHtmlHelpController *result;
@@ -10022,7 +10022,7 @@ static PyObject *_wrap_new_HtmlHelpController(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_delete_HtmlHelpController(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_HtmlHelpController(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10047,7 +10047,7 @@ static PyObject *_wrap_delete_HtmlHelpController(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_HtmlHelpController_SetTitleFormat(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_SetTitleFormat(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
@@ -10088,7 +10088,7 @@ static PyObject *_wrap_HtmlHelpController_SetTitleFormat(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_HtmlHelpController_SetTempDir(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_SetTempDir(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
@@ -10129,7 +10129,7 @@ static PyObject *_wrap_HtmlHelpController_SetTempDir(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlHelpController_AddBook(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_AddBook(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
@@ -10179,7 +10179,7 @@ static PyObject *_wrap_HtmlHelpController_AddBook(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlHelpController_Display(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_Display(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
@@ -10220,7 +10220,7 @@ static PyObject *_wrap_HtmlHelpController_Display(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlHelpController_DisplayID(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_DisplayID(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     int arg2 ;
@@ -10249,7 +10249,7 @@ static PyObject *_wrap_HtmlHelpController_DisplayID(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlHelpController_DisplayContents(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_DisplayContents(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10274,7 +10274,7 @@ static PyObject *_wrap_HtmlHelpController_DisplayContents(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_HtmlHelpController_DisplayIndex(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_DisplayIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10299,7 +10299,7 @@ static PyObject *_wrap_HtmlHelpController_DisplayIndex(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_HtmlHelpController_KeywordSearch(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_KeywordSearch(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxString *arg2 = 0 ;
@@ -10343,7 +10343,7 @@ static PyObject *_wrap_HtmlHelpController_KeywordSearch(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_HtmlHelpController_UseConfig(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_UseConfig(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
@@ -10391,7 +10391,7 @@ static PyObject *_wrap_HtmlHelpController_UseConfig(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_HtmlHelpController_ReadCustomization(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_ReadCustomization(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
@@ -10430,7 +10430,7 @@ static PyObject *_wrap_HtmlHelpController_ReadCustomization(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_HtmlHelpController_WriteCustomization(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_WriteCustomization(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxConfigBase *arg2 = (wxConfigBase *) 0 ;
@@ -10469,7 +10469,7 @@ static PyObject *_wrap_HtmlHelpController_WriteCustomization(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_HtmlHelpController_GetFrame(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlHelpController_GetFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     wxHtmlHelpFrame *result;
@@ -10495,7 +10495,7 @@ static PyObject *_wrap_HtmlHelpController_GetFrame(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * HtmlHelpController_swigregister(PyObject *, PyObject *args) {
+static PyObject * HtmlHelpController_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxHtmlHelpController, obj);
@@ -10503,317 +10503,317 @@ static PyObject * HtmlHelpController_swigregister(PyObject *, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"new_HtmlLinkInfo", (PyCFunction) _wrap_new_HtmlLinkInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlLinkInfo_GetHref", (PyCFunction) _wrap_HtmlLinkInfo_GetHref, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlLinkInfo_GetTarget", (PyCFunction) _wrap_HtmlLinkInfo_GetTarget, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlLinkInfo_GetEvent", (PyCFunction) _wrap_HtmlLinkInfo_GetEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlLinkInfo_GetHtmlCell", (PyCFunction) _wrap_HtmlLinkInfo_GetHtmlCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlLinkInfo_SetEvent", (PyCFunction) _wrap_HtmlLinkInfo_SetEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlLinkInfo_SetHtmlCell", (PyCFunction) _wrap_HtmlLinkInfo_SetHtmlCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlLinkInfo_swigregister", HtmlLinkInfo_swigregister, METH_VARARGS, NULL },
-	 { (char *)"HtmlTag_GetName", (PyCFunction) _wrap_HtmlTag_GetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTag_HasParam", (PyCFunction) _wrap_HtmlTag_HasParam, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTag_GetParam", (PyCFunction) _wrap_HtmlTag_GetParam, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTag_GetAllParams", (PyCFunction) _wrap_HtmlTag_GetAllParams, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTag_HasEnding", (PyCFunction) _wrap_HtmlTag_HasEnding, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTag_GetBeginPos", (PyCFunction) _wrap_HtmlTag_GetBeginPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTag_GetEndPos1", (PyCFunction) _wrap_HtmlTag_GetEndPos1, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTag_GetEndPos2", (PyCFunction) _wrap_HtmlTag_GetEndPos2, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTag_swigregister", HtmlTag_swigregister, METH_VARARGS, NULL },
-	 { (char *)"HtmlParser_SetFS", (PyCFunction) _wrap_HtmlParser_SetFS, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_GetFS", (PyCFunction) _wrap_HtmlParser_GetFS, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_Parse", (PyCFunction) _wrap_HtmlParser_Parse, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_InitParser", (PyCFunction) _wrap_HtmlParser_InitParser, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_DoneParser", (PyCFunction) _wrap_HtmlParser_DoneParser, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_DoParsing", (PyCFunction) _wrap_HtmlParser_DoParsing, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_StopParsing", (PyCFunction) _wrap_HtmlParser_StopParsing, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_AddTagHandler", (PyCFunction) _wrap_HtmlParser_AddTagHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_GetSource", (PyCFunction) _wrap_HtmlParser_GetSource, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_PushTagHandler", (PyCFunction) _wrap_HtmlParser_PushTagHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_PopTagHandler", (PyCFunction) _wrap_HtmlParser_PopTagHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlParser_swigregister", HtmlParser_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlWinParser", (PyCFunction) _wrap_new_HtmlWinParser, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetDC", (PyCFunction) _wrap_HtmlWinParser_SetDC, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetDC", (PyCFunction) _wrap_HtmlWinParser_GetDC, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetCharHeight", (PyCFunction) _wrap_HtmlWinParser_GetCharHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetCharWidth", (PyCFunction) _wrap_HtmlWinParser_GetCharWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetWindow", (PyCFunction) _wrap_HtmlWinParser_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetFonts", (PyCFunction) _wrap_HtmlWinParser_SetFonts, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetContainer", (PyCFunction) _wrap_HtmlWinParser_GetContainer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_OpenContainer", (PyCFunction) _wrap_HtmlWinParser_OpenContainer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetContainer", (PyCFunction) _wrap_HtmlWinParser_SetContainer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_CloseContainer", (PyCFunction) _wrap_HtmlWinParser_CloseContainer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetFontSize", (PyCFunction) _wrap_HtmlWinParser_GetFontSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetFontSize", (PyCFunction) _wrap_HtmlWinParser_SetFontSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetFontBold", (PyCFunction) _wrap_HtmlWinParser_GetFontBold, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetFontBold", (PyCFunction) _wrap_HtmlWinParser_SetFontBold, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetFontItalic", (PyCFunction) _wrap_HtmlWinParser_GetFontItalic, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetFontItalic", (PyCFunction) _wrap_HtmlWinParser_SetFontItalic, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetFontUnderlined", (PyCFunction) _wrap_HtmlWinParser_GetFontUnderlined, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetFontUnderlined", (PyCFunction) _wrap_HtmlWinParser_SetFontUnderlined, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetFontFixed", (PyCFunction) _wrap_HtmlWinParser_GetFontFixed, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetFontFixed", (PyCFunction) _wrap_HtmlWinParser_SetFontFixed, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetAlign", (PyCFunction) _wrap_HtmlWinParser_GetAlign, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetAlign", (PyCFunction) _wrap_HtmlWinParser_SetAlign, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetLinkColor", (PyCFunction) _wrap_HtmlWinParser_GetLinkColor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetLinkColor", (PyCFunction) _wrap_HtmlWinParser_SetLinkColor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetActualColor", (PyCFunction) _wrap_HtmlWinParser_GetActualColor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetActualColor", (PyCFunction) _wrap_HtmlWinParser_SetActualColor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_SetLink", (PyCFunction) _wrap_HtmlWinParser_SetLink, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_CreateCurrentFont", (PyCFunction) _wrap_HtmlWinParser_CreateCurrentFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_GetLink", (PyCFunction) _wrap_HtmlWinParser_GetLink, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinParser_swigregister", HtmlWinParser_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlTagHandler", (PyCFunction) _wrap_new_HtmlTagHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTagHandler__setCallbackInfo", (PyCFunction) _wrap_HtmlTagHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTagHandler_SetParser", (PyCFunction) _wrap_HtmlTagHandler_SetParser, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTagHandler_GetParser", (PyCFunction) _wrap_HtmlTagHandler_GetParser, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTagHandler_ParseInner", (PyCFunction) _wrap_HtmlTagHandler_ParseInner, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlTagHandler_swigregister", HtmlTagHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlWinTagHandler", (PyCFunction) _wrap_new_HtmlWinTagHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinTagHandler__setCallbackInfo", (PyCFunction) _wrap_HtmlWinTagHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinTagHandler_SetParser", (PyCFunction) _wrap_HtmlWinTagHandler_SetParser, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinTagHandler_GetParser", (PyCFunction) _wrap_HtmlWinTagHandler_GetParser, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinTagHandler_ParseInner", (PyCFunction) _wrap_HtmlWinTagHandler_ParseInner, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWinTagHandler_swigregister", HtmlWinTagHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"HtmlWinParser_AddTagHandler", (PyCFunction) _wrap_HtmlWinParser_AddTagHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_HtmlSelection", (PyCFunction) _wrap_new_HtmlSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_HtmlSelection", (PyCFunction) _wrap_delete_HtmlSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_Set", (PyCFunction) _wrap_HtmlSelection_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_SetCells", (PyCFunction) _wrap_HtmlSelection_SetCells, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_GetFromCell", (PyCFunction) _wrap_HtmlSelection_GetFromCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_GetToCell", (PyCFunction) _wrap_HtmlSelection_GetToCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_GetFromPos", (PyCFunction) _wrap_HtmlSelection_GetFromPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_GetToPos", (PyCFunction) _wrap_HtmlSelection_GetToPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_GetFromPrivPos", (PyCFunction) _wrap_HtmlSelection_GetFromPrivPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_GetToPrivPos", (PyCFunction) _wrap_HtmlSelection_GetToPrivPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_SetFromPrivPos", (PyCFunction) _wrap_HtmlSelection_SetFromPrivPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_SetToPrivPos", (PyCFunction) _wrap_HtmlSelection_SetToPrivPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_ClearPrivPos", (PyCFunction) _wrap_HtmlSelection_ClearPrivPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_IsEmpty", (PyCFunction) _wrap_HtmlSelection_IsEmpty, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSelection_swigregister", HtmlSelection_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlRenderingState", (PyCFunction) _wrap_new_HtmlRenderingState, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_HtmlRenderingState", (PyCFunction) _wrap_delete_HtmlRenderingState, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingState_SetSelectionState", (PyCFunction) _wrap_HtmlRenderingState_SetSelectionState, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingState_GetSelectionState", (PyCFunction) _wrap_HtmlRenderingState_GetSelectionState, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingState_SetFgColour", (PyCFunction) _wrap_HtmlRenderingState_SetFgColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingState_GetFgColour", (PyCFunction) _wrap_HtmlRenderingState_GetFgColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingState_SetBgColour", (PyCFunction) _wrap_HtmlRenderingState_SetBgColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingState_GetBgColour", (PyCFunction) _wrap_HtmlRenderingState_GetBgColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingState_swigregister", HtmlRenderingState_swigregister, METH_VARARGS, NULL },
-	 { (char *)"HtmlRenderingStyle_GetSelectedTextColour", (PyCFunction) _wrap_HtmlRenderingStyle_GetSelectedTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingStyle_GetSelectedTextBgColour", (PyCFunction) _wrap_HtmlRenderingStyle_GetSelectedTextBgColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingStyle_swigregister", HtmlRenderingStyle_swigregister, METH_VARARGS, NULL },
-	 { (char *)"DefaultHtmlRenderingStyle_GetSelectedTextColour", (PyCFunction) _wrap_DefaultHtmlRenderingStyle_GetSelectedTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"DefaultHtmlRenderingStyle_GetSelectedTextBgColour", (PyCFunction) _wrap_DefaultHtmlRenderingStyle_GetSelectedTextBgColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"DefaultHtmlRenderingStyle_swigregister", DefaultHtmlRenderingStyle_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlRenderingInfo", (PyCFunction) _wrap_new_HtmlRenderingInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_HtmlRenderingInfo", (PyCFunction) _wrap_delete_HtmlRenderingInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingInfo_SetSelection", (PyCFunction) _wrap_HtmlRenderingInfo_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingInfo_GetSelection", (PyCFunction) _wrap_HtmlRenderingInfo_GetSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingInfo_SetStyle", (PyCFunction) _wrap_HtmlRenderingInfo_SetStyle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingInfo_GetStyle", (PyCFunction) _wrap_HtmlRenderingInfo_GetStyle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingInfo_GetState", (PyCFunction) _wrap_HtmlRenderingInfo_GetState, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlRenderingInfo_swigregister", HtmlRenderingInfo_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlCell", (PyCFunction) _wrap_new_HtmlCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetPosX", (PyCFunction) _wrap_HtmlCell_GetPosX, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetPosY", (PyCFunction) _wrap_HtmlCell_GetPosY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetWidth", (PyCFunction) _wrap_HtmlCell_GetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetHeight", (PyCFunction) _wrap_HtmlCell_GetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetDescent", (PyCFunction) _wrap_HtmlCell_GetDescent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetMaxTotalWidth", (PyCFunction) _wrap_HtmlCell_GetMaxTotalWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetId", (PyCFunction) _wrap_HtmlCell_GetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_SetId", (PyCFunction) _wrap_HtmlCell_SetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetLink", (PyCFunction) _wrap_HtmlCell_GetLink, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetNext", (PyCFunction) _wrap_HtmlCell_GetNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetParent", (PyCFunction) _wrap_HtmlCell_GetParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetFirstChild", (PyCFunction) _wrap_HtmlCell_GetFirstChild, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetCursor", (PyCFunction) _wrap_HtmlCell_GetCursor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_IsFormattingCell", (PyCFunction) _wrap_HtmlCell_IsFormattingCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_SetLink", (PyCFunction) _wrap_HtmlCell_SetLink, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_SetNext", (PyCFunction) _wrap_HtmlCell_SetNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_SetParent", (PyCFunction) _wrap_HtmlCell_SetParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_SetPos", (PyCFunction) _wrap_HtmlCell_SetPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_Layout", (PyCFunction) _wrap_HtmlCell_Layout, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_Draw", (PyCFunction) _wrap_HtmlCell_Draw, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_DrawInvisible", (PyCFunction) _wrap_HtmlCell_DrawInvisible, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_Find", (PyCFunction) _wrap_HtmlCell_Find, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_AdjustPagebreak", (PyCFunction) _wrap_HtmlCell_AdjustPagebreak, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_SetCanLiveOnPagebreak", (PyCFunction) _wrap_HtmlCell_SetCanLiveOnPagebreak, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_IsLinebreakAllowed", (PyCFunction) _wrap_HtmlCell_IsLinebreakAllowed, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_IsTerminalCell", (PyCFunction) _wrap_HtmlCell_IsTerminalCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_FindCellByPos", (PyCFunction) _wrap_HtmlCell_FindCellByPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetAbsPos", (PyCFunction) _wrap_HtmlCell_GetAbsPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetFirstTerminal", (PyCFunction) _wrap_HtmlCell_GetFirstTerminal, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetLastTerminal", (PyCFunction) _wrap_HtmlCell_GetLastTerminal, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_GetDepth", (PyCFunction) _wrap_HtmlCell_GetDepth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_IsBefore", (PyCFunction) _wrap_HtmlCell_IsBefore, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_ConvertToText", (PyCFunction) _wrap_HtmlCell_ConvertToText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlCell_swigregister", HtmlCell_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlWordCell", (PyCFunction) _wrap_new_HtmlWordCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWordCell_swigregister", HtmlWordCell_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlContainerCell", (PyCFunction) _wrap_new_HtmlContainerCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_InsertCell", (PyCFunction) _wrap_HtmlContainerCell_InsertCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_SetAlignHor", (PyCFunction) _wrap_HtmlContainerCell_SetAlignHor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_GetAlignHor", (PyCFunction) _wrap_HtmlContainerCell_GetAlignHor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_SetAlignVer", (PyCFunction) _wrap_HtmlContainerCell_SetAlignVer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_GetAlignVer", (PyCFunction) _wrap_HtmlContainerCell_GetAlignVer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_SetIndent", (PyCFunction) _wrap_HtmlContainerCell_SetIndent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_GetIndent", (PyCFunction) _wrap_HtmlContainerCell_GetIndent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_GetIndentUnits", (PyCFunction) _wrap_HtmlContainerCell_GetIndentUnits, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_SetAlign", (PyCFunction) _wrap_HtmlContainerCell_SetAlign, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_SetWidthFloat", (PyCFunction) _wrap_HtmlContainerCell_SetWidthFloat, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_SetWidthFloatFromTag", (PyCFunction) _wrap_HtmlContainerCell_SetWidthFloatFromTag, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_SetMinHeight", (PyCFunction) _wrap_HtmlContainerCell_SetMinHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_SetBackgroundColour", (PyCFunction) _wrap_HtmlContainerCell_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_GetBackgroundColour", (PyCFunction) _wrap_HtmlContainerCell_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_SetBorder", (PyCFunction) _wrap_HtmlContainerCell_SetBorder, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_GetFirstChild", (PyCFunction) _wrap_HtmlContainerCell_GetFirstChild, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContainerCell_swigregister", HtmlContainerCell_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlColourCell", (PyCFunction) _wrap_new_HtmlColourCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlColourCell_swigregister", HtmlColourCell_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlFontCell", (PyCFunction) _wrap_new_HtmlFontCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlFontCell_swigregister", HtmlFontCell_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlWidgetCell", (PyCFunction) _wrap_new_HtmlWidgetCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWidgetCell_swigregister", HtmlWidgetCell_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlFilter", (PyCFunction) _wrap_new_HtmlFilter, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlFilter__setCallbackInfo", (PyCFunction) _wrap_HtmlFilter__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlFilter_swigregister", HtmlFilter_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlWindow", (PyCFunction) _wrap_new_HtmlWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_PreHtmlWindow", (PyCFunction) _wrap_new_PreHtmlWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_Create", (PyCFunction) _wrap_HtmlWindow_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow__setCallbackInfo", (PyCFunction) _wrap_HtmlWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_SetPage", (PyCFunction) _wrap_HtmlWindow_SetPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_LoadPage", (PyCFunction) _wrap_HtmlWindow_LoadPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_LoadFile", (PyCFunction) _wrap_HtmlWindow_LoadFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_AppendToPage", (PyCFunction) _wrap_HtmlWindow_AppendToPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_GetOpenedPage", (PyCFunction) _wrap_HtmlWindow_GetOpenedPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_GetOpenedAnchor", (PyCFunction) _wrap_HtmlWindow_GetOpenedAnchor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_GetOpenedPageTitle", (PyCFunction) _wrap_HtmlWindow_GetOpenedPageTitle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_SetRelatedFrame", (PyCFunction) _wrap_HtmlWindow_SetRelatedFrame, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_GetRelatedFrame", (PyCFunction) _wrap_HtmlWindow_GetRelatedFrame, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_SetRelatedStatusBar", (PyCFunction) _wrap_HtmlWindow_SetRelatedStatusBar, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_SetFonts", (PyCFunction) _wrap_HtmlWindow_SetFonts, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_SetTitle", (PyCFunction) _wrap_HtmlWindow_SetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_SetBorders", (PyCFunction) _wrap_HtmlWindow_SetBorders, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_ReadCustomization", (PyCFunction) _wrap_HtmlWindow_ReadCustomization, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_WriteCustomization", (PyCFunction) _wrap_HtmlWindow_WriteCustomization, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_HistoryBack", (PyCFunction) _wrap_HtmlWindow_HistoryBack, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_HistoryForward", (PyCFunction) _wrap_HtmlWindow_HistoryForward, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_HistoryCanBack", (PyCFunction) _wrap_HtmlWindow_HistoryCanBack, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_HistoryCanForward", (PyCFunction) _wrap_HtmlWindow_HistoryCanForward, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_HistoryClear", (PyCFunction) _wrap_HtmlWindow_HistoryClear, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_GetInternalRepresentation", (PyCFunction) _wrap_HtmlWindow_GetInternalRepresentation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_GetParser", (PyCFunction) _wrap_HtmlWindow_GetParser, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_ScrollToAnchor", (PyCFunction) _wrap_HtmlWindow_ScrollToAnchor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_HasAnchor", (PyCFunction) _wrap_HtmlWindow_HasAnchor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_AddFilter", (PyCFunction) _wrap_HtmlWindow_AddFilter, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_SelectWord", (PyCFunction) _wrap_HtmlWindow_SelectWord, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_SelectLine", (PyCFunction) _wrap_HtmlWindow_SelectLine, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_SelectAll", (PyCFunction) _wrap_HtmlWindow_SelectAll, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_base_OnLinkClicked", (PyCFunction) _wrap_HtmlWindow_base_OnLinkClicked, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_base_OnSetTitle", (PyCFunction) _wrap_HtmlWindow_base_OnSetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_base_OnCellMouseHover", (PyCFunction) _wrap_HtmlWindow_base_OnCellMouseHover, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_base_OnCellClicked", (PyCFunction) _wrap_HtmlWindow_base_OnCellClicked, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlWindow_swigregister", HtmlWindow_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlDCRenderer", (PyCFunction) _wrap_new_HtmlDCRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_HtmlDCRenderer", (PyCFunction) _wrap_delete_HtmlDCRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlDCRenderer_SetDC", (PyCFunction) _wrap_HtmlDCRenderer_SetDC, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlDCRenderer_SetSize", (PyCFunction) _wrap_HtmlDCRenderer_SetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlDCRenderer_SetHtmlText", (PyCFunction) _wrap_HtmlDCRenderer_SetHtmlText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlDCRenderer_SetFonts", (PyCFunction) _wrap_HtmlDCRenderer_SetFonts, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlDCRenderer_Render", (PyCFunction) _wrap_HtmlDCRenderer_Render, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlDCRenderer_GetTotalHeight", (PyCFunction) _wrap_HtmlDCRenderer_GetTotalHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlDCRenderer_swigregister", HtmlDCRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlPrintout", (PyCFunction) _wrap_new_HtmlPrintout, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlPrintout_SetHtmlText", (PyCFunction) _wrap_HtmlPrintout_SetHtmlText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlPrintout_SetHtmlFile", (PyCFunction) _wrap_HtmlPrintout_SetHtmlFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlPrintout_SetHeader", (PyCFunction) _wrap_HtmlPrintout_SetHeader, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlPrintout_SetFooter", (PyCFunction) _wrap_HtmlPrintout_SetFooter, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlPrintout_SetFonts", (PyCFunction) _wrap_HtmlPrintout_SetFonts, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlPrintout_SetMargins", (PyCFunction) _wrap_HtmlPrintout_SetMargins, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlPrintout_AddFilter", (PyCFunction) _wrap_HtmlPrintout_AddFilter, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlPrintout_CleanUpStatics", (PyCFunction) _wrap_HtmlPrintout_CleanUpStatics, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlPrintout_swigregister", HtmlPrintout_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlEasyPrinting", (PyCFunction) _wrap_new_HtmlEasyPrinting, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_HtmlEasyPrinting", (PyCFunction) _wrap_delete_HtmlEasyPrinting, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_PreviewFile", (PyCFunction) _wrap_HtmlEasyPrinting_PreviewFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_PreviewText", (PyCFunction) _wrap_HtmlEasyPrinting_PreviewText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_PrintFile", (PyCFunction) _wrap_HtmlEasyPrinting_PrintFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_PrintText", (PyCFunction) _wrap_HtmlEasyPrinting_PrintText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_PrinterSetup", (PyCFunction) _wrap_HtmlEasyPrinting_PrinterSetup, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_PageSetup", (PyCFunction) _wrap_HtmlEasyPrinting_PageSetup, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_SetHeader", (PyCFunction) _wrap_HtmlEasyPrinting_SetHeader, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_SetFooter", (PyCFunction) _wrap_HtmlEasyPrinting_SetFooter, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_SetFonts", (PyCFunction) _wrap_HtmlEasyPrinting_SetFonts, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_GetPrintData", (PyCFunction) _wrap_HtmlEasyPrinting_GetPrintData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_GetPageSetupData", (PyCFunction) _wrap_HtmlEasyPrinting_GetPageSetupData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlEasyPrinting_swigregister", HtmlEasyPrinting_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlBookRecord", (PyCFunction) _wrap_new_HtmlBookRecord, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_GetBookFile", (PyCFunction) _wrap_HtmlBookRecord_GetBookFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_GetTitle", (PyCFunction) _wrap_HtmlBookRecord_GetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_GetStart", (PyCFunction) _wrap_HtmlBookRecord_GetStart, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_GetBasePath", (PyCFunction) _wrap_HtmlBookRecord_GetBasePath, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_SetContentsRange", (PyCFunction) _wrap_HtmlBookRecord_SetContentsRange, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_GetContentsStart", (PyCFunction) _wrap_HtmlBookRecord_GetContentsStart, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_GetContentsEnd", (PyCFunction) _wrap_HtmlBookRecord_GetContentsEnd, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_SetTitle", (PyCFunction) _wrap_HtmlBookRecord_SetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_SetBasePath", (PyCFunction) _wrap_HtmlBookRecord_SetBasePath, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_SetStart", (PyCFunction) _wrap_HtmlBookRecord_SetStart, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_GetFullPath", (PyCFunction) _wrap_HtmlBookRecord_GetFullPath, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlBookRecord_swigregister", HtmlBookRecord_swigregister, METH_VARARGS, NULL },
-	 { (char *)"HtmlContentsItem_GetLevel", (PyCFunction) _wrap_HtmlContentsItem_GetLevel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContentsItem_GetID", (PyCFunction) _wrap_HtmlContentsItem_GetID, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContentsItem_GetName", (PyCFunction) _wrap_HtmlContentsItem_GetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContentsItem_GetPage", (PyCFunction) _wrap_HtmlContentsItem_GetPage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContentsItem_GetBook", (PyCFunction) _wrap_HtmlContentsItem_GetBook, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlContentsItem_swigregister", HtmlContentsItem_swigregister, METH_VARARGS, NULL },
-	 { (char *)"HtmlSearchStatus_Search", (PyCFunction) _wrap_HtmlSearchStatus_Search, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSearchStatus_IsActive", (PyCFunction) _wrap_HtmlSearchStatus_IsActive, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSearchStatus_GetCurIndex", (PyCFunction) _wrap_HtmlSearchStatus_GetCurIndex, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSearchStatus_GetMaxIndex", (PyCFunction) _wrap_HtmlSearchStatus_GetMaxIndex, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSearchStatus_GetName", (PyCFunction) _wrap_HtmlSearchStatus_GetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSearchStatus_GetContentsItem", (PyCFunction) _wrap_HtmlSearchStatus_GetContentsItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlSearchStatus_swigregister", HtmlSearchStatus_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlHelpData", (PyCFunction) _wrap_new_HtmlHelpData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_HtmlHelpData", (PyCFunction) _wrap_delete_HtmlHelpData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_SetTempDir", (PyCFunction) _wrap_HtmlHelpData_SetTempDir, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_AddBook", (PyCFunction) _wrap_HtmlHelpData_AddBook, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_FindPageByName", (PyCFunction) _wrap_HtmlHelpData_FindPageByName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_FindPageById", (PyCFunction) _wrap_HtmlHelpData_FindPageById, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_GetBookRecArray", (PyCFunction) _wrap_HtmlHelpData_GetBookRecArray, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_GetContents", (PyCFunction) _wrap_HtmlHelpData_GetContents, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_GetContentsCnt", (PyCFunction) _wrap_HtmlHelpData_GetContentsCnt, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_GetIndex", (PyCFunction) _wrap_HtmlHelpData_GetIndex, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_GetIndexCnt", (PyCFunction) _wrap_HtmlHelpData_GetIndexCnt, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpData_swigregister", HtmlHelpData_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlHelpFrame", (PyCFunction) _wrap_new_HtmlHelpFrame, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_GetData", (PyCFunction) _wrap_HtmlHelpFrame_GetData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_SetTitleFormat", (PyCFunction) _wrap_HtmlHelpFrame_SetTitleFormat, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_Display", (PyCFunction) _wrap_HtmlHelpFrame_Display, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_DisplayID", (PyCFunction) _wrap_HtmlHelpFrame_DisplayID, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_DisplayContents", (PyCFunction) _wrap_HtmlHelpFrame_DisplayContents, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_DisplayIndex", (PyCFunction) _wrap_HtmlHelpFrame_DisplayIndex, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_KeywordSearch", (PyCFunction) _wrap_HtmlHelpFrame_KeywordSearch, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_UseConfig", (PyCFunction) _wrap_HtmlHelpFrame_UseConfig, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_ReadCustomization", (PyCFunction) _wrap_HtmlHelpFrame_ReadCustomization, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_WriteCustomization", (PyCFunction) _wrap_HtmlHelpFrame_WriteCustomization, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpFrame_swigregister", HtmlHelpFrame_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_HtmlHelpController", (PyCFunction) _wrap_new_HtmlHelpController, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_HtmlHelpController", (PyCFunction) _wrap_delete_HtmlHelpController, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_SetTitleFormat", (PyCFunction) _wrap_HtmlHelpController_SetTitleFormat, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_SetTempDir", (PyCFunction) _wrap_HtmlHelpController_SetTempDir, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_AddBook", (PyCFunction) _wrap_HtmlHelpController_AddBook, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_Display", (PyCFunction) _wrap_HtmlHelpController_Display, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_DisplayID", (PyCFunction) _wrap_HtmlHelpController_DisplayID, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_DisplayContents", (PyCFunction) _wrap_HtmlHelpController_DisplayContents, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_DisplayIndex", (PyCFunction) _wrap_HtmlHelpController_DisplayIndex, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_KeywordSearch", (PyCFunction) _wrap_HtmlHelpController_KeywordSearch, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_UseConfig", (PyCFunction) _wrap_HtmlHelpController_UseConfig, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_ReadCustomization", (PyCFunction) _wrap_HtmlHelpController_ReadCustomization, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_WriteCustomization", (PyCFunction) _wrap_HtmlHelpController_WriteCustomization, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_GetFrame", (PyCFunction) _wrap_HtmlHelpController_GetFrame, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"HtmlHelpController_swigregister", HtmlHelpController_swigregister, METH_VARARGS, NULL },
-	 { NULL, NULL, 0, NULL }
+	 { (char *)"new_HtmlLinkInfo", (PyCFunction) _wrap_new_HtmlLinkInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlLinkInfo_GetHref", (PyCFunction) _wrap_HtmlLinkInfo_GetHref, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlLinkInfo_GetTarget", (PyCFunction) _wrap_HtmlLinkInfo_GetTarget, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlLinkInfo_GetEvent", (PyCFunction) _wrap_HtmlLinkInfo_GetEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlLinkInfo_GetHtmlCell", (PyCFunction) _wrap_HtmlLinkInfo_GetHtmlCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlLinkInfo_SetEvent", (PyCFunction) _wrap_HtmlLinkInfo_SetEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlLinkInfo_SetHtmlCell", (PyCFunction) _wrap_HtmlLinkInfo_SetHtmlCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlLinkInfo_swigregister", HtmlLinkInfo_swigregister, METH_VARARGS },
+	 { (char *)"HtmlTag_GetName", (PyCFunction) _wrap_HtmlTag_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTag_HasParam", (PyCFunction) _wrap_HtmlTag_HasParam, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTag_GetParam", (PyCFunction) _wrap_HtmlTag_GetParam, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTag_GetAllParams", (PyCFunction) _wrap_HtmlTag_GetAllParams, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTag_HasEnding", (PyCFunction) _wrap_HtmlTag_HasEnding, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTag_GetBeginPos", (PyCFunction) _wrap_HtmlTag_GetBeginPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTag_GetEndPos1", (PyCFunction) _wrap_HtmlTag_GetEndPos1, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTag_GetEndPos2", (PyCFunction) _wrap_HtmlTag_GetEndPos2, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTag_swigregister", HtmlTag_swigregister, METH_VARARGS },
+	 { (char *)"HtmlParser_SetFS", (PyCFunction) _wrap_HtmlParser_SetFS, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_GetFS", (PyCFunction) _wrap_HtmlParser_GetFS, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_Parse", (PyCFunction) _wrap_HtmlParser_Parse, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_InitParser", (PyCFunction) _wrap_HtmlParser_InitParser, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_DoneParser", (PyCFunction) _wrap_HtmlParser_DoneParser, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_DoParsing", (PyCFunction) _wrap_HtmlParser_DoParsing, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_StopParsing", (PyCFunction) _wrap_HtmlParser_StopParsing, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_AddTagHandler", (PyCFunction) _wrap_HtmlParser_AddTagHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_GetSource", (PyCFunction) _wrap_HtmlParser_GetSource, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_PushTagHandler", (PyCFunction) _wrap_HtmlParser_PushTagHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_PopTagHandler", (PyCFunction) _wrap_HtmlParser_PopTagHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlParser_swigregister", HtmlParser_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlWinParser", (PyCFunction) _wrap_new_HtmlWinParser, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetDC", (PyCFunction) _wrap_HtmlWinParser_SetDC, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetDC", (PyCFunction) _wrap_HtmlWinParser_GetDC, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetCharHeight", (PyCFunction) _wrap_HtmlWinParser_GetCharHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetCharWidth", (PyCFunction) _wrap_HtmlWinParser_GetCharWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetWindow", (PyCFunction) _wrap_HtmlWinParser_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetFonts", (PyCFunction) _wrap_HtmlWinParser_SetFonts, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetContainer", (PyCFunction) _wrap_HtmlWinParser_GetContainer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_OpenContainer", (PyCFunction) _wrap_HtmlWinParser_OpenContainer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetContainer", (PyCFunction) _wrap_HtmlWinParser_SetContainer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_CloseContainer", (PyCFunction) _wrap_HtmlWinParser_CloseContainer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetFontSize", (PyCFunction) _wrap_HtmlWinParser_GetFontSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetFontSize", (PyCFunction) _wrap_HtmlWinParser_SetFontSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetFontBold", (PyCFunction) _wrap_HtmlWinParser_GetFontBold, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetFontBold", (PyCFunction) _wrap_HtmlWinParser_SetFontBold, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetFontItalic", (PyCFunction) _wrap_HtmlWinParser_GetFontItalic, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetFontItalic", (PyCFunction) _wrap_HtmlWinParser_SetFontItalic, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetFontUnderlined", (PyCFunction) _wrap_HtmlWinParser_GetFontUnderlined, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetFontUnderlined", (PyCFunction) _wrap_HtmlWinParser_SetFontUnderlined, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetFontFixed", (PyCFunction) _wrap_HtmlWinParser_GetFontFixed, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetFontFixed", (PyCFunction) _wrap_HtmlWinParser_SetFontFixed, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetAlign", (PyCFunction) _wrap_HtmlWinParser_GetAlign, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetAlign", (PyCFunction) _wrap_HtmlWinParser_SetAlign, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetLinkColor", (PyCFunction) _wrap_HtmlWinParser_GetLinkColor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetLinkColor", (PyCFunction) _wrap_HtmlWinParser_SetLinkColor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetActualColor", (PyCFunction) _wrap_HtmlWinParser_GetActualColor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetActualColor", (PyCFunction) _wrap_HtmlWinParser_SetActualColor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_SetLink", (PyCFunction) _wrap_HtmlWinParser_SetLink, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_CreateCurrentFont", (PyCFunction) _wrap_HtmlWinParser_CreateCurrentFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_GetLink", (PyCFunction) _wrap_HtmlWinParser_GetLink, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinParser_swigregister", HtmlWinParser_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlTagHandler", (PyCFunction) _wrap_new_HtmlTagHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTagHandler__setCallbackInfo", (PyCFunction) _wrap_HtmlTagHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTagHandler_SetParser", (PyCFunction) _wrap_HtmlTagHandler_SetParser, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTagHandler_GetParser", (PyCFunction) _wrap_HtmlTagHandler_GetParser, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTagHandler_ParseInner", (PyCFunction) _wrap_HtmlTagHandler_ParseInner, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlTagHandler_swigregister", HtmlTagHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlWinTagHandler", (PyCFunction) _wrap_new_HtmlWinTagHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinTagHandler__setCallbackInfo", (PyCFunction) _wrap_HtmlWinTagHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinTagHandler_SetParser", (PyCFunction) _wrap_HtmlWinTagHandler_SetParser, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinTagHandler_GetParser", (PyCFunction) _wrap_HtmlWinTagHandler_GetParser, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinTagHandler_ParseInner", (PyCFunction) _wrap_HtmlWinTagHandler_ParseInner, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWinTagHandler_swigregister", HtmlWinTagHandler_swigregister, METH_VARARGS },
+	 { (char *)"HtmlWinParser_AddTagHandler", (PyCFunction) _wrap_HtmlWinParser_AddTagHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_HtmlSelection", (PyCFunction) _wrap_new_HtmlSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_HtmlSelection", (PyCFunction) _wrap_delete_HtmlSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_Set", (PyCFunction) _wrap_HtmlSelection_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_SetCells", (PyCFunction) _wrap_HtmlSelection_SetCells, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_GetFromCell", (PyCFunction) _wrap_HtmlSelection_GetFromCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_GetToCell", (PyCFunction) _wrap_HtmlSelection_GetToCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_GetFromPos", (PyCFunction) _wrap_HtmlSelection_GetFromPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_GetToPos", (PyCFunction) _wrap_HtmlSelection_GetToPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_GetFromPrivPos", (PyCFunction) _wrap_HtmlSelection_GetFromPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_GetToPrivPos", (PyCFunction) _wrap_HtmlSelection_GetToPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_SetFromPrivPos", (PyCFunction) _wrap_HtmlSelection_SetFromPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_SetToPrivPos", (PyCFunction) _wrap_HtmlSelection_SetToPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_ClearPrivPos", (PyCFunction) _wrap_HtmlSelection_ClearPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_IsEmpty", (PyCFunction) _wrap_HtmlSelection_IsEmpty, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSelection_swigregister", HtmlSelection_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlRenderingState", (PyCFunction) _wrap_new_HtmlRenderingState, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_HtmlRenderingState", (PyCFunction) _wrap_delete_HtmlRenderingState, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingState_SetSelectionState", (PyCFunction) _wrap_HtmlRenderingState_SetSelectionState, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingState_GetSelectionState", (PyCFunction) _wrap_HtmlRenderingState_GetSelectionState, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingState_SetFgColour", (PyCFunction) _wrap_HtmlRenderingState_SetFgColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingState_GetFgColour", (PyCFunction) _wrap_HtmlRenderingState_GetFgColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingState_SetBgColour", (PyCFunction) _wrap_HtmlRenderingState_SetBgColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingState_GetBgColour", (PyCFunction) _wrap_HtmlRenderingState_GetBgColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingState_swigregister", HtmlRenderingState_swigregister, METH_VARARGS },
+	 { (char *)"HtmlRenderingStyle_GetSelectedTextColour", (PyCFunction) _wrap_HtmlRenderingStyle_GetSelectedTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingStyle_GetSelectedTextBgColour", (PyCFunction) _wrap_HtmlRenderingStyle_GetSelectedTextBgColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingStyle_swigregister", HtmlRenderingStyle_swigregister, METH_VARARGS },
+	 { (char *)"DefaultHtmlRenderingStyle_GetSelectedTextColour", (PyCFunction) _wrap_DefaultHtmlRenderingStyle_GetSelectedTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DefaultHtmlRenderingStyle_GetSelectedTextBgColour", (PyCFunction) _wrap_DefaultHtmlRenderingStyle_GetSelectedTextBgColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DefaultHtmlRenderingStyle_swigregister", DefaultHtmlRenderingStyle_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlRenderingInfo", (PyCFunction) _wrap_new_HtmlRenderingInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_HtmlRenderingInfo", (PyCFunction) _wrap_delete_HtmlRenderingInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingInfo_SetSelection", (PyCFunction) _wrap_HtmlRenderingInfo_SetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingInfo_GetSelection", (PyCFunction) _wrap_HtmlRenderingInfo_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingInfo_SetStyle", (PyCFunction) _wrap_HtmlRenderingInfo_SetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingInfo_GetStyle", (PyCFunction) _wrap_HtmlRenderingInfo_GetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingInfo_GetState", (PyCFunction) _wrap_HtmlRenderingInfo_GetState, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlRenderingInfo_swigregister", HtmlRenderingInfo_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlCell", (PyCFunction) _wrap_new_HtmlCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetPosX", (PyCFunction) _wrap_HtmlCell_GetPosX, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetPosY", (PyCFunction) _wrap_HtmlCell_GetPosY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetWidth", (PyCFunction) _wrap_HtmlCell_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetHeight", (PyCFunction) _wrap_HtmlCell_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetDescent", (PyCFunction) _wrap_HtmlCell_GetDescent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetMaxTotalWidth", (PyCFunction) _wrap_HtmlCell_GetMaxTotalWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetId", (PyCFunction) _wrap_HtmlCell_GetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_SetId", (PyCFunction) _wrap_HtmlCell_SetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetLink", (PyCFunction) _wrap_HtmlCell_GetLink, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetNext", (PyCFunction) _wrap_HtmlCell_GetNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetParent", (PyCFunction) _wrap_HtmlCell_GetParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetFirstChild", (PyCFunction) _wrap_HtmlCell_GetFirstChild, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetCursor", (PyCFunction) _wrap_HtmlCell_GetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_IsFormattingCell", (PyCFunction) _wrap_HtmlCell_IsFormattingCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_SetLink", (PyCFunction) _wrap_HtmlCell_SetLink, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_SetNext", (PyCFunction) _wrap_HtmlCell_SetNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_SetParent", (PyCFunction) _wrap_HtmlCell_SetParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_SetPos", (PyCFunction) _wrap_HtmlCell_SetPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_Layout", (PyCFunction) _wrap_HtmlCell_Layout, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_Draw", (PyCFunction) _wrap_HtmlCell_Draw, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_DrawInvisible", (PyCFunction) _wrap_HtmlCell_DrawInvisible, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_Find", (PyCFunction) _wrap_HtmlCell_Find, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_AdjustPagebreak", (PyCFunction) _wrap_HtmlCell_AdjustPagebreak, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_SetCanLiveOnPagebreak", (PyCFunction) _wrap_HtmlCell_SetCanLiveOnPagebreak, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_IsLinebreakAllowed", (PyCFunction) _wrap_HtmlCell_IsLinebreakAllowed, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_IsTerminalCell", (PyCFunction) _wrap_HtmlCell_IsTerminalCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_FindCellByPos", (PyCFunction) _wrap_HtmlCell_FindCellByPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetAbsPos", (PyCFunction) _wrap_HtmlCell_GetAbsPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetFirstTerminal", (PyCFunction) _wrap_HtmlCell_GetFirstTerminal, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetLastTerminal", (PyCFunction) _wrap_HtmlCell_GetLastTerminal, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetDepth", (PyCFunction) _wrap_HtmlCell_GetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_IsBefore", (PyCFunction) _wrap_HtmlCell_IsBefore, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_ConvertToText", (PyCFunction) _wrap_HtmlCell_ConvertToText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_swigregister", HtmlCell_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlWordCell", (PyCFunction) _wrap_new_HtmlWordCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWordCell_swigregister", HtmlWordCell_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlContainerCell", (PyCFunction) _wrap_new_HtmlContainerCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_InsertCell", (PyCFunction) _wrap_HtmlContainerCell_InsertCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_SetAlignHor", (PyCFunction) _wrap_HtmlContainerCell_SetAlignHor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_GetAlignHor", (PyCFunction) _wrap_HtmlContainerCell_GetAlignHor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_SetAlignVer", (PyCFunction) _wrap_HtmlContainerCell_SetAlignVer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_GetAlignVer", (PyCFunction) _wrap_HtmlContainerCell_GetAlignVer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_SetIndent", (PyCFunction) _wrap_HtmlContainerCell_SetIndent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_GetIndent", (PyCFunction) _wrap_HtmlContainerCell_GetIndent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_GetIndentUnits", (PyCFunction) _wrap_HtmlContainerCell_GetIndentUnits, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_SetAlign", (PyCFunction) _wrap_HtmlContainerCell_SetAlign, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_SetWidthFloat", (PyCFunction) _wrap_HtmlContainerCell_SetWidthFloat, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_SetWidthFloatFromTag", (PyCFunction) _wrap_HtmlContainerCell_SetWidthFloatFromTag, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_SetMinHeight", (PyCFunction) _wrap_HtmlContainerCell_SetMinHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_SetBackgroundColour", (PyCFunction) _wrap_HtmlContainerCell_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_GetBackgroundColour", (PyCFunction) _wrap_HtmlContainerCell_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_SetBorder", (PyCFunction) _wrap_HtmlContainerCell_SetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_GetFirstChild", (PyCFunction) _wrap_HtmlContainerCell_GetFirstChild, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContainerCell_swigregister", HtmlContainerCell_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlColourCell", (PyCFunction) _wrap_new_HtmlColourCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlColourCell_swigregister", HtmlColourCell_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlFontCell", (PyCFunction) _wrap_new_HtmlFontCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlFontCell_swigregister", HtmlFontCell_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlWidgetCell", (PyCFunction) _wrap_new_HtmlWidgetCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWidgetCell_swigregister", HtmlWidgetCell_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlFilter", (PyCFunction) _wrap_new_HtmlFilter, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlFilter__setCallbackInfo", (PyCFunction) _wrap_HtmlFilter__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlFilter_swigregister", HtmlFilter_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlWindow", (PyCFunction) _wrap_new_HtmlWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PreHtmlWindow", (PyCFunction) _wrap_new_PreHtmlWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_Create", (PyCFunction) _wrap_HtmlWindow_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow__setCallbackInfo", (PyCFunction) _wrap_HtmlWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SetPage", (PyCFunction) _wrap_HtmlWindow_SetPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_LoadPage", (PyCFunction) _wrap_HtmlWindow_LoadPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_LoadFile", (PyCFunction) _wrap_HtmlWindow_LoadFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_AppendToPage", (PyCFunction) _wrap_HtmlWindow_AppendToPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_GetOpenedPage", (PyCFunction) _wrap_HtmlWindow_GetOpenedPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_GetOpenedAnchor", (PyCFunction) _wrap_HtmlWindow_GetOpenedAnchor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_GetOpenedPageTitle", (PyCFunction) _wrap_HtmlWindow_GetOpenedPageTitle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SetRelatedFrame", (PyCFunction) _wrap_HtmlWindow_SetRelatedFrame, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_GetRelatedFrame", (PyCFunction) _wrap_HtmlWindow_GetRelatedFrame, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SetRelatedStatusBar", (PyCFunction) _wrap_HtmlWindow_SetRelatedStatusBar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SetFonts", (PyCFunction) _wrap_HtmlWindow_SetFonts, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SetTitle", (PyCFunction) _wrap_HtmlWindow_SetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SetBorders", (PyCFunction) _wrap_HtmlWindow_SetBorders, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_ReadCustomization", (PyCFunction) _wrap_HtmlWindow_ReadCustomization, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_WriteCustomization", (PyCFunction) _wrap_HtmlWindow_WriteCustomization, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_HistoryBack", (PyCFunction) _wrap_HtmlWindow_HistoryBack, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_HistoryForward", (PyCFunction) _wrap_HtmlWindow_HistoryForward, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_HistoryCanBack", (PyCFunction) _wrap_HtmlWindow_HistoryCanBack, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_HistoryCanForward", (PyCFunction) _wrap_HtmlWindow_HistoryCanForward, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_HistoryClear", (PyCFunction) _wrap_HtmlWindow_HistoryClear, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_GetInternalRepresentation", (PyCFunction) _wrap_HtmlWindow_GetInternalRepresentation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_GetParser", (PyCFunction) _wrap_HtmlWindow_GetParser, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_ScrollToAnchor", (PyCFunction) _wrap_HtmlWindow_ScrollToAnchor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_HasAnchor", (PyCFunction) _wrap_HtmlWindow_HasAnchor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_AddFilter", (PyCFunction) _wrap_HtmlWindow_AddFilter, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SelectWord", (PyCFunction) _wrap_HtmlWindow_SelectWord, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SelectLine", (PyCFunction) _wrap_HtmlWindow_SelectLine, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SelectAll", (PyCFunction) _wrap_HtmlWindow_SelectAll, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_base_OnLinkClicked", (PyCFunction) _wrap_HtmlWindow_base_OnLinkClicked, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_base_OnSetTitle", (PyCFunction) _wrap_HtmlWindow_base_OnSetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_base_OnCellMouseHover", (PyCFunction) _wrap_HtmlWindow_base_OnCellMouseHover, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_base_OnCellClicked", (PyCFunction) _wrap_HtmlWindow_base_OnCellClicked, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_swigregister", HtmlWindow_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlDCRenderer", (PyCFunction) _wrap_new_HtmlDCRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_HtmlDCRenderer", (PyCFunction) _wrap_delete_HtmlDCRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlDCRenderer_SetDC", (PyCFunction) _wrap_HtmlDCRenderer_SetDC, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlDCRenderer_SetSize", (PyCFunction) _wrap_HtmlDCRenderer_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlDCRenderer_SetHtmlText", (PyCFunction) _wrap_HtmlDCRenderer_SetHtmlText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlDCRenderer_SetFonts", (PyCFunction) _wrap_HtmlDCRenderer_SetFonts, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlDCRenderer_Render", (PyCFunction) _wrap_HtmlDCRenderer_Render, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlDCRenderer_GetTotalHeight", (PyCFunction) _wrap_HtmlDCRenderer_GetTotalHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlDCRenderer_swigregister", HtmlDCRenderer_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlPrintout", (PyCFunction) _wrap_new_HtmlPrintout, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlPrintout_SetHtmlText", (PyCFunction) _wrap_HtmlPrintout_SetHtmlText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlPrintout_SetHtmlFile", (PyCFunction) _wrap_HtmlPrintout_SetHtmlFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlPrintout_SetHeader", (PyCFunction) _wrap_HtmlPrintout_SetHeader, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlPrintout_SetFooter", (PyCFunction) _wrap_HtmlPrintout_SetFooter, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlPrintout_SetFonts", (PyCFunction) _wrap_HtmlPrintout_SetFonts, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlPrintout_SetMargins", (PyCFunction) _wrap_HtmlPrintout_SetMargins, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlPrintout_AddFilter", (PyCFunction) _wrap_HtmlPrintout_AddFilter, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlPrintout_CleanUpStatics", (PyCFunction) _wrap_HtmlPrintout_CleanUpStatics, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlPrintout_swigregister", HtmlPrintout_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlEasyPrinting", (PyCFunction) _wrap_new_HtmlEasyPrinting, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_HtmlEasyPrinting", (PyCFunction) _wrap_delete_HtmlEasyPrinting, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_PreviewFile", (PyCFunction) _wrap_HtmlEasyPrinting_PreviewFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_PreviewText", (PyCFunction) _wrap_HtmlEasyPrinting_PreviewText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_PrintFile", (PyCFunction) _wrap_HtmlEasyPrinting_PrintFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_PrintText", (PyCFunction) _wrap_HtmlEasyPrinting_PrintText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_PrinterSetup", (PyCFunction) _wrap_HtmlEasyPrinting_PrinterSetup, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_PageSetup", (PyCFunction) _wrap_HtmlEasyPrinting_PageSetup, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_SetHeader", (PyCFunction) _wrap_HtmlEasyPrinting_SetHeader, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_SetFooter", (PyCFunction) _wrap_HtmlEasyPrinting_SetFooter, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_SetFonts", (PyCFunction) _wrap_HtmlEasyPrinting_SetFonts, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_GetPrintData", (PyCFunction) _wrap_HtmlEasyPrinting_GetPrintData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_GetPageSetupData", (PyCFunction) _wrap_HtmlEasyPrinting_GetPageSetupData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlEasyPrinting_swigregister", HtmlEasyPrinting_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlBookRecord", (PyCFunction) _wrap_new_HtmlBookRecord, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_GetBookFile", (PyCFunction) _wrap_HtmlBookRecord_GetBookFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_GetTitle", (PyCFunction) _wrap_HtmlBookRecord_GetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_GetStart", (PyCFunction) _wrap_HtmlBookRecord_GetStart, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_GetBasePath", (PyCFunction) _wrap_HtmlBookRecord_GetBasePath, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_SetContentsRange", (PyCFunction) _wrap_HtmlBookRecord_SetContentsRange, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_GetContentsStart", (PyCFunction) _wrap_HtmlBookRecord_GetContentsStart, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_GetContentsEnd", (PyCFunction) _wrap_HtmlBookRecord_GetContentsEnd, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_SetTitle", (PyCFunction) _wrap_HtmlBookRecord_SetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_SetBasePath", (PyCFunction) _wrap_HtmlBookRecord_SetBasePath, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_SetStart", (PyCFunction) _wrap_HtmlBookRecord_SetStart, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_GetFullPath", (PyCFunction) _wrap_HtmlBookRecord_GetFullPath, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlBookRecord_swigregister", HtmlBookRecord_swigregister, METH_VARARGS },
+	 { (char *)"HtmlContentsItem_GetLevel", (PyCFunction) _wrap_HtmlContentsItem_GetLevel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContentsItem_GetID", (PyCFunction) _wrap_HtmlContentsItem_GetID, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContentsItem_GetName", (PyCFunction) _wrap_HtmlContentsItem_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContentsItem_GetPage", (PyCFunction) _wrap_HtmlContentsItem_GetPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContentsItem_GetBook", (PyCFunction) _wrap_HtmlContentsItem_GetBook, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlContentsItem_swigregister", HtmlContentsItem_swigregister, METH_VARARGS },
+	 { (char *)"HtmlSearchStatus_Search", (PyCFunction) _wrap_HtmlSearchStatus_Search, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSearchStatus_IsActive", (PyCFunction) _wrap_HtmlSearchStatus_IsActive, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSearchStatus_GetCurIndex", (PyCFunction) _wrap_HtmlSearchStatus_GetCurIndex, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSearchStatus_GetMaxIndex", (PyCFunction) _wrap_HtmlSearchStatus_GetMaxIndex, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSearchStatus_GetName", (PyCFunction) _wrap_HtmlSearchStatus_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSearchStatus_GetContentsItem", (PyCFunction) _wrap_HtmlSearchStatus_GetContentsItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlSearchStatus_swigregister", HtmlSearchStatus_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlHelpData", (PyCFunction) _wrap_new_HtmlHelpData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_HtmlHelpData", (PyCFunction) _wrap_delete_HtmlHelpData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_SetTempDir", (PyCFunction) _wrap_HtmlHelpData_SetTempDir, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_AddBook", (PyCFunction) _wrap_HtmlHelpData_AddBook, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_FindPageByName", (PyCFunction) _wrap_HtmlHelpData_FindPageByName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_FindPageById", (PyCFunction) _wrap_HtmlHelpData_FindPageById, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_GetBookRecArray", (PyCFunction) _wrap_HtmlHelpData_GetBookRecArray, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_GetContents", (PyCFunction) _wrap_HtmlHelpData_GetContents, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_GetContentsCnt", (PyCFunction) _wrap_HtmlHelpData_GetContentsCnt, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_GetIndex", (PyCFunction) _wrap_HtmlHelpData_GetIndex, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_GetIndexCnt", (PyCFunction) _wrap_HtmlHelpData_GetIndexCnt, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpData_swigregister", HtmlHelpData_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlHelpFrame", (PyCFunction) _wrap_new_HtmlHelpFrame, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_GetData", (PyCFunction) _wrap_HtmlHelpFrame_GetData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_SetTitleFormat", (PyCFunction) _wrap_HtmlHelpFrame_SetTitleFormat, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_Display", (PyCFunction) _wrap_HtmlHelpFrame_Display, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_DisplayID", (PyCFunction) _wrap_HtmlHelpFrame_DisplayID, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_DisplayContents", (PyCFunction) _wrap_HtmlHelpFrame_DisplayContents, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_DisplayIndex", (PyCFunction) _wrap_HtmlHelpFrame_DisplayIndex, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_KeywordSearch", (PyCFunction) _wrap_HtmlHelpFrame_KeywordSearch, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_UseConfig", (PyCFunction) _wrap_HtmlHelpFrame_UseConfig, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_ReadCustomization", (PyCFunction) _wrap_HtmlHelpFrame_ReadCustomization, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_WriteCustomization", (PyCFunction) _wrap_HtmlHelpFrame_WriteCustomization, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpFrame_swigregister", HtmlHelpFrame_swigregister, METH_VARARGS },
+	 { (char *)"new_HtmlHelpController", (PyCFunction) _wrap_new_HtmlHelpController, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_HtmlHelpController", (PyCFunction) _wrap_delete_HtmlHelpController, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_SetTitleFormat", (PyCFunction) _wrap_HtmlHelpController_SetTitleFormat, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_SetTempDir", (PyCFunction) _wrap_HtmlHelpController_SetTempDir, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_AddBook", (PyCFunction) _wrap_HtmlHelpController_AddBook, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_Display", (PyCFunction) _wrap_HtmlHelpController_Display, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_DisplayID", (PyCFunction) _wrap_HtmlHelpController_DisplayID, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_DisplayContents", (PyCFunction) _wrap_HtmlHelpController_DisplayContents, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_DisplayIndex", (PyCFunction) _wrap_HtmlHelpController_DisplayIndex, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_KeywordSearch", (PyCFunction) _wrap_HtmlHelpController_KeywordSearch, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_UseConfig", (PyCFunction) _wrap_HtmlHelpController_UseConfig, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_ReadCustomization", (PyCFunction) _wrap_HtmlHelpController_ReadCustomization, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_WriteCustomization", (PyCFunction) _wrap_HtmlHelpController_WriteCustomization, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_GetFrame", (PyCFunction) _wrap_HtmlHelpController_GetFrame, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlHelpController_swigregister", HtmlHelpController_swigregister, METH_VARARGS },
+	 { NULL, NULL }
 };
 
 
@@ -11841,7 +11841,7 @@ _swigt__p_wxHtmlBookRecord,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0, 0, 0, 0.0, 0, 0}};
+{0}};
 
 #ifdef __cplusplus
 }

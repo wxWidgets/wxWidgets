@@ -1159,12 +1159,30 @@ wxDateTime wxDateTime___add____SWIG_1(wxDateTime *self,wxDateSpan const &other){
 wxTimeSpan wxDateTime___sub____SWIG_0(wxDateTime *self,wxDateTime const &other){ return *self - other; }
 wxDateTime wxDateTime___sub____SWIG_1(wxDateTime *self,wxTimeSpan const &other){ return *self - other; }
 wxDateTime wxDateTime___sub____SWIG_2(wxDateTime *self,wxDateSpan const &other){ return *self - other; }
-bool wxDateTime___lt__(wxDateTime *self,wxDateTime const *other){ return other ? (*self <  *other) : False; }
-bool wxDateTime___le__(wxDateTime *self,wxDateTime const *other){ return other ? (*self <= *other) : False; }
-bool wxDateTime___gt__(wxDateTime *self,wxDateTime const *other){ return other ? (*self >  *other) : True;  }
-bool wxDateTime___ge__(wxDateTime *self,wxDateTime const *other){ return other ? (*self >= *other) : True;  }
-bool wxDateTime___eq__(wxDateTime *self,wxDateTime const *other){ return other ? (*self == *other) : False; }
-bool wxDateTime___ne__(wxDateTime *self,wxDateTime const *other){ return other ? (*self != *other) : True;  }
+bool wxDateTime___lt__(wxDateTime *self,wxDateTime const *other){ 
+            if (!other || !self->IsValid() || !other->IsValid()) return self <  other; 
+            return (*self <  *other);
+        }
+bool wxDateTime___le__(wxDateTime *self,wxDateTime const *other){ 
+            if (!other || !self->IsValid() || !other->IsValid()) return self <= other; 
+            return (*self <= *other);
+        }
+bool wxDateTime___gt__(wxDateTime *self,wxDateTime const *other){ 
+            if (!other || !self->IsValid() || !other->IsValid()) return self >  other; 
+            return (*self >  *other);
+        }
+bool wxDateTime___ge__(wxDateTime *self,wxDateTime const *other){ 
+            if (!other || !self->IsValid() || !other->IsValid()) return self >= other; 
+            return (*self >= *other);
+        }
+bool wxDateTime___eq__(wxDateTime *self,wxDateTime const *other){
+            if (!other || !self->IsValid() || !other->IsValid()) return self == other; 
+            return (*self == *other);
+        }
+bool wxDateTime___ne__(wxDateTime *self,wxDateTime const *other){
+            if (!other || !self->IsValid() || !other->IsValid()) return self != other; 
+            return (*self != *other);
+        }
 int wxDateTime_ParseRfc822Date(wxDateTime *self,wxString const &date){
             const wxChar* rv;
             const wxChar* _date = date;

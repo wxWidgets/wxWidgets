@@ -514,13 +514,6 @@ SWIG_CheckDouble(PyObject* obj)
  static const wxString wxPyDialogNameStr(wxDialogNameStr); 
  static const wxString wxPyStatusLineNameStr(wxStatusLineNameStr); 
  static const wxString wxPyToolBarNameStr(wxToolBarNameStr); 
-bool wxDialog_IsModalShowing(wxDialog *self){
-        
-
-
-            return self->IsModalShowing();
-        
-        }
 
 
 wxRect wxStatusBar_GetFieldRect(wxStatusBar *self,int i){
@@ -4329,34 +4322,6 @@ static PyObject *_wrap_Dialog_EndModal(PyObject *self, PyObject *args, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Dialog_IsModalShowing(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxDialog *arg1 = (wxDialog *) 0 ;
-    bool result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Dialog_IsModalShowing",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDialog,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxDialog_IsModalShowing(arg1);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
     return resultobj;
     fail:
     return NULL;
@@ -24498,7 +24463,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Dialog_IsModal", (PyCFunction) _wrap_Dialog_IsModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Dialog_ShowModal", (PyCFunction) _wrap_Dialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Dialog_EndModal", (PyCFunction) _wrap_Dialog_EndModal, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Dialog_IsModalShowing", (PyCFunction) _wrap_Dialog_IsModalShowing, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Dialog_swigregister", Dialog_swigregister, METH_VARARGS },
 	 { (char *)"new_MiniFrame", (PyCFunction) _wrap_new_MiniFrame, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreMiniFrame", (PyCFunction) _wrap_new_PreMiniFrame, METH_VARARGS | METH_KEYWORDS },
@@ -26372,6 +26336,10 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"FRAME_NO_WINDOW_MENU", SWIG_FromInt((int)wxFRAME_NO_WINDOW_MENU));
     PyDict_SetItemString(d,"FRAME_NO_TASKBAR", SWIG_FromInt((int)wxFRAME_NO_TASKBAR));
     PyDict_SetItemString(d,"FRAME_SHAPED", SWIG_FromInt((int)wxFRAME_SHAPED));
+    PyDict_SetItemString(d,"DIALOG_MODAL", SWIG_FromInt((int)wxDIALOG_MODAL));
+    PyDict_SetItemString(d,"DIALOG_MODELESS", SWIG_FromInt((int)wxDIALOG_MODELESS));
+    PyDict_SetItemString(d,"USER_COLOURS", SWIG_FromInt((int)wxUSER_COLOURS));
+    PyDict_SetItemString(d,"NO_3D", SWIG_FromInt((int)wxNO_3D));
     PyDict_SetItemString(d,"FULLSCREEN_NOMENUBAR", SWIG_FromInt((int)wxFULLSCREEN_NOMENUBAR));
     PyDict_SetItemString(d,"FULLSCREEN_NOTOOLBAR", SWIG_FromInt((int)wxFULLSCREEN_NOTOOLBAR));
     PyDict_SetItemString(d,"FULLSCREEN_NOSTATUSBAR", SWIG_FromInt((int)wxFULLSCREEN_NOSTATUSBAR));

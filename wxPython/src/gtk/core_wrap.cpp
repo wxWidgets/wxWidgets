@@ -1251,7 +1251,8 @@ void wxEvtHandler_Connect(wxEvtHandler *self,int id,int lastId,int eventType,PyO
                                  &wxPyCallback::EventThunker);
             }
             else {
-                PyErr_SetString(PyExc_TypeError, "Expected callable object or None.");
+                wxPyBLOCK_THREADS(
+                    PyErr_SetString(PyExc_TypeError, "Expected callable object or None."));
             }
         }
 bool wxEvtHandler_Disconnect(wxEvtHandler *self,int id,int lastId,wxEventType eventType){
@@ -28020,6 +28021,59 @@ static PyObject *_wrap_Window_GetContainingSizer(PyObject *self, PyObject *args,
 }
 
 
+static PyObject *_wrap_Window_InheritAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_InheritAttributes",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->InheritAttributes();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_ShouldInheritColours(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_ShouldInheritColours",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxWindow const *)arg1)->ShouldInheritColours();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Window_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -31679,7 +31733,7 @@ static PyObject * MenuBar_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_MenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) NULL ;
-    int arg2 = (int) wxID_SEPARATOR ;
+    int arg2 = (int) wxID_ANY ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
@@ -32074,6 +32128,35 @@ static PyObject *_wrap_MenuItem_GetKind(PyObject *self, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_SetKind(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "kind", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MenuItem_SetKind",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMenuItem,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (wxItemKind) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetKind((wxItemKind )arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -41074,6 +41157,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetSizer", (PyCFunction) _wrap_Window_GetSizer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetContainingSizer", (PyCFunction) _wrap_Window_SetContainingSizer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetContainingSizer", (PyCFunction) _wrap_Window_GetContainingSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_InheritAttributes", (PyCFunction) _wrap_Window_InheritAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ShouldInheritColours", (PyCFunction) _wrap_Window_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_swigregister", Window_swigregister, METH_VARARGS },
 	 { (char *)"FindWindowById", (PyCFunction) _wrap_FindWindowById, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FindWindowByName", (PyCFunction) _wrap_FindWindowByName, METH_VARARGS | METH_KEYWORDS },
@@ -41185,6 +41270,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MenuItem_GetText", (PyCFunction) _wrap_MenuItem_GetText, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MenuItem_GetLabelFromText", (PyCFunction) _wrap_MenuItem_GetLabelFromText, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MenuItem_GetKind", (PyCFunction) _wrap_MenuItem_GetKind, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetKind", (PyCFunction) _wrap_MenuItem_SetKind, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MenuItem_SetCheckable", (PyCFunction) _wrap_MenuItem_SetCheckable, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MenuItem_IsCheckable", (PyCFunction) _wrap_MenuItem_IsCheckable, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MenuItem_IsSubMenu", (PyCFunction) _wrap_MenuItem_IsSubMenu, METH_VARARGS | METH_KEYWORDS },
@@ -42213,6 +42299,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"EXT_DIALOG_STYLE", SWIG_FromInt((int)wxEXT_DIALOG_STYLE));
     PyDict_SetItemString(d,"CLIP_CHILDREN", SWIG_FromInt((int)wxCLIP_CHILDREN));
     PyDict_SetItemString(d,"CLIP_SIBLINGS", SWIG_FromInt((int)wxCLIP_SIBLINGS));
+    PyDict_SetItemString(d,"ALWAYS_SHOW_SB", SWIG_FromInt((int)wxALWAYS_SHOW_SB));
     PyDict_SetItemString(d,"RETAINED", SWIG_FromInt((int)wxRETAINED));
     PyDict_SetItemString(d,"BACKINGSTORE", SWIG_FromInt((int)wxBACKINGSTORE));
     PyDict_SetItemString(d,"COLOURED", SWIG_FromInt((int)wxCOLOURED));

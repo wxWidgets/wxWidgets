@@ -1425,7 +1425,7 @@ wxGridCellCoords wxGrid_XYToCell(wxGrid *self,int x,int y){
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_DateTimeFormatStr_set(PyObject *) {
+static int _wrap_DateTimeFormatStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable DateTimeFormatStr is read-only.");
     return 1;
 }
@@ -1445,7 +1445,7 @@ static PyObject *_wrap_DateTimeFormatStr_get() {
 }
 
 
-static int _wrap_GridNoCellCoords_set(PyObject *) {
+static int _wrap_GridNoCellCoords_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable GridNoCellCoords is read-only.");
     return 1;
 }
@@ -1459,7 +1459,7 @@ static PyObject *_wrap_GridNoCellCoords_get() {
 }
 
 
-static int _wrap_GridNoCellRect_set(PyObject *) {
+static int _wrap_GridNoCellRect_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable GridNoCellRect is read-only.");
     return 1;
 }
@@ -1473,7 +1473,7 @@ static PyObject *_wrap_GridNoCellRect_get() {
 }
 
 
-static PyObject *_wrap_GridCellRenderer__setOORInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellRenderer__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -1501,7 +1501,7 @@ static PyObject *_wrap_GridCellRenderer__setOORInfo(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridCellRenderer_SetParameters(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellRenderer_SetParameters(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
     wxString *arg2 = 0 ;
@@ -1542,7 +1542,7 @@ static PyObject *_wrap_GridCellRenderer_SetParameters(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridCellRenderer_IncRef(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellRenderer_IncRef(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1567,7 +1567,7 @@ static PyObject *_wrap_GridCellRenderer_IncRef(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_GridCellRenderer_DecRef(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellRenderer_DecRef(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1592,7 +1592,7 @@ static PyObject *_wrap_GridCellRenderer_DecRef(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_GridCellRenderer_Draw(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellRenderer_Draw(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
     wxGrid *arg2 = 0 ;
@@ -1663,7 +1663,7 @@ static PyObject *_wrap_GridCellRenderer_Draw(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellRenderer_GetBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellRenderer_GetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
     wxGrid *arg2 = 0 ;
@@ -1728,7 +1728,7 @@ static PyObject *_wrap_GridCellRenderer_GetBestSize(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridCellRenderer_Clone(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellRenderer_Clone(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
     wxGridCellRenderer *result;
@@ -1756,14 +1756,14 @@ static PyObject *_wrap_GridCellRenderer_Clone(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject * GridCellRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PyGridCellRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyGridCellRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellRenderer *result;
     char *kwnames[] = {
@@ -1785,7 +1785,7 @@ static PyObject *_wrap_new_PyGridCellRenderer(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyGridCellRenderer__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellRenderer__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellRenderer *arg1 = (wxPyGridCellRenderer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -1816,7 +1816,7 @@ static PyObject *_wrap_PyGridCellRenderer__setCallbackInfo(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyGridCellRenderer_base_SetParameters(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellRenderer_base_SetParameters(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellRenderer *arg1 = (wxPyGridCellRenderer *) 0 ;
     wxString *arg2 = 0 ;
@@ -1857,14 +1857,14 @@ static PyObject *_wrap_PyGridCellRenderer_base_SetParameters(PyObject *, PyObjec
 }
 
 
-static PyObject * PyGridCellRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * PyGridCellRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyGridCellRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellStringRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellStringRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellStringRenderer *result;
     char *kwnames[] = {
@@ -1886,14 +1886,14 @@ static PyObject *_wrap_new_GridCellStringRenderer(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * GridCellStringRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellStringRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellStringRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellNumberRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellNumberRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellNumberRenderer *result;
     char *kwnames[] = {
@@ -1915,14 +1915,14 @@ static PyObject *_wrap_new_GridCellNumberRenderer(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * GridCellNumberRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellNumberRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellNumberRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellFloatRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellFloatRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) -1 ;
     int arg2 = (int) -1 ;
@@ -1956,7 +1956,7 @@ static PyObject *_wrap_new_GridCellFloatRenderer(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridCellFloatRenderer_GetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellFloatRenderer_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellFloatRenderer *arg1 = (wxGridCellFloatRenderer *) 0 ;
     int result;
@@ -1982,7 +1982,7 @@ static PyObject *_wrap_GridCellFloatRenderer_GetWidth(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridCellFloatRenderer_SetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellFloatRenderer_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellFloatRenderer *arg1 = (wxGridCellFloatRenderer *) 0 ;
     int arg2 ;
@@ -2011,7 +2011,7 @@ static PyObject *_wrap_GridCellFloatRenderer_SetWidth(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridCellFloatRenderer_GetPrecision(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellFloatRenderer_GetPrecision(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellFloatRenderer *arg1 = (wxGridCellFloatRenderer *) 0 ;
     int result;
@@ -2037,7 +2037,7 @@ static PyObject *_wrap_GridCellFloatRenderer_GetPrecision(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_GridCellFloatRenderer_SetPrecision(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellFloatRenderer_SetPrecision(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellFloatRenderer *arg1 = (wxGridCellFloatRenderer *) 0 ;
     int arg2 ;
@@ -2066,14 +2066,14 @@ static PyObject *_wrap_GridCellFloatRenderer_SetPrecision(PyObject *, PyObject *
 }
 
 
-static PyObject * GridCellFloatRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellFloatRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellFloatRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellBoolRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellBoolRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellBoolRenderer *result;
     char *kwnames[] = {
@@ -2095,14 +2095,14 @@ static PyObject *_wrap_new_GridCellBoolRenderer(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * GridCellBoolRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellBoolRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellBoolRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellDateTimeRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellDateTimeRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString arg1 = (wxString) wxPyDateTimeFormatStr ;
     wxString arg2 = (wxString) wxPyDateTimeFormatStr ;
@@ -2144,14 +2144,14 @@ static PyObject *_wrap_new_GridCellDateTimeRenderer(PyObject *, PyObject *args, 
 }
 
 
-static PyObject * GridCellDateTimeRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellDateTimeRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellDateTimeRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellEnumRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellEnumRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString const &arg1_defvalue = wxPyEmptyString ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
@@ -2192,14 +2192,14 @@ static PyObject *_wrap_new_GridCellEnumRenderer(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * GridCellEnumRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellEnumRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellEnumRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellAutoWrapStringRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellAutoWrapStringRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAutoWrapStringRenderer *result;
     char *kwnames[] = {
@@ -2221,14 +2221,14 @@ static PyObject *_wrap_new_GridCellAutoWrapStringRenderer(PyObject *, PyObject *
 }
 
 
-static PyObject * GridCellAutoWrapStringRenderer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellAutoWrapStringRenderer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellAutoWrapStringRenderer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_GridCellEditor__setOORInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -2256,7 +2256,7 @@ static PyObject *_wrap_GridCellEditor__setOORInfo(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_GridCellEditor_IsCreated(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_IsCreated(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     bool result;
@@ -2284,7 +2284,7 @@ static PyObject *_wrap_GridCellEditor_IsCreated(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellEditor_GetControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_GetControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxControl *result;
@@ -2312,7 +2312,7 @@ static PyObject *_wrap_GridCellEditor_GetControl(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridCellEditor_SetControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_SetControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxControl *arg2 = (wxControl *) 0 ;
@@ -2341,7 +2341,7 @@ static PyObject *_wrap_GridCellEditor_SetControl(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridCellEditor_GetCellAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_GetCellAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxGridCellAttr *result;
@@ -2369,7 +2369,7 @@ static PyObject *_wrap_GridCellEditor_GetCellAttr(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_GridCellEditor_SetCellAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_SetCellAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -2398,7 +2398,7 @@ static PyObject *_wrap_GridCellEditor_SetCellAttr(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_GridCellEditor_SetParameters(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_SetParameters(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxString *arg2 = 0 ;
@@ -2439,7 +2439,7 @@ static PyObject *_wrap_GridCellEditor_SetParameters(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridCellEditor_IncRef(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_IncRef(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2464,7 +2464,7 @@ static PyObject *_wrap_GridCellEditor_IncRef(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellEditor_DecRef(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_DecRef(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2489,7 +2489,7 @@ static PyObject *_wrap_GridCellEditor_DecRef(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellEditor_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -2526,7 +2526,7 @@ static PyObject *_wrap_GridCellEditor_Create(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellEditor_BeginEdit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_BeginEdit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     int arg2 ;
@@ -2563,7 +2563,7 @@ static PyObject *_wrap_GridCellEditor_BeginEdit(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellEditor_EndEdit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_EndEdit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     int arg2 ;
@@ -2603,7 +2603,7 @@ static PyObject *_wrap_GridCellEditor_EndEdit(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridCellEditor_Reset(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_Reset(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2628,7 +2628,7 @@ static PyObject *_wrap_GridCellEditor_Reset(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridCellEditor_Clone(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_Clone(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxGridCellEditor *result;
@@ -2656,7 +2656,7 @@ static PyObject *_wrap_GridCellEditor_Clone(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridCellEditor_SetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxRect *arg2 = 0 ;
@@ -2688,7 +2688,7 @@ static PyObject *_wrap_GridCellEditor_SetSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridCellEditor_Show(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     bool arg2 ;
@@ -2723,7 +2723,7 @@ static PyObject *_wrap_GridCellEditor_Show(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GridCellEditor_PaintBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_PaintBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxRect *arg2 = 0 ;
@@ -2759,7 +2759,7 @@ static PyObject *_wrap_GridCellEditor_PaintBackground(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridCellEditor_IsAcceptedKey(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_IsAcceptedKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxKeyEvent *arg2 = 0 ;
@@ -2796,7 +2796,7 @@ static PyObject *_wrap_GridCellEditor_IsAcceptedKey(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridCellEditor_StartingKey(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_StartingKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxKeyEvent *arg2 = 0 ;
@@ -2830,7 +2830,7 @@ static PyObject *_wrap_GridCellEditor_StartingKey(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_GridCellEditor_StartingClick(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_StartingClick(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2855,7 +2855,7 @@ static PyObject *_wrap_GridCellEditor_StartingClick(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridCellEditor_HandleReturn(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_HandleReturn(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     wxKeyEvent *arg2 = 0 ;
@@ -2889,7 +2889,7 @@ static PyObject *_wrap_GridCellEditor_HandleReturn(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_GridCellEditor_Destroy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEditor_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2914,14 +2914,14 @@ static PyObject *_wrap_GridCellEditor_Destroy(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject * GridCellEditor_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellEditor_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellEditor, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PyGridCellEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyGridCellEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *result;
     char *kwnames[] = {
@@ -2943,7 +2943,7 @@ static PyObject *_wrap_new_PyGridCellEditor(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_PyGridCellEditor__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -2974,7 +2974,7 @@ static PyObject *_wrap_PyGridCellEditor__setCallbackInfo(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyGridCellEditor_base_SetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor_base_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     wxRect *arg2 = 0 ;
@@ -3006,7 +3006,7 @@ static PyObject *_wrap_PyGridCellEditor_base_SetSize(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyGridCellEditor_base_Show(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor_base_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     bool arg2 ;
@@ -3041,7 +3041,7 @@ static PyObject *_wrap_PyGridCellEditor_base_Show(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyGridCellEditor_base_PaintBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor_base_PaintBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     wxRect *arg2 = 0 ;
@@ -3077,7 +3077,7 @@ static PyObject *_wrap_PyGridCellEditor_base_PaintBackground(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_PyGridCellEditor_base_IsAcceptedKey(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor_base_IsAcceptedKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     wxKeyEvent *arg2 = 0 ;
@@ -3114,7 +3114,7 @@ static PyObject *_wrap_PyGridCellEditor_base_IsAcceptedKey(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyGridCellEditor_base_StartingKey(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor_base_StartingKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     wxKeyEvent *arg2 = 0 ;
@@ -3148,7 +3148,7 @@ static PyObject *_wrap_PyGridCellEditor_base_StartingKey(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyGridCellEditor_base_StartingClick(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor_base_StartingClick(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3173,7 +3173,7 @@ static PyObject *_wrap_PyGridCellEditor_base_StartingClick(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyGridCellEditor_base_HandleReturn(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor_base_HandleReturn(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     wxKeyEvent *arg2 = 0 ;
@@ -3207,7 +3207,7 @@ static PyObject *_wrap_PyGridCellEditor_base_HandleReturn(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyGridCellEditor_base_Destroy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor_base_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3232,7 +3232,7 @@ static PyObject *_wrap_PyGridCellEditor_base_Destroy(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyGridCellEditor_base_SetParameters(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellEditor_base_SetParameters(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellEditor *arg1 = (wxPyGridCellEditor *) 0 ;
     wxString *arg2 = 0 ;
@@ -3273,14 +3273,14 @@ static PyObject *_wrap_PyGridCellEditor_base_SetParameters(PyObject *, PyObject 
 }
 
 
-static PyObject * PyGridCellEditor_swigregister(PyObject *, PyObject *args) {
+static PyObject * PyGridCellEditor_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyGridCellEditor, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellTextEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellTextEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellTextEditor *result;
     char *kwnames[] = {
@@ -3302,7 +3302,7 @@ static PyObject *_wrap_new_GridCellTextEditor(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridCellTextEditor_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellTextEditor_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellTextEditor *arg1 = (wxGridCellTextEditor *) 0 ;
     wxString result;
@@ -3334,14 +3334,14 @@ static PyObject *_wrap_GridCellTextEditor_GetValue(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * GridCellTextEditor_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellTextEditor_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellTextEditor, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellNumberEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellNumberEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) -1 ;
     int arg2 = (int) -1 ;
@@ -3375,7 +3375,7 @@ static PyObject *_wrap_new_GridCellNumberEditor(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellNumberEditor_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellNumberEditor_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellNumberEditor *arg1 = (wxGridCellNumberEditor *) 0 ;
     wxString result;
@@ -3407,14 +3407,14 @@ static PyObject *_wrap_GridCellNumberEditor_GetValue(PyObject *, PyObject *args,
 }
 
 
-static PyObject * GridCellNumberEditor_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellNumberEditor_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellNumberEditor, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellFloatEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellFloatEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) -1 ;
     int arg2 = (int) -1 ;
@@ -3448,7 +3448,7 @@ static PyObject *_wrap_new_GridCellFloatEditor(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_GridCellFloatEditor_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellFloatEditor_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellFloatEditor *arg1 = (wxGridCellFloatEditor *) 0 ;
     wxString result;
@@ -3480,14 +3480,14 @@ static PyObject *_wrap_GridCellFloatEditor_GetValue(PyObject *, PyObject *args, 
 }
 
 
-static PyObject * GridCellFloatEditor_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellFloatEditor_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellFloatEditor, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellBoolEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellBoolEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellBoolEditor *result;
     char *kwnames[] = {
@@ -3509,7 +3509,7 @@ static PyObject *_wrap_new_GridCellBoolEditor(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridCellBoolEditor_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellBoolEditor_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellBoolEditor *arg1 = (wxGridCellBoolEditor *) 0 ;
     wxString result;
@@ -3541,14 +3541,14 @@ static PyObject *_wrap_GridCellBoolEditor_GetValue(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * GridCellBoolEditor_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellBoolEditor_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellBoolEditor, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellChoiceEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellChoiceEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxString *arg2 = (wxString *) NULL ;
@@ -3592,7 +3592,7 @@ static PyObject *_wrap_new_GridCellChoiceEditor(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellChoiceEditor_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellChoiceEditor_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellChoiceEditor *arg1 = (wxGridCellChoiceEditor *) 0 ;
     wxString result;
@@ -3624,14 +3624,14 @@ static PyObject *_wrap_GridCellChoiceEditor_GetValue(PyObject *, PyObject *args,
 }
 
 
-static PyObject * GridCellChoiceEditor_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellChoiceEditor_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellChoiceEditor, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellEnumEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellEnumEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString const &arg1_defvalue = wxPyEmptyString ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
@@ -3672,7 +3672,7 @@ static PyObject *_wrap_new_GridCellEnumEditor(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridCellEnumEditor_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellEnumEditor_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellEnumEditor *arg1 = (wxGridCellEnumEditor *) 0 ;
     wxString result;
@@ -3704,14 +3704,14 @@ static PyObject *_wrap_GridCellEnumEditor_GetValue(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * GridCellEnumEditor_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellEnumEditor_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellEnumEditor, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellAutoWrapStringEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellAutoWrapStringEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAutoWrapStringEditor *result;
     char *kwnames[] = {
@@ -3733,7 +3733,7 @@ static PyObject *_wrap_new_GridCellAutoWrapStringEditor(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridCellAutoWrapStringEditor_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAutoWrapStringEditor_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAutoWrapStringEditor *arg1 = (wxGridCellAutoWrapStringEditor *) 0 ;
     wxString result;
@@ -3765,14 +3765,14 @@ static PyObject *_wrap_GridCellAutoWrapStringEditor_GetValue(PyObject *, PyObjec
 }
 
 
-static PyObject * GridCellAutoWrapStringEditor_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellAutoWrapStringEditor_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellAutoWrapStringEditor, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_GridCellAttr__setOORInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -3800,7 +3800,7 @@ static PyObject *_wrap_GridCellAttr__setOORInfo(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_new_GridCellAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) NULL ;
     wxGridCellAttr *result;
@@ -3830,7 +3830,7 @@ static PyObject *_wrap_new_GridCellAttr(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_GridCellAttr_Clone(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_Clone(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxGridCellAttr *result;
@@ -3858,7 +3858,7 @@ static PyObject *_wrap_GridCellAttr_Clone(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_GridCellAttr_MergeWith(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_MergeWith(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -3887,7 +3887,7 @@ static PyObject *_wrap_GridCellAttr_MergeWith(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridCellAttr_IncRef(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_IncRef(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3912,7 +3912,7 @@ static PyObject *_wrap_GridCellAttr_IncRef(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GridCellAttr_DecRef(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_DecRef(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3937,7 +3937,7 @@ static PyObject *_wrap_GridCellAttr_DecRef(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxColour *arg2 = 0 ;
@@ -3969,7 +3969,7 @@ static PyObject *_wrap_GridCellAttr_SetTextColour(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxColour *arg2 = 0 ;
@@ -4001,7 +4001,7 @@ static PyObject *_wrap_GridCellAttr_SetBackgroundColour(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxFont *arg2 = 0 ;
@@ -4035,7 +4035,7 @@ static PyObject *_wrap_GridCellAttr_SetFont(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     int arg2 ;
@@ -4068,7 +4068,7 @@ static PyObject *_wrap_GridCellAttr_SetAlignment(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     int arg2 ;
@@ -4101,7 +4101,7 @@ static PyObject *_wrap_GridCellAttr_SetSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetOverflow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetOverflow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool arg2 = (bool) True ;
@@ -4132,7 +4132,7 @@ static PyObject *_wrap_GridCellAttr_SetOverflow(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetReadOnly(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool arg2 = (bool) True ;
@@ -4163,7 +4163,7 @@ static PyObject *_wrap_GridCellAttr_SetReadOnly(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxGridCellRenderer *arg2 = (wxGridCellRenderer *) 0 ;
@@ -4192,7 +4192,7 @@ static PyObject *_wrap_GridCellAttr_SetRenderer(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxGridCellEditor *arg2 = (wxGridCellEditor *) 0 ;
@@ -4221,7 +4221,7 @@ static PyObject *_wrap_GridCellAttr_SetEditor(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetKind(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetKind(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     int arg2 ;
@@ -4250,7 +4250,7 @@ static PyObject *_wrap_GridCellAttr_SetKind(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridCellAttr_HasTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_HasTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4278,7 +4278,7 @@ static PyObject *_wrap_GridCellAttr_HasTextColour(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_GridCellAttr_HasBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_HasBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4306,7 +4306,7 @@ static PyObject *_wrap_GridCellAttr_HasBackgroundColour(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridCellAttr_HasFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_HasFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4334,7 +4334,7 @@ static PyObject *_wrap_GridCellAttr_HasFont(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridCellAttr_HasAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_HasAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4362,7 +4362,7 @@ static PyObject *_wrap_GridCellAttr_HasAlignment(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridCellAttr_HasRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_HasRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4390,7 +4390,7 @@ static PyObject *_wrap_GridCellAttr_HasRenderer(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellAttr_HasEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_HasEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4418,7 +4418,7 @@ static PyObject *_wrap_GridCellAttr_HasEditor(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridCellAttr_HasReadWriteMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_HasReadWriteMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4446,7 +4446,7 @@ static PyObject *_wrap_GridCellAttr_HasReadWriteMode(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridCellAttr_HasOverflowMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_HasOverflowMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4474,7 +4474,7 @@ static PyObject *_wrap_GridCellAttr_HasOverflowMode(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridCellAttr_GetTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_GetTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxColour result;
@@ -4504,7 +4504,7 @@ static PyObject *_wrap_GridCellAttr_GetTextColour(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_GridCellAttr_GetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_GetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxColour result;
@@ -4534,7 +4534,7 @@ static PyObject *_wrap_GridCellAttr_GetBackgroundColour(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridCellAttr_GetFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_GetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxFont result;
@@ -4564,7 +4564,7 @@ static PyObject *_wrap_GridCellAttr_GetFont(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridCellAttr_GetAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_GetAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -4603,7 +4603,7 @@ static PyObject *_wrap_GridCellAttr_GetAlignment(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridCellAttr_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -4642,7 +4642,7 @@ static PyObject *_wrap_GridCellAttr_GetSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridCellAttr_GetOverflow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_GetOverflow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4670,7 +4670,7 @@ static PyObject *_wrap_GridCellAttr_GetOverflow(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellAttr_GetRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_GetRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxGrid *arg2 = (wxGrid *) 0 ;
@@ -4710,7 +4710,7 @@ static PyObject *_wrap_GridCellAttr_GetRenderer(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellAttr_GetEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_GetEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxGrid *arg2 = (wxGrid *) 0 ;
@@ -4750,7 +4750,7 @@ static PyObject *_wrap_GridCellAttr_GetEditor(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridCellAttr_IsReadOnly(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_IsReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     bool result;
@@ -4778,7 +4778,7 @@ static PyObject *_wrap_GridCellAttr_IsReadOnly(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_GridCellAttr_SetDefAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttr_SetDefAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -4807,14 +4807,14 @@ static PyObject *_wrap_GridCellAttr_SetDefAttr(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject * GridCellAttr_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellAttr_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellAttr, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellAttrProvider(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellAttrProvider(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttrProvider *result;
     char *kwnames[] = {
@@ -4838,7 +4838,7 @@ static PyObject *_wrap_new_GridCellAttrProvider(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridCellAttrProvider__setOORInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttrProvider__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttrProvider *arg1 = (wxGridCellAttrProvider *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -4866,7 +4866,7 @@ static PyObject *_wrap_GridCellAttrProvider__setOORInfo(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridCellAttrProvider_GetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttrProvider_GetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttrProvider *arg1 = (wxGridCellAttrProvider *) 0 ;
     int arg2 ;
@@ -4906,7 +4906,7 @@ static PyObject *_wrap_GridCellAttrProvider_GetAttr(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridCellAttrProvider_SetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttrProvider_SetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttrProvider *arg1 = (wxGridCellAttrProvider *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -4943,7 +4943,7 @@ static PyObject *_wrap_GridCellAttrProvider_SetAttr(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridCellAttrProvider_SetRowAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttrProvider_SetRowAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttrProvider *arg1 = (wxGridCellAttrProvider *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -4976,7 +4976,7 @@ static PyObject *_wrap_GridCellAttrProvider_SetRowAttr(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_GridCellAttrProvider_SetColAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttrProvider_SetColAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttrProvider *arg1 = (wxGridCellAttrProvider *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -5009,7 +5009,7 @@ static PyObject *_wrap_GridCellAttrProvider_SetColAttr(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_GridCellAttrProvider_UpdateAttrRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttrProvider_UpdateAttrRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttrProvider *arg1 = (wxGridCellAttrProvider *) 0 ;
     size_t arg2 ;
@@ -5042,7 +5042,7 @@ static PyObject *_wrap_GridCellAttrProvider_UpdateAttrRows(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_GridCellAttrProvider_UpdateAttrCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellAttrProvider_UpdateAttrCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellAttrProvider *arg1 = (wxGridCellAttrProvider *) 0 ;
     size_t arg2 ;
@@ -5075,14 +5075,14 @@ static PyObject *_wrap_GridCellAttrProvider_UpdateAttrCols(PyObject *, PyObject 
 }
 
 
-static PyObject * GridCellAttrProvider_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellAttrProvider_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellAttrProvider, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PyGridCellAttrProvider(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyGridCellAttrProvider(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellAttrProvider *result;
     char *kwnames[] = {
@@ -5104,7 +5104,7 @@ static PyObject *_wrap_new_PyGridCellAttrProvider(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyGridCellAttrProvider__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellAttrProvider__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellAttrProvider *arg1 = (wxPyGridCellAttrProvider *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -5135,7 +5135,7 @@ static PyObject *_wrap_PyGridCellAttrProvider__setCallbackInfo(PyObject *, PyObj
 }
 
 
-static PyObject *_wrap_PyGridCellAttrProvider_base_GetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellAttrProvider_base_GetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellAttrProvider *arg1 = (wxPyGridCellAttrProvider *) 0 ;
     int arg2 ;
@@ -5175,7 +5175,7 @@ static PyObject *_wrap_PyGridCellAttrProvider_base_GetAttr(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyGridCellAttrProvider_base_SetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellAttrProvider_base_SetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellAttrProvider *arg1 = (wxPyGridCellAttrProvider *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -5212,7 +5212,7 @@ static PyObject *_wrap_PyGridCellAttrProvider_base_SetAttr(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyGridCellAttrProvider_base_SetRowAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellAttrProvider_base_SetRowAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellAttrProvider *arg1 = (wxPyGridCellAttrProvider *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -5245,7 +5245,7 @@ static PyObject *_wrap_PyGridCellAttrProvider_base_SetRowAttr(PyObject *, PyObje
 }
 
 
-static PyObject *_wrap_PyGridCellAttrProvider_base_SetColAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridCellAttrProvider_base_SetColAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridCellAttrProvider *arg1 = (wxPyGridCellAttrProvider *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -5278,14 +5278,14 @@ static PyObject *_wrap_PyGridCellAttrProvider_base_SetColAttr(PyObject *, PyObje
 }
 
 
-static PyObject * PyGridCellAttrProvider_swigregister(PyObject *, PyObject *args) {
+static PyObject * PyGridCellAttrProvider_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyGridCellAttrProvider, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_GridTableBase__setOORInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -5313,7 +5313,7 @@ static PyObject *_wrap_GridTableBase__setOORInfo(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridTableBase_SetAttrProvider(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetAttrProvider(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     wxGridCellAttrProvider *arg2 = (wxGridCellAttrProvider *) 0 ;
@@ -5342,7 +5342,7 @@ static PyObject *_wrap_GridTableBase_SetAttrProvider(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridTableBase_GetAttrProvider(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetAttrProvider(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     wxGridCellAttrProvider *result;
@@ -5370,7 +5370,7 @@ static PyObject *_wrap_GridTableBase_GetAttrProvider(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridTableBase_SetView(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetView(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     wxGrid *arg2 = (wxGrid *) 0 ;
@@ -5399,7 +5399,7 @@ static PyObject *_wrap_GridTableBase_SetView(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridTableBase_GetView(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetView(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     wxGrid *result;
@@ -5427,7 +5427,7 @@ static PyObject *_wrap_GridTableBase_GetView(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridTableBase_GetNumberRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetNumberRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int result;
@@ -5453,7 +5453,7 @@ static PyObject *_wrap_GridTableBase_GetNumberRows(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_GridTableBase_GetNumberCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetNumberCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int result;
@@ -5479,7 +5479,7 @@ static PyObject *_wrap_GridTableBase_GetNumberCols(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_GridTableBase_IsEmptyCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_IsEmptyCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5515,7 +5515,7 @@ static PyObject *_wrap_GridTableBase_IsEmptyCell(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridTableBase_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5555,7 +5555,7 @@ static PyObject *_wrap_GridTableBase_GetValue(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridTableBase_SetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5604,7 +5604,7 @@ static PyObject *_wrap_GridTableBase_SetValue(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridTableBase_GetTypeName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetTypeName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5644,7 +5644,7 @@ static PyObject *_wrap_GridTableBase_GetTypeName(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridTableBase_CanGetValueAs(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_CanGetValueAs(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5696,7 +5696,7 @@ static PyObject *_wrap_GridTableBase_CanGetValueAs(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_GridTableBase_CanSetValueAs(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_CanSetValueAs(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5748,7 +5748,7 @@ static PyObject *_wrap_GridTableBase_CanSetValueAs(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_GridTableBase_GetValueAsLong(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetValueAsLong(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5782,7 +5782,7 @@ static PyObject *_wrap_GridTableBase_GetValueAsLong(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridTableBase_GetValueAsDouble(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetValueAsDouble(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5816,7 +5816,7 @@ static PyObject *_wrap_GridTableBase_GetValueAsDouble(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridTableBase_GetValueAsBool(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetValueAsBool(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5852,7 +5852,7 @@ static PyObject *_wrap_GridTableBase_GetValueAsBool(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridTableBase_SetValueAsLong(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetValueAsLong(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5889,7 +5889,7 @@ static PyObject *_wrap_GridTableBase_SetValueAsLong(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridTableBase_SetValueAsDouble(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetValueAsDouble(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5926,7 +5926,7 @@ static PyObject *_wrap_GridTableBase_SetValueAsDouble(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridTableBase_SetValueAsBool(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetValueAsBool(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -5963,7 +5963,7 @@ static PyObject *_wrap_GridTableBase_SetValueAsBool(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridTableBase_Clear(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     PyObject * obj0 = 0 ;
@@ -5988,7 +5988,7 @@ static PyObject *_wrap_GridTableBase_Clear(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GridTableBase_InsertRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_InsertRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     size_t arg2 = (size_t) 0 ;
@@ -6028,7 +6028,7 @@ static PyObject *_wrap_GridTableBase_InsertRows(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridTableBase_AppendRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_AppendRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     size_t arg2 = (size_t) 1 ;
@@ -6062,7 +6062,7 @@ static PyObject *_wrap_GridTableBase_AppendRows(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridTableBase_DeleteRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_DeleteRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     size_t arg2 = (size_t) 0 ;
@@ -6102,7 +6102,7 @@ static PyObject *_wrap_GridTableBase_DeleteRows(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridTableBase_InsertCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_InsertCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     size_t arg2 = (size_t) 0 ;
@@ -6142,7 +6142,7 @@ static PyObject *_wrap_GridTableBase_InsertCols(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridTableBase_AppendCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_AppendCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     size_t arg2 = (size_t) 1 ;
@@ -6176,7 +6176,7 @@ static PyObject *_wrap_GridTableBase_AppendCols(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridTableBase_DeleteCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_DeleteCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     size_t arg2 = (size_t) 0 ;
@@ -6216,7 +6216,7 @@ static PyObject *_wrap_GridTableBase_DeleteCols(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridTableBase_GetRowLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetRowLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -6252,7 +6252,7 @@ static PyObject *_wrap_GridTableBase_GetRowLabelValue(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridTableBase_GetColLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetColLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -6288,7 +6288,7 @@ static PyObject *_wrap_GridTableBase_GetColLabelValue(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridTableBase_SetRowLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetRowLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -6333,7 +6333,7 @@ static PyObject *_wrap_GridTableBase_SetRowLabelValue(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridTableBase_SetColLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetColLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -6378,7 +6378,7 @@ static PyObject *_wrap_GridTableBase_SetColLabelValue(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridTableBase_CanHaveAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_CanHaveAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     bool result;
@@ -6406,7 +6406,7 @@ static PyObject *_wrap_GridTableBase_CanHaveAttributes(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_GridTableBase_GetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_GetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -6446,7 +6446,7 @@ static PyObject *_wrap_GridTableBase_GetAttr(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridTableBase_SetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -6483,7 +6483,7 @@ static PyObject *_wrap_GridTableBase_SetAttr(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridTableBase_SetRowAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetRowAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -6516,7 +6516,7 @@ static PyObject *_wrap_GridTableBase_SetRowAttr(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridTableBase_SetColAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableBase_SetColAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -6549,14 +6549,14 @@ static PyObject *_wrap_GridTableBase_SetColAttr(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * GridTableBase_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridTableBase_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridTableBase, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PyGridTableBase(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyGridTableBase(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *result;
     char *kwnames[] = {
@@ -6578,7 +6578,7 @@ static PyObject *_wrap_new_PyGridTableBase(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_PyGridTableBase__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -6609,7 +6609,7 @@ static PyObject *_wrap_PyGridTableBase__setCallbackInfo(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_PyGridTableBase_Destroy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6634,7 +6634,7 @@ static PyObject *_wrap_PyGridTableBase_Destroy(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_GetTypeName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_GetTypeName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
@@ -6674,7 +6674,7 @@ static PyObject *_wrap_PyGridTableBase_base_GetTypeName(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_CanGetValueAs(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_CanGetValueAs(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
@@ -6726,7 +6726,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanGetValueAs(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_CanSetValueAs(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_CanSetValueAs(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
@@ -6778,7 +6778,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanSetValueAs(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_Clear(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6803,7 +6803,7 @@ static PyObject *_wrap_PyGridTableBase_base_Clear(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_InsertRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_InsertRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     size_t arg2 = (size_t) 0 ;
@@ -6843,7 +6843,7 @@ static PyObject *_wrap_PyGridTableBase_base_InsertRows(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_AppendRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_AppendRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     size_t arg2 = (size_t) 1 ;
@@ -6877,7 +6877,7 @@ static PyObject *_wrap_PyGridTableBase_base_AppendRows(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_DeleteRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_DeleteRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     size_t arg2 = (size_t) 0 ;
@@ -6917,7 +6917,7 @@ static PyObject *_wrap_PyGridTableBase_base_DeleteRows(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_InsertCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_InsertCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     size_t arg2 = (size_t) 0 ;
@@ -6957,7 +6957,7 @@ static PyObject *_wrap_PyGridTableBase_base_InsertCols(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_AppendCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_AppendCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     size_t arg2 = (size_t) 1 ;
@@ -6991,7 +6991,7 @@ static PyObject *_wrap_PyGridTableBase_base_AppendCols(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_DeleteCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_DeleteCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     size_t arg2 = (size_t) 0 ;
@@ -7031,7 +7031,7 @@ static PyObject *_wrap_PyGridTableBase_base_DeleteCols(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_GetRowLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_GetRowLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
@@ -7067,7 +7067,7 @@ static PyObject *_wrap_PyGridTableBase_base_GetRowLabelValue(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_GetColLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_GetColLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
@@ -7103,7 +7103,7 @@ static PyObject *_wrap_PyGridTableBase_base_GetColLabelValue(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_SetRowLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_SetRowLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
@@ -7148,7 +7148,7 @@ static PyObject *_wrap_PyGridTableBase_base_SetRowLabelValue(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_SetColLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_SetColLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
@@ -7193,7 +7193,7 @@ static PyObject *_wrap_PyGridTableBase_base_SetColLabelValue(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_CanHaveAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_CanHaveAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     bool result;
@@ -7221,7 +7221,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanHaveAttributes(PyObject *, PyObje
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_GetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_GetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     int arg2 ;
@@ -7261,7 +7261,7 @@ static PyObject *_wrap_PyGridTableBase_base_GetAttr(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_SetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_SetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -7298,7 +7298,7 @@ static PyObject *_wrap_PyGridTableBase_base_SetAttr(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_SetRowAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_SetRowAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -7331,7 +7331,7 @@ static PyObject *_wrap_PyGridTableBase_base_SetRowAttr(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyGridTableBase_base_SetColAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyGridTableBase_base_SetColAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyGridTableBase *arg1 = (wxPyGridTableBase *) 0 ;
     wxGridCellAttr *arg2 = (wxGridCellAttr *) 0 ;
@@ -7364,14 +7364,14 @@ static PyObject *_wrap_PyGridTableBase_base_SetColAttr(PyObject *, PyObject *arg
 }
 
 
-static PyObject * PyGridTableBase_swigregister(PyObject *, PyObject *args) {
+static PyObject * PyGridTableBase_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyGridTableBase, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridStringTable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridStringTable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -7405,14 +7405,14 @@ static PyObject *_wrap_new_GridStringTable(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject * GridStringTable_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridStringTable_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridStringTable, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridTableMessage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridTableMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableBase *arg1 = (wxGridTableBase *) 0 ;
     int arg2 ;
@@ -7454,7 +7454,7 @@ static PyObject *_wrap_new_GridTableMessage(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_delete_GridTableMessage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_GridTableMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableMessage *arg1 = (wxGridTableMessage *) 0 ;
     PyObject * obj0 = 0 ;
@@ -7479,7 +7479,7 @@ static PyObject *_wrap_delete_GridTableMessage(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_GridTableMessage_SetTableObject(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableMessage_SetTableObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableMessage *arg1 = (wxGridTableMessage *) 0 ;
     wxGridTableBase *arg2 = (wxGridTableBase *) 0 ;
@@ -7508,7 +7508,7 @@ static PyObject *_wrap_GridTableMessage_SetTableObject(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_GridTableMessage_GetTableObject(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableMessage_GetTableObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableMessage *arg1 = (wxGridTableMessage *) 0 ;
     wxGridTableBase *result;
@@ -7536,7 +7536,7 @@ static PyObject *_wrap_GridTableMessage_GetTableObject(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_GridTableMessage_SetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableMessage_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableMessage *arg1 = (wxGridTableMessage *) 0 ;
     int arg2 ;
@@ -7565,7 +7565,7 @@ static PyObject *_wrap_GridTableMessage_SetId(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridTableMessage_GetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableMessage_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableMessage *arg1 = (wxGridTableMessage *) 0 ;
     int result;
@@ -7591,7 +7591,7 @@ static PyObject *_wrap_GridTableMessage_GetId(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridTableMessage_SetCommandInt(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableMessage_SetCommandInt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableMessage *arg1 = (wxGridTableMessage *) 0 ;
     int arg2 ;
@@ -7620,7 +7620,7 @@ static PyObject *_wrap_GridTableMessage_SetCommandInt(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridTableMessage_GetCommandInt(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableMessage_GetCommandInt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableMessage *arg1 = (wxGridTableMessage *) 0 ;
     int result;
@@ -7646,7 +7646,7 @@ static PyObject *_wrap_GridTableMessage_GetCommandInt(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridTableMessage_SetCommandInt2(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableMessage_SetCommandInt2(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableMessage *arg1 = (wxGridTableMessage *) 0 ;
     int arg2 ;
@@ -7675,7 +7675,7 @@ static PyObject *_wrap_GridTableMessage_SetCommandInt2(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_GridTableMessage_GetCommandInt2(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridTableMessage_GetCommandInt2(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridTableMessage *arg1 = (wxGridTableMessage *) 0 ;
     int result;
@@ -7701,14 +7701,14 @@ static PyObject *_wrap_GridTableMessage_GetCommandInt2(PyObject *, PyObject *arg
 }
 
 
-static PyObject * GridTableMessage_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridTableMessage_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridTableMessage, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridCellCoords(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridCellCoords(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) -1 ;
     int arg2 = (int) -1 ;
@@ -7742,7 +7742,7 @@ static PyObject *_wrap_new_GridCellCoords(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_delete_GridCellCoords(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_GridCellCoords(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     PyObject * obj0 = 0 ;
@@ -7767,7 +7767,7 @@ static PyObject *_wrap_delete_GridCellCoords(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellCoords_GetRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellCoords_GetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     int result;
@@ -7793,7 +7793,7 @@ static PyObject *_wrap_GridCellCoords_GetRow(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellCoords_SetRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellCoords_SetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     int arg2 ;
@@ -7822,7 +7822,7 @@ static PyObject *_wrap_GridCellCoords_SetRow(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellCoords_GetCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellCoords_GetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     int result;
@@ -7848,7 +7848,7 @@ static PyObject *_wrap_GridCellCoords_GetCol(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellCoords_SetCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellCoords_SetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     int arg2 ;
@@ -7877,7 +7877,7 @@ static PyObject *_wrap_GridCellCoords_SetCol(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellCoords_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellCoords_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     int arg2 ;
@@ -7910,7 +7910,7 @@ static PyObject *_wrap_GridCellCoords_Set(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_GridCellCoords___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellCoords___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     wxGridCellCoords *arg2 = 0 ;
@@ -7945,7 +7945,7 @@ static PyObject *_wrap_GridCellCoords___eq__(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellCoords___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellCoords___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     wxGridCellCoords *arg2 = 0 ;
@@ -7980,7 +7980,7 @@ static PyObject *_wrap_GridCellCoords___ne__(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridCellCoords_asTuple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellCoords_asTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     PyObject *result;
@@ -8006,14 +8006,14 @@ static PyObject *_wrap_GridCellCoords_asTuple(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject * GridCellCoords_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridCellCoords_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridCellCoords, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_Grid(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -8090,7 +8090,7 @@ static PyObject *_wrap_new_Grid(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Grid_CreateGrid(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_CreateGrid(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -8132,7 +8132,7 @@ static PyObject *_wrap_Grid_CreateGrid(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_SetSelectionMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetSelectionMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     WXGRIDSELECTIONMODES arg2 ;
@@ -8161,7 +8161,7 @@ static PyObject *_wrap_Grid_SetSelectionMode(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetSelectionMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetSelectionMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     WXGRIDSELECTIONMODES result;
@@ -8187,7 +8187,7 @@ static PyObject *_wrap_Grid_GetSelectionMode(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetNumberRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetNumberRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -8213,7 +8213,7 @@ static PyObject *_wrap_Grid_GetNumberRows(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_GetNumberCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetNumberCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -8239,7 +8239,7 @@ static PyObject *_wrap_Grid_GetNumberCols(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_ProcessTableMessage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_ProcessTableMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridTableMessage *arg2 = 0 ;
@@ -8276,7 +8276,7 @@ static PyObject *_wrap_Grid_ProcessTableMessage(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Grid_GetTable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetTable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridTableBase *result;
@@ -8304,7 +8304,7 @@ static PyObject *_wrap_Grid_GetTable(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Grid_SetTable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetTable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridTableBase *arg2 = (wxGridTableBase *) 0 ;
@@ -8348,7 +8348,7 @@ static PyObject *_wrap_Grid_SetTable(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Grid_ClearGrid(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_ClearGrid(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8373,7 +8373,7 @@ static PyObject *_wrap_Grid_ClearGrid(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Grid_InsertRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_InsertRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 0 ;
@@ -8419,7 +8419,7 @@ static PyObject *_wrap_Grid_InsertRows(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_AppendRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_AppendRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 1 ;
@@ -8459,7 +8459,7 @@ static PyObject *_wrap_Grid_AppendRows(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_DeleteRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DeleteRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 0 ;
@@ -8505,7 +8505,7 @@ static PyObject *_wrap_Grid_DeleteRows(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_InsertCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_InsertCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 0 ;
@@ -8551,7 +8551,7 @@ static PyObject *_wrap_Grid_InsertCols(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_AppendCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_AppendCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 1 ;
@@ -8591,7 +8591,7 @@ static PyObject *_wrap_Grid_AppendCols(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_DeleteCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DeleteCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 = (int) 0 ;
@@ -8637,7 +8637,7 @@ static PyObject *_wrap_Grid_DeleteCols(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_DrawCellHighlight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DrawCellHighlight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxDC *arg2 = 0 ;
@@ -8675,7 +8675,7 @@ static PyObject *_wrap_Grid_DrawCellHighlight(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_DrawTextRectangle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DrawTextRectangle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxDC *arg2 = 0 ;
@@ -8750,7 +8750,7 @@ static PyObject *_wrap_Grid_DrawTextRectangle(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_GetTextBoxSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetTextBoxSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxDC *arg2 = 0 ;
@@ -8828,7 +8828,7 @@ static PyObject *_wrap_Grid_GetTextBoxSize(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Grid_BeginBatch(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_BeginBatch(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8853,7 +8853,7 @@ static PyObject *_wrap_Grid_BeginBatch(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_EndBatch(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_EndBatch(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8878,7 +8878,7 @@ static PyObject *_wrap_Grid_EndBatch(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Grid_GetBatchCount(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetBatchCount(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -8904,7 +8904,7 @@ static PyObject *_wrap_Grid_GetBatchCount(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_ForceRefresh(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_ForceRefresh(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8929,7 +8929,7 @@ static PyObject *_wrap_Grid_ForceRefresh(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_IsEditable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_IsEditable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -8957,7 +8957,7 @@ static PyObject *_wrap_Grid_IsEditable(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_EnableEditing(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_EnableEditing(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -8986,7 +8986,7 @@ static PyObject *_wrap_Grid_EnableEditing(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_EnableCellEditControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_EnableCellEditControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 = (bool) True ;
@@ -9017,7 +9017,7 @@ static PyObject *_wrap_Grid_EnableCellEditControl(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Grid_DisableCellEditControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DisableCellEditControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9042,7 +9042,7 @@ static PyObject *_wrap_Grid_DisableCellEditControl(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_CanEnableCellControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_CanEnableCellControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -9070,7 +9070,7 @@ static PyObject *_wrap_Grid_CanEnableCellControl(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Grid_IsCellEditControlEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_IsCellEditControlEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -9098,7 +9098,7 @@ static PyObject *_wrap_Grid_IsCellEditControlEnabled(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Grid_IsCellEditControlShown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_IsCellEditControlShown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -9126,7 +9126,7 @@ static PyObject *_wrap_Grid_IsCellEditControlShown(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_IsCurrentCellReadOnly(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_IsCurrentCellReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -9154,7 +9154,7 @@ static PyObject *_wrap_Grid_IsCurrentCellReadOnly(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Grid_ShowCellEditControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_ShowCellEditControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9179,7 +9179,7 @@ static PyObject *_wrap_Grid_ShowCellEditControl(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Grid_HideCellEditControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_HideCellEditControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9204,7 +9204,7 @@ static PyObject *_wrap_Grid_HideCellEditControl(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Grid_SaveEditControlValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SaveEditControlValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9229,7 +9229,7 @@ static PyObject *_wrap_Grid_SaveEditControlValue(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Grid_XYToCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_XYToCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -9267,7 +9267,7 @@ static PyObject *_wrap_Grid_XYToCell(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Grid_YToRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_YToRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -9297,7 +9297,7 @@ static PyObject *_wrap_Grid_YToRow(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Grid_XToCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_XToCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -9327,7 +9327,7 @@ static PyObject *_wrap_Grid_XToCol(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Grid_YToEdgeOfRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_YToEdgeOfRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -9357,7 +9357,7 @@ static PyObject *_wrap_Grid_YToEdgeOfRow(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_XToEdgeOfCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_XToEdgeOfCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -9387,7 +9387,7 @@ static PyObject *_wrap_Grid_XToEdgeOfCol(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_CellToRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_CellToRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -9425,7 +9425,7 @@ static PyObject *_wrap_Grid_CellToRect(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_GetGridCursorRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetGridCursorRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -9451,7 +9451,7 @@ static PyObject *_wrap_Grid_GetGridCursorRow(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetGridCursorCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetGridCursorCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -9477,7 +9477,7 @@ static PyObject *_wrap_Grid_GetGridCursorCol(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_IsVisible(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_IsVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -9519,7 +9519,7 @@ static PyObject *_wrap_Grid_IsVisible(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Grid_MakeCellVisible(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MakeCellVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -9552,7 +9552,7 @@ static PyObject *_wrap_Grid_MakeCellVisible(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_SetGridCursor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetGridCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -9585,7 +9585,7 @@ static PyObject *_wrap_Grid_SetGridCursor(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_MoveCursorUp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MoveCursorUp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -9617,7 +9617,7 @@ static PyObject *_wrap_Grid_MoveCursorUp(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_MoveCursorDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MoveCursorDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -9649,7 +9649,7 @@ static PyObject *_wrap_Grid_MoveCursorDown(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Grid_MoveCursorLeft(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MoveCursorLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -9681,7 +9681,7 @@ static PyObject *_wrap_Grid_MoveCursorLeft(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Grid_MoveCursorRight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MoveCursorRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -9713,7 +9713,7 @@ static PyObject *_wrap_Grid_MoveCursorRight(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_MovePageDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MovePageDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -9741,7 +9741,7 @@ static PyObject *_wrap_Grid_MovePageDown(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_MovePageUp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MovePageUp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -9769,7 +9769,7 @@ static PyObject *_wrap_Grid_MovePageUp(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_MoveCursorUpBlock(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MoveCursorUpBlock(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -9801,7 +9801,7 @@ static PyObject *_wrap_Grid_MoveCursorUpBlock(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_MoveCursorDownBlock(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MoveCursorDownBlock(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -9833,7 +9833,7 @@ static PyObject *_wrap_Grid_MoveCursorDownBlock(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Grid_MoveCursorLeftBlock(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MoveCursorLeftBlock(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -9865,7 +9865,7 @@ static PyObject *_wrap_Grid_MoveCursorLeftBlock(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Grid_MoveCursorRightBlock(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_MoveCursorRightBlock(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -9897,7 +9897,7 @@ static PyObject *_wrap_Grid_MoveCursorRightBlock(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultRowLabelSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultRowLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -9923,7 +9923,7 @@ static PyObject *_wrap_Grid_GetDefaultRowLabelSize(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_GetRowLabelSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetRowLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -9949,7 +9949,7 @@ static PyObject *_wrap_Grid_GetRowLabelSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultColLabelSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultColLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -9975,7 +9975,7 @@ static PyObject *_wrap_Grid_GetDefaultColLabelSize(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_GetColLabelSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetColLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -10001,7 +10001,7 @@ static PyObject *_wrap_Grid_GetColLabelSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_GetLabelBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetLabelBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour result;
@@ -10031,7 +10031,7 @@ static PyObject *_wrap_Grid_GetLabelBackgroundColour(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Grid_GetLabelTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetLabelTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour result;
@@ -10061,7 +10061,7 @@ static PyObject *_wrap_Grid_GetLabelTextColour(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_GetLabelFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetLabelFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxFont result;
@@ -10091,7 +10091,7 @@ static PyObject *_wrap_Grid_GetLabelFont(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_GetRowLabelAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetRowLabelAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -10130,7 +10130,7 @@ static PyObject *_wrap_Grid_GetRowLabelAlignment(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Grid_GetColLabelAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetColLabelAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -10169,7 +10169,7 @@ static PyObject *_wrap_Grid_GetColLabelAlignment(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Grid_GetColLabelTextOrientation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetColLabelTextOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -10195,7 +10195,7 @@ static PyObject *_wrap_Grid_GetColLabelTextOrientation(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_Grid_GetRowLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetRowLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10231,7 +10231,7 @@ static PyObject *_wrap_Grid_GetRowLabelValue(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetColLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetColLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10267,7 +10267,7 @@ static PyObject *_wrap_Grid_GetColLabelValue(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetGridLineColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetGridLineColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour result;
@@ -10297,7 +10297,7 @@ static PyObject *_wrap_Grid_GetGridLineColour(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_GetCellHighlightColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellHighlightColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour result;
@@ -10327,7 +10327,7 @@ static PyObject *_wrap_Grid_GetCellHighlightColour(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_GetCellHighlightPenWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellHighlightPenWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -10353,7 +10353,7 @@ static PyObject *_wrap_Grid_GetCellHighlightPenWidth(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Grid_GetCellHighlightROPenWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellHighlightROPenWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -10379,7 +10379,7 @@ static PyObject *_wrap_Grid_GetCellHighlightROPenWidth(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_Grid_SetRowLabelSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetRowLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10408,7 +10408,7 @@ static PyObject *_wrap_Grid_SetRowLabelSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_SetColLabelSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10437,7 +10437,7 @@ static PyObject *_wrap_Grid_SetColLabelSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_SetLabelBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetLabelBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour *arg2 = 0 ;
@@ -10469,7 +10469,7 @@ static PyObject *_wrap_Grid_SetLabelBackgroundColour(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Grid_SetLabelTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetLabelTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour *arg2 = 0 ;
@@ -10501,7 +10501,7 @@ static PyObject *_wrap_Grid_SetLabelTextColour(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_SetLabelFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetLabelFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxFont *arg2 = 0 ;
@@ -10535,7 +10535,7 @@ static PyObject *_wrap_Grid_SetLabelFont(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_SetRowLabelAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetRowLabelAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10568,7 +10568,7 @@ static PyObject *_wrap_Grid_SetRowLabelAlignment(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Grid_SetColLabelAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColLabelAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10601,7 +10601,7 @@ static PyObject *_wrap_Grid_SetColLabelAlignment(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Grid_SetColLabelTextOrientation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColLabelTextOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10630,7 +10630,7 @@ static PyObject *_wrap_Grid_SetColLabelTextOrientation(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_Grid_SetRowLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetRowLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10675,7 +10675,7 @@ static PyObject *_wrap_Grid_SetRowLabelValue(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_SetColLabelValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10720,7 +10720,7 @@ static PyObject *_wrap_Grid_SetColLabelValue(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_SetGridLineColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetGridLineColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour *arg2 = 0 ;
@@ -10752,7 +10752,7 @@ static PyObject *_wrap_Grid_SetGridLineColour(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_SetCellHighlightColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellHighlightColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour *arg2 = 0 ;
@@ -10784,7 +10784,7 @@ static PyObject *_wrap_Grid_SetCellHighlightColour(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_SetCellHighlightPenWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellHighlightPenWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10813,7 +10813,7 @@ static PyObject *_wrap_Grid_SetCellHighlightPenWidth(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Grid_SetCellHighlightROPenWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellHighlightROPenWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -10842,7 +10842,7 @@ static PyObject *_wrap_Grid_SetCellHighlightROPenWidth(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_Grid_EnableDragRowSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_EnableDragRowSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 = (bool) True ;
@@ -10873,7 +10873,7 @@ static PyObject *_wrap_Grid_EnableDragRowSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_DisableDragRowSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DisableDragRowSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10898,7 +10898,7 @@ static PyObject *_wrap_Grid_DisableDragRowSize(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_CanDragRowSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_CanDragRowSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -10926,7 +10926,7 @@ static PyObject *_wrap_Grid_CanDragRowSize(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Grid_EnableDragColSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_EnableDragColSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 = (bool) True ;
@@ -10957,7 +10957,7 @@ static PyObject *_wrap_Grid_EnableDragColSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_DisableDragColSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DisableDragColSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10982,7 +10982,7 @@ static PyObject *_wrap_Grid_DisableDragColSize(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_CanDragColSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_CanDragColSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -11010,7 +11010,7 @@ static PyObject *_wrap_Grid_CanDragColSize(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Grid_EnableDragGridSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_EnableDragGridSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 = (bool) True ;
@@ -11041,7 +11041,7 @@ static PyObject *_wrap_Grid_EnableDragGridSize(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_DisableDragGridSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DisableDragGridSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11066,7 +11066,7 @@ static PyObject *_wrap_Grid_DisableDragGridSize(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Grid_CanDragGridSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_CanDragGridSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -11094,7 +11094,7 @@ static PyObject *_wrap_Grid_CanDragGridSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_SetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11131,7 +11131,7 @@ static PyObject *_wrap_Grid_SetAttr(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Grid_SetRowAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetRowAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11164,7 +11164,7 @@ static PyObject *_wrap_Grid_SetRowAttr(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_SetColAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11197,7 +11197,7 @@ static PyObject *_wrap_Grid_SetColAttr(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_SetColFormatBool(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColFormatBool(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11226,7 +11226,7 @@ static PyObject *_wrap_Grid_SetColFormatBool(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_SetColFormatNumber(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColFormatNumber(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11255,7 +11255,7 @@ static PyObject *_wrap_Grid_SetColFormatNumber(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_SetColFormatFloat(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColFormatFloat(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11296,7 +11296,7 @@ static PyObject *_wrap_Grid_SetColFormatFloat(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_SetColFormatCustom(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColFormatCustom(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11341,7 +11341,7 @@ static PyObject *_wrap_Grid_SetColFormatCustom(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_EnableGridLines(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_EnableGridLines(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 = (bool) True ;
@@ -11372,7 +11372,7 @@ static PyObject *_wrap_Grid_EnableGridLines(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_GridLinesEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GridLinesEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -11400,7 +11400,7 @@ static PyObject *_wrap_Grid_GridLinesEnabled(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultRowSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultRowSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -11426,7 +11426,7 @@ static PyObject *_wrap_Grid_GetDefaultRowSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_GetRowSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetRowSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11456,7 +11456,7 @@ static PyObject *_wrap_Grid_GetRowSize(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultColSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultColSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -11482,7 +11482,7 @@ static PyObject *_wrap_Grid_GetDefaultColSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_GetColSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetColSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11512,7 +11512,7 @@ static PyObject *_wrap_Grid_GetColSize(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultCellBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultCellBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour result;
@@ -11542,7 +11542,7 @@ static PyObject *_wrap_Grid_GetDefaultCellBackgroundColour(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_Grid_GetCellBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11580,7 +11580,7 @@ static PyObject *_wrap_Grid_GetCellBackgroundColour(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultCellTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultCellTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour result;
@@ -11610,7 +11610,7 @@ static PyObject *_wrap_Grid_GetDefaultCellTextColour(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Grid_GetCellTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11648,7 +11648,7 @@ static PyObject *_wrap_Grid_GetCellTextColour(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultCellFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultCellFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxFont result;
@@ -11678,7 +11678,7 @@ static PyObject *_wrap_Grid_GetDefaultCellFont(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_GetCellFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11716,7 +11716,7 @@ static PyObject *_wrap_Grid_GetCellFont(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultCellAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultCellAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -11755,7 +11755,7 @@ static PyObject *_wrap_Grid_GetDefaultCellAlignment(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_Grid_GetCellAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11802,7 +11802,7 @@ static PyObject *_wrap_Grid_GetCellAlignment(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultCellOverflow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultCellOverflow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -11830,7 +11830,7 @@ static PyObject *_wrap_Grid_GetDefaultCellOverflow(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_GetCellOverflow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellOverflow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11866,7 +11866,7 @@ static PyObject *_wrap_Grid_GetCellOverflow(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_GetCellSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11913,7 +11913,7 @@ static PyObject *_wrap_Grid_GetCellSize(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_SetDefaultRowSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetDefaultRowSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11948,7 +11948,7 @@ static PyObject *_wrap_Grid_SetDefaultRowSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_SetRowSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetRowSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -11981,7 +11981,7 @@ static PyObject *_wrap_Grid_SetRowSize(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_SetDefaultColSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetDefaultColSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12016,7 +12016,7 @@ static PyObject *_wrap_Grid_SetDefaultColSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_SetColSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12049,7 +12049,7 @@ static PyObject *_wrap_Grid_SetColSize(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_AutoSizeColumn(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_AutoSizeColumn(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12084,7 +12084,7 @@ static PyObject *_wrap_Grid_AutoSizeColumn(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Grid_AutoSizeRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_AutoSizeRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12119,7 +12119,7 @@ static PyObject *_wrap_Grid_AutoSizeRow(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_AutoSizeColumns(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_AutoSizeColumns(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 = (bool) True ;
@@ -12150,7 +12150,7 @@ static PyObject *_wrap_Grid_AutoSizeColumns(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_AutoSizeRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_AutoSizeRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 = (bool) True ;
@@ -12181,7 +12181,7 @@ static PyObject *_wrap_Grid_AutoSizeRows(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_AutoSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_AutoSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12206,7 +12206,7 @@ static PyObject *_wrap_Grid_AutoSize(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Grid_AutoSizeRowLabelSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_AutoSizeRowLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12235,7 +12235,7 @@ static PyObject *_wrap_Grid_AutoSizeRowLabelSize(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Grid_AutoSizeColLabelSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_AutoSizeColLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12264,7 +12264,7 @@ static PyObject *_wrap_Grid_AutoSizeColLabelSize(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Grid_SetColMinimalWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColMinimalWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12297,7 +12297,7 @@ static PyObject *_wrap_Grid_SetColMinimalWidth(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_SetRowMinimalHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetRowMinimalHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12330,7 +12330,7 @@ static PyObject *_wrap_Grid_SetRowMinimalHeight(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Grid_SetColMinimalAcceptableWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetColMinimalAcceptableWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12359,7 +12359,7 @@ static PyObject *_wrap_Grid_SetColMinimalAcceptableWidth(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_Grid_SetRowMinimalAcceptableHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetRowMinimalAcceptableHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12388,7 +12388,7 @@ static PyObject *_wrap_Grid_SetRowMinimalAcceptableHeight(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_GetColMinimalAcceptableWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetColMinimalAcceptableWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -12414,7 +12414,7 @@ static PyObject *_wrap_Grid_GetColMinimalAcceptableWidth(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_Grid_GetRowMinimalAcceptableHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetRowMinimalAcceptableHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int result;
@@ -12440,7 +12440,7 @@ static PyObject *_wrap_Grid_GetRowMinimalAcceptableHeight(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_SetDefaultCellBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetDefaultCellBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour *arg2 = 0 ;
@@ -12472,7 +12472,7 @@ static PyObject *_wrap_Grid_SetDefaultCellBackgroundColour(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_Grid_SetCellBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12512,7 +12512,7 @@ static PyObject *_wrap_Grid_SetCellBackgroundColour(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_Grid_SetDefaultCellTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetDefaultCellTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour *arg2 = 0 ;
@@ -12544,7 +12544,7 @@ static PyObject *_wrap_Grid_SetDefaultCellTextColour(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Grid_SetCellTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12584,7 +12584,7 @@ static PyObject *_wrap_Grid_SetCellTextColour(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_SetDefaultCellFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetDefaultCellFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxFont *arg2 = 0 ;
@@ -12618,7 +12618,7 @@ static PyObject *_wrap_Grid_SetDefaultCellFont(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_SetCellFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12660,7 +12660,7 @@ static PyObject *_wrap_Grid_SetCellFont(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_SetDefaultCellAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetDefaultCellAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12693,7 +12693,7 @@ static PyObject *_wrap_Grid_SetDefaultCellAlignment(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_Grid_SetCellAlignment(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12734,7 +12734,7 @@ static PyObject *_wrap_Grid_SetCellAlignment(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_SetDefaultCellOverflow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetDefaultCellOverflow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool arg2 ;
@@ -12763,7 +12763,7 @@ static PyObject *_wrap_Grid_SetDefaultCellOverflow(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_SetCellOverflow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellOverflow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12800,7 +12800,7 @@ static PyObject *_wrap_Grid_SetCellOverflow(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_SetCellSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12841,7 +12841,7 @@ static PyObject *_wrap_Grid_SetCellSize(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_SetDefaultRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetDefaultRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridCellRenderer *arg2 = (wxGridCellRenderer *) 0 ;
@@ -12870,7 +12870,7 @@ static PyObject *_wrap_Grid_SetDefaultRenderer(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_SetCellRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12907,7 +12907,7 @@ static PyObject *_wrap_Grid_SetCellRenderer(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridCellRenderer *result;
@@ -12935,7 +12935,7 @@ static PyObject *_wrap_Grid_GetDefaultRenderer(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Grid_GetCellRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellRenderer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -12971,7 +12971,7 @@ static PyObject *_wrap_Grid_GetCellRenderer(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_SetDefaultEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetDefaultEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridCellEditor *arg2 = (wxGridCellEditor *) 0 ;
@@ -13000,7 +13000,7 @@ static PyObject *_wrap_Grid_SetDefaultEditor(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_SetCellEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13037,7 +13037,7 @@ static PyObject *_wrap_Grid_SetCellEditor(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridCellEditor *result;
@@ -13065,7 +13065,7 @@ static PyObject *_wrap_Grid_GetDefaultEditor(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetCellEditor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13101,7 +13101,7 @@ static PyObject *_wrap_Grid_GetCellEditor(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_GetCellValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetCellValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13141,7 +13141,7 @@ static PyObject *_wrap_Grid_GetCellValue(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_SetCellValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetCellValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13190,7 +13190,7 @@ static PyObject *_wrap_Grid_SetCellValue(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_IsReadOnly(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_IsReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13226,7 +13226,7 @@ static PyObject *_wrap_Grid_IsReadOnly(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_SetReadOnly(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13265,7 +13265,7 @@ static PyObject *_wrap_Grid_SetReadOnly(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_SelectRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SelectRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13300,7 +13300,7 @@ static PyObject *_wrap_Grid_SelectRow(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Grid_SelectCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SelectCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13335,7 +13335,7 @@ static PyObject *_wrap_Grid_SelectCol(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Grid_SelectBlock(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SelectBlock(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13382,7 +13382,7 @@ static PyObject *_wrap_Grid_SelectBlock(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_SelectAll(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SelectAll(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -13407,7 +13407,7 @@ static PyObject *_wrap_Grid_SelectAll(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Grid_IsSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_IsSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     bool result;
@@ -13435,7 +13435,7 @@ static PyObject *_wrap_Grid_IsSelection(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_ClearSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_ClearSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     PyObject * obj0 = 0 ;
@@ -13460,7 +13460,7 @@ static PyObject *_wrap_Grid_ClearSelection(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Grid_IsInSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_IsInSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13496,7 +13496,7 @@ static PyObject *_wrap_Grid_IsInSelection(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_GetSelectedCells(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetSelectedCells(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridCellCoordsArray result;
@@ -13524,7 +13524,7 @@ static PyObject *_wrap_Grid_GetSelectedCells(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetSelectionBlockTopLeft(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetSelectionBlockTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridCellCoordsArray result;
@@ -13552,7 +13552,7 @@ static PyObject *_wrap_Grid_GetSelectionBlockTopLeft(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Grid_GetSelectionBlockBottomRight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetSelectionBlockBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridCellCoordsArray result;
@@ -13580,7 +13580,7 @@ static PyObject *_wrap_Grid_GetSelectionBlockBottomRight(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_Grid_GetSelectedRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetSelectedRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxArrayInt result;
@@ -13614,7 +13614,7 @@ static PyObject *_wrap_Grid_GetSelectedRows(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_GetSelectedCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetSelectedCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxArrayInt result;
@@ -13648,7 +13648,7 @@ static PyObject *_wrap_Grid_GetSelectedCols(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Grid_DeselectRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DeselectRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13677,7 +13677,7 @@ static PyObject *_wrap_Grid_DeselectRow(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_DeselectCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DeselectCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13706,7 +13706,7 @@ static PyObject *_wrap_Grid_DeselectCol(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Grid_DeselectCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_DeselectCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13739,7 +13739,7 @@ static PyObject *_wrap_Grid_DeselectCell(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_BlockToDeviceRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_BlockToDeviceRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxGridCellCoords *arg2 = 0 ;
@@ -13783,7 +13783,7 @@ static PyObject *_wrap_Grid_BlockToDeviceRect(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Grid_GetSelectionBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetSelectionBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour result;
@@ -13813,7 +13813,7 @@ static PyObject *_wrap_Grid_GetSelectionBackground(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_GetSelectionForeground(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetSelectionForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour result;
@@ -13843,7 +13843,7 @@ static PyObject *_wrap_Grid_GetSelectionForeground(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_SetSelectionBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetSelectionBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour *arg2 = 0 ;
@@ -13875,7 +13875,7 @@ static PyObject *_wrap_Grid_SetSelectionBackground(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_SetSelectionForeground(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetSelectionForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxColour *arg2 = 0 ;
@@ -13907,7 +13907,7 @@ static PyObject *_wrap_Grid_SetSelectionForeground(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Grid_RegisterDataType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_RegisterDataType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxString *arg2 = 0 ;
@@ -13956,7 +13956,7 @@ static PyObject *_wrap_Grid_RegisterDataType(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultEditorForCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultEditorForCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -13992,7 +13992,7 @@ static PyObject *_wrap_Grid_GetDefaultEditorForCell(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultRendererForCell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultRendererForCell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -14028,7 +14028,7 @@ static PyObject *_wrap_Grid_GetDefaultRendererForCell(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultEditorForType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultEditorForType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxString *arg2 = 0 ;
@@ -14072,7 +14072,7 @@ static PyObject *_wrap_Grid_GetDefaultEditorForType(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_Grid_GetDefaultRendererForType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetDefaultRendererForType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxString *arg2 = 0 ;
@@ -14116,7 +14116,7 @@ static PyObject *_wrap_Grid_GetDefaultRendererForType(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_Grid_SetMargins(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_SetMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     int arg2 ;
@@ -14149,7 +14149,7 @@ static PyObject *_wrap_Grid_SetMargins(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Grid_GetGridWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetGridWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxWindow *result;
@@ -14177,7 +14177,7 @@ static PyObject *_wrap_Grid_GetGridWindow(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Grid_GetGridRowLabelWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetGridRowLabelWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxWindow *result;
@@ -14205,7 +14205,7 @@ static PyObject *_wrap_Grid_GetGridRowLabelWindow(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Grid_GetGridColLabelWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetGridColLabelWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxWindow *result;
@@ -14233,7 +14233,7 @@ static PyObject *_wrap_Grid_GetGridColLabelWindow(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Grid_GetGridCornerLabelWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Grid_GetGridCornerLabelWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxWindow *result;
@@ -14261,14 +14261,14 @@ static PyObject *_wrap_Grid_GetGridCornerLabelWindow(PyObject *, PyObject *args,
 }
 
 
-static PyObject * Grid_swigregister(PyObject *, PyObject *args) {
+static PyObject * Grid_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGrid, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     wxEventType arg2 ;
@@ -14356,7 +14356,7 @@ static PyObject *_wrap_new_GridEvent(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_GridEvent_GetRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEvent_GetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEvent *arg1 = (wxGridEvent *) 0 ;
     int result;
@@ -14382,7 +14382,7 @@ static PyObject *_wrap_GridEvent_GetRow(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_GridEvent_GetCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEvent_GetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEvent *arg1 = (wxGridEvent *) 0 ;
     int result;
@@ -14408,7 +14408,7 @@ static PyObject *_wrap_GridEvent_GetCol(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_GridEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEvent *arg1 = (wxGridEvent *) 0 ;
     wxPoint result;
@@ -14438,7 +14438,7 @@ static PyObject *_wrap_GridEvent_GetPosition(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridEvent_Selecting(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEvent_Selecting(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEvent *arg1 = (wxGridEvent *) 0 ;
     bool result;
@@ -14466,7 +14466,7 @@ static PyObject *_wrap_GridEvent_Selecting(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GridEvent_ControlDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEvent_ControlDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEvent *arg1 = (wxGridEvent *) 0 ;
     bool result;
@@ -14494,7 +14494,7 @@ static PyObject *_wrap_GridEvent_ControlDown(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridEvent_MetaDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEvent_MetaDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEvent *arg1 = (wxGridEvent *) 0 ;
     bool result;
@@ -14522,7 +14522,7 @@ static PyObject *_wrap_GridEvent_MetaDown(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_GridEvent_ShiftDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEvent_ShiftDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEvent *arg1 = (wxGridEvent *) 0 ;
     bool result;
@@ -14550,7 +14550,7 @@ static PyObject *_wrap_GridEvent_ShiftDown(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GridEvent_AltDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEvent_AltDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEvent *arg1 = (wxGridEvent *) 0 ;
     bool result;
@@ -14578,14 +14578,14 @@ static PyObject *_wrap_GridEvent_AltDown(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject * GridEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridSizeEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridSizeEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     wxEventType arg2 ;
@@ -14661,7 +14661,7 @@ static PyObject *_wrap_new_GridSizeEvent(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GridSizeEvent_GetRowOrCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizeEvent_GetRowOrCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizeEvent *arg1 = (wxGridSizeEvent *) 0 ;
     int result;
@@ -14687,7 +14687,7 @@ static PyObject *_wrap_GridSizeEvent_GetRowOrCol(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridSizeEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizeEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizeEvent *arg1 = (wxGridSizeEvent *) 0 ;
     wxPoint result;
@@ -14717,7 +14717,7 @@ static PyObject *_wrap_GridSizeEvent_GetPosition(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridSizeEvent_ControlDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizeEvent_ControlDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizeEvent *arg1 = (wxGridSizeEvent *) 0 ;
     bool result;
@@ -14745,7 +14745,7 @@ static PyObject *_wrap_GridSizeEvent_ControlDown(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridSizeEvent_MetaDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizeEvent_MetaDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizeEvent *arg1 = (wxGridSizeEvent *) 0 ;
     bool result;
@@ -14773,7 +14773,7 @@ static PyObject *_wrap_GridSizeEvent_MetaDown(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GridSizeEvent_ShiftDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizeEvent_ShiftDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizeEvent *arg1 = (wxGridSizeEvent *) 0 ;
     bool result;
@@ -14801,7 +14801,7 @@ static PyObject *_wrap_GridSizeEvent_ShiftDown(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_GridSizeEvent_AltDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizeEvent_AltDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizeEvent *arg1 = (wxGridSizeEvent *) 0 ;
     bool result;
@@ -14829,14 +14829,14 @@ static PyObject *_wrap_GridSizeEvent_AltDown(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject * GridSizeEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridSizeEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridSizeEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridRangeSelectEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridRangeSelectEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     wxEventType arg2 ;
@@ -14914,7 +14914,7 @@ static PyObject *_wrap_new_GridRangeSelectEvent(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_GetTopLeftCoords(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_GetTopLeftCoords(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     wxGridCellCoords result;
@@ -14944,7 +14944,7 @@ static PyObject *_wrap_GridRangeSelectEvent_GetTopLeftCoords(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_GetBottomRightCoords(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_GetBottomRightCoords(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     wxGridCellCoords result;
@@ -14974,7 +14974,7 @@ static PyObject *_wrap_GridRangeSelectEvent_GetBottomRightCoords(PyObject *, PyO
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_GetTopRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_GetTopRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     int result;
@@ -15000,7 +15000,7 @@ static PyObject *_wrap_GridRangeSelectEvent_GetTopRow(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_GetBottomRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_GetBottomRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     int result;
@@ -15026,7 +15026,7 @@ static PyObject *_wrap_GridRangeSelectEvent_GetBottomRow(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_GetLeftCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_GetLeftCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     int result;
@@ -15052,7 +15052,7 @@ static PyObject *_wrap_GridRangeSelectEvent_GetLeftCol(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_GetRightCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_GetRightCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     int result;
@@ -15078,7 +15078,7 @@ static PyObject *_wrap_GridRangeSelectEvent_GetRightCol(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_Selecting(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_Selecting(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     bool result;
@@ -15106,7 +15106,7 @@ static PyObject *_wrap_GridRangeSelectEvent_Selecting(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_ControlDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_ControlDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     bool result;
@@ -15134,7 +15134,7 @@ static PyObject *_wrap_GridRangeSelectEvent_ControlDown(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_MetaDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_MetaDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     bool result;
@@ -15162,7 +15162,7 @@ static PyObject *_wrap_GridRangeSelectEvent_MetaDown(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_ShiftDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_ShiftDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     bool result;
@@ -15190,7 +15190,7 @@ static PyObject *_wrap_GridRangeSelectEvent_ShiftDown(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GridRangeSelectEvent_AltDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridRangeSelectEvent_AltDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridRangeSelectEvent *arg1 = (wxGridRangeSelectEvent *) 0 ;
     bool result;
@@ -15218,14 +15218,14 @@ static PyObject *_wrap_GridRangeSelectEvent_AltDown(PyObject *, PyObject *args, 
 }
 
 
-static PyObject * GridRangeSelectEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridRangeSelectEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridRangeSelectEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridEditorCreatedEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridEditorCreatedEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     wxEventType arg2 ;
@@ -15271,7 +15271,7 @@ static PyObject *_wrap_new_GridEditorCreatedEvent(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_GridEditorCreatedEvent_GetRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEditorCreatedEvent_GetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEditorCreatedEvent *arg1 = (wxGridEditorCreatedEvent *) 0 ;
     int result;
@@ -15297,7 +15297,7 @@ static PyObject *_wrap_GridEditorCreatedEvent_GetRow(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridEditorCreatedEvent_GetCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEditorCreatedEvent_GetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEditorCreatedEvent *arg1 = (wxGridEditorCreatedEvent *) 0 ;
     int result;
@@ -15323,7 +15323,7 @@ static PyObject *_wrap_GridEditorCreatedEvent_GetCol(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridEditorCreatedEvent_GetControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEditorCreatedEvent_GetControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEditorCreatedEvent *arg1 = (wxGridEditorCreatedEvent *) 0 ;
     wxControl *result;
@@ -15351,7 +15351,7 @@ static PyObject *_wrap_GridEditorCreatedEvent_GetControl(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_GridEditorCreatedEvent_SetRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEditorCreatedEvent_SetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEditorCreatedEvent *arg1 = (wxGridEditorCreatedEvent *) 0 ;
     int arg2 ;
@@ -15380,7 +15380,7 @@ static PyObject *_wrap_GridEditorCreatedEvent_SetRow(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridEditorCreatedEvent_SetCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEditorCreatedEvent_SetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEditorCreatedEvent *arg1 = (wxGridEditorCreatedEvent *) 0 ;
     int arg2 ;
@@ -15409,7 +15409,7 @@ static PyObject *_wrap_GridEditorCreatedEvent_SetCol(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridEditorCreatedEvent_SetControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridEditorCreatedEvent_SetControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridEditorCreatedEvent *arg1 = (wxGridEditorCreatedEvent *) 0 ;
     wxControl *arg2 = (wxControl *) 0 ;
@@ -15438,7 +15438,7 @@ static PyObject *_wrap_GridEditorCreatedEvent_SetControl(PyObject *, PyObject *a
 }
 
 
-static PyObject * GridEditorCreatedEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridEditorCreatedEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridEditorCreatedEvent, obj);
@@ -15446,455 +15446,455 @@ static PyObject * GridEditorCreatedEvent_swigregister(PyObject *, PyObject *args
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"GridCellRenderer__setOORInfo", (PyCFunction) _wrap_GridCellRenderer__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellRenderer_SetParameters", (PyCFunction) _wrap_GridCellRenderer_SetParameters, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellRenderer_IncRef", (PyCFunction) _wrap_GridCellRenderer_IncRef, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellRenderer_DecRef", (PyCFunction) _wrap_GridCellRenderer_DecRef, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellRenderer_Draw", (PyCFunction) _wrap_GridCellRenderer_Draw, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellRenderer_GetBestSize", (PyCFunction) _wrap_GridCellRenderer_GetBestSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellRenderer_Clone", (PyCFunction) _wrap_GridCellRenderer_Clone, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellRenderer_swigregister", GridCellRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PyGridCellRenderer", (PyCFunction) _wrap_new_PyGridCellRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellRenderer__setCallbackInfo", (PyCFunction) _wrap_PyGridCellRenderer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellRenderer_base_SetParameters", (PyCFunction) _wrap_PyGridCellRenderer_base_SetParameters, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellRenderer_swigregister", PyGridCellRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellStringRenderer", (PyCFunction) _wrap_new_GridCellStringRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellStringRenderer_swigregister", GridCellStringRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellNumberRenderer", (PyCFunction) _wrap_new_GridCellNumberRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellNumberRenderer_swigregister", GridCellNumberRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellFloatRenderer", (PyCFunction) _wrap_new_GridCellFloatRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellFloatRenderer_GetWidth", (PyCFunction) _wrap_GridCellFloatRenderer_GetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellFloatRenderer_SetWidth", (PyCFunction) _wrap_GridCellFloatRenderer_SetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellFloatRenderer_GetPrecision", (PyCFunction) _wrap_GridCellFloatRenderer_GetPrecision, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellFloatRenderer_SetPrecision", (PyCFunction) _wrap_GridCellFloatRenderer_SetPrecision, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellFloatRenderer_swigregister", GridCellFloatRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellBoolRenderer", (PyCFunction) _wrap_new_GridCellBoolRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellBoolRenderer_swigregister", GridCellBoolRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellDateTimeRenderer", (PyCFunction) _wrap_new_GridCellDateTimeRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellDateTimeRenderer_swigregister", GridCellDateTimeRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellEnumRenderer", (PyCFunction) _wrap_new_GridCellEnumRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEnumRenderer_swigregister", GridCellEnumRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellAutoWrapStringRenderer", (PyCFunction) _wrap_new_GridCellAutoWrapStringRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAutoWrapStringRenderer_swigregister", GridCellAutoWrapStringRenderer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"GridCellEditor__setOORInfo", (PyCFunction) _wrap_GridCellEditor__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_IsCreated", (PyCFunction) _wrap_GridCellEditor_IsCreated, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_GetControl", (PyCFunction) _wrap_GridCellEditor_GetControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_SetControl", (PyCFunction) _wrap_GridCellEditor_SetControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_GetCellAttr", (PyCFunction) _wrap_GridCellEditor_GetCellAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_SetCellAttr", (PyCFunction) _wrap_GridCellEditor_SetCellAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_SetParameters", (PyCFunction) _wrap_GridCellEditor_SetParameters, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_IncRef", (PyCFunction) _wrap_GridCellEditor_IncRef, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_DecRef", (PyCFunction) _wrap_GridCellEditor_DecRef, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_Create", (PyCFunction) _wrap_GridCellEditor_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_BeginEdit", (PyCFunction) _wrap_GridCellEditor_BeginEdit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_EndEdit", (PyCFunction) _wrap_GridCellEditor_EndEdit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_Reset", (PyCFunction) _wrap_GridCellEditor_Reset, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_Clone", (PyCFunction) _wrap_GridCellEditor_Clone, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_SetSize", (PyCFunction) _wrap_GridCellEditor_SetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_Show", (PyCFunction) _wrap_GridCellEditor_Show, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_PaintBackground", (PyCFunction) _wrap_GridCellEditor_PaintBackground, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_IsAcceptedKey", (PyCFunction) _wrap_GridCellEditor_IsAcceptedKey, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_StartingKey", (PyCFunction) _wrap_GridCellEditor_StartingKey, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_StartingClick", (PyCFunction) _wrap_GridCellEditor_StartingClick, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_HandleReturn", (PyCFunction) _wrap_GridCellEditor_HandleReturn, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_Destroy", (PyCFunction) _wrap_GridCellEditor_Destroy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEditor_swigregister", GridCellEditor_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PyGridCellEditor", (PyCFunction) _wrap_new_PyGridCellEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor__setCallbackInfo", (PyCFunction) _wrap_PyGridCellEditor__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_base_SetSize", (PyCFunction) _wrap_PyGridCellEditor_base_SetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_base_Show", (PyCFunction) _wrap_PyGridCellEditor_base_Show, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_base_PaintBackground", (PyCFunction) _wrap_PyGridCellEditor_base_PaintBackground, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_base_IsAcceptedKey", (PyCFunction) _wrap_PyGridCellEditor_base_IsAcceptedKey, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_base_StartingKey", (PyCFunction) _wrap_PyGridCellEditor_base_StartingKey, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_base_StartingClick", (PyCFunction) _wrap_PyGridCellEditor_base_StartingClick, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_base_HandleReturn", (PyCFunction) _wrap_PyGridCellEditor_base_HandleReturn, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_base_Destroy", (PyCFunction) _wrap_PyGridCellEditor_base_Destroy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_base_SetParameters", (PyCFunction) _wrap_PyGridCellEditor_base_SetParameters, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellEditor_swigregister", PyGridCellEditor_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellTextEditor", (PyCFunction) _wrap_new_GridCellTextEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellTextEditor_GetValue", (PyCFunction) _wrap_GridCellTextEditor_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellTextEditor_swigregister", GridCellTextEditor_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellNumberEditor", (PyCFunction) _wrap_new_GridCellNumberEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellNumberEditor_GetValue", (PyCFunction) _wrap_GridCellNumberEditor_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellNumberEditor_swigregister", GridCellNumberEditor_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellFloatEditor", (PyCFunction) _wrap_new_GridCellFloatEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellFloatEditor_GetValue", (PyCFunction) _wrap_GridCellFloatEditor_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellFloatEditor_swigregister", GridCellFloatEditor_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellBoolEditor", (PyCFunction) _wrap_new_GridCellBoolEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellBoolEditor_GetValue", (PyCFunction) _wrap_GridCellBoolEditor_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellBoolEditor_swigregister", GridCellBoolEditor_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellChoiceEditor", (PyCFunction) _wrap_new_GridCellChoiceEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellChoiceEditor_GetValue", (PyCFunction) _wrap_GridCellChoiceEditor_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellChoiceEditor_swigregister", GridCellChoiceEditor_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellEnumEditor", (PyCFunction) _wrap_new_GridCellEnumEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEnumEditor_GetValue", (PyCFunction) _wrap_GridCellEnumEditor_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellEnumEditor_swigregister", GridCellEnumEditor_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellAutoWrapStringEditor", (PyCFunction) _wrap_new_GridCellAutoWrapStringEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAutoWrapStringEditor_GetValue", (PyCFunction) _wrap_GridCellAutoWrapStringEditor_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAutoWrapStringEditor_swigregister", GridCellAutoWrapStringEditor_swigregister, METH_VARARGS, NULL },
-	 { (char *)"GridCellAttr__setOORInfo", (PyCFunction) _wrap_GridCellAttr__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_GridCellAttr", (PyCFunction) _wrap_new_GridCellAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_Clone", (PyCFunction) _wrap_GridCellAttr_Clone, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_MergeWith", (PyCFunction) _wrap_GridCellAttr_MergeWith, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_IncRef", (PyCFunction) _wrap_GridCellAttr_IncRef, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_DecRef", (PyCFunction) _wrap_GridCellAttr_DecRef, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetTextColour", (PyCFunction) _wrap_GridCellAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetBackgroundColour", (PyCFunction) _wrap_GridCellAttr_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetFont", (PyCFunction) _wrap_GridCellAttr_SetFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetAlignment", (PyCFunction) _wrap_GridCellAttr_SetAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetSize", (PyCFunction) _wrap_GridCellAttr_SetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetOverflow", (PyCFunction) _wrap_GridCellAttr_SetOverflow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetReadOnly", (PyCFunction) _wrap_GridCellAttr_SetReadOnly, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetRenderer", (PyCFunction) _wrap_GridCellAttr_SetRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetEditor", (PyCFunction) _wrap_GridCellAttr_SetEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetKind", (PyCFunction) _wrap_GridCellAttr_SetKind, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_HasTextColour", (PyCFunction) _wrap_GridCellAttr_HasTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_HasBackgroundColour", (PyCFunction) _wrap_GridCellAttr_HasBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_HasFont", (PyCFunction) _wrap_GridCellAttr_HasFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_HasAlignment", (PyCFunction) _wrap_GridCellAttr_HasAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_HasRenderer", (PyCFunction) _wrap_GridCellAttr_HasRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_HasEditor", (PyCFunction) _wrap_GridCellAttr_HasEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_HasReadWriteMode", (PyCFunction) _wrap_GridCellAttr_HasReadWriteMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_HasOverflowMode", (PyCFunction) _wrap_GridCellAttr_HasOverflowMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_GetTextColour", (PyCFunction) _wrap_GridCellAttr_GetTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_GetBackgroundColour", (PyCFunction) _wrap_GridCellAttr_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_GetFont", (PyCFunction) _wrap_GridCellAttr_GetFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_GetAlignment", (PyCFunction) _wrap_GridCellAttr_GetAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_GetSize", (PyCFunction) _wrap_GridCellAttr_GetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_GetOverflow", (PyCFunction) _wrap_GridCellAttr_GetOverflow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_GetRenderer", (PyCFunction) _wrap_GridCellAttr_GetRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_GetEditor", (PyCFunction) _wrap_GridCellAttr_GetEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_IsReadOnly", (PyCFunction) _wrap_GridCellAttr_IsReadOnly, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_SetDefAttr", (PyCFunction) _wrap_GridCellAttr_SetDefAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttr_swigregister", GridCellAttr_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellAttrProvider", (PyCFunction) _wrap_new_GridCellAttrProvider, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttrProvider__setOORInfo", (PyCFunction) _wrap_GridCellAttrProvider__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttrProvider_GetAttr", (PyCFunction) _wrap_GridCellAttrProvider_GetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttrProvider_SetAttr", (PyCFunction) _wrap_GridCellAttrProvider_SetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttrProvider_SetRowAttr", (PyCFunction) _wrap_GridCellAttrProvider_SetRowAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttrProvider_SetColAttr", (PyCFunction) _wrap_GridCellAttrProvider_SetColAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttrProvider_UpdateAttrRows", (PyCFunction) _wrap_GridCellAttrProvider_UpdateAttrRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttrProvider_UpdateAttrCols", (PyCFunction) _wrap_GridCellAttrProvider_UpdateAttrCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellAttrProvider_swigregister", GridCellAttrProvider_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PyGridCellAttrProvider", (PyCFunction) _wrap_new_PyGridCellAttrProvider, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellAttrProvider__setCallbackInfo", (PyCFunction) _wrap_PyGridCellAttrProvider__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellAttrProvider_base_GetAttr", (PyCFunction) _wrap_PyGridCellAttrProvider_base_GetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellAttrProvider_base_SetAttr", (PyCFunction) _wrap_PyGridCellAttrProvider_base_SetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellAttrProvider_base_SetRowAttr", (PyCFunction) _wrap_PyGridCellAttrProvider_base_SetRowAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellAttrProvider_base_SetColAttr", (PyCFunction) _wrap_PyGridCellAttrProvider_base_SetColAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridCellAttrProvider_swigregister", PyGridCellAttrProvider_swigregister, METH_VARARGS, NULL },
-	 { (char *)"GridTableBase__setOORInfo", (PyCFunction) _wrap_GridTableBase__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetAttrProvider", (PyCFunction) _wrap_GridTableBase_SetAttrProvider, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetAttrProvider", (PyCFunction) _wrap_GridTableBase_GetAttrProvider, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetView", (PyCFunction) _wrap_GridTableBase_SetView, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetView", (PyCFunction) _wrap_GridTableBase_GetView, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetNumberRows", (PyCFunction) _wrap_GridTableBase_GetNumberRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetNumberCols", (PyCFunction) _wrap_GridTableBase_GetNumberCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_IsEmptyCell", (PyCFunction) _wrap_GridTableBase_IsEmptyCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetValue", (PyCFunction) _wrap_GridTableBase_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetValue", (PyCFunction) _wrap_GridTableBase_SetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetTypeName", (PyCFunction) _wrap_GridTableBase_GetTypeName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_CanGetValueAs", (PyCFunction) _wrap_GridTableBase_CanGetValueAs, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_CanSetValueAs", (PyCFunction) _wrap_GridTableBase_CanSetValueAs, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetValueAsLong", (PyCFunction) _wrap_GridTableBase_GetValueAsLong, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetValueAsDouble", (PyCFunction) _wrap_GridTableBase_GetValueAsDouble, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetValueAsBool", (PyCFunction) _wrap_GridTableBase_GetValueAsBool, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetValueAsLong", (PyCFunction) _wrap_GridTableBase_SetValueAsLong, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetValueAsDouble", (PyCFunction) _wrap_GridTableBase_SetValueAsDouble, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetValueAsBool", (PyCFunction) _wrap_GridTableBase_SetValueAsBool, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_Clear", (PyCFunction) _wrap_GridTableBase_Clear, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_InsertRows", (PyCFunction) _wrap_GridTableBase_InsertRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_AppendRows", (PyCFunction) _wrap_GridTableBase_AppendRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_DeleteRows", (PyCFunction) _wrap_GridTableBase_DeleteRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_InsertCols", (PyCFunction) _wrap_GridTableBase_InsertCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_AppendCols", (PyCFunction) _wrap_GridTableBase_AppendCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_DeleteCols", (PyCFunction) _wrap_GridTableBase_DeleteCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetRowLabelValue", (PyCFunction) _wrap_GridTableBase_GetRowLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetColLabelValue", (PyCFunction) _wrap_GridTableBase_GetColLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetRowLabelValue", (PyCFunction) _wrap_GridTableBase_SetRowLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetColLabelValue", (PyCFunction) _wrap_GridTableBase_SetColLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_CanHaveAttributes", (PyCFunction) _wrap_GridTableBase_CanHaveAttributes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_GetAttr", (PyCFunction) _wrap_GridTableBase_GetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetAttr", (PyCFunction) _wrap_GridTableBase_SetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetRowAttr", (PyCFunction) _wrap_GridTableBase_SetRowAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_SetColAttr", (PyCFunction) _wrap_GridTableBase_SetColAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableBase_swigregister", GridTableBase_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PyGridTableBase", (PyCFunction) _wrap_new_PyGridTableBase, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase__setCallbackInfo", (PyCFunction) _wrap_PyGridTableBase__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_Destroy", (PyCFunction) _wrap_PyGridTableBase_Destroy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_GetTypeName", (PyCFunction) _wrap_PyGridTableBase_base_GetTypeName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_CanGetValueAs", (PyCFunction) _wrap_PyGridTableBase_base_CanGetValueAs, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_CanSetValueAs", (PyCFunction) _wrap_PyGridTableBase_base_CanSetValueAs, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_Clear", (PyCFunction) _wrap_PyGridTableBase_base_Clear, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_InsertRows", (PyCFunction) _wrap_PyGridTableBase_base_InsertRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_AppendRows", (PyCFunction) _wrap_PyGridTableBase_base_AppendRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_DeleteRows", (PyCFunction) _wrap_PyGridTableBase_base_DeleteRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_InsertCols", (PyCFunction) _wrap_PyGridTableBase_base_InsertCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_AppendCols", (PyCFunction) _wrap_PyGridTableBase_base_AppendCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_DeleteCols", (PyCFunction) _wrap_PyGridTableBase_base_DeleteCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_GetRowLabelValue", (PyCFunction) _wrap_PyGridTableBase_base_GetRowLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_GetColLabelValue", (PyCFunction) _wrap_PyGridTableBase_base_GetColLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_SetRowLabelValue", (PyCFunction) _wrap_PyGridTableBase_base_SetRowLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_SetColLabelValue", (PyCFunction) _wrap_PyGridTableBase_base_SetColLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_CanHaveAttributes", (PyCFunction) _wrap_PyGridTableBase_base_CanHaveAttributes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_GetAttr", (PyCFunction) _wrap_PyGridTableBase_base_GetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_SetAttr", (PyCFunction) _wrap_PyGridTableBase_base_SetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_SetRowAttr", (PyCFunction) _wrap_PyGridTableBase_base_SetRowAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_base_SetColAttr", (PyCFunction) _wrap_PyGridTableBase_base_SetColAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyGridTableBase_swigregister", PyGridTableBase_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridStringTable", (PyCFunction) _wrap_new_GridStringTable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridStringTable_swigregister", GridStringTable_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridTableMessage", (PyCFunction) _wrap_new_GridTableMessage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_GridTableMessage", (PyCFunction) _wrap_delete_GridTableMessage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableMessage_SetTableObject", (PyCFunction) _wrap_GridTableMessage_SetTableObject, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableMessage_GetTableObject", (PyCFunction) _wrap_GridTableMessage_GetTableObject, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableMessage_SetId", (PyCFunction) _wrap_GridTableMessage_SetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableMessage_GetId", (PyCFunction) _wrap_GridTableMessage_GetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableMessage_SetCommandInt", (PyCFunction) _wrap_GridTableMessage_SetCommandInt, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableMessage_GetCommandInt", (PyCFunction) _wrap_GridTableMessage_GetCommandInt, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableMessage_SetCommandInt2", (PyCFunction) _wrap_GridTableMessage_SetCommandInt2, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableMessage_GetCommandInt2", (PyCFunction) _wrap_GridTableMessage_GetCommandInt2, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridTableMessage_swigregister", GridTableMessage_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridCellCoords", (PyCFunction) _wrap_new_GridCellCoords, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_GridCellCoords", (PyCFunction) _wrap_delete_GridCellCoords, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellCoords_GetRow", (PyCFunction) _wrap_GridCellCoords_GetRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellCoords_SetRow", (PyCFunction) _wrap_GridCellCoords_SetRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellCoords_GetCol", (PyCFunction) _wrap_GridCellCoords_GetCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellCoords_SetCol", (PyCFunction) _wrap_GridCellCoords_SetCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellCoords_Set", (PyCFunction) _wrap_GridCellCoords_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellCoords___eq__", (PyCFunction) _wrap_GridCellCoords___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellCoords___ne__", (PyCFunction) _wrap_GridCellCoords___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellCoords_asTuple", (PyCFunction) _wrap_GridCellCoords_asTuple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridCellCoords_swigregister", GridCellCoords_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_Grid", (PyCFunction) _wrap_new_Grid, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_CreateGrid", (PyCFunction) _wrap_Grid_CreateGrid, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetSelectionMode", (PyCFunction) _wrap_Grid_SetSelectionMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetSelectionMode", (PyCFunction) _wrap_Grid_GetSelectionMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetNumberRows", (PyCFunction) _wrap_Grid_GetNumberRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetNumberCols", (PyCFunction) _wrap_Grid_GetNumberCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_ProcessTableMessage", (PyCFunction) _wrap_Grid_ProcessTableMessage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetTable", (PyCFunction) _wrap_Grid_GetTable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetTable", (PyCFunction) _wrap_Grid_SetTable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_ClearGrid", (PyCFunction) _wrap_Grid_ClearGrid, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_InsertRows", (PyCFunction) _wrap_Grid_InsertRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_AppendRows", (PyCFunction) _wrap_Grid_AppendRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DeleteRows", (PyCFunction) _wrap_Grid_DeleteRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_InsertCols", (PyCFunction) _wrap_Grid_InsertCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_AppendCols", (PyCFunction) _wrap_Grid_AppendCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DeleteCols", (PyCFunction) _wrap_Grid_DeleteCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DrawCellHighlight", (PyCFunction) _wrap_Grid_DrawCellHighlight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DrawTextRectangle", (PyCFunction) _wrap_Grid_DrawTextRectangle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetTextBoxSize", (PyCFunction) _wrap_Grid_GetTextBoxSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_BeginBatch", (PyCFunction) _wrap_Grid_BeginBatch, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_EndBatch", (PyCFunction) _wrap_Grid_EndBatch, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetBatchCount", (PyCFunction) _wrap_Grid_GetBatchCount, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_ForceRefresh", (PyCFunction) _wrap_Grid_ForceRefresh, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_IsEditable", (PyCFunction) _wrap_Grid_IsEditable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_EnableEditing", (PyCFunction) _wrap_Grid_EnableEditing, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_EnableCellEditControl", (PyCFunction) _wrap_Grid_EnableCellEditControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DisableCellEditControl", (PyCFunction) _wrap_Grid_DisableCellEditControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_CanEnableCellControl", (PyCFunction) _wrap_Grid_CanEnableCellControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_IsCellEditControlEnabled", (PyCFunction) _wrap_Grid_IsCellEditControlEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_IsCellEditControlShown", (PyCFunction) _wrap_Grid_IsCellEditControlShown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_IsCurrentCellReadOnly", (PyCFunction) _wrap_Grid_IsCurrentCellReadOnly, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_ShowCellEditControl", (PyCFunction) _wrap_Grid_ShowCellEditControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_HideCellEditControl", (PyCFunction) _wrap_Grid_HideCellEditControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SaveEditControlValue", (PyCFunction) _wrap_Grid_SaveEditControlValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_XYToCell", (PyCFunction) _wrap_Grid_XYToCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_YToRow", (PyCFunction) _wrap_Grid_YToRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_XToCol", (PyCFunction) _wrap_Grid_XToCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_YToEdgeOfRow", (PyCFunction) _wrap_Grid_YToEdgeOfRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_XToEdgeOfCol", (PyCFunction) _wrap_Grid_XToEdgeOfCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_CellToRect", (PyCFunction) _wrap_Grid_CellToRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetGridCursorRow", (PyCFunction) _wrap_Grid_GetGridCursorRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetGridCursorCol", (PyCFunction) _wrap_Grid_GetGridCursorCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_IsVisible", (PyCFunction) _wrap_Grid_IsVisible, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MakeCellVisible", (PyCFunction) _wrap_Grid_MakeCellVisible, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetGridCursor", (PyCFunction) _wrap_Grid_SetGridCursor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MoveCursorUp", (PyCFunction) _wrap_Grid_MoveCursorUp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MoveCursorDown", (PyCFunction) _wrap_Grid_MoveCursorDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MoveCursorLeft", (PyCFunction) _wrap_Grid_MoveCursorLeft, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MoveCursorRight", (PyCFunction) _wrap_Grid_MoveCursorRight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MovePageDown", (PyCFunction) _wrap_Grid_MovePageDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MovePageUp", (PyCFunction) _wrap_Grid_MovePageUp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MoveCursorUpBlock", (PyCFunction) _wrap_Grid_MoveCursorUpBlock, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MoveCursorDownBlock", (PyCFunction) _wrap_Grid_MoveCursorDownBlock, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MoveCursorLeftBlock", (PyCFunction) _wrap_Grid_MoveCursorLeftBlock, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_MoveCursorRightBlock", (PyCFunction) _wrap_Grid_MoveCursorRightBlock, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultRowLabelSize", (PyCFunction) _wrap_Grid_GetDefaultRowLabelSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetRowLabelSize", (PyCFunction) _wrap_Grid_GetRowLabelSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultColLabelSize", (PyCFunction) _wrap_Grid_GetDefaultColLabelSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetColLabelSize", (PyCFunction) _wrap_Grid_GetColLabelSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetLabelBackgroundColour", (PyCFunction) _wrap_Grid_GetLabelBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetLabelTextColour", (PyCFunction) _wrap_Grid_GetLabelTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetLabelFont", (PyCFunction) _wrap_Grid_GetLabelFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetRowLabelAlignment", (PyCFunction) _wrap_Grid_GetRowLabelAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetColLabelAlignment", (PyCFunction) _wrap_Grid_GetColLabelAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetColLabelTextOrientation", (PyCFunction) _wrap_Grid_GetColLabelTextOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetRowLabelValue", (PyCFunction) _wrap_Grid_GetRowLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetColLabelValue", (PyCFunction) _wrap_Grid_GetColLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetGridLineColour", (PyCFunction) _wrap_Grid_GetGridLineColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellHighlightColour", (PyCFunction) _wrap_Grid_GetCellHighlightColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellHighlightPenWidth", (PyCFunction) _wrap_Grid_GetCellHighlightPenWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellHighlightROPenWidth", (PyCFunction) _wrap_Grid_GetCellHighlightROPenWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetRowLabelSize", (PyCFunction) _wrap_Grid_SetRowLabelSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColLabelSize", (PyCFunction) _wrap_Grid_SetColLabelSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetLabelBackgroundColour", (PyCFunction) _wrap_Grid_SetLabelBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetLabelTextColour", (PyCFunction) _wrap_Grid_SetLabelTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetLabelFont", (PyCFunction) _wrap_Grid_SetLabelFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetRowLabelAlignment", (PyCFunction) _wrap_Grid_SetRowLabelAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColLabelAlignment", (PyCFunction) _wrap_Grid_SetColLabelAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColLabelTextOrientation", (PyCFunction) _wrap_Grid_SetColLabelTextOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetRowLabelValue", (PyCFunction) _wrap_Grid_SetRowLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColLabelValue", (PyCFunction) _wrap_Grid_SetColLabelValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetGridLineColour", (PyCFunction) _wrap_Grid_SetGridLineColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellHighlightColour", (PyCFunction) _wrap_Grid_SetCellHighlightColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellHighlightPenWidth", (PyCFunction) _wrap_Grid_SetCellHighlightPenWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellHighlightROPenWidth", (PyCFunction) _wrap_Grid_SetCellHighlightROPenWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_EnableDragRowSize", (PyCFunction) _wrap_Grid_EnableDragRowSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DisableDragRowSize", (PyCFunction) _wrap_Grid_DisableDragRowSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_CanDragRowSize", (PyCFunction) _wrap_Grid_CanDragRowSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_EnableDragColSize", (PyCFunction) _wrap_Grid_EnableDragColSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DisableDragColSize", (PyCFunction) _wrap_Grid_DisableDragColSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_CanDragColSize", (PyCFunction) _wrap_Grid_CanDragColSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_EnableDragGridSize", (PyCFunction) _wrap_Grid_EnableDragGridSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DisableDragGridSize", (PyCFunction) _wrap_Grid_DisableDragGridSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_CanDragGridSize", (PyCFunction) _wrap_Grid_CanDragGridSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetAttr", (PyCFunction) _wrap_Grid_SetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetRowAttr", (PyCFunction) _wrap_Grid_SetRowAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColAttr", (PyCFunction) _wrap_Grid_SetColAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColFormatBool", (PyCFunction) _wrap_Grid_SetColFormatBool, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColFormatNumber", (PyCFunction) _wrap_Grid_SetColFormatNumber, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColFormatFloat", (PyCFunction) _wrap_Grid_SetColFormatFloat, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColFormatCustom", (PyCFunction) _wrap_Grid_SetColFormatCustom, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_EnableGridLines", (PyCFunction) _wrap_Grid_EnableGridLines, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GridLinesEnabled", (PyCFunction) _wrap_Grid_GridLinesEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultRowSize", (PyCFunction) _wrap_Grid_GetDefaultRowSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetRowSize", (PyCFunction) _wrap_Grid_GetRowSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultColSize", (PyCFunction) _wrap_Grid_GetDefaultColSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetColSize", (PyCFunction) _wrap_Grid_GetColSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultCellBackgroundColour", (PyCFunction) _wrap_Grid_GetDefaultCellBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellBackgroundColour", (PyCFunction) _wrap_Grid_GetCellBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultCellTextColour", (PyCFunction) _wrap_Grid_GetDefaultCellTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellTextColour", (PyCFunction) _wrap_Grid_GetCellTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultCellFont", (PyCFunction) _wrap_Grid_GetDefaultCellFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellFont", (PyCFunction) _wrap_Grid_GetCellFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultCellAlignment", (PyCFunction) _wrap_Grid_GetDefaultCellAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellAlignment", (PyCFunction) _wrap_Grid_GetCellAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultCellOverflow", (PyCFunction) _wrap_Grid_GetDefaultCellOverflow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellOverflow", (PyCFunction) _wrap_Grid_GetCellOverflow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellSize", (PyCFunction) _wrap_Grid_GetCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetDefaultRowSize", (PyCFunction) _wrap_Grid_SetDefaultRowSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetRowSize", (PyCFunction) _wrap_Grid_SetRowSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetDefaultColSize", (PyCFunction) _wrap_Grid_SetDefaultColSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColSize", (PyCFunction) _wrap_Grid_SetColSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_AutoSizeColumn", (PyCFunction) _wrap_Grid_AutoSizeColumn, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_AutoSizeRow", (PyCFunction) _wrap_Grid_AutoSizeRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_AutoSizeColumns", (PyCFunction) _wrap_Grid_AutoSizeColumns, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_AutoSizeRows", (PyCFunction) _wrap_Grid_AutoSizeRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_AutoSize", (PyCFunction) _wrap_Grid_AutoSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_AutoSizeRowLabelSize", (PyCFunction) _wrap_Grid_AutoSizeRowLabelSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_AutoSizeColLabelSize", (PyCFunction) _wrap_Grid_AutoSizeColLabelSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColMinimalWidth", (PyCFunction) _wrap_Grid_SetColMinimalWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetRowMinimalHeight", (PyCFunction) _wrap_Grid_SetRowMinimalHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetColMinimalAcceptableWidth", (PyCFunction) _wrap_Grid_SetColMinimalAcceptableWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetRowMinimalAcceptableHeight", (PyCFunction) _wrap_Grid_SetRowMinimalAcceptableHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetColMinimalAcceptableWidth", (PyCFunction) _wrap_Grid_GetColMinimalAcceptableWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetRowMinimalAcceptableHeight", (PyCFunction) _wrap_Grid_GetRowMinimalAcceptableHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetDefaultCellBackgroundColour", (PyCFunction) _wrap_Grid_SetDefaultCellBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellBackgroundColour", (PyCFunction) _wrap_Grid_SetCellBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetDefaultCellTextColour", (PyCFunction) _wrap_Grid_SetDefaultCellTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellTextColour", (PyCFunction) _wrap_Grid_SetCellTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetDefaultCellFont", (PyCFunction) _wrap_Grid_SetDefaultCellFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellFont", (PyCFunction) _wrap_Grid_SetCellFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetDefaultCellAlignment", (PyCFunction) _wrap_Grid_SetDefaultCellAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellAlignment", (PyCFunction) _wrap_Grid_SetCellAlignment, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetDefaultCellOverflow", (PyCFunction) _wrap_Grid_SetDefaultCellOverflow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellOverflow", (PyCFunction) _wrap_Grid_SetCellOverflow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellSize", (PyCFunction) _wrap_Grid_SetCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetDefaultRenderer", (PyCFunction) _wrap_Grid_SetDefaultRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellRenderer", (PyCFunction) _wrap_Grid_SetCellRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultRenderer", (PyCFunction) _wrap_Grid_GetDefaultRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellRenderer", (PyCFunction) _wrap_Grid_GetCellRenderer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetDefaultEditor", (PyCFunction) _wrap_Grid_SetDefaultEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellEditor", (PyCFunction) _wrap_Grid_SetCellEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultEditor", (PyCFunction) _wrap_Grid_GetDefaultEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellEditor", (PyCFunction) _wrap_Grid_GetCellEditor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetCellValue", (PyCFunction) _wrap_Grid_GetCellValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetCellValue", (PyCFunction) _wrap_Grid_SetCellValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_IsReadOnly", (PyCFunction) _wrap_Grid_IsReadOnly, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetReadOnly", (PyCFunction) _wrap_Grid_SetReadOnly, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SelectRow", (PyCFunction) _wrap_Grid_SelectRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SelectCol", (PyCFunction) _wrap_Grid_SelectCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SelectBlock", (PyCFunction) _wrap_Grid_SelectBlock, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SelectAll", (PyCFunction) _wrap_Grid_SelectAll, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_IsSelection", (PyCFunction) _wrap_Grid_IsSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_ClearSelection", (PyCFunction) _wrap_Grid_ClearSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_IsInSelection", (PyCFunction) _wrap_Grid_IsInSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetSelectedCells", (PyCFunction) _wrap_Grid_GetSelectedCells, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetSelectionBlockTopLeft", (PyCFunction) _wrap_Grid_GetSelectionBlockTopLeft, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetSelectionBlockBottomRight", (PyCFunction) _wrap_Grid_GetSelectionBlockBottomRight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetSelectedRows", (PyCFunction) _wrap_Grid_GetSelectedRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetSelectedCols", (PyCFunction) _wrap_Grid_GetSelectedCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DeselectRow", (PyCFunction) _wrap_Grid_DeselectRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DeselectCol", (PyCFunction) _wrap_Grid_DeselectCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_DeselectCell", (PyCFunction) _wrap_Grid_DeselectCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_BlockToDeviceRect", (PyCFunction) _wrap_Grid_BlockToDeviceRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetSelectionBackground", (PyCFunction) _wrap_Grid_GetSelectionBackground, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetSelectionForeground", (PyCFunction) _wrap_Grid_GetSelectionForeground, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetSelectionBackground", (PyCFunction) _wrap_Grid_SetSelectionBackground, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetSelectionForeground", (PyCFunction) _wrap_Grid_SetSelectionForeground, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_RegisterDataType", (PyCFunction) _wrap_Grid_RegisterDataType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultEditorForCell", (PyCFunction) _wrap_Grid_GetDefaultEditorForCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultRendererForCell", (PyCFunction) _wrap_Grid_GetDefaultRendererForCell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultEditorForType", (PyCFunction) _wrap_Grid_GetDefaultEditorForType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetDefaultRendererForType", (PyCFunction) _wrap_Grid_GetDefaultRendererForType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_SetMargins", (PyCFunction) _wrap_Grid_SetMargins, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetGridWindow", (PyCFunction) _wrap_Grid_GetGridWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetGridRowLabelWindow", (PyCFunction) _wrap_Grid_GetGridRowLabelWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetGridColLabelWindow", (PyCFunction) _wrap_Grid_GetGridColLabelWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_GetGridCornerLabelWindow", (PyCFunction) _wrap_Grid_GetGridCornerLabelWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_swigregister", Grid_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridEvent", (PyCFunction) _wrap_new_GridEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEvent_GetRow", (PyCFunction) _wrap_GridEvent_GetRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEvent_GetCol", (PyCFunction) _wrap_GridEvent_GetCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEvent_GetPosition", (PyCFunction) _wrap_GridEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEvent_Selecting", (PyCFunction) _wrap_GridEvent_Selecting, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEvent_ControlDown", (PyCFunction) _wrap_GridEvent_ControlDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEvent_MetaDown", (PyCFunction) _wrap_GridEvent_MetaDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEvent_ShiftDown", (PyCFunction) _wrap_GridEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEvent_AltDown", (PyCFunction) _wrap_GridEvent_AltDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEvent_swigregister", GridEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridSizeEvent", (PyCFunction) _wrap_new_GridSizeEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizeEvent_GetRowOrCol", (PyCFunction) _wrap_GridSizeEvent_GetRowOrCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizeEvent_GetPosition", (PyCFunction) _wrap_GridSizeEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizeEvent_ControlDown", (PyCFunction) _wrap_GridSizeEvent_ControlDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizeEvent_MetaDown", (PyCFunction) _wrap_GridSizeEvent_MetaDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizeEvent_ShiftDown", (PyCFunction) _wrap_GridSizeEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizeEvent_AltDown", (PyCFunction) _wrap_GridSizeEvent_AltDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizeEvent_swigregister", GridSizeEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridRangeSelectEvent", (PyCFunction) _wrap_new_GridRangeSelectEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_GetTopLeftCoords", (PyCFunction) _wrap_GridRangeSelectEvent_GetTopLeftCoords, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_GetBottomRightCoords", (PyCFunction) _wrap_GridRangeSelectEvent_GetBottomRightCoords, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_GetTopRow", (PyCFunction) _wrap_GridRangeSelectEvent_GetTopRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_GetBottomRow", (PyCFunction) _wrap_GridRangeSelectEvent_GetBottomRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_GetLeftCol", (PyCFunction) _wrap_GridRangeSelectEvent_GetLeftCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_GetRightCol", (PyCFunction) _wrap_GridRangeSelectEvent_GetRightCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_Selecting", (PyCFunction) _wrap_GridRangeSelectEvent_Selecting, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_ControlDown", (PyCFunction) _wrap_GridRangeSelectEvent_ControlDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_MetaDown", (PyCFunction) _wrap_GridRangeSelectEvent_MetaDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_ShiftDown", (PyCFunction) _wrap_GridRangeSelectEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_AltDown", (PyCFunction) _wrap_GridRangeSelectEvent_AltDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridRangeSelectEvent_swigregister", GridRangeSelectEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridEditorCreatedEvent", (PyCFunction) _wrap_new_GridEditorCreatedEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEditorCreatedEvent_GetRow", (PyCFunction) _wrap_GridEditorCreatedEvent_GetRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEditorCreatedEvent_GetCol", (PyCFunction) _wrap_GridEditorCreatedEvent_GetCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEditorCreatedEvent_GetControl", (PyCFunction) _wrap_GridEditorCreatedEvent_GetControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEditorCreatedEvent_SetRow", (PyCFunction) _wrap_GridEditorCreatedEvent_SetRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEditorCreatedEvent_SetCol", (PyCFunction) _wrap_GridEditorCreatedEvent_SetCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEditorCreatedEvent_SetControl", (PyCFunction) _wrap_GridEditorCreatedEvent_SetControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridEditorCreatedEvent_swigregister", GridEditorCreatedEvent_swigregister, METH_VARARGS, NULL },
-	 { NULL, NULL, 0, NULL }
+	 { (char *)"GridCellRenderer__setOORInfo", (PyCFunction) _wrap_GridCellRenderer__setOORInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellRenderer_SetParameters", (PyCFunction) _wrap_GridCellRenderer_SetParameters, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellRenderer_IncRef", (PyCFunction) _wrap_GridCellRenderer_IncRef, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellRenderer_DecRef", (PyCFunction) _wrap_GridCellRenderer_DecRef, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellRenderer_Draw", (PyCFunction) _wrap_GridCellRenderer_Draw, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellRenderer_GetBestSize", (PyCFunction) _wrap_GridCellRenderer_GetBestSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellRenderer_Clone", (PyCFunction) _wrap_GridCellRenderer_Clone, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellRenderer_swigregister", GridCellRenderer_swigregister, METH_VARARGS },
+	 { (char *)"new_PyGridCellRenderer", (PyCFunction) _wrap_new_PyGridCellRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellRenderer__setCallbackInfo", (PyCFunction) _wrap_PyGridCellRenderer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellRenderer_base_SetParameters", (PyCFunction) _wrap_PyGridCellRenderer_base_SetParameters, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellRenderer_swigregister", PyGridCellRenderer_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellStringRenderer", (PyCFunction) _wrap_new_GridCellStringRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellStringRenderer_swigregister", GridCellStringRenderer_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellNumberRenderer", (PyCFunction) _wrap_new_GridCellNumberRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellNumberRenderer_swigregister", GridCellNumberRenderer_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellFloatRenderer", (PyCFunction) _wrap_new_GridCellFloatRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellFloatRenderer_GetWidth", (PyCFunction) _wrap_GridCellFloatRenderer_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellFloatRenderer_SetWidth", (PyCFunction) _wrap_GridCellFloatRenderer_SetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellFloatRenderer_GetPrecision", (PyCFunction) _wrap_GridCellFloatRenderer_GetPrecision, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellFloatRenderer_SetPrecision", (PyCFunction) _wrap_GridCellFloatRenderer_SetPrecision, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellFloatRenderer_swigregister", GridCellFloatRenderer_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellBoolRenderer", (PyCFunction) _wrap_new_GridCellBoolRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellBoolRenderer_swigregister", GridCellBoolRenderer_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellDateTimeRenderer", (PyCFunction) _wrap_new_GridCellDateTimeRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellDateTimeRenderer_swigregister", GridCellDateTimeRenderer_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellEnumRenderer", (PyCFunction) _wrap_new_GridCellEnumRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEnumRenderer_swigregister", GridCellEnumRenderer_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellAutoWrapStringRenderer", (PyCFunction) _wrap_new_GridCellAutoWrapStringRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAutoWrapStringRenderer_swigregister", GridCellAutoWrapStringRenderer_swigregister, METH_VARARGS },
+	 { (char *)"GridCellEditor__setOORInfo", (PyCFunction) _wrap_GridCellEditor__setOORInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_IsCreated", (PyCFunction) _wrap_GridCellEditor_IsCreated, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_GetControl", (PyCFunction) _wrap_GridCellEditor_GetControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_SetControl", (PyCFunction) _wrap_GridCellEditor_SetControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_GetCellAttr", (PyCFunction) _wrap_GridCellEditor_GetCellAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_SetCellAttr", (PyCFunction) _wrap_GridCellEditor_SetCellAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_SetParameters", (PyCFunction) _wrap_GridCellEditor_SetParameters, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_IncRef", (PyCFunction) _wrap_GridCellEditor_IncRef, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_DecRef", (PyCFunction) _wrap_GridCellEditor_DecRef, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_Create", (PyCFunction) _wrap_GridCellEditor_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_BeginEdit", (PyCFunction) _wrap_GridCellEditor_BeginEdit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_EndEdit", (PyCFunction) _wrap_GridCellEditor_EndEdit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_Reset", (PyCFunction) _wrap_GridCellEditor_Reset, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_Clone", (PyCFunction) _wrap_GridCellEditor_Clone, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_SetSize", (PyCFunction) _wrap_GridCellEditor_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_Show", (PyCFunction) _wrap_GridCellEditor_Show, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_PaintBackground", (PyCFunction) _wrap_GridCellEditor_PaintBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_IsAcceptedKey", (PyCFunction) _wrap_GridCellEditor_IsAcceptedKey, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_StartingKey", (PyCFunction) _wrap_GridCellEditor_StartingKey, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_StartingClick", (PyCFunction) _wrap_GridCellEditor_StartingClick, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_HandleReturn", (PyCFunction) _wrap_GridCellEditor_HandleReturn, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_Destroy", (PyCFunction) _wrap_GridCellEditor_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEditor_swigregister", GridCellEditor_swigregister, METH_VARARGS },
+	 { (char *)"new_PyGridCellEditor", (PyCFunction) _wrap_new_PyGridCellEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor__setCallbackInfo", (PyCFunction) _wrap_PyGridCellEditor__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_base_SetSize", (PyCFunction) _wrap_PyGridCellEditor_base_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_base_Show", (PyCFunction) _wrap_PyGridCellEditor_base_Show, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_base_PaintBackground", (PyCFunction) _wrap_PyGridCellEditor_base_PaintBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_base_IsAcceptedKey", (PyCFunction) _wrap_PyGridCellEditor_base_IsAcceptedKey, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_base_StartingKey", (PyCFunction) _wrap_PyGridCellEditor_base_StartingKey, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_base_StartingClick", (PyCFunction) _wrap_PyGridCellEditor_base_StartingClick, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_base_HandleReturn", (PyCFunction) _wrap_PyGridCellEditor_base_HandleReturn, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_base_Destroy", (PyCFunction) _wrap_PyGridCellEditor_base_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_base_SetParameters", (PyCFunction) _wrap_PyGridCellEditor_base_SetParameters, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellEditor_swigregister", PyGridCellEditor_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellTextEditor", (PyCFunction) _wrap_new_GridCellTextEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellTextEditor_GetValue", (PyCFunction) _wrap_GridCellTextEditor_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellTextEditor_swigregister", GridCellTextEditor_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellNumberEditor", (PyCFunction) _wrap_new_GridCellNumberEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellNumberEditor_GetValue", (PyCFunction) _wrap_GridCellNumberEditor_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellNumberEditor_swigregister", GridCellNumberEditor_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellFloatEditor", (PyCFunction) _wrap_new_GridCellFloatEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellFloatEditor_GetValue", (PyCFunction) _wrap_GridCellFloatEditor_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellFloatEditor_swigregister", GridCellFloatEditor_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellBoolEditor", (PyCFunction) _wrap_new_GridCellBoolEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellBoolEditor_GetValue", (PyCFunction) _wrap_GridCellBoolEditor_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellBoolEditor_swigregister", GridCellBoolEditor_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellChoiceEditor", (PyCFunction) _wrap_new_GridCellChoiceEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellChoiceEditor_GetValue", (PyCFunction) _wrap_GridCellChoiceEditor_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellChoiceEditor_swigregister", GridCellChoiceEditor_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellEnumEditor", (PyCFunction) _wrap_new_GridCellEnumEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEnumEditor_GetValue", (PyCFunction) _wrap_GridCellEnumEditor_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellEnumEditor_swigregister", GridCellEnumEditor_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellAutoWrapStringEditor", (PyCFunction) _wrap_new_GridCellAutoWrapStringEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAutoWrapStringEditor_GetValue", (PyCFunction) _wrap_GridCellAutoWrapStringEditor_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAutoWrapStringEditor_swigregister", GridCellAutoWrapStringEditor_swigregister, METH_VARARGS },
+	 { (char *)"GridCellAttr__setOORInfo", (PyCFunction) _wrap_GridCellAttr__setOORInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_GridCellAttr", (PyCFunction) _wrap_new_GridCellAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_Clone", (PyCFunction) _wrap_GridCellAttr_Clone, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_MergeWith", (PyCFunction) _wrap_GridCellAttr_MergeWith, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_IncRef", (PyCFunction) _wrap_GridCellAttr_IncRef, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_DecRef", (PyCFunction) _wrap_GridCellAttr_DecRef, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetTextColour", (PyCFunction) _wrap_GridCellAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetBackgroundColour", (PyCFunction) _wrap_GridCellAttr_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetFont", (PyCFunction) _wrap_GridCellAttr_SetFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetAlignment", (PyCFunction) _wrap_GridCellAttr_SetAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetSize", (PyCFunction) _wrap_GridCellAttr_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetOverflow", (PyCFunction) _wrap_GridCellAttr_SetOverflow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetReadOnly", (PyCFunction) _wrap_GridCellAttr_SetReadOnly, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetRenderer", (PyCFunction) _wrap_GridCellAttr_SetRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetEditor", (PyCFunction) _wrap_GridCellAttr_SetEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetKind", (PyCFunction) _wrap_GridCellAttr_SetKind, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_HasTextColour", (PyCFunction) _wrap_GridCellAttr_HasTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_HasBackgroundColour", (PyCFunction) _wrap_GridCellAttr_HasBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_HasFont", (PyCFunction) _wrap_GridCellAttr_HasFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_HasAlignment", (PyCFunction) _wrap_GridCellAttr_HasAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_HasRenderer", (PyCFunction) _wrap_GridCellAttr_HasRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_HasEditor", (PyCFunction) _wrap_GridCellAttr_HasEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_HasReadWriteMode", (PyCFunction) _wrap_GridCellAttr_HasReadWriteMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_HasOverflowMode", (PyCFunction) _wrap_GridCellAttr_HasOverflowMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_GetTextColour", (PyCFunction) _wrap_GridCellAttr_GetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_GetBackgroundColour", (PyCFunction) _wrap_GridCellAttr_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_GetFont", (PyCFunction) _wrap_GridCellAttr_GetFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_GetAlignment", (PyCFunction) _wrap_GridCellAttr_GetAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_GetSize", (PyCFunction) _wrap_GridCellAttr_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_GetOverflow", (PyCFunction) _wrap_GridCellAttr_GetOverflow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_GetRenderer", (PyCFunction) _wrap_GridCellAttr_GetRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_GetEditor", (PyCFunction) _wrap_GridCellAttr_GetEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_IsReadOnly", (PyCFunction) _wrap_GridCellAttr_IsReadOnly, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_SetDefAttr", (PyCFunction) _wrap_GridCellAttr_SetDefAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttr_swigregister", GridCellAttr_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellAttrProvider", (PyCFunction) _wrap_new_GridCellAttrProvider, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttrProvider__setOORInfo", (PyCFunction) _wrap_GridCellAttrProvider__setOORInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttrProvider_GetAttr", (PyCFunction) _wrap_GridCellAttrProvider_GetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttrProvider_SetAttr", (PyCFunction) _wrap_GridCellAttrProvider_SetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttrProvider_SetRowAttr", (PyCFunction) _wrap_GridCellAttrProvider_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttrProvider_SetColAttr", (PyCFunction) _wrap_GridCellAttrProvider_SetColAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttrProvider_UpdateAttrRows", (PyCFunction) _wrap_GridCellAttrProvider_UpdateAttrRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttrProvider_UpdateAttrCols", (PyCFunction) _wrap_GridCellAttrProvider_UpdateAttrCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellAttrProvider_swigregister", GridCellAttrProvider_swigregister, METH_VARARGS },
+	 { (char *)"new_PyGridCellAttrProvider", (PyCFunction) _wrap_new_PyGridCellAttrProvider, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellAttrProvider__setCallbackInfo", (PyCFunction) _wrap_PyGridCellAttrProvider__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellAttrProvider_base_GetAttr", (PyCFunction) _wrap_PyGridCellAttrProvider_base_GetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellAttrProvider_base_SetAttr", (PyCFunction) _wrap_PyGridCellAttrProvider_base_SetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellAttrProvider_base_SetRowAttr", (PyCFunction) _wrap_PyGridCellAttrProvider_base_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellAttrProvider_base_SetColAttr", (PyCFunction) _wrap_PyGridCellAttrProvider_base_SetColAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridCellAttrProvider_swigregister", PyGridCellAttrProvider_swigregister, METH_VARARGS },
+	 { (char *)"GridTableBase__setOORInfo", (PyCFunction) _wrap_GridTableBase__setOORInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetAttrProvider", (PyCFunction) _wrap_GridTableBase_SetAttrProvider, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetAttrProvider", (PyCFunction) _wrap_GridTableBase_GetAttrProvider, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetView", (PyCFunction) _wrap_GridTableBase_SetView, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetView", (PyCFunction) _wrap_GridTableBase_GetView, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetNumberRows", (PyCFunction) _wrap_GridTableBase_GetNumberRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetNumberCols", (PyCFunction) _wrap_GridTableBase_GetNumberCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_IsEmptyCell", (PyCFunction) _wrap_GridTableBase_IsEmptyCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetValue", (PyCFunction) _wrap_GridTableBase_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetValue", (PyCFunction) _wrap_GridTableBase_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetTypeName", (PyCFunction) _wrap_GridTableBase_GetTypeName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_CanGetValueAs", (PyCFunction) _wrap_GridTableBase_CanGetValueAs, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_CanSetValueAs", (PyCFunction) _wrap_GridTableBase_CanSetValueAs, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetValueAsLong", (PyCFunction) _wrap_GridTableBase_GetValueAsLong, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetValueAsDouble", (PyCFunction) _wrap_GridTableBase_GetValueAsDouble, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetValueAsBool", (PyCFunction) _wrap_GridTableBase_GetValueAsBool, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetValueAsLong", (PyCFunction) _wrap_GridTableBase_SetValueAsLong, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetValueAsDouble", (PyCFunction) _wrap_GridTableBase_SetValueAsDouble, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetValueAsBool", (PyCFunction) _wrap_GridTableBase_SetValueAsBool, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_Clear", (PyCFunction) _wrap_GridTableBase_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_InsertRows", (PyCFunction) _wrap_GridTableBase_InsertRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_AppendRows", (PyCFunction) _wrap_GridTableBase_AppendRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_DeleteRows", (PyCFunction) _wrap_GridTableBase_DeleteRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_InsertCols", (PyCFunction) _wrap_GridTableBase_InsertCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_AppendCols", (PyCFunction) _wrap_GridTableBase_AppendCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_DeleteCols", (PyCFunction) _wrap_GridTableBase_DeleteCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetRowLabelValue", (PyCFunction) _wrap_GridTableBase_GetRowLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetColLabelValue", (PyCFunction) _wrap_GridTableBase_GetColLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetRowLabelValue", (PyCFunction) _wrap_GridTableBase_SetRowLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetColLabelValue", (PyCFunction) _wrap_GridTableBase_SetColLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_CanHaveAttributes", (PyCFunction) _wrap_GridTableBase_CanHaveAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_GetAttr", (PyCFunction) _wrap_GridTableBase_GetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetAttr", (PyCFunction) _wrap_GridTableBase_SetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetRowAttr", (PyCFunction) _wrap_GridTableBase_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_SetColAttr", (PyCFunction) _wrap_GridTableBase_SetColAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableBase_swigregister", GridTableBase_swigregister, METH_VARARGS },
+	 { (char *)"new_PyGridTableBase", (PyCFunction) _wrap_new_PyGridTableBase, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase__setCallbackInfo", (PyCFunction) _wrap_PyGridTableBase__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_Destroy", (PyCFunction) _wrap_PyGridTableBase_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_GetTypeName", (PyCFunction) _wrap_PyGridTableBase_base_GetTypeName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_CanGetValueAs", (PyCFunction) _wrap_PyGridTableBase_base_CanGetValueAs, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_CanSetValueAs", (PyCFunction) _wrap_PyGridTableBase_base_CanSetValueAs, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_Clear", (PyCFunction) _wrap_PyGridTableBase_base_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_InsertRows", (PyCFunction) _wrap_PyGridTableBase_base_InsertRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_AppendRows", (PyCFunction) _wrap_PyGridTableBase_base_AppendRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_DeleteRows", (PyCFunction) _wrap_PyGridTableBase_base_DeleteRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_InsertCols", (PyCFunction) _wrap_PyGridTableBase_base_InsertCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_AppendCols", (PyCFunction) _wrap_PyGridTableBase_base_AppendCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_DeleteCols", (PyCFunction) _wrap_PyGridTableBase_base_DeleteCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_GetRowLabelValue", (PyCFunction) _wrap_PyGridTableBase_base_GetRowLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_GetColLabelValue", (PyCFunction) _wrap_PyGridTableBase_base_GetColLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_SetRowLabelValue", (PyCFunction) _wrap_PyGridTableBase_base_SetRowLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_SetColLabelValue", (PyCFunction) _wrap_PyGridTableBase_base_SetColLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_CanHaveAttributes", (PyCFunction) _wrap_PyGridTableBase_base_CanHaveAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_GetAttr", (PyCFunction) _wrap_PyGridTableBase_base_GetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_SetAttr", (PyCFunction) _wrap_PyGridTableBase_base_SetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_SetRowAttr", (PyCFunction) _wrap_PyGridTableBase_base_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_base_SetColAttr", (PyCFunction) _wrap_PyGridTableBase_base_SetColAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyGridTableBase_swigregister", PyGridTableBase_swigregister, METH_VARARGS },
+	 { (char *)"new_GridStringTable", (PyCFunction) _wrap_new_GridStringTable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridStringTable_swigregister", GridStringTable_swigregister, METH_VARARGS },
+	 { (char *)"new_GridTableMessage", (PyCFunction) _wrap_new_GridTableMessage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_GridTableMessage", (PyCFunction) _wrap_delete_GridTableMessage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableMessage_SetTableObject", (PyCFunction) _wrap_GridTableMessage_SetTableObject, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableMessage_GetTableObject", (PyCFunction) _wrap_GridTableMessage_GetTableObject, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableMessage_SetId", (PyCFunction) _wrap_GridTableMessage_SetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableMessage_GetId", (PyCFunction) _wrap_GridTableMessage_GetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableMessage_SetCommandInt", (PyCFunction) _wrap_GridTableMessage_SetCommandInt, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableMessage_GetCommandInt", (PyCFunction) _wrap_GridTableMessage_GetCommandInt, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableMessage_SetCommandInt2", (PyCFunction) _wrap_GridTableMessage_SetCommandInt2, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableMessage_GetCommandInt2", (PyCFunction) _wrap_GridTableMessage_GetCommandInt2, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridTableMessage_swigregister", GridTableMessage_swigregister, METH_VARARGS },
+	 { (char *)"new_GridCellCoords", (PyCFunction) _wrap_new_GridCellCoords, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_GridCellCoords", (PyCFunction) _wrap_delete_GridCellCoords, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords_GetRow", (PyCFunction) _wrap_GridCellCoords_GetRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords_SetRow", (PyCFunction) _wrap_GridCellCoords_SetRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords_GetCol", (PyCFunction) _wrap_GridCellCoords_GetCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords_SetCol", (PyCFunction) _wrap_GridCellCoords_SetCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords_Set", (PyCFunction) _wrap_GridCellCoords_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords___eq__", (PyCFunction) _wrap_GridCellCoords___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords___ne__", (PyCFunction) _wrap_GridCellCoords___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords_asTuple", (PyCFunction) _wrap_GridCellCoords_asTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords_swigregister", GridCellCoords_swigregister, METH_VARARGS },
+	 { (char *)"new_Grid", (PyCFunction) _wrap_new_Grid, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_CreateGrid", (PyCFunction) _wrap_Grid_CreateGrid, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetSelectionMode", (PyCFunction) _wrap_Grid_SetSelectionMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetSelectionMode", (PyCFunction) _wrap_Grid_GetSelectionMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetNumberRows", (PyCFunction) _wrap_Grid_GetNumberRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetNumberCols", (PyCFunction) _wrap_Grid_GetNumberCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_ProcessTableMessage", (PyCFunction) _wrap_Grid_ProcessTableMessage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetTable", (PyCFunction) _wrap_Grid_GetTable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetTable", (PyCFunction) _wrap_Grid_SetTable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_ClearGrid", (PyCFunction) _wrap_Grid_ClearGrid, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_InsertRows", (PyCFunction) _wrap_Grid_InsertRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_AppendRows", (PyCFunction) _wrap_Grid_AppendRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DeleteRows", (PyCFunction) _wrap_Grid_DeleteRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_InsertCols", (PyCFunction) _wrap_Grid_InsertCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_AppendCols", (PyCFunction) _wrap_Grid_AppendCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DeleteCols", (PyCFunction) _wrap_Grid_DeleteCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DrawCellHighlight", (PyCFunction) _wrap_Grid_DrawCellHighlight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DrawTextRectangle", (PyCFunction) _wrap_Grid_DrawTextRectangle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetTextBoxSize", (PyCFunction) _wrap_Grid_GetTextBoxSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_BeginBatch", (PyCFunction) _wrap_Grid_BeginBatch, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_EndBatch", (PyCFunction) _wrap_Grid_EndBatch, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetBatchCount", (PyCFunction) _wrap_Grid_GetBatchCount, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_ForceRefresh", (PyCFunction) _wrap_Grid_ForceRefresh, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_IsEditable", (PyCFunction) _wrap_Grid_IsEditable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_EnableEditing", (PyCFunction) _wrap_Grid_EnableEditing, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_EnableCellEditControl", (PyCFunction) _wrap_Grid_EnableCellEditControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DisableCellEditControl", (PyCFunction) _wrap_Grid_DisableCellEditControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_CanEnableCellControl", (PyCFunction) _wrap_Grid_CanEnableCellControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_IsCellEditControlEnabled", (PyCFunction) _wrap_Grid_IsCellEditControlEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_IsCellEditControlShown", (PyCFunction) _wrap_Grid_IsCellEditControlShown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_IsCurrentCellReadOnly", (PyCFunction) _wrap_Grid_IsCurrentCellReadOnly, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_ShowCellEditControl", (PyCFunction) _wrap_Grid_ShowCellEditControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_HideCellEditControl", (PyCFunction) _wrap_Grid_HideCellEditControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SaveEditControlValue", (PyCFunction) _wrap_Grid_SaveEditControlValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_XYToCell", (PyCFunction) _wrap_Grid_XYToCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_YToRow", (PyCFunction) _wrap_Grid_YToRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_XToCol", (PyCFunction) _wrap_Grid_XToCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_YToEdgeOfRow", (PyCFunction) _wrap_Grid_YToEdgeOfRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_XToEdgeOfCol", (PyCFunction) _wrap_Grid_XToEdgeOfCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_CellToRect", (PyCFunction) _wrap_Grid_CellToRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetGridCursorRow", (PyCFunction) _wrap_Grid_GetGridCursorRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetGridCursorCol", (PyCFunction) _wrap_Grid_GetGridCursorCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_IsVisible", (PyCFunction) _wrap_Grid_IsVisible, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MakeCellVisible", (PyCFunction) _wrap_Grid_MakeCellVisible, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetGridCursor", (PyCFunction) _wrap_Grid_SetGridCursor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MoveCursorUp", (PyCFunction) _wrap_Grid_MoveCursorUp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MoveCursorDown", (PyCFunction) _wrap_Grid_MoveCursorDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MoveCursorLeft", (PyCFunction) _wrap_Grid_MoveCursorLeft, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MoveCursorRight", (PyCFunction) _wrap_Grid_MoveCursorRight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MovePageDown", (PyCFunction) _wrap_Grid_MovePageDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MovePageUp", (PyCFunction) _wrap_Grid_MovePageUp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MoveCursorUpBlock", (PyCFunction) _wrap_Grid_MoveCursorUpBlock, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MoveCursorDownBlock", (PyCFunction) _wrap_Grid_MoveCursorDownBlock, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MoveCursorLeftBlock", (PyCFunction) _wrap_Grid_MoveCursorLeftBlock, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_MoveCursorRightBlock", (PyCFunction) _wrap_Grid_MoveCursorRightBlock, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultRowLabelSize", (PyCFunction) _wrap_Grid_GetDefaultRowLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetRowLabelSize", (PyCFunction) _wrap_Grid_GetRowLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultColLabelSize", (PyCFunction) _wrap_Grid_GetDefaultColLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetColLabelSize", (PyCFunction) _wrap_Grid_GetColLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetLabelBackgroundColour", (PyCFunction) _wrap_Grid_GetLabelBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetLabelTextColour", (PyCFunction) _wrap_Grid_GetLabelTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetLabelFont", (PyCFunction) _wrap_Grid_GetLabelFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetRowLabelAlignment", (PyCFunction) _wrap_Grid_GetRowLabelAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetColLabelAlignment", (PyCFunction) _wrap_Grid_GetColLabelAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetColLabelTextOrientation", (PyCFunction) _wrap_Grid_GetColLabelTextOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetRowLabelValue", (PyCFunction) _wrap_Grid_GetRowLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetColLabelValue", (PyCFunction) _wrap_Grid_GetColLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetGridLineColour", (PyCFunction) _wrap_Grid_GetGridLineColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellHighlightColour", (PyCFunction) _wrap_Grid_GetCellHighlightColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellHighlightPenWidth", (PyCFunction) _wrap_Grid_GetCellHighlightPenWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellHighlightROPenWidth", (PyCFunction) _wrap_Grid_GetCellHighlightROPenWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetRowLabelSize", (PyCFunction) _wrap_Grid_SetRowLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColLabelSize", (PyCFunction) _wrap_Grid_SetColLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetLabelBackgroundColour", (PyCFunction) _wrap_Grid_SetLabelBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetLabelTextColour", (PyCFunction) _wrap_Grid_SetLabelTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetLabelFont", (PyCFunction) _wrap_Grid_SetLabelFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetRowLabelAlignment", (PyCFunction) _wrap_Grid_SetRowLabelAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColLabelAlignment", (PyCFunction) _wrap_Grid_SetColLabelAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColLabelTextOrientation", (PyCFunction) _wrap_Grid_SetColLabelTextOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetRowLabelValue", (PyCFunction) _wrap_Grid_SetRowLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColLabelValue", (PyCFunction) _wrap_Grid_SetColLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetGridLineColour", (PyCFunction) _wrap_Grid_SetGridLineColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellHighlightColour", (PyCFunction) _wrap_Grid_SetCellHighlightColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellHighlightPenWidth", (PyCFunction) _wrap_Grid_SetCellHighlightPenWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellHighlightROPenWidth", (PyCFunction) _wrap_Grid_SetCellHighlightROPenWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_EnableDragRowSize", (PyCFunction) _wrap_Grid_EnableDragRowSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DisableDragRowSize", (PyCFunction) _wrap_Grid_DisableDragRowSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_CanDragRowSize", (PyCFunction) _wrap_Grid_CanDragRowSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_EnableDragColSize", (PyCFunction) _wrap_Grid_EnableDragColSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DisableDragColSize", (PyCFunction) _wrap_Grid_DisableDragColSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_CanDragColSize", (PyCFunction) _wrap_Grid_CanDragColSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_EnableDragGridSize", (PyCFunction) _wrap_Grid_EnableDragGridSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DisableDragGridSize", (PyCFunction) _wrap_Grid_DisableDragGridSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_CanDragGridSize", (PyCFunction) _wrap_Grid_CanDragGridSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetAttr", (PyCFunction) _wrap_Grid_SetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetRowAttr", (PyCFunction) _wrap_Grid_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColAttr", (PyCFunction) _wrap_Grid_SetColAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColFormatBool", (PyCFunction) _wrap_Grid_SetColFormatBool, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColFormatNumber", (PyCFunction) _wrap_Grid_SetColFormatNumber, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColFormatFloat", (PyCFunction) _wrap_Grid_SetColFormatFloat, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColFormatCustom", (PyCFunction) _wrap_Grid_SetColFormatCustom, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_EnableGridLines", (PyCFunction) _wrap_Grid_EnableGridLines, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GridLinesEnabled", (PyCFunction) _wrap_Grid_GridLinesEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultRowSize", (PyCFunction) _wrap_Grid_GetDefaultRowSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetRowSize", (PyCFunction) _wrap_Grid_GetRowSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultColSize", (PyCFunction) _wrap_Grid_GetDefaultColSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetColSize", (PyCFunction) _wrap_Grid_GetColSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultCellBackgroundColour", (PyCFunction) _wrap_Grid_GetDefaultCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellBackgroundColour", (PyCFunction) _wrap_Grid_GetCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultCellTextColour", (PyCFunction) _wrap_Grid_GetDefaultCellTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellTextColour", (PyCFunction) _wrap_Grid_GetCellTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultCellFont", (PyCFunction) _wrap_Grid_GetDefaultCellFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellFont", (PyCFunction) _wrap_Grid_GetCellFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultCellAlignment", (PyCFunction) _wrap_Grid_GetDefaultCellAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellAlignment", (PyCFunction) _wrap_Grid_GetCellAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultCellOverflow", (PyCFunction) _wrap_Grid_GetDefaultCellOverflow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellOverflow", (PyCFunction) _wrap_Grid_GetCellOverflow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellSize", (PyCFunction) _wrap_Grid_GetCellSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetDefaultRowSize", (PyCFunction) _wrap_Grid_SetDefaultRowSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetRowSize", (PyCFunction) _wrap_Grid_SetRowSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetDefaultColSize", (PyCFunction) _wrap_Grid_SetDefaultColSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColSize", (PyCFunction) _wrap_Grid_SetColSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_AutoSizeColumn", (PyCFunction) _wrap_Grid_AutoSizeColumn, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_AutoSizeRow", (PyCFunction) _wrap_Grid_AutoSizeRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_AutoSizeColumns", (PyCFunction) _wrap_Grid_AutoSizeColumns, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_AutoSizeRows", (PyCFunction) _wrap_Grid_AutoSizeRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_AutoSize", (PyCFunction) _wrap_Grid_AutoSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_AutoSizeRowLabelSize", (PyCFunction) _wrap_Grid_AutoSizeRowLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_AutoSizeColLabelSize", (PyCFunction) _wrap_Grid_AutoSizeColLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColMinimalWidth", (PyCFunction) _wrap_Grid_SetColMinimalWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetRowMinimalHeight", (PyCFunction) _wrap_Grid_SetRowMinimalHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetColMinimalAcceptableWidth", (PyCFunction) _wrap_Grid_SetColMinimalAcceptableWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetRowMinimalAcceptableHeight", (PyCFunction) _wrap_Grid_SetRowMinimalAcceptableHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetColMinimalAcceptableWidth", (PyCFunction) _wrap_Grid_GetColMinimalAcceptableWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetRowMinimalAcceptableHeight", (PyCFunction) _wrap_Grid_GetRowMinimalAcceptableHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetDefaultCellBackgroundColour", (PyCFunction) _wrap_Grid_SetDefaultCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellBackgroundColour", (PyCFunction) _wrap_Grid_SetCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetDefaultCellTextColour", (PyCFunction) _wrap_Grid_SetDefaultCellTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellTextColour", (PyCFunction) _wrap_Grid_SetCellTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetDefaultCellFont", (PyCFunction) _wrap_Grid_SetDefaultCellFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellFont", (PyCFunction) _wrap_Grid_SetCellFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetDefaultCellAlignment", (PyCFunction) _wrap_Grid_SetDefaultCellAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellAlignment", (PyCFunction) _wrap_Grid_SetCellAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetDefaultCellOverflow", (PyCFunction) _wrap_Grid_SetDefaultCellOverflow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellOverflow", (PyCFunction) _wrap_Grid_SetCellOverflow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellSize", (PyCFunction) _wrap_Grid_SetCellSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetDefaultRenderer", (PyCFunction) _wrap_Grid_SetDefaultRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellRenderer", (PyCFunction) _wrap_Grid_SetCellRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultRenderer", (PyCFunction) _wrap_Grid_GetDefaultRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellRenderer", (PyCFunction) _wrap_Grid_GetCellRenderer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetDefaultEditor", (PyCFunction) _wrap_Grid_SetDefaultEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellEditor", (PyCFunction) _wrap_Grid_SetCellEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultEditor", (PyCFunction) _wrap_Grid_GetDefaultEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellEditor", (PyCFunction) _wrap_Grid_GetCellEditor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetCellValue", (PyCFunction) _wrap_Grid_GetCellValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetCellValue", (PyCFunction) _wrap_Grid_SetCellValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_IsReadOnly", (PyCFunction) _wrap_Grid_IsReadOnly, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetReadOnly", (PyCFunction) _wrap_Grid_SetReadOnly, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SelectRow", (PyCFunction) _wrap_Grid_SelectRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SelectCol", (PyCFunction) _wrap_Grid_SelectCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SelectBlock", (PyCFunction) _wrap_Grid_SelectBlock, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SelectAll", (PyCFunction) _wrap_Grid_SelectAll, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_IsSelection", (PyCFunction) _wrap_Grid_IsSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_ClearSelection", (PyCFunction) _wrap_Grid_ClearSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_IsInSelection", (PyCFunction) _wrap_Grid_IsInSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetSelectedCells", (PyCFunction) _wrap_Grid_GetSelectedCells, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetSelectionBlockTopLeft", (PyCFunction) _wrap_Grid_GetSelectionBlockTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetSelectionBlockBottomRight", (PyCFunction) _wrap_Grid_GetSelectionBlockBottomRight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetSelectedRows", (PyCFunction) _wrap_Grid_GetSelectedRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetSelectedCols", (PyCFunction) _wrap_Grid_GetSelectedCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DeselectRow", (PyCFunction) _wrap_Grid_DeselectRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DeselectCol", (PyCFunction) _wrap_Grid_DeselectCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DeselectCell", (PyCFunction) _wrap_Grid_DeselectCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_BlockToDeviceRect", (PyCFunction) _wrap_Grid_BlockToDeviceRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetSelectionBackground", (PyCFunction) _wrap_Grid_GetSelectionBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetSelectionForeground", (PyCFunction) _wrap_Grid_GetSelectionForeground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetSelectionBackground", (PyCFunction) _wrap_Grid_SetSelectionBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetSelectionForeground", (PyCFunction) _wrap_Grid_SetSelectionForeground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_RegisterDataType", (PyCFunction) _wrap_Grid_RegisterDataType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultEditorForCell", (PyCFunction) _wrap_Grid_GetDefaultEditorForCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultRendererForCell", (PyCFunction) _wrap_Grid_GetDefaultRendererForCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultEditorForType", (PyCFunction) _wrap_Grid_GetDefaultEditorForType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetDefaultRendererForType", (PyCFunction) _wrap_Grid_GetDefaultRendererForType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_SetMargins", (PyCFunction) _wrap_Grid_SetMargins, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetGridWindow", (PyCFunction) _wrap_Grid_GetGridWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetGridRowLabelWindow", (PyCFunction) _wrap_Grid_GetGridRowLabelWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetGridColLabelWindow", (PyCFunction) _wrap_Grid_GetGridColLabelWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetGridCornerLabelWindow", (PyCFunction) _wrap_Grid_GetGridCornerLabelWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_swigregister", Grid_swigregister, METH_VARARGS },
+	 { (char *)"new_GridEvent", (PyCFunction) _wrap_new_GridEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEvent_GetRow", (PyCFunction) _wrap_GridEvent_GetRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEvent_GetCol", (PyCFunction) _wrap_GridEvent_GetCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEvent_GetPosition", (PyCFunction) _wrap_GridEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEvent_Selecting", (PyCFunction) _wrap_GridEvent_Selecting, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEvent_ControlDown", (PyCFunction) _wrap_GridEvent_ControlDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEvent_MetaDown", (PyCFunction) _wrap_GridEvent_MetaDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEvent_ShiftDown", (PyCFunction) _wrap_GridEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEvent_AltDown", (PyCFunction) _wrap_GridEvent_AltDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEvent_swigregister", GridEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_GridSizeEvent", (PyCFunction) _wrap_new_GridSizeEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizeEvent_GetRowOrCol", (PyCFunction) _wrap_GridSizeEvent_GetRowOrCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizeEvent_GetPosition", (PyCFunction) _wrap_GridSizeEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizeEvent_ControlDown", (PyCFunction) _wrap_GridSizeEvent_ControlDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizeEvent_MetaDown", (PyCFunction) _wrap_GridSizeEvent_MetaDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizeEvent_ShiftDown", (PyCFunction) _wrap_GridSizeEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizeEvent_AltDown", (PyCFunction) _wrap_GridSizeEvent_AltDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizeEvent_swigregister", GridSizeEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_GridRangeSelectEvent", (PyCFunction) _wrap_new_GridRangeSelectEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_GetTopLeftCoords", (PyCFunction) _wrap_GridRangeSelectEvent_GetTopLeftCoords, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_GetBottomRightCoords", (PyCFunction) _wrap_GridRangeSelectEvent_GetBottomRightCoords, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_GetTopRow", (PyCFunction) _wrap_GridRangeSelectEvent_GetTopRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_GetBottomRow", (PyCFunction) _wrap_GridRangeSelectEvent_GetBottomRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_GetLeftCol", (PyCFunction) _wrap_GridRangeSelectEvent_GetLeftCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_GetRightCol", (PyCFunction) _wrap_GridRangeSelectEvent_GetRightCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_Selecting", (PyCFunction) _wrap_GridRangeSelectEvent_Selecting, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_ControlDown", (PyCFunction) _wrap_GridRangeSelectEvent_ControlDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_MetaDown", (PyCFunction) _wrap_GridRangeSelectEvent_MetaDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_ShiftDown", (PyCFunction) _wrap_GridRangeSelectEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_AltDown", (PyCFunction) _wrap_GridRangeSelectEvent_AltDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridRangeSelectEvent_swigregister", GridRangeSelectEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_GridEditorCreatedEvent", (PyCFunction) _wrap_new_GridEditorCreatedEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEditorCreatedEvent_GetRow", (PyCFunction) _wrap_GridEditorCreatedEvent_GetRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEditorCreatedEvent_GetCol", (PyCFunction) _wrap_GridEditorCreatedEvent_GetCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEditorCreatedEvent_GetControl", (PyCFunction) _wrap_GridEditorCreatedEvent_GetControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEditorCreatedEvent_SetRow", (PyCFunction) _wrap_GridEditorCreatedEvent_SetRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEditorCreatedEvent_SetCol", (PyCFunction) _wrap_GridEditorCreatedEvent_SetCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEditorCreatedEvent_SetControl", (PyCFunction) _wrap_GridEditorCreatedEvent_SetControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridEditorCreatedEvent_swigregister", GridEditorCreatedEvent_swigregister, METH_VARARGS },
+	 { NULL, NULL }
 };
 
 
@@ -17048,7 +17048,7 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_POINTER, (char*)"GRID_VALUE_LONG", 0, 0, (void *)"long", &SWIGTYPE_p_char},
 { SWIG_PY_POINTER, (char*)"GRID_VALUE_CHOICEINT", 0, 0, (void *)"choiceint", &SWIGTYPE_p_char},
 { SWIG_PY_POINTER, (char*)"GRID_VALUE_DATETIME", 0, 0, (void *)"datetime", &SWIGTYPE_p_char},
-{0, 0, 0, 0.0, 0, 0}};
+{0}};
 
 #ifdef __cplusplus
 }

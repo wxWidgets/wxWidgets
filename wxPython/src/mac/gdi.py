@@ -5,33 +5,34 @@ import _gdi
 
 import core
 wx = core 
+__docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
 class GDIObject(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGDIObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GDIObject"""
+        """__init__(self) -> GDIObject"""
         newobj = _gdi.new_GDIObject(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_GDIObject):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def GetVisible(*args, **kwargs):
-        """GetVisible() -> bool"""
+        """GetVisible(self) -> bool"""
         return _gdi.GDIObject_GetVisible(*args, **kwargs)
 
     def SetVisible(*args, **kwargs):
-        """SetVisible(bool visible)"""
+        """SetVisible(self, bool visible)"""
         return _gdi.GDIObject_SetVisible(*args, **kwargs)
 
     def IsNull(*args, **kwargs):
-        """IsNull() -> bool"""
+        """IsNull(self) -> bool"""
         return _gdi.GDIObject_IsNull(*args, **kwargs)
 
 
@@ -66,7 +67,7 @@ class Colour(core.Object):
         return "<%s.%s; proxy of C++ wxColour instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(unsigned char red=0, unsigned char green=0, unsigned char blue=0) -> Colour
+        __init__(self, unsigned char red=0, unsigned char green=0, unsigned char blue=0) -> Colour
 
         Constructs a colour from red, green and blue values.
         """
@@ -75,14 +76,14 @@ class Colour(core.Object):
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Colour):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Red(*args, **kwargs):
         """
-        Red() -> unsigned char
+        Red(self) -> unsigned char
 
         Returns the red intensity.
         """
@@ -90,7 +91,7 @@ class Colour(core.Object):
 
     def Green(*args, **kwargs):
         """
-        Green() -> unsigned char
+        Green(self) -> unsigned char
 
         Returns the green intensity.
         """
@@ -98,7 +99,7 @@ class Colour(core.Object):
 
     def Blue(*args, **kwargs):
         """
-        Blue() -> unsigned char
+        Blue(self) -> unsigned char
 
         Returns the blue intensity.
         """
@@ -106,7 +107,7 @@ class Colour(core.Object):
 
     def Ok(*args, **kwargs):
         """
-        Ok() -> bool
+        Ok(self) -> bool
 
         Returns True if the colour object is valid (the colour has been
         initialised with RGB values).
@@ -115,7 +116,7 @@ class Colour(core.Object):
 
     def Set(*args, **kwargs):
         """
-        Set(unsigned char red, unsigned char green, unsigned char blue)
+        Set(self, unsigned char red, unsigned char green, unsigned char blue)
 
         Sets the RGB intensity values.
         """
@@ -123,7 +124,7 @@ class Colour(core.Object):
 
     def SetRGB(*args, **kwargs):
         """
-        SetRGB(unsigned long colRGB)
+        SetRGB(self, unsigned long colRGB)
 
         Sets the RGB intensity values from a packed RGB value.
         """
@@ -131,7 +132,7 @@ class Colour(core.Object):
 
     def SetFromName(*args, **kwargs):
         """
-        SetFromName(String colourName)
+        SetFromName(self, String colourName)
 
         Sets the RGB intensity values using a colour name listed in wx.TheColourDatabase.
         """
@@ -139,7 +140,7 @@ class Colour(core.Object):
 
     def GetPixel(*args, **kwargs):
         """
-        GetPixel() -> long
+        GetPixel(self) -> long
 
         Returns a pixel value which is platform-dependent. On Windows, a
         COLORREF is returned. On X, an allocated pixel value is returned.
@@ -149,7 +150,7 @@ class Colour(core.Object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(Colour colour) -> bool
+        __eq__(self, Colour colour) -> bool
 
         Compare colours for equality
         """
@@ -157,7 +158,7 @@ class Colour(core.Object):
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(Colour colour) -> bool
+        __ne__(self, Colour colour) -> bool
 
         Compare colours for inequality
         """
@@ -173,7 +174,7 @@ class Colour(core.Object):
 
     def GetRGB(*args, **kwargs):
         """
-        GetRGB() -> unsigned long
+        GetRGB(self) -> unsigned long
 
         Return the colour as a packed RGB value
         """
@@ -222,19 +223,19 @@ class Palette(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPalette instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int n, unsigned char red, unsigned char green, unsigned char blue) -> Palette"""
+        """__init__(self, int n, unsigned char red, unsigned char green, unsigned char blue) -> Palette"""
         newobj = _gdi.new_Palette(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Palette):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def GetPixel(*args, **kwargs):
-        """GetPixel(byte red, byte green, byte blue) -> int"""
+        """GetPixel(self, byte red, byte green, byte blue) -> int"""
         return _gdi.Palette_GetPixel(*args, **kwargs)
 
     def GetRGB(*args, **kwargs):
@@ -242,7 +243,7 @@ class Palette(GDIObject):
         return _gdi.Palette_GetRGB(*args, **kwargs)
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """Ok(self) -> bool"""
         return _gdi.Palette_Ok(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -260,75 +261,75 @@ class Pen(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPen instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Colour colour, int width=1, int style=SOLID) -> Pen"""
+        """__init__(self, Colour colour, int width=1, int style=SOLID) -> Pen"""
         newobj = _gdi.new_Pen(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Pen):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def GetCap(*args, **kwargs):
-        """GetCap() -> int"""
+        """GetCap(self) -> int"""
         return _gdi.Pen_GetCap(*args, **kwargs)
 
     def GetColour(*args, **kwargs):
-        """GetColour() -> Colour"""
+        """GetColour(self) -> Colour"""
         return _gdi.Pen_GetColour(*args, **kwargs)
 
     def GetJoin(*args, **kwargs):
-        """GetJoin() -> int"""
+        """GetJoin(self) -> int"""
         return _gdi.Pen_GetJoin(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle() -> int"""
+        """GetStyle(self) -> int"""
         return _gdi.Pen_GetStyle(*args, **kwargs)
 
     def GetWidth(*args, **kwargs):
-        """GetWidth() -> int"""
+        """GetWidth(self) -> int"""
         return _gdi.Pen_GetWidth(*args, **kwargs)
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """Ok(self) -> bool"""
         return _gdi.Pen_Ok(*args, **kwargs)
 
     def SetCap(*args, **kwargs):
-        """SetCap(int cap_style)"""
+        """SetCap(self, int cap_style)"""
         return _gdi.Pen_SetCap(*args, **kwargs)
 
     def SetColour(*args, **kwargs):
-        """SetColour(Colour colour)"""
+        """SetColour(self, Colour colour)"""
         return _gdi.Pen_SetColour(*args, **kwargs)
 
     def SetJoin(*args, **kwargs):
-        """SetJoin(int join_style)"""
+        """SetJoin(self, int join_style)"""
         return _gdi.Pen_SetJoin(*args, **kwargs)
 
     def SetStyle(*args, **kwargs):
-        """SetStyle(int style)"""
+        """SetStyle(self, int style)"""
         return _gdi.Pen_SetStyle(*args, **kwargs)
 
     def SetWidth(*args, **kwargs):
-        """SetWidth(int width)"""
+        """SetWidth(self, int width)"""
         return _gdi.Pen_SetWidth(*args, **kwargs)
 
     def SetDashes(*args, **kwargs):
-        """SetDashes(int dashes, wxDash dashes_array)"""
+        """SetDashes(self, int dashes, wxDash dashes_array)"""
         return _gdi.Pen_SetDashes(*args, **kwargs)
 
     def GetDashes(*args, **kwargs):
-        """GetDashes() -> PyObject"""
+        """GetDashes(self) -> PyObject"""
         return _gdi.Pen_GetDashes(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(Pen other) -> bool"""
+        """__eq__(self, Pen other) -> bool"""
         return _gdi.Pen___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(Pen other) -> bool"""
+        """__ne__(self, Pen other) -> bool"""
         return _gdi.Pen___ne__(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -344,19 +345,19 @@ class PyPen(Pen):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPen instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Colour colour, int width=1, int style=SOLID) -> PyPen"""
+        """__init__(self, Colour colour, int width=1, int style=SOLID) -> PyPen"""
         newobj = _gdi.new_PyPen(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_PyPen):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def SetDashes(*args, **kwargs):
-        """SetDashes(int dashes, wxDash dashes_array)"""
+        """SetDashes(self, int dashes, wxDash dashes_array)"""
         return _gdi.PyPen_SetDashes(*args, **kwargs)
 
 
@@ -379,7 +380,7 @@ class Brush(GDIObject):
         return "<%s.%s; proxy of C++ wxBrush instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Colour colour, int style=SOLID) -> Brush
+        __init__(self, Colour colour, int style=SOLID) -> Brush
 
         Constructs a brush from a colour object and style.
         """
@@ -388,45 +389,45 @@ class Brush(GDIObject):
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Brush):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def SetColour(*args, **kwargs):
-        """SetColour(Colour col)"""
+        """SetColour(self, Colour col)"""
         return _gdi.Brush_SetColour(*args, **kwargs)
 
     def SetStyle(*args, **kwargs):
-        """SetStyle(int style)"""
+        """SetStyle(self, int style)"""
         return _gdi.Brush_SetStyle(*args, **kwargs)
 
     def SetStipple(*args, **kwargs):
-        """SetStipple(Bitmap stipple)"""
+        """SetStipple(self, Bitmap stipple)"""
         return _gdi.Brush_SetStipple(*args, **kwargs)
 
     def GetColour(*args, **kwargs):
-        """GetColour() -> Colour"""
+        """GetColour(self) -> Colour"""
         return _gdi.Brush_GetColour(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle() -> int"""
+        """GetStyle(self) -> int"""
         return _gdi.Brush_GetStyle(*args, **kwargs)
 
     def GetStipple(*args, **kwargs):
-        """GetStipple() -> Bitmap"""
+        """GetStipple(self) -> Bitmap"""
         return _gdi.Brush_GetStipple(*args, **kwargs)
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """Ok(self) -> bool"""
         return _gdi.Brush_Ok(*args, **kwargs)
 
     def MacGetTheme(*args, **kwargs):
-        """MacGetTheme() -> short"""
+        """MacGetTheme(self) -> short"""
         return _gdi.Brush_MacGetTheme(*args, **kwargs)
 
     def MacSetTheme(*args, **kwargs):
-        """MacSetTheme(short macThemeBrush)"""
+        """MacSetTheme(self, short macThemeBrush)"""
         return _gdi.Brush_MacSetTheme(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -443,7 +444,7 @@ class Bitmap(GDIObject):
         return "<%s.%s; proxy of C++ wxBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(String name, int type=BITMAP_TYPE_ANY) -> Bitmap
+        __init__(self, String name, int type=BITMAP_TYPE_ANY) -> Bitmap
 
         Loads a bitmap from a file.
         """
@@ -452,18 +453,18 @@ class Bitmap(GDIObject):
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Bitmap):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """Ok(self) -> bool"""
         return _gdi.Bitmap_Ok(*args, **kwargs)
 
     def GetWidth(*args, **kwargs):
         """
-        GetWidth() -> int
+        GetWidth(self) -> int
 
         Gets the width of the bitmap in pixels.
         """
@@ -471,7 +472,7 @@ class Bitmap(GDIObject):
 
     def GetHeight(*args, **kwargs):
         """
-        GetHeight() -> int
+        GetHeight(self) -> int
 
         Gets the height of the bitmap in pixels.
         """
@@ -479,7 +480,7 @@ class Bitmap(GDIObject):
 
     def GetDepth(*args, **kwargs):
         """
-        GetDepth() -> int
+        GetDepth(self) -> int
 
         Gets the colour depth of the bitmap. A value of 1 indicates a
         monochrome bitmap.
@@ -488,7 +489,7 @@ class Bitmap(GDIObject):
 
     def GetSize(*args, **kwargs):
         """
-        GetSize() -> Size
+        GetSize(self) -> Size
 
         Get the size of the bitmap.
         """
@@ -496,7 +497,7 @@ class Bitmap(GDIObject):
 
     def ConvertToImage(*args, **kwargs):
         """
-        ConvertToImage() -> Image
+        ConvertToImage(self) -> Image
 
         Creates a platform-independent image from a platform-dependent bitmap. This
         preserves mask information so that bitmaps and images can be converted back
@@ -506,7 +507,7 @@ class Bitmap(GDIObject):
 
     def GetMask(*args, **kwargs):
         """
-        GetMask() -> Mask
+        GetMask(self) -> Mask
 
         Gets the associated mask (if any) which may have been loaded from a file
         or explpicitly set for the bitmap.
@@ -515,7 +516,7 @@ class Bitmap(GDIObject):
 
     def SetMask(*args, **kwargs):
         """
-        SetMask(Mask mask)
+        SetMask(self, Mask mask)
 
         Sets the mask for this bitmap.
         """
@@ -523,7 +524,7 @@ class Bitmap(GDIObject):
 
     def SetMaskColour(*args, **kwargs):
         """
-        SetMaskColour(Colour colour)
+        SetMaskColour(self, Colour colour)
 
         Create a Mask based on a specified colour in the Bitmap.
         """
@@ -531,7 +532,7 @@ class Bitmap(GDIObject):
 
     def GetSubBitmap(*args, **kwargs):
         """
-        GetSubBitmap(Rect rect) -> Bitmap
+        GetSubBitmap(self, Rect rect) -> Bitmap
 
         Returns a sub bitmap of the current one as long as the rect belongs entirely
         to the bitmap. This function preserves bit depth and mask information.
@@ -540,7 +541,7 @@ class Bitmap(GDIObject):
 
     def SaveFile(*args, **kwargs):
         """
-        SaveFile(String name, int type, Palette palette=(wxPalette *) NULL) -> bool
+        SaveFile(self, String name, int type, Palette palette=(wxPalette *) NULL) -> bool
 
         Saves a bitmap in the named file.
         """
@@ -548,19 +549,19 @@ class Bitmap(GDIObject):
 
     def LoadFile(*args, **kwargs):
         """
-        LoadFile(String name, int type) -> bool
+        LoadFile(self, String name, int type) -> bool
 
         Loads a bitmap from a file
         """
         return _gdi.Bitmap_LoadFile(*args, **kwargs)
 
     def CopyFromIcon(*args, **kwargs):
-        """CopyFromIcon(Icon icon) -> bool"""
+        """CopyFromIcon(self, Icon icon) -> bool"""
         return _gdi.Bitmap_CopyFromIcon(*args, **kwargs)
 
     def SetHeight(*args, **kwargs):
         """
-        SetHeight(int height)
+        SetHeight(self, int height)
 
         Set the height property (does not affect the bitmap data).
         """
@@ -568,7 +569,7 @@ class Bitmap(GDIObject):
 
     def SetWidth(*args, **kwargs):
         """
-        SetWidth(int width)
+        SetWidth(self, int width)
 
         Set the width property (does not affect the bitmap data).
         """
@@ -576,7 +577,7 @@ class Bitmap(GDIObject):
 
     def SetDepth(*args, **kwargs):
         """
-        SetDepth(int depth)
+        SetDepth(self, int depth)
 
         Set the depth property (does not affect the bitmap data).
         """
@@ -584,7 +585,7 @@ class Bitmap(GDIObject):
 
     def SetSize(*args, **kwargs):
         """
-        SetSize(Size size)
+        SetSize(self, Size size)
 
         Set the bitmap size
         """
@@ -592,11 +593,11 @@ class Bitmap(GDIObject):
 
     def __nonzero__(self): return self.Ok() 
     def __eq__(*args, **kwargs):
-        """__eq__(Bitmap other) -> bool"""
+        """__eq__(self, Bitmap other) -> bool"""
         return _gdi.Bitmap___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(Bitmap other) -> bool"""
+        """__ne__(self, Bitmap other) -> bool"""
         return _gdi.Bitmap___ne__(*args, **kwargs)
 
 
@@ -677,7 +678,7 @@ class Mask(core.Object):
         return "<%s.%s; proxy of C++ wxMask instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Bitmap bitmap, Colour colour=NullColour) -> Mask
+        __init__(self, Bitmap bitmap, Colour colour=NullColour) -> Mask
 
         Constructs a mask from a bitmap and a colour in that bitmap that indicates
         the transparent portions of the mask, by default BLACK is used.
@@ -699,47 +700,47 @@ class Icon(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String name, int type, int desiredWidth=-1, int desiredHeight=-1) -> Icon"""
+        """__init__(self, String name, int type, int desiredWidth=-1, int desiredHeight=-1) -> Icon"""
         newobj = _gdi.new_Icon(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Icon):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """Ok(self) -> bool"""
         return _gdi.Icon_Ok(*args, **kwargs)
 
     def GetWidth(*args, **kwargs):
-        """GetWidth() -> int"""
+        """GetWidth(self) -> int"""
         return _gdi.Icon_GetWidth(*args, **kwargs)
 
     def GetHeight(*args, **kwargs):
-        """GetHeight() -> int"""
+        """GetHeight(self) -> int"""
         return _gdi.Icon_GetHeight(*args, **kwargs)
 
     def GetDepth(*args, **kwargs):
-        """GetDepth() -> int"""
+        """GetDepth(self) -> int"""
         return _gdi.Icon_GetDepth(*args, **kwargs)
 
     def SetWidth(*args, **kwargs):
-        """SetWidth(int w)"""
+        """SetWidth(self, int w)"""
         return _gdi.Icon_SetWidth(*args, **kwargs)
 
     def SetHeight(*args, **kwargs):
-        """SetHeight(int h)"""
+        """SetHeight(self, int h)"""
         return _gdi.Icon_SetHeight(*args, **kwargs)
 
     def SetDepth(*args, **kwargs):
-        """SetDepth(int d)"""
+        """SetDepth(self, int d)"""
         return _gdi.Icon_SetDepth(*args, **kwargs)
 
     def CopyFromBitmap(*args, **kwargs):
-        """CopyFromBitmap(Bitmap bmp)"""
+        """CopyFromBitmap(self, Bitmap bmp)"""
         return _gdi.Icon_CopyFromBitmap(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -779,36 +780,36 @@ class IconLocation(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIconLocation instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String filename=&wxPyEmptyString, int num=0) -> IconLocation"""
+        """__init__(self, String filename=&wxPyEmptyString, int num=0) -> IconLocation"""
         newobj = _gdi.new_IconLocation(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_IconLocation):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def IsOk(*args, **kwargs):
-        """IsOk() -> bool"""
+        """IsOk(self) -> bool"""
         return _gdi.IconLocation_IsOk(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
     def SetFileName(*args, **kwargs):
-        """SetFileName(String filename)"""
+        """SetFileName(self, String filename)"""
         return _gdi.IconLocation_SetFileName(*args, **kwargs)
 
     def GetFileName(*args, **kwargs):
-        """GetFileName() -> String"""
+        """GetFileName(self) -> String"""
         return _gdi.IconLocation_GetFileName(*args, **kwargs)
 
     def SetIndex(*args, **kwargs):
-        """SetIndex(int num)"""
+        """SetIndex(self, int num)"""
         return _gdi.IconLocation_SetIndex(*args, **kwargs)
 
     def GetIndex(*args, **kwargs):
-        """GetIndex() -> int"""
+        """GetIndex(self) -> int"""
         return _gdi.IconLocation_GetIndex(*args, **kwargs)
 
 
@@ -823,27 +824,27 @@ class IconBundle(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIconBundle instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> IconBundle"""
+        """__init__(self) -> IconBundle"""
         newobj = _gdi.new_IconBundle(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_IconBundle):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def AddIcon(*args, **kwargs):
-        """AddIcon(Icon icon)"""
+        """AddIcon(self, Icon icon)"""
         return _gdi.IconBundle_AddIcon(*args, **kwargs)
 
     def AddIconFromFile(*args, **kwargs):
-        """AddIconFromFile(String file, long type)"""
+        """AddIconFromFile(self, String file, long type)"""
         return _gdi.IconBundle_AddIconFromFile(*args, **kwargs)
 
     def GetIcon(*args, **kwargs):
-        """GetIcon(Size size) -> Icon"""
+        """GetIcon(self, Size size) -> Icon"""
         return _gdi.IconBundle_GetIcon(*args, **kwargs)
 
 
@@ -882,7 +883,7 @@ class Cursor(GDIObject):
         return "<%s.%s; proxy of C++ wxCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(String cursorName, long type, int hotSpotX=0, int hotSpotY=0) -> Cursor
+        __init__(self, String cursorName, long type, int hotSpotX=0, int hotSpotY=0) -> Cursor
 
         Construct a Cursor from a file.  Specify the type of file using
         wx.BITAMP_TYPE* constants, and specify the hotspot if not using a
@@ -896,13 +897,13 @@ class Cursor(GDIObject):
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Cursor):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """Ok(self) -> bool"""
         return _gdi.Cursor_Ok(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -954,99 +955,99 @@ class Region(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRegion instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int x=0, int y=0, int width=0, int height=0) -> Region"""
+        """__init__(self, int x=0, int y=0, int width=0, int height=0) -> Region"""
         newobj = _gdi.new_Region(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Region):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Clear(*args, **kwargs):
-        """Clear()"""
+        """Clear(self)"""
         return _gdi.Region_Clear(*args, **kwargs)
 
     def Contains(*args, **kwargs):
-        """Contains(int x, int y) -> int"""
+        """Contains(self, int x, int y) -> int"""
         return _gdi.Region_Contains(*args, **kwargs)
 
     def ContainsPoint(*args, **kwargs):
-        """ContainsPoint(Point pt) -> int"""
+        """ContainsPoint(self, Point pt) -> int"""
         return _gdi.Region_ContainsPoint(*args, **kwargs)
 
     def ContainsRect(*args, **kwargs):
-        """ContainsRect(Rect rect) -> int"""
+        """ContainsRect(self, Rect rect) -> int"""
         return _gdi.Region_ContainsRect(*args, **kwargs)
 
     def ContainsRectDim(*args, **kwargs):
-        """ContainsRectDim(int x, int y, int w, int h) -> int"""
+        """ContainsRectDim(self, int x, int y, int w, int h) -> int"""
         return _gdi.Region_ContainsRectDim(*args, **kwargs)
 
     def GetBox(*args, **kwargs):
-        """GetBox() -> Rect"""
+        """GetBox(self) -> Rect"""
         return _gdi.Region_GetBox(*args, **kwargs)
 
     def Intersect(*args, **kwargs):
-        """Intersect(int x, int y, int width, int height) -> bool"""
+        """Intersect(self, int x, int y, int width, int height) -> bool"""
         return _gdi.Region_Intersect(*args, **kwargs)
 
     def IntersectRect(*args, **kwargs):
-        """IntersectRect(Rect rect) -> bool"""
+        """IntersectRect(self, Rect rect) -> bool"""
         return _gdi.Region_IntersectRect(*args, **kwargs)
 
     def IntersectRegion(*args, **kwargs):
-        """IntersectRegion(Region region) -> bool"""
+        """IntersectRegion(self, Region region) -> bool"""
         return _gdi.Region_IntersectRegion(*args, **kwargs)
 
     def IsEmpty(*args, **kwargs):
-        """IsEmpty() -> bool"""
+        """IsEmpty(self) -> bool"""
         return _gdi.Region_IsEmpty(*args, **kwargs)
 
     def Union(*args, **kwargs):
-        """Union(int x, int y, int width, int height) -> bool"""
+        """Union(self, int x, int y, int width, int height) -> bool"""
         return _gdi.Region_Union(*args, **kwargs)
 
     def UnionRect(*args, **kwargs):
-        """UnionRect(Rect rect) -> bool"""
+        """UnionRect(self, Rect rect) -> bool"""
         return _gdi.Region_UnionRect(*args, **kwargs)
 
     def UnionRegion(*args, **kwargs):
-        """UnionRegion(Region region) -> bool"""
+        """UnionRegion(self, Region region) -> bool"""
         return _gdi.Region_UnionRegion(*args, **kwargs)
 
     def Subtract(*args, **kwargs):
-        """Subtract(int x, int y, int width, int height) -> bool"""
+        """Subtract(self, int x, int y, int width, int height) -> bool"""
         return _gdi.Region_Subtract(*args, **kwargs)
 
     def SubtractRect(*args, **kwargs):
-        """SubtractRect(Rect rect) -> bool"""
+        """SubtractRect(self, Rect rect) -> bool"""
         return _gdi.Region_SubtractRect(*args, **kwargs)
 
     def SubtractRegion(*args, **kwargs):
-        """SubtractRegion(Region region) -> bool"""
+        """SubtractRegion(self, Region region) -> bool"""
         return _gdi.Region_SubtractRegion(*args, **kwargs)
 
     def Xor(*args, **kwargs):
-        """Xor(int x, int y, int width, int height) -> bool"""
+        """Xor(self, int x, int y, int width, int height) -> bool"""
         return _gdi.Region_Xor(*args, **kwargs)
 
     def XorRect(*args, **kwargs):
-        """XorRect(Rect rect) -> bool"""
+        """XorRect(self, Rect rect) -> bool"""
         return _gdi.Region_XorRect(*args, **kwargs)
 
     def XorRegion(*args, **kwargs):
-        """XorRegion(Region region) -> bool"""
+        """XorRegion(self, Region region) -> bool"""
         return _gdi.Region_XorRegion(*args, **kwargs)
 
     def ConvertToBitmap(*args, **kwargs):
-        """ConvertToBitmap() -> Bitmap"""
+        """ConvertToBitmap(self) -> Bitmap"""
         return _gdi.Region_ConvertToBitmap(*args, **kwargs)
 
     def UnionBitmap(*args, **kwargs):
-        """UnionBitmap(Bitmap bmp, Colour transColour=NullColour, int tolerance=0) -> bool"""
+        """UnionBitmap(self, Bitmap bmp, Colour transColour=NullColour, int tolerance=0) -> bool"""
         return _gdi.Region_UnionBitmap(*args, **kwargs)
 
 
@@ -1073,59 +1074,59 @@ class RegionIterator(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRegionIterator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Region region) -> RegionIterator"""
+        """__init__(self, Region region) -> RegionIterator"""
         newobj = _gdi.new_RegionIterator(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_RegionIterator):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def GetX(*args, **kwargs):
-        """GetX() -> int"""
+        """GetX(self) -> int"""
         return _gdi.RegionIterator_GetX(*args, **kwargs)
 
     def GetY(*args, **kwargs):
-        """GetY() -> int"""
+        """GetY(self) -> int"""
         return _gdi.RegionIterator_GetY(*args, **kwargs)
 
     def GetW(*args, **kwargs):
-        """GetW() -> int"""
+        """GetW(self) -> int"""
         return _gdi.RegionIterator_GetW(*args, **kwargs)
 
     def GetWidth(*args, **kwargs):
-        """GetWidth() -> int"""
+        """GetWidth(self) -> int"""
         return _gdi.RegionIterator_GetWidth(*args, **kwargs)
 
     def GetH(*args, **kwargs):
-        """GetH() -> int"""
+        """GetH(self) -> int"""
         return _gdi.RegionIterator_GetH(*args, **kwargs)
 
     def GetHeight(*args, **kwargs):
-        """GetHeight() -> int"""
+        """GetHeight(self) -> int"""
         return _gdi.RegionIterator_GetHeight(*args, **kwargs)
 
     def GetRect(*args, **kwargs):
-        """GetRect() -> Rect"""
+        """GetRect(self) -> Rect"""
         return _gdi.RegionIterator_GetRect(*args, **kwargs)
 
     def HaveRects(*args, **kwargs):
-        """HaveRects() -> bool"""
+        """HaveRects(self) -> bool"""
         return _gdi.RegionIterator_HaveRects(*args, **kwargs)
 
     def Reset(*args, **kwargs):
-        """Reset()"""
+        """Reset(self)"""
         return _gdi.RegionIterator_Reset(*args, **kwargs)
 
     def Next(*args, **kwargs):
-        """Next()"""
+        """Next(self)"""
         return _gdi.RegionIterator_Next(*args, **kwargs)
 
     def __nonzero__(*args, **kwargs):
-        """__nonzero__() -> bool"""
+        """__nonzero__(self) -> bool"""
         return _gdi.RegionIterator___nonzero__(*args, **kwargs)
 
 
@@ -1268,99 +1269,99 @@ class NativeFontInfo(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNativeFontInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> NativeFontInfo"""
+        """__init__(self) -> NativeFontInfo"""
         newobj = _gdi.new_NativeFontInfo(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_NativeFontInfo):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Init(*args, **kwargs):
-        """Init()"""
+        """Init(self)"""
         return _gdi.NativeFontInfo_Init(*args, **kwargs)
 
     def InitFromFont(*args, **kwargs):
-        """InitFromFont(Font font)"""
+        """InitFromFont(self, Font font)"""
         return _gdi.NativeFontInfo_InitFromFont(*args, **kwargs)
 
     def GetPointSize(*args, **kwargs):
-        """GetPointSize() -> int"""
+        """GetPointSize(self) -> int"""
         return _gdi.NativeFontInfo_GetPointSize(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle() -> int"""
+        """GetStyle(self) -> int"""
         return _gdi.NativeFontInfo_GetStyle(*args, **kwargs)
 
     def GetWeight(*args, **kwargs):
-        """GetWeight() -> int"""
+        """GetWeight(self) -> int"""
         return _gdi.NativeFontInfo_GetWeight(*args, **kwargs)
 
     def GetUnderlined(*args, **kwargs):
-        """GetUnderlined() -> bool"""
+        """GetUnderlined(self) -> bool"""
         return _gdi.NativeFontInfo_GetUnderlined(*args, **kwargs)
 
     def GetFaceName(*args, **kwargs):
-        """GetFaceName() -> String"""
+        """GetFaceName(self) -> String"""
         return _gdi.NativeFontInfo_GetFaceName(*args, **kwargs)
 
     def GetFamily(*args, **kwargs):
-        """GetFamily() -> int"""
+        """GetFamily(self) -> int"""
         return _gdi.NativeFontInfo_GetFamily(*args, **kwargs)
 
     def GetEncoding(*args, **kwargs):
-        """GetEncoding() -> int"""
+        """GetEncoding(self) -> int"""
         return _gdi.NativeFontInfo_GetEncoding(*args, **kwargs)
 
     def SetPointSize(*args, **kwargs):
-        """SetPointSize(int pointsize)"""
+        """SetPointSize(self, int pointsize)"""
         return _gdi.NativeFontInfo_SetPointSize(*args, **kwargs)
 
     def SetStyle(*args, **kwargs):
-        """SetStyle(int style)"""
+        """SetStyle(self, int style)"""
         return _gdi.NativeFontInfo_SetStyle(*args, **kwargs)
 
     def SetWeight(*args, **kwargs):
-        """SetWeight(int weight)"""
+        """SetWeight(self, int weight)"""
         return _gdi.NativeFontInfo_SetWeight(*args, **kwargs)
 
     def SetUnderlined(*args, **kwargs):
-        """SetUnderlined(bool underlined)"""
+        """SetUnderlined(self, bool underlined)"""
         return _gdi.NativeFontInfo_SetUnderlined(*args, **kwargs)
 
     def SetFaceName(*args, **kwargs):
-        """SetFaceName(String facename)"""
+        """SetFaceName(self, String facename)"""
         return _gdi.NativeFontInfo_SetFaceName(*args, **kwargs)
 
     def SetFamily(*args, **kwargs):
-        """SetFamily(int family)"""
+        """SetFamily(self, int family)"""
         return _gdi.NativeFontInfo_SetFamily(*args, **kwargs)
 
     def SetEncoding(*args, **kwargs):
-        """SetEncoding(int encoding)"""
+        """SetEncoding(self, int encoding)"""
         return _gdi.NativeFontInfo_SetEncoding(*args, **kwargs)
 
     def FromString(*args, **kwargs):
-        """FromString(String s) -> bool"""
+        """FromString(self, String s) -> bool"""
         return _gdi.NativeFontInfo_FromString(*args, **kwargs)
 
     def ToString(*args, **kwargs):
-        """ToString() -> String"""
+        """ToString(self) -> String"""
         return _gdi.NativeFontInfo_ToString(*args, **kwargs)
 
     def __str__(*args, **kwargs):
-        """__str__() -> String"""
+        """__str__(self) -> String"""
         return _gdi.NativeFontInfo___str__(*args, **kwargs)
 
     def FromUserString(*args, **kwargs):
-        """FromUserString(String s) -> bool"""
+        """FromUserString(self, String s) -> bool"""
         return _gdi.NativeFontInfo_FromUserString(*args, **kwargs)
 
     def ToUserString(*args, **kwargs):
-        """ToUserString() -> String"""
+        """ToUserString(self) -> String"""
         return _gdi.NativeFontInfo_ToUserString(*args, **kwargs)
 
 
@@ -1377,23 +1378,23 @@ class NativeEncodingInfo(object):
     facename = property(_gdi.NativeEncodingInfo_facename_get, _gdi.NativeEncodingInfo_facename_set)
     encoding = property(_gdi.NativeEncodingInfo_encoding_get, _gdi.NativeEncodingInfo_encoding_set)
     def __init__(self, *args, **kwargs):
-        """__init__() -> NativeEncodingInfo"""
+        """__init__(self) -> NativeEncodingInfo"""
         newobj = _gdi.new_NativeEncodingInfo(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_NativeEncodingInfo):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def FromString(*args, **kwargs):
-        """FromString(String s) -> bool"""
+        """FromString(self, String s) -> bool"""
         return _gdi.NativeEncodingInfo_FromString(*args, **kwargs)
 
     def ToString(*args, **kwargs):
-        """ToString() -> String"""
+        """ToString(self) -> String"""
         return _gdi.NativeEncodingInfo_ToString(*args, **kwargs)
 
 
@@ -1418,83 +1419,83 @@ class FontMapper(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontMapper instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> FontMapper"""
+        """__init__(self) -> FontMapper"""
         newobj = _gdi.new_FontMapper(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_FontMapper):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Get(*args, **kwargs):
-        """Get() -> FontMapper"""
+        """FontMapper.Get() -> FontMapper"""
         return _gdi.FontMapper_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
     def Set(*args, **kwargs):
-        """Set(FontMapper mapper) -> FontMapper"""
+        """FontMapper.Set(FontMapper mapper) -> FontMapper"""
         return _gdi.FontMapper_Set(*args, **kwargs)
 
     Set = staticmethod(Set)
     def CharsetToEncoding(*args, **kwargs):
-        """CharsetToEncoding(String charset, bool interactive=True) -> int"""
+        """CharsetToEncoding(self, String charset, bool interactive=True) -> int"""
         return _gdi.FontMapper_CharsetToEncoding(*args, **kwargs)
 
     def GetSupportedEncodingsCount(*args, **kwargs):
-        """GetSupportedEncodingsCount() -> size_t"""
+        """FontMapper.GetSupportedEncodingsCount() -> size_t"""
         return _gdi.FontMapper_GetSupportedEncodingsCount(*args, **kwargs)
 
     GetSupportedEncodingsCount = staticmethod(GetSupportedEncodingsCount)
     def GetEncoding(*args, **kwargs):
-        """GetEncoding(size_t n) -> int"""
+        """FontMapper.GetEncoding(size_t n) -> int"""
         return _gdi.FontMapper_GetEncoding(*args, **kwargs)
 
     GetEncoding = staticmethod(GetEncoding)
     def GetEncodingName(*args, **kwargs):
-        """GetEncodingName(int encoding) -> String"""
+        """FontMapper.GetEncodingName(int encoding) -> String"""
         return _gdi.FontMapper_GetEncodingName(*args, **kwargs)
 
     GetEncodingName = staticmethod(GetEncodingName)
     def GetEncodingDescription(*args, **kwargs):
-        """GetEncodingDescription(int encoding) -> String"""
+        """FontMapper.GetEncodingDescription(int encoding) -> String"""
         return _gdi.FontMapper_GetEncodingDescription(*args, **kwargs)
 
     GetEncodingDescription = staticmethod(GetEncodingDescription)
     def GetEncodingFromName(*args, **kwargs):
-        """GetEncodingFromName(String name) -> int"""
+        """FontMapper.GetEncodingFromName(String name) -> int"""
         return _gdi.FontMapper_GetEncodingFromName(*args, **kwargs)
 
     GetEncodingFromName = staticmethod(GetEncodingFromName)
     def SetConfig(*args, **kwargs):
-        """SetConfig(ConfigBase config)"""
+        """SetConfig(self, ConfigBase config)"""
         return _gdi.FontMapper_SetConfig(*args, **kwargs)
 
     def SetConfigPath(*args, **kwargs):
-        """SetConfigPath(String prefix)"""
+        """SetConfigPath(self, String prefix)"""
         return _gdi.FontMapper_SetConfigPath(*args, **kwargs)
 
     def GetDefaultConfigPath(*args, **kwargs):
-        """GetDefaultConfigPath() -> String"""
+        """FontMapper.GetDefaultConfigPath() -> String"""
         return _gdi.FontMapper_GetDefaultConfigPath(*args, **kwargs)
 
     GetDefaultConfigPath = staticmethod(GetDefaultConfigPath)
     def GetAltForEncoding(*args, **kwargs):
-        """GetAltForEncoding(int encoding, String facename=EmptyString, bool interactive=True) -> PyObject"""
+        """GetAltForEncoding(self, int encoding, String facename=EmptyString, bool interactive=True) -> PyObject"""
         return _gdi.FontMapper_GetAltForEncoding(*args, **kwargs)
 
     def IsEncodingAvailable(*args, **kwargs):
-        """IsEncodingAvailable(int encoding, String facename=EmptyString) -> bool"""
+        """IsEncodingAvailable(self, int encoding, String facename=EmptyString) -> bool"""
         return _gdi.FontMapper_IsEncodingAvailable(*args, **kwargs)
 
     def SetDialogParent(*args, **kwargs):
-        """SetDialogParent(Window parent)"""
+        """SetDialogParent(self, Window parent)"""
         return _gdi.FontMapper_SetDialogParent(*args, **kwargs)
 
     def SetDialogTitle(*args, **kwargs):
-        """SetDialogTitle(String title)"""
+        """SetDialogTitle(self, String title)"""
         return _gdi.FontMapper_SetDialogTitle(*args, **kwargs)
 
 
@@ -1544,7 +1545,7 @@ class Font(GDIObject):
         return "<%s.%s; proxy of C++ wxFont instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(int pointSize, int family, int style, int weight, bool underline=False, 
+        __init__(self, int pointSize, int family, int style, int weight, bool underline=False, 
             String face=EmptyString, 
             int encoding=FONTENCODING_DEFAULT) -> Font
         """
@@ -1553,135 +1554,135 @@ class Font(GDIObject):
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Font):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """Ok(self) -> bool"""
         return _gdi.Font_Ok(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
     def __eq__(*args, **kwargs):
-        """__eq__(Font other) -> bool"""
+        """__eq__(self, Font other) -> bool"""
         return _gdi.Font___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(Font other) -> bool"""
+        """__ne__(self, Font other) -> bool"""
         return _gdi.Font___ne__(*args, **kwargs)
 
     def GetPointSize(*args, **kwargs):
-        """GetPointSize() -> int"""
+        """GetPointSize(self) -> int"""
         return _gdi.Font_GetPointSize(*args, **kwargs)
 
     def GetFamily(*args, **kwargs):
-        """GetFamily() -> int"""
+        """GetFamily(self) -> int"""
         return _gdi.Font_GetFamily(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle() -> int"""
+        """GetStyle(self) -> int"""
         return _gdi.Font_GetStyle(*args, **kwargs)
 
     def GetWeight(*args, **kwargs):
-        """GetWeight() -> int"""
+        """GetWeight(self) -> int"""
         return _gdi.Font_GetWeight(*args, **kwargs)
 
     def GetUnderlined(*args, **kwargs):
-        """GetUnderlined() -> bool"""
+        """GetUnderlined(self) -> bool"""
         return _gdi.Font_GetUnderlined(*args, **kwargs)
 
     def GetFaceName(*args, **kwargs):
-        """GetFaceName() -> String"""
+        """GetFaceName(self) -> String"""
         return _gdi.Font_GetFaceName(*args, **kwargs)
 
     def GetEncoding(*args, **kwargs):
-        """GetEncoding() -> int"""
+        """GetEncoding(self) -> int"""
         return _gdi.Font_GetEncoding(*args, **kwargs)
 
     def GetNativeFontInfo(*args, **kwargs):
-        """GetNativeFontInfo() -> NativeFontInfo"""
+        """GetNativeFontInfo(self) -> NativeFontInfo"""
         return _gdi.Font_GetNativeFontInfo(*args, **kwargs)
 
     def IsFixedWidth(*args, **kwargs):
-        """IsFixedWidth() -> bool"""
+        """IsFixedWidth(self) -> bool"""
         return _gdi.Font_IsFixedWidth(*args, **kwargs)
 
     def GetNativeFontInfoDesc(*args, **kwargs):
-        """GetNativeFontInfoDesc() -> String"""
+        """GetNativeFontInfoDesc(self) -> String"""
         return _gdi.Font_GetNativeFontInfoDesc(*args, **kwargs)
 
     def GetNativeFontInfoUserDesc(*args, **kwargs):
-        """GetNativeFontInfoUserDesc() -> String"""
+        """GetNativeFontInfoUserDesc(self) -> String"""
         return _gdi.Font_GetNativeFontInfoUserDesc(*args, **kwargs)
 
     def SetPointSize(*args, **kwargs):
-        """SetPointSize(int pointSize)"""
+        """SetPointSize(self, int pointSize)"""
         return _gdi.Font_SetPointSize(*args, **kwargs)
 
     def SetFamily(*args, **kwargs):
-        """SetFamily(int family)"""
+        """SetFamily(self, int family)"""
         return _gdi.Font_SetFamily(*args, **kwargs)
 
     def SetStyle(*args, **kwargs):
-        """SetStyle(int style)"""
+        """SetStyle(self, int style)"""
         return _gdi.Font_SetStyle(*args, **kwargs)
 
     def SetWeight(*args, **kwargs):
-        """SetWeight(int weight)"""
+        """SetWeight(self, int weight)"""
         return _gdi.Font_SetWeight(*args, **kwargs)
 
     def SetFaceName(*args, **kwargs):
-        """SetFaceName(String faceName)"""
+        """SetFaceName(self, String faceName)"""
         return _gdi.Font_SetFaceName(*args, **kwargs)
 
     def SetUnderlined(*args, **kwargs):
-        """SetUnderlined(bool underlined)"""
+        """SetUnderlined(self, bool underlined)"""
         return _gdi.Font_SetUnderlined(*args, **kwargs)
 
     def SetEncoding(*args, **kwargs):
-        """SetEncoding(int encoding)"""
+        """SetEncoding(self, int encoding)"""
         return _gdi.Font_SetEncoding(*args, **kwargs)
 
     def SetNativeFontInfo(*args, **kwargs):
-        """SetNativeFontInfo(NativeFontInfo info)"""
+        """SetNativeFontInfo(self, NativeFontInfo info)"""
         return _gdi.Font_SetNativeFontInfo(*args, **kwargs)
 
     def SetNativeFontInfoFromString(*args, **kwargs):
-        """SetNativeFontInfoFromString(String info)"""
+        """SetNativeFontInfoFromString(self, String info)"""
         return _gdi.Font_SetNativeFontInfoFromString(*args, **kwargs)
 
     def SetNativeFontInfoUserDesc(*args, **kwargs):
-        """SetNativeFontInfoUserDesc(String info)"""
+        """SetNativeFontInfoUserDesc(self, String info)"""
         return _gdi.Font_SetNativeFontInfoUserDesc(*args, **kwargs)
 
     def GetFamilyString(*args, **kwargs):
-        """GetFamilyString() -> String"""
+        """GetFamilyString(self) -> String"""
         return _gdi.Font_GetFamilyString(*args, **kwargs)
 
     def GetStyleString(*args, **kwargs):
-        """GetStyleString() -> String"""
+        """GetStyleString(self) -> String"""
         return _gdi.Font_GetStyleString(*args, **kwargs)
 
     def GetWeightString(*args, **kwargs):
-        """GetWeightString() -> String"""
+        """GetWeightString(self) -> String"""
         return _gdi.Font_GetWeightString(*args, **kwargs)
 
     def SetNoAntiAliasing(*args, **kwargs):
-        """SetNoAntiAliasing(bool no=True)"""
+        """SetNoAntiAliasing(self, bool no=True)"""
         return _gdi.Font_SetNoAntiAliasing(*args, **kwargs)
 
     def GetNoAntiAliasing(*args, **kwargs):
-        """GetNoAntiAliasing() -> bool"""
+        """GetNoAntiAliasing(self) -> bool"""
         return _gdi.Font_GetNoAntiAliasing(*args, **kwargs)
 
     def GetDefaultEncoding(*args, **kwargs):
-        """GetDefaultEncoding() -> int"""
+        """Font.GetDefaultEncoding() -> int"""
         return _gdi.Font_GetDefaultEncoding(*args, **kwargs)
 
     GetDefaultEncoding = staticmethod(GetDefaultEncoding)
     def SetDefaultEncoding(*args, **kwargs):
-        """SetDefaultEncoding(int encoding)"""
+        """Font.SetDefaultEncoding(int encoding)"""
         return _gdi.Font_SetDefaultEncoding(*args, **kwargs)
 
     SetDefaultEncoding = staticmethod(SetDefaultEncoding)
@@ -1728,7 +1729,7 @@ class FontEnumerator(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyFontEnumerator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> FontEnumerator"""
+        """__init__(self) -> FontEnumerator"""
         newobj = _gdi.new_FontEnumerator(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1736,29 +1737,29 @@ class FontEnumerator(object):
         self._setCallbackInfo(self, FontEnumerator, 0)
 
     def __del__(self, destroy=_gdi.delete_FontEnumerator):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class, bool incref)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class, bool incref)"""
         return _gdi.FontEnumerator__setCallbackInfo(*args, **kwargs)
 
     def EnumerateFacenames(*args, **kwargs):
-        """EnumerateFacenames(int encoding=FONTENCODING_SYSTEM, bool fixedWidthOnly=False) -> bool"""
+        """EnumerateFacenames(self, int encoding=FONTENCODING_SYSTEM, bool fixedWidthOnly=False) -> bool"""
         return _gdi.FontEnumerator_EnumerateFacenames(*args, **kwargs)
 
     def EnumerateEncodings(*args, **kwargs):
-        """EnumerateEncodings(String facename=EmptyString) -> bool"""
+        """EnumerateEncodings(self, String facename=EmptyString) -> bool"""
         return _gdi.FontEnumerator_EnumerateEncodings(*args, **kwargs)
 
     def GetEncodings(*args, **kwargs):
-        """GetEncodings() -> PyObject"""
+        """GetEncodings(self) -> PyObject"""
         return _gdi.FontEnumerator_GetEncodings(*args, **kwargs)
 
     def GetFacenames(*args, **kwargs):
-        """GetFacenames() -> PyObject"""
+        """GetFacenames(self) -> PyObject"""
         return _gdi.FontEnumerator_GetFacenames(*args, **kwargs)
 
 
@@ -2029,27 +2030,27 @@ class Locale(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLocale instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int language=LANGUAGE_DEFAULT, int flags=wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING) -> Locale"""
+        """__init__(self, int language=LANGUAGE_DEFAULT, int flags=wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING) -> Locale"""
         newobj = _gdi.new_Locale(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_Locale):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Init1(*args, **kwargs):
         """
-        Init1(String szName, String szShort=EmptyString, String szLocale=EmptyString, 
+        Init1(self, String szName, String szShort=EmptyString, String szLocale=EmptyString, 
             bool bLoadDefault=True, 
             bool bConvertEncoding=False) -> bool
         """
         return _gdi.Locale_Init1(*args, **kwargs)
 
     def Init2(*args, **kwargs):
-        """Init2(int language=LANGUAGE_DEFAULT, int flags=wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING) -> bool"""
+        """Init2(self, int language=LANGUAGE_DEFAULT, int flags=wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING) -> bool"""
         return _gdi.Locale_Init2(*args, **kwargs)
 
     def Init(self, *_args, **_kwargs):
@@ -2060,80 +2061,80 @@ class Locale(object):
         return val
 
     def GetSystemLanguage(*args, **kwargs):
-        """GetSystemLanguage() -> int"""
+        """Locale.GetSystemLanguage() -> int"""
         return _gdi.Locale_GetSystemLanguage(*args, **kwargs)
 
     GetSystemLanguage = staticmethod(GetSystemLanguage)
     def GetSystemEncoding(*args, **kwargs):
-        """GetSystemEncoding() -> int"""
+        """Locale.GetSystemEncoding() -> int"""
         return _gdi.Locale_GetSystemEncoding(*args, **kwargs)
 
     GetSystemEncoding = staticmethod(GetSystemEncoding)
     def GetSystemEncodingName(*args, **kwargs):
-        """GetSystemEncodingName() -> String"""
+        """Locale.GetSystemEncodingName() -> String"""
         return _gdi.Locale_GetSystemEncodingName(*args, **kwargs)
 
     GetSystemEncodingName = staticmethod(GetSystemEncodingName)
     def IsOk(*args, **kwargs):
-        """IsOk() -> bool"""
+        """IsOk(self) -> bool"""
         return _gdi.Locale_IsOk(*args, **kwargs)
 
     def __nonzero__(self): return self.IsOk() 
     def GetLocale(*args, **kwargs):
-        """GetLocale() -> String"""
+        """GetLocale(self) -> String"""
         return _gdi.Locale_GetLocale(*args, **kwargs)
 
     def GetLanguage(*args, **kwargs):
-        """GetLanguage() -> int"""
+        """GetLanguage(self) -> int"""
         return _gdi.Locale_GetLanguage(*args, **kwargs)
 
     def GetSysName(*args, **kwargs):
-        """GetSysName() -> String"""
+        """GetSysName(self) -> String"""
         return _gdi.Locale_GetSysName(*args, **kwargs)
 
     def GetCanonicalName(*args, **kwargs):
-        """GetCanonicalName() -> String"""
+        """GetCanonicalName(self) -> String"""
         return _gdi.Locale_GetCanonicalName(*args, **kwargs)
 
     def AddCatalogLookupPathPrefix(*args, **kwargs):
-        """AddCatalogLookupPathPrefix(String prefix)"""
+        """Locale.AddCatalogLookupPathPrefix(String prefix)"""
         return _gdi.Locale_AddCatalogLookupPathPrefix(*args, **kwargs)
 
     AddCatalogLookupPathPrefix = staticmethod(AddCatalogLookupPathPrefix)
     def AddCatalog(*args, **kwargs):
-        """AddCatalog(String szDomain) -> bool"""
+        """AddCatalog(self, String szDomain) -> bool"""
         return _gdi.Locale_AddCatalog(*args, **kwargs)
 
     def IsLoaded(*args, **kwargs):
-        """IsLoaded(String szDomain) -> bool"""
+        """IsLoaded(self, String szDomain) -> bool"""
         return _gdi.Locale_IsLoaded(*args, **kwargs)
 
     def GetLanguageInfo(*args, **kwargs):
-        """GetLanguageInfo(int lang) -> LanguageInfo"""
+        """Locale.GetLanguageInfo(int lang) -> LanguageInfo"""
         return _gdi.Locale_GetLanguageInfo(*args, **kwargs)
 
     GetLanguageInfo = staticmethod(GetLanguageInfo)
     def GetLanguageName(*args, **kwargs):
-        """GetLanguageName(int lang) -> String"""
+        """Locale.GetLanguageName(int lang) -> String"""
         return _gdi.Locale_GetLanguageName(*args, **kwargs)
 
     GetLanguageName = staticmethod(GetLanguageName)
     def FindLanguageInfo(*args, **kwargs):
-        """FindLanguageInfo(String locale) -> LanguageInfo"""
+        """Locale.FindLanguageInfo(String locale) -> LanguageInfo"""
         return _gdi.Locale_FindLanguageInfo(*args, **kwargs)
 
     FindLanguageInfo = staticmethod(FindLanguageInfo)
     def AddLanguage(*args, **kwargs):
-        """AddLanguage(LanguageInfo info)"""
+        """Locale.AddLanguage(LanguageInfo info)"""
         return _gdi.Locale_AddLanguage(*args, **kwargs)
 
     AddLanguage = staticmethod(AddLanguage)
     def GetString(*args, **kwargs):
-        """GetString(String szOrigString, String szDomain=EmptyString) -> String"""
+        """GetString(self, String szOrigString, String szDomain=EmptyString) -> String"""
         return _gdi.Locale_GetString(*args, **kwargs)
 
     def GetName(*args, **kwargs):
-        """GetName() -> String"""
+        """GetName(self) -> String"""
         return _gdi.Locale_GetName(*args, **kwargs)
 
 
@@ -2193,37 +2194,37 @@ class EncodingConverter(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEncodingConverter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> EncodingConverter"""
+        """__init__(self) -> EncodingConverter"""
         newobj = _gdi.new_EncodingConverter(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_EncodingConverter):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Init(*args, **kwargs):
-        """Init(int input_enc, int output_enc, int method=CONVERT_STRICT) -> bool"""
+        """Init(self, int input_enc, int output_enc, int method=CONVERT_STRICT) -> bool"""
         return _gdi.EncodingConverter_Init(*args, **kwargs)
 
     def Convert(*args, **kwargs):
-        """Convert(String input) -> String"""
+        """Convert(self, String input) -> String"""
         return _gdi.EncodingConverter_Convert(*args, **kwargs)
 
     def GetPlatformEquivalents(*args, **kwargs):
-        """GetPlatformEquivalents(int enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
+        """EncodingConverter.GetPlatformEquivalents(int enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
         return _gdi.EncodingConverter_GetPlatformEquivalents(*args, **kwargs)
 
     GetPlatformEquivalents = staticmethod(GetPlatformEquivalents)
     def GetAllEquivalents(*args, **kwargs):
-        """GetAllEquivalents(int enc) -> wxFontEncodingArray"""
+        """EncodingConverter.GetAllEquivalents(int enc) -> wxFontEncodingArray"""
         return _gdi.EncodingConverter_GetAllEquivalents(*args, **kwargs)
 
     GetAllEquivalents = staticmethod(GetAllEquivalents)
     def CanConvert(*args, **kwargs):
-        """CanConvert(int encIn, int encOut) -> bool"""
+        """EncodingConverter.CanConvert(int encIn, int encOut) -> bool"""
         return _gdi.EncodingConverter_CanConvert(*args, **kwargs)
 
     CanConvert = staticmethod(CanConvert)
@@ -2282,162 +2283,162 @@ class DC(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __del__(self, destroy=_gdi.delete_DC):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def BeginDrawing(*args, **kwargs):
-        """BeginDrawing()"""
+        """BeginDrawing(self)"""
         return _gdi.DC_BeginDrawing(*args, **kwargs)
 
     def EndDrawing(*args, **kwargs):
-        """EndDrawing()"""
+        """EndDrawing(self)"""
         return _gdi.DC_EndDrawing(*args, **kwargs)
 
     def FloodFillXY(*args, **kwargs):
-        """FloodFillXY(int x, int y, Colour col, int style=FLOOD_SURFACE) -> bool"""
+        """FloodFillXY(self, int x, int y, Colour col, int style=FLOOD_SURFACE) -> bool"""
         return _gdi.DC_FloodFillXY(*args, **kwargs)
 
     def FloodFill(*args, **kwargs):
-        """FloodFill(Point pt, Colour col, int style=FLOOD_SURFACE) -> bool"""
+        """FloodFill(self, Point pt, Colour col, int style=FLOOD_SURFACE) -> bool"""
         return _gdi.DC_FloodFill(*args, **kwargs)
 
     def GetPixelXY(*args, **kwargs):
-        """GetPixelXY(int x, int y) -> Colour"""
+        """GetPixelXY(self, int x, int y) -> Colour"""
         return _gdi.DC_GetPixelXY(*args, **kwargs)
 
     def GetPixel(*args, **kwargs):
-        """GetPixel(Point pt) -> Colour"""
+        """GetPixel(self, Point pt) -> Colour"""
         return _gdi.DC_GetPixel(*args, **kwargs)
 
     def DrawLineXY(*args, **kwargs):
-        """DrawLineXY(int x1, int y1, int x2, int y2)"""
+        """DrawLineXY(self, int x1, int y1, int x2, int y2)"""
         return _gdi.DC_DrawLineXY(*args, **kwargs)
 
     def DrawLine(*args, **kwargs):
-        """DrawLine(Point pt1, Point pt2)"""
+        """DrawLine(self, Point pt1, Point pt2)"""
         return _gdi.DC_DrawLine(*args, **kwargs)
 
     def CrossHairXY(*args, **kwargs):
-        """CrossHairXY(int x, int y)"""
+        """CrossHairXY(self, int x, int y)"""
         return _gdi.DC_CrossHairXY(*args, **kwargs)
 
     def CrossHair(*args, **kwargs):
-        """CrossHair(Point pt)"""
+        """CrossHair(self, Point pt)"""
         return _gdi.DC_CrossHair(*args, **kwargs)
 
     def DrawArcXY(*args, **kwargs):
-        """DrawArcXY(int x1, int y1, int x2, int y2, int xc, int yc)"""
+        """DrawArcXY(self, int x1, int y1, int x2, int y2, int xc, int yc)"""
         return _gdi.DC_DrawArcXY(*args, **kwargs)
 
     def DrawArc(*args, **kwargs):
-        """DrawArc(Point pt1, Point pt2, Point centre)"""
+        """DrawArc(self, Point pt1, Point pt2, Point centre)"""
         return _gdi.DC_DrawArc(*args, **kwargs)
 
     def DrawCheckMarkXY(*args, **kwargs):
-        """DrawCheckMarkXY(int x, int y, int width, int height)"""
+        """DrawCheckMarkXY(self, int x, int y, int width, int height)"""
         return _gdi.DC_DrawCheckMarkXY(*args, **kwargs)
 
     def DrawCheckMark(*args, **kwargs):
-        """DrawCheckMark(Rect rect)"""
+        """DrawCheckMark(self, Rect rect)"""
         return _gdi.DC_DrawCheckMark(*args, **kwargs)
 
     def DrawEllipticArcXY(*args, **kwargs):
-        """DrawEllipticArcXY(int x, int y, int w, int h, double sa, double ea)"""
+        """DrawEllipticArcXY(self, int x, int y, int w, int h, double sa, double ea)"""
         return _gdi.DC_DrawEllipticArcXY(*args, **kwargs)
 
     def DrawEllipticArc(*args, **kwargs):
-        """DrawEllipticArc(Point pt, Size sz, double sa, double ea)"""
+        """DrawEllipticArc(self, Point pt, Size sz, double sa, double ea)"""
         return _gdi.DC_DrawEllipticArc(*args, **kwargs)
 
     def DrawPointXY(*args, **kwargs):
-        """DrawPointXY(int x, int y)"""
+        """DrawPointXY(self, int x, int y)"""
         return _gdi.DC_DrawPointXY(*args, **kwargs)
 
     def DrawPoint(*args, **kwargs):
-        """DrawPoint(Point pt)"""
+        """DrawPoint(self, Point pt)"""
         return _gdi.DC_DrawPoint(*args, **kwargs)
 
     def DrawRectangleXY(*args, **kwargs):
-        """DrawRectangleXY(int x, int y, int width, int height)"""
+        """DrawRectangleXY(self, int x, int y, int width, int height)"""
         return _gdi.DC_DrawRectangleXY(*args, **kwargs)
 
     def DrawRectangle(*args, **kwargs):
-        """DrawRectangle(Point pt, Size sz)"""
+        """DrawRectangle(self, Point pt, Size sz)"""
         return _gdi.DC_DrawRectangle(*args, **kwargs)
 
     def DrawRectangleRect(*args, **kwargs):
-        """DrawRectangleRect(Rect rect)"""
+        """DrawRectangleRect(self, Rect rect)"""
         return _gdi.DC_DrawRectangleRect(*args, **kwargs)
 
     def DrawRoundedRectangleXY(*args, **kwargs):
-        """DrawRoundedRectangleXY(int x, int y, int width, int height, double radius)"""
+        """DrawRoundedRectangleXY(self, int x, int y, int width, int height, double radius)"""
         return _gdi.DC_DrawRoundedRectangleXY(*args, **kwargs)
 
     def DrawRoundedRectangle(*args, **kwargs):
-        """DrawRoundedRectangle(Point pt, Size sz, double radius)"""
+        """DrawRoundedRectangle(self, Point pt, Size sz, double radius)"""
         return _gdi.DC_DrawRoundedRectangle(*args, **kwargs)
 
     def DrawRoundedRectangleRect(*args, **kwargs):
-        """DrawRoundedRectangleRect(Rect r, double radius)"""
+        """DrawRoundedRectangleRect(self, Rect r, double radius)"""
         return _gdi.DC_DrawRoundedRectangleRect(*args, **kwargs)
 
     def DrawCircleXY(*args, **kwargs):
-        """DrawCircleXY(int x, int y, int radius)"""
+        """DrawCircleXY(self, int x, int y, int radius)"""
         return _gdi.DC_DrawCircleXY(*args, **kwargs)
 
     def DrawCircle(*args, **kwargs):
-        """DrawCircle(Point pt, int radius)"""
+        """DrawCircle(self, Point pt, int radius)"""
         return _gdi.DC_DrawCircle(*args, **kwargs)
 
     def DrawEllipseXY(*args, **kwargs):
-        """DrawEllipseXY(int x, int y, int width, int height)"""
+        """DrawEllipseXY(self, int x, int y, int width, int height)"""
         return _gdi.DC_DrawEllipseXY(*args, **kwargs)
 
     def DrawEllipse(*args, **kwargs):
-        """DrawEllipse(Point pt, Size sz)"""
+        """DrawEllipse(self, Point pt, Size sz)"""
         return _gdi.DC_DrawEllipse(*args, **kwargs)
 
     def DrawEllipseRect(*args, **kwargs):
-        """DrawEllipseRect(Rect rect)"""
+        """DrawEllipseRect(self, Rect rect)"""
         return _gdi.DC_DrawEllipseRect(*args, **kwargs)
 
     def DrawIconXY(*args, **kwargs):
-        """DrawIconXY(Icon icon, int x, int y)"""
+        """DrawIconXY(self, Icon icon, int x, int y)"""
         return _gdi.DC_DrawIconXY(*args, **kwargs)
 
     def DrawIcon(*args, **kwargs):
-        """DrawIcon(Icon icon, Point pt)"""
+        """DrawIcon(self, Icon icon, Point pt)"""
         return _gdi.DC_DrawIcon(*args, **kwargs)
 
     def DrawBitmapXY(*args, **kwargs):
-        """DrawBitmapXY(Bitmap bmp, int x, int y, bool useMask=False)"""
+        """DrawBitmapXY(self, Bitmap bmp, int x, int y, bool useMask=False)"""
         return _gdi.DC_DrawBitmapXY(*args, **kwargs)
 
     def DrawBitmap(*args, **kwargs):
-        """DrawBitmap(Bitmap bmp, Point pt, bool useMask=False)"""
+        """DrawBitmap(self, Bitmap bmp, Point pt, bool useMask=False)"""
         return _gdi.DC_DrawBitmap(*args, **kwargs)
 
     def DrawTextXY(*args, **kwargs):
-        """DrawTextXY(String text, int x, int y)"""
+        """DrawTextXY(self, String text, int x, int y)"""
         return _gdi.DC_DrawTextXY(*args, **kwargs)
 
     def DrawText(*args, **kwargs):
-        """DrawText(String text, Point pt)"""
+        """DrawText(self, String text, Point pt)"""
         return _gdi.DC_DrawText(*args, **kwargs)
 
     def DrawRotatedTextXY(*args, **kwargs):
-        """DrawRotatedTextXY(String text, int x, int y, double angle)"""
+        """DrawRotatedTextXY(self, String text, int x, int y, double angle)"""
         return _gdi.DC_DrawRotatedTextXY(*args, **kwargs)
 
     def DrawRotatedText(*args, **kwargs):
-        """DrawRotatedText(String text, Point pt, double angle)"""
+        """DrawRotatedText(self, String text, Point pt, double angle)"""
         return _gdi.DC_DrawRotatedText(*args, **kwargs)
 
     def BlitXY(*args, **kwargs):
         """
-        BlitXY(int xdest, int ydest, int width, int height, DC source, 
+        BlitXY(self, int xdest, int ydest, int width, int height, DC source, 
             int xsrc, int ysrc, int rop=COPY, bool useMask=False, 
             int xsrcMask=-1, int ysrcMask=-1) -> bool
         """
@@ -2445,102 +2446,102 @@ class DC(core.Object):
 
     def Blit(*args, **kwargs):
         """
-        Blit(Point destPt, Size sz, DC source, Point srcPt, int rop=COPY, 
+        Blit(self, Point destPt, Size sz, DC source, Point srcPt, int rop=COPY, 
             bool useMask=False, Point srcPtMask=DefaultPosition) -> bool
         """
         return _gdi.DC_Blit(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
-        """DrawLines(int points, Point points_array, int xoffset=0, int yoffset=0)"""
+        """DrawLines(self, int points, Point points_array, int xoffset=0, int yoffset=0)"""
         return _gdi.DC_DrawLines(*args, **kwargs)
 
     def DrawPolygon(*args, **kwargs):
         """
-        DrawPolygon(int points, Point points_array, int xoffset=0, int yoffset=0, 
+        DrawPolygon(self, int points, Point points_array, int xoffset=0, int yoffset=0, 
             int fillStyle=ODDEVEN_RULE)
         """
         return _gdi.DC_DrawPolygon(*args, **kwargs)
 
     def DrawLabel(*args, **kwargs):
         """
-        DrawLabel(String text, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
+        DrawLabel(self, String text, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
             int indexAccel=-1)
         """
         return _gdi.DC_DrawLabel(*args, **kwargs)
 
     def DrawImageLabel(*args, **kwargs):
         """
-        DrawImageLabel(String text, Bitmap image, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
+        DrawImageLabel(self, String text, Bitmap image, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
             int indexAccel=-1) -> Rect
         """
         return _gdi.DC_DrawImageLabel(*args, **kwargs)
 
     def DrawSpline(*args, **kwargs):
-        """DrawSpline(int points, Point points_array)"""
+        """DrawSpline(self, int points, Point points_array)"""
         return _gdi.DC_DrawSpline(*args, **kwargs)
 
     def Clear(*args, **kwargs):
-        """Clear()"""
+        """Clear(self)"""
         return _gdi.DC_Clear(*args, **kwargs)
 
     def StartDoc(*args, **kwargs):
-        """StartDoc(String message) -> bool"""
+        """StartDoc(self, String message) -> bool"""
         return _gdi.DC_StartDoc(*args, **kwargs)
 
     def EndDoc(*args, **kwargs):
-        """EndDoc()"""
+        """EndDoc(self)"""
         return _gdi.DC_EndDoc(*args, **kwargs)
 
     def StartPage(*args, **kwargs):
-        """StartPage()"""
+        """StartPage(self)"""
         return _gdi.DC_StartPage(*args, **kwargs)
 
     def EndPage(*args, **kwargs):
-        """EndPage()"""
+        """EndPage(self)"""
         return _gdi.DC_EndPage(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(Font font)"""
+        """SetFont(self, Font font)"""
         return _gdi.DC_SetFont(*args, **kwargs)
 
     def SetPen(*args, **kwargs):
-        """SetPen(Pen pen)"""
+        """SetPen(self, Pen pen)"""
         return _gdi.DC_SetPen(*args, **kwargs)
 
     def SetBrush(*args, **kwargs):
-        """SetBrush(Brush brush)"""
+        """SetBrush(self, Brush brush)"""
         return _gdi.DC_SetBrush(*args, **kwargs)
 
     def SetBackground(*args, **kwargs):
-        """SetBackground(Brush brush)"""
+        """SetBackground(self, Brush brush)"""
         return _gdi.DC_SetBackground(*args, **kwargs)
 
     def SetBackgroundMode(*args, **kwargs):
-        """SetBackgroundMode(int mode)"""
+        """SetBackgroundMode(self, int mode)"""
         return _gdi.DC_SetBackgroundMode(*args, **kwargs)
 
     def SetPalette(*args, **kwargs):
-        """SetPalette(Palette palette)"""
+        """SetPalette(self, Palette palette)"""
         return _gdi.DC_SetPalette(*args, **kwargs)
 
     def SetClippingRegionXY(*args, **kwargs):
-        """SetClippingRegionXY(int x, int y, int width, int height)"""
+        """SetClippingRegionXY(self, int x, int y, int width, int height)"""
         return _gdi.DC_SetClippingRegionXY(*args, **kwargs)
 
     def SetClippingRegion(*args, **kwargs):
-        """SetClippingRegion(Point pt, Size sz)"""
+        """SetClippingRegion(self, Point pt, Size sz)"""
         return _gdi.DC_SetClippingRegion(*args, **kwargs)
 
     def SetClippingRect(*args, **kwargs):
-        """SetClippingRect(Rect rect)"""
+        """SetClippingRect(self, Rect rect)"""
         return _gdi.DC_SetClippingRect(*args, **kwargs)
 
     def SetClippingRegionAsRegion(*args, **kwargs):
-        """SetClippingRegionAsRegion(Region region)"""
+        """SetClippingRegionAsRegion(self, Region region)"""
         return _gdi.DC_SetClippingRegionAsRegion(*args, **kwargs)
 
     def DestroyClippingRegion(*args, **kwargs):
-        """DestroyClippingRegion()"""
+        """DestroyClippingRegion(self)"""
         return _gdi.DC_DestroyClippingRegion(*args, **kwargs)
 
     def GetClippingBox(*args, **kwargs):
@@ -2548,15 +2549,15 @@ class DC(core.Object):
         return _gdi.DC_GetClippingBox(*args, **kwargs)
 
     def GetClippingRect(*args, **kwargs):
-        """GetClippingRect() -> Rect"""
+        """GetClippingRect(self) -> Rect"""
         return _gdi.DC_GetClippingRect(*args, **kwargs)
 
     def GetCharHeight(*args, **kwargs):
-        """GetCharHeight() -> int"""
+        """GetCharHeight(self) -> int"""
         return _gdi.DC_GetCharHeight(*args, **kwargs)
 
     def GetCharWidth(*args, **kwargs):
-        """GetCharWidth() -> int"""
+        """GetCharWidth(self) -> int"""
         return _gdi.DC_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
@@ -2589,12 +2590,12 @@ class DC(core.Object):
         return _gdi.DC_GetMultiLineTextExtent(*args, **kwargs)
 
     def GetPartialTextExtents(*args, **kwargs):
-        """GetPartialTextExtents(String text) -> wxArrayInt"""
+        """GetPartialTextExtents(self, String text) -> wxArrayInt"""
         return _gdi.DC_GetPartialTextExtents(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
         """
-        GetSize() -> Size
+        GetSize(self) -> Size
 
         Get the DC size in device units.
         """
@@ -2610,7 +2611,7 @@ class DC(core.Object):
 
     def GetSizeMM(*args, **kwargs):
         """
-        GetSizeMM() -> Size
+        GetSizeMM(self) -> Size
 
         Get the DC size in milimeters.
         """
@@ -2625,99 +2626,99 @@ class DC(core.Object):
         return _gdi.DC_GetSizeMMTuple(*args, **kwargs)
 
     def DeviceToLogicalX(*args, **kwargs):
-        """DeviceToLogicalX(int x) -> int"""
+        """DeviceToLogicalX(self, int x) -> int"""
         return _gdi.DC_DeviceToLogicalX(*args, **kwargs)
 
     def DeviceToLogicalY(*args, **kwargs):
-        """DeviceToLogicalY(int y) -> int"""
+        """DeviceToLogicalY(self, int y) -> int"""
         return _gdi.DC_DeviceToLogicalY(*args, **kwargs)
 
     def DeviceToLogicalXRel(*args, **kwargs):
-        """DeviceToLogicalXRel(int x) -> int"""
+        """DeviceToLogicalXRel(self, int x) -> int"""
         return _gdi.DC_DeviceToLogicalXRel(*args, **kwargs)
 
     def DeviceToLogicalYRel(*args, **kwargs):
-        """DeviceToLogicalYRel(int y) -> int"""
+        """DeviceToLogicalYRel(self, int y) -> int"""
         return _gdi.DC_DeviceToLogicalYRel(*args, **kwargs)
 
     def LogicalToDeviceX(*args, **kwargs):
-        """LogicalToDeviceX(int x) -> int"""
+        """LogicalToDeviceX(self, int x) -> int"""
         return _gdi.DC_LogicalToDeviceX(*args, **kwargs)
 
     def LogicalToDeviceY(*args, **kwargs):
-        """LogicalToDeviceY(int y) -> int"""
+        """LogicalToDeviceY(self, int y) -> int"""
         return _gdi.DC_LogicalToDeviceY(*args, **kwargs)
 
     def LogicalToDeviceXRel(*args, **kwargs):
-        """LogicalToDeviceXRel(int x) -> int"""
+        """LogicalToDeviceXRel(self, int x) -> int"""
         return _gdi.DC_LogicalToDeviceXRel(*args, **kwargs)
 
     def LogicalToDeviceYRel(*args, **kwargs):
-        """LogicalToDeviceYRel(int y) -> int"""
+        """LogicalToDeviceYRel(self, int y) -> int"""
         return _gdi.DC_LogicalToDeviceYRel(*args, **kwargs)
 
     def CanDrawBitmap(*args, **kwargs):
-        """CanDrawBitmap() -> bool"""
+        """CanDrawBitmap(self) -> bool"""
         return _gdi.DC_CanDrawBitmap(*args, **kwargs)
 
     def CanGetTextExtent(*args, **kwargs):
-        """CanGetTextExtent() -> bool"""
+        """CanGetTextExtent(self) -> bool"""
         return _gdi.DC_CanGetTextExtent(*args, **kwargs)
 
     def GetDepth(*args, **kwargs):
-        """GetDepth() -> int"""
+        """GetDepth(self) -> int"""
         return _gdi.DC_GetDepth(*args, **kwargs)
 
     def GetPPI(*args, **kwargs):
-        """GetPPI() -> Size"""
+        """GetPPI(self) -> Size"""
         return _gdi.DC_GetPPI(*args, **kwargs)
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """Ok(self) -> bool"""
         return _gdi.DC_Ok(*args, **kwargs)
 
     def GetBackgroundMode(*args, **kwargs):
-        """GetBackgroundMode() -> int"""
+        """GetBackgroundMode(self) -> int"""
         return _gdi.DC_GetBackgroundMode(*args, **kwargs)
 
     def GetBackground(*args, **kwargs):
-        """GetBackground() -> Brush"""
+        """GetBackground(self) -> Brush"""
         return _gdi.DC_GetBackground(*args, **kwargs)
 
     def GetBrush(*args, **kwargs):
-        """GetBrush() -> Brush"""
+        """GetBrush(self) -> Brush"""
         return _gdi.DC_GetBrush(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont() -> Font"""
+        """GetFont(self) -> Font"""
         return _gdi.DC_GetFont(*args, **kwargs)
 
     def GetPen(*args, **kwargs):
-        """GetPen() -> Pen"""
+        """GetPen(self) -> Pen"""
         return _gdi.DC_GetPen(*args, **kwargs)
 
     def GetTextBackground(*args, **kwargs):
-        """GetTextBackground() -> Colour"""
+        """GetTextBackground(self) -> Colour"""
         return _gdi.DC_GetTextBackground(*args, **kwargs)
 
     def GetTextForeground(*args, **kwargs):
-        """GetTextForeground() -> Colour"""
+        """GetTextForeground(self) -> Colour"""
         return _gdi.DC_GetTextForeground(*args, **kwargs)
 
     def SetTextForeground(*args, **kwargs):
-        """SetTextForeground(Colour colour)"""
+        """SetTextForeground(self, Colour colour)"""
         return _gdi.DC_SetTextForeground(*args, **kwargs)
 
     def SetTextBackground(*args, **kwargs):
-        """SetTextBackground(Colour colour)"""
+        """SetTextBackground(self, Colour colour)"""
         return _gdi.DC_SetTextBackground(*args, **kwargs)
 
     def GetMapMode(*args, **kwargs):
-        """GetMapMode() -> int"""
+        """GetMapMode(self) -> int"""
         return _gdi.DC_GetMapMode(*args, **kwargs)
 
     def SetMapMode(*args, **kwargs):
-        """SetMapMode(int mode)"""
+        """SetMapMode(self, int mode)"""
         return _gdi.DC_SetMapMode(*args, **kwargs)
 
     def GetUserScale(*args, **kwargs):
@@ -2725,7 +2726,7 @@ class DC(core.Object):
         return _gdi.DC_GetUserScale(*args, **kwargs)
 
     def SetUserScale(*args, **kwargs):
-        """SetUserScale(double x, double y)"""
+        """SetUserScale(self, double x, double y)"""
         return _gdi.DC_SetUserScale(*args, **kwargs)
 
     def GetLogicalScale(*args, **kwargs):
@@ -2733,11 +2734,11 @@ class DC(core.Object):
         return _gdi.DC_GetLogicalScale(*args, **kwargs)
 
     def SetLogicalScale(*args, **kwargs):
-        """SetLogicalScale(double x, double y)"""
+        """SetLogicalScale(self, double x, double y)"""
         return _gdi.DC_SetLogicalScale(*args, **kwargs)
 
     def GetLogicalOrigin(*args, **kwargs):
-        """GetLogicalOrigin() -> Point"""
+        """GetLogicalOrigin(self) -> Point"""
         return _gdi.DC_GetLogicalOrigin(*args, **kwargs)
 
     def GetLogicalOriginTuple(*args, **kwargs):
@@ -2745,11 +2746,11 @@ class DC(core.Object):
         return _gdi.DC_GetLogicalOriginTuple(*args, **kwargs)
 
     def SetLogicalOrigin(*args, **kwargs):
-        """SetLogicalOrigin(int x, int y)"""
+        """SetLogicalOrigin(self, int x, int y)"""
         return _gdi.DC_SetLogicalOrigin(*args, **kwargs)
 
     def GetDeviceOrigin(*args, **kwargs):
-        """GetDeviceOrigin() -> Point"""
+        """GetDeviceOrigin(self) -> Point"""
         return _gdi.DC_GetDeviceOrigin(*args, **kwargs)
 
     def GetDeviceOriginTuple(*args, **kwargs):
@@ -2757,51 +2758,51 @@ class DC(core.Object):
         return _gdi.DC_GetDeviceOriginTuple(*args, **kwargs)
 
     def SetDeviceOrigin(*args, **kwargs):
-        """SetDeviceOrigin(int x, int y)"""
+        """SetDeviceOrigin(self, int x, int y)"""
         return _gdi.DC_SetDeviceOrigin(*args, **kwargs)
 
     def SetAxisOrientation(*args, **kwargs):
-        """SetAxisOrientation(bool xLeftRight, bool yBottomUp)"""
+        """SetAxisOrientation(self, bool xLeftRight, bool yBottomUp)"""
         return _gdi.DC_SetAxisOrientation(*args, **kwargs)
 
     def GetLogicalFunction(*args, **kwargs):
-        """GetLogicalFunction() -> int"""
+        """GetLogicalFunction(self) -> int"""
         return _gdi.DC_GetLogicalFunction(*args, **kwargs)
 
     def SetLogicalFunction(*args, **kwargs):
-        """SetLogicalFunction(int function)"""
+        """SetLogicalFunction(self, int function)"""
         return _gdi.DC_SetLogicalFunction(*args, **kwargs)
 
     def SetOptimization(*args, **kwargs):
-        """SetOptimization(bool opt)"""
+        """SetOptimization(self, bool opt)"""
         return _gdi.DC_SetOptimization(*args, **kwargs)
 
     def GetOptimization(*args, **kwargs):
-        """GetOptimization() -> bool"""
+        """GetOptimization(self) -> bool"""
         return _gdi.DC_GetOptimization(*args, **kwargs)
 
     def CalcBoundingBox(*args, **kwargs):
-        """CalcBoundingBox(int x, int y)"""
+        """CalcBoundingBox(self, int x, int y)"""
         return _gdi.DC_CalcBoundingBox(*args, **kwargs)
 
     def ResetBoundingBox(*args, **kwargs):
-        """ResetBoundingBox()"""
+        """ResetBoundingBox(self)"""
         return _gdi.DC_ResetBoundingBox(*args, **kwargs)
 
     def MinX(*args, **kwargs):
-        """MinX() -> int"""
+        """MinX(self) -> int"""
         return _gdi.DC_MinX(*args, **kwargs)
 
     def MaxX(*args, **kwargs):
-        """MaxX() -> int"""
+        """MaxX(self) -> int"""
         return _gdi.DC_MaxX(*args, **kwargs)
 
     def MinY(*args, **kwargs):
-        """MinY() -> int"""
+        """MinY(self) -> int"""
         return _gdi.DC_MinY(*args, **kwargs)
 
     def MaxY(*args, **kwargs):
-        """MaxY() -> int"""
+        """MaxY(self) -> int"""
         return _gdi.DC_MaxY(*args, **kwargs)
 
     def GetBoundingBox(*args, **kwargs):
@@ -2810,28 +2811,28 @@ class DC(core.Object):
 
     def __nonzero__(self): return self.Ok() 
     def _DrawPointList(*args, **kwargs):
-        """_DrawPointList(PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
+        """_DrawPointList(self, PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
         return _gdi.DC__DrawPointList(*args, **kwargs)
 
     def _DrawLineList(*args, **kwargs):
-        """_DrawLineList(PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
+        """_DrawLineList(self, PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
         return _gdi.DC__DrawLineList(*args, **kwargs)
 
     def _DrawRectangleList(*args, **kwargs):
-        """_DrawRectangleList(PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
+        """_DrawRectangleList(self, PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
         return _gdi.DC__DrawRectangleList(*args, **kwargs)
 
     def _DrawEllipseList(*args, **kwargs):
-        """_DrawEllipseList(PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
+        """_DrawEllipseList(self, PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
         return _gdi.DC__DrawEllipseList(*args, **kwargs)
 
     def _DrawPolygonList(*args, **kwargs):
-        """_DrawPolygonList(PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
+        """_DrawPolygonList(self, PyObject pyCoords, PyObject pyPens, PyObject pyBrushes) -> PyObject"""
         return _gdi.DC__DrawPolygonList(*args, **kwargs)
 
     def _DrawTextList(*args, **kwargs):
         """
-        _DrawTextList(PyObject textList, PyObject pyPoints, PyObject foregroundList, 
+        _DrawTextList(self, PyObject textList, PyObject pyPoints, PyObject foregroundList, 
             PyObject backgroundList) -> PyObject
         """
         return _gdi.DC__DrawTextList(*args, **kwargs)
@@ -2942,13 +2943,13 @@ class MemoryDC(DC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMemoryDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> MemoryDC"""
+        """__init__(self) -> MemoryDC"""
         newobj = _gdi.new_MemoryDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def SelectObject(*args, **kwargs):
-        """SelectObject(Bitmap bitmap)"""
+        """SelectObject(self, Bitmap bitmap)"""
         return _gdi.MemoryDC_SelectObject(*args, **kwargs)
 
 
@@ -2972,8 +2973,8 @@ class BufferedDC(MemoryDC):
         return "<%s.%s; proxy of C++ wxBufferedDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
         """
-        __init__(DC dc, Bitmap buffer) -> BufferedDC
-        __init__(DC dc, Size area) -> BufferedDC
+        __init__(self, DC dc, Bitmap buffer) -> BufferedDC
+        __init__(self, DC dc, Size area) -> BufferedDC
         """
         newobj = _gdi.new_BufferedDC(*args)
         self.this = newobj.this
@@ -2982,13 +2983,13 @@ class BufferedDC(MemoryDC):
         self._dc = args[0] # save a ref so the other dc will not be deleted before self
 
     def __del__(self, destroy=_gdi.delete_BufferedDC):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def UnMask(*args, **kwargs):
-        """UnMask()"""
+        """UnMask(self)"""
         return _gdi.BufferedDC_UnMask(*args, **kwargs)
 
 
@@ -3010,7 +3011,7 @@ class BufferedPaintDC(BufferedDC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedPaintDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window window, Bitmap buffer=NullBitmap) -> BufferedPaintDC"""
+        """__init__(self, Window window, Bitmap buffer=NullBitmap) -> BufferedPaintDC"""
         newobj = _gdi.new_BufferedPaintDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3029,21 +3030,21 @@ class ScreenDC(DC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScreenDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> ScreenDC"""
+        """__init__(self) -> ScreenDC"""
         newobj = _gdi.new_ScreenDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def StartDrawingOnTopWin(*args, **kwargs):
-        """StartDrawingOnTopWin(Window window) -> bool"""
+        """StartDrawingOnTopWin(self, Window window) -> bool"""
         return _gdi.ScreenDC_StartDrawingOnTopWin(*args, **kwargs)
 
     def StartDrawingOnTop(*args, **kwargs):
-        """StartDrawingOnTop(Rect rect=None) -> bool"""
+        """StartDrawingOnTop(self, Rect rect=None) -> bool"""
         return _gdi.ScreenDC_StartDrawingOnTop(*args, **kwargs)
 
     def EndDrawingOnTop(*args, **kwargs):
-        """EndDrawingOnTop() -> bool"""
+        """EndDrawingOnTop(self) -> bool"""
         return _gdi.ScreenDC_EndDrawingOnTop(*args, **kwargs)
 
 
@@ -3060,7 +3061,7 @@ class ClientDC(DC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxClientDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window win) -> ClientDC"""
+        """__init__(self, Window win) -> ClientDC"""
         newobj = _gdi.new_ClientDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3079,7 +3080,7 @@ class PaintDC(DC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPaintDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window win) -> PaintDC"""
+        """__init__(self, Window win) -> PaintDC"""
         newobj = _gdi.new_PaintDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3098,7 +3099,7 @@ class WindowDC(DC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window win) -> WindowDC"""
+        """__init__(self, Window win) -> WindowDC"""
         newobj = _gdi.new_WindowDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3117,7 +3118,7 @@ class MirrorDC(DC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMirrorDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(DC dc, bool mirror) -> MirrorDC"""
+        """__init__(self, DC dc, bool mirror) -> MirrorDC"""
         newobj = _gdi.new_MirrorDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3136,26 +3137,26 @@ class PostScriptDC(DC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPostScriptDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxPrintData printData) -> PostScriptDC"""
+        """__init__(self, wxPrintData printData) -> PostScriptDC"""
         newobj = _gdi.new_PostScriptDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetPrintData(*args, **kwargs):
-        """GetPrintData() -> wxPrintData"""
+        """GetPrintData(self) -> wxPrintData"""
         return _gdi.PostScriptDC_GetPrintData(*args, **kwargs)
 
     def SetPrintData(*args, **kwargs):
-        """SetPrintData(wxPrintData data)"""
+        """SetPrintData(self, wxPrintData data)"""
         return _gdi.PostScriptDC_SetPrintData(*args, **kwargs)
 
     def SetResolution(*args, **kwargs):
-        """SetResolution(int ppi)"""
+        """PostScriptDC.SetResolution(int ppi)"""
         return _gdi.PostScriptDC_SetResolution(*args, **kwargs)
 
     SetResolution = staticmethod(SetResolution)
     def GetResolution(*args, **kwargs):
-        """GetResolution() -> int"""
+        """PostScriptDC.GetResolution() -> int"""
         return _gdi.PostScriptDC_GetResolution(*args, **kwargs)
 
     GetResolution = staticmethod(GetResolution)
@@ -3181,35 +3182,35 @@ class MetaFile(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMetaFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String filename=EmptyString) -> MetaFile"""
+        """__init__(self, String filename=EmptyString) -> MetaFile"""
         newobj = _gdi.new_MetaFile(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_MetaFile):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """Ok(self) -> bool"""
         return _gdi.MetaFile_Ok(*args, **kwargs)
 
     def SetClipboard(*args, **kwargs):
-        """SetClipboard(int width=0, int height=0) -> bool"""
+        """SetClipboard(self, int width=0, int height=0) -> bool"""
         return _gdi.MetaFile_SetClipboard(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize() -> Size"""
+        """GetSize(self) -> Size"""
         return _gdi.MetaFile_GetSize(*args, **kwargs)
 
     def GetWidth(*args, **kwargs):
-        """GetWidth() -> int"""
+        """GetWidth(self) -> int"""
         return _gdi.MetaFile_GetWidth(*args, **kwargs)
 
     def GetHeight(*args, **kwargs):
-        """GetHeight() -> int"""
+        """GetHeight(self) -> int"""
         return _gdi.MetaFile_GetHeight(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -3226,7 +3227,7 @@ class MetaFileDC(DC):
         return "<%s.%s; proxy of C++ wxMetaFileDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(String filename=EmptyString, int width=0, int height=0, 
+        __init__(self, String filename=EmptyString, int width=0, int height=0, 
             String description=EmptyString) -> MetaFileDC
         """
         newobj = _gdi.new_MetaFileDC(*args, **kwargs)
@@ -3234,7 +3235,7 @@ class MetaFileDC(DC):
         self.thisown = 1
         del newobj.thisown
     def Close(*args, **kwargs):
-        """Close() -> MetaFile"""
+        """Close(self) -> MetaFile"""
         return _gdi.MetaFileDC_Close(*args, **kwargs)
 
 
@@ -3249,7 +3250,7 @@ class PrinterDC(DC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrinterDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxPrintData printData) -> PrinterDC"""
+        """__init__(self, wxPrintData printData) -> PrinterDC"""
         newobj = _gdi.new_PrinterDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3515,50 +3516,50 @@ class ImageList(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImageList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int width, int height, int mask=True, int initialCount=1) -> ImageList"""
+        """__init__(self, int width, int height, int mask=True, int initialCount=1) -> ImageList"""
         newobj = _gdi.new_ImageList(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_ImageList):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Add(*args, **kwargs):
-        """Add(Bitmap bitmap, Bitmap mask=NullBitmap) -> int"""
+        """Add(self, Bitmap bitmap, Bitmap mask=NullBitmap) -> int"""
         return _gdi.ImageList_Add(*args, **kwargs)
 
     def AddWithColourMask(*args, **kwargs):
-        """AddWithColourMask(Bitmap bitmap, Colour maskColour) -> int"""
+        """AddWithColourMask(self, Bitmap bitmap, Colour maskColour) -> int"""
         return _gdi.ImageList_AddWithColourMask(*args, **kwargs)
 
     def AddIcon(*args, **kwargs):
-        """AddIcon(Icon icon) -> int"""
+        """AddIcon(self, Icon icon) -> int"""
         return _gdi.ImageList_AddIcon(*args, **kwargs)
 
     def Replace(*args, **kwargs):
-        """Replace(int index, Bitmap bitmap) -> bool"""
+        """Replace(self, int index, Bitmap bitmap) -> bool"""
         return _gdi.ImageList_Replace(*args, **kwargs)
 
     def Draw(*args, **kwargs):
         """
-        Draw(int index, DC dc, int x, int x, int flags=IMAGELIST_DRAW_NORMAL, 
+        Draw(self, int index, DC dc, int x, int x, int flags=IMAGELIST_DRAW_NORMAL, 
             bool solidBackground=False) -> bool
         """
         return _gdi.ImageList_Draw(*args, **kwargs)
 
     def GetImageCount(*args, **kwargs):
-        """GetImageCount() -> int"""
+        """GetImageCount(self) -> int"""
         return _gdi.ImageList_GetImageCount(*args, **kwargs)
 
     def Remove(*args, **kwargs):
-        """Remove(int index) -> bool"""
+        """Remove(self, int index) -> bool"""
         return _gdi.ImageList_Remove(*args, **kwargs)
 
     def RemoveAll(*args, **kwargs):
-        """RemoveAll() -> bool"""
+        """RemoveAll(self) -> bool"""
         return _gdi.ImageList_RemoveAll(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
@@ -3580,19 +3581,19 @@ class PenList(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPenList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def AddPen(*args, **kwargs):
-        """AddPen(Pen pen)"""
+        """AddPen(self, Pen pen)"""
         return _gdi.PenList_AddPen(*args, **kwargs)
 
     def FindOrCreatePen(*args, **kwargs):
-        """FindOrCreatePen(Colour colour, int width, int style) -> Pen"""
+        """FindOrCreatePen(self, Colour colour, int width, int style) -> Pen"""
         return _gdi.PenList_FindOrCreatePen(*args, **kwargs)
 
     def RemovePen(*args, **kwargs):
-        """RemovePen(Pen pen)"""
+        """RemovePen(self, Pen pen)"""
         return _gdi.PenList_RemovePen(*args, **kwargs)
 
     def GetCount(*args, **kwargs):
-        """GetCount() -> int"""
+        """GetCount(self) -> int"""
         return _gdi.PenList_GetCount(*args, **kwargs)
 
 
@@ -3651,19 +3652,19 @@ class BrushList(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBrushList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def AddBrush(*args, **kwargs):
-        """AddBrush(Brush brush)"""
+        """AddBrush(self, Brush brush)"""
         return _gdi.BrushList_AddBrush(*args, **kwargs)
 
     def FindOrCreateBrush(*args, **kwargs):
-        """FindOrCreateBrush(Colour colour, int style) -> Brush"""
+        """FindOrCreateBrush(self, Colour colour, int style) -> Brush"""
         return _gdi.BrushList_FindOrCreateBrush(*args, **kwargs)
 
     def RemoveBrush(*args, **kwargs):
-        """RemoveBrush(Brush brush)"""
+        """RemoveBrush(self, Brush brush)"""
         return _gdi.BrushList_RemoveBrush(*args, **kwargs)
 
     def GetCount(*args, **kwargs):
-        """GetCount() -> int"""
+        """GetCount(self) -> int"""
         return _gdi.BrushList_GetCount(*args, **kwargs)
 
 
@@ -3678,32 +3679,32 @@ class ColourDatabase(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColourDatabase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> ColourDatabase"""
+        """__init__(self) -> ColourDatabase"""
         newobj = _gdi.new_ColourDatabase(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_gdi.delete_ColourDatabase):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Find(*args, **kwargs):
-        """Find(String name) -> Colour"""
+        """Find(self, String name) -> Colour"""
         return _gdi.ColourDatabase_Find(*args, **kwargs)
 
     def FindName(*args, **kwargs):
-        """FindName(Colour colour) -> String"""
+        """FindName(self, Colour colour) -> String"""
         return _gdi.ColourDatabase_FindName(*args, **kwargs)
 
     FindColour = Find 
     def AddColour(*args, **kwargs):
-        """AddColour(String name, Colour colour)"""
+        """AddColour(self, String name, Colour colour)"""
         return _gdi.ColourDatabase_AddColour(*args, **kwargs)
 
     def Append(*args, **kwargs):
-        """Append(String name, int red, int green, int blue)"""
+        """Append(self, String name, int red, int green, int blue)"""
         return _gdi.ColourDatabase_Append(*args, **kwargs)
 
 
@@ -3719,23 +3720,23 @@ class FontList(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def AddFont(*args, **kwargs):
-        """AddFont(Font font)"""
+        """AddFont(self, Font font)"""
         return _gdi.FontList_AddFont(*args, **kwargs)
 
     def FindOrCreateFont(*args, **kwargs):
         """
-        FindOrCreateFont(int point_size, int family, int style, int weight, 
+        FindOrCreateFont(self, int point_size, int family, int style, int weight, 
             bool underline=False, String facename=EmptyString, 
             int encoding=FONTENCODING_DEFAULT) -> Font
         """
         return _gdi.FontList_FindOrCreateFont(*args, **kwargs)
 
     def RemoveFont(*args, **kwargs):
-        """RemoveFont(Font font)"""
+        """RemoveFont(self, Font font)"""
         return _gdi.FontList_RemoveFont(*args, **kwargs)
 
     def GetCount(*args, **kwargs):
-        """GetCount() -> int"""
+        """GetCount(self) -> int"""
         return _gdi.FontList_GetCount(*args, **kwargs)
 
 
@@ -3755,64 +3756,64 @@ class Effects(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEffects instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> Effects"""
+        """__init__(self) -> Effects"""
         newobj = _gdi.new_Effects(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetHighlightColour(*args, **kwargs):
-        """GetHighlightColour() -> Colour"""
+        """GetHighlightColour(self) -> Colour"""
         return _gdi.Effects_GetHighlightColour(*args, **kwargs)
 
     def GetLightShadow(*args, **kwargs):
-        """GetLightShadow() -> Colour"""
+        """GetLightShadow(self) -> Colour"""
         return _gdi.Effects_GetLightShadow(*args, **kwargs)
 
     def GetFaceColour(*args, **kwargs):
-        """GetFaceColour() -> Colour"""
+        """GetFaceColour(self) -> Colour"""
         return _gdi.Effects_GetFaceColour(*args, **kwargs)
 
     def GetMediumShadow(*args, **kwargs):
-        """GetMediumShadow() -> Colour"""
+        """GetMediumShadow(self) -> Colour"""
         return _gdi.Effects_GetMediumShadow(*args, **kwargs)
 
     def GetDarkShadow(*args, **kwargs):
-        """GetDarkShadow() -> Colour"""
+        """GetDarkShadow(self) -> Colour"""
         return _gdi.Effects_GetDarkShadow(*args, **kwargs)
 
     def SetHighlightColour(*args, **kwargs):
-        """SetHighlightColour(Colour c)"""
+        """SetHighlightColour(self, Colour c)"""
         return _gdi.Effects_SetHighlightColour(*args, **kwargs)
 
     def SetLightShadow(*args, **kwargs):
-        """SetLightShadow(Colour c)"""
+        """SetLightShadow(self, Colour c)"""
         return _gdi.Effects_SetLightShadow(*args, **kwargs)
 
     def SetFaceColour(*args, **kwargs):
-        """SetFaceColour(Colour c)"""
+        """SetFaceColour(self, Colour c)"""
         return _gdi.Effects_SetFaceColour(*args, **kwargs)
 
     def SetMediumShadow(*args, **kwargs):
-        """SetMediumShadow(Colour c)"""
+        """SetMediumShadow(self, Colour c)"""
         return _gdi.Effects_SetMediumShadow(*args, **kwargs)
 
     def SetDarkShadow(*args, **kwargs):
-        """SetDarkShadow(Colour c)"""
+        """SetDarkShadow(self, Colour c)"""
         return _gdi.Effects_SetDarkShadow(*args, **kwargs)
 
     def Set(*args, **kwargs):
         """
-        Set(Colour highlightColour, Colour lightShadow, Colour faceColour, 
+        Set(self, Colour highlightColour, Colour lightShadow, Colour faceColour, 
             Colour mediumShadow, Colour darkShadow)
         """
         return _gdi.Effects_Set(*args, **kwargs)
 
     def DrawSunkenEdge(*args, **kwargs):
-        """DrawSunkenEdge(DC dc, Rect rect, int borderSize=1)"""
+        """DrawSunkenEdge(self, DC dc, Rect rect, int borderSize=1)"""
         return _gdi.Effects_DrawSunkenEdge(*args, **kwargs)
 
     def TileBitmap(*args, **kwargs):
-        """TileBitmap(Rect rect, DC dc, Bitmap bitmap) -> bool"""
+        """TileBitmap(self, Rect rect, DC dc, Bitmap bitmap) -> bool"""
         return _gdi.Effects_TileBitmap(*args, **kwargs)
 
 

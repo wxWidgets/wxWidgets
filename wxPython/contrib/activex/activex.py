@@ -5,6 +5,7 @@ import _activex
 
 import core
 wx = core 
+__docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
 class CLSID(object):
@@ -19,7 +20,7 @@ class CLSID(object):
         return "<%s.%s; proxy of C++ CLSID instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(String id) -> CLSID
+        __init__(self, String id) -> CLSID
 
         This class wraps the Windows CLSID structure and is used to
         specify the class of the ActiveX object that is to be created.  A
@@ -32,17 +33,17 @@ class CLSID(object):
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_activex.delete_CLSID):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def GetCLSIDString(*args, **kwargs):
-        """GetCLSIDString() -> String"""
+        """GetCLSIDString(self) -> String"""
         return _activex.CLSID_GetCLSIDString(*args, **kwargs)
 
     def GetProgIDString(*args, **kwargs):
-        """GetProgIDString() -> String"""
+        """GetProgIDString(self) -> String"""
         return _activex.CLSID_GetProgIDString(*args, **kwargs)
 
     def __str__(self):   return self.GetCLSIDString() 
@@ -125,15 +126,15 @@ class ParamXArray(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxParamXArray instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __nonzero__(*args, **kwargs):
-        """__nonzero__() -> bool"""
+        """__nonzero__(self) -> bool"""
         return _activex.ParamXArray___nonzero__(*args, **kwargs)
 
     def __len__(*args, **kwargs):
-        """__len__() -> int"""
+        """__len__(self) -> int"""
         return _activex.ParamXArray___len__(*args, **kwargs)
 
     def __getitem__(*args, **kwargs):
-        """__getitem__(int idx) -> ParamX"""
+        """__getitem__(self, int idx) -> ParamX"""
         return _activex.ParamXArray___getitem__(*args, **kwargs)
 
 
@@ -149,15 +150,15 @@ class FuncXArray(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFuncXArray instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __nonzero__(*args, **kwargs):
-        """__nonzero__() -> bool"""
+        """__nonzero__(self) -> bool"""
         return _activex.FuncXArray___nonzero__(*args, **kwargs)
 
     def __len__(*args, **kwargs):
-        """__len__() -> int"""
+        """__len__(self) -> int"""
         return _activex.FuncXArray___len__(*args, **kwargs)
 
     def __getitem__(*args, **kwargs):
-        """__getitem__(int idx) -> FuncX"""
+        """__getitem__(self, int idx) -> FuncX"""
         return _activex.FuncXArray___getitem__(*args, **kwargs)
 
 
@@ -173,15 +174,15 @@ class PropXArray(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPropXArray instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __nonzero__(*args, **kwargs):
-        """__nonzero__() -> bool"""
+        """__nonzero__(self) -> bool"""
         return _activex.PropXArray___nonzero__(*args, **kwargs)
 
     def __len__(*args, **kwargs):
-        """__len__() -> int"""
+        """__len__(self) -> int"""
         return _activex.PropXArray___len__(*args, **kwargs)
 
     def __getitem__(*args, **kwargs):
-        """__getitem__(int idx) -> PropX"""
+        """__getitem__(self, int idx) -> PropX"""
         return _activex.PropXArray___getitem__(*args, **kwargs)
 
 
@@ -210,7 +211,7 @@ class ActiveXWindow(core.Window):
         return "<%s.%s; proxy of C++ wxActiveXWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, CLSID clsId, int id=-1, Point pos=DefaultPosition, 
+        __init__(self, Window parent, CLSID clsId, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
             String name=PanelNameStr) -> ActiveXWindow
 
@@ -225,7 +226,7 @@ class ActiveXWindow(core.Window):
 
     def GetCLSID(*args, **kwargs):
         """
-        GetCLSID() -> CLSID
+        GetCLSID(self) -> CLSID
 
         Return the CLSID used to construct this ActiveX window
         """
@@ -233,7 +234,7 @@ class ActiveXWindow(core.Window):
 
     def GetAXEventCount(*args, **kwargs):
         """
-        GetAXEventCount() -> int
+        GetAXEventCount(self) -> int
 
         Number of events defined for this control
         """
@@ -241,7 +242,7 @@ class ActiveXWindow(core.Window):
 
     def GetAXEventDesc(*args, **kwargs):
         """
-        GetAXEventDesc(int idx) -> FuncX
+        GetAXEventDesc(self, int idx) -> FuncX
 
         Returns event description by index
         """
@@ -249,7 +250,7 @@ class ActiveXWindow(core.Window):
 
     def GetAXPropCount(*args, **kwargs):
         """
-        GetAXPropCount() -> int
+        GetAXPropCount(self) -> int
 
         Number of properties defined for this control
         """
@@ -257,14 +258,14 @@ class ActiveXWindow(core.Window):
 
     def GetAXPropDesc(*args):
         """
-        GetAXPropDesc(int idx) -> PropX
-        GetAXPropDesc(String name) -> PropX
+        GetAXPropDesc(self, int idx) -> PropX
+        GetAXPropDesc(self, String name) -> PropX
         """
         return _activex.ActiveXWindow_GetAXPropDesc(*args)
 
     def GetAXMethodCount(*args, **kwargs):
         """
-        GetAXMethodCount() -> int
+        GetAXMethodCount(self) -> int
 
         Number of methods defined for this control
         """
@@ -272,14 +273,14 @@ class ActiveXWindow(core.Window):
 
     def GetAXMethodDesc(*args):
         """
-        GetAXMethodDesc(int idx) -> FuncX
-        GetAXMethodDesc(String name) -> FuncX
+        GetAXMethodDesc(self, int idx) -> FuncX
+        GetAXMethodDesc(self, String name) -> FuncX
         """
         return _activex.ActiveXWindow_GetAXMethodDesc(*args)
 
     def GetAXEvents(*args, **kwargs):
         """
-        GetAXEvents() -> FuncXArray
+        GetAXEvents(self) -> FuncXArray
 
         Returns a sequence of FuncX objects describing the events
         available for this ActiveX object.
@@ -288,7 +289,7 @@ class ActiveXWindow(core.Window):
 
     def GetAXMethods(*args, **kwargs):
         """
-        GetAXMethods() -> FuncXArray
+        GetAXMethods(self) -> FuncXArray
 
         Returns a sequence of FuncX objects describing the methods
         available for this ActiveX object.
@@ -297,7 +298,7 @@ class ActiveXWindow(core.Window):
 
     def GetAXProperties(*args, **kwargs):
         """
-        GetAXProperties() -> PropXArray
+        GetAXProperties(self) -> PropXArray
 
         Returns a sequence of PropX objects describing the properties
         available for this ActiveX object.
@@ -306,7 +307,7 @@ class ActiveXWindow(core.Window):
 
     def SetAXProp(*args, **kwargs):
         """
-        SetAXProp(String name, PyObject value)
+        SetAXProp(self, String name, PyObject value)
 
         Set a property of the ActiveX object by name.
         """
@@ -314,7 +315,7 @@ class ActiveXWindow(core.Window):
 
     def GetAXProp(*args, **kwargs):
         """
-        GetAXProp(String name) -> PyObject
+        GetAXProp(self, String name) -> PyObject
 
         Get the value of an ActiveX property by name.
         """
@@ -322,7 +323,7 @@ class ActiveXWindow(core.Window):
 
     def _CallAXMethod(*args):
         """
-        _CallAXMethod(String name, PyObject args) -> PyObject
+        _CallAXMethod(self, String name, PyObject args) -> PyObject
 
         The implementation for CallMethod.  Calls an ActiveX method, by
         name passing the parameters given in args.
@@ -368,11 +369,11 @@ class ActiveXEvent(core.CommandEvent):
     eventName = property(_activex.ActiveXEvent_EventName)
 
     def _preCallInit(*args, **kwargs):
-        """_preCallInit(PyObject pyself)"""
+        """_preCallInit(self, PyObject pyself)"""
         return _activex.ActiveXEvent__preCallInit(*args, **kwargs)
 
     def _postCallCleanup(*args, **kwargs):
-        """_postCallCleanup(PyObject pyself)"""
+        """_postCallCleanup(self, PyObject pyself)"""
         return _activex.ActiveXEvent__postCallCleanup(*args, **kwargs)
 
 

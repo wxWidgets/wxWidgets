@@ -424,7 +424,7 @@ PyObject *wxCalendarCtrl_HitTest(wxCalendarCtrl *self,wxPoint const &pos){
 #ifdef __cplusplus
 extern "C" {
 #endif
-static PyObject *_wrap_new_CalendarDateAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_CalendarDateAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour const &arg1_defvalue = wxNullColour ;
     wxColour *arg1 = (wxColour *) &arg1_defvalue ;
@@ -494,7 +494,7 @@ static PyObject *_wrap_new_CalendarDateAttr(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_SetTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_SetTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     wxColour *arg2 = 0 ;
@@ -526,7 +526,7 @@ static PyObject *_wrap_CalendarDateAttr_SetTextColour(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_SetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_SetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     wxColour *arg2 = 0 ;
@@ -558,7 +558,7 @@ static PyObject *_wrap_CalendarDateAttr_SetBackgroundColour(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_SetBorderColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_SetBorderColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     wxColour *arg2 = 0 ;
@@ -590,7 +590,7 @@ static PyObject *_wrap_CalendarDateAttr_SetBorderColour(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_SetFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_SetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     wxFont *arg2 = 0 ;
@@ -624,7 +624,7 @@ static PyObject *_wrap_CalendarDateAttr_SetFont(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_SetBorder(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_SetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     int arg2 ;
@@ -653,7 +653,7 @@ static PyObject *_wrap_CalendarDateAttr_SetBorder(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_SetHoliday(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_SetHoliday(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     bool arg2 ;
@@ -682,7 +682,7 @@ static PyObject *_wrap_CalendarDateAttr_SetHoliday(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_HasTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_HasTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     bool result;
@@ -710,7 +710,7 @@ static PyObject *_wrap_CalendarDateAttr_HasTextColour(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_HasBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_HasBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     bool result;
@@ -738,7 +738,7 @@ static PyObject *_wrap_CalendarDateAttr_HasBackgroundColour(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_HasBorderColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_HasBorderColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     bool result;
@@ -766,7 +766,7 @@ static PyObject *_wrap_CalendarDateAttr_HasBorderColour(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_HasFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_HasFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     bool result;
@@ -794,7 +794,7 @@ static PyObject *_wrap_CalendarDateAttr_HasFont(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_HasBorder(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_HasBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     bool result;
@@ -822,7 +822,7 @@ static PyObject *_wrap_CalendarDateAttr_HasBorder(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_IsHoliday(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_IsHoliday(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     bool result;
@@ -850,7 +850,7 @@ static PyObject *_wrap_CalendarDateAttr_IsHoliday(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_GetTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_GetTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     wxColour result;
@@ -880,7 +880,7 @@ static PyObject *_wrap_CalendarDateAttr_GetTextColour(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_GetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_GetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     wxColour result;
@@ -910,7 +910,7 @@ static PyObject *_wrap_CalendarDateAttr_GetBackgroundColour(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_GetBorderColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_GetBorderColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     wxColour result;
@@ -940,7 +940,7 @@ static PyObject *_wrap_CalendarDateAttr_GetBorderColour(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_GetFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_GetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     wxFont result;
@@ -970,7 +970,7 @@ static PyObject *_wrap_CalendarDateAttr_GetFont(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_CalendarDateAttr_GetBorder(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarDateAttr_GetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarDateAttr *arg1 = (wxCalendarDateAttr *) 0 ;
     int result;
@@ -996,14 +996,14 @@ static PyObject *_wrap_CalendarDateAttr_GetBorder(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * CalendarDateAttr_swigregister(PyObject *, PyObject *args) {
+static PyObject * CalendarDateAttr_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxCalendarDateAttr, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_CalendarEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_CalendarEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxEventType arg2 ;
@@ -1033,7 +1033,7 @@ static PyObject *_wrap_new_CalendarEvent(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_CalendarEvent_GetDate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarEvent_GetDate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarEvent *arg1 = (wxCalendarEvent *) 0 ;
     wxDateTime result;
@@ -1063,7 +1063,7 @@ static PyObject *_wrap_CalendarEvent_GetDate(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_CalendarEvent_SetDate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarEvent_SetDate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarEvent *arg1 = (wxCalendarEvent *) 0 ;
     wxDateTime *arg2 = 0 ;
@@ -1097,7 +1097,7 @@ static PyObject *_wrap_CalendarEvent_SetDate(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_CalendarEvent_SetWeekDay(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarEvent_SetWeekDay(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarEvent *arg1 = (wxCalendarEvent *) 0 ;
     int arg2 ;
@@ -1126,7 +1126,7 @@ static PyObject *_wrap_CalendarEvent_SetWeekDay(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_CalendarEvent_GetWeekDay(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarEvent_GetWeekDay(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarEvent *arg1 = (wxCalendarEvent *) 0 ;
     int result;
@@ -1152,14 +1152,14 @@ static PyObject *_wrap_CalendarEvent_GetWeekDay(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * CalendarEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * CalendarEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxCalendarEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static int _wrap_CalendarNameStr_set(PyObject *) {
+static int _wrap_CalendarNameStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable CalendarNameStr is read-only.");
     return 1;
 }
@@ -1179,10 +1179,10 @@ static PyObject *_wrap_CalendarNameStr_get() {
 }
 
 
-static PyObject *_wrap_new_CalendarCtrl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) -1 ;
     wxDateTime const &arg3_defvalue = wxDefaultDateTime ;
     wxDateTime *arg3 = (wxDateTime *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
@@ -1207,11 +1207,13 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *, PyObject *args, PyObject *kw
         (char *) "parent",(char *) "id",(char *) "date",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:new_CalendarCtrl",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:new_CalendarCtrl",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxDateTime,
         SWIG_POINTER_EXCEPTION | 0)) == -1)
@@ -1266,7 +1268,7 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_new_PreCalendarCtrl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PreCalendarCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *result;
     char *kwnames[] = {
@@ -1288,7 +1290,7 @@ static PyObject *_wrap_new_PreCalendarCtrl(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_CalendarCtrl_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1381,7 +1383,7 @@ static PyObject *_wrap_CalendarCtrl_Create(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_CalendarCtrl_SetDate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_SetDate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxDateTime *arg2 = 0 ;
@@ -1415,7 +1417,7 @@ static PyObject *_wrap_CalendarCtrl_SetDate(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetDate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetDate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxDateTime *result;
@@ -1444,7 +1446,7 @@ static PyObject *_wrap_CalendarCtrl_GetDate(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_CalendarCtrl_SetLowerDateLimit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_SetLowerDateLimit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxDateTime const &arg2_defvalue = wxDefaultDateTime ;
@@ -1484,7 +1486,7 @@ static PyObject *_wrap_CalendarCtrl_SetLowerDateLimit(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarCtrl_SetUpperDateLimit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_SetUpperDateLimit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxDateTime const &arg2_defvalue = wxDefaultDateTime ;
@@ -1524,7 +1526,7 @@ static PyObject *_wrap_CalendarCtrl_SetUpperDateLimit(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetLowerDateLimit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetLowerDateLimit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxDateTime *result;
@@ -1553,7 +1555,7 @@ static PyObject *_wrap_CalendarCtrl_GetLowerDateLimit(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetUpperDateLimit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetUpperDateLimit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxDateTime *result;
@@ -1582,7 +1584,7 @@ static PyObject *_wrap_CalendarCtrl_GetUpperDateLimit(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarCtrl_SetDateRange(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_SetDateRange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxDateTime const &arg2_defvalue = wxDefaultDateTime ;
@@ -1634,7 +1636,7 @@ static PyObject *_wrap_CalendarCtrl_SetDateRange(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_CalendarCtrl_EnableYearChange(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_EnableYearChange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     bool arg2 = (bool) True ;
@@ -1665,7 +1667,7 @@ static PyObject *_wrap_CalendarCtrl_EnableYearChange(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_CalendarCtrl_EnableMonthChange(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_EnableMonthChange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     bool arg2 = (bool) True ;
@@ -1696,7 +1698,7 @@ static PyObject *_wrap_CalendarCtrl_EnableMonthChange(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarCtrl_EnableHolidayDisplay(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_EnableHolidayDisplay(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     bool arg2 = (bool) True ;
@@ -1727,7 +1729,7 @@ static PyObject *_wrap_CalendarCtrl_EnableHolidayDisplay(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_CalendarCtrl_SetHeaderColours(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_SetHeaderColours(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxColour *arg2 = 0 ;
@@ -1766,7 +1768,7 @@ static PyObject *_wrap_CalendarCtrl_SetHeaderColours(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetHeaderColourFg(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetHeaderColourFg(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxColour result;
@@ -1796,7 +1798,7 @@ static PyObject *_wrap_CalendarCtrl_GetHeaderColourFg(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetHeaderColourBg(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetHeaderColourBg(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxColour result;
@@ -1826,7 +1828,7 @@ static PyObject *_wrap_CalendarCtrl_GetHeaderColourBg(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarCtrl_SetHighlightColours(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_SetHighlightColours(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxColour *arg2 = 0 ;
@@ -1865,7 +1867,7 @@ static PyObject *_wrap_CalendarCtrl_SetHighlightColours(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetHighlightColourFg(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetHighlightColourFg(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxColour result;
@@ -1895,7 +1897,7 @@ static PyObject *_wrap_CalendarCtrl_GetHighlightColourFg(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetHighlightColourBg(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetHighlightColourBg(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxColour result;
@@ -1925,7 +1927,7 @@ static PyObject *_wrap_CalendarCtrl_GetHighlightColourBg(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_CalendarCtrl_SetHolidayColours(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_SetHolidayColours(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxColour *arg2 = 0 ;
@@ -1964,7 +1966,7 @@ static PyObject *_wrap_CalendarCtrl_SetHolidayColours(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetHolidayColourFg(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetHolidayColourFg(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxColour result;
@@ -1994,7 +1996,7 @@ static PyObject *_wrap_CalendarCtrl_GetHolidayColourFg(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetHolidayColourBg(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetHolidayColourBg(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxColour result;
@@ -2024,7 +2026,7 @@ static PyObject *_wrap_CalendarCtrl_GetHolidayColourBg(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     size_t arg2 ;
@@ -2054,7 +2056,7 @@ static PyObject *_wrap_CalendarCtrl_GetAttr(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_CalendarCtrl_SetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_SetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     size_t arg2 ;
@@ -2087,7 +2089,7 @@ static PyObject *_wrap_CalendarCtrl_SetAttr(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_CalendarCtrl_SetHoliday(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_SetHoliday(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     size_t arg2 ;
@@ -2116,7 +2118,7 @@ static PyObject *_wrap_CalendarCtrl_SetHoliday(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_CalendarCtrl_ResetAttr(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_ResetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     size_t arg2 ;
@@ -2145,7 +2147,7 @@ static PyObject *_wrap_CalendarCtrl_ResetAttr(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_CalendarCtrl_HitTest(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_HitTest(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -2178,7 +2180,7 @@ static PyObject *_wrap_CalendarCtrl_HitTest(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetMonthControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetMonthControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxControl *result;
@@ -2206,7 +2208,7 @@ static PyObject *_wrap_CalendarCtrl_GetMonthControl(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_CalendarCtrl_GetYearControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CalendarCtrl_GetYearControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxControl *result;
@@ -2234,7 +2236,7 @@ static PyObject *_wrap_CalendarCtrl_GetYearControl(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * CalendarCtrl_swigregister(PyObject *, PyObject *args) {
+static PyObject * CalendarCtrl_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxCalendarCtrl, obj);
@@ -2242,62 +2244,62 @@ static PyObject * CalendarCtrl_swigregister(PyObject *, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"new_CalendarDateAttr", (PyCFunction) _wrap_new_CalendarDateAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_SetTextColour", (PyCFunction) _wrap_CalendarDateAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_SetBackgroundColour", (PyCFunction) _wrap_CalendarDateAttr_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_SetBorderColour", (PyCFunction) _wrap_CalendarDateAttr_SetBorderColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_SetFont", (PyCFunction) _wrap_CalendarDateAttr_SetFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_SetBorder", (PyCFunction) _wrap_CalendarDateAttr_SetBorder, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_SetHoliday", (PyCFunction) _wrap_CalendarDateAttr_SetHoliday, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_HasTextColour", (PyCFunction) _wrap_CalendarDateAttr_HasTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_HasBackgroundColour", (PyCFunction) _wrap_CalendarDateAttr_HasBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_HasBorderColour", (PyCFunction) _wrap_CalendarDateAttr_HasBorderColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_HasFont", (PyCFunction) _wrap_CalendarDateAttr_HasFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_HasBorder", (PyCFunction) _wrap_CalendarDateAttr_HasBorder, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_IsHoliday", (PyCFunction) _wrap_CalendarDateAttr_IsHoliday, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_GetTextColour", (PyCFunction) _wrap_CalendarDateAttr_GetTextColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_GetBackgroundColour", (PyCFunction) _wrap_CalendarDateAttr_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_GetBorderColour", (PyCFunction) _wrap_CalendarDateAttr_GetBorderColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_GetFont", (PyCFunction) _wrap_CalendarDateAttr_GetFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_GetBorder", (PyCFunction) _wrap_CalendarDateAttr_GetBorder, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarDateAttr_swigregister", CalendarDateAttr_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_CalendarEvent", (PyCFunction) _wrap_new_CalendarEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarEvent_GetDate", (PyCFunction) _wrap_CalendarEvent_GetDate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarEvent_SetDate", (PyCFunction) _wrap_CalendarEvent_SetDate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarEvent_SetWeekDay", (PyCFunction) _wrap_CalendarEvent_SetWeekDay, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarEvent_GetWeekDay", (PyCFunction) _wrap_CalendarEvent_GetWeekDay, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarEvent_swigregister", CalendarEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_CalendarCtrl", (PyCFunction) _wrap_new_CalendarCtrl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_PreCalendarCtrl", (PyCFunction) _wrap_new_PreCalendarCtrl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_Create", (PyCFunction) _wrap_CalendarCtrl_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_SetDate", (PyCFunction) _wrap_CalendarCtrl_SetDate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetDate", (PyCFunction) _wrap_CalendarCtrl_GetDate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_SetLowerDateLimit", (PyCFunction) _wrap_CalendarCtrl_SetLowerDateLimit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_SetUpperDateLimit", (PyCFunction) _wrap_CalendarCtrl_SetUpperDateLimit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetLowerDateLimit", (PyCFunction) _wrap_CalendarCtrl_GetLowerDateLimit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetUpperDateLimit", (PyCFunction) _wrap_CalendarCtrl_GetUpperDateLimit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_SetDateRange", (PyCFunction) _wrap_CalendarCtrl_SetDateRange, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_EnableYearChange", (PyCFunction) _wrap_CalendarCtrl_EnableYearChange, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_EnableMonthChange", (PyCFunction) _wrap_CalendarCtrl_EnableMonthChange, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_EnableHolidayDisplay", (PyCFunction) _wrap_CalendarCtrl_EnableHolidayDisplay, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_SetHeaderColours", (PyCFunction) _wrap_CalendarCtrl_SetHeaderColours, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetHeaderColourFg", (PyCFunction) _wrap_CalendarCtrl_GetHeaderColourFg, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetHeaderColourBg", (PyCFunction) _wrap_CalendarCtrl_GetHeaderColourBg, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_SetHighlightColours", (PyCFunction) _wrap_CalendarCtrl_SetHighlightColours, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetHighlightColourFg", (PyCFunction) _wrap_CalendarCtrl_GetHighlightColourFg, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetHighlightColourBg", (PyCFunction) _wrap_CalendarCtrl_GetHighlightColourBg, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_SetHolidayColours", (PyCFunction) _wrap_CalendarCtrl_SetHolidayColours, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetHolidayColourFg", (PyCFunction) _wrap_CalendarCtrl_GetHolidayColourFg, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetHolidayColourBg", (PyCFunction) _wrap_CalendarCtrl_GetHolidayColourBg, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetAttr", (PyCFunction) _wrap_CalendarCtrl_GetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_SetAttr", (PyCFunction) _wrap_CalendarCtrl_SetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_SetHoliday", (PyCFunction) _wrap_CalendarCtrl_SetHoliday, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_ResetAttr", (PyCFunction) _wrap_CalendarCtrl_ResetAttr, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_HitTest", (PyCFunction) _wrap_CalendarCtrl_HitTest, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetMonthControl", (PyCFunction) _wrap_CalendarCtrl_GetMonthControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_GetYearControl", (PyCFunction) _wrap_CalendarCtrl_GetYearControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CalendarCtrl_swigregister", CalendarCtrl_swigregister, METH_VARARGS, NULL },
-	 { NULL, NULL, 0, NULL }
+	 { (char *)"new_CalendarDateAttr", (PyCFunction) _wrap_new_CalendarDateAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_SetTextColour", (PyCFunction) _wrap_CalendarDateAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_SetBackgroundColour", (PyCFunction) _wrap_CalendarDateAttr_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_SetBorderColour", (PyCFunction) _wrap_CalendarDateAttr_SetBorderColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_SetFont", (PyCFunction) _wrap_CalendarDateAttr_SetFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_SetBorder", (PyCFunction) _wrap_CalendarDateAttr_SetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_SetHoliday", (PyCFunction) _wrap_CalendarDateAttr_SetHoliday, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_HasTextColour", (PyCFunction) _wrap_CalendarDateAttr_HasTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_HasBackgroundColour", (PyCFunction) _wrap_CalendarDateAttr_HasBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_HasBorderColour", (PyCFunction) _wrap_CalendarDateAttr_HasBorderColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_HasFont", (PyCFunction) _wrap_CalendarDateAttr_HasFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_HasBorder", (PyCFunction) _wrap_CalendarDateAttr_HasBorder, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_IsHoliday", (PyCFunction) _wrap_CalendarDateAttr_IsHoliday, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_GetTextColour", (PyCFunction) _wrap_CalendarDateAttr_GetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_GetBackgroundColour", (PyCFunction) _wrap_CalendarDateAttr_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_GetBorderColour", (PyCFunction) _wrap_CalendarDateAttr_GetBorderColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_GetFont", (PyCFunction) _wrap_CalendarDateAttr_GetFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_GetBorder", (PyCFunction) _wrap_CalendarDateAttr_GetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarDateAttr_swigregister", CalendarDateAttr_swigregister, METH_VARARGS },
+	 { (char *)"new_CalendarEvent", (PyCFunction) _wrap_new_CalendarEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarEvent_GetDate", (PyCFunction) _wrap_CalendarEvent_GetDate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarEvent_SetDate", (PyCFunction) _wrap_CalendarEvent_SetDate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarEvent_SetWeekDay", (PyCFunction) _wrap_CalendarEvent_SetWeekDay, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarEvent_GetWeekDay", (PyCFunction) _wrap_CalendarEvent_GetWeekDay, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarEvent_swigregister", CalendarEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_CalendarCtrl", (PyCFunction) _wrap_new_CalendarCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PreCalendarCtrl", (PyCFunction) _wrap_new_PreCalendarCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_Create", (PyCFunction) _wrap_CalendarCtrl_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_SetDate", (PyCFunction) _wrap_CalendarCtrl_SetDate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetDate", (PyCFunction) _wrap_CalendarCtrl_GetDate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_SetLowerDateLimit", (PyCFunction) _wrap_CalendarCtrl_SetLowerDateLimit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_SetUpperDateLimit", (PyCFunction) _wrap_CalendarCtrl_SetUpperDateLimit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetLowerDateLimit", (PyCFunction) _wrap_CalendarCtrl_GetLowerDateLimit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetUpperDateLimit", (PyCFunction) _wrap_CalendarCtrl_GetUpperDateLimit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_SetDateRange", (PyCFunction) _wrap_CalendarCtrl_SetDateRange, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_EnableYearChange", (PyCFunction) _wrap_CalendarCtrl_EnableYearChange, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_EnableMonthChange", (PyCFunction) _wrap_CalendarCtrl_EnableMonthChange, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_EnableHolidayDisplay", (PyCFunction) _wrap_CalendarCtrl_EnableHolidayDisplay, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_SetHeaderColours", (PyCFunction) _wrap_CalendarCtrl_SetHeaderColours, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetHeaderColourFg", (PyCFunction) _wrap_CalendarCtrl_GetHeaderColourFg, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetHeaderColourBg", (PyCFunction) _wrap_CalendarCtrl_GetHeaderColourBg, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_SetHighlightColours", (PyCFunction) _wrap_CalendarCtrl_SetHighlightColours, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetHighlightColourFg", (PyCFunction) _wrap_CalendarCtrl_GetHighlightColourFg, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetHighlightColourBg", (PyCFunction) _wrap_CalendarCtrl_GetHighlightColourBg, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_SetHolidayColours", (PyCFunction) _wrap_CalendarCtrl_SetHolidayColours, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetHolidayColourFg", (PyCFunction) _wrap_CalendarCtrl_GetHolidayColourFg, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetHolidayColourBg", (PyCFunction) _wrap_CalendarCtrl_GetHolidayColourBg, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetAttr", (PyCFunction) _wrap_CalendarCtrl_GetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_SetAttr", (PyCFunction) _wrap_CalendarCtrl_SetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_SetHoliday", (PyCFunction) _wrap_CalendarCtrl_SetHoliday, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_ResetAttr", (PyCFunction) _wrap_CalendarCtrl_ResetAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_HitTest", (PyCFunction) _wrap_CalendarCtrl_HitTest, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetMonthControl", (PyCFunction) _wrap_CalendarCtrl_GetMonthControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetYearControl", (PyCFunction) _wrap_CalendarCtrl_GetYearControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_swigregister", CalendarCtrl_swigregister, METH_VARARGS },
+	 { NULL, NULL }
 };
 
 
@@ -2788,7 +2790,7 @@ _swigt__p_wxCalendarCtrl,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0, 0, 0, 0.0, 0, 0}};
+{0}};
 
 #ifdef __cplusplus
 }

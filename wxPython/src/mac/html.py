@@ -6,6 +6,7 @@ import _html
 import windows
 import core
 wx = core 
+__docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
 HTML_ALIGN_LEFT = _html.HTML_ALIGN_LEFT
@@ -48,33 +49,33 @@ class HtmlLinkInfo(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlLinkInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String href, String target=EmptyString) -> HtmlLinkInfo"""
+        """__init__(self, String href, String target=EmptyString) -> HtmlLinkInfo"""
         newobj = _html.new_HtmlLinkInfo(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetHref(*args, **kwargs):
-        """GetHref() -> String"""
+        """GetHref(self) -> String"""
         return _html.HtmlLinkInfo_GetHref(*args, **kwargs)
 
     def GetTarget(*args, **kwargs):
-        """GetTarget() -> String"""
+        """GetTarget(self) -> String"""
         return _html.HtmlLinkInfo_GetTarget(*args, **kwargs)
 
     def GetEvent(*args, **kwargs):
-        """GetEvent() -> MouseEvent"""
+        """GetEvent(self) -> MouseEvent"""
         return _html.HtmlLinkInfo_GetEvent(*args, **kwargs)
 
     def GetHtmlCell(*args, **kwargs):
-        """GetHtmlCell() -> HtmlCell"""
+        """GetHtmlCell(self) -> HtmlCell"""
         return _html.HtmlLinkInfo_GetHtmlCell(*args, **kwargs)
 
     def SetEvent(*args, **kwargs):
-        """SetEvent(MouseEvent e)"""
+        """SetEvent(self, MouseEvent e)"""
         return _html.HtmlLinkInfo_SetEvent(*args, **kwargs)
 
     def SetHtmlCell(*args, **kwargs):
-        """SetHtmlCell(HtmlCell e)"""
+        """SetHtmlCell(self, HtmlCell e)"""
         return _html.HtmlLinkInfo_SetHtmlCell(*args, **kwargs)
 
 
@@ -94,35 +95,35 @@ class HtmlTag(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlTag instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetName(*args, **kwargs):
-        """GetName() -> String"""
+        """GetName(self) -> String"""
         return _html.HtmlTag_GetName(*args, **kwargs)
 
     def HasParam(*args, **kwargs):
-        """HasParam(String par) -> bool"""
+        """HasParam(self, String par) -> bool"""
         return _html.HtmlTag_HasParam(*args, **kwargs)
 
     def GetParam(*args, **kwargs):
-        """GetParam(String par, int with_commas=False) -> String"""
+        """GetParam(self, String par, int with_commas=False) -> String"""
         return _html.HtmlTag_GetParam(*args, **kwargs)
 
     def GetAllParams(*args, **kwargs):
-        """GetAllParams() -> String"""
+        """GetAllParams(self) -> String"""
         return _html.HtmlTag_GetAllParams(*args, **kwargs)
 
     def HasEnding(*args, **kwargs):
-        """HasEnding() -> bool"""
+        """HasEnding(self) -> bool"""
         return _html.HtmlTag_HasEnding(*args, **kwargs)
 
     def GetBeginPos(*args, **kwargs):
-        """GetBeginPos() -> int"""
+        """GetBeginPos(self) -> int"""
         return _html.HtmlTag_GetBeginPos(*args, **kwargs)
 
     def GetEndPos1(*args, **kwargs):
-        """GetEndPos1() -> int"""
+        """GetEndPos1(self) -> int"""
         return _html.HtmlTag_GetEndPos1(*args, **kwargs)
 
     def GetEndPos2(*args, **kwargs):
-        """GetEndPos2() -> int"""
+        """GetEndPos2(self) -> int"""
         return _html.HtmlTag_GetEndPos2(*args, **kwargs)
 
 
@@ -138,47 +139,47 @@ class HtmlParser(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlParser instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def SetFS(*args, **kwargs):
-        """SetFS(FileSystem fs)"""
+        """SetFS(self, FileSystem fs)"""
         return _html.HtmlParser_SetFS(*args, **kwargs)
 
     def GetFS(*args, **kwargs):
-        """GetFS() -> FileSystem"""
+        """GetFS(self) -> FileSystem"""
         return _html.HtmlParser_GetFS(*args, **kwargs)
 
     def Parse(*args, **kwargs):
-        """Parse(String source) -> Object"""
+        """Parse(self, String source) -> Object"""
         return _html.HtmlParser_Parse(*args, **kwargs)
 
     def InitParser(*args, **kwargs):
-        """InitParser(String source)"""
+        """InitParser(self, String source)"""
         return _html.HtmlParser_InitParser(*args, **kwargs)
 
     def DoneParser(*args, **kwargs):
-        """DoneParser()"""
+        """DoneParser(self)"""
         return _html.HtmlParser_DoneParser(*args, **kwargs)
 
     def DoParsing(*args, **kwargs):
-        """DoParsing(int begin_pos, int end_pos)"""
+        """DoParsing(self, int begin_pos, int end_pos)"""
         return _html.HtmlParser_DoParsing(*args, **kwargs)
 
     def StopParsing(*args, **kwargs):
-        """StopParsing()"""
+        """StopParsing(self)"""
         return _html.HtmlParser_StopParsing(*args, **kwargs)
 
     def AddTagHandler(*args, **kwargs):
-        """AddTagHandler(HtmlTagHandler handler)"""
+        """AddTagHandler(self, HtmlTagHandler handler)"""
         return _html.HtmlParser_AddTagHandler(*args, **kwargs)
 
     def GetSource(*args, **kwargs):
-        """GetSource() -> String"""
+        """GetSource(self) -> String"""
         return _html.HtmlParser_GetSource(*args, **kwargs)
 
     def PushTagHandler(*args, **kwargs):
-        """PushTagHandler(HtmlTagHandler handler, String tags)"""
+        """PushTagHandler(self, HtmlTagHandler handler, String tags)"""
         return _html.HtmlParser_PushTagHandler(*args, **kwargs)
 
     def PopTagHandler(*args, **kwargs):
-        """PopTagHandler()"""
+        """PopTagHandler(self)"""
         return _html.HtmlParser_PopTagHandler(*args, **kwargs)
 
 
@@ -193,125 +194,125 @@ class HtmlWinParser(HtmlParser):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlWinParser instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(HtmlWindow wnd=None) -> HtmlWinParser"""
+        """__init__(self, HtmlWindow wnd=None) -> HtmlWinParser"""
         newobj = _html.new_HtmlWinParser(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def SetDC(*args, **kwargs):
-        """SetDC(DC dc)"""
+        """SetDC(self, DC dc)"""
         return _html.HtmlWinParser_SetDC(*args, **kwargs)
 
     def GetDC(*args, **kwargs):
-        """GetDC() -> DC"""
+        """GetDC(self) -> DC"""
         return _html.HtmlWinParser_GetDC(*args, **kwargs)
 
     def GetCharHeight(*args, **kwargs):
-        """GetCharHeight() -> int"""
+        """GetCharHeight(self) -> int"""
         return _html.HtmlWinParser_GetCharHeight(*args, **kwargs)
 
     def GetCharWidth(*args, **kwargs):
-        """GetCharWidth() -> int"""
+        """GetCharWidth(self) -> int"""
         return _html.HtmlWinParser_GetCharWidth(*args, **kwargs)
 
     def GetWindow(*args, **kwargs):
-        """GetWindow() -> HtmlWindow"""
+        """GetWindow(self) -> HtmlWindow"""
         return _html.HtmlWinParser_GetWindow(*args, **kwargs)
 
     def SetFonts(*args, **kwargs):
-        """SetFonts(String normal_face, String fixed_face, PyObject sizes=None)"""
+        """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlWinParser_SetFonts(*args, **kwargs)
 
     def GetContainer(*args, **kwargs):
-        """GetContainer() -> HtmlContainerCell"""
+        """GetContainer(self) -> HtmlContainerCell"""
         return _html.HtmlWinParser_GetContainer(*args, **kwargs)
 
     def OpenContainer(*args, **kwargs):
-        """OpenContainer() -> HtmlContainerCell"""
+        """OpenContainer(self) -> HtmlContainerCell"""
         return _html.HtmlWinParser_OpenContainer(*args, **kwargs)
 
     def SetContainer(*args, **kwargs):
-        """SetContainer(HtmlContainerCell c) -> HtmlContainerCell"""
+        """SetContainer(self, HtmlContainerCell c) -> HtmlContainerCell"""
         return _html.HtmlWinParser_SetContainer(*args, **kwargs)
 
     def CloseContainer(*args, **kwargs):
-        """CloseContainer() -> HtmlContainerCell"""
+        """CloseContainer(self) -> HtmlContainerCell"""
         return _html.HtmlWinParser_CloseContainer(*args, **kwargs)
 
     def GetFontSize(*args, **kwargs):
-        """GetFontSize() -> int"""
+        """GetFontSize(self) -> int"""
         return _html.HtmlWinParser_GetFontSize(*args, **kwargs)
 
     def SetFontSize(*args, **kwargs):
-        """SetFontSize(int s)"""
+        """SetFontSize(self, int s)"""
         return _html.HtmlWinParser_SetFontSize(*args, **kwargs)
 
     def GetFontBold(*args, **kwargs):
-        """GetFontBold() -> int"""
+        """GetFontBold(self) -> int"""
         return _html.HtmlWinParser_GetFontBold(*args, **kwargs)
 
     def SetFontBold(*args, **kwargs):
-        """SetFontBold(int x)"""
+        """SetFontBold(self, int x)"""
         return _html.HtmlWinParser_SetFontBold(*args, **kwargs)
 
     def GetFontItalic(*args, **kwargs):
-        """GetFontItalic() -> int"""
+        """GetFontItalic(self) -> int"""
         return _html.HtmlWinParser_GetFontItalic(*args, **kwargs)
 
     def SetFontItalic(*args, **kwargs):
-        """SetFontItalic(int x)"""
+        """SetFontItalic(self, int x)"""
         return _html.HtmlWinParser_SetFontItalic(*args, **kwargs)
 
     def GetFontUnderlined(*args, **kwargs):
-        """GetFontUnderlined() -> int"""
+        """GetFontUnderlined(self) -> int"""
         return _html.HtmlWinParser_GetFontUnderlined(*args, **kwargs)
 
     def SetFontUnderlined(*args, **kwargs):
-        """SetFontUnderlined(int x)"""
+        """SetFontUnderlined(self, int x)"""
         return _html.HtmlWinParser_SetFontUnderlined(*args, **kwargs)
 
     def GetFontFixed(*args, **kwargs):
-        """GetFontFixed() -> int"""
+        """GetFontFixed(self) -> int"""
         return _html.HtmlWinParser_GetFontFixed(*args, **kwargs)
 
     def SetFontFixed(*args, **kwargs):
-        """SetFontFixed(int x)"""
+        """SetFontFixed(self, int x)"""
         return _html.HtmlWinParser_SetFontFixed(*args, **kwargs)
 
     def GetAlign(*args, **kwargs):
-        """GetAlign() -> int"""
+        """GetAlign(self) -> int"""
         return _html.HtmlWinParser_GetAlign(*args, **kwargs)
 
     def SetAlign(*args, **kwargs):
-        """SetAlign(int a)"""
+        """SetAlign(self, int a)"""
         return _html.HtmlWinParser_SetAlign(*args, **kwargs)
 
     def GetLinkColor(*args, **kwargs):
-        """GetLinkColor() -> Colour"""
+        """GetLinkColor(self) -> Colour"""
         return _html.HtmlWinParser_GetLinkColor(*args, **kwargs)
 
     def SetLinkColor(*args, **kwargs):
-        """SetLinkColor(Colour clr)"""
+        """SetLinkColor(self, Colour clr)"""
         return _html.HtmlWinParser_SetLinkColor(*args, **kwargs)
 
     def GetActualColor(*args, **kwargs):
-        """GetActualColor() -> Colour"""
+        """GetActualColor(self) -> Colour"""
         return _html.HtmlWinParser_GetActualColor(*args, **kwargs)
 
     def SetActualColor(*args, **kwargs):
-        """SetActualColor(Colour clr)"""
+        """SetActualColor(self, Colour clr)"""
         return _html.HtmlWinParser_SetActualColor(*args, **kwargs)
 
     def SetLink(*args, **kwargs):
-        """SetLink(String link)"""
+        """SetLink(self, String link)"""
         return _html.HtmlWinParser_SetLink(*args, **kwargs)
 
     def CreateCurrentFont(*args, **kwargs):
-        """CreateCurrentFont() -> Font"""
+        """CreateCurrentFont(self) -> Font"""
         return _html.HtmlWinParser_CreateCurrentFont(*args, **kwargs)
 
     def GetLink(*args, **kwargs):
-        """GetLink() -> HtmlLinkInfo"""
+        """GetLink(self) -> HtmlLinkInfo"""
         return _html.HtmlWinParser_GetLink(*args, **kwargs)
 
 
@@ -326,7 +327,7 @@ class HtmlTagHandler(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlTagHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> HtmlTagHandler"""
+        """__init__(self) -> HtmlTagHandler"""
         newobj = _html.new_HtmlTagHandler(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -334,19 +335,19 @@ class HtmlTagHandler(core.Object):
         self._setCallbackInfo(self, HtmlTagHandler)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _html.HtmlTagHandler__setCallbackInfo(*args, **kwargs)
 
     def SetParser(*args, **kwargs):
-        """SetParser(HtmlParser parser)"""
+        """SetParser(self, HtmlParser parser)"""
         return _html.HtmlTagHandler_SetParser(*args, **kwargs)
 
     def GetParser(*args, **kwargs):
-        """GetParser() -> HtmlParser"""
+        """GetParser(self) -> HtmlParser"""
         return _html.HtmlTagHandler_GetParser(*args, **kwargs)
 
     def ParseInner(*args, **kwargs):
-        """ParseInner(HtmlTag tag)"""
+        """ParseInner(self, HtmlTag tag)"""
         return _html.HtmlTagHandler_ParseInner(*args, **kwargs)
 
 
@@ -361,7 +362,7 @@ class HtmlWinTagHandler(HtmlTagHandler):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlWinTagHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> HtmlWinTagHandler"""
+        """__init__(self) -> HtmlWinTagHandler"""
         newobj = _html.new_HtmlWinTagHandler(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -369,19 +370,19 @@ class HtmlWinTagHandler(HtmlTagHandler):
         self._setCallbackInfo(self, HtmlWinTagHandler)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _html.HtmlWinTagHandler__setCallbackInfo(*args, **kwargs)
 
     def SetParser(*args, **kwargs):
-        """SetParser(HtmlParser parser)"""
+        """SetParser(self, HtmlParser parser)"""
         return _html.HtmlWinTagHandler_SetParser(*args, **kwargs)
 
     def GetParser(*args, **kwargs):
-        """GetParser() -> HtmlWinParser"""
+        """GetParser(self) -> HtmlWinParser"""
         return _html.HtmlWinTagHandler_GetParser(*args, **kwargs)
 
     def ParseInner(*args, **kwargs):
-        """ParseInner(HtmlTag tag)"""
+        """ParseInner(self, HtmlTag tag)"""
         return _html.HtmlWinTagHandler_ParseInner(*args, **kwargs)
 
 
@@ -402,63 +403,63 @@ class HtmlSelection(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlSelection instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> HtmlSelection"""
+        """__init__(self) -> HtmlSelection"""
         newobj = _html.new_HtmlSelection(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_html.delete_HtmlSelection):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def Set(*args, **kwargs):
-        """Set(Point fromPos, HtmlCell fromCell, Point toPos, HtmlCell toCell)"""
+        """Set(self, Point fromPos, HtmlCell fromCell, Point toPos, HtmlCell toCell)"""
         return _html.HtmlSelection_Set(*args, **kwargs)
 
     def SetCells(*args, **kwargs):
-        """SetCells(HtmlCell fromCell, HtmlCell toCell)"""
+        """SetCells(self, HtmlCell fromCell, HtmlCell toCell)"""
         return _html.HtmlSelection_SetCells(*args, **kwargs)
 
     def GetFromCell(*args, **kwargs):
-        """GetFromCell() -> HtmlCell"""
+        """GetFromCell(self) -> HtmlCell"""
         return _html.HtmlSelection_GetFromCell(*args, **kwargs)
 
     def GetToCell(*args, **kwargs):
-        """GetToCell() -> HtmlCell"""
+        """GetToCell(self) -> HtmlCell"""
         return _html.HtmlSelection_GetToCell(*args, **kwargs)
 
     def GetFromPos(*args, **kwargs):
-        """GetFromPos() -> Point"""
+        """GetFromPos(self) -> Point"""
         return _html.HtmlSelection_GetFromPos(*args, **kwargs)
 
     def GetToPos(*args, **kwargs):
-        """GetToPos() -> Point"""
+        """GetToPos(self) -> Point"""
         return _html.HtmlSelection_GetToPos(*args, **kwargs)
 
     def GetFromPrivPos(*args, **kwargs):
-        """GetFromPrivPos() -> Point"""
+        """GetFromPrivPos(self) -> Point"""
         return _html.HtmlSelection_GetFromPrivPos(*args, **kwargs)
 
     def GetToPrivPos(*args, **kwargs):
-        """GetToPrivPos() -> Point"""
+        """GetToPrivPos(self) -> Point"""
         return _html.HtmlSelection_GetToPrivPos(*args, **kwargs)
 
     def SetFromPrivPos(*args, **kwargs):
-        """SetFromPrivPos(Point pos)"""
+        """SetFromPrivPos(self, Point pos)"""
         return _html.HtmlSelection_SetFromPrivPos(*args, **kwargs)
 
     def SetToPrivPos(*args, **kwargs):
-        """SetToPrivPos(Point pos)"""
+        """SetToPrivPos(self, Point pos)"""
         return _html.HtmlSelection_SetToPrivPos(*args, **kwargs)
 
     def ClearPrivPos(*args, **kwargs):
-        """ClearPrivPos()"""
+        """ClearPrivPos(self)"""
         return _html.HtmlSelection_ClearPrivPos(*args, **kwargs)
 
     def IsEmpty(*args, **kwargs):
-        """IsEmpty() -> bool"""
+        """IsEmpty(self) -> bool"""
         return _html.HtmlSelection_IsEmpty(*args, **kwargs)
 
 
@@ -476,39 +477,39 @@ class HtmlRenderingState(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlRenderingState instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> HtmlRenderingState"""
+        """__init__(self) -> HtmlRenderingState"""
         newobj = _html.new_HtmlRenderingState(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_html.delete_HtmlRenderingState):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def SetSelectionState(*args, **kwargs):
-        """SetSelectionState(int s)"""
+        """SetSelectionState(self, int s)"""
         return _html.HtmlRenderingState_SetSelectionState(*args, **kwargs)
 
     def GetSelectionState(*args, **kwargs):
-        """GetSelectionState() -> int"""
+        """GetSelectionState(self) -> int"""
         return _html.HtmlRenderingState_GetSelectionState(*args, **kwargs)
 
     def SetFgColour(*args, **kwargs):
-        """SetFgColour(Colour c)"""
+        """SetFgColour(self, Colour c)"""
         return _html.HtmlRenderingState_SetFgColour(*args, **kwargs)
 
     def GetFgColour(*args, **kwargs):
-        """GetFgColour() -> Colour"""
+        """GetFgColour(self) -> Colour"""
         return _html.HtmlRenderingState_GetFgColour(*args, **kwargs)
 
     def SetBgColour(*args, **kwargs):
-        """SetBgColour(Colour c)"""
+        """SetBgColour(self, Colour c)"""
         return _html.HtmlRenderingState_SetBgColour(*args, **kwargs)
 
     def GetBgColour(*args, **kwargs):
-        """GetBgColour() -> Colour"""
+        """GetBgColour(self) -> Colour"""
         return _html.HtmlRenderingState_GetBgColour(*args, **kwargs)
 
 
@@ -524,11 +525,11 @@ class HtmlRenderingStyle(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlRenderingStyle instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetSelectedTextColour(*args, **kwargs):
-        """GetSelectedTextColour(Colour clr) -> Colour"""
+        """GetSelectedTextColour(self, Colour clr) -> Colour"""
         return _html.HtmlRenderingStyle_GetSelectedTextColour(*args, **kwargs)
 
     def GetSelectedTextBgColour(*args, **kwargs):
-        """GetSelectedTextBgColour(Colour clr) -> Colour"""
+        """GetSelectedTextBgColour(self, Colour clr) -> Colour"""
         return _html.HtmlRenderingStyle_GetSelectedTextBgColour(*args, **kwargs)
 
 
@@ -544,11 +545,11 @@ class DefaultHtmlRenderingStyle(HtmlRenderingStyle):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDefaultHtmlRenderingStyle instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetSelectedTextColour(*args, **kwargs):
-        """GetSelectedTextColour(Colour clr) -> Colour"""
+        """GetSelectedTextColour(self, Colour clr) -> Colour"""
         return _html.DefaultHtmlRenderingStyle_GetSelectedTextColour(*args, **kwargs)
 
     def GetSelectedTextBgColour(*args, **kwargs):
-        """GetSelectedTextBgColour(Colour clr) -> Colour"""
+        """GetSelectedTextBgColour(self, Colour clr) -> Colour"""
         return _html.DefaultHtmlRenderingStyle_GetSelectedTextBgColour(*args, **kwargs)
 
 
@@ -563,35 +564,35 @@ class HtmlRenderingInfo(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlRenderingInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> HtmlRenderingInfo"""
+        """__init__(self) -> HtmlRenderingInfo"""
         newobj = _html.new_HtmlRenderingInfo(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_html.delete_HtmlRenderingInfo):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def SetSelection(*args, **kwargs):
-        """SetSelection(HtmlSelection s)"""
+        """SetSelection(self, HtmlSelection s)"""
         return _html.HtmlRenderingInfo_SetSelection(*args, **kwargs)
 
     def GetSelection(*args, **kwargs):
-        """GetSelection() -> HtmlSelection"""
+        """GetSelection(self) -> HtmlSelection"""
         return _html.HtmlRenderingInfo_GetSelection(*args, **kwargs)
 
     def SetStyle(*args, **kwargs):
-        """SetStyle(HtmlRenderingStyle style)"""
+        """SetStyle(self, HtmlRenderingStyle style)"""
         return _html.HtmlRenderingInfo_SetStyle(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle() -> HtmlRenderingStyle"""
+        """GetStyle(self) -> HtmlRenderingStyle"""
         return _html.HtmlRenderingInfo_GetStyle(*args, **kwargs)
 
     def GetState(*args, **kwargs):
-        """GetState() -> HtmlRenderingState"""
+        """GetState(self) -> HtmlRenderingState"""
         return _html.HtmlRenderingInfo_GetState(*args, **kwargs)
 
 
@@ -611,141 +612,141 @@ class HtmlCell(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> HtmlCell"""
+        """__init__(self) -> HtmlCell"""
         newobj = _html.new_HtmlCell(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetPosX(*args, **kwargs):
-        """GetPosX() -> int"""
+        """GetPosX(self) -> int"""
         return _html.HtmlCell_GetPosX(*args, **kwargs)
 
     def GetPosY(*args, **kwargs):
-        """GetPosY() -> int"""
+        """GetPosY(self) -> int"""
         return _html.HtmlCell_GetPosY(*args, **kwargs)
 
     def GetWidth(*args, **kwargs):
-        """GetWidth() -> int"""
+        """GetWidth(self) -> int"""
         return _html.HtmlCell_GetWidth(*args, **kwargs)
 
     def GetHeight(*args, **kwargs):
-        """GetHeight() -> int"""
+        """GetHeight(self) -> int"""
         return _html.HtmlCell_GetHeight(*args, **kwargs)
 
     def GetDescent(*args, **kwargs):
-        """GetDescent() -> int"""
+        """GetDescent(self) -> int"""
         return _html.HtmlCell_GetDescent(*args, **kwargs)
 
     def GetMaxTotalWidth(*args, **kwargs):
-        """GetMaxTotalWidth() -> int"""
+        """GetMaxTotalWidth(self) -> int"""
         return _html.HtmlCell_GetMaxTotalWidth(*args, **kwargs)
 
     def GetId(*args, **kwargs):
-        """GetId() -> String"""
+        """GetId(self) -> String"""
         return _html.HtmlCell_GetId(*args, **kwargs)
 
     def SetId(*args, **kwargs):
-        """SetId(String id)"""
+        """SetId(self, String id)"""
         return _html.HtmlCell_SetId(*args, **kwargs)
 
     def GetLink(*args, **kwargs):
-        """GetLink(int x=0, int y=0) -> HtmlLinkInfo"""
+        """GetLink(self, int x=0, int y=0) -> HtmlLinkInfo"""
         return _html.HtmlCell_GetLink(*args, **kwargs)
 
     def GetNext(*args, **kwargs):
-        """GetNext() -> HtmlCell"""
+        """GetNext(self) -> HtmlCell"""
         return _html.HtmlCell_GetNext(*args, **kwargs)
 
     def GetParent(*args, **kwargs):
-        """GetParent() -> HtmlContainerCell"""
+        """GetParent(self) -> HtmlContainerCell"""
         return _html.HtmlCell_GetParent(*args, **kwargs)
 
     def GetFirstChild(*args, **kwargs):
-        """GetFirstChild() -> HtmlCell"""
+        """GetFirstChild(self) -> HtmlCell"""
         return _html.HtmlCell_GetFirstChild(*args, **kwargs)
 
     def GetCursor(*args, **kwargs):
-        """GetCursor() -> Cursor"""
+        """GetCursor(self) -> Cursor"""
         return _html.HtmlCell_GetCursor(*args, **kwargs)
 
     def IsFormattingCell(*args, **kwargs):
-        """IsFormattingCell() -> bool"""
+        """IsFormattingCell(self) -> bool"""
         return _html.HtmlCell_IsFormattingCell(*args, **kwargs)
 
     def SetLink(*args, **kwargs):
-        """SetLink(HtmlLinkInfo link)"""
+        """SetLink(self, HtmlLinkInfo link)"""
         return _html.HtmlCell_SetLink(*args, **kwargs)
 
     def SetNext(*args, **kwargs):
-        """SetNext(HtmlCell cell)"""
+        """SetNext(self, HtmlCell cell)"""
         return _html.HtmlCell_SetNext(*args, **kwargs)
 
     def SetParent(*args, **kwargs):
-        """SetParent(HtmlContainerCell p)"""
+        """SetParent(self, HtmlContainerCell p)"""
         return _html.HtmlCell_SetParent(*args, **kwargs)
 
     def SetPos(*args, **kwargs):
-        """SetPos(int x, int y)"""
+        """SetPos(self, int x, int y)"""
         return _html.HtmlCell_SetPos(*args, **kwargs)
 
     def Layout(*args, **kwargs):
-        """Layout(int w)"""
+        """Layout(self, int w)"""
         return _html.HtmlCell_Layout(*args, **kwargs)
 
     def Draw(*args, **kwargs):
-        """Draw(DC dc, int x, int y, int view_y1, int view_y2, HtmlRenderingInfo info)"""
+        """Draw(self, DC dc, int x, int y, int view_y1, int view_y2, HtmlRenderingInfo info)"""
         return _html.HtmlCell_Draw(*args, **kwargs)
 
     def DrawInvisible(*args, **kwargs):
-        """DrawInvisible(DC dc, int x, int y, HtmlRenderingInfo info)"""
+        """DrawInvisible(self, DC dc, int x, int y, HtmlRenderingInfo info)"""
         return _html.HtmlCell_DrawInvisible(*args, **kwargs)
 
     def Find(*args, **kwargs):
-        """Find(int condition, void param) -> HtmlCell"""
+        """Find(self, int condition, void param) -> HtmlCell"""
         return _html.HtmlCell_Find(*args, **kwargs)
 
     def AdjustPagebreak(*args, **kwargs):
-        """AdjustPagebreak(int INOUT) -> bool"""
+        """AdjustPagebreak(self, int INOUT) -> bool"""
         return _html.HtmlCell_AdjustPagebreak(*args, **kwargs)
 
     def SetCanLiveOnPagebreak(*args, **kwargs):
-        """SetCanLiveOnPagebreak(bool can)"""
+        """SetCanLiveOnPagebreak(self, bool can)"""
         return _html.HtmlCell_SetCanLiveOnPagebreak(*args, **kwargs)
 
     def IsLinebreakAllowed(*args, **kwargs):
-        """IsLinebreakAllowed() -> bool"""
+        """IsLinebreakAllowed(self) -> bool"""
         return _html.HtmlCell_IsLinebreakAllowed(*args, **kwargs)
 
     def IsTerminalCell(*args, **kwargs):
-        """IsTerminalCell() -> bool"""
+        """IsTerminalCell(self) -> bool"""
         return _html.HtmlCell_IsTerminalCell(*args, **kwargs)
 
     def FindCellByPos(*args, **kwargs):
-        """FindCellByPos(int x, int y, unsigned int flags=HTML_FIND_EXACT) -> HtmlCell"""
+        """FindCellByPos(self, int x, int y, unsigned int flags=HTML_FIND_EXACT) -> HtmlCell"""
         return _html.HtmlCell_FindCellByPos(*args, **kwargs)
 
     def GetAbsPos(*args, **kwargs):
-        """GetAbsPos() -> Point"""
+        """GetAbsPos(self) -> Point"""
         return _html.HtmlCell_GetAbsPos(*args, **kwargs)
 
     def GetFirstTerminal(*args, **kwargs):
-        """GetFirstTerminal() -> HtmlCell"""
+        """GetFirstTerminal(self) -> HtmlCell"""
         return _html.HtmlCell_GetFirstTerminal(*args, **kwargs)
 
     def GetLastTerminal(*args, **kwargs):
-        """GetLastTerminal() -> HtmlCell"""
+        """GetLastTerminal(self) -> HtmlCell"""
         return _html.HtmlCell_GetLastTerminal(*args, **kwargs)
 
     def GetDepth(*args, **kwargs):
-        """GetDepth() -> unsigned int"""
+        """GetDepth(self) -> unsigned int"""
         return _html.HtmlCell_GetDepth(*args, **kwargs)
 
     def IsBefore(*args, **kwargs):
-        """IsBefore(HtmlCell cell) -> bool"""
+        """IsBefore(self, HtmlCell cell) -> bool"""
         return _html.HtmlCell_IsBefore(*args, **kwargs)
 
     def ConvertToText(*args, **kwargs):
-        """ConvertToText(HtmlSelection sel) -> String"""
+        """ConvertToText(self, HtmlSelection sel) -> String"""
         return _html.HtmlCell_ConvertToText(*args, **kwargs)
 
 
@@ -760,7 +761,7 @@ class HtmlWordCell(HtmlCell):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlWordCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String word, DC dc) -> HtmlWordCell"""
+        """__init__(self, String word, DC dc) -> HtmlWordCell"""
         newobj = _html.new_HtmlWordCell(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -777,73 +778,73 @@ class HtmlContainerCell(HtmlCell):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlContainerCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(HtmlContainerCell parent) -> HtmlContainerCell"""
+        """__init__(self, HtmlContainerCell parent) -> HtmlContainerCell"""
         newobj = _html.new_HtmlContainerCell(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def InsertCell(*args, **kwargs):
-        """InsertCell(HtmlCell cell)"""
+        """InsertCell(self, HtmlCell cell)"""
         return _html.HtmlContainerCell_InsertCell(*args, **kwargs)
 
     def SetAlignHor(*args, **kwargs):
-        """SetAlignHor(int al)"""
+        """SetAlignHor(self, int al)"""
         return _html.HtmlContainerCell_SetAlignHor(*args, **kwargs)
 
     def GetAlignHor(*args, **kwargs):
-        """GetAlignHor() -> int"""
+        """GetAlignHor(self) -> int"""
         return _html.HtmlContainerCell_GetAlignHor(*args, **kwargs)
 
     def SetAlignVer(*args, **kwargs):
-        """SetAlignVer(int al)"""
+        """SetAlignVer(self, int al)"""
         return _html.HtmlContainerCell_SetAlignVer(*args, **kwargs)
 
     def GetAlignVer(*args, **kwargs):
-        """GetAlignVer() -> int"""
+        """GetAlignVer(self) -> int"""
         return _html.HtmlContainerCell_GetAlignVer(*args, **kwargs)
 
     def SetIndent(*args, **kwargs):
-        """SetIndent(int i, int what, int units=HTML_UNITS_PIXELS)"""
+        """SetIndent(self, int i, int what, int units=HTML_UNITS_PIXELS)"""
         return _html.HtmlContainerCell_SetIndent(*args, **kwargs)
 
     def GetIndent(*args, **kwargs):
-        """GetIndent(int ind) -> int"""
+        """GetIndent(self, int ind) -> int"""
         return _html.HtmlContainerCell_GetIndent(*args, **kwargs)
 
     def GetIndentUnits(*args, **kwargs):
-        """GetIndentUnits(int ind) -> int"""
+        """GetIndentUnits(self, int ind) -> int"""
         return _html.HtmlContainerCell_GetIndentUnits(*args, **kwargs)
 
     def SetAlign(*args, **kwargs):
-        """SetAlign(HtmlTag tag)"""
+        """SetAlign(self, HtmlTag tag)"""
         return _html.HtmlContainerCell_SetAlign(*args, **kwargs)
 
     def SetWidthFloat(*args, **kwargs):
-        """SetWidthFloat(int w, int units)"""
+        """SetWidthFloat(self, int w, int units)"""
         return _html.HtmlContainerCell_SetWidthFloat(*args, **kwargs)
 
     def SetWidthFloatFromTag(*args, **kwargs):
-        """SetWidthFloatFromTag(HtmlTag tag)"""
+        """SetWidthFloatFromTag(self, HtmlTag tag)"""
         return _html.HtmlContainerCell_SetWidthFloatFromTag(*args, **kwargs)
 
     def SetMinHeight(*args, **kwargs):
-        """SetMinHeight(int h, int align=HTML_ALIGN_TOP)"""
+        """SetMinHeight(self, int h, int align=HTML_ALIGN_TOP)"""
         return _html.HtmlContainerCell_SetMinHeight(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(Colour clr)"""
+        """SetBackgroundColour(self, Colour clr)"""
         return _html.HtmlContainerCell_SetBackgroundColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour() -> Colour"""
+        """GetBackgroundColour(self) -> Colour"""
         return _html.HtmlContainerCell_GetBackgroundColour(*args, **kwargs)
 
     def SetBorder(*args, **kwargs):
-        """SetBorder(Colour clr1, Colour clr2)"""
+        """SetBorder(self, Colour clr1, Colour clr2)"""
         return _html.HtmlContainerCell_SetBorder(*args, **kwargs)
 
     def GetFirstChild(*args, **kwargs):
-        """GetFirstChild() -> HtmlCell"""
+        """GetFirstChild(self) -> HtmlCell"""
         return _html.HtmlContainerCell_GetFirstChild(*args, **kwargs)
 
 
@@ -858,7 +859,7 @@ class HtmlColourCell(HtmlCell):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlColourCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Colour clr, int flags=HTML_CLR_FOREGROUND) -> HtmlColourCell"""
+        """__init__(self, Colour clr, int flags=HTML_CLR_FOREGROUND) -> HtmlColourCell"""
         newobj = _html.new_HtmlColourCell(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -875,7 +876,7 @@ class HtmlFontCell(HtmlCell):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlFontCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Font font) -> HtmlFontCell"""
+        """__init__(self, Font font) -> HtmlFontCell"""
         newobj = _html.new_HtmlFontCell(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -892,7 +893,7 @@ class HtmlWidgetCell(HtmlCell):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlWidgetCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window wnd, int w=0) -> HtmlWidgetCell"""
+        """__init__(self, Window wnd, int w=0) -> HtmlWidgetCell"""
         newobj = _html.new_HtmlWidgetCell(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -911,7 +912,7 @@ class HtmlFilter(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlFilter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> HtmlFilter"""
+        """__init__(self) -> HtmlFilter"""
         newobj = _html.new_HtmlFilter(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -919,7 +920,7 @@ class HtmlFilter(core.Object):
         self._setCallbackInfo(self, HtmlFilter)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _html.HtmlFilter__setCallbackInfo(*args, **kwargs)
 
 
@@ -937,7 +938,7 @@ class HtmlWindow(windows.ScrolledWindow):
         return "<%s.%s; proxy of C++ wxPyHtmlWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, int style=HW_DEFAULT_STYLE, 
             String name=HtmlWindowNameStr) -> HtmlWindow
         """
@@ -949,143 +950,143 @@ class HtmlWindow(windows.ScrolledWindow):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, int style=HW_SCROLLBAR_AUTO, 
             String name=HtmlWindowNameStr) -> bool
         """
         return _html.HtmlWindow_Create(*args, **kwargs)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _html.HtmlWindow__setCallbackInfo(*args, **kwargs)
 
     def SetPage(*args, **kwargs):
-        """SetPage(String source) -> bool"""
+        """SetPage(self, String source) -> bool"""
         return _html.HtmlWindow_SetPage(*args, **kwargs)
 
     def LoadPage(*args, **kwargs):
-        """LoadPage(String location) -> bool"""
+        """LoadPage(self, String location) -> bool"""
         return _html.HtmlWindow_LoadPage(*args, **kwargs)
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(String filename) -> bool"""
+        """LoadFile(self, String filename) -> bool"""
         return _html.HtmlWindow_LoadFile(*args, **kwargs)
 
     def AppendToPage(*args, **kwargs):
-        """AppendToPage(String source) -> bool"""
+        """AppendToPage(self, String source) -> bool"""
         return _html.HtmlWindow_AppendToPage(*args, **kwargs)
 
     def GetOpenedPage(*args, **kwargs):
-        """GetOpenedPage() -> String"""
+        """GetOpenedPage(self) -> String"""
         return _html.HtmlWindow_GetOpenedPage(*args, **kwargs)
 
     def GetOpenedAnchor(*args, **kwargs):
-        """GetOpenedAnchor() -> String"""
+        """GetOpenedAnchor(self) -> String"""
         return _html.HtmlWindow_GetOpenedAnchor(*args, **kwargs)
 
     def GetOpenedPageTitle(*args, **kwargs):
-        """GetOpenedPageTitle() -> String"""
+        """GetOpenedPageTitle(self) -> String"""
         return _html.HtmlWindow_GetOpenedPageTitle(*args, **kwargs)
 
     def SetRelatedFrame(*args, **kwargs):
-        """SetRelatedFrame(Frame frame, String format)"""
+        """SetRelatedFrame(self, Frame frame, String format)"""
         return _html.HtmlWindow_SetRelatedFrame(*args, **kwargs)
 
     def GetRelatedFrame(*args, **kwargs):
-        """GetRelatedFrame() -> Frame"""
+        """GetRelatedFrame(self) -> Frame"""
         return _html.HtmlWindow_GetRelatedFrame(*args, **kwargs)
 
     def SetRelatedStatusBar(*args, **kwargs):
-        """SetRelatedStatusBar(int bar)"""
+        """SetRelatedStatusBar(self, int bar)"""
         return _html.HtmlWindow_SetRelatedStatusBar(*args, **kwargs)
 
     def SetFonts(*args, **kwargs):
-        """SetFonts(String normal_face, String fixed_face, PyObject sizes=None)"""
+        """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlWindow_SetFonts(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
-        """SetTitle(String title)"""
+        """SetTitle(self, String title)"""
         return _html.HtmlWindow_SetTitle(*args, **kwargs)
 
     def SetBorders(*args, **kwargs):
-        """SetBorders(int b)"""
+        """SetBorders(self, int b)"""
         return _html.HtmlWindow_SetBorders(*args, **kwargs)
 
     def ReadCustomization(*args, **kwargs):
-        """ReadCustomization(ConfigBase cfg, String path=EmptyString)"""
+        """ReadCustomization(self, ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlWindow_ReadCustomization(*args, **kwargs)
 
     def WriteCustomization(*args, **kwargs):
-        """WriteCustomization(ConfigBase cfg, String path=EmptyString)"""
+        """WriteCustomization(self, ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlWindow_WriteCustomization(*args, **kwargs)
 
     def HistoryBack(*args, **kwargs):
-        """HistoryBack() -> bool"""
+        """HistoryBack(self) -> bool"""
         return _html.HtmlWindow_HistoryBack(*args, **kwargs)
 
     def HistoryForward(*args, **kwargs):
-        """HistoryForward() -> bool"""
+        """HistoryForward(self) -> bool"""
         return _html.HtmlWindow_HistoryForward(*args, **kwargs)
 
     def HistoryCanBack(*args, **kwargs):
-        """HistoryCanBack() -> bool"""
+        """HistoryCanBack(self) -> bool"""
         return _html.HtmlWindow_HistoryCanBack(*args, **kwargs)
 
     def HistoryCanForward(*args, **kwargs):
-        """HistoryCanForward() -> bool"""
+        """HistoryCanForward(self) -> bool"""
         return _html.HtmlWindow_HistoryCanForward(*args, **kwargs)
 
     def HistoryClear(*args, **kwargs):
-        """HistoryClear()"""
+        """HistoryClear(self)"""
         return _html.HtmlWindow_HistoryClear(*args, **kwargs)
 
     def GetInternalRepresentation(*args, **kwargs):
-        """GetInternalRepresentation() -> HtmlContainerCell"""
+        """GetInternalRepresentation(self) -> HtmlContainerCell"""
         return _html.HtmlWindow_GetInternalRepresentation(*args, **kwargs)
 
     def GetParser(*args, **kwargs):
-        """GetParser() -> HtmlWinParser"""
+        """GetParser(self) -> HtmlWinParser"""
         return _html.HtmlWindow_GetParser(*args, **kwargs)
 
     def ScrollToAnchor(*args, **kwargs):
-        """ScrollToAnchor(String anchor) -> bool"""
+        """ScrollToAnchor(self, String anchor) -> bool"""
         return _html.HtmlWindow_ScrollToAnchor(*args, **kwargs)
 
     def HasAnchor(*args, **kwargs):
-        """HasAnchor(String anchor) -> bool"""
+        """HasAnchor(self, String anchor) -> bool"""
         return _html.HtmlWindow_HasAnchor(*args, **kwargs)
 
     def AddFilter(*args, **kwargs):
-        """AddFilter(HtmlFilter filter)"""
+        """HtmlWindow.AddFilter(HtmlFilter filter)"""
         return _html.HtmlWindow_AddFilter(*args, **kwargs)
 
     AddFilter = staticmethod(AddFilter)
     def SelectWord(*args, **kwargs):
-        """SelectWord(Point pos)"""
+        """SelectWord(self, Point pos)"""
         return _html.HtmlWindow_SelectWord(*args, **kwargs)
 
     def SelectLine(*args, **kwargs):
-        """SelectLine(Point pos)"""
+        """SelectLine(self, Point pos)"""
         return _html.HtmlWindow_SelectLine(*args, **kwargs)
 
     def SelectAll(*args, **kwargs):
-        """SelectAll()"""
+        """SelectAll(self)"""
         return _html.HtmlWindow_SelectAll(*args, **kwargs)
 
     def base_OnLinkClicked(*args, **kwargs):
-        """base_OnLinkClicked(HtmlLinkInfo link)"""
+        """base_OnLinkClicked(self, HtmlLinkInfo link)"""
         return _html.HtmlWindow_base_OnLinkClicked(*args, **kwargs)
 
     def base_OnSetTitle(*args, **kwargs):
-        """base_OnSetTitle(String title)"""
+        """base_OnSetTitle(self, String title)"""
         return _html.HtmlWindow_base_OnSetTitle(*args, **kwargs)
 
     def base_OnCellMouseHover(*args, **kwargs):
-        """base_OnCellMouseHover(HtmlCell cell, int x, int y)"""
+        """base_OnCellMouseHover(self, HtmlCell cell, int x, int y)"""
         return _html.HtmlWindow_base_OnCellMouseHover(*args, **kwargs)
 
     def base_OnCellClicked(*args, **kwargs):
-        """base_OnCellClicked(HtmlCell cell, int x, int y, MouseEvent event)"""
+        """base_OnCellClicked(self, HtmlCell cell, int x, int y, MouseEvent event)"""
         return _html.HtmlWindow_base_OnCellClicked(*args, **kwargs)
 
 
@@ -1112,42 +1113,42 @@ class HtmlDCRenderer(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlDCRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> HtmlDCRenderer"""
+        """__init__(self) -> HtmlDCRenderer"""
         newobj = _html.new_HtmlDCRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_html.delete_HtmlDCRenderer):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def SetDC(*args, **kwargs):
-        """SetDC(DC dc, int maxwidth)"""
+        """SetDC(self, DC dc, int maxwidth)"""
         return _html.HtmlDCRenderer_SetDC(*args, **kwargs)
 
     def SetSize(*args, **kwargs):
-        """SetSize(int width, int height)"""
+        """SetSize(self, int width, int height)"""
         return _html.HtmlDCRenderer_SetSize(*args, **kwargs)
 
     def SetHtmlText(*args, **kwargs):
-        """SetHtmlText(String html, String basepath=EmptyString, bool isdir=True)"""
+        """SetHtmlText(self, String html, String basepath=EmptyString, bool isdir=True)"""
         return _html.HtmlDCRenderer_SetHtmlText(*args, **kwargs)
 
     def SetFonts(*args, **kwargs):
-        """SetFonts(String normal_face, String fixed_face, PyObject sizes=None)"""
+        """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlDCRenderer_SetFonts(*args, **kwargs)
 
     def Render(*args, **kwargs):
         """
-        Render(int x, int y, int from=0, int dont_render=False, int to=INT_MAX, 
+        Render(self, int x, int y, int from=0, int dont_render=False, int to=INT_MAX, 
             int choices=None, int LCOUNT=0) -> int
         """
         return _html.HtmlDCRenderer_Render(*args, **kwargs)
 
     def GetTotalHeight(*args, **kwargs):
-        """GetTotalHeight() -> int"""
+        """GetTotalHeight(self) -> int"""
         return _html.HtmlDCRenderer_GetTotalHeight(*args, **kwargs)
 
 
@@ -1165,45 +1166,45 @@ class HtmlPrintout(windows.Printout):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlPrintout instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String title=HtmlPrintoutTitleStr) -> HtmlPrintout"""
+        """__init__(self, String title=HtmlPrintoutTitleStr) -> HtmlPrintout"""
         newobj = _html.new_HtmlPrintout(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def SetHtmlText(*args, **kwargs):
-        """SetHtmlText(String html, String basepath=EmptyString, bool isdir=True)"""
+        """SetHtmlText(self, String html, String basepath=EmptyString, bool isdir=True)"""
         return _html.HtmlPrintout_SetHtmlText(*args, **kwargs)
 
     def SetHtmlFile(*args, **kwargs):
-        """SetHtmlFile(String htmlfile)"""
+        """SetHtmlFile(self, String htmlfile)"""
         return _html.HtmlPrintout_SetHtmlFile(*args, **kwargs)
 
     def SetHeader(*args, **kwargs):
-        """SetHeader(String header, int pg=PAGE_ALL)"""
+        """SetHeader(self, String header, int pg=PAGE_ALL)"""
         return _html.HtmlPrintout_SetHeader(*args, **kwargs)
 
     def SetFooter(*args, **kwargs):
-        """SetFooter(String footer, int pg=PAGE_ALL)"""
+        """SetFooter(self, String footer, int pg=PAGE_ALL)"""
         return _html.HtmlPrintout_SetFooter(*args, **kwargs)
 
     def SetFonts(*args, **kwargs):
-        """SetFonts(String normal_face, String fixed_face, PyObject sizes=None)"""
+        """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlPrintout_SetFonts(*args, **kwargs)
 
     def SetMargins(*args, **kwargs):
         """
-        SetMargins(float top=25.2, float bottom=25.2, float left=25.2, 
+        SetMargins(self, float top=25.2, float bottom=25.2, float left=25.2, 
             float right=25.2, float spaces=5)
         """
         return _html.HtmlPrintout_SetMargins(*args, **kwargs)
 
     def AddFilter(*args, **kwargs):
-        """AddFilter(wxHtmlFilter filter)"""
+        """HtmlPrintout.AddFilter(wxHtmlFilter filter)"""
         return _html.HtmlPrintout_AddFilter(*args, **kwargs)
 
     AddFilter = staticmethod(AddFilter)
     def CleanUpStatics(*args, **kwargs):
-        """CleanUpStatics()"""
+        """HtmlPrintout.CleanUpStatics()"""
         return _html.HtmlPrintout_CleanUpStatics(*args, **kwargs)
 
     CleanUpStatics = staticmethod(CleanUpStatics)
@@ -1227,59 +1228,59 @@ class HtmlEasyPrinting(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlEasyPrinting instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String name=HtmlPrintingTitleStr, Window parentWindow=None) -> HtmlEasyPrinting"""
+        """__init__(self, String name=HtmlPrintingTitleStr, Window parentWindow=None) -> HtmlEasyPrinting"""
         newobj = _html.new_HtmlEasyPrinting(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_html.delete_HtmlEasyPrinting):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def PreviewFile(*args, **kwargs):
-        """PreviewFile(String htmlfile)"""
+        """PreviewFile(self, String htmlfile)"""
         return _html.HtmlEasyPrinting_PreviewFile(*args, **kwargs)
 
     def PreviewText(*args, **kwargs):
-        """PreviewText(String htmltext, String basepath=EmptyString)"""
+        """PreviewText(self, String htmltext, String basepath=EmptyString)"""
         return _html.HtmlEasyPrinting_PreviewText(*args, **kwargs)
 
     def PrintFile(*args, **kwargs):
-        """PrintFile(String htmlfile)"""
+        """PrintFile(self, String htmlfile)"""
         return _html.HtmlEasyPrinting_PrintFile(*args, **kwargs)
 
     def PrintText(*args, **kwargs):
-        """PrintText(String htmltext, String basepath=EmptyString)"""
+        """PrintText(self, String htmltext, String basepath=EmptyString)"""
         return _html.HtmlEasyPrinting_PrintText(*args, **kwargs)
 
     def PrinterSetup(*args, **kwargs):
-        """PrinterSetup()"""
+        """PrinterSetup(self)"""
         return _html.HtmlEasyPrinting_PrinterSetup(*args, **kwargs)
 
     def PageSetup(*args, **kwargs):
-        """PageSetup()"""
+        """PageSetup(self)"""
         return _html.HtmlEasyPrinting_PageSetup(*args, **kwargs)
 
     def SetHeader(*args, **kwargs):
-        """SetHeader(String header, int pg=PAGE_ALL)"""
+        """SetHeader(self, String header, int pg=PAGE_ALL)"""
         return _html.HtmlEasyPrinting_SetHeader(*args, **kwargs)
 
     def SetFooter(*args, **kwargs):
-        """SetFooter(String footer, int pg=PAGE_ALL)"""
+        """SetFooter(self, String footer, int pg=PAGE_ALL)"""
         return _html.HtmlEasyPrinting_SetFooter(*args, **kwargs)
 
     def SetFonts(*args, **kwargs):
-        """SetFonts(String normal_face, String fixed_face, PyObject sizes=None)"""
+        """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlEasyPrinting_SetFonts(*args, **kwargs)
 
     def GetPrintData(*args, **kwargs):
-        """GetPrintData() -> PrintData"""
+        """GetPrintData(self) -> PrintData"""
         return _html.HtmlEasyPrinting_GetPrintData(*args, **kwargs)
 
     def GetPageSetupData(*args, **kwargs):
-        """GetPageSetupData() -> PageSetupDialogData"""
+        """GetPageSetupData(self) -> PageSetupDialogData"""
         return _html.HtmlEasyPrinting_GetPageSetupData(*args, **kwargs)
 
 
@@ -1296,53 +1297,53 @@ class HtmlBookRecord(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlBookRecord instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String bookfile, String basepath, String title, String start) -> HtmlBookRecord"""
+        """__init__(self, String bookfile, String basepath, String title, String start) -> HtmlBookRecord"""
         newobj = _html.new_HtmlBookRecord(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetBookFile(*args, **kwargs):
-        """GetBookFile() -> String"""
+        """GetBookFile(self) -> String"""
         return _html.HtmlBookRecord_GetBookFile(*args, **kwargs)
 
     def GetTitle(*args, **kwargs):
-        """GetTitle() -> String"""
+        """GetTitle(self) -> String"""
         return _html.HtmlBookRecord_GetTitle(*args, **kwargs)
 
     def GetStart(*args, **kwargs):
-        """GetStart() -> String"""
+        """GetStart(self) -> String"""
         return _html.HtmlBookRecord_GetStart(*args, **kwargs)
 
     def GetBasePath(*args, **kwargs):
-        """GetBasePath() -> String"""
+        """GetBasePath(self) -> String"""
         return _html.HtmlBookRecord_GetBasePath(*args, **kwargs)
 
     def SetContentsRange(*args, **kwargs):
-        """SetContentsRange(int start, int end)"""
+        """SetContentsRange(self, int start, int end)"""
         return _html.HtmlBookRecord_SetContentsRange(*args, **kwargs)
 
     def GetContentsStart(*args, **kwargs):
-        """GetContentsStart() -> int"""
+        """GetContentsStart(self) -> int"""
         return _html.HtmlBookRecord_GetContentsStart(*args, **kwargs)
 
     def GetContentsEnd(*args, **kwargs):
-        """GetContentsEnd() -> int"""
+        """GetContentsEnd(self) -> int"""
         return _html.HtmlBookRecord_GetContentsEnd(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
-        """SetTitle(String title)"""
+        """SetTitle(self, String title)"""
         return _html.HtmlBookRecord_SetTitle(*args, **kwargs)
 
     def SetBasePath(*args, **kwargs):
-        """SetBasePath(String path)"""
+        """SetBasePath(self, String path)"""
         return _html.HtmlBookRecord_SetBasePath(*args, **kwargs)
 
     def SetStart(*args, **kwargs):
-        """SetStart(String start)"""
+        """SetStart(self, String start)"""
         return _html.HtmlBookRecord_SetStart(*args, **kwargs)
 
     def GetFullPath(*args, **kwargs):
-        """GetFullPath(String page) -> String"""
+        """GetFullPath(self, String page) -> String"""
         return _html.HtmlBookRecord_GetFullPath(*args, **kwargs)
 
 
@@ -1358,23 +1359,23 @@ class HtmlContentsItem(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlContentsItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetLevel(*args, **kwargs):
-        """GetLevel() -> int"""
+        """GetLevel(self) -> int"""
         return _html.HtmlContentsItem_GetLevel(*args, **kwargs)
 
     def GetID(*args, **kwargs):
-        """GetID() -> int"""
+        """GetID(self) -> int"""
         return _html.HtmlContentsItem_GetID(*args, **kwargs)
 
     def GetName(*args, **kwargs):
-        """GetName() -> String"""
+        """GetName(self) -> String"""
         return _html.HtmlContentsItem_GetName(*args, **kwargs)
 
     def GetPage(*args, **kwargs):
-        """GetPage() -> String"""
+        """GetPage(self) -> String"""
         return _html.HtmlContentsItem_GetPage(*args, **kwargs)
 
     def GetBook(*args, **kwargs):
-        """GetBook() -> HtmlBookRecord"""
+        """GetBook(self) -> HtmlBookRecord"""
         return _html.HtmlContentsItem_GetBook(*args, **kwargs)
 
 
@@ -1390,27 +1391,27 @@ class HtmlSearchStatus(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlSearchStatus instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Search(*args, **kwargs):
-        """Search() -> bool"""
+        """Search(self) -> bool"""
         return _html.HtmlSearchStatus_Search(*args, **kwargs)
 
     def IsActive(*args, **kwargs):
-        """IsActive() -> bool"""
+        """IsActive(self) -> bool"""
         return _html.HtmlSearchStatus_IsActive(*args, **kwargs)
 
     def GetCurIndex(*args, **kwargs):
-        """GetCurIndex() -> int"""
+        """GetCurIndex(self) -> int"""
         return _html.HtmlSearchStatus_GetCurIndex(*args, **kwargs)
 
     def GetMaxIndex(*args, **kwargs):
-        """GetMaxIndex() -> int"""
+        """GetMaxIndex(self) -> int"""
         return _html.HtmlSearchStatus_GetMaxIndex(*args, **kwargs)
 
     def GetName(*args, **kwargs):
-        """GetName() -> String"""
+        """GetName(self) -> String"""
         return _html.HtmlSearchStatus_GetName(*args, **kwargs)
 
     def GetContentsItem(*args, **kwargs):
-        """GetContentsItem() -> HtmlContentsItem"""
+        """GetContentsItem(self) -> HtmlContentsItem"""
         return _html.HtmlSearchStatus_GetContentsItem(*args, **kwargs)
 
 
@@ -1425,51 +1426,51 @@ class HtmlHelpData(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> HtmlHelpData"""
+        """__init__(self) -> HtmlHelpData"""
         newobj = _html.new_HtmlHelpData(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_html.delete_HtmlHelpData):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def SetTempDir(*args, **kwargs):
-        """SetTempDir(String path)"""
+        """SetTempDir(self, String path)"""
         return _html.HtmlHelpData_SetTempDir(*args, **kwargs)
 
     def AddBook(*args, **kwargs):
-        """AddBook(String book) -> bool"""
+        """AddBook(self, String book) -> bool"""
         return _html.HtmlHelpData_AddBook(*args, **kwargs)
 
     def FindPageByName(*args, **kwargs):
-        """FindPageByName(String page) -> String"""
+        """FindPageByName(self, String page) -> String"""
         return _html.HtmlHelpData_FindPageByName(*args, **kwargs)
 
     def FindPageById(*args, **kwargs):
-        """FindPageById(int id) -> String"""
+        """FindPageById(self, int id) -> String"""
         return _html.HtmlHelpData_FindPageById(*args, **kwargs)
 
     def GetBookRecArray(*args, **kwargs):
-        """GetBookRecArray() -> wxHtmlBookRecArray"""
+        """GetBookRecArray(self) -> wxHtmlBookRecArray"""
         return _html.HtmlHelpData_GetBookRecArray(*args, **kwargs)
 
     def GetContents(*args, **kwargs):
-        """GetContents() -> HtmlContentsItem"""
+        """GetContents(self) -> HtmlContentsItem"""
         return _html.HtmlHelpData_GetContents(*args, **kwargs)
 
     def GetContentsCnt(*args, **kwargs):
-        """GetContentsCnt() -> int"""
+        """GetContentsCnt(self) -> int"""
         return _html.HtmlHelpData_GetContentsCnt(*args, **kwargs)
 
     def GetIndex(*args, **kwargs):
-        """GetIndex() -> HtmlContentsItem"""
+        """GetIndex(self) -> HtmlContentsItem"""
         return _html.HtmlHelpData_GetIndex(*args, **kwargs)
 
     def GetIndexCnt(*args, **kwargs):
-        """GetIndexCnt() -> int"""
+        """GetIndexCnt(self) -> int"""
         return _html.HtmlHelpData_GetIndexCnt(*args, **kwargs)
 
 
@@ -1485,7 +1486,7 @@ class HtmlHelpFrame(windows.Frame):
         return "<%s.%s; proxy of C++ wxHtmlHelpFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int ??, String title=EmptyString, int style=HF_DEFAULTSTYLE, 
+        __init__(self, Window parent, int ??, String title=EmptyString, int style=HF_DEFAULTSTYLE, 
             HtmlHelpData data=None) -> HtmlHelpFrame
         """
         newobj = _html.new_HtmlHelpFrame(*args, **kwargs)
@@ -1495,43 +1496,43 @@ class HtmlHelpFrame(windows.Frame):
         self._setOORInfo(self)
 
     def GetData(*args, **kwargs):
-        """GetData() -> HtmlHelpData"""
+        """GetData(self) -> HtmlHelpData"""
         return _html.HtmlHelpFrame_GetData(*args, **kwargs)
 
     def SetTitleFormat(*args, **kwargs):
-        """SetTitleFormat(String format)"""
+        """SetTitleFormat(self, String format)"""
         return _html.HtmlHelpFrame_SetTitleFormat(*args, **kwargs)
 
     def Display(*args, **kwargs):
-        """Display(String x)"""
+        """Display(self, String x)"""
         return _html.HtmlHelpFrame_Display(*args, **kwargs)
 
     def DisplayID(*args, **kwargs):
-        """DisplayID(int id)"""
+        """DisplayID(self, int id)"""
         return _html.HtmlHelpFrame_DisplayID(*args, **kwargs)
 
     def DisplayContents(*args, **kwargs):
-        """DisplayContents()"""
+        """DisplayContents(self)"""
         return _html.HtmlHelpFrame_DisplayContents(*args, **kwargs)
 
     def DisplayIndex(*args, **kwargs):
-        """DisplayIndex()"""
+        """DisplayIndex(self)"""
         return _html.HtmlHelpFrame_DisplayIndex(*args, **kwargs)
 
     def KeywordSearch(*args, **kwargs):
-        """KeywordSearch(String keyword) -> bool"""
+        """KeywordSearch(self, String keyword) -> bool"""
         return _html.HtmlHelpFrame_KeywordSearch(*args, **kwargs)
 
     def UseConfig(*args, **kwargs):
-        """UseConfig(ConfigBase config, String rootpath=EmptyString)"""
+        """UseConfig(self, ConfigBase config, String rootpath=EmptyString)"""
         return _html.HtmlHelpFrame_UseConfig(*args, **kwargs)
 
     def ReadCustomization(*args, **kwargs):
-        """ReadCustomization(ConfigBase cfg, String path=EmptyString)"""
+        """ReadCustomization(self, ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlHelpFrame_ReadCustomization(*args, **kwargs)
 
     def WriteCustomization(*args, **kwargs):
-        """WriteCustomization(ConfigBase cfg, String path=EmptyString)"""
+        """WriteCustomization(self, ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlHelpFrame_WriteCustomization(*args, **kwargs)
 
 
@@ -1555,7 +1556,7 @@ class HtmlHelpController(core.EvtHandler):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpController instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int style=HF_DEFAULTSTYLE) -> HtmlHelpController"""
+        """__init__(self, int style=HF_DEFAULTSTYLE) -> HtmlHelpController"""
         newobj = _html.new_HtmlHelpController(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1563,57 +1564,57 @@ class HtmlHelpController(core.EvtHandler):
         self._setOORInfo(self)
 
     def __del__(self, destroy=_html.delete_HtmlHelpController):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def SetTitleFormat(*args, **kwargs):
-        """SetTitleFormat(String format)"""
+        """SetTitleFormat(self, String format)"""
         return _html.HtmlHelpController_SetTitleFormat(*args, **kwargs)
 
     def SetTempDir(*args, **kwargs):
-        """SetTempDir(String path)"""
+        """SetTempDir(self, String path)"""
         return _html.HtmlHelpController_SetTempDir(*args, **kwargs)
 
     def AddBook(*args, **kwargs):
-        """AddBook(String book, int show_wait_msg=False) -> bool"""
+        """AddBook(self, String book, int show_wait_msg=False) -> bool"""
         return _html.HtmlHelpController_AddBook(*args, **kwargs)
 
     def Display(*args, **kwargs):
-        """Display(String x)"""
+        """Display(self, String x)"""
         return _html.HtmlHelpController_Display(*args, **kwargs)
 
     def DisplayID(*args, **kwargs):
-        """DisplayID(int id)"""
+        """DisplayID(self, int id)"""
         return _html.HtmlHelpController_DisplayID(*args, **kwargs)
 
     def DisplayContents(*args, **kwargs):
-        """DisplayContents()"""
+        """DisplayContents(self)"""
         return _html.HtmlHelpController_DisplayContents(*args, **kwargs)
 
     def DisplayIndex(*args, **kwargs):
-        """DisplayIndex()"""
+        """DisplayIndex(self)"""
         return _html.HtmlHelpController_DisplayIndex(*args, **kwargs)
 
     def KeywordSearch(*args, **kwargs):
-        """KeywordSearch(String keyword) -> bool"""
+        """KeywordSearch(self, String keyword) -> bool"""
         return _html.HtmlHelpController_KeywordSearch(*args, **kwargs)
 
     def UseConfig(*args, **kwargs):
-        """UseConfig(ConfigBase config, String rootpath=EmptyString)"""
+        """UseConfig(self, ConfigBase config, String rootpath=EmptyString)"""
         return _html.HtmlHelpController_UseConfig(*args, **kwargs)
 
     def ReadCustomization(*args, **kwargs):
-        """ReadCustomization(ConfigBase cfg, String path=EmptyString)"""
+        """ReadCustomization(self, ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlHelpController_ReadCustomization(*args, **kwargs)
 
     def WriteCustomization(*args, **kwargs):
-        """WriteCustomization(ConfigBase cfg, String path=EmptyString)"""
+        """WriteCustomization(self, ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlHelpController_WriteCustomization(*args, **kwargs)
 
     def GetFrame(*args, **kwargs):
-        """GetFrame() -> HtmlHelpFrame"""
+        """GetFrame(self) -> HtmlHelpFrame"""
         return _html.HtmlHelpController_GetFrame(*args, **kwargs)
 
 

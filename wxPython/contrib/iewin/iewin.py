@@ -5,25 +5,26 @@ import _iewin
 
 import core
 wx = core 
+__docfilter__ = wx.__docfilter__ 
 class MSHTMLEvent(core.NotifyEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMSHTMLEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType commandType=wxEVT_NULL, int id=0) -> MSHTMLEvent"""
+        """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> MSHTMLEvent"""
         newobj = _iewin.new_MSHTMLEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetText1(*args, **kwargs):
-        """GetText1() -> String"""
+        """GetText1(self) -> String"""
         return _iewin.MSHTMLEvent_GetText1(*args, **kwargs)
 
     def GetLong1(*args, **kwargs):
-        """GetLong1() -> long"""
+        """GetLong1(self) -> long"""
         return _iewin.MSHTMLEvent_GetLong1(*args, **kwargs)
 
     def GetLong2(*args, **kwargs):
-        """GetLong2() -> long"""
+        """GetLong2(self) -> long"""
         return _iewin.MSHTMLEvent_GetLong2(*args, **kwargs)
 
 
@@ -56,7 +57,7 @@ class IEHtmlWin(core.Window):
         return "<%s.%s; proxy of C++ wxIEHtmlWin instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, String name=PanelNameStr) -> IEHtmlWin
         """
         newobj = _iewin.new_IEHtmlWin(*args, **kwargs)
@@ -66,60 +67,60 @@ class IEHtmlWin(core.Window):
         self._setOORInfo(self)
 
     def LoadUrl(*args, **kwargs):
-        """LoadUrl(String ??)"""
+        """LoadUrl(self, String ??)"""
         return _iewin.IEHtmlWin_LoadUrl(*args, **kwargs)
 
     def LoadString(*args, **kwargs):
-        """LoadString(String html) -> bool"""
+        """LoadString(self, String html) -> bool"""
         return _iewin.IEHtmlWin_LoadString(*args, **kwargs)
 
     def LoadStream(*args, **kwargs):
-        """LoadStream(InputStream is) -> bool"""
+        """LoadStream(self, InputStream is) -> bool"""
         return _iewin.IEHtmlWin_LoadStream(*args, **kwargs)
 
     Navigate = LoadUrl 
     def SetCharset(*args, **kwargs):
-        """SetCharset(String charset)"""
+        """SetCharset(self, String charset)"""
         return _iewin.IEHtmlWin_SetCharset(*args, **kwargs)
 
     def SetEditMode(*args, **kwargs):
-        """SetEditMode(bool seton)"""
+        """SetEditMode(self, bool seton)"""
         return _iewin.IEHtmlWin_SetEditMode(*args, **kwargs)
 
     def GetEditMode(*args, **kwargs):
-        """GetEditMode() -> bool"""
+        """GetEditMode(self) -> bool"""
         return _iewin.IEHtmlWin_GetEditMode(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
-        """GetStringSelection(bool asHTML=False) -> String"""
+        """GetStringSelection(self, bool asHTML=False) -> String"""
         return _iewin.IEHtmlWin_GetStringSelection(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText(bool asHTML=False) -> String"""
+        """GetText(self, bool asHTML=False) -> String"""
         return _iewin.IEHtmlWin_GetText(*args, **kwargs)
 
     def GoBack(*args, **kwargs):
-        """GoBack() -> bool"""
+        """GoBack(self) -> bool"""
         return _iewin.IEHtmlWin_GoBack(*args, **kwargs)
 
     def GoForward(*args, **kwargs):
-        """GoForward() -> bool"""
+        """GoForward(self) -> bool"""
         return _iewin.IEHtmlWin_GoForward(*args, **kwargs)
 
     def GoHome(*args, **kwargs):
-        """GoHome() -> bool"""
+        """GoHome(self) -> bool"""
         return _iewin.IEHtmlWin_GoHome(*args, **kwargs)
 
     def GoSearch(*args, **kwargs):
-        """GoSearch() -> bool"""
+        """GoSearch(self) -> bool"""
         return _iewin.IEHtmlWin_GoSearch(*args, **kwargs)
 
     def RefreshPage(*args, **kwargs):
-        """RefreshPage(int level) -> bool"""
+        """RefreshPage(self, int level) -> bool"""
         return _iewin.IEHtmlWin_RefreshPage(*args, **kwargs)
 
     def Stop(*args, **kwargs):
-        """Stop() -> bool"""
+        """Stop(self) -> bool"""
         return _iewin.IEHtmlWin_Stop(*args, **kwargs)
 
 

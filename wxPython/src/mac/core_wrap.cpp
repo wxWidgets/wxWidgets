@@ -1251,7 +1251,8 @@ void wxEvtHandler_Connect(wxEvtHandler *self,int id,int lastId,int eventType,PyO
                                  &wxPyCallback::EventThunker);
             }
             else {
-                PyErr_SetString(PyExc_TypeError, "Expected callable object or None.");
+                wxPyBLOCK_THREADS(
+                    PyErr_SetString(PyExc_TypeError, "Expected callable object or None."));
             }
         }
 bool wxEvtHandler_Disconnect(wxEvtHandler *self,int id,int lastId,wxEventType eventType){
@@ -1763,7 +1764,7 @@ bool wxGridBagSizer_Add(wxGridBagSizer *self,PyObject *item,wxGBPosition const &
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_EmptyString_set(PyObject *) {
+static int _wrap_EmptyString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable EmptyString is read-only.");
     return 1;
 }
@@ -1783,7 +1784,7 @@ static PyObject *_wrap_EmptyString_get() {
 }
 
 
-static PyObject *_wrap_Object_GetClassName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Object_GetClassName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxObject *arg1 = (wxObject *) 0 ;
     wxString result;
@@ -1815,7 +1816,7 @@ static PyObject *_wrap_Object_GetClassName(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Object_Destroy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Object_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxObject *arg1 = (wxObject *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1840,14 +1841,14 @@ static PyObject *_wrap_Object_Destroy(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * Object_swigregister(PyObject *, PyObject *args) {
+static PyObject * Object_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxObject, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_Size_width_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_width_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     int arg2 ;
@@ -1871,7 +1872,7 @@ static PyObject *_wrap_Size_width_set(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Size_width_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_width_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     int result;
@@ -1892,7 +1893,7 @@ static PyObject *_wrap_Size_width_get(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Size_height_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_height_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     int arg2 ;
@@ -1916,7 +1917,7 @@ static PyObject *_wrap_Size_height_set(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Size_height_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_height_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     int result;
@@ -1937,7 +1938,7 @@ static PyObject *_wrap_Size_height_get(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_new_Size(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Size(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -1971,7 +1972,7 @@ static PyObject *_wrap_new_Size(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_delete_Size(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_Size(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1996,7 +1997,7 @@ static PyObject *_wrap_delete_Size(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Size___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     wxSize *arg2 = 0 ;
@@ -2031,7 +2032,7 @@ static PyObject *_wrap_Size___eq__(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Size___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     wxSize *arg2 = 0 ;
@@ -2066,7 +2067,7 @@ static PyObject *_wrap_Size___ne__(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Size___add__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     wxSize *arg2 = 0 ;
@@ -2103,7 +2104,7 @@ static PyObject *_wrap_Size___add__(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Size___sub__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size___sub__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     wxSize *arg2 = 0 ;
@@ -2140,7 +2141,7 @@ static PyObject *_wrap_Size___sub__(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Size_IncTo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_IncTo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     wxSize *arg2 = 0 ;
@@ -2172,7 +2173,7 @@ static PyObject *_wrap_Size_IncTo(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Size_DecTo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_DecTo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     wxSize *arg2 = 0 ;
@@ -2204,7 +2205,7 @@ static PyObject *_wrap_Size_DecTo(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Size_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     int arg2 ;
@@ -2237,7 +2238,7 @@ static PyObject *_wrap_Size_Set(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Size_SetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     int arg2 ;
@@ -2266,7 +2267,7 @@ static PyObject *_wrap_Size_SetWidth(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Size_SetHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_SetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     int arg2 ;
@@ -2295,7 +2296,7 @@ static PyObject *_wrap_Size_SetHeight(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Size_GetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     int result;
@@ -2321,7 +2322,7 @@ static PyObject *_wrap_Size_GetWidth(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Size_GetHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     int result;
@@ -2347,7 +2348,7 @@ static PyObject *_wrap_Size_GetHeight(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Size_IsFullySpecified(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_IsFullySpecified(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     bool result;
@@ -2375,7 +2376,7 @@ static PyObject *_wrap_Size_IsFullySpecified(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Size_SetDefaults(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_SetDefaults(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     wxSize *arg2 = 0 ;
@@ -2407,7 +2408,7 @@ static PyObject *_wrap_Size_SetDefaults(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Size_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Size_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize *arg1 = (wxSize *) 0 ;
     PyObject *result;
@@ -2433,14 +2434,14 @@ static PyObject *_wrap_Size_Get(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject * Size_swigregister(PyObject *, PyObject *args) {
+static PyObject * Size_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxSize, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_RealPoint_x_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     double arg2 ;
@@ -2464,7 +2465,7 @@ static PyObject *_wrap_RealPoint_x_set(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_RealPoint_x_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint_x_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     double result;
@@ -2485,7 +2486,7 @@ static PyObject *_wrap_RealPoint_x_get(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_RealPoint_y_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint_y_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     double arg2 ;
@@ -2509,7 +2510,7 @@ static PyObject *_wrap_RealPoint_y_set(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_RealPoint_y_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint_y_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     double result;
@@ -2530,7 +2531,7 @@ static PyObject *_wrap_RealPoint_y_get(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_new_RealPoint(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_RealPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     double arg1 = (double) 0.0 ;
     double arg2 = (double) 0.0 ;
@@ -2564,7 +2565,7 @@ static PyObject *_wrap_new_RealPoint(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_delete_RealPoint(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_RealPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2589,7 +2590,7 @@ static PyObject *_wrap_delete_RealPoint(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_RealPoint___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     wxRealPoint *arg2 = 0 ;
@@ -2624,7 +2625,7 @@ static PyObject *_wrap_RealPoint___eq__(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_RealPoint___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     wxRealPoint *arg2 = 0 ;
@@ -2659,7 +2660,7 @@ static PyObject *_wrap_RealPoint___ne__(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_RealPoint___add__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     wxRealPoint *arg2 = 0 ;
@@ -2696,7 +2697,7 @@ static PyObject *_wrap_RealPoint___add__(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_RealPoint___sub__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint___sub__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     wxRealPoint *arg2 = 0 ;
@@ -2733,7 +2734,7 @@ static PyObject *_wrap_RealPoint___sub__(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_RealPoint_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     double arg2 ;
@@ -2766,7 +2767,7 @@ static PyObject *_wrap_RealPoint_Set(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_RealPoint_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_RealPoint_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRealPoint *arg1 = (wxRealPoint *) 0 ;
     PyObject *result;
@@ -2792,14 +2793,14 @@ static PyObject *_wrap_RealPoint_Get(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject * RealPoint_swigregister(PyObject *, PyObject *args) {
+static PyObject * RealPoint_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxRealPoint, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_Point_x_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     int arg2 ;
@@ -2823,7 +2824,7 @@ static PyObject *_wrap_Point_x_set(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Point_x_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point_x_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     int result;
@@ -2844,7 +2845,7 @@ static PyObject *_wrap_Point_x_get(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Point_y_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point_y_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     int arg2 ;
@@ -2868,7 +2869,7 @@ static PyObject *_wrap_Point_y_set(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Point_y_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point_y_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     int result;
@@ -2889,7 +2890,7 @@ static PyObject *_wrap_Point_y_get(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_new_Point(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Point(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -2923,7 +2924,7 @@ static PyObject *_wrap_new_Point(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_delete_Point(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_Point(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2948,7 +2949,7 @@ static PyObject *_wrap_delete_Point(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Point___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -2983,7 +2984,7 @@ static PyObject *_wrap_Point___eq__(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Point___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3018,7 +3019,7 @@ static PyObject *_wrap_Point___ne__(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Point___add__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3055,7 +3056,7 @@ static PyObject *_wrap_Point___add__(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Point___sub__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point___sub__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3092,7 +3093,7 @@ static PyObject *_wrap_Point___sub__(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Point___iadd__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point___iadd__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3128,7 +3129,7 @@ static PyObject *_wrap_Point___iadd__(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Point___isub__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point___isub__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3164,7 +3165,7 @@ static PyObject *_wrap_Point___isub__(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Point_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     long arg2 ;
@@ -3197,7 +3198,7 @@ static PyObject *_wrap_Point_Set(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Point_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = (wxPoint *) 0 ;
     PyObject *result;
@@ -3223,14 +3224,14 @@ static PyObject *_wrap_Point_Get(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject * Point_swigregister(PyObject *, PyObject *args) {
+static PyObject * Point_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPoint, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_Rect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Rect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -3276,7 +3277,7 @@ static PyObject *_wrap_new_Rect(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_new_RectPP(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_RectPP(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = 0 ;
     wxPoint *arg2 = 0 ;
@@ -3312,7 +3313,7 @@ static PyObject *_wrap_new_RectPP(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_new_RectPS(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_RectPS(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = 0 ;
     wxSize *arg2 = 0 ;
@@ -3348,7 +3349,7 @@ static PyObject *_wrap_new_RectPS(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_delete_Rect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_Rect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3373,7 +3374,7 @@ static PyObject *_wrap_delete_Rect(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Rect_GetX(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -3399,7 +3400,7 @@ static PyObject *_wrap_Rect_GetX(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Rect_SetX(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -3428,7 +3429,7 @@ static PyObject *_wrap_Rect_SetX(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Rect_GetY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -3454,7 +3455,7 @@ static PyObject *_wrap_Rect_GetY(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Rect_SetY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -3483,7 +3484,7 @@ static PyObject *_wrap_Rect_SetY(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Rect_GetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -3509,7 +3510,7 @@ static PyObject *_wrap_Rect_GetWidth(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Rect_SetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -3538,7 +3539,7 @@ static PyObject *_wrap_Rect_SetWidth(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Rect_GetHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -3564,7 +3565,7 @@ static PyObject *_wrap_Rect_GetHeight(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Rect_SetHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -3593,7 +3594,7 @@ static PyObject *_wrap_Rect_SetHeight(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Rect_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxPoint result;
@@ -3623,7 +3624,7 @@ static PyObject *_wrap_Rect_GetPosition(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Rect_SetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3655,7 +3656,7 @@ static PyObject *_wrap_Rect_SetPosition(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Rect_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxSize result;
@@ -3685,7 +3686,7 @@ static PyObject *_wrap_Rect_GetSize(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Rect_SetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxSize *arg2 = 0 ;
@@ -3717,7 +3718,7 @@ static PyObject *_wrap_Rect_SetSize(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Rect_GetTopLeft(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxPoint result;
@@ -3747,7 +3748,7 @@ static PyObject *_wrap_Rect_GetTopLeft(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Rect_SetTopLeft(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3779,7 +3780,7 @@ static PyObject *_wrap_Rect_SetTopLeft(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Rect_GetBottomRight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxPoint result;
@@ -3809,7 +3810,7 @@ static PyObject *_wrap_Rect_GetBottomRight(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Rect_SetBottomRight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -3841,7 +3842,7 @@ static PyObject *_wrap_Rect_SetBottomRight(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Rect_GetLeft(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -3867,7 +3868,7 @@ static PyObject *_wrap_Rect_GetLeft(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Rect_GetTop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -3893,7 +3894,7 @@ static PyObject *_wrap_Rect_GetTop(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Rect_GetBottom(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetBottom(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -3919,7 +3920,7 @@ static PyObject *_wrap_Rect_GetBottom(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Rect_GetRight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_GetRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -3945,7 +3946,7 @@ static PyObject *_wrap_Rect_GetRight(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Rect_SetLeft(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -3974,7 +3975,7 @@ static PyObject *_wrap_Rect_SetLeft(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Rect_SetRight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4003,7 +4004,7 @@ static PyObject *_wrap_Rect_SetRight(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Rect_SetTop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4032,7 +4033,7 @@ static PyObject *_wrap_Rect_SetTop(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Rect_SetBottom(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_SetBottom(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4061,7 +4062,7 @@ static PyObject *_wrap_Rect_SetBottom(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Rect_Inflate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_Inflate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4098,7 +4099,7 @@ static PyObject *_wrap_Rect_Inflate(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Rect_Deflate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_Deflate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4135,7 +4136,7 @@ static PyObject *_wrap_Rect_Deflate(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Rect_OffsetXY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_OffsetXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4168,7 +4169,7 @@ static PyObject *_wrap_Rect_OffsetXY(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Rect_Offset(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_Offset(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -4200,7 +4201,7 @@ static PyObject *_wrap_Rect_Offset(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Rect_Intersect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_Intersect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxRect *arg2 = 0 ;
@@ -4236,7 +4237,7 @@ static PyObject *_wrap_Rect_Intersect(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Rect___add__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxRect *arg2 = 0 ;
@@ -4273,7 +4274,7 @@ static PyObject *_wrap_Rect___add__(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Rect___iadd__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect___iadd__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxRect *arg2 = 0 ;
@@ -4309,7 +4310,7 @@ static PyObject *_wrap_Rect___iadd__(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Rect___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxRect *arg2 = 0 ;
@@ -4344,7 +4345,7 @@ static PyObject *_wrap_Rect___eq__(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Rect___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxRect *arg2 = 0 ;
@@ -4379,7 +4380,7 @@ static PyObject *_wrap_Rect___ne__(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Rect_InsideXY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_InsideXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4415,7 +4416,7 @@ static PyObject *_wrap_Rect_InsideXY(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Rect_Inside(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_Inside(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -4450,7 +4451,7 @@ static PyObject *_wrap_Rect_Inside(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Rect_Intersects(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_Intersects(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxRect *arg2 = 0 ;
@@ -4485,7 +4486,7 @@ static PyObject *_wrap_Rect_Intersects(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Rect_x_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4509,7 +4510,7 @@ static PyObject *_wrap_Rect_x_set(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Rect_x_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_x_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -4530,7 +4531,7 @@ static PyObject *_wrap_Rect_x_get(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Rect_y_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_y_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4554,7 +4555,7 @@ static PyObject *_wrap_Rect_y_set(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Rect_y_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_y_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -4575,7 +4576,7 @@ static PyObject *_wrap_Rect_y_get(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Rect_width_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_width_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4599,7 +4600,7 @@ static PyObject *_wrap_Rect_width_set(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Rect_width_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_width_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -4620,7 +4621,7 @@ static PyObject *_wrap_Rect_width_get(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Rect_height_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_height_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 ;
@@ -4644,7 +4645,7 @@ static PyObject *_wrap_Rect_height_set(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Rect_height_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_height_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int result;
@@ -4665,7 +4666,7 @@ static PyObject *_wrap_Rect_height_get(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Rect_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     int arg2 = (int) 0 ;
@@ -4714,7 +4715,7 @@ static PyObject *_wrap_Rect_Set(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Rect_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Rect_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     PyObject *result;
@@ -4740,14 +4741,14 @@ static PyObject *_wrap_Rect_Get(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject * Rect_swigregister(PyObject *, PyObject *args) {
+static PyObject * Rect_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxRect, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_IntersectRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IntersectRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxRect *arg2 = (wxRect *) 0 ;
@@ -4777,7 +4778,7 @@ static PyObject *_wrap_IntersectRect(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_new_Point2D(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Point2D(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     double arg1 = (double) 0.0 ;
     double arg2 = (double) 0.0 ;
@@ -4811,7 +4812,7 @@ static PyObject *_wrap_new_Point2D(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_new_Point2DCopy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Point2DCopy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = 0 ;
     wxPoint2D *result;
@@ -4840,7 +4841,7 @@ static PyObject *_wrap_new_Point2DCopy(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_new_Point2DFromPoint(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Point2DFromPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint *arg1 = 0 ;
     wxPoint2D *result;
@@ -4869,7 +4870,7 @@ static PyObject *_wrap_new_Point2DFromPoint(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Point2D_GetFloor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_GetFloor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -4908,7 +4909,7 @@ static PyObject *_wrap_Point2D_GetFloor(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Point2D_GetRounded(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_GetRounded(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -4947,7 +4948,7 @@ static PyObject *_wrap_Point2D_GetRounded(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Point2D_GetVectorLength(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_GetVectorLength(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     double result;
@@ -4973,7 +4974,7 @@ static PyObject *_wrap_Point2D_GetVectorLength(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Point2D_GetVectorAngle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_GetVectorAngle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     double result;
@@ -4999,7 +5000,7 @@ static PyObject *_wrap_Point2D_GetVectorAngle(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Point2D_SetVectorLength(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_SetVectorLength(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     double arg2 ;
@@ -5028,7 +5029,7 @@ static PyObject *_wrap_Point2D_SetVectorLength(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Point2D_SetVectorAngle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_SetVectorAngle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     double arg2 ;
@@ -5057,7 +5058,7 @@ static PyObject *_wrap_Point2D_SetVectorAngle(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Point2D_GetDistance(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_GetDistance(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5090,7 +5091,7 @@ static PyObject *_wrap_Point2D_GetDistance(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Point2D_GetDistanceSquare(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_GetDistanceSquare(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5123,7 +5124,7 @@ static PyObject *_wrap_Point2D_GetDistanceSquare(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Point2D_GetDotProduct(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_GetDotProduct(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5156,7 +5157,7 @@ static PyObject *_wrap_Point2D_GetDotProduct(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Point2D_GetCrossProduct(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_GetCrossProduct(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5189,7 +5190,7 @@ static PyObject *_wrap_Point2D_GetCrossProduct(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Point2D___neg__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D___neg__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D result;
@@ -5219,7 +5220,7 @@ static PyObject *_wrap_Point2D___neg__(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Point2D___iadd__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D___iadd__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5255,7 +5256,7 @@ static PyObject *_wrap_Point2D___iadd__(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Point2D___isub__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D___isub__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5291,7 +5292,7 @@ static PyObject *_wrap_Point2D___isub__(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Point2D___imul__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D___imul__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5327,7 +5328,7 @@ static PyObject *_wrap_Point2D___imul__(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Point2D___idiv__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D___idiv__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5363,7 +5364,7 @@ static PyObject *_wrap_Point2D___idiv__(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Point2D___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5398,7 +5399,7 @@ static PyObject *_wrap_Point2D___eq__(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Point2D___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     wxPoint2D *arg2 = 0 ;
@@ -5433,7 +5434,7 @@ static PyObject *_wrap_Point2D___ne__(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Point2D_x_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     double arg2 ;
@@ -5457,7 +5458,7 @@ static PyObject *_wrap_Point2D_x_set(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Point2D_x_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_x_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     double result;
@@ -5478,7 +5479,7 @@ static PyObject *_wrap_Point2D_x_get(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Point2D_y_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_y_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     double arg2 ;
@@ -5502,7 +5503,7 @@ static PyObject *_wrap_Point2D_y_set(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Point2D_y_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_y_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     double result;
@@ -5523,7 +5524,7 @@ static PyObject *_wrap_Point2D_y_get(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Point2D_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     double arg2 = (double) 0 ;
@@ -5560,7 +5561,7 @@ static PyObject *_wrap_Point2D_Set(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Point2D_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Point2D_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint2D *arg1 = (wxPoint2D *) 0 ;
     PyObject *result;
@@ -5586,14 +5587,14 @@ static PyObject *_wrap_Point2D_Get(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject * Point2D_swigregister(PyObject *, PyObject *args) {
+static PyObject * Point2D_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPoint2D, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static int _wrap_DefaultPosition_set(PyObject *) {
+static int _wrap_DefaultPosition_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable DefaultPosition is read-only.");
     return 1;
 }
@@ -5607,7 +5608,7 @@ static PyObject *_wrap_DefaultPosition_get() {
 }
 
 
-static int _wrap_DefaultSize_set(PyObject *) {
+static int _wrap_DefaultSize_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable DefaultSize is read-only.");
     return 1;
 }
@@ -5621,7 +5622,7 @@ static PyObject *_wrap_DefaultSize_get() {
 }
 
 
-static PyObject *_wrap_new_InputStream(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_InputStream(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     PyObject *arg1 = (PyObject *) 0 ;
     wxPyInputStream *result;
@@ -5646,7 +5647,7 @@ static PyObject *_wrap_new_InputStream(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_InputStream_close(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_close(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     PyObject * obj0 = 0 ;
@@ -5671,7 +5672,7 @@ static PyObject *_wrap_InputStream_close(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_InputStream_flush(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_flush(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     PyObject * obj0 = 0 ;
@@ -5696,7 +5697,7 @@ static PyObject *_wrap_InputStream_flush(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_InputStream_eof(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_eof(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     bool result;
@@ -5724,7 +5725,7 @@ static PyObject *_wrap_InputStream_eof(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_InputStream_read(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_read(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     int arg2 = (int) -1 ;
@@ -5756,7 +5757,7 @@ static PyObject *_wrap_InputStream_read(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_InputStream_readline(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_readline(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     int arg2 = (int) -1 ;
@@ -5788,7 +5789,7 @@ static PyObject *_wrap_InputStream_readline(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_InputStream_readlines(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_readlines(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     int arg2 = (int) -1 ;
@@ -5820,7 +5821,7 @@ static PyObject *_wrap_InputStream_readlines(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_InputStream_seek(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_seek(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     int arg2 ;
@@ -5855,7 +5856,7 @@ static PyObject *_wrap_InputStream_seek(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_InputStream_tell(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_tell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     int result;
@@ -5881,7 +5882,7 @@ static PyObject *_wrap_InputStream_tell(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_InputStream_Peek(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_Peek(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     char result;
@@ -5907,7 +5908,7 @@ static PyObject *_wrap_InputStream_Peek(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_InputStream_GetC(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_GetC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     char result;
@@ -5933,7 +5934,7 @@ static PyObject *_wrap_InputStream_GetC(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_InputStream_LastRead(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_LastRead(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     size_t result;
@@ -5959,7 +5960,7 @@ static PyObject *_wrap_InputStream_LastRead(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_InputStream_CanRead(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_CanRead(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     bool result;
@@ -5987,7 +5988,7 @@ static PyObject *_wrap_InputStream_CanRead(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_InputStream_Eof(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_Eof(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     bool result;
@@ -6015,7 +6016,7 @@ static PyObject *_wrap_InputStream_Eof(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_InputStream_Ungetch(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_Ungetch(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     char arg2 ;
@@ -6047,7 +6048,7 @@ static PyObject *_wrap_InputStream_Ungetch(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_InputStream_SeekI(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_SeekI(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     long arg2 ;
@@ -6083,7 +6084,7 @@ static PyObject *_wrap_InputStream_SeekI(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_InputStream_TellI(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InputStream_TellI(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyInputStream *arg1 = (wxPyInputStream *) 0 ;
     long result;
@@ -6109,14 +6110,14 @@ static PyObject *_wrap_InputStream_TellI(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject * InputStream_swigregister(PyObject *, PyObject *args) {
+static PyObject * InputStream_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyInputStream, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_OutputStream_write(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_OutputStream_write(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxOutputStream *arg1 = (wxOutputStream *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -6144,14 +6145,14 @@ static PyObject *_wrap_OutputStream_write(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject * OutputStream_swigregister(PyObject *, PyObject *args) {
+static PyObject * OutputStream_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxOutputStream, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_FSFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_FSFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxInputStream *arg1 = (wxInputStream *) 0 ;
     wxString *arg2 = 0 ;
@@ -6255,7 +6256,7 @@ static PyObject *_wrap_new_FSFile(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_delete_FSFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_FSFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFSFile *arg1 = (wxFSFile *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6280,7 +6281,7 @@ static PyObject *_wrap_delete_FSFile(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_FSFile_GetStream(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FSFile_GetStream(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFSFile *arg1 = (wxFSFile *) 0 ;
     wxInputStream *result;
@@ -6313,7 +6314,7 @@ static PyObject *_wrap_FSFile_GetStream(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_FSFile_GetMimeType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FSFile_GetMimeType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFSFile *arg1 = (wxFSFile *) 0 ;
     wxString *result;
@@ -6348,7 +6349,7 @@ static PyObject *_wrap_FSFile_GetMimeType(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_FSFile_GetLocation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FSFile_GetLocation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFSFile *arg1 = (wxFSFile *) 0 ;
     wxString *result;
@@ -6383,7 +6384,7 @@ static PyObject *_wrap_FSFile_GetLocation(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_FSFile_GetAnchor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FSFile_GetAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFSFile *arg1 = (wxFSFile *) 0 ;
     wxString *result;
@@ -6418,7 +6419,7 @@ static PyObject *_wrap_FSFile_GetAnchor(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_FSFile_GetModificationTime(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FSFile_GetModificationTime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFSFile *arg1 = (wxFSFile *) 0 ;
     wxDateTime result;
@@ -6448,21 +6449,21 @@ static PyObject *_wrap_FSFile_GetModificationTime(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * FSFile_swigregister(PyObject *, PyObject *args) {
+static PyObject * FSFile_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxFSFile, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject * CPPFileSystemHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * CPPFileSystemHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxFileSystemHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_FileSystemHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_FileSystemHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *result;
     char *kwnames[] = {
@@ -6484,7 +6485,7 @@ static PyObject *_wrap_new_FileSystemHandler(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_FileSystemHandler__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -6515,7 +6516,7 @@ static PyObject *_wrap_FileSystemHandler__setCallbackInfo(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_FileSystemHandler_CanOpen(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler_CanOpen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -6559,7 +6560,7 @@ static PyObject *_wrap_FileSystemHandler_CanOpen(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_FileSystemHandler_OpenFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler_OpenFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     wxFileSystem *arg2 = 0 ;
@@ -6612,7 +6613,7 @@ static PyObject *_wrap_FileSystemHandler_OpenFile(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_FileSystemHandler_FindFirst(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler_FindFirst(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -6666,7 +6667,7 @@ static PyObject *_wrap_FileSystemHandler_FindFirst(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_FileSystemHandler_FindNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler_FindNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     wxString result;
@@ -6698,7 +6699,7 @@ static PyObject *_wrap_FileSystemHandler_FindNext(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_FileSystemHandler_GetProtocol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler_GetProtocol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -6746,7 +6747,7 @@ static PyObject *_wrap_FileSystemHandler_GetProtocol(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_FileSystemHandler_GetLeftLocation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler_GetLeftLocation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -6794,7 +6795,7 @@ static PyObject *_wrap_FileSystemHandler_GetLeftLocation(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_FileSystemHandler_GetAnchor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler_GetAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -6842,7 +6843,7 @@ static PyObject *_wrap_FileSystemHandler_GetAnchor(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_FileSystemHandler_GetRightLocation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler_GetRightLocation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -6890,7 +6891,7 @@ static PyObject *_wrap_FileSystemHandler_GetRightLocation(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_FileSystemHandler_GetMimeTypeFromExt(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystemHandler_GetMimeTypeFromExt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyFileSystemHandler *arg1 = (wxPyFileSystemHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -6938,14 +6939,14 @@ static PyObject *_wrap_FileSystemHandler_GetMimeTypeFromExt(PyObject *, PyObject
 }
 
 
-static PyObject * FileSystemHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * FileSystemHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyFileSystemHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_FileSystem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_FileSystem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFileSystem *result;
     char *kwnames[] = {
@@ -6969,7 +6970,7 @@ static PyObject *_wrap_new_FileSystem(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_delete_FileSystem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_FileSystem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFileSystem *arg1 = (wxFileSystem *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6994,7 +6995,7 @@ static PyObject *_wrap_delete_FileSystem(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_FileSystem_ChangePathTo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystem_ChangePathTo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFileSystem *arg1 = (wxFileSystem *) 0 ;
     wxString *arg2 = 0 ;
@@ -7041,7 +7042,7 @@ static PyObject *_wrap_FileSystem_ChangePathTo(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_FileSystem_GetPath(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystem_GetPath(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFileSystem *arg1 = (wxFileSystem *) 0 ;
     wxString result;
@@ -7073,7 +7074,7 @@ static PyObject *_wrap_FileSystem_GetPath(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_FileSystem_OpenFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystem_OpenFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFileSystem *arg1 = (wxFileSystem *) 0 ;
     wxString *arg2 = 0 ;
@@ -7117,7 +7118,7 @@ static PyObject *_wrap_FileSystem_OpenFile(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_FileSystem_FindFirst(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystem_FindFirst(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFileSystem *arg1 = (wxFileSystem *) 0 ;
     wxString *arg2 = 0 ;
@@ -7171,7 +7172,7 @@ static PyObject *_wrap_FileSystem_FindFirst(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_FileSystem_FindNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystem_FindNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFileSystem *arg1 = (wxFileSystem *) 0 ;
     wxString result;
@@ -7203,7 +7204,7 @@ static PyObject *_wrap_FileSystem_FindNext(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_FileSystem_AddHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystem_AddHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFileSystemHandler *arg1 = (wxFileSystemHandler *) 0 ;
     PyObject * obj0 = 0 ;
@@ -7228,7 +7229,7 @@ static PyObject *_wrap_FileSystem_AddHandler(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_FileSystem_CleanUpHandlers(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystem_CleanUpHandlers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     char *kwnames[] = {
         NULL 
@@ -7249,7 +7250,7 @@ static PyObject *_wrap_FileSystem_CleanUpHandlers(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_FileSystem_FileNameToURL(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystem_FileNameToURL(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxString result;
@@ -7293,14 +7294,14 @@ static PyObject *_wrap_FileSystem_FileNameToURL(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * FileSystem_swigregister(PyObject *, PyObject *args) {
+static PyObject * FileSystem_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxFileSystem, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_FileSystem_URLToFileName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileSystem_URLToFileName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxString result;
@@ -7344,7 +7345,7 @@ static PyObject *_wrap_FileSystem_URLToFileName(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_new_InternetFSHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_InternetFSHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxInternetFSHandler *result;
     char *kwnames[] = {
@@ -7366,7 +7367,7 @@ static PyObject *_wrap_new_InternetFSHandler(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_InternetFSHandler_CanOpen(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InternetFSHandler_CanOpen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxInternetFSHandler *arg1 = (wxInternetFSHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -7410,7 +7411,7 @@ static PyObject *_wrap_InternetFSHandler_CanOpen(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_InternetFSHandler_OpenFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InternetFSHandler_OpenFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxInternetFSHandler *arg1 = (wxInternetFSHandler *) 0 ;
     wxFileSystem *arg2 = 0 ;
@@ -7463,14 +7464,14 @@ static PyObject *_wrap_InternetFSHandler_OpenFile(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * InternetFSHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * InternetFSHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxInternetFSHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ZipFSHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ZipFSHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxZipFSHandler *result;
     char *kwnames[] = {
@@ -7492,7 +7493,7 @@ static PyObject *_wrap_new_ZipFSHandler(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_ZipFSHandler_CanOpen(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ZipFSHandler_CanOpen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxZipFSHandler *arg1 = (wxZipFSHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -7536,7 +7537,7 @@ static PyObject *_wrap_ZipFSHandler_CanOpen(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ZipFSHandler_OpenFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ZipFSHandler_OpenFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxZipFSHandler *arg1 = (wxZipFSHandler *) 0 ;
     wxFileSystem *arg2 = 0 ;
@@ -7589,7 +7590,7 @@ static PyObject *_wrap_ZipFSHandler_OpenFile(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_ZipFSHandler_FindFirst(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ZipFSHandler_FindFirst(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxZipFSHandler *arg1 = (wxZipFSHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -7643,7 +7644,7 @@ static PyObject *_wrap_ZipFSHandler_FindFirst(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_ZipFSHandler_FindNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ZipFSHandler_FindNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxZipFSHandler *arg1 = (wxZipFSHandler *) 0 ;
     wxString result;
@@ -7675,14 +7676,14 @@ static PyObject *_wrap_ZipFSHandler_FindNext(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject * ZipFSHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * ZipFSHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxZipFSHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap___wxMemoryFSHandler_AddFile_wxImage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap___wxMemoryFSHandler_AddFile_wxImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxImage *arg2 = 0 ;
@@ -7732,7 +7733,7 @@ static PyObject *_wrap___wxMemoryFSHandler_AddFile_wxImage(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap___wxMemoryFSHandler_AddFile_wxBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap___wxMemoryFSHandler_AddFile_wxBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxBitmap *arg2 = 0 ;
@@ -7782,7 +7783,7 @@ static PyObject *_wrap___wxMemoryFSHandler_AddFile_wxBitmap(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap___wxMemoryFSHandler_AddFile_Data(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap___wxMemoryFSHandler_AddFile_Data(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -7822,7 +7823,7 @@ static PyObject *_wrap___wxMemoryFSHandler_AddFile_Data(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_new_MemoryFSHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_MemoryFSHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMemoryFSHandler *result;
     char *kwnames[] = {
@@ -7844,7 +7845,7 @@ static PyObject *_wrap_new_MemoryFSHandler(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MemoryFSHandler_RemoveFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MemoryFSHandler_RemoveFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     bool temp1 = False ;
@@ -7881,7 +7882,7 @@ static PyObject *_wrap_MemoryFSHandler_RemoveFile(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_MemoryFSHandler_CanOpen(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MemoryFSHandler_CanOpen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMemoryFSHandler *arg1 = (wxMemoryFSHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -7925,7 +7926,7 @@ static PyObject *_wrap_MemoryFSHandler_CanOpen(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_MemoryFSHandler_OpenFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MemoryFSHandler_OpenFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMemoryFSHandler *arg1 = (wxMemoryFSHandler *) 0 ;
     wxFileSystem *arg2 = 0 ;
@@ -7978,7 +7979,7 @@ static PyObject *_wrap_MemoryFSHandler_OpenFile(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_MemoryFSHandler_FindFirst(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MemoryFSHandler_FindFirst(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMemoryFSHandler *arg1 = (wxMemoryFSHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -8032,7 +8033,7 @@ static PyObject *_wrap_MemoryFSHandler_FindFirst(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_MemoryFSHandler_FindNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MemoryFSHandler_FindNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMemoryFSHandler *arg1 = (wxMemoryFSHandler *) 0 ;
     wxString result;
@@ -8064,14 +8065,14 @@ static PyObject *_wrap_MemoryFSHandler_FindNext(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * MemoryFSHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * MemoryFSHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMemoryFSHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_ImageHandler_GetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHandler_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     wxString result;
@@ -8103,7 +8104,7 @@ static PyObject *_wrap_ImageHandler_GetName(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ImageHandler_GetExtension(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHandler_GetExtension(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     wxString result;
@@ -8135,7 +8136,7 @@ static PyObject *_wrap_ImageHandler_GetExtension(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_ImageHandler_GetType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHandler_GetType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     long result;
@@ -8161,7 +8162,7 @@ static PyObject *_wrap_ImageHandler_GetType(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ImageHandler_GetMimeType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHandler_GetMimeType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     wxString result;
@@ -8193,7 +8194,7 @@ static PyObject *_wrap_ImageHandler_GetMimeType(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_ImageHandler_CanRead(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHandler_CanRead(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -8237,7 +8238,7 @@ static PyObject *_wrap_ImageHandler_CanRead(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ImageHandler_SetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHandler_SetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -8278,7 +8279,7 @@ static PyObject *_wrap_ImageHandler_SetName(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ImageHandler_SetExtension(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHandler_SetExtension(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -8319,7 +8320,7 @@ static PyObject *_wrap_ImageHandler_SetExtension(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_ImageHandler_SetType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHandler_SetType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     long arg2 ;
@@ -8348,7 +8349,7 @@ static PyObject *_wrap_ImageHandler_SetType(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ImageHandler_SetMimeType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHandler_SetMimeType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -8389,14 +8390,14 @@ static PyObject *_wrap_ImageHandler_SetMimeType(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * ImageHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * ImageHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxImageHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ImageHistogram(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ImageHistogram(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHistogram *result;
     char *kwnames[] = {
@@ -8418,7 +8419,7 @@ static PyObject *_wrap_new_ImageHistogram(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_ImageHistogram_MakeKey(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHistogram_MakeKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     unsigned char arg1 ;
     unsigned char arg2 ;
@@ -8452,7 +8453,7 @@ static PyObject *_wrap_ImageHistogram_MakeKey(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_ImageHistogram_FindFirstUnusedColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ImageHistogram_FindFirstUnusedColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHistogram *arg1 = (wxImageHistogram *) 0 ;
     unsigned char *arg2 = (unsigned char *) 0 ;
@@ -8519,14 +8520,14 @@ static PyObject *_wrap_ImageHistogram_FindFirstUnusedColour(PyObject *, PyObject
 }
 
 
-static PyObject * ImageHistogram_swigregister(PyObject *, PyObject *args) {
+static PyObject * ImageHistogram_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxImageHistogram, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_Image(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Image(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     long arg2 = (long) wxBITMAP_TYPE_ANY ;
@@ -8576,7 +8577,7 @@ static PyObject *_wrap_new_Image(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_delete_Image(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_Image(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8601,7 +8602,7 @@ static PyObject *_wrap_delete_Image(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_new_ImageFromMime(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ImageFromMime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxString *arg2 = 0 ;
@@ -8661,7 +8662,7 @@ static PyObject *_wrap_new_ImageFromMime(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_new_ImageFromStream(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ImageFromStream(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxInputStream *arg1 = 0 ;
     long arg2 = (long) wxBITMAP_TYPE_ANY ;
@@ -8721,7 +8722,7 @@ static PyObject *_wrap_new_ImageFromStream(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_new_ImageFromStreamMime(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ImageFromStreamMime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxInputStream *arg1 = 0 ;
     wxString *arg2 = 0 ;
@@ -8791,7 +8792,7 @@ static PyObject *_wrap_new_ImageFromStreamMime(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_new_EmptyImage__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_new_EmptyImage__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -8828,7 +8829,7 @@ static PyObject *_wrap_new_EmptyImage__SWIG_0(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_new_EmptyImage__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_new_EmptyImage__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxSize *arg1 = 0 ;
     bool arg2 = (bool) True ;
@@ -8912,7 +8913,7 @@ static PyObject *_wrap_new_EmptyImage(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_new_ImageFromBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ImageFromBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBitmap *arg1 = 0 ;
     wxImage *result;
@@ -8943,7 +8944,7 @@ static PyObject *_wrap_new_ImageFromBitmap(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_new_ImageFromData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ImageFromData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     int arg2 ;
@@ -8977,7 +8978,7 @@ static PyObject *_wrap_new_ImageFromData(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Image_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9010,7 +9011,7 @@ static PyObject *_wrap_Image_Create(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Image_Destroy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9035,7 +9036,7 @@ static PyObject *_wrap_Image_Destroy(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_Scale(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Scale(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9073,7 +9074,7 @@ static PyObject *_wrap_Image_Scale(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Image_ShrinkBy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_ShrinkBy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9111,7 +9112,7 @@ static PyObject *_wrap_Image_ShrinkBy(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Image_Rescale(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Rescale(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9148,7 +9149,7 @@ static PyObject *_wrap_Image_Rescale(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_SetRGB(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetRGB(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9193,7 +9194,7 @@ static PyObject *_wrap_Image_SetRGB(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Image_GetRed(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetRed(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9227,7 +9228,7 @@ static PyObject *_wrap_Image_GetRed(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Image_GetGreen(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetGreen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9261,7 +9262,7 @@ static PyObject *_wrap_Image_GetGreen(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Image_GetBlue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetBlue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9295,7 +9296,7 @@ static PyObject *_wrap_Image_GetBlue(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_SetAlpha(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetAlpha(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9332,7 +9333,7 @@ static PyObject *_wrap_Image_SetAlpha(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Image_GetAlpha(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetAlpha(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
@@ -9366,7 +9367,7 @@ static PyObject *_wrap_Image_GetAlpha(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Image_HasAlpha(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_HasAlpha(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     bool result;
@@ -9394,7 +9395,7 @@ static PyObject *_wrap_Image_HasAlpha(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Image_FindFirstUnusedColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_FindFirstUnusedColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     byte *arg2 = (byte *) 0 ;
@@ -9461,7 +9462,7 @@ static PyObject *_wrap_Image_FindFirstUnusedColour(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Image_SetMaskFromImage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetMaskFromImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxImage *arg2 = 0 ;
@@ -9510,7 +9511,7 @@ static PyObject *_wrap_Image_SetMaskFromImage(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Image_CanRead(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_CanRead(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     bool result;
@@ -9550,7 +9551,7 @@ static PyObject *_wrap_Image_CanRead(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_GetImageCount(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetImageCount(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     long arg2 = (long) wxBITMAP_TYPE_ANY ;
@@ -9594,7 +9595,7 @@ static PyObject *_wrap_Image_GetImageCount(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Image_LoadFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxString *arg2 = 0 ;
@@ -9650,7 +9651,7 @@ static PyObject *_wrap_Image_LoadFile(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Image_LoadMimeFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_LoadMimeFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxString *arg2 = 0 ;
@@ -9716,7 +9717,7 @@ static PyObject *_wrap_Image_LoadMimeFile(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Image_SaveFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SaveFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxString *arg2 = 0 ;
@@ -9764,7 +9765,7 @@ static PyObject *_wrap_Image_SaveFile(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Image_SaveMimeFile(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SaveMimeFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxString *arg2 = 0 ;
@@ -9824,7 +9825,7 @@ static PyObject *_wrap_Image_SaveMimeFile(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Image_CanReadStream(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_CanReadStream(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxInputStream *arg1 = 0 ;
     bool result;
@@ -9874,7 +9875,7 @@ static PyObject *_wrap_Image_CanReadStream(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Image_LoadStream(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_LoadStream(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxInputStream *arg2 = 0 ;
@@ -9940,7 +9941,7 @@ static PyObject *_wrap_Image_LoadStream(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Image_LoadMimeStream(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_LoadMimeStream(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxInputStream *arg2 = 0 ;
@@ -10016,7 +10017,7 @@ static PyObject *_wrap_Image_LoadMimeStream(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Image_Ok(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     bool result;
@@ -10044,7 +10045,7 @@ static PyObject *_wrap_Image_Ok(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Image_GetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int result;
@@ -10070,7 +10071,7 @@ static PyObject *_wrap_Image_GetWidth(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Image_GetHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     int result;
@@ -10096,7 +10097,7 @@ static PyObject *_wrap_Image_GetHeight(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Image_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxSize result;
@@ -10126,7 +10127,7 @@ static PyObject *_wrap_Image_GetSize(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_GetSubImage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetSubImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxRect *arg2 = 0 ;
@@ -10163,7 +10164,7 @@ static PyObject *_wrap_Image_GetSubImage(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Image_Copy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Copy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     SwigValueWrapper< wxImage > result;
@@ -10193,7 +10194,7 @@ static PyObject *_wrap_Image_Copy(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Image_Paste(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Paste(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxImage *arg2 = 0 ;
@@ -10235,7 +10236,7 @@ static PyObject *_wrap_Image_Paste(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Image_GetData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject *result;
@@ -10261,7 +10262,7 @@ static PyObject *_wrap_Image_GetData(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_SetData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -10289,7 +10290,7 @@ static PyObject *_wrap_Image_SetData(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_GetDataBuffer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetDataBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject *result;
@@ -10315,7 +10316,7 @@ static PyObject *_wrap_Image_GetDataBuffer(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Image_SetDataBuffer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetDataBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -10343,7 +10344,7 @@ static PyObject *_wrap_Image_SetDataBuffer(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Image_GetAlphaData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetAlphaData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject *result;
@@ -10369,7 +10370,7 @@ static PyObject *_wrap_Image_GetAlphaData(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Image_SetAlphaData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetAlphaData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -10397,7 +10398,7 @@ static PyObject *_wrap_Image_SetAlphaData(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Image_GetAlphaBuffer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetAlphaBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject *result;
@@ -10423,7 +10424,7 @@ static PyObject *_wrap_Image_GetAlphaBuffer(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Image_SetAlphaBuffer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetAlphaBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -10451,7 +10452,7 @@ static PyObject *_wrap_Image_SetAlphaBuffer(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Image_SetMaskColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetMaskColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     unsigned char arg2 ;
@@ -10488,7 +10489,7 @@ static PyObject *_wrap_Image_SetMaskColour(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Image_GetMaskRed(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetMaskRed(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     unsigned char result;
@@ -10514,7 +10515,7 @@ static PyObject *_wrap_Image_GetMaskRed(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Image_GetMaskGreen(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetMaskGreen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     unsigned char result;
@@ -10540,7 +10541,7 @@ static PyObject *_wrap_Image_GetMaskGreen(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Image_GetMaskBlue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetMaskBlue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     unsigned char result;
@@ -10566,7 +10567,7 @@ static PyObject *_wrap_Image_GetMaskBlue(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Image_SetMask(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     bool arg2 = (bool) True ;
@@ -10597,7 +10598,7 @@ static PyObject *_wrap_Image_SetMask(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_HasMask(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_HasMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     bool result;
@@ -10625,7 +10626,7 @@ static PyObject *_wrap_Image_HasMask(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_Rotate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Rotate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     double arg2 ;
@@ -10678,7 +10679,7 @@ static PyObject *_wrap_Image_Rotate(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Image_Rotate90(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Rotate90(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     bool arg2 = (bool) True ;
@@ -10714,7 +10715,7 @@ static PyObject *_wrap_Image_Rotate90(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Image_Mirror(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Mirror(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     bool arg2 = (bool) True ;
@@ -10750,7 +10751,7 @@ static PyObject *_wrap_Image_Mirror(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Image_Replace(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_Replace(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     unsigned char arg2 ;
@@ -10799,7 +10800,7 @@ static PyObject *_wrap_Image_Replace(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Image_ConvertToMono(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_ConvertToMono(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     unsigned char arg2 ;
@@ -10841,7 +10842,7 @@ static PyObject *_wrap_Image_ConvertToMono(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Image_SetOption(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetOption(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxString *arg2 = 0 ;
@@ -10898,7 +10899,7 @@ static PyObject *_wrap_Image_SetOption(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Image_SetOptionInt(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_SetOptionInt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxString *arg2 = 0 ;
@@ -10943,7 +10944,7 @@ static PyObject *_wrap_Image_SetOptionInt(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Image_GetOption(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetOption(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxString *arg2 = 0 ;
@@ -10991,7 +10992,7 @@ static PyObject *_wrap_Image_GetOption(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Image_GetOptionInt(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetOptionInt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxString *arg2 = 0 ;
@@ -11033,7 +11034,7 @@ static PyObject *_wrap_Image_GetOptionInt(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Image_HasOption(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_HasOption(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxString *arg2 = 0 ;
@@ -11077,7 +11078,7 @@ static PyObject *_wrap_Image_HasOption(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Image_CountColours(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_CountColours(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     unsigned long arg2 = (unsigned long) (unsigned long) -1 ;
@@ -11109,7 +11110,7 @@ static PyObject *_wrap_Image_CountColours(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Image_ComputeHistogram(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_ComputeHistogram(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxImageHistogram *arg2 = 0 ;
@@ -11144,7 +11145,7 @@ static PyObject *_wrap_Image_ComputeHistogram(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Image_AddHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_AddHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11169,7 +11170,7 @@ static PyObject *_wrap_Image_AddHandler(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Image_InsertHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_InsertHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHandler *arg1 = (wxImageHandler *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11194,7 +11195,7 @@ static PyObject *_wrap_Image_InsertHandler(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Image_RemoveHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_RemoveHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     bool result;
@@ -11234,7 +11235,7 @@ static PyObject *_wrap_Image_RemoveHandler(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Image_GetImageExtWildcard(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_GetImageExtWildcard(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString result;
     char *kwnames[] = {
@@ -11262,7 +11263,7 @@ static PyObject *_wrap_Image_GetImageExtWildcard(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Image_ConvertToBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_ConvertToBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxBitmap result;
@@ -11292,7 +11293,7 @@ static PyObject *_wrap_Image_ConvertToBitmap(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Image_ConvertToMonoBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Image_ConvertToMonoBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     unsigned char arg2 ;
@@ -11334,14 +11335,14 @@ static PyObject *_wrap_Image_ConvertToMonoBitmap(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject * Image_swigregister(PyObject *, PyObject *args) {
+static PyObject * Image_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxImage, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_InitAllImageHandlers(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_InitAllImageHandlers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     char *kwnames[] = {
         NULL 
@@ -11362,7 +11363,7 @@ static PyObject *_wrap_InitAllImageHandlers(PyObject *, PyObject *args, PyObject
 }
 
 
-static int _wrap_NullImage_set(PyObject *) {
+static int _wrap_NullImage_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable NullImage is read-only.");
     return 1;
 }
@@ -11376,7 +11377,7 @@ static PyObject *_wrap_NullImage_get() {
 }
 
 
-static int _wrap_IMAGE_OPTION_BMP_FORMAT_set(PyObject *) {
+static int _wrap_IMAGE_OPTION_BMP_FORMAT_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_BMP_FORMAT is read-only.");
     return 1;
 }
@@ -11396,7 +11397,7 @@ static PyObject *_wrap_IMAGE_OPTION_BMP_FORMAT_get() {
 }
 
 
-static int _wrap_IMAGE_OPTION_CUR_HOTSPOT_X_set(PyObject *) {
+static int _wrap_IMAGE_OPTION_CUR_HOTSPOT_X_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_CUR_HOTSPOT_X is read-only.");
     return 1;
 }
@@ -11416,7 +11417,7 @@ static PyObject *_wrap_IMAGE_OPTION_CUR_HOTSPOT_X_get() {
 }
 
 
-static int _wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_set(PyObject *) {
+static int _wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_CUR_HOTSPOT_Y is read-only.");
     return 1;
 }
@@ -11436,7 +11437,7 @@ static PyObject *_wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_get() {
 }
 
 
-static int _wrap_IMAGE_OPTION_RESOLUTION_set(PyObject *) {
+static int _wrap_IMAGE_OPTION_RESOLUTION_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTION is read-only.");
     return 1;
 }
@@ -11456,7 +11457,7 @@ static PyObject *_wrap_IMAGE_OPTION_RESOLUTION_get() {
 }
 
 
-static int _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set(PyObject *) {
+static int _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTIONUNIT is read-only.");
     return 1;
 }
@@ -11476,7 +11477,7 @@ static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get() {
 }
 
 
-static PyObject *_wrap_new_BMPHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_BMPHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBMPHandler *result;
     char *kwnames[] = {
@@ -11498,14 +11499,14 @@ static PyObject *_wrap_new_BMPHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * BMPHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * BMPHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxBMPHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ICOHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ICOHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxICOHandler *result;
     char *kwnames[] = {
@@ -11527,14 +11528,14 @@ static PyObject *_wrap_new_ICOHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * ICOHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * ICOHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxICOHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_CURHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_CURHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCURHandler *result;
     char *kwnames[] = {
@@ -11556,14 +11557,14 @@ static PyObject *_wrap_new_CURHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * CURHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * CURHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxCURHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ANIHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ANIHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxANIHandler *result;
     char *kwnames[] = {
@@ -11585,14 +11586,14 @@ static PyObject *_wrap_new_ANIHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * ANIHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * ANIHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxANIHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PNGHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PNGHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPNGHandler *result;
     char *kwnames[] = {
@@ -11614,14 +11615,14 @@ static PyObject *_wrap_new_PNGHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * PNGHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * PNGHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPNGHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GIFHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GIFHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGIFHandler *result;
     char *kwnames[] = {
@@ -11643,14 +11644,14 @@ static PyObject *_wrap_new_GIFHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * GIFHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * GIFHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGIFHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PCXHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PCXHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPCXHandler *result;
     char *kwnames[] = {
@@ -11672,14 +11673,14 @@ static PyObject *_wrap_new_PCXHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * PCXHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * PCXHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPCXHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_JPEGHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_JPEGHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxJPEGHandler *result;
     char *kwnames[] = {
@@ -11701,14 +11702,14 @@ static PyObject *_wrap_new_JPEGHandler(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject * JPEGHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * JPEGHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxJPEGHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PNMHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PNMHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPNMHandler *result;
     char *kwnames[] = {
@@ -11730,14 +11731,14 @@ static PyObject *_wrap_new_PNMHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * PNMHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * PNMHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPNMHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_XPMHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_XPMHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXPMHandler *result;
     char *kwnames[] = {
@@ -11759,14 +11760,14 @@ static PyObject *_wrap_new_XPMHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * XPMHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * XPMHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxXPMHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_TIFFHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_TIFFHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTIFFHandler *result;
     char *kwnames[] = {
@@ -11788,14 +11789,14 @@ static PyObject *_wrap_new_TIFFHandler(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject * TIFFHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * TIFFHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxTIFFHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_EvtHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_EvtHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *result;
     char *kwnames[] = {
@@ -11819,7 +11820,7 @@ static PyObject *_wrap_new_EvtHandler(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_EvtHandler_GetNextHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_GetNextHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     wxEvtHandler *result;
@@ -11847,7 +11848,7 @@ static PyObject *_wrap_EvtHandler_GetNextHandler(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_EvtHandler_GetPreviousHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_GetPreviousHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     wxEvtHandler *result;
@@ -11875,7 +11876,7 @@ static PyObject *_wrap_EvtHandler_GetPreviousHandler(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_EvtHandler_SetNextHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_SetNextHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     wxEvtHandler *arg2 = (wxEvtHandler *) 0 ;
@@ -11904,7 +11905,7 @@ static PyObject *_wrap_EvtHandler_SetNextHandler(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_EvtHandler_SetPreviousHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_SetPreviousHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     wxEvtHandler *arg2 = (wxEvtHandler *) 0 ;
@@ -11933,7 +11934,7 @@ static PyObject *_wrap_EvtHandler_SetPreviousHandler(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_EvtHandler_GetEvtHandlerEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_GetEvtHandlerEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     bool result;
@@ -11961,7 +11962,7 @@ static PyObject *_wrap_EvtHandler_GetEvtHandlerEnabled(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_EvtHandler_SetEvtHandlerEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_SetEvtHandlerEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     bool arg2 ;
@@ -11990,7 +11991,7 @@ static PyObject *_wrap_EvtHandler_SetEvtHandlerEnabled(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_EvtHandler_ProcessEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_ProcessEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     wxEvent *arg2 = 0 ;
@@ -12027,7 +12028,7 @@ static PyObject *_wrap_EvtHandler_ProcessEvent(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_EvtHandler_AddPendingEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_AddPendingEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     wxEvent *arg2 = 0 ;
@@ -12061,7 +12062,7 @@ static PyObject *_wrap_EvtHandler_AddPendingEvent(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_EvtHandler_ProcessPendingEvents(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_ProcessPendingEvents(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12086,7 +12087,7 @@ static PyObject *_wrap_EvtHandler_ProcessPendingEvents(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_EvtHandler_Connect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_Connect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     int arg2 ;
@@ -12126,7 +12127,7 @@ static PyObject *_wrap_EvtHandler_Connect(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_EvtHandler_Disconnect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler_Disconnect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     int arg2 ;
@@ -12170,7 +12171,7 @@ static PyObject *_wrap_EvtHandler_Disconnect(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_EvtHandler__setOORInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EvtHandler__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -12198,14 +12199,14 @@ static PyObject *_wrap_EvtHandler__setOORInfo(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject * EvtHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * EvtHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxEvtHandler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_NewEventType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NewEventType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType result;
     char *kwnames[] = {
@@ -12227,7 +12228,7 @@ static PyObject *_wrap_NewEventType(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_delete_Event(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_Event(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12252,7 +12253,7 @@ static PyObject *_wrap_delete_Event(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Event_SetEventType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_SetEventType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     wxEventType arg2 ;
@@ -12281,7 +12282,7 @@ static PyObject *_wrap_Event_SetEventType(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Event_GetEventType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_GetEventType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     wxEventType result;
@@ -12307,7 +12308,7 @@ static PyObject *_wrap_Event_GetEventType(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Event_GetEventObject(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_GetEventObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     wxObject *result;
@@ -12335,7 +12336,7 @@ static PyObject *_wrap_Event_GetEventObject(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Event_SetEventObject(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_SetEventObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     wxObject *arg2 = (wxObject *) 0 ;
@@ -12364,7 +12365,7 @@ static PyObject *_wrap_Event_SetEventObject(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Event_GetTimestamp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_GetTimestamp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     long result;
@@ -12390,7 +12391,7 @@ static PyObject *_wrap_Event_GetTimestamp(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Event_SetTimestamp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_SetTimestamp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     long arg2 = (long) 0 ;
@@ -12421,7 +12422,7 @@ static PyObject *_wrap_Event_SetTimestamp(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Event_GetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     int result;
@@ -12447,7 +12448,7 @@ static PyObject *_wrap_Event_GetId(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Event_SetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     int arg2 ;
@@ -12476,7 +12477,7 @@ static PyObject *_wrap_Event_SetId(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Event_IsCommandEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_IsCommandEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     bool result;
@@ -12504,7 +12505,7 @@ static PyObject *_wrap_Event_IsCommandEvent(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Event_Skip(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_Skip(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     bool arg2 = (bool) True ;
@@ -12535,7 +12536,7 @@ static PyObject *_wrap_Event_Skip(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Event_GetSkipped(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_GetSkipped(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     bool result;
@@ -12563,7 +12564,7 @@ static PyObject *_wrap_Event_GetSkipped(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Event_ShouldPropagate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_ShouldPropagate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     bool result;
@@ -12591,7 +12592,7 @@ static PyObject *_wrap_Event_ShouldPropagate(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Event_StopPropagation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_StopPropagation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     int result;
@@ -12617,7 +12618,7 @@ static PyObject *_wrap_Event_StopPropagation(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Event_ResumePropagation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_ResumePropagation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     int arg2 ;
@@ -12646,7 +12647,7 @@ static PyObject *_wrap_Event_ResumePropagation(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Event_Clone(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Event_Clone(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = (wxEvent *) 0 ;
     wxEvent *result;
@@ -12672,14 +12673,14 @@ static PyObject *_wrap_Event_Clone(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject * Event_swigregister(PyObject *, PyObject *args) {
+static PyObject * Event_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PropagationDisabler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PropagationDisabler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = 0 ;
     wxPropagationDisabler *result;
@@ -12710,7 +12711,7 @@ static PyObject *_wrap_new_PropagationDisabler(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_delete_PropagationDisabler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_PropagationDisabler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPropagationDisabler *arg1 = (wxPropagationDisabler *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12735,14 +12736,14 @@ static PyObject *_wrap_delete_PropagationDisabler(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * PropagationDisabler_swigregister(PyObject *, PyObject *args) {
+static PyObject * PropagationDisabler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPropagationDisabler, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PropagateOnce(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PropagateOnce(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvent *arg1 = 0 ;
     wxPropagateOnce *result;
@@ -12773,7 +12774,7 @@ static PyObject *_wrap_new_PropagateOnce(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_delete_PropagateOnce(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_PropagateOnce(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPropagateOnce *arg1 = (wxPropagateOnce *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12798,14 +12799,14 @@ static PyObject *_wrap_delete_PropagateOnce(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject * PropagateOnce_swigregister(PyObject *, PyObject *args) {
+static PyObject * PropagateOnce_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPropagateOnce, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_CommandEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_CommandEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -12839,7 +12840,7 @@ static PyObject *_wrap_new_CommandEvent(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_CommandEvent_GetSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     int result;
@@ -12865,7 +12866,7 @@ static PyObject *_wrap_CommandEvent_GetSelection(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_CommandEvent_SetString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_SetString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     wxString *arg2 = 0 ;
@@ -12906,7 +12907,7 @@ static PyObject *_wrap_CommandEvent_SetString(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_CommandEvent_GetString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_GetString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     wxString result;
@@ -12938,7 +12939,7 @@ static PyObject *_wrap_CommandEvent_GetString(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_CommandEvent_IsChecked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_IsChecked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     bool result;
@@ -12966,7 +12967,7 @@ static PyObject *_wrap_CommandEvent_IsChecked(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_CommandEvent_IsSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_IsSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     bool result;
@@ -12994,7 +12995,7 @@ static PyObject *_wrap_CommandEvent_IsSelection(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_CommandEvent_SetExtraLong(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_SetExtraLong(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     long arg2 ;
@@ -13023,7 +13024,7 @@ static PyObject *_wrap_CommandEvent_SetExtraLong(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_CommandEvent_GetExtraLong(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_GetExtraLong(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     long result;
@@ -13049,7 +13050,7 @@ static PyObject *_wrap_CommandEvent_GetExtraLong(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_CommandEvent_SetInt(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_SetInt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     int arg2 ;
@@ -13078,7 +13079,7 @@ static PyObject *_wrap_CommandEvent_SetInt(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_CommandEvent_GetInt(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_GetInt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     long result;
@@ -13104,7 +13105,7 @@ static PyObject *_wrap_CommandEvent_GetInt(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_CommandEvent_Clone(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CommandEvent_Clone(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
     wxEvent *result;
@@ -13130,14 +13131,14 @@ static PyObject *_wrap_CommandEvent_Clone(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject * CommandEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * CommandEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxCommandEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_NotifyEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_NotifyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -13171,7 +13172,7 @@ static PyObject *_wrap_new_NotifyEvent(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_NotifyEvent_Veto(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NotifyEvent_Veto(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNotifyEvent *arg1 = (wxNotifyEvent *) 0 ;
     PyObject * obj0 = 0 ;
@@ -13196,7 +13197,7 @@ static PyObject *_wrap_NotifyEvent_Veto(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_NotifyEvent_Allow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NotifyEvent_Allow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNotifyEvent *arg1 = (wxNotifyEvent *) 0 ;
     PyObject * obj0 = 0 ;
@@ -13221,7 +13222,7 @@ static PyObject *_wrap_NotifyEvent_Allow(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_NotifyEvent_IsAllowed(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NotifyEvent_IsAllowed(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNotifyEvent *arg1 = (wxNotifyEvent *) 0 ;
     bool result;
@@ -13249,14 +13250,14 @@ static PyObject *_wrap_NotifyEvent_IsAllowed(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject * NotifyEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * NotifyEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxNotifyEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ScrollEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ScrollEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -13302,7 +13303,7 @@ static PyObject *_wrap_new_ScrollEvent(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_ScrollEvent_GetOrientation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ScrollEvent_GetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxScrollEvent *arg1 = (wxScrollEvent *) 0 ;
     int result;
@@ -13328,7 +13329,7 @@ static PyObject *_wrap_ScrollEvent_GetOrientation(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_ScrollEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ScrollEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxScrollEvent *arg1 = (wxScrollEvent *) 0 ;
     int result;
@@ -13354,7 +13355,7 @@ static PyObject *_wrap_ScrollEvent_GetPosition(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_ScrollEvent_SetOrientation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ScrollEvent_SetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxScrollEvent *arg1 = (wxScrollEvent *) 0 ;
     int arg2 ;
@@ -13383,7 +13384,7 @@ static PyObject *_wrap_ScrollEvent_SetOrientation(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_ScrollEvent_SetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ScrollEvent_SetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxScrollEvent *arg1 = (wxScrollEvent *) 0 ;
     int arg2 ;
@@ -13412,14 +13413,14 @@ static PyObject *_wrap_ScrollEvent_SetPosition(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject * ScrollEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * ScrollEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxScrollEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ScrollWinEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ScrollWinEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -13459,7 +13460,7 @@ static PyObject *_wrap_new_ScrollWinEvent(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_ScrollWinEvent_GetOrientation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ScrollWinEvent_GetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxScrollWinEvent *arg1 = (wxScrollWinEvent *) 0 ;
     int result;
@@ -13485,7 +13486,7 @@ static PyObject *_wrap_ScrollWinEvent_GetOrientation(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_ScrollWinEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ScrollWinEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxScrollWinEvent *arg1 = (wxScrollWinEvent *) 0 ;
     int result;
@@ -13511,7 +13512,7 @@ static PyObject *_wrap_ScrollWinEvent_GetPosition(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_ScrollWinEvent_SetOrientation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ScrollWinEvent_SetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxScrollWinEvent *arg1 = (wxScrollWinEvent *) 0 ;
     int arg2 ;
@@ -13540,7 +13541,7 @@ static PyObject *_wrap_ScrollWinEvent_SetOrientation(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_ScrollWinEvent_SetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ScrollWinEvent_SetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxScrollWinEvent *arg1 = (wxScrollWinEvent *) 0 ;
     int arg2 ;
@@ -13569,14 +13570,14 @@ static PyObject *_wrap_ScrollWinEvent_SetPosition(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * ScrollWinEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * ScrollWinEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxScrollWinEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_MouseEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_MouseEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     wxMouseEvent *result;
@@ -13606,7 +13607,7 @@ static PyObject *_wrap_new_MouseEvent(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MouseEvent_IsButton(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_IsButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -13634,7 +13635,7 @@ static PyObject *_wrap_MouseEvent_IsButton(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MouseEvent_ButtonDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_ButtonDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 = (int) wxMOUSE_BTN_ANY ;
@@ -13668,7 +13669,7 @@ static PyObject *_wrap_MouseEvent_ButtonDown(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MouseEvent_ButtonDClick(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_ButtonDClick(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 = (int) wxMOUSE_BTN_ANY ;
@@ -13702,7 +13703,7 @@ static PyObject *_wrap_MouseEvent_ButtonDClick(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_MouseEvent_ButtonUp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_ButtonUp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 = (int) wxMOUSE_BTN_ANY ;
@@ -13736,7 +13737,7 @@ static PyObject *_wrap_MouseEvent_ButtonUp(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MouseEvent_Button(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_Button(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 ;
@@ -13768,7 +13769,7 @@ static PyObject *_wrap_MouseEvent_Button(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MouseEvent_ButtonIsDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_ButtonIsDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 ;
@@ -13800,7 +13801,7 @@ static PyObject *_wrap_MouseEvent_ButtonIsDown(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_MouseEvent_GetButton(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_GetButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -13826,7 +13827,7 @@ static PyObject *_wrap_MouseEvent_GetButton(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MouseEvent_ControlDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_ControlDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -13854,7 +13855,7 @@ static PyObject *_wrap_MouseEvent_ControlDown(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_MouseEvent_MetaDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_MetaDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -13882,7 +13883,7 @@ static PyObject *_wrap_MouseEvent_MetaDown(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MouseEvent_AltDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_AltDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -13910,7 +13911,7 @@ static PyObject *_wrap_MouseEvent_AltDown(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MouseEvent_ShiftDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_ShiftDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -13938,7 +13939,7 @@ static PyObject *_wrap_MouseEvent_ShiftDown(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MouseEvent_LeftDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_LeftDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -13966,7 +13967,7 @@ static PyObject *_wrap_MouseEvent_LeftDown(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MouseEvent_MiddleDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_MiddleDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -13994,7 +13995,7 @@ static PyObject *_wrap_MouseEvent_MiddleDown(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MouseEvent_RightDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_RightDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14022,7 +14023,7 @@ static PyObject *_wrap_MouseEvent_RightDown(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MouseEvent_LeftUp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_LeftUp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14050,7 +14051,7 @@ static PyObject *_wrap_MouseEvent_LeftUp(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MouseEvent_MiddleUp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_MiddleUp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14078,7 +14079,7 @@ static PyObject *_wrap_MouseEvent_MiddleUp(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MouseEvent_RightUp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_RightUp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14106,7 +14107,7 @@ static PyObject *_wrap_MouseEvent_RightUp(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MouseEvent_LeftDClick(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_LeftDClick(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14134,7 +14135,7 @@ static PyObject *_wrap_MouseEvent_LeftDClick(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MouseEvent_MiddleDClick(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_MiddleDClick(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14162,7 +14163,7 @@ static PyObject *_wrap_MouseEvent_MiddleDClick(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_MouseEvent_RightDClick(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_RightDClick(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14190,7 +14191,7 @@ static PyObject *_wrap_MouseEvent_RightDClick(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_MouseEvent_LeftIsDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_LeftIsDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14218,7 +14219,7 @@ static PyObject *_wrap_MouseEvent_LeftIsDown(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MouseEvent_MiddleIsDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_MiddleIsDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14246,7 +14247,7 @@ static PyObject *_wrap_MouseEvent_MiddleIsDown(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_MouseEvent_RightIsDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_RightIsDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14274,7 +14275,7 @@ static PyObject *_wrap_MouseEvent_RightIsDown(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_MouseEvent_Dragging(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_Dragging(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14302,7 +14303,7 @@ static PyObject *_wrap_MouseEvent_Dragging(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MouseEvent_Moving(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_Moving(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14330,7 +14331,7 @@ static PyObject *_wrap_MouseEvent_Moving(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MouseEvent_Entering(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_Entering(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14358,7 +14359,7 @@ static PyObject *_wrap_MouseEvent_Entering(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MouseEvent_Leaving(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_Leaving(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14386,7 +14387,7 @@ static PyObject *_wrap_MouseEvent_Leaving(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MouseEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     wxPoint result;
@@ -14416,7 +14417,7 @@ static PyObject *_wrap_MouseEvent_GetPosition(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_MouseEvent_GetPositionTuple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_GetPositionTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     long *arg2 = (long *) 0 ;
@@ -14455,7 +14456,7 @@ static PyObject *_wrap_MouseEvent_GetPositionTuple(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_MouseEvent_GetLogicalPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_GetLogicalPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     wxDC *arg2 = 0 ;
@@ -14494,7 +14495,7 @@ static PyObject *_wrap_MouseEvent_GetLogicalPosition(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_MouseEvent_GetX(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_GetX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -14520,7 +14521,7 @@ static PyObject *_wrap_MouseEvent_GetX(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_MouseEvent_GetY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_GetY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -14546,7 +14547,7 @@ static PyObject *_wrap_MouseEvent_GetY(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_MouseEvent_GetWheelRotation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_GetWheelRotation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -14572,7 +14573,7 @@ static PyObject *_wrap_MouseEvent_GetWheelRotation(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_MouseEvent_GetWheelDelta(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_GetWheelDelta(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -14598,7 +14599,7 @@ static PyObject *_wrap_MouseEvent_GetWheelDelta(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_MouseEvent_GetLinesPerAction(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_GetLinesPerAction(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -14624,7 +14625,7 @@ static PyObject *_wrap_MouseEvent_GetLinesPerAction(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_MouseEvent_IsPageScroll(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_IsPageScroll(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14652,7 +14653,7 @@ static PyObject *_wrap_MouseEvent_IsPageScroll(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_MouseEvent_m_x_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 ;
@@ -14676,7 +14677,7 @@ static PyObject *_wrap_MouseEvent_m_x_set(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MouseEvent_m_x_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_x_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -14697,7 +14698,7 @@ static PyObject *_wrap_MouseEvent_m_x_get(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MouseEvent_m_y_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_y_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 ;
@@ -14721,7 +14722,7 @@ static PyObject *_wrap_MouseEvent_m_y_set(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MouseEvent_m_y_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_y_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -14742,7 +14743,7 @@ static PyObject *_wrap_MouseEvent_m_y_get(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MouseEvent_m_leftDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_leftDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool arg2 ;
@@ -14766,7 +14767,7 @@ static PyObject *_wrap_MouseEvent_m_leftDown_set(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_MouseEvent_m_leftDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_leftDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14789,7 +14790,7 @@ static PyObject *_wrap_MouseEvent_m_leftDown_get(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_MouseEvent_m_middleDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_middleDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool arg2 ;
@@ -14813,7 +14814,7 @@ static PyObject *_wrap_MouseEvent_m_middleDown_set(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_MouseEvent_m_middleDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_middleDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14836,7 +14837,7 @@ static PyObject *_wrap_MouseEvent_m_middleDown_get(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_MouseEvent_m_rightDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_rightDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool arg2 ;
@@ -14860,7 +14861,7 @@ static PyObject *_wrap_MouseEvent_m_rightDown_set(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_MouseEvent_m_rightDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_rightDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14883,7 +14884,7 @@ static PyObject *_wrap_MouseEvent_m_rightDown_get(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_MouseEvent_m_controlDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_controlDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool arg2 ;
@@ -14907,7 +14908,7 @@ static PyObject *_wrap_MouseEvent_m_controlDown_set(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_MouseEvent_m_controlDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_controlDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14930,7 +14931,7 @@ static PyObject *_wrap_MouseEvent_m_controlDown_get(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_MouseEvent_m_shiftDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_shiftDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool arg2 ;
@@ -14954,7 +14955,7 @@ static PyObject *_wrap_MouseEvent_m_shiftDown_set(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_MouseEvent_m_shiftDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_shiftDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -14977,7 +14978,7 @@ static PyObject *_wrap_MouseEvent_m_shiftDown_get(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_MouseEvent_m_altDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_altDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool arg2 ;
@@ -15001,7 +15002,7 @@ static PyObject *_wrap_MouseEvent_m_altDown_set(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_MouseEvent_m_altDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_altDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -15024,7 +15025,7 @@ static PyObject *_wrap_MouseEvent_m_altDown_get(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_MouseEvent_m_metaDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_metaDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool arg2 ;
@@ -15048,7 +15049,7 @@ static PyObject *_wrap_MouseEvent_m_metaDown_set(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_MouseEvent_m_metaDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_metaDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     bool result;
@@ -15071,7 +15072,7 @@ static PyObject *_wrap_MouseEvent_m_metaDown_get(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_MouseEvent_m_wheelRotation_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_wheelRotation_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 ;
@@ -15095,7 +15096,7 @@ static PyObject *_wrap_MouseEvent_m_wheelRotation_set(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_MouseEvent_m_wheelRotation_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_wheelRotation_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -15116,7 +15117,7 @@ static PyObject *_wrap_MouseEvent_m_wheelRotation_get(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_MouseEvent_m_wheelDelta_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_wheelDelta_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 ;
@@ -15140,7 +15141,7 @@ static PyObject *_wrap_MouseEvent_m_wheelDelta_set(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_MouseEvent_m_wheelDelta_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_wheelDelta_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -15161,7 +15162,7 @@ static PyObject *_wrap_MouseEvent_m_wheelDelta_get(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_MouseEvent_m_linesPerAction_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_linesPerAction_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int arg2 ;
@@ -15185,7 +15186,7 @@ static PyObject *_wrap_MouseEvent_m_linesPerAction_set(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_MouseEvent_m_linesPerAction_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseEvent_m_linesPerAction_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseEvent *arg1 = (wxMouseEvent *) 0 ;
     int result;
@@ -15206,14 +15207,14 @@ static PyObject *_wrap_MouseEvent_m_linesPerAction_get(PyObject *, PyObject *arg
 }
 
 
-static PyObject * MouseEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * MouseEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMouseEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_SetCursorEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_SetCursorEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -15247,7 +15248,7 @@ static PyObject *_wrap_new_SetCursorEvent(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_SetCursorEvent_GetX(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SetCursorEvent_GetX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSetCursorEvent *arg1 = (wxSetCursorEvent *) 0 ;
     int result;
@@ -15273,7 +15274,7 @@ static PyObject *_wrap_SetCursorEvent_GetX(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_SetCursorEvent_GetY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SetCursorEvent_GetY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSetCursorEvent *arg1 = (wxSetCursorEvent *) 0 ;
     int result;
@@ -15299,7 +15300,7 @@ static PyObject *_wrap_SetCursorEvent_GetY(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_SetCursorEvent_SetCursor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SetCursorEvent_SetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSetCursorEvent *arg1 = (wxSetCursorEvent *) 0 ;
     wxCursor *arg2 = 0 ;
@@ -15333,7 +15334,7 @@ static PyObject *_wrap_SetCursorEvent_SetCursor(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_SetCursorEvent_GetCursor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SetCursorEvent_GetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSetCursorEvent *arg1 = (wxSetCursorEvent *) 0 ;
     wxCursor *result;
@@ -15365,7 +15366,7 @@ static PyObject *_wrap_SetCursorEvent_GetCursor(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_SetCursorEvent_HasCursor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SetCursorEvent_HasCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSetCursorEvent *arg1 = (wxSetCursorEvent *) 0 ;
     bool result;
@@ -15393,14 +15394,14 @@ static PyObject *_wrap_SetCursorEvent_HasCursor(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * SetCursorEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * SetCursorEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxSetCursorEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_KeyEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_KeyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     wxKeyEvent *result;
@@ -15428,7 +15429,7 @@ static PyObject *_wrap_new_KeyEvent(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_KeyEvent_ControlDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_ControlDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -15456,7 +15457,7 @@ static PyObject *_wrap_KeyEvent_ControlDown(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_KeyEvent_MetaDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_MetaDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -15484,7 +15485,7 @@ static PyObject *_wrap_KeyEvent_MetaDown(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_KeyEvent_AltDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_AltDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -15512,7 +15513,7 @@ static PyObject *_wrap_KeyEvent_AltDown(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_KeyEvent_ShiftDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_ShiftDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -15540,7 +15541,7 @@ static PyObject *_wrap_KeyEvent_ShiftDown(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_KeyEvent_HasModifiers(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_HasModifiers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -15568,7 +15569,7 @@ static PyObject *_wrap_KeyEvent_HasModifiers(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_KeyEvent_GetKeyCode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_GetKeyCode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     int result;
@@ -15594,7 +15595,7 @@ static PyObject *_wrap_KeyEvent_GetKeyCode(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_KeyEvent_GetUniChar(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_GetUniChar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     int result;
@@ -15620,7 +15621,7 @@ static PyObject *_wrap_KeyEvent_GetUniChar(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_KeyEvent_GetRawKeyCode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_GetRawKeyCode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     unsigned int result;
@@ -15646,7 +15647,7 @@ static PyObject *_wrap_KeyEvent_GetRawKeyCode(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_KeyEvent_GetRawKeyFlags(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_GetRawKeyFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     unsigned int result;
@@ -15672,7 +15673,7 @@ static PyObject *_wrap_KeyEvent_GetRawKeyFlags(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_KeyEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     wxPoint result;
@@ -15702,7 +15703,7 @@ static PyObject *_wrap_KeyEvent_GetPosition(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_KeyEvent_GetPositionTuple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_GetPositionTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     long *arg2 = (long *) 0 ;
@@ -15741,7 +15742,7 @@ static PyObject *_wrap_KeyEvent_GetPositionTuple(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_KeyEvent_GetX(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_GetX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     int result;
@@ -15767,7 +15768,7 @@ static PyObject *_wrap_KeyEvent_GetX(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_KeyEvent_GetY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_GetY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     int result;
@@ -15793,7 +15794,7 @@ static PyObject *_wrap_KeyEvent_GetY(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_KeyEvent_m_x_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     int arg2 ;
@@ -15817,7 +15818,7 @@ static PyObject *_wrap_KeyEvent_m_x_set(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_KeyEvent_m_x_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_x_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     int result;
@@ -15838,7 +15839,7 @@ static PyObject *_wrap_KeyEvent_m_x_get(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_KeyEvent_m_y_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_y_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     int arg2 ;
@@ -15862,7 +15863,7 @@ static PyObject *_wrap_KeyEvent_m_y_set(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_KeyEvent_m_y_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_y_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     int result;
@@ -15883,7 +15884,7 @@ static PyObject *_wrap_KeyEvent_m_y_get(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_KeyEvent_m_keyCode_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_keyCode_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     long arg2 ;
@@ -15907,7 +15908,7 @@ static PyObject *_wrap_KeyEvent_m_keyCode_set(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_KeyEvent_m_keyCode_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_keyCode_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     long result;
@@ -15928,7 +15929,7 @@ static PyObject *_wrap_KeyEvent_m_keyCode_get(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_KeyEvent_m_controlDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_controlDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool arg2 ;
@@ -15952,7 +15953,7 @@ static PyObject *_wrap_KeyEvent_m_controlDown_set(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_KeyEvent_m_controlDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_controlDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -15975,7 +15976,7 @@ static PyObject *_wrap_KeyEvent_m_controlDown_get(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_KeyEvent_m_shiftDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_shiftDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool arg2 ;
@@ -15999,7 +16000,7 @@ static PyObject *_wrap_KeyEvent_m_shiftDown_set(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_KeyEvent_m_shiftDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_shiftDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -16022,7 +16023,7 @@ static PyObject *_wrap_KeyEvent_m_shiftDown_get(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_KeyEvent_m_altDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_altDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool arg2 ;
@@ -16046,7 +16047,7 @@ static PyObject *_wrap_KeyEvent_m_altDown_set(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_KeyEvent_m_altDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_altDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -16069,7 +16070,7 @@ static PyObject *_wrap_KeyEvent_m_altDown_get(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_KeyEvent_m_metaDown_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_metaDown_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool arg2 ;
@@ -16093,7 +16094,7 @@ static PyObject *_wrap_KeyEvent_m_metaDown_set(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_KeyEvent_m_metaDown_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_metaDown_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -16116,7 +16117,7 @@ static PyObject *_wrap_KeyEvent_m_metaDown_get(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_KeyEvent_m_scanCode_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_scanCode_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool arg2 ;
@@ -16140,7 +16141,7 @@ static PyObject *_wrap_KeyEvent_m_scanCode_set(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_KeyEvent_m_scanCode_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_scanCode_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     bool result;
@@ -16163,7 +16164,7 @@ static PyObject *_wrap_KeyEvent_m_scanCode_get(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_KeyEvent_m_rawCode_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_rawCode_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     unsigned int arg2 ;
@@ -16187,7 +16188,7 @@ static PyObject *_wrap_KeyEvent_m_rawCode_set(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_KeyEvent_m_rawCode_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_rawCode_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     unsigned int result;
@@ -16208,7 +16209,7 @@ static PyObject *_wrap_KeyEvent_m_rawCode_get(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_KeyEvent_m_rawFlags_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_rawFlags_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     unsigned int arg2 ;
@@ -16232,7 +16233,7 @@ static PyObject *_wrap_KeyEvent_m_rawFlags_set(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_KeyEvent_m_rawFlags_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_m_rawFlags_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     unsigned int result;
@@ -16253,14 +16254,14 @@ static PyObject *_wrap_KeyEvent_m_rawFlags_get(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject * KeyEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * KeyEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxKeyEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_SizeEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_SizeEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize const &arg1_defvalue = wxDefaultSize ;
     wxSize *arg1 = (wxSize *) &arg1_defvalue ;
@@ -16298,7 +16299,7 @@ static PyObject *_wrap_new_SizeEvent(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_SizeEvent_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizeEvent_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizeEvent *arg1 = (wxSizeEvent *) 0 ;
     wxSize result;
@@ -16328,7 +16329,7 @@ static PyObject *_wrap_SizeEvent_GetSize(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizeEvent_GetRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizeEvent_GetRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizeEvent *arg1 = (wxSizeEvent *) 0 ;
     wxRect result;
@@ -16358,7 +16359,7 @@ static PyObject *_wrap_SizeEvent_GetRect(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizeEvent_SetRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizeEvent_SetRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizeEvent *arg1 = (wxSizeEvent *) 0 ;
     wxRect arg2 ;
@@ -16389,7 +16390,7 @@ static PyObject *_wrap_SizeEvent_SetRect(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizeEvent_SetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizeEvent_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizeEvent *arg1 = (wxSizeEvent *) 0 ;
     wxSize arg2 ;
@@ -16420,7 +16421,7 @@ static PyObject *_wrap_SizeEvent_SetSize(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizeEvent_m_size_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizeEvent_m_size_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizeEvent *arg1 = (wxSizeEvent *) 0 ;
     wxSize *arg2 = (wxSize *) 0 ;
@@ -16444,7 +16445,7 @@ static PyObject *_wrap_SizeEvent_m_size_set(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_SizeEvent_m_size_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizeEvent_m_size_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizeEvent *arg1 = (wxSizeEvent *) 0 ;
     wxSize *result;
@@ -16465,7 +16466,7 @@ static PyObject *_wrap_SizeEvent_m_size_get(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_SizeEvent_m_rect_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizeEvent_m_rect_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizeEvent *arg1 = (wxSizeEvent *) 0 ;
     wxRect *arg2 = (wxRect *) 0 ;
@@ -16489,7 +16490,7 @@ static PyObject *_wrap_SizeEvent_m_rect_set(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_SizeEvent_m_rect_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizeEvent_m_rect_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizeEvent *arg1 = (wxSizeEvent *) 0 ;
     wxRect *result;
@@ -16510,14 +16511,14 @@ static PyObject *_wrap_SizeEvent_m_rect_get(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject * SizeEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * SizeEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxSizeEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_MoveEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_MoveEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPoint const &arg1_defvalue = wxDefaultPosition ;
     wxPoint *arg1 = (wxPoint *) &arg1_defvalue ;
@@ -16555,7 +16556,7 @@ static PyObject *_wrap_new_MoveEvent(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_MoveEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MoveEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMoveEvent *arg1 = (wxMoveEvent *) 0 ;
     wxPoint result;
@@ -16585,7 +16586,7 @@ static PyObject *_wrap_MoveEvent_GetPosition(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MoveEvent_GetRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MoveEvent_GetRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMoveEvent *arg1 = (wxMoveEvent *) 0 ;
     wxRect result;
@@ -16615,7 +16616,7 @@ static PyObject *_wrap_MoveEvent_GetRect(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MoveEvent_SetRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MoveEvent_SetRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMoveEvent *arg1 = (wxMoveEvent *) 0 ;
     wxRect arg2 ;
@@ -16646,7 +16647,7 @@ static PyObject *_wrap_MoveEvent_SetRect(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MoveEvent_SetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MoveEvent_SetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMoveEvent *arg1 = (wxMoveEvent *) 0 ;
     wxPoint arg2 ;
@@ -16677,7 +16678,7 @@ static PyObject *_wrap_MoveEvent_SetPosition(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MoveEvent_m_pos_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MoveEvent_m_pos_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMoveEvent *arg1 = (wxMoveEvent *) 0 ;
     wxPoint *arg2 = (wxPoint *) 0 ;
@@ -16701,7 +16702,7 @@ static PyObject *_wrap_MoveEvent_m_pos_set(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MoveEvent_m_pos_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MoveEvent_m_pos_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMoveEvent *arg1 = (wxMoveEvent *) 0 ;
     wxPoint *result;
@@ -16722,7 +16723,7 @@ static PyObject *_wrap_MoveEvent_m_pos_get(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MoveEvent_m_rect_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MoveEvent_m_rect_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMoveEvent *arg1 = (wxMoveEvent *) 0 ;
     wxRect *arg2 = (wxRect *) 0 ;
@@ -16746,7 +16747,7 @@ static PyObject *_wrap_MoveEvent_m_rect_set(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MoveEvent_m_rect_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MoveEvent_m_rect_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMoveEvent *arg1 = (wxMoveEvent *) 0 ;
     wxRect *result;
@@ -16767,14 +16768,14 @@ static PyObject *_wrap_MoveEvent_m_rect_get(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject * MoveEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * MoveEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMoveEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PaintEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PaintEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxPaintEvent *result;
@@ -16802,14 +16803,14 @@ static PyObject *_wrap_new_PaintEvent(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * PaintEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * PaintEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPaintEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_NcPaintEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_NcPaintEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxNcPaintEvent *result;
@@ -16837,14 +16838,14 @@ static PyObject *_wrap_new_NcPaintEvent(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject * NcPaintEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * NcPaintEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxNcPaintEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_EraseEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_EraseEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxDC *arg2 = (wxDC *) (wxDC *) NULL ;
@@ -16878,7 +16879,7 @@ static PyObject *_wrap_new_EraseEvent(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_EraseEvent_GetDC(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_EraseEvent_GetDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEraseEvent *arg1 = (wxEraseEvent *) 0 ;
     wxDC *result;
@@ -16906,14 +16907,14 @@ static PyObject *_wrap_EraseEvent_GetDC(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject * EraseEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * EraseEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxEraseEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_FocusEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_FocusEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -16947,7 +16948,7 @@ static PyObject *_wrap_new_FocusEvent(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_FocusEvent_GetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FocusEvent_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFocusEvent *arg1 = (wxFocusEvent *) 0 ;
     wxWindow *result;
@@ -16975,7 +16976,7 @@ static PyObject *_wrap_FocusEvent_GetWindow(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_FocusEvent_SetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FocusEvent_SetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFocusEvent *arg1 = (wxFocusEvent *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -17004,14 +17005,14 @@ static PyObject *_wrap_FocusEvent_SetWindow(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject * FocusEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * FocusEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxFocusEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ChildFocusEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ChildFocusEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) NULL ;
     wxChildFocusEvent *result;
@@ -17039,7 +17040,7 @@ static PyObject *_wrap_new_ChildFocusEvent(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_ChildFocusEvent_GetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ChildFocusEvent_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxChildFocusEvent *arg1 = (wxChildFocusEvent *) 0 ;
     wxWindow *result;
@@ -17067,14 +17068,14 @@ static PyObject *_wrap_ChildFocusEvent_GetWindow(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject * ChildFocusEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * ChildFocusEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxChildFocusEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ActivateEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ActivateEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     bool arg2 = (bool) True ;
@@ -17114,7 +17115,7 @@ static PyObject *_wrap_new_ActivateEvent(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_ActivateEvent_GetActive(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ActivateEvent_GetActive(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxActivateEvent *arg1 = (wxActivateEvent *) 0 ;
     bool result;
@@ -17142,14 +17143,14 @@ static PyObject *_wrap_ActivateEvent_GetActive(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject * ActivateEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * ActivateEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxActivateEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_InitDialogEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_InitDialogEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxInitDialogEvent *result;
@@ -17177,14 +17178,14 @@ static PyObject *_wrap_new_InitDialogEvent(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject * InitDialogEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * InitDialogEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxInitDialogEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_MenuEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_MenuEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -17224,7 +17225,7 @@ static PyObject *_wrap_new_MenuEvent(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_MenuEvent_GetMenuId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuEvent_GetMenuId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuEvent *arg1 = (wxMenuEvent *) 0 ;
     int result;
@@ -17250,7 +17251,7 @@ static PyObject *_wrap_MenuEvent_GetMenuId(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MenuEvent_IsPopup(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuEvent_IsPopup(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuEvent *arg1 = (wxMenuEvent *) 0 ;
     bool result;
@@ -17278,7 +17279,7 @@ static PyObject *_wrap_MenuEvent_IsPopup(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MenuEvent_GetMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuEvent_GetMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuEvent *arg1 = (wxMenuEvent *) 0 ;
     wxMenu *result;
@@ -17306,14 +17307,14 @@ static PyObject *_wrap_MenuEvent_GetMenu(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject * MenuEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * MenuEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMenuEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_CloseEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_CloseEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -17347,7 +17348,7 @@ static PyObject *_wrap_new_CloseEvent(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_CloseEvent_SetLoggingOff(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CloseEvent_SetLoggingOff(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCloseEvent *arg1 = (wxCloseEvent *) 0 ;
     bool arg2 ;
@@ -17376,7 +17377,7 @@ static PyObject *_wrap_CloseEvent_SetLoggingOff(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_CloseEvent_GetLoggingOff(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CloseEvent_GetLoggingOff(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCloseEvent *arg1 = (wxCloseEvent *) 0 ;
     bool result;
@@ -17404,7 +17405,7 @@ static PyObject *_wrap_CloseEvent_GetLoggingOff(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_CloseEvent_Veto(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CloseEvent_Veto(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCloseEvent *arg1 = (wxCloseEvent *) 0 ;
     bool arg2 = (bool) True ;
@@ -17435,7 +17436,7 @@ static PyObject *_wrap_CloseEvent_Veto(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_CloseEvent_SetCanVeto(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CloseEvent_SetCanVeto(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCloseEvent *arg1 = (wxCloseEvent *) 0 ;
     bool arg2 ;
@@ -17464,7 +17465,7 @@ static PyObject *_wrap_CloseEvent_SetCanVeto(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_CloseEvent_CanVeto(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CloseEvent_CanVeto(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCloseEvent *arg1 = (wxCloseEvent *) 0 ;
     bool result;
@@ -17492,7 +17493,7 @@ static PyObject *_wrap_CloseEvent_CanVeto(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_CloseEvent_GetVeto(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_CloseEvent_GetVeto(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCloseEvent *arg1 = (wxCloseEvent *) 0 ;
     bool result;
@@ -17520,14 +17521,14 @@ static PyObject *_wrap_CloseEvent_GetVeto(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject * CloseEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * CloseEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxCloseEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ShowEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ShowEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     bool arg2 = (bool) False ;
@@ -17561,7 +17562,7 @@ static PyObject *_wrap_new_ShowEvent(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_ShowEvent_SetShow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ShowEvent_SetShow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxShowEvent *arg1 = (wxShowEvent *) 0 ;
     bool arg2 ;
@@ -17590,7 +17591,7 @@ static PyObject *_wrap_ShowEvent_SetShow(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_ShowEvent_GetShow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ShowEvent_GetShow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxShowEvent *arg1 = (wxShowEvent *) 0 ;
     bool result;
@@ -17618,14 +17619,14 @@ static PyObject *_wrap_ShowEvent_GetShow(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject * ShowEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * ShowEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxShowEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_IconizeEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_IconizeEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     bool arg2 = (bool) True ;
@@ -17659,7 +17660,7 @@ static PyObject *_wrap_new_IconizeEvent(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_IconizeEvent_Iconized(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IconizeEvent_Iconized(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIconizeEvent *arg1 = (wxIconizeEvent *) 0 ;
     bool result;
@@ -17687,14 +17688,14 @@ static PyObject *_wrap_IconizeEvent_Iconized(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject * IconizeEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * IconizeEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxIconizeEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_MaximizeEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_MaximizeEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxMaximizeEvent *result;
@@ -17722,14 +17723,14 @@ static PyObject *_wrap_new_MaximizeEvent(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject * MaximizeEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * MaximizeEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMaximizeEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_DropFilesEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DropFilesEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDropFilesEvent *arg1 = (wxDropFilesEvent *) 0 ;
     wxPoint result;
@@ -17759,7 +17760,7 @@ static PyObject *_wrap_DropFilesEvent_GetPosition(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_DropFilesEvent_GetNumberOfFiles(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DropFilesEvent_GetNumberOfFiles(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDropFilesEvent *arg1 = (wxDropFilesEvent *) 0 ;
     int result;
@@ -17785,7 +17786,7 @@ static PyObject *_wrap_DropFilesEvent_GetNumberOfFiles(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_DropFilesEvent_GetFiles(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DropFilesEvent_GetFiles(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDropFilesEvent *arg1 = (wxDropFilesEvent *) 0 ;
     PyObject *result;
@@ -17811,14 +17812,14 @@ static PyObject *_wrap_DropFilesEvent_GetFiles(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject * DropFilesEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * DropFilesEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxDropFilesEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_UpdateUIEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_UpdateUIEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxUpdateUIEvent *result;
@@ -17846,7 +17847,7 @@ static PyObject *_wrap_new_UpdateUIEvent(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_GetChecked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_GetChecked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
     bool result;
@@ -17874,7 +17875,7 @@ static PyObject *_wrap_UpdateUIEvent_GetChecked(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_GetEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_GetEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
     bool result;
@@ -17902,7 +17903,7 @@ static PyObject *_wrap_UpdateUIEvent_GetEnabled(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_GetText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
     wxString result;
@@ -17934,7 +17935,7 @@ static PyObject *_wrap_UpdateUIEvent_GetText(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_GetSetText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_GetSetText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
     bool result;
@@ -17962,7 +17963,7 @@ static PyObject *_wrap_UpdateUIEvent_GetSetText(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_GetSetChecked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_GetSetChecked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
     bool result;
@@ -17990,7 +17991,7 @@ static PyObject *_wrap_UpdateUIEvent_GetSetChecked(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_GetSetEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_GetSetEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
     bool result;
@@ -18018,7 +18019,7 @@ static PyObject *_wrap_UpdateUIEvent_GetSetEnabled(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_Check(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_Check(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
     bool arg2 ;
@@ -18047,7 +18048,7 @@ static PyObject *_wrap_UpdateUIEvent_Check(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_Enable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
     bool arg2 ;
@@ -18076,7 +18077,7 @@ static PyObject *_wrap_UpdateUIEvent_Enable(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_SetText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_SetText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
     wxString *arg2 = 0 ;
@@ -18117,7 +18118,7 @@ static PyObject *_wrap_UpdateUIEvent_SetText(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_SetUpdateInterval(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_SetUpdateInterval(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long arg1 ;
     PyObject * obj0 = 0 ;
@@ -18142,7 +18143,7 @@ static PyObject *_wrap_UpdateUIEvent_SetUpdateInterval(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_GetUpdateInterval(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_GetUpdateInterval(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long result;
     char *kwnames[] = {
@@ -18164,7 +18165,7 @@ static PyObject *_wrap_UpdateUIEvent_GetUpdateInterval(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_CanUpdate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_CanUpdate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -18192,7 +18193,7 @@ static PyObject *_wrap_UpdateUIEvent_CanUpdate(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_ResetUpdateTime(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_ResetUpdateTime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     char *kwnames[] = {
         NULL 
@@ -18213,7 +18214,7 @@ static PyObject *_wrap_UpdateUIEvent_ResetUpdateTime(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_SetMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_SetMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     PyObject * obj0 = 0 ;
@@ -18238,7 +18239,7 @@ static PyObject *_wrap_UpdateUIEvent_SetMode(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_UpdateUIEvent_GetMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_UpdateUIEvent_GetMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int result;
     char *kwnames[] = {
@@ -18260,14 +18261,14 @@ static PyObject *_wrap_UpdateUIEvent_GetMode(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject * UpdateUIEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * UpdateUIEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxUpdateUIEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_SysColourChangedEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_SysColourChangedEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSysColourChangedEvent *result;
     char *kwnames[] = {
@@ -18289,14 +18290,14 @@ static PyObject *_wrap_new_SysColourChangedEvent(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject * SysColourChangedEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * SysColourChangedEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxSysColourChangedEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_MouseCaptureChangedEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_MouseCaptureChangedEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxWindow *arg2 = (wxWindow *) NULL ;
@@ -18330,7 +18331,7 @@ static PyObject *_wrap_new_MouseCaptureChangedEvent(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_MouseCaptureChangedEvent_GetCapturedWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MouseCaptureChangedEvent_GetCapturedWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMouseCaptureChangedEvent *arg1 = (wxMouseCaptureChangedEvent *) 0 ;
     wxWindow *result;
@@ -18358,14 +18359,14 @@ static PyObject *_wrap_MouseCaptureChangedEvent_GetCapturedWindow(PyObject *, Py
 }
 
 
-static PyObject * MouseCaptureChangedEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * MouseCaptureChangedEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMouseCaptureChangedEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_DisplayChangedEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_DisplayChangedEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDisplayChangedEvent *result;
     char *kwnames[] = {
@@ -18387,14 +18388,14 @@ static PyObject *_wrap_new_DisplayChangedEvent(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject * DisplayChangedEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * DisplayChangedEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxDisplayChangedEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PaletteChangedEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PaletteChangedEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxPaletteChangedEvent *result;
@@ -18422,7 +18423,7 @@ static PyObject *_wrap_new_PaletteChangedEvent(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_PaletteChangedEvent_SetChangedWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PaletteChangedEvent_SetChangedWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPaletteChangedEvent *arg1 = (wxPaletteChangedEvent *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -18451,7 +18452,7 @@ static PyObject *_wrap_PaletteChangedEvent_SetChangedWindow(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_PaletteChangedEvent_GetChangedWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PaletteChangedEvent_GetChangedWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPaletteChangedEvent *arg1 = (wxPaletteChangedEvent *) 0 ;
     wxWindow *result;
@@ -18479,14 +18480,14 @@ static PyObject *_wrap_PaletteChangedEvent_GetChangedWindow(PyObject *, PyObject
 }
 
 
-static PyObject * PaletteChangedEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * PaletteChangedEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPaletteChangedEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_QueryNewPaletteEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_QueryNewPaletteEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxQueryNewPaletteEvent *result;
@@ -18514,7 +18515,7 @@ static PyObject *_wrap_new_QueryNewPaletteEvent(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_QueryNewPaletteEvent_SetPaletteRealized(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_QueryNewPaletteEvent_SetPaletteRealized(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxQueryNewPaletteEvent *arg1 = (wxQueryNewPaletteEvent *) 0 ;
     bool arg2 ;
@@ -18543,7 +18544,7 @@ static PyObject *_wrap_QueryNewPaletteEvent_SetPaletteRealized(PyObject *, PyObj
 }
 
 
-static PyObject *_wrap_QueryNewPaletteEvent_GetPaletteRealized(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_QueryNewPaletteEvent_GetPaletteRealized(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxQueryNewPaletteEvent *arg1 = (wxQueryNewPaletteEvent *) 0 ;
     bool result;
@@ -18571,14 +18572,14 @@ static PyObject *_wrap_QueryNewPaletteEvent_GetPaletteRealized(PyObject *, PyObj
 }
 
 
-static PyObject * QueryNewPaletteEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * QueryNewPaletteEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxQueryNewPaletteEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_NavigationKeyEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_NavigationKeyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNavigationKeyEvent *result;
     char *kwnames[] = {
@@ -18600,7 +18601,7 @@ static PyObject *_wrap_new_NavigationKeyEvent(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_NavigationKeyEvent_GetDirection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NavigationKeyEvent_GetDirection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
     bool result;
@@ -18628,7 +18629,7 @@ static PyObject *_wrap_NavigationKeyEvent_GetDirection(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_NavigationKeyEvent_SetDirection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NavigationKeyEvent_SetDirection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
     bool arg2 ;
@@ -18657,7 +18658,7 @@ static PyObject *_wrap_NavigationKeyEvent_SetDirection(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_NavigationKeyEvent_IsWindowChange(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NavigationKeyEvent_IsWindowChange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
     bool result;
@@ -18685,7 +18686,7 @@ static PyObject *_wrap_NavigationKeyEvent_IsWindowChange(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_NavigationKeyEvent_SetWindowChange(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NavigationKeyEvent_SetWindowChange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
     bool arg2 ;
@@ -18714,7 +18715,7 @@ static PyObject *_wrap_NavigationKeyEvent_SetWindowChange(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_NavigationKeyEvent_GetCurrentFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NavigationKeyEvent_GetCurrentFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
     wxWindow *result;
@@ -18742,7 +18743,7 @@ static PyObject *_wrap_NavigationKeyEvent_GetCurrentFocus(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_NavigationKeyEvent_SetCurrentFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_NavigationKeyEvent_SetCurrentFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -18771,14 +18772,14 @@ static PyObject *_wrap_NavigationKeyEvent_SetCurrentFocus(PyObject *, PyObject *
 }
 
 
-static PyObject * NavigationKeyEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * NavigationKeyEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxNavigationKeyEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_WindowCreateEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_WindowCreateEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) NULL ;
     wxWindowCreateEvent *result;
@@ -18806,7 +18807,7 @@ static PyObject *_wrap_new_WindowCreateEvent(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_WindowCreateEvent_GetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WindowCreateEvent_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindowCreateEvent *arg1 = (wxWindowCreateEvent *) 0 ;
     wxWindow *result;
@@ -18834,14 +18835,14 @@ static PyObject *_wrap_WindowCreateEvent_GetWindow(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * WindowCreateEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * WindowCreateEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxWindowCreateEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_WindowDestroyEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_WindowDestroyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) NULL ;
     wxWindowDestroyEvent *result;
@@ -18869,7 +18870,7 @@ static PyObject *_wrap_new_WindowDestroyEvent(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_WindowDestroyEvent_GetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WindowDestroyEvent_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindowDestroyEvent *arg1 = (wxWindowDestroyEvent *) 0 ;
     wxWindow *result;
@@ -18897,14 +18898,14 @@ static PyObject *_wrap_WindowDestroyEvent_GetWindow(PyObject *, PyObject *args, 
 }
 
 
-static PyObject * WindowDestroyEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * WindowDestroyEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxWindowDestroyEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_ContextMenuEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_ContextMenuEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -18948,7 +18949,7 @@ static PyObject *_wrap_new_ContextMenuEvent(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ContextMenuEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ContextMenuEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxContextMenuEvent *arg1 = (wxContextMenuEvent *) 0 ;
     wxPoint *result;
@@ -18977,7 +18978,7 @@ static PyObject *_wrap_ContextMenuEvent_GetPosition(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_ContextMenuEvent_SetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ContextMenuEvent_SetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxContextMenuEvent *arg1 = (wxContextMenuEvent *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -19009,14 +19010,14 @@ static PyObject *_wrap_ContextMenuEvent_SetPosition(PyObject *, PyObject *args, 
 }
 
 
-static PyObject * ContextMenuEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * ContextMenuEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxContextMenuEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_IdleEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_IdleEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIdleEvent *result;
     char *kwnames[] = {
@@ -19038,7 +19039,7 @@ static PyObject *_wrap_new_IdleEvent(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_IdleEvent_RequestMore(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IdleEvent_RequestMore(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIdleEvent *arg1 = (wxIdleEvent *) 0 ;
     bool arg2 = (bool) True ;
@@ -19069,7 +19070,7 @@ static PyObject *_wrap_IdleEvent_RequestMore(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_IdleEvent_MoreRequested(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IdleEvent_MoreRequested(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIdleEvent *arg1 = (wxIdleEvent *) 0 ;
     bool result;
@@ -19097,7 +19098,7 @@ static PyObject *_wrap_IdleEvent_MoreRequested(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_IdleEvent_SetMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IdleEvent_SetMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     PyObject * obj0 = 0 ;
@@ -19122,7 +19123,7 @@ static PyObject *_wrap_IdleEvent_SetMode(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_IdleEvent_GetMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IdleEvent_GetMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int result;
     char *kwnames[] = {
@@ -19144,7 +19145,7 @@ static PyObject *_wrap_IdleEvent_GetMode(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_IdleEvent_CanSend(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IdleEvent_CanSend(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -19172,14 +19173,14 @@ static PyObject *_wrap_IdleEvent_CanSend(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject * IdleEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * IdleEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxIdleEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PyEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     wxEventType arg2 = (wxEventType) wxEVT_NULL ;
@@ -19213,7 +19214,7 @@ static PyObject *_wrap_new_PyEvent(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_delete_PyEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_PyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyEvent *arg1 = (wxPyEvent *) 0 ;
     PyObject * obj0 = 0 ;
@@ -19238,7 +19239,7 @@ static PyObject *_wrap_delete_PyEvent(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_PyEvent_SetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyEvent_SetSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyEvent *arg1 = (wxPyEvent *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -19266,7 +19267,7 @@ static PyObject *_wrap_PyEvent_SetSelf(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_PyEvent_GetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyEvent_GetSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyEvent *arg1 = (wxPyEvent *) 0 ;
     PyObject *result;
@@ -19292,14 +19293,14 @@ static PyObject *_wrap_PyEvent_GetSelf(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject * PyEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * PyEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PyCommandEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyCommandEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -19333,7 +19334,7 @@ static PyObject *_wrap_new_PyCommandEvent(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_delete_PyCommandEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_PyCommandEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyCommandEvent *arg1 = (wxPyCommandEvent *) 0 ;
     PyObject * obj0 = 0 ;
@@ -19358,7 +19359,7 @@ static PyObject *_wrap_delete_PyCommandEvent(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_PyCommandEvent_SetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyCommandEvent_SetSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyCommandEvent *arg1 = (wxPyCommandEvent *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -19386,7 +19387,7 @@ static PyObject *_wrap_PyCommandEvent_SetSelf(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyCommandEvent_GetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyCommandEvent_GetSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyCommandEvent *arg1 = (wxPyCommandEvent *) 0 ;
     PyObject *result;
@@ -19412,14 +19413,14 @@ static PyObject *_wrap_PyCommandEvent_GetSelf(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject * PyCommandEvent_swigregister(PyObject *, PyObject *args) {
+static PyObject * PyCommandEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyCommandEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PyApp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyApp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *result;
     char *kwnames[] = {
@@ -19443,7 +19444,7 @@ static PyObject *_wrap_new_PyApp(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_delete_PyApp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_PyApp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     PyObject * obj0 = 0 ;
@@ -19468,7 +19469,7 @@ static PyObject *_wrap_delete_PyApp(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_PyApp__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -19499,7 +19500,7 @@ static PyObject *_wrap_PyApp__setCallbackInfo(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyApp_GetAppName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetAppName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxString result;
@@ -19531,7 +19532,7 @@ static PyObject *_wrap_PyApp_GetAppName(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_PyApp_SetAppName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetAppName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxString *arg2 = 0 ;
@@ -19572,7 +19573,7 @@ static PyObject *_wrap_PyApp_SetAppName(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_PyApp_GetClassName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetClassName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxString result;
@@ -19604,7 +19605,7 @@ static PyObject *_wrap_PyApp_GetClassName(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_PyApp_SetClassName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetClassName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxString *arg2 = 0 ;
@@ -19645,7 +19646,7 @@ static PyObject *_wrap_PyApp_SetClassName(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_PyApp_GetVendorName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetVendorName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxString *result;
@@ -19680,7 +19681,7 @@ static PyObject *_wrap_PyApp_GetVendorName(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_PyApp_SetVendorName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetVendorName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxString *arg2 = 0 ;
@@ -19721,7 +19722,7 @@ static PyObject *_wrap_PyApp_SetVendorName(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_PyApp_GetTraits(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetTraits(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxAppTraits *result;
@@ -19747,7 +19748,7 @@ static PyObject *_wrap_PyApp_GetTraits(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_PyApp_ProcessPendingEvents(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_ProcessPendingEvents(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     PyObject * obj0 = 0 ;
@@ -19772,7 +19773,7 @@ static PyObject *_wrap_PyApp_ProcessPendingEvents(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyApp_Yield(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_Yield(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     bool arg2 = (bool) False ;
@@ -19806,7 +19807,7 @@ static PyObject *_wrap_PyApp_Yield(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_PyApp_WakeUpIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_WakeUpIdle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     PyObject * obj0 = 0 ;
@@ -19831,7 +19832,7 @@ static PyObject *_wrap_PyApp_WakeUpIdle(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_PyApp_MainLoop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_MainLoop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     int result;
@@ -19857,7 +19858,7 @@ static PyObject *_wrap_PyApp_MainLoop(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_PyApp_Exit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_Exit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     PyObject * obj0 = 0 ;
@@ -19882,7 +19883,7 @@ static PyObject *_wrap_PyApp_Exit(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_PyApp_ExitMainLoop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_ExitMainLoop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     PyObject * obj0 = 0 ;
@@ -19907,7 +19908,7 @@ static PyObject *_wrap_PyApp_ExitMainLoop(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_PyApp_Pending(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_Pending(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     bool result;
@@ -19935,7 +19936,7 @@ static PyObject *_wrap_PyApp_Pending(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_PyApp_Dispatch(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_Dispatch(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     bool result;
@@ -19963,7 +19964,7 @@ static PyObject *_wrap_PyApp_Dispatch(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_PyApp_ProcessIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_ProcessIdle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     bool result;
@@ -19991,7 +19992,7 @@ static PyObject *_wrap_PyApp_ProcessIdle(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_PyApp_SendIdleEvents(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SendIdleEvents(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -20032,7 +20033,7 @@ static PyObject *_wrap_PyApp_SendIdleEvents(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_PyApp_IsActive(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_IsActive(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     bool result;
@@ -20060,7 +20061,7 @@ static PyObject *_wrap_PyApp_IsActive(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_PyApp_SetTopWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetTopWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -20089,7 +20090,7 @@ static PyObject *_wrap_PyApp_SetTopWindow(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_PyApp_GetTopWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetTopWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     wxWindow *result;
@@ -20117,7 +20118,7 @@ static PyObject *_wrap_PyApp_GetTopWindow(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_PyApp_SetExitOnFrameDelete(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetExitOnFrameDelete(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     bool arg2 ;
@@ -20146,7 +20147,7 @@ static PyObject *_wrap_PyApp_SetExitOnFrameDelete(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyApp_GetExitOnFrameDelete(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetExitOnFrameDelete(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     bool result;
@@ -20174,7 +20175,7 @@ static PyObject *_wrap_PyApp_GetExitOnFrameDelete(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyApp_SetUseBestVisual(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetUseBestVisual(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     bool arg2 ;
@@ -20203,7 +20204,7 @@ static PyObject *_wrap_PyApp_SetUseBestVisual(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyApp_GetUseBestVisual(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetUseBestVisual(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     bool result;
@@ -20231,7 +20232,7 @@ static PyObject *_wrap_PyApp_GetUseBestVisual(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyApp_SetPrintMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetPrintMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     int arg2 ;
@@ -20260,7 +20261,7 @@ static PyObject *_wrap_PyApp_SetPrintMode(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_PyApp_GetPrintMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetPrintMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     int result;
@@ -20286,7 +20287,7 @@ static PyObject *_wrap_PyApp_GetPrintMode(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_PyApp_SetAssertMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetAssertMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     int arg2 ;
@@ -20315,7 +20316,7 @@ static PyObject *_wrap_PyApp_SetAssertMode(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_PyApp_GetAssertMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetAssertMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     int result;
@@ -20341,7 +20342,7 @@ static PyObject *_wrap_PyApp_GetAssertMode(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_PyApp_GetMacSupportPCMenuShortcuts(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetMacSupportPCMenuShortcuts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     bool result;
     char *kwnames[] = {
@@ -20365,7 +20366,7 @@ static PyObject *_wrap_PyApp_GetMacSupportPCMenuShortcuts(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyApp_GetMacAboutMenuItemId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetMacAboutMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long result;
     char *kwnames[] = {
@@ -20387,7 +20388,7 @@ static PyObject *_wrap_PyApp_GetMacAboutMenuItemId(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_PyApp_GetMacPreferencesMenuItemId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetMacPreferencesMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long result;
     char *kwnames[] = {
@@ -20409,7 +20410,7 @@ static PyObject *_wrap_PyApp_GetMacPreferencesMenuItemId(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyApp_GetMacExitMenuItemId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetMacExitMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long result;
     char *kwnames[] = {
@@ -20431,7 +20432,7 @@ static PyObject *_wrap_PyApp_GetMacExitMenuItemId(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyApp_GetMacHelpMenuTitleName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetMacHelpMenuTitleName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString result;
     char *kwnames[] = {
@@ -20459,7 +20460,7 @@ static PyObject *_wrap_PyApp_GetMacHelpMenuTitleName(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyApp_SetMacSupportPCMenuShortcuts(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetMacSupportPCMenuShortcuts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     bool arg1 ;
     PyObject * obj0 = 0 ;
@@ -20484,7 +20485,7 @@ static PyObject *_wrap_PyApp_SetMacSupportPCMenuShortcuts(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyApp_SetMacAboutMenuItemId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetMacAboutMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long arg1 ;
     PyObject * obj0 = 0 ;
@@ -20509,7 +20510,7 @@ static PyObject *_wrap_PyApp_SetMacAboutMenuItemId(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_PyApp_SetMacPreferencesMenuItemId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetMacPreferencesMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long arg1 ;
     PyObject * obj0 = 0 ;
@@ -20534,7 +20535,7 @@ static PyObject *_wrap_PyApp_SetMacPreferencesMenuItemId(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyApp_SetMacExitMenuItemId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetMacExitMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long arg1 ;
     PyObject * obj0 = 0 ;
@@ -20559,7 +20560,7 @@ static PyObject *_wrap_PyApp_SetMacExitMenuItemId(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyApp_SetMacHelpMenuTitleName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_SetMacHelpMenuTitleName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     bool temp1 = False ;
@@ -20596,7 +20597,7 @@ static PyObject *_wrap_PyApp_SetMacHelpMenuTitleName(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyApp__BootstrapApp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp__BootstrapApp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     PyObject * obj0 = 0 ;
@@ -20621,7 +20622,7 @@ static PyObject *_wrap_PyApp__BootstrapApp(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_PyApp_GetComCtl32Version(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyApp_GetComCtl32Version(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int result;
     char *kwnames[] = {
@@ -20643,14 +20644,14 @@ static PyObject *_wrap_PyApp_GetComCtl32Version(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * PyApp_swigregister(PyObject *, PyObject *args) {
+static PyObject * PyApp_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyApp, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_Exit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Exit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     char *kwnames[] = {
         NULL 
@@ -20671,7 +20672,7 @@ static PyObject *_wrap_Exit(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Yield(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Yield(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     bool result;
     char *kwnames[] = {
@@ -20695,7 +20696,7 @@ static PyObject *_wrap_Yield(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_YieldIfNeeded(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_YieldIfNeeded(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     bool result;
     char *kwnames[] = {
@@ -20719,7 +20720,7 @@ static PyObject *_wrap_YieldIfNeeded(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_SafeYield(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SafeYield(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) NULL ;
     bool arg2 = (bool) False ;
@@ -20755,7 +20756,7 @@ static PyObject *_wrap_SafeYield(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_WakeUpIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_WakeUpIdle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     char *kwnames[] = {
         NULL 
@@ -20776,7 +20777,7 @@ static PyObject *_wrap_WakeUpIdle(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_PostEvent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PostEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     wxEvent *arg2 = 0 ;
@@ -20810,7 +20811,7 @@ static PyObject *_wrap_PostEvent(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_App_CleanUp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_App_CleanUp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     char *kwnames[] = {
         NULL 
@@ -20831,7 +20832,7 @@ static PyObject *_wrap_App_CleanUp(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_GetApp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GetApp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *result;
     char *kwnames[] = {
@@ -20855,7 +20856,7 @@ static PyObject *_wrap_GetApp(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_new_AcceleratorEntry(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_AcceleratorEntry(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -20901,7 +20902,7 @@ static PyObject *_wrap_new_AcceleratorEntry(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_delete_AcceleratorEntry(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_AcceleratorEntry(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxAcceleratorEntry *arg1 = (wxAcceleratorEntry *) 0 ;
     PyObject * obj0 = 0 ;
@@ -20926,7 +20927,7 @@ static PyObject *_wrap_delete_AcceleratorEntry(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_AcceleratorEntry_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_AcceleratorEntry_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxAcceleratorEntry *arg1 = (wxAcceleratorEntry *) 0 ;
     int arg2 ;
@@ -20969,7 +20970,7 @@ static PyObject *_wrap_AcceleratorEntry_Set(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_AcceleratorEntry_SetMenuItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_AcceleratorEntry_SetMenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxAcceleratorEntry *arg1 = (wxAcceleratorEntry *) 0 ;
     wxMenuItem *arg2 = (wxMenuItem *) 0 ;
@@ -20998,7 +20999,7 @@ static PyObject *_wrap_AcceleratorEntry_SetMenuItem(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_AcceleratorEntry_GetMenuItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_AcceleratorEntry_GetMenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxAcceleratorEntry *arg1 = (wxAcceleratorEntry *) 0 ;
     wxMenuItem *result;
@@ -21026,7 +21027,7 @@ static PyObject *_wrap_AcceleratorEntry_GetMenuItem(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_AcceleratorEntry_GetFlags(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_AcceleratorEntry_GetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxAcceleratorEntry *arg1 = (wxAcceleratorEntry *) 0 ;
     int result;
@@ -21052,7 +21053,7 @@ static PyObject *_wrap_AcceleratorEntry_GetFlags(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_AcceleratorEntry_GetKeyCode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_AcceleratorEntry_GetKeyCode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxAcceleratorEntry *arg1 = (wxAcceleratorEntry *) 0 ;
     int result;
@@ -21078,7 +21079,7 @@ static PyObject *_wrap_AcceleratorEntry_GetKeyCode(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_AcceleratorEntry_GetCommand(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_AcceleratorEntry_GetCommand(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxAcceleratorEntry *arg1 = (wxAcceleratorEntry *) 0 ;
     int result;
@@ -21104,14 +21105,14 @@ static PyObject *_wrap_AcceleratorEntry_GetCommand(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * AcceleratorEntry_swigregister(PyObject *, PyObject *args) {
+static PyObject * AcceleratorEntry_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxAcceleratorEntry, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_AcceleratorTable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_AcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     wxAcceleratorEntry *arg2 = (wxAcceleratorEntry *) 0 ;
@@ -21147,7 +21148,7 @@ static PyObject *_wrap_new_AcceleratorTable(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_delete_AcceleratorTable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_AcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxAcceleratorTable *arg1 = (wxAcceleratorTable *) 0 ;
     PyObject * obj0 = 0 ;
@@ -21172,7 +21173,7 @@ static PyObject *_wrap_delete_AcceleratorTable(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_AcceleratorTable_Ok(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_AcceleratorTable_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxAcceleratorTable *arg1 = (wxAcceleratorTable *) 0 ;
     bool result;
@@ -21200,14 +21201,14 @@ static PyObject *_wrap_AcceleratorTable_Ok(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject * AcceleratorTable_swigregister(PyObject *, PyObject *args) {
+static PyObject * AcceleratorTable_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxAcceleratorTable, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static int _wrap_NullAcceleratorTable_set(PyObject *) {
+static int _wrap_NullAcceleratorTable_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable NullAcceleratorTable is read-only.");
     return 1;
 }
@@ -21221,7 +21222,7 @@ static PyObject *_wrap_NullAcceleratorTable_get() {
 }
 
 
-static PyObject *_wrap_GetAccelFromString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GetAccelFromString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxAcceleratorEntry *result;
@@ -21259,7 +21260,7 @@ static PyObject *_wrap_GetAccelFromString(PyObject *, PyObject *args, PyObject *
 }
 
 
-static int _wrap_PanelNameStr_set(PyObject *) {
+static int _wrap_PanelNameStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable PanelNameStr is read-only.");
     return 1;
 }
@@ -21279,7 +21280,7 @@ static PyObject *_wrap_PanelNameStr_get() {
 }
 
 
-static PyObject *_wrap_new_VisualAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_VisualAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxVisualAttributes *result;
     char *kwnames[] = {
@@ -21301,7 +21302,7 @@ static PyObject *_wrap_new_VisualAttributes(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_delete_VisualAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_VisualAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
     PyObject * obj0 = 0 ;
@@ -21326,7 +21327,7 @@ static PyObject *_wrap_delete_VisualAttributes(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_VisualAttributes_font_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_VisualAttributes_font_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
     wxFont *arg2 = (wxFont *) 0 ;
@@ -21350,7 +21351,7 @@ static PyObject *_wrap_VisualAttributes_font_set(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_VisualAttributes_font_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_VisualAttributes_font_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
     wxFont *result;
@@ -21371,7 +21372,7 @@ static PyObject *_wrap_VisualAttributes_font_get(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_VisualAttributes_colFg_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_VisualAttributes_colFg_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
     wxColour *arg2 = (wxColour *) 0 ;
@@ -21395,7 +21396,7 @@ static PyObject *_wrap_VisualAttributes_colFg_set(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_VisualAttributes_colFg_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_VisualAttributes_colFg_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
     wxColour *result;
@@ -21416,7 +21417,7 @@ static PyObject *_wrap_VisualAttributes_colFg_get(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_VisualAttributes_colBg_set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_VisualAttributes_colBg_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
     wxColour *arg2 = (wxColour *) 0 ;
@@ -21440,7 +21441,7 @@ static PyObject *_wrap_VisualAttributes_colBg_set(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_VisualAttributes_colBg_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_VisualAttributes_colBg_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
     wxColour *result;
@@ -21461,14 +21462,14 @@ static PyObject *_wrap_VisualAttributes_colBg_get(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * VisualAttributes_swigregister(PyObject *, PyObject *args) {
+static PyObject * VisualAttributes_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxVisualAttributes, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_Window(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Window(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) (int)-1 ;
@@ -21547,7 +21548,7 @@ static PyObject *_wrap_new_Window(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_new_PreWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PreWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *result;
     char *kwnames[] = {
@@ -21571,7 +21572,7 @@ static PyObject *_wrap_new_PreWindow(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -21654,7 +21655,7 @@ static PyObject *_wrap_Window_Create(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_Close(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Close(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool arg2 = (bool) False ;
@@ -21688,7 +21689,7 @@ static PyObject *_wrap_Window_Close(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Window_Destroy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -21716,7 +21717,7 @@ static PyObject *_wrap_Window_Destroy(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_DestroyChildren(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_DestroyChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -21744,7 +21745,7 @@ static PyObject *_wrap_Window_DestroyChildren(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_IsBeingDeleted(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_IsBeingDeleted(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -21772,7 +21773,7 @@ static PyObject *_wrap_Window_IsBeingDeleted(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_SetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -21813,7 +21814,7 @@ static PyObject *_wrap_Window_SetTitle(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_GetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString result;
@@ -21845,7 +21846,7 @@ static PyObject *_wrap_Window_GetTitle(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_SetLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -21886,7 +21887,7 @@ static PyObject *_wrap_Window_SetLabel(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_GetLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString result;
@@ -21918,7 +21919,7 @@ static PyObject *_wrap_Window_GetLabel(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_SetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -21959,7 +21960,7 @@ static PyObject *_wrap_Window_SetName(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_GetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString result;
@@ -21991,7 +21992,7 @@ static PyObject *_wrap_Window_GetName(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_SetWindowVariant(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetWindowVariant(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -22020,7 +22021,7 @@ static PyObject *_wrap_Window_SetWindowVariant(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_GetWindowVariant(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetWindowVariant(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int result;
@@ -22046,7 +22047,7 @@ static PyObject *_wrap_Window_GetWindowVariant(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_SetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -22075,7 +22076,7 @@ static PyObject *_wrap_Window_SetId(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Window_GetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int result;
@@ -22101,7 +22102,7 @@ static PyObject *_wrap_Window_GetId(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Window_NewControlId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_NewControlId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int result;
     char *kwnames[] = {
@@ -22123,7 +22124,7 @@ static PyObject *_wrap_Window_NewControlId(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_NextControlId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_NextControlId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     int result;
@@ -22149,7 +22150,7 @@ static PyObject *_wrap_Window_NextControlId(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_PrevControlId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_PrevControlId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     int result;
@@ -22175,7 +22176,7 @@ static PyObject *_wrap_Window_PrevControlId(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_SetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize *arg2 = 0 ;
@@ -22207,7 +22208,7 @@ static PyObject *_wrap_Window_SetSize(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_SetDimensions(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetDimensions(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -22254,7 +22255,7 @@ static PyObject *_wrap_Window_SetDimensions(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_SetRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRect *arg2 = 0 ;
@@ -22292,7 +22293,7 @@ static PyObject *_wrap_Window_SetRect(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_SetSizeWH(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetSizeWH(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -22325,7 +22326,7 @@ static PyObject *_wrap_Window_SetSizeWH(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_Move(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Move(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -22363,7 +22364,7 @@ static PyObject *_wrap_Window_Move(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Window_MoveXY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_MoveXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -22402,7 +22403,7 @@ static PyObject *_wrap_Window_MoveXY(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_Raise(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Raise(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -22427,7 +22428,7 @@ static PyObject *_wrap_Window_Raise(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Window_Lower(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Lower(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -22452,7 +22453,7 @@ static PyObject *_wrap_Window_Lower(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Window_SetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetClientSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize *arg2 = 0 ;
@@ -22484,7 +22485,7 @@ static PyObject *_wrap_Window_SetClientSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_SetClientSizeWH(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetClientSizeWH(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -22517,7 +22518,7 @@ static PyObject *_wrap_Window_SetClientSizeWH(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_SetClientRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetClientRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRect *arg2 = 0 ;
@@ -22549,7 +22550,7 @@ static PyObject *_wrap_Window_SetClientRect(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint result;
@@ -22579,7 +22580,7 @@ static PyObject *_wrap_Window_GetPosition(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_GetPositionTuple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetPositionTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -22618,7 +22619,7 @@ static PyObject *_wrap_Window_GetPositionTuple(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize result;
@@ -22648,7 +22649,7 @@ static PyObject *_wrap_Window_GetSize(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_GetSizeTuple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetSizeTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -22687,7 +22688,7 @@ static PyObject *_wrap_Window_GetSizeTuple(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_GetRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRect result;
@@ -22717,7 +22718,7 @@ static PyObject *_wrap_Window_GetRect(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_GetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetClientSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize result;
@@ -22747,7 +22748,7 @@ static PyObject *_wrap_Window_GetClientSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_GetClientSizeTuple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetClientSizeTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -22786,7 +22787,7 @@ static PyObject *_wrap_Window_GetClientSizeTuple(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Window_GetClientAreaOrigin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetClientAreaOrigin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint result;
@@ -22816,7 +22817,7 @@ static PyObject *_wrap_Window_GetClientAreaOrigin(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_GetClientRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetClientRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRect result;
@@ -22846,7 +22847,7 @@ static PyObject *_wrap_Window_GetClientRect(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_GetBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize result;
@@ -22876,7 +22877,7 @@ static PyObject *_wrap_Window_GetBestSize(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_GetBestSizeTuple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetBestSizeTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -22915,7 +22916,7 @@ static PyObject *_wrap_Window_GetBestSizeTuple(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_GetAdjustedBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetAdjustedBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize result;
@@ -22945,7 +22946,7 @@ static PyObject *_wrap_Window_GetAdjustedBestSize(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_Center(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Center(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) wxBOTH ;
@@ -22976,7 +22977,7 @@ static PyObject *_wrap_Window_Center(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_CenterOnScreen(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_CenterOnScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) wxBOTH ;
@@ -23007,7 +23008,7 @@ static PyObject *_wrap_Window_CenterOnScreen(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_CenterOnParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_CenterOnParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) wxBOTH ;
@@ -23038,7 +23039,7 @@ static PyObject *_wrap_Window_CenterOnParent(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_Fit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Fit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -23063,7 +23064,7 @@ static PyObject *_wrap_Window_Fit(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Window_FitInside(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_FitInside(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -23088,7 +23089,7 @@ static PyObject *_wrap_Window_FitInside(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_SetSizeHints__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_Window_SetSizeHints__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -23142,7 +23143,7 @@ static PyObject *_wrap_Window_SetSizeHints__SWIG_0(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_Window_SetSizeHints__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_Window_SetSizeHints__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize *arg2 = 0 ;
@@ -23287,7 +23288,7 @@ static PyObject *_wrap_Window_SetSizeHints(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_Window_SetVirtualSizeHints__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_Window_SetVirtualSizeHints__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -23329,7 +23330,7 @@ static PyObject *_wrap_Window_SetVirtualSizeHints__SWIG_0(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_Window_SetVirtualSizeHints__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_Window_SetVirtualSizeHints__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize *arg2 = 0 ;
@@ -23444,7 +23445,7 @@ static PyObject *_wrap_Window_SetVirtualSizeHints(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_Window_GetMinWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetMinWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int result;
@@ -23470,7 +23471,7 @@ static PyObject *_wrap_Window_GetMinWidth(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_GetMinHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetMinHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int result;
@@ -23496,7 +23497,7 @@ static PyObject *_wrap_Window_GetMinHeight(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_GetMaxWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetMaxWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int result;
@@ -23522,7 +23523,7 @@ static PyObject *_wrap_Window_GetMaxWidth(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_GetMaxHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetMaxHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int result;
@@ -23548,7 +23549,7 @@ static PyObject *_wrap_Window_GetMaxHeight(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_GetMaxSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetMaxSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize result;
@@ -23578,7 +23579,7 @@ static PyObject *_wrap_Window_GetMaxSize(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_GetMinSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetMinSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize result;
@@ -23608,7 +23609,7 @@ static PyObject *_wrap_Window_GetMinSize(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_SetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetVirtualSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize *arg2 = 0 ;
@@ -23640,7 +23641,7 @@ static PyObject *_wrap_Window_SetVirtualSize(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_SetVirtualSizeWH(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetVirtualSizeWH(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -23673,7 +23674,7 @@ static PyObject *_wrap_Window_SetVirtualSizeWH(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_GetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetVirtualSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize result;
@@ -23703,7 +23704,7 @@ static PyObject *_wrap_Window_GetVirtualSize(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_GetVirtualSizeTuple(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetVirtualSizeTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -23742,7 +23743,7 @@ static PyObject *_wrap_Window_GetVirtualSizeTuple(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_GetBestVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetBestVirtualSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize result;
@@ -23772,7 +23773,7 @@ static PyObject *_wrap_Window_GetBestVirtualSize(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Window_Show(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool arg2 = (bool) True ;
@@ -23806,7 +23807,7 @@ static PyObject *_wrap_Window_Show(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Window_Hide(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Hide(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -23834,7 +23835,7 @@ static PyObject *_wrap_Window_Hide(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Window_Enable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool arg2 = (bool) True ;
@@ -23868,7 +23869,7 @@ static PyObject *_wrap_Window_Enable(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_Disable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Disable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -23896,7 +23897,7 @@ static PyObject *_wrap_Window_Disable(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_IsShown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_IsShown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -23924,7 +23925,7 @@ static PyObject *_wrap_Window_IsShown(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_IsEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_IsEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -23952,7 +23953,7 @@ static PyObject *_wrap_Window_IsEnabled(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_SetWindowStyleFlag(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetWindowStyleFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     long arg2 ;
@@ -23981,7 +23982,7 @@ static PyObject *_wrap_Window_SetWindowStyleFlag(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Window_GetWindowStyleFlag(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetWindowStyleFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     long result;
@@ -24007,7 +24008,7 @@ static PyObject *_wrap_Window_GetWindowStyleFlag(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Window_HasFlag(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_HasFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -24039,7 +24040,7 @@ static PyObject *_wrap_Window_HasFlag(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_IsRetained(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_IsRetained(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -24067,7 +24068,7 @@ static PyObject *_wrap_Window_IsRetained(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_SetExtraStyle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetExtraStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     long arg2 ;
@@ -24096,7 +24097,7 @@ static PyObject *_wrap_Window_SetExtraStyle(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_GetExtraStyle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetExtraStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     long result;
@@ -24122,7 +24123,7 @@ static PyObject *_wrap_Window_GetExtraStyle(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_MakeModal(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_MakeModal(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool arg2 = (bool) True ;
@@ -24153,7 +24154,7 @@ static PyObject *_wrap_Window_MakeModal(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_SetThemeEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetThemeEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool arg2 ;
@@ -24182,7 +24183,7 @@ static PyObject *_wrap_Window_SetThemeEnabled(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_GetThemeEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetThemeEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -24210,7 +24211,7 @@ static PyObject *_wrap_Window_GetThemeEnabled(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_SetFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -24235,7 +24236,7 @@ static PyObject *_wrap_Window_SetFocus(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_SetFocusFromKbd(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetFocusFromKbd(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -24260,7 +24261,7 @@ static PyObject *_wrap_Window_SetFocusFromKbd(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_FindFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_FindFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *result;
     char *kwnames[] = {
@@ -24284,7 +24285,7 @@ static PyObject *_wrap_Window_FindFocus(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_AcceptsFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_AcceptsFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -24312,7 +24313,7 @@ static PyObject *_wrap_Window_AcceptsFocus(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_AcceptsFocusFromKeyboard(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_AcceptsFocusFromKeyboard(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -24340,7 +24341,7 @@ static PyObject *_wrap_Window_AcceptsFocusFromKeyboard(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_Window_GetDefaultItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *result;
@@ -24368,7 +24369,7 @@ static PyObject *_wrap_Window_GetDefaultItem(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_SetDefaultItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -24400,7 +24401,7 @@ static PyObject *_wrap_Window_SetDefaultItem(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_SetTmpDefaultItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetTmpDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -24429,7 +24430,7 @@ static PyObject *_wrap_Window_SetTmpDefaultItem(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Window_GetChildren(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject *result;
@@ -24455,7 +24456,7 @@ static PyObject *_wrap_Window_GetChildren(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_GetParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *result;
@@ -24483,7 +24484,7 @@ static PyObject *_wrap_Window_GetParent(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_GetGrandParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetGrandParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *result;
@@ -24511,7 +24512,7 @@ static PyObject *_wrap_Window_GetGrandParent(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_IsTopLevel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_IsTopLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -24539,7 +24540,7 @@ static PyObject *_wrap_Window_IsTopLevel(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_Reparent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Reparent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -24571,7 +24572,7 @@ static PyObject *_wrap_Window_Reparent(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_AddChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_AddChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -24600,7 +24601,7 @@ static PyObject *_wrap_Window_AddChild(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_RemoveChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_RemoveChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -24629,7 +24630,7 @@ static PyObject *_wrap_Window_RemoveChild(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_FindWindowById(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_FindWindowById(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     long arg2 ;
@@ -24661,7 +24662,7 @@ static PyObject *_wrap_Window_FindWindowById(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_FindWindowByName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_FindWindowByName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -24705,7 +24706,7 @@ static PyObject *_wrap_Window_FindWindowByName(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_GetEventHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetEventHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxEvtHandler *result;
@@ -24733,7 +24734,7 @@ static PyObject *_wrap_Window_GetEventHandler(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_SetEventHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetEventHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxEvtHandler *arg2 = (wxEvtHandler *) 0 ;
@@ -24762,7 +24763,7 @@ static PyObject *_wrap_Window_SetEventHandler(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_PushEventHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_PushEventHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxEvtHandler *arg2 = (wxEvtHandler *) 0 ;
@@ -24791,7 +24792,7 @@ static PyObject *_wrap_Window_PushEventHandler(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_PopEventHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_PopEventHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool arg2 = (bool) False ;
@@ -24825,7 +24826,7 @@ static PyObject *_wrap_Window_PopEventHandler(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_RemoveEventHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_RemoveEventHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxEvtHandler *arg2 = (wxEvtHandler *) 0 ;
@@ -24857,7 +24858,7 @@ static PyObject *_wrap_Window_RemoveEventHandler(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Window_SetValidator(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetValidator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxValidator *arg2 = 0 ;
@@ -24891,7 +24892,7 @@ static PyObject *_wrap_Window_SetValidator(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_GetValidator(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetValidator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxValidator *result;
@@ -24919,7 +24920,7 @@ static PyObject *_wrap_Window_GetValidator(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_Validate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Validate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -24947,7 +24948,7 @@ static PyObject *_wrap_Window_Validate(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_TransferDataToWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_TransferDataToWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -24975,7 +24976,7 @@ static PyObject *_wrap_Window_TransferDataToWindow(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Window_TransferDataFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_TransferDataFromWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -25003,7 +25004,7 @@ static PyObject *_wrap_Window_TransferDataFromWindow(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Window_InitDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_InitDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -25028,7 +25029,7 @@ static PyObject *_wrap_Window_InitDialog(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_SetAcceleratorTable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetAcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxAcceleratorTable *arg2 = 0 ;
@@ -25062,7 +25063,7 @@ static PyObject *_wrap_Window_SetAcceleratorTable(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_GetAcceleratorTable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetAcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxAcceleratorTable *result;
@@ -25088,7 +25089,7 @@ static PyObject *_wrap_Window_GetAcceleratorTable(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_RegisterHotKey(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_RegisterHotKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -25128,7 +25129,7 @@ static PyObject *_wrap_Window_RegisterHotKey(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_UnregisterHotKey(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_UnregisterHotKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -25160,7 +25161,7 @@ static PyObject *_wrap_Window_UnregisterHotKey(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_ConvertDialogPointToPixels(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ConvertDialogPointToPixels(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -25197,7 +25198,7 @@ static PyObject *_wrap_Window_ConvertDialogPointToPixels(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_Window_ConvertDialogSizeToPixels(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ConvertDialogSizeToPixels(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize *arg2 = 0 ;
@@ -25234,7 +25235,7 @@ static PyObject *_wrap_Window_ConvertDialogSizeToPixels(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_Window_DLG_PNT(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_DLG_PNT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -25271,7 +25272,7 @@ static PyObject *_wrap_Window_DLG_PNT(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_DLG_SZE(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_DLG_SZE(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize *arg2 = 0 ;
@@ -25308,7 +25309,7 @@ static PyObject *_wrap_Window_DLG_SZE(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_ConvertPixelPointToDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ConvertPixelPointToDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -25345,7 +25346,7 @@ static PyObject *_wrap_Window_ConvertPixelPointToDialog(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_Window_ConvertPixelSizeToDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ConvertPixelSizeToDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSize *arg2 = 0 ;
@@ -25382,7 +25383,7 @@ static PyObject *_wrap_Window_ConvertPixelSizeToDialog(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_Window_WarpPointer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_WarpPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -25415,7 +25416,7 @@ static PyObject *_wrap_Window_WarpPointer(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_CaptureMouse(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_CaptureMouse(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -25440,7 +25441,7 @@ static PyObject *_wrap_Window_CaptureMouse(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_ReleaseMouse(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ReleaseMouse(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -25465,7 +25466,7 @@ static PyObject *_wrap_Window_ReleaseMouse(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_GetCapture(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetCapture(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *result;
     char *kwnames[] = {
@@ -25489,7 +25490,7 @@ static PyObject *_wrap_Window_GetCapture(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_HasCapture(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_HasCapture(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -25517,7 +25518,7 @@ static PyObject *_wrap_Window_HasCapture(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_Refresh(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Refresh(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool arg2 = (bool) True ;
@@ -25554,7 +25555,7 @@ static PyObject *_wrap_Window_Refresh(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_RefreshRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_RefreshRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRect *arg2 = 0 ;
@@ -25586,7 +25587,7 @@ static PyObject *_wrap_Window_RefreshRect(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_Update(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Update(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -25611,7 +25612,7 @@ static PyObject *_wrap_Window_Update(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_ClearBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ClearBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -25636,7 +25637,7 @@ static PyObject *_wrap_Window_ClearBackground(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_Freeze(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Freeze(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -25661,7 +25662,7 @@ static PyObject *_wrap_Window_Freeze(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_Thaw(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Thaw(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -25686,7 +25687,7 @@ static PyObject *_wrap_Window_Thaw(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Window_PrepareDC(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_PrepareDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxDC *arg2 = 0 ;
@@ -25720,7 +25721,7 @@ static PyObject *_wrap_Window_PrepareDC(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_GetUpdateRegion(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetUpdateRegion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRegion *result;
@@ -25749,7 +25750,7 @@ static PyObject *_wrap_Window_GetUpdateRegion(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Window_GetUpdateClientRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetUpdateClientRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRect result;
@@ -25779,7 +25780,7 @@ static PyObject *_wrap_Window_GetUpdateClientRect(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_IsExposed(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_IsExposed(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -25827,7 +25828,7 @@ static PyObject *_wrap_Window_IsExposed(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_IsExposedPoint(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_IsExposedPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -25862,7 +25863,7 @@ static PyObject *_wrap_Window_IsExposedPoint(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_IsExposedRect(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_IsExposedRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRect *arg2 = 0 ;
@@ -25897,7 +25898,7 @@ static PyObject *_wrap_Window_IsExposedRect(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxVisualAttributes result;
@@ -25927,7 +25928,7 @@ static PyObject *_wrap_Window_GetDefaultAttributes(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Window_GetClassDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
     wxVisualAttributes result;
@@ -25959,7 +25960,7 @@ static PyObject *_wrap_Window_GetClassDefaultAttributes(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_Window_SetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxColour *arg2 = 0 ;
@@ -25994,7 +25995,7 @@ static PyObject *_wrap_Window_SetBackgroundColour(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_SetDefaultBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetDefaultBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxColour *arg2 = 0 ;
@@ -26026,7 +26027,7 @@ static PyObject *_wrap_Window_SetDefaultBackgroundColour(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_Window_SetForegroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetForegroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxColour *arg2 = 0 ;
@@ -26061,7 +26062,7 @@ static PyObject *_wrap_Window_SetForegroundColour(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_SetDefaultForegroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetDefaultForegroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxColour *arg2 = 0 ;
@@ -26093,7 +26094,7 @@ static PyObject *_wrap_Window_SetDefaultForegroundColour(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_Window_GetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxColour result;
@@ -26123,7 +26124,7 @@ static PyObject *_wrap_Window_GetBackgroundColour(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_GetForegroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetForegroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxColour result;
@@ -26153,7 +26154,7 @@ static PyObject *_wrap_Window_GetForegroundColour(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Window_SetCursor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxCursor *arg2 = 0 ;
@@ -26190,7 +26191,7 @@ static PyObject *_wrap_Window_SetCursor(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_GetCursor(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxCursor *result;
@@ -26222,7 +26223,7 @@ static PyObject *_wrap_Window_GetCursor(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_SetFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxFont *arg2 = 0 ;
@@ -26259,7 +26260,7 @@ static PyObject *_wrap_Window_SetFont(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_SetDefaultFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetDefaultFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxFont *arg2 = 0 ;
@@ -26293,7 +26294,7 @@ static PyObject *_wrap_Window_SetDefaultFont(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_GetFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxFont *result;
@@ -26325,7 +26326,7 @@ static PyObject *_wrap_Window_GetFont(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_SetCaret(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetCaret(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxCaret *arg2 = (wxCaret *) 0 ;
@@ -26354,7 +26355,7 @@ static PyObject *_wrap_Window_SetCaret(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_GetCaret(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetCaret(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxCaret *result;
@@ -26380,7 +26381,7 @@ static PyObject *_wrap_Window_GetCaret(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_GetCharHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetCharHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int result;
@@ -26406,7 +26407,7 @@ static PyObject *_wrap_Window_GetCharHeight(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_GetCharWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetCharWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int result;
@@ -26432,7 +26433,7 @@ static PyObject *_wrap_Window_GetCharWidth(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_GetTextExtent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetTextExtent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -26487,7 +26488,7 @@ static PyObject *_wrap_Window_GetTextExtent(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_GetFullTextExtent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetFullTextExtent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -26562,7 +26563,7 @@ static PyObject *_wrap_Window_GetFullTextExtent(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Window_ClientToScreenXY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ClientToScreenXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -26611,7 +26612,7 @@ static PyObject *_wrap_Window_ClientToScreenXY(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_ScreenToClientXY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ScreenToClientXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -26660,7 +26661,7 @@ static PyObject *_wrap_Window_ScreenToClientXY(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_ClientToScreen(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ClientToScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -26697,7 +26698,7 @@ static PyObject *_wrap_Window_ClientToScreen(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_ScreenToClient(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ScreenToClient(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -26734,7 +26735,7 @@ static PyObject *_wrap_Window_ScreenToClient(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_HitTestXY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_HitTestXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -26768,7 +26769,7 @@ static PyObject *_wrap_Window_HitTestXY(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_HitTest(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_HitTest(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -26801,7 +26802,7 @@ static PyObject *_wrap_Window_HitTest(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Window_GetBorder__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_Window_GetBorder__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     long arg2 ;
@@ -26828,7 +26829,7 @@ static PyObject *_wrap_Window_GetBorder__SWIG_0(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_Window_GetBorder__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_Window_GetBorder__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int result;
@@ -26899,7 +26900,7 @@ static PyObject *_wrap_Window_GetBorder(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_Window_UpdateWindowUI(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_UpdateWindowUI(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     long arg2 = (long) wxUPDATE_UI_NONE ;
@@ -26930,7 +26931,7 @@ static PyObject *_wrap_Window_UpdateWindowUI(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_PopupMenuXY(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_PopupMenuXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxMenu *arg2 = (wxMenu *) 0 ;
@@ -26970,7 +26971,7 @@ static PyObject *_wrap_Window_PopupMenuXY(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_PopupMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_PopupMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxMenu *arg2 = (wxMenu *) 0 ;
@@ -27009,7 +27010,7 @@ static PyObject *_wrap_Window_PopupMenu(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_GetHandle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     long result;
@@ -27035,7 +27036,7 @@ static PyObject *_wrap_Window_GetHandle(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Window_HasScrollbar(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_HasScrollbar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -27067,7 +27068,7 @@ static PyObject *_wrap_Window_HasScrollbar(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_SetScrollbar(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetScrollbar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -27114,7 +27115,7 @@ static PyObject *_wrap_Window_SetScrollbar(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_SetScrollPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetScrollPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -27153,7 +27154,7 @@ static PyObject *_wrap_Window_SetScrollPos(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_GetScrollPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetScrollPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -27183,7 +27184,7 @@ static PyObject *_wrap_Window_GetScrollPos(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_GetScrollThumb(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetScrollThumb(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -27213,7 +27214,7 @@ static PyObject *_wrap_Window_GetScrollThumb(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_GetScrollRange(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetScrollRange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -27243,7 +27244,7 @@ static PyObject *_wrap_Window_GetScrollRange(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_ScrollWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ScrollWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -27282,7 +27283,7 @@ static PyObject *_wrap_Window_ScrollWindow(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Window_ScrollLines(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ScrollLines(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -27314,7 +27315,7 @@ static PyObject *_wrap_Window_ScrollLines(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_ScrollPages(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_ScrollPages(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -27346,7 +27347,7 @@ static PyObject *_wrap_Window_ScrollPages(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_LineUp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_LineUp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -27374,7 +27375,7 @@ static PyObject *_wrap_Window_LineUp(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_LineDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_LineDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -27402,7 +27403,7 @@ static PyObject *_wrap_Window_LineDown(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_PageUp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_PageUp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -27430,7 +27431,7 @@ static PyObject *_wrap_Window_PageUp(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_PageDown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_PageDown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -27458,7 +27459,7 @@ static PyObject *_wrap_Window_PageDown(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_SetHelpText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetHelpText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -27499,7 +27500,7 @@ static PyObject *_wrap_Window_SetHelpText(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_SetHelpTextForId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetHelpTextForId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -27540,7 +27541,7 @@ static PyObject *_wrap_Window_SetHelpTextForId(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_GetHelpText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetHelpText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString result;
@@ -27572,7 +27573,7 @@ static PyObject *_wrap_Window_GetHelpText(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_SetToolTipString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetToolTipString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -27613,7 +27614,7 @@ static PyObject *_wrap_Window_SetToolTipString(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_SetToolTip(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetToolTip(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxToolTip *arg2 = (wxToolTip *) 0 ;
@@ -27642,7 +27643,7 @@ static PyObject *_wrap_Window_SetToolTip(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_GetToolTip(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetToolTip(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxToolTip *result;
@@ -27670,7 +27671,7 @@ static PyObject *_wrap_Window_GetToolTip(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_SetDropTarget(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetDropTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPyDropTarget *arg2 = (wxPyDropTarget *) 0 ;
@@ -27699,7 +27700,7 @@ static PyObject *_wrap_Window_SetDropTarget(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_GetDropTarget(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetDropTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxPyDropTarget *result;
@@ -27725,7 +27726,7 @@ static PyObject *_wrap_Window_GetDropTarget(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_SetConstraints(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetConstraints(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxLayoutConstraints *arg2 = (wxLayoutConstraints *) 0 ;
@@ -27754,7 +27755,7 @@ static PyObject *_wrap_Window_SetConstraints(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_GetConstraints(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetConstraints(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxLayoutConstraints *result;
@@ -27780,7 +27781,7 @@ static PyObject *_wrap_Window_GetConstraints(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_SetAutoLayout(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetAutoLayout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool arg2 ;
@@ -27809,7 +27810,7 @@ static PyObject *_wrap_Window_SetAutoLayout(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_GetAutoLayout(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetAutoLayout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -27837,7 +27838,7 @@ static PyObject *_wrap_Window_GetAutoLayout(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_Layout(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_Layout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     bool result;
@@ -27865,7 +27866,7 @@ static PyObject *_wrap_Window_Layout(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Window_SetSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSizer *arg2 = (wxSizer *) 0 ;
@@ -27900,7 +27901,7 @@ static PyObject *_wrap_Window_SetSizer(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_SetSizerAndFit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetSizerAndFit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSizer *arg2 = (wxSizer *) 0 ;
@@ -27935,7 +27936,7 @@ static PyObject *_wrap_Window_SetSizerAndFit(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Window_GetSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSizer *result;
@@ -27963,7 +27964,7 @@ static PyObject *_wrap_Window_GetSizer(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Window_SetContainingSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetContainingSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSizer *arg2 = (wxSizer *) 0 ;
@@ -27992,7 +27993,7 @@ static PyObject *_wrap_Window_SetContainingSizer(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Window_GetContainingSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_GetContainingSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxSizer *result;
@@ -28020,14 +28021,67 @@ static PyObject *_wrap_Window_GetContainingSizer(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject * Window_swigregister(PyObject *, PyObject *args) {
+static PyObject *_wrap_Window_InheritAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_InheritAttributes",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->InheritAttributes();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_ShouldInheritColours(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_ShouldInheritColours",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxWindow const *)arg1)->ShouldInheritColours();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * Window_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxWindow, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_FindWindowById(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FindWindowById(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long arg1 ;
     wxWindow *arg2 = (wxWindow *) NULL ;
@@ -28061,7 +28115,7 @@ static PyObject *_wrap_FindWindowById(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_FindWindowByName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FindWindowByName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxWindow *arg2 = (wxWindow *) NULL ;
@@ -28107,7 +28161,7 @@ static PyObject *_wrap_FindWindowByName(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_FindWindowByLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FindWindowByLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxWindow *arg2 = (wxWindow *) NULL ;
@@ -28153,7 +28207,7 @@ static PyObject *_wrap_FindWindowByLabel(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Window_FromHWND(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_FromHWND(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     unsigned long arg2 ;
@@ -28185,7 +28239,7 @@ static PyObject *_wrap_Window_FromHWND(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_new_Validator(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Validator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxValidator *result;
     char *kwnames[] = {
@@ -28209,7 +28263,7 @@ static PyObject *_wrap_new_Validator(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Validator_Clone(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Validator_Clone(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxValidator *arg1 = (wxValidator *) 0 ;
     wxValidator *result;
@@ -28237,7 +28291,7 @@ static PyObject *_wrap_Validator_Clone(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Validator_Validate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Validator_Validate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxValidator *arg1 = (wxValidator *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -28269,7 +28323,7 @@ static PyObject *_wrap_Validator_Validate(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Validator_TransferToWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Validator_TransferToWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxValidator *arg1 = (wxValidator *) 0 ;
     bool result;
@@ -28297,7 +28351,7 @@ static PyObject *_wrap_Validator_TransferToWindow(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_Validator_TransferFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Validator_TransferFromWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxValidator *arg1 = (wxValidator *) 0 ;
     bool result;
@@ -28325,7 +28379,7 @@ static PyObject *_wrap_Validator_TransferFromWindow(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_Validator_GetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Validator_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxValidator *arg1 = (wxValidator *) 0 ;
     wxWindow *result;
@@ -28353,7 +28407,7 @@ static PyObject *_wrap_Validator_GetWindow(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Validator_SetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Validator_SetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxValidator *arg1 = (wxValidator *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -28382,7 +28436,7 @@ static PyObject *_wrap_Validator_SetWindow(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Validator_IsSilent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Validator_IsSilent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     bool result;
     char *kwnames[] = {
@@ -28406,7 +28460,7 @@ static PyObject *_wrap_Validator_IsSilent(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Validator_SetBellOnError(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Validator_SetBellOnError(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) True ;
     PyObject * obj0 = 0 ;
@@ -28433,14 +28487,14 @@ static PyObject *_wrap_Validator_SetBellOnError(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * Validator_swigregister(PyObject *, PyObject *args) {
+static PyObject * Validator_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxValidator, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PyValidator(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyValidator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyValidator *result;
     char *kwnames[] = {
@@ -28462,7 +28516,7 @@ static PyObject *_wrap_new_PyValidator(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_PyValidator__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyValidator__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyValidator *arg1 = (wxPyValidator *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -28499,14 +28553,14 @@ static PyObject *_wrap_PyValidator__setCallbackInfo(PyObject *, PyObject *args, 
 }
 
 
-static PyObject * PyValidator_swigregister(PyObject *, PyObject *args) {
+static PyObject * PyValidator_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyValidator, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static int _wrap_DefaultValidator_set(PyObject *) {
+static int _wrap_DefaultValidator_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable DefaultValidator is read-only.");
     return 1;
 }
@@ -28520,7 +28574,7 @@ static PyObject *_wrap_DefaultValidator_get() {
 }
 
 
-static PyObject *_wrap_new_Menu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Menu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString const &arg1_defvalue = wxPyEmptyString ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
@@ -28569,7 +28623,7 @@ static PyObject *_wrap_new_Menu(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Menu_Append(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Append(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -28642,7 +28696,7 @@ static PyObject *_wrap_Menu_Append(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Menu_AppendSeparator(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_AppendSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenuItem *result;
@@ -28670,7 +28724,7 @@ static PyObject *_wrap_Menu_AppendSeparator(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Menu_AppendCheckItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_AppendCheckItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -28737,7 +28791,7 @@ static PyObject *_wrap_Menu_AppendCheckItem(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Menu_AppendRadioItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_AppendRadioItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -28804,7 +28858,7 @@ static PyObject *_wrap_Menu_AppendRadioItem(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Menu_AppendMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_AppendMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -28875,7 +28929,7 @@ static PyObject *_wrap_Menu_AppendMenu(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Menu_AppendItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_AppendItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenuItem *arg2 = (wxMenuItem *) 0 ;
@@ -28907,7 +28961,7 @@ static PyObject *_wrap_Menu_AppendItem(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Menu_Break(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Break(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     PyObject * obj0 = 0 ;
@@ -28932,7 +28986,7 @@ static PyObject *_wrap_Menu_Break(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Menu_InsertItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_InsertItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     size_t arg2 ;
@@ -28968,7 +29022,7 @@ static PyObject *_wrap_Menu_InsertItem(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Menu_Insert(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Insert(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     size_t arg2 ;
@@ -29045,7 +29099,7 @@ static PyObject *_wrap_Menu_Insert(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Menu_InsertSeparator(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_InsertSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     size_t arg2 ;
@@ -29077,7 +29131,7 @@ static PyObject *_wrap_Menu_InsertSeparator(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Menu_InsertCheckItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_InsertCheckItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     size_t arg2 ;
@@ -29148,7 +29202,7 @@ static PyObject *_wrap_Menu_InsertCheckItem(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Menu_InsertRadioItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_InsertRadioItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     size_t arg2 ;
@@ -29219,7 +29273,7 @@ static PyObject *_wrap_Menu_InsertRadioItem(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Menu_InsertMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_InsertMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     size_t arg2 ;
@@ -29294,7 +29348,7 @@ static PyObject *_wrap_Menu_InsertMenu(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Menu_PrependItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_PrependItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenuItem *arg2 = (wxMenuItem *) 0 ;
@@ -29326,7 +29380,7 @@ static PyObject *_wrap_Menu_PrependItem(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Menu_Prepend(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Prepend(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -29399,7 +29453,7 @@ static PyObject *_wrap_Menu_Prepend(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Menu_PrependSeparator(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_PrependSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenuItem *result;
@@ -29427,7 +29481,7 @@ static PyObject *_wrap_Menu_PrependSeparator(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Menu_PrependCheckItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_PrependCheckItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -29494,7 +29548,7 @@ static PyObject *_wrap_Menu_PrependCheckItem(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Menu_PrependRadioItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_PrependRadioItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -29561,7 +29615,7 @@ static PyObject *_wrap_Menu_PrependRadioItem(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Menu_PrependMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_PrependMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -29632,7 +29686,7 @@ static PyObject *_wrap_Menu_PrependMenu(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Menu_Remove(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Remove(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -29664,7 +29718,7 @@ static PyObject *_wrap_Menu_Remove(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Menu_RemoveItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_RemoveItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenuItem *arg2 = (wxMenuItem *) 0 ;
@@ -29696,7 +29750,7 @@ static PyObject *_wrap_Menu_RemoveItem(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Menu_Delete(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Delete(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -29728,7 +29782,7 @@ static PyObject *_wrap_Menu_Delete(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Menu_DeleteItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_DeleteItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenuItem *arg2 = (wxMenuItem *) 0 ;
@@ -29760,7 +29814,7 @@ static PyObject *_wrap_Menu_DeleteItem(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Menu_Destroy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     PyObject * obj0 = 0 ;
@@ -29785,7 +29839,7 @@ static PyObject *_wrap_Menu_Destroy(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Menu_DestroyId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_DestroyId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -29817,7 +29871,7 @@ static PyObject *_wrap_Menu_DestroyId(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Menu_DestroyItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_DestroyItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenuItem *arg2 = (wxMenuItem *) 0 ;
@@ -29849,7 +29903,7 @@ static PyObject *_wrap_Menu_DestroyItem(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Menu_GetMenuItemCount(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetMenuItemCount(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     size_t result;
@@ -29875,7 +29929,7 @@ static PyObject *_wrap_Menu_GetMenuItemCount(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Menu_GetMenuItems(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetMenuItems(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     PyObject *result;
@@ -29901,7 +29955,7 @@ static PyObject *_wrap_Menu_GetMenuItems(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Menu_FindItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_FindItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxString *arg2 = 0 ;
@@ -29943,7 +29997,7 @@ static PyObject *_wrap_Menu_FindItem(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Menu_FindItemById(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_FindItemById(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -29975,7 +30029,7 @@ static PyObject *_wrap_Menu_FindItemById(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Menu_FindItemByPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_FindItemByPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     size_t arg2 ;
@@ -30007,7 +30061,7 @@ static PyObject *_wrap_Menu_FindItemByPosition(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Menu_Enable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -30040,7 +30094,7 @@ static PyObject *_wrap_Menu_Enable(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Menu_IsEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_IsEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -30072,7 +30126,7 @@ static PyObject *_wrap_Menu_IsEnabled(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Menu_Check(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Check(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -30105,7 +30159,7 @@ static PyObject *_wrap_Menu_Check(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Menu_IsChecked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_IsChecked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -30137,7 +30191,7 @@ static PyObject *_wrap_Menu_IsChecked(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Menu_SetLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_SetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -30182,7 +30236,7 @@ static PyObject *_wrap_Menu_SetLabel(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Menu_GetLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -30218,7 +30272,7 @@ static PyObject *_wrap_Menu_GetLabel(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Menu_SetHelpString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_SetHelpString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -30263,7 +30317,7 @@ static PyObject *_wrap_Menu_SetHelpString(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Menu_GetHelpString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetHelpString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     int arg2 ;
@@ -30299,7 +30353,7 @@ static PyObject *_wrap_Menu_GetHelpString(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Menu_SetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_SetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxString *arg2 = 0 ;
@@ -30340,7 +30394,7 @@ static PyObject *_wrap_Menu_SetTitle(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Menu_GetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxString result;
@@ -30372,7 +30426,7 @@ static PyObject *_wrap_Menu_GetTitle(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Menu_SetEventHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_SetEventHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxEvtHandler *arg2 = (wxEvtHandler *) 0 ;
@@ -30401,7 +30455,7 @@ static PyObject *_wrap_Menu_SetEventHandler(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Menu_GetEventHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetEventHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxEvtHandler *result;
@@ -30429,7 +30483,7 @@ static PyObject *_wrap_Menu_GetEventHandler(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Menu_SetInvokingWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_SetInvokingWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -30458,7 +30512,7 @@ static PyObject *_wrap_Menu_SetInvokingWindow(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Menu_GetInvokingWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetInvokingWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxWindow *result;
@@ -30486,7 +30540,7 @@ static PyObject *_wrap_Menu_GetInvokingWindow(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_Menu_GetStyle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     long result;
@@ -30512,7 +30566,7 @@ static PyObject *_wrap_Menu_GetStyle(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Menu_UpdateUI(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_UpdateUI(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxEvtHandler *arg2 = (wxEvtHandler *) NULL ;
@@ -30543,7 +30597,7 @@ static PyObject *_wrap_Menu_UpdateUI(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Menu_GetMenuBar(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetMenuBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenuBar *result;
@@ -30571,7 +30625,7 @@ static PyObject *_wrap_Menu_GetMenuBar(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Menu_Attach(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Attach(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenuBarBase *arg2 = (wxMenuBarBase *) 0 ;
@@ -30600,7 +30654,7 @@ static PyObject *_wrap_Menu_Attach(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Menu_Detach(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_Detach(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     PyObject * obj0 = 0 ;
@@ -30625,7 +30679,7 @@ static PyObject *_wrap_Menu_Detach(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Menu_IsAttached(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_IsAttached(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     bool result;
@@ -30653,7 +30707,7 @@ static PyObject *_wrap_Menu_IsAttached(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Menu_SetParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_SetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenu *arg2 = (wxMenu *) 0 ;
@@ -30682,7 +30736,7 @@ static PyObject *_wrap_Menu_SetParent(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Menu_GetParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Menu_GetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) 0 ;
     wxMenu *result;
@@ -30710,14 +30764,14 @@ static PyObject *_wrap_Menu_GetParent(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * Menu_swigregister(PyObject *, PyObject *args) {
+static PyObject * Menu_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMenu, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_MenuBar(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_MenuBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long arg1 = (long) 0 ;
     wxMenuBar *result;
@@ -30747,7 +30801,7 @@ static PyObject *_wrap_new_MenuBar(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_MenuBar_Append(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_Append(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     wxMenu *arg2 = (wxMenu *) 0 ;
@@ -30795,7 +30849,7 @@ static PyObject *_wrap_MenuBar_Append(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MenuBar_Insert(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_Insert(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     size_t arg2 ;
@@ -30847,7 +30901,7 @@ static PyObject *_wrap_MenuBar_Insert(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MenuBar_GetMenuCount(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_GetMenuCount(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     size_t result;
@@ -30873,7 +30927,7 @@ static PyObject *_wrap_MenuBar_GetMenuCount(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MenuBar_GetMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_GetMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     size_t arg2 ;
@@ -30905,7 +30959,7 @@ static PyObject *_wrap_MenuBar_GetMenu(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_MenuBar_Replace(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_Replace(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     size_t arg2 ;
@@ -30957,7 +31011,7 @@ static PyObject *_wrap_MenuBar_Replace(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_MenuBar_Remove(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_Remove(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     size_t arg2 ;
@@ -30989,7 +31043,7 @@ static PyObject *_wrap_MenuBar_Remove(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MenuBar_EnableTop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_EnableTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     size_t arg2 ;
@@ -31022,7 +31076,7 @@ static PyObject *_wrap_MenuBar_EnableTop(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MenuBar_IsEnabledTop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_IsEnabledTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     size_t arg2 ;
@@ -31054,7 +31108,7 @@ static PyObject *_wrap_MenuBar_IsEnabledTop(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MenuBar_SetLabelTop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_SetLabelTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     size_t arg2 ;
@@ -31099,7 +31153,7 @@ static PyObject *_wrap_MenuBar_SetLabelTop(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MenuBar_GetLabelTop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_GetLabelTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     size_t arg2 ;
@@ -31135,7 +31189,7 @@ static PyObject *_wrap_MenuBar_GetLabelTop(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MenuBar_FindMenuItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_FindMenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     wxString *arg2 = 0 ;
@@ -31193,7 +31247,7 @@ static PyObject *_wrap_MenuBar_FindMenuItem(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MenuBar_FindItemById(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_FindItemById(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     int arg2 ;
@@ -31225,7 +31279,7 @@ static PyObject *_wrap_MenuBar_FindItemById(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MenuBar_FindMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_FindMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     wxString *arg2 = 0 ;
@@ -31267,7 +31321,7 @@ static PyObject *_wrap_MenuBar_FindMenu(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuBar_Enable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     int arg2 ;
@@ -31300,7 +31354,7 @@ static PyObject *_wrap_MenuBar_Enable(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MenuBar_Check(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_Check(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     int arg2 ;
@@ -31333,7 +31387,7 @@ static PyObject *_wrap_MenuBar_Check(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_MenuBar_IsChecked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_IsChecked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     int arg2 ;
@@ -31365,7 +31419,7 @@ static PyObject *_wrap_MenuBar_IsChecked(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MenuBar_IsEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_IsEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     int arg2 ;
@@ -31397,7 +31451,7 @@ static PyObject *_wrap_MenuBar_IsEnabled(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MenuBar_SetLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_SetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     int arg2 ;
@@ -31442,7 +31496,7 @@ static PyObject *_wrap_MenuBar_SetLabel(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuBar_GetLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_GetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     int arg2 ;
@@ -31478,7 +31532,7 @@ static PyObject *_wrap_MenuBar_GetLabel(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuBar_SetHelpString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_SetHelpString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     int arg2 ;
@@ -31523,7 +31577,7 @@ static PyObject *_wrap_MenuBar_SetHelpString(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MenuBar_GetHelpString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_GetHelpString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     int arg2 ;
@@ -31559,7 +31613,7 @@ static PyObject *_wrap_MenuBar_GetHelpString(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MenuBar_GetFrame(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_GetFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     wxFrame *result;
@@ -31587,7 +31641,7 @@ static PyObject *_wrap_MenuBar_GetFrame(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuBar_IsAttached(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_IsAttached(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     bool result;
@@ -31615,7 +31669,7 @@ static PyObject *_wrap_MenuBar_IsAttached(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MenuBar_Attach(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_Attach(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     wxFrame *arg2 = (wxFrame *) 0 ;
@@ -31644,7 +31698,7 @@ static PyObject *_wrap_MenuBar_Attach(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MenuBar_Detach(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuBar_Detach(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuBar *arg1 = (wxMenuBar *) 0 ;
     PyObject * obj0 = 0 ;
@@ -31669,17 +31723,17 @@ static PyObject *_wrap_MenuBar_Detach(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * MenuBar_swigregister(PyObject *, PyObject *args) {
+static PyObject * MenuBar_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMenuBar, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_MenuItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_MenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenu *arg1 = (wxMenu *) NULL ;
-    int arg2 = (int) wxID_SEPARATOR ;
+    int arg2 = (int) wxID_ANY ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
@@ -31762,7 +31816,7 @@ static PyObject *_wrap_new_MenuItem(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_MenuItem_GetMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxMenu *result;
@@ -31790,7 +31844,7 @@ static PyObject *_wrap_MenuItem_GetMenu(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuItem_SetMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_SetMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxMenu *arg2 = (wxMenu *) 0 ;
@@ -31819,7 +31873,7 @@ static PyObject *_wrap_MenuItem_SetMenu(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuItem_SetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     int arg2 ;
@@ -31848,7 +31902,7 @@ static PyObject *_wrap_MenuItem_SetId(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MenuItem_GetId(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     int result;
@@ -31874,7 +31928,7 @@ static PyObject *_wrap_MenuItem_GetId(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MenuItem_IsSeparator(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_IsSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     bool result;
@@ -31902,7 +31956,7 @@ static PyObject *_wrap_MenuItem_IsSeparator(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MenuItem_SetText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_SetText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxString *arg2 = 0 ;
@@ -31943,7 +31997,7 @@ static PyObject *_wrap_MenuItem_SetText(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuItem_GetLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxString result;
@@ -31975,7 +32029,7 @@ static PyObject *_wrap_MenuItem_GetLabel(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MenuItem_GetText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxString *result;
@@ -32010,7 +32064,7 @@ static PyObject *_wrap_MenuItem_GetText(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuItem_GetLabelFromText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetLabelFromText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxString result;
@@ -32054,7 +32108,7 @@ static PyObject *_wrap_MenuItem_GetLabelFromText(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_MenuItem_GetKind(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetKind(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     int result;
@@ -32080,7 +32134,36 @@ static PyObject *_wrap_MenuItem_GetKind(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuItem_SetCheckable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_SetKind(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "kind", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MenuItem_SetKind",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMenuItem,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (wxItemKind) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetKind((wxItemKind )arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_SetCheckable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     bool arg2 ;
@@ -32109,7 +32192,7 @@ static PyObject *_wrap_MenuItem_SetCheckable(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_MenuItem_IsCheckable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_IsCheckable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     bool result;
@@ -32137,7 +32220,7 @@ static PyObject *_wrap_MenuItem_IsCheckable(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_MenuItem_IsSubMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_IsSubMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     bool result;
@@ -32165,7 +32248,7 @@ static PyObject *_wrap_MenuItem_IsSubMenu(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MenuItem_SetSubMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_SetSubMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxMenu *arg2 = (wxMenu *) 0 ;
@@ -32194,7 +32277,7 @@ static PyObject *_wrap_MenuItem_SetSubMenu(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MenuItem_GetSubMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetSubMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxMenu *result;
@@ -32222,7 +32305,7 @@ static PyObject *_wrap_MenuItem_GetSubMenu(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MenuItem_Enable(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     bool arg2 = (bool) True ;
@@ -32253,7 +32336,7 @@ static PyObject *_wrap_MenuItem_Enable(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_MenuItem_IsEnabled(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_IsEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     bool result;
@@ -32281,7 +32364,7 @@ static PyObject *_wrap_MenuItem_IsEnabled(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MenuItem_Check(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_Check(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     bool arg2 = (bool) True ;
@@ -32312,7 +32395,7 @@ static PyObject *_wrap_MenuItem_Check(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MenuItem_IsChecked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_IsChecked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     bool result;
@@ -32340,7 +32423,7 @@ static PyObject *_wrap_MenuItem_IsChecked(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MenuItem_Toggle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_Toggle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     PyObject * obj0 = 0 ;
@@ -32365,7 +32448,7 @@ static PyObject *_wrap_MenuItem_Toggle(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_MenuItem_SetHelp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_SetHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxString *arg2 = 0 ;
@@ -32406,7 +32489,7 @@ static PyObject *_wrap_MenuItem_SetHelp(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuItem_GetHelp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxString *result;
@@ -32441,7 +32524,7 @@ static PyObject *_wrap_MenuItem_GetHelp(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_MenuItem_GetAccel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetAccel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxAcceleratorEntry *result;
@@ -32467,7 +32550,7 @@ static PyObject *_wrap_MenuItem_GetAccel(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MenuItem_SetAccel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_SetAccel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxAcceleratorEntry *arg2 = (wxAcceleratorEntry *) 0 ;
@@ -32496,7 +32579,7 @@ static PyObject *_wrap_MenuItem_SetAccel(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_MenuItem_GetDefaultMarginWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetDefaultMarginWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int result;
     char *kwnames[] = {
@@ -32518,7 +32601,7 @@ static PyObject *_wrap_MenuItem_GetDefaultMarginWidth(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_MenuItem_SetBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_SetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxBitmap *arg2 = 0 ;
@@ -32552,7 +32635,7 @@ static PyObject *_wrap_MenuItem_SetBitmap(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_MenuItem_GetBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MenuItem_GetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
     wxBitmap *result;
@@ -32584,14 +32667,14 @@ static PyObject *_wrap_MenuItem_GetBitmap(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject * MenuItem_swigregister(PyObject *, PyObject *args) {
+static PyObject * MenuItem_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMenuItem, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static int _wrap_ControlNameStr_set(PyObject *) {
+static int _wrap_ControlNameStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable ControlNameStr is read-only.");
     return 1;
 }
@@ -32611,7 +32694,7 @@ static PyObject *_wrap_ControlNameStr_get() {
 }
 
 
-static PyObject *_wrap_new_Control(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_Control(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -32700,7 +32783,7 @@ static PyObject *_wrap_new_Control(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_new_PreControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PreControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxControl *result;
     char *kwnames[] = {
@@ -32724,7 +32807,7 @@ static PyObject *_wrap_new_PreControl(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Control_Create(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Control_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxControl *arg1 = (wxControl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -32817,7 +32900,7 @@ static PyObject *_wrap_Control_Create(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Control_Command(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Control_Command(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxControl *arg1 = (wxControl *) 0 ;
     wxCommandEvent *arg2 = 0 ;
@@ -32851,7 +32934,7 @@ static PyObject *_wrap_Control_Command(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Control_GetLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Control_GetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxControl *arg1 = (wxControl *) 0 ;
     wxString result;
@@ -32883,7 +32966,7 @@ static PyObject *_wrap_Control_GetLabel(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Control_SetLabel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Control_SetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxControl *arg1 = (wxControl *) 0 ;
     wxString *arg2 = 0 ;
@@ -32924,7 +33007,7 @@ static PyObject *_wrap_Control_SetLabel(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Control_GetClassDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Control_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
     wxVisualAttributes result;
@@ -32956,14 +33039,14 @@ static PyObject *_wrap_Control_GetClassDefaultAttributes(PyObject *, PyObject *a
 }
 
 
-static PyObject * Control_swigregister(PyObject *, PyObject *args) {
+static PyObject * Control_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxControl, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_ItemContainer_Append(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_Append(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     wxString *arg2 = 0 ;
@@ -33010,7 +33093,7 @@ static PyObject *_wrap_ItemContainer_Append(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ItemContainer_AppendItems(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_AppendItems(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     wxArrayString *arg2 = 0 ;
@@ -33065,7 +33148,7 @@ static PyObject *_wrap_ItemContainer_AppendItems(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_ItemContainer_Insert(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_Insert(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     wxString *arg2 = 0 ;
@@ -33116,7 +33199,7 @@ static PyObject *_wrap_ItemContainer_Insert(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ItemContainer_Clear(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -33141,7 +33224,7 @@ static PyObject *_wrap_ItemContainer_Clear(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_ItemContainer_Delete(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_Delete(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     int arg2 ;
@@ -33170,7 +33253,7 @@ static PyObject *_wrap_ItemContainer_Delete(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ItemContainer_GetCount(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_GetCount(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     int result;
@@ -33196,7 +33279,7 @@ static PyObject *_wrap_ItemContainer_GetCount(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_ItemContainer_IsEmpty(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_IsEmpty(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     bool result;
@@ -33224,7 +33307,7 @@ static PyObject *_wrap_ItemContainer_IsEmpty(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_ItemContainer_GetString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_GetString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     int arg2 ;
@@ -33260,7 +33343,7 @@ static PyObject *_wrap_ItemContainer_GetString(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_ItemContainer_GetStrings(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_GetStrings(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     wxArrayString result;
@@ -33288,7 +33371,7 @@ static PyObject *_wrap_ItemContainer_GetStrings(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_ItemContainer_SetString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_SetString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     int arg2 ;
@@ -33333,7 +33416,7 @@ static PyObject *_wrap_ItemContainer_SetString(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_ItemContainer_FindString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_FindString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     wxString *arg2 = 0 ;
@@ -33375,7 +33458,7 @@ static PyObject *_wrap_ItemContainer_FindString(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_ItemContainer_Select(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_Select(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     int arg2 ;
@@ -33404,7 +33487,7 @@ static PyObject *_wrap_ItemContainer_Select(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_ItemContainer_GetSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     int result;
@@ -33430,7 +33513,7 @@ static PyObject *_wrap_ItemContainer_GetSelection(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_ItemContainer_GetStringSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_GetStringSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     wxString result;
@@ -33462,7 +33545,7 @@ static PyObject *_wrap_ItemContainer_GetStringSelection(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_ItemContainer_GetClientData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_GetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     int arg2 ;
@@ -33492,7 +33575,7 @@ static PyObject *_wrap_ItemContainer_GetClientData(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_ItemContainer_SetClientData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ItemContainer_SetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxItemContainer *arg1 = (wxItemContainer *) 0 ;
     int arg2 ;
@@ -33524,21 +33607,21 @@ static PyObject *_wrap_ItemContainer_SetClientData(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * ItemContainer_swigregister(PyObject *, PyObject *args) {
+static PyObject * ItemContainer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxItemContainer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject * ControlWithItems_swigregister(PyObject *, PyObject *args) {
+static PyObject * ControlWithItems_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxControlWithItems, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_SizerItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_SizerItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *result;
     char *kwnames[] = {
@@ -33560,7 +33643,7 @@ static PyObject *_wrap_new_SizerItem(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_new_SizerItemSpacer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_SizerItemSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     int arg2 ;
@@ -33606,7 +33689,7 @@ static PyObject *_wrap_new_SizerItemSpacer(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_new_SizerItemWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_SizerItemWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -33648,7 +33731,7 @@ static PyObject *_wrap_new_SizerItemWindow(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_new_SizerItemSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_SizerItemSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     int arg2 ;
@@ -33690,7 +33773,7 @@ static PyObject *_wrap_new_SizerItemSizer(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_SizerItem_DeleteWindows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_DeleteWindows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     PyObject * obj0 = 0 ;
@@ -33715,7 +33798,7 @@ static PyObject *_wrap_SizerItem_DeleteWindows(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_SizerItem_DetachSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_DetachSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     PyObject * obj0 = 0 ;
@@ -33740,7 +33823,7 @@ static PyObject *_wrap_SizerItem_DetachSizer(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_SizerItem_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxSize result;
@@ -33770,7 +33853,7 @@ static PyObject *_wrap_SizerItem_GetSize(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizerItem_CalcMin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxSize result;
@@ -33800,7 +33883,7 @@ static PyObject *_wrap_SizerItem_CalcMin(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizerItem_SetDimension(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetDimension(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxPoint arg2 ;
@@ -33837,7 +33920,7 @@ static PyObject *_wrap_SizerItem_SetDimension(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_SizerItem_GetMinSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetMinSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxSize result;
@@ -33867,7 +33950,7 @@ static PyObject *_wrap_SizerItem_GetMinSize(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_SizerItem_SetInitSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetInitSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     int arg2 ;
@@ -33900,7 +33983,7 @@ static PyObject *_wrap_SizerItem_SetInitSize(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_SizerItem_SetRatioWH(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetRatioWH(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     int arg2 ;
@@ -33933,7 +34016,7 @@ static PyObject *_wrap_SizerItem_SetRatioWH(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_SizerItem_SetRatioSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetRatioSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxSize arg2 ;
@@ -33964,7 +34047,7 @@ static PyObject *_wrap_SizerItem_SetRatioSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_SizerItem_SetRatio(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetRatio(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     float arg2 ;
@@ -33993,7 +34076,7 @@ static PyObject *_wrap_SizerItem_SetRatio(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_SizerItem_GetRatio(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetRatio(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     float result;
@@ -34019,7 +34102,7 @@ static PyObject *_wrap_SizerItem_GetRatio(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_SizerItem_IsWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_IsWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     bool result;
@@ -34047,7 +34130,7 @@ static PyObject *_wrap_SizerItem_IsWindow(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_SizerItem_IsSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_IsSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     bool result;
@@ -34075,7 +34158,7 @@ static PyObject *_wrap_SizerItem_IsSizer(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizerItem_IsSpacer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_IsSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     bool result;
@@ -34103,7 +34186,7 @@ static PyObject *_wrap_SizerItem_IsSpacer(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_SizerItem_SetProportion(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetProportion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     int arg2 ;
@@ -34132,7 +34215,7 @@ static PyObject *_wrap_SizerItem_SetProportion(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_SizerItem_GetProportion(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetProportion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     int result;
@@ -34158,7 +34241,7 @@ static PyObject *_wrap_SizerItem_GetProportion(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_SizerItem_SetFlag(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     int arg2 ;
@@ -34187,7 +34270,7 @@ static PyObject *_wrap_SizerItem_SetFlag(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizerItem_GetFlag(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     int result;
@@ -34213,7 +34296,7 @@ static PyObject *_wrap_SizerItem_GetFlag(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizerItem_SetBorder(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     int arg2 ;
@@ -34242,7 +34325,7 @@ static PyObject *_wrap_SizerItem_SetBorder(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_SizerItem_GetBorder(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     int result;
@@ -34268,7 +34351,7 @@ static PyObject *_wrap_SizerItem_GetBorder(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_SizerItem_GetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxWindow *result;
@@ -34296,7 +34379,7 @@ static PyObject *_wrap_SizerItem_GetWindow(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_SizerItem_SetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -34325,7 +34408,7 @@ static PyObject *_wrap_SizerItem_SetWindow(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_SizerItem_GetSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxSizer *result;
@@ -34353,7 +34436,7 @@ static PyObject *_wrap_SizerItem_GetSizer(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_SizerItem_SetSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxSizer *arg2 = (wxSizer *) 0 ;
@@ -34382,7 +34465,7 @@ static PyObject *_wrap_SizerItem_SetSizer(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_SizerItem_GetSpacer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxSize *result;
@@ -34411,7 +34494,7 @@ static PyObject *_wrap_SizerItem_GetSpacer(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_SizerItem_SetSpacer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_SetSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxSize *arg2 = 0 ;
@@ -34443,7 +34526,7 @@ static PyObject *_wrap_SizerItem_SetSpacer(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_SizerItem_Show(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     bool arg2 ;
@@ -34472,7 +34555,7 @@ static PyObject *_wrap_SizerItem_Show(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_SizerItem_IsShown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_IsShown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     bool result;
@@ -34500,7 +34583,7 @@ static PyObject *_wrap_SizerItem_IsShown(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_SizerItem_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     wxPoint result;
@@ -34530,7 +34613,7 @@ static PyObject *_wrap_SizerItem_GetPosition(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_SizerItem_GetUserData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_SizerItem_GetUserData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
     PyObject *result;
@@ -34556,14 +34639,14 @@ static PyObject *_wrap_SizerItem_GetUserData(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject * SizerItem_swigregister(PyObject *, PyObject *args) {
+static PyObject * SizerItem_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxSizerItem, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_Sizer__setOORInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -34591,7 +34674,7 @@ static PyObject *_wrap_Sizer__setOORInfo(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Sizer_Add(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_Add(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -34642,7 +34725,7 @@ static PyObject *_wrap_Sizer_Add(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Sizer_Insert(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_Insert(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     int arg2 ;
@@ -34697,7 +34780,7 @@ static PyObject *_wrap_Sizer_Insert(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Sizer_Prepend(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_Prepend(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -34748,7 +34831,7 @@ static PyObject *_wrap_Sizer_Prepend(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Sizer_Remove(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_Remove(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -34779,7 +34862,7 @@ static PyObject *_wrap_Sizer_Remove(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Sizer__SetItemMinSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer__SetItemMinSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -34814,7 +34897,7 @@ static PyObject *_wrap_Sizer__SetItemMinSize(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Sizer_AddItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_AddItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxSizerItem *arg2 = (wxSizerItem *) 0 ;
@@ -34843,7 +34926,7 @@ static PyObject *_wrap_Sizer_AddItem(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Sizer_InsertItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_InsertItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     size_t arg2 ;
@@ -34876,7 +34959,7 @@ static PyObject *_wrap_Sizer_InsertItem(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Sizer_PrependItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_PrependItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxSizerItem *arg2 = (wxSizerItem *) 0 ;
@@ -34905,7 +34988,7 @@ static PyObject *_wrap_Sizer_PrependItem(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Sizer_SetDimension(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_SetDimension(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     int arg2 ;
@@ -34946,7 +35029,7 @@ static PyObject *_wrap_Sizer_SetDimension(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Sizer_SetMinSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_SetMinSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxSize *arg2 = 0 ;
@@ -34978,7 +35061,7 @@ static PyObject *_wrap_Sizer_SetMinSize(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Sizer_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxSize result;
@@ -35008,7 +35091,7 @@ static PyObject *_wrap_Sizer_GetSize(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Sizer_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxPoint result;
@@ -35038,7 +35121,7 @@ static PyObject *_wrap_Sizer_GetPosition(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Sizer_GetMinSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_GetMinSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxSize result;
@@ -35068,7 +35151,7 @@ static PyObject *_wrap_Sizer_GetMinSize(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Sizer_RecalcSizes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -35093,7 +35176,7 @@ static PyObject *_wrap_Sizer_RecalcSizes(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Sizer_CalcMin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxSize result;
@@ -35123,7 +35206,7 @@ static PyObject *_wrap_Sizer_CalcMin(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Sizer_Layout(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_Layout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -35148,7 +35231,7 @@ static PyObject *_wrap_Sizer_Layout(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_Sizer_Fit(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_Fit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -35182,7 +35265,7 @@ static PyObject *_wrap_Sizer_Fit(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Sizer_FitInside(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_FitInside(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -35211,7 +35294,7 @@ static PyObject *_wrap_Sizer_FitInside(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_Sizer_SetSizeHints(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_SetSizeHints(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -35240,7 +35323,7 @@ static PyObject *_wrap_Sizer_SetSizeHints(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Sizer_SetVirtualSizeHints(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_SetVirtualSizeHints(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -35269,7 +35352,7 @@ static PyObject *_wrap_Sizer_SetVirtualSizeHints(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_Sizer_Clear(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     bool arg2 = (bool) False ;
@@ -35300,7 +35383,7 @@ static PyObject *_wrap_Sizer_Clear(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_Sizer_DeleteWindows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_DeleteWindows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -35325,7 +35408,7 @@ static PyObject *_wrap_Sizer_DeleteWindows(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_Sizer_GetChildren(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_GetChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *result;
@@ -35351,7 +35434,7 @@ static PyObject *_wrap_Sizer_GetChildren(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Sizer_Show(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -35385,7 +35468,7 @@ static PyObject *_wrap_Sizer_Show(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Sizer_Hide(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_Hide(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -35413,7 +35496,7 @@ static PyObject *_wrap_Sizer_Hide(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_Sizer_IsShown(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_IsShown(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -35444,7 +35527,7 @@ static PyObject *_wrap_Sizer_IsShown(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_Sizer_ShowItems(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Sizer_ShowItems(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     bool arg2 ;
@@ -35473,14 +35556,14 @@ static PyObject *_wrap_Sizer_ShowItems(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject * Sizer_swigregister(PyObject *, PyObject *args) {
+static PyObject * Sizer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxSizer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_PySizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PySizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPySizer *result;
     char *kwnames[] = {
@@ -35502,7 +35585,7 @@ static PyObject *_wrap_new_PySizer(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_PySizer__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PySizer__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPySizer *arg1 = (wxPySizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -35533,14 +35616,14 @@ static PyObject *_wrap_PySizer__setCallbackInfo(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject * PySizer_swigregister(PyObject *, PyObject *args) {
+static PyObject * PySizer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPySizer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_BoxSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_BoxSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) wxHORIZONTAL ;
     wxBoxSizer *result;
@@ -35568,7 +35651,7 @@ static PyObject *_wrap_new_BoxSizer(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
-static PyObject *_wrap_BoxSizer_GetOrientation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_BoxSizer_GetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBoxSizer *arg1 = (wxBoxSizer *) 0 ;
     int result;
@@ -35594,7 +35677,7 @@ static PyObject *_wrap_BoxSizer_GetOrientation(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_BoxSizer_SetOrientation(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_BoxSizer_SetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBoxSizer *arg1 = (wxBoxSizer *) 0 ;
     int arg2 ;
@@ -35623,7 +35706,7 @@ static PyObject *_wrap_BoxSizer_SetOrientation(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_BoxSizer_RecalcSizes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_BoxSizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBoxSizer *arg1 = (wxBoxSizer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -35648,7 +35731,7 @@ static PyObject *_wrap_BoxSizer_RecalcSizes(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_BoxSizer_CalcMin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_BoxSizer_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBoxSizer *arg1 = (wxBoxSizer *) 0 ;
     wxSize result;
@@ -35678,14 +35761,14 @@ static PyObject *_wrap_BoxSizer_CalcMin(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject * BoxSizer_swigregister(PyObject *, PyObject *args) {
+static PyObject * BoxSizer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxBoxSizer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_StaticBoxSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_StaticBoxSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStaticBox *arg1 = (wxStaticBox *) 0 ;
     int arg2 = (int) wxHORIZONTAL ;
@@ -35717,7 +35800,7 @@ static PyObject *_wrap_new_StaticBoxSizer(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_StaticBoxSizer_GetStaticBox(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StaticBoxSizer_GetStaticBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStaticBoxSizer *arg1 = (wxStaticBoxSizer *) 0 ;
     wxStaticBox *result;
@@ -35745,7 +35828,7 @@ static PyObject *_wrap_StaticBoxSizer_GetStaticBox(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StaticBoxSizer_RecalcSizes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StaticBoxSizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStaticBoxSizer *arg1 = (wxStaticBoxSizer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -35770,7 +35853,7 @@ static PyObject *_wrap_StaticBoxSizer_RecalcSizes(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StaticBoxSizer_CalcMin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StaticBoxSizer_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStaticBoxSizer *arg1 = (wxStaticBoxSizer *) 0 ;
     wxSize result;
@@ -35800,14 +35883,14 @@ static PyObject *_wrap_StaticBoxSizer_CalcMin(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject * StaticBoxSizer_swigregister(PyObject *, PyObject *args) {
+static PyObject * StaticBoxSizer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxStaticBoxSizer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 1 ;
     int arg2 = (int) 0 ;
@@ -35853,7 +35936,7 @@ static PyObject *_wrap_new_GridSizer(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_GridSizer_RecalcSizes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -35878,7 +35961,7 @@ static PyObject *_wrap_GridSizer_RecalcSizes(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GridSizer_CalcMin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     wxSize result;
@@ -35908,7 +35991,7 @@ static PyObject *_wrap_GridSizer_CalcMin(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GridSizer_SetCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_SetCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     int arg2 ;
@@ -35937,7 +36020,7 @@ static PyObject *_wrap_GridSizer_SetCols(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GridSizer_SetRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_SetRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     int arg2 ;
@@ -35966,7 +36049,7 @@ static PyObject *_wrap_GridSizer_SetRows(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GridSizer_SetVGap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_SetVGap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     int arg2 ;
@@ -35995,7 +36078,7 @@ static PyObject *_wrap_GridSizer_SetVGap(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GridSizer_SetHGap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_SetHGap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     int arg2 ;
@@ -36024,7 +36107,7 @@ static PyObject *_wrap_GridSizer_SetHGap(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GridSizer_GetCols(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_GetCols(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     int result;
@@ -36050,7 +36133,7 @@ static PyObject *_wrap_GridSizer_GetCols(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GridSizer_GetRows(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_GetRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     int result;
@@ -36076,7 +36159,7 @@ static PyObject *_wrap_GridSizer_GetRows(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GridSizer_GetVGap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_GetVGap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     int result;
@@ -36102,7 +36185,7 @@ static PyObject *_wrap_GridSizer_GetVGap(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GridSizer_GetHGap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridSizer_GetHGap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridSizer *arg1 = (wxGridSizer *) 0 ;
     int result;
@@ -36128,14 +36211,14 @@ static PyObject *_wrap_GridSizer_GetHGap(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject * GridSizer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridSizer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridSizer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_FlexGridSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_FlexGridSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 1 ;
     int arg2 = (int) 0 ;
@@ -36181,7 +36264,7 @@ static PyObject *_wrap_new_FlexGridSizer(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_FlexGridSizer_RecalcSizes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -36206,7 +36289,7 @@ static PyObject *_wrap_FlexGridSizer_RecalcSizes(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_FlexGridSizer_CalcMin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     wxSize result;
@@ -36236,7 +36319,7 @@ static PyObject *_wrap_FlexGridSizer_CalcMin(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_FlexGridSizer_AddGrowableRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_AddGrowableRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     size_t arg2 ;
@@ -36271,7 +36354,7 @@ static PyObject *_wrap_FlexGridSizer_AddGrowableRow(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_FlexGridSizer_RemoveGrowableRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_RemoveGrowableRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     size_t arg2 ;
@@ -36300,7 +36383,7 @@ static PyObject *_wrap_FlexGridSizer_RemoveGrowableRow(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_FlexGridSizer_AddGrowableCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_AddGrowableCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     size_t arg2 ;
@@ -36335,7 +36418,7 @@ static PyObject *_wrap_FlexGridSizer_AddGrowableCol(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_FlexGridSizer_RemoveGrowableCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_RemoveGrowableCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     size_t arg2 ;
@@ -36364,7 +36447,7 @@ static PyObject *_wrap_FlexGridSizer_RemoveGrowableCol(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_FlexGridSizer_SetFlexibleDirection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_SetFlexibleDirection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     int arg2 ;
@@ -36393,7 +36476,7 @@ static PyObject *_wrap_FlexGridSizer_SetFlexibleDirection(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_FlexGridSizer_GetFlexibleDirection(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_GetFlexibleDirection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     int result;
@@ -36419,7 +36502,7 @@ static PyObject *_wrap_FlexGridSizer_GetFlexibleDirection(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_FlexGridSizer_SetNonFlexibleGrowMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_SetNonFlexibleGrowMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     int arg2 ;
@@ -36448,7 +36531,7 @@ static PyObject *_wrap_FlexGridSizer_SetNonFlexibleGrowMode(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_FlexGridSizer_GetNonFlexibleGrowMode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_GetNonFlexibleGrowMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     int result;
@@ -36474,7 +36557,7 @@ static PyObject *_wrap_FlexGridSizer_GetNonFlexibleGrowMode(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_FlexGridSizer_GetRowHeights(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_GetRowHeights(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     wxArrayInt *result;
@@ -36511,7 +36594,7 @@ static PyObject *_wrap_FlexGridSizer_GetRowHeights(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_FlexGridSizer_GetColWidths(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FlexGridSizer_GetColWidths(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFlexGridSizer *arg1 = (wxFlexGridSizer *) 0 ;
     wxArrayInt *result;
@@ -36548,14 +36631,14 @@ static PyObject *_wrap_FlexGridSizer_GetColWidths(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject * FlexGridSizer_swigregister(PyObject *, PyObject *args) {
+static PyObject * FlexGridSizer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxFlexGridSizer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GBPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GBPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -36589,7 +36672,7 @@ static PyObject *_wrap_new_GBPosition(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_GBPosition_GetRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBPosition_GetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     int result;
@@ -36615,7 +36698,7 @@ static PyObject *_wrap_GBPosition_GetRow(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBPosition_GetCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBPosition_GetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     int result;
@@ -36641,7 +36724,7 @@ static PyObject *_wrap_GBPosition_GetCol(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBPosition_SetRow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBPosition_SetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     int arg2 ;
@@ -36670,7 +36753,7 @@ static PyObject *_wrap_GBPosition_SetRow(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBPosition_SetCol(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBPosition_SetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     int arg2 ;
@@ -36699,7 +36782,7 @@ static PyObject *_wrap_GBPosition_SetCol(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBPosition___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBPosition___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     wxGBPosition *arg2 = 0 ;
@@ -36734,7 +36817,7 @@ static PyObject *_wrap_GBPosition___eq__(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBPosition___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBPosition___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     wxGBPosition *arg2 = 0 ;
@@ -36769,7 +36852,7 @@ static PyObject *_wrap_GBPosition___ne__(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBPosition_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBPosition_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     int arg2 = (int) 0 ;
@@ -36806,7 +36889,7 @@ static PyObject *_wrap_GBPosition_Set(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_GBPosition_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBPosition_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     PyObject *result;
@@ -36832,14 +36915,14 @@ static PyObject *_wrap_GBPosition_Get(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject * GBPosition_swigregister(PyObject *, PyObject *args) {
+static PyObject * GBPosition_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGBPosition, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GBSpan(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GBSpan(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 1 ;
     int arg2 = (int) 1 ;
@@ -36873,7 +36956,7 @@ static PyObject *_wrap_new_GBSpan(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_GBSpan_GetRowspan(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSpan_GetRowspan(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     int result;
@@ -36899,7 +36982,7 @@ static PyObject *_wrap_GBSpan_GetRowspan(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBSpan_GetColspan(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSpan_GetColspan(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     int result;
@@ -36925,7 +37008,7 @@ static PyObject *_wrap_GBSpan_GetColspan(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBSpan_SetRowspan(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSpan_SetRowspan(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     int arg2 ;
@@ -36954,7 +37037,7 @@ static PyObject *_wrap_GBSpan_SetRowspan(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBSpan_SetColspan(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSpan_SetColspan(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     int arg2 ;
@@ -36983,7 +37066,7 @@ static PyObject *_wrap_GBSpan_SetColspan(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_GBSpan___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSpan___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     wxGBSpan *arg2 = 0 ;
@@ -37018,7 +37101,7 @@ static PyObject *_wrap_GBSpan___eq__(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_GBSpan___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSpan___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     wxGBSpan *arg2 = 0 ;
@@ -37053,7 +37136,7 @@ static PyObject *_wrap_GBSpan___ne__(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static PyObject *_wrap_GBSpan_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSpan_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     int arg2 = (int) 1 ;
@@ -37090,7 +37173,7 @@ static PyObject *_wrap_GBSpan_Set(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject *_wrap_GBSpan_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSpan_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     PyObject *result;
@@ -37116,14 +37199,14 @@ static PyObject *_wrap_GBSpan_Get(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject * GBSpan_swigregister(PyObject *, PyObject *args) {
+static PyObject * GBSpan_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGBSpan, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static int _wrap_DefaultSpan_set(PyObject *) {
+static int _wrap_DefaultSpan_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable DefaultSpan is read-only.");
     return 1;
 }
@@ -37137,7 +37220,7 @@ static PyObject *_wrap_DefaultSpan_get() {
 }
 
 
-static PyObject *_wrap_new_GBSizerItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GBSizerItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *result;
     char *kwnames[] = {
@@ -37159,7 +37242,7 @@ static PyObject *_wrap_new_GBSizerItem(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_new_GBSizerItemWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GBSizerItemWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxGBPosition *arg2 = 0 ;
@@ -37211,7 +37294,7 @@ static PyObject *_wrap_new_GBSizerItemWindow(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_new_GBSizerItemSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GBSizerItemSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxGBPosition *arg2 = 0 ;
@@ -37263,7 +37346,7 @@ static PyObject *_wrap_new_GBSizerItemSizer(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_new_GBSizerItemSpacer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GBSizerItemSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     int arg2 ;
@@ -37319,7 +37402,7 @@ static PyObject *_wrap_new_GBSizerItemSpacer(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GBSizerItem_GetPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSizerItem_GetPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGBPosition result;
@@ -37349,7 +37432,7 @@ static PyObject *_wrap_GBSizerItem_GetPos(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_GBSizerItem_GetSpan(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSizerItem_GetSpan(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGBSpan result;
@@ -37379,7 +37462,7 @@ static PyObject *_wrap_GBSizerItem_GetSpan(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GBSizerItem_SetPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSizerItem_SetPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGBPosition *arg2 = 0 ;
@@ -37414,7 +37497,7 @@ static PyObject *_wrap_GBSizerItem_SetPos(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_GBSizerItem_SetSpan(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSizerItem_SetSpan(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGBSpan *arg2 = 0 ;
@@ -37449,7 +37532,7 @@ static PyObject *_wrap_GBSizerItem_SetSpan(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_GBSizerItem_Intersects__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_GBSizerItem_Intersects__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGBSizerItem *arg2 = 0 ;
@@ -37483,7 +37566,7 @@ static PyObject *_wrap_GBSizerItem_Intersects__SWIG_0(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_GBSizerItem_Intersects__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_GBSizerItem_Intersects__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGBPosition *arg2 = 0 ;
@@ -37588,7 +37671,7 @@ static PyObject *_wrap_GBSizerItem_Intersects(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_GBSizerItem_GetEndPos(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSizerItem_GetEndPos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     int *arg2 = 0 ;
@@ -37631,7 +37714,7 @@ static PyObject *_wrap_GBSizerItem_GetEndPos(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_GBSizerItem_GetGBSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSizerItem_GetGBSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGridBagSizer *result;
@@ -37657,7 +37740,7 @@ static PyObject *_wrap_GBSizerItem_GetGBSizer(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GBSizerItem_SetGBSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSizerItem_SetGBSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGridBagSizer *arg2 = (wxGridBagSizer *) 0 ;
@@ -37686,14 +37769,14 @@ static PyObject *_wrap_GBSizerItem_SetGBSizer(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject * GBSizerItem_swigregister(PyObject *, PyObject *args) {
+static PyObject * GBSizerItem_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGBSizerItem, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GridBagSizer(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GridBagSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -37727,7 +37810,7 @@ static PyObject *_wrap_new_GridBagSizer(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_GridBagSizer_Add(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridBagSizer_Add(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -37792,7 +37875,7 @@ static PyObject *_wrap_GridBagSizer_Add(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_GridBagSizer_AddItem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridBagSizer_AddItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxGBSizerItem *arg2 = (wxGBSizerItem *) 0 ;
@@ -37824,7 +37907,7 @@ static PyObject *_wrap_GridBagSizer_AddItem(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridBagSizer_GetEmptyCellSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridBagSizer_GetEmptyCellSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxSize result;
@@ -37854,7 +37937,7 @@ static PyObject *_wrap_GridBagSizer_GetEmptyCellSize(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridBagSizer_SetEmptyCellSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridBagSizer_SetEmptyCellSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxSize *arg2 = 0 ;
@@ -37886,7 +37969,7 @@ static PyObject *_wrap_GridBagSizer_SetEmptyCellSize(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridBagSizer_GetItemPosition__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_GetItemPosition__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -37917,7 +38000,7 @@ static PyObject *_wrap_GridBagSizer_GetItemPosition__SWIG_0(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_GridBagSizer_GetItemPosition__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_GetItemPosition__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxSizer *arg2 = (wxSizer *) 0 ;
@@ -37948,7 +38031,7 @@ static PyObject *_wrap_GridBagSizer_GetItemPosition__SWIG_1(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_GridBagSizer_GetItemPosition__SWIG_2(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_GetItemPosition__SWIG_2(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     size_t arg2 ;
@@ -38064,7 +38147,7 @@ static PyObject *_wrap_GridBagSizer_GetItemPosition(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -38100,7 +38183,7 @@ static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_0(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxSizer *arg2 = (wxSizer *) 0 ;
@@ -38136,7 +38219,7 @@ static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_1(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_2(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_2(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     size_t arg2 ;
@@ -38272,7 +38355,7 @@ static PyObject *_wrap_GridBagSizer_SetItemPosition(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridBagSizer_GetItemSpan__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_GetItemSpan__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -38303,7 +38386,7 @@ static PyObject *_wrap_GridBagSizer_GetItemSpan__SWIG_0(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridBagSizer_GetItemSpan__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_GetItemSpan__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxSizer *arg2 = (wxSizer *) 0 ;
@@ -38334,7 +38417,7 @@ static PyObject *_wrap_GridBagSizer_GetItemSpan__SWIG_1(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridBagSizer_GetItemSpan__SWIG_2(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_GetItemSpan__SWIG_2(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     size_t arg2 ;
@@ -38450,7 +38533,7 @@ static PyObject *_wrap_GridBagSizer_GetItemSpan(PyObject *self, PyObject *args) 
 }
 
 
-static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -38486,7 +38569,7 @@ static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_0(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxSizer *arg2 = (wxSizer *) 0 ;
@@ -38522,7 +38605,7 @@ static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_1(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_2(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_2(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     size_t arg2 ;
@@ -38658,7 +38741,7 @@ static PyObject *_wrap_GridBagSizer_SetItemSpan(PyObject *self, PyObject *args) 
 }
 
 
-static PyObject *_wrap_GridBagSizer_FindItem__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_FindItem__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -38685,7 +38768,7 @@ static PyObject *_wrap_GridBagSizer_FindItem__SWIG_0(PyObject *, PyObject *args)
 }
 
 
-static PyObject *_wrap_GridBagSizer_FindItem__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_FindItem__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxSizer *arg2 = (wxSizer *) 0 ;
@@ -38779,7 +38862,7 @@ static PyObject *_wrap_GridBagSizer_FindItem(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_GridBagSizer_FindItemAtPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridBagSizer_FindItemAtPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxGBPosition *arg2 = 0 ;
@@ -38812,7 +38895,7 @@ static PyObject *_wrap_GridBagSizer_FindItemAtPosition(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_GridBagSizer_FindItemAtPoint(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridBagSizer_FindItemAtPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxPoint *arg2 = 0 ;
@@ -38845,7 +38928,7 @@ static PyObject *_wrap_GridBagSizer_FindItemAtPoint(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_GridBagSizer_FindItemWithData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridBagSizer_FindItemWithData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxObject *arg2 = (wxObject *) 0 ;
@@ -38875,7 +38958,7 @@ static PyObject *_wrap_GridBagSizer_FindItemWithData(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_GridBagSizer_RecalcSizes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridBagSizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     PyObject * obj0 = 0 ;
@@ -38900,7 +38983,7 @@ static PyObject *_wrap_GridBagSizer_RecalcSizes(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GridBagSizer_CalcMin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridBagSizer_CalcMin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxSize result;
@@ -38930,7 +39013,7 @@ static PyObject *_wrap_GridBagSizer_CalcMin(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GridBagSizer_CheckForIntersection__SWIG_0(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_CheckForIntersection__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxGBSizerItem *arg2 = (wxGBSizerItem *) 0 ;
@@ -38965,7 +39048,7 @@ static PyObject *_wrap_GridBagSizer_CheckForIntersection__SWIG_0(PyObject *, PyO
 }
 
 
-static PyObject *_wrap_GridBagSizer_CheckForIntersection__SWIG_1(PyObject *, PyObject *args) {
+static PyObject *_wrap_GridBagSizer_CheckForIntersection__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxGBPosition *arg2 = 0 ;
@@ -39104,14 +39187,14 @@ static PyObject *_wrap_GridBagSizer_CheckForIntersection(PyObject *self, PyObjec
 }
 
 
-static PyObject * GridBagSizer_swigregister(PyObject *, PyObject *args) {
+static PyObject * GridBagSizer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGridBagSizer, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_IndividualLayoutConstraint_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int arg2 ;
@@ -39160,7 +39243,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_Set(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_LeftOf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_LeftOf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -39195,7 +39278,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_LeftOf(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_RightOf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_RightOf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -39230,7 +39313,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_RightOf(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_Above(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_Above(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -39265,7 +39348,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_Above(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_Below(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_Below(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -39300,7 +39383,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_Below(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_SameAs(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_SameAs(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -39339,7 +39422,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_SameAs(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_PercentOf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_PercentOf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -39376,7 +39459,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_PercentOf(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_Absolute(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_Absolute(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int arg2 ;
@@ -39405,7 +39488,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_Absolute(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_Unconstrained(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_Unconstrained(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     PyObject * obj0 = 0 ;
@@ -39430,7 +39513,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_Unconstrained(PyObject *, PyOb
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_AsIs(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_AsIs(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     PyObject * obj0 = 0 ;
@@ -39455,7 +39538,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_AsIs(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_GetOtherWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_GetOtherWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     wxWindow *result;
@@ -39483,7 +39566,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetOtherWindow(PyObject *, PyO
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_GetMyEdge(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_GetMyEdge(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int result;
@@ -39509,7 +39592,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetMyEdge(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_SetEdge(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_SetEdge(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int arg2 ;
@@ -39538,7 +39621,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_SetEdge(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_SetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_SetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int arg2 ;
@@ -39567,7 +39650,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_SetValue(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_GetMargin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_GetMargin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int result;
@@ -39593,7 +39676,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetMargin(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_SetMargin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_SetMargin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int arg2 ;
@@ -39622,7 +39705,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_SetMargin(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int result;
@@ -39648,7 +39731,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetValue(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_GetPercent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_GetPercent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int result;
@@ -39674,7 +39757,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetPercent(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_GetOtherEdge(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_GetOtherEdge(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int result;
@@ -39700,7 +39783,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetOtherEdge(PyObject *, PyObj
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_GetDone(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_GetDone(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     bool result;
@@ -39728,7 +39811,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetDone(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_SetDone(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_SetDone(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     bool arg2 ;
@@ -39757,7 +39840,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_SetDone(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_GetRelationship(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_GetRelationship(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int result;
@@ -39783,7 +39866,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetRelationship(PyObject *, Py
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_SetRelationship(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_SetRelationship(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int arg2 ;
@@ -39812,7 +39895,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_SetRelationship(PyObject *, Py
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_ResetIfWin(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_ResetIfWin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -39844,7 +39927,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_ResetIfWin(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_SatisfyConstraint(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_SatisfyConstraint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     wxLayoutConstraints *arg2 = (wxLayoutConstraints *) 0 ;
@@ -39880,7 +39963,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_SatisfyConstraint(PyObject *, 
 }
 
 
-static PyObject *_wrap_IndividualLayoutConstraint_GetEdge(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IndividualLayoutConstraint_GetEdge(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIndividualLayoutConstraint *arg1 = (wxIndividualLayoutConstraint *) 0 ;
     int arg2 ;
@@ -39918,14 +40001,14 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetEdge(PyObject *, PyObject *
 }
 
 
-static PyObject * IndividualLayoutConstraint_swigregister(PyObject *, PyObject *args) {
+static PyObject * IndividualLayoutConstraint_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxIndividualLayoutConstraint, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_LayoutConstraints_left_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_left_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     wxIndividualLayoutConstraint *result;
@@ -39946,7 +40029,7 @@ static PyObject *_wrap_LayoutConstraints_left_get(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_LayoutConstraints_top_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_top_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     wxIndividualLayoutConstraint *result;
@@ -39967,7 +40050,7 @@ static PyObject *_wrap_LayoutConstraints_top_get(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_LayoutConstraints_right_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_right_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     wxIndividualLayoutConstraint *result;
@@ -39988,7 +40071,7 @@ static PyObject *_wrap_LayoutConstraints_right_get(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_LayoutConstraints_bottom_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_bottom_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     wxIndividualLayoutConstraint *result;
@@ -40009,7 +40092,7 @@ static PyObject *_wrap_LayoutConstraints_bottom_get(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_LayoutConstraints_width_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_width_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     wxIndividualLayoutConstraint *result;
@@ -40030,7 +40113,7 @@ static PyObject *_wrap_LayoutConstraints_width_get(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_LayoutConstraints_height_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_height_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     wxIndividualLayoutConstraint *result;
@@ -40051,7 +40134,7 @@ static PyObject *_wrap_LayoutConstraints_height_get(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_LayoutConstraints_centreX_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_centreX_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     wxIndividualLayoutConstraint *result;
@@ -40072,7 +40155,7 @@ static PyObject *_wrap_LayoutConstraints_centreX_get(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_LayoutConstraints_centreY_get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_centreY_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     wxIndividualLayoutConstraint *result;
@@ -40093,7 +40176,7 @@ static PyObject *_wrap_LayoutConstraints_centreY_get(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_new_LayoutConstraints(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_LayoutConstraints(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *result;
     char *kwnames[] = {
@@ -40115,7 +40198,7 @@ static PyObject *_wrap_new_LayoutConstraints(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_LayoutConstraints_SatisfyConstraints(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_SatisfyConstraints(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -40154,7 +40237,7 @@ static PyObject *_wrap_LayoutConstraints_SatisfyConstraints(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_LayoutConstraints_AreSatisfied(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LayoutConstraints_AreSatisfied(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLayoutConstraints *arg1 = (wxLayoutConstraints *) 0 ;
     bool result;
@@ -40182,7 +40265,7 @@ static PyObject *_wrap_LayoutConstraints_AreSatisfied(PyObject *, PyObject *args
 }
 
 
-static PyObject * LayoutConstraints_swigregister(PyObject *, PyObject *args) {
+static PyObject * LayoutConstraints_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxLayoutConstraints, obj);
@@ -40190,1239 +40273,1242 @@ static PyObject * LayoutConstraints_swigregister(PyObject *, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"_wxPySetDictionary", __wxPySetDictionary, METH_VARARGS, NULL },
-	 { (char *)"_wxPyFixStockObjects", __wxPyFixStockObjects, METH_VARARGS, NULL },
-	 { (char *)"Object_GetClassName", (PyCFunction) _wrap_Object_GetClassName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Object_Destroy", (PyCFunction) _wrap_Object_Destroy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Object_swigregister", Object_swigregister, METH_VARARGS, NULL },
-	 { (char *)"Size_width_set", (PyCFunction) _wrap_Size_width_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_width_get", (PyCFunction) _wrap_Size_width_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_height_set", (PyCFunction) _wrap_Size_height_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_height_get", (PyCFunction) _wrap_Size_height_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_Size", (PyCFunction) _wrap_new_Size, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_Size", (PyCFunction) _wrap_delete_Size, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size___eq__", (PyCFunction) _wrap_Size___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size___ne__", (PyCFunction) _wrap_Size___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size___add__", (PyCFunction) _wrap_Size___add__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size___sub__", (PyCFunction) _wrap_Size___sub__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_IncTo", (PyCFunction) _wrap_Size_IncTo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_DecTo", (PyCFunction) _wrap_Size_DecTo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_Set", (PyCFunction) _wrap_Size_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_SetWidth", (PyCFunction) _wrap_Size_SetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_SetHeight", (PyCFunction) _wrap_Size_SetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_GetWidth", (PyCFunction) _wrap_Size_GetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_GetHeight", (PyCFunction) _wrap_Size_GetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_IsFullySpecified", (PyCFunction) _wrap_Size_IsFullySpecified, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_SetDefaults", (PyCFunction) _wrap_Size_SetDefaults, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_Get", (PyCFunction) _wrap_Size_Get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Size_swigregister", Size_swigregister, METH_VARARGS, NULL },
-	 { (char *)"RealPoint_x_set", (PyCFunction) _wrap_RealPoint_x_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint_x_get", (PyCFunction) _wrap_RealPoint_x_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint_y_set", (PyCFunction) _wrap_RealPoint_y_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint_y_get", (PyCFunction) _wrap_RealPoint_y_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_RealPoint", (PyCFunction) _wrap_new_RealPoint, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_RealPoint", (PyCFunction) _wrap_delete_RealPoint, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint___eq__", (PyCFunction) _wrap_RealPoint___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint___ne__", (PyCFunction) _wrap_RealPoint___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint___add__", (PyCFunction) _wrap_RealPoint___add__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint___sub__", (PyCFunction) _wrap_RealPoint___sub__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint_Set", (PyCFunction) _wrap_RealPoint_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint_Get", (PyCFunction) _wrap_RealPoint_Get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"RealPoint_swigregister", RealPoint_swigregister, METH_VARARGS, NULL },
-	 { (char *)"Point_x_set", (PyCFunction) _wrap_Point_x_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point_x_get", (PyCFunction) _wrap_Point_x_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point_y_set", (PyCFunction) _wrap_Point_y_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point_y_get", (PyCFunction) _wrap_Point_y_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_Point", (PyCFunction) _wrap_new_Point, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_Point", (PyCFunction) _wrap_delete_Point, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point___eq__", (PyCFunction) _wrap_Point___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point___ne__", (PyCFunction) _wrap_Point___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point___add__", (PyCFunction) _wrap_Point___add__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point___sub__", (PyCFunction) _wrap_Point___sub__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point___iadd__", (PyCFunction) _wrap_Point___iadd__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point___isub__", (PyCFunction) _wrap_Point___isub__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point_Set", (PyCFunction) _wrap_Point_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point_Get", (PyCFunction) _wrap_Point_Get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point_swigregister", Point_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_Rect", (PyCFunction) _wrap_new_Rect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_RectPP", (PyCFunction) _wrap_new_RectPP, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_RectPS", (PyCFunction) _wrap_new_RectPS, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_Rect", (PyCFunction) _wrap_delete_Rect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetX", (PyCFunction) _wrap_Rect_GetX, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetX", (PyCFunction) _wrap_Rect_SetX, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetY", (PyCFunction) _wrap_Rect_GetY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetY", (PyCFunction) _wrap_Rect_SetY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetWidth", (PyCFunction) _wrap_Rect_GetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetWidth", (PyCFunction) _wrap_Rect_SetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetHeight", (PyCFunction) _wrap_Rect_GetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetHeight", (PyCFunction) _wrap_Rect_SetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetPosition", (PyCFunction) _wrap_Rect_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetPosition", (PyCFunction) _wrap_Rect_SetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetSize", (PyCFunction) _wrap_Rect_GetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetSize", (PyCFunction) _wrap_Rect_SetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetTopLeft", (PyCFunction) _wrap_Rect_GetTopLeft, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetTopLeft", (PyCFunction) _wrap_Rect_SetTopLeft, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetBottomRight", (PyCFunction) _wrap_Rect_GetBottomRight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetBottomRight", (PyCFunction) _wrap_Rect_SetBottomRight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetLeft", (PyCFunction) _wrap_Rect_GetLeft, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetTop", (PyCFunction) _wrap_Rect_GetTop, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetBottom", (PyCFunction) _wrap_Rect_GetBottom, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_GetRight", (PyCFunction) _wrap_Rect_GetRight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetLeft", (PyCFunction) _wrap_Rect_SetLeft, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetRight", (PyCFunction) _wrap_Rect_SetRight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetTop", (PyCFunction) _wrap_Rect_SetTop, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_SetBottom", (PyCFunction) _wrap_Rect_SetBottom, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_Inflate", (PyCFunction) _wrap_Rect_Inflate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_Deflate", (PyCFunction) _wrap_Rect_Deflate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_OffsetXY", (PyCFunction) _wrap_Rect_OffsetXY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_Offset", (PyCFunction) _wrap_Rect_Offset, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_Intersect", (PyCFunction) _wrap_Rect_Intersect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect___add__", (PyCFunction) _wrap_Rect___add__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect___iadd__", (PyCFunction) _wrap_Rect___iadd__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect___eq__", (PyCFunction) _wrap_Rect___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect___ne__", (PyCFunction) _wrap_Rect___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_InsideXY", (PyCFunction) _wrap_Rect_InsideXY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_Inside", (PyCFunction) _wrap_Rect_Inside, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_Intersects", (PyCFunction) _wrap_Rect_Intersects, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_x_set", (PyCFunction) _wrap_Rect_x_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_x_get", (PyCFunction) _wrap_Rect_x_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_y_set", (PyCFunction) _wrap_Rect_y_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_y_get", (PyCFunction) _wrap_Rect_y_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_width_set", (PyCFunction) _wrap_Rect_width_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_width_get", (PyCFunction) _wrap_Rect_width_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_height_set", (PyCFunction) _wrap_Rect_height_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_height_get", (PyCFunction) _wrap_Rect_height_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_Set", (PyCFunction) _wrap_Rect_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_Get", (PyCFunction) _wrap_Rect_Get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Rect_swigregister", Rect_swigregister, METH_VARARGS, NULL },
-	 { (char *)"IntersectRect", (PyCFunction) _wrap_IntersectRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_Point2D", (PyCFunction) _wrap_new_Point2D, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_Point2DCopy", (PyCFunction) _wrap_new_Point2DCopy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_Point2DFromPoint", (PyCFunction) _wrap_new_Point2DFromPoint, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_GetFloor", (PyCFunction) _wrap_Point2D_GetFloor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_GetRounded", (PyCFunction) _wrap_Point2D_GetRounded, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_GetVectorLength", (PyCFunction) _wrap_Point2D_GetVectorLength, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_GetVectorAngle", (PyCFunction) _wrap_Point2D_GetVectorAngle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_SetVectorLength", (PyCFunction) _wrap_Point2D_SetVectorLength, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_SetVectorAngle", (PyCFunction) _wrap_Point2D_SetVectorAngle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_GetDistance", (PyCFunction) _wrap_Point2D_GetDistance, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_GetDistanceSquare", (PyCFunction) _wrap_Point2D_GetDistanceSquare, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_GetDotProduct", (PyCFunction) _wrap_Point2D_GetDotProduct, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_GetCrossProduct", (PyCFunction) _wrap_Point2D_GetCrossProduct, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D___neg__", (PyCFunction) _wrap_Point2D___neg__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D___iadd__", (PyCFunction) _wrap_Point2D___iadd__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D___isub__", (PyCFunction) _wrap_Point2D___isub__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D___imul__", (PyCFunction) _wrap_Point2D___imul__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D___idiv__", (PyCFunction) _wrap_Point2D___idiv__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D___eq__", (PyCFunction) _wrap_Point2D___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D___ne__", (PyCFunction) _wrap_Point2D___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_x_set", (PyCFunction) _wrap_Point2D_x_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_x_get", (PyCFunction) _wrap_Point2D_x_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_y_set", (PyCFunction) _wrap_Point2D_y_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_y_get", (PyCFunction) _wrap_Point2D_y_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_Set", (PyCFunction) _wrap_Point2D_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_Get", (PyCFunction) _wrap_Point2D_Get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Point2D_swigregister", Point2D_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_InputStream", (PyCFunction) _wrap_new_InputStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_close", (PyCFunction) _wrap_InputStream_close, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_flush", (PyCFunction) _wrap_InputStream_flush, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_eof", (PyCFunction) _wrap_InputStream_eof, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_read", (PyCFunction) _wrap_InputStream_read, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_readline", (PyCFunction) _wrap_InputStream_readline, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_readlines", (PyCFunction) _wrap_InputStream_readlines, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_seek", (PyCFunction) _wrap_InputStream_seek, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_tell", (PyCFunction) _wrap_InputStream_tell, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_Peek", (PyCFunction) _wrap_InputStream_Peek, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_GetC", (PyCFunction) _wrap_InputStream_GetC, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_LastRead", (PyCFunction) _wrap_InputStream_LastRead, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_CanRead", (PyCFunction) _wrap_InputStream_CanRead, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_Eof", (PyCFunction) _wrap_InputStream_Eof, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_Ungetch", (PyCFunction) _wrap_InputStream_Ungetch, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_SeekI", (PyCFunction) _wrap_InputStream_SeekI, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_TellI", (PyCFunction) _wrap_InputStream_TellI, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InputStream_swigregister", InputStream_swigregister, METH_VARARGS, NULL },
-	 { (char *)"OutputStream_write", (PyCFunction) _wrap_OutputStream_write, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"OutputStream_swigregister", OutputStream_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_FSFile", (PyCFunction) _wrap_new_FSFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_FSFile", (PyCFunction) _wrap_delete_FSFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FSFile_GetStream", (PyCFunction) _wrap_FSFile_GetStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FSFile_GetMimeType", (PyCFunction) _wrap_FSFile_GetMimeType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FSFile_GetLocation", (PyCFunction) _wrap_FSFile_GetLocation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FSFile_GetAnchor", (PyCFunction) _wrap_FSFile_GetAnchor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FSFile_GetModificationTime", (PyCFunction) _wrap_FSFile_GetModificationTime, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FSFile_swigregister", FSFile_swigregister, METH_VARARGS, NULL },
-	 { (char *)"CPPFileSystemHandler_swigregister", CPPFileSystemHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_FileSystemHandler", (PyCFunction) _wrap_new_FileSystemHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler__setCallbackInfo", (PyCFunction) _wrap_FileSystemHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_CanOpen", (PyCFunction) _wrap_FileSystemHandler_CanOpen, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_OpenFile", (PyCFunction) _wrap_FileSystemHandler_OpenFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_FindFirst", (PyCFunction) _wrap_FileSystemHandler_FindFirst, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_FindNext", (PyCFunction) _wrap_FileSystemHandler_FindNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_GetProtocol", (PyCFunction) _wrap_FileSystemHandler_GetProtocol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_GetLeftLocation", (PyCFunction) _wrap_FileSystemHandler_GetLeftLocation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_GetAnchor", (PyCFunction) _wrap_FileSystemHandler_GetAnchor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_GetRightLocation", (PyCFunction) _wrap_FileSystemHandler_GetRightLocation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_GetMimeTypeFromExt", (PyCFunction) _wrap_FileSystemHandler_GetMimeTypeFromExt, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystemHandler_swigregister", FileSystemHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_FileSystem", (PyCFunction) _wrap_new_FileSystem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_FileSystem", (PyCFunction) _wrap_delete_FileSystem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystem_ChangePathTo", (PyCFunction) _wrap_FileSystem_ChangePathTo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystem_GetPath", (PyCFunction) _wrap_FileSystem_GetPath, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystem_OpenFile", (PyCFunction) _wrap_FileSystem_OpenFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystem_FindFirst", (PyCFunction) _wrap_FileSystem_FindFirst, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystem_FindNext", (PyCFunction) _wrap_FileSystem_FindNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystem_AddHandler", (PyCFunction) _wrap_FileSystem_AddHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystem_CleanUpHandlers", (PyCFunction) _wrap_FileSystem_CleanUpHandlers, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystem_FileNameToURL", (PyCFunction) _wrap_FileSystem_FileNameToURL, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FileSystem_swigregister", FileSystem_swigregister, METH_VARARGS, NULL },
-	 { (char *)"FileSystem_URLToFileName", (PyCFunction) _wrap_FileSystem_URLToFileName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_InternetFSHandler", (PyCFunction) _wrap_new_InternetFSHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InternetFSHandler_CanOpen", (PyCFunction) _wrap_InternetFSHandler_CanOpen, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InternetFSHandler_OpenFile", (PyCFunction) _wrap_InternetFSHandler_OpenFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InternetFSHandler_swigregister", InternetFSHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ZipFSHandler", (PyCFunction) _wrap_new_ZipFSHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ZipFSHandler_CanOpen", (PyCFunction) _wrap_ZipFSHandler_CanOpen, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ZipFSHandler_OpenFile", (PyCFunction) _wrap_ZipFSHandler_OpenFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ZipFSHandler_FindFirst", (PyCFunction) _wrap_ZipFSHandler_FindFirst, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ZipFSHandler_FindNext", (PyCFunction) _wrap_ZipFSHandler_FindNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ZipFSHandler_swigregister", ZipFSHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"__wxMemoryFSHandler_AddFile_wxImage", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_wxImage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"__wxMemoryFSHandler_AddFile_wxBitmap", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_wxBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"__wxMemoryFSHandler_AddFile_Data", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_Data, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_MemoryFSHandler", (PyCFunction) _wrap_new_MemoryFSHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MemoryFSHandler_RemoveFile", (PyCFunction) _wrap_MemoryFSHandler_RemoveFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MemoryFSHandler_CanOpen", (PyCFunction) _wrap_MemoryFSHandler_CanOpen, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MemoryFSHandler_OpenFile", (PyCFunction) _wrap_MemoryFSHandler_OpenFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MemoryFSHandler_FindFirst", (PyCFunction) _wrap_MemoryFSHandler_FindFirst, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MemoryFSHandler_FindNext", (PyCFunction) _wrap_MemoryFSHandler_FindNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MemoryFSHandler_swigregister", MemoryFSHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"ImageHandler_GetName", (PyCFunction) _wrap_ImageHandler_GetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHandler_GetExtension", (PyCFunction) _wrap_ImageHandler_GetExtension, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHandler_GetType", (PyCFunction) _wrap_ImageHandler_GetType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHandler_GetMimeType", (PyCFunction) _wrap_ImageHandler_GetMimeType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHandler_CanRead", (PyCFunction) _wrap_ImageHandler_CanRead, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHandler_SetName", (PyCFunction) _wrap_ImageHandler_SetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHandler_SetExtension", (PyCFunction) _wrap_ImageHandler_SetExtension, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHandler_SetType", (PyCFunction) _wrap_ImageHandler_SetType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHandler_SetMimeType", (PyCFunction) _wrap_ImageHandler_SetMimeType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHandler_swigregister", ImageHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ImageHistogram", (PyCFunction) _wrap_new_ImageHistogram, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHistogram_MakeKey", (PyCFunction) _wrap_ImageHistogram_MakeKey, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHistogram_FindFirstUnusedColour", (PyCFunction) _wrap_ImageHistogram_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ImageHistogram_swigregister", ImageHistogram_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_Image", (PyCFunction) _wrap_new_Image, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_Image", (PyCFunction) _wrap_delete_Image, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_ImageFromMime", (PyCFunction) _wrap_new_ImageFromMime, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_ImageFromStream", (PyCFunction) _wrap_new_ImageFromStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_ImageFromStreamMime", (PyCFunction) _wrap_new_ImageFromStreamMime, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_EmptyImage", _wrap_new_EmptyImage, METH_VARARGS, NULL },
-	 { (char *)"new_ImageFromBitmap", (PyCFunction) _wrap_new_ImageFromBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_ImageFromData", (PyCFunction) _wrap_new_ImageFromData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Create", (PyCFunction) _wrap_Image_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Destroy", (PyCFunction) _wrap_Image_Destroy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Scale", (PyCFunction) _wrap_Image_Scale, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_ShrinkBy", (PyCFunction) _wrap_Image_ShrinkBy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Rescale", (PyCFunction) _wrap_Image_Rescale, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetRGB", (PyCFunction) _wrap_Image_SetRGB, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetRed", (PyCFunction) _wrap_Image_GetRed, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetGreen", (PyCFunction) _wrap_Image_GetGreen, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetBlue", (PyCFunction) _wrap_Image_GetBlue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetAlpha", (PyCFunction) _wrap_Image_SetAlpha, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetAlpha", (PyCFunction) _wrap_Image_GetAlpha, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_HasAlpha", (PyCFunction) _wrap_Image_HasAlpha, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_FindFirstUnusedColour", (PyCFunction) _wrap_Image_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetMaskFromImage", (PyCFunction) _wrap_Image_SetMaskFromImage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_CanRead", (PyCFunction) _wrap_Image_CanRead, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetImageCount", (PyCFunction) _wrap_Image_GetImageCount, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_LoadFile", (PyCFunction) _wrap_Image_LoadFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_LoadMimeFile", (PyCFunction) _wrap_Image_LoadMimeFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SaveFile", (PyCFunction) _wrap_Image_SaveFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SaveMimeFile", (PyCFunction) _wrap_Image_SaveMimeFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_CanReadStream", (PyCFunction) _wrap_Image_CanReadStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_LoadStream", (PyCFunction) _wrap_Image_LoadStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_LoadMimeStream", (PyCFunction) _wrap_Image_LoadMimeStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Ok", (PyCFunction) _wrap_Image_Ok, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetWidth", (PyCFunction) _wrap_Image_GetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetHeight", (PyCFunction) _wrap_Image_GetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetSize", (PyCFunction) _wrap_Image_GetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetSubImage", (PyCFunction) _wrap_Image_GetSubImage, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Copy", (PyCFunction) _wrap_Image_Copy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Paste", (PyCFunction) _wrap_Image_Paste, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetData", (PyCFunction) _wrap_Image_GetData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetData", (PyCFunction) _wrap_Image_SetData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetDataBuffer", (PyCFunction) _wrap_Image_GetDataBuffer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetDataBuffer", (PyCFunction) _wrap_Image_SetDataBuffer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetAlphaData", (PyCFunction) _wrap_Image_GetAlphaData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetAlphaData", (PyCFunction) _wrap_Image_SetAlphaData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetAlphaBuffer", (PyCFunction) _wrap_Image_GetAlphaBuffer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetAlphaBuffer", (PyCFunction) _wrap_Image_SetAlphaBuffer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetMaskColour", (PyCFunction) _wrap_Image_SetMaskColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetMaskRed", (PyCFunction) _wrap_Image_GetMaskRed, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetMaskGreen", (PyCFunction) _wrap_Image_GetMaskGreen, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetMaskBlue", (PyCFunction) _wrap_Image_GetMaskBlue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetMask", (PyCFunction) _wrap_Image_SetMask, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_HasMask", (PyCFunction) _wrap_Image_HasMask, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Rotate", (PyCFunction) _wrap_Image_Rotate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Rotate90", (PyCFunction) _wrap_Image_Rotate90, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Mirror", (PyCFunction) _wrap_Image_Mirror, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_Replace", (PyCFunction) _wrap_Image_Replace, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_ConvertToMono", (PyCFunction) _wrap_Image_ConvertToMono, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetOption", (PyCFunction) _wrap_Image_SetOption, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_SetOptionInt", (PyCFunction) _wrap_Image_SetOptionInt, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetOption", (PyCFunction) _wrap_Image_GetOption, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetOptionInt", (PyCFunction) _wrap_Image_GetOptionInt, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_HasOption", (PyCFunction) _wrap_Image_HasOption, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_CountColours", (PyCFunction) _wrap_Image_CountColours, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_ComputeHistogram", (PyCFunction) _wrap_Image_ComputeHistogram, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_AddHandler", (PyCFunction) _wrap_Image_AddHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_InsertHandler", (PyCFunction) _wrap_Image_InsertHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_RemoveHandler", (PyCFunction) _wrap_Image_RemoveHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_GetImageExtWildcard", (PyCFunction) _wrap_Image_GetImageExtWildcard, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_ConvertToBitmap", (PyCFunction) _wrap_Image_ConvertToBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_ConvertToMonoBitmap", (PyCFunction) _wrap_Image_ConvertToMonoBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Image_swigregister", Image_swigregister, METH_VARARGS, NULL },
-	 { (char *)"InitAllImageHandlers", (PyCFunction) _wrap_InitAllImageHandlers, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_BMPHandler", (PyCFunction) _wrap_new_BMPHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"BMPHandler_swigregister", BMPHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ICOHandler", (PyCFunction) _wrap_new_ICOHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ICOHandler_swigregister", ICOHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_CURHandler", (PyCFunction) _wrap_new_CURHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CURHandler_swigregister", CURHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ANIHandler", (PyCFunction) _wrap_new_ANIHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ANIHandler_swigregister", ANIHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PNGHandler", (PyCFunction) _wrap_new_PNGHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PNGHandler_swigregister", PNGHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GIFHandler", (PyCFunction) _wrap_new_GIFHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GIFHandler_swigregister", GIFHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PCXHandler", (PyCFunction) _wrap_new_PCXHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PCXHandler_swigregister", PCXHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_JPEGHandler", (PyCFunction) _wrap_new_JPEGHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"JPEGHandler_swigregister", JPEGHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PNMHandler", (PyCFunction) _wrap_new_PNMHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PNMHandler_swigregister", PNMHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_XPMHandler", (PyCFunction) _wrap_new_XPMHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XPMHandler_swigregister", XPMHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_TIFFHandler", (PyCFunction) _wrap_new_TIFFHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"TIFFHandler_swigregister", TIFFHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_EvtHandler", (PyCFunction) _wrap_new_EvtHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_GetNextHandler", (PyCFunction) _wrap_EvtHandler_GetNextHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_GetPreviousHandler", (PyCFunction) _wrap_EvtHandler_GetPreviousHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_SetNextHandler", (PyCFunction) _wrap_EvtHandler_SetNextHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_SetPreviousHandler", (PyCFunction) _wrap_EvtHandler_SetPreviousHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_GetEvtHandlerEnabled", (PyCFunction) _wrap_EvtHandler_GetEvtHandlerEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_SetEvtHandlerEnabled", (PyCFunction) _wrap_EvtHandler_SetEvtHandlerEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_ProcessEvent", (PyCFunction) _wrap_EvtHandler_ProcessEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_AddPendingEvent", (PyCFunction) _wrap_EvtHandler_AddPendingEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_ProcessPendingEvents", (PyCFunction) _wrap_EvtHandler_ProcessPendingEvents, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_Connect", (PyCFunction) _wrap_EvtHandler_Connect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_Disconnect", (PyCFunction) _wrap_EvtHandler_Disconnect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler__setOORInfo", (PyCFunction) _wrap_EvtHandler__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EvtHandler_swigregister", EvtHandler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"NewEventType", (PyCFunction) _wrap_NewEventType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_Event", (PyCFunction) _wrap_delete_Event, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_SetEventType", (PyCFunction) _wrap_Event_SetEventType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_GetEventType", (PyCFunction) _wrap_Event_GetEventType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_GetEventObject", (PyCFunction) _wrap_Event_GetEventObject, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_SetEventObject", (PyCFunction) _wrap_Event_SetEventObject, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_GetTimestamp", (PyCFunction) _wrap_Event_GetTimestamp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_SetTimestamp", (PyCFunction) _wrap_Event_SetTimestamp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_GetId", (PyCFunction) _wrap_Event_GetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_SetId", (PyCFunction) _wrap_Event_SetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_IsCommandEvent", (PyCFunction) _wrap_Event_IsCommandEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_Skip", (PyCFunction) _wrap_Event_Skip, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_GetSkipped", (PyCFunction) _wrap_Event_GetSkipped, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_ShouldPropagate", (PyCFunction) _wrap_Event_ShouldPropagate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_StopPropagation", (PyCFunction) _wrap_Event_StopPropagation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_ResumePropagation", (PyCFunction) _wrap_Event_ResumePropagation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_Clone", (PyCFunction) _wrap_Event_Clone, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Event_swigregister", Event_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PropagationDisabler", (PyCFunction) _wrap_new_PropagationDisabler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_PropagationDisabler", (PyCFunction) _wrap_delete_PropagationDisabler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PropagationDisabler_swigregister", PropagationDisabler_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PropagateOnce", (PyCFunction) _wrap_new_PropagateOnce, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_PropagateOnce", (PyCFunction) _wrap_delete_PropagateOnce, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PropagateOnce_swigregister", PropagateOnce_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_CommandEvent", (PyCFunction) _wrap_new_CommandEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_GetSelection", (PyCFunction) _wrap_CommandEvent_GetSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_SetString", (PyCFunction) _wrap_CommandEvent_SetString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_GetString", (PyCFunction) _wrap_CommandEvent_GetString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_IsChecked", (PyCFunction) _wrap_CommandEvent_IsChecked, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_IsSelection", (PyCFunction) _wrap_CommandEvent_IsSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_SetExtraLong", (PyCFunction) _wrap_CommandEvent_SetExtraLong, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_GetExtraLong", (PyCFunction) _wrap_CommandEvent_GetExtraLong, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_SetInt", (PyCFunction) _wrap_CommandEvent_SetInt, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_GetInt", (PyCFunction) _wrap_CommandEvent_GetInt, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_Clone", (PyCFunction) _wrap_CommandEvent_Clone, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CommandEvent_swigregister", CommandEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_NotifyEvent", (PyCFunction) _wrap_new_NotifyEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NotifyEvent_Veto", (PyCFunction) _wrap_NotifyEvent_Veto, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NotifyEvent_Allow", (PyCFunction) _wrap_NotifyEvent_Allow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NotifyEvent_IsAllowed", (PyCFunction) _wrap_NotifyEvent_IsAllowed, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NotifyEvent_swigregister", NotifyEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ScrollEvent", (PyCFunction) _wrap_new_ScrollEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollEvent_GetOrientation", (PyCFunction) _wrap_ScrollEvent_GetOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollEvent_GetPosition", (PyCFunction) _wrap_ScrollEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollEvent_SetOrientation", (PyCFunction) _wrap_ScrollEvent_SetOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollEvent_SetPosition", (PyCFunction) _wrap_ScrollEvent_SetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollEvent_swigregister", ScrollEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ScrollWinEvent", (PyCFunction) _wrap_new_ScrollWinEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollWinEvent_GetOrientation", (PyCFunction) _wrap_ScrollWinEvent_GetOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollWinEvent_GetPosition", (PyCFunction) _wrap_ScrollWinEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollWinEvent_SetOrientation", (PyCFunction) _wrap_ScrollWinEvent_SetOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollWinEvent_SetPosition", (PyCFunction) _wrap_ScrollWinEvent_SetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ScrollWinEvent_swigregister", ScrollWinEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_MouseEvent", (PyCFunction) _wrap_new_MouseEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_IsButton", (PyCFunction) _wrap_MouseEvent_IsButton, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_ButtonDown", (PyCFunction) _wrap_MouseEvent_ButtonDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_ButtonDClick", (PyCFunction) _wrap_MouseEvent_ButtonDClick, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_ButtonUp", (PyCFunction) _wrap_MouseEvent_ButtonUp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_Button", (PyCFunction) _wrap_MouseEvent_Button, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_ButtonIsDown", (PyCFunction) _wrap_MouseEvent_ButtonIsDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_GetButton", (PyCFunction) _wrap_MouseEvent_GetButton, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_ControlDown", (PyCFunction) _wrap_MouseEvent_ControlDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_MetaDown", (PyCFunction) _wrap_MouseEvent_MetaDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_AltDown", (PyCFunction) _wrap_MouseEvent_AltDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_ShiftDown", (PyCFunction) _wrap_MouseEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_LeftDown", (PyCFunction) _wrap_MouseEvent_LeftDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_MiddleDown", (PyCFunction) _wrap_MouseEvent_MiddleDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_RightDown", (PyCFunction) _wrap_MouseEvent_RightDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_LeftUp", (PyCFunction) _wrap_MouseEvent_LeftUp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_MiddleUp", (PyCFunction) _wrap_MouseEvent_MiddleUp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_RightUp", (PyCFunction) _wrap_MouseEvent_RightUp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_LeftDClick", (PyCFunction) _wrap_MouseEvent_LeftDClick, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_MiddleDClick", (PyCFunction) _wrap_MouseEvent_MiddleDClick, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_RightDClick", (PyCFunction) _wrap_MouseEvent_RightDClick, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_LeftIsDown", (PyCFunction) _wrap_MouseEvent_LeftIsDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_MiddleIsDown", (PyCFunction) _wrap_MouseEvent_MiddleIsDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_RightIsDown", (PyCFunction) _wrap_MouseEvent_RightIsDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_Dragging", (PyCFunction) _wrap_MouseEvent_Dragging, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_Moving", (PyCFunction) _wrap_MouseEvent_Moving, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_Entering", (PyCFunction) _wrap_MouseEvent_Entering, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_Leaving", (PyCFunction) _wrap_MouseEvent_Leaving, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_GetPosition", (PyCFunction) _wrap_MouseEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_GetPositionTuple", (PyCFunction) _wrap_MouseEvent_GetPositionTuple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_GetLogicalPosition", (PyCFunction) _wrap_MouseEvent_GetLogicalPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_GetX", (PyCFunction) _wrap_MouseEvent_GetX, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_GetY", (PyCFunction) _wrap_MouseEvent_GetY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_GetWheelRotation", (PyCFunction) _wrap_MouseEvent_GetWheelRotation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_GetWheelDelta", (PyCFunction) _wrap_MouseEvent_GetWheelDelta, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_GetLinesPerAction", (PyCFunction) _wrap_MouseEvent_GetLinesPerAction, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_IsPageScroll", (PyCFunction) _wrap_MouseEvent_IsPageScroll, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_x_set", (PyCFunction) _wrap_MouseEvent_m_x_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_x_get", (PyCFunction) _wrap_MouseEvent_m_x_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_y_set", (PyCFunction) _wrap_MouseEvent_m_y_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_y_get", (PyCFunction) _wrap_MouseEvent_m_y_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_leftDown_set", (PyCFunction) _wrap_MouseEvent_m_leftDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_leftDown_get", (PyCFunction) _wrap_MouseEvent_m_leftDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_middleDown_set", (PyCFunction) _wrap_MouseEvent_m_middleDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_middleDown_get", (PyCFunction) _wrap_MouseEvent_m_middleDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_rightDown_set", (PyCFunction) _wrap_MouseEvent_m_rightDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_rightDown_get", (PyCFunction) _wrap_MouseEvent_m_rightDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_controlDown_set", (PyCFunction) _wrap_MouseEvent_m_controlDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_controlDown_get", (PyCFunction) _wrap_MouseEvent_m_controlDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_shiftDown_set", (PyCFunction) _wrap_MouseEvent_m_shiftDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_shiftDown_get", (PyCFunction) _wrap_MouseEvent_m_shiftDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_altDown_set", (PyCFunction) _wrap_MouseEvent_m_altDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_altDown_get", (PyCFunction) _wrap_MouseEvent_m_altDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_metaDown_set", (PyCFunction) _wrap_MouseEvent_m_metaDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_metaDown_get", (PyCFunction) _wrap_MouseEvent_m_metaDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_wheelRotation_set", (PyCFunction) _wrap_MouseEvent_m_wheelRotation_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_wheelRotation_get", (PyCFunction) _wrap_MouseEvent_m_wheelRotation_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_wheelDelta_set", (PyCFunction) _wrap_MouseEvent_m_wheelDelta_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_wheelDelta_get", (PyCFunction) _wrap_MouseEvent_m_wheelDelta_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_linesPerAction_set", (PyCFunction) _wrap_MouseEvent_m_linesPerAction_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_m_linesPerAction_get", (PyCFunction) _wrap_MouseEvent_m_linesPerAction_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseEvent_swigregister", MouseEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_SetCursorEvent", (PyCFunction) _wrap_new_SetCursorEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SetCursorEvent_GetX", (PyCFunction) _wrap_SetCursorEvent_GetX, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SetCursorEvent_GetY", (PyCFunction) _wrap_SetCursorEvent_GetY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SetCursorEvent_SetCursor", (PyCFunction) _wrap_SetCursorEvent_SetCursor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SetCursorEvent_GetCursor", (PyCFunction) _wrap_SetCursorEvent_GetCursor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SetCursorEvent_HasCursor", (PyCFunction) _wrap_SetCursorEvent_HasCursor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SetCursorEvent_swigregister", SetCursorEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_KeyEvent", (PyCFunction) _wrap_new_KeyEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_ControlDown", (PyCFunction) _wrap_KeyEvent_ControlDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_MetaDown", (PyCFunction) _wrap_KeyEvent_MetaDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_AltDown", (PyCFunction) _wrap_KeyEvent_AltDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_ShiftDown", (PyCFunction) _wrap_KeyEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_HasModifiers", (PyCFunction) _wrap_KeyEvent_HasModifiers, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_GetKeyCode", (PyCFunction) _wrap_KeyEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_GetUniChar", (PyCFunction) _wrap_KeyEvent_GetUniChar, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_GetRawKeyCode", (PyCFunction) _wrap_KeyEvent_GetRawKeyCode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_GetRawKeyFlags", (PyCFunction) _wrap_KeyEvent_GetRawKeyFlags, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_GetPosition", (PyCFunction) _wrap_KeyEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_GetPositionTuple", (PyCFunction) _wrap_KeyEvent_GetPositionTuple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_GetX", (PyCFunction) _wrap_KeyEvent_GetX, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_GetY", (PyCFunction) _wrap_KeyEvent_GetY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_x_set", (PyCFunction) _wrap_KeyEvent_m_x_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_x_get", (PyCFunction) _wrap_KeyEvent_m_x_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_y_set", (PyCFunction) _wrap_KeyEvent_m_y_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_y_get", (PyCFunction) _wrap_KeyEvent_m_y_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_keyCode_set", (PyCFunction) _wrap_KeyEvent_m_keyCode_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_keyCode_get", (PyCFunction) _wrap_KeyEvent_m_keyCode_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_controlDown_set", (PyCFunction) _wrap_KeyEvent_m_controlDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_controlDown_get", (PyCFunction) _wrap_KeyEvent_m_controlDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_shiftDown_set", (PyCFunction) _wrap_KeyEvent_m_shiftDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_shiftDown_get", (PyCFunction) _wrap_KeyEvent_m_shiftDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_altDown_set", (PyCFunction) _wrap_KeyEvent_m_altDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_altDown_get", (PyCFunction) _wrap_KeyEvent_m_altDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_metaDown_set", (PyCFunction) _wrap_KeyEvent_m_metaDown_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_metaDown_get", (PyCFunction) _wrap_KeyEvent_m_metaDown_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_scanCode_set", (PyCFunction) _wrap_KeyEvent_m_scanCode_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_scanCode_get", (PyCFunction) _wrap_KeyEvent_m_scanCode_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_rawCode_set", (PyCFunction) _wrap_KeyEvent_m_rawCode_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_rawCode_get", (PyCFunction) _wrap_KeyEvent_m_rawCode_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_rawFlags_set", (PyCFunction) _wrap_KeyEvent_m_rawFlags_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_m_rawFlags_get", (PyCFunction) _wrap_KeyEvent_m_rawFlags_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"KeyEvent_swigregister", KeyEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_SizeEvent", (PyCFunction) _wrap_new_SizeEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizeEvent_GetSize", (PyCFunction) _wrap_SizeEvent_GetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizeEvent_GetRect", (PyCFunction) _wrap_SizeEvent_GetRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizeEvent_SetRect", (PyCFunction) _wrap_SizeEvent_SetRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizeEvent_SetSize", (PyCFunction) _wrap_SizeEvent_SetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizeEvent_m_size_set", (PyCFunction) _wrap_SizeEvent_m_size_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizeEvent_m_size_get", (PyCFunction) _wrap_SizeEvent_m_size_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizeEvent_m_rect_set", (PyCFunction) _wrap_SizeEvent_m_rect_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizeEvent_m_rect_get", (PyCFunction) _wrap_SizeEvent_m_rect_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizeEvent_swigregister", SizeEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_MoveEvent", (PyCFunction) _wrap_new_MoveEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MoveEvent_GetPosition", (PyCFunction) _wrap_MoveEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MoveEvent_GetRect", (PyCFunction) _wrap_MoveEvent_GetRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MoveEvent_SetRect", (PyCFunction) _wrap_MoveEvent_SetRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MoveEvent_SetPosition", (PyCFunction) _wrap_MoveEvent_SetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MoveEvent_m_pos_set", (PyCFunction) _wrap_MoveEvent_m_pos_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MoveEvent_m_pos_get", (PyCFunction) _wrap_MoveEvent_m_pos_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MoveEvent_m_rect_set", (PyCFunction) _wrap_MoveEvent_m_rect_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MoveEvent_m_rect_get", (PyCFunction) _wrap_MoveEvent_m_rect_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MoveEvent_swigregister", MoveEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PaintEvent", (PyCFunction) _wrap_new_PaintEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PaintEvent_swigregister", PaintEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_NcPaintEvent", (PyCFunction) _wrap_new_NcPaintEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NcPaintEvent_swigregister", NcPaintEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_EraseEvent", (PyCFunction) _wrap_new_EraseEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EraseEvent_GetDC", (PyCFunction) _wrap_EraseEvent_GetDC, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"EraseEvent_swigregister", EraseEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_FocusEvent", (PyCFunction) _wrap_new_FocusEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FocusEvent_GetWindow", (PyCFunction) _wrap_FocusEvent_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FocusEvent_SetWindow", (PyCFunction) _wrap_FocusEvent_SetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FocusEvent_swigregister", FocusEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ChildFocusEvent", (PyCFunction) _wrap_new_ChildFocusEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ChildFocusEvent_GetWindow", (PyCFunction) _wrap_ChildFocusEvent_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ChildFocusEvent_swigregister", ChildFocusEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ActivateEvent", (PyCFunction) _wrap_new_ActivateEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ActivateEvent_GetActive", (PyCFunction) _wrap_ActivateEvent_GetActive, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ActivateEvent_swigregister", ActivateEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_InitDialogEvent", (PyCFunction) _wrap_new_InitDialogEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"InitDialogEvent_swigregister", InitDialogEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_MenuEvent", (PyCFunction) _wrap_new_MenuEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuEvent_GetMenuId", (PyCFunction) _wrap_MenuEvent_GetMenuId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuEvent_IsPopup", (PyCFunction) _wrap_MenuEvent_IsPopup, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuEvent_GetMenu", (PyCFunction) _wrap_MenuEvent_GetMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuEvent_swigregister", MenuEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_CloseEvent", (PyCFunction) _wrap_new_CloseEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CloseEvent_SetLoggingOff", (PyCFunction) _wrap_CloseEvent_SetLoggingOff, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CloseEvent_GetLoggingOff", (PyCFunction) _wrap_CloseEvent_GetLoggingOff, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CloseEvent_Veto", (PyCFunction) _wrap_CloseEvent_Veto, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CloseEvent_SetCanVeto", (PyCFunction) _wrap_CloseEvent_SetCanVeto, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CloseEvent_CanVeto", (PyCFunction) _wrap_CloseEvent_CanVeto, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CloseEvent_GetVeto", (PyCFunction) _wrap_CloseEvent_GetVeto, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"CloseEvent_swigregister", CloseEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ShowEvent", (PyCFunction) _wrap_new_ShowEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ShowEvent_SetShow", (PyCFunction) _wrap_ShowEvent_SetShow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ShowEvent_GetShow", (PyCFunction) _wrap_ShowEvent_GetShow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ShowEvent_swigregister", ShowEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_IconizeEvent", (PyCFunction) _wrap_new_IconizeEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IconizeEvent_Iconized", (PyCFunction) _wrap_IconizeEvent_Iconized, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IconizeEvent_swigregister", IconizeEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_MaximizeEvent", (PyCFunction) _wrap_new_MaximizeEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MaximizeEvent_swigregister", MaximizeEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"DropFilesEvent_GetPosition", (PyCFunction) _wrap_DropFilesEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"DropFilesEvent_GetNumberOfFiles", (PyCFunction) _wrap_DropFilesEvent_GetNumberOfFiles, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"DropFilesEvent_GetFiles", (PyCFunction) _wrap_DropFilesEvent_GetFiles, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"DropFilesEvent_swigregister", DropFilesEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_UpdateUIEvent", (PyCFunction) _wrap_new_UpdateUIEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_GetChecked", (PyCFunction) _wrap_UpdateUIEvent_GetChecked, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_GetEnabled", (PyCFunction) _wrap_UpdateUIEvent_GetEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_GetText", (PyCFunction) _wrap_UpdateUIEvent_GetText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_GetSetText", (PyCFunction) _wrap_UpdateUIEvent_GetSetText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_GetSetChecked", (PyCFunction) _wrap_UpdateUIEvent_GetSetChecked, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_GetSetEnabled", (PyCFunction) _wrap_UpdateUIEvent_GetSetEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_Check", (PyCFunction) _wrap_UpdateUIEvent_Check, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_Enable", (PyCFunction) _wrap_UpdateUIEvent_Enable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_SetText", (PyCFunction) _wrap_UpdateUIEvent_SetText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_SetUpdateInterval", (PyCFunction) _wrap_UpdateUIEvent_SetUpdateInterval, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_GetUpdateInterval", (PyCFunction) _wrap_UpdateUIEvent_GetUpdateInterval, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_CanUpdate", (PyCFunction) _wrap_UpdateUIEvent_CanUpdate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_ResetUpdateTime", (PyCFunction) _wrap_UpdateUIEvent_ResetUpdateTime, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_SetMode", (PyCFunction) _wrap_UpdateUIEvent_SetMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_GetMode", (PyCFunction) _wrap_UpdateUIEvent_GetMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"UpdateUIEvent_swigregister", UpdateUIEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_SysColourChangedEvent", (PyCFunction) _wrap_new_SysColourChangedEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SysColourChangedEvent_swigregister", SysColourChangedEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_MouseCaptureChangedEvent", (PyCFunction) _wrap_new_MouseCaptureChangedEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseCaptureChangedEvent_GetCapturedWindow", (PyCFunction) _wrap_MouseCaptureChangedEvent_GetCapturedWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MouseCaptureChangedEvent_swigregister", MouseCaptureChangedEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_DisplayChangedEvent", (PyCFunction) _wrap_new_DisplayChangedEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"DisplayChangedEvent_swigregister", DisplayChangedEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PaletteChangedEvent", (PyCFunction) _wrap_new_PaletteChangedEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PaletteChangedEvent_SetChangedWindow", (PyCFunction) _wrap_PaletteChangedEvent_SetChangedWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PaletteChangedEvent_GetChangedWindow", (PyCFunction) _wrap_PaletteChangedEvent_GetChangedWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PaletteChangedEvent_swigregister", PaletteChangedEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_QueryNewPaletteEvent", (PyCFunction) _wrap_new_QueryNewPaletteEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"QueryNewPaletteEvent_SetPaletteRealized", (PyCFunction) _wrap_QueryNewPaletteEvent_SetPaletteRealized, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"QueryNewPaletteEvent_GetPaletteRealized", (PyCFunction) _wrap_QueryNewPaletteEvent_GetPaletteRealized, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"QueryNewPaletteEvent_swigregister", QueryNewPaletteEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_NavigationKeyEvent", (PyCFunction) _wrap_new_NavigationKeyEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NavigationKeyEvent_GetDirection", (PyCFunction) _wrap_NavigationKeyEvent_GetDirection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NavigationKeyEvent_SetDirection", (PyCFunction) _wrap_NavigationKeyEvent_SetDirection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NavigationKeyEvent_IsWindowChange", (PyCFunction) _wrap_NavigationKeyEvent_IsWindowChange, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NavigationKeyEvent_SetWindowChange", (PyCFunction) _wrap_NavigationKeyEvent_SetWindowChange, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NavigationKeyEvent_GetCurrentFocus", (PyCFunction) _wrap_NavigationKeyEvent_GetCurrentFocus, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NavigationKeyEvent_SetCurrentFocus", (PyCFunction) _wrap_NavigationKeyEvent_SetCurrentFocus, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"NavigationKeyEvent_swigregister", NavigationKeyEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_WindowCreateEvent", (PyCFunction) _wrap_new_WindowCreateEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WindowCreateEvent_GetWindow", (PyCFunction) _wrap_WindowCreateEvent_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WindowCreateEvent_swigregister", WindowCreateEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_WindowDestroyEvent", (PyCFunction) _wrap_new_WindowDestroyEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WindowDestroyEvent_GetWindow", (PyCFunction) _wrap_WindowDestroyEvent_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WindowDestroyEvent_swigregister", WindowDestroyEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_ContextMenuEvent", (PyCFunction) _wrap_new_ContextMenuEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ContextMenuEvent_GetPosition", (PyCFunction) _wrap_ContextMenuEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ContextMenuEvent_SetPosition", (PyCFunction) _wrap_ContextMenuEvent_SetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ContextMenuEvent_swigregister", ContextMenuEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_IdleEvent", (PyCFunction) _wrap_new_IdleEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IdleEvent_RequestMore", (PyCFunction) _wrap_IdleEvent_RequestMore, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IdleEvent_MoreRequested", (PyCFunction) _wrap_IdleEvent_MoreRequested, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IdleEvent_SetMode", (PyCFunction) _wrap_IdleEvent_SetMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IdleEvent_GetMode", (PyCFunction) _wrap_IdleEvent_GetMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IdleEvent_CanSend", (PyCFunction) _wrap_IdleEvent_CanSend, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IdleEvent_swigregister", IdleEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PyEvent", (PyCFunction) _wrap_new_PyEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_PyEvent", (PyCFunction) _wrap_delete_PyEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyEvent_SetSelf", (PyCFunction) _wrap_PyEvent_SetSelf, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyEvent_GetSelf", (PyCFunction) _wrap_PyEvent_GetSelf, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyEvent_swigregister", PyEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PyCommandEvent", (PyCFunction) _wrap_new_PyCommandEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_PyCommandEvent", (PyCFunction) _wrap_delete_PyCommandEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyCommandEvent_SetSelf", (PyCFunction) _wrap_PyCommandEvent_SetSelf, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyCommandEvent_GetSelf", (PyCFunction) _wrap_PyCommandEvent_GetSelf, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyCommandEvent_swigregister", PyCommandEvent_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PyApp", (PyCFunction) _wrap_new_PyApp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_PyApp", (PyCFunction) _wrap_delete_PyApp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp__setCallbackInfo", (PyCFunction) _wrap_PyApp__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetAppName", (PyCFunction) _wrap_PyApp_GetAppName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetAppName", (PyCFunction) _wrap_PyApp_SetAppName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetClassName", (PyCFunction) _wrap_PyApp_GetClassName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetClassName", (PyCFunction) _wrap_PyApp_SetClassName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetVendorName", (PyCFunction) _wrap_PyApp_GetVendorName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetVendorName", (PyCFunction) _wrap_PyApp_SetVendorName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetTraits", (PyCFunction) _wrap_PyApp_GetTraits, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_ProcessPendingEvents", (PyCFunction) _wrap_PyApp_ProcessPendingEvents, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_Yield", (PyCFunction) _wrap_PyApp_Yield, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_WakeUpIdle", (PyCFunction) _wrap_PyApp_WakeUpIdle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_MainLoop", (PyCFunction) _wrap_PyApp_MainLoop, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_Exit", (PyCFunction) _wrap_PyApp_Exit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_ExitMainLoop", (PyCFunction) _wrap_PyApp_ExitMainLoop, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_Pending", (PyCFunction) _wrap_PyApp_Pending, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_Dispatch", (PyCFunction) _wrap_PyApp_Dispatch, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_ProcessIdle", (PyCFunction) _wrap_PyApp_ProcessIdle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SendIdleEvents", (PyCFunction) _wrap_PyApp_SendIdleEvents, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_IsActive", (PyCFunction) _wrap_PyApp_IsActive, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetTopWindow", (PyCFunction) _wrap_PyApp_SetTopWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetTopWindow", (PyCFunction) _wrap_PyApp_GetTopWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetExitOnFrameDelete", (PyCFunction) _wrap_PyApp_SetExitOnFrameDelete, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetExitOnFrameDelete", (PyCFunction) _wrap_PyApp_GetExitOnFrameDelete, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetUseBestVisual", (PyCFunction) _wrap_PyApp_SetUseBestVisual, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetUseBestVisual", (PyCFunction) _wrap_PyApp_GetUseBestVisual, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetPrintMode", (PyCFunction) _wrap_PyApp_SetPrintMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetPrintMode", (PyCFunction) _wrap_PyApp_GetPrintMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetAssertMode", (PyCFunction) _wrap_PyApp_SetAssertMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetAssertMode", (PyCFunction) _wrap_PyApp_GetAssertMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_PyApp_GetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetMacAboutMenuItemId", (PyCFunction) _wrap_PyApp_GetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetMacPreferencesMenuItemId", (PyCFunction) _wrap_PyApp_GetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetMacExitMenuItemId", (PyCFunction) _wrap_PyApp_GetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetMacHelpMenuTitleName", (PyCFunction) _wrap_PyApp_GetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_PyApp_SetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetMacAboutMenuItemId", (PyCFunction) _wrap_PyApp_SetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetMacPreferencesMenuItemId", (PyCFunction) _wrap_PyApp_SetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetMacExitMenuItemId", (PyCFunction) _wrap_PyApp_SetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_SetMacHelpMenuTitleName", (PyCFunction) _wrap_PyApp_SetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp__BootstrapApp", (PyCFunction) _wrap_PyApp__BootstrapApp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_GetComCtl32Version", (PyCFunction) _wrap_PyApp_GetComCtl32Version, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyApp_swigregister", PyApp_swigregister, METH_VARARGS, NULL },
-	 { (char *)"Exit", (PyCFunction) _wrap_Exit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Yield", (PyCFunction) _wrap_Yield, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"YieldIfNeeded", (PyCFunction) _wrap_YieldIfNeeded, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SafeYield", (PyCFunction) _wrap_SafeYield, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"WakeUpIdle", (PyCFunction) _wrap_WakeUpIdle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PostEvent", (PyCFunction) _wrap_PostEvent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"App_CleanUp", (PyCFunction) _wrap_App_CleanUp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GetApp", (PyCFunction) _wrap_GetApp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_AcceleratorEntry", (PyCFunction) _wrap_new_AcceleratorEntry, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_AcceleratorEntry", (PyCFunction) _wrap_delete_AcceleratorEntry, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"AcceleratorEntry_Set", (PyCFunction) _wrap_AcceleratorEntry_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"AcceleratorEntry_SetMenuItem", (PyCFunction) _wrap_AcceleratorEntry_SetMenuItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"AcceleratorEntry_GetMenuItem", (PyCFunction) _wrap_AcceleratorEntry_GetMenuItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"AcceleratorEntry_GetFlags", (PyCFunction) _wrap_AcceleratorEntry_GetFlags, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"AcceleratorEntry_GetKeyCode", (PyCFunction) _wrap_AcceleratorEntry_GetKeyCode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"AcceleratorEntry_GetCommand", (PyCFunction) _wrap_AcceleratorEntry_GetCommand, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"AcceleratorEntry_swigregister", AcceleratorEntry_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_AcceleratorTable", (PyCFunction) _wrap_new_AcceleratorTable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_AcceleratorTable", (PyCFunction) _wrap_delete_AcceleratorTable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"AcceleratorTable_Ok", (PyCFunction) _wrap_AcceleratorTable_Ok, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"AcceleratorTable_swigregister", AcceleratorTable_swigregister, METH_VARARGS, NULL },
-	 { (char *)"GetAccelFromString", (PyCFunction) _wrap_GetAccelFromString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_VisualAttributes", (PyCFunction) _wrap_new_VisualAttributes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_VisualAttributes", (PyCFunction) _wrap_delete_VisualAttributes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"VisualAttributes_font_set", (PyCFunction) _wrap_VisualAttributes_font_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"VisualAttributes_font_get", (PyCFunction) _wrap_VisualAttributes_font_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"VisualAttributes_colFg_set", (PyCFunction) _wrap_VisualAttributes_colFg_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"VisualAttributes_colFg_get", (PyCFunction) _wrap_VisualAttributes_colFg_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"VisualAttributes_colBg_set", (PyCFunction) _wrap_VisualAttributes_colBg_set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"VisualAttributes_colBg_get", (PyCFunction) _wrap_VisualAttributes_colBg_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"VisualAttributes_swigregister", VisualAttributes_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_Window", (PyCFunction) _wrap_new_Window, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_PreWindow", (PyCFunction) _wrap_new_PreWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Create", (PyCFunction) _wrap_Window_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Close", (PyCFunction) _wrap_Window_Close, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Destroy", (PyCFunction) _wrap_Window_Destroy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_DestroyChildren", (PyCFunction) _wrap_Window_DestroyChildren, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_IsBeingDeleted", (PyCFunction) _wrap_Window_IsBeingDeleted, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetTitle", (PyCFunction) _wrap_Window_SetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetTitle", (PyCFunction) _wrap_Window_GetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetLabel", (PyCFunction) _wrap_Window_SetLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetLabel", (PyCFunction) _wrap_Window_GetLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetName", (PyCFunction) _wrap_Window_SetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetName", (PyCFunction) _wrap_Window_GetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetWindowVariant", (PyCFunction) _wrap_Window_SetWindowVariant, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetWindowVariant", (PyCFunction) _wrap_Window_GetWindowVariant, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetId", (PyCFunction) _wrap_Window_SetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetId", (PyCFunction) _wrap_Window_GetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_NewControlId", (PyCFunction) _wrap_Window_NewControlId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_NextControlId", (PyCFunction) _wrap_Window_NextControlId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_PrevControlId", (PyCFunction) _wrap_Window_PrevControlId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetSize", (PyCFunction) _wrap_Window_SetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetDimensions", (PyCFunction) _wrap_Window_SetDimensions, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetRect", (PyCFunction) _wrap_Window_SetRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetSizeWH", (PyCFunction) _wrap_Window_SetSizeWH, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Move", (PyCFunction) _wrap_Window_Move, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_MoveXY", (PyCFunction) _wrap_Window_MoveXY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Raise", (PyCFunction) _wrap_Window_Raise, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Lower", (PyCFunction) _wrap_Window_Lower, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetClientSize", (PyCFunction) _wrap_Window_SetClientSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetClientSizeWH", (PyCFunction) _wrap_Window_SetClientSizeWH, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetClientRect", (PyCFunction) _wrap_Window_SetClientRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetPosition", (PyCFunction) _wrap_Window_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetPositionTuple", (PyCFunction) _wrap_Window_GetPositionTuple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetSize", (PyCFunction) _wrap_Window_GetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetSizeTuple", (PyCFunction) _wrap_Window_GetSizeTuple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetRect", (PyCFunction) _wrap_Window_GetRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetClientSize", (PyCFunction) _wrap_Window_GetClientSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetClientSizeTuple", (PyCFunction) _wrap_Window_GetClientSizeTuple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetClientAreaOrigin", (PyCFunction) _wrap_Window_GetClientAreaOrigin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetClientRect", (PyCFunction) _wrap_Window_GetClientRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetBestSize", (PyCFunction) _wrap_Window_GetBestSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetBestSizeTuple", (PyCFunction) _wrap_Window_GetBestSizeTuple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetAdjustedBestSize", (PyCFunction) _wrap_Window_GetAdjustedBestSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Center", (PyCFunction) _wrap_Window_Center, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_CenterOnScreen", (PyCFunction) _wrap_Window_CenterOnScreen, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_CenterOnParent", (PyCFunction) _wrap_Window_CenterOnParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Fit", (PyCFunction) _wrap_Window_Fit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_FitInside", (PyCFunction) _wrap_Window_FitInside, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetSizeHints", _wrap_Window_SetSizeHints, METH_VARARGS, NULL },
-	 { (char *)"Window_SetVirtualSizeHints", _wrap_Window_SetVirtualSizeHints, METH_VARARGS, NULL },
-	 { (char *)"Window_GetMinWidth", (PyCFunction) _wrap_Window_GetMinWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetMinHeight", (PyCFunction) _wrap_Window_GetMinHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetMaxWidth", (PyCFunction) _wrap_Window_GetMaxWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetMaxHeight", (PyCFunction) _wrap_Window_GetMaxHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetMaxSize", (PyCFunction) _wrap_Window_GetMaxSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetMinSize", (PyCFunction) _wrap_Window_GetMinSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetVirtualSize", (PyCFunction) _wrap_Window_SetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetVirtualSizeWH", (PyCFunction) _wrap_Window_SetVirtualSizeWH, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetVirtualSize", (PyCFunction) _wrap_Window_GetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetVirtualSizeTuple", (PyCFunction) _wrap_Window_GetVirtualSizeTuple, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetBestVirtualSize", (PyCFunction) _wrap_Window_GetBestVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Show", (PyCFunction) _wrap_Window_Show, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Hide", (PyCFunction) _wrap_Window_Hide, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Enable", (PyCFunction) _wrap_Window_Enable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Disable", (PyCFunction) _wrap_Window_Disable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_IsShown", (PyCFunction) _wrap_Window_IsShown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_IsEnabled", (PyCFunction) _wrap_Window_IsEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetWindowStyleFlag", (PyCFunction) _wrap_Window_SetWindowStyleFlag, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetWindowStyleFlag", (PyCFunction) _wrap_Window_GetWindowStyleFlag, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_HasFlag", (PyCFunction) _wrap_Window_HasFlag, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_IsRetained", (PyCFunction) _wrap_Window_IsRetained, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetExtraStyle", (PyCFunction) _wrap_Window_SetExtraStyle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetExtraStyle", (PyCFunction) _wrap_Window_GetExtraStyle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_MakeModal", (PyCFunction) _wrap_Window_MakeModal, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetThemeEnabled", (PyCFunction) _wrap_Window_SetThemeEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetThemeEnabled", (PyCFunction) _wrap_Window_GetThemeEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetFocus", (PyCFunction) _wrap_Window_SetFocus, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetFocusFromKbd", (PyCFunction) _wrap_Window_SetFocusFromKbd, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_FindFocus", (PyCFunction) _wrap_Window_FindFocus, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_AcceptsFocus", (PyCFunction) _wrap_Window_AcceptsFocus, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_Window_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetDefaultItem", (PyCFunction) _wrap_Window_GetDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetDefaultItem", (PyCFunction) _wrap_Window_SetDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetTmpDefaultItem", (PyCFunction) _wrap_Window_SetTmpDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetChildren", (PyCFunction) _wrap_Window_GetChildren, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetParent", (PyCFunction) _wrap_Window_GetParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetGrandParent", (PyCFunction) _wrap_Window_GetGrandParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_IsTopLevel", (PyCFunction) _wrap_Window_IsTopLevel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Reparent", (PyCFunction) _wrap_Window_Reparent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_AddChild", (PyCFunction) _wrap_Window_AddChild, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_RemoveChild", (PyCFunction) _wrap_Window_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_FindWindowById", (PyCFunction) _wrap_Window_FindWindowById, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_FindWindowByName", (PyCFunction) _wrap_Window_FindWindowByName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetEventHandler", (PyCFunction) _wrap_Window_GetEventHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetEventHandler", (PyCFunction) _wrap_Window_SetEventHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_PushEventHandler", (PyCFunction) _wrap_Window_PushEventHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_PopEventHandler", (PyCFunction) _wrap_Window_PopEventHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_RemoveEventHandler", (PyCFunction) _wrap_Window_RemoveEventHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetValidator", (PyCFunction) _wrap_Window_SetValidator, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetValidator", (PyCFunction) _wrap_Window_GetValidator, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Validate", (PyCFunction) _wrap_Window_Validate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_TransferDataToWindow", (PyCFunction) _wrap_Window_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_TransferDataFromWindow", (PyCFunction) _wrap_Window_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_InitDialog", (PyCFunction) _wrap_Window_InitDialog, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetAcceleratorTable", (PyCFunction) _wrap_Window_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetAcceleratorTable", (PyCFunction) _wrap_Window_GetAcceleratorTable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_RegisterHotKey", (PyCFunction) _wrap_Window_RegisterHotKey, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_UnregisterHotKey", (PyCFunction) _wrap_Window_UnregisterHotKey, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ConvertDialogPointToPixels", (PyCFunction) _wrap_Window_ConvertDialogPointToPixels, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ConvertDialogSizeToPixels", (PyCFunction) _wrap_Window_ConvertDialogSizeToPixels, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_DLG_PNT", (PyCFunction) _wrap_Window_DLG_PNT, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_DLG_SZE", (PyCFunction) _wrap_Window_DLG_SZE, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ConvertPixelPointToDialog", (PyCFunction) _wrap_Window_ConvertPixelPointToDialog, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ConvertPixelSizeToDialog", (PyCFunction) _wrap_Window_ConvertPixelSizeToDialog, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_WarpPointer", (PyCFunction) _wrap_Window_WarpPointer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_CaptureMouse", (PyCFunction) _wrap_Window_CaptureMouse, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ReleaseMouse", (PyCFunction) _wrap_Window_ReleaseMouse, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetCapture", (PyCFunction) _wrap_Window_GetCapture, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_HasCapture", (PyCFunction) _wrap_Window_HasCapture, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Refresh", (PyCFunction) _wrap_Window_Refresh, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_RefreshRect", (PyCFunction) _wrap_Window_RefreshRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Update", (PyCFunction) _wrap_Window_Update, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ClearBackground", (PyCFunction) _wrap_Window_ClearBackground, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Freeze", (PyCFunction) _wrap_Window_Freeze, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Thaw", (PyCFunction) _wrap_Window_Thaw, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_PrepareDC", (PyCFunction) _wrap_Window_PrepareDC, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetUpdateRegion", (PyCFunction) _wrap_Window_GetUpdateRegion, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetUpdateClientRect", (PyCFunction) _wrap_Window_GetUpdateClientRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_IsExposed", (PyCFunction) _wrap_Window_IsExposed, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_IsExposedPoint", (PyCFunction) _wrap_Window_IsExposedPoint, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_IsExposedRect", (PyCFunction) _wrap_Window_IsExposedRect, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetDefaultAttributes", (PyCFunction) _wrap_Window_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetClassDefaultAttributes", (PyCFunction) _wrap_Window_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetBackgroundColour", (PyCFunction) _wrap_Window_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetDefaultBackgroundColour", (PyCFunction) _wrap_Window_SetDefaultBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetForegroundColour", (PyCFunction) _wrap_Window_SetForegroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetDefaultForegroundColour", (PyCFunction) _wrap_Window_SetDefaultForegroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetBackgroundColour", (PyCFunction) _wrap_Window_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetForegroundColour", (PyCFunction) _wrap_Window_GetForegroundColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetCursor", (PyCFunction) _wrap_Window_SetCursor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetCursor", (PyCFunction) _wrap_Window_GetCursor, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetFont", (PyCFunction) _wrap_Window_SetFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetDefaultFont", (PyCFunction) _wrap_Window_SetDefaultFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetFont", (PyCFunction) _wrap_Window_GetFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetCaret", (PyCFunction) _wrap_Window_SetCaret, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetCaret", (PyCFunction) _wrap_Window_GetCaret, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetCharHeight", (PyCFunction) _wrap_Window_GetCharHeight, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetCharWidth", (PyCFunction) _wrap_Window_GetCharWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetTextExtent", (PyCFunction) _wrap_Window_GetTextExtent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetFullTextExtent", (PyCFunction) _wrap_Window_GetFullTextExtent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ClientToScreenXY", (PyCFunction) _wrap_Window_ClientToScreenXY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ScreenToClientXY", (PyCFunction) _wrap_Window_ScreenToClientXY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ClientToScreen", (PyCFunction) _wrap_Window_ClientToScreen, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ScreenToClient", (PyCFunction) _wrap_Window_ScreenToClient, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_HitTestXY", (PyCFunction) _wrap_Window_HitTestXY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_HitTest", (PyCFunction) _wrap_Window_HitTest, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetBorder", _wrap_Window_GetBorder, METH_VARARGS, NULL },
-	 { (char *)"Window_UpdateWindowUI", (PyCFunction) _wrap_Window_UpdateWindowUI, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_PopupMenuXY", (PyCFunction) _wrap_Window_PopupMenuXY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_PopupMenu", (PyCFunction) _wrap_Window_PopupMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetHandle", (PyCFunction) _wrap_Window_GetHandle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_HasScrollbar", (PyCFunction) _wrap_Window_HasScrollbar, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetScrollbar", (PyCFunction) _wrap_Window_SetScrollbar, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetScrollPos", (PyCFunction) _wrap_Window_SetScrollPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetScrollPos", (PyCFunction) _wrap_Window_GetScrollPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetScrollThumb", (PyCFunction) _wrap_Window_GetScrollThumb, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetScrollRange", (PyCFunction) _wrap_Window_GetScrollRange, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ScrollWindow", (PyCFunction) _wrap_Window_ScrollWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ScrollLines", (PyCFunction) _wrap_Window_ScrollLines, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_ScrollPages", (PyCFunction) _wrap_Window_ScrollPages, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_LineUp", (PyCFunction) _wrap_Window_LineUp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_LineDown", (PyCFunction) _wrap_Window_LineDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_PageUp", (PyCFunction) _wrap_Window_PageUp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_PageDown", (PyCFunction) _wrap_Window_PageDown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetHelpText", (PyCFunction) _wrap_Window_SetHelpText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetHelpTextForId", (PyCFunction) _wrap_Window_SetHelpTextForId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetHelpText", (PyCFunction) _wrap_Window_GetHelpText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetToolTipString", (PyCFunction) _wrap_Window_SetToolTipString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetToolTip", (PyCFunction) _wrap_Window_SetToolTip, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetToolTip", (PyCFunction) _wrap_Window_GetToolTip, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetDropTarget", (PyCFunction) _wrap_Window_SetDropTarget, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetDropTarget", (PyCFunction) _wrap_Window_GetDropTarget, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetConstraints", (PyCFunction) _wrap_Window_SetConstraints, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetConstraints", (PyCFunction) _wrap_Window_GetConstraints, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetAutoLayout", (PyCFunction) _wrap_Window_SetAutoLayout, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetAutoLayout", (PyCFunction) _wrap_Window_GetAutoLayout, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_Layout", (PyCFunction) _wrap_Window_Layout, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetSizer", (PyCFunction) _wrap_Window_SetSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetSizerAndFit", (PyCFunction) _wrap_Window_SetSizerAndFit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetSizer", (PyCFunction) _wrap_Window_GetSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_SetContainingSizer", (PyCFunction) _wrap_Window_SetContainingSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_GetContainingSizer", (PyCFunction) _wrap_Window_GetContainingSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_swigregister", Window_swigregister, METH_VARARGS, NULL },
-	 { (char *)"FindWindowById", (PyCFunction) _wrap_FindWindowById, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FindWindowByName", (PyCFunction) _wrap_FindWindowByName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FindWindowByLabel", (PyCFunction) _wrap_FindWindowByLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Window_FromHWND", (PyCFunction) _wrap_Window_FromHWND, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_Validator", (PyCFunction) _wrap_new_Validator, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Validator_Clone", (PyCFunction) _wrap_Validator_Clone, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Validator_Validate", (PyCFunction) _wrap_Validator_Validate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Validator_TransferToWindow", (PyCFunction) _wrap_Validator_TransferToWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Validator_TransferFromWindow", (PyCFunction) _wrap_Validator_TransferFromWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Validator_GetWindow", (PyCFunction) _wrap_Validator_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Validator_SetWindow", (PyCFunction) _wrap_Validator_SetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Validator_IsSilent", (PyCFunction) _wrap_Validator_IsSilent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Validator_SetBellOnError", (PyCFunction) _wrap_Validator_SetBellOnError, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Validator_swigregister", Validator_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PyValidator", (PyCFunction) _wrap_new_PyValidator, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyValidator__setCallbackInfo", (PyCFunction) _wrap_PyValidator__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PyValidator_swigregister", PyValidator_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_Menu", (PyCFunction) _wrap_new_Menu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Append", (PyCFunction) _wrap_Menu_Append, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_AppendSeparator", (PyCFunction) _wrap_Menu_AppendSeparator, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_AppendCheckItem", (PyCFunction) _wrap_Menu_AppendCheckItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_AppendRadioItem", (PyCFunction) _wrap_Menu_AppendRadioItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_AppendMenu", (PyCFunction) _wrap_Menu_AppendMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_AppendItem", (PyCFunction) _wrap_Menu_AppendItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Break", (PyCFunction) _wrap_Menu_Break, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_InsertItem", (PyCFunction) _wrap_Menu_InsertItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Insert", (PyCFunction) _wrap_Menu_Insert, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_InsertSeparator", (PyCFunction) _wrap_Menu_InsertSeparator, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_InsertCheckItem", (PyCFunction) _wrap_Menu_InsertCheckItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_InsertRadioItem", (PyCFunction) _wrap_Menu_InsertRadioItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_InsertMenu", (PyCFunction) _wrap_Menu_InsertMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_PrependItem", (PyCFunction) _wrap_Menu_PrependItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Prepend", (PyCFunction) _wrap_Menu_Prepend, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_PrependSeparator", (PyCFunction) _wrap_Menu_PrependSeparator, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_PrependCheckItem", (PyCFunction) _wrap_Menu_PrependCheckItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_PrependRadioItem", (PyCFunction) _wrap_Menu_PrependRadioItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_PrependMenu", (PyCFunction) _wrap_Menu_PrependMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Remove", (PyCFunction) _wrap_Menu_Remove, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_RemoveItem", (PyCFunction) _wrap_Menu_RemoveItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Delete", (PyCFunction) _wrap_Menu_Delete, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_DeleteItem", (PyCFunction) _wrap_Menu_DeleteItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Destroy", (PyCFunction) _wrap_Menu_Destroy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_DestroyId", (PyCFunction) _wrap_Menu_DestroyId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_DestroyItem", (PyCFunction) _wrap_Menu_DestroyItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetMenuItemCount", (PyCFunction) _wrap_Menu_GetMenuItemCount, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetMenuItems", (PyCFunction) _wrap_Menu_GetMenuItems, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_FindItem", (PyCFunction) _wrap_Menu_FindItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_FindItemById", (PyCFunction) _wrap_Menu_FindItemById, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_FindItemByPosition", (PyCFunction) _wrap_Menu_FindItemByPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Enable", (PyCFunction) _wrap_Menu_Enable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_IsEnabled", (PyCFunction) _wrap_Menu_IsEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Check", (PyCFunction) _wrap_Menu_Check, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_IsChecked", (PyCFunction) _wrap_Menu_IsChecked, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_SetLabel", (PyCFunction) _wrap_Menu_SetLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetLabel", (PyCFunction) _wrap_Menu_GetLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_SetHelpString", (PyCFunction) _wrap_Menu_SetHelpString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetHelpString", (PyCFunction) _wrap_Menu_GetHelpString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_SetTitle", (PyCFunction) _wrap_Menu_SetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetTitle", (PyCFunction) _wrap_Menu_GetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_SetEventHandler", (PyCFunction) _wrap_Menu_SetEventHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetEventHandler", (PyCFunction) _wrap_Menu_GetEventHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_SetInvokingWindow", (PyCFunction) _wrap_Menu_SetInvokingWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetInvokingWindow", (PyCFunction) _wrap_Menu_GetInvokingWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetStyle", (PyCFunction) _wrap_Menu_GetStyle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_UpdateUI", (PyCFunction) _wrap_Menu_UpdateUI, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetMenuBar", (PyCFunction) _wrap_Menu_GetMenuBar, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Attach", (PyCFunction) _wrap_Menu_Attach, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_Detach", (PyCFunction) _wrap_Menu_Detach, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_IsAttached", (PyCFunction) _wrap_Menu_IsAttached, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_SetParent", (PyCFunction) _wrap_Menu_SetParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_GetParent", (PyCFunction) _wrap_Menu_GetParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Menu_swigregister", Menu_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_MenuBar", (PyCFunction) _wrap_new_MenuBar, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_Append", (PyCFunction) _wrap_MenuBar_Append, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_Insert", (PyCFunction) _wrap_MenuBar_Insert, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_GetMenuCount", (PyCFunction) _wrap_MenuBar_GetMenuCount, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_GetMenu", (PyCFunction) _wrap_MenuBar_GetMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_Replace", (PyCFunction) _wrap_MenuBar_Replace, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_Remove", (PyCFunction) _wrap_MenuBar_Remove, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_EnableTop", (PyCFunction) _wrap_MenuBar_EnableTop, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_IsEnabledTop", (PyCFunction) _wrap_MenuBar_IsEnabledTop, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_SetLabelTop", (PyCFunction) _wrap_MenuBar_SetLabelTop, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_GetLabelTop", (PyCFunction) _wrap_MenuBar_GetLabelTop, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_FindMenuItem", (PyCFunction) _wrap_MenuBar_FindMenuItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_FindItemById", (PyCFunction) _wrap_MenuBar_FindItemById, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_FindMenu", (PyCFunction) _wrap_MenuBar_FindMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_Enable", (PyCFunction) _wrap_MenuBar_Enable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_Check", (PyCFunction) _wrap_MenuBar_Check, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_IsChecked", (PyCFunction) _wrap_MenuBar_IsChecked, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_IsEnabled", (PyCFunction) _wrap_MenuBar_IsEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_SetLabel", (PyCFunction) _wrap_MenuBar_SetLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_GetLabel", (PyCFunction) _wrap_MenuBar_GetLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_SetHelpString", (PyCFunction) _wrap_MenuBar_SetHelpString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_GetHelpString", (PyCFunction) _wrap_MenuBar_GetHelpString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_GetFrame", (PyCFunction) _wrap_MenuBar_GetFrame, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_IsAttached", (PyCFunction) _wrap_MenuBar_IsAttached, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_Attach", (PyCFunction) _wrap_MenuBar_Attach, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_Detach", (PyCFunction) _wrap_MenuBar_Detach, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuBar_swigregister", MenuBar_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_MenuItem", (PyCFunction) _wrap_new_MenuItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetMenu", (PyCFunction) _wrap_MenuItem_GetMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_SetMenu", (PyCFunction) _wrap_MenuItem_SetMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_SetId", (PyCFunction) _wrap_MenuItem_SetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetId", (PyCFunction) _wrap_MenuItem_GetId, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_IsSeparator", (PyCFunction) _wrap_MenuItem_IsSeparator, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_SetText", (PyCFunction) _wrap_MenuItem_SetText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetLabel", (PyCFunction) _wrap_MenuItem_GetLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetText", (PyCFunction) _wrap_MenuItem_GetText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetLabelFromText", (PyCFunction) _wrap_MenuItem_GetLabelFromText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetKind", (PyCFunction) _wrap_MenuItem_GetKind, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_SetCheckable", (PyCFunction) _wrap_MenuItem_SetCheckable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_IsCheckable", (PyCFunction) _wrap_MenuItem_IsCheckable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_IsSubMenu", (PyCFunction) _wrap_MenuItem_IsSubMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_SetSubMenu", (PyCFunction) _wrap_MenuItem_SetSubMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetSubMenu", (PyCFunction) _wrap_MenuItem_GetSubMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_Enable", (PyCFunction) _wrap_MenuItem_Enable, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_IsEnabled", (PyCFunction) _wrap_MenuItem_IsEnabled, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_Check", (PyCFunction) _wrap_MenuItem_Check, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_IsChecked", (PyCFunction) _wrap_MenuItem_IsChecked, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_Toggle", (PyCFunction) _wrap_MenuItem_Toggle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_SetHelp", (PyCFunction) _wrap_MenuItem_SetHelp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetHelp", (PyCFunction) _wrap_MenuItem_GetHelp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetAccel", (PyCFunction) _wrap_MenuItem_GetAccel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_SetAccel", (PyCFunction) _wrap_MenuItem_SetAccel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetDefaultMarginWidth", (PyCFunction) _wrap_MenuItem_GetDefaultMarginWidth, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_SetBitmap", (PyCFunction) _wrap_MenuItem_SetBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_GetBitmap", (PyCFunction) _wrap_MenuItem_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MenuItem_swigregister", MenuItem_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_Control", (PyCFunction) _wrap_new_Control, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_PreControl", (PyCFunction) _wrap_new_PreControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Control_Create", (PyCFunction) _wrap_Control_Create, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Control_Command", (PyCFunction) _wrap_Control_Command, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Control_GetLabel", (PyCFunction) _wrap_Control_GetLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Control_SetLabel", (PyCFunction) _wrap_Control_SetLabel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Control_GetClassDefaultAttributes", (PyCFunction) _wrap_Control_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Control_swigregister", Control_swigregister, METH_VARARGS, NULL },
-	 { (char *)"ItemContainer_Append", (PyCFunction) _wrap_ItemContainer_Append, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_AppendItems", (PyCFunction) _wrap_ItemContainer_AppendItems, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_Insert", (PyCFunction) _wrap_ItemContainer_Insert, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_Clear", (PyCFunction) _wrap_ItemContainer_Clear, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_Delete", (PyCFunction) _wrap_ItemContainer_Delete, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_GetCount", (PyCFunction) _wrap_ItemContainer_GetCount, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_IsEmpty", (PyCFunction) _wrap_ItemContainer_IsEmpty, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_GetString", (PyCFunction) _wrap_ItemContainer_GetString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_GetStrings", (PyCFunction) _wrap_ItemContainer_GetStrings, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_SetString", (PyCFunction) _wrap_ItemContainer_SetString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_FindString", (PyCFunction) _wrap_ItemContainer_FindString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_Select", (PyCFunction) _wrap_ItemContainer_Select, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_GetSelection", (PyCFunction) _wrap_ItemContainer_GetSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_GetStringSelection", (PyCFunction) _wrap_ItemContainer_GetStringSelection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_GetClientData", (PyCFunction) _wrap_ItemContainer_GetClientData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_SetClientData", (PyCFunction) _wrap_ItemContainer_SetClientData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"ItemContainer_swigregister", ItemContainer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"ControlWithItems_swigregister", ControlWithItems_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_SizerItem", (PyCFunction) _wrap_new_SizerItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_SizerItemSpacer", (PyCFunction) _wrap_new_SizerItemSpacer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_SizerItemWindow", (PyCFunction) _wrap_new_SizerItemWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_SizerItemSizer", (PyCFunction) _wrap_new_SizerItemSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_DeleteWindows", (PyCFunction) _wrap_SizerItem_DeleteWindows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_DetachSizer", (PyCFunction) _wrap_SizerItem_DetachSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetSize", (PyCFunction) _wrap_SizerItem_GetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_CalcMin", (PyCFunction) _wrap_SizerItem_CalcMin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetDimension", (PyCFunction) _wrap_SizerItem_SetDimension, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetMinSize", (PyCFunction) _wrap_SizerItem_GetMinSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetInitSize", (PyCFunction) _wrap_SizerItem_SetInitSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetRatioWH", (PyCFunction) _wrap_SizerItem_SetRatioWH, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetRatioSize", (PyCFunction) _wrap_SizerItem_SetRatioSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetRatio", (PyCFunction) _wrap_SizerItem_SetRatio, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetRatio", (PyCFunction) _wrap_SizerItem_GetRatio, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_IsWindow", (PyCFunction) _wrap_SizerItem_IsWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_IsSizer", (PyCFunction) _wrap_SizerItem_IsSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_IsSpacer", (PyCFunction) _wrap_SizerItem_IsSpacer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetProportion", (PyCFunction) _wrap_SizerItem_SetProportion, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetProportion", (PyCFunction) _wrap_SizerItem_GetProportion, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetFlag", (PyCFunction) _wrap_SizerItem_SetFlag, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetFlag", (PyCFunction) _wrap_SizerItem_GetFlag, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetBorder", (PyCFunction) _wrap_SizerItem_SetBorder, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetBorder", (PyCFunction) _wrap_SizerItem_GetBorder, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetWindow", (PyCFunction) _wrap_SizerItem_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetWindow", (PyCFunction) _wrap_SizerItem_SetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetSizer", (PyCFunction) _wrap_SizerItem_GetSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetSizer", (PyCFunction) _wrap_SizerItem_SetSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetSpacer", (PyCFunction) _wrap_SizerItem_GetSpacer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_SetSpacer", (PyCFunction) _wrap_SizerItem_SetSpacer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_Show", (PyCFunction) _wrap_SizerItem_Show, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_IsShown", (PyCFunction) _wrap_SizerItem_IsShown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetPosition", (PyCFunction) _wrap_SizerItem_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_GetUserData", (PyCFunction) _wrap_SizerItem_GetUserData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"SizerItem_swigregister", SizerItem_swigregister, METH_VARARGS, NULL },
-	 { (char *)"Sizer__setOORInfo", (PyCFunction) _wrap_Sizer__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_Add", (PyCFunction) _wrap_Sizer_Add, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_Insert", (PyCFunction) _wrap_Sizer_Insert, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_Prepend", (PyCFunction) _wrap_Sizer_Prepend, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_Remove", (PyCFunction) _wrap_Sizer_Remove, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer__SetItemMinSize", (PyCFunction) _wrap_Sizer__SetItemMinSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_AddItem", (PyCFunction) _wrap_Sizer_AddItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_InsertItem", (PyCFunction) _wrap_Sizer_InsertItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_PrependItem", (PyCFunction) _wrap_Sizer_PrependItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_SetDimension", (PyCFunction) _wrap_Sizer_SetDimension, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_SetMinSize", (PyCFunction) _wrap_Sizer_SetMinSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_GetSize", (PyCFunction) _wrap_Sizer_GetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_GetPosition", (PyCFunction) _wrap_Sizer_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_GetMinSize", (PyCFunction) _wrap_Sizer_GetMinSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_RecalcSizes", (PyCFunction) _wrap_Sizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_CalcMin", (PyCFunction) _wrap_Sizer_CalcMin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_Layout", (PyCFunction) _wrap_Sizer_Layout, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_Fit", (PyCFunction) _wrap_Sizer_Fit, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_FitInside", (PyCFunction) _wrap_Sizer_FitInside, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_SetSizeHints", (PyCFunction) _wrap_Sizer_SetSizeHints, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_SetVirtualSizeHints", (PyCFunction) _wrap_Sizer_SetVirtualSizeHints, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_Clear", (PyCFunction) _wrap_Sizer_Clear, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_DeleteWindows", (PyCFunction) _wrap_Sizer_DeleteWindows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_GetChildren", (PyCFunction) _wrap_Sizer_GetChildren, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_Show", (PyCFunction) _wrap_Sizer_Show, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_Hide", (PyCFunction) _wrap_Sizer_Hide, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_IsShown", (PyCFunction) _wrap_Sizer_IsShown, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_ShowItems", (PyCFunction) _wrap_Sizer_ShowItems, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Sizer_swigregister", Sizer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_PySizer", (PyCFunction) _wrap_new_PySizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PySizer__setCallbackInfo", (PyCFunction) _wrap_PySizer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PySizer_swigregister", PySizer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_BoxSizer", (PyCFunction) _wrap_new_BoxSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"BoxSizer_GetOrientation", (PyCFunction) _wrap_BoxSizer_GetOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"BoxSizer_SetOrientation", (PyCFunction) _wrap_BoxSizer_SetOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"BoxSizer_RecalcSizes", (PyCFunction) _wrap_BoxSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"BoxSizer_CalcMin", (PyCFunction) _wrap_BoxSizer_CalcMin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"BoxSizer_swigregister", BoxSizer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_StaticBoxSizer", (PyCFunction) _wrap_new_StaticBoxSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"StaticBoxSizer_GetStaticBox", (PyCFunction) _wrap_StaticBoxSizer_GetStaticBox, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"StaticBoxSizer_RecalcSizes", (PyCFunction) _wrap_StaticBoxSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"StaticBoxSizer_CalcMin", (PyCFunction) _wrap_StaticBoxSizer_CalcMin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"StaticBoxSizer_swigregister", StaticBoxSizer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridSizer", (PyCFunction) _wrap_new_GridSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_RecalcSizes", (PyCFunction) _wrap_GridSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_CalcMin", (PyCFunction) _wrap_GridSizer_CalcMin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_SetCols", (PyCFunction) _wrap_GridSizer_SetCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_SetRows", (PyCFunction) _wrap_GridSizer_SetRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_SetVGap", (PyCFunction) _wrap_GridSizer_SetVGap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_SetHGap", (PyCFunction) _wrap_GridSizer_SetHGap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_GetCols", (PyCFunction) _wrap_GridSizer_GetCols, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_GetRows", (PyCFunction) _wrap_GridSizer_GetRows, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_GetVGap", (PyCFunction) _wrap_GridSizer_GetVGap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_GetHGap", (PyCFunction) _wrap_GridSizer_GetHGap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridSizer_swigregister", GridSizer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_FlexGridSizer", (PyCFunction) _wrap_new_FlexGridSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_RecalcSizes", (PyCFunction) _wrap_FlexGridSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_CalcMin", (PyCFunction) _wrap_FlexGridSizer_CalcMin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_AddGrowableRow", (PyCFunction) _wrap_FlexGridSizer_AddGrowableRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_RemoveGrowableRow", (PyCFunction) _wrap_FlexGridSizer_RemoveGrowableRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_AddGrowableCol", (PyCFunction) _wrap_FlexGridSizer_AddGrowableCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_RemoveGrowableCol", (PyCFunction) _wrap_FlexGridSizer_RemoveGrowableCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_SetFlexibleDirection", (PyCFunction) _wrap_FlexGridSizer_SetFlexibleDirection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_GetFlexibleDirection", (PyCFunction) _wrap_FlexGridSizer_GetFlexibleDirection, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_SetNonFlexibleGrowMode", (PyCFunction) _wrap_FlexGridSizer_SetNonFlexibleGrowMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_GetNonFlexibleGrowMode", (PyCFunction) _wrap_FlexGridSizer_GetNonFlexibleGrowMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_GetRowHeights", (PyCFunction) _wrap_FlexGridSizer_GetRowHeights, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_GetColWidths", (PyCFunction) _wrap_FlexGridSizer_GetColWidths, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"FlexGridSizer_swigregister", FlexGridSizer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GBPosition", (PyCFunction) _wrap_new_GBPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBPosition_GetRow", (PyCFunction) _wrap_GBPosition_GetRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBPosition_GetCol", (PyCFunction) _wrap_GBPosition_GetCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBPosition_SetRow", (PyCFunction) _wrap_GBPosition_SetRow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBPosition_SetCol", (PyCFunction) _wrap_GBPosition_SetCol, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBPosition___eq__", (PyCFunction) _wrap_GBPosition___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBPosition___ne__", (PyCFunction) _wrap_GBPosition___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBPosition_Set", (PyCFunction) _wrap_GBPosition_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBPosition_Get", (PyCFunction) _wrap_GBPosition_Get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBPosition_swigregister", GBPosition_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GBSpan", (PyCFunction) _wrap_new_GBSpan, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSpan_GetRowspan", (PyCFunction) _wrap_GBSpan_GetRowspan, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSpan_GetColspan", (PyCFunction) _wrap_GBSpan_GetColspan, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSpan_SetRowspan", (PyCFunction) _wrap_GBSpan_SetRowspan, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSpan_SetColspan", (PyCFunction) _wrap_GBSpan_SetColspan, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSpan___eq__", (PyCFunction) _wrap_GBSpan___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSpan___ne__", (PyCFunction) _wrap_GBSpan___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSpan_Set", (PyCFunction) _wrap_GBSpan_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSpan_Get", (PyCFunction) _wrap_GBSpan_Get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSpan_swigregister", GBSpan_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GBSizerItem", (PyCFunction) _wrap_new_GBSizerItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_GBSizerItemWindow", (PyCFunction) _wrap_new_GBSizerItemWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_GBSizerItemSizer", (PyCFunction) _wrap_new_GBSizerItemSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_GBSizerItemSpacer", (PyCFunction) _wrap_new_GBSizerItemSpacer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSizerItem_GetPos", (PyCFunction) _wrap_GBSizerItem_GetPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSizerItem_GetSpan", (PyCFunction) _wrap_GBSizerItem_GetSpan, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSizerItem_SetPos", (PyCFunction) _wrap_GBSizerItem_SetPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSizerItem_SetSpan", (PyCFunction) _wrap_GBSizerItem_SetSpan, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSizerItem_Intersects", _wrap_GBSizerItem_Intersects, METH_VARARGS, NULL },
-	 { (char *)"GBSizerItem_GetEndPos", (PyCFunction) _wrap_GBSizerItem_GetEndPos, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSizerItem_GetGBSizer", (PyCFunction) _wrap_GBSizerItem_GetGBSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSizerItem_SetGBSizer", (PyCFunction) _wrap_GBSizerItem_SetGBSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GBSizerItem_swigregister", GBSizerItem_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_GridBagSizer", (PyCFunction) _wrap_new_GridBagSizer, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_Add", (PyCFunction) _wrap_GridBagSizer_Add, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_AddItem", (PyCFunction) _wrap_GridBagSizer_AddItem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_GetEmptyCellSize", (PyCFunction) _wrap_GridBagSizer_GetEmptyCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_SetEmptyCellSize", (PyCFunction) _wrap_GridBagSizer_SetEmptyCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_GetItemPosition", _wrap_GridBagSizer_GetItemPosition, METH_VARARGS, NULL },
-	 { (char *)"GridBagSizer_SetItemPosition", _wrap_GridBagSizer_SetItemPosition, METH_VARARGS, NULL },
-	 { (char *)"GridBagSizer_GetItemSpan", _wrap_GridBagSizer_GetItemSpan, METH_VARARGS, NULL },
-	 { (char *)"GridBagSizer_SetItemSpan", _wrap_GridBagSizer_SetItemSpan, METH_VARARGS, NULL },
-	 { (char *)"GridBagSizer_FindItem", _wrap_GridBagSizer_FindItem, METH_VARARGS, NULL },
-	 { (char *)"GridBagSizer_FindItemAtPosition", (PyCFunction) _wrap_GridBagSizer_FindItemAtPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_FindItemAtPoint", (PyCFunction) _wrap_GridBagSizer_FindItemAtPoint, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_FindItemWithData", (PyCFunction) _wrap_GridBagSizer_FindItemWithData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_RecalcSizes", (PyCFunction) _wrap_GridBagSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_CalcMin", (PyCFunction) _wrap_GridBagSizer_CalcMin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"GridBagSizer_CheckForIntersection", _wrap_GridBagSizer_CheckForIntersection, METH_VARARGS, NULL },
-	 { (char *)"GridBagSizer_swigregister", GridBagSizer_swigregister, METH_VARARGS, NULL },
-	 { (char *)"IndividualLayoutConstraint_Set", (PyCFunction) _wrap_IndividualLayoutConstraint_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_LeftOf", (PyCFunction) _wrap_IndividualLayoutConstraint_LeftOf, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_RightOf", (PyCFunction) _wrap_IndividualLayoutConstraint_RightOf, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_Above", (PyCFunction) _wrap_IndividualLayoutConstraint_Above, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_Below", (PyCFunction) _wrap_IndividualLayoutConstraint_Below, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_SameAs", (PyCFunction) _wrap_IndividualLayoutConstraint_SameAs, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_PercentOf", (PyCFunction) _wrap_IndividualLayoutConstraint_PercentOf, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_Absolute", (PyCFunction) _wrap_IndividualLayoutConstraint_Absolute, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_Unconstrained", (PyCFunction) _wrap_IndividualLayoutConstraint_Unconstrained, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_AsIs", (PyCFunction) _wrap_IndividualLayoutConstraint_AsIs, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_GetOtherWindow", (PyCFunction) _wrap_IndividualLayoutConstraint_GetOtherWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_GetMyEdge", (PyCFunction) _wrap_IndividualLayoutConstraint_GetMyEdge, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_SetEdge", (PyCFunction) _wrap_IndividualLayoutConstraint_SetEdge, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_SetValue", (PyCFunction) _wrap_IndividualLayoutConstraint_SetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_GetMargin", (PyCFunction) _wrap_IndividualLayoutConstraint_GetMargin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_SetMargin", (PyCFunction) _wrap_IndividualLayoutConstraint_SetMargin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_GetValue", (PyCFunction) _wrap_IndividualLayoutConstraint_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_GetPercent", (PyCFunction) _wrap_IndividualLayoutConstraint_GetPercent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_GetOtherEdge", (PyCFunction) _wrap_IndividualLayoutConstraint_GetOtherEdge, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_GetDone", (PyCFunction) _wrap_IndividualLayoutConstraint_GetDone, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_SetDone", (PyCFunction) _wrap_IndividualLayoutConstraint_SetDone, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_GetRelationship", (PyCFunction) _wrap_IndividualLayoutConstraint_GetRelationship, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_SetRelationship", (PyCFunction) _wrap_IndividualLayoutConstraint_SetRelationship, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_ResetIfWin", (PyCFunction) _wrap_IndividualLayoutConstraint_ResetIfWin, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_SatisfyConstraint", (PyCFunction) _wrap_IndividualLayoutConstraint_SatisfyConstraint, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_GetEdge", (PyCFunction) _wrap_IndividualLayoutConstraint_GetEdge, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"IndividualLayoutConstraint_swigregister", IndividualLayoutConstraint_swigregister, METH_VARARGS, NULL },
-	 { (char *)"LayoutConstraints_left_get", (PyCFunction) _wrap_LayoutConstraints_left_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_top_get", (PyCFunction) _wrap_LayoutConstraints_top_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_right_get", (PyCFunction) _wrap_LayoutConstraints_right_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_bottom_get", (PyCFunction) _wrap_LayoutConstraints_bottom_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_width_get", (PyCFunction) _wrap_LayoutConstraints_width_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_height_get", (PyCFunction) _wrap_LayoutConstraints_height_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_centreX_get", (PyCFunction) _wrap_LayoutConstraints_centreX_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_centreY_get", (PyCFunction) _wrap_LayoutConstraints_centreY_get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_LayoutConstraints", (PyCFunction) _wrap_new_LayoutConstraints, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_SatisfyConstraints", (PyCFunction) _wrap_LayoutConstraints_SatisfyConstraints, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_AreSatisfied", (PyCFunction) _wrap_LayoutConstraints_AreSatisfied, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LayoutConstraints_swigregister", LayoutConstraints_swigregister, METH_VARARGS, NULL },
-	 { NULL, NULL, 0, NULL }
+	 { (char *)"_wxPySetDictionary", __wxPySetDictionary, METH_VARARGS },
+	 { (char *)"_wxPyFixStockObjects", __wxPyFixStockObjects, METH_VARARGS },
+	 { (char *)"Object_GetClassName", (PyCFunction) _wrap_Object_GetClassName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Object_Destroy", (PyCFunction) _wrap_Object_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Object_swigregister", Object_swigregister, METH_VARARGS },
+	 { (char *)"Size_width_set", (PyCFunction) _wrap_Size_width_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_width_get", (PyCFunction) _wrap_Size_width_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_height_set", (PyCFunction) _wrap_Size_height_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_height_get", (PyCFunction) _wrap_Size_height_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_Size", (PyCFunction) _wrap_new_Size, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_Size", (PyCFunction) _wrap_delete_Size, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size___eq__", (PyCFunction) _wrap_Size___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size___ne__", (PyCFunction) _wrap_Size___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size___add__", (PyCFunction) _wrap_Size___add__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size___sub__", (PyCFunction) _wrap_Size___sub__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_IncTo", (PyCFunction) _wrap_Size_IncTo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_DecTo", (PyCFunction) _wrap_Size_DecTo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_Set", (PyCFunction) _wrap_Size_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_SetWidth", (PyCFunction) _wrap_Size_SetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_SetHeight", (PyCFunction) _wrap_Size_SetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_GetWidth", (PyCFunction) _wrap_Size_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_GetHeight", (PyCFunction) _wrap_Size_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_IsFullySpecified", (PyCFunction) _wrap_Size_IsFullySpecified, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_SetDefaults", (PyCFunction) _wrap_Size_SetDefaults, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_Get", (PyCFunction) _wrap_Size_Get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_swigregister", Size_swigregister, METH_VARARGS },
+	 { (char *)"RealPoint_x_set", (PyCFunction) _wrap_RealPoint_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint_x_get", (PyCFunction) _wrap_RealPoint_x_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint_y_set", (PyCFunction) _wrap_RealPoint_y_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint_y_get", (PyCFunction) _wrap_RealPoint_y_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_RealPoint", (PyCFunction) _wrap_new_RealPoint, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_RealPoint", (PyCFunction) _wrap_delete_RealPoint, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint___eq__", (PyCFunction) _wrap_RealPoint___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint___ne__", (PyCFunction) _wrap_RealPoint___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint___add__", (PyCFunction) _wrap_RealPoint___add__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint___sub__", (PyCFunction) _wrap_RealPoint___sub__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint_Set", (PyCFunction) _wrap_RealPoint_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint_Get", (PyCFunction) _wrap_RealPoint_Get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RealPoint_swigregister", RealPoint_swigregister, METH_VARARGS },
+	 { (char *)"Point_x_set", (PyCFunction) _wrap_Point_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point_x_get", (PyCFunction) _wrap_Point_x_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point_y_set", (PyCFunction) _wrap_Point_y_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point_y_get", (PyCFunction) _wrap_Point_y_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_Point", (PyCFunction) _wrap_new_Point, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_Point", (PyCFunction) _wrap_delete_Point, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point___eq__", (PyCFunction) _wrap_Point___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point___ne__", (PyCFunction) _wrap_Point___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point___add__", (PyCFunction) _wrap_Point___add__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point___sub__", (PyCFunction) _wrap_Point___sub__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point___iadd__", (PyCFunction) _wrap_Point___iadd__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point___isub__", (PyCFunction) _wrap_Point___isub__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point_Set", (PyCFunction) _wrap_Point_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point_Get", (PyCFunction) _wrap_Point_Get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point_swigregister", Point_swigregister, METH_VARARGS },
+	 { (char *)"new_Rect", (PyCFunction) _wrap_new_Rect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_RectPP", (PyCFunction) _wrap_new_RectPP, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_RectPS", (PyCFunction) _wrap_new_RectPS, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_Rect", (PyCFunction) _wrap_delete_Rect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetX", (PyCFunction) _wrap_Rect_GetX, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetX", (PyCFunction) _wrap_Rect_SetX, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetY", (PyCFunction) _wrap_Rect_GetY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetY", (PyCFunction) _wrap_Rect_SetY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetWidth", (PyCFunction) _wrap_Rect_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetWidth", (PyCFunction) _wrap_Rect_SetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetHeight", (PyCFunction) _wrap_Rect_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetHeight", (PyCFunction) _wrap_Rect_SetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetPosition", (PyCFunction) _wrap_Rect_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetPosition", (PyCFunction) _wrap_Rect_SetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetSize", (PyCFunction) _wrap_Rect_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetSize", (PyCFunction) _wrap_Rect_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetTopLeft", (PyCFunction) _wrap_Rect_GetTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetTopLeft", (PyCFunction) _wrap_Rect_SetTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetBottomRight", (PyCFunction) _wrap_Rect_GetBottomRight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetBottomRight", (PyCFunction) _wrap_Rect_SetBottomRight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetLeft", (PyCFunction) _wrap_Rect_GetLeft, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetTop", (PyCFunction) _wrap_Rect_GetTop, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetBottom", (PyCFunction) _wrap_Rect_GetBottom, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetRight", (PyCFunction) _wrap_Rect_GetRight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetLeft", (PyCFunction) _wrap_Rect_SetLeft, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetRight", (PyCFunction) _wrap_Rect_SetRight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetTop", (PyCFunction) _wrap_Rect_SetTop, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetBottom", (PyCFunction) _wrap_Rect_SetBottom, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_Inflate", (PyCFunction) _wrap_Rect_Inflate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_Deflate", (PyCFunction) _wrap_Rect_Deflate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_OffsetXY", (PyCFunction) _wrap_Rect_OffsetXY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_Offset", (PyCFunction) _wrap_Rect_Offset, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_Intersect", (PyCFunction) _wrap_Rect_Intersect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect___add__", (PyCFunction) _wrap_Rect___add__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect___iadd__", (PyCFunction) _wrap_Rect___iadd__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect___eq__", (PyCFunction) _wrap_Rect___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect___ne__", (PyCFunction) _wrap_Rect___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_InsideXY", (PyCFunction) _wrap_Rect_InsideXY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_Inside", (PyCFunction) _wrap_Rect_Inside, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_Intersects", (PyCFunction) _wrap_Rect_Intersects, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_x_set", (PyCFunction) _wrap_Rect_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_x_get", (PyCFunction) _wrap_Rect_x_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_y_set", (PyCFunction) _wrap_Rect_y_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_y_get", (PyCFunction) _wrap_Rect_y_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_width_set", (PyCFunction) _wrap_Rect_width_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_width_get", (PyCFunction) _wrap_Rect_width_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_height_set", (PyCFunction) _wrap_Rect_height_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_height_get", (PyCFunction) _wrap_Rect_height_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_Set", (PyCFunction) _wrap_Rect_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_Get", (PyCFunction) _wrap_Rect_Get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_swigregister", Rect_swigregister, METH_VARARGS },
+	 { (char *)"IntersectRect", (PyCFunction) _wrap_IntersectRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_Point2D", (PyCFunction) _wrap_new_Point2D, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_Point2DCopy", (PyCFunction) _wrap_new_Point2DCopy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_Point2DFromPoint", (PyCFunction) _wrap_new_Point2DFromPoint, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_GetFloor", (PyCFunction) _wrap_Point2D_GetFloor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_GetRounded", (PyCFunction) _wrap_Point2D_GetRounded, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_GetVectorLength", (PyCFunction) _wrap_Point2D_GetVectorLength, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_GetVectorAngle", (PyCFunction) _wrap_Point2D_GetVectorAngle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_SetVectorLength", (PyCFunction) _wrap_Point2D_SetVectorLength, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_SetVectorAngle", (PyCFunction) _wrap_Point2D_SetVectorAngle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_GetDistance", (PyCFunction) _wrap_Point2D_GetDistance, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_GetDistanceSquare", (PyCFunction) _wrap_Point2D_GetDistanceSquare, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_GetDotProduct", (PyCFunction) _wrap_Point2D_GetDotProduct, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_GetCrossProduct", (PyCFunction) _wrap_Point2D_GetCrossProduct, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D___neg__", (PyCFunction) _wrap_Point2D___neg__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D___iadd__", (PyCFunction) _wrap_Point2D___iadd__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D___isub__", (PyCFunction) _wrap_Point2D___isub__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D___imul__", (PyCFunction) _wrap_Point2D___imul__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D___idiv__", (PyCFunction) _wrap_Point2D___idiv__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D___eq__", (PyCFunction) _wrap_Point2D___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D___ne__", (PyCFunction) _wrap_Point2D___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_x_set", (PyCFunction) _wrap_Point2D_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_x_get", (PyCFunction) _wrap_Point2D_x_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_y_set", (PyCFunction) _wrap_Point2D_y_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_y_get", (PyCFunction) _wrap_Point2D_y_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_Set", (PyCFunction) _wrap_Point2D_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_Get", (PyCFunction) _wrap_Point2D_Get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Point2D_swigregister", Point2D_swigregister, METH_VARARGS },
+	 { (char *)"new_InputStream", (PyCFunction) _wrap_new_InputStream, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_close", (PyCFunction) _wrap_InputStream_close, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_flush", (PyCFunction) _wrap_InputStream_flush, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_eof", (PyCFunction) _wrap_InputStream_eof, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_read", (PyCFunction) _wrap_InputStream_read, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_readline", (PyCFunction) _wrap_InputStream_readline, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_readlines", (PyCFunction) _wrap_InputStream_readlines, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_seek", (PyCFunction) _wrap_InputStream_seek, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_tell", (PyCFunction) _wrap_InputStream_tell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_Peek", (PyCFunction) _wrap_InputStream_Peek, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_GetC", (PyCFunction) _wrap_InputStream_GetC, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_LastRead", (PyCFunction) _wrap_InputStream_LastRead, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_CanRead", (PyCFunction) _wrap_InputStream_CanRead, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_Eof", (PyCFunction) _wrap_InputStream_Eof, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_Ungetch", (PyCFunction) _wrap_InputStream_Ungetch, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_SeekI", (PyCFunction) _wrap_InputStream_SeekI, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_TellI", (PyCFunction) _wrap_InputStream_TellI, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InputStream_swigregister", InputStream_swigregister, METH_VARARGS },
+	 { (char *)"OutputStream_write", (PyCFunction) _wrap_OutputStream_write, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"OutputStream_swigregister", OutputStream_swigregister, METH_VARARGS },
+	 { (char *)"new_FSFile", (PyCFunction) _wrap_new_FSFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_FSFile", (PyCFunction) _wrap_delete_FSFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FSFile_GetStream", (PyCFunction) _wrap_FSFile_GetStream, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FSFile_GetMimeType", (PyCFunction) _wrap_FSFile_GetMimeType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FSFile_GetLocation", (PyCFunction) _wrap_FSFile_GetLocation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FSFile_GetAnchor", (PyCFunction) _wrap_FSFile_GetAnchor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FSFile_GetModificationTime", (PyCFunction) _wrap_FSFile_GetModificationTime, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FSFile_swigregister", FSFile_swigregister, METH_VARARGS },
+	 { (char *)"CPPFileSystemHandler_swigregister", CPPFileSystemHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_FileSystemHandler", (PyCFunction) _wrap_new_FileSystemHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler__setCallbackInfo", (PyCFunction) _wrap_FileSystemHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_CanOpen", (PyCFunction) _wrap_FileSystemHandler_CanOpen, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_OpenFile", (PyCFunction) _wrap_FileSystemHandler_OpenFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_FindFirst", (PyCFunction) _wrap_FileSystemHandler_FindFirst, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_FindNext", (PyCFunction) _wrap_FileSystemHandler_FindNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_GetProtocol", (PyCFunction) _wrap_FileSystemHandler_GetProtocol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_GetLeftLocation", (PyCFunction) _wrap_FileSystemHandler_GetLeftLocation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_GetAnchor", (PyCFunction) _wrap_FileSystemHandler_GetAnchor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_GetRightLocation", (PyCFunction) _wrap_FileSystemHandler_GetRightLocation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_GetMimeTypeFromExt", (PyCFunction) _wrap_FileSystemHandler_GetMimeTypeFromExt, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystemHandler_swigregister", FileSystemHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_FileSystem", (PyCFunction) _wrap_new_FileSystem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_FileSystem", (PyCFunction) _wrap_delete_FileSystem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystem_ChangePathTo", (PyCFunction) _wrap_FileSystem_ChangePathTo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystem_GetPath", (PyCFunction) _wrap_FileSystem_GetPath, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystem_OpenFile", (PyCFunction) _wrap_FileSystem_OpenFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystem_FindFirst", (PyCFunction) _wrap_FileSystem_FindFirst, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystem_FindNext", (PyCFunction) _wrap_FileSystem_FindNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystem_AddHandler", (PyCFunction) _wrap_FileSystem_AddHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystem_CleanUpHandlers", (PyCFunction) _wrap_FileSystem_CleanUpHandlers, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystem_FileNameToURL", (PyCFunction) _wrap_FileSystem_FileNameToURL, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FileSystem_swigregister", FileSystem_swigregister, METH_VARARGS },
+	 { (char *)"FileSystem_URLToFileName", (PyCFunction) _wrap_FileSystem_URLToFileName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_InternetFSHandler", (PyCFunction) _wrap_new_InternetFSHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InternetFSHandler_CanOpen", (PyCFunction) _wrap_InternetFSHandler_CanOpen, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InternetFSHandler_OpenFile", (PyCFunction) _wrap_InternetFSHandler_OpenFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InternetFSHandler_swigregister", InternetFSHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_ZipFSHandler", (PyCFunction) _wrap_new_ZipFSHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ZipFSHandler_CanOpen", (PyCFunction) _wrap_ZipFSHandler_CanOpen, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ZipFSHandler_OpenFile", (PyCFunction) _wrap_ZipFSHandler_OpenFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ZipFSHandler_FindFirst", (PyCFunction) _wrap_ZipFSHandler_FindFirst, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ZipFSHandler_FindNext", (PyCFunction) _wrap_ZipFSHandler_FindNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ZipFSHandler_swigregister", ZipFSHandler_swigregister, METH_VARARGS },
+	 { (char *)"__wxMemoryFSHandler_AddFile_wxImage", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_wxImage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"__wxMemoryFSHandler_AddFile_wxBitmap", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_wxBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"__wxMemoryFSHandler_AddFile_Data", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_Data, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_MemoryFSHandler", (PyCFunction) _wrap_new_MemoryFSHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MemoryFSHandler_RemoveFile", (PyCFunction) _wrap_MemoryFSHandler_RemoveFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MemoryFSHandler_CanOpen", (PyCFunction) _wrap_MemoryFSHandler_CanOpen, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MemoryFSHandler_OpenFile", (PyCFunction) _wrap_MemoryFSHandler_OpenFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MemoryFSHandler_FindFirst", (PyCFunction) _wrap_MemoryFSHandler_FindFirst, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MemoryFSHandler_FindNext", (PyCFunction) _wrap_MemoryFSHandler_FindNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MemoryFSHandler_swigregister", MemoryFSHandler_swigregister, METH_VARARGS },
+	 { (char *)"ImageHandler_GetName", (PyCFunction) _wrap_ImageHandler_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHandler_GetExtension", (PyCFunction) _wrap_ImageHandler_GetExtension, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHandler_GetType", (PyCFunction) _wrap_ImageHandler_GetType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHandler_GetMimeType", (PyCFunction) _wrap_ImageHandler_GetMimeType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHandler_CanRead", (PyCFunction) _wrap_ImageHandler_CanRead, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHandler_SetName", (PyCFunction) _wrap_ImageHandler_SetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHandler_SetExtension", (PyCFunction) _wrap_ImageHandler_SetExtension, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHandler_SetType", (PyCFunction) _wrap_ImageHandler_SetType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHandler_SetMimeType", (PyCFunction) _wrap_ImageHandler_SetMimeType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHandler_swigregister", ImageHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_ImageHistogram", (PyCFunction) _wrap_new_ImageHistogram, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHistogram_MakeKey", (PyCFunction) _wrap_ImageHistogram_MakeKey, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHistogram_FindFirstUnusedColour", (PyCFunction) _wrap_ImageHistogram_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ImageHistogram_swigregister", ImageHistogram_swigregister, METH_VARARGS },
+	 { (char *)"new_Image", (PyCFunction) _wrap_new_Image, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_Image", (PyCFunction) _wrap_delete_Image, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_ImageFromMime", (PyCFunction) _wrap_new_ImageFromMime, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_ImageFromStream", (PyCFunction) _wrap_new_ImageFromStream, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_ImageFromStreamMime", (PyCFunction) _wrap_new_ImageFromStreamMime, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_EmptyImage", _wrap_new_EmptyImage, METH_VARARGS },
+	 { (char *)"new_ImageFromBitmap", (PyCFunction) _wrap_new_ImageFromBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_ImageFromData", (PyCFunction) _wrap_new_ImageFromData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Create", (PyCFunction) _wrap_Image_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Destroy", (PyCFunction) _wrap_Image_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Scale", (PyCFunction) _wrap_Image_Scale, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_ShrinkBy", (PyCFunction) _wrap_Image_ShrinkBy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Rescale", (PyCFunction) _wrap_Image_Rescale, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetRGB", (PyCFunction) _wrap_Image_SetRGB, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetRed", (PyCFunction) _wrap_Image_GetRed, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetGreen", (PyCFunction) _wrap_Image_GetGreen, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetBlue", (PyCFunction) _wrap_Image_GetBlue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetAlpha", (PyCFunction) _wrap_Image_SetAlpha, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetAlpha", (PyCFunction) _wrap_Image_GetAlpha, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_HasAlpha", (PyCFunction) _wrap_Image_HasAlpha, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_FindFirstUnusedColour", (PyCFunction) _wrap_Image_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetMaskFromImage", (PyCFunction) _wrap_Image_SetMaskFromImage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_CanRead", (PyCFunction) _wrap_Image_CanRead, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetImageCount", (PyCFunction) _wrap_Image_GetImageCount, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_LoadFile", (PyCFunction) _wrap_Image_LoadFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_LoadMimeFile", (PyCFunction) _wrap_Image_LoadMimeFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SaveFile", (PyCFunction) _wrap_Image_SaveFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SaveMimeFile", (PyCFunction) _wrap_Image_SaveMimeFile, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_CanReadStream", (PyCFunction) _wrap_Image_CanReadStream, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_LoadStream", (PyCFunction) _wrap_Image_LoadStream, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_LoadMimeStream", (PyCFunction) _wrap_Image_LoadMimeStream, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Ok", (PyCFunction) _wrap_Image_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetWidth", (PyCFunction) _wrap_Image_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetHeight", (PyCFunction) _wrap_Image_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetSize", (PyCFunction) _wrap_Image_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetSubImage", (PyCFunction) _wrap_Image_GetSubImage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Copy", (PyCFunction) _wrap_Image_Copy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Paste", (PyCFunction) _wrap_Image_Paste, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetData", (PyCFunction) _wrap_Image_GetData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetData", (PyCFunction) _wrap_Image_SetData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetDataBuffer", (PyCFunction) _wrap_Image_GetDataBuffer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetDataBuffer", (PyCFunction) _wrap_Image_SetDataBuffer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetAlphaData", (PyCFunction) _wrap_Image_GetAlphaData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetAlphaData", (PyCFunction) _wrap_Image_SetAlphaData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetAlphaBuffer", (PyCFunction) _wrap_Image_GetAlphaBuffer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetAlphaBuffer", (PyCFunction) _wrap_Image_SetAlphaBuffer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetMaskColour", (PyCFunction) _wrap_Image_SetMaskColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetMaskRed", (PyCFunction) _wrap_Image_GetMaskRed, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetMaskGreen", (PyCFunction) _wrap_Image_GetMaskGreen, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetMaskBlue", (PyCFunction) _wrap_Image_GetMaskBlue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetMask", (PyCFunction) _wrap_Image_SetMask, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_HasMask", (PyCFunction) _wrap_Image_HasMask, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Rotate", (PyCFunction) _wrap_Image_Rotate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Rotate90", (PyCFunction) _wrap_Image_Rotate90, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Mirror", (PyCFunction) _wrap_Image_Mirror, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_Replace", (PyCFunction) _wrap_Image_Replace, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_ConvertToMono", (PyCFunction) _wrap_Image_ConvertToMono, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetOption", (PyCFunction) _wrap_Image_SetOption, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_SetOptionInt", (PyCFunction) _wrap_Image_SetOptionInt, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetOption", (PyCFunction) _wrap_Image_GetOption, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetOptionInt", (PyCFunction) _wrap_Image_GetOptionInt, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_HasOption", (PyCFunction) _wrap_Image_HasOption, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_CountColours", (PyCFunction) _wrap_Image_CountColours, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_ComputeHistogram", (PyCFunction) _wrap_Image_ComputeHistogram, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_AddHandler", (PyCFunction) _wrap_Image_AddHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_InsertHandler", (PyCFunction) _wrap_Image_InsertHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_RemoveHandler", (PyCFunction) _wrap_Image_RemoveHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetImageExtWildcard", (PyCFunction) _wrap_Image_GetImageExtWildcard, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_ConvertToBitmap", (PyCFunction) _wrap_Image_ConvertToBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_ConvertToMonoBitmap", (PyCFunction) _wrap_Image_ConvertToMonoBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_swigregister", Image_swigregister, METH_VARARGS },
+	 { (char *)"InitAllImageHandlers", (PyCFunction) _wrap_InitAllImageHandlers, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_BMPHandler", (PyCFunction) _wrap_new_BMPHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"BMPHandler_swigregister", BMPHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_ICOHandler", (PyCFunction) _wrap_new_ICOHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ICOHandler_swigregister", ICOHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_CURHandler", (PyCFunction) _wrap_new_CURHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CURHandler_swigregister", CURHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_ANIHandler", (PyCFunction) _wrap_new_ANIHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ANIHandler_swigregister", ANIHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_PNGHandler", (PyCFunction) _wrap_new_PNGHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PNGHandler_swigregister", PNGHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_GIFHandler", (PyCFunction) _wrap_new_GIFHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GIFHandler_swigregister", GIFHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_PCXHandler", (PyCFunction) _wrap_new_PCXHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PCXHandler_swigregister", PCXHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_JPEGHandler", (PyCFunction) _wrap_new_JPEGHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"JPEGHandler_swigregister", JPEGHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_PNMHandler", (PyCFunction) _wrap_new_PNMHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PNMHandler_swigregister", PNMHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_XPMHandler", (PyCFunction) _wrap_new_XPMHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XPMHandler_swigregister", XPMHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_TIFFHandler", (PyCFunction) _wrap_new_TIFFHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"TIFFHandler_swigregister", TIFFHandler_swigregister, METH_VARARGS },
+	 { (char *)"new_EvtHandler", (PyCFunction) _wrap_new_EvtHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_GetNextHandler", (PyCFunction) _wrap_EvtHandler_GetNextHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_GetPreviousHandler", (PyCFunction) _wrap_EvtHandler_GetPreviousHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_SetNextHandler", (PyCFunction) _wrap_EvtHandler_SetNextHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_SetPreviousHandler", (PyCFunction) _wrap_EvtHandler_SetPreviousHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_GetEvtHandlerEnabled", (PyCFunction) _wrap_EvtHandler_GetEvtHandlerEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_SetEvtHandlerEnabled", (PyCFunction) _wrap_EvtHandler_SetEvtHandlerEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_ProcessEvent", (PyCFunction) _wrap_EvtHandler_ProcessEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_AddPendingEvent", (PyCFunction) _wrap_EvtHandler_AddPendingEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_ProcessPendingEvents", (PyCFunction) _wrap_EvtHandler_ProcessPendingEvents, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_Connect", (PyCFunction) _wrap_EvtHandler_Connect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_Disconnect", (PyCFunction) _wrap_EvtHandler_Disconnect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler__setOORInfo", (PyCFunction) _wrap_EvtHandler__setOORInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EvtHandler_swigregister", EvtHandler_swigregister, METH_VARARGS },
+	 { (char *)"NewEventType", (PyCFunction) _wrap_NewEventType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_Event", (PyCFunction) _wrap_delete_Event, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_SetEventType", (PyCFunction) _wrap_Event_SetEventType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_GetEventType", (PyCFunction) _wrap_Event_GetEventType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_GetEventObject", (PyCFunction) _wrap_Event_GetEventObject, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_SetEventObject", (PyCFunction) _wrap_Event_SetEventObject, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_GetTimestamp", (PyCFunction) _wrap_Event_GetTimestamp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_SetTimestamp", (PyCFunction) _wrap_Event_SetTimestamp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_GetId", (PyCFunction) _wrap_Event_GetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_SetId", (PyCFunction) _wrap_Event_SetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_IsCommandEvent", (PyCFunction) _wrap_Event_IsCommandEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_Skip", (PyCFunction) _wrap_Event_Skip, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_GetSkipped", (PyCFunction) _wrap_Event_GetSkipped, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_ShouldPropagate", (PyCFunction) _wrap_Event_ShouldPropagate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_StopPropagation", (PyCFunction) _wrap_Event_StopPropagation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_ResumePropagation", (PyCFunction) _wrap_Event_ResumePropagation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_Clone", (PyCFunction) _wrap_Event_Clone, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Event_swigregister", Event_swigregister, METH_VARARGS },
+	 { (char *)"new_PropagationDisabler", (PyCFunction) _wrap_new_PropagationDisabler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_PropagationDisabler", (PyCFunction) _wrap_delete_PropagationDisabler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PropagationDisabler_swigregister", PropagationDisabler_swigregister, METH_VARARGS },
+	 { (char *)"new_PropagateOnce", (PyCFunction) _wrap_new_PropagateOnce, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_PropagateOnce", (PyCFunction) _wrap_delete_PropagateOnce, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PropagateOnce_swigregister", PropagateOnce_swigregister, METH_VARARGS },
+	 { (char *)"new_CommandEvent", (PyCFunction) _wrap_new_CommandEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_GetSelection", (PyCFunction) _wrap_CommandEvent_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_SetString", (PyCFunction) _wrap_CommandEvent_SetString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_GetString", (PyCFunction) _wrap_CommandEvent_GetString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_IsChecked", (PyCFunction) _wrap_CommandEvent_IsChecked, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_IsSelection", (PyCFunction) _wrap_CommandEvent_IsSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_SetExtraLong", (PyCFunction) _wrap_CommandEvent_SetExtraLong, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_GetExtraLong", (PyCFunction) _wrap_CommandEvent_GetExtraLong, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_SetInt", (PyCFunction) _wrap_CommandEvent_SetInt, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_GetInt", (PyCFunction) _wrap_CommandEvent_GetInt, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_Clone", (PyCFunction) _wrap_CommandEvent_Clone, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CommandEvent_swigregister", CommandEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_NotifyEvent", (PyCFunction) _wrap_new_NotifyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NotifyEvent_Veto", (PyCFunction) _wrap_NotifyEvent_Veto, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NotifyEvent_Allow", (PyCFunction) _wrap_NotifyEvent_Allow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NotifyEvent_IsAllowed", (PyCFunction) _wrap_NotifyEvent_IsAllowed, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NotifyEvent_swigregister", NotifyEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_ScrollEvent", (PyCFunction) _wrap_new_ScrollEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollEvent_GetOrientation", (PyCFunction) _wrap_ScrollEvent_GetOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollEvent_GetPosition", (PyCFunction) _wrap_ScrollEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollEvent_SetOrientation", (PyCFunction) _wrap_ScrollEvent_SetOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollEvent_SetPosition", (PyCFunction) _wrap_ScrollEvent_SetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollEvent_swigregister", ScrollEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_ScrollWinEvent", (PyCFunction) _wrap_new_ScrollWinEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollWinEvent_GetOrientation", (PyCFunction) _wrap_ScrollWinEvent_GetOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollWinEvent_GetPosition", (PyCFunction) _wrap_ScrollWinEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollWinEvent_SetOrientation", (PyCFunction) _wrap_ScrollWinEvent_SetOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollWinEvent_SetPosition", (PyCFunction) _wrap_ScrollWinEvent_SetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollWinEvent_swigregister", ScrollWinEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_MouseEvent", (PyCFunction) _wrap_new_MouseEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_IsButton", (PyCFunction) _wrap_MouseEvent_IsButton, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_ButtonDown", (PyCFunction) _wrap_MouseEvent_ButtonDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_ButtonDClick", (PyCFunction) _wrap_MouseEvent_ButtonDClick, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_ButtonUp", (PyCFunction) _wrap_MouseEvent_ButtonUp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_Button", (PyCFunction) _wrap_MouseEvent_Button, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_ButtonIsDown", (PyCFunction) _wrap_MouseEvent_ButtonIsDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_GetButton", (PyCFunction) _wrap_MouseEvent_GetButton, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_ControlDown", (PyCFunction) _wrap_MouseEvent_ControlDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_MetaDown", (PyCFunction) _wrap_MouseEvent_MetaDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_AltDown", (PyCFunction) _wrap_MouseEvent_AltDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_ShiftDown", (PyCFunction) _wrap_MouseEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_LeftDown", (PyCFunction) _wrap_MouseEvent_LeftDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_MiddleDown", (PyCFunction) _wrap_MouseEvent_MiddleDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_RightDown", (PyCFunction) _wrap_MouseEvent_RightDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_LeftUp", (PyCFunction) _wrap_MouseEvent_LeftUp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_MiddleUp", (PyCFunction) _wrap_MouseEvent_MiddleUp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_RightUp", (PyCFunction) _wrap_MouseEvent_RightUp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_LeftDClick", (PyCFunction) _wrap_MouseEvent_LeftDClick, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_MiddleDClick", (PyCFunction) _wrap_MouseEvent_MiddleDClick, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_RightDClick", (PyCFunction) _wrap_MouseEvent_RightDClick, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_LeftIsDown", (PyCFunction) _wrap_MouseEvent_LeftIsDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_MiddleIsDown", (PyCFunction) _wrap_MouseEvent_MiddleIsDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_RightIsDown", (PyCFunction) _wrap_MouseEvent_RightIsDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_Dragging", (PyCFunction) _wrap_MouseEvent_Dragging, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_Moving", (PyCFunction) _wrap_MouseEvent_Moving, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_Entering", (PyCFunction) _wrap_MouseEvent_Entering, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_Leaving", (PyCFunction) _wrap_MouseEvent_Leaving, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_GetPosition", (PyCFunction) _wrap_MouseEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_GetPositionTuple", (PyCFunction) _wrap_MouseEvent_GetPositionTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_GetLogicalPosition", (PyCFunction) _wrap_MouseEvent_GetLogicalPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_GetX", (PyCFunction) _wrap_MouseEvent_GetX, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_GetY", (PyCFunction) _wrap_MouseEvent_GetY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_GetWheelRotation", (PyCFunction) _wrap_MouseEvent_GetWheelRotation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_GetWheelDelta", (PyCFunction) _wrap_MouseEvent_GetWheelDelta, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_GetLinesPerAction", (PyCFunction) _wrap_MouseEvent_GetLinesPerAction, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_IsPageScroll", (PyCFunction) _wrap_MouseEvent_IsPageScroll, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_x_set", (PyCFunction) _wrap_MouseEvent_m_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_x_get", (PyCFunction) _wrap_MouseEvent_m_x_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_y_set", (PyCFunction) _wrap_MouseEvent_m_y_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_y_get", (PyCFunction) _wrap_MouseEvent_m_y_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_leftDown_set", (PyCFunction) _wrap_MouseEvent_m_leftDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_leftDown_get", (PyCFunction) _wrap_MouseEvent_m_leftDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_middleDown_set", (PyCFunction) _wrap_MouseEvent_m_middleDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_middleDown_get", (PyCFunction) _wrap_MouseEvent_m_middleDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_rightDown_set", (PyCFunction) _wrap_MouseEvent_m_rightDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_rightDown_get", (PyCFunction) _wrap_MouseEvent_m_rightDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_controlDown_set", (PyCFunction) _wrap_MouseEvent_m_controlDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_controlDown_get", (PyCFunction) _wrap_MouseEvent_m_controlDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_shiftDown_set", (PyCFunction) _wrap_MouseEvent_m_shiftDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_shiftDown_get", (PyCFunction) _wrap_MouseEvent_m_shiftDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_altDown_set", (PyCFunction) _wrap_MouseEvent_m_altDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_altDown_get", (PyCFunction) _wrap_MouseEvent_m_altDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_metaDown_set", (PyCFunction) _wrap_MouseEvent_m_metaDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_metaDown_get", (PyCFunction) _wrap_MouseEvent_m_metaDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_wheelRotation_set", (PyCFunction) _wrap_MouseEvent_m_wheelRotation_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_wheelRotation_get", (PyCFunction) _wrap_MouseEvent_m_wheelRotation_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_wheelDelta_set", (PyCFunction) _wrap_MouseEvent_m_wheelDelta_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_wheelDelta_get", (PyCFunction) _wrap_MouseEvent_m_wheelDelta_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_linesPerAction_set", (PyCFunction) _wrap_MouseEvent_m_linesPerAction_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_m_linesPerAction_get", (PyCFunction) _wrap_MouseEvent_m_linesPerAction_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseEvent_swigregister", MouseEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_SetCursorEvent", (PyCFunction) _wrap_new_SetCursorEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SetCursorEvent_GetX", (PyCFunction) _wrap_SetCursorEvent_GetX, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SetCursorEvent_GetY", (PyCFunction) _wrap_SetCursorEvent_GetY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SetCursorEvent_SetCursor", (PyCFunction) _wrap_SetCursorEvent_SetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SetCursorEvent_GetCursor", (PyCFunction) _wrap_SetCursorEvent_GetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SetCursorEvent_HasCursor", (PyCFunction) _wrap_SetCursorEvent_HasCursor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SetCursorEvent_swigregister", SetCursorEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_KeyEvent", (PyCFunction) _wrap_new_KeyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_ControlDown", (PyCFunction) _wrap_KeyEvent_ControlDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_MetaDown", (PyCFunction) _wrap_KeyEvent_MetaDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_AltDown", (PyCFunction) _wrap_KeyEvent_AltDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_ShiftDown", (PyCFunction) _wrap_KeyEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_HasModifiers", (PyCFunction) _wrap_KeyEvent_HasModifiers, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_GetKeyCode", (PyCFunction) _wrap_KeyEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_GetUniChar", (PyCFunction) _wrap_KeyEvent_GetUniChar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_GetRawKeyCode", (PyCFunction) _wrap_KeyEvent_GetRawKeyCode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_GetRawKeyFlags", (PyCFunction) _wrap_KeyEvent_GetRawKeyFlags, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_GetPosition", (PyCFunction) _wrap_KeyEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_GetPositionTuple", (PyCFunction) _wrap_KeyEvent_GetPositionTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_GetX", (PyCFunction) _wrap_KeyEvent_GetX, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_GetY", (PyCFunction) _wrap_KeyEvent_GetY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_x_set", (PyCFunction) _wrap_KeyEvent_m_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_x_get", (PyCFunction) _wrap_KeyEvent_m_x_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_y_set", (PyCFunction) _wrap_KeyEvent_m_y_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_y_get", (PyCFunction) _wrap_KeyEvent_m_y_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_keyCode_set", (PyCFunction) _wrap_KeyEvent_m_keyCode_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_keyCode_get", (PyCFunction) _wrap_KeyEvent_m_keyCode_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_controlDown_set", (PyCFunction) _wrap_KeyEvent_m_controlDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_controlDown_get", (PyCFunction) _wrap_KeyEvent_m_controlDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_shiftDown_set", (PyCFunction) _wrap_KeyEvent_m_shiftDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_shiftDown_get", (PyCFunction) _wrap_KeyEvent_m_shiftDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_altDown_set", (PyCFunction) _wrap_KeyEvent_m_altDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_altDown_get", (PyCFunction) _wrap_KeyEvent_m_altDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_metaDown_set", (PyCFunction) _wrap_KeyEvent_m_metaDown_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_metaDown_get", (PyCFunction) _wrap_KeyEvent_m_metaDown_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_scanCode_set", (PyCFunction) _wrap_KeyEvent_m_scanCode_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_scanCode_get", (PyCFunction) _wrap_KeyEvent_m_scanCode_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_rawCode_set", (PyCFunction) _wrap_KeyEvent_m_rawCode_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_rawCode_get", (PyCFunction) _wrap_KeyEvent_m_rawCode_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_rawFlags_set", (PyCFunction) _wrap_KeyEvent_m_rawFlags_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_m_rawFlags_get", (PyCFunction) _wrap_KeyEvent_m_rawFlags_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_swigregister", KeyEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_SizeEvent", (PyCFunction) _wrap_new_SizeEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizeEvent_GetSize", (PyCFunction) _wrap_SizeEvent_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizeEvent_GetRect", (PyCFunction) _wrap_SizeEvent_GetRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizeEvent_SetRect", (PyCFunction) _wrap_SizeEvent_SetRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizeEvent_SetSize", (PyCFunction) _wrap_SizeEvent_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizeEvent_m_size_set", (PyCFunction) _wrap_SizeEvent_m_size_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizeEvent_m_size_get", (PyCFunction) _wrap_SizeEvent_m_size_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizeEvent_m_rect_set", (PyCFunction) _wrap_SizeEvent_m_rect_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizeEvent_m_rect_get", (PyCFunction) _wrap_SizeEvent_m_rect_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizeEvent_swigregister", SizeEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_MoveEvent", (PyCFunction) _wrap_new_MoveEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MoveEvent_GetPosition", (PyCFunction) _wrap_MoveEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MoveEvent_GetRect", (PyCFunction) _wrap_MoveEvent_GetRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MoveEvent_SetRect", (PyCFunction) _wrap_MoveEvent_SetRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MoveEvent_SetPosition", (PyCFunction) _wrap_MoveEvent_SetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MoveEvent_m_pos_set", (PyCFunction) _wrap_MoveEvent_m_pos_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MoveEvent_m_pos_get", (PyCFunction) _wrap_MoveEvent_m_pos_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MoveEvent_m_rect_set", (PyCFunction) _wrap_MoveEvent_m_rect_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MoveEvent_m_rect_get", (PyCFunction) _wrap_MoveEvent_m_rect_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MoveEvent_swigregister", MoveEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_PaintEvent", (PyCFunction) _wrap_new_PaintEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PaintEvent_swigregister", PaintEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_NcPaintEvent", (PyCFunction) _wrap_new_NcPaintEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NcPaintEvent_swigregister", NcPaintEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_EraseEvent", (PyCFunction) _wrap_new_EraseEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EraseEvent_GetDC", (PyCFunction) _wrap_EraseEvent_GetDC, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"EraseEvent_swigregister", EraseEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_FocusEvent", (PyCFunction) _wrap_new_FocusEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FocusEvent_GetWindow", (PyCFunction) _wrap_FocusEvent_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FocusEvent_SetWindow", (PyCFunction) _wrap_FocusEvent_SetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FocusEvent_swigregister", FocusEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_ChildFocusEvent", (PyCFunction) _wrap_new_ChildFocusEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ChildFocusEvent_GetWindow", (PyCFunction) _wrap_ChildFocusEvent_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ChildFocusEvent_swigregister", ChildFocusEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_ActivateEvent", (PyCFunction) _wrap_new_ActivateEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ActivateEvent_GetActive", (PyCFunction) _wrap_ActivateEvent_GetActive, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ActivateEvent_swigregister", ActivateEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_InitDialogEvent", (PyCFunction) _wrap_new_InitDialogEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"InitDialogEvent_swigregister", InitDialogEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_MenuEvent", (PyCFunction) _wrap_new_MenuEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuEvent_GetMenuId", (PyCFunction) _wrap_MenuEvent_GetMenuId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuEvent_IsPopup", (PyCFunction) _wrap_MenuEvent_IsPopup, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuEvent_GetMenu", (PyCFunction) _wrap_MenuEvent_GetMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuEvent_swigregister", MenuEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_CloseEvent", (PyCFunction) _wrap_new_CloseEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CloseEvent_SetLoggingOff", (PyCFunction) _wrap_CloseEvent_SetLoggingOff, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CloseEvent_GetLoggingOff", (PyCFunction) _wrap_CloseEvent_GetLoggingOff, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CloseEvent_Veto", (PyCFunction) _wrap_CloseEvent_Veto, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CloseEvent_SetCanVeto", (PyCFunction) _wrap_CloseEvent_SetCanVeto, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CloseEvent_CanVeto", (PyCFunction) _wrap_CloseEvent_CanVeto, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CloseEvent_GetVeto", (PyCFunction) _wrap_CloseEvent_GetVeto, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CloseEvent_swigregister", CloseEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_ShowEvent", (PyCFunction) _wrap_new_ShowEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ShowEvent_SetShow", (PyCFunction) _wrap_ShowEvent_SetShow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ShowEvent_GetShow", (PyCFunction) _wrap_ShowEvent_GetShow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ShowEvent_swigregister", ShowEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_IconizeEvent", (PyCFunction) _wrap_new_IconizeEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IconizeEvent_Iconized", (PyCFunction) _wrap_IconizeEvent_Iconized, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IconizeEvent_swigregister", IconizeEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_MaximizeEvent", (PyCFunction) _wrap_new_MaximizeEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MaximizeEvent_swigregister", MaximizeEvent_swigregister, METH_VARARGS },
+	 { (char *)"DropFilesEvent_GetPosition", (PyCFunction) _wrap_DropFilesEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DropFilesEvent_GetNumberOfFiles", (PyCFunction) _wrap_DropFilesEvent_GetNumberOfFiles, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DropFilesEvent_GetFiles", (PyCFunction) _wrap_DropFilesEvent_GetFiles, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DropFilesEvent_swigregister", DropFilesEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_UpdateUIEvent", (PyCFunction) _wrap_new_UpdateUIEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_GetChecked", (PyCFunction) _wrap_UpdateUIEvent_GetChecked, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_GetEnabled", (PyCFunction) _wrap_UpdateUIEvent_GetEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_GetText", (PyCFunction) _wrap_UpdateUIEvent_GetText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_GetSetText", (PyCFunction) _wrap_UpdateUIEvent_GetSetText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_GetSetChecked", (PyCFunction) _wrap_UpdateUIEvent_GetSetChecked, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_GetSetEnabled", (PyCFunction) _wrap_UpdateUIEvent_GetSetEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_Check", (PyCFunction) _wrap_UpdateUIEvent_Check, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_Enable", (PyCFunction) _wrap_UpdateUIEvent_Enable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_SetText", (PyCFunction) _wrap_UpdateUIEvent_SetText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_SetUpdateInterval", (PyCFunction) _wrap_UpdateUIEvent_SetUpdateInterval, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_GetUpdateInterval", (PyCFunction) _wrap_UpdateUIEvent_GetUpdateInterval, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_CanUpdate", (PyCFunction) _wrap_UpdateUIEvent_CanUpdate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_ResetUpdateTime", (PyCFunction) _wrap_UpdateUIEvent_ResetUpdateTime, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_SetMode", (PyCFunction) _wrap_UpdateUIEvent_SetMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_GetMode", (PyCFunction) _wrap_UpdateUIEvent_GetMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"UpdateUIEvent_swigregister", UpdateUIEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_SysColourChangedEvent", (PyCFunction) _wrap_new_SysColourChangedEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SysColourChangedEvent_swigregister", SysColourChangedEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_MouseCaptureChangedEvent", (PyCFunction) _wrap_new_MouseCaptureChangedEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseCaptureChangedEvent_GetCapturedWindow", (PyCFunction) _wrap_MouseCaptureChangedEvent_GetCapturedWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MouseCaptureChangedEvent_swigregister", MouseCaptureChangedEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_DisplayChangedEvent", (PyCFunction) _wrap_new_DisplayChangedEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DisplayChangedEvent_swigregister", DisplayChangedEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_PaletteChangedEvent", (PyCFunction) _wrap_new_PaletteChangedEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PaletteChangedEvent_SetChangedWindow", (PyCFunction) _wrap_PaletteChangedEvent_SetChangedWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PaletteChangedEvent_GetChangedWindow", (PyCFunction) _wrap_PaletteChangedEvent_GetChangedWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PaletteChangedEvent_swigregister", PaletteChangedEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_QueryNewPaletteEvent", (PyCFunction) _wrap_new_QueryNewPaletteEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"QueryNewPaletteEvent_SetPaletteRealized", (PyCFunction) _wrap_QueryNewPaletteEvent_SetPaletteRealized, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"QueryNewPaletteEvent_GetPaletteRealized", (PyCFunction) _wrap_QueryNewPaletteEvent_GetPaletteRealized, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"QueryNewPaletteEvent_swigregister", QueryNewPaletteEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_NavigationKeyEvent", (PyCFunction) _wrap_new_NavigationKeyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NavigationKeyEvent_GetDirection", (PyCFunction) _wrap_NavigationKeyEvent_GetDirection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NavigationKeyEvent_SetDirection", (PyCFunction) _wrap_NavigationKeyEvent_SetDirection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NavigationKeyEvent_IsWindowChange", (PyCFunction) _wrap_NavigationKeyEvent_IsWindowChange, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NavigationKeyEvent_SetWindowChange", (PyCFunction) _wrap_NavigationKeyEvent_SetWindowChange, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NavigationKeyEvent_GetCurrentFocus", (PyCFunction) _wrap_NavigationKeyEvent_GetCurrentFocus, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NavigationKeyEvent_SetCurrentFocus", (PyCFunction) _wrap_NavigationKeyEvent_SetCurrentFocus, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"NavigationKeyEvent_swigregister", NavigationKeyEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_WindowCreateEvent", (PyCFunction) _wrap_new_WindowCreateEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WindowCreateEvent_GetWindow", (PyCFunction) _wrap_WindowCreateEvent_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WindowCreateEvent_swigregister", WindowCreateEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_WindowDestroyEvent", (PyCFunction) _wrap_new_WindowDestroyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WindowDestroyEvent_GetWindow", (PyCFunction) _wrap_WindowDestroyEvent_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WindowDestroyEvent_swigregister", WindowDestroyEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_ContextMenuEvent", (PyCFunction) _wrap_new_ContextMenuEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ContextMenuEvent_GetPosition", (PyCFunction) _wrap_ContextMenuEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ContextMenuEvent_SetPosition", (PyCFunction) _wrap_ContextMenuEvent_SetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ContextMenuEvent_swigregister", ContextMenuEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_IdleEvent", (PyCFunction) _wrap_new_IdleEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IdleEvent_RequestMore", (PyCFunction) _wrap_IdleEvent_RequestMore, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IdleEvent_MoreRequested", (PyCFunction) _wrap_IdleEvent_MoreRequested, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IdleEvent_SetMode", (PyCFunction) _wrap_IdleEvent_SetMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IdleEvent_GetMode", (PyCFunction) _wrap_IdleEvent_GetMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IdleEvent_CanSend", (PyCFunction) _wrap_IdleEvent_CanSend, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IdleEvent_swigregister", IdleEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_PyEvent", (PyCFunction) _wrap_new_PyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_PyEvent", (PyCFunction) _wrap_delete_PyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyEvent_SetSelf", (PyCFunction) _wrap_PyEvent_SetSelf, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyEvent_GetSelf", (PyCFunction) _wrap_PyEvent_GetSelf, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyEvent_swigregister", PyEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_PyCommandEvent", (PyCFunction) _wrap_new_PyCommandEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_PyCommandEvent", (PyCFunction) _wrap_delete_PyCommandEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyCommandEvent_SetSelf", (PyCFunction) _wrap_PyCommandEvent_SetSelf, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyCommandEvent_GetSelf", (PyCFunction) _wrap_PyCommandEvent_GetSelf, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyCommandEvent_swigregister", PyCommandEvent_swigregister, METH_VARARGS },
+	 { (char *)"new_PyApp", (PyCFunction) _wrap_new_PyApp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_PyApp", (PyCFunction) _wrap_delete_PyApp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp__setCallbackInfo", (PyCFunction) _wrap_PyApp__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetAppName", (PyCFunction) _wrap_PyApp_GetAppName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetAppName", (PyCFunction) _wrap_PyApp_SetAppName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetClassName", (PyCFunction) _wrap_PyApp_GetClassName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetClassName", (PyCFunction) _wrap_PyApp_SetClassName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetVendorName", (PyCFunction) _wrap_PyApp_GetVendorName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetVendorName", (PyCFunction) _wrap_PyApp_SetVendorName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetTraits", (PyCFunction) _wrap_PyApp_GetTraits, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_ProcessPendingEvents", (PyCFunction) _wrap_PyApp_ProcessPendingEvents, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_Yield", (PyCFunction) _wrap_PyApp_Yield, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_WakeUpIdle", (PyCFunction) _wrap_PyApp_WakeUpIdle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_MainLoop", (PyCFunction) _wrap_PyApp_MainLoop, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_Exit", (PyCFunction) _wrap_PyApp_Exit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_ExitMainLoop", (PyCFunction) _wrap_PyApp_ExitMainLoop, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_Pending", (PyCFunction) _wrap_PyApp_Pending, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_Dispatch", (PyCFunction) _wrap_PyApp_Dispatch, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_ProcessIdle", (PyCFunction) _wrap_PyApp_ProcessIdle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SendIdleEvents", (PyCFunction) _wrap_PyApp_SendIdleEvents, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_IsActive", (PyCFunction) _wrap_PyApp_IsActive, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetTopWindow", (PyCFunction) _wrap_PyApp_SetTopWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetTopWindow", (PyCFunction) _wrap_PyApp_GetTopWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetExitOnFrameDelete", (PyCFunction) _wrap_PyApp_SetExitOnFrameDelete, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetExitOnFrameDelete", (PyCFunction) _wrap_PyApp_GetExitOnFrameDelete, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetUseBestVisual", (PyCFunction) _wrap_PyApp_SetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetUseBestVisual", (PyCFunction) _wrap_PyApp_GetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetPrintMode", (PyCFunction) _wrap_PyApp_SetPrintMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetPrintMode", (PyCFunction) _wrap_PyApp_GetPrintMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetAssertMode", (PyCFunction) _wrap_PyApp_SetAssertMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetAssertMode", (PyCFunction) _wrap_PyApp_GetAssertMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_PyApp_GetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetMacAboutMenuItemId", (PyCFunction) _wrap_PyApp_GetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetMacPreferencesMenuItemId", (PyCFunction) _wrap_PyApp_GetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetMacExitMenuItemId", (PyCFunction) _wrap_PyApp_GetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetMacHelpMenuTitleName", (PyCFunction) _wrap_PyApp_GetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_PyApp_SetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetMacAboutMenuItemId", (PyCFunction) _wrap_PyApp_SetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetMacPreferencesMenuItemId", (PyCFunction) _wrap_PyApp_SetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetMacExitMenuItemId", (PyCFunction) _wrap_PyApp_SetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_SetMacHelpMenuTitleName", (PyCFunction) _wrap_PyApp_SetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp__BootstrapApp", (PyCFunction) _wrap_PyApp__BootstrapApp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetComCtl32Version", (PyCFunction) _wrap_PyApp_GetComCtl32Version, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_swigregister", PyApp_swigregister, METH_VARARGS },
+	 { (char *)"Exit", (PyCFunction) _wrap_Exit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Yield", (PyCFunction) _wrap_Yield, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"YieldIfNeeded", (PyCFunction) _wrap_YieldIfNeeded, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SafeYield", (PyCFunction) _wrap_SafeYield, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"WakeUpIdle", (PyCFunction) _wrap_WakeUpIdle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PostEvent", (PyCFunction) _wrap_PostEvent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"App_CleanUp", (PyCFunction) _wrap_App_CleanUp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GetApp", (PyCFunction) _wrap_GetApp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_AcceleratorEntry", (PyCFunction) _wrap_new_AcceleratorEntry, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_AcceleratorEntry", (PyCFunction) _wrap_delete_AcceleratorEntry, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"AcceleratorEntry_Set", (PyCFunction) _wrap_AcceleratorEntry_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"AcceleratorEntry_SetMenuItem", (PyCFunction) _wrap_AcceleratorEntry_SetMenuItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"AcceleratorEntry_GetMenuItem", (PyCFunction) _wrap_AcceleratorEntry_GetMenuItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"AcceleratorEntry_GetFlags", (PyCFunction) _wrap_AcceleratorEntry_GetFlags, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"AcceleratorEntry_GetKeyCode", (PyCFunction) _wrap_AcceleratorEntry_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"AcceleratorEntry_GetCommand", (PyCFunction) _wrap_AcceleratorEntry_GetCommand, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"AcceleratorEntry_swigregister", AcceleratorEntry_swigregister, METH_VARARGS },
+	 { (char *)"new_AcceleratorTable", (PyCFunction) _wrap_new_AcceleratorTable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_AcceleratorTable", (PyCFunction) _wrap_delete_AcceleratorTable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"AcceleratorTable_Ok", (PyCFunction) _wrap_AcceleratorTable_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"AcceleratorTable_swigregister", AcceleratorTable_swigregister, METH_VARARGS },
+	 { (char *)"GetAccelFromString", (PyCFunction) _wrap_GetAccelFromString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_VisualAttributes", (PyCFunction) _wrap_new_VisualAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_VisualAttributes", (PyCFunction) _wrap_delete_VisualAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_font_set", (PyCFunction) _wrap_VisualAttributes_font_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_font_get", (PyCFunction) _wrap_VisualAttributes_font_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_colFg_set", (PyCFunction) _wrap_VisualAttributes_colFg_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_colFg_get", (PyCFunction) _wrap_VisualAttributes_colFg_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_colBg_set", (PyCFunction) _wrap_VisualAttributes_colBg_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_colBg_get", (PyCFunction) _wrap_VisualAttributes_colBg_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_swigregister", VisualAttributes_swigregister, METH_VARARGS },
+	 { (char *)"new_Window", (PyCFunction) _wrap_new_Window, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PreWindow", (PyCFunction) _wrap_new_PreWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Create", (PyCFunction) _wrap_Window_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Close", (PyCFunction) _wrap_Window_Close, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Destroy", (PyCFunction) _wrap_Window_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_DestroyChildren", (PyCFunction) _wrap_Window_DestroyChildren, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_IsBeingDeleted", (PyCFunction) _wrap_Window_IsBeingDeleted, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetTitle", (PyCFunction) _wrap_Window_SetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetTitle", (PyCFunction) _wrap_Window_GetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetLabel", (PyCFunction) _wrap_Window_SetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetLabel", (PyCFunction) _wrap_Window_GetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetName", (PyCFunction) _wrap_Window_SetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetName", (PyCFunction) _wrap_Window_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetWindowVariant", (PyCFunction) _wrap_Window_SetWindowVariant, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetWindowVariant", (PyCFunction) _wrap_Window_GetWindowVariant, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetId", (PyCFunction) _wrap_Window_SetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetId", (PyCFunction) _wrap_Window_GetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_NewControlId", (PyCFunction) _wrap_Window_NewControlId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_NextControlId", (PyCFunction) _wrap_Window_NextControlId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_PrevControlId", (PyCFunction) _wrap_Window_PrevControlId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetSize", (PyCFunction) _wrap_Window_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetDimensions", (PyCFunction) _wrap_Window_SetDimensions, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetRect", (PyCFunction) _wrap_Window_SetRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetSizeWH", (PyCFunction) _wrap_Window_SetSizeWH, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Move", (PyCFunction) _wrap_Window_Move, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_MoveXY", (PyCFunction) _wrap_Window_MoveXY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Raise", (PyCFunction) _wrap_Window_Raise, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Lower", (PyCFunction) _wrap_Window_Lower, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetClientSize", (PyCFunction) _wrap_Window_SetClientSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetClientSizeWH", (PyCFunction) _wrap_Window_SetClientSizeWH, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetClientRect", (PyCFunction) _wrap_Window_SetClientRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetPosition", (PyCFunction) _wrap_Window_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetPositionTuple", (PyCFunction) _wrap_Window_GetPositionTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetSize", (PyCFunction) _wrap_Window_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetSizeTuple", (PyCFunction) _wrap_Window_GetSizeTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetRect", (PyCFunction) _wrap_Window_GetRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetClientSize", (PyCFunction) _wrap_Window_GetClientSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetClientSizeTuple", (PyCFunction) _wrap_Window_GetClientSizeTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetClientAreaOrigin", (PyCFunction) _wrap_Window_GetClientAreaOrigin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetClientRect", (PyCFunction) _wrap_Window_GetClientRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetBestSize", (PyCFunction) _wrap_Window_GetBestSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetBestSizeTuple", (PyCFunction) _wrap_Window_GetBestSizeTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetAdjustedBestSize", (PyCFunction) _wrap_Window_GetAdjustedBestSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Center", (PyCFunction) _wrap_Window_Center, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_CenterOnScreen", (PyCFunction) _wrap_Window_CenterOnScreen, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_CenterOnParent", (PyCFunction) _wrap_Window_CenterOnParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Fit", (PyCFunction) _wrap_Window_Fit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_FitInside", (PyCFunction) _wrap_Window_FitInside, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetSizeHints", _wrap_Window_SetSizeHints, METH_VARARGS },
+	 { (char *)"Window_SetVirtualSizeHints", _wrap_Window_SetVirtualSizeHints, METH_VARARGS },
+	 { (char *)"Window_GetMinWidth", (PyCFunction) _wrap_Window_GetMinWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetMinHeight", (PyCFunction) _wrap_Window_GetMinHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetMaxWidth", (PyCFunction) _wrap_Window_GetMaxWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetMaxHeight", (PyCFunction) _wrap_Window_GetMaxHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetMaxSize", (PyCFunction) _wrap_Window_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetMinSize", (PyCFunction) _wrap_Window_GetMinSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetVirtualSize", (PyCFunction) _wrap_Window_SetVirtualSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetVirtualSizeWH", (PyCFunction) _wrap_Window_SetVirtualSizeWH, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetVirtualSize", (PyCFunction) _wrap_Window_GetVirtualSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetVirtualSizeTuple", (PyCFunction) _wrap_Window_GetVirtualSizeTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetBestVirtualSize", (PyCFunction) _wrap_Window_GetBestVirtualSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Show", (PyCFunction) _wrap_Window_Show, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Hide", (PyCFunction) _wrap_Window_Hide, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Enable", (PyCFunction) _wrap_Window_Enable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Disable", (PyCFunction) _wrap_Window_Disable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_IsShown", (PyCFunction) _wrap_Window_IsShown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_IsEnabled", (PyCFunction) _wrap_Window_IsEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetWindowStyleFlag", (PyCFunction) _wrap_Window_SetWindowStyleFlag, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetWindowStyleFlag", (PyCFunction) _wrap_Window_GetWindowStyleFlag, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_HasFlag", (PyCFunction) _wrap_Window_HasFlag, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_IsRetained", (PyCFunction) _wrap_Window_IsRetained, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetExtraStyle", (PyCFunction) _wrap_Window_SetExtraStyle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetExtraStyle", (PyCFunction) _wrap_Window_GetExtraStyle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_MakeModal", (PyCFunction) _wrap_Window_MakeModal, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetThemeEnabled", (PyCFunction) _wrap_Window_SetThemeEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetThemeEnabled", (PyCFunction) _wrap_Window_GetThemeEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetFocus", (PyCFunction) _wrap_Window_SetFocus, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetFocusFromKbd", (PyCFunction) _wrap_Window_SetFocusFromKbd, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_FindFocus", (PyCFunction) _wrap_Window_FindFocus, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_AcceptsFocus", (PyCFunction) _wrap_Window_AcceptsFocus, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_Window_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetDefaultItem", (PyCFunction) _wrap_Window_GetDefaultItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetDefaultItem", (PyCFunction) _wrap_Window_SetDefaultItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetTmpDefaultItem", (PyCFunction) _wrap_Window_SetTmpDefaultItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetChildren", (PyCFunction) _wrap_Window_GetChildren, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetParent", (PyCFunction) _wrap_Window_GetParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetGrandParent", (PyCFunction) _wrap_Window_GetGrandParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_IsTopLevel", (PyCFunction) _wrap_Window_IsTopLevel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Reparent", (PyCFunction) _wrap_Window_Reparent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_AddChild", (PyCFunction) _wrap_Window_AddChild, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_RemoveChild", (PyCFunction) _wrap_Window_RemoveChild, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_FindWindowById", (PyCFunction) _wrap_Window_FindWindowById, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_FindWindowByName", (PyCFunction) _wrap_Window_FindWindowByName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetEventHandler", (PyCFunction) _wrap_Window_GetEventHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetEventHandler", (PyCFunction) _wrap_Window_SetEventHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_PushEventHandler", (PyCFunction) _wrap_Window_PushEventHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_PopEventHandler", (PyCFunction) _wrap_Window_PopEventHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_RemoveEventHandler", (PyCFunction) _wrap_Window_RemoveEventHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetValidator", (PyCFunction) _wrap_Window_SetValidator, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetValidator", (PyCFunction) _wrap_Window_GetValidator, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Validate", (PyCFunction) _wrap_Window_Validate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_TransferDataToWindow", (PyCFunction) _wrap_Window_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_TransferDataFromWindow", (PyCFunction) _wrap_Window_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_InitDialog", (PyCFunction) _wrap_Window_InitDialog, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetAcceleratorTable", (PyCFunction) _wrap_Window_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetAcceleratorTable", (PyCFunction) _wrap_Window_GetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_RegisterHotKey", (PyCFunction) _wrap_Window_RegisterHotKey, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_UnregisterHotKey", (PyCFunction) _wrap_Window_UnregisterHotKey, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ConvertDialogPointToPixels", (PyCFunction) _wrap_Window_ConvertDialogPointToPixels, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ConvertDialogSizeToPixels", (PyCFunction) _wrap_Window_ConvertDialogSizeToPixels, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_DLG_PNT", (PyCFunction) _wrap_Window_DLG_PNT, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_DLG_SZE", (PyCFunction) _wrap_Window_DLG_SZE, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ConvertPixelPointToDialog", (PyCFunction) _wrap_Window_ConvertPixelPointToDialog, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ConvertPixelSizeToDialog", (PyCFunction) _wrap_Window_ConvertPixelSizeToDialog, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_WarpPointer", (PyCFunction) _wrap_Window_WarpPointer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_CaptureMouse", (PyCFunction) _wrap_Window_CaptureMouse, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ReleaseMouse", (PyCFunction) _wrap_Window_ReleaseMouse, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetCapture", (PyCFunction) _wrap_Window_GetCapture, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_HasCapture", (PyCFunction) _wrap_Window_HasCapture, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Refresh", (PyCFunction) _wrap_Window_Refresh, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_RefreshRect", (PyCFunction) _wrap_Window_RefreshRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Update", (PyCFunction) _wrap_Window_Update, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ClearBackground", (PyCFunction) _wrap_Window_ClearBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Freeze", (PyCFunction) _wrap_Window_Freeze, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Thaw", (PyCFunction) _wrap_Window_Thaw, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_PrepareDC", (PyCFunction) _wrap_Window_PrepareDC, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetUpdateRegion", (PyCFunction) _wrap_Window_GetUpdateRegion, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetUpdateClientRect", (PyCFunction) _wrap_Window_GetUpdateClientRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_IsExposed", (PyCFunction) _wrap_Window_IsExposed, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_IsExposedPoint", (PyCFunction) _wrap_Window_IsExposedPoint, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_IsExposedRect", (PyCFunction) _wrap_Window_IsExposedRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetDefaultAttributes", (PyCFunction) _wrap_Window_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetClassDefaultAttributes", (PyCFunction) _wrap_Window_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetBackgroundColour", (PyCFunction) _wrap_Window_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetDefaultBackgroundColour", (PyCFunction) _wrap_Window_SetDefaultBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetForegroundColour", (PyCFunction) _wrap_Window_SetForegroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetDefaultForegroundColour", (PyCFunction) _wrap_Window_SetDefaultForegroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetBackgroundColour", (PyCFunction) _wrap_Window_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetForegroundColour", (PyCFunction) _wrap_Window_GetForegroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetCursor", (PyCFunction) _wrap_Window_SetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetCursor", (PyCFunction) _wrap_Window_GetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetFont", (PyCFunction) _wrap_Window_SetFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetDefaultFont", (PyCFunction) _wrap_Window_SetDefaultFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetFont", (PyCFunction) _wrap_Window_GetFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetCaret", (PyCFunction) _wrap_Window_SetCaret, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetCaret", (PyCFunction) _wrap_Window_GetCaret, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetCharHeight", (PyCFunction) _wrap_Window_GetCharHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetCharWidth", (PyCFunction) _wrap_Window_GetCharWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetTextExtent", (PyCFunction) _wrap_Window_GetTextExtent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetFullTextExtent", (PyCFunction) _wrap_Window_GetFullTextExtent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ClientToScreenXY", (PyCFunction) _wrap_Window_ClientToScreenXY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ScreenToClientXY", (PyCFunction) _wrap_Window_ScreenToClientXY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ClientToScreen", (PyCFunction) _wrap_Window_ClientToScreen, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ScreenToClient", (PyCFunction) _wrap_Window_ScreenToClient, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_HitTestXY", (PyCFunction) _wrap_Window_HitTestXY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_HitTest", (PyCFunction) _wrap_Window_HitTest, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetBorder", _wrap_Window_GetBorder, METH_VARARGS },
+	 { (char *)"Window_UpdateWindowUI", (PyCFunction) _wrap_Window_UpdateWindowUI, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_PopupMenuXY", (PyCFunction) _wrap_Window_PopupMenuXY, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_PopupMenu", (PyCFunction) _wrap_Window_PopupMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetHandle", (PyCFunction) _wrap_Window_GetHandle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_HasScrollbar", (PyCFunction) _wrap_Window_HasScrollbar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetScrollbar", (PyCFunction) _wrap_Window_SetScrollbar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetScrollPos", (PyCFunction) _wrap_Window_SetScrollPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetScrollPos", (PyCFunction) _wrap_Window_GetScrollPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetScrollThumb", (PyCFunction) _wrap_Window_GetScrollThumb, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetScrollRange", (PyCFunction) _wrap_Window_GetScrollRange, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ScrollWindow", (PyCFunction) _wrap_Window_ScrollWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ScrollLines", (PyCFunction) _wrap_Window_ScrollLines, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ScrollPages", (PyCFunction) _wrap_Window_ScrollPages, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_LineUp", (PyCFunction) _wrap_Window_LineUp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_LineDown", (PyCFunction) _wrap_Window_LineDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_PageUp", (PyCFunction) _wrap_Window_PageUp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_PageDown", (PyCFunction) _wrap_Window_PageDown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetHelpText", (PyCFunction) _wrap_Window_SetHelpText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetHelpTextForId", (PyCFunction) _wrap_Window_SetHelpTextForId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetHelpText", (PyCFunction) _wrap_Window_GetHelpText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetToolTipString", (PyCFunction) _wrap_Window_SetToolTipString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetToolTip", (PyCFunction) _wrap_Window_SetToolTip, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetToolTip", (PyCFunction) _wrap_Window_GetToolTip, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetDropTarget", (PyCFunction) _wrap_Window_SetDropTarget, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetDropTarget", (PyCFunction) _wrap_Window_GetDropTarget, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetConstraints", (PyCFunction) _wrap_Window_SetConstraints, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetConstraints", (PyCFunction) _wrap_Window_GetConstraints, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetAutoLayout", (PyCFunction) _wrap_Window_SetAutoLayout, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetAutoLayout", (PyCFunction) _wrap_Window_GetAutoLayout, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Layout", (PyCFunction) _wrap_Window_Layout, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetSizer", (PyCFunction) _wrap_Window_SetSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetSizerAndFit", (PyCFunction) _wrap_Window_SetSizerAndFit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetSizer", (PyCFunction) _wrap_Window_GetSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetContainingSizer", (PyCFunction) _wrap_Window_SetContainingSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetContainingSizer", (PyCFunction) _wrap_Window_GetContainingSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_InheritAttributes", (PyCFunction) _wrap_Window_InheritAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_ShouldInheritColours", (PyCFunction) _wrap_Window_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_swigregister", Window_swigregister, METH_VARARGS },
+	 { (char *)"FindWindowById", (PyCFunction) _wrap_FindWindowById, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FindWindowByName", (PyCFunction) _wrap_FindWindowByName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FindWindowByLabel", (PyCFunction) _wrap_FindWindowByLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_FromHWND", (PyCFunction) _wrap_Window_FromHWND, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_Validator", (PyCFunction) _wrap_new_Validator, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Validator_Clone", (PyCFunction) _wrap_Validator_Clone, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Validator_Validate", (PyCFunction) _wrap_Validator_Validate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Validator_TransferToWindow", (PyCFunction) _wrap_Validator_TransferToWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Validator_TransferFromWindow", (PyCFunction) _wrap_Validator_TransferFromWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Validator_GetWindow", (PyCFunction) _wrap_Validator_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Validator_SetWindow", (PyCFunction) _wrap_Validator_SetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Validator_IsSilent", (PyCFunction) _wrap_Validator_IsSilent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Validator_SetBellOnError", (PyCFunction) _wrap_Validator_SetBellOnError, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Validator_swigregister", Validator_swigregister, METH_VARARGS },
+	 { (char *)"new_PyValidator", (PyCFunction) _wrap_new_PyValidator, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyValidator__setCallbackInfo", (PyCFunction) _wrap_PyValidator__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyValidator_swigregister", PyValidator_swigregister, METH_VARARGS },
+	 { (char *)"new_Menu", (PyCFunction) _wrap_new_Menu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Append", (PyCFunction) _wrap_Menu_Append, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_AppendSeparator", (PyCFunction) _wrap_Menu_AppendSeparator, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_AppendCheckItem", (PyCFunction) _wrap_Menu_AppendCheckItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_AppendRadioItem", (PyCFunction) _wrap_Menu_AppendRadioItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_AppendMenu", (PyCFunction) _wrap_Menu_AppendMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_AppendItem", (PyCFunction) _wrap_Menu_AppendItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Break", (PyCFunction) _wrap_Menu_Break, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_InsertItem", (PyCFunction) _wrap_Menu_InsertItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Insert", (PyCFunction) _wrap_Menu_Insert, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_InsertSeparator", (PyCFunction) _wrap_Menu_InsertSeparator, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_InsertCheckItem", (PyCFunction) _wrap_Menu_InsertCheckItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_InsertRadioItem", (PyCFunction) _wrap_Menu_InsertRadioItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_InsertMenu", (PyCFunction) _wrap_Menu_InsertMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_PrependItem", (PyCFunction) _wrap_Menu_PrependItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Prepend", (PyCFunction) _wrap_Menu_Prepend, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_PrependSeparator", (PyCFunction) _wrap_Menu_PrependSeparator, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_PrependCheckItem", (PyCFunction) _wrap_Menu_PrependCheckItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_PrependRadioItem", (PyCFunction) _wrap_Menu_PrependRadioItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_PrependMenu", (PyCFunction) _wrap_Menu_PrependMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Remove", (PyCFunction) _wrap_Menu_Remove, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_RemoveItem", (PyCFunction) _wrap_Menu_RemoveItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Delete", (PyCFunction) _wrap_Menu_Delete, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_DeleteItem", (PyCFunction) _wrap_Menu_DeleteItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Destroy", (PyCFunction) _wrap_Menu_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_DestroyId", (PyCFunction) _wrap_Menu_DestroyId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_DestroyItem", (PyCFunction) _wrap_Menu_DestroyItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetMenuItemCount", (PyCFunction) _wrap_Menu_GetMenuItemCount, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetMenuItems", (PyCFunction) _wrap_Menu_GetMenuItems, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_FindItem", (PyCFunction) _wrap_Menu_FindItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_FindItemById", (PyCFunction) _wrap_Menu_FindItemById, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_FindItemByPosition", (PyCFunction) _wrap_Menu_FindItemByPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Enable", (PyCFunction) _wrap_Menu_Enable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_IsEnabled", (PyCFunction) _wrap_Menu_IsEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Check", (PyCFunction) _wrap_Menu_Check, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_IsChecked", (PyCFunction) _wrap_Menu_IsChecked, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_SetLabel", (PyCFunction) _wrap_Menu_SetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetLabel", (PyCFunction) _wrap_Menu_GetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_SetHelpString", (PyCFunction) _wrap_Menu_SetHelpString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetHelpString", (PyCFunction) _wrap_Menu_GetHelpString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_SetTitle", (PyCFunction) _wrap_Menu_SetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetTitle", (PyCFunction) _wrap_Menu_GetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_SetEventHandler", (PyCFunction) _wrap_Menu_SetEventHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetEventHandler", (PyCFunction) _wrap_Menu_GetEventHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_SetInvokingWindow", (PyCFunction) _wrap_Menu_SetInvokingWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetInvokingWindow", (PyCFunction) _wrap_Menu_GetInvokingWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetStyle", (PyCFunction) _wrap_Menu_GetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_UpdateUI", (PyCFunction) _wrap_Menu_UpdateUI, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetMenuBar", (PyCFunction) _wrap_Menu_GetMenuBar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Attach", (PyCFunction) _wrap_Menu_Attach, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_Detach", (PyCFunction) _wrap_Menu_Detach, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_IsAttached", (PyCFunction) _wrap_Menu_IsAttached, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_SetParent", (PyCFunction) _wrap_Menu_SetParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_GetParent", (PyCFunction) _wrap_Menu_GetParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Menu_swigregister", Menu_swigregister, METH_VARARGS },
+	 { (char *)"new_MenuBar", (PyCFunction) _wrap_new_MenuBar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_Append", (PyCFunction) _wrap_MenuBar_Append, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_Insert", (PyCFunction) _wrap_MenuBar_Insert, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_GetMenuCount", (PyCFunction) _wrap_MenuBar_GetMenuCount, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_GetMenu", (PyCFunction) _wrap_MenuBar_GetMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_Replace", (PyCFunction) _wrap_MenuBar_Replace, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_Remove", (PyCFunction) _wrap_MenuBar_Remove, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_EnableTop", (PyCFunction) _wrap_MenuBar_EnableTop, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_IsEnabledTop", (PyCFunction) _wrap_MenuBar_IsEnabledTop, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_SetLabelTop", (PyCFunction) _wrap_MenuBar_SetLabelTop, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_GetLabelTop", (PyCFunction) _wrap_MenuBar_GetLabelTop, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_FindMenuItem", (PyCFunction) _wrap_MenuBar_FindMenuItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_FindItemById", (PyCFunction) _wrap_MenuBar_FindItemById, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_FindMenu", (PyCFunction) _wrap_MenuBar_FindMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_Enable", (PyCFunction) _wrap_MenuBar_Enable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_Check", (PyCFunction) _wrap_MenuBar_Check, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_IsChecked", (PyCFunction) _wrap_MenuBar_IsChecked, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_IsEnabled", (PyCFunction) _wrap_MenuBar_IsEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_SetLabel", (PyCFunction) _wrap_MenuBar_SetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_GetLabel", (PyCFunction) _wrap_MenuBar_GetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_SetHelpString", (PyCFunction) _wrap_MenuBar_SetHelpString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_GetHelpString", (PyCFunction) _wrap_MenuBar_GetHelpString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_GetFrame", (PyCFunction) _wrap_MenuBar_GetFrame, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_IsAttached", (PyCFunction) _wrap_MenuBar_IsAttached, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_Attach", (PyCFunction) _wrap_MenuBar_Attach, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_Detach", (PyCFunction) _wrap_MenuBar_Detach, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuBar_swigregister", MenuBar_swigregister, METH_VARARGS },
+	 { (char *)"new_MenuItem", (PyCFunction) _wrap_new_MenuItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetMenu", (PyCFunction) _wrap_MenuItem_GetMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetMenu", (PyCFunction) _wrap_MenuItem_SetMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetId", (PyCFunction) _wrap_MenuItem_SetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetId", (PyCFunction) _wrap_MenuItem_GetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_IsSeparator", (PyCFunction) _wrap_MenuItem_IsSeparator, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetText", (PyCFunction) _wrap_MenuItem_SetText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetLabel", (PyCFunction) _wrap_MenuItem_GetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetText", (PyCFunction) _wrap_MenuItem_GetText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetLabelFromText", (PyCFunction) _wrap_MenuItem_GetLabelFromText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetKind", (PyCFunction) _wrap_MenuItem_GetKind, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetKind", (PyCFunction) _wrap_MenuItem_SetKind, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetCheckable", (PyCFunction) _wrap_MenuItem_SetCheckable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_IsCheckable", (PyCFunction) _wrap_MenuItem_IsCheckable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_IsSubMenu", (PyCFunction) _wrap_MenuItem_IsSubMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetSubMenu", (PyCFunction) _wrap_MenuItem_SetSubMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetSubMenu", (PyCFunction) _wrap_MenuItem_GetSubMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_Enable", (PyCFunction) _wrap_MenuItem_Enable, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_IsEnabled", (PyCFunction) _wrap_MenuItem_IsEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_Check", (PyCFunction) _wrap_MenuItem_Check, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_IsChecked", (PyCFunction) _wrap_MenuItem_IsChecked, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_Toggle", (PyCFunction) _wrap_MenuItem_Toggle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetHelp", (PyCFunction) _wrap_MenuItem_SetHelp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetHelp", (PyCFunction) _wrap_MenuItem_GetHelp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetAccel", (PyCFunction) _wrap_MenuItem_GetAccel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetAccel", (PyCFunction) _wrap_MenuItem_SetAccel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetDefaultMarginWidth", (PyCFunction) _wrap_MenuItem_GetDefaultMarginWidth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_SetBitmap", (PyCFunction) _wrap_MenuItem_SetBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_GetBitmap", (PyCFunction) _wrap_MenuItem_GetBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MenuItem_swigregister", MenuItem_swigregister, METH_VARARGS },
+	 { (char *)"new_Control", (PyCFunction) _wrap_new_Control, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PreControl", (PyCFunction) _wrap_new_PreControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Control_Create", (PyCFunction) _wrap_Control_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Control_Command", (PyCFunction) _wrap_Control_Command, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Control_GetLabel", (PyCFunction) _wrap_Control_GetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Control_SetLabel", (PyCFunction) _wrap_Control_SetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Control_GetClassDefaultAttributes", (PyCFunction) _wrap_Control_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Control_swigregister", Control_swigregister, METH_VARARGS },
+	 { (char *)"ItemContainer_Append", (PyCFunction) _wrap_ItemContainer_Append, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_AppendItems", (PyCFunction) _wrap_ItemContainer_AppendItems, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_Insert", (PyCFunction) _wrap_ItemContainer_Insert, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_Clear", (PyCFunction) _wrap_ItemContainer_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_Delete", (PyCFunction) _wrap_ItemContainer_Delete, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_GetCount", (PyCFunction) _wrap_ItemContainer_GetCount, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_IsEmpty", (PyCFunction) _wrap_ItemContainer_IsEmpty, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_GetString", (PyCFunction) _wrap_ItemContainer_GetString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_GetStrings", (PyCFunction) _wrap_ItemContainer_GetStrings, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_SetString", (PyCFunction) _wrap_ItemContainer_SetString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_FindString", (PyCFunction) _wrap_ItemContainer_FindString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_Select", (PyCFunction) _wrap_ItemContainer_Select, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_GetSelection", (PyCFunction) _wrap_ItemContainer_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_GetStringSelection", (PyCFunction) _wrap_ItemContainer_GetStringSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_GetClientData", (PyCFunction) _wrap_ItemContainer_GetClientData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_SetClientData", (PyCFunction) _wrap_ItemContainer_SetClientData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ItemContainer_swigregister", ItemContainer_swigregister, METH_VARARGS },
+	 { (char *)"ControlWithItems_swigregister", ControlWithItems_swigregister, METH_VARARGS },
+	 { (char *)"new_SizerItem", (PyCFunction) _wrap_new_SizerItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_SizerItemSpacer", (PyCFunction) _wrap_new_SizerItemSpacer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_SizerItemWindow", (PyCFunction) _wrap_new_SizerItemWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_SizerItemSizer", (PyCFunction) _wrap_new_SizerItemSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_DeleteWindows", (PyCFunction) _wrap_SizerItem_DeleteWindows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_DetachSizer", (PyCFunction) _wrap_SizerItem_DetachSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetSize", (PyCFunction) _wrap_SizerItem_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_CalcMin", (PyCFunction) _wrap_SizerItem_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetDimension", (PyCFunction) _wrap_SizerItem_SetDimension, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetMinSize", (PyCFunction) _wrap_SizerItem_GetMinSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetInitSize", (PyCFunction) _wrap_SizerItem_SetInitSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetRatioWH", (PyCFunction) _wrap_SizerItem_SetRatioWH, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetRatioSize", (PyCFunction) _wrap_SizerItem_SetRatioSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetRatio", (PyCFunction) _wrap_SizerItem_SetRatio, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetRatio", (PyCFunction) _wrap_SizerItem_GetRatio, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_IsWindow", (PyCFunction) _wrap_SizerItem_IsWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_IsSizer", (PyCFunction) _wrap_SizerItem_IsSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_IsSpacer", (PyCFunction) _wrap_SizerItem_IsSpacer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetProportion", (PyCFunction) _wrap_SizerItem_SetProportion, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetProportion", (PyCFunction) _wrap_SizerItem_GetProportion, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetFlag", (PyCFunction) _wrap_SizerItem_SetFlag, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetFlag", (PyCFunction) _wrap_SizerItem_GetFlag, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetBorder", (PyCFunction) _wrap_SizerItem_SetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetBorder", (PyCFunction) _wrap_SizerItem_GetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetWindow", (PyCFunction) _wrap_SizerItem_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetWindow", (PyCFunction) _wrap_SizerItem_SetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetSizer", (PyCFunction) _wrap_SizerItem_GetSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetSizer", (PyCFunction) _wrap_SizerItem_SetSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetSpacer", (PyCFunction) _wrap_SizerItem_GetSpacer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_SetSpacer", (PyCFunction) _wrap_SizerItem_SetSpacer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_Show", (PyCFunction) _wrap_SizerItem_Show, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_IsShown", (PyCFunction) _wrap_SizerItem_IsShown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetPosition", (PyCFunction) _wrap_SizerItem_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_GetUserData", (PyCFunction) _wrap_SizerItem_GetUserData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SizerItem_swigregister", SizerItem_swigregister, METH_VARARGS },
+	 { (char *)"Sizer__setOORInfo", (PyCFunction) _wrap_Sizer__setOORInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Add", (PyCFunction) _wrap_Sizer_Add, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Insert", (PyCFunction) _wrap_Sizer_Insert, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Prepend", (PyCFunction) _wrap_Sizer_Prepend, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Remove", (PyCFunction) _wrap_Sizer_Remove, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer__SetItemMinSize", (PyCFunction) _wrap_Sizer__SetItemMinSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_AddItem", (PyCFunction) _wrap_Sizer_AddItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_InsertItem", (PyCFunction) _wrap_Sizer_InsertItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_PrependItem", (PyCFunction) _wrap_Sizer_PrependItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_SetDimension", (PyCFunction) _wrap_Sizer_SetDimension, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_SetMinSize", (PyCFunction) _wrap_Sizer_SetMinSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_GetSize", (PyCFunction) _wrap_Sizer_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_GetPosition", (PyCFunction) _wrap_Sizer_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_GetMinSize", (PyCFunction) _wrap_Sizer_GetMinSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_RecalcSizes", (PyCFunction) _wrap_Sizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_CalcMin", (PyCFunction) _wrap_Sizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Layout", (PyCFunction) _wrap_Sizer_Layout, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Fit", (PyCFunction) _wrap_Sizer_Fit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_FitInside", (PyCFunction) _wrap_Sizer_FitInside, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_SetSizeHints", (PyCFunction) _wrap_Sizer_SetSizeHints, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_SetVirtualSizeHints", (PyCFunction) _wrap_Sizer_SetVirtualSizeHints, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Clear", (PyCFunction) _wrap_Sizer_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_DeleteWindows", (PyCFunction) _wrap_Sizer_DeleteWindows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_GetChildren", (PyCFunction) _wrap_Sizer_GetChildren, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Show", (PyCFunction) _wrap_Sizer_Show, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Hide", (PyCFunction) _wrap_Sizer_Hide, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_IsShown", (PyCFunction) _wrap_Sizer_IsShown, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_ShowItems", (PyCFunction) _wrap_Sizer_ShowItems, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_swigregister", Sizer_swigregister, METH_VARARGS },
+	 { (char *)"new_PySizer", (PyCFunction) _wrap_new_PySizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PySizer__setCallbackInfo", (PyCFunction) _wrap_PySizer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PySizer_swigregister", PySizer_swigregister, METH_VARARGS },
+	 { (char *)"new_BoxSizer", (PyCFunction) _wrap_new_BoxSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"BoxSizer_GetOrientation", (PyCFunction) _wrap_BoxSizer_GetOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"BoxSizer_SetOrientation", (PyCFunction) _wrap_BoxSizer_SetOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"BoxSizer_RecalcSizes", (PyCFunction) _wrap_BoxSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"BoxSizer_CalcMin", (PyCFunction) _wrap_BoxSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"BoxSizer_swigregister", BoxSizer_swigregister, METH_VARARGS },
+	 { (char *)"new_StaticBoxSizer", (PyCFunction) _wrap_new_StaticBoxSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StaticBoxSizer_GetStaticBox", (PyCFunction) _wrap_StaticBoxSizer_GetStaticBox, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StaticBoxSizer_RecalcSizes", (PyCFunction) _wrap_StaticBoxSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StaticBoxSizer_CalcMin", (PyCFunction) _wrap_StaticBoxSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StaticBoxSizer_swigregister", StaticBoxSizer_swigregister, METH_VARARGS },
+	 { (char *)"new_GridSizer", (PyCFunction) _wrap_new_GridSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_RecalcSizes", (PyCFunction) _wrap_GridSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_CalcMin", (PyCFunction) _wrap_GridSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_SetCols", (PyCFunction) _wrap_GridSizer_SetCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_SetRows", (PyCFunction) _wrap_GridSizer_SetRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_SetVGap", (PyCFunction) _wrap_GridSizer_SetVGap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_SetHGap", (PyCFunction) _wrap_GridSizer_SetHGap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_GetCols", (PyCFunction) _wrap_GridSizer_GetCols, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_GetRows", (PyCFunction) _wrap_GridSizer_GetRows, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_GetVGap", (PyCFunction) _wrap_GridSizer_GetVGap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_GetHGap", (PyCFunction) _wrap_GridSizer_GetHGap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridSizer_swigregister", GridSizer_swigregister, METH_VARARGS },
+	 { (char *)"new_FlexGridSizer", (PyCFunction) _wrap_new_FlexGridSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_RecalcSizes", (PyCFunction) _wrap_FlexGridSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_CalcMin", (PyCFunction) _wrap_FlexGridSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_AddGrowableRow", (PyCFunction) _wrap_FlexGridSizer_AddGrowableRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_RemoveGrowableRow", (PyCFunction) _wrap_FlexGridSizer_RemoveGrowableRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_AddGrowableCol", (PyCFunction) _wrap_FlexGridSizer_AddGrowableCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_RemoveGrowableCol", (PyCFunction) _wrap_FlexGridSizer_RemoveGrowableCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_SetFlexibleDirection", (PyCFunction) _wrap_FlexGridSizer_SetFlexibleDirection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_GetFlexibleDirection", (PyCFunction) _wrap_FlexGridSizer_GetFlexibleDirection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_SetNonFlexibleGrowMode", (PyCFunction) _wrap_FlexGridSizer_SetNonFlexibleGrowMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_GetNonFlexibleGrowMode", (PyCFunction) _wrap_FlexGridSizer_GetNonFlexibleGrowMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_GetRowHeights", (PyCFunction) _wrap_FlexGridSizer_GetRowHeights, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_GetColWidths", (PyCFunction) _wrap_FlexGridSizer_GetColWidths, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FlexGridSizer_swigregister", FlexGridSizer_swigregister, METH_VARARGS },
+	 { (char *)"new_GBPosition", (PyCFunction) _wrap_new_GBPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBPosition_GetRow", (PyCFunction) _wrap_GBPosition_GetRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBPosition_GetCol", (PyCFunction) _wrap_GBPosition_GetCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBPosition_SetRow", (PyCFunction) _wrap_GBPosition_SetRow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBPosition_SetCol", (PyCFunction) _wrap_GBPosition_SetCol, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBPosition___eq__", (PyCFunction) _wrap_GBPosition___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBPosition___ne__", (PyCFunction) _wrap_GBPosition___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBPosition_Set", (PyCFunction) _wrap_GBPosition_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBPosition_Get", (PyCFunction) _wrap_GBPosition_Get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBPosition_swigregister", GBPosition_swigregister, METH_VARARGS },
+	 { (char *)"new_GBSpan", (PyCFunction) _wrap_new_GBSpan, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSpan_GetRowspan", (PyCFunction) _wrap_GBSpan_GetRowspan, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSpan_GetColspan", (PyCFunction) _wrap_GBSpan_GetColspan, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSpan_SetRowspan", (PyCFunction) _wrap_GBSpan_SetRowspan, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSpan_SetColspan", (PyCFunction) _wrap_GBSpan_SetColspan, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSpan___eq__", (PyCFunction) _wrap_GBSpan___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSpan___ne__", (PyCFunction) _wrap_GBSpan___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSpan_Set", (PyCFunction) _wrap_GBSpan_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSpan_Get", (PyCFunction) _wrap_GBSpan_Get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSpan_swigregister", GBSpan_swigregister, METH_VARARGS },
+	 { (char *)"new_GBSizerItem", (PyCFunction) _wrap_new_GBSizerItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_GBSizerItemWindow", (PyCFunction) _wrap_new_GBSizerItemWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_GBSizerItemSizer", (PyCFunction) _wrap_new_GBSizerItemSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_GBSizerItemSpacer", (PyCFunction) _wrap_new_GBSizerItemSpacer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_GetPos", (PyCFunction) _wrap_GBSizerItem_GetPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_GetSpan", (PyCFunction) _wrap_GBSizerItem_GetSpan, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_SetPos", (PyCFunction) _wrap_GBSizerItem_SetPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_SetSpan", (PyCFunction) _wrap_GBSizerItem_SetSpan, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_Intersects", _wrap_GBSizerItem_Intersects, METH_VARARGS },
+	 { (char *)"GBSizerItem_GetEndPos", (PyCFunction) _wrap_GBSizerItem_GetEndPos, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_GetGBSizer", (PyCFunction) _wrap_GBSizerItem_GetGBSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_SetGBSizer", (PyCFunction) _wrap_GBSizerItem_SetGBSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_swigregister", GBSizerItem_swigregister, METH_VARARGS },
+	 { (char *)"new_GridBagSizer", (PyCFunction) _wrap_new_GridBagSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_Add", (PyCFunction) _wrap_GridBagSizer_Add, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_AddItem", (PyCFunction) _wrap_GridBagSizer_AddItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_GetEmptyCellSize", (PyCFunction) _wrap_GridBagSizer_GetEmptyCellSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_SetEmptyCellSize", (PyCFunction) _wrap_GridBagSizer_SetEmptyCellSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_GetItemPosition", _wrap_GridBagSizer_GetItemPosition, METH_VARARGS },
+	 { (char *)"GridBagSizer_SetItemPosition", _wrap_GridBagSizer_SetItemPosition, METH_VARARGS },
+	 { (char *)"GridBagSizer_GetItemSpan", _wrap_GridBagSizer_GetItemSpan, METH_VARARGS },
+	 { (char *)"GridBagSizer_SetItemSpan", _wrap_GridBagSizer_SetItemSpan, METH_VARARGS },
+	 { (char *)"GridBagSizer_FindItem", _wrap_GridBagSizer_FindItem, METH_VARARGS },
+	 { (char *)"GridBagSizer_FindItemAtPosition", (PyCFunction) _wrap_GridBagSizer_FindItemAtPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_FindItemAtPoint", (PyCFunction) _wrap_GridBagSizer_FindItemAtPoint, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_FindItemWithData", (PyCFunction) _wrap_GridBagSizer_FindItemWithData, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_RecalcSizes", (PyCFunction) _wrap_GridBagSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_CalcMin", (PyCFunction) _wrap_GridBagSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridBagSizer_CheckForIntersection", _wrap_GridBagSizer_CheckForIntersection, METH_VARARGS },
+	 { (char *)"GridBagSizer_swigregister", GridBagSizer_swigregister, METH_VARARGS },
+	 { (char *)"IndividualLayoutConstraint_Set", (PyCFunction) _wrap_IndividualLayoutConstraint_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_LeftOf", (PyCFunction) _wrap_IndividualLayoutConstraint_LeftOf, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_RightOf", (PyCFunction) _wrap_IndividualLayoutConstraint_RightOf, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_Above", (PyCFunction) _wrap_IndividualLayoutConstraint_Above, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_Below", (PyCFunction) _wrap_IndividualLayoutConstraint_Below, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_SameAs", (PyCFunction) _wrap_IndividualLayoutConstraint_SameAs, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_PercentOf", (PyCFunction) _wrap_IndividualLayoutConstraint_PercentOf, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_Absolute", (PyCFunction) _wrap_IndividualLayoutConstraint_Absolute, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_Unconstrained", (PyCFunction) _wrap_IndividualLayoutConstraint_Unconstrained, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_AsIs", (PyCFunction) _wrap_IndividualLayoutConstraint_AsIs, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_GetOtherWindow", (PyCFunction) _wrap_IndividualLayoutConstraint_GetOtherWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_GetMyEdge", (PyCFunction) _wrap_IndividualLayoutConstraint_GetMyEdge, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_SetEdge", (PyCFunction) _wrap_IndividualLayoutConstraint_SetEdge, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_SetValue", (PyCFunction) _wrap_IndividualLayoutConstraint_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_GetMargin", (PyCFunction) _wrap_IndividualLayoutConstraint_GetMargin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_SetMargin", (PyCFunction) _wrap_IndividualLayoutConstraint_SetMargin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_GetValue", (PyCFunction) _wrap_IndividualLayoutConstraint_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_GetPercent", (PyCFunction) _wrap_IndividualLayoutConstraint_GetPercent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_GetOtherEdge", (PyCFunction) _wrap_IndividualLayoutConstraint_GetOtherEdge, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_GetDone", (PyCFunction) _wrap_IndividualLayoutConstraint_GetDone, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_SetDone", (PyCFunction) _wrap_IndividualLayoutConstraint_SetDone, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_GetRelationship", (PyCFunction) _wrap_IndividualLayoutConstraint_GetRelationship, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_SetRelationship", (PyCFunction) _wrap_IndividualLayoutConstraint_SetRelationship, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_ResetIfWin", (PyCFunction) _wrap_IndividualLayoutConstraint_ResetIfWin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_SatisfyConstraint", (PyCFunction) _wrap_IndividualLayoutConstraint_SatisfyConstraint, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_GetEdge", (PyCFunction) _wrap_IndividualLayoutConstraint_GetEdge, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IndividualLayoutConstraint_swigregister", IndividualLayoutConstraint_swigregister, METH_VARARGS },
+	 { (char *)"LayoutConstraints_left_get", (PyCFunction) _wrap_LayoutConstraints_left_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_top_get", (PyCFunction) _wrap_LayoutConstraints_top_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_right_get", (PyCFunction) _wrap_LayoutConstraints_right_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_bottom_get", (PyCFunction) _wrap_LayoutConstraints_bottom_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_width_get", (PyCFunction) _wrap_LayoutConstraints_width_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_height_get", (PyCFunction) _wrap_LayoutConstraints_height_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_centreX_get", (PyCFunction) _wrap_LayoutConstraints_centreX_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_centreY_get", (PyCFunction) _wrap_LayoutConstraints_centreY_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_LayoutConstraints", (PyCFunction) _wrap_new_LayoutConstraints, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_SatisfyConstraints", (PyCFunction) _wrap_LayoutConstraints_SatisfyConstraints, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_AreSatisfied", (PyCFunction) _wrap_LayoutConstraints_AreSatisfied, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LayoutConstraints_swigregister", LayoutConstraints_swigregister, METH_VARARGS },
+	 { NULL, NULL }
 };
 
 
@@ -42153,7 +42239,7 @@ _swigt__p_wxPyValidator,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0, 0, 0, 0.0, 0, 0}};
+{0}};
 
 #ifdef __cplusplus
 }
@@ -42213,6 +42299,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"EXT_DIALOG_STYLE", SWIG_FromInt((int)wxEXT_DIALOG_STYLE));
     PyDict_SetItemString(d,"CLIP_CHILDREN", SWIG_FromInt((int)wxCLIP_CHILDREN));
     PyDict_SetItemString(d,"CLIP_SIBLINGS", SWIG_FromInt((int)wxCLIP_SIBLINGS));
+    PyDict_SetItemString(d,"ALWAYS_SHOW_SB", SWIG_FromInt((int)wxALWAYS_SHOW_SB));
     PyDict_SetItemString(d,"RETAINED", SWIG_FromInt((int)wxRETAINED));
     PyDict_SetItemString(d,"BACKINGSTORE", SWIG_FromInt((int)wxBACKINGSTORE));
     PyDict_SetItemString(d,"COLOURED", SWIG_FromInt((int)wxCOLOURED));

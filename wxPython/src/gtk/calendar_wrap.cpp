@@ -1182,7 +1182,7 @@ static PyObject *_wrap_CalendarNameStr_get() {
 static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) -1 ;
     wxDateTime const &arg3_defvalue = wxDefaultDateTime ;
     wxDateTime *arg3 = (wxDateTime *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
@@ -1207,11 +1207,13 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject
         (char *) "parent",(char *) "id",(char *) "date",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:new_CalendarCtrl",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:new_CalendarCtrl",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxDateTime,
         SWIG_POINTER_EXCEPTION | 0)) == -1)

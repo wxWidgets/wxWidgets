@@ -6,6 +6,7 @@ import _stc
 import core
 import misc
 wx = core 
+__docfilter__ = wx.__docfilter__ 
 STC_USE_DND = _stc.STC_USE_DND
 STC_USE_POPUP = _stc.STC_USE_POPUP
 STC_INVALID_POSITION = _stc.STC_INVALID_POSITION
@@ -893,7 +894,7 @@ class StyledTextCtrl(core.Control):
         return "<%s.%s; proxy of C++ wxStyledTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, String name=STCNameStr) -> StyledTextCtrl
         """
         newobj = _stc.new_StyledTextCtrl(*args, **kwargs)
@@ -904,1710 +905,1710 @@ class StyledTextCtrl(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, String name=wxSTCNameStr)
         """
         return _stc.StyledTextCtrl_Create(*args, **kwargs)
 
     def AddText(*args, **kwargs):
-        """AddText(String text)"""
+        """AddText(self, String text)"""
         return _stc.StyledTextCtrl_AddText(*args, **kwargs)
 
     def AddStyledText(*args, **kwargs):
-        """AddStyledText(wxMemoryBuffer data)"""
+        """AddStyledText(self, wxMemoryBuffer data)"""
         return _stc.StyledTextCtrl_AddStyledText(*args, **kwargs)
 
     def InsertText(*args, **kwargs):
-        """InsertText(int pos, String text)"""
+        """InsertText(self, int pos, String text)"""
         return _stc.StyledTextCtrl_InsertText(*args, **kwargs)
 
     def ClearAll(*args, **kwargs):
-        """ClearAll()"""
+        """ClearAll(self)"""
         return _stc.StyledTextCtrl_ClearAll(*args, **kwargs)
 
     def ClearDocumentStyle(*args, **kwargs):
-        """ClearDocumentStyle()"""
+        """ClearDocumentStyle(self)"""
         return _stc.StyledTextCtrl_ClearDocumentStyle(*args, **kwargs)
 
     def GetLength(*args, **kwargs):
-        """GetLength() -> int"""
+        """GetLength(self) -> int"""
         return _stc.StyledTextCtrl_GetLength(*args, **kwargs)
 
     def GetCharAt(*args, **kwargs):
-        """GetCharAt(int pos) -> int"""
+        """GetCharAt(self, int pos) -> int"""
         return _stc.StyledTextCtrl_GetCharAt(*args, **kwargs)
 
     def GetCurrentPos(*args, **kwargs):
-        """GetCurrentPos() -> int"""
+        """GetCurrentPos(self) -> int"""
         return _stc.StyledTextCtrl_GetCurrentPos(*args, **kwargs)
 
     def GetAnchor(*args, **kwargs):
-        """GetAnchor() -> int"""
+        """GetAnchor(self) -> int"""
         return _stc.StyledTextCtrl_GetAnchor(*args, **kwargs)
 
     def GetStyleAt(*args, **kwargs):
-        """GetStyleAt(int pos) -> int"""
+        """GetStyleAt(self, int pos) -> int"""
         return _stc.StyledTextCtrl_GetStyleAt(*args, **kwargs)
 
     def Redo(*args, **kwargs):
-        """Redo()"""
+        """Redo(self)"""
         return _stc.StyledTextCtrl_Redo(*args, **kwargs)
 
     def SetUndoCollection(*args, **kwargs):
-        """SetUndoCollection(bool collectUndo)"""
+        """SetUndoCollection(self, bool collectUndo)"""
         return _stc.StyledTextCtrl_SetUndoCollection(*args, **kwargs)
 
     def SelectAll(*args, **kwargs):
-        """SelectAll()"""
+        """SelectAll(self)"""
         return _stc.StyledTextCtrl_SelectAll(*args, **kwargs)
 
     def SetSavePoint(*args, **kwargs):
-        """SetSavePoint()"""
+        """SetSavePoint(self)"""
         return _stc.StyledTextCtrl_SetSavePoint(*args, **kwargs)
 
     def GetStyledText(*args, **kwargs):
-        """GetStyledText(int startPos, int endPos) -> wxMemoryBuffer"""
+        """GetStyledText(self, int startPos, int endPos) -> wxMemoryBuffer"""
         return _stc.StyledTextCtrl_GetStyledText(*args, **kwargs)
 
     def CanRedo(*args, **kwargs):
-        """CanRedo() -> bool"""
+        """CanRedo(self) -> bool"""
         return _stc.StyledTextCtrl_CanRedo(*args, **kwargs)
 
     def MarkerLineFromHandle(*args, **kwargs):
-        """MarkerLineFromHandle(int handle) -> int"""
+        """MarkerLineFromHandle(self, int handle) -> int"""
         return _stc.StyledTextCtrl_MarkerLineFromHandle(*args, **kwargs)
 
     def MarkerDeleteHandle(*args, **kwargs):
-        """MarkerDeleteHandle(int handle)"""
+        """MarkerDeleteHandle(self, int handle)"""
         return _stc.StyledTextCtrl_MarkerDeleteHandle(*args, **kwargs)
 
     def GetUndoCollection(*args, **kwargs):
-        """GetUndoCollection() -> bool"""
+        """GetUndoCollection(self) -> bool"""
         return _stc.StyledTextCtrl_GetUndoCollection(*args, **kwargs)
 
     def GetViewWhiteSpace(*args, **kwargs):
-        """GetViewWhiteSpace() -> int"""
+        """GetViewWhiteSpace(self) -> int"""
         return _stc.StyledTextCtrl_GetViewWhiteSpace(*args, **kwargs)
 
     def SetViewWhiteSpace(*args, **kwargs):
-        """SetViewWhiteSpace(int viewWS)"""
+        """SetViewWhiteSpace(self, int viewWS)"""
         return _stc.StyledTextCtrl_SetViewWhiteSpace(*args, **kwargs)
 
     def PositionFromPoint(*args, **kwargs):
-        """PositionFromPoint(Point pt) -> int"""
+        """PositionFromPoint(self, Point pt) -> int"""
         return _stc.StyledTextCtrl_PositionFromPoint(*args, **kwargs)
 
     def PositionFromPointClose(*args, **kwargs):
-        """PositionFromPointClose(int x, int y) -> int"""
+        """PositionFromPointClose(self, int x, int y) -> int"""
         return _stc.StyledTextCtrl_PositionFromPointClose(*args, **kwargs)
 
     def GotoLine(*args, **kwargs):
-        """GotoLine(int line)"""
+        """GotoLine(self, int line)"""
         return _stc.StyledTextCtrl_GotoLine(*args, **kwargs)
 
     def GotoPos(*args, **kwargs):
-        """GotoPos(int pos)"""
+        """GotoPos(self, int pos)"""
         return _stc.StyledTextCtrl_GotoPos(*args, **kwargs)
 
     def SetAnchor(*args, **kwargs):
-        """SetAnchor(int posAnchor)"""
+        """SetAnchor(self, int posAnchor)"""
         return _stc.StyledTextCtrl_SetAnchor(*args, **kwargs)
 
     def GetCurLine(*args, **kwargs):
-        """GetCurLine(int OUTPUT) -> String"""
+        """GetCurLine(self, int OUTPUT) -> String"""
         return _stc.StyledTextCtrl_GetCurLine(*args, **kwargs)
 
     def GetEndStyled(*args, **kwargs):
-        """GetEndStyled() -> int"""
+        """GetEndStyled(self) -> int"""
         return _stc.StyledTextCtrl_GetEndStyled(*args, **kwargs)
 
     def ConvertEOLs(*args, **kwargs):
-        """ConvertEOLs(int eolMode)"""
+        """ConvertEOLs(self, int eolMode)"""
         return _stc.StyledTextCtrl_ConvertEOLs(*args, **kwargs)
 
     def GetEOLMode(*args, **kwargs):
-        """GetEOLMode() -> int"""
+        """GetEOLMode(self) -> int"""
         return _stc.StyledTextCtrl_GetEOLMode(*args, **kwargs)
 
     def SetEOLMode(*args, **kwargs):
-        """SetEOLMode(int eolMode)"""
+        """SetEOLMode(self, int eolMode)"""
         return _stc.StyledTextCtrl_SetEOLMode(*args, **kwargs)
 
     def StartStyling(*args, **kwargs):
-        """StartStyling(int pos, int mask)"""
+        """StartStyling(self, int pos, int mask)"""
         return _stc.StyledTextCtrl_StartStyling(*args, **kwargs)
 
     def SetStyling(*args, **kwargs):
-        """SetStyling(int length, int style)"""
+        """SetStyling(self, int length, int style)"""
         return _stc.StyledTextCtrl_SetStyling(*args, **kwargs)
 
     def GetBufferedDraw(*args, **kwargs):
-        """GetBufferedDraw() -> bool"""
+        """GetBufferedDraw(self) -> bool"""
         return _stc.StyledTextCtrl_GetBufferedDraw(*args, **kwargs)
 
     def SetBufferedDraw(*args, **kwargs):
-        """SetBufferedDraw(bool buffered)"""
+        """SetBufferedDraw(self, bool buffered)"""
         return _stc.StyledTextCtrl_SetBufferedDraw(*args, **kwargs)
 
     def SetTabWidth(*args, **kwargs):
-        """SetTabWidth(int tabWidth)"""
+        """SetTabWidth(self, int tabWidth)"""
         return _stc.StyledTextCtrl_SetTabWidth(*args, **kwargs)
 
     def GetTabWidth(*args, **kwargs):
-        """GetTabWidth() -> int"""
+        """GetTabWidth(self) -> int"""
         return _stc.StyledTextCtrl_GetTabWidth(*args, **kwargs)
 
     def SetCodePage(*args, **kwargs):
-        """SetCodePage(int codePage)"""
+        """SetCodePage(self, int codePage)"""
         return _stc.StyledTextCtrl_SetCodePage(*args, **kwargs)
 
     def MarkerDefine(*args, **kwargs):
         """
-        MarkerDefine(int markerNumber, int markerSymbol, Colour foreground=wxNullColour, 
+        MarkerDefine(self, int markerNumber, int markerSymbol, Colour foreground=wxNullColour, 
             Colour background=wxNullColour)
         """
         return _stc.StyledTextCtrl_MarkerDefine(*args, **kwargs)
 
     def MarkerSetForeground(*args, **kwargs):
-        """MarkerSetForeground(int markerNumber, Colour fore)"""
+        """MarkerSetForeground(self, int markerNumber, Colour fore)"""
         return _stc.StyledTextCtrl_MarkerSetForeground(*args, **kwargs)
 
     def MarkerSetBackground(*args, **kwargs):
-        """MarkerSetBackground(int markerNumber, Colour back)"""
+        """MarkerSetBackground(self, int markerNumber, Colour back)"""
         return _stc.StyledTextCtrl_MarkerSetBackground(*args, **kwargs)
 
     def MarkerAdd(*args, **kwargs):
-        """MarkerAdd(int line, int markerNumber) -> int"""
+        """MarkerAdd(self, int line, int markerNumber) -> int"""
         return _stc.StyledTextCtrl_MarkerAdd(*args, **kwargs)
 
     def MarkerDelete(*args, **kwargs):
-        """MarkerDelete(int line, int markerNumber)"""
+        """MarkerDelete(self, int line, int markerNumber)"""
         return _stc.StyledTextCtrl_MarkerDelete(*args, **kwargs)
 
     def MarkerDeleteAll(*args, **kwargs):
-        """MarkerDeleteAll(int markerNumber)"""
+        """MarkerDeleteAll(self, int markerNumber)"""
         return _stc.StyledTextCtrl_MarkerDeleteAll(*args, **kwargs)
 
     def MarkerGet(*args, **kwargs):
-        """MarkerGet(int line) -> int"""
+        """MarkerGet(self, int line) -> int"""
         return _stc.StyledTextCtrl_MarkerGet(*args, **kwargs)
 
     def MarkerNext(*args, **kwargs):
-        """MarkerNext(int lineStart, int markerMask) -> int"""
+        """MarkerNext(self, int lineStart, int markerMask) -> int"""
         return _stc.StyledTextCtrl_MarkerNext(*args, **kwargs)
 
     def MarkerPrevious(*args, **kwargs):
-        """MarkerPrevious(int lineStart, int markerMask) -> int"""
+        """MarkerPrevious(self, int lineStart, int markerMask) -> int"""
         return _stc.StyledTextCtrl_MarkerPrevious(*args, **kwargs)
 
     def MarkerDefineBitmap(*args, **kwargs):
-        """MarkerDefineBitmap(int markerNumber, Bitmap bmp)"""
+        """MarkerDefineBitmap(self, int markerNumber, Bitmap bmp)"""
         return _stc.StyledTextCtrl_MarkerDefineBitmap(*args, **kwargs)
 
     def SetMarginType(*args, **kwargs):
-        """SetMarginType(int margin, int marginType)"""
+        """SetMarginType(self, int margin, int marginType)"""
         return _stc.StyledTextCtrl_SetMarginType(*args, **kwargs)
 
     def GetMarginType(*args, **kwargs):
-        """GetMarginType(int margin) -> int"""
+        """GetMarginType(self, int margin) -> int"""
         return _stc.StyledTextCtrl_GetMarginType(*args, **kwargs)
 
     def SetMarginWidth(*args, **kwargs):
-        """SetMarginWidth(int margin, int pixelWidth)"""
+        """SetMarginWidth(self, int margin, int pixelWidth)"""
         return _stc.StyledTextCtrl_SetMarginWidth(*args, **kwargs)
 
     def GetMarginWidth(*args, **kwargs):
-        """GetMarginWidth(int margin) -> int"""
+        """GetMarginWidth(self, int margin) -> int"""
         return _stc.StyledTextCtrl_GetMarginWidth(*args, **kwargs)
 
     def SetMarginMask(*args, **kwargs):
-        """SetMarginMask(int margin, int mask)"""
+        """SetMarginMask(self, int margin, int mask)"""
         return _stc.StyledTextCtrl_SetMarginMask(*args, **kwargs)
 
     def GetMarginMask(*args, **kwargs):
-        """GetMarginMask(int margin) -> int"""
+        """GetMarginMask(self, int margin) -> int"""
         return _stc.StyledTextCtrl_GetMarginMask(*args, **kwargs)
 
     def SetMarginSensitive(*args, **kwargs):
-        """SetMarginSensitive(int margin, bool sensitive)"""
+        """SetMarginSensitive(self, int margin, bool sensitive)"""
         return _stc.StyledTextCtrl_SetMarginSensitive(*args, **kwargs)
 
     def GetMarginSensitive(*args, **kwargs):
-        """GetMarginSensitive(int margin) -> bool"""
+        """GetMarginSensitive(self, int margin) -> bool"""
         return _stc.StyledTextCtrl_GetMarginSensitive(*args, **kwargs)
 
     def StyleClearAll(*args, **kwargs):
-        """StyleClearAll()"""
+        """StyleClearAll(self)"""
         return _stc.StyledTextCtrl_StyleClearAll(*args, **kwargs)
 
     def StyleSetForeground(*args, **kwargs):
-        """StyleSetForeground(int style, Colour fore)"""
+        """StyleSetForeground(self, int style, Colour fore)"""
         return _stc.StyledTextCtrl_StyleSetForeground(*args, **kwargs)
 
     def StyleSetBackground(*args, **kwargs):
-        """StyleSetBackground(int style, Colour back)"""
+        """StyleSetBackground(self, int style, Colour back)"""
         return _stc.StyledTextCtrl_StyleSetBackground(*args, **kwargs)
 
     def StyleSetBold(*args, **kwargs):
-        """StyleSetBold(int style, bool bold)"""
+        """StyleSetBold(self, int style, bool bold)"""
         return _stc.StyledTextCtrl_StyleSetBold(*args, **kwargs)
 
     def StyleSetItalic(*args, **kwargs):
-        """StyleSetItalic(int style, bool italic)"""
+        """StyleSetItalic(self, int style, bool italic)"""
         return _stc.StyledTextCtrl_StyleSetItalic(*args, **kwargs)
 
     def StyleSetSize(*args, **kwargs):
-        """StyleSetSize(int style, int sizePoints)"""
+        """StyleSetSize(self, int style, int sizePoints)"""
         return _stc.StyledTextCtrl_StyleSetSize(*args, **kwargs)
 
     def StyleSetFaceName(*args, **kwargs):
-        """StyleSetFaceName(int style, String fontName)"""
+        """StyleSetFaceName(self, int style, String fontName)"""
         return _stc.StyledTextCtrl_StyleSetFaceName(*args, **kwargs)
 
     def StyleSetEOLFilled(*args, **kwargs):
-        """StyleSetEOLFilled(int style, bool filled)"""
+        """StyleSetEOLFilled(self, int style, bool filled)"""
         return _stc.StyledTextCtrl_StyleSetEOLFilled(*args, **kwargs)
 
     def StyleResetDefault(*args, **kwargs):
-        """StyleResetDefault()"""
+        """StyleResetDefault(self)"""
         return _stc.StyledTextCtrl_StyleResetDefault(*args, **kwargs)
 
     def StyleSetUnderline(*args, **kwargs):
-        """StyleSetUnderline(int style, bool underline)"""
+        """StyleSetUnderline(self, int style, bool underline)"""
         return _stc.StyledTextCtrl_StyleSetUnderline(*args, **kwargs)
 
     def StyleSetCase(*args, **kwargs):
-        """StyleSetCase(int style, int caseForce)"""
+        """StyleSetCase(self, int style, int caseForce)"""
         return _stc.StyledTextCtrl_StyleSetCase(*args, **kwargs)
 
     def StyleSetCharacterSet(*args, **kwargs):
-        """StyleSetCharacterSet(int style, int characterSet)"""
+        """StyleSetCharacterSet(self, int style, int characterSet)"""
         return _stc.StyledTextCtrl_StyleSetCharacterSet(*args, **kwargs)
 
     def StyleSetHotSpot(*args, **kwargs):
-        """StyleSetHotSpot(int style, bool hotspot)"""
+        """StyleSetHotSpot(self, int style, bool hotspot)"""
         return _stc.StyledTextCtrl_StyleSetHotSpot(*args, **kwargs)
 
     def SetSelForeground(*args, **kwargs):
-        """SetSelForeground(bool useSetting, Colour fore)"""
+        """SetSelForeground(self, bool useSetting, Colour fore)"""
         return _stc.StyledTextCtrl_SetSelForeground(*args, **kwargs)
 
     def SetSelBackground(*args, **kwargs):
-        """SetSelBackground(bool useSetting, Colour back)"""
+        """SetSelBackground(self, bool useSetting, Colour back)"""
         return _stc.StyledTextCtrl_SetSelBackground(*args, **kwargs)
 
     def SetCaretForeground(*args, **kwargs):
-        """SetCaretForeground(Colour fore)"""
+        """SetCaretForeground(self, Colour fore)"""
         return _stc.StyledTextCtrl_SetCaretForeground(*args, **kwargs)
 
     def CmdKeyAssign(*args, **kwargs):
-        """CmdKeyAssign(int key, int modifiers, int cmd)"""
+        """CmdKeyAssign(self, int key, int modifiers, int cmd)"""
         return _stc.StyledTextCtrl_CmdKeyAssign(*args, **kwargs)
 
     def CmdKeyClear(*args, **kwargs):
-        """CmdKeyClear(int key, int modifiers)"""
+        """CmdKeyClear(self, int key, int modifiers)"""
         return _stc.StyledTextCtrl_CmdKeyClear(*args, **kwargs)
 
     def CmdKeyClearAll(*args, **kwargs):
-        """CmdKeyClearAll()"""
+        """CmdKeyClearAll(self)"""
         return _stc.StyledTextCtrl_CmdKeyClearAll(*args, **kwargs)
 
     def SetStyleBytes(*args, **kwargs):
-        """SetStyleBytes(int length, char styleBytes)"""
+        """SetStyleBytes(self, int length, char styleBytes)"""
         return _stc.StyledTextCtrl_SetStyleBytes(*args, **kwargs)
 
     def StyleSetVisible(*args, **kwargs):
-        """StyleSetVisible(int style, bool visible)"""
+        """StyleSetVisible(self, int style, bool visible)"""
         return _stc.StyledTextCtrl_StyleSetVisible(*args, **kwargs)
 
     def GetCaretPeriod(*args, **kwargs):
-        """GetCaretPeriod() -> int"""
+        """GetCaretPeriod(self) -> int"""
         return _stc.StyledTextCtrl_GetCaretPeriod(*args, **kwargs)
 
     def SetCaretPeriod(*args, **kwargs):
-        """SetCaretPeriod(int periodMilliseconds)"""
+        """SetCaretPeriod(self, int periodMilliseconds)"""
         return _stc.StyledTextCtrl_SetCaretPeriod(*args, **kwargs)
 
     def SetWordChars(*args, **kwargs):
-        """SetWordChars(String characters)"""
+        """SetWordChars(self, String characters)"""
         return _stc.StyledTextCtrl_SetWordChars(*args, **kwargs)
 
     def BeginUndoAction(*args, **kwargs):
-        """BeginUndoAction()"""
+        """BeginUndoAction(self)"""
         return _stc.StyledTextCtrl_BeginUndoAction(*args, **kwargs)
 
     def EndUndoAction(*args, **kwargs):
-        """EndUndoAction()"""
+        """EndUndoAction(self)"""
         return _stc.StyledTextCtrl_EndUndoAction(*args, **kwargs)
 
     def IndicatorSetStyle(*args, **kwargs):
-        """IndicatorSetStyle(int indic, int style)"""
+        """IndicatorSetStyle(self, int indic, int style)"""
         return _stc.StyledTextCtrl_IndicatorSetStyle(*args, **kwargs)
 
     def IndicatorGetStyle(*args, **kwargs):
-        """IndicatorGetStyle(int indic) -> int"""
+        """IndicatorGetStyle(self, int indic) -> int"""
         return _stc.StyledTextCtrl_IndicatorGetStyle(*args, **kwargs)
 
     def IndicatorSetForeground(*args, **kwargs):
-        """IndicatorSetForeground(int indic, Colour fore)"""
+        """IndicatorSetForeground(self, int indic, Colour fore)"""
         return _stc.StyledTextCtrl_IndicatorSetForeground(*args, **kwargs)
 
     def IndicatorGetForeground(*args, **kwargs):
-        """IndicatorGetForeground(int indic) -> Colour"""
+        """IndicatorGetForeground(self, int indic) -> Colour"""
         return _stc.StyledTextCtrl_IndicatorGetForeground(*args, **kwargs)
 
     def SetWhitespaceForeground(*args, **kwargs):
-        """SetWhitespaceForeground(bool useSetting, Colour fore)"""
+        """SetWhitespaceForeground(self, bool useSetting, Colour fore)"""
         return _stc.StyledTextCtrl_SetWhitespaceForeground(*args, **kwargs)
 
     def SetWhitespaceBackground(*args, **kwargs):
-        """SetWhitespaceBackground(bool useSetting, Colour back)"""
+        """SetWhitespaceBackground(self, bool useSetting, Colour back)"""
         return _stc.StyledTextCtrl_SetWhitespaceBackground(*args, **kwargs)
 
     def SetStyleBits(*args, **kwargs):
-        """SetStyleBits(int bits)"""
+        """SetStyleBits(self, int bits)"""
         return _stc.StyledTextCtrl_SetStyleBits(*args, **kwargs)
 
     def GetStyleBits(*args, **kwargs):
-        """GetStyleBits() -> int"""
+        """GetStyleBits(self) -> int"""
         return _stc.StyledTextCtrl_GetStyleBits(*args, **kwargs)
 
     def SetLineState(*args, **kwargs):
-        """SetLineState(int line, int state)"""
+        """SetLineState(self, int line, int state)"""
         return _stc.StyledTextCtrl_SetLineState(*args, **kwargs)
 
     def GetLineState(*args, **kwargs):
-        """GetLineState(int line) -> int"""
+        """GetLineState(self, int line) -> int"""
         return _stc.StyledTextCtrl_GetLineState(*args, **kwargs)
 
     def GetMaxLineState(*args, **kwargs):
-        """GetMaxLineState() -> int"""
+        """GetMaxLineState(self) -> int"""
         return _stc.StyledTextCtrl_GetMaxLineState(*args, **kwargs)
 
     def GetCaretLineVisible(*args, **kwargs):
-        """GetCaretLineVisible() -> bool"""
+        """GetCaretLineVisible(self) -> bool"""
         return _stc.StyledTextCtrl_GetCaretLineVisible(*args, **kwargs)
 
     def SetCaretLineVisible(*args, **kwargs):
-        """SetCaretLineVisible(bool show)"""
+        """SetCaretLineVisible(self, bool show)"""
         return _stc.StyledTextCtrl_SetCaretLineVisible(*args, **kwargs)
 
     def GetCaretLineBack(*args, **kwargs):
-        """GetCaretLineBack() -> Colour"""
+        """GetCaretLineBack(self) -> Colour"""
         return _stc.StyledTextCtrl_GetCaretLineBack(*args, **kwargs)
 
     def SetCaretLineBack(*args, **kwargs):
-        """SetCaretLineBack(Colour back)"""
+        """SetCaretLineBack(self, Colour back)"""
         return _stc.StyledTextCtrl_SetCaretLineBack(*args, **kwargs)
 
     def StyleSetChangeable(*args, **kwargs):
-        """StyleSetChangeable(int style, bool changeable)"""
+        """StyleSetChangeable(self, int style, bool changeable)"""
         return _stc.StyledTextCtrl_StyleSetChangeable(*args, **kwargs)
 
     def AutoCompShow(*args, **kwargs):
-        """AutoCompShow(int lenEntered, String itemList)"""
+        """AutoCompShow(self, int lenEntered, String itemList)"""
         return _stc.StyledTextCtrl_AutoCompShow(*args, **kwargs)
 
     def AutoCompCancel(*args, **kwargs):
-        """AutoCompCancel()"""
+        """AutoCompCancel(self)"""
         return _stc.StyledTextCtrl_AutoCompCancel(*args, **kwargs)
 
     def AutoCompActive(*args, **kwargs):
-        """AutoCompActive() -> bool"""
+        """AutoCompActive(self) -> bool"""
         return _stc.StyledTextCtrl_AutoCompActive(*args, **kwargs)
 
     def AutoCompPosStart(*args, **kwargs):
-        """AutoCompPosStart() -> int"""
+        """AutoCompPosStart(self) -> int"""
         return _stc.StyledTextCtrl_AutoCompPosStart(*args, **kwargs)
 
     def AutoCompComplete(*args, **kwargs):
-        """AutoCompComplete()"""
+        """AutoCompComplete(self)"""
         return _stc.StyledTextCtrl_AutoCompComplete(*args, **kwargs)
 
     def AutoCompStops(*args, **kwargs):
-        """AutoCompStops(String characterSet)"""
+        """AutoCompStops(self, String characterSet)"""
         return _stc.StyledTextCtrl_AutoCompStops(*args, **kwargs)
 
     def AutoCompSetSeparator(*args, **kwargs):
-        """AutoCompSetSeparator(int separatorCharacter)"""
+        """AutoCompSetSeparator(self, int separatorCharacter)"""
         return _stc.StyledTextCtrl_AutoCompSetSeparator(*args, **kwargs)
 
     def AutoCompGetSeparator(*args, **kwargs):
-        """AutoCompGetSeparator() -> int"""
+        """AutoCompGetSeparator(self) -> int"""
         return _stc.StyledTextCtrl_AutoCompGetSeparator(*args, **kwargs)
 
     def AutoCompSelect(*args, **kwargs):
-        """AutoCompSelect(String text)"""
+        """AutoCompSelect(self, String text)"""
         return _stc.StyledTextCtrl_AutoCompSelect(*args, **kwargs)
 
     def AutoCompSetCancelAtStart(*args, **kwargs):
-        """AutoCompSetCancelAtStart(bool cancel)"""
+        """AutoCompSetCancelAtStart(self, bool cancel)"""
         return _stc.StyledTextCtrl_AutoCompSetCancelAtStart(*args, **kwargs)
 
     def AutoCompGetCancelAtStart(*args, **kwargs):
-        """AutoCompGetCancelAtStart() -> bool"""
+        """AutoCompGetCancelAtStart(self) -> bool"""
         return _stc.StyledTextCtrl_AutoCompGetCancelAtStart(*args, **kwargs)
 
     def AutoCompSetFillUps(*args, **kwargs):
-        """AutoCompSetFillUps(String characterSet)"""
+        """AutoCompSetFillUps(self, String characterSet)"""
         return _stc.StyledTextCtrl_AutoCompSetFillUps(*args, **kwargs)
 
     def AutoCompSetChooseSingle(*args, **kwargs):
-        """AutoCompSetChooseSingle(bool chooseSingle)"""
+        """AutoCompSetChooseSingle(self, bool chooseSingle)"""
         return _stc.StyledTextCtrl_AutoCompSetChooseSingle(*args, **kwargs)
 
     def AutoCompGetChooseSingle(*args, **kwargs):
-        """AutoCompGetChooseSingle() -> bool"""
+        """AutoCompGetChooseSingle(self) -> bool"""
         return _stc.StyledTextCtrl_AutoCompGetChooseSingle(*args, **kwargs)
 
     def AutoCompSetIgnoreCase(*args, **kwargs):
-        """AutoCompSetIgnoreCase(bool ignoreCase)"""
+        """AutoCompSetIgnoreCase(self, bool ignoreCase)"""
         return _stc.StyledTextCtrl_AutoCompSetIgnoreCase(*args, **kwargs)
 
     def AutoCompGetIgnoreCase(*args, **kwargs):
-        """AutoCompGetIgnoreCase() -> bool"""
+        """AutoCompGetIgnoreCase(self) -> bool"""
         return _stc.StyledTextCtrl_AutoCompGetIgnoreCase(*args, **kwargs)
 
     def UserListShow(*args, **kwargs):
-        """UserListShow(int listType, String itemList)"""
+        """UserListShow(self, int listType, String itemList)"""
         return _stc.StyledTextCtrl_UserListShow(*args, **kwargs)
 
     def AutoCompSetAutoHide(*args, **kwargs):
-        """AutoCompSetAutoHide(bool autoHide)"""
+        """AutoCompSetAutoHide(self, bool autoHide)"""
         return _stc.StyledTextCtrl_AutoCompSetAutoHide(*args, **kwargs)
 
     def AutoCompGetAutoHide(*args, **kwargs):
-        """AutoCompGetAutoHide() -> bool"""
+        """AutoCompGetAutoHide(self) -> bool"""
         return _stc.StyledTextCtrl_AutoCompGetAutoHide(*args, **kwargs)
 
     def AutoCompSetDropRestOfWord(*args, **kwargs):
-        """AutoCompSetDropRestOfWord(bool dropRestOfWord)"""
+        """AutoCompSetDropRestOfWord(self, bool dropRestOfWord)"""
         return _stc.StyledTextCtrl_AutoCompSetDropRestOfWord(*args, **kwargs)
 
     def AutoCompGetDropRestOfWord(*args, **kwargs):
-        """AutoCompGetDropRestOfWord() -> bool"""
+        """AutoCompGetDropRestOfWord(self) -> bool"""
         return _stc.StyledTextCtrl_AutoCompGetDropRestOfWord(*args, **kwargs)
 
     def RegisterImage(*args, **kwargs):
-        """RegisterImage(int type, Bitmap bmp)"""
+        """RegisterImage(self, int type, Bitmap bmp)"""
         return _stc.StyledTextCtrl_RegisterImage(*args, **kwargs)
 
     def ClearRegisteredImages(*args, **kwargs):
-        """ClearRegisteredImages()"""
+        """ClearRegisteredImages(self)"""
         return _stc.StyledTextCtrl_ClearRegisteredImages(*args, **kwargs)
 
     def AutoCompGetTypeSeparator(*args, **kwargs):
-        """AutoCompGetTypeSeparator() -> int"""
+        """AutoCompGetTypeSeparator(self) -> int"""
         return _stc.StyledTextCtrl_AutoCompGetTypeSeparator(*args, **kwargs)
 
     def AutoCompSetTypeSeparator(*args, **kwargs):
-        """AutoCompSetTypeSeparator(int separatorCharacter)"""
+        """AutoCompSetTypeSeparator(self, int separatorCharacter)"""
         return _stc.StyledTextCtrl_AutoCompSetTypeSeparator(*args, **kwargs)
 
     def SetIndent(*args, **kwargs):
-        """SetIndent(int indentSize)"""
+        """SetIndent(self, int indentSize)"""
         return _stc.StyledTextCtrl_SetIndent(*args, **kwargs)
 
     def GetIndent(*args, **kwargs):
-        """GetIndent() -> int"""
+        """GetIndent(self) -> int"""
         return _stc.StyledTextCtrl_GetIndent(*args, **kwargs)
 
     def SetUseTabs(*args, **kwargs):
-        """SetUseTabs(bool useTabs)"""
+        """SetUseTabs(self, bool useTabs)"""
         return _stc.StyledTextCtrl_SetUseTabs(*args, **kwargs)
 
     def GetUseTabs(*args, **kwargs):
-        """GetUseTabs() -> bool"""
+        """GetUseTabs(self) -> bool"""
         return _stc.StyledTextCtrl_GetUseTabs(*args, **kwargs)
 
     def SetLineIndentation(*args, **kwargs):
-        """SetLineIndentation(int line, int indentSize)"""
+        """SetLineIndentation(self, int line, int indentSize)"""
         return _stc.StyledTextCtrl_SetLineIndentation(*args, **kwargs)
 
     def GetLineIndentation(*args, **kwargs):
-        """GetLineIndentation(int line) -> int"""
+        """GetLineIndentation(self, int line) -> int"""
         return _stc.StyledTextCtrl_GetLineIndentation(*args, **kwargs)
 
     def GetLineIndentPosition(*args, **kwargs):
-        """GetLineIndentPosition(int line) -> int"""
+        """GetLineIndentPosition(self, int line) -> int"""
         return _stc.StyledTextCtrl_GetLineIndentPosition(*args, **kwargs)
 
     def GetColumn(*args, **kwargs):
-        """GetColumn(int pos) -> int"""
+        """GetColumn(self, int pos) -> int"""
         return _stc.StyledTextCtrl_GetColumn(*args, **kwargs)
 
     def SetUseHorizontalScrollBar(*args, **kwargs):
-        """SetUseHorizontalScrollBar(bool show)"""
+        """SetUseHorizontalScrollBar(self, bool show)"""
         return _stc.StyledTextCtrl_SetUseHorizontalScrollBar(*args, **kwargs)
 
     def GetUseHorizontalScrollBar(*args, **kwargs):
-        """GetUseHorizontalScrollBar() -> bool"""
+        """GetUseHorizontalScrollBar(self) -> bool"""
         return _stc.StyledTextCtrl_GetUseHorizontalScrollBar(*args, **kwargs)
 
     def SetIndentationGuides(*args, **kwargs):
-        """SetIndentationGuides(bool show)"""
+        """SetIndentationGuides(self, bool show)"""
         return _stc.StyledTextCtrl_SetIndentationGuides(*args, **kwargs)
 
     def GetIndentationGuides(*args, **kwargs):
-        """GetIndentationGuides() -> bool"""
+        """GetIndentationGuides(self) -> bool"""
         return _stc.StyledTextCtrl_GetIndentationGuides(*args, **kwargs)
 
     def SetHighlightGuide(*args, **kwargs):
-        """SetHighlightGuide(int column)"""
+        """SetHighlightGuide(self, int column)"""
         return _stc.StyledTextCtrl_SetHighlightGuide(*args, **kwargs)
 
     def GetHighlightGuide(*args, **kwargs):
-        """GetHighlightGuide() -> int"""
+        """GetHighlightGuide(self) -> int"""
         return _stc.StyledTextCtrl_GetHighlightGuide(*args, **kwargs)
 
     def GetLineEndPosition(*args, **kwargs):
-        """GetLineEndPosition(int line) -> int"""
+        """GetLineEndPosition(self, int line) -> int"""
         return _stc.StyledTextCtrl_GetLineEndPosition(*args, **kwargs)
 
     def GetCodePage(*args, **kwargs):
-        """GetCodePage() -> int"""
+        """GetCodePage(self) -> int"""
         return _stc.StyledTextCtrl_GetCodePage(*args, **kwargs)
 
     def GetCaretForeground(*args, **kwargs):
-        """GetCaretForeground() -> Colour"""
+        """GetCaretForeground(self) -> Colour"""
         return _stc.StyledTextCtrl_GetCaretForeground(*args, **kwargs)
 
     def GetReadOnly(*args, **kwargs):
-        """GetReadOnly() -> bool"""
+        """GetReadOnly(self) -> bool"""
         return _stc.StyledTextCtrl_GetReadOnly(*args, **kwargs)
 
     def SetCurrentPos(*args, **kwargs):
-        """SetCurrentPos(int pos)"""
+        """SetCurrentPos(self, int pos)"""
         return _stc.StyledTextCtrl_SetCurrentPos(*args, **kwargs)
 
     def SetSelectionStart(*args, **kwargs):
-        """SetSelectionStart(int pos)"""
+        """SetSelectionStart(self, int pos)"""
         return _stc.StyledTextCtrl_SetSelectionStart(*args, **kwargs)
 
     def GetSelectionStart(*args, **kwargs):
-        """GetSelectionStart() -> int"""
+        """GetSelectionStart(self) -> int"""
         return _stc.StyledTextCtrl_GetSelectionStart(*args, **kwargs)
 
     def SetSelectionEnd(*args, **kwargs):
-        """SetSelectionEnd(int pos)"""
+        """SetSelectionEnd(self, int pos)"""
         return _stc.StyledTextCtrl_SetSelectionEnd(*args, **kwargs)
 
     def GetSelectionEnd(*args, **kwargs):
-        """GetSelectionEnd() -> int"""
+        """GetSelectionEnd(self) -> int"""
         return _stc.StyledTextCtrl_GetSelectionEnd(*args, **kwargs)
 
     def SetPrintMagnification(*args, **kwargs):
-        """SetPrintMagnification(int magnification)"""
+        """SetPrintMagnification(self, int magnification)"""
         return _stc.StyledTextCtrl_SetPrintMagnification(*args, **kwargs)
 
     def GetPrintMagnification(*args, **kwargs):
-        """GetPrintMagnification() -> int"""
+        """GetPrintMagnification(self) -> int"""
         return _stc.StyledTextCtrl_GetPrintMagnification(*args, **kwargs)
 
     def SetPrintColourMode(*args, **kwargs):
-        """SetPrintColourMode(int mode)"""
+        """SetPrintColourMode(self, int mode)"""
         return _stc.StyledTextCtrl_SetPrintColourMode(*args, **kwargs)
 
     def GetPrintColourMode(*args, **kwargs):
-        """GetPrintColourMode() -> int"""
+        """GetPrintColourMode(self) -> int"""
         return _stc.StyledTextCtrl_GetPrintColourMode(*args, **kwargs)
 
     def FindText(*args, **kwargs):
-        """FindText(int minPos, int maxPos, String text, int flags=0) -> int"""
+        """FindText(self, int minPos, int maxPos, String text, int flags=0) -> int"""
         return _stc.StyledTextCtrl_FindText(*args, **kwargs)
 
     def FormatRange(*args, **kwargs):
         """
-        FormatRange(bool doDraw, int startPos, int endPos, DC draw, DC target, 
+        FormatRange(self, bool doDraw, int startPos, int endPos, DC draw, DC target, 
             Rect renderRect, Rect pageRect) -> int
         """
         return _stc.StyledTextCtrl_FormatRange(*args, **kwargs)
 
     def GetFirstVisibleLine(*args, **kwargs):
-        """GetFirstVisibleLine() -> int"""
+        """GetFirstVisibleLine(self) -> int"""
         return _stc.StyledTextCtrl_GetFirstVisibleLine(*args, **kwargs)
 
     def GetLine(*args, **kwargs):
-        """GetLine(int line) -> String"""
+        """GetLine(self, int line) -> String"""
         return _stc.StyledTextCtrl_GetLine(*args, **kwargs)
 
     def GetLineCount(*args, **kwargs):
-        """GetLineCount() -> int"""
+        """GetLineCount(self) -> int"""
         return _stc.StyledTextCtrl_GetLineCount(*args, **kwargs)
 
     def SetMarginLeft(*args, **kwargs):
-        """SetMarginLeft(int pixelWidth)"""
+        """SetMarginLeft(self, int pixelWidth)"""
         return _stc.StyledTextCtrl_SetMarginLeft(*args, **kwargs)
 
     def GetMarginLeft(*args, **kwargs):
-        """GetMarginLeft() -> int"""
+        """GetMarginLeft(self) -> int"""
         return _stc.StyledTextCtrl_GetMarginLeft(*args, **kwargs)
 
     def SetMarginRight(*args, **kwargs):
-        """SetMarginRight(int pixelWidth)"""
+        """SetMarginRight(self, int pixelWidth)"""
         return _stc.StyledTextCtrl_SetMarginRight(*args, **kwargs)
 
     def GetMarginRight(*args, **kwargs):
-        """GetMarginRight() -> int"""
+        """GetMarginRight(self) -> int"""
         return _stc.StyledTextCtrl_GetMarginRight(*args, **kwargs)
 
     def GetModify(*args, **kwargs):
-        """GetModify() -> bool"""
+        """GetModify(self) -> bool"""
         return _stc.StyledTextCtrl_GetModify(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
-        """SetSelection(int start, int end)"""
+        """SetSelection(self, int start, int end)"""
         return _stc.StyledTextCtrl_SetSelection(*args, **kwargs)
 
     def GetSelectedText(*args, **kwargs):
-        """GetSelectedText() -> String"""
+        """GetSelectedText(self) -> String"""
         return _stc.StyledTextCtrl_GetSelectedText(*args, **kwargs)
 
     def GetTextRange(*args, **kwargs):
-        """GetTextRange(int startPos, int endPos) -> String"""
+        """GetTextRange(self, int startPos, int endPos) -> String"""
         return _stc.StyledTextCtrl_GetTextRange(*args, **kwargs)
 
     def HideSelection(*args, **kwargs):
-        """HideSelection(bool normal)"""
+        """HideSelection(self, bool normal)"""
         return _stc.StyledTextCtrl_HideSelection(*args, **kwargs)
 
     def LineFromPosition(*args, **kwargs):
-        """LineFromPosition(int pos) -> int"""
+        """LineFromPosition(self, int pos) -> int"""
         return _stc.StyledTextCtrl_LineFromPosition(*args, **kwargs)
 
     def PositionFromLine(*args, **kwargs):
-        """PositionFromLine(int line) -> int"""
+        """PositionFromLine(self, int line) -> int"""
         return _stc.StyledTextCtrl_PositionFromLine(*args, **kwargs)
 
     def LineScroll(*args, **kwargs):
-        """LineScroll(int columns, int lines)"""
+        """LineScroll(self, int columns, int lines)"""
         return _stc.StyledTextCtrl_LineScroll(*args, **kwargs)
 
     def EnsureCaretVisible(*args, **kwargs):
-        """EnsureCaretVisible()"""
+        """EnsureCaretVisible(self)"""
         return _stc.StyledTextCtrl_EnsureCaretVisible(*args, **kwargs)
 
     def ReplaceSelection(*args, **kwargs):
-        """ReplaceSelection(String text)"""
+        """ReplaceSelection(self, String text)"""
         return _stc.StyledTextCtrl_ReplaceSelection(*args, **kwargs)
 
     def SetReadOnly(*args, **kwargs):
-        """SetReadOnly(bool readOnly)"""
+        """SetReadOnly(self, bool readOnly)"""
         return _stc.StyledTextCtrl_SetReadOnly(*args, **kwargs)
 
     def CanPaste(*args, **kwargs):
-        """CanPaste() -> bool"""
+        """CanPaste(self) -> bool"""
         return _stc.StyledTextCtrl_CanPaste(*args, **kwargs)
 
     def CanUndo(*args, **kwargs):
-        """CanUndo() -> bool"""
+        """CanUndo(self) -> bool"""
         return _stc.StyledTextCtrl_CanUndo(*args, **kwargs)
 
     def EmptyUndoBuffer(*args, **kwargs):
-        """EmptyUndoBuffer()"""
+        """EmptyUndoBuffer(self)"""
         return _stc.StyledTextCtrl_EmptyUndoBuffer(*args, **kwargs)
 
     def Undo(*args, **kwargs):
-        """Undo()"""
+        """Undo(self)"""
         return _stc.StyledTextCtrl_Undo(*args, **kwargs)
 
     def Cut(*args, **kwargs):
-        """Cut()"""
+        """Cut(self)"""
         return _stc.StyledTextCtrl_Cut(*args, **kwargs)
 
     def Copy(*args, **kwargs):
-        """Copy()"""
+        """Copy(self)"""
         return _stc.StyledTextCtrl_Copy(*args, **kwargs)
 
     def Paste(*args, **kwargs):
-        """Paste()"""
+        """Paste(self)"""
         return _stc.StyledTextCtrl_Paste(*args, **kwargs)
 
     def Clear(*args, **kwargs):
-        """Clear()"""
+        """Clear(self)"""
         return _stc.StyledTextCtrl_Clear(*args, **kwargs)
 
     def SetText(*args, **kwargs):
-        """SetText(String text)"""
+        """SetText(self, String text)"""
         return _stc.StyledTextCtrl_SetText(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText() -> String"""
+        """GetText(self) -> String"""
         return _stc.StyledTextCtrl_GetText(*args, **kwargs)
 
     def GetTextLength(*args, **kwargs):
-        """GetTextLength() -> int"""
+        """GetTextLength(self) -> int"""
         return _stc.StyledTextCtrl_GetTextLength(*args, **kwargs)
 
     def SetOvertype(*args, **kwargs):
-        """SetOvertype(bool overtype)"""
+        """SetOvertype(self, bool overtype)"""
         return _stc.StyledTextCtrl_SetOvertype(*args, **kwargs)
 
     def GetOvertype(*args, **kwargs):
-        """GetOvertype() -> bool"""
+        """GetOvertype(self) -> bool"""
         return _stc.StyledTextCtrl_GetOvertype(*args, **kwargs)
 
     def SetCaretWidth(*args, **kwargs):
-        """SetCaretWidth(int pixelWidth)"""
+        """SetCaretWidth(self, int pixelWidth)"""
         return _stc.StyledTextCtrl_SetCaretWidth(*args, **kwargs)
 
     def GetCaretWidth(*args, **kwargs):
-        """GetCaretWidth() -> int"""
+        """GetCaretWidth(self) -> int"""
         return _stc.StyledTextCtrl_GetCaretWidth(*args, **kwargs)
 
     def SetTargetStart(*args, **kwargs):
-        """SetTargetStart(int pos)"""
+        """SetTargetStart(self, int pos)"""
         return _stc.StyledTextCtrl_SetTargetStart(*args, **kwargs)
 
     def GetTargetStart(*args, **kwargs):
-        """GetTargetStart() -> int"""
+        """GetTargetStart(self) -> int"""
         return _stc.StyledTextCtrl_GetTargetStart(*args, **kwargs)
 
     def SetTargetEnd(*args, **kwargs):
-        """SetTargetEnd(int pos)"""
+        """SetTargetEnd(self, int pos)"""
         return _stc.StyledTextCtrl_SetTargetEnd(*args, **kwargs)
 
     def GetTargetEnd(*args, **kwargs):
-        """GetTargetEnd() -> int"""
+        """GetTargetEnd(self) -> int"""
         return _stc.StyledTextCtrl_GetTargetEnd(*args, **kwargs)
 
     def ReplaceTarget(*args, **kwargs):
-        """ReplaceTarget(String text) -> int"""
+        """ReplaceTarget(self, String text) -> int"""
         return _stc.StyledTextCtrl_ReplaceTarget(*args, **kwargs)
 
     def ReplaceTargetRE(*args, **kwargs):
-        """ReplaceTargetRE(String text) -> int"""
+        """ReplaceTargetRE(self, String text) -> int"""
         return _stc.StyledTextCtrl_ReplaceTargetRE(*args, **kwargs)
 
     def SearchInTarget(*args, **kwargs):
-        """SearchInTarget(String text) -> int"""
+        """SearchInTarget(self, String text) -> int"""
         return _stc.StyledTextCtrl_SearchInTarget(*args, **kwargs)
 
     def SetSearchFlags(*args, **kwargs):
-        """SetSearchFlags(int flags)"""
+        """SetSearchFlags(self, int flags)"""
         return _stc.StyledTextCtrl_SetSearchFlags(*args, **kwargs)
 
     def GetSearchFlags(*args, **kwargs):
-        """GetSearchFlags() -> int"""
+        """GetSearchFlags(self) -> int"""
         return _stc.StyledTextCtrl_GetSearchFlags(*args, **kwargs)
 
     def CallTipShow(*args, **kwargs):
-        """CallTipShow(int pos, String definition)"""
+        """CallTipShow(self, int pos, String definition)"""
         return _stc.StyledTextCtrl_CallTipShow(*args, **kwargs)
 
     def CallTipCancel(*args, **kwargs):
-        """CallTipCancel()"""
+        """CallTipCancel(self)"""
         return _stc.StyledTextCtrl_CallTipCancel(*args, **kwargs)
 
     def CallTipActive(*args, **kwargs):
-        """CallTipActive() -> bool"""
+        """CallTipActive(self) -> bool"""
         return _stc.StyledTextCtrl_CallTipActive(*args, **kwargs)
 
     def CallTipPosAtStart(*args, **kwargs):
-        """CallTipPosAtStart() -> int"""
+        """CallTipPosAtStart(self) -> int"""
         return _stc.StyledTextCtrl_CallTipPosAtStart(*args, **kwargs)
 
     def CallTipSetHighlight(*args, **kwargs):
-        """CallTipSetHighlight(int start, int end)"""
+        """CallTipSetHighlight(self, int start, int end)"""
         return _stc.StyledTextCtrl_CallTipSetHighlight(*args, **kwargs)
 
     def CallTipSetBackground(*args, **kwargs):
-        """CallTipSetBackground(Colour back)"""
+        """CallTipSetBackground(self, Colour back)"""
         return _stc.StyledTextCtrl_CallTipSetBackground(*args, **kwargs)
 
     def CallTipSetForeground(*args, **kwargs):
-        """CallTipSetForeground(Colour fore)"""
+        """CallTipSetForeground(self, Colour fore)"""
         return _stc.StyledTextCtrl_CallTipSetForeground(*args, **kwargs)
 
     def CallTipSetForegroundHighlight(*args, **kwargs):
-        """CallTipSetForegroundHighlight(Colour fore)"""
+        """CallTipSetForegroundHighlight(self, Colour fore)"""
         return _stc.StyledTextCtrl_CallTipSetForegroundHighlight(*args, **kwargs)
 
     def VisibleFromDocLine(*args, **kwargs):
-        """VisibleFromDocLine(int line) -> int"""
+        """VisibleFromDocLine(self, int line) -> int"""
         return _stc.StyledTextCtrl_VisibleFromDocLine(*args, **kwargs)
 
     def DocLineFromVisible(*args, **kwargs):
-        """DocLineFromVisible(int lineDisplay) -> int"""
+        """DocLineFromVisible(self, int lineDisplay) -> int"""
         return _stc.StyledTextCtrl_DocLineFromVisible(*args, **kwargs)
 
     def SetFoldLevel(*args, **kwargs):
-        """SetFoldLevel(int line, int level)"""
+        """SetFoldLevel(self, int line, int level)"""
         return _stc.StyledTextCtrl_SetFoldLevel(*args, **kwargs)
 
     def GetFoldLevel(*args, **kwargs):
-        """GetFoldLevel(int line) -> int"""
+        """GetFoldLevel(self, int line) -> int"""
         return _stc.StyledTextCtrl_GetFoldLevel(*args, **kwargs)
 
     def GetLastChild(*args, **kwargs):
-        """GetLastChild(int line, int level) -> int"""
+        """GetLastChild(self, int line, int level) -> int"""
         return _stc.StyledTextCtrl_GetLastChild(*args, **kwargs)
 
     def GetFoldParent(*args, **kwargs):
-        """GetFoldParent(int line) -> int"""
+        """GetFoldParent(self, int line) -> int"""
         return _stc.StyledTextCtrl_GetFoldParent(*args, **kwargs)
 
     def ShowLines(*args, **kwargs):
-        """ShowLines(int lineStart, int lineEnd)"""
+        """ShowLines(self, int lineStart, int lineEnd)"""
         return _stc.StyledTextCtrl_ShowLines(*args, **kwargs)
 
     def HideLines(*args, **kwargs):
-        """HideLines(int lineStart, int lineEnd)"""
+        """HideLines(self, int lineStart, int lineEnd)"""
         return _stc.StyledTextCtrl_HideLines(*args, **kwargs)
 
     def GetLineVisible(*args, **kwargs):
-        """GetLineVisible(int line) -> bool"""
+        """GetLineVisible(self, int line) -> bool"""
         return _stc.StyledTextCtrl_GetLineVisible(*args, **kwargs)
 
     def SetFoldExpanded(*args, **kwargs):
-        """SetFoldExpanded(int line, bool expanded)"""
+        """SetFoldExpanded(self, int line, bool expanded)"""
         return _stc.StyledTextCtrl_SetFoldExpanded(*args, **kwargs)
 
     def GetFoldExpanded(*args, **kwargs):
-        """GetFoldExpanded(int line) -> bool"""
+        """GetFoldExpanded(self, int line) -> bool"""
         return _stc.StyledTextCtrl_GetFoldExpanded(*args, **kwargs)
 
     def ToggleFold(*args, **kwargs):
-        """ToggleFold(int line)"""
+        """ToggleFold(self, int line)"""
         return _stc.StyledTextCtrl_ToggleFold(*args, **kwargs)
 
     def EnsureVisible(*args, **kwargs):
-        """EnsureVisible(int line)"""
+        """EnsureVisible(self, int line)"""
         return _stc.StyledTextCtrl_EnsureVisible(*args, **kwargs)
 
     def SetFoldFlags(*args, **kwargs):
-        """SetFoldFlags(int flags)"""
+        """SetFoldFlags(self, int flags)"""
         return _stc.StyledTextCtrl_SetFoldFlags(*args, **kwargs)
 
     def EnsureVisibleEnforcePolicy(*args, **kwargs):
-        """EnsureVisibleEnforcePolicy(int line)"""
+        """EnsureVisibleEnforcePolicy(self, int line)"""
         return _stc.StyledTextCtrl_EnsureVisibleEnforcePolicy(*args, **kwargs)
 
     def SetTabIndents(*args, **kwargs):
-        """SetTabIndents(bool tabIndents)"""
+        """SetTabIndents(self, bool tabIndents)"""
         return _stc.StyledTextCtrl_SetTabIndents(*args, **kwargs)
 
     def GetTabIndents(*args, **kwargs):
-        """GetTabIndents() -> bool"""
+        """GetTabIndents(self) -> bool"""
         return _stc.StyledTextCtrl_GetTabIndents(*args, **kwargs)
 
     def SetBackSpaceUnIndents(*args, **kwargs):
-        """SetBackSpaceUnIndents(bool bsUnIndents)"""
+        """SetBackSpaceUnIndents(self, bool bsUnIndents)"""
         return _stc.StyledTextCtrl_SetBackSpaceUnIndents(*args, **kwargs)
 
     def GetBackSpaceUnIndents(*args, **kwargs):
-        """GetBackSpaceUnIndents() -> bool"""
+        """GetBackSpaceUnIndents(self) -> bool"""
         return _stc.StyledTextCtrl_GetBackSpaceUnIndents(*args, **kwargs)
 
     def SetMouseDwellTime(*args, **kwargs):
-        """SetMouseDwellTime(int periodMilliseconds)"""
+        """SetMouseDwellTime(self, int periodMilliseconds)"""
         return _stc.StyledTextCtrl_SetMouseDwellTime(*args, **kwargs)
 
     def GetMouseDwellTime(*args, **kwargs):
-        """GetMouseDwellTime() -> int"""
+        """GetMouseDwellTime(self) -> int"""
         return _stc.StyledTextCtrl_GetMouseDwellTime(*args, **kwargs)
 
     def WordStartPosition(*args, **kwargs):
-        """WordStartPosition(int pos, bool onlyWordCharacters) -> int"""
+        """WordStartPosition(self, int pos, bool onlyWordCharacters) -> int"""
         return _stc.StyledTextCtrl_WordStartPosition(*args, **kwargs)
 
     def WordEndPosition(*args, **kwargs):
-        """WordEndPosition(int pos, bool onlyWordCharacters) -> int"""
+        """WordEndPosition(self, int pos, bool onlyWordCharacters) -> int"""
         return _stc.StyledTextCtrl_WordEndPosition(*args, **kwargs)
 
     def SetWrapMode(*args, **kwargs):
-        """SetWrapMode(int mode)"""
+        """SetWrapMode(self, int mode)"""
         return _stc.StyledTextCtrl_SetWrapMode(*args, **kwargs)
 
     def GetWrapMode(*args, **kwargs):
-        """GetWrapMode() -> int"""
+        """GetWrapMode(self) -> int"""
         return _stc.StyledTextCtrl_GetWrapMode(*args, **kwargs)
 
     def SetLayoutCache(*args, **kwargs):
-        """SetLayoutCache(int mode)"""
+        """SetLayoutCache(self, int mode)"""
         return _stc.StyledTextCtrl_SetLayoutCache(*args, **kwargs)
 
     def GetLayoutCache(*args, **kwargs):
-        """GetLayoutCache() -> int"""
+        """GetLayoutCache(self) -> int"""
         return _stc.StyledTextCtrl_GetLayoutCache(*args, **kwargs)
 
     def SetScrollWidth(*args, **kwargs):
-        """SetScrollWidth(int pixelWidth)"""
+        """SetScrollWidth(self, int pixelWidth)"""
         return _stc.StyledTextCtrl_SetScrollWidth(*args, **kwargs)
 
     def GetScrollWidth(*args, **kwargs):
-        """GetScrollWidth() -> int"""
+        """GetScrollWidth(self) -> int"""
         return _stc.StyledTextCtrl_GetScrollWidth(*args, **kwargs)
 
     def TextWidth(*args, **kwargs):
-        """TextWidth(int style, String text) -> int"""
+        """TextWidth(self, int style, String text) -> int"""
         return _stc.StyledTextCtrl_TextWidth(*args, **kwargs)
 
     def SetEndAtLastLine(*args, **kwargs):
-        """SetEndAtLastLine(bool endAtLastLine)"""
+        """SetEndAtLastLine(self, bool endAtLastLine)"""
         return _stc.StyledTextCtrl_SetEndAtLastLine(*args, **kwargs)
 
     def GetEndAtLastLine(*args, **kwargs):
-        """GetEndAtLastLine() -> int"""
+        """GetEndAtLastLine(self) -> int"""
         return _stc.StyledTextCtrl_GetEndAtLastLine(*args, **kwargs)
 
     def TextHeight(*args, **kwargs):
-        """TextHeight(int line) -> int"""
+        """TextHeight(self, int line) -> int"""
         return _stc.StyledTextCtrl_TextHeight(*args, **kwargs)
 
     def SetUseVerticalScrollBar(*args, **kwargs):
-        """SetUseVerticalScrollBar(bool show)"""
+        """SetUseVerticalScrollBar(self, bool show)"""
         return _stc.StyledTextCtrl_SetUseVerticalScrollBar(*args, **kwargs)
 
     def GetUseVerticalScrollBar(*args, **kwargs):
-        """GetUseVerticalScrollBar() -> bool"""
+        """GetUseVerticalScrollBar(self) -> bool"""
         return _stc.StyledTextCtrl_GetUseVerticalScrollBar(*args, **kwargs)
 
     def AppendText(*args, **kwargs):
-        """AppendText(int length, String text)"""
+        """AppendText(self, int length, String text)"""
         return _stc.StyledTextCtrl_AppendText(*args, **kwargs)
 
     def GetTwoPhaseDraw(*args, **kwargs):
-        """GetTwoPhaseDraw() -> bool"""
+        """GetTwoPhaseDraw(self) -> bool"""
         return _stc.StyledTextCtrl_GetTwoPhaseDraw(*args, **kwargs)
 
     def SetTwoPhaseDraw(*args, **kwargs):
-        """SetTwoPhaseDraw(bool twoPhase)"""
+        """SetTwoPhaseDraw(self, bool twoPhase)"""
         return _stc.StyledTextCtrl_SetTwoPhaseDraw(*args, **kwargs)
 
     def TargetFromSelection(*args, **kwargs):
-        """TargetFromSelection()"""
+        """TargetFromSelection(self)"""
         return _stc.StyledTextCtrl_TargetFromSelection(*args, **kwargs)
 
     def LinesJoin(*args, **kwargs):
-        """LinesJoin()"""
+        """LinesJoin(self)"""
         return _stc.StyledTextCtrl_LinesJoin(*args, **kwargs)
 
     def LinesSplit(*args, **kwargs):
-        """LinesSplit(int pixelWidth)"""
+        """LinesSplit(self, int pixelWidth)"""
         return _stc.StyledTextCtrl_LinesSplit(*args, **kwargs)
 
     def SetFoldMarginColour(*args, **kwargs):
-        """SetFoldMarginColour(bool useSetting, Colour back)"""
+        """SetFoldMarginColour(self, bool useSetting, Colour back)"""
         return _stc.StyledTextCtrl_SetFoldMarginColour(*args, **kwargs)
 
     def SetFoldMarginHiColour(*args, **kwargs):
-        """SetFoldMarginHiColour(bool useSetting, Colour fore)"""
+        """SetFoldMarginHiColour(self, bool useSetting, Colour fore)"""
         return _stc.StyledTextCtrl_SetFoldMarginHiColour(*args, **kwargs)
 
     def LineDown(*args, **kwargs):
         """
-        LineDown()
+        LineDown(self)
 
         This is just a wrapper for ScrollLines(1).
         """
         return _stc.StyledTextCtrl_LineDown(*args, **kwargs)
 
     def LineDownExtend(*args, **kwargs):
-        """LineDownExtend()"""
+        """LineDownExtend(self)"""
         return _stc.StyledTextCtrl_LineDownExtend(*args, **kwargs)
 
     def LineUp(*args, **kwargs):
         """
-        LineUp()
+        LineUp(self)
 
         This is just a wrapper for ScrollLines(-1).
         """
         return _stc.StyledTextCtrl_LineUp(*args, **kwargs)
 
     def LineUpExtend(*args, **kwargs):
-        """LineUpExtend()"""
+        """LineUpExtend(self)"""
         return _stc.StyledTextCtrl_LineUpExtend(*args, **kwargs)
 
     def CharLeft(*args, **kwargs):
-        """CharLeft()"""
+        """CharLeft(self)"""
         return _stc.StyledTextCtrl_CharLeft(*args, **kwargs)
 
     def CharLeftExtend(*args, **kwargs):
-        """CharLeftExtend()"""
+        """CharLeftExtend(self)"""
         return _stc.StyledTextCtrl_CharLeftExtend(*args, **kwargs)
 
     def CharRight(*args, **kwargs):
-        """CharRight()"""
+        """CharRight(self)"""
         return _stc.StyledTextCtrl_CharRight(*args, **kwargs)
 
     def CharRightExtend(*args, **kwargs):
-        """CharRightExtend()"""
+        """CharRightExtend(self)"""
         return _stc.StyledTextCtrl_CharRightExtend(*args, **kwargs)
 
     def WordLeft(*args, **kwargs):
-        """WordLeft()"""
+        """WordLeft(self)"""
         return _stc.StyledTextCtrl_WordLeft(*args, **kwargs)
 
     def WordLeftExtend(*args, **kwargs):
-        """WordLeftExtend()"""
+        """WordLeftExtend(self)"""
         return _stc.StyledTextCtrl_WordLeftExtend(*args, **kwargs)
 
     def WordRight(*args, **kwargs):
-        """WordRight()"""
+        """WordRight(self)"""
         return _stc.StyledTextCtrl_WordRight(*args, **kwargs)
 
     def WordRightExtend(*args, **kwargs):
-        """WordRightExtend()"""
+        """WordRightExtend(self)"""
         return _stc.StyledTextCtrl_WordRightExtend(*args, **kwargs)
 
     def Home(*args, **kwargs):
-        """Home()"""
+        """Home(self)"""
         return _stc.StyledTextCtrl_Home(*args, **kwargs)
 
     def HomeExtend(*args, **kwargs):
-        """HomeExtend()"""
+        """HomeExtend(self)"""
         return _stc.StyledTextCtrl_HomeExtend(*args, **kwargs)
 
     def LineEnd(*args, **kwargs):
-        """LineEnd()"""
+        """LineEnd(self)"""
         return _stc.StyledTextCtrl_LineEnd(*args, **kwargs)
 
     def LineEndExtend(*args, **kwargs):
-        """LineEndExtend()"""
+        """LineEndExtend(self)"""
         return _stc.StyledTextCtrl_LineEndExtend(*args, **kwargs)
 
     def DocumentStart(*args, **kwargs):
-        """DocumentStart()"""
+        """DocumentStart(self)"""
         return _stc.StyledTextCtrl_DocumentStart(*args, **kwargs)
 
     def DocumentStartExtend(*args, **kwargs):
-        """DocumentStartExtend()"""
+        """DocumentStartExtend(self)"""
         return _stc.StyledTextCtrl_DocumentStartExtend(*args, **kwargs)
 
     def DocumentEnd(*args, **kwargs):
-        """DocumentEnd()"""
+        """DocumentEnd(self)"""
         return _stc.StyledTextCtrl_DocumentEnd(*args, **kwargs)
 
     def DocumentEndExtend(*args, **kwargs):
-        """DocumentEndExtend()"""
+        """DocumentEndExtend(self)"""
         return _stc.StyledTextCtrl_DocumentEndExtend(*args, **kwargs)
 
     def PageUp(*args, **kwargs):
         """
-        PageUp()
+        PageUp(self)
 
         This is just a wrapper for ScrollPages(-1).
         """
         return _stc.StyledTextCtrl_PageUp(*args, **kwargs)
 
     def PageUpExtend(*args, **kwargs):
-        """PageUpExtend()"""
+        """PageUpExtend(self)"""
         return _stc.StyledTextCtrl_PageUpExtend(*args, **kwargs)
 
     def PageDown(*args, **kwargs):
         """
-        PageDown()
+        PageDown(self)
 
         This is just a wrapper for ScrollPages(1).
         """
         return _stc.StyledTextCtrl_PageDown(*args, **kwargs)
 
     def PageDownExtend(*args, **kwargs):
-        """PageDownExtend()"""
+        """PageDownExtend(self)"""
         return _stc.StyledTextCtrl_PageDownExtend(*args, **kwargs)
 
     def EditToggleOvertype(*args, **kwargs):
-        """EditToggleOvertype()"""
+        """EditToggleOvertype(self)"""
         return _stc.StyledTextCtrl_EditToggleOvertype(*args, **kwargs)
 
     def Cancel(*args, **kwargs):
-        """Cancel()"""
+        """Cancel(self)"""
         return _stc.StyledTextCtrl_Cancel(*args, **kwargs)
 
     def DeleteBack(*args, **kwargs):
-        """DeleteBack()"""
+        """DeleteBack(self)"""
         return _stc.StyledTextCtrl_DeleteBack(*args, **kwargs)
 
     def Tab(*args, **kwargs):
-        """Tab()"""
+        """Tab(self)"""
         return _stc.StyledTextCtrl_Tab(*args, **kwargs)
 
     def BackTab(*args, **kwargs):
-        """BackTab()"""
+        """BackTab(self)"""
         return _stc.StyledTextCtrl_BackTab(*args, **kwargs)
 
     def NewLine(*args, **kwargs):
-        """NewLine()"""
+        """NewLine(self)"""
         return _stc.StyledTextCtrl_NewLine(*args, **kwargs)
 
     def FormFeed(*args, **kwargs):
-        """FormFeed()"""
+        """FormFeed(self)"""
         return _stc.StyledTextCtrl_FormFeed(*args, **kwargs)
 
     def VCHome(*args, **kwargs):
-        """VCHome()"""
+        """VCHome(self)"""
         return _stc.StyledTextCtrl_VCHome(*args, **kwargs)
 
     def VCHomeExtend(*args, **kwargs):
-        """VCHomeExtend()"""
+        """VCHomeExtend(self)"""
         return _stc.StyledTextCtrl_VCHomeExtend(*args, **kwargs)
 
     def ZoomIn(*args, **kwargs):
-        """ZoomIn()"""
+        """ZoomIn(self)"""
         return _stc.StyledTextCtrl_ZoomIn(*args, **kwargs)
 
     def ZoomOut(*args, **kwargs):
-        """ZoomOut()"""
+        """ZoomOut(self)"""
         return _stc.StyledTextCtrl_ZoomOut(*args, **kwargs)
 
     def DelWordLeft(*args, **kwargs):
-        """DelWordLeft()"""
+        """DelWordLeft(self)"""
         return _stc.StyledTextCtrl_DelWordLeft(*args, **kwargs)
 
     def DelWordRight(*args, **kwargs):
-        """DelWordRight()"""
+        """DelWordRight(self)"""
         return _stc.StyledTextCtrl_DelWordRight(*args, **kwargs)
 
     def LineCut(*args, **kwargs):
-        """LineCut()"""
+        """LineCut(self)"""
         return _stc.StyledTextCtrl_LineCut(*args, **kwargs)
 
     def LineDelete(*args, **kwargs):
-        """LineDelete()"""
+        """LineDelete(self)"""
         return _stc.StyledTextCtrl_LineDelete(*args, **kwargs)
 
     def LineTranspose(*args, **kwargs):
-        """LineTranspose()"""
+        """LineTranspose(self)"""
         return _stc.StyledTextCtrl_LineTranspose(*args, **kwargs)
 
     def LineDuplicate(*args, **kwargs):
-        """LineDuplicate()"""
+        """LineDuplicate(self)"""
         return _stc.StyledTextCtrl_LineDuplicate(*args, **kwargs)
 
     def LowerCase(*args, **kwargs):
-        """LowerCase()"""
+        """LowerCase(self)"""
         return _stc.StyledTextCtrl_LowerCase(*args, **kwargs)
 
     def UpperCase(*args, **kwargs):
-        """UpperCase()"""
+        """UpperCase(self)"""
         return _stc.StyledTextCtrl_UpperCase(*args, **kwargs)
 
     def LineScrollDown(*args, **kwargs):
-        """LineScrollDown()"""
+        """LineScrollDown(self)"""
         return _stc.StyledTextCtrl_LineScrollDown(*args, **kwargs)
 
     def LineScrollUp(*args, **kwargs):
-        """LineScrollUp()"""
+        """LineScrollUp(self)"""
         return _stc.StyledTextCtrl_LineScrollUp(*args, **kwargs)
 
     def DeleteBackNotLine(*args, **kwargs):
-        """DeleteBackNotLine()"""
+        """DeleteBackNotLine(self)"""
         return _stc.StyledTextCtrl_DeleteBackNotLine(*args, **kwargs)
 
     def HomeDisplay(*args, **kwargs):
-        """HomeDisplay()"""
+        """HomeDisplay(self)"""
         return _stc.StyledTextCtrl_HomeDisplay(*args, **kwargs)
 
     def HomeDisplayExtend(*args, **kwargs):
-        """HomeDisplayExtend()"""
+        """HomeDisplayExtend(self)"""
         return _stc.StyledTextCtrl_HomeDisplayExtend(*args, **kwargs)
 
     def LineEndDisplay(*args, **kwargs):
-        """LineEndDisplay()"""
+        """LineEndDisplay(self)"""
         return _stc.StyledTextCtrl_LineEndDisplay(*args, **kwargs)
 
     def LineEndDisplayExtend(*args, **kwargs):
-        """LineEndDisplayExtend()"""
+        """LineEndDisplayExtend(self)"""
         return _stc.StyledTextCtrl_LineEndDisplayExtend(*args, **kwargs)
 
     def HomeWrap(*args, **kwargs):
-        """HomeWrap()"""
+        """HomeWrap(self)"""
         return _stc.StyledTextCtrl_HomeWrap(*args, **kwargs)
 
     def HomeWrapExtend(*args, **kwargs):
-        """HomeWrapExtend()"""
+        """HomeWrapExtend(self)"""
         return _stc.StyledTextCtrl_HomeWrapExtend(*args, **kwargs)
 
     def LineEndWrap(*args, **kwargs):
-        """LineEndWrap()"""
+        """LineEndWrap(self)"""
         return _stc.StyledTextCtrl_LineEndWrap(*args, **kwargs)
 
     def LineEndWrapExtend(*args, **kwargs):
-        """LineEndWrapExtend()"""
+        """LineEndWrapExtend(self)"""
         return _stc.StyledTextCtrl_LineEndWrapExtend(*args, **kwargs)
 
     def VCHomeWrap(*args, **kwargs):
-        """VCHomeWrap()"""
+        """VCHomeWrap(self)"""
         return _stc.StyledTextCtrl_VCHomeWrap(*args, **kwargs)
 
     def VCHomeWrapExtend(*args, **kwargs):
-        """VCHomeWrapExtend()"""
+        """VCHomeWrapExtend(self)"""
         return _stc.StyledTextCtrl_VCHomeWrapExtend(*args, **kwargs)
 
     def LineCopy(*args, **kwargs):
-        """LineCopy()"""
+        """LineCopy(self)"""
         return _stc.StyledTextCtrl_LineCopy(*args, **kwargs)
 
     def MoveCaretInsideView(*args, **kwargs):
-        """MoveCaretInsideView()"""
+        """MoveCaretInsideView(self)"""
         return _stc.StyledTextCtrl_MoveCaretInsideView(*args, **kwargs)
 
     def LineLength(*args, **kwargs):
-        """LineLength(int line) -> int"""
+        """LineLength(self, int line) -> int"""
         return _stc.StyledTextCtrl_LineLength(*args, **kwargs)
 
     def BraceHighlight(*args, **kwargs):
-        """BraceHighlight(int pos1, int pos2)"""
+        """BraceHighlight(self, int pos1, int pos2)"""
         return _stc.StyledTextCtrl_BraceHighlight(*args, **kwargs)
 
     def BraceBadLight(*args, **kwargs):
-        """BraceBadLight(int pos)"""
+        """BraceBadLight(self, int pos)"""
         return _stc.StyledTextCtrl_BraceBadLight(*args, **kwargs)
 
     def BraceMatch(*args, **kwargs):
-        """BraceMatch(int pos) -> int"""
+        """BraceMatch(self, int pos) -> int"""
         return _stc.StyledTextCtrl_BraceMatch(*args, **kwargs)
 
     def GetViewEOL(*args, **kwargs):
-        """GetViewEOL() -> bool"""
+        """GetViewEOL(self) -> bool"""
         return _stc.StyledTextCtrl_GetViewEOL(*args, **kwargs)
 
     def SetViewEOL(*args, **kwargs):
-        """SetViewEOL(bool visible)"""
+        """SetViewEOL(self, bool visible)"""
         return _stc.StyledTextCtrl_SetViewEOL(*args, **kwargs)
 
     def GetDocPointer(*args, **kwargs):
-        """GetDocPointer() -> void"""
+        """GetDocPointer(self) -> void"""
         return _stc.StyledTextCtrl_GetDocPointer(*args, **kwargs)
 
     def SetDocPointer(*args, **kwargs):
-        """SetDocPointer(void docPointer)"""
+        """SetDocPointer(self, void docPointer)"""
         return _stc.StyledTextCtrl_SetDocPointer(*args, **kwargs)
 
     def SetModEventMask(*args, **kwargs):
-        """SetModEventMask(int mask)"""
+        """SetModEventMask(self, int mask)"""
         return _stc.StyledTextCtrl_SetModEventMask(*args, **kwargs)
 
     def GetEdgeColumn(*args, **kwargs):
-        """GetEdgeColumn() -> int"""
+        """GetEdgeColumn(self) -> int"""
         return _stc.StyledTextCtrl_GetEdgeColumn(*args, **kwargs)
 
     def SetEdgeColumn(*args, **kwargs):
-        """SetEdgeColumn(int column)"""
+        """SetEdgeColumn(self, int column)"""
         return _stc.StyledTextCtrl_SetEdgeColumn(*args, **kwargs)
 
     def GetEdgeMode(*args, **kwargs):
-        """GetEdgeMode() -> int"""
+        """GetEdgeMode(self) -> int"""
         return _stc.StyledTextCtrl_GetEdgeMode(*args, **kwargs)
 
     def SetEdgeMode(*args, **kwargs):
-        """SetEdgeMode(int mode)"""
+        """SetEdgeMode(self, int mode)"""
         return _stc.StyledTextCtrl_SetEdgeMode(*args, **kwargs)
 
     def GetEdgeColour(*args, **kwargs):
-        """GetEdgeColour() -> Colour"""
+        """GetEdgeColour(self) -> Colour"""
         return _stc.StyledTextCtrl_GetEdgeColour(*args, **kwargs)
 
     def SetEdgeColour(*args, **kwargs):
-        """SetEdgeColour(Colour edgeColour)"""
+        """SetEdgeColour(self, Colour edgeColour)"""
         return _stc.StyledTextCtrl_SetEdgeColour(*args, **kwargs)
 
     def SearchAnchor(*args, **kwargs):
-        """SearchAnchor()"""
+        """SearchAnchor(self)"""
         return _stc.StyledTextCtrl_SearchAnchor(*args, **kwargs)
 
     def SearchNext(*args, **kwargs):
-        """SearchNext(int flags, String text) -> int"""
+        """SearchNext(self, int flags, String text) -> int"""
         return _stc.StyledTextCtrl_SearchNext(*args, **kwargs)
 
     def SearchPrev(*args, **kwargs):
-        """SearchPrev(int flags, String text) -> int"""
+        """SearchPrev(self, int flags, String text) -> int"""
         return _stc.StyledTextCtrl_SearchPrev(*args, **kwargs)
 
     def LinesOnScreen(*args, **kwargs):
-        """LinesOnScreen() -> int"""
+        """LinesOnScreen(self) -> int"""
         return _stc.StyledTextCtrl_LinesOnScreen(*args, **kwargs)
 
     def UsePopUp(*args, **kwargs):
-        """UsePopUp(bool allowPopUp)"""
+        """UsePopUp(self, bool allowPopUp)"""
         return _stc.StyledTextCtrl_UsePopUp(*args, **kwargs)
 
     def SelectionIsRectangle(*args, **kwargs):
-        """SelectionIsRectangle() -> bool"""
+        """SelectionIsRectangle(self) -> bool"""
         return _stc.StyledTextCtrl_SelectionIsRectangle(*args, **kwargs)
 
     def SetZoom(*args, **kwargs):
-        """SetZoom(int zoom)"""
+        """SetZoom(self, int zoom)"""
         return _stc.StyledTextCtrl_SetZoom(*args, **kwargs)
 
     def GetZoom(*args, **kwargs):
-        """GetZoom() -> int"""
+        """GetZoom(self) -> int"""
         return _stc.StyledTextCtrl_GetZoom(*args, **kwargs)
 
     def CreateDocument(*args, **kwargs):
-        """CreateDocument() -> void"""
+        """CreateDocument(self) -> void"""
         return _stc.StyledTextCtrl_CreateDocument(*args, **kwargs)
 
     def AddRefDocument(*args, **kwargs):
-        """AddRefDocument(void docPointer)"""
+        """AddRefDocument(self, void docPointer)"""
         return _stc.StyledTextCtrl_AddRefDocument(*args, **kwargs)
 
     def ReleaseDocument(*args, **kwargs):
-        """ReleaseDocument(void docPointer)"""
+        """ReleaseDocument(self, void docPointer)"""
         return _stc.StyledTextCtrl_ReleaseDocument(*args, **kwargs)
 
     def GetModEventMask(*args, **kwargs):
-        """GetModEventMask() -> int"""
+        """GetModEventMask(self) -> int"""
         return _stc.StyledTextCtrl_GetModEventMask(*args, **kwargs)
 
     def SetSTCFocus(*args, **kwargs):
-        """SetSTCFocus(bool focus)"""
+        """SetSTCFocus(self, bool focus)"""
         return _stc.StyledTextCtrl_SetSTCFocus(*args, **kwargs)
 
     def GetSTCFocus(*args, **kwargs):
-        """GetSTCFocus() -> bool"""
+        """GetSTCFocus(self) -> bool"""
         return _stc.StyledTextCtrl_GetSTCFocus(*args, **kwargs)
 
     def SetStatus(*args, **kwargs):
-        """SetStatus(int statusCode)"""
+        """SetStatus(self, int statusCode)"""
         return _stc.StyledTextCtrl_SetStatus(*args, **kwargs)
 
     def GetStatus(*args, **kwargs):
-        """GetStatus() -> int"""
+        """GetStatus(self) -> int"""
         return _stc.StyledTextCtrl_GetStatus(*args, **kwargs)
 
     def SetMouseDownCaptures(*args, **kwargs):
-        """SetMouseDownCaptures(bool captures)"""
+        """SetMouseDownCaptures(self, bool captures)"""
         return _stc.StyledTextCtrl_SetMouseDownCaptures(*args, **kwargs)
 
     def GetMouseDownCaptures(*args, **kwargs):
-        """GetMouseDownCaptures() -> bool"""
+        """GetMouseDownCaptures(self) -> bool"""
         return _stc.StyledTextCtrl_GetMouseDownCaptures(*args, **kwargs)
 
     def SetSTCCursor(*args, **kwargs):
-        """SetSTCCursor(int cursorType)"""
+        """SetSTCCursor(self, int cursorType)"""
         return _stc.StyledTextCtrl_SetSTCCursor(*args, **kwargs)
 
     def GetSTCCursor(*args, **kwargs):
-        """GetSTCCursor() -> int"""
+        """GetSTCCursor(self) -> int"""
         return _stc.StyledTextCtrl_GetSTCCursor(*args, **kwargs)
 
     def SetControlCharSymbol(*args, **kwargs):
-        """SetControlCharSymbol(int symbol)"""
+        """SetControlCharSymbol(self, int symbol)"""
         return _stc.StyledTextCtrl_SetControlCharSymbol(*args, **kwargs)
 
     def GetControlCharSymbol(*args, **kwargs):
-        """GetControlCharSymbol() -> int"""
+        """GetControlCharSymbol(self) -> int"""
         return _stc.StyledTextCtrl_GetControlCharSymbol(*args, **kwargs)
 
     def WordPartLeft(*args, **kwargs):
-        """WordPartLeft()"""
+        """WordPartLeft(self)"""
         return _stc.StyledTextCtrl_WordPartLeft(*args, **kwargs)
 
     def WordPartLeftExtend(*args, **kwargs):
-        """WordPartLeftExtend()"""
+        """WordPartLeftExtend(self)"""
         return _stc.StyledTextCtrl_WordPartLeftExtend(*args, **kwargs)
 
     def WordPartRight(*args, **kwargs):
-        """WordPartRight()"""
+        """WordPartRight(self)"""
         return _stc.StyledTextCtrl_WordPartRight(*args, **kwargs)
 
     def WordPartRightExtend(*args, **kwargs):
-        """WordPartRightExtend()"""
+        """WordPartRightExtend(self)"""
         return _stc.StyledTextCtrl_WordPartRightExtend(*args, **kwargs)
 
     def SetVisiblePolicy(*args, **kwargs):
-        """SetVisiblePolicy(int visiblePolicy, int visibleSlop)"""
+        """SetVisiblePolicy(self, int visiblePolicy, int visibleSlop)"""
         return _stc.StyledTextCtrl_SetVisiblePolicy(*args, **kwargs)
 
     def DelLineLeft(*args, **kwargs):
-        """DelLineLeft()"""
+        """DelLineLeft(self)"""
         return _stc.StyledTextCtrl_DelLineLeft(*args, **kwargs)
 
     def DelLineRight(*args, **kwargs):
-        """DelLineRight()"""
+        """DelLineRight(self)"""
         return _stc.StyledTextCtrl_DelLineRight(*args, **kwargs)
 
     def SetXOffset(*args, **kwargs):
-        """SetXOffset(int newOffset)"""
+        """SetXOffset(self, int newOffset)"""
         return _stc.StyledTextCtrl_SetXOffset(*args, **kwargs)
 
     def GetXOffset(*args, **kwargs):
-        """GetXOffset() -> int"""
+        """GetXOffset(self) -> int"""
         return _stc.StyledTextCtrl_GetXOffset(*args, **kwargs)
 
     def ChooseCaretX(*args, **kwargs):
-        """ChooseCaretX()"""
+        """ChooseCaretX(self)"""
         return _stc.StyledTextCtrl_ChooseCaretX(*args, **kwargs)
 
     def SetXCaretPolicy(*args, **kwargs):
-        """SetXCaretPolicy(int caretPolicy, int caretSlop)"""
+        """SetXCaretPolicy(self, int caretPolicy, int caretSlop)"""
         return _stc.StyledTextCtrl_SetXCaretPolicy(*args, **kwargs)
 
     def SetYCaretPolicy(*args, **kwargs):
-        """SetYCaretPolicy(int caretPolicy, int caretSlop)"""
+        """SetYCaretPolicy(self, int caretPolicy, int caretSlop)"""
         return _stc.StyledTextCtrl_SetYCaretPolicy(*args, **kwargs)
 
     def SetPrintWrapMode(*args, **kwargs):
-        """SetPrintWrapMode(int mode)"""
+        """SetPrintWrapMode(self, int mode)"""
         return _stc.StyledTextCtrl_SetPrintWrapMode(*args, **kwargs)
 
     def GetPrintWrapMode(*args, **kwargs):
-        """GetPrintWrapMode() -> int"""
+        """GetPrintWrapMode(self) -> int"""
         return _stc.StyledTextCtrl_GetPrintWrapMode(*args, **kwargs)
 
     def SetHotspotActiveForeground(*args, **kwargs):
-        """SetHotspotActiveForeground(bool useSetting, Colour fore)"""
+        """SetHotspotActiveForeground(self, bool useSetting, Colour fore)"""
         return _stc.StyledTextCtrl_SetHotspotActiveForeground(*args, **kwargs)
 
     def SetHotspotActiveBackground(*args, **kwargs):
-        """SetHotspotActiveBackground(bool useSetting, Colour back)"""
+        """SetHotspotActiveBackground(self, bool useSetting, Colour back)"""
         return _stc.StyledTextCtrl_SetHotspotActiveBackground(*args, **kwargs)
 
     def SetHotspotActiveUnderline(*args, **kwargs):
-        """SetHotspotActiveUnderline(bool underline)"""
+        """SetHotspotActiveUnderline(self, bool underline)"""
         return _stc.StyledTextCtrl_SetHotspotActiveUnderline(*args, **kwargs)
 
     def SetHotspotSingleLine(*args, **kwargs):
-        """SetHotspotSingleLine(bool singleLine)"""
+        """SetHotspotSingleLine(self, bool singleLine)"""
         return _stc.StyledTextCtrl_SetHotspotSingleLine(*args, **kwargs)
 
     def ParaDown(*args, **kwargs):
-        """ParaDown()"""
+        """ParaDown(self)"""
         return _stc.StyledTextCtrl_ParaDown(*args, **kwargs)
 
     def ParaDownExtend(*args, **kwargs):
-        """ParaDownExtend()"""
+        """ParaDownExtend(self)"""
         return _stc.StyledTextCtrl_ParaDownExtend(*args, **kwargs)
 
     def ParaUp(*args, **kwargs):
-        """ParaUp()"""
+        """ParaUp(self)"""
         return _stc.StyledTextCtrl_ParaUp(*args, **kwargs)
 
     def ParaUpExtend(*args, **kwargs):
-        """ParaUpExtend()"""
+        """ParaUpExtend(self)"""
         return _stc.StyledTextCtrl_ParaUpExtend(*args, **kwargs)
 
     def PositionBefore(*args, **kwargs):
-        """PositionBefore(int pos) -> int"""
+        """PositionBefore(self, int pos) -> int"""
         return _stc.StyledTextCtrl_PositionBefore(*args, **kwargs)
 
     def PositionAfter(*args, **kwargs):
-        """PositionAfter(int pos) -> int"""
+        """PositionAfter(self, int pos) -> int"""
         return _stc.StyledTextCtrl_PositionAfter(*args, **kwargs)
 
     def CopyRange(*args, **kwargs):
-        """CopyRange(int start, int end)"""
+        """CopyRange(self, int start, int end)"""
         return _stc.StyledTextCtrl_CopyRange(*args, **kwargs)
 
     def CopyText(*args, **kwargs):
-        """CopyText(int length, String text)"""
+        """CopyText(self, int length, String text)"""
         return _stc.StyledTextCtrl_CopyText(*args, **kwargs)
 
     def SetSelectionMode(*args, **kwargs):
-        """SetSelectionMode(int mode)"""
+        """SetSelectionMode(self, int mode)"""
         return _stc.StyledTextCtrl_SetSelectionMode(*args, **kwargs)
 
     def GetSelectionMode(*args, **kwargs):
-        """GetSelectionMode() -> int"""
+        """GetSelectionMode(self) -> int"""
         return _stc.StyledTextCtrl_GetSelectionMode(*args, **kwargs)
 
     def GetLineSelStartPosition(*args, **kwargs):
-        """GetLineSelStartPosition(int line) -> int"""
+        """GetLineSelStartPosition(self, int line) -> int"""
         return _stc.StyledTextCtrl_GetLineSelStartPosition(*args, **kwargs)
 
     def GetLineSelEndPosition(*args, **kwargs):
-        """GetLineSelEndPosition(int line) -> int"""
+        """GetLineSelEndPosition(self, int line) -> int"""
         return _stc.StyledTextCtrl_GetLineSelEndPosition(*args, **kwargs)
 
     def LineDownRectExtend(*args, **kwargs):
-        """LineDownRectExtend()"""
+        """LineDownRectExtend(self)"""
         return _stc.StyledTextCtrl_LineDownRectExtend(*args, **kwargs)
 
     def LineUpRectExtend(*args, **kwargs):
-        """LineUpRectExtend()"""
+        """LineUpRectExtend(self)"""
         return _stc.StyledTextCtrl_LineUpRectExtend(*args, **kwargs)
 
     def CharLeftRectExtend(*args, **kwargs):
-        """CharLeftRectExtend()"""
+        """CharLeftRectExtend(self)"""
         return _stc.StyledTextCtrl_CharLeftRectExtend(*args, **kwargs)
 
     def CharRightRectExtend(*args, **kwargs):
-        """CharRightRectExtend()"""
+        """CharRightRectExtend(self)"""
         return _stc.StyledTextCtrl_CharRightRectExtend(*args, **kwargs)
 
     def HomeRectExtend(*args, **kwargs):
-        """HomeRectExtend()"""
+        """HomeRectExtend(self)"""
         return _stc.StyledTextCtrl_HomeRectExtend(*args, **kwargs)
 
     def VCHomeRectExtend(*args, **kwargs):
-        """VCHomeRectExtend()"""
+        """VCHomeRectExtend(self)"""
         return _stc.StyledTextCtrl_VCHomeRectExtend(*args, **kwargs)
 
     def LineEndRectExtend(*args, **kwargs):
-        """LineEndRectExtend()"""
+        """LineEndRectExtend(self)"""
         return _stc.StyledTextCtrl_LineEndRectExtend(*args, **kwargs)
 
     def PageUpRectExtend(*args, **kwargs):
-        """PageUpRectExtend()"""
+        """PageUpRectExtend(self)"""
         return _stc.StyledTextCtrl_PageUpRectExtend(*args, **kwargs)
 
     def PageDownRectExtend(*args, **kwargs):
-        """PageDownRectExtend()"""
+        """PageDownRectExtend(self)"""
         return _stc.StyledTextCtrl_PageDownRectExtend(*args, **kwargs)
 
     def StutteredPageUp(*args, **kwargs):
-        """StutteredPageUp()"""
+        """StutteredPageUp(self)"""
         return _stc.StyledTextCtrl_StutteredPageUp(*args, **kwargs)
 
     def StutteredPageUpExtend(*args, **kwargs):
-        """StutteredPageUpExtend()"""
+        """StutteredPageUpExtend(self)"""
         return _stc.StyledTextCtrl_StutteredPageUpExtend(*args, **kwargs)
 
     def StutteredPageDown(*args, **kwargs):
-        """StutteredPageDown()"""
+        """StutteredPageDown(self)"""
         return _stc.StyledTextCtrl_StutteredPageDown(*args, **kwargs)
 
     def StutteredPageDownExtend(*args, **kwargs):
-        """StutteredPageDownExtend()"""
+        """StutteredPageDownExtend(self)"""
         return _stc.StyledTextCtrl_StutteredPageDownExtend(*args, **kwargs)
 
     def WordLeftEnd(*args, **kwargs):
-        """WordLeftEnd()"""
+        """WordLeftEnd(self)"""
         return _stc.StyledTextCtrl_WordLeftEnd(*args, **kwargs)
 
     def WordLeftEndExtend(*args, **kwargs):
-        """WordLeftEndExtend()"""
+        """WordLeftEndExtend(self)"""
         return _stc.StyledTextCtrl_WordLeftEndExtend(*args, **kwargs)
 
     def WordRightEnd(*args, **kwargs):
-        """WordRightEnd()"""
+        """WordRightEnd(self)"""
         return _stc.StyledTextCtrl_WordRightEnd(*args, **kwargs)
 
     def WordRightEndExtend(*args, **kwargs):
-        """WordRightEndExtend()"""
+        """WordRightEndExtend(self)"""
         return _stc.StyledTextCtrl_WordRightEndExtend(*args, **kwargs)
 
     def SetWhitespaceChars(*args, **kwargs):
-        """SetWhitespaceChars(String characters)"""
+        """SetWhitespaceChars(self, String characters)"""
         return _stc.StyledTextCtrl_SetWhitespaceChars(*args, **kwargs)
 
     def SetCharsDefault(*args, **kwargs):
-        """SetCharsDefault()"""
+        """SetCharsDefault(self)"""
         return _stc.StyledTextCtrl_SetCharsDefault(*args, **kwargs)
 
     def AutoCompGetCurrent(*args, **kwargs):
-        """AutoCompGetCurrent() -> int"""
+        """AutoCompGetCurrent(self) -> int"""
         return _stc.StyledTextCtrl_AutoCompGetCurrent(*args, **kwargs)
 
     def StartRecord(*args, **kwargs):
-        """StartRecord()"""
+        """StartRecord(self)"""
         return _stc.StyledTextCtrl_StartRecord(*args, **kwargs)
 
     def StopRecord(*args, **kwargs):
-        """StopRecord()"""
+        """StopRecord(self)"""
         return _stc.StyledTextCtrl_StopRecord(*args, **kwargs)
 
     def SetLexer(*args, **kwargs):
-        """SetLexer(int lexer)"""
+        """SetLexer(self, int lexer)"""
         return _stc.StyledTextCtrl_SetLexer(*args, **kwargs)
 
     def GetLexer(*args, **kwargs):
-        """GetLexer() -> int"""
+        """GetLexer(self) -> int"""
         return _stc.StyledTextCtrl_GetLexer(*args, **kwargs)
 
     def Colourise(*args, **kwargs):
-        """Colourise(int start, int end)"""
+        """Colourise(self, int start, int end)"""
         return _stc.StyledTextCtrl_Colourise(*args, **kwargs)
 
     def SetProperty(*args, **kwargs):
-        """SetProperty(String key, String value)"""
+        """SetProperty(self, String key, String value)"""
         return _stc.StyledTextCtrl_SetProperty(*args, **kwargs)
 
     def SetKeyWords(*args, **kwargs):
-        """SetKeyWords(int keywordSet, String keyWords)"""
+        """SetKeyWords(self, int keywordSet, String keyWords)"""
         return _stc.StyledTextCtrl_SetKeyWords(*args, **kwargs)
 
     def SetLexerLanguage(*args, **kwargs):
-        """SetLexerLanguage(String language)"""
+        """SetLexerLanguage(self, String language)"""
         return _stc.StyledTextCtrl_SetLexerLanguage(*args, **kwargs)
 
     def GetCurrentLine(*args, **kwargs):
-        """GetCurrentLine() -> int"""
+        """GetCurrentLine(self) -> int"""
         return _stc.StyledTextCtrl_GetCurrentLine(*args, **kwargs)
 
     def StyleSetSpec(*args, **kwargs):
-        """StyleSetSpec(int styleNum, String spec)"""
+        """StyleSetSpec(self, int styleNum, String spec)"""
         return _stc.StyledTextCtrl_StyleSetSpec(*args, **kwargs)
 
     def StyleSetFont(*args, **kwargs):
-        """StyleSetFont(int styleNum, Font font)"""
+        """StyleSetFont(self, int styleNum, Font font)"""
         return _stc.StyledTextCtrl_StyleSetFont(*args, **kwargs)
 
     def StyleSetFontAttr(*args, **kwargs):
         """
-        StyleSetFontAttr(int styleNum, int size, String faceName, bool bold, 
+        StyleSetFontAttr(self, int styleNum, int size, String faceName, bool bold, 
             bool italic, bool underline)
         """
         return _stc.StyledTextCtrl_StyleSetFontAttr(*args, **kwargs)
 
     def CmdKeyExecute(*args, **kwargs):
-        """CmdKeyExecute(int cmd)"""
+        """CmdKeyExecute(self, int cmd)"""
         return _stc.StyledTextCtrl_CmdKeyExecute(*args, **kwargs)
 
     def SetMargins(*args, **kwargs):
-        """SetMargins(int left, int right)"""
+        """SetMargins(self, int left, int right)"""
         return _stc.StyledTextCtrl_SetMargins(*args, **kwargs)
 
     def GetSelection(*args, **kwargs):
-        """GetSelection(int OUTPUT, int OUTPUT)"""
+        """GetSelection(self, int OUTPUT, int OUTPUT)"""
         return _stc.StyledTextCtrl_GetSelection(*args, **kwargs)
 
     def PointFromPosition(*args, **kwargs):
-        """PointFromPosition(int pos) -> Point"""
+        """PointFromPosition(self, int pos) -> Point"""
         return _stc.StyledTextCtrl_PointFromPosition(*args, **kwargs)
 
     def ScrollToLine(*args, **kwargs):
-        """ScrollToLine(int line)"""
+        """ScrollToLine(self, int line)"""
         return _stc.StyledTextCtrl_ScrollToLine(*args, **kwargs)
 
     def ScrollToColumn(*args, **kwargs):
-        """ScrollToColumn(int column)"""
+        """ScrollToColumn(self, int column)"""
         return _stc.StyledTextCtrl_ScrollToColumn(*args, **kwargs)
 
     def SendMsg(*args, **kwargs):
-        """SendMsg(int msg, long wp=0, long lp=0) -> long"""
+        """SendMsg(self, int msg, long wp=0, long lp=0) -> long"""
         return _stc.StyledTextCtrl_SendMsg(*args, **kwargs)
 
     def SetVScrollBar(*args, **kwargs):
-        """SetVScrollBar(wxScrollBar bar)"""
+        """SetVScrollBar(self, wxScrollBar bar)"""
         return _stc.StyledTextCtrl_SetVScrollBar(*args, **kwargs)
 
     def SetHScrollBar(*args, **kwargs):
-        """SetHScrollBar(wxScrollBar bar)"""
+        """SetHScrollBar(self, wxScrollBar bar)"""
         return _stc.StyledTextCtrl_SetHScrollBar(*args, **kwargs)
 
     def GetLastKeydownProcessed(*args, **kwargs):
-        """GetLastKeydownProcessed() -> bool"""
+        """GetLastKeydownProcessed(self) -> bool"""
         return _stc.StyledTextCtrl_GetLastKeydownProcessed(*args, **kwargs)
 
     def SetLastKeydownProcessed(*args, **kwargs):
-        """SetLastKeydownProcessed(bool val)"""
+        """SetLastKeydownProcessed(self, bool val)"""
         return _stc.StyledTextCtrl_SetLastKeydownProcessed(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
-        """SaveFile(String filename) -> bool"""
+        """SaveFile(self, String filename) -> bool"""
         return _stc.StyledTextCtrl_SaveFile(*args, **kwargs)
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(String filename) -> bool"""
+        """LoadFile(self, String filename) -> bool"""
         return _stc.StyledTextCtrl_LoadFile(*args, **kwargs)
 
     def DoDragOver(*args, **kwargs):
-        """DoDragOver(int x, int y, int def) -> int"""
+        """DoDragOver(self, int x, int y, int def) -> int"""
         return _stc.StyledTextCtrl_DoDragOver(*args, **kwargs)
 
     def DoDropText(*args, **kwargs):
-        """DoDropText(long x, long y, String data) -> bool"""
+        """DoDropText(self, long x, long y, String data) -> bool"""
         return _stc.StyledTextCtrl_DoDropText(*args, **kwargs)
 
     def SetUseAntiAliasing(*args, **kwargs):
-        """SetUseAntiAliasing(bool useAA)"""
+        """SetUseAntiAliasing(self, bool useAA)"""
         return _stc.StyledTextCtrl_SetUseAntiAliasing(*args, **kwargs)
 
     def GetUseAntiAliasing(*args, **kwargs):
-        """GetUseAntiAliasing() -> bool"""
+        """GetUseAntiAliasing(self) -> bool"""
         return _stc.StyledTextCtrl_GetUseAntiAliasing(*args, **kwargs)
 
 
@@ -2630,191 +2631,191 @@ class StyledTextEvent(core.CommandEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStyledTextEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType commandType=0, int id=0) -> StyledTextEvent"""
+        """__init__(self, wxEventType commandType=0, int id=0) -> StyledTextEvent"""
         newobj = _stc.new_StyledTextEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def __del__(self, destroy=_stc.delete_StyledTextEvent):
-        """__del__()"""
+        """__del__(self)"""
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def SetPosition(*args, **kwargs):
-        """SetPosition(int pos)"""
+        """SetPosition(self, int pos)"""
         return _stc.StyledTextEvent_SetPosition(*args, **kwargs)
 
     def SetKey(*args, **kwargs):
-        """SetKey(int k)"""
+        """SetKey(self, int k)"""
         return _stc.StyledTextEvent_SetKey(*args, **kwargs)
 
     def SetModifiers(*args, **kwargs):
-        """SetModifiers(int m)"""
+        """SetModifiers(self, int m)"""
         return _stc.StyledTextEvent_SetModifiers(*args, **kwargs)
 
     def SetModificationType(*args, **kwargs):
-        """SetModificationType(int t)"""
+        """SetModificationType(self, int t)"""
         return _stc.StyledTextEvent_SetModificationType(*args, **kwargs)
 
     def SetText(*args, **kwargs):
-        """SetText(String t)"""
+        """SetText(self, String t)"""
         return _stc.StyledTextEvent_SetText(*args, **kwargs)
 
     def SetLength(*args, **kwargs):
-        """SetLength(int len)"""
+        """SetLength(self, int len)"""
         return _stc.StyledTextEvent_SetLength(*args, **kwargs)
 
     def SetLinesAdded(*args, **kwargs):
-        """SetLinesAdded(int num)"""
+        """SetLinesAdded(self, int num)"""
         return _stc.StyledTextEvent_SetLinesAdded(*args, **kwargs)
 
     def SetLine(*args, **kwargs):
-        """SetLine(int val)"""
+        """SetLine(self, int val)"""
         return _stc.StyledTextEvent_SetLine(*args, **kwargs)
 
     def SetFoldLevelNow(*args, **kwargs):
-        """SetFoldLevelNow(int val)"""
+        """SetFoldLevelNow(self, int val)"""
         return _stc.StyledTextEvent_SetFoldLevelNow(*args, **kwargs)
 
     def SetFoldLevelPrev(*args, **kwargs):
-        """SetFoldLevelPrev(int val)"""
+        """SetFoldLevelPrev(self, int val)"""
         return _stc.StyledTextEvent_SetFoldLevelPrev(*args, **kwargs)
 
     def SetMargin(*args, **kwargs):
-        """SetMargin(int val)"""
+        """SetMargin(self, int val)"""
         return _stc.StyledTextEvent_SetMargin(*args, **kwargs)
 
     def SetMessage(*args, **kwargs):
-        """SetMessage(int val)"""
+        """SetMessage(self, int val)"""
         return _stc.StyledTextEvent_SetMessage(*args, **kwargs)
 
     def SetWParam(*args, **kwargs):
-        """SetWParam(int val)"""
+        """SetWParam(self, int val)"""
         return _stc.StyledTextEvent_SetWParam(*args, **kwargs)
 
     def SetLParam(*args, **kwargs):
-        """SetLParam(int val)"""
+        """SetLParam(self, int val)"""
         return _stc.StyledTextEvent_SetLParam(*args, **kwargs)
 
     def SetListType(*args, **kwargs):
-        """SetListType(int val)"""
+        """SetListType(self, int val)"""
         return _stc.StyledTextEvent_SetListType(*args, **kwargs)
 
     def SetX(*args, **kwargs):
-        """SetX(int val)"""
+        """SetX(self, int val)"""
         return _stc.StyledTextEvent_SetX(*args, **kwargs)
 
     def SetY(*args, **kwargs):
-        """SetY(int val)"""
+        """SetY(self, int val)"""
         return _stc.StyledTextEvent_SetY(*args, **kwargs)
 
     def SetDragText(*args, **kwargs):
-        """SetDragText(String val)"""
+        """SetDragText(self, String val)"""
         return _stc.StyledTextEvent_SetDragText(*args, **kwargs)
 
     def SetDragAllowMove(*args, **kwargs):
-        """SetDragAllowMove(bool val)"""
+        """SetDragAllowMove(self, bool val)"""
         return _stc.StyledTextEvent_SetDragAllowMove(*args, **kwargs)
 
     def SetDragResult(*args, **kwargs):
-        """SetDragResult(int val)"""
+        """SetDragResult(self, int val)"""
         return _stc.StyledTextEvent_SetDragResult(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition() -> int"""
+        """GetPosition(self) -> int"""
         return _stc.StyledTextEvent_GetPosition(*args, **kwargs)
 
     def GetKey(*args, **kwargs):
-        """GetKey() -> int"""
+        """GetKey(self) -> int"""
         return _stc.StyledTextEvent_GetKey(*args, **kwargs)
 
     def GetModifiers(*args, **kwargs):
-        """GetModifiers() -> int"""
+        """GetModifiers(self) -> int"""
         return _stc.StyledTextEvent_GetModifiers(*args, **kwargs)
 
     def GetModificationType(*args, **kwargs):
-        """GetModificationType() -> int"""
+        """GetModificationType(self) -> int"""
         return _stc.StyledTextEvent_GetModificationType(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText() -> String"""
+        """GetText(self) -> String"""
         return _stc.StyledTextEvent_GetText(*args, **kwargs)
 
     def GetLength(*args, **kwargs):
-        """GetLength() -> int"""
+        """GetLength(self) -> int"""
         return _stc.StyledTextEvent_GetLength(*args, **kwargs)
 
     def GetLinesAdded(*args, **kwargs):
-        """GetLinesAdded() -> int"""
+        """GetLinesAdded(self) -> int"""
         return _stc.StyledTextEvent_GetLinesAdded(*args, **kwargs)
 
     def GetLine(*args, **kwargs):
-        """GetLine() -> int"""
+        """GetLine(self) -> int"""
         return _stc.StyledTextEvent_GetLine(*args, **kwargs)
 
     def GetFoldLevelNow(*args, **kwargs):
-        """GetFoldLevelNow() -> int"""
+        """GetFoldLevelNow(self) -> int"""
         return _stc.StyledTextEvent_GetFoldLevelNow(*args, **kwargs)
 
     def GetFoldLevelPrev(*args, **kwargs):
-        """GetFoldLevelPrev() -> int"""
+        """GetFoldLevelPrev(self) -> int"""
         return _stc.StyledTextEvent_GetFoldLevelPrev(*args, **kwargs)
 
     def GetMargin(*args, **kwargs):
-        """GetMargin() -> int"""
+        """GetMargin(self) -> int"""
         return _stc.StyledTextEvent_GetMargin(*args, **kwargs)
 
     def GetMessage(*args, **kwargs):
-        """GetMessage() -> int"""
+        """GetMessage(self) -> int"""
         return _stc.StyledTextEvent_GetMessage(*args, **kwargs)
 
     def GetWParam(*args, **kwargs):
-        """GetWParam() -> int"""
+        """GetWParam(self) -> int"""
         return _stc.StyledTextEvent_GetWParam(*args, **kwargs)
 
     def GetLParam(*args, **kwargs):
-        """GetLParam() -> int"""
+        """GetLParam(self) -> int"""
         return _stc.StyledTextEvent_GetLParam(*args, **kwargs)
 
     def GetListType(*args, **kwargs):
-        """GetListType() -> int"""
+        """GetListType(self) -> int"""
         return _stc.StyledTextEvent_GetListType(*args, **kwargs)
 
     def GetX(*args, **kwargs):
-        """GetX() -> int"""
+        """GetX(self) -> int"""
         return _stc.StyledTextEvent_GetX(*args, **kwargs)
 
     def GetY(*args, **kwargs):
-        """GetY() -> int"""
+        """GetY(self) -> int"""
         return _stc.StyledTextEvent_GetY(*args, **kwargs)
 
     def GetDragText(*args, **kwargs):
-        """GetDragText() -> String"""
+        """GetDragText(self) -> String"""
         return _stc.StyledTextEvent_GetDragText(*args, **kwargs)
 
     def GetDragAllowMove(*args, **kwargs):
-        """GetDragAllowMove() -> bool"""
+        """GetDragAllowMove(self) -> bool"""
         return _stc.StyledTextEvent_GetDragAllowMove(*args, **kwargs)
 
     def GetDragResult(*args, **kwargs):
-        """GetDragResult() -> int"""
+        """GetDragResult(self) -> int"""
         return _stc.StyledTextEvent_GetDragResult(*args, **kwargs)
 
     def GetShift(*args, **kwargs):
-        """GetShift() -> bool"""
+        """GetShift(self) -> bool"""
         return _stc.StyledTextEvent_GetShift(*args, **kwargs)
 
     def GetControl(*args, **kwargs):
-        """GetControl() -> bool"""
+        """GetControl(self) -> bool"""
         return _stc.StyledTextEvent_GetControl(*args, **kwargs)
 
     def GetAlt(*args, **kwargs):
-        """GetAlt() -> bool"""
+        """GetAlt(self) -> bool"""
         return _stc.StyledTextEvent_GetAlt(*args, **kwargs)
 
     def Clone(*args, **kwargs):
-        """Clone() -> Event"""
+        """Clone(self) -> Event"""
         return _stc.StyledTextEvent_Clone(*args, **kwargs)
 
 

@@ -23,7 +23,7 @@ class WizardEvent(core.NotifyEvent):
         return "<%s.%s; proxy of C++ wxWizardEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(wxEventType type=wxEVT_NULL, int id=-1, bool direction=True, 
+        __init__(self, wxEventType type=wxEVT_NULL, int id=-1, bool direction=True, 
             WizardPage page=None) -> WizardEvent
         """
         newobj = _wizard.new_WizardEvent(*args, **kwargs)
@@ -31,11 +31,11 @@ class WizardEvent(core.NotifyEvent):
         self.thisown = 1
         del newobj.thisown
     def GetDirection(*args, **kwargs):
-        """GetDirection() -> bool"""
+        """GetDirection(self) -> bool"""
         return _wizard.WizardEvent_GetDirection(*args, **kwargs)
 
     def GetPage(*args, **kwargs):
-        """GetPage() -> WizardPage"""
+        """GetPage(self) -> WizardPage"""
         return _wizard.WizardEvent_GetPage(*args, **kwargs)
 
 
@@ -51,19 +51,19 @@ class WizardPage(windows.Panel):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizardPage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Create(*args, **kwargs):
-        """Create(Wizard parent, Bitmap bitmap=wxNullBitmap, String resource=EmptyString) -> bool"""
+        """Create(self, Wizard parent, Bitmap bitmap=wxNullBitmap, String resource=EmptyString) -> bool"""
         return _wizard.WizardPage_Create(*args, **kwargs)
 
     def GetPrev(*args, **kwargs):
-        """GetPrev() -> WizardPage"""
+        """GetPrev(self) -> WizardPage"""
         return _wizard.WizardPage_GetPrev(*args, **kwargs)
 
     def GetNext(*args, **kwargs):
-        """GetNext() -> WizardPage"""
+        """GetNext(self) -> WizardPage"""
         return _wizard.WizardPage_GetNext(*args, **kwargs)
 
     def GetBitmap(*args, **kwargs):
-        """GetBitmap() -> Bitmap"""
+        """GetBitmap(self) -> Bitmap"""
         return _wizard.WizardPage_GetBitmap(*args, **kwargs)
 
 
@@ -78,7 +78,7 @@ class PyWizardPage(WizardPage):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyWizardPage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Wizard parent, Bitmap bitmap=&wxNullBitmap, String resource=&wxPyEmptyString) -> PyWizardPage"""
+        """__init__(self, Wizard parent, Bitmap bitmap=&wxNullBitmap, String resource=&wxPyEmptyString) -> PyWizardPage"""
         newobj = _wizard.new_PyWizardPage(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -86,27 +86,27 @@ class PyWizardPage(WizardPage):
         self._setCallbackInfo(self, PyWizardPage);self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Wizard parent, Bitmap bitmap=wxNullBitmap, String resource=EmptyString) -> bool"""
+        """Create(self, Wizard parent, Bitmap bitmap=wxNullBitmap, String resource=EmptyString) -> bool"""
         return _wizard.PyWizardPage_Create(*args, **kwargs)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _wizard.PyWizardPage__setCallbackInfo(*args, **kwargs)
 
     def base_DoMoveWindow(*args, **kwargs):
-        """base_DoMoveWindow(int x, int y, int width, int height)"""
+        """base_DoMoveWindow(self, int x, int y, int width, int height)"""
         return _wizard.PyWizardPage_base_DoMoveWindow(*args, **kwargs)
 
     def base_DoSetSize(*args, **kwargs):
-        """base_DoSetSize(int x, int y, int width, int height, int sizeFlags=SIZE_AUTO)"""
+        """base_DoSetSize(self, int x, int y, int width, int height, int sizeFlags=SIZE_AUTO)"""
         return _wizard.PyWizardPage_base_DoSetSize(*args, **kwargs)
 
     def base_DoSetClientSize(*args, **kwargs):
-        """base_DoSetClientSize(int width, int height)"""
+        """base_DoSetClientSize(self, int width, int height)"""
         return _wizard.PyWizardPage_base_DoSetClientSize(*args, **kwargs)
 
     def base_DoSetVirtualSize(*args, **kwargs):
-        """base_DoSetVirtualSize(int x, int y)"""
+        """base_DoSetVirtualSize(self, int x, int y)"""
         return _wizard.PyWizardPage_base_DoSetVirtualSize(*args, **kwargs)
 
     def base_DoGetSize(*args, **kwargs):
@@ -122,47 +122,47 @@ class PyWizardPage(WizardPage):
         return _wizard.PyWizardPage_base_DoGetPosition(*args, **kwargs)
 
     def base_DoGetVirtualSize(*args, **kwargs):
-        """base_DoGetVirtualSize() -> Size"""
+        """base_DoGetVirtualSize(self) -> Size"""
         return _wizard.PyWizardPage_base_DoGetVirtualSize(*args, **kwargs)
 
     def base_DoGetBestSize(*args, **kwargs):
-        """base_DoGetBestSize() -> Size"""
+        """base_DoGetBestSize(self) -> Size"""
         return _wizard.PyWizardPage_base_DoGetBestSize(*args, **kwargs)
 
     def base_InitDialog(*args, **kwargs):
-        """base_InitDialog()"""
+        """base_InitDialog(self)"""
         return _wizard.PyWizardPage_base_InitDialog(*args, **kwargs)
 
     def base_TransferDataToWindow(*args, **kwargs):
-        """base_TransferDataToWindow() -> bool"""
+        """base_TransferDataToWindow(self) -> bool"""
         return _wizard.PyWizardPage_base_TransferDataToWindow(*args, **kwargs)
 
     def base_TransferDataFromWindow(*args, **kwargs):
-        """base_TransferDataFromWindow() -> bool"""
+        """base_TransferDataFromWindow(self) -> bool"""
         return _wizard.PyWizardPage_base_TransferDataFromWindow(*args, **kwargs)
 
     def base_Validate(*args, **kwargs):
-        """base_Validate() -> bool"""
+        """base_Validate(self) -> bool"""
         return _wizard.PyWizardPage_base_Validate(*args, **kwargs)
 
     def base_AcceptsFocus(*args, **kwargs):
-        """base_AcceptsFocus() -> bool"""
+        """base_AcceptsFocus(self) -> bool"""
         return _wizard.PyWizardPage_base_AcceptsFocus(*args, **kwargs)
 
     def base_AcceptsFocusFromKeyboard(*args, **kwargs):
-        """base_AcceptsFocusFromKeyboard() -> bool"""
+        """base_AcceptsFocusFromKeyboard(self) -> bool"""
         return _wizard.PyWizardPage_base_AcceptsFocusFromKeyboard(*args, **kwargs)
 
     def base_GetMaxSize(*args, **kwargs):
-        """base_GetMaxSize() -> Size"""
+        """base_GetMaxSize(self) -> Size"""
         return _wizard.PyWizardPage_base_GetMaxSize(*args, **kwargs)
 
     def base_AddChild(*args, **kwargs):
-        """base_AddChild(Window child)"""
+        """base_AddChild(self, Window child)"""
         return _wizard.PyWizardPage_base_AddChild(*args, **kwargs)
 
     def base_RemoveChild(*args, **kwargs):
-        """base_RemoveChild(Window child)"""
+        """base_RemoveChild(self, Window child)"""
         return _wizard.PyWizardPage_base_RemoveChild(*args, **kwargs)
 
 
@@ -184,7 +184,7 @@ class WizardPageSimple(WizardPage):
         return "<%s.%s; proxy of C++ wxWizardPageSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Wizard parent, WizardPage prev=None, WizardPage next=None, 
+        __init__(self, Wizard parent, WizardPage prev=None, WizardPage next=None, 
             Bitmap bitmap=wxNullBitmap, wxChar resource=None) -> WizardPageSimple
         """
         newobj = _wizard.new_WizardPageSimple(*args, **kwargs)
@@ -195,21 +195,21 @@ class WizardPageSimple(WizardPage):
 
     def Create(*args, **kwargs):
         """
-        Create(Wizard parent=None, WizardPage prev=None, WizardPage next=None, 
+        Create(self, Wizard parent=None, WizardPage prev=None, WizardPage next=None, 
             Bitmap bitmap=wxNullBitmap, wxChar resource=None) -> bool
         """
         return _wizard.WizardPageSimple_Create(*args, **kwargs)
 
     def SetPrev(*args, **kwargs):
-        """SetPrev(WizardPage prev)"""
+        """SetPrev(self, WizardPage prev)"""
         return _wizard.WizardPageSimple_SetPrev(*args, **kwargs)
 
     def SetNext(*args, **kwargs):
-        """SetNext(WizardPage next)"""
+        """SetNext(self, WizardPage next)"""
         return _wizard.WizardPageSimple_SetNext(*args, **kwargs)
 
     def Chain(*args, **kwargs):
-        """Chain(WizardPageSimple first, WizardPageSimple second)"""
+        """WizardPageSimple.Chain(WizardPageSimple first, WizardPageSimple second)"""
         return _wizard.WizardPageSimple_Chain(*args, **kwargs)
 
     Chain = staticmethod(Chain)
@@ -236,7 +236,7 @@ class Wizard(windows.Dialog):
         return "<%s.%s; proxy of C++ wxWizard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id=-1, String title=EmptyString, 
+        __init__(self, Window parent, int id=-1, String title=EmptyString, 
             Bitmap bitmap=wxNullBitmap, Point pos=DefaultPosition, 
             long style=DEFAULT_DIALOG_STYLE) -> Wizard
         """
@@ -248,57 +248,57 @@ class Wizard(windows.Dialog):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id=-1, String title=EmptyString, 
+        Create(self, Window parent, int id=-1, String title=EmptyString, 
             Bitmap bitmap=wxNullBitmap, Point pos=DefaultPosition) -> bool
         """
         return _wizard.Wizard_Create(*args, **kwargs)
 
     def Init(*args, **kwargs):
-        """Init()"""
+        """Init(self)"""
         return _wizard.Wizard_Init(*args, **kwargs)
 
     def RunWizard(*args, **kwargs):
-        """RunWizard(WizardPage firstPage) -> bool"""
+        """RunWizard(self, WizardPage firstPage) -> bool"""
         return _wizard.Wizard_RunWizard(*args, **kwargs)
 
     def GetCurrentPage(*args, **kwargs):
-        """GetCurrentPage() -> WizardPage"""
+        """GetCurrentPage(self) -> WizardPage"""
         return _wizard.Wizard_GetCurrentPage(*args, **kwargs)
 
     def SetPageSize(*args, **kwargs):
-        """SetPageSize(Size size)"""
+        """SetPageSize(self, Size size)"""
         return _wizard.Wizard_SetPageSize(*args, **kwargs)
 
     def GetPageSize(*args, **kwargs):
-        """GetPageSize() -> Size"""
+        """GetPageSize(self) -> Size"""
         return _wizard.Wizard_GetPageSize(*args, **kwargs)
 
     def FitToPage(*args, **kwargs):
-        """FitToPage(WizardPage firstPage)"""
+        """FitToPage(self, WizardPage firstPage)"""
         return _wizard.Wizard_FitToPage(*args, **kwargs)
 
     def GetPageAreaSizer(*args, **kwargs):
-        """GetPageAreaSizer() -> Sizer"""
+        """GetPageAreaSizer(self) -> Sizer"""
         return _wizard.Wizard_GetPageAreaSizer(*args, **kwargs)
 
     def SetBorder(*args, **kwargs):
-        """SetBorder(int border)"""
+        """SetBorder(self, int border)"""
         return _wizard.Wizard_SetBorder(*args, **kwargs)
 
     def IsRunning(*args, **kwargs):
-        """IsRunning() -> bool"""
+        """IsRunning(self) -> bool"""
         return _wizard.Wizard_IsRunning(*args, **kwargs)
 
     def ShowPage(*args, **kwargs):
-        """ShowPage(WizardPage page, bool goingForward=True) -> bool"""
+        """ShowPage(self, WizardPage page, bool goingForward=True) -> bool"""
         return _wizard.Wizard_ShowPage(*args, **kwargs)
 
     def HasNextPage(*args, **kwargs):
-        """HasNextPage(WizardPage page) -> bool"""
+        """HasNextPage(self, WizardPage page) -> bool"""
         return _wizard.Wizard_HasNextPage(*args, **kwargs)
 
     def HasPrevPage(*args, **kwargs):
-        """HasPrevPage(WizardPage page) -> bool"""
+        """HasPrevPage(self, WizardPage page) -> bool"""
         return _wizard.Wizard_HasPrevPage(*args, **kwargs)
 
 
