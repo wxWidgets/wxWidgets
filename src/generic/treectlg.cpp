@@ -2282,13 +2282,26 @@ void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )
             m_imageListNormal->GetSize( image, image_w, image_h );
             image_w += 4;
         }
-        else
+        else // !RightDown() && !LeftUp() ==> LeftDown() || LeftDClick()
         {
             wxFAIL_MSG(_T("you must create an image list to use images!"));
         }
     }
     x += image_w;
     w -= image_w + 4; // I don't know why +4 is needed
+            if ( flags & wxTREE_HITTEST_ONITEMBUTTON )
+            {
+                // only toggle the item for a single click, double click on
+                // the button doesn't do anything (it toggles the item twice)
+                if ( event.LeftDown() )
+                {
+                    Toggle( item );
+                }
+
+                // don't select the item if the button was clicked
+                return;
+            }
+
 
     wxClientDC dc(this);
     PrepareDC( dc );
@@ -2488,13 +2501,6 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                                 event.ShiftDown(),
                                 event.ControlDown(),
                                 is_multiple, extended_select, unselect_others);
-
-            if ( (flags & wxTREE_HITTEST_ONITEMBUTTON) && event.LeftDown() )
-            {
-                Toggle( item );
-                if ( is_multiple )
-                    return;
-            }
 
             SelectItem(item, unselect_others, extended_select);
 
