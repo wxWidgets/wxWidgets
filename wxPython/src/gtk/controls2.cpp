@@ -7714,7 +7714,7 @@ static PyObject *_wrap_wxTreeCtrl_GetSelection(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxTreeCtrl_GetItemParent(_swigobj,_swigarg0)  (_swigobj->GetParent(_swigarg0))
+#define wxTreeCtrl_GetItemParent(_swigobj,_swigarg0)  (_swigobj->GetItemParent(_swigarg0))
 static PyObject *_wrap_wxTreeCtrl_GetItemParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTreeItemId * _result;

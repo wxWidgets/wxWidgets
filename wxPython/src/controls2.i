@@ -1233,7 +1233,7 @@ public:
 
     wxTreeItemId GetRootItem();
     wxTreeItemId GetSelection();
-    %name(GetItemParent) wxTreeItemId GetParent(const wxTreeItemId& item);
+    wxTreeItemId GetItemParent(const wxTreeItemId& item);
     //size_t GetSelections(wxArrayTreeItemIds& selection);
     %addmethods {
         PyObject* GetSelections() {
