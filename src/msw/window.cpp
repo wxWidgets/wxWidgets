@@ -170,15 +170,25 @@ static bool gs_hasStdCmap = FALSE;
 // ---------------------------------------------------------------------------
 
 // the window proc for all our windows
+#ifdef __DIGITALMARS__
+extern "C" LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
+                                   WPARAM wParam, LPARAM lParam);
+#else
 LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
+#endif
+                                   
 
 #ifdef  __WXDEBUG__
     const char *wxGetMessageName(int message);
 #endif  //__WXDEBUG__
 
 void wxRemoveHandleAssociation(wxWindowMSW *win);
-void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
+#ifdef __DIGITALMARS__
+extern "C" void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
+#else
+extern void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
+#endif
 wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 
 // this magical function is used to translate VK_APPS key presses to right
@@ -3310,6 +3320,7 @@ bool wxWindowMSW::HandleDestroy()
 
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP
+    
     if ( m_dropTarget != NULL )
     {
         m_dropTarget->Revoke(m_hWnd);
@@ -3470,6 +3481,10 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
     return GetEventHandler()->ProcessEvent(event);
 #endif
 }
+
+#ifdef __DIGITALMARS__
+extern "C" HCURSOR wxGetCurrentBusyCursor();
+#endif
 
 bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
                                   short nHitTest,
