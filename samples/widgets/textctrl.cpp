@@ -177,9 +177,8 @@ protected:
 
 private:
     // any class wishing to process wxWindows events must use this macro
-    DECLARE_EVENT_TABLE();
-
-    DECLARE_WIDGETS_PAGE(TextWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(TextWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------

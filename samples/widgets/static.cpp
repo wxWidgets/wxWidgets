@@ -118,8 +118,8 @@ protected:
                *m_textLabel;
 
 private:
-    DECLARE_EVENT_TABLE();
-    DECLARE_WIDGETS_PAGE(StaticWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(StaticWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------

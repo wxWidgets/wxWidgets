@@ -130,8 +130,8 @@ protected:
                *m_textTickFreq;
 
 private:
-    DECLARE_EVENT_TABLE();
-    DECLARE_WIDGETS_PAGE(SliderWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(SliderWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------

@@ -144,8 +144,8 @@ protected:
                *m_textDelete;
 
 private:
-    DECLARE_EVENT_TABLE();
-    DECLARE_WIDGETS_PAGE(ListboxWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(ListboxWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------

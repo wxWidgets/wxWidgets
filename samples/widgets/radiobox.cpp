@@ -119,8 +119,8 @@ protected:
                *m_textLabelBtns;
 
 private:
-    DECLARE_EVENT_TABLE();
-    DECLARE_WIDGETS_PAGE(RadioWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(RadioWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------

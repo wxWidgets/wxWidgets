@@ -153,8 +153,8 @@ protected:
     wxImageList *m_imageList;
 
 private:
-    DECLARE_EVENT_TABLE();
-    DECLARE_WIDGETS_PAGE(NotebookWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(NotebookWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------

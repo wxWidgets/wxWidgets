@@ -133,8 +133,8 @@ protected:
                *m_textDelete;
 
 private:
-    DECLARE_EVENT_TABLE();
-    DECLARE_WIDGETS_PAGE(ComboboxWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(ComboboxWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------

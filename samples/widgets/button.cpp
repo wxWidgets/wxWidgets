@@ -112,8 +112,8 @@ protected:
     wxTextCtrl *m_textLabel;
 
 private:
-    DECLARE_EVENT_TABLE();
-    DECLARE_WIDGETS_PAGE(ButtonWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(ButtonWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------

@@ -126,8 +126,8 @@ protected:
                *m_textMax;
 
 private:
-    DECLARE_EVENT_TABLE();
-    DECLARE_WIDGETS_PAGE(SpinBtnWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(SpinBtnWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------

@@ -122,8 +122,8 @@ protected:
     wxTimer *m_timer;
 
 private:
-    DECLARE_EVENT_TABLE();
-    DECLARE_WIDGETS_PAGE(GaugeWidgetsPage);
+    DECLARE_EVENT_TABLE()
+    DECLARE_WIDGETS_PAGE(GaugeWidgetsPage)
 };
 
 // ----------------------------------------------------------------------------
