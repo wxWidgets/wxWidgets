@@ -5,6 +5,7 @@
 all:
 	cd about && make
 	cd help && make
+	cd helpview && make
 	cd printing && make
 	cd test && make
 	cd virtual && make
@@ -14,6 +15,7 @@ all:
 clean:
 	cd about && make clean
 	cd help && make clean
+	cd helpview && make clean
 	cd printing && make clean
 	cd test && make clean
 	cd virtual && make clean

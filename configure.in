@@ -3069,6 +3069,7 @@ AC_OUTPUT([
             samples/html/about/Makefile
             samples/html/help/Makefile
             samples/html/printing/Makefile
+            samples/html/helpview/Makefile
             samples/html/test/Makefile
             samples/html/zip/Makefile
             samples/html/virtual/Makefile
