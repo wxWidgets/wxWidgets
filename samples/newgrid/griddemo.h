@@ -121,6 +121,24 @@ public:
 // memory
 // ----------------------------------------------------------------------------
 
+class SimpleTable : public wxGridStringTable {
+public:
+    SimpleTable( int numRows, int numCols )
+        : wxGridStringTable( numRows, numCols ) {}
+
+    // override this to fake a row as all bools
+    wxString GetTypeName( int row, int col )
+        {
+            if (row == 8)
+                return wxT("bool");
+            else if (row == 9 && col == 1)
+                return wxT("unknown type");  // to test fallback
+            else
+                return wxGridStringTable::GetTypeName(row, col);
+        }
+
+};
+
 class BigGridTable : public wxGridTableBase
 {
 public:
@@ -128,7 +146,6 @@ public:
 
     long GetNumberRows() { return m_sizeGrid; }
     long GetNumberCols() { return m_sizeGrid; }
-
     wxString GetValue( int row, int col )
     {
         return wxString::Format("(%d, %d)", row, col);

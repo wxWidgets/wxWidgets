@@ -61,6 +61,7 @@ class WXDLLEXPORT wxGridCornerLabelWindow;
 class WXDLLEXPORT wxGridRowLabelWindow;
 class WXDLLEXPORT wxGridTableBase;
 class WXDLLEXPORT wxGridWindow;
+class WXDLLEXPORT wxGridTypeRegistry;
 
 class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxTextCtrl;
@@ -309,8 +310,8 @@ public:
     const wxColour& GetBackgroundColour() const;
     const wxFont& GetFont() const;
     void GetAlignment(int *hAlign, int *vAlign) const;
-    wxGridCellRenderer *GetRenderer() const;
-    wxGridCellEditor *GetEditor() const;
+    wxGridCellRenderer *GetRenderer(wxGridCellRenderer* def) const;
+    wxGridCellEditor *GetEditor(wxGridCellEditor* def) const;
 
     bool IsReadOnly() const { return m_isReadOnly; }
 
@@ -406,9 +407,27 @@ public:
     //
     virtual long GetNumberRows() = 0;
     virtual long GetNumberCols() = 0;
-    virtual wxString GetValue( int row, int col ) = 0;
-    virtual void SetValue( int row, int col, const wxString& s ) = 0;
     virtual bool IsEmptyCell( int row, int col ) = 0;
+    virtual wxString GetValue( int row, int col ) = 0;
+    virtual void SetValue( int row, int col, const wxString& value ) = 0;
+
+    // Data type determination and value access
+    virtual wxString GetTypeName( int row, int col );
+    virtual bool CanGetValueAs( int row, int col, const wxString& typeName );
+    virtual bool CanSetValueAs( int row, int col, const wxString& typeName );
+
+    virtual long GetValueAsLong( int row, int col );
+    virtual double GetValueAsDouble( int row, int col );
+    virtual bool GetValueAsBool( int row, int col );
+
+    virtual void SetValueAsLong( int row, int col, long value );
+    virtual void SetValueAsDouble( int row, int col, double value );
+    virtual void SetValueAsBool( int row, int col, bool value );
+
+    // For user defined types
+    virtual void* GetValueAsCustom( int row, int col, const wxString& typeName );
+    virtual void  SetValueAsCustom( int row, int col, const wxString& typeName, void* value );
+
 
     // Overriding these is optional
     //
@@ -437,12 +456,17 @@ public:
     // get the currently used attr provider (may be NULL)
     wxGridCellAttrProvider *GetAttrProvider() const { return m_attrProvider; }
 
+    // Does this table allow attributes?  Default implementation creates
+    // a wxGridCellAttrProvider if necessary.
+    virtual bool CanHaveAttributes();
+
+
     // change row/col number in attribute if needed
-    void UpdateAttrRows( size_t pos, int numRows );
-    void UpdateAttrCols( size_t pos, int numCols );
+    virtual void UpdateAttrRows( size_t pos, int numRows );
+    virtual void UpdateAttrCols( size_t pos, int numCols );
 
     // by default forwarded to wxGridCellAttrProvider if any. May be
-    // overridden to handle attributes directly in this class.
+    // overridden to handle attributes directly in the table.
     virtual wxGridCellAttr *GetAttr( int row, int col );
 
     // these functions take ownership of the pointer
@@ -866,10 +890,11 @@ public:
     wxGridCellRenderer* GetCellRenderer(int row, int col);
 
     // takes ownership of the pointer
-    void SetDefaultEditor(wxGridCellEditor *editor);
+//    void SetDefaultEditor(wxGridCellEditor *editor);
     void SetCellEditor(int row, int col, wxGridCellEditor *editor);
-    wxGridCellEditor *GetDefaultEditor() const;
+//    wxGridCellEditor *GetDefaultEditor() const;
     wxGridCellEditor* GetCellEditor(int row, int col);
+
 
 
     // ------ cell value accessors
@@ -966,6 +991,16 @@ public:
 
     void SetSelectionBackground(const wxColour& c) { m_selectionBackground = c; }
     void SetSelectionForeground(const wxColour& c) { m_selectionForeground = c; }
+
+
+    // Methods for a registry for mapping data types to Renderers/Editors
+    void RegisterDataType(const wxString& typeName,
+                          wxGridCellRenderer* renderer,
+                          wxGridCellEditor* editor);
+    wxGridCellEditor* GetDefaultEditorForCell(int row, int col);
+    wxGridCellRenderer* GetDefaultRendererForCell(int row, int col);
+    wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName);
+    wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName);
 
 
 
@@ -1259,6 +1294,9 @@ protected:
     bool m_inOnKeyDown;
     int  m_batchCount;
 
+
+    wxGridTypeRegistry*    m_typeRegistry;
+
     enum CursorMode
     {
         WXGRID_CURSOR_SELECT_CELL,
@@ -1333,6 +1371,7 @@ protected:
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
 };
+
 
 
 // ----------------------------------------------------------------------------

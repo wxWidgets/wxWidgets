@@ -248,6 +248,46 @@ public:
                            m_colAttrs;
 };
 
+
+// ----------------------------------------------------------------------------
+// data structures used for the data type registry
+// ----------------------------------------------------------------------------
+
+struct wxGridDataTypeInfo {
+    wxGridDataTypeInfo(const wxString& typeName,
+                       wxGridCellRenderer* renderer,
+                       wxGridCellEditor* editor)
+        : m_typeName(typeName), m_renderer(renderer), m_editor(editor)
+        { }
+
+    ~wxGridDataTypeInfo() { delete m_renderer; delete m_editor; }
+
+    wxString            m_typeName;
+    wxGridCellRenderer* m_renderer;
+    wxGridCellEditor*   m_editor;
+};
+
+
+WX_DEFINE_ARRAY(wxGridDataTypeInfo*, wxGridDataTypeInfoArray);
+
+
+class WXDLLEXPORT wxGridTypeRegistry {
+public:
+    ~wxGridTypeRegistry();
+    void RegisterDataType(const wxString& typeName,
+                     wxGridCellRenderer* renderer,
+                     wxGridCellEditor* editor);
+    int FindDataType(const wxString& typeName);
+    wxGridCellRenderer* GetRenderer(int index);
+    wxGridCellEditor*   GetEditor(int index);
+
+private:
+    wxGridDataTypeInfoArray m_typeinfo;
+};
+
+
+
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
@@ -341,23 +381,14 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
         // set the colours/fonts if we have any
         if ( attr )
         {
-            if ( attr->HasTextColour() )
-            {
-                m_colFgOld = m_control->GetForegroundColour();
-                m_control->SetForegroundColour(attr->GetTextColour());
-            }
+            m_colFgOld = m_control->GetForegroundColour();
+            m_control->SetForegroundColour(attr->GetTextColour());
 
-            if ( attr->HasBackgroundColour() )
-            {
-                m_colBgOld = m_control->GetBackgroundColour();
-                m_control->SetBackgroundColour(attr->GetBackgroundColour());
-            }
+            m_colBgOld = m_control->GetBackgroundColour();
+            m_control->SetBackgroundColour(attr->GetBackgroundColour());
 
-            if ( attr->HasFont() )
-            {
-                m_fontOld = m_control->GetFont();
-                m_control->SetFont(attr->GetFont());
-            }
+            m_fontOld = m_control->GetFont();
+            m_control->SetFont(attr->GetFont());
 
             // can't do anything more in the base class version, the other
             // attributes may only be used by the derived classes
@@ -565,7 +596,10 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be Created first!"));
 
-    m_startValue = !!grid->GetTable()->GetValue(row, col); // FIXME-DATA
+    if (grid->GetTable()->CanGetValueAs(row, col, wxT("bool")))
+        m_startValue = grid->GetTable()->GetValueAsBool(row, col);
+    else
+        m_startValue = !!grid->GetTable()->GetValue(row, col);
     CBox()->SetValue(m_startValue);
     CBox()->SetFocus();
 }
@@ -584,8 +618,10 @@ bool wxGridCellBoolEditor::EndEdit(int row, int col,
 
     if ( changed )
     {
-        // FIXME-DATA
-        grid->GetTable()->SetValue(row, col, value ? _T("1") : wxEmptyString);
+        if (grid->GetTable()->CanGetValueAs(row, col, wxT("bool")))
+            grid->GetTable()->SetValueAsBool(row, col, value);
+        else
+            grid->GetTable()->SetValue(row, col, value ? _T("1") : wxEmptyString);
     }
 
     return changed;
@@ -764,7 +800,13 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 
     rectMark.Inflate(-margin);
 
-    if ( !!grid.GetTable()->GetValue(row, col) ) // FIXME-DATA
+    bool value;
+    if (grid.GetTable()->CanGetValueAs(row, col, wxT("bool")))
+        value = grid.GetTable()->GetValueAsBool(row, col);
+    else
+        value = !!grid.GetTable()->GetValue(row, col);
+
+    if ( value )
     {
         dc.SetTextForeground(attr.GetTextColour());
         dc.DrawCheckMark(rectMark);
@@ -837,12 +879,21 @@ void wxGridCellAttr::GetAlignment(int *hAlign, int *vAlign) const
 }
 
 
-wxGridCellRenderer* wxGridCellAttr::GetRenderer() const
+// GetRenderer and GetEditor use a slightly different decision path about
+// which to use.  If a non-default attr object has one then it is used,
+// otherwise the default editor or renderer passed in is used.  It should be
+// the default for the data type of the cell.  If it is NULL (because the
+// table has a type that the grid does not have in its registry,) then the
+// grid's default editor or renderer is used.
+
+wxGridCellRenderer* wxGridCellAttr::GetRenderer(wxGridCellRenderer* def) const
 {
-    if (HasRenderer())
+    if ((m_defGridAttr != this || def == NULL) && HasRenderer())
         return m_renderer;
+    else if (def)
+        return def;
     else if (m_defGridAttr != this)
-        return m_defGridAttr->GetRenderer();
+        return m_defGridAttr->GetRenderer(NULL);
     else
     {
         wxFAIL_MSG(wxT("Missing default cell attribute"));
@@ -850,12 +901,14 @@ wxGridCellRenderer* wxGridCellAttr::GetRenderer() const
     }
 }
 
-wxGridCellEditor* wxGridCellAttr::GetEditor() const
+wxGridCellEditor* wxGridCellAttr::GetEditor(wxGridCellEditor* def) const
 {
-    if (HasEditor())
+    if ((m_defGridAttr != this || def == NULL) && HasEditor())
         return m_editor;
+    else if (def)
+        return def;
     else if (m_defGridAttr != this)
-        return m_defGridAttr->GetEditor();
+        return m_defGridAttr->GetEditor(NULL);
     else
     {
         wxFAIL_MSG(wxT("Missing default cell attribute"));
@@ -1157,13 +1210,63 @@ void wxGridCellAttrProvider::UpdateAttrCols( size_t pos, int numCols )
 }
 
 // ----------------------------------------------------------------------------
+// wxGridTypeRegistry
+// ----------------------------------------------------------------------------
+
+wxGridTypeRegistry::~wxGridTypeRegistry()
+{
+    for (size_t i=0; i<m_typeinfo.Count(); i++)
+        delete m_typeinfo[i];
+}
+
+
+void wxGridTypeRegistry::RegisterDataType(const wxString& typeName,
+                                          wxGridCellRenderer* renderer,
+                                          wxGridCellEditor* editor)
+{
+    int loc;
+    wxGridDataTypeInfo* info = new wxGridDataTypeInfo(typeName, renderer, editor);
+
+    // is it already registered?
+    if ((loc = FindDataType(typeName)) != -1) {
+        delete m_typeinfo[loc];
+        m_typeinfo[loc] = info;
+    }
+    else {
+        m_typeinfo.Add(info);
+    }
+}
+
+int wxGridTypeRegistry::FindDataType(const wxString& typeName)
+{
+    int found = -1;
+
+    for (size_t i=0; i<m_typeinfo.Count(); i++) {
+        if (typeName == m_typeinfo[i]->m_typeName) {
+            found = i;
+            break;
+        }
+    }
+
+    return found;
+}
+
+wxGridCellRenderer* wxGridTypeRegistry::GetRenderer(int index)
+{
+    wxGridCellRenderer* renderer = m_typeinfo[index]->m_renderer;
+    return renderer;
+}
+
+wxGridCellEditor*   wxGridTypeRegistry::GetEditor(int index)
+{
+    wxGridCellEditor* editor = m_typeinfo[index]->m_editor;
+    return editor;
+}
+
+// ----------------------------------------------------------------------------
 // wxGridTableBase
 // ----------------------------------------------------------------------------
 
-//////////////////////////////////////////////////////////////////////
-//
-// Abstract base class for grid data (the model)
-//
 IMPLEMENT_ABSTRACT_CLASS( wxGridTableBase, wxObject )
 
 
@@ -1182,6 +1285,16 @@ void wxGridTableBase::SetAttrProvider(wxGridCellAttrProvider *attrProvider)
 {
     delete m_attrProvider;
     m_attrProvider = attrProvider;
+}
+
+bool wxGridTableBase::CanHaveAttributes()
+{
+    if ( ! GetAttrProvider() )
+    {
+        // use the default attr provider by default
+        SetAttrProvider(new wxGridCellAttrProvider);
+    }
+    return TRUE;
 }
 
 wxGridCellAttr *wxGridTableBase::GetAttr(int row, int col)
@@ -1302,7 +1415,8 @@ bool wxGridTableBase::DeleteCols( size_t pos, size_t numCols )
 wxString wxGridTableBase::GetRowLabelValue( int row )
 {
     wxString s;
-    s << row;
+    s << row + 1; // RD: Starting the rows at zero confuses users, no matter
+                  //     how much it makes sense to us geeks.
     return s;
 }
 
@@ -1332,6 +1446,65 @@ wxString wxGridTableBase::GetColLabelValue( int col )
     return s2;
 }
 
+
+wxString wxGridTableBase::GetTypeName( int WXUNUSED(row), int WXUNUSED(col) )
+{
+    return wxT("string");
+}
+
+bool wxGridTableBase::CanGetValueAs( int WXUNUSED(row), int WXUNUSED(col),
+                                     const wxString& typeName )
+{
+    return typeName == wxT("string");
+}
+
+bool wxGridTableBase::CanSetValueAs( int row, int col, const wxString& typeName )
+{
+    return CanGetValueAs(row, col, typeName);
+}
+
+long wxGridTableBase::GetValueAsLong( int WXUNUSED(row), int WXUNUSED(col) )
+{
+    return 0;
+}
+
+double wxGridTableBase::GetValueAsDouble( int WXUNUSED(row), int WXUNUSED(col) )
+{
+    return 0.0;
+}
+
+bool wxGridTableBase::GetValueAsBool( int WXUNUSED(row), int WXUNUSED(col) )
+{
+    return FALSE;
+}
+
+void wxGridTableBase::SetValueAsLong( int WXUNUSED(row), int WXUNUSED(col),
+                                      long WXUNUSED(value) )
+{
+}
+
+void wxGridTableBase::SetValueAsDouble( int WXUNUSED(row), int WXUNUSED(col),
+                                        double WXUNUSED(value) )
+{
+}
+
+void wxGridTableBase::SetValueAsBool( int WXUNUSED(row), int WXUNUSED(col),
+                                      bool WXUNUSED(value) )
+{
+}
+
+
+void* wxGridTableBase::GetValueAsCustom( int WXUNUSED(row), int WXUNUSED(col),
+                                         const wxString& WXUNUSED(typeName) )
+{
+    return NULL;
+}
+
+void  wxGridTableBase::SetValueAsCustom( int WXUNUSED(row), int WXUNUSED(col),
+                                         const wxString& WXUNUSED(typeName),
+                                         void* WXUNUSED(value) )
+{
+}
 
 
 //////////////////////////////////////////////////////////////////////
@@ -1418,11 +1591,11 @@ wxString wxGridStringTable::GetValue( int row, int col )
     return m_data[row][col];
 }
 
-void wxGridStringTable::SetValue( int row, int col, const wxString& s )
+void wxGridStringTable::SetValue( int row, int col, const wxString& value )
 {
     // TODO: bounds checking
     //
-    m_data[row][col] = s;
+    m_data[row][col] = value;
 }
 
 bool wxGridStringTable::IsEmptyCell( int row, int col )
@@ -1980,29 +2153,29 @@ void wxGridWindow::OnEraseBackground(wxEraseEvent& event)
 {
     int cw, ch;
     GetClientSize( &cw, &ch );
-    
+
     int right, bottom;
     m_owner->CalcUnscrolledPosition( cw, ch, &right, &bottom );
-    
+
     wxRect rightRect;
     rightRect = m_owner->CellToRect( 0, m_owner->GetNumberCols()-1 );
 
     wxRect bottomRect;
     bottomRect = m_owner->CellToRect( m_owner->GetNumberRows()-1, 0 );
-    
+
     if ( right > rightRect.GetRight()  ||  bottom > bottomRect.GetBottom() )
     {
         int left, top;
         m_owner->CalcUnscrolledPosition( 0, 0, &left, &top );
-        
+
         wxClientDC dc( this );
         m_owner->PrepareDC( dc );
         dc.SetBrush( wxBrush(m_owner->GetDefaultCellBackgroundColour(), wxSOLID) );
         dc.SetPen( *wxTRANSPARENT_PEN );
-        
+
         if ( right > rightRect.GetRight() )
             dc.DrawRectangle( rightRect.GetRight()+1, top, right - rightRect.GetRight(), ch );
-            
+
         if ( bottom > bottomRect.GetBottom() )
             dc.DrawRectangle( left, bottomRect.GetBottom()+1, cw, bottom - bottomRect.GetBottom() );
     }
@@ -2049,6 +2222,8 @@ wxGrid::~wxGrid()
 
     if (m_ownTable)
         delete m_table;
+
+    delete m_typeRegistry;
 }
 
 
@@ -2068,7 +2243,16 @@ void wxGrid::Create()
 
     m_defaultCellAttr = new wxGridCellAttr;
     m_defaultCellAttr->SetDefAttr(m_defaultCellAttr);
-    // RD:  Should we fill the default attrs now or is waiting until Init() okay?
+
+    // Set default cell attributes
+    m_defaultCellAttr->SetFont(GetFont());
+    m_defaultCellAttr->SetAlignment(wxLEFT, wxTOP);
+    m_defaultCellAttr->SetTextColour(
+        wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_defaultCellAttr->SetBackgroundColour(
+        wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    m_defaultCellAttr->SetRenderer(new wxGridCellStringRenderer);
+    m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
 
 
     m_numRows = 0;
@@ -2078,6 +2262,15 @@ void wxGrid::Create()
     m_rowLabelWidth = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
     m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
 
+    // data type registration
+    m_typeRegistry = new wxGridTypeRegistry;
+    RegisterDataType(wxT("string"), new wxGridCellStringRenderer,
+                                    new wxGridCellTextEditor);
+    RegisterDataType(wxT("bool"), new wxGridCellBoolRenderer,
+                                  new wxGridCellBoolEditor);
+
+
+    // subwindow components that make up the wxGrid
     m_cornerLabelWin = new wxGridCornerLabelWindow( this,
                                                     -1,
                                                     wxDefaultPosition,
@@ -2199,17 +2392,6 @@ void wxGrid::Init()
 #else
     m_defaultRowHeight += 4;
 #endif
-
-    // Set default cell attributes
-    m_defaultCellAttr->SetFont(GetFont());
-    m_defaultCellAttr->SetAlignment(wxLEFT, wxTOP);
-    m_defaultCellAttr->SetRenderer(new wxGridCellStringRenderer);
-    m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
-    m_defaultCellAttr->SetTextColour(
-        wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_defaultCellAttr->SetBackgroundColour(
-        wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
-
 
     m_gridLineColour = wxColour( 128, 128, 255 );
     m_gridLinesEnabled = TRUE;
@@ -3282,7 +3464,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                         EnableCellEditControl();
 
                         wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
-                        attr->GetEditor()->StartingClick();
+                        attr->GetEditor(GetDefaultEditorForCell(coords.GetRow(), coords.GetCol()))->StartingClick();
                         attr->DecRef();
 
                         m_waitForSlowClick = FALSE;
@@ -4043,8 +4225,10 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 if ( !IsCellEditControlEnabled() && CanEnableCellControl() )
                 {
                     EnableCellEditControl();
-                    wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
-                    attr->GetEditor()->StartingKey(event);
+                    int row = m_currentCellCoords.GetRow();
+                    int col = m_currentCellCoords.GetCol();
+                    wxGridCellAttr* attr = GetCellAttr(row, col);
+                    attr->GetEditor(GetDefaultEditorForCell(row, col))->StartingKey(event);
                     attr->DecRef();
                 }
                 else
@@ -4196,13 +4380,16 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     // if the editor is shown, we should use it and not the renderer
     if ( isCurrent && IsCellEditControlEnabled() )
     {
-        attr->GetEditor()->PaintBackground(rect, attr);
+        attr->GetEditor(GetDefaultEditorForCell(row, col))->
+            PaintBackground(rect, attr);
     }
     else
     {
         // but all the rest is drawn by the cell renderer and hence may be
         // customized
-        attr->GetRenderer()->Draw(*this, *attr, dc, rect, row, col, IsInSelection(coords));
+        attr->GetRenderer(GetDefaultRendererForCell(row,col))->
+            Draw(*this, *attr, dc, rect, row, col, IsInSelection(coords));
+
     }
 
     attr->DecRef();
@@ -4251,6 +4438,7 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         dc.DrawLine(x2, y1, x2, y2+1);
 #endif // 0
 }
+
 
 void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
 {
@@ -4735,7 +4923,7 @@ void wxGrid::ShowCellEditControl()
 #endif
 
             wxGridCellAttr* attr = GetCellAttr(row, col);
-            wxGridCellEditor* editor = attr->GetEditor();
+            wxGridCellEditor* editor = attr->GetEditor(GetDefaultEditorForCell(row, col));
             if ( !editor->IsCreated() )
             {
                 editor->Create(m_gridWin, -1,
@@ -4759,7 +4947,7 @@ void wxGrid::HideCellEditControl()
         int col = m_currentCellCoords.GetCol();
 
         wxGridCellAttr* attr = GetCellAttr(row, col);
-        attr->GetEditor()->Show( FALSE );
+        attr->GetEditor(GetDefaultEditorForCell(row, col))->Show( FALSE );
         attr->DecRef();
         m_gridWin->SetFocus();
     }
@@ -4781,7 +4969,8 @@ void wxGrid::SaveEditControlValue()
         int col = m_currentCellCoords.GetCol();
 
         wxGridCellAttr* attr = GetCellAttr(row, col);
-        bool changed = attr->GetEditor()->EndEdit(row, col, TRUE, this);
+        wxGridCellEditor* editor = attr->GetEditor(GetDefaultEditorForCell(row, col));
+        bool changed = editor->EndEdit(row, col, TRUE, this);
 
         attr->DecRef();
 
@@ -5677,15 +5866,15 @@ void wxGrid::SetDefaultCellFont( const wxFont& font )
     m_defaultCellAttr->SetFont(font);
 }
 
-void wxGrid::SetDefaultRenderer(wxGridCellRenderer *renderer)
-{
-    m_defaultCellAttr->SetRenderer(renderer);
-}
+//  void wxGrid::SetDefaultRenderer(wxGridCellRenderer *renderer)
+//  {
+//      m_defaultCellAttr->SetRenderer(renderer);
+//  }
 
-void wxGrid::SetDefaultEditor(wxGridCellEditor *editor)
-{
-    m_defaultCellAttr->SetEditor(editor);
-}
+//  void wxGrid::SetDefaultEditor(wxGridCellEditor *editor)
+//  {
+//      m_defaultCellAttr->SetEditor(editor);
+//  }
 
 // ----------------------------------------------------------------------------
 // access to the default attrbiutes
@@ -5711,15 +5900,15 @@ void wxGrid::GetDefaultCellAlignment( int *horiz, int *vert )
     m_defaultCellAttr->GetAlignment(horiz, vert);
 }
 
-wxGridCellRenderer *wxGrid::GetDefaultRenderer() const
-{
-    return m_defaultCellAttr->GetRenderer();
-}
+//  wxGridCellRenderer *wxGrid::GetDefaultRenderer() const
+//  {
+//      return m_defaultCellAttr->GetRenderer();
+//  }
 
-wxGridCellEditor *wxGrid::GetDefaultEditor() const
-{
-    return m_defaultCellAttr->GetEditor();
-}
+//  wxGridCellEditor *wxGrid::GetDefaultEditor() const
+//  {
+//      return m_defaultCellAttr->GetEditor();
+//  }
 
 // ----------------------------------------------------------------------------
 // access to cell attributes
@@ -5759,7 +5948,7 @@ void wxGrid::GetCellAlignment( int row, int col, int *horiz, int *vert )
 wxGridCellRenderer* wxGrid::GetCellRenderer(int row, int col)
 {
     wxGridCellAttr* attr = GetCellAttr(row, col);
-    wxGridCellRenderer* renderer = attr->GetRenderer();
+    wxGridCellRenderer* renderer = attr->GetRenderer(GetDefaultRendererForCell(row,col));
     attr->DecRef();
     return renderer;
 }
@@ -5767,7 +5956,7 @@ wxGridCellRenderer* wxGrid::GetCellRenderer(int row, int col)
 wxGridCellEditor* wxGrid::GetCellEditor(int row, int col)
 {
     wxGridCellAttr* attr = GetCellAttr(row, col);
-    wxGridCellEditor* editor = attr->GetEditor();
+    wxGridCellEditor* editor = attr->GetEditor(GetDefaultEditorForCell(row, col));
     attr->DecRef();
     return editor;
 }
@@ -5791,19 +5980,7 @@ bool wxGrid::CanHaveAttributes()
         return FALSE;
     }
 
-    // RD:  Maybe m_table->CanHaveAttributes() would be better in case the
-    //      table is providing the attributes itself???  In which case
-    //      I don't think the grid should create a Provider object for the
-    //      table but the table should be smart enough to do that on its own.
-    if ( !m_table->GetAttrProvider() )
-    {
-        // use the default attr provider by default
-        // (another choice would be to just return FALSE thus forcing the user
-        // to it himself)
-        m_table->SetAttrProvider(new wxGridCellAttrProvider);
-    }
-
-    return TRUE;
+    return m_table->CanHaveAttributes();
 }
 
 void wxGrid::ClearAttrCache()
@@ -5992,6 +6169,53 @@ void wxGrid::SetReadOnly(int row, int col, bool isReadOnly)
         attr->DecRef();
     }
 }
+
+// ----------------------------------------------------------------------------
+// Data type registration
+// ----------------------------------------------------------------------------
+
+void wxGrid::RegisterDataType(const wxString& typeName,
+                              wxGridCellRenderer* renderer,
+                              wxGridCellEditor* editor)
+{
+    m_typeRegistry->RegisterDataType(typeName, renderer, editor);
+}
+
+
+wxGridCellEditor* wxGrid::GetDefaultEditorForCell(int row, int col)
+{
+    wxString typeName = m_table->GetTypeName(row, col);
+    return GetDefaultEditorForType(typeName);
+}
+
+wxGridCellRenderer* wxGrid::GetDefaultRendererForCell(int row, int col)
+{
+    wxString typeName = m_table->GetTypeName(row, col);
+    return GetDefaultRendererForType(typeName);
+}
+
+wxGridCellEditor* wxGrid::GetDefaultEditorForType(const wxString& typeName)
+{
+    int index = m_typeRegistry->FindDataType(typeName);
+    if (index == -1) {
+        // Should we force the failure here or let it fallback to string handling???
+        // wxFAIL_MSG(wxT("Unknown data type name"));
+        return NULL;
+    }
+    return m_typeRegistry->GetEditor(index);
+}
+
+wxGridCellRenderer* wxGrid::GetDefaultRendererForType(const wxString& typeName)
+{
+    int index = m_typeRegistry->FindDataType(typeName);
+    if (index == -1) {
+        // Should we force the failure here or let it fallback to string handling???
+        // wxFAIL_MSG(wxT("Unknown data type name"));
+        return NULL;
+    }
+    return m_typeRegistry->GetRenderer(index);
+}
+
 
 // ----------------------------------------------------------------------------
 // row/col size

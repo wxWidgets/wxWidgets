@@ -184,7 +184,11 @@ GridFrame::GridFrame()
     // this will create a grid and, by default, an associated grid
     // table for string data
     //
-    grid->CreateGrid( 100, 100 );
+    //grid->CreateGrid( 100, 100 );
+    grid->SetTable(new SimpleTable(100, 100), TRUE);
+
+    // VZ: cell borders don't look nice otherwise :-) (for now...)
+    grid->SetDefaultCellBackgroundColour(wxColour(200, 200, 180));
 
     grid->SetRowSize( 0, 60 );
     grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );
@@ -724,7 +728,7 @@ BugsGridFrame::BugsGridFrame()
 
     // TODO the correct data type must be used for each column
 
-    wxGrid *grid = new wxGrid(this, -1);
+    wxGrid *grid = new wxGrid(this, -1, wxDefaultPosition);
     wxGridTableBase *table =
         new wxGridStringTable(WXSIZEOF(data), WXSIZEOF(headers));
     for ( size_t row = 0; row < WXSIZEOF(data); row++ )
