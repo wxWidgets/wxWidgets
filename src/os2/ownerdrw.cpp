@@ -83,6 +83,14 @@ bool wxOwnerDrawn::OnMeasureItem(
                       ,(long *)pWidth
                       ,(long *)pHeight
                      );
+    // DEBUG
+    char                            zMsg[128];
+    sprintf(zMsg, "GetTextExtent for %s: Width: %ld, Height: %ld", m_strName.c_str(), *pWidth, *pHeight);
+    (void)wxMessageBox( "wxWindows Menu sample"
+                       ,zMsg
+                       ,wxICON_INFORMATION
+                      );
+    // end DEBUG
 
     //
     // JACS: items still look too tightly packed, so adding 2 pixels.

@@ -2741,18 +2741,28 @@ bool wxWindow::OS2OnMeasureItem(
     //
     if (lId == 65536) // I really don't like this...has to be a better indicator
     {
-        POWNERITEM                  pMeasureStruct = (POWNERITEM)pItemStruct;
-        char                        zData[sizeof(wxMenuItem)];
-
-        char                        zMsg[128];
-
-        if (IsKindOf(CLASSINFO(wxFrame)))
+        if (IsKindOf(CLASSINFO(wxFrame))) // we'll assume if Frame then a menu
         {
+            size_t                  nWidth;
+            size_t                  nHeight;
+            POWNERITEM              pMeasureStruct = (POWNERITEM)pItemStruct;
             wxFrame*                pFrame = (wxFrame*)this;
             wxMenuItem*             pMenuItem = pFrame->GetMenuBar()->FindItem(pMeasureStruct->idItem, pMeasureStruct->hItem);
 
             wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
-            return(pMenuItem->OnMeasureItem(&pMeasureStruct->rclItem));
+            nWidth  = 0L;
+            nHeight = 0L;
+            if (pMenuItem->OnMeasureItem( &nWidth
+                                         ,&nHeight
+                                        ))
+            {
+                pMeasureStruct->rclItem.xRight  = nWidth;
+                pMeasureStruct->rclItem.xLeft   = 0L;
+                pMeasureStruct->rclItem.yTop    = nHeight;
+                pMeasureStruct->rclItem.yBottom = 0L;
+                return TRUE;
+            }
+            return FALSE;
         }
     }
     wxWindow*                      pItem = FindItem(id);
