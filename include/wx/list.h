@@ -189,7 +189,7 @@ public:
 
     // operations
         // delete all nodes
-    virtual void Clear();
+    void Clear();
         // instruct it to destroy user data when deleting nodes
     void DeleteContents(bool destroy) { m_destroy = destroy; }
 
@@ -437,6 +437,12 @@ public:
     wxStringList() { DeleteContents(TRUE); }
     wxStringList(const char *first ...);
 
+        // copying the string list: the strings are copied, too (extremely
+        // inefficient!)
+    wxStringList(const wxStringList& other) { DoCopy(other); }
+    wxStringList& operator=(const wxStringList& other)
+        { Clear(); DoCopy(other); return *this; }
+
     // operations
         // makes a copy of the string
     wxNode *Add(const char *s)
@@ -456,6 +462,9 @@ public:
     wxNode *First() const { return (wxNode *)GetFirst(); }
     wxNode *Last() const { return (wxNode *)GetLast(); }
     wxNode *Nth(size_t index) const { return (wxNode *)Item(index); }
+
+private:
+    void DoCopy(const wxStringList&); // common part of copy ctor and operator=
 };
 
 #endif // wxLIST_COMPATIBILITY

@@ -491,6 +491,17 @@ void wxStringListNode::DeleteData()
     delete [] (char *)GetData();
 }
 
+void wxStringList::DoCopy(const wxStringList& other)
+{
+    wxASSERT( GetCount() == 0 );    // this list must be empty before copying!
+
+    size_t count = other.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        Add(other.Item(n)->GetData()); 
+    }
+}
+
 // Variable argument list, terminated by a zero
 // Makes new storage for the strings
 wxStringList::wxStringList (const char *first, ...)
