@@ -65,6 +65,7 @@ OBJECTS = \
 		ffile.obj,\
 		file.obj,\
 		fileconf.obj,\
+		filename.obj,\
 		filefn.obj,\
 		filesys.obj,\
 		fontcmn.obj,\
@@ -166,6 +167,7 @@ SOURCES = \
 		ffile.cpp,\
 		file.cpp,\
 		fileconf.cpp,\
+		filename.cpp,\
 		filefn.cpp,\
 		filesys.cpp,\
 		fontcmn.cpp,\
@@ -297,6 +299,7 @@ ffile.obj : ffile.cpp
 file.obj : file.cpp
 fileconf.obj : fileconf.cpp
 filefn.obj : filefn.cpp
+filename.obj : filename.cpp
 filesys.obj : filesys.cpp
 fontcmn.obj : fontcmn.cpp
 fontmap.obj : fontmap.cpp
