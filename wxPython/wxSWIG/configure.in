@@ -47,7 +47,7 @@ dnl Checks for library functions.
 
 AC_FUNC_ALLOCA
 AC_ARG_WITH(lang,[  --with-lang=LANG        Set SWIG target language (TCL,TCL8,PYTHON,PERL5,PERL4,GUILE)],[
-	AC_DEFINE_UNQUOTED(SWIG_LANG,$withval)], [AC_DEFINE(SWIG_LANG,TCL)])
+	AC_DEFINE_UNQUOTED(SWIG_LANG,$withval)], [AC_DEFINE(SWIG_LANG,PYTHON)])
 
 AC_ARG_WITH(doc,[  --with-doc=DOC          Set SWIG target documentation method (ASCII,LATEX,HTML,NODOC)], [
 	AC_DEFINE_UNQUOTED(SWIG_DOC,$withval)], [AC_DEFINE(SWIG_DOC,ASCII)])
@@ -327,7 +327,7 @@ AC_SUBST(TCLLIB)
 PYINCLUDE=nope
 PYLIB=nope
 PYPACKAGE=nope
-PYLINK="-lModules -lPython -lObjects -lParser" 
+PYLINK="-lModules -lPython -lObjects -lParser"
 
 AC_ARG_WITH(py,[  --with-py=path          Set location of Python],[
 	PYPACKAGE="$withval"], [PYPACKAGE=nope])
@@ -372,7 +372,7 @@ for i in $dirs ; do
 	    AC_MSG_RESULT($i)
 	    PYLIB="$i"
 	    PYINCLUDE="$PYINCLUDE -I$i"
-            PYLINK="-lpython1.5"	
+            PYLINK="-lpython1.5"
 	    break
 	fi
 	if test -r $i/libPython.a; then
@@ -420,11 +420,11 @@ if test "$PERL" != nope; then
 				PERL5EXT="$i"
 				break;
 			fi
-		done	
+		done
 		if test "$PERL5EXT" = none; then
 			PERL5EXT="$PERL5DIR/CORE"
 			AC_MSG_RESULT(could not locate perl.h...using $PERL5EXT)
-		fi	
+		fi
 	else
 		AC_MSG_RESULT(unable to determine perl5 configuration)
 		PERL5EXT=$PERL5DIR
@@ -436,7 +436,7 @@ if test "$PERL" != nope; then
 
 AC_SUBST(PERL5EXT)
 
-AC_OUTPUT(Makefile SWIG/Makefile Modules/Makefile Runtime/Makefile swig_lib/tcl/Makefile swig_lib/python/Makefile swig_lib/perl5/Makefile Makefile.template)
+AC_OUTPUT(Makefile SWIG/Makefile Modules/Makefile Runtime/Makefile swig_lib/tcl/Makefile swig_lib/python/Makefile swig_lib/perl5/Makefile)
 
 
 

@@ -81,8 +81,10 @@ FILE  *swig_log;
 
 char *SwigLib;
 
-//char** __argv;
-//int    __argc;
+#ifndef MSDOS
+char** __argv;
+int    __argc;
+#endif
 
 int SWIG_main(int argc, char *argv[], Language *l, Documentation *d) {
 
@@ -114,8 +116,10 @@ int SWIG_main(int argc, char *argv[], Language *l, Documentation *d) {
   f_init = 0;
   f_header = 0;
 
-  //__argc = argc;
-  //__argv = argv;
+#ifndef MSDOS
+  __argc = argc;
+  __argv = argv;
+#endif
   lang = l;
   doc = d;
   Status = 0;
