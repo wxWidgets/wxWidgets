@@ -3067,7 +3067,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
       GetData(7,SQL_C_SLONG, (UCHAR *)&precision,   0,                       &cb);
       GetData(8,SQL_C_SLONG, (UCHAR *)&length,      0,                       &cb);
 
-        outStr.Printf(wxT("%-32s %-32s (%04d)%-15s %9d %9d\n"),
+        outStr.Printf(wxT("%-32s %-32s (%04d)%-15s %9ld %9ld\n"),
             tblName, colName, sqlDataType, typeName, precision, length);
         if (fputs(outStr.c_str(), fp) == EOF)
         {
@@ -3592,7 +3592,7 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
         (Dbms() != dbmsMY_SQL || dataTypeName != "text"))
     {
         wxString s;
-        s.Printf(wxT("(%d)"), columnLength);
+        s.Printf(wxT("(%lu)"), columnLength);
         sqlStmt += s;
     }
 
