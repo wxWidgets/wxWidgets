@@ -28,7 +28,8 @@ public:
     enum Direction
     {
         Read,
-        Write
+        Write,
+        Direction_Max
     };
 
     enum
@@ -56,21 +57,12 @@ public:
     bool IsOk() const { return m_fds[Read] != INVALID_FD; }
 
     // return the descriptor for one of the pipe ends
-    int operator[](Direction which) const
-    {
-        wxASSERT_MSG( which >= 0 && (size_t)which < WXSIZEOF(m_fds),
-                      _T("invalid pipe index") );
-
-        return m_fds[which];
-    }
+    int operator[](Direction which) const { return m_fds[which]; }
 
     // detach a descriptor, meaning that the pipe dtor won't close it, and
     // return it
     int Detach(Direction which)
     {
-        wxASSERT_MSG( which >= 0 && (size_t)which < WXSIZEOF(m_fds),
-                      _T("invalid pipe index") );
-
         int fd = m_fds[which];
         m_fds[which] = INVALID_FD;
 
@@ -91,7 +83,7 @@ public:
     ~wxPipe() { Close(); }
 
 private:
-    int m_fds[2];
+    int m_fds[Direction_Max];
 };
 
 #if wxUSE_STREAMS
