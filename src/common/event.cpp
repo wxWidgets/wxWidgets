@@ -1095,9 +1095,11 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
 void wxEvtHandler::ProcessPendingEvents()
 {
-    // DE: It doesn't look like this method was intended to be called unless
-    // pending events have already been created.
-    wxASSERT_MSG(m_pendingEvents,wxT("Please call wxApp::ProcessPendingEvents() instead"));
+    // this method is only called by wxApp if this handler does have pending
+    // events
+    wxCHECK_RET( m_pendingEvents,
+                 wxT("Please call wxApp::ProcessPendingEvents() instead") );
+
 #if defined(__VISAGECPP__)
     wxENTER_CRIT_SECT( m_eventsLocker);
 #else
