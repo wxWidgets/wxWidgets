@@ -82,12 +82,6 @@
 #endif
 #endif /*  __VISUALC__ */
 
-/*  suppress some Watcom C++ warnings */
-#ifdef __WATCOMC__
-#   pragma warning 849 9            /*  Disable 'virtual function hidden' */
-#   pragma warning 549 9            /*  Disable 'operand contains compiler generated information' */
-#endif /*  __VISUALC__ */
-
 /*  suppress some Salford C++ warnings */
 #ifdef __SALFORDC__
 #   pragma suppress 353             /*  Possible nested comments */
