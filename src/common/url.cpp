@@ -40,12 +40,15 @@ wxProtoInfo *wxURL::ms_protocols = NULL;
 // Enforce linking of protocol classes:
 USE_PROTOCOL(wxFileProto)
 
-#if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
 USE_PROTOCOL(wxHTTP)
-USE_PROTOCOL(wxFTP)
 
     wxHTTP *wxURL::ms_proxyDefault = NULL;
     bool wxURL::ms_useDefaultProxy = false;
+#endif
+
+#if wxUSE_PROTOCOL_FTP
+USE_PROTOCOL(wxFTP)
 #endif
 
 // --------------------------------------------------------------
@@ -79,7 +82,7 @@ void wxURL::Init(const wxString& url)
     m_nativeImp = CreateNativeImpObject();
 #endif
 
-#if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
     if ( ms_useDefaultProxy && !ms_proxyDefault )
     {
         SetDefaultProxy( wxGetenv(wxT("HTTP_PROXY")) );
@@ -93,7 +96,7 @@ void wxURL::Init(const wxString& url)
 
     m_useProxy = ms_proxyDefault != NULL;
     m_proxy = ms_proxyDefault;
-#endif // wxUSE_SOCKETS
+#endif // wxUSE_PROTOCOL_HTTP
 
 }
 
@@ -156,7 +159,7 @@ bool wxURL::ParseURL()
     }
   }
 
-#if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
   if (m_useProxy)
   {
     // destroy the previously created protocol as we'll be using m_proxy
@@ -170,7 +173,7 @@ bool wxURL::ParseURL()
     // We initialize specific variables.
     m_protocol = m_proxy; // FIXME: we should clone the protocol
   }
-#endif
+#endif // wxUSE_PROTOCOL_HTTP
 
   m_error = wxURL_NOERR;
   return true;
@@ -182,19 +185,19 @@ bool wxURL::ParseURL()
 
 void wxURL::CleanData()
 {
-#if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
   if (!m_useProxy)
-#endif
+#endif // wxUSE_PROTOCOL_HTTP
     delete m_protocol;
 }
 
 wxURL::~wxURL()
 {
     CleanData();
-#if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
     if (m_proxy && m_proxy != ms_proxyDefault)
         delete m_proxy;
-#endif
+#endif // wxUSE_PROTOCOL_HTTP
 #if wxUSE_URL_NATIVE
     delete m_nativeImp;
 #endif
@@ -313,7 +316,7 @@ wxInputStream *wxURL::GetInputStream()
   return the_i_stream;
 }
 
-#if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
 void wxURL::SetDefaultProxy(const wxString& url_proxy)
 {
   if ( !url_proxy )
@@ -393,7 +396,7 @@ void wxURL::SetProxy(const wxString& url_proxy)
         ParseURL();
     }
 }
-#endif // wxUSE_SOCKETS
+#endif // wxUSE_PROTOCOL_HTTP
 
 // ----------------------------------------------------------------------
 // wxURLModule
@@ -417,6 +420,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxURLModule, wxModule)
 
 bool wxURLModule::OnInit()
 {
+#if wxUSE_PROTOCOL_HTTP
     // env var HTTP_PROXY contains the address of the default proxy to use if
     // set, but don't try to create this proxy right now because it will slow
     // down the program startup (especially if there is no DNS server
@@ -426,14 +430,16 @@ bool wxURLModule::OnInit()
     {
         wxURL::ms_useDefaultProxy = true;
     }
-
+#endif // wxUSE_PROTOCOL_HTTP
     return true;
 }
 
 void wxURLModule::OnExit()
 {
+#if wxUSE_PROTOCOL_HTTP
     delete wxURL::ms_proxyDefault;
     wxURL::ms_proxyDefault = NULL;
+#endif // wxUSE_PROTOCOL_HTTP
 }
 
 #endif // wxUSE_SOCKETS

@@ -88,11 +88,11 @@ public:
 protected:
     static wxProtoInfo *ms_protocols;
 
-#if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
     static wxHTTP *ms_proxyDefault;
     static bool ms_useDefaultProxy;
     wxHTTP *m_proxy;
-#endif // wxUSE_SOCKETS
+#endif // wxUSE_PROTOCOL_HTTP
 
 #if wxUSE_URL_NATIVE
     friend class wxURLNativeImp;
