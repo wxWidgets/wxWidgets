@@ -21,7 +21,7 @@ class TestPanel(wx.Panel):
         dc.Clear()
 
         dc.SetFont(wx.Font(16, wx.SWISS, wx.NORMAL, wx.BOLD, True))
-        dc.DrawText("Bitmap alpha blending (on wxMSW and wxGTK)",
+        dc.DrawText("Bitmap alpha blending (on wxMSW and wxMac)",
                     (25,25))
 
         bmp = wx.Bitmap(opj('bitmaps/toucan.png'))
@@ -49,7 +49,7 @@ def runTest(frame, nb, log):
 overview = """<html><body>
 <h2><center>Images with Alpha</center></h2>
 
-wxMSW and wxGTK now support alpha channels of supported image
+wxMSW and wxMac now support alpha channels of supported image
 types, and will properly blend that chennel when drawing a
 bitmap.  It is not supported yet on wxGTK, (if you would like to
 change that please submit a patch!)
