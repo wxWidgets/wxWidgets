@@ -8,9 +8,12 @@ def runTest(frame, nb, log):
     data.EnablePrintToFile(True)
     data.EnablePageNumbers(True)
     data.EnableSelection(True)
+    data.SetMinPage(1)
+    data.SetMaxPage(5)
     dlg = wxPrintDialog(frame, data)
     if dlg.ShowModal() == wxID_OK:
-        log.WriteText('\n')
+        data = dlg.GetPrintDialogData()
+        log.WriteText('GetAllPages: %d\n' % data.GetAllPages())
     dlg.Destroy()
 
 #---------------------------------------------------------------------------

@@ -15,6 +15,7 @@ class TestComboBox(wxPanel):
         wxPanel.__init__(self, parent, -1)
 
         sampleList = ['zero', 'one', 'two', 'three', 'four', 'five',
+                      ##'this is a long item that needs a scrollbar...',
                       'six', 'seven', 'eight']
 
         wxStaticText(self, -1, "This example uses the wxComboBox control.",
@@ -23,6 +24,11 @@ class TestComboBox(wxPanel):
         wxStaticText(self, -1, "Select one:", wxPoint(15, 50), wxSize(75, 18))
         cb = wxComboBox(self, 500, "default value", wxPoint(90, 50), wxSize(95, -1),
                         sampleList, wxCB_DROPDOWN)#|wxTE_PROCESS_ENTER)
+        ##import win32api, win32con
+        ##win32api.SendMessage(cb.GetHandle(),
+        ##                     win32con.CB_SETHORIZONTALEXTENT,
+	##                     200, 0)
+
         EVT_COMBOBOX(self, 500, self.EvtComboBox)
         EVT_TEXT(self, 500, self.EvtText)
         EVT_TEXT_ENTER(self, 500, self.EvtTextEnter)
