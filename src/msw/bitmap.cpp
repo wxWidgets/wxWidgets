@@ -925,8 +925,6 @@ wxImage wxBitmap::ConvertToImage() const
         ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
         ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
         ::DeleteDC( memdc );
-        // background color set to mask colour
-        unsigned char r=MASK_RED, g=MASK_GREEN, b=MASK_BLUE;
         ptdata = data;
         ptbits = lpBits;
         for( i=0; i<height; i++ )
