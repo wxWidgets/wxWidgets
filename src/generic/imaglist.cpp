@@ -7,8 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __PALMOS__
-
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "imaglist.h"
 #endif
@@ -20,7 +18,12 @@
 #pragma hdrstop
 #endif
 
+#include "wx/defs.h"
+
+#ifndef __PALMOS__
+
 #include "wx/generic/imaglist.h"
+
 #include "wx/icon.h"
 #include "wx/image.h"
 #include "wx/dc.h"
