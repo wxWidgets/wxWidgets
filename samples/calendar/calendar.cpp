@@ -47,8 +47,6 @@
 #include "wx/calctrl.h"
 #include "wx/datectrl.h"
 
-#define wxUSE_DATEPICKERCTRL 1
-
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -105,9 +103,9 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
-#if wxUSE_DATEPICKERCTRL
+#if wxUSE_DATEPICKCTRL
     void OnAskDate(wxCommandEvent& event);
-#endif // wxUSE_DATEPICKERCTRL
+#endif // wxUSE_DATEPICKCTRL
 
     void OnCalMonday(wxCommandEvent& event);
     void OnCalHolidays(wxCommandEvent& event);
@@ -131,7 +129,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#if wxUSE_DATEPICKERCTRL
+#if wxUSE_DATEPICKCTRL
 
 // Define a simple modal dialog which asks the user for a date
 class MyDialog : public wxDialog
@@ -152,7 +150,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif // wxUSE_DATEPICKERCTRL
+#endif // wxUSE_DATEPICKCTRL
 
 // ----------------------------------------------------------------------------
 // constants
@@ -164,9 +162,9 @@ enum
     // menu items
     Calendar_File_About = wxID_ABOUT,
     Calendar_File_Quit = wxID_EXIT,
-#if wxUSE_DATEPICKERCTRL
+#if wxUSE_DATEPICKCTRL
     Calendar_File_AskDate = 100,
-#endif // wxUSE_DATEPICKERCTRL
+#endif // wxUSE_DATEPICKCTRL
     Calendar_Cal_Monday = 200,
     Calendar_Cal_Holidays,
     Calendar_Cal_Special,
@@ -190,9 +188,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Calendar_File_Quit,  MyFrame::OnQuit)
     EVT_MENU(Calendar_File_About, MyFrame::OnAbout)
 
-#if wxUSE_DATEPICKERCTRL
+#if wxUSE_DATEPICKCTRL
     EVT_MENU(Calendar_File_AskDate, MyFrame::OnAskDate)
-#endif // wxUSE_DATEPICKERCTRL
+#endif // wxUSE_DATEPICKCTRL
 
     EVT_MENU(Calendar_Cal_Monday, MyFrame::OnCalMonday)
     EVT_MENU(Calendar_Cal_Holidays, MyFrame::OnCalHolidays)
@@ -219,13 +217,13 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
     EVT_CALENDAR_WEEKDAY_CLICKED(Calendar_CalCtrl, MyPanel::OnCalendarWeekDayClick)
 END_EVENT_TABLE()
 
-#if wxUSE_DATEPICKERCTRL
+#if wxUSE_DATEPICKCTRL
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_DATE_CHANGED(wxID_ANY, MyDialog::OnDateChange)
 END_EVENT_TABLE()
 
-#endif // wxUSE_DATEPICKERCTRL
+#endif // wxUSE_DATEPICKCTRL
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -268,10 +266,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-#if wxUSE_DATEPICKERCTRL
+#if wxUSE_DATEPICKCTRL
     menuFile->Append(Calendar_File_AskDate, _T("&Choose date...\tCtrl-D"), _T("Show dialog with wxDatePickerCtrl"));
     menuFile->AppendSeparator();
-#endif // wxUSE_DATEPICKERCTRL
+#endif // wxUSE_DATEPICKCTRL
 
     menuFile->Append(Calendar_File_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
     menuFile->AppendSeparator();
@@ -403,7 +401,7 @@ void MyFrame::OnToday(wxCommandEvent &WXUNUSED(event))
     m_panel->Today();
 }
 
-#if wxUSE_DATEPICKERCTRL
+#if wxUSE_DATEPICKCTRL
 
 void MyFrame::OnAskDate(wxCommandEvent& WXUNUSED(event))
 {
@@ -425,7 +423,7 @@ void MyFrame::OnAskDate(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-#endif // wxUSE_DATEPICKERCTRL
+#endif // wxUSE_DATEPICKCTRL
 
 // ----------------------------------------------------------------------------
 // MyPanel
@@ -536,7 +534,7 @@ void MyPanel::Today()
 // MyDialog
 // ----------------------------------------------------------------------------
 
-#if wxUSE_DATEPICKERCTRL
+#if wxUSE_DATEPICKCTRL
 
 MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt)
         : wxDialog(parent, -1, wxString(_T("Calendar: Choose a date")))
@@ -579,5 +577,5 @@ void MyDialog::OnDateChange(wxDateEvent& event)
     m_text->SetValue(event.GetDate().FormatISODate());
 }
 
-#endif // wxUSE_DATEPICKERCTRL
+#endif // wxUSE_DATEPICKCTRL
 
