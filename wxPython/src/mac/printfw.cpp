@@ -178,7 +178,14 @@ public:
     PYPRIVATE;
 };
 
-IMPLEMENT_CLASS( wxPyPrintPreview, wxPrintPreview );
+// Stupid renamed classes...  Fix this in 2.5...
+#if defined(__WXMSW__)
+IMPLEMENT_CLASS( wxPyPrintPreview, wxWindowsPrintPreview );
+#elif defined(__WXMAC__)
+IMPLEMENT_CLASS( wxPyPrintPreview, wxMacPrintPreview );
+#else
+IMPLEMENT_CLASS( wxPyPrintPreview, wxPostScriptPrintPreview );
+#endif
 
 IMP_PYCALLBACK_BOOL_INT    (wxPyPrintPreview, wxPrintPreview, SetCurrentPage);
 IMP_PYCALLBACK_BOOL_WXWINDC(wxPyPrintPreview, wxPrintPreview, PaintPage);
