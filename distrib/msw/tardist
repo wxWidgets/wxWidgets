@@ -18,6 +18,8 @@ expandlines()
       if [ "$line" != "" ]; then
         ls $line >> $outputfile
       fi
+    uniq < $outputfile > /tmp/uniqtemp.txt
+    mv /tmp/uniqtemp.txt $outputfile
     done
 }
 
@@ -69,74 +71,81 @@ rm -f $2/wxxrc-*.tar.gz
 echo Tarring...
 
 ### Generic
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxgen.txt
+cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp > /tmp/wxgen_in.txt
+expandlines /tmp/wxgen_in.txt /tmp/wxgen.txt
 tar cvf $2/wxWindows-${WXVER}-gen.tar -T /tmp/wxgen.txt
 gzip $2/wxWindows-${WXVER}-gen.tar
 mv $2/wxWindows-${WXVER}-gen.tar.gz $2/wxWindows-${WXVER}-gen.tgz
 
 ### wxGTK
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxgtk.txt
+cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxgtk_in.txt
+expandlines /tmp/wxgtk_in.txt /tmp/wxgtk.txt
 tar cvf $2/wxGTK-${WXVER}.tar -T /tmp/wxgtk.txt
 gzip $2/wxGTK-${WXVER}.tar
 
 ### wxMotif
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxmotif.txt
+cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmotif_in.txt
+expandlines /tmp/wxmotif_in.txt /tmp/wxmotif.txt
 tar cvf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 gzip $2/wxMotif-${WXVER}.tar
 
 ### wxX11: combined wxMotif and wxX11 distributions
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/xml.rsp` | uniq > /tmp/wxx.txt
-ls `cat $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` | uniq >> /tmp/wxx.txt
-tar cvf $2/wxX11-${WXVER}.tar -T /tmp/wxx.txt
+cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
+expandlines /tmp/wxx11_in.txt /tmp/wxx11.txt
+tar cvf $2/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
 gzip $2/wxX11-${WXVER}.tar
 
 ### wxMSW
-# ls `cat $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/bc.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxmsw.txt
+# cat $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/bc.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmsw_in.txt
+# expandlines /tmp/wxmsw_in.txt /tmp/wxmsw.txt
 # tar cvf $2/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt
 # gzip $2/wxMSW-${WXVER}.tar
 
 ### wxMac
-ls `cat $1/distrib/msw/mac.rsp $1/distrib/msw/cw.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` | uniq > /tmp/wxmac.txt
+cat $1/distrib/msw/mac.rsp $1/distrib/msw/cw.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
+expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
 tar cvf $2/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
 gzip $2/wxMac-${WXVER}.tar
 
 ### Doc sources
-ls `cat $1/distrib/msw/docsrc.rsp` > /tmp/docsrc.txt
+cat $1/distrib/msw/docsrc.rsp > /tmp/docsrc_in.txt
+expandlines /tmp/docsrc_in.txt /tmp/docsrc.txt
 tar cvf $2/wxWindows-${WXVER}-doc.tar -T /tmp/docsrc.txt
 gzip $2/wxWindows-${WXVER}-doc.tar
 
 ### HTML docs
-ls `cat $1/distrib/msw/wx_html.rsp` > /tmp/html.txt
+cat $1/distrib/msw/wx_html.rsp > /tmp/html_in.txt
+expandlines /tmp/html_in.txt /tmp/html.txt
 tar cvf $2/wxWindows-${WXVER}-htm.tar -T /tmp/html.txt
 gzip $2/wxWindows-${WXVER}-htm.tar
 
 ### PDF docs
-ls `cat $1/distrib/msw/wx_pdf.rsp` > /tmp/pdf.txt
+cat $1/distrib/msw/wx_pdf.rsp > /tmp/pdf_in.txt
+expandlines /tmp/pdf_in.txt /tmp/pdf.txt
 tar cvf $2/wxWindows-${WXVER}-pdf.tar -T /tmp/pdf.txt
 gzip $2/wxWindows-${WXVER}-pdf.tar
 
-### Stubs files
-#ls `cat $1/distrib/msw/stubs.rsp` > /tmp/stubs.txt
-#tar cvf $2/wxWindows-${WXVER}-stubs.tar -T /tmp/stubs.txt
-#gzip $2/wxWindows-${WXVER}-stubs.tar
-
 ### Tex2RTF
-ls `cat $1/distrib/msw/tex2rtf.rsp` > /tmp/tex2rtf.txt
+cat $1/distrib/msw/tex2rtf.rsp > /tmp/tex2rtf_in.txt
+expandlines /tmp/tex2rtf_in.txt /tmp/tex2rtf.txt
 tar cvf $2/tex2rtf2-${WXVER}.tar -T /tmp/tex2rtf.txt
 gzip $2/tex2rtf2-${WXVER}.tar
 
 ### OGL
-ls `cat $1/distrib/msw/ogl.rsp` > /tmp/ogl.txt
+cat $1/distrib/msw/ogl.rsp > /tmp/ogl_in.txt
+expandlines /tmp/ogl_in.txt /tmp/ogl.txt
 tar cvf $2/ogl3-${WXVER}.tar -T /tmp/ogl.txt
 gzip $2/ogl3-${WXVER}.tar
 
 ### JPEG
-ls `cat $1/distrib/msw/jpeg.rsp` > /tmp/jpeg.txt
+cat $1/distrib/msw/jpeg.rsp > /tmp/jpeg_in.txt
+expandlines /tmp/jpeg_in.txt /tmp/wxx11.txt
 tar cvf $2/jpeg-${WXVER}.tar -T /tmp/jpeg.txt
 gzip $2/jpeg-${WXVER}.tar
 
 ### TIFF
-ls `cat $1/distrib/msw/tiff.rsp` > /tmp/tiff.txt
+cat $1/distrib/msw/tiff.rsp > /tmp/tiff_in.txt
+expandlines /tmp/tiff_in.txt /tmp/tiff.txt
 tar cvf $2/tiff-${WXVER}.tar -T /tmp/tiff.txt
 gzip $2/tiff-${WXVER}.tar
 
