@@ -1474,6 +1474,7 @@
     src/cocoa/checklst.mm
     src/cocoa/choice.mm
     src/cocoa/colour.mm
+    src/cocoa/combobox.mm
     src/cocoa/control.mm
     src/cocoa/cursor.mm
     src/cocoa/data.cpp
@@ -1544,6 +1545,7 @@
     wx/cocoa/checklst.h
     wx/cocoa/choice.h
     wx/cocoa/colour.h
+    wx/cocoa/combobox.h
     wx/cocoa/control.h
     wx/cocoa/cursor.h
     wx/cocoa/dc.h
