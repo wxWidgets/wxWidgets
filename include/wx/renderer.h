@@ -144,6 +144,22 @@ public:
 
     // return the default (native) implementation for this platform
     static wxRendererNative& GetDefault();
+
+
+    // changing the global renderer
+    // ----------------------------
+
+#if wxUSE_DYNLIB_CLASS
+    // load the renderer from the specified DLL, the returned pointer must be
+    // deleted by caller if not NULL when it is not used any more
+    static wxRendererNative *Load(const wxString& name);
+#endif // wxUSE_DYNLIB_CLASS
+
+    // set the renderer to use, passing NULL reverts to using the default
+    // renderer
+    //
+    // return the previous renderer used with Set() or NULL if none
+    static wxRendererNative *Set(wxRendererNative *renderer);
 };
 
 // ----------------------------------------------------------------------------

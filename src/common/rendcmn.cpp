@@ -32,6 +32,10 @@
 
 #include "wx/ptr_scpd.h"
 
+#if wxUSE_DYNLIB_CLASS
+    #include "wx/dynlib.h"
+#endif // wxUSE_DYNLIB_CLASS
+
 // ----------------------------------------------------------------------------
 // wxRendererPtr: auto pointer holding the global renderer
 // ----------------------------------------------------------------------------
@@ -42,8 +46,6 @@ wxDEFINE_SCOPED_PTR(wxRendererNative, wxRendererPtrBase);
 class wxRendererPtr : public wxRendererPtrBase
 {
 public:
-    wxRendererPtr() : wxRendererPtrBase(NULL) { m_initialized = false; }
-
     // return true if we have a renderer, false otherwise
     bool IsOk()
     {
@@ -58,7 +60,17 @@ public:
         return get() != NULL;
     }
 
+    // return the global and unique wxRendererPtr
+    static wxRendererPtr& Get()
+    {
+        static wxRendererPtr s_renderer;
+
+        return s_renderer;
+    }
+
 private:
+    wxRendererPtr() : wxRendererPtrBase(NULL) { m_initialized = false; }
+
     void DoInit()
     {
         wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
@@ -74,15 +86,97 @@ private:
     DECLARE_NO_COPY_CLASS(wxRendererPtr)
 };
 
+#if wxUSE_DYNLIB_CLASS
+
+// ----------------------------------------------------------------------------
+// wxRendererFromDynLib: represents a renderer dynamically loaded from a DLL
+// ----------------------------------------------------------------------------
+
+class wxRendererFromDynLib : public wxDelegateRendererNative
+{
+public:
+    // create the object wrapping the given renderer created from this DLL
+    //
+    // we take ownership of the pointer and will delete it (and also unload the
+    // DLL) when we're deleted
+    wxRendererFromDynLib(wxDynamicLibrary& dll, wxRendererNative *renderer)
+        : wxDelegateRendererNative(*renderer),
+          m_renderer(renderer),
+          m_dllHandle(dll.Detach())
+        {
+        }
+
+    virtual ~wxRendererFromDynLib()
+    {
+        delete m_renderer;
+        wxDynamicLibrary::Unload(m_dllHandle);
+    }
+
+private:
+    wxRendererNative *m_renderer;
+    wxDllType m_dllHandle;
+};
+
+#endif // wxUSE_DYNLIB_CLASS
+
 // ============================================================================
 // wxRendererNative implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// Managing the global renderer
+// ----------------------------------------------------------------------------
+
 /* static */
 wxRendererNative& wxRendererNative::Get()
 {
-    static wxRendererPtr s_renderer;
+    wxRendererPtr& renderer = wxRendererPtr::Get();
 
-    return s_renderer.IsOk() ? *s_renderer.get() : GetDefault();
+    return renderer.IsOk() ? *renderer.get() : GetDefault();
 }
+
+/* static */
+wxRendererNative *wxRendererNative::Set(wxRendererNative *rendererNew)
+{
+    wxRendererPtr& renderer = wxRendererPtr::Get();
+
+    wxRendererNative *rendererOld = renderer.release();
+
+    renderer.reset(rendererNew);
+
+    return rendererOld;
+}
+
+
+// ----------------------------------------------------------------------------
+// Dynamic renderers loading
+// ----------------------------------------------------------------------------
+
+#if wxUSE_DYNLIB_CLASS
+
+/* static */
+wxRendererNative *wxRendererNative::Load(const wxString& name)
+{
+    wxString fullname = wxDynamicLibrary::CanonicalizePluginName(name);
+
+    wxDynamicLibrary dll(fullname);
+    if ( !dll.IsLoaded() )
+        return NULL;
+
+    // each theme DLL must export a wxCreateRenderer() function with this
+    // signature
+    typedef wxRendererNative *(*wxCreateRenderer_t)();
+
+    wxDYNLIB_FUNCTION(wxCreateRenderer_t, wxCreateRenderer, dll);
+    if ( !pfnwxCreateRenderer )
+        return NULL;
+
+    wxRendererNative *renderer = (*pfnwxCreateRenderer)();
+    if ( !renderer )
+        return NULL;
+
+    return new wxRendererFromDynLib(dll, renderer);
+}
+
+#endif // wxUSE_DYNLIB_CLASS
 
