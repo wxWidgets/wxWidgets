@@ -514,7 +514,7 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( win );
-    wxNode *node = menu->m_items.First();
+    wxNode *node = menu->GetItems().First();
     while (node)
     {
         wxMenuItem *menuitem = (wxMenuItem*)node->Data();
@@ -533,7 +533,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 
     if (m_frameMenuBar)
     {
-        wxNode *node = m_frameMenuBar->m_menus.First();
+        wxNode *node = m_frameMenuBar->GetMenus().First();
         while (node)
         {
             wxMenu *menu = (wxMenu*)node->Data();
@@ -548,7 +548,8 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
                 m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
 
             /* an mdi child menu bar might be underneath */
-            if (m_mdiMenuBar) m_frameMenuBar->Show( FALSE );
+            if (m_mdiMenuBar)
+                m_frameMenuBar->Show( FALSE );
         }
     }
 

@@ -2750,7 +2750,7 @@ void wxWindow::InitDialog()
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( win );
-    wxNode *node = menu->m_items.First();
+    wxNode *node = menu->GetItems().First();
     while (node)
     {
         wxMenuItem *menuitem = (wxMenuItem*)node->Data();

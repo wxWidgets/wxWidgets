@@ -124,7 +124,7 @@ void wxMDIParentFrame::GtkOnSize( int x, int y, int width, int height )
 
     if (m_mdiMenuBar)
     {
-        m_mdiMenuBar->m_x = 0;  
+        m_mdiMenuBar->m_x = 0;
         m_mdiMenuBar->m_y = 0;
         m_mdiMenuBar->m_width = m_width;
         m_mdiMenuBar->m_height = wxMENU_HEIGHT;
@@ -137,13 +137,13 @@ void wxMDIParentFrame::SetMDIMenuBar( wxMenuBar *menu_bar )
 {
     /* hide old child menu bar */
     if (m_mdiMenuBar) m_mdiMenuBar->Show( FALSE );
-    
+
     m_mdiMenuBar = menu_bar;
-    
+
     /* show and resize new menu child menu bar */
     if (m_mdiMenuBar)
     {
-        m_mdiMenuBar->m_x = 0;  
+        m_mdiMenuBar->m_x = 0;
         m_mdiMenuBar->m_y = 0;
         m_mdiMenuBar->m_width = m_width;
         m_mdiMenuBar->m_height = wxMENU_HEIGHT;
@@ -151,7 +151,7 @@ void wxMDIParentFrame::SetMDIMenuBar( wxMenuBar *menu_bar )
         gtk_widget_set_usize( m_mdiMenuBar->m_widget, m_width, wxMENU_HEIGHT );
         m_mdiMenuBar->Show( TRUE );
     }
-    
+
     /* show/hide parent menu bar as required */
     if (m_frameMenuBar) m_frameMenuBar->Show( (m_mdiMenuBar == NULL) );
 }
@@ -202,7 +202,7 @@ void wxMDIParentFrame::OnSysColourChanged( wxSysColourChangedEvent& WXUNUSED(eve
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxFrame)
-  
+
 BEGIN_EVENT_TABLE(wxMDIChildFrame, wxFrame)
     EVT_ACTIVATE(wxMDIChildFrame::OnActivate)
 END_EVENT_TABLE()
@@ -243,7 +243,7 @@ bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
       long style, const wxString& name )
 {
     m_title = title;
-  
+
     return wxWindow::Create( parent->GetClientWindow(), id, wxDefaultPosition, size, style, name );
 }
 
@@ -256,11 +256,11 @@ void wxMDIChildFrame::AddChild( wxWindow *child )
 {
     wxWindow::AddChild( child );
 }
-  
+
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( win );
-    wxNode *node = menu->m_items.First();
+    wxNode *node = menu->GetItems().First();
     while (node)
     {
         wxMenuItem *menuitem = (wxMenuItem*)node->Data();
@@ -280,7 +280,7 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 
        if (m_menuBar->m_parent != this)
        {
-            wxNode *node = m_menuBar->m_menus.First();
+            wxNode *node = m_menuBar->GetMenus().First();
             while (node)
             {
                 wxMenu *menu = (wxMenu*)node->Data();
@@ -290,10 +290,10 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 
             m_menuBar->m_parent = mdi_frame;
         }
-	
+
         gtk_myfixed_put( GTK_MYFIXED(mdi_frame->m_wxwindow),
           m_menuBar->m_widget, m_menuBar->m_x, m_menuBar->m_y );
-	  
+
         mdi_frame->SetMDIMenuBar( m_menuBar );
     }
 }
@@ -325,15 +325,15 @@ static void wxInsertChildInMDI( wxMDIClientWindow* parent, wxMDIChildFrame* chil
 
     gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",
       GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)child );
-    
+
     GtkNotebook *notebook = GTK_NOTEBOOK(parent->m_widget);
-    
+
     gtk_notebook_append_page( notebook, child->m_widget, label_widget );
 
     child->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
 
     gtk_notebook_set_page( notebook, parent->m_children.Number()-1 );
-  
+
     gtk_page_change_callback( (GtkNotebook *) NULL, child->m_page, 0, parent );
 }
 
@@ -359,7 +359,7 @@ wxMDIClientWindow::~wxMDIClientWindow(void)
 bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
 {
     m_needParent = TRUE;
-  
+
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInMDI;
 
     PreCreation( parent, -1, wxPoint(10,10), wxSize(100,100), style, "wxMDIClientWindow" );
@@ -374,7 +374,7 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
     m_parent->AddChild( this );
 
     (m_parent->m_insertCallback)( m_parent, this );
-  
+
     PostCreation();
 
     Show( TRUE );

@@ -2,7 +2,7 @@
 // Name:        menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     11.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -13,7 +13,7 @@
 #define   _MENUITEM_H
 
 #ifdef __GNUG__
-#pragma interface "menuitem.h"
+    #pragma interface "menuitem.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -26,7 +26,7 @@
 // headers - only because ownerdrw.h is not always included and I don't want
 // to write #ifdef's everywhere...
 #if wxUSE_OWNER_DRAWN
-#include  "wx/ownerdrw.h"
+    #include  "wx/ownerdrw.h"
 #endif
 
 // ----------------------------------------------------------------------------

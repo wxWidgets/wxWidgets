@@ -39,8 +39,8 @@ wxMenuBar::wxMenuBar( long style )
     if (style & wxMB_DOCKABLE)
     {
         m_widget = gtk_handle_box_new();
-	gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_menubar) );
-	gtk_widget_show( GTK_WIDGET(m_menubar) );
+        gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_menubar) );
+        gtk_widget_show( GTK_WIDGET(m_menubar) );
     }
     else
     {
@@ -72,16 +72,19 @@ wxMenuBar::wxMenuBar()
 void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
     m_menus.Append( menu );
-    menu->m_title = title; 
+    wxString title2 = title;
 
     int pos;
-    do 
+    do
     {
-        pos = menu->m_title.First( '&' );
-        if (pos != -1) menu->m_title.Remove( pos, 1 );
-    } while (pos != -1);
+        pos = title2.First( '&' );
+        if (pos != wxNOT_FOUND)
+            title2.Remove( pos, 1 );
+    } while (pos != wxNOT_FOUND);
 
-    menu->m_owner = gtk_menu_item_new_with_label( WXSTRINGCAST(menu->m_title) );
+    menu->SetTitle(title2);
+
+    menu->m_owner = gtk_menu_item_new_with_label( WXSTRINGCAST(title2) );
     gtk_widget_show( menu->m_owner );
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
 
@@ -90,13 +93,14 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
-    if (menu->m_title == menuString)
+    if (menu->GetTitle() == menuString)
     {
         int res = menu->FindItem( itemString );
-        if (res != -1) return res;
+        if (res != wxNOT_FOUND)
+            return res;
     }
-    
-    wxNode *node = menu->m_items.First();
+
+    wxNode *node = ((wxMenu *)menu)->GetItems().First();    // const_cast
     while (node)
     {
         wxMenuItem *item = (wxMenuItem*)node->Data();
@@ -106,7 +110,19 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
         node = node->Next();
     }
 
-    return -1;
+    return wxNOT_FOUND;
+}
+
+wxMenuItem *wxMenuBar::FindItemForId(int itemId, wxMenu **menuForItem = NULL) const
+{
+    if ( menuForItem )
+    {
+        // TODO return the pointer to the menu
+
+        *menuForItem = NULL;
+    }
+
+    return FindItem(itemId);
 }
 
 int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemString ) const
@@ -122,26 +138,26 @@ int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemStr
     return -1;
 }
 
-/* Find a wxMenuItem using its id. Recurses down into sub-menus */
+// Find a wxMenuItem using its id. Recurses down into sub-menus
 static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 {
     wxMenuItem* result = menu->FindItem(id);
 
-    wxNode *node = menu->m_items.First();
-    while ( node && result == NULL ) 
+    wxNode *node = ((wxMenu *)menu)->GetItems().First(); // const_cast
+    while ( node && result == NULL )
     {
         wxMenuItem *item = (wxMenuItem*)node->Data();
         if (item->IsSubMenu())
-	{
+        {
             result = FindMenuItemByIdRecursive( item->GetSubMenu(), id );
-	}
+        }
         node = node->Next();
     }
 
     return result;
 }
 
-wxMenuItem* wxMenuBar::FindMenuItemById( int id ) const
+wxMenuItem* wxMenuBar::FindItem( int id ) const
 {
     wxMenuItem* result = 0;
     wxNode *node = m_menus.First();
@@ -151,101 +167,114 @@ wxMenuItem* wxMenuBar::FindMenuItemById( int id ) const
         result = FindMenuItemByIdRecursive( menu, id );
         node = node->Next();
     }
-    
+
     return result;
 }
 
 void wxMenuBar::Check( int id, bool check )
 {
     wxMenuItem* item = FindMenuItemById( id );
-    if (item) item->Check(check);
+
+    wxCHECK_RET( item, "wxMenuBar::Check: no such item" );
+
+    item->Check(check);
 }
 
-bool wxMenuBar::Checked( int id ) const
+bool wxMenuBar::IsChecked( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
-    if (item) return item->IsChecked();
-    return FALSE;
+
+    wxCHECK_MSG( item, FALSE, "wxMenuBar::IsChecked: no such item" );
+
+    return item->IsChecked();
 }
 
 void wxMenuBar::Enable( int id, bool enable )
 {
     wxMenuItem* item = FindMenuItemById( id );
-    if (item) item->Enable(enable);
+
+    wxCHECK_RET( item, "wxMenuBar::Enable: no such item" );
+
+    item->Enable(enable);
 }
 
-bool wxMenuBar::Enabled( int id ) const
+bool wxMenuBar::IsEnabled( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
-    if (item) return item->IsEnabled();
-    
-    return FALSE;
+
+    wxCHECK_MSG( item, FALSE, "wxMenuBar::IsEnabled: no such item" );
+
+    return item->IsEnabled();
 }
 
 wxString wxMenuBar::GetLabel( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
-    
-    if (item) return item->GetText();
-    
-    return wxString("");
+
+    wxCHECK_MSG( item, "", "wxMenuBar::GetLabel: no such item" );
+
+    return item->GetText();
 }
 
 void wxMenuBar::SetLabel( int id, const wxString &label )
 {
     wxMenuItem* item = FindMenuItemById( id );
-    
-    if (item) item->SetText( label );
+
+    wxCHECK_RET( item, "wxMenuBar::SetLabel: no such item" );
+
+    item->SetText( label );
 }
 
 void wxMenuBar::EnableTop( int pos, bool flag )
 {
     wxNode *node = m_menus.Nth( pos );
-  
+
     wxCHECK_RET( node, "menu not found" );
-  
+
     wxMenu* menu = (wxMenu*)node->Data();
-  
-    if (menu->m_owner) gtk_widget_set_sensitive( menu->m_owner, flag );
+
+    if (menu->m_owner)
+        gtk_widget_set_sensitive( menu->m_owner, flag );
 }
 
 wxString wxMenuBar::GetLabelTop( int pos ) const
 {
     wxNode *node = m_menus.Nth( pos );
-  
+
     wxCHECK_MSG( node, "invalid", "menu not found" );
-  
+
     wxMenu* menu = (wxMenu*)node->Data();
-  
+
     return menu->GetTitle();
 }
 
 void wxMenuBar::SetLabelTop( int pos, const wxString& label )
 {
     wxNode *node = m_menus.Nth( pos );
-  
+
     wxCHECK_RET( node, "menu not found" );
-  
+
     wxMenu* menu = (wxMenu*)node->Data();
-  
+
     menu->SetTitle( label );
 }
 
 void wxMenuBar::SetHelpString( int id, const wxString& helpString )
 {
     wxMenuItem* item = FindMenuItemById( id );
-    
-    if (item) item->SetHelp( helpString );
+
+    wxCHECK_RET( item, "wxMenuBar::SetHelpString: no such item" );
+
+    item->SetHelp( helpString );
 }
 
 wxString wxMenuBar::GetHelpString( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
-    
-    if (item) 
-        return item->GetHelp();
-    else
-        return wxString("");
+
+    wxCHECK_MSG( item, "", "wxMenuBar::GetHelpString: no such item" );
+
+    return item->GetHelp();
 }
 
 //-----------------------------------------------------------------------------
@@ -257,41 +286,44 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     int id = menu->FindMenuIdByMenuItem(widget);
 
     /* should find it for normal (not popup) menu */
-    wxASSERT( (id != -1) || (menu->GetInvokingWindow() != NULL) ); 
+    wxASSERT( (id != -1) || (menu->GetInvokingWindow() != NULL) );
 
-    if (!menu->IsEnabled(id)) return;
+    if (!menu->IsEnabled(id))
+        return;
 
     wxMenuItem* item = menu->FindItem( id );
     wxCHECK_RET( item, "error in menu item callback" );
-    
-    if (item->m_isCheckMenu)
+
+    if (item->IsCheckable())
     {
-        if (item->m_isChecked == item->IsChecked())
+        if (item->GetCheckedFlag() == item->IsChecked())
         {
-	    /* the menu item has been checked by calling wxMenuItem->Check() */
+            /* the menu item has been checked by calling wxMenuItem->Check() */
             return;
-	}
-	else
-	{
-	    /* the user pressed on the menu item -> report */
-	    item->m_isChecked = item->IsChecked();  /* make consistent again */
-	}
+        }
+        else
+        {
+            /* the user pressed on the menu item -> report */
+            item->SetCheckedFlag(item->IsChecked());  /* make consistent again */
+        }
     }
 
     wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, id );
     event.SetEventObject( menu );
     event.SetInt(id );
 
-    if (menu->m_callback)
+    if (menu->GetCallback())
     {
-        (void) (*(menu->m_callback)) (*menu, event);
+        (void) (*(menu->GetCallback())) (*menu, event);
         return;
     }
 
-    if (menu->GetEventHandler()->ProcessEvent(event)) return;
+    if (menu->GetEventHandler()->ProcessEvent(event))
+        return;
 
     wxWindow *win = menu->GetInvokingWindow();
-    if (win) win->GetEventHandler()->ProcessEvent( event );
+    if (win)
+        win->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -304,7 +336,8 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 
     wxASSERT( id != -1 ); // should find it!
 
-    if (!menu->IsEnabled(id)) return;
+    if (!menu->IsEnabled(id))
+        return;
 
     wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, id );
     event.SetEventObject( menu );
@@ -318,7 +351,8 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
      }
 */
 
-    if (menu->GetEventHandler()->ProcessEvent(event)) return;
+    if (menu->GetEventHandler()->ProcessEvent(event))
+        return;
 
     wxWindow *win = menu->GetInvokingWindow();
     if (win) win->GetEventHandler()->ProcessEvent( event );
@@ -334,15 +368,18 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
 
     wxASSERT( id != -1 ); // should find it!
 
-    if (!menu->IsEnabled(id)) return;
+    if (!menu->IsEnabled(id))
+        return;
 
     wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, -1 );
     event.SetEventObject( menu );
 
-    if (menu->GetEventHandler()->ProcessEvent(event)) return;
+    if (menu->GetEventHandler()->ProcessEvent(event))
+        return;
 
     wxWindow *win = menu->GetInvokingWindow();
-    if (win) win->GetEventHandler()->ProcessEvent( event );
+    if (win)
+        win->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -361,7 +398,7 @@ wxMenuItem::wxMenuItem()
     m_menuItem = (GtkWidget *) NULL;
 }
 
-/* it's valid for this function to be called even if m_menuItem == NULL */
+// it's valid for this function to be called even if m_menuItem == NULL
 void wxMenuItem::SetName( const wxString& str )
 {
     m_text = "";
@@ -432,13 +469,13 @@ wxMenu::wxMenu( const wxString& title, const wxFunction func )
         Append(-2, m_title);
         AppendSeparator();
     }
-    
+
     m_owner = (GtkWidget*) NULL;
 }
 
 void wxMenu::SetTitle( const wxString& title )
 {
-    /* Waiting for something better. */
+    // TODO Waiting for something better
     m_title = title;
 }
 
@@ -517,14 +554,14 @@ void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxStri
 void wxMenu::Append( wxMenuItem *item )
 {
     m_items.Append( item );
-    
+
     GtkWidget *menuItem = (GtkWidget*) NULL;
 
-    if (item->IsSeparator()) 
+    if (item->IsSeparator())
         menuItem = gtk_menu_item_new();
-    else if (item->IsSubMenu()) 
+    else if (item->IsSubMenu())
         menuItem = gtk_menu_item_new_with_label(item->GetText());
-    else 
+    else
         menuItem = item->IsCheckable() ? gtk_check_menu_item_new_with_label(item->GetText())
                                        : gtk_menu_item_new_with_label(item->GetText());
 
@@ -537,15 +574,15 @@ void wxMenu::Append( wxMenuItem *item )
         gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
                             GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
                             (gpointer*)this );
-			    
-	if (!item->IsSubMenu())
-	{
+
+        if (!item->IsSubMenu())
+        {
             gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                                 GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                                 (gpointer*)this );
-	}
+        }
     }
-    
+
     gtk_menu_append( GTK_MENU(m_menu), menuItem );
     gtk_widget_show( menuItem );
     item->SetMenuItem(menuItem);
@@ -556,7 +593,7 @@ int wxMenu::FindItem( const wxString itemString ) const
     wxString s( itemString );
 
     int pos;
-    do 
+    do
     {
         pos = s.First( '&' );
         if (pos != -1) s.Remove( pos, 1 );
@@ -567,98 +604,85 @@ int wxMenu::FindItem( const wxString itemString ) const
     {
         wxMenuItem *item = (wxMenuItem*)node->Data();
         if (item->GetText() == s)
-	{
+        {
             return item->GetId();
-	}
+        }
         node = node->Next();
     }
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 void wxMenu::Enable( int id, bool enable )
 {
     wxMenuItem *item = FindItem(id);
-    if (item)
-    { 
-        item->Enable(enable);
-    }
+
+    wxCHECK_RET( item, "wxMenu::Enable: no such item" );
+
+    item->Enable(enable);
 }
 
 bool wxMenu::IsEnabled( int id ) const
 {
     wxMenuItem *item = FindItem(id);
-    if (item)
-    {
-        return item->IsEnabled();
-    }
-    else
-    {
-        return FALSE;
-    }
+
+    wxCHECK_MSG( item, FALSE, "wxMenu::IsEnabled: no such item" );
+
+    return item->IsEnabled();
 }
 
 void wxMenu::Check( int id, bool enable )
 {
     wxMenuItem *item = FindItem(id);
-    if (item)
-    {
-        item->Check(enable);
-    }
+
+    wxCHECK_RET( item, "wxMenu::Check: no such item" );
+
+    item->Check(enable);
 }
 
 bool wxMenu::IsChecked( int id ) const
 {
     wxMenuItem *item = FindItem(id);
-    if (item)
-    {
-        return item->IsChecked();
-    }
-    else
-    {
-        return FALSE;
-    }
+
+    wxCHECK_MSG( item, FALSE, "wxMenu::IsChecked: no such item" );
+
+    return item->IsChecked();
 }
 
 void wxMenu::SetLabel( int id, const wxString &label )
 {
     wxMenuItem *item = FindItem(id);
-    if (item)
-    {
-        item->SetText(label);
-    }
+
+    wxCHECK_RET( item, "wxMenu::SetLabel: no such item" );
+
+    item->SetText(label);
 }
 
 wxString wxMenu::GetLabel( int id ) const
 {
     wxMenuItem *item = FindItem(id);
-    if (item)
-    { 
-        return item->GetText();
-    }
-    else
-    {
-        return "";
-    }
+
+    wxCHECK_MSG( item, "", "wxMenu::GetLabel: no such item" );
+
+    return item->GetText();
 }
 
 void wxMenu::SetHelpString( int id, const wxString& helpString )
 {
     wxMenuItem *item = FindItem(id);
-    if (item) item->SetHelp( helpString );
+
+    wxCHECK_RET( item, "wxMenu::SetHelpString: no such item" );
+
+    item->SetHelp( helpString );
 }
 
 wxString wxMenu::GetHelpString( int id ) const
 {
     wxMenuItem *item = FindItem(id);
-    if (item)
-    { 
-        return item->GetHelp();
-    }
-    else
-    {
-        return "";
-    }
+
+    wxCHECK_MSG( item, "", "wxMenu::GetHelpString: no such item" );
+
+    return item->GetHelp();
 }
 
 int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
@@ -672,19 +696,19 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
         node = node->Next();
     }
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 wxMenuItem *wxMenu::FindItem(int id) const
 {
     wxNode *node = m_items.First();
-    while (node) 
+    while (node)
     {
         wxMenuItem *item = (wxMenuItem*)node->Data();
         if (item->GetId() == id)
-	{
+        {
             return item;
-	}
+        }
         node = node->Next();
     }
 
@@ -705,10 +729,9 @@ wxWindow *wxMenu::GetInvokingWindow()
     return m_invokingWindow;
 }
 
-// Update a menu and all submenus recursively.
-// source is the object that has the update event handlers
-// defined for it. If NULL, the menu or associated window
-// will be used.
+// Update a menu and all submenus recursively. source is the object that has
+// the update event handlers defined for it. If NULL, the menu or associated
+// window will be used.
 void wxMenu::UpdateUI(wxEvtHandler* source)
 {
   if (!source && GetInvokingWindow())
@@ -744,5 +767,4 @@ void wxMenu::UpdateUI(wxEvtHandler* source)
     node = node->Next();
   }
 }
-
 
