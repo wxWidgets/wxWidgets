@@ -2108,7 +2108,7 @@ static void TPRedrawFocusOutline(STPTextPaneVars *varsp) {
 
 // update TXN focus state
 static void TPFocusPaneText(STPTextPaneVars *varsp, Boolean setFocus) {
-    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(varsp->fUserPaneRec);
+/*    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(varsp->fUserPaneRec); */
 
     if (varsp->fInFocus != setFocus /*&& textctrl->MacIsReallyShown() */ ) {
         varsp->fInFocus = setFocus;
