@@ -10688,7 +10688,8 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   for ac_declaration in \
-   '' \
+   ''\
+   '#include <stdlib.h>' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
@@ -10702,8 +10703,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-$ac_declaration
 #include <stdlib.h>
+$ac_declaration
 int
 main ()
 {
@@ -11328,7 +11329,8 @@ else
   fi
 fi
 for ac_declaration in \
-   '' \
+   ''\
+   '#include <stdlib.h>' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
@@ -11342,8 +11344,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-$ac_declaration
 #include <stdlib.h>
+$ac_declaration
 int
 main ()
 {
@@ -35895,19 +35897,16 @@ EOF
 
 
 if test $GCC_PCH = 1 ; then
+    CODE_GEN_FLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA $CODE_GEN_FLAGS"
     CPPFLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA $CPPFLAGS"
 else
     case "${host}" in
         powerpc-*-darwin* )
-                                    CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
+                                    CODE_GEN_FLAGS="-DNO_GCC_PRAGMA $CODE_GEN_FLAGS"
+            CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
             ;;
     esac
 fi
-case "${host}" in
-    powerpc-*-darwin* )
-                        CODE_GEN_FLAGS_CXX="-DNO_GCC_PRAGMA $CODE_GEN_FLAGS_CXX"
-        ;;
-esac
 
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
