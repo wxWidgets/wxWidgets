@@ -391,6 +391,15 @@ class WXDLLEXPORT wxEvent;
 #  endif /* ATTRIBUTE_PRINTF */
 #endif
 
+// Macro to issue warning when using deprecated functions with gcc or MSVC7:
+#if defined(__GNUC__)
+    #define wxDEPRECATED(x) x __attribute__ ((deprecated))
+#elif defined(__VISUALC__) && (__VISUALC__ >= 1300)
+    #define wxDEPRECATED(x) __declspec(deprecated) x
+#else
+    #define wxDEPRECATED(x) x
+#endif
+
 // everybody gets the assert and other debug macros
 #ifdef __cplusplus
 #include "wx/debug.h"
