@@ -18,6 +18,7 @@ wx_include_HEADERS = \
  bmpbuttn.h \
  brush.h \
  buffer.h \
+ busyinfo.h \
  button.h \
  caret.h \
  checkbox.h \
@@ -62,9 +63,12 @@ wx_include_HEADERS = \
  fileconf.h \
  filedlg.h \
  filefn.h \
+ filesys.h \
  font.h \
  fontdlg.h \
  frame.h \
+ fs_inet.h \
+ fs_zip.h \
  gauge.h \
  gdicmn.h \
  gdiobj.h \
@@ -179,8 +183,10 @@ wx_include_HEADERS = \
  wx_cw_d.h \
  wxchar.h \
  wxexpr.h \
+ wxhtml.h \
  wxprec.h \
  xpmhand.h \
+ zipstream.h \
  zstream.h
 
 # setup.h is installed in another directory because several versions of wxwin
