@@ -650,6 +650,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         ret = (ret || win->GetEventHandler()->ProcessEvent( event2 ));
     }
 
+#if wxUSE_ACCEL
     if (!ret)
     {
         wxWindow *ancestor = win;
@@ -665,6 +666,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
             ancestor = ancestor->GetParent();
         }
     }
+#endif // wxUSE_ACCEL
 
     /* win is a control: tab can be propagated up */
     if ( (!ret) &&
@@ -706,8 +708,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
                     wxNode *node = menubar->GetMenus().First();
 		    if (node)
 		    {
-                        wxMenu *firstMenu = (wxMenu*) node->Data();
 			// doesn't work correctly
+            // wxMenu *firstMenu = (wxMenu*) node->Data();
 			// gtk_menu_item_select( GTK_MENU_ITEM(firstMenu->m_owner) );
 			// ret = TRUE;
 			break;

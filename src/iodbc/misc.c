@@ -24,10 +24,10 @@
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include	<config.h>
+#include	"config.h"
 
-#include	<isql.h>
-#include	<isqlext.h>
+#include	"isql.h"
+#include	"isqlext.h"
 
 #include	<stdio.h>
 #include        <unistd.h>

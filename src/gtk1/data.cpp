@@ -18,6 +18,7 @@
 #include "wx/dc.h"
 #include "wx/accel.h"
 #include "wx/dcps.h"
+#include "wx/icon.h"
 
 #define _MAXPATHLEN 500
 
@@ -127,7 +128,10 @@ wxCursor *wxHOURGLASS_CURSOR = (wxCursor *) NULL;
 wxCursor *wxCROSS_CURSOR = (wxCursor *) NULL;
 
 /* 'Null' objects */
-wxAcceleratorTable   wxNullAcceleratorTable;
+#if wxUSE_ACCEL
+    wxAcceleratorTable   wxNullAcceleratorTable;
+#endif // wxUSE_ACCEL
+
 wxBitmap   wxNullBitmap;
 wxIcon     wxNullIcon;
 wxCursor   wxNullCursor;

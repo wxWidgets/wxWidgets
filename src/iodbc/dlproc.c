@@ -24,18 +24,18 @@
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include	<config.h>
+#include	"config.h"
 
-#include	<isql.h>
-#include	<isqlext.h>
+#include	"isql.h"
+#include	"isqlext.h"
 
-#include        <dlproc.h>
+#include	"dlproc.h"
 
-#include	<herr.h>
-#include	<henv.h>
-#include	<hdbc.h>
+#include	"herr.h"
+#include	"henv.h"
+#include	"hdbc.h"
 
-#include	<itrace.h>
+#include	"itrace.h"
 
 #include	"henv.ci"
 
@@ -44,7 +44,6 @@ _iodbcdm_getproc (HDBC hdbc, int idx)
 {
   DBC_t FAR *pdbc = (DBC_t FAR *) hdbc;
   ENV_t FAR *penv;
-  HDLL hdll;
   HPROC FAR *phproc;
 
   if (idx <= 0 || idx > SQL_EXT_API_LAST)

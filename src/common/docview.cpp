@@ -53,6 +53,7 @@
 #include "wx/msgdlg.h"
 #include "wx/choicdlg.h"
 #include "wx/docview.h"
+#include "wx/prntbase.h"
 #include "wx/printdlg.h"
 #include "wx/confbase.h"
 
@@ -240,9 +241,7 @@ bool wxDocument::SaveAs()
         return FALSE;
 
     wxString fileName(tmp);
-    wxString path("");
-    wxString name("");
-    wxString ext("");
+    wxString path, name, ext;
     wxSplitPath(fileName, & path, & name, & ext);
 
     if (ext.IsEmpty() || ext == _T(""))
@@ -787,6 +786,7 @@ void wxDocManager::OnFileSaveAs(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_PRINTING_ARCHITECTURE
     wxView *view = GetCurrentView();
     if (!view)
         return;
@@ -799,6 +799,7 @@ void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
 
         delete printout;
     }
+#endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
 void wxDocManager::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
@@ -817,6 +818,7 @@ void wxDocManager::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_PRINTING_ARCHITECTURE
     wxView *view = GetCurrentView();
     if (!view)
         return;
@@ -834,6 +836,7 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
         frame->Initialize();
         frame->Show(TRUE);
     }
+#endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
 void wxDocManager::OnUndo(wxCommandEvent& WXUNUSED(event))

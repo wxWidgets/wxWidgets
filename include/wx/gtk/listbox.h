@@ -51,7 +51,9 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr )
     {
+#if wxUSE_CHECKLISTBOX
         m_hasCheckBoxes = FALSE;
+#endif // wxUSE_CHECKLISTBOX
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
     virtual ~wxListBox();
@@ -117,7 +119,10 @@ public:
     GtkList   *m_list;
     wxList     m_clientDataList;
     wxList     m_clientObjectList;
+
+#if wxUSE_CHECKLISTBOX
     bool       m_hasCheckBoxes;
+#endif // wxUSE_CHECKLISTBOX
 };
 
 #endif // __GTKLISTBOXH__

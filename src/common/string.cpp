@@ -2128,7 +2128,7 @@ static void wxLoadCharacterSets(void)
   if (already_loaded) return;
 
   already_loaded = TRUE;
-#if defined(__UNIX__)
+#if defined(__UNIX__) && wxUSE_TEXTFILE
   // search through files in /usr/share/i18n/charmaps
   wxString fname;
   for (fname = ::wxFindFirstFile(_T("/usr/share/i18n/charmaps/*"));

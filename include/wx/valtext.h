@@ -16,6 +16,10 @@
 #pragma interface "valtext.h"
 #endif
 
+#if defined(wxUSE_VALIDATORS) && !wxUSE_VALIDATORS
+    #error "wxWindows is compiled without support for wxValidator"
+#endif
+
 #include "wx/validate.h"
 
 #define wxFILTER_NONE           0x0000

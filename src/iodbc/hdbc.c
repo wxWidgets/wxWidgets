@@ -24,20 +24,20 @@
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include	<config.h>
+#include	"config.h"
 
-#include	<isql.h>
-#include	<isqlext.h>
+#include	"isql.h"
+#include	"isqlext.h"
 
-#include        <dlproc.h>
+#include        "dlproc.h"
 
-#include	<herr.h>
-#include	<henv.h>
-#include	<hdbc.h>
-#include	<hstmt.h>
+#include	"herr.h"
+#include	"henv.h"
+#include	"hdbc.h"
+#include	"hstmt.h"
 
-#include	<itrace.h>
-#include	<stdio.h>
+#include	"itrace.h"
+#include	"stdio.h"
 
 extern	RETCODE	_iodbcdm_driverunload();
 
@@ -176,7 +176,6 @@ SQLSetConnectOption (
     UWORD fOption,
     UDWORD vParam)
 {
-  GENV_t FAR *genv;
   DBC_t FAR *pdbc = (DBC_t FAR *) hdbc;
   STMT_t FAR *pstmt;
   HPROC hproc = SQL_NULL_HPROC;
@@ -511,7 +510,6 @@ SQLGetConnectOption (
     UWORD fOption,
     PTR pvParam)
 {
-  GENV_t FAR *genv;
   DBC_t FAR *pdbc = (DBC_t FAR *) hdbc;
   int sqlstat = en_00000;
   HPROC hproc = SQL_NULL_HPROC;
@@ -764,7 +762,7 @@ SQLTransact (
   GENV_t FAR *genv = (GENV_t FAR *) henv;
   DBC_t FAR *pdbc = (DBC_t FAR *) hdbc;
   HERR herr;
-  RETCODE retcode;
+  RETCODE retcode = 0;
 
   if (hdbc != SQL_NULL_HDBC)
     {

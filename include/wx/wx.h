@@ -25,6 +25,22 @@
 #include "wx/dcprint.h"
 #include "wx/dcscreen.h"
 #include "wx/button.h"
+#include "wx/menu.h"
+#include "wx/app.h"
+#include "wx/event.h"
+#include "wx/list.h"
+#include "wx/pen.h"
+#include "wx/brush.h"
+#include "wx/palette.h"
+#include "wx/icon.h"
+#include "wx/cursor.h"
+#include "wx/dialog.h"
+#include "wx/timer.h"
+#include "wx/utils.h"
+#include "wx/settings.h"
+#include "wx/msgdlg.h"
+#include "wx/cmndata.h"
+
 #include "wx/bmpbuttn.h"
 #include "wx/checkbox.h"
 #include "wx/choice.h"
@@ -39,37 +55,29 @@
 #include "wx/slider.h"
 #include "wx/gauge.h"
 #include "wx/combobox.h"
-#include "wx/menu.h"
-#include "wx/app.h"
-#include "wx/event.h"
-#include "wx/list.h"
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/palette.h"
-#include "wx/icon.h"
-#include "wx/cursor.h"
-#include "wx/dialog.h"
-#include "wx/timer.h"
-#include "wx/utils.h"
-#include "wx/settings.h"
 #include "wx/layout.h"
 #include "wx/memory.h"
 #include "wx/mdi.h"
 #include "wx/scrolwin.h"
 #include "wx/statusbr.h"
 #include "wx/scrolbar.h"
-#include "wx/msgdlg.h"
 #include "wx/choicdlg.h"
 #include "wx/textdlg.h"
 #include "wx/filedlg.h"
 #include "wx/dirdlg.h"
-#include "wx/cmndata.h"
-#include "wx/intl.h"
-#include "wx/valtext.h"
+
+#if wxUSE_INTL
+    #include "wx/intl.h"
+#endif // wxUSE_INTL
+
+#if wxUSE_VALIDATORS
+    #include "wx/valtext.h"
+#endif // wxUSE_VALIDATORS
+
 #if wxUSE_SERIAL
-#include "wx/objstrm.h"
-#include "wx/serbase.h"
-#endif
+    #include "wx/objstrm.h"
+    #include "wx/serbase.h"
+#endif // wxUSE_SERIAL
 
 #endif
     // _WX_WXH__

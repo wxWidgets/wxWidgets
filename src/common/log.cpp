@@ -505,6 +505,7 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                 break;
 
         case wxLOG_Status:
+#if wxUSE_STATUSBAR
                 {
                     // find the top window and set it's status text if it has any
                     wxFrame *pFrame = gs_pFrame;
@@ -518,6 +519,7 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                     if ( pFrame != NULL )
                         pFrame->SetStatusText(szString);
                 }
+#endif // wxUSE_STATUSBAR
                 break;
 
         case wxLOG_Trace:
@@ -584,7 +586,9 @@ public:
     // menu callbacks
     void OnClose(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
+#if wxUSE_FILE
     void OnSave (wxCommandEvent& event);
+#endif // wxUSE_FILE
     void OnClear(wxCommandEvent& event);
 
     void OnIdle(wxIdleEvent&);
@@ -612,7 +616,9 @@ private:
 BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
     // wxLogWindow menu events
     EVT_MENU(Menu_Close, wxLogFrame::OnClose)
+#if wxUSE_FILE
     EVT_MENU(Menu_Save,  wxLogFrame::OnSave)
+#endif // wxUSE_FILE
     EVT_MENU(Menu_Clear, wxLogFrame::OnClear)
 
     EVT_CLOSE(wxLogFrame::OnCloseWindow)
@@ -632,15 +638,19 @@ wxLogFrame::wxLogFrame(wxFrame *pParent, wxLogWindow *log, const wxChar *szTitle
     // create menu
     wxMenuBar *pMenuBar = new wxMenuBar;
     wxMenu *pMenu = new wxMenu;
+#if wxUSE_FILE
     pMenu->Append(Menu_Save,  _("&Save..."), _("Save log contents to file"));
+#endif // wxUSE_FILE
     pMenu->Append(Menu_Clear, _("C&lear"), _("Clear the log contents"));
     pMenu->AppendSeparator();
     pMenu->Append(Menu_Close, _("&Close"), _("Close this window"));
     pMenuBar->Append(pMenu, _("&Log"));
     SetMenuBar(pMenuBar);
 
+#if wxUSE_STATUSBAR
     // status bar for menu prompts
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
     m_log->OnFrameCreate(this);
 }
@@ -655,6 +665,7 @@ void wxLogFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     DoClose();
 }
 
+#if wxUSE_FILE
 void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
     // get the file name
@@ -725,6 +736,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         wxLogStatus(this, _("Log saved to the file '%s'."), szFileName);
     }
 }
+#endif // wxUSE_FILE
 
 void wxLogFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 {
@@ -739,9 +751,9 @@ wxLogFrame::~wxLogFrame()
 // wxLogWindow
 // -----------
 wxLogWindow::wxLogWindow(wxFrame *pParent,
-        const wxChar *szTitle,
-        bool bShow,
-        bool bDoPass)
+                         const wxChar *szTitle,
+                         bool bShow,
+                         bool bDoPass)
 {
     m_bPassMessages = bDoPass;
 

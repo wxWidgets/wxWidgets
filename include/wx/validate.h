@@ -18,6 +18,12 @@
 
 #include "wx/event.h"
 
+#if defined(wxUSE_VALIDATORS) && !wxUSE_VALIDATORS
+    // wxWindows is compiled without support for wxValidator
+    class WXDLLEXPORT wxValidator;
+    #define wxDefaultValidator (*((wxValidator *)NULL))
+#else // wxUSE_VALIDATORS
+
 class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxWindowBase;
 
@@ -77,6 +83,8 @@ private:
 };
 
 WXDLLEXPORT_DATA(extern const wxValidator) wxDefaultValidator;
+
+#endif // wxUSE_VALIDATORS
 
 #endif
     // _WX_VALIDATEH__

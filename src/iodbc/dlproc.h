@@ -26,7 +26,7 @@
 #ifndef	_DLPROC_H
 #define	_DLPROC_H
 
-#include	<dlf.h>
+#include	"dlf.h"
 
 typedef RETCODE (FAR * HPROC) ();
 

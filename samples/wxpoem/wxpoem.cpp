@@ -26,9 +26,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
-#include "wx/list.h"
-#include "wx/utils.h"
+#include "wx/wx.h"
 #endif
 
 #include "wx/help.h"
@@ -135,7 +133,9 @@ void            CopyToClipboard(HWND, char *);
 wxMenu    *popupMenu = NULL;
 void PopupFunction(wxMenu& menu, wxCommandEvent& event);
 
-wxHelpController *HelpController = NULL;
+#if wxUSE_HELP
+    wxHelpController *HelpController = NULL;
+#endif // wxUSE_HELP
 
 IMPLEMENT_APP(MyApp)
 
@@ -590,8 +590,10 @@ bool MyApp::OnInit()
   DarkGreyPen = new wxPen("GREY", THICK_LINE_WIDTH, wxSOLID);
   WhitePen = new wxPen("WHITE", THICK_LINE_WIDTH, wxSOLID);
 
+#if wxUSE_HELP
   HelpController = new wxHelpController();
   HelpController->Initialize("wxpoem");
+#endif // wxUSE_HELP
 
   CreateFonts();
 
@@ -666,7 +668,9 @@ int MyApp::OnExit()
 {
   if (backingBitmap)
     delete backingBitmap;
+#if wxUSE_HELP
   delete HelpController;
+#endif // wxUSE_HELP
   delete GreyPen;
   delete DarkGreyPen;
   delete WhitePen;
@@ -1122,8 +1126,10 @@ void PopupFunction(wxMenu& /*menu*/, wxCommandEvent& event)
      }
      case POEM_HELP_CONTENTS:
      {
+#if wxUSE_HELP
        HelpController->LoadFile("wxpoem");
        HelpController->DisplayContents();
+#endif // wxUSE_HELP
        break;
      }
      case POEM_ABOUT:

@@ -1,12 +1,13 @@
 /*-*- c++ -*-********************************************************
- * exthlp.h - an external help controller for wxWindows             *
+ * helpext.h - an external help controller for wxWindows             *
  *                                                                  *
  * (C) 1998 by Karsten Ballüder (Ballueder@usa.net)                 *
  *                                                                  *
  * $Id$
  *******************************************************************/
-#ifndef WXXHELP_H
-#define WXXHELP_H
+
+#ifndef __WX_HELPEXT_H_
+#define __WX_HELPEXT_H_
 
 #if wxUSE_HELP
 
@@ -46,7 +47,7 @@
    Lines starting with ';' will be ignored.
 */
 
-class wxExtHelpController : public wxHTMLHelpControllerBase
+class WXDLLEXPORT wxExtHelpController : public wxHTMLHelpControllerBase
 {      
 DECLARE_CLASS(wxExtHelpController)
    public:
@@ -76,5 +77,6 @@ DECLARE_CLASS(wxExtHelpController)
    bool DisplayHelp(wxString const &);
 };
 
-#endif  
-#endif
+#endif // wxUSE_HELP
+
+#endif // __WX_HELPEXT_H_

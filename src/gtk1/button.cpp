@@ -79,7 +79,9 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
     PreCreation( parent, id, pos, newSize, style, name );
   
+#if wxUSE_VALIDATORS
     SetValidator( validator );
+#endif // wxUSE_VALIDATORS
 
     m_widget = gtk_button_new_with_label( "" );
     

@@ -8,7 +8,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SASHWIN_H_G_
@@ -17,6 +17,8 @@
 #ifdef __GNUG__
 #pragma interface "sashwin.h"
 #endif
+
+#if wxUSE_SASH
 
 #include "wx/defs.h"
 #include "wx/window.h"
@@ -209,6 +211,8 @@ typedef void (wxEvtHandler::*wxSashEventFunction)(wxSashEvent&);
 
 #define EVT_SASH_DRAGGED(id, fn) { wxEVT_SASH_DRAGGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSashEventFunction) & fn, NULL },
 #define EVT_SASH_DRAGGED_RANGE(id1, id2, fn) { wxEVT_SASH_DRAGGED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxSashEventFunction) & fn, NULL },
+
+#endif // wxUSE_SASH
 
 #endif
   // _WX_SASHWIN_H_G_

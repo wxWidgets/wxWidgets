@@ -406,9 +406,11 @@ void wxApp::OnIdle( wxIdleEvent &event )
     DeletePendingObjects();
 
     /* flush the logged messages if any */
+#if wxUSE_LOG
     wxLog *log = wxLog::GetActiveTarget();
     if (log != NULL && log->HasPendingMessages())
         log->Flush();
+#endif // wxUSE_LOG
 
     /* Send OnIdle events to all windows */
     bool needMore = SendIdleEvents();
@@ -635,6 +637,7 @@ void wxApp::CleanUp()
     }
 #endif // Debug
 
+#if wxUSE_LOG
     // do this as the very last thing because everything else can log messages
     wxLog::DontCreateOnDemand();
 
@@ -647,6 +650,7 @@ wxLog *wxApp::CreateLogTarget()
 {
     return new wxLogGui;
 }
+#endif // wxUSE_LOG
 
 //-----------------------------------------------------------------------------
 // wxEntry
@@ -730,6 +734,7 @@ int wxEntry( int argc, char *argv[] )
         }
     }
 
+#if wxUSE_LOG
     // flush the logged messages if any
     wxLog *log = wxLog::GetActiveTarget();
     if (log != NULL && log->HasPendingMessages())
@@ -741,6 +746,7 @@ int wxEntry( int argc, char *argv[] )
     wxLog *oldlog = wxLog::SetActiveTarget(new wxLogStderr);
     if ( oldlog )
         delete oldlog;
+#endif // wxUSE_LOG
 
     wxApp::CleanUp();
 

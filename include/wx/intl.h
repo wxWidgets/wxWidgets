@@ -19,6 +19,8 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
+#if wxUSE_INTL
+
 // ============================================================================
 // global decls
 // ============================================================================
@@ -136,6 +138,16 @@ inline const wxMB2WXbuf wxGetTranslation(const wxChar *sz)
     else
         return (const wxMB2WXbuf)sz;
 }
+
+#else // !wxUSE_INTL
+
+#ifndef WXINTL_NO_GETTEXT_MACRO
+    #define   _(str)  (str)
+#endif
+
+inline const wxChar *wxGetTranslation(const wxChar *sz) { return sz; }
+
+#endif // wxUSE_INTL/!wxUSE_INTL
 
 #endif
     // _WX_INTLH__

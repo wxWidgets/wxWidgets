@@ -104,9 +104,11 @@ class wxApp: public wxEvtHandler
     void SetPrintMode( int WXUNUSED(mode) ) {}
     int GetPrintMode() const { return wxPRINT_POSTSCRIPT; }
 
+#if wxUSE_LOG
     /* override this function to create default log target of arbitrary
      * user-defined classv (default implementation creates a wxLogGui object) */
     virtual wxLog *CreateLogTarget();
+#endif // wxUSE_LOG
 
   // implementation 
 

@@ -24,19 +24,19 @@
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include	<config.h>
+#include	"config.h"
 
-#include	<isql.h>
-#include	<isqlext.h>
+#include	"isql.h"
+#include	"isqlext.h"
 
-#include        <dlproc.h>
+#include        "dlproc.h"
 
-#include	<herr.h>
-#include	<henv.h>
-#include	<hdbc.h>
-#include	<hstmt.h>
+#include	"herr.h"
+#include	"henv.h"
+#include	"hdbc.h"
+#include	"hstmt.h"
 
-#include	<itrace.h>
+#include	"itrace.h"
 
 static void 
 do_cursoropen (STMT_t FAR * pstmt)

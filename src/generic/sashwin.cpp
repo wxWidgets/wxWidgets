@@ -8,7 +8,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -25,6 +25,10 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+
+#if !wxUSE_SASH
+    #error "Thisfile requires wxUSE_SASH to be defined."
+#endif // wxUSE_SASH
 
 #include <math.h>
 #include <stdlib.h>

@@ -24,7 +24,7 @@
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include	<dlf.h>
+#include	"dlf.h"
 #include	<errno.h>
 
 #ifdef	DLDAPI_DEFINED

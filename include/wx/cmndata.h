@@ -89,6 +89,7 @@ public:
     int             maxSize;
 };
 
+#if wxUSE_PRINTING_ARCHITECTURE
 /*
  * wxPrintData
  * Encapsulates printer information (not printer dialog information)
@@ -378,6 +379,8 @@ private:
 
     wxPrintData     m_printData;
 };
+
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 #endif
 // _WX_CMNDATA_H_BASE_

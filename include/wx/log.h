@@ -16,6 +16,8 @@
     #pragma interface "log.h"
 #endif
 
+#if wxUSE_LOG
+
 #include <time.h>   // for time_t
 
 #include "wx/dynarray.h"
@@ -347,6 +349,21 @@ private:
 // for log messages for easy redirection
 // ----------------------------------------------------------------------------
 
+// are we in 'verbose' mode?
+// (note that it's often handy to change this var manually from the
+//  debugger, thus enabling/disabling verbose reporting for some
+//  parts of the program only)
+WXDLLEXPORT_DATA(extern bool) g_bVerbose;
+
+// ----------------------------------------------------------------------------
+// get error code/error message from system in a portable way
+// ----------------------------------------------------------------------------
+
+// return the last system error code
+WXDLLEXPORT unsigned long wxSysErrorCode();
+// return the error message for given (or last if 0) error code
+WXDLLEXPORT const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
+
 // define wxLog<level>
 // -------------------
 
@@ -355,34 +372,45 @@ extern void WXDLLEXPORT wxLog##level(const wxChar *szFormat, ...)
 #define DECLARE_LOG_FUNCTION2(level, arg1)                          \
 extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...)
 
-    // a generic function for all levels (level is passes as parameter)
-    DECLARE_LOG_FUNCTION2(Generic, wxLogLevel level);
+#else // !wxUSE_LOG
 
-    // one function per each level
-    DECLARE_LOG_FUNCTION(FatalError);
-    DECLARE_LOG_FUNCTION(Error);
-    DECLARE_LOG_FUNCTION(Warning);
-    DECLARE_LOG_FUNCTION(Message);
-    DECLARE_LOG_FUNCTION(Info);
-    DECLARE_LOG_FUNCTION(Verbose);
+// log functions do nothing at all
+#define DECLARE_LOG_FUNCTION(level)                                 \
+inline void WXDLLEXPORT wxLog##level(const wxChar * WXUNUSED(szFormat), ...) {}
+#define DECLARE_LOG_FUNCTION2(level, arg1)                          \
+inline void WXDLLEXPORT wxLog##level(WXUNUSED(arg1),                \
+                                     const wxChar *WXUNUSED(szFormat), ...) {}
 
-    // this function sends the log message to the status line of the top level
-    // application frame, if any
-    DECLARE_LOG_FUNCTION(Status);
+#endif // wxUSE_LOG/!wxUSE_LOG
 
-    // this one is the same as previous except that it allows to explicitly
-    // specify the frame to which the output should go
-    DECLARE_LOG_FUNCTION2(Status, wxFrame *pFrame);
+// a generic function for all levels (level is passes as parameter)
+DECLARE_LOG_FUNCTION2(Generic, wxLogLevel level);
 
-    // additional one: as wxLogError, but also logs last system call error code
-    // and the corresponding error message if available
-    DECLARE_LOG_FUNCTION(SysError);
+// one function per each level
+DECLARE_LOG_FUNCTION(FatalError);
+DECLARE_LOG_FUNCTION(Error);
+DECLARE_LOG_FUNCTION(Warning);
+DECLARE_LOG_FUNCTION(Message);
+DECLARE_LOG_FUNCTION(Info);
+DECLARE_LOG_FUNCTION(Verbose);
 
-    // and another one which also takes the error code (for those broken APIs
-    // that don't set the errno (like registry APIs in Win32))
-    DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
+// this function sends the log message to the status line of the top level
+// application frame, if any
+DECLARE_LOG_FUNCTION(Status);
 
-    // debug functions do nothing in release mode
+// this one is the same as previous except that it allows to explicitly
+// specify the frame to which the output should go
+DECLARE_LOG_FUNCTION2(Status, wxFrame *pFrame);
+
+// additional one: as wxLogError, but also logs last system call error code
+// and the corresponding error message if available
+DECLARE_LOG_FUNCTION(SysError);
+
+// and another one which also takes the error code (for those broken APIs
+// that don't set the errno (like registry APIs in Win32))
+DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
+
+// debug functions do nothing in release mode
 #ifdef  __WXDEBUG__
     DECLARE_LOG_FUNCTION(Debug);
 
@@ -403,34 +431,18 @@ extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...)
     inline void wxLogTrace(const wxChar *, ...) { }
     inline void wxLogTrace(wxTraceMask, const wxChar *, ...) { }
     inline void wxLogTrace(const wxChar *, const wxChar *, ...) { }
-#endif
+#endif // debug/!debug
 
-
-    // are we in 'verbose' mode?
-    // (note that it's often handy to change this var manually from the
-    //  debugger, thus enabling/disabling verbose reporting for some
-    //  parts of the program only)
-    WXDLLEXPORT_DATA(extern bool) g_bVerbose;
-
-    // ----------------------------------------------------------------------------
-    // get error code/error message from system in a portable way
-    // ----------------------------------------------------------------------------
-
-    // return the last system error code
-    WXDLLEXPORT unsigned long wxSysErrorCode();
-    // return the error message for given (or last if 0) error code
-    WXDLLEXPORT const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
-
-    // ----------------------------------------------------------------------------
-    // debug only logging functions: use them with API name and error code
-    // ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// debug only logging functions: use them with API name and error code
+// ----------------------------------------------------------------------------
 
 #ifndef __TFILE__
-#define __XFILE__(x) _T(x)
-#define __TFILE__ __XFILE__(__FILE__)
+    #define __XFILE__(x) _T(x)
+    #define __TFILE__ __XFILE__(__FILE__)
 #endif
 
-#ifdef  __WXDEBUG__
+#if __WXDEBUG__
     // make life easier for people using VC++ IDE: clicking on the message
     // will take us immediately to the place of the failed API
 #ifdef __VISUALC__

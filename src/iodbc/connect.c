@@ -24,19 +24,19 @@
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include	<config.h>
+#include	"config.h"
 
-#include	<isql.h>
-#include	<isqlext.h>
+#include	"isql.h"
+#include	"isqlext.h"
 
-#include        <dlproc.h>
+#include	"dlproc.h"
 
-#include	<herr.h>
-#include	<henv.h>
-#include	<hdbc.h>
-#include	<hstmt.h>
+#include	"herr.h"
+#include	"henv.h"
+#include	"hdbc.h"
+#include	"hstmt.h"
 
-#include	<itrace.h>
+#include	"itrace.h"
 
 extern	char*	_iodbcdm_getkeyvalbydsn();
 extern	char*	_iodbcdm_getkeyvalinstr();
@@ -308,7 +308,6 @@ _iodbcdm_driverunload (HDBC hdbc)
   GENV_t FAR *genv;
   HPROC hproc;
   RETCODE retcode = SQL_SUCCESS;
-  int sqlstat = en_00000;
 
   if (hdbc == SQL_NULL_HDBC)
     {
@@ -964,17 +963,13 @@ SQLBrowseConnect (
     SWORD FAR * pcbConnStrOut)
 {
   DBC_t FAR *pdbc = (DBC_t FAR *) hdbc;
-  HDLL hdll;
   char FAR *drv;
   char drvbuf[1024];
   char FAR *dsn;
   char dsnbuf[SQL_MAX_DSN_LENGTH + 1];
-  UCHAR cnstr2drv[1024];
 
   HPROC hproc;
-  HPROC dialproc;
 
-  int sqlstat = en_00000;
   RETCODE retcode = SQL_SUCCESS;
   RETCODE setopterr = SQL_SUCCESS;
 

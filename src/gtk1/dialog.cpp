@@ -393,11 +393,13 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
     wxASSERT_MSG( (m_widget != NULL), _T("invalid dialog") );
 
+#if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
     {
         Layout();
     }
     else
+#endif // wxUSE_CONSTRAINTS
     {
         /* no child: go out ! */
         if (!GetChildren().First()) return;

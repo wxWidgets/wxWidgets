@@ -28,7 +28,10 @@
 #include "wx/font.h"            // so we can't do without them
 #include "wx/colour.h"
 #include "wx/region.h"
-#include "wx/accel.h"
+
+#if wxUSE_ACCEL
+    #include "wx/accel.h"
+#endif // wxUSE_ACCEL
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -356,10 +359,12 @@ public:
     // validators and client data
     // --------------------------
 
+#if wxUSE_VALIDATORS
         // a window may have an associated validator which is used to control
         // user input
     virtual void SetValidator( const wxValidator &validator );
     virtual wxValidator *GetValidator() { return m_windowValidator; }
+#endif // wxUSE_VALIDATORS
 
         // each window may have associated client data: either a pointer to
         // wxClientData object in which case it is managed by the window (i.e.
@@ -389,12 +394,14 @@ public:
 
     virtual void InitDialog();
 
+#if wxUSE_ACCEL
     // accelerators
     // ------------
     virtual void SetAcceleratorTable( const wxAcceleratorTable& accel )
         { m_acceleratorTable = accel; }
     wxAcceleratorTable *GetAcceleratorTable()
         { return &m_acceleratorTable; }
+#endif // wxUSE_ACCEL
 
     // dialog units translations
     // -------------------------
@@ -654,8 +661,10 @@ protected:
     // changed with SetEventHandler()
     wxEvtHandler        *m_eventHandler;
 
+#if wxUSE_VALIDATORS
     // associated validator or NULL if none
     wxValidator         *m_windowValidator;
+#endif // wxUSE_VALIDATORS
 
 #if wxUSE_DRAG_AND_DROP
     wxDropTarget        *m_dropTarget;
@@ -673,9 +682,11 @@ protected:
     // the region which should be repainted in response to paint event
     wxRegion             m_updateRegion;
 
+#if wxUSE_ACCEL
     // the accelerator table for the window which translates key strokes into
     // command events
     wxAcceleratorTable   m_acceleratorTable;
+#endif // wxUSE_ACCEL
 
     // user data associated with the window: either an object which will be
     // deleted by the window when it's deleted or some raw pointer which we do

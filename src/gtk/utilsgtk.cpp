@@ -35,7 +35,14 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkfeatures.h>
 #include <gdk/gdkx.h>
-#include "X11/XKBlib.h"
+
+#ifdef __HPUX__
+    // under HP-UX XKBlib.h defines structures with field named "explicit" -
+    // which is, of course, an error for a C++ compiler
+    #define explicit __wx_explicit
+    #include "X11/XKBlib.h"
+    #undef explicit
+#endif // __HPUX__
 
 // ----------------------------------------------------------------------------
 // misc.

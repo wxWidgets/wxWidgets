@@ -54,7 +54,6 @@ void *wxJoystick::Entry(void)
   struct timeval time_out = {0, 0};
 
   FD_ZERO(&read_fds);
-  DeferDestroy(TRUE);
   while (1) {
     TestDestroy();
 

@@ -1,0 +1,7 @@
+SUFFIXES = .cpp
+
+DEFS = @DEFS@ $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
+
+noinst_PROGRAMS = pngdemo
+
+pngdemo_SOURCES = pngdemo.cpp

@@ -80,7 +80,7 @@ public:
 private:
     // helper function - creates a new thread (but doesn't run it)
     MyThread *CreateThread();
-    
+
     // crit section protects access to all of the arrays below
     wxCriticalSection m_critsect;
 
@@ -130,9 +130,9 @@ void MyThread::WriteText(const wxString& text)
 
     // before doing any GUI calls we must ensure that this thread is the only
     // one doing it!
-    
+
     wxMutexGuiEnter();
-    
+
     msg << wxTime().FormatTime() << ": " << text;
 
     m_frame->WriteText(msg);
@@ -372,7 +372,7 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
     else
     {
         m_threads[n]->Pause();
-    
+
         SetStatusText("Thread paused.", 1);
     }
 }

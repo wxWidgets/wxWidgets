@@ -39,16 +39,18 @@
 #include "wx/cmndata.h"
 #include "wx/log.h"
 
-#include "wx/paper.h"
-
 // For compatibility
 #if (defined(__WXMOTIF__) || defined(__WXGTK__)) && wxUSE_POSTSCRIPT
     #define wxCOMPATIBILITY_WITH_PRINTSETUPDATA 1
 #endif
 
-#if wxCOMPATIBILITY_WITH_PRINTSETUPDATA
-    #include "wx/generic/dcpsg.h"
-#endif
+#if wxUSE_PRINTING_ARCHITECTURE
+    #include "wx/paper.h"
+
+    #if wxCOMPATIBILITY_WITH_PRINTSETUPDATA
+        #include "wx/generic/dcpsg.h"
+    #endif
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 #ifdef __WXMSW__
     #include <windows.h>
@@ -66,9 +68,11 @@
 #endif // MSW
 
 #if !USE_SHARED_LIBRARY
-    IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
-    IMPLEMENT_DYNAMIC_CLASS(wxPrintDialogData, wxObject)
-    IMPLEMENT_DYNAMIC_CLASS(wxPageSetupDialogData, wxObject)
+    #if wxUSE_PRINTING_ARCHITECTURE
+        IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
+        IMPLEMENT_DYNAMIC_CLASS(wxPrintDialogData, wxObject)
+        IMPLEMENT_DYNAMIC_CLASS(wxPageSetupDialogData, wxObject)
+    #endif // wxUSE_PRINTING_ARCHITECTURE
     IMPLEMENT_DYNAMIC_CLASS(wxFontData, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject)
 #endif
@@ -163,6 +167,7 @@ void wxFontData::operator=(const wxFontData& data)
     maxSize = data.maxSize;
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
 // ----------------------------------------------------------------------------
 // Print data
 // ----------------------------------------------------------------------------
@@ -1166,3 +1171,4 @@ void wxPageSetupDialogData::CalculatePaperSizeFromId()
     }
 }
 
+#endif // wxUSE_PRINTING_ARCHITECTURE

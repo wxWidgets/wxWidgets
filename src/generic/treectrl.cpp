@@ -83,7 +83,7 @@ public:
   int GetX() const { return m_x; }
   int GetY() const { return m_y; }
 
-  void SetHeight(int h) { m_height = h; }
+  void SetHeight(int h) { m_text_height = h; }
 
   void SetX(int x) { m_x = x; }
   void SetY(int y) { m_y = y; }
@@ -139,7 +139,7 @@ private:
   int                 m_isBold      :1; // render the label in bold font
 
   int                 m_x, m_y;
-  long                m_height, m_width;
+  long                m_text_height, m_text_width;
   int                 m_xCross, m_yCross;
   int                 m_level;
   wxArrayTreeItems    m_children;
@@ -189,7 +189,7 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
 
   m_parent = parent;
 
-  dc.GetTextExtent( m_text, &m_width, &m_height );
+  dc.GetTextExtent( m_text, &m_text_width, &m_text_height );
 }
 
 wxGenericTreeItem::~wxGenericTreeItem()
@@ -222,7 +222,7 @@ void wxGenericTreeItem::SetText( const wxString &text, wxDC& dc )
 {
   m_text = text;
 
-  dc.GetTextExtent( m_text, &m_width, &m_height );
+  dc.GetTextExtent( m_text, &m_text_width, &m_text_height );
 }
 
 void wxGenericTreeItem::Reset()
@@ -232,7 +232,7 @@ void wxGenericTreeItem::Reset()
   m_selImage = -1;
   m_data = NULL;
   m_x = m_y =
-  m_height = m_width = 0;
+  m_text_height = m_text_width = 0;
   m_xCross =
   m_yCross = 0;
 
@@ -268,7 +268,7 @@ void wxGenericTreeItem::SetCross( int x, int y )
 void wxGenericTreeItem::GetSize( int &x, int &y )
 {
   if ( y < m_y ) y = m_y;
-  int width = m_x +  m_width;
+  int width = m_x +  m_text_width;
   if (width > x) x = width;
 
   if (IsExpanded())
@@ -284,7 +284,7 @@ void wxGenericTreeItem::GetSize( int &x, int &y )
 wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
                                                bool &onButton )
 {
-  if ((point.y > m_y) && (point.y < m_y + m_height))
+  if ((point.y > m_y) && (point.y < m_y + m_text_height))
   {
     // FIXME why +5?
     //  Because that is the size of the plus sign, RR
@@ -298,7 +298,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
 
     /* TODO: we should do a query here like
          m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );  */
-    int w = m_width;
+    int w = m_text_width;
     if (m_image != -1) w += 24;
 
     if ((point.x > m_x) && (point.x < m_x+w))
@@ -888,32 +888,154 @@ void wxTreeCtrl::Unselect()
   }
 }
 
-void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId)
+void wxTreeCtrl::UnselectAllChildren(wxGenericTreeItem *item)
 {
-  wxGenericTreeItem *item = itemId.m_pItem;
+  item->SetHilight(FALSE);
+  RefreshLine(item);
+  
+  if (item->HasChildren())
+    {
+      wxArrayTreeItems& children = item->GetChildren();
+      size_t count = children.Count();
+      for ( size_t n = 0; n < count; ++n )
+	UnselectAllChildren(children[n]);
+    }
+}
 
-  if ( m_current != item )
-  {
+void wxTreeCtrl::UnselectAll()
+{
+  UnselectAllChildren(GetRootItem().m_pItem);
+}
+
+// Recursive function !
+// To stop we must have crt_item<last_item
+// Algorithm = 
+// Tag all next children, when no more children,
+// Move to parent (not to tag) 
+// Keep going, if we found last_item, we stop
+bool wxTreeCtrl::TagNextChildren(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select)
+{
+    wxGenericTreeItem *parent = crt_item->GetParent();
+
+    if ( parent == NULL ) // This is root item
+      return TagAllChildrenUntilLast(crt_item, last_item, select);
+
+    wxArrayTreeItems& children = parent->GetChildren();
+    int index = children.Index(crt_item);
+    wxASSERT( index != wxNOT_FOUND ); // I'm not a child of my parent?
+
+    size_t count = children.Count();
+    for (size_t n=(size_t)(index+1); n<count; ++n)
+      if (TagAllChildrenUntilLast(children[n], last_item, select)) return true;
+
+    return TagNextChildren(parent, last_item, select);
+}
+
+bool wxTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select)
+{
+  crt_item->SetHilight(select);
+  RefreshLine(crt_item);
+  
+  if (crt_item==last_item) return true;
+
+  if (crt_item->HasChildren())
+    {
+      wxArrayTreeItems& children = crt_item->GetChildren();
+      size_t count = children.Count();
+      for ( size_t n = 0; n < count; ++n )
+	if (TagAllChildrenUntilLast(children[n], last_item, select)) return true;
+    }
+	
+  return false;
+}
+
+void wxTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeItem *item2)
+{
+  // item2 is not necessary after item1
+  wxGenericTreeItem *first=NULL, *last=NULL;
+
+  // choice first' and 'last' between item1 and item2
+  if (item1->GetY()<item2->GetY()) 
+    {
+      first=item1;
+      last=item2;
+    }
+  else 
+    {
+      first=item2;
+      last=item1;
+    }
+
+  bool select=m_current->HasHilight();
+  
+  if (TagAllChildrenUntilLast(first,last,select)) return;
+
+  cout << first->GetText() << " " << last->GetText() << " " << (int) select << endl;
+  TagNextChildren(first,last,select);  
+}
+
+void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId, 
+			    bool unselect_others, 
+			    bool extended_select)
+{ 
+    bool is_single=!(GetWindowStyleFlag() & wxTR_MULTIPLE);
+
+    //wxCHECK_RET( ( (!unselect_others) && is_single),
+    //           _T("this is a single selection tree") );
+
+    // to keep going anyhow !!!
+    if (is_single) 
+    {
+        unselect_others=true;
+        extended_select=false;
+    }
+
+    wxGenericTreeItem *item = itemId.m_pItem;
+    
     wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, GetId() );
     event.m_item = item;
     event.m_itemOld = m_current;
     event.SetEventObject( this );
+    // Here we don't send any selection mode yet ! TO SEE 
+    
+    if (m_current)
+      cout << m_current->GetText() << " " << (int)m_current->HasHilight() << endl;
+
     if ( GetEventHandler()->ProcessEvent( event ) && event.WasVetoed() )
       return;
 
-    if ( m_current )
+    if (m_current)
+    cout << m_current->GetText() << " " << (int)m_current->HasHilight() << endl;
+
+    // ctrl press
+    if (unselect_others)
     {
-      m_current->SetHilight( FALSE );
-      RefreshLine( m_current );
+        if (is_single) Unselect(); // to speed up thing
+	else UnselectAll();
     }
 
-    m_current = item;
-    m_current->SetHilight( TRUE );
-    RefreshLine( m_current );
+    // shift press
+    if (extended_select) 
+    {
+        if (m_current == NULL) m_current=GetRootItem().m_pItem;
+        // don't change the mark (m_current)
+        SelectItemRange(m_current, item);
+    }
+    else
+    {
+        bool select=true; // the default
+
+	// Check if we need to toggle hilight (ctrl mode)
+	if (!unselect_others)
+	  select=!item->HasHilight();
+
+        m_current = item;
+	m_current->SetHilight(select);
+	RefreshLine( m_current );
+    }
 
     event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
     GetEventHandler()->ProcessEvent( event );
-  }
 }
 
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
@@ -950,7 +1072,7 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
         int x_pos = GetScrollPos( wxHORIZONTAL );
         SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-client_h/2)/10 );
     }
-    else if (item_y > start_y+client_h-20)
+    else if (item_y > start_y+client_h-16)
     {
        int x = 0;
        int y = 0;
@@ -1295,6 +1417,10 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
         return;
     }
 
+    bool is_multiple=(GetWindowStyleFlag() & wxTR_MULTIPLE);
+    bool extended_select=(event.ShiftDown() && is_multiple);
+    bool unselect_others=!(extended_select || (event.ControlDown() && is_multiple));
+
     switch (event.KeyCode())
     {
         case '+':
@@ -1344,7 +1470,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                         if (current == GetFirstChild( prev, cockie ))
                         {
                             // otherwise we return to where we came from
-                            SelectItem( prev );
+                            SelectItem( prev, unselect_others, extended_select );
                             EnsureVisible( prev );
                             break;
 			}
@@ -1361,7 +1487,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                         }
                     }
 
-                    SelectItem( prev );
+                    SelectItem( prev, unselect_others, extended_select );
                     EnsureVisible( prev );
                 }
             }
@@ -1374,7 +1500,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                 if (prev)
                 {
                     EnsureVisible( prev );
-                    SelectItem( prev );
+                    SelectItem( prev, unselect_others, extended_select );
                 }
             }
             break;
@@ -1391,7 +1517,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                 {
                     long cookie = 0;
                     wxTreeItemId child = GetFirstChild( m_current, cookie );
-                    SelectItem( child );
+                    SelectItem( child, unselect_others, extended_select );
                     EnsureVisible( child );
                 }
                 else
@@ -1408,7 +1534,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                     }
                     if (next != 0)
                     {
-                        SelectItem( next );
+                        SelectItem( next, unselect_others, extended_select );
                         EnsureVisible( next );
                     }
                 }
@@ -1436,7 +1562,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                 if ( last.IsOk() )
                 {
                     EnsureVisible( last );
-                    SelectItem( last );
+                    SelectItem( last, unselect_others, extended_select );
                 }
             }
             break;
@@ -1448,7 +1574,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                 if (prev)
                 {
                     EnsureVisible( prev );
-                    SelectItem( prev );
+                    SelectItem( prev, unselect_others, extended_select );
                 }
             }
             break;
@@ -1505,8 +1631,11 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    if (!IsSelected(item))
-        SelectItem(item);  /* we dont support multiple selections, BTW */
+    bool is_multiple=(GetWindowStyleFlag() & wxTR_MULTIPLE);
+    bool extended_select=(event.ShiftDown() && is_multiple);
+    bool unselect_others=!(extended_select || (event.ControlDown() && is_multiple));
+
+    SelectItem(item, unselect_others, extended_select);
 
     if (event.LeftDClick())
     {

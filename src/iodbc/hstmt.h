@@ -26,10 +26,10 @@
 #ifndef	_HSTMT_H
 #define	_HSTMT_H
 
-#include	<config.h>
+#include	"config.h"
 
-#include	<isql.h>
-#include	<isqlext.h>
+#include	"isql.h"
+#include	"isqlext.h"
 
 typedef struct STMT
   {

@@ -107,8 +107,10 @@ void wxWindowBase::InitBase()
     // the default event handler is just this window
     m_eventHandler = this;
 
+#if wxUSE_VALIDATORS
     // no validator
     m_windowValidator = (wxValidator *) NULL;
+#endif // wxUSE_VALIDATORS
 
     // use the system default colours
     wxSystemSettings settings;
@@ -194,8 +196,10 @@ wxWindowBase::~wxWindowBase()
         delete m_caret;
 #endif // wxUSE_CARET
 
+#if wxUSE_VALIDATORS
     if ( m_windowValidator )
         delete m_windowValidator;
+#endif // wxUSE_VALIDATORS
 
     if ( m_clientObject )
         delete m_clientObject;
@@ -543,6 +547,7 @@ void wxWindowBase::SetCaret(wxCaret *caret)
 }
 #endif // wxUSE_CARET
 
+#if wxUSE_VALIDATORS
 // ----------------------------------------------------------------------------
 // validators
 // ----------------------------------------------------------------------------
@@ -557,6 +562,7 @@ void wxWindowBase::SetValidator(const wxValidator& validator)
     if ( m_windowValidator )
         m_windowValidator->SetWindow(this) ;
 }
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // update region testing
@@ -619,6 +625,7 @@ void wxWindowBase::MakeModal(bool WXUNUSED(modal))
 
 bool wxWindowBase::Validate()
 {
+#if wxUSE_VALIDATORS
     wxWindowList::Node *node;
     for ( node = m_children.GetFirst(); node; node = node->GetNext() )
     {
@@ -629,12 +636,14 @@ bool wxWindowBase::Validate()
             return FALSE;
         }
     }
+#endif // wxUSE_VALIDATORS
 
     return TRUE;
 }
 
 bool wxWindowBase::TransferDataToWindow()
 {
+#if wxUSE_VALIDATORS
     wxWindowList::Node *node;
     for ( node = m_children.GetFirst(); node; node = node->GetNext() )
     {
@@ -652,12 +661,14 @@ bool wxWindowBase::TransferDataToWindow()
             return FALSE;
         }
     }
+#endif // wxUSE_VALIDATORS
 
     return TRUE;
 }
 
 bool wxWindowBase::TransferDataFromWindow()
 {
+#if wxUSE_VALIDATORS
     wxWindowList::Node *node;
     for ( node = m_children.GetFirst(); node; node = node->GetNext() )
     {
@@ -668,6 +679,7 @@ bool wxWindowBase::TransferDataFromWindow()
             return FALSE;
         }
     }
+#endif // wxUSE_VALIDATORS
 
     return TRUE;
 }
@@ -1150,16 +1162,21 @@ void wxWindowBase::UpdateWindowUI()
             if ( event.GetSetText() && IsKindOf(CLASSINFO(wxControl)) )
                 ((wxControl*)this)->SetLabel(event.GetText());
 
+#if wxUSE_CHECKBOX
             if ( IsKindOf(CLASSINFO(wxCheckBox)) )
             {
                 if ( event.GetSetChecked() )
                     ((wxCheckBox *)this)->SetValue(event.GetChecked());
             }
-            else if ( IsKindOf(CLASSINFO(wxRadioButton)) )
+#endif // wxUSE_CHECKBOX
+
+#if wxUSE_RADIOBUTTON
+            if ( IsKindOf(CLASSINFO(wxRadioButton)) )
             {
                 if ( event.GetSetChecked() )
                     ((wxRadioButton *) this)->SetValue(event.GetChecked());
             }
+#endif // wxUSE_RADIOBUTTON
         }
     }
 }

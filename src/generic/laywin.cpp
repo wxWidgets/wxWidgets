@@ -9,7 +9,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -33,6 +33,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxQueryLayoutInfoEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxCalculateLayoutEvent, wxEvent)
 
+#if wxUSE_SASH
 IMPLEMENT_CLASS(wxSashLayoutWindow, wxSashWindow)
 
 BEGIN_EVENT_TABLE(wxSashLayoutWindow, wxSashWindow)
@@ -143,7 +144,7 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
         }
         case wxLAYOUT_NONE:
         {
-	    break;
+            break;
         }
 
     }
@@ -157,6 +158,7 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
 
     event.SetRect(clientSize);
 }
+#endif // wxUSE_SASH
 
 /*
  * wxLayoutAlgorithm
@@ -206,6 +208,7 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
     // reduce the available space to allow space for any active edges.
 
     int leftMargin = 0, rightMargin = 0, topMargin = 0, bottomMargin = 0;
+#if wxUSE_SASH
     if (parent->IsKindOf(CLASSINFO(wxSashWindow)))
     {
         wxSashWindow* sashWindow = (wxSashWindow*) parent;
@@ -224,6 +227,7 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
         if (sashWindow->GetSashVisible(wxSASH_BOTTOM))
             bottomMargin += sashWindow->GetDefaultBorderSize();
     }
+#endif // wxUSE_SASH
 
     int cw, ch;
     parent->GetClientSize(& cw, & ch);

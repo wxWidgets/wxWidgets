@@ -66,7 +66,7 @@ void wxDCBase::DrawPolygon(const wxList *list,
 }
 
 
-#ifdef wxUSE_SPLINES
+#if wxUSE_SPLINES
 
 // TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
 void wxDCBase::DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3)

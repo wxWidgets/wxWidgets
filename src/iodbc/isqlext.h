@@ -27,7 +27,7 @@
 #ifndef	_ISQLEXT_H
 # define _ISQLEXT_H
 
-#include <isql.h>
+#include "isql.h"
 
 /*
  *  Generic constants

@@ -137,7 +137,9 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
     PreCreation( parent, id, pos, size, style, name );
 
+#if wxUSE_VALIDATORS
     SetValidator( validator );
+#endif // wxUSE_VALIDATORS
 
     m_vScrollbarVisible = FALSE;
 

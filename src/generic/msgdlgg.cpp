@@ -150,7 +150,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString
         n++;
     }
     
-#ifdef __WXGTK__
+#if wxUSE_STATICLINE
     (void) new wxStaticLine( this, -1, wxPoint(0,y-20), wxSize(w+30, 5) );
 #endif
     

@@ -43,8 +43,8 @@
 #ifdef __WXGTK__
 
 extern "C" {
-#include <../iodbc/isql.h>
-#include <../iodbc/isqlext.h>
+#include "../../src/iodbc/isql.h"
+#include "../../src/iodbc/isqlext.h"
 typedef float         SFLOAT;
 typedef double        SDOUBLE;
 typedef unsigned int  UINT;

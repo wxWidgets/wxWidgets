@@ -39,6 +39,8 @@ public:
 	void OnListKeyDown(wxListEvent& event);
 	void OnActivated(wxListEvent& event);
 
+    void OnChar(wxKeyEvent& event);
+
    DECLARE_EVENT_TABLE()
 };
 

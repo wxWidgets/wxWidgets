@@ -323,6 +323,9 @@ public:
         // get the item currently selected (may return NULL if no selection)
     wxTreeItemId GetSelection() const { return m_current; }
 
+        // get the items currently selected, return the number of such item
+  //size_t GetSelections(wxArrayTreeItems*) const;
+
         // get the parent of this item (may return NULL if root)
     wxTreeItemId GetParent(const wxTreeItemId& item) const;
 
@@ -400,8 +403,9 @@ public:
 
         // remove the selection from currently selected item (if any)
     void Unselect();
+    void UnselectAll();
         // select this item
-    void SelectItem(const wxTreeItemId& item);
+    void SelectItem(const wxTreeItemId& item, bool unselect_others=true, bool extended_select=false);
         // make sure this item is visible (expanding the parent item and/or
         // scrolling to this item if necessary)
     void EnsureVisible(const wxTreeItemId& item);
@@ -484,6 +488,11 @@ protected:
 
     void RefreshSubtree( wxGenericTreeItem *item );
     void RefreshLine( wxGenericTreeItem *item );
+
+    void SelectItemRange( wxGenericTreeItem *item1, wxGenericTreeItem *item2 );
+    bool TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
+    bool TagNextChildren(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
+    void UnselectAllChildren( wxGenericTreeItem *item );
 
 private:
     DECLARE_EVENT_TABLE()

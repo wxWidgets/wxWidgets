@@ -25,9 +25,6 @@ WORDCHAR	[^'\\]
 
 #include "wx/expr.h"
 
-#ifdef wx_x
-extern char *malloc();
-#endif
 #define Return(x) return x;
 
 #if defined(VMS) && !defined(strdup)
@@ -40,10 +37,9 @@ static size_t lex_string_ptr = 0;
 static int lex_read_from_string = 0;
 
 static int my_input(void);
-static int my_unput(char);
 
 #ifdef FLEX_SCANNER
-#undef YY_INPUT
+# undef YY_INPUT
 # define YY_INPUT(buf,result,max_size) \
    if (lex_read_from_string) \
    {  int c = my_input(); result = (c == 0) ? YY_NULL : ((buf)[0]=(c), 1); } \
@@ -53,6 +49,7 @@ static int my_unput(char);
 #else
 # undef unput
 # define unput(_c) my_unput(_c)
+  static int my_unput(char);
 #endif
 
 %}
@@ -121,9 +118,6 @@ static int lex_input() {
 static int lex_input() {
   return input();
 }
-/* # undef unput
-# define unput(_c) my_unput(_c)
-*/
 
 # undef input
 # define input() my_input()

@@ -27,12 +27,7 @@ void yyerror(char *);
 /* You may need to put /DLEX_SCANNER in your makefile
  * if you're using LEX!
  */
-#ifdef LEX_SCANNER
-/* int yyoutput(int); */
 void yyoutput(int);
-#else
-void yyoutput(int);
-#endif
 
 #if defined(__cplusplus) || defined(__STDC__)
 #if defined(__cplusplus) && defined(__EXTERN_C__)

@@ -792,6 +792,7 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
     return ans;
 }
 
+#if wxUSE_TEXTDLG
 wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
                         const wxString& defaultValue, wxWindow *parent,
                         int x, int y, bool WXUNUSED(centre) )
@@ -802,6 +803,7 @@ wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
     else
         return wxString("");
 }
+#endif // wxUSE_TEXTDLG
 
 #ifdef __MWERKS__
 char *strdup(const char *s)

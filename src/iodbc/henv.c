@@ -24,17 +24,17 @@
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include	<config.h>
+#include	"config.h"
 
-#include	<isql.h>
-#include	<isqlext.h>
+#include	"isql.h"
+#include	"isqlext.h"
 
-#include	<dlproc.h>
+#include	"dlproc.h"
 
-#include	<herr.h>
-#include	<henv.h>
+#include	"herr.h"
+#include	"henv.h"
 
-#include	<itrace.h>
+#include	"itrace.h"
 
 RETCODE SQL_API 
 SQLAllocEnv (HENV FAR * phenv)

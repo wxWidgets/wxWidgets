@@ -161,7 +161,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
+                                wxTR_HAS_BUTTONS | wxSUNKEN_BORDER
+				| wxTR_MULTIPLE
+				);
     wxTextCtrl *textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);

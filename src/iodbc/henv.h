@@ -26,11 +26,11 @@
 #ifndef	_HENV_H
 #define	_HENV_H
 
-#include	<config.h>
-#include	<dlproc.h>
+#include	"config.h"
+#include	"dlproc.h"
 
-#include	<isql.h>
-#include	<isqlext.h>
+#include	"isql.h"
+#include	"isqlext.h"
 
 #ifndef SYSERR
 #define   SYSERR -1

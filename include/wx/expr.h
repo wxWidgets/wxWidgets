@@ -29,9 +29,6 @@
 #define yyoutput PROIO_yyoutput
 #define yylex PROIO_yylex
 #define yyerror PROIO_yyerror
-#define input PROIO_input
-#define unput PROIO_unput
-
 #define yyleng PROIO_yyleng
 #define yytext PROIO_yytext
 #define yymorfg PROIO_yymorfg

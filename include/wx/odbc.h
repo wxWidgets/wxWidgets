@@ -27,10 +27,10 @@
 
 #ifdef __WXGTK__
 extern "C" {
-#include <../iodbc/isql.h>
-#include <../iodbc/isqlext.h>
-#include <../iodbc/odbc_funcs.h>
-#include <../iodbc/odbc_types.h>
+#include "../../src/iodbc/isql.h"
+#include "../../src/iodbc/isqlext.h"
+#include "../../src/iodbc/odbc_funcs.h"
+#include "../../src/iodbc/odbc_types.h"
 typedef float   SFLOAT;
 typedef double  SDOUBLE;
 #define ULONG UDWORD

@@ -19,17 +19,21 @@
 #pragma interface "laywin.h"
 #endif
 
-#include "wx/sashwin.h"
+#if wxUSE_SASH
+    #include "wx/sashwin.h"
+#endif // wxUSE_SASH
 
 const wxEventType wxEVT_QUERY_LAYOUT_INFO =     wxEVT_FIRST + 1500;
 const wxEventType wxEVT_CALCULATE_LAYOUT =      wxEVT_FIRST + 1501;
 
-enum wxLayoutOrientation {
+enum wxLayoutOrientation
+{
     wxLAYOUT_HORIZONTAL,
     wxLAYOUT_VERTICAL
 };
 
-enum wxLayoutAlignment {
+enum wxLayoutAlignment
+{
     wxLAYOUT_NONE,
     wxLAYOUT_TOP,
     wxLAYOUT_LEFT,
@@ -128,6 +132,8 @@ typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEv
 
 #define EVT_CALCULATE_LAYOUT(func)  { wxEVT_CALCULATE_LAYOUT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCalculateLayoutEventFunction) & func, NULL },
 
+#if wxUSE_SASH
+
 // This is window that can remember alignment/orientation, does its own layout,
 // and can provide sashes too. Useful for implementing docked windows with sashes in
 // an IDE-style interface.
@@ -162,6 +168,8 @@ protected:
 
 DECLARE_EVENT_TABLE()
 };
+
+#endif // wxUSE_SASH
 
 class WXDLLEXPORT wxMDIParentFrame;
 class WXDLLEXPORT wxFrame;

@@ -12,9 +12,9 @@
 #ifndef _WX_WXCHAR_H_
 #define _WX_WXCHAR_H_
 
-#ifdef __GNUG__
-#pragma interface "wxchar.h"
-#endif
+//#ifdef __GNUG__
+//#pragma interface "wxchar.h"
+//#endif
 
 // only do SBCS or _UNICODE
 #if defined (_MBCS )

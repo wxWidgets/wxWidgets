@@ -37,12 +37,19 @@
 // file names) we drop on them
 // ----------------------------------------------------------------------------
 
+// FIXME this is ugly and should be fixed in the library itself
+#ifdef __WXMSW__
+    typedef long wxDropPointCoord;
+#else // wxGTK
+    typedef int wxDropPointCoord;
+#endif // MSW/GTK
+
 class DnDText : public wxTextDropTarget
 {
 public:
   DnDText(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropText(long x, long y, const wxChar* psz );
+  virtual bool OnDropText(wxDropPointCoord x, wxDropPointCoord y, const wxChar* psz );
 
 private:
   wxListBox *m_pOwner;
@@ -53,7 +60,7 @@ class DnDFile : public wxFileDropTarget
 public:
   DnDFile(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropFiles(long x, long y,
+  virtual bool OnDropFiles(wxDropPointCoord x, wxDropPointCoord y,
                            size_t nFiles, const wxChar* const aszFiles[] );
 
 private:
@@ -195,7 +202,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
   // associate drop targets with 2 text controls
   m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
-  m_ctrlText->SetDropTarget( new DnDText(m_ctrlText) );
+  m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
 
   wxLayoutConstraints *c;
 
@@ -349,14 +356,14 @@ DnDFrame::~DnDFrame()
 // ----------------------------------------------------------------------------
 // Notifications called by the base class
 // ----------------------------------------------------------------------------
-bool DnDText::OnDropText( long, long, const wxChar *psz )
+bool DnDText::OnDropText( wxDropPointCoord, wxDropPointCoord, const wxChar *psz )
 {
   m_pOwner->Append(psz);
 
   return TRUE;
 }
 
-bool DnDFile::OnDropFiles( long, long, size_t nFiles,
+bool DnDFile::OnDropFiles( wxDropPointCoord, wxDropPointCoord, size_t nFiles,
                            const wxChar* const aszFiles[])
 {
   wxString str;

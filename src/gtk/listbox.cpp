@@ -42,12 +42,14 @@ extern bool g_isIdle;
 //-------------------------------------------------------------------------
 
 #if (GTK_MINOR_VERSION > 0)
-#define NEW_GTK_SCROLL_CODE
+    #define NEW_GTK_SCROLL_CODE
 #endif
 
 //-----------------------------------------------------------------------------
 // private functions
 //-----------------------------------------------------------------------------
+
+#if wxUSE_CHECKLISTBOX
 
 #define CHECKBOX_STRING "[-] "
 
@@ -56,6 +58,12 @@ extern bool g_isIdle;
 //
 // the argument to it is a "const char *" pointer
 #define GET_REAL_LABEL(label) ((m_hasCheckBoxes)?(label)+4 : (label))
+
+#else // !wxUSE_CHECKLISTBOX
+
+#define GET_REAL_LABEL(label) (label)
+
+#endif // wxUSE_CHECKLISTBOX
 
 //-----------------------------------------------------------------------------
 // data
@@ -127,6 +135,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
 
     int sel = listbox->GetIndex( widget );
 
+#if wxUSE_CHECKLISTBOX
     if ((listbox->m_hasCheckBoxes) && (gdk_event->x < 15) && (gdk_event->type != GDK_2BUTTON_PRESS))
     {
         wxCheckListBox *clb = (wxCheckListBox *)listbox;
@@ -138,6 +147,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
         event.SetInt( sel );
         listbox->GetEventHandler()->ProcessEvent( event );
     }
+#endif // wxUSE_CHECKLISTBOX
     
     /* emit wxEVT_COMMAND_LISTBOX_DOUBLECLICKED later */
     g_hasDoubleClicked = (gdk_event->type == GDK_2BUTTON_PRESS);
@@ -160,6 +170,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 
     if (gdk_event->keyval != ' ') return FALSE;
 
+#if wxUSE_CHECKLISTBOX
     int sel = listbox->GetIndex( widget );
 
     wxCheckListBox *clb = (wxCheckListBox *)listbox;
@@ -170,6 +181,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
     event.SetEventObject( listbox );
     event.SetInt( sel );
     listbox->GetEventHandler()->ProcessEvent( event );
+#endif // wxUSE_CHECKLISTBOX
 
     return FALSE;
 }
@@ -216,7 +228,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
 wxListBox::wxListBox()
 {
     m_list = (GtkList *) NULL;
+#if wxUSE_CHECKLISTBOX
     m_hasCheckBoxes = FALSE;
+#endif // wxUSE_CHECKLISTBOX
 }
 
 bool wxListBox::Create( wxWindow *parent, wxWindowID id,
@@ -274,10 +288,12 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         GtkWidget *list_item;
 
         wxString str(choices[i]);
+#if wxUSE_CHECKLISTBOX
         if (m_hasCheckBoxes)
         {
             str.Prepend(CHECKBOX_STRING);
         }
+#endif // wxUSE_CHECKLISTBOX
 
         list_item = gtk_list_item_new_with_label( str.mbc_str() );
 
@@ -300,6 +316,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                             (GtkSignalFunc)gtk_listbox_button_release_callback,
                             (gpointer) this );
 
+#if wxUSE_CHECKLISTBOX
         if (m_hasCheckBoxes)
         {
             gtk_signal_connect( GTK_OBJECT(list_item),
@@ -307,6 +324,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                             (GtkSignalFunc)gtk_listbox_key_press_callback,
                             (gpointer)this );
         }
+#endif // wxUSE_CHECKLISTBOX
 
         ConnectWidget( list_item );
 
@@ -399,11 +417,13 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
 
         deletedData.Add(clientData);
 
+#if wxUSE_CHECKLISTBOX
         // save check state
         if ( m_hasCheckBoxes )
         {
             deletedChecks.Add(((wxCheckListBox *)this)->IsChecked(pos + n));
         }
+#endif // wxUSE_CHECKLISTBOX
     }
 
     int nDeletedCount = n;
@@ -422,10 +442,12 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
     {
         Append(deletedLabels[n], deletedData[n]);
 
+#if wxUSE_CHECKLISTBOX
         if ( m_hasCheckBoxes )
         {
             ((wxCheckListBox *)this)->Check(pos + n, (bool)deletedChecks[n]);
         }
+#endif // wxUSE_CHECKLISTBOX
     }
 }
 
@@ -436,10 +458,12 @@ void wxListBox::AppendCommon( const wxString &item )
     GtkWidget *list_item;
 
     wxString label(item);
+#if wxUSE_CHECKLISTBOX
     if (m_hasCheckBoxes)
     {
         label.Prepend(CHECKBOX_STRING);
     }
+#endif // wxUSE_CHECKLISTBOX
 
     list_item = gtk_list_item_new_with_label( label.mbc_str() );
 
@@ -462,6 +486,7 @@ void wxListBox::AppendCommon( const wxString &item )
                         (GtkSignalFunc)gtk_listbox_button_release_callback,
                         (gpointer) this );
 
+#if wxUSE_CHECKLISTBOX
     if (m_hasCheckBoxes)
     {
        gtk_signal_connect( GTK_OBJECT(list_item),
@@ -469,6 +494,7 @@ void wxListBox::AppendCommon( const wxString &item )
                            (GtkSignalFunc)gtk_listbox_key_press_callback,
                            (gpointer)this );
     }
+#endif // wxUSE_CHECKLISTBOX
 
     gtk_widget_show( list_item );
 
@@ -785,8 +811,10 @@ void wxListBox::SetString( int n, const wxString &string )
         GtkLabel *label = GTK_LABEL( bin->child );
 
         wxString str;
+#if wxUSE_CHECKLISTBOX
         if (m_hasCheckBoxes)
             str += CHECKBOX_STRING;
+#endif // wxUSE_CHECKLISTBOX
         str += string;
 
         gtk_label_set( label, str.mbc_str() );

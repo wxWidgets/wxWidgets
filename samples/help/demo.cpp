@@ -34,8 +34,7 @@
     #include "wx/wx.h"
 #endif
 
-#include   "wx/helpbase.h"
-#include   "wx/help.h"
+#include "wx/help.h"
 
 // ----------------------------------------------------------------------------
 // ressources

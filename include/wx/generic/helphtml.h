@@ -5,8 +5,9 @@
  *                                                                  *
  * $Id$
  *******************************************************************/
-#ifndef WXXHELPHTML_H
-#define WXXHELPHTML_H
+
+#ifndef __WX_HELPHTML_H_
+#define __WX_HELPHTML_H_
 
 #if wxUSE_HELP
 
@@ -25,7 +26,7 @@
 /// Character introducing comments/documentation field in map file.
 #define WXEXTHELP_COMMENTCHAR   ';'
 
-class wxExtHelpMapList;
+class WXDLLEXPORT wxExtHelpMapList;
 
 
 /**
@@ -47,8 +48,8 @@ class wxExtHelpMapList;
    Lines starting with ';' will be ignored.
 */
 
-class wxHTMLHelpControllerBase : public wxHelpControllerBase
-{      
+class WXDLLEXPORT wxHTMLHelpControllerBase : public wxHelpControllerBase
+{
 DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
    public:
    wxHTMLHelpControllerBase(void);
@@ -67,7 +68,7 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
    */
    virtual bool Initialize(const wxString& dir, int WXUNUSED(server))
       { return Initialize(dir); }
-      
+
    /** This must be called to tell the controller where to find the
        documentation.
        If a locale is set, look in file/localename, i.e.
@@ -79,7 +80,7 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
        @return true on success
    */
    virtual bool Initialize(const wxString& dir);
-  
+
    /** If file is "", reloads file given in Initialize.
        @file Name of help directory.
        @return true on success
@@ -124,5 +125,6 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
    void DeleteList(void);
 };
 
-#endif  
-#endif
+#endif // wxUSE_HELP
+
+#endif // __WX_HELPHTML_H_
