@@ -53,7 +53,7 @@
 
     foreach $file (sort keys %wxUNIV) {
         ($fileobj = $file) =~ s/cp?p?$/\o/;
-	my $tag = $wxUNIV{$file} =~ /Theme/ ? "WXUNIVTHEMEOBJS" : "WXUNIVOBJS";
+	my $tag = $wxUNIV{$file} =~ /T/ ? "WXUNIVTHEMEOBJS" : "WXUNIVOBJS";
 
         $file =~ s/cp?p?$/obj/;
         $project{$tag} .= $file . " ";
