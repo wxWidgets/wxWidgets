@@ -85,7 +85,8 @@ class TestPanel(wx.Panel):
         pos = evt.GetPosition()
         item, flags, col = self.tree.HitTest(pos)
         if item:
-            print flags, col, self.tree.GetItemText(item, col)
+            self.log.write('Flags: %s, Col:%s, Text: %s' %
+                           (flags, col, self.tree.GetItemText(item, col)))
 
     def OnSize(self, evt):
         self.tree.SetSize(self.GetSize())

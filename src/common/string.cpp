@@ -968,7 +968,6 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
     wxCharBuffer inBuf((const char *)NULL);
     if (nLength != npos)
     {
-        wxASSERT( psz != NULL );
         wxCharBuffer tmp(nLength);
         memcpy(tmp.data(), psz, nLength);
         tmp.data()[nLength] = '\0';
@@ -1026,7 +1025,6 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
     wxWCharBuffer inBuf((const wchar_t *)NULL);
     if (nLength != npos)
     {
-        wxASSERT( pwz != NULL );
         wxWCharBuffer tmp(nLength);
         memcpy(tmp.data(), pwz, nLength * sizeof(wchar_t));
         tmp.data()[nLength] = '\0';

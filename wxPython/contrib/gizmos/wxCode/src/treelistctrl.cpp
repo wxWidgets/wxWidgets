@@ -4909,10 +4909,16 @@ wxTreeItemId wxTreeListCtrl::FindItem (const wxTreeItemId& item, const wxString&
 { return m_main_win->FindItem (item, str, flags); }
 
 bool wxTreeListCtrl::SetBackgroundColour(const wxColour& colour)
-{ return m_main_win->SetBackgroundColour(colour); }
+{ 
+    if (!m_main_win) return false;
+    return m_main_win->SetBackgroundColour(colour); 
+}
 
 bool wxTreeListCtrl::SetForegroundColour(const wxColour& colour)
-{ return m_main_win->SetForegroundColour(colour); }
+{ 
+    if (!m_main_win) return false;
+    return m_main_win->SetForegroundColour(colour); 
+}
 
 size_t wxTreeListCtrl::GetColumnCount() const
 { return m_main_win->GetColumnCount(); }
