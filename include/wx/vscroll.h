@@ -32,7 +32,7 @@
    horizontal scrolling; it can't scroll another window nor only a rectangle
    of the window and not its entire client area.
  */
-class wxVScrolledWindow : public wxPanel
+class WXDLLEXPORT wxVScrolledWindow : public wxPanel
 {
 public:
     // constructors and such
