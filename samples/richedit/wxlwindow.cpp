@@ -711,10 +711,6 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
 
             default:
                if((!(event.ControlDown() || event.AltDown()
-//#if 0
-                     ///FIXME: wxGTK reports MetaDown always
-                     || event.MetaDown()
-//#endif
                   ))
                   && (keyCode < 256 && keyCode >= 32)
                   )
@@ -862,19 +858,9 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
                   updateRect->x+updateRect->width,
                   updateRect->y+updateRect->height));
    }
-   if(IsDirty())
-   {
-      WXLO_DEBUG(("InternalPaint, isdirty, list size: %ld,%ld",
-                  (unsigned long) m_llist->GetSize().x,
-                  (unsigned long) m_llist->GetSize().y));
-//      m_llist->ForceTotalLayout();
-      m_llist->Layout(dc);
-      WXLO_DEBUG(("InternalPaint, isdirty, list size after layout: %ld,%ld",
-                  (unsigned long) m_llist->GetSize().x,
-                  (unsigned long) m_llist->GetSize().y));
-      ResizeScrollbars();
-      ResetDirty();
-   }
+
+   ResizeScrollbars();
+
    
    /* Check whether the window has grown, if so, we need to reallocate
       the bitmap to be larger. */
@@ -999,20 +985,24 @@ wxLayoutWindow::OnSize(wxSizeEvent &event)
    event.Skip();
 }
 
-// change the range and position of scrollbars
+/*
+Change the range and position of scrollbars. Has evolved into a
+generic Update function which will at some time later cause a repaint
+as needed. 
+*/
+
 void
 wxLayoutWindow::ResizeScrollbars(bool exact)
 {
 
-   if(IsDirty())
-   {
-      wxClientDC dc( this );
-      PrepareDC( dc );
+   if(! IsDirty())
+      return;
+   
+   wxClientDC dc( this );
+   PrepareDC( dc );
 //      m_llist->ForceTotalLayout();
-      m_llist->Layout(dc);
-      ResetDirty();
-      RequestUpdate();
-   }
+   m_llist->Layout(dc);
+   ResetDirty();
    
    wxPoint max = m_llist->GetSize();
    wxSize size = GetClientSize();
@@ -1028,7 +1018,11 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 
    // check if the text hasn't become too big
    // TODO why do we set both at once? they're independent...
-   if( max.x > m_maxx - WXLO_ROFFSET || max.y > m_maxy - WXLO_BOFFSET || exact )
+   if( max.x > m_maxx - WXLO_ROFFSET
+       || max.y > m_maxy - WXLO_BOFFSET
+       || max.x < m_maxx - X_SCROLL_PAGE
+       || max.y < m_maxy - Y_SCROLL_PAGE
+       || exact )
    {
       // text became too large
       if ( !exact )
@@ -1038,47 +1032,35 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
          max.y += WXLO_BOFFSET;
       }
 
-      ViewStart(&m_ViewStartX, &m_ViewStartY);
-      SetScrollbars(X_SCROLL_PAGE, Y_SCROLL_PAGE,
-                    max.x / X_SCROLL_PAGE + 1, max.y / Y_SCROLL_PAGE + 1,
-                    m_ViewStartX, m_ViewStartY,
-                    true);
-
-      m_hasHScrollbar =
-      m_hasVScrollbar = true;
+      bool done = FALSE;
+      if(max.x < X_SCROLL_PAGE)
+      {
+         SetScrollbars(0,-1,0,-1,0,-1,true);
+         m_hasHScrollbar = FALSE;
+         done = TRUE;
+      }
+      if(max.y < Y_SCROLL_PAGE)
+      {
+         SetScrollbars(-1,0,-1,0,-1,0,true);
+         m_hasVScrollbar = FALSE;
+         done = TRUE;
+      }
+      if(! done)
+      {
+         ViewStart(&m_ViewStartX, &m_ViewStartY);
+         SetScrollbars(X_SCROLL_PAGE,
+                       Y_SCROLL_PAGE,
+                       max.x / X_SCROLL_PAGE + 1,
+                       max.y / Y_SCROLL_PAGE + 1,
+                       m_ViewStartX, m_ViewStartY,
+                       true);
+         m_hasHScrollbar =
+            m_hasVScrollbar = true;
+      }
 
       m_maxx = max.x + X_SCROLL_PAGE;
       m_maxy = max.y + Y_SCROLL_PAGE;
    }
-#if 0
-   //FIXME: this code is pretty broken, producing "arithmetic
-   //exception" crashes (div by 0??)
-   else
-   {
-      // check if the window hasn't become too big, thus making the scrollbars
-      // unnecessary
-      if ( !exact )
-      {
-         // add an extra bit to the sizes to avoid future updates
-         max.x -= WXLO_ROFFSET;
-         max.y -= WXLO_BOFFSET;
-      }
-
-      if ( m_hasHScrollbar && (max.x < m_maxx) )
-      {
-         // remove the horizontal scrollbar
-         SetScrollbars(0, -1, 0, -1, 0, -1, true);
-         m_hasHScrollbar = false;
-      }
-
-      if ( m_hasVScrollbar && (max.y < m_maxy) )
-      {
-         // remove the vertical scrollbar
-         SetScrollbars(-1, 0, -1, 0, -1, 0, true);
-         m_hasVScrollbar = false;
-      }
-   }
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1090,13 +1072,11 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 void
 wxLayoutWindow::Paste(bool primary)
 {
+   // this only has an effect under X11:
+   if(primary) wxTheClipboard->UsePrimarySelection();
    // Read some text
    if (wxTheClipboard->Open())
    {
-#if __WXGTK__
-      if(primary)
-         wxTheClipboard->UsePrimarySelection();
-#endif
 #if wxUSE_PRIVATE_CLIPBOARD_FORMAT
       wxLayoutDataObject wxldo;
       if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
