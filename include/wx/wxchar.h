@@ -302,7 +302,7 @@ typedef  _TUCHAR     wxUChar;
 // include wchar.h to get wcslen() declaration used by wx/buffer.h
 #        include <wchar.h>
 
-#      elif defined(__FreeBSD__) || defined(__DARWIN__)
+#      elif defined(__FreeBSD__) || defined(__DARWIN__) || defined(__EMX__)
 
 // include stdlib.h for wchar_t, wcslen is provided in wxchar.cpp
 #        include <stdlib.h>
