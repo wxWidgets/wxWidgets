@@ -75,6 +75,8 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
     EVT_MENU( ID_TOGGLEGRIDLINES, GridFrame::ToggleGridLines )
     EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
+    EVT_MENU( ID_CELLOVERFLOW, GridFrame::CellOverflow )
+    EVT_MENU( ID_RESIZECELL, GridFrame::ResizeCell )
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
     EVT_MENU( ID_SETLABEL_FONT, GridFrame::SetLabelFont )
@@ -153,6 +155,8 @@ GridFrame::GridFrame()
     viewMenu->Append( ID_SET_HIGHLIGHT_WIDTH, "&Set Cell Highlight Width...", "" );
     viewMenu->Append( ID_SET_RO_HIGHLIGHT_WIDTH, "&Set Cell RO Highlight Width...", "" );
     viewMenu->Append( ID_AUTOSIZECOLS, "&Auto-size cols" );
+    viewMenu->Append( ID_CELLOVERFLOW, "&Overflow cells", "", TRUE );
+    viewMenu->Append( ID_RESIZECELL, "&Resize cell (7,1)", "", TRUE );
 
     wxMenu *rowLabelMenu = new wxMenu;
 
@@ -261,6 +265,12 @@ GridFrame::GridFrame()
 
     grid->SetRowSize( 99, 60 );
     grid->SetCellValue( 99, 99, "Ctrl+End\nwill go to\nthis cell" );
+    grid->SetCellValue( 1, 0, "This default cell will overflow into neighboring cells, but not if you turn overflow off.");
+
+    grid->SetCellTextColour(1, 2, *wxRED);
+    grid->SetCellBackgroundColour(1, 2, *wxGREEN);
+
+    grid->SetCellValue( 1, 4, "I'm in the middle");
 
     grid->SetCellValue(2, 2, "red");
 
@@ -291,7 +301,7 @@ GridFrame::GridFrame()
 
     grid->SetCellTextColour(5, 8, *wxGREEN);
     grid->SetCellValue(5, 8, "Bg from row attr\nText col from cell attr");
-    grid->SetCellValue(5, 5, "Bg from row attr\nText col from col attr");
+    grid->SetCellValue(5, 5, "Bg from row attr Text col from col attr and this text is so long that it covers over many many empty cells but is broken by one that isn't");
 
     grid->SetColFormatFloat(6);
     grid->SetCellValue(0, 6, "3.1415");
@@ -302,6 +312,21 @@ GridFrame::GridFrame()
     grid->SetCellValue(0, 7, "3.1415");
     grid->SetCellValue(1, 7, "1415");
     grid->SetCellValue(2, 7, "12345.67890");
+
+    const wxString choices[] =
+    {
+        _T("Please select a choice"),
+        _T("This takes two cells"),
+        _T("Another choice"),
+    };
+    grid->SetCellEditor(4, 0, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
+    grid->SetCellSize(4, 0, 1, 2);
+    grid->SetCellValue(4, 0, choices[0]);
+    grid->SetCellOverflow(4, 0, FALSE);
+
+    grid->SetCellSize(7, 1, 3, 4);
+    grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
+    grid->SetCellValue(7, 1, "Big box!");
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
@@ -338,6 +363,7 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, TRUE );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, TRUE );
     GetMenuBar()->Check( ID_TOGGLEGRIDLINES, TRUE );
+    GetMenuBar()->Check( ID_CELLOVERFLOW, TRUE );
 }
 
 
@@ -436,6 +462,20 @@ void GridFrame::AutoSizeCols( wxCommandEvent& WXUNUSED(ev) )
     grid->Refresh();
 }
 
+void GridFrame::CellOverflow( wxCommandEvent& ev )
+{
+    grid->SetDefaultCellOverflow(ev.IsChecked());
+    grid->Refresh();
+}
+
+void GridFrame::ResizeCell( wxCommandEvent& ev )
+{
+    if (ev.IsChecked())
+        grid->SetCellSize( 7, 1, 5, 5 );
+    else
+        grid->SetCellSize( 7, 1, 1, 5 );
+    grid->Refresh();
+}
 
 void GridFrame::SetLabelColour( wxCommandEvent& WXUNUSED(ev) )
 {

@@ -42,6 +42,8 @@ class GridFrame : public wxFrame
     void ToggleGridSizing( wxCommandEvent& );
     void ToggleGridLines( wxCommandEvent& );
     void AutoSizeCols( wxCommandEvent& );
+    void CellOverflow( wxCommandEvent& );
+    void ResizeCell( wxCommandEvent& );
     void SetLabelColour( wxCommandEvent& );
     void SetLabelTextColour( wxCommandEvent& );
     void SetLabelFont(wxCommandEvent &);
@@ -107,6 +109,8 @@ public:
         ID_TOGGLEGRIDSIZING,
         ID_TOGGLEGRIDLINES,
         ID_AUTOSIZECOLS,
+        ID_CELLOVERFLOW,
+        ID_RESIZECELL,
         ID_SETLABELCOLOUR,
         ID_SETLABELTEXTCOLOUR,
         ID_SETLABEL_FONT,
