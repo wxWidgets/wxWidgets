@@ -1398,8 +1398,19 @@ no effect on other platforms.
         "Returns the background style of the window.
 
 :see: `SetBackgroundStyle`", "");
-    
 
+    
+    DocDeclStr(
+        bool , HasTransparentBackground(),
+        "Returns True if this window's background is transparent (as, for
+example, for `wx.StaticText`) and should show the parent window's
+background.
+
+This method is mostly used internally by the library itself and you
+normally shouldn't have to call it. You may, however, have to override
+it in your custom control classes to ensure that background is painted
+correctly.", "");
+    
     
     DocDeclStr(
         virtual bool , SetCursor( const wxCursor &cursor ),
