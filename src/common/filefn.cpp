@@ -99,7 +99,7 @@
 #endif
 
 #ifdef __WINDOWS__
-    #include "windows.h"
+    #include <windows.h>
 #endif
 
 // ----------------------------------------------------------------------------

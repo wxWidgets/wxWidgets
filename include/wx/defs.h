@@ -224,8 +224,13 @@
 #include "wx/setup.h"
 
 // just in case they were defined in setup.h
+#ifdef PACKAGE
 #undef PACKAGE
+#endif
+
+#ifdef VERSION
 #undef VERSION
+#endif
 
 // this has to be done after including setup.h which might
 // define __HPUX__ 1 itself
@@ -1808,7 +1813,7 @@ typedef void *          WXLPCREATESTRUCT;
 typedef unsigned long   WXMPARAM;
 typedef unsigned long   WXMSGID;
 typedef void*           WXRESULT;
-typedef int             (*WXFARPROC)();
+//typedef int             (*WXFARPROC)();
 // some windows handles not defined by PM
 typedef unsigned long   HANDLE;
 typedef unsigned long   HICON;
