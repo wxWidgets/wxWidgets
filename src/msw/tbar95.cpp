@@ -705,11 +705,14 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
         {
             ttText->lpszText = (wxChar *)help.c_str();
         }
-#if (_WIN32_IE >= 0x0300)
         else
         {
-            // FIXME this is a temp hack only until I understand better what
-            //       must be done in both ANSI and Unicode builds
+            // VZ: I don't know why it happens, but the versions of
+            //     comctl32.dll starting from 4.70 sometimes send TTN_NEEDTEXTW 
+            //     even to ANSI programs (normally, this message is supposed
+            //     to be sent to Unicode programs only) - hence we need to
+            //     handle it as well, otherwise no tooltips will be shown in
+            //     this case
 
             size_t lenAnsi = help.Len();
             #ifdef __MWERKS__
@@ -731,7 +734,6 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 
             delete [] pwz;
         }
-#endif // _WIN32_IE >= 0x0300
     }
 
     // For backward compatibility...
