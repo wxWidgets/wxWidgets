@@ -101,6 +101,7 @@ GENERICOBJS= \
   ..\generic\$D\choicdgg.obj \
   ..\generic\$D\colrdlgg.obj \
   ..\generic\$D\dcpsg.obj \
+  ..\generic\$D\dirdlgg.obj \
   ..\generic\$D\dirctrlg.obj \
   ..\generic\$D\dragimgg.obj \
   ..\generic\$D\fontdlgg.obj \
@@ -148,6 +149,7 @@ GENLIBOBJS= \
   choicdgg.obj \
   colrdlgg.obj \
   dcpsg.obj \
+  dirdlgg.obj \
   dirctrlg.obj \
   dragimgg.obj \
   fontdlgg.obj \
@@ -476,7 +478,6 @@ OS2OBJS = \
   ..\os2\$D\dcscreen.obj \
   ..\os2\$D\dialog.obj \
   ..\os2\$D\dir.obj \
-  ..\os2\$D\dirdlg.obj \
   ..\os2\$D\dnd.obj \
   ..\os2\$D\filedlg.obj \
   ..\os2\$D\font.obj \
@@ -559,7 +560,6 @@ OS2LIBOBJS1 = \
   dcscreen.obj \
   dialog.obj \
   dir.obj \
-  dirdlg.obj \
   dnd.obj \
   filedlg.obj \
   font.obj \
@@ -580,10 +580,10 @@ OS2LIBOBJS1 = \
   main.obj \
   mdi.obj \
   menu.obj \
-  menuitem.obj
+  menuitem.obj \
+  metafile.obj
 
 OS2LIBOBJS2 = \
-  metafile.obj \
   mimetype.obj \
   minifram.obj \
   msgdlg.obj \
@@ -639,6 +639,7 @@ HTMLOBJS = \
   ..\html\$D\m_list.obj \
   ..\html\$D\m_meta.obj \
   ..\html\$D\m_pre.obj \
+  ..\html\$D\m_style.obj \
   ..\html\$D\m_tables.obj \
   ..\html\$D\winpars.obj
 
@@ -661,6 +662,7 @@ HTMLLIBOBJS = \
   m_list.obj \
   m_meta.obj \
   m_pre.obj \
+  m_style.obj \
   m_tables.obj \
   winpars.obj
 
@@ -827,6 +829,7 @@ $(GENLIBOBJS):
   copy ..\generic\$D\colrdlgg.obj
   copy ..\generic\$D\dragimgg.obj
   copy ..\generic\$D\dcpsg.obj
+  copy ..\generic\$D\dirdlgg.obj
   copy ..\generic\$D\dirctrlg.obj
   copy ..\generic\$D\fontdlgg.obj
   copy ..\generic\$D\fdrepdlg.obj
@@ -882,6 +885,7 @@ $(HTMLLIBOBJS):
   copy ..\html\$D\m_list.obj
   copy ..\html\$D\m_meta.obj
   copy ..\html\$D\m_pre.obj
+  copy ..\html\$D\m_style.obj
   copy ..\html\$D\m_tables.obj
   copy ..\html\$D\winpars.obj
 
@@ -909,7 +913,6 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\dcscreen.obj
   copy ..\os2\$D\dialog.obj
   copy ..\os2\$D\dir.obj
-  copy ..\os2\$D\dirdlg.obj
   copy ..\os2\$D\dnd.obj
   copy ..\os2\$D\filedlg.obj
   copy ..\os2\$D\font.obj
@@ -931,9 +934,9 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\mdi.obj
   copy ..\os2\$D\menu.obj
   copy ..\os2\$D\menuitem.obj
+  copy ..\os2\$D\metafile.obj
 
 $(OS2LIBOBJS2):
-  copy ..\os2\$D\metafile.obj
   copy ..\os2\$D\mimetype.obj
   copy ..\os2\$D\minifram.obj
   copy ..\os2\$D\msgdlg.obj

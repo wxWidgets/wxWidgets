@@ -1341,10 +1341,6 @@ EXPORTS
       ;wxDocument::OnOpenDocument(const wxString&)
       OnOpenDocument__10wxDocumentFRC8wxString
   ;From object file:  ..\common\dseldlg.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxDirSelector(const wxString&,const wxString&,long,const wxPoint&,wxWindow*)
-      wxDirSelector__FRC8wxStringT1lRC7wxPointP8wxWindow
-      wxDirSelectorPromptStr
   ;From object file:  ..\common\dynarray.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxBaseArray::Add(long)
@@ -7361,98 +7357,8 @@ EXPORTS
       DoDrawText__14wxPostScriptDCFRC8wxStringiT2
       ;wxPostScriptDC::ms_PSScaleFactor
       ms_PSScaleFactor__14wxPostScriptDC
+  ;From object file:  ..\generic\dirdlgg.cpp
   ;From object file:  ..\generic\dirctrlg.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxDirItemData::wxDirItemData(const wxString&,const wxString&,unsigned long)
-      __ct__13wxDirItemDataFRC8wxStringT1Ul
-      ;wxGenericDirCtrl::sm_eventTableEntries
-      sm_eventTableEntries__16wxGenericDirCtrl
-      ;wxGenericDirCtrl::sm_classwxGenericDirCtrl
-      sm_classwxGenericDirCtrl__16wxGenericDirCtrl
-      ;wxDirFilterListCtrl::sm_classwxDirFilterListCtrl
-      sm_classwxDirFilterListCtrl__19wxDirFilterListCtrl
-      __vft19wxDirFilterListCtrl8wxObject
-      __vft16wxGenericDirCtrl8wxObject
-      ;setdrive(int)
-      setdrive__Fi
-      ;wxDirFilterListCtrl::Init()
-      Init__19wxDirFilterListCtrlFv
-      ;wxConstructorForwxGenericDirCtrl()
-      wxConstructorForwxGenericDirCtrl__Fv
-      ;wxGenericDirCtrl::wxGenericDirCtrl()
-      __ct__16wxGenericDirCtrlFv
-      ;wxDirItemData::SetNewDirName(const wxString&)
-      SetNewDirName__13wxDirItemDataFRC8wxString
-      ;wxGenericDirCtrl::ExpandPath(const wxString&)
-      ExpandPath__16wxGenericDirCtrlFRC8wxString
-      ;wxDirFilterListCtrl::Create(wxGenericDirCtrl*,const int,const wxPoint&,const wxSize&,long)
-      Create__19wxDirFilterListCtrlFP16wxGenericDirCtrlCiRC7wxPointRC6wxSizel
-      ;wxGenericDirCtrl::sm_eventTable
-      sm_eventTable__16wxGenericDirCtrl
-      ;wxGenericDirCtrl::OnSize(wxSizeEvent&)
-      OnSize__16wxGenericDirCtrlFR11wxSizeEvent
-      ;wxGenericDirCtrl::OnEndEditItem(wxTreeEvent&)
-      OnEndEditItem__16wxGenericDirCtrlFR11wxTreeEvent
-      __vft13wxDirItemData12wxClientData
-      ;wxGenericDirCtrl::Init()
-      Init__16wxGenericDirCtrlFv
-      __vft19wxDirFilterListCtrl15wxItemContainer
-      ;wxDirItemData::~wxDirItemData()
-      __dt__13wxDirItemDataFv
-      ;wxGenericDirCtrl::ParseFilter(const wxString&,wxArrayString&,wxArrayString&)
-      ParseFilter__16wxGenericDirCtrlFRC8wxStringR13wxArrayStringT2
-      ;wxDirFilterListCtrl::GetEventTable() const
-      GetEventTable__19wxDirFilterListCtrlCFv
-      ;wxGenericDirCtrl::ExpandDir(wxTreeItemId)
-      ExpandDir__16wxGenericDirCtrlF12wxTreeItemId
-      ;wxDirFilterListCtrl::sm_eventTableEntries
-      sm_eventTableEntries__19wxDirFilterListCtrl
-      ;wxDirFilterListCtrl::OnSelFilter(wxCommandEvent&)
-      OnSelFilter__19wxDirFilterListCtrlFR14wxCommandEvent
-      ;wxGenericDirCtrl::SetFilterIndex(int)
-      SetFilterIndex__16wxGenericDirCtrlFi
-      ;wxDirFilterListCtrl::FillFilterList(const wxString&,int)
-      FillFilterList__19wxDirFilterListCtrlFRC8wxStringi
-      ;wxGenericDirCtrl::SetupSections()
-      SetupSections__16wxGenericDirCtrlFv
-      ;wxGenericDirCtrl::ShowHidden(unsigned long)
-      ShowHidden__16wxGenericDirCtrlFUl
-      ;wxGenericDirCtrl::OnCollapseItem(wxTreeEvent&)
-      OnCollapseItem__16wxGenericDirCtrlFR11wxTreeEvent
-      ;wxDirItemData::HasSubDirs() const
-      HasSubDirs__13wxDirItemDataCFv
-      ;wxGenericDirCtrl::GetPath() const
-      GetPath__16wxGenericDirCtrlCFv
-      ;wxGenericDirCtrl::GetFilePath() const
-      GetFilePath__16wxGenericDirCtrlCFv
-      ;wxGenericDirCtrl::Create(wxWindow*,const int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&,int,const wxString&)
-      Create__16wxGenericDirCtrlFP8wxWindowCiRC8wxStringRC7wxPointRC6wxSizelT3iT3
-      ;wxIsDriveAvailable(const wxString&)
-      wxIsDriveAvailable__FRC8wxString
-      ;wxGenericDirCtrl::SetPath(const wxString&)
-      SetPath__16wxGenericDirCtrlFRC8wxString
-      ;wxGenericDirCtrl::SetFilter(const wxString&)
-      SetFilter__16wxGenericDirCtrlFRC8wxString
-      ;wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent&)
-      OnBeginEditItem__16wxGenericDirCtrlFR11wxTreeEvent
-      ;wxDirFilterListCtrl::sm_eventTable
-      sm_eventTable__19wxDirFilterListCtrl
-      ;wxGenericDirCtrl::OnExpandItem(wxTreeEvent&)
-      OnExpandItem__16wxGenericDirCtrlFR11wxTreeEvent
-      ;wxGenericDirCtrl::FindChild(wxTreeItemId,const wxString&,unsigned long&)
-      FindChild__16wxGenericDirCtrlF12wxTreeItemIdRC8wxStringRUl
-      ;wxGenericDirCtrl::AddSection(const wxString&,const wxString&,int)
-      AddSection__16wxGenericDirCtrlFRC8wxStringT1i
-      ;wxGenericDirCtrl::GetEventTable() const
-      GetEventTable__16wxGenericDirCtrlCFv
-      ;wxGenericDirCtrl::~wxGenericDirCtrl()
-      __dt__16wxGenericDirCtrlFv
-      ;wxGenericDirCtrl::DoResize()
-      DoResize__16wxGenericDirCtrlFv
-      ;wxDirItemData::HasFiles(const wxString&) const
-      HasFiles__13wxDirItemDataCFRC8wxString
-      ;wxGenericDirCtrl::ExtractWildcard(const wxString&,int,wxString&,wxString&)
-      ExtractWildcard__16wxGenericDirCtrlFRC8wxStringiR8wxStringT3
   ;From object file:  ..\generic\dragimgg.cpp
   ;From object file:  ..\generic\fontdlgg.cpp
     ;PUBDEFs (Symbols available from object file):
@@ -10192,7 +10098,6 @@ EXPORTS
       ;wxGenericTreeCtrl::FillArray(wxGenericTreeItem*,wxArrayTreeItemIds&) const
       FillArray__17wxGenericTreeCtrlCFP17wxGenericTreeItemR18wxArrayTreeItemIds
   ;From object file:  ..\generic\treelay.cpp
-  ;From object file:  ..\generic\wizard.cpp
   ;From object file:  ..\html\helpctrl.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxHtmlHelpController::DisplayTextPopup(const wxString&,const wxPoint&)
@@ -10910,6 +10815,14 @@ EXPORTS
       _link_dummy_func_m_pre__Fv
       ;wxConstructorForHTML_ModulePre()
       wxConstructorForHTML_ModulePre__Fv
+  ;From object file:  ..\html\m_style.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;HTML_ModuleStyleTag::sm_classHTML_ModuleStyleTag
+      sm_classHTML_ModuleStyleTag__19HTML_ModuleStyleTag
+      ;_link_dummy_func_m_style()
+      _link_dummy_func_m_style__Fv
+      ;wxConstructorForHTML_ModuleStyleTag()
+      wxConstructorForHTML_ModuleStyleTag__Fv
   ;From object file:  ..\html\m_tables.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxHtmlTableCell::ReallocRows(int)
@@ -12109,15 +12022,6 @@ EXPORTS
       Open__5wxDirFRC8wxString
       ;wxDir::GetName() const
       GetName__5wxDirCFv
-  ;From object file:  ..\os2\dirdlg.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxDirDialog::sm_classwxDirDialog
-      sm_classwxDirDialog__11wxDirDialog
-      __vft11wxDirDialog8wxObject
-      ;wxDirDialog::ShowModal()
-      ShowModal__11wxDirDialogFv
-      ;wxDirDialog::wxDirDialog(wxWindow*,const wxString&,const wxString&,long,const wxPoint&)
-      __ct__11wxDirDialogFP8wxWindowRC8wxStringT2lRC7wxPoint
   ;From object file:  ..\os2\dnd.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDropTarget::OnData(int,int,wxDragResult)
@@ -12218,10 +12122,10 @@ EXPORTS
       SetPS__6wxFontFUl
       ;wxNativeFontInfo::SetStyle(wxFontStyle)
       SetStyle__16wxNativeFontInfoF11wxFontStyle
-      ;wxNativeFontInfo::GetPointSize() const
-      GetPointSize__16wxNativeFontInfoCFv
       ;wxNativeFontInfo::GetStyle() const
       GetStyle__16wxNativeFontInfoCFv
+      ;wxNativeFontInfo::GetPointSize() const
+      GetPointSize__16wxNativeFontInfoCFv
       ;wxNativeFontInfo::GetFamily() const
       GetFamily__16wxNativeFontInfoCFv
       ;wxNativeFontInfo::GetFaceName() const
