@@ -66,6 +66,7 @@ public:
 
   virtual void SetSize( int x, int y, int width, int height,
     int sizeFlags = wxSIZE_AUTO );
+  virtual void SetSize( int width, int height );
     
   virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
     const wxString& name = "statusBar");

@@ -284,11 +284,17 @@ void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
     m_resizing = FALSE;
 }
 
+void wxFrame::SetSize( int width, int height )
+{
+    SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
+}
+
 void wxFrame::Centre( int direction )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-    int x,y;
+    int x = 0;
+    int y = 0;
     
     if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
     if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
@@ -348,10 +354,6 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
 
-    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-    event.SetEventObject( this );
-    ProcessEvent( event );
-  
     gtk_widget_set_usize( m_widget, m_width, m_height );
 
     // This emulates the new wxMSW behaviour
@@ -390,6 +392,10 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     }
 
     m_sizeSet = TRUE;
+    
+    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
+    event.SetEventObject( this );
+    ProcessEvent( event );
 }
 
 void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )

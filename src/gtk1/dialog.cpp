@@ -51,7 +51,7 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxPanel)
 
-wxDialog::wxDialog(void)
+wxDialog::wxDialog()
 {
     m_title = "";
     m_modalShowing = FALSE;
@@ -106,20 +106,20 @@ bool wxDialog::Create( wxWindow *parent,
     return TRUE;
 }
 
-wxDialog::~wxDialog(void)
+wxDialog::~wxDialog()
 {
     wxTopLevelWindows.DeleteObject( this );
     if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
 }
 
-void wxDialog::SetTitle(const wxString& title )
+void wxDialog::SetTitle( const wxString& title )
 {
     m_title = title;
     if (m_title.IsNull()) m_title = "";
     gtk_window_set_title( GTK_WINDOW(m_widget), m_title );
 }
 
-wxString wxDialog::GetTitle(void) const
+wxString wxDialog::GetTitle() const
 {
     return (wxString&)m_title;
 }
@@ -163,7 +163,7 @@ void wxDialog::OnPaint( wxPaintEvent& WXUNUSED(event) )
   // yes
 }
 
-bool wxDialog::OnClose(void)
+bool wxDialog::OnClose()
 {
     static wxList closing;
 
@@ -179,14 +179,14 @@ bool wxDialog::OnClose(void)
     return FALSE;
 }
 
-bool wxDialog::Destroy(void)
+bool wxDialog::Destroy()
 {
     if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
 
     return TRUE;
 }
 
-void wxDialog::OnCloseWindow(wxCloseEvent& event)
+void wxDialog::OnCloseWindow( wxCloseEvent& event )
 {
     if (GetEventHandler()->OnClose() || event.GetForce())
     {
@@ -259,11 +259,17 @@ void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
     m_resizing = FALSE;
 }
 
+void wxDialog::SetSize( int width, int height )
+{
+    SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
+}
+
 void wxDialog::Centre( int direction )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-    int x,y;
+    int x = 0;
+    int y = 0;
     
     if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
     if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
@@ -285,7 +291,7 @@ bool wxDialog::Show( bool show )
     return TRUE;
 }
 
-bool wxDialog::IsModal(void) const
+bool wxDialog::IsModal() const
 {
     return m_modalShowing;
 }
@@ -301,7 +307,7 @@ void wxDialog::SetModal( bool WXUNUSED(flag) )
     wxFAIL_MSG( "wxDialog:SetModal obsolete now" );
 }
 
-int wxDialog::ShowModal(void)
+int wxDialog::ShowModal()
 {
     if (IsModal())
     {
@@ -337,7 +343,7 @@ void wxDialog::EndModal( int retCode )
     Show( FALSE );
 }
 
-void wxDialog::InitDialog(void)
+void wxDialog::InitDialog()
 {
     wxWindow::InitDialog();
 }

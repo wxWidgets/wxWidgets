@@ -40,36 +40,54 @@ class wxBitmapButton: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxBitmapButton)
 
-  public:
-
-    wxBitmapButton(void);
-    inline wxBitmapButton(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr)
-    {
+public:
+  wxBitmapButton();
+  inline wxBitmapButton( wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
+                         const wxValidator& validator = wxDefaultValidator,
+                         const wxString& name = wxButtonNameStr )
+  {
       Create(parent, id, bitmap, pos, size, style, validator, name);
-    }
-    bool Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr);
-    void SetDefault(void);
-    void SetLabel( const wxString &label );
-    wxString GetLabel(void) const;
-    virtual void SetLabel(const wxBitmap& bitmap) { SetBitmapLabel(bitmap); }
-    virtual void SetBitmapLabel( const wxBitmap& bitmap );
-    wxBitmap& GetBitmapLabel(void) const { return (wxBitmap&) m_bitmap; }
+  }
+  bool Create( wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxButtonNameStr);
+  void SetDefault();
     
-  // implementation
+  void SetLabel( const wxString &label );
+  wxString GetLabel() const;
+  virtual void SetLabel( const wxBitmap& bitmap ) { SetBitmapLabel(bitmap); }
+    
+  wxBitmap& GetBitmapDisabled() const { return (wxBitmap&) m_disabled; }
+  wxBitmap& GetBitmapFocus() const { return (wxBitmap&) m_focus; }
+  wxBitmap& GetBitmapLabel() const { return (wxBitmap&) m_bitmap; }
+  wxBitmap& GetBitmapSelected() const { return (wxBitmap&) m_selected; }
+    
+  void SetBitmapDisabled( const wxBitmap& bitmap );
+  void SetBitmapFocus( const wxBitmap& bitmap );
+  void SetBitmapLabel( const wxBitmap& bitmap );
+  void SetBitmapSelected( const wxBitmap& bitmap );
+    
+  virtual void Enable(const bool);
   
-    void ApplyWidgetStyle();    
-    
-  public:
+// implementation
+
+  void HasFocus();
+  void NotFocus();
+  void StartSelect();
+  void EndSelect();
+  void SetBitmap();
+  void ApplyWidgetStyle();    
   
-    wxBitmap   m_bitmap;    
-    
+  bool         m_hasFocus;
+  bool         m_isSelected;
+  wxBitmap     m_bitmap; 
+  wxBitmap     m_disabled;
+  wxBitmap     m_focus;
+  wxBitmap     m_selected;   
 };
+
 #endif // __BMPBUTTONH__
