@@ -5997,6 +5997,24 @@ else
             CODE_GEN_FLAGS="-DNO_GCC_PRAGMA $CODE_GEN_FLAGS"
             CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
             ;;
+        *-*-mingw32* )
+            dnl MinGW GCC versions >= 3.2 have problems with
+            dnl static member of classes derived from templates
+            dnl in combination with #pragme interface/implementation
+            dnl (the test case uses 4 files)
+            if test "$wxUSE_STL" = "yes"; then
+               AC_MSG_CHECKING([If this MinGW version needs -DNO_GCC_PRAGMA])
+               AC_TRY_COMPILE([],
+                              [#if !(__GNUC__ == 3 && __GNUC_MINOR__ >= 2)
+                               #error "Not GCC 3.2 or greater"
+                               #endif
+                               ],
+                              [CODE_GEN_FLAGS="-DNO_GCC_PRAGMA $CODE_GEN_FLAGS"
+                               CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
+                               AC_MSG_RESULT([yes])],
+                              [AC_MSG_RESULT([no])])
+            fi
+            ;;
     esac
 fi
 
@@ -6194,7 +6212,9 @@ else dnl we build wxBase only
     SUBDIRS="samples utils"
 fi
 dnl Add tests to the list of subdirs if cppunit 1.8.0+ is detected
-AM_PATH_CPPUNIT(1.8.0, SUBDIRS="$SUBDIRS tests")
+AM_PATH_CPPUNIT(1.8.0, [AC_MSG_RESULT([yes])
+                        SUBDIRS="$SUBDIRS tests"],
+                       [AC_MSG_RESULT([no])])
 
 for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then

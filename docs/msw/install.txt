@@ -365,6 +365,9 @@ Here are the steps required using the provided makefiles:
 - If you are using gcc-2.95, edit build\msw\config.gcc and set the GCC_VERSION
   variable to "2.95".
 
+- If you are compiling with GCC 3.x using makefiles and with wxUSE_STL == 1
+  you need to manually add -DNO_GCC_PRAGMA to CXXFLAGS in config.gcc.
+
 - Use the makefile.gcc files for compiling wxWindows and samples,
   e.g. to compile a debugging version of wxWindows:
   > cd c:\wx\build\msw
