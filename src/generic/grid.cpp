@@ -3206,9 +3206,7 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
     {
         if ( numCols >= curNumCols )
         {
-            for (size_t i=0; i< m_data[row].GetCount(); i++) (m_data[row])[i].Clear();
-            m_data[row].Empty();
-//            m_data[row].Clear();
+            m_data[row].Clear();
         }
         else
         {
@@ -5323,7 +5321,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             return;
         }
 
-        if ( dragRow >= 0 )
+        if ( dragRow >= 0 && dragRow < GetNumberRows())
         {
             m_dragRowOrCol = dragRow;
 
@@ -5341,7 +5339,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             return;
         }
 
-        if ( dragCol >= 0 )
+        if ( dragCol >= 0 && dragCol < GetNumberCols())
         {
             m_dragRowOrCol = dragCol;
 
