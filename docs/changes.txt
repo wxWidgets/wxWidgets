@@ -13,13 +13,17 @@ OTHER CHANGES
 
 All:
 
+- added wxDateSpan::operator==() and !=() (Lukasz Michalski)
+- use true/false throughout the library instead of TRUE/FALSE
+- wxStopWatch::Start() resumes the stop watch if paused, as per the docs
+
+All GUI ports:
+
 - implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
 - improved contrib/utils/convertrc parsing (David J. Cooke)
 - fixed handling of URLs and filenames in wxFileSystem
 - implemented alignment for wxGrid bool editor and renderer
 - support wxListCtrl columns alignment for all platforms and not just MSW
-- added wxDateSpan::operator==() and !=() (Lukasz Michalski)
-- use true/false throughout the library instead of TRUE/FALSE
 - Changed to type-safe wxSizerItemList for wxSizer child items.
 
     Deprecated:
