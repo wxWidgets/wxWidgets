@@ -88,6 +88,8 @@ wxRect wxStatusBarUniv::GetTotalFieldRect(wxCoord *borderBetweenFields)
     wxRect rect = GetClientRect();
 
     // no, don't do this - the borders are meant to be inside this rect
+    // wxSize sizeBorders =
+    m_renderer->GetStatusBarBorders(borderBetweenFields);
     //rect.Deflate(sizeBorders.x, sizeBorders.y);
 
     // recalc the field widths if needed
