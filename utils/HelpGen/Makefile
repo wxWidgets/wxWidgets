@@ -30,6 +30,7 @@ SRCS = src/cjparser.cpp\
 	src/wx/hash.cpp\
 	src/wx/log.cpp\
 	src/wx/file.cpp\
+	src/wx/dynarray.cpp\
 	src/wx/list.cpp
 
 OBJS = obj/cjparser.o\
@@ -45,6 +46,7 @@ OBJS = obj/cjparser.o\
 	obj/wx/hash.o\
 	obj/wx/log.o\
 	obj/wx/file.o\
+	obj/wx/dynarray.o\
 	obj/wx/list.o
 
 # tested with egcs 1.1.1 (add more compilers here)
@@ -52,7 +54,7 @@ CC = g++
 
 DEFINES = -DwxUSE_NOGUI=1 -D__UNIX__ -D__WXGTK__ -DHAVE_VSNPRINTF
 # this might not work with some versions of gcc - try just -g then
-DEBUG = -ggdb
+DEBUG = -ggdb -D__WXDEBUG__
 INCLUDE = -I./include
 CPPFLAGS  = $(INCLUDE) $(DEFINES) $(DEBUG) -c -Wall
 
@@ -64,7 +66,7 @@ CPPFLAGS  = $(INCLUDE) $(DEFINES) $(DEBUG) -c -Wall
 obj/%.o: src/%.cpp
 	$(CC) $(CPPFLAGS) -o $@ $<
 	
-all: links $(PROG)
+all: $(PROG)
 
 $(PROG) : $(OBJS)
 	$(CC) -o $(PROG) $(DEBUG) -Wall $(OBJS)

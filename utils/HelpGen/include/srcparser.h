@@ -367,8 +367,8 @@ public:
 	// TRUE, if there is at least one entry
 	// in the comment list of this context
 	bool HasComments();
-	inline MCommentListT& GetCommentList()
-		{ return mComments; }
+	MCommentListT& GetCommentList() { return mComments; }
+	const MCommentListT& GetCommentList() const { return mComments; }
 
 	// should be overriden, if the context supports sorting
 	// of it's members
