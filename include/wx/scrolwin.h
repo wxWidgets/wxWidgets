@@ -21,6 +21,7 @@ public:
         wxGenericScrolledWindow::Create(parent, id, pos, size, style, name);
     }
 };
+#define wxSCROLLED_WINDOW_IS_GENERIC 1
 #endif
 
 #endif
