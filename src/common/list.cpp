@@ -56,6 +56,8 @@
 // wxListKey
 // -----------------------------------------------------------------------------
 
+wxListKey wxDefaultListKey;
+
 bool wxListKey::operator==(wxListKeyValue value) const
 {
     switch ( m_keyType )

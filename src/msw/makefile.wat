@@ -16,9 +16,8 @@ LIBTARGET   = $(WXLIB)\wx.lib
 DUMMY=dummydll
 # ODBCLIB     = ..\..\contrib\odbc\odbc32.lib
 
-EXTRATARGETS = # wxxpm
-EXTRATARGETSCLEAN = # clean_wxxpm
-
+EXTRATARGETS = xpm png zlib
+EXTRATARGETSCLEAN = clean_xpm clean_png clean_zlib
 GENDIR=$(WXDIR)\src\generic
 COMMDIR=$(WXDIR)\src\common
 XPMDIR=$(WXDIR)\src\xpm
@@ -114,7 +113,7 @@ COMMONOBJS = cmndata.obj &
 #  db.obj &
 #  dbtable.obj &
 
-MSWOBJS1 = &
+MSWOBJS = &
   accel.obj &
   app.obj &
   bitmap.obj &
@@ -169,7 +168,6 @@ MSWOBJS1 = &
   palette.obj &
   pen.obj &
   penwin.obj &
-  pnghand.obj &
   printdlg.obj &
   printwin.obj &
   radiobox.obj &
@@ -199,6 +197,8 @@ MSWOBJS1 = &
   wave.obj &
   window.obj &
 
+#  pnghand.obj &
+
 OLEOBJS = &
   droptgt.obj &
   dropsrc.obj &
@@ -207,33 +207,28 @@ OLEOBJS = &
   uuid.obj &
   automtn.obj
 
-XPMOBJECTS = 	crbuffri.obj&
-		crdatfri.obj&
-		create.obj crifrbuf.obj&
-		crifrdat.obj&
-		data.obj&
-		hashtab.obj misc.obj&
-		parse.obj rdftodat.obj&
-		rdftoi.obj&
-		rgb.obj scan.obj&
-		simx.obj wrffrdat.obj&
-		wrffrp.obj wrffri.obj
-
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(OLEOBJS) # $(XPMOBJECTS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(OLEOBJS)
 
-all:        $(OBJECTS) $(LIBTARGET)
+all:        $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS)
 
 $(LIBTARGET) : $(OBJECTS)
     %create tmp.lbc
     @for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
     wlib /b /c /n /p=512 $^@ @tmp.lbc
+
+#test : $(OBJECTS)
+#    %create tmp.lbc
+#    @for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
+#    wlib /b /c /n /p=512 $^@ @tmp.lbc
 	
-clean:   .SYMBOLIC
+	
+clean:   $(EXTRATARGETSCLEAN)
     -erase *.obj
     -erase $(LIBTARGET)
     -erase *.pch
     -erase *.err
+    -erase *.lbc
 
 cleanall:   clean
 
@@ -825,15 +820,85 @@ wrffri.obj: $(XPMDIR)\wrffri.c
 wrffrp.obj: $(XPMDIR)\wrffrp.c
   *$(CC) $(CPPFLAGS) $(IFLAGS) $<
 
+OBJ1 = adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) \
+  trees$(O) 
+OBJ2 = zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) \
+  infutil$(O) inffast$(O) 
 
-#wxxpm:   .SYMBOLIC
-#    cd $(WXDIR)\contrib\wxxpm
-#    wmake -f makefile.wat all
-#    cd $(WXDIR)\src\msw
+all: $(LIBTARGET)
 
-#clean_wxxpm:   .SYMBOLIC
-#    cd $(WXDIR)\contrib\wxxpm
-#    wmake -f makefile.wat clean
-#    cd $(WXDIR)\src\msw
+adler32.obj: adler32.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+compress.obj: compress.c zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+crc32.obj: crc32.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+deflate.obj: deflate.c deflate.h zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+gzio.obj: gzio.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+infblock.obj: infblock.c zutil.h zlib.h zconf.h infblock.h inftrees.h\
+   infcodes.h infutil.h
+	$(CC) -c $(CFLAGS) $*.c
+
+infcodes.obj: infcodes.c zutil.h zlib.h zconf.h inftrees.h infutil.h\
+   infcodes.h inffast.h
+	$(CC) -c $(CFLAGS) $*.c
+
+inflate.obj: inflate.c zutil.h zlib.h zconf.h infblock.h
+	$(CC) -c $(CFLAGS) $*.c
+
+inftrees.obj: inftrees.c zutil.h zlib.h zconf.h inftrees.h
+	$(CC) -c $(CFLAGS) $*.c
+
+infutil.obj: infutil.c zutil.h zlib.h zconf.h inftrees.h infutil.h
+	$(CC) -c $(CFLAGS) $*.c
+
+inffast.obj: inffast.c zutil.h zlib.h zconf.h inftrees.h infutil.h inffast.h
+	$(CC) -c $(CFLAGS) $*.c
+
+trees.obj: trees.c deflate.h zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+uncompr.obj: uncompr.c zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+zutil.obj: zutil.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+xpm:   .SYMBOLIC
+    cd $(WXDIR)\src\xpm
+    wmake -f makefile.wat all
+    cd $(WXDIR)\src\msw
+
+clean_xpm:   .SYMBOLIC
+    cd $(WXDIR)\src\xpm
+    wmake -f makefile.wat clean
+    cd $(WXDIR)\src\msw
+
+png:   .SYMBOLIC
+    cd $(WXDIR)\src\png
+    wmake -f makefile.wat all
+    cd $(WXDIR)\src\msw
+
+clean_png:   .SYMBOLIC
+    cd $(WXDIR)\src\png
+    wmake -f makefile.wat clean
+    cd $(WXDIR)\src\msw
+
+zlib:   .SYMBOLIC
+    cd $(WXDIR)\src\zlib
+    wmake -f makefile.wat all
+    cd $(WXDIR)\src\msw
+
+clean_zlib:   .SYMBOLIC
+    cd $(WXDIR)\src\zlib
+    wmake -f makefile.wat clean
+    cd $(WXDIR)\src\msw
 
 

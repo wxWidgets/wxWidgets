@@ -1,11 +1,21 @@
 General ToDo
 ------------
 
-- Write this ToDo list :-)
-
 Please see also:
 
   docs/gtk/todo.txt
   docs/motif/todo.txt
   docs/msw/todo.txt
+
+- Suggestion from Janos Vegh: the memory-checking classes could
+  also keep return the size of memory currently allocated, with
+  a call to return it e.g. int wxDebugContext::GetMemoryUsed().
+  Maybe even an optional window in debug mode with a tally of memory
+  usage, how many classes of each kind are in use, etc.? That
+  would be neat.
+
+- Documentation: mention include files with each class.
+
+- Complete this ToDo list :-)
+
 

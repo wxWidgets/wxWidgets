@@ -7,7 +7,7 @@
 
 wxWindows is a C++ framework providing GUI (Graphical User
 Interface) and other facilities on more than one platform.  Version 2.0 currently
-supports subsets MS Windows (16-bit, Windows 95 and Windows NT) and GTK+, with Motif
+supports MS Windows (16-bit, Windows 95 and Windows NT) and GTK+, with Motif
 and Mac ports in an advanced state.
 
 wxWindows was originally developed at the Artificial Intelligence
@@ -29,7 +29,7 @@ variants, unless otherwise stated. All trademarks are acknowledged.
 
 wxWindows was developed to provide a cheap and flexible way to maximize
 investment in GUI application development.  While a number of commercial
-class libraries already exist for cross-platform development,
+class libraries already existed for cross-platform development,
 none met all of the following criteria:
 
 \begin{enumerate}\itemsep=0pt
@@ -39,22 +39,24 @@ none met all of the following criteria:
 \item support for a wide range of compilers.
 \end{enumerate}
 
+Since wxWindows was started, several other free or almost-free GUI frameworks have
+emerged. However, none has the range of features, flexibility, documentation and the
+well-established development team that wxWindows has.
+
 As public domain software and a project open to everyone, wxWindows has
 benefited from comments, ideas, bug fixes, enhancements and the sheer
 enthusiasm of users, especially via the Internet. This gives wxWindows a
-certain advantage over its commercial brothers, and a robustness against
+certain advantage over its commercial competitors (and over free libraries
+without an independent development team), plus a robustness against
 the transience of one individual or company. This openness and
 availability of source code is especially important when the future of
 thousands of lines of application code may depend upon the longevity of
 the underlying class library.
 
-In writing wxWindows, completeness has sometimes been traded for
-portability and simplicity of programming. Version 2.0 goes much
-further than previous versions in terms of generality and features,
+Version 2.0 goes much further than previous versions in terms of generality and features,
 allowing applications to be produced
 that are often indistinguishable from those produced using single-platform
-toolkits
-such as Motif and MFC.
+toolkits such as Motif and MFC.
 
 The importance of using a platform-independent class library cannot be
 overstated, since GUI application development is very time-consuming,
@@ -62,10 +64,9 @@ and sustained popularity of particular GUIs cannot be guaranteed.
 Code can very quickly become obsolete if it addresses the wrong
 platform or audience.  wxWindows helps to insulate the programmer from
 these winds of change. Although wxWindows may not be suitable for
-every application, it provides access to most of the functionality a
-GUI program normally requires, plus some extras such as form
-construction, interprocess communication and PostScript output, and
-can of course be extended as needs dictate.  As a bonus, it provides
+every application (such as an OLE-intensive program), it provides access to most of the functionality a
+GUI program normally requires, plus some extras such as network programming
+and PostScript output, and can of course be extended as needs dictate.  As a bonus, it provides
 a cleaner programming interface than the native
 APIs. Programmers may find it worthwhile to use wxWindows even if they
 are developing on only one platform.
@@ -76,14 +77,19 @@ here are some of the benefits:
 \begin{itemize}\itemsep=0pt
 \item Low cost (free, in fact!)
 \item You get the source.
+\item Available on a variety of popular platforms.
+\item Works with almost all popular C++ compilers.
 \item Several example programs.
 \item Over 700 pages of printable and on-line documentation.
+\item Includes Tex2RTF, to allow you to produce your own documentation
+in Windows Help, HTML and Word RTF formats.
 \item Simple-to-use, object-oriented API.
-\item Graphics calls include splines, polylines, rounded rectangles, etc.
+\item Flexible event system.
+\item Graphics calls include lines, rounded rectangles, splines, polylines, etc.
 \item Constraint-based layout option.
 \item Print/preview and document/view architectures.
-\item Status line facility, toolbar
-\item Encapsulated PostScript generation under Unix, normal MS Windows printing on the
+\item Toolbar, notebook, tree control, advanced list control classes.
+\item PostScript generation under Unix, normal MS Windows printing on the
 PC.
 \item MDI (Multiple Document Interface) support.
 \item Can be used to create DLLs under Windows, dynamic libraries on Unix.
@@ -92,7 +98,7 @@ PC.
 them to the clipboard.
 \item An API for invoking help from applications.
 \item Dialog Editor for building dialogs.
-\item Socket support.
+\item Network support via a family of socket and protocol classes.
 \end{itemize}
 
 \section{Changes from version 1.xx}\label{versionchanges}
@@ -167,7 +173,9 @@ following setups.
 
 \begin{enumerate}\itemsep=0pt
 \item A 486 or higher PC running MS Windows.
-\item One of Microsoft Visual C++ 4.0 or higher, Borland C++, Gnu-Win32.
+\item A Windows compiler: most are supported, but please see {\tt install.txt} for
+details. Supported compilers include Microsoft Visual C++ 4.0 or higher, Borland C++, Cygwin,
+Metrowerks CodeWarrior.
 \item At least 60 MB of disk space.
 \end{enumerate}
 
@@ -399,7 +407,7 @@ wxWindows does not use templates since it is a notoriously unportable feature.
 
 Some compilers, such as Borland C++ and Microsoft C++, support
 precompiled headers. This can save a great deal of compiling time. The
-recommended approach is to precompile {\tt ``wx.h''}, using this
+recommended approach is to precompile {\tt "wx.h"}, using this
 precompiled header for compiling both wxWindows itself and any
 wxWindows applications. For Windows compilers, two dummy source files
 are provided (one for normal applications and one for creating DLLs)
@@ -409,8 +417,7 @@ However, there are several downsides to using precompiled headers. One
 is that to take advantage of the facility, you often need to include
 more header files than would normally be the case. This means that
 changing a header file will cause more recompilations (in the case of
-wxWindows, everything needs to be recompiled since everything includes
-{\tt ``wx.h''}!)
+wxWindows, everything needs to be recompiled since everything includes {\tt "wx.h"}!)
 
 A related problem is that for compilers that don't have precompiled
 headers, including a lot of header files slows down compilation
@@ -460,8 +467,9 @@ descriptions of miscellaneous file handling functions.
 A number of `extras' are supplied with wxWindows, to complement
 the GUI functionality in the main class library. These are found
 below the utils directory and usually have their own source, library
-and documentation directories. For larger user-contributed packages,
-see the directory /pub/packages/wxwin/contrib.
+and documentation directories. For other user-contributed packages,
+see the directory ftp://www.remstar.com/pub/wxwin/contrib, which is
+more easily accessed via the Contributions page on the Web site.
 
 \section{wxHelp}\label{wxhelp}
 
@@ -596,8 +604,7 @@ The same goes for other data types: use classes wherever possible.
 
 Don't use absolute panel item positioning if you can avoid it. Different GUIs have
 very differently sized panel items. Consider using the constraint system, although this
-can be complex to program. If you needs are simple, the default relative positioning
-behaviour may be adequate (using default position values and wxPanel::NewLine).
+can be complex to program.
 
 Alternatively, you could use alternative .wrc (wxWindows resource files) on different
 platforms, with slightly different dimensions in each. Or space your panel items out

@@ -1,8 +1,8 @@
 #
 # Makefile for WATCOM
 #
-# Created by D.Chubraev, chubraev@iem.ee.ethz.ch
-# 8 Nov 1994
+# Created by Julian Smart, January 1999
+# 
 #
 
 WXDIR = ..\.. 

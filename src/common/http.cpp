@@ -166,7 +166,7 @@ bool wxHTTP::Connect(const wxString& host)
   return TRUE;
 }
 
-bool wxHTTP::Connect(wxSockAddress& addr)
+bool wxHTTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 {
   struct sockaddr *raw_addr;
   size_t len;

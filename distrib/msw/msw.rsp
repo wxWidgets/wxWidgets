@@ -43,6 +43,7 @@ src/msw/*.prj
 
 src/xpm/*.c
 src/xpm/*.h
+src/xpm/makefile*
 src/xpm/changes
 src/xpm/readme
 src/xpm/readme.msw

@@ -80,7 +80,7 @@ wxFTP::~wxFTP()
 ////////////////////////////////////////////////////////////////
 ////// wxFTP connect and login methods /////////////////////////
 ////////////////////////////////////////////////////////////////
-bool wxFTP::Connect(wxSockAddress& addr)
+bool wxFTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 {
   if (!m_handler) {
     m_lastError = wxPROTO_NOHNDLR;

@@ -33,6 +33,8 @@ Add centring, right justify styles to wxStaticText.
 Extend wxSystemSettings to get symbols for current nationality,
 e.g. ',' instead of '.' for decimal points.
 
+Supply correct ctl3d/odbc lib files for BC++, Watcom (corrupt?)
+
 LOW PRIORITY (MEDIUM TERM)
 --------------------------
 

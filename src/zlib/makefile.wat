@@ -29,7 +29,9 @@ OBJP1=adler32$(O)+compress$(O)+crc32$(O)+gzio$(O)+uncompr$(O)+deflate$(O)
 OBJP2=trees$(O)+zutil$(O)+inflate$(O)+infblock$(O)+inftrees$(O)+infcodes$(O)
 OBJP3=infutil$(O)+inffast$(O)
 
-all: test
+# all: test
+
+all: $(LIBTARGET)
 
 adler32.obj: adler32.c zutil.h zlib.h zconf.h
 	$(CC) $(CFLAGS) $*.c

@@ -21,12 +21,19 @@ $(LNK) : makefile.wat
     @%append $(LNK) $(STACK)
     @%append $(LNK) name $(PROGRAM).exe
     @%append $(LNK) file $(WXLIB)\wx.lib
+    @for %i in ($(EXTRALIBS)) do @%append $(LNK) file %i
     @for %i in ($(OBJECTS)) do @%append $(LNK) file %i
-
-#    @for %i in ($(EXTRALIBS)) do @%append $(LNK) file %i
 #    @%append $(LNK) $(MINDATA)
 #    @%append $(LNK) $(MAXDATA)
 
 clean:   .SYMBOLIC
-    -erase *.obj *.bak *.err *.pch *.lib *.lnk *.res *.exe
+    -erase *.obj
+    -erase *.bak
+    -erase *.err
+    -erase *.pch
+    -erase *.lib
+    -erase *.lnk
+    -erase *.res
+    -erase *.exe
+    -erase *.lbc
 

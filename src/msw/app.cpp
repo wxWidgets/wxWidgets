@@ -561,7 +561,7 @@ int wxEntry(WXHINSTANCE hInstance,
             int nCmdShow,
             bool enterLoop)
 {
-#if !defined(__WXDEBUG__) && !defined(__BORLANDC__) // take everything into a try-except block in release build
+#if !defined(__WXDEBUG__) && !defined(__BORLANDC__) && !defined(__WATCOMC__) // take everything into a try-except block in release build
   try {
 #endif
 
@@ -631,7 +631,7 @@ int wxEntry(WXHINSTANCE hInstance,
   wxApp::CleanUp();
 
   return retValue;
-#if !defined(__WXDEBUG__) && !defined(__BORLANDC__) // catch exceptions only in release build
+#if !defined(__WXDEBUG__) && !defined(__BORLANDC__) && !defined(__WATCOMC__) // catch exceptions only in release build
   }
   except ( EXCEPTION_EXECUTE_HANDLER ) {
     /*

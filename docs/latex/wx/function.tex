@@ -1090,10 +1090,14 @@ Under X, sleeps for the specified number of seconds.
 
 \membersection{::wxStripMenuCodes}
 
-\func{void}{wxStripMenuCodes}{\param{const wxString\& }{in}, \param{const wxString\& }{out}}
+\func{wxString}{wxStripMenuCodes}{\param{const wxString\& }{in}}
+
+\func{void}{wxStripMenuCodes}{\param{char* }{in}, \param{char* }{out}}
 
 Strips any menu codes from {\it in} and places the result
-in {\it out}. Menu codes include \& (mark the next character with an underline
+in {\it out} (or returns the new string, in the first form).
+
+Menu codes include \& (mark the next character with an underline
 as a keyboard shortkey in Windows and Motif) and $\backslash$t (tab in Windows).
 
 \membersection{::wxStartTimer}\label{wxstarttimer}

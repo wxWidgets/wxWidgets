@@ -229,7 +229,7 @@ application have all been processed, wxWindows sends an OnIdle event to the appl
 sends an OnIdle event to each application window, allowing windows to do idle processing such as updating
 their appearance. If either wxApp::OnIdle or a window OnIdle function requested more time, by
 caling \helpref{wxIdleEvent::ReqestMore}{wxidleeventrequestmore}, wxWindows will send another OnIdle
-event to the application event. This will occur in a loop until either a user event is found to be
+event to the application object. This will occur in a loop until either a user event is found to be
 pending, or OnIdle requests no more time. Then all pending user events are processed until the system
 goes idle again, when OnIdle is called, and so on.
 

@@ -97,15 +97,12 @@ project files are currently supplied.
 Watcom C++ 10.6 compilation
 ---------------------------
 
-Currently under construction, but so far we have:
-
 1. Make sure your WXWIN variable is set, and uses the FAT (short
    name) form.
 2. Change directory to wx\src\msw. Type 'wmake -f makefile.wat' to
    make the wxWindows core library.
 3. Change directory to wx\samples\minimal and type 'wmake -f makefile.wat'
-   to make this sample. There are a lot of link errors at this
-   point, so can anyone help work out what I've done wrong?
+   to make this sample.
 
 Metrowerks CodeWarrior compilation
 ----------------------------------

@@ -30,7 +30,7 @@ public:
   ~wxFTP();
 
   bool Close();
-  bool Connect(wxSockAddress& addr);
+  bool Connect(wxSockAddress& addr, bool wait = TRUE);
   bool Connect(const wxString& host);
 
   void SetUser(const wxString& user) { m_user = user; }

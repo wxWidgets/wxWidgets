@@ -63,8 +63,8 @@ public:
   wxProtocol();
 
   bool Reconnect();
-  virtual bool Connect( const wxString& WXUNUSED(host) ) { return FALSE; } 
-  virtual bool Connect( wxSockAddress& addr) { return wxSocketClient::Connect(addr); }
+  virtual bool Connect( const wxString& WXUNUSED(host) ) { return FALSE; }
+  virtual bool Connect( wxSockAddress& addr, bool WXUNUSED(wait) = TRUE) { return wxSocketClient::Connect(addr); }
 
   virtual bool Abort() = 0;
   virtual wxInputStream *GetInputStream(const wxString& path) = 0;

@@ -266,6 +266,8 @@ samples/wxsocket/*.cpp
 samples/wxsocket/*.h
 samples/wxsocket/*.def
 samples/wxsocket/makefile*
+samples/wxsocket/client.wat
+samples/wxsocket/server.wat
 samples/wxsocket/*.xbm
 samples/wxsocket/*.xpm
 samples/wxsocket/*.ico

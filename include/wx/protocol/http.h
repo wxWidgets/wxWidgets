@@ -27,7 +27,7 @@ public:
   ~wxHTTP();
 
   bool Connect(const wxString& host);
-  bool Connect(wxSockAddress& addr);
+  bool Connect(wxSockAddress& addr, bool wait);
   bool Abort();
   wxInputStream *GetInputStream(const wxString& path);
   inline wxProtocolError GetError() { return m_perr; }

@@ -250,7 +250,8 @@ wxInputStream *wxURL::GetInputStream(void)
 
     addr.Service(m_servname);
 
-    if (!m_protocol->Connect(addr)) {
+    if (!m_protocol->Connect(addr, TRUE)) // Watcom needs the 2nd arg for some reason
+    {
       m_error = wxURL_CONNERR;
       return NULL;
     }
@@ -281,7 +282,7 @@ void wxURL::SetDefaultProxy(const wxString& url_proxy)
   addr.Hostname(hostname);
   addr.Service(port);
   
-  g_proxy->Connect(addr);
+  g_proxy->Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
 }
 
 void wxURL::SetProxy(const wxString& url_proxy)
@@ -306,7 +307,7 @@ void wxURL::SetProxy(const wxString& url_proxy)
   addr.Hostname(hostname);
   addr.Service(port);
 
-  m_proxy.Connect(addr);
+  m_proxy.Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
 
   m_protocol = &m_proxy;
   m_protoname = "proxy";
