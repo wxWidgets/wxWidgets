@@ -4,7 +4,7 @@
 // Author:      Jonathan Bayer
 // Modified by:
 // Created:
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) Jonathan Bayer
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@
 enum wxResizable
 {
 	wxNOT_RESIZABLE =           0x00,
-	wxHORIZENTAL_RESIZABLE =    0x01,
+	wxHORIZONTAL_RESIZABLE =    0x01,
 	wxVERTICAL_RESIZABLE =      0x10,
 	wxRESIZABLE =               0x11
 };
