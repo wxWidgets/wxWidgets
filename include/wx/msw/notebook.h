@@ -162,17 +162,18 @@ public:
   // -------------------
 
 #if wxUSE_UXTHEME
-  // handler for child pages erase background event
-  void DoEraseBackground(wxEraseEvent& event);
+  virtual bool SetBackgroundColour(const wxColour& colour)
+  {
+      if ( !wxNotebookBase::SetBackgroundColour(colour) )
+          return false;
 
-  // real implementation of the above method
-  void DoEraseBackground(wxWindow *win, WXHDC hDC);
+      UpdateBgBrush();
 
-  // get the brush to be used for painting the background for the controls
-  // which need it in their MSWControlColor()
-  //
-  // the brush will be adjusted for use with the given window on this DC
-  WXHBRUSH GetThemeBackgroundBrush(WXHDC hDC, wxWindow *win) const;
+      return true;
+  }
+
+  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindow *win);
+  virtual wxColour MSWGetBgColourForChild(wxWindow *win);
 #endif // wxUSE_UXTHEME
 
 protected:
@@ -189,6 +190,14 @@ protected:
   void AdjustPageSize(wxNotebookPage *page);
 
 #if wxUSE_UXTHEME
+  // this is a slightly ugly function which gets the bitmap of notebook
+  // background and either returns the colour under the specified window in it
+  // or creates a brush from it
+  //
+  // so if win == NULL, a brush is created and returned
+  //       win != NULL, returns COLORREF of the pixel under its top left corner
+  WXHANDLE QueryBgBitmap(wxWindow *win = NULL);
+
   // creates the brush to be used for drawing the tab control background
   void UpdateBgBrush();
 #endif // wxUSE_UXTHEME

@@ -862,26 +862,44 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 
 #if wxUSE_UXTHEME
 
+WXHANDLE wxNotebook::QueryBgBitmap(wxWindow *win)
+{
+    RECT rc;
+    GetWindowRect(GetHwnd(), &rc);
+
+    WindowHDC hDC(GetHwnd());
+    MemoryHDC hDCMem(hDC);
+    CompatibleBitmap hBmp(hDC, rc.right - rc.left, rc.bottom - rc.top);
+
+    SelectInHDC selectBmp(hDCMem, hBmp);
+
+    ::SendMessage(GetHwnd(), WM_PRINTCLIENT,
+                  (WPARAM)(HDC)hDCMem, 
+                  PRF_ERASEBKGND | PRF_CLIENT | PRF_NONCLIENT);
+
+    if ( win )
+    {
+        RECT rc2;
+        ::GetWindowRect(GetHwndOf(win), &rc2);
+
+        COLORREF c = ::GetPixel(hDCMem, rc2.left - rc.left, rc2.top - rc.top);
+
+        return (WXHANDLE)c;
+    }
+    else // we are asked to create the brush
+    {
+        return (WXHANDLE)::CreatePatternBrush(hBmp);
+    }
+}
+
 void wxNotebook::UpdateBgBrush()
 {
     if ( m_hbrBackground )
         ::DeleteObject((HBRUSH)m_hbrBackground);
 
-    if ( wxUxThemeEngine::GetIfActive() )
+    if ( !m_hasBgCol && wxUxThemeEngine::GetIfActive() )
     {
-        RECT rc;
-        GetWindowRect(GetHwnd(), &rc);
-
-        WindowHDC hDC(GetHwnd());
-        MemoryHDC hDCMem(hDC);
-        CompatibleBitmap hBmp(hDC, rc.right - rc.left, rc.bottom - rc.top);
-
-        SelectInHDC selectBmp(hDCMem, hBmp);
-
-        SendMessage(GetHwnd(), WM_PRINTCLIENT, (WPARAM)(HDC)hDCMem, 
-                    PRF_ERASEBKGND | PRF_CLIENT | PRF_NONCLIENT);
-
-        m_hbrBackground = (WXHBRUSH)::CreatePatternBrush(hBmp);
+        m_hbrBackground = (WXHBRUSH)QueryBgBitmap();
     }
     else // no themes
     {
@@ -889,7 +907,7 @@ void wxNotebook::UpdateBgBrush()
     }
 }
 
-WXHBRUSH wxNotebook::GetThemeBackgroundBrush(WXHDC hDC, wxWindow *win) const
+WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, wxWindow *win)
 {
     if ( m_hbrBackground )
     {
@@ -904,30 +922,24 @@ WXHBRUSH wxNotebook::GetThemeBackgroundBrush(WXHDC hDC, wxWindow *win) const
         {
             wxLogLastError(_T("SetBrushOrgEx(notebook bg brush)"));
         }
+
+        return m_hbrBackground;
     }
 
-    return m_hbrBackground;
+    return wxNotebookBase::MSWGetBgBrushForChild(hDC, win);
 }
 
-void wxNotebook::DoEraseBackground(wxEraseEvent& event)
+wxColour wxNotebook::MSWGetBgColourForChild(wxWindow *win)
 {
-    DoEraseBackground((wxWindow *)event.GetEventObject(),
-                      (WXHDC)GetHdcOf(*event.GetDC()));
-}
+    if ( m_hasBgCol )
+        return GetBackgroundColour();
 
-void wxNotebook::DoEraseBackground(wxWindow *win, WXHDC hDC)
-{
-    // we can either draw the background ourselves or let DrawThemeBackground()
-    // do it, but as we already have the correct brush, let's do it ourselves
-    // (note that we use the same code in wxControl::MSWControlColor(), so if
-    // it breaks, it should at least break in consistent way)
-    WXHBRUSH hbr = GetThemeBackgroundBrush(hDC, win);
-    if ( hbr )
-    {
-        RECT rectClient;
-        ::GetClientRect(GetHwndOf(win), &rectClient);
-        ::FillRect((HDC)hDC, &rectClient, (HBRUSH)hbr);
-    }
+    if ( !wxUxThemeEngine::GetIfActive() )
+        return wxNullColour;
+
+    COLORREF c = (COLORREF)QueryBgBitmap(win);
+
+    return c == CLR_INVALID ? wxNullColour : wxRGBToColour(c);
 }
 
 #endif // wxUSE_UXTHEME
