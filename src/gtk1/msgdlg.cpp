@@ -89,6 +89,10 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
         else
             gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_YES);
     }
+
+    if (parent)
+        gtk_window_set_transient_for(GTK_WINDOW(m_widget),
+                                     GTK_WINDOW(m_parent->m_widget));
 }
  
 int wxMessageDialog::ShowModal()
