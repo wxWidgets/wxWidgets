@@ -634,13 +634,19 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 
     path += name;
 
+    // Needed for Unicode/Ansi conversion
+    char buf[500];
+    
 #if defined(HAVE_MKSTEMP)
     // scratch space for mkstemp()
     path += _T("XXXXXX");
 
-    // can use the cast here because the length doesn't change and the string
-    // is not shared
-    int fdTemp = mkstemp((char*)(const char *)path.mb_str());
+#if wxUSE_UNICODE
+    strcpy( buf, wxConvFile.cWC2MB( path ) );
+#else
+    strcpy( buf, path.c_str() );
+#endif
+    int fdTemp = mkstemp( buf );
     if ( fdTemp == -1 )
     {
         // this might be not necessary as mkstemp() on most systems should have
@@ -649,6 +655,11 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     }
     else // mkstemp() succeeded
     {
+#if wxUSE_UNICODE
+        path = wxConvFile.cMB2WC( buf );
+#else
+        path = buf;
+#endif
         // avoid leaking the fd
         if ( fileTemp )
         {
@@ -665,9 +676,22 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     // same as above
     path += _T("XXXXXX");
 
-    if ( !mktemp((char *)path.mb_str()) )
+#if wxUSE_UNICODE
+    strcpy( buf, wxConvFile.cWC2MB( path ) );
+#else
+    strcpy( buf, path.c_str() );
+#endif
+    if ( !mktemp( buf )
     {
         path.clear();
+    }
+    else
+    {
+#if wxUSE_UNICODE
+        path = wxConvFile.cMB2WC( buf );
+#else
+        path = buf;
+#endif
     }
 #else // !HAVE_MKTEMP (includes __DOS__)
     // generate the unique file name ourselves
