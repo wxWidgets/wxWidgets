@@ -601,10 +601,19 @@ bool wxTextCtrl::Create( wxWindow *parent,
         GtkWrapMode wrap;
         if ( HasFlag( wxTE_DONTWRAP ) )
             wrap = GTK_WRAP_NONE;
-        else if ( HasFlag( wxTE_LINEWRAP ) )
+        else if ( HasFlag( wxTE_CHARWRAP ) )
             wrap = GTK_WRAP_CHAR;
-        else // HasFlag(wxTE_WORDWRAP) always true as wxTE_WORDWRAP == 0
+        else if ( HasFlag( wxTE_WORDWRAP ) )
             wrap = GTK_WRAP_WORD;
+        else // HasFlag(wxTE_BESTWRAP) always true as wxTE_BESTWRAP == 0
+        {
+            // GTK_WRAP_WORD_CHAR seems to be new in GTK+ 2.4
+#ifdef __WXGTK24__
+            wrap = GTK_WRAP_WORD_CHAR;
+#else
+            wrap = GTK_WRAP_WORD;
+#endif
+        }
 
         gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), wrap );
 
